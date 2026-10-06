@@ -1,46 +1,49 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
+import { CATEGORIES, MOVEMENTS } from "@/lib/movements";
+import { checkAccess } from "@/lib/server/access";
 import { ParsedSessionSchema } from "@/lib/types";
 
-// Server-side only so the API key never reaches the browser. The log itself
-// stays in localStorage; this route just turns a transcript into structure.
+// Server-side only so the API key never reaches the browser. Turns a spoken
+// note into structured entries; saving is a separate call after review.
 const client = new Anthropic();
 
-const SYSTEM = `You turn a CrossFit athlete's spoken post-workout note into structured lift entries.
+const movementList = CATEGORIES.map(
+  (c) =>
+    `${c}: ${MOVEMENTS.filter((m) => m.category === c)
+      .map((m) => (m.detail && c === "WODs" ? `${m.name} (${m.detail})` : m.name))
+      .join(", ")}`,
+).join("\n");
 
-- One entry per distinct movement + load. If they did several sets at different weights, emit one entry per weight.
-- "Worked up to 80" or "hit 80" means a heavy single: reps 1, sets null, weight 80.
-- "5 by 3 at 60" means sets 5, reps 3, weight 60. "3 sets of 5" means sets 3, reps 5.
-- Only log weighted or rep-based strength/skill work. Ignore chit-chat. A conditioning WOD can be one entry with the WOD name as movement and its score in note.
-- Speech-to-text mangles words ("snatch" may appear as "snack", "clean and jerk" as "clean and jerry"); fix them.
-- Prefer the athlete's existing movement names when one matches, so history stays grouped.
-- Use the stated unit; if none is stated, use the default unit given.
-- Resolve relative dates ("yesterday", "on Monday") against today's date. Otherwise date is null.`;
+const SYSTEM = `You turn a CrossFit athlete's spoken post-class note into structured entries.
+
+Movement names: use the exact name from this list whenever the movement matches (fix speech-to-text errors and synonyms: "squat clean" → Clean, "C2B" → Chest-to-Bar Pull-up, "HSPU" → Handstand Push-up, "snack" → Snatch). Only invent a name in Title Case if nothing fits.
+${movementList}
+
+Lifts:
+- One entry per movement + load. Several weights for one movement → one entry per weight.
+- "Worked up to 80" or "hit 80" → sets null, reps 1, weight 80. "5 by 3 at 60" → sets 5, reps 3, weight 60. "3 sets of 5" → sets 3, reps 5.
+- Gymnastics: reps per set, weight null (unless weighted). "Max set of 20 pull-ups" → sets 1, reps 20.
+
+WODs:
+- A named benchmark (Fran, Grace, Cindy…) → movement is that name, score is the result, rx true/false if Rx/scaled was said.
+- Any other class WOD → movement "WOD", score as said ("12:40", "7+4"), note = a short description of the workout.
+- Time scores as m:ss. AMRAP scores as rounds+reps ("7+4").
+- Don't also list the WOD's individual movements as separate entries.
+
+Other:
+- Ignore chit-chat. Use the stated unit, else the default unit given.
+- Resolve relative dates ("yesterday", "on Monday") against today's date. Otherwise date is null.
+- title: 2–4 words describing the session, e.g. "Olympic day", "Squat + Fran".`;
 
 export async function POST(request: Request) {
   if (!process.env.ANTHROPIC_API_KEY) {
-    return Response.json(
-      { error: "ANTHROPIC_API_KEY is not set, so add lifts by hand for now." },
-      { status: 503 },
-    );
+    return Response.json({ error: "ANTHROPIC_API_KEY is not set, so add movements by hand for now." }, { status: 503 });
   }
+  const denied = checkAccess(request);
+  if (denied) return denied;
 
-  // The app is public (it's a portfolio piece) but each parse costs money, so
-  // only someone with ACCESS_CODE can reach Claude. Fail closed in production.
-  const code = process.env.ACCESS_CODE;
-  if (!code && process.env.NODE_ENV === "production") {
-    return Response.json({ error: "ACCESS_CODE is not set on the server." }, { status: 503 });
-  }
-  if (code && request.headers.get("x-access-code") !== code) {
-    return Response.json({ error: "Enter the access code to use voice parsing." }, { status: 401 });
-  }
-
-  const { transcript, today, unit, knownMovements } = (await request.json()) as {
-    transcript: string;
-    today: string;
-    unit: "kg" | "lb";
-    knownMovements: string[];
-  };
+  const { transcript, today, unit } = (await request.json()) as { transcript: string; today: string; unit: "kg" | "lb" };
   if (!transcript?.trim()) {
     return Response.json({ error: "Say or type something first." }, { status: 400 });
   }
@@ -56,15 +59,13 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "user",
-          content: `Today: ${today}\nDefault unit: ${unit}\nExisting movement names: ${
-            knownMovements.join(", ") || "(none yet)"
-          }\n\nNote:\n${transcript.slice(0, 8000)}`,
+          content: `Today: ${today}\nDefault unit: ${unit}\n\nNote:\n${transcript.slice(0, 8000)}`,
         },
       ],
     });
 
     if (response.stop_reason === "refusal" || !response.parsed_output) {
-      return Response.json({ error: "Couldn't parse that. Try rephrasing." }, { status: 422 });
+      return Response.json({ error: "Couldn't make sense of that. Try rephrasing." }, { status: 422 });
     }
     return Response.json(response.parsed_output);
   } catch (error) {
@@ -73,7 +74,7 @@ export async function POST(request: Request) {
     }
     if (error instanceof Anthropic.APIError) {
       console.error(`Anthropic API error ${error.status}:`, error.message);
-      return Response.json({ error: "Parsing failed. Your note is still here." }, { status: 502 });
+      return Response.json({ error: "The AI step failed. Your note is still here." }, { status: 502 });
     }
     throw error;
   }

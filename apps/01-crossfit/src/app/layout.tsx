@@ -1,20 +1,23 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Barlow, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const barlow = Barlow({ variable: "--font-barlow", subsets: ["latin"], weight: ["400", "500", "600"] });
+const condensed = Barlow_Condensed({ variable: "--font-condensed", subsets: ["latin"], weight: ["600", "700"] });
 
 export const metadata: Metadata = {
   title: "CrossFit Log",
-  description: "Talk through your lifts after class; get a clean log and PRs.",
+  description: "Your PBs, ready when the coach says 70%. Log class by voice.",
+  appleWebApp: { capable: true, title: "CrossFit Log", statusBarStyle: "black-translucent" },
 };
+
+export const viewport: Viewport = { themeColor: "#111111", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${barlow.variable} ${condensed.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

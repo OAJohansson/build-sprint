@@ -8,7 +8,9 @@ reps in going from idea to something live, plus an honest write-up of what I lea
 ## Products
 
 <!-- products:start -->
-_Nothing shipped yet — day 1 starts soon._
+| Day | Product | Problem | Status | Live | Links |
+| --: | --- | --- | --- | --- | --- |
+| 1 | **CrossFit Log** | Typing lifts into a phone after class is enough friction that I never track cleans, snatches or PRs | 🛠️ building | — | [write-up](docs/products/01-crossfit.md) · [code](apps/01-crossfit) |
 <!-- products:end -->
 
 _This table is generated from `docs/products/*.md`. Run `pnpm sync` after editing frontmatter._

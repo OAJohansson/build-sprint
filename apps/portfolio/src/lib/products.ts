@@ -8,7 +8,9 @@ export type Product = {
   slug: string;
   day: number;
   title: string;
-  tagline: string;
+  user: string;
+  problem: string;
+  bet: string;
   status: Status;
   date: string;
   url: string;
@@ -34,7 +36,9 @@ export function getProducts(): Product[] {
         slug,
         day: Number(data.day),
         title: String(data.title ?? slug),
-        tagline: String(data.tagline ?? ""),
+        user: String(data.user ?? ""),
+        problem: String(data.problem ?? ""),
+        bet: String(data.bet ?? ""),
         status: (data.status ?? "building") as Status,
         date: data.date instanceof Date ? data.date.toISOString().slice(0, 10) : String(data.date ?? ""),
         url: String(data.url ?? ""),

@@ -54,11 +54,12 @@ syncReadme();
 console.log(`
 Created day ${day}: ${title}
   app    apps/${slug}
-  doc    docs/products/${slug}.md   ← fill in Problem + Scope before coding
+  doc    docs/products/${slug}.md   ← fill in user, problem and bet before coding
 
 Next:
   pnpm install
   pnpm -F ${slug} dev
   Deploy: vercel.com/new → import build-sprint → Root Directory "apps/${slug}" → Deploy
-          then paste the URL into the doc's \`url:\` field and run \`pnpm sync\`.
+          then paste the URL into the doc's \`url:\` field.
+  After editing the doc: pnpm sync && pnpm notebook (then republish the notebook).
 `);

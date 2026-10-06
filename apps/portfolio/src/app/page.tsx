@@ -49,7 +49,7 @@ export default function Home() {
                     {p.title}
                   </Link>
                 </h2>
-                {p.tagline && <p className="mt-1 text-sm text-muted-foreground">{p.tagline}</p>}
+                {p.problem && <p className="mt-1 text-sm text-muted-foreground">{p.problem}</p>}
               </div>
               {p.url && (
                 <a href={p.url} className="relative z-10 mt-auto inline-flex w-fit items-center gap-1 text-sm font-medium underline-offset-4 hover:underline">

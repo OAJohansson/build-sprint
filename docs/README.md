@@ -1,10 +1,13 @@
 # Docs
 
+**Read it as a notebook:** https://claude.ai/artifact/6WgAx5PMZYAzBqCg7zf25b (private).
+It's built from these files by `pnpm notebook` and republished whenever they change. The markdown here stays the master copy.
+
 | Where | What goes there |
 | --- | --- |
 | [`PLAYBOOK.md`](PLAYBOOK.md) | The daily loop: how a product goes from idea to deployed in one day. |
 | [`ideas.md`](ideas.md) | Backlog of product ideas. Pick from here each morning. |
-| [`products/`](products/) | One write-up per product (`NN-slug.md`). The frontmatter feeds the README table and the portfolio site. Created by `pnpm new`. |
+| [`products/`](products/) | One lean page per product: user, problem, bet, links, learned (`NN-slug.md`). The frontmatter feeds the README table and the portfolio site. Created by `pnpm new`. |
 | [`learnings.md`](learnings.md) | Lessons that apply across products. Raw material for interviews. |
 | [`decisions/`](decisions/) | Setup and architecture decisions with their reasoning. Use [`TEMPLATE.md`](decisions/TEMPLATE.md). |
 
@@ -13,11 +16,15 @@
 ```yaml
 day: 1
 title: CrossFit Log
-tagline: One line a recruiter can read in 3 seconds
+user: CrossFitters training 3–5×/week
+problem: Results on the whiteboard get lost, so I can't see progress
+bet: A 10-second workout log with automatic PR tracking
 status: building   # idea | building | shipped | parked
 date: 2026-10-07
 url: https://...vercel.app   # empty until deployed
 tags: [nextjs, localstorage]
 ```
 
-After editing frontmatter, run `pnpm sync` to refresh the README table. The portfolio site reads these files at build time.
+Below the frontmatter there is just a `## Learned` list (1–3 bullets). Keep it lean: one line per field.
+
+After editing, run `pnpm sync` (README table) and `pnpm notebook` (the private notebook, then republish it). The portfolio site reads the same files at build time.

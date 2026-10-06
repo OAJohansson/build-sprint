@@ -10,14 +10,14 @@ export function syncReadme() {
     [
       p.day,
       `**${p.title}**`,
-      p.tagline || "",
+      p.problem || "",
       STATUS[p.status] ?? p.status,
       p.url ? `[live](${p.url})` : "—",
       `[write-up](docs/products/${p.file}) · [code](apps/${p.slug})`,
     ].join(" | "),
   );
   const table = [
-    "| Day | Product | What it is | Status | Live | Links |",
+    "| Day | Product | Problem | Status | Live | Links |",
     "| --: | --- | --- | --- | --- | --- |",
     ...rows.map((r) => `| ${r} |`),
   ].join("\n");

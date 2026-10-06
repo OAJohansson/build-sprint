@@ -3,7 +3,7 @@
 One new product every day: scoped in the morning, shipped by night. Small on purpose. The point is
 reps in going from idea to something live, plus an honest write-up of what I learned.
 
-**Portfolio site:** _add the portfolio's Vercel URL here after the first deploy_
+**Portfolio site:** _not public yet. Products are tracked in a private notebook built from `docs/` (`pnpm notebook`)._
 
 ## Products
 
@@ -33,6 +33,7 @@ scripts/              `pnpm new` and `pnpm sync`
 Why a monorepo with a Vercel project per app: see
 [decision 0001](docs/decisions/0001-monorepo-one-vercel-project-per-app.md).
 Why no database by default: see [decision 0002](docs/decisions/0002-localstorage-by-default.md).
+Why a private notebook first: see [decision 0003](docs/decisions/0003-private-notebook-before-public-portfolio.md).
 
 ## Daily commands
 
@@ -41,6 +42,7 @@ pnpm new crossfit "CrossFit Log"   # scaffold apps/NN-crossfit + docs/products/N
 pnpm install
 pnpm -F NN-crossfit dev            # run it
 pnpm sync                          # refresh the table above from the write-ups
+pnpm notebook                      # rebuild the private notebook (then republish it)
 pnpm portfolio                     # preview the portfolio site
 ```
 

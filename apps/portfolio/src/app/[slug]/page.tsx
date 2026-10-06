@@ -15,7 +15,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/[slug]">): Promise<Metadata> {
   const p = getProduct((await params).slug);
-  return p ? { title: p.title, description: p.tagline } : {};
+  return p ? { title: p.title, description: p.problem } : {};
 }
 
 export default async function ProductPage({ params }: PageProps<"/[slug]">) {
@@ -35,7 +35,6 @@ export default async function ProductPage({ params }: PageProps<"/[slug]">) {
           <StatusBadge status={p.status} />
         </div>
         <h1 className="text-4xl font-semibold tracking-tight">{p.title}</h1>
-        {p.tagline && <p className="text-lg text-muted-foreground">{p.tagline}</p>}
         <div className="flex flex-wrap items-center gap-2">
           {p.url && (
             <a href={p.url} className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">
@@ -49,6 +48,14 @@ export default async function ProductPage({ params }: PageProps<"/[slug]">) {
           ))}
         </div>
       </header>
+      <dl className="grid gap-4 border-y py-5 sm:grid-cols-[6rem_1fr]">
+        {(["User", "Problem", "Bet"] as const).map((label) => (
+          <div key={label} className="contents">
+            <dt className="text-xs font-semibold uppercase tracking-wider text-muted-foreground sm:pt-1">{label}</dt>
+            <dd className="text-lg">{p[label.toLowerCase() as "user" | "problem" | "bet"] || "—"}</dd>
+          </div>
+        ))}
+      </dl>
       {p.screenshot && (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={p.screenshot} alt={`${p.title} screenshot`} className="w-full rounded-xl border" />

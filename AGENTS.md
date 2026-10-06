@@ -21,8 +21,11 @@ The apps use Next.js 16, which has breaking changes from older versions (async `
 
 ## Documentation (do this by default, without being asked)
 
-- Keep the product's `docs/products/NN-slug.md` current as you build: scope at the start, then
-  "What shipped" and "What I learned" at the end. Update its frontmatter (`status`, `url`,
-  `tagline`, `tags`) and run `pnpm sync`.
+- Keep the product's `docs/products/NN-slug.md` lean and current: `user`, `problem` and `bet`
+  (one line each) before coding; `url` once deployed; 1–3 bullets under `## Learned` and
+  `status: shipped` (or `parked`) at the end. Don't add extra sections.
+- After any change in `docs/`, run `pnpm sync && pnpm notebook`, then republish
+  `.notebook/index.html` with the Artifact tool to the existing private notebook,
+  https://claude.ai/artifact/6WgAx5PMZYAzBqCg7zf25b (pass that URL; never create a new one).
 - Non-obvious setup or architecture choices → a new file in `docs/decisions/` from `TEMPLATE.md`.
 - Lessons that apply across products → one line in `docs/learnings.md`.

@@ -6,8 +6,8 @@ One product per day. Done beats perfect. Scope is the main lever, so cut early.
 
 - Pick an idea from [`ideas.md`](ideas.md).
 - `pnpm new <slug> "Display Title"`. This creates the app, the write-up and the README row.
-- Fill in **Problem**, **Who it's for** and **Scope** in `docs/products/NN-slug.md` *before writing code*.
-  Scope = the 1–3 things that must work tonight. Everything else goes under "Out of scope".
+- Fill in **user**, **problem** and **bet** (one line each) in `docs/products/NN-slug.md` *before writing code*.
+  The bet is the smallest thing that could solve the problem by tonight. Cut everything else.
 
 ## 2. Build (bulk of the day)
 
@@ -33,13 +33,13 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 
 ## 4. Wrap up (≈20 min)
 
-- Fill in **What shipped**, **What I learned** and **If I kept going** in the write-up.
-- Set `status: shipped` (or `parked`, which is fine too) → `pnpm sync`.
+- Add 1–3 bullets under **Learned** in the write-up.
+- Set `status: shipped` (or `parked`, which is fine too) → `pnpm sync && pnpm notebook` → republish the notebook.
 - Add a screenshot to `apps/portfolio/public/shots/NN-slug.png` (optional, makes the portfolio better).
 - Anything that applies beyond this product → one line in [`learnings.md`](learnings.md).
 
 ## Definition of done
 
 - [ ] Live URL works on phone and desktop
-- [ ] Write-up has all sections filled in and `status: shipped`
-- [ ] README table is up to date (`pnpm sync`)
+- [ ] Write-up has user, problem, bet, url, learned and `status: shipped`
+- [ ] README table and notebook are up to date

@@ -15,6 +15,9 @@ jerk five doubles at 80") into structured lifts. Speech-to-text also mangles lif
 - Parsing is one Claude call (`claude-opus-5-5`, low effort, structured output via a Zod schema) in a
   Next.js route handler, `apps/01-crossfit/src/app/api/parse/route.ts`. It needs a server only to
   keep `ANTHROPIC_API_KEY` secret. No database, no auth.
+- The app is public (portfolio piece), so the route requires an `ACCESS_CODE` header and fails
+  closed in production if it's unset. Visitors without the code get a free, pre-made demo result.
+  A monthly spend limit on the Anthropic workspace is the backstop.
 - The user always reviews and edits the parsed rows before saving. Saved sessions live in localStorage.
 
 ## Alternatives considered
@@ -25,6 +28,6 @@ jerk five doubles at 80") into structured lifts. Speech-to-text also mangles lif
 
 ## Consequences
 
-- Needs `ANTHROPIC_API_KEY` set in the Vercel project. Without it the route returns 503 and the app
+- Needs `ANTHROPIC_API_KEY` and `ACCESS_CODE` set in the Vercel project. Without it the route returns 503 and the app
   falls back to manual entry.
 - Per-device data. Export to JSON exists as a safety net; revisit sync if it's used daily.

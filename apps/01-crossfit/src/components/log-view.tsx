@@ -5,6 +5,7 @@ import { Loader2, Mic, Plus, Sparkles, Square, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { useSpeech } from "@/lib/use-speech";
+import { DEMO_NOTE, DEMO_RESULT } from "@/lib/demo";
 import { type Lift, type ParsedSession, type Session, type Unit, today, uid } from "@/lib/types";
 
 type Draft = { date: string; title: string; lifts: Lift[] };
@@ -27,6 +28,10 @@ export function LogView({
   const [draft, setDraft] = useState<Draft | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [accessCode, setAccessCode] = useLocalStorage("01-crossfit:access-code", "");
+  const [needCode, setNeedCode] = useState(false);
+  const [demo, setDemo] = useState(false);
+  const [codeInput, setCodeInput] = useState("");
 
   const append = useCallback(
     (text: string) => setTranscript((t) => (t ? `${t.trimEnd()} ${text}` : text)),
@@ -44,28 +49,44 @@ export function LogView({
     note: null,
   });
 
-  async function parse() {
+  const toDraft = (parsed: ParsedSession): Draft => ({
+    date: parsed.date ?? date,
+    title: parsed.title,
+    lifts: parsed.lifts.map((l) => ({ ...l, id: uid() })),
+  });
+
+  function tryDemo() {
+    setTranscript(DEMO_NOTE);
+    setNeedCode(false);
+    setError(null);
+    setDemo(true);
+    setDraft(toDraft(DEMO_RESULT));
+  }
+
+  async function parse(code = accessCode) {
     speech.stop();
     setBusy(true);
     setError(null);
     try {
       const res = await fetch("/api/parse", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: { "content-type": "application/json", "x-access-code": code },
         body: JSON.stringify({ transcript, today: today(), unit, knownMovements }),
       });
       const data = await res.json();
+      if (res.status === 401) {
+        setAccessCode("");
+        setNeedCode(true);
+        return;
+      }
       if (!res.ok) {
         setError(data.error ?? "Parsing failed.");
         if (res.status === 503) setDraft({ date, title: "", lifts: [blankLift()] });
         return;
       }
-      const parsed = data as ParsedSession;
-      setDraft({
-        date: parsed.date ?? date,
-        title: parsed.title,
-        lifts: parsed.lifts.map((l) => ({ ...l, id: uid() })),
-      });
+      setNeedCode(false);
+      setDemo(false);
+      setDraft(toDraft(data as ParsedSession));
     } catch {
       setError("Network error. Your note is still here.");
     } finally {
@@ -111,6 +132,12 @@ export function LogView({
           />
         </div>
         {error && <p className="text-sm text-destructive">{error}</p>}
+        {demo && (
+          <p className="rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground">
+            Demo: this is what Claude returns for the example note (pre-made, no AI call). Edit it and save to
+            see History and Progress.
+          </p>
+        )}
 
         <ul className="flex flex-col gap-3">
           {draft.lifts.map((l) => (
@@ -222,18 +249,54 @@ export function LogView({
 
       <div className="flex items-center gap-2">
         <input type="date" className={`${input} w-auto`} value={date} onChange={(e) => setDate(e.target.value)} />
-        <Button size="lg" className="flex-1" disabled={!transcript.trim() || busy} onClick={parse}>
+        <Button size="lg" className="flex-1" disabled={!transcript.trim() || busy} onClick={() => parse()}>
           {busy ? <Loader2 className="animate-spin" /> : <Sparkles />}
           {busy ? "Reading your note…" : "Turn into lifts"}
         </Button>
       </div>
-      <button
-        type="button"
-        className="self-center text-sm text-muted-foreground underline underline-offset-4"
-        onClick={() => setDraft({ date, title: "", lifts: [blankLift()] })}
-      >
-        or add lifts by hand
-      </button>
+      {needCode && (
+        <form
+          className="flex flex-col gap-2 rounded-lg border p-3"
+          onSubmit={(e) => {
+            e.preventDefault();
+            setAccessCode(codeInput.trim());
+            parse(codeInput.trim());
+          }}
+        >
+          <p className="text-sm">
+            Voice parsing is limited to the owner to keep AI costs in check. Have the code? Enter it once
+            and this device remembers it.
+          </p>
+          <div className="flex gap-2">
+            <input
+              className={input}
+              type="password"
+              placeholder="Access code"
+              value={codeInput}
+              onChange={(e) => setCodeInput(e.target.value)}
+            />
+            <Button type="submit" disabled={!codeInput.trim() || busy}>
+              Unlock
+            </Button>
+          </div>
+          <Button type="button" variant="outline" onClick={tryDemo}>
+            No code? Try the demo
+          </Button>
+        </form>
+      )}
+
+      <div className="flex justify-center gap-4 text-sm text-muted-foreground">
+        <button
+          type="button"
+          className="underline underline-offset-4"
+          onClick={() => setDraft({ date, title: "", lifts: [blankLift()] })}
+        >
+          Add lifts by hand
+        </button>
+        <button type="button" className="underline underline-offset-4" onClick={tryDemo}>
+          Try an example
+        </button>
+      </div>
     </section>
   );
 }

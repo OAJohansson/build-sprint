@@ -25,6 +25,16 @@ export async function POST(request: Request) {
     );
   }
 
+  // The app is public (it's a portfolio piece) but each parse costs money, so
+  // only someone with ACCESS_CODE can reach Claude. Fail closed in production.
+  const code = process.env.ACCESS_CODE;
+  if (!code && process.env.NODE_ENV === "production") {
+    return Response.json({ error: "ACCESS_CODE is not set on the server." }, { status: 503 });
+  }
+  if (code && request.headers.get("x-access-code") !== code) {
+    return Response.json({ error: "Enter the access code to use voice parsing." }, { status: 401 });
+  }
+
   const { transcript, today, unit, knownMovements } = (await request.json()) as {
     transcript: string;
     today: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Loader2, Mic, Plus, Sparkles, Square, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocalStorage } from "@/lib/use-local-storage";
@@ -33,11 +33,17 @@ export function LogView({
   const [demo, setDemo] = useState(false);
   const [codeInput, setCodeInput] = useState("");
 
-  const append = useCallback(
-    (text: string) => setTranscript((t) => (t ? `${t.trimEnd()} ${text}` : text)),
+  // Text typed before the mic was tapped; dictation is placed after it.
+  const base = useRef("");
+  const onDictation = useCallback(
+    (spoken: string) => setTranscript(base.current ? `${base.current} ${spoken}` : spoken),
     [setTranscript],
   );
-  const speech = useSpeech(append);
+  const speech = useSpeech(onDictation);
+  const startDictation = () => {
+    base.current = transcript.trimEnd();
+    speech.start();
+  };
 
   const blankLift = (): Lift => ({
     id: uid(),
@@ -235,7 +241,7 @@ export function LogView({
       {speech.supported && (
         <button
           type="button"
-          onClick={speech.listening ? speech.stop : speech.start}
+          onClick={speech.listening ? speech.stop : startDictation}
           className={`mx-auto flex size-24 items-center justify-center rounded-full text-primary-foreground shadow-lg transition ${
             speech.listening ? "animate-pulse bg-destructive" : "bg-primary hover:opacity-90"
           }`}

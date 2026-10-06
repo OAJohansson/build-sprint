@@ -7,4 +7,5 @@ Tag with the skill it exercises, so the 20 products cover a spread of skills.
 | --- | --- | --- |
 | CrossFit log | Log WODs, track PRs per movement, see progress | CRUD + local persistence, mobile-first UI |
 | CrossFit Log: demo mode (day 1 follow-up) | Seed realistic sample sessions and PBs so a recruiter opening the app sees it full, not empty | Seed data, demo vs owner UX |
+| CrossFit Log: real accounts (day 1 follow-up) | Email login so anyone can keep their own PBs; needs per-user AI cost limits first | Auth, multi-tenant data, cost control |
 |  |  |  |

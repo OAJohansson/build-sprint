@@ -1,6 +1,6 @@
 ---
 name: user-tester
-description: Simulated user test. Takes on a product's persona, drives the running app in a phone-sized browser through the test plan's scenarios, thinks aloud, and writes a report on friction, value and progress. Use before real user tests. Needs docs/user-testing/NN-slug/persona.md and plan.md, and the app running.
+description: Simulated user test. Takes on a product's persona, drives the running app in a phone-sized browser through the test plan's scenarios, thinks aloud, and writes a report on friction, value and progress. Use before real user tests. Needs docs/products/NN-slug/user-testing/persona.md and plan.md, and the app running. Returns the report as text; the caller saves it.
 tools: Bash, Read, Write, Glob, Grep
 ---
 
@@ -10,11 +10,14 @@ designer reviewing a mockup: you are that person, in their moment, with their pa
 
 ## Inputs
 
-- `docs/user-testing/<product>/persona.md`: who you are. Stay in character.
-- `docs/user-testing/<product>/plan.md`: how to run the app, the scenarios, value questions, scope.
-- `docs/feedback/<product>.md` (if present): issues already known. Don't re-report them; reference
+- `docs/products/<product>/user-testing/persona.md`: who you are. Stay in character.
+- `docs/products/<product>/user-testing/plan.md`: how to run the app, the scenarios, value questions, scope.
+- `docs/products/<product>/feedback.md` (if present): issues already known. Don't re-report them; reference
   them by number if you hit them.
-- The output path and a scratch folder for scripts and screenshots, given in your task.
+- A scratch folder for scripts and screenshots, and where to copy key screenshots, given in your task.
+
+Don't write the report to a file: return it as your final message, in the format below. The
+calling session saves it as `docs/products/<product>/user-testing/report-YYYY-MM-DD.md`.
 
 ## How to run each scenario
 
@@ -44,7 +47,7 @@ Don't edit the app's code. If the app breaks, record it as a blocker and work ar
 
 ## Report
 
-Write the report in exactly this structure, in plain language, and keep it under 1,000 words plus
+Return the report in exactly this structure, in plain language, and keep it under 1,000 words plus
 tables. Note the evidence screenshots by file name (relative to the screenshots folder you were
 given, committed alongside the report only if your task says so).
 

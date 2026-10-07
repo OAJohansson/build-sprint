@@ -74,4 +74,4 @@
 ## Out of scope
 
 Accuracy of dictation and AI parsing (simulated); visual polish beyond clarity; the known feedback
-items already in `docs/feedback/01-crossfit.md` (reference them if you hit them, don't re-report).
+items already in `docs/products/01-crossfit/feedback.md` (reference them if you hit them, don't re-report).

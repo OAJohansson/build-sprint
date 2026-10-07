@@ -7,6 +7,7 @@ user: "Me: years of CrossFit, never consistent about logging weights"
 problem: "Coach says “70% of your 1RM” and I never remember my PBs, because logging lifts after class is too much friction"
 bet: "A PB board that answers “what’s 70%?” in 5 seconds, fed by talking through class for 20 seconds while Claude tidies it up and celebrates new PBs"
 url: "https://crossfit-log.vercel.app"
+design: "https://claude.ai/artifact/244xnmDMMpHvigepL751qX"
 tags: [voice, claude-api, supabase, mobile]
 ---
 

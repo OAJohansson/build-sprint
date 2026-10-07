@@ -1,6 +1,4 @@
-# Learnings
+# Learnings across products
 
-Lessons that apply across products. One line each, newest first. Note which day each came from.
-
-- Test browser dictation on a real phone on day one: Chrome on Android re-sends earlier speech results, which my desktop testing never showed. (day 1)
-- Frame the moment of use before building: the first MVP logged workouts, but the real job was recalling a PB mid-class. (day 1)
+Each product keeps its own lessons in `docs/products/NN-slug/learnings.md`. A summary of the
+lessons that repeat across products comes later in the sprint.

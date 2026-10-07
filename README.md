@@ -25,12 +25,12 @@ templates/
   next-starter/       what `pnpm new` copies: Next.js 16 + Tailwind 4 + shadcn + localStorage hook
 docs/
   PLAYBOOK.md         the daily loop
-  ideas.md            idea backlog
+  ideas.md            ideas for the next products
   products/           one write-up per product (problem → scope → what shipped → learnings)
-  learnings.md        lessons that apply across products
+  learnings.md        (later) summary of lessons across products
   decisions/          why it's set up this way
-  feedback/           per-product review log: owner + simulated-user findings, prioritised
-  user-testing/       simulated user tests: persona + plan templates, reports per product
+  products/NN-slug/   per product: journal, feedback, user-testing/, backlog, learnings
+  user-testing/       simulated user testing: method + persona and plan templates
 scripts/              `pnpm new` and `pnpm sync`
 .claude/agents/       user-tester: the agent that plays the persona and drives the app
 ```

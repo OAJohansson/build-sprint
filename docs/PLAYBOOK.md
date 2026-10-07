@@ -33,10 +33,10 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 
 ## 3b. Test as a user (≈30 min, once the core flow works)
 
-- Write `docs/user-testing/NN-slug/persona.md` and `plan.md` from the templates (one specific person,
+- Write `docs/products/NN-slug/user-testing/persona.md` and `plan.md` from the templates (one specific person,
   scenarios as their real moments, each with a success bar).
-- Run the `user-tester` agent against the running app. It writes `report-YYYY-MM-DD.md`.
-- Add its findings to `docs/feedback/NN-slug.md` next to your own review, then prioritise together.
+- Run the `user-tester` agent against the running app; save its report as `report-YYYY-MM-DD.md`.
+- Add its findings to `docs/products/NN-slug/feedback.md` next to your own review, then prioritise together.
 - Full method: [`user-testing/README.md`](user-testing/README.md).
 
 ## 4. Wrap up (≈20 min)
@@ -44,7 +44,7 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 - Add 1–3 bullets under **Learned** in the write-up.
 - Set `status: shipped` (or `parked`, which is fine too) → `pnpm sync && pnpm notebook` → republish the notebook.
 - Add a screenshot to `apps/portfolio/public/shots/NN-slug.png` (optional, makes the portfolio better).
-- Anything that applies beyond this product → one line in [`learnings.md`](learnings.md).
+- Lessons → `docs/products/NN-slug/learnings.md` (a cross-product summary comes later).
 
 ## Definition of done
 

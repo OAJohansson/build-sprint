@@ -51,6 +51,21 @@ a { color: var(--accent); text-underline-offset: 3px; }
 .nav .d { font: 12px var(--mono); color: var(--muted); min-width: 2ch; }
 .nav .t { flex: 1; min-width: 0; }
 .empty-nav { color: var(--muted); padding: 4px 8px; font-size: 13px; }
+.subnav { list-style: none; margin: 2px 0 8px 22px; padding: 0 0 0 10px; border-left: 1px solid var(--line); display: grid; gap: 1px; }
+.subnav a { padding: 4px 8px; font-size: 13px; color: var(--muted); }
+.subnav a[aria-current="page"] { color: var(--accent); background: var(--accent-soft); }
+
+/* product sub-pages */
+.sections { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr)); gap: 10px; }
+.section-card { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; color: var(--ink); text-decoration: none; }
+.section-card:hover { border-color: var(--accent); }
+.section-card .t { font-weight: 600; }
+.section-card .p { font: 12px var(--mono); color: var(--muted); }
+.crumbs { font: 12px var(--mono); color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px; }
+.crumbs a { color: var(--muted); }
+.prose pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 13px/1.5 var(--mono); }
+.prose hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
+.prose h3 { font: 600 16px/1.3 var(--body); margin: 20px 0 8px; }
 
 /* phone top bar */
 .topbar { display: none; }
@@ -137,11 +152,6 @@ h2 { font: 700 20px/1.2 var(--display); margin: 0; text-wrap: balance; }
     <ul class="nav"><li><a href="#overview" data-route="overview"><span class="t">Overview</span></a></li></ul>
     <p class="nav-label">Products</p>
     <ul class="nav" id="nav-products"></ul>
-    <p class="nav-label">Notes</p>
-    <ul class="nav">
-      <li><a href="#ideas" data-route="ideas"><span class="t">Idea backlog</span></a></li>
-      <li><a href="#learnings" data-route="learnings"><span class="t">Learnings</span></a></li>
-    </ul>
   </nav>
   <main><div class="col" id="view"></div></main>
 </div>
@@ -160,9 +170,25 @@ const md = (text) => {
 const STATUS = { shipped: "Shipped", building: "Building", parked: "Parked", idea: "Idea" };
 const pill = (s) => `<span class="pill ${esc(s)}">${esc(STATUS[s] || s)}</span>`;
 
-function nav() {
+// Routes: "overview", "<slug>" (product overview) or "<slug>.<section>" (product sub-page).
+function parseRoute() {
+  const route = decodeURIComponent(location.hash.slice(1)) || "overview";
+  const [slug, sectionId] = route.split(".");
+  const p = DATA.products.find((x) => x.slug === slug);
+  const section = p && sectionId ? p.sections.find((s) => s.id === sectionId) : null;
+  return { route: p ? (section ? `${p.slug}.${section.id}` : p.slug) : "overview", p, section };
+}
+
+function nav(current) {
   $("#nav-products").innerHTML = DATA.products.length
-    ? DATA.products.map((p) => `<li><a href="#${p.slug}" data-route="${p.slug}"><span class="d">${nn(p.day)}</span><span class="t">${esc(p.title)}</span></a></li>`).join("")
+    ? DATA.products.map((p) => {
+        const open = current.p && current.p.slug === p.slug;
+        const sub = open && p.sections.length
+          ? `<ul class="subnav"><li><a href="#${p.slug}" data-route="${p.slug}">Overview</a></li>${p.sections.map((s) =>
+              `<li><a href="#${p.slug}.${s.id}" data-route="${p.slug}.${s.id}">${esc(s.label)}</a></li>`).join("")}</ul>`
+          : "";
+        return `<li><a href="#${p.slug}" data-route="${open ? "" : p.slug}"><span class="d">${nn(p.day)}</span><span class="t">${esc(p.title)}</span></a>${sub}</li>`;
+      }).join("")
     : `<li class="empty-nav">None yet</li>`;
 }
 
@@ -181,7 +207,7 @@ function overview() {
           <span class="d">${nn(p.day)}</span><span class="t">${esc(p.title)}</span>${pill(p.status)}
           <span class="p">${esc(p.problem || "Problem not written yet")}</span>
         </a>`).join("")}</div>`
-    : `<div class="empty">No products yet. Day 1 starts with <code>pnpm new &lt;slug&gt;</code>. Pick one from the <a href="#ideas">idea backlog</a>.</div>`;
+    : `<div class="empty">No products yet. Day 1 starts with <code>pnpm new &lt;slug&gt;</code>.</div>`;
   return `
     <header class="head">
       <div class="eyebrow">Overview</div>
@@ -193,12 +219,18 @@ function overview() {
       <div class="tally"><span><b>${count("shipped")}</b>/${DATA.total} shipped</span><span><b>${count("building")}</b> building</span><span><b>${count("parked")}</b> parked</span></div>
     </section>
     <section class="head"><h2>Products</h2>${rows}</section>
+    <section class="head"><h2>Product ideas</h2><div class="prose">${md(DATA.ideas)}</div></section>
     <div class="links"><a class="btn" href="${DATA.repo}">Code on GitHub</a></div>`;
 }
 
 function product(p) {
   const fact = (label, value) => `<div class="fact"><dt>${label}</dt><dd class="${value ? "" : "blank"}">${esc(value || "Not written yet")}</dd></div>`;
   const live = p.url ? `<a class="btn primary" href="${esc(p.url)}">Open app ↗</a>` : `<span class="btn off">Not deployed yet</span>`;
+  const design = p.design ? `<a class="btn" href="${esc(p.design)}">Design canvas ↗</a>` : "";
+  const cards = p.sections.length
+    ? `<section class="head"><h2>In this product</h2><div class="sections">${p.sections.map((s) =>
+        `<a class="section-card" href="#${p.slug}.${s.id}"><span class="t">${esc(s.label)}</span><span class="p">${esc(s.summary)}</span></a>`).join("")}</div></section>`
+    : "";
   const body = p.body.replace(/^##\s*Learned\s*\n+-\s*$/m, "").trim();
   return `
     <header class="head">
@@ -206,22 +238,27 @@ function product(p) {
       <h1>${esc(p.title)}</h1>
     </header>
     <dl class="facts">${fact("User", p.user)}${fact("Problem", p.problem)}${fact("Bet", p.bet)}</dl>
-    <div class="links">${live}<a class="btn" href="${p.code}">Code</a><a class="btn" href="${p.doc}">Edit notes</a></div>
+    <div class="links">${live}${design}<a class="btn" href="${p.code}">Code</a><a class="btn" href="${p.doc}">Edit notes</a></div>
     ${p.tags.length ? `<div class="tags">${p.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div>` : ""}
+    ${cards}
     <section class="prose">${body ? md(body) : `<h2>Learned</h2><p class="lede">Filled in at the end of the day.</p>`}</section>`;
 }
 
-function page(text) { return `<section class="prose">${md(text)}</section>`; }
+function sectionPage(p, s) {
+  return `
+    <div class="crumbs"><a href="#${p.slug}">${nn(p.day)} ${esc(p.title)}</a><span>/</span><span>${esc(s.label)}</span></div>
+    <section class="prose">${md(s.text)}</section>`;
+}
 
 function render() {
-  const route = decodeURIComponent(location.hash.slice(1)) || "overview";
-  const p = DATA.products.find((x) => x.slug === route);
-  const html = p ? product(p) : route === "ideas" ? page(DATA.ideas) : route === "learnings" ? page(DATA.learnings) : overview();
+  const current = parseRoute();
+  const { p, section } = current;
+  const html = section ? sectionPage(p, section) : p ? product(p) : overview();
   $("#view").innerHTML = html + `<div class="foot">Built ${esc(DATA.built)} from docs/ in the repo</div>`;
-  const current = p || route === "ideas" || route === "learnings" ? route : "overview";
+  nav(current);
   document.querySelectorAll("[data-route]").forEach((a) =>
-    a.dataset.route === current ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
-  document.title = p ? `${p.title} · Build Sprint Notebook` : "Build Sprint Notebook";
+    a.dataset.route === current.route ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
+  document.title = p ? `${p.title}${section ? ` · ${section.label}` : ""} · Build Sprint Notebook` : "Build Sprint Notebook";
   setMenu(false);
   window.scrollTo(0, 0);
 }
@@ -235,6 +272,5 @@ $("#menu-btn").addEventListener("click", () => setMenu(!$("#rail").classList.con
 $("#scrim").addEventListener("click", () => setMenu(false));
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") setMenu(false); });
 window.addEventListener("hashchange", render);
-nav();
 render();
 </script>

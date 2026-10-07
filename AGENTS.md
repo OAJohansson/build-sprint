@@ -21,11 +21,19 @@ The apps use Next.js 16, which has breaking changes from older versions (async `
 
 ## Documentation (do this by default, without being asked)
 
-- Keep the product's `docs/products/NN-slug.md` lean and current: `user`, `problem` and `bet`
+- Keep the product's card `docs/products/NN-slug.md` lean and current: `user`, `problem` and `bet`
   (one line each) before coding; `url` once deployed; 1–3 bullets under `## Learned` and
-  `status: shipped` (or `parked`) at the end. Don't add extra sections.
+  `status: shipped` (or `parked`) at the end. Don't add extra sections to the card.
+- Everything else about a product goes in its folder `docs/products/NN-slug/`, kept current as you
+  work (each file is a sub-page in the notebook):
+  - `journal.md`: what happened, what was decided and why, in order. Summarise each meaningful
+    step of the conversation (requests, pivots, bugs, decisions) as it happens.
+  - `feedback.md`: every review comment and user-test finding, numbered, with a status.
+  - `user-testing/`: `persona.md`, `plan.md`, `report-YYYY-MM-DD.md` (see `docs/user-testing/README.md`).
+  - `backlog.md`: ideas and parked features for this product.
+  - `learnings.md`: lessons from this product.
 - After any change in `docs/`, run `pnpm sync && pnpm notebook`, then republish
   `.notebook/index.html` with the Artifact tool to the existing private notebook,
   https://claude.ai/artifact/6WgAx5PMZYAzBqCg7zf25b (pass that URL; never create a new one).
 - Non-obvious setup or architecture choices → a new file in `docs/decisions/` from `TEMPLATE.md`.
-- Lessons that apply across products → one line in `docs/learnings.md`.
+- `docs/ideas.md` is for ideas for *new* products. A cross-product learnings summary comes later.

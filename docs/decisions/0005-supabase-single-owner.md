@@ -24,10 +24,10 @@ also public (portfolio piece) and is used by one person for now.
 
 - Reuse the kids-app Supabase project: works, but mixes two apps' data and keys.
 - Vercel Marketplace Postgres: equally fine; Supabase was already set up and familiar.
-- Real accounts (email login): parked in `docs/ideas.md`; every new user would add AI cost.
+- Real accounts (email login): parked in the product backlog; every new user would add AI cost.
 
 ## Consequences
 
 - Needs `SUPABASE_URL` and `SUPABASE_SECRET_KEY` in the Vercel project, plus the schema run once.
 - Free Supabase projects pause after a week without activity; restore from the dashboard.
-- Recruiters without the code see only the unlock screen until demo mode exists (`docs/ideas.md`).
+- Recruiters without the code see only the unlock screen until demo mode exists (product backlog).

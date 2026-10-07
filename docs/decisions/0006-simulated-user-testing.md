@@ -13,11 +13,11 @@ recruit real testers for every iteration, but shipping without a user's view rep
 
 Every product gets a simulated user test once its core flow works:
 
-- A persona and a scenario plan per product (`docs/user-testing/NN-slug/`), from shared templates.
+- A persona and a scenario plan per product (`docs/products/NN-slug/user-testing/`), from shared templates.
 - A `user-tester` agent (`.claude/agents/user-tester.md`) plays the persona and drives the real app
   in a phone-sized browser, with screenshots as evidence, and writes a fixed-format report: jobs,
   scenarios, findings by severity, value, progress, top recommendations.
-- Findings join the owner's review in `docs/feedback/NN-slug.md` and get prioritised together.
+- Findings join the owner's review in `docs/products/NN-slug/feedback.md` and get prioritised together.
 - Real users then test the same scenarios. Where the simulation was wrong, the templates or agent
   get fixed (recorded in `docs/user-testing/README.md` → Method learnings).
 

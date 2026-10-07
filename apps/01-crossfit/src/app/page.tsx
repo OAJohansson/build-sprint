@@ -31,17 +31,30 @@ export default function Home() {
 
   const api = useMemo(() => makeApi(code), [code]);
 
-  const reload = useCallback(async () => {
+  const reload = useCallback(async (): Promise<boolean> => {
     try {
       setData(await api.load());
       setError(null);
+      return true;
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
         setCode("");
         setError(code ? "That code didn't work." : null);
-      } else setError(err instanceof Error ? err.message : "Couldn't load your data.");
+      } else setError(err instanceof Error ? err.message : "Something went wrong. Please try again later.");
+      return false;
     }
   }, [api, code, setCode]);
+
+  // A failed retry comes back in milliseconds; keep the button busy briefly so
+  // the tap visibly does something, and say so when it fails again.
+  const [retrying, setRetrying] = useState(false);
+  const [failedRetries, setFailedRetries] = useState(0);
+  const retry = async () => {
+    setRetrying(true);
+    const [ok] = await Promise.all([reload(), new Promise((r) => setTimeout(r, 800))]);
+    setRetrying(false);
+    setFailedRetries((n) => (ok ? 0 : n + 1));
+  };
 
   useEffect(() => {
     // Loading data on mount (and when the code changes) is the point of this effect.
@@ -52,14 +65,31 @@ export default function Home() {
   if (!code) return <Unlock error={error} onUnlock={setCode} />;
   if (!data) {
     return (
-      <main className="flex flex-1 flex-col items-center justify-center gap-4 p-6 text-center">
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-5 p-6 text-center">
         {error ? (
           <>
+            <h1 className="font-display text-3xl font-bold uppercase">Couldn&rsquo;t load your log</h1>
             <p className="text-muted-foreground">{error}</p>
-            <BigButton variant="light" onClick={reload}>Try again</BigButton>
+            <BigButton variant="light" className="w-full" disabled={retrying} onClick={retry}>
+              {retrying ? <Loader2 className="animate-spin" /> : null}
+              {retrying ? "Trying again…" : "Try again"}
+            </BigButton>
+            {failedRetries > 0 && !retrying && (
+              <p className="text-sm text-muted-foreground">Still not working. Give it a few minutes and try again.</p>
+            )}
+            <button
+              type="button"
+              className="h-11 text-sm text-muted-foreground underline underline-offset-4"
+              onClick={() => {
+                setError(null);
+                setCode("");
+              }}
+            >
+              Enter the access code again
+            </button>
           </>
         ) : (
-          <Loader2 className="size-8 animate-spin text-muted-foreground" />
+          <Loader2 className="size-8 animate-spin text-muted-foreground" aria-label="Loading" />
         )}
       </main>
     );

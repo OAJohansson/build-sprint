@@ -58,3 +58,16 @@ What happened, what was decided and why. Newest last.
   credits each practice to its source, with a new [Product craft](https://github.com/OAJohansson/build-sprint/blob/main/docs/product-craft.md)
   page: the owner's list (Cagan, Perri, Torres, Pichler, Doshi, Rachitsky) plus Singer,
   Christensen and Moesta, Fitzpatrick, Krug and Husain for balance.
+
+### Prototype: three directions (`/prototype`)
+- Built at `/prototypes/home` in the app, behind a picker, with real sun times from `suncalc`
+  (Bali on 7 Oct: sunrise 06:00, golden hour 17:46, sunset 18:14; the brief's 18:12 was close).
+  `?at=06:05` starts the clock at another Bali time to check every sky.
+- **Window** (scene first): full-bleed sky, the sun at its real height sinking toward the
+  landmark, the countdown floating on the sky.
+- **Arc** (instrument): the day as the sun's path; the countdown is the sun's position on it;
+  times listed below the horizon.
+- **Scrub** (interactive): split at the horizon with the landmark reflected; drag to move through
+  time and watch the light change; the countdown as a sentence.
+- Search works across three cases: landmark (Paris), no landmark (Lisbon) and far north (Tromsø).
+  Owner to pick a direction.

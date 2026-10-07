@@ -1,0 +1,61 @@
+/* Shared motion for the prototype variants. Strong ease-out (Emil Kowalski's curve). */
+.hz {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* Content enters once, on open: small rise + fade, staggered by --i. */
+.hz-rise {
+  animation: hz-rise 420ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 60ms + 120ms);
+}
+@keyframes hz-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* The sun settles into its real position on open: first-open delight, so it may take longer. */
+.hz-sun-in {
+  animation: hz-sun-in 1100ms var(--ease-out) both;
+}
+@keyframes hz-sun-in {
+  from {
+    opacity: 0;
+    transform: translateY(48px) scale(0.92);
+  }
+}
+
+/* A new place's sky fades in over the old one. */
+.hz-sky-in {
+  animation: hz-fade 600ms ease both;
+}
+@keyframes hz-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The arc draws itself once. */
+.hz-draw {
+  stroke-dasharray: 1;
+  animation: hz-draw 900ms var(--ease-in-out) both 150ms;
+}
+@keyframes hz-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hz-rise,
+  .hz-sun-in,
+  .hz-draw {
+    animation: hz-fade 200ms ease both;
+  }
+}
+
+.hz button {
+  -webkit-tap-highlight-color: transparent;
+}

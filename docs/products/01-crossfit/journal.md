@@ -107,6 +107,14 @@ Newest last. Pull requests are in the `OAJohansson/build-sprint` repo.
   browser. Nothing is saved and the AI isn't called. The "Home" tab replaces "PBs".
 - Transcription stays on hold until phone dictation has been tested.
 
+### "This week" instead of the week pills (#19)
+- Owner feedback: the 8 pills looked like one progress bar, and "Start a streak" (weeks) next to
+  "1 of 3 days" (days) mixed two measures. New users also saw seven empty weeks before they'd even
+  started.
+- Replaced it with a **This week** card: three dots (one per training day needed), a hint such as
+  "1 more day keeps your streak going", and the streak as a small badge once it's running. Looking
+  back belongs in the calendar.
+
 ### Notebook restructure
 - Each product now keeps everything in one place: journey, feedback, user testing, backlog,
   learnings and decisions, as sub-pages in this notebook.

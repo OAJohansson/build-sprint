@@ -1,10 +1,10 @@
-# Test plan: Sunset (working name)
+# Test plan: Horizon
 
-Scenarios come from the jobs in the [brief](#02-sunset.brief); success bars from its success table.
+Scenarios come from the jobs in the [brief](#02-horizon.brief); success bars from its success table.
 
 ## How to run the app for testing
 
-- Start: `pnpm -F 02-sunset dev -p 3270`.
+- Start: `pnpm -F 02-horizon dev -p 3270`.
 - Viewport: 390 × 844, deviceScaleFactor 2.
 - **Location:** grant geolocation in the browser context and set it to Bali (Seminyak, about
   −8.69, 115.16). For the "blocked" case, deny it.

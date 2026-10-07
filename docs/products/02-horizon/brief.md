@@ -2,7 +2,7 @@
 
 Written before any code (playbook step 1). Short answers; the success check is filled in at wrap-up.
 
-*Drafted by Claude from the owner's idea, decisions by the owner, 7 Oct. Open: the name.*
+*Drafted by Claude from the owner's idea, decisions by the owner, 7 Oct.*
 
 ## Problem
 
@@ -15,7 +15,7 @@ zone to work out.
 
 A traveller who chases sunsets: someone like me in Bali, out and about, phone in hand, wants the
 moment more than the data. Not a pro photographer (they have PhotoPills). Full persona in
-[User testing](#02-sunset.testing).
+[User testing](#02-horizon.testing).
 
 ## Moment of use and jobs to be done
 

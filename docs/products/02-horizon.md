@@ -1,6 +1,6 @@
 ---
 day: 2
-title: Sunset
+title: Horizon
 status: building
 date: 2026-10-07
 user: "Travellers who plan their evenings around the sunset"

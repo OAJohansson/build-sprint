@@ -24,7 +24,7 @@ What happened, what was decided and why. Newest last.
   "beautiful" goal an explicit, testable bet.
 - **Process change:** playbook step 1 is now "Discover and frame", written up as a one-page brief
   per product; sprint goals A/B/C at the top of the playbook; a success check at wrap-up.
-- Draft [brief](#02-sunset.brief) and persona (Noor, a traveller in Bali) written for the owner
+- Draft [brief](#02-horizon.brief) and persona (Noor, a traveller in Bali) written for the owner
   to react to. Open calls: main job (here-now vs elsewhere), success measures, MVP cut.
 
 ### Owner's decisions on the brief
@@ -40,3 +40,10 @@ What happened, what was decided and why. Newest last.
 - **Success:** the five signals plus "sense of place" and a readability guardrail. **MVP:** as
   proposed, plus sky and landmarks.
 - Test plan written: six scenarios from the jobs and success bars.
+
+### Name and landmarks
+- **Name: Horizon.** Sunrise and sunset both happen at the horizon, and the landmark sits on it.
+  Runner-up: Dawn & Dusk. Renamed the app and docs from `02-sunset` to `02-horizon` before the
+  first deploy.
+- **Landmarks for the MVP:** Bali (temple gate), Paris, London, New York, Sydney, Rome, Agra,
+  Tokyo, Rio, Cairo.

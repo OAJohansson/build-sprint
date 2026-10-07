@@ -27,6 +27,12 @@ Day 1 lost half a day to setup surprising us late, one problem at a time. Check 
 - [ ] Server errors are logged with the real reason (`failure()` in `src/lib/server/failure.ts`),
   while users only see a general message. Buttons that retry show that they're working.
 
+## Design principle: clean and minimal
+
+Every element has to earn its place. If the visual already says it (three dots, one ticked), don't
+repeat it in text. Cut labels, hints and subtitles that restate what's on screen; keep a feature
+discoverable with one quiet cue (a muted badge at 0) rather than a sentence explaining it.
+
 ## 2. Build (bulk of the day)
 
 - `pnpm install && pnpm -F NN-slug dev`

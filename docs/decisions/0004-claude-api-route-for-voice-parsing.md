@@ -1,7 +1,7 @@
 # 0004 — Voice notes parsed by Claude in a server route; the log stays in localStorage
 
 - **Date:** 2026-10-06
-- **Status:** accepted
+- **Status:** accepted (storage superseded by [0005](0005-supabase-single-owner.md))
 
 ## Context
 

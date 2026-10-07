@@ -4,10 +4,10 @@ title: CrossFit Log
 status: building
 date: 2026-10-06
 user: "Me: years of CrossFit, never consistent about logging weights"
-problem: "Typing lifts into a phone after class is enough friction that I never track cleans, snatches or PRs"
-bet: "Talk for 20 seconds after class, Claude turns it into structured lifts, one tap to save, and per-movement history shows progress"
+problem: "Coach says “70% of your 1RM” and I never remember my PBs, because logging lifts after class is too much friction"
+bet: "A PB board that answers “what’s 70%?” in 5 seconds, fed by talking through class for 20 seconds while Claude tidies it up and celebrates new PBs"
 url: "https://crossfit-log.vercel.app"
-tags: [voice, claude-api, localstorage, mobile]
+tags: [voice, claude-api, supabase, mobile]
 ---
 
 ## Learned

@@ -10,7 +10,7 @@ reps in going from idea to something live, plus an honest write-up of what I lea
 <!-- products:start -->
 | Day | Product | Problem | Status | Live | Links |
 | --: | --- | --- | --- | --- | --- |
-| 1 | **CrossFit Log** | Typing lifts into a phone after class is enough friction that I never track cleans, snatches or PRs | 🛠️ building | [live](https://crossfit-log.vercel.app) | [write-up](docs/products/01-crossfit.md) · [code](apps/01-crossfit) |
+| 1 | **CrossFit Log** | Coach says “70% of your 1RM” and I never remember my PBs, because logging lifts after class is too much friction | 🛠️ building | [live](https://crossfit-log.vercel.app) | [write-up](docs/products/01-crossfit.md) · [code](apps/01-crossfit) |
 <!-- products:end -->
 
 _This table is generated from `docs/products/*.md`. Run `pnpm sync` after editing frontmatter._

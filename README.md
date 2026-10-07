@@ -33,6 +33,7 @@ docs/
   user-testing/       simulated user testing: method + persona and plan templates
 scripts/              `pnpm new` and `pnpm sync`
 .claude/agents/       user-tester: the agent that plays the persona and drives the app
+.claude/skills/       design skills used at each playbook step (decision 0008)
 ```
 
 Why a monorepo with a Vercel project per app: see

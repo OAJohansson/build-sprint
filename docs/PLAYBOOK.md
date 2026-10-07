@@ -11,8 +11,9 @@ One product per day. Done beats perfect. Scope is the main lever, so cut early.
   the wrong problem.)*
 - **Persona and test plan.** Fill in `docs/products/NN-slug/user-testing/persona.md` and `plan.md`
   from the [templates](user-testing/). They double as the spec.
-- **Three approaches.** Sketch three genuinely different solutions (a design canvas works well), pick
-  one or a mix, and note why in `journal.md`.
+- **Three approaches.** Sketch three genuinely different solutions, then run `/prototype` on the
+  main screen to get them as working variants behind a picker. Pick one or a mix, and note why in
+  `journal.md`.
 - **Stop line.** Write in `journal.md` what ships today and what goes straight to `backlog.md`.
 - Fill in **user**, **problem** and **bet** (one line each) on the card `docs/products/NN-slug.md`.
   The bet is the smallest thing that could solve the problem by tonight. Cut everything else.
@@ -24,6 +25,8 @@ Day 1 lost half a day to setup surprising us late, one problem at a time. Check 
 - [ ] Every environment variable set in Vercel (Production *and* Preview), with the right *kind*
   of key (secret vs publishable), and a redeploy after changing them.
 - [ ] Opened on a **real phone**, not just desktop. Test any browser feature (mic, camera) there.
+  The starter already has the phone baseline (`mobile-native` skill); use the skill when something
+  "feels like a website" on the phone.
 - [ ] Server errors are logged with the real reason (`failure()` in `src/lib/server/failure.ts`),
   while users only see a general message. Buttons that retry show that they're working.
 
@@ -38,6 +41,8 @@ discoverable with one quiet cue (a muted badge at 0) rather than a sentence expl
 - `pnpm install && pnpm -F NN-slug dev`
 - Data lives in `localStorage` (`useLocalStorage` in `src/lib`) unless the product truly needs a backend.
 - Add UI pieces with `pnpm dlx shadcn@latest add <component>` from inside the app folder.
+- Polish with the `emil-design-eng` skill (press feedback, timing, when not to animate); `animate`
+  only if a screen needs motion; `dataviz` for charts.
 - Commit and push often. Pushes to `main` deploy automatically once the Vercel project exists.
 
 ## 3. Ship (≈15 min, do it early, e.g. at lunch)
@@ -59,6 +64,8 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 
 - Run the `user-tester` agent against the running app with the persona and plan from step 1; save
   its report as `user-testing/report-YYYY-MM-DD.md`.
+- Run `break-ui` on the main screens (worst-case data: long names, zero, one, huge numbers) and
+  the `web-design-guidelines` audit on the changed files.
 - **Then** do your own review. Log both in `docs/products/NN-slug/feedback.md`, fix blockers
   straight away, and prioritise the rest together.
 - Triage rule for leaving a product: fix anything that shows wrong numbers or looks broken if it's

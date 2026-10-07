@@ -75,4 +75,24 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Phone baseline (mobile-native skill). Tailwind 4's hover: already only applies on devices
+     that can hover. Pull-to-refresh is left on; turn it off per app if it gets in the way. */
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+  /* Below 16px, iOS zooms into the field on focus. */
+  input,
+  textarea,
+  select {
+    font-size: max(16px, 1em);
+  }
+  button,
+  a,
+  [role="button"] {
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+  }
 }

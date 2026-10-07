@@ -19,6 +19,14 @@ The apps use Next.js 16, which has breaking changes from older versions (async `
   it does, record why in the product write-up.
 - Keep each app deployable on its own from `apps/NN-slug` (Vercel Root Directory).
 
+## Design skills
+
+Use the project skills in `.claude/skills/` at their playbook step without being asked
+(decision 0008): `prototype` for the three approaches, `mobile-native` for phone issues,
+`emil-design-eng` while building UI, `animate` only when something needs motion, `dataviz` for
+charts, then `break-ui` and `web-design-guidelines` before the own review. When a skill's advice
+conflicts with the clean-and-minimal principle (decision 0007), the principle wins.
+
 ## Documentation (do this by default, without being asked)
 
 - Keep the product's card `docs/products/NN-slug.md` lean and current: `user`, `problem` and `bet`

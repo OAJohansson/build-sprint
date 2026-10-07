@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -10,12 +10,26 @@ export const metadata: Metadata = {
   description: "Day __DAY__ of the 20-day build sprint.",
 };
 
+// Phone baseline (mobile-native skill): content can sit under the notch (pad with
+// env(safe-area-inset-*)), the keyboard resizes the layout, and the status bar matches the
+// background in both themes. Zoom stays enabled.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  interactiveWidget: "resizes-content",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-dvh flex flex-col">{children}</body>
     </html>
   );
 }

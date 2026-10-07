@@ -23,34 +23,28 @@ export function Sparkline({ values, width = 96, height = 28 }: { values: number[
   );
 }
 
-/** This week against the weekly goal: one dot per training day, the streak as a badge. */
+/**
+ * This week against the weekly goal: one dot per training day. The streak badge
+ * is always there (muted at 0) so people know there's a streak to build.
+ */
 export function WeeklyGoal({ sessions, onOpen }: { sessions: Session[]; onOpen: () => void }) {
   const { streak, thisWeek } = weeklyGoal(sessions, today());
-  const toGo = Math.max(WEEKLY_GOAL - thisWeek, 0);
-  const days = (n: number) => `${n} more day${n === 1 ? "" : "s"}`;
-  const hint =
-    toGo === 0
-      ? "Goal hit. Any extra day is a bonus."
-      : streak > 0
-        ? `${days(toGo)} keeps your streak going`
-        : thisWeek === 0
-          ? `Train ${WEEKLY_GOAL} days this week to start a streak`
-          : `${days(toGo)} starts a streak`;
   const dots = Math.max(WEEKLY_GOAL, thisWeek);
   return (
     <button
       type="button"
       onClick={onOpen}
       className="flex flex-col gap-3 rounded-2xl bg-[#1a1a18] p-4 text-left"
-      aria-label={`This week: ${thisWeek} of ${WEEKLY_GOAL} training days. ${hint}.${streak > 0 ? ` ${streak}-week streak.` : ""} Open calendar`}
+      aria-label={`This week: ${thisWeek} of ${WEEKLY_GOAL} training days. Streak: ${streak} week${streak === 1 ? "" : "s"} in a row with ${WEEKLY_GOAL}+ days. Open calendar`}
     >
       <span className="flex items-center justify-between gap-3">
         <span className="font-display text-[26px] font-bold uppercase leading-none">This week</span>
-        {streak > 0 && (
-          <span className="flex items-center gap-1 rounded-full bg-[#3a2412] px-2.5 py-1 text-sm font-semibold text-primary">
-            <Flame className="size-4" /> {streak}-week streak
-          </span>
-        )}
+        <span
+          title={`Weeks in a row with ${WEEKLY_GOAL}+ training days`}
+          className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-sm font-semibold ${streak > 0 ? "bg-[#3a2412] text-primary" : "bg-[#262624] text-muted-foreground"}`}
+        >
+          <Flame className="size-4" /> {streak} week{streak === 1 ? "" : "s"}
+        </span>
       </span>
       <span className="flex gap-2.5">
         {Array.from({ length: dots }, (_, i) => (
@@ -61,12 +55,6 @@ export function WeeklyGoal({ sessions, onOpen }: { sessions: Session[]; onOpen: 
             {i < thisWeek && <Check className="size-5" strokeWidth={3} />}
           </span>
         ))}
-      </span>
-      <span className="text-sm text-muted-foreground">
-        <b className="font-semibold text-foreground">
-          {thisWeek} of {WEEKLY_GOAL} days
-        </b>{" "}
-        · {hint}
       </span>
     </button>
   );

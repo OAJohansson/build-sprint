@@ -85,6 +85,15 @@ Newest last. Pull requests are in the `OAJohansson/build-sprint` repo.
 - Retro written; three process changes carried into the playbook for the next product.
 - Status: **shipped**.
 
+### Follow-up estimates and Progress designs
+- Estimated four backlog items (my build time): Progress section 2–3 h, edit a saved session
+  ~1.5 h, demo mode ~1.5 h, server-side transcription 2–3 h plus a second speech-to-text provider
+  and its key. Suggested order: Progress → edit → demo; transcription only if phone dictation is
+  still poor after the phrase-by-phrase fix.
+- Three Progress designs on the design canvas: **P1** progress on Home above the PBs, **P2** a
+  separate Progress tab with a one-line teaser on Home, **P3** a weekly recap and milestone
+  timeline. Plus a lift page with a trend chart that works with any of them.
+
 ### Notebook restructure
 - Each product now keeps everything in one place: journey, feedback, user testing, backlog,
   learnings and decisions, as sub-pages in this notebook.

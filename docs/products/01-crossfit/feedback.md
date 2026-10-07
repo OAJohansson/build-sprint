@@ -9,7 +9,7 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 ## Wrap-up (7 Oct)
 
 Triage rule before moving to the next product: fix anything that shows wrong numbers or looks
-broken if it's quick; park the rest with a clear note. 11 fixed, 7 parked (in [Backlog](#01-crossfit.backlog)). Follow-up the same day: #5, #9 and #13 fixed too (14 fixed, 4 parked).
+broken if it's quick; park the rest with a clear note. 11 fixed, 7 parked (in [Backlog](#01-crossfit.backlog)). Follow-up the same day: #5, #9 and #13 fixed too, then #19 (15 fixed, 4 parked).
 
 ## Round 1 (7 Oct)
 
@@ -40,6 +40,7 @@ From the [user test with Sam](#01-crossfit.testing). F-numbers refer to that rep
 | 16 | Bug | **Calendar week count cut at month edges (F8)**; "×3" is cryptic; the day panel doesn't change with the month. | parked (week column now says "3d" instead of "×3") |
 | 17 | UX | **Day-one PBs dated today (F9)**, and each saved PB goes to the lift page instead of letting you add the next one. | parked |
 | 18 | Copy | **Database-ish words (F10):** "first record", "added", "from a session"; a lift appears twice in history; empty filter says "Nothing matches “”". | parked |
+| 19 | UX | **Weekly-goal row read as one progress bar.** Eight week-pills plus "1 of 3 days this week" looked like a single bar at 1/8; streak (weeks) and days this week were mixed up, and a new user saw seven empty weeks. | fixed: "This week" card with one dot per training day, the streak as a small badge once it starts, and a hint ("1 more day keeps your streak going"); history stays in the calendar |
 
 ### Options to discuss later
 

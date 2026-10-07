@@ -1,5 +1,6 @@
 "use client";
 
+import { Check, Flame } from "lucide-react";
 import { SectionLabel } from "@/components/ui/bits";
 import { type Trend, WEEKLY_GOAL, benchmarkRepeats, fmtKg, movingLifts, weeklyGoal } from "@/lib/progress";
 import { type Session, formatDate, today } from "@/lib/types";
@@ -22,45 +23,50 @@ export function Sparkline({ values, width = 96, height = 28 }: { values: number[
   );
 }
 
-/** One row of the last 8 weeks against the weekly goal, with the streak as the headline. */
+/** This week against the weekly goal: one dot per training day, the streak as a badge. */
 export function WeeklyGoal({ sessions, onOpen }: { sessions: Session[]; onOpen: () => void }) {
-  const { weeks, streak, thisWeek } = weeklyGoal(sessions, today());
+  const { streak, thisWeek } = weeklyGoal(sessions, today());
   const toGo = Math.max(WEEKLY_GOAL - thisWeek, 0);
-  const headline = streak > 0 ? `${streak}-week streak` : toGo ? "Start a streak" : "Goal hit this week";
+  const days = (n: number) => `${n} more day${n === 1 ? "" : "s"}`;
+  const hint =
+    toGo === 0
+      ? "Goal hit. Any extra day is a bonus."
+      : streak > 0
+        ? `${days(toGo)} keeps your streak going`
+        : thisWeek === 0
+          ? `Train ${WEEKLY_GOAL} days this week to start a streak`
+          : `${days(toGo)} starts a streak`;
+  const dots = Math.max(WEEKLY_GOAL, thisWeek);
   return (
     <button
       type="button"
       onClick={onOpen}
       className="flex flex-col gap-3 rounded-2xl bg-[#1a1a18] p-4 text-left"
-      aria-label={`${headline}. ${thisWeek} of ${WEEKLY_GOAL} training days this week. Open calendar`}
+      aria-label={`This week: ${thisWeek} of ${WEEKLY_GOAL} training days. ${hint}.${streak > 0 ? ` ${streak}-week streak.` : ""} Open calendar`}
     >
-      <span className="flex items-baseline justify-between gap-3">
-        <span className="font-display text-[26px] font-bold uppercase leading-none">{headline}</span>
-        <span className="text-sm text-muted-foreground">
-          <b className="font-semibold text-foreground">
-            {Math.min(thisWeek, WEEKLY_GOAL)} of {WEEKLY_GOAL}
-          </b>{" "}
-          days this week
-        </span>
+      <span className="flex items-center justify-between gap-3">
+        <span className="font-display text-[26px] font-bold uppercase leading-none">This week</span>
+        {streak > 0 && (
+          <span className="flex items-center gap-1 rounded-full bg-[#3a2412] px-2.5 py-1 text-sm font-semibold text-primary">
+            <Flame className="size-4" /> {streak}-week streak
+          </span>
+        )}
       </span>
-      <span className="grid grid-cols-8 gap-[5px]">
-        {weeks.map((w) => {
-          const fill = w.current ? Math.min(w.days / WEEKLY_GOAL, 1) : w.hit ? 1 : 0;
-          return (
-            <span
-              key={w.start}
-              title={`Week of ${formatDate(w.start)}: ${w.days} day${w.days === 1 ? "" : "s"}`}
-              className={`block h-3 overflow-hidden rounded-full ${w.current ? "bg-[#3a2412]" : "bg-[#2e2e2b]"}`}
-            >
-              <span className="block h-full rounded-full bg-primary" style={{ width: `${Math.round(fill * 100)}%` }} />
-            </span>
-          );
-        })}
+      <span className="flex gap-2.5">
+        {Array.from({ length: dots }, (_, i) => (
+          <span
+            key={i}
+            className={`flex size-9 items-center justify-center rounded-full ${i < thisWeek ? "bg-primary text-background" : "border-2 border-[#3a3a36]"}`}
+          >
+            {i < thisWeek && <Check className="size-5" strokeWidth={3} />}
+          </span>
+        ))}
       </span>
-      <span className="flex justify-between text-[11px] text-muted-foreground">
-        <span>{formatDate(weeks[0].start)}</span>
-        <span>Goal: {WEEKLY_GOAL} days a week</span>
-        <span>This week</span>
+      <span className="text-sm text-muted-foreground">
+        <b className="font-semibold text-foreground">
+          {thisWeek} of {WEEKLY_GOAL} days
+        </b>{" "}
+        · {hint}
       </span>
     </button>
   );

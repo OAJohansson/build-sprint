@@ -75,13 +75,41 @@ const products = readProducts().map((p) => ({
   sections: sections(p),
 }));
 
+// Sprint-wide pages, in menu order after Overview. Links to another page's file open that page;
+// other relative links open the file on GitHub.
+const PAGES = [
+  { id: "playbook", label: "Playbook", eyebrow: "How each day runs", file: "docs/PLAYBOOK.md" },
+  { id: "skills", label: "Skills", eyebrow: "Claude skills in the repo", file: ".claude/skills/README.md" },
+  { id: "learnings", label: "Learnings", eyebrow: "Across products", file: "docs/learnings.md" },
+  { id: "todo", label: "To do", eyebrow: "Sprint to-do", file: "docs/todo.md" },
+];
+function relink(text, file) {
+  const dir = path.posix.dirname(file);
+  return text.replace(/\]\((?!https?:|#|mailto:)([^)\s#]+)(#[^)\s]*)?\)/g, (_, target) => {
+    const to = path.posix.normalize(path.posix.join(dir, target));
+    const page = to === "docs/ideas.md" ? { id: "overview" } : PAGES.find((pg) => pg.file === to);
+    return page ? `](#${page.id})` : `](${REPO}/blob/main/${to})`;
+  });
+}
+const pages = PAGES.filter((pg) => exists(pg.file)).map((pg) => {
+  const text = read(pg.file);
+  return {
+    id: pg.id,
+    label: pg.label,
+    eyebrow: pg.eyebrow,
+    title: text.match(/^# (.*)/m)?.[1] ?? pg.label,
+    text: relink(text.replace(/^# .*\n+/, ""), pg.file),
+    source: `${REPO}/blob/main/${pg.file}`,
+  };
+});
+
 const data = {
   repo: REPO,
   total: TOTAL,
   built: new Date().toISOString().slice(0, 10),
   products,
   ideas: read("docs/ideas.md").replace(/^# .*\n+/, ""),
-  learnings: read("docs/learnings.md").replace(/^# .*\n+/, ""),
+  pages,
 };
 
 // "<" escaped so no doc text can close the script tag early.

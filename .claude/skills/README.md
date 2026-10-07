@@ -1,17 +1,17 @@
 # Design skills
 
-Project skills for designing and testing the sprint's apps. Chosen in
+Project skills for designing and testing the sprint's apps. Click a name to read the skill. Chosen in
 [decision 0008](../../docs/decisions/0008-design-skills.md); the playbook names which step uses
 each one.
 
 | Skill | Playbook step | Runs |
 | --- | --- | --- |
-| `prototype` | 1. Three approaches: 3 working variants behind a picker | Only when called: `/prototype <screen>` |
-| `mobile-native` | 1b. Setup: phone fixes (already in `templates/next-starter`) | Automatically, on mobile work |
-| `emil-design-eng` | 2. Build: polish, press feedback, when not to animate | Named in AGENTS.md (vague description) |
-| `animate` | 2. Build: only when a screen needs motion | Automatically |
-| `break-ui` | 3b. Test: worst-case data behind a toggle | Automatically, or `/break-ui <screen>` |
-| `web-design-guidelines` | 3b. Test: accessibility and interface audit | Automatically, or `/web-design-guidelines <files>` |
+| [`prototype`](prototype/SKILL.md) | 1. Three approaches: 3 working variants behind a picker | Only when called: `/prototype <screen>` |
+| [`mobile-native`](mobile-native/SKILL.md) | 1b. Setup: phone fixes (already in `templates/next-starter`) | Automatically, on mobile work |
+| [`emil-design-eng`](emil-design-eng/SKILL.md) | 2. Build: polish, press feedback, when not to animate | Named in AGENTS.md (vague description) |
+| [`animate`](animate/SKILL.md) | 2. Build: only when a screen needs motion | Automatically |
+| [`break-ui`](break-ui/SKILL.md) | 3b. Test: worst-case data behind a toggle | Automatically, or `/break-ui <screen>` |
+| [`web-design-guidelines`](web-design-guidelines/SKILL.md) | 3b. Test: accessibility and interface audit | Automatically, or `/web-design-guidelines <files>` |
 
 ## Sources
 

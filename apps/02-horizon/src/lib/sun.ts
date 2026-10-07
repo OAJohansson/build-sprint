@@ -1,7 +1,8 @@
-// Prototype-only: sun times, the live sky and formatting, shared by the three variants.
+// Sun times, the live sky and time formatting for a place. All times are UTC instants, shown in
+// the place's own time zone.
 import { getPosition, getTimes } from "suncalc";
 
-export type LandmarkId = "bali" | "paris" | "none";
+import type { LandmarkId } from "./landmarks";
 
 export type Place = {
   id: string;
@@ -11,14 +12,10 @@ export type Place = {
   lng: number;
   tz: string;
   landmark: LandmarkId;
+  here?: boolean; // the device's own location
 };
 
-export const PLACES: Place[] = [
-  { id: "seminyak", name: "Seminyak", region: "Bali", lat: -8.6905, lng: 115.1621, tz: "Asia/Makassar", landmark: "bali" },
-  { id: "paris", name: "Paris", region: "France", lat: 48.8566, lng: 2.3522, tz: "Europe/Paris", landmark: "paris" },
-  { id: "lisbon", name: "Lisbon", region: "Portugal", lat: 38.7223, lng: -9.1393, tz: "Europe/Lisbon", landmark: "none" },
-  { id: "tromso", name: "Tromsø", region: "Norway", lat: 69.6492, lng: 18.9553, tz: "Europe/Oslo", landmark: "none" },
-];
+
 
 // Minutes east of UTC for a zone at an instant, e.g. +480 for Bali.
 function utcOffset(tz: string, at: Date) {
@@ -131,11 +128,6 @@ export function until(ms: number) {
   return { h, m, short: h ? `${h}h ${String(m).padStart(2, "0")}m` : `${m} min`, long: h ? `${h} h ${m} min` : `${m} min` };
 }
 
-// "Bali time 16:45" → an instant on the prototype's day (7 Oct 2026, UTC+8).
-export function baliInstant(hhmm: string) {
-  const [h, m] = hhmm.split(":").map(Number);
-  return new Date(Date.UTC(2026, 9, 7, h - 8, m));
-}
 
 // Everything a variant needs for one place at one moment.
 export function view(place: Place, now: Date) {

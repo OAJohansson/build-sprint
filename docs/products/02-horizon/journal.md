@@ -77,3 +77,22 @@ What happened, what was decided and why. Newest last.
   folders on `main`. Deployed to **horizon-beta-wine.vercel.app** before the real app was built,
   so the prototype can be judged on a real phone.
 - Learned along the way: commits, branches, pull requests and merging (explained step by step).
+
+### Arc chosen; the MVP built around it
+- **Owner picked Arc** (the instrument: the day as the sun's path, the countdown as the sun's
+  position on it). Known cost from the prototype table: the landmark is small, so watch the
+  "which city is this?" signal in the user test.
+- Built the MVP on it (prototype folder deleted):
+  - Welcome screen that says why location helps before the browser asks (R2); if refused or
+    unavailable, search opens with a short note.
+  - Your location named via BigDataCloud's free lookup; city search via Open-Meteo geocoding (any
+    city, its own time zone). Both free, keyless, called from the browser; no backend.
+  - All 10 landmarks drawn, matched by distance (e.g. within 40 km of Paris); everywhere else a
+    calm generic horizon.
+  - Live clock (catches up when the tab comes back); remembers your location choice or last
+    place on the device.
+  - Polar days say "No sunset today" and "Sun up all day".
+- **Environment:** the cloud sandbox blocked vercel.app; the owner allowed `*.vercel.app` in the
+  environment's network settings so Claude can check deploys. The two lookup services are still
+  blocked from the sandbox, so local tests use realistic stand-in answers (same approach as
+  CrossFit's AI).

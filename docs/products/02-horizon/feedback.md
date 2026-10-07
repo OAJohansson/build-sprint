@@ -49,3 +49,9 @@ fixed straight away; the rest to prioritise together.
 | 25 | Design | **Countdown too close to the arc.** | fixed: the countdown is centred between the top of the arc and the landmark |
 | 26 | Design | **Both golden-hour ends are the same yellow; sunset is more orange.** | fixed: morning gold, evening sunset orange (row dot too) |
 | 27 | Product | **Add Arvidsjaur (the owner's home town) as a landmark place**, researched. | fixed: Lappstaden, the Forest Sami church town: pyramid-roofed kåtor, a storehouse on stilts, pines |
+
+## After wrap-up, 7 Oct
+
+| # | Type | Feedback | Status |
+| --- | --- | --- | --- |
+| 28 | Delight | **A pulse of light over the sky when the sun rises or sets** (owner's "cherry on top"). | fixed: a ring of warm light sweeps from the sun across the sky in about 3 s, once per sunrise or sunset (gold or orange); behind the arc and text; a gentle brighten instead for "reduce motion" |

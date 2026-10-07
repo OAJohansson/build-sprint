@@ -82,6 +82,41 @@
   }
 }
 
+/* The pulse: a wave of warm light from the horizon, once, when the sun rises or sets. */
+.hz-pulse {
+  mix-blend-mode: screen;
+  /* A wave travels at a steady pace (linear), sweeping the sky in about 3 s; the opacity
+     keyframes shape how it appears and fades. An ease-out would fling it off-screen. */
+  animation: hz-pulse 3000ms linear both;
+}
+@keyframes hz-pulse {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 50%) scale(0.04);
+  }
+  6% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 50%) scale(1.7);
+  }
+}
+@keyframes hz-pulse-soft {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 50%) scale(0.5);
+  }
+  30% {
+    opacity: 0.4;
+    transform: translate(-50%, 50%) scale(0.5);
+  }
+}
+
 /* E. Living sky: twinkling stars and drifting clouds. Constant motion, so linear or gentle. */
 .hz-twinkle {
   animation: hz-twinkle 5s ease-in-out infinite;
@@ -111,6 +146,10 @@
   }
   .hz-land-in {
     animation: hz-fade 200ms ease both;
+  }
+  /* No expanding wave: the sky just brightens gently and fades. */
+  .hz-pulse {
+    animation: hz-pulse-soft 1600ms ease both;
   }
   .hz-glide {
     transition: none;

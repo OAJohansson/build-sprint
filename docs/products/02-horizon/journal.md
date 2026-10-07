@@ -142,3 +142,11 @@ What happened, what was decided and why. Newest last.
 - Design skills kept (decision 0008). Backlog "start here": a real person at sunset, then a
   bigger landmark that's visible at night.
 - Status: **shipped**.
+
+### Cherry on top: the light pulse
+- Owner asked for a pulse of light over the sky when the sun hits the horizon. Built as a ring of
+  warm light that sweeps from the sun across the sky in about 3 seconds, once per event.
+- Learned along the way: a strong ease-out is right for UI but wrong for a travelling wave (it
+  flung the ring off-screen in under half a second); a wave wants linear motion, with the
+  opacity shaping how it appears and fades. Freezing the animation at set times
+  (`getAnimations()[0].currentTime`) was the way to see it.

@@ -26,9 +26,44 @@ type PbRow = {
 
 const num = (v: number | string | null) => (v == null ? null : Number(v));
 
+/** A database error with a plain-language reason the app can show. */
+export class StoreError extends Error {}
+
+type DbError = { message: string; code?: string };
+
+function explain(error: DbError): string {
+  // 42501: permission denied / row-level security. Happens with the public key.
+  if (error.code === "42501" || /row-level security|permission denied/i.test(error.message)) {
+    return "The database refused to save. SUPABASE_SECRET_KEY in Vercel must be the secret key (sb_secret_… or service_role), not the publishable/anon key.";
+  }
+  // Table missing: the schema wasn't run.
+  if (error.code === "42P01" || error.code === "PGRST205" || /does not exist|could not find the table/i.test(error.message)) {
+    return "The database tables are missing. Run apps/01-crossfit/supabase/schema.sql in the Supabase SQL Editor.";
+  }
+  if (/invalid api key|jwt|unauthorized/i.test(error.message)) {
+    return "Supabase rejected the key. Check SUPABASE_SECRET_KEY in Vercel (copied in full, no spaces).";
+  }
+  return `Database error: ${error.message}${error.code ? ` (${error.code})` : ""}`;
+}
+
+/** What kind of Supabase key this is, without trusting the variable name. */
+export function keyKind(key: string): "secret" | "public" | "unknown" {
+  if (key.startsWith("sb_secret_")) return "secret";
+  if (key.startsWith("sb_publishable_")) return "public";
+  try {
+    const role = JSON.parse(Buffer.from(key.split(".")[1], "base64url").toString()).role;
+    if (role === "service_role") return "secret";
+    if (role === "anon" || role === "authenticated") return "public";
+  } catch {}
+  return "unknown";
+}
+
 function supabaseStore(db: SupabaseClient): Store {
-  const check = (error: { message: string } | null) => {
-    if (error) throw new Error(`Supabase: ${error.message}`);
+  const check = (error: DbError | null) => {
+    if (error) {
+      console.error("Supabase error", error);
+      throw new StoreError(explain(error));
+    }
   };
   return {
     async load() {
@@ -113,9 +148,15 @@ function memoryStore(): Store {
   };
 }
 
-export function getStore(): Store | null {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SECRET_KEY;
-  if (url && key) return supabaseStore(createClient(url, key, { auth: { persistSession: false } }));
-  return process.env.NODE_ENV === "production" ? null : memoryStore();
+export function getStore(): { store: Store } | { problem: string } {
+  const url = process.env.SUPABASE_URL?.trim().replace(/\/+$/, "");
+  const key = process.env.SUPABASE_SECRET_KEY?.trim();
+  if (url && key) {
+    if (keyKind(key) === "public") {
+      return { problem: "SUPABASE_SECRET_KEY in Vercel is the publishable/anon key. Use the secret key (sb_secret_… or service_role) and redeploy." };
+    }
+    return { store: supabaseStore(createClient(url, key, { auth: { persistSession: false } })) };
+  }
+  if (process.env.NODE_ENV !== "production") return { store: memoryStore() };
+  return { problem: "Database is not configured (SUPABASE_URL / SUPABASE_SECRET_KEY)." };
 }

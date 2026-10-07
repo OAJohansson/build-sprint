@@ -1,5 +1,5 @@
 import "server-only";
-import { getStore, type Store } from "@/lib/server/store";
+import { StoreError, getStore, type Store } from "@/lib/server/store";
 
 // The app is public (portfolio piece) but holds personal data and spends money
 // on AI, so every API route needs ACCESS_CODE. Fails closed in production.
@@ -18,14 +18,14 @@ export function checkAccess(request: Request): Response | null {
 export function guard(request: Request): { store: Store } | { error: Response } {
   const denied = checkAccess(request);
   if (denied) return { error: denied };
-  const store = getStore();
-  if (!store) {
-    return { error: Response.json({ error: "Database is not configured (SUPABASE_URL / SUPABASE_SECRET_KEY)." }, { status: 503 }) };
-  }
-  return { store };
+  const result = getStore();
+  if ("problem" in result) return { error: Response.json({ error: result.problem }, { status: 503 }) };
+  return result;
 }
 
 export const serverError = (error: unknown) => {
   console.error(error);
-  return Response.json({ error: "Something went wrong saving or loading. Try again." }, { status: 500 });
+  // Database problems carry a plain-language reason; show it rather than a generic message.
+  const message = error instanceof StoreError ? error.message : "Something went wrong saving or loading. Try again.";
+  return Response.json({ error: message }, { status: 500 });
 };

@@ -46,7 +46,9 @@ export function LogFlow({
     (spoken: string) => setTranscript(base.current ? `${base.current} ${spoken}` : spoken),
     [setTranscript],
   );
-  const speech = useSpeech(onDictation);
+  // Add ?debug to the URL to see what the browser's speech engine sends.
+  const [debug] = useState(() => typeof window !== "undefined" && new URLSearchParams(window.location.search).has("debug"));
+  const speech = useSpeech(onDictation, debug);
 
   async function sumUp() {
     speech.stop();
@@ -223,6 +225,11 @@ export function LogFlow({
       )}
       {speech.error && <p className="text-center text-sm text-destructive">{speech.error}</p>}
       {error && <p className="text-sm text-destructive">{error}</p>}
+      {debug && speech.log.length > 0 && (
+        <pre className="max-h-60 overflow-auto whitespace-pre-wrap rounded-xl bg-card p-3 text-[11px] leading-snug text-muted-foreground">
+          {speech.log.join("\n")}
+        </pre>
+      )}
 
       <div className="flex gap-2.5">
         <BigButton variant="outline" className="flex-1" onClick={() => setPicking(true)}>

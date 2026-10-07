@@ -23,8 +23,7 @@ function getCtor(): (new () => Recognition) | null {
 
 /**
  * Join recognition results into one string, tolerating browser quirks:
- * Chrome on Android sends cumulative results ("testing", "testing again")
- * and some browsers re-deliver a phrase that was already final.
+ * cumulative results ("testing", "testing again") and phrases delivered twice.
  */
 export function joinResults(parts: string[]): string {
   let acc = "";
@@ -41,65 +40,125 @@ export function joinResults(parts: string[]): string {
 }
 
 const noop = () => () => {};
+const isAndroid = () => typeof navigator !== "undefined" && /android/i.test(navigator.userAgent);
 
 /**
- * Dictation. onText receives the full text dictated in the current session,
- * rebuilt from scratch on every update so repeated events can't duplicate it.
+ * Dictation. onText receives the full text dictated since the mic was tapped,
+ * rebuilt on every update so repeated browser events can't duplicate it.
+ *
+ * Chrome on Android garbles continuous mode (it re-sends and re-recognises
+ * earlier audio), so there we listen one phrase at a time: each finished phrase
+ * is committed once and listening restarts until the user taps stop.
  */
-export function useSpeech(onText: (sessionText: string) => void) {
+export function useSpeech(onText: (sessionText: string) => void, debug = false) {
   const supported = useSyncExternalStore(noop, () => getCtor() !== null, () => false);
   const [listening, setListening] = useState(false);
   const [interim, setInterim] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [log, setLog] = useState<string[]>([]);
   const rec = useRef<Recognition | null>(null);
+  const wanted = useRef(false);
   const onTextRef = useRef(onText);
   useEffect(() => {
     onTextRef.current = onText;
   }, [onText]);
 
-  const stop = useCallback(() => rec.current?.stop(), []);
+  const note = useCallback(
+    (line: string) => {
+      if (debug) setLog((l) => [...l.slice(-30), `${new Date().toISOString().slice(17, 23)} ${line}`]);
+    },
+    [debug],
+  );
+
+  const stop = useCallback(() => {
+    wanted.current = false;
+    rec.current?.stop();
+  }, []);
 
   const start = useCallback(() => {
     const Ctor = getCtor();
     if (!Ctor || rec.current) return;
     setError(null);
-    const r = new Ctor();
-    r.continuous = true;
-    r.interimResults = true;
-    r.lang = navigator.language || "en-US";
+    setLog([]);
+    wanted.current = true;
+    const phraseMode = isAndroid();
+    let committed = ""; // text from finished phrases (phrase mode)
     let last = "";
-    r.onresult = (e) => {
-      const finals: string[] = [];
-      let live = "";
-      for (let i = 0; i < e.results.length; i++) {
-        const res = e.results[i];
-        if (res.isFinal) finals.push(res[0].transcript);
-        else live = res[0].transcript;
-      }
-      const text = joinResults(finals);
+    let silentRuns = 0;
+    note(`start, ${phraseMode ? "phrase" : "continuous"} mode, ${navigator.userAgent.slice(0, 60)}`);
+
+    const emit = (text: string) => {
       if (text !== last) {
         last = text;
         onTextRef.current(text);
       }
-      // Hide interim text the final transcript already shows.
-      setInterim(text.toLowerCase().endsWith(live.trim().toLowerCase()) ? "" : live.trim());
     };
-    r.onerror = (e) => {
-      if (e.error !== "no-speech" && e.error !== "aborted") {
-        setError(e.error === "not-allowed" ? "Microphone access was blocked." : `Dictation error: ${e.error}`);
-      }
+
+    const listen = () => {
+      const r = new Ctor();
+      r.continuous = !phraseMode;
+      r.interimResults = true;
+      r.lang = navigator.language || "en-US";
+      let phrase = "";
+      r.onresult = (e) => {
+        const finals: string[] = [];
+        let live = "";
+        const raw: string[] = [];
+        for (let i = 0; i < e.results.length; i++) {
+          const res = e.results[i];
+          raw.push(`${res.isFinal ? "F" : "i"}:"${res[0].transcript}"`);
+          if (res.isFinal) finals.push(res[0].transcript);
+          else live = res[0].transcript;
+        }
+        note(raw.join(" "));
+        phrase = joinResults(finals);
+        emit(joinResults([committed, phrase]));
+        const shown = joinResults([committed, phrase]).toLowerCase();
+        setInterim(shown.endsWith(live.trim().toLowerCase()) ? "" : live.trim());
+      };
+      r.onerror = (e) => {
+        note(`error ${e.error}`);
+        if (e.error === "not-allowed" || e.error === "service-not-allowed") {
+          wanted.current = false;
+          setError("Microphone access was blocked. Allow it in the browser's site settings.");
+        } else if (e.error !== "no-speech" && e.error !== "aborted") {
+          setError(`Dictation error: ${e.error}`);
+        }
+      };
+      r.onend = () => {
+        note(`end, phrase="${phrase}"`);
+        silentRuns = phrase ? 0 : silentRuns + 1;
+        committed = joinResults([committed, phrase]);
+        emit(committed);
+        setInterim("");
+        // Phrase mode: keep listening until stopped, or after ~3 silent phrases.
+        if (phraseMode && wanted.current && silentRuns < 3) {
+          try {
+            listen();
+            return;
+          } catch {
+            note("restart failed");
+          }
+        }
+        wanted.current = false;
+        rec.current = null;
+        setListening(false);
+      };
+      rec.current = r;
+      r.start();
     };
-    r.onend = () => {
-      setListening(false);
-      setInterim("");
-      rec.current = null;
-    };
-    rec.current = r;
-    r.start();
+
+    listen();
     setListening(true);
-  }, []);
+  }, [note]);
 
-  useEffect(() => () => rec.current?.stop(), []);
+  useEffect(
+    () => () => {
+      wanted.current = false;
+      rec.current?.stop();
+    },
+    [],
+  );
 
-  return { supported, listening, interim, error, start, stop };
+  return { supported, listening, interim, error, start, stop, log };
 }

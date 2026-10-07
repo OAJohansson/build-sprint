@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
+import { TrendChart } from "@/components/progress";
 import { BigButton, Chip, Screen, SectionLabel, TopBar } from "@/components/ui/bits";
+import { fmtKg, liftTrend } from "@/lib/progress";
 import { findMovement } from "@/lib/movements";
 import { currentPbs, formatPb, percentOf, repLabel } from "@/lib/pb";
 import { type Pb, type Session, formatDate, formatEntry } from "@/lib/types";
@@ -35,6 +37,8 @@ export function LiftDetail({
   const selected = bests.find((b) => b.id === selectedId) ?? bests[0];
   // Coaches call percentages of the 1RM, so the grid never silently uses a 3RM.
   const oneRm = bests.find((b) => b.kind === "load" && b.repMax === 1);
+  const trend = mv.pb === "load" ? liftTrend(sessions, movement) : null;
+  const oneRmKg = oneRm ? (oneRm.unit === "lb" ? oneRm.value * 0.45359237 : oneRm.value) : undefined;
 
   const history = [
     ...mine.map((p) => ({ date: p.achievedOn, text: `${repLabel(p.repMax) || (p.rx ? "Rx" : p.kind === "reps" ? "Max" : "Scaled")} ${formatPb(p)}`, pb: p, tag: p.sessionId ? "from a session" : "added" })),
@@ -70,6 +74,19 @@ export function LiftDetail({
             </Chip>
           ))}
         </div>
+      )}
+
+      {trend && (
+        <section className="flex flex-col gap-2">
+          <p className="flex items-baseline gap-2">
+            <span className="font-display text-[34px] font-bold leading-none tabular-nums">
+              {trend.change >= 0 ? "+" : "−"}
+              {fmtKg(Math.abs(trend.change))} kg
+            </span>
+            <span className="text-sm text-muted-foreground">top set since {formatDate(trend.first.date)}</span>
+          </p>
+          <TrendChart trend={trend} oneRm={oneRmKg} />
+        </section>
       )}
 
       {mv.pb === "load" && !oneRm && (

@@ -9,7 +9,7 @@ import { findMovement, isWod } from "@/lib/movements";
 import { candidateFromEntry, detectPbs, pbKey, repLabel } from "@/lib/pb";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { useSpeech } from "@/lib/use-speech";
-import { type Entry, type NewPb, type Pb, type Unit, formatDate, formatEntry, today, uid } from "@/lib/types";
+import { type Entry, type NewPb, type Pb, type Session, type Unit, formatDate, formatEntry, today, uid } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 type Draft = { date: string; title: string; entries: Entry[] };
@@ -20,6 +20,8 @@ const blank = (movement: string, unit: Unit): Entry => ({
 
 /** Talk (or pick) → AI tidies it up → check & save. */
 export function LogFlow({
+  editing,
+  sampleNote,
   api,
   pbs,
   unit,
@@ -30,12 +32,23 @@ export function LogFlow({
   pbs: Pb[];
   unit: Unit;
   onClose: () => void;
+  /** Reopen a saved session in Check & save instead of starting a new log. */
+  editing?: Session;
+  /** Demo mode: start with this note, and never touch the saved draft. */
+  sampleNote?: string;
   onSaved: (newPbs: NewPb[]) => void;
 }) {
   // The note survives a locked phone or closed tab until it's saved.
-  const [transcript, setTranscript] = useLocalStorage("01-crossfit:note", "");
+  const [storedNote, setStoredNote] = useLocalStorage("01-crossfit:note", "");
+  const [localNote, setLocalNote] = useState(editing?.transcript ?? sampleNote ?? "");
+  // Editing and the demo keep their own note, so they never touch the unsaved draft of a new log.
+  const local = !!editing || sampleNote !== undefined;
+  const transcript = local ? localNote : storedNote;
+  const setTranscript = local ? setLocalNote : setStoredNote;
   const [date, setDate] = useState(today);
-  const [draft, setDraft] = useState<Draft | null>(null);
+  const [draft, setDraft] = useState<Draft | null>(() =>
+    editing ? { date: editing.date, title: editing.title, entries: editing.entries.map((e) => ({ ...e, id: uid() })) } : null,
+  );
   const [picking, setPicking] = useState(false);
   const [open, setOpen] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -77,7 +90,9 @@ export function LogFlow({
   // Which entries would set a PB (worked out the same way the server does on save).
   const flagged = useMemo(() => {
     if (!draft) return new Map<string, NewPb>();
-    const found = new Map(detectPbs(draft.entries, pbs, draft.date, null).map((n) => [pbKey(n.pb), n]));
+    // When editing, this session's own earlier PBs don't count against it.
+    const others = editing ? pbs.filter((p) => p.sessionId !== editing.id) : pbs;
+    const found = new Map(detectPbs(draft.entries, others, draft.date, null).map((n) => [pbKey(n.pb), n]));
     const byEntry = new Map<string, NewPb>();
     for (const e of draft.entries) {
       const c = candidateFromEntry(e, draft.date, null);
@@ -85,7 +100,7 @@ export function LogFlow({
       if (hit && hit.pb.value === c.value && hit.pb.unit === c.unit) byEntry.set(e.id, hit);
     }
     return byEntry;
-  }, [draft, pbs]);
+  }, [draft, pbs, editing]);
 
   async function save() {
     if (!draft) return;
@@ -95,8 +110,9 @@ export function LogFlow({
       const entries: NewEntry[] = draft.entries
         .filter((e) => e.movement.trim())
         .map((e) => ({ movement: e.movement, sets: e.sets, reps: e.reps, weight: e.weight, unit: e.unit, score: e.score, rx: e.rx, note: e.note }));
-      const { newPbs } = await api.saveSession({ date: draft.date, title: draft.title, transcript, entries });
-      setTranscript("");
+      const payload = { date: draft.date, title: draft.title, transcript, entries };
+      const { newPbs } = editing ? await api.updateSession(editing.id, payload) : await api.saveSession(payload);
+      if (!local) setStoredNote("");
       onSaved(newPbs);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Couldn't save.");
@@ -131,7 +147,12 @@ export function LogFlow({
 
     return (
       <Screen>
-        <TopBar title="Check & save" sub={formatDate(draft.date, { weekday: "short", day: "numeric", month: "short" })} onBack={() => setDraft(null)} />
+        <TopBar
+          title={editing ? "Edit session" : "Check & save"}
+          sub={formatDate(draft.date, { weekday: "short", day: "numeric", month: "short" })}
+          onBack={editing ? onClose : () => setDraft(null)}
+          close={!!editing}
+        />
         <div className="flex gap-2">
           <label className="flex-1">
             <span className="sr-only">Session title</span>
@@ -175,7 +196,7 @@ export function LogFlow({
         <div className="flex-1" />
         <BigButton onClick={save} disabled={busy || draft.entries.length === 0}>
           {busy ? <Loader2 className="animate-spin" /> : null}
-          {busy ? "Saving…" : "Save session"}
+          {busy ? "Saving…" : editing ? "Save changes" : "Save session"}
         </BigButton>
       </Screen>
     );

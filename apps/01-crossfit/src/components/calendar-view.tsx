@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pencil, Trash2 } from "lucide-react";
 import { SectionLabel } from "@/components/ui/bits";
 import { findMovement } from "@/lib/movements";
 import { type Session, formatDate, formatEntry, today } from "@/lib/types";
@@ -9,7 +9,15 @@ import { cn } from "@/lib/utils";
 
 const iso = (y: number, m: number, d: number) => `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 
-export function CalendarView({ sessions, onDelete }: { sessions: Session[]; onDelete: (s: Session) => void }) {
+export function CalendarView({
+  sessions,
+  onDelete,
+  onEdit,
+}: {
+  sessions: Session[];
+  onDelete: (s: Session) => void;
+  onEdit: (s: Session) => void;
+}) {
   const now = today();
   const [month, setMonth] = useState(() => ({ y: +now.slice(0, 4), m: +now.slice(5, 7) - 1 }));
   const [selected, setSelected] = useState(now);
@@ -95,14 +103,23 @@ export function CalendarView({ sessions, onDelete }: { sessions: Session[]; onDe
           <div key={s.id} className="flex flex-col">
             <div className="flex items-center justify-between">
               <SectionLabel>{s.title}</SectionLabel>
-              <button
-                type="button"
-                aria-label={`Delete ${s.title}`}
-                onClick={() => confirm(`Delete "${s.title}"? PBs set in it go too.`) && onDelete(s)}
-                className="-mr-2 flex size-10 items-center justify-center text-muted-foreground"
-              >
-                <Trash2 className="size-4" />
-              </button>
+              <span className="flex items-center">
+                <button
+                  type="button"
+                  onClick={() => onEdit(s)}
+                  className="flex h-10 items-center gap-1.5 px-2 text-sm font-semibold text-primary"
+                >
+                  <Pencil className="size-4" /> Edit
+                </button>
+                <button
+                  type="button"
+                  aria-label={`Delete ${s.title}`}
+                  onClick={() => confirm(`Delete "${s.title}"? PBs set in it go too.`) && onDelete(s)}
+                  className="-mr-2 flex size-10 items-center justify-center text-muted-foreground"
+                >
+                  <Trash2 className="size-4" />
+                </button>
+              </span>
             </div>
             {s.entries.map((e) => (
               <div key={e.id} className="flex items-center justify-between gap-3 border-b border-border py-2.5">

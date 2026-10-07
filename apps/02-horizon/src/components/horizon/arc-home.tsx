@@ -5,8 +5,10 @@
 // the day's times sit below it.
 import { LocateFixed } from "lucide-react";
 import { useEffect, useState } from "react";
-import { clock, dayFraction, gradient, nextOf, recentEvent, shortDate, sunDay, view, type Place } from "@/lib/sun";
+import { auroraLand, clock, dayFraction, gradient, moon, nextOf, recentEvent, shortDate, sunDay, view, type Place } from "@/lib/sun";
+import { Aurora } from "./aurora";
 import { Clouds } from "./clouds";
+import { Moon } from "./moon";
 import { Landmark } from "./landmark";
 import { PlaceButton } from "./place-button";
 import { Stars } from "./stars";
@@ -116,6 +118,8 @@ export function ArcHome({ place, now, demo, onSearch, onLocate }: { place: Place
       <div key={place.id} className="hz-sky-in absolute inset-0" style={{ background: gradient(v.sky) }} />
       <Stars opacity={v.sky.stars} />
       <Clouds opacity={Math.max(0, Math.min(1, (v.alt + 2) / 10)) * 0.8} />
+      {auroraLand(place) && <Aurora opacity={Math.max(0, Math.min(1, (-v.alt - 8) / 6)) * 0.55} />}
+      <Moon {...moon(place, now)} southern={place.lat < 0} darkness={Math.max(0, Math.min(1, (-v.alt - 2) / 8))} />
       <h1 className="sr-only">Horizon: {place.name}</h1>
       {demo && (
         <p className="pointer-events-none absolute inset-x-0 bottom-3 z-10 text-center text-xs font-medium tracking-wide text-white/50">

@@ -150,3 +150,12 @@ What happened, what was decided and why. Newest last.
   flung the ring off-screen in under half a second); a wave wants linear motion, with the
   opacity shaping how it appears and fades. Freezing the animation at set times
   (`getAnimations()[0].currentTime`) was the way to see it.
+
+### Moon and aurora
+- Owner asked for an aurora at night near the Arctic Circle (Arvidsjaur) and a subtle moon at
+  night everywhere.
+- **Product call:** the brief promises "the place's sky right now", so the moon is the real one
+  (phase and position from suncalc), shown only when it's actually up. Tonight that's a thin
+  waning crescent rising around 4:30 am in Bali; a switch to "always a moon at night" is offered.
+  The aurora can't be predicted from astronomy, so it's shown as part of the place's character
+  (60° latitude or more, on dark nights); a real aurora forecast goes to the backlog.

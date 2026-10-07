@@ -1,6 +1,6 @@
 // Sun times, the live sky and time formatting for a place. All times are UTC instants, shown in
 // the place's own time zone.
-import { getPosition, getTimes } from "suncalc";
+import { getMoonIllumination, getMoonPosition, getPosition, getTimes } from "suncalc";
 
 import type { LandmarkId } from "./landmarks";
 
@@ -85,6 +85,16 @@ export function nextOf(place: Place, now: Date, kind: SunEvent["kind"]): Date | 
   }
   return null;
 }
+
+// The real moon for a place and moment: where it is, and how much of it is lit.
+export function moon(place: Place, at: Date) {
+  const pos = getMoonPosition(at, place.lat, place.lng);
+  const ill = getMoonIllumination(at);
+  return { alt: pos.altitude, az: pos.azimuth, fraction: ill.fraction, phase: ill.phase };
+}
+
+// Auroras are seen far north (or south): show them as part of the place's night sky.
+export const auroraLand = (place: Place) => Math.abs(place.lat) >= 60;
 
 export const altitude = (place: Place, at: Date) => getPosition(at, place.lat, place.lng).altitude;
 

@@ -28,3 +28,4 @@ success signal that's still simulated). Then the landmark: bigger and visible at
 | Saved places | Quick switch between home and trips. | idea |
 | Share card | A picture of tonight's sunset countdown to send a friend. | idea |
 | Blue hour | The deep-blue light after sunset, for photographers. | idea |
+| Real aurora forecast | Show the aurora only when it is likely (NOAA Kp index), instead of every dark night up north. | idea |

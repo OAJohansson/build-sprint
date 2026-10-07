@@ -138,7 +138,28 @@
   }
 }
 
+/* Aurora curtains sway and breathe, slowly. */
+.hz-aurora {
+  transform-origin: bottom center;
+  animation: hz-aurora 18s ease-in-out infinite alternate;
+}
+@keyframes hz-aurora {
+  0% {
+    transform: translateX(-4%) scaleY(0.85) skewX(-6deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateX(3%) scaleY(1.08) skewX(4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-2%) scaleY(0.95) skewX(-2deg);
+    opacity: 0.8;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .hz-aurora,
   .hz-twinkle,
   .hz-drift,
   .hz-glow {

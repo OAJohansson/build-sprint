@@ -55,3 +55,4 @@ fixed straight away; the rest to prioritise together.
 | # | Type | Feedback | Status |
 | --- | --- | --- | --- |
 | 28 | Delight | **A pulse of light over the sky when the sun rises or sets** (owner's "cherry on top"). | fixed: a ring of warm light sweeps from the sun across the sky in about 3 s, once per sunrise or sunset (gold or orange); behind the arc and text; a gentle brighten instead for "reduce motion" |
+| 29 | Delight | **Aurora on nights near the Arctic Circle, and a subtle moon everywhere at night** (owner). | fixed: the real moon at its real phase and position (mirrored south of the equator), shown only when it's above the horizon; aurora curtains on dark nights for places at 60° latitude or more, swaying slowly |

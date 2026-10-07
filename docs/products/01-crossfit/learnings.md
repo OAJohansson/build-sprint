@@ -13,8 +13,8 @@ What building CrossFit Log taught me.
 | Planned | 1 day |
 | Actual | 2 days (6–7 Oct) |
 | First live version | Day 1 (v1, before the needs brainstorm) |
-| Pull requests | 7 |
-| Feedback items | 18: 8 from my review, 10 from the simulated user test. 11 fixed, 7 parked |
+| Pull requests | 12 (7 by the first wrap-up, 5 in the follow-up) |
+| Feedback items | 21: 11 from my review, 10 from the simulated user test. 17 fixed, 4 parked |
 | Who found the bugs | Me on a real phone: dictation repeating (twice), PB not saving, app not loading. Test agent: 4 wrong-number bugs (rep-max PBs, percentage base, "510" → 8:30, session count). My review: copy and UX |
 | Time lost to setup | About half of day 2 (Supabase key type, dictation on Android) |
 

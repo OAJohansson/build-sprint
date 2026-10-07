@@ -81,6 +81,7 @@ const data = {
   built: new Date().toISOString().slice(0, 10),
   products,
   ideas: read("docs/ideas.md").replace(/^# .*\n+/, ""),
+  learnings: read("docs/learnings.md").replace(/^# .*\n+/, ""),
 };
 
 // "<" escaped so no doc text can close the script tag early.

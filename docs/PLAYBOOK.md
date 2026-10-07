@@ -71,7 +71,8 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
   who found them), Keep / Change / Try, what surprised you.
 - **At most 3 process changes**, made *before* the next product starts: edit this playbook, the
   templates or the checklists, and log each one in [`learnings.md`](learnings.md) (the process changelog).
-- Add 1–3 bullets under **Learned** on the card.
+- Add 1–3 bullets under **Learned** on the card, and 3–7 **key learnings** under the product's
+  heading in [`learnings.md`](learnings.md) (new design principles go there too).
 - Set `status: shipped` (or `parked`, which is fine too) → `pnpm sync && pnpm notebook` → republish the notebook.
 - Add a screenshot to `apps/portfolio/public/shots/NN-slug.png` (optional, makes the portfolio better).
 

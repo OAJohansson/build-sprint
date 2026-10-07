@@ -50,6 +50,8 @@ conflicts with the clean-and-minimal principle (decision 0007), the principle wi
   - `user-testing/`: `persona.md`, `plan.md`, `report-YYYY-MM-DD.md` (see `docs/user-testing/README.md`).
   - `backlog.md`: ideas and parked features for this product.
   - `learnings.md`: lessons from this product, plus the retro at wrap-up (see `docs/PLAYBOOK.md`).
+  - `story.md`: the interview story at wrap-up (STAR, headline, themes, assumptions vs reality,
+    follow-ups); feeds the story bank page (`docs/interview-stories.md`).
 - After any change in `docs/`, run `pnpm sync && pnpm notebook`, then republish
   `.notebook/index.html` with the Artifact tool to the existing private notebook,
   https://claude.ai/artifact/6WgAx5PMZYAzBqCg7zf25b (pass that URL; never create a new one).

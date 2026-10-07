@@ -47,3 +47,14 @@ What happened, what was decided and why. Newest last.
   first deploy.
 - **Landmarks for the MVP:** Bali (temple gate), Paris, London, New York, Sydney, Rome, Agra,
   Tokyo, Rio, Cairo.
+
+### Requirements before the prototype
+- **Owner's question:** should the prototype prompt include all the requirements, and shouldn't
+  we list them before designing? Is the brief a PRD?
+- **Coaching:** yes, the brief is a one-page PRD. Requirements come out of discovery (Cagan) and
+  are written as behaviours with a check, not designs, plus no-gos and rabbit holes (Singer, Shape
+  Up). The prompt should point at the brief rather than repeat it, so there's one source of truth.
+- Added nine requirements, no-gos, rabbit holes and the appetite to the brief. Playbook step 1 now
+  credits each practice to its source, with a new [Product craft](https://github.com/OAJohansson/build-sprint/blob/main/docs/product-craft.md)
+  page: the owner's list (Cagan, Perri, Torres, Pichler, Doshi, Rachitsky) plus Singer,
+  Christensen and Moesta, Fitzpatrick, Krug and Husain for balance.

@@ -54,7 +54,7 @@ fs.writeFileSync(doc, fill(fs.readFileSync(path.join(PRODUCTS_DIR, "TEMPLATE.md"
 const folder = path.join(PRODUCTS_DIR, slug);
 fs.mkdirSync(path.join(folder, "user-testing"), { recursive: true });
 const starters = {
-  "brief.md": "# Brief\n\nWritten before any code (playbook step 1). Short answers; the success check is filled in at wrap-up.\n\n## Problem\n\n## Who\n\n## Moment of use and jobs to be done\n\n## Today's alternatives\n\n## Riskiest assumptions\n\n## Success: what good looks like\n\n| Signal | How I'll measure it | Target |\n| --- | --- | --- |\n\n## MVP and stop line\n\n## Success check (at wrap-up)\n",
+  "brief.md": "# Brief\n\nA one-page PRD, written before any code (playbook step 1). Short answers; the success check is filled in at wrap-up.\n\n## Problem\n\n## Who\n\n## Moment of use and jobs to be done\n\n## Today's alternatives\n\n## Riskiest assumptions\n\n## Success: what good looks like\n\n| Signal | How I'll measure it | Target |\n| --- | --- | --- |\n\n## MVP and stop line\n\n## Requirements\n\n| # | Must | Check |\n| --- | --- | --- |\n\n**No-gos:** \n\n**Rabbit holes:** \n\n## Success check (at wrap-up)\n",
   "journal.md": "# Journey\n\nWhat happened, what was decided and why. Newest last.\n",
   "feedback.md": "# Review feedback\n\nStatus: `open` · `fixing` · `fixed` · `parked` · `won't do`\n\n| # | Type | Feedback | Status |\n| --- | --- | --- | --- |\n",
   "backlog.md": "# Backlog\n\n| Idea | Why | Status |\n| --- | --- | --- |\n",

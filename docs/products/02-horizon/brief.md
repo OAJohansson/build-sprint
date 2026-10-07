@@ -1,6 +1,6 @@
 # Brief
 
-Written before any code (playbook step 1). Short answers; the success check is filled in at wrap-up.
+A one-page PRD, written before any code (playbook step 1). Short answers; the success check is filled in at wrap-up.
 
 *Drafted by Claude from the owner's idea, decisions by the owner, 7 Oct.*
 
@@ -101,5 +101,31 @@ now.
 compass, blue hour, map, share card.
 
 **Backlog too:** landmarks for more places, a landmark found automatically for any city.
+
+## Requirements
+
+What the MVP must do, as behaviour the user sees. The prototype explores *how*.
+
+| # | Must | Check |
+| --- | --- | --- |
+| R1 | Open and know | With location allowed, the home screen shows the next event (sunrise or sunset, whichever comes first) and the time left, with no taps. |
+| R2 | Ask for location kindly | Before the browser prompt, one line says why ("to show your sunset"). If it's blocked or fails, search appears instead. |
+| R3 | Both events | Today's sunrise and sunset times are both visible, plus when golden hour starts (evening) or ends (morning). |
+| R4 | Live countdown | The time left updates while the app is open, and the next event takes over once one passes. |
+| R5 | Search a place | Type a city, pick from results; all times then show in that place's local time, with its current local time. One tap back to "my location". |
+| R6 | Live sky | The background is computed from the sun's height for the place right now: night, dawn, sunrise, morning, midday, afternoon, golden hour, sunset, dusk. Phases blend; no jumps. |
+| R7 | Landmark | The 10 MVP places (Bali, Paris, London, New York, Sydney, Rome, Agra, Tokyo, Rio, Cairo) show their silhouette on the horizon when you're in or search for one; anywhere else shows a calm generic horizon. |
+| R8 | Polar days | Where the sun doesn't rise or set today, it says so plainly and shows the next event. |
+| R9 | Readable and kind | Text 4.5:1 contrast on every sky; works one-handed on a phone; motion respects "reduce motion". |
+
+**No-gos:** accounts, saved places, weather or cloud forecast, notifications, maps, sun
+direction, photos, landmarks beyond the 10.
+
+**Rabbit holes:** a physically accurate sky (use gradients keyed to the sun's height instead);
+detailed landmark drawings (simple silhouettes, one style); hand-written time-zone maths (use the
+place's time-zone name with the browser's date formatting); tuning animations before the
+countdown works.
+
+**Appetite:** one day. The prototype round: about an hour.
 
 ## Success check (at wrap-up)

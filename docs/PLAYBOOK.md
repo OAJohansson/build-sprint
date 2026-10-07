@@ -11,40 +11,55 @@ products can be rough, as long as each one teaches something.
 - **B. Product craft:** working the way good product managers do.
 - **C. Technical skill:** understanding what I build, not just shipping it.
 
-Claude is my product coach as well as my builder: at each step it names the practice, makes me
+The practices are grounded in people who are great at this craft; who said what, and why it
+matters, is in [Product craft](product-craft.md). Claude is my product coach as well as my
+builder: at each step it names the practice, makes me
 take the product decisions, challenges solution-first thinking, and explains the technical
 choices in plain words.
 
 ## 1. Discover and frame (≈60 min, before any code)
 
 Fall in love with the problem, not the solution. Write it all in the product's **brief**
-(`docs/products/NN-slug/brief.md`), one short section per step. Timebox it: an hour, not a day.
+(`docs/products/NN-slug/brief.md`): a one-page PRD, one short section per step. Timebox it: an
+hour, not a day. Names in brackets are where each practice comes from; see
+[Product craft](product-craft.md).
 
 - Pick an idea from [`ideas.md`](ideas.md), then `pnpm new <slug> "Display Title"`. This creates
   the app, the card, the product folder (with an empty brief) and the README row.
 - **Problem.** One or two sentences: who has it, when, and what it costs them today. No features.
+  *(Perri: outcomes over outputs.)*
 - **Who.** A quick persona: one specific person, not a market. Full version in
   `user-testing/persona.md` from the [template](user-testing/).
 - **Moment of use and jobs to be done.** When, where and in what state do they open this? Their
-  top 3 jobs as "When…, I want…, so I can…", ranked. *(Day 1: v1 skipped this and solved the
-  wrong problem.)*
+  top 3 jobs as "When…, I want…, so I can…", ranked. *(Christensen and Moesta. Day 1: v1 skipped
+  this and solved the wrong problem.)*
 - **Today's alternatives.** How do they solve it now (an app, Google, a friend, nothing)? What's
   good about that, and what's annoying? Why would anyone switch? If you can't answer the last
-  question, change the idea or find the edge before building.
+  question, change the idea or find the edge before building. *(Moesta: the forces that make
+  people switch.)*
 - **Riskiest assumptions.** What must be true for this to work? Check the four risks: *value*
   (will they use it?), *usability* (can they?), *feasibility* (can I build it today?),
-  *viability* (does it work for me: cost, data, time?). Mark the riskiest one; the MVP must test it.
+  *viability* (does it work for me: cost, data, time?). Mark the riskiest one; the MVP must test
+  it. *(Cagan's four risks; Torres: test assumptions, not ideas.)*
 - **Success: what good looks like.** Decided *before* building. One main outcome for the user
   (not a feature list), plus 2–3 signals and how I'll measure each: in the user test (task done,
   time, taps, "would you use it again?"), and live if it's worth it (e.g. Vercel Analytics). Add
-  one guardrail (something that mustn't get worse, like correct numbers).
+  one guardrail (something that mustn't get worse, like correct numbers). Measure what a feature
+  is *for*, not that it exists. *(Perri; Doshi: pre-mortem, "it failed, why?")*
 - **MVP and stop line.** The smallest thing that does the top job and tests the riskiest
-  assumption. List what ships today; everything else goes straight to `backlog.md`.
-- **Three approaches.** Sketch three genuinely different solutions, then run `/prototype` on the
-  main screen to get them as working variants behind a picker. Pick one or a mix, and note why in
-  `journal.md`.
+  assumption. The appetite is one day: fix the time, cut the scope. List what ships today;
+  everything else goes straight to `backlog.md`. *(Singer, Shape Up: appetite.)*
+- **Requirements, no-gos and rabbit holes.** What the MVP must do, each as a user-visible
+  behaviour with a check ("when location is blocked, search appears"), not a design. Then what
+  it won't do (no-gos), and the traps that could eat the day (rabbit holes). This is what design
+  and the prototype work from. *(Singer: the pitch; Cagan: requirements come out of discovery,
+  not before it.)*
 - **Test plan.** `user-testing/plan.md` from the [template](user-testing/): one scenario per top
   job, with success bars taken from the brief.
+- **Three approaches.** Run `/prototype` on the main screen, pointing it at the brief, to get three
+  genuinely different directions as working variants behind a picker. Judge them against the
+  success signals, not just looks. Pick one or a mix, and note why in `journal.md`. *(Cagan:
+  prototypes over documents.)*
 - Fill in **user**, **problem** and **bet** (one line each) on the card `docs/products/NN-slug.md`.
   The bet is the smallest thing that could solve the problem by tonight. Cut everything else.
 

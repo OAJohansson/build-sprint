@@ -82,6 +82,7 @@ const products = readProducts().map((p) => ({
 // other relative links open the file on GitHub.
 const PAGES = [
   { id: "playbook", label: "Playbook", eyebrow: "How each day runs", file: "docs/PLAYBOOK.md" },
+  { id: "craft", label: "Product craft", eyebrow: "The people behind the playbook", file: "docs/product-craft.md" },
   { id: "skills", label: "Skills", eyebrow: "Claude skills in the repo", file: ".claude/skills/README.md" },
   { id: "learnings", label: "Learnings", eyebrow: "Across products", file: "docs/learnings.md" },
   { id: "todo", label: "To do", eyebrow: "Sprint to-do", file: "docs/todo.md" },

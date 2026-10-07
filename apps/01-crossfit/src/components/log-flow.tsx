@@ -62,9 +62,13 @@ export function LogFlow({
         entries: parsed.entries.map((e) => ({ ...e, id: uid(), movement: findMovement(e.movement).name })),
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "The AI step failed.");
-      // Without the AI, carry on by hand.
-      if (err instanceof ApiError && err.status === 503) setDraft({ date, title: "", entries: [] });
+      // If reading the note is unavailable, carry on by hand.
+      if (err instanceof ApiError && err.status === 503) {
+        setError("Couldn't read your note right now. You can add your movements by hand below.");
+        setDraft({ date, title: "", entries: [] });
+      } else {
+        setError(err instanceof ApiError && err.status !== 500 && err.status !== 502 ? err.message : "Couldn't read your note right now. It's still here, so try again in a moment.");
+      }
     } finally {
       setBusy(false);
     }

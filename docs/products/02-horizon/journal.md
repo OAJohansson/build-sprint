@@ -159,3 +159,9 @@ What happened, what was decided and why. Newest last.
   waning crescent rising around 4:30 am in Bali; a switch to "always a moon at night" is offered.
   The aurora can't be predicted from astronomy, so it's shown as part of the place's character
   (60° latitude or more, on dark nights); a real aurora forecast goes to the backlog.
+- **Owner decided:** keep the real moon. Merged (PR #19).
+
+### Done
+- After the wrap-up, three finishing touches shipped: the 2-minute demo, the light pulse at
+  sunrise and sunset, and the moon and aurora. Horizon stays **shipped**; next time, start from the
+  backlog's "start here" note.

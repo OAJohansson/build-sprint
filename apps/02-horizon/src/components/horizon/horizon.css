@@ -48,7 +48,15 @@
   }
 }
 
+/* The sun moves a little every second: constant motion, so linear. */
+.hz-glide {
+  transition: transform 1s linear;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .hz-glide {
+    transition: none;
+  }
   .hz-rise,
   .hz-sun-in,
   .hz-draw {

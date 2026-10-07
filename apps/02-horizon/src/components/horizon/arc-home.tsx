@@ -45,15 +45,16 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
     <main className="hz fixed inset-0 flex flex-col overflow-hidden bg-[#0b1022]">
       <div key={place.id} className="hz-sky-in absolute inset-0" style={{ background: gradient(v.sky) }} />
       <Stars opacity={v.sky.stars} />
+      <h1 className="sr-only">Horizon: {place.name}</h1>
 
       <div className="hz-rise relative flex items-center justify-between gap-3 px-6 pt-[max(1.25rem,env(safe-area-inset-top))]">
-        <PlaceButton place={place} localTime={v.localTime} ink={ink} inkSoft={v.sky.inkSoft} onClick={onSearch} />
+        <PlaceButton place={place} localTime={v.localTime} ink={v.sky.inkTop} inkSoft={v.sky.inkTopSoft} onClick={onSearch} />
         {!place.here && (
           <button
             onClick={onLocate}
             aria-label="Back to my location"
             className="-mr-2 grid size-11 shrink-0 place-items-center rounded-full transition-transform duration-150 ease-out active:scale-[0.97]"
-            style={{ color: ink }}
+            style={{ color: v.sky.inkTop }}
           >
             <LocateFixed className="size-5" aria-hidden="true" />
           </button>
@@ -71,7 +72,7 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
             {/* the night, below the horizon */}
             <path d={arc(nightPt, R, NIGHT, 0, 1)} fill="none" stroke="#ffffff" strokeOpacity={0.16} strokeWidth={1.5} strokeDasharray="2 5" />
             <line x1={0} x2={W} y1={BASE} y2={BASE} stroke={ink} strokeOpacity={0.4} />
-            <g style={{ transform: `translate(${sx}px, ${sy}px)`, transition: "transform 1s linear" }}>
+            <g className="hz-glide" style={{ transform: `translate(${sx}px, ${sy}px)` }}>
               <circle r={daylight ? 9 : 6} fill={daylight ? "#fff3d6" : "#dfe6ff"} className="hz-sun-in" />
               {daylight && <circle r={18} fill="#ffd79a" opacity={0.28} />}
             </g>
@@ -79,7 +80,7 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
 
           <Landmark id={place.landmark} fill={v.sky.land} className="pointer-events-none absolute left-1/2 w-[30%] -translate-x-1/2" style={{ bottom: `${((NIGHT + 8) / (BASE + NIGHT + 8)) * 100}%` }} />
 
-          <div className="absolute inset-x-0 text-center" style={{ top: "25%", color: ink }} aria-live="polite">
+          <div className="absolute inset-x-0 text-center" style={{ top: "25%", color: ink, textShadow: v.sky.shadow }}>
             {v.event && v.left ? (
               <>
                 <p className="hz-rise text-[clamp(44px,14vw,56px)] font-light leading-none tracking-[-0.03em] tabular-nums" style={{ ["--i" as string]: 1 }}>
@@ -96,7 +97,7 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
           </div>
         </div>
 
-        <div className="relative px-6 pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-2" style={{ background: `linear-gradient(to bottom, transparent, ${v.sky.land} 30%)` }}>
+        <div className="relative -mt-8 px-6 pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-8" style={{ background: `linear-gradient(to bottom, transparent, ${v.sky.land} 2rem)` }}>
           <ul className="mx-auto max-w-[420px] divide-y divide-white/10 text-white">
             {rows.map((r, i) => {
               const next = v.event && r.at && +r.at === +v.event.at;

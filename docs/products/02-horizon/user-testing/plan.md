@@ -4,15 +4,19 @@ Scenarios come from the jobs in the [brief](#02-horizon.brief); success bars fro
 
 ## How to run the app for testing
 
-- Start: `pnpm -F 02-horizon dev -p 3270`.
-- Viewport: 390 × 844, deviceScaleFactor 2.
+- **App:** the live site, https://horizon-beta-wine.vercel.app (or `pnpm -F 02-horizon dev -p 3270`
+  for local changes). Playwright's `playwright-core` at `/opt/node-tools/node_modules/playwright-core`.
+- **From the cloud sandbox:** launch Chromium with the proxy (`proxy: { server: process.env.HTTPS_PROXY }`
+  and `--ignore-certificate-errors`). The two lookup services (Open-Meteo search, BigDataCloud
+  place name) are blocked there, so stub them with real-shaped answers (`page.route`); a helper
+  that does both is passed in the task.
+- Viewport: 390 × 844, deviceScaleFactor 2, `timezoneId` of the persona's place.
 - **Location:** grant geolocation in the browser context and set it to Bali (Seminyak, about
-  −8.69, 115.16). For the "blocked" case, deny it.
-- **Time:** fix the clock (Playwright `page.clock`) so each scenario happens at its moment, e.g.
-  16:45 Bali time for S1.
-- **Place search:** the real geocoding API if reachable; otherwise stub it with the right
-  coordinates and time zone for the places used below.
-- **First run:** a fresh browser context, nothing stored.
+  −8.69, 115.16). For the "blocked" case, don't grant it.
+- **Time:** fix the clock (`page.clock.setFixedTime`) so each scenario happens at its moment, e.g.
+  16:45 Bali time (08:45 UTC) for S1.
+- **First run:** a fresh browser context, nothing stored. The app remembers your choice in
+  localStorage (`horizon:last`).
 
 ## Scenarios
 

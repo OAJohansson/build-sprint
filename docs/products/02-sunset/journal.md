@@ -26,3 +26,17 @@ What happened, what was decided and why. Newest last.
   per product; sprint goals A/B/C at the top of the playbook; a success check at wrap-up.
 - Draft [brief](#02-sunset.brief) and persona (Noor, a traveller in Bali) written for the owner
   to react to. Open calls: main job (here-now vs elsewhere), success measures, MVP cut.
+
+### Owner's decisions on the brief
+- **Main job:** how long until sunrise or sunset *here*; searching elsewhere is secondary. The app
+  covers sunrise and sunset equally, so the name must too (brainstorm open).
+- **Sky as background:** the screen shows the place's sky right now, from dawn through midday to
+  sunset and night.
+- **Landmark (new):** the place's most famous landmark on the horizon (Paris: the Eiffel Tower).
+  Coaching point: a feature can be a success signal if you measure what it's *for* (a sense of
+  place: do people recognise the city without its name?). It also raised a feasibility risk:
+  "any place in the world" can't be done well in a day, so about 10 hand-drawn silhouettes plus a
+  generic horizon; automatic landmarks go to the backlog.
+- **Success:** the five signals plus "sense of place" and a readability guardrail. **MVP:** as
+  proposed, plus sky and landmarks.
+- Test plan written: six scenarios from the jobs and success bars.

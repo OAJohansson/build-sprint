@@ -2,7 +2,7 @@
 
 Written before any code (playbook step 1). Short answers; the success check is filled in at wrap-up.
 
-*Draft by Claude from the owner's idea, 7 Oct. Items marked **Your call** are open decisions.*
+*Drafted by Claude from the owner's idea, decisions by the owner, 7 Oct. Open: the name.*
 
 ## Problem
 
@@ -29,8 +29,9 @@ the phone for a few seconds.
 3. "When I'm about to watch it, I want a calm, beautiful moment, so checking the sunset feels like
    part of the ritual, not a chore."
 
-**Your call:** is job 1 (here, now) really the main job, and job 2 (somewhere else, later)
-secondary? It decides the home screen.
+**Decided:** job 1 is the main job, so the home screen is "how long until sunrise or sunset
+where I am". Searching another place (job 2) is one step away. Sunrise matters as much as sunset,
+so the app and its name cover both.
 
 ## Today's alternatives
 
@@ -56,6 +57,7 @@ isn't enough. The edge has to be:
 | Value | People will open a dedicated app instead of Googling, because a countdown, golden hour and a beautiful screen are worth it. | **Riskiest** |
 | Usability | Allowing location and searching a place is quick on a phone; the countdown is readable at a glance. | Medium |
 | Feasibility | Times computed in the browser (the SunCalc formula, no API); place search and the place's time zone from a free geocoding API (Open-Meteo, no key). | Low |
+| Feasibility | A landmark for "any place in the world" can't be hand-made or found reliably in one day. A hand-drawn set for famous places, with a calm generic horizon everywhere else, can. | Medium |
 | Viability | No backend, no costs, no accounts. | Low |
 
 So the MVP must test **value**: does it beat Google for the main job, and does it feel delightful?
@@ -71,23 +73,33 @@ checking feels like a small pleasure rather than a search.
 | Another place | User test: search a city → sees its sunrise and sunset in local time | ≤ 15 s |
 | Delight | User test rating, and one real person: "would you show this to a friend?" | 4/5 or better; a real yes |
 | Beats Google | Ask the tester and one real person which they'd use tomorrow, and why | They pick this app, with a reason |
+| Sense of place | User test: show the background (city name hidden) for 5 of the landmark places → which city is it? | 4 of 5 recognised |
+| Guardrail: readable | The countdown stays readable on every sky and landmark, in bright sun (contrast check) | Contrast 4.5:1 or better |
 | Guardrail: correct times | 5 places vs timeanddate.com, including one with no sunset (Tromsø in June) | Within 2 min; polar case handled |
 
-**Your call:** do these feel like the right definition of "good"? Is there one you'd drop or add?
-Live usage (Vercel Analytics: returning visitors) is optional for a one-day product.
+**Decided:** these five plus the landmark. A feature can be a success signal when you measure
+what it's *for*, not that it exists: the landmark is for a sense of place, so the test is whether
+people recognise the city without reading its name. Live usage (Vercel Analytics) is skipped for
+now.
 
 ## MVP and stop line
 
-**Ships today (proposal):**
-- Auto-locate (with a fallback: search, if location is blocked).
-- Home: a countdown to the next sunset or sunrise, its time, and the golden hour.
-- A sky that matches the time of day, with a few purposeful animations (the sun easing toward the
-  horizon, the countdown ticking).
-- Search any city; times shown in that city's local time.
+**Ships today (decided):**
+- Auto-locate, with search as the fallback if location is blocked.
+- Home: a countdown to the next sunrise or sunset, its time, and the golden hour.
+- **A sky that is the place's sky right now:** night, dawn, sunrise, morning, midday, afternoon,
+  golden hour, sunset and dusk, blending smoothly from one to the next and computed from the sun's
+  real height for that place. A few purposeful animations (the sun easing toward the horizon, the
+  countdown ticking).
+- **A landmark on the horizon:** hand-drawn silhouettes for about 10 famous places (Paris: the
+  Eiffel Tower; Bali: a temple gate; and so on), shown when you're in or search for one. Every
+  other place gets a calm generic horizon. Silhouettes keep one style and stay readable on every
+  sky; photos wouldn't.
+- Search any city; times in that city's local time.
 
 **Backlog:** saved places, cloud forecast ("will it be a good one?"), reminders, sun direction and
 compass, blue hour, map, share card.
 
-**Your call:** anything on the backlog that must ship today, or anything above you'd cut?
+**Backlog too:** landmarks for more places, a landmark found automatically for any city.
 
 ## Success check (at wrap-up)

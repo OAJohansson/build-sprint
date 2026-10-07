@@ -149,7 +149,7 @@ h2 { font: 700 20px/1.2 var(--display); margin: 0; text-wrap: balance; }
   <nav class="rail" id="rail" aria-label="Contents">
     <a class="brand" href="#overview">Build Sprint</a>
     <p class="brand-sub">20 products · 20 days</p>
-    <ul class="nav"><li><a href="#overview" data-route="overview"><span class="t">Overview</span></a></li><li><a href="#learnings" data-route="learnings"><span class="t">Learnings</span></a></li></ul>
+    <ul class="nav" id="nav-pages"></ul>
     <p class="nav-label">Products</p>
     <ul class="nav" id="nav-products"></ul>
   </nav>
@@ -170,16 +170,20 @@ const md = (text) => {
 const STATUS = { shipped: "Shipped", building: "Building", parked: "Parked", idea: "Idea" };
 const pill = (s) => `<span class="pill ${esc(s)}">${esc(STATUS[s] || s)}</span>`;
 
-// Routes: "overview", "learnings", "<slug>" (product overview) or "<slug>.<section>" (product sub-page).
+// Routes: "overview", a sprint page ("playbook", "skills", "learnings", "todo"), "<slug>" (product
+// overview) or "<slug>.<section>" (product sub-page).
 function parseRoute() {
   const route = decodeURIComponent(location.hash.slice(1)) || "overview";
   const [slug, sectionId] = route.split(".");
   const p = DATA.products.find((x) => x.slug === slug);
   const section = p && sectionId ? p.sections.find((s) => s.id === sectionId) : null;
-  return { route: p ? (section ? `${p.slug}.${section.id}` : p.slug) : route === "learnings" ? "learnings" : "overview", p, section };
+  const page = !p ? DATA.pages.find((x) => x.id === route) : null;
+  return { route: p ? (section ? `${p.slug}.${section.id}` : p.slug) : page ? page.id : "overview", p, section, page };
 }
 
 function nav(current) {
+  $("#nav-pages").innerHTML = [{ id: "overview", label: "Overview" }, ...DATA.pages]
+    .map((pg) => `<li><a href="#${pg.id}" data-route="${pg.id}"><span class="t">${esc(pg.label)}</span></a></li>`).join("");
   $("#nav-products").innerHTML = DATA.products.length
     ? DATA.products.map((p) => {
         const open = current.p && current.p.slug === p.slug;
@@ -220,16 +224,17 @@ function overview() {
     </section>
     <section class="head"><h2>Products</h2>${rows}</section>
     <section class="head"><h2>Product ideas</h2><div class="prose">${md(DATA.ideas)}</div></section>
-    <div class="links"><a class="btn" href="#learnings">Learnings across products</a><a class="btn" href="${DATA.repo}">Code on GitHub</a></div>`;
+    <div class="links">${DATA.pages.map((pg) => `<a class="btn" href="#${pg.id}">${esc(pg.label)}</a>`).join("")}<a class="btn" href="${DATA.repo}">Code on GitHub</a></div>`;
 }
 
-function learningsPage() {
+function sprintPage(pg) {
   return `
     <header class="head">
-      <div class="eyebrow">Across products</div>
-      <h1>Learnings</h1>
+      <div class="eyebrow">${esc(pg.eyebrow)}</div>
+      <h1>${esc(pg.title)}</h1>
     </header>
-    <section class="prose">${md(DATA.learnings)}</section>`;
+    <section class="prose">${md(pg.text)}</section>
+    <div class="links"><a class="btn" href="${esc(pg.source)}">Edit on GitHub</a></div>`;
 }
 
 function product(p) {
@@ -261,13 +266,13 @@ function sectionPage(p, s) {
 
 function render() {
   const current = parseRoute();
-  const { p, section } = current;
-  const html = section ? sectionPage(p, section) : p ? product(p) : current.route === "learnings" ? learningsPage() : overview();
+  const { p, section, page } = current;
+  const html = section ? sectionPage(p, section) : p ? product(p) : page ? sprintPage(page) : overview();
   $("#view").innerHTML = html + `<div class="foot">Built ${esc(DATA.built)} from docs/ in the repo</div>`;
   nav(current);
   document.querySelectorAll("[data-route]").forEach((a) =>
     a.dataset.route === current.route ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
-  document.title = p ? `${p.title}${section ? ` · ${section.label}` : ""} · Build Sprint Notebook` : current.route === "learnings" ? "Learnings · Build Sprint Notebook" : "Build Sprint Notebook";
+  document.title = p ? `${p.title}${section ? ` · ${section.label}` : ""} · Build Sprint Notebook` : page ? `${page.label} · Build Sprint Notebook` : "Build Sprint Notebook";
   setMenu(false);
   window.scrollTo(0, 0);
 }

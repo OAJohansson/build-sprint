@@ -54,10 +54,11 @@ fs.writeFileSync(doc, fill(fs.readFileSync(path.join(PRODUCTS_DIR, "TEMPLATE.md"
 const folder = path.join(PRODUCTS_DIR, slug);
 fs.mkdirSync(path.join(folder, "user-testing"), { recursive: true });
 const starters = {
+  "brief.md": "# Brief\n\nA one-page PRD, written before any code (playbook step 1). Short answers; the success check is filled in at wrap-up.\n\n## Problem\n\n## Who\n\n## Moment of use and jobs to be done\n\n## Today's alternatives\n\n## Riskiest assumptions\n\n## Success: what good looks like\n\n| Signal | How I'll measure it | Target |\n| --- | --- | --- |\n\n## MVP and stop line\n\n## Requirements\n\n| # | Must | Check |\n| --- | --- | --- |\n\n**No-gos:** \n\n**Rabbit holes:** \n\n## Success check (at wrap-up)\n",
   "journal.md": "# Journey\n\nWhat happened, what was decided and why. Newest last.\n",
   "feedback.md": "# Review feedback\n\nStatus: `open` · `fixing` · `fixed` · `parked` · `won't do`\n\n| # | Type | Feedback | Status |\n| --- | --- | --- | --- |\n",
   "backlog.md": "# Backlog\n\n| Idea | Why | Status |\n| --- | --- | --- |\n",
-  "learnings.md": "# Learnings\n\nWhat building this product taught me.\n\n## Retro\n\n**Numbers:** planned vs actual time, PRs, bugs and who found them.\n\n**Keep**\n\n**Change**\n\n**Try next time**\n\n**What surprised me**\n\n**Process changes carried forward** (max 3, logged in `docs/learnings.md`)\n",
+  "learnings.md": "# Learnings\n\nWhat building this product taught me.\n\n## Retro\n\n**Numbers:** planned vs actual time, PRs, bugs and who found them.\n\n**Keep**\n\n**Change**\n\n**Try next time**\n\n**What surprised me**\n\n**Growth:** one thing learned for A (product), B (product craft), C (technical).\n\n**Process changes carried forward** (max 3, logged in `docs/learnings.md`)\n",
 };
 for (const [name, text] of Object.entries(starters)) fs.writeFileSync(path.join(folder, name), text);
 syncReadme();
@@ -66,7 +67,7 @@ console.log(`
 Created day ${day}: ${title}
   app    apps/${slug}
   doc    docs/products/${slug}.md   ← fill in user, problem and bet before coding
-  folder docs/products/${slug}/     journal, feedback, user-testing, backlog, learnings
+  folder docs/products/${slug}/     brief, journal, feedback, user-testing, backlog, learnings
 
 Next:
   pnpm install

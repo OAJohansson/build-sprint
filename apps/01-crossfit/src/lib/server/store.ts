@@ -26,7 +26,7 @@ type PbRow = {
 
 const num = (v: number | string | null) => (v == null ? null : Number(v));
 
-/** A database error with a plain-language reason the app can show. */
+/** A database error with a plain-language reason for the server logs. */
 export class StoreError extends Error {}
 
 type DbError = { message: string; code?: string };

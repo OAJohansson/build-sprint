@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { CATEGORIES, MOVEMENTS } from "@/lib/movements";
-import { checkAccess } from "@/lib/server/access";
+import { checkAccess, failure } from "@/lib/server/access";
 import { ParsedSessionSchema } from "@/lib/types";
 
 // Server-side only so the API key never reaches the browser. Turns a spoken
@@ -38,7 +38,7 @@ Other:
 
 export async function POST(request: Request) {
   if (!process.env.ANTHROPIC_API_KEY) {
-    return Response.json({ error: "ANTHROPIC_API_KEY is not set, so add movements by hand for now." }, { status: 503 });
+    return failure("ANTHROPIC_API_KEY is not set.", 503);
   }
   const denied = checkAccess(request);
   if (denied) return denied;
@@ -73,8 +73,7 @@ export async function POST(request: Request) {
       return Response.json({ error: "Busy right now, try again in a moment." }, { status: 429 });
     }
     if (error instanceof Anthropic.APIError) {
-      console.error(`Anthropic API error ${error.status}:`, error.message);
-      return Response.json({ error: "The AI step failed. Your note is still here." }, { status: 502 });
+      return failure(`Anthropic API error ${error.status}: ${error.message}`, 502);
     }
     throw error;
   }

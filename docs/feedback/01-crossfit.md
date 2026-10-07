@@ -9,7 +9,7 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 
 | # | Type | Feedback | Status |
 | --- | --- | --- | --- |
-| 1 | Bug | Adding a PB (Snatch 70 kg) fails with "Something went wrong saving or loading." | fixed in code: the app now names the cause (wrong key type, missing tables, or the database's own error). Confirm on the live app |
+| 1 | Bug | Adding a PB (Snatch 70 kg) fails with "Something went wrong saving or loading." | fixed in code: users see only "Something went wrong. Please try again later."; the real cause (wrong key type, missing tables, database error) goes to the Vercel logs. Confirm on the live app |
 | 2 | Bug | Dictation in Chrome still repeats what I say over and over. | fixed in code: on Android, listens one phrase at a time. Confirm on a real phone (`?debug` shows raw events) |
 | 3 | Copy | Empty-state line "Add them once and they're here when the coach says 70%" isn't descriptive enough. | open |
 | 4 | UX | Two buttons do the same thing on the empty home screen: "Add PB" (top right) and "Add your first PB" (middle). | open |

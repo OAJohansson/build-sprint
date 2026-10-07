@@ -11,6 +11,7 @@ import { PbForm } from "@/components/pb-form";
 import { BigButton, inputClass } from "@/components/ui/bits";
 import { ApiError, api as makeApi } from "@/lib/api";
 import { DEMO_NOTE, demoApi } from "@/lib/demo";
+import type { GoalChange } from "@/lib/progress";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { type NewPb, type Pb, type Session, type Unit, today } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -34,6 +35,12 @@ export default function Home() {
   // Demo mode: sample data in this tab only, for visitors without the access code.
   const [demo, setDemo] = useState(false);
   const api = useMemo(() => (demo ? demoApi(today()) : makeApi(code)), [demo, code]);
+
+  // The weekly goal is a preference, so it stays on this device. The demo keeps its own.
+  const [savedGoals, setSavedGoals] = useLocalStorage<GoalChange[]>("01-crossfit:weekly-goal", []);
+  const [demoGoals, setDemoGoals] = useState<GoalChange[]>([]);
+  const goals = demo ? demoGoals : savedGoals;
+  const setGoals = demo ? setDemoGoals : setSavedGoals;
 
   const reload = useCallback(async (): Promise<boolean> => {
     try {
@@ -113,6 +120,7 @@ export default function Home() {
               className="h-9 flex-none font-semibold text-primary"
               onClick={() => {
                 setDemo(false);
+                setDemoGoals([]);
                 setData(null);
                 setOverlay(null);
               }}
@@ -128,7 +136,8 @@ export default function Home() {
             sessions={sessions}
             onOpen={(movement) => setOverlay({ type: "lift", movement })}
             onAddPb={() => setOverlay({ type: "pb" })}
-            onCalendar={() => setTab("calendar")}
+            goals={goals}
+            onGoalChange={setGoals}
           />
         ) : (
           <CalendarView

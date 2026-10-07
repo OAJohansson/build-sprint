@@ -1,8 +1,9 @@
 "use client";
 
-import { Check, Flame } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Check, Flame, X } from "lucide-react";
 import { SectionLabel } from "@/components/ui/bits";
-import { type Trend, WEEKLY_GOAL, benchmarkRepeats, fmtKg, movingLifts, weeklyGoal } from "@/lib/progress";
+import { type GoalChange, type Trend, benchmarkRepeats, fmtKg, movingLifts, setGoal, weeklyGoal } from "@/lib/progress";
 import { type Session, formatDate, today } from "@/lib/types";
 
 /** Tiny line of a lift's top set per day; the latest point is emphasised. */
@@ -26,37 +27,100 @@ export function Sparkline({ values, width = 96, height = 28 }: { values: number[
 /**
  * This week against the weekly goal: one dot per training day. The streak badge
  * is always there (muted at 0) so people know there's a streak to build.
+ * Tapping the card changes the goal.
  */
-export function WeeklyGoal({ sessions, onOpen }: { sessions: Session[]; onOpen: () => void }) {
-  const { streak, thisWeek } = weeklyGoal(sessions, today());
-  const dots = Math.max(WEEKLY_GOAL, thisWeek);
+export function WeeklyGoal({
+  sessions,
+  goals,
+  onGoalChange,
+}: {
+  sessions: Session[];
+  goals: GoalChange[];
+  onGoalChange: (goals: GoalChange[]) => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const { streak, thisWeek, goal } = weeklyGoal(sessions, today(), goals);
+  const dots = Math.max(goal, thisWeek);
   return (
-    <button
-      type="button"
-      onClick={onOpen}
-      className="flex flex-col gap-3 rounded-2xl bg-[#1a1a18] p-4 text-left"
-      aria-label={`This week: ${thisWeek} of ${WEEKLY_GOAL} training days. Streak: ${streak} week${streak === 1 ? "" : "s"} in a row with ${WEEKLY_GOAL}+ days. Open calendar`}
-    >
-      <span className="flex items-center justify-between gap-3">
-        <span className="font-display text-[26px] font-bold uppercase leading-none">This week</span>
-        <span
-          title={`Weeks in a row with ${WEEKLY_GOAL}+ training days`}
-          className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-sm font-semibold ${streak > 0 ? "bg-[#3a2412] text-primary" : "bg-[#262624] text-muted-foreground"}`}
-        >
-          <Flame className="size-4" /> {streak} week{streak === 1 ? "" : "s"}
-        </span>
-      </span>
-      <span className="flex gap-2.5">
-        {Array.from({ length: dots }, (_, i) => (
+    <>
+      <button
+        type="button"
+        onClick={() => setEditing(true)}
+        className="flex flex-col gap-3 rounded-2xl bg-[#1a1a18] p-4 text-left"
+        aria-label={`This week: ${thisWeek} of ${goal} training days. Streak: ${streak} week${streak === 1 ? "" : "s"} in a row. Change weekly goal`}
+      >
+        <span className="flex items-center justify-between gap-3">
+          <span className="font-display text-[26px] font-bold uppercase leading-none">This week</span>
           <span
-            key={i}
-            className={`flex size-9 items-center justify-center rounded-full ${i < thisWeek ? "bg-primary text-background" : "border-2 border-[#3a3a36]"}`}
+            title={`Weeks in a row hitting your goal`}
+            className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-sm font-semibold ${streak > 0 ? "bg-[#3a2412] text-primary" : "bg-[#262624] text-muted-foreground"}`}
           >
-            {i < thisWeek && <Check className="size-5" strokeWidth={3} />}
+            <Flame className="size-4" /> {streak} week{streak === 1 ? "" : "s"}
           </span>
-        ))}
-      </span>
-    </button>
+        </span>
+        <span className="flex flex-wrap gap-2.5">
+          {Array.from({ length: dots }, (_, i) => (
+            <span
+              key={i}
+              className={`flex size-9 items-center justify-center rounded-full ${i < thisWeek ? "bg-primary text-background" : "border-2 border-[#3a3a36]"}`}
+            >
+              {i < thisWeek && <Check className="size-5" strokeWidth={3} />}
+            </span>
+          ))}
+        </span>
+      </button>
+      {editing && (
+        <GoalSheet
+          goal={goal}
+          onClose={() => setEditing(false)}
+          onPick={(days) => {
+            onGoalChange(setGoal(goals, today(), days));
+            setEditing(false);
+          }}
+        />
+      )}
+    </>
+  );
+}
+
+/** Bottom sheet: pick training days a week. Applies from this week on. */
+function GoalSheet({ goal, onPick, onClose }: { goal: number; onPick: (days: number) => void; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+  return (
+    <div className="fixed inset-0 z-50 flex items-end bg-black/60" onClick={onClose}>
+      <div
+        role="dialog"
+        aria-label="Weekly goal"
+        className="mx-auto flex w-full max-w-md flex-col gap-4 rounded-t-3xl bg-[#1a1a18] px-5 pb-[max(env(safe-area-inset-bottom),24px)] pt-5"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between">
+          <h2 className="font-display text-[26px] font-bold uppercase leading-none">Weekly goal</h2>
+          <button type="button" aria-label="Close" onClick={onClose} className="-mr-2 flex size-11 items-center justify-center">
+            <X className="size-6" />
+          </button>
+        </div>
+        <span className="text-sm text-muted-foreground">Training days a week</span>
+        <div className="grid grid-cols-7 gap-1.5">
+          {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+            <button
+              key={n}
+              type="button"
+              aria-pressed={n === goal}
+              onClick={() => onPick(n)}
+              className={`h-12 rounded-xl font-display text-xl font-bold ${n === goal ? "bg-primary text-background" : "bg-[#262624]"}`}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+        <span className="text-xs text-muted-foreground">Counts from this week. Past weeks keep the goal they had.</span>
+      </div>
+    </div>
   );
 }
 

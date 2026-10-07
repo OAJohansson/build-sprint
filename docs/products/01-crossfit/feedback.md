@@ -9,7 +9,7 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 ## Wrap-up (7 Oct)
 
 Triage rule before moving to the next product: fix anything that shows wrong numbers or looks
-broken if it's quick; park the rest with a clear note. 11 fixed, 7 parked (in [Backlog](#01-crossfit.backlog)). Follow-up the same day: #5, #9 and #13 fixed too, then #19 and #20 (16 fixed, 4 parked).
+broken if it's quick; park the rest with a clear note. 11 fixed, 7 parked (in [Backlog](#01-crossfit.backlog)). Follow-up the same day: #5, #9 and #13 fixed too, then #19–#21 (17 fixed, 4 parked).
 
 ## Round 1 (7 Oct)
 
@@ -42,6 +42,7 @@ From the [user test with Sam](#01-crossfit.testing). F-numbers refer to that rep
 | 18 | Copy | **Database-ish words (F10):** "first record", "added", "from a session"; a lift appears twice in history; empty filter says "Nothing matches “”". | parked |
 | 19 | UX | **Weekly-goal row read as one progress bar.** Eight week-pills plus "1 of 3 days this week" looked like a single bar at 1/8; streak (weeks) and days this week were mixed up, and a new user saw seven empty weeks. | fixed: "This week" card with one dot per training day, the streak as a small badge once it starts, and a hint ("1 more day keeps your streak going"); history stays in the calendar |
 | 20 | UX | **Subtitle repeats the dots.** "1 of 3 days · 2 more days to start a streak" says what the ticks already show; and before a first streak there was no hint a streak exists. | fixed: subtitle removed; streak badge always shown (muted "0 weeks" until it starts, orange after) |
+| 21 | Product | **The weekly goal is fixed at 3 days.** No way to change it. | fixed: tap the This week card to pick 1–7 days; the new goal counts from this week and past weeks keep theirs |
 
 ### Options to discuss later
 

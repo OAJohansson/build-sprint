@@ -1,6 +1,10 @@
-// The 10 MVP landmark places (brief, R7). A place within `km` of one shows its silhouette;
-// anywhere else gets the generic horizon.
+// Landmark places (brief, R7, plus Arvidsjaur). A place within `km` of one shows its silhouette.
+// Anywhere else gets a scene for its terrain (coast, mountains, city), or gentle hills.
+export type Terrain = "coast" | "mountains" | "city";
+
 export type LandmarkId =
+  | Terrain
+  | "arvidsjaur"
   | "bali"
   | "paris"
   | "london"
@@ -13,7 +17,7 @@ export type LandmarkId =
   | "cairo"
   | "none";
 
-const LANDMARKS: { id: Exclude<LandmarkId, "none">; lat: number; lng: number; km: number }[] = [
+const LANDMARKS: { id: Exclude<LandmarkId, "none" | Terrain>; lat: number; lng: number; km: number }[] = [
   { id: "bali", lat: -8.4, lng: 115.19, km: 90 },
   { id: "paris", lat: 48.8566, lng: 2.3522, km: 40 },
   { id: "london", lat: 51.5074, lng: -0.1278, km: 40 },
@@ -24,6 +28,7 @@ const LANDMARKS: { id: Exclude<LandmarkId, "none">; lat: number; lng: number; km
   { id: "tokyo", lat: 35.6762, lng: 139.6503, km: 50 },
   { id: "rio", lat: -22.9068, lng: -43.1729, km: 40 },
   { id: "cairo", lat: 30.0444, lng: 31.2357, km: 40 },
+  { id: "arvidsjaur", lat: 65.5917, lng: 19.18, km: 30 },
 ];
 
 function km(aLat: number, aLng: number, bLat: number, bLng: number) {

@@ -1,6 +1,6 @@
 // Finding places: city search (Open-Meteo geocoding) and naming the device's location
 // (BigDataCloud's free client-side lookup). Both are free, keyless and called from the browser.
-import { landmarkFor } from "./landmarks";
+import { landmarkFor, type LandmarkId } from "./landmarks";
 import type { Place } from "./sun";
 
 type GeoResult = {
@@ -9,6 +9,7 @@ type GeoResult = {
   latitude: number;
   longitude: number;
   timezone?: string;
+  population?: number;
   country?: string;
   admin1?: string;
 };
@@ -28,7 +29,30 @@ export async function searchPlaces(query: string, signal?: AbortSignal): Promise
       lng: r.longitude,
       tz: r.timezone!,
       landmark: landmarkFor(r.latitude, r.longitude),
+      population: r.population,
     }));
+}
+
+// No landmark nearby: pick a scene from the terrain (#22). One call to Open-Meteo's elevation
+// service for the point and four points about 6 km away: low ground with sea next to it is coast,
+// high ground is mountains, a big city gets a skyline (even a high one, like Mexico City).
+// Anything unclear stays as gentle hills.
+export async function terrainFor(place: Place): Promise<LandmarkId> {
+  if ((place.population ?? 0) >= 1_000_000) return "city";
+  const d = 0.055; // ≈ 6 km
+  const lats = [place.lat, place.lat + d, place.lat, place.lat - d, place.lat];
+  const lngs = [place.lng, place.lng, place.lng + d, place.lng, place.lng - d];
+  try {
+    const res = await fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lats.join(",")}&longitude=${lngs.join(",")}`);
+    if (!res.ok) throw new Error(`Elevation failed: ${res.status}`);
+    const { elevation }: { elevation: number[] } = await res.json();
+    const [here, ...around] = elevation;
+    if (here >= 900 || (here >= 450 && Math.max(...around) - Math.min(...around) > 400)) return "mountains";
+    if (here < 60 && around.some((e) => e <= 1)) return "coast";
+  } catch (e) {
+    console.warn("[horizon] terrain lookup failed", e);
+  }
+  return "none";
 }
 
 // The device's location as a place. The name is a nice-to-have: if the lookup fails, it's

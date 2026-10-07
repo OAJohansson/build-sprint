@@ -108,3 +108,20 @@ What happened, what was decided and why. Newest last.
   rows, the sun over the digits, polar "next sunset", the refused-location dead end.
 - Open for the owner to prioritise: the sunset moment, Tokyo's silhouette, landmark size and
   night visibility, units on the countdown, a "This week" strip.
+
+### Owner's review on a real phone, and a round of changes
+- Owner's notes (feedback #21–27): start screen on every open, a default scene for places
+  without a landmark (Pemenang showed plain hills), empty space above the arc, an animation to
+  learn from, the countdown too close to the arc, sunset colour, and Arvidsjaur as a landmark.
+- **Built:** taller arc with the ground starting at the horizon; spaced countdown with units
+  ("1h 30m"); sunset-orange evening golden hour; terrain scenes from one elevation lookup (beach,
+  peaks, skyline); Lappstaden for Arvidsjaur (researched: the Forest Sami church town); Fuji and a
+  pagoda for Tokyo; animations A (the day replays), C (the sunset moment: seconds, "happening
+  now" with a breathing glow, then the afterglow), D (landmark rises) and E (twinkling stars,
+  drifting clouds).
+- **Start screen on every open (#21):** coaching pushback. The main job is "open and know, no
+  taps", and travelling is already covered because the app finds your current location on every
+  open. Owner to decide after trying it.
+- **Environment:** the owner allowed `*.open-meteo.com` and `*.bigdatacloud.net`, so tests now use
+  the real lookups. Local tests run on a production build, because Next's dev server only serves
+  its scripts to localhost and the sandbox browser must reach it by network address.

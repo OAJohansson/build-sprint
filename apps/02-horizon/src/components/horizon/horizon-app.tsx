@@ -3,7 +3,7 @@
 // The app: finds the place (your location, or a searched city), keeps the clock ticking, and
 // remembers your last choice on this device. Rendered in the browser only (see page.tsx).
 import { useCallback, useEffect, useState } from "react";
-import { currentPosition, herePlace } from "@/lib/places";
+import { currentPosition, herePlace, terrainFor } from "@/lib/places";
 import { gradient, sky, type Place } from "@/lib/sun";
 import { ArcHome } from "./arc-home";
 import { Landmark } from "./landmark";
@@ -105,6 +105,22 @@ export default function HorizonApp() {
       .catch(() => {});
   }, [last, usedHere, show, locate]);
 
+  // No landmark here: look up the terrain once and show a coast, mountain or city scene (#22).
+  useEffect(() => {
+    if (!place || place.landmark !== "none" || place.terrainChecked) return;
+    let live = true;
+    void terrainFor(place).then((landmark) => {
+      if (!live) return;
+      const next = { ...place, landmark, terrainChecked: true };
+      setPlace(next);
+      const saved = readLast();
+      if (saved?.kind === "place" && saved.place.id === place.id) saveLast({ ...saved, place: next });
+    });
+    return () => {
+      live = false;
+    };
+  }, [place]);
+
   const pick = (p: Place) => {
     setPlace(p);
     saveLast({ kind: "place", place: p, here: usedHere || !!place?.here });
@@ -114,7 +130,7 @@ export default function HorizonApp() {
   return (
     <>
       {place ? (
-        <ArcHome place={place} now={now} onSearch={() => setSearch({})} onLocate={locate} />
+        <ArcHome key={place.id} place={place} now={now} onSearch={() => setSearch({})} onLocate={locate} />
       ) : (
         <Welcome locating={locating} onLocate={locate} onSearch={() => setSearch({})} />
       )}

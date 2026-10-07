@@ -12,6 +12,8 @@ export type Place = {
   lng: number;
   tz: string;
   landmark: LandmarkId;
+  terrainChecked?: boolean; // the terrain scene has been looked up (#22)
+  population?: number;
   here?: boolean; // the device's own location
 };
 
@@ -61,6 +63,18 @@ export function nextEvent(place: Place, now: Date): SunEvent | null {
     if (next) return next;
   }
   return null;
+}
+
+// A sunrise or sunset that happened in the last `minutes` (the moment, then the afterglow).
+export function recentEvent(place: Place, now: Date, minutes = 25): SunEvent | null {
+  const events: SunEvent[] = [];
+  for (const d of [0, -1]) {
+    const day = sunDay(place, new Date(now.getTime() + d * 864e5));
+    if (day.sunrise) events.push({ kind: "sunrise", at: day.sunrise });
+    if (day.sunset) events.push({ kind: "sunset", at: day.sunset });
+  }
+  const past = events.filter((e) => e.at <= now && +now - +e.at < minutes * 60000).sort((a, b) => +b.at - +a.at);
+  return past[0] ?? null;
 }
 
 // The next sunrise, or the next sunset, specifically: after a polar day, "when does it set again?"

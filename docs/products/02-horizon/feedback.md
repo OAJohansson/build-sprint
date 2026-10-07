@@ -31,10 +31,10 @@ fixed straight away; the rest to prioritise together.
 | 12 | Bug | **Sun covers the digits at midday (F6).** | fixed: the sun fades while it passes behind the countdown |
 | 13 | Requirement | **Polar days don't say what's next (F8, R8).** | fixed: "No sunset today · Next sunset 27 Jul". Note: suncalc's strict definition (top edge, refraction) ends Tromsø's midnight sun on 26–27 Jul; commonly cited is 22 Jul |
 | 14 | UX | **Dead end after refusing location (F9):** no close button, no hint. | fixed: close button; "allow location in your browser's settings" |
-| 15 | Product | **The sunset moment falls flat (F3):** "0:01" for a minute, then straight to "11:47 until sunrise tomorrow". Job 3 (the ritual). | open |
-| 16 | Design | **Tokyo Tower looks like the Eiffel Tower (F4).** | open |
+| 15 | Product | **The sunset moment falls flat (F3):** "0:01" for a minute, then straight to "11:47 until sunrise tomorrow". Job 3 (the ritual). | fixed: seconds in the last 2 minutes, "Sunset · happening now" with a warm breathing glow, then "9 min since sunset · afterglow" for 25 minutes (same for sunrise: "morning light") |
+| 16 | Design | **Tokyo Tower looks like the Eiffel Tower (F4).** | fixed: Mt Fuji behind a five-storey pagoda |
 | 17 | Design | **Landmark too small for a sense of place, and invisible at night (F5).** The known cost of Arc. | open |
-| 18 | UX | **"1:30" has no units; place button 36 px, top of screen (F10).** | open |
+| 18 | UX | **"1:30" has no units; place button 36 px, top of screen (F10).** | fixed: "1h 30m" and "42 min" with small units; place button 44 px. Search stays at the top for now |
 | 19 | Product | **A "This week" strip:** sunset times for the next 7 days and the trend, for evening planning. | open |
 | 20 | Process | **Automatic contrast check in the test harness**, so the readability guardrail gets a number every run. | open |
 
@@ -42,10 +42,10 @@ fixed straight away; the rest to prioritise together.
 
 | # | Type | Feedback | Status |
 | --- | --- | --- | --- |
-| 21 | Product | **Reopening the app should go to the start screen**, not the saved location. Note: conflicts with R1 ("open and know, no taps") and #10; needs a decision. | open |
-| 22 | Design | **Places without a landmark (e.g. Pemenang, Lombok) get the generic hills.** Idea: a default by terrain: beach near the coast, mountains in high places, maybe a skyline for big cities. | open |
+| 21 | Product | **Reopening the app should go to the start screen**, not the saved location. Note: conflicts with R1 ("open and know, no taps") and #10; needs a decision. | open: discussing (travelling is covered by reopening on your current location; see journal) |
+| 22 | Design | **Places without a landmark (e.g. Pemenang, Lombok) get the generic hills.** Idea: a default by terrain: beach near the coast, mountains in high places, maybe a skyline for big cities. | fixed: one Open-Meteo elevation lookup per place: big city (1M+) → skyline, high ground → peaks, low ground with sea within 6 km → beach, else hills. Checked with real data: Pemenang → beach, Zermatt → peaks, Madrid → skyline |
 | 23 | Design | **Lots of empty space above the arc.** | fixed: the arc is taller, the instrument sits lower, and the ground starts at the horizon line (sky above, ground below) |
-| 24 | Learning | **Add an animation, to learn how to work with them.** Brainstorm options. | open |
+| 24 | Learning | **Add an animation, to learn how to work with them.** Brainstorm options. | fixed: owner picked A, C, D, E. A: the sun replays the day along the arc on open. C: the sunset moment (#15). D: a new place's landmark rises from the horizon. E: twinkling stars, drifting clouds. All respect "reduce motion" |
 | 25 | Design | **Countdown too close to the arc.** | fixed: the countdown is centred between the top of the arc and the landmark |
 | 26 | Design | **Both golden-hour ends are the same yellow; sunset is more orange.** | fixed: morning gold, evening sunset orange (row dot too) |
-| 27 | Product | **Add Arvidsjaur (the owner's home town) as a landmark place**, researched. | open |
+| 27 | Product | **Add Arvidsjaur (the owner's home town) as a landmark place**, researched. | fixed: Lappstaden, the Forest Sami church town: pyramid-roofed kåtor, a storehouse on stilts, pines |

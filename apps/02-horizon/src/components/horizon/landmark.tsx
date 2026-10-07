@@ -8,6 +8,33 @@ const GATE_HALF =
 const PALM_L =
   "M58 200 Q62 150 74 112 L77 113 Q66 152 63 200 Z M75 112 Q52 104 34 116 Q54 106 74 115 Q60 96 44 94 Q64 94 77 111 Q80 92 96 86 Q86 98 80 111 Q100 102 116 110 Q96 106 79 114 Z";
 
+// A spruce: stacked tiers narrowing to a point.
+const spruce = (x: number, top: number, h: number) => {
+  const w = h * 0.36;
+  const tiers = 4;
+  let d = `M${x} ${top}`;
+  for (let i = 1; i <= tiers; i++) {
+    const y = top + (h * 0.86 * i) / tiers;
+    const half = (w / 2) * (i / tiers);
+    d += ` L${x + half} ${y} L${x + half * 0.55} ${y}`;
+  }
+  d += ` L${x + 2} ${top + h * 0.86} V${top + h} H${x - 2} V${top + h * 0.86}`;
+  for (let i = tiers; i >= 1; i--) {
+    const y = top + (h * 0.86 * i) / tiers;
+    const half = (w / 2) * (i / tiers);
+    d += ` L${x - half * 0.55} ${y} L${x - half} ${y}`;
+  }
+  return d + " Z";
+};
+
+// A Forest Sami kåta: low walls under a steep pyramid roof.
+const kata = (x: number, w: number, h: number) =>
+  `M${x} 200 V${200 - h * 0.28} L${x + w / 2} ${200 - h} L${x + w} ${200 - h * 0.28} V200 Z`;
+
+// A pagoda tier: a wide curved roof over a narrower body.
+const tier = (cx: number, y: number, w: number) =>
+  `M${cx - w / 2} ${y} Q${cx - w / 4} ${y - 4} ${cx - w / 3} ${y - 9} H${cx + w / 3} Q${cx + w / 4} ${y - 4} ${cx + w / 2} ${y} Z M${cx - w / 4} ${y} H${cx + w / 4} V${y + 14} H${cx - w / 4} Z`;
+
 const SHAPES: Record<LandmarkId, React.ReactNode> = {
   bali: (
     <>
@@ -78,11 +105,18 @@ const SHAPES: Record<LandmarkId, React.ReactNode> = {
   ),
   tokyo: (
     <>
-      {/* Tokyo Tower: lattice legs, main deck and top deck */}
-      <path d="M150 200 L182 132 H186 L194 78 H196 L198 30 L200 6 L202 30 L204 78 H206 L214 132 H218 L250 200 H232 Q200 168 168 200 Z" />
-      <rect x="174" y="122" width="52" height="12" />
-      <rect x="190" y="70" width="20" height="9" />
-      <path d="M0 200 V176 H44 V164 H84 V182 H130 V200 Z M270 200 V170 H312 V182 H352 V166 H400 V200 Z" />
+      {/* Mt Fuji behind a five-storey pagoda */}
+      <path d="M40 200 L170 96 Q200 80 230 96 L360 200 Z" opacity="0.7" />
+      <path d="M170 96 Q200 80 230 96 L214 108 L204 102 L196 110 L186 102 Z" fill="currentColor" opacity="0.28" />
+      <g transform="translate(-50 0)">
+        <path d={tier(150, 186, 64)} />
+        <path d={tier(150, 162, 56)} />
+        <path d={tier(150, 138, 48)} />
+        <path d={tier(150, 114, 40)} />
+        <path d={tier(150, 90, 32)} />
+        <path d="M148 81 V54 H152 V81 Z" />
+        <path d="M134 200 V188 H166 V200 Z" />
+      </g>
     </>
   ),
   rio: (
@@ -101,6 +135,47 @@ const SHAPES: Record<LandmarkId, React.ReactNode> = {
       <path d="M190 200 L282 108 L374 200 Z" opacity="0.85" />
       <path d="M318 200 L356 162 L394 200 Z" />
       <path d="M0 200 V196 H400 V200 Z" />
+    </>
+  ),
+  arvidsjaur: (
+    <>
+      {/* Lappstaden, the Forest Sami church town: kåtor with pyramid roofs, a storehouse on stilts, pines */}
+      <g opacity="0.6">
+        <path d={spruce(40, 96, 104)} />
+        <path d={spruce(76, 118, 82)} />
+        <path d={spruce(330, 100, 100)} />
+        <path d={spruce(368, 122, 78)} />
+      </g>
+      <path d={kata(104, 34, 50)} />
+      <path d={kata(144, 40, 60)} />
+      <path d={kata(190, 46, 70)} />
+      <path d={kata(242, 36, 54)} />
+      {/* njalla: a storehouse raised on poles */}
+      <path d="M286 160 L304 144 L322 160 V176 H286 Z M290 176 H294 V200 H290 Z M314 176 H318 V200 H314 Z" />
+      <path d="M0 200 V196 H400 V200 Z" />
+    </>
+  ),
+  coast: (
+    <>
+      {/* A beach: palms leaning over the sand, a boat on the water */}
+      <path d="M0 200 V184 Q60 172 130 182 Q170 188 190 200 Z" />
+      <path d={PALM_L} transform="translate(-6 8)" />
+      <path d={PALM_L} transform="translate(126 -6) scale(-0.9 1) translate(-110 0)" />
+      <path d="M300 192 H346 L338 200 H308 Z M322 190 V150 L344 188 Z" />
+      <path d="M210 194 H250 M268 198 H290 M360 196 H392" stroke="currentColor" strokeOpacity="0.22" strokeWidth="1.5" />
+    </>
+  ),
+  mountains: (
+    <>
+      {/* Peaks with snow on the tops */}
+      <path d="M0 200 L70 130 L104 154 L170 76 L236 150 L268 122 L340 182 L370 160 L400 180 V200 Z" />
+      <path d="M170 76 L190 100 L178 96 L168 106 L158 96 L150 100 Z M70 130 L80 140 L70 138 L62 142 Z M268 122 L280 134 L268 130 L258 136 Z" fill="currentColor" opacity="0.28" />
+    </>
+  ),
+  city: (
+    <>
+      {/* A skyline of mixed heights */}
+      <path d="M0 200 V160 H24 V140 H48 V170 H66 V120 H92 V150 H110 V96 H124 V84 H128 V96 H142 V156 H160 V130 H186 V100 H210 V146 H230 V116 H254 V160 H272 V88 H284 V70 H288 V88 H300 V150 H322 V126 H346 V164 H370 V138 H400 V200 Z" />
     </>
   ),
   none: (

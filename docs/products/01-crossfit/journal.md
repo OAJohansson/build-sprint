@@ -132,6 +132,10 @@ Newest last. Pull requests are in the `OAJohansson/build-sprint` repo.
 - The goal is a preference, so it's stored on the device (localStorage), not in Supabase. The demo
   keeps its own goal and forgets it on exit.
 
+### Done for now
+- Follow-up closed with PR #12. Status stays **shipped**; next time start from the backlog's
+  "Start here" note. Learnings summary page added to the notebook for all products.
+
 ### Notebook restructure
 - Each product now keeps everything in one place: journey, feedback, user testing, backlog,
   learnings and decisions, as sub-pages in this notebook.

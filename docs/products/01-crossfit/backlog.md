@@ -27,4 +27,3 @@ candidates, in order: show the note while checking (#15), calendar weeks across 
 | Plate maths | "60 kg = 20 kg bar + 20 kg a side" next to each percentage. | idea |
 | Per-set logging | Log each set separately instead of sets × reps @ weight. | idea |
 | Better transcription | Record audio and transcribe on the server instead of relying on the browser's speech engine. 2–3 h plus a speech-to-text provider and key; only if phone dictation is still poor. | on hold |
-| Choose your weekly goal | The streak uses 3 days a week; let people pick 2–5. | idea |

@@ -122,6 +122,16 @@ Newest last. Pull requests are in the `OAJohansson/build-sprint` repo.
 - Made "clean and minimal" a design principle for every product, in the playbook and as
   [decision 0007](#01-crossfit.decisions).
 
+### Choose your weekly goal (#21)
+- Owner: there's no way to change the 3-days goal; maybe tapping the card? Agreed: the card is the
+  goal, so tapping it is where people look (Apple Fitness and Strava edit goals from the goal
+  itself). The Calendar is one tab away, so the card no longer needs to open it.
+- Tap the card → a bottom sheet with 1–7 days. Picking a number saves and closes.
+- A new goal counts **from this week**; past weeks keep the goal they had, so raising the goal
+  doesn't wipe out a streak and lowering it doesn't inflate one.
+- The goal is a preference, so it's stored on the device (localStorage), not in Supabase. The demo
+  keeps its own goal and forgets it on exit.
+
 ### Notebook restructure
 - Each product now keeps everything in one place: journey, feedback, user testing, backlog,
   learnings and decisions, as sub-pages in this notebook.

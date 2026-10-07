@@ -5,7 +5,22 @@ import { weekOf } from "@/lib/summary";
 
 // Everything the Progress section shows, worked out from logged sessions.
 
-export const WEEKLY_GOAL = 3;
+export const DEFAULT_GOAL = 3;
+
+/** A weekly goal and the Monday it applies from. Past weeks keep the goal they had. */
+export type GoalChange = { from: string; days: number };
+
+export function goalFor(goals: GoalChange[], weekStart: string) {
+  let days = DEFAULT_GOAL;
+  for (const g of [...goals].sort((x, y) => x.from.localeCompare(y.from))) if (g.from <= weekStart) days = g.days;
+  return days;
+}
+
+/** Set the goal from this week on (replacing a change made earlier this week). */
+export function setGoal(goals: GoalChange[], today: string, days: number): GoalChange[] {
+  const from = weekOf(today)[0];
+  return [...goals.filter((g) => g.from !== from), { from, days }];
+}
 
 const addDays = (iso: string, n: number) => {
   const d = new Date(`${iso}T12:00:00`);
@@ -16,13 +31,13 @@ const addDays = (iso: string, n: number) => {
 export type WeekPill = { start: string; days: number; hit: boolean; current: boolean };
 
 /** The last `count` weeks (Monday-first), oldest first, with training days per week and the streak. */
-export function weeklyGoal(sessions: Session[], today: string, count = 8) {
+export function weeklyGoal(sessions: Session[], today: string, goals: GoalChange[] = [], count = 8) {
   const trained = new Set(sessions.map((s) => s.date));
   const thisMonday = weekOf(today)[0];
   const weeks: WeekPill[] = Array.from({ length: count }, (_, i) => {
     const start = addDays(thisMonday, -7 * (count - 1 - i));
     const days = weekOf(start).filter((d) => trained.has(d)).length;
-    return { start, days, hit: days >= WEEKLY_GOAL, current: i === count - 1 };
+    return { start, days, hit: days >= goalFor(goals, start), current: i === count - 1 };
   });
   // Streak: completed weeks in a row that hit the goal, plus this week once it's hit.
   let streak = 0;
@@ -31,12 +46,12 @@ export function weeklyGoal(sessions: Session[], today: string, count = 8) {
   // Look further back than the pills show, so a long streak isn't capped at 8.
   if (streak >= count - 1) {
     let start = addDays(weeks[0].start, -7);
-    while (weekOf(start).filter((d) => trained.has(d)).length >= WEEKLY_GOAL) {
+    while (weekOf(start).filter((d) => trained.has(d)).length >= goalFor(goals, start)) {
       streak++;
       start = addDays(start, -7);
     }
   }
-  return { weeks, streak, thisWeek: weeks[count - 1].days };
+  return { weeks, streak, thisWeek: weeks[count - 1].days, goal: goalFor(goals, thisMonday) };
 }
 
 export type Trend = {

@@ -5,6 +5,7 @@ import { Plus, Search } from "lucide-react";
 import { MovingUp, WeeklyGoal } from "@/components/progress";
 import { Chip, SectionLabel, inputClass } from "@/components/ui/bits";
 import { CATEGORIES, type Category } from "@/lib/movements";
+import type { GoalChange } from "@/lib/progress";
 import { summarize } from "@/lib/summary";
 import type { Pb, Session } from "@/lib/types";
 
@@ -23,13 +24,15 @@ export function PbBoard({
   sessions,
   onOpen,
   onAddPb,
-  onCalendar,
+  goals,
+  onGoalChange,
 }: {
   pbs: Pb[];
   sessions: Session[];
   onOpen: (movement: string) => void;
   onAddPb: () => void;
-  onCalendar: () => void;
+  goals: GoalChange[];
+  onGoalChange: (goals: GoalChange[]) => void;
 }) {
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState<Category | "All">("All");
@@ -59,7 +62,7 @@ export function PbBoard({
 
       {sessions.length > 0 && (
         <>
-          <WeeklyGoal sessions={sessions} onOpen={onCalendar} />
+          <WeeklyGoal sessions={sessions} goals={goals} onGoalChange={onGoalChange} />
           <MovingUp sessions={sessions} onOpen={onOpen} />
         </>
       )}

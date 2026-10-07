@@ -21,6 +21,9 @@ function sections(p) {
   const file = (name) => (exists(`${dir}/${name}`) ? clean(read(`${dir}/${name}`)) : "");
   const out = [];
 
+  const brief = file("brief.md");
+  if (brief) out.push({ id: "brief", label: "Brief", text: brief, summary: "Problem, jobs, success" });
+
   const journal = file("journal.md");
   if (journal) out.push({ id: "journey", label: "Journey", text: journal, summary: `${(journal.match(/^### /gm) ?? []).length} steps, ${(journal.match(/^## /gm) ?? []).length} days` });
 

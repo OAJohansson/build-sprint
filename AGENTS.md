@@ -19,6 +19,14 @@ The apps use Next.js 16, which has breaking changes from older versions (async `
   it does, record why in the product write-up.
 - Keep each app deployable on its own from `apps/NN-slug` (Vercel Root Directory).
 
+## Coaching
+
+The owner's goals are in the playbook ("Why I'm doing this"): build good products with AI, learn
+product craft, and grow technically. Act as their product coach as well as their builder: name
+the practice behind each step (and where it comes from), ask them to make the product calls
+instead of making them silently, push back on solution-first thinking, and explain technical
+choices briefly in plain words.
+
 ## Design skills
 
 Use the project skills in `.claude/skills/` at their playbook step without being asked
@@ -34,6 +42,8 @@ conflicts with the clean-and-minimal principle (decision 0007), the principle wi
   `status: shipped` (or `parked`) at the end. Don't add extra sections to the card.
 - Everything else about a product goes in its folder `docs/products/NN-slug/`, kept current as you
   work (each file is a sub-page in the notebook):
+  - `brief.md`: problem, who, jobs to be done, today's alternatives, riskiest assumptions, success
+    measures, MVP and stop line; written before code, success check filled in at wrap-up.
   - `journal.md`: what happened, what was decided and why, in order. Summarise each meaningful
     step of the conversation (requests, pivots, bugs, decisions) as it happens.
   - `feedback.md`: every review comment and user-test finding, numbered, with a status.

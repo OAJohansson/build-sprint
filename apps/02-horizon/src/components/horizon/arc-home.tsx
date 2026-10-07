@@ -4,7 +4,7 @@
 // the horizon, and the countdown is the sun's position on it. The landmark anchors the horizon;
 // the day's times sit below it.
 import { LocateFixed } from "lucide-react";
-import { clock, dayFraction, gradient, view, type Place } from "@/lib/sun";
+import { clock, dayFraction, gradient, nextOf, shortDate, sunDay, view, type Place } from "@/lib/sun";
 import { Landmark } from "./landmark";
 import { PlaceButton } from "./place-button";
 import { Stars } from "./stars";
@@ -35,10 +35,19 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
   const gEve = frac(v.day.goldenStart, place);
   const gMorn = frac(v.day.goldenEnd, place);
   const [sx, sy] = daylight ? dayPt(f) : nightPt(f);
+  // Fade the sun when it passes behind the countdown (F6).
+  const behindText = sy < 150 && Math.abs(sx - W / 2) < 95;
+  const polar = v.day.alwaysUp || v.day.alwaysDown;
+  const polarNext = polar ? nextOf(place, now, v.day.alwaysUp ? "sunset" : "sunrise") : null;
+  // The rows describe the day of the next event: tomorrow's times once today's sun has set (F7).
+  const tomorrow = !polar && v.tomorrow && v.event;
+  const day = tomorrow && v.event ? sunDay(place, v.event.at) : v.day;
   const rows = [
-    { label: "Sunrise", at: v.day.sunrise },
-    { label: "Golden hour", at: v.day.goldenStart },
-    { label: "Sunset", at: v.day.sunset },
+    { label: "Sunrise", at: day.sunrise },
+    v.event?.kind === "sunrise" && !polar
+      ? { label: "Golden light until", at: day.goldenEnd }
+      : { label: "Golden hour", at: day.goldenStart },
+    { label: "Sunset", at: day.sunset },
   ];
 
   return (
@@ -72,7 +81,7 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
             {/* the night, below the horizon */}
             <path d={arc(nightPt, R, NIGHT, 0, 1)} fill="none" stroke="#ffffff" strokeOpacity={0.16} strokeWidth={1.5} strokeDasharray="2 5" />
             <line x1={0} x2={W} y1={BASE} y2={BASE} stroke={ink} strokeOpacity={0.4} />
-            <g className="hz-glide" style={{ transform: `translate(${sx}px, ${sy}px)` }}>
+            <g className="hz-glide" style={{ transform: `translate(${sx}px, ${sy}px)`, opacity: behindText ? 0.3 : 1 }}>
               <circle r={daylight ? 9 : 6} fill={daylight ? "#fff3d6" : "#dfe6ff"} className="hz-sun-in" />
               {daylight && <circle r={18} fill="#ffd79a" opacity={0.28} />}
             </g>
@@ -81,7 +90,7 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
           <Landmark id={place.landmark} fill={v.sky.land} className="pointer-events-none absolute left-1/2 w-[30%] -translate-x-1/2" style={{ bottom: `${((NIGHT + 8) / (BASE + NIGHT + 8)) * 100}%` }} />
 
           <div className="absolute inset-x-0 text-center" style={{ top: "25%", color: ink, textShadow: v.sky.shadow }}>
-            {v.event && v.left ? (
+            {!polar && v.event && v.left ? (
               <>
                 <p className="hz-rise text-[clamp(44px,14vw,56px)] font-light leading-none tracking-[-0.03em] tabular-nums" style={{ ["--i" as string]: 1 }}>
                   {v.left.h}:{String(v.left.m).padStart(2, "0")}
@@ -92,23 +101,31 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
                 </p>
               </>
             ) : (
-              <p className="hz-rise mt-12 px-8 text-xl font-light">{v.day.alwaysUp ? "No sunset today" : "No sunrise today"}</p>
+              <div className="hz-rise mt-12 px-8">
+                <p className="text-xl font-light">{v.day.alwaysUp ? "No sunset today" : "No sunrise today"}</p>
+                {polarNext && (
+                  <p className="mt-1 text-sm" style={{ color: v.sky.inkSoft }}>
+                    Next {v.day.alwaysUp ? "sunset" : "sunrise"} {shortDate(polarNext, place.tz)}
+                  </p>
+                )}
+              </div>
             )}
           </div>
         </div>
 
         <div className="relative -mt-8 px-6 pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-8" style={{ background: `linear-gradient(to bottom, transparent, ${v.sky.land} 2rem)` }}>
+          {tomorrow && <p className="mx-auto max-w-[420px] pb-1 text-xs font-medium uppercase tracking-wider text-white/55">Tomorrow</p>}
           <ul className="mx-auto max-w-[420px] divide-y divide-white/10 text-white">
             {rows.map((r, i) => {
               const next = v.event && r.at && +r.at === +v.event.at;
               return (
                 <li key={r.label} className="hz-rise flex items-baseline justify-between py-3" style={{ ["--i" as string]: 3 + i }}>
                   <span className={next ? "font-medium" : "text-white/65"}>
-                    {r.label === "Golden hour" && <span className="mr-2 inline-block size-2 rounded-full bg-[#ffc46b] align-middle" aria-hidden="true" />}
+                    {r.label.startsWith("Golden") && <span className="mr-2 inline-block size-2 rounded-full bg-[#ffc46b] align-middle" aria-hidden="true" />}
                     {r.label}
                   </span>
                   <span className={`tabular-nums ${next ? "font-medium" : "text-white/65"}`}>
-                    {r.at ? clock(r.at, place.tz) : v.day.alwaysUp ? "Sun up all day" : v.day.alwaysDown ? "Sun down all day" : "—"}
+                    {r.at ? clock(r.at, place.tz) : day.alwaysUp ? "Sun up all day" : day.alwaysDown ? "Sun down all day" : "—"}
                   </span>
                 </li>
               );

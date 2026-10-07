@@ -49,15 +49,25 @@ export function sunDay(place: Place, at: Date): SunDay {
   };
 }
 
-// The next sunrise or sunset after `now`, looking up to three days ahead (polar days have none).
+// The next sunrise or sunset after `now`. Polar summers and winters can last months, so this looks
+// up to 200 days ahead.
 export function nextEvent(place: Place, now: Date): SunEvent | null {
-  for (let d = 0; d < 3; d++) {
+  for (let d = 0; d < 200; d++) {
     const day = sunDay(place, new Date(now.getTime() + d * 864e5));
     const events: SunEvent[] = [];
     if (day.sunrise) events.push({ kind: "sunrise", at: day.sunrise });
     if (day.sunset) events.push({ kind: "sunset", at: day.sunset });
     const next = events.filter((e) => e.at > now).sort((a, b) => +a.at - +b.at)[0];
     if (next) return next;
+  }
+  return null;
+}
+
+// The next sunrise, or the next sunset, specifically: after a polar day, "when does it set again?"
+export function nextOf(place: Place, now: Date, kind: SunEvent["kind"]): Date | null {
+  for (let d = 0; d < 200; d++) {
+    const at = sunDay(place, new Date(now.getTime() + d * 864e5))[kind];
+    if (at && at > now) return at;
   }
   return null;
 }
@@ -144,6 +154,8 @@ export function sky(alt: number): Sky {
 export const gradient = (s: Sky) => `linear-gradient(to bottom, ${s.top} 0%, ${s.mid} 55%, ${s.horizon} 100%)`;
 
 // ---- Formatting, always in the place's own time zone. ----
+
+export const shortDate = (d: Date, tz: string) => d.toLocaleDateString("en-GB", { timeZone: tz, day: "numeric", month: "short" });
 
 export const clock = (d: Date | null, tz: string) =>
   d ? d.toLocaleTimeString("en-GB", { timeZone: tz, hour: "2-digit", minute: "2-digit" }) : "—";

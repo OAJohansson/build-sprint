@@ -96,3 +96,15 @@ What happened, what was decided and why. Newest last.
   environment's network settings so Claude can check deploys. The two lookup services are still
   blocked from the sandbox, so local tests use realistic stand-in answers (same approach as
   CrossFit's AI).
+
+### Testing round: audit, then Noor
+- Interface audit (`web-design-guidelines`) while the user test ran: the countdown measured 1.9:1
+  in the afternoon (target 4.5:1). Fixed by picking the text colour against the sky right behind
+  each piece of text; worst case now 4.3:1. Plus five small accessibility fixes.
+- Simulated user test with Noor ([report](#02-horizon.testing)): jobs scored 3, 4, 4. Value
+  confirmed ("beats Google for do I have time?"; the live sky is the delight), but contrast and
+  reopening on yesterday's searched city would push her back to Google.
+- Fixed straight away (wrong data or looks broken): reopening on yesterday's city, tomorrow's
+  rows, the sun over the digits, polar "next sunset", the refused-location dead end.
+- Open for the owner to prioritise: the sunset moment, Tokyo's silhouette, landmark size and
+  night visibility, units on the countdown, a "This week" strip.

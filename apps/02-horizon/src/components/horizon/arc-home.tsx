@@ -12,10 +12,19 @@ import "./horizon.css";
 
 const W = 360;
 const BASE = 200; // horizon y in the SVG
-const R = 150;
+const R = 150; // half the arc's width
+const RY = 180; // the arc's height: taller than a half circle, to give the countdown room
 const NIGHT = 46; // depth of the night arc below the horizon
+const H = BASE + NIGHT + 8; // SVG height
+const MORNING = "#ffd27a"; // morning golden light
+const EVENING = "#ff8f54"; // evening golden hour, warmer, like the sunset itself
+// The countdown sits midway between the top of the arc and the top of the landmark.
+const LANDMARK_W = 0.32; // share of the width
+const LANDMARK_TOP = BASE - (W * LANDMARK_W) / 2;
+const TEXT_H = 82; // countdown + label, in SVG units
+const TEXT_TOP = (BASE - RY + LANDMARK_TOP) / 2 - TEXT_H / 2;
 
-const dayPt = (f: number) => [W / 2 - R * Math.cos(Math.PI * f), BASE - R * Math.sin(Math.PI * f)] as const;
+const dayPt = (f: number) => [W / 2 - R * Math.cos(Math.PI * f), BASE - RY * Math.sin(Math.PI * f)] as const;
 const nightPt = (f: number) => [W / 2 + R * Math.cos(Math.PI * f), BASE + NIGHT * Math.sin(Math.PI * f)] as const;
 const arc = (pt: typeof dayPt, rx: number, ry: number, a: number, b: number) => {
   const [x1, y1] = pt(a);
@@ -36,7 +45,7 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
   const gMorn = frac(v.day.goldenEnd, place);
   const [sx, sy] = daylight ? dayPt(f) : nightPt(f);
   // Fade the sun when it passes behind the countdown (F6).
-  const behindText = sy < 150 && Math.abs(sx - W / 2) < 95;
+  const behindText = sy > TEXT_TOP - 12 && sy < TEXT_TOP + TEXT_H && Math.abs(sx - W / 2) < 95;
   const polar = v.day.alwaysUp || v.day.alwaysDown;
   const polarNext = polar ? nextOf(place, now, v.day.alwaysUp ? "sunset" : "sunrise") : null;
   // The rows describe the day of the next event: tomorrow's times once today's sun has set (F7).
@@ -70,14 +79,16 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
         )}
       </div>
 
-      <div className="relative mt-auto w-full">
+      {/* Sky above, the instrument on the horizon, ground below: the ground starts at the horizon line. */}
+      <div className="flex-1" />
+      <div className="relative w-full" style={{ background: `linear-gradient(to bottom, transparent ${(BASE / H) * 100}%, ${v.sky.land} ${(BASE / H) * 100}%)` }}>
         <div className="relative mx-auto w-full max-w-[420px]">
-          <svg viewBox={`0 0 ${W} ${BASE + NIGHT + 8}`} className="block w-full overflow-visible" aria-hidden="true">
+          <svg viewBox={`0 0 ${W} ${H}`} className="block w-full overflow-visible" aria-hidden="true">
             {/* daylight arc: elapsed solid, still to come faint */}
-            <path d={arc(dayPt, R, R, 0, 1)} pathLength={1} className="hz-draw" fill="none" stroke={ink} strokeOpacity={0.28} strokeWidth={1.5} />
-            {daylight && <path d={arc(dayPt, R, R, 0, f)} fill="none" stroke={ink} strokeOpacity={0.85} strokeWidth={1.5} />}
-            {gMorn != null && <path d={arc(dayPt, R, R, 0, gMorn)} fill="none" stroke="#ffc46b" strokeWidth={4} strokeLinecap="round" />}
-            {gEve != null && <path d={arc(dayPt, R, R, gEve, 1)} fill="none" stroke="#ffc46b" strokeWidth={4} strokeLinecap="round" />}
+            <path d={arc(dayPt, R, RY, 0, 1)} pathLength={1} className="hz-draw" fill="none" stroke={ink} strokeOpacity={0.28} strokeWidth={1.5} />
+            {daylight && <path d={arc(dayPt, R, RY, 0, f)} fill="none" stroke={ink} strokeOpacity={0.85} strokeWidth={1.5} />}
+            {gMorn != null && <path d={arc(dayPt, R, RY, 0, gMorn)} fill="none" stroke={MORNING} strokeWidth={4} strokeLinecap="round" />}
+            {gEve != null && <path d={arc(dayPt, R, RY, gEve, 1)} fill="none" stroke={EVENING} strokeWidth={4} strokeLinecap="round" />}
             {/* the night, below the horizon */}
             <path d={arc(nightPt, R, NIGHT, 0, 1)} fill="none" stroke="#ffffff" strokeOpacity={0.16} strokeWidth={1.5} strokeDasharray="2 5" />
             <line x1={0} x2={W} y1={BASE} y2={BASE} stroke={ink} strokeOpacity={0.4} />
@@ -87,21 +98,21 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
             </g>
           </svg>
 
-          <Landmark id={place.landmark} fill={v.sky.land} className="pointer-events-none absolute left-1/2 w-[30%] -translate-x-1/2" style={{ bottom: `${((NIGHT + 8) / (BASE + NIGHT + 8)) * 100}%` }} />
+          <Landmark id={place.landmark} fill={v.sky.land} className="pointer-events-none absolute left-1/2 -translate-x-1/2" style={{ width: `${LANDMARK_W * 100}%`, bottom: `${((NIGHT + 8) / H) * 100}%` }} />
 
-          <div className="absolute inset-x-0 text-center" style={{ top: "25%", color: ink, textShadow: v.sky.shadow }}>
+          <div className="absolute inset-x-0 flex flex-col items-center justify-center text-center" style={{ top: `${(TEXT_TOP / H) * 100}%`, height: `${(TEXT_H / H) * 100}%`, color: ink, textShadow: v.sky.shadow }}>
             {!polar && v.event && v.left ? (
               <>
                 <p className="hz-rise text-[clamp(44px,14vw,56px)] font-light leading-none tracking-[-0.03em] tabular-nums" style={{ ["--i" as string]: 1 }}>
                   {v.left.h}:{String(v.left.m).padStart(2, "0")}
                 </p>
-                <p className="hz-rise mt-2 text-sm" style={{ ["--i" as string]: 2, color: v.sky.inkSoft }}>
+                <p className="hz-rise mt-2.5 text-sm" style={{ ["--i" as string]: 2, color: v.sky.inkSoft }}>
                   until {v.event.kind}
                   {v.tomorrow ? " tomorrow" : ""}
                 </p>
               </>
             ) : (
-              <div className="hz-rise mt-12 px-8">
+              <div className="hz-rise px-8">
                 <p className="text-xl font-light">{v.day.alwaysUp ? "No sunset today" : "No sunrise today"}</p>
                 {polarNext && (
                   <p className="mt-1 text-sm" style={{ color: v.sky.inkSoft }}>
@@ -113,15 +124,18 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
           </div>
         </div>
 
-        <div className="relative -mt-8 px-6 pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-8" style={{ background: `linear-gradient(to bottom, transparent, ${v.sky.land} 2rem)` }}>
-          {tomorrow && <p className="mx-auto max-w-[420px] pb-1 text-xs font-medium uppercase tracking-wider text-white/55">Tomorrow</p>}
-          <ul className="mx-auto max-w-[420px] divide-y divide-white/10 text-white">
+      </div>
+      <div className="relative flex flex-[1.15] flex-col justify-end px-6 pb-[max(2.5rem,env(safe-area-inset-bottom))]" style={{ background: v.sky.land }}>
+          {tomorrow && <p className="mx-auto w-full max-w-[420px] pb-1 text-xs font-medium uppercase tracking-wider text-white/55">Tomorrow</p>}
+          <ul className="mx-auto w-full max-w-[420px] divide-y divide-white/10 text-white">
             {rows.map((r, i) => {
               const next = v.event && r.at && +r.at === +v.event.at;
               return (
                 <li key={r.label} className="hz-rise flex items-baseline justify-between py-3" style={{ ["--i" as string]: 3 + i }}>
                   <span className={next ? "font-medium" : "text-white/65"}>
-                    {r.label.startsWith("Golden") && <span className="mr-2 inline-block size-2 rounded-full bg-[#ffc46b] align-middle" aria-hidden="true" />}
+                    {r.label.startsWith("Golden") && (
+                      <span className="mr-2 inline-block size-2 rounded-full align-middle" style={{ background: r.label === "Golden hour" ? EVENING : MORNING }} aria-hidden="true" />
+                    )}
                     {r.label}
                   </span>
                   <span className={`tabular-nums ${next ? "font-medium" : "text-white/65"}`}>
@@ -131,7 +145,6 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
               );
             })}
           </ul>
-        </div>
       </div>
     </main>
   );

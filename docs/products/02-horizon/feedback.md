@@ -37,3 +37,15 @@ fixed straight away; the rest to prioritise together.
 | 18 | UX | **"1:30" has no units; place button 36 px, top of screen (F10).** | open |
 | 19 | Product | **A "This week" strip:** sunset times for the next 7 days and the trend, for evening planning. | open |
 | 20 | Process | **Automatic contrast check in the test harness**, so the readability guardrail gets a number every run. | open |
+
+## Round 3: owner's review on a real phone, 7 Oct
+
+| # | Type | Feedback | Status |
+| --- | --- | --- | --- |
+| 21 | Product | **Reopening the app should go to the start screen**, not the saved location. Note: conflicts with R1 ("open and know, no taps") and #10; needs a decision. | open |
+| 22 | Design | **Places without a landmark (e.g. Pemenang, Lombok) get the generic hills.** Idea: a default by terrain: beach near the coast, mountains in high places, maybe a skyline for big cities. | open |
+| 23 | Design | **Lots of empty space above the arc.** | fixed: the arc is taller, the instrument sits lower, and the ground starts at the horizon line (sky above, ground below) |
+| 24 | Learning | **Add an animation, to learn how to work with them.** Brainstorm options. | open |
+| 25 | Design | **Countdown too close to the arc.** | fixed: the countdown is centred between the top of the arc and the landmark |
+| 26 | Design | **Both golden-hour ends are the same yellow; sunset is more orange.** | fixed: morning gold, evening sunset orange (row dot too) |
+| 27 | Product | **Add Arvidsjaur (the owner's home town) as a landmark place**, researched. | open |

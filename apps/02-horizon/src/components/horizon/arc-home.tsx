@@ -81,7 +81,7 @@ function Left({ h, m, soft }: { h: number; m: number; soft: string }) {
   );
 }
 
-export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now: Date; onSearch: () => void; onLocate: () => void }) {
+export function ArcHome({ place, now, demo, onSearch, onLocate }: { place: Place; now: Date; demo?: boolean; onSearch: () => void; onLocate: () => void }) {
   const v = view(place, now);
   const { daylight, f: fNow } = dayFraction(place, now);
   const replay = useReplay();
@@ -117,6 +117,11 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
       <Stars opacity={v.sky.stars} />
       <Clouds opacity={Math.max(0, Math.min(1, (v.alt + 2) / 10)) * 0.8} />
       <h1 className="sr-only">Horizon: {place.name}</h1>
+      {demo && (
+        <p className="pointer-events-none absolute inset-x-0 bottom-3 z-10 text-center text-xs font-medium tracking-wide text-white/50">
+          Demo · a day in 2 minutes
+        </p>
+      )}
 
       <div className="hz-rise relative flex items-center justify-between gap-3 px-6 pt-[max(1.25rem,env(safe-area-inset-top))]">
         <PlaceButton place={place} localTime={v.localTime} ink={v.sky.inkTop} inkSoft={v.sky.inkTopSoft} onClick={onSearch} />
@@ -156,7 +161,7 @@ export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now:
                 <circle cx={glowAt[0]} cy={glowAt[1]} r={34} fill="url(#hz-glow-fill)" className="hz-glow" />
               </>
             )}
-            <g className={replay < 1 ? undefined : "hz-glide"} style={{ transform: `translate(${sx}px, ${sy}px)`, opacity: behindText ? 0.3 : 1 }}>
+            <g className={replay < 1 || demo ? undefined : "hz-glide"} style={{ transform: `translate(${sx}px, ${sy}px)`, opacity: behindText ? 0.3 : 1 }}>
               <circle r={daylight ? 9 : 6} fill={daylight ? "#fff3d6" : "#dfe6ff"} className="hz-sun-in" />
               {daylight && <circle r={18} fill="#ffd79a" opacity={0.28} />}
             </g>

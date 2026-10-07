@@ -2,9 +2,9 @@
 
 // The app: finds the place (your location, or a searched city), keeps the clock ticking, and
 // remembers your last choice on this device. Rendered in the browser only (see page.tsx).
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { currentPosition, herePlace, terrainFor } from "@/lib/places";
-import { gradient, sky, type Place } from "@/lib/sun";
+import { gradient, nextEvent, recentEvent, sky, type Place } from "@/lib/sun";
 import { ArcHome } from "./arc-home";
 import { Landmark } from "./landmark";
 import { PlaceSearch } from "./place-search";
@@ -30,9 +30,37 @@ function saveLast(last: Last) {
   }
 }
 
-function useNow() {
+// Demo mode (`?demo`): a whole day in about 2 minutes, to watch every sky and animation. Time runs
+// 2000× faster, slowing to 60× within 20 minutes of sunrise or sunset so the moment is visible.
+const DEMO = typeof location !== "undefined" && new URLSearchParams(location.search).has("demo");
+
+function demoSpeed(place: Place | null, at: Date) {
+  if (!place) return 2000;
+  const next = nextEvent(place, at);
+  const near = recentEvent(place, at, 20) || (next && +next.at - +at < 20 * 60000);
+  return near ? 60 : 2000;
+}
+
+function useNow(place: Place | null) {
   const [now, setNow] = useState(() => new Date());
+  const placeRef = useRef(place);
   useEffect(() => {
+    placeRef.current = place;
+  }, [place]);
+  useEffect(() => {
+    if (!DEMO) return;
+    let sim = Date.now();
+    let last = performance.now();
+    const id = setInterval(() => {
+      const t = performance.now();
+      sim += (t - last) * demoSpeed(placeRef.current, new Date(sim));
+      last = t;
+      setNow(new Date(sim));
+    }, 50);
+    return () => clearInterval(id);
+  }, []);
+  useEffect(() => {
+    if (DEMO) return;
     const tick = () => setNow(new Date());
     const id = setInterval(tick, 1000);
     // Timers are slowed in background tabs; catch up as soon as the app is visible again.
@@ -64,13 +92,13 @@ async function findHere(): Promise<HereResult> {
 }
 
 export default function HorizonApp() {
-  const now = useNow();
   const [last] = useState(readLast);
   // Location worked before: always reopen there, never on yesterday's searched city (F2).
   const [usedHere] = useState(() => last?.kind === "here" || (last?.kind === "place" && !!last.here));
   const [place, setPlace] = useState<Place | null>(last?.kind === "place" && !usedHere ? last.place : null);
   const [locating, setLocating] = useState(usedHere);
   const [search, setSearch] = useState<{ note?: string } | null>(null);
+  const now = useNow(place);
 
   // Finding the location is kept apart from updating the screen, which happens once it arrives.
   const show = useCallback((r: HereResult) => {
@@ -130,7 +158,7 @@ export default function HorizonApp() {
   return (
     <>
       {place ? (
-        <ArcHome key={place.id} place={place} now={now} onSearch={() => setSearch({})} onLocate={locate} />
+        <ArcHome key={place.id} place={place} now={now} demo={DEMO} onSearch={() => setSearch({})} onLocate={locate} />
       ) : (
         <Welcome locating={locating} onLocate={locate} onSearch={() => setSearch({})} />
       )}

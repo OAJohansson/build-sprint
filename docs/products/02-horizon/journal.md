@@ -71,3 +71,9 @@ What happened, what was decided and why. Newest last.
   time and watch the light change; the countdown as a sentence.
 - Search works across three cases: landmark (Paris), no landmark (Lisbon) and far north (Tromsø).
   Owner to pick a direction.
+
+### First deploy
+- Merged PR #14 so `apps/02-horizon` was on `main`; Vercel's Root Directory list only shows
+  folders on `main`. Deployed to **horizon-beta-wine.vercel.app** before the real app was built,
+  so the prototype can be judged on a real phone.
+- Learned along the way: commits, branches, pull requests and merging (explained step by step).

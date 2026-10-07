@@ -44,6 +44,10 @@ Don't edit the app's code. If the app breaks, record it as a blocker and work ar
   *for* in their eyes after five minutes, and does that match what they came for?
 - **Progress and payoff**: does the app give something back (insight, trend, motivation), or does
   it just store data? Be concrete about what's missing.
+- **Guardrails, measured**: for every guardrail in the product's brief (`brief.md`, success table),
+  report a number, not an impression. For readability, sample the text and the background behind
+  it in your screenshots and give the contrast ratio for each state you saw (e.g. each sky or theme),
+  with the worst case first.
 
 ## Report
 

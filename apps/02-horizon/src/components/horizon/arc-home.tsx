@@ -123,7 +123,7 @@ export function ArcHome({ place, now, demo, onSearch, onLocate }: { place: Place
         </p>
       )}
 
-      <div className="hz-rise relative flex items-center justify-between gap-3 px-6 pt-[max(1.25rem,env(safe-area-inset-top))]">
+      <div className="hz-rise relative z-10 flex items-center justify-between gap-3 px-6 pt-[max(1.25rem,env(safe-area-inset-top))]">
         <PlaceButton place={place} localTime={v.localTime} ink={v.sky.inkTop} inkSoft={v.sky.inkTopSoft} onClick={onSearch} />
         {!place.here && (
           <button
@@ -141,6 +141,21 @@ export function ArcHome({ place, now, demo, onSearch, onLocate }: { place: Place
       <div className="flex-1" />
       <div className="relative w-full" style={{ background: `linear-gradient(to bottom, transparent ${(BASE / H) * 100}%, ${v.sky.land} ${(BASE / H) * 100}%)` }}>
         <div className="relative mx-auto w-full max-w-[420px]">
+          {/* The pulse: when the sun touches the horizon, one wave of light washes over the sky. It
+              stays mounted for 3 minutes (keyed to the event) so the animation plays exactly once. */}
+          {recent && since < 3 * 60000 && (
+            <div className="pointer-events-none absolute inset-x-0 -top-[100vh] overflow-hidden" style={{ bottom: `${((H - BASE) / H) * 100}%` }} aria-hidden="true">
+              <div
+                key={+recent.at}
+                className="hz-pulse absolute bottom-0 aspect-square w-[200vmax] rounded-full"
+                style={{
+                  left: `${((recent.kind === "sunrise" ? dayPt(0) : dayPt(1))[0] / W) * 100}%`,
+                  // A soft glow at the centre and a bright ring of light that travels outwards.
+                  background: `radial-gradient(circle, ${recent.kind === "sunrise" ? MORNING : EVENING}66 0%, transparent 18%, ${recent.kind === "sunrise" ? MORNING : EVENING}00 26%, ${recent.kind === "sunrise" ? MORNING : EVENING}dd 33%, ${recent.kind === "sunrise" ? MORNING : EVENING}00 40%)`,
+                }}
+              />
+            </div>
+          )}
           <svg viewBox={`0 0 ${W} ${H}`} className="block w-full overflow-visible" aria-hidden="true">
             {/* daylight arc: elapsed solid, still to come faint */}
             <path d={arc(dayPt, R, RY, 0, 1)} pathLength={1} className="hz-draw" fill="none" stroke={ink} strokeOpacity={0.28} strokeWidth={1.5} />

@@ -4,6 +4,8 @@
 
 - Start: [command, port, env vars, e.g. an access code]
 - Viewport: 390 × 844 (phone), unless the product is desktop-first.
+- From the cloud sandbox: test a production build at the machine's address, and allow the APIs the
+  app calls in the environment's network settings (playbook step 1b).
 - Seed data: [how to create a "first run" state and a "returning user" state]
 - Simulated parts: [what can't be real here: mic, AI, payments… and how to fake them faithfully]
 

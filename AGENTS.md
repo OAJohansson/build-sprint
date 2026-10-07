@@ -36,5 +36,7 @@ The apps use Next.js 16, which has breaking changes from older versions (async `
   `.notebook/index.html` with the Artifact tool to the existing private notebook,
   https://claude.ai/artifact/6WgAx5PMZYAzBqCg7zf25b (pass that URL; never create a new one).
 - Non-obvious setup or architecture choices → a new file in `docs/decisions/` from `TEMPLATE.md`.
-- `docs/ideas.md` is for ideas for *new* products. `docs/learnings.md` is the process changelog: each
-  process change from a retro, made before the next product starts.
+- `docs/ideas.md` is for ideas for *new* products. `docs/learnings.md` is the summary of learnings
+  across products (a notebook page): design principles, 3–7 key learnings per product, and the
+  process changelog (each process change from a retro, made before the next product starts).
+  Add to it whenever a product teaches something, not only at wrap-up.

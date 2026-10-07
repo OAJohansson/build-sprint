@@ -119,7 +119,8 @@ Newest last. Pull requests are in the `OAJohansson/build-sprint` repo.
 - Owner: the subtitle repeats what the ticks show; keep it minimal, but people should know a streak
   exists before they have one. Removed the subtitle; the flame badge is always there, muted at
   "0 weeks", orange once a streak starts (like Duolingo's grey flame).
-- Made "clean and minimal" a playbook design principle for every product.
+- Made "clean and minimal" a design principle for every product, in the playbook and as
+  [decision 0007](#01-crossfit.decisions).
 
 ### Notebook restructure
 - Each product now keeps everything in one place: journey, feedback, user testing, backlog,

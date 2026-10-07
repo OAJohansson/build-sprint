@@ -1,10 +1,37 @@
-# Learnings across products
+# Learnings
 
-Each product keeps its own lessons and retro in `docs/products/NN-slug/learnings.md`. This page
-is the **process changelog**: every change to how I build, and the product that taught it. A
-summary of patterns across products comes later in the sprint.
+The key lessons from every product in one place, so I can refresh what I've learned without
+opening each product. Each product keeps the full detail and its retro in
+`docs/products/NN-slug/learnings.md`.
+
+## Design principles
+
+Rules I now apply to every product (detail in the playbook).
+
+- **Clean and minimal.** Every element earns its place; don't repeat in words what the visual
+  already shows; make features discoverable with a quiet cue, not a sentence. *(01 CrossFit Log,
+  decision 0007)*
+
+## Key learnings by product
+
+### 01 CrossFit Log
+
+- **Frame the moment of use first.** v1 logged workouts well but missed the real job: knowing my
+  PB when the coach says "70%". A one-hour needs brainstorm fixed what a day of building didn't.
+- **Show three different designs, then mix.** Choosing was fast, and A's board plus B's review beat
+  either option alone.
+- **Give something back.** An app that only stores data feels like homework. Percentages, a PB
+  celebration and visible progress make logging worth it.
+- **Less on screen is clearer.** Three ticked dots said more than the dots plus a sentence; one
+  element per idea.
+- **Test on a real phone and check every setting on day one.** Android dictation and a wrong
+  Supabase key type each cost hours because they surfaced late.
+- **Users see a friendly error; the logs get the real reason.**
+- **A simulated user finds what my own review misses**, especially wrong numbers.
 
 ## Process changelog
+
+Every change to how I build, and the product that taught it.
 
 | Date | From | Learning | Change made |
 | --- | --- | --- | --- |

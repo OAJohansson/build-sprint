@@ -51,6 +51,13 @@ What building CrossFit Log taught me.
 - An app that only stores data feels like homework. Give something back: percentages, a PB
   celebration, and (next) visible progress.
 
+## Design
+- Don't repeat in words what the visual already shows. The "This week" card was clearer with three
+  ticked dots and no subtitle; this became the playbook's clean-and-minimal principle (decision 0007).
+- Make a feature discoverable with a quiet cue: a muted "0 weeks" streak badge says a streak exists
+  without explaining it.
+- One element per idea. Bars, "6 of 8 weeks" and a streak all said "you show up"; one row was better.
+
 ## Engineering
 - Test browser dictation on a real phone on day one. Chrome on Android re-sends earlier speech
   results, which desktop testing never showed.

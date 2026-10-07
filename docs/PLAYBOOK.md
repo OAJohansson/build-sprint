@@ -31,6 +31,14 @@ First deploy of a new app (one-time, about 2 minutes):
 
 Deploying in the morning means the rest of the day is iterating on a live app, which removes most of the last-minute risk.
 
+## 3b. Test as a user (≈30 min, once the core flow works)
+
+- Write `docs/user-testing/NN-slug/persona.md` and `plan.md` from the templates (one specific person,
+  scenarios as their real moments, each with a success bar).
+- Run the `user-tester` agent against the running app. It writes `report-YYYY-MM-DD.md`.
+- Add its findings to `docs/feedback/NN-slug.md` next to your own review, then prioritise together.
+- Full method: [`user-testing/README.md`](user-testing/README.md).
+
 ## 4. Wrap up (≈20 min)
 
 - Add 1–3 bullets under **Learned** in the write-up.
@@ -43,3 +51,4 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 - [ ] Live URL works on phone and desktop
 - [ ] Write-up has user, problem, bet, url, learned and `status: shipped`
 - [ ] README table and notebook are up to date
+- [ ] A simulated user test has run, and its top findings are fixed or logged

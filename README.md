@@ -29,7 +29,10 @@ docs/
   products/           one write-up per product (problem → scope → what shipped → learnings)
   learnings.md        lessons that apply across products
   decisions/          why it's set up this way
+  feedback/           per-product review log: owner + simulated-user findings, prioritised
+  user-testing/       simulated user tests: persona + plan templates, reports per product
 scripts/              `pnpm new` and `pnpm sync`
+.claude/agents/       user-tester: the agent that plays the persona and drives the app
 ```
 
 Why a monorepo with a Vercel project per app: see

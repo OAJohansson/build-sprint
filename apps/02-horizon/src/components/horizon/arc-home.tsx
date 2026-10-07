@@ -119,7 +119,7 @@ export function ArcHome({ place, now, demo, onSearch, onLocate }: { place: Place
       <h1 className="sr-only">Horizon: {place.name}</h1>
       {demo && (
         <p className="pointer-events-none absolute inset-x-0 bottom-3 z-10 text-center text-xs font-medium tracking-wide text-white/50">
-          Demo · a day in 3 minutes
+          Demo · a day in 2 minutes
         </p>
       )}
 

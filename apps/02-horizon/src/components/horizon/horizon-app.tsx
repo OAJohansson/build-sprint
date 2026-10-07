@@ -30,15 +30,15 @@ function saveLast(last: Last) {
   }
 }
 
-// Demo mode (`?demo`): a whole day in about 3 minutes, to watch every sky and animation. Time runs
-// 1200× faster, slowing to 60× within half an hour of sunrise or sunset so the moment is visible.
+// Demo mode (`?demo`): a whole day in about 2 minutes, to watch every sky and animation. Time runs
+// 2000× faster, slowing to 60× within 20 minutes of sunrise or sunset so the moment is visible.
 const DEMO = typeof location !== "undefined" && new URLSearchParams(location.search).has("demo");
 
 function demoSpeed(place: Place | null, at: Date) {
-  if (!place) return 1200;
+  if (!place) return 2000;
   const next = nextEvent(place, at);
-  const near = recentEvent(place, at, 30) || (next && +next.at - +at < 30 * 60000);
-  return near ? 60 : 1200;
+  const near = recentEvent(place, at, 20) || (next && +next.at - +at < 20 * 60000);
+  return near ? 60 : 2000;
 }
 
 function useNow(place: Place | null) {

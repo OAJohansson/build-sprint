@@ -127,7 +127,7 @@ What happened, what was decided and why. Newest last.
   its scripts to localhost and the sandbox browser must reach it by network address.
 
 ### Demo mode
-- Owner asked to see a full day to check every animation. Added `?demo`: a day in about 3
-  minutes (1200× speed, slowing to 60× within half an hour of sunrise and sunset so the moments
+- Owner asked to see a full day to check every animation. Added `?demo`: a day in about 2
+  minutes (2000× speed, slowing to 60× within 20 minutes of sunrise and sunset so the moments
   are watchable), with a small "Demo" label. Also useful for showing the app to someone at any
   time of day.

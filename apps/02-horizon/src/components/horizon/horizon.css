@@ -48,7 +48,73 @@
   }
 }
 
+/* The sun moves a little every second: constant motion, so linear. */
+.hz-glide {
+  transition: transform 1s linear;
+}
+
+/* D. A new place's landmark rises from the horizon. */
+.hz-land-in {
+  animation: hz-land-in 700ms var(--ease-out) both 150ms;
+}
+@keyframes hz-land-in {
+  from {
+    opacity: 0;
+    transform: translateY(14%);
+  }
+}
+
+/* C. The sunset (or sunrise) moment: the horizon glows and breathes. */
+.hz-glow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hz-glow 3.2s ease-in-out infinite;
+}
+@keyframes hz-glow {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+/* E. Living sky: twinkling stars and drifting clouds. Constant motion, so linear or gentle. */
+.hz-twinkle {
+  animation: hz-twinkle 5s ease-in-out infinite;
+}
+@keyframes hz-twinkle {
+  50% {
+    opacity: 0.3;
+  }
+}
+.hz-drift {
+  animation: hz-drift 140s linear infinite;
+}
+@keyframes hz-drift {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(110vw);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .hz-twinkle,
+  .hz-drift,
+  .hz-glow {
+    animation: none;
+  }
+  .hz-land-in {
+    animation: hz-fade 200ms ease both;
+  }
+  .hz-glide {
+    transition: none;
+  }
   .hz-rise,
   .hz-sun-in,
   .hz-draw {

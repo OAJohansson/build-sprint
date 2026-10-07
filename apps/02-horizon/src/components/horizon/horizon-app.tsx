@@ -3,7 +3,7 @@
 // The app: finds the place (your location, or a searched city), keeps the clock ticking, and
 // remembers your last choice on this device. Rendered in the browser only (see page.tsx).
 import { useCallback, useEffect, useState } from "react";
-import { currentPosition, herePlace } from "@/lib/places";
+import { currentPosition, herePlace, terrainFor } from "@/lib/places";
 import { gradient, sky, type Place } from "@/lib/sun";
 import { ArcHome } from "./arc-home";
 import { Landmark } from "./landmark";
@@ -11,7 +11,8 @@ import { PlaceSearch } from "./place-search";
 import "./horizon.css";
 
 const KEY = "horizon:last";
-type Last = { kind: "here" } | { kind: "place"; place: Place };
+// `here` on a searched place means location worked before, so the app reopens on it (F2).
+type Last = { kind: "here" } | { kind: "place"; place: Place; here?: boolean };
 
 function readLast(): Last | null {
   try {
@@ -54,15 +55,21 @@ async function findHere(): Promise<HereResult> {
   } catch (e) {
     const denied = (e as GeolocationPositionError)?.code === 1;
     console.warn("[horizon] location unavailable", e);
-    return { note: denied ? "Location is turned off for Horizon. Search for a place instead." : "Couldn’t find your location. Search for a place instead." };
+    return {
+      note: denied
+        ? "Location is off for Horizon. Search for a place, or allow location in your browser’s settings."
+        : "Couldn’t find your location. Search for a place instead.",
+    };
   }
 }
 
 export default function HorizonApp() {
   const now = useNow();
   const [last] = useState(readLast);
-  const [place, setPlace] = useState<Place | null>(last?.kind === "place" ? last.place : null);
-  const [locating, setLocating] = useState(last?.kind === "here");
+  // Location worked before: always reopen there, never on yesterday's searched city (F2).
+  const [usedHere] = useState(() => last?.kind === "here" || (last?.kind === "place" && !!last.here));
+  const [place, setPlace] = useState<Place | null>(last?.kind === "place" && !usedHere ? last.place : null);
+  const [locating, setLocating] = useState(usedHere);
   const [search, setSearch] = useState<{ note?: string } | null>(null);
 
   // Finding the location is kept apart from updating the screen, which happens once it arrives.
@@ -85,33 +92,49 @@ export default function HorizonApp() {
   // On open: your location if you chose it before (or already allowed it); otherwise your last
   // searched place; otherwise the welcome screen.
   useEffect(() => {
-    if (last?.kind === "place") return;
-    if (last?.kind === "here") {
+    if (usedHere) {
       void findHere().then(show);
       return;
     }
+    if (last?.kind === "place") return;
     navigator.permissions
       ?.query({ name: "geolocation" })
       .then((p) => {
         if (p.state === "granted") locate();
       })
       .catch(() => {});
-  }, [last, show, locate]);
+  }, [last, usedHere, show, locate]);
+
+  // No landmark here: look up the terrain once and show a coast, mountain or city scene (#22).
+  useEffect(() => {
+    if (!place || place.landmark !== "none" || place.terrainChecked) return;
+    let live = true;
+    void terrainFor(place).then((landmark) => {
+      if (!live) return;
+      const next = { ...place, landmark, terrainChecked: true };
+      setPlace(next);
+      const saved = readLast();
+      if (saved?.kind === "place" && saved.place.id === place.id) saveLast({ ...saved, place: next });
+    });
+    return () => {
+      live = false;
+    };
+  }, [place]);
 
   const pick = (p: Place) => {
     setPlace(p);
-    saveLast({ kind: "place", place: p });
+    saveLast({ kind: "place", place: p, here: usedHere || !!place?.here });
     setSearch(null);
   };
 
   return (
     <>
       {place ? (
-        <ArcHome place={place} now={now} onSearch={() => setSearch({})} onLocate={locate} />
+        <ArcHome key={place.id} place={place} now={now} onSearch={() => setSearch({})} onLocate={locate} />
       ) : (
         <Welcome locating={locating} onLocate={locate} onSearch={() => setSearch({})} />
       )}
-      {search && <PlaceSearch note={search.note} onPick={pick} onLocate={locate} onClose={place ? () => setSearch(null) : undefined} />}
+      {search && <PlaceSearch note={search.note} onPick={pick} onLocate={locate} onClose={() => setSearch(null)} />}
     </>
   );
 }

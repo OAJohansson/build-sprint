@@ -12,6 +12,8 @@ export type Place = {
   lng: number;
   tz: string;
   landmark: LandmarkId;
+  terrainChecked?: boolean; // the terrain scene has been looked up (#22)
+  population?: number;
   here?: boolean; // the device's own location
 };
 
@@ -49,15 +51,37 @@ export function sunDay(place: Place, at: Date): SunDay {
   };
 }
 
-// The next sunrise or sunset after `now`, looking up to three days ahead (polar days have none).
+// The next sunrise or sunset after `now`. Polar summers and winters can last months, so this looks
+// up to 200 days ahead.
 export function nextEvent(place: Place, now: Date): SunEvent | null {
-  for (let d = 0; d < 3; d++) {
+  for (let d = 0; d < 200; d++) {
     const day = sunDay(place, new Date(now.getTime() + d * 864e5));
     const events: SunEvent[] = [];
     if (day.sunrise) events.push({ kind: "sunrise", at: day.sunrise });
     if (day.sunset) events.push({ kind: "sunset", at: day.sunset });
     const next = events.filter((e) => e.at > now).sort((a, b) => +a.at - +b.at)[0];
     if (next) return next;
+  }
+  return null;
+}
+
+// A sunrise or sunset that happened in the last `minutes` (the moment, then the afterglow).
+export function recentEvent(place: Place, now: Date, minutes = 25): SunEvent | null {
+  const events: SunEvent[] = [];
+  for (const d of [0, -1]) {
+    const day = sunDay(place, new Date(now.getTime() + d * 864e5));
+    if (day.sunrise) events.push({ kind: "sunrise", at: day.sunrise });
+    if (day.sunset) events.push({ kind: "sunset", at: day.sunset });
+  }
+  const past = events.filter((e) => e.at <= now && +now - +e.at < minutes * 60000).sort((a, b) => +b.at - +a.at);
+  return past[0] ?? null;
+}
+
+// The next sunrise, or the next sunset, specifically: after a polar day, "when does it set again?"
+export function nextOf(place: Place, now: Date, kind: SunEvent["kind"]): Date | null {
+  for (let d = 0; d < 200; d++) {
+    const at = sunDay(place, new Date(now.getTime() + d * 864e5))[kind];
+    if (at && at > now) return at;
   }
   return null;
 }
@@ -76,22 +100,44 @@ const STOPS: [number, string, string, string][] = [
   [-4, "#1c2350", "#5a4a86", "#d77a6e"], // dusk / dawn
   [0, "#2d3a78", "#c86f74", "#ffad6a"], // sunset / sunrise
   [5, "#4f73b8", "#e79a7a", "#ffcf8f"], // golden hour
-  [12, "#4a86d0", "#8bbbe6", "#f4d9b8"], // late afternoon
-  [30, "#2f78d4", "#6fb0ec", "#cfe7fb"], // day
-  [60, "#2768c8", "#5ea3ea", "#bfe0fc"], // midday
+  [12, "#3f78c4", "#8bbbe6", "#f4d9b8"], // late afternoon
+  [30, "#2a6bc4", "#6fb0ec", "#cfe7fb"], // day
+  [60, "#2361bd", "#5ea3ea", "#bfe0fc"], // midday
 ];
 
-export type Sky = { top: string; mid: string; horizon: string; ink: string; inkSoft: string; land: string; stars: number };
+// `ink` is for text over the middle of the sky (the countdown), `inkTop` for the top bar.
+export type Sky = {
+  top: string;
+  mid: string;
+  horizon: string;
+  ink: string;
+  inkSoft: string;
+  inkTop: string;
+  inkTopSoft: string;
+  shadow: string;
+  land: string;
+  stars: number;
+};
 
 const mix = (a: RGB, b: RGB, t: number): RGB => a.map((v, i) => Math.round(v + (b[i] - v) * t)) as RGB;
 const css = (c: RGB) => `rgb(${c[0]} ${c[1]} ${c[2]})`;
-const lum = (c: RGB) => {
+const DARK: RGB = [13, 20, 36];
+const WHITE: RGB = [255, 255, 255];
+const contrast = (a: RGB, b: RGB) => {
+  const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
+// Whichever of white or near-black reads better on this background (R9).
+const inkOn = (bg: RGB) => (contrast(WHITE, bg) >= contrast(DARK, bg) ? WHITE : DARK);
+const soft = (c: RGB) => `rgb(${c[0]} ${c[1]} ${c[2]} / 0.85)`;
+
+function lum(c: RGB) {
   const [r, g, b] = c.map((v) => {
     const s = v / 255;
     return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
   });
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-};
+}
 
 export function sky(alt: number): Sky {
   const a = Math.max(STOPS[0][0], Math.min(STOPS[STOPS.length - 1][0], alt));
@@ -101,14 +147,19 @@ export function sky(alt: number): Sky {
   const [a1, ...c1] = STOPS[i + 1];
   const t = (a - a0) / (a1 - a0);
   const [top, mid, horizon] = [0, 1, 2].map((k) => mix(hex(c0[k]), hex(c1[k]), t));
-  // Text sits over the top half of the sky: dark ink on bright skies, white otherwise (R9).
-  const bright = lum(mix(top, mid, 0.5)) > 0.32;
+  // Ink is picked against the sky right behind each piece of text, not the sky as a whole.
+  const ink = inkOn(mix(mid, horizon, 0.2));
+  const inkTop = inkOn(mix(top, mid, 0.1));
   return {
     top: css(top),
     mid: css(mid),
     horizon: css(horizon),
-    ink: bright ? "#0d1424" : "#ffffff",
-    inkSoft: bright ? "rgb(13 20 36 / 0.68)" : "rgb(255 255 255 / 0.74)",
+    ink: css(ink),
+    inkSoft: soft(ink),
+    inkTop: css(inkTop),
+    inkTopSoft: soft(inkTop),
+    // A soft shadow under white text helps on the few mid-blue skies where contrast is borderline.
+    shadow: ink === WHITE ? "0 1px 2px rgb(0 0 0 / 0.22)" : "none",
     land: css(mix(mix(horizon, [8, 10, 22], 0.82), top, 0.08)),
     stars: Math.max(0, Math.min(1, (-alt - 6) / 8)),
   };
@@ -117,6 +168,8 @@ export function sky(alt: number): Sky {
 export const gradient = (s: Sky) => `linear-gradient(to bottom, ${s.top} 0%, ${s.mid} 55%, ${s.horizon} 100%)`;
 
 // ---- Formatting, always in the place's own time zone. ----
+
+export const shortDate = (d: Date, tz: string) => d.toLocaleDateString("en-GB", { timeZone: tz, day: "numeric", month: "short" });
 
 export const clock = (d: Date | null, tz: string) =>
   d ? d.toLocaleTimeString("en-GB", { timeZone: tz, hour: "2-digit", minute: "2-digit" }) : "—";

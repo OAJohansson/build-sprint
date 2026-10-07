@@ -32,6 +32,14 @@ export function PlaceSearch({ onPick, onLocate, onClose, note }: { onPick: (p: P
     };
   }, [query]);
 
+  // Escape closes the search, like any dialog.
+  useEffect(() => {
+    if (!onClose) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
   const showing = query.length >= 2 ? state : { status: "idle" as const, results: [] };
 
   return (
@@ -45,6 +53,7 @@ export function PlaceSearch({ onPick, onLocate, onClose, note }: { onPick: (p: P
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search a city…"
             aria-label="Search a city"
+            name="city"
             autoComplete="off"
             autoCorrect="off"
             spellCheck={false}

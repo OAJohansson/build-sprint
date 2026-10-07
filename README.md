@@ -11,7 +11,7 @@ reps in going from idea to something live, plus an honest write-up of what I lea
 | Day | Product | Problem | Status | Live | Links |
 | --: | --- | --- | --- | --- | --- |
 | 1 | **CrossFit Log** | Coach says “70% of your 1RM” and I never remember my PBs, because logging lifts after class is too much friction | ✅ shipped | [live](https://crossfit-log.vercel.app) | [write-up](docs/products/01-crossfit.md) · [code](apps/01-crossfit) |
-| 2 | **Horizon** | Late in the day I don't know how long until sunset, and finding out means a search or a weather app | 🛠️ building | — | [write-up](docs/products/02-horizon.md) · [code](apps/02-horizon) |
+| 2 | **Horizon** | Late in the day I don't know how long until sunset, and finding out means a search or a weather app | 🛠️ building | [live](https://horizon-beta-wine.vercel.app) | [write-up](docs/products/02-horizon.md) · [code](apps/02-horizon) |
 <!-- products:end -->
 
 _This table is generated from `docs/products/*.md`. Run `pnpm sync` after editing frontmatter._

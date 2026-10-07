@@ -1,13 +1,14 @@
 "use client";
 
-// Arc: an instrument. The day is drawn as the sun's path over the horizon; the countdown is the
-// sun's position on it. The landmark is a small anchor on the horizon; the times sit below it.
-import { Landmark } from "./_components/landmark";
-import { PlaceButton } from "./_components/place-button";
-import { Stars } from "./_components/stars";
-import { clock, dayFraction, gradient, view, type Place } from "./_lib/sky";
-import type { VariantProps } from "./harness";
-import "./variants.css";
+// The home screen ("Arc", chosen from three prototypes): the day is drawn as the sun's path over
+// the horizon, and the countdown is the sun's position on it. The landmark anchors the horizon;
+// the day's times sit below it.
+import { LocateFixed } from "lucide-react";
+import { clock, dayFraction, gradient, view, type Place } from "@/lib/sun";
+import { Landmark } from "./landmark";
+import { PlaceButton } from "./place-button";
+import { Stars } from "./stars";
+import "./horizon.css";
 
 const W = 360;
 const BASE = 200; // horizon y in the SVG
@@ -27,7 +28,7 @@ const frac = (d: Date | null, place: Place) => {
   return v.daylight ? v.f : null;
 };
 
-export function Arc({ place, now, onSearch }: VariantProps) {
+export function ArcHome({ place, now, onSearch, onLocate }: { place: Place; now: Date; onSearch: () => void; onLocate: () => void }) {
   const v = view(place, now);
   const { daylight, f } = dayFraction(place, now);
   const ink = v.sky.ink;
@@ -45,8 +46,18 @@ export function Arc({ place, now, onSearch }: VariantProps) {
       <div key={place.id} className="hz-sky-in absolute inset-0" style={{ background: gradient(v.sky) }} />
       <Stars opacity={v.sky.stars} />
 
-      <div className="relative px-6 pt-[max(1.25rem,env(safe-area-inset-top))] hz-rise">
+      <div className="hz-rise relative flex items-center justify-between gap-3 px-6 pt-[max(1.25rem,env(safe-area-inset-top))]">
         <PlaceButton place={place} localTime={v.localTime} ink={ink} inkSoft={v.sky.inkSoft} onClick={onSearch} />
+        {!place.here && (
+          <button
+            onClick={onLocate}
+            aria-label="Back to my location"
+            className="-mr-2 grid size-11 shrink-0 place-items-center rounded-full transition-transform duration-150 ease-out active:scale-[0.97]"
+            style={{ color: ink }}
+          >
+            <LocateFixed className="size-5" aria-hidden="true" />
+          </button>
+        )}
       </div>
 
       <div className="relative mt-auto w-full">
@@ -80,12 +91,12 @@ export function Arc({ place, now, onSearch }: VariantProps) {
                 </p>
               </>
             ) : (
-              <p className="hz-rise px-8 text-xl font-light">{v.day.alwaysUp ? "No sunset today" : "No sunrise today"}</p>
+              <p className="hz-rise mt-12 px-8 text-xl font-light">{v.day.alwaysUp ? "No sunset today" : "No sunrise today"}</p>
             )}
           </div>
         </div>
 
-        <div className="relative px-6 pb-28 pt-2" style={{ background: `linear-gradient(to bottom, transparent, ${v.sky.land} 30%)` }}>
+        <div className="relative px-6 pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-2" style={{ background: `linear-gradient(to bottom, transparent, ${v.sky.land} 30%)` }}>
           <ul className="mx-auto max-w-[420px] divide-y divide-white/10 text-white">
             {rows.map((r, i) => {
               const next = v.event && r.at && +r.at === +v.event.at;
@@ -95,7 +106,9 @@ export function Arc({ place, now, onSearch }: VariantProps) {
                     {r.label === "Golden hour" && <span className="mr-2 inline-block size-2 rounded-full bg-[#ffc46b] align-middle" aria-hidden="true" />}
                     {r.label}
                   </span>
-                  <span className={`tabular-nums ${next ? "font-medium" : "text-white/65"}`}>{clock(r.at, place.tz)}</span>
+                  <span className={`tabular-nums ${next ? "font-medium" : "text-white/65"}`}>
+                    {r.at ? clock(r.at, place.tz) : v.day.alwaysUp ? "Sun up all day" : v.day.alwaysDown ? "Sun down all day" : "—"}
+                  </span>
                 </li>
               );
             })}

@@ -7,7 +7,7 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   title: "Horizon",
-  description: "Day 2 of the 20-day build sprint.",
+  description: "How long until sunrise or sunset, wherever you are.",
 };
 
 // Phone baseline (mobile-native skill): content can sit under the notch (pad with

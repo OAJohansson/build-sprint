@@ -94,6 +94,19 @@ Newest last. Pull requests are in the `OAJohansson/build-sprint` repo.
   separate Progress tab with a one-line teaser on Home, **P3** a weekly recap and milestone
   timeline. Plus a lift page with a trend chart that works with any of them.
 
+### Progress, editing and demo mode (PR #8)
+- Owner feedback on P1: bars, "6 of 8 weeks at 3+" and a streak all show the same thing. Settled
+  on one element: a **weekly-goal row** (8 weeks, filled when 3+ days, this week fills up) with
+  the streak as the headline. It motivates, says what to do this week, and a missed week costs one
+  pill rather than everything.
+- Built P1: Home is "My training" with the weekly-goal row, "Moving up" (lifts with a mini chart
+  and "+17.5 kg since…") and repeated benchmarks, then PBs. Each lift page has a trend chart of
+  the top set per session against a dashed 1RM line.
+- Edit a saved session from the calendar; the PBs it set are worked out again.
+- Demo mode: "Try the demo" on the access-code screen loads eight weeks of sample training in the
+  browser. Nothing is saved and the AI isn't called. The "Home" tab replaces "PBs".
+- Transcription stays on hold until phone dictation has been tested.
+
 ### Notebook restructure
 - Each product now keeps everything in one place: journey, feedback, user testing, backlog,
   learnings and decisions, as sub-pages in this notebook.

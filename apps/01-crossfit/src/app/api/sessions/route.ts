@@ -51,6 +51,35 @@ export async function POST(request: Request) {
   }
 }
 
+/** Edit a saved session: new details and entries; its PBs are worked out again. */
+export async function PUT(request: Request) {
+  const g = guard(request);
+  if ("error" in g) return g.error;
+  const id = new URL(request.url).searchParams.get("id");
+  const parsed = Body.safeParse(await request.json().catch(() => null));
+  if (!id || !parsed.success) return Response.json({ error: "That session doesn't look right." }, { status: 400 });
+
+  try {
+    const { sessions, pbs } = await g.store.load();
+    const existing = sessions.find((s) => s.id === id);
+    if (!existing) return Response.json({ error: "That session no longer exists." }, { status: 404 });
+    const session: Session = {
+      ...existing,
+      date: parsed.data.date,
+      title: parsed.data.title.trim() || "Session",
+      transcript: parsed.data.transcript,
+      entries: parsed.data.entries.map((e) => ({ ...e, id: uid(), movement: findMovement(e.movement).name })),
+    };
+    // Compare against every PB except the ones this session set before the edit.
+    const others = pbs.filter((p) => p.sessionId !== id);
+    const found = detectPbs(session.entries, others, session.date, id).map((n) => ({ ...n, pb: { ...n.pb, id: uid() } }));
+    await g.store.updateSession(session, found.map((n) => n.pb));
+    return Response.json({ session, newPbs: found });
+  } catch (error) {
+    return serverError(error);
+  }
+}
+
 export async function DELETE(request: Request) {
   const g = guard(request);
   if ("error" in g) return g.error;

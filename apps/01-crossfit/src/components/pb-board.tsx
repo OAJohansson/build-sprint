@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { Plus, Search } from "lucide-react";
-import { Chip, inputClass } from "@/components/ui/bits";
+import { MovingUp, WeeklyGoal } from "@/components/progress";
+import { Chip, SectionLabel, inputClass } from "@/components/ui/bits";
 import { CATEGORIES, type Category } from "@/lib/movements";
-import { summarize, trainedDays, weekOf } from "@/lib/summary";
-import { type Pb, type Session, today } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { summarize } from "@/lib/summary";
+import type { Pb, Session } from "@/lib/types";
 
 const SECTION: Record<Category, string> = {
   Olympic: "Olympic lifting",
@@ -34,11 +34,6 @@ export function PbBoard({
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState<Category | "All">("All");
 
-  const week = weekOf(today());
-  const trained = trainedDays(sessions);
-  // Training days, not sessions: logging twice in a day is still one day at the box.
-  const thisWeek = week.filter((d) => trained.has(d)).length;
-
   const q = query.trim().toLowerCase();
   const rows = summarize(pbs)
     .filter((r) => (q ? r.name.toLowerCase().includes(q) : cat === "All" || r.category === cat))
@@ -50,7 +45,7 @@ export function PbBoard({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h1 className="font-display text-[34px] font-bold tracking-wide">MY PBs</h1>
+        <h1 className="font-display text-[34px] font-bold tracking-wide">MY TRAINING</h1>
         {pbs.length > 0 && (
           <button
             type="button"
@@ -62,24 +57,14 @@ export function PbBoard({
         )}
       </div>
 
-      <button type="button" onClick={onCalendar} className="flex flex-col gap-2 text-left" aria-label={`This week: ${thisWeek} training days. Open calendar`}>
-        <span className="flex justify-between text-[13px] text-muted-foreground">
-          <span>This week</span>
-          <span className="font-semibold text-foreground">
-            {thisWeek} day{thisWeek === 1 ? "" : "s"}
-          </span>
-        </span>
-        <span className="grid grid-cols-7 gap-1.5">
-          {week.map((d, i) => (
-            <span key={d} className="flex flex-col items-center gap-1.5">
-              <span className={cn("text-xs", d === today() ? "font-semibold text-foreground" : "text-muted-foreground")}>
-                {"MTWTFSS"[i]}
-              </span>
-              <span className={cn("size-[30px] rounded-full", trained.has(d) ? "bg-primary" : "border-[1.5px] border-input")} />
-            </span>
-          ))}
-        </span>
-      </button>
+      {sessions.length > 0 && (
+        <>
+          <WeeklyGoal sessions={sessions} onOpen={onCalendar} />
+          <MovingUp sessions={sessions} onOpen={onOpen} />
+        </>
+      )}
+
+      {pbs.length > 0 && <SectionLabel>PBs</SectionLabel>}
 
       {pbs.length > 0 && (
         <>

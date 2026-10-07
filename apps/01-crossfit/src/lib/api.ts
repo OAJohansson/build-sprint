@@ -34,6 +34,8 @@ export const api = (code: string) => ({
     call<ParsedSession>(code, "/api/parse", { method: "POST", body: JSON.stringify({ transcript, today, unit }) }),
   saveSession: (s: { date: string; title: string; transcript: string; entries: NewEntry[] }) =>
     call<{ session: Session; newPbs: NewPb[] }>(code, "/api/sessions", { method: "POST", body: JSON.stringify(s) }),
+  updateSession: (id: string, s: { date: string; title: string; transcript: string; entries: NewEntry[] }) =>
+    call<{ session: Session; newPbs: NewPb[] }>(code, `/api/sessions?id=${encodeURIComponent(id)}`, { method: "PUT", body: JSON.stringify(s) }),
   deleteSession: (id: string) => call(code, `/api/sessions?id=${encodeURIComponent(id)}`, { method: "DELETE" }),
   addPb: (pb: NewPbInput) =>
     call<{ pb: Pb; previous: Pb | null; isBest: boolean }>(code, "/api/pbs", { method: "POST", body: JSON.stringify(pb) }),

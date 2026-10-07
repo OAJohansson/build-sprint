@@ -9,6 +9,8 @@ import type { Entry, Pb, Session } from "@/lib/types";
 export type Store = {
   load(): Promise<{ sessions: Session[]; pbs: Pb[] }>;
   addSession(session: Session, pbs: Pb[]): Promise<void>;
+  /** Replace a session's details and entries, and the PBs it set. */
+  updateSession(session: Session, pbs: Pb[]): Promise<void>;
   deleteSession(id: string): Promise<void>;
   addPb(pb: Pb): Promise<void>;
   deletePb(id: string): Promise<void>;
@@ -109,6 +111,22 @@ function supabaseStore(db: SupabaseClient): Store {
       }
       for (const pb of pbs) await this.addPb(pb);
     },
+    async updateSession(session, pbs) {
+      check((await db.from("crossfit_sessions").update({
+        date: session.date, title: session.title, transcript: session.transcript,
+      }).eq("id", session.id)).error);
+      check((await db.from("crossfit_entries").delete().eq("session_id", session.id)).error);
+      check((await db.from("crossfit_pbs").delete().eq("session_id", session.id)).error);
+      if (session.entries.length) {
+        check((await db.from("crossfit_entries").insert(
+          session.entries.map((e, i) => ({
+            id: e.id, session_id: session.id, position: i, movement: e.movement, sets: e.sets, reps: e.reps,
+            weight: e.weight, unit: e.unit, score: e.score, rx: e.rx, note: e.note,
+          })),
+        )).error);
+      }
+      for (const pb of pbs) await this.addPb(pb);
+    },
     async deleteSession(id) {
       check((await db.from("crossfit_sessions").delete().eq("id", id)).error);
     },
@@ -134,6 +152,10 @@ function memoryStore(): Store {
     async addSession(session, pbs) {
       mem.sessions.push(structuredClone(session));
       mem.pbs.push(...structuredClone(pbs));
+    },
+    async updateSession(session, pbs) {
+      mem.sessions = mem.sessions.map((s) => (s.id === session.id ? structuredClone(session) : s));
+      mem.pbs = [...mem.pbs.filter((p) => p.sessionId !== session.id), ...structuredClone(pbs)];
     },
     async deleteSession(id) {
       mem.sessions = mem.sessions.filter((s) => s.id !== id);

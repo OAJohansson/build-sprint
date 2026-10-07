@@ -30,4 +30,5 @@ also public (portfolio piece) and is used by one person for now.
 
 - Needs `SUPABASE_URL` and `SUPABASE_SECRET_KEY` in the Vercel project, plus the schema run once.
 - Free Supabase projects pause after a week without activity; restore from the dashboard.
-- Recruiters without the code see only the unlock screen until demo mode exists (product backlog).
+- Visitors without the code can use demo mode: sample data in their browser only, no database
+  and no AI calls, so it costs nothing (added 7 Oct).

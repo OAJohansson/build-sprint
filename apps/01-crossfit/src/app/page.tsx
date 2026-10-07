@@ -10,14 +10,15 @@ import { PbBoard } from "@/components/pb-board";
 import { PbForm } from "@/components/pb-form";
 import { BigButton, inputClass } from "@/components/ui/bits";
 import { ApiError, api as makeApi } from "@/lib/api";
+import { DEMO_NOTE, demoApi } from "@/lib/demo";
 import { useLocalStorage } from "@/lib/use-local-storage";
-import type { NewPb, Pb, Session, Unit } from "@/lib/types";
+import { type NewPb, type Pb, type Session, type Unit, today } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 type Overlay =
   | { type: "lift"; movement: string }
   | { type: "pb"; movement?: string }
-  | { type: "log" }
+  | { type: "log"; session?: Session }
   | { type: "celebrate"; pbs: NewPb[] }
   | null;
 
@@ -30,7 +31,9 @@ export default function Home() {
   const [tab, setTab] = useState<"pbs" | "calendar">("pbs");
   const [overlay, setOverlay] = useState<Overlay>(null);
 
-  const api = useMemo(() => makeApi(code), [code]);
+  // Demo mode: sample data in this tab only, for visitors without the access code.
+  const [demo, setDemo] = useState(false);
+  const api = useMemo(() => (demo ? demoApi(today()) : makeApi(code)), [demo, code]);
 
   const reload = useCallback(async (): Promise<boolean> => {
     try {
@@ -60,10 +63,10 @@ export default function Home() {
   useEffect(() => {
     // Loading data on mount (and when the code changes) is the point of this effect.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (code) reload();
-  }, [code, reload]);
+    if (code || demo) reload();
+  }, [code, demo, reload]);
 
-  if (!code) return <Unlock error={error} onUnlock={setCode} />;
+  if (!code && !demo) return <Unlock error={error} onUnlock={setCode} onDemo={() => setDemo(true)} />;
   if (!data) {
     return (
       <main className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-5 p-6 text-center">
@@ -102,6 +105,22 @@ export default function Home() {
   return (
     <>
       <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-4 px-5 pb-44 pt-7">
+        {demo && (
+          <div className="flex items-center justify-between gap-3 rounded-xl bg-card px-4 py-2.5 text-sm">
+            <span className="text-muted-foreground">Demo with sample data. Nothing you do is saved.</span>
+            <button
+              type="button"
+              className="h-9 flex-none font-semibold text-primary"
+              onClick={() => {
+                setDemo(false);
+                setData(null);
+                setOverlay(null);
+              }}
+            >
+              Exit demo
+            </button>
+          </div>
+        )}
         {error && <p className="rounded-xl bg-card px-4 py-3 text-sm text-destructive">{error}</p>}
         {tab === "pbs" ? (
           <PbBoard
@@ -122,6 +141,7 @@ export default function Home() {
               }
               reload();
             }}
+            onEdit={(session) => setOverlay({ type: "log", session })}
           />
         )}
       </main>
@@ -140,7 +160,7 @@ export default function Home() {
                 aria-current={tab === t ? "page" : undefined}
                 className={cn("h-11", tab === t ? "font-semibold text-foreground" : "text-muted-foreground")}
               >
-                {t === "pbs" ? "PBs" : "Calendar"}
+                {t === "pbs" ? "Home" : "Calendar"}
               </button>
             ))}
           </nav>
@@ -175,6 +195,9 @@ export default function Home() {
       )}
       {overlay?.type === "log" && (
         <LogFlow
+          key={overlay.session?.id ?? "new"}
+          editing={overlay.session}
+          sampleNote={demo ? DEMO_NOTE : undefined}
           api={api}
           pbs={pbs}
           unit={unit}
@@ -192,7 +215,7 @@ export default function Home() {
   );
 }
 
-function Unlock({ error, onUnlock }: { error: string | null; onUnlock: (code: string) => void }) {
+function Unlock({ error, onUnlock, onDemo }: { error: string | null; onUnlock: (code: string) => void; onDemo: () => void }) {
   const [value, setValue] = useState("");
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 px-6">
@@ -217,6 +240,12 @@ function Unlock({ error, onUnlock }: { error: string | null; onUnlock: (code: st
         </BigButton>
       </form>
       <p className="text-sm text-muted-foreground">A personal log for now. Enter it once and this device remembers it.</p>
+      <div className="flex flex-col gap-2 border-t border-border pt-6">
+        <BigButton variant="outline" onClick={onDemo}>
+          Try the demo
+        </BigButton>
+        <p className="text-center text-sm text-muted-foreground">Eight weeks of sample training. Nothing is saved.</p>
+      </div>
     </main>
   );
 }

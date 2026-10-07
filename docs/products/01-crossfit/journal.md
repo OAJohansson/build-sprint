@@ -77,6 +77,14 @@ Newest last. Pull requests are in the `OAJohansson/build-sprint` repo.
 - First run on CrossFit Log with **Sam**, a 32-year-old CrossFitter. See
   [User testing](#01-crossfit.testing).
 
+### Wrap-up
+- Triage rule: fix what shows wrong numbers or looks broken if it's quick; park the rest. Fixed in
+  PR #7: rep-max PBs from working sets, percentages always on the 1RM, "510" → 5:10, training
+  days instead of sessions, no 70% line, no kg toggle, one "Add PB" button, new empty-state copy.
+- Parked with a "start here" note: the Progress section on Home (#9).
+- Retro written; three process changes carried into the playbook for the next product.
+- Status: **shipped**.
+
 ### Notebook restructure
 - Each product now keeps everything in one place: journey, feedback, user testing, backlog,
   learnings and decisions, as sub-pages in this notebook.

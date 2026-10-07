@@ -4,7 +4,7 @@ import { useState } from "react";
 import { BigButton, Chip, Screen, SectionLabel, TopBar, inputClass } from "@/components/ui/bits";
 import { MovementPicker } from "@/components/movement-picker";
 import { findMovement } from "@/lib/movements";
-import { parseRounds, parseTime } from "@/lib/pb";
+import { formatPb, parseRounds, parseTimeInput } from "@/lib/pb";
 import { type Pb, type PbKindStored, type Unit, today } from "@/lib/types";
 import type { NewPbInput } from "@/lib/api";
 
@@ -48,7 +48,7 @@ export function PbForm({
   const value =
     kind === "load" ? Number(weight) || null
     : kind === "reps" ? Number(reps) || null
-    : kind === "time" ? parseTime(time)
+    : kind === "time" ? parseTimeInput(time)
     : parseRounds(`${rounds}+${extra || 0}`);
 
   async function submit(e: React.FormEvent) {
@@ -122,7 +122,10 @@ export function PbForm({
         {kind === "time" && (
           <label className="flex flex-col gap-2">
             <SectionLabel>Time (m:ss)</SectionLabel>
-            <input autoFocus className={`${inputClass} font-display text-3xl font-bold`} placeholder="4:32" inputMode="text" value={time} onChange={(e) => setTime(e.target.value.replace(".", ":"))} />
+            <input autoFocus className={`${inputClass} font-display text-3xl font-bold`} placeholder="432" inputMode="numeric" value={time} onChange={(e) => setTime(e.target.value)} />
+            <span className="text-sm text-muted-foreground">
+              {value ? `Saves as ${formatPb({ kind: "time", value, unit: null })}` : "Type 432 for 4:32"}
+            </span>
           </label>
         )}
 

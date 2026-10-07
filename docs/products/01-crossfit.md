@@ -1,7 +1,7 @@
 ---
 day: 1
 title: CrossFit Log
-status: building
+status: shipped
 date: 2026-10-06
 user: "Me: years of CrossFit, never consistent about logging weights"
 problem: "Coach says “70% of your 1RM” and I never remember my PBs, because logging lifts after class is too much friction"
@@ -13,4 +13,6 @@ tags: [voice, claude-api, supabase, mobile]
 
 ## Learned
 
--
+- Frame the moment of use before building: v1 logged workouts, but the real job was recalling a PB mid-class.
+- An app that only stores data feels like homework; progress is the payoff (the next thing to build).
+- A simulated user caught the wrong-number bugs my own review missed.

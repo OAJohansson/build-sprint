@@ -2,12 +2,30 @@
 
 One product per day. Done beats perfect. Scope is the main lever, so cut early.
 
-## 1. Pick and frame (≈30 min)
+## 1. Pick and frame (≈45 min, before any code)
 
 - Pick an idea from [`ideas.md`](ideas.md).
-- `pnpm new <slug> "Display Title"`. This creates the app, the write-up and the README row.
-- Fill in **user**, **problem** and **bet** (one line each) in `docs/products/NN-slug.md` *before writing code*.
+- `pnpm new <slug> "Display Title"`. This creates the app, the card, the product folder and the README row.
+- **Moment of use and top 3 jobs.** When, where and in what state does the person open this? What
+  are they trying to get done ("when…, I want…, so I can…")? *(Day 1: v1 skipped this and solved
+  the wrong problem.)*
+- **Persona and test plan.** Fill in `docs/products/NN-slug/user-testing/persona.md` and `plan.md`
+  from the [templates](user-testing/). They double as the spec.
+- **Three approaches.** Sketch three genuinely different solutions (a design canvas works well), pick
+  one or a mix, and note why in `journal.md`.
+- **Stop line.** Write in `journal.md` what ships today and what goes straight to `backlog.md`.
+- Fill in **user**, **problem** and **bet** (one line each) on the card `docs/products/NN-slug.md`.
   The bet is the smallest thing that could solve the problem by tonight. Cut everything else.
+
+## 1b. Setup checklist (≈15 min, first hour)
+
+Day 1 lost half a day to setup surprising us late, one problem at a time. Check these once, early:
+
+- [ ] Every environment variable set in Vercel (Production *and* Preview), with the right *kind*
+  of key (secret vs publishable), and a redeploy after changing them.
+- [ ] Opened on a **real phone**, not just desktop. Test any browser feature (mic, camera) there.
+- [ ] Server errors are logged with the real reason (`failure()` in `src/lib/server/failure.ts`),
+  while users only see a general message. Buttons that retry show that they're working.
 
 ## 2. Build (bulk of the day)
 
@@ -33,18 +51,23 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 
 ## 3b. Test as a user (≈30 min, once the core flow works)
 
-- Write `docs/products/NN-slug/user-testing/persona.md` and `plan.md` from the templates (one specific person,
-  scenarios as their real moments, each with a success bar).
-- Run the `user-tester` agent against the running app; save its report as `report-YYYY-MM-DD.md`.
-- Add its findings to `docs/products/NN-slug/feedback.md` next to your own review, then prioritise together.
+- Run the `user-tester` agent against the running app with the persona and plan from step 1; save
+  its report as `user-testing/report-YYYY-MM-DD.md`.
+- **Then** do your own review. Log both in `docs/products/NN-slug/feedback.md`, fix blockers
+  straight away, and prioritise the rest together.
+- Triage rule for leaving a product: fix anything that shows wrong numbers or looks broken if it's
+  quick; park the rest in `backlog.md` with a "start here" note.
 - Full method: [`user-testing/README.md`](user-testing/README.md).
 
-## 4. Wrap up (≈20 min)
+## 4. Wrap up (≈30 min)
 
-- Add 1–3 bullets under **Learned** in the write-up.
+- **Retro** in `docs/products/NN-slug/learnings.md`: numbers (planned vs actual time, PRs, bugs and
+  who found them), Keep / Change / Try, what surprised you.
+- **At most 3 process changes**, made *before* the next product starts: edit this playbook, the
+  templates or the checklists, and log each one in [`learnings.md`](learnings.md) (the process changelog).
+- Add 1–3 bullets under **Learned** on the card.
 - Set `status: shipped` (or `parked`, which is fine too) → `pnpm sync && pnpm notebook` → republish the notebook.
 - Add a screenshot to `apps/portfolio/public/shots/NN-slug.png` (optional, makes the portfolio better).
-- Lessons → `docs/products/NN-slug/learnings.md` (a cross-product summary comes later).
 
 ## Definition of done
 
@@ -52,3 +75,4 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 - [ ] Write-up has user, problem, bet, url, learned and `status: shipped`
 - [ ] README table and notebook are up to date
 - [ ] A simulated user test has run, and its top findings are fixed or logged
+- [ ] Retro written, and its process changes made before the next product starts

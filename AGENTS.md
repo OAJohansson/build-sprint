@@ -31,9 +31,10 @@ The apps use Next.js 16, which has breaking changes from older versions (async `
   - `feedback.md`: every review comment and user-test finding, numbered, with a status.
   - `user-testing/`: `persona.md`, `plan.md`, `report-YYYY-MM-DD.md` (see `docs/user-testing/README.md`).
   - `backlog.md`: ideas and parked features for this product.
-  - `learnings.md`: lessons from this product.
+  - `learnings.md`: lessons from this product, plus the retro at wrap-up (see `docs/PLAYBOOK.md`).
 - After any change in `docs/`, run `pnpm sync && pnpm notebook`, then republish
   `.notebook/index.html` with the Artifact tool to the existing private notebook,
   https://claude.ai/artifact/6WgAx5PMZYAzBqCg7zf25b (pass that URL; never create a new one).
 - Non-obvious setup or architecture choices → a new file in `docs/decisions/` from `TEMPLATE.md`.
-- `docs/ideas.md` is for ideas for *new* products. A cross-product learnings summary comes later.
+- `docs/ideas.md` is for ideas for *new* products. `docs/learnings.md` is the process changelog: each
+  process change from a retro, made before the next product starts.

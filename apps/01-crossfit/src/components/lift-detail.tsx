@@ -33,6 +33,8 @@ export function LiftDetail({
   );
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = bests.find((b) => b.id === selectedId) ?? bests[0];
+  // Coaches call percentages of the 1RM, so the grid never silently uses a 3RM.
+  const oneRm = bests.find((b) => b.kind === "load" && b.repMax === 1);
 
   const history = [
     ...mine.map((p) => ({ date: p.achievedOn, text: `${repLabel(p.repMax) || (p.rx ? "Rx" : p.kind === "reps" ? "Max" : "Scaled")} ${formatPb(p)}`, pb: p, tag: p.sessionId ? "from a session" : "added" })),
@@ -70,10 +72,16 @@ export function LiftDetail({
         </div>
       )}
 
-      {selected?.kind === "load" && (
+      {mv.pb === "load" && !oneRm && (
+        <div className="flex flex-col items-start gap-2 rounded-xl bg-card px-4 py-3.5">
+          <p>Percentages use your 1RM, and there isn&rsquo;t one yet.</p>
+          <button type="button" onClick={onUpdate} className="text-sm font-semibold text-primary">Add your 1RM</button>
+        </div>
+      )}
+      {oneRm && (
         <div className="flex flex-col gap-2.5">
           <SectionLabel>
-            Percentages of {repLabel(selected.repMax)} · rounded to {selected.unit === "lb" ? "5 lb" : "2.5 kg"}
+            Percentages of your 1RM ({formatPb(oneRm)}) · rounded to {oneRm.unit === "lb" ? "5 lb" : "2.5 kg"}
           </SectionLabel>
           <div className="grid grid-cols-4 gap-2">
             {PCTS.map((p) => (
@@ -85,7 +93,7 @@ export function LiftDetail({
                 )}
               >
                 <span className={cn("text-xs", p === 70 ? "font-semibold" : "text-muted-foreground")}>{p}%</span>
-                <span className="font-display text-[26px] font-bold tabular-nums">{percentOf(selected.value, selected.unit, p)}</span>
+                <span className="font-display text-[26px] font-bold tabular-nums">{percentOf(oneRm.value, oneRm.unit, p)}</span>
               </div>
             ))}
           </div>

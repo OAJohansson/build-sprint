@@ -1,6 +1,47 @@
 # Learnings
 
-What building CrossFit Log taught me. Newest first.
+What building CrossFit Log taught me.
+
+## Retro (7 Oct)
+
+*Draft by Claude; edit to make it yours.*
+
+**Numbers**
+
+| | |
+| --- | --- |
+| Planned | 1 day |
+| Actual | 2 days (6–7 Oct) |
+| First live version | Day 1 (v1, before the needs brainstorm) |
+| Pull requests | 7 |
+| Feedback items | 18: 8 from my review, 10 from the simulated user test. 11 fixed, 7 parked |
+| Who found the bugs | Me on a real phone: dictation repeating (twice), PB not saving, app not loading. Test agent: 4 wrong-number bugs (rep-max PBs, percentage base, "510" → 8:30, session count). My review: copy and UX |
+| Time lost to setup | About half of day 2 (Supabase key type, dictation on Android) |
+
+**Keep**
+- Needs brainstorm, then 3 different design approaches, then a clickable prototype. Fast and decisive.
+- Logging feedback first and fixing in batches, with only blockers fixed straight away.
+- Simulated user test with a specific persona. It found the wrong-number bugs I didn't.
+
+**Change**
+- I built v1 before framing the moment of use, so v1 solved the wrong problem.
+- Setup issues surfaced late and one at a time. Check every setting and the real phone on day one.
+- "One day" became two. Decide what ships today, and what goes straight to the backlog, at kick-off.
+
+**Try next time**
+- Write the persona and test plan at kick-off; they double as the spec.
+- Run the test agent before my own review, then review both together.
+
+**What surprised me**
+- Product: the most valuable feature (seeing progress) wasn't in my first brain dump at all.
+- Technical: phones and desktops behave differently for dictation; config can "half work".
+- Process: an agent playing a user found data bugs that a feature-by-feature review missed.
+
+**Process changes carried forward** (logged in `docs/learnings.md`)
+1. Kick-off: moment of use + top 3 jobs + 3 approaches + a stop line, before code.
+2. Setup checklist on day one: real phone, every env var and key type, server logs with friendly
+   user errors.
+3. Persona and test plan at kick-off; test agent before own review.
 
 ## Product
 - Frame the moment of use before building. The first MVP logged workouts well, but the real job

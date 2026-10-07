@@ -36,3 +36,6 @@ By day 20, try to have at least one story for each:
 | Speed | "How do you ship fast without lowering the bar?" |
 
 ## The stories
+
+Each story's **Themes** are its main, headline-worthy themes. Smaller examples for every theme are
+in the story's *Theme prompts*, so a gap below means "no strong main story yet", not "nothing at all".

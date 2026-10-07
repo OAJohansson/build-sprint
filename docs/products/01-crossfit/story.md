@@ -64,5 +64,20 @@ review skims past.
 - **"What would you do next?"** Show the note while checking the AI's numbers, and test with
   people at my box.
 
+## Theme prompts
+
+Smaller examples beyond the main story; empty where this product has no real one.
+
+- **Discovery:** v1 made logging easy, but the real job was recalling a PB mid-class.
+- **Prioritisation:** parked accounts, estimated 1RM and per-set logging; the access code doubles as the login.
+- **Metrics:** "see I'm progressing" scored 2/5 in the user test, so the progress view went in next.
+- **Failure:** built v1 before framing the moment of use; four wrong-number bugs got past my review.
+- **Ambiguity:**
+- **Trade-offs:** a real API key on Vercel (cost risk, protected by an access code and spend cap) instead of hosting inside Claude, to learn the real deploy path.
+- **Craft:** the "This week" card: three dots said more than dots plus a sentence (clean and minimal).
+- **Technical:** Android Chrome re-sends earlier speech results, so dictation repeated; fixed by rebuilding the text and listening phrase by phrase.
+- **Working with AI:** Claude turns a spoken note into lifts; the review screen lets me catch its mistakes before saving.
+- **Speed:** live on day 1, but "one day" became two; that led to the stop line at kick-off.
+
 **Evidence:** [live app](https://crossfit-log.vercel.app) · [journey](#01-crossfit.journey) ·
 [user test](#01-crossfit.testing) · [retro](#01-crossfit.learnings)

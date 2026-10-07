@@ -74,6 +74,21 @@ looking like Paris). And guardrails need numbers; my eye said the contrast was f
 - **"What would you do next?"** Show it to one real person at sunset, then make the landmark
   bigger and visible at night.
 
+## Theme prompts
+
+Smaller examples beyond the main story; empty where this product has no real one.
+
+- **Discovery:** naming the alternative (Google) turned "what time is sunset?" into "do I have time?".
+- **Prioritisation:** triaged 29 findings by which success signal each one moved; parked the "This week" strip.
+- **Metrics:** success defined before building; readability measured at 1.9:1, then 4.3:1.
+- **Failure:** the app reopened on yesterday's searched city and showed the wrong sunset; caught by the simulated user.
+- **Ambiguity:** a landmark for *any* city wasn't possible, so 10 hand-drawn ones plus a terrain guess from elevation data (beach, peaks, skyline), checked against real places like Pemenang and Zermatt.
+- **Trade-offs:** the real moon (some nights none) over a decorative one; no start screen on every open.
+- **Craft:** the sunset moment ("happening now", the afterglow) and a ring of light sweeping the sky.
+- **Technical:** text colour picked by measured contrast against the sky right behind it; times via each place's time-zone name, not hand-written maths.
+- **Working with AI:** Claude built three working prototypes and ran the simulated user; I made the product calls and pushed back when a first version of the light pulse was too subtle to see.
+- **Speed:** prototype live within hours so I judged it on my phone; shipped in a day, plus a 2-minute demo mode for showing it.
+
 **Evidence:** [live app](https://horizon-beta-wine.vercel.app) ([2-minute demo day](https://horizon-beta-wine.vercel.app/?demo)) ·
 [brief](#02-horizon.brief) · [user test](#02-horizon.testing) · [feedback](#02-horizon.feedback) ·
 [retro](#02-horizon.learnings)

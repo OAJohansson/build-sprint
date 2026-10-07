@@ -49,12 +49,24 @@ for (const entry of fs.readdirSync(appDir, { recursive: true, withFileTypes: tru
 
 const doc = path.join(PRODUCTS_DIR, `${slug}.md`);
 fs.writeFileSync(doc, fill(fs.readFileSync(path.join(PRODUCTS_DIR, "TEMPLATE.md"), "utf8")));
+
+// The product's folder: one file per notebook sub-page.
+const folder = path.join(PRODUCTS_DIR, slug);
+fs.mkdirSync(path.join(folder, "user-testing"), { recursive: true });
+const starters = {
+  "journal.md": "# Journey\n\nWhat happened, what was decided and why. Newest last.\n",
+  "feedback.md": "# Review feedback\n\nStatus: `open` · `fixing` · `fixed` · `parked` · `won't do`\n\n| # | Type | Feedback | Status |\n| --- | --- | --- | --- |\n",
+  "backlog.md": "# Backlog\n\n| Idea | Why | Status |\n| --- | --- | --- |\n",
+  "learnings.md": "# Learnings\n\nWhat building this product taught me.\n\n## Retro\n\n**Numbers:** planned vs actual time, PRs, bugs and who found them.\n\n**Keep**\n\n**Change**\n\n**Try next time**\n\n**What surprised me**\n\n**Process changes carried forward** (max 3, logged in `docs/learnings.md`)\n",
+};
+for (const [name, text] of Object.entries(starters)) fs.writeFileSync(path.join(folder, name), text);
 syncReadme();
 
 console.log(`
 Created day ${day}: ${title}
   app    apps/${slug}
   doc    docs/products/${slug}.md   ← fill in user, problem and bet before coding
+  folder docs/products/${slug}/     journal, feedback, user-testing, backlog, learnings
 
 Next:
   pnpm install

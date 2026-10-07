@@ -23,7 +23,7 @@ export function CalendarView({ sessions, onDelete }: { sessions: Session[]; onDe
   const cells: (string | null)[] = [...Array(lead).fill(null), ...Array.from({ length: days }, (_, i) => iso(month.y, month.m, i + 1))];
   while (cells.length % 7) cells.push(null);
   const weeks = Array.from({ length: cells.length / 7 }, (_, w) => cells.slice(w * 7, w * 7 + 7));
-  const monthCount = sessions.filter((s) => s.date.startsWith(iso(month.y, month.m, 1).slice(0, 7))).length;
+  const monthCount = [...trained.keys()].filter((d) => d.startsWith(iso(month.y, month.m, 1).slice(0, 7))).length;
 
   const shift = (d: number) =>
     setMonth(({ y, m }) => {
@@ -49,15 +49,15 @@ export function CalendarView({ sessions, onDelete }: { sessions: Session[]; onDe
         </div>
       </div>
       <p className="-mt-3 text-sm text-muted-foreground">
-        <span className="font-semibold text-foreground">{monthCount}</span> session{monthCount === 1 ? "" : "s"} this month
+        <span className="font-semibold text-foreground">{monthCount}</span> training day{monthCount === 1 ? "" : "s"} this month
       </p>
 
       <div className="grid grid-cols-[repeat(7,minmax(0,1fr))_40px] items-center gap-1.5">
-        {["M", "T", "W", "T", "F", "S", "S", "WK"].map((h, i) => (
+        {["M", "T", "W", "T", "F", "S", "S", "DAYS"].map((h, i) => (
           <span key={i} className="text-center text-xs text-muted-foreground">{h}</span>
         ))}
         {weeks.map((week, w) => {
-          const count = week.reduce((n, d) => n + (d ? trained.get(d) ?? 0 : 0), 0);
+          const count = week.filter((d) => d && trained.has(d)).length;
           return [
             ...week.map((d, i) =>
               d ? (
@@ -80,7 +80,7 @@ export function CalendarView({ sessions, onDelete }: { sessions: Session[]; onDe
               ),
             ),
             <span key={`w${w}`} className="text-center font-display text-[17px] font-bold">
-              {count ? `×${count}` : ""}
+              {count ? `${count}d` : ""}
             </span>,
           ];
         })}

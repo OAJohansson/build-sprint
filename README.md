@@ -10,7 +10,7 @@ reps in going from idea to something live, plus an honest write-up of what I lea
 <!-- products:start -->
 | Day | Product | Problem | Status | Live | Links |
 | --: | --- | --- | --- | --- | --- |
-| 1 | **CrossFit Log** | Coach says “70% of your 1RM” and I never remember my PBs, because logging lifts after class is too much friction | 🛠️ building | [live](https://crossfit-log.vercel.app) | [write-up](docs/products/01-crossfit.md) · [code](apps/01-crossfit) |
+| 1 | **CrossFit Log** | Coach says “70% of your 1RM” and I never remember my PBs, because logging lifts after class is too much friction | ✅ shipped | [live](https://crossfit-log.vercel.app) | [write-up](docs/products/01-crossfit.md) · [code](apps/01-crossfit) |
 <!-- products:end -->
 
 _This table is generated from `docs/products/*.md`. Run `pnpm sync` after editing frontmatter._
@@ -25,11 +25,14 @@ templates/
   next-starter/       what `pnpm new` copies: Next.js 16 + Tailwind 4 + shadcn + localStorage hook
 docs/
   PLAYBOOK.md         the daily loop
-  ideas.md            idea backlog
+  ideas.md            ideas for the next products
   products/           one write-up per product (problem → scope → what shipped → learnings)
-  learnings.md        lessons that apply across products
+  learnings.md        (later) summary of lessons across products
   decisions/          why it's set up this way
+  products/NN-slug/   per product: journal, feedback, user-testing/, backlog, learnings
+  user-testing/       simulated user testing: method + persona and plan templates
 scripts/              `pnpm new` and `pnpm sync`
+.claude/agents/       user-tester: the agent that plays the persona and drives the app
 ```
 
 Why a monorepo with a Vercel project per app: see

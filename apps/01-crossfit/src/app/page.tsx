@@ -23,7 +23,8 @@ type Overlay =
 
 export default function Home() {
   const [code, setCode] = useLocalStorage("01-crossfit:access-code", "");
-  const [unit, setUnit] = useLocalStorage<Unit>("01-crossfit:unit", "kg");
+  // Everything is in kg for now (feedback #8).
+  const unit: Unit = "kg";
   const [data, setData] = useState<{ sessions: Session[]; pbs: Pb[] } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<"pbs" | "calendar">("pbs");
@@ -130,7 +131,7 @@ export default function Home() {
           <BigButton onClick={() => setOverlay({ type: "log" })}>
             <Mic /> Log class
           </BigButton>
-          <nav className="grid grid-cols-[1fr_1fr_auto] items-center text-sm">
+          <nav className="grid grid-cols-2 items-center text-sm">
             {(["pbs", "calendar"] as const).map((t) => (
               <button
                 key={t}
@@ -142,14 +143,6 @@ export default function Home() {
                 {t === "pbs" ? "PBs" : "Calendar"}
               </button>
             ))}
-            <button
-              type="button"
-              onClick={() => setUnit(unit === "kg" ? "lb" : "kg")}
-              aria-label={`Default unit: ${unit}. Tap to switch`}
-              className="h-9 rounded-full border border-input px-3 text-xs text-muted-foreground"
-            >
-              {unit}
-            </button>
           </nav>
         </div>
       </div>

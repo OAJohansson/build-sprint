@@ -1,7 +1,7 @@
 "use client";
 
 import { BigButton } from "@/components/ui/bits";
-import { formatPb, percentOf, repLabel } from "@/lib/pb";
+import { formatPb, repLabel } from "@/lib/pb";
 import { type NewPb, formatDate } from "@/lib/types";
 
 const COLORS = ["#ff7a1a", "#f2f2ee", "#ffc94d"];
@@ -55,14 +55,6 @@ export function Celebrate({ pbs, onDone }: { pbs: NewPb[]; onDone: () => void })
             </span>
           )}
         </div>
-        {pb.kind === "load" && pb.repMax === 1 && (
-          <div className="flex w-full items-center justify-between rounded-2xl bg-card px-4 py-3.5">
-            <span className="text-muted-foreground">Your 70% is now</span>
-            <span className="font-display text-[26px] font-bold">
-              {percentOf(pb.value, pb.unit, 70)} {pb.unit}
-            </span>
-          </div>
-        )}
         {rest.length > 0 && (
           <p className="text-muted-foreground">
             Also new: {rest.map((n) => `${n.pb.movement} ${n.pb.kind === "load" ? repLabel(n.pb.repMax) + " " : ""}${formatPb(n.pb)}`).join(", ")}

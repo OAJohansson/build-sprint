@@ -6,6 +6,14 @@ import type { Entry, NewPb, Pb, PbKindStored, Unit } from "@/lib/types";
 
 const toKg = (value: number, unit: Unit | null) => (unit === "lb" ? value * 0.45359237 : value);
 
+/** What people type on a number pad: "510" → 5:10, "1230" → 12:30, "5" → 5:00, "4:32" as is. */
+export function parseTimeInput(s: string): number | null {
+  const t = s.trim();
+  if (/^\d{3,4}$/.test(t)) return Number(t.slice(0, -2)) * 60 + Number(t.slice(-2));
+  if (/^\d{1,2}$/.test(t)) return Number(t) * 60;
+  return parseTime(t.replace(/[.,]/g, ":"));
+}
+
 /** "4:32" → 272, "1:02:03" → 3723, "95" → 95. */
 export function parseTime(s: string): number | null {
   const parts = s.trim().split(":").map(Number);
@@ -71,6 +79,8 @@ export function candidateFromEntry(e: Entry, date: string, sessionId: string | n
   switch (kind) {
     case "load":
       if (e.weight == null || e.weight <= 0 || !e.reps || e.reps < 1 || e.reps > 10) return null;
+      // Only a single set counts: 5 × 3 @ 90 are working sets, not a 3RM.
+      if (e.sets != null && e.sets > 1) return null;
       return { ...base, kind, repMax: e.reps, value: e.weight, unit: e.unit };
     case "reps":
       // Only a single max set counts: 5 × 10 pull-ups isn't a max-reps test.

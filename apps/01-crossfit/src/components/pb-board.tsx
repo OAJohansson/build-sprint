@@ -36,7 +36,8 @@ export function PbBoard({
 
   const week = weekOf(today());
   const trained = trainedDays(sessions);
-  const thisWeek = sessions.filter((s) => week.includes(s.date)).length;
+  // Training days, not sessions: logging twice in a day is still one day at the box.
+  const thisWeek = week.filter((d) => trained.has(d)).length;
 
   const q = query.trim().toLowerCase();
   const rows = summarize(pbs)
@@ -50,20 +51,22 @@ export function PbBoard({
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h1 className="font-display text-[34px] font-bold tracking-wide">MY PBs</h1>
-        <button
-          type="button"
-          onClick={onAddPb}
-          className="-mr-1 flex h-11 items-center gap-1.5 rounded-full border border-input px-4 text-sm font-semibold"
-        >
-          <Plus className="size-4" /> Add PB
-        </button>
+        {pbs.length > 0 && (
+          <button
+            type="button"
+            onClick={onAddPb}
+            className="-mr-1 flex h-11 items-center gap-1.5 rounded-full border border-input px-4 text-sm font-semibold"
+          >
+            <Plus className="size-4" /> Add PB
+          </button>
+        )}
       </div>
 
-      <button type="button" onClick={onCalendar} className="flex flex-col gap-2 text-left" aria-label={`This week: ${thisWeek} sessions. Open calendar`}>
+      <button type="button" onClick={onCalendar} className="flex flex-col gap-2 text-left" aria-label={`This week: ${thisWeek} training days. Open calendar`}>
         <span className="flex justify-between text-[13px] text-muted-foreground">
           <span>This week</span>
           <span className="font-semibold text-foreground">
-            {thisWeek} session{thisWeek === 1 ? "" : "s"}
+            {thisWeek} day{thisWeek === 1 ? "" : "s"}
           </span>
         </span>
         <span className="grid grid-cols-7 gap-1.5">
@@ -99,8 +102,10 @@ export function PbBoard({
 
       {pbs.length === 0 ? (
         <div className="mt-6 flex flex-col items-center gap-4 rounded-2xl bg-card px-6 py-10 text-center">
-          <p className="font-display text-2xl font-bold uppercase">Start with the PBs you know</p>
-          <p className="text-muted-foreground">Snatch, clean, back squat, Fran… Add them once and they&rsquo;re here when the coach says 70%.</p>
+          <p className="font-display text-2xl font-bold uppercase">Know your numbers</p>
+          <p className="text-muted-foreground">
+            Add the PBs you already know. Next time the coach says &ldquo;70% of your 1RM&rdquo;, you&rsquo;ll see the weight straight away.
+          </p>
           <button type="button" onClick={onAddPb} className="h-12 rounded-xl bg-secondary px-6 font-semibold text-secondary-foreground">
             Add your first PB
           </button>

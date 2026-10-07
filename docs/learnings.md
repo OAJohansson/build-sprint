@@ -8,6 +8,8 @@ opening each product. Each product keeps the full detail and its retro in
 
 Rules I now apply to every product (detail in the playbook).
 
+- **Measure readability, don't eyeball it.** Pick text colour against the exact background
+  behind it and check the contrast number for every state. *(02 Horizon)*
 - **Clean and minimal.** Every element earns its place; don't repeat in words what the visual
   already shows; make features discoverable with a quiet cue, not a sentence. *(01 CrossFit Log,
   decision 0007)*
@@ -29,6 +31,21 @@ Rules I now apply to every product (detail in the playbook).
 - **Users see a friendly error; the logs get the real reason.**
 - **A simulated user finds what my own review misses**, especially wrong numbers.
 
+### 02 Horizon
+
+- **Name the alternative early.** Google already answers "what time is sunset?"; the edge became
+  "do I have time?" plus feel, which shaped the whole home screen.
+- **A brief (one-page PRD) before code makes prototypes sharper.** Requirements as behaviours,
+  plus no-gos and rabbit holes; the prototype prompt just pointed at it.
+- **Measure what a feature is for, not that it exists.** The landmark's signal was "which city is
+  this?", which exposed Tokyo looking like Paris.
+- **The emotional peak shows up in testing.** The sunset moment ("happening now", the afterglow)
+  wasn't in the brief but is what people would show a friend.
+- **Never let a saved choice stand in for "here".** Reopening on yesterday's searched city gave
+  wrong data for the main job.
+- **Guardrails need numbers.** Text measured 1.9:1 in the afternoon while looking fine at a glance.
+- **Prototype on the live site.** Judging three directions on a real phone made the choice quick.
+
 ## Process changelog
 
 Every change to how I build, and the product that taught it.
@@ -43,3 +60,6 @@ Every change to how I build, and the product that taught it.
 | 7 Oct | Before 02 | Design came from Claude's general knowledge; no design skill was installed. | Six design skills in `.claude/skills/`, each named at its playbook step (decision 0008); phone baseline in the starter template. Trial on 02, judge at its retro. |
 | 7 Oct | Before 02 | I want to learn to work like a product manager, not just ship. | Playbook step 1 becomes discovery: a brief per product (problem, who, jobs, today's alternatives, riskiest assumptions, success measures, MVP) and a success check at wrap-up; sprint goals A/B/C at the top; Claude acts as product coach. |
 | 7 Oct | 02 Horizon | We were about to prototype without written requirements. | Brief becomes a one-page PRD with requirements (behaviour + check), no-gos and rabbit holes; each playbook practice credited to its source on a new Product craft page. |
+| 7 Oct | 02 Horizon | About an hour lost to the cloud sandbox's network: vercel.app and the APIs were blocked, and the test browser couldn't reach the local app. | Setup checklist (1b): allow `*.vercel.app` and the product's APIs; test a production build at the machine's address. |
+| 7 Oct | 02 Horizon | Text measured 1.9:1 but looked fine; the tester judged it by eye. | The `user-tester` agent measures every guardrail in the brief with a number (contrast per state). |
+| 7 Oct | 02 Horizon | The audit and the user test ran at once, so the tester re-found a known bug; `break-ui` never ran. | Playbook 3b order: audit and `break-ui` first, fix, then the simulated user test. |

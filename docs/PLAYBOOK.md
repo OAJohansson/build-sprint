@@ -72,6 +72,11 @@ Day 1 lost half a day to setup surprising us late, one problem at a time. Check 
 - [ ] Opened on a **real phone**, not just desktop. Test any browser feature (mic, camera) there.
   The starter already has the phone baseline (`mobile-native` skill); use the skill when something
   "feels like a website" on the phone.
+- [ ] **Cloud sandbox can reach what it needs** (Claude Code on the web): in the environment's
+  network settings, allow `*.vercel.app` and every API the product calls (as `*.domain.com`), so
+  Claude can check deploys and test with real data. For browser tests, run a production build
+  (`pnpm -F NN-slug build && pnpm -F NN-slug start`) and open it by the machine's address: Next's
+  dev server only serves its scripts to localhost. *(Day 2 lost about an hour to this.)*
 - [ ] Server errors are logged with the real reason (`failure()` in `src/lib/server/failure.ts`),
   while users only see a general message. Buttons that retry show that they're working.
 
@@ -107,10 +112,12 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 
 ## 3b. Test as a user (≈30 min, once the core flow works)
 
-- Run the `user-tester` agent against the running app with the persona and plan from step 1; save
-  its report as `user-testing/report-YYYY-MM-DD.md`.
-- Run `break-ui` on the main screens (worst-case data: long names, zero, one, huge numbers) and
-  the `web-design-guidelines` audit on the changed files.
+- **First the checks:** run the `web-design-guidelines` audit on the changed files and `break-ui`
+  on the main screens (worst-case data: long names, zero, one, huge numbers). Fix what they find.
+  *(Day 2: the user test re-found a bug the audit had already caught.)*
+- **Then the simulated user:** run the `user-tester` agent on the fixed build with the persona and
+  plan from step 1; save its report as `user-testing/report-YYYY-MM-DD.md`. It measures every
+  guardrail in the brief with a number.
 - **Then** do your own review. Log both in `docs/products/NN-slug/feedback.md`, fix blockers
   straight away, and prioritise the rest together.
 - Triage rule for leaving a product: fix anything that shows wrong numbers or looks broken if it's

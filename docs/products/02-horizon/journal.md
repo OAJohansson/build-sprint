@@ -131,3 +131,14 @@ What happened, what was decided and why. Newest last.
   minutes (2000× speed, slowing to 60× within 20 minutes of sunrise and sunset so the moments
   are watchable), with a small "Demo" label. Also useful for showing the app to someone at any
   time of day.
+
+### Wrap-up
+- Success check written in the [brief](#02-horizon.brief): the main job, another place, beating
+  Google and correct times met (some after fixes); delight and sense of place met in the
+  simulated test but still need a real person; readability 4.3:1 at worst.
+- Retro in [Learnings](#02-horizon.learnings). Three process changes made before product 03:
+  sandbox network and test-server setup in the checklist, the test agent measures every guardrail,
+  and audit plus `break-ui` before the simulated user test.
+- Design skills kept (decision 0008). Backlog "start here": a real person at sunset, then a
+  bigger landmark that's visible at night.
+- Status: **shipped**.

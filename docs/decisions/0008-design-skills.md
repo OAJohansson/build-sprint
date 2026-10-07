@@ -1,7 +1,7 @@
 # 0008 — A small set of design skills, each tied to a playbook step
 
 - **Date:** 2026-10-07
-- **Status:** accepted (trial on product 02; keep or drop at its retro)
+- **Status:** accepted; kept after product 02's retro (see Consequences)
 
 ## Context
 
@@ -48,3 +48,9 @@ right problem; framing and user tests still carry most of the UX. Fewer skills m
 conflicting rules: when they disagree (for example, pull-to-refresh), the playbook and 0007 win.
 Judge it at product 02's retro: fewer "looks broken / feels off on the phone" findings than day 1,
 and a faster design choice? If not, drop them.
+
+**Verdict after 02 Horizon (7 Oct):** keep. `/prototype` made choosing a direction quick (three
+working variants on the live site), the `web-design-guidelines` audit caught unreadable text
+(1.9:1) and five accessibility gaps, and there were no "feels like a website" findings on the
+phone (the `mobile-native` baseline). `break-ui` wasn't run; the playbook now runs it before the
+user test.

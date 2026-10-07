@@ -129,3 +129,22 @@ countdown works.
 **Appetite:** one day. The prototype round: about an hour.
 
 ## Success check (at wrap-up)
+
+*7 Oct, from the simulated user test (Noor), the interface audit and the owner's review on a real
+phone. No real user outside the owner yet.*
+
+| Signal | Target | What happened | Verdict |
+| --- | --- | --- | --- |
+| Answer at a glance | ≤ 5 s, no taps | 0 taps, about 3 s, but unreadable in bright sky until the contrast fix. Now "1h 30m until sunset" with units | Met, after fixes |
+| Another place | ≤ 15 s | Lisbon in about 8 s, Bali in about 4 s; times in local time, no maths | Met |
+| Delight | 4/5; a real "would show a friend" | Ritual job scored 4/5; "the sunset strip is the thing she'd show a friend". The sunset moment, then afterglow, added after. No real person asked yet | Partly: simulated yes, real person not yet |
+| Beats Google | They pick this, with a reason | "Beats Google for *do I have time?*", but two issues (contrast, reopening on yesterday's city) would have sent her back. Both fixed | Met, after fixes |
+| Sense of place | 4 of 5 recognised | 5 of 5, but only by looking closely; Tokyo looked like Paris (fixed). Landmark still small and dark at night | Met on the number, weak in feel |
+| Guardrail: readable | 4.5:1 | 1.9:1 at first; now 4.3:1 at worst (a few mid-blue moments), soft shadow under white text | Nearly; the audit caught it, not my eye |
+| Guardrail: correct times | Within 2 min of published | Bali 18:14 and Paris 19:17 match. Polar dates differ by a few days (definition of "set") | Met for normal places |
+
+**Did it solve the problem?** Yes for the main job: open it and know how long until sunset, with
+no typing, in a place that feels like yours. The bet that beauty is the edge over Google held in
+testing (the sky and the sunset moment are what people would show), but it still needs a real
+person to confirm it.
+

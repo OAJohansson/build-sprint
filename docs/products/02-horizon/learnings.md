@@ -13,8 +13,8 @@ What building Horizon taught me.
 | Planned | 1 day |
 | Actual | 1 day (7 Oct), after a morning setting up design skills and the PM playbook |
 | First live version | The prototype, before the real app was built (Vercel, early afternoon) |
-| Pull requests | 4 (#14–#17) |
-| Feedback items | 27: 8 from the interface audit, 12 from the simulated user test, 7 from my review on a real phone. 21 fixed, 2 won't do, 4 parked |
+| Pull requests | 6 (#14–#19), including the wrap-up and two finishing touches |
+| Feedback items | 29: 8 from the interface audit, 12 from the simulated user test, 9 from me. 23 fixed, 2 won't do, 4 parked |
 | Who found the bugs | Audit: unreadable text (1.9:1), accessibility. Test agent: reopening on yesterday's searched city (wrong data), today's times under tomorrow's countdown, polar "what next", the sun over the digits, Tokyo looking like Paris. Me on my phone: empty space, spacing, sunset colour, places with no scene, start screen. Claude while building: polar text overlap, a hard glow |
 | Time lost to setup | About an hour: the cloud sandbox blocked vercel.app and the lookup APIs, and the test browser couldn't reach the local app |
 
@@ -43,6 +43,11 @@ What building Horizon taught me.
 - **A, product:** "beautiful" can be a strategy, but only if you name it as the bet and test it ("would you show a friend?").
 - **B, product craft:** the brief as a lean PRD; the four risks; deciding success before building, and measuring what a feature is *for* (the landmark → "which city is this?"); prioritising by which signal an item moves.
 - **C, technical:** branches, pull requests and merging; time zones with the browser's date formatting; animation with `requestAnimationFrame` and CSS keyframes, with reduced-motion fallbacks; contrast maths; how the sandbox's proxy and network rules work.
+
+**After the wrap-up** (same day): three finishing touches (a 2-minute demo, a light pulse at
+sunrise and sunset, the real moon and an aurora up north). Polish was cheap once the core was solid
+and live, and the demo made every animation checkable. Worth watching that "one more thing" stays
+small.
 
 **Process changes carried forward** (logged in `docs/learnings.md`)
 1. Setup checklist: allow `*.vercel.app` and the product's API domains in the cloud environment, and test in the browser against a production build.

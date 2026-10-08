@@ -71,3 +71,12 @@ What happened, what was decided and why. Newest last.
   uneven struck letters, key clicks and a bell, the reader replies in red ribbon), *Cards* (the
   desk: index cards, a row of the week's cards, a date stamp, a memo slip clipped on), *Smoke*
   (forward only: finished sentences drift up and fade, no going back, embers for the week).
+
+### Platen chosen, made more of a machine
+- **Owner's pick: Platen.** It mimics the experience of typing on a typewriter, sound included.
+  But "the paper is just stuck to a blackboard": not enough typewriter. Asked for more, without
+  going overboard.
+- **Named what was missing:** the paper was a typewriter, the machine wasn't. Added the carriage
+  (knobs, return lever, roller), a paper bail, a type guide with red and black ribbon that follows
+  the letters, a slight carriage drift with the bell at each line end, an enamel body with a
+  brass nameplate, and a shadow where the paper goes into the roller. No full keyboard.

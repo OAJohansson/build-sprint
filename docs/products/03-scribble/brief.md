@@ -87,6 +87,11 @@ Everything is saved in a database and can be exported.
 - **A database, not localStorage:** I'll use this daily and can't lose pieces
   ([decision 0009](https://github.com/OAJohansson/build-sprint/blob/main/docs/decisions/0009-scribble-supabase-and-ai-feedback.md)).
 
+**Design (owner, 8 Oct, after four prototype rounds):** the feeling of a typewriter without a
+typewriter: the line holds still and the page rises, struck typewriter type, black and red ink,
+manuscript habits (typed header, `###` end mark), soft key clicks. *Manuscript* (light) or
+*Night* (dark), following the phone's setting; Night by default.
+
 **Stop line:** anything not listed above goes to [backlog](#03-scribble.backlog): the feedback
 character, choosing my own topics, longer forms, the weekly editor's letter, the model eval.
 

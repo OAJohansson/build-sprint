@@ -124,10 +124,20 @@ Impact × Confidence ÷ Effort.
 When time is short: fix anything that shows wrong data or looks broken straight away if it's
 quick; park the rest in the backlog with a "start here" note.
 
+#### One-way and two-way doors
+Irreversible decisions (one-way doors) deserve slow care; reversible ones (two-way doors) should
+be made fast, then corrected with real use. When stuck between two good options: go back to the
+brief's job and moment of use, test both in the real moment, or flip a coin and notice your
+reaction. Where we met it: Scribble's light vs dark design (03), solved by following the phone's
+setting. From: Jeff Bezos, Amazon shareholder letter (2015).
+
 ### Quiz
 
 **Q:** What's the difference between an outcome and an output?
 **A:** An output is what you ship (features). An outcome is what changes for the user because of it. Success should be measured in outcomes.
+
+**Q:** What's a two-way door decision, and how should you treat it?
+**A:** A reversible decision. Make it quickly and let real use correct it; save slow deliberation for one-way doors.
 
 **Q:** What are the four product risks, and what does each one ask?
 **A:** Value (will they use it?), usability (can they?), feasibility (can we build it?) and viability (does it work for the business: cost, legal, time?).

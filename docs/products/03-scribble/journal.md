@@ -112,3 +112,14 @@ What happened, what was decided and why. Newest last.
 - **Round 4:** *Manuscript* (the screen is the page, lamplight at the edges, centred underlined
   title, double-spaced), *Night* (warm ink on near-black, almost nothing but your line), *Ribbon*
   (graphic: black band with the prompt, cream page, red strip for actions).
+
+### Design decided: Manuscript by day, Night by night
+- **Owner couldn't choose between Manuscript and Night** and asked how to decide. Coached:
+  pros and cons against the brief (moment of use: bed at night vs bus and coffee in daylight;
+  perfectionism: a manuscript can raise the stakes, a dark scratchpad lowers them), taste is
+  legitimate, and a reversible choice is a two-way door (Bezos): decide fast. Also: test in
+  the real moment, and the coin-flip trick.
+- **Decided (owner):** both, following the phone's light or dark setting. Manuscript in light
+  mode, Night in dark mode, Night when there's no preference. Same layout, two palettes.
+  Real use over the next days can tell whether one is worth dropping.
+- Ribbon is parked in the backlog.

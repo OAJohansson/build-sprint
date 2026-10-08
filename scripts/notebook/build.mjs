@@ -15,6 +15,10 @@ const ls = (d) => (exists(d) ? fs.readdirSync(path.join(ROOT, d)).sort() : []);
 const clean = (text) => text.replace(/!\[([^\]]*)\]\([^)]*\)/g, "*(screenshot: $1)*").trim();
 const tableRows = (text) => text.split("\n").filter((l) => /^\|\s*[^-\s|]/.test(l)).length - 1;
 
+// An interview story's headline and themes ("**Headline:** …", "**Themes:** A · B").
+const storyLine = (text, key) => text.match(new RegExp(`(?:^|\\n)\\*\\*${key}:\\*\\*\\s*([\\s\\S]*?)(?:\\n\\n|$)`))?.[1].replace(/\s+/g, " ").trim() ?? "";
+const storyThemes = (text) => storyLine(text, "Themes");
+
 // Each product's folder (docs/products/NN-slug/) becomes sub-pages, in this order.
 function sections(p) {
   const dir = `docs/products/${p.slug}`;
@@ -51,6 +55,9 @@ function sections(p) {
   const learnings = file("learnings.md");
   if (learnings) out.push({ id: "learnings", label: "Learnings", text: learnings, summary: `${(learnings.match(/^- /gm) ?? []).length} lessons` });
 
+  const story = file("story.md");
+  if (story) out.push({ id: "story", label: "Interview story", text: story, summary: storyThemes(story) || "STAR story" });
+
   const decisions = ls("docs/decisions")
     .filter((f) => /^\d{4}-.*\.md$/.test(f))
     .map((f) => read(`docs/decisions/${f}`))
@@ -85,6 +92,7 @@ const PAGES = [
   { id: "craft", label: "Product craft", eyebrow: "The people behind the playbook", file: "docs/product-craft.md" },
   { id: "skills", label: "Skills", eyebrow: "Claude skills in the repo", file: ".claude/skills/README.md" },
   { id: "learnings", label: "Learnings", eyebrow: "Across products", file: "docs/learnings.md" },
+  { id: "stories", label: "Interview stories", eyebrow: "Story bank", file: "docs/interview-stories.md" },
   { id: "todo", label: "To do", eyebrow: "Sprint to-do", file: "docs/todo.md" },
 ];
 function relink(text, file) {
@@ -95,8 +103,21 @@ function relink(text, file) {
     return page ? `](#${page.id})` : `](${REPO}/blob/main/${to})`;
   });
 }
+// The story bank's table: one row per product with a story, and which interview themes it covers.
+function storyTable() {
+  const rows = products
+    .map((p) => ({ p, s: p.sections.find((x) => x.id === "story") }))
+    .filter((r) => r.s)
+    .map(({ p, s }) => `| [${String(p.day).padStart(2, "0")} ${p.title}](#${p.slug}.story) | ${storyLine(s.text, "Headline")} | ${storyThemes(s.text)} |`);
+  if (!rows.length) return "\nNo stories yet. Each product's story is written at wrap-up.\n";
+  const covered = new Set(rows.join(" ").match(/Discovery|Prioritisation|Metrics|Failure|Ambiguity|Trade-offs|Craft|Technical|Working with AI|Speed/g));
+  const all = ["Discovery", "Prioritisation", "Metrics", "Failure", "Ambiguity", "Trade-offs", "Craft", "Technical", "Working with AI", "Speed"];
+  const missing = all.filter((t) => !covered.has(t));
+  return `\n| Product | Headline | Themes |\n| --- | --- | --- |\n${rows.join("\n")}\n\n**No story yet for:** ${missing.length ? missing.join(", ") : "none, every theme is covered"}.\n`;
+}
+
 const pages = PAGES.filter((pg) => exists(pg.file)).map((pg) => {
-  const text = read(pg.file);
+  const text = read(pg.file) + (pg.id === "stories" ? storyTable() : "");
   return {
     id: pg.id,
     label: pg.label,

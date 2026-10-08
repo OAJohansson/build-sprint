@@ -131,6 +131,10 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 - **Retro** in `docs/products/NN-slug/learnings.md`: numbers (planned vs actual time, PRs, bugs and
   who found them), Keep / Change / Try, what surprised you, and one thing learned for each goal
   (A product, B product craft, C technical).
+- **Interview story** (≈10 min) in `docs/products/NN-slug/story.md`: the product as a STAR story
+  you could tell in 2 minutes, with a headline, the interview themes it covers, the assumptions
+  that turned out right or wrong, and likely follow-ups. Built from the brief, feedback and retro.
+  The [story bank](interview-stories.md) shows which themes still need a story.
 - **At most 3 process changes**, made *before* the next product starts: edit this playbook, the
   templates or the checklists, and log each one in [`learnings.md`](learnings.md) (the process changelog).
 - Add 1–3 bullets under **Learned** on the card, and 3–7 **key learnings** under the product's
@@ -146,3 +150,4 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 - [ ] README table and notebook are up to date
 - [ ] A simulated user test has run, and its top findings are fixed or logged
 - [ ] Retro written, and its process changes made before the next product starts
+- [ ] Interview story written

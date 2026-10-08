@@ -10,6 +10,8 @@ product's backlog) or new products (those go in [ideas](ideas.md)).
 | 3 | **Playwright smoke test from the user test** (maybe). Turn the test agent's passing main flow into a committed test that runs on every change. | When a product gets a second round of changes | No new skill needed; the `user-tester` agent and Playwright are already set up. |
 | 4 | **Try Anthropic's `webapp-testing` skill** (maybe). The obvious next testing skill if `user-tester` leaves gaps. | If a product needs browser tests `user-tester` can't do | Mostly overlaps with `user-tester`. It runs Python scripts, which need approval each time in cloud sessions. |
 | 5 | **Test with one real person.** Show a product to an actual user, not just the simulated one. | Any product, once its core flow works | No skill replaces this. On day 1 the biggest finds came from using the app on a real phone. |
+| 6 | **Make the interview stories mine.** Rewrite the drafts for 01 CrossFit Log and 02 Horizon in my own words, and practise the 30-second version out loud. | This week | Interviewers can hear a borrowed story; rewriting is also how I'll remember it. |
+| 7 | **Fill the story bank's gaps.** No strong main story yet for *Ambiguity*, *Technical* and *Speed*. Pick future products that stretch these, and use each story's theme prompts. | Ongoing, check at each wrap-up | Horizon has smaller examples for all three in its theme prompts. The story bank page lists the current gaps. |
 
 ## Testing: what's covered today
 

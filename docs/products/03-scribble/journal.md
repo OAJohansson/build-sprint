@@ -80,3 +80,9 @@ What happened, what was decided and why. Newest last.
   (knobs, return lever, roller), a paper bail, a type guide with red and black ribbon that follows
   the letters, a slight carriage drift with the bell at each line end, an enamel body with a
   brass nameplate, and a shadow where the paper goes into the roller. No full keyboard.
+- **Owner: "we took it too far."** The type guide (the U-shaped bracket with the red ribbon line)
+  following every letter was distracting, and the whole thing was getting busy. Removed the type
+  guide and the carriage drift; the machine stays still (knobs, roller, bail, body, nameplate)
+  and only the letters move. The line-end bell stays (sound, not motion). Rule taken forward:
+  the typewriter feel comes from the static frame and the sound, never from things moving while
+  you write.

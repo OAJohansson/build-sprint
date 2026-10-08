@@ -92,7 +92,6 @@ textarea {
 .pl-carriage {
   display: flex; align-items: center; gap: 2px;
   width: min(620px, calc(100% - 4px)); height: 30px; margin-top: -15px; position: relative; z-index: 2;
-  transition: transform 180ms var(--ease-out);
 }
 .pl-roller {
   flex: 1; height: 26px; border-radius: 13px;
@@ -119,16 +118,9 @@ textarea {
   display: flex; justify-content: space-around; align-items: center;
 }
 .pl-bail span { width: 22px; height: 9px; border-radius: 4px; background: #1c1a18; box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15); }
-/* Type guide: chrome bracket and ribbon at the strike point */
 .pl-body { position: relative; }
-.pl-guide {
-  position: absolute; left: -5px; top: 2px; width: 20px; height: 1.55em; pointer-events: none;
-  border: 2px solid rgba(160, 154, 144, 0.75); border-top: 0; border-radius: 0 0 5px 5px;
-  transition: transform 90ms var(--ease-out);
-}
-.pl-guide::after { content: ""; position: absolute; left: -6px; right: -6px; bottom: -6px; height: 4px; background: linear-gradient(#a3271c 50%, #1b1715 50%); border-radius: 1px; }
 /* Paper slipping into the roller */
-.pl-paper { position: relative; transition: transform 180ms var(--ease-out); }
+.pl-paper { position: relative; }
 .pl-paper::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 22px; background: linear-gradient(transparent, rgba(40, 28, 16, 0.22)); pointer-events: none; }
 /* Body: enamel shell with a brass nameplate */
 .pl-body-shell {
@@ -144,9 +136,6 @@ textarea {
   background: linear-gradient(#e6d3a3, #b8955a); color: #3b2a12;
   font-size: 10px; letter-spacing: 0.32em; text-transform: uppercase;
   box-shadow: inset 0 0 0 1px rgba(80, 55, 20, 0.5), 0 1px 2px rgba(0, 0, 0, 0.6);
-}
-@media (prefers-reduced-motion: reduce) {
-  .pl-carriage, .pl-paper, .pl-guide { transition: none; }
 }
 .pl-count { margin: 10px 0 0; font-size: 13px; color: var(--muted); }
 .pl-keys { display: flex; gap: 44px; margin-top: 14px; }

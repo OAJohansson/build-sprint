@@ -41,21 +41,12 @@ export default function Platen() {
   const reply = s.feedback ? `${s.feedback.strength}\n\n${s.feedback.tryNext}\n\n— R.` : "";
   const typedReply = useTypedOut(reply, s.stage === "read", click);
 
-  // Carriage: the strike point follows the caret; the paper drifts a little the other way and
-  // slides back at the end of a line, when the bell rings.
+  // The bell rings when a line wraps, like the bell near the end of a typewriter line.
   const caret = useRef<HTMLSpanElement>(null);
   const lastTop = useRef<number | null>(null);
-  const [strike, setStrike] = useState({ x: 0, y: 0 });
-  const [drift, setDrift] = useState(0);
-
   useLayoutEffect(() => {
-    const el = caret.current;
-    const body = el?.parentElement;
-    if (!el || !body) return;
-    const x = el.offsetLeft;
-    const y = el.offsetTop;
-    setStrike({ x, y });
-    setDrift(Math.max(-18, Math.min(18, -(x - body.clientWidth / 2) * 0.12)));
+    const y = caret.current?.offsetTop;
+    if (y === undefined) return;
     if (lastTop.current !== null && y > lastTop.current && !s.text.endsWith("\n")) bell();
     lastTop.current = y;
   }, [s.text, bell]);
@@ -107,19 +98,18 @@ export default function Platen() {
       </header>
 
       <div className="pl-window">
-        <div className="pl-paper" key={s.prompt} style={{ transform: `translateX(${drift.toFixed(1)}px)` }}>
+        <div className="pl-paper" key={s.prompt}>
           <p className="pl-prompt"><Struck text={s.prompt} red /></p>
           <p className="pl-body">
             <Struck text={s.text} />
             <span className="pl-caret" ref={caret} aria-hidden="true" />
-            <span className="pl-guide" aria-hidden="true" style={{ transform: `translate(${strike.x}px, ${strike.y}px)` }} />
           </p>
         </div>
         <div className="pl-bail" aria-hidden="true"><span /><span /></div>
       </div>
 
       <div className="pl-machine">
-        <div className="pl-carriage" aria-hidden="true" style={{ transform: `translateX(${drift.toFixed(1)}px)` }}>
+        <div className="pl-carriage" aria-hidden="true">
           <span className="pl-lever" />
           <span className="pl-knob" />
           <span className="pl-roller" />

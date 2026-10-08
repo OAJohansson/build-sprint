@@ -123,3 +123,21 @@ What happened, what was decided and why. Newest last.
   mode, Night in dark mode, Night when there's no preference. Same layout, two palettes.
   Real use over the next days can tell whether one is worth dropping.
 - Ribbon is parked in the backlog.
+
+### Build steps 1 and 2: the real screen and saving everything
+- **Promoted the design** (prototype skill, phase 6): Manuscript in light mode, Night in dark mode,
+  from one layout and two palettes; prototype surface deleted. Typed header (`SCRIBBLE · NO. n`,
+  the week as ■ □ □ □, `pieces`), the line holds still while the page rises, struck type, soft
+  key clicks, `###` under a finished piece, the reader's reply typed in red.
+- **Saving, two layers** ([decision 0009](https://github.com/OAJohansson/build-sprint/blob/main/docs/decisions/0009-scribble-supabase-and-ai-feedback.md)):
+  every keystroke goes to this device at once; the database gets it 1.5 s after typing stops. Each
+  piece's id is made on the device, so autosave just upserts the same row. One table,
+  `scribble_pieces`, in the existing Supabase project; access code as login; in-memory store in
+  local dev. A quiet "saved" next to the word count answers "did it save?".
+- **Checked in the browser:** draft restored from the database with this device's copy wiped
+  (another device); a reload a moment after typing kept the newest words (device copy wins when
+  newer); set down → done with a date, feedback saved with it, week marks fill, device copy cleared.
+- Also: 40 hand-written prompts (no repeats of recent ones), "your pieces" list to reread, export
+  all as Markdown, key sound toggle. Feedback is still the sample until build step 3.
+- Fixed while testing: the word count and save status were squeezed to "— …" on a phone; they now
+  get their own line.

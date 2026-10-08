@@ -1,14 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import Letters from "./letters";
-import Notebook from "./notebook";
-import Typewriter from "./typewriter";
+import Cards from "./cards";
+import Platen from "./platen";
+import Smoke from "./smoke";
 
 const VARIANTS = [
-  { name: "Notebook", font: "var(--font-garamond)", Component: Notebook },
-  { name: "Letters", font: "var(--font-newsreader)", Component: Letters },
-  { name: "Typewriter", font: "var(--font-courier)", Component: Typewriter },
+  { name: "Platen", font: "var(--font-courier)", Component: Platen },
+  { name: "Cards", font: "var(--font-elite)", Component: Cards },
+  { name: "Smoke", font: "var(--font-cutive)", Component: Smoke },
 ];
 
 export default function PrototypeHarness() {
@@ -70,7 +70,6 @@ export default function PrototypeHarness() {
       <div className="candle" style={{ fontFamily: font }}>
         <Component key={mountKey} />
       </div>
-      <div className="candle-glow" aria-hidden="true" />
       <div className="candle-grain" aria-hidden="true" />
 
       <nav className="proto-picker" data-position="top" data-ready={ready ? "" : undefined} aria-label="Prototype variants">

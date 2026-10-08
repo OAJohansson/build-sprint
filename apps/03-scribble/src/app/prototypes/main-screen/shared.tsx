@@ -119,6 +119,91 @@ export function wordCount(text: string) {
   return w.length;
 }
 
+/** Small deterministic jitter per character, so each letter lands a little differently. */
+export function jitter(i: number) {
+  const x = Math.sin(i * 12.9898) * 43758.5453;
+  return x - Math.floor(x); // 0..1
+}
+
+/** Typewriter sounds, synthesised with Web Audio (no files). Starts on the first key press. */
+export function useTypeSound(enabled: boolean) {
+  const ctx = useRef<AudioContext | null>(null);
+  const get = () => {
+    if (!enabled || typeof window === "undefined") return null;
+    ctx.current ??= new AudioContext();
+    return ctx.current;
+  };
+  const click = useCallback(() => {
+    const c = get();
+    if (!c) return;
+    const t = c.currentTime;
+    const len = Math.floor(c.sampleRate * 0.03);
+    const buf = c.createBuffer(1, len, c.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len) ** 3;
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    const band = c.createBiquadFilter();
+    band.type = "bandpass";
+    band.frequency.value = 1800 + Math.random() * 1600;
+    const gain = c.createGain();
+    gain.gain.setValueAtTime(0.5, t);
+    src.connect(band).connect(gain).connect(c.destination);
+    src.start(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enabled]);
+  const bell = useCallback(() => {
+    const c = get();
+    if (!c) return;
+    const t = c.currentTime;
+    for (const f of [2093, 3136]) {
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.frequency.value = f;
+      g.gain.setValueAtTime(0.08, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
+      o.connect(g).connect(c.destination);
+      o.start(t);
+      o.stop(t + 0.9);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enabled]);
+  return { click, bell };
+}
+
+/** Reveals `text` one character at a time once `active`, calling onChar per character. */
+export function useTypedOut(text: string, active: boolean, onChar?: () => void, msPerChar = 28) {
+  const [n, setN] = useState(0);
+  const onCharRef = useRef(onChar);
+  useEffect(() => {
+    onCharRef.current = onChar;
+  });
+  useEffect(() => {
+    if (!active) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- show it all at once
+      setN(text.length);
+      return;
+    }
+    let i = 0;
+    const id = setInterval(() => {
+      i++;
+      setN(i);
+      if (text[i - 1] && text[i - 1] !== " ") onCharRef.current?.();
+      if (i >= text.length) clearInterval(id);
+    }, msPerChar);
+    return () => clearInterval(id);
+  }, [text, active, msPerChar]);
+  return text.slice(0, n);
+}
+
+/** Keeps the caret at the end: on a typewriter you can only add or strike the last letter. */
+export function keepCaretAtEnd(e: React.SyntheticEvent<HTMLTextAreaElement>) {
+  const el = e.currentTarget;
+  const end = el.value.length;
+  if (el.selectionStart !== end || el.selectionEnd !== end) el.setSelectionRange(end, end);
+}
+
 /** Grows a textarea with its content. */
 export function useAutoGrow(value: string) {
   const ref = useRef<HTMLTextAreaElement>(null);

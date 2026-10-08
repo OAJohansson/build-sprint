@@ -93,6 +93,8 @@ const PAGES = [
   { id: "skills", label: "Skills", eyebrow: "Claude skills in the repo", file: ".claude/skills/README.md" },
   { id: "learnings", label: "Learnings", eyebrow: "Across products", file: "docs/learnings.md" },
   { id: "stories", label: "Interview stories", eyebrow: "Story bank", file: "docs/interview-stories.md" },
+  { id: "knowledge", label: "Knowledge bank", eyebrow: "General knowledge", file: "docs/knowledge-bank.md" },
+  { id: "quiz", label: "Quiz", eyebrow: "Active recall", title: "Knowledge quiz", generated: true },
   { id: "todo", label: "To do", eyebrow: "Sprint to-do", file: "docs/todo.md" },
 ];
 function relink(text, file) {
@@ -116,7 +118,21 @@ function storyTable() {
   return `\n| Product | Headline | Themes |\n| --- | --- | --- |\n${rows.join("\n")}\n\n**No story yet for:** ${missing.length ? missing.join(", ") : "none, every theme is covered"}.\n`;
 }
 
-const pages = PAGES.filter((pg) => exists(pg.file)).map((pg) => {
+// Quiz cards from the knowledge bank: "**Q:** … / **A:** …" pairs, grouped by "## Topic".
+function quizCards() {
+  if (!exists("docs/knowledge-bank.md")) return [];
+  const cards = [];
+  for (const section of read("docs/knowledge-bank.md").split(/\n(?=## )/).slice(1)) {
+    const topic = section.match(/^## (.*)/)[1].trim();
+    for (const m of section.matchAll(/\*\*Q:\*\*\s*([\s\S]*?)\n\*\*A:\*\*\s*([\s\S]*?)(?=\n\s*\n|$)/g)) {
+      cards.push({ topic, q: m[1].trim(), a: m[2].trim() });
+    }
+  }
+  return cards;
+}
+
+const pages = PAGES.filter((pg) => pg.generated || exists(pg.file)).map((pg) => {
+  if (pg.generated) return { id: pg.id, label: pg.label, eyebrow: pg.eyebrow, title: pg.title, text: "", source: `${REPO}/blob/main/docs/knowledge-bank.md` };
   const text = read(pg.file) + (pg.id === "stories" ? storyTable() : "");
   return {
     id: pg.id,
@@ -135,6 +151,7 @@ const data = {
   products,
   ideas: read("docs/ideas.md").replace(/^# .*\n+/, ""),
   pages,
+  quiz: quizCards(),
 };
 
 // "<" escaped so no doc text can close the script tag early.

@@ -131,6 +131,9 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 - **Retro** in `docs/products/NN-slug/learnings.md`: numbers (planned vs actual time, PRs, bugs and
   who found them), Keep / Change / Try, what surprised you, and one thing learned for each goal
   (A product, B product craft, C technical).
+- **Knowledge bank:** add any general concept learned during the product (not product-specific),
+  with quiz questions, to [`knowledge-bank.md`](knowledge-bank.md). Do a few minutes of the
+  notebook's Quiz at the start of each day.
 - **Interview story** (≈10 min) in `docs/products/NN-slug/story.md`: the product as a STAR story
   you could tell in 2 minutes, with a headline, the interview themes it covers, the assumptions
   that turned out right or wrong, and likely follow-ups. Built from the brief, feedback and retro.

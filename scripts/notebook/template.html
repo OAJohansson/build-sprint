@@ -139,6 +139,27 @@ h2 { font: 700 20px/1.2 var(--display); margin: 0; text-wrap: balance; }
 .prose th { font: 600 11px var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--rail); }
 .prose tr:last-child td { border-bottom: 0; }
 .foot { font: 12px var(--mono); color: var(--muted); border-top: 1px solid var(--line); padding-top: 14px; }
+
+/* quiz: one flashcard at a time, Leitner boxes */
+.qstats { display: flex; flex-wrap: wrap; gap: 4px 18px; font: 13px var(--mono); color: var(--muted); }
+.qstats b { color: var(--ink); font-weight: 500; font-variant-numeric: tabular-nums; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: 500 13px var(--body); padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.card { display: flex; flex-direction: column; gap: 16px; padding: 22px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; min-height: 260px; }
+.card .topic { font: 12px var(--mono); color: var(--muted); display: flex; justify-content: space-between; gap: 12px; }
+.card .q { font: 600 20px/1.35 var(--body); margin: 0; text-wrap: balance; }
+.card .a { margin: 0; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 16px; }
+.card .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+.qbtn { font: 600 15px var(--body); min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; }
+.qbtn small { font: 11px var(--mono); color: var(--muted); }
+.qbtn.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.qbtn.again { border-color: var(--warn); color: var(--warn); }
+.qbtn.good { border-color: var(--ok); color: var(--ok); }
+.qbtn:active { transform: scale(0.97); }
+.qnote { font-size: 13px; color: var(--muted); margin: 0; }
+.linkish { background: none; border: 0; padding: 0; font: inherit; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+@media (prefers-reduced-motion: no-preference) { .qbtn { transition: transform 120ms ease-out; } }
 </style>
 
 <div class="topbar">
@@ -237,6 +258,100 @@ function sprintPage(pg) {
     <div class="links"><a class="btn" href="${esc(pg.source)}">Edit on GitHub</a></div>`;
 }
 
+// ---- Quiz: active recall with Leitner boxes. Progress lives in this browser only. ----
+const DAY = 864e5;
+const BOXES = [0, 1, 3, 7, 16, 35]; // days until a card comes back, by box
+const qid = (c) => { let h = 0; for (const ch of c.q) h = (h * 31 + ch.charCodeAt(0)) | 0; return "q" + (h >>> 0).toString(36); };
+const quiz = { topic: "All", queue: [], card: null, shown: false, practice: false, armedReset: false };
+function loadProgress() { try { return JSON.parse(localStorage.getItem("nb-quiz") || "{}"); } catch { return {}; } }
+function saveProgress(p) { try { localStorage.setItem("nb-quiz", JSON.stringify(p)); } catch {} }
+let progress = loadProgress();
+const inTopic = (c) => quiz.topic === "All" || c.topic === quiz.topic;
+const isDue = (c) => { const s = progress[qid(c)]; return !s || s.due <= Date.now(); };
+function buildQueue() {
+  const pool = DATA.quiz.filter(inTopic);
+  const due = quiz.practice ? pool : pool.filter(isDue);
+  // seen-and-due first (oldest first), then new cards in page order
+  quiz.queue = due.slice().sort((a, b) => ((progress[qid(a)]?.due ?? Infinity) - (progress[qid(b)]?.due ?? Infinity)));
+  quiz.card = quiz.queue.shift() || null;
+  quiz.shown = false;
+}
+const inDays = (box) => (BOXES[box] === 0 ? "today" : BOXES[box] === 1 ? "tomorrow" : `in ${BOXES[box]} days`);
+function quizPage() {
+  if (!quiz.card && !quiz.queue.length && !quiz.done) buildQueue();
+  const pool = DATA.quiz.filter(inTopic);
+  const dueCount = pool.filter(isDue).length;
+  const learned = pool.filter((c) => (progress[qid(c)]?.box ?? 0) >= 3).length;
+  const topics = ["All", ...new Set(DATA.quiz.map((c) => c.topic))];
+  const c = quiz.card;
+  const box = c ? progress[qid(c)]?.box ?? 0 : 0;
+  const next = Math.min(box + 1, BOXES.length - 1);
+  const easy = Math.min(box + 2, BOXES.length - 1);
+  const nextDue = pool.map((x) => progress[qid(x)]?.due).filter((d) => d && d > Date.now()).sort((a, b) => a - b)[0];
+  const body = c
+    ? `<article class="card" aria-live="polite">
+        <div class="topic"><span>${esc(c.topic)}</span><span>${quiz.queue.length + 1} left</span></div>
+        <p class="q">${esc(c.q)}</p>
+        ${quiz.shown ? `<p class="a">${esc(c.a)}</p>` : ""}
+        <div class="actions">${quiz.shown
+          ? `<button class="qbtn again" data-grade="again">Again<small>today</small></button>
+             <button class="qbtn good" data-grade="good">Good<small>${inDays(next)}</small></button>
+             <button class="qbtn" data-grade="easy">Easy<small>${inDays(easy)}</small></button>`
+          : `<button class="qbtn primary" data-show>Show answer</button>`}</div>
+      </article>
+      <p class="qnote">Say the answer to yourself before revealing it. Keys: space to reveal, 1 again, 2 good, 3 easy.</p>`
+    : `<div class="card"><p class="q">All caught up${quiz.topic === "All" ? "" : ` on ${esc(quiz.topic)}`}.</p>
+        <p class="qnote">${nextDue ? `Next card due ${new Date(nextDue).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}.` : "Every card is waiting for you."} Coming back after a gap is what moves knowledge into long-term memory.</p>
+        <div class="actions"><button class="qbtn primary" data-practice>Practise all ${pool.length} anyway</button></div></div>`;
+  return `
+    <header class="head">
+      <div class="eyebrow">Active recall</div>
+      <h1>Knowledge quiz</h1>
+      <p class="lede">Questions from the <a href="#knowledge">Knowledge bank</a>. Cards you know come back after 1, 3, 7, 16, then 35 days; cards you miss come back today.</p>
+    </header>
+    <div class="qstats"><span><b>${dueCount}</b> due</span><span><b>${learned}</b>/${pool.length} learned</span><span><b>${DATA.quiz.length}</b> cards</span></div>
+    <div class="chips" role="group" aria-label="Topic">${topics.map((t) => `<button class="chip" data-topic="${esc(t)}" aria-pressed="${t === quiz.topic}">${esc(t)}</button>`).join("")}</div>
+    ${body}
+    <p class="qnote">Progress is saved in this browser only. <button class="linkish" data-reset>${quiz.armedReset ? "Tap again to reset all progress" : "Reset progress"}</button></p>`;
+}
+function grade(kind) {
+  const c = quiz.card; if (!c) return;
+  const id = qid(c);
+  const box = progress[id]?.box ?? 0;
+  const nb = kind === "again" ? 0 : Math.min(box + (kind === "easy" ? 2 : 1), BOXES.length - 1);
+  progress[id] = { box: nb, due: Date.now() + BOXES[nb] * DAY };
+  saveProgress(progress);
+  if (kind === "again") quiz.queue.push(c); // try it again before the session ends
+  quiz.card = quiz.queue.shift() || null;
+  quiz.shown = false;
+  if (!quiz.card) { quiz.practice = false; quiz.done = true; }
+  rerenderQuiz();
+}
+function rerenderQuiz() {
+  const y = window.scrollY;
+  render(true);
+  window.scrollTo(0, y);
+  $(".card .qbtn")?.focus({ preventScroll: true });
+}
+$("#view").addEventListener("click", (e) => {
+  const t = e.target.closest("button"); if (!t || parseRoute().route !== "quiz") return;
+  if (t.dataset.topic) { quiz.topic = t.dataset.topic; quiz.practice = false; quiz.done = false; buildQueue(); }
+  else if ("show" in t.dataset) quiz.shown = true;
+  else if (t.dataset.grade) return grade(t.dataset.grade);
+  else if ("practice" in t.dataset) { quiz.practice = true; quiz.done = false; buildQueue(); }
+  else if ("reset" in t.dataset) {
+    if (!quiz.armedReset) { quiz.armedReset = true; }
+    else { progress = {}; saveProgress(progress); quiz.armedReset = false; quiz.done = false; buildQueue(); }
+  } else return;
+  rerenderQuiz();
+});
+document.addEventListener("keydown", (e) => {
+  if (parseRoute().route !== "quiz" || e.metaKey || e.ctrlKey || e.altKey || /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+  if (!quiz.card) return;
+  if (!quiz.shown && (e.key === " " || e.key === "Enter")) { e.preventDefault(); quiz.shown = true; rerenderQuiz(); }
+  else if (quiz.shown && ["1", "2", "3"].includes(e.key)) grade({ 1: "again", 2: "good", 3: "easy" }[e.key]);
+});
+
 function product(p) {
   const fact = (label, value) => `<div class="fact"><dt>${label}</dt><dd class="${value ? "" : "blank"}">${esc(value || "Not written yet")}</dd></div>`;
   const live = p.url ? `<a class="btn primary" href="${esc(p.url)}">Open app ↗</a>` : `<span class="btn off">Not deployed yet</span>`;
@@ -264,17 +379,17 @@ function sectionPage(p, s) {
     <section class="prose">${md(s.text)}</section>`;
 }
 
-function render() {
+function render(keepScroll) {
   const current = parseRoute();
   const { p, section, page } = current;
-  const html = section ? sectionPage(p, section) : p ? product(p) : page ? sprintPage(page) : overview();
+  const html = section ? sectionPage(p, section) : p ? product(p) : page ? (page.id === "quiz" ? quizPage() : sprintPage(page)) : overview();
   $("#view").innerHTML = html + `<div class="foot">Built ${esc(DATA.built)} from docs/ in the repo</div>`;
   nav(current);
   document.querySelectorAll("[data-route]").forEach((a) =>
     a.dataset.route === current.route ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   document.title = p ? `${p.title}${section ? ` · ${section.label}` : ""} · Build Sprint Notebook` : page ? `${page.label} · Build Sprint Notebook` : "Build Sprint Notebook";
   setMenu(false);
-  window.scrollTo(0, 0);
+  if (!keepScroll) window.scrollTo(0, 0);
 }
 
 function setMenu(open) {
@@ -285,6 +400,6 @@ function setMenu(open) {
 $("#menu-btn").addEventListener("click", () => setMenu(!$("#rail").classList.contains("open")));
 $("#scrim").addEventListener("click", () => setMenu(false));
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") setMenu(false); });
-window.addEventListener("hashchange", render);
+window.addEventListener("hashchange", () => render());
 render();
 </script>

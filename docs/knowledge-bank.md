@@ -184,7 +184,10 @@ realistic context (on a real phone) against the success signals, not just looks.
 There are two copies: your computer's (**local**) and GitHub's (**origin**). Git never syncs them
 by itself. "61 commits behind origin/main" means your copy hasn't downloaded new work yet.
 **Fast-forward** means catching up by adding the missing commits in order. Habit: pull when you
-start, push when you finish, and push before switching between machines.
+start, push when you finish, and push before switching between machines. Run git in the Claude
+app's Terminal panel. `git pull --ff-only` is a safety catch: if your copy and GitHub's have both
+changed, it stops instead of blending them. Since all changes reach `main` through PRs, plain
+`git pull` works the same for me.
 
 #### Ways to merge, and conflicts
 **Merge commit** keeps every commit and adds one recording the merge (safest). **Squash** combines
@@ -239,6 +242,9 @@ so finishing is a check, not a feeling.
 **Q:** What is a fast-forward?
 **A:** Catching up a branch by adding the missing commits in order, without creating a merge commit.
 
+**Q:** What does `--ff-only` add to `git pull`?
+**A:** A safety catch: it only catches up (fast-forwards); if both copies have changed, it stops instead of blending them.
+
 **Q:** Name the three ways GitHub can merge a PR.
 **A:** Merge commit (keeps all commits plus a merge commit), squash (one combined commit), rebase (replays commits without a merge commit).
 
@@ -264,6 +270,20 @@ so finishing is a check, not a feeling.
 #### Clean and minimal
 Every element earns its place. Don't repeat in words what the visual already shows; make a
 feature discoverable with one quiet cue instead of a sentence. *(Decision 0007)*
+
+#### Describing a design: from feeling to dimensions
+A feeling ("candlelit, vintage, warm") becomes buildable when you split it into separate levers:
+mood words (three adjectives plus one you *don't* want), light and colour (dark or light,
+temperature, one accent, contrast), typography (serif, typewriter, handwritten; size, line height,
+line length), texture (literal vs evoked), space and layout, motion and pace, details and
+ornaments, voice of the words, and sound or touch. Why it matters: vague direction gets generic
+results, from a designer or an AI. Where we met it: Scribble's candlelit look (03). From: the
+mood board and design brief practice; "three words" is a common brand exercise.
+
+#### Skeuomorphism
+Making digital things look like physical ones (paper, leather, wood). *Literal* skeuomorphism (the
+2010 iPhone) dates fast; *evoked* (a faint grain, warm ink colours, a soft vignette) carries the
+feeling without the costume. Where we met it: Scribble (03).
 
 ### Accessibility
 
@@ -303,6 +323,12 @@ stop). Constant or travelling motion (a progress bar, a wave of light) uses **li
 
 **Q:** What does "clean and minimal" mean in practice?
 **A:** Every element earns its place: don't repeat in words what the visual already shows, and make features discoverable with one quiet cue.
+
+**Q:** How do you turn a feeling like "cosy and vintage" into design direction?
+**A:** Split it into dimensions: three mood words plus one to avoid, light and colour, typography, texture, space, motion, details, voice, sound/touch.
+
+**Q:** What is skeuomorphism, and which kind ages better?
+**A:** Making digital things look physical. Evoked (a hint of grain, warm colours) ages better than literal (fake leather, torn paper).
 
 **Q:** What contrast ratio does WCAG ask for, for normal text and for large text?
 **A:** 4.5:1 for normal text, 3:1 for large text and icons.

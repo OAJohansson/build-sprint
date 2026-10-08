@@ -1,14 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import Cards from "./cards";
-import Platen from "./platen";
-import Smoke from "./smoke";
+import Chrome from "./chrome";
+import Drawn from "./drawn";
+import Enamel from "./enamel";
 
 const VARIANTS = [
-  { name: "Platen", font: "var(--font-courier)", Component: Platen },
-  { name: "Cards", font: "var(--font-elite)", Component: Cards },
-  { name: "Smoke", font: "var(--font-cutive)", Component: Smoke },
+  { name: "Chrome", font: "var(--font-courier)", Component: Chrome },
+  { name: "Enamel", font: "var(--font-courier)", Component: Enamel },
+  { name: "Ink", font: "var(--font-courier)", Component: Drawn },
 ];
 
 export default function PrototypeHarness() {

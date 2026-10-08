@@ -86,3 +86,16 @@ What happened, what was decided and why. Newest last.
   and only the letters move. The line-end bell stays (sound, not motion). Rule taken forward:
   the typewriter feel comes from the static frame and the sound, never from things moving while
   you write.
+
+### Round 3: three typewriter machines
+- **Owner: "you're not listening".** Removing the type guide helped, but it still didn't feel
+  like a typewriter, and they asked for three new directions so we don't get locked into one.
+  Keep: the sheet rising as you type, and the key clicks. Remove: the line-end bell (distracting).
+  And: everything below the paper didn't read as a typewriter: "why is it black? Shouldn't it be
+  silver, metallic?"
+- **My miss, named:** I treated "simpler" as "remove a part" when the ask was a different machine.
+  What makes a typewriter recognisable is keys and metal; the black bar had neither.
+- **Round 3:** *Chrome* (1930s silver portable, brushed metal, chrome-rimmed keys, ribbon cover),
+  *Enamel* (1960s green portable with cream keys you actually type on; the phone keyboard stays
+  away), *Ink* (the machine as a sepia line drawing on cream, with the fan of typebars; light).
+  All share the rising sheet and clicks; no bell anywhere.

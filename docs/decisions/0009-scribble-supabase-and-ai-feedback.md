@@ -40,4 +40,9 @@ but cost should stay minimal.
   Vercel project, and the schema run once.
 - Free Supabase projects pause after a week without activity; daily use keeps it awake, and the
   export is the backup.
+- Sharing CrossFit Log's project (owner asked, 8 Oct): fine for one user. Costs: the secret key
+  reaches every table in the project (a bug or leak exposes both apps: a bigger blast radius),
+  and both share outages, pauses and limits. Gains: fits the two free projects already in use,
+  daily writing keeps the project awake, and the data is tiny. Split into its own project (or a
+  key with limited rights) as soon as either app has other users; moving one table takes ~15 min.
 - Revisit the model when the prompt changes (re-run the eval), and if the app ever gets other users.

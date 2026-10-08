@@ -410,10 +410,20 @@ offsets: daylight saving time breaks them.
 Free, keyless APIs (like Open-Meteo) can be called straight from the browser, so no backend is
 needed. Anything that needs a secret key must go through a server route instead.
 
+#### Blast radius
+How much breaks or leaks when one thing goes wrong. Two apps sharing one database and one
+all-powerful key have a bigger blast radius: a bug or a leaked key in either exposes both.
+Fine for a single user; split (separate projects, or keys with limited rights) once real users
+arrive. Where we met it: Scribble sharing CrossFit Log's Supabase project (03, decision 0009).
+From: site reliability and security engineering.
+
 ### Quiz
 
 **Q:** What is a hydration mismatch?
 **A:** When the HTML rendered on the server differs from the first render in the browser (for example because of the clock or localStorage), so React complains.
+
+**Q:** What's the "blast radius" of sharing one database and secret key between two apps?
+**A:** A bug or leaked key in either app can expose both apps' data; acceptable for one user, split once there are real users.
 
 **Q:** When would you use requestAnimationFrame instead of CSS?
 **A:** For motion calculated every frame in JavaScript, like moving the sun along an arc to a computed position.

@@ -141,3 +141,4 @@ What happened, what was decided and why. Newest last.
   all as Markdown, key sound toggle. Feedback is still the sample until build step 3.
 - Fixed while testing: the word count and save status were squeezed to "— …" on a phone; they now
   get their own line.
+- **Owner asked whether sharing CrossFit Log's Supabase project is a problem.** Fine at one user; trade-offs (blast radius, shared fate vs free-plan fit, stays awake, reversible) added to decision 0009 and the knowledge bank.

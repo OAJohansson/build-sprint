@@ -99,3 +99,16 @@ What happened, what was decided and why. Newest last.
   *Enamel* (1960s green portable with cream keys you actually type on; the phone keyboard stays
   away), *Ink* (the machine as a sepia line drawing on cream, with the fan of typebars; light).
   All share the rising sheet and clicks; no bell anywhere.
+
+### Round 4: the feeling of a typewriter, without the typewriter
+- **Owner:** drawing an actual typewriter "looks childish". Keep the paper and the struck
+  letters, keep the essence of typing on a typewriter, but no machine in the design; a nice
+  visual design with an old-school typewriter vibe.
+- **What went wrong, named:** this is literal vs evoked skeuomorphism, the distinction from the
+  design-vocabulary step. Three rounds drew the object; the owner wanted its qualities.
+- **Typewriter qualities kept:** the line holds still and the page rises; struck, uneven ink in a
+  typewriter face; black and red ribbon as the palette; manuscript conventions (typed header,
+  double spacing, page count, the `###` end mark); soft key clicks (no bell).
+- **Round 4:** *Manuscript* (the screen is the page, lamplight at the edges, centred underlined
+  title, double-spaced), *Night* (warm ink on near-black, almost nothing but your line), *Ribbon*
+  (graphic: black band with the prompt, cream page, red strip for actions).

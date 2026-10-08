@@ -1,14 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import Chrome from "./chrome";
-import Drawn from "./drawn";
-import Enamel from "./enamel";
+import { Manuscript, NightDraft, Ribbon } from "./directions";
 
 const VARIANTS = [
-  { name: "Chrome", font: "var(--font-courier)", Component: Chrome },
-  { name: "Enamel", font: "var(--font-courier)", Component: Enamel },
-  { name: "Ink", font: "var(--font-courier)", Component: Drawn },
+  { name: "Manuscript", font: "var(--font-courier)", Component: Manuscript },
+  { name: "Night", font: "var(--font-courier)", Component: NightDraft },
+  { name: "Ribbon", font: "var(--font-courier)", Component: Ribbon },
 ];
 
 export default function PrototypeHarness() {

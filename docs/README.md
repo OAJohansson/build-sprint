@@ -10,6 +10,7 @@ It's built from these files by `pnpm notebook` and republished whenever they cha
 | [`products/`](products/) | Per product: a lean card (`NN-slug.md`: user, problem, bet, links, learned; feeds the README table and portfolio) and a folder (`NN-slug/`) with the journal, feedback log, user testing, backlog and learnings. Each becomes a sub-page in the notebook. Created by `pnpm new`. |
 | [`product-craft.md`](product-craft.md) | The product-management voices behind the playbook (Cagan, Perri, Torres…), their key ideas and where each shows up. A page in the notebook. |
 | [`interview-stories.md`](interview-stories.md) | The story bank: how to tell a product as an interview story, and a table of every product's story and the interview themes it covers. A page in the notebook. |
+| [`knowledge-bank.md`](knowledge-bank.md) | General knowledge learned along the way (product craft, design, git and shipping, web tech, building with AI), with quiz questions that feed the notebook's Quiz page (active recall, spaced repetition). |
 | [`todo.md`](todo.md) | Sprint-wide to-do: process, tools and skills to come back to (not product features). A page in the notebook. |
 | [`learnings.md`](learnings.md) | Summary of learnings across products: design principles, key learnings per product and the process changelog. A page in the notebook. Each product keeps the full detail in its folder. |
 | [`decisions/`](decisions/) | Setup and architecture decisions with their reasoning. Use [`TEMPLATE.md`](decisions/TEMPLATE.md). |

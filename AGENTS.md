@@ -55,11 +55,12 @@ conflicts with the clean-and-minimal principle (decision 0007), the principle wi
 - After any change in `docs/`, run `pnpm sync && pnpm notebook`, then republish
   `.notebook/index.html` with the Artifact tool to the existing private notebook,
   https://claude.ai/artifact/6WgAx5PMZYAzBqCg7zf25b (pass that URL; never create a new one).
-- `docs/knowledge-bank.md` is the owner's general knowledge (product craft, design, git and
-  shipping, web technology, building with AI), separate from product-specific learnings. Whenever
-  you teach a general concept, add it there (what it is, why it matters, where we met it, and who
-  it comes from) plus 1–3 quiz questions in the topic's `### Quiz` as `**Q:**` / `**A:**` pairs;
-  they feed the notebook's Quiz page.
+- `docs/knowledge-bank.md` is the owner's general knowledge, separate from product-specific
+  learnings, in seven categories (customer insight, product strategy, product delivery, design and
+  UX, technology, building with AI, communication and influence), each with subsections. Whenever
+  you teach a general concept, add it under the right subsection (what it is, why it matters,
+  where we met it, and who it comes from) plus 1–3 quiz questions in the category's `### Quiz` as
+  `**Q:**` / `**A:**` pairs; they feed the notebook's Quiz page.
 - Non-obvious setup or architecture choices → a new file in `docs/decisions/` from `TEMPLATE.md`.
 - `docs/ideas.md` is for ideas for *new* products. `docs/learnings.md` is the summary of learnings
   across products (a notebook page): design principles, 3–7 key learnings per product, and the

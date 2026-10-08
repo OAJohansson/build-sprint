@@ -61,3 +61,13 @@ What happened, what was decided and why. Newest last.
 - **Decided (owner):** candlelit dark, always (warm brown-black, parchment text, candle-amber
   accent); evoked texture (faint grain, soft vignette); lightly literary voice ("Set down the
   pen", "Ask for a reader", "Another spark"); typeface left to the prototypes to try.
+
+### Prototype round 1 → round 2
+- **Round 1** (Notebook, Letters, Typewriter): owner felt the three were too similar. Fair: same
+  palette, same layout, same controls; they differed mostly in typeface.
+- **Owner's sharper picture:** an old typewriter in a little workroom, smoking a cigarette,
+  typing. Typewriter is the overarching feeling.
+- **Round 2, three different ideas of "typewriter":** *Platen* (the machine: paper feeds up,
+  uneven struck letters, key clicks and a bell, the reader replies in red ribbon), *Cards* (the
+  desk: index cards, a row of the week's cards, a date stamp, a memo slip clipped on), *Smoke*
+  (forward only: finished sentences drift up and fade, no going back, embers for the week).

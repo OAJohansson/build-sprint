@@ -120,3 +120,7 @@ discovering my own topics, longer forms, a daily streak, a rich-text editor, off
 - Making the editor fancy: a plain, beautiful text area is the product.
 
 ## Success check (at wrap-up)
+
+**Evidence so far (10 Oct):** guardrail *kind and specific feedback*: first real reply passed all
+checks (quoted the writer, one suggestion, no rewrite; the craft note taught "keep the detail in
+rather than summarising"). Full check at wrap-up.

@@ -179,3 +179,7 @@ What happened, what was decided and why. Newest last.
   note, "last time" on the next page, goal card saved. The real Claude call gets its first test
   live once `ANTHROPIC_API_KEY` is in Vercel.
 - **Live check of the reader and polish:** everything works on the phone. Owner: "not this one" under the prompt looks messy; moved back to the footer (the proximity argument lost to a calmer page). Feedback #10.
+- **First real reader reply, owner's verdict (feedback guardrail):** it quoted and built on their
+  own words; one clear suggestion, no rewrite; the craft note taught something specific ("detail
+  is everything: keep the detail in rather than summarising"). 3 of 3 on the checklist for the
+  first piece. The model eval can stay in the backlog for now.

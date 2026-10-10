@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Pieces, Reading } from "@/components/pieces";
 import { Unlock } from "@/components/unlock";
 import { Writer } from "@/components/writer";
@@ -17,6 +17,11 @@ export default function Home() {
   const [pieces, setPieces] = useState<Piece[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<View>({ type: "write" });
+  // Coming back from a piece returns you to the same place in a long list (break-ui, 10 Oct).
+  const listScroll = useRef(0);
+  useEffect(() => {
+    window.scrollTo({ top: view.type === "pieces" ? listScroll.current : 0 });
+  }, [view]);
 
   const load = useCallback(async () => {
     try {
@@ -25,7 +30,7 @@ export default function Home() {
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
         setCode("");
-        setError("That code didn't work.");
+        setError("That code didn't work. Check it and try again.");
       } else setError(err instanceof Error ? err.message : "Something went wrong. Please try again later.");
     }
   }, [api, setCode]);
@@ -55,7 +60,7 @@ export default function Home() {
               </button>
             </>
           ) : (
-            <p className="sc-reading breathe">opening the notebook</p>
+            <p className="sc-reading breathe" role="status">opening the notebook…</p>
           )}
         </div>
       </main>
@@ -68,15 +73,21 @@ export default function Home() {
         pieces={pieces}
         sound={sound}
         onToggleSound={() => setSound((s) => !s)}
-        onOpen={(id) => setView({ type: "read", id })}
-        onBack={() => setView({ type: "write" })}
+        onOpen={(id) => {
+          listScroll.current = window.scrollY;
+          setView({ type: "read", id });
+        }}
+        onBack={() => {
+          listScroll.current = 0;
+          setView({ type: "write" });
+        }}
       />
     );
   }
 
   if (view.type === "read") {
     const piece = pieces.find((p) => p.id === view.id);
-    if (piece) return <Reading piece={piece} onBack={() => setView({ type: "pieces" })} />;
+    if (piece) return <Reading piece={piece} pieces={pieces} api={api} onSaved={onSaved} onBack={() => setView({ type: "pieces" })} />;
   }
 
   return (

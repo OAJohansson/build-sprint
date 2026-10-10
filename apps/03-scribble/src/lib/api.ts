@@ -30,10 +30,12 @@ async function call<T>(code: string, path: string, init: RequestInit = {}): Prom
 
 export const api = (code: string) => ({
   list: () => call<{ pieces: Piece[] }>(code, "/api/pieces").then((r) => r.pieces),
-  save: (id: string, input: PieceInput) =>
+  save: (id: string, input: PieceInput, opts: { keepalive?: boolean } = {}) =>
     call<{ piece: Piece }>(code, `/api/pieces?id=${encodeURIComponent(id)}`, {
       method: "PUT",
       body: JSON.stringify(input),
+      // keepalive lets the save finish even as the page closes (user test F6).
+      keepalive: opts.keepalive,
     }).then((r) => r.piece),
   read: (input: { prompt: string; body: string; lastLesson?: string; recentLessons?: string[] }) =>
     call<{ feedback: Feedback }>(code, "/api/feedback", { method: "POST", body: JSON.stringify(input) }).then((r) => r.feedback),

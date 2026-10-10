@@ -183,3 +183,26 @@ What happened, what was decided and why. Newest last.
   own words; one clear suggestion, no rewrite; the craft note taught something specific ("detail
   is everything: keep the detail in rather than summarising"). 3 of 3 on the checklist for the
   first piece. The model eval can stay in the backlog for now.
+
+### Testing round (playbook 3b): audit, break-ui, then the simulated user
+- Footer fix merged (PR #25). **Audit:** screen readers would have heard the typed-out reply
+  letter by letter and a word count on every keystroke; fixed, plus loading text, hover states,
+  labels and `color-scheme` (feedback #11–13).
+- **break-ui** with worst cases seeded through the API (2,000 words, one word, a long URL, emoji
+  and Vietnamese, a 300-character prompt, 200 pieces, goal 7 with extras): fixed emoji splitting,
+  the narrow header and the list position (#14–16). My first typing-speed measurement (1 s per
+  key) was wrong: the background tab throttles frames. Measured properly: 8–29 ms. Two decisions
+  for the owner (#18, #19).
+- Simulated user test running against a fresh local app.
+- **Simulated user test** ([report](#03-scribble.testing)): job 1 scored 5/5 (about 20 s to the
+  first word on first use, 6–8 s after), job 2 3/5, job 3 2/5. Two majors: the reader was only
+  available on the set-down screen (F1), and the red ink failed contrast, worst at night (F2).
+  **Fixed straight away** under the triage rule (wrong-looking or data-risk, quick): F1, F2, F3,
+  F6 (save on page hide), F8 (44 px targets), F9; verified in the browser. Four decisions go to
+  the owner (F4, F5, F7, and the "what you're practising" view for job 3), plus #18 and #19.
+- **Owner's calls on the open findings:** keep forward-only writing for a week, then revisit
+  (#19); hide "not this one" once you've started (F5); "keep writing" on the set-down screen as
+  the undo (F7); and **build the "what you're practising" list now** (job 3): the reader's
+  lessons, newest first, with the pieces written since, each opening the piece that taught it.
+  All built and checked in the browser (plus a "1 words" fix). Still open: auto-scrolling the
+  reply (F4) and where export lives (#18).

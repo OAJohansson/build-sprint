@@ -5,7 +5,7 @@ import type { Api } from "@/lib/api";
 import { pickPrompt } from "@/lib/prompts";
 import type { Feedback, Piece } from "@/lib/types";
 import { keepCaretAtEnd, Struck, useKeyClick, useTypedOut } from "@/lib/typewriter";
-import { doneThisWeek, wordCount } from "@/lib/week";
+import { doneThisWeek, lessonsFrom, wordCount } from "@/lib/week";
 import { Week } from "@/components/week";
 
 type Draft = { id: string; prompt: string; body: string; updatedAt: string };
@@ -77,10 +77,7 @@ export function Writer({
   const typedCraft = useTypedOut(feedback?.craft ?? "", craftShown, click, 18);
 
   // The learning loop: the last lesson travels into the next piece (feedback #9).
-  const lessons = pieces
-    .filter((p) => p.status === "done" && p.feedback?.lesson && p.id !== draft.id)
-    .sort((a, b) => (b.finishedAt ?? "").localeCompare(a.finishedAt ?? ""))
-    .map((p) => p.feedback!.lesson!);
+  const lessons = lessonsFrom(pieces, draft.id);
   const lastLesson = lessons[0];
 
   const done = doneThisWeek(pieces);
@@ -104,6 +101,25 @@ export function Writer({
     // onSaved and api are stable enough; re-running on them would re-save for nothing.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [draft, stage]);
+
+  // Closing or switching away saves at once, not after the pause (user test F6).
+  const latest = useRef({ draft, stage, saveState });
+  useEffect(() => {
+    latest.current = { draft, stage, saveState };
+  });
+  useEffect(() => {
+    const flush = () => {
+      const { draft: d, stage: st, saveState: ss } = latest.current;
+      if (document.visibilityState !== "hidden" || st !== "writing" || !d.body.trim() || ss === "saved") return;
+      api.save(d.id, { prompt: d.prompt, body: d.body, status: "draft", feedback: null }, { keepalive: true }).catch(() => {});
+    };
+    document.addEventListener("visibilitychange", flush);
+    window.addEventListener("pagehide", flush);
+    return () => {
+      document.removeEventListener("visibilitychange", flush);
+      window.removeEventListener("pagehide", flush);
+    };
+  }, [api]);
 
   const update = (patch: Partial<Draft>) => {
     setNotice(null);
@@ -153,6 +169,17 @@ export function Writer({
     }
   }
 
+  // A thumb slip on "set down the pen" isn't final (user test F7): reopen the piece as a draft.
+  async function keepWriting() {
+    setNotice(null);
+    setStage("writing");
+    try {
+      onSaved(await api.save(draft.id, { prompt: draft.prompt, body: draft.body, status: "draft", feedback: null }));
+    } catch {
+      setSaveState("unsaved");
+    }
+  }
+
   function freshPage() {
     setDraft(newDraft(pieces, draft.prompt));
     setFeedback(null);
@@ -163,7 +190,7 @@ export function Writer({
 
   const header = (
     <header className="sc-head">
-      <span>SCRIBBLE &nbsp;·&nbsp; NO. {pieceNo}</span>
+      <span className="sc-brand"><span className="sc-wide">SCRIBBLE &nbsp;·&nbsp; </span>NO.&nbsp;{pieceNo}</span>
       <Week done={done} />
       <button className="sc-link sc-small" onClick={onOpenPieces}>
         pieces
@@ -185,24 +212,32 @@ export function Writer({
           <p className="sc-end" aria-hidden="true">
             ###
           </p>
-          {stage === "reading" && <p className="sc-reading breathe">your reader is reading</p>}
+          {stage === "reading" && <p className="sc-reading breathe" role="status">your reader is reading…</p>}
+          <p className="sr-only" aria-live="polite">
+            {stage === "read" && feedback ? `${feedback.strength} ${feedback.tryNext} The craft: ${feedback.craft ?? ""}` : ""}
+          </p>
           {typedReply && (
-            <p className="sc-body sc-reply" aria-live="polite">
+            <p className="sc-body sc-reply" aria-hidden="true">
               <Struck text={typedReply} from={5000} red />
             </p>
           )}
           {typedCraft && (
-            <aside className="sc-craft">
+            <aside className="sc-craft" aria-hidden="true">
               <span className="sc-craft-label">the craft</span>
               <Struck text={typedCraft} from={9000} />
             </aside>
           )}
-          {notice && <p className="sc-notice">{notice}</p>}
+          {notice && <p className="sc-notice" role="alert">{notice}</p>}
         </article>
         <div className="sc-after">
           {stage === "set" && (
             <button className="sc-link sc-main" onClick={askReader}>
               Ask for a reader
+            </button>
+          )}
+          {stage === "set" && (
+            <button className="sc-link sc-small" onClick={keepWriting}>
+              keep writing
             </button>
           )}
           {stage !== "reading" && (
@@ -216,7 +251,7 @@ export function Writer({
   }
 
   const words = wordCount(draft.body);
-  const status = notice ?? (saveState === "saving" ? "saving" : saveState === "saved" ? "saved" : saveState === "unsaved" ? "kept on this device" : "");
+  const status = notice ?? (saveState === "saving" ? "saving…" : saveState === "saved" ? "saved" : saveState === "unsaved" ? "kept on this device" : "");
 
   return (
     <div className="sc" onClick={() => input.current?.focus()}>
@@ -234,13 +269,16 @@ export function Writer({
         </div>
       </div>
       <footer className="sc-foot" onClick={(e) => e.stopPropagation()}>
-        <span className="sc-folio" aria-live="polite">
+        <span className="sc-folio">
           — {words} {words === 1 ? "word" : "words"}
-          {status && ` · ${status}`} —
+          <span aria-live="polite">{status && ` · ${status}`}</span> —
         </span>
-        <button className="sc-link" onClick={() => update({ prompt: newDraft(pieces, draft.prompt).prompt })}>
-          <span aria-hidden="true">↻</span> not this one
-        </button>
+        {/* Once you've started, your words belong to this prompt (user test F5, owner's call). */}
+        {!draft.body.trim() && (
+          <button className="sc-link" onClick={() => update({ prompt: newDraft(pieces, draft.prompt).prompt })}>
+            <span aria-hidden="true">↻</span> not this one
+          </button>
+        )}
         <button className="sc-link sc-main" onClick={setDown}>
           set down the pen
         </button>

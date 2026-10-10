@@ -3,6 +3,32 @@
 Sprint-wide work to come back to: process, tools and skills, not features (those go in a
 product's backlog) or new products (those go in [ideas](ideas.md)).
 
+## In flight
+
+Everything on the go right now, sprint and job hunt, in priority order. Claude keeps this current
+until the tracking tool (#10) exists. Ask "where are we?" for an update.
+
+**Scribble (product 03)**
+1. Rename the Vercel project to `scribble` and add a `.vercel.app` domain; send Claude the URL. *(me)*
+2. Live check on the phone; URL on the card.
+3. Build step 3: real Claude feedback (`ANTHROPIC_API_KEY` in Vercel).
+4. Testing: audit and `break-ui`, then the simulated user test.
+5. Wrap-up: success check, retro, interview story, learnings, `status: shipped`; push the wrap-up branch.
+
+**Before product 04**
+6. To-do #8: `pnpm ship`.
+7. To-do #10: one place to stay on track.
+
+**Job hunt**
+8. Book the Montu UK interview. *(me)*
+9. Look at what Montu UK offers patients today (15 min), before building for them.
+10. Prepare for the charity interview. *(me)*
+11. Keep applying for roles. *(me, ongoing)*
+
+**Later:** to-do #9 (Scribble for Mac), #5 and #6 (a real user; stories in my own words), Scribble's model eval (#1).
+
+## Sprint to-do
+
 | # | What | When | Notes |
 | --- | --- | --- | --- |
 | 1 | **Start learning evals.** Add a small eval to a product, to learn how evals work. | **Next up:** product 02 has shipped | Not extensive. A first candidate: CrossFit Log's AI parsing (spoken note → lifts), with a handful of notes and their correct parse, scored automatically. |

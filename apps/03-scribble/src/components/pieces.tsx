@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
+import type { Api } from "@/lib/api";
 import type { Piece } from "@/lib/types";
 import { Struck } from "@/lib/typewriter";
-import { wordCount } from "@/lib/week";
+import { lessonsFrom, wordCount } from "@/lib/week";
 
 const day = (iso: string) =>
   new Date(iso).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }).toUpperCase();
@@ -62,7 +64,7 @@ export function Pieces({
               <li key={p.id}>
                 <button className="sc-row" onClick={() => onOpen(p.id)}>
                   <span className="sc-row-meta">
-                    {day(p.finishedAt ?? p.updatedAt)} · {wordCount(p.body)} words{p.feedback ? " · read" : ""}
+                    {day(p.finishedAt ?? p.updatedAt)} · {wordCount(p.body)} words{p.feedback ? " · has a reply" : ""}
                   </span>
                   <span className="sc-row-prompt">{p.prompt}</span>
                   <span className="sc-row-first">{p.body.split("\n")[0]}</span>
@@ -84,7 +86,32 @@ export function Pieces({
   );
 }
 
-export function Reading({ piece, onBack }: { piece: Piece; onBack: () => void }) {
+export function Reading({
+  piece,
+  pieces,
+  api,
+  onSaved,
+  onBack,
+}: {
+  piece: Piece;
+  pieces: Piece[];
+  api: Api;
+  onSaved: (piece: Piece) => void;
+  onBack: () => void;
+}) {
+  // The reader is there for any finished piece, not only right after setting it down (user test F1).
+  const [state, setState] = useState<"idle" | "reading" | "failed">("idle");
+  async function askReader() {
+    setState("reading");
+    try {
+      const lessons = lessonsFrom(pieces, piece.id);
+      const feedback = await api.read({ prompt: piece.prompt, body: piece.body, lastLesson: lessons[0], recentLessons: lessons.slice(0, 5) });
+      onSaved(await api.save(piece.id, { prompt: piece.prompt, body: piece.body, status: "done", feedback }));
+      setState("idle");
+    } catch {
+      setState("failed");
+    }
+  }
   return (
     <div className="sc sc-done">
       <header className="sc-head">
@@ -114,7 +141,24 @@ export function Reading({ piece, onBack }: { piece: Piece; onBack: () => void })
             <Struck text={piece.feedback.craft} from={9000} />
           </aside>
         )}
+        {state === "reading" && (
+          <p className="sc-reading breathe" role="status">
+            your reader is reading…
+          </p>
+        )}
+        {state === "failed" && (
+          <p className="sc-notice" role="alert">
+            your reader couldn&apos;t be reached. try again in a moment
+          </p>
+        )}
       </article>
+      {!piece.feedback && state !== "reading" && (
+        <div className="sc-after">
+          <button className="sc-link sc-main" onClick={askReader}>
+            Ask for a reader
+          </button>
+        </div>
+      )}
     </div>
   );
 }

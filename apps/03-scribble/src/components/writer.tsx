@@ -5,7 +5,7 @@ import type { Api } from "@/lib/api";
 import { pickPrompt } from "@/lib/prompts";
 import type { Feedback, Piece } from "@/lib/types";
 import { keepCaretAtEnd, Struck, useKeyClick, useTypedOut } from "@/lib/typewriter";
-import { doneThisWeek, wordCount } from "@/lib/week";
+import { doneThisWeek, lessonsFrom, wordCount } from "@/lib/week";
 import { Week } from "@/components/week";
 
 type Draft = { id: string; prompt: string; body: string; updatedAt: string };
@@ -77,10 +77,7 @@ export function Writer({
   const typedCraft = useTypedOut(feedback?.craft ?? "", craftShown, click, 18);
 
   // The learning loop: the last lesson travels into the next piece (feedback #9).
-  const lessons = pieces
-    .filter((p) => p.status === "done" && p.feedback?.lesson && p.id !== draft.id)
-    .sort((a, b) => (b.finishedAt ?? "").localeCompare(a.finishedAt ?? ""))
-    .map((p) => p.feedback!.lesson!);
+  const lessons = lessonsFrom(pieces, draft.id);
   const lastLesson = lessons[0];
 
   const done = doneThisWeek(pieces);
@@ -104,6 +101,25 @@ export function Writer({
     // onSaved and api are stable enough; re-running on them would re-save for nothing.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [draft, stage]);
+
+  // Closing or switching away saves at once, not after the pause (user test F6).
+  const latest = useRef({ draft, stage, saveState });
+  useEffect(() => {
+    latest.current = { draft, stage, saveState };
+  });
+  useEffect(() => {
+    const flush = () => {
+      const { draft: d, stage: st, saveState: ss } = latest.current;
+      if (document.visibilityState !== "hidden" || st !== "writing" || !d.body.trim() || ss === "saved") return;
+      api.save(d.id, { prompt: d.prompt, body: d.body, status: "draft", feedback: null }, { keepalive: true }).catch(() => {});
+    };
+    document.addEventListener("visibilitychange", flush);
+    window.addEventListener("pagehide", flush);
+    return () => {
+      document.removeEventListener("visibilitychange", flush);
+      window.removeEventListener("pagehide", flush);
+    };
+  }, [api]);
 
   const update = (patch: Partial<Draft>) => {
     setNotice(null);

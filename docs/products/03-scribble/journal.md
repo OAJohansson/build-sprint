@@ -194,3 +194,9 @@ What happened, what was decided and why. Newest last.
   key) was wrong: the background tab throttles frames. Measured properly: 8–29 ms. Two decisions
   for the owner (#18, #19).
 - Simulated user test running against a fresh local app.
+- **Simulated user test** ([report](#03-scribble.testing)): job 1 scored 5/5 (about 20 s to the
+  first word on first use, 6–8 s after), job 2 3/5, job 3 2/5. Two majors: the reader was only
+  available on the set-down screen (F1), and the red ink failed contrast, worst at night (F2).
+  **Fixed straight away** under the triage rule (wrong-looking or data-risk, quick): F1, F2, F3,
+  F6 (save on page hide), F8 (44 px targets), F9; verified in the browser. Four decisions go to
+  the owner (F4, F5, F7, and the "what you're practising" view for job 3), plus #18 and #19.

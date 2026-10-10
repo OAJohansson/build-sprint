@@ -17,3 +17,11 @@ export function doneThisWeek(pieces: Piece[], now = new Date()) {
 export function wordCount(text: string) {
   return text.trim().split(/\s+/).filter(Boolean).length;
 }
+
+/** The reader's lessons, newest first (the learning loop, feedback #9). */
+export function lessonsFrom(pieces: Piece[], exceptId?: string) {
+  return pieces
+    .filter((p) => p.status === "done" && p.feedback?.lesson && p.id !== exceptId)
+    .sort((a, b) => (b.finishedAt ?? "").localeCompare(a.finishedAt ?? ""))
+    .map((p) => p.feedback!.lesson!);
+}

@@ -87,7 +87,7 @@ export default function Home() {
 
   if (view.type === "read") {
     const piece = pieces.find((p) => p.id === view.id);
-    if (piece) return <Reading piece={piece} onBack={() => setView({ type: "pieces" })} />;
+    if (piece) return <Reading piece={piece} pieces={pieces} api={api} onSaved={onSaved} onBack={() => setView({ type: "pieces" })} />;
   }
 
   return (

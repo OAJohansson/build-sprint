@@ -66,3 +66,13 @@ conflicts with the clean-and-minimal principle (decision 0007), the principle wi
   across products (a notebook page): design principles, 3–7 key learnings per product, and the
   process changelog (each process change from a retro, made before the next product starts).
   Add to it whenever a product teaches something, not only at wrap-up.
+
+## Job hunt
+
+The job search is run from the Job Coach project in claude.ai, not from this repo. Its live
+priorities are on the Focus page of the Job Prep Hub (https://claude.ai/artifact/EBNLSbWYvYyf7moz26PCuV#focus,
+read it with the Artifact tool) and roles are in the Job Tracker
+(https://claude.ai/artifact/UAcFjtMc6G5z8edskbUqeo). When the owner asks "where are we?" or wants
+priorities across everything, read Focus first and rank its dated items (interviews, deadlines)
+alongside the sprint work. Job Coach keeps the **Job hunt** section of `docs/todo.md` current;
+don't rewrite it from here unless the owner asks, and never copy job detail into other docs.

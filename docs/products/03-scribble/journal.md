@@ -178,3 +178,4 @@ What happened, what was decided and why. Newest last.
 - **Checked locally with the sample reader** (no key on this Mac): swap, set down, reply, craft
   note, "last time" on the next page, goal card saved. The real Claude call gets its first test
   live once `ANTHROPIC_API_KEY` is in Vercel.
+- **Live check of the reader and polish:** everything works on the phone. Owner: "not this one" under the prompt looks messy; moved back to the footer (the proximity argument lost to a calmer page). Feedback #10.

@@ -226,15 +226,6 @@ export function Writer({
           <h1 className="sc-prompt" key={draft.prompt}>
             <Struck text={draft.prompt} red />
           </h1>
-          <button
-            className="sc-link sc-small sc-swap"
-            onClick={(e) => {
-              e.stopPropagation();
-              update({ prompt: newDraft(pieces, draft.prompt).prompt });
-            }}
-          >
-            <span aria-hidden="true">↻</span> not this one
-          </button>
           {lastLesson && <p className="sc-last">last time: {lastLesson}</p>}
           <p className="sc-body">
             <Struck text={draft.body} />
@@ -247,6 +238,9 @@ export function Writer({
           — {words} {words === 1 ? "word" : "words"}
           {status && ` · ${status}`} —
         </span>
+        <button className="sc-link" onClick={() => update({ prompt: newDraft(pieces, draft.prompt).prompt })}>
+          <span aria-hidden="true">↻</span> not this one
+        </button>
         <button className="sc-link sc-main" onClick={setDown}>
           set down the pen
         </button>

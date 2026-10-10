@@ -79,8 +79,7 @@ body { font-family: var(--font-type), "Courier New", monospace; }
 @media (prefers-color-scheme: dark) {
   .sc-prompt { text-align: left; text-transform: none; letter-spacing: normal; text-decoration: none; }
 }
-.sc-swap { display: flex; align-items: center; gap: 6px; margin: 4px auto 22px; }
-@media (prefers-color-scheme: dark) { .sc-swap { margin-left: -4px; } }
+.sc-col .sc-prompt { margin-bottom: 28px; }
 .sc-done .sc-prompt, .sc-page > .sc-prompt { margin-bottom: 28px; }
 .sc-body { margin: 0; line-height: var(--lh); white-space: pre-wrap; overflow-wrap: break-word; }
 .strike { position: relative; top: var(--y); opacity: var(--o); text-shadow: 0 0 0.6px currentColor; }
@@ -103,7 +102,6 @@ body { font-family: var(--font-type), "Courier New", monospace; }
 .sc-link:active { transform: scale(0.97); }
 .sc-small { min-height: 32px; font-size: 11px; letter-spacing: 0.1em; }
 .sc-main { color: var(--red); }
-.sc-foot .sc-main { margin-left: auto; }
 @media (prefers-color-scheme: dark) {
   .sc-foot .sc-main, .sc-after .sc-main { min-height: 40px; padding: 0 18px; border-radius: 999px; color: var(--ink); text-decoration: none; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--red) 60%, transparent); }
 }
@@ -116,7 +114,7 @@ body { font-family: var(--font-type), "Courier New", monospace; }
 .sc-reply { color: var(--red); }
 .sc-craft { display: block; margin: 28px 0 0; padding: 14px 0 0; border-top: 1px solid var(--rule); font-size: 15px; line-height: 1.7; }
 .sc-craft-label { display: block; margin-bottom: 6px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
-.sc-last { margin: -12px 0 22px; font-size: 12px; font-style: italic; color: var(--muted); text-align: center; }
+.sc-last { margin: -18px 0 24px; font-size: 12px; font-style: italic; color: var(--muted); text-align: center; }
 @media (prefers-color-scheme: dark) { .sc-last { text-align: left; } }
 .sc-notice { margin: 16px 0 0; text-align: center; font-size: 13px; color: var(--red); }
 .sc-after { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 28px auto calc(48px + env(safe-area-inset-bottom)); }

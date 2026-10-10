@@ -13,3 +13,4 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 7 | Owner review (live, phone) | Not clear what the four marks mean; make it clearer without adding the word "week" | fixed (tapping them opens "this week: 2 of 4 · goal − 4 +") |
 | 8 | Owner review (live, phone) | "Another spark" is unclear | fixed ("↻ not this one", under the prompt) |
 | 9 | Owner review (live, phone) | Make it a stronger learning tool: a reminder of what to keep in mind before writing, and a short creative-writing theory note that explains *how* (e.g. how to end on an image). Still one solid lesson per piece, low friction | fixed (craft note in the feedback; "last time" line before the next piece; no pop-up) |
+| 10 | Owner review (live, phone) | "↻ not this one" under the prompt looks messy; better in the footer next to "set down the pen", as before. Everything else works | fixed (back in the footer, new label kept) |

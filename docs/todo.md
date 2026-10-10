@@ -6,7 +6,7 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 ## Now
 
 **Scribble (product 03)**
-- [ ] Add the new `.vercel.app` domain and send Claude the URL *(me)*
+- [x] Live at scribble-notebook.vercel.app
 - [ ] Live check on the phone
 - [ ] Real Claude feedback
 - [ ] Testing: audit, break-ui, simulated user

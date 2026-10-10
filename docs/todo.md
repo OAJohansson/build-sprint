@@ -8,7 +8,7 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 **Scribble (product 03)**
 - [x] Live at scribble-notebook.vercel.app
 - [x] Live check on the phone: saved ✓
-- [ ] Real Claude feedback
+- [ ] Real Claude feedback: built; add `ANTHROPIC_API_KEY` in Vercel and deploy *(me)*
 - [ ] Testing: audit, break-ui, simulated user
 - [ ] Wrap-up and ship
 

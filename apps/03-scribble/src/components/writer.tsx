@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Api } from "@/lib/api";
 import { pickPrompt } from "@/lib/prompts";
-import { sampleFeedback } from "@/lib/sample-feedback";
 import type { Feedback, Piece } from "@/lib/types";
 import { keepCaretAtEnd, Struck, useKeyClick, useTypedOut } from "@/lib/typewriter";
 import { doneThisWeek, wordCount } from "@/lib/week";
@@ -73,7 +72,16 @@ export function Writer({
   const input = useRef<HTMLTextAreaElement>(null);
   const click = useKeyClick(sound);
   const reply = feedback ? `${feedback.strength}\n\n${feedback.tryNext}` : "";
-  const typedReply = useTypedOut(reply, stage === "read", click);
+  const typedReply = useTypedOut(reply, stage === "read", click, 18);
+  const craftShown = stage === "read" && typedReply.length >= reply.length;
+  const typedCraft = useTypedOut(feedback?.craft ?? "", craftShown, click, 18);
+
+  // The learning loop: the last lesson travels into the next piece (feedback #9).
+  const lessons = pieces
+    .filter((p) => p.status === "done" && p.feedback?.lesson && p.id !== draft.id)
+    .sort((a, b) => (b.finishedAt ?? "").localeCompare(a.finishedAt ?? ""))
+    .map((p) => p.feedback!.lesson!);
+  const lastLesson = lessons[0];
 
   const done = doneThisWeek(pieces);
   const pieceNo = pieces.filter((p) => p.status === "done").length + (stage === "writing" ? 1 : 0);
@@ -122,9 +130,20 @@ export function Writer({
   }
 
   async function askReader() {
+    setNotice(null);
     setStage("reading");
-    await new Promise((r) => setTimeout(r, 1400));
-    const fb = sampleFeedback(draft.body);
+    let fb: Feedback;
+    try {
+      // A beat of "your reader is reading" even when the answer is quick.
+      [fb] = await Promise.all([
+        api.read({ prompt: draft.prompt, body: draft.body, lastLesson, recentLessons: lessons.slice(0, 5) }),
+        new Promise((r) => setTimeout(r, 1200)),
+      ]);
+    } catch {
+      setStage("set");
+      setNotice("your reader couldn't be reached. try again in a moment");
+      return;
+    }
     setFeedback(fb);
     setStage("read");
     try {
@@ -172,6 +191,12 @@ export function Writer({
               <Struck text={typedReply} from={5000} red />
             </p>
           )}
+          {typedCraft && (
+            <aside className="sc-craft">
+              <span className="sc-craft-label">the craft</span>
+              <Struck text={typedCraft} from={9000} />
+            </aside>
+          )}
           {notice && <p className="sc-notice">{notice}</p>}
         </article>
         <div className="sc-after">
@@ -201,6 +226,16 @@ export function Writer({
           <h1 className="sc-prompt" key={draft.prompt}>
             <Struck text={draft.prompt} red />
           </h1>
+          <button
+            className="sc-link sc-small sc-swap"
+            onClick={(e) => {
+              e.stopPropagation();
+              update({ prompt: newDraft(pieces, draft.prompt).prompt });
+            }}
+          >
+            <span aria-hidden="true">↻</span> not this one
+          </button>
+          {lastLesson && <p className="sc-last">last time: {lastLesson}</p>}
           <p className="sc-body">
             <Struck text={draft.body} />
             <span className="sc-caret" aria-hidden="true" />
@@ -208,9 +243,6 @@ export function Writer({
         </div>
       </div>
       <footer className="sc-foot" onClick={(e) => e.stopPropagation()}>
-        <button className="sc-link" onClick={() => update({ prompt: newDraft(pieces, draft.prompt).prompt })}>
-          another spark
-        </button>
         <span className="sc-folio" aria-live="polite">
           — {words} {words === 1 ? "word" : "words"}
           {status && ` · ${status}`} —

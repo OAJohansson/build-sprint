@@ -21,8 +21,11 @@ function parse(body: unknown): PieceInput | null {
   if (typeof b.prompt !== "string" || typeof b.body !== "string") return null;
   if (b.status !== "draft" && b.status !== "done") return null;
   const f = b.feedback as Record<string, unknown> | null | undefined;
+  const text = (v: unknown) => (typeof v === "string" ? v.slice(0, 2000) : undefined);
   const feedback =
-    f && typeof f.strength === "string" && typeof f.tryNext === "string" ? { strength: f.strength, tryNext: f.tryNext } : null;
+    f && typeof f.strength === "string" && typeof f.tryNext === "string"
+      ? { strength: text(f.strength)!, tryNext: text(f.tryNext)!, craft: text(f.craft), lesson: text(f.lesson) }
+      : null;
   return { prompt: b.prompt.slice(0, 500), body: b.body.slice(0, 50_000), status: b.status, feedback };
 }
 

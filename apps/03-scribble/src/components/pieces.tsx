@@ -17,7 +17,11 @@ function exportAll(pieces: Piece[]) {
   const lines = ["# Scribble", ""];
   for (const p of [...finished(pieces), ...pieces.filter((x) => x.status === "draft")]) {
     lines.push(`## ${p.status === "draft" ? "Draft" : day(p.finishedAt ?? p.updatedAt)}: ${p.prompt}`, "", p.body, "");
-    if (p.feedback) lines.push(`> What's working: ${p.feedback.strength}`, ">", `> Try next time: ${p.feedback.tryNext}`, "");
+    if (p.feedback) {
+      lines.push(`> What's working: ${p.feedback.strength}`, ">", `> Try next time: ${p.feedback.tryNext}`);
+      if (p.feedback.craft) lines.push(">", `> The craft: ${p.feedback.craft}`);
+      lines.push("");
+    }
   }
   const blob = new Blob([lines.join("\n")], { type: "text/markdown" });
   const a = document.createElement("a");
@@ -103,6 +107,12 @@ export function Reading({ piece, onBack }: { piece: Piece; onBack: () => void })
           <p className="sc-body sc-reply">
             <Struck text={`${piece.feedback.strength}\n\n${piece.feedback.tryNext}`} from={5000} red />
           </p>
+        )}
+        {piece.feedback?.craft && (
+          <aside className="sc-craft">
+            <span className="sc-craft-label">the craft</span>
+            <Struck text={piece.feedback.craft} from={9000} />
+          </aside>
         )}
       </article>
     </div>

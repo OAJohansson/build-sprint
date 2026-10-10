@@ -160,3 +160,21 @@ What happened, what was decided and why. Newest last.
   points (feedback #6–9): editable weekly goal, unclear marks, unclear "another spark", and a
   stronger learning loop (scaffolding before writing, a short theory note in the feedback, one
   lesson per piece). Asked for a critique before any changes.
+
+### Owner feedback 6–9, and build step 3 (the reader)
+- **Critique before changes (owner asked):** the marks and the goal are one problem, solved by
+  progressive disclosure (tap the marks → "this week: 2 of 4 · goal − 4 +"). "Another spark"
+  failed clarity over cleverness and sat far from what it changes (proximity). On the learning
+  loop: one lesson per piece is deliberate practice (Ericsson); but a pop-up before writing would
+  add a step and raise the bar, against the riskiest assumption (perfectionism). Instead, feed
+  forward (Hattie and Timperley): the last lesson becomes one quiet "last time" line.
+- **Decided (owner):** goal card on the marks; "↻ not this one" under the prompt (owner asked for
+  five more options, chose this plus the icon); a craft note in the feedback and the "last time"
+  line; no pop-up. Curriculum and craft notebook went to the backlog.
+- **Built:** `/api/feedback` with Claude Sonnet 5.5 (structured output: strength, try next, the
+  craft, a short lesson; medium effort; server-side refusal fallback; stable system prompt,
+  cached). The last lesson and recent lessons go with each request, so the reader can notice
+  progress and avoid repeats. The craft note types out after the reply, under a rule.
+- **Checked locally with the sample reader** (no key on this Mac): swap, set down, reply, craft
+  note, "last time" on the next page, goal card saved. The real Claude call gets its first test
+  live once `ANTHROPIC_API_KEY` is in Vercel.

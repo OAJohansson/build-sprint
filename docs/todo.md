@@ -7,7 +7,7 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 **Scribble (product 03)**
 - [x] Live at scribble-notebook.vercel.app
-- [ ] Live check on the phone
+- [x] Live check on the phone: saved ✓
 - [ ] Real Claude feedback
 - [ ] Testing: audit, break-ui, simulated user
 - [ ] Wrap-up and ship

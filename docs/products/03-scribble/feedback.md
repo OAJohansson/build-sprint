@@ -9,3 +9,7 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 3 | Owner review (prototype) | Too far: the moving type guide with the red line is distracting; keep it simple | fixed (type guide and carriage drift removed) |
 | 4 | Owner review (prototype) | Still not a typewriter below the paper; why black, not silver/metallic? Want three new typewriter directions; keep rising paper and key clicks; drop the line-end bell | fixed (round 3: Chrome, Enamel, Ink; bell removed) |
 | 5 | Owner review (prototype) | Drawing an actual typewriter looks childish; keep the essence (paper, struck letters, typing feel) but no machine | fixed (round 4: Manuscript, Night, Ribbon) |
+| 6 | Owner review (live, phone) | Let me set how many pieces per week I aim for | open |
+| 7 | Owner review (live, phone) | Not clear what the four marks mean; make it clearer without adding the word "week" | open |
+| 8 | Owner review (live, phone) | "Another spark" is unclear | open |
+| 9 | Owner review (live, phone) | Make it a stronger learning tool: a reminder of what to keep in mind before writing, and a short creative-writing theory note that explains *how* (e.g. how to end on an image). Still one solid lesson per piece, low friction | open |

@@ -169,6 +169,17 @@ export function Writer({
     }
   }
 
+  // A thumb slip on "set down the pen" isn't final (user test F7): reopen the piece as a draft.
+  async function keepWriting() {
+    setNotice(null);
+    setStage("writing");
+    try {
+      onSaved(await api.save(draft.id, { prompt: draft.prompt, body: draft.body, status: "draft", feedback: null }));
+    } catch {
+      setSaveState("unsaved");
+    }
+  }
+
   function freshPage() {
     setDraft(newDraft(pieces, draft.prompt));
     setFeedback(null);
@@ -224,6 +235,11 @@ export function Writer({
               Ask for a reader
             </button>
           )}
+          {stage === "set" && (
+            <button className="sc-link sc-small" onClick={keepWriting}>
+              keep writing
+            </button>
+          )}
           {stage !== "reading" && (
             <button className="sc-link" onClick={freshPage}>
               A fresh page
@@ -257,9 +273,12 @@ export function Writer({
           — {words} {words === 1 ? "word" : "words"}
           <span aria-live="polite">{status && ` · ${status}`}</span> —
         </span>
-        <button className="sc-link" onClick={() => update({ prompt: newDraft(pieces, draft.prompt).prompt })}>
-          <span aria-hidden="true">↻</span> not this one
-        </button>
+        {/* Once you've started, your words belong to this prompt (user test F5, owner's call). */}
+        {!draft.body.trim() && (
+          <button className="sc-link" onClick={() => update({ prompt: newDraft(pieces, draft.prompt).prompt })}>
+            <span aria-hidden="true">↻</span> not this one
+          </button>
+        )}
         <button className="sc-link sc-main" onClick={setDown}>
           set down the pen
         </button>

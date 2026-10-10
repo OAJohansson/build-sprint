@@ -22,15 +22,15 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 16 | break-ui | Opening a piece from a long list and coming back jumped to the top | fixed (list position kept) |
 | 17 | break-ui | Typing cost: 8 ms per keystroke at 22–330 words, 29 ms at 2,000 words (dev build) | fine; fragile only for very long pieces |
 | 18 | break-ui | 200 pieces render as one list (no paging); "export all" and the key-sound switch sit at the bottom of it | open: decision for the owner |
-| 19 | break-ui | While writing, you can only add to or delete from the end, and earlier lines of a long piece scroll out of view with no way back until you set the pen down | open: decision for the owner (typewriter rule chosen in the prototypes, never explicitly confirmed) |
+| 19 | break-ui | While writing, you can only add to or delete from the end, and earlier lines of a long piece scroll out of view with no way back until you set the pen down | kept for a week of real use (owner), then revisit |
 | 20 | break-ui | Vietnamese letters fall back to another font (Courier Prime lacks them) | won't do for now: rare for this writer; readable |
 | 21 | User test F1 (major) | A finished piece without a reply can't get one once you leave the set-down screen | fixed ("Ask for a reader" on any finished piece's page) |
 | 22 | User test F2 (major) | Red ink below 4.5:1: Night worst 2.94, Manuscript worst 3.64 | fixed (Night red #e8806b, Manuscript red #8a2617, struck red never below 90%: worst ~4.9:1) |
 | 23 | User test F3 | Manuscript muted text over the vignette 3.72–4.06 | fixed (muted #574e42: ~4.9–5.3:1) |
 | 24 | User test F4 | The reply types out below the fold; the suggestion and craft note can be missed | open: decision (auto-scroll is motion while reading) |
-| 25 | User test F5 | "not this one" after you've started moves your text under a new prompt; caret lost | open: decision |
+| 25 | User test F5 | "not this one" after you've started moves your text under a new prompt; caret lost | fixed (owner: the swap hides once you've started) |
 | 26 | User test F6 | Closing within 1.5 s of typing left the last words off other devices | fixed (save on page hide, keepalive) |
-| 27 | User test F7 | No undo after "set down the pen"; a finished piece can't be reopened | open: decision |
+| 27 | User test F7 | No undo after "set down the pen"; a finished piece can't be reopened | fixed (owner: "keep writing" on the set-down screen) |
 | 28 | User test F8 | Tap targets of 32 px (marks, "pieces", goal − +, "← write") | fixed (44 px) |
 | 29 | User test F9 | "· read" tag is ambiguous | fixed ("· has a reply") |
-| 30 | User test (progress) | Job 3 scored 2/5: nothing shows what you're getting better at | open: "what you're practising" list (backlog candidate) |
+| 30 | User test (progress) | Job 3 scored 2/5: nothing shows what you're getting better at | fixed (owner: build now; "what you're practising" at the top of your pieces, with pieces since each lesson) |

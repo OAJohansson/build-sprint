@@ -200,3 +200,9 @@ What happened, what was decided and why. Newest last.
   **Fixed straight away** under the triage rule (wrong-looking or data-risk, quick): F1, F2, F3,
   F6 (save on page hide), F8 (44 px targets), F9; verified in the browser. Four decisions go to
   the owner (F4, F5, F7, and the "what you're practising" view for job 3), plus #18 and #19.
+- **Owner's calls on the open findings:** keep forward-only writing for a week, then revisit
+  (#19); hide "not this one" once you've started (F5); "keep writing" on the set-down screen as
+  the undo (F7); and **build the "what you're practising" list now** (job 3): the reader's
+  lessons, newest first, with the pieces written since, each opening the piece that taught it.
+  All built and checked in the browser (plus a "1 words" fix). Still open: auto-scrolling the
+  reply (F4) and where export lives (#18).

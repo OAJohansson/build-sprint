@@ -33,6 +33,23 @@ function exportAll(pieces: Piece[]) {
   URL.revokeObjectURL(a.href);
 }
 
+/**
+ * What you're practising (user test, job 3): each lesson the reader gave, newest first, with how
+ * many pieces you've written since. Tapping one opens the piece that taught it.
+ */
+function practising(pieces: Piece[]) {
+  const done = finished(pieces);
+  const seen = new Set<string>();
+  const out: { lesson: string; id: string; since: number }[] = [];
+  done.forEach((p, i) => {
+    const lesson = p.feedback?.lesson?.trim();
+    if (!lesson || seen.has(lesson.toLowerCase())) return;
+    seen.add(lesson.toLowerCase());
+    out.push({ lesson, id: p.id, since: i });
+  });
+  return out.slice(0, 5);
+}
+
 export function Pieces({
   pieces,
   sound,
@@ -56,6 +73,25 @@ export function Pieces({
         <h1 className="sc-head-title">YOUR PIECES &nbsp;·&nbsp; {list.length}</h1>
       </header>
       <main className="sc-page">
+        {practising(pieces).length > 0 && (
+          <section className="sc-practice" aria-labelledby="practice-title">
+            <h2 id="practice-title" className="sc-practice-title">
+              what you&apos;re practising
+            </h2>
+            <ul>
+              {practising(pieces).map((l) => (
+                <li key={l.id}>
+                  <button className="sc-practice-row" onClick={() => onOpen(l.id)}>
+                    <span>{l.lesson}</span>
+                    <span className="sc-practice-since">
+                      {l.since === 0 ? "latest" : `${l.since} ${l.since === 1 ? "piece" : "pieces"} since`}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
         {list.length === 0 ? (
           <p className="sc-empty">Nothing set down yet. Your first page is waiting.</p>
         ) : (
@@ -64,7 +100,7 @@ export function Pieces({
               <li key={p.id}>
                 <button className="sc-row" onClick={() => onOpen(p.id)}>
                   <span className="sc-row-meta">
-                    {day(p.finishedAt ?? p.updatedAt)} · {wordCount(p.body)} words{p.feedback ? " · has a reply" : ""}
+                    {day(p.finishedAt ?? p.updatedAt)} · {wordCount(p.body)} {wordCount(p.body) === 1 ? "word" : "words"}{p.feedback ? " · has a reply" : ""}
                   </span>
                   <span className="sc-row-prompt">{p.prompt}</span>
                   <span className="sc-row-first">{p.body.split("\n")[0]}</span>

@@ -154,3 +154,4 @@ What happened, what was decided and why. Newest last.
 - **Owner's idea:** a list of problems to solve in the notebook. Turned the old feature-first
   "Product ideas" list into **Problems to solve** (who, when, what it costs), with its own
   notebook page; one list, problem-first, matching playbook step 1.
+- **Owner:** the Vercel project was named after the repo again (as with Horizon); explained the rename and adding a new .vercel.app domain; `pnpm ship` will name it from product 04. **Owner's idea:** one place to see all ongoing tasks across the sprint and job hunt, an executive-assistant view: sprint to-do #10 and a row in Problems to solve.

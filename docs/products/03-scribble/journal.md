@@ -206,3 +206,11 @@ What happened, what was decided and why. Newest last.
   lessons, newest first, with the pieces written since, each opening the piece that taught it.
   All built and checked in the browser (plus a "1 words" fix). Still open: auto-scrolling the
   reply (F4) and where export lives (#18).
+
+### Wrap-up and ship
+- Testing round merged (PR #26) and live. Wrap-up drafted from the journal, feedback and test
+  report: success check (starting fast and feedback met; weekly output and abandoned pieces too
+  early, check 17 Oct), retro, interview story. **Owner approved the three process changes** and
+  asked to wrap up: playbook step 1 now asks for references and "evoked, not literal" before
+  `/prototype` and lists carried behaviours as decisions; `pnpm ship` is to-do #8 before product
+  04. **Status: shipped.**

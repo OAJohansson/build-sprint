@@ -56,10 +56,14 @@ hour, not a day. Names in brackets are where each practice comes from; see
   not before it.)*
 - **Test plan.** `user-testing/plan.md` from the [template](user-testing/): one scenario per top
   job, with success bars taken from the brief.
-- **Three approaches.** Run `/prototype` on the main screen, pointing it at the brief, to get three
-  genuinely different directions as working variants behind a picker. Judge them against the
-  success signals, not just looks. Pick one or a mix, and note why in `journal.md`. *(Cagan:
-  prototypes over documents.)*
+- **Three approaches.** First collect 2–3 real references for the feel (apps, covers, photos) and
+  write down what *not* to do. A feel is evoked, not drawn: no illustrating the object behind a
+  theme. *(Day 3: four rounds of literal typewriters.)* Then run `/prototype` on the main screen,
+  pointing it at the brief and the references, to get three genuinely different directions as
+  working variants behind a picker. Judge them against the success signals, not just looks. Pick
+  one or a mix, and note why in `journal.md`. When the chosen variant becomes the real app, list
+  the behaviours it brings along (e.g. "you can only edit at the end") as decisions for the owner.
+  *(Cagan: prototypes over documents.)*
 - Fill in **user**, **problem** and **bet** (one line each) on the card `docs/products/NN-slug.md`.
   The bet is the smallest thing that could solve the problem by tonight. Cut everything else.
 
@@ -97,7 +101,9 @@ discoverable with one quiet cue (a muted badge at 0) rather than a sentence expl
 
 ## 3. Ship (≈15 min, do it early, e.g. at lunch)
 
-First deploy of a new app (one-time, about 2 minutes):
+First deploy of a new app (one-time, about 2 minutes). *Being replaced by one command, `pnpm ship
+NN-slug` (to-do #8, before product 04): it names the project, sets the Root Directory and env vars,
+and deploys.*
 
 1. [vercel.com/new](https://vercel.com/new) → import the `build-sprint` repo.
 2. **Project name**: the slug without the number (e.g. `crossfit`), which gives `crossfit-<something>.vercel.app`.

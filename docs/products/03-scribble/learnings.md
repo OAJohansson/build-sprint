@@ -2,7 +2,7 @@
 
 What building this product taught me.
 
-*Retro drafted by Claude from the journal and feedback log, 10 Oct; the owner's own words to be added.*
+*Retro drafted by Claude from the journal and feedback log, 10 Oct; process changes approved by the owner.*
 
 ## Retro
 

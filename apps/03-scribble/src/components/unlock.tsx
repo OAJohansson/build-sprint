@@ -21,13 +21,15 @@ export function Unlock({ error, onUnlock }: { error: string | null; onUnlock: (c
         <input
           id="code"
           className="sc-gate-input"
+          name="access-code"
           type="password"
           autoComplete="current-password"
+          spellCheck={false}
           value={code}
           onChange={(e) => setCode(e.target.value)}
           autoFocus
         />
-        {error && <p className="sc-notice">{error}</p>}
+        {error && <p className="sc-notice" role="alert">{error}</p>}
         <button className="sc-link sc-main" type="submit">
           open the notebook
         </button>

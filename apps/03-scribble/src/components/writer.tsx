@@ -163,7 +163,7 @@ export function Writer({
 
   const header = (
     <header className="sc-head">
-      <span>SCRIBBLE &nbsp;·&nbsp; NO. {pieceNo}</span>
+      <span className="sc-brand"><span className="sc-wide">SCRIBBLE &nbsp;·&nbsp; </span>NO.&nbsp;{pieceNo}</span>
       <Week done={done} />
       <button className="sc-link sc-small" onClick={onOpenPieces}>
         pieces
@@ -185,19 +185,22 @@ export function Writer({
           <p className="sc-end" aria-hidden="true">
             ###
           </p>
-          {stage === "reading" && <p className="sc-reading breathe">your reader is reading</p>}
+          {stage === "reading" && <p className="sc-reading breathe" role="status">your reader is reading…</p>}
+          <p className="sr-only" aria-live="polite">
+            {stage === "read" && feedback ? `${feedback.strength} ${feedback.tryNext} The craft: ${feedback.craft ?? ""}` : ""}
+          </p>
           {typedReply && (
-            <p className="sc-body sc-reply" aria-live="polite">
+            <p className="sc-body sc-reply" aria-hidden="true">
               <Struck text={typedReply} from={5000} red />
             </p>
           )}
           {typedCraft && (
-            <aside className="sc-craft">
+            <aside className="sc-craft" aria-hidden="true">
               <span className="sc-craft-label">the craft</span>
               <Struck text={typedCraft} from={9000} />
             </aside>
           )}
-          {notice && <p className="sc-notice">{notice}</p>}
+          {notice && <p className="sc-notice" role="alert">{notice}</p>}
         </article>
         <div className="sc-after">
           {stage === "set" && (
@@ -216,7 +219,7 @@ export function Writer({
   }
 
   const words = wordCount(draft.body);
-  const status = notice ?? (saveState === "saving" ? "saving" : saveState === "saved" ? "saved" : saveState === "unsaved" ? "kept on this device" : "");
+  const status = notice ?? (saveState === "saving" ? "saving…" : saveState === "saved" ? "saved" : saveState === "unsaved" ? "kept on this device" : "");
 
   return (
     <div className="sc" onClick={() => input.current?.focus()}>
@@ -234,9 +237,9 @@ export function Writer({
         </div>
       </div>
       <footer className="sc-foot" onClick={(e) => e.stopPropagation()}>
-        <span className="sc-folio" aria-live="polite">
+        <span className="sc-folio">
           — {words} {words === 1 ? "word" : "words"}
-          {status && ` · ${status}`} —
+          <span aria-live="polite">{status && ` · ${status}`}</span> —
         </span>
         <button className="sc-link" onClick={() => update({ prompt: newDraft(pieces, draft.prompt).prompt })}>
           <span aria-hidden="true">↻</span> not this one

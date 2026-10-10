@@ -51,7 +51,7 @@ export function Pieces({
         <button className="sc-link sc-small" onClick={onBack}>
           ← write
         </button>
-        <span>YOUR PIECES &nbsp;·&nbsp; {list.length}</span>
+        <h1 className="sc-head-title">YOUR PIECES &nbsp;·&nbsp; {list.length}</h1>
       </header>
       <main className="sc-page">
         {list.length === 0 ? (

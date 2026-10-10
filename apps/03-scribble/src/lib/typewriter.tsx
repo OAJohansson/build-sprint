@@ -10,14 +10,21 @@ function jitter(i: number) {
   return x - Math.floor(x);
 }
 
+// Split into what a reader sees as one character, so emoji with skin tones (👵🏼), hearts (❤️) and
+// letters with combining accents stay whole (break-ui, 10 Oct).
+const segmenter = typeof Intl !== "undefined" && "Segmenter" in Intl ? new Intl.Segmenter(undefined, { granularity: "grapheme" }) : null;
+function graphemes(text: string) {
+  return segmenter ? Array.from(segmenter.segment(text), (s) => s.segment) : Array.from(text);
+}
+
 export function Struck({ text, from = 0, red = false }: { text: string; from?: number; red?: boolean }) {
   return (
     <>
       {text.split("\n").map((line, li, lines) => (
         <span key={li}>
-          {Array.from(line).map((ch, ci) => {
+          {graphemes(line).map((ch, ci) => {
             const i = from + li * 97 + ci;
-            return ch === " " ? (
+            return /^\s$/.test(ch) ? (
               " "
             ) : (
               <span

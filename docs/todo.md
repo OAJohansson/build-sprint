@@ -1,25 +1,57 @@
 # To do
 
-Sprint-wide work to come back to: process, tools and skills, not features (those go in a
-product's backlog) or new products (those go in [ideas](ideas.md)).
+Everything in flight, sprint and job hunt, in priority order. *(me)* = only I can do it.
+Details are in the notes at the bottom. Ask Claude "where are we?" for an update.
 
-| # | What | When | Notes |
-| --- | --- | --- | --- |
-| 1 | **Start learning evals.** Add a small eval to a product, to learn how evals work. | **Next up:** product 02 has shipped | Not extensive. A first candidate: CrossFit Log's AI parsing (spoken note → lifts), with a handful of notes and their correct parse, scored automatically. |
-| 2 | ~~**Judge the design skills** (decision 0008): keep or drop.~~ | Done 7 Oct | Kept: `/prototype` and the audit earned their place; no "feels off on the phone" findings. See decision 0008. |
-| 3 | **Playwright smoke test from the user test** (maybe). Turn the test agent's passing main flow into a committed test that runs on every change. | When a product gets a second round of changes | No new skill needed; the `user-tester` agent and Playwright are already set up. |
-| 4 | **Try Anthropic's `webapp-testing` skill** (maybe). The obvious next testing skill if `user-tester` leaves gaps. | If a product needs browser tests `user-tester` can't do | Mostly overlaps with `user-tester`. It runs Python scripts, which need approval each time in cloud sessions. |
-| 5 | **Test with one real person.** Show a product to an actual user, not just the simulated one. | Any product, once its core flow works | No skill replaces this. On day 1 the biggest finds came from using the app on a real phone. |
-| 6 | **Make the interview stories mine.** Rewrite the drafts for 01 CrossFit Log and 02 Horizon in my own words, and practise the 30-second version out loud. | This week | Interviewers can hear a borrowed story; rewriting is also how I'll remember it. |
-| 7 | **Fill the story bank's gaps.** No strong main story yet for *Ambiguity*, *Technical* and *Speed*. Pick future products that stretch these, and use each story's theme prompts. | Ongoing, check at each wrap-up | Horizon has smaller examples for all three in its theme prompts. The story bank page lists the current gaps. |
+## Now
 
-## Testing: what's covered today
+**Scribble (product 03)**
+- [x] Live at scribble-notebook.vercel.app
+- [x] Live check on the phone: saved ✓
+- [ ] Real Claude feedback: built; add `ANTHROPIC_API_KEY` in Vercel and deploy *(me)*
+- [ ] Testing: audit, break-ui, simulated user
+- [ ] Wrap-up and ship
 
-No new testing skills for now (7 Oct); the main pieces are in place:
+**Job hunt**
+- [ ] Book the Montu UK interview *(me)*
+- [ ] Prepare for the charity interview *(me)*
+- [ ] Keep applying for roles *(me)*
 
-- **Simulated user testing:** the `user-tester` agent drives the real app in a phone-sized browser
-  as the persona. It does what most "QA" skills do.
-- **Edge cases and audits:** the `break-ui` and `web-design-guidelines` skills.
-- **The gap is regression tests:** nothing checks that a change didn't break yesterday's main flow
-  (item 3).
-- **Real users:** item 5.
+## Next (before product 04)
+
+- [ ] `pnpm ship`: deploy setup in one command (#8)
+- [ ] One place to stay on track (#10)
+- [ ] Look at what Montu UK offers patients today (15 min)
+
+## Later
+
+- [ ] Scribble as a Mac app in Swift (#9)
+- [ ] Show a product to one real person (#5)
+- [ ] Rewrite the interview stories in my own words (#6)
+- [ ] Fill the story bank's gaps: Ambiguity, Technical, Speed (#7)
+- [ ] Learn evals: Scribble's model eval (#1)
+- [ ] Maybe: Playwright smoke test (#3), Anthropic's `webapp-testing` skill (#4)
+
+## Done
+
+- [x] Judge the design skills: kept (#2, 7 Oct)
+
+## Notes
+
+- **#1 Evals:** first candidate is Scribble's feedback (in its backlog): ~8 sample pieces, a
+  pass/fail checklist, Haiku vs Sonnet vs Opus.
+- **#3 Playwright:** turn the user test's passing main flow into a test that runs on every change.
+  The gap today: nothing checks a change didn't break yesterday's main flow.
+- **#4 webapp-testing:** only if `user-tester` leaves gaps; it mostly overlaps.
+- **#5 Real person:** no skill replaces this. On day 1 the biggest finds came from a real phone.
+- **#6 Stories:** interviewers can hear a borrowed story; practise the 30-second version out loud.
+- **#8 `pnpm ship`:** `vercel login` once; then one command I run myself (keys never pass through
+  Claude) creates the project with the right name and Root Directory, copies env vars from
+  `.env.local`, deploys and writes the URL into the card. A `vercel.json` replaces the "skip
+  deployments" toggle. Saves ~10–15 min a day.
+- **#9 Scribble for Mac:** learn SwiftUI on an app I use daily, same Supabase data as the web app.
+  Decide: own public repo or inside `build-sprint`. For recruiters: README, short demo video,
+  download in GitHub Releases. Opening without a warning needs Apple notarization ($99/year).
+- **#10 One place:** also in Problems to solve; could be a sprint product.
+- **Testing today:** `user-tester` (simulated user), `break-ui` and `web-design-guidelines`
+  (edge cases and audits). Gaps: regression tests (#3) and real users (#5).

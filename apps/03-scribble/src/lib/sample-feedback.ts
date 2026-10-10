@@ -1,6 +1,6 @@
 import type { Feedback } from "@/lib/types";
 
-// Stand-in until the Claude call exists (build step 3): quotes the writer's own words, one strength
+// Stand-in for the reader when there's no ANTHROPIC_API_KEY in development: quotes the writer's own words, one strength
 // and one thing to try, in the shape the real feedback will have.
 function clip(s: string, words = 12) {
   const w = s.replace(/[.!?]+$/, "").split(/\s+/);
@@ -18,10 +18,16 @@ export function sampleFeedback(text: string): Feedback {
     return {
       strength: `“${first}” already sounds like you talking, not like someone trying to write.`,
       tryNext: "Add one concrete detail the reader could see or hear. What exactly was in front of you?",
+      craft:
+        "Concrete detail does the work that adjectives can't: name the thing itself. Not \"a nice smell\", but \"burnt toast and someone else's perfume\".",
+      lesson: "add one detail I could see",
     };
   }
   return {
     strength: `“${first}” is a confident opening. It drops me straight into the moment.`,
     tryNext: `Your ending, “${last}”, explains the feeling. Try ending on an image instead and let the reader feel it.`,
+    craft:
+      "T.S. Eliot called it the objective correlative: let an object or action carry the feeling. Not \"I felt lonely\", but \"I still set out two cups.\"",
+    lesson: "end on an image, not a feeling",
   };
 }

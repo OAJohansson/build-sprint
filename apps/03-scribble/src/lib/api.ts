@@ -1,6 +1,6 @@
 "use client";
 
-import type { Piece, PieceInput } from "@/lib/types";
+import type { Feedback, Piece, PieceInput } from "@/lib/types";
 
 // Client-side calls to the app's own API. Every call carries the access code.
 
@@ -35,5 +35,7 @@ export const api = (code: string) => ({
       method: "PUT",
       body: JSON.stringify(input),
     }).then((r) => r.piece),
+  read: (input: { prompt: string; body: string; lastLesson?: string; recentLessons?: string[] }) =>
+    call<{ feedback: Feedback }>(code, "/api/feedback", { method: "POST", body: JSON.stringify(input) }).then((r) => r.feedback),
 });
 export type Api = ReturnType<typeof api>;

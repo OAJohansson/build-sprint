@@ -62,7 +62,7 @@ conflicts with the clean-and-minimal principle (decision 0007), the principle wi
   where we met it, and who it comes from) plus 1–3 quiz questions in the category's `### Quiz` as
   `**Q:**` / `**A:**` pairs; they feed the notebook's Quiz page.
 - Non-obvious setup or architecture choices → a new file in `docs/decisions/` from `TEMPLATE.md`.
-- `docs/ideas.md` is for ideas for *new* products. `docs/learnings.md` is the summary of learnings
+- `docs/ideas.md` is "Problems to solve": problems (who, when, what it costs) that could become *new* products, written problem-first; add one whenever the owner mentions a problem. `docs/learnings.md` is the summary of learnings
   across products (a notebook page): design principles, 3–7 key learnings per product, and the
   process changelog (each process change from a retro, made before the next product starts).
   Add to it whenever a product teaches something, not only at wrap-up.

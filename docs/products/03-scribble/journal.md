@@ -142,3 +142,39 @@ What happened, what was decided and why. Newest last.
 - Fixed while testing: the word count and save status were squeezed to "— …" on a phone; they now
   get their own line.
 - **Owner asked whether sharing CrossFit Log's Supabase project is a problem.** Fine at one user; trade-offs (blast radius, shared fate vs free-plan fit, stays awake, reversible) added to decision 0009 and the knowledge bank.
+
+### Deploy, and making setup faster
+- PR #23 merged; owner created the Vercel project and deployed. Owner: too much time goes into
+  setup every day. Proposed a `vercel login` once plus a `pnpm ship NN-slug` script the owner runs
+  (keys go from their Mac to Vercel, never through Claude) and a `vercel.json` that replaces the
+  "skip deployments" toggle. **Decided:** sprint to-do #8, right after Scribble's wrap-up.
+- **Owner's idea:** rebuild Scribble as a native Mac app in Swift, to learn Swift and because
+  they'll use it often; showcase it to recruiters through an open-source GitHub repo. Sprint
+  to-do #9, with the open questions (repo, sync, notarization) noted.
+- **Owner's idea:** a list of problems to solve in the notebook. Turned the old feature-first
+  "Product ideas" list into **Problems to solve** (who, when, what it costs), with its own
+  notebook page; one list, problem-first, matching playbook step 1.
+- **Owner:** the Vercel project was named after the repo again (as with Horizon); explained the rename and adding a new .vercel.app domain; `pnpm ship` will name it from product 04. **Owner's idea:** one place to see all ongoing tasks across the sprint and job hunt, an executive-assistant view: sprint to-do #10 and a row in Problems to solve.
+- **Live:** https://scribble-notebook.vercel.app (Vercel project renamed to `scribble`, new domain added). Checked: the page loads, and the API refuses without the right access code.
+- **Phone check passed:** "saved" appeared on the live site. Owner: "it feels nice", plus four
+  points (feedback #6–9): editable weekly goal, unclear marks, unclear "another spark", and a
+  stronger learning loop (scaffolding before writing, a short theory note in the feedback, one
+  lesson per piece). Asked for a critique before any changes.
+
+### Owner feedback 6–9, and build step 3 (the reader)
+- **Critique before changes (owner asked):** the marks and the goal are one problem, solved by
+  progressive disclosure (tap the marks → "this week: 2 of 4 · goal − 4 +"). "Another spark"
+  failed clarity over cleverness and sat far from what it changes (proximity). On the learning
+  loop: one lesson per piece is deliberate practice (Ericsson); but a pop-up before writing would
+  add a step and raise the bar, against the riskiest assumption (perfectionism). Instead, feed
+  forward (Hattie and Timperley): the last lesson becomes one quiet "last time" line.
+- **Decided (owner):** goal card on the marks; "↻ not this one" under the prompt (owner asked for
+  five more options, chose this plus the icon); a craft note in the feedback and the "last time"
+  line; no pop-up. Curriculum and craft notebook went to the backlog.
+- **Built:** `/api/feedback` with Claude Sonnet 5.5 (structured output: strength, try next, the
+  craft, a short lesson; medium effort; server-side refusal fallback; stable system prompt,
+  cached). The last lesson and recent lessons go with each request, so the reader can notice
+  progress and avoid repeats. The craft note types out after the reply, under a rule.
+- **Checked locally with the sample reader** (no key on this Mac): swap, set down, reply, craft
+  note, "last time" on the next page, goal card saved. The real Claude call gets its first test
+  live once `ANTHROPIC_API_KEY` is in Vercel.

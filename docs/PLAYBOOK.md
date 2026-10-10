@@ -24,7 +24,7 @@ Fall in love with the problem, not the solution. Write it all in the product's *
 hour, not a day. Names in brackets are where each practice comes from; see
 [Product craft](product-craft.md).
 
-- Pick an idea from [`ideas.md`](ideas.md), then `pnpm new <slug> "Display Title"`. This creates
+- Pick a problem from [Problems to solve](ideas.md), then `pnpm new <slug> "Display Title"`. This creates
   the app, the card, the product folder (with an empty brief) and the README row.
 - **Problem.** One or two sentences: who has it, when, and what it costs them today. No features.
   *(Perri: outcomes over outputs.)*

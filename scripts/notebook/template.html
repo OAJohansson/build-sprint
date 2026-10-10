@@ -249,7 +249,7 @@ function overview() {
       <div class="tally"><span><b>${count("shipped")}</b>/${DATA.total} shipped</span><span><b>${count("building")}</b> building</span><span><b>${count("parked")}</b> parked</span></div>
     </section>
     <section class="head"><h2>Products</h2>${rows}</section>
-    <section class="head"><h2>Product ideas</h2><div class="prose">${md(DATA.ideas)}</div></section>
+    <section class="head"><h2>Problems to solve</h2><div class="prose">${md(DATA.ideas)}</div></section>
     <div class="links">${DATA.pages.map((pg) => `<a class="btn" href="#${pg.id}">${esc(pg.label)}</a>`).join("")}<a class="btn" href="${DATA.repo}">Code on GitHub</a></div>`;
 }
 

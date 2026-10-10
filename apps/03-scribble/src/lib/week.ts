@@ -1,7 +1,5 @@
 import type { Piece } from "@/lib/types";
 
-export const WEEKLY_GOAL = 4;
-
 /** Monday 00:00 of this week, in the device's time zone. */
 export function startOfWeek(now = new Date()) {
   const d = new Date(now);

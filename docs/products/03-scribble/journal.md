@@ -183,3 +183,14 @@ What happened, what was decided and why. Newest last.
   own words; one clear suggestion, no rewrite; the craft note taught something specific ("detail
   is everything: keep the detail in rather than summarising"). 3 of 3 on the checklist for the
   first piece. The model eval can stay in the backlog for now.
+
+### Testing round (playbook 3b): audit, break-ui, then the simulated user
+- Footer fix merged (PR #25). **Audit:** screen readers would have heard the typed-out reply
+  letter by letter and a word count on every keystroke; fixed, plus loading text, hover states,
+  labels and `color-scheme` (feedback #11–13).
+- **break-ui** with worst cases seeded through the API (2,000 words, one word, a long URL, emoji
+  and Vietnamese, a 300-character prompt, 200 pieces, goal 7 with extras): fixed emoji splitting,
+  the narrow header and the list position (#14–16). My first typing-speed measurement (1 s per
+  key) was wrong: the background tab throttles frames. Measured properly: 8–29 ms. Two decisions
+  for the owner (#18, #19).
+- Simulated user test running against a fresh local app.

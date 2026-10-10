@@ -5,13 +5,6 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 ## Now
 
-**Scribble (product 03)**
-- [x] Live at scribble-notebook.vercel.app
-- [x] Live check on the phone: saved ✓
-- [ ] Real Claude feedback: built; add `ANTHROPIC_API_KEY` in Vercel and deploy *(me)*
-- [ ] Testing: audit, break-ui, simulated user
-- [ ] Wrap-up and ship
-
 **Job hunt** (kept current by Job Coach, last updated Sat 10 Oct. Detail and dates in [Focus](https://claude.ai/artifact/EBNLSbWYvYyf7moz26PCuV#focus))
 - [ ] CharityJob first chat, Wed 14 Oct, 5pm (10am UK). Prep the GambleAware and Vinehealth walkthroughs, mock run on Tue *(me)*
 - [ ] Oak National Academy: submit by Tue 13 Oct (closes Wed 14) *(me)*
@@ -21,6 +14,7 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 ## Next (before product 04)
 
+- [ ] Scribble check on 17 Oct: pieces written that week (goal 4) and any abandoned *(me)*
 - [ ] `pnpm ship`: deploy setup in one command (#8)
 - [ ] One place to stay on track (#10)
 - [ ] Look at what Montu UK offers patients today (15 min)
@@ -29,13 +23,14 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 - [ ] Scribble as a Mac app in Swift (#9)
 - [ ] Show a product to one real person (#5)
-- [ ] Rewrite the interview stories in my own words (#6)
+- [ ] Rewrite the interview stories in my own words, now including Scribble (#6)
 - [ ] Fill the story bank's gaps: Ambiguity, Technical, Speed (#7)
 - [ ] Learn evals: Scribble's model eval (#1)
 - [ ] Maybe: Playwright smoke test (#3), Anthropic's `webapp-testing` skill (#4)
 
 ## Done
 
+- [x] Scribble shipped: scribble-notebook.vercel.app (10 Oct)
 - [x] Judge the design skills: kept (#2, 7 Oct)
 
 ## Notes

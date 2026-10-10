@@ -12,7 +12,7 @@ reps in going from idea to something live, plus an honest write-up of what I lea
 | --: | --- | --- | --- | --- | --- |
 | 1 | **CrossFit Log** | Coach says “70% of your 1RM” and I never remember my PBs, because logging lifts after class is too much friction | ✅ shipped | [live](https://crossfit-log.vercel.app) | [write-up](docs/products/01-crossfit.md) · [code](apps/01-crossfit) |
 | 2 | **Horizon** | Late in the day I don't know how long until sunset, and finding out means a search or a weather app | ✅ shipped | [live](https://horizon-beta-wine.vercel.app) | [write-up](docs/products/02-horizon.md) · [code](apps/02-horizon) |
-| 3 | **Scribble** | Writing practice feels too big to start (reviews) or turns into perfectionism (journalling), so the habit doesn't stick | 🛠️ building | [live](https://scribble-notebook.vercel.app) | [write-up](docs/products/03-scribble.md) · [code](apps/03-scribble) |
+| 3 | **Scribble** | Writing practice feels too big to start (reviews) or turns into perfectionism (journalling), so the habit doesn't stick | ✅ shipped | [live](https://scribble-notebook.vercel.app) | [write-up](docs/products/03-scribble.md) · [code](apps/03-scribble) |
 <!-- products:end -->
 
 _This table is generated from `docs/products/*.md`. Run `pnpm sync` after editing frontmatter._

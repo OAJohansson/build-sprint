@@ -121,6 +121,18 @@ discovering my own topics, longer forms, a daily streak, a rich-text editor, off
 
 ## Success check (at wrap-up)
 
-**Evidence so far (10 Oct):** guardrail *kind and specific feedback*: first real reply passed all
-checks (quoted the writer, one suggestion, no rewrite; the craft note taught "keep the detail in
-rather than summarising"). Full check at wrap-up.
+*10 Oct, drafted from the test report and the owner's first real use.*
+
+| Signal | Target | What happened |
+| --- | --- | --- |
+| Output (main) | 4+ pieces in the first week | **Too early to tell:** the week has just started. Check on 17 Oct. |
+| Easy to start | first word ≤ 60 s, no decisions | **Met:** ~20 s first time (unlock, read, tap, type), 6–8 s after; 1 tap |
+| Small is allowed | finish in ≤ 10 min | **Met:** a 42-word piece in 3–4 min; no minimum length |
+| Feedback helps | can name one thing to try | **Met:** the owner's first real reply taught "keep the detail in rather than summarising" |
+| Guardrail: kind and specific feedback | all pass | **Met so far:** 1 real reply checked (quotes, one suggestion, no rewrite, kind); the model eval stays in the backlog |
+| Guardrail: perfectionism | < 1 in 4 pieces abandoned | **Too early to tell;** forward-only writing and "keep writing" are the levers to watch |
+
+**Did it solve the problem?** For starting, yes: writing begins in seconds and small pieces feel
+finished. For learning, the loop is in place (one lesson, the craft behind it, the lesson carried
+forward, a list of what you're practising), but whether it makes me a better writer needs weeks of
+use. Next check: 17 Oct (output and abandoned pieces).

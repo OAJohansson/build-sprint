@@ -1,9 +1,12 @@
-# Product ideas
+# Problems to solve
 
-Ideas for the next products (features for an existing product go in its own backlog). Rough ideas. Move one into a product with `pnpm new` each morning.
-Tag with the skill it exercises, so the 20 products cover a spread of skills.
+Problems I've noticed, mine or other people's, waiting to become a product. Write the *problem*,
+not the app: who has it, when it hits, and what it costs them today. Add one whenever it comes
+up; each morning, pick one and run `pnpm new` (playbook step 1). Features for an existing product
+go in its own backlog instead.
 
-| Idea | One-liner | Skill it stretches |
-| --- | --- | --- |
-| CrossFit log | Log WODs, track PRs per movement, see progress | CRUD + local persistence, mobile-first UI |
-|  |  |  |
+| Problem (who, when, what it costs) | Where it came from | Skill it might stretch | Status |
+| --- | --- | --- | --- |
+| Coach says "70% of your 1RM" mid-class and I can't remember my PBs, because logging after class is too much friction | Me, at CrossFit | Voice input, AI parsing, a real database | Built: 01 CrossFit Log |
+| Late afternoon somewhere new, I don't know if I still have time to catch the sunset; finding out means a search and time-zone maths | Me, travelling | Visual design, animation, public APIs | Built: 02 Horizon |
+| I want to practise writing, but reviews feel too big to start and journalling turned into perfectionism, so the habit doesn't stick | Me, journalling | AI feedback, design taste, autosave | Built: 03 Scribble |

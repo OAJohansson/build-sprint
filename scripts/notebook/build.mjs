@@ -95,13 +95,14 @@ const PAGES = [
   { id: "stories", label: "Interview stories", eyebrow: "Story bank", file: "docs/interview-stories.md" },
   { id: "knowledge", label: "Knowledge bank", eyebrow: "General knowledge", file: "docs/knowledge-bank.md" },
   { id: "quiz", label: "Quiz", eyebrow: "Active recall", title: "Knowledge quiz", generated: true },
+  { id: "problems", label: "Problems to solve", eyebrow: "Pick the next product here", file: "docs/ideas.md" },
   { id: "todo", label: "To do", eyebrow: "Sprint to-do", file: "docs/todo.md" },
 ];
 function relink(text, file) {
   const dir = path.posix.dirname(file);
   return text.replace(/\]\((?!https?:|#|mailto:)([^)\s#]+)(#[^)\s]*)?\)/g, (_, target) => {
     const to = path.posix.normalize(path.posix.join(dir, target));
-    const page = to === "docs/ideas.md" ? { id: "overview" } : PAGES.find((pg) => pg.file === to);
+    const page = PAGES.find((pg) => pg.file === to);
     return page ? `](#${page.id})` : `](${REPO}/blob/main/${to})`;
   });
 }

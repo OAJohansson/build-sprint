@@ -142,3 +142,15 @@ What happened, what was decided and why. Newest last.
 - Fixed while testing: the word count and save status were squeezed to "— …" on a phone; they now
   get their own line.
 - **Owner asked whether sharing CrossFit Log's Supabase project is a problem.** Fine at one user; trade-offs (blast radius, shared fate vs free-plan fit, stays awake, reversible) added to decision 0009 and the knowledge bank.
+
+### Deploy, and making setup faster
+- PR #23 merged; owner created the Vercel project and deployed. Owner: too much time goes into
+  setup every day. Proposed a `vercel login` once plus a `pnpm ship NN-slug` script the owner runs
+  (keys go from their Mac to Vercel, never through Claude) and a `vercel.json` that replaces the
+  "skip deployments" toggle. **Decided:** sprint to-do #8, right after Scribble's wrap-up.
+- **Owner's idea:** rebuild Scribble as a native Mac app in Swift, to learn Swift and because
+  they'll use it often; showcase it to recruiters through an open-source GitHub repo. Sprint
+  to-do #9, with the open questions (repo, sync, notarization) noted.
+- **Owner's idea:** a list of problems to solve in the notebook. Turned the old feature-first
+  "Product ideas" list into **Problems to solve** (who, when, what it costs), with its own
+  notebook page; one list, problem-first, matching playbook step 1.

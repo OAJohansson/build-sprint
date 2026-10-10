@@ -6,7 +6,7 @@ It's built from these files by `pnpm notebook` and republished whenever they cha
 | Where | What goes there |
 | --- | --- |
 | [`PLAYBOOK.md`](PLAYBOOK.md) | The daily loop: how a product goes from idea to deployed in one day. |
-| [`ideas.md`](ideas.md) | Ideas for the next products. Pick from here each morning. |
+| [`ideas.md`](ideas.md) | Problems to solve: problem-first ideas for the next products. Pick from here each morning. A page in the notebook. |
 | [`products/`](products/) | Per product: a lean card (`NN-slug.md`: user, problem, bet, links, learned; feeds the README table and portfolio) and a folder (`NN-slug/`) with the journal, feedback log, user testing, backlog and learnings. Each becomes a sub-page in the notebook. Created by `pnpm new`. |
 | [`product-craft.md`](product-craft.md) | The product-management voices behind the playbook (Cagan, Perri, Torres…), their key ideas and where each shows up. A page in the notebook. |
 | [`interview-stories.md`](interview-stories.md) | The story bank: how to tell a product as an interview story, and a table of every product's story and the interview themes it covers. A page in the notebook. |

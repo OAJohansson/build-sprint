@@ -2,42 +2,38 @@
 
 import { useState } from "react";
 import { Care } from "./care";
-import { Journey, type JourneyKind } from "./journey";
+import { Journey } from "./journey";
 import { Setup } from "./setup";
-import { demoStore, type Store } from "./store";
 import { Today } from "./today";
+import { useHydrated, useMallow } from "./use-mallow";
 
-// The prototype app: Today, Journey and Care behind a three-item tab bar, plus first-run setup.
+// Mallow: Today, Journey and Care behind a three-item tab bar, with first-run setup before them.
 
 type Tab = "today" | "journey" | "care";
 
-export default function MallowApp({ journey }: { journey: JourneyKind }) {
-  const [store, setStoreRaw] = useState<Store>(demoStore);
-  const [setup, setSetup] = useState(() => readParam("setup") === "1");
-  const [tab, setTabRaw] = useState<Tab>(() => (readParam("tab") as Tab) || "today");
+export default function MallowApp() {
+  const hydrated = useHydrated();
+  const { store, mode, setStore, createStore, startDemo, leaveDemo, eraseReal } = useMallow();
+  const [tab, setTabRaw] = useState<Tab>("today");
   const [addingMedicine, setAddingMedicine] = useState(false);
-  const setStore = (fn: (s: Store) => Store) => setStoreRaw(fn);
 
   const setTab = (t: Tab) => {
     setTabRaw(t);
-    writeParam("tab", t);
     window.scrollTo(0, 0);
   };
 
-  if (setup)
-    return (
-      <Setup
-        onDone={(s) => {
-          setStoreRaw(s);
-          setSetup(false);
-          writeParam("setup", null);
-          setTab("today");
-        }}
-      />
-    );
+  if (!hydrated) return null;
+  if (!store) return <Setup onDone={createStore} onDemo={startDemo} />;
 
   return (
     <>
+      {mode === "demo" && (
+        <div className="pt-[env(safe-area-inset-top)] text-center text-xs font-medium" style={{ background: "var(--mallow-tint)", color: "var(--mallow-deep)" }}>
+          <button onClick={leaveDemo} className="min-h-7 w-full">
+            Demo data · tap to leave
+          </button>
+        </div>
+      )}
       {tab === "today" && (
         <Today
           store={store}
@@ -48,21 +44,23 @@ export default function MallowApp({ journey }: { journey: JourneyKind }) {
           }}
         />
       )}
-      {tab === "journey" && <Journey store={store} kind={journey} />}
+      {tab === "journey" && <Journey store={store} />}
       {tab === "care" && (
         <Care
           store={store}
           setStore={setStore}
-          addingMedicine={addingMedicine}
-          setAddingMedicine={setAddingMedicine}
-          onLoadDemo={() => {
-            setStoreRaw(demoStore());
+          demo={mode === "demo"}
+          onStartDemo={() => {
+            startDemo();
             setTab("today");
           }}
-          onStartFresh={() => {
-            setSetup(true);
-            writeParam("setup", "1");
+          onLeaveDemo={() => {
+            leaveDemo();
+            setTab("today");
           }}
+          onErase={eraseReal}
+          addingMedicine={addingMedicine}
+          setAddingMedicine={setAddingMedicine}
         />
       )}
       <TabBar tab={tab} onTab={setTab} />
@@ -122,14 +120,3 @@ const DropIcon = () => (
     <path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z" />
   </svg>
 );
-
-function readParam(k: string) {
-  if (typeof window === "undefined") return null;
-  return new URLSearchParams(window.location.search).get(k);
-}
-function writeParam(k: string, v: string | null) {
-  const url = new URL(window.location.href);
-  if (v === null) url.searchParams.delete(k);
-  else url.searchParams.set(k, v);
-  history.replaceState(null, "", url);
-}

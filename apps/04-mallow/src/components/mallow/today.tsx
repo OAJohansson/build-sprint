@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { NOW, TODAY, amountLabel, daysBetween, doctor, long, reliefPhrase, units, type Medicine } from "./data";
+import { amountLabel, daysBetween, long, nowTime, reliefPhrase, today, units, type Medicine } from "@/lib/mallow/data";
 import { CompactGrades, Muted, Primary, ReliefRow, Sheet, SideEffectChips, toggleIn } from "./shared";
-import { lastOf, pendingDose, type Store } from "./store";
+import { dayOf, doctorName, lastOf, pendingDose, withDay, type Store } from "@/lib/mallow/store";
 
 // Today: a mallow that grows quietly beside the two things Sam does here, logging a dose and
 // saying how the day was. The plant is never explained: a logged day adds a leaf, a missed day
@@ -28,8 +28,7 @@ function Plant({ store, grewToday }: { store: Store; grewToday: boolean }) {
   const cycle = store.next ? Math.max(daysBetween(last, store.next), 7) : 30;
   const slotY = (i: number) => BASE - 18 - (Math.min(i, cycle - 1) * (BASE - 18 - TOP - 26)) / (cycle - 1);
   const loggedIdx = store.days.filter((d) => d.logged && d.date >= last).map((d) => daysBetween(last, d.date));
-  if (store.today.logged) loggedIdx.push(daysBetween(last, TODAY));
-  const blooming = store.next !== "" && TODAY >= store.next;
+  const blooming = store.next !== "" && today() >= store.next;
 
   const budX = stemX(TOP);
   return (
@@ -40,7 +39,7 @@ function Plant({ store, grewToday }: { store: Store; grewToday: boolean }) {
         const right = i % 2 === 0;
         const len = 26 + 12 * (1 - i / cycle) + ((i * 7) % 5); // older leaves have grown more
         const angle = right ? -24 - ((i * 5) % 12) : 204 + ((i * 5) % 12);
-        const isNew = grewToday && i === daysBetween(last, TODAY);
+        const isNew = grewToday && i === daysBetween(last, today());
         return (
           <g key={i} transform={`translate(${stemX(y).toFixed(1)} ${y.toFixed(1)}) rotate(${angle})`}>
             <path
@@ -78,45 +77,45 @@ export function Today({
   const [doseOpen, setDoseOpen] = useState(false);
   const [checkinOpen, setCheckinOpen] = useState(false);
   const [grewToday, setGrewToday] = useState(false);
-  const [thanks, setThanks] = useState<string>();
-  const pending = pendingDose(store);
+  const [thanks, setThanks] = useState<{ when: string; phrase: string }>();
+  // Doses are asked about relative to when this visit started, so one logged a minute ago isn't.
+  const [visit] = useState(() => ({ date: today(), time: nowTime() }));
+  const pending = pendingDose(store, visit);
   const medName = (id: string) => store.meds.find((m) => m.id === id);
-  const toGo = store.next ? daysBetween(TODAY, store.next) : undefined;
+  const now = dayOf(store, today());
+  const toGo = store.next ? daysBetween(today(), store.next) : undefined;
+  const when = pending ? (pending.date === visit.date ? `Today at ${pending.dose.time}` : `Last night at ${pending.dose.time}`) : "";
 
   const rate = (relief: number) => {
     if (!pending) return;
-    setStore((s) => {
-      const days = [...s.days];
-      const day = { ...days[days.length - 1] };
-      day.doses = day.doses.map((d, i) => (i === pending.i ? { ...d, relief } : d));
-      days[days.length - 1] = day;
-      return { ...s, days };
-    });
-    setThanks(reliefPhrase[relief].toLowerCase());
+    setStore((s) => withDay(s, pending.date, (d) => ({ ...d, doses: d.doses.map((x, i) => (i === pending.i ? { ...x, relief } : x)) })));
+    setThanks({ when: pending.date === visit.date ? `this morning's dose` : `last night's dose`, phrase: reliefPhrase[relief].toLowerCase() });
   };
 
   return (
-    <main className="mx-auto w-full max-w-[440px] px-5 pb-36 pt-[calc(env(safe-area-inset-top)+var(--top-gap))]">
+    <main className="mx-auto w-full max-w-[440px] px-5 pb-36 pt-[calc(env(safe-area-inset-top)+20px)]">
       <header className="flex items-baseline justify-between">
         <span className="serif text-xl" style={{ color: "var(--mallow-deep)" }}>
           Mallow
         </span>
         <span className="text-sm" style={{ color: "var(--ink-soft)" }}>
-          {long(TODAY)}
+          {long(today())}
         </span>
       </header>
 
       {pending ? (
         <section className="mt-6 rounded-3xl p-4" style={{ background: "var(--mallow-wash)" }}>
           <Muted>
-            Last night at {pending.dose.time} you took {amountLabel(medName(pending.dose.med)!, pending.dose.amount)}{" "}
+            {when} you took {amountLabel(medName(pending.dose.med)!, pending.dose.amount)}{" "}
             {medName(pending.dose.med)?.name}.
           </Muted>
           <p className="serif mb-3 mt-0.5 text-lg">How much did it help?</p>
           <ReliefRow onPick={rate} />
         </section>
       ) : thanks ? (
-        <Muted className="enter mt-6 text-center">Noted: last night&apos;s dose {thanks}.</Muted>
+        <Muted className="enter mt-6 text-center">
+          Noted: {thanks.when} {thanks.phrase}.
+        </Muted>
       ) : null}
 
       <div className="mt-6">
@@ -126,7 +125,7 @@ export function Today({
       {toGo !== undefined && toGo > 0 && (
         <div className="mt-4 text-center">
           <p className="serif text-xl">
-            <span className="tnum">{toGo}</span> {toGo === 1 ? "day" : "days"} until you see {doctor}
+            <span className="tnum">{toGo}</span> {toGo === 1 ? "day" : "days"} until you see {doctorName(store)}
           </p>
           <Muted className="mt-1">What you log here is what they&apos;ll see.</Muted>
         </div>
@@ -140,22 +139,22 @@ export function Today({
         >
           <span className="font-medium">Took a dose</span>
           <span className="text-xs" style={{ color: "var(--ink-soft)" }}>
-            {store.meds.length ? `${store.today.doses.length} today` : "Add your medicine"}
+            {store.meds.length ? `${now.doses.length} today` : "Add your medicine"}
           </span>
         </button>
         <button
           onClick={() => setCheckinOpen(true)}
           className="press flex min-h-16 flex-col items-center justify-center rounded-2xl px-2 text-white"
-          style={{ background: store.today.logged ? "var(--leaf-deep)" : "var(--mallow)" }}
+          style={{ background: now.logged ? "var(--leaf-deep)" : "var(--mallow)" }}
         >
-          <span className="font-medium">{store.today.logged ? "Today is logged" : "How was today?"}</span>
-          <span className="text-xs opacity-80">{store.today.logged ? "Tap to change" : `${store.tracked.length} quick questions`}</span>
+          <span className="font-medium">{now.logged ? "Today is logged" : "How was today?"}</span>
+          <span className="text-xs opacity-80">{now.logged ? "Tap to change" : `${store.tracked.length} quick questions`}</span>
         </button>
       </div>
 
-      {store.today.doses.length > 0 && (
+      {now.doses.length > 0 && (
         <ul className="mt-6 divide-y text-sm" style={{ borderColor: "var(--line)" }}>
-          {store.today.doses.map((d, i) => {
+          {now.doses.map((d, i) => {
             const m = medName(d.med);
             return (
               <li key={i} className="enter flex justify-between gap-3 py-2.5" style={{ borderColor: "var(--line)" }}>
@@ -166,7 +165,7 @@ export function Today({
                   {m ? `${amountLabel(m, d.amount)} ${m.name}` : "Dose"}
                 </span>
                 <span style={{ color: "var(--ink-soft)" }}>
-                  {d.relief !== undefined ? reliefPhrase[d.relief] : "We'll ask tomorrow"}
+                  {d.relief !== undefined ? reliefPhrase[d.relief] : "We'll ask later"}
                 </span>
               </li>
             );
@@ -179,7 +178,7 @@ export function Today({
         meds={store.meds}
         onClose={() => setDoseOpen(false)}
         onLog={(med, amount, time) => {
-          setStore((s) => ({ ...s, today: { ...s.today, doses: [...s.today.doses, { med, amount, time }] } }));
+          setStore((s) => withDay(s, today(), (d) => ({ ...d, doses: [...d.doses, { med, amount, time }].sort((a, b) => a.time.localeCompare(b.time)) })));
           setDoseOpen(false);
         }}
       />
@@ -188,9 +187,10 @@ export function Today({
         open={checkinOpen}
         store={store}
         onClose={() => setCheckinOpen(false)}
+        day={now}
         onSave={(grades, side) => {
-          setGrewToday(!store.today.logged);
-          setStore((s) => ({ ...s, today: { ...s.today, logged: true, grades, side } }));
+          setGrewToday(!now.logged);
+          setStore((s) => withDay(s, today(), (d) => ({ ...d, logged: true, grades, side })));
           setCheckinOpen(false);
         }}
       />
@@ -211,7 +211,7 @@ function DoseSheet({
 }) {
   const [editing, setEditing] = useState<Medicine>();
   const [amount, setAmount] = useState(0);
-  const [time, setTime] = useState(NOW);
+  const [time, setTime] = useState(nowTime);
   const close = () => {
     setEditing(undefined);
     onClose();
@@ -222,12 +222,12 @@ function DoseSheet({
       {!editing ? (
         <>
           <h2 className="serif text-2xl">Which one?</h2>
-          <Muted className="mt-1">Logged at {NOW}. Tomorrow we&apos;ll ask how it helped.</Muted>
+          <Muted className="mt-1">Logged now. Next time you open Mallow, it asks how it helped.</Muted>
           <div className="mt-5 flex flex-col gap-2">
             {meds.map((m) => (
               <div key={m.id} className="flex gap-2">
                 <button
-                  onClick={() => onLog(m.id, m.amount, NOW)}
+                  onClick={() => onLog(m.id, m.amount, nowTime())}
                   className="press flex min-h-16 flex-1 flex-col justify-center rounded-2xl px-5 text-left text-white"
                   style={{ background: "var(--mallow)" }}
                 >
@@ -240,7 +240,7 @@ function DoseSheet({
                   onClick={() => {
                     setEditing(m);
                     setAmount(m.amount);
-                    setTime(NOW);
+                    setTime(nowTime());
                   }}
                   aria-label={`Change amount or time for ${m.name}`}
                   className="press min-h-16 rounded-2xl border px-4 text-sm"
@@ -293,16 +293,18 @@ function DoseSheet({
 function CheckinSheet({
   open,
   store,
+  day,
   onClose,
   onSave,
 }: {
   open: boolean;
   store: Store;
+  day: ReturnType<typeof dayOf>;
   onClose: () => void;
   onSave: (grades: Record<string, number>, side: string[]) => void;
 }) {
-  const [grades, setGrades] = useState<Record<string, number>>(store.today.grades);
-  const [side, setSide] = useState<string[]>(store.today.side);
+  const [grades, setGrades] = useState<Record<string, number>>(day.grades);
+  const [side, setSide] = useState<string[]>(day.side);
   const done = store.tracked.every((id) => grades[id] !== undefined);
   return (
     <Sheet open={open} onClose={onClose} label="How was today?">

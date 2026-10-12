@@ -103,6 +103,12 @@ the PDF is made on the phone. A demo history fills the app for testing and showi
 - **No fixed moment yet;** reminders and notifications come later.
 - **Name: Mallow,** a soothing plant. Palette from the flower: purple, green and white.
 
+**Design (owner, 12 Oct, after two prototype rounds):** three tabs, Today, Journey (patients'
+own word) and Care. Today is a mallow that quietly grows a leaf per logged day and flowers on
+appointment day, never explained; the purpose is said plainly instead ("9 days until you see
+Dr Patel"). Journey is a calendar shaded by one symptom's grade. Care holds medicines (more than
+one allowed), what's tracked and the appointments.
+
 **Design references (owner, 12 Oct):** Vinehealth, the cancer companion app the owner worked on:
 plain-word grades, "last time you mentioned…", choosing your own symptoms, a report for the
 appointment, accessibility for low vision and brain fog. Inspiration only; Mallow should be its

@@ -78,3 +78,15 @@ What happened, what was decided and why. Newest last.
   chapter"). The summary for Dr Patel sits on top in all three.
 - Demo history is now generated (11 weeks, three appointments, a few missed days and notes), so
   summaries and trends are computed rather than typed in.
+
+### Calendar chosen; prototype promoted
+- **Owner chose the Calendar** for Journey: a month shaded by one symptom's grade (deeper mauve =
+  harder day, never red/green), appointments marked, tap a day for its doses, relief and notes.
+  Timeline and Chapters were dropped (Chapters' "better than last chapter" lives on in the summary).
+- Kept by default (owner didn't object): tabs **Today · Journey · Care**; the bloom on
+  appointment day stays an unannounced surprise.
+- **Promoted into the real app** and the prototype surface deleted: real dates and times, data in
+  localStorage, first-run setup (with an optional doctor's name), relief asked about doses taken an
+  hour or more before the app was opened, appointments roll over once the day has passed.
+- **Demo data is kept apart from real entries** (separate storage keys, a "Demo data · tap to
+  leave" band), meeting requirement 9: trying the demo never touches real data.

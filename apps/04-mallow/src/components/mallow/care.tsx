@@ -1,25 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import { amountLabel, doctor, symptomCatalogue, type Medicine } from "./data";
+import { amountLabel, symptomCatalogue, type Medicine } from "@/lib/mallow/data";
 import { MedicineScreen } from "./medicine";
 import { Chips, Muted, Secondary, toggleIn } from "./shared";
-import { lastOf, type Store } from "./store";
+import { lastOf, type Store } from "@/lib/mallow/store";
 
-// Care: what Sam takes, what Sam tracks, and when the appointments are.
+// Care: what you take, what you track, and when the appointments are.
 
 export function Care({
   store,
   setStore,
-  onLoadDemo,
-  onStartFresh,
+  demo,
+  onStartDemo,
+  onLeaveDemo,
+  onErase,
   addingMedicine,
   setAddingMedicine,
 }: {
   store: Store;
   setStore: (fn: (s: Store) => Store) => void;
-  onLoadDemo: () => void;
-  onStartFresh: () => void;
+  demo: boolean;
+  onStartDemo: () => void;
+  onLeaveDemo: () => void;
+  onErase: () => void;
   addingMedicine: boolean;
   setAddingMedicine: (v: boolean) => void;
 }) {
@@ -27,7 +31,7 @@ export function Care({
   const last = lastOf(store);
 
   return (
-    <main className="mx-auto w-full max-w-[440px] px-5 pb-36 pt-[calc(env(safe-area-inset-top)+var(--top-gap))]">
+    <main className="mx-auto w-full max-w-[440px] px-5 pb-36 pt-[calc(env(safe-area-inset-top)+20px)]">
       <h1 className="serif text-[2rem] leading-tight">Care</h1>
 
       <Section title="Your medicine">
@@ -73,8 +77,18 @@ export function Care({
         />
       </Section>
 
-      <Section title={`Appointments with ${doctor}`}>
+      <Section title="Appointments">
         <div className="divide-y rounded-2xl border bg-white" style={{ borderColor: "var(--line)" }}>
+          <label className="flex min-h-14 items-center justify-between gap-4 px-4" style={{ borderColor: "var(--line)" }}>
+            <span className="font-medium">Doctor</span>
+            <input
+              value={store.doctor}
+              onChange={(e) => setStore((s) => ({ ...s, doctor: e.target.value }))}
+              placeholder="Optional"
+              autoComplete="off"
+              className="min-h-10 min-w-0 flex-1 bg-transparent text-right outline-none"
+            />
+          </label>
           <DateRow
             label="Last"
             value={last}
@@ -84,10 +98,22 @@ export function Care({
         </div>
       </Section>
 
-      <Section title="Prototype">
+      <Section title="Your data" hint="Everything stays on this phone. Nothing is sent anywhere.">
         <div className="flex flex-col gap-2">
-          <Secondary onClick={onLoadDemo}>Load Sam&apos;s demo history</Secondary>
-          <Secondary onClick={onStartFresh}>Start fresh (first-run setup)</Secondary>
+          {demo ? (
+            <Secondary onClick={onLeaveDemo}>Leave the demo</Secondary>
+          ) : (
+            <Secondary onClick={onStartDemo}>Try it with demo data</Secondary>
+          )}
+          {!demo && (
+            <Secondary
+              onClick={() => {
+                if (window.confirm("Delete everything you've logged on this phone? This can't be undone.")) onErase();
+              }}
+            >
+              Delete my data
+            </Secondary>
+          )}
         </div>
       </Section>
 

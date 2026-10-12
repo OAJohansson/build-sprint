@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { amountLabel, timesOfDay, units, type Form, type Medicine } from "./data";
+import { amountLabel, timesOfDay, units, type Form, type Medicine } from "@/lib/mallow/data";
 import { Chips, Choice, Muted, Primary, toggleIn } from "./shared";
 
 // Adding (or editing) a medicine: one question per screen, the way it's written on the label.
@@ -157,7 +157,7 @@ function Step({ onClick, label, children }: { onClick: () => void; label: string
 export function MedicineScreen(props: React.ComponentProps<typeof MedicineFlow>) {
   return (
     <div className="fixed inset-0 z-40 overflow-y-auto" style={{ background: "var(--paper)" }}>
-      <div className="mx-auto flex min-h-dvh max-w-[440px] flex-col px-5 pb-8 pt-[calc(env(safe-area-inset-top)+var(--top-gap))]">
+      <div className="mx-auto flex min-h-dvh max-w-[440px] flex-col px-5 pb-8 pt-[calc(env(safe-area-inset-top)+16px)]">
         <MedicineFlow {...props} />
       </div>
     </div>

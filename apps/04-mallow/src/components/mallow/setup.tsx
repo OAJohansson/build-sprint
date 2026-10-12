@@ -1,24 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { TODAY, addDays, symptomCatalogue, type Medicine } from "./data";
+import { addDays, symptomCatalogue, today, type Medicine } from "@/lib/mallow/data";
 import { MedicineFlow } from "./medicine";
 import { Chips, Muted, Primary, toggleIn } from "./shared";
-import { emptyToday, type Store } from "./store";
+import type { Store } from "@/lib/mallow/store";
 
 // First run: why Mallow exists, the medicine, what to track, the appointments. Then Today.
 
-export function Setup({ onDone }: { onDone: (s: Store) => void }) {
+export function Setup({ onDone, onDemo }: { onDone: (s: Store) => void; onDemo: () => void }) {
   const [step, setStep] = useState(0);
   const [meds, setMeds] = useState<Medicine[]>([]);
   const [tracked, setTracked] = useState<string[]>(["pain", "sleep"]);
-  const [last, setLast] = useState(addDays(TODAY, -21));
-  const [next, setNext] = useState(addDays(TODAY, 9));
+  const [last, setLast] = useState(() => addDays(today(), -28));
+  const [next, setNext] = useState("");
+  const [doctor, setDoctor] = useState("");
 
-  const finish = () => onDone({ meds, tracked, past: [last], next, days: [], today: emptyToday() });
+  const finish = () => onDone({ meds, tracked, doctor, past: [last], next, days: [] });
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-[440px] flex-col px-5 pb-10 pt-[calc(env(safe-area-inset-top)+var(--top-gap))]">
+    <main className="mx-auto flex min-h-dvh w-full max-w-[440px] flex-col px-5 pb-10 pt-[calc(env(safe-area-inset-top)+20px)]">
       {step === 0 && (
         <section className="enter flex flex-1 flex-col">
           <span className="serif text-xl" style={{ color: "var(--mallow-deep)" }}>
@@ -33,6 +34,9 @@ export function Setup({ onDone }: { onDone: (s: Store) => void }) {
             Get started
           </Primary>
           <Muted className="mt-3 text-center text-xs">Everything stays on this phone.</Muted>
+          <button onClick={onDemo} className="press mt-4 min-h-11 text-sm underline-offset-4 hover:underline" style={{ color: "var(--ink-soft)" }}>
+            Look around with demo data first
+          </button>
         </section>
       )}
 
@@ -114,16 +118,18 @@ export function Setup({ onDone }: { onDone: (s: Store) => void }) {
           <div className="mt-6 divide-y rounded-2xl border bg-white" style={{ borderColor: "var(--line)" }}>
             <label className="flex min-h-14 items-center justify-between px-4" style={{ borderColor: "var(--line)" }}>
               <span className="font-medium">Last appointment</span>
-              <input type="date" value={last} max={TODAY} onChange={(e) => e.target.value && setLast(e.target.value)} className="tnum min-h-10 bg-transparent text-right outline-none" />
+              <input type="date" value={last} max={today()} onChange={(e) => e.target.value && setLast(e.target.value)} className="tnum min-h-10 bg-transparent text-right outline-none" />
             </label>
             <label className="flex min-h-14 items-center justify-between px-4" style={{ borderColor: "var(--line)" }}>
               <span className="font-medium">Next appointment</span>
-              <input type="date" value={next} min={TODAY} onChange={(e) => setNext(e.target.value)} className="tnum min-h-10 bg-transparent text-right outline-none" />
+              <input type="date" value={next} min={today()} onChange={(e) => setNext(e.target.value)} className="tnum min-h-10 bg-transparent text-right outline-none" />
+            </label>
+            <label className="flex min-h-14 items-center justify-between gap-4 px-4" style={{ borderColor: "var(--line)" }}>
+              <span className="font-medium">Doctor</span>
+              <input value={doctor} onChange={(e) => setDoctor(e.target.value)} placeholder="Optional" autoComplete="off" className="min-h-10 min-w-0 flex-1 bg-transparent text-right outline-none" />
             </label>
           </div>
-          <button onClick={() => setNext("")} className="press mt-2 min-h-11 self-start text-sm" style={{ color: "var(--ink-soft)" }}>
-            Not booked yet
-          </button>
+          <Muted className="mt-2 text-xs">Leave the next one empty if it isn&apos;t booked yet.</Muted>
           <Primary className="mt-auto" onClick={finish}>
             Start
           </Primary>

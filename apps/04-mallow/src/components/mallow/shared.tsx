@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { reliefOptions, sideEffects, symptomById } from "./data";
+import { reliefOptions, sideEffects, symptomById } from "@/lib/mallow/data";
 
 // Small pieces the screens share.
 

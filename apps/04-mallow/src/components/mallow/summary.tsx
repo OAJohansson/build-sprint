@@ -1,10 +1,10 @@
 "use client";
 
-import { doctor, gradeWord, long, periodStats, reliefOptions, short, symptomById, trendWord } from "./data";
+import { daysBetween, gradeWord, long, periodStats, reliefOptions, short, symptomById, trendWord } from "@/lib/mallow/data";
 import { Sheet } from "./shared";
-import { chaptersOf, type Store } from "./store";
+import { chaptersOf, doctorName, type Store } from "@/lib/mallow/store";
 
-// What Dr Patel will see: this chapter against the one before. The PDF will be built from this.
+// What the doctor will see: this chapter against the one before. The PDF will be built from this.
 export function SummarySheet({ store, open, onClose }: { store: Store; open: boolean; onClose: () => void }) {
   const chapters = chaptersOf(store);
   const now = chapters[chapters.length - 1];
@@ -16,12 +16,12 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
   return (
     <Sheet open={open} onClose={onClose} label="Summary for your appointment">
       <p className="text-sm" style={{ color: "var(--ink-soft)" }}>
-        For {doctor}
+        For {doctorName(store)}
         {store.next ? ` · ${long(store.next)}` : ""}
       </p>
       <h2 className="serif mt-1 text-2xl">Since your last appointment</h2>
       <p className="tnum mt-1 text-sm" style={{ color: "var(--ink-soft)" }}>
-        {short(now.from)} – {short(now.to)} · {a.logged} of {a.days} days logged
+        {short(now.from)} – {short(now.to)} · {a.logged} of {daysBetween(now.from, now.to) + 1} days logged
       </p>
 
       {a.logged === 0 ? (

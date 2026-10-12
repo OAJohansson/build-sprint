@@ -8,6 +8,7 @@
     "notebook": "node scripts/notebook/build.mjs",
     "portfolio": "pnpm -F portfolio dev",
     "build": "pnpm -r build",
-    "lint": "pnpm -r lint"
+    "lint": "pnpm -r lint",
+    "ship": "node scripts/ship.mjs"
   }
 }

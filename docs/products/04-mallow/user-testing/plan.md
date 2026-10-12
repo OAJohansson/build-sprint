@@ -17,17 +17,24 @@ Written as the persona's real moments. Each has a success bar.
 - **Task:** "Log how today was."
 - **Success:** check-in saved in ≤ 30 s and ≤ 6 taps, no typing, without help.
 
+### S1b · Dose and relief
+- **Moment:** just took the evening dose; two hours later, opens the app again.
+- **Task:** "Note that I took it." Later: "Say how it helped."
+- **Success:** dose logged in ≤ 2 taps; on reopening, the relief question appears unprompted and
+  is answered in 1 tap.
+
 ### S2 · Bad-day check-in
 - **Moment:** a flare day, tired, one hand free, low patience.
 - **Task:** "Just get today down, quickly."
 - **Success:** done without help; nothing makes them feel judged (no streak warnings, no red).
 
 ### S3 · The follow-up (main)
-- **Moment:** two minutes before the video call, demo history loaded.
+- **Moment:** the morning of the appointment, demo history loaded; then two minutes before the call.
 - **Task:** as Sam, find what to tell the doctor. Then, as the clinician seeing the screen: is it
   working?
 - **Success:** in ≤ 60 s from the summary alone, says correctly whether pain and sleep got better,
-  worse or stayed the same, and names the most common side effect.
+  worse or stayed the same, says how much the doses helped, and names the most common side
+  effect. The downloaded PDF shows the same numbers.
 
 ### S4 · Coming back after a gap
 - **Moment:** after four days without checking in.
@@ -42,4 +49,4 @@ Written as the persona's real moments. Each has a success bar.
 
 ## Out of scope
 
-Reminders, sharing to the clinic, accounts and sync, medical accuracy of the scales.
+Notifications, sending to the clinic directly, accounts and sync, medical accuracy of the scales.

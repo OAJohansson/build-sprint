@@ -30,3 +30,23 @@ What happened, what was decided and why. Newest last.
   its green, purple and white. Coaching note: in health, a name is part of the claim, so describe
   a feeling, not a promised result (MHRA rules on promoting prescription-only medicines).
 - Draft [brief](#04-mallow.brief) written for the owner to react to.
+
+### Owner's MVP and references
+- **Owner's framing:** Montu UK wants to know how its treatment helps people manage long-term
+  conditions; the patient wants to know how the medicine helps their mood and symptoms (pain, low
+  mood, anxiety). So: log when, how and how much they take, log symptoms, and log how they feel
+  after a dose. Stickiness: tell Sam in the app that logging helps the doctor give better care.
+  A PDF of the summary for the doctor. Sam sets the last appointment date.
+- **References:** screenshots of Vinehealth, the cancer companion app the owner worked on
+  (symptom grades with plain descriptions, "last time you mentioned…", prioritised symptoms,
+  reports for appointments, a coloured monthly calendar, accessibility for vision and cognition).
+  Inspiration only; the owner asked for something creative and beautiful.
+- **Coaching:** the MVP grew from a check-in plus summary to five parts. Kept the dose-to-relief
+  link because it answers the real question (a daily trend shows *that* things changed, not
+  *whether the medicine did it*), but made each part tiny. Montu's view across patients is a
+  second product (backlog).
+- **Decisions (owner):** relief is one tap, asked the next time the app opens (works without
+  notifications; mirrors PGIC, which the registry collects). Sam sets the last *and* next
+  appointment (summary range plus countdown). A real PDF made on the phone, nothing uploaded.
+- Not borrowed from Vinehealth: many tabs and articles, a colour per screen, emoji faces,
+  red/green days (they'd make a bad week feel like a report card).

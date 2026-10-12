@@ -24,8 +24,7 @@ full version in [User testing](#04-mallow.testing).
 the app (one tap: how did it help?), plus a short daily symptom check-in whenever Sam remembers.
 No fixed time and no notifications yet (owner): reminders come later, so every moment must work
 whenever the app is opened and can't rely on a ritual.
-**Second moment:** the day of the appointment: download the summary as a PDF and send it to the
-clinic, or show it in the call.
+**Second moment:** the day of the appointment: open the summary and show it in the call.
 
 1. "When I'm in the follow-up, I want to show what has changed since last time, so the doctor
    adjusts my treatment on what really happened, not on how I feel today."
@@ -86,8 +85,8 @@ with a decision based on it.
 **Ships today:** a short setup (Sam's product, usual amount, 2–4 symptoms to track, last and next
 appointment) → log a dose in a tap → next open, one tap on how it helped → a daily check-in of
 Sam's symptoms in plain-word grades, sleep and side effects → a summary since the last appointment,
-with a countdown to the next one → download it as a PDF for the doctor. Data stays in localStorage;
-the PDF is made on the phone. A demo history fills the app for testing and showing.
+with a countdown to the next one, shown on screen in the call. Data stays in localStorage. A demo
+history fills the app for testing and showing.
 
 **Decided (owner, 12 Oct):**
 - **Patient side, plus a summary.** No clinic dashboard; the summary *is* what the clinic gets.
@@ -99,7 +98,8 @@ the PDF is made on the phone. A demo history fills the app for testing and showi
 - **Stickiness through purpose** (owner): the app says plainly that logging helps the doctor give
   better care, and counts down to the next appointment.
 - **Sam sets the last and next appointment dates** (owner). The summary covers last → today.
-- **A real PDF made on the phone** (owner), nothing uploaded.
+- **A real PDF made on the phone** (owner), nothing uploaded. *Later cut from the MVP (owner,
+  12 Oct): the summary on screen is enough for now; the PDF is next in the backlog.*
 - **No fixed moment yet;** reminders and notifications come later.
 - **Name: Mallow,** a soothing plant. Palette from the flower: purple, green and white.
 
@@ -130,7 +130,7 @@ articles, accounts and sync.
 | 5 | Missed days are fine: gaps show as gaps, never as zeros or a broken streak | Skip 3 days → gap; averages ignore it |
 | 6 | Home shows the countdown to the next appointment, days logged, and why logging matters ("your doctor will see this") | Visible on home without scrolling |
 | 7 | Summary since the last appointment: each symptom's average and direction vs the period before, doses and how they helped, side effects counted, notes flagged | Numbers match the data by hand |
-| 8 | "Download for my doctor" makes a PDF of the summary on the phone | File opens, same numbers, readable in 60 s |
+| 8 | The summary opens from Journey in one tap, fits the phone screen and can be shown in the call (PDF moved to the backlog, owner 12 Oct) | Open → readable in 60 s, same numbers as the data |
 | 9 | A demo history can be loaded and cleared, and never mixes with real entries | Load demo → full summary; clear → empty |
 | 10 | Data stays on the device; nothing is sent anywhere | No network calls with health data |
 
@@ -141,7 +141,6 @@ questionnaires.
 **Rabbit holes:**
 - Chart polish: one clear trend per measure; use the `dataviz` skill and stop there.
 - Statistics: "better, worse or about the same" from simple averages, no significance tests.
-- PDF layout: one page, plain and readable; reuse the summary's numbers, don't redesign it.
 - Product catalogue: Sam types their product name once (free text) plus a form (oil, flower,
   vape, capsule); no strain database.
 - Side-effect lists: a short fixed set of common ones (dry mouth, drowsy, dizzy, foggy, anxious,

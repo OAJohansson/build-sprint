@@ -4,7 +4,7 @@ import { daysBetween, gradeWord, long, periodStats, reliefOptions, short, sympto
 import { Sheet } from "./shared";
 import { chaptersOf, doctorName, type Store } from "@/lib/mallow/store";
 
-// What the doctor will see: this chapter against the one before. The PDF will be built from this.
+// What the doctor will see: this stretch since the last appointment against the one before.
 export function SummarySheet({ store, open, onClose }: { store: Store; open: boolean; onClose: () => void }) {
   const chapters = chaptersOf(store);
   const now = chapters[chapters.length - 1];
@@ -36,8 +36,7 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
                 <dt>
                   <span className="block font-medium">{s.name}</span>
                   <span className="block text-sm" style={{ color: "var(--ink-soft)" }}>
-                    {b ? `${gradeWord(s, b.averages[s.id])} → ` : "Mostly "}
-                    {gradeWord(s, a.averages[s.id]).toLowerCase()}
+                    {fromTo(gradeWord(s, b?.averages[s.id]), gradeWord(s, a.averages[s.id]), !!b)}
                   </span>
                 </dt>
                 {b && (
@@ -52,7 +51,7 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
             <li>
               {a.doses} doses · helped “{reliefOptions[2].toLowerCase()}” or more: {a.helped} of {a.rated} rated
             </li>
-            {a.side.length > 0 && <li>{a.side.slice(0, 3).map(([s, n]) => `${s} on ${n} days`).join(" · ")}</li>}
+            {a.side.length > 0 && <li>{a.side.slice(0, 3).map(([s, n]) => `${s} on ${n} ${n === 1 ? "day" : "days"}`).join(" · ")}</li>}
           </ul>
           {a.notes.length > 0 && (
             <ul className="mt-4 space-y-1 text-sm">
@@ -68,9 +67,12 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
           )}
         </>
       )}
-      <p className="mt-6 text-xs" style={{ color: "var(--ink-faint)" }}>
-        Preview. The PDF download is built after this round.
-      </p>
     </Sheet>
   );
+}
+
+// "Poorly → a bit broken", or "Mostly moderate" when both periods round to the same word.
+function fromTo(before: string, now: string, hasBefore: boolean) {
+  if (!hasBefore || before === now) return `Mostly ${now.toLowerCase()}`;
+  return `${before} → ${now.toLowerCase()}`;
 }

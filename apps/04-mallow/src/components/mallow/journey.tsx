@@ -33,13 +33,13 @@ export function Journey({ store }: { store: Store }) {
         className="press mt-5 flex w-full items-center justify-between gap-3 rounded-2xl p-4 text-left"
         style={{ background: "var(--mallow-wash)" }}
       >
-        <span>
-          <span className="block font-medium">For {doctorName(store)}</span>
+        <span className="min-w-0">
+          <span className="block truncate font-medium">For {doctorName(store)}</span>
           <span className="tnum block text-sm" style={{ color: "var(--ink-soft)" }}>
             Since {short(lastOf(store))} · {now.logged} days logged
           </span>
         </span>
-        <span className="text-sm font-medium" style={{ color: "var(--mallow-deep)" }}>
+        <span className="shrink-0 text-sm font-medium" style={{ color: "var(--mallow-deep)" }}>
           Summary ›
         </span>
       </button>
@@ -81,14 +81,14 @@ function DayDetail({ store, day }: { store: Store; day: Day }) {
           {day.doses.map((d, i) => {
             const m = medOf(store, d.med);
             return (
-              <li key={i} className="flex justify-between gap-3">
-                <span>
-                  <span className="tnum" style={{ color: "var(--ink-faint)" }}>
-                    {d.time}
-                  </span>{" "}
-                  {m ? `${amountLabel(m, d.amount)} ${m.name}` : "Dose"}
+              <li key={i} className="grid grid-cols-[auto_minmax(0,1fr)_auto] gap-2">
+                <span className="tnum" style={{ color: "var(--ink-faint)" }}>
+                  {d.time}
                 </span>
-                <span style={{ color: "var(--ink-soft)" }}>{d.relief !== undefined ? reliefPhrase[d.relief] : "Not rated"}</span>
+                <span className="truncate">{m ? `${amountLabel(m, d.amount)} ${m.name}` : "Dose"}</span>
+                <span className="whitespace-nowrap" style={{ color: "var(--ink-soft)" }}>
+                  {d.relief !== undefined ? reliefPhrase[d.relief] : "Not rated"}
+                </span>
               </li>
             );
           })}

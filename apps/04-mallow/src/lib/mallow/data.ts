@@ -38,8 +38,11 @@ export const units: Record<Form, { unit: string; step: number; start: number }> 
   Capsule: { unit: "capsules", step: 1, start: 1 },
   Other: { unit: "doses", step: 1, start: 1 },
 };
-export const amountLabel = (m: Pick<Medicine, "form" | "amount">, amount = m.amount) =>
-  `${+amount.toFixed(2)} ${units[m.form].unit}`;
+export const amountLabel = (m: Pick<Medicine, "form" | "amount">, amount = m.amount) => {
+  const n = +amount.toFixed(2);
+  const unit = units[m.form].unit;
+  return `${n} ${n === 1 && unit.endsWith("s") ? unit.slice(0, -1) : unit}`;
+};
 export const timesOfDay = ["Morning", "Afternoon", "Evening", "Bedtime", "When needed"];
 
 // ---- Symptoms: plain-word grades (Vinehealth's pattern), each word with what it means ----

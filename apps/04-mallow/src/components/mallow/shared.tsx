@@ -161,7 +161,7 @@ export function Sheet({
     <div className="fixed inset-0 z-50" role="dialog" aria-modal aria-label={label}>
       <div className="scrim absolute inset-0 bg-black/25" onClick={onClose} />
       <div
-        className="sheet absolute inset-x-0 bottom-0 mx-auto max-h-[88dvh] w-full max-w-[440px] overflow-y-auto rounded-t-3xl px-5 pt-3"
+        className="sheet absolute inset-x-0 bottom-0 mx-auto max-h-[88dvh] w-full max-w-[440px] overflow-y-auto overscroll-contain rounded-t-3xl px-5 pt-3"
         style={{ background: "var(--paper)", paddingBottom: "calc(env(safe-area-inset-bottom) + 24px)" }}
       >
         <div className="mx-auto mb-4 h-1 w-10 rounded-full" style={{ background: "var(--line)" }} />
@@ -195,9 +195,9 @@ export function Secondary({ children, className = "", ...rest }: React.ButtonHTM
   );
 }
 
-export function Muted({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+export function Muted({ children, className = "", role }: { children: React.ReactNode; className?: string; role?: string }) {
   return (
-    <p className={`text-sm ${className}`} style={{ color: "var(--ink-soft)" }}>
+    <p role={role} aria-live={role === "status" ? "polite" : undefined} className={`text-sm ${className}`} style={{ color: "var(--ink-soft)" }}>
       {children}
     </p>
   );

@@ -24,7 +24,7 @@ const stemPath = (() => {
 const leafPath = (len: number, wid: number) =>
   `M0,0 C${len * 0.28},${-wid} ${len * 0.72},${-wid} ${len},0 C${len * 0.72},${wid} ${len * 0.28},${wid} 0,0Z`;
 
-function Plant({ store, grewToday }: { store: Store; grewToday: boolean }) {
+function Plant({ store, grewToday, compact }: { store: Store; grewToday: boolean; compact: boolean }) {
   const last = lastOf(store);
   const cycle = store.next ? Math.max(daysBetween(last, store.next), 7) : 30;
   const slotY = (i: number) => BASE - 18 - (Math.min(i, cycle - 1) * (BASE - 18 - TOP - 26)) / (cycle - 1);
@@ -33,7 +33,7 @@ function Plant({ store, grewToday }: { store: Store; grewToday: boolean }) {
 
   const budX = stemX(TOP);
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="mx-auto block h-auto w-full max-w-[220px]" aria-hidden>
+    <svg viewBox={`0 0 ${W} ${H}`} className={`mx-auto block h-auto w-full max-w-[220px] ${compact ? "max-h-[18dvh]" : "max-h-[30dvh]"}`} aria-hidden>
       <path d={stemPath} fill="none" stroke="var(--leaf-deep)" strokeWidth="2.5" strokeLinecap="round" />
       {loggedIdx.map((i) => {
         const y = slotY(i);
@@ -97,9 +97,9 @@ export function Today({
   return (
     <main className="mx-auto w-full max-w-[440px] px-5 pb-36 pt-[calc(env(safe-area-inset-top)+20px)]">
       <header className="flex items-baseline justify-between">
-        <span className="serif text-xl" style={{ color: "var(--mallow-deep)" }}>
+        <h1 className="serif text-xl" style={{ color: "var(--mallow-deep)" }}>
           Mallow
-        </span>
+        </h1>
         <span className="text-sm" style={{ color: "var(--ink-soft)" }}>
           {long(today())}
         </span>
@@ -115,13 +115,13 @@ export function Today({
           <ReliefRow onPick={rate} />
         </section>
       ) : thanks ? (
-        <Muted className="enter mt-6 text-center">
+        <Muted className="enter mt-6 text-center" role="status">
           Noted: {thanks.when} {thanks.phrase}.
         </Muted>
       ) : null}
 
       <div className="mt-6">
-        <Plant store={store} grewToday={grewToday} />
+        <Plant store={store} grewToday={grewToday} compact={!!pending || (toGo !== undefined && toGo <= 1)} />
       </div>
 
       {/* The day before and the day of the appointment, the summary comes to Sam. */}
@@ -159,11 +159,11 @@ export function Today({
         </button>
         <button
           onClick={() => setCheckinOpen(true)}
-          className="press flex min-h-16 flex-col items-center justify-center rounded-2xl px-2 text-white"
+          className="press flex min-h-16 flex-col items-center justify-center rounded-2xl px-2 py-2 leading-tight text-white"
           style={{ background: now.logged ? "var(--leaf-deep)" : "var(--mallow)" }}
         >
           <span className="font-medium">{now.logged ? "Today is logged" : "How was today?"}</span>
-          <span className="text-xs opacity-80">{now.logged ? "Tap to change" : `${store.tracked.length} quick questions`}</span>
+          <span className="mt-0.5 text-xs opacity-80">{now.logged ? "Tap to change" : `${store.tracked.length} quick questions`}</span>
         </button>
       </div>
 
@@ -205,9 +205,9 @@ export function Today({
         store={store}
         onClose={() => setCheckinOpen(false)}
         day={now}
-        onSave={(grades, side) => {
+        onSave={(grades, side, note) => {
           setGrewToday(!now.logged);
-          setStore((s) => withDay(s, today(), (d) => ({ ...d, logged: true, grades, side })));
+          setStore((s) => withDay(s, today(), (d) => ({ ...d, logged: true, grades, side, note: note.trim() || undefined })));
           setCheckinOpen(false);
         }}
       />
@@ -245,10 +245,10 @@ function DoseSheet({
               <div key={m.id} className="flex gap-2">
                 <button
                   onClick={() => onLog(m.id, m.amount, nowTime())}
-                  className="press flex min-h-16 flex-1 flex-col justify-center rounded-2xl px-5 text-left text-white"
+                  className="press flex min-h-16 min-w-0 flex-1 flex-col justify-center rounded-2xl px-5 text-left text-white"
                   style={{ background: "var(--mallow)" }}
                 >
-                  <span className="font-medium">
+                  <span className="line-clamp-2 font-medium">
                     {amountLabel(m)} {m.name}
                   </span>
                   <span className="text-sm opacity-80">{[m.form, m.strength].filter(Boolean).join(" · ")}</span>
@@ -318,10 +318,11 @@ function CheckinSheet({
   store: Store;
   day: ReturnType<typeof dayOf>;
   onClose: () => void;
-  onSave: (grades: Record<string, number>, side: string[]) => void;
+  onSave: (grades: Record<string, number>, side: string[], note: string) => void;
 }) {
   const [grades, setGrades] = useState<Record<string, number>>(day.grades);
   const [side, setSide] = useState<string[]>(day.side);
+  const [note, setNote] = useState(day.note ?? "");
   const done = store.tracked.every((id) => grades[id] !== undefined);
   return (
     <Sheet open={open} onClose={onClose} label="How was today?">
@@ -332,8 +333,24 @@ function CheckinSheet({
           <p className="mb-2 text-sm font-medium">Anything else?</p>
           <SideEffectChips value={side} onToggle={(s) => setSide(toggleIn(side, s))} />
         </div>
+        <div>
+          <label htmlFor="day-note" className="mb-2 block text-sm font-medium">
+            Anything your doctor should know? <span style={{ color: "var(--ink-faint)", fontWeight: 400 }}>(optional)</span>
+          </label>
+          <textarea
+            id="day-note"
+            name="note"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            maxLength={500}
+            rows={2}
+            placeholder="e.g. Flare after a long walk…"
+            className="w-full resize-none rounded-xl border bg-white px-4 py-3"
+            style={{ borderColor: "var(--line)" }}
+          />
+        </div>
       </div>
-      <Primary className="mt-6" disabled={!done} onClick={() => onSave(grades, side)}>
+      <Primary className="mt-6" disabled={!done} onClick={() => onSave(grades, side, note)}>
         Save today
       </Primary>
     </Sheet>

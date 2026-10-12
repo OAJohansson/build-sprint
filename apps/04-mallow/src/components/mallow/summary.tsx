@@ -36,10 +36,10 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
                 <dt>
                   <span className="block font-medium">{s.name}</span>
                   <span className="block text-sm" style={{ color: "var(--ink-soft)" }}>
-                    {fromTo(gradeWord(s, b?.averages[s.id]), gradeWord(s, a.averages[s.id]), !!b)}
+                    {fromTo(gradeWord(s, b?.averages[s.id]), gradeWord(s, a.averages[s.id]), b?.averages[s.id] !== undefined)}
                   </span>
                 </dt>
-                {b && (
+                {b?.averages[s.id] !== undefined && a.averages[s.id] !== undefined && (
                   <dd className="text-sm font-medium" style={{ color: "var(--mallow-deep)" }}>
                     {trendWord(b.averages[s.id], a.averages[s.id])}
                   </dd>

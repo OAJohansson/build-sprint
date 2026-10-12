@@ -4,7 +4,7 @@ import { daysBetween, gradeWord, long, periodStats, reliefOptions, short, sympto
 import { Sheet } from "./shared";
 import { chaptersOf, doctorName, type Store } from "@/lib/mallow/store";
 
-// What the doctor will see: this chapter against the one before. The PDF will be built from this.
+// What the doctor will see: this stretch since the last appointment against the one before.
 export function SummarySheet({ store, open, onClose }: { store: Store; open: boolean; onClose: () => void }) {
   const chapters = chaptersOf(store);
   const now = chapters[chapters.length - 1];
@@ -68,9 +68,6 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
           )}
         </>
       )}
-      <p className="mt-6 text-xs" style={{ color: "var(--ink-faint)" }}>
-        Preview. The PDF download is built after this round.
-      </p>
     </Sheet>
   );
 }

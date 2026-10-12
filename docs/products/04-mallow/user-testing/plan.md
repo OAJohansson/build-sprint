@@ -34,7 +34,7 @@ Written as the persona's real moments. Each has a success bar.
   working?
 - **Success:** in ≤ 60 s from the summary alone, says correctly whether pain and sleep got better,
   worse or stayed the same, says how much the doses helped, and names the most common side
-  effect. The downloaded PDF shows the same numbers.
+  effect.
 
 ### S4 · Coming back after a gap
 - **Moment:** after four days without checking in.

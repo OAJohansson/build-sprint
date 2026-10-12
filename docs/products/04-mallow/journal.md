@@ -90,3 +90,8 @@ What happened, what was decided and why. Newest last.
   hour or more before the app was opened, appointments roll over once the day has passed.
 - **Demo data is kept apart from real entries** (separate storage keys, a "Demo data · tap to
   leave" band), meeting requirement 9: trying the demo never touches real data.
+
+### Live, and the PDF cut
+- **Live** at https://mallow-omega.vercel.app (`pnpm ship 04-mallow`, no env vars).
+- **Owner cut the PDF download from the MVP:** the summary in Journey ("For Dr Patel · Summary")
+  is enough to show in the call. PDF moved to the backlog as the next thing.

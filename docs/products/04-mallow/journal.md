@@ -60,3 +60,21 @@ What happened, what was decided and why. Newest last.
   appointment day; a missed day adds nothing.
 - Shared across all three: plain-word grades with a four-bar intensity mark (no faces, no
   red/green), relief as one tap, a summary preview sheet. Waiting for the owner's pick.
+
+### Round 2: Garden, medicine, Journey
+- **Owner picked the Garden**, but without the explanation: "it sounds odd that the flower blooms
+  when you see your doctor." The plant is now an unexplained quiet delight (a leaf per logged day,
+  the bud opens on appointment day); the purpose is said plainly instead: "9 days until you see
+  Dr Patel · What you log here is what they'll see."
+- **Owner: add a medication flow.** Added first-run setup (why Mallow exists → medicine → what to
+  track → appointments) and a Care tab to add, edit or stop a medicine (form → name and strength
+  as on the pharmacy label → usual amount and when). More than one product is allowed (an oil
+  daily plus flower for flare-ups). Logging a dose: pick the medicine (1 tap), or change the
+  amount or time.
+- **Owner: a history section called "Journey"** (patients' own word for getting better). The app
+  now has three tabs: Today, Journey, Care. The picker compares three Journey directions:
+  **Timeline** (days by week, tap to open), **Calendar** (a month shaded by one symptom's grade),
+  **Chapters** (each stretch between appointments, with trend lines and "better than last
+  chapter"). The summary for Dr Patel sits on top in all three.
+- Demo history is now generated (11 weeks, three appointments, a few missed days and notes), so
+  summaries and trends are computed rather than typed in.

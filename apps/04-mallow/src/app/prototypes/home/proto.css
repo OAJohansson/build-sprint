@@ -97,3 +97,8 @@
     transform: none;
   }
 }
+
+/* Room for the prototype picker, which sits at the top so it never covers the tab bar. */
+.mallow {
+  --top-gap: 72px;
+}

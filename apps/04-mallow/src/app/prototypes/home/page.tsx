@@ -1,21 +1,22 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import Garden from "./garden";
-import Journal from "./journal";
-import Ritual from "./ritual";
+import MallowApp from "./app";
+import type { JourneyKind } from "./journey";
 
-// Prototype harness: three home-screen directions behind the picker. Delete once one is chosen.
-const variants = [
-  { name: "Ritual", Component: Ritual },
-  { name: "Journal", Component: Journal },
-  { name: "Garden", Component: Garden },
+// Prototype harness: the Mallow app, with three directions for the Journey tab behind the picker.
+// Delete once one is chosen.
+const variants: { name: string; kind: JourneyKind }[] = [
+  { name: "Timeline", kind: "timeline" },
+  { name: "Calendar", kind: "calendar" },
+  { name: "Chapters", kind: "chapters" },
 ];
 
 export default function HomePrototypes() {
   const [current, setCurrent] = useState(0);
   const [mountKey, setMountKey] = useState(0);
   const [ready, setReady] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const highlightRef = useRef<HTMLSpanElement>(null);
 
@@ -33,6 +34,7 @@ export default function HomePrototypes() {
     const v = parseInt(new URLSearchParams(window.location.search).get("v") ?? "", 10);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- reading the URL once on mount
     if (v >= 1 && v <= variants.length) setCurrent(v - 1);
+    setMounted(true);
     requestAnimationFrame(() => requestAnimationFrame(() => setReady(true)));
   }, []);
 
@@ -65,12 +67,11 @@ export default function HomePrototypes() {
     return () => document.removeEventListener("keydown", onKey);
   }, [current, setActive]);
 
-  const { Component } = variants[current];
-
   return (
     <>
-      <Component key={mountKey} />
-      <nav className="proto-picker" aria-label="Prototype variants" data-ready={ready ? "" : undefined}>
+      {/* The app reads the URL on its first render, so it only renders in the browser. */}
+      {mounted && <MallowApp key={mountKey} journey={variants[current].kind} />}
+      <nav className="proto-picker" aria-label="Prototype variants" data-position="top" data-ready={ready ? "" : undefined}>
         <span className="proto-picker-highlight" aria-hidden="true" ref={highlightRef} />
         {variants.map((v, i) => (
           <button

@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { amountLabel, daysBetween, long, nowTime, reliefPhrase, today, units, type Medicine } from "@/lib/mallow/data";
-import { CompactGrades, Muted, Primary, ReliefRow, Sheet, SideEffectChips, toggleIn } from "./shared";
-import { dayOf, doctorName, lastOf, pendingDose, withDay, type Store } from "@/lib/mallow/store";
+import { Muted, Primary, ReliefRow, Secondary, Sheet } from "./shared";
+import { CheckinSheet, DoseEditor, type DoseTarget } from "./day-editing";
+import { appointmentPassed, confirmAppointment, dayOf, doctorName, lastOf, moveAppointment, pendingDose, withDay, type Store } from "@/lib/mallow/store";
 import { SummarySheet } from "./summary";
 
 // Today: a mallow that grows quietly beside the two things Sam does here, logging a dose and
@@ -79,6 +80,7 @@ export function Today({
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [checkinOpen, setCheckinOpen] = useState(false);
   const [grewToday, setGrewToday] = useState(false);
+  const [editing, setEditing] = useState<DoseTarget>();
   const [thanks, setThanks] = useState<{ when: string; phrase: string }>();
   // Doses are asked about relative to when this visit started, so one logged a minute ago isn't.
   const [visit, setVisit] = useState(() => ({ date: today(), time: nowTime() }));
@@ -91,7 +93,8 @@ export function Today({
   const pending = pendingDose(store, visit);
   const medName = (id: string) => store.meds.find((m) => m.id === id);
   const now = dayOf(store, today());
-  const toGo = store.next ? daysBetween(today(), store.next) : undefined;
+  const passed = appointmentPassed(store);
+  const toGo = store.next && !passed ? daysBetween(today(), store.next) : undefined;
   const when = pending ? `${pending.date === visit.date ? "Today" : "Yesterday"} at ${pending.dose.time}` : "";
 
   const rate = (relief: number) => {
@@ -127,7 +130,7 @@ export function Today({
       ) : null}
 
       <div className="mt-6">
-        <Plant store={store} grewToday={grewToday} compact={!!pending || (toGo !== undefined && toGo <= 1)} />
+        <Plant store={store} grewToday={grewToday} compact={!!pending || passed || (toGo !== undefined && toGo <= 1)} />
       </div>
 
       {/* The day before and the day of the appointment, the summary comes to Sam. */}
@@ -142,6 +145,9 @@ export function Today({
           </Primary>
         </section>
       )}
+
+      {passed && <AppointmentCheck store={store} setStore={setStore} />}
+      {!store.next && <NextAppointment setStore={setStore} />}
 
       {toGo !== undefined && toGo > 1 && (
         <div className="mt-4 text-center">
@@ -178,16 +184,20 @@ export function Today({
           {now.doses.map((d, i) => {
             const m = medName(d.med);
             return (
-              <li key={i} className="enter flex justify-between gap-3 py-2.5" style={{ borderColor: "var(--line)" }}>
-                <span>
+              <li key={i} className="enter" style={{ borderColor: "var(--line)" }}>
+                <button
+                  onClick={() => setEditing({ date: today(), index: i })}
+                  aria-label={`Change the ${d.time} dose`}
+                  className="press grid min-h-11 w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 py-2 text-left"
+                >
                   <span className="tnum" style={{ color: "var(--ink-faint)" }}>
                     {d.time}
-                  </span>{" "}
-                  {m ? `${amountLabel(m, d.amount)} ${m.name}` : "Dose"}
-                </span>
-                <span style={{ color: "var(--ink-soft)" }}>
-                  {d.relief !== undefined ? reliefPhrase[d.relief] : "We'll ask later"}
-                </span>
+                  </span>
+                  <span className="truncate">{m ? `${amountLabel(m, d.amount)} ${m.name}` : "Dose"}</span>
+                  <span className="whitespace-nowrap" style={{ color: "var(--ink-soft)" }}>
+                    {d.relief !== undefined ? reliefPhrase[d.relief] : "We'll ask later"} ›
+                  </span>
+                </button>
               </li>
             );
           })}
@@ -206,17 +216,17 @@ export function Today({
         }}
       />
 
-      <CheckinSheet
-        open={checkinOpen}
-        store={store}
-        onClose={() => setCheckinOpen(false)}
-        day={now}
-        onSave={(grades, side, note) => {
-          setGrewToday(!now.logged);
-          setStore((s) => withDay(s, today(), (d) => ({ ...d, logged: true, grades, side, note: note.trim() || undefined })));
-          setCheckinOpen(false);
-        }}
-      />
+      {checkinOpen && (
+        <CheckinSheet
+          open
+          store={store}
+          setStore={setStore}
+          date={today()}
+          onClose={() => setCheckinOpen(false)}
+          onSaved={(first) => setGrewToday(first)}
+        />
+      )}
+      {editing && <DoseEditor store={store} setStore={setStore} target={editing} onClose={() => setEditing(undefined)} />}
     </main>
   );
 }
@@ -313,52 +323,67 @@ function DoseSheet({
   );
 }
 
-function CheckinSheet({
-  open,
-  store,
-  day,
-  onClose,
-  onSave,
-}: {
-  open: boolean;
-  store: Store;
-  day: ReturnType<typeof dayOf>;
-  onClose: () => void;
-  onSave: (grades: Record<string, number>, side: string[], note: string) => void;
-}) {
-  const [grades, setGrades] = useState<Record<string, number>>(day.grades);
-  const [side, setSide] = useState<string[]>(day.side);
-  const [note, setNote] = useState(day.note ?? "");
-  const done = store.tracked.every((id) => grades[id] !== undefined);
+// The appointment date has passed: did it happen, or did the clinic move it? Until Sam says,
+// the summary and the stretch stay as they are.
+function AppointmentCheck({ store, setStore }: { store: Store; setStore: (fn: (s: Store) => Store) => void }) {
+  const [step, setStep] = useState<"ask" | "happened" | "moved">("ask");
+  const [date, setDate] = useState("");
   return (
-    <Sheet open={open} onClose={onClose} label="How was today?">
-      <h2 className="serif mb-5 text-2xl">How was today?</h2>
-      <div className="space-y-4">
-        <CompactGrades tracked={store.tracked} grades={grades} onPick={(id, g) => setGrades((x) => ({ ...x, [id]: g }))} />
-        <div>
-          <p className="mb-2 text-sm font-medium">Anything else?</p>
-          <SideEffectChips value={side} onToggle={(s) => setSide(toggleIn(side, s))} />
-        </div>
-        <div>
-          <label htmlFor="day-note" className="mb-2 block text-sm font-medium">
-            Anything your doctor should know? <span style={{ color: "var(--ink-faint)", fontWeight: 400 }}>(optional)</span>
-          </label>
-          <textarea
-            id="day-note"
-            name="note"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            maxLength={500}
-            rows={2}
-            placeholder="e.g. Flare after a long walk…"
-            className="w-full resize-none rounded-xl border bg-white px-4 py-3"
+    <section className="enter mt-4 rounded-3xl p-4 text-center" style={{ background: "var(--mallow-wash)" }}>
+      {step === "ask" && (
+        <>
+          <p className="serif text-xl">Did your appointment on {long(store.next)} happen?</p>
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <Primary onClick={() => setStep("happened")}>Yes</Primary>
+            <Secondary className="min-h-14" onClick={() => setStep("moved")}>
+              It moved
+            </Secondary>
+          </div>
+        </>
+      )}
+      {step !== "ask" && (
+        <>
+          <p className="serif text-xl">{step === "happened" ? "When is the next one?" : "When is it now?"}</p>
+          <input
+            type="date"
+            name="next-appointment"
+            aria-label={step === "happened" ? "Next appointment" : "New appointment date"}
+            value={date}
+            min={today()}
+            onChange={(e) => setDate(e.target.value)}
+            className="tnum mt-4 min-h-12 w-full rounded-xl border bg-white px-4"
             style={{ borderColor: "var(--line)" }}
           />
-        </div>
-      </div>
-      <Primary className="mt-6" disabled={!done} onClick={() => onSave(grades, side, note)}>
-        {done ? "Save today" : `${store.tracked.filter((id) => grades[id] === undefined).length} to go`}
-      </Primary>
-    </Sheet>
+          <Primary
+            className="mt-3"
+            disabled={!date}
+            onClick={() => setStore((s) => (step === "happened" ? confirmAppointment(s, date) : moveAppointment(s, date)))}
+          >
+            Save
+          </Primary>
+          {step === "happened" && (
+            <button onClick={() => setStore((s) => confirmAppointment(s))} className="press mt-2 min-h-11 text-sm" style={{ color: "var(--ink-soft)" }}>
+              Not booked yet
+            </button>
+          )}
+        </>
+      )}
+    </section>
+  );
+}
+
+// No next appointment yet: one quiet place to add it, so the countdown can come back.
+function NextAppointment({ setStore }: { setStore: (fn: (s: Store) => Store) => void }) {
+  return (
+    <label className="mt-4 flex min-h-14 items-center justify-between gap-3 rounded-2xl border bg-white px-4" style={{ borderColor: "var(--line)" }}>
+      <span className="text-sm font-medium">Next appointment</span>
+      <input
+        type="date"
+        name="next-appointment"
+        min={today()}
+        onChange={(e) => e.target.value && setStore((s) => ({ ...s, next: e.target.value }))}
+        className="tnum min-h-10 bg-transparent text-right text-sm"
+      />
+    </label>
   );
 }

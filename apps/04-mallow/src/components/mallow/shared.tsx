@@ -230,3 +230,38 @@ export function Choice({
     </button>
   );
 }
+
+// One choice from a few, as chips (e.g. which medicine).
+export function ChipRow({
+  options,
+  value,
+  onPick,
+}: {
+  options: { id: string; label: string }[];
+  value: string;
+  onPick: (id: string) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2" role="radiogroup">
+      {options.map((o) => {
+        const on = o.id === value;
+        return (
+          <button
+            key={o.id}
+            role="radio"
+            aria-checked={on}
+            onClick={() => onPick(o.id)}
+            className="press min-h-11 max-w-full truncate rounded-full border px-4 text-sm"
+            style={{
+              background: on ? "var(--mallow-tint)" : "var(--card)",
+              borderColor: on ? "var(--mallow)" : "var(--line)",
+              color: on ? "var(--mallow-deep)" : "var(--ink)",
+            }}
+          >
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}

@@ -44,7 +44,7 @@ export default function MallowApp() {
           }}
         />
       )}
-      {tab === "journey" && <Journey store={store} />}
+      {tab === "journey" && <Journey store={store} setStore={setStore} />}
       {tab === "care" && (
         <Care
           store={store}

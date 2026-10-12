@@ -2,7 +2,7 @@
 
 import { useCallback, useSyncExternalStore } from "react";
 import { demoStore } from "@/lib/mallow/demo";
-import { rollAppointments, type Store } from "@/lib/mallow/store";
+import type { Store } from "@/lib/mallow/store";
 import { useLocalStorage } from "@/lib/use-local-storage";
 
 // Real entries and the demo live under separate keys, so trying the demo never touches real data.
@@ -13,10 +13,10 @@ export function useMallow() {
   const [real, setReal] = useLocalStorage<Store | null>("04-mallow:data", null);
   const [demo, setDemo] = useLocalStorage<Store | null>("04-mallow:demo", null);
   const raw = mode === "demo" ? demo : real;
-  const store = raw ? rollAppointments(raw) : null;
+  const store = raw;
 
   const setStore = useCallback(
-    (fn: (s: Store) => Store) => (mode === "demo" ? setDemo : setReal)((s) => (s ? fn(rollAppointments(s)) : s)),
+    (fn: (s: Store) => Store) => (mode === "demo" ? setDemo : setReal)((s) => (s ? fn(s) : s)),
     [mode, setDemo, setReal],
   );
 

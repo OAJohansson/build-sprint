@@ -14,11 +14,14 @@ import {
   type Day,
 } from "@/lib/mallow/data";
 import { allDays, chaptersOf, doctorName, lastOf, type Store } from "@/lib/mallow/store";
+import { CheckinSheet, DoseEditor, type DoseTarget } from "./day-editing";
 import { Chips, GradeMark, Muted } from "./shared";
 import { SummarySheet } from "./summary";
 
 // Journey: everything logged so far, as a calendar. The summary for the appointment sits on top.
-export function Journey({ store }: { store: Store }) {
+type SetStore = (fn: (s: Store) => Store) => void;
+
+export function Journey({ store, setStore }: { store: Store; setStore: SetStore }) {
   const [summaryOpen, setSummaryOpen] = useState(false);
   const all = allDays(store);
   const empty = store.days.every((d) => !d.logged && d.doses.length === 0);
@@ -44,11 +47,8 @@ export function Journey({ store }: { store: Store }) {
         </span>
       </button>
 
-      {empty ? (
-        <Muted className="mt-10 text-center">Your days will appear here as you log them.</Muted>
-      ) : (
-        <Calendar store={store} days={all} />
-      )}
+      {empty && <Muted className="mt-8 text-center">Your days will appear here as you log them.</Muted>}
+      <Calendar store={store} setStore={setStore} days={all} />
 
       <SummarySheet store={store} open={summaryOpen} onClose={() => setSummaryOpen(false)} />
     </main>
@@ -60,7 +60,9 @@ const dayLabel = (d: string) => (d === today() ? "Today" : daysBetween(d, today(
 
 // ---------- Shared day pieces ----------
 
-function DayDetail({ store, day }: { store: Store; day: Day }) {
+function DayDetail({ store, setStore, day }: { store: Store; setStore: SetStore; day: Day }) {
+  const [editing, setEditing] = useState<DoseTarget>();
+  const [checkin, setCheckin] = useState(false);
   return (
     <div className="enter mt-3 space-y-3 text-sm">
       {day.logged && (
@@ -81,14 +83,20 @@ function DayDetail({ store, day }: { store: Store; day: Day }) {
           {day.doses.map((d, i) => {
             const m = medOf(store, d.med);
             return (
-              <li key={i} className="grid grid-cols-[auto_minmax(0,1fr)_auto] gap-2">
-                <span className="tnum" style={{ color: "var(--ink-faint)" }}>
-                  {d.time}
-                </span>
-                <span className="truncate">{m ? `${amountLabel(m, d.amount)} ${m.name}` : "Dose"}</span>
-                <span className="whitespace-nowrap" style={{ color: "var(--ink-soft)" }}>
-                  {d.relief !== undefined ? reliefPhrase[d.relief] : "Not rated"}
-                </span>
+              <li key={i}>
+                <button
+                  onClick={() => setEditing({ date: day.date, index: i })}
+                  aria-label={`Change the ${d.time} dose`}
+                  className="press grid min-h-10 w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 text-left"
+                >
+                  <span className="tnum" style={{ color: "var(--ink-faint)" }}>
+                    {d.time}
+                  </span>
+                  <span className="truncate">{m ? `${amountLabel(m, d.amount)} ${m.name}` : "Dose"}</span>
+                  <span className="whitespace-nowrap" style={{ color: "var(--ink-soft)" }}>
+                    {d.relief !== undefined ? reliefPhrase[d.relief] : "Not rated"} ›
+                  </span>
+                </button>
               </li>
             );
           })}
@@ -96,6 +104,27 @@ function DayDetail({ store, day }: { store: Store; day: Day }) {
       )}
       {day.side.length > 0 && <p style={{ color: "var(--ink-soft)" }}>{day.side.join(", ")}</p>}
       {day.note && <p className="serif italic">“{day.note}”</p>}
+      {/* Fill in or correct a day, so mistakes never stay in the summary. */}
+      <div className="flex gap-2 pt-1">
+        <button
+          onClick={() => setCheckin(true)}
+          className="press min-h-11 flex-1 rounded-xl border text-sm font-medium"
+          style={{ borderColor: "var(--line)", color: "var(--mallow-deep)" }}
+        >
+          {day.logged ? "Change check-in" : "Add check-in"}
+        </button>
+        {store.meds.length > 0 && (
+          <button
+            onClick={() => setEditing({ date: day.date })}
+            className="press min-h-11 flex-1 rounded-xl border text-sm font-medium"
+            style={{ borderColor: "var(--line)", color: "var(--mallow-deep)" }}
+          >
+            Add a dose
+          </button>
+        )}
+      </div>
+      {checkin && <CheckinSheet open store={store} setStore={setStore} date={day.date} onClose={() => setCheckin(false)} />}
+      {editing && <DoseEditor store={store} setStore={setStore} target={editing} onClose={() => setEditing(undefined)} />}
     </div>
   );
 }
@@ -104,7 +133,7 @@ function DayDetail({ store, day }: { store: Store; day: Day }) {
 
 const shade = ["var(--mallow-wash)", "color-mix(in oklch, var(--mallow) 34%, white)", "color-mix(in oklch, var(--mallow) 62%, white)", "var(--mallow-deep)"];
 
-function Calendar({ store, days }: { store: Store; days: Day[] }) {
+function Calendar({ store, setStore, days }: { store: Store; setStore: SetStore; days: Day[] }) {
   const months = [...new Set(days.map((d) => d.date.slice(0, 7)))];
   const [mi, setMi] = useState(months.length - 1);
   const [sym, setSym] = useState(store.tracked[0]);
@@ -182,7 +211,7 @@ function Calendar({ store, days }: { store: Store; days: Day[] }) {
       {pickedDay && (
         <section key={picked} className="mt-6 rounded-2xl border bg-white p-4" style={{ borderColor: "var(--line)" }}>
           <h3 className="font-medium">{dayLabel(picked)}</h3>
-          {pickedDay.logged || pickedDay.doses.length ? <DayDetail store={store} day={pickedDay} /> : <Muted className="mt-1">Not logged</Muted>}
+          <DayDetail key={picked} store={store} setStore={setStore} day={pickedDay} />
         </section>
       )}
     </div>

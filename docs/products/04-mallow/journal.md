@@ -101,3 +101,18 @@ What happened, what was decided and why. Newest last.
 - Checking the summary's real numbers found two wording bugs, fixed: "Dizzy on 1 days", and
   "Moderate → moderate · A little better" (both periods round to the same word while the average
   moved), now "Mostly moderate · A little better".
+
+### Checks and the simulated user test
+- **Design audit:** heading on Today, live region for "Noted", sheets contain their scroll,
+  balanced headings. Title Case and "…" placeholders declined (house style).
+- **break-ui** with worst-case data: 8 breaks fixed, including small phones hiding the main
+  buttons, "1 puffs", long names, a first summary reading "– → moderate", and a missing note
+  field in the check-in (a brief requirement only the demo had covered).
+- **Simulated user test (Sam):** all bars met except setup (~80 s vs 60 s); 17 of 17 summary
+  numbers matched by hand; 0 health claims; no data left the phone. 4 majors found, two of them
+  only visible when time passes (resume without reload, an appointment date passing).
+- Quick fixes straight away (wrong dose named in the relief confirmation, relief question not
+  re-checked on resume, ties rounded up, Save disabled without reason, plurals, contrast).
+- **Owner's calls on the rest:** ask on Today when an appointment date passes (no silent
+  rollover); **full editing** of doses and past days; medicine lines and comparison dates in the
+  summary. All three built and verified.

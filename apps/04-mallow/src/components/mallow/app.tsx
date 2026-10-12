@@ -29,7 +29,7 @@ export default function MallowApp() {
     <>
       {mode === "demo" && (
         <div className="pt-[env(safe-area-inset-top)] text-center text-xs font-medium" style={{ background: "var(--mallow-tint)", color: "var(--mallow-deep)" }}>
-          <button onClick={leaveDemo} className="min-h-7 w-full">
+          <button onClick={leaveDemo} className="min-h-11 w-full">
             Demo data · tap to leave
           </button>
         </div>
@@ -44,7 +44,7 @@ export default function MallowApp() {
           }}
         />
       )}
-      {tab === "journey" && <Journey store={store} />}
+      {tab === "journey" && <Journey store={store} setStore={setStore} />}
       {tab === "care" && (
         <Care
           store={store}

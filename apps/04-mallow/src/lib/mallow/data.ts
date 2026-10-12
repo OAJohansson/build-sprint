@@ -38,8 +38,11 @@ export const units: Record<Form, { unit: string; step: number; start: number }> 
   Capsule: { unit: "capsules", step: 1, start: 1 },
   Other: { unit: "doses", step: 1, start: 1 },
 };
-export const amountLabel = (m: Pick<Medicine, "form" | "amount">, amount = m.amount) =>
-  `${+amount.toFixed(2)} ${units[m.form].unit}`;
+export const amountLabel = (m: Pick<Medicine, "form" | "amount">, amount = m.amount) => {
+  const n = +amount.toFixed(2);
+  const unit = units[m.form].unit;
+  return `${n} ${n === 1 && unit.endsWith("s") ? unit.slice(0, -1) : unit}`;
+};
 export const timesOfDay = ["Morning", "Afternoon", "Evening", "Bedtime", "When needed"];
 
 // ---- Symptoms: plain-word grades (Vinehealth's pattern), each word with what it means ----
@@ -90,7 +93,13 @@ export function periodStats(days: Day[], tracked: string[]) {
 }
 
 // Words for an average grade, and for a change between two periods (lower = easier for all).
-export const gradeWord = (s: Symptom, avg?: number) => (avg === undefined ? "–" : s.grades[Math.round(avg)][0]);
+export const gradeWord = (s: Symptom, avg?: number) => {
+  if (avg === undefined) return "–";
+  const low = Math.floor(avg);
+  // Halfway between two grades (e.g. 9 mild days and 9 moderate), say both rather than round up.
+  if (avg - low >= 0.4 && avg - low <= 0.6) return `${s.grades[low][0]} to ${s.grades[low + 1][0].toLowerCase()}`;
+  return s.grades[Math.round(avg)][0];
+};
 export function trendWord(before?: number, now?: number) {
   if (before === undefined || now === undefined) return "Not enough yet";
   const d = now - before;

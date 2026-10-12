@@ -103,7 +103,7 @@
   --card: #fff;
   --ink: oklch(0.27 0.035 315);
   --ink-soft: oklch(0.48 0.03 315);
-  --ink-faint: oklch(0.66 0.02 315);
+  --ink-faint: oklch(0.55 0.02 315);
   --line: oklch(0.92 0.012 320);
   --mallow: oklch(0.55 0.14 322);
   --mallow-deep: oklch(0.42 0.12 318);
@@ -126,6 +126,10 @@
   font-family: var(--font-fraunces), Georgia, serif;
   font-optical-sizing: auto;
   letter-spacing: -0.01em;
+}
+
+.mallow :is(h1, h2, h3) {
+  text-wrap: balance;
 }
 
 .mallow .tnum {

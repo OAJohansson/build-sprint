@@ -23,11 +23,11 @@ export const withDay = (s: Store, date: string, fn: (d: Day) => Day): Store => {
 export const lastOf = (s: Store) => s.past[s.past.length - 1] ?? today();
 export const doctorName = (s: Store) => s.doctor.trim() || "your doctor";
 
-// Once an appointment day has passed, it becomes the start of a new stretch.
-export function rollAppointments(s: Store): Store {
-  if (!s.next || s.next >= today()) return s;
-  return { ...s, past: [...s.past, s.next], next: "" };
-}
+// After the appointment date, Sam says whether it happened (a new stretch starts) or moved.
+// Nothing rolls over on its own: a moved appointment must never empty the summary.
+export const appointmentPassed = (s: Store) => s.next !== "" && s.next < today();
+export const confirmAppointment = (s: Store, next = ""): Store => ({ ...s, past: [...s.past, s.next], next });
+export const moveAppointment = (s: Store, next: string): Store => ({ ...s, next });
 
 // Every calendar day from the first appointment to today, empty where nothing was logged.
 export function allDays(s: Store) {

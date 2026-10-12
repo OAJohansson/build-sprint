@@ -1,6 +1,6 @@
 # Brief
 
-*Master copy: `docs/product/polish-sprint/brief.md` in the [kids-app repo](https://github.com/OAJohansson/kids-app). Copied here at wrap-up for the notebook.*
+*Master copy: `docs/product/polish-sprint/brief.md` in the [kids-app repo](https://github.com/OAJohansson/kids-app). Copied here at wrap-up for the notebook. The full discovery, competitor research and every sprint document are in the [Inkling Product Notebook](https://claude.ai/artifact/SZWbpHSzw5F2MP2D3zuqm5).*
 
 
 **Date:** 2026-10-12 · **Appetite:** a few hours, fixed (cut scope, not time) · **Status:** agreed 2026-10-12

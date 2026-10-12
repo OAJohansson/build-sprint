@@ -83,6 +83,7 @@ const products = readProducts().map((p) => ({
   code: p.repo || `${REPO}/tree/main/apps/${p.slug}`,
   doc: `${REPO}/tree/main/docs/products/${p.slug}`,
   design: p.design || "",
+  notebook: p.notebook || "",
   sections: sections(p),
 }));
 

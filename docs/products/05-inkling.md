@@ -8,6 +8,7 @@ problem: "Young adults go round in circles about direction; ChatGPT agrees and f
 bet: "One evening journey, question → write → meet an idea → takeaway, built on real data with a public demo, shows the journal-that-teaches in two minutes"
 url: "https://inkling-journal.vercel.app"
 repo: "https://github.com/OAJohansson/kids-app"
+notebook: "https://claude.ai/artifact/SZWbpHSzw5F2MP2D3zuqm5"
 tags: ["claude-api", "supabase", "redesign", "demo", "evals"]
 ---
 

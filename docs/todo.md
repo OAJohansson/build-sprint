@@ -14,6 +14,8 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 ## Next
 
+- [ ] Merge the Inkling pull request in kids-app so the new app and `/demo` go live at inkling-journal.vercel.app *(me)*
+- [ ] Rehearse the Inkling demo script (`docs/product/polish-sprint/demo-script.md` in kids-app) before the Enthuse interview *(me)*
 - [ ] Scribble check on 17 Oct: pieces written that week (goal 4) and any abandoned *(me)*
 - [ ] One place to stay on track (#10)
 - [ ] Build 04 Mallow (cannabis symptom tracker): brief done, prototype next
@@ -22,13 +24,15 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 - [ ] Scribble as a Mac app in Swift (#9)
 - [ ] Show a product to one real person (#5)
-- [ ] Rewrite the interview stories in my own words, now including Scribble (#6)
-- [ ] Fill the story bank's gaps: Ambiguity, Technical, Speed (#7)
+- [ ] Rewrite the interview stories in my own words, now including Scribble and Inkling (#6)
+- [ ] Inkling: five conversations with 16–25-year-olds to test the riskiest assumption (want to *learn*, not only feel better)
 - [ ] Learn evals: Scribble's model eval (#1)
 - [ ] Maybe: Playwright smoke test (#3), Anthropic's `webapp-testing` skill (#4)
 
 ## Done
 
+- [x] Inkling shipped as product 05: polish sprint, Claude API, evals 8/8 (12 Oct)
+- [x] Story bank gaps filled by Inkling's story: Ambiguity, Technical, Speed (#7, 12 Oct)
 - [x] `pnpm ship`: deploy setup in one command (#8, 12 Oct)
 - [x] Scribble shipped: scribble-notebook.vercel.app (10 Oct)
 - [x] Judge the design skills: kept (#2, 7 Oct)

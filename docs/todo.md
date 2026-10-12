@@ -12,11 +12,11 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 - [ ] Montu UK: waiting on Kiren for a screening time
 - [ ] Keep applying: the 8am session each day *(me)*
 
-## Next (before product 04)
+## Next
 
 - [ ] Scribble check on 17 Oct: pieces written that week (goal 4) and any abandoned *(me)*
 - [ ] One place to stay on track (#10)
-- [ ] Look at what Montu UK offers patients today (15 min)
+- [ ] Build 04 Mallow (cannabis symptom tracker): brief done, prototype next
 
 ## Later
 

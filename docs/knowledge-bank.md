@@ -60,6 +60,14 @@ A feature can't be its own success metric. Ask what it's *for* and measure that.
 Horizon's landmark is for a sense of place, so the test was "which city is this?" with the name
 hidden. That exposed Tokyo looking like Paris.
 
+#### Recall bias
+People asked "how has the last month been?" don't average the month: they remember the peaks,
+the most recent days and how they feel right now. So a measure taken at the moment beats a
+summary from memory, which is why diaries and daily check-ins exist (ecological momentary
+assessment). Why it matters: if a decision rests on recalled data, the product can win by
+capturing it at the time. Where we met it: Mallow (04), patients rebuilding weeks of pain in a
+15-minute follow-up. From: Kahneman's peak-end rule; clinical research on patient diaries.
+
 ### Quiz
 
 **Q:** Write the jobs-to-be-done format.
@@ -85,6 +93,12 @@ hidden. That exposed Tokyo looking like Paris.
 
 **Q:** How do you turn a feature into a success measure?
 **A:** Ask what the feature is for and measure that. For example, a landmark is for a sense of place, so measure whether people recognise the city without its name.
+
+**Q:** What is recall bias, and how does a product get around it?
+**A:** People remember peaks, recent days and their current mood rather than an average; capture the data at the moment (a daily check-in) instead of asking afterwards.
+
+**Q:** What does Kahneman's peak-end rule say?
+**A:** We judge an experience mostly by its most intense moment and how it ended, not by its total or average.
 
 ## Product strategy
 
@@ -113,6 +127,14 @@ Break an idea into the assumptions that must be true, and test the riskiest one 
 #### Pre-mortem
 Before starting, imagine the product has failed and ask why. It surfaces risks that optimism
 hides. *(Shreyas Doshi)*
+
+#### In regulated products, words are claims
+In health and finance, the name, copy and charts can count as claims about what a product or
+medicine does. Medical cannabis is a prescription-only medicine in the UK, and promoting those to
+the public is restricted (MHRA). So describe a feeling or show the user's own data ("your sleep,
+last 30 days"), never promise a result ("pain free"). It's also more honest: some weeks the data
+will say it didn't help. Why it matters: it's a viability risk you can design out on day one.
+Where we met it: naming Mallow (04). From: Cagan's viability risk (legal and compliance).
 
 ### Prioritisation
 
@@ -156,6 +178,9 @@ setting. From: Jeff Bezos, Amazon shareholder letter (2015).
 
 **Q:** What is a good triage rule when time is short?
 **A:** Fix anything that shows wrong data or looks broken straight away if it's quick; park the rest with a note.
+
+**Q:** Why is "Pain Free" a risky name for a medical cannabis app in the UK?
+**A:** It promises a result for a prescription-only medicine, which UK rules restrict; a name describing a feeling, plus the user's own data, avoids the claim.
 
 ## Product delivery
 

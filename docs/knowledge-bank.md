@@ -37,6 +37,13 @@ the current way and the *pull* of the new one beat their *anxiety* about the cha
 *habits*. *Where:* Google already answers "what time is sunset?", so Horizon had to answer
 "do I have time?" and feel better. *(Bob Moesta)*
 
+#### Evidence has a kind, not just a size
+Before quoting research, check what kind of evidence it is: desk research (studies, reviews,
+competitors) tells you what's likely; conversations and behaviour tell you what your users do. A
+big pack can contain zero user conversations. Why it matters: claims in a pitch or interview must
+match the evidence ("research suggests" vs "users told me"). Where we met it: Inkling (05), whose
+16-competitor discovery had no interviews. From: Teresa Torres, *Continuous Discovery Habits*.
+
 ### User research and testing
 
 #### Testing with users
@@ -99,6 +106,9 @@ capturing it at the time. Where we met it: Mallow (04), patients rebuilding week
 
 **Q:** What does Kahneman's peak-end rule say?
 **A:** We judge an experience mostly by its most intense moment and how it ended, not by its total or average.
+
+**Q:** A research pack has 16 competitor reviews and many surveys. What should you check before quoting it?
+**A:** What kind of evidence it is: desk research says what's likely; only conversations and behaviour show what your users do.
 
 ## Product strategy
 
@@ -320,6 +330,13 @@ Making digital things look like physical ones (paper, leather, wood). *Literal* 
 2010 iPhone) dates fast; *evoked* (a faint grain, warm ink colours, a soft vignette) carries the
 feeling without the costume. Where we met it: Scribble (03).
 
+#### Progress without punishment
+Show progress as something changing over time (your thinking, your skill), not as streaks or
+counts you can lose. Why it matters: punishing mechanics drive people away, and for under-18s in
+the UK they can count as nudge techniques, which the Children's Code rules out. Where we met it:
+Inkling (05): ideas that "came back" instead of a streak. From: the ICO Age Appropriate Design
+Code; Finch and How We Feel as apps young people keep.
+
 ### Accessibility
 
 #### Contrast ratio
@@ -331,6 +348,11 @@ countdown looked fine but measured 1.9:1.
 #### Numbers that line up
 Use tabular figures (`font-variant-numeric: tabular-nums`) for countdowns and columns of numbers,
 so digits don't jump as they change.
+
+#### Text direction for what people write
+Anything users type can be in a right-to-left language (Arabic, Hebrew). Put `dir="auto"` on inputs
+and on elements showing user text so the browser picks the direction per paragraph; otherwise
+punctuation lands on the wrong side. Where we met it: Inkling (05), break-ui with an Arabic entry.
 
 ### Mobile
 
@@ -395,6 +417,12 @@ stop). Constant or travelling motion (a progress bar, a wave of light) uses **li
 **Q:** What does "reduced motion" mean for a designer?
 **A:** A system setting some people turn on; respect it by replacing movement with gentle fades or stillness.
 
+**Q:** Why show progress without streaks in an app for 16–25-year-olds?
+**A:** Punishing mechanics drive people away, and for under-18s in the UK they can count as nudge techniques the Children's Code rules out.
+
+**Q:** Which attribute keeps right-to-left user text (like Arabic) displaying correctly?
+**A:** `dir="auto"` on the input and on elements that show user text.
+
 ## Technology
 
 ### Web foundations
@@ -442,6 +470,12 @@ Fine for a single user; split (separate projects, or keys with limited rights) o
 arrive. Where we met it: Scribble sharing CrossFit Log's Supabase project (03, decision 0009).
 From: site reliability and security engineering.
 
+#### One data shape, two sources (adapter pattern)
+Define the data your screens need as one interface, then write two implementations: one calls the
+real API, one returns demo or test data. The screens never know which they got. Why it matters: a
+safe public demo, tests without a backend, and no screen built twice. Where we met it: Inkling
+(05): `/demo` runs Maya's scripted journal through the same screens as the real app.
+
 ### Quiz
 
 **Q:** What is a hydration mismatch?
@@ -465,6 +499,9 @@ From: site reliability and security engineering.
 **Q:** When can an API be called straight from the browser?
 **A:** When it's free and needs no secret key, and allows browser requests (CORS). Anything with a secret key goes through a server.
 
+**Q:** What is the adapter pattern, in one sentence, and what did it give Inkling?
+**A:** One interface with interchangeable implementations; the same screens run on the real API or a scripted demo.
+
 ## Building with AI
 
 ### Tools
@@ -478,6 +515,12 @@ Keep the set small: competing skills give competing rules.
 An assistant can hand a focused job to a separate agent with its own instructions, such as the
 simulated user tester. It returns a report, and the main session decides what to do with it.
 
+#### Structured outputs and thinking tokens
+Structured outputs make the model reply in JSON that matches a schema you give it, so code can rely
+on the fields. On models that think before answering, the thinking counts against `max_tokens`:
+a limit sized for the answer alone cuts replies off. Treat a "max_tokens" stop as an error, not a
+result. Where we met it: Inkling (05), moving five 200-token calls to Claude Haiku 5.5.
+
 ### Judgment
 
 #### Keep the product calls
@@ -485,12 +528,25 @@ AI is fast at building, testing and drafting; the product decisions stay with yo
 the main job, what to cut, what "done" means. Review its work: AI drafts can look right and still
 be wrong (a too-subtle animation, a wrong-number bug).
 
+#### The agreeable-AI risk
+Language models tend to agree with the user (sycophancy). For reflection or advice products that's
+the core failure: people say ChatGPT "just agrees with me". Design against it: one question that
+helps the user step back, a named idea, no advice unless asked. Where we met it: Inkling (05).
+From: OpenAI's 2025 rollback of an over-agreeable GPT-4o update.
+
 ### Evals
 
 #### What an eval is
 A repeatable test of an AI feature: a set of inputs with known good outputs, scored
 automatically, so you can tell whether a change made the AI better or worse. Start by looking at
 real outputs and where they fail. *(Hamel Husain)*
+
+#### A model change is a behaviour change
+Switching model or provider, or editing a prompt, can change behaviour even when the code is the
+same. Run the evals before and after, and record both results. Newer models often follow prompts
+more literally, so loose rules ("exactly one question") may need to be stated exactly. Where we
+met it: Inkling (05): on the Claude API, safety held but two rules broke (6/8), fixed with two
+sentences (8/8).
 
 ### Quiz
 
@@ -509,6 +565,15 @@ real outputs and where they fail. *(Hamel Husain)*
 **Q:** What is an eval?
 **A:** A repeatable test of an AI feature: inputs with known good outputs, scored automatically, to see whether a change made it better or worse.
 
+**Q:** Why can a model switch break an app whose code didn't change?
+**A:** Behaviour lives in the model and prompt; a new model can follow rules differently, so run the evals before and after.
+
+**Q:** Why did 200-token limits break on newer Claude models?
+**A:** They think before answering, and thinking counts against `max_tokens`.
+
+**Q:** What is the core failure of an AI used for reflection?
+**A:** Agreeing with the user (sycophancy) instead of helping them see more clearly.
+
 ## Communication and influence
 
 ### Storytelling
@@ -517,6 +582,11 @@ real outputs and where they fail. *(Hamel Husain)*
 For interviews, tell a project as **S**ituation, **T**ask, **A**ction, **R**esult, in about two
 minutes, then one line on what you learned. Lead with the problem, say "I", include a mistake and
 have the numbers ready.
+
+#### A demo is an argument
+In a short demo, every screen should carry one "we learned → we decided → here it is" beat, and end
+on what you'd test next. Rehearse it on the real path, and say plainly what's scripted. Where we
+met it: Inkling's 2-minute script for an interview (05).
 
 ### Writing
 
@@ -541,3 +611,6 @@ folder)*
 
 **Q:** What goes in a decision record?
 **A:** The context, what was decided, the alternatives and why they lost, and the consequences.
+
+**Q:** What should each screen of a short product demo carry?
+**A:** One "we learned → we decided → here it is" beat, ending on what you'd test next.

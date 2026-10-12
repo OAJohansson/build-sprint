@@ -24,6 +24,12 @@ Written as the persona's real moments. Each has a success bar.
 - What's missing that would make them come back tomorrow?
 - [Product-specific question, e.g. "Can they see they're progressing?"]
 
+## Trust checks
+
+- After any scenario that saves something, compare what's saved with what was typed, word for word.
+- For a demo with scripted or simulated parts, ask afterwards: "What did you think was real?"
+  *(05 Inkling: entries were cut short; testers couldn't tell the demo was scripted.)*
+
 ## Out of scope
 
 [What not to judge in this round.]

@@ -79,7 +79,8 @@ const products = readProducts().map((p) => ({
   url: p.url || "",
   tags: Array.isArray(p.tags) ? p.tags : [],
   body: p.body.trim(),
-  code: `${REPO}/tree/main/apps/${p.slug}`,
+  // `repo:` on the card for products whose code lives outside this monorepo.
+  code: p.repo || `${REPO}/tree/main/apps/${p.slug}`,
   doc: `${REPO}/tree/main/docs/products/${p.slug}`,
   design: p.design || "",
   sections: sections(p),

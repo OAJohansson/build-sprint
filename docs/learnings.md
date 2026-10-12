@@ -12,6 +12,10 @@ Rules I now apply to every product (detail in the playbook).
   drawing the object. Illustrated typewriters looked childish; typewriter type and ink didn't.
   *(03 Scribble)*
 
+- **Progress without punishment.** Show progress as thinking or skill changing over time, never as
+  streaks or counts you can lose. It's kinder, it's what keeps people (the apps young people keep
+  never punish), and for 16–17s it's the law (UK Children's Code: no nudge techniques). *(05 Inkling)*
+
 - **Measure readability, don't eyeball it.** Pick text colour against the exact background
   behind it and check the contrast number for every state. *(02 Horizon)*
 - **Clean and minimal.** Every element earns its place; don't repeat in words what the visual
@@ -65,6 +69,21 @@ Rules I now apply to every product (detail in the playbook).
   contrast measured 2.9:1 where the eye said fine.
 - **Never lose a piece, in layers.** Device instantly, database after a pause, and on page hide.
 
+### 05 Inkling
+
+- **Make the existing strength visible.** The AI already named the idea in every reply; a chat
+  bubble hid it. Its own screen was the wow, and the cheapest thing to build.
+- **Audit inherited discovery before quoting it.** A big research pack had no user conversations;
+  say "research suggests", and put five interviews first in the backlog.
+- **Real data disciplines the design.** Wiring screens to real data showed what the design promised
+  but the data didn't have; the demo was changed to match.
+- **One data shape, two sources.** A public demo that can't touch real data, and real-data features,
+  from the same screens.
+- **Test with the user and the audience.** A simulated 19-year-old and a simulated hiring manager
+  each found what the other missed; together they found a trust bug the audit couldn't.
+- **A model change is a behaviour change.** Safety held on the new model, but two prompt rules broke;
+  evals caught them before users did.
+
 ## Process changelog
 
 Every change to how I build, and the product that taught it.
@@ -87,3 +106,6 @@ Every change to how I build, and the product that taught it.
 | 10 Oct | 03 Scribble | Four prototype rounds: three drew a literal typewriter when the owner wanted its feeling. | Playbook step 1: collect 2–3 references and what not to do before `/prototype`; a feel is evoked, not drawn. |
 | 10 Oct | 03 Scribble | Forward-only writing came along from a prototype without the owner choosing it. | Playbook step 1: when a prototype becomes the app, list the behaviours it carries as owner decisions. |
 | 10 Oct | 03 Scribble | Vercel setup (project name, domain, env vars, skip toggle) cost time every day. | `pnpm ship NN-slug` (built 12 Oct) and a `vercel.json` per app that skips unchanged builds; playbook step 3 is now one command. |
+| 12 Oct | 05 Inkling | "A few hours" became the whole app plus a provider switch, one reasonable request at a time. | Playbook step 2: re-cut on every scope widening (cut, swap or re-bet out loud) and log it in the journal. |
+| 12 Oct | 05 Inkling | Saved entries were cut short, and testers couldn't tell the demo was scripted. | Test plan template: trust checks (compare saved with typed; ask "what did you think was real?"). |
+| 12 Oct | 05 Inkling | Switching to the Claude API kept safety but broke two prompt rules, caught only by the evals. | Playbook step 2: run evals before and after any model, provider or prompt change, and record the result. |

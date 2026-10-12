@@ -98,6 +98,12 @@ discoverable with one quiet cue (a muted badge at 0) rather than a sentence expl
 - Polish with the `emil-design-eng` skill (press feedback, timing, when not to animate); `animate`
   only if a screen needs motion; `dataviz` for charts.
 - Commit and push often. Pushes to `main` deploy automatically once the Vercel project exists.
+- **Re-cut on every scope widening.** When a request adds anything past the stop line, name it
+  before building: cut something, swap it for something, or re-bet the appetite out loud. Log the
+  choice in `journal.md`. *(05 Inkling: "a few hours" quietly became the whole app.)*
+- **AI behaviour has its own tests.** Before and after any change to a model, provider or prompt,
+  run the product's evals and record the result. A new model is a behaviour change. *(05 Inkling:
+  the evals caught two rules the new model broke.)*
 
 ## 3. Ship (≈5 min, do it early, e.g. at lunch)
 

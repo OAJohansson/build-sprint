@@ -7,6 +7,7 @@ user: ""
 problem: ""
 bet: ""
 url: ""
+repo: ""  # only if the code lives outside apps/, e.g. a separate GitHub repo
 tags: []
 ---
 

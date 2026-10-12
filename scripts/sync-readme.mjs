@@ -13,7 +13,7 @@ export function syncReadme() {
       p.problem || "",
       STATUS[p.status] ?? p.status,
       p.url ? `[live](${p.url})` : "—",
-      `[write-up](docs/products/${p.file}) · [code](apps/${p.slug})`,
+      `[write-up](docs/products/${p.file}) · [code](${p.repo || `apps/${p.slug}`})`,
     ].join(" | "),
   );
   const table = [

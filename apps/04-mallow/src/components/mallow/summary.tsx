@@ -36,8 +36,7 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
                 <dt>
                   <span className="block font-medium">{s.name}</span>
                   <span className="block text-sm" style={{ color: "var(--ink-soft)" }}>
-                    {b ? `${gradeWord(s, b.averages[s.id])} → ` : "Mostly "}
-                    {gradeWord(s, a.averages[s.id]).toLowerCase()}
+                    {fromTo(gradeWord(s, b?.averages[s.id]), gradeWord(s, a.averages[s.id]), !!b)}
                   </span>
                 </dt>
                 {b && (
@@ -52,7 +51,7 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
             <li>
               {a.doses} doses · helped “{reliefOptions[2].toLowerCase()}” or more: {a.helped} of {a.rated} rated
             </li>
-            {a.side.length > 0 && <li>{a.side.slice(0, 3).map(([s, n]) => `${s} on ${n} days`).join(" · ")}</li>}
+            {a.side.length > 0 && <li>{a.side.slice(0, 3).map(([s, n]) => `${s} on ${n} ${n === 1 ? "day" : "days"}`).join(" · ")}</li>}
           </ul>
           {a.notes.length > 0 && (
             <ul className="mt-4 space-y-1 text-sm">
@@ -70,4 +69,10 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
       )}
     </Sheet>
   );
+}
+
+// "Poorly → a bit broken", or "Mostly moderate" when both periods round to the same word.
+function fromTo(before: string, now: string, hasBefore: boolean) {
+  if (!hasBefore || before === now) return `Mostly ${now.toLowerCase()}`;
+  return `${before} → ${now.toLowerCase()}`;
 }

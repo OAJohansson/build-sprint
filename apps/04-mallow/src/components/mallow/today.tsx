@@ -4,6 +4,7 @@ import { useState } from "react";
 import { amountLabel, daysBetween, long, nowTime, reliefPhrase, today, units, type Medicine } from "@/lib/mallow/data";
 import { CompactGrades, Muted, Primary, ReliefRow, Sheet, SideEffectChips, toggleIn } from "./shared";
 import { dayOf, doctorName, lastOf, pendingDose, withDay, type Store } from "@/lib/mallow/store";
+import { SummarySheet } from "./summary";
 
 // Today: a mallow that grows quietly beside the two things Sam does here, logging a dose and
 // saying how the day was. The plant is never explained: a logged day adds a leaf, a missed day
@@ -75,6 +76,7 @@ export function Today({
   onAddMedicine: () => void;
 }) {
   const [doseOpen, setDoseOpen] = useState(false);
+  const [summaryOpen, setSummaryOpen] = useState(false);
   const [checkinOpen, setCheckinOpen] = useState(false);
   const [grewToday, setGrewToday] = useState(false);
   const [thanks, setThanks] = useState<{ when: string; phrase: string }>();
@@ -122,7 +124,20 @@ export function Today({
         <Plant store={store} grewToday={grewToday} />
       </div>
 
-      {toGo !== undefined && toGo > 0 && (
+      {/* The day before and the day of the appointment, the summary comes to Sam. */}
+      {toGo !== undefined && toGo <= 1 && (
+        <section className="enter mt-4 rounded-3xl p-4 text-center" style={{ background: "var(--mallow-wash)" }}>
+          <p className="serif text-xl">
+            {toGo === 0 ? "Your appointment is today" : "Your appointment is tomorrow"}
+          </p>
+          <Muted className="mt-1">Show {doctorName(store)} how it&apos;s really been.</Muted>
+          <Primary className="mt-4" onClick={() => setSummaryOpen(true)}>
+            Open your summary
+          </Primary>
+        </section>
+      )}
+
+      {toGo !== undefined && toGo > 1 && (
         <div className="mt-4 text-center">
           <p className="serif text-xl">
             <span className="tnum">{toGo}</span> {toGo === 1 ? "day" : "days"} until you see {doctorName(store)}
@@ -172,6 +187,8 @@ export function Today({
           })}
         </ul>
       )}
+
+      <SummarySheet store={store} open={summaryOpen} onClose={() => setSummaryOpen(false)} />
 
       <DoseSheet
         open={doseOpen}

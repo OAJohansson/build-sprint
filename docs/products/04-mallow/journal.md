@@ -95,3 +95,9 @@ What happened, what was decided and why. Newest last.
 - **Live** at https://mallow-omega.vercel.app (`pnpm ship 04-mallow`, no env vars).
 - **Owner cut the PDF download from the MVP:** the summary in Journey ("For Dr Patel · Summary")
   is enough to show in the call. PDF moved to the backlog as the next thing.
+- **Appointment-day card** (owner agreed): the day before and the day of the appointment, Today
+  shows "Your appointment is today/tomorrow" with "Open your summary", so the main job comes to
+  Sam instead of sitting a tab away.
+- Checking the summary's real numbers found two wording bugs, fixed: "Dizzy on 1 days", and
+  "Moderate → moderate · A little better" (both periods round to the same word while the average
+  moved), now "Mostly moderate · A little better".

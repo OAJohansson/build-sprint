@@ -50,3 +50,13 @@ What happened, what was decided and why. Newest last.
   appointment (summary range plus countdown). A real PDF made on the phone, nothing uploaded.
 - Not borrowed from Vinehealth: many tabs and articles, a colour per screen, emoji faces,
   red/green days (they'd make a bad week feel like a report card).
+
+### Three directions (prototype)
+- `/prototype` on the home screen, at `/prototypes/home` behind a picker, with demo data for Sam
+  (12 Oct, 9 days to Dr Patel, 18 of 21 days logged, last night's dose not yet rated).
+- **Ritual** (interaction model): one calm question at a time; the app leads. **Journal** (layout):
+  the day as a timeline, everything answered in place, a dot strip of the month between
+  appointments. **Garden** (personality): a mallow that grows a leaf per logged day and flowers on
+  appointment day; a missed day adds nothing.
+- Shared across all three: plain-word grades with a four-bar intensity mark (no faces, no
+  red/green), relief as one tap, a summary preview sheet. Waiting for the owner's pick.

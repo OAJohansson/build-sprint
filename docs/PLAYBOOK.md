@@ -99,20 +99,22 @@ discoverable with one quiet cue (a muted badge at 0) rather than a sentence expl
   only if a screen needs motion; `dataviz` for charts.
 - Commit and push often. Pushes to `main` deploy automatically once the Vercel project exists.
 
-## 3. Ship (≈15 min, do it early, e.g. at lunch)
+## 3. Ship (≈5 min, do it early, e.g. at lunch)
 
-First deploy of a new app (one-time, about 2 minutes). *Being replaced by one command, `pnpm ship
-NN-slug` (to-do #8, before product 04): it names the project, sets the Root Directory and env vars,
-and deploys.*
+First deploy of a new app, one command (to-do #8, from 03 Scribble's retro):
 
-1. [vercel.com/new](https://vercel.com/new) → import the `build-sprint` repo.
-2. **Project name**: the slug without the number (e.g. `crossfit`), which gives `crossfit-<something>.vercel.app`.
-3. **Root Directory** → `apps/NN-slug`. Framework auto-detects as Next.js.
-4. Deploy.
-5. Settings → Build & Deployment → Root Directory: enable **"Skip deployments when there are no
-   changes to the root directory or its dependencies"**, so other days' pushes don't rebuild it.
-   (Don't enable this on `portfolio`, which must rebuild whenever `docs/` changes.)
-6. Paste the URL into the write-up's `url:` field → `pnpm sync` → commit.
+1. Merge the scaffold to `main` (Vercel builds from there).
+2. Put the app's keys in `apps/NN-slug/.env.local` (copy from the previous app; `.env.example`
+   lists what's needed). Git ignores this file.
+3. Run **`pnpm ship NN-slug`** yourself (`--dry-run` first if you like). It creates the Vercel
+   project named after the product with Root Directory `apps/NN-slug`, connects GitHub, sets the
+   env vars for Production and Preview, deploys `main`, waits until it's live and writes the URL
+   into the card. Keys go from the file straight to Vercel and are never printed.
+4. Commit the card. Each app's `vercel.json` skips builds when its folder didn't change (not on
+   `portfolio`, which must rebuild whenever `docs/` changes).
+
+One-time on a new machine: `vercel login`. To change a key later: edit `.env.local`, run
+`pnpm ship NN-slug` again (it updates the project and redeploys).
 
 Deploying in the morning means the rest of the day is iterating on a live app, which removes most of the last-minute risk.
 

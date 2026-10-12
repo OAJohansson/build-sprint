@@ -15,7 +15,6 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 ## Next (before product 04)
 
 - [ ] Scribble check on 17 Oct: pieces written that week (goal 4) and any abandoned *(me)*
-- [ ] `pnpm ship`: deploy setup in one command (#8)
 - [ ] One place to stay on track (#10)
 - [ ] Look at what Montu UK offers patients today (15 min)
 
@@ -30,6 +29,7 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 ## Done
 
+- [x] `pnpm ship`: deploy setup in one command (#8, 12 Oct)
 - [x] Scribble shipped: scribble-notebook.vercel.app (10 Oct)
 - [x] Judge the design skills: kept (#2, 7 Oct)
 

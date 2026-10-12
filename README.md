@@ -33,7 +33,7 @@ docs/
   decisions/          why it's set up this way
   products/NN-slug/   per product: journal, feedback, user-testing/, backlog, learnings
   user-testing/       simulated user testing: method + persona and plan templates
-scripts/              `pnpm new` and `pnpm sync`
+scripts/              `pnpm new`, `pnpm ship` and `pnpm sync`
 .claude/agents/       user-tester: the agent that plays the persona and drives the app
 .claude/skills/       design skills used at each playbook step (decision 0008)
 ```
@@ -47,6 +47,7 @@ Why a private notebook first: see [decision 0003](docs/decisions/0003-private-no
 
 ```bash
 pnpm new crossfit "CrossFit Log"   # scaffold apps/NN-crossfit + docs/products/NN-crossfit.md
+pnpm ship 01-crossfit              # create the Vercel project, set env vars, deploy, write the URL
 pnpm install
 pnpm -F NN-crossfit dev            # run it
 pnpm sync                          # refresh the table above from the write-ups

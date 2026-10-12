@@ -36,7 +36,7 @@ export function Journey({ store }: { store: Store }) {
         <span className="min-w-0">
           <span className="block truncate font-medium">For {doctorName(store)}</span>
           <span className="tnum block text-sm" style={{ color: "var(--ink-soft)" }}>
-            Since {short(lastOf(store))} · {now.logged} days logged
+            Since {short(lastOf(store))} · {now.logged} {now.logged === 1 ? "day" : "days"} logged
           </span>
         </span>
         <span className="shrink-0 text-sm font-medium" style={{ color: "var(--mallow-deep)" }}>
@@ -102,7 +102,7 @@ function DayDetail({ store, day }: { store: Store; day: Day }) {
 
 // ---------- A month at a glance, shaded by one symptom ----------
 
-const shade = ["var(--mallow-wash)", "color-mix(in oklch, var(--mallow) 22%, white)", "color-mix(in oklch, var(--mallow) 55%, white)", "var(--mallow-deep)"];
+const shade = ["var(--mallow-wash)", "color-mix(in oklch, var(--mallow) 34%, white)", "color-mix(in oklch, var(--mallow) 62%, white)", "var(--mallow-deep)"];
 
 function Calendar({ store, days }: { store: Store; days: Day[] }) {
   const months = [...new Set(days.map((d) => d.date.slice(0, 7)))];

@@ -103,7 +103,7 @@
   --card: #fff;
   --ink: oklch(0.27 0.035 315);
   --ink-soft: oklch(0.48 0.03 315);
-  --ink-faint: oklch(0.66 0.02 315);
+  --ink-faint: oklch(0.55 0.02 315);
   --line: oklch(0.92 0.012 320);
   --mallow: oklch(0.55 0.14 322);
   --mallow-deep: oklch(0.42 0.12 318);

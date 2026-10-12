@@ -93,7 +93,13 @@ export function periodStats(days: Day[], tracked: string[]) {
 }
 
 // Words for an average grade, and for a change between two periods (lower = easier for all).
-export const gradeWord = (s: Symptom, avg?: number) => (avg === undefined ? "–" : s.grades[Math.round(avg)][0]);
+export const gradeWord = (s: Symptom, avg?: number) => {
+  if (avg === undefined) return "–";
+  const low = Math.floor(avg);
+  // Halfway between two grades (e.g. 9 mild days and 9 moderate), say both rather than round up.
+  if (avg - low >= 0.4 && avg - low <= 0.6) return `${s.grades[low][0]} to ${s.grades[low + 1][0].toLowerCase()}`;
+  return s.grades[Math.round(avg)][0];
+};
 export function trendWord(before?: number, now?: number) {
   if (before === undefined || now === undefined) return "Not enough yet";
   const d = now - before;

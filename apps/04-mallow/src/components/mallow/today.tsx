@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { amountLabel, daysBetween, long, nowTime, reliefPhrase, today, units, type Medicine } from "@/lib/mallow/data";
 import { CompactGrades, Muted, Primary, ReliefRow, Sheet, SideEffectChips, toggleIn } from "./shared";
 import { dayOf, doctorName, lastOf, pendingDose, withDay, type Store } from "@/lib/mallow/store";
@@ -81,17 +81,23 @@ export function Today({
   const [grewToday, setGrewToday] = useState(false);
   const [thanks, setThanks] = useState<{ when: string; phrase: string }>();
   // Doses are asked about relative to when this visit started, so one logged a minute ago isn't.
-  const [visit] = useState(() => ({ date: today(), time: nowTime() }));
+  const [visit, setVisit] = useState(() => ({ date: today(), time: nowTime() }));
+  // Coming back to the app (resuming a tab or the home-screen app) counts as a new visit.
+  useEffect(() => {
+    const onShow = () => document.visibilityState === "visible" && setVisit({ date: today(), time: nowTime() });
+    document.addEventListener("visibilitychange", onShow);
+    return () => document.removeEventListener("visibilitychange", onShow);
+  }, []);
   const pending = pendingDose(store, visit);
   const medName = (id: string) => store.meds.find((m) => m.id === id);
   const now = dayOf(store, today());
   const toGo = store.next ? daysBetween(today(), store.next) : undefined;
-  const when = pending ? (pending.date === visit.date ? `Today at ${pending.dose.time}` : `Last night at ${pending.dose.time}`) : "";
+  const when = pending ? `${pending.date === visit.date ? "Today" : "Yesterday"} at ${pending.dose.time}` : "";
 
   const rate = (relief: number) => {
     if (!pending) return;
     setStore((s) => withDay(s, pending.date, (d) => ({ ...d, doses: d.doses.map((x, i) => (i === pending.i ? { ...x, relief } : x)) })));
-    setThanks({ when: pending.date === visit.date ? `this morning's dose` : `last night's dose`, phrase: reliefPhrase[relief].toLowerCase() });
+    setThanks({ when: `your ${pending.dose.time} dose`, phrase: reliefPhrase[relief].toLowerCase() });
   };
 
   return (
@@ -351,7 +357,7 @@ function CheckinSheet({
         </div>
       </div>
       <Primary className="mt-6" disabled={!done} onClick={() => onSave(grades, side, note)}>
-        Save today
+        {done ? "Save today" : `${store.tracked.filter((id) => grades[id] === undefined).length} to go`}
       </Primary>
     </Sheet>
   );

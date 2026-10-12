@@ -26,6 +26,8 @@ hour, not a day. Names in brackets are where each practice comes from; see
 
 - Pick a problem from [Problems to solve](ideas.md), then `pnpm new <slug> "Display Title"`. This creates
   the app, the card, the product folder (with an empty brief) and the README row.
+- **Ship the empty starter straight away** (04 Mallow): merge the scaffold and run
+  `pnpm ship NN-slug` in the first hour, so every later change is seen on a real phone.
 - **Problem.** One or two sentences: who has it, when, and what it costs them today. No features.
   *(Perri: outcomes over outputs.)*
 - **Who.** A quick persona: one specific person, not a market. Full version in
@@ -126,6 +128,8 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 
 ## 3b. Test as a user (≈30 min, once the core flow works)
 
+- **Walk the brief on a fresh install** (04 Mallow): clear the app's data and check every
+  requirement in the brief, not on the demo. Demo data hides missing features.
 - **First the checks:** run the `web-design-guidelines` audit on the changed files and `break-ui`
   on the main screens (worst-case data: long names, zero, one, huge numbers). Fix what they find.
   *(Day 2: the user test re-found a bug the audit had already caught.)*

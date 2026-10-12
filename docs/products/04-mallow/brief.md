@@ -147,3 +147,22 @@ questionnaires.
   hungry) plus "other" in the note.
 
 ## Success check (at wrap-up)
+
+*12 Oct, drafted from the simulated user test (report-2026-10-12) and the checks. The owner's own
+phone review and a real patient are still to come (to-do).*
+
+| Signal | Target | What happened |
+| --- | --- | --- |
+| Summary answers the question (main) | ≤ 60 s, correct | **Met (simulated):** ~30–40 s; pain, sleep and side effects named correctly. Not yet tried by a real patient or clinician. |
+| Logging is effortless | dose ≤ 2 taps, relief 1 tap, check-in ≤ 30 s | **Met:** dose 2 taps / ~4 s, relief 1 tap / ~3 s, check-in 5–6 taps / ~20–25 s, no typing |
+| Relief is captured | asked unprompted, 1 tap | **Met after a fix:** the question only appeared after a reload; now re-checked whenever the app is reopened |
+| Works on a bad day | done without help | **Met:** 6 taps, nothing red, no streaks; Save now says "2 to go" instead of silently greying out |
+| Guardrail: correct numbers | exact | **Met:** 17 of 17 summary values matched a hand count; ties now said honestly ("mild to moderate") |
+| Guardrail: no claims | none | **Met:** 0 claims across ~60 strings; nothing leaves the phone (0 network requests) |
+| Setup (requirement 1) | ≤ 60 s | **Missed:** ~80 s (medicine name and dates); acceptable once, logged |
+
+**Did it solve the problem?** In simulation, yes for the appointment itself: a few taps a day
+become one screen that tells a clinician in under a minute whether pain and sleep moved, how often
+the doses helped, and what was taken. What isn't known is whether a real patient keeps logging
+without reminders (the second-riskiest assumption) and whether a clinician trusts plain-word
+averages. Both need real people: the owner's phone review first, then one patient (to-do).

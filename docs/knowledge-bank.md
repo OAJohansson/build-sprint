@@ -261,7 +261,17 @@ fixed build, then your own review, so your opinion doesn't shape what the test l
 Agree what "done" means before starting (live on phone and desktop, write-up, test run, retro),
 so finishing is a check, not a feeling.
 
+#### Let time pass in tests
+Most tests check one moment. Real use stretches across time: the app resumed from the background
+(not reloaded), midnight passing, a date that moves. Anything that says "since", "last time" or
+"in 9 days" needs a test where time passes. Why it matters: these bugs never show in a demo.
+Where we met it: Mallow (04), where two of four major findings only appeared that way. From:
+testing practice for time-dependent software (fake clocks, e.g. Playwright's clock).
+
 ### Quiz
+
+**Q:** Why add a "time passes" scenario to a user test?
+**A:** Because resuming an app, crossing midnight or a date moving can break anything time-based ("last time", countdowns), and a one-moment test never sees it.
 
 **Q:** What does a one-page PRD contain, in order?
 **A:** Why (problem, who, jobs), what we don't know (alternatives, riskiest assumptions), how we'll know it worked (success measures), and what we'll build (MVP, requirements, no-gos).

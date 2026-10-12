@@ -361,6 +361,8 @@ function product(p) {
   const fact = (label, value) => `<div class="fact"><dt>${label}</dt><dd class="${value ? "" : "blank"}">${esc(value || "Not written yet")}</dd></div>`;
   const live = p.url ? `<a class="btn primary" href="${esc(p.url)}">Open app ↗</a>` : `<span class="btn off">Not deployed yet</span>`;
   const design = p.design ? `<a class="btn" href="${esc(p.design)}">Design canvas ↗</a>` : "";
+  // A product's own notebook, when it has one outside this repo (e.g. 05 Inkling).
+  const notebook = p.notebook ? `<a class="btn" href="${esc(p.notebook)}">Product notebook ↗</a>` : "";
   const cards = p.sections.length
     ? `<section class="head"><h2>In this product</h2><div class="sections">${p.sections.map((s) =>
         `<a class="section-card" href="#${p.slug}.${s.id}"><span class="t">${esc(s.label)}</span><span class="p">${esc(s.summary)}</span></a>`).join("")}</div></section>`
@@ -372,7 +374,7 @@ function product(p) {
       <h1>${esc(p.title)}</h1>
     </header>
     <dl class="facts">${fact("User", p.user)}${fact("Problem", p.problem)}${fact("Bet", p.bet)}</dl>
-    <div class="links">${live}${design}<a class="btn" href="${p.code}">Code</a><a class="btn" href="${p.doc}">Edit notes</a></div>
+    <div class="links">${live}${design}${notebook}<a class="btn" href="${p.code}">Code</a><a class="btn" href="${p.doc}">Edit notes</a></div>
     ${p.tags.length ? `<div class="tags">${p.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div>` : ""}
     ${cards}
     <section class="prose">${body ? md(body) : `<h2>Learned</h2><p class="lede">Filled in at the end of the day.</p>`}</section>`;

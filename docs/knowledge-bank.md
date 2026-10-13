@@ -268,7 +268,41 @@ Most tests check one moment. Real use stretches across time: the app resumed fro
 Where we met it: Mallow (04), where two of four major findings only appeared that way. From:
 testing practice for time-dependent software (fake clocks, e.g. Playwright's clock).
 
+#### Kinds of tests
+User-journey tests try the app the way a person would: tap through a task and see if it works.
+Our playbook's step 3b (simulated user, break-ui, walking the brief) is this kind. Unit tests are
+small pieces of code that check one piece of logic with sample inputs ("workouts Monday and
+Wednesday → streak of 1 week") and run automatically on every change. Journey tests find what
+confuses people; unit tests catch logic that quietly breaks later, especially dates and edge
+cases. Evals are unit tests for AI behaviour. We unit-test only date, time and streak logic, where our
+bugs have been (decision 0011). Choosing what to test is risk-based testing: test where a failure
+is both likely and costly, and leave the rest to the user test. From: the test pyramid (Mike Cohn), many small fast tests at the
+bottom, few slow journey tests on top.
+
+#### Root cause, not patch
+When a bug shows on one screen, find every place that uses the faulty code and fix it once at the
+source, rather than patching the screen where you saw it. Patches pile up and the bug returns
+elsewhere. Where we met it: decision 0011 (from the ponytail skill's review).
+
+#### YAGNI and labelled shortcuts
+YAGNI, "You Aren't Gonna Need It": don't build options or flexibility nobody asked for. Shortcuts
+are fine in a sprint if they're visible: label each in code (`shortcut: <limit>, <when to
+upgrade>`) so the technical debt can be found later. From: Extreme Programming (Kent Beck, Ron
+Jeffries).
+
 ### Quiz
+
+**Q:** What's the difference between a user-journey test and a unit test?
+**A:** A journey test tries the app like a person would and finds confusion and broken flows; a unit test checks one piece of logic with sample inputs, runs automatically, and catches logic that breaks later.
+
+**Q:** How does a unit test check "what happens just after midnight" without waiting?
+**A:** It fakes the clock: set "now" to 00:01 (`vi.setSystemTime`), run the logic, and compare with the expected answer.
+
+**Q:** Why fix a bug's root cause instead of the screen where it appeared?
+**A:** Other places using the same code have the same bug; a patch leaves them broken and piles up.
+
+**Q:** What does YAGNI stand for, and where does it come from?
+**A:** "You Aren't Gonna Need It": don't build what nobody asked for. From Extreme Programming (Kent Beck, Ron Jeffries).
 
 **Q:** Why add a "time passes" scenario to a user test?
 **A:** Because resuming an app, crossing midnight or a date moving can break anything time-based ("last time", countdowns), and a one-moment test never sees it.

@@ -5,11 +5,11 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 ## Now
 
-**Job hunt** (kept current by Job Coach, last updated Sat 10 Oct. Detail and dates in [Focus](https://claude.ai/artifact/EBNLSbWYvYyf7moz26PCuV#focus))
-- [ ] CharityJob first chat, Wed 14 Oct, 5pm (10am UK). Prep the GambleAware and Vinehealth walkthroughs, mock run on Tue *(me)*
-- [ ] Oak National Academy: submit by Tue 13 Oct (closes Wed 14) *(me)*
-- [ ] Enthuse via Vero: wait for Ethan to book the interview, then the Inkling story and half a day of UI polish
-- [ ] Montu UK: waiting on Kiren for a screening time
+**Job hunt** (kept current by Job Coach, last updated Wed 14 Oct. Detail and dates in [Focus](https://claude.ai/artifact/EBNLSbWYvYyf7moz26PCuV#focus))
+- [ ] CharityJob first chat today, Wed 14 Oct, 5pm (10am UK). Booked. Debrief with Claude straight after *(me)*
+- [ ] UKHSA Product Owner: submit by Tue 20 Oct (closes that day) *(me)*
+- [ ] Montu UK and Therabody: waiting on Kiren and Jasmine to book a call (offered Thu 15 or Fri 16)
+- [ ] Version 1: waiting on Malti to book the recruiter screen (offered Fri 16, Mon 19 or Tue 20, mornings UK)
 - [ ] Keep applying: the 8am session each day *(me)*
 
 ## Next

@@ -4,8 +4,37 @@
     {
       "name": "03-scribble",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["-F", "03-scribble", "dev", "--port", "3003"],
+      "runtimeArgs": [
+        "-F",
+        "03-scribble",
+        "dev",
+        "--port",
+        "3003"
+      ],
       "port": 3003
+    },
+    {
+      "name": "inkling",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--dir",
+        "/Users/ante/Workplace/kids-app",
+        "dev"
+      ],
+      "port": 3010,
+      "autoPort": true
+    },
+    {
+      "name": "04-mallow",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "-F",
+        "04-mallow",
+        "dev",
+        "--port",
+        "3004"
+      ],
+      "port": 3004
     }
   ]
 }

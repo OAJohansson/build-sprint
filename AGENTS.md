@@ -87,5 +87,5 @@ priorities are on the Focus page of the Job Prep Hub (https://claude.ai/artifact
 read it with the Artifact tool) and roles are in the Job Tracker
 (https://claude.ai/artifact/UAcFjtMc6G5z8edskbUqeo). When the owner asks "where are we?" or wants
 priorities across everything, read Focus first and rank its dated items (interviews, deadlines)
-alongside the sprint work. Job Coach keeps the **Job hunt** section of `docs/todo.md` current;
-don't rewrite it from here unless the owner asks, and never copy job detail into other docs.
+alongside the sprint work. `docs/todo.md` only links to Focus for the
+job hunt (Focus is the single source); never copy job items or dates back into it or other docs.

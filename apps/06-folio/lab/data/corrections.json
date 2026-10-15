@@ -1,0 +1,16 @@
+{
+  "about": "Owner-confirmed fixes applied on top of goodreads_library_export.csv, which stays exactly as exported. Keys are Goodreads Book Ids.",
+  "merge": [
+    {
+      "keep": "33980368",
+      "drop": "40745",
+      "rating": 3.5,
+      "why": "Mindset: the 3.5 was meant for the edition I read, not the want-to-read one (owner, 15 Oct)"
+    },
+    {
+      "keep": "61215351",
+      "drop": "3263607",
+      "why": "The Fellowship of the Ring: same book on both shelves, read wins"
+    }
+  ]
+}

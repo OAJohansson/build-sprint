@@ -134,7 +134,7 @@ Day 1 (the app). The recommender steps get their own requirements on the day the
 | 3 | Log as read: half-star rating, a one-line review, an optional longer paragraph, date read (defaults to today) | Done in ≤ 30 s; all fields saved word for word |
 | 4 | The shelf shows covers with ratings and one-liners; long reviews never show on the shelf | Scan three books in ≤ 10 s; no paragraph visible |
 | 5 | The book page shows the one-liner, and the long review opens with a tap; everything can be edited, moved between shelves or removed | Edit → the shelf updates |
-| 6 | Goodreads CSV import: read and to-read shelves, ratings (0 = unrated), review into the long paragraph, date read; covers by ISBN, then by title search; importing again doesn't duplicate | Counts match the CSV; second import adds 0 |
+| 6 | Goodreads CSV import: read and to-read shelves, ratings (0 = unrated, halves kept), review into the long paragraph, date read (else date added); covers by ISBN, then by title search; rows that are the same book (same Open Library work) merge: read wins, and a rating on either row is kept; importing again doesn't duplicate | Counts match the CSV after merges; *Mindset* imports as read, 3.5 stars; second import adds 0 |
 | 7 | Data stays on the device (localStorage); only book searches and cover requests leave it | No personal data in requests |
 
 **No-gos:** community and other people's reviews, accounts and sync, word lookup and notes (v2),
@@ -152,8 +152,8 @@ reading progress, stats and charts, social sharing, training or fine-tuning a mo
 - **Goodreads date parsing and the date-added split** (Vitest in the app, pytest in the lab):
   normal `2023/05/14`; a missing "date read" (19 of my 65 read books: fall back to date added);
   a book added on the split date itself (lands on exactly one side); an empty export.
-- **Import merging:** the same book on both shelves (read wins); a rating on a want-to-read row
-  (keep it); a re-import adds nothing.
+- **Import merging:** the same book on both shelves (read wins); a rating only on the want-to-read
+  row moves to the read one (*Mindset*, owner 15 Oct); a re-import adds nothing.
 - **Rating mapping:** Goodreads `0` means unrated, not zero stars; the export writes ratings as
   `4.0` and can hold halves (`3.5`); all map exactly and round-trip.
 - **Eval metrics** (pytest): hit rate@10 and NDCG@10 against small hand-worked cases (hit at

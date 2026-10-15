@@ -501,6 +501,13 @@ Store moments as absolute instants (UTC) and show them in a place's time zone by
 as `Asia/Makassar`, using the browser's date formatting (`Intl.DateTimeFormat`). Never hand-write
 offsets: daylight saving time breaks them.
 
+#### Raw data stays raw
+Keep a source file exactly as it came (an export, a download) and put fixes in a separate,
+explained step: a corrections file or a cleaning script. Why it matters: you can always rerun from
+the source, see every change and why it was made, and re-export without losing your fixes. Where
+we met it: Folio (06): a misplaced *Mindset* rating fixed in `corrections.json`, not in the
+Goodreads CSV. From: data engineering practice (immutable raw layer, as in "bronze/silver/gold").
+
 ### Working with APIs
 
 #### Calling APIs from the browser
@@ -573,6 +580,9 @@ history.
 
 **Q:** Why test a production build, not just the dev server?
 **A:** The production build is what users get; it can behave differently, and dev servers are built for localhost.
+
+**Q:** Why fix data in a separate corrections step instead of editing the raw export?
+**A:** The raw file stays a faithful source you can rerun from, every fix is visible and explained, and a fresh export doesn't wipe the fixes.
 
 **Q:** What are localStorage's limits?
 **A:** It lives in one browser on one device, can be cleared, holds little data and isn't shared between people.

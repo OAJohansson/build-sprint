@@ -62,3 +62,8 @@ What happened, what was decided and why. Newest last.
   bulk-added rows of 2018 and 2021).
 - **Quirks found:** *Fellowship of the Ring* on both shelves (two editions); *Mindset* read but
   unrated, while a 3.5 sits on a want-to-read edition, likely the rating meant for the read book.
+- **Mindset (owner):** the 3.5 is the rating for the edition they read. Fixed without touching
+  the export: `apps/06-folio/lab/data/corrections.json` lists owner-confirmed merges (Mindset,
+  Fellowship), which the lab applies on load. The app's import gets a general rule instead: rows
+  that resolve to the same Open Library work merge, read wins, and a rating on either row is kept.
+  Practice: keep raw data exactly as it came, and apply fixes in a separate, explained step.

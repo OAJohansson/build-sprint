@@ -547,6 +547,13 @@ similarity). A "two-tower" model learns one embedding for users and one for item
 space. Why it matters: embeddings power retrieval, search and most modern AI features. Where we
 met it: Folio (06), content-based step.
 
+#### Explicit vs implicit feedback
+**Explicit** feedback is what people tell you: a star rating, a thumbs up. It's clear but rare,
+and skewed (people mostly rate what they liked). **Implicit** feedback is what people do: plays,
+saves, skips, adding to a want-to-read list. It's noisy but plentiful, so most real recommenders
+(Spotify, YouTube) run mainly on it. Where we met it: Folio (06): 65 rated books, but 287
+want-to-reads, and ratings only from 3 to 5 stars.
+
 #### Cold start
 A recommender has nothing to go on for a new user or a new item. Fixes: ask for a few favourites
 up front, fall back to popularity, or use content features (Spotify's audio models place songs no
@@ -587,6 +594,9 @@ history.
 
 **Q:** What is an embedding, in one sentence?
 **A:** A list of numbers representing a thing, placed so that similar things are close together.
+
+**Q:** What is the difference between explicit and implicit feedback?
+**A:** Explicit is what people say (a rating); implicit is what they do (plays, saves, want-to-read). Implicit is noisier but far more plentiful.
 
 ## Building with AI
 

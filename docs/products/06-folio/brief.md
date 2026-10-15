@@ -59,6 +59,13 @@ tap), and recommends with a reason, from a recommender measured against my own r
 | Usability | Logging a finished book (rating and one-liner) takes ≤ 30 s | Low |
 | Viability | Costs stay near zero (Open Library is free; Claude only at the last level); the export is public in the repo (owner, 15 Oct); Python is new to this repo | Low |
 
+**What the export showed (15 Oct):** 352 books: 65 read, 287 want to read. Ratings are only
+3, 4 and 5 stars (16, 32, 16; one unrated), so there's little signal about dislikes. No reviews
+or private notes. 46 of 65 have a date read, and the last one is from 2024: I stopped logging,
+which is the problem itself. ISBNs exist for 288 of 352. So the want-to-read shelf is the richest
+signal (implicit feedback: intent rather than a rating), and a split on *date read* would leave
+only 3 test books. The eval uses leave-one-out on liked books and a split on date added instead.
+
 So the MVP must test **whether my history makes better recommendations**. That's why the eval
 harness (step 2) comes before any clever recommender, and why every level is scored on it.
 
@@ -70,7 +77,7 @@ recommender suggested it.
 | Signal | How I'll measure it | Target |
 | --- | --- | --- |
 | Recommendations land (main) | Owner judgment on the final top 10: how many I'd actually want to read and hadn't considered | ≥ 3 of 10 |
-| Better than the baseline | Offline eval, time split (train before 2024, test after): hit rate@10 and NDCG@10, per level | Best level beats popularity on both |
+| Better than the baseline | Offline eval, per level: leave-one-out on books I rated 4–5 stars, plus a time split on *date added* that hides my newest want-to-reads; hit rate@10 and NDCG@10 | Best level beats popularity on both |
 | Import works | Goodreads CSV → Folio: rows with title, author, rating and shelf; rows with a cover | ≥ 95% imported, ≥ 80% with a cover |
 | Logging is quick | User test: log a just-finished book with a rating and a one-liner | ≤ 30 s, ≤ 5 taps |
 | The shelf is scannable | User test: from the shelf, say what I thought of three books | ≤ 10 s, no taps |
@@ -87,7 +94,7 @@ day 5 or goes to the backlog.
 | Day | Ships | Learns |
 | --- | --- | --- |
 | 1 | The app: search, shelves (read, want to read), half-star ratings, one-line review with the paragraph behind a tap, Goodreads CSV import | Product, data model, the test set |
-| 2 | Python lab, eval harness (time split, hit rate@10, NDCG@10, diversity), popularity baseline, recommendations screen | Measure before you build |
+| 2 | Python lab, eval harness (leave-one-out and a date-added split, hit rate@10, NDCG@10, diversity), popularity baseline, recommendations screen | Measure before you build |
 | 3 | Content-based: embeddings of book descriptions, my taste as the weighted average of what I liked | Embeddings, vector similarity |
 | 4 | Collaborative filtering (matrix factorization on goodbooks-10k with me added), then a hybrid blend with Claude re-ranking and explaining, and an LLM judge for the reasons | The Netflix technique, cold start, where LLMs fit |
 
@@ -138,11 +145,11 @@ reading progress, stats and charts, social sharing, training or fine-tuning a mo
 
 ## Unit tests
 
-- **Goodreads date parsing and the time split** (Vitest in the app, pytest in the lab): normal
-  `2023/05/14`; a missing "date read" (use date added, or leave it out of the split); a book read
-  at midnight on 31 Dec 2023 (falls before the 2024 split); an empty export.
-- **Rating mapping:** Goodreads `0` means unrated, not zero stars; 1–5 map exactly; half stars
-  round-trip.
+- **Goodreads date parsing and the date-added split** (Vitest in the app, pytest in the lab):
+  normal `2023/05/14`; a missing "date read" (19 of my 65 read books); a book added on the split
+  date itself (lands on exactly one side); an empty export.
+- **Rating mapping:** Goodreads `0` means unrated, not zero stars; the export writes ratings as
+  `4.0`, so `1.0`–`5.0` map exactly; half stars round-trip.
 - **Eval metrics** (pytest): hit rate@10 and NDCG@10 against small hand-worked cases (hit at
   rank 1, hit at rank 10, no hit, empty list).
 

@@ -41,3 +41,17 @@ What happened, what was decided and why. Newest last.
   because of a conflict in `docs/todo.md`: main had job items copied back in by the Job Coach
   sync; the PR points to Focus instead. Kept the Focus link (AGENTS.md: Focus is the single
   source), pushed, and cut Folio on top of the PR branch so it includes Vitest.
+
+## 15 Oct: the Goodreads export
+
+- **Owner exported their library** (macOS wouldn't let Claude read Downloads, so the owner moved it
+  to `apps/06-folio/lab/data/`). Checked before committing to the public repo: no private notes,
+  reviews or spoilers, so it's safe.
+- **What's in it:** 352 books, 65 read and 287 want to read. Ratings only 3–5 stars. 46 read books
+  have a date, the last in 2024. **The history stopped in 2024**, evidence for the problem itself
+  (logging in Goodreads is a chore, so it goes stale).
+- **Eval redesigned:** a date-read split would test on 3 books, so the harness uses leave-one-out
+  on 4–5-star books and a split on date added, which includes want-to-reads. Coaching point:
+  want-to-read is *implicit feedback* (an action that shows intent) versus *explicit feedback*
+  (a rating); most real recommenders run mostly on implicit signals.
+- **Rating skew:** with no 1–2 stars, 3 stars is the "didn't love it" signal; treat 4–5 as liked.

@@ -520,6 +520,39 @@ real API, one returns demo or test data. The screens never know which they got. 
 safe public demo, tests without a backend, and no screen built twice. Where we met it: Inkling
 (05): `/demo` runs Maya's scripted journal through the same screens as the real app.
 
+### Recommendation systems
+
+#### The three families of recommender
+A recommender predicts how much someone would like something they haven't seen. **Popularity**
+recommends what most people like: trivial, and hard to beat for new users. **Content-based**
+matches features of items you liked (genre, author, description): works for one user and can
+explain itself, but stays in a bubble. **Collaborative filtering** uses people with similar taste
+("readers like you loved…"): finds surprising picks, but needs many users and can't place a new
+item or user. Why it matters: every product's "for you" is one of these or a blend. Where we met
+it: Folio (06). From: the Netflix Prize (2006–09) and the recommender systems literature.
+
+#### Multi-stage recommenders: retrieval, ranking, re-ranking
+Real systems work in stages. **Retrieval** narrows millions of items to a few hundred, fast,
+usually with embeddings. **Ranking** scores those with a heavier model and many signals.
+**Re-ranking** applies rules on top: variety, nothing already seen, freshness. Spotify's Discover
+Weekly blends collaborative filtering on playlists, language models on what people write about
+artists, and audio models for brand-new songs. Why it matters: it's the shape interviewers expect
+you to sketch. Where we met it: Folio (06). From: Covington et al., "Deep Neural Networks for
+YouTube Recommendations" (2016).
+
+#### Embeddings
+An embedding turns a thing (a book description, a user, a song) into a list of numbers, so that
+similar things land close together; "similar" becomes a distance you can compute (cosine
+similarity). A "two-tower" model learns one embedding for users and one for items, in the same
+space. Why it matters: embeddings power retrieval, search and most modern AI features. Where we
+met it: Folio (06), content-based step.
+
+#### Cold start
+A recommender has nothing to go on for a new user or a new item. Fixes: ask for a few favourites
+up front, fall back to popularity, or use content features (Spotify's audio models place songs no
+one has played yet). Where we met it: Folio (06), solved for the owner by importing a Goodreads
+history.
+
 ### Quiz
 
 **Q:** What is a hydration mismatch?
@@ -545,6 +578,15 @@ safe public demo, tests without a backend, and no screen built twice. Where we m
 
 **Q:** What is the adapter pattern, in one sentence, and what did it give Inkling?
 **A:** One interface with interchangeable implementations; the same screens run on the real API or a scripted demo.
+
+**Q:** Name the three classic families of recommender and one weakness of each.
+**A:** Popularity (same list for everyone), content-based (stays in a bubble), collaborative filtering (needs many users; cold start).
+
+**Q:** What are the three stages of a production recommender?
+**A:** Retrieval (narrow to a few hundred candidates, fast), ranking (score them with a heavier model), re-ranking (rules like variety and nothing already seen).
+
+**Q:** What is an embedding, in one sentence?
+**A:** A list of numbers representing a thing, placed so that similar things are close together.
 
 ## Building with AI
 
@@ -592,6 +634,20 @@ more literally, so loose rules ("exactly one question") may need to be stated ex
 met it: Inkling (05): on the Claude API, safety held but two rules broke (6/8), fixed with two
 sentences (8/8).
 
+#### Evaluating a recommender: offline, beyond accuracy, online
+**Offline:** hide part of real history and check whether it comes back. Split by time (train on
+the past, test on the future), so the model never "sees the future". **Hit rate@10:** was a
+hidden item in the top 10? **NDCG@10:** was it near the top? **Beyond accuracy:** diversity,
+novelty and coverage, because accuracy alone rewards recommending bestsellers to everyone.
+**Online:** A/B tests on real behaviour (saves, clicks, finishes); offline and online results
+often disagree. Why it matters: measurement is what separates a recommender from a guess. Where we
+met it: Folio (06).
+
+#### Always beat a baseline
+Before any clever model, build the dumbest reasonable one (e.g. "most popular books you haven't
+read") and score it. A model that doesn't beat it isn't working, however impressive it sounds.
+Where we met it: Folio (06), step 2 of the ladder.
+
 ### Quiz
 
 **Q:** What is a skill, and how does it get used?
@@ -617,6 +673,15 @@ sentences (8/8).
 
 **Q:** What is the core failure of an AI used for reflection?
 **A:** Agreeing with the user (sycophancy) instead of helping them see more clearly.
+
+**Q:** Why split a recommender's test data by time instead of at random?
+**A:** So the model is trained only on the past and tested on the future, like real use; a random split lets it "see the future".
+
+**Q:** What do hit rate@10 and NDCG@10 measure?
+**A:** Hit rate: whether a hidden item appears in the top 10. NDCG: also rewards it for being near the top.
+
+**Q:** Why build a popularity baseline first?
+**A:** It's the bar to beat; a clever model that can't beat "most popular" isn't working.
 
 ## Communication and influence
 

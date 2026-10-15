@@ -48,10 +48,17 @@ What happened, what was decided and why. Newest last.
   to `apps/06-folio/lab/data/`). Checked before committing to the public repo: no private notes,
   reviews or spoilers, so it's safe.
 - **What's in it:** 352 books, 65 read and 287 want to read. Ratings only 3–5 stars. 46 read books
-  have a date, the last in 2024. **The history stopped in 2024**, evidence for the problem itself
-  (logging in Goodreads is a chore, so it goes stale).
+  have a date read, the last in 2024.
 - **Eval redesigned:** a date-read split would test on 3 books, so the harness uses leave-one-out
   on 4–5-star books and a split on date added, which includes want-to-reads. Coaching point:
   want-to-read is *implicit feedback* (an action that shows intent) versus *explicit feedback*
   (a rating); most real recommenders run mostly on implicit signals.
 - **Rating skew:** with no 1–2 stars, 3 stars is the "didn't love it" signal; treat 4–5 as liked.
+- **Correction (owner, with screenshots):** Claude first read "no date read after 2024" as "the
+  history stopped in 2024". Wrong: the owner's 2025–26 reads (*Four Thousand Weeks*, *When Breath
+  Becomes Air*, *On Connection*, *Mindset*…) are all in the export, just without a date read;
+  Goodreads only fills it when set by hand. Lesson: check a conclusion about the data with the
+  person who made it before building on it. *Date added* is the fallback date (except for the
+  bulk-added rows of 2018 and 2021).
+- **Quirks found:** *Fellowship of the Ring* on both shelves (two editions); *Mindset* read but
+  unrated, while a 3.5 sits on a want-to-read edition, likely the rating meant for the read book.

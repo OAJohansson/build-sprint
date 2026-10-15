@@ -59,12 +59,16 @@ tap), and recommends with a reason, from a recommender measured against my own r
 | Usability | Logging a finished book (rating and one-liner) takes ≤ 30 s | Low |
 | Viability | Costs stay near zero (Open Library is free; Claude only at the last level); the export is public in the repo (owner, 15 Oct); Python is new to this repo | Low |
 
-**What the export showed (15 Oct):** 352 books: 65 read, 287 want to read. Ratings are only
-3, 4 and 5 stars (16, 32, 16; one unrated), so there's little signal about dislikes. No reviews
-or private notes. 46 of 65 have a date read, and the last one is from 2024: I stopped logging,
-which is the problem itself. ISBNs exist for 288 of 352. So the want-to-read shelf is the richest
-signal (implicit feedback: intent rather than a rating), and a split on *date read* would leave
-only 3 test books. The eval uses leave-one-out on liked books and a split on date added instead.
+**What the export showed (15 Oct):** 352 books: 65 read, 287 want to read. Ratings on read
+books are only 3, 4 and 5 stars (16, 32, 16), so there's little signal about dislikes. No reviews
+or private notes. Only 46 of 65 read books have a *date read* (none after 2024), but the owner's
+recent reads are there: Goodreads leaves "date read" empty unless it's set by hand, so for 19
+books the only date is *date added* (six of them from 2025–26). The want-to-read shelf is the
+richest signal (implicit feedback: intent rather than a rating). Data quirks the import must
+handle: *The Fellowship of the Ring* is on both shelves as two editions; a 3.5-star rating sits on
+a want-to-read edition of *Mindset* while the read edition is unrated (the export does carry half
+stars); old rows were bulk-added on the same day (Oct 2018, Jun 2021), so date added isn't a read
+date for them. The eval therefore uses leave-one-out on liked books, plus a split on date added.
 
 So the MVP must test **whether my history makes better recommendations**. That's why the eval
 harness (step 2) comes before any clever recommender, and why every level is scored on it.
@@ -146,10 +150,12 @@ reading progress, stats and charts, social sharing, training or fine-tuning a mo
 ## Unit tests
 
 - **Goodreads date parsing and the date-added split** (Vitest in the app, pytest in the lab):
-  normal `2023/05/14`; a missing "date read" (19 of my 65 read books); a book added on the split
-  date itself (lands on exactly one side); an empty export.
+  normal `2023/05/14`; a missing "date read" (19 of my 65 read books: fall back to date added);
+  a book added on the split date itself (lands on exactly one side); an empty export.
+- **Import merging:** the same book on both shelves (read wins); a rating on a want-to-read row
+  (keep it); a re-import adds nothing.
 - **Rating mapping:** Goodreads `0` means unrated, not zero stars; the export writes ratings as
-  `4.0`, so `1.0`–`5.0` map exactly; half stars round-trip.
+  `4.0` and can hold halves (`3.5`); all map exactly and round-trip.
 - **Eval metrics** (pytest): hit rate@10 and NDCG@10 against small hand-worked cases (hit at
   rank 1, hit at rank 10, no hit, empty list).
 

@@ -119,6 +119,12 @@ one-line reviews, calm. Modern, sleek, minimal. Not: Goodreads' dense, dated pag
 review text; "bookish" decoration (wood shelves, paper textures, quill icons). A feel is evoked,
 not drawn.
 
+**Design (owner, 16 Oct, after two prototype rounds):** two tabs, **Home** and **Shelf**. Home
+has three rows: New releases, Popular this month (both Open Library lists, the same for
+everyone) and Folio's picks (the recommender, with a reason). Shelf has Read as a diary by
+month, with clear month headings, and Want to read as a shelf of smaller covers with titles.
+A mascot, Folio the owl with glasses, sits by the name.
+
 **Stop line:** anything not above goes to [backlog](#06-folio.backlog): word lookup and saved
 words, notes and ideas while reading, community and discussion, a "reading now" shelf with
 progress, stats, accounts and sync, and other people's reviews.

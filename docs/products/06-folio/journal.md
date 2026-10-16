@@ -103,3 +103,37 @@ What happened, what was decided and why. Newest last.
   short; one-liners clamped to one line, so no opinion is readable; missing covers read as
   broken; all-caps month headers feel templated; an unexplained "+"; gold stars are the loudest
   thing on screen. Useful input for the shelf pick.
+
+## 16 Oct: prototype round 2, the owner's picks combined
+
+- **Owner's picks:** **Diary** for Read, with clearer month headings to separate sections;
+  **Wall** for Want to read, but smaller covers with readable titles, so it *feels like looking
+  at a bookshelf*.
+- **Scope widened (named, per the playbook):** the owner asked for recommendations in the
+  prototype, two tabs (**Home** and **Shelf**), and a Home of three rows: **New releases**,
+  **Popular this month**, **Folio's picks**, plus a **mascot**, a cute library animal with
+  glasses (inspired by Duolingo), next to the name. The recommendations screen moved up from
+  day 2 as UI only, with sample picks. New releases is new scope, but cheap: Open Library
+  lists exist.
+- **Built at `/prototypes/folio`** (round 1's `/prototypes/shelf` deleted):
+  - **Read:** month headings now large sentence case with the year muted, a count and a
+    hairline. Two of the critic's notes applied: titles wrap instead of being cut by the stars
+    (stars moved to the author line), one-liners show two lines, the "+" mark is gone.
+  - **Want to read:** four covers per row, titles under each, every row standing on a hairline
+    "ledge". The shelf feel is evoked by rhythm and baseline, not drawn wood. Tap opens a sheet.
+  - **Home:** three horizontal rows. *Popular this month* is Open Library's real trending list;
+    *New releases* is real 2026 English releases by reading-log count; *Folio's picks* are hand
+    picked samples with a "Because you loved…" reason.
+  - **Mascot:** Folio, a small static owl with round glasses holding a green book, next to the
+    name.
+- **Teaching moments:**
+  - **Popular and new are popularity recommenders,** the same for everyone. They're
+    mostly romance and self-help, not the owner's taste, which is exactly why the personal row
+    must beat them on the eval.
+  - **Half of Claude's first-guess picks were already on the want-to-read shelf** (*Shuggie
+    Bain*, *Inspired*, *Range*, *The Song of Achilles*, *Continuous Discovery Habits*, *On Earth
+    We're Briefly Gorgeous*): a good sign for taste, and proof that the "not already on my shelf"
+    filter is needed.
+  - **Cover quality varies:** one library scan shows a "Withdrawn from collection" sticker.
+- **Open questions for the owner:** where adding a book (search) lives with only two tabs; Home
+  order (personal picks first or last); star colour (the critic found gold too loud).

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { cleanTitle, fromGoodreads, mergeBooks, parseCsv, toIsoDate, toRating, today } from "./goodreads";
+import { cleanReview, cleanTitle, fromGoodreads, mergeBooks, parseCsv, readGoodreads, toIsoDate, toRating, today } from "./goodreads";
 import type { Book } from "./types";
 
 const HEADER =
@@ -123,5 +123,84 @@ describe("mergeBooks", () => {
   it("a real date read beats an estimated one", () => {
     const merged = mergeBooks(base, { ...other, shelf: "read", readOn: "2026-09-30", readOnEstimated: false });
     expect(merged).toMatchObject({ readOn: "2026-09-30", readOnEstimated: false });
+  });
+});
+
+// Every field from the export must arrive in Folio exactly as it was (owner, 16 Oct).
+describe("field fidelity", () => {
+  const FULL =
+    "Book Id,Title,Author,Author l-f,Additional Authors,ISBN,ISBN13,My Rating,Average Rating,Publisher,Binding,Number of Pages,Year Published,Original Publication Year,Date Read,Date Added,Bookshelves,Bookshelves with positions,Exclusive Shelf,My Review,Spoiler,Private Notes,Read Count,Owned Copies";
+  const row = [
+    "123",
+    '"Say ""Hello"", Again: A Novel (Greetings, #2)"',
+    "Lena  Andersson",
+    '"Andersson, Lena"',
+    "",
+    '"=""0123456789"""',
+    '"=""9780123456789"""',
+    "4.5",
+    "3.9",
+    "Publisher",
+    "Paperback",
+    "300",
+    "2021",
+    "2019",
+    "2024/02/29",
+    "2024/01/31",
+    "",
+    "",
+    "read",
+    '"Loved it.<br/><br/>Second <i>paragraph</i> &amp; more:<br />""quoted"" — åäö, emoji 📚."',
+    "",
+    "my private note",
+    "1",
+    "0",
+  ].join(",");
+
+  it("keeps title, author, ISBN, year, rating, dates and shelf exactly", () => {
+    const [b] = fromGoodreads(`${FULL}\n${row}`);
+    expect(b).toEqual({
+      goodreadsId: "123",
+      isbn: "9780123456789",
+      title: 'Say "Hello", Again',
+      author: "Lena Andersson",
+      year: 2019,
+      shelf: "read",
+      rating: 4.5,
+      readOn: "2024-02-29",
+      readOnEstimated: false,
+      addedOn: "2024-01-31",
+      review: 'Loved it.\n\nSecond paragraph & more:\n"quoted" — åäö, emoji 📚.',
+    });
+  });
+  it("never imports private notes", () => {
+    const [b] = fromGoodreads(`${FULL}\n${row}`);
+    expect(JSON.stringify(b)).not.toContain("my private note");
+  });
+  it("keeps non-English titles and authors as written", () => {
+    const [b] = fromGoodreads(csv("9,Om falsk och äkta liberalism,Lena Andersson,,,0,,,,2026/01/02,to-read"));
+    expect(b).toMatchObject({ title: "Om falsk och äkta liberalism", author: "Lena Andersson" });
+  });
+  it("an empty review stays empty, not a blank string", () => {
+    expect(cleanReview("")).toBeNull();
+    expect(cleanReview("  <br/>  ")).toBeNull();
+  });
+});
+
+// No book lost: rows on shelves Folio doesn't have are reported, not dropped (owner, 16 Oct).
+describe("no book lost", () => {
+  it("every row is either imported or reported as skipped", () => {
+    const file = csv(
+      "1,A,Author One,,,5,,,2024/01/01,2024/01/01,read",
+      "2,B,Author Two,,,0,,,,2024/01/02,to-read",
+      "3,C,Author Three,,,0,,,,2024/01/03,currently-reading",
+      "4,D,Author Four,,,0,,,,2024/01/04,did-not-finish",
+    );
+    const { rows, skipped } = readGoodreads(file);
+    expect(rows.length + skipped.length).toBe(4);
+    expect(skipped).toEqual([
+      { title: "C", author: "Author Three", shelf: "currently-reading" },
+      { title: "D", author: "Author Four", shelf: "did-not-finish" },
+    ]);
   });
 });

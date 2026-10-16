@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Api } from "@/lib/api";
-import { fromGoodreads } from "@/lib/goodreads";
+import { readGoodreads, type SkippedRow } from "@/lib/goodreads";
 import type { Book } from "@/lib/types";
 import { Sheet } from "./shared";
 
@@ -14,13 +14,13 @@ export function ImportSheet({ api, books, onDone, onClose }: { api: Api; books: 
   const [state, setState] = useState<
     | { kind: "idle" }
     | { kind: "running"; done: number; total: number }
-    | { kind: "done"; added: number; merged: number; total: number; unmatched: { title: string; author: string }[] }
+    | { kind: "done"; added: number; merged: number; total: number; unmatched: { title: string; author: string }[]; skipped: SkippedRow[] }
     | { kind: "error"; message: string }
   >({ kind: "idle" });
 
   const run = async (file: File) => {
     try {
-      const rows = fromGoodreads(await file.text());
+      const { rows, skipped } = readGoodreads(await file.text());
       if (!rows.length) return setState({ kind: "error", message: "No read or want-to-read books in that file." });
       let added = 0;
       let merged = 0;
@@ -32,7 +32,7 @@ export function ImportSheet({ api, books, onDone, onClose }: { api: Api; books: 
         merged += r.merged;
         unmatched.push(...r.unmatched);
       }
-      setState({ kind: "done", added, merged, total: rows.length, unmatched });
+      setState({ kind: "done", added, merged, total: rows.length, unmatched, skipped });
       onDone();
     } catch (e) {
       setState({ kind: "error", message: e instanceof Error ? e.message : "The import stopped." });
@@ -79,9 +79,23 @@ export function ImportSheet({ api, books, onDone, onClose }: { api: Api; books: 
           {state.kind === "done" && (
             <div className="mt-3 space-y-2 text-[15px] leading-relaxed" aria-live="polite">
               <p>
-                All {state.total} books from the file are on your shelves
+                {state.skipped.length ? `${state.total} books` : `All ${state.total} books`} from the file are on your shelves
                 {state.merged > 0 ? ` (${state.added} new; ${state.merged} were duplicates or already here, merged into one).` : "."}
               </p>
+              {state.skipped.length > 0 && (
+                <details open>
+                  <summary className="cursor-pointer text-red-300">
+                    {state.skipped.length} {state.skipped.length === 1 ? "book was" : "books were"} not imported: Folio has only Read and Want to read
+                  </summary>
+                  <ul className="mt-2 space-y-1 text-[14px] text-[var(--f-muted)]">
+                    {state.skipped.map((b, i) => (
+                      <li key={i}>
+                        {b.title} <span className="text-[var(--f-faint)]">· {b.author} · on “{b.shelf}”</span>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
               {state.unmatched.length > 0 && (
                 <details>
                   <summary className="cursor-pointer text-[var(--f-muted)]">

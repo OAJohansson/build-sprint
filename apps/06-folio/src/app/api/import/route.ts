@@ -63,7 +63,7 @@ export async function POST(request: Request) {
         // same book may be on the read shelf, and its rating should land there (Mindset).
         rating: r.rating,
         line: null,
-        review: null,
+        review: r.review ?? null,
         genres: f?.genres ?? [],
         readOn: r.readOn,
         readOnEstimated: r.readOnEstimated,

@@ -17,6 +17,8 @@ export type ImportRow = {
   readOn: string | null;
   readOnEstimated: boolean;
   addedOn: string;
+  /** "My Review", as plain text (becomes the longer review). */
+  review: string | null;
 };
 
 /** RFC 4180 CSV: quoted fields may hold commas, doubled quotes and line breaks. */
@@ -81,8 +83,44 @@ export function cleanTitle(title: string): string {
 
 const ISBN = (v: string) => v.replace(/[="\s]/g, "") || null;
 
-/** Turn the export's text into books, skipping shelves other than read and to-read. */
+/** Goodreads reviews are HTML-ish ("<br/>", "<i>", "&amp;"): keep the words and line breaks. */
+export function cleanReview(value: string): string | null {
+  const text = value
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>\s*<p>/gi, "\n\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&amp;/g, "&")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  return text || null;
+}
+
+/** A row the import can't place yet (another exclusive shelf, e.g. currently-reading). */
+export type SkippedRow = { title: string; author: string; shelf: string };
+
+/**
+ * Turn the export's text into books. Folio has two shelves, so rows on any other exclusive shelf
+ * (currently-reading, or a custom one like did-not-finish) are returned as skipped, never dropped
+ * silently (owner's "no book lost" rule, 16 Oct).
+ */
+export function readGoodreads(csv: string, now = new Date()): { rows: ImportRow[]; skipped: SkippedRow[] } {
+  const skipped: SkippedRow[] = [];
+  const rows = parseGoodreads(csv, now, skipped);
+  return { rows, skipped };
+}
+
+/** The read and to-read rows only (see readGoodreads for the rest). */
 export function fromGoodreads(csv: string, now = new Date()): ImportRow[] {
+  return parseGoodreads(csv, now, []);
+}
+
+function parseGoodreads(csv: string, now: Date, skipped: SkippedRow[]): ImportRow[] {
   const [header, ...rows] = parseCsv(csv);
   if (!header) return [];
   const col = (name: string) => header.indexOf(name);
@@ -93,7 +131,10 @@ export function fromGoodreads(csv: string, now = new Date()): ImportRow[] {
   for (const r of rows) {
     const exclusive = get(r, "Exclusive Shelf");
     const shelf: Shelf | null = exclusive === "read" ? "read" : exclusive === "to-read" ? "want" : null;
-    if (!shelf) continue;
+    if (!shelf) {
+      if (get(r, "Title")) skipped.push({ title: cleanTitle(get(r, "Title")), author: get(r, "Author").replace(/\s+/g, " "), shelf: exclusive || "no shelf" });
+      continue;
+    }
     const added = toIsoDate(get(r, "Date Added")) ?? today(now);
     const read = toIsoDate(get(r, "Date Read"));
     const year = Number(get(r, "Original Publication Year") || get(r, "Year Published")) || null;
@@ -108,6 +149,7 @@ export function fromGoodreads(csv: string, now = new Date()): ImportRow[] {
       readOn: shelf === "read" ? (read ?? added) : null,
       readOnEstimated: shelf === "read" && !read,
       addedOn: added,
+      review: cleanReview(get(r, "My Review")),
     });
   }
   return out;

@@ -337,3 +337,10 @@ What happened, what was decided and why. Newest last.
   format (StoryGraph, LibraryThing…) mapping to the same import rows, with its own tests for
   dates, rating scales and shelf words; a generic "match your columns" screen comes after. It
   matters for other users switching to Folio, not for the owner's MVP, so it goes to the backlog.
+- **Owner: test that the CSV's data shows correctly.** Writing field-by-field tests found two
+  gaps. Goodreads reviews weren't imported at all, so anyone with reviews would lose them; they
+  now become the longer review, as plain text with line breaks kept. And rows on other Goodreads
+  shelves (currently-reading, or custom ones like did-not-finish) were skipped silently; they're
+  now named on screen as not imported, and where they go is the owner's call. 21 unit tests (the
+  repo's rule is unit tests for date logic only; the owner asked for these). The test plan gets a
+  field-by-field check, and the backlog's automated import test now covers fields too.

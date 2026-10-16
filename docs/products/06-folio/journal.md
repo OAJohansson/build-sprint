@@ -67,3 +67,23 @@ What happened, what was decided and why. Newest last.
   Fellowship), which the lab applies on load. The app's import gets a general rule instead: rows
   that resolve to the same Open Library work merge, read wins, and a rating on either row is kept.
   Practice: keep raw data exactly as it came, and apply fixes in a separate, explained step.
+
+## 16 Oct: prototype round 1, the shelf
+
+- **`/prototype` on the shelf screen** (the main screen for jobs 2 and 4), three directions on
+  the owner's real shelves (24 most recent read, 18 want to read), behind a picker at
+  `/prototypes/shelf`. The one-liners and two long reviews are **sample text** written for the
+  prototype; the export has no reviews.
+  - **Wall** (axis: covers first): Letterboxd's 3-column grid with half stars; the one-liner and
+    the full review open in a bottom sheet. Wins on looks and density; costs a tap per opinion,
+    so "say what I thought of three books" isn't possible without tapping.
+  - **Diary** (axis: time-ordered text): month headers, small cover, title, stars, the
+    one-liner cut to one line; tap a row to open the full review in place. Scans fastest; looks
+    the least like a book app.
+  - **Lines** (axis: the opinion as the hero): each one-liner set large in a serif, the book as
+    its caption; books without a line fall into a small cover grid at the end. The most personal;
+    only works if one-liners get written, and a fresh import has none.
+- **Found while building:** Open Library has covers by ISBN for only about half the books (9 of
+  18 on want to read), and many slowly (each redirects to archive.org, about 1.6 s). Some are
+  library scans. So the import's title-search fallback is required, not optional, and the
+  typographic fallback cover is part of the design.

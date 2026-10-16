@@ -35,6 +35,18 @@
         "3004"
       ],
       "port": 3004
+    },
+    {
+      "name": "06-folio",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "-F",
+        "06-folio",
+        "dev",
+        "--port",
+        "3006"
+      ],
+      "port": 3006
     }
   ]
 }

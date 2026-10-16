@@ -386,3 +386,14 @@ What happened, what was decided and why. Newest last.
   previews. Committed locally and held back until the limit frees up (about 11:50 on Sat 17
   Oct by the rolling count; fully clear about 15:00), then pushed in one batch with Folio's
   deploy.
+
+## 16 Oct: the recommender goal
+
+- **Owner's goal:** short term, learn how recommendation systems work inside out and build a
+  strong eval system for whatever Folio ends up using. Long term, through iterations, build the
+  most advanced book recommender there is.
+- **Coaching:** "most advanced" needs a definition, or it can't be reached. Here it means the
+  best on Folio's eval: offline metrics on a public dataset plus my own history, an LLM judge for
+  the reasons, and my real behaviour in the app, under the guardrails (real books only, nothing
+  already on my shelf, enough variety). So the eval comes before every model, and each new level
+  has to beat the last one on it. Advanced levels and online evaluation added to the backlog.

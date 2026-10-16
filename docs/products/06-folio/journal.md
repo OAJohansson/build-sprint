@@ -365,3 +365,17 @@ What happened, what was decided and why. Newest last.
 - **Migration 002 run by the owner and checked:** the `started_on` column exists, the database
   accepts a book on the Current read shelf (a temporary test row, deleted straight after), and
   all 349 books are untouched.
+
+## 16 Oct: shipping
+
+- The owner's merges hadn't gone through (both PRs still open) and the first ship hadn't run.
+  On the owner's request Claude merged PR 33, pointed PR 34 at main and merged it, then ran
+  `pnpm ship 06-folio`. **Exception to decision 0010** (the owner runs ship so keys never pass
+  through Claude), at the owner's request; the script sends keys from `.env.local` to Vercel and
+  never prints them.
+- **Project "folio" created** on Vercel (root `apps/06-folio`, GitHub connected, 6 env vars set),
+  but the **deploy was refused: the free plan's 100 deployments a day were used up**, because
+  every push today built previews. Retry `pnpm ship 06-folio` within 24 hours; it updates the
+  project and deploys.
+- **Lesson:** on the free plan, pushes are a budget. Push in batches at the end of a step, not
+  after every small doc change.

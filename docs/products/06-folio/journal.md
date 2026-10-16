@@ -169,3 +169,26 @@ What happened, what was decided and why. Newest last.
   list. Fixed with title plus author surname for now; the real app matches Open Library work ids.
 - **Cover quirk:** *Prophet Song* shows the German edition's cover. Prefer English-edition
   covers in the real import (backlog).
+
+## 16 Oct: genre filter on Want to read
+
+- **Owner:** filter the Want to read shelf by genre ("I'm in the mood for a classic"), using
+  Open Library's genre data.
+- **What the data holds:** of all 285 want-to-read books, 271 match Open Library and 241 (85%)
+  have subjects; 254 (89%) have a cover once the lookup falls back from ISBN to title. That
+  clears the brief's 80% cover target. The newest books are the worst-tagged (9 of the 18 most
+  recent have none), because new books haven't been tagged by readers yet. Google Books
+  refuses requests without an API key.
+- **Subjects are messy:** 600+ different tags, mixed languages ("romans, nouvelles", "ficción")
+  and noise ("large type books", "reading level-grade 11"). Claude wrote **mapping rules** from
+  raw tags to 10 shelf genres, several allowed per book: Classics (tagged classic, or fiction,
+  poetry or drama from before 1950), Literary fiction, Queer stories, Fantasy & sci-fi,
+  Poetry & drama, Memoir, Psychology & self, Business & product, History & ideas, Children's.
+  Result: 212 books sorted, **73 in "No genre yet"**, shown as the last chip so the gap stays
+  visible.
+- **Built:** a row of genre chips above the shelf (most common first, one at a time, tap again
+  for all), and genres in the book sheet. The prototype now holds the whole want-to-read list.
+- **For the owner:** fill the 73 with Claude (it classifies from title and author into the same
+  10 genres, with an eval that checks it against the books Open Library already tags), tag them
+  by hand, or leave them. Also: "Children's" (28 books, e.g. *The Wonderful Wizard of Oz*) as a
+  chip, or fold it into Classics and Fantasy.

@@ -144,6 +144,7 @@ Day 1 (the app). The recommender steps get their own requirements on the day the
 | 5 | The book page shows the one-liner, and the long review opens with a tap; everything can be edited, moved between shelves or removed | Edit → the shelf updates |
 | 6 | Goodreads CSV import: read and to-read shelves, ratings (0 = unrated, halves kept), review into the long paragraph, date read (else date added); covers by ISBN, then by title search; rows that are the same book (same Open Library work) merge: read wins, and a rating on either row is kept; importing again doesn't duplicate | Counts match the CSV after merges; *Mindset* imports as read, 3.5 stars; second import adds 0 |
 | 8 | Search tab: browse genre chips (tuned Open Library queries, most-read first) and the Booker winners; books already on a shelf say so instead of offering "Want to read" | Memoir chip → *When Breath Becomes Air* marked Read; no other "Piranesi" marked as saved |
+| 9 | Want to read filters by genre: chips from Open Library subjects mapped to about 10 shelf genres, books without one in "No genre yet" | Classics → *Dracula*, *East of Eden*; counts add up, with a book able to sit in several genres |
 | 7 | Data stays on the device (localStorage); only book searches and cover requests leave it | No personal data in requests |
 
 **No-gos:** community and other people's reviews, accounts and sync, word lookup and notes (v2),

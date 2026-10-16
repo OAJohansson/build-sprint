@@ -528,6 +528,14 @@ the source, see every change and why it was made, and re-export without losing y
 we met it: Folio (06): a misplaced *Mindset* rating fixed in `corrections.json`, not in the
 Goodreads CSV. From: data engineering practice (immutable raw layer, as in "bronze/silver/gold").
 
+#### Controlled vocabulary (mapping messy tags)
+User-generated tags are messy: hundreds of variants, other languages, noise. To filter on them,
+define a short fixed list of categories (a controlled vocabulary or taxonomy) and write rules
+that map raw tags into it, allowing several per item and keeping an honest "unsorted" bucket.
+Why it matters: every catalogue, store and search filter does this, and the rules (or a
+classifier) are where quality is won or lost. Where we met it: Folio (06): 600+ Open Library
+subjects mapped to 10 shelf genres; 73 of 285 books left unsorted.
+
 ### Working with APIs
 
 #### Calling APIs from the browser
@@ -600,6 +608,9 @@ history.
 
 **Q:** Why test a production build, not just the dev server?
 **A:** The production build is what users get; it can behave differently, and dev servers are built for localhost.
+
+**Q:** What is a controlled vocabulary, and why map tags into one?
+**A:** A short fixed list of categories; mapping messy user tags into it makes filters reliable and keeps the noise out.
 
 **Q:** Why fix data in a separate corrections step instead of editing the raw export?
 **A:** The raw file stays a faithful source you can rerun from, every fix is visible and explained, and a fresh export doesn't wipe the fixes.

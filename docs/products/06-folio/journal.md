@@ -268,3 +268,13 @@ What happened, what was decided and why. Newest last.
   other suggestion goes to the backlog, to review after shipping: the Home ideas, book page data,
   and the critic's notes on Search, cover titles, the owl header and month headings. Round 2 of
   the critic isn't needed for the MVP; the design is frozen.
+- **Storage (owner): the existing Supabase project.** Claude laid out the options: the shared
+  Supabase project, Neon through Vercel's Storage tab, or localStorage for the MVP. localStorage
+  doesn't sync, gets wiped with the browser, and Safari deletes it after 7 days without a visit.
+  Folio gets one table, `folio_books`, in the project CrossFit Log and Scribble share, with an
+  access code, following their pattern. Decision 0015, with the cost named: three apps now share
+  one secret key. Schema written; `.env.example` now also lists `SUPABASE_URL`,
+  `SUPABASE_SECRET_KEY` and `ACCESS_CODE`.
+- **Owner asked why `.env.example` gets copied to `.env.local`:** the example is a public template
+  with names only; the local file holds the real keys and git ignores it. Added to the knowledge
+  bank.

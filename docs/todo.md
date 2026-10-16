@@ -9,6 +9,10 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 ## Next
 
+- [ ] Merge PR 33 (Mallow wrap-up, code habits), then the Folio scaffold PR *(me)*
+- [ ] Folio: export my Goodreads library and drop the CSV in `apps/06-folio/lab/data/` *(me)*
+- [ ] Folio: `pnpm ship 06-folio` once the scaffold is on main *(me)*
+- [ ] Folio day 1: `/prototype` the shelf, then build search, shelves, ratings, one-liners, Goodreads import
 - [ ] Merge the Inkling pull request in kids-app so the new app and `/demo` go live at inkling-journal.vercel.app *(me)*
 - [ ] Rehearse the Inkling demo script (`docs/product/polish-sprint/demo-script.md` in kids-app) before the Enthuse interview *(me)*
 - [ ] Scribble check on 17 Oct: pieces written that week (goal 4) and any abandoned *(me)*

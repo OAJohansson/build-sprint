@@ -251,6 +251,12 @@ Secrets (API keys) live in environment variables on the server, never in the cod
 of key: a **publishable** key can be public and is limited (read only); a **secret** key must stay
 on the server. Change a variable, then redeploy.
 
+Two files keep them apart: **`.env.example`** is a committed template that lists the variable
+*names* (and where to get each), with empty values; **`.env.local`** holds the real values, and
+git ignores it. Next.js reads `.env.local` automatically when the app runs on your machine, and
+the host (Vercel) gets the same values from its own settings. Where we met it: every app with a
+key; Folio (06) has three.
+
 ### Quality
 
 #### Testing order
@@ -346,6 +352,9 @@ Jeffries).
 **Q:** Why couldn't Vercel find a new app's folder for the Root Directory?
 **A:** The picker lists folders on main; the folder only existed on an unmerged branch.
 
+**Q:** Why have both `.env.example` and `.env.local`?
+**A:** The example is a committed template with names only, so anyone knows what to set; the local file holds the real secrets and is never committed.
+
 **Q:** What's the difference between a publishable key and a secret key?
 **A:** A publishable key can be public and is limited (often read-only); a secret key must stay on the server. Using the wrong one makes writes fail.
 
@@ -380,6 +389,20 @@ counts you can lose. Why it matters: punishing mechanics drive people away, and 
 the UK they can count as nudge techniques, which the Children's Code rules out. Where we met it:
 Inkling (05): ideas that "came back" instead of a streak. From: the ICO Age Appropriate Design
 Code; Finch and How We Feel as apps young people keep.
+
+#### The Double Diamond
+A design process in two diamonds: first widen (discover many possibilities), then narrow (define
+one direction), then widen again (develop options) and narrow (deliver one). The point is to
+diverge on purpose before converging, instead of polishing the first idea. Where we met it: the
+`design-session` skill (06 Folio): Discover, Define, Deliver. From: the UK Design Council (2004);
+applied to AI design by Anshu Chimala (Lenny's Newsletter, 2026).
+
+#### AI tells and hand-written copy
+Every model overuses certain patterns (purple gradients, glows, cards in cards, eyebrow labels,
+"unlock" and "seamless"), and once users notice them, a design reads as AI-made. Look for them
+while refining and try alternatives, rather than banning them up front. Treat AI-written copy as
+lorem ipsum: a human rewrites every line in one voice, and it usually gets shorter. Where we met
+it: `design-session`, `tells.md` (06 Folio). From: Anshu Chimala (Lenny's Newsletter, 2026).
 
 ### Accessibility
 
@@ -467,6 +490,12 @@ stop). Constant or travelling motion (a progress bar, a wave of light) uses **li
 **Q:** Which attribute keeps right-to-left user text (like Arabic) displaying correctly?
 **A:** `dir="auto"` on the input and on elements that show user text.
 
+**Q:** What are the Double Diamond's four moves?
+**A:** Diverge to discover, converge to define, diverge to develop options, converge to deliver one.
+
+**Q:** Why review a design for "AI tells" rather than ban them in the prompt?
+**A:** None is wrong on its own, and banning them up front makes the model overthink and invent stranger patterns; check and try alternatives instead.
+
 ## Technology
 
 ### Web foundations
@@ -501,6 +530,21 @@ Store moments as absolute instants (UTC) and show them in a place's time zone by
 as `Asia/Makassar`, using the browser's date formatting (`Intl.DateTimeFormat`). Never hand-write
 offsets: daylight saving time breaks them.
 
+#### Raw data stays raw
+Keep a source file exactly as it came (an export, a download) and put fixes in a separate,
+explained step: a corrections file or a cleaning script. Why it matters: you can always rerun from
+the source, see every change and why it was made, and re-export without losing your fixes. Where
+we met it: Folio (06): a misplaced *Mindset* rating fixed in `corrections.json`, not in the
+Goodreads CSV. From: data engineering practice (immutable raw layer, as in "bronze/silver/gold").
+
+#### Controlled vocabulary (mapping messy tags)
+User-generated tags are messy: hundreds of variants, other languages, noise. To filter on them,
+define a short fixed list of categories (a controlled vocabulary or taxonomy) and write rules
+that map raw tags into it, allowing several per item and keeping an honest "unsorted" bucket.
+Why it matters: every catalogue, store and search filter does this, and the rules (or a
+classifier) are where quality is won or lost. Where we met it: Folio (06): 600+ Open Library
+subjects mapped to 10 shelf genres; 73 of 285 books left unsorted.
+
 ### Working with APIs
 
 #### Calling APIs from the browser
@@ -520,6 +564,53 @@ real API, one returns demo or test data. The screens never know which they got. 
 safe public demo, tests without a backend, and no screen built twice. Where we met it: Inkling
 (05): `/demo` runs Maya's scripted journal through the same screens as the real app.
 
+### Recommendation systems
+
+#### The three families of recommender
+A recommender predicts how much someone would like something they haven't seen. **Popularity**
+recommends what most people like: trivial, and hard to beat for new users. **Content-based**
+matches features of items you liked (genre, author, description): works for one user and can
+explain itself, but stays in a bubble. **Collaborative filtering** uses people with similar taste
+("readers like you loved…"): finds surprising picks, but needs many users and can't place a new
+item or user. Why it matters: every product's "for you" is one of these or a blend. Where we met
+it: Folio (06). From: the Netflix Prize (2006–09) and the recommender systems literature.
+
+#### Multi-stage recommenders: retrieval, ranking, re-ranking
+Real systems work in stages. **Retrieval** narrows millions of items to a few hundred, fast,
+usually with embeddings. **Ranking** scores those with a heavier model and many signals.
+**Re-ranking** applies rules on top: variety, nothing already seen, freshness. Spotify's Discover
+Weekly blends collaborative filtering on playlists, language models on what people write about
+artists, and audio models for brand-new songs. Why it matters: it's the shape interviewers expect
+you to sketch. Where we met it: Folio (06). From: Covington et al., "Deep Neural Networks for
+YouTube Recommendations" (2016).
+
+#### Embeddings
+An embedding turns a thing (a book description, a user, a song) into a list of numbers, so that
+similar things land close together; "similar" becomes a distance you can compute (cosine
+similarity). A "two-tower" model learns one embedding for users and one for items, in the same
+space. Why it matters: embeddings power retrieval, search and most modern AI features. Where we
+met it: Folio (06), content-based step.
+
+#### Explicit vs implicit feedback
+**Explicit** feedback is what people tell you: a star rating, a thumbs up. It's clear but rare,
+and skewed (people mostly rate what they liked). **Implicit** feedback is what people do: plays,
+saves, skips, adding to a want-to-read list. It's noisy but plentiful, so most real recommenders
+(Spotify, YouTube) run mainly on it. Where we met it: Folio (06): 65 rated books, but 287
+want-to-reads, and ratings only from 3 to 5 stars.
+
+#### Cold start
+A recommender has nothing to go on for a new user or a new item. Fixes: ask for a few favourites
+up front, fall back to popularity, or use content features (Spotify's audio models place songs no
+one has played yet). Where we met it: Folio (06), solved for the owner by importing a Goodreads
+history.
+
+#### Precision vs recall in matching
+When matching records (an imported book to a catalogue entry), a looser rule finds more matches
+(recall) but more of them are wrong (precision). Which error is worse depends on what a match
+does: when matches merge records, a wrong match destroys data, so prefer precision and let a
+person fix the leftovers. Where we met it: Folio (06): a broader search "matched" *A Corruption of
+Blood* to *Imitation of Christ*; we kept strict matching and listed the 15 unmatched books.
+
 ### Quiz
 
 **Q:** What is a hydration mismatch?
@@ -534,6 +625,12 @@ safe public demo, tests without a backend, and no screen built twice. Where we m
 **Q:** Why test a production build, not just the dev server?
 **A:** The production build is what users get; it can behave differently, and dev servers are built for localhost.
 
+**Q:** What is a controlled vocabulary, and why map tags into one?
+**A:** A short fixed list of categories; mapping messy user tags into it makes filters reliable and keeps the noise out.
+
+**Q:** Why fix data in a separate corrections step instead of editing the raw export?
+**A:** The raw file stays a faithful source you can rerun from, every fix is visible and explained, and a fresh export doesn't wipe the fixes.
+
 **Q:** What are localStorage's limits?
 **A:** It lives in one browser on one device, can be cleared, holds little data and isn't shared between people.
 
@@ -545,6 +642,21 @@ safe public demo, tests without a backend, and no screen built twice. Where we m
 
 **Q:** What is the adapter pattern, in one sentence, and what did it give Inkling?
 **A:** One interface with interchangeable implementations; the same screens run on the real API or a scripted demo.
+
+**Q:** Name the three classic families of recommender and one weakness of each.
+**A:** Popularity (same list for everyone), content-based (stays in a bubble), collaborative filtering (needs many users; cold start).
+
+**Q:** What are the three stages of a production recommender?
+**A:** Retrieval (narrow to a few hundred candidates, fast), ranking (score them with a heavier model), re-ranking (rules like variety and nothing already seen).
+
+**Q:** When should a matching rule favour precision over recall?
+**A:** When a wrong match is costly, e.g. it merges two records into one; leave the uncertain ones for a person to fix.
+
+**Q:** What is an embedding, in one sentence?
+**A:** A list of numbers representing a thing, placed so that similar things are close together.
+
+**Q:** What is the difference between explicit and implicit feedback?
+**A:** Explicit is what people say (a rating); implicit is what they do (plays, saves, want-to-read). Implicit is noisier but far more plentiful.
 
 ## Building with AI
 
@@ -578,6 +690,21 @@ the core failure: people say ChatGPT "just agrees with me". Design against it: o
 helps the user step back, a named idea, no advice unless asked. Where we met it: Inkling (05).
 From: OpenAI's 2025 rollback of an over-agreeable GPT-4o update.
 
+#### Separate the builder from the critic
+A model judges its own work poorly: it knows what it meant, so it sees that instead of what's
+there. Give the judging to a separate agent with a fresh context and only the output (a
+screenshot), a fixed prompt and a score, and keep the stopping bar out of its prompt. Set a
+stopping rule (a score, or stop when it plateaus) so the loop doesn't burn tokens. Where we met
+it: the `design-critic` subagent (06 Folio): 6/10 on its first screen, with six specific gaps.
+From: Anshu Chimala (Lenny's Newsletter, 2026); the same idea as generator–evaluator loops and
+LLM-as-judge.
+
+#### Seed strings for real variety
+Asking a model to "be random" or "make it unique" doesn't work: it still picks the likely
+answer. Give it real randomness instead, such as a random string from a script, and have it
+derive choices (colours, layout, type) from patterns in the string. Where we met it:
+`design-session`'s Discover step. From: Sakana AI's "String Seed of Thought".
+
 ### Evals
 
 #### What an eval is
@@ -591,6 +718,20 @@ same. Run the evals before and after, and record both results. Newer models ofte
 more literally, so loose rules ("exactly one question") may need to be stated exactly. Where we
 met it: Inkling (05): on the Claude API, safety held but two rules broke (6/8), fixed with two
 sentences (8/8).
+
+#### Evaluating a recommender: offline, beyond accuracy, online
+**Offline:** hide part of real history and check whether it comes back. Split by time (train on
+the past, test on the future), so the model never "sees the future". **Hit rate@10:** was a
+hidden item in the top 10? **NDCG@10:** was it near the top? **Beyond accuracy:** diversity,
+novelty and coverage, because accuracy alone rewards recommending bestsellers to everyone.
+**Online:** A/B tests on real behaviour (saves, clicks, finishes); offline and online results
+often disagree. Why it matters: measurement is what separates a recommender from a guess. Where we
+met it: Folio (06).
+
+#### Always beat a baseline
+Before any clever model, build the dumbest reasonable one (e.g. "most popular books you haven't
+read") and score it. A model that doesn't beat it isn't working, however impressive it sounds.
+Where we met it: Folio (06), step 2 of the ladder.
 
 ### Quiz
 
@@ -617,6 +758,24 @@ sentences (8/8).
 
 **Q:** What is the core failure of an AI used for reflection?
 **A:** Agreeing with the user (sycophancy) instead of helping them see more clearly.
+
+**Q:** Why split a recommender's test data by time instead of at random?
+**A:** So the model is trained only on the past and tested on the future, like real use; a random split lets it "see the future".
+
+**Q:** What do hit rate@10 and NDCG@10 measure?
+**A:** Hit rate: whether a hidden item appears in the top 10. NDCG: also rewards it for being near the top.
+
+**Q:** Why build a popularity baseline first?
+**A:** It's the bar to beat; a clever model that can't beat "most popular" isn't working.
+
+**Q:** Why should a separate agent critique a design, seeing only a screenshot?
+**A:** The builder knows what it meant and judges that; a fresh critic judges only what's on screen.
+
+**Q:** Why keep the stopping score out of the critic's prompt?
+**A:** So it scores honestly instead of aiming at the bar.
+
+**Q:** Why do seed strings work when "be random" doesn't?
+**A:** A model can't produce randomness on request; a real random input gives it something to derive different choices from.
 
 ## Communication and influence
 

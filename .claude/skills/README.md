@@ -6,12 +6,17 @@ each one.
 
 | Skill | Playbook step | Runs |
 | --- | --- | --- |
-| [`prototype`](prototype/SKILL.md) | 1. Three approaches: 3 working variants behind a picker | Only when called: `/prototype <screen>` |
+| [`design-session`](design-session/SKILL.md) | 1. Design: Discover → Define (critic loop) → Deliver, with owner checkpoints ([decision 0013](../../docs/decisions/0013-design-session-skill.md)) | Only when called: `/design-session <screen>` |
+| [`prototype`](prototype/SKILL.md) | 1. Design, inside `design-session`: 3 working variants behind a picker | Only when called: `/prototype <screen>` |
 | [`mobile-native`](mobile-native/SKILL.md) | 1b. Setup: phone fixes (already in `templates/next-starter`) | Automatically, on mobile work |
 | [`emil-design-eng`](emil-design-eng/SKILL.md) | 2. Build: polish, press feedback, when not to animate | Named in AGENTS.md (vague description) |
 | [`animate`](animate/SKILL.md) | 2. Build: only when a screen needs motion | Automatically |
 | [`break-ui`](break-ui/SKILL.md) | 3b. Test: worst-case data behind a toggle | Automatically, or `/break-ui <screen>` |
 | [`web-design-guidelines`](web-design-guidelines/SKILL.md) | 3b. Test: accessibility and interface audit | Automatically, or `/web-design-guidelines <files>` |
+
+`design-session` is our own, adapted from Anshu Chimala's "How to turn your AI into a world-class
+designer" (Lenny's Newsletter, Sep 2026); its critic is the `design-critic` subagent in
+`.claude/agents/`.
 
 ## Sources
 

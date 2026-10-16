@@ -84,7 +84,7 @@ export function SegmentTabs<T extends string>({
           role="tab"
           aria-selected={value === o.value}
           onClick={() => onChange(o.value)}
-          className={`pb-1 transition-colors duration-150 ${
+          className={`whitespace-nowrap pb-1 transition-colors duration-150 ${
             value === o.value
               ? "text-[var(--f-text)] shadow-[inset_0_-1.5px_0_var(--f-text)]"
               : "text-[var(--f-faint)] hover:text-[var(--f-muted)]"

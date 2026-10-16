@@ -1,25 +1,25 @@
 "use client";
 
+import { Check } from "lucide-react";
 import { useState } from "react";
 import { books, type Book } from "./data";
 import { Cover } from "./shared";
 
-// Want to read: a shelf. Genre chips filter it (one at a time, tap again for all). Four smaller
-// covers per row, each row standing on a hairline ledge, titles readable underneath. Tap a book
-// for its details in a sheet.
-const UNSORTED = "No genre yet";
+// Want to read: a shelf, filtered by one genre at a time from a sheet behind an icon (the owner
+// wanted the chips off the screen, 16 Oct). Four smaller covers per row, each row standing on a
+// hairline ledge, titles readable underneath. Tap a book for its details in a sheet.
+export const UNSORTED = "No genre yet";
 const shelfBooks = books.filter((b) => b.shelf === "want");
 const genreCounts = new Map<string, number>();
 for (const b of shelfBooks)
   for (const g of b.genres?.length ? b.genres : [UNSORTED]) genreCounts.set(g, (genreCounts.get(g) ?? 0) + 1);
 // Most common first; the unsorted pile always last, so the gap stays visible.
-const filters = [...genreCounts.entries()]
+export const genreFilters = [...genreCounts.entries()]
   .sort(([a, x], [b, y]) => (a === UNSORTED ? 1 : b === UNSORTED ? -1 : y - x))
   .map(([name, count]) => ({ name, count }));
 
-export function Want() {
+export function Want({ genre }: { genre: string | null }) {
   const [open, setOpen] = useState<Book | null>(null);
-  const [genre, setGenre] = useState<string | null>(null);
   const list = genre
     ? shelfBooks.filter((b) => (b.genres?.length ? b.genres.includes(genre) : genre === UNSORTED))
     : shelfBooks;
@@ -28,24 +28,6 @@ export function Want() {
 
   return (
     <div>
-      <ul className="mt-3 flex gap-2 overflow-x-auto overscroll-x-contain px-4 pb-1 [scrollbar-width:none]" aria-label="Filter by genre">
-        {filters.map((f) => (
-          <li key={f.name} className="shrink-0">
-            <button
-              onClick={() => setGenre(genre === f.name ? null : f.name)}
-              aria-pressed={genre === f.name}
-              className={`rounded-full px-3 py-1.5 text-[13px] transition-colors duration-150 ${
-                genre === f.name
-                  ? "bg-[var(--f-text)] text-[var(--f-bg)]"
-                  : "text-[var(--f-muted)] shadow-[0_0_0_1px_var(--f-line)] active:bg-white/[0.06]"
-              }`}
-            >
-              {f.name}
-              <span className={`ml-1.5 tabular-nums ${genre === f.name ? "opacity-60" : "text-[var(--f-faint)]"}`}>{f.count}</span>
-            </button>
-          </li>
-        ))}
-      </ul>
       <div className="px-4">
       {rows.map((row, i) => (
         <ul key={i} className="grid grid-cols-4 gap-3 border-b border-[var(--f-line)] pb-3 pt-5 first:pt-2">
@@ -89,6 +71,46 @@ function Sheet({ book, onClose }: { book: Book; onClose: () => void }) {
             <p className="mt-2 text-[13px] text-[var(--f-faint)]">Saved {added}</p>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+export function GenreSheet({
+  value,
+  onChange,
+  onClose,
+}: {
+  value: string | null;
+  onChange: (genre: string | null) => void;
+  onClose: () => void;
+}) {
+  const options = [{ name: null, label: "All books", count: shelfBooks.length }, ...genreFilters.map((f) => ({ ...f, label: f.name }))];
+  return (
+    <div className="fixed inset-0 z-40" role="dialog" aria-modal="true" aria-label="Filter by genre">
+      <button aria-label="Close" onClick={onClose} className="absolute inset-0 animate-in fade-in bg-black/50 duration-200" />
+      <div className="absolute inset-x-0 bottom-0 mx-auto max-h-[80dvh] max-w-xl animate-in slide-in-from-bottom overflow-y-auto rounded-t-2xl bg-[var(--f-raised)] pb-[max(16px,env(safe-area-inset-bottom))] pt-3 duration-250 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:animate-none">
+        <div className="mx-auto mb-3 h-1 w-9 rounded-full bg-[var(--f-line)]" />
+        <ul>
+          {options.map((o) => {
+            const active = value === o.name;
+            return (
+              <li key={o.label}>
+                <button
+                  onClick={() => {
+                    onChange(o.name);
+                    onClose();
+                  }}
+                  className="flex w-full items-center gap-3 px-5 py-3 text-left text-[16px] transition-colors duration-150 active:bg-white/[0.04]"
+                >
+                  <span className={active ? "font-medium" : ""}>{o.label}</span>
+                  <span className="text-[14px] text-[var(--f-faint)] tabular-nums">{o.count}</span>
+                  {active && <Check size={18} className="ml-auto text-[var(--f-text)]" aria-label="Selected" />}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </div>
   );

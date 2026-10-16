@@ -192,3 +192,12 @@ What happened, what was decided and why. Newest last.
   10 genres, with an eval that checks it against the books Open Library already tags), tag them
   by hand, or leave them. Also: "Children's" (28 books, e.g. *The Wonderful Wizard of Oz*) as a
   chip, or fold it into Classics and Fantasy.
+- **Owner:** the chips took too much room. Moved behind a filter icon beside the Read / Want to
+  read tabs, opening a sheet of genres with counts. The active genre shows as a small line under
+  the tabs with a clear button, and the icon turns bright. First try put the active genre next
+  to the icon, which made "Want to read" wrap on a phone; moved below.
+- **Mapping bug found by looking:** novels tagged "fiction, psychological" (*Giovanni's Room*,
+  *The Heart's Invisible Furies*) sat in Psychology & self. Rules now keep fiction out of the
+  nonfiction genres: Psychology & self fell from 75 to 34 books, History & ideas rose to 53, and
+  66 books are unsorted. Still imperfect (*Yellow Face* isn't tagged as fiction), so hand-written
+  rules on messy tags have a ceiling. That's the case for Claude classifying, with an eval.

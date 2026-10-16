@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, Home as HomeIcon, Search as SearchIcon } from "lucide-react";
+import { BookOpen, Home as HomeIcon, ListFilter, Search as SearchIcon, X } from "lucide-react";
 import { useState } from "react";
 import { books } from "./data";
 import { Home } from "./home";
@@ -8,7 +8,7 @@ import { Mascot } from "./mascot";
 import { Read } from "./read";
 import { Search } from "./search";
 import { folio, SegmentTabs } from "./shared";
-import { Want } from "./want";
+import { genreFilters, GenreSheet, Want } from "./want";
 
 // Prototype round 2 (16 Oct): the owner's picks combined. Home with three browse rows, Search
 // (title or author, genres, Booker winners), and a Shelf with Read as the Diary and Want to read
@@ -16,6 +16,8 @@ import { Want } from "./want";
 export default function FolioPrototype() {
   const [tab, setTab] = useState<"home" | "search" | "shelf">("home");
   const [shelf, setShelf] = useState<"read" | "want">("read");
+  const [genre, setGenre] = useState<string | null>(null);
+  const [filtering, setFiltering] = useState(false);
   const counts = { read: books.filter((b) => b.shelf === "read").length, want: books.filter((b) => b.shelf === "want").length };
 
   return (
@@ -32,7 +34,7 @@ export default function FolioPrototype() {
           <Search />
         ) : (
           <>
-            <div className="px-4 pb-1">
+            <div className="flex items-center justify-between gap-3 px-4 pb-1">
               <SegmentTabs
                 value={shelf}
                 onChange={setShelf}
@@ -41,8 +43,27 @@ export default function FolioPrototype() {
                   { value: "want", label: "Want to read", count: counts.want },
                 ]}
               />
+              {shelf === "want" && (
+                <button
+                  onClick={() => setFiltering(true)}
+                  aria-label="Filter by genre"
+                  className={`-mr-2 shrink-0 p-2 transition-colors duration-150 ${genre ? "text-[var(--f-text)]" : "text-[var(--f-muted)]"}`}
+                >
+                  <ListFilter size={20} strokeWidth={genre ? 2.2 : 1.8} />
+                </button>
+              )}
             </div>
-            {shelf === "read" ? <Read /> : <Want />}
+            {shelf === "want" && genre && (
+              <div className="flex items-center gap-2 px-4 pt-2 text-[14px]">
+                <span className="text-[var(--f-muted)]">{genre}</span>
+                <span className="text-[var(--f-faint)] tabular-nums">{genreFilters.find((f) => f.name === genre)?.count}</span>
+                <button onClick={() => setGenre(null)} aria-label={`Clear filter: ${genre}`} className="-m-1.5 p-1.5 text-[var(--f-faint)]">
+                  <X size={16} />
+                </button>
+              </div>
+            )}
+            {shelf === "read" ? <Read /> : <Want genre={genre} />}
+            {filtering && <GenreSheet value={genre} onChange={setGenre} onClose={() => setFiltering(false)} />}
           </>
         )}
       </div>

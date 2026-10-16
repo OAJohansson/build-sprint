@@ -283,8 +283,7 @@ export const books: Book[] = [
   "date": "2026-10-12",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self"
+   "Literary fiction"
   ]
  },
  {
@@ -305,8 +304,7 @@ export const books: Book[] = [
   "title": "Where the Light Gets In",
   "author": "Ben Crowe",
   "date": "2026-09-24",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "40539136",
@@ -344,8 +342,7 @@ export const books: Book[] = [
   "coverId": 15239287,
   "year": 2026,
   "date": "2026-09-17",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "223436601",
@@ -357,9 +354,7 @@ export const books: Book[] = [
   "date": "2026-08-22",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Memoir",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -382,8 +377,7 @@ export const books: Book[] = [
   "coverId": 15249913,
   "year": 2026,
   "date": "2026-07-18",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "28921",
@@ -418,8 +412,7 @@ export const books: Book[] = [
   "coverId": 15249355,
   "year": 2026,
   "date": "2026-04-30",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "246248414",
@@ -427,8 +420,7 @@ export const books: Book[] = [
   "author": "Victorian Poetry",
   "isbn": "9798242342385",
   "date": "2026-04-26",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "209348298",
@@ -437,8 +429,7 @@ export const books: Book[] = [
   "isbn": "9780857308665",
   "year": 2024,
   "date": "2026-03-28",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "241456738",
@@ -446,8 +437,7 @@ export const books: Book[] = [
   "author": "Curtis Garner",
   "isbn": "9780857309419",
   "date": "2026-03-28",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "218583908",
@@ -457,8 +447,7 @@ export const books: Book[] = [
   "coverId": 15135611,
   "year": 2025,
   "date": "2026-03-28",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "157981748",
@@ -494,9 +483,7 @@ export const books: Book[] = [
   "date": "2026-02-11",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -546,8 +533,7 @@ export const books: Book[] = [
   "isbn": "9786020652665",
   "year": 2019,
   "date": "2026-02-01",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "212294434",
@@ -571,7 +557,8 @@ export const books: Book[] = [
   "date": "2025-12-12",
   "shelf": "want",
   "genres": [
-   "Queer stories"
+   "Queer stories",
+   "History & ideas"
   ]
  },
  {
@@ -582,8 +569,7 @@ export const books: Book[] = [
   "coverId": 14815392,
   "year": 2024,
   "date": "2025-12-04",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "202468422",
@@ -593,8 +579,7 @@ export const books: Book[] = [
   "coverId": 14653203,
   "year": 2024,
   "date": "2025-12-04",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "195474144",
@@ -618,7 +603,8 @@ export const books: Book[] = [
   "date": "2025-12-01",
   "shelf": "want",
   "genres": [
-   "Memoir"
+   "Memoir",
+   "History & ideas"
   ]
  },
  {
@@ -640,8 +626,7 @@ export const books: Book[] = [
   "author": "John Boyne",
   "isbn": "9789123477494",
   "date": "2025-11-27",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "45047384",
@@ -680,8 +665,7 @@ export const books: Book[] = [
   "coverId": 261287,
   "year": 1979,
   "date": "2025-10-02",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "217388128",
@@ -690,8 +674,7 @@ export const books: Book[] = [
   "isbn": "9780374615406",
   "year": 2025,
   "date": "2025-06-22",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "33253215",
@@ -703,8 +686,7 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Literary fiction",
-   "Queer stories",
-   "Psychology & self"
+   "Queer stories"
   ]
  },
  {
@@ -715,8 +697,7 @@ export const books: Book[] = [
   "coverId": 15103411,
   "year": 2024,
   "date": "2025-05-30",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "218372426",
@@ -729,7 +710,8 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Psychology & self",
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -742,9 +724,7 @@ export const books: Book[] = [
   "date": "2025-01-13",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -757,9 +737,7 @@ export const books: Book[] = [
   "date": "2025-01-13",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -772,8 +750,7 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Classics",
-   "Queer stories",
-   "Psychology & self"
+   "Queer stories"
   ]
  },
  {
@@ -797,8 +774,7 @@ export const books: Book[] = [
   "coverId": 14296323,
   "year": 2021,
   "date": "2024-10-10",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "50157885",
@@ -822,7 +798,9 @@ export const books: Book[] = [
   "year": 1997,
   "date": "2024-10-08",
   "shelf": "want",
-  "genres": []
+  "genres": [
+   "History & ideas"
+  ]
  },
  {
   "id": "58169",
@@ -834,8 +812,7 @@ export const books: Book[] = [
   "date": "2024-09-14",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self"
+   "Literary fiction"
   ]
  },
  {
@@ -872,8 +849,7 @@ export const books: Book[] = [
   "isbn": "9780197558324",
   "year": 2023,
   "date": "2024-08-18",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "176443397",
@@ -884,7 +860,9 @@ export const books: Book[] = [
   "year": 2024,
   "date": "2024-08-09",
   "shelf": "want",
-  "genres": []
+  "genres": [
+   "History & ideas"
+  ]
  },
  {
   "id": "76334",
@@ -896,8 +874,7 @@ export const books: Book[] = [
   "date": "2024-04-27",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self"
+   "Literary fiction"
   ]
  },
  {
@@ -936,9 +913,7 @@ export const books: Book[] = [
   "date": "2023-12-24",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -963,8 +938,7 @@ export const books: Book[] = [
   "coverId": 12638422,
   "year": 2000,
   "date": "2023-12-02",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "157095669",
@@ -974,8 +948,7 @@ export const books: Book[] = [
   "coverId": 14445208,
   "year": 2023,
   "date": "2023-11-20",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "53343",
@@ -985,8 +958,7 @@ export const books: Book[] = [
   "coverId": 20450,
   "year": 1976,
   "date": "2023-11-05",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "96177657",
@@ -1010,8 +982,7 @@ export const books: Book[] = [
   "date": "2023-09-10",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self"
+   "Literary fiction"
   ]
  },
  {
@@ -1022,8 +993,7 @@ export const books: Book[] = [
   "coverId": 12537626,
   "year": 2022,
   "date": "2023-08-10",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "41134642",
@@ -1087,8 +1057,7 @@ export const books: Book[] = [
   "coverId": 14543830,
   "year": 2022,
   "date": "2023-02-05",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "41160292",
@@ -1111,8 +1080,7 @@ export const books: Book[] = [
   "date": "2022-12-18",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Memoir"
+   "Literary fiction"
   ]
  },
  {
@@ -1122,8 +1090,7 @@ export const books: Book[] = [
   "isbn": "9780593299517",
   "year": 2022,
   "date": "2022-11-29",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "48691943",
@@ -1133,8 +1100,7 @@ export const books: Book[] = [
   "coverId": 10085060,
   "year": 2019,
   "date": "2022-11-14",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "52962238",
@@ -1161,7 +1127,8 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Psychology & self",
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -1198,8 +1165,7 @@ export const books: Book[] = [
   "isbn": "9781608684021",
   "year": 2017,
   "date": "2022-09-17",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "43701904",
@@ -1208,8 +1174,7 @@ export const books: Book[] = [
   "isbn": "9781786780799",
   "year": 2019,
   "date": "2022-09-17",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "58046715",
@@ -1219,8 +1184,7 @@ export const books: Book[] = [
   "coverId": 11136152,
   "year": 2021,
   "date": "2022-09-15",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "76865",
@@ -1232,7 +1196,8 @@ export const books: Book[] = [
   "date": "2022-08-30",
   "shelf": "want",
   "genres": [
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -1245,9 +1210,7 @@ export const books: Book[] = [
   "date": "2022-08-29",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Memoir",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -1299,8 +1262,7 @@ export const books: Book[] = [
   "coverId": 10607120,
   "year": 2021,
   "date": "2022-08-09",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "58604389",
@@ -1338,7 +1300,8 @@ export const books: Book[] = [
   "date": "2022-07-18",
   "shelf": "want",
   "genres": [
-   "Psychology & self"
+   "Psychology & self",
+   "History & ideas"
   ]
  },
  {
@@ -1348,8 +1311,7 @@ export const books: Book[] = [
   "coverId": 12441918,
   "year": 1971,
   "date": "2022-07-17",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "11324722",
@@ -1360,8 +1322,7 @@ export const books: Book[] = [
   "date": "2022-07-16",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self"
+   "Literary fiction"
   ]
  },
  {
@@ -1398,16 +1359,14 @@ export const books: Book[] = [
   "coverId": 10208801,
   "year": 2016,
   "date": "2022-07-05",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "56866234",
   "title": "Strong Product People",
   "author": "Petra Wille",
   "date": "2022-07-05",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "53481975",
@@ -1431,7 +1390,8 @@ export const books: Book[] = [
   "date": "2022-07-05",
   "shelf": "want",
   "genres": [
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -1442,10 +1402,7 @@ export const books: Book[] = [
   "coverId": 9700654,
   "year": 2008,
   "date": "2022-07-05",
-  "shelf": "want",
-  "genres": [
-   "Business & product"
-  ]
+  "shelf": "want"
  },
  {
   "id": "13078769",
@@ -1550,7 +1507,8 @@ export const books: Book[] = [
   "date": "2022-06-05",
   "shelf": "want",
   "genres": [
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -1563,8 +1521,7 @@ export const books: Book[] = [
   "date": "2022-06-05",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self"
+   "Literary fiction"
   ]
  },
  {
@@ -1575,8 +1532,7 @@ export const books: Book[] = [
   "coverId": 832567,
   "year": 1990,
   "date": "2022-06-05",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "56332351",
@@ -1631,7 +1587,6 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Fantasy & sci-fi",
-   "Psychology & self",
    "Children's"
   ]
  },
@@ -1641,8 +1596,7 @@ export const books: Book[] = [
   "author": "Albert Camus",
   "year": 1980,
   "date": "2022-04-27",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "48727813",
@@ -1667,8 +1621,7 @@ export const books: Book[] = [
   "date": "2022-04-27",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Memoir"
+   "Literary fiction"
   ]
  },
  {
@@ -1681,8 +1634,6 @@ export const books: Book[] = [
   "date": "2022-04-27",
   "shelf": "want",
   "genres": [
-   "Psychology & self",
-   "Business & product",
    "Children's"
   ]
  },
@@ -1696,8 +1647,7 @@ export const books: Book[] = [
   "date": "2022-04-24",
   "shelf": "want",
   "genres": [
-   "Classics",
-   "Psychology & self"
+   "Classics"
   ]
  },
  {
@@ -1736,9 +1686,7 @@ export const books: Book[] = [
   "date": "2022-04-13",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -1749,8 +1697,7 @@ export const books: Book[] = [
   "coverId": 7244512,
   "year": 2012,
   "date": "2022-04-13",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "4898",
@@ -1817,7 +1764,6 @@ export const books: Book[] = [
   "genres": [
    "Classics",
    "Poetry & drama",
-   "Psychology & self",
    "Children's"
   ]
  },
@@ -1831,7 +1777,8 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Psychology & self",
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -1852,8 +1799,7 @@ export const books: Book[] = [
   "author": "Vee Kativhu",
   "year": 2021,
   "date": "2022-03-17",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "54493401",
@@ -1878,8 +1824,7 @@ export const books: Book[] = [
   "date": "2022-03-13",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self"
+   "Literary fiction"
   ]
  },
  {
@@ -1891,7 +1836,9 @@ export const books: Book[] = [
   "year": 1993,
   "date": "2022-03-06",
   "shelf": "want",
-  "genres": []
+  "genres": [
+   "History & ideas"
+  ]
  },
  {
   "id": "10534",
@@ -1902,9 +1849,7 @@ export const books: Book[] = [
   "date": "2022-03-06",
   "shelf": "want",
   "genres": [
-   "Classics",
-   "Psychology & self",
-   "Business & product"
+   "Classics"
   ]
  },
  {
@@ -1929,8 +1874,7 @@ export const books: Book[] = [
   "coverId": 8462052,
   "year": 1999,
   "date": "2022-03-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "78159",
@@ -1955,8 +1899,7 @@ export const books: Book[] = [
   "date": "2022-03-06",
   "shelf": "want",
   "genres": [
-   "Classics",
-   "Memoir"
+   "Classics"
   ]
  },
  {
@@ -1995,8 +1938,7 @@ export const books: Book[] = [
   "coverId": 223529,
   "year": 1997,
   "date": "2022-02-24",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "38447",
@@ -2047,8 +1989,7 @@ export const books: Book[] = [
   "coverId": 12291587,
   "year": 2019,
   "date": "2022-02-15",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "9547888",
@@ -2084,8 +2025,7 @@ export const books: Book[] = [
   "isbn": "9780190627119",
   "year": 2018,
   "date": "2022-02-03",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "18774981",
@@ -2110,8 +2050,7 @@ export const books: Book[] = [
   "date": "2022-01-29",
   "shelf": "want",
   "genres": [
-   "Fantasy & sci-fi",
-   "Psychology & self"
+   "Fantasy & sci-fi"
   ]
  },
  {
@@ -2137,8 +2076,7 @@ export const books: Book[] = [
   "date": "2022-01-06",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Memoir"
+   "Literary fiction"
   ]
  },
  {
@@ -2151,8 +2089,7 @@ export const books: Book[] = [
   "date": "2021-12-15",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Memoir"
+   "Literary fiction"
   ]
  },
  {
@@ -2165,9 +2102,7 @@ export const books: Book[] = [
   "date": "2021-12-15",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -2178,7 +2113,9 @@ export const books: Book[] = [
   "year": 1955,
   "date": "2021-12-10",
   "shelf": "want",
-  "genres": []
+  "genres": [
+   "History & ideas"
+  ]
  },
  {
   "id": "19243347",
@@ -2204,7 +2141,8 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Classics",
-   "Poetry & drama"
+   "Poetry & drama",
+   "History & ideas"
   ]
  },
  {
@@ -2239,8 +2177,7 @@ export const books: Book[] = [
   "author": "Ambrose Parry",
   "year": 2021,
   "date": "2021-09-04",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "56771617",
@@ -2250,8 +2187,7 @@ export const books: Book[] = [
   "coverId": 12440722,
   "year": 2021,
   "date": "2021-09-04",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "35210",
@@ -2263,8 +2199,7 @@ export const books: Book[] = [
   "date": "2021-08-22",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self"
+   "Literary fiction"
   ]
  },
  {
@@ -2277,7 +2212,8 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Psychology & self",
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -2290,8 +2226,7 @@ export const books: Book[] = [
   "date": "2021-08-17",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self"
+   "Literary fiction"
   ]
  },
  {
@@ -2302,8 +2237,7 @@ export const books: Book[] = [
   "coverId": 9386888,
   "year": 2020,
   "date": "2021-08-17",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "38651604",
@@ -2313,8 +2247,7 @@ export const books: Book[] = [
   "coverId": 9232811,
   "year": 2018,
   "date": "2021-08-17",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "168668",
@@ -2327,8 +2260,7 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Literary fiction",
-   "Poetry & drama",
-   "Psychology & self"
+   "Poetry & drama"
   ]
  },
  {
@@ -2363,8 +2295,7 @@ export const books: Book[] = [
   "author": "Lena Andersson",
   "isbn": "9789198166033",
   "date": "2021-07-26",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "53319528",
@@ -2372,8 +2303,7 @@ export const books: Book[] = [
   "author": "Robert Wright",
   "isbn": "9789027472762",
   "date": "2021-06-28",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "29283884",
@@ -2386,7 +2316,6 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Queer stories",
-   "Psychology & self",
    "Children's"
   ]
  },
@@ -2397,8 +2326,7 @@ export const books: Book[] = [
   "coverId": 288439,
   "year": 2002,
   "date": "2021-06-23",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "10883",
@@ -2436,8 +2364,7 @@ export const books: Book[] = [
   "date": "2021-06-15",
   "shelf": "want",
   "genres": [
-   "Classics",
-   "Psychology & self"
+   "Classics"
   ]
  },
  {
@@ -2474,8 +2401,7 @@ export const books: Book[] = [
   "isbn": "9789046823187",
   "year": 2017,
   "date": "2021-06-14",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "12000020",
@@ -2528,8 +2454,7 @@ export const books: Book[] = [
   "date": "2021-06-09",
   "shelf": "want",
   "genres": [
-   "Fantasy & sci-fi",
-   "Memoir"
+   "Fantasy & sci-fi"
   ]
  },
  {
@@ -2554,8 +2479,7 @@ export const books: Book[] = [
   "date": "2021-06-08",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Memoir"
+   "Literary fiction"
   ]
  },
  {
@@ -2567,7 +2491,9 @@ export const books: Book[] = [
   "year": 1958,
   "date": "2021-06-08",
   "shelf": "want",
-  "genres": []
+  "genres": [
+   "History & ideas"
+  ]
  },
  {
   "id": "396931",
@@ -2577,7 +2503,9 @@ export const books: Book[] = [
   "year": 1951,
   "date": "2021-06-08",
   "shelf": "want",
-  "genres": []
+  "genres": [
+   "History & ideas"
+  ]
  },
  {
   "id": "55502856",
@@ -2641,8 +2569,7 @@ export const books: Book[] = [
   "date": "2021-06-07",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -2655,7 +2582,8 @@ export const books: Book[] = [
   "date": "2021-06-07",
   "shelf": "want",
   "genres": [
-   "Psychology & self"
+   "Psychology & self",
+   "History & ideas"
   ]
  },
  {
@@ -2681,7 +2609,8 @@ export const books: Book[] = [
   "date": "2021-06-07",
   "shelf": "want",
   "genres": [
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -2690,8 +2619,7 @@ export const books: Book[] = [
   "author": "Miguel de Cervantes Saavedra",
   "year": 2020,
   "date": "2021-06-07",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "51858470",
@@ -2702,7 +2630,9 @@ export const books: Book[] = [
   "year": 2020,
   "date": "2021-06-07",
   "shelf": "want",
-  "genres": []
+  "genres": [
+   "History & ideas"
+  ]
  },
  {
   "id": "9507278",
@@ -2712,8 +2642,7 @@ export const books: Book[] = [
   "coverId": 10360523,
   "year": 2010,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "100165",
@@ -2735,8 +2664,7 @@ export const books: Book[] = [
   "isbn": "9785170728817",
   "year": 1985,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "7144",
@@ -2745,8 +2673,7 @@ export const books: Book[] = [
   "coverId": 13116014,
   "year": 1941,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "24583",
@@ -2759,7 +2686,6 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Classics",
-   "Psychology & self",
    "Children's"
   ]
  },
@@ -2787,8 +2713,7 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Classics",
-   "Memoir"
+   "Classics"
   ]
  },
  {
@@ -2801,8 +2726,7 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Classics",
-   "Psychology & self"
+   "Classics"
   ]
  },
  {
@@ -2815,7 +2739,6 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Psychology & self",
    "Children's"
   ]
  },
@@ -2857,7 +2780,6 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Business & product",
    "History & ideas"
   ]
  },
@@ -2873,8 +2795,7 @@ export const books: Book[] = [
    "Classics",
    "Queer stories",
    "Fantasy & sci-fi",
-   "Poetry & drama",
-   "Psychology & self"
+   "Poetry & drama"
   ]
  },
  {
@@ -2883,8 +2804,7 @@ export const books: Book[] = [
   "author": "Ray Bradbury",
   "year": 1963,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "55224372",
@@ -2893,8 +2813,7 @@ export const books: Book[] = [
   "isbn": "9789177952787",
   "year": 2020,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "39109459",
@@ -2903,8 +2822,7 @@ export const books: Book[] = [
   "isbn": "9789177950158",
   "year": 2018,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "22601256",
@@ -2913,8 +2831,7 @@ export const books: Book[] = [
   "isbn": "9789127139961",
   "year": 2014,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "43723901",
@@ -2948,8 +2865,7 @@ export const books: Book[] = [
   "author": "Ichiro Kishimi",
   "year": 2013,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "479572",
@@ -2972,8 +2888,7 @@ export const books: Book[] = [
   "coverId": 11559287,
   "year": 2021,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "21083719",
@@ -2984,7 +2899,9 @@ export const books: Book[] = [
   "year": 2014,
   "date": "2021-06-06",
   "shelf": "want",
-  "genres": []
+  "genres": [
+   "History & ideas"
+  ]
  },
  {
   "id": "83518",
@@ -3009,9 +2926,7 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -3024,7 +2939,8 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Psychology & self"
+   "Psychology & self",
+   "History & ideas"
   ]
  },
  {
@@ -3037,8 +2953,7 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self"
+   "Literary fiction"
   ]
  },
  {
@@ -3051,7 +2966,8 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Psychology & self"
+   "Psychology & self",
+   "History & ideas"
   ]
  },
  {
@@ -3064,9 +2980,7 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -3079,9 +2993,7 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -3095,7 +3007,8 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Psychology & self",
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -3121,7 +3034,8 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Psychology & self"
+   "Psychology & self",
+   "History & ideas"
   ]
  },
  {
@@ -3134,9 +3048,7 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -3158,8 +3070,7 @@ export const books: Book[] = [
   "coverId": 13098570,
   "year": 2016,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "24878857",
@@ -3169,8 +3080,7 @@ export const books: Book[] = [
   "coverId": 8148854,
   "year": 2015,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "670089",
@@ -3193,8 +3103,7 @@ export const books: Book[] = [
   "coverId": 9283857,
   "year": 2002,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "13187824",
@@ -3219,7 +3128,8 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -3232,7 +3142,8 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Psychology & self",
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -3245,8 +3156,7 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self"
+   "Literary fiction"
   ]
  },
  {
@@ -3259,8 +3169,7 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -3301,7 +3210,8 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -3314,9 +3224,7 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Memoir",
-   "Business & product"
+   "Literary fiction"
   ]
  },
  {
@@ -3329,8 +3237,7 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Memoir"
+   "Literary fiction"
   ]
  },
  {
@@ -3341,8 +3248,7 @@ export const books: Book[] = [
   "coverId": 13872897,
   "year": 2018,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "39863499",
@@ -3353,7 +3259,8 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Memoir"
+   "Memoir",
+   "History & ideas"
   ]
  },
  {
@@ -3365,7 +3272,8 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -3378,8 +3286,7 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Memoir"
+   "Literary fiction"
   ]
  },
  {
@@ -3390,8 +3297,7 @@ export const books: Book[] = [
   "coverId": 164385,
   "year": 1981,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "23425",
@@ -3415,6 +3321,7 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
+   "History & ideas",
    "Children's"
   ]
  },
@@ -3428,7 +3335,8 @@ export const books: Book[] = [
   "date": "2021-06-06",
   "shelf": "want",
   "genres": [
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -3465,8 +3373,7 @@ export const books: Book[] = [
   "coverId": 11094752,
   "year": 2017,
   "date": "2021-06-06",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "413179",
@@ -3518,8 +3425,7 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Classics",
-   "Fantasy & sci-fi",
-   "Psychology & self"
+   "Fantasy & sci-fi"
   ]
  },
  {
@@ -3561,8 +3467,7 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Classics",
-   "Fantasy & sci-fi",
-   "Psychology & self"
+   "Fantasy & sci-fi"
   ]
  },
  {
@@ -3578,7 +3483,6 @@ export const books: Book[] = [
    "Classics",
    "Fantasy & sci-fi",
    "Poetry & drama",
-   "Psychology & self",
    "Children's"
   ]
  },
@@ -3592,7 +3496,8 @@ export const books: Book[] = [
   "date": "2018-10-15",
   "shelf": "want",
   "genres": [
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -3616,7 +3521,8 @@ export const books: Book[] = [
   "date": "2018-10-15",
   "shelf": "want",
   "genres": [
-   "Business & product"
+   "Business & product",
+   "History & ideas"
   ]
  },
  {
@@ -3672,7 +3578,8 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Classics",
-   "Poetry & drama"
+   "Poetry & drama",
+   "History & ideas"
   ]
  },
  {
@@ -3709,8 +3616,7 @@ export const books: Book[] = [
   "author": "Friedrich Nietzsche",
   "year": 2021,
   "date": "2018-10-09",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "30289",
@@ -3748,8 +3654,7 @@ export const books: Book[] = [
   "shelf": "want",
   "genres": [
    "Classics",
-   "Poetry & drama",
-   "Memoir"
+   "Poetry & drama"
   ]
  },
  {
@@ -3762,8 +3667,7 @@ export const books: Book[] = [
   "date": "2018-10-09",
   "shelf": "want",
   "genres": [
-   "Literary fiction",
-   "Psychology & self"
+   "Literary fiction"
   ]
  },
  {
@@ -3788,8 +3692,7 @@ export const books: Book[] = [
   "date": "2018-10-09",
   "shelf": "want",
   "genres": [
-   "Classics",
-   "Business & product"
+   "Classics"
   ]
  },
  {
@@ -3817,7 +3720,6 @@ export const books: Book[] = [
   "genres": [
    "Classics",
    "Poetry & drama",
-   "Business & product",
    "Children's"
   ]
  },
@@ -3833,7 +3735,6 @@ export const books: Book[] = [
   "genres": [
    "Classics",
    "Poetry & drama",
-   "Business & product",
    "Children's"
   ]
  },
@@ -3849,7 +3750,6 @@ export const books: Book[] = [
   "genres": [
    "Classics",
    "Poetry & drama",
-   "Business & product",
    "Children's"
   ]
  },
@@ -3871,8 +3771,7 @@ export const books: Book[] = [
   "coverId": 10249122,
   "year": 2018,
   "date": "2018-10-09",
-  "shelf": "want",
-  "genres": []
+  "shelf": "want"
  },
  {
   "id": "485894",
@@ -3886,7 +3785,6 @@ export const books: Book[] = [
   "genres": [
    "Classics",
    "Fantasy & sci-fi",
-   "Psychology & self",
    "Children's"
   ]
  },

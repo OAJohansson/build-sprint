@@ -15,3 +15,5 @@
 | Browse highest rated, per genre | Open Library ratings are thin; would need a minimum count, or another source | Maybe |
 | Browse by release year | Home's New releases covers the main case | Maybe |
 | Prefer English-edition covers (e.g. *Prophet Song* shows the German one) | Covers are the design's main visual | With the real import |
+| **Reading tracker:** books finished this week, month and year at a glance, with a simple way to look back at any period | See how much I read and keep momentum; date logic needs unit tests (decision 0011), and 19 imported books have only a date added, so counts must say what they're based on | Next after the MVP (owner, 16 Oct) |
+| **Reading goals:** set a monthly or yearly target and see progress toward it | A light push to read more intentionally; Goodreads' yearly challenge is a feature people miss | With the tracker (owner, 16 Oct) |

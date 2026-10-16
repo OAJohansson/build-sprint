@@ -131,6 +131,8 @@ First deploy of a new app, one command (to-do #8, from 03 Scribble's retro):
    into the card. Keys go from the file straight to Vercel and are never printed.
 4. Commit the card. Each app's `vercel.json` skips builds when its folder didn't change (not on
    `portfolio`, which must rebuild whenever `docs/` changes).
+   Apps deploy from `main` only: branch pushes make no deployments, because even cancelled ones
+   count toward the free plan's 100 a day (decision 0016). Push and merge in batches.
 
 One-time on a new machine: `vercel login`. To change a key later: edit `.env.local`, run
 `pnpm ship NN-slug` again (it updates the project and redeploys).

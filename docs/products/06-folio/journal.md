@@ -379,3 +379,10 @@ What happened, what was decided and why. Newest last.
   project and deploys.
 - **Lesson:** on the free plan, pushes are a budget. Push in batches at the end of a step, not
   after every small doc change.
+- **Why 100 deployments?** The account showed 123 in 24 hours: every push to the `06-folio`
+  branch started a build in each of the four older apps, which their `ignoreCommand` cancelled,
+  but cancelled builds still count. **Decision 0016 (owner):** every app, the portfolio and the
+  starter deploy from `main` only, so branch pushes cost nothing; the trade-off is no branch
+  previews. Committed locally and held back until the limit frees up (about 11:50 on Sat 17
+  Oct by the rolling count; fully clear about 15:00), then pushed in one batch with Folio's
+  deploy.

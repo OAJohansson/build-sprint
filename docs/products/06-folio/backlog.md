@@ -4,7 +4,7 @@
 | --- | --- | --- |
 | **Word lookup while reading:** type a word, get a short definition, save it to the book; a list of my words to revisit | Paper books have no built-in dictionary; as a non-native speaker I guess from context and never look words up. The most frequent moment: in bed, mid-chapter | Next (v2) |
 | **Notes and ideas while reading,** per book | Read intentionally, not passively; keep what a book made me think | Next (v2) |
-| "Reading now" shelf with the book in hand at the top | The container for words and notes in v2; Goodreads' currently-reading books should move here from Want to read | With v2 |
+| Current read shelf | The container for words and notes in v2 | Done (16 Oct): built in the MVP, with Start reading / I've finished it; Goodreads' currently-reading imports here |
 | Review my saved words (spaced repetition, a word a day) | Words looked up once are forgotten; remembering them is the outcome | Later |
 | Reading community: discuss a book I've finished with people who read it, with little friction | No easy way to talk about books today; needs other users, accounts and a backend, so cold start makes it a product of its own | Later; maybe its own product |
 | Other people's one-line reviews on a book page | The scannable overview I wanted from Goodreads; needs a community or a review source | Later |

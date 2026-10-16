@@ -1,5 +1,8 @@
 // One book on my shelves: book data (from the import or a search) plus what I think of it.
-export type Shelf = "read" | "want";
+export type Shelf = "reading" | "read" | "want";
+
+export const SHELF_LABEL: Record<Shelf, string> = { reading: "Current read", read: "Read", want: "Want to read" };
+export const SHELVES = Object.keys(SHELF_LABEL) as Shelf[];
 
 export type Book = {
   id: string;
@@ -23,6 +26,8 @@ export type Book = {
   readOn: string | null;
   /** True when readOn came from Goodreads' "date added" because "date read" was empty. */
   readOnEstimated: boolean;
+  /** When I started it, for books on Current read (YYYY-MM-DD). */
+  startedOn: string | null;
   addedOn: string;
   updatedAt: string;
 };

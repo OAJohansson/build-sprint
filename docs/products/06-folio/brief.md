@@ -124,8 +124,9 @@ not drawn.
 **Shelf**. Search finds a title or author and browses five genre chips and the Booker winners
 (our own list). Home
 has three rows: New releases, Popular this month (both Open Library lists, the same for
-everyone) and Folio's picks (the recommender, with a reason). Shelf has Read as a diary by
-month, with clear month headings, and Want to read as a shelf of smaller covers with titles.
+everyone) and Folio's picks (the recommender, with a reason). Shelf has three shelves (owner,
+16 Oct): Current read (the books in my hands, the base for v2's words and notes), Read as a diary
+by month with clear month headings, and Want to read as a shelf of smaller covers with titles.
 A mascot, Folio the owl with glasses, sits by the name.
 
 **Stop line:** anything not above goes to [backlog](#06-folio.backlog): word lookup and saved

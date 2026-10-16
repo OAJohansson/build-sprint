@@ -68,7 +68,7 @@ describe("fromGoodreads", () => {
       ),
     );
     expect(rows).toHaveLength(4);
-    expect(rows[3]).toMatchObject({ title: "Some Book", shelf: "want", readOn: null });
+    expect(rows[3]).toMatchObject({ title: "Some Book", shelf: "reading", readOn: null });
     expect(rows[0]).toMatchObject({ title: "Educated", isbn: "9780399590504", rating: 5, shelf: "read", readOn: "2023-09-02", readOnEstimated: false });
     expect(rows[1]).toMatchObject({ rating: 3.5, readOn: "2026-10-10", readOnEstimated: true });
     expect(rows[2]).toMatchObject({ shelf: "want", rating: null, readOn: null, author: "Susanna Clarke" });
@@ -108,6 +108,7 @@ describe("mergeBooks", () => {
     genres: ["Psychology & self"],
     readOn: "2026-10-10",
     readOnEstimated: true,
+    startedOn: null,
     addedOn: "2026-10-10",
   };
   const other: Omit<Book, "id" | "updatedAt"> = { ...base, goodreadsId: "2", shelf: "want", rating: 3.5, readOn: null, readOnEstimated: false, addedOn: "2021-06-06" };
@@ -120,6 +121,11 @@ describe("mergeBooks", () => {
   it("never overwrites my own rating or words", () => {
     const merged = mergeBooks({ ...base, rating: 4, line: "Mine" }, { ...other, line: "Theirs" });
     expect(merged).toMatchObject({ rating: 4, line: "Mine" });
+  });
+  it("the furthest shelf wins: read, then reading, then want", () => {
+    expect(mergeBooks({ ...base, shelf: "want", readOn: null }, { ...other, shelf: "reading" }).shelf).toBe("reading");
+    expect(mergeBooks({ ...base, shelf: "reading", readOn: null }, { ...other, shelf: "want" }).shelf).toBe("reading");
+    expect(mergeBooks({ ...base, shelf: "reading", readOn: null }, { ...other, shelf: "read", readOn: "2026-01-01" }).shelf).toBe("read");
   });
   it("a real date read beats an estimated one", () => {
     const merged = mergeBooks(base, { ...other, shelf: "read", readOn: "2026-09-30", readOnEstimated: false });
@@ -199,8 +205,8 @@ describe("no book lost", () => {
     );
     const { rows, skipped } = readGoodreads(file);
     expect(rows.length + skipped.length).toBe(4);
-    // Currently reading waits on Want to read; a custom shelf is reported.
-    expect(rows.find((r) => r.title === "C")?.shelf).toBe("want");
+    // Currently reading goes to Current read; a custom shelf is reported.
+    expect(rows.find((r) => r.title === "C")?.shelf).toBe("reading");
     expect(skipped).toEqual([{ title: "D", author: "Author Four", shelf: "did-not-finish" }]);
   });
 });

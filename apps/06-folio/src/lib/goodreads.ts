@@ -105,9 +105,9 @@ export function cleanReview(value: string): string | null {
 export type SkippedRow = { title: string; author: string; shelf: string };
 
 /**
- * Turn the export's text into books. Folio has two shelves: currently-reading goes to Want to
- * read, and rows on a custom exclusive shelf (e.g. did-not-finish) are returned as skipped, never
- * dropped silently (owner's "no book lost" rule, 16 Oct).
+ * Turn the export's text into books. read, to-read and currently-reading map to Folio's Read,
+ * Want to read and Current read; rows on a custom exclusive shelf (e.g. did-not-finish) are
+ * returned as skipped, never dropped silently (owner's "no book lost" rule, 16 Oct).
  */
 export function readGoodreads(csv: string, now = new Date()): { rows: ImportRow[]; skipped: SkippedRow[] } {
   const skipped: SkippedRow[] = [];
@@ -115,7 +115,7 @@ export function readGoodreads(csv: string, now = new Date()): { rows: ImportRow[
   return { rows, skipped };
 }
 
-/** The read and to-read rows only (see readGoodreads for the rest). */
+/** The rows Folio has a shelf for (see readGoodreads for the skipped ones). */
 export function fromGoodreads(csv: string, now = new Date()): ImportRow[] {
   return parseGoodreads(csv, now, []);
 }
@@ -130,10 +130,8 @@ function parseGoodreads(csv: string, now: Date, skipped: SkippedRow[]): ImportRo
   const out: ImportRow[] = [];
   for (const r of rows) {
     const exclusive = get(r, "Exclusive Shelf");
-    // Folio has no "reading now" shelf yet (v2), so books in progress wait on Want to read (owner,
-    // 16 Oct). Custom shelves (e.g. did-not-finish) are reported as skipped.
-    const shelf: Shelf | null =
-      exclusive === "read" ? "read" : exclusive === "to-read" || exclusive === "currently-reading" ? "want" : null;
+    // Custom shelves (e.g. did-not-finish) have no place in Folio and are reported as skipped.
+    const shelf: Shelf | null = exclusive === "read" ? "read" : exclusive === "to-read" ? "want" : exclusive === "currently-reading" ? "reading" : null;
     if (!shelf) {
       if (get(r, "Title")) skipped.push({ title: cleanTitle(get(r, "Title")), author: get(r, "Author").replace(/\s+/g, " "), shelf: exclusive || "no shelf" });
       continue;
@@ -158,13 +156,17 @@ function parseGoodreads(csv: string, now: Date, skipped: SkippedRow[]): ImportRo
   return out;
 }
 
+/** When two rows are the same book, the furthest along wins: read, then reading, then want. */
+const SHELF_RANK: Record<Shelf, number> = { want: 0, reading: 1, read: 2 };
+
 /**
- * Two rows for the same book (same Open Library work): read beats want to read, a rating on
+ * Two rows for the same book (same Open Library work): the furthest shelf wins, a rating on
  * either row is kept, my own words are never overwritten, and a real "date read" beats an
  * estimated one. `kept` keeps its id.
  */
 export function mergeBooks<T extends Omit<Book, "updatedAt">>(kept: T, other: Omit<Book, "id" | "updatedAt">): T {
-  const read = kept.shelf === "read" || other.shelf === "read";
+  const shelf: Shelf = SHELF_RANK[other.shelf] > SHELF_RANK[kept.shelf] ? other.shelf : kept.shelf;
+  const read = shelf === "read";
   const readOnFrom =
     kept.readOn && (!kept.readOnEstimated || !other.readOn || other.readOnEstimated) ? kept : other.readOn ? other : kept;
   return {
@@ -174,13 +176,14 @@ export function mergeBooks<T extends Omit<Book, "updatedAt">>(kept: T, other: Om
     isbn: kept.isbn ?? other.isbn,
     coverUrl: kept.coverUrl ?? other.coverUrl,
     year: kept.year ?? other.year,
-    shelf: read ? "read" : "want",
+    shelf,
     rating: kept.rating ?? other.rating,
     line: kept.line ?? other.line,
     review: kept.review ?? other.review,
     genres: [...new Set([...kept.genres, ...other.genres])],
     readOn: read ? readOnFrom.readOn : null,
     readOnEstimated: read ? readOnFrom.readOnEstimated : false,
+    startedOn: shelf === "want" ? null : (kept.startedOn ?? other.startedOn),
     addedOn: kept.addedOn < other.addedOn ? kept.addedOn : other.addedOn,
   };
 }

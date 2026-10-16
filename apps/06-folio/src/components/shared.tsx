@@ -55,7 +55,7 @@ export function SegmentTabs<T extends string>({
   options: { value: T; label: string; count?: number }[];
 }) {
   return (
-    <div role="tablist" className="flex gap-5 text-[15px]">
+    <div role="tablist" className="flex min-w-0 gap-3.5 overflow-x-auto text-[14.5px] [scrollbar-width:none]">
       {options.map((o) => (
         <button
           key={o.value}
@@ -67,7 +67,7 @@ export function SegmentTabs<T extends string>({
           }`}
         >
           {o.label}
-          {o.count !== undefined && <span className="ml-1.5 text-[var(--f-faint)] tabular-nums">{o.count}</span>}
+          {o.count !== undefined && <span className="ml-1 text-[13px] text-[var(--f-faint)] tabular-nums">{o.count}</span>}
         </button>
       ))}
     </div>

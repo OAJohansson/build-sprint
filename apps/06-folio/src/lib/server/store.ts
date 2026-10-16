@@ -29,6 +29,7 @@ type Row = {
   genres: string[] | null;
   read_on: string | null;
   read_on_estimated: boolean;
+  started_on: string | null;
   added_on: string;
   updated_at: string;
 };
@@ -50,6 +51,7 @@ const toBook = (r: Row): Book => ({
   genres: r.genres ?? [],
   readOn: r.read_on,
   readOnEstimated: r.read_on_estimated,
+  startedOn: r.started_on ?? null,
   addedOn: r.added_on,
   updatedAt: r.updated_at,
 });
@@ -70,6 +72,7 @@ const toRow = (b: Omit<Book, "updatedAt">, now: string): Omit<Row, "updated_at">
   genres: b.genres,
   read_on: b.readOn,
   read_on_estimated: b.readOnEstimated,
+  started_on: b.startedOn,
   added_on: b.addedOn,
   updated_at: now,
 });
@@ -85,6 +88,9 @@ function explain(error: DbError): string {
   }
   if (error.code === "42P01" || error.code === "PGRST205" || /does not exist|could not find the table/i.test(error.message)) {
     return "The folio_books table is missing. Run apps/06-folio/supabase/schema.sql in the Supabase SQL Editor.";
+  }
+  if (/started_on|folio_books_shelf_check/i.test(error.message)) {
+    return "The database is missing the Current read shelf. Run apps/06-folio/supabase/migrations/002-current-read.sql in the Supabase SQL Editor.";
   }
   if (error.code === "23505") return `A book is already on the shelf twice (${error.message}).`;
   if (/invalid api key|jwt|unauthorized/i.test(error.message)) {

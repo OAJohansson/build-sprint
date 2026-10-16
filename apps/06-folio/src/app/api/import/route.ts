@@ -17,7 +17,7 @@ const CONCURRENCY = 5;
 function isRow(r: unknown): r is ImportRow {
   if (!r || typeof r !== "object") return false;
   const o = r as Record<string, unknown>;
-  return typeof o.goodreadsId === "string" && typeof o.title === "string" && (o.shelf === "read" || o.shelf === "want") && typeof o.addedOn === "string";
+  return typeof o.goodreadsId === "string" && typeof o.title === "string" && (o.shelf === "read" || o.shelf === "want" || o.shelf === "reading") && typeof o.addedOn === "string";
 }
 
 async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
@@ -67,6 +67,7 @@ export async function POST(request: Request) {
         genres: f?.genres ?? [],
         readOn: r.readOn,
         readOnEstimated: r.readOnEstimated,
+        startedOn: null,
         addedOn: r.addedOn,
       };
       const existing = byGoodreads.get(r.goodreadsId) ?? (incoming.workKey ? byWork.get(incoming.workKey) : undefined);

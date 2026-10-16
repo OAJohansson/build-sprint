@@ -3,6 +3,7 @@
 import { ArrowUpDown, BookOpen, Home as HomeIcon, ListFilter, Search as SearchIcon, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { BookSheet, fromFound, type SheetTarget } from "@/components/book-sheet";
+import { Current } from "@/components/current";
 import { Home } from "@/components/home";
 import { ImportSheet } from "@/components/import-sheet";
 import { Mascot } from "@/components/mascot";
@@ -13,7 +14,7 @@ import { Unlock } from "@/components/unlock";
 import { GenreSheet, genreFilters, Want } from "@/components/want";
 import { api as makeApi, ApiError } from "@/lib/api";
 import { samplePicks } from "@/lib/data/picks";
-import type { Book, BookInput, Found, Shelf } from "@/lib/types";
+import { SHELF_LABEL, SHELVES, type Book, type BookInput, type Found, type Shelf } from "@/lib/types";
 import { useLocalStorage } from "@/lib/use-local-storage";
 
 type Tab = "home" | "search" | "shelf";
@@ -29,7 +30,8 @@ export default function Folio() {
   const [error, setError] = useState<string | null>(null);
 
   const [tab, setTab] = useState<Tab>("home");
-  const [shelf, setShelf] = useState<Shelf>("read");
+  // null until chosen: then Current read if I'm reading something, else Read.
+  const [pickedShelf, setShelf] = useState<Shelf | null>(null);
   const [sort, setSort] = useState<ReadSort>("date");
   const [genre, setGenre] = useState<string | null>(null);
   const [sheet, setSheet] = useState<SheetTarget | "sort" | "genre" | "import" | null>(null);
@@ -104,6 +106,10 @@ export default function Folio() {
 
   const read = books.filter((b) => b.shelf === "read");
   const want = books.filter((b) => b.shelf === "want");
+  const reading = books.filter((b) => b.shelf === "reading");
+  const onShelf = { reading, read, want };
+  const shelf: Shelf = pickedShelf ?? (reading.length ? "reading" : "read");
+  const current = onShelf[shelf];
   const picks = samplePicks.filter((p) => !shelfOf(p));
   const genreCount = genre ? genreFilters(want).find((f) => f.name === genre)?.count ?? 0 : 0;
 
@@ -121,20 +127,17 @@ export default function Folio() {
           <Search api={api} shelfOf={shelfOf} onOpen={open} onWant={(f) => save(fromFound(f, "want")).catch(() => setSheet({ found: f }))} />
         ) : (
           <>
-            <div className="flex items-center justify-between gap-3 px-4 pb-1">
+            <div className="flex items-center justify-between gap-2 px-4 pb-1">
               <SegmentTabs
                 value={shelf}
                 onChange={setShelf}
-                options={[
-                  { value: "read", label: "Read", count: read.length },
-                  { value: "want", label: "Want to read", count: want.length },
-                ]}
+                options={SHELVES.map((s) => ({ value: s, label: SHELF_LABEL[s], count: onShelf[s].length }))}
               />
-              {(shelf === "read" ? read : want).length > 0 && (
+              {shelf !== "reading" && current.length > 0 && (
                 <button
                   onClick={() => setSheet(shelf === "read" ? "sort" : "genre")}
                   aria-label={shelf === "read" ? "Sort" : "Filter by genre"}
-                  className={`-mr-2 shrink-0 p-2 transition-colors duration-150 ${
+                  className={`-mr-1.5 shrink-0 p-1.5 transition-colors duration-150 ${
                     (shelf === "read" ? sort !== "date" : genre) ? "text-[var(--f-text)]" : "text-[var(--f-muted)]"
                   }`}
                 >
@@ -152,10 +155,12 @@ export default function Folio() {
               </div>
             )}
 
-            {(shelf === "read" ? read : want).length === 0 ? (
+            {current.length === 0 ? (
               <div className="px-4 py-12 text-center">
                 <p className="text-[15px] text-[var(--f-muted)]">
-                  {books.length ? (shelf === "read" ? "No books read yet." : "Nothing saved yet. Find books in Search.") : "Your shelves are empty."}
+                  {books.length
+                    ? { reading: "Nothing on the go. Open a book on Want to read and tap Start reading.", read: "No books read yet.", want: "Nothing saved yet. Find books in Search." }[shelf]
+                    : "Your shelves are empty."}
                 </p>
                 {!books.length && (
                   <button onClick={() => setSheet("import")} className="mt-4 rounded-full bg-[var(--f-text)] px-4 py-2.5 text-[15px] text-[var(--f-bg)]">
@@ -163,6 +168,8 @@ export default function Folio() {
                   </button>
                 )}
               </div>
+            ) : shelf === "reading" ? (
+              <Current books={reading} onOpen={(book) => setSheet({ book })} />
             ) : shelf === "read" ? (
               <Read books={read} sort={sort} onOpen={(book) => setSheet({ book })} />
             ) : (

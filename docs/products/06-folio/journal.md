@@ -347,3 +347,13 @@ What happened, what was decided and why. Newest last.
 - **Decision (owner):** Goodreads' currently-reading books go to Want to read until v2 adds a
   Reading now shelf; books on custom shelves (e.g. did-not-finish) stay named on screen as not
   imported. Tests updated (21 pass).
+- **Owner changed their mind: a third shelf, Current read.** It's the base for v2's
+  while-reading features (words, notes). Named as scope widening; about an hour, so taken in.
+  - **Built:** a `reading` shelf with a `started_on` date. Goodreads' currently-reading imports
+    there, and when two rows are the same book the furthest shelf wins (read, reading, want).
+    The book sheet's next step is the filled button: Want to read, Start reading, I've finished
+    it. The Shelf opens on Current read when it has books, with larger covers there.
+  - **Fit:** with the real counts the three tabs overflowed a 375px phone by ~10–35px; tightened
+    the spacing and count size until they fit exactly.
+  - **Database:** needs migration `002-current-read.sql`, which the owner runs once in Supabase.
+  - 22 tests pass.

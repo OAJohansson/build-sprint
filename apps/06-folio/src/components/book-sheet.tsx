@@ -22,8 +22,12 @@ export const fromFound = (f: Found, shelf: Book["shelf"]): BookInput => ({
   genres: f.genres,
   readOn: null,
   readOnEstimated: false,
+  startedOn: shelf === "reading" ? today() : null,
   addedOn: today(),
 });
+
+const PRIMARY = "rounded-full bg-[var(--f-text)] px-4 py-2.5 text-[15px] text-[var(--f-bg)] disabled:opacity-60";
+const SECONDARY = "rounded-full px-4 py-2.5 text-[15px] shadow-[0_0_0_1px_var(--f-line)] disabled:opacity-60";
 
 const longDate = (iso: string) => new Date(iso + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 
@@ -82,6 +86,9 @@ export function BookSheet({
             {info.genres.length > 0 && <p className="mt-2 text-[13px] text-[var(--f-muted)]">{info.genres.join(" · ")}</p>}
             {!book && "found" in target && target.found.note && <p className="mt-2 text-[13px] text-[var(--f-faint)]">{target.found.note}</p>}
             {book?.shelf === "want" && <p className="mt-2 text-[13px] text-[var(--f-faint)]">Saved {longDate(book.addedOn)}</p>}
+            {book?.shelf === "reading" && (
+              <p className="mt-2 text-[13px] text-[var(--f-faint)]">{book.startedOn ? `Reading since ${longDate(book.startedOn)}` : "Reading now"}</p>
+            )}
           </div>
         </div>
 
@@ -110,20 +117,27 @@ export function BookSheet({
             )}
 
             <div className="mt-6 flex flex-wrap gap-2">
+              {/* The next step for this book is the filled button; the rest are quiet. */}
               {!book && (
-                <button disabled={busy} onClick={() => run(() => onSave(base()))} className="rounded-full bg-[var(--f-text)] px-4 py-2.5 text-[15px] text-[var(--f-bg)] disabled:opacity-60">
+                <button disabled={busy} onClick={() => run(() => onSave(base()))} className={PRIMARY}>
                   Want to read
                 </button>
               )}
-              <button
-                onClick={() => setLogging(true)}
-                className={`rounded-full px-4 py-2.5 text-[15px] ${book?.shelf === "want" ? "bg-[var(--f-text)] text-[var(--f-bg)]" : "shadow-[0_0_0_1px_var(--f-line)]"}`}
-              >
-                {book?.shelf === "read" ? (book.line || book.rating ? "Edit" : "Add rating and a line") : "I've read it"}
+              {(!book || book.shelf === "want") && (
+                <button
+                  disabled={busy}
+                  onClick={() => run(() => onSave({ ...base(), shelf: "reading", startedOn: today() }, book?.id))}
+                  className={book ? PRIMARY : SECONDARY}
+                >
+                  Start reading
+                </button>
+              )}
+              <button onClick={() => setLogging(true)} className={book?.shelf === "reading" ? PRIMARY : SECONDARY}>
+                {book?.shelf === "read" ? (book.line || book.rating ? "Edit" : "Add rating and a line") : book?.shelf === "reading" ? "I've finished it" : "I've read it"}
               </button>
               {book &&
                 (confirmRemove ? (
-                  <button disabled={busy} onClick={() => run(() => onRemove(book))} className="rounded-full px-4 py-2.5 text-[15px] text-red-300 shadow-[0_0_0_1px_var(--f-line)]">
+                  <button disabled={busy} onClick={() => run(() => onRemove(book))} className={`${SECONDARY} text-red-300`}>
                     Remove from shelf
                   </button>
                 ) : (

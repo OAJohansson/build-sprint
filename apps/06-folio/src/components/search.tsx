@@ -174,7 +174,7 @@ function ResultList({
               </span>
             </button>
             {shelf ? (
-              <span className="shrink-0 text-[13px] text-[var(--f-faint)]">{shelf === "read" ? "Read" : "On your list"}</span>
+              <span className="shrink-0 text-[13px] text-[var(--f-faint)]">{shelf === "read" ? "Read" : shelf === "reading" ? "Reading" : "On your list"}</span>
             ) : (
               <button
                 onClick={() => onWant(r)}

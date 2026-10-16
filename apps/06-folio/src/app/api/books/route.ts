@@ -1,6 +1,6 @@
 import { guard } from "@/lib/server/access";
 import { serverError } from "@/lib/server/failure";
-import type { Book, BookInput } from "@/lib/types";
+import { SHELVES, type Book, type BookInput, type Shelf } from "@/lib/types";
 
 // My shelves are small enough (hundreds of books) to load whole.
 export async function GET(request: Request) {
@@ -23,7 +23,8 @@ function parse(body: unknown): BookInput | null {
   const date = (v: unknown) => (typeof v === "string" && DATE.test(v) ? v : null);
   const title = text(b.title, 300);
   const author = text(b.author, 200) ?? "";
-  if (!title || (b.shelf !== "read" && b.shelf !== "want") || !date(b.addedOn)) return null;
+  if (!title || !SHELVES.includes(b.shelf as Shelf) || !date(b.addedOn)) return null;
+  const shelf = b.shelf as Shelf;
   const rating = typeof b.rating === "number" && b.rating >= 0.5 && b.rating <= 5 ? Math.round(b.rating * 2) / 2 : null;
   return {
     workKey: text(b.workKey, 100),
@@ -33,13 +34,14 @@ function parse(body: unknown): BookInput | null {
     author,
     coverUrl: text(b.coverUrl, 500),
     year: typeof b.year === "number" && Number.isInteger(b.year) ? b.year : null,
-    shelf: b.shelf,
-    rating: b.shelf === "read" ? rating : null,
+    shelf,
+    rating: shelf === "read" ? rating : null,
     line: text(b.line, 280),
     review: text(b.review, 20_000),
     genres: Array.isArray(b.genres) ? b.genres.filter((g): g is string => typeof g === "string").slice(0, 12) : [],
-    readOn: b.shelf === "read" ? date(b.readOn) : null,
-    readOnEstimated: b.shelf === "read" && b.readOnEstimated === true,
+    readOn: shelf === "read" ? date(b.readOn) : null,
+    readOnEstimated: shelf === "read" && b.readOnEstimated === true,
+    startedOn: shelf === "want" ? null : date(b.startedOn),
     addedOn: date(b.addedOn)!,
   };
 }

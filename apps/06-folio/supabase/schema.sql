@@ -16,7 +16,8 @@ create table if not exists folio_books (
   author text not null,
   cover_url text,
   published_year int,
-  shelf text not null check (shelf in ('read', 'want')),
+  -- 'reading' is the Current read shelf (migration 002).
+  shelf text not null constraint folio_books_shelf_check check (shelf in ('reading', 'read', 'want')),
   -- Half stars, 0.5 to 5; null means not rated.
   rating numeric(2, 1) check (rating is null or (rating between 0.5 and 5 and rating * 2 = floor(rating * 2))),
   -- The one-liner shown on the shelf, and the optional longer review behind a tap.
@@ -24,6 +25,8 @@ create table if not exists folio_books (
   review text,
   genres text[] not null default '{}',
   read_on date,
+  -- When I started the book on the Current read shelf.
+  started_on date,
   -- True when read_on came from Goodreads' "date added" because "date read" was empty.
   read_on_estimated boolean not null default false,
   added_on date not null default current_date,

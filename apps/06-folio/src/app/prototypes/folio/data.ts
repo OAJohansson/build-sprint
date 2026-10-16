@@ -1,4 +1,4 @@
-// Prototype data: the owner's real Goodreads shelves (the 24 most recent read; all 285 want to
+// Prototype data: the owner's real Goodreads shelves (all 65 read; all 285 want to
 // read, with Open Library subjects mapped to shelf genres by the rules in the journal, 16 Oct).
 // shortcut: the one-liners and long reviews are SAMPLE text written for the prototype (the export
 // has no reviews); delete this file with the prototype surface.
@@ -272,6 +272,445 @@ export const books: Book[] = [
   "date": "2022-05-31",
   "shelf": "read",
   "rating": 4.0
+ },
+ {
+  "id": "18050143",
+  "title": "Zero to One",
+  "author": "Peter Thiel",
+  "isbn": "9780804139298",
+  "coverId": 9002334,
+  "year": 2001,
+  "date": "2022-05-19",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "32887592",
+  "title": "A Pelican Introduction",
+  "author": "Guy Standing",
+  "isbn": "9780141985480",
+  "coverId": 14848258,
+  "year": 2017,
+  "date": "2022-05-14",
+  "shelf": "read",
+  "rating": 3.0
+ },
+ {
+  "id": "54944",
+  "title": "The Ethical Slut",
+  "author": "Dossie Easton",
+  "isbn": "9781890159016",
+  "coverId": 938291,
+  "year": 1997,
+  "date": "2022-05-09",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "368593",
+  "title": "The 4-Hour Workweek",
+  "author": "Timothy Ferriss",
+  "isbn": "9780307353139",
+  "coverId": 539652,
+  "year": 2006,
+  "date": "2022-04-17",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "170448",
+  "title": "Animal Farm",
+  "author": "George Orwell",
+  "isbn": "9780451526342",
+  "coverId": 11261770,
+  "year": 1945,
+  "date": "2022-04-10",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "18373",
+  "title": "Flowers for Algernon",
+  "author": "Daniel Keyes",
+  "isbn": "9780156030083",
+  "coverId": 12947700,
+  "year": 1966,
+  "date": "2022-03-29",
+  "shelf": "read",
+  "rating": 5.0
+ },
+ {
+  "id": "18458190",
+  "title": "Egenmäktigt förfarande",
+  "author": "Lena Andersson",
+  "isbn": "9789127136991",
+  "year": 2013,
+  "date": "2022-03-05",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "6708",
+  "title": "The Power of Now",
+  "author": "Eckhart Tolle",
+  "coverId": 551262,
+  "year": 1997,
+  "date": "2022-02-27",
+  "shelf": "read",
+  "rating": 3.0
+ },
+ {
+  "id": "35959740",
+  "title": "Circe",
+  "author": "Madeline Miller",
+  "isbn": "9780316556347",
+  "coverId": 8739376,
+  "year": 2018,
+  "date": "2022-01-20",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "55278923",
+  "title": "The Frontiers of Knowledge",
+  "author": "A.C. Grayling",
+  "isbn": "9780241304587",
+  "coverId": 11976099,
+  "year": 2021,
+  "date": "2022-01-17",
+  "shelf": "read",
+  "rating": 3.0
+ },
+ {
+  "id": "42285012",
+  "title": "The Beekeeper of Aleppo",
+  "author": "Christy Lefteri",
+  "year": 2019,
+  "date": "2022-01-07",
+  "shelf": "read",
+  "rating": 5.0
+ },
+ {
+  "id": "6181",
+  "title": "If This Is a Man / The Truce",
+  "author": "Primo Levi",
+  "isbn": "9780349100135",
+  "coverId": 212617,
+  "year": 1963,
+  "date": "2021-12-01",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "23422",
+  "title": "The Art of Travel",
+  "author": "Alain de Botton",
+  "isbn": "9780375725340",
+  "coverId": 10410653,
+  "year": 2002,
+  "date": "2021-11-01",
+  "shelf": "read",
+  "rating": 3.0
+ },
+ {
+  "id": "54898389",
+  "title": "The Almanack of Naval Ravikant",
+  "author": "Eric Jorgenson",
+  "isbn": "9781544514208",
+  "coverId": 10449931,
+  "year": 2020,
+  "date": "2021-10-10",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "30474",
+  "title": "The Communist Manifesto",
+  "author": "Karl Marx",
+  "isbn": "9780140447576",
+  "coverId": 11048623,
+  "year": 1848,
+  "date": "2021-10-01",
+  "shelf": "read",
+  "rating": 3.0
+ },
+ {
+  "id": "23120225",
+  "title": "The Establishment",
+  "author": "Owen Jones",
+  "isbn": "9781846147197",
+  "coverId": 8064202,
+  "year": 2014,
+  "date": "2021-09-11",
+  "shelf": "read",
+  "rating": 3.0
+ },
+ {
+  "id": "11337189",
+  "title": "A Universe from Nothing",
+  "author": "Lawrence M. Krauss",
+  "isbn": "9781451624458",
+  "coverId": 9454845,
+  "year": 2010,
+  "date": "2021-08-28",
+  "shelf": "read",
+  "rating": 3.0
+ },
+ {
+  "id": "32895535",
+  "title": "Why Buddhism Is True",
+  "author": "Robert Wright",
+  "isbn": "9781508235408",
+  "date": "2021-07-23",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "31799",
+  "title": "The Problems of Philosophy",
+  "author": "Bertrand Russell",
+  "isbn": "9781421903675",
+  "coverId": 6947403,
+  "year": 1900,
+  "date": "2021-07-10",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "81959",
+  "title": "As a Man Thinketh",
+  "author": "James Allen",
+  "isbn": "9781585425648",
+  "coverId": 850412,
+  "year": 2006,
+  "date": "2021-06-27",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "11250317",
+  "title": "The Song of Achilles",
+  "author": "Madeline Miller",
+  "isbn": "9781408816035",
+  "coverId": 7098465,
+  "year": 2011,
+  "date": "2021-06-25",
+  "shelf": "read",
+  "rating": 5.0
+ },
+ {
+  "id": "40876575",
+  "title": "Utopia for Realists",
+  "author": "Rutger Bregman",
+  "isbn": "9780316471909",
+  "coverId": 12684144,
+  "year": 2016,
+  "date": "2021-06-22",
+  "shelf": "read",
+  "rating": 3.0
+ },
+ {
+  "id": "24213",
+  "title": "Alice’s Adventures in Wonderland / Through the Looking-Glass",
+  "author": "Lewis Carroll",
+  "coverId": 8595966,
+  "year": 1889,
+  "date": "2021-06-08",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "6334",
+  "title": "Never Let Me Go",
+  "author": "Kazuo Ishiguro",
+  "isbn": "9781400078776",
+  "coverId": 1047334,
+  "year": 2005,
+  "date": "2021-06-08",
+  "shelf": "read",
+  "rating": 3.0
+ },
+ {
+  "id": "25135194",
+  "title": "Prisoners of Geography",
+  "author": "Tim Marshall",
+  "isbn": "9781783961412",
+  "coverId": 8900233,
+  "year": 2015,
+  "date": "2021-06-08",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "46212868",
+  "title": "How Proust Can Change Your Life",
+  "author": "Alain de Botton",
+  "isbn": "9781509870691",
+  "year": 2019,
+  "date": "2021-06-06",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "26147",
+  "title": "Man's Search for Meaning",
+  "author": "Viktor E. Frankl",
+  "isbn": "9781844132393",
+  "coverId": 8516506,
+  "year": 1946,
+  "date": "2021-06-06",
+  "shelf": "read",
+  "rating": 5.0
+ },
+ {
+  "id": "12576334",
+  "title": "Religion for Atheists",
+  "author": "Alain de Botton",
+  "isbn": "9780241144770",
+  "coverId": 10165125,
+  "year": 2012,
+  "date": "2021-06-06",
+  "shelf": "read",
+  "rating": 3.0
+ },
+ {
+  "id": "30372952",
+  "title": "Black Box Thinking",
+  "author": "Matthew Syed",
+  "isbn": "9781473613805",
+  "coverId": 11349464,
+  "year": 2015,
+  "date": "2021-04-08",
+  "shelf": "read",
+  "rating": 5.0
+ },
+ {
+  "id": "36203368",
+  "title": "The Choice",
+  "author": "Edith Eger",
+  "isbn": "9781846045127",
+  "coverId": 14814936,
+  "year": 1900,
+  "date": "2021-03-27",
+  "shelf": "read",
+  "rating": 5.0
+ },
+ {
+  "id": "52879286",
+  "title": "Humankind",
+  "author": "Rutger Bregman",
+  "isbn": "9780316418539",
+  "coverId": 9410738,
+  "year": 2019,
+  "date": "2021-03-24",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "23423",
+  "title": "The Consolations of Philosophy",
+  "author": "Alain de Botton",
+  "isbn": "9780140276619",
+  "coverId": 10124965,
+  "year": 2001,
+  "date": "2021-02-25",
+  "shelf": "read",
+  "rating": 3.0
+ },
+ {
+  "id": "41015249",
+  "title": "Beren and Lúthien",
+  "author": "J.R.R. Tolkien",
+  "coverId": 12639912,
+  "year": 2017,
+  "date": "2021-02-09",
+  "shelf": "read",
+  "rating": 3.0
+ },
+ {
+  "id": "35510008",
+  "title": "This is Going to Hurt",
+  "author": "Adam Kay",
+  "coverId": 9355118,
+  "year": 2017,
+  "date": "2020-09-30",
+  "shelf": "read",
+  "rating": 5.0
+ },
+ {
+  "id": "23692271",
+  "title": "Sapiens",
+  "author": "Yuval Noah Harari",
+  "coverId": 8634250,
+  "year": 2011,
+  "date": "2018-10-15",
+  "shelf": "read",
+  "rating": 5.0
+ },
+ {
+  "id": "31138556",
+  "title": "Homo Deus",
+  "author": "Yuval Noah Harari",
+  "coverId": 8846275,
+  "year": 2017,
+  "date": "2018-10-09",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "34890015",
+  "title": "Factfulness",
+  "author": "Hans Rosling",
+  "isbn": "9781473637467",
+  "coverId": 8186237,
+  "year": 2018,
+  "date": "2018-10-09",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "38820046",
+  "title": "21 Lessons for the 21st Century",
+  "author": "Yuval Noah Harari",
+  "isbn": "9780525512172",
+  "coverId": 10108277,
+  "year": 2018,
+  "date": "2018-10-09",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "22557272",
+  "title": "The Girl on the Train",
+  "author": "Paula Hawkins",
+  "isbn": "9781594633669",
+  "coverId": 7350360,
+  "year": 2014,
+  "date": "2018-10-09",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "17157681",
+  "title": "The Hobbit, Part One",
+  "author": "J.R.R. Tolkien",
+  "isbn": "9780007926664",
+  "coverId": 14627509,
+  "year": 1937,
+  "date": "2018-10-09",
+  "shelf": "read",
+  "rating": 4.0
+ },
+ {
+  "id": "865",
+  "title": "The Alchemist",
+  "author": "Paulo Coelho",
+  "isbn": "9780061122415",
+  "coverId": 7414780,
+  "year": 1988,
+  "date": "2018-10-09",
+  "shelf": "read",
+  "rating": 5.0
  },
  {
   "id": "2784",

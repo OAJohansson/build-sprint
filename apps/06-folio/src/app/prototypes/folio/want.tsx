@@ -1,9 +1,8 @@
 "use client";
 
-import { Check } from "lucide-react";
 import { useState } from "react";
 import { books, type Book } from "./data";
-import { Cover } from "./shared";
+import { ChoiceSheet, Cover } from "./shared";
 
 // Want to read: a shelf, filtered by one genre at a time from a sheet behind an icon (the owner
 // wanted the chips off the screen, 16 Oct). Four smaller covers per row, each row standing on a
@@ -85,33 +84,16 @@ export function GenreSheet({
   onChange: (genre: string | null) => void;
   onClose: () => void;
 }) {
-  const options = [{ name: null, label: "All books", count: shelfBooks.length }, ...genreFilters.map((f) => ({ ...f, label: f.name }))];
   return (
-    <div className="fixed inset-0 z-40" role="dialog" aria-modal="true" aria-label="Filter by genre">
-      <button aria-label="Close" onClick={onClose} className="absolute inset-0 animate-in fade-in bg-black/50 duration-200" />
-      <div className="absolute inset-x-0 bottom-0 mx-auto max-h-[80dvh] max-w-xl animate-in slide-in-from-bottom overflow-y-auto rounded-t-2xl bg-[var(--f-raised)] pb-[max(16px,env(safe-area-inset-bottom))] pt-3 duration-250 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:animate-none">
-        <div className="mx-auto mb-3 h-1 w-9 rounded-full bg-[var(--f-line)]" />
-        <ul>
-          {options.map((o) => {
-            const active = value === o.name;
-            return (
-              <li key={o.label}>
-                <button
-                  onClick={() => {
-                    onChange(o.name);
-                    onClose();
-                  }}
-                  className="flex w-full items-center gap-3 px-5 py-3 text-left text-[16px] transition-colors duration-150 active:bg-white/[0.04]"
-                >
-                  <span className={active ? "font-medium" : ""}>{o.label}</span>
-                  <span className="text-[14px] text-[var(--f-faint)] tabular-nums">{o.count}</span>
-                  {active && <Check size={18} className="ml-auto text-[var(--f-text)]" aria-label="Selected" />}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    </div>
+    <ChoiceSheet<string | null>
+      label="Filter by genre"
+      value={value}
+      onChange={onChange}
+      onClose={onClose}
+      options={[
+        { value: null, label: "All books", count: shelfBooks.length },
+        ...genreFilters.map((f) => ({ value: f.name, label: f.name, count: f.count })),
+      ]}
+    />
   );
 }

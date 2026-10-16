@@ -1,5 +1,6 @@
 "use client";
 
+import { Check } from "lucide-react";
 import { useState } from "react";
 
 // Folio's prototype palette: warm ink, off-white type, one amber accent for stars.
@@ -94,6 +95,50 @@ export function SegmentTabs<T extends string>({
           {o.count !== undefined && <span className="ml-1.5 text-[var(--f-faint)] tabular-nums">{o.count}</span>}
         </button>
       ))}
+    </div>
+  );
+}
+
+// A bottom sheet of single-choice options (genre filter, sort order).
+export function ChoiceSheet<T>({
+  label,
+  options,
+  value,
+  onChange,
+  onClose,
+}: {
+  label: string;
+  options: { value: T; label: string; count?: number }[];
+  value: T;
+  onChange: (v: T) => void;
+  onClose: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-40" role="dialog" aria-modal="true" aria-label={label}>
+      <button aria-label="Close" onClick={onClose} className="absolute inset-0 animate-in fade-in bg-black/50 duration-200" />
+      <div className="absolute inset-x-0 bottom-0 mx-auto max-h-[80dvh] max-w-xl animate-in slide-in-from-bottom overflow-y-auto rounded-t-2xl bg-[var(--f-raised)] pb-[max(16px,env(safe-area-inset-bottom))] pt-3 duration-250 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:animate-none">
+        <div className="mx-auto mb-3 h-1 w-9 rounded-full bg-[var(--f-line)]" />
+        <ul>
+          {options.map((o) => {
+            const active = value === o.value;
+            return (
+              <li key={o.label}>
+                <button
+                  onClick={() => {
+                    onChange(o.value);
+                    onClose();
+                  }}
+                  className="flex w-full items-center gap-3 px-5 py-3 text-left text-[16px] transition-colors duration-150 active:bg-white/[0.04]"
+                >
+                  <span className={active ? "font-medium" : ""}>{o.label}</span>
+                  {o.count !== undefined && <span className="text-[14px] text-[var(--f-faint)] tabular-nums">{o.count}</span>}
+                  {active && <Check size={18} className="ml-auto text-[var(--f-text)]" aria-label="Selected" />}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }

@@ -201,3 +201,10 @@ What happened, what was decided and why. Newest last.
   nonfiction genres: Psychology & self fell from 75 to 34 books, History & ideas rose to 53, and
   66 books are unsorted. Still imperfect (*Yellow Face* isn't tagged as fiction), so hand-written
   rules on messy tags have a ceiling. That's the case for Claude classifying, with an eval.
+- **Owner:** keep "No genre yet" as its own filter for now (it already was the sheet's last
+  option); solving the unsorted books comes later.
+- **Owner:** sort Read by rating, highest first. Added a sort icon beside the tabs on Read,
+  opening the same kind of sheet: Date read (default) or Highest rated. By rating, sections
+  become star groups (5 stars 16, 4 stars 32, 3½ stars 1, 3 stars 16, matching the export) and
+  each row shows month and year instead of the day. The prototype now holds all 65 read books.
+  Both sheets share one component.

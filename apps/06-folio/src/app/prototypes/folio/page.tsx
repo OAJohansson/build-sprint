@@ -1,13 +1,13 @@
 "use client";
 
-import { BookOpen, Home as HomeIcon, ListFilter, Search as SearchIcon, X } from "lucide-react";
+import { ArrowUpDown, BookOpen, Home as HomeIcon, ListFilter, Search as SearchIcon, X } from "lucide-react";
 import { useState } from "react";
 import { books } from "./data";
 import { Home } from "./home";
 import { Mascot } from "./mascot";
-import { Read } from "./read";
+import { Read, type ReadSort } from "./read";
 import { Search } from "./search";
-import { folio, SegmentTabs } from "./shared";
+import { ChoiceSheet, folio, SegmentTabs } from "./shared";
 import { genreFilters, GenreSheet, Want } from "./want";
 
 // Prototype round 2 (16 Oct): the owner's picks combined. Home with three browse rows, Search
@@ -18,6 +18,8 @@ export default function FolioPrototype() {
   const [shelf, setShelf] = useState<"read" | "want">("read");
   const [genre, setGenre] = useState<string | null>(null);
   const [filtering, setFiltering] = useState(false);
+  const [sort, setSort] = useState<ReadSort>("date");
+  const [sorting, setSorting] = useState(false);
   const counts = { read: books.filter((b) => b.shelf === "read").length, want: books.filter((b) => b.shelf === "want").length };
 
   return (
@@ -43,6 +45,15 @@ export default function FolioPrototype() {
                   { value: "want", label: "Want to read", count: counts.want },
                 ]}
               />
+              {shelf === "read" && (
+                <button
+                  onClick={() => setSorting(true)}
+                  aria-label="Sort"
+                  className={`-mr-2 shrink-0 p-2 transition-colors duration-150 ${sort !== "date" ? "text-[var(--f-text)]" : "text-[var(--f-muted)]"}`}
+                >
+                  <ArrowUpDown size={20} strokeWidth={sort !== "date" ? 2.2 : 1.8} />
+                </button>
+              )}
               {shelf === "want" && (
                 <button
                   onClick={() => setFiltering(true)}
@@ -62,7 +73,19 @@ export default function FolioPrototype() {
                 </button>
               </div>
             )}
-            {shelf === "read" ? <Read /> : <Want genre={genre} />}
+            {shelf === "read" ? <Read sort={sort} /> : <Want genre={genre} />}
+            {sorting && (
+              <ChoiceSheet<ReadSort>
+                label="Sort"
+                value={sort}
+                onChange={setSort}
+                onClose={() => setSorting(false)}
+                options={[
+                  { value: "date", label: "Date read" },
+                  { value: "rating", label: "Highest rated" },
+                ]}
+              />
+            )}
             {filtering && <GenreSheet value={genre} onChange={setGenre} onClose={() => setFiltering(false)} />}
           </>
         )}

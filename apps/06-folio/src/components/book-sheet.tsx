@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { today } from "@/lib/goodreads";
-import type { Book, BookInput, Found } from "@/lib/types";
+import { SHELF_LABEL, type Book, type BookInput, type Found, type Shelf } from "@/lib/types";
 import { Cover, Sheet, Stars } from "./shared";
 
 export type SheetTarget = { book: Book } | { found: Found };
@@ -28,6 +28,9 @@ export const fromFound = (f: Found, shelf: Book["shelf"]): BookInput => ({
 
 const PRIMARY = "rounded-full bg-[var(--f-text)] px-4 py-2.5 text-[15px] text-[var(--f-bg)] disabled:opacity-60";
 const SECONDARY = "rounded-full px-4 py-2.5 text-[15px] shadow-[0_0_0_1px_var(--f-line)] disabled:opacity-60";
+
+/** Shelves a book can move to without the log form (moving to Read goes through "I've read it"). */
+const moveTargets = (from: Shelf): Shelf[] => ({ reading: ["want"], want: [], read: ["reading", "want"] })[from] as Shelf[];
 
 const longDate = (iso: string) => new Date(iso + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 
@@ -135,17 +138,38 @@ export function BookSheet({
               <button onClick={() => setLogging(true)} className={book?.shelf === "reading" ? PRIMARY : SECONDARY}>
                 {book?.shelf === "read" ? (book.line || book.rating ? "Edit" : "Add rating and a line") : book?.shelf === "reading" ? "I've finished it" : "I've read it"}
               </button>
-              {book &&
-                (confirmRemove ? (
-                  <button disabled={busy} onClick={() => run(() => onRemove(book))} className={`${SECONDARY} text-red-300`}>
-                    Remove from shelf
-                  </button>
-                ) : (
-                  <button onClick={() => setConfirmRemove(true)} className="px-3 py-2.5 text-[15px] text-[var(--f-faint)]">
-                    Remove
+            </div>
+
+            {book && (
+              <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-[var(--f-line)] pt-4 text-[14px]">
+                {/* Moving keeps everything (rating, line, dates); only Remove deletes. */}
+                {moveTargets(book.shelf).map((to) => (
+                  <button
+                    key={to}
+                    disabled={busy}
+                    onClick={() => run(() => onSave({ ...base(), shelf: to, startedOn: to === "reading" ? today() : book.startedOn }, book.id))}
+                    className="text-[var(--f-muted)] underline underline-offset-4 disabled:opacity-60"
+                  >
+                    Move to {SHELF_LABEL[to]}
                   </button>
                 ))}
-            </div>
+                {confirmRemove ? (
+                  <span className="flex items-center gap-3">
+                    <span className="text-[var(--f-muted)]">Delete it and what you wrote?</span>
+                    <button disabled={busy} onClick={() => run(() => onRemove(book))} className="text-red-300 underline underline-offset-4 disabled:opacity-60">
+                      Delete
+                    </button>
+                    <button onClick={() => setConfirmRemove(false)} className="text-[var(--f-faint)]">
+                      Keep
+                    </button>
+                  </span>
+                ) : (
+                  <button onClick={() => setConfirmRemove(true)} className="ml-auto text-[var(--f-faint)]">
+                    Remove from Folio
+                  </button>
+                )}
+              </div>
+            )}
           </>
         )}
         {error && (

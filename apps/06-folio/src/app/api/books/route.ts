@@ -35,13 +35,15 @@ function parse(body: unknown): BookInput | null {
     coverUrl: text(b.coverUrl, 500),
     year: typeof b.year === "number" && Number.isInteger(b.year) ? b.year : null,
     shelf,
-    rating: shelf === "read" ? rating : null,
+    // Kept on every shelf (the app shows them on Read only), so moving a book away from Read and
+    // back never loses its rating or dates (owner, 16 Oct).
+    rating,
     line: text(b.line, 280),
     review: text(b.review, 20_000),
     genres: Array.isArray(b.genres) ? b.genres.filter((g): g is string => typeof g === "string").slice(0, 12) : [],
-    readOn: shelf === "read" ? date(b.readOn) : null,
-    readOnEstimated: shelf === "read" && b.readOnEstimated === true,
-    startedOn: shelf === "want" ? null : date(b.startedOn),
+    readOn: date(b.readOn),
+    readOnEstimated: b.readOnEstimated === true && Boolean(date(b.readOn)),
+    startedOn: date(b.startedOn),
     addedOn: date(b.addedOn)!,
   };
 }

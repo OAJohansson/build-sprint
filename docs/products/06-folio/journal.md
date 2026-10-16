@@ -357,3 +357,8 @@ What happened, what was decided and why. Newest last.
     the spacing and count size until they fit exactly.
   - **Database:** needs migration `002-current-read.sql`, which the owner runs once in Supabase.
   - 22 tests pass.
+- **Owner: Remove shouldn't be the only way off a shelf.** Added "Move to" links in the book sheet
+  and made delete explicit ("Remove from Folio", confirmed with "Delete it and what you wrote?").
+  The API now keeps rating, line and dates on every shelf (shown on Read only), so a book can
+  move away from Read and back without losing anything; checked by moving a rated book
+  read → want → reading → read. Feedback 7.

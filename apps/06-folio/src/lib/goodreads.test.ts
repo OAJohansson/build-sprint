@@ -67,7 +67,8 @@ describe("fromGoodreads", () => {
         "4,Some Book,Someone,,,0,,,,2020/01/01,currently-reading",
       ),
     );
-    expect(rows).toHaveLength(3);
+    expect(rows).toHaveLength(4);
+    expect(rows[3]).toMatchObject({ title: "Some Book", shelf: "want", readOn: null });
     expect(rows[0]).toMatchObject({ title: "Educated", isbn: "9780399590504", rating: 5, shelf: "read", readOn: "2023-09-02", readOnEstimated: false });
     expect(rows[1]).toMatchObject({ rating: 3.5, readOn: "2026-10-10", readOnEstimated: true });
     expect(rows[2]).toMatchObject({ shelf: "want", rating: null, readOn: null, author: "Susanna Clarke" });
@@ -198,9 +199,8 @@ describe("no book lost", () => {
     );
     const { rows, skipped } = readGoodreads(file);
     expect(rows.length + skipped.length).toBe(4);
-    expect(skipped).toEqual([
-      { title: "C", author: "Author Three", shelf: "currently-reading" },
-      { title: "D", author: "Author Four", shelf: "did-not-finish" },
-    ]);
+    // Currently reading waits on Want to read; a custom shelf is reported.
+    expect(rows.find((r) => r.title === "C")?.shelf).toBe("want");
+    expect(skipped).toEqual([{ title: "D", author: "Author Four", shelf: "did-not-finish" }]);
   });
 });

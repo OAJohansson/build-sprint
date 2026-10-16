@@ -344,3 +344,6 @@ What happened, what was decided and why. Newest last.
   now named on screen as not imported, and where they go is the owner's call. 21 unit tests (the
   repo's rule is unit tests for date logic only; the owner asked for these). The test plan gets a
   field-by-field check, and the backlog's automated import test now covers fields too.
+- **Decision (owner):** Goodreads' currently-reading books go to Want to read until v2 adds a
+  Reading now shelf; books on custom shelves (e.g. did-not-finish) stay named on screen as not
+  imported. Tests updated (21 pass).

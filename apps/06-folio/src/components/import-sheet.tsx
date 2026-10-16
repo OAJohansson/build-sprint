@@ -85,7 +85,7 @@ export function ImportSheet({ api, books, onDone, onClose }: { api: Api; books: 
               {state.skipped.length > 0 && (
                 <details open>
                   <summary className="cursor-pointer text-red-300">
-                    {state.skipped.length} {state.skipped.length === 1 ? "book was" : "books were"} not imported: Folio has only Read and Want to read
+                    {state.skipped.length} {state.skipped.length === 1 ? "book was" : "books were"} not imported: their Goodreads shelf has no place in Folio yet
                   </summary>
                   <ul className="mt-2 space-y-1 text-[14px] text-[var(--f-muted)]">
                     {state.skipped.map((b, i) => (

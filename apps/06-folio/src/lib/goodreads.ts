@@ -101,13 +101,13 @@ export function cleanReview(value: string): string | null {
   return text || null;
 }
 
-/** A row the import can't place yet (another exclusive shelf, e.g. currently-reading). */
+/** A row the import can't place (a custom exclusive shelf, e.g. did-not-finish). */
 export type SkippedRow = { title: string; author: string; shelf: string };
 
 /**
- * Turn the export's text into books. Folio has two shelves, so rows on any other exclusive shelf
- * (currently-reading, or a custom one like did-not-finish) are returned as skipped, never dropped
- * silently (owner's "no book lost" rule, 16 Oct).
+ * Turn the export's text into books. Folio has two shelves: currently-reading goes to Want to
+ * read, and rows on a custom exclusive shelf (e.g. did-not-finish) are returned as skipped, never
+ * dropped silently (owner's "no book lost" rule, 16 Oct).
  */
 export function readGoodreads(csv: string, now = new Date()): { rows: ImportRow[]; skipped: SkippedRow[] } {
   const skipped: SkippedRow[] = [];
@@ -130,7 +130,10 @@ function parseGoodreads(csv: string, now: Date, skipped: SkippedRow[]): ImportRo
   const out: ImportRow[] = [];
   for (const r of rows) {
     const exclusive = get(r, "Exclusive Shelf");
-    const shelf: Shelf | null = exclusive === "read" ? "read" : exclusive === "to-read" ? "want" : null;
+    // Folio has no "reading now" shelf yet (v2), so books in progress wait on Want to read (owner,
+    // 16 Oct). Custom shelves (e.g. did-not-finish) are reported as skipped.
+    const shelf: Shelf | null =
+      exclusive === "read" ? "read" : exclusive === "to-read" || exclusive === "currently-reading" ? "want" : null;
     if (!shelf) {
       if (get(r, "Title")) skipped.push({ title: cleanTitle(get(r, "Title")), author: get(r, "Author").replace(/\s+/g, " "), shelf: exclusive || "no shelf" });
       continue;

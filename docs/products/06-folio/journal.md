@@ -362,3 +362,6 @@ What happened, what was decided and why. Newest last.
   The API now keeps rating, line and dates on every shelf (shown on Read only), so a book can
   move away from Read and back without losing anything; checked by moving a rated book
   read → want → reading → read. Feedback 7.
+- **Migration 002 run by the owner and checked:** the `started_on` column exists, the database
+  accepts a book on the Current read shelf (a temporary test row, deleted straight after), and
+  all 349 books are untouched.

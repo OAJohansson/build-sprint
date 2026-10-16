@@ -3,12 +3,11 @@
 import { folioPicks, newReleases, popular, type Pick } from "./home-data";
 import { Cover } from "./shared";
 
-// Home: three shelves to browse, in the owner's order (16 Oct).
+// Home: three shelves to browse. Folio's picks first, the personal row (owner, 16 Oct, after
+// critic round 1); New releases and Popular this month follow.
 export function Home() {
   return (
     <div className="space-y-7">
-      <Row title="New releases" items={newReleases} />
-      <Row title="Popular this month" items={popular} />
       <section>
         <h2 className="px-4 text-[17px] font-semibold tracking-tight">Folio&apos;s picks for you</h2>
         <ul className="mt-3 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto overscroll-x-contain px-4 pb-1 [scrollbar-width:none]">
@@ -26,6 +25,8 @@ export function Home() {
           ))}
         </ul>
       </section>
+      <Row title="New releases" items={newReleases} />
+      <Row title="Popular this month" items={popular} />
     </div>
   );
 }

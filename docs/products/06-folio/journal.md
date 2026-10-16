@@ -256,3 +256,15 @@ What happened, what was decided and why. Newest last.
   4. Search: just a search field and recent searches; Booker to Home; genres as a plain list.
   5. The owl and name only on Home, not on every tab.
   6. One placeholder-cover style everywhere (letter on Read, title on Want to read).
+- **Owner asked what the critic meant** (one discovery row, "your latest reads", what else could
+  make Home less generic, whether the data sources have longer reviews). Claude explained:
+  - Home is the first thing seen on every open, and nothing on it was the owner's.
+  - "Latest reads" gives continuity, but barely changes between visits.
+  - No source offers Goodreads-style public reviews. NYT gives review links, Google Books
+    synopses; Hardcover's other-reader reviews are unconfirmed.
+  - The most personal ideas come from Folio's own data: up next from my 285 want-to-reads,
+    rediscovered saves, year count, taste line, on this day.
+- **Decision (owner): keep the MVP as it is, with Folio's picks moved to the top of Home.** Every
+  other suggestion goes to the backlog, to review after shipping: the Home ideas, book page data,
+  and the critic's notes on Search, cover titles, the owl header and month headings. Round 2 of
+  the critic isn't needed for the MVP; the design is frozen.

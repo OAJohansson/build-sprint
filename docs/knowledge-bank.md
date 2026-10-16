@@ -251,6 +251,12 @@ Secrets (API keys) live in environment variables on the server, never in the cod
 of key: a **publishable** key can be public and is limited (read only); a **secret** key must stay
 on the server. Change a variable, then redeploy.
 
+Two files keep them apart: **`.env.example`** is a committed template that lists the variable
+*names* (and where to get each), with empty values; **`.env.local`** holds the real values, and
+git ignores it. Next.js reads `.env.local` automatically when the app runs on your machine, and
+the host (Vercel) gets the same values from its own settings. Where we met it: every app with a
+key; Folio (06) has three.
+
 ### Quality
 
 #### Testing order
@@ -345,6 +351,9 @@ Jeffries).
 
 **Q:** Why couldn't Vercel find a new app's folder for the Root Directory?
 **A:** The picker lists folders on main; the folder only existed on an unmerged branch.
+
+**Q:** Why have both `.env.example` and `.env.local`?
+**A:** The example is a committed template with names only, so anyone knows what to set; the local file holds the real secrets and is never committed.
 
 **Q:** What's the difference between a publishable key and a secret key?
 **A:** A publishable key can be public and is limited (often read-only); a secret key must stay on the server. Using the wrong one makes writes fail.

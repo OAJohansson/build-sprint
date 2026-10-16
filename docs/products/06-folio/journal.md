@@ -87,3 +87,19 @@ What happened, what was decided and why. Newest last.
   18 on want to read), and many slowly (each redirects to archive.org, about 1.6 s). Some are
   library scans. So the import's title-search fallback is required, not optional, and the
   typographic fallback cover is part of the design.
+
+## 16 Oct: a design-session skill (side quest)
+
+- **Owner's request:** turn Anshu Chimala's article "How to turn your AI into a world-class
+  designer" (Lenny's Newsletter) into a skill we use together; owner's first skill, so Claude
+  walked through how skills work (a `SKILL.md` with a name and description; project vs personal;
+  automatic vs called; a skill runs here, a subagent gets a fresh context).
+- **Built:** `/design-session` (Discover, Define, Deliver with owner checkpoints), the
+  `design-critic` subagent on Fable, a seed script and our own AI-tells list. Defaults taken
+  while the owner didn't pick: full process, no image or video generation, critic on Fable,
+  only when called. Decision 0013. Renamed from `design` because another installed skill already
+  had that name.
+- **Smoke test on the Diary prototype:** 6/10. Top gaps: stars next to the title cut titles
+  short; one-liners clamped to one line, so no opinion is readable; missing covers read as
+  broken; all-caps month headers feel templated; an unexplained "+"; gold stars are the loudest
+  thing on screen. Useful input for the shelf pick.

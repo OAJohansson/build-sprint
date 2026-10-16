@@ -66,9 +66,10 @@ hour, not a day. Names in brackets are where each practice comes from; see
   *(Risk-based testing: test where failure is likely and costly. Decision 0011.)*
 - **Three approaches.** First collect 2–3 real references for the feel (apps, covers, photos) and
   write down what *not* to do. A feel is evoked, not drawn: no illustrating the object behind a
-  theme. *(Day 3: four rounds of literal typewriters.)* Then run `/prototype` on the main screen,
-  pointing it at the brief and the references, to get three genuinely different directions as
-  working variants behind a picker. Judge them against the success signals, not just looks. Pick
+  theme. *(Day 3: four rounds of literal typewriters.)* Then run `/design-session` on the main screen
+  (decision 0013): seeds and broad ideas, `/prototype` for three genuinely different directions
+  behind a picker, a fresh-eyes critic that scores screenshots until 9/10, then subtract, check
+  for AI tells and rewrite the copy by hand. Judge them against the success signals, not just looks. Pick
   one or a mix, and note why in `journal.md`. When the chosen variant becomes the real app, list
   the behaviours it brings along (e.g. "you can only edit at the end") as decisions for the owner.
   *(Cagan: prototypes over documents.)*

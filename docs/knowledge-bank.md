@@ -381,6 +381,20 @@ the UK they can count as nudge techniques, which the Children's Code rules out. 
 Inkling (05): ideas that "came back" instead of a streak. From: the ICO Age Appropriate Design
 Code; Finch and How We Feel as apps young people keep.
 
+#### The Double Diamond
+A design process in two diamonds: first widen (discover many possibilities), then narrow (define
+one direction), then widen again (develop options) and narrow (deliver one). The point is to
+diverge on purpose before converging, instead of polishing the first idea. Where we met it: the
+`design-session` skill (06 Folio): Discover, Define, Deliver. From: the UK Design Council (2004);
+applied to AI design by Anshu Chimala (Lenny's Newsletter, 2026).
+
+#### AI tells and hand-written copy
+Every model overuses certain patterns (purple gradients, glows, cards in cards, eyebrow labels,
+"unlock" and "seamless"), and once users notice them, a design reads as AI-made. Look for them
+while refining and try alternatives, rather than banning them up front. Treat AI-written copy as
+lorem ipsum: a human rewrites every line in one voice, and it usually gets shorter. Where we met
+it: `design-session`, `tells.md` (06 Folio). From: Anshu Chimala (Lenny's Newsletter, 2026).
+
 ### Accessibility
 
 #### Contrast ratio
@@ -466,6 +480,12 @@ stop). Constant or travelling motion (a progress bar, a wave of light) uses **li
 
 **Q:** Which attribute keeps right-to-left user text (like Arabic) displaying correctly?
 **A:** `dir="auto"` on the input and on elements that show user text.
+
+**Q:** What are the Double Diamond's four moves?
+**A:** Diverge to discover, converge to define, diverge to develop options, converge to deliver one.
+
+**Q:** Why review a design for "AI tells" rather than ban them in the prompt?
+**A:** None is wrong on its own, and banning them up front makes the model overthink and invent stranger patterns; check and try alternatives instead.
 
 ## Technology
 
@@ -640,6 +660,21 @@ the core failure: people say ChatGPT "just agrees with me". Design against it: o
 helps the user step back, a named idea, no advice unless asked. Where we met it: Inkling (05).
 From: OpenAI's 2025 rollback of an over-agreeable GPT-4o update.
 
+#### Separate the builder from the critic
+A model judges its own work poorly: it knows what it meant, so it sees that instead of what's
+there. Give the judging to a separate agent with a fresh context and only the output (a
+screenshot), a fixed prompt and a score, and keep the stopping bar out of its prompt. Set a
+stopping rule (a score, or stop when it plateaus) so the loop doesn't burn tokens. Where we met
+it: the `design-critic` subagent (06 Folio): 6/10 on its first screen, with six specific gaps.
+From: Anshu Chimala (Lenny's Newsletter, 2026); the same idea as generator–evaluator loops and
+LLM-as-judge.
+
+#### Seed strings for real variety
+Asking a model to "be random" or "make it unique" doesn't work: it still picks the likely
+answer. Give it real randomness instead, such as a random string from a script, and have it
+derive choices (colours, layout, type) from patterns in the string. Where we met it:
+`design-session`'s Discover step. From: Sakana AI's "String Seed of Thought".
+
 ### Evals
 
 #### What an eval is
@@ -702,6 +737,15 @@ Where we met it: Folio (06), step 2 of the ladder.
 
 **Q:** Why build a popularity baseline first?
 **A:** It's the bar to beat; a clever model that can't beat "most popular" isn't working.
+
+**Q:** Why should a separate agent critique a design, seeing only a screenshot?
+**A:** The builder knows what it meant and judges that; a fresh critic judges only what's on screen.
+
+**Q:** Why keep the stopping score out of the critic's prompt?
+**A:** So it scores honestly instead of aiming at the bar.
+
+**Q:** Why do seed strings work when "be random" doesn't?
+**A:** A model can't produce randomness on request; a real random input gives it something to derive different choices from.
 
 ## Communication and influence
 

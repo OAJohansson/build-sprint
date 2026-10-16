@@ -146,7 +146,7 @@ Day 1 (the app). The recommender steps get their own requirements on the day the
 | 8 | Search tab: browse genre chips (tuned Open Library queries, most-read first) and the Booker winners; books already on a shelf say so instead of offering "Want to read" | Memoir chip → *When Breath Becomes Air* marked Read; no other "Piranesi" marked as saved |
 | 9 | Want to read filters by genre: chips from Open Library subjects mapped to about 10 shelf genres, books without one in "No genre yet" | Classics → *Dracula*, *East of Eden*; counts add up, with a book able to sit in several genres |
 | 10 | Read can be sorted by date read (months) or highest rated (star groups, newest first within each) | Highest rated → 5 stars first; group counts match the ratings |
-| 7 | Data stays on the device (localStorage); only book searches and cover requests leave it | No personal data in requests |
+| 7 | Reading data stays on the device (localStorage); book lookups go through Folio's server routes, which hold the API keys and cache (decision 0014) | No personal data in requests; no key visible in the browser |
 
 **No-gos:** community and other people's reviews, accounts and sync, word lookup and notes (v2),
 reading progress, stats and charts, social sharing, training or fine-tuning a model.

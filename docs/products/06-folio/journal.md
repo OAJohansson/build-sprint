@@ -236,3 +236,9 @@ What happened, what was decided and why. Newest last.
   covers), and NYT or Wikidata cover lists and prizes. Keys stay on a server route, which also
   caches. Decide between Hardcover and Google Books with a bake-off on the owner's 350 books.
   ISBNdb isn't worth paying for: more records, but not the data Folio needs.
+- **Decision (owner): build on all the free sources** (Open Library, Hardcover, Google Books,
+  NYT, Wikidata) behind one swappable layer, with keys on server routes that also cache.
+  Decision 0014. This gives Folio a small backend, needed to keep keys secret; the reading data
+  stays in localStorage. `.env.example` lists the three keys with where to get each. Owner
+  creates the keys (only they can); design carries on meanwhile, and the bake-off runs once the
+  keys are in.

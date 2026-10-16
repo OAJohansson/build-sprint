@@ -78,7 +78,11 @@ export async function POST(request: Request) {
     });
 
     await g.store.save([...changed.values()]);
-    return Response.json({ added, matched: found.filter(Boolean).length, total: rows.length });
+    // Every row is accounted for: added as a new book, or merged into one already there. Books
+    // Open Library didn't recognise are still added (no cover or genre) and named, so nothing
+    // goes missing silently (owner, 16 Oct).
+    const unmatched = rows.filter((_, i) => !found[i]).map((r) => ({ title: r.title, author: r.author }));
+    return Response.json({ added, merged: rows.length - added, total: rows.length, unmatched });
   } catch (error) {
     return serverError(error);
   }

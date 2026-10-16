@@ -32,3 +32,6 @@
 | Want to read: covers only, title on tap (critic, Letterboxd's poster grid) | Owner wants readable titles for now | Review after ship |
 | Owl and name on Home only; Search and Shelf start with their own content (critic) | Saves about 50px per screen | Review after ship |
 | Read: lighter month headings (critic: heavier than book titles) | Owner asked for more defined headings; revisit with real use | Review after ship |
+| **Automated import check:** a test that imports a fixture export and checks that books + merges = rows, merges are real duplicates and unrecognised books are reported | The owner's rule: once others use Folio, nobody may lose a book on import (feedback 2). Fits sprint to-do #3 (a regression test) | Before anyone else uses Folio |
+| **Fix a match:** for a book Open Library didn't recognise, search and link the right book (or another edition) to get its cover and genres | 15 of my books are unmatched (translations, a boxed set, a typo); a looser automatic match picks the wrong books (feedback 3) | Next |
+| Try Google Books and Hardcover for unmatched books in the data test | Translations and new books may be in other catalogues | With the keys |

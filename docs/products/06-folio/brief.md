@@ -87,6 +87,7 @@ recommender suggested it.
 | The shelf is scannable | User test: from the shelf, say what I thought of three books | ≤ 10 s, no taps |
 | Guardrail: real books only | Every recommendation exists in Open Library and isn't already on my shelf | 0 failures |
 | Guardrail: exact ratings | Imported ratings and dates match the CSV | Exact |
+| Guardrail: no book lost on import | Rows in the export = books added + duplicates merged; unrecognised books named on screen; every merge a real duplicate | Exact, every import (owner, 16 Oct) |
 
 ## MVP and stop line
 

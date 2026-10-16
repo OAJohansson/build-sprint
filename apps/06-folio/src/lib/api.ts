@@ -35,7 +35,10 @@ export const api = (code: string) => ({
     call<{ book: Book }>(code, `/api/books?id=${encodeURIComponent(id)}`, { method: "PUT", body: JSON.stringify(input) }).then((r) => r.book),
   remove: (id: string) => call<{ ok: true }>(code, `/api/books?id=${encodeURIComponent(id)}`, { method: "DELETE" }),
   importRows: (rows: ImportRow[]) =>
-    call<{ added: number; matched: number; total: number }>(code, "/api/import", { method: "POST", body: JSON.stringify({ rows }) }),
+    call<{ added: number; merged: number; total: number; unmatched: { title: string; author: string }[] }>(code, "/api/import", {
+      method: "POST",
+      body: JSON.stringify({ rows }),
+    }),
   search: (q: string) => call<{ results: Found[] }>(code, `/api/search?q=${encodeURIComponent(q)}`).then((r) => r.results),
   genre: (label: string) => call<{ results: Found[] }>(code, `/api/search?genre=${encodeURIComponent(label)}`).then((r) => r.results),
   home: () => call<{ popular: Found[]; newReleases: Found[] }>(code, "/api/home"),

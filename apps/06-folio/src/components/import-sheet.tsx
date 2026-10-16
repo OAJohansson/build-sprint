@@ -12,7 +12,10 @@ const BATCH = 25;
 // everything as a file.
 export function ImportSheet({ api, books, onDone, onClose }: { api: Api; books: Book[]; onDone: () => void; onClose: () => void }) {
   const [state, setState] = useState<
-    { kind: "idle" } | { kind: "running"; done: number; total: number } | { kind: "done"; added: number; total: number; matched: number } | { kind: "error"; message: string }
+    | { kind: "idle" }
+    | { kind: "running"; done: number; total: number }
+    | { kind: "done"; added: number; merged: number; total: number; unmatched: { title: string; author: string }[] }
+    | { kind: "error"; message: string }
   >({ kind: "idle" });
 
   const run = async (file: File) => {
@@ -20,14 +23,16 @@ export function ImportSheet({ api, books, onDone, onClose }: { api: Api; books: 
       const rows = fromGoodreads(await file.text());
       if (!rows.length) return setState({ kind: "error", message: "No read or want-to-read books in that file." });
       let added = 0;
-      let matched = 0;
+      let merged = 0;
+      const unmatched: { title: string; author: string }[] = [];
       for (let i = 0; i < rows.length; i += BATCH) {
         setState({ kind: "running", done: i, total: rows.length });
         const r = await api.importRows(rows.slice(i, i + BATCH));
         added += r.added;
-        matched += r.matched;
+        merged += r.merged;
+        unmatched.push(...r.unmatched);
       }
-      setState({ kind: "done", added, total: rows.length, matched });
+      setState({ kind: "done", added, merged, total: rows.length, unmatched });
       onDone();
     } catch (e) {
       setState({ kind: "error", message: e instanceof Error ? e.message : "The import stopped." });
@@ -72,11 +77,26 @@ export function ImportSheet({ api, books, onDone, onClose }: { api: Api; books: 
             </label>
           )}
           {state.kind === "done" && (
-            <p className="mt-3 text-[15px]" aria-live="polite">
-              {state.added ? `Added ${state.added} books` : "Nothing new"}
-              {state.total - state.added > 0 ? `; ${state.total - state.added} were already on your shelves.` : "."}
-              {state.matched < state.total ? ` ${state.total - state.matched} not found on Open Library (no cover or genre).` : ""}
-            </p>
+            <div className="mt-3 space-y-2 text-[15px] leading-relaxed" aria-live="polite">
+              <p>
+                All {state.total} books from the file are on your shelves
+                {state.merged > 0 ? ` (${state.added} new; ${state.merged} were duplicates or already here, merged into one).` : "."}
+              </p>
+              {state.unmatched.length > 0 && (
+                <details>
+                  <summary className="cursor-pointer text-[var(--f-muted)]">
+                    {state.unmatched.length} weren&apos;t recognised by Open Library, so they have no cover or genre yet
+                  </summary>
+                  <ul className="mt-2 space-y-1 text-[14px] text-[var(--f-muted)]">
+                    {state.unmatched.map((b, i) => (
+                      <li key={i}>
+                        {b.title} <span className="text-[var(--f-faint)]">· {b.author}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+            </div>
           )}
           {state.kind === "error" && (
             <p role="alert" className="mt-3 text-[15px] text-red-300">

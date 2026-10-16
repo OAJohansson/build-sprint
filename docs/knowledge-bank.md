@@ -604,6 +604,13 @@ up front, fall back to popularity, or use content features (Spotify's audio mode
 one has played yet). Where we met it: Folio (06), solved for the owner by importing a Goodreads
 history.
 
+#### Precision vs recall in matching
+When matching records (an imported book to a catalogue entry), a looser rule finds more matches
+(recall) but more of them are wrong (precision). Which error is worse depends on what a match
+does: when matches merge records, a wrong match destroys data, so prefer precision and let a
+person fix the leftovers. Where we met it: Folio (06): a broader search "matched" *A Corruption of
+Blood* to *Imitation of Christ*; we kept strict matching and listed the 15 unmatched books.
+
 ### Quiz
 
 **Q:** What is a hydration mismatch?
@@ -641,6 +648,9 @@ history.
 
 **Q:** What are the three stages of a production recommender?
 **A:** Retrieval (narrow to a few hundred candidates, fast), ranking (score them with a heavier model), re-ranking (rules like variety and nothing already seen).
+
+**Q:** When should a matching rule favour precision over recall?
+**A:** When a wrong match is costly, e.g. it merges two records into one; leave the uncertain ones for a person to fix.
 
 **Q:** What is an embedding, in one sentence?
 **A:** A list of numbers representing a thing, placed so that similar things are close together.

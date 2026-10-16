@@ -316,3 +316,19 @@ What happened, what was decided and why. Newest last.
 - **Shortcuts left in the code** (`grep -r "shortcut:" apps/06-folio`): Folio's picks are still
   the hand-picked sample, Open Library is the only source, the genre rules miss some books, the
   Booker list is static, and the trending list's English filter is rough.
+
+## 16 Oct: the owner's first real import
+
+- **Owner imported their export into the live data:** "Added 349 books; 3 were already on your
+  shelves. 15 not found on Open Library." They read it as 15 books missing and asked which.
+- **Checked against the real table:** nothing missing. 352 rows became 349 books (three
+  duplicate editions merged); the 15 are on the shelves without cover or genre: Swedish, Dutch and
+  Indonesian editions, a John Boyne boxed set, "Farenheit 451" (typo in Goodreads) and a few new
+  books.
+- **Tried a looser search:** it would match most of the 15, but to the wrong books, and a wrong
+  match can merge two different books, which really would lose one. Kept strict matching
+  (precision over recall); a "fix a match" feature goes to the backlog.
+- **Fixed the message:** it now says every book from the file is on the shelves, explains
+  merges, and lists the unrecognised books by name.
+- **Owner's rule for testing:** no one may lose a book on import. Added as a brief guardrail and
+  a test-plan trust check; an automated test is in the backlog. Feedback 1–3 logged.

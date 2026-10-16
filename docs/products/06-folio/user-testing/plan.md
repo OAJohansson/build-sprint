@@ -54,6 +54,9 @@ Written as the persona's real moments. Each has a success bar.
 
 - After S1 and S2, compare saved ratings, dates and review text with the CSV or what was typed,
   word for word.
+- **No book lost on import** (owner, 16 Oct): count the export's read and to-read rows; shelves
+  + merged duplicates must equal that number exactly, every merge must be a real duplicate (same
+  book, another edition), and every book Open Library didn't recognise must be named on screen.
 - From day 2: ask "Where do you think the recommendations come from?", and check the answer
   matches what the app says.
 

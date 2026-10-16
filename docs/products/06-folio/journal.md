@@ -289,3 +289,30 @@ What happened, what was decided and why. Newest last.
   shelves, or spend the book-service quotas (Hardcover's token is the owner's account). Claude
   will come later anyway: the hybrid recommender's re-ranking and explanations, the LLM judge,
   and possibly sorting the unsorted genres.
+
+## 16 Oct: building the real app
+
+- **Built from the prototype** (prototype surface deleted):
+  - **Screens:** Home, Search and Shelf (Read diary with sort, Want to read with the genre
+    filter), a book sheet for adding, logging as read (half stars, one-liner, optional longer
+    review, finish date), editing and removing, an import and backup sheet, and the access-code
+    screen.
+  - **Server:** routes for books, the batch import, search and Home's lists. Keys and the
+    database stay on the server (decisions 0014, 0015); Open Library is the only source so far.
+- **Unit tests (16, Vitest):** Goodreads CSV parsing, dates (month end, year end, just after
+  midnight, empty export), ratings (0 = unrated, halves) and the merge rule.
+- **Tested against an in-memory store,** not the owner's Supabase. A separate launch config
+  blanks the Supabase values; Claude checked the real table stayed empty before testing.
+- **Full import of the real export:** 352 rows became 349 books in about 2 minutes:
+  - **Merges:** *Mindset* (read, 3.5, by the general merge rule, so the lab's corrections file
+    isn't needed in the app), *Fellowship of the Ring* (read), and two *Odyssey* editions.
+  - **Ratings** match the export (16 / 32 / 1 / 16); covers 312/349 (89%, target 80%); genres
+    271/349.
+  - **Importing again adds 0.**
+- **Browser flow at phone size:** a wrong code is refused with a message; Home loads real lists
+  (and *Giovanni's Room* drops out of the picks because it's on my list); search finds *Tomorrow,
+  and Tomorrow, and Tomorrow* first; Want to read takes one tap; logging it read with 4½ stars and
+  a line moves it to Read without a duplicate, saved word for word.
+- **Shortcuts left in the code** (`grep -r "shortcut:" apps/06-folio`): Folio's picks are still
+  the hand-picked sample, Open Library is the only source, the genre rules miss some books, the
+  Booker list is static, and the trending list's English filter is rough.

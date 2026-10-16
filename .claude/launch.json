@@ -47,6 +47,23 @@
         "3006"
       ],
       "port": 3006
+    },
+    {
+      "name": "06-folio-test",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "-F",
+        "06-folio",
+        "dev",
+        "--port",
+        "3016"
+      ],
+      "port": 3016,
+      "env": {
+        "SUPABASE_URL": "",
+        "SUPABASE_SECRET_KEY": "",
+        "ACCESS_CODE": "test-code"
+      }
     }
   ]
 }

@@ -7,7 +7,7 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   title: "Folio",
-  description: "Day 6 of the 20-day build sprint.",
+  description: "My reading: shelves, short reviews and what to read next.",
 };
 
 // Phone baseline (mobile-native skill): content can sit under the notch (pad with
@@ -18,10 +18,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   interactiveWidget: "resizes-content",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
-  ],
+  // Folio is dark only; the status bar matches --f-bg.
+  themeColor: "#14110f",
 };
 
 export default function RootLayout({

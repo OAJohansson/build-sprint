@@ -68,12 +68,26 @@
   }
 }
 
+:root {
+  /* Folio's palette: warm ink, off-white type, one amber accent for stars. Dark only, like
+     Letterboxd (prototype rounds, 16 Oct). */
+  --f-bg: oklch(0.17 0.006 60);
+  --f-raised: oklch(0.215 0.007 60);
+  --f-line: oklch(1 0 0 / 0.08);
+  --f-text: oklch(0.95 0.01 85);
+  --f-muted: oklch(0.7 0.012 80);
+  --f-faint: oklch(0.55 0.01 80);
+  --f-star: oklch(0.82 0.13 78);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    background: var(--f-bg);
+    color: var(--f-text);
+    color-scheme: dark;
   }
 
   /* Phone baseline (mobile-native skill). Tailwind 4's hover: already only applies on devices

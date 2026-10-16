@@ -1,28 +1,27 @@
 "use client";
 
-import { useState } from "react";
-import { books, type Book } from "./data";
+import type { Book } from "@/lib/types";
 import { Cover, Stars } from "./shared";
 
 export type ReadSort = "date" | "rating";
 
 const starLabel = (r: number) => `${Math.floor(r)}${r % 1 ? "½" : ""} ${r === 1 ? "star" : "stars"}`;
+const at = (iso: string) => new Date(iso + "T12:00:00");
 
-// Read: the Diary. By default grouped by month; sorted by rating it groups by stars, highest
-// first, newest first within each. Each row shows the title in full, author and stars, and up to
-// two lines of the one-liner. Tap a row to open the full review in place.
-export function Read({ sort }: { sort: ReadSort }) {
-  const [open, setOpen] = useState<string | null>(null);
-  const list = books.filter((b) => b.shelf === "read");
+// Read: the diary. Grouped by month by default; sorted by rating, grouped by stars (highest
+// first, newest first within each). Each row: the day, cover, title, author and stars, and up to
+// two lines of the one-liner. Tap a row for the book: full review, edit, remove.
+export function Read({ books, sort, onOpen }: { books: Book[]; sort: ReadSort; onOpen: (b: Book) => void }) {
+  const byDate = (a: Book, b: Book) => (b.readOn ?? b.addedOn).localeCompare(a.readOn ?? a.addedOn);
+  const sorted = [...books].sort(sort === "rating" ? (a, b) => (b.rating ?? 0) - (a.rating ?? 0) || byDate(a, b) : byDate);
   const groups: { key: string; title: string; sub?: string; items: Book[] }[] = [];
-  const sorted = sort === "rating" ? [...list].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0) || b.date.localeCompare(a.date)) : list;
   for (const b of sorted) {
     let key: string, title: string, sub: string | undefined;
     if (sort === "rating") {
       key = String(b.rating ?? 0);
       title = b.rating ? starLabel(b.rating) : "Not rated";
     } else {
-      const d = new Date(b.date + "T12:00:00");
+      const d = at(b.readOn ?? b.addedOn);
       title = d.toLocaleDateString("en-GB", { month: "long" });
       sub = String(d.getFullYear());
       key = title + sub;
@@ -42,7 +41,7 @@ export function Read({ sort }: { sort: ReadSort }) {
           </h2>
           <ul>
             {g.items.map((b) => (
-              <Row key={b.id} book={b} byRating={sort === "rating"} open={open === b.id} onToggle={() => setOpen(open === b.id ? null : b.id)} />
+              <Row key={b.id} book={b} byRating={sort === "rating"} onOpen={() => onOpen(b)} />
             ))}
           </ul>
         </section>
@@ -51,23 +50,24 @@ export function Read({ sort }: { sort: ReadSort }) {
   );
 }
 
-function Row({ book, byRating, open, onToggle }: { book: Book; byRating: boolean; open: boolean; onToggle: () => void }) {
-  const d = new Date(book.date + "T12:00:00");
+function Row({ book, byRating, onOpen }: { book: Book; byRating: boolean; onOpen: () => void }) {
+  const d = at(book.readOn ?? book.addedOn);
   return (
     <li className="border-b border-[var(--f-line)] last:border-b-0">
-      <button
-        onClick={onToggle}
-        aria-expanded={book.review ? open : undefined}
-        className="flex w-full gap-3 px-4 py-3.5 text-left transition-colors duration-150 active:bg-white/[0.03]"
-      >
-        {/* Grouped by month, the day is enough; grouped by stars, show when it was read. */}
-        <span className={`shrink-0 pt-[3px] text-right text-[13px] tabular-nums leading-tight text-[var(--f-muted)] ${byRating ? "w-8" : "w-6"}`}>
+      <button onClick={onOpen} className="flex w-full gap-3 px-4 py-3.5 text-left transition-colors duration-150 active:bg-white/[0.03]">
+        {/* Grouped by month, the day is enough; grouped by stars, show when it was read. An
+            estimated date (only "date added" in the Goodreads export) shows no day. */}
+        <span
+          className={`shrink-0 pt-[3px] text-right text-[13px] leading-tight tabular-nums text-[var(--f-muted)] ${byRating ? "w-8" : "w-6"}`}
+          title={book.readOnEstimated ? "Date read unknown; this is when it was added" : undefined}
+        >
           {byRating ? (
             <>
               {d.toLocaleDateString("en-GB", { month: "short" })}
-              <br />
-              ’{String(d.getFullYear()).slice(2)}
+              <br />’{String(d.getFullYear()).slice(2)}
             </>
+          ) : book.readOnEstimated ? (
+            <span className="text-[var(--f-faint)]">·</span>
           ) : (
             d.getDate()
           )}
@@ -79,12 +79,7 @@ function Row({ book, byRating, open, onToggle }: { book: Book; byRating: boolean
             <span className="truncate">{book.author}</span>
             <Stars rating={book.rating} className="ml-auto shrink-0 text-[12px]" />
           </span>
-          {book.line && (
-            <span className={`mt-1.5 text-[14px] leading-snug ${open ? "block" : "line-clamp-2"}`}>{book.line}</span>
-          )}
-          {open && book.review && (
-            <span className="mt-2 block text-[14px] leading-relaxed text-[var(--f-muted)]">{book.review}</span>
-          )}
+          {book.line && <span className="mt-1.5 line-clamp-2 text-[14px] leading-snug">{book.line}</span>}
         </span>
       </button>
     </li>

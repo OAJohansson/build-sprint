@@ -332,3 +332,8 @@ What happened, what was decided and why. Newest last.
   merges, and lists the unrecognised books by name.
 - **Owner's rule for testing:** no one may lose a book on import. Added as a brief guardrail and
   a test-plan trust check; an automated test is in the backlog. Feedback 1–3 logged.
+- **Owner asked whether any CSV export would work.** Not today: the import requires Goodreads'
+  column names and refuses other files. Supporting others means one small adapter per known
+  format (StoryGraph, LibraryThing…) mapping to the same import rows, with its own tests for
+  dates, rating scales and shelf words; a generic "match your columns" screen comes after. It
+  matters for other users switching to Folio, not for the owner's MVP, so it goes to the backlog.

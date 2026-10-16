@@ -11,3 +11,7 @@
 | Recommendations in the app, live (an API route), instead of a JSON file the lab exports | Recs refresh as I log books, without running the notebook | After the ladder |
 | Online evaluation: track which recommendations I save, start and finish | Offline metrics often disagree with real behaviour | After the ladder |
 | Stats: books a year, ratings spread | Nice to look back on; not a job today | Later |
+| Browse Nobel laureates (literature): our own list of authors, then their best-known books | Prize lists are a trusted way to find serious books; Open Library's Nobel tag returns books *about* the prize | Later (owner, 16 Oct) |
+| Browse highest rated, per genre | Open Library ratings are thin; would need a minimum count, or another source | Maybe |
+| Browse by release year | Home's New releases covers the main case | Maybe |
+| Prefer English-edition covers (e.g. *Prophet Song* shows the German one) | Covers are the design's main visual | With the real import |

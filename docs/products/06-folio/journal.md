@@ -137,3 +137,35 @@ What happened, what was decided and why. Newest last.
   - **Cover quality varies:** one library scan shows a "Withdrawn from collection" sticker.
 - **Open questions for the owner:** where adding a book (search) lives with only two tabs; Home
   order (personal picks first or last); star colour (the critic found gold too loud).
+
+## 16 Oct: a Search tab with browsing
+
+- **Owner:** Search becomes the third tab, and asked whether Open Library can browse by genre,
+  prizes (Nobel, Booker), release date and highest rated.
+- **Tested each against the API:**
+  - **Genre:** works, but subjects are reader-tagged and messy: "science fiction" returns
+    *Harry Potter* first, and "memoir" alone returns *Atomic Habits*. Each chip is a hand-tuned
+    query.
+  - **Release year:** works, sorted by reading-log count; sorting by "new" returns German
+    textbooks.
+  - **Highest rated:** thin data. Open Library's ratings come from a small base (*Project Hail
+    Mary*: 184 ratings), so the top skews to fantasy.
+  - **Booker:** about 60 tagged books mixing winners and the shortlist, so we keep our own list
+    of winners.
+  - **Nobel:** the tag returns books *about* the prize, and the Nobel goes to authors, not
+    books.
+- **Coaching:** browsing is discovery, the same job as recommendations, and new scope past the
+  stop line, so it was cut to the smallest useful set.
+- **Owner's MVP set:** title and author search, genre chips (literary fiction, memoir,
+  psychology and self, business and product, plus "Queer stories" suggested from the shelf's
+  strongest thread), and the **Booker winners** (60 books, 1969–2025, ours, matched to Open
+  Library: 58 with covers). Nobel laureates go to the backlog; highest rated and release year
+  aren't in.
+- **Built in the prototype:** search with a 300 ms debounce and loading, empty and error
+  states; genre lists; a Booker row plus the full list; "Want to read" on each result, and
+  "Read" or "On your list" for books already on the shelf. Brief check: "piranesi" returns
+  Susanna Clarke's first.
+- **Bug found while testing:** shelf matching on title alone marked every "Piranesi" as on the
+  list. Fixed with title plus author surname for now; the real app matches Open Library work ids.
+- **Cover quirk:** *Prophet Song* shows the German edition's cover. Prefer English-edition
+  covers in the real import (backlog).

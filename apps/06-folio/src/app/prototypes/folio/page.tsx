@@ -1,19 +1,20 @@
 "use client";
 
-import { BookOpen, Home as HomeIcon } from "lucide-react";
+import { BookOpen, Home as HomeIcon, Search as SearchIcon } from "lucide-react";
 import { useState } from "react";
 import { books } from "./data";
 import { Home } from "./home";
 import { Mascot } from "./mascot";
 import { Read } from "./read";
+import { Search } from "./search";
 import { folio, SegmentTabs } from "./shared";
 import { Want } from "./want";
 
-// Prototype round 2 (16 Oct): the owner's picks combined. Home with three browse rows, and a
-// Shelf with Read as the Diary and Want to read as a shelf of covers. Two tabs, a mascot by the
-// name. Nothing outside /prototypes imports from here.
+// Prototype round 2 (16 Oct): the owner's picks combined. Home with three browse rows, Search
+// (title or author, genres, Booker winners), and a Shelf with Read as the Diary and Want to read
+// as a shelf of covers. A mascot by the name. Nothing outside /prototypes imports from here.
 export default function FolioPrototype() {
-  const [tab, setTab] = useState<"home" | "shelf">("home");
+  const [tab, setTab] = useState<"home" | "search" | "shelf">("home");
   const [shelf, setShelf] = useState<"read" | "want">("read");
   const counts = { read: books.filter((b) => b.shelf === "read").length, want: books.filter((b) => b.shelf === "want").length };
 
@@ -27,6 +28,8 @@ export default function FolioPrototype() {
 
         {tab === "home" ? (
           <Home />
+        ) : tab === "search" ? (
+          <Search />
         ) : (
           <>
             <div className="px-4 pb-1">
@@ -52,6 +55,7 @@ export default function FolioPrototype() {
           {(
             [
               { id: "home", label: "Home", Icon: HomeIcon },
+              { id: "search", label: "Search", Icon: SearchIcon },
               { id: "shelf", label: "Shelf", Icon: BookOpen },
             ] as const
           ).map(({ id, label, Icon }) => (

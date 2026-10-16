@@ -208,3 +208,31 @@ What happened, what was decided and why. Newest last.
   become star groups (5 stars 16, 4 stars 32, 3½ stars 1, 3 stars 16, matching the export) and
   each row shows month and year instead of the day. The prototype now holds all 65 read books.
   Both sheets share one component.
+
+## 16 Oct: which book data service?
+
+- **Owner:** is Open Library the best base, or would Google Books (or another) give more books
+  and reviews? Wants a solid base, as they expect to use Folio a lot. Asked for web research on
+  the biggest and richest databases, free or paid, before deciding.
+- **Findings:**
+  - Goodreads closed its API in 2020; StoryGraph has none.
+  - **Free:**
+    - **Open Library:** 20M+ records, no key, subjects, trending, reading-log counts; messy
+      tags, thin ratings, slow covers.
+    - **Google Books:** tens of millions of titles; descriptions, categories, good covers,
+      average rating and count; needs a key, about 1,000 requests a day.
+    - **Hardcover:** a modern Goodreads alternative with a GraphQL API: reader ratings,
+      genre tags ordered by votes, read counts and reviews. Free, but in beta, with a personal
+      token, 60 requests a minute and tokens reset every year.
+    - **NYT Books:** weekly bestseller lists and review links; free key, 500–1,000 requests a
+      day, non-commercial.
+    - **Wikidata:** prize winners (Booker, Nobel) as open data.
+  - **Paid:** ISBNdb (110M+ records, from about $15 a month, metadata only, no ratings or
+    reviews); Nielsen BookData and OCLC WorldCat are enterprise or library deals.
+  - **Nobody offers Goodreads-style public reviews through an API;** Hardcover comes closest.
+- **Recommendation for the owner to decide:** combine free sources behind one swappable layer.
+  Open Library stays the free base, Hardcover is tested as the rich source (ratings, genres,
+  popularity, the best signal for recommendations), Google Books fills gaps (descriptions,
+  covers), and NYT or Wikidata cover lists and prizes. Keys stay on a server route, which also
+  caches. Decide between Hardcover and Google Books with a bake-off on the owner's 350 books.
+  ISBNdb isn't worth paying for: more records, but not the data Folio needs.

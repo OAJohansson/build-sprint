@@ -19,6 +19,19 @@ The apps use Next.js 16, which has breaking changes from older versions (async `
   it does, record why in the product write-up.
 - Keep each app deployable on its own from `apps/NN-slug` (Vercel Root Directory).
 
+## Code habits (decision 0011)
+
+- End each coding reply with one line: what you skipped or didn't check, and any risk the owner
+  should know. Leave it out when there is nothing real to say.
+- Mark a known shortcut in the code as `// shortcut: <the limit>, <when to upgrade>`, so
+  `grep -r "shortcut:" apps/NN-slug` lists a product's weak spots.
+- Bug fix: before editing, find every caller of the code you touch and fix the root cause once in
+  the shared code. If the root cause is bigger than the bug, say so and let the owner pick patch
+  or proper fix.
+- Date, time and streak logic lives in a plain function in `src/lib` with a small unit test next
+  to it (`*.test.ts`, Vitest; fix "now" with `vi.setSystemTime`): one normal case and the edges
+  (midnight, month end, empty history). Run `pnpm -F NN-slug test`. No unit tests for other code.
+
 ## Coaching
 
 The owner's goals are in the playbook ("Why I'm doing this"): build good products with AI, learn
@@ -74,5 +87,5 @@ priorities are on the Focus page of the Job Prep Hub (https://claude.ai/artifact
 read it with the Artifact tool) and roles are in the Job Tracker
 (https://claude.ai/artifact/UAcFjtMc6G5z8edskbUqeo). When the owner asks "where are we?" or wants
 priorities across everything, read Focus first and rank its dated items (interviews, deadlines)
-alongside the sprint work. Job Coach keeps the **Job hunt** section of `docs/todo.md` current;
-don't rewrite it from here unless the owner asks, and never copy job detail into other docs.
+alongside the sprint work. `docs/todo.md` only links to Focus for the
+job hunt (Focus is the single source); never copy job items or dates back into it or other docs.

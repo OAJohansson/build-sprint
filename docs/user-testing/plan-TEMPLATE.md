@@ -18,6 +18,13 @@ Written as the persona's real moments. Each has a success bar.
 - **Task:** [what they try to do, in their words]
 - **Success:** [outcome] in ≤ [time] / ≤ [taps], without help.
 
+### S? · Time passes (04 Mallow)
+- **Moment:** the same person later: the app resumed from the background without a reload, the
+  next day after midnight, and after a key date (an appointment, a deadline) has passed or moved.
+- **Task:** carry on as normal.
+- **Success:** anything time-based (reminders, "since last…", countdowns, questions about earlier
+  actions) is right without a reload; nothing silently resets.
+
 ## Value questions
 
 - Which features would this persona use weekly? Which never?

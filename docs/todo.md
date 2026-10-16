@@ -5,12 +5,7 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 ## Now
 
-**Job hunt** (kept current by Job Coach, last updated Wed 14 Oct. Detail and dates in [Focus](https://claude.ai/artifact/EBNLSbWYvYyf7moz26PCuV#focus))
-- [ ] UKHSA Product Owner: submit by Tue 20 Oct (closes that day) *(me)*
-- [ ] CharityJob first chat moved: waiting on Francesco to confirm Mon 19 or Tue 20, morning UK
-- [ ] Montu UK and Therabody: waiting on Kiren and Jasmine to book a call (offered Thu 15 or Fri 16)
-- [ ] Version 1: waiting on Malti to book the recruiter screen (offered Fri 16, Mon 19 or Tue 20, mornings UK)
-- [ ] Keep applying: the 8am session each day *(me)*
+**Job hunt:** see [Focus](https://claude.ai/artifact/EBNLSbWYvYyf7moz26PCuV#focus) for interviews, deadlines and what's next. Job Coach keeps it current each morning.
 
 ## Next
 
@@ -18,7 +13,7 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 - [ ] Rehearse the Inkling demo script (`docs/product/polish-sprint/demo-script.md` in kids-app) before the Enthuse interview *(me)*
 - [ ] Scribble check on 17 Oct: pieces written that week (goal 4) and any abandoned *(me)*
 - [ ] One place to stay on track (#10)
-- [ ] Build 04 Mallow (cannabis symptom tracker): brief done, prototype next
+- [ ] Mallow follow-up: my own 5-minute phone review at mallow-omega.vercel.app, then one real patient (or someone with chronic pain) for a week; log in its feedback *(me)*
 
 ## Later
 
@@ -30,6 +25,8 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 - [ ] Maybe: Playwright smoke test (#3), Anthropic's `webapp-testing` skill (#4)
 
 ## Done
+
+- [x] Mallow shipped: mallow-omega.vercel.app (12 Oct)
 
 - [x] Inkling shipped as product 05: polish sprint, Claude API, evals 8/8 (12 Oct)
 - [x] Story bank gaps filled by Inkling's story: Ambiguity, Technical, Speed (#7, 12 Oct)

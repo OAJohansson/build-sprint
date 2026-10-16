@@ -69,6 +69,20 @@ Rules I now apply to every product (detail in the playbook).
   contrast measured 2.9:1 where the eye said fine.
 - **Never lose a piece, in layers.** Device instantly, database after a pause, and on page hide.
 
+### 04 Mallow
+
+- **Find the moment the product is for.** Not "a tracker" (they exist) but the 15-minute follow-up:
+  a one-screen summary since the last appointment is the product; logging feeds it.
+- **Link the outcome to the action.** A daily trend shows *that* things changed; one-tap relief per
+  dose shows whether the medicine did it.
+- **Borrow patterns from your own past work.** Vinehealth's "last time you mentioned…" became the
+  relief question that works without notifications.
+- **In health, words are claims.** Describe a feeling, show the user's own data, never promise a result.
+- **Let time pass in tests.** Resume without reload and a moved appointment hid two of four majors.
+- **Demo data hides missing features.** A required note field existed only in the demo; test on a
+  fresh install.
+- **Explaining a delight can kill it.** The plant works unexplained; the purpose is said plainly instead.
+
 ### 05 Inkling
 
 - **Make the existing strength visible.** The AI already named the idea in every reply; a chat
@@ -106,6 +120,11 @@ Every change to how I build, and the product that taught it.
 | 10 Oct | 03 Scribble | Four prototype rounds: three drew a literal typewriter when the owner wanted its feeling. | Playbook step 1: collect 2–3 references and what not to do before `/prototype`; a feel is evoked, not drawn. |
 | 10 Oct | 03 Scribble | Forward-only writing came along from a prototype without the owner choosing it. | Playbook step 1: when a prototype becomes the app, list the behaviours it carries as owner decisions. |
 | 10 Oct | 03 Scribble | Vercel setup (project name, domain, env vars, skip toggle) cost time every day. | `pnpm ship NN-slug` (built 12 Oct) and a `vercel.json` per app that skips unchanged builds; playbook step 3 is now one command. |
+| 12 Oct | 04 Mallow | The first deploy came after two prototype rounds, so the phone never saw the app while it was shaped. | Playbook step 1: run `pnpm ship NN-slug` on the empty starter right after `pnpm new`. |
+| 12 Oct | 04 Mallow | Two of four major findings only appeared when the tester let time pass (resume without reload, a moved appointment). | Test plan template: a "time passes" scenario (resume without reload, cross midnight, cross a key date). |
+| 12 Oct | 04 Mallow | A required check-in note existed only in the demo data; nothing caught it until break-ui. | Playbook step 3b: before testing, walk every brief requirement on a fresh install, not the demo. |
 | 12 Oct | 05 Inkling | "A few hours" became the whole app plus a provider switch, one reasonable request at a time. | Playbook step 2: re-cut on every scope widening (cut, swap or re-bet out loud) and log it in the journal. |
 | 12 Oct | 05 Inkling | Saved entries were cut short, and testers couldn't tell the demo was scripted. | Test plan template: trust checks (compare saved with typed; ask "what did you think was real?"). |
 | 12 Oct | 05 Inkling | Switching to the Claude API kept safety but broke two prompt rules, caught only by the evals. | Playbook step 2: run evals before and after any model, provider or prompt change, and record the result. |
+| 13 Oct | Before 06 | Reviewed the "ponytail" skill: Claude's judgement calls (what it skipped, shortcuts taken) stayed hidden in the code. | AGENTS.md code habits (decision 0011): a closing "skipped / risk" line, `shortcut:` labels in code, root-cause bug fixes. Skill not installed. |
+| 13 Oct | Before 06 | All our testing was user-journey testing; Mallow's time bugs only showed when the tester let time pass. | Unit tests for date, time and streak logic only: Vitest in the starter template, playbook step 2 (decision 0011); a 5-minute unit-test pick in the brief (step 1) and a retro question on whether it caught anything. |

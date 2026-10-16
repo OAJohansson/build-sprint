@@ -116,3 +116,12 @@ What happened, what was decided and why. Newest last.
 - **Owner's calls on the rest:** ask on Today when an appointment date passes (no silent
   rollover); **full editing** of doses and past days; medicine lines and comparison dates in the
   summary. All three built and verified.
+
+### Wrap-up
+- Owner too tired for the phone review; **wrapped up with the simulated test's numbers** and added
+  the own review plus one real patient as a to-do. Success check, retro (reflections marked as
+  drafts), interview story and learnings written; card set to shipped.
+- **Process changes** (made now, before the next product): ship the empty starter in the first
+  hour; a "time passes" scenario in every test plan; walk the brief on a fresh install before testing.
+- New problems added to the list while waiting for the deploy: food research while travelling, and
+  a quick, pleasant book log.

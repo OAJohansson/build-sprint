@@ -26,6 +26,8 @@ hour, not a day. Names in brackets are where each practice comes from; see
 
 - Pick a problem from [Problems to solve](ideas.md), then `pnpm new <slug> "Display Title"`. This creates
   the app, the card, the product folder (with an empty brief) and the README row.
+- **Ship the empty starter straight away** (04 Mallow): merge the scaffold and run
+  `pnpm ship NN-slug` in the first hour, so every later change is seen on a real phone.
 - **Problem.** One or two sentences: who has it, when, and what it costs them today. No features.
   *(Perri: outcomes over outputs.)*
 - **Who.** A quick persona: one specific person, not a market. Full version in
@@ -56,6 +58,12 @@ hour, not a day. Names in brackets are where each practice comes from; see
   not before it.)*
 - **Test plan.** `user-testing/plan.md` from the [template](user-testing/): one scenario per top
   job, with success bars taken from the brief.
+- **Unit-test pick (≈5 min).** Under **Unit tests** in the brief, name the 0–3 pieces of logic
+  that would hurt most if they were silently wrong, and the edges to check for each (midnight,
+  month end, empty history, a 0 or a huge number). Default to dates, times and streaks; "none" is
+  a fine answer for an app without such logic. This is practice in judging risk, not a hunt for
+  zero bugs: keep each test small, and at the retro note whether one caught anything.
+  *(Risk-based testing: test where failure is likely and costly. Decision 0011.)*
 - **Three approaches.** First collect 2–3 real references for the feel (apps, covers, photos) and
   write down what *not* to do. A feel is evoked, not drawn: no illustrating the object behind a
   theme. *(Day 3: four rounds of literal typewriters.)* Then run `/prototype` on the main screen,
@@ -101,6 +109,10 @@ discoverable with one quiet cue (a muted badge at 0) rather than a sentence expl
 - **Re-cut on every scope widening.** When a request adds anything past the stop line, name it
   before building: cut something, swap it for something, or re-bet the appetite out loud. Log the
   choice in `journal.md`. *(05 Inkling: "a few hours" quietly became the whole app.)*
+- **Date, time and streak logic has unit tests.** Keep it in a plain function in `src/lib` with a
+  `*.test.ts` beside it: a normal case plus the edges (midnight, month end, empty history), with
+  "now" fixed by `vi.setSystemTime`. `pnpm -F NN-slug test`. *(04 Mallow: time bugs only showed
+  when the tester let time pass; decision 0011.)*
 - **AI behaviour has its own tests.** Before and after any change to a model, provider or prompt,
   run the product's evals and record the result. A new model is a behaviour change. *(05 Inkling:
   the evals caught two rules the new model broke.)*
@@ -126,6 +138,8 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 
 ## 3b. Test as a user (≈30 min, once the core flow works)
 
+- **Walk the brief on a fresh install** (04 Mallow): clear the app's data and check every
+  requirement in the brief, not on the demo. Demo data hides missing features.
 - **First the checks:** run the `web-design-guidelines` audit on the changed files and `break-ui`
   on the main screens (worst-case data: long names, zero, one, huge numbers). Fix what they find.
   *(Day 2: the user test re-found a bug the audit had already caught.)*

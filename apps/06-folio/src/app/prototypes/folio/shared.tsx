@@ -48,11 +48,12 @@ export function Cover({ book, tiny = false, className = "" }: { book: CoverBook;
     >
       {failed || !url ? (
         <div
-          className={`flex h-full flex-col p-[8%] text-left ${tiny ? "items-center justify-center" : "justify-between"}`}
+          className={`flex h-full flex-col text-left ${tiny ? "p-[3px]" : "justify-between p-[8%]"}`}
           style={{ background: `oklch(0.3 0.03 ${hue(book.id)})` }}
         >
           {tiny ? (
-            <span className="text-[13px] font-medium text-white/70">{book.title[0]}</span>
+            // One placeholder style everywhere: the title in small type, scaled to the tile.
+            <span className="line-clamp-4 text-[7px] font-medium leading-[1.15] text-white/80">{book.title}</span>
           ) : (
             <>
               <span className="line-clamp-4 text-[11px] font-medium leading-tight text-white/90">{book.title}</span>

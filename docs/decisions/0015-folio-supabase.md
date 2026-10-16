@@ -32,7 +32,8 @@ plan allows two active projects, and both are in use.
 
 ## Consequences
 
-- Needs `SUPABASE_URL`, `SUPABASE_SECRET_KEY` (the same values as Scribble's) and `ACCESS_CODE`
+- Needs `SUPABASE_URL`, `SUPABASE_SECRET_KEY` (the owner reuses CrossFit and Scribble's secret
+  key, 16 Oct; a Folio-only key could be revoked on its own) and `ACCESS_CODE`
   in `.env.local` and Vercel, and the schema run once.
 - **Bigger blast radius:** three apps now share one project and one secret key. A bug or leak in
   any of them exposes all three, and they share pauses and limits. Fine for one user (decision

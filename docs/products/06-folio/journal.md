@@ -278,3 +278,14 @@ What happened, what was decided and why. Newest last.
 - **Owner asked why `.env.example` gets copied to `.env.local`:** the example is a public template
   with names only; the local file holds the real keys and git ignores it. Added to the knowledge
   bank.
+- **Setup (owner, 16 Oct):** the apps had no local keys files (they only lived in Vercel), so the
+  owner took the Supabase URL and secret key from the dashboard, chose to reuse the CrossFit and
+  Scribble secret key rather than a Folio-only one, and ran the schema. Claude checked without
+  printing values: both set, a secret key, and `folio_books` answers (empty). The book-service
+  keys are next.
+- **Owner asked whether Folio needs an access code,** since it doesn't use Claude. Claude: yes.
+  The code isn't about AI costs. Folio's server routes read and write the shelves with a secret
+  key, and the app is on a public URL, so without it anyone could read, change or delete the
+  shelves, or spend the book-service quotas (Hardcover's token is the owner's account). Claude
+  will come later anyway: the hybrid recommender's re-ranking and explanations, the LLM judge,
+  and possibly sorting the unsorted genres.

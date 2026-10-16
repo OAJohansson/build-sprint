@@ -39,7 +39,6 @@ export function Read({ sort }: { sort: ReadSort }) {
           <h2 className="sticky top-0 z-10 flex items-baseline gap-2 border-b border-[var(--f-line)] bg-[var(--f-bg)] px-4 pb-2.5 pt-5">
             <span className="text-[19px] font-semibold tracking-tight">{g.title}</span>
             {g.sub && <span className="text-[15px] text-[var(--f-faint)] tabular-nums">{g.sub}</span>}
-            <span className="ml-auto text-[13px] text-[var(--f-faint)] tabular-nums">{g.items.length}</span>
           </h2>
           <ul>
             {g.items.map((b) => (
@@ -62,7 +61,7 @@ function Row({ book, byRating, open, onToggle }: { book: Book; byRating: boolean
         className="flex w-full gap-3 px-4 py-3.5 text-left transition-colors duration-150 active:bg-white/[0.03]"
       >
         {/* Grouped by month, the day is enough; grouped by stars, show when it was read. */}
-        <span className={`shrink-0 pt-0.5 text-right text-[13px] tabular-nums leading-tight text-[var(--f-faint)] ${byRating ? "w-8" : "w-6"}`}>
+        <span className={`shrink-0 pt-[3px] text-right text-[13px] tabular-nums leading-tight text-[var(--f-muted)] ${byRating ? "w-8" : "w-6"}`}>
           {byRating ? (
             <>
               {d.toLocaleDateString("en-GB", { month: "short" })}

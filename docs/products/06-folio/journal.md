@@ -242,3 +242,17 @@ What happened, what was decided and why. Newest last.
   stays in localStorage. `.env.example` lists the three keys with where to get each. Owner
   creates the keys (only they can); design carries on meanwhile, and the bake-off runs once the
   keys are in.
+
+## 16 Oct: critic round 1 (design-session, Define)
+
+- **Score 6/10:** "a Letterboxd-style book diary whose Home and Search have drifted into a
+  generic bookstore front". Keep: the Read diary row and the restrained palette.
+- **Applied (no conflict with owner calls):** tighter spacing between Home rows; on Read, no
+  per-month count, and the day number aligned with the title in the author's colour.
+- **Held for the owner (they contradict earlier owner decisions):**
+  1. Home: lead with my own reading (latest reads), at most one discovery row.
+  2. Read: month headings are heavier than book titles; make them smaller.
+  3. Want to read: drop titles under real covers (poster-only grid, title on tap).
+  4. Search: just a search field and recent searches; Booker to Home; genres as a plain list.
+  5. The owl and name only on Home, not on every tab.
+  6. One placeholder-cover style everywhere (letter on Read, title on Want to read).

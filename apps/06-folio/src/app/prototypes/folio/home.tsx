@@ -6,7 +6,7 @@ import { Cover } from "./shared";
 // Home: three shelves to browse, in the owner's order (16 Oct).
 export function Home() {
   return (
-    <div className="space-y-9">
+    <div className="space-y-7">
       <Row title="New releases" items={newReleases} />
       <Row title="Popular this month" items={popular} />
       <section>

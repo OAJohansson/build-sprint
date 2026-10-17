@@ -54,8 +54,13 @@ def load_books() -> pd.DataFrame:
 
 
 def load_ratings() -> pd.DataFrame:
-    """6M (user_id, book_id, rating) rows; book_id is goodbooks' own 1–10000 id."""
-    return pd.read_csv(GOODBOOKS / "ratings.csv")
+    """6M (user_id, book_id, rating) rows; book_id is goodbooks' own 1–10000 id.
+
+    The file is in time order (README, and checked: no 2016–17 book is rated before row 1.1M),
+    so `seq`, the row number, is each rating's place in time.
+    """
+    ratings = pd.read_csv(GOODBOOKS / "ratings.csv")
+    return ratings.assign(seq=range(len(ratings)))
 
 
 def _norm_title(title: str) -> str:

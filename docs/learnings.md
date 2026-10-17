@@ -98,6 +98,15 @@ Rules I now apply to every product (detail in the playbook).
 - **A model change is a behaviour change.** Safety held on the new model, but two prompt rules broke;
   evals caught them before users did.
 
+### 06 Folio
+
+- **Build the exam before the model.** Without a fixed eval every recommender just sounds
+  convincing; with it, "most advanced" becomes a row in a table that has to beat the last one.
+- **Measure, don't assume.** The owner guessed 70% of their liked books were in goodbooks; it was
+  33%, and 17% of recent saves. That one number reshaped the roadmap.
+- **Check the data's claims, including your own.** "No dates" turned out to be "no date
+  column, but time order", which changed the exam from random hide-and-seek to leave-last-out.
+
 ## Process changelog
 
 Every change to how I build, and the product that taught it.

@@ -437,3 +437,24 @@ explains (owner's request: "help me start thinking about this, not just you tell
 - **K = 10 (owner):** Folio will show 10 picks; the owner researches before choosing (a
   "maximiser", Schwartz), and 10 is also what papers report. Mood (fiction vs non-fiction) noted
   as context for step 4's re-ranking (backlog).
+
+## 18 Oct: the exam built, baselines scored
+
+- **More exam calls (owner):** score order, not just "found it", even though the owner reads all
+  10 ("you are not your user"): headline **NDCG@10**, 5★ = 2 points, 4★ = 1. Beyond accuracy
+  (coverage, novelty, author spread), found by the owner with hints from a thought experiment
+  (1,000 bestseller lists laid side by side). Owner's trust rule "never a book I'd rate 3★"
+  can't be checked in advance, so it became the **regret grade**; **no quality floor**, to keep
+  polarising books. Recorded in decision 0017.
+- **Built** in `apps/06-folio/lab/`: `splits.py` (leave-last-out, owner's time-aware check),
+  `metrics.py`, `evaluate.py` (guardrails stop the run), `baselines.py`, `results.py`,
+  `scripts/run_eval.py` (8 seconds), notebook `01_data_and_baselines`. 28 pytest cases with
+  hand-worked answers; one caught a real bug (bestsellers could run out of books).
+- **Results** (10,000 readers, hide last 1): random NDCG@10 0.0003, hit rate 0.1%; **bestsellers
+  NDCG@10 0.010 (0.008–0.011), hit rate 2.0%**, regret 31% (= the base rate of 3★-or-lower
+  ratings), coverage 0.6% (about 60 books), author spread 0.59. Owner's 48: 0 found by both.
+- **Walk-through:** why so low? Readers have already read 3.3 of the top 10, and only 9% of
+  hidden books are in the top 100: experienced readers live in the long tail. Why 0 of 48? Three
+  causes, found together: 32 books aren't in goodbooks (data), bestsellers can't reach the tail
+  (*Animal Farm* is #18, just outside the 10; *Design of Everyday Things* #8,973) (model), and 48
+  kicks can't separate baselines (exam).

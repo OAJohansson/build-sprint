@@ -458,3 +458,12 @@ explains (owner's request: "help me start thinking about this, not just you tell
   causes, found together: 32 books aren't in goodbooks (data), bestsellers can't reach the tail
   (*Animal Farm* is #18, just outside the 10; *Design of Everyday Things* #8,973) (model), and 48
   kicks can't separate baselines (exam).
+- **Big picture, at the owner's request:** the eval is the referee, not a player. Training =
+  studying, evaluating = the exam. Each step: build a model, train it on goodbooks (and later
+  descriptions), take the exam, and if it beats the bar it becomes Folio's picks (your shelf → 10
+  books → the JSON file Home reads). Online evaluation in Folio comes later.
+- **The bar for step 2, agreed before building it (owner: "lets go for it"):** NDCG@10 range
+  entirely above bestsellers' (above 0.011), regret ≤ 31%, coverage ≥ 6% with higher novelty,
+  guardrails, and the owner would save at least one of its 10 picks. In decision 0017.
+- **Step 1 done.** Next: step 2, content-based (TF-IDF on descriptions and tags, then sentence
+  embeddings), scored with `scripts/run_eval.py`.

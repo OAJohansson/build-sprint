@@ -857,6 +857,12 @@ owner's 16 books that are in the dataset (fair to the model) vs all 48 (the real
 catalog gaps included). A miss can be bad judgment or "not in its world"; slices separate them.
 Where we met it: Folio (06).
 
+#### Decide the bar before the result (pre-registration)
+Write down what counts as success before running the new model, so a disappointing result
+can't quietly move the goalposts. Combine a clear win on the headline (ranges not overlapping),
+"no worse" on the guardrail grades, and a human look at real outputs. Where we met it: Folio (06),
+the bar for step 2 (decision 0017). From: scientific pre-registration of studies.
+
 #### Reading numbers like an analyst
 Surprise → theory → check with data → lesson, and ask whether the first cause explains *all* of
 it. Where we met it: Folio (06): bestsellers finds the next liked book only 2% of the time because
@@ -923,6 +929,9 @@ these readers have already read 3.3 of the top 10, and only 9% of hidden books a
 
 **Q:** Bestsellers' regret is 31% and 31% of all ratings are 3★ or lower. What does that tell you?
 **A:** It disappoints at the base rate: it has no idea who you are, so it can't steer away from books you'd find meh.
+
+**Q:** Why agree a model's success bar before you run it?
+**A:** So a disappointing result can't move the goalposts; you read the result honestly instead of explaining it away.
 
 ## Communication and influence
 

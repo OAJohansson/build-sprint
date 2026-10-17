@@ -30,6 +30,19 @@ Designed with the owner, 17–18 Oct (journal):
 - One interface (`fit`, `recommend`), one `evaluate()`, and `results/results.md` gets a row
   per model and run.
 
+## The bar for replacing the model in Folio (agreed before step 2, owner, 18 Oct)
+
+A new model replaces the current one in Folio only if, on readers, hide last 1:
+
+1. its NDCG@10 range sits entirely above the current model's (now: above 0.011);
+2. regret (hide-5 run) is at or below the current model's (now: 31%, the base rate);
+3. coverage is at least 6% (10× bestsellers) and novelty is higher;
+4. every guardrail passes;
+5. the owner reads its 10 picks for them and would save at least one (a sense check, not a number).
+
+Decided in advance (pre-registration), so a result can't move the goalposts. Expected and fine:
+a content model may fail 1 and pass 3, which is the case for step 4's hybrid.
+
 ## Alternatives considered
 
 - **Owner's shelf only (0012):** most personal, too few test books to rank models.

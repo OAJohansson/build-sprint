@@ -397,3 +397,43 @@ What happened, what was decided and why. Newest last.
   the reasons, and my real behaviour in the app, under the guardrails (real books only, nothing
   already on my shelf, enough variety). So the eval comes before every model, and each new level
   has to beat the last one on it. Advanced levels and online evaluation added to the backlog.
+
+## 17 Oct: recommender step 1, data and the exam design
+
+Worked as a mentor session: theory, then the owner reasons out the next move before Claude
+explains (owner's request: "help me start thinking about this, not just you telling me").
+
+- **Orientation:** the five families (popularity, content-based, collaborative filtering, hybrid,
+  LLM), retrieval → ranking → re-ranking, explicit vs implicit feedback, cold start, and the
+  roadmap. Cold-start onboarding parked in the backlog: Folio has one user, who isn't cold.
+- **Lab set up:** uv (installed with Homebrew), Python 3.12, pandas, pytest, Jupyter in
+  `apps/06-folio/lab/`; goodbooks-10k downloaded by `scripts/download_goodbooks.py`, not committed.
+- **"A book I liked" = 4–5★, with 5★ worth more (owner).** 3★ is "decent", not a target. That's
+  a relevance threshold plus graded relevance, which NDCG supports. Want-to-reads are intent, not
+  satisfaction: input for the taste profile, not proof of liking. Taste drifts (most dated reads
+  are 2021–22; recent taste lives in 46 want-to-reads added 2025–26).
+- **Leakage found by the owner** (with a hint): letting the model see *Circe* while hiding *The
+  Song of Achilles* is "Thursday's newspaper". So test on the future, train on the past.
+- **Why two levels:** a few hidden books can't separate two models (penalty kicks: 3 vs 1,000),
+  so the exam runs on goodbooks readers, with the owner's shelf as a personal check. Decision 0012's
+  time split on the owner's shelf alone is replaced (decision 0017).
+- **Dataset: goodbooks-10k (owner),** because it's clean, has reader ids, and is the research
+  benchmark, so scores compare with papers. Its catch: a 2017 snapshot of popular books.
+  Considered: Amazon Reviews 2023 (fresher, messier), Open Library dumps (2026, but no reader id,
+  so useless for "readers like you"; useful later for fresh popularity). Goodreads closed its API
+  in Dec 2020, so no fresh Goodreads data exists.
+- **Overlap, measured (owner guessed 70%):** 16 of 48 books rated 4–5★ are in goodbooks (33%;
+  5★ only: 10 of 16), and just 11 of 66 want-to-reads added since 2023 (17%). Matching ladder:
+  Goodreads id (131), ISBN-10 (0 extra; goodbooks' ISBN-13s are rounded floats, unusable), title
+  + author surname (12 extra, all checked correct). Known miss: *If This Is a Man* is
+  *Survival in Auschwitz* in goodbooks. Meaning: crowd models will be weak for the owner's recent
+  taste; content-based and LLM steps can cover books outside goodbooks.
+- **Two personal-check slices (owner):** the 16 in goodbooks (fair to the model's judgment) and
+  all 48 (what Folio's experience would be, catalog gaps included).
+- **Correction by Claude:** goodbooks has no dates, but its ratings file is in time order
+  (verified: no 2016–17 book is rated before row 1.1M of 6M). So the Sams get leave-last-out.
+- **Hide each reader's last 1 liked book and, separately, the last 5 (owner: both).** Last 1 is
+  the research standard; last 5 is closer to "the coming months" and allows recall.
+- **K = 10 (owner):** Folio will show 10 picks; the owner researches before choosing (a
+  "maximiser", Schwartz), and 10 is also what papers report. Mood (fiction vs non-fiction) noted
+  as context for step 4's re-ranking (backlog).

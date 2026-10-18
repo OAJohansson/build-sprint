@@ -112,6 +112,21 @@ Rules I now apply to every product (detail in the playbook).
 - **Pick the cheapest model that clears the bar, by measurement.** About $1.20 of batch runs
   showed Haiku ties a 1970s method on strangers, while Opus finds 7 of the owner's 48 books.
 
+### 07 Six AM
+
+- **Use the user's mental model.** My jam grid of lanes made no sense to the owner, who expected
+  GarageBand's timeline (Jakob's law); it failed before any code, the cheapest time to be wrong.
+- **Content before layout.** Agreeing what the screen must hold (from GarageBand and rekordbox)
+  turned a "childish" contact sheet into one the owner could pick from.
+- **Pictures beat words for choosing.** Ten one-liners stalled the owner; a contact sheet of
+  rough thumbnails got a pick without blending every idea into mush.
+- **Seeing both changes minds.** Side by side, the owner chose the critic's darker version over
+  their own earlier taste, keeping only the turntable.
+- **Hear it today.** Synthesised loops gave real, in-key sound on day one instead of a day of
+  sample curation, and forced the audio-clock timing to be right early.
+- **A hidden feature isn't a feature.** Delete worked but nothing said so; a bin that appears
+  while you hold a loop is the signifier (Don Norman).
+
 ## Process changelog
 
 Every change to how I build, and the product that taught it.
@@ -146,3 +161,6 @@ Every change to how I build, and the product that taught it.
 | 16 Oct | 06 Folio | 123 cancelled preview builds in other apps (from ~29 pushes to one branch) used up Vercel's free 100 deployments a day and blocked Folio's first deploy. | Every app, the portfolio and the starter deploy from `main` only (decision 0016); push and merge in batches. |
 | 18 Oct | 06 Folio | Vercel flagged every key "Needs Attention" (uploaded as readable variables), and a push ending in a README-only commit skipped Folio's build. | `ship.mjs` uploads keys as Sensitive; each `vercel.json` skips a build only if the app is unchanged since its last deploy (decision 0016 update). |
 | 18 Oct | 06 Folio | A four-day recommender ladder ran past the sprint's pace and was cut on day 4. | Playbook step 1: when a product has a learning ladder, set the MVP cut first; only the first rung is in scope, the rest starts in the backlog. |
+| 19 Oct | 07 Six AM | The first contact sheet looked "childish": directions came from vibes before anyone agreed what the screen must hold. | Playbook step 1: before `/design-session`, list what the screen must hold, from 1–2 real apps the owner knows. |
+| 19 Oct | 07 Six AM | Shared pages were held back for a parallel product's wrap-up that had already happened on `main`. | Playbook step 1: a product started in parallel gets a worktree from the latest `main` and a carry-over list in its journal; check `main` before holding shared pages. |
+| 19 Oct | 07 Six AM | The owner couldn't choose from ten one-line directions and wanted to blend them all. | Playbook step 1: if the owner can't choose from words, show a contact sheet of rough thumbnails of every direction first, then build three. |

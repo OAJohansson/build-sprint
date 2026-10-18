@@ -86,7 +86,21 @@ assessment). Why it matters: if a decision rests on recalled data, the product c
 capturing it at the time. Where we met it: Mallow (04), patients rebuilding weeks of pain in a
 15-minute follow-up. From: Kahneman's peak-end rule; clinical research on patient diaries.
 
+#### The Barnum effect
+People rate vague, flattering descriptions ("you value independence but also connection") as a
+very accurate picture of themselves. So "users loved their result" proves little; what they *do*
+with it is the test. *Where:* stress-testing a self-discovery questionnaire app (07 discovery,
+parked). *(Bertram Forer, 1949)*
+
+#### The Johari window
+What you know about yourself and what others see only partly overlap: open, blind, hidden and
+unknown areas. Asking someone else the same questions shows the blind spot. *Where:* the "seen by
+others" idea for the parked self-discovery app. *(Joseph Luft and Harrington Ingham, 1955)*
+
 ### Quiz
+
+**Q:** What is the Barnum effect, and why does it matter for a personality-quiz product?
+**A:** People accept vague, flattering descriptions as accurate, so liking the result proves little; measure what people do with it.
 
 **Q:** Write the jobs-to-be-done format.
 **A:** "When [situation], I want [outcome], so I can [motivation]."
@@ -457,7 +471,30 @@ stop). Constant or travelling motion (a progress bar, a wave of light) uses **li
 `transform` and `opacity`, and always provide a gentler version for **reduced motion**.
 *(Emil Kowalski)*
 
+#### Jakob's law
+People spend most of their time in other products, so they expect yours to work the same way.
+Fight that expectation only when you have a clear reason. *Where:* Six AM's first idea, a jam
+grid of lanes, made no sense to the owner, who expected GarageBand's timeline; the timeline won.
+*(Jakob Nielsen)*
+
+#### Content before layout
+Agree what has to be on the screen before designing how it looks; a layout judged without its
+real content is a guess. *Where:* Six AM's first contact sheet looked "childish" partly because
+the features weren't agreed; listing them first (from GarageBand and rekordbox) fixed it.
+
+#### Thumbnail sketches (a contact sheet)
+When choosing from words is hard, draw many directions small and rough, side by side, and pick
+from pictures. Blending all the ideas into one averages them into something generic.
+*Where:* Six AM's ten directions on one page, then three built properly. *(Photographers'
+contact sheets; design studio practice)*
+
 ### Quiz
+
+**Q:** What does Jakob's law say, and what did it change in Six AM?
+**A:** Users expect your product to work like the ones they already know; the owner expected a GarageBand-style timeline, so it replaced the jam grid.
+
+**Q:** Why agree the features before designing a screen?
+**A:** You can't judge a layout without its real content; designs made from vibes alone miss what has to fit.
 
 **Q:** What does "clean and minimal" mean in practice?
 **A:** Every element earns its place: don't repeat in words what the visual already shows, and make features discoverable with one quiet cue.
@@ -683,7 +720,30 @@ person knows (*If This Is a Man* is *Survival in Auschwitz* in the US). Watch fo
 goodbooks stored 13-digit ISBNs as rounded numbers, and dropped leading zeros from 10-digit ones.
 Where we met it: Folio (06): 131 by id, 0 extra by ISBN, 12 by title + author, all correct.
 
+### Audio
+
+#### Schedule sound on the audio clock
+Browser timers (setTimeout, requestAnimationFrame) drift and pause; the Web Audio clock doesn't.
+Schedule each note a little ahead on `AudioContext.currentTime` and let a timer only look
+ahead. *Where:* Six AM's playhead is a silent rAF loop for now; real sound must use the audio
+clock. *(Chris Wilson, "A Tale of Two Clocks")*
+
+#### Sample licences: use vs redistribute
+Most sample packs, free ones included, let you use the sounds *in your tracks* but forbid sharing
+the raw files inside another app. CC0 sounds can be shipped. *Where:* Six AM's crate must be CC0
+(Freesound filters by licence).
+
+#### House is built in 8-bar phrases
+Dance tracks change every 8 bars (and 16, 32): that's where sounds come in and drop out and how
+DJs count. *Where:* Six AM's ruler labels every 8 bars, with grid lines every 4.
+
 ### Quiz
+
+**Q:** Why not time music with setTimeout in the browser?
+**A:** Timers drift and pause in background tabs; schedule notes ahead on the Web Audio clock (AudioContext.currentTime) instead.
+
+**Q:** Can you ship a free sample pack's sounds inside your app?
+**A:** Usually not: most licences allow use in your own tracks but not redistributing the raw files. CC0 sounds are safe.
 
 **Q:** In TF-IDF, why does a tag like "favorites" count for almost nothing?
 **A:** IDF: it's on nearly every book, so it says nothing about any one of them; rare tags get the weight.

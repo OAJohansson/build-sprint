@@ -50,3 +50,101 @@ What happened, what was decided and why. Newest last.
   background. Key limit: the test agent can't hear, so it checks timing from the transport
   position and clip states; whether it sounds like house is the owner's ear test.
 - Dev server moved to port 3007 so Six AM and Folio (3000) can run at the same time.
+
+## 18 Oct: design session, Discover
+
+- Ran `/design-session` for the main screen (the jam grid). Four random seeds gave four
+  directions (Four on the floor, Turntable, Crate spines, Night bus board); the references gave
+  Berlin warehouse, '80s drum machine, '70s hi-fi and Xerox club flyer; Gallery wall labels (far
+  away) and Cloakroom tickets (sounds wrong) completed the ten.
+- Owner found it hard to choose from one-liners and asked to blend all ten as references. Pushed
+  back: blending averages into the generic look the method avoids. Instead built a **contact
+  sheet** (thumbnail sketches): all ten as rough static frames of the same screen and content,
+  `design/contact-sheet.html`, to pick three from pictures, not words.
+- **Contact sheet rejected.** Owner: "childish, too simple", and the lanes concept didn't land at
+  all; they expect a timeline. This is the brief's usability risk ("a beginner understands lanes
+  without a tutorial") failing on its first user, before any code. The flat static frames also
+  hid the time dimension, so "click a clip" had nothing to explain it. Only the Turntable caught
+  their eye.
+- **Decision: timeline first** (owner, 18 Oct). The main screen is a timeline you drag loops
+  onto, with a record-crate sound browser to pick from; live jamming moves to the backlog. Why:
+  it matches the owner's mental model (Jakob's law, Jakob Nielsen: people expect your product to
+  work like the ones they already know, here GarageBand), and it shows the job "see what plays
+  when". Card bet, brief (jobs, risks, MVP, requirements, unit tests) and test plan updated.
+  Feedback 1 → fixing.
+- Carry over: Jakob's law to the knowledge bank (design and UX).
+- **Features agreed before layout** (content before layout). Looked at GarageBand's main window
+  (control bar, tracks area, Loop Browser) and rekordbox 7 (dark, waveforms coloured by sound, a
+  library list). The mix: GarageBand's layout with rekordbox's look and browser. MVP screen:
+  control bar (play, back to start, bar and tempo display, filter, undo), four fixed tracks with
+  mute, loops as waveform blocks that snap and repeat, a playhead, and the crate (groups, list,
+  preview, drag). Not yet: volume per track, more tracks, zoom, loop-a-section. Brief updated.
+- **Contact sheet 2** (`design/contact-sheet-2.html`): ten looks on that same anatomy, from
+  Studio light (GarageBand) and Booth (rekordbox) to Warehouse, Record shop, Turntable, '70s
+  hi-fi, '80s drum machine, Night bus, Gallery and Acid house; the crate moves between bottom,
+  right and left.
+- **Owner's three: 04 Record shop, 05 Turntable, 07 '80s drum machine.** Why, in their words:
+  "I like the colours, they feel a bit warmer." Next: build them as working prototypes with
+  `/prototype` (owner runs it).
+- **Prototypes built** (`/prototype`): `apps/07-six-am/src/app/prototypes/main-screen`, three
+  variants behind the picker on one shared engine (snap to bar, repeat in whole loops, overwrite
+  on overlap, undo, mute, a silent playhead at 124 BPM). Record shop (night, sleeves on the left,
+  the previewing record slides out), Turntable (daylight, a deck that spins what you preview),
+  Drum machine (hardware keys mute tracks, LEDs show what's sounding, the crate as sample pads).
+  Checked in the browser: drag from the crate, move, repeat, overlap trim, mute, delete, undo,
+  play, preview. No sound yet.
+- Shared files touched (watch at merge): `pnpm-lock.yaml` (07's dependencies) and
+  `.claude/launch.json` (a `07-six-am` entry). If either conflicts with Folio, take main's and
+  rerun `pnpm install`.
+- **Crate at the bottom for all three** (owner, feedback 4): rekordbox's layout, the timeline
+  full width on top. Record shop's sleeves now sit in a row and the previewing record is pulled
+  up out of its sleeve; Turntable's deck sits bottom-left beside a three-column list.
+- **One crate design for all three** (owner, feedback 5): Turntable's crate (a deck that spins
+  what you preview, group tabs, a three-column list) is now a shared component, styled in Record
+  shop's dark wood and Drum machine's beige hardware. The palettes stay as the difference. The
+  sleeves and sample pads are gone.
+- **Pick: Record shop.** Owner: "dark mood but with fun colours. That's how I like my music:
+  fun Chicago house, disco-inspired tracks played in a dark, moody warehouse in East London."
+  The block colours pop against the dark; retro but stylish, not overdone.
+- **Intended aesthetic** (the yardstick for the critic): *fun Chicago house and disco colour
+  popping against a dark, moody East London warehouse; retro, but stylish and never overdone.*
+- Next: the Define phase, a critic loop on screenshots at laptop size (1440 × 900, not the
+  skill's phone size, since Six AM is laptop-first).
+- **Critic round 1: 6/10.** Top gap: brown-on-brown, nothing pops. Fixed: near-black base,
+  more saturated block colours, serif only for logo and deck title (mono elsewhere), colour
+  bars on track headers, a coloured drop preview with its bar number. Not taken, because they
+  go against the owner's picks: back to sleeve tiles, remove the deck.
+- **Critic round 2: 6/10, not rising**, so stopped and showed the owner (skill rule). Top gap
+  now: solid colour blocks swamp the dark (wants dark tinted clips with coloured waveforms,
+  rekordbox-style), which contradicts the owner's "the bars pop nicely against the dark".
+- Owner asked to see the critic's version. Built as a fourth picker option, **Critic's take**
+  (Record shop with all six round-2 notes: tinted clips with coloured waveforms and full colour
+  only under the playhead or when selected, half-height waveforms, no turntable but a stop-
+  preview button, crate dots only on loops already used, the drag ghost outlined with its bar
+  marked on the ruler, a quieter transport). The owner compares before and after.
+- **Owner's pick: Critic's take, with the vinyl player kept bottom left** (feedback 7). So the
+  owner overruled one critic note (the deck) and accepted the rest, including the dark tinted
+  clips, despite liking the solid blocks earlier: seeing both side by side changed their mind.
+- **Deliver, subtract** (what breaks if it's gone?): removed the "On the deck" label (also an
+  eyebrow tell); the ruler now labels every 8 bars, house's phrase length, instead of every 4
+  (grid lines stay at 4). Also removed the dot on loops already in the track; owner: you can
+  use the same loop many times, so it has no purpose. Everything else kept.
+- **Deliver, AI tells** (against `tells.md`): no gradients, glows, cards-in-cards, emoji, sparkles
+  or hype copy left. Two candidates shown before/after: the boxed "M" buttons (pills on
+  everything) and monospace on every label (reads like a code editor; a possible new tell for
+  the list). Owner: plain "M" that fills only when muted; keep the mono, it matches the retro
+  readout and the hardware feel (so not added to the tells list).
+- **Deliver, copy:** owner keeps the copy as it is for now.
+- **Logo** (owner asked, using the `design` skill): its AI generator needs a Gemini key (not set,
+  and a paid spend decision), and its brief suggested neon glow (an AI tell, and against "never
+  overdone"). So four hand-drawn SVG marks in the four timeline colours instead
+  (`design/logo-options.html`): Sunrise record, Four to the floor, Six o'clock, The build.
+  Owner picked **Sunrise record**; it now sits next to the name, with a faint outer ring so the
+  black disc stays visible on the dark bar. Next: promote the winner into the real app.
+- **Promoted** (owner, 18 Oct): the main screen is now the app's home page. Rules in
+  `src/lib/timeline.ts` with unit tests for snap to bar, repeat in whole loops and overwrite on
+  overlap (8 passing; the brief's unit-test pick); the studio in `src/components/studio/`; one
+  CSS module with the final values; IBM Plex Mono and Instrument Serif in the layout; the logo
+  as the favicon. The prototype route, the other variants and the picker are deleted; the
+  contact sheets and logo options stay in `design/` as the record. Marked shortcuts: made-up
+  crate with no audio, drawn waveforms, a silent rAF playhead, nothing saved yet.

@@ -1,34 +1,30 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { IBM_Plex_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+// Mono for the interface, a serif for the logo and the loop on the deck (design session, 18 Oct).
+const mono = IBM_Plex_Mono({ weight: ["400", "500", "600"], subsets: ["latin"], variable: "--f-mono" });
+const serif = Instrument_Serif({ weight: "400", style: ["normal", "italic"], subsets: ["latin"], variable: "--f-serif" });
 
 export const metadata: Metadata = {
   title: "Six AM",
-  description: "Day 7 of the 20-day build sprint.",
+  description: "Make house and techno from loops: drag sounds from the crate onto a timeline.",
 };
 
-// Phone baseline (mobile-native skill): content can sit under the notch (pad with
-// env(safe-area-inset-*)), the keyboard resizes the layout, and the status bar matches the
-// background in both themes. Zoom stays enabled.
+// Laptop-first, one dark theme: the status bar matches the warehouse background.
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
   interactiveWidget: "resizes-content",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
-  ],
+  themeColor: "#131110",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${mono.variable} ${serif.variable} h-full antialiased`}>
       <body className="min-h-dvh flex flex-col">{children}</body>
     </html>
   );

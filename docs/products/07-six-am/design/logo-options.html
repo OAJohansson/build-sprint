@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Six AM logo options</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #131110; color: #f1e6d3; font-family: 'IBM Plex Mono', monospace; padding: 48px; }
+  h1 { font: 500 14px 'IBM Plex Mono'; color: #9a8b78; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 36px; }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; max-width: 1200px; }
+  .card { background: #1a1715; border: 1px solid #2c2622; border-radius: 10px; padding: 28px; }
+  .big { display: flex; align-items: center; justify-content: center; height: 200px; }
+  .big svg { width: 150px; height: 150px; }
+  .lockup { display: flex; align-items: center; gap: 10px; margin: 18px 0 8px; padding: 14px 18px; background: #1a1715; border-top: 1px solid #2c2622; }
+  .lockup svg { width: 30px; height: 30px; }
+  .lockup span { font: italic 400 34px 'Instrument Serif'; }
+  .tiny { display: flex; gap: 14px; align-items: center; color: #9a8b78; font-size: 12px; }
+  .tiny svg { width: 16px; height: 16px; }
+  h2 { font: 500 15px 'IBM Plex Mono'; margin-top: 14px; }
+  p { color: #9a8b78; font-size: 13px; line-height: 1.5; margin-top: 4px; }
+</style>
+</head>
+<body>
+<h1>Six AM · logo options · the four timeline colours on the warehouse dark</h1>
+<div class="grid" id="grid"></div>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- 1 · Sunrise record: a record whose label is a four-stripe sunrise -->
+    <symbol id="l1" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="48" fill="#0b0a09"/>
+      <circle cx="50" cy="50" r="40" fill="none" stroke="#1f1b18" stroke-width="1.2"/>
+      <circle cx="50" cy="50" r="33" fill="none" stroke="#1f1b18" stroke-width="1.2"/>
+      <clipPath id="sun"><circle cx="50" cy="50" r="24"/></clipPath>
+      <g clip-path="url(#sun)">
+        <rect x="20" y="26" width="60" height="12" fill="#f2b134"/>
+        <rect x="20" y="38" width="60" height="12" fill="#ef5b37"/>
+        <rect x="20" y="50" width="60" height="12" fill="#23b3a5"/>
+        <rect x="20" y="62" width="60" height="12" fill="#a9c95a"/>
+      </g>
+      <circle cx="50" cy="50" r="3" fill="#0b0a09"/>
+    </symbol>
+    <!-- 2 · Four to the floor: four kicks, one per track colour -->
+    <symbol id="l2" viewBox="0 0 100 100">
+      <rect x="8" y="18" width="16" height="64" rx="8" fill="#f2b134"/>
+      <rect x="31" y="30" width="16" height="52" rx="8" fill="#ef5b37"/>
+      <rect x="54" y="42" width="16" height="40" rx="8" fill="#23b3a5"/>
+      <rect x="77" y="54" width="16" height="28" rx="8" fill="#a9c95a"/>
+    </symbol>
+    <!-- 3 · Six o'clock: a clock face in four quarters, hands in one straight line -->
+    <symbol id="l3" viewBox="0 0 100 100">
+      <path d="M50 4 A46 46 0 0 1 96 50" fill="none" stroke="#f2b134" stroke-width="9" stroke-linecap="round"/>
+      <path d="M96 50 A46 46 0 0 1 50 96" fill="none" stroke="#ef5b37" stroke-width="9" stroke-linecap="round"/>
+      <path d="M50 96 A46 46 0 0 1 4 50" fill="none" stroke="#23b3a5" stroke-width="9" stroke-linecap="round"/>
+      <path d="M4 50 A46 46 0 0 1 50 4" fill="none" stroke="#a9c95a" stroke-width="9" stroke-linecap="round"/>
+      <line x1="50" y1="24" x2="50" y2="76" stroke="#f1e6d3" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="50" cy="50" r="6" fill="#f1e6d3"/>
+    </symbol>
+    <!-- 4 · The build: four loop blocks stepping in, like a track arriving -->
+    <symbol id="l4" viewBox="0 0 100 100">
+      <rect x="6" y="10" width="88" height="16" rx="4" fill="#f2b134"/>
+      <rect x="26" y="32" width="68" height="16" rx="4" fill="#ef5b37"/>
+      <rect x="46" y="54" width="48" height="16" rx="4" fill="#23b3a5"/>
+      <rect x="66" y="76" width="28" height="16" rx="4" fill="#a9c95a"/>
+    </symbol>
+  </defs>
+</svg>
+<script>
+const opts = [
+  ["1 · Sunrise record", "A record whose label is a four-stripe sunrise: six AM, the sun coming up over the warehouse. The stripes nod to 70s disco sleeves."],
+  ["2 · Four to the floor", "Four kicks, one per track colour, stepping down like a level meter. House's 4/4 beat and the app's four tracks in one shape."],
+  ["3 · Six o'clock", "A clock in four coloured quarters; the hands in one straight line read 6:00. Doubles as a record seen from above."],
+  ["4 · The build", "Four loop blocks stepping in from the right, like the timeline as a track builds up. The most literal: it's what you do in the app."],
+];
+document.getElementById("grid").innerHTML = opts.map(([name, why], i) => `
+  <div class="card">
+    <div class="big"><svg><use href="#l${i + 1}"/></svg></div>
+    <div class="lockup"><svg><use href="#l${i + 1}"/></svg><span>Six AM</span></div>
+    <div class="tiny"><svg><use href="#l${i + 1}"/></svg> at favicon size (16px)</div>
+    <h2>${name}</h2><p>${why}</p>
+  </div>`).join("");
+</script>
+</body>
+</html>

@@ -37,6 +37,16 @@
       "port": 3004
     },
     {
+      "name": "07-six-am",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "-F",
+        "07-six-am",
+        "dev"
+      ],
+      "port": 3007
+    },
+    {
       "name": "06-folio",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": [

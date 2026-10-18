@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Six AM contact sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Barlow+Condensed:ital,wght@0,500;0,700;1,800&family=Big+Shoulders+Stencil+Display:wght@500;800&family=Courier+Prime:wght@400;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=Jost:wght@200;300;400&family=Permanent+Marker&family=Space+Mono:wght@400;700&family=Special+Elite&family=VT323&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Sheet chrome (not a contestant) ---------- */
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#141414;color:#e8e6e1;font:14px/1.45 Inter,system-ui,sans-serif;padding:40px 40px 80px}
+  .sheet-head{max-width:1400px;margin:0 auto 32px;display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
+  .sheet-head h1{font:500 22px Inter,sans-serif;letter-spacing:-.01em}
+  .sheet-head p{color:#9a978f;max-width:620px}
+  .grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:40px 32px}
+  .cell{cursor:zoom-in}
+  .thumb{position:relative;width:100%;aspect-ratio:1440/900;overflow:hidden;border-radius:6px;outline:1px solid #2a2a2a}
+  .thumb .frame{position:absolute;top:0;left:0;transform-origin:0 0}
+  .cap{display:flex;gap:12px;margin-top:12px;align-items:baseline}
+  .cap b{font:500 13px 'Space Mono',monospace;color:#9a978f}
+  .cap strong{font-weight:500}
+  .cap span{color:#9a978f}
+  .tag{font-size:11px;border:1px solid #3a3a3a;border-radius:99px;padding:1px 8px;color:#9a978f;margin-left:auto;white-space:nowrap}
+  .overlay{position:fixed;inset:0;background:rgba(10,10,10,.92);display:none;align-items:center;justify-content:center;z-index:10;cursor:zoom-out}
+  .overlay.on{display:flex}
+  .overlay .holder{position:relative;overflow:hidden;border-radius:6px}
+  .overlay .frame{position:absolute;top:0;left:0;transform-origin:0 0}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
+
+  /* ---------- Shared frame ---------- */
+  .frame{width:1440px;height:900px;overflow:hidden;position:relative}
+
+  /* ---------- 01 Four on the floor ---------- */
+  .f1{background:#0a0b0a;color:#8dffb8;font-family:'Space Mono',monospace;padding:40px 56px}
+  .f1 .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:40px}
+  .f1 .logo{font:44px 'Archivo Black';letter-spacing:.04em;border:6px double #8dffb8;padding:6px 20px;transform:rotate(-2deg)}
+  .f1 .count{font-size:44px;font-weight:700;letter-spacing:.06em}
+  .f1 .count small{font-size:16px;opacity:.6;margin-right:16px;font-weight:400}
+  .f1 .cols{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+  .f1 .lane h3{font:26px 'Archivo Black';text-transform:uppercase;border:5px double #8dffb8;padding:8px 14px;margin-bottom:18px;display:inline-block}
+  .f1 .lane:nth-child(even) h3{transform:rotate(1.5deg)}
+  .f1 .lane:nth-child(odd) h3{transform:rotate(-1deg)}
+  .f1 .clip{border:4px double rgba(141,255,184,.35);height:92px;padding:14px 16px;margin-bottom:12px;font-size:18px;display:flex;flex-direction:column;justify-content:space-between}
+  .f1 .clip small{font-size:12px;opacity:.55}
+  .f1 .clip.play{background:#8dffb8;color:#0a0b0a;border-color:#8dffb8}
+  .f1 .clip.play small{opacity:.7}
+  .f1 .clip.next{border-style:dashed;border-width:3px;border-color:#8dffb8}
+  .f1 .foot{position:absolute;left:56px;right:56px;bottom:40px;display:flex;align-items:center;gap:32px}
+  .f1 .fader{flex:1;height:22px;border:4px double #8dffb8;position:relative}
+  .f1 .fader i{position:absolute;inset:3px auto 3px 3px;width:62%;background:#8dffb8}
+  .f1 .rec{font:700 18px 'Space Mono';color:#ff5a4f;border:4px double #ff5a4f;padding:10px 20px}
+
+  /* ---------- 02 Turntable ---------- */
+  .f2{background:#F3EBDD;color:#2a2622;font-family:Jost,sans-serif}
+  .f2 svg{position:absolute;left:60px;top:40px}
+  .f2 .side{position:absolute;left:960px;top:70px;right:70px}
+  .f2 .side h1{font-weight:200;font-size:84px;letter-spacing:-.02em;line-height:1}
+  .f2 .side .meta{font-weight:300;font-size:22px;margin:14px 0 48px;color:#7a6f63}
+  .f2 .row{border-top:1px solid #d6cbb9;padding:16px 0;display:flex;justify-content:space-between;font-weight:300;font-size:22px}
+  .f2 .row em{font-style:normal;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#7a6f63;padding-top:6px}
+  .f2 .row .q{color:#c2502c}
+  .f2 .ctrl{position:absolute;left:960px;right:70px;bottom:70px}
+  .f2 .line{height:1px;background:#2a2622;position:relative;margin:18px 0 34px}
+  .f2 .line i{position:absolute;left:62%;top:-8px;width:17px;height:17px;border-radius:50%;background:#2a2622}
+  .f2 .lab{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#7a6f63;display:flex;justify-content:space-between}
+  .f2 .recb{display:flex;align-items:center;gap:14px;font-weight:300;font-size:22px}
+  .f2 .recb i{width:22px;height:22px;border-radius:50%;border:1px solid #c2502c;display:grid;place-items:center}
+  .f2 .recb i::after{content:"";width:12px;height:12px;border-radius:50%;background:#c2502c}
+
+  /* ---------- 03 Crate spines ---------- */
+  .f3{background:#EFEBE4;color:#111;font-family:'Space Mono',monospace;padding:36px 56px}
+  .f3 .top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid #111;padding-bottom:14px;margin-bottom:22px}
+  .f3 .top h1{font:110px/0.85 Anton;letter-spacing:-.01em;text-transform:uppercase}
+  .f3 .top .t{font-size:14px;text-align:right;line-height:1.7}
+  .f3 .top .t b{color:#D6246E}
+  .f3 .crate{display:grid;grid-template-columns:200px 1fr 300px;align-items:end;gap:24px;height:158px;border-bottom:1px solid #111;padding-bottom:0}
+  .f3 .crate .lab{font-size:13px;line-height:1.6;padding-bottom:14px}
+  .f3 .crate .lab b{display:block;font:30px Anton;text-transform:uppercase}
+  .f3 .spines{display:flex;gap:6px;align-items:flex-end;height:100%}
+  .f3 .sp{width:118px;height:126px;position:relative;display:flex;align-items:center;justify-content:center;border:1px solid #111;border-bottom:0}
+  .f3 .sp span{writing-mode:vertical-rl;transform:rotate(180deg);font:22px Anton;text-transform:uppercase;letter-spacing:.02em}
+  .f3 .sp:nth-child(1){background:#d9d2c5}.f3 .sp:nth-child(2){background:#111;color:#EFEBE4}.f3 .sp:nth-child(3){background:#c4bba9}.f3 .sp:nth-child(4){background:#e8e2d7}.f3 .sp:nth-child(5){background:#a99f8e}
+  .f3 .sp.play{height:150px}
+  .f3 .sticker{position:absolute;top:-22px;left:50%;transform:translateX(-50%) rotate(-8deg);width:58px;height:58px;border-radius:50%;background:#D6246E;color:#fff;font:700 13px 'Space Mono';display:grid;place-items:center}
+  .f3 .sp.next .sticker{background:#EFEBE4;color:#D6246E;border:2px solid #D6246E}
+  .f3 .now{padding-bottom:14px;font-size:13px}
+  .f3 .now b{display:block;font:34px/1 Anton;text-transform:uppercase;margin-top:4px}
+  .f3 .foot{position:absolute;left:56px;right:56px;bottom:30px;display:flex;align-items:center;gap:28px;font-size:13px}
+  .f3 .hair{flex:1;height:1px;background:#111;position:relative}
+  .f3 .hair i{position:absolute;left:62%;top:-12px;width:2px;height:24px;background:#D6246E}
+  .f3 .foot .r{color:#D6246E;font-weight:700}
+
+  /* ---------- 04 Night bus board ---------- */
+  .f4{background:#0E0C0A;color:#FFAE45;font-family:VT323,monospace;padding:44px 60px}
+  .f4 .top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:28px}
+  .f4 .top h1{font-size:40px;font-weight:400;letter-spacing:.08em}
+  .f4 .top h1 small{display:block;font-size:24px;color:#7a5427}
+  .f4 .clock{font-size:96px;line-height:.8;text-align:right}
+  .f4 .clock small{display:block;font-size:24px;color:#7a5427;text-align:right}
+  .f4 table{width:100%;border-collapse:collapse}
+  .f4 th{font-weight:400;font-size:22px;color:#7a5427;text-align:left;padding:8px 0;border-bottom:2px solid #3a2a16;letter-spacing:.1em}
+  .f4 td{font-size:38px;padding:18px 0;border-bottom:2px solid #22190e;vertical-align:top}
+  .f4 td.r{width:200px}
+  .f4 td.r small{display:block;font-size:22px;color:#7a5427}
+  .f4 td.n{width:340px}
+  .f4 td.x{width:330px}
+  .f4 .due{background:#FFAE45;color:#0E0C0A;padding:0 8px;font-size:24px;margin-left:8px}
+  .f4 .dim{color:#5a3e1d}
+  .f4 .also{display:flex;flex-wrap:wrap;gap:8px}
+  .f4 .also span{font-size:24px;border:1px solid #4a3418;padding:2px 10px;color:#c58533}
+  .f4 .foot{position:absolute;left:60px;right:60px;bottom:40px;display:flex;align-items:center;gap:28px;font-size:28px}
+  .f4 .leds{display:flex;gap:4px;flex:1}
+  .f4 .leds i{flex:1;height:22px;background:#2a1e10}
+  .f4 .leds i.on{background:#FFAE45}
+  .f4 .rec{color:#ff5a3c}
+
+  /* ---------- 05 Berlin warehouse ---------- */
+  .f5{background-color:#7d7b77;color:#1d1d1c;font-family:'Big Shoulders Stencil Display',sans-serif;padding:0 60px}
+  .f5::before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .45 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.55;pointer-events:none}
+  .f5 .glow{position:absolute;left:0;right:0;top:0;height:420px;background:radial-gradient(ellipse 70% 100% at 50% 0,rgba(235,245,255,.32),transparent 70%);pointer-events:none}
+  .f5 .tube{position:relative;margin:44px 0 0;height:12px;border-radius:6px;background:#5f5f5c}
+  .f5 .tube i{position:absolute;left:0;top:0;bottom:0;width:72%;border-radius:6px;background:#f2f9ff;box-shadow:0 0 18px 4px rgba(225,240,255,.85),0 0 60px 14px rgba(200,225,255,.35)}
+  .f5 .top{position:relative;display:flex;justify-content:space-between;align-items:flex-end;margin:36px 0 34px}
+  .f5 .top h1{font-weight:800;font-size:96px;line-height:.85;letter-spacing:.02em}
+  .f5 .top .t{font-weight:500;font-size:30px;text-align:right;line-height:1.1}
+  .f5 .lane{position:relative;display:grid;grid-template-columns:180px repeat(5,1fr);gap:14px;margin-bottom:16px;align-items:stretch}
+  .f5 .lane h3{font-weight:800;font-size:36px;align-self:center}
+  .f5 .clip{height:110px;background:rgba(20,20,20,.16);border:1px solid rgba(20,20,20,.28);padding:14px;font-weight:500;font-size:26px;line-height:1;display:flex;align-items:flex-end}
+  .f5 .clip.play{background:#eef6fd;border-color:#eef6fd;box-shadow:0 0 26px rgba(225,240,255,.7)}
+  .f5 .clip.next{border:2px dashed #eef6fd;color:#eef6fd}
+  .f5 .foot{position:absolute;left:60px;right:60px;bottom:40px;display:flex;align-items:center;gap:30px;font-weight:800;font-size:30px}
+  .f5 .bar{flex:1;height:6px;background:rgba(20,20,20,.35);position:relative}
+  .f5 .bar i{position:absolute;left:62%;top:-14px;width:12px;height:34px;background:#eef6fd;box-shadow:0 0 14px rgba(225,240,255,.8)}
+  .f5 .rec{color:#b3201a}
+
+  /* ---------- 06 '80s drum machine ---------- */
+  .f6{background:#262626;padding:40px}
+  .f6 .panel{background:#DAD3C4;border-radius:16px;height:100%;overflow:hidden;box-shadow:inset 0 2px 0 rgba(255,255,255,.5),0 20px 40px rgba(0,0,0,.4);display:flex;flex-direction:column}
+  .f6 .band{background:#3a3a3a;color:#eee;display:flex;justify-content:space-between;align-items:center;padding:22px 36px}
+  .f6 .band h1{font:italic 800 46px 'Barlow Condensed';letter-spacing:.02em}
+  .f6 .band h1 span{color:#EE6A24;font-style:normal;font-weight:500;font-size:24px;margin-left:16px;letter-spacing:.12em}
+  .f6 .lcd{background:#A6B58C;color:#1f2919;font:28px/1.05 VT323;padding:10px 18px;border-radius:4px;box-shadow:inset 0 2px 6px rgba(0,0,0,.35);width:420px}
+  .f6 .body{display:flex;flex:1;padding:28px 36px;gap:36px}
+  .f6 .lanes{flex:1}
+  .f6 .lane{display:grid;grid-template-columns:120px repeat(5,1fr);gap:16px;margin-bottom:22px;align-items:end}
+  .f6 .lane h3{font:700 20px 'Barlow Condensed';letter-spacing:.14em;color:#3a3a3a;padding-bottom:30px}
+  .f6 .k{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .f6 .led{width:12px;height:12px;border-radius:50%;background:#7a2a1c}
+  .f6 .led.on{background:#ff3b1f;box-shadow:0 0 10px #ff3b1f}
+  .f6 .led.amb{background:#ffb020;box-shadow:0 0 8px #ffb020}
+  .f6 .key{width:100%;height:76px;border-radius:7px;box-shadow:0 4px 0 rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.4)}
+  .f6 .lane:nth-child(1) .key{background:#EE6A24}.f6 .lane:nth-child(2) .key{background:#F2A23A}.f6 .lane:nth-child(3) .key{background:#E9D9A6}.f6 .lane:nth-child(4) .key{background:#F4F1EA}
+  .f6 .k small{font:500 15px 'Barlow Condensed';letter-spacing:.06em;color:#3a3a3a;text-transform:uppercase;text-align:center;line-height:1.1;height:34px}
+  .f6 .side{width:260px;border-left:2px solid #c6bead;padding-left:36px;display:flex;flex-direction:column;align-items:center;gap:22px}
+  .f6 .knob{width:170px;height:170px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#5a5a5a,#222);box-shadow:0 8px 16px rgba(0,0,0,.35);position:relative}
+  .f6 .knob::after{content:"";position:absolute;left:50%;top:12px;width:6px;height:44px;margin-left:-3px;background:#EE6A24;border-radius:3px;transform-origin:3px 73px;transform:rotate(32deg)}
+  .f6 .side h4{font:700 20px 'Barlow Condensed';letter-spacing:.2em;color:#3a3a3a}
+  .f6 .btns{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%}
+  .f6 .btn{height:64px;border-radius:7px;background:#3a3a3a;color:#eee;font:700 18px 'Barlow Condensed';letter-spacing:.14em;display:grid;place-items:center;box-shadow:0 4px 0 rgba(0,0,0,.3)}
+  .f6 .btn.rec{background:#c8261b}
+
+  /* ---------- 07 '70s hi-fi ---------- */
+  .f7{background:repeating-linear-gradient(90deg,#5b3a22 0 7px,#6a4429 7px 15px,#553620 15px 26px,#6e472b 26px 31px);padding:46px 46px}
+  .f7 .face{height:100%;border-radius:6px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.09) 0 1px,transparent 1px 3px),linear-gradient(#dcdcd8,#b9b9b4);box-shadow:inset 0 2px 0 #fff,0 10px 30px rgba(0,0,0,.5);padding:34px 44px;font-family:'Special Elite',monospace;color:#2b2b2b;position:relative}
+  .f7 .top{display:flex;gap:32px;align-items:center;margin-bottom:34px}
+  .f7 .vu{width:250px;height:150px;background:linear-gradient(#f6ecca,#e9d9a3);border:6px solid #2b2b2b;border-radius:6px;position:relative;overflow:hidden;box-shadow:inset 0 0 30px rgba(255,170,40,.45)}
+  .f7 .vu svg{position:absolute;inset:0}
+  .f7 .mid{flex:1}
+  .f7 .plate{font-size:20px;letter-spacing:.24em;text-align:center;margin-bottom:14px}
+  .f7 .plate b{font-size:30px;letter-spacing:.3em;display:block}
+  .f7 .dial{height:62px;background:#141414;border-radius:4px;position:relative;color:#e9c46a;font:16px 'Special Elite';display:flex;justify-content:space-between;align-items:center;padding:0 24px;box-shadow:inset 0 3px 8px rgba(0,0,0,.6)}
+  .f7 .dial i{position:absolute;top:6px;bottom:6px;width:3px;background:#ff4b2b;left:53%;box-shadow:0 0 8px #ff4b2b}
+  .f7 .rows{display:grid;grid-template-columns:1fr 230px;gap:40px}
+  .f7 .lane{display:grid;grid-template-columns:150px repeat(5,1fr);gap:14px;align-items:center;margin-bottom:22px}
+  .f7 .dymo{background:#111;color:#f1f1f1;font:700 17px 'Courier Prime';letter-spacing:.2em;padding:6px 10px;border-radius:3px;text-transform:uppercase;justify-self:start;box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+  .f7 .rock{height:74px;border-radius:5px;background:linear-gradient(#f2f2f0,#c9c9c4);border:1px solid #8d8d88;box-shadow:0 3px 0 #8d8d88;display:flex;flex-direction:column;justify-content:space-between;padding:9px 12px;font-size:15px}
+  .f7 .lamp{width:14px;height:14px;border-radius:50%;background:#7a5a2a}
+  .f7 .lamp.on{background:#ffb43a;box-shadow:0 0 12px 3px rgba(255,180,58,.8)}
+  .f7 .lamp.dim{background:#c98f2c;box-shadow:0 0 6px rgba(255,180,58,.5)}
+  .f7 .ctrls{display:flex;flex-direction:column;align-items:center;gap:20px}
+  .f7 .knob{width:150px;height:150px;border-radius:50%;background:repeating-conic-gradient(#d8d8d4 0 4deg,#b8b8b2 4deg 8deg);border:8px solid #9a9a95;position:relative;box-shadow:0 8px 14px rgba(0,0,0,.3)}
+  .f7 .knob::after{content:"";position:absolute;left:50%;top:10px;width:4px;height:36px;margin-left:-2px;background:#2b2b2b;transform-origin:2px 57px;transform:rotate(32deg)}
+  .f7 .reclamp{display:flex;align-items:center;gap:12px}
+  .f7 .reclamp i{width:26px;height:26px;border-radius:50%;background:#e2301f;box-shadow:0 0 14px 4px rgba(226,48,31,.7)}
+
+  /* ---------- 08 Xerox flyer ---------- */
+  .f8{background:#f3f0e8;color:#111;font-family:'Courier Prime',monospace;padding:40px 60px}
+  .f8::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.18) 1px,transparent 1.4px);background-size:7px 7px;opacity:.35;pointer-events:none}
+  .f8 .top{position:relative;display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}
+  .f8 .cut{display:flex;gap:6px}
+  .f8 .cut span{font:96px/1 'Archivo Black';background:#111;color:#f3f0e8;padding:2px 12px}
+  .f8 .cut span:nth-child(odd){transform:rotate(-3deg)}.f8 .cut span:nth-child(even){transform:rotate(2deg);background:#f3f0e8;color:#111;border:4px solid #111}
+  .f8 .sub{font:700 22px 'Courier Prime';text-align:right;line-height:1.4}
+  .f8 .sub em{font-style:normal;background:#111;color:#f3f0e8;padding:0 6px}
+  .f8 .strip{position:relative;display:grid;grid-template-columns:190px repeat(5,1fr);gap:16px;align-items:center;margin-bottom:22px}
+  .f8 .strip h3{font:30px 'Archivo Black';background:#111;color:#f3f0e8;padding:6px 12px;transform:rotate(-2deg);justify-self:start;text-transform:uppercase}
+  .f8 .scrap{position:relative;height:100px;background:#fbfaf6;border:2px solid #111;padding:12px;font:700 19px 'Courier Prime';display:flex;align-items:flex-end}
+  .f8 .scrap:nth-child(3n){transform:rotate(1.2deg)}.f8 .scrap:nth-child(3n+1){transform:rotate(-1deg)}
+  .f8 .scrap.play{background:#111;color:#fbfaf6}
+  .f8 .scrap.play::after{content:"";position:absolute;inset:-14px -16px;border:3px solid #D7261E;border-radius:50%;transform:rotate(-4deg)}
+  .f8 .scrap.next::after{content:"NEXT!";position:absolute;top:-16px;right:-10px;font:22px 'Permanent Marker';color:#D7261E;transform:rotate(8deg)}
+  .f8 .tape{position:absolute;width:70px;height:22px;background:rgba(222,210,165,.75);top:-10px;left:20px;transform:rotate(-6deg)}
+  .f8 .foot{position:absolute;left:60px;right:60px;bottom:36px;display:flex;align-items:center;gap:28px;font:700 20px 'Courier Prime'}
+  .f8 .slide{flex:1;height:26px;border:2px solid #111;position:relative;background:repeating-linear-gradient(90deg,#111 0 2px,transparent 2px 14px)}
+  .f8 .slide i{position:absolute;left:62%;top:-10px;width:22px;height:42px;background:#111}
+  .f8 .rec{font:30px 'Permanent Marker';color:#D7261E}
+
+  /* ---------- 09 Gallery labels ---------- */
+  .f9{background:#FAF9F6;color:#1f1f1f;font-family:Inter,sans-serif;padding:56px 80px}
+  .f9 .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:70px}
+  .f9 .top h1{font:400 34px 'Instrument Serif'}
+  .f9 .top .t{font-size:13px;color:#8a877f;letter-spacing:.04em}
+  .f9 .rooms{display:grid;grid-template-columns:repeat(4,1fr);gap:56px}
+  .f9 h3{font:italic 400 34px 'Instrument Serif';margin-bottom:26px}
+  .f9 h3 small{font:400 12px Inter;font-style:normal;color:#8a877f;display:block;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+  .f9 .lbl{background:#fff;border:1px solid #e8e5de;padding:14px 16px 16px;margin-bottom:14px;position:relative}
+  .f9 .lbl b{font:italic 400 22px 'Instrument Serif';display:block}
+  .f9 .lbl span{font-size:11.5px;color:#8a877f}
+  .f9 .lbl.play::after{content:"";position:absolute;right:14px;top:16px;width:11px;height:11px;border-radius:50%;background:#C8231B}
+  .f9 .lbl.next::after{content:"";position:absolute;right:14px;top:16px;width:9px;height:9px;border-radius:50%;border:1px solid #C8231B}
+  .f9 .foot{position:absolute;left:80px;right:80px;bottom:48px;display:flex;align-items:center;gap:40px;font-size:12.5px;color:#8a877f}
+  .f9 .thin{flex:1;height:1px;background:#cfccc4;position:relative}
+  .f9 .thin i{position:absolute;left:62%;top:-5px;width:11px;height:11px;border-radius:50%;background:#1f1f1f}
+  .f9 .foot b{color:#C8231B;font-weight:500}
+
+  /* ---------- 10 Cloakroom ---------- */
+  .f10{background:radial-gradient(ellipse at 50% 0,#4a1a17,#1c0f0c 70%);color:#f1e6d3;font-family:'Space Mono',monospace;padding:36px 60px}
+  .f10 .top{display:flex;justify-content:space-between;align-items:baseline}
+  .f10 .top h1{font:400 30px 'Special Elite';letter-spacing:.3em}
+  .f10 .top .t{font-size:16px;color:#c9a96a}
+  .f10 .rail{position:absolute;left:60px;right:60px;top:120px;height:8px;border-radius:4px;background:linear-gradient(#e7c27a,#9b7531);box-shadow:0 3px 6px rgba(0,0,0,.5)}
+  .f10 .hooks{position:absolute;left:60px;right:60px;top:124px;display:grid;grid-template-columns:repeat(4,1fr)}
+  .f10 .hook{display:flex;flex-direction:column;align-items:center}
+  .f10 .hook .str{width:2px;height:34px;background:#c9a96a}
+  .f10 .tk{width:230px;height:250px;color:#1c0f0c;padding:22px 20px;position:relative;-webkit-mask:radial-gradient(circle 14px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 14px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat;mask:radial-gradient(circle 14px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 14px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat}
+  .f10 .tk::before{content:"";position:absolute;top:12px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#2a1411}
+  .f10 .tk small{display:block;font-size:11px;letter-spacing:.3em;margin-top:18px}
+  .f10 .tk b{display:block;font:44px/1 'Archivo Black';margin:6px 0 14px}
+  .f10 .tk p{font-size:19px;line-height:1.25;font-weight:700}
+  .f10 .tk em{position:absolute;bottom:18px;left:20px;font-style:normal;font-size:12px;letter-spacing:.2em;border-top:1px dashed currentColor;padding-top:8px;right:20px}
+  .f10 .hook:nth-child(1) .tk{background:#F5B7C5;transform:rotate(-3deg)}
+  .f10 .hook:nth-child(2) .tk{background:#F4D35E;transform:rotate(2deg)}
+  .f10 .hook:nth-child(3) .tk{background:#A8D5E2;transform:rotate(-1.5deg);opacity:.85}
+  .f10 .empty{width:230px;height:250px;border:2px dashed rgba(241,230,211,.3);display:grid;place-items:center;font-size:14px;color:rgba(241,230,211,.55);text-align:center;padding:20px}
+  .f10 .racks{position:absolute;left:60px;right:60px;top:470px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+  .f10 .rack h4{font:400 15px 'Special Elite';letter-spacing:.25em;color:#c9a96a;margin-bottom:12px;border-bottom:1px solid rgba(201,169,106,.35);padding-bottom:8px}
+  .f10 .stub{display:flex;justify-content:space-between;font-size:15px;padding:9px 12px;margin-bottom:8px;color:#1c0f0c;font-weight:700}
+  .f10 .rack:nth-child(1) .stub{background:#e9a9b8}.f10 .rack:nth-child(2) .stub{background:#e6c654}.f10 .rack:nth-child(3) .stub{background:#9cc8d5}.f10 .rack:nth-child(4) .stub{background:#b3d8b4}
+  .f10 .stub span{opacity:.6;font-weight:400}
+  .f10 .foot{position:absolute;left:60px;right:60px;bottom:34px;display:flex;align-items:center;gap:28px;font-size:16px;color:#c9a96a}
+  .f10 .brass{flex:1;height:6px;border-radius:3px;background:#3a211b;position:relative}
+  .f10 .brass i{position:absolute;left:0;top:0;bottom:0;width:62%;border-radius:3px;background:linear-gradient(#e7c27a,#9b7531)}
+  .f10 .rec{color:#ff6b5a}
+</style>
+</head>
+<body>
+<div class="sheet-head">
+  <h1>Six AM: contact sheet, main screen</h1>
+  <p>Ten directions, same screen and content: four lanes, Drums and Bass playing, a Chords loop waiting for the next bar, recording. Rough on purpose, no sound. Click a frame to see it full size; circle your three.</p>
+</div>
+<div class="grid" id="grid"></div>
+<div class="overlay" id="ov"><div class="holder" id="holder"></div></div>
+
+<script>
+const lanes = [
+  { name: "Drums", clips: ["Four to the Floor", "Rolling Hats", "Jack Shuffle", "Broken Beat", "Clap Stack"], play: 0, next: -1 },
+  { name: "Bass", clips: ["Deep Sub", "Acid Line", "Offbeat Pump", "Rubber Bass", "Low Rumble"], play: 1, next: -1 },
+  { name: "Chords", clips: ["Chicago Stab", "Warm Pad", "Organ Hit", "Detroit Strings", "Minor Wash"], play: -1, next: 0 },
+  { name: "Top / FX", clips: ["Shaker Loop", "Vocal Chop", "Ride Wash", "Noise Riser", "Cowbell"], play: -1, next: -1 },
+];
+const st = (l, i) => (l.play === i ? "play" : l.next === i ? "next" : "");
+const nowName = (l) => (l.play >= 0 ? l.clips[l.play] : "");
+
+const frames = [
+  {
+    n: "01", name: "Four on the floor", line: "Club hand stamps, phosphor green on black, double borders", tag: "seed",
+    html: () => `<div class="frame f1">
+      <div class="top"><div class="logo">SIX AM</div><div class="count"><small>124 BPM</small>BAR 17.3</div></div>
+      <div class="cols">${lanes.map((l) => `<div class="lane"><h3>${l.name}</h3>${l.clips.map((c, i) =>
+        `<div class="clip ${st(l, i)}">${c}<small>${st(l, i) === "play" ? "PLAYING" : st(l, i) === "next" ? "STARTS NEXT BAR" : "4 BARS"}</small></div>`).join("")}</div>`).join("")}</div>
+      <div class="foot"><span>FILTER</span><div class="fader"><i></i></div><div class="rec">● REC 02:14</div></div>
+    </div>`,
+  },
+  {
+    n: "02", name: "Turntable", line: "Lanes as rings on a record, warm cream, thin light type", tag: "seed",
+    html: () => {
+      const cx = 410, cy = 410, radii = [360, 284, 208, 132], w = 66;
+      const P = (r, a) => { const t = (a - 90) * Math.PI / 180; return [cx + r * Math.cos(t), cy + r * Math.sin(t)]; };
+      let arcs = "", defs = "";
+      lanes.forEach((l, li) => {
+        const r = radii[li];
+        l.clips.forEach((c, i) => {
+          const a1 = i * 72 + 2.5, a2 = (i + 1) * 72 - 2.5, [x1, y1] = P(r, a1), [x2, y2] = P(r, a2);
+          const id = `f2a${li}${i}`, s = st(l, i);
+          defs += `<path id="${id}" d="M${x1} ${y1} A${r} ${r} 0 0 1 ${x2} ${y2}"/>`;
+          const col = s === "play" ? "#F3EBDD" : s === "next" ? "#5b4a3b" : "#2a2725";
+          arcs += `<use href="#${id}" fill="none" stroke="${col}" stroke-width="${w}"/>`;
+          if (s === "next") arcs += `<use href="#${id}" fill="none" stroke="#c2502c" stroke-width="2" stroke-dasharray="6 6" transform="translate(0,0)"/>`;
+          arcs += `<text font-family="Jost" font-weight="${s === "play" ? 400 : 300}" font-size="15" letter-spacing="1.5" fill="${s === "play" ? "#2a2622" : "#cbbfae"}" dy="5"><textPath href="#${id}" startOffset="50%" text-anchor="middle">${c.toUpperCase()}</textPath></text>`;
+        });
+      });
+      let grooves = ""; for (let r = 100; r < 405; r += 6) grooves += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#000" stroke-opacity=".18"/>`;
+      return `<div class="frame f2">
+        <svg width="820" height="820" viewBox="0 0 820 820"><defs>${defs}</defs>
+          <circle cx="${cx}" cy="${cy}" r="405" fill="#1b1a18"/>${grooves}${arcs}
+          <circle cx="${cx}" cy="${cy}" r="88" fill="#c2502c"/>
+          <text x="${cx}" y="${cy - 8}" text-anchor="middle" font-family="Jost" font-weight="300" font-size="26" fill="#F3EBDD">Six AM</text>
+          <text x="${cx}" y="${cy + 24}" text-anchor="middle" font-family="Jost" font-weight="300" font-size="14" letter-spacing="2" fill="#F3EBDD">BAR 17.3 · 124</text>
+          <circle cx="${cx}" cy="${cy}" r="5" fill="#1b1a18"/>
+        </svg>
+        <div class="side"><h1>Six AM</h1><div class="meta">Side A · bar 17.3 · 124</div>
+          ${lanes.map((l) => `<div class="row"><em>${l.name}</em><span class="${l.next >= 0 ? "q" : ""}">${nowName(l) || (l.next >= 0 ? l.clips[l.next] + " · next bar" : "—")}</span></div>`).join("")}
+        </div>
+        <div class="ctrl"><div class="lab"><span>Filter</span><span>Open</span></div><div class="line"><i></i></div><div class="recb"><i></i>Recording · 2:14</div></div>
+      </div>`;
+    },
+  },
+  {
+    n: "03", name: "Crate spines", line: "Flick through records by their spines, condensed black, magenta stickers", tag: "seed",
+    html: () => `<div class="frame f3">
+      <div class="top"><h1>Six AM</h1><div class="t">BAR <b>17.3</b> · 124 BPM<br>4 CRATES · 20 LOOPS</div></div>
+      ${lanes.map((l, li) => `<div class="crate"><div class="lab">CRATE 0${li + 1}<b>${l.name}</b></div>
+        <div class="spines">${l.clips.map((c, i) => `<div class="sp ${st(l, i)}"><span>${c}</span>${st(l, i) === "play" ? '<div class="sticker">NOW</div>' : st(l, i) === "next" ? '<div class="sticker">NEXT</div>' : ""}</div>`).join("")}</div>
+        <div class="now">${l.play >= 0 ? "ON THE DECK" : l.next >= 0 ? "NEXT BAR" : "EMPTY"}<b>${nowName(l) || (l.next >= 0 ? l.clips[l.next] : "—")}</b></div></div>`).join("")}
+      <div class="foot"><span>FILTER</span><div class="hair"><i></i></div><span class="r">● REC 02:14</span></div>
+    </div>`,
+  },
+  {
+    n: "04", name: "Night bus board", line: "A departure board in sodium orange; lanes are routes, the next bar is the bus", tag: "seed",
+    html: () => `<div class="frame f4">
+      <div class="top"><h1>SIX AM NIGHT SERVICE<small>ALL ROUTES RUNNING AT 124</small></h1><div class="clock">17.3<small>BAR · BEAT</small></div></div>
+      <table><tr><th>ROUTE</th><th>NOW</th><th>NEXT</th><th>ALSO ON THIS ROUTE</th></tr>
+      ${lanes.map((l, li) => `<tr><td class="r">N${li + 1}<small>${l.name.toUpperCase()}</small></td>
+        <td class="n">${nowName(l) || '<span class="dim">—</span>'}</td>
+        <td class="x">${l.next >= 0 ? `${l.clips[l.next]}<span class="due">DUE 1 BAR</span>` : '<span class="dim">—</span>'}</td>
+        <td><div class="also">${l.clips.filter((_, i) => i !== l.play && i !== l.next).map((c) => `<span>${c}</span>`).join("")}</div></td></tr>`).join("")}
+      </table>
+      <div class="foot"><span>FILTER</span><div class="leds">${Array.from({ length: 32 }, (_, i) => `<i class="${i < 20 ? "on" : ""}"></i>`).join("")}</div><span class="rec">● RECORDING 02:14</span></div>
+    </div>`,
+  },
+  {
+    n: "05", name: "Berlin warehouse", line: "Raw concrete, stencil type, one fluorescent tube as the playhead", tag: "reference",
+    html: () => `<div class="frame f5"><div class="glow"></div>
+      <div class="tube"><i></i></div>
+      <div class="top"><h1>SIX AM</h1><div class="t">124<br>BAR 17.3</div></div>
+      ${lanes.map((l) => `<div class="lane"><h3>${l.name.toUpperCase()}</h3>${l.clips.map((c, i) => `<div class="clip ${st(l, i)}">${c.toUpperCase()}</div>`).join("")}</div>`).join("")}
+      <div class="foot"><span>FILTER</span><div class="bar"><i></i></div><span class="rec">● REC 02:14</span></div>
+    </div>`,
+  },
+  {
+    n: "06", name: "'80s drum machine", line: "Beige hardware panel, chunky coloured keys, LEDs and a small LCD", tag: "reference",
+    html: () => `<div class="frame f6"><div class="panel">
+      <div class="band"><h1>SIX AM <span>JAM BOX · 4 LANE</span></h1><div class="lcd">BAR 017.3  TEMPO 124<br>NEXT  CHICAGO STAB</div></div>
+      <div class="body"><div class="lanes">${lanes.map((l) => `<div class="lane"><h3>${l.name.toUpperCase()}</h3>${l.clips.map((c, i) => `<div class="k"><div class="led ${st(l, i) === "play" ? "on" : st(l, i) === "next" ? "amb" : ""}"></div><div class="key"></div><small>${c}</small></div>`).join("")}</div>`).join("")}</div>
+        <div class="side"><h4>FILTER</h4><div class="knob"></div><div class="btns"><div class="btn">START</div><div class="btn">STOP</div><div class="btn rec" style="grid-column:span 2">● REC 02:14</div></div></div>
+      </div></div></div>`,
+  },
+  {
+    n: "07", name: "'70s hi-fi", line: "Wood veneer, brushed aluminium, VU needles, Dymo labels", tag: "retro",
+    html: () => {
+      const vu = (a) => `<svg viewBox="0 0 250 150" width="250" height="150"><path d="M30 120 A110 110 0 0 1 220 120" fill="none" stroke="#2b2b2b" stroke-width="2"/><path d="M168 64 A110 110 0 0 1 220 120" fill="none" stroke="#c8261b" stroke-width="6"/>${Array.from({ length: 11 }, (_, i) => { const t = Math.PI * (1 - i / 10) * 0.86 + 0.22; const x1 = 125 + 110 * Math.cos(t), y1 = 140 - 110 * Math.sin(t) - 20 + 0, x2 = 125 + 96 * Math.cos(t), y2 = 140 - 96 * Math.sin(t) - 20; return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#2b2b2b" stroke-width="2"/>`; }).join("")}<text x="125" y="102" text-anchor="middle" font-family="Special Elite" font-size="16" fill="#2b2b2b">VU</text><line x1="125" y1="140" x2="${125 + 112 * Math.cos(a)}" y2="${140 - 112 * Math.sin(a)}" stroke="#1a1a1a" stroke-width="2.5"/></svg>`;
+      return `<div class="frame f7"><div class="face">
+        <div class="top"><div class="vu">${vu(1.2)}</div>
+          <div class="mid"><div class="plate"><b>SIX AM</b>STEREO JAM RECEIVER · MODEL 600</div><div class="dial"><span>1</span><span>5</span><span>9</span><span>13</span><span>17</span><span>21</span><span>25</span><span>29</span><span>BAR</span><i></i></div></div>
+          <div class="vu">${vu(1.05)}</div></div>
+        <div class="rows"><div>${lanes.map((l) => `<div class="lane"><span class="dymo">${l.name}</span>${l.clips.map((c, i) => `<div class="rock"><div class="lamp ${st(l, i) === "play" ? "on" : st(l, i) === "next" ? "dim" : ""}"></div>${c}</div>`).join("")}</div>`).join("")}</div>
+          <div class="ctrls"><span class="dymo">Filter</span><div class="knob"></div><div class="reclamp"><i></i><span class="dymo">Rec 02:14</span></div><span style="font-size:15px">124 · BAR 17.3</span></div></div>
+      </div></div>`;
+    },
+  },
+  {
+    n: "08", name: "Xerox club flyer", line: "1988 warehouse party flyer: photocopy, halftone, cut-out type, tape, red marker", tag: "retro",
+    html: () => `<div class="frame f8">
+      <div class="top"><div class="cut">${"SIX AM".split("").map((c) => (c === " " ? '<i style="width:22px"></i>' : `<span>${c}</span>`)).join("")}</div><div class="sub">ALL NIGHT JAM<br><em>124 BPM</em> · BAR 17.3</div></div>
+      ${lanes.map((l) => `<div class="strip"><h3>${l.name}</h3>${l.clips.map((c, i) => `<div class="scrap ${st(l, i)}">${i === 2 ? '<div class="tape"></div>' : ""}${c}</div>`).join("")}</div>`).join("")}
+      <div class="foot"><span>FILTER</span><div class="slide"><i></i></div><span class="rec">REC 02:14</span></div>
+    </div>`,
+  },
+  {
+    n: "09", name: "Gallery wall labels", line: "Museum-white walls; each loop is an artwork with a caption, red dot = playing", tag: "far away",
+    html: () => `<div class="frame f9">
+      <div class="top"><h1>Six AM</h1><div class="t">Bar 17.3 · 124 beats per minute</div></div>
+      <div class="rooms">${lanes.map((l, li) => `<div><h3><small>Room ${["I", "II", "III", "IV"][li]}</small>${l.name}</h3>${l.clips.map((c, i) => `<div class="lbl ${st(l, i)}"><b>${c}</b><span>${st(l, i) === "play" ? "Now showing · " : st(l, i) === "next" ? "From the next bar · " : ""}Loop, 4 bars · CC0</span></div>`).join("")}</div>`).join("")}</div>
+      <div class="foot"><span>Filter</span><div class="thin"><i></i></div><b>● Recording, 2 min 14 s</b></div>
+    </div>`,
+  },
+  {
+    n: "10", name: "Cloakroom tickets", line: "Hang a ticket on your lane's hook to play it; velvet, brass and paper", tag: "sounds wrong",
+    html: () => `<div class="frame f10">
+      <div class="top"><h1>SIX AM CLOAKROOM</h1><div class="t">BAR 17.3 · 124</div></div>
+      <div class="rail"></div>
+      <div class="hooks">${lanes.map((l, li) => {
+        const i = l.play >= 0 ? l.play : l.next;
+        return `<div class="hook"><div class="str"></div>${i >= 0 ? `<div class="tk"><small>CLOAKROOM · ${l.name.toUpperCase()}</small><b>No ${String(li * 5 + i + 1).padStart(3, "0")}</b><p>${l.clips[i]}</p><em>${l.play >= 0 ? "NOW PLAYING" : "HANGS AT NEXT BAR"}</em></div>` : `<div class="empty">Hang a ${l.name.toLowerCase()} ticket here</div>`}</div>`;
+      }).join("")}</div>
+      <div class="racks">${lanes.map((l, li) => `<div class="rack"><h4>${l.name.toUpperCase()}</h4>${l.clips.map((c, i) => i === l.play || i === l.next ? "" : `<div class="stub">${c}<span>No ${String(li * 5 + i + 1).padStart(3, "0")}</span></div>`).join("")}</div>`).join("")}</div>
+      <div class="foot"><span>FILTER</span><div class="brass"><i></i></div><span class="rec">● REC 02:14</span></div>
+    </div>`,
+  },
+];
+
+const grid = document.getElementById("grid");
+grid.innerHTML = frames.map((f, k) => `<div class="cell" data-k="${k}"><div class="thumb">${f.html()}</div>
+  <div class="cap"><b>${f.n}</b><div><strong>${f.name}</strong><br><span>${f.line}</span></div><em class="tag">${f.tag}</em></div></div>`).join("");
+
+const fit = () => document.querySelectorAll(".thumb").forEach((t) => {
+  t.querySelector(".frame").style.transform = `scale(${t.clientWidth / 1440})`;
+});
+addEventListener("resize", fit); fit();
+document.fonts?.ready.then(fit);
+
+const ov = document.getElementById("ov"), holder = document.getElementById("holder");
+grid.addEventListener("click", (e) => {
+  const cell = e.target.closest(".cell"); if (!cell) return;
+  const s = Math.min((innerWidth - 48) / 1440, (innerHeight - 48) / 900);
+  holder.style.width = 1440 * s + "px"; holder.style.height = 900 * s + "px";
+  holder.innerHTML = frames[cell.dataset.k].html();
+  holder.firstElementChild.style.transform = `scale(${s})`;
+  ov.classList.add("on");
+});
+const close = () => ov.classList.remove("on");
+ov.addEventListener("click", close);
+addEventListener("keydown", (e) => e.key === "Escape" && close());
+</script>
+</body>
+</html>

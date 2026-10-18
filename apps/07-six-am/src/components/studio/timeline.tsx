@@ -71,7 +71,7 @@ export function TimelineView({ t, colors }: { t: Timeline; colors: string[] }) {
               return (
                 <div
                   key={r.id}
-                  className={cx(s.region, t.selected === r.id && s.selected, live && s.live)}
+                  className={cx(s.region, t.selected === r.id && s.selected, live && s.live, t.bin?.id === r.id && t.bin.over && s.removing)}
                   style={{ left: (r.start - 1) * ppb, width: r.length * ppb - 2 }}
                   {...t.blockBody(r)}
                 >

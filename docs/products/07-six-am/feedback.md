@@ -11,3 +11,4 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 5 | Owner review, prototypes | Likes the colour palettes of Drum machine and Record shop, but the crate design of Turntable (deck plus list); use that crate in the other two | fixed |
 | 6 | Design critic, rounds 1–2 (6/10, 6/10) | Brown-on-brown; serif everywhere; solid blocks swamp the dark; waveforms as wallpaper; decorative deck; noisy crate dots; weak drag ghost; five styles in the transport | fixed (deck kept, see 7) |
 | 7 | Owner review, critic's take | Prefers the critic's take, but keep the vinyl player bottom left | fixed |
+| 8 | Owner, first listen | "Sounds great." But no visible way to remove a loop from the timeline (only select + Delete, which isn't discoverable); wants press and hold → a bin appears → drag onto it to remove | fixed |

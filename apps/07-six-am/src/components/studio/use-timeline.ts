@@ -11,10 +11,11 @@ import type { AudioEngine } from "./audio";
 
 type Drag =
   | { type: "new"; loop: Loop; x: number; y: number; bar: number | null }
-  | { type: "move"; id: string; start: number; offset: number }
+  | { type: "move"; id: string; start: number; offset: number; overBin: boolean }
   | { type: "resize"; id: string; length: number };
 
 const THRESHOLD = 4;
+const HOLD_MS = 250; // press and hold a block this long and the bin appears
 
 export function useTimeline() {
   // shortcut: starts from the demo track and isn't saved; move to useLocalStorage (brief requirement 7) in the build.
@@ -152,19 +153,26 @@ export function useTimeline() {
     },
   });
 
-  /** Spread onto a block: click selects, drag moves along its track. */
+  /** Spread onto a block: click selects, drag moves along its track, drop on the bin removes it.
+   *  The bin appears once you hold the block or start dragging it (owner, feedback 8). */
   const blockBody = (r: Region) => ({
     onPointerDown: (e: React.PointerEvent) => {
       if (e.button !== 0) return;
       e.stopPropagation();
       setSelected(r.id);
       const offset = laneX(e.clientX) - (r.start - 1) * ppbRef.current;
+      const hold = setTimeout(() => setDrag({ type: "move", id: r.id, offset, start: r.start, overBin: false }), HOLD_MS);
       track(e, (ev) => {
-        setDrag({ type: "move", id: r.id, offset, start: snapBar(laneX(ev.clientX) - offset, ppbRef.current, r.length) });
-      }, (_ev, moved) => {
-        if (!moved) return;
+        clearTimeout(hold);
+        const overBin = !!(document.elementFromPoint(ev.clientX, ev.clientY) as HTMLElement | null)?.closest("[data-bin]");
+        // Over the bin, the block stays put; elsewhere it follows along its track.
+        const start = overBin ? r.start : snapBar(laneX(ev.clientX) - offset, ppbRef.current, r.length);
+        setDrag({ type: "move", id: r.id, offset, start, overBin });
+      }, () => {
+        clearTimeout(hold);
         const d = dragRef.current;
-        if (d?.type === "move" && d.start !== r.start) {
+        if (d?.type === "move" && d.overBin) remove(r.id);
+        else if (d?.type === "move" && d.start !== r.start) {
           commit({ ...docRef.current, regions: place(docRef.current.regions, { ...r, start: d.start }) });
         }
         setDrag(null);
@@ -236,13 +244,14 @@ export function useTimeline() {
     return r;
   });
   const ghost = drag?.type === "new" ? drag : null;
+  const bin = drag?.type === "move" ? { id: drag.id, over: drag.overBin } : null;
   const inTrack = new Set(doc.regions.map((r) => r.loopId));
   const sounding = doc.muted.map((m, t) => !m && regions.some((r) => r.track === t && playhead >= r.start && playhead < r.start + r.length));
   const bar = Math.floor(playhead), beat = Math.floor((playhead - bar) * 4) + 1;
 
   return {
     doc, regions, playing, setPlaying, playhead, jumpTo, bar, beat, selected, setSelected,
-    preview, setPreview, group, setGroup, filter, ghost, inTrack, sounding, pxPerBar, lanesRef,
+    preview, setPreview, group, setGroup, filter, ghost, bin, inTrack, sounding, pxPerBar, lanesRef,
     canUndo: past.length > 0, undo, toggleMute, remove,
     crateItem, blockBody, blockGrip, ruler, knob,
   };

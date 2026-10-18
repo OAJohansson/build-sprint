@@ -2,6 +2,7 @@
 
 // The main screen (design session, 18 Oct): a dark warehouse with Chicago house and disco
 // colour. Control bar on top, the timeline in the middle, the crate along the bottom.
+import { Trash2 } from "lucide-react";
 import { useTimeline } from "./use-timeline";
 import { TimelineView, cx } from "./timeline";
 import { Crate } from "./crate";
@@ -38,6 +39,14 @@ export function Studio() {
         <TimelineView t={t} colors={COLORS} />
       </main>
       <Crate t={t} colors={COLORS} />
+      {t.bin ? (
+        <div className={s.binZone}>
+          <div data-bin className={cx(s.bin, t.bin.over && s.binOver)}>
+            <Trash2 aria-hidden />
+            <span>{t.bin.over ? "Let go to remove" : "Drop here to remove"}</span>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -166,3 +166,8 @@ What happened, what was decided and why. Newest last.
 - Checked in the browser with a temporary level meter (the test agent can't hear): sound while
   playing, drums louder when they come back at bar 41, quieter with drums muted, silent after
   stopping, preview plays on its own. Whether it *sounds* like house is the owner's ear test.
+- **Owner's first listen: "sounds great."** One gap: no visible way to remove a loop (Delete
+  works but nothing on screen says so; a discoverability problem, Don Norman's signifiers).
+  Added drag to the bin: hold a block for a quarter of a second, or start dragging it, and a
+  bin covers the crate ("Drop here to remove"); over it the block dims and the bin turns red;
+  let go and the loop is removed (undo brings it back). Feedback 8.

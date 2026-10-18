@@ -66,8 +66,9 @@ A laptop web app with two parts. **The crate** (sound browser): 24 loops in four
 bass, chords, top/FX), all at 124 BPM in A minor, each with a preview. Synthesised in the browser
 first, CC0 samples from Freesound later (decision 0019, 18 Oct). **The timeline**: four fixed tracks (drums, bass, chords, top/FX) you drag loops onto;
 every loop snaps to the bar and repeats when you drag its end; mute per track; play from any bar
-with a moving playhead; one filter control; undo. One zoom level showing about 64 bars. Saved in
-localStorage. Layout: GarageBand's (timeline plus loop browser), look and browser from rekordbox
+with a moving playhead; one filter control; undo. One zoom level showing about 64 bars. Tracks autosave to
+Supabase so they open on any device, behind an access code (decision 0020, 19 Oct; the brief
+first said localStorage). Layout: GarageBand's (timeline plus loop browser), look and browser from rekordbox
 (dark, coloured waveforms, a proper library list). Owner agreed this feature list, 18 Oct.
 
 Stop line: no live jamming (the lanes idea), no humming, no Freesound search, no export, no

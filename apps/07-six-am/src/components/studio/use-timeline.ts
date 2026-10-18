@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   BARS, type Doc, type Loop, type Region,
-  demoDoc, loopById, newId, place, snapBar, snapLength,
+  loopById, newId, place, snapBar, snapLength,
 } from "@/lib/timeline";
 import type { AudioEngine } from "./audio";
 
@@ -17,9 +17,9 @@ type Drag =
 const THRESHOLD = 4;
 const HOLD_MS = 250; // press and hold a block this long and the bin appears
 
-export function useTimeline() {
-  // shortcut: starts from the demo track and isn't saved; move to useLocalStorage (brief requirement 7) in the build.
-  const [doc, setDoc] = useState<Doc>(demoDoc);
+/** One open track. `initial` is the saved arrangement; Studio remounts this per track. */
+export function useTimeline(initial: Doc) {
+  const [doc, setDoc] = useState<Doc>(initial);
   const [past, setPast] = useState<Doc[]>([]);
   const docRef = useRef(doc);
 

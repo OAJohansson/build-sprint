@@ -309,6 +309,9 @@ importers:
 
   apps/07-six-am:
     dependencies:
+      '@supabase/supabase-js':
+        specifier: ^2.117.2
+        version: 2.117.2
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -327,6 +330,9 @@ importers:
       react-dom:
         specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
       tailwind-merge:
         specifier: ^3.6.0
         version: 3.7.0

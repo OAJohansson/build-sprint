@@ -171,3 +171,23 @@ What happened, what was decided and why. Newest last.
   Added drag to the bin: hold a block for a quarter of a second, or start dragging it, and a
   bin covers the crate ("Drop here to remove"); over it the block dims and the bin turns red;
   let go and the loop is removed (undo brings it back). Feedback 8.
+
+## 19 Oct: saving
+
+- Owner asked for saving and a UI for saved tracks, plus song analysis (upload a track or use
+  Spotify to see how it's built) and more sounds. Song analysis and more sounds went to the
+  backlog; Spotify closed its audio-analysis API to new apps in late 2024, so analysing an
+  uploaded file is the likelier route.
+- **Where to save: Supabase** (owner: "I want my tracks on any device"), decision 0020: one
+  `sixam_tracks` table in the project CrossFit, Scribble and Folio share; name plus the whole
+  arrangement as JSON; server routes only, with the secret key; an access code as the login; an
+  in-memory store in development. Pattern copied from Folio.
+- **The UI:** autosave a moment after each change ("Saving…" → "Saved", or "Not saved · Retry");
+  the track name in the bar, click to rename; a My tracks panel with New track, open, and delete
+  with a confirm step. A first visit starts from the demo track ("My first track").
+- `src/lib/ago.ts` ("5 min ago", "yesterday") with tests for midnight, month end and a missing
+  date (decision 0011); 18 tests pass. Block ids are random now, so blocks added after
+  reopening a track can't clash with saved ones.
+- Checked in the browser on the in-memory store: an edit and a rename survive a reload; new
+  track, switching back and deleting work. Not yet checked against the real Supabase (the owner
+  runs the schema and adds the keys).

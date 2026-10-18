@@ -51,8 +51,8 @@ export const LOOPS: Loop[] = [
 ];
 export const loopById = (id: string) => LOOPS.find((l) => l.id === id)!;
 
-let seq = 0;
-export const newId = () => `r${++seq}`;
+// Random, so blocks added after reopening a saved track never clash with the saved ones.
+export const newId = () => `r${Math.random().toString(36).slice(2, 10)}${Date.now().toString(36).slice(-4)}`;
 
 const R = (loopId: string, start: number, length: number): Region => ({
   id: newId(), loopId, track: loopById(loopId).track, start, length,

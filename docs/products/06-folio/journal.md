@@ -526,3 +526,8 @@ explains (owner's request: "help me start thinking about this, not just you tell
   about $1.50 a month vs $0.05). Bar check, honestly: item 1 not proven on the 500-reader sample
   (hide-1 ranges overlap bestsellers'), items 2–4 pass, item 5 is the owner's look at the live
   picks. Decision 0018.
+- **Shipping the picks:** owner added `ANTHROPIC_API_KEY` in Vercel as a Sensitive variable.
+  Vercel flagged the other keys "Needs Attention" because `pnpm ship` uploaded them as plain
+  encrypted variables (readable by anyone with project access); `ship.mjs` now uploads them as
+  Sensitive, and the owner re-saves the existing ones by hand. Merged to main and pushed (with
+  the held-back decision 0016 commits) so Vercel deploys.

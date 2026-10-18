@@ -39,3 +39,14 @@ What happened, what was decided and why. Newest last.
 - `docs/ideas.md`: already updated on this branch (self-discovery row, music row).
 - `README.md`: run `pnpm sync` after Folio merges.
 - Notebook: `pnpm sync && pnpm notebook`, then republish.
+
+## 18 Oct: brief signed off, persona and test plan
+
+- Owner confirmed the brief and humming in v2; setup committed on `07-discovery`.
+- **Persona:** the owner (they/them), a house and techno lover who has never produced and closed
+  the big DAWs after a look. Words to use are the club's (drop, pump, crate), not the studio's.
+- **Test plan:** five scenarios on a 1440 × 900 laptop viewport: first sound, build and record a
+  groove, the filter move, play it back after a reload, and a long run with the tab in the
+  background. Key limit: the test agent can't hear, so it checks timing from the transport
+  position and clip states; whether it sounds like house is the owner's ear test.
+- Dev server moved to port 3007 so Six AM and Folio (3000) can run at the same time.

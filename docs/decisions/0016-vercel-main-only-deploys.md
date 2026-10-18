@@ -38,3 +38,12 @@ names with a slash (e.g. `claude/…`) are covered too.
 - A merge to `main` still creates cancelled deployments in apps that didn't change (about one per
   app per merge): batch merges.
 - Check after the first merge that apps still deploy from `main`.
+
+## Update, 18 Oct: compare with the last deploy, not the last commit
+
+The `ignoreCommand` was `git diff --quiet HEAD^ HEAD -- .`, which looks only at the last commit of
+a push: a push whose last commit didn't touch an app skipped that app even when earlier commits
+did (Folio's LLM picks were skipped because the last commit only synced the README). It is now
+`[ -n "$VERCEL_GIT_PREVIOUS_SHA" ] && git diff --quiet "$VERCEL_GIT_PREVIOUS_SHA" HEAD -- .`:
+skip only when nothing in the app changed since its last successful deploy, and always build when
+there is no earlier deploy (or the old commit isn't in Vercel's shallow clone).

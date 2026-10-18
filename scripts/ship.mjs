@@ -85,7 +85,9 @@ const missing = expected.filter((k) => !env.some((e) => e.key === k));
 step("Environment variables");
 console.log(env.length ? `  from .env.local: ${env.map((e) => e.key).join(", ")}` : "  none (no .env.local, or it's empty)");
 if (missing.length) console.log(`  ⚠ in .env.example but not set: ${missing.join(", ")}`);
-const envBody = env.map((e) => ({ key: e.key, value: e.value, target: ["production", "preview"], type: "encrypted" }));
+// "sensitive": Vercel never shows the value again, not even to me ("Needs Attention" otherwise).
+// Everything in .env.local is a key or code, so all of it is sensitive.
+const envBody = env.map((e) => ({ key: e.key, value: e.value, target: ["production", "preview"], type: "sensitive" }));
 
 if (dryRun) {
   console.log(`\nDry run. Would create or update project "${name}" (Root Directory ${rootDirectory}, Next.js,`);

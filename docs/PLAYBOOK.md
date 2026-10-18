@@ -51,6 +51,9 @@ hour, not a day. Names in brackets are where each practice comes from; see
 - **MVP and stop line.** The smallest thing that does the top job and tests the riskiest
   assumption. The appetite is one day: fix the time, cut the scope. List what ships today;
   everything else goes straight to `backlog.md`. *(Singer, Shape Up: appetite.)*
+  When the product carries a learning ladder (several models, levels or versions to try), set
+  the MVP cut first: only the first rung that ships on its own is in scope, and the rest of the
+  ladder starts in the backlog (06 Folio).
 - **Requirements, no-gos and rabbit holes.** What the MVP must do, each as a user-visible
   behaviour with a check ("when location is blocked, search appears"), not a design. Then what
   it won't do (no-gos), and the traps that could eat the day (rabbit holes). This is what design

@@ -41,6 +41,7 @@ export const api = (code: string) => ({
     }),
   search: (q: string) => call<{ results: Found[] }>(code, `/api/search?q=${encodeURIComponent(q)}`).then((r) => r.results),
   genre: (label: string) => call<{ results: Found[] }>(code, `/api/search?genre=${encodeURIComponent(label)}`).then((r) => r.results),
+  picks: () => call<{ picks: Found[] }>(code, "/api/picks").then((r) => r.picks),
   home: () => call<{ popular: Found[]; newReleases: Found[] }>(code, "/api/home"),
 });
 export type Api = ReturnType<typeof api>;

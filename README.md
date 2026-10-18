@@ -15,7 +15,7 @@ reps in going from idea to something live, plus an honest write-up of what I lea
 | 3 | **Scribble** | Writing practice feels too big to start (reviews) or turns into perfectionism (journalling), so the habit doesn't stick | ✅ shipped | [live](https://scribble-notebook.vercel.app) | [write-up](docs/products/03-scribble.md) · [code](apps/03-scribble) |
 | 4 | **Mallow** | At follow-ups they rebuild weeks from memory, so dose decisions rest on rough impressions | ✅ shipped | [live](https://mallow-omega.vercel.app) | [write-up](docs/products/04-mallow.md) · [code](apps/04-mallow) |
 | 5 | **Inkling** | Young adults go round in circles about direction; ChatGPT agrees and forgets, and Inkling's real strength (naming the idea at work) was invisible inside a chat window | ✅ shipped | [live](https://inkling-journal.vercel.app) | [write-up](docs/products/05-inkling.md) · [code](https://github.com/OAJohansson/kids-app) |
-| 6 | **Folio** | My reading history sits in Goodreads, which feels clunky, buries opinions in long reviews and recommends books that miss my taste, so logging is a chore and picking the next book is guesswork | 🛠️ building | — | [write-up](docs/products/06-folio.md) · [code](apps/06-folio) |
+| 6 | **Folio** | My reading history sits in Goodreads, which feels clunky, buries opinions in long reviews and recommends books that miss my taste, so logging is a chore and picking the next book is guesswork | ✅ shipped | [live](https://folio-iota-jade.vercel.app) | [write-up](docs/products/06-folio.md) · [code](apps/06-folio) |
 <!-- products:end -->
 
 _This table is generated from `docs/products/*.md`. Run `pnpm sync` after editing frontmatter._

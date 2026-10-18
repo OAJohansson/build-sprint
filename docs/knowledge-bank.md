@@ -55,6 +55,17 @@ a replacement for real people.
 Ask about their life and past behaviour, not your idea. Compliments are not data; commitments
 (time, money, a next step) are. *(Rob Fitzpatrick, The Mom Test)*
 
+#### Maximisers and satisficers
+Some people compare carefully before choosing (**maximisers**); others take the first option
+that's good enough (**satisficers**) *(Barry Schwartz, The Paradox of Choice, 2004)*.
+Maximisers want more options, with reasons and reviews to check; satisficers want a short list.
+Where we met it: Folio (06): the owner over-researches, so Folio shows 10 picks.
+
+#### You are not your user
+Your own habits are a hypothesis, not the answer: check them against how people in general
+behave. Where we met it: Folio (06): the owner reads all 10 picks, but chose to score order
+anyway, because most people look closely at only the first few.
+
 ### Data and metrics
 
 #### Success signals and guardrails
@@ -109,6 +120,9 @@ capturing it at the time. Where we met it: Mallow (04), patients rebuilding week
 
 **Q:** A research pack has 16 competitor reviews and many surveys. What should you check before quoting it?
 **A:** What kind of evidence it is: desk research says what's likely; only conversations and behaviour show what your users do.
+
+**Q:** What's the difference between a maximiser and a satisficer, and what does each want from a list of options?
+**A:** A maximiser compares carefully and wants more options with reasons; a satisficer takes the first good-enough option and wants a short list.
 
 ## Product strategy
 
@@ -611,7 +625,71 @@ does: when matches merge records, a wrong match destroys data, so prefer precisi
 person fix the leftovers. Where we met it: Folio (06): a broader search "matched" *A Corruption of
 Blood* to *Imitation of Christ*; we kept strict matching and listed the 15 unmatched books.
 
+#### The long tail and popularity bias
+A few books are read by almost everyone; most books are read by a few people each, and together
+those make up most of what people read: the **long tail** *(Chris Anderson, 2004)*. Accuracy
+grades reward recommending what everybody reads, so models drift towards bestsellers
+(**popularity bias**). Experienced readers live in the tail: they read the famous books first and
+move on. Why it matters: the tail is where a personal recommender earns its keep. Where we met
+it: Folio (06): goodbooks readers' first books sit around popularity rank 290, their latest liked
+ones around 1,700; the owner's *Design of Everyday Things* is rank 8,973 of 10,000.
+
+#### Item cold start, and why hybrids exist
+A "readers like you" model only knows books that sit on readers' shelves; a new book nobody has
+read is invisible to it, however good the model. Models that read content (descriptions, audio)
+can place a brand-new item, and AI models know newer books but can invent some. Each family
+covers another's blind spot, which is the real reason production systems are hybrids (Spotify
+places new songs with audio models). Where we met it: Folio (06): only 11 of the owner's 66
+want-to-reads since 2023 are in the 2017 dataset.
+
+#### Context: the same person wants different things at different times
+Taste is stable-ish; intent isn't. On a fiction evening a great non-fiction pick is wrong
+*tonight*. Two designs: one varied list the person scans (needs diversity), or a mood choice first
+(needs accuracy within a mood). Where we met it: Folio (06), owner: "it depends on my mood";
+parked for the re-ranking step.
+
+#### Benchmark datasets and staleness
+A **benchmark** is a public dataset everyone tests on, so results compare across papers and
+teams. They're frozen in time (**staleness**): goodbooks-10k is Goodreads' 10,000 most popular
+books around 2017, with 53k readers and 6M ratings. Goodreads closed its API in Dec 2020, so no
+fresh copy exists; Amazon Reviews 2023 is fresher but messier; Open Library's monthly dumps have
+no reader id, so they can't show which books sit on the same shelf. Separate *learning the
+method* (a benchmark is fine) from *serving today's books* (needs fresh data). Where we met it:
+Folio (06).
+
+#### TF-IDF: describing an item by its rare words
+Turn each item into a fingerprint, one number per word (or tag): **TF** (term frequency) says how
+strongly this item carries the word, **IDF** (inverse document frequency) says how rare the word
+is across all items, so "favorites", on nearly every book, counts for almost nothing and
+"cancer-memoir" counts a lot. Items with similar fingerprints are similar (cosine similarity);
+a user is a blend of the items they liked. Why it matters: a fast, explainable content baseline
+that needs no other users. Where we met it: Folio (06), on Goodreads shelf tags: 2.3× bestsellers,
+but 70% of its hits were sequels. From: Karen Spärck Jones (1972), the idea behind early search
+engines.
+
+#### An LLM as the recommender
+Show the model the user's history and ask for items by name. It knows items newer than any
+dataset and writes reasons, but it can invent items, repeat what the user owns, and favours
+famous things. So **the model isn't the system**: code around it matches names to a real
+catalogue, drops owned and duplicate items, and checks existence (Folio uses Open Library). Why
+it matters: the common shape of "AI recommendations" today, and a cheap MVP. Where we met it:
+Folio (06): Haiku tied TF-IDF on goodbooks readers; Opus found 7 of the owner's 48 books, the
+classic models 0.
+
+#### Matching records across datasets: a ladder
+Try the strictest identifier first (a shared id), then a looser one (ISBN, but every edition has
+its own), then normalised title + author, and check the loose matches by eye. Some matches only a
+person knows (*If This Is a Man* is *Survival in Auschwitz* in the US). Watch for damaged fields:
+goodbooks stored 13-digit ISBNs as rounded numbers, and dropped leading zeros from 10-digit ones.
+Where we met it: Folio (06): 131 by id, 0 extra by ISBN, 12 by title + author, all correct.
+
 ### Quiz
+
+**Q:** In TF-IDF, why does a tag like "favorites" count for almost nothing?
+**A:** IDF: it's on nearly every book, so it says nothing about any one of them; rare tags get the weight.
+
+**Q:** Why isn't an LLM on its own a recommender system?
+**A:** It can invent items, repeat what the user owns and favour famous ones; code around it must match names to a real catalogue and drop owned, repeated and unknown items.
 
 **Q:** What is a hydration mismatch?
 **A:** When the HTML rendered on the server differs from the first render in the browser (for example because of the clock or localStorage), so React complains.
@@ -657,6 +735,15 @@ Blood* to *Imitation of Christ*; we kept strict matching and listed the 15 unmat
 
 **Q:** What is the difference between explicit and implicit feedback?
 **A:** Explicit is what people say (a rating); implicit is what they do (plays, saves, want-to-read). Implicit is noisier but far more plentiful.
+
+**Q:** What is the long tail, and why does it matter for a recommender?
+**A:** The many less-famous items that together make up most of what people consume; experienced users live there, and bestseller lists can't reach it.
+
+**Q:** Why can't a "readers like you" model recommend a book published last year (if the data is older)?
+**A:** It only knows books that appear on readers' shelves in its data (item cold start); a content or AI model has to place new books.
+
+**Q:** What is a benchmark dataset, and what's its usual catch?
+**A:** A public dataset everyone tests on, so results compare; it's frozen in time, so it misses newer items.
 
 ## Building with AI
 
@@ -733,7 +820,113 @@ Before any clever model, build the dumbest reasonable one (e.g. "most popular bo
 read") and score it. A model that doesn't beat it isn't working, however impressive it sounds.
 Where we met it: Folio (06), step 2 of the ladder.
 
+#### An offline evaluation harness: the exam board
+A fixed frame every model is strapped into and tested the same way, on past data. Parts: the
+data; the **split** (what's hidden, what the model may see); the model, which only has to *learn*
+and *answer*; **guardrails** (pass/fail rules); the **grades**; a **results table** with a row
+per model; and tests that check the grading itself against hand-worked answers. Why it matters:
+it turns "the most advanced recommender" into a measurable claim. Where we met it: Folio (06),
+`apps/06-folio/lab` (decision 0017).
+
+#### Data leakage: Thursday's newspaper
+When information from the future, or from the answer, slips into what a model sees, it looks
+brilliant in the lab and disappoints in real life. Fix: train on the past, test on the future
+(**out-of-time validation**). Where we met it: Folio (06), owner: letting the model see *Circe*
+while hiding *The Song of Achilles*, the book that led to it.
+
+#### Leave-last-out vs random hold-out
+**Leave-last-out:** hide each person's most recent items; the standard in recommender papers.
+**Random hold-out:** hide random items; used when there's no order, but slightly optimistic (the
+model sees later items) and can't test drift or sequences. Check what order the data really has:
+goodbooks has no dates, but its file is in time order (no 2016–17 book is rated before row 1.1M
+of 6M). Where we met it: Folio (06).
+
+#### Sample size and confidence intervals
+One person's handful of hidden books can't separate two models: like judging two penalty takers
+on 3 kicks each. Test on thousands of people, and show each grade as a range (a **confidence
+interval**). The **bootstrap** gets the range by re-drawing the people at random, with
+replacement, a thousand times and seeing how much the average moves *(Bradley Efron, 1979)*. If
+two models' ranges overlap, there's no winner yet. Where we met it: Folio (06): 10,000 readers,
+plus the owner's 48 books as a personal check.
+
+#### Ranking grades: hit rate, MRR, NDCG, recall
+For a list of k recommendations with hidden items: **hit rate@k**, was one in the list;
+**recall@k**, what share of the hidden items were; **MRR**, one over the position of the first
+hit (1, ½, ⅓…), drops fast; **NDCG@k**, read backwards: *gain* (points per hit, can be more for a
+5★ item), *cumulative* (summed), *discounted* (less the lower it sits, 1/log2(position + 1)),
+*normalised* (divided by the best possible, so 0 to 1) *(Järvelin & Kekäläinen, 2002)*. Position
+matters because attention falls down a list (Netflix: people look closely at about 3 titles).
+Compare models only on the same exam: hiding more items makes a hit easier. Where we met it:
+Folio (06): headline NDCG@10, 5★ = 2 points, 4★ = 1.
+
+#### Beyond accuracy: coverage, novelty, diversity
+**Coverage:** share of the catalog that appears in anyone's list (are lists personal?).
+**Novelty:** how un-mainstream the picks are (would they have found it alone?). **Diversity:**
+how different the books in one list are (authors, genres). Random wins all three and is useless;
+bestsellers wins accuracy and fails all three. So no single grade can be trusted alone: report
+them side by side. Where we met it: Folio (06): bestsellers shows about 60 books to everyone
+(coverage 0.6%).
+
+#### Grades vs guardrails, and base rates
+A **grade** is something to improve; a **guardrail** is a rule that disqualifies when broken
+(never a book already on the shelf, never a book that doesn't exist). A guardrail must be
+checkable before the outcome: "never recommend a book I'd rate 3★" can't be, so it became a
+grade instead (**regret**: of the picks people went on to read, how many disappointed). Read a
+grade against its **base rate**: bestsellers' regret is 31%, exactly the share of 3★-or-lower
+ratings overall, so it's no better than chance at avoiding disappointment. Where we met it:
+Folio (06), owner's regret grade; no quality floor, to keep polarising books.
+
+#### Slicing
+Break a grade down by subgroup to see where a model works and fails: only 5★ hidden books; the
+owner's 16 books that are in the dataset (fair to the model) vs all 48 (the real experience,
+catalog gaps included). A miss can be bad judgment or "not in its world"; slices separate them.
+Where we met it: Folio (06).
+
+#### Decide the bar before the result (pre-registration)
+Write down what counts as success before running the new model, so a disappointing result
+can't quietly move the goalposts. Combine a clear win on the headline (ranges not overlapping),
+"no worse" on the guardrail grades, and a human look at real outputs. Where we met it: Folio (06),
+the bar for step 2 (decision 0017). From: scientific pre-registration of studies.
+
+#### Measure an LLM's raw mistakes, not just the final score
+When code cleans up after a model (drops made-up or already-owned items), the final score hides
+how often the model was wrong. Count the raw errors separately: made-up items (the
+**hallucination rate**, checked against an outside source), items the user already has, repeats,
+failed calls, and how often code had to pad the list. Why it matters: these rates are what break
+trust, and they move when you change model or prompt. Where we met it: Folio (06): 90% of
+Haiku's named books were in the catalogue and 7% were already on the shelf.
+
+#### Data contamination
+An LLM was trained on much of the internet, so it may have *seen* the test answers (famous
+"readers who liked X liked Y" pairs, the benchmark itself) and score better than it would on
+truly new cases. Why it matters: an LLM's offline score can flatter it; say so, and prefer tests
+on data newer than the model or private to you. Where we met it: Folio (06): Opus put *Circe*
+first right after *The Song of Achilles*, a pairing all over Goodreads. From: the LLM evaluation
+literature (e.g. Sainz et al., 2023, "NLP evaluation in trouble").
+
+#### The cheapest model that clears the bar
+Run the exam on a small, cheap model first; pay for the big one only where the cheap one falls
+short, and measure whether it earns its price. Make calls through a **batch API** (half price,
+results within the hour) and **cache** answers by prompt so reruns cost nothing. Why it matters:
+eval runs and production calls are a real bill; "which model" is a cost decision backed by the
+eval, not taste. Where we met it: Folio (06): Haiku on 1,000 reader tests plus Opus on 48 books
+cost about $1.20, where Opus on everything would have been about $13.
+
+#### Reading numbers like an analyst
+Surprise → theory → check with data → lesson, and ask whether the first cause explains *all* of
+it. Where we met it: Folio (06): bestsellers finds the next liked book only 2% of the time because
+these readers have already read 3.3 of the top 10, and only 9% of hidden books are in the top 100.
+
 ### Quiz
+
+**Q:** What is data contamination, and why does it matter when you evaluate an LLM?
+**A:** The model may have seen the test answers in its training data, so its score can flatter it; say so and prefer new or private test data.
+
+**Q:** Why count an LLM's raw mistakes separately from the final score?
+**A:** Code may clean up its errors (made-up or already-owned items), hiding how often it was wrong; those rates drive trust and change with model or prompt.
+
+**Q:** How do you keep LLM eval runs cheap?
+**A:** Test the cheapest model first, pay for the big one only where needed, use a batch API (half price) and cache answers by prompt so reruns are free.
 
 **Q:** What is a skill, and how does it get used?
 **A:** A packaged set of instructions for a kind of task. Most load automatically when their description matches; some only run when called explicitly.
@@ -776,6 +969,27 @@ Where we met it: Folio (06), step 2 of the ladder.
 
 **Q:** Why do seed strings work when "be random" doesn't?
 **A:** A model can't produce randomness on request; a real random input gives it something to derive different choices from.
+
+**Q:** What is data leakage, and how does a time split prevent it?
+**A:** Future or answer information slipping into what the model sees; training only on the past and testing on the future keeps it out.
+
+**Q:** Why show a recommender's grade as a range, and how does the bootstrap get it?
+**A:** A score from few people can be luck; re-drawing the people at random a thousand times shows how much the average moves. Overlapping ranges mean no winner yet.
+
+**Q:** What do the four words in NDCG stand for?
+**A:** Gain (points per hit), cumulative (summed), discounted (less for lower positions), normalised (divided by the best possible, so 0 to 1).
+
+**Q:** Why can't you judge a recommender on accuracy alone?
+**A:** Bestsellers can score decently while showing everyone the same few books; report coverage, novelty and diversity next to it.
+
+**Q:** What's the difference between a grade and a guardrail?
+**A:** A grade is improved over time; a guardrail is a checkable rule that disqualifies a model when broken.
+
+**Q:** Bestsellers' regret is 31% and 31% of all ratings are 3★ or lower. What does that tell you?
+**A:** It disappoints at the base rate: it has no idea who you are, so it can't steer away from books you'd find meh.
+
+**Q:** Why agree a model's success bar before you run it?
+**A:** So a disappointing result can't move the goalposts; you read the result honestly instead of explaining it away.
 
 ## Communication and influence
 

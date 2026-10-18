@@ -1,7 +1,7 @@
 # 0012 — Folio's recommender lab: Python notebooks in the app folder, committed data, results as JSON
 
 - **Date:** 2026-10-15
-- **Status:** accepted
+- **Status:** accepted; the eval design is replaced by 0017
 
 ## Context
 

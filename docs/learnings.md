@@ -98,6 +98,20 @@ Rules I now apply to every product (detail in the playbook).
 - **A model change is a behaviour change.** Safety held on the new model, but two prompt rules broke;
   evals caught them before users did.
 
+### 06 Folio
+
+- **Build the exam before the model.** Without a fixed eval every recommender just sounds
+  convincing; with it, "most advanced" becomes a row in a table that has to beat the last one.
+- **Measure, don't assume.** The owner guessed 70% of their liked books were in goodbooks; it was
+  33%, and 17% of recent saves. That one number reshaped the roadmap.
+- **Check the data's claims, including your own.** "No dates" turned out to be "no date
+  column, but time order", which changed the exam from random hide-and-seek to leave-last-out.
+- **The model isn't the system, and the checker needs checking.** Code around the LLM catches
+  owned, repeated and made-up books; the first hallucination check flagged real books because of
+  subtitles. Test the eval's own tools on known answers.
+- **Pick the cheapest model that clears the bar, by measurement.** About $1.20 of batch runs
+  showed Haiku ties a 1970s method on strangers, while Opus finds 7 of the owner's 48 books.
+
 ## Process changelog
 
 Every change to how I build, and the product that taught it.
@@ -130,3 +144,5 @@ Every change to how I build, and the product that taught it.
 | 13 Oct | Before 06 | All our testing was user-journey testing; Mallow's time bugs only showed when the tester let time pass. | Unit tests for date, time and streak logic only: Vitest in the starter template, playbook step 2 (decision 0011); a 5-minute unit-test pick in the brief (step 1) and a retro question on whether it caught anything. |
 | 16 Oct | During 06 | The model that builds a screen is poor at judging it, and variants drift to the same AI defaults (Anshu Chimala, Lenny's Newsletter). | `/design-session` skill (Discover with seed strings, Define with a `design-critic` subagent that sees only screenshots, Deliver by subtracting, checking AI tells and hand-written copy) replaces `/prototype` as the design step (decision 0013). |
 | 16 Oct | 06 Folio | 123 cancelled preview builds in other apps (from ~29 pushes to one branch) used up Vercel's free 100 deployments a day and blocked Folio's first deploy. | Every app, the portfolio and the starter deploy from `main` only (decision 0016); push and merge in batches. |
+| 18 Oct | 06 Folio | Vercel flagged every key "Needs Attention" (uploaded as readable variables), and a push ending in a README-only commit skipped Folio's build. | `ship.mjs` uploads keys as Sensitive; each `vercel.json` skips a build only if the app is unchanged since its last deploy (decision 0016 update). |
+| 18 Oct | 06 Folio | A four-day recommender ladder ran past the sprint's pace and was cut on day 4. | Playbook step 1: when a product has a learning ladder, set the MVP cut first; only the first rung is in scope, the rest starts in the backlog. |

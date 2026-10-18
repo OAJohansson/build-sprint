@@ -397,3 +397,146 @@ What happened, what was decided and why. Newest last.
   the reasons, and my real behaviour in the app, under the guardrails (real books only, nothing
   already on my shelf, enough variety). So the eval comes before every model, and each new level
   has to beat the last one on it. Advanced levels and online evaluation added to the backlog.
+
+## 17 Oct: recommender step 1, data and the exam design
+
+Worked as a mentor session: theory, then the owner reasons out the next move before Claude
+explains (owner's request: "help me start thinking about this, not just you telling me").
+
+- **Orientation:** the five families (popularity, content-based, collaborative filtering, hybrid,
+  LLM), retrieval → ranking → re-ranking, explicit vs implicit feedback, cold start, and the
+  roadmap. Cold-start onboarding parked in the backlog: Folio has one user, who isn't cold.
+- **Lab set up:** uv (installed with Homebrew), Python 3.12, pandas, pytest, Jupyter in
+  `apps/06-folio/lab/`; goodbooks-10k downloaded by `scripts/download_goodbooks.py`, not committed.
+- **"A book I liked" = 4–5★, with 5★ worth more (owner).** 3★ is "decent", not a target. That's
+  a relevance threshold plus graded relevance, which NDCG supports. Want-to-reads are intent, not
+  satisfaction: input for the taste profile, not proof of liking. Taste drifts (most dated reads
+  are 2021–22; recent taste lives in 46 want-to-reads added 2025–26).
+- **Leakage found by the owner** (with a hint): letting the model see *Circe* while hiding *The
+  Song of Achilles* is "Thursday's newspaper". So test on the future, train on the past.
+- **Why two levels:** a few hidden books can't separate two models (penalty kicks: 3 vs 1,000),
+  so the exam runs on goodbooks readers, with the owner's shelf as a personal check. Decision 0012's
+  time split on the owner's shelf alone is replaced (decision 0017).
+- **Dataset: goodbooks-10k (owner),** because it's clean, has reader ids, and is the research
+  benchmark, so scores compare with papers. Its catch: a 2017 snapshot of popular books.
+  Considered: Amazon Reviews 2023 (fresher, messier), Open Library dumps (2026, but no reader id,
+  so useless for "readers like you"; useful later for fresh popularity). Goodreads closed its API
+  in Dec 2020, so no fresh Goodreads data exists.
+- **Overlap, measured (owner guessed 70%):** 16 of 48 books rated 4–5★ are in goodbooks (33%;
+  5★ only: 10 of 16), and just 11 of 66 want-to-reads added since 2023 (17%). Matching ladder:
+  Goodreads id (131), ISBN-10 (0 extra; goodbooks' ISBN-13s are rounded floats, unusable), title
+  + author surname (12 extra, all checked correct). Known miss: *If This Is a Man* is
+  *Survival in Auschwitz* in goodbooks. Meaning: crowd models will be weak for the owner's recent
+  taste; content-based and LLM steps can cover books outside goodbooks.
+- **Two personal-check slices (owner):** the 16 in goodbooks (fair to the model's judgment) and
+  all 48 (what Folio's experience would be, catalog gaps included).
+- **Correction by Claude:** goodbooks has no dates, but its ratings file is in time order
+  (verified: no 2016–17 book is rated before row 1.1M of 6M). So the Sams get leave-last-out.
+- **Hide each reader's last 1 liked book and, separately, the last 5 (owner: both).** Last 1 is
+  the research standard; last 5 is closer to "the coming months" and allows recall.
+- **K = 10 (owner):** Folio will show 10 picks; the owner researches before choosing (a
+  "maximiser", Schwartz), and 10 is also what papers report. Mood (fiction vs non-fiction) noted
+  as context for step 4's re-ranking (backlog).
+
+## 18 Oct: the exam built, baselines scored
+
+- **More exam calls (owner):** score order, not just "found it", even though the owner reads all
+  10 ("you are not your user"): headline **NDCG@10**, 5★ = 2 points, 4★ = 1. Beyond accuracy
+  (coverage, novelty, author spread), found by the owner with hints from a thought experiment
+  (1,000 bestseller lists laid side by side). Owner's trust rule "never a book I'd rate 3★"
+  can't be checked in advance, so it became the **regret grade**; **no quality floor**, to keep
+  polarising books. Recorded in decision 0017.
+- **Built** in `apps/06-folio/lab/`: `splits.py` (leave-last-out, owner's time-aware check),
+  `metrics.py`, `evaluate.py` (guardrails stop the run), `baselines.py`, `results.py`,
+  `scripts/run_eval.py` (8 seconds), notebook `01_data_and_baselines`. 28 pytest cases with
+  hand-worked answers; one caught a real bug (bestsellers could run out of books).
+- **Results** (10,000 readers, hide last 1): random NDCG@10 0.0003, hit rate 0.1%; **bestsellers
+  NDCG@10 0.010 (0.008–0.011), hit rate 2.0%**, regret 31% (= the base rate of 3★-or-lower
+  ratings), coverage 0.6% (about 60 books), author spread 0.59. Owner's 48: 0 found by both.
+- **Walk-through:** why so low? Readers have already read 3.3 of the top 10, and only 9% of
+  hidden books are in the top 100: experienced readers live in the long tail. Why 0 of 48? Three
+  causes, found together: 32 books aren't in goodbooks (data), bestsellers can't reach the tail
+  (*Animal Farm* is #18, just outside the 10; *Design of Everyday Things* #8,973) (model), and 48
+  kicks can't separate baselines (exam).
+- **Big picture, at the owner's request:** the eval is the referee, not a player. Training =
+  studying, evaluating = the exam. Each step: build a model, train it on goodbooks (and later
+  descriptions), take the exam, and if it beats the bar it becomes Folio's picks (your shelf → 10
+  books → the JSON file Home reads). Online evaluation in Folio comes later.
+- **The bar for step 2, agreed before building it (owner: "lets go for it"):** NDCG@10 range
+  entirely above bestsellers' (above 0.011), regret ≤ 31%, coverage ≥ 6% with higher novelty,
+  guardrails, and the owner would save at least one of its 10 picks. In decision 0017.
+- **Step 1 done.** Next: step 2, content-based (TF-IDF on descriptions and tags, then sentence
+  embeddings), scored with `scripts/run_eval.py`.
+
+## 18 Oct: step 2, TF-IDF, then the MVP cut to an LLM recommender
+
+- **TF-IDF on Goodreads shelf tags** (`lab/folio_lab/content.py`): each book becomes a fingerprint
+  over its shelf names, with ~120 generic shelves dropped ("to-read", "owned", "kindle",
+  "read-in-2015"…); a reader is a weighted blend of their books (5★ = 2, 4★ = 1, 3★ = 0, 1–2★ =
+  −1, want-to-reads 0, no recency fade: starting settings, not yet the owner's calls). Fits in
+  1 s. **10,000 readers, hide last 1: NDCG@10 0.023 (0.021–0.025)**, 2.3× bestsellers, regret
+  21%, coverage 55%, novelty 5.8: passes bar items 1–4. Caveat: 70% of its hits are by an author
+  already on the shelf (sequels); 0 of the owner's 48 (32 aren't in the catalogue).
+- **Owner stepped back: time to scale down to an MVP** (20 products in 20 days). First proposal:
+  ship TF-IDF's picks as a static file. Owner asked what TF-IDF is, what a live version would
+  cost (about half a day; only books in the 2017 catalogue count) and whether an LLM is a better
+  MVP for learning AI evals and for interviews. **Decision (owner): the LLM is the MVP
+  recommender**, TF-IDF and bestsellers stay as its baselines, the rest goes to the backlog.
+  Coaching note: a solution switch, justified by the problem (the owner's books are mostly
+  newer than 2017; the learning goal is evals).
+- **Built:** `lab/folio_lab/llm.py`: Claude reads the shelf (latest 100 rated books with stars,
+  latest 40 want-to-reads) and names 15 books as JSON (structured outputs); code matches them to
+  the catalogue and drops anything on the shelf, repeated or unknown, then pads to 10 with
+  bestsellers. Its raw mistakes are counted separately (`results/llm-errors.md`). Calls go
+  through the Batch API (half price) with a disk cache, so reruns are free. The owner level now
+  includes the 32 books outside goodbooks (ids from 100,001), so a model that knows them can find
+  them. A fixed sample of **500 readers** for the costly models; every model has rows on it.
+- **Cost (owner asked to minimise it):** the first plan (Opus on everything, ~$13) became
+  **Haiku 5.5 on the full exam, Opus 5.5 on the owner's 48 only: actual ≈ $1.20** (Haiku 3.3M
+  input and 2.0M output tokens; Opus 0.11M and 0.03M; batch prices). Owner asked why the test
+  is needed at all: an LLM's list always *reads* well; only the exam shows whether it finds what
+  people went on to love, and it measures the LLM-only errors (made-up books, books already
+  owned).
+- **Results (500 readers):** hide last 1, Haiku NDCG@10 **0.025 (0.014–0.038)**, the same as
+  TF-IDF (0.025, 0.014–0.036), bestsellers 0.009 (0.003–0.016): 500 readers is too few to prove
+  the gap on hide-1. Hide last 5: **Haiku 0.040 (0.032–0.050)**, TF-IDF 0.035, bestsellers 0.019
+  (0.012–0.026): clearly above bestsellers. Regret 23% (≤ 31%), coverage 15.8% of the catalogue
+  (bestsellers 0.4%), novelty 4.9, author spread 0.95 (the most varied lists). Raw errors: 90% of
+  named books are in the catalogue, 7% were already on the shelf (dropped), 2% of slots padded.
+- **The owner's 48 books, where the LLM can see everything:** **Opus found 7 of 48** (NDCG 0.098,
+  range 0.029–0.181), Haiku 3, TF-IDF and bestsellers 0. Opus put *Circe* first right after *The
+  Song of Achilles*, and found *Humankind*, *Prisoners of Geography*, *When Breath Becomes Air*,
+  *Fellowship of the Ring*, *Man's Search for Meaning* and *Sapiens*. Regret 8% (Haiku 18%).
+  Caveat: the LLM read the internet, so it may "know" famous pairings (data contamination), and
+  48 cases give wide ranges.
+- **Live in the app:** `/api/picks` sends the shelf to Claude (same prompt as the lab), checks each
+  name on Open Library, drops shelf books, and caches per shelf for a week, so picks change when
+  a book is logged. 7 s on the real shelf; 8 picks survived the checks (backlog: always 10). The
+  hand-picked samples are gone.
+- **Hallucination check** (`lab/scripts/check_unmatched.py`, Open Library): of Claude's names
+  that aren't in the catalogue (about 10% of all), a sample was looked up. The first run flagged
+  real books (*The Body Keeps the Score*, *Deep Work*) because full subtitles break Open Library's
+  title search: **the checker itself needed checking**. With short titles: Haiku 7–10% of
+  out-of-catalogue names not found, Opus 3 of 31. By eye about half of those are real (*Rock
+  Chick Rebel*, *Specters*) and half made up or mashed up (*The Ides of Rome* by Rick Riordan,
+  *Girls in Tights*): roughly **0.5% of all named books are invented**. A second failure type:
+  Opus at low effort sometimes corrects itself *inside* the title ("Homo Faber... no: The Silent
+  Patient"); the Open Library check drops those in the app.
+- **Decision (owner): Opus 5.5 powers Folio's picks** (found 7 of the owner's 48 vs Haiku's 3;
+  about $1.50 a month vs $0.05). Bar check, honestly: item 1 not proven on the 500-reader sample
+  (hide-1 ranges overlap bestsellers'), items 2–4 pass, item 5 is the owner's look at the live
+  picks. Decision 0018.
+- **Shipping the picks:** owner added `ANTHROPIC_API_KEY` in Vercel as a Sensitive variable.
+  Vercel flagged the other keys "Needs Attention" because `pnpm ship` uploaded them as plain
+  encrypted variables (readable by anyone with project access); `ship.mjs` now uploads them as
+  Sensitive, and the owner re-saves the existing ones by hand. Merged to main and pushed (with
+  the held-back decision 0016 commits) so Vercel deploys.
+- **Deploy:** the push was skipped twice by the shared deploy rule (it looked only at the last
+  commit, a README sync). Fixed in every app's `vercel.json` and the template: skip only if the
+  app is unchanged since its last successful deploy (decision 0016 update). Folio is live at
+  folio-iota-jade.vercel.app; `/api/picks` answered in 9 s with 6 picks, a different list from
+  the local run (LLM non-determinism) and one odd match (*Adam Kay Bundle*): both in the backlog.
+- **Bar item 5 passes (owner):** "I would definitely read *Klara and the Sun*." *A Little Life*
+  is "my kind of taste" but "feels like a long commitment": the right book can still be the wrong
+  pick for now, so length is a signal the recommender doesn't see yet (backlog). All of decision
+  0017's bar is now checked: items 2–5 pass; item 1 is unproven on the 500-reader sample.

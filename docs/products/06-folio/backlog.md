@@ -45,3 +45,4 @@
 | **Picks: an LLM judge for the reasons** ("Because you loved X": is X really why?) and a stability check (same shelf twice, how much does the list change?) | Two more AI evals: quality of explanations, and non-determinism | Later |
 | **Picks: Opus on the full exam** (about $14 in batch) if Haiku and Opus disagree on my 48 books | Decides whether the big model earns 40× the price | If needed |
 | **Picks: guard against prompt injection from book titles** (a title is user data inside the prompt) | Matters once anyone else can add books | With a second user |
+| **Picks: show length and let me choose the commitment** (page count on each pick; "something short" vs "a big one") | Owner: *A Little Life* is my taste but "feels like a long commitment"; the right book can be the wrong pick for now. Pairs with the mood idea | Later (owner, 18 Oct) |

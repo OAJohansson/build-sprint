@@ -42,7 +42,7 @@ catalogue, of which roughly 1 in 20 is made up.
 - **Item 1 is not proven on the 500-reader sample.** Haiku's hide-1 range overlaps bestsellers',
   though hide-5 is clearly above.
 - **Items 2–4 pass:** regret 23%, coverage 15.8% with novelty 4.9, guardrails enforced in code.
-- **Item 5** is the owner's look at the live picks.
+- **Item 5 passes:** the owner would read *Klara and the Sun* from the live picks.
 
 The model was chosen on the owner level, where only the LLM can see all 48 books. That level has
 wide ranges (Opus NDCG 0.029–0.181) and possible data contamination.

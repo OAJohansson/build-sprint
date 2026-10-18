@@ -536,3 +536,7 @@ explains (owner's request: "help me start thinking about this, not just you tell
   app is unchanged since its last successful deploy (decision 0016 update). Folio is live at
   folio-iota-jade.vercel.app; `/api/picks` answered in 9 s with 6 picks, a different list from
   the local run (LLM non-determinism) and one odd match (*Adam Kay Bundle*): both in the backlog.
+- **Bar item 5 passes (owner):** "I would definitely read *Klara and the Sun*." *A Little Life*
+  is "my kind of taste" but "feels like a long commitment": the right book can still be the wrong
+  pick for now, so length is a signal the recommender doesn't see yet (backlog). All of decision
+  0017's bar is now checked: items 2–5 pass; item 1 is unproven on the 500-reader sample.

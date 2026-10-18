@@ -657,6 +657,25 @@ no reader id, so they can't show which books sit on the same shelf. Separate *le
 method* (a benchmark is fine) from *serving today's books* (needs fresh data). Where we met it:
 Folio (06).
 
+#### TF-IDF: describing an item by its rare words
+Turn each item into a fingerprint, one number per word (or tag): **TF** (term frequency) says how
+strongly this item carries the word, **IDF** (inverse document frequency) says how rare the word
+is across all items, so "favorites", on nearly every book, counts for almost nothing and
+"cancer-memoir" counts a lot. Items with similar fingerprints are similar (cosine similarity);
+a user is a blend of the items they liked. Why it matters: a fast, explainable content baseline
+that needs no other users. Where we met it: Folio (06), on Goodreads shelf tags: 2.3× bestsellers,
+but 70% of its hits were sequels. From: Karen Spärck Jones (1972), the idea behind early search
+engines.
+
+#### An LLM as the recommender
+Show the model the user's history and ask for items by name. It knows items newer than any
+dataset and writes reasons, but it can invent items, repeat what the user owns, and favours
+famous things. So **the model isn't the system**: code around it matches names to a real
+catalogue, drops owned and duplicate items, and checks existence (Folio uses Open Library). Why
+it matters: the common shape of "AI recommendations" today, and a cheap MVP. Where we met it:
+Folio (06): Haiku tied TF-IDF on goodbooks readers; Opus found 7 of the owner's 48 books, the
+classic models 0.
+
 #### Matching records across datasets: a ladder
 Try the strictest identifier first (a shared id), then a looser one (ISBN, but every edition has
 its own), then normalised title + author, and check the loose matches by eye. Some matches only a
@@ -665,6 +684,12 @@ goodbooks stored 13-digit ISBNs as rounded numbers, and dropped leading zeros fr
 Where we met it: Folio (06): 131 by id, 0 extra by ISBN, 12 by title + author, all correct.
 
 ### Quiz
+
+**Q:** In TF-IDF, why does a tag like "favorites" count for almost nothing?
+**A:** IDF: it's on nearly every book, so it says nothing about any one of them; rare tags get the weight.
+
+**Q:** Why isn't an LLM on its own a recommender system?
+**A:** It can invent items, repeat what the user owns and favour famous ones; code around it must match names to a real catalogue and drop owned, repeated and unknown items.
 
 **Q:** What is a hydration mismatch?
 **A:** When the HTML rendered on the server differs from the first render in the browser (for example because of the clock or localStorage), so React complains.
@@ -863,12 +888,45 @@ can't quietly move the goalposts. Combine a clear win on the headline (ranges no
 "no worse" on the guardrail grades, and a human look at real outputs. Where we met it: Folio (06),
 the bar for step 2 (decision 0017). From: scientific pre-registration of studies.
 
+#### Measure an LLM's raw mistakes, not just the final score
+When code cleans up after a model (drops made-up or already-owned items), the final score hides
+how often the model was wrong. Count the raw errors separately: made-up items (the
+**hallucination rate**, checked against an outside source), items the user already has, repeats,
+failed calls, and how often code had to pad the list. Why it matters: these rates are what break
+trust, and they move when you change model or prompt. Where we met it: Folio (06): 90% of
+Haiku's named books were in the catalogue and 7% were already on the shelf.
+
+#### Data contamination
+An LLM was trained on much of the internet, so it may have *seen* the test answers (famous
+"readers who liked X liked Y" pairs, the benchmark itself) and score better than it would on
+truly new cases. Why it matters: an LLM's offline score can flatter it; say so, and prefer tests
+on data newer than the model or private to you. Where we met it: Folio (06): Opus put *Circe*
+first right after *The Song of Achilles*, a pairing all over Goodreads. From: the LLM evaluation
+literature (e.g. Sainz et al., 2023, "NLP evaluation in trouble").
+
+#### The cheapest model that clears the bar
+Run the exam on a small, cheap model first; pay for the big one only where the cheap one falls
+short, and measure whether it earns its price. Make calls through a **batch API** (half price,
+results within the hour) and **cache** answers by prompt so reruns cost nothing. Why it matters:
+eval runs and production calls are a real bill; "which model" is a cost decision backed by the
+eval, not taste. Where we met it: Folio (06): Haiku on 1,000 reader tests plus Opus on 48 books
+cost about $1.20, where Opus on everything would have been about $13.
+
 #### Reading numbers like an analyst
 Surprise → theory → check with data → lesson, and ask whether the first cause explains *all* of
 it. Where we met it: Folio (06): bestsellers finds the next liked book only 2% of the time because
 these readers have already read 3.3 of the top 10, and only 9% of hidden books are in the top 100.
 
 ### Quiz
+
+**Q:** What is data contamination, and why does it matter when you evaluate an LLM?
+**A:** The model may have seen the test answers in its training data, so its score can flatter it; say so and prefer new or private test data.
+
+**Q:** Why count an LLM's raw mistakes separately from the final score?
+**A:** Code may clean up its errors (made-up or already-owned items), hiding how often it was wrong; those rates drive trust and change with model or prompt.
+
+**Q:** How do you keep LLM eval runs cheap?
+**A:** Test the cheapest model first, pay for the big one only where needed, use a batch API (half price) and cache answers by prompt so reruns are free.
 
 **Q:** What is a skill, and how does it get used?
 **A:** A packaged set of instructions for a kind of task. Most load automatically when their description matches; some only run when called explicitly.

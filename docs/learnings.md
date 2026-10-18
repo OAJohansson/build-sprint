@@ -106,6 +106,11 @@ Rules I now apply to every product (detail in the playbook).
   33%, and 17% of recent saves. That one number reshaped the roadmap.
 - **Check the data's claims, including your own.** "No dates" turned out to be "no date
   column, but time order", which changed the exam from random hide-and-seek to leave-last-out.
+- **The model isn't the system, and the checker needs checking.** Code around the LLM catches
+  owned, repeated and made-up books; the first hallucination check flagged real books because of
+  subtitles. Test the eval's own tools on known answers.
+- **Pick the cheapest model that clears the bar, by measurement.** About $1.20 of batch runs
+  showed Haiku ties a 1970s method on strangers, while Opus finds 7 of the owner's 48 books.
 
 ## Process changelog
 

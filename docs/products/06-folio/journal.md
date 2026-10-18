@@ -467,3 +467,62 @@ explains (owner's request: "help me start thinking about this, not just you tell
   guardrails, and the owner would save at least one of its 10 picks. In decision 0017.
 - **Step 1 done.** Next: step 2, content-based (TF-IDF on descriptions and tags, then sentence
   embeddings), scored with `scripts/run_eval.py`.
+
+## 18 Oct: step 2, TF-IDF, then the MVP cut to an LLM recommender
+
+- **TF-IDF on Goodreads shelf tags** (`lab/folio_lab/content.py`): each book becomes a fingerprint
+  over its shelf names, with ~120 generic shelves dropped ("to-read", "owned", "kindle",
+  "read-in-2015"…); a reader is a weighted blend of their books (5★ = 2, 4★ = 1, 3★ = 0, 1–2★ =
+  −1, want-to-reads 0, no recency fade: starting settings, not yet the owner's calls). Fits in
+  1 s. **10,000 readers, hide last 1: NDCG@10 0.023 (0.021–0.025)**, 2.3× bestsellers, regret
+  21%, coverage 55%, novelty 5.8: passes bar items 1–4. Caveat: 70% of its hits are by an author
+  already on the shelf (sequels); 0 of the owner's 48 (32 aren't in the catalogue).
+- **Owner stepped back: time to scale down to an MVP** (20 products in 20 days). First proposal:
+  ship TF-IDF's picks as a static file. Owner asked what TF-IDF is, what a live version would
+  cost (about half a day; only books in the 2017 catalogue count) and whether an LLM is a better
+  MVP for learning AI evals and for interviews. **Decision (owner): the LLM is the MVP
+  recommender**, TF-IDF and bestsellers stay as its baselines, the rest goes to the backlog.
+  Coaching note: a solution switch, justified by the problem (the owner's books are mostly
+  newer than 2017; the learning goal is evals).
+- **Built:** `lab/folio_lab/llm.py`: Claude reads the shelf (latest 100 rated books with stars,
+  latest 40 want-to-reads) and names 15 books as JSON (structured outputs); code matches them to
+  the catalogue and drops anything on the shelf, repeated or unknown, then pads to 10 with
+  bestsellers. Its raw mistakes are counted separately (`results/llm-errors.md`). Calls go
+  through the Batch API (half price) with a disk cache, so reruns are free. The owner level now
+  includes the 32 books outside goodbooks (ids from 100,001), so a model that knows them can find
+  them. A fixed sample of **500 readers** for the costly models; every model has rows on it.
+- **Cost (owner asked to minimise it):** the first plan (Opus on everything, ~$13) became
+  **Haiku 5.5 on the full exam, Opus 5.5 on the owner's 48 only: actual ≈ $1.20** (Haiku 3.3M
+  input and 2.0M output tokens; Opus 0.11M and 0.03M; batch prices). Owner asked why the test
+  is needed at all: an LLM's list always *reads* well; only the exam shows whether it finds what
+  people went on to love, and it measures the LLM-only errors (made-up books, books already
+  owned).
+- **Results (500 readers):** hide last 1, Haiku NDCG@10 **0.025 (0.014–0.038)**, the same as
+  TF-IDF (0.025, 0.014–0.036), bestsellers 0.009 (0.003–0.016): 500 readers is too few to prove
+  the gap on hide-1. Hide last 5: **Haiku 0.040 (0.032–0.050)**, TF-IDF 0.035, bestsellers 0.019
+  (0.012–0.026): clearly above bestsellers. Regret 23% (≤ 31%), coverage 15.8% of the catalogue
+  (bestsellers 0.4%), novelty 4.9, author spread 0.95 (the most varied lists). Raw errors: 90% of
+  named books are in the catalogue, 7% were already on the shelf (dropped), 2% of slots padded.
+- **The owner's 48 books, where the LLM can see everything:** **Opus found 7 of 48** (NDCG 0.098,
+  range 0.029–0.181), Haiku 3, TF-IDF and bestsellers 0. Opus put *Circe* first right after *The
+  Song of Achilles*, and found *Humankind*, *Prisoners of Geography*, *When Breath Becomes Air*,
+  *Fellowship of the Ring*, *Man's Search for Meaning* and *Sapiens*. Regret 8% (Haiku 18%).
+  Caveat: the LLM read the internet, so it may "know" famous pairings (data contamination), and
+  48 cases give wide ranges.
+- **Live in the app:** `/api/picks` sends the shelf to Claude (same prompt as the lab), checks each
+  name on Open Library, drops shelf books, and caches per shelf for a week, so picks change when
+  a book is logged. 7 s on the real shelf; 8 picks survived the checks (backlog: always 10). The
+  hand-picked samples are gone.
+- **Hallucination check** (`lab/scripts/check_unmatched.py`, Open Library): of Claude's names
+  that aren't in the catalogue (about 10% of all), a sample was looked up. The first run flagged
+  real books (*The Body Keeps the Score*, *Deep Work*) because full subtitles break Open Library's
+  title search: **the checker itself needed checking**. With short titles: Haiku 7–10% of
+  out-of-catalogue names not found, Opus 3 of 31. By eye about half of those are real (*Rock
+  Chick Rebel*, *Specters*) and half made up or mashed up (*The Ides of Rome* by Rick Riordan,
+  *Girls in Tights*): roughly **0.5% of all named books are invented**. A second failure type:
+  Opus at low effort sometimes corrects itself *inside* the title ("Homo Faber... no: The Silent
+  Patient"); the Open Library check drops those in the app.
+- **Decision (owner): Opus 5.5 powers Folio's picks** (found 7 of the owner's 48 vs Haiku's 3;
+  about $1.50 a month vs $0.05). Bar check, honestly: item 1 not proven on the 500-reader sample
+  (hide-1 ranges overlap bestsellers'), items 2–4 pass, item 5 is the owner's look at the live
+  picks. Decision 0018.

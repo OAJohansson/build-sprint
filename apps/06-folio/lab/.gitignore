@@ -4,3 +4,4 @@ __pycache__/
 .ipynb_checkpoints/
 # downloaded by scripts/download_goodbooks.py, not committed (decision 0012)
 data/goodbooks/
+cache/

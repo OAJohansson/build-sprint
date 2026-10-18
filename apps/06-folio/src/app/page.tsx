@@ -13,7 +13,6 @@ import { ChoiceSheet, SegmentTabs } from "@/components/shared";
 import { Unlock } from "@/components/unlock";
 import { GenreSheet, genreFilters, Want } from "@/components/want";
 import { api as makeApi, ApiError } from "@/lib/api";
-import { samplePicks } from "@/lib/data/picks";
 import { SHELF_LABEL, SHELVES, type Book, type BookInput, type Found, type Shelf } from "@/lib/types";
 import { useLocalStorage } from "@/lib/use-local-storage";
 
@@ -27,6 +26,7 @@ export default function Folio() {
   const api = useMemo(() => makeApi(code), [code]);
   const [books, setBooks] = useState<Book[] | null>(null);
   const [lists, setLists] = useState<{ popular: Found[]; newReleases: Found[] } | "loading" | "error">("loading");
+  const [picked, setPicked] = useState<Found[] | "loading" | "error">("loading");
   const [error, setError] = useState<string | null>(null);
 
   const [tab, setTab] = useState<Tab>("home");
@@ -54,6 +54,7 @@ export default function Folio() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     load();
     api.home().then(setLists, () => setLists("error"));
+    api.picks().then(setPicked, () => setPicked("error"));
   }, [code, api, load]);
 
   // Which shelf a found book is on: by Open Library work, else by title and author surname.
@@ -110,7 +111,8 @@ export default function Folio() {
   const onShelf = { reading, read, want };
   const shelf: Shelf = pickedShelf ?? (reading.length ? "reading" : "read");
   const current = onShelf[shelf];
-  const picks = samplePicks.filter((p) => !shelfOf(p));
+  // a pick I've just saved leaves the row straight away; new picks come on the next visit
+  const picks = typeof picked === "string" ? picked : picked.filter((p) => !shelfOf(p));
   const genreCount = genre ? genreFilters(want).find((f) => f.name === genre)?.count ?? 0 : 0;
 
   return (

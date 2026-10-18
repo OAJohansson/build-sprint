@@ -4,6 +4,7 @@ import json
 import re
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 DATA = Path(__file__).resolve().parent.parent / "data"
@@ -102,3 +103,18 @@ def match_to_goodbooks(shelf: pd.DataFrame, books: pd.DataFrame) -> pd.DataFrame
         else:
             ids.append(pd.NA); how.append(None)
     return shelf.assign(gb_id=pd.array(ids, dtype="Int64"), matched_by=how)
+
+
+FIRST_EXTRA_ID = 100_001
+
+
+def add_shelf_books(books: pd.DataFrame, shelf: pd.DataFrame):
+    """The catalogue plus the owner's books that goodbooks lacks (ids from 100,001), and the
+    shelf with `eval_id` (goodbooks id, else the new id). Only models that read titles (the
+    LLM) can use the new books; the others never see them."""
+    extra = shelf[shelf.gb_id.isna()].reset_index(drop=True)
+    ids = np.arange(FIRST_EXTRA_ID, FIRST_EXTRA_ID + len(extra))
+    new = pd.DataFrame({"book_id": ids, "title": extra.title, "authors": extra.author})
+    eval_id = shelf.gb_id.astype("Int64").copy()
+    eval_id[shelf.gb_id.isna().to_numpy()] = ids
+    return pd.concat([books, new], ignore_index=True), shelf.assign(eval_id=eval_id)

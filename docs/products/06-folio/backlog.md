@@ -8,7 +8,7 @@
 | Review my saved words (spaced repetition, a word a day) | Words looked up once are forgotten; remembering them is the outcome | Later |
 | Reading community: discuss a book I've finished with people who read it, with little friction | No easy way to talk about books today; needs other users, accounts and a backend, so cold start makes it a product of its own | Later; maybe its own product |
 | Other people's one-line reviews on a book page | The scannable overview I wanted from Goodreads; needs a community or a review source | Later |
-| Recommendations in the app, live (an API route), instead of a JSON file the lab exports | Recs refresh as I log books, without running the notebook | After the ladder |
+| Recommendations in the app, live (an API route), instead of a JSON file the lab exports | Recs refresh as I log books, without running the notebook | Done (18 Oct): `/api/picks` asks Claude on each shelf change, cached per shelf |
 | Online evaluation: track which recommendations I save, start and finish | Offline metrics often disagree with real behaviour | After the ladder |
 | Stats: books a year, ratings spread | Nice to look back on; not a job today | Later |
 | Browse Nobel laureates (literature): our own list of authors, then their best-known books | Prize lists are a trusted way to find serious books; Open Library's Nobel tag returns books *about* the prize | Later (owner, 16 Oct) |
@@ -40,3 +40,8 @@
 | **Online evaluation in Folio:** log what was shown and what I did (saved, started, finished, dismissed), interleave two recommenders in one list, and a thumbs up or down per pick | Offline metrics often disagree with real use; one user can still compare recommenders by interleaving | After step 2 |
 | **Mood in recommendations:** one mixed list of 10 vs a Fiction / Non-fiction toggle, then 10 in that mood | On a fiction evening a self-help pick is wrong *tonight* even if right for me; decide at the recommender's re-ranking step (step 4) | Step 4 (owner, 17 Oct) |
 | **Cold-start onboarding:** "pick 3–5 books you loved" from a grid of covers, not genre checkboxes | Only needed once there's a second user; specific books carry more taste than genres. The eval can test it first (give a model only 3 books) | Later (owner, 17 Oct) |
+| **Recommender, parked at the MVP cut (owner, 18 Oct):** TF-IDF tuning calls (want-to-read weight, recency fade, 4★ vs 5★, keep or drop author and series tags), sentence embeddings, Open Library descriptions, collaborative filtering (step 3), the hybrid (step 4) | The LLM became the MVP recommender to ship faster and learn AI evals; these stay the classic route and the ladder's next rungs | Later |
+| **Picks: always 10.** Ask for 20, or ask again with the rejected titles, when fewer than 10 survive the shelf and Open Library checks (8 today, because the prompt shows only the latest 40 want-to-reads) | The exam pads to 10 with bestsellers; the app shows fewer | Next |
+| **Picks: an LLM judge for the reasons** ("Because you loved X": is X really why?) and a stability check (same shelf twice, how much does the list change?) | Two more AI evals: quality of explanations, and non-determinism | Later |
+| **Picks: Opus on the full exam** (about $14 in batch) if Haiku and Opus disagree on my 48 books | Decides whether the big model earns 40× the price | If needed |
+| **Picks: guard against prompt injection from book titles** (a title is user data inside the prompt) | Matters once anyone else can add books | With a second user |

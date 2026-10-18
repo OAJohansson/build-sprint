@@ -74,12 +74,15 @@ def shelf_time(shelf: pd.DataFrame) -> pd.Series:
     return read_on.fillna(shelf.date_added)
 
 
-def owner_cases(shelf: pd.DataFrame) -> list[Case]:
+def owner_cases(shelf: pd.DataFrame, id_col: str = "gb_id") -> list[Case]:
     """The owner's personal check: each liked book in turn is hidden, and the model sees only the
     shelf as it stood *before* that book (strictly earlier, so same-day additions stay hidden:
     no Thursday's newspaper). Books not in goodbooks can't be seen or found; their target is
-    kept as None so the "all 48" slice counts them as misses."""
-    shelf = shelf.assign(t=shelf_time(shelf))
+    kept as None so the "all 48" slice counts them as misses.
+
+    With id_col="eval_id" (from data.add_shelf_books) every shelf book has an id, so a model
+    that knows books beyond goodbooks (the LLM) can see and find all of them."""
+    shelf = shelf.assign(t=shelf_time(shelf), gb_id=shelf[id_col])
     cases = []
     for book in shelf[(shelf.shelf == "read") & (shelf.rating >= LIKED)].itertuples():
         before = shelf[(shelf.t < book.t) & shelf.gb_id.notna()].sort_values("t")

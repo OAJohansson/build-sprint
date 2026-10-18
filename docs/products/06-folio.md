@@ -14,4 +14,4 @@ tags: ["open-library", "recommendations", "evals", "python", "claude-api"]
 
 ## Learned
 
--
+- An LLM's list always reads well; only the exam showed Haiku merely ties TF-IDF on strangers while Opus finds 7 of my 48 books (classic models: 0), for about $1.20 of test runs.

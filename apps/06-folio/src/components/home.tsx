@@ -10,13 +10,19 @@ export function Home({
   lists,
   onOpen,
 }: {
-  picks: Found[];
+  picks: Found[] | "loading" | "error";
   lists: { popular: Found[]; newReleases: Found[] } | "loading" | "error";
   onOpen: (b: Found) => void;
 }) {
   return (
     <div className="space-y-7">
-      <CoverRow title="Folio's picks for you" items={picks} wide caption={(b) => b.note} onOpen={onOpen} />
+      {picks === "loading" ? (
+        <p className="px-4 text-[14px] text-[var(--f-faint)]">Choosing your picks…</p>
+      ) : picks === "error" ? (
+        <p className="px-4 text-[14px] text-[var(--f-muted)]">Couldn&apos;t choose your picks right now.</p>
+      ) : (
+        <CoverRow title="Folio's picks for you" items={picks} wide caption={(b) => b.note} onOpen={onOpen} />
+      )}
       {lists === "loading" ? (
         <p className="px-4 text-[14px] text-[var(--f-faint)]">Loading new and popular books…</p>
       ) : lists === "error" ? (

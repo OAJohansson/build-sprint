@@ -191,3 +191,7 @@ What happened, what was decided and why. Newest last.
 - Checked in the browser on the in-memory store: an edit and a rename survive a reload; new
   track, switching back and deleting work. Not yet checked against the real Supabase (the owner
   runs the schema and adds the keys).
+- **Live on the real Supabase** (owner ran the schema, added the keys and typed the code): the
+  first track was created in the database, saves return 200, a reload loads it back, a mute and
+  unmute each save. Fixed a wasted save on every load (React's development mode runs effects
+  twice; autosave now compares with the track as loaded instead of skipping the first run).

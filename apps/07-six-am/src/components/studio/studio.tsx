@@ -168,13 +168,9 @@ function Session({ track, tracks, status, onChange, onRetry, onOpen, onNew, onDe
   const savedName = useRef(track.name);
   const [library, setLibrary] = useState(false);
 
-  // Every edit (and undo) is saved; the first render is the saved track itself.
-  const changed = useEffectEvent((doc: Doc) => onChange(savedName.current, doc));
-  const first = useRef(true);
-  useEffect(() => {
-    if (first.current) { first.current = false; return; }
-    changed(t.doc);
-  }, [t.doc]);
+  // Every edit (and undo) is saved; the track as loaded is already saved.
+  const changed = useEffectEvent((doc: Doc) => { if (doc !== track.doc) onChange(savedName.current, doc); });
+  useEffect(() => { changed(t.doc); }, [t.doc]);
 
   const commitName = () => {
     const clean = name.trim().slice(0, 80);

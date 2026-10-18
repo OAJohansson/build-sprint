@@ -62,9 +62,9 @@ Main outcome: in one sitting, I go from nothing to a track I want to play back.
 
 ## MVP and stop line
 
-A laptop web app with two parts. **The crate** (sound browser): one curated pack of about 24 CC0
-loops in four groups (drums, bass, chords, top/FX), all at 124 BPM in one key, each with a
-preview. **The timeline**: four fixed tracks (drums, bass, chords, top/FX) you drag loops onto;
+A laptop web app with two parts. **The crate** (sound browser): 24 loops in four groups (drums,
+bass, chords, top/FX), all at 124 BPM in A minor, each with a preview. Synthesised in the browser
+first, CC0 samples from Freesound later (decision 0019, 18 Oct). **The timeline**: four fixed tracks (drums, bass, chords, top/FX) you drag loops onto;
 every loop snaps to the bar and repeats when you drag its end; mute per track; play from any bar
 with a moving playhead; one filter control; undo. One zoom level showing about 64 bars. Saved in
 localStorage. Layout: GarageBand's (timeline plus loop browser), look and browser from rekordbox

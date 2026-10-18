@@ -21,7 +21,8 @@ const L = (track: number, name: string, bars: number, vibe: string, kind: Kind):
   track, name, bars, vibe, kind,
 });
 
-// shortcut: a made-up crate with no audio files, until the CC0 sound pack is curated (next build step).
+// The crate: 24 loops, each played by its synth recipe in recipes.ts (decision 0019).
+// shortcut: synthesised only; vocal chop and real instruments are stand-ins until Freesound CC0 samples join.
 export const LOOPS: Loop[] = [
   L(0, "Four to the Floor", 4, "steady · classic", "kick"),
   L(0, "Rolling Hats", 2, "shuffled · bright", "hats"),
@@ -103,7 +104,7 @@ export function place(regions: Region[], r: Region): Region[] {
 }
 
 // Pseudo waveforms: one amplitude per 16th note, shaped by the loop type.
-// shortcut: drawn, not measured; replace with peaks from the decoded audio once loops are real.
+// shortcut: drawn, not measured; render each recipe offline (Tone.Offline) and draw its real peaks.
 const jit = (i: number, s: number) => { const x = Math.sin(i * 12.9898 + s * 78.233) * 43758.5453; return x - Math.floor(x); };
 export function amps(kind: Kind, bars: number, seed = 1): number[] {
   const n = bars * 16, a: number[] = [];

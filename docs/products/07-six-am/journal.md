@@ -148,3 +148,21 @@ What happened, what was decided and why. Newest last.
   as the favicon. The prototype route, the other variants and the picker are deleted; the
   contact sheets and logo options stay in `design/` as the record. Marked shortcuts: made-up
   crate with no audio, drawn waveforms, a silent rAF playhead, nothing saved yet.
+
+## 18–19 Oct: real sound
+
+- Folio had already shipped on main; merged main in and did the parked carry-over (knowledge
+  bank, to-do, README, notebook).
+- **Synthesis first** (owner, decision 0019): every loop is a recipe (an instrument plus notes
+  on a 16-step grid) in A minor at 124 BPM, played by Tone.js instruments: a 909-style kit, a
+  303-style acid line, sub, reese, stabs, pads, organ, strings, piano, shaker, FM chop, ride,
+  cowbell and noise sweeps. Samples from Freesound later.
+- **Timing on the audio clock:** a lookahead scheduler books notes 120 ms ahead every 25 ms; the
+  playhead reads the audio clock instead of counting frames. The timeline becomes one 1024-step
+  index (`src/lib/schedule.ts`, unit tested: repeats, cut-short notes, empty timeline, a repeat
+  ending where the next loop starts, starting mid-bar). 14 tests pass.
+- Mute silences a track's channel, the filter knob sweeps a master low-pass (now starts fully
+  open), clicking a loop previews it in time with the track, or on its own when stopped.
+- Checked in the browser with a temporary level meter (the test agent can't hear): sound while
+  playing, drums louder when they come back at bar 41, quieter with drums muted, silent after
+  stopping, preview plays on its own. Whether it *sounds* like house is the owner's ear test.

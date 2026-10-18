@@ -24,7 +24,7 @@ export function Studio() {
       <header className={s.bar}>
         <div className={s.logo}><Logo className={s.mark} />Six AM</div>
         <div className={s.transport}>
-          <button className={s.tb} onClick={() => t.setPlayhead(1)} aria-label="Back to start">{Icon.start}</button>
+          <button className={s.tb} onClick={() => t.jumpTo(1)} aria-label="Back to start">{Icon.start}</button>
           <button className={cx(s.tb, s.play)} onClick={() => t.setPlaying(!t.playing)} aria-label={t.playing ? "Pause" : "Play"}>{t.playing ? Icon.pause : Icon.play}</button>
           <div className={s.lcd}><b>{t.bar}.{t.beat}</b><small>bar</small><b>124</b><small>bpm</small></div>
           <button className={s.undo} onClick={t.undo} disabled={!t.canUndo}>{Icon.undo} Undo</button>

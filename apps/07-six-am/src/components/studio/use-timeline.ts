@@ -4,9 +4,10 @@
 // blocks, mute, the transport and the filter knob. The edit rules live in @/lib/timeline.
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
-  BARS, BARS_PER_SECOND, type Doc, type Loop, type Region,
+  BARS, type Doc, type Loop, type Region,
   demoDoc, loopById, newId, place, snapBar, snapLength,
 } from "@/lib/timeline";
+import type { AudioEngine } from "./audio";
 
 type Drag =
   | { type: "new"; loop: Loop; x: number; y: number; bar: number | null }
@@ -24,9 +25,9 @@ export function useTimeline() {
   const [playing, setPlaying] = useState(false);
   const [playhead, setPlayhead] = useState(37);
   const [selected, setSelected] = useState<string | null>(null);
-  const [preview, setPreview] = useState<string | null>("rubber-bass");
+  const [preview, setPreview] = useState<string | null>(null);
   const [group, setGroup] = useState(1);
-  const [filter, setFilter] = useState(0.62);
+  const [filter, setFilter] = useState(1);
   const [drag, setDragState] = useState<Drag | null>(null);
   const dragRef = useRef<Drag | null>(null);
   const setDrag = (d: Drag | null) => { dragRef.current = d; setDragState(d); };
@@ -71,20 +72,42 @@ export function useTimeline() {
     setSelected(null);
   }, [commit]);
 
-  // Transport: the playhead moves at 124 BPM and loops at the end.
-  // shortcut: silent, timed with requestAnimationFrame; schedule real audio on the Web Audio clock in the build.
+  // Sound: the engine is loaded in the browser only (Tone.js needs Web Audio), on first use.
+  const engineRef = useRef<Promise<AudioEngine> | null>(null);
+  const engine = useCallback(() => (engineRef.current ??= import("./audio").then((m) => new m.AudioEngine())), []);
+  const playheadRef = useRef(playhead);
+  useLayoutEffect(() => { playheadRef.current = playhead; });
+
+  useEffect(() => { engine().then((e) => e.setRegions(doc.regions)); }, [engine, doc.regions]);
+  useEffect(() => { engine().then((e) => e.setMuted(doc.muted)); }, [engine, doc.muted]);
+  useEffect(() => { engine().then((e) => e.setFilter(filter)); }, [engine, filter]);
+  useEffect(() => { engine().then((e) => e.setPreview(preview)); }, [engine, preview]);
+
+  // Transport: the music runs on the audio clock; the playhead just reads where it is.
   useEffect(() => {
-    if (!playing) return;
-    let raf = 0, last = performance.now();
-    const tick = (t: number) => {
-      const dt = (t - last) / 1000;
-      last = t;
-      setPlayhead((p) => { const n = p + dt * BARS_PER_SECOND; return n >= BARS + 1 ? 1 : n; });
+    let raf = 0, live = true;
+    engine().then((e) => {
+      if (!live) return;
+      if (!playing) { e.stop(); return; }
+      e.playFrom(playheadRef.current);
+      const tick = () => {
+        const bar = e.position();
+        if (bar !== null) setPlayhead(bar);
+        raf = requestAnimationFrame(tick);
+      };
       raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [playing]);
+    });
+    return () => { live = false; cancelAnimationFrame(raf); };
+  }, [engine, playing]);
+
+  /** Move the playhead; while playing, the music jumps there too. */
+  const playingRef = useRef(playing);
+  useLayoutEffect(() => { playingRef.current = playing; });
+  const jumpTo = useCallback((bar: number) => {
+    setPlayhead(bar);
+    playheadRef.current = bar;
+    if (playingRef.current) engine().then((e) => e.playFrom(bar));
+  }, [engine]);
 
   const laneX = (clientX: number) => clientX - (lanesRef.current?.getBoundingClientRect().left ?? 0);
 
@@ -173,7 +196,7 @@ export function useTimeline() {
   /** Spread onto the ruler: click or drag sets where play starts. */
   const ruler = {
     onPointerDown: (e: React.PointerEvent) => {
-      const set = (x: number) => setPlayhead(Math.min(Math.max(Math.floor(x / ppbRef.current) + 1, 1), BARS));
+      const set = (x: number) => jumpTo(Math.min(Math.max(Math.floor(x / ppbRef.current) + 1, 1), BARS));
       set(laneX(e.clientX));
       track(e, (ev) => set(laneX(ev.clientX)), () => {});
     },
@@ -218,7 +241,7 @@ export function useTimeline() {
   const bar = Math.floor(playhead), beat = Math.floor((playhead - bar) * 4) + 1;
 
   return {
-    doc, regions, playing, setPlaying, playhead, setPlayhead, bar, beat, selected, setSelected,
+    doc, regions, playing, setPlaying, playhead, jumpTo, bar, beat, selected, setSelected,
     preview, setPreview, group, setGroup, filter, ghost, inTrack, sounding, pxPerBar, lanesRef,
     canUndo: past.length > 0, undo, toggleMute, remove,
     crateItem, blockBody, blockGrip, ruler, knob,

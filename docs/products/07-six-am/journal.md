@@ -217,3 +217,12 @@ What happened, what was decided and why. Newest last.
   scheduler tick. Can't happen on the live site, but the scheduler is now defensive: a loop or
   instrument it can't play is skipped and reported once, and the music keeps going. All 48
   previewed cleanly after a fresh reload.
+
+## 19 Oct: shipped and wrapped up
+
+- Owner: "ship and wrap up now, leave the rest in the backlog." Skipped, and logged at the top of
+  the backlog: `break-ui`, the guidelines review, the simulated user test and a second-device test.
+- Wrap-up: success check in the brief (honest: owner's use only, no user test), retro with three
+  process changes made in the playbook, key learnings, interview story, card set to shipped.
+- Merged to `main`; the owner runs `pnpm ship 07-six-am` to create the Vercel project with the
+  three keys and get the URL into the card.

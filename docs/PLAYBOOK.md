@@ -28,6 +28,9 @@ hour, not a day. Names in brackets are where each practice comes from; see
   the app, the card, the product folder (with an empty brief) and the README row.
 - **Ship the empty starter straight away** (04 Mallow): merge the scaffold and run
   `pnpm ship NN-slug` in the first hour, so every later change is seen on a real phone.
+- **Starting while another product wraps up** (07 Six AM): work in a worktree cut from the latest
+  `main`, keep a "to carry over" list in the journal for shared pages, and check `main` before
+  holding them back; the other product may already be merged.
 - **Problem.** One or two sentences: who has it, when, and what it costs them today. No features.
   *(Perri: outcomes over outputs.)*
 - **Who.** A quick persona: one specific person, not a market. Full version in
@@ -67,8 +70,11 @@ hour, not a day. Names in brackets are where each practice comes from; see
   a fine answer for an app without such logic. This is practice in judging risk, not a hunt for
   zero bugs: keep each test small, and at the retro note whether one caught anything.
   *(Risk-based testing: test where failure is likely and costly. Decision 0011.)*
-- **Three approaches.** First collect 2–3 real references for the feel (apps, covers, photos) and
-  write down what *not* to do. A feel is evoked, not drawn: no illustrating the object behind a
+- **Three approaches.** First agree what the screen must hold, listed from 1–2 real apps the
+  owner already knows (content before layout; *day 7: a "childish" first sheet*). Then collect 2–3
+  real references for the feel (apps, covers, photos) and write down what *not* to do. If the
+  owner can't choose from one-line directions, show a contact sheet of rough thumbnails of every
+  direction before building three. A feel is evoked, not drawn: no illustrating the object behind a
   theme. *(Day 3: four rounds of literal typewriters.)* Then run `/design-session` on the main screen
   (decision 0013): seeds and broad ideas, `/prototype` for three genuinely different directions
   behind a picker, a fresh-eyes critic that scores screenshots until 9/10, then subtract, check

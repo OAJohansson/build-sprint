@@ -104,3 +104,19 @@ zoom levels, audio export formats, building a synth.
   that ends exactly where the next loop starts.
 
 ## Success check (at wrap-up)
+
+Wrapped up on 19 Oct without the user test (owner's call), so these are the owner's own use, not
+measurements.
+
+| Signal | Target | What happened |
+| --- | --- | --- |
+| First sound | Under 30 seconds | Not timed. Press play on the demo track and it sounds; the first click is needed by the browser |
+| First track | 2+ minutes, 4+ loops, no help | Not tested with a fresh user. The owner built and saved tracks; the demo shows the shape |
+| Pride | "Would you play this to a friend?" | Not asked. Owner on first listen: "sounds great"; on the 48 loops: "they sound good" |
+| Guardrail: no drift | Every loop on its bar | Holds by design: notes are booked on the audio clock; scheduling is unit tested |
+
+**Did it solve the problem?** Partly, for one person. The cockpit problem is answered: one
+screen, a timeline, a crate, everything in key, and the owner made tracks they liked on day
+one. Whether a beginner other than the owner gets to a track without help is untested. The
+riskiest assumption (does arranging loops feel like *making* music?) has one positive data
+point, the owner, and that's all.

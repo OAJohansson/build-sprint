@@ -31,7 +31,7 @@ What happened, what was decided and why. Newest last.
 - **Name: Six AM**, the moment the warehouse lights come on. Picked from a brainstorm in the
   Bending Spoons spirit (inside reference, absurd out of context); can change later.
 
-### To carry over after Folio
+### To carry over after Folio (done 18 Oct, after Folio shipped on main)
 
 - `docs/knowledge-bank.md`: Barnum effect (Forer, 1949); Johari window (Luft & Ingham, 1955);
   Wheel of Life (Paul J. Meyer); sample licensing (use in tracks vs redistribute in an app);

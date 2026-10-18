@@ -211,3 +211,9 @@ What happened, what was decided and why. Newest last.
 - Level check with a temporary meter: all 24 new loops sound. The disco strings were nearly
   silent (a slow string attack can't speak in a 16th note), so they got their own fast-attack
   synth; six quiet ones were turned up to sit with the originals.
+- **Owner hit an error message** while trying them (feedback 9): "reading 'bars'" of
+  undefined, every 25 ms. The sound engine had started before the new loops existed and the
+  dev server's hot reload kept that old engine running, so previewing a new loop crashed its
+  scheduler tick. Can't happen on the live site, but the scheduler is now defensive: a loop or
+  instrument it can't play is skipped and reported once, and the music keeps going. All 48
+  previewed cleanly after a fresh reload.

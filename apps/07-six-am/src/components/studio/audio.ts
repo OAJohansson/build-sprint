@@ -236,15 +236,31 @@ export class AudioEngine {
       const k = this.nextStep, t = this.nextTime;
       if (this.playing) {
         for (const hit of this.index.get(k % STEPS) ?? []) {
-          if (!this.muted[hit.track]) this.play[RECIPES[hit.loopId].inst](hit.note, t);
+          if (!this.muted[hit.track]) this.sound(hit.loopId, hit.note, t);
         }
       }
       if (this.preview) {
-        const recipe = RECIPES[this.preview];
-        for (const note of previewHits(recipe, loopById(this.preview).bars, k)) this.play[recipe.inst](note, t);
+        const recipe = RECIPES[this.preview], loop = loopById(this.preview);
+        if (recipe && loop) for (const note of previewHits(recipe, loop.bars, k)) this.sound(this.preview, note, t);
       }
       this.nextStep = k + 1;
       this.nextTime = t + SECONDS_PER_STEP;
+    }
+  }
+
+  /** Play one note. A loop the engine doesn't know, or an instrument that throws, is skipped
+   *  (and reported once) so one bad sound can never stop the music. */
+  private failed = new Set<string>();
+  private sound(loopId: string, note: Note, t: number) {
+    const play = this.play[RECIPES[loopId]?.inst];
+    try {
+      if (!play) throw new Error("no recipe or instrument");
+      play(note, t);
+    } catch (e) {
+      if (!this.failed.has(loopId)) {
+        this.failed.add(loopId);
+        console.error(`[six-am] couldn't play "${loopId}":`, e);
+      }
     }
   }
 }

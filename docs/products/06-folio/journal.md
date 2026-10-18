@@ -531,3 +531,8 @@ explains (owner's request: "help me start thinking about this, not just you tell
   encrypted variables (readable by anyone with project access); `ship.mjs` now uploads them as
   Sensitive, and the owner re-saves the existing ones by hand. Merged to main and pushed (with
   the held-back decision 0016 commits) so Vercel deploys.
+- **Deploy:** the push was skipped twice by the shared deploy rule (it looked only at the last
+  commit, a README sync). Fixed in every app's `vercel.json` and the template: skip only if the
+  app is unchanged since its last successful deploy (decision 0016 update). Folio is live at
+  folio-iota-jade.vercel.app; `/api/picks` answered in 9 s with 6 picks, a different list from
+  the local run (LLM non-determinism) and one odd match (*Adam Kay Bundle*): both in the backlog.

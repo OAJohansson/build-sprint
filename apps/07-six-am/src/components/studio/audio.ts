@@ -29,6 +29,10 @@ function makeInstruments(channels: Tone.Channel[]): Record<Inst, Play> {
   const clap = new Tone.NoiseSynth({ noise: { type: "pink" }, volume: -4, envelope: { attack: 0.002, decay: 0.16, sustain: 0 } }).connect(clapF);
   const snareF = new Tone.Filter(2500, "bandpass").connect(drums);
   const snare = new Tone.NoiseSynth({ noise: { type: "white" }, volume: -8, envelope: { attack: 0.001, decay: 0.12, sustain: 0 } }).connect(snareF);
+  const tom = new Tone.MembraneSynth({ pitchDecay: 0.06, octaves: 2.5, volume: -6, envelope: { attack: 0.001, decay: 0.35, sustain: 0 } }).connect(drums);
+  const rimF = new Tone.Filter(3500, "bandpass").connect(drums);
+  rimF.Q.value = 4;
+  const rim = new Tone.NoiseSynth({ noise: { type: "white" }, volume: -6, envelope: { attack: 0.001, decay: 0.03, sustain: 0 } }).connect(rimF);
   const kit: Play = (n, t) => {
     switch (n.note) {
       case "kick": kick.triggerAttackRelease("A0", 0.3, t, n.vel); break;
@@ -37,6 +41,10 @@ function makeInstruments(channels: Tone.Channel[]): Record<Inst, Play> {
       case "ohat": ohat.triggerAttackRelease(0.15, t, n.vel); break;
       case "clap": clap.triggerAttackRelease(0.15, t, n.vel); break;
       case "snare": snare.triggerAttackRelease(0.1, t, n.vel); break;
+      case "tomL": tom.triggerAttackRelease("D2", 0.3, t, n.vel); break;
+      case "tomM": tom.triggerAttackRelease("G2", 0.3, t, n.vel); break;
+      case "tomH": tom.triggerAttackRelease("C3", 0.25, t, n.vel); break;
+      case "rim": rim.triggerAttackRelease(0.03, t, n.vel); break;
     }
   };
 
@@ -47,6 +55,8 @@ function makeInstruments(channels: Tone.Channel[]): Record<Inst, Play> {
   const pump = mono({ oscillator: { type: "square" }, volume: -8, filter: { Q: 2 }, envelope: { attack: 0.003, decay: 0.12, sustain: 0.2, release: 0.05 }, filterEnvelope: { baseFrequency: 120, octaves: 2.5, decay: 0.12, sustain: 0.1 } });
   const rubber = mono({ oscillator: { type: "fmsquare" }, volume: -10, envelope: { attack: 0.002, decay: 0.2, sustain: 0.2, release: 0.08 }, filterEnvelope: { baseFrequency: 150, octaves: 3, decay: 0.2, sustain: 0.2 } });
   const reese = mono({ oscillator: { type: "fatsawtooth", count: 3, spread: 30 }, volume: -12, filter: { Q: 1 }, envelope: { attack: 0.02, decay: 0.3, sustain: 0.8, release: 0.3 }, filterEnvelope: { baseFrequency: 90, octaves: 2, decay: 0.4, sustain: 0.5 } });
+  const octave = mono({ oscillator: { type: "sawtooth" }, volume: -9, filter: { Q: 3 }, envelope: { attack: 0.002, decay: 0.12, sustain: 0.1, release: 0.05 }, filterEnvelope: { baseFrequency: 220, octaves: 2.8, decay: 0.1, sustain: 0.1 } });
+  const pluck = mono({ oscillator: { type: "triangle" }, volume: -4, filter: { Q: 1.5 }, envelope: { attack: 0.002, decay: 0.25, sustain: 0, release: 0.1 }, filterEnvelope: { baseFrequency: 160, octaves: 3, decay: 0.18, sustain: 0 } });
   const tone = (s: Tone.Synth | Tone.MonoSynth): Play => (n, t) => s.triggerAttackRelease(n.note, sec(n.dur) * 0.95, t, n.vel);
 
   // Chords: polyphonic synths with different envelopes and filters.
@@ -62,6 +72,17 @@ function makeInstruments(channels: Tone.Channel[]): Record<Inst, Play> {
   const strings = poly({ oscillator: { type: "sawtooth" }, envelope: { attack: 0.45, decay: 0.3, sustain: 0.8, release: 1 } }, 2200, -22);
   const piano = poly({ oscillator: { type: "triangle" }, envelope: { attack: 0.002, decay: 0.45, sustain: 0, release: 0.2 } }, 5000, -12);
   const wash = poly({ oscillator: { type: "sine" }, envelope: { attack: 2, decay: 1, sustain: 0.9, release: 3 } }, 4000, -14);
+  // Electric piano (FM, Rhodes-ish), a dub stab drowned in echo, and a plucky arpeggio.
+  const keysF = new Tone.Filter(4500, "lowpass").connect(chords);
+  const keys = new Tone.PolySynth(Tone.FMSynth, { harmonicity: 3, modulationIndex: 2.2, envelope: { attack: 0.003, decay: 0.9, sustain: 0.15, release: 0.6 }, modulationEnvelope: { attack: 0.002, decay: 0.4, sustain: 0, release: 0.3 } }).connect(keysF);
+  keys.volume.value = -9;
+  // Disco string stabs: a fast attack (the slow "strings" pad can't speak in a 16th).
+  const disco = poly({ oscillator: { type: "fatsawtooth", count: 3, spread: 18 }, envelope: { attack: 0.008, decay: 0.22, sustain: 0.25, release: 0.25 } }, 5200, -8);
+  const echo = new Tone.FeedbackDelay({ delayTime: 3 * SECONDS_PER_STEP, feedback: 0.55, wet: 0.45 }).connect(new Tone.Filter(1800, "lowpass").connect(chords));
+  const dub = new Tone.PolySynth(Tone.Synth, { oscillator: { type: "sawtooth" }, envelope: { attack: 0.004, decay: 0.15, sustain: 0, release: 0.1 } }).connect(echo);
+  dub.volume.value = -14;
+  const arpDelay = new Tone.FeedbackDelay({ delayTime: 2 * SECONDS_PER_STEP, feedback: 0.3, wet: 0.25 }).connect(chords);
+  const arp = new Tone.Synth({ oscillator: { type: "square" }, volume: -13, envelope: { attack: 0.002, decay: 0.12, sustain: 0, release: 0.08 } }).connect(arpDelay);
   const chordPlay = (p: Tone.PolySynth): Play => (n, t) => p.triggerAttackRelease(n.note, sec(n.dur) * 0.95, t, n.vel);
 
   // Top and FX: shaker, a vowel-ish FM chop, ride, cowbell and noise sweeps.
@@ -71,27 +92,59 @@ function makeInstruments(channels: Tone.Channel[]): Record<Inst, Play> {
   const ride = new Tone.MetalSynth({ volume: -30, envelope: { attack: 0.001, decay: 0.7, release: 0.2 }, harmonicity: 5.1, modulationIndex: 32, resonance: 4000, octaves: 1.5 }).connect(top);
   const bell = new Tone.PolySynth(Tone.Synth, { oscillator: { type: "square" }, envelope: { attack: 0.001, decay: 0.09, sustain: 0, release: 0.05 } }).connect(new Tone.Filter(3000, "bandpass").connect(top));
   bell.volume.value = -16;
-  const sweepF = new Tone.Filter(300, "bandpass").connect(top);
-  sweepF.Q.value = 1.2;
-  const sweep = new Tone.NoiseSynth({ noise: { type: "white" }, volume: -10, envelope: { attack: 1, decay: 0, sustain: 1, release: 0.05 } }).connect(sweepF);
-  const sweepPlay = (from: number, to: number): Play => (n, t) => {
-    const d = sec(n.dur);
-    sweep.envelope.attack = d * 0.9;
-    sweepF.frequency.cancelScheduledValues(t);
-    sweepF.frequency.setValueAtTime(from, t);
-    sweepF.frequency.exponentialRampToValueAtTime(to, t + d);
-    sweep.triggerAttackRelease(d, t, n.vel);
+  // Noise sweeps: each has its own noise and filter, so a riser and a downlifter can overlap.
+  // Rising sweeps fade in; falling ones start loud and fade out.
+  const makeSweep = (from: number, to: number, volume = -10): Play => {
+    const f = new Tone.Filter(from, "bandpass").connect(top);
+    f.Q.value = 1.2;
+    const noise = new Tone.NoiseSynth({ noise: { type: "white" }, volume, envelope: { attack: 1, decay: 0, sustain: 1, release: 0.05 } }).connect(f);
+    const rising = to > from;
+    return (n, t) => {
+      const d = sec(n.dur);
+      noise.envelope.attack = rising ? d * 0.9 : 0.01;
+      noise.envelope.release = rising ? 0.05 : d * 0.9;
+      f.frequency.cancelScheduledValues(t);
+      f.frequency.setValueAtTime(from, t);
+      f.frequency.exponentialRampToValueAtTime(to, t + d);
+      noise.triggerAttackRelease(rising ? d : 0.02, t, n.vel);
+    };
+  };
+
+  // Latin percussion, a siren and vinyl crackle.
+  const conga = new Tone.MembraneSynth({ pitchDecay: 0.02, octaves: 1.2, volume: -10, envelope: { attack: 0.001, decay: 0.22, sustain: 0 } }).connect(top);
+  const clave = new Tone.Synth({ oscillator: { type: "sine" }, volume: -3, envelope: { attack: 0.001, decay: 0.05, sustain: 0, release: 0.02 } }).connect(top);
+  const tambF = new Tone.Filter(7500, "bandpass").connect(top);
+  const tamb = new Tone.NoiseSynth({ noise: { type: "white" }, volume: 2, envelope: { attack: 0.002, decay: 0.09, sustain: 0 } }).connect(tambF);
+  const siren = new Tone.Synth({ oscillator: { type: "sawtooth" }, volume: -12, envelope: { attack: 0.05, decay: 0, sustain: 1, release: 0.2 } }).connect(new Tone.Filter(2500, "lowpass").connect(top));
+  const crackleF = new Tone.Filter(2000, "highpass").connect(top);
+  const crackle = new Tone.NoiseSynth({ noise: { type: "brown" }, volume: -16, envelope: { attack: 0.001, decay: 0.012, sustain: 0 } }).connect(crackleF);
+  const sirenPlay: Play = (n, t) => {
+    const d = sec(n.dur), base = Tone.Frequency(n.note).toFrequency();
+    siren.frequency.cancelScheduledValues(t);
+    siren.triggerAttackRelease(base, d * 0.95, t, n.vel);
+    // Up and down twice a bar, like a rave siren.
+    for (let i = 0, step = sec(8); i * step < d; i++) {
+      siren.frequency.linearRampToValueAtTime(i % 2 ? base : base * 1.6, t + (i + 1) * step);
+    }
   };
 
   return {
-    kit, sub: tone(sub), acid: tone(acid), pump: tone(pump), rubber: tone(rubber), reese: tone(reese),
+    kit, sub: tone(sub), acid: tone(acid), pump: tone(pump), rubber: tone(rubber), reese: tone(reese), octave: tone(octave), pluck: tone(pluck),
     stab: chordPlay(stab), pad: chordPlay(pad), organ: chordPlay(organ), strings: chordPlay(strings), piano: chordPlay(piano), wash: chordPlay(wash),
+    keys: chordPlay(keys), dub: chordPlay(dub), arp: tone(arp),
+    conga: (n, t) => conga.triggerAttackRelease(n.note, 0.2, t, n.vel),
+    clave: (n, t) => clave.triggerAttackRelease("D7", 0.04, t, n.vel),
+    tamb: (n, t) => tamb.triggerAttackRelease(0.08, t, n.vel),
+    fall: makeSweep(9000, 200, 0),
+    disco: chordPlay(disco),
+    siren: sirenPlay,
+    crackle: (n, t) => crackle.triggerAttackRelease(0.012, t, n.vel),
     shaker: (n, t) => shaker.triggerAttackRelease(0.05, t, n.vel),
     chop: tone(chop as unknown as Tone.Synth),
     ride: (n, t) => ride.triggerAttackRelease("C4", 0.6, t, n.vel),
     cowbell: (n, t) => bell.triggerAttackRelease(["C#5", "G#5"], 0.08, t, n.vel),
-    riser: sweepPlay(300, 9000),
-    swell: sweepPlay(2000, 12000),
+    riser: makeSweep(300, 9000),
+    swell: makeSweep(2000, 12000),
   };
 }
 

@@ -10,7 +10,7 @@ export type Kind =
   | "kick" | "hats" | "broken" | "clap"
   | "sub" | "acid" | "pump"
   | "stab" | "pad"
-  | "shaker" | "chop" | "ride" | "riser" | "perc";
+  | "shaker" | "chop" | "ride" | "riser" | "perc" | "arp" | "fall";
 
 export type Loop = { id: string; track: number; name: string; bars: number; vibe: string; kind: Kind };
 export type Region = { id: string; loopId: string; track: number; start: number; length: number };
@@ -21,7 +21,7 @@ const L = (track: number, name: string, bars: number, vibe: string, kind: Kind):
   track, name, bars, vibe, kind,
 });
 
-// The crate: 24 loops, each played by its synth recipe in recipes.ts (decision 0019).
+// The crate: 48 loops, 12 per group, each played by its synth recipe in recipes.ts (decision 0019).
 // shortcut: synthesised only; vocal chop and real instruments are stand-ins until Freesound CC0 samples join.
 export const LOOPS: Loop[] = [
   L(0, "Four to the Floor", 4, "steady · classic", "kick"),
@@ -48,6 +48,31 @@ export const LOOPS: Loop[] = [
   L(3, "Noise Riser", 8, "tension · build", "riser"),
   L(3, "Cowbell", 2, "cheeky · 808", "perc"),
   L(3, "Crash Swell", 4, "release · big", "riser"),
+  // Added 19 Oct (owner: more sounds for more complex songs).
+  L(0, "Garage Skip", 4, "2-step · skippy", "broken"),
+  L(0, "Disco Hats", 2, "open · Studio 54", "hats"),
+  L(0, "Rimshot Groove", 2, "dry · minimal", "broken"),
+  L(0, "Tribal Toms", 4, "tribal · rolling", "perc"),
+  L(0, "Techno Thump", 4, "relentless · Berlin", "kick"),
+  L(0, "Snare Fill", 4, "builds · into the drop", "broken"),
+  L(1, "Disco Octaves", 2, "bouncy · disco", "pump"),
+  L(1, "Acid Squelch", 4, "screaming · 303", "acid"),
+  L(1, "Walking Funk", 4, "funky · moving", "acid"),
+  L(1, "Sub Stabs", 4, "short · deep", "pump"),
+  L(1, "Deep Pluck", 4, "plucky · deep house", "pump"),
+  L(1, "Rolling Sixteenths", 2, "driving · techno", "acid"),
+  L(2, "Rhodes Swing", 4, "jazzy · late night", "stab"),
+  L(2, "Disco Strings", 4, "glossy · disco", "stab"),
+  L(2, "House Organ", 4, "classic · 1990", "stab"),
+  L(2, "Dub Chord", 4, "echoing · dub techno", "stab"),
+  L(2, "Sunrise Arp", 4, "sparkling · uplifting", "arp"),
+  L(2, "Gospel Lift", 8, "warm · hands up", "pad"),
+  L(3, "Conga Loop", 2, "latin · warm", "perc"),
+  L(3, "Clave", 2, "clicky · latin", "perc"),
+  L(3, "Tambourine", 2, "jangly · offbeat", "shaker"),
+  L(3, "Downlifter", 4, "falling · after the drop", "fall"),
+  L(3, "Siren", 4, "rave · alarm", "chop"),
+  L(3, "Vinyl Crackle", 4, "dusty · record shop", "shaker"),
 ];
 export const loopById = (id: string) => LOOPS.find((l) => l.id === id)!;
 
@@ -126,6 +151,8 @@ export function amps(kind: Kind, bars: number, seed = 1): number[] {
       case "ride": v = q % 4 === 2 ? 0.6 : 0.3; break;
       case "riser": v = 0.08 + 0.9 * (i / n) ** 1.6; break;
       case "perc": v = [0, 3, 8, 11].includes(q) ? 0.75 : 0.06; break;
+      case "arp": v = 0.35 + 0.25 * ((q % 4) / 3); break;
+      case "fall": v = 0.95 - 0.85 * (i / n) ** 0.7; break;
     }
     a.push(Math.min(1, v * (0.85 + 0.3 * r)));
   }

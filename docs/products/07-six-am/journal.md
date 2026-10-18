@@ -195,3 +195,19 @@ What happened, what was decided and why. Newest last.
   first track was created in the database, saves return 200, a reload loads it back, a mute and
   unmute each save. Fixed a wasted save on every load (React's development mode runs effects
   twice; autosave now compares with the track as loaded instead of skipping the first run).
+
+## 19 Oct: more sounds
+
+- Owner chose more synthesised loops first (always in key) over Freesound samples. The crate
+  doubled to **48 loops, 12 per group**: garage, disco hats, rimshots, tribal toms, techno
+  thump and a snare fill; disco octaves, acid squelch, walking funk, sub stabs, deep pluck and
+  rolling sixteenths; Rhodes, disco strings, house organ, a dub chord with echo, a sunrise arp
+  and gospel chords; congas, clave, tambourine, a downlifter, a rave siren and vinyl crackle.
+- New instruments for them (toms, rim, octave bass, pluck, FM electric piano, dub echo, arp,
+  conga, clave, tambourine, siren, crackle); each noise sweep now has its own synth, so a
+  riser and a downlifter can overlap. The crate list scrolls (two rows show at a time).
+- A test now checks the crate and the recipes agree (every loop has notes, inside its length,
+  12 per group); 21 tests pass.
+- Level check with a temporary meter: all 24 new loops sound. The disco strings were nearly
+  silent (a slow string attack can't speak in a 16th note), so they got their own fast-attack
+  synth; six quiet ones were turned up to sit with the originals.

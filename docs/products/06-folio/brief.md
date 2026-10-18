@@ -173,3 +173,21 @@ reading progress, stats and charts, social sharing, training or fine-tuning a mo
   rank 1, hit at rank 10, no hit, empty list).
 
 ## Success check (at wrap-up)
+
+| Signal | Target | What happened |
+| --- | --- | --- |
+| Recommendations land (main) | ≥ 3 of 10 I'd want and hadn't considered | **Missed, on a quick look:** 6–8 picks shown live; I'd definitely read *Klara and the Sun*; *A Little Life* is my taste but already on my mind and "a long commitment". About 1 new pick I'd read. |
+| Better than the baseline | Best level beats popularity on both | **Met.** TF-IDF: NDCG@10 0.023 vs 0.010 on 10,000 goodbooks readers (the exam moved from my own history to readers, decision 0017). On my 48 liked books, Opus found 7, popularity and TF-IDF 0. |
+| Import works | ≥ 95% imported, ≥ 80% with a cover | **Met.** 352 rows → 349 books (3 duplicate editions merged), all on the shelves; 334 (96%) with a cover. |
+| Logging is quick | ≤ 30 s, ≤ 5 taps | **Not measured:** the simulated user test didn't run (time went to the recommender). |
+| The shelf is scannable | ≤ 10 s, no taps | **Not measured**, same reason. |
+| Guardrail: real books only | 0 failures | **Met by construction:** every pick must exist on Open Library and not be on the shelf, or it's dropped. In the lab about 0.5% of named books were invented; one live pick matched an odd edition (*Adam Kay Bundle*). |
+| Guardrail: exact ratings | Exact | **Met:** 22 unit tests check every imported field. |
+| Guardrail: no book lost on import | Exact | **Met** on the real import (rows = books + merges, unrecognised books named on screen). |
+
+**Did it solve the problem?** Partly. Logging and the shelf replaced Goodreads for me, and the picks
+are personal and explain themselves, which Goodreads' never did. But they don't yet clear my own
+bar of 3 new books I'd want out of 10, and the original plan (four classic recommenders, then an LLM)
+was cut to two plus an LLM to ship. The eval is the lasting part: any future recommender gets a
+fair score in minutes.
+

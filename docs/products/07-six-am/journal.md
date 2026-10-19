@@ -224,5 +224,8 @@ What happened, what was decided and why. Newest last.
   the backlog: `break-ui`, the guidelines review, the simulated user test and a second-device test.
 - Wrap-up: success check in the brief (honest: owner's use only, no user test), retro with three
   process changes made in the playbook, key learnings, interview story, card set to shipped.
-- Merged to `main`; the owner runs `pnpm ship 07-six-am` to create the Vercel project with the
-  three keys and get the URL into the card.
+- Merged to `main` (PR #35); the owner ran `pnpm ship 07-six-am`. **Live at
+  https://six-am.vercel.app.** Checked: the page, logo and access-code screen load, the API
+  refuses a missing or wrong code (so `ACCESS_CODE` is set), and with the owner's code their
+  tracks load from Supabase. The first load after a deploy took a moment (two database trips
+  in a row on a cold server); logged in the backlog.

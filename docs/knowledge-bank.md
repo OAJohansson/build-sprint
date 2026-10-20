@@ -625,7 +625,7 @@ most of what "make it an app" means (an icon, focus, no tabs) costs 30 minutes, 
 build. The next step up is a **wrapper** like Capacitor: a real Xcode project that shows the site,
 which earns its keep only for native features (widgets, reliable notifications, App Store). An
 installed web app keeps its own storage, separate from the browser's. Where we met it: Scribble
-(03) as a Dock app. From: the W3C Web App Manifest spec; "Progressive Web Apps", coined by Alex
+(03) as a Dock app, then Six AM (07). From: the W3C Web App Manifest spec; "Progressive Web Apps", coined by Alex
 Russell and Frances Berriman (Google, 2015).
 
 #### Network rules in the cloud

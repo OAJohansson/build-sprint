@@ -247,3 +247,18 @@ What happened, what was decided and why. Newest last.
   appointment the "Did it happen?" question appears; a vape added halfway shows in the graph and
   first in "Took a dose". Found and fixed: "1 quick questions"; the "Noted…" line stayed after the
   plan day ended; Next sat against the field in the full-screen medicine flow (v1).
+
+### Simulated user test as Priya (playbook step 3b)
+- **Why now:** v2 had tests, a critic and an audit but no user test; the open question was whether
+  the graph is read correctly in the 10 seconds of a call.
+- **Set-up:** new persona Priya (31, anxiety and poor sleep, oil at night, vape added halfway) next
+  to Sam; a v2 plan (setup ≤ 90 s, 1-tap tick, ≤ 2-tap vape, check-in, Journey read ≤ 60 s, Know
+  your medicine, time passes). Run on PR 38's head, phone size. The first run lost its dev server
+  (the app stops it when the session's turn ends); the second ran in the foreground.
+- **Result:** logging and guardrails pass (0 breaches, 9/9 numbers exact, 0 causal words). Main
+  signal only partly met: ~50 s, sleep and the medicines read correctly, but the caption above the
+  graph ("anxiety mostly quite. Before treatment: quite") made a real improvement read as "no
+  change". Priya linked the anxiety drop to the vape herself; the screen doesn't say it.
+- **Checked before logging:** the agent's major "00:30 dose saved to the wrong day" was wrong
+  (the code counts it for last night, as decided); kept as a labelling issue (feedback 38).
+- **Nothing in the product changed.** Owner's calls listed in feedback 34–37.

@@ -303,19 +303,21 @@ backlog updated.
 
 ## Success check (v2, at wrap-up)
 
-*20 Oct, from Claude's checks in the browser, the unit tests and the hand counts. No user test
-(simulated or real) of v2 yet; that's the main gap.*
+*20 Oct, from Claude's checks in the browser, the unit tests and the hand counts; updated the same
+day with the simulated user test as Priya ([report](user-testing/report-2026-10-20.md)). No real
+user yet.*
 
 | Signal | Target | What happened |
 | --- | --- | --- |
-| Change is readable (main) | ≤ 60 s, correct, no causal words | **Not yet tested with a user.** On screen: the takeaway sentence, the graph and every medicine fit in one phone screen when Journey opens; the design critic scored 5/10 twice (owner made the calls after round 2). |
-| Setup fits | ≤ 90 s, skippable | **Likely met:** about 14 taps plus typing a name on a fresh install; every step skippable. Not timed with a person. |
-| Logging stays effortless | tick 1 tap; as-needed ≤ 2; check-in ≤ 30 s | **Met:** tick 1 tap; as-needed 2 taps (Took a dose → the medicine); v1 check-in unchanged. |
+| Change is readable (main) | ≤ 60 s, correct, no causal words | **Partly met (simulated, Priya):** ~50 s, 2 taps (Journey, then 1 tap per symptom). Sleep and "what was taken when" read correctly (vape start read as ~5 Sep, actual 6 Sep). Anxiety only half right: the caption "mostly quite. Before treatment: quite" reads as no change, while the line and the Summary say a little better (feedback 34). 0 causal words from the app; Priya inferred "it dropped once I had the vape" herself. |
+| Setup fits | ≤ 90 s, skippable | **Met to home, missed for her whole plan (simulated):** ~22 taps, 65–75 s to Today; adding the vape from Care takes another ~35–45 s (setup takes one medicine), ~105–120 s in all. Amounts and last appointment come prefilled (feedback 36, 37). |
+| Logging stays effortless | tick 1 tap; as-needed ≤ 2; check-in ≤ 30 s | **Met (simulated):** tick 1 tap / ~2 s; vape 2 taps / ~4 s; check-in 5 taps / ~12–15 s, no typing. |
 | Missed doses are kind | no red, streaks or guilt | **Met:** "Not taken" in the same grey as "Later"; no counts or streaks. |
 | Guardrail: correct numbers | exact | **Met:** summary values on Sam's demo matched a hand count (pain 1.5 vs 1.57, mood 1.35 → 1.67, baseline comparisons, 13 doses on 7 days); 30 unit tests for schedule, history, migration, averages and comparisons. |
 | Guardrail: no advice, no claims | 0 breaches | **Met after fixes:** one breach caught ("How quickly it works" heading), four near misses changed (see journal); nothing leaves the phone (only the app's own files are requested). |
 
 **Did v2 solve the problem?** It now answers "what am I taking, and is anything changing?" from the
 daily log rather than from memory, and v1 users keep their data. Whether a patient or a clinician
-reads the graph correctly in a call is not known yet: run the simulated user test as Priya, then a
-real one.
+reads the graph correctly in a call is only partly answered: in the simulated test as Priya, sleep
+and the medicines read correctly, but the caption above the graph hid the anxiety improvement.
+Next: the owner's call on the caption, then a real patient.

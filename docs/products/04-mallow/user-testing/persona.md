@@ -45,3 +45,57 @@ Use they/them. Imagined persona (owner, 12 Oct); no real patient tested yet.
 Says: "a bad day", "flare", "sleep was rubbish", "foggy", "the oil", "the flower", "my dose",
 "follow-up", "how it's been".
 Confused by: "PROMs", "efficacy", "adverse events", "NRS", "baseline", "adherence".
+
+---
+
+# Persona 2: Priya, anxiety and poor sleep (v2)
+
+Imagined persona (20 Oct), written as she/her; no real
+patient tested yet. Matches the "Demo: Priya" history in Care.
+
+## Who
+
+- 31, lives in Bristol, works full-time as a UX researcher at an agency, often on calls. Anxiety
+  since her twenties and poor sleep (lying awake, waking at 3 am). Tried CBT, sertraline and
+  sleep hygiene before a private clinic prescribed medical cannabis three months ago.
+- On a balanced oil, 0.3 ml an hour before bed, every night since the start. Six or seven weeks in,
+  the clinic added a vape for anxious moments (up to 3 puffs when needed).
+- Monthly video follow-up (about 15 minutes) with Dr Okafor; the next one is in a few days.
+- Tech comfort: high. Lives in apps; notices clumsy design and gets impatient with it.
+- Patience: medium. Fine at night, short between meetings or when anxious.
+
+## Moments of use
+
+1. Bedtime: takes the oil and ticks it off, in bed, lights low.
+2. An anxious moment at work or on the train: uses the vape, wants to note it in a second, discreetly.
+3. The follow-up call: phone in hand, wants to answer "has your sleep improved? and the anxiety?"
+   with something better than "I think so".
+
+## Jobs to be done
+
+1. "When the doctor asks if it's helping, I want to see how my sleep and anxiety have changed since
+   I started and what I was on, so we decide on facts, not on my mood that day."
+2. "When I take my dose, I want to tick it off in one tap, so the record is right without thinking."
+3. "When I use the vape, I want to log it in a second, so I can later see how often I need it."
+4. "When I'm unsure about the vape, I want plain facts about it (how fast, how long, driving), so I
+   don't have to google at 11 pm."
+
+## Frustrations
+
+- Charts that need a legend to decode; vague trends with no dates.
+- Anything that feels like being judged for using the vape more.
+- Apps that sound like an advert or a wellness influencer. Being told what to do.
+- Notifications and streaks.
+
+## What "worth it" means
+
+- After a week: ticking the oil and logging the vape is automatic.
+- At the follow-up: she can say "sleep got better in the first six weeks and has stayed there;
+  anxiety eased more once the vape was added" and point at it.
+- She'd keep using it if it made the call shorter and more useful.
+
+## Language she uses
+
+Says: "the oil", "the vape", "a few puffs", "slept badly", "on edge", "since I started",
+"follow-up", "my plan".
+Confused by: "baseline", "PRN", "titration", "adherence", "efficacy".

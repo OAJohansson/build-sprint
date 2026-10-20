@@ -37,3 +37,13 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 31 | v2 audit 12, 19 | Today's plan list gets long (3 medicines × 4 times); green "taken" tick reads as a judgement | open: owner's call |
 | 32 | v2 audit 15, 21–23, 28–30, 32 | Focus in sheets and cards; calendar cells 36 px at 320; "None" days look empty; radio keys; very old stopped medicine stretches "since starting"; input max lengths | backlog |
 | 33 | v2 time-passes test | "1 quick questions"; stale "Noted" after the plan day; Next against the field; the chart could fail to draw when the page opened in the background (ResizeObserver) | fixed |
+| 34 | User test 20 Oct F1 (major, Priya) | Journey caption gives a level ("anxiety mostly quite. Before treatment: quite") so it reads as no change, while the line (2.21 → 1.54) and the Summary say "a little better"; the main signal only half met | open: owner's call (caption as then → now with dates?) |
+| 35 | User test F5 | Summary card mixes two comparisons ("About the same" vs last stretch, "Now: better" vs before treatment) without saying which is which; Journey and Summary disagree on anxiety | open: owner's call, decide with 34 |
+| 36 | User test S1a (guardrail near miss) | Amount steppers start at values she didn't enter (oil 0.5 ml, vape 2 puffs; as-needed sheet preset 2 puffs) | open: owner's call (blank and required vs keep) |
+| 37 | User test S1b, F6 | "Last appointment" prefilled (28 days ago) and a new medicine's "Started" defaults to today: unnoticed, both write wrong history; setup takes only one medicine | open: owner's call |
+| 38 | User test F2 (downgraded: the agent reported a wrong-day dose; the code shows the 00:30 tick counts for last night as designed) | Between midnight and 04:00 the screen says "Mon 26 Oct · Your plan today" while showing last night's plan; the dose shows under Monday in Your days | open |
+| 39 | User test F3, F7 | Worse is at the top of the graph (better = falling line); appointment ticks look like date ticks, so the vape start reads as "around 5 Sep" (actual 6 Sep) | open |
+| 40 | User test F4 | Last night's relief question stays on Today all day, above tonight's dose | open |
+| 41 | User test S1c | Only one condition can be picked (Priya has anxiety and sleep) | backlog |
+| 42 | User test F8, F9, F10, S1d, S1e | Sam's note hint for every condition; "Logged now" before picking; "Noted" pushes the screen down 44 px; "tired today" on a before question; 40 px date fields | open (quick fixes) |
+| 43 | User test value | Doctor would ask for puffs per week and whether drowsiness is on vape days; Priya wants "vape used 3–4 days a week since 6 Sep" under the strip | backlog |

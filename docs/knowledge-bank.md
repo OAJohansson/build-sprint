@@ -432,6 +432,22 @@ while refining and try alternatives, rather than banning them up front. Treat AI
 lorem ipsum: a human rewrites every line in one voice, and it usually gets shorter. Where we met
 it: `design-session`, `tells.md` (06 Folio). From: Anshu Chimala (Lenny's Newsletter, 2026).
 
+#### Defaults are suggestions
+Whatever a field starts with is what most people keep: a default reads as "the normal choice".
+Why it matters: a prefilled number is a recommendation in disguise, and a prefilled date quietly
+becomes history. Where it's not the user's choice to make for them, start empty (or with rough quick
+picks) instead. Where we met it: Mallow (04) v2: amounts started at 0.5 ml and 2 puffs, and dates at
+"28 days ago" and "today"; the owner chose blank amounts and "About when?" quick picks. From:
+Thaler and Sunstein, *Nudge* (2008); Johnson and Goldstein's organ-donation defaults (2003).
+
+#### One fact, one wording
+When two screens describe the same thing, they must agree and use the same words, or people trust
+neither. Why it matters: in a 10-second glance, the first sentence wins; if it contradicts the
+detail, the detail is lost. Where we met it: Mallow (04) v2 user test: the Journey caption said
+anxiety was "quite, as before" while the Summary said "a little better"; the owner made the
+caption say then → now in the Summary's words. From: Jakob Nielsen's heuristic "Consistency and
+standards" (1994).
+
 ### Accessibility
 
 #### Contrast ratio
@@ -558,6 +574,12 @@ Visual Display of Quantitative Information; Stephen Few on dashboards)*
 
 **Q:** Why review a design for "AI tells" rather than ban them in the prompt?
 **A:** None is wrong on its own, and banning them up front makes the model overthink and invent stranger patterns; check and try alternatives instead.
+
+**Q:** Why can a prefilled amount break a "never suggest a dose" rule?
+**A:** People keep defaults, so a starting number works as a recommendation even if nobody meant it as one.
+
+**Q:** Two screens describe the same trend in different words. What goes wrong?
+**A:** People trust the first one they read and doubt both; one fact should have one wording everywhere.
 
 ## Technology
 

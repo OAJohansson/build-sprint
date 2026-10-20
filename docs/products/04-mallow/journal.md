@@ -262,3 +262,8 @@ What happened, what was decided and why. Newest last.
 - **Checked before logging:** the agent's major "00:30 dose saved to the wrong day" was wrong
   (the code counts it for last night, as decided); kept as a labelling issue (feedback 38).
 - **Nothing in the product changed.** Owner's calls listed in feedback 34–37.
+- **Owner's calls on the test** (20 Oct): 34 caption as then → now in the Summary's words, no date
+  (a date beside the vape start would invite "the vape did it"); 35 label both Summary comparisons
+  ("since last visit" / "since before treatment"); 36 amounts start blank and required (a default
+  is a nudge, and the guardrail is no suggested doses); 37 rough quick picks for unknown dates
+  instead of guesses, and "Add another" at the end of setup. Not built yet.

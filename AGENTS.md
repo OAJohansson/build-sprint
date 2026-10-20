@@ -19,6 +19,16 @@ The apps use Next.js 16, which has breaking changes from older versions (async `
   it does, record why in the product write-up.
 - Keep each app deployable on its own from `apps/NN-slug` (Vercel Root Directory).
 
+## Parallel sessions
+
+- Each session works in its own worktree and branch, cut from the latest `origin/main`. Never
+  edit in the main checkout while another session is working there.
+- Touch only your own files (`apps/NN-slug`, `docs/products/NN-slug*`). Shared files
+  (`docs/knowledge-bank.md`, `docs/ideas.md`, `docs/learnings.md`, `README.md`, lockfile) come
+  last: merge `main` into your branch first, then add to them.
+- Merge or open the PR the same day; a branch that lives for days drifts from `main`.
+- Lockfile conflict: take `main`'s `pnpm-lock.yaml` and run `pnpm install`; never hand-merge it.
+
 ## Code habits (decision 0011)
 
 - End each coding reply with one line: what you skipped or didn't check, and any risk the owner

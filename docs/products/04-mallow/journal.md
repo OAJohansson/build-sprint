@@ -247,6 +247,10 @@ What happened, what was decided and why. Newest last.
   appointment the "Did it happen?" question appears; a vape added halfway shows in the graph and
   first in "Took a dose". Found and fixed: "1 quick questions"; the "Noted…" line stayed after the
   plan day ended; Next sat against the field in the full-screen medicine flow (v1).
+- **v2 live** (20 Oct): PR 38 merged by Claude at the owner's request; `pnpm ship 04-mallow`
+  READY at https://mallow-omega.vercel.app. Checked live at phone size with the Priya demo: graph,
+  takeaway and medicine rows render, no console errors, only the app's own files requested. A
+  simulated user test as Priya runs in its own session.
 
 ### Simulated user test as Priya (playbook step 3b)
 - **Why now:** v2 had tests, a critic and an audit but no user test; the open question was whether

@@ -1,22 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import { addDays, symptomCatalogue, today, type Medicine } from "@/lib/mallow/data";
+import { addDays, conditions, symptomById, symptomCatalogue, today, type Medicine } from "@/lib/mallow/data";
+import { newMedicine } from "@/lib/mallow/history";
 import { MedicineFlow } from "./medicine";
-import { Chips, Muted, Primary, toggleIn } from "./shared";
+import { Chips, Choice, CompactGrades, Muted, Primary, Secondary, toggleIn } from "./shared";
 import type { Store } from "@/lib/mallow/store";
 
-// First run: why Mallow exists, the medicine, what to track, the appointments. Then Today.
+// First run: why Mallow exists, the condition (which suggests symptoms), how things were before
+// treatment, one medicine's essentials, the appointments. Then Today. Every step can be skipped.
 
 export function Setup({ onDone, onDemo }: { onDone: (s: Store) => void; onDemo: () => void }) {
   const [step, setStep] = useState(0);
+  const [condition, setCondition] = useState("");
   const [meds, setMeds] = useState<Medicine[]>([]);
   const [tracked, setTracked] = useState<string[]>(["pain", "sleep"]);
+  const [baseline, setBaseline] = useState<Record<string, number>>({});
   const [last, setLast] = useState(() => addDays(today(), -28));
   const [next, setNext] = useState("");
   const [doctor, setDoctor] = useState("");
 
-  const finish = () => onDone({ meds, tracked, doctor, past: [last], next, days: [] });
+  const finish = () =>
+    onDone({ version: 2, condition, baseline: pick(baseline, tracked), meds, tracked, doctor, past: [last], next, days: [] });
+  const back = (to: number) => (
+    <button onClick={() => setStep(to)} className="press -ml-1 min-h-11 self-start px-1 text-sm" style={{ color: "var(--ink-soft)" }}>
+      ← Back
+    </button>
+  );
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-[440px] flex-col px-5 pb-10 pt-[calc(env(safe-area-inset-top)+20px)]">
@@ -27,8 +37,8 @@ export function Setup({ onDone, onDemo }: { onDone: (s: Store) => void; onDemo: 
           </span>
           <h1 className="serif mt-auto text-[2.25rem] leading-tight">Between appointments, it&apos;s hard to remember how it&apos;s really been.</h1>
           <Muted className="mt-4 text-base leading-relaxed">
-            Log your doses and how you feel, in a few taps. When you see your doctor, they see what really happened, and can
-            adjust your care with you.
+            Log your doses and how you feel, in a few taps. Over time you&apos;ll see how things change, and your doctor
+            sees what really happened.
           </Muted>
           <Primary className="mt-10" onClick={() => setStep(1)}>
             Get started
@@ -41,60 +51,40 @@ export function Setup({ onDone, onDemo }: { onDone: (s: Store) => void; onDemo: 
       )}
 
       {step === 1 && (
-        <div className="flex flex-1 flex-col">
-          {meds.length === 0 ? (
-            <MedicineFlow cancelLabel="← Back" onCancel={() => setStep(0)} onSave={(m) => setMeds([m])} />
-          ) : (
-            <section className="enter flex flex-1 flex-col">
-              <h1 className="serif text-[1.75rem] leading-tight">Do you take anything else?</h1>
-              <Muted className="mt-2">For example, an oil every day and flower for flare-ups.</Muted>
-              <ul className="mt-6 space-y-2">
-                {meds.map((m) => (
-                  <li key={m.id} className="rounded-2xl border bg-white px-4 py-3" style={{ borderColor: "var(--line)" }}>
-                    <span className="font-medium">{m.name}</span>
-                    <span className="text-sm" style={{ color: "var(--ink-soft)" }}>
-                      {" "}
-                      · {m.form}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <Primary className="mt-auto" onClick={() => setStep(2)}>
-                That&apos;s everything
-              </Primary>
-              <button
-                onClick={() => setStep(1.5)}
-                className="press mt-2 min-h-12 w-full text-sm font-medium"
-                style={{ color: "var(--mallow-deep)" }}
+        <section className="enter flex flex-1 flex-col">
+          {back(0)}
+          <h1 className="serif mt-6 text-[1.75rem] leading-tight">What were you prescribed for?</h1>
+          <Muted className="mt-2">So Mallow can suggest what to keep an eye on.</Muted>
+          <div className="mt-6 flex flex-col gap-2">
+            {conditions.map((c) => (
+              <Choice
+                key={c.id}
+                on={condition === c.id}
+                onClick={() => {
+                  setCondition(c.id);
+                  setTracked(c.suggest);
+                  setTimeout(() => setStep(2), 180);
+                }}
               >
-                + Add another
-              </button>
-            </section>
-          )}
-        </div>
-      )}
-
-      {step === 1.5 && (
-        <MedicineFlow
-          onCancel={() => setStep(1)}
-          onSave={(m) => {
-            setMeds((x) => [...x, m]);
-            setStep(1);
-          }}
-        />
+                {c.name}
+              </Choice>
+            ))}
+          </div>
+          <button onClick={() => setStep(2)} className="press mt-4 min-h-11 text-sm" style={{ color: "var(--ink-soft)" }}>
+            Skip
+          </button>
+        </section>
       )}
 
       {step === 2 && (
         <section className="enter flex flex-1 flex-col">
-          <button onClick={() => setStep(1)} className="press -ml-1 min-h-11 self-start px-1 text-sm" style={{ color: "var(--ink-soft)" }}>
-            ← Back
-          </button>
+          {back(1)}
           <h1 className="serif mt-6 text-[1.75rem] leading-tight">What do you want to keep an eye on?</h1>
-          <Muted className="mt-2">Pick up to four. You can change them later.</Muted>
+          <Muted className="mt-2">{condition && condition !== "other" ? "Suggested for you. " : ""}Up to four. You can change them later.</Muted>
           <div className="mt-6">
             <Chips
               options={symptomCatalogue.map((s) => s.name)}
-              value={tracked.map((id) => symptomCatalogue.find((s) => s.id === id)!.name)}
+              value={tracked.map((id) => symptomById(id).name)}
               onToggle={(name) => {
                 const id = symptomCatalogue.find((s) => s.name === name)!.id;
                 const nextList = toggleIn(tracked, id);
@@ -103,16 +93,55 @@ export function Setup({ onDone, onDemo }: { onDone: (s: Store) => void; onDemo: 
             />
           </div>
           <Primary className="mt-auto" disabled={tracked.length === 0} onClick={() => setStep(3)}>
-            Next
+            {tracked.length === 0 ? "Pick at least one" : "Next"}
           </Primary>
         </section>
       )}
 
       {step === 3 && (
         <section className="enter flex flex-1 flex-col">
-          <button onClick={() => setStep(2)} className="press -ml-1 min-h-11 self-start px-1 text-sm" style={{ color: "var(--ink-soft)" }}>
-            ← Back
-          </button>
+          {back(2)}
+          <h1 className="serif mt-6 text-[1.75rem] leading-tight">Before you started treatment, how were things?</h1>
+          <Muted className="mt-2">Your starting point, so you can see change from day one. Skip anything you don&apos;t remember.</Muted>
+          <div className="mt-6 space-y-4">
+            <CompactGrades
+              tracked={tracked}
+              grades={baseline}
+              questions="before"
+              onPick={(id, g) => setBaseline((b) => (b[id] === g ? omit(b, id) : { ...b, [id]: g }))}
+            />
+          </div>
+          {/* Skipping stays possible but quiet: the starting point is what the graphs compare against. */}
+          {Object.keys(pick(baseline, tracked)).length ? (
+            <Primary className="mt-8" onClick={() => setStep(4)}>
+              Next
+            </Primary>
+          ) : (
+            <Secondary className="mt-8" onClick={() => setStep(4)}>
+              Skip for now
+            </Secondary>
+          )}
+        </section>
+      )}
+
+      {step === 4 && (
+        <div className="flex flex-1 flex-col">
+          <MedicineFlow
+            cancelLabel="← Back"
+            onCancel={() => setStep(3)}
+            onSkip={() => setStep(5)}
+            onSave={(fields, startDate) => {
+              setMeds([newMedicine(fields, startDate)]);
+              setStep(5);
+            }}
+            initial={meds[0]}
+          />
+        </div>
+      )}
+
+      {step === 5 && (
+        <section className="enter flex flex-1 flex-col">
+          {back(4)}
           <h1 className="serif mt-6 text-[1.75rem] leading-tight">When are your appointments?</h1>
           <Muted className="mt-2">Your summary covers everything since the last one.</Muted>
           <div className="mt-6 divide-y rounded-2xl border bg-white" style={{ borderColor: "var(--line)" }}>
@@ -138,3 +167,6 @@ export function Setup({ onDone, onDemo }: { onDone: (s: Store) => void; onDemo: 
     </main>
   );
 }
+
+const pick = (r: Record<string, number>, keys: string[]) => Object.fromEntries(Object.entries(r).filter(([k]) => keys.includes(k)));
+const omit = (r: Record<string, number>, key: string) => Object.fromEntries(Object.entries(r).filter(([k]) => k !== key));

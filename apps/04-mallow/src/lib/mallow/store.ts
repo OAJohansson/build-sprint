@@ -2,6 +2,10 @@ import { addDays, daysBetween, today, type Day, type Dose, type Medicine } from 
 
 // Everything Mallow keeps, on this phone only.
 export type Store = {
+  version: 2;
+  condition: string; // a conditions id, "" when skipped
+  baseline: Record<string, number>; // before treatment: a grade per symptom, set once, editable in Care
+  reliefPausedOn?: string; // the day "Not now" was tapped on the relief prompt
   meds: Medicine[];
   tracked: string[];
   doctor: string; // optional name, "" when not given
@@ -59,4 +63,26 @@ export function pendingDose(s: Store, since: { date: string; time: string }) {
     });
   }
   return candidates.at(-1);
+}
+
+// v1 stored medicines without a history and had no condition or baseline. Upgrade on read, so
+// old data keeps working; running it on v2 data changes nothing. A medicine's start is the first
+// appointment or its first logged dose, whichever came first.
+type V1Medicine = Omit<Medicine, "howTo" | "asNeeded" | "startDate" | "changes"> & Partial<Medicine>;
+type V1Store = Omit<Store, "version" | "condition" | "baseline" | "meds"> & Partial<Store> & { meds: V1Medicine[] };
+
+export function migrate(raw: V1Store | Store): Store {
+  if (raw.version === 2) return raw as Store;
+  const firstDose = (id: string) => raw.days.find((d) => d.doses.some((x) => x.med === id))?.date;
+  const meds = raw.meds.map((m): Medicine => {
+    const start = [raw.past[0], firstDose(m.id)].filter(Boolean).sort()[0] ?? today();
+    return {
+      ...m,
+      howTo: m.howTo ?? "",
+      asNeeded: m.asNeeded ?? "",
+      startDate: m.startDate ?? start,
+      changes: m.changes ?? [{ date: m.startDate ?? start, amount: m.amount }],
+    };
+  });
+  return { ...raw, version: 2, condition: raw.condition ?? "", baseline: raw.baseline ?? {}, meds };
 }

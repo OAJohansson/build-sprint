@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { amountLabel, daysBetween, long, nowTime, reliefPhrase, today, units, type Medicine } from "@/lib/mallow/data";
+import { activeOn } from "@/lib/mallow/history";
+import { duePlan, planDate, planDoses, tickDose, type Due } from "@/lib/mallow/schedule";
 import { Muted, Primary, ReliefRow, Secondary, Sheet } from "./shared";
 import { CheckinSheet, DoseEditor, type DoseTarget } from "./day-editing";
 import { appointmentPassed, confirmAppointment, dayOf, doctorName, lastOf, moveAppointment, pendingDose, withDay, type Store } from "@/lib/mallow/store";
 import { SummarySheet } from "./summary";
 
-// Today: a mallow that grows quietly beside the two things Sam does here, logging a dose and
-// saying how the day was. The plant is never explained: a logged day adds a leaf, a missed day
+// Today: a mallow that grows quietly beside what Sam does here: ticking off the plan, logging an
+// as-needed dose and saying how the day was. The plant is never explained: a logged day adds a leaf, a missed day
 // adds nothing, and the bud opens on appointment day.
 
 const W = 300;
@@ -90,7 +92,13 @@ export function Today({
     document.addEventListener("visibilitychange", onShow);
     return () => document.removeEventListener("visibilitychange", onShow);
   }, []);
-  const pending = pendingDose(store, visit);
+  const clock = useClock();
+  const plan = duePlan(store, clock);
+  const extras = planDoses(store, planDate(clock)).filter((x) => !x.dose.slot);
+  const active = store.meds.filter((m) => activeOn(m, today()));
+  // Relief is optional (v2): only asked when more than one medicine is in use, since that's the
+  // only thing it's used for, and "Not now" quiets it for the rest of the day.
+  const pending = active.length > 1 && store.reliefPausedOn !== today() ? pendingDose(store, visit) : undefined;
   const medName = (id: string) => store.meds.find((m) => m.id === id);
   const now = dayOf(store, today());
   const passed = appointmentPassed(store);
@@ -101,6 +109,12 @@ export function Today({
     if (!pending) return;
     setStore((s) => withDay(s, pending.date, (d) => ({ ...d, doses: d.doses.map((x, i) => (i === pending.i ? { ...x, relief } : x)) })));
     setThanks({ when: `your ${pending.dose.time} dose`, phrase: reliefPhrase[relief].toLowerCase() });
+  };
+  const tick = (due: Due) => {
+    if (due.taken) return setEditing({ date: due.taken.date, index: due.taken.index });
+    const t = tickDose(due, { date: today(), time: nowTime() });
+    setStore((s) => withDay(s, t.date, (d) => ({ ...d, doses: [...d.doses, t.dose].sort((a, b) => a.time.localeCompare(b.time)) })));
+    setThanks({ when: `${due.slot.toLowerCase()} ${due.med.name}`, phrase: `taken at ${t.dose.time}` });
   };
 
   return (
@@ -122,6 +136,13 @@ export function Today({
           </Muted>
           <p className="serif mb-3 mt-0.5 text-lg">How much did it help?</p>
           <ReliefRow onPick={rate} />
+          <button
+            onClick={() => setStore((s) => ({ ...s, reliefPausedOn: today() }))}
+            className="press mt-2 min-h-11 w-full text-sm"
+            style={{ color: "var(--ink-soft)" }}
+          >
+            Not now
+          </button>
         </section>
       ) : thanks ? (
         <Muted className="enter mt-6 text-center" role="status">
@@ -130,7 +151,7 @@ export function Today({
       ) : null}
 
       <div className="mt-6">
-        <Plant store={store} grewToday={grewToday} compact={!!pending || passed || (toGo !== undefined && toGo <= 1)} />
+        <Plant store={store} grewToday={grewToday} compact={!!pending || passed || (toGo !== undefined && toGo <= 1) || plan.length > 2} />
       </div>
 
       {/* The day before and the day of the appointment, the summary comes to Sam. */}
@@ -158,15 +179,17 @@ export function Today({
         </div>
       )}
 
+      {plan.length > 0 && <PlanList plan={plan} onTick={tick} />}
+
       <div className="mt-6 grid grid-cols-2 gap-2">
         <button
-          onClick={() => (store.meds.length ? setDoseOpen(true) : onAddMedicine())}
+          onClick={() => (active.length ? setDoseOpen(true) : onAddMedicine())}
           className="press flex min-h-16 flex-col items-center justify-center rounded-2xl border px-2"
           style={{ borderColor: "var(--line)", background: "var(--card)" }}
         >
           <span className="font-medium">Took a dose</span>
           <span className="text-xs" style={{ color: "var(--ink-soft)" }}>
-            {store.meds.length ? `${now.doses.length} today` : "Add your medicine"}
+            {active.length ? "As needed or extra" : "Add your medicine"}
           </span>
         </button>
         <button
@@ -179,14 +202,14 @@ export function Today({
         </button>
       </div>
 
-      {now.doses.length > 0 && (
+      {extras.length > 0 && (
         <ul className="mt-6 divide-y text-sm" style={{ borderColor: "var(--line)" }}>
-          {now.doses.map((d, i) => {
+          {extras.map(({ dose: d, date, index }) => {
             const m = medName(d.med);
             return (
-              <li key={i} className="enter" style={{ borderColor: "var(--line)" }}>
+              <li key={`${date}-${index}`} className="enter" style={{ borderColor: "var(--line)" }}>
                 <button
-                  onClick={() => setEditing({ date: today(), index: i })}
+                  onClick={() => setEditing({ date, index })}
                   aria-label={`Change the ${d.time} dose`}
                   className="press grid min-h-11 w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 py-2 text-left"
                 >
@@ -195,7 +218,7 @@ export function Today({
                   </span>
                   <span className="truncate">{m ? `${amountLabel(m, d.amount)} ${m.name}` : "Dose"}</span>
                   <span className="whitespace-nowrap" style={{ color: "var(--ink-soft)" }}>
-                    {d.relief !== undefined ? reliefPhrase[d.relief] : "We'll ask later"} ›
+                    {d.relief !== undefined ? reliefPhrase[d.relief] : "How it helped"} ›
                   </span>
                 </button>
               </li>
@@ -208,7 +231,7 @@ export function Today({
 
       <DoseSheet
         open={doseOpen}
-        meds={store.meds}
+        meds={[...active].sort((a, b) => +b.when.includes("When needed") - +a.when.includes("When needed"))}
         onClose={() => setDoseOpen(false)}
         onLog={(med, amount, time) => {
           setStore((s) => withDay(s, today(), (d) => ({ ...d, doses: [...d.doses, { med, amount, time }].sort((a, b) => a.time.localeCompare(b.time)) })));
@@ -255,7 +278,7 @@ function DoseSheet({
       {!editing ? (
         <>
           <h2 className="serif text-2xl">Which one?</h2>
-          <Muted className="mt-1">Logged now. Next time you open Mallow, it asks how it helped.</Muted>
+          <Muted className="mt-1">Logged now. Tap Change for a different amount or time.</Muted>
           <div className="mt-5 flex flex-col gap-2">
             {meds.map((m) => (
               <div key={m.id} className="flex gap-2">
@@ -267,7 +290,7 @@ function DoseSheet({
                   <span className="line-clamp-2 font-medium">
                     {amountLabel(m)} {m.name}
                   </span>
-                  <span className="text-sm opacity-80">{[m.form, m.strength].filter(Boolean).join(" · ")}</span>
+                  <span className="text-sm opacity-80">{m.asNeeded || [m.form, m.strength].filter(Boolean).join(" · ")}</span>
                 </button>
                 <button
                   onClick={() => {
@@ -385,5 +408,78 @@ function NextAppointment({ setStore }: { setStore: (fn: (s: Store) => Store) => 
         className="tnum min-h-10 bg-transparent text-right text-sm"
       />
     </label>
+  );
+}
+
+// The minute hand: what's due changes while the app stays open, and on coming back to it.
+function useClock() {
+  const read = () => ({ date: today(), time: nowTime() });
+  const [clock, setClock] = useState(read);
+  useEffect(() => {
+    const update = () => setClock((c) => {
+      const n = read();
+      return n.date === c.date && n.time === c.time ? c : n;
+    });
+    const id = window.setInterval(update, 30_000);
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      window.clearInterval(id);
+      document.removeEventListener("visibilitychange", update);
+    };
+  }, []);
+  return clock;
+}
+
+// The plan for today, in time-of-day order. Ticking is one tap; a missed slot just says "Not
+// taken", in the same quiet grey as everything else (no red, no streaks).
+function PlanList({ plan, onTick }: { plan: Due[]; onTick: (d: Due) => void }) {
+  const label: Record<Due["status"], string> = { now: "Now", later: "Later", "not taken": "Not taken", taken: "" };
+  return (
+    <section className="mt-6" aria-labelledby="plan-heading">
+      <h2 id="plan-heading" className="text-sm font-medium" style={{ color: "var(--ink-soft)" }}>
+        Your plan today
+      </h2>
+      <ul className="mt-2 flex flex-col gap-2">
+        {plan.map((d) => {
+          const taken = d.status === "taken";
+          const now = d.status === "now";
+          return (
+            <li key={`${d.slot}-${d.med.id}`}>
+              <button
+                onClick={() => onTick(d)}
+                aria-label={taken ? `${d.slot}: ${d.med.name}, taken at ${d.taken!.dose.time}. Change it` : `Tick ${d.slot.toLowerCase()} ${d.med.name} as taken`}
+                className="press grid min-h-16 w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border px-4 py-2.5 text-left"
+                style={{ background: now ? "var(--mallow-wash)" : "var(--card)", borderColor: now ? "var(--mallow)" : "var(--line)" }}
+              >
+                <span
+                  aria-hidden
+                  className="grid size-7 place-items-center rounded-full border-2"
+                  style={{ borderColor: taken ? "var(--leaf-deep)" : "var(--ink-faint)", background: taken ? "var(--leaf-deep)" : "transparent" }}
+                >
+                  {taken && (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12.5 10 17 19 7" />
+                    </svg>
+                  )}
+                </span>
+                <span className="min-w-0">
+                  <span className="block break-words font-medium">
+                    {d.slot}: {amountLabel(d.med, d.amount)} {d.med.name}
+                  </span>
+                  {d.med.howTo && (
+                    <span className="block break-words text-sm" style={{ color: "var(--ink-soft)" }}>
+                      {d.med.howTo}
+                    </span>
+                  )}
+                </span>
+                <span className="tnum whitespace-nowrap text-sm" style={{ color: now ? "var(--mallow-deep)" : "var(--ink-soft)" }}>
+                  {taken ? d.taken!.dose.time : label[d.status]}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }

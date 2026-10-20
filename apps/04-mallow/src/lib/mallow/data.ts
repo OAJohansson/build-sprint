@@ -25,11 +25,16 @@ export const long = (d: string) => fmt(d, { weekday: "short", day: "numeric", mo
 export type Form = "Oil" | "Flower" | "Vape" | "Capsule" | "Other";
 export type Medicine = {
   id: string;
-  name: string;
+  name: string; // as on the pharmacy label
   form: Form;
   strength: string;
-  amount: number;
-  when: string[];
+  amount: number; // the amount prescribed now (the last entry in `changes`)
+  when: string[]; // times of day, plus "When needed" for an as-needed medicine
+  howTo: string; // "Under the tongue, hold for a minute"; "" when not given
+  asNeeded: string; // the as-needed rule from the label, e.g. "Up to 3 puffs when anxious"
+  startDate: string;
+  stopDate?: string; // first day it was no longer taken
+  changes: { date: string; amount: number }[]; // oldest first; the first entry is the starting amount
 };
 export const units: Record<Form, { unit: string; step: number; start: number }> = {
   Oil: { unit: "ml", step: 0.1, start: 0.5 },
@@ -44,6 +49,7 @@ export const amountLabel = (m: Pick<Medicine, "form" | "amount">, amount = m.amo
   return `${n} ${n === 1 && unit.endsWith("s") ? unit.slice(0, -1) : unit}`;
 };
 export const timesOfDay = ["Morning", "Afternoon", "Evening", "Bedtime", "When needed"];
+export const scheduledTimes = ["Morning", "Afternoon", "Evening", "Bedtime"];
 
 // ---- Symptoms: plain-word grades (Vinehealth's pattern), each word with what it means ----
 
@@ -57,6 +63,24 @@ export const symptomCatalogue: Symptom[] = [
   { id: "stiffness", name: "Stiffness", question: "How stiff were you today?", grades: [["None", "Moving freely"], ["Mild", "Stiff, eased off"], ["Moderate", "Stiff most of the day"], ["Severe", "Hard to move"]] },
   { id: "headache", name: "Headache", question: "Any headache today?", grades: [["None", "No headache"], ["Mild", "There, but not in the way"], ["Moderate", "Got in the way of some things"], ["Severe", "Had to stop and lie down"]] },
   { id: "nausea", name: "Nausea", question: "Any nausea today?", grades: [["None", "None"], ["Mild", "Queasy now and then"], ["Moderate", "Put me off food"], ["Severe", "Couldn't keep food down"]] },
+  { id: "appetite", name: "Appetite", question: "How was your appetite today?", grades: [["Normal", "Ate as usual"], ["A bit low", "Ate a little less than usual"], ["Low", "Hard to eat a proper meal"], ["Very low", "Barely ate"]] },
+  { id: "spasm", name: "Muscle spasm", question: "How were your muscle spasms today?", grades: [["None", "No spasms"], ["Mild", "A few, not in the way"], ["Moderate", "Got in the way of some things"], ["Severe", "Stopped me doing basic things"]] },
+  { id: "focus", name: "Concentration", question: "How was your concentration today?", grades: [["Good", "Could focus when I needed to"], ["A bit off", "Drifted now and then"], ["Poor", "Hard to finish things"], ["Very poor", "Couldn't focus on much at all"]] },
+  { id: "pelvic", name: "Period or pelvic pain", question: "Any period or pelvic pain today?", grades: [["None", "No pain"], ["Mild", "There, but not in the way"], ["Moderate", "Got in the way of some things"], ["Severe", "Stopped me doing basic things"]] },
+];
+
+// Conditions and the symptoms Mallow suggests for each (2 to 4, always editable).
+export const conditions: { id: string; name: string; suggest: string[] }[] = [
+  { id: "pain", name: "Chronic pain or fibromyalgia", suggest: ["pain", "sleep", "fatigue", "mood"] },
+  { id: "arthritis", name: "Arthritis", suggest: ["pain", "stiffness", "sleep"] },
+  { id: "anxiety", name: "Anxiety", suggest: ["anxiety", "sleep", "mood"] },
+  { id: "insomnia", name: "Insomnia", suggest: ["sleep", "fatigue", "mood"] },
+  { id: "ms", name: "MS or spasticity", suggest: ["spasm", "pain", "sleep"] },
+  { id: "migraine", name: "Migraine", suggest: ["headache", "nausea", "sleep"] },
+  { id: "endo", name: "Endometriosis", suggest: ["pelvic", "fatigue", "mood"] },
+  { id: "adhd", name: "ADHD", suggest: ["focus", "sleep", "mood"] },
+  { id: "nausea", name: "Nausea or appetite", suggest: ["nausea", "appetite"] },
+  { id: "other", name: "Something else", suggest: [] },
 ];
 export const symptomById = (id: string) => symptomCatalogue.find((s) => s.id === id)!;
 
@@ -66,7 +90,8 @@ export const sideEffects = ["Dry mouth", "Drowsy", "Dizzy", "Foggy", "Anxious", 
 
 // ---- A day: the check-in (if done), the doses and anything noticed ----
 
-export type Dose = { time: string; med: string; amount: number; relief?: number };
+// `slot` is set when the dose was ticked from the plan ("Bedtime"); as-needed doses have none.
+export type Dose = { time: string; med: string; amount: number; relief?: number; slot?: string };
 export type Day = { date: string; logged: boolean; grades: Record<string, number>; doses: Dose[]; side: string[]; note?: string };
 
 // ---- Summaries ----

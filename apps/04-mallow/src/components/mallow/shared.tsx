@@ -99,16 +99,18 @@ export function CompactGrades({
   tracked,
   grades,
   onPick,
+  questions = "today",
 }: {
   tracked: string[];
   grades: Record<string, number>;
   onPick: (id: string, g: number) => void;
+  questions?: "today" | "before"; // "before": the symptom's name instead of today's question
 }) {
   return (
     <>
       {tracked.map(symptomById).map((s) => (
         <div key={s.id}>
-          <p className="mb-2 text-sm font-medium">{s.question}</p>
+          <p className="mb-2 text-sm font-medium">{questions === "before" ? s.name : s.question}</p>
           <div className="grid grid-cols-4 gap-1.5" role="radiogroup" aria-label={s.name}>
             {s.grades.map(([word], g) => {
               const on = grades[s.id] === g;

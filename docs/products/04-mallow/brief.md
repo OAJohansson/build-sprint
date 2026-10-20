@@ -166,3 +166,137 @@ become one screen that tells a clinician in under a minute whether pain and slee
 the doses helped, and what was taken. What isn't known is whether a real patient keeps logging
 without reminders (the second-riskiest assumption) and whether a clinician trusts plain-word
 averages. Both need real people: the owner's phone review first, then one patient (to-do).
+
+---
+
+# v2: is it working, and what am I taking?
+
+*Owner's rebuild brief, 20 Oct, written up by Claude before any code (playbook step 1). Everything
+in v1 above still holds unless this section says otherwise.*
+
+**v2 deliberately lifts two v1 no-gos:** medication schedules and educational content. Both are
+there to serve "is it working?", not to become a medicine shop or a content app.
+
+## Problem (v2)
+
+v1 answers "is it working?" for one 15-minute call, built around pain and per-dose relief. Three
+gaps remain:
+- **Patients don't understand their options.** The CQC found Alternaleaf patients were
+  "encouraged to pick from a wide range of cannabis-based products with no guidance". The
+  clinician decides product and dose; the patient needs enough plain information to take part.
+- **Nothing says what to take and when.** Montu's tools (pre-screen, portal for repeats and
+  bookings, a store, live chat, PDF guides) don't track doses or symptoms or show change.
+- **Memory-based relief is weak evidence.** "Did it help?" is recalled; a daily grade captures
+  today. Change over time, shown next to what was being taken, is stronger evidence for patient,
+  prescriber and the business (Montu can't advertise, so retention is how it grows).
+
+## Who (v2)
+
+- **Sam** (v1): 44, fibromyalgia six years, eight months on medical cannabis, oil daily and
+  flower for flare ups, monthly 15-minute video follow up.
+- **Priya** (new): 31, anxiety and poor sleep, three months on a balanced oil at night, a vape
+  added halfway for anxious moments, monthly video follow up.
+
+Main patient groups behind the condition list: chronic pain, mental health (anxiety, depression,
+PTSD, ADHD), neurological (MS, migraine), women's health (endometriosis).
+
+## Goals and jobs to be done
+
+1. **Understand the medicine I've been prescribed, and know what to ask my doctor** (reworded
+   from "understand my options", owner 20 Oct: the guardrails rule out helping choose) — "When I'm prescribed a form I haven't used, I want to know how
+   to take it and what to expect, so I take part in decisions with my doctor."
+2. **Know what to take, when and how, and log it** — "When it's time for a dose, I want the app
+   to show what's due and let me tick it, so the record keeps itself."
+3. **Track my symptoms** — "When I check in, I want the symptoms that matter for my condition, not
+   only pain."
+4. **See change while on treatment** — "When I wonder if things are changing, I want to see my
+   sleep, pain or anxiety over time next to what I was taking, so my doctor and I can judge."
+
+**Principle for goal 4:** the evidence is the daily symptom log over time, not asking whether the
+medicine helped. The app shows change alongside the medicines taken and never says the medicine
+caused it. The doctor interprets.
+
+## Riskiest assumptions (v2)
+
+| Risk | Assumption | How risky |
+| --- | --- | --- |
+| Value | A trend per symptom with the medicine strip underneath answers "is it changing?" faster and more honestly than per-dose relief | **Riskiest** |
+| Value | A schedule (tick what's due) keeps logging going better than v1's "log a dose" button | High |
+| Viability | Education can be useful while never naming products, doses or claims (advertising law, CQC) | High: copy is checked string by string |
+| Usability | Setup with conditions, baseline and a full prescription still fits in 90 s | Medium |
+| Feasibility | Graphs, a medicine history and migration of v1 data in two days | Medium: the biggest scope risk |
+
+## Success (v2)
+
+| Signal | How I'll measure it | Target |
+| --- | --- | --- |
+| Change is readable (main) | From the graph alone, say whether sleep (Priya) or pain (Sam) changed since starting, and what was taken when | ≤ 60 s, correct, no causal words used by the app |
+| Setup fits | Fresh install → home, including condition and baseline | ≤ 90 s, skippable |
+| Logging stays effortless | Tick a scheduled dose; log an as-needed dose; check in | 1 tap; ≤ 2 taps; ≤ 30 s |
+| Missed doses are kind | Skip a scheduled dose | Shown as not taken; no red, streaks or guilt copy |
+| Guardrail: correct numbers | Summary and graph values vs a hand count | Exact |
+| Guardrail: no advice, no claims | Every new string checked against the guardrails | 0 breaches; near misses listed |
+
+## MVP and stop line (v2)
+
+Two days, requirements 1–6 in this order. **Day 1:** 1 and 2 (conditions, symptoms, baseline),
+then 3 and 4 (My plan, medicine history, Today schedule); ship. **Day 2:** 6 (graphs and summary),
+then 5 (Know your medicine); new demo data; ship.
+
+**Stop line, cut in this order if day 2 runs over:** (a) "Other forms" cards (own forms only);
+(b) the 3-month range (keep 4 weeks and since starting); (c) amount-change markers on the strip
+(keep start/stop bars). The graph, the strip's bars, the summary and the guardrails are not cut.
+
+**Constraints:** everything stays on the device (localStorage); no accounts, backend or network
+calls with health data; demo data only, never mixed with real data. Keep v1's calm design, plain
+words, three tabs (Today, Journey, Care) and the plant. Logging stays two taps or fewer.
+
+**Decided (owner, 20 Oct):**
+- **Midnight:** a bedtime dose ticked after midnight counts toward the previous night's plan (the
+  schedule day ends around 04:00); the dose keeps its real date and time.
+- **Relief:** shown as one quiet line per medicine in the summary, only when medicines overlap
+  and there are ratings.
+- **Setup:** asks one medicine's essentials (name, form, amount, times); how to take it, the
+  as-needed rule and more medicines are added in Care, to keep setup within 90 s.
+
+## Requirements (v2)
+
+| # | Must | Check |
+| --- | --- | --- |
+| 1 | **Setup that fits my condition.** Pick a condition → 2–4 suggested symptoms, editable. Catalogue adds Appetite, Muscle spasm, Concentration, Period or pelvic pain (question + four plain-word grades with meanings, lower is easier) | Fresh install → home ≤ 90 s, skippable with defaults |
+| 2 | **Before treatment.** Optional baseline grade per tracked symptom in setup, editable in Care; stored once; first comparison in graphs and summary | Skippable; shows as a band and in the summary |
+| 3 | **My plan.** Per medicine: product name (free text), form, amount, times of day, how to take it, as-needed rule; several medicines; "as your doctor prescribed". History: startDate, optional stopDate, amount changes {date, amount}, written automatically; v1 data migrates (start = first appointment or first dose) | Add, change, stop → history correct; v1 store loads |
+| 4 | **Today follows my plan.** Shows what's due now; tick = 1 tap; as-needed ≤ 2 taps; amount and time editable; missed = "not taken", never a failure. Relief optional (tap on the dose row or an easy-to-skip prompt), used only to separate medicines taken in the same weeks | Tap counts; no red, streaks or guilt |
+| 5 | **Know your medicine.** One card per form (oil, flower, vape, capsule): what it is, how to take it, onset and duration (typical ranges + "varies from person to person"), common side effects, storage, driving and travel; own forms first, others under "Other forms"; from Care and each medicine. Dose and frequency only from My plan, as "Your plan". Ends with 3–4 "Questions you could ask your doctor" | No general dosing advice; guardrail check |
+| 6 | **Is it working?** v1 check-in kept (≤ 30 s, gaps stay gaps). One graph per tracked symptom (pick which, first by default; 4 weeks / 3 months / since starting); y axis in grade words; daily dots + 7-day average, gaps not joined; medicine strip (bar per medicine, amount-change markers, appointments as lines); before-treatment band; one plain-words line, never "working", "effective", "because of". Works at 320 px, readable in a video call. Summary: per symptom, trend word and change vs period before and vs before treatment, medicines in use (with amount changes) | Numbers match a hand count |
+
+## Guardrails (must hold everywhere)
+
+- Never suggest a product, cultivar, strength or dose for a condition; never name products other
+  than the patient's own.
+- Never tell someone to start, stop or change a dose; any decision points to "your doctor or
+  pharmacist".
+- No claims: describe, don't promise. No "best for", "proven", "effective", "works".
+- Education is factual and balanced, about forms in general, and says effects vary.
+- No health data leaves the phone; demo data never mixes with real entries.
+- Accessibility as v1: 44 px targets, text contrast ≥ 4.5:1, non-text ≥ 3:1, one-handed on a bad
+  day, no red or green judging colours.
+
+## Out of scope (v2, to backlog)
+
+Questions for my appointment (next up), PDF of the summary, supply and reorder estimate with a link
+to Repeats, reminders and notifications, clinic view across patients, monthly validated
+questionnaires (GAD-7, a sleep scale; EQ-5D-5L needs a licence), seizure diary, accounts and sync.
+
+## Done when
+
+Vitest for the schedule (due now, across midnight), medicine history (start, stop, amount changes,
+v1 migration), 7-day average with gaps, period and baseline comparisons. Every requirement walked
+on a fresh install. A "time passes" test (resume without reload, midnight, an appointment date,
+a medicine added halfway). web-design-guidelines and break-ui on Today, graphs and cards. Every
+new string checked against the guardrails, near misses listed. Success check, learnings and
+backlog updated.
+
+## Success check (v2, at wrap-up)
+
+*To fill in.*

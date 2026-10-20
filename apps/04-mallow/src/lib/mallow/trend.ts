@@ -56,21 +56,43 @@ export function compare(s: Store, id: string, from: string, to: string) {
   };
 }
 
-// "Since starting Balanced oil (3 Sep): sleep mostly a bit broken. Before treatment: poorly."
-// Never "working", "effective" or "because of".
+// The caption above the graph: then → now, in the Summary's words (owner, 20 Oct).
+// "Anxiety before treatment: quite. Last 4 weeks: a little to quite · a little better."
+// "Then" is before treatment, or the first 4 weeks when there's no starting point. "Now" is the
+// stretch since the last appointment, the Summary's own window, so the two never disagree
+// ("Now (since 22 Sep)"); with no appointment since starting, the last 4 weeks. It says what changed, never why, and gives no date for when it shifted: a date
+// beside a medicine's start would invite "that's what did it". Never "working" or "because of".
 export function plainLine(s: Store, id: string, end = today()) {
   const sym = symptomById(id);
   const start = treatmentStart(s.meds);
   if (!start) return undefined;
-  const pts = series(s, id, start, end);
-  // Too few check-ins to say anything: no verdict from one or two days.
-  if (pts.filter((p) => p.grade !== undefined).length < MIN_IN_WINDOW) return undefined;
-  const now = mean(pts)!;
+  const word = (g: number) => gradeWord(sym, g).toLowerCase();
+  // An average needs at least 3 check-ins: no verdict from one or two days.
+  const meanOf = (from: string, to: string) => {
+    const pts = series(s, id, from, to);
+    return pts.filter((p) => p.grade !== undefined).length >= MIN_IN_WINDOW ? mean(pts) : undefined;
+  };
   const first = s.meds.filter((m) => m.startDate === start);
-  const what = first.length === 1 ? first[0].name : "treatment";
+  const since = `Since starting ${first.length === 1 ? first[0].name : "treatment"} (${short(start)})`;
+  const visit = s.past[s.past.length - 1];
+  const fromVisit = visit && visit > start && visit < end ? meanOf(visit, end) : undefined;
+  const recentFrom = addDays(end, -27) > start ? addDays(end, -27) : start;
+  const recent = recentFrom > start ? meanOf(recentFrom, end) : undefined;
+  const now = fromVisit ?? recent ?? meanOf(start, end);
+  if (now === undefined) return undefined;
+  const nowLabel = fromVisit !== undefined ? `Now (since ${short(visit)})` : recent !== undefined ? "Last 4 weeks" : since;
+
   const base = s.baseline[id];
-  const before = base !== undefined ? ` Before treatment: ${sym.grades[base][0].toLowerCase()}.` : "";
-  return `Since starting ${what} (${short(start)}): ${sym.name.toLowerCase()} mostly ${gradeWord(sym, now).toLowerCase()}.${before}`;
+  // Without a starting point, the first 4 weeks stand in, once there are 4 more weeks after them.
+  const early = daysBetween(start, end) >= 55 ? meanOf(start, addDays(start, 27)) : undefined;
+  const then =
+    base !== undefined
+      ? { label: "before treatment", word: sym.grades[base][0].toLowerCase(), value: base }
+      : early !== undefined
+        ? { label: "in the first 4 weeks", word: word(early), value: early }
+        : undefined;
+  if (!then) return `${since}: ${sym.name.toLowerCase()} mostly ${word(now)}.`;
+  return `${sym.name} ${then.label}: ${then.word}. ${nowLabel}: ${word(now)} · ${trendWord(then.value, now).toLowerCase()}.`;
 }
 
 // The medicine strip: a bar per medicine taken at any point in the range, clipped to it, with

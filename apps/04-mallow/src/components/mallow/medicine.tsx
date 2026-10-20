@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { amountLabel, timesOfDay, today, units, type Form, type Medicine } from "@/lib/mallow/data";
 import type { MedicineFields } from "@/lib/mallow/history";
-import { Chips, Choice, Muted, Primary, toggleIn } from "./shared";
+import { Chips, Choice, Muted, Primary, RoughDate, toggleIn } from "./shared";
 
 // Adding (or editing) a medicine in My plan: one question per screen, the way it's written on the
 // label. Setup asks the essentials (form, name, amount, times); Care adds how to take it and the
-// as-needed rule (`full`), so setup stays within 90 seconds (owner, 20 Oct).
+// as-needed rule (`full`), so setup stays within 90 seconds (owner, 20 Oct). A new medicine's
+// amount and start date start empty: a prefilled amount reads as a suggested dose, and a prefilled
+// date writes history she never gave (user test 20 Oct, findings 36 and 37).
 
 const forms: { form: Form; sub: string }[] = [
   { form: "Oil", sub: "Drops or a syringe, under the tongue" },
@@ -38,15 +40,17 @@ export function MedicineFlow({
   const [form, setForm] = useState<Form>(initial?.form ?? "Oil");
   const [name, setName] = useState(initial?.name ?? "");
   const [strength, setStrength] = useState(initial?.strength ?? "");
-  const [amount, setAmount] = useState(initial?.amount ?? units.Oil.start);
+  const [amount, setAmount] = useState<number | undefined>(initial?.amount);
   const [when, setWhen] = useState<string[]>(initial?.when ?? []);
-  const [startDate, setStartDate] = useState(initial?.startDate ?? today());
+  const [startDate, setStartDate] = useState<string | undefined>(initial?.startDate);
   const [howTo, setHowTo] = useState(initial?.howTo ?? "");
   const [asNeeded, setAsNeeded] = useState(initial?.asNeeded ?? "");
   const u = units[form];
   const steps = full ? 4 : 3;
   const save = () =>
-    onSave({ name: name.trim(), form, strength: strength.trim(), amount, when, howTo: howTo.trim(), asNeeded: when.includes("When needed") ? asNeeded.trim() : "" }, startDate);
+    amount !== undefined &&
+    // Not sure when it started: Mallow counts it from today, the day it was added, not a guess.
+    onSave({ name: name.trim(), form, strength: strength.trim(), amount, when, howTo: howTo.trim(), asNeeded: when.includes("When needed") ? asNeeded.trim() : "" }, startDate ?? today());
 
   const back = () => (step === 0 || (initial && step === 1) ? onCancel() : setStep(step - 1));
 
@@ -73,7 +77,8 @@ export function MedicineFlow({
                   sub={f.sub}
                   onClick={() => {
                     setForm(f.form);
-                    if (!initial) setAmount(units[f.form].start);
+                    // Another form has another unit, so an amount already chosen no longer applies.
+                    if (!initial && f.form !== form) setAmount(undefined);
                     setTimeout(() => setStep(1), 180);
                   }}
                 >
@@ -133,29 +138,38 @@ export function MedicineFlow({
             <h1 className="serif text-[1.75rem] leading-tight">How much, as your doctor prescribed?</h1>
             <Muted className="mt-2">Copy it from your pharmacy label. You can change it each time you log a dose.</Muted>
             <div className="mt-6 flex items-center justify-between rounded-2xl border bg-white p-2" style={{ borderColor: "var(--line)" }}>
-              <Step label="Less" onClick={() => setAmount((a) => Math.max(u.step, +(a - u.step).toFixed(2)))}>
+              <Step label="Less" disabled={amount === undefined} onClick={() => setAmount((a) => a !== undefined ? Math.max(u.step, +(a - u.step).toFixed(2)) : a)}>
                 −
               </Step>
-              <span className="tnum text-2xl font-medium">{amountLabel({ form, amount })}</span>
-              <Step label="More" onClick={() => setAmount((a) => +(a + u.step).toFixed(2))}>
+              <span className="tnum text-2xl font-medium" style={amount === undefined ? { color: "var(--ink-faint)" } : undefined}>
+                {amount === undefined ? `– ${u.unit}` : amountLabel({ form, amount })}
+              </span>
+              <Step label="More" onClick={() => setAmount((a) => (a === undefined ? u.step : +(a + u.step).toFixed(2)))}>
                 +
               </Step>
             </div>
             <p className="mb-2 mt-6 text-sm font-medium">When does your prescription say to take it?</p>
             <Chips options={timesOfDay} value={when} onToggle={(t) => setWhen(toggleIn(when, t))} />
-            <label className="mb-6 mt-6 flex min-h-14 items-center justify-between rounded-2xl border bg-white px-4" style={{ borderColor: "var(--line)" }}>
-              <span className="font-medium">Started</span>
-              <input
-                type="date"
-                name="start-date"
-                value={startDate}
-                max={today()}
-                onChange={(e) => e.target.value && setStartDate(e.target.value)}
-                className="tnum min-h-10 bg-transparent text-right outline-none"
-              />
-            </label>
-            <Primary className="mt-auto" onClick={() => (full ? setStep(3) : save())}>
-              {full ? "Next" : initial ? "Save" : "Add medicine"}
+            {initial ? (
+              <label className="mb-6 mt-6 flex min-h-14 items-center justify-between rounded-2xl border bg-white px-4" style={{ borderColor: "var(--line)" }}>
+                <span className="font-medium">Started</span>
+                <input
+                  type="date"
+                  name="start-date"
+                  value={startDate}
+                  max={today()}
+                  onChange={(e) => e.target.value && setStartDate(e.target.value)}
+                  className="tnum min-h-10 bg-transparent text-right outline-none"
+                />
+              </label>
+            ) : (
+              <div className="mb-6 mt-6">
+                <RoughDate label="About when did you start it?" value={startDate} onChange={setStartDate} />
+                <Muted className="mt-2 text-xs">Rough is fine. Not sure? Skip it, and it counts from today.</Muted>
+              </div>
+            )}
+            <Primary className="mt-auto" disabled={amount === undefined} onClick={() => (full ? setStep(3) : save())}>
+              {amount === undefined ? "Add your amount" : full ? "Next" : initial ? "Save" : "Add medicine"}
             </Primary>
           </>
         )}
@@ -211,12 +225,13 @@ const howToHint: Record<Form, string> = {
   Other: "",
 };
 
-function Step({ onClick, label, children }: { onClick: () => void; label: string; children: React.ReactNode }) {
+function Step({ onClick, label, disabled, children }: { onClick: () => void; label: string; disabled?: boolean; children: React.ReactNode }) {
   return (
     <button
       onClick={onClick}
       aria-label={label}
-      className="press size-12 rounded-xl text-2xl leading-none"
+      disabled={disabled}
+      className="press size-12 rounded-xl text-2xl leading-none disabled:opacity-40"
       style={{ background: "var(--mallow-tint)", color: "var(--mallow-deep)" }}
     >
       {children}

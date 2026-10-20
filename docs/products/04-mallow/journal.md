@@ -247,3 +247,32 @@ What happened, what was decided and why. Newest last.
   appointment the "Did it happen?" question appears; a vape added halfway shows in the graph and
   first in "Took a dose". Found and fixed: "1 quick questions"; the "Noted…" line stayed after the
   plan day ended; Next sat against the field in the full-screen medicine flow (v1).
+
+### Simulated user test as Priya (playbook step 3b)
+- **Why now:** v2 had tests, a critic and an audit but no user test; the open question was whether
+  the graph is read correctly in the 10 seconds of a call.
+- **Set-up:** new persona Priya (31, anxiety and poor sleep, oil at night, vape added halfway) next
+  to Sam; a v2 plan (setup ≤ 90 s, 1-tap tick, ≤ 2-tap vape, check-in, Journey read ≤ 60 s, Know
+  your medicine, time passes). Run on PR 38's head, phone size. The first run lost its dev server
+  (the app stops it when the session's turn ends); the second ran in the foreground.
+- **Result:** logging and guardrails pass (0 breaches, 9/9 numbers exact, 0 causal words). Main
+  signal only partly met: ~50 s, sleep and the medicines read correctly, but the caption above the
+  graph ("anxiety mostly quite. Before treatment: quite") made a real improvement read as "no
+  change". Priya linked the anxiety drop to the vape herself; the screen doesn't say it.
+- **Checked before logging:** the agent's major "00:30 dose saved to the wrong day" was wrong
+  (the code counts it for last night, as decided); kept as a labelling issue (feedback 38).
+- **Nothing in the product changed.** Owner's calls listed in feedback 34–37.
+- **Owner's calls on the test** (20 Oct): 34 caption as then → now in the Summary's words, no date
+  (a date beside the vape start would invite "the vape did it"); 35 label both Summary comparisons
+  ("since last visit" / "since before treatment"); 36 amounts start blank and required (a default
+  is a nudge, and the guardrail is no suggested doses); 37 rough quick picks for unknown dates
+  instead of guesses, and "Add another" at the end of setup. Not built yet.
+- **Built the calls** (20 Oct, PR 40): caption, labelled Summary, blank amounts, "About when?"
+  quick picks and "Anything else on your plan?". One change from the approved preview: "now" in the
+  caption is the stretch since the last appointment, not the last 4 weeks. With 4 weeks, the caption
+  said "better" while the Summary said "a little better" (the averages fell either side of a
+  threshold), which is the contradiction 34 set out to remove. Not re-tested with the persona yet.
+- **Re-test on PR 40** (20 Oct, setup and Journey only): main signal met in simulation, ~40 s,
+  3 of 3 correct, caption and Summary agree; whole setup with the vape ~80–95 s, nothing prefilled.
+  All five re-checked findings fixed. New: quick picks hide the date they save and skip "2 months"
+  (44, owner's call), and "since 20 Sep" doesn't say it's the last appointment (45).

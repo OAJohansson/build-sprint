@@ -272,3 +272,7 @@ What happened, what was decided and why. Newest last.
   caption is the stretch since the last appointment, not the last 4 weeks. With 4 weeks, the caption
   said "better" while the Summary said "a little better" (the averages fell either side of a
   threshold), which is the contradiction 34 set out to remove. Not re-tested with the persona yet.
+- **Re-test on PR 40** (20 Oct, setup and Journey only): main signal met in simulation, ~40 s,
+  3 of 3 correct, caption and Summary agree; whole setup with the vape ~80–95 s, nothing prefilled.
+  All five re-checked findings fixed. New: quick picks hide the date they save and skip "2 months"
+  (44, owner's call), and "since 20 Sep" doesn't say it's the last appointment (45).

@@ -309,8 +309,8 @@ user yet.*
 
 | Signal | Target | What happened |
 | --- | --- | --- |
-| Change is readable (main) | ≤ 60 s, correct, no causal words | **Partly met (simulated, Priya):** ~50 s, 2 taps (Journey, then 1 tap per symptom). Sleep and "what was taken when" read correctly (vape start read as ~5 Sep, actual 6 Sep). Anxiety only half right: the caption "mostly quite. Before treatment: quite" reads as no change, while the line and the Summary say a little better (feedback 34). 0 causal words from the app; Priya inferred "it dropped once I had the vape" herself. |
-| Setup fits | ≤ 90 s, skippable | **Met to home, missed for her whole plan (simulated):** ~22 taps, 65–75 s to Today; adding the vape from Care takes another ~35–45 s (setup takes one medicine), ~105–120 s in all. Amounts and last appointment come prefilled (feedback 36, 37). |
+| Change is readable (main) | ≤ 60 s, correct, no causal words | **Met after fixes (simulated, Priya):** first run ~50 s with anxiety misread (the caption gave a level, feedback 34); after PR 40, re-test ~40 s, 3 of 3 correct, caption and Summary agree for every symptom, 0 causal words ([re-test](user-testing/report-2026-10-20-retest.md)). She still infers "the vape did it" herself. No real user yet. |
+| Setup fits | ≤ 90 s, skippable | **Met, just (simulated):** after PR 40, her whole plan (oil and vape, both dates, follow-up) in one flow, ~80–95 s, nothing prefilled; before, 65–75 s to Today plus ~40 s to add the vape in Care. |
 | Logging stays effortless | tick 1 tap; as-needed ≤ 2; check-in ≤ 30 s | **Met (simulated):** tick 1 tap / ~2 s; vape 2 taps / ~4 s; check-in 5 taps / ~12–15 s, no typing. |
 | Missed doses are kind | no red, streaks or guilt | **Met:** "Not taken" in the same grey as "Later"; no counts or streaks. |
 | Guardrail: correct numbers | exact | **Met:** summary values on Sam's demo matched a hand count (pain 1.5 vs 1.57, mood 1.35 → 1.67, baseline comparisons, 13 doses on 7 days); 30 unit tests for schedule, history, migration, averages and comparisons. |
@@ -318,6 +318,5 @@ user yet.*
 
 **Did v2 solve the problem?** It now answers "what am I taking, and is anything changing?" from the
 daily log rather than from memory, and v1 users keep their data. Whether a patient or a clinician
-reads the graph correctly in a call is only partly answered: in the simulated test as Priya, sleep
-and the medicines read correctly, but the caption above the graph hid the anxiety improvement.
-Next: the owner's call on the caption, then a real patient.
+reads the graph correctly in a call: yes in simulation, after the caption fix (Priya, 3 of 3 in
+~40 s). Next: a real patient, and ideally a clinician, on the same two scenarios.

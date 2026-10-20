@@ -176,3 +176,11 @@ What happened, what was decided and why. Newest last.
   ("Flower T22", "THC 22%"), now "As on your label".
 - **Noticed for day 2:** with a two-slot plan the Took a dose / check-in buttons fall below the
   fold on a 375 × 812 phone; look at it with break-ui.
+
+### Ship blocked: Vercel skip check (fixed for every app)
+- `pnpm ship 04-mallow` failed, and had been failing since 19 Oct: the `ignoreCommand` crashed
+  ("bad object") when the previous deploy's commit wasn't in Vercel's clone, so the build errored
+  instead of running. The script also deploys GitHub's main, so v2 has to be merged first.
+- **Owner chose the proper fix:** a missing earlier commit now means "build". Applied to every
+  committed app and the template (Selvedge's uncommitted copy still has the old line); decision
+  0016 corrected. Merging rebuilds each app once, since every app folder changed.

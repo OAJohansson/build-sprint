@@ -46,4 +46,11 @@ a push: a push whose last commit didn't touch an app skipped that app even when 
 did (Folio's LLM picks were skipped because the last commit only synced the README). It is now
 `[ -n "$VERCEL_GIT_PREVIOUS_SHA" ] && git diff --quiet "$VERCEL_GIT_PREVIOUS_SHA" HEAD -- .`:
 skip only when nothing in the app changed since its last successful deploy, and always build when
-there is no earlier deploy (or the old commit isn't in Vercel's shallow clone).
+there is no earlier deploy.
+
+**Fix (20 Oct, Mallow v2):** that version did *not* build when the old commit was missing from
+Vercel's clone: `git diff` failed with "bad object" (exit 128), which Vercel treats as an error, so
+every Mallow deploy failed. It is now
+`if git cat-file -e "$VERCEL_GIT_PREVIOUS_SHA^{commit}" 2>/dev/null; then git diff --quiet "$VERCEL_GIT_PREVIOUS_SHA" HEAD -- .; else exit 1; fi`:
+no earlier deploy or a missing commit means build (exit 1); otherwise skip only when nothing in the
+app changed. Applied to every app and the template; checked locally for each case.

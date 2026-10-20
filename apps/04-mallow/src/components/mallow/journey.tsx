@@ -6,52 +6,89 @@ import {
   daysBetween,
   fmt,
   long,
-  periodStats,
   reliefPhrase,
   short,
   symptomById,
   today,
   type Day,
 } from "@/lib/mallow/data";
-import { allDays, chaptersOf, doctorName, lastOf, type Store } from "@/lib/mallow/store";
+import { allDays, doctorName, type Store } from "@/lib/mallow/store";
 import { CheckinSheet, DoseEditor, type DoseTarget } from "./day-editing";
-import { Chips, GradeMark, Muted } from "./shared";
+import { ChipRow, GradeMark, Muted } from "./shared";
 import { SummarySheet } from "./summary";
+import { TrendChart } from "./trend-chart";
+import { rangeLabel, type Range } from "@/lib/mallow/trend";
 
-// Journey: everything logged so far, as a calendar. The summary for the appointment sits on top.
+// Journey: is it changing? A trend per symptom with the medicines underneath, the summary for the
+// appointment, and every day logged so far as a calendar.
 type SetStore = (fn: (s: Store) => Store) => void;
 
 export function Journey({ store, setStore }: { store: Store; setStore: SetStore }) {
   const [summaryOpen, setSummaryOpen] = useState(false);
   const all = allDays(store);
   const empty = store.days.every((d) => !d.logged && d.doses.length === 0);
-  const now = periodStats(chaptersOf(store).at(-1)?.days ?? [], store.tracked);
+  // One symptom choice for the graph and the calendar below it.
+  const [picked, setPicked] = useState(store.tracked[0]);
+  const symptom = store.tracked.includes(picked) ? picked : store.tracked[0];
 
   return (
     <main className="mx-auto w-full max-w-[440px] px-5 pb-36 pt-[calc(env(safe-area-inset-top)+20px)]">
       <h1 className="serif text-[2rem] leading-tight">Journey</h1>
 
+      <Trends store={store} symptom={symptom} onPick={setPicked} />
+
+      {/* The appointment summary, one slim row under the graph (owner, 20 Oct: graph first). */}
       <button
         onClick={() => setSummaryOpen(true)}
-        className="press mt-5 flex w-full items-center justify-between gap-3 rounded-2xl p-4 text-left"
+        className="press mt-6 flex min-h-14 w-full items-center justify-between gap-3 rounded-2xl px-4 py-3 text-left"
         style={{ background: "var(--mallow-wash)" }}
       >
-        <span className="min-w-0">
-          <span className="block truncate font-medium">For {doctorName(store)}</span>
-          <span className="tnum block text-sm" style={{ color: "var(--ink-soft)" }}>
-            Since {short(lastOf(store))} · {now.logged} {now.logged === 1 ? "day" : "days"} logged
-          </span>
+        <span className="min-w-0 font-medium">
+          Summary for {doctorName(store)}
+          {store.next ? <span className="tnum font-normal" style={{ color: "var(--ink-soft)" }}>{` · ${short(store.next)}`}</span> : null}
         </span>
-        <span className="shrink-0 text-sm font-medium" style={{ color: "var(--mallow-deep)" }}>
-          Summary ›
+        <span aria-hidden className="shrink-0" style={{ color: "var(--mallow-deep)" }}>
+          ›
         </span>
       </button>
 
       {empty && <Muted className="mt-8 text-center">Your days will appear here as you log them.</Muted>}
-      <Calendar store={store} setStore={setStore} days={all} />
+      <Calendar store={store} setStore={setStore} days={all} sym={symptom} />
 
       <SummarySheet store={store} open={summaryOpen} onClose={() => setSummaryOpen(false)} />
     </main>
+  );
+}
+
+// One graph at a time: pick the symptom (the first tracked one by default) and the range.
+function Trends({ store, symptom, onPick }: { store: Store; symptom: string; onPick: (id: string) => void }) {
+  const [range, setRange] = useState<Range>("all");
+  return (
+    <section className="mt-5" aria-label="How it's been changing">
+      {store.tracked.length > 1 && (
+        <div>
+          <ChipRow options={store.tracked.map((id) => ({ id, label: symptomById(id).name }))} value={symptom} onPick={onPick} />
+        </div>
+      )}
+      <div className="mt-3 grid grid-cols-3 gap-1 rounded-xl p-1" role="radiogroup" aria-label="Time range" style={{ background: "var(--mallow-wash)" }}>
+        {(["4w", "3m", "all"] as Range[]).map((r) => (
+          <button
+            key={r}
+            role="radio"
+            aria-checked={range === r}
+            onClick={() => setRange(r)}
+            className="press min-h-11 rounded-lg text-sm"
+            style={{ background: range === r ? "var(--card)" : "transparent", color: range === r ? "var(--ink)" : "var(--ink-soft)", fontWeight: range === r ? 500 : 400 }}
+          >
+            {rangeLabel[r]}
+          </button>
+        ))}
+      </div>
+      <div className="mt-4">
+        {/* Keyed so a picked day never carries over to another symptom or range. */}
+        <TrendChart key={`${symptom}-${range}`} store={store} symptom={symptom} range={range} />
+      </div>
+    </section>
   );
 }
 
@@ -133,10 +170,9 @@ function DayDetail({ store, setStore, day }: { store: Store; setStore: SetStore;
 
 const shade = ["var(--mallow-wash)", "color-mix(in oklch, var(--mallow) 34%, white)", "color-mix(in oklch, var(--mallow) 62%, white)", "var(--mallow-deep)"];
 
-function Calendar({ store, setStore, days }: { store: Store; setStore: SetStore; days: Day[] }) {
+function Calendar({ store, setStore, days, sym }: { store: Store; setStore: SetStore; days: Day[]; sym: string }) {
   const months = [...new Set(days.map((d) => d.date.slice(0, 7)))];
   const [mi, setMi] = useState(months.length - 1);
-  const [sym, setSym] = useState(store.tracked[0]);
   const [picked, setPicked] = useState<string>(days.at(-1)!.date);
   const s = symptomById(sym);
   const month = months[mi];
@@ -149,10 +185,11 @@ function Calendar({ store, setStore, days }: { store: Store; setStore: SetStore;
   const pickedDay = byDate.get(picked);
 
   return (
-    <div className="mt-6">
-      <Chips options={store.tracked.map((id) => symptomById(id).name)} value={[s.name]} onToggle={(n) => setSym(store.tracked.find((id) => symptomById(id).name === n)!)} />
-
-      <div className="mt-5 flex items-center justify-between">
+    <div className="mt-10">
+      <h2 className="text-sm font-medium" style={{ color: "var(--ink-soft)" }}>
+        Your days
+      </h2>
+      <div className="mt-2 flex items-center justify-between">
         <MonthArrow label="Previous month" disabled={mi === 0} onClick={() => setMi(mi - 1)}>
           ‹
         </MonthArrow>

@@ -184,3 +184,66 @@ What happened, what was decided and why. Newest last.
 - **Owner chose the proper fix:** a missing earlier commit now means "build". Applied to every
   committed app and the template (Selvedge's uncommitted copy still has the old line); decision
   0016 corrected. Merging rebuilds each app once, since every app folder changed.
+- **Day 1 live** (20 Oct): PR 37 merged by Claude at the owner's request, `pnpm ship 04-mallow`
+  READY at https://mallow-omega.vercel.app. Checked on the live site at phone size: the new setup
+  (condition step) and the demo's plan and optional relief prompt; no console errors; only the
+  app's own static files are requested.
+
+## 20 Oct · v2 day 2
+
+### Is it working? Graph, medicine strip and summary
+- **Owner's brief for the graph:** in the 10 seconds of a video call it must be obvious how the
+  symptom has been changing and what medication the patient was on. Coaching: "design for the
+  decision" (Tufte's data-ink, Few): the change leads, medicines sit beneath on the same time axis.
+- **Owner chose the light design path** (build with the dataviz skill, then the design critic)
+  over a full /design-session: the chart's form was mostly fixed by the brief.
+- **Trend logic** in `lib/mallow/trend.ts`: daily series, 7-day average that is a gap with fewer
+  than 3 check-ins (never a zero), ranges as fixed day counts (28, 91, since the first medicine),
+  comparison with the same length before and with before treatment, the plain-words line, the
+  medicine bars. 11 more unit tests (30 in all), including a month end and empty history.
+- **Claude's call, flagged:** harder grades at the top, so "pain is lower" reads as the line going
+  down (how clinicians read symptom charts).
+- **Critic round 1: 5/10.** Top gaps: daily dots read as bands over months; green appointment dots
+  break the no-green rule; the change marker looked like a slider; a tall before box; two
+  disagreeing day counts. All fixed (dots only over 4 weeks, ink ticks with a key, the bar steps up
+  at a change, a short before band, the card no longer counts days).
+- **Critic round 2: 5/10** (not rising, so stopped and showed the owner). Taken: the takeaway
+  sentence above the graph; name and amount on one line ("Balanced oil · 0.5 ml → 0.7 ml");
+  as-needed use as dots, not ticks; the picked day written as a nurse would. Bug found on the way:
+  the readout listed as-needed medicines on days they weren't used.
+- **Owner's calls at the checkpoint:** graph first (the summary becomes a slim row under it); keep
+  the calendar below as "Your days" (it's where past days are edited); keep the before band on the
+  left, as the brief says, rather than a dashed line across the plot.
+- **Summary (requirement 6):** each symptom compares with the stretch before *and* with before
+  treatment ("Before treatment: severe. Now: better."); medicines in use with amount changes,
+  starts and stops; as-needed shown as days used; relief only when more than one medicine was
+  taken. Hand count on Sam's demo: every value matched.
+- **Demo rebuilt:** Sam (4 months, oil 0.5 → 0.7 ml at the third appointment, flower on flare days)
+  and Priya (3 months, vape added halfway); missed days, a week away, bad days, baselines; switch in
+  Care ("Demo: Sam / Demo: Priya").
+
+### Know your medicine, guardrail check, time passes
+- **Cards** for oil, flower, vape and capsule (`lib/mallow/forms.ts`, all copy in one file):
+  what it is, how it's taken, when it starts and how long it lasts (typical ranges plus "varies
+  from person to person"), common side effects (THC and CBD, general), storing it, driving and
+  travel, and 4 questions for the doctor. The only dose on a card is the patient's own, from My
+  plan, under "Your plan", with "Questions about your dose go to your doctor or pharmacist".
+  Own forms first, others under "Other forms"; reached from Care and from each medicine.
+- **Guardrail check of every new string.** Breach fixed: the heading "How quickly it **works**"
+  (now "When it starts and how long it lasts"). Near misses, kept and why:
+  - "Because it starts slowly and lasts a while, oil is often part of a regular daily plan" and
+    "flower is often prescribed for times when a faster effect is needed, like flare-ups": describe
+    how forms are prescribed, not what to take; no condition named.
+  - "If you feel drowsy, dizzy or slowed down, don't drive": an instruction, but road safety and UK
+    law, not a dose.
+  - "Effects come on slowly, so they can build up later than you expect": a fact about onset;
+    deliberately not "don't take more".
+  - "What's the most I should use in a day?": a question *to the doctor*, not an answer.
+  - v1's anxiety grade "Couldn't do things because of it": "because" refers to the anxiety.
+  - Changed earlier on day 1: "With food", "Slow puffs" (advice-like hints), "Flower T22" and
+    "THC 22%" placeholders (looked like real products and strengths).
+- **Time passes, with a fake clock in the browser** (no reload): 23:50 bedtime "Now"; 00:30 still
+  last night's, the tick stored on the real date; 04:10 a new plan day; the day after the
+  appointment the "Did it happen?" question appears; a vape added halfway shows in the graph and
+  first in "Took a dose". Found and fixed: "1 quick questions"; the "Noted…" line stayed after the
+  plan day ended; Next sat against the field in the full-screen medicine flow (v1).

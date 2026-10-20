@@ -82,6 +82,10 @@ Rules I now apply to every product (detail in the playbook).
 - **Demo data hides missing features.** A required note field existed only in the demo; test on a
   fresh install.
 - **Explaining a delight can kill it.** The plant works unexplained; the purpose is said plainly instead.
+- **v2: evidence from the log, not from asking.** Daily grades over time, next to what was taken,
+  beat recalled relief; relief became optional and the app never says why things changed.
+- **v2: guardrails need a grep.** One banned word slipped into a heading after the copy review;
+  keeping all education copy in one file made the check one read.
 
 ### 05 Inkling
 

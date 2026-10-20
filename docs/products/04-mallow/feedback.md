@@ -23,3 +23,17 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 17 | User test F7 | Save stays disabled with no reason until every symptom is answered | fixed: button says "2 to go" |
 | 18 | User test F8 | Calendar shows one month of one symptom; no "since you started" view; mild shade too faint | mild shade darkened; progress strip parked in backlog |
 | 19 | User test F9, F10, contrast | "1 days logged"; 28 px demo band; faint text at 3.06:1 | fixed: plural, 44 px band, faint text darkened to ≥4.5:1 |
+| 20 | v2 critic round 1 (5/10) | Daily dots read as bands; green appointment dots; slider-like change marker; tall before box; two disagreeing day counts | fixed (dots only over 4 weeks, ink ticks, a step in the bar, short band, one count) |
+| 21 | v2 critic round 2 (5/10) | Graph starts too far down; medicine rows hard to read; before marker looks like a widget | owner's calls: graph first, summary as a slim row, before band kept on the left; medicine rows reworked |
+| 22 | v2 critic | Month calendar reads as a second, louder chart | owner kept it as "Your days" (where past days are edited); backlog item to revisit |
+| 23 | v2 audit 1 | Medicine label ran off the screen at 320 px; truncation cut the amounts first | fixed: labels use the strip's full width, only the name is shortened |
+| 24 | v2 audit 2 | One-day range drew "Today" twice (duplicate key) | fixed: ticks de-duplicated, one point shows only "Today" |
+| 25 | v2 audit 3, 4 | 1–2 check-ins: blank graph but a verdict in the caption; one-point average pieces vanished | fixed: dots shown while check-ins are few, no plain line below 3 check-ins, one-point pieces drawn as dots |
+| 26 | v2 audit 5, 6 | White 80% text on mauve 3.97:1; dots 2.44:1; as-needed bar 1.27:1 | fixed: full white, solid dots, as-needed bar in --ink-faint |
+| 27 | v2 audit 7, 8 | Long unbroken names caused sideways scroll (relief prompt, Noted, readout, dose sheet) | fixed: overflow-wrap anywhere; checked at 320 px with a 63-character name |
+| 28 | v2 audit 9, 11, 13, 14, 27 | Readout height jumped; odd screen-reader label; no keyboard scrubbing; live region chattered; picked day carried over | fixed: fixed-height readout, label reworded, arrow keys on the graph, no live region, chart keyed by symptom and range |
+| 29 | v2 audit 16, 17 | Know dropped the as-needed rule for mixed medicines; three card lines steered towards a form ("flare-ups", "regular daily plan", "discreet") | fixed: rule shown; the three lines removed (guardrails win over the brief's background notes) |
+| 30 | v2 audit 18, 20, 24, 25, 26, 31, 33 | Summary key by name; verdict from one check-in; plan row's spoken label; no confirmation after as-needed log; Noted hidden by relief prompt; empty boxes; "←" read aloud | fixed |
+| 31 | v2 audit 12, 19 | Today's plan list gets long (3 medicines × 4 times); green "taken" tick reads as a judgement | open: owner's call |
+| 32 | v2 audit 15, 21–23, 28–30, 32 | Focus in sheets and cards; calendar cells 36 px at 320; "None" days look empty; radio keys; very old stopped medicine stretches "since starting"; input max lengths | backlog |
+| 33 | v2 time-passes test | "1 quick questions"; stale "Noted" after the plan day; Next against the field; the chart could fail to draw when the page opened in the background (ResizeObserver) | fixed |

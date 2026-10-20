@@ -1,11 +1,20 @@
-import { addDays, daysBetween, today, type Day, type Dose } from "./data";
-import { newMedicine } from "./history";
+import { addDays, today, type Day, type Dose } from "./data";
+import { newMedicine, updateMedicine } from "./history";
 import type { Store } from "./store";
 
-// Sam's demo history: eleven weeks on a balanced oil (plus flower on flare days), three
-// appointments, a few missed days, and things easing a little. Dates are relative to today, and
-// a fixed seed makes it the same every time. Kept apart from real entries (see use-mallow).
+// Two demo patients whose histories tell the v2 story, relative to today, the same every time
+// (fixed seeds). Kept apart from real entries (see use-mallow).
+// - Sam: fibromyalgia, about 4 months on a balanced oil (plus flower on flare days); the oil was
+//   increased at the third appointment, and pain eases a little after it.
+// - Priya: anxiety and poor sleep, about 3 months on an oil at night; a vape was added halfway for
+//   anxious moments, so the medicine strip shows the overlap.
+// Both have missed days, a run of days away, a few bad days and a before-treatment baseline.
 
+export type Persona = "sam" | "priya";
+export const personas: { id: Persona; name: string; sub: string }[] = [
+  { id: "sam", name: "Sam", sub: "Fibromyalgia, 4 months" },
+  { id: "priya", name: "Priya", sub: "Anxiety and sleep, 3 months" },
+];
 
 function rng(seed: number) {
   return () => {
@@ -15,45 +24,101 @@ function rng(seed: number) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
+const clamp = (g: number) => Math.max(0, Math.min(3, Math.round(g)));
+const lerp = (a: number, b: number, p: number) => a + (b - a) * Math.min(Math.max(p, 0), 1);
 
-const missedOffsets = new Set([4, 13, 14, 32, 46, 57, 64, 65]); // days after the first appointment
-const notes: Record<number, string> = {
-  7: "Flare after the long walk on Saturday",
-  23: "Started taking the evening dose an hour earlier",
-  41: "Good weekend, managed the garden",
-  64: "Rough night, neighbours' party",
-  73: "Dry mouth again, drinking more water",
-};
+export function demoStore(who: Persona = "sam", end = today()): Store {
+  return who === "sam" ? sam(end) : priya(end);
+}
 
-export function demoStore(): Store {
-  const end = today();
-  const first = addDays(end, -77);
-  const past = [first, addDays(end, -49), addDays(end, -21)];
-  // shortcut: day 1 keeps v1's Sam; the v2 demo (Sam's dose increase, Priya's overlap) comes on day 2.
-  const meds = [
-    newMedicine({ name: "Balanced oil", form: "Oil", strength: "THC 20 : CBD 20", amount: 0.5, when: ["Morning", "Bedtime"], howTo: "Under the tongue, hold for a minute", asNeeded: "" }, first, "oil"),
-    newMedicine({ name: "Flower T22", form: "Flower", strength: "THC 22%", amount: 0.1, when: ["When needed"], howTo: "In your vaporiser", asNeeded: "Up to 0.1 g on a flare day" }, first, "flower"),
-  ];
+function sam(end: string): Store {
+  const span = 118;
+  const first = addDays(end, -span);
+  const raise = 56; // third appointment: oil from 0.5 to 0.7 ml
+  const past = [0, 28, 56, 84, 112].map((d) => addDays(first, d));
+  let oil = newMedicine({ name: "Balanced oil", form: "Oil", strength: "THC 20 : CBD 20", amount: 0.5, when: ["Morning", "Bedtime"], howTo: "Under the tongue, hold for a minute", asNeeded: "" }, first, "oil");
+  oil = updateMedicine(oil, { ...oil, amount: 0.7 }, addDays(first, raise));
+  const flower = newMedicine({ name: "Flower T22", form: "Flower", strength: "THC 22%", amount: 0.1, when: ["When needed"], howTo: "In the vaporiser", asNeeded: "On a flare day, as on the label" }, first, "flower");
+
   const r = rng(42);
-  const span = daysBetween(first, end);
+  const away = new Set([38, 39, 40, 41, 42]); // a week at their sister's, nothing logged
+  const flares = new Set([9, 33, 47, 71, 98]);
+  const notes: Record<number, string> = { 9: "Flare after the long walk on Saturday", 47: "Bad week, cold weather", 61: "First week on the higher dose", 88: "Good weekend, managed the garden", 110: "Dry mouth again, drinking more water" };
   const days: Day[] = [];
-  for (let i = 0; i < span; i++) {
+  for (let i = 0; i <= span; i++) {
     const date = addDays(first, i);
-    const p = i / span;
-    const grade = (base: number) => Math.max(0, Math.min(3, Math.round(base + (r() - 0.5) * 1.6)));
-    const grades = { pain: grade(2.4 - 0.8 * p), sleep: grade(2.2 - 1.0 * p), fatigue: grade(2.0 - 0.2 * p), mood: grade(1.4 - 0.2 * p) };
-    const relief = () => Math.max(0, Math.min(3, Math.round(1.1 + 0.9 * p + (r() - 0.5) * 1.8)));
-    const doses: Dose[] = [
-      { time: "08:30", med: "oil", amount: 0.5, slot: "Morning", relief: relief() },
-      { time: "21:30", med: "oil", amount: 0.5, slot: "Bedtime", relief: relief() },
-    ];
-    if (grades.pain === 3) doses.splice(1, 0, { time: "15:10", med: "flower", amount: 0.1, relief: relief() });
-    const side = [r() < 0.5 ? "Dry mouth" : "", r() < 0.2 ? "Drowsy" : "", r() < 0.06 ? "Dizzy" : ""].filter(Boolean);
-    if (missedOffsets.has(i)) continue;
+    const isToday = i === span;
+    const amount = i < raise ? 0.5 : 0.7;
+    const doses: Dose[] = [{ time: "08:30", med: "oil", amount, slot: "Morning", relief: clamp(1.4 + r() * 1.4) }];
+    if (!isToday) doses.push({ time: "21:30", med: "oil", amount, slot: "Bedtime", relief: clamp(1.4 + r() * 1.4) });
+    if (isToday) {
+      days.push({ date, logged: false, grades: {}, doses, side: [] });
+      continue;
+    }
+    if (away.has(i) || (r() < 0.12 && !flares.has(i))) continue;
+    // Pain eases slowly, levels off before the increase, then eases again.
+    const pain = i < raise ? lerp(2.5, 1.9, i / raise) : lerp(1.9, 1.3, (i - raise) / (span - raise));
+    const n = () => (r() - 0.5) * 1.3;
+    const flare = flares.has(i);
+    const grades = {
+      pain: flare ? 3 : clamp(pain + n()),
+      sleep: flare ? 3 : clamp(lerp(2.2, 1.4, i / span) + n()),
+      fatigue: clamp(lerp(2.1, 1.7, i / span) + n()),
+      mood: clamp(lerp(1.5, 1.1, i / span) + n()),
+    };
+    if (flare || grades.pain === 3) doses.splice(1, 0, { time: "15:10", med: "flower", amount: 0.1, relief: clamp(1.5 + r() * 1.5) });
+    const side = [r() < 0.45 ? "Dry mouth" : "", r() < 0.15 + (i >= raise ? 0.08 : 0) ? "Drowsy" : "", r() < 0.05 ? "Dizzy" : ""].filter(Boolean);
     days.push({ date, logged: true, grades, doses, side, note: notes[i] });
   }
-  // Last night's dose hasn't been rated yet, and this morning's dose is in: Mallow asks on opening.
-  delete days[days.length - 1].doses.at(-1)!.relief;
-  days.push({ date: end, logged: false, grades: {}, doses: [{ time: "08:30", med: "oil", amount: 0.5, slot: "Morning", relief: 1 }], side: [] });
-  return { version: 2, condition: "pain", baseline: { pain: 3, sleep: 3, fatigue: 2, mood: 2 }, meds, tracked: ["pain", "sleep", "fatigue", "mood"], doctor: "Dr Patel", past, next: addDays(end, 9), days };
+  // Last night's dose hasn't been rated yet: with two medicines in use, Mallow asks once.
+  delete days[days.length - 2]?.doses.at(-1)?.relief;
+  return {
+    version: 2, condition: "pain", baseline: { pain: 3, sleep: 2, fatigue: 2, mood: 1 },
+    meds: [oil, flower], tracked: ["pain", "sleep", "fatigue", "mood"], doctor: "Dr Patel", past, next: addDays(end, 22), days,
+  };
+}
+
+function priya(end: string): Store {
+  const span = 90;
+  const first = addDays(end, -span);
+  const vapeFrom = 46;
+  const past = [0, 30, 60].map((d) => addDays(first, d));
+  const oil = newMedicine({ name: "Balanced oil", form: "Oil", strength: "THC 10 : CBD 10", amount: 0.3, when: ["Bedtime"], howTo: "Under the tongue, an hour before bed", asNeeded: "" }, first, "oil");
+  const vape = newMedicine({ name: "Vape cartridge", form: "Vape", strength: "THC 18 : CBD 2", amount: 2, when: ["When needed"], howTo: "As shown at the clinic", asNeeded: "Up to 3 puffs when anxious" }, addDays(first, vapeFrom), "vape");
+
+  const r = rng(7);
+  const away = new Set([21, 22, 23, 24]);
+  const bad = new Set([14, 37, 52, 79]);
+  const notes: Record<number, string> = { 14: "Work deadline, barely slept", 37: "Panicky on the train", 49: "Tried the vape before the meeting", 79: "Family stuff, rough day" };
+  const days: Day[] = [];
+  for (let i = 0; i <= span; i++) {
+    const date = addDays(first, i);
+    const doses: Dose[] = [];
+    if (i < span) doses.push({ time: "21:45", med: "oil", amount: 0.3, slot: "Bedtime", relief: clamp(1.3 + r() * 1.6) });
+    if (i === span) {
+      days.push({ date, logged: false, grades: {}, doses, side: [] });
+      continue;
+    }
+    if (away.has(i) || (r() < 0.14 && !bad.has(i))) {
+      if (doses.length) days.push({ date, logged: false, grades: {}, doses, side: [] });
+      continue;
+    }
+    const n = () => (r() - 0.5) * 1.3;
+    const isBad = bad.has(i);
+    // Sleep settles in the first six weeks; anxiety only eases a little until the vape is added.
+    const anxiety = isBad ? 3 : clamp((i < vapeFrom ? lerp(2.3, 1.9, i / vapeFrom) : lerp(1.8, 1.2, (i - vapeFrom) / (span - vapeFrom))) + n());
+    const grades = {
+      anxiety,
+      sleep: isBad ? 3 : clamp(lerp(2.3, 1.2, i / 45) + n()),
+      mood: clamp(lerp(1.7, 1.0, i / span) + n() + (isBad ? 1 : 0)),
+    };
+    if (i >= vapeFrom && anxiety >= 2) doses.unshift({ time: "13:20", med: "vape", amount: anxiety === 3 ? 3 : 2, relief: r() < 0.7 ? clamp(1.2 + r() * 1.8) : undefined });
+    const side = [r() < 0.25 ? "Dry mouth" : "", r() < 0.2 ? "Drowsy" : "", i >= vapeFrom && r() < 0.08 ? "Dizzy" : ""].filter(Boolean);
+    days.push({ date, logged: true, grades, doses: doses.sort((a, b) => a.time.localeCompare(b.time)), side, note: notes[i] });
+  }
+  delete days[days.length - 2]?.doses.at(-1)?.relief;
+  return {
+    version: 2, condition: "anxiety", baseline: { anxiety: 2, sleep: 2, mood: 2 },
+    meds: [oil, vape], tracked: ["anxiety", "sleep", "mood"], doctor: "Dr Okafor", past, next: addDays(end, 4), days,
+  };
 }

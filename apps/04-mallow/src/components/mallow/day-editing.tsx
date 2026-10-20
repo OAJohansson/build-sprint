@@ -98,7 +98,7 @@ export function DoseEditor({
     setStore((s) => withDay(s, target.date, (d) => ({ ...d, doses: fn(d.doses).sort((a, b) => a.time.localeCompare(b.time)) })));
     onClose();
   };
-  const dose: Dose = { med, amount, time, ...(relief !== undefined ? { relief } : {}) };
+  const dose: Dose = { med, amount, time, ...(existing?.slot ? { slot: existing.slot } : {}), ...(relief !== undefined ? { relief } : {}) };
 
   return (
     <Sheet open onClose={onClose} label={existing ? "Change dose" : "Add a dose"}>

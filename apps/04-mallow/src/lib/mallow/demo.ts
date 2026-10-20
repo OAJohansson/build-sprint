@@ -1,14 +1,11 @@
-import { addDays, daysBetween, today, type Day, type Medicine } from "./data";
+import { addDays, daysBetween, today, type Day, type Dose } from "./data";
+import { newMedicine } from "./history";
 import type { Store } from "./store";
 
 // Sam's demo history: eleven weeks on a balanced oil (plus flower on flare days), three
 // appointments, a few missed days, and things easing a little. Dates are relative to today, and
 // a fixed seed makes it the same every time. Kept apart from real entries (see use-mallow).
 
-const meds: Medicine[] = [
-  { id: "oil", name: "Balanced oil", form: "Oil", strength: "THC 20 : CBD 20", amount: 0.5, when: ["Morning", "Bedtime"] },
-  { id: "flower", name: "Flower T22", form: "Flower", strength: "THC 22%", amount: 0.1, when: ["When needed"] },
-];
 
 function rng(seed: number) {
   return () => {
@@ -32,6 +29,11 @@ export function demoStore(): Store {
   const end = today();
   const first = addDays(end, -77);
   const past = [first, addDays(end, -49), addDays(end, -21)];
+  // shortcut: day 1 keeps v1's Sam; the v2 demo (Sam's dose increase, Priya's overlap) comes on day 2.
+  const meds = [
+    newMedicine({ name: "Balanced oil", form: "Oil", strength: "THC 20 : CBD 20", amount: 0.5, when: ["Morning", "Bedtime"], howTo: "Under the tongue, hold for a minute", asNeeded: "" }, first, "oil"),
+    newMedicine({ name: "Flower T22", form: "Flower", strength: "THC 22%", amount: 0.1, when: ["When needed"], howTo: "In your vaporiser", asNeeded: "Up to 0.1 g on a flare day" }, first, "flower"),
+  ];
   const r = rng(42);
   const span = daysBetween(first, end);
   const days: Day[] = [];
@@ -41,9 +43,9 @@ export function demoStore(): Store {
     const grade = (base: number) => Math.max(0, Math.min(3, Math.round(base + (r() - 0.5) * 1.6)));
     const grades = { pain: grade(2.4 - 0.8 * p), sleep: grade(2.2 - 1.0 * p), fatigue: grade(2.0 - 0.2 * p), mood: grade(1.4 - 0.2 * p) };
     const relief = () => Math.max(0, Math.min(3, Math.round(1.1 + 0.9 * p + (r() - 0.5) * 1.8)));
-    const doses = [
-      { time: "08:30", med: "oil", amount: 0.5, relief: relief() as number | undefined },
-      { time: "21:30", med: "oil", amount: 0.5, relief: relief() as number | undefined },
+    const doses: Dose[] = [
+      { time: "08:30", med: "oil", amount: 0.5, slot: "Morning", relief: relief() },
+      { time: "21:30", med: "oil", amount: 0.5, slot: "Bedtime", relief: relief() },
     ];
     if (grades.pain === 3) doses.splice(1, 0, { time: "15:10", med: "flower", amount: 0.1, relief: relief() });
     const side = [r() < 0.5 ? "Dry mouth" : "", r() < 0.2 ? "Drowsy" : "", r() < 0.06 ? "Dizzy" : ""].filter(Boolean);
@@ -52,6 +54,6 @@ export function demoStore(): Store {
   }
   // Last night's dose hasn't been rated yet, and this morning's dose is in: Mallow asks on opening.
   delete days[days.length - 1].doses.at(-1)!.relief;
-  days.push({ date: end, logged: false, grades: {}, doses: [{ time: "08:30", med: "oil", amount: 0.5, relief: 1 }], side: [] });
-  return { meds, tracked: ["pain", "sleep", "fatigue", "mood"], doctor: "Dr Patel", past, next: addDays(end, 9), days };
+  days.push({ date: end, logged: false, grades: {}, doses: [{ time: "08:30", med: "oil", amount: 0.5, slot: "Morning", relief: 1 }], side: [] });
+  return { version: 2, condition: "pain", baseline: { pain: 3, sleep: 3, fatigue: 2, mood: 2 }, meds, tracked: ["pain", "sleep", "fatigue", "mood"], doctor: "Dr Patel", past, next: addDays(end, 9), days };
 }

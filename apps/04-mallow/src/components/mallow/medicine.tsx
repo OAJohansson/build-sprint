@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { amountLabel, timesOfDay, units, type Form, type Medicine } from "@/lib/mallow/data";
+import { amountLabel, timesOfDay, today, units, type Form, type Medicine } from "@/lib/mallow/data";
+import type { MedicineFields } from "@/lib/mallow/history";
 import { Chips, Choice, Muted, Primary, toggleIn } from "./shared";
 
-// Adding (or editing) a medicine: one question per screen, the way it's written on the label.
+// Adding (or editing) a medicine in My plan: one question per screen, the way it's written on the
+// label. Setup asks the essentials (form, name, amount, times); Care adds how to take it and the
+// as-needed rule (`full`), so setup stays within 90 seconds (owner, 20 Oct).
 
 const forms: { form: Form; sub: string }[] = [
   { form: "Oil", sub: "Drops or a syringe, under the tongue" },
@@ -18,13 +21,17 @@ export function MedicineFlow({
   initial,
   onSave,
   onCancel,
-  onRemove,
+  onStop,
+  onSkip,
+  full = false,
   cancelLabel = "Cancel",
 }: {
   initial?: Medicine;
-  onSave: (m: Medicine) => void;
+  onSave: (fields: MedicineFields, startDate: string) => void;
   onCancel: () => void;
-  onRemove?: () => void;
+  onStop?: () => void;
+  onSkip?: () => void;
+  full?: boolean;
   cancelLabel?: string;
 }) {
   const [step, setStep] = useState(initial ? 1 : 0);
@@ -33,7 +40,13 @@ export function MedicineFlow({
   const [strength, setStrength] = useState(initial?.strength ?? "");
   const [amount, setAmount] = useState(initial?.amount ?? units.Oil.start);
   const [when, setWhen] = useState<string[]>(initial?.when ?? []);
+  const [startDate, setStartDate] = useState(initial?.startDate ?? today());
+  const [howTo, setHowTo] = useState(initial?.howTo ?? "");
+  const [asNeeded, setAsNeeded] = useState(initial?.asNeeded ?? "");
   const u = units[form];
+  const steps = full ? 4 : 3;
+  const save = () =>
+    onSave({ name: name.trim(), form, strength: strength.trim(), amount, when, howTo: howTo.trim(), asNeeded: when.includes("When needed") ? asNeeded.trim() : "" }, startDate);
 
   const back = () => (step === 0 || (initial && step === 1) ? onCancel() : setStep(step - 1));
 
@@ -44,7 +57,7 @@ export function MedicineFlow({
           {step === 0 || (initial && step === 1) ? cancelLabel : "← Back"}
         </button>
         <span className="tnum text-sm" style={{ color: "var(--ink-faint)" }}>
-          {step + 1} of 3
+          {step + 1} of {steps}
         </span>
       </div>
 
@@ -68,6 +81,11 @@ export function MedicineFlow({
                 </Choice>
               ))}
             </div>
+            {onSkip && (
+              <button onClick={onSkip} className="press mt-4 min-h-11 text-sm" style={{ color: "var(--ink-soft)" }}>
+                Skip for now
+              </button>
+            )}
           </>
         )}
 
@@ -82,7 +100,7 @@ export function MedicineFlow({
               id="med-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder={form === "Flower" ? "e.g. Flower T22" : "e.g. Balanced oil"}
+              placeholder="As on your label"
               autoComplete="off"
               className="mt-1.5 min-h-12 w-full rounded-xl border bg-white px-4 outline-none focus:border-[var(--mallow)]"
               style={{ borderColor: "var(--line)" }}
@@ -94,7 +112,7 @@ export function MedicineFlow({
               id="med-strength"
               value={strength}
               onChange={(e) => setStrength(e.target.value)}
-              placeholder={form === "Flower" ? "e.g. THC 22%" : "e.g. THC 20 : CBD 20"}
+              placeholder="THC and CBD, as on your label"
               autoComplete="off"
               className="mt-1.5 min-h-12 w-full rounded-xl border bg-white px-4 outline-none focus:border-[var(--mallow)]"
               style={{ borderColor: "var(--line)" }}
@@ -102,9 +120,9 @@ export function MedicineFlow({
             <Primary className="mt-auto" disabled={!name.trim()} onClick={() => setStep(2)}>
               Next
             </Primary>
-            {onRemove && (
-              <button onClick={onRemove} className="press mt-3 min-h-11 text-sm" style={{ color: "var(--ink-soft)" }}>
-                I don&apos;t take this any more
+            {onStop && (
+              <button onClick={onStop} className="press mt-3 min-h-11 text-sm" style={{ color: "var(--ink-soft)" }}>
+                I&apos;ve stopped taking this
               </button>
             )}
           </>
@@ -112,8 +130,8 @@ export function MedicineFlow({
 
         {step === 2 && (
           <>
-            <h1 className="serif text-[1.75rem] leading-tight">How much do you usually take?</h1>
-            <Muted className="mt-2">You can change it each time you log a dose.</Muted>
+            <h1 className="serif text-[1.75rem] leading-tight">How much, as your doctor prescribed?</h1>
+            <Muted className="mt-2">Copy it from your pharmacy label. You can change it each time you log a dose.</Muted>
             <div className="mt-6 flex items-center justify-between rounded-2xl border bg-white p-2" style={{ borderColor: "var(--line)" }}>
               <Step label="Less" onClick={() => setAmount((a) => Math.max(u.step, +(a - u.step).toFixed(2)))}>
                 −
@@ -123,14 +141,58 @@ export function MedicineFlow({
                 +
               </Step>
             </div>
-            <p className="mb-2 mt-6 text-sm font-medium">When do you usually take it?</p>
+            <p className="mb-2 mt-6 text-sm font-medium">When does your prescription say to take it?</p>
             <Chips options={timesOfDay} value={when} onToggle={(t) => setWhen(toggleIn(when, t))} />
-            <Primary
-              className="mt-auto"
-              onClick={() =>
-                onSave({ id: initial?.id ?? `m${Date.now()}`, name: name.trim(), form, strength: strength.trim(), amount, when })
-              }
-            >
+            <label className="mb-6 mt-6 flex min-h-14 items-center justify-between rounded-2xl border bg-white px-4" style={{ borderColor: "var(--line)" }}>
+              <span className="font-medium">Started</span>
+              <input
+                type="date"
+                name="start-date"
+                value={startDate}
+                max={today()}
+                onChange={(e) => e.target.value && setStartDate(e.target.value)}
+                className="tnum min-h-10 bg-transparent text-right outline-none"
+              />
+            </label>
+            <Primary className="mt-auto" onClick={() => (full ? setStep(3) : save())}>
+              {full ? "Next" : initial ? "Save" : "Add medicine"}
+            </Primary>
+          </>
+        )}
+
+        {step === 3 && (
+          <>
+            <h1 className="serif text-[1.75rem] leading-tight">How do you take it?</h1>
+            <Muted className="mt-2">In your own words, from your label or your doctor. Both optional.</Muted>
+            <label className="mt-6 block text-sm font-medium" htmlFor="med-how">
+              How to take it
+            </label>
+            <input
+              id="med-how"
+              value={howTo}
+              onChange={(e) => setHowTo(e.target.value)}
+              placeholder={howToHint[form]}
+              autoComplete="off"
+              className="mt-1.5 min-h-12 w-full rounded-xl border bg-white px-4 outline-none focus:border-[var(--mallow)]"
+              style={{ borderColor: "var(--line)" }}
+            />
+            {when.includes("When needed") && (
+              <>
+                <label className="mt-4 block text-sm font-medium" htmlFor="med-as-needed">
+                  When needed: what does the label say?
+                </label>
+                <input
+                  id="med-as-needed"
+                  value={asNeeded}
+                  onChange={(e) => setAsNeeded(e.target.value)}
+                  placeholder="As written on your label"
+                  autoComplete="off"
+                  className="mt-1.5 min-h-12 w-full rounded-xl border bg-white px-4 outline-none focus:border-[var(--mallow)]"
+                  style={{ borderColor: "var(--line)" }}
+                />
+              </>
+            )}
+            <Primary className="mt-auto" onClick={save}>
               {initial ? "Save" : "Add medicine"}
             </Primary>
           </>
@@ -139,6 +201,15 @@ export function MedicineFlow({
     </div>
   );
 }
+
+// Examples of how a form is taken, from the form alone; never an amount (guardrails).
+const howToHint: Record<Form, string> = {
+  Oil: "e.g. Under the tongue",
+  Flower: "e.g. In my vaporiser",
+  Vape: "e.g. With my vape pen",
+  Capsule: "e.g. By mouth",
+  Other: "",
+};
 
 function Step({ onClick, label, children }: { onClick: () => void; label: string; children: React.ReactNode }) {
   return (

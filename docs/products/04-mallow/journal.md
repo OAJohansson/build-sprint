@@ -125,3 +125,54 @@ What happened, what was decided and why. Newest last.
   hour; a "time passes" scenario in every test plan; walk the brief on a fresh install before testing.
 - New problems added to the list while waiting for the deploy: food research while travelling, and
   a quick, pleasant book log.
+
+## 20 Oct · v2 rebuild
+
+### The v2 brief
+- **Owner wrote a v2 rebuild brief** (two days): conditions beyond pain, a before-treatment
+  baseline, My plan with a medicine history, Today following the plan, "Know your medicine"
+  cards, and a trend graph per symptom with a medicine strip as the new main screen.
+- **Decision: lift two v1 no-gos** (medication schedules, educational content). Why: research
+  showed patients pick products with little guidance (CQC on Alternaleaf), Montu's tools don't
+  track doses or show change, and retention is how a clinic that can't advertise grows.
+- **Decision: evidence comes from the daily log, not from asking.** Per-dose relief becomes
+  optional and is only used to tell apart medicines taken in the same weeks. The app shows
+  change next to what was taken and never says the medicine caused it.
+- Written up as a v2 section in the brief before code; out-of-scope items moved to the backlog.
+- **Scope re-cut said out loud:** stop line for day 2, cut in order: "Other forms" cards, the
+  3-month range, amount-change markers. The graph, the strip, the summary and the guardrails stay.
+
+### Owner's calls before code
+- **Goal 1 reworded** to "understand the medicine I've been prescribed, and know what to ask my
+  doctor". Coaching: "options" promised a choice the guardrails don't allow.
+- **Midnight:** a bedtime dose after midnight counts toward the previous night (schedule day ends
+  about 04:00). **Relief:** a quiet line per medicine in the summary when medicines overlap.
+  **Setup:** one medicine's essentials only; the rest in Care, to hold 90 s.
+- Next: branch `04-mallow-v2` from main (keeps the uncommitted 08 Selvedge work out), then day 1.
+
+### Day 1 build: conditions, before treatment, My plan, Today follows the plan
+- Branch `04-mallow-v2` from `origin/main` (local main was behind). Vitest added (v1 predated
+  decision 0011).
+- **Data:** 4 new symptoms (Appetite, Muscle spasm, Concentration, Period or pelvic pain), a
+  condition → suggested symptoms list, a before-treatment grade per symptom, and each medicine now
+  carries `startDate`, `stopDate` and `changes` (the first entry is the starting amount). v1 data
+  is upgraded when read (`migrate`): a medicine starts at the first appointment or its first dose,
+  whichever came first. Checked in the browser with a real v1 store.
+- **Schedule:** a plan day runs 04:00 to 04:00 (owner's call); a ticked dose keeps its slot, so a
+  bedtime dose at 00:30 counts for last night. 19 unit tests (schedule, history, migration).
+- **Setup:** welcome → condition → suggested symptoms → before treatment → one medicine
+  (with a start date) → appointments. Fresh install walked: about 14 taps plus the name.
+  "Skip" on before-treatment made a quiet secondary button, so the starting point isn't skipped
+  by default.
+- **Care:** My plan ("As your doctor prescribed"), how to take it and the as-needed rule, history
+  line ("Since 25 Sep · changed 20 Oct"), stop keeps the history (a medicine added today by mistake
+  is removed instead), stopped list, before-treatment editing.
+- **Today:** "Your plan today" with 1-tap ticks, "Now / Later / Not taken" in the same grey (no
+  red, no streaks); as-needed via "Took a dose" (as-needed medicines first, their label rule shown).
+  **Relief made optional:** the prompt only appears when more than one medicine is in use (the
+  only thing relief is used for), with "Not now" for the day. Claude's call, flagged to owner.
+- **Guardrail near misses fixed:** example hints "With food" and "Slow puffs" read as advice
+  (now "By mouth", "With my vape pen"); name and strength placeholders looked like real products
+  ("Flower T22", "THC 22%"), now "As on your label".
+- **Noticed for day 2:** with a two-slot plan the Took a dose / check-in buttons fall below the
+  fold on a 375 × 812 phone; look at it with break-ui.

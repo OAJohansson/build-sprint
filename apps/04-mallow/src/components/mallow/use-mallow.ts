@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useSyncExternalStore } from "react";
+import { useCallback, useMemo, useSyncExternalStore } from "react";
 import { demoStore } from "@/lib/mallow/demo";
-import type { Store } from "@/lib/mallow/store";
+import { migrate, type Store } from "@/lib/mallow/store";
 import { useLocalStorage } from "@/lib/use-local-storage";
 
 // Real entries and the demo live under separate keys, so trying the demo never touches real data.
@@ -13,10 +13,11 @@ export function useMallow() {
   const [real, setReal] = useLocalStorage<Store | null>("04-mallow:data", null);
   const [demo, setDemo] = useLocalStorage<Store | null>("04-mallow:demo", null);
   const raw = mode === "demo" ? demo : real;
-  const store = raw;
+  // v1 data is upgraded when read; it's written back in the new shape on the next change.
+  const store = useMemo(() => (raw ? migrate(raw) : raw), [raw]);
 
   const setStore = useCallback(
-    (fn: (s: Store) => Store) => (mode === "demo" ? setDemo : setReal)((s) => (s ? fn(s) : s)),
+    (fn: (s: Store) => Store) => (mode === "demo" ? setDemo : setReal)((s) => (s ? fn(migrate(s)) : s)),
     [mode, setDemo, setReal],
   );
 

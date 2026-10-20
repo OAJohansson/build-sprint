@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { amountLabel, symptomCatalogue, type Medicine } from "@/lib/mallow/data";
+import { amountLabel, short, symptomById, symptomCatalogue, today, type Medicine } from "@/lib/mallow/data";
+import { newMedicine, stopMedicine, updateMedicine } from "@/lib/mallow/history";
 import { MedicineScreen } from "./medicine";
-import { Chips, Muted, Secondary, toggleIn } from "./shared";
+import { Chips, CompactGrades, Muted, Primary, Secondary, Sheet, toggleIn } from "./shared";
 import { lastOf, type Store } from "@/lib/mallow/store";
 
-// Care: what you take, what you track, and when the appointments are.
+// Care: my plan (what I take, as prescribed, with its history), what I track and how it was
+// before treatment, and when the appointments are.
 
 export function Care({
   store,
@@ -28,21 +30,34 @@ export function Care({
   setAddingMedicine: (v: boolean) => void;
 }) {
   const [editing, setEditing] = useState<Medicine>();
+  const [baselineOpen, setBaselineOpen] = useState(false);
   const last = lastOf(store);
+  const current = store.meds.filter((m) => !m.stopDate || m.stopDate > today());
+  const stopped = store.meds.filter((m) => m.stopDate && m.stopDate <= today());
 
   return (
     <main className="mx-auto w-full max-w-[440px] px-5 pb-36 pt-[calc(env(safe-area-inset-top)+20px)]">
       <h1 className="serif text-[2rem] leading-tight">Care</h1>
 
-      <Section title="Your medicine">
+      <Section title="My plan" hint="As your doctor prescribed. When it changes, update it here and Mallow remembers what you took and when.">
         <ul className="divide-y rounded-2xl border bg-white" style={{ borderColor: "var(--line)" }}>
-          {store.meds.map((m) => (
+          {current.map((m) => (
             <li key={m.id} style={{ borderColor: "var(--line)" }}>
               <button onClick={() => setEditing(m)} className="press flex min-h-16 w-full items-center justify-between gap-3 px-4 py-3 text-left">
-                <span>
-                  <span className="block font-medium">{m.name}</span>
+                <span className="min-w-0">
+                  <span className="block break-words font-medium">{m.name}</span>
                   <span className="block text-sm" style={{ color: "var(--ink-soft)" }}>
-                    {[m.form, m.strength, `${amountLabel(m)} usually`, m.when.join(", ").toLowerCase()].filter(Boolean).join(" · ")}
+                    {[m.form, m.strength, amountLabel(m), m.when.join(", ").toLowerCase()].filter(Boolean).join(" · ")}
+                  </span>
+                  {(m.howTo || m.asNeeded) && (
+                    <span className="block break-words text-sm" style={{ color: "var(--ink-soft)" }}>
+                      {[m.howTo, m.asNeeded].filter(Boolean).join(" · ")}
+                    </span>
+                  )}
+                  <span className="block text-xs" style={{ color: "var(--ink-faint)" }}>
+                    Since {short(m.startDate)}
+                    {m.changes.length > 1 ? ` · changed ${short(m.changes.at(-1)!.date)}` : ""}
+                    {m.stopDate ? ` · stops ${short(m.stopDate)}` : ""}
                   </span>
                 </span>
                 <span aria-hidden style={{ color: "var(--ink-faint)" }}>
@@ -61,6 +76,11 @@ export function Care({
             </button>
           </li>
         </ul>
+        {stopped.length > 0 && (
+          <Muted className="mt-3">
+            Stopped: {stopped.map((m) => `${m.name} (${short(m.startDate)} to ${short(m.stopDate!)})`).join(", ")}
+          </Muted>
+        )}
       </Section>
 
       <Section title="What you track" hint="Up to four, so a check-in stays quick.">
@@ -75,6 +95,24 @@ export function Care({
             });
           }}
         />
+      </Section>
+
+      <Section title="Before treatment" hint="How things were before you started. Your starting point in graphs and the summary.">
+        <button
+          onClick={() => setBaselineOpen(true)}
+          className="press w-full divide-y rounded-2xl border bg-white text-left"
+          style={{ borderColor: "var(--line)" }}
+          aria-label="Change how things were before treatment"
+        >
+          {store.tracked.map(symptomById).map((sym) => (
+            <span key={sym.id} className="flex min-h-12 items-center justify-between gap-3 px-4" style={{ borderColor: "var(--line)" }}>
+              <span className="font-medium">{sym.name}</span>
+              <span className="text-sm" style={{ color: "var(--ink-soft)" }}>
+                {store.baseline[sym.id] !== undefined ? sym.grades[store.baseline[sym.id]][0] : "Not set"} ›
+              </span>
+            </span>
+          ))}
+        </button>
       </Section>
 
       <Section title="Appointments">
@@ -117,25 +155,57 @@ export function Care({
         </div>
       </Section>
 
+      <Sheet open={baselineOpen} onClose={() => setBaselineOpen(false)} label="Before treatment">
+        <h2 className="serif text-2xl">Before you started treatment</h2>
+        <Muted className="mt-1">Tap a word again to clear it.</Muted>
+        <div className="mt-5 space-y-4">
+          <CompactGrades
+            tracked={store.tracked}
+            grades={store.baseline}
+            questions="before"
+            onPick={(id, g) =>
+              setStore((s) => {
+                const baseline = { ...s.baseline };
+                if (baseline[id] === g) delete baseline[id];
+                else baseline[id] = g;
+                return { ...s, baseline };
+              })
+            }
+          />
+        </div>
+        <Primary className="mt-6" onClick={() => setBaselineOpen(false)}>
+          Done
+        </Primary>
+      </Sheet>
+
       {(addingMedicine || editing) && (
         <MedicineScreen
+          full
           initial={editing}
           onCancel={() => {
             setEditing(undefined);
             setAddingMedicine(false);
           }}
-          onRemove={
-            editing && store.meds.length > 1
+          onStop={
+            editing
               ? () => {
-                  setStore((s) => ({ ...s, meds: s.meds.filter((x) => x.id !== editing.id) }));
+                  if (!window.confirm(`Stop ${editing.name} from today? Mallow keeps what you took before.`)) return;
+                  // Added today by mistake and never taken: remove it rather than keep a one-day history.
+                  const neverTaken = editing.startDate >= today() && !store.days.some((d) => d.doses.some((x) => x.med === editing.id));
+                  setStore((s) => ({
+                    ...s,
+                    meds: neverTaken ? s.meds.filter((x) => x.id !== editing.id) : s.meds.map((x) => (x.id === editing.id ? stopMedicine(x, today()) : x)),
+                  }));
                   setEditing(undefined);
                 }
               : undefined
           }
-          onSave={(m) => {
+          onSave={(fields, startDate) => {
             setStore((s) => ({
               ...s,
-              meds: s.meds.some((x) => x.id === m.id) ? s.meds.map((x) => (x.id === m.id ? m : x)) : [...s.meds, m],
+              meds: editing
+                ? s.meds.map((x) => (x.id === editing.id ? updateMedicine(x, { ...fields, startDate }, today()) : x))
+                : [...s.meds, newMedicine(fields, startDate)],
             }));
             setEditing(undefined);
             setAddingMedicine(false);

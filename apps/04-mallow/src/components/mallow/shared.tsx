@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
-import { reliefOptions, sideEffects, symptomById } from "@/lib/mallow/data";
+import { useEffect, useState } from "react";
+import { reliefOptions, sideEffects, symptomById, today } from "@/lib/mallow/data";
+import { roughDate, roughOf, roughOptions } from "@/lib/mallow/rough-date";
 
 // Small pieces the screens share.
 
@@ -264,6 +265,44 @@ export function ChipRow({
           </button>
         );
       })}
+    </div>
+  );
+}
+
+// "About when?" for a date the patient may not know: quick picks, or an exact date. Empty until
+// they choose; nothing is filled in for them (owner, 20 Oct).
+export function RoughDate({ value, onChange, label }: { value?: string; onChange: (date?: string) => void; label: string }) {
+  const picked = roughOf(value);
+  const [exact, setExact] = useState(!!value && !picked);
+  const pickLabel = "Pick a date";
+  return (
+    <div>
+      <p className="mb-2 text-sm font-medium">{label}</p>
+      <Chips
+        options={[...roughOptions.map((o) => o.label), pickLabel]}
+        value={exact ? [pickLabel] : roughOptions.filter((o) => o.id === picked).map((o) => o.label)}
+        onToggle={(l) => {
+          const o = roughOptions.find((x) => x.label === l);
+          if (o) {
+            setExact(false);
+            onChange(picked === o.id ? undefined : roughDate(o.id));
+          } else {
+            setExact(!exact);
+            if (exact) onChange(undefined);
+          }
+        }}
+      />
+      {exact && (
+        <input
+          type="date"
+          aria-label={label}
+          value={value ?? ""}
+          max={today()}
+          onChange={(e) => onChange(e.target.value || undefined)}
+          className="tnum mt-3 min-h-12 w-full rounded-xl border bg-white px-4 outline-none focus:border-[var(--mallow)]"
+          style={{ borderColor: "var(--line)" }}
+        />
+      )}
     </div>
   );
 }

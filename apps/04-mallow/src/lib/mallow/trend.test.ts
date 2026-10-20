@@ -67,11 +67,30 @@ describe("plain line", () => {
   beforeEach(() => vi.useFakeTimers().setSystemTime(new Date(2026, 9, 20, 12, 0)));
   afterEach(() => vi.useRealTimers());
 
-  it("names the first medicine, the usual word and the baseline, without claims", () => {
-    const s = store(run("2026-09-03", Array(30).fill(1)), { baseline: { sleep: 2 } });
+  it("then → now: before treatment against the last 4 weeks, without claims", () => {
+    // 48 days of check-ins: "poorly" (2) for 20 days, then "a bit broken" (1) for the last 28.
+    const s = store(run("2026-09-03", [...Array(20).fill(2), ...Array(28).fill(1)]), { baseline: { sleep: 2 } });
     const line = plainLine(s, "sleep")!;
-    expect(line).toBe("Since starting Balanced oil (3 Sep): sleep mostly a bit broken. Before treatment: poorly.");
-    expect(line).not.toMatch(/work|effective|because/i);
+    expect(line).toBe("Sleep before treatment: poorly. Last 4 weeks: a bit broken · better.");
+    expect(line).not.toMatch(/work|effective|because|helped/i);
+  });
+  it("'now' is the stretch since the last appointment when there is one (the Summary's window)", () => {
+    const days = run("2026-09-03", [...Array(28).fill(2), ...Array(20).fill(0)]);
+    const s = store(days, { baseline: { sleep: 2 }, past: ["2026-09-03", "2026-10-01"] });
+    expect(plainLine(s, "sleep")).toBe("Sleep before treatment: poorly. Now (since 1 Oct): well · better.");
+  });
+  it("without a starting point, compares with the first 4 weeks once there are 8 weeks", () => {
+    const early = newMedicine({ ...base, name: "Balanced oil", form: "Oil", amount: 0.5 }, "2026-08-20", "oil");
+    expect(plainLine(store(run("2026-08-20", Array(62).fill(2)), { meds: [early] }), "sleep")).toBe(
+      "Sleep in the first 4 weeks: poorly. Last 4 weeks: poorly · about the same.",
+    );
+  });
+  it("short history: 'since starting', with the baseline when there is one", () => {
+    const recent = newMedicine({ ...base, name: "Balanced oil", form: "Oil", amount: 0.5 }, "2026-10-10", "oil");
+    expect(plainLine(store(run("2026-10-10", Array(11).fill(1)), { meds: [recent] }), "sleep")).toBe("Since starting Balanced oil (10 Oct): sleep mostly a bit broken.");
+    expect(plainLine(store(run("2026-10-10", Array(11).fill(1)), { meds: [recent], baseline: { sleep: 3 } }), "sleep")).toBe(
+      "Sleep before treatment: barely. Since starting Balanced oil (10 Oct): a bit broken · better.",
+    );
   });
   it("says 'treatment' when two medicines started together, and nothing with no check-ins", () => {
     const vape = newMedicine({ ...base, name: "Vape", form: "Vape", amount: 2 }, "2026-09-03", "vape");

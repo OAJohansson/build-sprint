@@ -44,20 +44,27 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
           <dl className="mt-5 divide-y rounded-2xl border bg-white" style={{ borderColor: "var(--line)" }}>
             {store.tracked.map(symptomById).map((s) => (
               <div key={s.id} className="px-4 py-3" style={{ borderColor: "var(--line)" }}>
-                <div className="flex items-baseline justify-between gap-3">
-                  <dt className="font-medium">{s.name}</dt>
-                  {enough && b?.averages[s.id] !== undefined && a.averages[s.id] !== undefined && (
-                    <dd className="whitespace-nowrap text-sm font-medium" style={{ color: "var(--mallow-deep)" }}>
-                      {trendWord(b.averages[s.id], a.averages[s.id])}
-                    </dd>
-                  )}
-                </div>
+                <dt className="font-medium">{s.name}</dt>
+                {/* Two comparisons, each named, so they never seem to disagree (owner, 20 Oct). */}
                 <dd className="text-sm" style={{ color: "var(--ink-soft)" }}>
-                  {fromTo(gradeWord(s, b?.averages[s.id]), gradeWord(s, a.averages[s.id]), b?.averages[s.id] !== undefined)}
+                  {enough && b?.averages[s.id] !== undefined && a.averages[s.id] !== undefined ? (
+                    <>
+                      <span className="font-medium" style={{ color: "var(--mallow-deep)" }}>
+                        Since last visit: {trendWord(b.averages[s.id], a.averages[s.id]).toLowerCase()}
+                      </span>
+                      {" · "}
+                      {fromTo(gradeWord(s, b.averages[s.id]), gradeWord(s, a.averages[s.id]), true)}
+                    </>
+                  ) : (
+                    fromTo(gradeWord(s, b?.averages[s.id]), gradeWord(s, a.averages[s.id]), false)
+                  )}
                 </dd>
                 {enough && store.baseline[s.id] !== undefined && a.averages[s.id] !== undefined && (
                   <dd className="text-sm" style={{ color: "var(--ink-soft)" }}>
-                    Before treatment: {s.grades[store.baseline[s.id]][0].toLowerCase()}. Now: {trendWord(store.baseline[s.id], a.averages[s.id]).toLowerCase()}.
+                    <span className="font-medium" style={{ color: "var(--mallow-deep)" }}>
+                      Since before treatment: {trendWord(store.baseline[s.id], a.averages[s.id]).toLowerCase()}
+                    </span>
+                    {" · "}was {s.grades[store.baseline[s.id]][0].toLowerCase()}
                   </dd>
                 )}
               </div>
@@ -99,10 +106,10 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
   );
 }
 
-// "Poorly → a bit broken", or "Mostly moderate" when both periods round to the same word.
+// "poorly → a bit broken", or "mostly moderate" when both periods round to the same word.
 function fromTo(before: string, now: string, hasBefore: boolean) {
-  if (!hasBefore || before === now) return `Mostly ${now.toLowerCase()}`;
-  return `${before} → ${now.toLowerCase()}`;
+  if (!hasBefore || before === now) return hasBefore ? `mostly ${now.toLowerCase()}` : `Mostly ${now.toLowerCase()}`;
+  return `${before.toLowerCase()} → ${now.toLowerCase()}`;
 }
 
 // What the clinician adjusts: each medicine in use during the stretch, the amount (and any change

@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { addDays, conditions, symptomById, symptomCatalogue, today, type Medicine } from "@/lib/mallow/data";
+import { amountLabel, conditions, symptomById, symptomCatalogue, today, type Medicine } from "@/lib/mallow/data";
 import { newMedicine } from "@/lib/mallow/history";
 import { MedicineFlow } from "./medicine";
-import { Chips, Choice, CompactGrades, Muted, Primary, Secondary, toggleIn } from "./shared";
+import { Chips, Choice, CompactGrades, Muted, Primary, RoughDate, Secondary, toggleIn } from "./shared";
 import type { Store } from "@/lib/mallow/store";
 
 // First run: why Mallow exists, the condition (which suggests symptoms), how things were before
-// treatment, one medicine's essentials, the appointments. Then Today. Every step can be skipped.
+// treatment, the essentials of each medicine ("Anything else on your plan?"), the appointments.
+// Then Today. Every step can be skipped, and no date is filled in for her (owner, 20 Oct).
 
 export function Setup({ onDone, onDemo }: { onDone: (s: Store) => void; onDemo: () => void }) {
   const [step, setStep] = useState(0);
@@ -16,12 +17,17 @@ export function Setup({ onDone, onDemo }: { onDone: (s: Store) => void; onDemo: 
   const [meds, setMeds] = useState<Medicine[]>([]);
   const [tracked, setTracked] = useState<string[]>(["pain", "sleep"]);
   const [baseline, setBaseline] = useState<Record<string, number>>({});
-  const [last, setLast] = useState(() => addDays(today(), -28));
+  const [adding, setAdding] = useState(true);
+  const [last, setLast] = useState<string>();
   const [next, setNext] = useState("");
   const [doctor, setDoctor] = useState("");
 
+  // Summaries run from the last appointment. Skipped: from when her first medicine started (or
+  // today), a real date she gave rather than a guessed appointment.
+  // shortcut: Care then shows that date as "Last" appointment; give the store "no appointment yet" if it confuses people.
+  const firstStart = meds.map((m) => m.startDate).sort()[0];
   const finish = () =>
-    onDone({ version: 2, condition, baseline: pick(baseline, tracked), meds, tracked, doctor, past: [last], next, days: [] });
+    onDone({ version: 2, condition, baseline: pick(baseline, tracked), meds, tracked, doctor, past: [last ?? firstStart ?? today()], next, days: [] });
   const back = (to: number) => (
     <button onClick={() => setStep(to)} className="press -ml-1 min-h-11 self-start px-1 text-sm" style={{ color: "var(--ink-soft)" }}>
       ← Back
@@ -124,19 +130,42 @@ export function Setup({ onDone, onDemo }: { onDone: (s: Store) => void; onDemo: 
         </section>
       )}
 
-      {step === 4 && (
+      {step === 4 && (adding || meds.length === 0) && (
         <div className="flex flex-1 flex-col">
           <MedicineFlow
             cancelLabel="← Back"
-            onCancel={() => setStep(3)}
-            onSkip={() => setStep(5)}
+            onCancel={() => (meds.length ? setAdding(false) : setStep(3))}
+            onSkip={meds.length ? undefined : () => setStep(5)}
             onSave={(fields, startDate) => {
-              setMeds([newMedicine(fields, startDate)]);
-              setStep(5);
+              setMeds((m) => [...m, newMedicine(fields, startDate, `m${Date.now()}-${m.length}`)]);
+              setAdding(false);
             }}
-            initial={meds[0]}
           />
         </div>
+      )}
+
+      {step === 4 && !adding && meds.length > 0 && (
+        <section className="enter flex flex-1 flex-col">
+          {back(3)}
+          <h1 className="serif mt-6 text-[1.75rem] leading-tight">Anything else on your plan?</h1>
+          <Muted className="mt-2">Like something for when you need it. You can add more later in Care.</Muted>
+          <ul className="mt-6 divide-y rounded-2xl border bg-white" style={{ borderColor: "var(--line)" }}>
+            {meds.map((m) => (
+              <li key={m.id} className="px-4 py-3" style={{ borderColor: "var(--line)" }}>
+                <span className="block break-words font-medium">{m.name}</span>
+                <span className="tnum text-sm" style={{ color: "var(--ink-soft)" }}>
+                  {amountLabel(m)} · {m.when.join(", ") || "No times yet"}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <Secondary className="mt-auto" onClick={() => setAdding(true)}>
+            Add another
+          </Secondary>
+          <Primary className="mt-3" onClick={() => setStep(5)}>
+            That&apos;s all
+          </Primary>
+        </section>
       )}
 
       {step === 5 && (
@@ -144,11 +173,10 @@ export function Setup({ onDone, onDemo }: { onDone: (s: Store) => void; onDemo: 
           {back(4)}
           <h1 className="serif mt-6 text-[1.75rem] leading-tight">When are your appointments?</h1>
           <Muted className="mt-2">Your summary covers everything since the last one.</Muted>
+          <div className="mt-6">
+            <RoughDate label="About when was your last one?" value={last} onChange={setLast} />
+          </div>
           <div className="mt-6 divide-y rounded-2xl border bg-white" style={{ borderColor: "var(--line)" }}>
-            <label className="flex min-h-14 items-center justify-between px-4" style={{ borderColor: "var(--line)" }}>
-              <span className="font-medium">Last appointment</span>
-              <input type="date" value={last} max={today()} onChange={(e) => e.target.value && setLast(e.target.value)} className="tnum min-h-10 bg-transparent text-right outline-none" />
-            </label>
             <label className="flex min-h-14 items-center justify-between px-4" style={{ borderColor: "var(--line)" }}>
               <span className="font-medium">Next appointment</span>
               <input type="date" value={next} min={today()} onChange={(e) => setNext(e.target.value)} className="tnum min-h-10 bg-transparent text-right outline-none" />

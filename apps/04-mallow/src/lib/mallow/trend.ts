@@ -62,8 +62,10 @@ export function plainLine(s: Store, id: string, end = today()) {
   const sym = symptomById(id);
   const start = treatmentStart(s.meds);
   if (!start) return undefined;
-  const now = mean(series(s, id, start, end));
-  if (now === undefined) return undefined;
+  const pts = series(s, id, start, end);
+  // Too few check-ins to say anything: no verdict from one or two days.
+  if (pts.filter((p) => p.grade !== undefined).length < MIN_IN_WINDOW) return undefined;
+  const now = mean(pts)!;
   const first = s.meds.filter((m) => m.startDate === start);
   const what = first.length === 1 ? first[0].name : "treatment";
   const base = s.baseline[id];

@@ -85,7 +85,8 @@ function Trends({ store, symptom, onPick }: { store: Store; symptom: string; onP
         ))}
       </div>
       <div className="mt-4">
-        <TrendChart store={store} symptom={symptom} range={range} />
+        {/* Keyed so a picked day never carries over to another symptom or range. */}
+        <TrendChart key={`${symptom}-${range}`} store={store} symptom={symptom} range={range} />
       </div>
     </section>
   );

@@ -61,3 +61,20 @@ put into your own words.*
 1. Ship the empty starter in the first hour (`pnpm ship` right after `pnpm new`), not after the design.
 2. Test plans include a "time passes" scenario: resume without reload, cross midnight, cross a key date.
 3. Before testing, walk every brief requirement on a fresh install, not the demo.
+
+## v2 (20 Oct)
+
+- **Evidence from the log, not from asking.** Moving "is it working?" from per-dose relief to
+  daily grades over time, with the medicines on the same axis, made relief optional and the
+  summary more honest. The app shows change next to what was taken; the doctor interprets.
+- **A design brief in one sentence.** The owner's "how the symptoms changed and what they were on"
+  decided every cut the critic suggested: dots only over 4 weeks, the takeaway above the graph,
+  medicine names instead of colours.
+- **Guardrails need a grep, not just good intentions.** The one breach ("How quickly it works")
+  was in a heading written after the copy review; placeholders like "Flower T22" looked like real
+  products. Keeping all copy in one file (`forms.ts`) made the check one read.
+- **Time is still where bugs hide.** The "time passes" test with a fake clock found a stale
+  "Noted" line after a plan day ended and confirmed the 04:00 plan day; the unit tests covered the
+  logic, the browser test covered what the user sees.
+- **Process:** the ship script deploys `main`, and a skip check that crashes looks like a broken
+  app; fixing it once in every app and the template beat patching Mallow alone.

@@ -40,21 +40,28 @@ export function TrendChart({ store, symptom, range }: { store: Store; symptom: s
   const stripTop = PLOT_H + AXIS_H;
   const height = stripTop + Math.max(bars.length, 1) * ROW_H + 4;
 
-  // The average line, broken wherever there were too few check-ins.
+  // The average line, broken wherever there were too few check-ins. A one-point piece gets a
+  // zero-length step so the round cap still draws it as a dot instead of vanishing.
   const segments: string[] = [];
   let cur = "";
+  let n = 0;
+  const close = () => {
+    if (cur) segments.push(n === 1 ? `${cur}l0.01,0` : cur);
+    cur = "";
+    n = 0;
+  };
   pts.forEach((p, i) => {
-    if (p.avg === undefined) {
-      if (cur) segments.push(cur);
-      cur = "";
-      return;
-    }
+    if (p.avg === undefined) return close();
     cur += `${cur ? "L" : "M"}${x(i).toFixed(1)},${yg(p.avg).toFixed(1)}`;
+    n++;
   });
-  if (cur) segments.push(cur);
+  close();
+  // Daily dots over 4 weeks, or whenever check-ins are few; across months of data they turn into
+  // bands and drown the line.
+  const showDots = range === "4w" || logged < 20;
 
   const appts = [...store.past, store.next].filter((d) => d && d >= from && d <= end);
-  const ticks = [0, Math.round(span / 2), span];
+  const ticks = pts.length === 1 ? [0] : [...new Set([0, Math.round(span / 2), span])];
   const h = hover !== undefined ? pts[hover] : undefined;
   // What was being taken that day: scheduled medicines in the plan, as-needed ones only if used.
   const isAsNeeded = (m: Store["meds"][number]) => !m.when.some((w) => w !== "When needed");
@@ -74,8 +81,8 @@ export function TrendChart({ store, symptom, range }: { store: Store; symptom: s
       <figcaption className="mb-3 text-base leading-relaxed">
         {plainLine(store, symptom) ?? <span style={{ color: "var(--ink-soft)" }}>A few days of check-ins and your trend appears here.</span>}
       </figcaption>
-      {/* One readout row, always the same height: the range at rest, the picked day when scrubbing. */}
-      <p className="tnum min-h-10 text-sm leading-snug" style={{ color: "var(--ink-soft)" }} aria-live="polite">
+      {/* One readout block, the same height either way (three lines): the range at rest, the picked day when scrubbing. */}
+      <p className="tnum min-h-[3lh] text-sm leading-snug [overflow-wrap:anywhere]" style={{ color: "var(--ink-soft)" }}>
         {h ? (
           <>
             <span className="font-medium" style={{ color: "var(--ink)" }}>
@@ -84,8 +91,9 @@ export function TrendChart({ store, symptom, range }: { store: Store; symptom: s
             {" · "}
             {h.grade !== undefined ? sym.grades[h.grade][0] : "Not logged"}
             {h.avg !== undefined ? ` (that week: ${gradeWord(sym, h.avg).toLowerCase()})` : ""}
-            <br />
-            {onMeds.length ? onMeds.map((m) => `${amountLabel(m, amountOn(m, h.date))} ${m.name}`).join(", ") : "No medicine in your plan"}
+            <span className="block truncate">
+              {onMeds.length ? onMeds.map((m) => `${amountLabel(m, amountOn(m, h.date))} ${m.name}`).join(", ") : "No medicine in your plan"}
+            </span>
           </>
         ) : (
           <>
@@ -98,7 +106,20 @@ export function TrendChart({ store, symptom, range }: { store: Store; symptom: s
 
       <div ref={box} className="mt-2 w-full">
         {width > 0 && (
-          <svg width={width} height={height} role="img" aria-label={`${sym.name} over ${rangeLabel[range].toLowerCase()}, with your medicines underneath`} className="block overflow-visible">
+          <svg
+            width={width}
+            height={height}
+            role="img"
+            tabIndex={0}
+            aria-label={`${sym.name} ${range === "all" ? "since starting" : `over ${rangeLabel[range]}`}, with your medicines underneath. Use the arrow keys to read a day.`}
+            className="block overflow-visible rounded-lg"
+            onKeyDown={(e) => {
+              const step: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1, Home: -Infinity, End: Infinity };
+              if (!(e.key in step)) return;
+              e.preventDefault();
+              setHover((hv) => Math.max(0, Math.min(span, (hv ?? span) + step[e.key])));
+            }}
+          >
             {/* Grade rows: the words are the axis. */}
             {sym.grades.map(([word], g) => (
               <g key={word}>
@@ -117,7 +138,7 @@ export function TrendChart({ store, symptom, range }: { store: Store; symptom: s
               </g>
             )}
             {baseline !== undefined && (
-              <text x={LABEL_W + (BEFORE_W - 4) / 2} y={baseline === 0 ? yg(baseline) - 14 : yg(baseline) + 22} fontSize={10} textAnchor="middle" fill="var(--ink-soft)">
+              <text x={LABEL_W + (BEFORE_W - 4) / 2} y={baseline === 0 ? yg(baseline) - 14 : yg(baseline) + 22} fontSize={11} textAnchor="middle" fill="var(--ink-soft)">
                 Before
               </text>
             )}
@@ -132,23 +153,22 @@ export function TrendChart({ store, symptom, range }: { store: Store; symptom: s
 
             {/* Daily dots, then the 7-day average on top. */}
             {/* Daily dots only over 4 weeks; across months they turn into bands and drown the line. */}
-            {range === "4w" &&
-              pts.map((p, i) => (p.grade === undefined ? null : <circle key={p.date} cx={x(i)} cy={yg(p.grade)} r={3} fill="var(--mallow)" opacity={0.6} />))}
+            {showDots && pts.map((p, i) => (p.grade === undefined ? null : <circle key={p.date} cx={x(i)} cy={yg(p.grade)} r={2.5} fill="var(--mallow)" />))}
             {segments.map((d) => (
               <path key={d} d={d} fill="none" stroke="var(--mallow-deep)" strokeWidth={2.5} strokeLinejoin="round" strokeLinecap="round" />
             ))}
 
             {/* Date ticks. */}
             {ticks.map((i, k) => (
-              <text key={i} x={k === 0 ? x(i) + 2 : x(i)} y={PLOT_H + 14} fontSize={10} fill="var(--ink-faint)" textAnchor={k === 0 ? "start" : k === 2 ? "end" : "middle"}>
-                {i === span ? "Today" : short(pts[i].date)}
+              <text key={i} x={k === 0 ? x(i) + 2 : x(i)} y={PLOT_H + 14} fontSize={11} fill="var(--ink-faint)" textAnchor={pts.length === 1 ? "start" : k === 0 ? "start" : i === span ? "end" : "middle"}>
+                {i === span || pts.length === 1 ? "Today" : short(pts[i].date)}
               </text>
             ))}
 
             {/* The medicine strip: a row per medicine, its name above a bar from start to stop. */}
             {bars.length === 0 && (
-              <text x={x0} y={stripTop + 16} fontSize={11} fill="var(--ink-faint)">
-                No medicine in your plan for these dates
+              <text x={0} y={stripTop + 16} fontSize={11} fill="var(--ink-faint)">
+                No medicine in your plan for these dates.
               </text>
             )}
             {bars.map((b, r) => {
@@ -160,16 +180,22 @@ export function TrendChart({ store, symptom, range }: { store: Store; symptom: s
               const amounts = asNeeded
                 ? "when needed"
                 : [amountOn(b.med, b.from), ...b.changes.map((c) => c.amount)].map((a) => amountLabel(b.med, a)).join(" → ");
-              const label = `${b.med.name}${form} · ${amounts}`;
+              // Fit the label to the strip's full width (it can start under the grade words); shorten
+              // only the name, never the amounts, which are what the doctor needs.
+              const tail = `${form} · ${amounts}`;
+              const room = Math.floor(x1 / 6.5);
+              const name = b.med.name.length + tail.length > room ? `${b.med.name.slice(0, Math.max(room - tail.length - 1, 6))}…` : b.med.name;
+              const label = `${name}${tail}`;
               // An as-needed medicine: a light bar with a tick on each day it was taken.
               const used = asNeeded ? pts.filter((p) => dayOf(store, p.date).doses.some((d) => d.med === b.med.id)).map((p) => p.date) : [];
               return (
                 <g key={b.med.id}>
-                  {/* Label at the bar's start, pulled left only as far as it needs to fit (about 6px a character). */}
-                  <text x={Math.max(x0, Math.min(bx, x1 - Math.min(label.length, 34) * 6))} y={top + 10} fontSize={11} fill="var(--ink-soft)">
-                    {label.length > 34 ? `${label.slice(0, 33)}…` : label}
+                  {/* Label at the bar's start, pulled left only as far as it needs to fit (about 6.5px a character). */}
+                  <text x={Math.max(0, Math.min(bx, x1 - label.length * 6.5))} y={top + 10} fontSize={11} fill="var(--ink-soft)">
+                    <title>{`${b.med.name}${tail}`}</title>
+                    {label}
                   </text>
-                  <rect x={bx} y={top + 17} width={bw} height={asNeeded ? 2 : 6} rx={3} fill={asNeeded ? "var(--line)" : "var(--ink-faint)"} />
+                  <rect x={bx} y={top + 17} width={bw} height={asNeeded ? 2 : 6} rx={asNeeded ? 1 : 3} fill="var(--ink-faint)" />
                   {used.map((d) => (
                     <circle key={d} cx={xDate(d)} cy={top + 18} r={2.5} fill="var(--ink-soft)" />
                   ))}
@@ -226,6 +252,9 @@ function useWidth() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // Measure now as well: ResizeObserver only reports on a rendered frame, which a page opened in
+    // the background (or resumed from it) may not get for a while.
+    setW(Math.round(el.getBoundingClientRect().width));
     const ro = new ResizeObserver(([e]) => setW(Math.round(e.contentRect.width)));
     ro.observe(el);
     return () => ro.disconnect();

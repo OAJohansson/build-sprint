@@ -488,7 +488,19 @@ from pictures. Blending all the ideas into one averages them into something gene
 *Where:* Six AM's ten directions on one page, then three built properly. *(Photographers'
 contact sheets; design studio practice)*
 
+#### Design for the decision (data-ink)
+Before drawing a chart, say in one sentence what the reader must conclude, then remove everything
+that doesn't help them get there: extra colours, numbers on every point, legends a label can
+replace, decoration. Why it matters: a chart read in 10 seconds (a video call) gets one glance; every
+competing mark costs that glance. *Where:* Mallow v2's graph: the owner's sentence ("how the
+symptoms changed and what they were on") cut daily dots from long ranges, put the takeaway above
+the graph and named medicines instead of colouring them. *(Edward Tufte's data-ink ratio, The
+Visual Display of Quantitative Information; Stephen Few on dashboards)*
+
 ### Quiz
+
+**Q:** What is "design for the decision", and how did it shape Mallow's graph?
+**A:** Name what the reader must conclude, then cut what doesn't serve it (Tufte's data-ink): the owner's one sentence removed daily dots over months, moved the takeaway above the graph and labelled medicines instead of colouring them.
 
 **Q:** What does Jakob's law say, and what did it change in Six AM?
 **A:** Users expect your product to work like the ones they already know; the owner expected a GarageBand-style timeline, so it replaced the jam grid.

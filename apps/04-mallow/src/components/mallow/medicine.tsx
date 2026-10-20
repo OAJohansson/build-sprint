@@ -51,7 +51,7 @@ export function MedicineFlow({
   const back = () => (step === 0 || (initial && step === 1) ? onCancel() : setStep(step - 1));
 
   return (
-    <div className="flex min-h-full flex-col">
+    <div className="flex min-h-full flex-1 flex-col">
       <div className="flex items-center justify-between">
         <button onClick={back} className="press -ml-1 min-h-11 px-1 text-sm" style={{ color: "var(--ink-soft)" }}>
           {step === 0 || (initial && step === 1) ? cancelLabel : "← Back"}

@@ -221,3 +221,29 @@ What happened, what was decided and why. Newest last.
 - **Demo rebuilt:** Sam (4 months, oil 0.5 → 0.7 ml at the third appointment, flower on flare days)
   and Priya (3 months, vape added halfway); missed days, a week away, bad days, baselines; switch in
   Care ("Demo: Sam / Demo: Priya").
+
+### Know your medicine, guardrail check, time passes
+- **Cards** for oil, flower, vape and capsule (`lib/mallow/forms.ts`, all copy in one file):
+  what it is, how it's taken, when it starts and how long it lasts (typical ranges plus "varies
+  from person to person"), common side effects (THC and CBD, general), storing it, driving and
+  travel, and 4 questions for the doctor. The only dose on a card is the patient's own, from My
+  plan, under "Your plan", with "Questions about your dose go to your doctor or pharmacist".
+  Own forms first, others under "Other forms"; reached from Care and from each medicine.
+- **Guardrail check of every new string.** Breach fixed: the heading "How quickly it **works**"
+  (now "When it starts and how long it lasts"). Near misses, kept and why:
+  - "Because it starts slowly and lasts a while, oil is often part of a regular daily plan" and
+    "flower is often prescribed for times when a faster effect is needed, like flare-ups": describe
+    how forms are prescribed, not what to take; no condition named.
+  - "If you feel drowsy, dizzy or slowed down, don't drive": an instruction, but road safety and UK
+    law, not a dose.
+  - "Effects come on slowly, so they can build up later than you expect": a fact about onset;
+    deliberately not "don't take more".
+  - "What's the most I should use in a day?": a question *to the doctor*, not an answer.
+  - v1's anxiety grade "Couldn't do things because of it": "because" refers to the anxiety.
+  - Changed earlier on day 1: "With food", "Slow puffs" (advice-like hints), "Flower T22" and
+    "THC 22%" placeholders (looked like real products and strengths).
+- **Time passes, with a fake clock in the browser** (no reload): 23:50 bedtime "Now"; 00:30 still
+  last night's, the tick stored on the real date; 04:10 a new plan day; the day after the
+  appointment the "Did it happen?" question appears; a vape added halfway shows in the graph and
+  first in "Took a dose". Found and fixed: "1 quick questions"; the "Noted…" line stayed after the
+  plan day ended; Next sat against the field in the full-screen medicine flow (v1).

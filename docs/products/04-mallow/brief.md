@@ -303,4 +303,19 @@ backlog updated.
 
 ## Success check (v2, at wrap-up)
 
-*To fill in.*
+*20 Oct, from Claude's checks in the browser, the unit tests and the hand counts. No user test
+(simulated or real) of v2 yet; that's the main gap.*
+
+| Signal | Target | What happened |
+| --- | --- | --- |
+| Change is readable (main) | ≤ 60 s, correct, no causal words | **Not yet tested with a user.** On screen: the takeaway sentence, the graph and every medicine fit in one phone screen when Journey opens; the design critic scored 5/10 twice (owner made the calls after round 2). |
+| Setup fits | ≤ 90 s, skippable | **Likely met:** about 14 taps plus typing a name on a fresh install; every step skippable. Not timed with a person. |
+| Logging stays effortless | tick 1 tap; as-needed ≤ 2; check-in ≤ 30 s | **Met:** tick 1 tap; as-needed 2 taps (Took a dose → the medicine); v1 check-in unchanged. |
+| Missed doses are kind | no red, streaks or guilt | **Met:** "Not taken" in the same grey as "Later"; no counts or streaks. |
+| Guardrail: correct numbers | exact | **Met:** summary values on Sam's demo matched a hand count (pain 1.5 vs 1.57, mood 1.35 → 1.67, baseline comparisons, 13 doses on 7 days); 30 unit tests for schedule, history, migration, averages and comparisons. |
+| Guardrail: no advice, no claims | 0 breaches | **Met after fixes:** one breach caught ("How quickly it works" heading), four near misses changed (see journal); nothing leaves the phone (only the app's own files are requested). |
+
+**Did v2 solve the problem?** It now answers "what am I taking, and is anything changing?" from the
+daily log rather than from memory, and v1 users keep their data. Whether a patient or a clinician
+reads the graph correctly in a call is not known yet: run the simulated user test as Priya, then a
+real one.

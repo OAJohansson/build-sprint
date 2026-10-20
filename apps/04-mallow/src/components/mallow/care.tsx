@@ -4,6 +4,9 @@ import { useState } from "react";
 import { amountLabel, short, symptomById, symptomCatalogue, today, type Medicine } from "@/lib/mallow/data";
 import { newMedicine, stopMedicine, updateMedicine } from "@/lib/mallow/history";
 import { MedicineScreen } from "./medicine";
+import { FormCardScreen, KnowList } from "./know";
+import { cardFor } from "@/lib/mallow/forms";
+import type { Form } from "@/lib/mallow/data";
 import { Chips, CompactGrades, Muted, Primary, Secondary, Sheet, toggleIn } from "./shared";
 import { lastOf, type Store } from "@/lib/mallow/store";
 import { personas, type Persona } from "@/lib/mallow/demo";
@@ -34,6 +37,7 @@ export function Care({
 }) {
   const [editing, setEditing] = useState<Medicine>();
   const [baselineOpen, setBaselineOpen] = useState(false);
+  const [reading, setReading] = useState<Form>();
   const last = lastOf(store);
   const current = store.meds.filter((m) => !m.stopDate || m.stopDate > today());
   const stopped = store.meds.filter((m) => m.stopDate && m.stopDate <= today());
@@ -67,6 +71,11 @@ export function Care({
                   ›
                 </span>
               </button>
+              {cardFor(m.form) && (
+                <button onClick={() => setReading(m.form)} className="press -mt-2 min-h-11 px-4 pb-2 text-left text-sm font-medium" style={{ color: "var(--mallow-deep)" }}>
+                  About {m.form.toLowerCase()} ›
+                </button>
+              )}
             </li>
           ))}
           <li style={{ borderColor: "var(--line)" }}>
@@ -84,6 +93,10 @@ export function Care({
             Stopped: {stopped.map((m) => `${m.name} (${short(m.startDate)} to ${short(m.stopDate!)})`).join(", ")}
           </Muted>
         )}
+      </Section>
+
+      <Section title="Know your medicine" hint="How each form is taken, what to expect, and questions for your doctor.">
+        <KnowList store={store} onOpen={setReading} />
       </Section>
 
       <Section title="What you track" hint="Up to four, so a check-in stays quick.">
@@ -173,6 +186,8 @@ export function Care({
           )}
         </div>
       </Section>
+
+      {reading && <FormCardScreen store={store} form={reading} onClose={() => setReading(undefined)} />}
 
       <Sheet open={baselineOpen} onClose={() => setBaselineOpen(false)} label="Before treatment">
         <h2 className="serif text-2xl">Before you started treatment</h2>

@@ -14,7 +14,10 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
   const before = chapters[chapters.length - 2];
   if (!now) return null;
   const a = periodStats(now.days, store.tracked);
-  const b = before ? periodStats(before.days, store.tracked) : undefined;
+  // No comparison from fewer than 3 check-ins in a stretch (the chart's rule too).
+  const prev = before ? periodStats(before.days, store.tracked) : undefined;
+  const b = prev && prev.logged >= 3 ? prev : undefined;
+  const enough = a.logged >= 3;
 
   return (
     <Sheet open={open} onClose={onClose} label="Summary for your appointment">
@@ -43,7 +46,7 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
               <div key={s.id} className="px-4 py-3" style={{ borderColor: "var(--line)" }}>
                 <div className="flex items-baseline justify-between gap-3">
                   <dt className="font-medium">{s.name}</dt>
-                  {b?.averages[s.id] !== undefined && a.averages[s.id] !== undefined && (
+                  {enough && b?.averages[s.id] !== undefined && a.averages[s.id] !== undefined && (
                     <dd className="whitespace-nowrap text-sm font-medium" style={{ color: "var(--mallow-deep)" }}>
                       {trendWord(b.averages[s.id], a.averages[s.id])}
                     </dd>
@@ -52,7 +55,7 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
                 <dd className="text-sm" style={{ color: "var(--ink-soft)" }}>
                   {fromTo(gradeWord(s, b?.averages[s.id]), gradeWord(s, a.averages[s.id]), b?.averages[s.id] !== undefined)}
                 </dd>
-                {store.baseline[s.id] !== undefined && a.averages[s.id] !== undefined && (
+                {enough && store.baseline[s.id] !== undefined && a.averages[s.id] !== undefined && (
                   <dd className="text-sm" style={{ color: "var(--ink-soft)" }}>
                     Before treatment: {s.grades[store.baseline[s.id]][0].toLowerCase()}. Now: {trendWord(store.baseline[s.id], a.averages[s.id]).toLowerCase()}.
                   </dd>
@@ -63,7 +66,7 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
           <h3 className="mt-5 text-sm font-medium">Medicines in this stretch</h3>
           <ul className="mt-2 space-y-2.5 text-sm">
             {medicineLines(store, now.from, now.to, now.days).map((line) => (
-              <li key={line.name}>
+              <li key={line.id}>
                 <span className="block break-words font-medium">{line.name}</span>
                 {line.details.map((d) => (
                   <span key={d} className="tnum block" style={{ color: "var(--ink-soft)" }}>
@@ -73,9 +76,11 @@ export function SummarySheet({ store, open, onClose }: { store: Store; open: boo
               </li>
             ))}
           </ul>
-          <ul className="tnum mt-3 space-y-1.5 text-sm" style={{ color: "var(--ink-soft)" }}>
-            {a.side.length > 0 && <li>{a.side.slice(0, 3).map(([s, n]) => `${s} on ${n} ${n === 1 ? "day" : "days"}`).join(" · ")}</li>}
-          </ul>
+          {a.side.length > 0 && (
+            <p className="tnum mt-3 text-sm" style={{ color: "var(--ink-soft)" }}>
+              {a.side.slice(0, 3).map(([s, n]) => `${s} on ${n} ${n === 1 ? "day" : "days"}`).join(" · ")}
+            </p>
+          )}
           {a.notes.length > 0 && (
             <ul className="mt-4 space-y-1 text-sm">
               {a.notes.map((n) => (
@@ -125,6 +130,6 @@ function medicineLines(store: Store, from: string, to: string, days: Day[]) {
       const helped = rated.filter((d) => (d.relief ?? 0) >= 2).length;
       details.push(`Helped “${reliefOptions[2].toLowerCase()}” or more: ${helped} of ${rated.length} rated`);
     }
-    return { name: m.name, details };
+    return { id: m.id, name: m.name, details };
   });
 }

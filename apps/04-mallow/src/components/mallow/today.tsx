@@ -83,7 +83,8 @@ export function Today({
   const [checkinOpen, setCheckinOpen] = useState(false);
   const [grewToday, setGrewToday] = useState(false);
   const [editing, setEditing] = useState<DoseTarget>();
-  const [thanks, setThanks] = useState<{ when: string; phrase: string }>();
+  // "Noted" belongs to the plan day it was said on; it disappears once a new plan day starts.
+  const [thanks, setThanks] = useState<{ when: string; phrase: string; day: string }>();
   // Doses are asked about relative to when this visit started, so one logged a minute ago isn't.
   const [visit, setVisit] = useState(() => ({ date: today(), time: nowTime() }));
   // Coming back to the app (resuming a tab or the home-screen app) counts as a new visit.
@@ -108,13 +109,13 @@ export function Today({
   const rate = (relief: number) => {
     if (!pending) return;
     setStore((s) => withDay(s, pending.date, (d) => ({ ...d, doses: d.doses.map((x, i) => (i === pending.i ? { ...x, relief } : x)) })));
-    setThanks({ when: `your ${pending.dose.time} dose`, phrase: reliefPhrase[relief].toLowerCase() });
+    setThanks({ when: `your ${pending.dose.time} dose`, phrase: reliefPhrase[relief].toLowerCase(), day: planDate(clock) });
   };
   const tick = (due: Due) => {
     if (due.taken) return setEditing({ date: due.taken.date, index: due.taken.index });
     const t = tickDose(due, { date: today(), time: nowTime() });
     setStore((s) => withDay(s, t.date, (d) => ({ ...d, doses: [...d.doses, t.dose].sort((a, b) => a.time.localeCompare(b.time)) })));
-    setThanks({ when: `${due.slot.toLowerCase()} ${due.med.name}`, phrase: `taken at ${t.dose.time}` });
+    setThanks({ when: `${due.slot.toLowerCase()} ${due.med.name}`, phrase: `taken at ${t.dose.time}`, day: planDate(clock) });
   };
 
   return (
@@ -128,9 +129,16 @@ export function Today({
         </span>
       </header>
 
-      {pending ? (
+      {/* "Noted" always confirms a log, even while the relief question is showing. */}
+      {thanks && thanks.day === planDate(clock) && (
+        <Muted className="enter mt-6 text-center [overflow-wrap:anywhere]" role="status">
+          Noted: {thanks.when} {thanks.phrase}.
+        </Muted>
+      )}
+
+      {pending && (
         <section className="mt-6 rounded-3xl p-4" style={{ background: "var(--mallow-wash)" }}>
-          <Muted>
+          <Muted className="[overflow-wrap:anywhere]">
             {when} you took {amountLabel(medName(pending.dose.med)!, pending.dose.amount)}{" "}
             {medName(pending.dose.med)?.name}.
           </Muted>
@@ -144,11 +152,7 @@ export function Today({
             Not now
           </button>
         </section>
-      ) : thanks ? (
-        <Muted className="enter mt-6 text-center" role="status">
-          Noted: {thanks.when} {thanks.phrase}.
-        </Muted>
-      ) : null}
+      )}
 
       <div className="mt-6">
         <Plant store={store} grewToday={grewToday} compact={!!pending || passed || (toGo !== undefined && toGo <= 1) || plan.length > 2} />
@@ -198,7 +202,7 @@ export function Today({
           style={{ background: now.logged ? "var(--leaf-deep)" : "var(--mallow)" }}
         >
           <span className="font-medium">{now.logged ? "Today is logged" : "How was today?"}</span>
-          <span className="mt-0.5 text-xs opacity-80">{now.logged ? "Tap to change" : `${store.tracked.length} quick questions`}</span>
+          <span className="mt-0.5 text-xs">{now.logged ? "Tap to change" : `${store.tracked.length} quick ${store.tracked.length === 1 ? "question" : "questions"}`}</span>
         </button>
       </div>
 
@@ -236,6 +240,8 @@ export function Today({
         onLog={(med, amount, time) => {
           setStore((s) => withDay(s, today(), (d) => ({ ...d, doses: [...d.doses, { med, amount, time }].sort((a, b) => a.time.localeCompare(b.time)) })));
           setDoseOpen(false);
+          const m = store.meds.find((x) => x.id === med);
+          if (m) setThanks({ when: `${amountLabel(m, amount)} ${m.name}`, phrase: `at ${time}`, day: planDate(clock) });
         }}
       />
 
@@ -287,10 +293,10 @@ function DoseSheet({
                   className="press flex min-h-16 min-w-0 flex-1 flex-col justify-center rounded-2xl px-5 text-left text-white"
                   style={{ background: "var(--mallow)" }}
                 >
-                  <span className="line-clamp-2 font-medium">
+                  <span className="line-clamp-2 font-medium [overflow-wrap:anywhere]">
                     {amountLabel(m)} {m.name}
                   </span>
-                  <span className="text-sm opacity-80">{m.asNeeded || [m.form, m.strength].filter(Boolean).join(" · ")}</span>
+                  <span className="text-sm [overflow-wrap:anywhere]">{m.asNeeded || [m.form, m.strength].filter(Boolean).join(" · ")}</span>
                 </button>
                 <button
                   onClick={() => {
@@ -310,7 +316,7 @@ function DoseSheet({
         </>
       ) : (
         <>
-          <h2 className="serif text-2xl">{editing.name}</h2>
+          <h2 className="serif text-2xl [overflow-wrap:anywhere]">{editing.name}</h2>
           <div className="mt-5 flex items-center justify-between rounded-2xl border bg-white p-2" style={{ borderColor: "var(--line)" }}>
             <button
               aria-label="Less"
@@ -447,7 +453,7 @@ function PlanList({ plan, onTick }: { plan: Due[]; onTick: (d: Due) => void }) {
             <li key={`${d.slot}-${d.med.id}`}>
               <button
                 onClick={() => onTick(d)}
-                aria-label={taken ? `${d.slot}: ${d.med.name}, taken at ${d.taken!.dose.time}. Change it` : `Tick ${d.slot.toLowerCase()} ${d.med.name} as taken`}
+                aria-label={`${d.slot}: ${amountLabel(d.med, d.amount)} ${d.med.name}, ${taken ? `taken at ${d.taken!.dose.time}` : label[d.status].toLowerCase()}. ${taken ? "Change it" : "Tick as taken"}`}
                 className="press grid min-h-16 w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border px-4 py-2.5 text-left"
                 style={{ background: now ? "var(--mallow-wash)" : "var(--card)", borderColor: now ? "var(--mallow)" : "var(--line)" }}
               >

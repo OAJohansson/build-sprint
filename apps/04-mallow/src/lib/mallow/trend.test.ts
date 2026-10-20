@@ -77,6 +77,7 @@ describe("plain line", () => {
     const vape = newMedicine({ ...base, name: "Vape", form: "Vape", amount: 2 }, "2026-09-03", "vape");
     expect(plainLine(store(run("2026-09-03", [1, 1, 1]), { meds: [oil, vape] }), "sleep")).toMatch(/^Since starting treatment/);
     expect(plainLine(store([]), "sleep")).toBeUndefined();
+    expect(plainLine(store(run("2026-09-03", [1, 1])), "sleep")).toBeUndefined(); // no verdict from two days
   });
 });
 

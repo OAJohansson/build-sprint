@@ -578,6 +578,17 @@ replaying along the arc).
 The dev server compiles on demand and is made for localhost; a production build (`build`, then
 `start`) is what users get. Test the production build when it matters.
 
+#### Installable web app (PWA) versus a native wrapper
+A website becomes "installable" with a **web app manifest** (name, icon, colours,
+`display: standalone`) plus an `apple-touch-icon`. Safari's **Add to Dock** (Mac) or **Add to Home
+Screen** (iPhone) then opens it in its own window with an icon and no browser bar. Why it matters:
+most of what "make it an app" means (an icon, focus, no tabs) costs 30 minutes, not a native
+build. The next step up is a **wrapper** like Capacitor: a real Xcode project that shows the site,
+which earns its keep only for native features (widgets, reliable notifications, App Store). An
+installed web app keeps its own storage, separate from the browser's. Where we met it: Scribble
+(03) as a Dock app. From: the W3C Web App Manifest spec; "Progressive Web Apps", coined by Alex
+Russell and Frances Berriman (Google, 2015).
+
 #### Network rules in the cloud
 A cloud sandbox only reaches domains its network policy allows. Allow what the product needs
 (`*.vercel.app`, the API domains) in the environment settings.
@@ -750,6 +761,12 @@ Dance tracks change every 8 bars (and 16, 32): that's where sounds come in and d
 DJs count. *Where:* Six AM's ruler labels every 8 bars, with grid lines every 4.
 
 ### Quiz
+
+**Q:** What does a website need before "Add to Dock" or "Add to Home Screen" makes it feel like an app?
+**A:** A web app manifest (name, icons, `display: standalone`) and an apple-touch-icon; then it opens in its own window with its own icon.
+
+**Q:** When is wrapping a web app in Capacitor worth it over a PWA?
+**A:** When you need native features (widgets, dependable notifications, the App Store); for an icon and a focused window, a PWA is enough.
 
 **Q:** Why not time music with setTimeout in the browser?
 **A:** Timers drift and pause in background tabs; schedule notes ahead on the Web Audio clock (AudioContext.currentTime) instead.

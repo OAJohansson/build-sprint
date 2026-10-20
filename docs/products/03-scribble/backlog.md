@@ -11,3 +11,4 @@
 | Craft curriculum: a core set of techniques (concrete detail, strong verbs, specificity, rhythm, endings, humour like the rule of three) the reader picks from, tracking which you've had | Makes the feedback a progression, not random tips (feedback #9) | idea |
 | Craft notebook: every lesson you've been given, in one place | Visible growth (job 3), and a reference while writing | idea |
 | Prompts written to practise one technique ("describe a feeling through an object") | Pairs prompts with the craft lessons | idea |
+| Capacitor wrapper: a real iOS/Mac app around the live site | Only if a week of the Dock app shows a need a web app can't meet (widgets, reliable reminders) | idea |

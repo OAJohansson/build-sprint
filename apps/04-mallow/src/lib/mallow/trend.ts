@@ -60,7 +60,7 @@ export function compare(s: Store, id: string, from: string, to: string) {
 // "Anxiety before treatment: quite. Last 4 weeks: a little to quite · a little better."
 // "Then" is before treatment, or the first 4 weeks when there's no starting point. "Now" is the
 // stretch since the last appointment, the Summary's own window, so the two never disagree
-// ("Now (since 22 Sep)"); with no appointment since starting, the last 4 weeks. It says what changed, never why, and gives no date for when it shifted: a date
+// ("Now (since your last appointment, 22 Sep)"); with no appointment since starting, the last 4 weeks. It says what changed, never why, and gives no date for when it shifted: a date
 // beside a medicine's start would invite "that's what did it". Never "working" or "because of".
 export function plainLine(s: Store, id: string, end = today()) {
   const sym = symptomById(id);
@@ -80,7 +80,7 @@ export function plainLine(s: Store, id: string, end = today()) {
   const recent = recentFrom > start ? meanOf(recentFrom, end) : undefined;
   const now = fromVisit ?? recent ?? meanOf(start, end);
   if (now === undefined) return undefined;
-  const nowLabel = fromVisit !== undefined ? `Now (since ${short(visit)})` : recent !== undefined ? "Last 4 weeks" : since;
+  const nowLabel = fromVisit !== undefined ? `Now (since your last appointment, ${short(visit)})` : recent !== undefined ? "Last 4 weeks" : since;
 
   const base = s.baseline[id];
   // Without a starting point, the first 4 weeks stand in, once there are 4 more weeks after them.

@@ -276,3 +276,6 @@ What happened, what was decided and why. Newest last.
   3 of 3 correct, caption and Summary agree; whole setup with the vape ~80–95 s, nothing prefilled.
   All five re-checked findings fixed. New: quick picks hide the date they save and skip "2 months"
   (44, owner's call), and "since 20 Sep" doesn't say it's the last appointment (45).
+- **44 and 45 fixed, then shipped** (20 Oct): the date a quick pick saves is shown under it ("Saved
+  as about 20 Aug"), with "About 2 months ago" added; the caption names its anchor ("since your last
+  appointment, 20 Sep"). The strip still draws a rough start as exact (left as is).

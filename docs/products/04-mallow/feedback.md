@@ -47,6 +47,6 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 41 | User test S1c | Only one condition can be picked (Priya has anxiety and sleep) | backlog |
 | 42 | User test F8, F9, F10, S1d, S1e | Sam's note hint for every condition; "Logged now" before picking; "Noted" pushes the screen down 44 px; "tired today" on a before question; 40 px date fields | open (quick fixes) |
 | 43 | User test value | Doctor would ask for puffs per week and whether drowsiness is on vape days; Priya wants "vape used 3–4 days a week since 6 Sep" under the strip | backlog |
-| 44 | Re-test 20 Oct R1 | "About when?" has nothing between a month and 3 months, and never shows the date a pick saves; the strip then draws a rough date as exact | open: owner's call (show "≈ 20 Sep" under the chip; add "About 2 months ago"?) |
-| 45 | Re-test R2 | "Now (since 20 Sep)" doesn't say 20 Sep is the last appointment | open (quick fix: "since your last appointment, 20 Sep") |
+| 44 | Re-test 20 Oct R1 | "About when?" has nothing between a month and 3 months, and never shows the date a pick saves; the strip then draws a rough date as exact | fixed (owner, 20 Oct): "Saved as about 20 Aug. Pick a date if you know it." under the chosen pick; "About 2 months ago" added |
+| 45 | Re-test R2 | "Now (since 20 Sep)" doesn't say 20 Sep is the last appointment | fixed: "Now (since your last appointment, 20 Sep)" |
 | 46 | Re-test R3 | Caption doesn't say when the change happened | won't do for now: 34 chose no date; revisit after 39 |

@@ -77,7 +77,7 @@ describe("plain line", () => {
   it("'now' is the stretch since the last appointment when there is one (the Summary's window)", () => {
     const days = run("2026-09-03", [...Array(28).fill(2), ...Array(20).fill(0)]);
     const s = store(days, { baseline: { sleep: 2 }, past: ["2026-09-03", "2026-10-01"] });
-    expect(plainLine(s, "sleep")).toBe("Sleep before treatment: poorly. Now (since 1 Oct): well · better.");
+    expect(plainLine(s, "sleep")).toBe("Sleep before treatment: poorly. Now (since your last appointment, 1 Oct): well · better.");
   });
   it("without a starting point, compares with the first 4 weeks once there are 8 weeks", () => {
     const early = newMedicine({ ...base, name: "Balanced oil", form: "Oil", amount: 0.5 }, "2026-08-20", "oil");

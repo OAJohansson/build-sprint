@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { reliefOptions, sideEffects, symptomById, today } from "@/lib/mallow/data";
+import { reliefOptions, short, sideEffects, symptomById, today } from "@/lib/mallow/data";
 import { roughDate, roughOf, roughOptions } from "@/lib/mallow/rough-date";
 
 // Small pieces the screens share.
@@ -292,6 +292,12 @@ export function RoughDate({ value, onChange, label }: { value?: string; onChange
           }
         }}
       />
+      {/* The date a quick pick saves, so a rough answer is never hidden (user re-test, finding 44). */}
+      {picked && value && (
+        <p className="tnum mt-2 text-sm" style={{ color: "var(--ink-soft)" }}>
+          Saved as about {short(value)}. Pick a date if you know it.
+        </p>
+      )}
       {exact && (
         <input
           type="date"

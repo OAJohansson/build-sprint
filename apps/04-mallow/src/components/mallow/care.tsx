@@ -6,6 +6,7 @@ import { newMedicine, stopMedicine, updateMedicine } from "@/lib/mallow/history"
 import { MedicineScreen } from "./medicine";
 import { Chips, CompactGrades, Muted, Primary, Secondary, Sheet, toggleIn } from "./shared";
 import { lastOf, type Store } from "@/lib/mallow/store";
+import { personas, type Persona } from "@/lib/mallow/demo";
 
 // Care: my plan (what I take, as prescribed, with its history), what I track and how it was
 // before treatment, and when the appointments are.
@@ -14,6 +15,7 @@ export function Care({
   store,
   setStore,
   demo,
+  persona,
   onStartDemo,
   onLeaveDemo,
   onErase,
@@ -23,7 +25,8 @@ export function Care({
   store: Store;
   setStore: (fn: (s: Store) => Store) => void;
   demo: boolean;
-  onStartDemo: () => void;
+  persona: Persona;
+  onStartDemo: (who?: Persona) => void;
   onLeaveDemo: () => void;
   onErase: () => void;
   addingMedicine: boolean;
@@ -138,11 +141,27 @@ export function Care({
 
       <Section title="Your data" hint="Everything stays on this phone. Nothing is sent anywhere.">
         <div className="flex flex-col gap-2">
-          {demo ? (
-            <Secondary onClick={onLeaveDemo}>Leave the demo</Secondary>
-          ) : (
-            <Secondary onClick={onStartDemo}>Try it with demo data</Secondary>
-          )}
+          {/* Two demo patients; switching rebuilds the demo, never touching real data. */}
+          <div className="grid grid-cols-2 gap-2">
+            {personas.map((p) => {
+              const on = demo && persona === p.id;
+              return (
+                <button
+                  key={p.id}
+                  aria-pressed={on}
+                  onClick={() => onStartDemo(p.id)}
+                  className="press min-h-14 rounded-2xl border px-3 py-2 text-left"
+                  style={{ background: on ? "var(--mallow-tint)" : "var(--card)", borderColor: on ? "var(--mallow)" : "var(--line)" }}
+                >
+                  <span className="block text-sm font-medium">Demo: {p.name}</span>
+                  <span className="block text-xs" style={{ color: "var(--ink-soft)" }}>
+                    {p.sub}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          {demo && <Secondary onClick={onLeaveDemo}>Leave the demo</Secondary>}
           {!demo && (
             <Secondary
               onClick={() => {

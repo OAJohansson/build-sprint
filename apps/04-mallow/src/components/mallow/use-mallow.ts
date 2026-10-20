@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useSyncExternalStore } from "react";
-import { demoStore } from "@/lib/mallow/demo";
+import { demoStore, type Persona } from "@/lib/mallow/demo";
 import { migrate, type Store } from "@/lib/mallow/store";
 import { useLocalStorage } from "@/lib/use-local-storage";
 
@@ -12,6 +12,7 @@ export function useMallow() {
   const [mode, setMode] = useLocalStorage<Mode>("04-mallow:mode", "real");
   const [real, setReal] = useLocalStorage<Store | null>("04-mallow:data", null);
   const [demo, setDemo] = useLocalStorage<Store | null>("04-mallow:demo", null);
+  const [persona, setPersona] = useLocalStorage<Persona>("04-mallow:demo-persona", "sam");
   const raw = mode === "demo" ? demo : real;
   // v1 data is upgraded when read; it's written back in the new shape on the next change.
   const store = useMemo(() => (raw ? migrate(raw) : raw), [raw]);
@@ -24,13 +25,16 @@ export function useMallow() {
   return {
     store,
     mode,
+    persona,
     setStore,
     createStore: (s: Store) => {
       setReal(s);
       setMode("real");
     },
-    startDemo: () => {
-      setDemo(demoStore());
+    // Starting (or switching) the demo rebuilds it from today, so its dates are always current.
+    startDemo: (who: Persona = persona) => {
+      setPersona(who);
+      setDemo(demoStore(who));
       setMode("demo");
     },
     leaveDemo: () => setMode("real"),

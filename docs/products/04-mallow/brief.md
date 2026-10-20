@@ -259,6 +259,10 @@ words, three tabs (Today, Journey, Care) and the plant. Logging stays two taps o
 - **Setup:** asks one medicine's essentials (name, form, amount, times); how to take it, the
   as-needed rule and more medicines are added in Care, to keep setup within 90 s.
 
+- **What the graph must make obvious** (owner, 20 Oct, for the 10 seconds of a video call): how
+  each symptom has been changing, and what type of medication the patient was on at the time.
+  Symptom change leads, the medicines sit beneath on the same time axis; nothing else competes.
+
 ## Requirements (v2)
 
 | # | Must | Check |

@@ -13,7 +13,7 @@ type Tab = "today" | "journey" | "care";
 
 export default function MallowApp() {
   const hydrated = useHydrated();
-  const { store, mode, setStore, createStore, startDemo, leaveDemo, eraseReal } = useMallow();
+  const { store, mode, persona, setStore, createStore, startDemo, leaveDemo, eraseReal } = useMallow();
   const [tab, setTabRaw] = useState<Tab>("today");
   const [addingMedicine, setAddingMedicine] = useState(false);
 
@@ -23,14 +23,14 @@ export default function MallowApp() {
   };
 
   if (!hydrated) return null;
-  if (!store) return <Setup onDone={createStore} onDemo={startDemo} />;
+  if (!store) return <Setup onDone={createStore} onDemo={() => startDemo()} />;
 
   return (
     <>
       {mode === "demo" && (
         <div className="pt-[env(safe-area-inset-top)] text-center text-xs font-medium" style={{ background: "var(--mallow-tint)", color: "var(--mallow-deep)" }}>
           <button onClick={leaveDemo} className="min-h-11 w-full">
-            Demo data · tap to leave
+            Demo data: {persona === "priya" ? "Priya" : "Sam"} · tap to leave
           </button>
         </div>
       )}
@@ -50,8 +50,9 @@ export default function MallowApp() {
           store={store}
           setStore={setStore}
           demo={mode === "demo"}
-          onStartDemo={() => {
-            startDemo();
+          persona={persona}
+          onStartDemo={(who) => {
+            startDemo(who);
             setTab("today");
           }}
           onLeaveDemo={() => {

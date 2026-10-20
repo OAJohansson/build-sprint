@@ -78,3 +78,9 @@ put into your own words.*
   logic, the browser test covered what the user sees.
 - **Process:** the ship script deploys `main`, and a skip check that crashes looks like a broken
   app; fixing it once in every app and the template beat patching Mallow alone.
+- **The first sentence wins.** In the Priya test, a caption that gave a level ("mostly quite")
+  hid a real improvement that the line and the Summary showed. Same words weren't enough to fix it:
+  two screens must also measure over the same window, or rounding at a threshold makes them
+  disagree again ("better" vs "a little better").
+- **Defaults are suggestions.** Prefilled amounts and dates were the near misses the guardrail
+  check didn't catch: no string advised a dose, but a starting number did the same job.

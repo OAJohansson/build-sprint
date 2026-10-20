@@ -267,3 +267,8 @@ What happened, what was decided and why. Newest last.
   ("since last visit" / "since before treatment"); 36 amounts start blank and required (a default
   is a nudge, and the guardrail is no suggested doses); 37 rough quick picks for unknown dates
   instead of guesses, and "Add another" at the end of setup. Not built yet.
+- **Built the calls** (20 Oct, PR 40): caption, labelled Summary, blank amounts, "About when?"
+  quick picks and "Anything else on your plan?". One change from the approved preview: "now" in the
+  caption is the stretch since the last appointment, not the last 4 weeks. With 4 weeks, the caption
+  said "better" while the Summary said "a little better" (the averages fell either side of a
+  threshold), which is the contradiction 34 set out to remove. Not re-tested with the persona yet.

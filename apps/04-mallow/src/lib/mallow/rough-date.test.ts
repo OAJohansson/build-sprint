@@ -9,6 +9,7 @@ describe("rough dates", () => {
     vi.setSystemTime(new Date(2026, 9, 20, 12, 0));
     expect(roughDate("week")).toBe("2026-10-17");
     expect(roughDate("month")).toBe("2026-09-20");
+    expect(roughDate("2months")).toBe("2026-08-20");
     expect(roughDate("3months")).toBe("2026-07-21");
   });
   it("crosses month and year ends, just after midnight", () => {

@@ -9,6 +9,8 @@ const serif = Instrument_Serif({ weight: "400", style: ["normal", "italic"], sub
 export const metadata: Metadata = {
   title: "Six AM",
   description: "Make house and techno from loops: drag sounds from the crate onto a timeline.",
+  // Opened from the Dock or home screen, it runs in its own window under the name "Six AM".
+  appleWebApp: { capable: true, title: "Six AM", statusBarStyle: "black-translucent" },
 };
 
 // Laptop-first, one dark theme: the status bar matches the warehouse background.

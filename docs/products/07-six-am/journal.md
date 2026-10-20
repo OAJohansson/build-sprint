@@ -229,3 +229,18 @@ What happened, what was decided and why. Newest last.
   refuses a missing or wrong code (so `ACCESS_CODE` is set), and with the owner's code their
   tracks load from Supabase. The first load after a deploy took a moment (two database trips
   in a row on a cold server); logged in the backlog.
+
+## 20 Oct: installable as a Dock and home-screen app
+
+- Owner asked for Six AM as an installable web app, done in its own worktree and branch (the new
+  "Parallel sessions" rule) while Selvedge is built in parallel.
+- Copied Scribble's pattern (03): a web app manifest (`display: standalone`, warehouse colours),
+  an icon drawn in code (the favicon's record with the striped sun label; 180, 192 and 512 px) and
+  Apple web-app tags. Safari's Add to Dock (Mac), Chrome's Install, or Add to Home Screen open it
+  in its own window with no browser bar. The SVG favicon stays for browser tabs.
+- Scope call: install only, no offline mode or service worker. Six AM needs the network for its
+  tracks (Supabase), so offline would be a bigger, separate build.
+- Heads-up: an installed web app keeps its own storage, so the access code is asked once in the
+  installed app; the tracks come back from Supabase.
+- Checked: production build passes, manifest and all three icons served (PNG), app loads with no
+  console errors.

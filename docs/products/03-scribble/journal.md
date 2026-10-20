@@ -214,3 +214,15 @@ What happened, what was decided and why. Newest last.
   asked to wrap up: playbook step 1 now asks for references and "evoked, not literal" before
   `/prototype` and lists carried behaviours as decisions; `pnpm ship` is to-do #8 before product
   04. **Status: shipped.**
+
+### After ship: Scribble as a Dock app (20 Oct)
+- Owner wants to start using Scribble day to day and asked what it would take to make it an iOS
+  app on the Mac. Options laid out: Add to Dock (no code), a manifest and icon (~30 min), a
+  Capacitor wrapper (half a day to a day), a native rewrite (days). Feedback and saving run on
+  the server, so any wrapper would still load the live site. Coaching point: "an app" is a
+  solution; find what actually annoys you in the browser first.
+- **Owner chose the cheap test first:** a web app manifest, a code-drawn icon (manuscript page,
+  two typed lines, red cursor) at 180, 192 and 512 px, and Apple web-app tags. Then use it from
+  the Dock for a week before deciding on a wrapper.
+- An installed web app keeps its own storage: the access code and weekly goal are entered once
+  more; pieces live in Supabase and carry over.

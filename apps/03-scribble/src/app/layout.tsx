@@ -8,6 +8,8 @@ const courier = Courier_Prime({ variable: "--font-type", subsets: ["latin"], wei
 export const metadata: Metadata = {
   title: "Scribble",
   description: "A few sentences a day, and a reader who tells you what worked.",
+  // Opened from the home screen or Dock, it runs full screen under the name "Scribble".
+  appleWebApp: { capable: true, title: "Scribble", statusBarStyle: "default" },
 };
 
 // Phone baseline (mobile-native skill): content can sit under the notch (pad with

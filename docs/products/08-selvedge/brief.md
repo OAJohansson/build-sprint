@@ -56,7 +56,8 @@ explore*. And saving into it is as quick as a screenshot, from the same share bu
   answer key.
 - **Viability:** suggesting real products needs a catalogue; there's no free product API and
   scraping shops is fragile and against their terms. So brands and search phrases that open in
-  shops, not products. AI cost: one vision call per board, pennies.
+  shops, not products. AI cost: one vision call per board, pennies. Image storage: the free
+  Supabase plan holds 1 GB, about 5,000 saves once shrunk in the browser.
 
 **Answer key (my style today, written before the app):** relaxed and roomy silhouettes (boxy tees,
 wide jeans, long denim shorts, loose trousers); a muted earthy palette (chocolate, cream,
@@ -74,61 +75,68 @@ Main outcome: from scattered saves to "that's my style, and here's where to look
 | --- | --- | --- |
 | Quick save | On my phone: share sheet to "saved", counting taps and seconds | 2 taps after Share, under 5 s; as quick as a screenshot |
 | Board in minutes | 20 saves in the inbox to a board I'd keep | Under 2 minutes, no hand layout |
-| Style read I trust | The read against the answer key, section by section | 4 of 5 sections "that's me"; no confident nonsense |
-| Discovery | Brands in the read I didn't know and would actually look at | At least 3 |
+| Style read I trust (day 2) | The read against the answer key, section by section | 4 of 5 sections "that's me"; no confident nonsense |
+| Discovery (day 2) | Brands in the read I didn't know and would actually look at, and that are real | At least 3; none invented |
 
 **Guardrail:** no save is lost; everything shared arrives in the inbox.
 
 ## MVP and stop line
 
-Proposed cut (owner to confirm): the four steps from the idea are about two days of work, so the
-MVP keeps the chain whole but thin, and drops per-save AI.
+Owner's cut (21 Oct): **capture and board today, the AI read tomorrow.** Saving happens on the
+phone (that's where inspiration turns up); the board is edited on the laptop (too fiddly on a
+phone), so saves sync between the two (decision 0021).
+
+**Day 1 (MVP):**
 
 1. **Capture:** installable web app in Android's share sheet, taking images and links into an
-   inbox; drag-and-drop bulk upload on the laptop for old saves.
+   inbox; drag-and-drop bulk upload on the laptop for old saves. Same library on both devices.
 2. **Board:** pick saves and the app lays out a collage, with the palette pulled from the images
-   as swatches (computed in the browser, no AI).
-3. **Style read:** one AI call over the board gives palette names, silhouettes, key pieces, style
-   names, brands (ones I know and new ones) and search phrases that open in shops.
+   as swatches (computed in the browser, no AI). Then edit it on the laptop: drag to reorder,
+   make a piece bigger or smaller, remove it. The board saves itself.
 
 First hour, before the real app: a **share-target probe**, the empty starter shipped with a share
 target that only shows what arrived. Share from Instagram, Pinterest and the gallery on my phone
 and write down what each sends. That answers the feasibility question before any design.
 
-Stop line: no AI cropping or tagging per save (the board read covers it), no fetching images
-behind Instagram links, no shop catalogue or product cards, no checkout, no native app (a v2
-learning project), no outfit planning, no wardrobe of owned clothes, no accounts. All to
-`backlog.md`.
+**Day 2:** the **style read**, one AI call over the board: palette names, silhouettes, key pieces,
+style names, brands and search phrases that open in shops. Brands the middle way (owner, 21 Oct):
+the AI suggests freely, known and new, and every brand comes with a one-tap search link so I can
+check it's real. Tested against the answer key before it ships.
+
+Stop line: no AI cropping or tagging per save, no fetching images behind Instagram links, no
+free-form canvas (no rotating, overlapping or text on the board), no shop catalogue or product
+cards, no checkout, no native app (a v2 learning project), no outfit planning, no wardrobe of
+owned clothes, no accounts beyond an access code. All to `backlog.md`.
 
 ## Requirements
 
-Drafted after the probe and the owner's calls below; the table is a first pass.
+Day 1. Drafted before the probe; rows 1–3 may change with what each app sends.
 
 | # | Must | Check |
 | --- | --- | --- |
 | 1 | The installed app appears in Android's share sheet | Share a screenshot from the gallery; Selvedge is in the list |
 | 2 | A shared image lands in the inbox in at most 2 taps after Share | Count taps from the gallery |
 | 3 | A shared link lands in the inbox with its preview if one is public | Share an Instagram post and a Pinterest pin |
-| 4 | Dropping files on the laptop adds them all | Drop 20 screenshots; 20 in the inbox |
-| 5 | Picking saves makes a board with no hand layout | Pick 12; a collage and 5–6 swatches appear |
-| 6 | The style read covers palette, silhouettes, pieces, style names, brands | Read my test board; every section is filled |
-| 7 | Each search phrase opens a shop search | Tap one; the shop's results open |
-| 8 | Nothing shared is lost, even offline | Share in airplane mode; it's there afterwards |
+| 4 | A save on the phone shows up on the laptop | Share on the phone, reload on the laptop; it's there |
+| 5 | Dropping files on the laptop adds them all | Drop 20 screenshots; 20 in the inbox |
+| 6 | Picking saves makes a board with no hand layout | Pick 12; a collage and 5–6 swatches appear |
+| 7 | The board can be reordered, resized per piece and trimmed | Drag one, make one bigger, remove one; reload, it holds |
+| 8 | Nothing shared is lost, even offline | Share in airplane mode; it arrives once back online |
 
-**No-gos:** product scraping, AI-generated clothes images, accounts, social features.
+Day 2: the style read covers palette, silhouettes, pieces, style names and brands; every brand
+and search phrase opens a shop search.
+
+**No-gos:** product scraping, AI-generated clothes images, real accounts, social features.
 
 **Rabbit holes:** link unfurling for Instagram and Pinterest, collage layout algorithms (pick a
-simple masonry), background removal, colour-naming perfection, iOS (no share target there).
+simple masonry grid), a free-form canvas editor, background removal, colour-naming perfection,
+iOS (no share target there), image sizes (shrink in the browser before upload).
 
-## Owner calls before the design
+## Owner calls (decided 21 Oct)
 
-- **One device or both?** Saving on the phone and looking at the board on the laptop means the
-  saves must sync, which needs a backend (image storage, like Six AM's Supabase with an access
-  code). Phone-only keeps everything on the device (images in the browser's IndexedDB, since
-  localStorage is too small for pictures).
-- **The MVP cut above:** keep the chain thin (capture, board, read) or go deeper on fewer steps?
-- **Where new brands come from:** the AI's own knowledge for the MVP (fast, may be dated or
-  invented), or a short hand-made list it chooses from (trustworthy, slower to build)?
+- **Both devices:** save on the phone, edit the board on the laptop, so saves sync (decision 0021).
+- **The cut:** capture and board on day 1; the AI style read on day 2.
+- **Brands:** the middle way; the AI suggests freely, each brand with a search link to check it.
 
 ## Unit tests
 

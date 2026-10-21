@@ -37,8 +37,13 @@ if (!fs.existsSync(appDir)) fail(`apps/${slug} doesn't exist.`);
 const name = flag("--name") ?? slug.replace(/^\d{2}-/, "");
 const rootDirectory = `apps/${slug}`;
 
-/** Calls the Vercel API through the CLI (uses your `vercel login`). Body goes on stdin. */
+/**
+ * Calls the Vercel API through the CLI (uses your `vercel login`). Body goes on stdin and must be
+ * a plain object: the CLI (54.x) only JSON-encodes objects and sends an array as
+ * "[object Object]", which the API rejects as "Invalid JSON". Send lists one item at a time.
+ */
 function vercelApi(endpoint, { method = "GET", body } = {}) {
+  if (Array.isArray(body)) fail(`vercelApi(${endpoint}): send one object per call, not an array.`);
   const cliArgs = ["api", endpoint, "--raw", "-X", method];
   if (body !== undefined) cliArgs.push("--input", "-");
   if (scope) cliArgs.push("--scope", scope);
@@ -105,9 +110,9 @@ if (existing.ok) {
     const patched = vercelApi(`/v9/projects/${projectId}`, { method: "PATCH", body: { rootDirectory, framework: "nextjs" } });
     if (!patched.ok) fail(`Couldn't set the Root Directory: ${patched.data?.error?.message ?? patched.stderr}`);
   }
-  if (envBody.length) {
-    const up = vercelApi(`/v10/projects/${projectId}/env?upsert=true`, { method: "POST", body: envBody });
-    if (!up.ok) fail(`Couldn't update the env vars: ${up.data?.error?.message ?? up.stderr}`);
+  for (const envVar of envBody) {
+    const up = vercelApi(`/v10/projects/${projectId}/env?upsert=true`, { method: "POST", body: envVar });
+    if (!up.ok) fail(`Couldn't update ${envVar.key}: ${up.data?.error?.message ?? up.stderr}`);
   }
   console.log("  already existed: Root Directory and env vars brought up to date");
 } else {

@@ -244,3 +244,14 @@ What happened, what was decided and why. Newest last.
   installed app; the tracks come back from Supabase.
 - Checked: production build passes, manifest and all three icons served (PNG), app loads with no
   console errors.
+- **Live** (20 Oct): PR 45 merged; Vercel's auto-deploy of `main` went Ready and
+  https://six-am.vercel.app now serves the manifest and icons (PNG), the API still asks for the
+  access code. `pnpm ship 07-six-am` stopped at its env-var step ("Invalid JSON (400)" from
+  `vercel api ... env?upsert=true`); not needed here since the project already had its env vars.
+- **`pnpm ship` env-var bug fixed** (21 Oct). Root cause: the Vercel CLI (54.x) parses the
+  `--input` body, but its HTTP client only JSON-encodes plain objects, so the env-var *array* went
+  out as "[object Object]" and Vercel answered "Invalid JSON". It only bit when re-shipping an
+  existing project that has env vars (first deploys send one object; Mallow has no env vars).
+  Fix in `scripts/ship.mjs`: one upsert per env var, and `vercelApi` refuses arrays with a clear
+  message. Checked without touching real values: `{}` gets Vercel's "missing `key`" validation
+  error, `[{}]` gets "Invalid JSON".

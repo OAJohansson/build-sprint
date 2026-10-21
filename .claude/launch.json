@@ -74,6 +74,18 @@
         "SUPABASE_SECRET_KEY": "",
         "ACCESS_CODE": "test-code"
       }
+    },
+    {
+      "name": "08-selvedge",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "-F",
+        "08-selvedge",
+        "start",
+        "--port",
+        "3008"
+      ],
+      "port": 3008
     }
   ]
 }

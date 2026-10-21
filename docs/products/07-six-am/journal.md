@@ -229,3 +229,29 @@ What happened, what was decided and why. Newest last.
   refuses a missing or wrong code (so `ACCESS_CODE` is set), and with the owner's code their
   tracks load from Supabase. The first load after a deploy took a moment (two database trips
   in a row on a cold server); logged in the backlog.
+
+## 20 Oct: installable as a Dock and home-screen app
+
+- Owner asked for Six AM as an installable web app, done in its own worktree and branch (the new
+  "Parallel sessions" rule) while Selvedge is built in parallel.
+- Copied Scribble's pattern (03): a web app manifest (`display: standalone`, warehouse colours),
+  an icon drawn in code (the favicon's record with the striped sun label; 180, 192 and 512 px) and
+  Apple web-app tags. Safari's Add to Dock (Mac), Chrome's Install, or Add to Home Screen open it
+  in its own window with no browser bar. The SVG favicon stays for browser tabs.
+- Scope call: install only, no offline mode or service worker. Six AM needs the network for its
+  tracks (Supabase), so offline would be a bigger, separate build.
+- Heads-up: an installed web app keeps its own storage, so the access code is asked once in the
+  installed app; the tracks come back from Supabase.
+- Checked: production build passes, manifest and all three icons served (PNG), app loads with no
+  console errors.
+- **Live** (20 Oct): PR 45 merged; Vercel's auto-deploy of `main` went Ready and
+  https://six-am.vercel.app now serves the manifest and icons (PNG), the API still asks for the
+  access code. `pnpm ship 07-six-am` stopped at its env-var step ("Invalid JSON (400)" from
+  `vercel api ... env?upsert=true`); not needed here since the project already had its env vars.
+- **`pnpm ship` env-var bug fixed** (21 Oct). Root cause: the Vercel CLI (54.x) parses the
+  `--input` body, but its HTTP client only JSON-encodes plain objects, so the env-var *array* went
+  out as "[object Object]" and Vercel answered "Invalid JSON". It only bit when re-shipping an
+  existing project that has env vars (first deploys send one object; Mallow has no env vars).
+  Fix in `scripts/ship.mjs`: one upsert per env var, and `vercelApi` refuses arrays with a clear
+  message. Checked without touching real values: `{}` gets Vercel's "missing `key`" validation
+  error, `[{}]` gets "Invalid JSON".

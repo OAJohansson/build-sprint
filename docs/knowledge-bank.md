@@ -274,6 +274,17 @@ the PR into a single commit. **Rebase** replays the commits onto `main` without 
 When two branches change the same lines differently, git can't choose: a **merge conflict**,
 which a person resolves.
 
+#### Worktrees and small batches
+A **worktree** is a second folder of the same repo, checked out on its own branch, so two pieces
+of work never share files. Why it matters: two sessions editing one folder can overwrite or
+commit each other's changes, which is worse than a merge conflict because nothing warns you.
+Pair it with **small batches**: branch from the latest `main` and merge the same day, so there is
+little for branches to disagree about. Shared files that everyone appends to (a knowledge bank,
+a lockfile) are where conflicts still happen, so add to them last. Where we met it: 20 Oct,
+three sessions in one folder (Mallow, Selvedge, Scribble) left mixed uncommitted work on a
+stale branch. From: `git worktree` (Git 2.5, 2015); small batches from Don Reinertsen's *The
+Principles of Product Development Flow* (2009) and trunk-based development (DORA research).
+
 #### Deploying
 Vercel watches `main`: every merge rebuilds and deploys. Branches get their own **preview**
 deploys. In a monorepo, each app is its own Vercel project with a **Root Directory**
@@ -382,6 +393,12 @@ Jeffries).
 
 **Q:** What causes a merge conflict?
 **A:** Two branches changing the same lines of the same file differently; a person has to choose.
+
+**Q:** What is a git worktree, and why give each parallel session one?
+**A:** A second folder of the same repo on its own branch; sessions then can't overwrite or commit each other's changes.
+
+**Q:** Why merge small and often when work runs in parallel?
+**A:** The less a branch drifts from `main`, the fewer lines two branches can change differently, so conflicts stay rare and small.
 
 **Q:** Why work on a branch instead of changing main directly?
 **A:** Safety (live apps stay untouched), review (a PR shows every change), history (reasons recorded) and easy undo.
@@ -625,7 +642,7 @@ most of what "make it an app" means (an icon, focus, no tabs) costs 30 minutes, 
 build. The next step up is a **wrapper** like Capacitor: a real Xcode project that shows the site,
 which earns its keep only for native features (widgets, reliable notifications, App Store). An
 installed web app keeps its own storage, separate from the browser's. Where we met it: Scribble
-(03) as a Dock app. From: the W3C Web App Manifest spec; "Progressive Web Apps", coined by Alex
+(03) as a Dock app, then Six AM (07). From: the W3C Web App Manifest spec; "Progressive Web Apps", coined by Alex
 Russell and Frances Berriman (Google, 2015).
 
 #### Network rules in the cloud

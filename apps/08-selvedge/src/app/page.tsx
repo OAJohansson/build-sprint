@@ -1,21 +1,17 @@
-"use client";
+import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
-import { useLocalStorage } from "@/lib/use-local-storage";
-
+// shortcut: a holding page for the share-target spike, replace with the inbox.
 export default function Home() {
-  // Placeholder to prove persistence works — delete once the real UI exists.
-  const [count, setCount] = useLocalStorage("08-selvedge:count", 0);
-
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center gap-6 p-6">
-      <p className="text-sm text-muted-foreground">Day 8</p>
+    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center gap-4 p-6">
       <h1 className="text-3xl font-semibold tracking-tight">Selvedge</h1>
-      <p className="text-muted-foreground">Start building in src/app/page.tsx.</p>
-      <div className="flex items-center gap-3">
-        <Button onClick={() => setCount((c) => c + 1)}>Clicked {count} times</Button>
-        <Button variant="ghost" onClick={() => setCount(0)}>Reset</Button>
-      </div>
+      <p className="text-muted-foreground">
+        Install this app (Chrome menu, Install app), then share from Instagram, Pinterest or your
+        gallery and choose Selvedge.
+      </p>
+      <Link href="/probe" className="underline underline-offset-4">
+        See what arrived
+      </Link>
     </main>
   );
 }

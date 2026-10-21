@@ -245,6 +245,12 @@ realistic context (on a real phone) against the success signals, not just looks.
 
 ### Building and shipping
 
+#### Spike (a throwaway probe)
+A small, time-boxed build that answers one technical question before you design around it, then
+gets thrown away or folded in. Why it matters: an hour of probing beats a day of building on a
+wrong guess. Where we met it: Selvedge (08): a share-target probe that only shows what Instagram,
+Pinterest and the gallery send. From: Extreme Programming (Kent Beck, 1990s).
+
 #### The git building blocks
 - **Repository (repo):** the project folder plus its full history.
 - **Commit:** a saved snapshot of changes with a message saying why; permanent and revertible.
@@ -336,6 +342,9 @@ upgrade>`) so the technical debt can be found later. From: Extreme Programming (
 Jeffries).
 
 ### Quiz
+
+**Q:** What is a spike, and when do you run one?
+**A:** A small, time-boxed probe that answers one technical unknown before you design around it; run it first when a feasibility question could change the plan.
 
 **Q:** What's the difference between a user-journey test and a unit test?
 **A:** A journey test tries the app like a person would and finds confusion and broken flows; a unit test checks one piece of logic with sample inputs, runs automatically, and catches logic that breaks later.
@@ -617,6 +626,14 @@ replaying along the arc).
 The dev server compiles on demand and is made for localhost; a production build (`build`, then
 `start`) is what users get. Test the production build when it matters.
 
+#### Web Share Target (a web app in the share sheet)
+An installed web app (PWA) can list itself in Android's share sheet by declaring a
+`share_target` in its manifest; the shared image, link or text then arrives as a request to the
+app, usually caught by its service worker. Why it matters: it gives a web app the "save from
+anywhere" move without a native app. Limits: Android Chrome only (not iOS), only once installed,
+and each source app decides what it sends (often a link, not the picture). Where we met it:
+Selvedge (08) capture. From: the W3C Web Share Target spec (Google, 2019).
+
 #### Installable web app (PWA) versus a native wrapper
 A website becomes "installable" with a **web app manifest** (name, icon, colours,
 `display: standalone`) plus an `apple-touch-icon`. Safari's **Add to Dock** (Mac) or **Add to Home
@@ -806,6 +823,9 @@ DJs count. *Where:* Six AM's ruler labels every 8 bars, with grid lines every 4.
 
 **Q:** When is wrapping a web app in Capacitor worth it over a PWA?
 **A:** When you need native features (widgets, dependable notifications, the App Store); for an icon and a focused window, a PWA is enough.
+
+**Q:** What does the Web Share Target API let a web app do, and where does it work?
+**A:** Appear in the phone's share sheet and receive images, links or text; only Android Chrome, and only once the app is installed.
 
 **Q:** Why not time music with setTimeout in the browser?
 **A:** Timers drift and pause in background tabs; schedule notes ahead on the Web Audio clock (AudioContext.currentTime) instead.

@@ -82,3 +82,9 @@ Explained: riskiest = would sink the product if false, and least evidence for it
 mapping). Targets without a baseline: a falsifiable "at least X of Y will Z" bet, set at the
 number that would change what I do, counted over a fixed window; the first round is the baseline.
 Both added to the knowledge bank with quiz questions.
+
+### Assumption mapping, in depth
+
+Owner: "the assumption mapping is gold", and asked for the theory in the knowledge bank to quiz
+on. Expanded the entry (the 2×2, the four corners, the steps, evidence strength; Bland and
+Osterwalder) with three quiz questions.

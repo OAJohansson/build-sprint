@@ -174,15 +174,39 @@ Every idea carries four risks: **value** (will they use it?), **usability** (can
 **feasibility** (can we build it?) and **viability** (does it work for the business: cost,
 legal, time?). Name the riskiest one and make the MVP test it. *(Marty Cagan)*
 
-#### Picking the riskiest assumption
-"Riskiest" combines two questions: **how much does it matter** (if it's false, does the product
-fail?) and **how little evidence do I have** (am I guessing?). The riskiest assumption is the one
-that is both: it would sink the product and you have the least proof of it. Something that
-matters a lot but you already know is true isn't risky; something you're unsure of that barely
-matters isn't either. Plot them on a 2×2 (important vs evidence) and test the top-left corner
-first. *Where:* the Andreas Product Portfolio Website, choosing between "product thinking comes
-across in seconds" and "hiring managers click the link". *(David Bland, Testing Business Ideas:
-assumption mapping)*
+#### Assumption mapping: picking the riskiest assumption
+**What it is.** A way to decide which assumption to test first. "Riskiest" combines two
+questions: **how important is it** (if it's false, does the product fail?) and **how much
+evidence do I have** (have I seen it, or am I guessing?). The riskiest assumption is high on the
+first and low on the second.
+
+**How it works, in four steps:**
+1. **Write the assumptions down** as statements that could be wrong: "I believe hiring managers
+   will click a link in a CV." One per sticky note. Cover all three kinds: *desirability* (do they
+   want it?), *feasibility* (can we build it?) and *viability* (does it work for the business:
+   cost, legal, time?). Cagan's four risks split usability out of desirability.
+2. **Place each on a 2×2.** Vertical axis: important (top) to unimportant (bottom). Horizontal
+   axis: no evidence (left) to strong evidence (right). Place them relative to each other; exact
+   positions don't matter.
+3. **Read the four corners:**
+   - *Important, no evidence* (top left): **test now**. This is where products die.
+   - *Important, evidence* (top right): plan around it; keep an eye on it.
+   - *Unimportant, no evidence* (bottom left): park it; it isn't worth the test yet.
+   - *Unimportant, evidence* (bottom right): safe; ignore.
+4. **Design the cheapest test** for the top-left ones, then **move the notes** as evidence comes
+   in. The map is a living thing, not a one-off.
+
+**Why it matters.** Teams naturally test what's easy or interesting, not what's risky, and build
+the whole thing before learning that one load-bearing belief was false. The map makes the bet
+visible and argues for doing the scary test first. Evidence has strength too: what people *do*
+(clicked, paid, came back) beats what they *say* ("I'd use that").
+
+**Where we met it:** the Andreas Product Portfolio Website, choosing between "product thinking
+comes across in seconds on a phone", "creative design helps rather than gets in the way",
+"I can show enough employer work" and "hiring managers click the link".
+
+*(David Bland and Alex Osterwalder, Testing Business Ideas, 2019; desirability, feasibility,
+viability from IDEO's design thinking)*
 
 #### Test assumptions, not whole ideas
 Break an idea into the assumptions that must be true, and test the riskiest one cheaply first.
@@ -219,8 +243,14 @@ setting. From: Jeff Bezos, Amazon shareholder letter (2015).
 
 ### Quiz
 
-**Q:** What two questions make an assumption "riskiest"?
-**A:** How much it matters (would the product fail if it's false?) and how little evidence you have for it. The riskiest is high on both.
+**Q:** In assumption mapping, what are the two axes, and which corner do you test first?
+**A:** Importance (would the product fail if it's false?) and evidence (have I seen it, or am I guessing?). Test the important, no-evidence corner (top left) first.
+
+**Q:** What do you do with an assumption that's important but already has strong evidence, and one that's unimportant with no evidence?
+**A:** Important with evidence: plan around it and keep watching it. Unimportant with no evidence: park it; it isn't worth testing yet.
+
+**Q:** Why is "people said they'd use it" weak evidence, and what's stronger?
+**A:** What people say they'd do is a poor predictor; what they actually do (click, pay, come back) is much stronger evidence.
 
 **Q:** What's the difference between an outcome and an output?
 **A:** An output is what you ship (features). An outcome is what changes for the user because of it. Success should be measured in outcomes.

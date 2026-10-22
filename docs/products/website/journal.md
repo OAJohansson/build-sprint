@@ -63,3 +63,14 @@ Owner's order: product thinking, taste, AI judgement (evals), quick feel. Quick 
 because the metrics are already in the CV summaries; they still appear wherever an outcome is
 told. This sets up the design's main tension: the top job usually needs reading, but the moment
 is a phone and a minute or two.
+
+### What success looks like
+
+Owner: more replies can't be credited to the site (too much else varies), but interviewers
+bringing up something from it shows they read it and are interested. Pre-mortem: they'd leave
+because it wasn't engaging or had too much information. They'd like analytics to see clicks and
+time per section. In the brief: main outcome (curious before the call), three signals (mentions
+in interviews, link opened via a per-application tag, visits that go past the first screen), a
+"not too much information" guardrail, and analytics noted as a rabbit hole (free Vercel
+analytics has no click events; cookie-based tools need a consent banner). Targets are the
+owner's to set.

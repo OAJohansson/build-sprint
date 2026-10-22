@@ -62,8 +62,23 @@ is a phone and a minute or two. The first screen has to show how I think in seco
 
 ## Success: what good looks like
 
+**Main outcome:** hiring managers come to the first call already curious about my work.
+
+More replies isn't the measure: replies vary too much with the role and the market to credit the
+site.
+
 | Signal | How I'll measure it | Target |
 | --- | --- | --- |
+| Interviewers bring up something from the site unprompted | One line per interview in a log: mentioned or not, and what | Owner to set (proposal: 1 in 3 interviews) |
+| The link gets opened | A tag per application in the link (`?ref=company`), read in analytics | Owner to set |
+| Visitors go past the first screen | Share of visits that open at least one project | Owner to set (proposal: half) |
+
+**Guardrail:** not too much information. In the user test, a hiring manager can say who I am and
+what I'm good at after 5 seconds on the first screen, and finishes a project story in about 2
+minutes.
+
+**Pre-mortem** ("they closed it after 20 seconds and didn't call. Why?"): it wasn't engaging, or
+there was too much information.
 
 ## MVP and stop line
 
@@ -82,7 +97,9 @@ Open: career projects and sprint products in one section or two?
 
 **No-gos:** 
 
-**Rabbit holes:** 
+**Rabbit holes:** analytics. Vercel's free plan counts page views but not clicks or time per
+section (custom events need Pro); heatmap tools like PostHog set cookies, which in the UK means a
+consent banner unless set up cookieless. Pick the simplest tool that answers the three signals.
 
 ## Unit tests
 

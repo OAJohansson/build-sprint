@@ -336,3 +336,11 @@ target's service worker can't type a code. Build order, each step shippable:
 4. **Boards and the editor:** promote Sketchbook V1 from the prototype into the app (and delete
    the prototype surface), seasonal boards, the tiled draft from picked saves, autosave.
 5. **Real crop:** handles to trim each side, on top of pan and zoom.
+- **Step 1 done: data and access.** `supabase/schema.sql` (tables `selvedge_saves` and
+  `selvedge_boards`, a private `selvedge` bucket for webp, jpeg and png up to 5 MB, RLS on with
+  no policies); `src/lib/library.ts` (types and checks: UUIDs, names, board docs, the first link
+  in shared text, the source by host); `src/lib/server/store.ts` (Supabase, or an in-memory
+  stand-in locally; `SELVEDGE_MEMORY_STORE=1` forces it); the access code by header or cookie
+  (`/api/access`); routes `/api/saves`, `/api/photos`, `/api/boards`. Tested locally against the
+  in-memory store with a throwaway code: 13 checks pass. Not yet tested against Supabase: the
+  schema has to be run first (owner). Keys checked for format only, never printed.

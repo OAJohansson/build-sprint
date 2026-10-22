@@ -3,7 +3,7 @@ side: true
 title: Andreas Product Portfolio Website
 status: building
 date: 2026-10-22
-user: ""
+user: "A hiring manager for a product role, opening my CV link on their phone between meetings"
 problem: ""
 bet: ""
 url: ""

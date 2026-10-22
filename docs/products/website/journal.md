@@ -28,3 +28,11 @@ Deleted it and scaffolded `apps/website` fresh, so the brief decides what the si
 
 Brief first, no code: problem, who, jobs, today's alternatives, riskiest assumptions, success,
 MVP and stop line.
+
+### Who it's for
+
+Owner's answer: a hiring manager for a product role who got my CV and opens the link on their
+phone between meetings, and should come away wanting to talk to me. Not only AI roles: the site
+has to show an exceptional product manager, through its own UX/UI and creativity as well as
+the content (who I am, CV history, product portfolio). Written into the brief's Problem, Who and
+Moment of use.

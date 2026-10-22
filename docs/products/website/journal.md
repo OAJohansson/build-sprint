@@ -36,3 +36,11 @@ phone between meetings, and should come away wanting to talk to me. Not only AI 
 has to show an exceptional product manager, through its own UX/UI and creativity as well as
 the content (who I am, CV history, product portfolio). Written into the brief's Problem, Who and
 Moment of use.
+
+### First content ideas (a jump to solution, parked in the brief)
+
+Asked about today's alternatives; the owner answered with content instead: an About me (CV,
+career background) and Projects, led by GambleAware and Vine Health (the strongest career
+examples, with visuals) plus the sprint products. Open question: one projects section or two.
+Captured as a draft in the brief's MVP, to test against the jobs once they're written. New
+risks noted: whether creative UI slows a phone reader, and whether employer work can be shown.

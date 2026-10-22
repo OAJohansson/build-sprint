@@ -26,12 +26,24 @@ creativity) is part of the evidence.
 
 ## Riskiest assumptions
 
+- *Usability:* creative UI helps rather than slows a hiring manager with a minute on their phone.
+- *Viability:* I'm allowed to show visuals of GambleAware and Vine Health work (employer or
+  client material, possibly under NDA).
+
 ## Success: what good looks like
 
 | Signal | How I'll measure it | Target |
 | --- | --- | --- |
 
 ## MVP and stop line
+
+**Content so far (owner's first take, not yet tested against the jobs):**
+
+1. About me: who I am, CV, career background.
+2. Projects: the strongest career work, **GambleAware** and **Vine Health**, with visuals; plus
+   the sprint products.
+
+Open: career projects and sprint products in one section or two?
 
 ## Requirements
 

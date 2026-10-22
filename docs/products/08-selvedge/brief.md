@@ -103,7 +103,9 @@ likeness later. Saving happens on the phone; boards are edited on the laptop, so
 2. **Boards by season:** several boards, each named by season ("Summer 2026", "Autumn 2026"), so
    I can see my taste change over time.
 3. **Board editor:** pick saves and the app tiles them edge to edge as a first draft, with the
-   palette as colour squares and a title pill (like my Spring / Summer board). Then I make it
+   palette as colour squares and a title pill (like my Spring / Summer board). Changed after the
+   first board (22 Oct): a new board starts empty, its picked saves become its tray, and shapes
+   (square, rectangle, pill) with text are added by hand. Then I make it
    mine: drag, resize, crop (a real crop with handles, not only pan and zoom), bring forward or back, delete, and an optional rough "cut from a
    magazine" edge on any piece (off by default). It saves itself.
 4. **Character spike (done 22 Oct):** OpenAI `gpt-5.4-image-2` drew "my style, full stop".
@@ -123,7 +125,7 @@ the home page opens on the latest board's character.
 we've decided where face photos are stored (a shared database is wrong for them, decision 0021).
 
 Stop line: no AI cropping or tagging per save, no logging in to Instagram for pictures, no
-rotating pieces or free text on the board (the title pill is the only text), no shop catalogue or product
+rotating pieces or free text loose on the board (text lives inside shapes), no shop catalogue or product
 cards, no checkout, no native app (a v2 learning project), no outfit planning, no wardrobe of
 owned clothes, no accounts beyond an access code. All to `backlog.md`.
 

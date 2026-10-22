@@ -1,19 +1,21 @@
 "use client";
 
-// Prototype harness for the board editor: three layouts of the same editor behind the picker.
+// Prototype harness for the board editor: three versions of the same editor behind the picker.
 // Number keys or arrows switch; the choice is kept in ?v=. Nothing here is imported by the app.
 // shortcut: a throwaway surface, delete it once a winner is promoted (prototype skill, rule 5).
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import Desk from "./desk";
-import Gallery from "./gallery";
+import Editor from "./editor";
 import "./picker.css";
-import Workbench from "./workbench";
 
+// Round 2: one layout (round 1's pick: Workbench's tray, Desk's tools by the piece), three personalities.
+const Pencil = () => <Editor theme="pencil" />;
+const Sketchbook = () => <Editor theme="sketchbook" />;
+const Workwear = () => <Editor theme="workwear" />;
 const VARIANTS = [
-  { name: "Workbench", C: Workbench, top: false },
-  { name: "Desk", C: Desk, top: true },
-  { name: "Gallery", C: Gallery, top: true },
+  { name: "Pencil", C: Pencil, top: false },
+  { name: "Sketchbook", C: Sketchbook, top: false },
+  { name: "Workwear", C: Workwear, top: false },
 ];
 
 export default function BoardEditorPrototypes() {

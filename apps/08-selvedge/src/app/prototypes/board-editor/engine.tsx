@@ -220,8 +220,8 @@ export function BoardCanvas({ board, fit = "contain", chrome, className = "", st
       </div>
       {rect && sel && (
         <>
-          <div className="pointer-events-none absolute" style={{ ...rect, outline: `2px solid ${board.cropping ? "#d9822b" : "#1b1c1e"}`, outlineOffset: 2, boxShadow: "0 0 0 4px rgba(255,255,255,.7)" }} />
-          <div className="absolute h-4 w-4 cursor-nwse-resize rounded-full border-2 border-white bg-[#1b1c1e]"
+          <div className="board-sel pointer-events-none absolute" data-cropping={board.cropping ? "" : undefined} style={rect} />
+          <div className="board-handle absolute h-4 w-4 cursor-nwse-resize"
             style={{ left: rect.left + rect.width - 8, top: rect.top + rect.height - 8 }}
             onPointerDown={(e) => onDown(e, sel, "resize")} />
           {chrome?.(rect)}

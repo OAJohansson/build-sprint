@@ -249,3 +249,18 @@ What happened, what was decided and why. Newest last.
   forward and back, delete (button or key), rough edge (off by default), add a save by click or
   drag, a second board, "start again from a draft". Photos in a git-ignored
   `public/prototype-board/`. Checked in the browser: every edit, all three layouts.
+- **Owner's pick, round 1:** Workbench's tray on the left, plus the tools floating by the picked
+  piece (from Desk and Gallery): "you need to move the mouse less". Crop must be a real crop
+  (handles), not only pan and zoom; background removal stays day 2. The features are there; the
+  design has no identity yet. The home page will carry more identity later (its own design).
+- **Round 2 (identity):** the merged layout in three personalities: Pencil (muted sketch,
+  graphite on paper, the owner's ask), Sketchbook (the sketch plus watercolour washes in the
+  palette, the owner's ask), Workwear (indigo, the selvedge stripe, stitching: identity from the
+  name).
+- **Round 2 built** (same `/prototypes/board-editor`; round 1's layout files retired, kept in
+  git): `editor.tsx` (tray left, tools in a chip by the picked piece) and `themes.css`. Pencil
+  and Sketchbook draw their lines on a separate layer bent by an SVG noise filter, so borders
+  wobble like pencil while text stays crisp; hover and active states are pencil hatching
+  (Pencil) or watercolour washes in the palette (Sketchbook). Workwear uses the selvedge stripe
+  under the top bar, dashed thread stitching, and a leather-patch logo. Checked: all three render
+  and edit.

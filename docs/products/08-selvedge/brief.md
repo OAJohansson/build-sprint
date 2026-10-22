@@ -104,7 +104,7 @@ likeness later. Saving happens on the phone; boards are edited on the laptop, so
    I can see my taste change over time.
 3. **Board editor:** pick saves and the app tiles them edge to edge as a first draft, with the
    palette as colour squares and a title pill (like my Spring / Summer board). Then I make it
-   mine: drag, resize, crop, bring forward or back, delete, and an optional rough "cut from a
+   mine: drag, resize, crop (a real crop with handles, not only pan and zoom), bring forward or back, delete, and an optional rough "cut from a
    magazine" edge on any piece (off by default). It saves itself.
 4. **Character spike (done 22 Oct):** OpenAI `gpt-5.4-image-2` drew "my style, full stop".
 

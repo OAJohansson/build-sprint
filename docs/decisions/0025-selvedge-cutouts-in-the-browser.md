@@ -1,4 +1,4 @@
-# 0025 — Selvedge removes backgrounds in the browser with ormbg
+# 0025 — Selvedge removes backgrounds in the browser (ormbg quick, BEN2 careful)
 
 - **Date:** 2026-10-23
 - **Status:** accepted
@@ -21,8 +21,13 @@ in the browser (free, no key, about 40 MB the first time)".
   box still fits) is kept beside the original in the private bucket at `cutouts/<save id>.webp`
   (`/api/cutouts`). No schema change. A piece switches between the photo and its cut-out
   (`cutout: true`), so "Restore background" is instant and the original is never touched.
-- **Edges:** the mask is cleaned with a levels curve (faint pixels clear, near-solid ones solid,
-  a smooth step between), as the ormbg write-up suggests, so no haze of background remains.
+- **Edges (tuned on the owner's photos, 23 Oct):** the mask is cleaned with a levels curve
+  (below 12% clear, above 50% solid, a smooth step between), so a ghosted arm comes back and no
+  haze remains; stray islands away from the subject are dropped and small holes filled.
+- **Careful option (23 Oct, owner's call):** quick stays the default. Once a photo is cut out,
+  **Cut out more carefully** re-runs it with `onnx-community/BEN2-ONNX` (MIT, fp16, 219 MB once),
+  same clean-up, also on WASM (WebGPU ran out of memory). On the owner's three hard photos it
+  fixed every miss quick made (a car, a clothes pile). The piece remembers `careful: true`.
 
 ## Alternatives considered
 
@@ -41,4 +46,6 @@ in the browser (free, no key, about 40 MB the first time)".
   marked as a shortcut and in the backlog.
 - Depends on Hugging Face (the model) and jsDelivr (the ONNX runtime files) being reachable the
   first time; revisit by self-hosting both if either becomes a problem.
-- Revisit the model if cut-outs of busy backgrounds disappoint on real saves.
+- Careful costs a 219 MB first download and about 40 s a photo on a laptop CPU (48 s in the
+  test including the download); likely slow or too heavy on a phone. Try WebGPU later.
+- Revisit the models if cut-outs of busy backgrounds still disappoint on real saves.

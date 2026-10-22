@@ -533,6 +533,14 @@ anxiety was "quite, as before" while the Summary said "a little better"; the own
 caption say then → now in the Summary's words. From: Jakob Nielsen's heuristic "Consistency and
 standards" (1994).
 
+#### Progressive disclosure
+Show the simple, cheap option first and offer the heavier one only once it's relevant. Why it
+matters: most people never need the advanced path, so making it the default costs everyone the
+wait; hiding it entirely leaves the hard cases stuck. Where we met it: Selvedge (08) cut-outs:
+the quick model (44 MB, 8 s) is the default, and "Cut out more carefully" (219 MB, about 40 s)
+appears only after a quick cut-out, for the photos it missed. From: Jakob Nielsen (2006), going
+back to Xerox Star's design in the early 1980s.
+
 ### Accessibility
 
 #### Contrast ratio
@@ -599,6 +607,9 @@ the graph and named medicines instead of colouring them. *(Edward Tufte's data-i
 Visual Display of Quantitative Information; Stephen Few on dashboards)*
 
 ### Quiz
+
+**Q:** What is progressive disclosure, and where did Selvedge use it?
+**A:** Offer the simple option first and the heavier one only when needed; "Cut out more carefully" (the slow, 219 MB model) appears only after the quick cut-out.
 
 **Q:** What is "design for the decision", and how did it shape Mallow's graph?
 **A:** Name what the reader must conclude, then cut what doesn't serve it (Tufte's data-ink): the owner's one sentence removed daily dots over months, moved the takeaway above the graph and labelled medicines instead of colouring them.

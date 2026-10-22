@@ -154,29 +154,44 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
   // a piece switches between the photo and its cut-out.
   const [cutting, setCutting] = useState<{ id: string; label: string } | null>(null);
   const [versions, setVersions] = useState<Record<string, number>>({});
-  async function toggleBackground() {
+  // Quick by default; "careful" (BEN2) redoes a hard one, slower and better (owner, 23 Oct).
+  async function cutWith(quality: "quick" | "careful") {
     if (!p || p.kind !== "photo" || !p.saveId || cutting) return;
-    if (p.cutout) return editor.actions.setCutout(false);
-    const saveId = p.saveId;
-    const have = await fetch(`/api/cutouts?id=${saveId}`, { method: "HEAD" }).then((r) => r.ok, () => false);
-    if (!have) {
-      setCutting({ id: saveId, label: "Cutting out…" });
-      try {
-        const v = await cutOut(saveId, (pr) => setCutting({ id: saveId, label: pr.stage === "loading" ? `Getting the scissors ready… ${Math.round(pr.progress)}%` : "Cutting out…" }));
-        setVersions((vs) => ({ ...vs, [saveId]: v }));
-      } catch (error) {
-        console.error(error);
-        setCutting({ id: saveId, label: "Couldn't cut this one out" });
-        setTimeout(() => setCutting(null), 3000);
-        return;
-      }
-      setCutting(null);
+    const saveId = p.saveId, careful = quality === "careful";
+    if (!careful) {
+      const have = await fetch(`/api/cutouts?id=${saveId}`, { method: "HEAD" }).then((r) => r.ok, () => false);
+      if (have) return editor.actions.setCutout(true);
     }
-    editor.actions.setCutout(true);
+    const working = careful ? "Cutting out carefully… about half a minute" : "Cutting out…";
+    setCutting({ id: saveId, label: working });
+    try {
+      const v = await cutOut(saveId, quality, (pr) => setCutting({ id: saveId, label: pr.stage === "loading"
+        ? `${careful ? "Getting the careful scissors ready" : "Getting the scissors ready"}… ${Math.round(pr.progress)}%`
+        : working }));
+      setVersions((vs) => ({ ...vs, [saveId]: v }));
+    } catch (error) {
+      console.error(error);
+      setCutting({ id: saveId, label: "Couldn't cut this one out" });
+      setTimeout(() => setCutting(null), 3000);
+      return;
+    }
+    setCutting(null);
+    editor.actions.setCutout(true, careful || undefined);
   }
   const base = useTools(editor);
+  const busy = cutting && p?.saveId === cutting.id ? cutting.label : null;
   const tools = p?.kind === "photo" && !editor.cropping
-    ? [base[0], { key: "background", label: cutting && cutting.id === p.saveId ? cutting.label : p.cutout ? "Restore background" : "Remove background", on: toggleBackground, active: !!p.cutout }, ...base.slice(1)]
+    ? [
+        base[0],
+        busy
+          ? { key: "background", label: busy, on: () => {}, active: true }
+          : p.cutout
+            ? { key: "background", label: "Restore background", on: () => editor.actions.setCutout(false), active: true }
+            : { key: "background", label: "Remove background", on: () => cutWith("quick"), active: false },
+        // For the hard ones: redo the cut-out with the careful model.
+        ...(p.cutout && !p.careful && !busy ? [{ key: "careful", label: "Cut out more carefully", on: () => cutWith("careful"), active: false }] : []),
+        ...base.slice(1),
+      ]
     : base;
   const byId = useMemo(() => new Map(saves.map((s) => [s.id, s])), [saves]);
   const shown = showAll || !tray ? photos : photos.filter((s) => tray.includes(s.id));

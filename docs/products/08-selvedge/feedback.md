@@ -11,3 +11,4 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 5 | Owner, first board | No palette squares by default; instead a tool to add shapes (squares, rectangles, a round pill) with optional text inside, like the "Autumn 2026" pill | fixed (shapes: square, rectangle, pill; colour and text) |
 | 6 | Owner, first board | Crop doesn't really crop; it needs to be a proper crop | fixed (a real crop: handles on every side, slide inside, Reset) |
 | 7 | Owner, first board | Removing the background is a separate feature from cropping; both are needed | fixed (automatic, in the browser; hand fixing in the backlog) |
+| 8 | Owner, first live cut-outs (23 Oct) | "Not perfect, but workable": a ghosted forearm, a car and grey bits left, part of a chair kept | fixed (tuned clean-up; "Cut out more carefully" with BEN2) |

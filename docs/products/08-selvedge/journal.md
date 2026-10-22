@@ -478,3 +478,19 @@ target's service worker can't type a code. Build order, each step shippable:
   out clean (17 s, including the first download), and the jersey flat lay kept every item with the
   grey backdrop gone (7 s with the model cached). No errors.
 - Not yet: hand fixing of misses (backlog), real saves, a phone.
+- **Owner's first live cut-outs (23 Oct): "not perfect, but workable."** Three misses: a ghosted
+  forearm (the model unsure, so half-transparent), leftover background (a car and grey bits by
+  a bag), part of a chair kept. Compared on the owner's three photos, in Node: **A** today's ormbg;
+  **B** ormbg plus a tuned clean-up ("fairly sure" counts as solid, stray islands dropped, small
+  holes filled); **C** BEN2 (MIT, 219 MB) plus the same clean-up. B brings the arm back but keeps
+  the car (it touches the bag) and a clothes pile; **C wins all three**: the arm with its watch,
+  no car, no clothes pile. In the browser, BEN2 on WebGPU ran out of memory in headless Chrome; on
+  the CPU (WASM) it works at about 37 s a photo (ormbg about 7 s).
+- **Owner's call: keep quick as the default (with the tuned clean-up), add "Cut out more
+  carefully" with BEN2 for the hard ones.** Built: the tuned clean-up now runs after both models;
+  after a quick cut-out the tool box offers **Cut out more carefully**, which shows the download
+  progress the first time and then "about half a minute". Checked end to end in headless Chromium
+  on the owner's mirror selfie: quick 8 s (arm back, clothes pile still there), careful 48 s
+  including the 219 MB download (clothes pile gone); the option disappears once careful is done.
+  No errors. Practice: **progressive disclosure**, the expensive option appears only when the
+  cheap one has been tried.

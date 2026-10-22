@@ -349,3 +349,26 @@ target's service worker can't type a code. Build order, each step shippable:
   stored in the private bucket and streamed back byte for byte, an Instagram link recognised, a
   board saved and loaded, bad input and wrong file types refused. Test rows deleted afterwards
   (0 saves, 0 boards left). Run with a throwaway access code, so the real one was never read.
+
+## 22 Oct: step 2, capture
+
+- **Service worker** (`public/sw.js`): a share goes into an IndexedDB queue on the phone at once,
+  the share sheet closes onto `/inbox`, then uploads run: pictures shrunk on the phone to a long
+  side of 1600 px as WebP, links sent as they are. Failed uploads stay queued and retry on the
+  next share, when the inbox opens, when the phone is back online (Background Sync) or on demand.
+  Each picture in a multi-photo share is its own save.
+- **Link pictures** (`src/lib/server/link-picture.ts`): the server fetches the shared page,
+  reads `og:image`, downloads it and keeps the copy; only public web addresses (localhost and
+  private networks refused); size and time caps. Picture shapes come from the file's own header
+  (`image-size.ts`). **Found:** Instagram serves its preview to a plainly named link-preview bot
+  but not to a "phone browser" identity, so the fetcher names itself honestly as Selvedge.
+- **The screenshot ask:** a link whose picture can't be fetched is saved as a link and the inbox
+  says "Couldn't get the picture from this post. Take a screenshot and share that instead."
+- **Plain inbox** at `/inbox` with the access-code form (designed in step 3); the app now opens
+  there. The probe page and its store are retired.
+- **Tested end to end** in headless Chromium against Supabase: a 3000 × 4000 photo shared,
+  shrunk to WebP and stored with the right shape; the owner's Pinterest and Instagram links
+  saved with their pictures; a share made offline waited on the phone and arrived once back
+  online. Local and private addresses refused. Test rows deleted afterwards.
+- **Not yet checked:** a real Android phone; whether Instagram treats Vercel's servers like my
+  laptop. Marked shortcut: offline, the inbox page itself can't load (the share is still kept).

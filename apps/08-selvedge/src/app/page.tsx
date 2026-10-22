@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-// shortcut: a holding page for the share-target spike, replace with the inbox.
+// shortcut: a holding page until the home page (the latest board's character) is designed.
 export default function Home() {
   return (
     <main className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center gap-4 p-6">
@@ -9,8 +9,8 @@ export default function Home() {
         Install this app (Chrome menu, Install app), then share from Instagram, Pinterest or your
         gallery and choose Selvedge.
       </p>
-      <Link href="/probe" className="underline underline-offset-4">
-        See what arrived
+      <Link href="/inbox" className="underline underline-offset-4">
+        Open your inbox
       </Link>
     </main>
   );

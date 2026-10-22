@@ -1,8 +1,12 @@
 import { SOURCES, UUID, cleanText, firstLink, sourceOf, type Source } from "@/lib/library";
 import { guard } from "@/lib/server/access";
 import { serverError } from "@/lib/server/failure";
+import { imageSize } from "@/lib/server/image-size";
+import { fetchLinkPicture } from "@/lib/server/link-picture";
 
-// My saves: GET lists them, newest first; POST adds one (a picture, a link, or both; multipart);
+// My saves: GET lists them, newest first; POST adds one (a picture, a link, or both; multipart).
+// A link without a picture gets one from its page (og:image), kept as a copy; if that fails the
+// save is kept as a link and the inbox asks for a screenshot.
 // DELETE ?id= removes one with its picture. The id comes from the browser, so a share that's
 // retried after a dropped connection lands once.
 const TYPES = ["image/webp", "image/jpeg", "image/png"];
@@ -34,17 +38,18 @@ export async function POST(request: Request) {
   const text = cleanText(form.get("text"), 2000);
   const link = cleanText(form.get("url"), 2000) ?? firstLink(text);
   if (!image && !link) return Response.json({ error: "There's nothing to save." }, { status: 400 });
+  let picture: { bytes: Uint8Array; type: string } | null = image ?{ bytes: new Uint8Array(await image.arrayBuffer()), type: image.type } : null;
+  if (!picture && link) picture = await fetchLinkPicture(link);
+  // The picture's own header is the truth about its shape; the browser's number is a fallback.
+  const size = picture ? imageSize(picture.bytes) : null;
   const aspectIn = Number(form.get("aspect"));
-  const aspect = image && Number.isFinite(aspectIn) && aspectIn > 0 && aspectIn < 20 ? aspectIn : null;
+  const aspect = size && size.h > 0 ? size.w / size.h : picture && Number.isFinite(aspectIn) && aspectIn > 0 && aspectIn < 20 ? aspectIn : null;
   const given = String(form.get("source") ?? "");
   const source: Source = (SOURCES as readonly string[]).includes(given) ? (given as Source) : sourceOf(link, !!image);
   const title = cleanText(form.get("title"), 300);
 
   try {
-    const save = await g.store.addSave({
-      id, link, source, title, aspect,
-      image: image ? { bytes: new Uint8Array(await image.arrayBuffer()), type: image.type } : null,
-    });
+    const save = await g.store.addSave({ id, link, source, title, aspect, image: picture });
     return Response.json({ save });
   } catch (error) {
     return serverError(error);

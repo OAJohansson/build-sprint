@@ -68,3 +68,13 @@
 @keyframes chip-in { from { opacity: 0; transform: translateX(-50%) translateY(4px) scale(0.97); } }
 .desk-chip { animation: chip-in 160ms cubic-bezier(0.23, 1, 0.32, 1); transform-origin: 50% 100%; }
 @media (prefers-reduced-motion: reduce) { .desk-chip { animation: none; } }
+
+/* The picked state in the new-board picker (owner's pick D, 22 Oct): a small watercolour dot of
+   the logo's yellow at the corner and the faintest pencil frame; every photo stays full colour. */
+.pick-tile { border: 0; padding: 0; background: none; cursor: pointer; transition: transform 150ms ease-out; }
+.pick-tile:active { transform: scale(0.97); }
+.pick-tile::before { content: ""; position: absolute; inset: -5px; border: 1.4px solid #3a2a20; border-radius: 4px 7px 3px 6px; filter: url(#pencil-line); opacity: 0; transition: opacity 180ms ease-out; pointer-events: none; }
+.pick-tile[aria-pressed="true"]::before { opacity: 0.22; }
+.pick-dot { position: absolute; top: -10px; right: -10px; width: 24px; height: 24px; overflow: visible; pointer-events: none; opacity: 0; transform: scale(0.4); transition: opacity 160ms ease-out, transform 220ms cubic-bezier(0.23, 1, 0.32, 1); }
+.pick-tile[aria-pressed="true"] .pick-dot { opacity: 1; transform: scale(1); }
+@media (prefers-reduced-motion: reduce) { .pick-tile, .pick-tile::before, .pick-dot { transition: none; } }

@@ -447,3 +447,7 @@ target's service worker can't type a code. Build order, each step shippable:
   that grows in), F Selvedge thread (a fine yellow stitch down the photo's edge with a knot: a
   selvedge is denim's finished edge, marked with a coloured thread). Every photo stays in full
   colour; no hard outlines.
+- **Owner's pick: D, the yellow dot**, now in the picker (a small watercolour dot of the logo's
+  yellow and the faintest pencil frame). **The selvedge thread (F) is kept as a design concept**
+  for later ("it ties back to the brand... I want to use it somewhere"), recorded in the backlog.
+  Feedback 2 fixed.

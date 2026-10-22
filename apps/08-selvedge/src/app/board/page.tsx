@@ -94,6 +94,7 @@ function BoardApp() {
       <svg width="0" height="0" className="absolute" aria-hidden="true">
         <filter id="pencil-line"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" /><feDisplacementMap in="SourceGraphic" scale="3.2" /></filter>
         <filter id="wash-edge"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" seed="9" /><feDisplacementMap in="SourceGraphic" scale="9" /></filter>
+        <filter id="ink-bleed"><feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="7" /><feDisplacementMap in="SourceGraphic" scale="3" /></filter>
       </svg>
 
       {board && !picking ? (
@@ -228,9 +229,13 @@ function Picker({ photos, name: suggested, onMake, onCancel }: { photos: Save[];
       </label>
       <div className="grid grid-cols-6 gap-3">
         {photos.map((s) => (
-          <button key={s.id} type="button" onClick={() => toggle(s.id)} aria-pressed={picked.has(s.id)}
-            className={`relative aspect-[3/4] overflow-hidden rounded-sm transition-opacity duration-150 ease-out ${picked.has(s.id) ? "outline outline-2 outline-offset-2 outline-[#3a2a20]" : "opacity-45"}`}>
-            <img src={imageUrl(s.id)} alt="" loading="lazy" className="h-full w-full object-cover" />
+          // Picked: a small yellow dot and the faintest pencil frame (owner's pick D, 22 Oct).
+          <button key={s.id} type="button" onClick={() => toggle(s.id)} aria-pressed={picked.has(s.id)} className="pick-tile relative aspect-[3/4]">
+            <img src={imageUrl(s.id)} alt="" loading="lazy" className="h-full w-full rounded-[2px] object-cover" />
+            <svg className="pick-dot" viewBox="0 0 22 22" aria-hidden="true">
+              <circle cx="11" cy="11" r="7.5" fill="#f2d666" style={{ filter: "url(#ink-bleed)" }} />
+              <circle cx="9" cy="9" r="2.6" fill="#f7e595" opacity=".8" />
+            </svg>
           </button>
         ))}
       </div>

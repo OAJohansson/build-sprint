@@ -9,6 +9,7 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 ## Next
 
+- [ ] Website (side project): finish the brief (MVP and stop line, requirements), then the design session. Branch `website-discovery`; ask Claude to "continue the website"
 - [ ] Six AM: in the main folder, switch to `main`, pull, copy `.env.local` into `apps/07-six-am/`, then `pnpm ship 07-six-am` *(me)*
 - [ ] Six AM: the skipped checks on the live URL (`break-ui`, guidelines, simulated user test, a second device); see its backlog
 - [ ] Merge the Inkling pull request in kids-app so the new app and `/demo` go live at inkling-journal.vercel.app *(me)*

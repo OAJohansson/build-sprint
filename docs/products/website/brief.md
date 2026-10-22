@@ -51,6 +51,20 @@ is a phone and a minute or two. The first screen has to show how I think in seco
 
 ## Riskiest assumptions
 
+**Riskiest (test first): product thinking comes across in seconds on a phone.** It carries the
+top job and the whole site fails without it, and there's no evidence yet: it's the design's open
+tension. The MVP and the user test must check it (the 5-second guardrail below).
+*(Chosen by Claude at the owner's request.)*
+
+Assumption map:
+
+| | Little evidence | Some evidence |
+| --- | --- | --- |
+| **Important** | Product thinking in seconds on a phone (**test now**); creative design helps rather than slows | Hiring managers click a portfolio link in a CV |
+| **Less important** | | Enough public GambleAware and Vine Health material (cheap to check; the story can carry it if not) |
+
+Notes per assumption:
+
 - *Usability:* creative UI helps rather than slows a hiring manager with a minute on their phone.
 - *Viability:* I'm allowed to show visuals of GambleAware and Vine Health work. Plan: public
   material only (their live website and app, their own published posts), credited. Not cleared
@@ -69,9 +83,11 @@ site.
 
 | Signal | How I'll measure it | Target |
 | --- | --- | --- |
-| Interviewers bring up something from the site unprompted | One line per interview in a log: mentioned or not, and what | Owner to set. Framed as a bet: at least 3 of my next 10 interviews; 0 of 10 means rethink the site |
-| The link gets opened | A tag per application in the link (`?ref=company`), read in analytics | Owner to set |
-| Visitors go past the first screen | Visits that open at least one project | Owner to set. First 20 visits set the baseline |
+| Interviewers bring up something from the site unprompted | One line per interview in a log: mentioned or not, and what | At least 3 of my next 10 interviews; 0 of 10 means rethink the site |
+| The link gets opened | A tag per application in the link (`?ref=company`), read in analytics | Opened for at least half the applications it's sent with |
+| Visitors go past the first screen | Visits that open at least one project | First 20 visits set the baseline; then a real target |
+
+*(Targets set by Claude at the owner's request, as decision lines rather than forecasts.)*
 
 **Guardrail:** not too much information. In the user test, a hiring manager can say who I am and
 what I'm good at after 5 seconds on the first screen, and finishes a project story in about 2

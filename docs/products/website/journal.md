@@ -97,3 +97,11 @@ owner's yes, merged PR #53 and republished from `main`; discovery continues on
 `website-discovery`. Not a git conflict: worktrees isolate files, but the notebook is one
 published page outside git, and whoever publishes last wins. Fix proposed to the owner: publish
 only from `main`.
+
+### Riskiest assumption and targets (Claude's call, owner behind schedule)
+
+Owner asked Claude to decide and move on. Riskiest: product thinking comes across in seconds on a
+phone (carries the top job, no evidence yet); the MVP and user test must check it. Targets as
+decision lines: 3 of the next 10 interviews mention the site (0 means rethink); the link opened
+for at least half the applications; the first 20 visits set the baseline for going past the
+first screen. Next: MVP and stop line, requirements, then the design session.

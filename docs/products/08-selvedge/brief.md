@@ -150,7 +150,7 @@ and search phrase opens a shop search.
 living illustrator. *(AI-generated clothes images were a no-go until 22 Oct; the owner reversed
 it: the character illustrates my own taste, it doesn't replace it.)*
 
-**Rabbit holes:** link unfurling for Instagram and Pinterest, collage layout algorithms (pick a
+**Rabbit holes:** link unfurling for Instagram and Pinterest, collage layout algorithms (keep to
 the tiled draft), a full Canva-style editor (keep to drag, resize, crop, layers), background removal on day 1, colour-naming perfection,
 iOS (no share target there), image sizes (shrink in the browser before upload).
 

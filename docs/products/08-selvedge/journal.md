@@ -441,3 +441,9 @@ target's service worker can't type a code. Build order, each step shippable:
   4 (a photo keeps its shape when resized, so its whole picture stays; only Crop reframes it),
   and half of 2 (nothing pre-picked). "Start again from a draft" now tiles photos only.
 - **Select states** for 2: `design/select-states.html`, A Pencil tick, B Taped in, C Highlighter.
+- **Select states, round 2** (owner: "not sure about any of these"; wants the logo's yellow, soft
+  and subtle, "surprise me"): `design/select-states-2.html`. D Yellow dot (a watercolour dot at
+  the corner and the faintest pencil frame), E Underlined (a highlighter stroke under the photo
+  that grows in), F Selvedge thread (a fine yellow stitch down the photo's edge with a knot: a
+  selvedge is denim's finished edge, marked with a coloured thread). Every photo stays in full
+  colour; no hard outlines.

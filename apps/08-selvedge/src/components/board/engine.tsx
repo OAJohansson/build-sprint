@@ -7,7 +7,7 @@
 // the tools and saves sit, and saves the board.
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { imageUrl, type Piece, type Save } from "@/lib/library";
+import { cutoutUrl, imageUrl, type Piece, type Save } from "@/lib/library";
 
 export const BOARD_W = 1600;
 export const BOARD_H = 900;
@@ -145,6 +145,7 @@ export function useBoardEditor(initial: Piece[], onChange: (pieces: Piece[]) => 
       setPieces((ps) => [...ps, { id, kind, color, text: "", x: Math.round((at?.x ?? BOARD_W / 2) - w / 2), y: Math.round((at?.y ?? BOARD_H / 2) - h / 2), w, h, z: Math.max(0, ...ps.map((p) => p.z)) + 1, cropX: 50, cropY: 50, zoom: 1, rough: false }]);
       setSelected(id);
     },
+    setCutout: (on: boolean) => piece?.kind === "photo" && update(piece.id, { cutout: on }),
     setColor: (color: string) => piece && piece.kind !== "photo" && update(piece.id, { color }),
     setText: (text: string) => piece && piece.kind !== "photo" && update(piece.id, { text: text.slice(0, 80) }),
     replaceAll: (next: Piece[]) => { setPieces(() => next); setSelected(null); setCropping(false); },
@@ -171,9 +172,11 @@ export type BoardEditor = ReturnType<typeof useBoardEditor>;
 export type Rect = { left: number; top: number; width: number; height: number };
 
 /** The board itself: scales 1600 × 900 into its box and handles the pointer work. */
-export function BoardCanvas({ board, saves, chrome, className = "" }: {
+export function BoardCanvas({ board, saves, versions = {}, chrome, className = "" }: {
   board: BoardEditor;
   saves: Save[];
+  /** A version per save whose cut-out was just (re)made, so the new one shows straight away. */
+  versions?: Record<string, number>;
   chrome?: (rect: Rect) => React.ReactNode;
   className?: string;
 }) {
@@ -193,6 +196,8 @@ export function BoardCanvas({ board, saves, chrome, className = "" }: {
   type Mode = "move" | "resize" | "pan" | `edge-${string}`;
   const drag = useRef<{ id: string; mode: Mode; sx: number; sy: number; start: Piece; crop: Crop } | null>(null);
   const aspectOf = (p: Piece) => (p.saveId && byId.get(p.saveId)?.aspect) || 0.75;
+  // A piece shows its save's cut-out when that's on, else the photo.
+  const photoSrc = (p: Piece) => (p.cutout ? cutoutUrl(p.saveId!, versions[p.saveId!]) : imageUrl(p.saveId!));
 
   const onDown = (e: React.PointerEvent, p: Piece, mode: Mode) => {
     e.stopPropagation();
@@ -251,7 +256,7 @@ export function BoardCanvas({ board, saves, chrome, className = "" }: {
   // While cropping a photo: where the whole photo sits on screen around the kept part.
   const cropView = rect && sel && cropping && sel.kind === "photo" && sel.saveId ? (() => {
     const c = cropOf(sel, aspectOf(sel));
-    return { src: imageUrl(sel.saveId), full: { left: rect.left - (c.x / c.w) * rect.width, top: rect.top - (c.y / c.h) * rect.height, width: rect.width / c.w, height: rect.height / c.h } };
+    return { src: photoSrc(sel), full: { left: rect.left - (c.x / c.w) * rect.width, top: rect.top - (c.y / c.h) * rect.height, width: rect.width / c.w, height: rect.height / c.h } };
   })() : null;
 
   return (
@@ -266,7 +271,7 @@ export function BoardCanvas({ board, saves, chrome, className = "" }: {
             filter: p.rough ? "drop-shadow(0 3px 4px rgba(0,0,0,.28))" : undefined }}
             onPointerDown={(e) => onDown(e, p, "move")}>
             <div className="relative h-full w-full overflow-hidden" style={{ clipPath: p.rough ? roughEdge(p.id) : undefined }}>
-              {p.kind === "photo" && p.saveId && <CroppedPhoto src={imageUrl(p.saveId)} crop={cropOf(p, aspectOf(p))} />}
+              {p.kind === "photo" && p.saveId && <CroppedPhoto src={photoSrc(p)} crop={cropOf(p, aspectOf(p))} />}
               {p.kind === "swatch" && (
                 <div className="flex h-full w-full items-center justify-center p-[6%] text-center" style={{ background: p.color }}>
                   {p.text && <span style={{ font: `400 ${Math.min(p.h * 0.3, p.w * 0.16)}px/1.05 var(--font-hand)`, color: inkOn(p.color ?? PILL_CREAM), letterSpacing: "0.03em", textTransform: "uppercase" }}>{p.text}</span>}

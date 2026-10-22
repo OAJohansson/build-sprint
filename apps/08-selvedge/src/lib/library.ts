@@ -20,6 +20,8 @@ export type Save = {
 
 /** Where the picture of a save is served (the bucket is private; the server streams it). */
 export const imageUrl = (id: string) => `/api/photos?id=${id}`;
+/** Where a save's cut-out (background removed) is served; `v` busts the cache after a redo. */
+export const cutoutUrl = (id: string, v?: number) => `/api/cutouts?id=${id}${v ? `&v=${v}` : ""}`;
 
 export type Piece = {
   id: string;
@@ -30,6 +32,8 @@ export type Piece = {
   rough: boolean;
   /** The part of the original photo that shows, as fractions of its width and height (feedback 6). */
   crop?: { x: number; y: number; w: number; h: number };
+  /** Show the save's cut-out (background removed) instead of the photo (feedback 7). */
+  cutout?: boolean;
   color?: string;
   text?: string;
 };
@@ -90,6 +94,7 @@ export function parseDoc(v: unknown): BoardDoc | null {
       x: p.x as number, y: p.y as number, w: p.w as number, h: p.h as number, z: p.z as number,
       cropX: p.cropX as number, cropY: p.cropY as number, zoom: p.zoom as number, rough: p.rough === true,
       ...(cropOk(p.crop) ? { crop: p.crop as Piece["crop"] } : {}),
+      ...(p.cutout === true ? { cutout: true } : {}),
       ...(typeof p.color === "string" && /^#[0-9a-f]{6}$/i.test(p.color) ? { color: p.color } : {}),
       ...(typeof p.text === "string" ? { text: p.text.slice(0, 80) } : {}),
     });

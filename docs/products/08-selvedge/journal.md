@@ -239,3 +239,13 @@ What happened, what was decided and why. Newest last.
   the bigger editor, **cut-outs move to day 2**. Day 1 is now capture, inbox, seasonal boards and
   the editor (drag, resize, crop, layers, optional rough edges). Brief updated; the stop line
   now allows overlapping and layering, still no rotation or free text.
+- **Prototypes built** (`/prototype`, `apps/08-selvedge/src/app/prototypes/board-editor`, at
+  `/prototypes/board-editor`): three layouts on one shared engine. **Workbench** (tools always
+  visible: saves tray left, tool bar top), **Desk** (a board on a desk, saves as a strip of
+  prints, tools float by the picked piece) and **Gallery** (the board fills the screen; a small
+  bar on selection, saves in a sheet on request). Same board in each, drafted like the owner's:
+  14 saves tiled edge to edge in two rows, six palette squares over the seams, a hand-lettered
+  "SUMMER 2026" pill. Edits: drag, resize (corner), crop (pan, zoom with slider or wheel),
+  forward and back, delete (button or key), rough edge (off by default), add a save by click or
+  drag, a second board, "start again from a draft". Photos in a git-ignored
+  `public/prototype-board/`. Checked in the browser: every edit, all three layouts.

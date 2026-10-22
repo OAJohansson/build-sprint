@@ -310,3 +310,11 @@ What happened, what was decided and why. Newest last.
 - **Locked: Sketchbook V1** (owner, 22 Oct), plus one thing from V2: the soft pencil frame
   around the collage (drawn on its own layer, so V1 still clips pieces to the board). Next:
   Deliver (subtract, AI tells, the owner's own copy), then promote V1 into the app.
+- **Deliver (owner, 22 Oct).** Subtract: removed the top-bar hint and the tray footer (the one
+  AI tell found: helper text where nobody gets stuck); kept Back and "Start again from a draft".
+  Copy: the owner kept the current wording for now (Your saves, + New board, Start again from a
+  draft, Crop, Done cropping, Rough edge, Forward, Back, Delete), to revisit later.
+- **Design session summary (board editor):** seeds and ten directions, two contact sheets and a
+  collage lab all missed until the owner's own moodboard arrived; round 1 layouts (Workbench,
+  Desk, Gallery) gave the layout; round 2 personalities gave Sketchbook; critic rounds 1 and 2
+  (5/10 each, contradicting) were stopped; the owner locked Sketchbook V1 plus V2's frame.

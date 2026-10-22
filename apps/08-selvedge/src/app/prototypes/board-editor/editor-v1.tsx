@@ -2,6 +2,7 @@
 
 // Sketchbook V1: the owner's pick, exactly as it was in round 2 (restored from c0195e6 at the
 // owner's request, 22 Oct). Kept apart from editor.tsx so later rounds can't change it.
+// Deliver (owner, 22 Oct): the top-bar hint and the tray footer removed; copy kept as is.
 
 import { useMemo } from "react";
 import { BoardCanvas, SAVES, SaveThumb, useBoard, type Board, type Rect } from "./engine";
@@ -55,8 +56,7 @@ export default function SketchbookV1() {
           ))}
           <button onClick={board.actions.newBoard} className="ed-btn ed-tab ed-quiet"><span>+ New board</span></button>
         </nav>
-        <span className="ed-hint ml-auto">{p ? (board.cropping ? "Drag the photo to move it in its frame" : "Drag to move · corner to resize") : "Click a piece to edit it"}</span>
-        <button className="ed-btn ed-quiet" onClick={board.actions.redraft}><span>Start again from a draft</span></button>
+        <button className="ed-btn ed-quiet ml-auto" onClick={board.actions.redraft}><span>Start again from a draft</span></button>
       </header>
 
       <aside className="ed-tray overflow-y-auto p-4">
@@ -64,7 +64,6 @@ export default function SketchbookV1() {
         <div className="grid grid-cols-2 gap-3">
           {SAVES.map((s, i) => <SaveThumb key={s.id} save={s} board={board} className="ed-thumb aspect-[3/4]" style={{ ["--tilt" as string]: `${((i * 37) % 5) - 2}deg` }} />)}
         </div>
-        <p className="ed-tray-foot mt-4">Click a save, or drag it onto the board</p>
       </aside>
 
       <main className="ed-stage relative p-8">

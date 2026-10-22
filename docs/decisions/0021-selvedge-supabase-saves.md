@@ -20,7 +20,10 @@ Log, Scribble, Folio and Six AM share one (decisions 0015, 0020).
   (which saves, in what order and size, plus the palette) as JSON. Schema in
   `apps/08-selvedge/supabase/schema.sql`, run once in the SQL Editor.
 - Only the app's server routes talk to Supabase, with `SUPABASE_SECRET_KEY`; RLS on, no policies.
-- **Login:** an access code (`ACCESS_CODE`), typed once per device, as in Six AM.
+- **Login:** an access code (`ACCESS_CODE`), typed once per device and kept in an httpOnly
+  cookie (a header works too), because the share target's service worker can't type a code.
+  Pictures are streamed by the server from the private bucket (`/api/photos`), so the cookie on
+  plain `<img>` requests is enough and no signed links are needed.
 - **Offline shares:** the service worker that receives a share keeps it in the browser (IndexedDB)
   until the upload succeeds, so nothing shared is lost.
 

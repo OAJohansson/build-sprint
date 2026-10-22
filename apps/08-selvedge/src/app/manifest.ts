@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Selvedge",
     short_name: "Selvedge",
     description: "Save the clothes you love from anywhere, and see your style together.",
-    start_url: "/",
+    start_url: "/inbox",
     display: "standalone",
     background_color: "#1d2733",
     theme_color: "#1d2733",

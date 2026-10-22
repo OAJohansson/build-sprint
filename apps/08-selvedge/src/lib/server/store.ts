@@ -1,0 +1,164 @@
+import "server-only";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { Board, BoardDoc, BoardSummary, Save, Source } from "@/lib/library";
+
+// My saves and boards live in the shared Supabase project (supabase/schema.sql; decision 0021):
+// two tables and a private picture bucket. Only this server code holds the secret key. Without
+// Supabase env vars in development, an in-memory store stands in so the app runs locally; in
+// production that's an error instead. Pattern from Six AM (decision 0020).
+
+export type NewSave = { id: string; image: { bytes: Uint8Array; type: string } | null; aspect: number | null; link: string | null; source: Source; title: string | null };
+
+export type Store = {
+  listSaves(): Promise<Save[]>;
+  addSave(save: NewSave): Promise<Save>;
+  removeSave(id: string): Promise<void>;
+  /** The picture of a save, or null. */
+  readImage(id: string): Promise<{ bytes: Uint8Array; type: string } | null>;
+  listBoards(): Promise<BoardSummary[]>;
+  getBoard(id: string): Promise<Board | null>;
+  /** Create or update a board by id. Returns it as stored. */
+  saveBoard(id: string, name: string, doc: BoardDoc): Promise<Board>;
+  removeBoard(id: string): Promise<void>;
+};
+
+/** A database error with a plain-language reason for the server logs. */
+export class StoreError extends Error {}
+
+type DbError = { message: string; code?: string; statusCode?: string };
+
+function explain(error: DbError): string {
+  if (error.code === "42501" || /row-level security|permission denied/i.test(error.message)) {
+    return "The database refused. SUPABASE_SECRET_KEY must be the secret key (sb_secret_… or service_role), not the publishable key.";
+  }
+  if (error.code === "42P01" || error.code === "PGRST205" || /does not exist|could not find the table/i.test(error.message)) {
+    return "The selvedge tables are missing. Run apps/08-selvedge/supabase/schema.sql in the Supabase SQL Editor.";
+  }
+  if (/bucket not found/i.test(error.message)) {
+    return "The selvedge bucket is missing. Run apps/08-selvedge/supabase/schema.sql in the Supabase SQL Editor.";
+  }
+  if (/invalid api key|jwt|unauthorized/i.test(error.message)) {
+    return "Supabase rejected the key. Check SUPABASE_SECRET_KEY (copied in full, no spaces).";
+  }
+  return `Database error: ${error.message}${error.code ? ` (${error.code})` : ""}`;
+}
+
+type SaveRow = { id: string; image_path: string | null; aspect: number | null; link: string | null; source: Source; title: string | null; created_at: string };
+const toSave = (r: SaveRow): Save => ({ id: r.id, hasImage: !!r.image_path, aspect: r.aspect, link: r.link, source: r.source, title: r.title, createdAt: r.created_at });
+type BoardRow = { id: string; name: string; doc: BoardDoc; updated_at: string };
+const toBoard = (r: BoardRow): Board => ({ id: r.id, name: r.name, doc: r.doc, updatedAt: r.updated_at });
+
+const EXT: Record<string, string> = { "image/webp": "webp", "image/jpeg": "jpg", "image/png": "png" };
+
+function supabaseStore(db: SupabaseClient): Store {
+  const check = (error: DbError | null) => { if (error) throw new StoreError(explain(error)); };
+  const bucket = db.storage.from("selvedge");
+  const SAVE_COLS = "id, image_path, aspect, link, source, title, created_at";
+  return {
+    async listSaves() {
+      const { data, error } = await db.from("selvedge_saves").select(SAVE_COLS).order("created_at", { ascending: false });
+      check(error);
+      return (data as SaveRow[]).map(toSave);
+    },
+    async addSave(s) {
+      let image_path: string | null = null;
+      if (s.image) {
+        image_path = `saves/${s.id}.${EXT[s.image.type] ?? "img"}`;
+        const { error } = await bucket.upload(image_path, s.image.bytes, { contentType: s.image.type, upsert: true });
+        check(error);
+      }
+      const { data, error } = await db.from("selvedge_saves")
+        .upsert({ id: s.id, image_path, aspect: s.aspect, link: s.link, source: s.source, title: s.title })
+        .select(SAVE_COLS).single();
+      check(error);
+      return toSave(data as SaveRow);
+    },
+    async removeSave(id) {
+      const { data } = await db.from("selvedge_saves").select("image_path").eq("id", id).maybeSingle();
+      const { error } = await db.from("selvedge_saves").delete().eq("id", id);
+      check(error);
+      if (data?.image_path) await bucket.remove([data.image_path]);
+    },
+    async readImage(id) {
+      const { data: row, error } = await db.from("selvedge_saves").select("image_path").eq("id", id).maybeSingle();
+      check(error);
+      if (!row?.image_path) return null;
+      const { data, error: e2 } = await bucket.download(row.image_path);
+      check(e2);
+      return data ? { bytes: new Uint8Array(await data.arrayBuffer()), type: data.type || "image/webp" } : null;
+    },
+    async listBoards() {
+      const { data, error } = await db.from("selvedge_boards").select("id, name, updated_at").order("updated_at", { ascending: false });
+      check(error);
+      return (data as Omit<BoardRow, "doc">[]).map((r) => ({ id: r.id, name: r.name, updatedAt: r.updated_at }));
+    },
+    async getBoard(id) {
+      const { data, error } = await db.from("selvedge_boards").select("id, name, doc, updated_at").eq("id", id).maybeSingle();
+      check(error);
+      return data ? toBoard(data as BoardRow) : null;
+    },
+    async saveBoard(id, name, doc) {
+      const { data, error } = await db.from("selvedge_boards")
+        .upsert({ id, name, doc, updated_at: new Date().toISOString() })
+        .select("id, name, doc, updated_at").single();
+      check(error);
+      return toBoard(data as BoardRow);
+    },
+    async removeBoard(id) {
+      const { error } = await db.from("selvedge_boards").delete().eq("id", id);
+      check(error);
+    },
+  };
+}
+
+function memoryStore(): Store {
+  const g = globalThis as unknown as { __selvedgeMem?: { saves: Map<string, Save>; images: Map<string, { bytes: Uint8Array; type: string }>; boards: Map<string, Board> } };
+  const mem = (g.__selvedgeMem ??= { saves: new Map(), images: new Map(), boards: new Map() });
+  return {
+    async listSaves() { return [...mem.saves.values()].sort((a, b) => b.createdAt.localeCompare(a.createdAt)); },
+    async addSave(s) {
+      if (s.image) mem.images.set(s.id, s.image);
+      const save: Save = { id: s.id, hasImage: !!s.image, aspect: s.aspect, link: s.link, source: s.source, title: s.title, createdAt: new Date().toISOString() };
+      mem.saves.set(s.id, save);
+      return save;
+    },
+    async removeSave(id) { mem.saves.delete(id); mem.images.delete(id); },
+    async readImage(id) { return mem.images.get(id) ?? null; },
+    async listBoards() {
+      return [...mem.boards.values()].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).map(({ id, name, updatedAt }) => ({ id, name, updatedAt }));
+    },
+    async getBoard(id) { return mem.boards.get(id) ?? null; },
+    async saveBoard(id, name, doc) {
+      const board = { id, name, doc, updatedAt: new Date().toISOString() };
+      mem.boards.set(id, board);
+      return board;
+    },
+    async removeBoard(id) { mem.boards.delete(id); },
+  };
+}
+
+/** What kind of Supabase key this is, without trusting the variable name. */
+function keyKind(key: string): "secret" | "public" | "unknown" {
+  if (key.startsWith("sb_secret_")) return "secret";
+  if (key.startsWith("sb_publishable_")) return "public";
+  try {
+    const role = JSON.parse(Buffer.from(key.split(".")[1], "base64url").toString()).role;
+    if (role === "service_role") return "secret";
+    if (role === "anon" || role === "authenticated") return "public";
+  } catch {}
+  return "unknown";
+}
+
+export function getStore(): { store: Store } | { problem: string } {
+  const url = process.env.SUPABASE_URL?.trim().replace(/\/+$/, "");
+  const key = process.env.SUPABASE_SECRET_KEY?.trim();
+  if (process.env.SELVEDGE_MEMORY_STORE === "1" && process.env.NODE_ENV !== "production") return { store: memoryStore() };
+  if (url && key) {
+    if (keyKind(key) === "public") {
+      return { problem: "SUPABASE_SECRET_KEY is the publishable key. Use the secret key (sb_secret_…) and redeploy." };
+    }
+    return { store: supabaseStore(createClient(url, key, { auth: { persistSession: false } })) };
+  }
+  if (process.env.NODE_ENV !== "production") return { store: memoryStore() };
+  return { problem: "Database is not configured (SUPABASE_URL / SUPABASE_SECRET_KEY)." };
+}

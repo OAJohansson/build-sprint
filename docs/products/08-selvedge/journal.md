@@ -318,3 +318,57 @@ What happened, what was decided and why. Newest last.
   collage lab all missed until the owner's own moodboard arrived; round 1 layouts (Workbench,
   Desk, Gallery) gave the layout; round 2 personalities gave Sketchbook; critic rounds 1 and 2
   (5/10 each, contradicting) were stopped; the owner locked Sketchbook V1 plus V2's frame.
+
+## 22 Oct: day-1 build, the order
+
+PR #51 merged (the design session). Branch `08-day1-build`. Six AM's pattern carries over
+(server routes with the secret key, an access code on every route, an in-memory stand-in locally
+without keys); new for Selvedge: the access code also lives in a cookie, because the share
+target's service worker can't type a code. Build order, each step shippable:
+
+1. **Data and access:** Supabase schema (`selvedge_saves`, `selvedge_boards`, a private
+   `selvedge` bucket), server store with the in-memory stand-in, the access-code gate and cookie.
+2. **Capture:** the service worker queues shares in IndexedDB, shrinks images (long side about
+   1600 px, WebP), uploads when online; links get their picture from `og:image` on the server,
+   and if that fails the save says so and asks for a screenshot (requirement 3b).
+3. **Inbox (phone):** saves, newest first, where each came from, the screenshot ask; laptop
+   drag-and-drop bulk upload.
+4. **Boards and the editor:** promote Sketchbook V1 from the prototype into the app (and delete
+   the prototype surface), seasonal boards, the tiled draft from picked saves, autosave.
+5. **Real crop:** handles to trim each side, on top of pan and zoom.
+- **Step 1 done: data and access.** `supabase/schema.sql` (tables `selvedge_saves` and
+  `selvedge_boards`, a private `selvedge` bucket for webp, jpeg and png up to 5 MB, RLS on with
+  no policies); `src/lib/library.ts` (types and checks: UUIDs, names, board docs, the first link
+  in shared text, the source by host); `src/lib/server/store.ts` (Supabase, or an in-memory
+  stand-in locally; `SELVEDGE_MEMORY_STORE=1` forces it); the access code by header or cookie
+  (`/api/access`); routes `/api/saves`, `/api/photos`, `/api/boards`. Tested locally against the
+  in-memory store with a throwaway code: 13 checks pass. Not yet tested against Supabase: the
+  schema has to be run first (owner). Keys checked for format only, never printed.
+- **Schema run** by the owner in the Supabase SQL Editor ("Success. No rows returned"). The same
+  checks against the real project pass: access refused without the code, cookie set, a photo
+  stored in the private bucket and streamed back byte for byte, an Instagram link recognised, a
+  board saved and loaded, bad input and wrong file types refused. Test rows deleted afterwards
+  (0 saves, 0 boards left). Run with a throwaway access code, so the real one was never read.
+
+## 22 Oct: step 2, capture
+
+- **Service worker** (`public/sw.js`): a share goes into an IndexedDB queue on the phone at once,
+  the share sheet closes onto `/inbox`, then uploads run: pictures shrunk on the phone to a long
+  side of 1600 px as WebP, links sent as they are. Failed uploads stay queued and retry on the
+  next share, when the inbox opens, when the phone is back online (Background Sync) or on demand.
+  Each picture in a multi-photo share is its own save.
+- **Link pictures** (`src/lib/server/link-picture.ts`): the server fetches the shared page,
+  reads `og:image`, downloads it and keeps the copy; only public web addresses (localhost and
+  private networks refused); size and time caps. Picture shapes come from the file's own header
+  (`image-size.ts`). **Found:** Instagram serves its preview to a plainly named link-preview bot
+  but not to a "phone browser" identity, so the fetcher names itself honestly as Selvedge.
+- **The screenshot ask:** a link whose picture can't be fetched is saved as a link and the inbox
+  says "Couldn't get the picture from this post. Take a screenshot and share that instead."
+- **Plain inbox** at `/inbox` with the access-code form (designed in step 3); the app now opens
+  there. The probe page and its store are retired.
+- **Tested end to end** in headless Chromium against Supabase: a 3000 × 4000 photo shared,
+  shrunk to WebP and stored with the right shape; the owner's Pinterest and Instagram links
+  saved with their pictures; a share made offline waited on the phone and arrived once back
+  online. Local and private addresses refused. Test rows deleted afterwards.
+- **Not yet checked:** a real Android phone; whether Instagram treats Vercel's servers like my
+  laptop. Marked shortcut: offline, the inbox page itself can't load (the share is still kept).

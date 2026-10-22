@@ -161,3 +161,19 @@ What happened, what was decided and why. Newest last.
   lines into vector strokes and animate them on, before the colour fades in. Real drawing, real
   motion. Claude-drawn doodles (rough.js style) suit the small illustrations around the app and
   the waiting screen.
+
+## 22 Oct: draw-on spike
+
+- **Built** `apps/08-selvedge/public/spike/draw-on.html`: takes the finished drawing and replays
+  it as if drawn. It finds the ink (pixels clearly darker than their surroundings, so a dark
+  wash like the brown tee isn't mistaken for a line), walks each connected line outward from its
+  top so ink flows along the strokes, reveals the lines with six "pens" at once (54 long lines,
+  then the short hatching marks), then fades the watercolour in. About 9 s of drawing plus
+  1.6 s of colour; all in the browser, on any drawing, nothing to install.
+- **First pass** also drew 2,200 specks of paper grain and a black patch from the dark tee wash;
+  fixed by using local contrast only and leaving specks to the colour pass.
+- **Result:** a clean pencil sketch of the owner's character builds up top to bottom, then the
+  colour washes in. It runs after the drawing arrives, so it adds to the 88 s wait instead of
+  hiding it; on day 2 the waiting screen covers the model's time, then the draw-on is the reveal.
+- **Not checked:** other drawings (thresholds are tuned on one), a phone (1 million pixels of
+  work up front, about a second on a laptop).

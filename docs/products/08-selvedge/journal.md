@@ -372,3 +372,15 @@ target's service worker can't type a code. Build order, each step shippable:
   online. Local and private addresses refused. Test rows deleted afterwards.
 - **Not yet checked:** a real Android phone; whether Instagram treats Vercel's servers like my
   laptop. Marked shortcut: offline, the inbox page itself can't load (the share is still kept).
+
+## 22 Oct: live, and capture works on the phone
+
+- **Keys reached production.** The first ship had no keys; after they were added, `pnpm ship`
+  set them but its deploy was cancelled by the skip-unchanged rule, so production refused every
+  code (503). Patched with `.env.example` (PR #55, a real deploy with the keys); the proper fix,
+  ship forcing the build after a key change, went to its own session (PRs #56 and #57, merged).
+- **Owner's phone test (22 Oct): all good.** The access code works on the phone; a Pinterest
+  pin, an Instagram post and a gallery picture were shared to Selvedge and all three arrived in
+  the inbox with their pictures. So Instagram's preview works from Vercel's servers too, which
+  was the one thing only the real phone could show. The riskiest assumption (saving is as quick
+  as a screenshot, and every source gives a picture) holds for one person.

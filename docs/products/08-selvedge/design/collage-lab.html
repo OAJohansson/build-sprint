@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selvedge collage lab</title>
+<!-- A random collage generator for the board: every shuffle lays the Summer 2026 saves out again,
+     cut by hand (scissors, torn, cut around the figure), overlapping, with scraps, tape and
+     magazine words. The controls set how messy it gets. The photos in board/ stay out of git. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Bodoni+Moda:ital,wght@0,500;1,500&family=Caveat:wght@600&family=Courier+Prime:wght@700&family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#161513;color:#e9e5dc;font:14px/1.45 Inter,system-ui,sans-serif;padding:20px 24px 40px}
+.bar{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;margin-bottom:14px}
+.bar label{display:flex;gap:8px;align-items:center;color:#b8b2a6}.bar input[type=range]{width:110px}
+button,select{font:inherit;color:#e9e5dc;background:#24221f;border:1px solid #3a3732;border-radius:8px;padding:7px 12px;cursor:pointer}
+button.main{background:#e9e5dc;color:#161513;border-color:#e9e5dc;font-weight:600}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.presets button.on{border-color:#e9e5dc}
+.stage{position:relative;width:100%;aspect-ratio:1440/900;overflow:hidden;border-radius:6px}
+.frame{position:absolute;top:0;left:0;width:1440px;height:900px;overflow:hidden;transform-origin:0 0}
+.p{position:absolute}.p .in{width:100%;height:100%;background-repeat:no-repeat}
+.word{position:absolute;line-height:1;padding:4px 8px 6px;white-space:nowrap}
+.tape{position:absolute;height:24px;background:rgba(222,207,170,.75);mix-blend-mode:multiply}
+.note{color:#9a958b;margin-top:10px;max-width:900px}
+</style>
+</head>
+<body>
+<div class="presets" id="presets"></div>
+<div class="bar">
+  <button class="main" id="shuffle">Shuffle</button>
+  <label>Pieces <input type="range" id="count" min="8" max="34" value="22"></label>
+  <label>Overlap <input type="range" id="overlap" min="0" max="100" value="60"></label>
+  <label>Tilt <input type="range" id="tilt" min="0" max="20" value="7"></label>
+  <label>Details <input type="range" id="detail" min="0" max="100" value="45"></label>
+  <label>Scraps and tape <input type="range" id="bits" min="0" max="100" value="45"></label>
+  <label>Words <input type="range" id="words" min="0" max="10" value="4"></label>
+  <label>Cuts <select id="cuts"><option value="mix">Mixed</option><option value="figure">Around the figure</option><option value="scissor">Scissors</option><option value="torn">Torn</option></select></label>
+  <label>Paper <select id="paper"><option value="#f4efe4">Cream</option><option value="#fbfaf6">White</option><option value="#c4a57c">Kraft</option><option value="#1b1a18">Black</option><option value="#d9cdb6">Card</option></select></label>
+  <label><input type="checkbox" id="spread"> Spread fold</label>
+</div>
+<div class="stage" id="stage"><div class="frame" id="frame"></div></div>
+<p class="note">Every shuffle is a new board from the same 18 saves. Tell me the preset and settings you like, or say "this one" and I'll keep the arrangement (the number in the corner).</p>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let seed = 1;
+const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+const pick = (a) => a[Math.floor(rnd() * a.length)];
+const im = (n) => `board/${String(n).padStart(2, "0")}.jpg`;
+const PAL = ["#4b3326", "#efe6d3", "#6b6e4e", "#6c7378", "#2a3550", "#1d1b19"];
+
+// Whole looks (n, focus y) and cropped details (n, zoom, focus x, focus y, w/h ratio).
+const LOOKS = [[1, 22], [2, 40], [3, 45], [4, 45], [5, 45], [7, 40], [9, 35], [10, 40], [12, 40], [13, 45], [14, 40], [15, 40], [17, 45], [18, 45], [6, 45], [8, 40], [16, 40]];
+const DETAILS = [[13, 1.9, 50, 94, 1.3], [7, 1.9, 50, 93, 1.3], [3, 1.9, 50, 92, 1.3], [9, 3, 48, 3, 1.1], [6, 3, 64, 16, 1.2], [16, 2.6, 88, 8, 1.1], [15, 3, 40, 10, 1.1], [10, 3, 55, 48, 1], [16, 2, 55, 95, 1.4], [8, 2, 82, 95, 1.3], [11, 1.5, 50, 52, 1.8], [5, 3.2, 33, 28, 0.8], [8, 1.8, 25, 15, 1], [6, 1.8, 35, 45, 0.9]];
+const WORDS = ["summer", "roomy", "socks + bostons", "2026", "earth tones", "relaxed", "stripes", "wide leg", "the brown tee", "cream", "workwear", "90s"];
+const FONTS = ["Abril Fatface", "Anton", "Bodoni Moda", "Courier Prime", "Playfair Display", "Inter"];
+
+// Cut shapes as clip-path polygons (percent).
+function scissor() {
+  const j = () => 1 + rnd() * 6;
+  return `polygon(${j()}% ${j()}%, ${40 + rnd() * 20}% ${rnd() * 4}%, ${100 - j()}% ${j()}%, ${100 - rnd() * 4}% ${40 + rnd() * 20}%, ${100 - j()}% ${100 - j()}%, ${40 + rnd() * 20}% ${100 - rnd() * 4}%, ${j()}% ${100 - j()}%, ${rnd() * 4}% ${40 + rnd() * 20}%)`;
+}
+function torn() {
+  const pts = [], s = 2, a = 2.2;
+  for (let x = 0; x <= 100; x += s) pts.push(`${x}% ${rnd() * a}%`);
+  for (let y = 0; y <= 100; y += s) pts.push(`${100 - rnd() * a}% ${y}%`);
+  for (let x = 100; x >= 0; x -= s) pts.push(`${x}% ${100 - rnd() * a}%`);
+  for (let y = 100; y >= 0; y -= s) pts.push(`${rnd() * a}% ${y}%`);
+  return `polygon(${pts.join(",")})`;
+}
+function figure() { // a rough scissor cut around a standing figure: head, shoulders, legs
+  const half = [[50, 2], [62, 4], [66, 12], [62, 19], [80, 24], [86, 40], [84, 58], [74, 60], [72, 82], [76, 97], [56, 99], [52, 74]];
+  const j = () => rnd() * 3 - 1.5;
+  const right = half.map(([x, y]) => `${x + j()}% ${y + j()}%`);
+  const left = half.slice(1, -1).reverse().map(([x, y]) => `${100 - x + j()}% ${y + j()}%`);
+  return `polygon(${right.concat([`${48 + j()}% 74%`, `${44 + j()}% 99%`, `${24 + j()}% 97%`], left.slice(2)).join(",")})`;
+}
+
+function piece({ n, x, y, w, h, r, z, px, py, cut, shadow }) {
+  const size = z === 1 ? "cover" : `${Math.max(z, (h / w) * 0.8) * 100}% auto`;
+  return `<div class="p" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;transform:rotate(${r}deg);filter:drop-shadow(0 ${shadow}px ${shadow * 1.4}px rgba(0,0,0,.3));z-index:${Math.floor(rnd() * 50) + 10}">
+    <div class="in" style="clip-path:${cut};background-image:url(${im(n)});background-size:${size};background-position:${px}% ${py}%"></div></div>`;
+}
+
+function build(s) {
+  seed = s.seed;
+  const W = 1440, H = 900, out = [];
+  const dark = s.paper === "#1b1a18";
+  if (s.spread) out.push(`<div style="position:absolute;left:719px;top:0;bottom:0;width:3px;background:linear-gradient(90deg,#0000,#0003,#0000);z-index:200"></div>`);
+  // Scraps of coloured paper underneath.
+  const scraps = Math.round(s.bits / 12);
+  for (let i = 0; i < scraps; i++) {
+    const w = 120 + rnd() * 260, h = 80 + rnd() * 220;
+    out.push(`<div class="p" style="left:${rnd() * (W - w)}px;top:${rnd() * (H - h)}px;width:${w}px;height:${h}px;transform:rotate(${rnd() * 30 - 15}deg);z-index:${2 + i}"><div class="in" style="clip-path:${rnd() < 0.5 ? torn() : scissor()};background:${pick(PAL)};opacity:.9"></div></div>`);
+  }
+  // Pieces: spread across the board, overlap pulls them towards each other.
+  const cols = Math.ceil(Math.sqrt((s.count * W) / H)), rows = Math.ceil(s.count / cols);
+  const rowH = H / rows;
+  const used = [];
+  for (let i = 0; i < s.count; i++) {
+    const isDetail = rnd() * 100 < s.detail;
+    let n, z = 1, px = 50, py, ratio;
+    if (isDetail) { const d = pick(DETAILS); [n, z, px, py, ratio] = d; }
+    else { let l; do { l = pick(LOOKS); } while (used.includes(l[0]) && used.length < LOOKS.length); used.push(l[0]); [n, py] = l; ratio = 0.56; }
+    // Sized by row height: more overlap, bigger pieces in the same space.
+    const grow = 1 + s.overlap / 70;
+    const h = isDetail ? rowH * (0.55 + rnd() * 0.45) * grow : rowH * (1.05 + rnd() * 0.5) * grow;
+    const w = h * ratio;
+    const cx = ((i % cols) + 0.5 + (rnd() - 0.5) * 1.1) * (W / cols), cy = (Math.floor(i / cols) + 0.5 + (rnd() - 0.5) * 1.1) * (H / rows);
+    const cut = s.cuts === "mix" ? (isDetail ? pick([scissor(), torn(), "ellipse(48% 48% at 50% 50%)"]) : pick([figure(), scissor(), torn(), figure()])) :
+      s.cuts === "figure" ? (isDetail ? scissor() : figure()) : s.cuts === "scissor" ? scissor() : torn();
+    out.push(piece({ n, x: cx - w / 2, y: cy - h / 2, w, h, r: (rnd() * 2 - 1) * s.tilt, z, px, py, cut, shadow: 2 + rnd() * 5 }));
+  }
+  // Tape.
+  for (let i = 0; i < Math.round(s.bits / 9); i++) out.push(`<div class="tape" style="left:${rnd() * (W - 140)}px;top:${rnd() * (H - 30)}px;width:${70 + rnd() * 90}px;transform:rotate(${rnd() * 70 - 35}deg);z-index:90"></div>`);
+  // Words cut from magazines.
+  const title = s.ransomTitle;
+  for (let i = 0; i < s.words; i++) {
+    const t = pick(WORDS), bg = pick(["#fff", "#efe6d3", "#1d1b19", "#c23a2b", "#f3e27a"]);
+    const fg = ["#1d1b19", "#c23a2b"].includes(bg) ? "#fff" : "#1d1b19";
+    out.push(`<div class="word" style="left:${rnd() * (W - 260)}px;top:${rnd() * (H - 60)}px;font:${pick(["400", "700"])} ${18 + rnd() * 26}px '${pick(FONTS)}';background:${bg};color:${fg};transform:rotate(${rnd() * 16 - 8}deg);z-index:95;filter:drop-shadow(0 2px 2px rgba(0,0,0,.25))">${t}</div>`);
+  }
+  // The board's own title, cut out too, and the season switcher (kept readable).
+  out.push(`<div class="word" style="left:48px;top:40px;font:700 56px/1 'Playfair Display';font-style:italic;background:${dark ? "#efe6d3" : "#fff"};color:#1d1b19;transform:rotate(-2deg);z-index:150;filter:drop-shadow(0 3px 3px rgba(0,0,0,.3))">Summer 2026</div>`);
+  out.push(`<div style="position:absolute;right:40px;top:36px;display:flex;gap:8px;z-index:150;font:500 13px Inter">${["Summer 2026", "Spring 2026", "+ New board"].map((t, i) => `<span style="padding:6px 10px;border-radius:6px;background:${i === 0 ? "#1d1b19" : "#ffffffd9"};color:${i === 0 ? "#fff" : "#1d1b19"}">${t}</span>`).join("")}</div>`);
+  out.push(`<div style="position:absolute;right:40px;bottom:30px;display:flex;gap:6px;z-index:150">${PAL.map((c) => `<i style="display:block;width:30px;height:30px;background:${c};box-shadow:0 0 0 2px #fff"></i>`).join("")}</div>`);
+  out.push(`<div style="position:absolute;left:12px;bottom:8px;font:500 11px Inter;color:${dark ? "#777" : "#0007"};z-index:150">#${s.seed}</div>`);
+  const f = $("frame"); f.style.background = s.paper; f.innerHTML = out.join("");
+}
+
+const PRESETS = {
+  "Spread, messier": { count: 20, overlap: 70, tilt: 8, detail: 40, bits: 30, words: 4, cuts: "mix", paper: "#fbfaf6", spread: true },
+  "The pile": { count: 30, overlap: 100, tilt: 12, detail: 50, bits: 50, words: 3, cuts: "figure", paper: "#f4efe4", spread: false },
+  "Cut-out people": { count: 14, overlap: 55, tilt: 5, detail: 20, bits: 15, words: 2, cuts: "figure", paper: "#fbfaf6", spread: false },
+  "Kraft and tape": { count: 22, overlap: 65, tilt: 10, detail: 45, bits: 85, words: 3, cuts: "scissor", paper: "#c4a57c", spread: false },
+  "Torn on black": { count: 24, overlap: 75, tilt: 9, detail: 45, bits: 40, words: 4, cuts: "torn", paper: "#1b1a18", spread: false },
+  "Few and big": { count: 9, overlap: 85, tilt: 6, detail: 25, bits: 20, words: 1, cuts: "mix", paper: "#f4efe4", spread: true },
+};
+const state = { seed: 4242, ...PRESETS["Spread, messier"] };
+const ids = ["count", "overlap", "tilt", "detail", "bits", "words"];
+function toUI() { ids.forEach((k) => ($(k).value = state[k])); $("cuts").value = state.cuts; $("paper").value = state.paper; $("spread").checked = state.spread; }
+function fromUI() { ids.forEach((k) => (state[k] = Number($(k).value))); state.cuts = $("cuts").value; state.paper = $("paper").value; state.spread = $("spread").checked; }
+function fit() { $("frame").style.transform = `scale(${$("stage").clientWidth / 1440})`; }
+
+$("presets").innerHTML = Object.keys(PRESETS).map((k, i) => `<button data-k="${k}" class="${i ? "" : "on"}">${k}</button>`).join("");
+$("presets").onclick = (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  document.querySelectorAll(".presets button").forEach((x) => x.classList.toggle("on", x === b));
+  Object.assign(state, PRESETS[b.dataset.k]); toUI(); build(state);
+};
+document.querySelectorAll(".bar input,.bar select").forEach((el) => el.addEventListener("input", () => { fromUI(); build(state); }));
+$("shuffle").onclick = () => { state.seed = 1 + Math.floor(Math.random() * 99999); build(state); };
+addEventListener("resize", fit);
+toUI(); fit(); build(state);
+</script>
+</body>
+</html>

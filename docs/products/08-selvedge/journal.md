@@ -208,3 +208,12 @@ What happened, what was decided and why. Newest last.
   Stitched strips, Scrapbook, Quiet collage, and Ransom note (sounds wrong). Cuts are drawn in
   code (clip-path polygons for scissor and torn edges), which also tells us the real app can do
   them on any save.
+- **Contact sheet 2, owner:** "nothing really hits the mark." Wants it closer to their own
+  moodboard: "a bit random and overlapping", "not too polished, more like a hand-made thing";
+  Magazine spread was closest. (The example board still hasn't come through.)
+- **Collage lab** (`design/collage-lab.html`): instead of ten more guesses, a generator. Every
+  shuffle lays the 18 saves out again, cut three ways (scissors, torn, a rough cut around the
+  figure), overlapping, with paper scraps, tape and magazine words; sliders for pieces, overlap,
+  tilt, details, scraps and words; six presets (Spread messier, The pile, Cut-out people, Kraft
+  and tape, Torn on black, Few and big). It doubles as a test of the real auto-layout: the app
+  has to make this arrangement itself.

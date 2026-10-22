@@ -217,3 +217,25 @@ What happened, what was decided and why. Newest last.
   tilt, details, scraps and words; six presets (Spread messier, The pile, Cut-out people, Kraft
   and tape, Torn on black, Few and big). It doubles as a test of the real auto-layout: the app
   has to make this arrangement itself.
+
+## 22 Oct: the owner's own moodboard, and a pivot to an editor
+
+- **Reference at last** (`design/board/owner-moodboard-spring-summer.webp`, kept out of git):
+  photos tiled edge to edge with no gaps and no tilt; cut-outs with no background laid on top
+  (Dr. Martens, a Boston clog, sunglasses, a flat lay); plain colour-swatch squares overlapping
+  the photos; one title, "SPRING / SUMMER", hand-lettered on a cream pill in the middle. "Random
+  and overlapping" meant layered, not tilted scraps; every direction so far had missed that.
+- **Collage lab, owner:** "just random blobs of colours" (the photos likely didn't load in the
+  view they opened). Dropped either way: the owner wants to **make** the board, not have it made.
+- **Owner's new shape:** a board editor. Drag and drop images onto a board; a crop tool; cut a
+  figure out of its background, like their board; an optional rough "cut from a magazine" edge
+  (an option, not the default).
+- **Named as scope change:** day 1 had "the app lays the board out, light edits" and "no
+  free-form canvas"; background removal was listed as a rabbit hole. Owner calls pending: how to
+  cut out (scissors you trace, automatic removal, or both), and whether the app still lays out a
+  first draft to edit.
+- **Owner's calls (22 Oct):** cut-outs work **automatically, then you fix** them with scissors
+  traced by hand; a new board starts as a **tiled draft to edit**, like their own; and to pay for
+  the bigger editor, **cut-outs move to day 2**. Day 1 is now capture, inbox, seasonal boards and
+  the editor (drag, resize, crop, layers, optional rough edges). Brief updated; the stop line
+  now allows overlapping and layering, still no rotation or free text.

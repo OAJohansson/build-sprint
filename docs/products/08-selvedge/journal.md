@@ -407,3 +407,23 @@ target's service worker can't type a code. Build order, each step shippable:
   outfit. So from Vercel the embed page works at least some of the time; the earlier logo came
   from a moment it didn't. When it doesn't, the guard now turns that into the screenshot ask.
   Watch the `[instagram]` log lines for how often that happens.
+
+## 22 Oct: step 4, the board editor in the app
+
+- **Promoted Sketchbook V1** (as locked, with V2's soft frame) from the prototype into the app at
+  `/board`: `src/components/board/engine.tsx` (pieces, edits, canvas), `sketchbook.css`, the page
+  in `src/app/board/`. The prototype surface is deleted (the prototype skill's rule 5); its
+  photos folder and git-ignore line went with it. The access-code form is now a shared component.
+- **Seasonal boards:** names from the date (`src/lib/season.ts`: spring Mar–May, summer Jun–Aug,
+  autumn Sep–Nov, winter Dec–Feb, winter keeps the year it starts in), numbered when taken
+  ("Autumn 2026 (2)"). Unit test: 6 cases (normal, midnight at a month change, New Year inside
+  winter, a leap-year February end, first board, numbering), all pass.
+- **New board:** name it (this season by default), pick saves (the 14 newest picked to start),
+  "Make the board": tiled edge to edge, the palette from the photos, the title pill.
+- **Palette** (`src/lib/palette.ts`, in the browser, no AI): first try picked only whites and
+  greys (walls, pavements, backdrops). Now greys, extremes and photo edges count less: the test
+  board gave off-white, taupe, khaki, denim blue, mushroom and dark taupe.
+- **Autosave:** each edit is sent 0.7 s after the last one (and when the tab is hidden); a
+  quiet "Saving…" shows meanwhile. Checked: a dragged title saved and survived a reload.
+- **Tested** in the browser at 1440 × 900 against the in-memory store with the 18 design photos.
+  Not yet: the owner's real saves, a second device, the real crop (step 5).

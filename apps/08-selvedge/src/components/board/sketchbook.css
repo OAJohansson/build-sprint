@@ -94,3 +94,13 @@
 .shape-text { width: 140px; height: 30px; margin: 0 4px; padding: 0 8px; border: 1px solid rgba(58, 42, 32, 0.25); border-radius: 6px; background: #fffdf8; font: 400 16px/1 var(--font-pencil); color: #3a2a20; }
 .shape-text:focus { outline: 2px solid #f2d666; outline-offset: 1px; }
 @media (prefers-reduced-motion: reduce) { .shape-pick, .shape-colour { transition: none; } }
+
+/* The real crop (feedback 6): the whole photo faded around the piece, the kept part bright,
+   eight handles to trim the sides; drag inside to slide the photo under the box. */
+.crop-ghost { opacity: 0.32; z-index: 40; }
+.crop-box { overflow: hidden; z-index: 41; outline: 1.6px solid #3a2a20; outline-offset: 0; box-shadow: 0 0 0 9999px rgba(246, 239, 226, 0.25); }
+.crop-handle { z-index: 42; width: 12px; height: 12px; margin: -6px 0 0 -6px; background: #fffdf8; border: 1.6px solid #3a2a20; border-radius: 2px; }
+.crop-n, .crop-s { cursor: ns-resize; width: 22px; height: 8px; margin: -4px 0 0 -11px; border-radius: 4px; }
+.crop-e, .crop-w { cursor: ew-resize; width: 8px; height: 22px; margin: -11px 0 0 -4px; border-radius: 4px; }
+.crop-nw, .crop-se { cursor: nwse-resize; }
+.crop-ne, .crop-sw { cursor: nesw-resize; }

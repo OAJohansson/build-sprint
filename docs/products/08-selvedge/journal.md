@@ -457,3 +457,11 @@ target's service worker can't type a code. Build order, each step shippable:
   text is hand-lettered and turns cream on dark colours by itself. Checked: a yellow
   "SPRING / SUMMER" pill and a denim "DENIM" square, both autosaved with colour and text. The
   stop line now allows text inside shapes (still no loose text, no rotation).
+- **The real crop** (feedback 6): each photo keeps a crop box, the part of the original that
+  shows, as fractions of the photo; the original is never cut. Crop shows the whole photo faded
+  around the piece and the kept part bright, with handles on every corner and side: drag one to
+  trim, and the piece takes the new shape; drag inside to slide the photo under the box. Done
+  cropping keeps it, Reset brings back the whole photo at its own shape. Older pieces (framed
+  with cover and a focus point) carry their framing into a crop box unchanged. Picking another
+  piece leaves crop mode. Checked: a bottom trim (450 → 344 high), a right trim (308 → 240 wide),
+  a slide to the photo's left edge, Done, and Reset (back to 240 × 300, the photo's 0.8 shape).

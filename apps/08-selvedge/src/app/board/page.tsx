@@ -146,7 +146,7 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
     const t = trayRef.current ? [...new Set([...trayRef.current, ...used])] : undefined;
     if (t && t.length !== trayRef.current?.length) setTray(t);
     onChange(t ? { pieces, tray: t } : { pieces });
-  });
+  }, (id) => saves.find((x) => x.id === id)?.aspect ?? 0.75);
   const tools = useTools(editor);
   const p = editor.piece;
   const byId = useMemo(() => new Map(saves.map((s) => [s.id, s])), [saves]);
@@ -189,10 +189,6 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
           <span>{t.label}</span>
         </button>
       ))}
-      {editor.cropping && p && (
-        <input aria-label="Zoom" type="range" min={1} max={3} step={0.05} value={p.zoom} className="ed-zoom mx-2 w-24"
-          onChange={(e) => editor.actions.zoom(Number(e.target.value))} />
-      )}
     </div>
   );
 

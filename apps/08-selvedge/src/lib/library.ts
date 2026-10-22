@@ -28,6 +28,8 @@ export type Piece = {
   x: number; y: number; w: number; h: number; z: number;
   cropX: number; cropY: number; zoom: number;
   rough: boolean;
+  /** The part of the original photo that shows, as fractions of its width and height (feedback 6). */
+  crop?: { x: number; y: number; w: number; h: number };
   color?: string;
   text?: string;
 };
@@ -66,6 +68,12 @@ export function sourceOf(link: string | null, hasFile: boolean): Source {
 }
 
 const num = (v: unknown) => typeof v === "number" && Number.isFinite(v);
+const cropOk = (c: unknown) => {
+  const r = c as { x?: unknown; y?: unknown; w?: unknown; h?: unknown } | null;
+  if (!r || ![r.x, r.y, r.w, r.h].every(num)) return false;
+  const { x, y, w, h } = r as { x: number; y: number; w: number; h: number };
+  return x >= 0 && y >= 0 && w > 0.01 && h > 0.01 && x + w <= 1.0001 && y + h <= 1.0001;
+};
 
 /** A board as sent by the browser, checked piece by piece; null if it isn't one. */
 export function parseDoc(v: unknown): BoardDoc | null {
@@ -81,6 +89,7 @@ export function parseDoc(v: unknown): BoardDoc | null {
       ...(p.kind === "photo" ? { saveId: p.saveId as string } : {}),
       x: p.x as number, y: p.y as number, w: p.w as number, h: p.h as number, z: p.z as number,
       cropX: p.cropX as number, cropY: p.cropY as number, zoom: p.zoom as number, rough: p.rough === true,
+      ...(cropOk(p.crop) ? { crop: p.crop as Piece["crop"] } : {}),
       ...(typeof p.color === "string" && /^#[0-9a-f]{6}$/i.test(p.color) ? { color: p.color } : {}),
       ...(typeof p.text === "string" ? { text: p.text.slice(0, 80) } : {}),
     });

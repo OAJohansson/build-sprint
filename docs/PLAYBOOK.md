@@ -182,7 +182,7 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
   templates or the checklists, and log each one in [`learnings.md`](learnings.md) (the process changelog).
 - Add 1–3 bullets under **Learned** on the card, and 3–7 **key learnings** under the product's
   heading in [`learnings.md`](learnings.md) (new design principles go there too).
-- Set `status: shipped` (or `parked`, which is fine too) → `pnpm sync && pnpm notebook` → republish the notebook.
+- Set `status: shipped` (or `parked`, which is fine too) → `pnpm sync` → commit and merge → republish the notebook from `main` (`pnpm notebook`; see AGENTS.md).
 - Take a screenshot of the product for the website (where it goes is decided in the website brief).
 
 ## Definition of done

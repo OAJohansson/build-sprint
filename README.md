@@ -17,7 +17,7 @@ reps in going from idea to something live, plus an honest write-up of what I lea
 | 5 | **Inkling** | Young adults go round in circles about direction; ChatGPT agrees and forgets, and Inkling's real strength (naming the idea at work) was invisible inside a chat window | ✅ shipped | [live](https://inkling-journal.vercel.app) | [write-up](docs/products/05-inkling.md) · [code](https://github.com/OAJohansson/kids-app) |
 | 6 | **Folio** | My reading history sits in Goodreads, which feels clunky, buries opinions in long reviews and recommends books that miss my taste, so logging is a chore and picking the next book is guesswork | ✅ shipped | [live](https://folio-iota-jade.vercel.app) | [write-up](docs/products/06-folio.md) · [code](apps/06-folio) |
 | 7 | **Six AM** | Real DAWs look like a cockpit and GarageBand isn't built for dance music, so I never get from \"I'd love to\" to a track I can play | ✅ shipped | [live](https://six-am.vercel.app) | [write-up](docs/products/07-six-am.md) · [code](apps/07-six-am) |
-| 8 | **Selvedge** | My saved pieces are scattered across Instagram, Pinterest and screenshots and a moodboard takes an evening, so I can't put my style into words or find brands that match | 🛠️ building | — | [write-up](docs/products/08-selvedge.md) · [code](apps/08-selvedge) |
+| 8 | **Selvedge** | My saved pieces are scattered across Instagram, Pinterest and screenshots and a moodboard takes an evening, so I can't put my style into words or find brands that match | 🛠️ building | [live](https://selvedge-sandy.vercel.app) | [write-up](docs/products/08-selvedge.md) · [code](apps/08-selvedge) |
 <!-- products:end -->
 
 _This table is generated from `docs/products/*.md`. Run `pnpm sync` after editing frontmatter._

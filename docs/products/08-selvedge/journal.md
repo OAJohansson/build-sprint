@@ -52,3 +52,24 @@ What happened, what was decided and why. Newest last.
   URL, menu → Install app, open it once. Then share one of each: an Instagram post, a Pinterest
   pin, a gallery screenshot, and choose Selvedge. On the probe, tap "Copy as text" and paste the
   result here. The question: which apps send a picture, and which only a link?
+
+## 22 Oct: probe results
+
+- **Live** at https://selvedge-sandy.vercel.app (owner ran `pnpm ship`). Installed on the
+  owner's Android phone; Selvedge appears in the share sheet.
+- **What each app sends:**
+
+  | Source | Sends | Picture? |
+  | --- | --- | --- |
+  | Gallery | the file: `image/jpeg`, 6,203 KB | Yes, full size |
+  | Instagram | `text`: the post link (`instagram.com/p/…`) | No |
+  | Pinterest | `title`: "Take a look! 📌", `text`: the message plus a `pin.it` short link | No |
+
+  Links arrive in `text`, never in `url`, so capture has to pull the link out of the text.
+- **Links still lead to a picture.** Fetched from a server, both pages carry a public preview
+  image (`og:image`): Pinterest a stable 736 px image, Instagram a 640 px square crop whose link
+  expires. So the server downloads and keeps the picture at save time. Risk: Instagram can block
+  server fetches; a screenshot stays the fallback, and a link with no picture still saves.
+- **Consequences for design:** one inbox for both kinds (a picture, or a link with the picture
+  we fetched); a 6 MB photo must be shrunk in the browser before upload (decision 0021). The
+  Instagram square crop may cut off part of an outfit, so the board should cope with squares.

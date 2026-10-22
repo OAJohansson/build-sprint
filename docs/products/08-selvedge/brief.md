@@ -47,10 +47,13 @@ explore*. And saving into it is as quick as a screenshot, from the same share bu
 
 - **Usability (riskiest):** saving through the share sheet is as quick as an Instagram save or a
   screenshot, or I'll keep the old habit and the inbox stays empty. Everything else depends on it.
-- **Feasibility (check first, on the phone):** an installed web app (PWA) shows up in Android's
-  share sheet (Web Share Target API). The unknown is *what each app sends*: the gallery sends the
-  image; Instagram and Pinterest probably send only a link, and Instagram hides images behind a
-  login. If links bring no picture, screenshots are the capture path and links are a fallback.
+- **Feasibility (checked 22 Oct, probe):** the installed app is in Android's share sheet. The
+  gallery sends the image itself (a 6 MB JPEG, so shrink before upload). Instagram and Pinterest
+  send only a link, in the `text` field (the `url` field stays empty). Both links lead to a public
+  preview image (`og:image`) when fetched from a server: Pinterest a stable 736 px image,
+  Instagram a 640 px square crop on a signed link that expires, so the picture must be downloaded
+  and kept, not linked. Instagram may block server fetches at any time; the screenshot stays the
+  fallback.
 - **Value:** the AI's reading of my board is accurate enough to trust. Test it against my own
   read first (Folio's lesson: build the test before the model), with my style notes below as the
   answer key.
@@ -110,13 +113,13 @@ owned clothes, no accounts beyond an access code. All to `backlog.md`.
 
 ## Requirements
 
-Day 1. Drafted before the probe; rows 1–3 may change with what each app sends.
+Day 1. Rows 1–3 updated after the probe (22 Oct).
 
 | # | Must | Check |
 | --- | --- | --- |
 | 1 | The installed app appears in Android's share sheet | Share a screenshot from the gallery; Selvedge is in the list |
 | 2 | A shared image lands in the inbox in at most 2 taps after Share | Count taps from the gallery |
-| 3 | A shared link lands in the inbox with its preview if one is public | Share an Instagram post and a Pinterest pin |
+| 3 | A shared Instagram or Pinterest link lands in the inbox with its picture, kept by us | Share a post and a pin; both show a picture a day later |
 | 4 | A save on the phone shows up on the laptop | Share on the phone, reload on the laptop; it's there |
 | 5 | Dropping files on the laptop adds them all | Drop 20 screenshots; 20 in the inbox |
 | 6 | Picking saves makes a board with no hand layout | Pick 12; a collage and 5–6 swatches appear |

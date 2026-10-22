@@ -4,8 +4,9 @@ A one-page PRD, written before any code (playbook step 1). Short answers; the su
 
 ## Problem
 
-A hiring manager who has my CV can't tell from it whether I'm an exceptional product manager.
-*(Draft: what that costs them, and me, comes from "Today's alternatives".)*
+A hiring manager who has my CV can see where I've worked, but not how I think about product: the
+problems, decisions, users and outcomes behind each role. So they can't tell an exceptional
+product manager from a good CV, and I lose the call to people who present better.
 
 ## Who
 
@@ -20,15 +21,38 @@ the link on their phone between meetings. They should come away wanting to talk 
 as a person and a professional: CV history and the product portfolio. The site itself (UX/UI,
 creativity) is part of the evidence.
 
-*(Jobs as "When…, I want…, so I can…": not written yet.)*
+**Jobs (draft, to be ranked by the owner):**
+
+- **A.** When I've got a PM candidate's CV, I want to see how they think about product (problem,
+  decision, users, outcome, in plain words), so I can tell if they're exceptional and not just
+  experienced.
+- **B.** When I'm skimming between meetings, I want a quick feel for their work, with visuals and
+  the metrics they moved, so I can decide in a minute or two whether to book a call.
+- **C.** When I'm hiring for product judgement, I want to see their taste in things they designed
+  and built, so I know they can tell good from good enough.
+- **D.** When the role involves AI, I want proof they know how to judge AI quality (evals), so I
+  know they can ship AI features responsibly.
 
 ## Today's alternatives
+
+- **CV and LinkedIn:** show where I worked and for how long; good for a quick history check. They
+  don't show how I think, what I decided, or what changed for users, and every candidate's looks
+  the same.
+- **The screening call:** shows how I think, but costs them 30 minutes before they know if it's
+  worth it.
+- **Why they'd switch:** the website gives a taste of the call (my product thinking, taste and
+  evals) in the two minutes they already spend on the CV.
 
 ## Riskiest assumptions
 
 - *Usability:* creative UI helps rather than slows a hiring manager with a minute on their phone.
-- *Viability:* I'm allowed to show visuals of GambleAware and Vine Health work (employer or
-  client material, possibly under NDA).
+- *Viability:* I'm allowed to show visuals of GambleAware and Vine Health work. Plan: public
+  material only (their live website and app, their own published posts), credited. Not cleared
+  yet: **internal metrics**. Numbers I moved may be confidential unless already public; check the
+  contract or ask a former manager, or show them as relative changes.
+- *Value:* the sprint products can show evals. Today the evidence is Inkling (evals 8/8, prompt
+  and model checks) and Folio (two-level recommender eval, decision 0017); Scribble's eval is
+  still in its backlog.
 
 ## Success: what good looks like
 

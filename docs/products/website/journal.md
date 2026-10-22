@@ -44,3 +44,15 @@ career background) and Projects, led by GambleAware and Vine Health (the stronge
 examples, with visuals) plus the sprint products. Open question: one projects section or two.
 Captured as a draft in the brief's MVP, to test against the jobs once they're written. New
 risks noted: whether creative UI slows a phone reader, and whether employer work can be shown.
+
+### The gap the website fills
+
+Owner: today a hiring manager can't see how I think about product. The site should show, in very
+simple terms, the problems I solved, the decisions I made, the users we served and their outcome,
+with visuals and the metrics I moved. Two more signals: product taste (a nice site, and products I
+designed) and evals (AI work needs them). Turned into a sharper Problem, today's alternatives
+(CV/LinkedIn vs a screening call) and four draft jobs for the owner to rank.
+
+Risk question: public GambleAware and Vine Health material (website, own published posts) is the
+plan, credited. Internal metrics are the real risk; to be checked. Eval evidence exists in
+Inkling and Folio only.

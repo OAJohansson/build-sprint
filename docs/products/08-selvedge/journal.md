@@ -199,3 +199,12 @@ What happened, what was decided and why. Newest last.
 - **Contact sheet:** the owner couldn't picture one-liners, so all ten became rough frames of the
   same board with the real Summer 2026 saves (`design/contact-sheet.html`; the photos sit in a
   git-ignored `design/board/`). Real content this time, after Six AM's "childish" thumbnails.
+- **Contact sheet 1 rejected:** "none of these are along the direction I was thinking." The
+  owner wants a **collage, as if cut out of magazines**: images cropped and stuck together by
+  hand. (They meant to attach an example board; it didn't come through.)
+- **Contact sheet 2** (`design/contact-sheet-2.html`): ten collage directions, all cut-and-paste
+  with whole looks beside cropped details (Bostons, caps, stripes, Gazelles, sunglasses): Kraft
+  and scissors, Torn pages on black, The details, Photocopy zine, Swatch book, Magazine spread,
+  Stitched strips, Scrapbook, Quiet collage, and Ransom note (sounds wrong). Cuts are drawn in
+  code (clip-path polygons for scissor and torn edges), which also tells us the real app can do
+  them on any save.

@@ -6,5 +6,3 @@ next-env.d.ts
 .env*.local
 .vercel
 
-# Prototype photos: the owner's saves (other people's photos), never committed.
-/public/prototype-board/

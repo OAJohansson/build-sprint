@@ -1,0 +1,70 @@
+/* Sketchbook V1, the board editor's locked look (owner, 22 Oct), promoted from the prototype's
+   themes.css: the shared base, the .t-sketchbook1 personality and V2's soft frame around the
+   collage. The sketchy lines are drawn on separate layers bent by the #pencil-line SVG filter,
+   so borders wobble like a pencil while text stays crisp. */
+
+/* ---------- Defaults ---------- */
+.board-sel { outline: 2px solid #1b1c1e; outline-offset: 2px; box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.7); }
+.board-sel[data-cropping] { outline-color: #d9822b; }
+.board-handle { border-radius: 999px; border: 2px solid #fff; background: #1b1c1e; }
+.board-sheet { background: #f7f3ea; }
+.board-frame { display: none; }
+
+/* ---------- Shared editor bones ---------- */
+.ed { --ink: #1b1c1e; --paper: #f4f1ea; --muted: #6b6b6b; color: var(--ink); background: var(--paper); }
+.ed-btn { position: relative; height: 34px; padding: 0 12px; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; white-space: nowrap; transition: transform 150ms ease-out, color 150ms ease-out; }
+.ed-btn > span { position: relative; z-index: 1; }
+.ed-btn:active { transform: scale(0.97); }
+.ed-btn::before, .ed-btn::after { content: ""; position: absolute; inset: 0; pointer-events: none; transition: opacity 150ms ease-out; }
+.ed-thumb { position: relative; transition: transform 150ms ease-out; }
+.ed-thumb:hover { transform: translateY(-2px); }
+.ed-thumb:active { transform: scale(0.97); }
+.ed-chip { padding: 4px; }
+.ed-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ed-thumb { aspect-ratio: 3 / 4; }
+.ed-caption { display: none; }
+@media (prefers-reduced-motion: reduce) { .ed-btn, .ed-thumb { transition: none; } }
+
+
+/* ---------- Sketchbook V1: the owner's pick as it was in round 2 (restored from c0195e6) ---------- */
+.t-sketchbook1 { --ink: #3a2a20; --paper: #f7f0e3; --muted: #8f7e6c; --olive: #8a8f5c; --denim: #5d7aa6; --choc: #7a4b35; --hi: #f2d666;
+  font-family: var(--font-pencil); font-size: 17px; background: var(--paper); }
+.t-sketchbook1 .ed-top { position: relative; }
+.t-sketchbook1 .ed-top::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 0; border-bottom: 1.6px solid var(--ink); filter: url(#pencil-line); }
+.t-sketchbook1 .ed-logo { font: 400 36px/1 var(--font-hand); position: relative; z-index: 0; }
+.t-sketchbook1 .ed-logo::before { content: ""; position: absolute; left: -10px; right: -12px; top: 10px; bottom: -4px; background: var(--hi); opacity: 0.75; border-radius: 40% 55% 45% 60%; filter: url(#wash-edge); z-index: -1; }
+.t-sketchbook1 .ed-btn::before { border: 1.6px solid var(--ink); border-radius: 9px 11px 8px 10px; filter: url(#pencil-line); opacity: 0; }
+.t-sketchbook1 .ed-btn::after { inset: 3px -2px 1px 2px; border-radius: 45% 55% 50% 40% / 55% 45% 55% 45%; background: var(--wash, var(--olive)); opacity: 0; filter: url(#wash-edge); }
+.t-sketchbook1 .ed-btn:hover::before { opacity: 1; }
+.t-sketchbook1 .ed-btn:hover::after { opacity: 0.28; }
+.t-sketchbook1 .ed-btn[data-active]::after { opacity: 0.7; }
+.t-sketchbook1 .ed-btn[data-active] { color: #241a13; }
+.t-sketchbook1 .ed-tab { --wash: var(--hi); }
+.t-sketchbook1 .ed-tool:nth-child(2) { --wash: var(--denim); }
+.t-sketchbook1 .ed-tool:nth-child(3) { --wash: var(--olive); }
+.t-sketchbook1 .ed-tool:nth-child(4) { --wash: var(--choc); }
+.t-sketchbook1 .ed-tool[data-danger] { --wash: #c8553d; color: #8c2a1c; }
+.t-sketchbook1 .ed-quiet, .t-sketchbook1 .ed-hint { color: var(--muted); }
+.t-sketchbook1 .ed-tray { position: relative; }
+.t-sketchbook1 .ed-tray::after { content: ""; position: absolute; top: 12px; bottom: 12px; right: 0; border-right: 1.6px solid var(--ink); filter: url(#pencil-line); }
+.t-sketchbook1 .ed-tray-title { font: 400 28px/1 var(--font-hand); display: inline-block; position: relative; z-index: 0; }
+.t-sketchbook1 .ed-tray-title::before { content: ""; position: absolute; left: -6px; right: -10px; top: 12px; bottom: -2px; background: var(--denim); opacity: 0.35; border-radius: 50% 40% 55% 45%; filter: url(#wash-edge); z-index: -1; }
+.t-sketchbook1 .ed-tray-foot { color: var(--muted); font-size: 15px; }
+.t-sketchbook1 .ed-thumb { padding: 6px 6px 14px; background: #fffdf8; rotate: var(--tilt); box-shadow: 0 2px 6px rgba(58, 42, 32, 0.18); }
+.t-sketchbook1 .ed-chip { background: #fffdf8; border-radius: 14px; box-shadow: 0 6px 18px rgba(58, 42, 32, 0.2); }
+.t-sketchbook1 .ed-chip::before { content: ""; position: absolute; inset: 0; border: 1.8px solid var(--ink); border-radius: 12px 15px 11px 14px; filter: url(#pencil-line); pointer-events: none; }
+.t-sketchbook1 .ed-stage .board-sel { outline: none; box-shadow: none; }
+.t-sketchbook1 .ed-stage .board-sel::before { content: ""; position: absolute; inset: -7px; border: 2.4px solid var(--denim); border-radius: 8px; filter: url(#pencil-line); }
+.t-sketchbook1 .ed-stage .board-sel[data-cropping]::before { border-color: var(--choc); border-style: dashed; }
+.t-sketchbook1 .board-handle { border-radius: 50%; background: var(--hi); border: 2px solid var(--ink); filter: url(#pencil-line); }
+.t-sketchbook1 .ed-zoom { accent-color: var(--denim); }
+
+
+/* V1 keeps its look and borrows V2's soft pencil frame around the collage (owner, 22 Oct). */
+.t-sketchbook1 .board-frame { display: block; }
+.t-sketchbook1 .board-frame::after { content: ""; position: absolute; inset: -9px; border: 1.6px solid #4a4440; border-radius: 4px 7px 3px 6px; filter: url(#pencil-line); opacity: 0.55; }
+
+/* The tool chip appears by the picked piece. */
+@keyframes chip-in { from { opacity: 0; transform: translateX(-50%) translateY(4px) scale(0.97); } }
+.desk-chip { animation: chip-in 160ms cubic-bezier(0.23, 1, 0.32, 1); transform-origin: 50% 100%; }
+@media (prefers-reduced-motion: reduce) { .desk-chip { animation: none; } }

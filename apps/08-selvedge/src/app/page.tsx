@@ -9,9 +9,10 @@ export default function Home() {
         Install this app (Chrome menu, Install app), then share from Instagram, Pinterest or your
         gallery and choose Selvedge.
       </p>
-      <Link href="/inbox" className="underline underline-offset-4">
-        Open your inbox
-      </Link>
+      <div className="flex gap-5">
+        <Link href="/inbox" className="underline underline-offset-4">Open your inbox</Link>
+        <Link href="/board" className="underline underline-offset-4">Make a board</Link>
+      </div>
     </main>
   );
 }

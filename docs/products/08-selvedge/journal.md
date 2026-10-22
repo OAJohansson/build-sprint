@@ -344,3 +344,8 @@ target's service worker can't type a code. Build order, each step shippable:
   (`/api/access`); routes `/api/saves`, `/api/photos`, `/api/boards`. Tested locally against the
   in-memory store with a throwaway code: 13 checks pass. Not yet tested against Supabase: the
   schema has to be run first (owner). Keys checked for format only, never printed.
+- **Schema run** by the owner in the Supabase SQL Editor ("Success. No rows returned"). The same
+  checks against the real project pass: access refused without the code, cookie set, a photo
+  stored in the private bucket and streamed back byte for byte, an Instagram link recognised, a
+  board saved and loaded, bad input and wrong file types refused. Test rows deleted afterwards
+  (0 saves, 0 boards left). Run with a throwaway access code, so the real one was never read.

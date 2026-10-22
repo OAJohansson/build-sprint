@@ -150,3 +150,14 @@ What happened, what was decided and why. Newest last.
 - **Options for the owner:** image model only (best drawing, an 88 s wait); Claude only (live
   drawing, much simpler figures); or both: Claude sketches live in ink while the image model
   paints, then the painting replaces the sketch.
+- **Owner's verdict on the Claude drawing: "really bad."** Fair. Researched why the chess video
+  looks so much better. The open-source twin (`chess-in-the-margins`) draws every creature in
+  code with rough.js (a sketchy-line library), draws each part twice and alternates the copies
+  so lines "boil", and animates with GSAP: a crafted drawing engine refined over many rounds,
+  not a single SVG written blind. Its subjects are cartoon doodles (simple shapes Claude does
+  well), not a realistic fashion figure (faces, hands, folds, watercolour, which code draws
+  badly). My test had none of that: one pass, no library, no render-and-look loop.
+- **Better idea for "see it drawn":** let the image model make the drawing, then trace its ink
+  lines into vector strokes and animate them on, before the colour fades in. Real drawing, real
+  motion. Claude-drawn doodles (rough.js style) suit the small illustrations around the app and
+  the waiting screen.

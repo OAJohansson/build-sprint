@@ -923,6 +923,16 @@ on the fields. On models that think before answering, the thinking counts agains
 a limit sized for the answer alone cuts replies off. Treat a "max_tokens" stop as an error, not a
 result. Where we met it: Inkling (05), moving five 200-token calls to Claude Haiku 5.5.
 
+#### Two ways AI draws: pixels or code
+An image model (OpenAI's or Google's image models, Flux) paints pixels: rich, painterly,
+reads photos, but it arrives all at once and costs cents a picture. A language model like
+Claude draws by writing code (SVG, canvas, libraries like rough.js): instant, animatable,
+nearly free, crisp at any size, but strongest at simple shapes and doodles, weakest at
+realistic people. Why it matters: pick by what the drawing must be, and combine them (paint
+with one, animate with the other). Where we met it: Selvedge (08): the image model's
+character was "my style, full stop"; Claude's one-pass SVG of the same outfit was "really
+bad". From: practice; the doodle-chess projects made with Claude use rough.js plus GSAP.
+
 ### Judgment
 
 #### Keep the product calls
@@ -1077,6 +1087,9 @@ it. Where we met it: Folio (06): bestsellers finds the next liked book only 2% o
 these readers have already read 3.3 of the top 10, and only 9% of hidden books are in the top 100.
 
 ### Quiz
+
+**Q:** When would you have Claude draw in code rather than use an image model?
+**A:** When it must be instant, animated, cheap or simple (doodles, icons, UI marks); use an image model for painterly or realistic pictures, like a person in an outfit.
 
 **Q:** What is data contamination, and why does it matter when you evaluate an LLM?
 **A:** The model may have seen the test answers in its training data, so its score can flatter it; say so and prefer new or private test data.

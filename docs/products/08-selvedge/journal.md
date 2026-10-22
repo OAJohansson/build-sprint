@@ -267,3 +267,14 @@ What happened, what was decided and why. Newest last.
 - **Owner's pick, round 2: Sketchbook** ("love it!"): pencil lines plus watercolour washes in
   the palette, saves as tilted prints. Next: the intended aesthetic in one sentence, then the
   critic loop.
+- **Two feels, two tests (owner, 22 Oct).** Torn between "a designer's sketchbook" (where the
+  current design leans, and liked) and "cutting from magazines" (more creative, but a fear it
+  turns into a caricature). Built **Cut paper** next to Sketchbook: torn newsprint for the top
+  strip and the tool chip, scissor-cut scraps of palette paper as active states, a magazine
+  serif (Bodoni Moda) with small caps captions, masking tape on the prints only. Guardrail: no
+  ransom letters, no tape and scraps everywhere. Each goes to the design critic against its own
+  sentence:
+  1. Sketchbook: "Like working in a designer's sketchbook: pencil lines, a wash of colour, and
+     my photos taped in, never like software."
+  2. Cut paper: "Like sitting at a table cutting pieces out of magazines: warm, hand-made, a
+     little imperfect, and calm enough that my clothes do the talking."

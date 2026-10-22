@@ -6,7 +6,7 @@
 
 import { BoardCanvas, SAVES, SaveThumb, useBoard, useTools, type Rect } from "./engine";
 
-export type Theme = "pencil" | "sketchbook" | "workwear";
+export type Theme = "pencil" | "sketchbook" | "workwear" | "cutpaper";
 
 export default function Editor({ theme }: { theme: Theme }) {
   const board = useBoard();

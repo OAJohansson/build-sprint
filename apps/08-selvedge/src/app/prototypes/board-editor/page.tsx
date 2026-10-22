@@ -8,14 +8,12 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Editor from "./editor";
 import "./picker.css";
 
-// Round 2: one layout (round 1's pick: Workbench's tray, Desk's tools by the piece), three personalities.
-const Pencil = () => <Editor theme="pencil" />;
+// Round 3: the owner's pick (Sketchbook) against the same editor pushed towards magazine cut paper.
 const Sketchbook = () => <Editor theme="sketchbook" />;
-const Workwear = () => <Editor theme="workwear" />;
+const CutPaper = () => <Editor theme="cutpaper" />;
 const VARIANTS = [
-  { name: "Pencil", C: Pencil, top: false },
   { name: "Sketchbook", C: Sketchbook, top: false },
-  { name: "Workwear", C: Workwear, top: false },
+  { name: "Cut paper", C: CutPaper, top: false },
 ];
 
 export default function BoardEditorPrototypes() {

@@ -151,7 +151,7 @@ living illustrator. *(AI-generated clothes images were a no-go until 22 Oct; the
 it: the character illustrates my own taste, it doesn't replace it.)*
 
 **Rabbit holes:** link unfurling for Instagram and Pinterest, collage layout algorithms (pick a
-simple masonry grid), a free-form canvas editor, background removal, colour-naming perfection,
+the tiled draft), a full Canva-style editor (keep to drag, resize, crop, layers), background removal on day 1, colour-naming perfection,
 iOS (no share target there), image sizes (shrink in the browser before upload).
 
 ## Owner calls (decided 21 Oct)

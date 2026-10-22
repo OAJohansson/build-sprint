@@ -54,3 +54,13 @@ every Mallow deploy failed. It is now
 `if git cat-file -e "$VERCEL_GIT_PREVIOUS_SHA^{commit}" 2>/dev/null; then git diff --quiet "$VERCEL_GIT_PREVIOUS_SHA" HEAD -- .; else exit 1; fi`:
 no earlier deploy or a missing commit means build (exit 1); otherwise skip only when nothing in the
 app changed. Applied to every app and the template; checked locally for each case.
+
+## Update, 22 Oct: key-only changes need a manual redeploy
+
+Keys live on Vercel, not in the app's folder, so a ship that only changed keys is cancelled by the
+skip rule and the live site keeps the old keys (08 Selvedge, 22 Oct). It's rare, since a first
+ship always builds, and Vercel's API has no way to skip the rule, so ship now prints the manual
+fix instead: dashboard → Deployments → … → Redeploy, untick "Use project's Ignore Build Step". A
+ship-only signal the `ignoreCommand` reads was weighed and dropped as more machinery than a rare
+problem needs (PR #56); revisit if key-only changes become common. Also brought 08 Selvedge's
+`vercel.json` up to the 20 Oct version of the rule, which it had missed.

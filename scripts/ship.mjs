@@ -146,6 +146,16 @@ for (let i = 0; i < 90 && !["READY", "ERROR", "CANCELED"].includes(state); i++) 
   process.stdout.write(".");
 }
 console.log(` ${state}`);
+// shortcut: a key-only change is cancelled by the skip rule (decision 0016), and the API can't skip
+// it, so this prints the dashboard steps; automate it if key-only changes become frequent.
+if (state === "CANCELED") {
+  fail(
+    `The deployment was cancelled, most likely by the skip rule: nothing in ${rootDirectory} changed since the last deploy.\n` +
+      "  The live site still runs the old build. If you changed keys, rebuild it by hand:\n" +
+      `  Vercel dashboard → project ${name} → Deployments → … on the latest production deploy → Redeploy,\n` +
+      "  untick \"Use project's Ignore Build Step\", then Redeploy.",
+  );
+}
 if (state !== "READY") fail(`The deployment ended as ${state}. See the build log in the Vercel dashboard (project ${name}).`);
 
 // 6. The .vercel.app address, into the card.

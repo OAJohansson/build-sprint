@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Draw-on spike</title>
+<!--
+  Draw-on spike (Selvedge 08): makes a finished image-model drawing look as if it's being drawn.
+  1. Find the ink: pixels clearly darker than their surroundings (thin lines), not the broad washes.
+  2. Order the ink: walk each connected line outward from its top (breadth-first), so ink flows
+     along the strokes the way a pen would.
+  3. Reveal the ink in that order, a few pens at once, then fade in the full watercolour.
+  shortcut: a throwaway page, the real version becomes a component on day 2.
+-->
+<style>
+  html, body { margin: 0; background: #f4efe4; font: 14px system-ui, sans-serif; color: #3a2f28; }
+  main { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px; }
+  canvas { width: auto; height: auto; max-width: 100%; max-height: 82vh; border-radius: 8px; }
+  button { font: inherit; padding: 8px 14px; border: 1px solid #3a2f2855; border-radius: 8px; background: none; }
+</style>
+</head>
+<body>
+<main>
+  <canvas id="c"></canvas>
+  <div><button id="again">Draw again</button> <span id="status"></span></div>
+</main>
+<script>
+const SRC = new URLSearchParams(location.search).get("src") || "character.jpg";
+const SECONDS = Number(new URLSearchParams(location.search).get("s") || 9);
+const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+const status = document.getElementById("status");
+let run = 0;
+
+const img = new Image();
+img.onload = () => { prepare(); draw(); };
+img.src = SRC;
+
+let W, H, full, order, starts, paper;
+
+function prepare() {
+  W = canvas.width = img.naturalWidth; H = canvas.height = img.naturalHeight;
+  ctx.drawImage(img, 0, 0);
+  full = ctx.getImageData(0, 0, W, H);
+  const d = full.data, n = W * H, lum = new Float32Array(n);
+  for (let i = 0; i < n; i++) lum[i] = (0.299 * d[4 * i] + 0.587 * d[4 * i + 1] + 0.114 * d[4 * i + 2]) / 255;
+
+  // The paper colour: the brightest corner region's average.
+  paper = [d[0], d[1], d[2]];
+
+  // Local average by a box blur (radius R) from a summed-area table.
+  const R = 7, sat = new Float64Array((W + 1) * (H + 1));
+  for (let y = 0; y < H; y++) for (let x = 0, row = 0; x < W; x++) {
+    row += lum[y * W + x];
+    sat[(y + 1) * (W + 1) + x + 1] = sat[y * (W + 1) + x + 1] + row;
+  }
+  const ink = new Uint8Array(n);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const x0 = Math.max(0, x - R), x1 = Math.min(W, x + R + 1), y0 = Math.max(0, y - R), y1 = Math.min(H, y + R + 1);
+    const sum = sat[y1 * (W + 1) + x1] - sat[y0 * (W + 1) + x1] - sat[y1 * (W + 1) + x0] + sat[y0 * (W + 1) + x0];
+    const avg = sum / ((x1 - x0) * (y1 - y0)), v = lum[y * W + x];
+    // Local contrast only: a dark wash is dark everywhere, so it isn't ink; a line is darker
+    // than what's around it.
+    if (v < avg - 0.085) ink[y * W + x] = 1;
+  }
+
+  // Walk each connected line from its topmost pixel, breadth-first (8 neighbours).
+  const seen = new Uint8Array(n), comps = [];
+  for (let i = 0; i < n; i++) {
+    if (!ink[i] || seen[i]) continue;
+    const q = [i]; seen[i] = 1;
+    for (let h = 0; h < q.length; h++) {
+      const p = q[h], x = p % W, y = (p / W) | 0;
+      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+        const xx = x + dx, yy = y + dy;
+        if (xx < 0 || yy < 0 || xx >= W || yy >= H) continue;
+        const k = yy * W + xx;
+        if (ink[k] && !seen[k]) { seen[k] = 1; q.push(k); }
+      }
+    }
+    comps.push(q);
+  }
+  // Big lines first, top to bottom; short marks (hatching) after. Specks are paper grain:
+  // leave them for the colour pass.
+  const big = comps.filter(c => c.length >= 40).sort((a, b) => a[0] - b[0]);
+  const small = comps.filter(c => c.length >= 8 && c.length < 40).sort((a, b) => a[0] - b[0]);
+  order = big.concat(small);
+  status.textContent = `${order.length} lines`;
+}
+
+function draw() {
+  const me = ++run;
+  const out = ctx.createImageData(W, H), o = out.data, d = full.data;
+  for (let i = 0; i < W * H; i++) { o[4 * i] = paper[0]; o[4 * i + 1] = paper[1]; o[4 * i + 2] = paper[2]; o[4 * i + 3] = 255; }
+  const total = order.reduce((s, c) => s + c.length, 0);
+  const PENS = 6, perFrame = Math.ceil(total / (SECONDS * 60) / PENS);
+  const pens = []; let next = 0;
+  const take = () => (next < order.length ? { c: order[next++], h: 0 } : null);
+  for (let i = 0; i < PENS; i++) { const p = take(); if (p) pens.push(p); }
+
+  function frame() {
+    if (me !== run) return;
+    for (let i = 0; i < pens.length; i++) {
+      let pen = pens[i], budget = perFrame;
+      // Each pen spends its budget on its line, then picks up the next line.
+      while (pen && budget > 0) {
+        const steps = Math.min(budget, pen.c.length - pen.h);
+        for (let s = 0; s < steps; s++, pen.h++) {
+          const p = pen.c[pen.h] * 4;
+          o[p] = d[p]; o[p + 1] = d[p + 1]; o[p + 2] = d[p + 2];
+        }
+        budget -= steps;
+        if (pen.h >= pen.c.length) pen = pens[i] = take();
+      }
+    }
+    ctx.putImageData(out, 0, 0);
+    if (pens.some(Boolean)) { requestAnimationFrame(frame); return; }
+    status.textContent = "Colour";
+    const t0 = performance.now();
+    (function wash(now) {
+      if (me !== run) return;
+      const a = Math.min(1, (now - t0) / 1600);
+      ctx.putImageData(out, 0, 0);
+      ctx.globalAlpha = a; ctx.drawImage(img, 0, 0); ctx.globalAlpha = 1;
+      if (a < 1) requestAnimationFrame(wash); else status.textContent = "Done";
+    })(t0);
+  }
+  status.textContent = "Drawing…";
+  requestAnimationFrame(frame);
+}
+
+document.getElementById("again").onclick = draw;
+</script>
+</body>
+</html>

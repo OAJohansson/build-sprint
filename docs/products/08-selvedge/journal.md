@@ -402,3 +402,8 @@ target's service worker can't type a code. Build order, each step shippable:
   **Diagnostics:** `[instagram]` log lines (status, page reached, refused types; no personal
   data) so a re-share shows in Vercel's logs what Instagram sent. Locally the owner's new post
   stores portrait (0.75) with the whole outfit.
+- **Re-share after the guard (owner, 22 Oct): works.** Vercel's log shows the embed page answered
+  (268 KB, no refusals), and the save stored the photo as posted: 1280 × 1706 portrait, whole
+  outfit. So from Vercel the embed page works at least some of the time; the earlier logo came
+  from a moment it didn't. When it doesn't, the guard now turns that into the screenshot ask.
+  Watch the `[instagram]` log lines for how often that happens.

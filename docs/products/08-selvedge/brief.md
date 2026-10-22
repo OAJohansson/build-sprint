@@ -114,8 +114,9 @@ Share-target probe: done 22 Oct (see journal).
 style names, brands and search phrases that open in shops. Brands the middle way (owner, 21 Oct):
 the AI suggests freely, known and new, and every brand comes with a one-tap search link so I can
 check it's real. Tested against the answer key before it ships. Then the **character**: a
-hand-drawn figure wearing the board's style, drawn with the model the spike picks, and the home
-page opens on the latest board's character.
+hand-drawn figure wearing the board's style, drawn by OpenAI's `gpt-5.4-image-2` and revealed
+as if painted live (draw-on), with doodles to watch while it's drawn (decision 0022, proposed);
+the home page opens on the latest board's character.
 
 **Later:** a character that looks like me, from a selfie, once the plain character works and
 we've decided where face photos are stored (a shared database is wrong for them, decision 0021).

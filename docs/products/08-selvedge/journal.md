@@ -177,3 +177,14 @@ What happened, what was decided and why. Newest last.
   hiding it; on day 2 the waiting screen covers the model's time, then the draw-on is the reveal.
 - **Not checked:** other drawings (thresholds are tuned on one), a phone (1 million pixels of
   work up front, about a second on a laptop).
+
+## 22 Oct: spike findings, and back to the MVP
+
+- **Why the second attempt worked:** the first had Claude invent the drawing in code; the
+  second let the image model draw and Claude only replay it. Each tool did what it's good at.
+- **Claude only?** Not at this quality: Claude can't paint pixels, and code draws people and
+  fabric badly. A Claude-only "paper doll" (a drawn base figure and garment library, dressed per
+  board) stays an option: instant, free, the same character every season, but limited.
+- **Owner's lean:** OpenAI for the drawing plus Claude's draw-on reveal (decision 0022, proposed).
+  The owner called time on the spike: "we have spent too much time on this". Back to day 1
+  (capture, inbox, seasonal boards, board editing); the character waits until that ships.

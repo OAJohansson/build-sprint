@@ -56,3 +56,10 @@ designed) and evals (AI work needs them). Turned into a sharper Problem, today's
 Risk question: public GambleAware and Vine Health material (website, own published posts) is the
 plan, credited. Internal metrics are the real risk; to be checked. Eval evidence exists in
 Inkling and Folio only.
+
+### Jobs ranked
+
+Owner's order: product thinking, taste, AI judgement (evals), quick feel. Quick feel is last
+because the metrics are already in the CV summaries; they still appear wherever an outcome is
+told. This sets up the design's main tension: the top job usually needs reading, but the moment
+is a phone and a minute or two.

@@ -21,17 +21,23 @@ the link on their phone between meetings. They should come away wanting to talk 
 as a person and a professional: CV history and the product portfolio. The site itself (UX/UI,
 creativity) is part of the evidence.
 
-**Jobs (draft, to be ranked by the owner):**
+**Jobs, ranked by the owner:**
 
-- **A.** When I've got a PM candidate's CV, I want to see how they think about product (problem,
-  decision, users, outcome, in plain words), so I can tell if they're exceptional and not just
-  experienced.
-- **B.** When I'm skimming between meetings, I want a quick feel for their work, with visuals and
-  the metrics they moved, so I can decide in a minute or two whether to book a call.
-- **C.** When I'm hiring for product judgement, I want to see their taste in things they designed
-  and built, so I know they can tell good from good enough.
-- **D.** When the role involves AI, I want proof they know how to judge AI quality (evals), so I
-  know they can ship AI features responsibly.
+1. **Product thinking.** When I've got a PM candidate's CV, I want to see how they think about
+   product (problem, decision, users, outcome, in plain words), so I can tell if they're
+   exceptional and not just experienced.
+2. **Taste.** When I'm hiring for product judgement, I want to see their taste in things they
+   designed and built, so I know they can tell good from good enough.
+3. **AI judgement.** When the role involves AI, I want proof they know how to judge AI quality
+   (evals), so I know they can ship AI features responsibly.
+4. **Quick feel.** When I'm skimming between meetings, I want a quick feel for their work, with
+   visuals and the metrics they moved, so I can decide in a minute or two whether to book a call.
+
+Why quick feel is last: the metrics are already in the CV summaries, so the site doesn't need to
+lead with them; they still appear wherever an outcome is told.
+
+**Design tension to solve:** the top job (product thinking) usually takes reading, but the moment
+is a phone and a minute or two. The first screen has to show how I think in seconds.
 
 ## Today's alternatives
 

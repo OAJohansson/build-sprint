@@ -301,3 +301,9 @@ What happened, what was decided and why. Newest last.
   (hand face for titles only, a quiet small face for tool words); vary the tape.
 - **Learning:** a critic with no memory re-litigates; after two flat rounds, the owner's eye
   beats a third round.
+- **Owner: "I didn't want you to change the sketchbook design, I liked it as it was."**
+  Restored the round 2 Sketchbook exactly from git (`c0195e6`) as **Sketchbook V1**
+  (`editor-v1.tsx`, `.t-sketchbook1`, with round 2's own tools), kept the critic-loop version as
+  **Sketchbook V2**, and Cut paper beside them. The picker now shows all three.
+- **Learning:** the critic loop edited the owner's pick in place. When the owner has picked and
+  likes a design, the loop works on a copy and the pick stays untouched; "pick" means keep.

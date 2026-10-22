@@ -6,13 +6,15 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Editor from "./editor";
+import SketchbookV1 from "./editor-v1";
 import "./picker.css";
 
-// Round 3: the owner's pick (Sketchbook) against the same editor pushed towards magazine cut paper.
-const Sketchbook = () => <Editor theme="sketchbook" />;
+// Round 3: the owner's pick as it was (V1), the critic-loop version of it (V2), and Cut paper.
+const SketchbookV2 = () => <Editor theme="sketchbook" />;
 const CutPaper = () => <Editor theme="cutpaper" />;
 const VARIANTS = [
-  { name: "Sketchbook", C: Sketchbook, top: false },
+  { name: "Sketchbook V1", C: SketchbookV1, top: false },
+  { name: "Sketchbook V2", C: SketchbookV2, top: false },
   { name: "Cut paper", C: CutPaper, top: false },
 ];
 

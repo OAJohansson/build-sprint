@@ -14,3 +14,5 @@
 | Hand-drawn character wearing each board, shown first on the home page | Owner, 22 Oct; the creative heart | Day 2 (after the spike) |
 | Character that looks like me, from a selfie | Likeness and face-photo storage need their own decision | Later |
 | Compare seasons side by side (how my taste changed) | Seasonal boards make it possible | Later |
+| Hand-drawn illustrations to watch while the character is drawn (about 90 s) | Owner, 22 Oct: make the wait fun | Day 2 |
+| The same character across boards (one face, new outfits) | Image models vary between runs; a season-to-season story needs one recognisable figure | Day 2 (check), later |

@@ -127,4 +127,12 @@ What happened, what was decided and why. Newest last.
   and cheaper, but drew a Carhartt logo despite "no logos". Adding the style in words made both
   pick the board's signature pieces (camp-collar shirt, sunglasses, chain), which supports doing
   the style read before the drawing on day 2.
-- **Owner's pick:** pending.
+- **Owner's pick: OpenAI `gpt-5.4-image-2`, board alone.** "This one is so good, it's spot on.
+  It's my style, full stop," and they like the sketch style too. Notable: the winner came from
+  the images alone, with no style read in words, so on day 2 the drawing doesn't have to wait
+  for the read. The 88 s wait is fine with the owner: fill it with small hand-drawn
+  illustrations on screen while the character is drawn.
+- **Not yet known:** one drawing per prompt is a small sample. Image models vary between runs,
+  so the next drawing from the same board may be weaker, and the character won't look like the
+  same person from board to board unless we make it. The newest Google model
+  (`gemini-nano-banana-2.1`) was never tried.

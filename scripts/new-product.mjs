@@ -80,5 +80,5 @@ Next:
   pnpm -F ${slug} dev
   Deploy: vercel.com/new → import build-sprint → Root Directory "apps/${slug}" → Deploy
           then paste the URL into the doc's \`url:\` field.
-  After editing the doc: pnpm sync && pnpm notebook (then republish the notebook).
+  After editing the doc: pnpm sync and commit; republish the notebook from main after merging (see AGENTS.md).
 `);

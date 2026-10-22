@@ -264,3 +264,6 @@ What happened, what was decided and why. Newest last.
   (Pencil) or watercolour washes in the palette (Sketchbook). Workwear uses the selvedge stripe
   under the top bar, dashed thread stitching, and a leather-patch logo. Checked: all three render
   and edit.
+- **Owner's pick, round 2: Sketchbook** ("love it!"): pencil lines plus watercolour washes in
+  the palette, saves as tilted prints. Next: the intended aesthetic in one sentence, then the
+  critic loop.

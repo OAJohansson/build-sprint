@@ -318,3 +318,21 @@ What happened, what was decided and why. Newest last.
   collage lab all missed until the owner's own moodboard arrived; round 1 layouts (Workbench,
   Desk, Gallery) gave the layout; round 2 personalities gave Sketchbook; critic rounds 1 and 2
   (5/10 each, contradicting) were stopped; the owner locked Sketchbook V1 plus V2's frame.
+
+## 22 Oct: day-1 build, the order
+
+PR #51 merged (the design session). Branch `08-day1-build`. Six AM's pattern carries over
+(server routes with the secret key, an access code on every route, an in-memory stand-in locally
+without keys); new for Selvedge: the access code also lives in a cookie, because the share
+target's service worker can't type a code. Build order, each step shippable:
+
+1. **Data and access:** Supabase schema (`selvedge_saves`, `selvedge_boards`, a private
+   `selvedge` bucket), server store with the in-memory stand-in, the access-code gate and cookie.
+2. **Capture:** the service worker queues shares in IndexedDB, shrinks images (long side about
+   1600 px, WebP), uploads when online; links get their picture from `og:image` on the server,
+   and if that fails the save says so and asks for a screenshot (requirement 3b).
+3. **Inbox (phone):** saves, newest first, where each came from, the screenshot ask; laptop
+   drag-and-drop bulk upload.
+4. **Boards and the editor:** promote Sketchbook V1 from the prototype into the app (and delete
+   the prototype surface), seasonal boards, the tiled draft from picked saves, autosave.
+5. **Real crop:** handles to trim each side, on top of pan and zoom.

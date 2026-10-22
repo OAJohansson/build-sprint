@@ -88,3 +88,12 @@ Both added to the knowledge bank with quiz questions.
 Owner: "the assumption mapping is gold", and asked for the theory in the knowledge bank to quiz
 on. Expanded the entry (the 2×2, the four corners, the steps, evidence strength; Bland and
 Osterwalder) with three quiz questions.
+
+### Merged early: the notebook clash
+
+The Selvedge session asked (for the owner) to merge: I'd republished the notebook from the
+`website` branch, so a republish from `main` would have dropped the website pages. With the
+owner's yes, merged PR #53 and republished from `main`; discovery continues on
+`website-discovery`. Not a git conflict: worktrees isolate files, but the notebook is one
+published page outside git, and whoever publishes last wins. Fix proposed to the owner: publish
+only from `main`.

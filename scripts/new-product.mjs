@@ -1,12 +1,16 @@
-// Usage: pnpm new <slug> ["Display Title"]
+// Usage: pnpm new <slug> ["Display Title"] [--side]
 // Copies templates/next-starter to apps/NN-<slug>, creates the write-up in
 // docs/products/NN-<slug>.md and refreshes the README table.
+// --side: a side project that follows the playbook but isn't one of the 20, so no day
+// number: apps/<slug> and docs/products/<slug>.md.
 import fs from "node:fs";
 import path from "node:path";
 import { ROOT, APPS_DIR, PRODUCTS_DIR } from "./products.mjs";
 import { syncReadme } from "./sync-readme.mjs";
 
-const [rawSlug, ...titleParts] = process.argv.slice(2);
+const args = process.argv.slice(2);
+const side = args.includes("--side");
+const [rawSlug, ...titleParts] = args.filter((a) => a !== "--side");
 if (!rawSlug || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(rawSlug)) {
   console.error('Usage: pnpm new <kebab-slug> ["Display Title"]   e.g. pnpm new crossfit "CrossFit Log"');
   process.exit(1);
@@ -18,7 +22,7 @@ const taken = [...fs.readdirSync(APPS_DIR), ...fs.readdirSync(PRODUCTS_DIR)]
   .map(Number);
 const day = Math.max(0, ...taken) + 1;
 const nn = String(day).padStart(2, "0");
-const slug = `${nn}-${rawSlug}`;
+const slug = side ? rawSlug : `${nn}-${rawSlug}`;
 const title =
   titleParts.join(" ") ||
   rawSlug.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");
@@ -48,7 +52,8 @@ for (const entry of fs.readdirSync(appDir, { recursive: true, withFileTypes: tru
 }
 
 const doc = path.join(PRODUCTS_DIR, `${slug}.md`);
-fs.writeFileSync(doc, fill(fs.readFileSync(path.join(PRODUCTS_DIR, "TEMPLATE.md"), "utf8")));
+const card = fill(fs.readFileSync(path.join(PRODUCTS_DIR, "TEMPLATE.md"), "utf8"));
+fs.writeFileSync(doc, side ? card.replace(/^day: .*\n/m, "side: true\n") : card);
 
 // The product's folder: one file per notebook sub-page.
 const folder = path.join(PRODUCTS_DIR, slug);
@@ -65,7 +70,7 @@ for (const [name, text] of Object.entries(starters)) fs.writeFileSync(path.join(
 syncReadme();
 
 console.log(`
-Created day ${day}: ${title}
+Created ${side ? "side project" : `day ${day}`}: ${title}
   app    apps/${slug}
   doc    docs/products/${slug}.md   ← fill in user, problem and bet before coding
   folder docs/products/${slug}/     brief, journal, feedback, user-testing, backlog, learnings, story

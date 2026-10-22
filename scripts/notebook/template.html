@@ -178,6 +178,8 @@ h2 { font: 700 20px/1.2 var(--display); margin: 0; text-wrap: balance; }
     <ul class="nav" id="nav-pages"></ul>
     <p class="nav-label">Products</p>
     <ul class="nav" id="nav-products"></ul>
+    <p class="nav-label" id="nav-side-label" hidden>Alongside the sprint</p>
+    <ul class="nav" id="nav-side"></ul>
   </nav>
   <main><div class="col" id="view"></div></main>
 </div>
@@ -189,6 +191,10 @@ const DATA = /*DATA*/null;
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const nn = (d) => String(d).padStart(2, "0");
+// Side projects (e.g. the website) follow the playbook but aren't one of the 20: no day number.
+const SPRINT = DATA.products.filter((p) => !p.side);
+const SIDE = DATA.products.filter((p) => p.side);
+const dayLabel = (p) => (p.side ? "+" : nn(p.day));
 const md = (text) => {
   const html = window.marked ? marked.parse(text) : `<pre>${esc(text)}</pre>`;
   return html.replace(/<table>/g, '<div class="tw"><table>').replace(/<\/table>/g, "</table></div>");
@@ -210,33 +216,35 @@ function parseRoute() {
 function nav(current) {
   $("#nav-pages").innerHTML = [{ id: "overview", label: "Overview" }, ...DATA.pages]
     .map((pg) => `<li><a href="#${pg.id}" data-route="${pg.id}"><span class="t">${esc(pg.label)}</span></a></li>`).join("");
-  $("#nav-products").innerHTML = DATA.products.length
-    ? DATA.products.map((p) => {
-        const open = current.p && current.p.slug === p.slug;
-        const sub = open && p.sections.length
-          ? `<ul class="subnav"><li><a href="#${p.slug}" data-route="${p.slug}">Overview</a></li>${p.sections.map((s) =>
-              `<li><a href="#${p.slug}.${s.id}" data-route="${p.slug}.${s.id}">${esc(s.label)}</a></li>`).join("")}</ul>`
-          : "";
-        return `<li><a href="#${p.slug}" data-route="${open ? "" : p.slug}"><span class="d">${nn(p.day)}</span><span class="t">${esc(p.title)}</span></a>${sub}</li>`;
-      }).join("")
-    : `<li class="empty-nav">None yet</li>`;
+  const item = (p) => {
+    const open = current.p && current.p.slug === p.slug;
+    const sub = open && p.sections.length
+      ? `<ul class="subnav"><li><a href="#${p.slug}" data-route="${p.slug}">Overview</a></li>${p.sections.map((s) =>
+          `<li><a href="#${p.slug}.${s.id}" data-route="${p.slug}.${s.id}">${esc(s.label)}</a></li>`).join("")}</ul>`
+      : "";
+    return `<li><a href="#${p.slug}" data-route="${open ? "" : p.slug}"><span class="d">${dayLabel(p)}</span><span class="t">${esc(p.title)}</span></a>${sub}</li>`;
+  };
+  $("#nav-products").innerHTML = SPRINT.length ? SPRINT.map(item).join("") : `<li class="empty-nav">None yet</li>`;
+  $("#nav-side").innerHTML = SIDE.map(item).join("");
+  $("#nav-side-label").hidden = !SIDE.length;
 }
 
 function overview() {
-  const by = Object.fromEntries(DATA.products.map((p) => [p.day, p]));
-  const count = (s) => DATA.products.filter((p) => p.status === s).length;
+  const by = Object.fromEntries(SPRINT.map((p) => [p.day, p]));
+  const count = (s) => SPRINT.filter((p) => p.status === s).length;
   const cells = Array.from({ length: DATA.total }, (_, i) => {
     const p = by[i + 1];
     return p
       ? `<a class="cell ${esc(p.status)}" href="#${p.slug}" title="Day ${i + 1}: ${esc(p.title)}">${i + 1}</a>`
       : `<span class="cell" title="Day ${i + 1}">${i + 1}</span>`;
   }).join("");
-  const rows = DATA.products.length
-    ? `<div class="list">${DATA.products.map((p) => `
+  const row = (p) => `
         <a class="row" href="#${p.slug}">
-          <span class="d">${nn(p.day)}</span><span class="t">${esc(p.title)}</span>${pill(p.status)}
+          <span class="d">${dayLabel(p)}</span><span class="t">${esc(p.title)}</span>${pill(p.status)}
           <span class="p">${esc(p.problem || "Problem not written yet")}</span>
-        </a>`).join("")}</div>`
+        </a>`;
+  const rows = SPRINT.length
+    ? `<div class="list">${SPRINT.map(row).join("")}</div>`
     : `<div class="empty">No products yet. Day 1 starts with <code>pnpm new &lt;slug&gt;</code>.</div>`;
   return `
     <header class="head">
@@ -249,6 +257,7 @@ function overview() {
       <div class="tally"><span><b>${count("shipped")}</b>/${DATA.total} shipped</span><span><b>${count("building")}</b> building</span><span><b>${count("parked")}</b> parked</span></div>
     </section>
     <section class="head"><h2>Products</h2>${rows}</section>
+    ${SIDE.length ? `<section class="head"><h2>Alongside the sprint</h2><div class="list">${SIDE.map(row).join("")}</div></section>` : ""}
     <section class="head"><h2>Problems to solve</h2><div class="prose">${md(DATA.ideas)}</div></section>
     <div class="links">${DATA.pages.map((pg) => `<a class="btn" href="#${pg.id}">${esc(pg.label)}</a>`).join("")}<a class="btn" href="${DATA.repo}">Code on GitHub</a></div>`;
 }
@@ -370,7 +379,7 @@ function product(p) {
   const body = p.body.replace(/^##\s*Learned\s*\n+-\s*$/m, "").trim();
   return `
     <header class="head">
-      <div class="eyebrow"><span>Day ${nn(p.day)}</span><span>${esc(p.date)}</span>${pill(p.status)}</div>
+      <div class="eyebrow"><span>${p.side ? "Alongside the sprint" : `Day ${nn(p.day)}`}</span><span>${esc(p.date)}</span>${pill(p.status)}</div>
       <h1>${esc(p.title)}</h1>
     </header>
     <dl class="facts">${fact("User", p.user)}${fact("Problem", p.problem)}${fact("Bet", p.bet)}</dl>
@@ -382,7 +391,7 @@ function product(p) {
 
 function sectionPage(p, s) {
   return `
-    <div class="crumbs"><a href="#${p.slug}">${nn(p.day)} ${esc(p.title)}</a><span>/</span><span>${esc(s.label)}</span></div>
+    <div class="crumbs"><a href="#${p.slug}">${p.side ? "" : `${nn(p.day)} `}${esc(p.title)}</a><span>/</span><span>${esc(s.label)}</span></div>
     <section class="prose">${md(s.text)}</section>`;
 }
 

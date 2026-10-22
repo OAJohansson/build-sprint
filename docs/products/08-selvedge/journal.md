@@ -486,3 +486,11 @@ target's service worker can't type a code. Build order, each step shippable:
   the car (it touches the bag) and a clothes pile; **C wins all three**: the arm with its watch,
   no car, no clothes pile. In the browser, BEN2 on WebGPU ran out of memory in headless Chrome; on
   the CPU (WASM) it works at about 37 s a photo (ormbg about 7 s).
+- **Owner's call: keep quick as the default (with the tuned clean-up), add "Cut out more
+  carefully" with BEN2 for the hard ones.** Built: the tuned clean-up now runs after both models;
+  after a quick cut-out the tool box offers **Cut out more carefully**, which shows the download
+  progress the first time and then "about half a minute". Checked end to end in headless Chromium
+  on the owner's mirror selfie: quick 8 s (arm back, clothes pile still there), careful 48 s
+  including the 219 MB download (clothes pile gone); the option disappears once careful is done.
+  No errors. Practice: **progressive disclosure**, the expensive option appears only when the
+  cheap one has been tried.

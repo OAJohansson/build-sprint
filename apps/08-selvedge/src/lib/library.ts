@@ -34,6 +34,8 @@ export type Piece = {
   crop?: { x: number; y: number; w: number; h: number };
   /** Show the save's cut-out (background removed) instead of the photo (feedback 7). */
   cutout?: boolean;
+  /** The cut-out was redone with the careful model, so "Cut out more carefully" isn't offered again. */
+  careful?: boolean;
   color?: string;
   text?: string;
 };
@@ -95,6 +97,7 @@ export function parseDoc(v: unknown): BoardDoc | null {
       cropX: p.cropX as number, cropY: p.cropY as number, zoom: p.zoom as number, rough: p.rough === true,
       ...(cropOk(p.crop) ? { crop: p.crop as Piece["crop"] } : {}),
       ...(p.cutout === true ? { cutout: true } : {}),
+      ...(p.careful === true ? { careful: true } : {}),
       ...(typeof p.color === "string" && /^#[0-9a-f]{6}$/i.test(p.color) ? { color: p.color } : {}),
       ...(typeof p.text === "string" ? { text: p.text.slice(0, 80) } : {}),
     });

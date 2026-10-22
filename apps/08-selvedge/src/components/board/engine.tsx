@@ -145,7 +145,7 @@ export function useBoardEditor(initial: Piece[], onChange: (pieces: Piece[]) => 
       setPieces((ps) => [...ps, { id, kind, color, text: "", x: Math.round((at?.x ?? BOARD_W / 2) - w / 2), y: Math.round((at?.y ?? BOARD_H / 2) - h / 2), w, h, z: Math.max(0, ...ps.map((p) => p.z)) + 1, cropX: 50, cropY: 50, zoom: 1, rough: false }]);
       setSelected(id);
     },
-    setCutout: (on: boolean) => piece?.kind === "photo" && update(piece.id, { cutout: on }),
+    setCutout: (on: boolean, careful?: boolean) => piece?.kind === "photo" && update(piece.id, careful === undefined ? { cutout: on } : { cutout: on, careful }),
     setColor: (color: string) => piece && piece.kind !== "photo" && update(piece.id, { color }),
     setText: (text: string) => piece && piece.kind !== "photo" && update(piece.id, { text: text.slice(0, 80) }),
     replaceAll: (next: Piece[]) => { setPieces(() => next); setSelected(null); setCropping(false); },

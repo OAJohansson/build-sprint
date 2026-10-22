@@ -278,3 +278,16 @@ What happened, what was decided and why. Newest last.
      my photos taped in, never like software."
   2. Cut paper: "Like sitting at a table cutting pieces out of magazines: warm, hand-made, a
      little imperfect, and calm enough that my clothes do the talking."
+- **Critic round 1: both 5/10.** Shared verdict: "a standard canvas editor with sketchbook
+  stickers applied on top" (Sketchbook) and "a scrapbook costume" (Cut paper). Top gaps:
+  Sketchbook, the board as a Figma-like artboard; Cut paper, the torn top edge as caricature.
+  Both: the rounded pill tool bar, corner handles, help strings, polaroid frames, too many voices.
+- **Round 1 fixes.** Shared: tools are Crop, Rough edge, one layer toggle ("Bring to front" or
+  "Send to back") and Remove; they sit below the piece; help strings gone; "Start again" at the
+  end of the tray; the tray is a pile at each photo's own shape. Sketchbook: no artboard (the
+  page is the board, a pencil margin marks it), highlighter on the logo only, board names as
+  index tabs, the picked piece lifts, a pencil tick as the corner, tools on a strip of tape,
+  tray prints mixed (taped, cut, pencil-framed). Cut paper: decoration removed (no torn strips,
+  frames or tape), one serif plus a small sans in the tool bar, square corners, a 1px sheet edge
+  and its caption. Overruled for the owner to confirm: both critics wanted Rough edge out of the
+  tool bar; it stays, because the owner asked for it.

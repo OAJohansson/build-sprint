@@ -149,7 +149,7 @@ export type Rect = { left: number; top: number; width: number; height: number };
 export function BoardCanvas({ board, fit = "contain", chrome, className = "", style }: {
   board: Board;
   fit?: "contain" | "width";
-  chrome?: (rect: Rect) => React.ReactNode;
+  chrome?: (rect: Rect, box: { w: number; h: number }) => React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
 }) {
@@ -197,9 +197,9 @@ export function BoardCanvas({ board, fit = "contain", chrome, className = "", st
     <div ref={box} className={`relative select-none ${className}`} style={style}
       onPointerDown={() => actions.select(null)} onPointerMove={onMove} onPointerUp={onUp}
       onDragOver={(e) => e.preventDefault()} onDrop={onDrop}>
-      <div className="absolute overflow-hidden" style={{ left: offX, top: offY, width: BOARD_W, height: BOARD_H, transform: `scale(${s})`, transformOrigin: "0 0", background: "#f7f3ea" }}>
+      <div className="board-sheet absolute overflow-hidden" style={{ left: offX, top: offY, width: BOARD_W, height: BOARD_H, transform: `scale(${s})`, transformOrigin: "0 0" }}>
         {[...pieces].sort((a, b) => a.z - b.z).map((p) => (
-          <div key={p.id} className="absolute" style={{ left: p.x, top: p.y, width: p.w, height: p.h, zIndex: p.z, cursor: cropping && selected === p.id ? "grab" : "move",
+          <div key={p.id} className="board-piece absolute" data-selected={selected === p.id ? "" : undefined} style={{ left: p.x, top: p.y, width: p.w, height: p.h, zIndex: p.z, cursor: cropping && selected === p.id ? "grab" : "move",
             filter: p.rough ? "drop-shadow(0 3px 4px rgba(0,0,0,.28))" : undefined }}
             onPointerDown={(e) => onDown(e, p, "move")}
             onWheel={(e) => { if (cropping && selected === p.id) actions.zoom(p.zoom - e.deltaY / 400); }}>
@@ -224,7 +224,7 @@ export function BoardCanvas({ board, fit = "contain", chrome, className = "", st
           <div className="board-handle absolute h-4 w-4 cursor-nwse-resize"
             style={{ left: rect.left + rect.width - 8, top: rect.top + rect.height - 8 }}
             onPointerDown={(e) => onDown(e, sel, "resize")} />
-          {chrome?.(rect)}
+          {chrome?.(rect, size)}
         </>
       )}
     </div>
@@ -236,13 +236,13 @@ const clamp = (v: number) => Math.min(100, Math.max(0, v));
 // The actions a layout can show, with labels in one place so all three say the same thing.
 export function useTools(board: Board) {
   const p = board.piece;
+  const onTop = !!p && p.z >= Math.max(...board.pieces.map((x) => x.z));
   return useMemo(() => p ? [
     ...(p.kind === "photo" ? [{ key: "crop", label: board.cropping ? "Done cropping" : "Crop", on: board.actions.toggleCrop, active: board.cropping }] : []),
     { key: "rough", label: "Rough edge", on: board.actions.toggleRough, active: p.rough },
-    { key: "forward", label: "Forward", on: board.actions.forward, active: false },
-    { key: "back", label: "Back", on: board.actions.back, active: false },
-    { key: "delete", label: "Delete", on: board.actions.remove, active: false },
-  ] : [], [p, board.cropping, board.actions]);
+    { key: "layer", label: onTop ? "Send to back" : "Bring to front", on: onTop ? board.actions.back : board.actions.forward, active: false },
+    { key: "delete", label: "Remove", on: board.actions.remove, active: false },
+  ] : [], [p, onTop, board.cropping, board.actions]);
 }
 
 // A save thumbnail you can click or drag onto the board.

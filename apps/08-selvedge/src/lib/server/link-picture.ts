@@ -4,7 +4,9 @@ import "server-only";
 // but both pages carry a public preview image (og:image). Fetch the page, find that image and
 // keep a copy now: Instagram's image links expire. Anything that fails returns null, and the
 // save asks for a screenshot instead (requirement 3b).
-// shortcut: reads og:image only, upgrade to a site's own embed API if og:image stops working.
+// Instagram's og:image is a zoomed square crop that cuts the outfit off (owner, 22 Oct), so for
+// Instagram posts we read the post's public embed page first, which shows the photo as posted.
+// shortcut: a carousel gives its first photo only, upgrade if sharing the third photo of a post matters.
 
 // Named honestly as a link-preview bot: Instagram serves og:image to that, but not to a
 // "phone browser" (checked 22 Oct), and we don't pretend to be anyone else's bot.
@@ -56,9 +58,39 @@ export function findPreviewImage(html: string, pageUrl: string): string | null {
   return null;
 }
 
+/** The largest picture up to `max` px wide from an <img srcset>, else its src. */
+export function pickFromSrcset(tag: string, max: number): string | null {
+  const decode = (v: string) => v.replace(/&amp;/g, "&");
+  const set = tag.match(/\bsrcset\s*=\s*"([^"]+)"/i)?.[1];
+  const options = (set ? decode(set) : "").split(",").map((part) => {
+    const [url, w] = part.trim().split(/\s+/);
+    return { url, w: parseInt(w, 10) };
+  }).filter((o) => o.url && o.w > 0 && o.w <= max).sort((a, b) => b.w - a.w);
+  if (options[0]) return options[0].url;
+  const src = tag.match(/\ssrc\s*=\s*"([^"]+)"/i)?.[1];
+  return src ? decode(src) : null;
+}
+
+/** For an Instagram post or reel: its picture as posted, from the public embed page. */
+async function instagramPicture(link: string) {
+  const code = link.match(/instagram\.com\/(?:[^/]+\/)?(p|reel|tv)\/([A-Za-z0-9_-]+)/);
+  if (!code) return null;
+  const page = await fetchCapped(`https://www.instagram.com/${code[1]}/${code[2]}/embed/captioned/`, MAX_PAGE, "text/html", 6000);
+  if (!page || !page.type.includes("html")) return null;
+  const tag = new TextDecoder().decode(page.bytes).match(/<img\b[^>]*class="EmbeddedMediaImage"[^>]*>/i)?.[0];
+  const src = tag ? pickFromSrcset(tag, 1600) : null;
+  if (!src || !isPublicUrl(src)) return null;
+  const image = await fetchCapped(src, MAX_IMAGE, "image/webp,image/jpeg,image/png", 8000);
+  return image && TYPES.includes(image.type) ? { bytes: image.bytes, type: image.type } : null;
+}
+
 export async function fetchLinkPicture(link: string): Promise<{ bytes: Uint8Array; type: string } | null> {
   if (!isPublicUrl(link)) return null;
   try {
+    if (/(^|\.)instagram\.com$/.test(new URL(link).hostname)) {
+      const posted = await instagramPicture(link);
+      if (posted) return posted;
+    }
     const page = await fetchCapped(link, MAX_PAGE, "text/html,application/xhtml+xml", 6000);
     if (!page || !page.type.includes("html")) return null;
     const src = findPreviewImage(new TextDecoder().decode(page.bytes), page.url);

@@ -372,3 +372,23 @@ target's service worker can't type a code. Build order, each step shippable:
   online. Local and private addresses refused. Test rows deleted afterwards.
 - **Not yet checked:** a real Android phone; whether Instagram treats Vercel's servers like my
   laptop. Marked shortcut: offline, the inbox page itself can't load (the share is still kept).
+
+## 22 Oct: live, and capture works on the phone
+
+- **Keys reached production.** The first ship had no keys; after they were added, `pnpm ship`
+  set them but its deploy was cancelled by the skip-unchanged rule, so production refused every
+  code (503). Patched with `.env.example` (PR #55, a real deploy with the keys); the proper fix,
+  ship forcing the build after a key change, went to its own session (PRs #56 and #57, merged).
+- **Owner's phone test (22 Oct): all good.** The access code works on the phone; a Pinterest
+  pin, an Instagram post and a gallery picture were shared to Selvedge and all three arrived in
+  the inbox with their pictures. So Instagram's preview works from Vercel's servers too, which
+  was the one thing only the real phone could show. The riskiest assumption (saving is as quick
+  as a screenshot, and every source gives a picture) holds for one person.
+- **Instagram pictures were cropped** (owner, 22 Oct): "a problem for the collage later". Cause:
+  Instagram's `og:image` is a zoomed square crop (its link says so: `c819.0.2457.2457`, 640 px),
+  here head and shoulders with the outfit gone. **Fix:** for Instagram posts the server now reads
+  the post's public embed page (the official way sites embed a post) and keeps the photo as
+  posted, the largest size up to 1600 px; `og:image` stays the fallback. Checked with the owner's
+  post: stored 1080 px with the whole outfit. Pinterest's preview was already uncropped.
+  Limit (marked shortcut): a carousel gives its first photo. Saves made before the fix keep the
+  crop: remove and share them again.

@@ -53,7 +53,7 @@ explore*. And saving into it is as quick as a screenshot, from the same share bu
   preview image (`og:image`) when fetched from a server: Pinterest a stable 736 px image,
   Instagram a 640 px square crop on a signed link that expires, so the picture must be downloaded
   and kept, not linked. Instagram may block server fetches at any time; the screenshot stays the
-  fallback.
+  fallback. Confirmed live on 22 Oct: all three sources arrive with their picture.
 - **Value:** the AI's reading of my board is accurate enough to trust. Test it against my own
   read first (Folio's lesson: build the test before the model), with my style notes below as the
   answer key.

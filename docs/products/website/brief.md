@@ -69,9 +69,9 @@ site.
 
 | Signal | How I'll measure it | Target |
 | --- | --- | --- |
-| Interviewers bring up something from the site unprompted | One line per interview in a log: mentioned or not, and what | Owner to set (proposal: 1 in 3 interviews) |
+| Interviewers bring up something from the site unprompted | One line per interview in a log: mentioned or not, and what | Owner to set. Framed as a bet: at least 3 of my next 10 interviews; 0 of 10 means rethink the site |
 | The link gets opened | A tag per application in the link (`?ref=company`), read in analytics | Owner to set |
-| Visitors go past the first screen | Share of visits that open at least one project | Owner to set (proposal: half) |
+| Visitors go past the first screen | Visits that open at least one project | Owner to set. First 20 visits set the baseline |
 
 **Guardrail:** not too much information. In the user test, a hiring manager can say who I am and
 what I'm good at after 5 seconds on the first screen, and finishes a project story in about 2

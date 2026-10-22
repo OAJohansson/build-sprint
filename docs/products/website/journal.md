@@ -74,3 +74,11 @@ in interviews, link opened via a per-application tag, visits that go past the fi
 "not too much information" guardrail, and analytics noted as a rabbit hole (free Vercel
 analytics has no click events; cookie-based tools need a consent banner). Targets are the
 owner's to set.
+
+### "I always struggle with targets"
+
+Owner found "riskiest assumption" unclear and asked how to set a target that isn't a guess.
+Explained: riskiest = would sink the product if false, and least evidence for it (assumption
+mapping). Targets without a baseline: a falsifiable "at least X of Y will Z" bet, set at the
+number that would change what I do, counted over a fixed window; the first round is the baseline.
+Both added to the knowledge bank with quiz questions.

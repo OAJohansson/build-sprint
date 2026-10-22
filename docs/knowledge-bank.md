@@ -78,6 +78,16 @@ A feature can't be its own success metric. Ask what it's *for* and measure that.
 Horizon's landmark is for a sense of place, so the test was "which city is this?" with the name
 hidden. That exposed Tokyo looking like Paris.
 
+#### Setting a target without a baseline
+With no past numbers, a target feels like a guess, so don't pretend it's a forecast. Three ways
+to make it honest: write it as a falsifiable bet, "at least X of Y will Z" (at least 3 of my next
+10 interviewers will mention something from the site); set it at the number that would **change
+what you do** (0 of 10 means rethink the site; 3 or more means keep going), not the number you
+hope for; and with small numbers, use counts over a fixed window, not percentages. The first
+round sets the baseline; the second target is the real one. *Where:* the Andreas Product
+Portfolio Website's success signals. *(Alberto Savoia, The Right It: the XYZ hypothesis; Douglas
+Hubbard, How to Measure Anything: measure to reduce uncertainty for a decision)*
+
 #### Recall bias
 People asked "how has the last month been?" don't average the month: they remember the peaks,
 the most recent days and how they feel right now. So a measure taken at the moment beats a
@@ -98,6 +108,12 @@ unknown areas. Asking someone else the same questions shows the blind spot. *Whe
 others" idea for the parked self-discovery app. *(Joseph Luft and Harrington Ingham, 1955)*
 
 ### Quiz
+
+**Q:** How do you set a success target when you have no baseline?
+**A:** Write it as a falsifiable bet ("at least X of Y will Z"), set it at the number that would change your decision, and use counts over a fixed window when numbers are small. The first round becomes the baseline.
+
+**Q:** Why prefer "3 of my next 10 interviews" over "30% of interviews"?
+**A:** With small numbers a percentage swings wildly and hides how little data there is; a count over a fixed window is honest and easy to check.
 
 **Q:** What is the Barnum effect, and why does it matter for a personality-quiz product?
 **A:** People accept vague, flattering descriptions as accurate, so liking the result proves little; measure what people do with it.
@@ -158,6 +174,16 @@ Every idea carries four risks: **value** (will they use it?), **usability** (can
 **feasibility** (can we build it?) and **viability** (does it work for the business: cost,
 legal, time?). Name the riskiest one and make the MVP test it. *(Marty Cagan)*
 
+#### Picking the riskiest assumption
+"Riskiest" combines two questions: **how much does it matter** (if it's false, does the product
+fail?) and **how little evidence do I have** (am I guessing?). The riskiest assumption is the one
+that is both: it would sink the product and you have the least proof of it. Something that
+matters a lot but you already know is true isn't risky; something you're unsure of that barely
+matters isn't either. Plot them on a 2×2 (important vs evidence) and test the top-left corner
+first. *Where:* the Andreas Product Portfolio Website, choosing between "product thinking comes
+across in seconds" and "hiring managers click the link". *(David Bland, Testing Business Ideas:
+assumption mapping)*
+
 #### Test assumptions, not whole ideas
 Break an idea into the assumptions that must be true, and test the riskiest one cheaply first.
 *(Teresa Torres, Continuous Discovery Habits)*
@@ -192,6 +218,9 @@ reaction. Where we met it: Scribble's light vs dark design (03), solved by follo
 setting. From: Jeff Bezos, Amazon shareholder letter (2015).
 
 ### Quiz
+
+**Q:** What two questions make an assumption "riskiest"?
+**A:** How much it matters (would the product fail if it's false?) and how little evidence you have for it. The riskiest is high on both.
 
 **Q:** What's the difference between an outcome and an output?
 **A:** An output is what you ship (features). An outcome is what changes for the user because of it. Success should be measured in outcomes.

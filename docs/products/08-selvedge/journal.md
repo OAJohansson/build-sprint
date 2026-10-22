@@ -136,3 +136,17 @@ What happened, what was decided and why. Newest last.
   so the next drawing from the same board may be weaker, and the character won't look like the
   same person from board to board unless we make it. The newest Google model
   (`gemini-nano-banana-2.1`) was never tried.
+
+## 22 Oct: could Claude do all the drawing?
+
+- **The owner's reference video:** a post about a chess game on notebook paper with doodled
+  pieces, "built with Claude Sonnet 5.5". The owner loves seeing a drawing happen in motion and
+  asked whether Claude alone could draw the character.
+- **Tried it:** Claude (Opus 5.5) drew the winning outfit (brown boxy tee, slate carpenter
+  trousers, tote, Bostons with white socks, cap) as SVG ink strokes, animated stroke by stroke,
+  then colour washes. What that shows: Claude can draw *in motion*, instantly and for almost
+  nothing, but as clean vector lines; it can't match the image model's painterly sketch (faces,
+  hands, fabric, watercolour), which the owner called "my style, full stop".
+- **Options for the owner:** image model only (best drawing, an 88 s wait); Claude only (live
+  drawing, much simpler figures); or both: Claude sketches live in ink while the image model
+  paints, then the painting replaces the sketch.

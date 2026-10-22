@@ -79,3 +79,27 @@ What happened, what was decided and why. Newest last.
 - **No picture? Say so (owner's call).** When a link's picture can't be fetched, Selvedge tells
   me and suggests taking a screenshot instead (requirement 3b), rather than quietly saving a
   bare link card.
+
+## 22 Oct: re-cut to a three-day style DNA
+
+- **Owner widened the idea** to a style DNA: upload images, make moodboards, get an AI summary
+  of the style. Plus **several boards by season** (Summer 2026, Autumn 2026) to track how taste
+  changes; a **hand-drawn character** wearing each board's style (references: loose fashion
+  sketches with ink lines and watercolour washes); the home page opening on the latest
+  character; and later a character that **looks like me**, from a selfie. The UI should play
+  on the hand-drawn idea; try several colour palettes.
+- **Named as scope widening** (playbook: re-cut on every widening). The character needs an
+  image model (Claude can't draw), a second key and a few cents a drawing; the selfie adds
+  likeness and face-photo storage. Re-bet out loud: **three days instead of one.**
+- **Owner's plan:** day 1 capture, inbox, seasonal boards and board editing, no AI, plus a
+  one-hour character spike (two image models, a real board, judge the drawings first). Day 2
+  the style read and the character, home opens on the latest character. Later: the selfie
+  likeness, once face-photo storage is decided.
+- **No-go reversed:** "AI-generated clothes images" was a no-go; the owner reversed it, since
+  the character illustrates their own taste. New no-go: prompting "in the style of" a named
+  living illustrator (one reference is signed by one); we take the feel, not the hand.
+- **Design note:** clean and minimal (0007) still wins, so the hand-drawn feel lives in the
+  character, the type and a few ink details, on a calm layout.
+- **Character spike set-up:** no OpenAI or Google key in the repo, but OpenRouter (key already
+  used by Inkling) serves both families through one key. Candidates: Google's
+  `gemini-nano-banana-2.1` and OpenAI's `gpt-5.4-image-2`; both take the board's images as input.

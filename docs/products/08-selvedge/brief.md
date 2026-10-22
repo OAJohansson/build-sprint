@@ -72,7 +72,8 @@ revival.
 
 ## Success: what good looks like
 
-Main outcome: from scattered saves to "that's my style, and here's where to look" in one sitting.
+Main outcome: from scattered saves to "that's my style, and here's where to look" in one sitting,
+and a character that looks like my taste.
 
 | Signal | How I'll measure it | Target |
 | --- | --- | --- |
@@ -81,32 +82,45 @@ Main outcome: from scattered saves to "that's my style, and here's where to look
 | Style read I trust (day 2) | The read against the answer key, section by section | 4 of 5 sections "that's me"; no confident nonsense |
 | Discovery (day 2) | Brands in the read I didn't know and would actually look at, and that are real | At least 3; none invented |
 
+| Character (day 2) | "Is that my style?" for the character drawn from a board | Yes on first look, and it wears pieces from the board |
+| Change over time | Two seasonal boards side by side | I can say what changed |
+
 **Guardrail:** no save is lost; everything shared arrives in the inbox.
 
 ## MVP and stop line
 
-Owner's cut (21 Oct): **capture and board today, the AI read tomorrow.** Saving happens on the
-phone (that's where inspiration turns up); the board is edited on the laptop (too fiddly on a
-phone), so saves sync between the two (decision 0021).
+Re-cut (owner, 22 Oct): the owner widened the idea to a **style DNA** with **seasonal boards**
+and a **hand-drawn character** that wears each board's style. Named as a scope widening and
+re-bet out loud: Selvedge becomes a **three-day product** (1 day planned), with the selfie
+likeness later. Saving happens on the phone; boards are edited on the laptop, so saves sync
+(decision 0021).
 
-**Day 1 (MVP):**
+**Day 1:**
 
 1. **Capture:** installable web app in Android's share sheet, taking images and links into an
-   inbox; drag-and-drop bulk upload on the laptop for old saves. Same library on both devices.
-2. **Board:** pick saves and the app lays out a collage, with the palette pulled from the images
+   inbox (links get their picture from the page's `og:image`; if that fails, I'm asked for a
+   screenshot); drag-and-drop bulk upload on the laptop. Same library on both devices.
+2. **Boards by season:** several boards, each named by season ("Summer 2026", "Autumn 2026"), so
+   I can see my taste change over time.
+3. **Board:** pick saves and the app lays out a collage, with the palette pulled from the images
    as swatches (computed in the browser, no AI). Then edit it on the laptop: drag to reorder,
    make a piece bigger or smaller, remove it. The board saves itself.
+4. **Character spike (one hour):** give two image models a real board and judge the drawings
+   (hand-drawn fashion illustration, wearing the board's pieces) before designing around them.
 
-First hour, before the real app: a **share-target probe**, the empty starter shipped with a share
-target that only shows what arrived. Share from Instagram, Pinterest and the gallery on my phone
-and write down what each sends. That answers the feasibility question before any design.
+Share-target probe: done 22 Oct (see journal).
 
 **Day 2:** the **style read**, one AI call over the board: palette names, silhouettes, key pieces,
 style names, brands and search phrases that open in shops. Brands the middle way (owner, 21 Oct):
 the AI suggests freely, known and new, and every brand comes with a one-tap search link so I can
-check it's real. Tested against the answer key before it ships.
+check it's real. Tested against the answer key before it ships. Then the **character**: a
+hand-drawn figure wearing the board's style, drawn with the model the spike picks, and the home
+page opens on the latest board's character.
 
-Stop line: no AI cropping or tagging per save, no fetching images behind Instagram links, no
+**Later:** a character that looks like me, from a selfie, once the plain character works and
+we've decided where face photos are stored (a shared database is wrong for them, decision 0021).
+
+Stop line: no AI cropping or tagging per save, no logging in to Instagram for pictures, no
 free-form canvas (no rotating, overlapping or text on the board), no shop catalogue or product
 cards, no checkout, no native app (a v2 learning project), no outfit planning, no wardrobe of
 owned clothes, no accounts beyond an access code. All to `backlog.md`.
@@ -130,7 +144,9 @@ Day 1. Rows 1–3 updated after the probe (22 Oct).
 Day 2: the style read covers palette, silhouettes, pieces, style names and brands; every brand
 and search phrase opens a shop search.
 
-**No-gos:** product scraping, AI-generated clothes images, real accounts, social features.
+**No-gos:** product scraping, real accounts, social features, prompting "in the style of" a named
+living illustrator. *(AI-generated clothes images were a no-go until 22 Oct; the owner reversed
+it: the character illustrates my own taste, it doesn't replace it.)*
 
 **Rabbit holes:** link unfurling for Instagram and Pinterest, collage layout algorithms (pick a
 simple masonry grid), a free-form canvas editor, background removal, colour-naming perfection,

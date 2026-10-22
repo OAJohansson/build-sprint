@@ -54,3 +54,10 @@ every Mallow deploy failed. It is now
 `if git cat-file -e "$VERCEL_GIT_PREVIOUS_SHA^{commit}" 2>/dev/null; then git diff --quiet "$VERCEL_GIT_PREVIOUS_SHA" HEAD -- .; else exit 1; fi`:
 no earlier deploy or a missing commit means build (exit 1); otherwise skip only when nothing in the
 app changed. Applied to every app and the template; checked locally for each case.
+
+## Update, 22 Oct: ship always builds
+
+The skip rule also cancelled a ship that only changed keys (keys aren't in the app's folder). The
+`ignoreCommand` now builds first when `$VERCEL_GIT_COMMIT_SHA` equals `$SHIP_BUILD_SHA`, a project env
+var ship sets to the commit it deploys; ordinary pushes still skip. See decision 0025. This also
+brought 08 Selvedge's `vercel.json`, which still had the 18 Oct version, up to date.

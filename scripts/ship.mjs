@@ -4,7 +4,8 @@
 //   1. creates the Vercel project: named after the product, Root Directory apps/NN-slug, Next.js,
 //      connected to the GitHub repo, with the env vars from apps/NN-slug/.env.local
 //      (Production and Preview); if the project exists, it updates the Root Directory and env vars
-//   2. deploys `main` to production and waits until it's live
+//   2. deploys `main` to production and waits until it's live; it always builds, even when the app's
+//      folder is unchanged and only keys changed (SHIP_BUILD_SHA, see decision 0025)
 //   3. writes the .vercel.app URL into the product's card and refreshes the README
 //
 // Run it yourself after a one-time `vercel login`. Env values go straight from the file to Vercel
@@ -71,7 +72,8 @@ step(`Checking that ${rootDirectory} is on GitHub's main`);
 spawnSync("git", ["fetch", "-q", "origin", "main"], { cwd: ROOT });
 const onMain = spawnSync("git", ["ls-tree", "-d", "origin/main", rootDirectory], { cwd: ROOT, encoding: "utf8" });
 if (!onMain.stdout.trim()) fail(`${rootDirectory} isn't on origin/main yet. Merge the scaffold first, then ship.`);
-console.log("  yes");
+const sha = spawnSync("git", ["rev-parse", "origin/main"], { cwd: ROOT, encoding: "utf8" }).stdout.trim();
+console.log(`  yes (main is at ${sha.slice(0, 7)})`);
 
 // 3. Env vars from .env.local; names only are ever printed.
 const envFile = path.join(appDir, ".env.local");
@@ -93,10 +95,15 @@ if (missing.length) console.log(`  ⚠ in .env.example but not set: ${missing.jo
 // "sensitive": Vercel never shows the value again, not even to me ("Needs Attention" otherwise).
 // Everything in .env.local is a key or code, so all of it is sensitive.
 const envBody = env.map((e) => ({ key: e.key, value: e.value, target: ["production", "preview"], type: "sensitive" }));
+// The skip rule in each vercel.json (decision 0016) cancels a build when the app's folder hasn't
+// changed, which also cancels a ship that only changed keys. Its first check builds anyway when the
+// commit is the one named here, so ship always builds and ordinary pushes still skip. A later push
+// is a new commit, so a leftover value forces nothing (decision 0025).
+envBody.push({ key: "SHIP_BUILD_SHA", value: sha, target: ["production"], type: "plain" });
 
 if (dryRun) {
   console.log(`\nDry run. Would create or update project "${name}" (Root Directory ${rootDirectory}, Next.js,`);
-  console.log(`github.com/${REPO}), set ${env.length} env vars, deploy main and write the URL into the card.`);
+  console.log(`github.com/${REPO}), set ${env.length} env vars, deploy main (${sha.slice(0, 7)}, forced build) and write the URL into the card.`);
   process.exit(0);
 }
 
@@ -136,7 +143,7 @@ step("Deploying main to production (a minute or two)");
 const [org, repo] = REPO.split("/");
 const deploy = vercelApi("/v13/deployments", {
   method: "POST",
-  body: { name, project: projectId, target: "production", gitSource: { type: "github", org, repo, ref: "main" } },
+  body: { name, project: projectId, target: "production", gitSource: { type: "github", org, repo, ref: "main", sha } },
 });
 if (!deploy.ok) fail(`Couldn't start the deployment: ${deploy.data?.error?.message ?? deploy.stderr}`);
 let state = deploy.data.readyState;
@@ -146,6 +153,18 @@ for (let i = 0; i < 90 && !["READY", "ERROR", "CANCELED"].includes(state); i++) 
   process.stdout.write(".");
 }
 console.log(` ${state}`);
+if (state === "CANCELED") {
+  const events = vercelApi(`/v3/deployments/${deploy.data.id}/events?limit=-1`).data;
+  const skipped = Array.isArray(events) && events.some((e) => /ignored build step/i.test(e.text ?? e.payload?.text ?? ""));
+  const onMainJson = spawnSync("git", ["show", `${sha}:${rootDirectory}/vercel.json`], { cwd: ROOT, encoding: "utf8" }).stdout;
+  fail(
+    `The deployment was CANCELED${skipped ? " by the skip rule (the ignoreCommand in vercel.json)" : ", most likely by the skip rule (the ignoreCommand in vercel.json)"}: ` +
+      (onMainJson.includes("SHIP_BUILD_SHA")
+        ? "it should have built because SHIP_BUILD_SHA matched. Check the build log in the Vercel dashboard."
+        : `${rootDirectory}/vercel.json on main doesn't know SHIP_BUILD_SHA yet. Copy the ignoreCommand from templates/next-starter/vercel.json, merge, and ship again.`) +
+      " The live site still runs the previous build, without the new keys.",
+  );
+}
 if (state !== "READY") fail(`The deployment ended as ${state}. See the build log in the Vercel dashboard (project ${name}).`);
 
 // 6. The .vercel.app address, into the card.

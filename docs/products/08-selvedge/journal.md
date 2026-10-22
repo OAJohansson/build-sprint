@@ -392,3 +392,13 @@ target's service worker can't type a code. Build order, each step shippable:
   post: stored 1080 px with the whole outfit. Pinterest's preview was already uncropped.
   Limit (marked shortcut): a carousel gives its first photo. Saves made before the fix keep the
   crop: remove and share them again.
+- **Live, it stored Instagram's logo** (owner, 22 Oct: "just showing an icon"). The stored file
+  was the 4168 px Instagram logo PNG. From my laptop the same post's embed page and og:image are
+  both real photos, so Vercel's servers get something else from Instagram (likely a login page,
+  some of the time: the first save this morning worked from Vercel). **Fix:** a guard keeps an
+  Instagram picture only if it comes from Instagram's photo CDN (`/v/t…`) as JPEG or WebP; the
+  logo and other placeholders are refused, so the save falls back to the screenshot ask instead
+  of storing a logo. Order: embed page (photo as posted), then og:image (cropped, but real).
+  **Diagnostics:** `[instagram]` log lines (status, page reached, refused types; no personal
+  data) so a re-share shows in Vercel's logs what Instagram sent. Locally the owner's new post
+  stores portrait (0.75) with the whole outfit.

@@ -2,7 +2,7 @@
 // Publish or republish that file as a claude.ai artifact; see AGENTS.md.
 import fs from "node:fs";
 import path from "node:path";
-import { ROOT, readProducts } from "../products.mjs";
+import { ROOT, readProducts, readSideProjects } from "../products.mjs";
 
 const REPO = "https://github.com/OAJohansson/build-sprint";
 const TOTAL = 20;
@@ -67,9 +67,11 @@ function sections(p) {
   return out;
 }
 
-const products = readProducts().map((p) => ({
+// Side projects (e.g. the website) get the same pages but sit outside the 20: no day, no grid cell.
+const products = [...readProducts(), ...readSideProjects()].map((p) => ({
   slug: p.slug,
-  day: p.day,
+  day: p.day ?? null,
+  side: p.side === true || p.side === "true",
   title: p.title,
   status: p.status || "building",
   date: p.date || "",
@@ -113,7 +115,7 @@ function storyTable() {
   const rows = products
     .map((p) => ({ p, s: p.sections.find((x) => x.id === "story") }))
     .filter((r) => r.s)
-    .map(({ p, s }) => `| [${String(p.day).padStart(2, "0")} ${p.title}](#${p.slug}.story) | ${storyLine(s.text, "Headline")} | ${storyThemes(s.text)} |`);
+    .map(({ p, s }) => `| [${p.side ? "" : `${String(p.day).padStart(2, "0")} `}${p.title}](#${p.slug}.story) | ${storyLine(s.text, "Headline")} | ${storyThemes(s.text)} |`);
   if (!rows.length) return "\nNo stories yet. Each product's story is written at wrap-up.\n";
   const covered = new Set(rows.join(" ").match(/Discovery|Prioritisation|Metrics|Failure|Ambiguity|Trade-offs|Craft|Technical|Working with AI|Speed/g));
   const all = ["Discovery", "Prioritisation", "Metrics", "Failure", "Ambiguity", "Trade-offs", "Craft", "Technical", "Working with AI", "Speed"];

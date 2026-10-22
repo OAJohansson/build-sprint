@@ -139,7 +139,7 @@ First deploy of a new app, one command (to-do #8, from 03 Scribble's retro):
    env vars for Production and Preview, deploys `main`, waits until it's live and writes the URL
    into the card. Keys go from the file straight to Vercel and are never printed.
 4. Commit the card. Each app's `vercel.json` skips builds when its folder didn't change (not on
-   `portfolio`, which must rebuild whenever `docs/` changes).
+   `website`, if it reads `docs/` and must rebuild when they change).
    Apps deploy from `main` only: branch pushes make no deployments, because even cancelled ones
    count toward the free plan's 100 a day (decision 0016). Push and merge in batches.
 
@@ -183,7 +183,7 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 - Add 1–3 bullets under **Learned** on the card, and 3–7 **key learnings** under the product's
   heading in [`learnings.md`](learnings.md) (new design principles go there too).
 - Set `status: shipped` (or `parked`, which is fine too) → `pnpm sync && pnpm notebook` → republish the notebook.
-- Add a screenshot to `apps/portfolio/public/shots/NN-slug.png` (optional, makes the portfolio better).
+- Take a screenshot of the product for the website (where it goes is decided in the website brief).
 
 ## Definition of done
 

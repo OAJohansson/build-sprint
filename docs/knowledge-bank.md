@@ -78,6 +78,16 @@ A feature can't be its own success metric. Ask what it's *for* and measure that.
 Horizon's landmark is for a sense of place, so the test was "which city is this?" with the name
 hidden. That exposed Tokyo looking like Paris.
 
+#### Setting a target without a baseline
+With no past numbers, a target feels like a guess, so don't pretend it's a forecast. Three ways
+to make it honest: write it as a falsifiable bet, "at least X of Y will Z" (at least 3 of my next
+10 interviewers will mention something from the site); set it at the number that would **change
+what you do** (0 of 10 means rethink the site; 3 or more means keep going), not the number you
+hope for; and with small numbers, use counts over a fixed window, not percentages. The first
+round sets the baseline; the second target is the real one. *Where:* the Andreas Product
+Portfolio Website's success signals. *(Alberto Savoia, The Right It: the XYZ hypothesis; Douglas
+Hubbard, How to Measure Anything: measure to reduce uncertainty for a decision)*
+
 #### Recall bias
 People asked "how has the last month been?" don't average the month: they remember the peaks,
 the most recent days and how they feel right now. So a measure taken at the moment beats a
@@ -98,6 +108,12 @@ unknown areas. Asking someone else the same questions shows the blind spot. *Whe
 others" idea for the parked self-discovery app. *(Joseph Luft and Harrington Ingham, 1955)*
 
 ### Quiz
+
+**Q:** How do you set a success target when you have no baseline?
+**A:** Write it as a falsifiable bet ("at least X of Y will Z"), set it at the number that would change your decision, and use counts over a fixed window when numbers are small. The first round becomes the baseline.
+
+**Q:** Why prefer "3 of my next 10 interviews" over "30% of interviews"?
+**A:** With small numbers a percentage swings wildly and hides how little data there is; a count over a fixed window is honest and easy to check.
 
 **Q:** What is the Barnum effect, and why does it matter for a personality-quiz product?
 **A:** People accept vague, flattering descriptions as accurate, so liking the result proves little; measure what people do with it.
@@ -158,6 +174,40 @@ Every idea carries four risks: **value** (will they use it?), **usability** (can
 **feasibility** (can we build it?) and **viability** (does it work for the business: cost,
 legal, time?). Name the riskiest one and make the MVP test it. *(Marty Cagan)*
 
+#### Assumption mapping: picking the riskiest assumption
+**What it is.** A way to decide which assumption to test first. "Riskiest" combines two
+questions: **how important is it** (if it's false, does the product fail?) and **how much
+evidence do I have** (have I seen it, or am I guessing?). The riskiest assumption is high on the
+first and low on the second.
+
+**How it works, in four steps:**
+1. **Write the assumptions down** as statements that could be wrong: "I believe hiring managers
+   will click a link in a CV." One per sticky note. Cover all three kinds: *desirability* (do they
+   want it?), *feasibility* (can we build it?) and *viability* (does it work for the business:
+   cost, legal, time?). Cagan's four risks split usability out of desirability.
+2. **Place each on a 2×2.** Vertical axis: important (top) to unimportant (bottom). Horizontal
+   axis: no evidence (left) to strong evidence (right). Place them relative to each other; exact
+   positions don't matter.
+3. **Read the four corners:**
+   - *Important, no evidence* (top left): **test now**. This is where products die.
+   - *Important, evidence* (top right): plan around it; keep an eye on it.
+   - *Unimportant, no evidence* (bottom left): park it; it isn't worth the test yet.
+   - *Unimportant, evidence* (bottom right): safe; ignore.
+4. **Design the cheapest test** for the top-left ones, then **move the notes** as evidence comes
+   in. The map is a living thing, not a one-off.
+
+**Why it matters.** Teams naturally test what's easy or interesting, not what's risky, and build
+the whole thing before learning that one load-bearing belief was false. The map makes the bet
+visible and argues for doing the scary test first. Evidence has strength too: what people *do*
+(clicked, paid, came back) beats what they *say* ("I'd use that").
+
+**Where we met it:** the Andreas Product Portfolio Website, choosing between "product thinking
+comes across in seconds on a phone", "creative design helps rather than gets in the way",
+"I can show enough employer work" and "hiring managers click the link".
+
+*(David Bland and Alex Osterwalder, Testing Business Ideas, 2019; desirability, feasibility,
+viability from IDEO's design thinking)*
+
 #### Test assumptions, not whole ideas
 Break an idea into the assumptions that must be true, and test the riskiest one cheaply first.
 *(Teresa Torres, Continuous Discovery Habits)*
@@ -192,6 +242,15 @@ reaction. Where we met it: Scribble's light vs dark design (03), solved by follo
 setting. From: Jeff Bezos, Amazon shareholder letter (2015).
 
 ### Quiz
+
+**Q:** In assumption mapping, what are the two axes, and which corner do you test first?
+**A:** Importance (would the product fail if it's false?) and evidence (have I seen it, or am I guessing?). Test the important, no-evidence corner (top left) first.
+
+**Q:** What do you do with an assumption that's important but already has strong evidence, and one that's unimportant with no evidence?
+**A:** Important with evidence: plan around it and keep watching it. Unimportant with no evidence: park it; it isn't worth testing yet.
+
+**Q:** Why is "people said they'd use it" weak evidence, and what's stronger?
+**A:** What people say they'd do is a poor predictor; what they actually do (click, pay, come back) is much stronger evidence.
 
 **Q:** What's the difference between an outcome and an output?
 **A:** An output is what you ship (features). An outcome is what changes for the user because of it. Success should be measured in outcomes.

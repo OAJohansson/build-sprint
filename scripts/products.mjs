@@ -22,14 +22,22 @@ function frontmatter(text) {
   return { data, body: match ? text.slice(match[0].length) : text };
 }
 
-// Every product write-up in docs/products, sorted by day.
-export function readProducts() {
+function readCards(pattern) {
   return fs
     .readdirSync(PRODUCTS_DIR)
-    .filter((f) => /^\d{2}-.+\.md$/.test(f))
+    .filter((f) => pattern.test(f) && f !== "TEMPLATE.md")
     .map((f) => {
       const { data, body } = frontmatter(fs.readFileSync(path.join(PRODUCTS_DIR, f), "utf8"));
       return { ...data, body, file: f, slug: f.replace(/\.md$/, "") };
-    })
-    .sort((a, b) => a.day - b.day);
+    });
+}
+
+// Every product write-up in docs/products, sorted by day.
+export function readProducts() {
+  return readCards(/^\d{2}-.+\.md$/).sort((a, b) => a.day - b.day);
+}
+
+// Side projects: same playbook, but not one of the 20 (no day number, e.g. docs/products/website.md).
+export function readSideProjects() {
+  return readCards(/^[a-z][a-z0-9-]*\.md$/).sort((a, b) => String(a.date).localeCompare(String(b.date)));
 }

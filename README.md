@@ -26,7 +26,7 @@ _This table is generated from `docs/products/*.md`. Run `pnpm sync` after editin
 
 ```
 apps/
-  portfolio/          hub site listing every product (reads docs/products at build time)
+  website/            Andreas Product Portfolio Website: CV + the 20 products (side project)
   NN-slug/            one folder per product, each its own Vercel project and URL
 templates/
   next-starter/       what `pnpm new` copies: Next.js 16 + Tailwind 4 + shadcn + localStorage hook
@@ -57,7 +57,7 @@ pnpm install
 pnpm -F NN-crossfit dev            # run it
 pnpm sync                          # refresh the table above from the write-ups
 pnpm notebook                      # rebuild the private notebook (then republish it)
-pnpm portfolio                     # preview the portfolio site
+pnpm website                       # preview the website
 ```
 
 Deploying a new app takes about 2 minutes, once per product: import this repo at

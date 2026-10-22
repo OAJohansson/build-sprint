@@ -465,3 +465,16 @@ target's service worker can't type a code. Build order, each step shippable:
   with cover and a focus point) carry their framing into a crop box unchanged. Picking another
   piece leaves crop mode. Checked: a bottom trim (450 → 344 high), a right trim (308 → 240 wide),
   a slide to the photo's left edge, Done, and Reset (back to 240 × 300, the photo's 0.8 shape).
+
+## 23 Oct: background removal
+
+- Built locally while the owner tests the live site. **Remove background** in a photo's tool box
+  cuts it out in the browser with `ormbg` (Apache-2.0, 44 MB once, decision 0025): a Web Worker
+  runs the model, the cut-out (WebP with transparency, same size as the photo) is kept beside the
+  original in the bucket, and the piece switches to it; **Restore background** switches back.
+- **Model choice:** imgly (AGPL) and RMBG (non-commercial) ruled out by licence, BiRefNet by
+  reported browser memory crashes, MODNet by being portrait-only.
+- **Tested** in headless Chromium at 1440 × 900: a person in front of a fence and building came
+  out clean (17 s, including the first download), and the jersey flat lay kept every item with the
+  grey backdrop gone (7 s with the model cached). No errors.
+- Not yet: hand fixing of misses (backlog), real saves, a phone.

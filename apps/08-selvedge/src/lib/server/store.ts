@@ -15,6 +15,10 @@ export type Store = {
   removeSave(id: string): Promise<void>;
   /** The picture of a save, or null. */
   readImage(id: string): Promise<{ bytes: Uint8Array; type: string } | null>;
+  /** A save's cut-out (its picture with the background removed, made in the browser), or null. */
+  readCutout(id: string): Promise<{ bytes: Uint8Array; type: string } | null>;
+  writeCutout(id: string, image: { bytes: Uint8Array; type: string }): Promise<void>;
+  removeCutout(id: string): Promise<void>;
   listBoards(): Promise<BoardSummary[]>;
   getBoard(id: string): Promise<Board | null>;
   /** Create or update a board by id. Returns it as stored. */
@@ -77,7 +81,7 @@ function supabaseStore(db: SupabaseClient): Store {
       const { data } = await db.from("selvedge_saves").select("image_path").eq("id", id).maybeSingle();
       const { error } = await db.from("selvedge_saves").delete().eq("id", id);
       check(error);
-      if (data?.image_path) await bucket.remove([data.image_path]);
+      await bucket.remove([...(data?.image_path ? [data.image_path] : []), `cutouts/${id}.webp`]);
     },
     async readImage(id) {
       const { data: row, error } = await db.from("selvedge_saves").select("image_path").eq("id", id).maybeSingle();
@@ -86,6 +90,19 @@ function supabaseStore(db: SupabaseClient): Store {
       const { data, error: e2 } = await bucket.download(row.image_path);
       check(e2);
       return data ? { bytes: new Uint8Array(await data.arrayBuffer()), type: data.type || "image/webp" } : null;
+    },
+    async readCutout(id) {
+      const { data, error } = await bucket.download(`cutouts/${id}.webp`);
+      if (error) return null; // none made yet
+      return { bytes: new Uint8Array(await data.arrayBuffer()), type: "image/webp" };
+    },
+    async writeCutout(id, image) {
+      const { error } = await bucket.upload(`cutouts/${id}.webp`, image.bytes, { contentType: image.type, upsert: true });
+      check(error);
+    },
+    async removeCutout(id) {
+      const { error } = await bucket.remove([`cutouts/${id}.webp`]);
+      check(error);
     },
     async listBoards() {
       const { data, error } = await db.from("selvedge_boards").select("id, name, updated_at").order("updated_at", { ascending: false });
@@ -112,8 +129,11 @@ function supabaseStore(db: SupabaseClient): Store {
 }
 
 function memoryStore(): Store {
-  const g = globalThis as unknown as { __selvedgeMem?: { saves: Map<string, Save>; images: Map<string, { bytes: Uint8Array; type: string }>; boards: Map<string, Board> } };
-  const mem = (g.__selvedgeMem ??= { saves: new Map(), images: new Map(), boards: new Map() });
+  type Img = { bytes: Uint8Array; type: string };
+  const g = globalThis as unknown as { __selvedgeMem?: { saves: Map<string, Save>; images: Map<string, Img>; cutouts?: Map<string, Img>; boards: Map<string, Board> } };
+  type Mem = { saves: Map<string, Save>; images: Map<string, Img>; cutouts?: Map<string, Img>; boards: Map<string, Board> };
+  const mem: Mem = (g.__selvedgeMem ??= { saves: new Map(), images: new Map(), boards: new Map() });
+  const cutouts = (mem.cutouts ??= new Map<string, Img>());
   return {
     async listSaves() { return [...mem.saves.values()].sort((a, b) => b.createdAt.localeCompare(a.createdAt)); },
     async addSave(s) {
@@ -122,8 +142,11 @@ function memoryStore(): Store {
       mem.saves.set(s.id, save);
       return save;
     },
-    async removeSave(id) { mem.saves.delete(id); mem.images.delete(id); },
+    async removeSave(id) { mem.saves.delete(id); mem.images.delete(id); cutouts.delete(id); },
     async readImage(id) { return mem.images.get(id) ?? null; },
+    async readCutout(id) { return cutouts.get(id) ?? null; },
+    async writeCutout(id, image) { cutouts.set(id, image); },
+    async removeCutout(id) { cutouts.delete(id); },
     async listBoards() {
       return [...mem.boards.values()].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).map(({ id, name, updatedAt }) => ({ id, name, updatedAt }));
     },

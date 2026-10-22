@@ -3,7 +3,7 @@ import { guard } from "@/lib/server/access";
 import { serverError } from "@/lib/server/failure";
 
 // A save's cut-out: its picture with the background removed. It's made in the browser (an
-// in-browser model, decision 0026) and kept beside the original in the private bucket, so the
+// in-browser model, decision 0025) and kept beside the original in the private bucket, so the
 // original is never touched. GET streams it, PUT stores one (WebP with transparency), DELETE
 // removes it.
 const MAX_BYTES = 4 * 1024 * 1024;

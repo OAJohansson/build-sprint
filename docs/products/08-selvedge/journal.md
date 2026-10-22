@@ -469,7 +469,7 @@ target's service worker can't type a code. Build order, each step shippable:
 ## 23 Oct: background removal
 
 - Built locally while the owner tests the live site. **Remove background** in a photo's tool box
-  cuts it out in the browser with `ormbg` (Apache-2.0, 44 MB once, decision 0026): a Web Worker
+  cuts it out in the browser with `ormbg` (Apache-2.0, 44 MB once, decision 0025): a Web Worker
   runs the model, the cut-out (WebP with transparency, same size as the photo) is kept beside the
   original in the bucket, and the piece switches to it; **Restore background** switches back.
 - **Model choice:** imgly (AGPL) and RMBG (non-commercial) ruled out by licence, BiRefNet by

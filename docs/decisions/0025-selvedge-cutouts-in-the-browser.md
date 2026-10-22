@@ -1,4 +1,4 @@
-# 0026 — Selvedge removes backgrounds in the browser with ormbg
+# 0025 — Selvedge removes backgrounds in the browser with ormbg
 
 - **Date:** 2026-10-23
 - **Status:** accepted

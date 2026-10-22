@@ -1,4 +1,4 @@
-// Background removal, off the main thread so the editor never freezes (decision 0026). The model
+// Background removal, off the main thread so the editor never freezes (decision 0025). The model
 // (ormbg, Apache-2.0, about 44 MB) downloads once, the browser keeps it, and it runs on the CPU
 // (WASM), which every browser has. A photo comes in as a blob; the same photo goes back as a WebP
 // with transparency, the same size, so a piece's crop box still fits it.

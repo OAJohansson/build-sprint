@@ -1,5 +1,5 @@
 // Remove a save's background in the browser and keep the cut-out beside the original
-// (feedback 7, decision 0026). One worker for the whole page; the model loads on first use.
+// (feedback 7, decision 0025). One worker for the whole page; the model loads on first use.
 // shortcut: the cut-out is automatic only, add hand-traced scissors to fix misses (owner's
 // "auto, then fix") once the automatic one has been tried on real saves.
 

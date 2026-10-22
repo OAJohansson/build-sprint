@@ -95,22 +95,23 @@ re-bet out loud: Selvedge becomes a **three-day product** (1 day planned), with 
 likeness later. Saving happens on the phone; boards are edited on the laptop, so saves sync
 (decision 0021).
 
-**Day 1:**
+**Day 1** (re-cut 22 Oct, after the owner's own moodboard: the board is made, not generated):
 
 1. **Capture:** installable web app in Android's share sheet, taking images and links into an
    inbox (links get their picture from the page's `og:image`; if that fails, I'm asked for a
    screenshot); drag-and-drop bulk upload on the laptop. Same library on both devices.
 2. **Boards by season:** several boards, each named by season ("Summer 2026", "Autumn 2026"), so
    I can see my taste change over time.
-3. **Board:** pick saves and the app lays out a collage, with the palette pulled from the images
-   as swatches (computed in the browser, no AI). Then edit it on the laptop: drag to reorder,
-   make a piece bigger or smaller, remove it. The board saves itself.
-4. **Character spike (one hour):** give two image models a real board and judge the drawings
-   (hand-drawn fashion illustration, wearing the board's pieces) before designing around them.
+3. **Board editor:** pick saves and the app tiles them edge to edge as a first draft, with the
+   palette as colour squares and a title pill (like my Spring / Summer board). Then I make it
+   mine: drag, resize, crop (a real crop with handles, not only pan and zoom), bring forward or back, delete, and an optional rough "cut from a
+   magazine" edge on any piece (off by default). It saves itself.
+4. **Character spike (done 22 Oct):** OpenAI `gpt-5.4-image-2` drew "my style, full stop".
 
 Share-target probe: done 22 Oct (see journal).
 
-**Day 2:** the **style read**, one AI call over the board: palette names, silhouettes, key pieces,
+**Day 2:** **cut-outs** first: one tap removes a piece's background with a model that runs in
+the browser, then scissors I trace by hand fix what it missed. Then the **style read**, one AI call over the board: palette names, silhouettes, key pieces,
 style names, brands and search phrases that open in shops. Brands the middle way (owner, 21 Oct):
 the AI suggests freely, known and new, and every brand comes with a one-tap search link so I can
 check it's real. Tested against the answer key before it ships. Then the **character**: a
@@ -122,7 +123,7 @@ the home page opens on the latest board's character.
 we've decided where face photos are stored (a shared database is wrong for them, decision 0021).
 
 Stop line: no AI cropping or tagging per save, no logging in to Instagram for pictures, no
-free-form canvas (no rotating, overlapping or text on the board), no shop catalogue or product
+rotating pieces or free text on the board (the title pill is the only text), no shop catalogue or product
 cards, no checkout, no native app (a v2 learning project), no outfit planning, no wardrobe of
 owned clothes, no accounts beyond an access code. All to `backlog.md`.
 
@@ -149,8 +150,8 @@ and search phrase opens a shop search.
 living illustrator. *(AI-generated clothes images were a no-go until 22 Oct; the owner reversed
 it: the character illustrates my own taste, it doesn't replace it.)*
 
-**Rabbit holes:** link unfurling for Instagram and Pinterest, collage layout algorithms (pick a
-simple masonry grid), a free-form canvas editor, background removal, colour-naming perfection,
+**Rabbit holes:** link unfurling for Instagram and Pinterest, collage layout algorithms (keep to
+the tiled draft), a full Canva-style editor (keep to drag, resize, crop, layers), background removal on day 1, colour-naming perfection,
 iOS (no share target there), image sizes (shrink in the browser before upload).
 
 ## Owner calls (decided 21 Oct)

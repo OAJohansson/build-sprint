@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selvedge contact sheet 2</title>
+<!-- Ten collage directions for the board (laptop, 1440 x 900): pieces cut out of magazines and
+     stuck down. Same content in each: Summer 2026, the saves (whole looks and cropped details),
+     the palette, one piece selected for editing. The photos in board/ stay out of git. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,wght@0,500;1,500&family=Caveat:wght@600&family=Courier+Prime:wght@400;700&family=DM+Serif+Display&family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@1,700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#161513;color:#e9e5dc;font:14px/1.45 Inter,system-ui,sans-serif;padding:36px 36px 80px}
+.head{max-width:1400px;margin:0 auto 28px}.head h1{font:500 22px Inter}.head p{color:#9a958b;max-width:760px;margin-top:6px}
+.grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:36px 28px}
+.thumb{position:relative;width:100%;aspect-ratio:1440/900;overflow:hidden;border-radius:6px;outline:1px solid #2c2a26;cursor:zoom-in}
+.frame{position:absolute;top:0;left:0;width:1440px;height:900px;overflow:hidden;transform-origin:0 0}
+.cap{display:flex;gap:12px;margin-top:10px;align-items:baseline}.cap b{font:500 13px 'Space Mono';color:#9a958b}.cap span{color:#9a958b}
+.overlay{position:fixed;inset:0;background:rgba(10,10,10,.93);display:none;align-items:center;justify-content:center;z-index:9;cursor:zoom-out}.overlay.on{display:flex}
+.holder{position:relative;overflow:hidden;border-radius:6px}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+
+/* collage pieces */
+.p{position:absolute}.p .in{width:100%;height:100%;background-repeat:no-repeat}
+.lift{filter:drop-shadow(0 5px 7px rgba(0,0,0,.28))}.flat{filter:drop-shadow(0 1px 1px rgba(0,0,0,.2))}
+.tape{position:absolute;height:26px;background:rgba(222,207,170,.78);mix-blend-mode:multiply}
+.stitch{position:absolute;border-top:2px dashed currentColor;opacity:.8}
+.sel{outline:2px solid var(--sel,#1d1b19);outline-offset:6px}
+.tools{position:absolute;display:flex;gap:6px;font:500 13px Inter;z-index:5}.tools span{padding:4px 9px;border-radius:6px;background:var(--tb,#1d1b19);color:var(--tf,#fff)}
+.chip{position:absolute;width:70px;height:96px;background:#fff;padding:6px 6px 22px}.chip i{display:block;width:100%;height:100%}
+.chip b{position:absolute;bottom:4px;left:7px;font:500 9px Inter;color:#444;letter-spacing:.3px}
+.ransom{position:absolute;display:flex;align-items:flex-end;gap:2px}.ransom span{display:inline-block;line-height:1;padding:2px 5px 4px}
+.tabs{position:absolute;display:flex;gap:18px;font:500 14px Inter}
+</style>
+</head>
+<body>
+<div class="head">
+  <h1>Selvedge board: ten collage directions</h1>
+  <p>All ten are cut-and-paste collages, as if pieces were cut out of magazines with scissors and stuck to a board: whole looks next to cropped details (the Bostons, a cap, the stripes), torn and scissor-cut edges, tape. Rough frames for the feel. Click one to see it full size.</p>
+</div>
+<div class="grid" id="grid"></div>
+<div class="overlay" id="ov"><div class="holder" id="holder"></div></div>
+
+<script>
+// Seeded random, so every cut is the same on each load.
+let seed = 7;
+const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+const im = (n) => `board/${String(n).padStart(2, "0")}.jpg`;
+
+// Cut shapes as clip-path polygons in percent.
+function scissor() { // 6–9 straight cuts, slightly off square
+  const j = () => 2 + rnd() * 6;
+  return `polygon(${j()}% ${j()}%, ${45 + rnd() * 10}% ${rnd() * 3}%, ${100 - j()}% ${j()}%, ${100 - rnd() * 3}% ${50 + rnd() * 8}%, ${100 - j()}% ${100 - j()}%, ${50 + rnd() * 10}% ${100 - rnd() * 3}%, ${j()}% ${100 - j()}%, ${rnd() * 3}% ${45 + rnd() * 10}%)`;
+}
+function torn(sides = "trbl") { // a ragged edge on the given sides
+  const pts = [], step = 2.2, a = 1.8;
+  for (let x = 0; x <= 100; x += step) pts.push(`${x}% ${sides.includes("t") ? rnd() * a : 0}%`);
+  for (let y = 0; y <= 100; y += step) pts.push(`${100 - (sides.includes("r") ? rnd() * a : 0)}% ${y}%`);
+  for (let x = 100; x >= 0; x -= step) pts.push(`${x}% ${100 - (sides.includes("b") ? rnd() * a : 0)}%`);
+  for (let y = 100; y >= 0; y -= step) pts.push(`${sides.includes("l") ? rnd() * a : 0}% ${y}%`);
+  return `polygon(${pts.join(",")})`;
+}
+const SHAPES = { s: scissor, t: () => torn(), tb: () => torn("tb"), o: () => "ellipse(48% 48% at 50% 50%)", r: () => "none" };
+
+// A piece: n = image, z = zoom (1 = fit width), px/py = focus, cut = s|t|tb|o|r
+function P({ n, x, y, w, h, r = 0, z = 1, px = 50, py = 40, cut = "s", sh = "lift", sel = 0, bg = "", f = "" }) {
+  const clip = SHAPES[cut]();
+  // Whole looks fill the piece; detail crops zoom in (photos are 0.56–0.8 wide per tall).
+  const size = z === 1 ? "cover" : `${Math.max(z, (h / w) * 0.8) * 100}% auto`;
+  return `<div class="p ${sh} ${sel ? "sel" : ""}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;transform:rotate(${r}deg)">
+    <div class="in" style="clip-path:${clip};background-image:url(${im(n)});background-size:${size};background-position:${px}% ${py}%;${bg};${f ? "filter:" + f : ""}"></div></div>`;
+}
+const tape = (x, y, w, r) => `<div class="tape" style="left:${x}px;top:${y}px;width:${w}px;transform:rotate(${r}deg)"></div>`;
+const tools = (x, y, tb = "#1d1b19", tf = "#fff") => `<div class="tools" style="left:${x}px;top:${y}px;--tb:${tb};--tf:${tf}"><span>Smaller</span><span>Bigger</span><span>Remove</span></div>`;
+const PAL = [["#4b3326", "Chocolate"], ["#efe6d3", "Cream"], ["#6b6e4e", "Olive"], ["#6c7378", "Slate"], ["#2a3550", "Navy"], ["#1d1b19", "Black"]];
+const chips = (x, y, gap = 80, rot = true) => PAL.map(([c, t], i) => `<div class="chip lift" style="left:${x + i * gap}px;top:${y + (rot ? (i % 2) * 8 : 0)}px;transform:rotate(${rot ? (rnd() * 8 - 4).toFixed(1) : 0}deg)"><i style="background:${c}"></i><b>${t}</b></div>`).join("");
+// Ransom-note title: every letter cut from a different page.
+const FONTS = ["Abril Fatface", "Anton", "Archivo Black", "Bodoni Moda", "Courier Prime", "DM Serif Display", "Playfair Display", "Space Mono"];
+const lum = (h) => { const n = parseInt(h.slice(1), 16); return (0.3 * (n >> 16) + 0.59 * ((n >> 8) & 255) + 0.11 * (n & 255)) / 255; };
+function scrap(bgs, fgs) { // a random scrap, and a letter colour that reads on it
+  const b = bgs[Math.floor(rnd() * bgs.length)];
+  let ok = fgs.filter((f) => Math.abs(lum(f) - lum(b)) > 0.4);
+  if (!ok.length) ok = ["#1d1b19", "#fff"].filter((c) => Math.abs(lum(c) - lum(b)) > 0.4);
+  return `background:${b};color:${ok[Math.floor(rnd() * ok.length)]}`;
+}
+function ransom(text, x, y, size, bgs, fgs) {
+  return `<div class="ransom lift" style="left:${x}px;top:${y}px">${[...text].map((ch) => ch === " " ? `<span style="width:${size * 0.3}px"></span>` :
+    `<span style="font-family:'${FONTS[Math.floor(rnd() * FONTS.length)]}';font-size:${size * (0.8 + rnd() * 0.45)}px;${scrap(bgs, fgs)};transform:rotate(${(rnd() * 10 - 5).toFixed(1)}deg)">${ch}</span>`).join("")}</div>`;
+}
+const tabs = (x, y, c, cur = "#1d1b19") => `<div class="tabs" style="left:${x}px;top:${y}px;color:${c}"><span style="color:${cur};border-bottom:2px solid ${cur}">Summer 2026</span><span>Spring 2026</span><span>+ New board</span></div>`;
+
+const D = [
+  ["01", "Kraft and scissors", "Brown card, scissor-cut looks and details, masking tape, a ransom-note title", "#c4a57c", () => `
+    ${ransom("Summer 2026", 64, 52, 58, ["#fff", "#efe6d3", "#1d1b19", "#c23a2b", "#f3e27a"], ["#1d1b19", "#4b3326", "#fff"])}
+    ${tabs(70, 150, "#5b4632", "#2b1d12")}
+    ${P({ n: 1, x: 90, y: 220, w: 300, h: 560, r: -3, z: 1.25, py: 12 })}${tape(170, 208, 120, -6)}
+    ${P({ n: 7, x: 420, y: 150, w: 330, h: 520, r: 2, py: 40, sel: 1 })}${tools(440, 690, "#2b1d12", "#f3ead9")}
+    ${P({ n: 13, x: 400, y: 640, w: 260, h: 200, r: -4, z: 1.7, px: 50, py: 93, cut: "s" })}
+    ${P({ n: 16, x: 790, y: 90, w: 300, h: 300, r: 3, z: 1.3, px: 10, py: 12 })}${tape(880, 78, 110, 4)}
+    ${P({ n: 6, x: 1110, y: 70, w: 230, h: 170, r: -5, z: 3, px: 64, py: 16, cut: "o" })}
+    ${P({ n: 10, x: 780, y: 420, w: 280, h: 400, r: -2, py: 40 })}
+    ${P({ n: 8, x: 1080, y: 300, w: 270, h: 230, r: 4, z: 2, px: 85, py: 95, cut: "s" })}
+    ${P({ n: 11, x: 1100, y: 560, w: 260, h: 150, r: -3, z: 1.5, px: 50, py: 52, cut: "s" })}
+    ${chips(1080, 740, 50, false)}`],
+  ["02", "Torn pages on black", "Black card, every piece torn by hand from a page, a typed label strip", "#151413", () => `
+    <div class="p flat" style="left:70px;top:70px;width:440px;height:70px"><div class="in" style="clip-path:${torn("tb")};background:#efe6d3;font:700 40px 'Courier Prime';color:#1d1b19;padding:12px 22px">SUMMER 2026</div></div>
+    ${tabs(80, 160, "#8d877c", "#efe6d3")}
+    ${P({ n: 1, x: 80, y: 230, w: 330, h: 600, r: -2, z: 1.25, py: 12, cut: "t" })}
+    ${P({ n: 14, x: 440, y: 120, w: 330, h: 560, r: 3, py: 40, cut: "t", sel: 1 })}${tools(470, 700, "#efe6d3", "#1d1b19")}
+    ${P({ n: 16, x: 800, y: 90, w: 290, h: 340, r: -4, z: 1.2, px: 20, py: 10, cut: "t" })}
+    ${P({ n: 3, x: 1110, y: 100, w: 260, h: 420, r: 2, py: 50, cut: "t" })}
+    ${P({ n: 8, x: 810, y: 460, w: 300, h: 340, r: 3, z: 1.1, px: 40, py: 30, cut: "t" })}
+    ${P({ n: 9, x: 1130, y: 560, w: 230, h: 230, r: -3, z: 2.4, px: 50, py: 4, cut: "t" })}
+    ${chips(440, 790, 52, false)}`],
+  ["03", "The details", "One big look in the middle, cropped details around it like an editorial", "#efe9dd", () => `
+    <div style="position:absolute;left:70px;top:60px;font:500 64px 'Bodoni Moda';color:#1d1b19;font-style:italic">Summer 2026</div>
+    ${tabs(76, 150, "#8a8175")}
+    ${P({ n: 7, x: 560, y: 60, w: 340, h: 780, r: 0, py: 40, cut: "s", sel: 1 })}${tools(590, 850)}
+    ${P({ n: 13, x: 300, y: 600, w: 230, h: 180, r: -6, z: 1.9, px: 50, py: 94 })}
+    ${P({ n: 9, x: 330, y: 250, w: 190, h: 170, r: 5, z: 3.2, px: 48, py: 3, cut: "o" })}
+    ${P({ n: 10, x: 940, y: 90, w: 240, h: 240, r: 4, z: 3, px: 55, py: 48 })}
+    ${P({ n: 11, x: 960, y: 380, w: 260, h: 140, r: -3, z: 1.5, px: 50, py: 52 })}
+    ${P({ n: 16, x: 950, y: 560, w: 260, h: 230, r: 3, z: 2, px: 55, py: 94 })}
+    ${P({ n: 5, x: 1230, y: 240, w: 170, h: 210, r: -5, z: 3.2, px: 33, py: 28, cut: "s" })}
+    ${P({ n: 6, x: 90, y: 260, w: 210, h: 280, r: -3, z: 1.7, px: 30, py: 45 })}
+    ${chips(80, 760, 52, false)}`],
+  ["04", "Photocopy zine", "Black-and-white photocopies, one red, staples, cut-out headline", "#f2f0ea", () => `
+    <div style="position:absolute;left:60px;top:40px;font:400 150px/0.9 Anton;color:#1d1b19;letter-spacing:-2px">SUMMER<br><span style="color:#d0342c">2026</span></div>
+    ${tabs(70, 330, "#666", "#1d1b19")}
+    ${P({ n: 1, x: 520, y: 60, w: 320, h: 560, r: -2, z: 1.25, py: 12, f: "grayscale(1) contrast(1.6) brightness(1.05)" })}
+    ${P({ n: 14, x: 860, y: 110, w: 300, h: 520, r: 3, py: 40, f: "grayscale(1) contrast(1.6)", sel: 1 })}${tools(880, 650)}
+    ${P({ n: 12, x: 1170, y: 60, w: 230, h: 400, r: -3, py: 40, f: "grayscale(1) contrast(1.6)" })}
+    ${P({ n: 16, x: 80, y: 430, w: 380, h: 380, r: 2, z: 1.1, px: 30, py: 20, cut: "r", bg: "background-color:#d0342c;background-blend-mode:multiply", f: "grayscale(1) contrast(1.4)" })}
+    ${P({ n: 13, x: 560, y: 650, w: 280, h: 200, r: 4, z: 1.8, px: 50, py: 94, f: "grayscale(1) contrast(1.6)" })}
+    ${chips(1000, 720, 56, false)}`],
+  ["05", "Swatch book", "Cut fabric swatches and paint chips from the photos, pinned beside the looks", "#e7dfd0", () => `
+    <div style="position:absolute;left:70px;top:56px;font:400 60px 'DM Serif Display';color:#2b241f">Summer 2026</div>
+    ${tabs(76, 140, "#8a7f73", "#2b241f")}
+    ${P({ n: 1, x: 70, y: 210, w: 280, h: 520, r: -2, z: 1.25, py: 12 })}
+    ${P({ n: 7, x: 370, y: 200, w: 280, h: 520, r: 2, py: 40, sel: 1 })}${tools(390, 740, "#2b241f", "#f6f1e7")}
+    ${[[10, 3.2, 55, 48, "Stripe, cream"], [5, 3.2, 40, 40, "Canvas, olive"], [1, 3, 50, 25, "Jersey, brown"], [16, 2.6, 70, 65, "Denim, light"], [6, 3.4, 40, 50, "Duck, tan"], [15, 3, 50, 35, "Check, brown"]].map(([n, z, px, py, t], i) =>
+      `<div class="p lift" style="left:${700 + (i % 3) * 230}px;top:${200 + Math.floor(i / 3) * 290}px;width:200px;height:250px;background:#fff;padding:10px 10px 40px;transform:rotate(${(i % 2 ? 2 : -2)}deg)"><div class="in" style="clip-path:polygon(0 0,100% 0,100% 100%,0 100%);background-image:url(${im(n)});background-size:${z * 100}% auto;background-position:${px}% ${py}%"></div><b style="position:absolute;bottom:12px;left:12px;font:500 12px Inter;color:#444">${t}</b></div>`).join("")}
+    ${chips(700, 790, 80, false)}`],
+  ["06", "Magazine spread", "A double-page spread with a gutter, cut-outs crossing it, big cut headline", "#fbfaf6", () => `
+    <div style="position:absolute;left:720px;top:0;bottom:0;width:2px;background:linear-gradient(90deg,#0000,#0002,#0000)"></div>
+    <div style="position:absolute;left:70px;top:60px;font:700 92px/0.95 'Playfair Display';font-style:italic;color:#1d1b19">Summer<br>2026</div>
+    <div style="position:absolute;left:74px;top:270px;width:300px;font:400 14px/1.6 Inter;color:#555">Eighteen saves, March to June. Roomy shapes, earth and cream, always the socks.</div>
+    ${tabs(76, 360, "#888")}
+    ${P({ n: 3, x: 400, y: 90, w: 300, h: 420, r: -3, py: 40 })}
+    ${P({ n: 13, x: 610, y: 380, w: 300, h: 460, r: 3, py: 50, sel: 1 })}${tools(630, 852)}
+    ${P({ n: 8, x: 960, y: 70, w: 380, h: 470, r: -2, z: 1.05, px: 40, py: 30, cut: "r" })}
+    ${P({ n: 9, x: 1190, y: 500, w: 200, h: 180, r: 5, z: 3, px: 48, py: 3, cut: "o" })}
+    ${P({ n: 11, x: 920, y: 600, w: 260, h: 140, r: -4, z: 1.5, px: 50, py: 52 })}
+    ${chips(76, 760, 52, false)}`],
+  ["07", "Stitched strips", "Looks sliced into strips and stitched back together, selvedge thread on the seams", "#e9e2d4", () => `
+    <div style="position:absolute;left:70px;top:60px;font:400 58px 'DM Serif Display';color:#1d2733">Summer 2026</div>
+    ${tabs(76, 140, "#7a8290", "#1d2733")}
+    ${[1, 7, 14, 10, 13, 3, 12, 16].map((n, i) => P({ n, x: 70 + i * 160, y: 210 + (i % 2) * 30, w: 150, h: 520, r: 0, z: 1.9, px: 50, py: 38, cut: "r", sh: "flat", sel: i === 2 }) +
+      `<div class="stitch" style="left:${70 + i * 160 + 152}px;top:${215 + (i % 2) * 30}px;height:510px;width:0;border-top:0;border-left:2px dashed #c23a2b"></div>`).join("")}
+    ${tools(400, 770, "#1d2733", "#efe9dc")}
+    ${chips(820, 790, 52, false)}`],
+  ["08", "Scrapbook", "Tape, staples, a price tag and a handwritten note: the most hand-made", "#d9cdb6", () => `
+    ${ransom("Summer 26", 60, 46, 54, ["#fff", "#f3e27a", "#1d1b19"], ["#1d1b19", "#c23a2b"])}
+    ${tabs(66, 140, "#6b5d48", "#2b1d12")}
+    ${P({ n: 1, x: 80, y: 200, w: 290, h: 520, r: -4, z: 1.25, py: 12, cut: "r" })}${tape(150, 190, 120, -8)}
+    ${P({ n: 10, x: 400, y: 170, w: 300, h: 500, r: 3, py: 40, cut: "t", sel: 1 })}${tools(420, 690)}
+    ${P({ n: 6, x: 730, y: 110, w: 330, h: 420, r: -2, z: 1.05, px: 40, py: 30, cut: "r" })}${tape(840, 98, 100, 3)}
+    <div class="p lift" style="left:1090px;top:120px;width:250px;height:110px;background:#f3e27a;transform:rotate(4deg);font:600 30px Caveat;color:#2b1d12;padding:14px 18px">roomy, earthy,<br>always the socks</div>
+    <div class="p lift" style="left:1120px;top:270px;width:150px;height:84px;background:#fff;clip-path:polygon(18% 0,100% 0,100% 100%,18% 100%,0 50%);transform:rotate(-8deg);font:700 15px 'Courier Prime';color:#1d1b19;padding:16px 10px 0 40px">BOSTON<br>SUEDE</div>
+    ${P({ n: 13, x: 1080, y: 400, w: 280, h: 220, r: 3, z: 1.8, px: 50, py: 94 })}
+    ${P({ n: 16, x: 740, y: 560, w: 300, h: 260, r: -3, z: 1.9, px: 85, py: 10, cut: "s" })}
+    ${chips(1060, 680, 50, false)}`],
+  ["09", "Quiet collage", "Clean off-white, a few big cut pieces with crisp shadows, lots of air", "#f7f5f0", () => `
+    <div style="position:absolute;left:80px;top:80px;font:400 44px 'DM Serif Display';color:#1d1b19">Summer 2026</div>
+    ${tabs(84, 150, "#999")}
+    ${P({ n: 7, x: 420, y: 110, w: 330, h: 620, r: -1.5, py: 40, sel: 1 })}${tools(440, 750)}
+    ${P({ n: 1, x: 790, y: 160, w: 300, h: 560, r: 1.5, z: 1.25, py: 12 })}
+    ${P({ n: 13, x: 1110, y: 480, w: 250, h: 190, r: -3, z: 1.8, px: 50, py: 94 })}
+    ${P({ n: 9, x: 1140, y: 220, w: 190, h: 170, r: 3, z: 3, px: 48, py: 3, cut: "o" })}
+    <div style="position:absolute;left:84px;top:640px;display:flex;gap:10px">${PAL.map(([c]) => `<i style="display:block;width:36px;height:36px;border-radius:50%;background:${c};box-shadow:0 0 0 1px #0001"></i>`).join("")}</div>`],
+  ["10", "Ransom note", "Sounds wrong: everything, even the buttons, in letters cut from magazines", "#2a2622", () => `
+    ${ransom("SUMMER 2026", 60, 50, 74, ["#fff", "#f3e27a", "#c23a2b", "#efe6d3", "#6b6e4e"], ["#1d1b19", "#fff", "#4b3326"])}
+    ${ransom("spring 2026", 66, 170, 26, ["#fff", "#efe6d3"], ["#1d1b19"])}${ransom("+ new", 300, 170, 26, ["#f3e27a"], ["#1d1b19"])}
+    ${P({ n: 14, x: 80, y: 260, w: 300, h: 540, r: -3, py: 40 })}
+    ${P({ n: 1, x: 410, y: 230, w: 300, h: 560, r: 2, z: 1.25, py: 12, sel: 1, cut: "t" })}${ransom("bigger", 430, 820, 22, ["#fff"], ["#1d1b19"])}${ransom("remove", 560, 820, 22, ["#c23a2b"], ["#fff"])}
+    ${P({ n: 8, x: 740, y: 120, w: 340, h: 420, r: -2, z: 1.05, px: 40, py: 30 })}
+    ${P({ n: 10, x: 1100, y: 160, w: 260, h: 420, r: 3, py: 40, cut: "t" })}
+    ${P({ n: 13, x: 760, y: 590, w: 280, h: 220, r: 4, z: 1.8, px: 50, py: 94 })}
+    ${chips(1080, 640, 48, false)}`],
+];
+
+const grid = document.getElementById("grid");
+grid.innerHTML = D.map(([n, name, why, bg, body]) => `<div><div class="thumb"><div class="frame" style="background:${bg}">${body()}</div></div><div class="cap"><b>${n}</b><strong>${name}</strong><span>${why}</span></div></div>`).join("");
+function fit() { document.querySelectorAll(".thumb").forEach((t) => (t.firstElementChild.style.transform = `scale(${t.clientWidth / 1440})`)); }
+addEventListener("resize", fit); fit();
+const ov = document.getElementById("ov"), holder = document.getElementById("holder");
+grid.addEventListener("click", (e) => {
+  const t = e.target.closest(".thumb"); if (!t) return;
+  const s = Math.min((innerWidth - 60) / 1440, (innerHeight - 60) / 900);
+  holder.style.width = 1440 * s + "px"; holder.style.height = 900 * s + "px";
+  holder.innerHTML = t.innerHTML; holder.firstElementChild.style.transform = `scale(${s})`; ov.classList.add("on");
+});
+ov.addEventListener("click", () => ov.classList.remove("on"));
+</script>
+</body>
+</html>

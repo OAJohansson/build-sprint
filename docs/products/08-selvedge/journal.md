@@ -188,3 +188,133 @@ What happened, what was decided and why. Newest last.
 - **Owner's lean:** OpenAI for the drawing plus Claude's draw-on reveal (decision 0022, proposed).
   The owner called time on the spike: "we have spent too much time on this". Back to day 1
   (capture, inbox, seasonal boards, board editing); the character waits until that ships.
+
+## 22 Oct: design session (board), Discover
+
+- **Screen:** the board (laptop), because it carries the payoff jobs (seeing my style, then the
+  read and the character); the phone inbox gets its own session next.
+- **Seeds:** four random strings gave Sketchbook scroll, Contact sheet, Clothes rail and Tailor's
+  pattern paper. Plus Designer's sketchbook (the owner's references), Museum wall, Care label,
+  Selvedge edge (the name), and two that sound wrong: Departure board, Laundrette noticeboard.
+- **Contact sheet:** the owner couldn't picture one-liners, so all ten became rough frames of the
+  same board with the real Summer 2026 saves (`design/contact-sheet.html`; the photos sit in a
+  git-ignored `design/board/`). Real content this time, after Six AM's "childish" thumbnails.
+- **Contact sheet 1 rejected:** "none of these are along the direction I was thinking." The
+  owner wants a **collage, as if cut out of magazines**: images cropped and stuck together by
+  hand. (They meant to attach an example board; it didn't come through.)
+- **Contact sheet 2** (`design/contact-sheet-2.html`): ten collage directions, all cut-and-paste
+  with whole looks beside cropped details (Bostons, caps, stripes, Gazelles, sunglasses): Kraft
+  and scissors, Torn pages on black, The details, Photocopy zine, Swatch book, Magazine spread,
+  Stitched strips, Scrapbook, Quiet collage, and Ransom note (sounds wrong). Cuts are drawn in
+  code (clip-path polygons for scissor and torn edges), which also tells us the real app can do
+  them on any save.
+- **Contact sheet 2, owner:** "nothing really hits the mark." Wants it closer to their own
+  moodboard: "a bit random and overlapping", "not too polished, more like a hand-made thing";
+  Magazine spread was closest. (The example board still hasn't come through.)
+- **Collage lab** (`design/collage-lab.html`): instead of ten more guesses, a generator. Every
+  shuffle lays the 18 saves out again, cut three ways (scissors, torn, a rough cut around the
+  figure), overlapping, with paper scraps, tape and magazine words; sliders for pieces, overlap,
+  tilt, details, scraps and words; six presets (Spread messier, The pile, Cut-out people, Kraft
+  and tape, Torn on black, Few and big). It doubles as a test of the real auto-layout: the app
+  has to make this arrangement itself.
+
+## 22 Oct: the owner's own moodboard, and a pivot to an editor
+
+- **Reference at last** (`design/board/owner-moodboard-spring-summer.webp`, kept out of git):
+  photos tiled edge to edge with no gaps and no tilt; cut-outs with no background laid on top
+  (Dr. Martens, a Boston clog, sunglasses, a flat lay); plain colour-swatch squares overlapping
+  the photos; one title, "SPRING / SUMMER", hand-lettered on a cream pill in the middle. "Random
+  and overlapping" meant layered, not tilted scraps; every direction so far had missed that.
+- **Collage lab, owner:** "just random blobs of colours" (the photos likely didn't load in the
+  view they opened). Dropped either way: the owner wants to **make** the board, not have it made.
+- **Owner's new shape:** a board editor. Drag and drop images onto a board; a crop tool; cut a
+  figure out of its background, like their board; an optional rough "cut from a magazine" edge
+  (an option, not the default).
+- **Named as scope change:** day 1 had "the app lays the board out, light edits" and "no
+  free-form canvas"; background removal was listed as a rabbit hole. Owner calls pending: how to
+  cut out (scissors you trace, automatic removal, or both), and whether the app still lays out a
+  first draft to edit.
+- **Owner's calls (22 Oct):** cut-outs work **automatically, then you fix** them with scissors
+  traced by hand; a new board starts as a **tiled draft to edit**, like their own; and to pay for
+  the bigger editor, **cut-outs move to day 2**. Day 1 is now capture, inbox, seasonal boards and
+  the editor (drag, resize, crop, layers, optional rough edges). Brief updated; the stop line
+  now allows overlapping and layering, still no rotation or free text.
+- **Prototypes built** (`/prototype`, `apps/08-selvedge/src/app/prototypes/board-editor`, at
+  `/prototypes/board-editor`): three layouts on one shared engine. **Workbench** (tools always
+  visible: saves tray left, tool bar top), **Desk** (a board on a desk, saves as a strip of
+  prints, tools float by the picked piece) and **Gallery** (the board fills the screen; a small
+  bar on selection, saves in a sheet on request). Same board in each, drafted like the owner's:
+  14 saves tiled edge to edge in two rows, six palette squares over the seams, a hand-lettered
+  "SUMMER 2026" pill. Edits: drag, resize (corner), crop (pan, zoom with slider or wheel),
+  forward and back, delete (button or key), rough edge (off by default), add a save by click or
+  drag, a second board, "start again from a draft". Photos in a git-ignored
+  `public/prototype-board/`. Checked in the browser: every edit, all three layouts.
+- **Owner's pick, round 1:** Workbench's tray on the left, plus the tools floating by the picked
+  piece (from Desk and Gallery): "you need to move the mouse less". Crop must be a real crop
+  (handles), not only pan and zoom; background removal stays day 2. The features are there; the
+  design has no identity yet. The home page will carry more identity later (its own design).
+- **Round 2 (identity):** the merged layout in three personalities: Pencil (muted sketch,
+  graphite on paper, the owner's ask), Sketchbook (the sketch plus watercolour washes in the
+  palette, the owner's ask), Workwear (indigo, the selvedge stripe, stitching: identity from the
+  name).
+- **Round 2 built** (same `/prototypes/board-editor`; round 1's layout files retired, kept in
+  git): `editor.tsx` (tray left, tools in a chip by the picked piece) and `themes.css`. Pencil
+  and Sketchbook draw their lines on a separate layer bent by an SVG noise filter, so borders
+  wobble like pencil while text stays crisp; hover and active states are pencil hatching
+  (Pencil) or watercolour washes in the palette (Sketchbook). Workwear uses the selvedge stripe
+  under the top bar, dashed thread stitching, and a leather-patch logo. Checked: all three render
+  and edit.
+- **Owner's pick, round 2: Sketchbook** ("love it!"): pencil lines plus watercolour washes in
+  the palette, saves as tilted prints. Next: the intended aesthetic in one sentence, then the
+  critic loop.
+- **Two feels, two tests (owner, 22 Oct).** Torn between "a designer's sketchbook" (where the
+  current design leans, and liked) and "cutting from magazines" (more creative, but a fear it
+  turns into a caricature). Built **Cut paper** next to Sketchbook: torn newsprint for the top
+  strip and the tool chip, scissor-cut scraps of palette paper as active states, a magazine
+  serif (Bodoni Moda) with small caps captions, masking tape on the prints only. Guardrail: no
+  ransom letters, no tape and scraps everywhere. Each goes to the design critic against its own
+  sentence:
+  1. Sketchbook: "Like working in a designer's sketchbook: pencil lines, a wash of colour, and
+     my photos taped in, never like software."
+  2. Cut paper: "Like sitting at a table cutting pieces out of magazines: warm, hand-made, a
+     little imperfect, and calm enough that my clothes do the talking."
+- **Critic round 1: both 5/10.** Shared verdict: "a standard canvas editor with sketchbook
+  stickers applied on top" (Sketchbook) and "a scrapbook costume" (Cut paper). Top gaps:
+  Sketchbook, the board as a Figma-like artboard; Cut paper, the torn top edge as caricature.
+  Both: the rounded pill tool bar, corner handles, help strings, polaroid frames, too many voices.
+- **Round 1 fixes.** Shared: tools are Crop, Rough edge, one layer toggle ("Bring to front" or
+  "Send to back") and Remove; they sit below the piece; help strings gone; "Start again" at the
+  end of the tray; the tray is a pile at each photo's own shape. Sketchbook: no artboard (the
+  page is the board, a pencil margin marks it), highlighter on the logo only, board names as
+  index tabs, the picked piece lifts, a pencil tick as the corner, tools on a strip of tape,
+  tray prints mixed (taped, cut, pencil-framed). Cut paper: decoration removed (no torn strips,
+  frames or tape), one serif plus a small sans in the tool bar, square corners, a 1px sheet edge
+  and its caption. Overruled for the owner to confirm: both critics wanted Rough edge out of the
+  tool bar; it stays, because the owner asked for it.
+- **Critic round 2: both 5/10 again.** Not rising, so stopped and shown to the owner (the
+  session's rule). The critic also reversed itself: Sketchbook round 1 asked for index tabs and
+  kept the logo highlighter, round 2 called the tabs "browser tabs" and the highlighter a
+  cliché; Cut paper round 1 anchored the board top and dropped print frames, round 2 wanted it
+  centred with frames back. It also judged the board's own "SUMMER 2026" pill (the owner's
+  design) as chrome. Notes raised in both rounds, worth keeping: the selection is too faint; the
+  tool bar must never cover the title; one handwriting face for everything reads as a kids' app
+  (hand face for titles only, a quiet small face for tool words); vary the tape.
+- **Learning:** a critic with no memory re-litigates; after two flat rounds, the owner's eye
+  beats a third round.
+- **Owner: "I didn't want you to change the sketchbook design, I liked it as it was."**
+  Restored the round 2 Sketchbook exactly from git (`c0195e6`) as **Sketchbook V1**
+  (`editor-v1.tsx`, `.t-sketchbook1`, with round 2's own tools), kept the critic-loop version as
+  **Sketchbook V2**, and Cut paper beside them. The picker now shows all three.
+- **Learning:** the critic loop edited the owner's pick in place. When the owner has picked and
+  likes a design, the loop works on a copy and the pick stays untouched; "pick" means keep.
+- **Locked: Sketchbook V1** (owner, 22 Oct), plus one thing from V2: the soft pencil frame
+  around the collage (drawn on its own layer, so V1 still clips pieces to the board). Next:
+  Deliver (subtract, AI tells, the owner's own copy), then promote V1 into the app.
+- **Deliver (owner, 22 Oct).** Subtract: removed the top-bar hint and the tray footer (the one
+  AI tell found: helper text where nobody gets stuck); kept Back and "Start again from a draft".
+  Copy: the owner kept the current wording for now (Your saves, + New board, Start again from a
+  draft, Crop, Done cropping, Rough edge, Forward, Back, Delete), to revisit later.
+- **Design session summary (board editor):** seeds and ten directions, two contact sheets and a
+  collage lab all missed until the owner's own moodboard arrived; round 1 layouts (Workbench,
+  Desk, Gallery) gave the layout; round 2 personalities gave Sketchbook; critic rounds 1 and 2
+  (5/10 each, contradicting) were stopped; the owner locked Sketchbook V1 plus V2's frame.

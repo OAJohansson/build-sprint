@@ -1,0 +1,3 @@
+# Other people's photos (the owner's saves) and videos stay out of git.
+board/
+*.mp4

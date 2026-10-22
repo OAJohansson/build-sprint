@@ -7,6 +7,7 @@
 .board-sel[data-cropping] { outline-color: #d9822b; }
 .board-handle { border-radius: 999px; border: 2px solid #fff; background: #1b1c1e; }
 .board-sheet { background: #f7f3ea; }
+.board-frame { display: none; }
 
 /* ---------- Shared editor bones ---------- */
 .ed { --ink: #1b1c1e; --paper: #f4f1ea; --muted: #6b6b6b; color: var(--ink); background: var(--paper); }
@@ -197,3 +198,7 @@
 .t-sketchbook1 .board-handle { border-radius: 50%; background: var(--hi); border: 2px solid var(--ink); filter: url(#pencil-line); }
 .t-sketchbook1 .ed-zoom { accent-color: var(--denim); }
 
+
+/* V1 keeps its look and borrows V2's soft pencil frame around the collage (owner, 22 Oct). */
+.t-sketchbook1 .board-frame { display: block; }
+.t-sketchbook1 .board-frame::after { content: ""; position: absolute; inset: -9px; border: 1.6px solid #4a4440; border-radius: 4px 7px 3px 6px; filter: url(#pencil-line); opacity: 0.55; }

@@ -307,3 +307,6 @@ What happened, what was decided and why. Newest last.
   **Sketchbook V2**, and Cut paper beside them. The picker now shows all three.
 - **Learning:** the critic loop edited the owner's pick in place. When the owner has picked and
   likes a design, the loop works on a copy and the pick stays untouched; "pick" means keep.
+- **Locked: Sketchbook V1** (owner, 22 Oct), plus one thing from V2: the soft pencil frame
+  around the collage (drawn on its own layer, so V1 still clips pieces to the board). Next:
+  Deliver (subtract, AI tells, the owner's own copy), then promote V1 into the app.

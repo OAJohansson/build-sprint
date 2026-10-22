@@ -197,6 +197,8 @@ export function BoardCanvas({ board, fit = "contain", chrome, className = "", st
     <div ref={box} className={`relative select-none ${className}`} style={style}
       onPointerDown={() => actions.select(null)} onPointerMove={onMove} onPointerUp={onUp}
       onDragOver={(e) => e.preventDefault()} onDrop={onDrop}>
+      {/* An optional frame drawn around the board (themes turn it on); outside the sheet so it never clips. */}
+      <div className="board-frame pointer-events-none absolute" style={{ left: offX, top: offY, width: BOARD_W * s, height: BOARD_H * s }} />
       <div className="board-sheet absolute overflow-hidden" style={{ left: offX, top: offY, width: BOARD_W, height: BOARD_H, transform: `scale(${s})`, transformOrigin: "0 0" }}>
         {[...pieces].sort((a, b) => a.z - b.z).map((p) => (
           <div key={p.id} className="board-piece absolute" data-selected={selected === p.id ? "" : undefined} style={{ left: p.x, top: p.y, width: p.w, height: p.h, zIndex: p.z, cursor: cropping && selected === p.id ? "grab" : "move",

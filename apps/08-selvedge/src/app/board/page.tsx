@@ -2,15 +2,15 @@
 
 /* eslint-disable @next/next/no-img-element */
 // The board editor (laptop): Sketchbook V1 as the owner locked it (22 Oct), on real saves. Boards
-// by season as tabs; "+ New board" picks saves and makes a tiled draft with the photos' palette;
-// every edit autosaves a moment later, so the board is the same on any device.
+// by season as tabs; "+ New board" names it and picks its saves, which become the board's tray;
+// the board starts empty and photos are dragged on (feedback 3). Every edit autosaves a moment
+// later, so the board is the same on any device.
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AccessGate } from "@/components/access-gate";
-import { BoardCanvas, FALLBACK_PALETTE, tiledDraft, useBoardEditor, useTools, type Rect } from "@/components/board/engine";
-import { imageUrl, type Board, type BoardSummary, type Piece, type Save } from "@/lib/library";
-import { paletteFrom } from "@/lib/palette";
+import { BoardCanvas, tiledDraft, useBoardEditor, useTools, type Rect } from "@/components/board/engine";
+import { imageUrl, type Board, type BoardDoc, type BoardSummary, type Save } from "@/lib/library";
 import { newBoardName } from "@/lib/season";
 
 export default dynamic(() => Promise.resolve(BoardApp), { ssr: false });
@@ -47,21 +47,21 @@ function BoardApp() {
   useEffect(() => { load(); }, [load]);
 
   // Autosave: the latest pieces go to the server a moment after the last edit.
-  const pending = useRef<{ id: string; name: string; pieces: Piece[] } | null>(null);
+  const pending = useRef<{ id: string; name: string; doc: BoardDoc } | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const flush = useCallback(async (keepalive = false) => {
     const job = pending.current; if (!job) return;
     pending.current = null;
     setSaveState("saving");
     try {
-      const r = await fetch(`/api/boards?id=${job.id}`, { method: "PUT", keepalive, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: job.name, doc: { pieces: job.pieces } }) });
+      const r = await fetch(`/api/boards?id=${job.id}`, { method: "PUT", keepalive, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: job.name, doc: job.doc }) });
       setSaveState(r.ok ? "saved" : "failed");
     } catch {
       setSaveState("failed");
     }
   }, []);
-  const queueSave = useCallback((id: string, name: string, pieces: Piece[]) => {
-    pending.current = { id, name, pieces };
+  const queueSave = useCallback((id: string, name: string, doc: BoardDoc) => {
+    pending.current = { id, name, doc };
     setSaveState("saving");
     clearTimeout(timer.current);
     timer.current = setTimeout(() => flush(), 700);
@@ -73,8 +73,8 @@ function BoardApp() {
   }, [flush]);
 
   async function makeBoard(name: string, picked: Save[]) {
-    const palette = await paletteFrom(picked.map((s) => imageUrl(s.id)), 6, FALLBACK_PALETTE);
-    const next: Board = { id: crypto.randomUUID(), name, doc: { pieces: tiledDraft(name, picked, palette) }, updatedAt: new Date().toISOString() };
+    // An empty board; the picked saves are its tray, dragged on by hand.
+    const next: Board = { id: crypto.randomUUID(), name, doc: { pieces: [], tray: picked.map((s) => s.id) }, updatedAt: new Date().toISOString() };
     const r = await fetch(`/api/boards?id=${next.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, doc: next.doc }) });
     if (!r.ok) return setSaveState("failed");
     setBoards((bs) => [{ id: next.id, name, updatedAt: next.updatedAt }, ...bs]);
@@ -98,7 +98,7 @@ function BoardApp() {
 
       {board && !picking ? (
         <Editor key={board.id} board={board} saves={saves} photos={photos} boards={boards} saveState={saveState}
-          onChange={(pieces) => queueSave(board.id, board.name, pieces)}
+          onChange={(doc) => queueSave(board.id, board.name, doc)}
           onSwitch={switchTo} onNew={async () => { await flush(); setPicking(true); }} />
       ) : (
         <>
@@ -131,19 +131,30 @@ function Header({ boards, current, onSwitch, onNew, right }: { boards: BoardSumm
 
 function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, onNew }: {
   board: Board; saves: Save[]; photos: Save[]; boards: BoardSummary[]; saveState: SaveState;
-  onChange: (pieces: Piece[]) => void; onSwitch: (id: string) => void; onNew: () => void;
+  onChange: (doc: BoardDoc) => void; onSwitch: (id: string) => void; onNew: () => void;
 }) {
-  const editor = useBoardEditor(board.doc.pieces, onChange);
+  // The board's tray: the saves picked for it. "All saves" shows everything; a save dragged on
+  // from there joins the board's tray. Older boards (no tray) show all saves.
+  const [tray, setTray] = useState<string[] | undefined>(board.doc.tray);
+  const [showAll, setShowAll] = useState(!board.doc.tray);
+  const trayRef = useRef(tray);
+  useEffect(() => { trayRef.current = tray; }, [tray]);
+  const editor = useBoardEditor(board.doc.pieces, (pieces) => {
+    const used = pieces.flatMap((x) => (x.kind === "photo" && x.saveId ? [x.saveId] : []));
+    const t = trayRef.current ? [...new Set([...trayRef.current, ...used])] : undefined;
+    if (t && t.length !== trayRef.current?.length) setTray(t);
+    onChange(t ? { pieces, tray: t } : { pieces });
+  });
   const tools = useTools(editor);
   const p = editor.piece;
   const byId = useMemo(() => new Map(saves.map((s) => [s.id, s])), [saves]);
+  const shown = showAll || !tray ? photos : photos.filter((s) => tray.includes(s.id));
 
   async function redraft() {
     if (!confirm("Start again from a draft? This board's arrangement will be replaced.")) return;
     const onBoard = editor.pieces.filter((x) => x.kind === "photo" && x.saveId).sort((a, b) => a.y - b.y || a.x - b.x).map((x) => byId.get(x.saveId!)).filter((s): s is Save => !!s);
-    const picked = onBoard.length ? onBoard : photos.slice(0, 14);
-    const palette = await paletteFrom(picked.map((s) => imageUrl(s.id)), 6, FALLBACK_PALETTE);
-    editor.actions.replaceAll(tiledDraft(board.name, picked, palette));
+    const picked = onBoard.length ? onBoard : shown.slice(0, 14);
+    editor.actions.replaceAll(tiledDraft(picked));
   }
 
   const chip = (r: Rect) => (
@@ -173,8 +184,14 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
 
       <aside className="ed-tray overflow-y-auto p-4">
         <p className="ed-tray-title mb-3">Your saves</p>
+        {tray && (
+          <div className="mb-3 flex gap-1">
+            <button className="ed-btn ed-tab" data-active={!showAll ? "" : undefined} onClick={() => setShowAll(false)}><span>This board</span></button>
+            <button className="ed-btn ed-tab" data-active={showAll ? "" : undefined} onClick={() => setShowAll(true)}><span>All saves</span></button>
+          </div>
+        )}
         <div className="grid grid-cols-2 gap-3">
-          {photos.map((s, i) => (
+          {shown.map((s, i) => (
             <button key={s.id} type="button" draggable className="ed-thumb relative aspect-[3/4] shrink-0 overflow-hidden"
               style={{ ["--tilt" as string]: `${((i * 37) % 5) - 2}deg` }}
               onDragStart={(e) => e.dataTransfer.setData("text/selvedge-save", s.id)}
@@ -195,7 +212,7 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
 // Making a board: name it (this season by default) and pick the saves to tile.
 function Picker({ photos, name: suggested, onMake, onCancel }: { photos: Save[]; name: string; onMake: (name: string, picked: Save[]) => Promise<void>; onCancel?: () => void }) {
   const [name, setName] = useState(suggested);
-  const [picked, setPicked] = useState(() => new Set(photos.slice(0, 14).map((s) => s.id)));
+  const [picked, setPicked] = useState<Set<string>>(() => new Set());
   const [busy, setBusy] = useState(false);
   const toggle = (id: string) => setPicked((p) => { const n = new Set(p); if (n.has(id)) n.delete(id); else n.add(id); return n; });
 
@@ -209,7 +226,6 @@ function Picker({ photos, name: suggested, onMake, onCancel }: { photos: Save[];
         <input value={name} onChange={(e) => setName(e.target.value)} maxLength={80}
           className="h-10 w-64 rounded-md border border-black/20 bg-white/70 px-3 text-[17px]" />
       </label>
-      <p className="ed-quiet text-[15px]">{picked.size} picked. Click a save to add or remove it.</p>
       <div className="grid grid-cols-6 gap-3">
         {photos.map((s) => (
           <button key={s.id} type="button" onClick={() => toggle(s.id)} aria-pressed={picked.has(s.id)}

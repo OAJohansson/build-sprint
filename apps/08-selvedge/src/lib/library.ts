@@ -31,7 +31,8 @@ export type Piece = {
   color?: string;
   text?: string;
 };
-export type BoardDoc = { pieces: Piece[] };
+/** A board: its pieces, and the saves picked for it (its tray); older boards have no tray. */
+export type BoardDoc = { pieces: Piece[]; tray?: string[] };
 export type Board = { id: string; name: string; doc: BoardDoc; updatedAt: string };
 export type BoardSummary = Omit<Board, "doc">;
 
@@ -84,5 +85,7 @@ export function parseDoc(v: unknown): BoardDoc | null {
       ...(typeof p.text === "string" ? { text: p.text.slice(0, 80) } : {}),
     });
   }
-  return { pieces: out };
+  const trayIn = (v as { tray?: unknown }).tray;
+  const tray = Array.isArray(trayIn) ? trayIn.filter((t): t is string => typeof t === "string" && UUID.test(t)).slice(0, 500) : undefined;
+  return tray ? { pieces: out, tray } : { pieces: out };
 }

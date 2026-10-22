@@ -18,10 +18,10 @@ export const FALLBACK_PALETTE = ["#4a2a26", "#f2e3c6", "#e4e6e1", "#5f6b66", "#1
 const uid = () => crypto.randomUUID().slice(0, 8);
 
 /**
- * A new board, laid out like the owner's: the picked photos tiled edge to edge (two rows when
- * there are four or more), palette squares laid over the seams, the title pill in the middle.
+ * "Start again from a draft": the photos tiled edge to edge, like the owner's board (two rows
+ * when there are four or more). Photos only: shapes and text are added by hand (feedback 5).
  */
-export function tiledDraft(title: string, picked: Save[], palette: string[]): Piece[] {
+export function tiledDraft(picked: Save[]): Piece[] {
   const photos = picked.filter((s) => s.hasImage);
   const rowCount = photos.length >= 4 ? 2 : 1;
   const perRow = Math.ceil(photos.length / rowCount);
@@ -39,12 +39,6 @@ export function tiledDraft(title: string, picked: Save[], palette: string[]): Pi
       x += w;
     });
   });
-  const spots: [number, number][] = [[300, 90], [60, 370], [1330, 110], [1250, 470], [560, 600], [930, 640]];
-  palette.slice(0, 6).forEach((color, i) => {
-    const [x, y] = spots[i];
-    pieces.push({ id: uid(), kind: "swatch", color, x, y, w: 150, h: 150, z: z++, cropX: 50, cropY: 50, zoom: 1, rough: false });
-  });
-  pieces.push({ id: uid(), kind: "title", text: title, x: 380, y: 390, w: 840, h: 120, z: z++, cropX: 50, cropY: 50, zoom: 1, rough: false });
   return pieces;
 }
 
@@ -150,7 +144,13 @@ export function BoardCanvas({ board, saves, chrome, className = "" }: {
     const d = drag.current; if (!d || !s) return;
     const dx = (e.clientX - d.sx) / s, dy = (e.clientY - d.sy) / s, p = d.start;
     if (d.mode === "move") update(d.id, { x: Math.round(p.x + dx), y: Math.round(p.y + dy) });
-    else if (d.mode === "resize") update(d.id, { w: Math.max(40, Math.round(p.w + dx)), h: Math.max(40, Math.round(p.h + dy)) });
+    else if (d.mode === "resize") {
+      if (p.kind === "photo") {
+        // A photo keeps its shape when resized, so nothing gets cropped; only Crop changes the framing.
+        const k = Math.max(40 / Math.min(p.w, p.h), (p.w + dx) / p.w, (p.h + dy) / p.h);
+        update(d.id, { w: Math.round(p.w * k), h: Math.round(p.h * k) });
+      } else update(d.id, { w: Math.max(40, Math.round(p.w + dx)), h: Math.max(40, Math.round(p.h + dy)) });
+    }
     else update(d.id, { cropX: clamp(p.cropX - (dx / p.w) * 100 / p.zoom), cropY: clamp(p.cropY - (dy / p.h) * 100 / p.zoom) });
   };
   const onUp = () => { drag.current = null; };

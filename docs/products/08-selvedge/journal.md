@@ -427,3 +427,17 @@ target's service worker can't type a code. Build order, each step shippable:
   quiet "Saving…" shows meanwhile. Checked: a dragged title saved and survived a reload.
 - **Tested** in the browser at 1440 × 900 against the in-memory store with the 18 design photos.
   Not yet: the owner's real saves, a second device, the real crop (step 5).
+
+## 22 Oct: the owner's first board, and fixes
+
+- **Feedback 1–7** logged (`feedback.md`): drop the pick count; nothing picked by default and a
+  clearer selected state (3 options); a new board starts empty, photos dragged on; resizing a
+  photo must not crop it; no palette squares by default, instead a shapes-with-text tool; a real
+  crop; background removal as its own feature.
+- **Owner's calls:** the picker picks the board's tray (the board starts empty, you drag from
+  it; "All saves" shows everything and a save dragged on from there joins the tray); order: the
+  quick fixes, then shapes with text, then the real crop, then background removal.
+- **Fixed:** 1 (the count line is gone), 3 (empty board, the board's own tray saved with it),
+  4 (a photo keeps its shape when resized, so its whole picture stays; only Crop reframes it),
+  and half of 2 (nothing pre-picked). "Start again from a draft" now tiles photos only.
+- **Select states** for 2: `design/select-states.html`, A Pencil tick, B Taped in, C Highlighter.

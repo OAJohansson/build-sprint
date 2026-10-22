@@ -71,26 +71,53 @@ export function pickFromSrcset(tag: string, max: number): string | null {
   return src ? decode(src) : null;
 }
 
-/** For an Instagram post or reel: its picture as posted, from the public embed page. */
+/** A real Instagram post photo, not the logo or a placeholder: served from its photo CDN
+ *  (paths like /v/t51…) as JPEG or WebP. From data-centre servers Instagram sometimes answers
+ *  with a login page whose picture is its logo (live, 22 Oct); that must never be kept. */
+export function isInstagramPhoto(url: string, type: string): boolean {
+  try {
+    const u = new URL(url);
+    return /(^|\.)(cdninstagram\.com|fbcdn\.net)$/.test(u.hostname) && /^\/v\/t\d/.test(u.pathname) && (type === "image/jpeg" || type === "image/webp");
+  } catch {
+    return false;
+  }
+}
+
+// What each Instagram fetch got, for the server logs (no personal data: hosts, paths, status).
+const where = (url: string) => { try { const u = new URL(url); return u.hostname + u.pathname.slice(0, 40); } catch { return "?"; } };
+const note = (msg: string) => console.log(`[instagram] ${msg}`);
+
+async function keepIfPhoto(src: string | null, from: string) {
+  if (!src || !isPublicUrl(src)) { note(`${from}: no picture found`); return null; }
+  const image = await fetchCapped(src, MAX_IMAGE, "image/webp,image/jpeg,image/png", 8000);
+  if (!image) { note(`${from}: picture didn't download (${where(src)})`); return null; }
+  if (!isInstagramPhoto(image.url, image.type)) { note(`${from}: refused a non-photo (${image.type} from ${where(image.url)})`); return null; }
+  return { bytes: image.bytes, type: image.type };
+}
+
+/** For an Instagram post or reel: its photo as posted (embed page), else og:image, never the logo. */
 async function instagramPicture(link: string) {
   const code = link.match(/instagram\.com\/(?:[^/]+\/)?(p|reel|tv)\/([A-Za-z0-9_-]+)/);
-  if (!code) return null;
-  const page = await fetchCapped(`https://www.instagram.com/${code[1]}/${code[2]}/embed/captioned/`, MAX_PAGE, "text/html", 6000);
-  if (!page || !page.type.includes("html")) return null;
-  const tag = new TextDecoder().decode(page.bytes).match(/<img\b[^>]*class="EmbeddedMediaImage"[^>]*>/i)?.[0];
-  const src = tag ? pickFromSrcset(tag, 1600) : null;
-  if (!src || !isPublicUrl(src)) return null;
-  const image = await fetchCapped(src, MAX_IMAGE, "image/webp,image/jpeg,image/png", 8000);
-  return image && TYPES.includes(image.type) ? { bytes: image.bytes, type: image.type } : null;
+  if (!code) { note("not a post link"); return null; }
+  const embed = await fetchCapped(`https://www.instagram.com/${code[1]}/${code[2]}/embed/captioned/`, MAX_PAGE, "text/html", 6000);
+  note(`embed page: ${embed ? `${embed.type}, ${embed.bytes.length} B, ended at ${where(embed.url)}` : "no answer"}`);
+  if (embed?.type.includes("html")) {
+    const tag = new TextDecoder().decode(embed.bytes).match(/<img\b[^>]*class="EmbeddedMediaImage"[^>]*>/i)?.[0];
+    const posted = await keepIfPhoto(tag ? pickFromSrcset(tag, 1600) : null, "embed");
+    if (posted) return posted;
+  }
+  // The preview is a zoomed square crop, but a real photo beats none.
+  const page = await fetchCapped(link, MAX_PAGE, "text/html,application/xhtml+xml", 6000);
+  note(`post page: ${page ? `${page.type}, ${page.bytes.length} B, ended at ${where(page.url)}` : "no answer"}`);
+  if (!page?.type.includes("html")) return null;
+  return keepIfPhoto(findPreviewImage(new TextDecoder().decode(page.bytes), page.url), "og:image");
 }
 
 export async function fetchLinkPicture(link: string): Promise<{ bytes: Uint8Array; type: string } | null> {
   if (!isPublicUrl(link)) return null;
   try {
-    if (/(^|\.)instagram\.com$/.test(new URL(link).hostname)) {
-      const posted = await instagramPicture(link);
-      if (posted) return posted;
-    }
+    // Instagram has its own path, and when it gives no real photo the save asks for a screenshot.
+    if (/(^|\.)instagram\.com$/.test(new URL(link).hostname)) return await instagramPicture(link);
     const page = await fetchCapped(link, MAX_PAGE, "text/html,application/xhtml+xml", 6000);
     if (!page || !page.type.includes("html")) return null;
     const src = findPreviewImage(new TextDecoder().decode(page.bytes), page.url);

@@ -27,6 +27,11 @@ The apps use Next.js 16, which has breaking changes from older versions (async `
   (`docs/knowledge-bank.md`, `docs/ideas.md`, `docs/learnings.md`, `README.md`, lockfile) come
   last: merge `main` into your branch first, then add to them.
 - Merge or open the PR the same day; a branch that lives for days drifts from `main`.
+- **Notes are only safe once committed.** Commit `docs/` changes at each step, not only at the
+  end, and push the branch (branch pushes cost no deploys, decision 0016), so nothing is lost if
+  a worktree is cleaned up.
+- The notebook is shared by every session: publish it **only from `main`**, never from a branch
+  (decision 0024). Merging is: merge, then republish from `main` (see Documentation).
 - Lockfile conflict: take `main`'s `pnpm-lock.yaml` and run `pnpm install`; never hand-merge it.
 
 ## Code habits (decision 0011)
@@ -76,9 +81,15 @@ conflicts with the clean-and-minimal principle (decision 0007), the principle wi
   - `learnings.md`: lessons from this product, plus the retro at wrap-up (see `docs/PLAYBOOK.md`).
   - `story.md`: the interview story at wrap-up (STAR, headline, themes, assumptions vs reality,
     follow-ups); feeds the story bank page (`docs/interview-stories.md`).
-- After any change in `docs/`, run `pnpm sync && pnpm notebook`, then republish
-  `.notebook/index.html` with the Artifact tool to the existing private notebook,
-  https://claude.ai/artifact/6WgAx5PMZYAzBqCg7zf25b (pass that URL; never create a new one).
+- After any change in `docs/`, run `pnpm sync` and commit it on your branch. To check how it
+  looks, `pnpm notebook --preview` (writes `.notebook/preview.html`; never publish that file).
+- **After each merge to `main`** (merges are batched, about once or twice a day, to save deploys):
+  build from the merged commit (`git fetch origin && git switch --detach origin/main` in your
+  worktree), run `pnpm notebook`, then republish `.notebook/index.html` with the Artifact tool to
+  the existing private notebook, https://claude.ai/artifact/6WgAx5PMZYAzBqCg7zf25b (pass that
+  URL; never create a new one). `pnpm notebook` refuses unless the checkout is the latest `main`
+  with no uncommitted notes, and warns about notes on branches not merged yet: tell the owner
+  about any it lists.
 - `docs/knowledge-bank.md` is the owner's general knowledge, separate from product-specific
   learnings, in seven categories (customer insight, product strategy, product delivery, design and
   UX, technology, building with AI, communication and influence), each with subsections. Whenever

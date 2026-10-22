@@ -1,8 +1,51 @@
 // Builds the private sprint notebook (.notebook/index.html) from docs/.
 // Publish or republish that file as a claude.ai artifact; see AGENTS.md.
+// The notebook is one page shared by every session, so it's only built for publishing from the
+// latest main with no uncommitted notes (decision 0024). `--preview` builds any branch into
+// .notebook/preview.html, for checking only.
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { ROOT, readProducts, readSideProjects } from "../products.mjs";
+
+const preview = process.argv.includes("--preview");
+const git = (...args) => execFileSync("git", args, { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
+
+// Notes committed on a branch but not on main yet: they exist, but the notebook can't show them.
+function unmergedNotes() {
+  const refs = git("for-each-ref", "--format=%(refname:short)", "refs/heads", "refs/remotes/origin").split("\n");
+  const seen = new Set();
+  const out = [];
+  for (const ref of refs) {
+    if (!ref || ["main", "origin", "origin/HEAD", "origin/main"].includes(ref)) continue;
+    const tip = git("rev-parse", ref);
+    if (seen.has(tip)) continue;
+    seen.add(tip);
+    const count = Number(git("rev-list", "--count", `origin/main..${ref}`, "--", "docs"));
+    if (count) out.push(`${ref}: ${count} commit(s), last ${git("log", "-1", "--format=%cs", ref)}`);
+  }
+  return out;
+}
+
+if (!preview) {
+  try {
+    git("fetch", "--quiet", "origin", "main");
+  } catch {
+    console.warn("Couldn't fetch origin/main; checking against the last fetched copy.");
+  }
+  const problems = [];
+  if (git("rev-parse", "HEAD") !== git("rev-parse", "origin/main"))
+    problems.push("This checkout isn't the latest main. Merge first, then build from origin/main (e.g. `git switch --detach origin/main`).");
+  if (git("status", "--porcelain", "--", "docs"))
+    problems.push("docs/ has uncommitted changes. Commit them on a branch and merge, so the notebook only shows what's on main.");
+  if (problems.length) {
+    console.error(`Notebook not built for publishing:\n- ${problems.join("\n- ")}\nTo check it locally instead: pnpm notebook --preview`);
+    process.exit(1);
+  }
+  const waiting = unmergedNotes();
+  if (waiting.length)
+    console.warn(`\n⚠ Notes on branches not merged into main (not in the notebook yet):\n  ${waiting.join("\n  ")}\nMerge them, or delete the branch if it's abandoned.\n`);
+}
 
 const REPO = "https://github.com/OAJohansson/build-sprint";
 const TOTAL = 20;
@@ -162,7 +205,7 @@ const data = {
 // "<" escaped so no doc text can close the script tag early.
 const json = JSON.stringify(data).replace(/</g, "\\u003c");
 const html = read("scripts/notebook/template.html").replace("/*DATA*/null", json);
-const out = path.join(ROOT, ".notebook/index.html");
+const out = path.join(ROOT, preview ? ".notebook/preview.html" : ".notebook/index.html");
 fs.mkdirSync(path.dirname(out), { recursive: true });
 fs.writeFileSync(out, html);
-console.log(`Notebook: ${products.length} product(s) → ${path.relative(ROOT, out)}`);
+console.log(`Notebook: ${products.length} product(s) → ${path.relative(ROOT, out)}${preview ? " (preview only, don't publish)" : ""}`);

@@ -120,6 +120,7 @@ Day 1. Rows 1–3 updated after the probe (22 Oct).
 | 1 | The installed app appears in Android's share sheet | Share a screenshot from the gallery; Selvedge is in the list |
 | 2 | A shared image lands in the inbox in at most 2 taps after Share | Count taps from the gallery |
 | 3 | A shared Instagram or Pinterest link lands in the inbox with its picture, kept by us | Share a post and a pin; both show a picture a day later |
+| 3b | If a link's picture can't be fetched, I'm told and asked for a screenshot instead | Share a link that blocks fetching; the message suggests a screenshot |
 | 4 | A save on the phone shows up on the laptop | Share on the phone, reload on the laptop; it's there |
 | 5 | Dropping files on the laptop adds them all | Drop 20 screenshots; 20 in the inbox |
 | 6 | Picking saves makes a board with no hand layout | Pick 12; a collage and 5–6 swatches appear |

@@ -73,3 +73,9 @@ What happened, what was decided and why. Newest last.
 - **Consequences for design:** one inbox for both kinds (a picture, or a link with the picture
   we fetched); a 6 MB photo must be shrunk in the browser before upload (decision 0021). The
   Instagram square crop may cut off part of an outfit, so the board should cope with squares.
+- **Taps (owner, 22 Oct):** 3 taps from Share to saved. The target was 2; the owner finds 3
+  acceptable. Recorded as a pass with a note; worth recounting once the real inbox replaces the
+  probe.
+- **No picture? Say so (owner's call).** When a link's picture can't be fetched, Selvedge tells
+  me and suggests taking a screenshot instead (requirement 3b), rather than quietly saving a
+  bare link card.

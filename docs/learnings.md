@@ -131,6 +131,16 @@ Rules I now apply to every product (detail in the playbook).
 - **A hidden feature isn't a feature.** Delete worked but nothing said so; a bin that appears
   while you hold a loop is the signifier (Don Norman).
 
+### 08 Selvedge (in progress)
+
+- **Probe before you design.** An hour-long share-target probe showed Instagram and Pinterest
+  send only a link, which reshaped capture before a single screen was drawn.
+- **Spikes need a stop.** The character spike answered its question in four drawings, then ran
+  on until the owner called time; set the question and timebox first.
+- **Let each tool do what it's good at.** The image model paints; Claude replays the painting
+  stroke by stroke. Claude painting in code was "really bad"; Claude animating a painting was
+  the moment the owner loved.
+
 ## Process changelog
 
 Every change to how I build, and the product that taught it.

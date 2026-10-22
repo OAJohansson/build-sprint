@@ -17,6 +17,26 @@ export const FALLBACK_PALETTE = ["#4a2a26", "#f2e3c6", "#e4e6e1", "#5f6b66", "#1
 
 const uid = () => crypto.randomUUID().slice(0, 8);
 
+/** The shapes the tray offers (feedback 5): a square and a rectangle (flat colour, text optional)
+ *  and a round pill like the owner's "SPRING / SUMMER" title. */
+export const SHAPES = {
+  square: { kind: "swatch", w: 160, h: 160, label: "Square" },
+  rectangle: { kind: "swatch", w: 300, h: 160, label: "Rectangle" },
+  pill: { kind: "title", w: 640, h: 120, label: "Pill" },
+} as const;
+export type ShapeKind = keyof typeof SHAPES;
+
+/** The pill's cream (from the owner's board) and the logo's yellow, offered with every board's palette. */
+export const PILL_CREAM = "#f2e3c6";
+export const LOGO_YELLOW = "#f2d666";
+
+/** Dark ink on light colours, cream on dark ones, so text in a shape is always readable. */
+export function inkOn(color: string) {
+  const n = parseInt(color.slice(1), 16);
+  const light = (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
+  return light > 0.55 ? "#3a2a20" : "#f7f1e3";
+}
+
 /**
  * "Start again from a draft": the photos tiled edge to edge, like the owner's board (two rows
  * when there are four or more). Photos only: shapes and text are added by hand (feedback 5).
@@ -89,6 +109,14 @@ export function useBoardEditor(initial: Piece[], onChange: (pieces: Piece[]) => 
       setPieces((ps) => [...ps, { id, kind: "photo", saveId: save.id, x: Math.round((at?.x ?? BOARD_W / 2) - w / 2), y: Math.round((at?.y ?? BOARD_H / 2) - h / 2), w, h, z: Math.max(0, ...ps.map((p) => p.z)) + 1, cropX: 50, cropY: 40, zoom: 1, rough: false }]);
       setSelected(id);
     },
+    addShape: (shape: ShapeKind, color: string, at?: { x: number; y: number }) => {
+      const { w, h, kind } = SHAPES[shape];
+      const id = uid();
+      setPieces((ps) => [...ps, { id, kind, color, text: "", x: Math.round((at?.x ?? BOARD_W / 2) - w / 2), y: Math.round((at?.y ?? BOARD_H / 2) - h / 2), w, h, z: Math.max(0, ...ps.map((p) => p.z)) + 1, cropX: 50, cropY: 50, zoom: 1, rough: false }]);
+      setSelected(id);
+    },
+    setColor: (color: string) => piece && piece.kind !== "photo" && update(piece.id, { color }),
+    setText: (text: string) => piece && piece.kind !== "photo" && update(piece.id, { text: text.slice(0, 80) }),
     replaceAll: (next: Piece[]) => { setPieces(() => next); setSelected(null); setCropping(false); },
   };
 
@@ -158,9 +186,12 @@ export function BoardCanvas({ board, saves, chrome, className = "" }: {
   const byId = useMemo(() => new Map(saves.map((x) => [x.id, x])), [saves]);
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    const save = byId.get(e.dataTransfer.getData("text/selvedge-save"));
     const r = box.current!.getBoundingClientRect();
-    if (save) actions.addSave(save, { x: (e.clientX - r.left - offX) / s, y: (e.clientY - r.top - offY) / s });
+    const at = { x: (e.clientX - r.left - offX) / s, y: (e.clientY - r.top - offY) / s };
+    const save = byId.get(e.dataTransfer.getData("text/selvedge-save"));
+    const shape = e.dataTransfer.getData("text/selvedge-shape") as ShapeKind;
+    if (save) actions.addSave(save, at);
+    else if (shape in SHAPES) actions.addShape(shape, e.dataTransfer.getData("text/selvedge-color") || PILL_CREAM, at);
   };
 
   const sel = pieces.find((p) => p.id === selected);
@@ -183,10 +214,14 @@ export function BoardCanvas({ board, saves, chrome, className = "" }: {
                 <img src={imageUrl(p.saveId)} alt="" draggable={false} className="h-full w-full object-cover"
                   style={{ objectPosition: `${p.cropX}% ${p.cropY}%`, transform: `scale(${p.zoom})`, transformOrigin: `${p.cropX}% ${p.cropY}%` }} />
               )}
-              {p.kind === "swatch" && <div className="h-full w-full" style={{ background: p.color }} />}
+              {p.kind === "swatch" && (
+                <div className="flex h-full w-full items-center justify-center p-[6%] text-center" style={{ background: p.color }}>
+                  {p.text && <span style={{ font: `400 ${Math.min(p.h * 0.3, p.w * 0.16)}px/1.05 var(--font-hand)`, color: inkOn(p.color ?? PILL_CREAM), letterSpacing: "0.03em", textTransform: "uppercase" }}>{p.text}</span>}
+                </div>
+              )}
               {p.kind === "title" && (
-                <div className="flex h-full w-full items-center justify-center rounded-[60px]" style={{ background: "#f2e3c6" }}>
-                  <span style={{ font: `400 ${p.h * 0.62}px/1 var(--font-hand)`, color: "#4a2a26", letterSpacing: "0.04em", textTransform: "uppercase" }}>{p.text}</span>
+                <div className="flex h-full w-full items-center justify-center rounded-[999px] px-[4%]" style={{ background: p.color ?? PILL_CREAM }}>
+                  <span className="whitespace-nowrap" style={{ font: `400 ${p.h * 0.62}px/1 var(--font-hand)`, color: p.color ? inkOn(p.color) : "#4a2a26", letterSpacing: "0.04em", textTransform: "uppercase" }}>{p.text}</span>
                 </div>
               )}
             </div>

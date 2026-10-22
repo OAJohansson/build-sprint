@@ -9,8 +9,9 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AccessGate } from "@/components/access-gate";
-import { BoardCanvas, tiledDraft, useBoardEditor, useTools, type Rect } from "@/components/board/engine";
+import { BoardCanvas, FALLBACK_PALETTE, LOGO_YELLOW, PILL_CREAM, SHAPES, tiledDraft, useBoardEditor, useTools, type Rect, type ShapeKind } from "@/components/board/engine";
 import { imageUrl, type Board, type BoardDoc, type BoardSummary, type Save } from "@/lib/library";
+import { paletteFrom } from "@/lib/palette";
 import { newBoardName } from "@/lib/season";
 
 export default dynamic(() => Promise.resolve(BoardApp), { ssr: false });
@@ -151,6 +152,15 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
   const byId = useMemo(() => new Map(saves.map((s) => [s.id, s])), [saves]);
   const shown = showAll || !tray ? photos : photos.filter((s) => tray.includes(s.id));
 
+  // Colours for shapes: the board's own palette, read from its photos, plus the pill's cream and
+  // the logo's yellow.
+  const [palette, setPalette] = useState<string[]>([PILL_CREAM, LOGO_YELLOW, ...FALLBACK_PALETTE]);
+  const paletteKey = shown.slice(0, 18).map((s) => s.id).join();
+  useEffect(() => {
+    const ids = paletteKey ? paletteKey.split(",") : [];
+    paletteFrom(ids.map(imageUrl), 6, FALLBACK_PALETTE).then((c) => setPalette([PILL_CREAM, LOGO_YELLOW, ...c.filter((x) => x !== PILL_CREAM && x !== LOGO_YELLOW)]));
+  }, [paletteKey]);
+
   async function redraft() {
     if (!confirm("Start again from a draft? This board's arrangement will be replaced.")) return;
     const onBoard = editor.pieces.filter((x) => x.kind === "photo" && x.saveId).sort((a, b) => a.y - b.y || a.x - b.x).map((x) => byId.get(x.saveId!)).filter((s): s is Save => !!s);
@@ -162,6 +172,18 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
     <div key={p?.id} className="ed-chip desk-chip absolute z-50 flex items-center gap-1"
       style={{ left: r.left + r.width / 2, top: Math.max(8, r.top - 52), transform: "translateX(-50%)" }}
       onPointerDown={(e) => e.stopPropagation()}>
+      {p && p.kind !== "photo" && (
+        <>
+          <div className="flex items-center gap-1 px-1" role="radiogroup" aria-label="Colour">
+            {palette.map((c) => (
+              <button key={c} role="radio" aria-checked={p.color === c} aria-label={`Colour ${c}`} onClick={() => editor.actions.setColor(c)}
+                className="shape-colour" style={{ background: c }} data-on={p.color === c ? "" : undefined} />
+            ))}
+          </div>
+          <input aria-label="Text" placeholder="Text" value={p.text ?? ""} maxLength={80} onChange={(e) => editor.actions.setText(e.target.value)}
+            className="shape-text" />
+        </>
+      )}
       {tools.map((t) => (
         <button key={t.key} onClick={t.on} className="ed-btn ed-tool" data-active={t.active ? "" : undefined} data-danger={t.key === "delete" ? "" : undefined}>
           <span>{t.label}</span>
@@ -184,6 +206,16 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
       } />
 
       <aside className="ed-tray overflow-y-auto p-4">
+        <p className="ed-tray-title mb-2">Shapes</p>
+        <div className="mb-5 flex items-end gap-3">
+          {(Object.keys(SHAPES) as ShapeKind[]).map((k) => (
+            <button key={k} type="button" draggable className={`shape-pick shape-${k}`} aria-label={`Add a ${SHAPES[k].label.toLowerCase()}`}
+              onDragStart={(e) => { e.dataTransfer.setData("text/selvedge-shape", k); e.dataTransfer.setData("text/selvedge-color", k === "pill" ? PILL_CREAM : palette[2] ?? PILL_CREAM); }}
+              onClick={() => editor.actions.addShape(k, k === "pill" ? PILL_CREAM : palette[2] ?? PILL_CREAM)}>
+              <span>{SHAPES[k].label}</span>
+            </button>
+          ))}
+        </div>
         <p className="ed-tray-title mb-3">Your saves</p>
         {tray && (
           <div className="mb-3 flex gap-1">

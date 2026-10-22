@@ -451,3 +451,9 @@ target's service worker can't type a code. Build order, each step shippable:
   yellow and the faintest pencil frame). **The selvedge thread (F) is kept as a design concept**
   for later ("it ties back to the brand... I want to use it somewhere"), recorded in the backlog.
   Feedback 2 fixed.
+- **Shapes with text** (feedback 5): the tray has a Shapes row (square, rectangle, a round pill,
+  drawn in pencil) to click or drag on. A picked shape's tool box gets colour dots (the pill's
+  cream, the logo's yellow, then the palette read from the board's photos) and a text field;
+  text is hand-lettered and turns cream on dark colours by itself. Checked: a yellow
+  "SPRING / SUMMER" pill and a denim "DENIM" square, both autosaved with colour and text. The
+  stop line now allows text inside shapes (still no loose text, no rotation).

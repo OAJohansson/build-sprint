@@ -8,6 +8,6 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 2 | Owner, first board | Nothing picked by default; picking needs a clearer selected state. Show 3 select states to choose from | fixed (nothing pre-picked; the yellow dot, owner's pick D) |
 | 3 | Owner, first board | A new board shouldn't be filled with the picked images; the owner wants to drag images on | fixed |
 | 4 | Owner, first board | Resizing a photo zooms in and crops it (half the clothes lost); a photo should keep its whole picture when resized | fixed |
-| 5 | Owner, first board | No palette squares by default; instead a tool to add shapes (squares, rectangles, a round pill) with optional text inside, like the "Autumn 2026" pill | open (next) |
+| 5 | Owner, first board | No palette squares by default; instead a tool to add shapes (squares, rectangles, a round pill) with optional text inside, like the "Autumn 2026" pill | fixed (shapes: square, rectangle, pill; colour and text) |
 | 6 | Owner, first board | Crop doesn't really crop; it needs to be a proper crop | open |
 | 7 | Owner, first board | Removing the background is a separate feature from cropping; both are needed | open (after the crop) |

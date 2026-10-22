@@ -291,3 +291,13 @@ What happened, what was decided and why. Newest last.
   frames or tape), one serif plus a small sans in the tool bar, square corners, a 1px sheet edge
   and its caption. Overruled for the owner to confirm: both critics wanted Rough edge out of the
   tool bar; it stays, because the owner asked for it.
+- **Critic round 2: both 5/10 again.** Not rising, so stopped and shown to the owner (the
+  session's rule). The critic also reversed itself: Sketchbook round 1 asked for index tabs and
+  kept the logo highlighter, round 2 called the tabs "browser tabs" and the highlighter a
+  cliché; Cut paper round 1 anchored the board top and dropped print frames, round 2 wanted it
+  centred with frames back. It also judged the board's own "SUMMER 2026" pill (the owner's
+  design) as chrome. Notes raised in both rounds, worth keeping: the selection is too faint; the
+  tool bar must never cover the title; one handwriting face for everything reads as a kids' app
+  (hand face for titles only, a quiet small face for tool words); vary the tape.
+- **Learning:** a critic with no memory re-litigates; after two flat rounds, the owner's eye
+  beats a third round.

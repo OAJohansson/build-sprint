@@ -188,3 +188,14 @@ What happened, what was decided and why. Newest last.
 - **Owner's lean:** OpenAI for the drawing plus Claude's draw-on reveal (decision 0022, proposed).
   The owner called time on the spike: "we have spent too much time on this". Back to day 1
   (capture, inbox, seasonal boards, board editing); the character waits until that ships.
+
+## 22 Oct: design session (board), Discover
+
+- **Screen:** the board (laptop), because it carries the payoff jobs (seeing my style, then the
+  read and the character); the phone inbox gets its own session next.
+- **Seeds:** four random strings gave Sketchbook scroll, Contact sheet, Clothes rail and Tailor's
+  pattern paper. Plus Designer's sketchbook (the owner's references), Museum wall, Care label,
+  Selvedge edge (the name), and two that sound wrong: Departure board, Laundrette noticeboard.
+- **Contact sheet:** the owner couldn't picture one-liners, so all ten became rough frames of the
+  same board with the real Summer 2026 saves (`design/contact-sheet.html`; the photos sit in a
+  git-ignored `design/board/`). Real content this time, after Six AM's "childish" thumbnails.

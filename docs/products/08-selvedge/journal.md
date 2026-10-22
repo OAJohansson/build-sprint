@@ -478,3 +478,11 @@ target's service worker can't type a code. Build order, each step shippable:
   out clean (17 s, including the first download), and the jersey flat lay kept every item with the
   grey backdrop gone (7 s with the model cached). No errors.
 - Not yet: hand fixing of misses (backlog), real saves, a phone.
+- **Owner's first live cut-outs (23 Oct): "not perfect, but workable."** Three misses: a ghosted
+  forearm (the model unsure, so half-transparent), leftover background (a car and grey bits by
+  a bag), part of a chair kept. Compared on the owner's three photos, in Node: **A** today's ormbg;
+  **B** ormbg plus a tuned clean-up ("fairly sure" counts as solid, stray islands dropped, small
+  holes filled); **C** BEN2 (MIT, 219 MB) plus the same clean-up. B brings the arm back but keeps
+  the car (it touches the bag) and a clothes pile; **C wins all three**: the arm with its watch,
+  no car, no clothes pile. In the browser, BEN2 on WebGPU ran out of memory in headless Chrome; on
+  the CPU (WASM) it works at about 37 s a photo (ormbg about 7 s).

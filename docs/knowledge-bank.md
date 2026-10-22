@@ -645,6 +645,14 @@ installed web app keeps its own storage, separate from the browser's. Where we m
 (03) as a Dock app, then Six AM (07). From: the W3C Web App Manifest spec; "Progressive Web Apps", coined by Alex
 Russell and Frances Berriman (Google, 2015).
 
+#### Open Graph tags (link previews)
+`<meta property="og:image">`, `og:title` and friends in a page's head say what a link preview
+shows: the picture, title and description you see when a link is pasted into a chat. Why it
+matters: a server can fetch a public page and read its preview without an API. Limits: the
+image may be cropped or small, signed links can expire (so download it), and sites can block
+fetches. Where we met it: Selvedge (08): Instagram and Pinterest share only a link, but both
+pages carry an `og:image`. From: Facebook's Open Graph protocol (2010).
+
 #### Network rules in the cloud
 A cloud sandbox only reaches domains its network policy allows. Allow what the product needs
 (`*.vercel.app`, the API domains) in the environment settings.
@@ -823,6 +831,9 @@ DJs count. *Where:* Six AM's ruler labels every 8 bars, with grid lines every 4.
 
 **Q:** When is wrapping a web app in Capacitor worth it over a PWA?
 **A:** When you need native features (widgets, dependable notifications, the App Store); for an icon and a focused window, a PWA is enough.
+
+**Q:** A shared link has no picture. Where can a server find one without an API?
+**A:** In the page's Open Graph tags (`og:image`), the same ones that make link previews; download it, since the link may expire.
 
 **Q:** What does the Web Share Target API let a web app do, and where does it work?
 **A:** Appear in the phone's share sheet and receive images, links or text; only Android Chrome, and only once the app is installed.

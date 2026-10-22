@@ -103,3 +103,28 @@ What happened, what was decided and why. Newest last.
 - **Character spike set-up:** no OpenAI or Google key in the repo, but OpenRouter (key already
   used by Inkling) serves both families through one key. Candidates: Google's
   `gemini-nano-banana-2.1` and OpenAI's `gpt-5.4-image-2`; both take the board's images as input.
+
+## 22 Oct: character spike
+
+- **Board:** the owner's 18 saves for **Summer 2026** (outfit photos and flat lays), shrunk to
+  768 px. Kept out of git: they're other people's photos.
+- **Ran** `apps/08-selvedge/spike/character.mjs`: the same board and prompt to two image models
+  through OpenRouter, two prompts each: **board** (the images alone, what day 1 knows) and
+  **read** (the images plus the style in words, what day 2's style read will add). Style asked
+  for in words only (loose ink lines, marker and watercolour washes, off-white paper); the
+  illustration references weren't sent, so no living illustrator's hand is copied.
+  `gemini-nano-banana-2.1` was rate-limited upstream twice, so Google's `gemini-3-pro-image`
+  stood in. Drawings in `design/character-spike/`.
+
+  | Model | Time | Cost | Board alone | Board plus words |
+  | --- | --- | --- | --- | --- |
+  | OpenAI `gpt-5.4-image-2` | 88 s | $0.23 | brown boxy tee, slate carpenter trousers, brown tote, Bostons with white socks, cap | cream striped camp-collar shirt, long denim shorts, crossbody, sunglasses, chain, Bostons and socks |
+  | Google `gemini-3-pro-image` | 29 s | $0.15 | Carhartt-style vest over a white tee, olive double-knees, Bostons, cap | navy striped camp shirt, light wide jeans rolled, tote, sunglasses, chain, Bostons |
+
+- **First read (Claude):** both models pass the feasibility question: every drawing wears real
+  pieces from the board in its palette, in a sketchbook style. OpenAI's line is looser and
+  closer to a designer's sketch; Google's is cleaner and more illustrated, three times faster
+  and cheaper, but drew a Carhartt logo despite "no logos". Adding the style in words made both
+  pick the board's signature pieces (camp-collar shirt, sunglasses, chain), which supports doing
+  the style read before the drawing on day 2.
+- **Owner's pick:** pending.

@@ -2,7 +2,7 @@
 // step). Shares wait here until they're uploaded; the inbox shows what's still waiting and why.
 
 export type QueueState = "queued" | "offline" | "locked" | "failed" | "unreadable";
-export type QueueItem = { id: string; at: number; file: Blob | null; text: string; url: string; title: string; state: QueueState };
+export type QueueItem = { id: string; at: number; file: Blob | null; text: string; url: string; title: string; state: QueueState; source?: "upload" };
 
 const DB = "selvedge";
 const VERSION = 2;
@@ -40,9 +40,24 @@ export async function dropFromQueue(id: string): Promise<void> {
   });
 }
 
-/** Ask the service worker to try the uploads again. */
+/** Queue photos dropped on the inbox (laptop), so they upload like shares: shrunk, retried. */
+export async function enqueueFiles(files: File[]): Promise<number> {
+  const db = await open(), at = Date.now();
+  const items: QueueItem[] = files.map((file, i) => ({ id: crypto.randomUUID(), at: at + i, file, text: "", url: "", title: "", state: "queued", source: "upload" }));
+  await new Promise<void>((resolve, reject) => {
+    const t = db.transaction(QUEUE, "readwrite");
+    for (const item of items) t.objectStore(QUEUE).put(item);
+    t.oncomplete = () => resolve();
+    t.onerror = () => reject(t.error);
+  });
+  retryUploads();
+  return items.length;
+}
+
+/** Ask the service worker to try the uploads again. It may not control the page yet (its first
+ *  load), so this waits for the active worker rather than the page's controller. */
 export function retryUploads() {
-  navigator.serviceWorker?.controller?.postMessage("flush");
+  navigator.serviceWorker?.ready.then((r) => r.active?.postMessage("flush"), () => {});
 }
 
 /** Call `fn` whenever the service worker says the queue changed. Returns an unsubscribe. */

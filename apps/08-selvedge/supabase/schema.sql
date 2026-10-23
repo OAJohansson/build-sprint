@@ -34,7 +34,20 @@ create table if not exists selvedge_boards (
 
 create index if not exists selvedge_boards_updated_idx on selvedge_boards (updated_at desc);
 
+-- Folders I make in the inbox to group saves (owner, 23 Oct): named by me, renamed any time.
+-- A save is on its day page until I move it into a folder; deleting a folder sends its saves back.
+create table if not exists selvedge_folders (
+  id uuid primary key,
+  name text not null check (char_length(name) between 1 and 80),
+  -- Show each save's colours as watercolour dots in this folder (the owner's switch).
+  colour_notes boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+alter table selvedge_saves add column if not exists folder_id uuid references selvedge_folders (id) on delete set null;
+
 alter table selvedge_saves enable row level security;
+alter table selvedge_folders enable row level security;
 alter table selvedge_boards enable row level security;
 
 -- The private bucket for the pictures (shrunk in the browser first, so a few hundred KB each).

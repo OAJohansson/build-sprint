@@ -494,3 +494,37 @@ target's service worker can't type a code. Build order, each step shippable:
   including the 219 MB download (clothes pile gone); the option disappears once careful is done.
   No errors. Practice: **progressive disclosure**, the expensive option appears only when the
   cheap one has been tried.
+
+## 23 Oct: design session (inbox), Discover
+
+- **Screen:** the inbox (phone first; the laptop adds drag-and-drop bulk upload). Identity stays
+  the locked Sketchbook V1, so the directions vary layout and grouping, not the look.
+- **Seeds:** four random strings gave Day pages, Contact sheet, The pile and Strips by source.
+  Plus Masonry wall (the safe default), Not on a board yet, Colour notes, Season shelves, and two
+  that sound wrong: One at a time, Ledger.
+- **Contact sheet** (`design/inbox-contact-sheet.html`): all ten as rough phone frames with the
+  owner's real saves, each showing the same moment (just saved, one waiting, one link without
+  its picture), since one-liners were hard to picture last session.
+- **Owner's pick: Day pages**, with three changes. (1) **Folders** too: Days stays the default, a
+  Folders page lets me make folders, name them anything (no defaults) and rename them later.
+  (2) **A save lives in one place:** moving a photo into a folder takes it off its day page.
+  (3) **Colour notes** (from direction 7) only inside folders, switched on or off per folder.
+  And the yellow tape goes: "my eyes are gravitating towards the tape rather than the clothes."
+  Named as a scope widening (folders weren't in the MVP); the owner's calls on it: move with
+  Select, then Move to (the board picker's yellow dot); the switch per folder; the board tray's
+  All saves can be narrowed to one folder.
+- **Built** on `08-inbox-design`: a `selvedge_folders` table and `folder_id` on saves (deleting a
+  folder sends its saves back to their day pages); `/api/folders`; `PATCH /api/saves` to move;
+  day grouping in `src/lib/days.ts` with tests (today, yesterday, midnight, month end, new year,
+  empty); the inbox in the sketchbook look (prints, slight tilt, no tape); the Move to sheet with
+  "New folder" inline; colour dots read from each photo in the browser; the tray's folder filter;
+  and the laptop's drop-anywhere upload through the same queue as shares (requirement 5).
+- **Bug found while testing:** a page's first load isn't controlled by the service worker yet,
+  and `retryUploads` only spoke to the controlling worker, so a retry on a fresh page did
+  nothing (shares too). Fixed once in the shared code: it now waits for the active worker, and
+  the worker tells uncontrolled pages when the queue changes.
+- **Checked** at phone size (375 × 812) and on the laptop: make a folder, Select two, Move to,
+  they leave Today and the folder shows 2; colour notes on; rename; the tray filter (11 → 2);
+  delete a folder, its saves come back; a headless drop of two photos lands as two "upload"
+  saves. The picked dot was hard to see on a print's white corner, so it's a little bigger and
+  further in. The in-app browser can't run service workers, so the drop was tested headless.

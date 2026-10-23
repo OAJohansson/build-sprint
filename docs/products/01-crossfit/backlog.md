@@ -27,3 +27,4 @@ candidates, in order: show the note while checking (#15), calendar weeks across 
 | Plate maths | "60 kg = 20 kg bar + 20 kg a side" next to each percentage. | idea |
 | Per-set logging | Log each set separately instead of sets × reps @ weight. | idea |
 | Better transcription | Record audio and transcribe on the server instead of relying on the browser's speech engine. 2–3 h plus a speech-to-text provider and key; only if phone dictation is still poor. | on hold |
+| Key list out of date | `.env.example` lists only ANTHROPIC_API_KEY and ACCESS_CODE, but Vercel also has SUPABASE_URL and SUPABASE_SECRET_KEY (its own Supabase project, decision 0005). Add them, under `[01-crossfit]` in the keyring, before the next `pnpm ship`. | idea |

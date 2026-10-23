@@ -68,11 +68,18 @@ function sections(p) {
   const file = (name) => (exists(`${dir}/${name}`) ? clean(read(`${dir}/${name}`)) : "");
   const out = [];
 
+  // Streamlined and Founder (decision 0026): the owner's kickoff pack and evals come first.
+  const kickoff = file("kickoff.md");
+  if (kickoff) out.push({ id: "kickoff", label: "Kickoff pack", text: kickoff, summary: kickoff.match(/\*\*Mode:\*\*\s*(\w+)/)?.[1] ?? "Kickoff" });
+
+  const evals = file("evals.md");
+  if (evals) out.push({ id: "evals", label: "Evals", text: evals, summary: `${(evals.match(/^- \[[ x]\]/gm) ?? []).length} checks` });
+
   const brief = file("brief.md");
   if (brief) out.push({ id: "brief", label: "Brief", text: brief, summary: "Problem, jobs, success" });
 
   const journal = file("journal.md");
-  if (journal) out.push({ id: "journey", label: "Journey", text: journal, summary: `${(journal.match(/^### /gm) ?? []).length} steps, ${(journal.match(/^## /gm) ?? []).length} days` });
+  if (journal) out.push({ id: "journey", label: "Journey", text: journal, summary: `${(journal.match(/^### /gm) ?? []).length} steps, ${(journal.match(/^## (?!To carry over)/gm) ?? []).length} days` });
 
   const feedback = file("feedback.md");
   if (feedback) {
@@ -101,11 +108,17 @@ function sections(p) {
   const story = file("story.md");
   if (story) out.push({ id: "story", label: "Interview story", text: story, summary: storyThemes(story) || "STAR story" });
 
+  // The product's own decision log (L- and T-numbers, decision 0026), then the repo decisions about it.
+  const log = file("decisions.md");
+  const logged = (log.match(/^\| [LT]\d+ \|/gm) ?? []).length;
   const decisions = ls("docs/decisions")
     .filter((f) => /^\d{4}-.*\.md$/.test(f))
     .map((f) => read(`docs/decisions/${f}`))
     .filter((t) => t.includes(p.title) || t.includes(p.slug));
-  if (decisions.length) out.push({ id: "decisions", label: "Decisions", text: decisions.map(clean).join("\n\n---\n\n"), summary: `${decisions.length} recorded` });
+  if (log || decisions.length) {
+    const summary = [logged && `${logged} logged`, decisions.length && `${decisions.length} recorded`].filter(Boolean).join(", ") || "Decision log";
+    out.push({ id: "decisions", label: "Decisions", text: [log, ...decisions.map(clean)].filter(Boolean).join("\n\n---\n\n"), summary });
+  }
 
   return out;
 }

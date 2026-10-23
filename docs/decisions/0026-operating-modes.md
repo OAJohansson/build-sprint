@@ -1,7 +1,7 @@
 # 0026 — Operating modes: one pipeline, three settings
 
 - **Date:** 2026-10-23
-- **Status:** accepted (the owner calls are decided; the deferred pieces below are not)
+- **Status:** accepted; rolled out 23 Oct, first used on product 9
 
 ## Context
 
@@ -144,15 +144,20 @@ The squad's agents live in `.claude/agents/`: `discovery.md`, `designer.md`,
 
 1. **Product 9 runs in Founder mode.** Claude had recommended Streamlined; the owner chose
    Founder to try the full pipeline. The dial can still be turned down mid-product.
-2. **Claude merges its own PRs once checks pass.** This is a standing approval. The owner gives
-   up their last look before code goes live, and accepts that risk because there are no real
-   users yet, so a broken live site costs little. Revisit when a product gets real users.
-   - "Checks pass" means the `checks` GitHub Action (`.github/workflows/checks.yml`) is green.
-     It is deliberately light: for each app the PR changed it runs lint, unit tests and
-     `next build`, which includes the TypeScript check and catches most "won't deploy" errors
-     before Vercel does. It also checks that the repo scripts parse. Builds need no keys. A
-     docs-only PR passes in seconds, and Actions minutes are free on a public repo.
-   - No checks, no merge: if the PR has no green `checks` run, Claude asks the owner instead.
+2. **Every merge to `main` is the owner's approval** (changed on 23 Oct from a standing
+   approval to merge on green checks). Merging is what puts code live, so it stays the owner's
+   last look: Claude does all the work up to it (branch, PR, green checks, preview link) and then
+   asks, in one line, what the merge would put live. On the owner's yes in chat, Claude merges.
+   - "Checks" means the `checks` GitHub Action (`.github/workflows/checks.yml`). It is
+     deliberately light: for each app the PR changed it runs lint, unit tests and `next build`,
+     which includes the TypeScript check and catches most "won't deploy" errors before Vercel
+     does. It also checks that the repo scripts parse. Builds need no keys. A docs-only PR passes
+     in seconds, and Actions minutes are free on a public repo. Claude only asks for a merge once
+     it is green.
+   - **Founder:** one merge, after the final review. A brand-new app is the one exception: its
+     empty starter needs one merge at kickoff so the Vercel project exists for the preview.
+   - **Streamlined and Learning:** merges during the product (the empty starter, a working
+     version to try on the phone) are asked for too, batched into one request.
    - Merges are still batched (about once or twice a day, decision 0016), because each merge
      costs deploys, and Claude republishes the notebook from `main` after each merge as before.
 3. **Previews only for the owner's big checks; no branch previews.** Decision 0016 stands:
@@ -164,17 +169,23 @@ The squad's agents live in `.claude/agents/`: `discovery.md`, `designer.md`,
      review.
    - Learning: only when the owner asks.
 
-## Open: deferred
+## Rolled out after 08 Selvedge (23 Oct)
 
-Deferred until 08 Selvedge ships, because Selvedge sessions have these files open:
+The pieces deferred while Selvedge had these files open:
 
-- Changes to `pnpm ship`, the deploy rules and the branch rules.
-- `docs/PLAYBOOK.md` (the gates per step) and `AGENTS.md` (the mode rules and the PM's
-  behaviour).
-- Wiring the kickoff-pack and evals templates, `mode:` and `decisions.md` into `pnpm new` and
-  `docs/products/TEMPLATE.md`.
-- Moving where shared docs (`knowledge-bank.md`, `learnings.md`, `ideas.md`, `README.md`) are
-  written, so parallel sessions stop conflicting on them.
+- **Playbook** step 0 (the dial, the kinds of decision, the gates) and a gate note at each step;
+  **`AGENTS.md`** "Operating modes" (the rules per mode and the PM's behaviour) and "Parallel
+  sessions and ops".
+- **`pnpm new --mode`** writes `mode:` on the card (default `learning`) and, for Streamlined and
+  Founder, creates `kickoff.md`, `evals.md` (part 1 only; part 2 never enters the repo) and
+  `decisions.md`. The notebook shows them as Kickoff pack, Evals and Decisions sub-pages.
+- **Ops rules:** one worktree and one branch per product (a spike is a commit); Claude asks for each
+  merge once `checks` is green and merges on the owner's yes; `pnpm ship` fills `.env.local` from `.env.secrets.local` first and Claude
+  runs it; `pnpm ship NN-slug --preview` makes the one deliberate preview.
+- **Shared docs written once:** during a product, entries for the knowledge bank, problems,
+  learnings and the playbook go under `## To carry over` at the top of the journal, and are
+  written into the shared files in one commit at wrap-up, after merging `main`. `README.md` is
+  generated, so a conflict is solved by taking `main`'s and running `pnpm sync`.
 
 ## Alternatives considered
 

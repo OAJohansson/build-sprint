@@ -14,7 +14,7 @@
 // Keys already set in .env.local are kept unless --force. Only key names are ever printed.
 import fs from "node:fs";
 import path from "node:path";
-import { ROOT, APPS_DIR } from "./products.mjs";
+import { APPS_DIR, secretsPath as findSecrets } from "./products.mjs";
 
 const SECRETS_FILE = ".env.secrets.local";
 const args = process.argv.slice(2);
@@ -35,8 +35,8 @@ const examplePath = path.join(appDir, ".env.example");
 if (!fs.existsSync(examplePath)) fail(`apps/${slug}/.env.example doesn't exist: nothing to fill.`);
 const wanted = [...fs.readFileSync(examplePath, "utf8").matchAll(/^([A-Z0-9_]+)=/gm)].map((m) => m[1]);
 
-const secretsPath = path.join(ROOT, SECRETS_FILE);
-if (!fs.existsSync(secretsPath)) fail(`${SECRETS_FILE} doesn't exist at the repo root. Create it with KEY=value lines.`);
+const secretsPath = findSecrets();
+if (!fs.existsSync(secretsPath)) fail(`${SECRETS_FILE} doesn't exist at the repo root (${secretsPath}). Create it with KEY=value lines.`);
 
 // Same line rule as ship.mjs: KEY=value, optional matching quotes, empty values skipped.
 const LINE = /^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/;

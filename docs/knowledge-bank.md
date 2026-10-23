@@ -1092,6 +1092,15 @@ it: the `design-critic` subagent (06 Folio): 6/10 on its first screen, with six 
 From: Anshu Chimala (Lenny's Newsletter, 2026); the same idea as generator–evaluator loops and
 LLM-as-judge.
 
+#### Delegate by kind of decision, not by task
+To hand work to agents without losing what you learn, sort decisions by what they teach. Learning
+decisions (problem, MVP cut, design direction, architecture) stay yours; toil (copy, small fixes)
+the agent decides with a veto you can use any time; ops (git, deploys, keys) is never yours. Batch
+the ones you keep into a few fixed gates, so work never waits on a trickle of questions. Where we
+met it: the operating modes after 08 Selvedge (decision 0026), where merges and Vercel cost more
+attention than the product calls. From: decision-rights thinking (RACI, Amazon's one-way and
+two-way doors) and consent-based decisions ("default with a veto").
+
 #### Seed strings for real variety
 Asking a model to "be random" or "make it unique" doesn't work: it still picks the likely
 answer. Give it real randomness instead, such as a random string from a script, and have it
@@ -1111,6 +1120,13 @@ same. Run the evals before and after, and record both results. Newer models ofte
 more literally, so loose rules ("exactly one question") may need to be stated exactly. Where we
 met it: Inkling (05): on the Claude API, safety held but two rules broke (6/8), fixed with two
 sentences (8/8).
+
+#### Goodhart's law and hidden checks
+"When a measure becomes a target, it ceases to be a good measure." An agent that can read its
+evals will optimise for them, and can pass every check while missing the point. Keep a few checks
+the builder never sees (owner-only, held outside the repo), and have someone other than the
+builder grade. Where we met it: Founder mode's evals (decision 0026). From: Charles Goodhart
+(1975), as phrased by Marilyn Strathern; the same reason ML keeps a held-out test set.
 
 #### Evaluating a recommender: offline, beyond accuracy, online
 **Offline:** hide part of real history and check whether it comes back. Split by time (train on
@@ -1224,6 +1240,12 @@ it. Where we met it: Folio (06): bestsellers finds the next liked book only 2% o
 these readers have already read 3.3 of the top 10, and only 9% of hidden books are in the top 100.
 
 ### Quiz
+
+**Q:** What three kinds of decision decide what you hand to an agent, and who owns each?
+**A:** Learning decisions stay yours; toil the agent decides with your veto; ops (git, deploys, keys) is never yours.
+
+**Q:** Why keep some evals hidden from the agent that builds?
+**A:** Goodhart's law: a visible measure becomes a target, so the build can pass every check and still miss the point.
 
 **Q:** When would you have Claude draw in code rather than use an image model?
 **A:** When it must be instant, animated, cheap or simple (doodles, icons, UI marks); use an image model for painterly or realistic pictures, like a person in an outfit.

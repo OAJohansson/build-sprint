@@ -2,6 +2,7 @@
 day: __DAY__
 title: __TITLE__
 status: building
+mode: __MODE__
 date: __DATE__
 user: ""
 problem: ""

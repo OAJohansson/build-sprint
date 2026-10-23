@@ -335,3 +335,7 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   comparable to the 7.5): styles column truncates, deck bars have unequal tracks, red "differs",
   hover and selected look alike, empty state splits instructions from the table. Round 3 sent;
   "Copy for Claude" keeps its name (the owner's label in the brief) despite the critic's note.
+- **Design, round 3:** fresh critic 8/10 ("the table itself is exactly the feel"). Round 4: the
+  detail strip must add depth instead of echoing the row (all styles, BPM alternative, key
+  runner-up, a per-snippet breakdown for the proposed 4 × 30 s window; no energy sparkline, it
+  would look like captured audio), artist always visible, visible hover, Camelot keys, square buttons.

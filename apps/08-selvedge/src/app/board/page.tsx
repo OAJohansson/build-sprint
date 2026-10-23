@@ -7,7 +7,8 @@
 // later, so the board is the same on any device.
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLocalStorage } from "@/lib/use-local-storage";
 import { SketchFilters } from "@/components/sketch-filters";
 import { AccessGate } from "@/components/access-gate";
 import { BOARD_H, BOARD_W, BoardCanvas, FALLBACK_PALETTE, LOGO_YELLOW, PILL_CREAM, SHAPES, useBoardEditor, useTools, type Rect, type ShapeKind } from "@/components/board/engine";
@@ -114,6 +115,15 @@ function BoardApp() {
     else { setBoard(null); setPicking(true); }
   }
 
+  // The sidebar folds away (owner, 23 Oct): a ‹ on its edge on hover, a faint › to bring it back,
+  // and ⌘\ as in Figma. Remembered on this device.
+  const [trayOpen, setTrayOpen] = useLocalStorage("selvedge.trayOpen", true);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if ((e.metaKey || e.ctrlKey) && e.key === "\\") { e.preventDefault(); setTrayOpen(!trayOpen); } };
+    addEventListener("keydown", onKey);
+    return () => removeEventListener("keydown", onKey);
+  }, [trayOpen, setTrayOpen]);
+
   if (access === false) return <AccessGate onOpen={() => load()} />;
   if (!saves) return null;
 
@@ -121,18 +131,18 @@ function BoardApp() {
   const switchTo = async (id: string) => { await flush(); setPicking(false); open(id); };
 
   return (
-    <div className="ed t-sketchbook1 grid h-dvh grid-cols-[264px_1fr] grid-rows-[64px_1fr]">
+    <div className={`ed t-sketchbook1 grid h-dvh grid-rows-[64px_1fr] transition-[grid-template-columns] duration-200 ease-out motion-reduce:transition-none ${trayOpen ? "grid-cols-[264px_1fr]" : "grid-cols-[0px_1fr]"}`}>
       <SketchFilters />
 
       {board && !picking ? (
         <Editor key={board.id} board={board} saves={saves} photos={photos} boards={boards} saveState={saveState}
           onChange={(doc) => { latest.current = doc; queueSave(board.id, board.name, doc); }}
           onSwitch={switchTo} onNew={async () => { await flush(); setPicking(true); }}
-          onRename={renameBoard} onDelete={deleteBoard} />
+          onRename={renameBoard} onDelete={deleteBoard} trayOpen={trayOpen} onTray={setTrayOpen} />
       ) : (
         <>
           <Header boards={boards} current={null} onSwitch={switchTo} onNew={() => setPicking(true)} />
-          <aside className="ed-tray p-4" />
+          <aside className={`ed-tray p-4 ${trayOpen ? "" : "invisible"}`} />
           <main className="ed-stage relative overflow-y-auto p-8">
             <NewBoard name={newBoardName(new Date(), boards.map((b) => b.name))} onMake={makeBoard}
               onCancel={board ? () => setPicking(false) : undefined} />
@@ -202,10 +212,10 @@ function BoardMenu({ name, onRename, onDownload, onDelete, downloading }: { name
   );
 }
 
-function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, onNew, onRename, onDelete }: {
+function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, onNew, onRename, onDelete, trayOpen, onTray }: {
   board: Board; saves: Save[]; photos: Save[]; boards: BoardSummary[]; saveState: SaveState;
   onChange: (doc: BoardDoc) => void; onSwitch: (id: string) => void; onNew: () => void;
-  onRename: (name: string) => void; onDelete: () => void;
+  onRename: (name: string) => void; onDelete: () => void; trayOpen: boolean; onTray: (open: boolean) => void;
 }) {
   // The tray mirrors the inbox (owner, 23 Oct): Inspo, as Inbox (saves not in a folder) and Folders,
   // so every save is in reach while making the board; one already on it is marked. Folders are the
@@ -306,17 +316,34 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
     setDownloading(false);
   }
 
+  // The pipette (owner, 23 Oct): take a shape's colour from a photo on the board. Chrome's own
+  // picker can sample anywhere on screen; elsewhere a click on a photo samples it.
+  const [sampling, setSampling] = useState(false);
+  async function pipette() {
+    const Dropper = (window as unknown as { EyeDropper?: new () => { open: () => Promise<{ sRGBHex: string }> } }).EyeDropper;
+    if (!Dropper) return setSampling(true);
+    try { editor.actions.setColor(toHex((await new Dropper().open()).sRGBHex)); } catch {} // Esc cancels
+  }
+  useEffect(() => {
+    if (!sampling) return;
+    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setSampling(false); };
+    addEventListener("keydown", esc);
+    return () => removeEventListener("keydown", esc);
+  }, [sampling]);
+  const custom = p && p.kind !== "photo" && p.color && !palette.includes(p.color) ? p.color : null;
+
   const chip = (r: Rect) => (
-    <div key={p?.id} className="ed-chip desk-chip absolute z-50 flex items-center gap-1"
-      style={{ left: r.left + r.width / 2, top: Math.max(8, r.top - 52), transform: "translateX(-50%)" }}
-      onPointerDown={(e) => e.stopPropagation()}>
+    <FloatingChip key={p?.id} rect={r}>
       {p && p.kind !== "photo" && (
         <>
           <div className="flex items-center gap-1 px-1" role="radiogroup" aria-label="Colour">
-            {palette.map((c) => (
+            {[...(custom ? [custom] : []), ...palette].map((c) => (
               <button key={c} role="radio" aria-checked={p.color === c} aria-label={`Colour ${c}`} onClick={() => editor.actions.setColor(c)}
                 className="shape-colour" style={{ background: c }} data-on={p.color === c ? "" : undefined} />
             ))}
+            <button type="button" className="shape-pipette" aria-label="Take a colour from a photo" title="Take a colour from a photo" onClick={pipette}>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M13.5 2.8a2.3 2.3 0 0 1 3.3 3.3l-1.9 1.9.9.9-1.4 1.4-.9-.9-6.6 6.6H4.1v-2.8l6.6-6.6-.9-.9 1.4-1.4.9.9z" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /></svg>
+            </button>
           </div>
           <input aria-label="Text" placeholder="Text" value={p.text ?? ""} maxLength={80} onChange={(e) => editor.actions.setText(e.target.value)}
             className="shape-text" />
@@ -327,17 +354,22 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
           <span>{t.label}</span>
         </button>
       ))}
-    </div>
+    </FloatingChip>
   );
 
   return (
     <>
       <Header boards={boards} current={board.id} onSwitch={onSwitch} onNew={onNew}
         menu={{ onRename, onDownload: download, onDelete, downloading }} right={
-        <span className="ed-quiet ml-auto text-[15px]" aria-live="polite">{saveState === "saving" ? "Saving…" : saveState === "failed" ? "Couldn't save. Check your connection" : ""}</span>
+        <>
+          <span className="ed-quiet ml-auto text-[15px]" aria-live="polite">{saveState === "saving" ? "Saving…" : saveState === "failed" ? "Couldn't save. Check your connection" : ""}</span>
+          {/* Undo (owner, 23 Oct), shown only when there's something to undo; ⌘Z works too. */}
+          {editor.canUndo && <button className="ed-btn ed-quiet" title="Undo (⌘Z)" onClick={editor.actions.undo}><span>↶ Undo</span></button>}
+        </>
       } />
 
-      <aside className="ed-tray overflow-y-auto p-4">
+      <aside className={`ed-tray group relative overflow-y-auto p-4 ${trayOpen ? "" : "invisible"}`}>
+        <button className="tray-fold" aria-label="Hide the sidebar" title="Hide the sidebar (⌘\)" onClick={() => onTray(false)}>‹</button>
         <p className="ed-tray-title mb-2">Shapes</p>
         <div className="mb-5 flex items-end gap-3">
           {(Object.keys(SHAPES) as ShapeKind[]).map((k) => (
@@ -382,7 +414,14 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
       </aside>
 
       <main className="ed-stage relative p-8">
+        {!trayOpen && <button className="tray-unfold" aria-label="Show the sidebar" title="Show the sidebar (⌘\)" onClick={() => onTray(true)}>›</button>}
         <BoardCanvas board={editor} saves={saves} versions={versions} busy={cutting?.id} chrome={chip} className="h-full w-full" />
+        {sampling && (
+          <div className="absolute inset-0 z-[60] cursor-crosshair" role="button" aria-label="Click a photo to take its colour"
+            onPointerDown={async (e) => { e.stopPropagation(); const c = await sampleColour(e.clientX, e.clientY); if (c) editor.actions.setColor(c); setSampling(false); }}>
+            <p className="ed-chip absolute left-1/2 top-3 -translate-x-1/2 px-3 py-1 text-[15px]">Click a photo to take its colour</p>
+          </div>
+        )}
       </main>
     </>
   );
@@ -423,4 +462,63 @@ function NewBoard({ name: suggested, onMake, onCancel }: { name: string; onMake:
       </div>
     </form>
   );
+}
+
+// The tool chip by the picked piece, kept fully on screen (owner, 23 Oct): centred above the piece,
+// moved in from the edges, and below the piece when there's no room above.
+function FloatingChip({ rect, children }: { rect: Rect; children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<{ left: number; top: number } | null>(null);
+  const { left: rl, top: rt, width: rw, height: rh } = rect;
+  useLayoutEffect(() => {
+    const el = ref.current, box = el?.offsetParent as HTMLElement | null;
+    if (!el || !box) return;
+    const place = () => {
+      const m = 8, w = el.offsetWidth, h = el.offsetHeight;
+      const left = Math.max(m, Math.min(rl + rw / 2 - w / 2, box.clientWidth - w - m));
+      const above = rt - h - 10;
+      const top = above >= m ? above : Math.max(m, Math.min(rt + rh + 10, box.clientHeight - h - m));
+      setPos((p) => (p && p.left === left && p.top === top ? p : { left, top }));
+    };
+    place();
+    const ro = new ResizeObserver(place); // the chip's own size changes (a longer label, text typed)
+    ro.observe(el);
+    ro.observe(box);
+    return () => ro.disconnect();
+  }, [rl, rt, rw, rh]);
+  return (
+    <div ref={ref} className="ed-chip desk-chip absolute z-50 flex items-center gap-1"
+      style={{ left: pos?.left ?? rect.left, top: pos?.top ?? rect.top, visibility: pos ? undefined : "hidden" }}
+      onPointerDown={(e) => e.stopPropagation()}>
+      {children}
+    </div>
+  );
+}
+
+const toHex = (c: string) => {
+  if (/^#[0-9a-f]{6}$/i.test(c)) return c.toLowerCase();
+  const m = c.match(/\d+/g);
+  return m ? "#" + m.slice(0, 3).map((v) => Number(v).toString(16).padStart(2, "0")).join("") : "#f2e3c6";
+};
+
+/** The colour of the photo under a point on the board (a small average), skipping see-through
+ *  parts of cut-outs so the photo underneath counts. */
+async function sampleColour(x: number, y: number): Promise<string | null> {
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = 5;
+  const g = canvas.getContext("2d", { willReadFrequently: true });
+  if (!g) return null;
+  for (const el of document.elementsFromPoint(x, y)) {
+    const img = el.closest(".board-piece")?.querySelector("img");
+    if (!img || !img.complete || !img.naturalWidth) continue;
+    const r = img.getBoundingClientRect();
+    const nx = ((x - r.left) / r.width) * img.naturalWidth, ny = ((y - r.top) / r.height) * img.naturalHeight;
+    g.clearRect(0, 0, 5, 5);
+    g.drawImage(img, nx - 2, ny - 2, 5, 5, 0, 0, 5, 5);
+    const d = g.getImageData(0, 0, 5, 5).data;
+    let rr = 0, gg = 0, bb = 0, n = 0;
+    for (let i = 0; i < d.length; i += 4) if (d[i + 3] > 200) { rr += d[i]; gg += d[i + 1]; bb += d[i + 2]; n++; }
+    if (n) return "#" + [rr, gg, bb].map((v) => Math.round(v / n).toString(16).padStart(2, "0")).join("");
+  }
+  return null;
 }

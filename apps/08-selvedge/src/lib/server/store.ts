@@ -19,12 +19,12 @@ export type Store = {
   readCutout(id: string): Promise<{ bytes: Uint8Array; type: string } | null>;
   writeCutout(id: string, image: { bytes: Uint8Array; type: string }): Promise<void>;
   removeCutout(id: string): Promise<void>;
-  /** Move saves into a folder, or back to their day pages with null. */
+  /** Move saves into a folder, or back to the inbox with null. */
   moveSaves(ids: string[], folderId: string | null): Promise<void>;
   listFolders(): Promise<Folder[]>;
   /** Create or update a folder by id (its name and colour notes). */
   saveFolder(id: string, name: string, colourNotes: boolean): Promise<Folder>;
-  /** Delete a folder; its saves go back to their day pages. */
+  /** Delete a folder; its saves go back to the inbox. */
   removeFolder(id: string): Promise<void>;
   listBoards(): Promise<BoardSummary[]>;
   getBoard(id: string): Promise<Board | null>;

@@ -3,7 +3,7 @@ import { guard } from "@/lib/server/access";
 import { serverError } from "@/lib/server/failure";
 
 // My inbox folders (owner, 23 Oct): GET lists them, PUT ?id= creates or updates one (its name and
-// colour notes), DELETE ?id= removes one and sends its saves back to their day pages.
+// colour notes), DELETE ?id= removes one and sends its saves back to the inbox.
 const idOf = (request: Request) => new URL(request.url).searchParams.get("id") ?? "";
 
 export async function GET(request: Request) {

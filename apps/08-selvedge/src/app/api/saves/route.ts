@@ -69,7 +69,7 @@ export async function DELETE(request: Request) {
   }
 }
 
-// PATCH { ids, folderId } moves saves into a folder, or back to their day pages with null.
+// PATCH { ids, folderId } moves saves into a folder, or back to the inbox with null.
 export async function PATCH(request: Request) {
   const g = guard(request);
   if ("error" in g) return g.error;

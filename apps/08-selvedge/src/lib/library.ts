@@ -16,7 +16,7 @@ export type Save = {
   source: Source;
   title: string | null;
   createdAt: string;
-  /** The folder it was moved to, or null while it's on its day page. */
+  /** The folder it was moved to, or null while it's in the inbox. */
   folderId: string | null;
 };
 

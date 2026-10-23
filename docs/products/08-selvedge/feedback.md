@@ -31,3 +31,4 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 25 | Owner, board pass | Rename boards, saved and in progress | fixed (board menu: Rename) |
 | 26 | Owner, board pass | Not obvious that background removal is working | fixed (a soft shimmer over the photo) |
 | 27 | Owner, board pass | Export the board to download it | fixed (board menu: Download, a 3200 × 1800 PNG) |
+| 28 | Owner, copy (23 Oct) | The inbox still says "Today"; "Days" needs a new name that isn't "Inspo" again; the same on the board | fixed (Inspo = the collection; Inbox and Folders; small day markers) |

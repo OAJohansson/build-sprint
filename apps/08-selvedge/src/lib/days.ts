@@ -1,4 +1,4 @@
-// The inbox's day pages (owner's pick, 23 Oct): saves grouped by the local day they were saved,
+// The inbox's day markers (owner's pick, 23 Oct): saves grouped by the local day they were saved,
 // newest day first, each headed "Today", "Yesterday" or "Wednesday 22 Oct" (plus the year when
 // it isn't this year).
 

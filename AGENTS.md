@@ -54,6 +54,10 @@ product craft, and grow technically. Act as their product coach as well as their
 the practice behind each step (and where it comes from), ask them to make the product calls
 instead of making them silently, push back on solution-first thinking, and explain technical
 choices briefly in plain words.
+- At the feature drill-down (playbook step 1, after the MVP and before design), list the product's
+  objects and pre-fill the brief's table for each across lifecycle, connections, screen states
+  and trust, with your call (MVP / Later / No) and a one-line reason per row. Ask the owner to
+  change only what they disagree with; MVP rows become requirements, Later rows go to the backlog.
 
 ## Design skills
 

@@ -302,6 +302,23 @@ then shape a solution that fits. A good pitch names **no-gos** (what we won't bu
 Build several genuinely different directions, each defensible on its own, and judge them in
 realistic context (on a real phone) against the success signals, not just looks.
 
+#### Object-oriented UX: drill down by object
+List the things a person makes or keeps in the product (the objects: a board, a save, a folder),
+then walk each one through the same actions: create, find, change, organise, remove (and get
+back), take out (download, share). Why it matters: requests name the headline feature, and the
+small actions around each object are predictable but easy to forget, so they surface late, one
+complaint at a time. Where we met it: Selvedge (08): rename, delete and download for a board, and
+undo, were all asked for after the MVP was built; the playbook's feature drill-down now catches
+them before design. From: Sophia Prater, Object-Oriented UX (the ORCA process: objects,
+relationships, calls to action, attributes).
+
+#### The UI stack: every screen has five states
+A screen isn't one design but several: empty (nothing yet), working (loading, uploading),
+error, partial and ideal (full, with many items and long names). Why it matters: designs show the
+ideal state; people meet the others first. Where we met it: Selvedge (08): an empty board gave no
+hint, and a cut-out gave no sign it was working until a shimmer was added. From: Scott Hurff,
+"How to fix a bad user interface" (2014).
+
 ### Building and shipping
 
 #### Spike (a throwaway probe)
@@ -401,6 +418,12 @@ upgrade>`) so the technical debt can be found later. From: Extreme Programming (
 Jeffries).
 
 ### Quiz
+
+**Q:** What does the feature drill-down walk each object through, and why?
+**A:** Its lifecycle (create, find, change, organise, remove, take out), its connections, its screen states and trust (undo, confirm, nothing lost), because the small actions around a feature are predictable but get missed until someone uses it.
+
+**Q:** What are the five states in Scott Hurff's UI stack?
+**A:** Empty, loading, error, partial and ideal.
 
 **Q:** What is a spike, and when do you run one?
 **A:** A small, time-boxed probe that answers one technical unknown before you design around it; run it first when a feasibility question could change the plan.

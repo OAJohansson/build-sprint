@@ -589,3 +589,12 @@ target's service worker can't type a code. Build order, each step shippable:
   (headless: a 3200 × 1800 PNG with the photos and the hand-lettered pill); Delete (the board
   gone, the New board form shown); the shimmer's animation runs. Not checked: a real cut-out with
   the shimmer on the live site.
+- **Copy (owner, 23 Oct): is "Inspo" right, and what replaces "Days"?** Worked through as a
+  naming system: three concepts (the whole collection, the unsorted pile, the sorted groups) had
+  been named by date ("Today", "Days"). Owner's calls: **Inspo** is the whole collection (the
+  owner's word; "Saves", "Swipe file", "Scrapbook" and "Archive" considered); **Inbox** is the
+  unsorted pile, beside **Folders** (like Mail; "Unsorted" and "New" were the alternatives;
+  "Loose" ruled out, as in fashion it's a fit); the Inbox keeps **small day markers** as
+  dividers. Applied on both screens: the inbox page reads "Inspo", then "Today ——"; its tabs are
+  Inbox | Folders | Boards; the board's link back says "Inspo" and its tray reads
+  "Inspo · Inbox | Folders"; every "day pages" string and comment now says "inbox".

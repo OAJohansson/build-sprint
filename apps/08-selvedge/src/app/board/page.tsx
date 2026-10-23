@@ -149,8 +149,8 @@ function Header({ boards, current, onSwitch, onNew, menu, right }: { boards: Boa
   return (
     <header className="ed-top col-span-2 flex items-center gap-5 px-6">
       <span className="ed-logo">Selvedge</span>
-      {/* Back to where saves land (owner, 23 Oct); the autosave flushes as the page goes. */}
-      <a href="/inbox" className="ed-btn ed-tab inline-flex items-center"><span>Inbox</span></a>
+      {/* Back to my Inspo, where saves land (owner, 23 Oct); the autosave flushes as the page goes. */}
+      <a href="/inbox" className="ed-btn ed-tab inline-flex items-center"><span>Inspo</span></a>
       <nav className="flex items-center gap-1">
         {boards.map((b) => (b.id === current && menu ? <BoardMenu key={b.id} name={b.name} {...menu} /> : (
           <button key={b.id} onClick={() => onSwitch(b.id)} className="ed-btn ed-tab" data-active={b.id === current ? "" : undefined}><span>{b.name}</span></button>
@@ -207,7 +207,7 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
   onChange: (doc: BoardDoc) => void; onSwitch: (id: string) => void; onNew: () => void;
   onRename: (name: string) => void; onDelete: () => void;
 }) {
-  // The tray mirrors the inbox (owner, 23 Oct): Days (saves not in a folder, by day) and Folders,
+  // The tray mirrors the inbox (owner, 23 Oct): Inspo, as Inbox (saves not in a folder) and Folders,
   // so every save is in reach while making the board; one already on it is marked. Folders are the
   // shortlists; the per-board tray of picked saves is gone (an old board's `tray` is ignored).
   const [folders, setFolders] = useState<Folder[]>([]);
@@ -349,15 +349,15 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
           ))}
         </div>
         {/* Inspo: every save, newest first (owner, 23 Oct: the tray is about my saved
-            inspiration, not dates), with Days and Folders on the same line. */}
+            inspiration, not dates), with Inbox and Folders on the same line. */}
         <div className="mb-3 flex items-center">
           <p className="ed-tray-title mr-auto">Inspo</p>
-          <button className="ed-btn ed-tab !px-2" data-active={view === "days" ? "" : undefined} onClick={() => setView("days")}><span>Days</span></button>
+          <button className="ed-btn ed-tab !px-2" data-active={view === "days" ? "" : undefined} onClick={() => setView("days")}><span>Inbox</span></button>
           <button className="ed-btn ed-tab !px-2" data-active={view !== "days" ? "" : undefined} onClick={() => setView("folders")}><span>Folders</span></button>
         </div>
         {view === "days" ? (
           loose.length ? <Thumbs saves={loose} used={used} onAdd={editor.actions.addSave} />
-            : <p className="ed-tray-foot">Nothing on your day pages. New saves land here.</p>
+            : <p className="ed-tray-foot">Nothing in your inbox. New saves land here.</p>
         ) : view === "folders" ? (
           folders.length ? (
             <ul className="-ml-3 flex flex-col items-start">

@@ -1,4 +1,4 @@
-/* The inbox in the sketchbook look: day pages with saves as prints, slightly tilted, no tape
+/* The inbox in the sketchbook look: saves as prints, slightly tilted, no tape
    (owner, 23 Oct: the tape pulled the eye from the clothes). Pencil lines use #pencil-line. */
 .inbox-day { font: 400 26px/1 var(--font-hand); }
 .inbox-print { position: relative; display: block; width: 100%; padding: 6px 6px 14px; background: #fffdf8; rotate: var(--tilt, 0deg); box-shadow: 0 2px 6px rgba(58, 42, 32, 0.16); }
@@ -26,3 +26,7 @@
    it reads against the print's white border. */
 .inbox-pick .pick-dot { top: -4px; right: -4px; width: 30px; height: 30px; }
 .inbox-bar button:disabled { opacity: 0.4; }
+/* The small day markers inside the Inbox (owner, 23 Oct): Inspo is the title; the day only
+   splits a long pile, in the muted pencil with a faint line after it. */
+.inbox-divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 15px; }
+.inbox-divider::after { content: ""; flex: 1; border-top: 1.2px solid var(--muted); opacity: 0.45; filter: url(#pencil-line); }

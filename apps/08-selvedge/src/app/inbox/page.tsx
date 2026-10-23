@@ -1,11 +1,11 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-// The inbox: where a share lands (design session, 23 Oct). Day pages by default: every save not
-// yet in a folder, grouped by the day it was saved, as prints in the sketchbook look. Folders are
-// mine to make and name; tap saves to pick them, then Move to puts them in one, and they leave
-// their day page (a save lives in one place). A folder can show each save's colours (colour notes, per
-// folder). Add photos picks them from the computer or gallery, or drop them anywhere on a laptop;
+// My Inspo (every save): the Inbox, where a share lands, and my Folders (owner's naming, 23 Oct).
+// The Inbox shows every save not yet in a folder, newest first, split by small day markers, as
+// prints in the sketchbook look. Folders are mine to make and name; tap saves to pick them, then
+// Move to puts them in one, and they leave the Inbox (a save lives in one place). A folder can
+// show each save's colours (colour notes, per folder). Add photos picks them from the computer or gallery, or drop them anywhere on a laptop;
 // both upload like shares. What's still waiting on this device shows on top; a link whose picture
 // couldn't be fetched asks for a screenshot (3b).
 
@@ -105,7 +105,7 @@ function Inbox() {
   }
 
   async function deleteFolder(f: Folder) {
-    if (!confirm(`Delete "${f.name}"? Its photos go back to their day pages.`)) return;
+    if (!confirm(`Delete "${f.name}"? Its photos go back to your inbox.`)) return;
     await fetch(`/api/folders?id=${f.id}`, { method: "DELETE" });
     go({ page: "folders" });
     refresh();
@@ -143,9 +143,9 @@ function Inbox() {
       {/* The tabs sit by the logo, as on the board; the main action, Add photos, on the right. */}
       <header className="ed-top mx-auto flex w-full max-w-4xl items-center gap-1 px-4 pb-2 pt-[max(1rem,env(safe-area-inset-top))]">
         <span className="ed-logo mr-3 sm:mr-5">Selvedge</span>
-        <button className="ed-btn ed-tab" data-active={view.page === "days" ? "" : undefined} onClick={() => go({ page: "days" })}><span>Days</span></button>
+        <button className="ed-btn ed-tab" data-active={view.page === "days" ? "" : undefined} onClick={() => go({ page: "days" })}><span>Inbox</span></button>
         <button className="ed-btn ed-tab" data-active={view.page !== "days" ? "" : undefined} onClick={() => go({ page: "folders" })}><span>Folders</span></button>
-        {/* To the boards, where the tray shows these same days and folders (owner, 23 Oct). Laptop
+        {/* To the boards, where the tray shows this same Inbox and Folders (owner, 23 Oct). Laptop
             only: boards are made on the laptop (brief), and a phone has no room for a fourth tab. */}
         <a href="/board" className="ed-btn ed-tab hidden items-center sm:inline-flex"><span>Boards</span></a>
         <label className="ed-btn ed-quiet ml-auto inline-flex cursor-pointer items-center !text-[var(--ink)]">
@@ -155,6 +155,7 @@ function Inbox() {
       </header>
 
       <main className={`mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 pt-5 ${picked.size ? "pb-28" : "pb-12"}`}>
+        {view.page !== "folder" && <h1 className="ed-tray-title self-start">Inspo</h1>}
         {view.page === "days" && (
           <>
             {missed && <p className="inbox-miss">That share arrived before the app was ready, so it wasn&apos;t kept. Share it again.</p>}
@@ -184,7 +185,7 @@ function Inbox() {
           ) : (
             byDay(loose).map((d) => (
               <section key={d.label} className="flex flex-col gap-3">
-                <h2 className="ed-tray-title self-start">{d.label}</h2>
+                <h2 className="inbox-divider">{d.label}</h2>
                 <Prints saves={d.items} picked={picked} onToggle={toggle} />
               </section>
             ))
@@ -195,7 +196,7 @@ function Inbox() {
           inFolder(folder.id).length ? (
             <Prints saves={inFolder(folder.id)} picked={picked} onToggle={toggle} notes={folder.colourNotes} />
           ) : (
-            <p className="text-[var(--muted)]">Nothing in here yet. On your day pages, tap photos to pick them, then Move to.</p>
+            <p className="text-[var(--muted)]">Nothing in here yet. In your inbox, tap photos to pick them, then Move to.</p>
           )
         ) : (
           <p className="text-[var(--muted)]">That folder is gone. <button className="underline" onClick={() => go({ page: "folders" })}>Back to folders</button></p>
@@ -349,7 +350,7 @@ function MoveSheet({ folders, fromFolder, onPick, onNew, onClose }: {
       <div className="inbox-sheet" role="dialog" aria-label="Move to">
         <p className="ed-tray-title mb-3">Move to</p>
         <ul className="-ml-3 flex flex-col items-start">
-          {fromFolder && <li><button className="ed-btn" onClick={() => onPick(null)}><span>Back to day pages</span></button></li>}
+          {fromFolder && <li><button className="ed-btn" onClick={() => onPick(null)}><span>Back to the inbox</span></button></li>}
           {folders.map((f) => <li key={f.id}><button className="ed-btn" onClick={() => onPick(f.id)}><span>{f.name}</span></button></li>)}
         </ul>
         <div className="mt-2 -ml-3">

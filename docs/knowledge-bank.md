@@ -533,6 +533,15 @@ anxiety was "quite, as before" while the Summary said "a little better"; the own
 caption say then → now in the Summary's words. From: Jakob Nielsen's heuristic "Consistency and
 standards" (1994).
 
+#### Name things by what they mean, one word per concept
+Name a screen or control by what it is to the user, not by how it's sorted or built, and give
+each concept exactly one word used everywhere. Why it matters: a word doing two jobs, or two
+words for one thing, makes people stop and guess. Where we met it: Selvedge (08): "Today" and
+"Days" named a sort order, not the thing; the owner's word "Inspo" became the whole collection,
+"Inbox" the unsorted pile (like Mail: Inbox, then Folders), and "Folders" the sorted ones, the
+same on the inbox and the board. From: Steve Krug, *Don't Make Me Think* (2000); Kinneret
+Yifrah, *Microcopy* (2017).
+
 #### Premature commitment
 Making people decide something before they have what they need to decide it well. Why it matters:
 the choice is a guess, and fixing it costs a detour. Where we met it: Selvedge (08): picking photos
@@ -630,6 +639,9 @@ the graph and named medicines instead of colouring them. *(Edward Tufte's data-i
 Visual Display of Quantitative Information; Stephen Few on dashboards)*
 
 ### Quiz
+
+**Q:** Why did Selvedge rename "Days" and "Today", and to what?
+**A:** They named a sort order, not the thing; now "Inspo" is the whole collection, "Inbox" the unsorted pile and "Folders" the sorted ones, the same words on every screen.
 
 **Q:** What is premature commitment, and how did Selvedge remove it?
 **A:** Being made to decide before you can judge; picking a board's photos in the inbox before seeing them together. The board's tray now shows every save, so you choose while placing.

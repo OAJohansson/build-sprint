@@ -379,3 +379,4 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   gutter between BPM and Key, no ghost rows in the empty state, and one toolbar instead of the
   not-listening banner (which the user test asked for). One last polish pass takes the points more
   than one grader agreed on; the final score is reported as it comes.
+- **Cleanup:** the throwaway spike pages and design prototypes are removed (their code lives on in `src/lib/ears/` and `/analyse`). Lint, 82 tests and the production build pass.

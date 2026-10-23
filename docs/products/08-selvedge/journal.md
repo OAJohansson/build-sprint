@@ -528,3 +528,8 @@ target's service worker can't type a code. Build order, each step shippable:
   delete a folder, its saves come back; a headless drop of two photos lands as two "upload"
   saves. The picked dot was hard to see on a print's white corner, so it's a little bigger and
   further in. The in-app browser can't run service workers, so the drop was tested headless.
+- **Inbox design session, wrap-up:** directions from four seeds (Day pages, Contact sheet, The
+  pile, Strips by source) plus six more; the owner's pick, Day pages, with folders and colour
+  notes added and the tape removed. Copy: the owner read every string on the screen and kept it
+  as written. No critic round this time: the owner picked a direction from the contact sheet, and
+  the board's identity was already locked. Live on 23 Oct after the folders schema was run.

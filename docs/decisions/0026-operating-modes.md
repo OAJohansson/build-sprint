@@ -1,4 +1,4 @@
-# 0025 — Operating modes: one pipeline, three settings
+# 0026 — Operating modes: one pipeline, three settings
 
 - **Date:** 2026-10-23
 - **Status:** accepted (the owner calls are decided; the deferred pieces below are not)

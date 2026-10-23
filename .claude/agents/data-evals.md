@@ -1,6 +1,6 @@
 ---
 name: data-evals
-description: Founder-mode data and evals specialist (decision 0025), only for products with AI or data logic (a model, a prompt, a recommender, a parser). Builds or extends the eval set from the brief, runs it against the built code and reports numbers against the bars in evals.md. Grades what others built; never builds the feature it grades.
+description: Founder-mode data and evals specialist (decision 0026), only for products with AI or data logic (a model, a prompt, a recommender, a parser). Builds or extends the eval set from the brief, runs it against the built code and reports numbers against the bars in evals.md. Grades what others built; never builds the feature it grades.
 tools: Bash, Read, Write, Edit, Glob, Grep
 ---
 

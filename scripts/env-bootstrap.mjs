@@ -2,7 +2,7 @@
 //
 // Fills apps/NN-slug/.env.local from one secrets file at the repo root, .env.secrets.local
 // (git-ignored by the `.env*.local` rule), using the app's .env.example as the list of keys
-// (decision 0025: keys stop being copied by hand from the previous app).
+// (decision 0026: keys stop being copied by hand from the previous app).
 //
 // The secrets file is KEY=value lines. Values meant for one app only (e.g. ACCESS_CODE) go under
 // a section header with the app's slug; they win over the shared value for that app:

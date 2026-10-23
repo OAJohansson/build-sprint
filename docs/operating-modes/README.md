@@ -1,7 +1,7 @@
 # Operating modes
 
 One pipeline with a dial: Learning, Streamlined, Founder (decision
-[0025](../decisions/0025-operating-modes.md)). This folder holds the templates the modes add on
+[0026](../decisions/0026-operating-modes.md)). This folder holds the templates the modes add on
 top of the brief and the user-testing templates.
 
 - [`kickoff-TEMPLATE.md`](kickoff-TEMPLATE.md) → `docs/products/NN-slug/kickoff.md`: today's brief

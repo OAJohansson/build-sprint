@@ -1,6 +1,6 @@
 ---
 name: discovery
-description: Founder-mode discovery specialist (decision 0025). Turns a product's kickoff pack into the brief, persona and test plan the rest of the squad works from, and flags gaps or contradictions in the pack for the PM. Needs docs/products/NN-slug/kickoff.md and evals.md. Never sees the owner-only checks.
+description: Founder-mode discovery specialist (decision 0026). Turns a product's kickoff pack into the brief, persona and test plan the rest of the squad works from, and flags gaps or contradictions in the pack for the PM. Needs docs/products/NN-slug/kickoff.md and evals.md. Never sees the owner-only checks.
 tools: Read, Write, Edit, Glob, Grep
 ---
 

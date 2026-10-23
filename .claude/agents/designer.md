@@ -1,6 +1,6 @@
 ---
 name: designer
-description: Founder-mode designer (decision 0025). Builds three genuinely different directions for one screen by following the design-session and prototype skills, with the kickoff pack's feel references and not-list standing in for the owner's checkpoints. Returns screenshots for the design-critic to score; never scores its own work.
+description: Founder-mode designer (decision 0026). Builds three genuinely different directions for one screen by following the design-session and prototype skills, with the kickoff pack's feel references and not-list standing in for the owner's checkpoints. Returns screenshots for the design-critic to score; never scores its own work.
 tools: Bash, Read, Write, Edit, Glob, Grep
 ---
 

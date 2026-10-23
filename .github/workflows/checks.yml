@@ -1,4 +1,4 @@
-# Light checks on every PR to main (decision 0025): lint, unit tests and a production build, only
+# Light checks on every PR to main (decision 0026): lint, unit tests and a production build, only
 # for the apps the PR changed, plus a syntax check of the repo scripts. A docs-only PR passes in
 # seconds. Claude merges its own PR only once this passes.
 name: checks

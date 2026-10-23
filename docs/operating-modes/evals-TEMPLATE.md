@@ -1,6 +1,6 @@
 # Evals: [Product]
 
-How the owner will judge the delivery (decision 0025). Written at kickoff, before any code, in
+How the owner will judge the delivery (decision 0026). Written at kickoff, before any code, in
 two parts that never live together:
 
 - **Agent-checkable checks** (this file, `docs/products/NN-slug/evals.md`): the squad reads them,

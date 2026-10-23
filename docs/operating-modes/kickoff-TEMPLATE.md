@@ -1,6 +1,6 @@
 # Kickoff pack: [Product]
 
-The owner's kickoff for a product (decision 0025). In Founder mode the owner writes it alone and
+The owner's kickoff for a product (decision 0026). In Founder mode the owner writes it alone and
 the PM session builds from it; in Streamlined mode Claude drafts it and the owner decides it at
 the kickoff gate. It is today's brief, plus what a squad needs to work without asking: the feel,
 what to avoid, the appetite and the mode. Short answers; a line is better than a paragraph.

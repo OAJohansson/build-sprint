@@ -538,3 +538,12 @@ target's service worker can't type a code. Build order, each step shippable:
   at once, and uses the same path as dropping photos (queued, shrunk, retried). Checked headless:
   three photos picked, three "upload" saves, "Saved ✓" shown. The empty-inbox line now points
   to Add photos instead of dropping.
+- **Owner's design pass on the live inbox (23 Oct):** move Days and Folders next to the title;
+  day titles in the board's blue wash; drop "Saved ✓" (it read as a second title beside
+  "Today", and the new photo at the top already shows the share landed); drop the Select button
+  so a tap on any card picks it; and find the best place for Add photos. Owner's pick for that:
+  **the header, on the right** (where most apps put the main action, on every page; "+ Add" on a
+  phone), over a first card in Today or a round button at the bottom. Practice: **proximity**
+  (Gestalt): controls sit by what they change. Built and checked at 1440 × 900 and 375 × 812:
+  tabs by the logo, "+ Add photos" on the right, blue "Today", one tap picks, the bar appears,
+  Cancel clears it. A post without its picture keeps its link working inside the card.

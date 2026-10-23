@@ -49,3 +49,4 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T8 | 2026-10-23 | Row order: analysed (oldest first), then active, queued, failed, then the link's not-analysed tracks | PM | build | |
 | T9 | 2026-10-23 | Tempo clamped to 60–200 BPM, one decimal; the LCD drops ".0" | PM | build | |
 | T10 | 2026-10-23 | Toasts top centre; a "Stop" text button ends listening; "Analyse all" hidden when one track is left | PM | build | |
+| L35 | 2026-10-23 | The brief gives reference genre calls but no reference BPMs. data-evals sources each validation track's BPM from public listings (Beatport, the uploader's description, tempo databases) before seeing results and marks tracks with no source; those are reported, not counted, so the ≥ 8/10 BPM bar is judged on the sourced tracks and says so | PM | evals | |

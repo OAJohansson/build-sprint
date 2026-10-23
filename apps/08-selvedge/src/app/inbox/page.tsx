@@ -5,8 +5,9 @@
 // yet in a folder, grouped by the day it was saved, as prints in the sketchbook look. Folders are
 // mine to make and name; Select, then Move to, puts saves in one, and then they leave their day
 // page (a save lives in one place). A folder can show each save's colours (colour notes, per
-// folder). On the laptop, photos dropped anywhere are saved like shares. What's still waiting on
-// this phone shows on top; a link whose picture couldn't be fetched asks for a screenshot (3b).
+// folder). Add photos picks them from the computer or gallery, or drop them anywhere on a laptop;
+// both upload like shares. What's still waiting on this device shows on top; a link whose picture
+// couldn't be fetched asks for a screenshot (3b).
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
@@ -110,16 +111,20 @@ function Inbox() {
     refresh();
   }
 
-  // Laptop: photos dropped anywhere on the inbox are queued and uploaded like shares (requirement 5).
+  // Photos from the computer (or the phone's gallery), picked with Add photos or dropped anywhere
+  // on the inbox, are queued and uploaded like shares (requirement 5; owner, 23 Oct).
   const hasFiles = (e: React.DragEvent) => e.dataTransfer.types.includes("Files");
-  async function drop(e: React.DragEvent) {
-    e.preventDefault();
-    setDragging(false);
-    const files = [...e.dataTransfer.files].filter((f) => f.type.startsWith("image/"));
+  async function addFiles(list: FileList | null) {
+    const files = [...(list ?? [])].filter((f) => f.type.startsWith("image/"));
     if (!files.length) return;
     setDropped(await enqueueFiles(files));
     if (view.page !== "days") go({ page: "days" });
     refresh();
+  }
+  function drop(e: React.DragEvent) {
+    e.preventDefault();
+    setDragging(false);
+    addFiles(e.dataTransfer.files);
   }
 
   if (access === false) return <AccessGate onOpen={() => { setAccess(true); retryUploads(); refresh(); }} />;
@@ -166,16 +171,22 @@ function Inbox() {
           <FolderHead folder={folder} onBack={() => go({ page: "folders" })} onSave={saveFolder} onDelete={() => deleteFolder(folder)} />
         )}
 
-        {canSelect && (
-          <div className="-mb-2 flex justify-end">
-            <button className="ed-btn ed-quiet" onClick={() => setPicked(picked ? null : new Set())}><span>{picked ? "Cancel" : "Select"}</span></button>
+        {(view.page === "days" || canSelect) && (
+          <div className="-mx-3 -mb-2 flex items-center">
+            {view.page === "days" && !picked && (
+              <label className="ed-btn ed-tab inline-flex cursor-pointer items-center">
+                <span>+ Add photos</span>
+                <input type="file" accept="image/*" multiple className="sr-only" onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
+              </label>
+            )}
+            {canSelect && <button className="ed-btn ed-quiet ml-auto" onClick={() => setPicked(picked ? null : new Set())}><span>{picked ? "Cancel" : "Select"}</span></button>}
           </div>
         )}
 
         {saves === null ? null : view.page === "days" ? (
           loose.length === 0 && queue.length === 0 ? (
             <p className="text-[var(--muted)]">
-              {saves.length ? "Everything is in a folder. New saves land here." : "Nothing saved yet. Share a post, a pin or a screenshot to Selvedge, or drop photos here on a laptop."}
+              {saves.length ? "Everything is in a folder. New saves land here." : "Nothing saved yet. Share a post, a pin or a screenshot to Selvedge, or add photos from your computer."}
             </p>
           ) : (
             byDay(loose).map((d) => (

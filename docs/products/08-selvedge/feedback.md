@@ -15,3 +15,4 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 9 | Owner, inbox directions (23 Oct) | Day pages, plus folders I make and rename; a moved photo leaves its day page | fixed (Days and Folders, Select then Move to) |
 | 10 | Owner, inbox directions | Colour notes, but only in folders, and switchable | fixed (a switch per folder) |
 | 11 | Owner, inbox directions | Remove the yellow tape on the prints: the eye goes to the tape, not the clothes | fixed |
+| 12 | Owner, live inbox (23 Oct) | An option to upload images from the computer, not only drag and drop | fixed (+ Add photos on the day pages) |

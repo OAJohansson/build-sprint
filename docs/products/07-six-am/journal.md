@@ -318,3 +318,4 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - **Feel, owner's call:** "I think I prefer the tool version", sketch A of three shown in the
   parent session (rekordbox-style table of analysed tracks under a compact player bar). The session
   list becomes the main surface; actions work on the selected row (L20).
+- **Things to avoid, owner's call:** "I'm happy with the default list" (L21). All kickoff gaps settled; the pack is complete and the squad runs without further kickoff questions.

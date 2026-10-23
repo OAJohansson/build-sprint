@@ -3,8 +3,8 @@
 The owner's kickoff for a product (decision 0026). In Founder mode the owner writes it alone and
 the PM session builds from it. Transcribed by the PM from the owner's brief of 23 Oct
 ([`kickoff-source.md`](kickoff-source.md), the full text with appendices); where this page and the
-brief differ, the brief wins. Lines marked **(owner to confirm)** are gaps the brief left, filled
-with the PM's recommended default until the owner answers.
+brief differ, the brief wins. The gaps the brief left (appetite, feel, things to avoid, genre display, batch analysis) were
+settled by the owner on 23 Oct; see L3, L4, L19, L20, L21 in `decisions.md`.
 
 **Mode:** founder
 **Appetite:** no fixed day budget (owner, 23 Oct: the laptop stays on so the squad can work
@@ -176,7 +176,7 @@ track's facts line up in calm, precise, scannable columns.
 
 ## Things to avoid
 
-**(owner to confirm)** The PM's recommended not-list:
+The PM's proposed list, accepted by the owner (23 Oct):
 
 - Certainty: never "This is Deep House"; always probabilities.
 - Anything that looks like record, download or save-audio (no record dot, no waveform of the

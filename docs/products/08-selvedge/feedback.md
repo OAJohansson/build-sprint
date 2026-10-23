@@ -33,3 +33,7 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 27 | Owner, board pass | Export the board to download it | fixed (board menu: Download, a 3200 × 1800 PNG) |
 | 28 | Owner, copy (23 Oct) | The inbox still says "Today"; "Days" needs a new name that isn't "Inspo" again; the same on the board | fixed (Inspo = the collection; Inbox and Folders; small day markers) |
 | 29 | Owner, inbox (23 Oct) | The "Today" divider line doesn't work; show five options | fixed (Gallery label, the owner's pick of five) |
+| 30 | Owner, board (23 Oct) | An undo button for mistakes | fixed (↶ Undo when there's something to undo; ⌘Z, ⇧⌘Z) |
+| 31 | Owner, board | The photo menu is cut off for a photo near the screen edge | fixed (the menu stays on screen, flips below) |
+| 32 | Owner, board | Hide the sidebar, best practice, no clutter | fixed (hover handle on the edge, faint › to reopen, ⌘\) |
+| 33 | Owner, board | A colour picker to copy a colour from a photo for shapes | fixed (pipette by the shape colours) |

@@ -65,7 +65,7 @@
 .t-sketchbook1 .board-frame::after { content: ""; position: absolute; inset: -9px; border: 1.6px solid #4a4440; border-radius: 4px 7px 3px 6px; filter: url(#pencil-line); opacity: 0.55; }
 
 /* The tool chip appears by the picked piece. */
-@keyframes chip-in { from { opacity: 0; transform: translateX(-50%) translateY(4px) scale(0.97); } }
+@keyframes chip-in { from { opacity: 0; transform: translateY(4px) scale(0.97); } }
 .desk-chip { animation: chip-in 160ms cubic-bezier(0.23, 1, 0.32, 1); transform-origin: 50% 100%; }
 @media (prefers-reduced-motion: reduce) { .desk-chip { animation: none; } }
 
@@ -116,3 +116,17 @@
   animation: cut-shimmer 1.6s ease-in-out infinite; }
 @keyframes cut-shimmer { from { background-position: 130% 0; } to { background-position: -30% 0; } }
 @media (prefers-reduced-motion: reduce) { .board-piece [data-busy]::after { animation: none; background: rgba(255, 253, 248, 0.35); } }
+
+/* The pipette beside the shape colours (owner, 23 Oct). */
+.shape-pipette { width: 22px; height: 22px; display: grid; place-items: center; border: 0; padding: 0; margin-left: 2px; background: none; color: #3a2a20; cursor: pointer; border-radius: 50%; transition: transform 150ms ease-out; }
+.shape-pipette svg { width: 16px; height: 16px; }
+.shape-pipette:hover { transform: scale(1.12); }
+
+/* Folding the sidebar (owner, 23 Oct): no button in the way. A ‹ shows on the sidebar's pencil
+   edge while the pointer is over the sidebar; a faint › at the board's left edge brings it back. */
+.tray-fold, .tray-unfold { position: absolute; z-index: 40; width: 22px; height: 44px; display: grid; place-items: center; border: 0; padding: 0; background: #fffdf8; color: #3a2a20; font: 400 20px/1 var(--font-hand); cursor: pointer; border-radius: 8px; box-shadow: 0 1px 4px rgba(58, 42, 32, 0.18); transition: opacity 150ms ease-out; }
+.tray-fold { position: sticky; float: right; top: 50%; margin-right: -12px; opacity: 0; }
+.ed-tray:hover .tray-fold, .tray-fold:focus-visible { opacity: 0.85; }
+.tray-unfold { left: 4px; top: 50%; transform: translateY(-50%); opacity: 0.45; }
+.tray-unfold:hover, .tray-unfold:focus-visible { opacity: 0.9; }
+@media (prefers-reduced-motion: reduce) { .tray-fold, .tray-unfold, .shape-pipette { transition: none; } }

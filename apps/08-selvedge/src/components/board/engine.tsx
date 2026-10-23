@@ -110,6 +110,32 @@ export function useBoardEditor(initial: Piece[], onChange: (pieces: Piece[]) => 
   useEffect(() => { if (pieces !== loaded.current) report.current(pieces); }, [pieces]);
   const update = useCallback((id: string, patch: Partial<Piece>) => setPieces((ps) => ps.map((p) => (p.id === id ? { ...p, ...patch } : p))), [setPieces]);
 
+  // Undo (owner, 23 Oct): before each change the board as it was goes on a stack. A drag is one
+  // step (saved when it starts) and typing in a shape is one step per pause, not per letter.
+  const [hist, setHist] = useState<{ past: Piece[][]; future: Piece[][] }>({ past: [], future: [] });
+  const last = useRef<{ key: string; at: number } | null>(null);
+  const checkpoint = (key = "") => {
+    const now = Date.now(), prev = last.current;
+    last.current = { key, at: now };
+    if (key && prev?.key === key && now - prev.at < 1200) return;
+    setHist((h) => (h.past.at(-1) === pieces ? h : { past: [...h.past.slice(-99), pieces], future: [] }));
+  };
+  const restore = (dir: "undo" | "redo") => {
+    let from = dir === "undo" ? hist.past : hist.future;
+    while (from.at(-1) === pieces) from = from.slice(0, -1);
+    const next = from.at(-1);
+    if (!next) return;
+    from = from.slice(0, -1);
+    const to = [...(dir === "undo" ? hist.future : hist.past), pieces];
+    setHist(dir === "undo" ? { past: from, future: to } : { past: to, future: from });
+    last.current = null;
+    setPieces(() => next);
+    if (!next.some((p) => p.id === selected)) setSelected(null);
+    setCropping(false);
+  };
+  const canUndo = hist.past.some((x) => x !== pieces);
+  const canRedo = hist.future.length > 0;
+
   const piece = pieces.find((p) => p.id === selected) ?? null;
   const maxZ = Math.max(0, ...pieces.map((p) => p.z));
   const minZ = Math.min(0, ...pieces.map((p) => p.z));
@@ -117,44 +143,55 @@ export function useBoardEditor(initial: Piece[], onChange: (pieces: Piece[]) => 
   const actions = {
     // Picking another piece (or none) leaves crop mode.
     select: (id: string | null) => { if (id !== selected) setCropping(false); setSelected(id); },
-    forward: () => piece && update(piece.id, { z: maxZ + 1 }),
-    back: () => piece && update(piece.id, { z: minZ - 1 }),
-    remove: () => { if (piece) { setPieces((ps) => ps.filter((p) => p.id !== piece.id)); setSelected(null); setCropping(false); } },
-    toggleRough: () => piece && update(piece.id, { rough: !piece.rough }),
+    /** Remember the board before a drag or resize starts, so the whole gesture undoes at once. */
+    checkpoint: () => checkpoint(),
+    undo: () => restore("undo"),
+    redo: () => restore("redo"),
+    forward: () => { if (piece) { checkpoint(); update(piece.id, { z: maxZ + 1 }); } },
+    back: () => { if (piece) { checkpoint(); update(piece.id, { z: minZ - 1 }); } },
+    remove: () => { if (piece) { checkpoint(); setPieces((ps) => ps.filter((p) => p.id !== piece.id)); setSelected(null); setCropping(false); } },
+    toggleRough: () => { if (piece) { checkpoint(); update(piece.id, { rough: !piece.rough }); } },
     toggleCrop: () => {
       if (piece?.kind !== "photo" || !piece.saveId) return;
       // Entering Crop stores what's showing as the piece's crop box, so nothing jumps.
+      if (!cropping) checkpoint();
       if (!cropping && !piece.crop) update(piece.id, { crop: cropOf(piece, aspectOf(piece.saveId)) });
       setCropping((c) => !c);
     },
     /** Back to the whole photo, keeping the piece's width. */
     resetCrop: () => {
       if (piece?.kind !== "photo" || !piece.saveId) return;
+      checkpoint();
       update(piece.id, { crop: FULL, h: Math.round(piece.w / aspectOf(piece.saveId)) });
     },
     addSave: (save: Save, at?: { x: number; y: number }) => {
       if (!save.hasImage) return;
       const h = 420, w = Math.round(h * (save.aspect ?? 0.75));
       const id = uid();
+      checkpoint();
       setPieces((ps) => [...ps, { id, kind: "photo", saveId: save.id, x: Math.round((at?.x ?? BOARD_W / 2) - w / 2), y: Math.round((at?.y ?? BOARD_H / 2) - h / 2), w, h, z: Math.max(0, ...ps.map((p) => p.z)) + 1, cropX: 50, cropY: 40, zoom: 1, rough: false, crop: FULL }]);
       setSelected(id);
     },
     addShape: (shape: ShapeKind, color: string, at?: { x: number; y: number }) => {
       const { w, h, kind } = SHAPES[shape];
       const id = uid();
+      checkpoint();
       setPieces((ps) => [...ps, { id, kind, color, text: "", x: Math.round((at?.x ?? BOARD_W / 2) - w / 2), y: Math.round((at?.y ?? BOARD_H / 2) - h / 2), w, h, z: Math.max(0, ...ps.map((p) => p.z)) + 1, cropX: 50, cropY: 50, zoom: 1, rough: false }]);
       setSelected(id);
     },
-    setCutout: (on: boolean, careful?: boolean) => piece?.kind === "photo" && update(piece.id, careful === undefined ? { cutout: on } : { cutout: on, careful }),
-    setColor: (color: string) => piece && piece.kind !== "photo" && update(piece.id, { color }),
-    setText: (text: string) => piece && piece.kind !== "photo" && update(piece.id, { text: text.slice(0, 80) }),
-    replaceAll: (next: Piece[]) => { setPieces(() => next); setSelected(null); setCropping(false); },
+    setCutout: (on: boolean, careful?: boolean) => { if (piece?.kind === "photo") { checkpoint(); update(piece.id, careful === undefined ? { cutout: on } : { cutout: on, careful }); } },
+    setColor: (color: string) => { if (piece && piece.kind !== "photo") { checkpoint(); update(piece.id, { color }); } },
+    setText: (text: string) => { if (piece && piece.kind !== "photo") { checkpoint(`text-${piece.id}`); update(piece.id, { text: text.slice(0, 80) }); } },
+    replaceAll: (next: Piece[]) => { checkpoint(); setPieces(() => next); setSelected(null); setCropping(false); },
   };
 
-  // Keyboard: Delete removes, Escape lets go, [ and ] change the layer.
+  // Keyboard: ⌘Z / Ctrl+Z undoes and ⇧⌘Z / Ctrl+Y redoes; Delete removes, Escape lets go, [ and ]
+  // change the layer. A text field keeps its own undo.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (/^(INPUT|TEXTAREA|SELECT)$/.test((e.target as HTMLElement).tagName)) return;
+      const mod = e.metaKey || e.ctrlKey, k = e.key.toLowerCase();
+      if (mod && (k === "z" || k === "y")) { e.preventDefault(); if (k === "y" || e.shiftKey) actions.redo(); else actions.undo(); return; }
       if (!piece) return;
       if (e.key === "Delete" || e.key === "Backspace") { e.preventDefault(); actions.remove(); }
       else if (e.key === "Escape") actions.select(null);
@@ -165,7 +202,7 @@ export function useBoardEditor(initial: Piece[], onChange: (pieces: Piece[]) => 
     return () => removeEventListener("keydown", onKey);
   });
 
-  return { pieces, piece, selected, cropping, update, actions };
+  return { pieces, piece, selected, cropping, update, actions, canUndo, canRedo };
 }
 
 export type BoardEditor = ReturnType<typeof useBoardEditor>;
@@ -204,6 +241,7 @@ export function BoardCanvas({ board, saves, versions = {}, busy, chrome, classNa
   const onDown = (e: React.PointerEvent, p: Piece, mode: Mode) => {
     e.stopPropagation();
     actions.select(p.id);
+    actions.checkpoint();
     const m: Mode = cropping && selected === p.id && mode === "move" ? "pan" : mode;
     drag.current = { id: p.id, mode: m, sx: e.clientX, sy: e.clientY, start: p, crop: cropOf(p, aspectOf(p)) };
     (e.target as HTMLElement).setPointerCapture(e.pointerId);

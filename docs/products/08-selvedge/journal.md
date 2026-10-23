@@ -604,3 +604,21 @@ target's service worker can't type a code. Build order, each step shippable:
   Written on the print (on the first print's white border), Gallery label (small spaced capitals,
   air above). **Owner's pick: Gallery label.** Built: "TODAY" in small spaced capitals in the
   muted ink, no line, a little more space between days.
+- **Rebuilt the owner's Spring / Summer board in the live app (23 Oct)**, laid out from their
+  reference image in the board's own format; 4 photos weren't in the inbox (plaid shirt, Dr
+  Martens, tank-top selfie, Bostons), so their spots are empty.
+- **Owner's next four asks:** undo; the photo menu cut off at the screen edge; hide the sidebar
+  without adding clutter; a colour picker to take a shape's colour from a photo.
+- **Built:** **Undo** (a quiet "↶ Undo" by the save status, only when there's something to undo,
+  plus ⌘Z and ⇧⌘Z / Ctrl+Y). Each change is one step: a drag or resize is saved when it starts,
+  and typing in a shape is one step per pause. **The menu** measures itself and stays 8 px
+  inside the board area, flipping below the piece when there's no room above. **Hiding the
+  sidebar:** no new button; a ‹ appears on the sidebar's pencil edge on hover, a faint › at the
+  board's left edge brings it back, and ⌘\ toggles it (Figma's shortcut), remembered on the
+  device (the Notion / Linear / VS Code pattern). **The pipette** beside the shape colours uses
+  Chrome's EyeDropper where it exists (samples anything on screen); elsewhere a click on a photo
+  samples it (a 5 × 5 average, skipping cut-out transparency). A picked colour joins the dots.
+- **Checked** at 1440 × 900 and 1440 × 620: the menu for a top-right photo stays inside (and
+  flips below at the top); Undo steps back through text, a pill and a photo, ⇧⌘Z redoes; the
+  sidebar folds and unfolds by handle and by ⌘\; the pipette (fallback path) turns a pill the
+  photo's brown. Not checked: Chrome's own EyeDropper (needs a real click on screen).

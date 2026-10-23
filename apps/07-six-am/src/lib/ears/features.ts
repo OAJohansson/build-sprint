@@ -339,6 +339,20 @@ export function keyFromChroma(chroma: number[]): KeyEstimate {
   return { ...best, strength: Math.round(best.strength * 100) / 100 };
 }
 
+/** Every key ranked by fit, best first (the Analyse strip shows the runner-up). Same scores as keyFromChroma. */
+export function rankKeys(chroma: number[]): KeyEstimate[] {
+  const all: KeyEstimate[] = [];
+  for (let tonic = 0; tonic < 12; tonic++) {
+    const rotated = chroma.map((_, i) => chroma[(i + tonic) % 12]);
+    all.push({ key: NOTES[tonic], scale: "major", strength: pearson(rotated, KK_MAJOR) });
+    all.push({ key: NOTES[tonic], scale: "minor", strength: pearson(rotated, KK_MINOR) });
+  }
+  return all
+    .filter((k) => Number.isFinite(k.strength))
+    .sort((a, b) => b.strength - a.strength)
+    .map((k) => ({ ...k, strength: Math.round(k.strength * 100) / 100 }));
+}
+
 export function estimateKey(pcm: Float32Array): KeyEstimate {
   return keyFromChroma(chromaProfile(pcm));
 }

@@ -351,3 +351,6 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   store, SoundCloud URL parsing and style names, all with unit tests (66 pass). Playlists: the
   widget gives details for the first 20 tracks; skipping through the set fills the rest (L29–L31,
   T3, T4). Wired into `/spike/model` for the owner's queue test tonight.
+- **Analyse view built** at `/analyse` (Deck design plus the last critic's fixes), Studio tempo now
+  variable (Set Studio BPM), Copy for Claude, CSV/JSON export, licence note in the app README.
+  72 tests, lint, tsc and build pass. Not yet run on real tab audio (owner's Chrome). L32–L34, T5–T10.

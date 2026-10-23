@@ -1,10 +1,10 @@
 // Turns the timeline into notes on one 16th-note grid (64 bars = 1024 steps), so the audio
 // scheduler only has to ask "what plays on step k?". Pure, so it's unit tested.
-import { BARS, BPM, loopById, type Region } from "./timeline";
+import { BARS, loopById, type Region } from "./timeline";
 import type { Note, Recipe } from "./recipes";
 
+// Step length depends on the project tempo: see secondsPerStep in tempo.ts.
 export const STEPS = BARS * 16;
-export const SECONDS_PER_STEP = 60 / BPM / 4;
 
 export type Hit = { track: number; loopId: string; note: Note };
 

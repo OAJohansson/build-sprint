@@ -6,7 +6,8 @@
 // depends on the screen.
 import * as Tone from "tone";
 import { RECIPES, type Inst, type Note } from "@/lib/recipes";
-import { SECONDS_PER_STEP, STEPS, buildIndex, previewHits, stepOfBar, type Hit } from "@/lib/schedule";
+import { STEPS, buildIndex, previewHits, stepOfBar, type Hit } from "@/lib/schedule";
+import { DEFAULT_BPM, clampBpm, secondsPerStep } from "@/lib/tempo";
 import { loopById, type Region } from "@/lib/timeline";
 
 const LOOKAHEAD = 0.12, TICK_MS = 25;
@@ -14,10 +15,13 @@ const TRACK_DB = [0, -3, -7, -9]; // drums, bass, chords, top/FX
 
 type Play = (note: Note, time: number) => void;
 
-/** Build every instrument once, each wired into its track's channel. */
-function makeInstruments(channels: Tone.Channel[]): Record<Inst, Play> {
+/** Tempo-synced echoes: their delay is a number of 16ths, so it follows the project tempo. */
+type Synced = { node: Tone.FeedbackDelay; steps: number };
+
+/** Build every instrument once, each wired into its track's channel. `sps` is the current 16th length. */
+function makeInstruments(channels: Tone.Channel[], sps: () => number): { play: Record<Inst, Play>; synced: Synced[] } {
   const [drums, bass, chords, top] = channels;
-  const sec = (steps: number) => steps * SECONDS_PER_STEP;
+  const sec = (steps: number) => steps * sps();
 
   // Drum kit: a falling-pitch kick, filtered noise for hats, claps and snares (909 territory).
   const kick = new Tone.MembraneSynth({ pitchDecay: 0.045, octaves: 6, envelope: { attack: 0.001, decay: 0.32, sustain: 0 } }).connect(drums);
@@ -78,10 +82,10 @@ function makeInstruments(channels: Tone.Channel[]): Record<Inst, Play> {
   keys.volume.value = -9;
   // Disco string stabs: a fast attack (the slow "strings" pad can't speak in a 16th).
   const disco = poly({ oscillator: { type: "fatsawtooth", count: 3, spread: 18 }, envelope: { attack: 0.008, decay: 0.22, sustain: 0.25, release: 0.25 } }, 5200, -8);
-  const echo = new Tone.FeedbackDelay({ delayTime: 3 * SECONDS_PER_STEP, feedback: 0.55, wet: 0.45 }).connect(new Tone.Filter(1800, "lowpass").connect(chords));
+  const echo = new Tone.FeedbackDelay({ delayTime: 3 * sps(), feedback: 0.55, wet: 0.45 }).connect(new Tone.Filter(1800, "lowpass").connect(chords));
   const dub = new Tone.PolySynth(Tone.Synth, { oscillator: { type: "sawtooth" }, envelope: { attack: 0.004, decay: 0.15, sustain: 0, release: 0.1 } }).connect(echo);
   dub.volume.value = -14;
-  const arpDelay = new Tone.FeedbackDelay({ delayTime: 2 * SECONDS_PER_STEP, feedback: 0.3, wet: 0.25 }).connect(chords);
+  const arpDelay = new Tone.FeedbackDelay({ delayTime: 2 * sps(), feedback: 0.3, wet: 0.25 }).connect(chords);
   const arp = new Tone.Synth({ oscillator: { type: "square" }, volume: -13, envelope: { attack: 0.002, decay: 0.12, sustain: 0, release: 0.08 } }).connect(arpDelay);
   const chordPlay = (p: Tone.PolySynth): Play => (n, t) => p.triggerAttackRelease(n.note, sec(n.dur) * 0.95, t, n.vel);
 
@@ -128,7 +132,7 @@ function makeInstruments(channels: Tone.Channel[]): Record<Inst, Play> {
     }
   };
 
-  return {
+  const play: Record<Inst, Play> = {
     kit, sub: tone(sub), acid: tone(acid), pump: tone(pump), rubber: tone(rubber), reese: tone(reese), octave: tone(octave), pluck: tone(pluck),
     stab: chordPlay(stab), pad: chordPlay(pad), organ: chordPlay(organ), strings: chordPlay(strings), piano: chordPlay(piano), wash: chordPlay(wash),
     keys: chordPlay(keys), dub: chordPlay(dub), arp: tone(arp),
@@ -146,11 +150,15 @@ function makeInstruments(channels: Tone.Channel[]): Record<Inst, Play> {
     riser: makeSweep(300, 9000),
     swell: makeSweep(2000, 12000),
   };
+  return { play, synced: [{ node: echo, steps: 3 }, { node: arpDelay, steps: 2 }] };
 }
 
 export class AudioEngine {
   private ready: Promise<void> | null = null;
   private play!: Record<Inst, Play>;
+  private synced: Synced[] = [];
+  /** Seconds per 16th at the project tempo (F10). */
+  private sps = secondsPerStep(DEFAULT_BPM);
   private channels: Tone.Channel[] = [];
   private master!: Tone.Filter;
   private index = new Map<number, Hit[]>();
@@ -173,9 +181,25 @@ export class AudioEngine {
       this.master = new Tone.Filter({ type: "lowpass", frequency: this.cutoff(), Q: 1 }).connect(limiter);
       this.channels = TRACK_DB.map((db) => new Tone.Channel({ volume: db }).connect(this.master));
       this.channels.forEach((c, i) => (c.mute = this.muted[i]));
-      this.play = makeInstruments(this.channels);
+      const built = makeInstruments(this.channels, () => this.sps);
+      this.play = built.play;
+      this.synced = built.synced;
     })();
     return this.ready;
+  }
+
+  /** Change the tempo, also mid-play: the clock restarts from where the music is, so nothing jumps. */
+  setTempo(bpm: number) {
+    const next = secondsPerStep(clampBpm(bpm));
+    if (next === this.sps) return;
+    // Steps already booked (up to ~120 ms ahead) keep their time; from the next unbooked step
+    // on, the clock runs at the new tempo. The playhead counts from that step.
+    if (this.timer) {
+      this.originStep = this.nextStep;
+      this.originTime = this.nextTime;
+    }
+    this.sps = next;
+    this.synced.forEach((d) => d.node.delayTime.rampTo(d.steps * next, 0.05));
   }
 
   setRegions(regions: Region[]) { this.index = buildIndex(regions, RECIPES); }
@@ -211,7 +235,7 @@ export class AudioEngine {
   /** Where the music is now, in bars (1 = the start), or null when the track isn't playing. */
   position(): number | null {
     if (!this.playing) return null;
-    const step = this.originStep + (Tone.immediate() - this.originTime) / SECONDS_PER_STEP;
+    const step = this.originStep + (Tone.immediate() - this.originTime) / this.sps;
     return (((step % STEPS) + STEPS) % STEPS) / 16 + 1;
   }
 
@@ -244,7 +268,7 @@ export class AudioEngine {
         if (recipe && loop) for (const note of previewHits(recipe, loop.bars, k)) this.sound(this.preview, note, t);
       }
       this.nextStep = k + 1;
-      this.nextTime = t + SECONDS_PER_STEP;
+      this.nextTime = t + this.sps;
     }
   }
 

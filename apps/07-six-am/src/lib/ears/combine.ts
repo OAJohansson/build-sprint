@@ -1,6 +1,6 @@
 // Combine per-snippet statistics into one track result (L26: 4 × 30 s across the track).
 // Pure: runs in the worker (it has the class names) and in Node for checks.
-import { keyFromChroma, tempoFromAcf, topFromMean } from "./features";
+import { keyFromChroma, rankKeys, tempoFromAcf, topFromMean } from "./features";
 import type { EarsCombined, EarsSnippetStats } from "./types";
 
 /** Frame-weighted mean of normalised onset autocorrelations; null if none usable. */
@@ -26,6 +26,7 @@ export function combineSnippets(snippets: EarsSnippetStats[], classes: string[])
   const chroma = new Array<number>(12).fill(0);
   for (const s of snippets) for (let i = 0; i < 12; i++) chroma[i] += s.chroma[i] ?? 0;
   const key = keyFromChroma(chroma);
+  const runnerUp = rankKeys(chroma).find((k) => k.key !== key.key || k.scale !== key.scale) ?? null;
 
   const samples = snippets.reduce((t, s) => t + s.samples, 0);
   const rms = Math.sqrt(snippets.reduce((t, s) => t + s.sumSquares, 0) / Math.max(1, samples));
@@ -46,6 +47,7 @@ export function combineSnippets(snippets: EarsSnippetStats[], classes: string[])
     key: key.key,
     scale: key.scale,
     keyStrength: key.strength,
+    keyRunnerUp: runnerUp,
     energy: { rms: Math.round(rms * 10000) / 10000, dbfs: Math.round(dbfs * 10) / 10 },
     brightness: { centroidHz: Math.round(centroidHz) },
   };

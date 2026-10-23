@@ -40,3 +40,12 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L31 | 2026-10-23 | BPM estimator rebuilt: low-band onset mix, beat-multiple + half-beat scoring, broad prior around 128 BPM, alternative tempo with relation (2:1, 1:2, 3:2, 2:3) flagged ambiguous at ≥ 80%. Synthetic 120–174 BPM all correct; provisional until data-evals on the validation set | PM (engineer's proposal) | build | provisional |
 | T3 | 2026-10-23 | Energy and brightness 0–1 scales are fixed ranges (-40…-5 dBFS; 500 Hz…4 kHz log), raw values stored too. Veto: other ranges | PM | build | |
 | T4 | 2026-10-23 | Queue: re-adding a done track leaves it done, a failed one re-queues; stopping listening mid-track re-queues it. One result per track; re-analysing replaces it. Veto: keep every run | PM | build | |
+| L32 | 2026-10-23 | Studio tempo is per device (localStorage), not saved with each track. Reason: smallest change for F10; per-track would make Analyse call the Supabase API with the access code. Reverse: `bpm` on the track doc | PM (engineer's proposal) | build | |
+| L33 | 2026-10-23 | Analyse is its own route `/analyse` with a Studio · Analyse switch in both app bars; it needs no access code (results stay local) | PM (engineer's proposal) | build | |
+| L34 | 2026-10-23 | Key runner-up from a second-best key match in the engine (`rankKeys`), not a "relative key" guess | PM (engineer's proposal) | build | |
+| T5 | 2026-10-23 | Key confidence shown as a word: "likely" at strength ≥ 0.6, else "unsure" (number in the tooltip) | PM | build | |
+| T6 | 2026-10-23 | BPM marker in the row only when ambiguous; the strip always lists the alternative | PM | build | |
+| T7 | 2026-10-23 | Pasting one track lists it with Analyse; it isn't queued automatically | PM | build | |
+| T8 | 2026-10-23 | Row order: analysed (oldest first), then active, queued, failed, then the link's not-analysed tracks | PM | build | |
+| T9 | 2026-10-23 | Tempo clamped to 60–200 BPM, one decimal; the LCD drops ".0" | PM | build | |
+| T10 | 2026-10-23 | Toasts top centre; a "Stop" text button ends listening; "Analyse all" hidden when one track is left | PM | build | |

@@ -33,6 +33,8 @@ export type EarsResult = {
   key: string;
   scale: string;
   keyStrength: number;
+  /** Second-best key (combined results only; older stored results don't have it). */
+  keyRunnerUp?: { key: string; scale: string; strength: number } | null;
   energy: { rms: number; dbfs: number };
   brightness: { centroidHz: number };
   stats: EarsSnippetStats;

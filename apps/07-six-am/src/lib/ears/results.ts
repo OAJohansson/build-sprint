@@ -38,6 +38,8 @@ export type EarsAnalysis = {
   key: string;
   scale: string;
   keyStrength: number;
+  /** Second-best key; missing on results saved before it existed. */
+  keyRunnerUp?: { key: string; scale: string; strength: number } | null;
   /** 0–1 label scale (see energyLevel); raw dBFS kept next to it. */
   energy: number;
   energyDbfs: number;
@@ -105,6 +107,7 @@ export function toAnalysis(meta: TrackMeta, combined: EarsCombined, plan: Snippe
     key: combined.key,
     scale: combined.scale,
     keyStrength: combined.keyStrength,
+    keyRunnerUp: combined.keyRunnerUp ?? null,
     energy: energyLevel(combined.energy.dbfs),
     energyDbfs: combined.energy.dbfs,
     brightness: brightnessLevel(combined.brightness.centroidHz),

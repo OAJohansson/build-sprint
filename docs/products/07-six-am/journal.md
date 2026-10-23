@@ -373,3 +373,9 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   and Set Studio (KI/KI → "Set Studio to 145 BPM"); contrast ≥ 4.5:1; model download retries; pasted
   links add to the list; playlists in the Claude text; gold only for BPM, progress and the selected
   edge; strip bug fixed. 82 tests, lint, tsc, build pass. L37, L38, T11–T16.
+- **Design score after the fix pass:** 7/10 (fresh critic). Keeps the strip ("must not be
+  redesigned"). Asks again for aligned % sub-columns (the previous critic asked for % next to the
+  name: critics disagree), a clearly visible hover (asked by three critics in a row: a real gap), a
+  gutter between BPM and Key, no ghost rows in the empty state, and one toolbar instead of the
+  not-listening banner (which the user test asked for). One last polish pass takes the points more
+  than one grader agreed on; the final score is reported as it comes.

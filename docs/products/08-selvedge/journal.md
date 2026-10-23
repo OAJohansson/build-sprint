@@ -547,3 +547,12 @@ target's service worker can't type a code. Build order, each step shippable:
   (Gestalt): controls sit by what they change. Built and checked at 1440 × 900 and 375 × 812:
   tabs by the logo, "+ Add photos" on the right, blue "Today", one tap picks, the bar appears,
   Cancel clears it. A post without its picture keeps its link working inside the card.
+- **Owner: "We need to link the inbox to the mood board."** Until now only the logo led to the
+  board, unmarked. Three ways in were offered (from picked photos, from a folder, a Boards tab);
+  the owner chose **from picked photos**: the pick bar gains **Make a board**, a sheet names it
+  (this season by default, as the board's picker does), and the board opens empty with the
+  picked photos in its tray. Checked at phone size: two picked, "Autumn 2026", the board opens
+  with a tray of 2 and no pieces.
+- **And back (owner):** the board's header gains an **Inbox** link next to the logo. Leaving a
+  board saves it first (the autosave flushes when the page goes, not only after its 0.7 s wait):
+  checked by adding a photo and following the link 50 ms later; the piece was kept.

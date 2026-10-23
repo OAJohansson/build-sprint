@@ -15,6 +15,7 @@ import { imageUrl, type Folder, type Save } from "@/lib/library";
 import { AccessGate } from "@/components/access-gate";
 import { SketchFilters } from "@/components/sketch-filters";
 import { byDay } from "@/lib/days";
+import { newBoardName } from "@/lib/season";
 import { paletteFrom } from "@/lib/palette";
 import { dropFromQueue, enqueueFiles, listQueue, onQueueChange, retryUploads, type QueueItem } from "@/lib/queue";
 
@@ -48,6 +49,7 @@ function Inbox() {
   // A tap on any card picks it (owner, 23 Oct: no Select step); the bar shows while any are picked.
   const [picked, setPicked] = useState<Set<string>>(() => new Set());
   const [moving, setMoving] = useState(false);
+  const [making, setMaking] = useState<string | null>(null); // the suggested board name, while naming
   const [dragging, setDragging] = useState(false);
 
   const refresh = useCallback(() => {
@@ -82,6 +84,21 @@ function Inbox() {
     setMoving(false);
     await fetch("/api/saves", { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ ids, folderId }) });
     refresh();
+  }
+
+  // Make a board from the picked saves (owner, 23 Oct): named this season by default, it opens
+  // empty with them in its tray, as the board's own picker does.
+  async function startBoard() {
+    const r = await fetch("/api/boards");
+    const names = r.ok ? ((await r.json()).boards as { name: string }[]).map((b) => b.name) : [];
+    setMaking(newBoardName(new Date(), names));
+  }
+  async function makeBoard(name: string): Promise<boolean> {
+    const id = crypto.randomUUID();
+    const tray = (saves ?? []).filter((s) => picked.has(s.id) && s.hasImage).map((s) => s.id);
+    const r = await fetch(`/api/boards?id=${id}`, { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ name, doc: { pieces: [], tray } }) });
+    if (r.ok) location.assign(`/board?id=${id}`);
+    return r.ok;
   }
 
   async function removePicked() {
@@ -201,7 +218,8 @@ function Inbox() {
 
       {picked.size > 0 && (
         <div className="inbox-bar gap-2">
-          <button className="ed-btn ed-tab" data-active="" onClick={() => setMoving(true)}><span>Move to…</span></button>
+          <button className="ed-btn ed-tab" data-active="" onClick={startBoard}><span>Make a board</span></button>
+          <button className="ed-btn ed-tab" onClick={() => setMoving(true)}><span>Move to…</span></button>
           <button className="ed-btn ed-tool" data-danger="" onClick={removePicked}><span>Remove</span></button>
           <button className="ed-btn ed-quiet" onClick={() => setPicked(new Set())}><span>Cancel</span></button>
         </div>
@@ -211,6 +229,8 @@ function Inbox() {
         <MoveSheet folders={folders.filter((f) => view.page !== "folder" || f.id !== view.id)} fromFolder={view.page === "folder"}
           onPick={moveTo} onNew={async (name) => { const id = await newFolder(name); if (id) await moveTo(id); }} onClose={() => setMoving(false)} />
       )}
+
+      {making !== null && picked.size > 0 && <BoardSheet suggested={making} onMake={makeBoard} onClose={() => setMaking(null)} />}
 
       {dragging && <div className="inbox-drop">Drop photos to save them</div>}
     </div>
@@ -353,6 +373,25 @@ function MoveSheet({ folders, fromFolder, onPick, onNew, onClose }: {
           <NewFolder onNew={async (name) => { await onNew(name); return "made"; }} />
         </div>
       </div>
+    </>
+  );
+}
+
+function BoardSheet({ suggested, onMake, onClose }: { suggested: string; onMake: (name: string) => Promise<boolean>; onClose: () => void }) {
+  const [name, setName] = useState(suggested);
+  const [busy, setBusy] = useState(false);
+  return (
+    <>
+      <div className="inbox-scrim" onClick={onClose} />
+      <form className="inbox-sheet flex flex-col gap-3" role="dialog" aria-label="New board"
+        onSubmit={async (e) => { e.preventDefault(); if (!name.trim()) return; setBusy(true); if (!(await onMake(name.trim()))) setBusy(false); }}>
+        <p className="ed-tray-title self-start">New board</p>
+        <input autoFocus onFocus={(e) => e.target.select()} value={name} onChange={(e) => setName(e.target.value)} maxLength={80} className="inbox-field w-full" />
+        <div className="-ml-3 flex gap-1">
+          <button className="ed-btn ed-tab" data-active="" disabled={!name.trim() || busy}><span>{busy ? "Making…" : "Make the board"}</span></button>
+          <button type="button" className="ed-btn ed-quiet" onClick={onClose}><span>Cancel</span></button>
+        </div>
+      </form>
     </>
   );
 }

@@ -71,8 +71,10 @@ function BoardApp() {
   }, [flush]);
   useEffect(() => {
     const away = () => { if (document.visibilityState === "hidden") flush(true); };
+    const leave = () => flush(true); // following the Inbox link
     document.addEventListener("visibilitychange", away);
-    return () => document.removeEventListener("visibilitychange", away);
+    addEventListener("pagehide", leave);
+    return () => { document.removeEventListener("visibilitychange", away); removeEventListener("pagehide", leave); };
   }, [flush]);
 
   async function makeBoard(name: string, picked: Save[]) {
@@ -117,6 +119,8 @@ function Header({ boards, current, onSwitch, onNew, right }: { boards: BoardSumm
   return (
     <header className="ed-top col-span-2 flex items-center gap-5 px-6">
       <span className="ed-logo">Selvedge</span>
+      {/* Back to where saves land (owner, 23 Oct); the autosave flushes as the page goes. */}
+      <a href="/inbox" className="ed-btn ed-tab inline-flex items-center"><span>Inbox</span></a>
       <nav className="flex items-center gap-1">
         {boards.map((b) => (
           <button key={b.id} onClick={() => onSwitch(b.id)} className="ed-btn ed-tab" data-active={b.id === current ? "" : undefined}><span>{b.name}</span></button>

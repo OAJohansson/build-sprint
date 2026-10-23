@@ -45,3 +45,6 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Accounts, cloud sync, sharing, mobile, non-Chrome browsers | Out of scope for a personal tool | no (for now) |
 | Mark each analysed track as filed into a playlist, with a "31 / 56 placed · 6 unsure" progress line and a per-row playlist picker | User test 23 Oct: the thing that would bring them back tomorrow | next after Ears v1 |
 | Search / type-to-filter in long lists | User test 23 Oct | later |
+| Design to 9/10 (final critic, 7/10): one toolbar with one status slot instead of three stacked bars; listening state in one place; Style columns wider, Track capped ~380 px; quieter in-row "Analyse"; two-line empty state | Founder eval report, 24 Oct | next |
+| Sharper house sub-genres: map Discogs styles to the owner's families (deep, jackin', melodic, ballroom) with their own rules, or a second signal (swing, chords) | Validation: plain House tops 6/10 | next |
+| Stability check and a single 10-track queue run in real Chrome; a geo-blocked track | Not evidenced in the eval report | next |

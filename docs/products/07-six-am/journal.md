@@ -380,3 +380,6 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   not-listening banner (which the user test asked for). One last polish pass takes the points more
   than one grader agreed on; the final score is reported as it comes.
 - **Cleanup:** the throwaway spike pages and design prototypes are removed (their code lives on in `src/lib/ears/` and `/analyse`). Lint, 82 tests and the production build pass.
+- **Final design score:** 7/10 (bar 9: not met, reported as is). **Preview** made once
+  (`pnpm ship 07-six-am --preview`). **Eval report** written (`eval-report.md`); the design gaps,
+  sharper house sub-genres and the untested runs went to the backlog.

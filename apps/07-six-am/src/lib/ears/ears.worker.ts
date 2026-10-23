@@ -24,14 +24,32 @@ let loading: Promise<void> | null = null;
 // would otherwise download 18 MB on every visit.
 const MODEL_CACHE = "ears-models-v1";
 
+/** fetch with 3 tries (0.6 s, then 1.8 s apart): the dev proxy to essentia.upf.edu sometimes
+ *  answers 500 once. A non-OK answer is an error, never parsed. */
+async function fetchOk(url: string, tries = 3): Promise<Response> {
+  let last: unknown;
+  for (let i = 0; i < tries; i++) {
+    if (i) await new Promise((r) => setTimeout(r, 600 * 3 ** (i - 1)));
+    try {
+      const res = await fetch(url);
+      if (res.ok && res.body) return res;
+      last = new Error(`HTTP ${res.status}`);
+      if (res.status >= 400 && res.status < 500 && res.status !== 408 && res.status !== 429) break;
+    } catch (e) {
+      last = e;
+    }
+  }
+  throw new Error(`${url.split("/").pop()}: ${last instanceof Error ? last.message : String(last)}`);
+}
+
 async function fetchWithProgress(url: string): Promise<Uint8Array> {
   const cache = "caches" in self ? await caches.open(MODEL_CACHE).catch(() => null) : null;
   const hit = await cache?.match(url);
   if (hit) return new Uint8Array(await hit.arrayBuffer());
-  const res = await fetch(url);
-  if (!res.ok || !res.body) throw new Error(`${url}: HTTP ${res.status}`);
+  const res = await fetchOk(url);
   const total = Number(res.headers.get("content-length")) || 0;
-  const reader = res.body.getReader();
+  post({ type: "progress", loaded: 0, total }); // the UI shows "18 MB" from the first second
+  const reader = res.body!.getReader();
   const chunks: Uint8Array[] = [];
   let loaded = 0, lastPost = 0;
   for (;;) {
@@ -48,9 +66,16 @@ async function fetchWithProgress(url: string): Promise<Uint8Array> {
   return out;
 }
 
+async function fetchMeta(url: string): Promise<{ classes: string[] }> {
+  const res = await fetchOk(url);
+  const meta = (await res.json().catch(() => null)) as { classes?: unknown } | null;
+  if (!meta || !Array.isArray(meta.classes)) throw new Error(`${url.split("/").pop()}: not the model's metadata`);
+  return { classes: meta.classes as string[] };
+}
+
 async function load() {
   const t0 = performance.now();
-  const [meta, bytes] = await Promise.all([fetch(META_URL).then((r) => r.json()), fetchWithProgress(MODEL_URL)]);
+  const [meta, bytes] = await Promise.all([fetchMeta(META_URL), fetchWithProgress(MODEL_URL)]);
   classes = meta.classes;
   session = await ort.InferenceSession.create(bytes, { executionProviders: ["wasm"] });
   info = {

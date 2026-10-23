@@ -51,3 +51,11 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T10 | 2026-10-23 | Toasts top centre; a "Stop" text button ends listening; "Analyse all" hidden when one track is left | PM | build | |
 | L35 | 2026-10-23 | The brief gives reference genre calls but no reference BPMs. data-evals sources each validation track's BPM from public listings (Beatport, the uploader's description, tempo databases) before seeing results and marks tracks with no source; those are reported, not counted, so the ≥ 8/10 BPM bar is judged on the sourced tracks and says so | PM | evals | |
 | L36 | 2026-10-24 | Style % = each style's own likelihood (Discogs-EffNet is multi-label, sigmoid outputs; the top 5 can sum to 65–138%). Kept as is, labelled honestly in the UI and the Claude text, not normalised. The F4 check text "summing to a probability distribution" was wrong for a multi-label model; it is reported as failed as written, with this note, not rewritten after the fact | PM | evals | |
+| L37 | 2026-10-24 | Half/double unclear: Set Studio defaults to the reading in 90–160 BPM (the engine's main reading if both or neither), the other reading as a second button; row and LCD still lead with the engine's reading | PM (engineer's proposal) | fixes | provisional |
+| L38 | 2026-10-24 | "Clear list" empties the pasted tracks, the queue and the stored results after one inline confirm that says to export first | PM (engineer's proposal) | fixes | provisional |
+| T11 | 2026-10-24 | Pasted links are added to the list (repeats skipped, message with counts) instead of replacing it (owner's request) | PM | fixes | |
+| T12 | 2026-10-24 | Model download: 3 tries with backoff, plain-words error with Retry | PM | fixes | |
+| T13 | 2026-10-24 | CSV gains `bpm_display` and `bpm_studio` at the end; old columns unchanged | PM | fixes | |
+| T14 | 2026-10-24 | Copy for Claude adds the key confidence word, the differs note, the preview note, "each style's own likelihood" and a "My playlists" line from Appendix B (hard-coded, shortcut) | PM | fixes | |
+| T15 | 2026-10-24 | Greys lifted to ≥ 4.5:1 (faint #958a7c, muted #aa9c88); gold only on BPM numbers, the progress bar and the selected row's edge | PM | fixes | |
+| T16 | 2026-10-24 | Strip: the big LCD is the one BPM; the tags row reads "Uploader · tag … · tags …" without duplicates | PM | fixes | |

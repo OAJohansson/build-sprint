@@ -12,12 +12,13 @@ import { parseSoundCloudList } from "@/lib/ears/soundcloud-url";
 import { useEarsQueue } from "@/lib/ears/use-ears-queue";
 import { LoadError, oembedTitle, Player, soundUrl, type ScSound } from "@/lib/ears/widget";
 import { useLocalStorage } from "@/lib/use-local-storage";
-import { sanitiseSource, SOURCE_KEY, type Row, type Source, type SourceTrack } from "./rows";
+import { appendToSource, sanitiseSource, SOURCE_KEY, type Row, type Source, type SourceTrack } from "./rows";
 
 export type Listening = "unknown" | "unsupported" | "off" | "on";
 export type ModelState = { state: "idle" | "loading" | "downloading" | "ready" | "error"; fraction: number | null };
 export type Busy = { text: string; fraction: number | null } | null;
-export type Message = { tone: "error" | "info"; text: string } | null;
+/** One line of news; an error the user can fix has its action (Retry, Enable listening). */
+export type Message = { tone: "error" | "info"; text: string; detail?: string; action?: { label: string; run(): void } } | null;
 
 export type AnalyseModel = {
   demo: boolean;
@@ -37,6 +38,8 @@ export type AnalyseModel = {
   analyse(rows: Row[]): void;
   cancel(): void;
   retry(id: string): void;
+  /** Empty the list: pasted tracks, the queue and the stored results. */
+  clearList(): void;
 };
 
 /** NF4: desktop Chrome/Chromium only. Firefox has getDisplayMedia but can't share a tab's audio; Safari can't either. */
@@ -53,7 +56,7 @@ const useSupport = () => useSyncExternalStore(noSubscribe, () => (detectSupport(
 const toTrack = (s: ScSound, fallbackUrl?: string): SourceTrack | null => {
   const url = soundUrl(s) ?? fallbackUrl;
   if (!url) return null;
-  return { url, title: s.title, uploader: s.user?.username, durationMs: s.full_duration ?? s.duration, blocked: s.policy === "BLOCK", preview: s.policy === "SNIP" };
+  return { url, trackId: typeof s.id === "number" ? s.id : undefined, title: s.title, uploader: s.user?.username, durationMs: s.full_duration ?? s.duration, blocked: s.policy === "BLOCK", preview: s.policy === "SNIP" };
 };
 
 // shortcut: queue and results are shared by every tab through localStorage, and a tab that opens
@@ -91,7 +94,7 @@ export function useAnalyse(): AnalyseModel {
 
   // The model (18 MB) loads on first use (NF3), from the browser cache after the first time.
   const earsRef = useRef<EarsClient | null>(null);
-  const ensureEars = () => {
+  const ensureEars = (): void => {
     if (earsRef.current) return;
     const client = new EarsClient();
     earsRef.current = client;
@@ -100,8 +103,19 @@ export function useAnalyse(): AnalyseModel {
     // content-length the fraction is null and the bar stays empty but the size is still shown.
     let ready = false;
     client.onProgress = (f) => { if (!ready) setModel({ state: "downloading", fraction: f }); };
-    client.onError = (m) => { setModel({ state: "error", fraction: null }); setMessage({ tone: "error", text: `The listening model didn't load: ${m}. Reload to try again.` }); };
+    // The worker already retried 3 times; a fresh worker on Retry starts the download again.
+    client.onError = (m) => {
+      setModel({ state: "error", fraction: null });
+      setMessage({ tone: "error", text: "Couldn't download the listening model", detail: m, action: { label: "Retry", run: retryModel } });
+    };
     client.ready().then(() => { ready = true; setModel({ state: "ready", fraction: null }); setEars(client); });
+  };
+  const retryModel = () => {
+    earsRef.current?.terminate();
+    earsRef.current = null;
+    setEars(null);
+    setMessage(null);
+    ensureEars();
   };
   useEffect(() => () => earsRef.current?.terminate(), []);
   useEffect(() => () => capture?.stop(), [capture]);
@@ -155,9 +169,17 @@ export function useAnalyse(): AnalyseModel {
           }
         }
       }
-      if (tracks.length) setSource({ version: 1, url: valid[0].url, kind: valid.length > 1 ? "list" : valid[0].kind === "set" ? "set" : "track", tracks });
+      // A pasted link adds to the list (owner, 23 Oct); repeats are skipped.
+      let added = 0;
+      if (tracks.length) {
+        const r = appendToSource(source, tracks, valid[0].url, valid.length > 1 ? "list" : valid[0].kind === "set" ? "set" : "track");
+        added = r.added;
+        setSource(r.source);
+      }
       const blocked = tracks.filter((t) => t.blocked).length;
+      const repeats = tracks.length - added;
       if (problems.length) setMessage({ tone: "error", text: problems.join(" · ") });
+      else if (source && tracks.length) setMessage({ tone: "info", text: `Added ${added} track${added === 1 ? "" : "s"} to the list${repeats ? ` · ${repeats} already on it` : ""}${blocked ? ` · ${blocked} not available in your region` : ""}.` });
       else if (blocked) setMessage({ tone: "info", text: `${blocked} track${blocked > 1 ? "s aren't" : " isn't"} available in your region.` });
     } catch (e) {
       setMessage({ tone: "error", text: e instanceof Error ? e.message : String(e) });
@@ -173,7 +195,7 @@ export function useAnalyse(): AnalyseModel {
     try {
       const c = await startTabCapture(() => {
         setCapture(null);
-        setMessage({ tone: "info", text: "Listening stopped. Press Enable listening to go on; queued tracks wait." });
+        setMessage({ tone: "info", text: "Listening stopped. Queued tracks wait.", action: { label: "Enable listening", run: () => void enable() } });
       });
       setCapture(c);
     } catch (e) {
@@ -181,7 +203,7 @@ export function useAnalyse(): AnalyseModel {
         ? e.reason === "cancelled" ? "Sharing was cancelled. Press Enable listening, pick this tab, keep “Also share tab audio” on, then Share."
           : e.message
         : String(e);
-      setMessage({ tone: "error", text });
+      setMessage({ tone: "error", text, action: { label: "Retry", run: () => void enable() } });
     }
   };
 
@@ -212,5 +234,6 @@ export function useAnalyse(): AnalyseModel {
     analyse,
     cancel: q.cancel,
     retry: (id) => { ensureEars(); q.retry(id); },
+    clearList: () => { q.clear(); q.clearResults(); setSource(null); setMessage(null); },
   };
 }

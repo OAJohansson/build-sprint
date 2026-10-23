@@ -6,7 +6,7 @@ import type { EarsAnalysis } from "@/lib/ears/results";
 export const SOURCE_KEY = "six-am:ears-source:v1";
 
 /** A track of the pasted link (a playlist's tracks, or the one track). Metadata only. */
-export type SourceTrack = { url: string; title?: string; uploader?: string; durationMs?: number; blocked?: boolean; preview?: boolean };
+export type SourceTrack = { url: string; trackId?: number; title?: string; uploader?: string; durationMs?: number; blocked?: boolean; preview?: boolean };
 export type Source = { version: 1; url: string; kind: "track" | "set" | "list"; tracks: SourceTrack[] };
 
 export type RowState = "done" | "loading" | "listening" | "analysing" | "queued" | "failed" | "new" | "blocked";
@@ -28,6 +28,30 @@ export function sanitiseSource(raw: unknown): Source | null {
   const s = raw as Source;
   if (typeof s.url !== "string" || !Array.isArray(s.tracks)) return null;
   return { version: 1, url: s.url, kind: s.kind === "set" || s.kind === "list" ? s.kind : "track", tracks: s.tracks.filter((t) => t && typeof t.url === "string") };
+}
+
+/** Same track? SoundCloud id when both have one, else the link without query, case or trailing slash. */
+const urlKey = (u: string) => u.split(/[?#]/)[0].replace(/\/+$/, "").toLowerCase();
+export function sameTrack(a: SourceTrack, b: SourceTrack): boolean {
+  if (a.trackId != null && b.trackId != null) return a.trackId === b.trackId;
+  return urlKey(a.url) === urlKey(b.url);
+}
+
+/** A pasted link adds its tracks to the list (owner, 23 Oct): new ones go at the end, repeats are
+ *  skipped (the earlier entry keeps its place but takes fresher details). */
+export function appendToSource(prev: Source | null, incoming: SourceTrack[], url: string, kind: Source["kind"]): { source: Source; added: number } {
+  const tracks = [...(prev?.tracks ?? [])];
+  let added = 0;
+  for (const t of incoming) {
+    const i = tracks.findIndex((x) => sameTrack(x, t));
+    if (i >= 0) { tracks[i] = { ...tracks[i], ...t, url: tracks[i].url }; continue; }
+    tracks.push(t);
+    added++;
+  }
+  const source: Source = prev
+    ? { version: 1, url: prev.url, kind: prev.kind === "track" && prev.tracks.length === tracks.length ? prev.kind : "list", tracks }
+    : { version: 1, url, kind, tracks };
+  return { source, added };
 }
 
 export function buildRows(results: EarsAnalysis[], queue: QueueState, source: Source | null): { main: Row[]; rest: Row[] } {

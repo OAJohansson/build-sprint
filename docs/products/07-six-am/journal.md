@@ -369,3 +369,7 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   the DJ intro) came out Techno; track 8 didn't hear past its Deep House tag. Stability and the
   single 10-track queue weren't evidenced (two batches). Style % is a per-style likelihood, not a
   share (L36).
+- **Fix pass** on the user test and the critic: BPM choice shared by row, strip, Claude text, export
+  and Set Studio (KI/KI → "Set Studio to 145 BPM"); contrast ≥ 4.5:1; model download retries; pasted
+  links add to the list; playlists in the Claude text; gold only for BPM, progress and the selected
+  edge; strip bug fixed. 82 tests, lint, tsc, build pass. L37, L38, T11–T16.

@@ -7,10 +7,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/studio/logo";
 import { ViewsNav } from "@/components/views-nav";
+import { bpmChoice } from "@/lib/ears/bpm-choice";
 import { claudeText } from "@/lib/ears/claude-text";
 import { saveFile, toCsv, toJson } from "@/lib/ears/export";
 import {
-  bpmText, brightnessLabel, energyLabel, formatDuration, keyLabel, keyWord, namedStyles, pct, tagDiffers, tempoMarker, tempoRelationWords,
+  bpmText, brightnessLabel, camelot, energyLabel, formatDuration, keyLabel, keyWord, namedStyles, pct, tagDiffers, tempoMarker, tempoRelationWords,
 } from "@/lib/ears/labels";
 import { activeItem, queueCounts, type QueueItem } from "@/lib/ears/queue";
 import type { EarsAnalysis } from "@/lib/ears/results";
@@ -45,7 +46,7 @@ export function DemoAnalyse({ listening }: { listening: boolean }) {
     dismiss: () => setNote(null),
     embedUrl: null,
     onIframe: () => {},
-    load: say, enable: say, stopListening: say, analyse: say, cancel: say, retry: say,
+    load: say, enable: say, stopListening: say, analyse: say, cancel: say, retry: say, clearList: say,
   };
   return <Screen m={m} />;
 }
@@ -74,11 +75,12 @@ function Screen({ m }: { m: AnalyseModel }) {
       flash("Couldn't copy: the browser blocked the clipboard");
     }
   };
-  const setBpm = (a: EarsAnalysis) => {
-    const b = clampBpm(a.bpm);
+  const setBpm = (bpm: number) => {
+    const b = clampBpm(bpm);
     setStudioBpm(b);
     flash(`Studio set to ${formatBpm(b)} BPM`, true);
   };
+  const [query, setQuery] = useState("");
 
   return (
     <div className={s.root}>
@@ -90,15 +92,11 @@ function Screen({ m }: { m: AnalyseModel }) {
         </div>
       </header>
       <Toolbar m={m} />
-      {m.message ? (
-        <div className={cx(s.msg, m.message.tone === "error" && s.msgError)} role={m.message.tone === "error" ? "alert" : "status"}>
-          <span>{m.message.text}</span>
-          <button className={s.textBtn} onClick={m.dismiss}>Dismiss</button>
-        </div>
-      ) : <div />}
+      <Notice m={m} empty={empty} />
+      {empty ? <div /> : <ListBar m={m} count={main.length + rest.length} query={query} setQuery={setQuery} />}
       <main className={s.main}>
         {empty ? <EmptySteps /> : (
-          <Table m={m} main={main} rest={rest} selectedId={selected?.id ?? null} onSelect={setSelId} />
+          <Table m={m} main={main} rest={rest} query={query} selectedId={selected?.id ?? null} onSelect={setSelId} />
         )}
         {selected && !empty ? <Strip a={selected} studioBpm={studioBpm} onCopy={copy} onSetBpm={setBpm} /> : null}
       </main>
@@ -108,6 +106,66 @@ function Screen({ m }: { m: AnalyseModel }) {
           {toast.link ? <Link href="/">Open Studio</Link> : null}
         </div>
       ) : null}
+    </div>
+  );
+}
+
+/** One line under the toolbar: news (with its action), else what's needed to go on. */
+function Notice({ m, empty }: { m: AnalyseModel; empty: boolean }) {
+  const queued = queueCounts(m.queue).queued;
+  if (m.message) {
+    const err = m.message.tone === "error";
+    return (
+      <div className={cx(s.msg, err && s.msgError)} role={err ? "alert" : "status"}>
+        <span title={m.message.detail}>{m.message.text}</span>
+        {m.message.action ? <button className={s.btn} onClick={m.message.action.run}>{m.message.action.label}</button> : null}
+        <button className={s.textBtn} onClick={m.dismiss}>Dismiss</button>
+      </div>
+    );
+  }
+  if (empty || m.listening !== "off") return <div />;
+  if (queued) {
+    return (
+      <div className={cx(s.msg, s.msgWait)} role="status">
+        <span><b>Not listening</b> · {queued} track{queued > 1 ? "s" : ""} waiting</span>
+        <button className={s.btn} onClick={m.enable}>Enable listening</button>
+      </div>
+    );
+  }
+  // Step 2 of the empty state stays in view until listening is on.
+  return (
+    <div className={s.msg} role="status">
+      <span>Next: press Enable listening. In Chrome&apos;s dialog pick this tab, leave <q>Also share tab audio</q> on and click <q>Share</q>, once per session.</span>
+      <button className={s.btn} onClick={m.enable}>Enable listening</button>
+    </div>
+  );
+}
+
+/** Above the table: type to filter, and Clear list (asks once, inline). */
+function ListBar({ m, count, query, setQuery }: { m: AnalyseModel; count: number; query: string; setQuery: (q: string) => void }) {
+  const [confirm, setConfirm] = useState(false);
+  const analysed = m.results.length;
+  return (
+    <div className={s.listBar}>
+      <input
+        className={s.filter}
+        type="search"
+        aria-label="Filter tracks"
+        placeholder="Filter by title, uploader or style"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={(e) => { if (e.key === "Escape") setQuery(""); }}
+      />
+      <span className={s.listCount}>{count} track{count === 1 ? "" : "s"} · {analysed} analysed</span>
+      {confirm ? (
+        <span className={s.confirm} role="group" aria-label="Clear the list?">
+          <span>Clear all {count}{analysed ? `, with ${analysed} result${analysed > 1 ? "s" : ""} (export first to keep them)` : ""}?</span>
+          <button className={s.actBtn} onClick={() => { m.clearList(); setConfirm(false); setQuery(""); }}>Clear</button>
+          <button className={s.actBtn} onClick={() => setConfirm(false)}>Keep</button>
+        </span>
+      ) : (
+        <button className={cx(s.actBtn, s.clear)} onClick={() => setConfirm(true)} title="Empty the list: pasted tracks, the queue and the results in this browser">Clear list</button>
+      )}
     </div>
   );
 }
@@ -201,7 +259,7 @@ function Listen({ m }: { m: AnalyseModel }) {
       <div className={s.listen}>
         <button className={s.btn} onClick={m.enable} disabled={m.listening === "unknown" || !!m.busy}>Enable listening</button>
         {block ?? <span className={s.offNote} title="Chrome asks which tab to share: pick this tab, keep “Also share tab audio” on, then press Share. Once per session.">
-          {queued ? `Off · ${queued} queued wait for it` : <>Off · Chrome asks: keep <q>Also share tab audio</q> on</>}
+          {queued ? `Off · ${queued} waiting` : <>Off · keep <q>Also share tab audio</q> on</>}
         </span>}
       </div>
     );
@@ -224,7 +282,8 @@ function progressOf(m: AnalyseModel, active: QueueItem | undefined): { left: str
     return { left: `Downloading the listening model · ${MODEL_MB} MB`, right: f == null ? "" : `${Math.round(f * 100)}%`, fraction: f, label: "Downloading the listening model, first time only" };
   }
   if (m.model.state === "loading") {
-    return { left: "Starting the listening model…", right: "", fraction: null, label: "Starting the listening model" };
+    // Shown from the first second, before the download reports progress (or when it comes from the cache).
+    return { left: `Getting the listening model · ${MODEL_MB} MB`, right: "", fraction: null, label: `Getting the listening model, ${MODEL_MB} MB the first time` };
   }
   if (!active) return null;
   if (active.status === "loading") return { left: "Loading the track…", right: "", fraction: 0, label: "Loading the track" };
@@ -244,17 +303,49 @@ function EmptySteps() {
         <li><span>Press Enable listening. In Chrome&apos;s dialog pick this tab, leave <q>Also share tab audio</q> on and click <q>Share</q>, once per session.</span></li>
         <li>Press Analyse on a track, or Analyse all. Six AM listens to 4 snippets of 30 s; about 2 minutes later its row fills in. It keeps the measurements only, never the audio.</li>
       </ol>
-      <p className={s.fine}>Styles are likelihoods from the Discogs-EffNet model, not one answer. Results stay in this browser.</p>
+      <p className={s.fine}>Styles are likelihoods, not one answer. Results stay in this browser.</p>
+      <div className={s.ghost} aria-hidden="true">
+        <HeadRow />
+        <div className={s.ghostRow} /><div className={s.ghostRow} /><div className={s.ghostRow} />
+      </div>
     </>
   );
 }
 
-function Table({ m, main, rest, selectedId, onSelect }: { m: AnalyseModel; main: Row[]; rest: Row[]; selectedId: string | null; onSelect: (id: string) => void }) {
+function HeadRow() {
+  return (
+    <div className={cx(s.cols, s.head)} role="row">
+      <span className={cx(s.th, s.right)} role="columnheader">#</span>
+      <span className={s.th} role="columnheader">Track</span>
+      <span className={s.th} role="columnheader" title="The style heard most strongly, and how strongly">Style · %</span>
+      <span className={s.th} role="columnheader" title="The next style heard">Also · %</span>
+      <span className={cx(s.th, s.right)} role="columnheader">BPM</span>
+      <span className={s.th} role="columnheader" title="Camelot key: DJs mix keys with neighbouring numbers">Key</span>
+      <span className={s.th} role="columnheader">Energy</span>
+      <span className={s.th} role="columnheader">Tone</span>
+      <span className={cx(s.th, s.right)} role="columnheader">Time</span>
+      <span className={s.th} role="columnheader" title="The genre the uploader set on SoundCloud">Uploader tag</span>
+    </div>
+  );
+}
+
+/** Type-to-filter: title, uploader, the styles heard and the uploader's tag. */
+function matches(r: Row, q: string): boolean {
+  if (!q) return true;
+  const hay = [r.title, r.uploader, r.result?.uploaderGenreTag ?? "", ...(r.result ? namedStyles(r.result).slice(0, 3).map((x) => x.name) : [])].join(" ").toLowerCase();
+  return q.toLowerCase().split(/\s+/).filter(Boolean).every((w) => hay.includes(w));
+}
+
+function Table({ m, main: allMain, rest: allRest, query, selectedId, onSelect }: { m: AnalyseModel; main: Row[]; rest: Row[]; query: string; selectedId: string | null; onSelect: (id: string) => void }) {
   const ref = useRef<HTMLDivElement>(null);
-  const analysable = rest.filter((r) => r.state === "new");
+  // Numbers stay those of the whole list while filtering.
+  const q = query.trim();
+  const main = allMain.map((r, i) => ({ r, n: i + 1 })).filter((x) => matches(x.r, q));
+  const rest = allRest.map((r, i) => ({ r, n: allMain.length + i + 1 })).filter((x) => matches(x.r, q));
+  const analysable = rest.map((x) => x.r).filter((r) => r.state === "new");
   const blocked = rest.length - analysable.length;
-  const firstKey = main[0]?.key ?? rest[0]?.key;
-  const tabKey = selectedId && main.some((r) => r.result?.id === selectedId) ? main.find((r) => r.result?.id === selectedId)!.key : firstKey;
+  const firstKey = main[0]?.r.key ?? rest[0]?.r.key;
+  const tabKey = main.find((x) => selectedId && x.r.result?.id === selectedId)?.r.key ?? firstKey;
 
   // Arrow keys move between rows (one tab stop for the table); landing on an analysed row selects it.
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -270,21 +361,13 @@ function Table({ m, main, rest, selectedId, onSelect }: { m: AnalyseModel; main:
 
   return (
     <div className={s.grid} role="grid" aria-label="Analysed tracks" ref={ref} onKeyDown={onKeyDown}>
-      <div className={cx(s.cols, s.head)} role="row">
-        <span className={cx(s.th, s.right)} role="columnheader">#</span>
-        <span className={s.th} role="columnheader">Track</span>
-        <span className={cx(s.th, s.span2)} role="columnheader" title="The style heard most strongly, and how strongly">Style · %</span>
-        <span className={cx(s.th, s.span2)} role="columnheader" title="The next style heard">Also · %</span>
-        <span className={cx(s.th, s.right)} role="columnheader">BPM</span>
-        <span className={s.th} role="columnheader">Key</span>
-        <span className={s.th} role="columnheader">Energy</span>
-        <span className={s.th} role="columnheader">Tone</span>
-        <span className={cx(s.th, s.right)} role="columnheader">Time</span>
-        <span className={s.th} role="columnheader" title="The genre the uploader set on SoundCloud">Uploader tag</span>
-      </div>
-      {main.map((r, i) => (
-        <TableRow key={r.key} r={r} n={i + 1} m={m} selected={!!r.result && r.result.id === selectedId} tabbable={r.key === tabKey} onSelect={onSelect} />
+      <HeadRow />
+      {main.map(({ r, n }) => (
+        <TableRow key={r.key} r={r} n={n} m={m} selected={!!r.result && r.result.id === selectedId} tabbable={r.key === tabKey} onSelect={onSelect} />
       ))}
+      {q && !main.length && !rest.length ? (
+        <div className={s.divider} role="row"><span role="gridcell">No tracks match “{q}”</span></div>
+      ) : null}
       {rest.length ? (
         <>
           <div className={s.divider} role="row">
@@ -293,13 +376,13 @@ function Table({ m, main, rest, selectedId, onSelect }: { m: AnalyseModel; main:
               {blocked ? ` · ${blocked} not available in your region` : ""}
             </span>
             {analysable.length > 1 ? (
-              <button className={cx(s.textBtn, s.goldBtn)} onClick={() => m.analyse(analysable)} title={m.listening === "on" ? "Queue them all; they're analysed one after another" : "Queue them all; they start once listening is on"}>
+              <button className={s.actBtn} onClick={() => m.analyse(analysable)} title={m.listening === "on" ? "Queue them all; they're analysed one after another" : "Queue them all; they start once listening is on"}>
                 Analyse all {analysable.length}
               </button>
             ) : null}
           </div>
-          {rest.map((r, i) => (
-            <TableRow key={r.key} r={r} n={main.length + i + 1} m={m} selected={false} tabbable={r.key === tabKey} onSelect={onSelect} />
+          {rest.map(({ r, n }) => (
+            <TableRow key={r.key} r={r} n={n} m={m} selected={false} tabbable={r.key === tabKey} onSelect={onSelect} />
           ))}
         </>
       ) : null}
@@ -322,12 +405,13 @@ function TableRow({ r, n, m, selected, tabbable, onSelect }: { r: Row; n: number
   const select = () => { if (r.result) onSelect(r.result.id); };
   const styles = a ? namedStyles(a) : [];
   const title = r.title || r.url.replace(/^https?:\/\/(www\.)?soundcloud\.com\//, "");
+  const bpm = a ? bpmChoice(a) : null;
 
   let status: React.ReactNode = null;
   if (!a) {
     if (r.state === "new") {
       status = (
-        <button className={cx(s.textBtn, s.goldBtn)} onClick={(e) => { e.stopPropagation(); m.analyse([r]); }} title={m.listening === "on" ? "Listen to 4 snippets of 30 s (about 2 min)" : "Queue it; it starts once listening is on"}>
+        <button className={s.actBtn} onClick={(e) => { e.stopPropagation(); m.analyse([r]); }} title={m.listening === "on" ? "Listen to 4 snippets of 30 s (about 2 min)" : "Queue it; it starts once listening is on"}>
           Analyse
         </button>
       );
@@ -341,7 +425,7 @@ function TableRow({ r, n, m, selected, tabbable, onSelect }: { r: Row; n: number
       status = (
         <span title={r.item?.message}>
           <span className={reason === "geo-blocked" ? s.dim : s.failed}>{FAIL_TEXT[reason] ?? FAIL_TEXT.error}</span>
-          {reason !== "geo-blocked" ? <> <button className={cx(s.textBtn, s.goldBtn)} onClick={(e) => { e.stopPropagation(); m.retry(r.item!.id); }}>Retry</button></> : null}
+          {reason !== "geo-blocked" ? <> <button className={s.actBtn} onClick={(e) => { e.stopPropagation(); m.retry(r.item!.id); }}>Retry</button></> : null}
         </span>
       );
     }
@@ -359,34 +443,32 @@ function TableRow({ r, n, m, selected, tabbable, onSelect }: { r: Row; n: number
       onKeyDown={(e) => { if ((e.key === "Enter" || e.key === " ") && e.target === e.currentTarget) { e.preventDefault(); select(); } }}
     >
       <span className={cx(s.num, s.idx)} role="gridcell">{n}</span>
-      <span className={s.track} role="gridcell"><b>{title}</b>{r.uploader ? <span className={s.by}>· {r.uploader}</span> : null}</span>
-      {a ? (
+      <span className={s.track} role="gridcell" title={r.uploader ? `${title} · ${r.uploader}` : title}><b>{title}</b>{r.uploader ? <span className={s.by}>· {r.uploader}</span> : null}</span>
+      {a && bpm ? (
         <>
-          <span role="gridcell">{styles[0]?.name ?? "–"}</span>
-          <span className={s.pct} role="gridcell">{styles[0] ? pct(styles[0].p) : ""}</span>
-          <span className={s.also} role="gridcell">{styles[1]?.name ?? ""}</span>
-          <span className={s.pct} role="gridcell">{styles[1] ? pct(styles[1].p) : ""}</span>
+          <StyleCell x={styles[0]} />
+          <StyleCell x={styles[1]} also />
           <span className={s.bpm} role="gridcell">
-            {bpmText(a.bpm)}
-            {a.bpmAmbiguous && a.bpmAlternative ? (
-              <span className={s.mark2} title={`Could be ${a.bpmAlternative.bpm.toFixed(1)} BPM (${tempoRelationWords(a.bpmAlternative.relation)}); see the strip`}>{tempoMarker(a.bpmAlternative.relation)}</span>
+            {bpmText(bpm.main)}
+            {bpm.unclear && bpm.alt != null ? (
+              <span className={s.mark2} title={`Could be ${bpmText(bpm.alt)} BPM (${tempoRelationWords(bpm.relation!)}); Set Studio uses ${bpmText(bpm.studio)}`}>{tempoMarker(bpm.relation!)}</span>
             ) : null}
           </span>
-          <span role="gridcell">{keyLabel(a.key, a.scale)}</span>
+          <span role="gridcell" title={camelotTitle(a.key, a.scale)}>{keyLabel(a.key, a.scale)}</span>
           <span role="gridcell"><Energy value={a.energy} /></span>
           <span role="gridcell" className={s.muted}>{brightnessLabel(a.brightness)}</span>
           <span className={s.time} role="gridcell">
             {formatDuration(a.durationMs)}
-            {a.preview ? <span className={s.mark2} title="SoundCloud plays only a 30 s preview of this track here, so only that was heard">30s</span> : null}
+            {a.preview ? <span className={s.mark2} title="30 s preview: SoundCloud only plays a preview of this track">30s</span> : null}
           </span>
-          <span role="gridcell" className={s.muted}>
-            {a.uploaderGenreTag ?? <span className={s.dim}>none</span>}
-            {tagDiffers(a) ? <span className={s.differs} title="The uploader's tag isn't among the top 3 styles Six AM heard">differs</span> : null}
+          <span role="gridcell" className={cx(s.muted, s.tagCell)} title={a.uploaderGenreTag ? `Uploader tag: ${a.uploaderGenreTag}${tagDiffers(a) ? " · differs: not among the top 3 styles Six AM heard" : ""}` : "The uploader set no genre tag"}>
+            {a.uploaderGenreTag ? <span className={s.sName}>{a.uploaderGenreTag}</span> : <span className={s.dim}>none</span>}
+            {tagDiffers(a) ? <span className={s.differs}>differs</span> : null}
           </span>
         </>
       ) : (
         <>
-          <span className={s.span4} role="gridcell">{status}</span>
+          <span className={s.span2} role="gridcell">{status}</span>
           <span className={s.bpm} role="gridcell"><span className={s.dim}>{dash}</span></span>
           <span className={s.dim} role="gridcell">{dash}</span>
           <span className={s.dim} role="gridcell">{dash}</span>
@@ -399,7 +481,19 @@ function TableRow({ r, n, m, selected, tabbable, onSelect }: { r: Row; n: number
   );
 }
 
-/** Five steps lit in gold up to the energy. A still meter, never a live level. */
+function StyleCell({ x, also }: { x?: { name: string; p: number }; also?: boolean }) {
+  if (!x) return <span role="gridcell" className={s.dim}>{also ? "" : "–"}</span>;
+  return (
+    <span role="gridcell" className={cx(s.styleCell, also && s.also)} title={`${x.name} · ${pct(x.p)} % likely`}>
+      <span className={s.sName}>{x.name}</span><span className={s.pct}>{pct(x.p)}</span>
+    </span>
+  );
+}
+
+const camelotTitle = (key: string, scale: string) =>
+  camelot(key, scale) ? `Camelot key ${camelot(key, scale)}: DJs mix keys with neighbouring numbers` : undefined;
+
+/** Five steps lit up to the energy. A still meter, never a live level. */
 function Energy({ value }: { value: number }) {
   const lit = Math.max(1, Math.round(value * 5));
   return (
@@ -409,50 +503,58 @@ function Energy({ value }: { value: number }) {
   );
 }
 
-function Strip({ a, studioBpm, onCopy, onSetBpm }: { a: EarsAnalysis; studioBpm: number; onCopy: (a: EarsAnalysis) => void; onSetBpm: (a: EarsAnalysis) => void }) {
+function Strip({ a, studioBpm, onCopy, onSetBpm }: { a: EarsAnalysis; studioBpm: number; onCopy: (a: EarsAnalysis) => void; onSetBpm: (bpm: number) => void }) {
   const styles = namedStyles(a);
   const above = styles.filter((x) => x.p > 0.05);
   const bars = above.length ? above : styles.slice(0, 3);
-  const target = clampBpm(a.bpm);
-  const alt = a.bpmAlternative;
+  const bpm = bpmChoice(a);
+  const target = clampBpm(bpm.studio);
+  const other = bpm.studioOther != null ? clampBpm(bpm.studioOther) : null;
   const ru = a.keyRunnerUp;
+  // The genre tag once, then the other tags (case-insensitive, no repeats).
+  const genre = a.uploaderGenreTag?.trim() || null;
+  const seen = new Set(genre ? [genre.toLowerCase()] : []);
+  const otherTags = a.uploaderTags.filter((t) => { const k = t.trim().toLowerCase(); if (!k || seen.has(k)) return false; seen.add(k); return true; });
   return (
     <section className={s.strip} aria-label="Selected track">
       <div className={s.headLine}>
         <b>{a.title || "Untitled"}</b>
         <span className={s.by}>{a.uploader}</span>
-        <span className={s.lcd}>{bpmText(a.bpm)}<span className={s.lcdUnit}>BPM</span></span>
+        <span className={s.lcd}>{bpmText(bpm.main)}<span className={s.lcdUnit}>BPM</span></span>
+        {bpm.alt != null ? (
+          <span className={s.lcdAlt}>or {bpmText(bpm.alt)} <span className={bpm.unclear ? s.doubt : undefined}>· {tempoRelationWords(bpm.relation!)}{bpm.unclear ? ", unsure" : ", less likely"}</span></span>
+        ) : <span className={s.lcdAlt}>steady</span>}
         <span className={s.actions}>
           <button className={s.btn} onClick={() => onCopy(a)} title="Copies the results and a question for Claude to the clipboard">Copy for Claude</button>
-          <button className={s.btn} onClick={() => onSetBpm(a)} disabled={target === studioBpm} title={target === studioBpm ? "The Studio is already at this tempo" : `The Studio is at ${formatBpm(studioBpm)} BPM`}>
+          <button className={s.btn} onClick={() => onSetBpm(target)} disabled={target === studioBpm} title={target === studioBpm ? "The Studio is already at this tempo" : `The Studio is at ${formatBpm(studioBpm)} BPM`}>
             {target === studioBpm ? `Studio is at ${formatBpm(target)} BPM` : `Set Studio to ${formatBpm(target)} BPM`}
           </button>
+          {other != null ? (
+            <button className={s.actBtn} onClick={() => onSetBpm(other)} disabled={other === studioBpm} title={`Half/double time is unclear: use ${formatBpm(other)} BPM instead`}>
+              or {formatBpm(other)}
+            </button>
+          ) : null}
         </span>
       </div>
       <div className={s.facts}>
         <div className={s.bars} aria-label="Styles heard, as likelihoods">
-          <span className={s.label}>{above.length ? "Styles above 5 % · likelihoods" : "Top styles · likelihoods"}</span>
+          <span className={s.label} title="Each style's own likelihood; they don't add up to 100">{above.length ? "Styles above 5 % · each its own likelihood" : "Top styles · each its own likelihood"}</span>
           {bars.map((x) => (
             <div key={x.name} className={s.prob}><b>{x.name}</b><span className={s.probTrack}><i style={{ width: `${Math.min(100, pct(x.p))}%` }} /></span><span>{pct(x.p)}%</span></div>
           ))}
         </div>
         <dl className={s.dl}>
-          <dt>BPM</dt>
-          <dd>
-            {alt ? (
-              <>{bpmText(a.bpm)} or {alt.bpm.toFixed(1)} <span className={a.bpmAmbiguous ? s.mark2 : s.muted}>· {tempoRelationWords(alt.relation)}{a.bpmAmbiguous ? ", unsure" : ", less likely"}</span></>
-            ) : <>{bpmText(a.bpm)} <span className={s.muted}>· steady</span></>}
-          </dd>
           <dt>Key</dt>
-          <dd>{keyLabel(a.key, a.scale)} <span className={s.muted} title={`Key strength ${a.keyStrength.toFixed(2)} (0 to 1)`}>· {keyWord(a.keyStrength)}</span></dd>
+          <dd title={camelotTitle(a.key, a.scale)}>{keyLabel(a.key, a.scale)} <span className={s.muted} title={`Key strength ${a.keyStrength.toFixed(2)} (0 to 1)`}>· {keyWord(a.keyStrength)}</span></dd>
           <dt>Runner-up</dt>
           <dd>{ru ? keyLabel(ru.key, ru.scale) : <span className={s.dim}>–</span>}</dd>
           <dt>Energy</dt>
           <dd>{energyLabel(a.energy)} <span className={s.muted}>· tone {brightnessLabel(a.brightness)}</span></dd>
-          <dt>Tags</dt>
-          <dd title={a.uploaderTags.join(", ")}>
-            {a.uploaderGenreTag ?? <span className={s.dim}>no genre tag</span>}
-            {tagDiffers(a) ? <span className={s.differs}>differs from what Six AM heard</span> : a.uploaderTags.length ? <span className={s.muted}> · {a.uploaderTags.join(", ")}</span> : null}
+          <dt>Uploader</dt>
+          <dd title={[genre ? `Genre tag ${genre}` : "No genre tag", otherTags.length ? `tags ${otherTags.join(", ")}` : ""].filter(Boolean).join(" · ")}>
+            <span className={s.muted}>tag </span>{genre ?? <span className={s.dim}>none</span>}
+            {tagDiffers(a) ? <span className={s.differs} title="Not among the top 3 styles Six AM heard">differs</span> : null}
+            {otherTags.length ? <span className={s.muted}> · tags {otherTags.join(", ")}</span> : null}
           </dd>
         </dl>
         <div className={s.snipBlock}>

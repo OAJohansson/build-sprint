@@ -319,3 +319,9 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   parent session (rekordbox-style table of analysed tracks under a compact player bar). The session
   list becomes the main surface; actions work on the selected row (L20).
 - **Things to avoid, owner's call:** "I'm happy with the default list" (L21). All kickoff gaps settled; the pack is complete and the squad runs without further kickoff questions.
+- **Step 1 model spike built** by the engineer (`/spike/model`, worker and features in
+  `src/lib/ears/`): Discogs-EffNet ONNX in a worker, mel and features in plain TS (L22, L23, T1).
+  PM smoke check of `?test=tone` in the built-in browser: Test PASS, BPM 124, A minor, model from
+  cache in 0.1 s (18 MB), inference 294 ms for 30 s, top styles Minimal Techno / Minimal / Techno /
+  Tech House. Real tracks need the owner's Chrome (asked: FOVOS Work, Gag On It remix, Knober
+  Realize; the brief's Brejcha example has no URL, so Realize stands in for the minimal/tech end).

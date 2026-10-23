@@ -25,6 +25,7 @@
       "Bash(git check-ignore *)",
       "Bash(gh pr create *)",
       "Bash(gh pr edit *)",
+      "Bash(gh pr merge *)",
       "Bash(pnpm install)",
       "Bash(pnpm sync)",
       "Bash(pnpm -s sync)",

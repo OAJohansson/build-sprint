@@ -1,7 +1,7 @@
 # 0025 — Operating modes: one pipeline, three settings
 
 - **Date:** 2026-10-23
-- **Status:** accepted (groundwork only; the open calls and deferred pieces below are not decided)
+- **Status:** accepted (the owner calls are decided; the deferred pieces below are not)
 
 ## Context
 
@@ -138,18 +138,33 @@ The squad's agents live in `.claude/agents/`: `discovery.md`, `designer.md`,
   root (`.env.secrets.local`, covered by the existing `.env*.local` rule), using the app's
   `.env.example` as the list of keys. It never prints values and only overwrites an existing value
   with `--force`. Keys stop being copied by hand from the previous app.
+- A light `checks` GitHub Action on every PR to `main` (owner call 2 below).
 
-## Open: not decided yet
+## Owner calls (decided 23 Oct)
 
-Owner calls still to make:
+1. **Product 9 runs in Founder mode.** Claude had recommended Streamlined; the owner chose
+   Founder to try the full pipeline. The dial can still be turned down mid-product.
+2. **Claude merges its own PRs once checks pass.** This is a standing approval. The owner gives
+   up their last look before code goes live, and accepts that risk because there are no real
+   users yet, so a broken live site costs little. Revisit when a product gets real users.
+   - "Checks pass" means the `checks` GitHub Action (`.github/workflows/checks.yml`) is green.
+     It is deliberately light: for each app the PR changed it runs lint, unit tests and
+     `next build`, which includes the TypeScript check and catches most "won't deploy" errors
+     before Vercel does. It also checks that the repo scripts parse. Builds need no keys. A
+     docs-only PR passes in seconds, and Actions minutes are free on a public repo.
+   - No checks, no merge: if the PR has no green `checks` run, Claude asks the owner instead.
+   - Merges are still batched (about once or twice a day, decision 0016), because each merge
+     costs deploys, and Claude republishes the notebook from `main` after each merge as before.
+3. **Previews only for the owner's big checks; no branch previews.** Decision 0016 stands:
+   branch pushes deploy nothing. When the owner reviews something big, Claude makes one
+   deliberate preview with `vercel deploy` from the app's folder (preview, not production, so
+   one deployment from the daily 100) and sends the link:
+   - Founder: once, for the final review.
+   - Streamlined: at the design pick (if the directions need a phone to judge) and at the final
+     review.
+   - Learning: only when the owner asks.
 
-1. **Which mode for product 9.** Recommended: Streamlined, because it keeps every learning
-   decision with the owner while removing ops and toil, and it is the cheapest to turn down.
-2. **A standing approval for Claude to merge its own PRs once checks pass.** Today the owner merges.
-   Without it, ops still waits on the owner at every merge.
-3. **Deliberate branch preview deploys versus the free plan's 100 deploys a day** (decision 0016).
-   Previews would let a squad's PR be tried on a phone before merge, but each one counts against
-   the daily budget.
+## Open: deferred
 
 Deferred until 08 Selvedge ships, because Selvedge sessions have these files open:
 

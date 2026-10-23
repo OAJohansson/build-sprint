@@ -339,3 +339,7 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   detail strip must add depth instead of echoing the row (all styles, BPM alternative, key
   runner-up, a per-snippet breakdown for the proposed 4 × 30 s window; no energy sparkline, it
   would look like captured audio), artist always visible, visible hover, Camelot keys, square buttons.
+- **Owner, after the spike runs:** spotted that 60 s from the start heard only Gag On It's intro.
+  Agreed: 4 × 30 s snippets at about 20/40/60/80% (L26) and a queue in the MVP (L27, reverses L4);
+  the speed bar changes with it. Owner confirmed the Deck design (L25). The first spike run (FOVOS)
+  read 101.3 BPM for a ~150 BPM track (2:3 error); the BPM shortcut gets fixed with the snippet work.

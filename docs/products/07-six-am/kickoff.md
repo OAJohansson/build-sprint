@@ -86,7 +86,7 @@ Outcome: I use Ears to place all 56 tracks of *B b baaangers* into genre playlis
 | --- | --- | --- |
 | Genre agreement | Top-1 or top-2 vs the reference call, 10-track validation set | ≥ 7 / 10 |
 | BPM accuracy | ±2 of reference, or half/double-time flagged | ≥ 8 / 10 |
-| Speed | Paste to result | ≤ 90 s |
+| Speed | Result after listening ends; one track end to end | ≤ 10 s; ≤ 2½ min (owner, 23 Oct: was paste to result ≤ 90 s) |
 | Playlist sorted | Tracks placed using Ears | all 56 |
 
 **Guardrail:** no audio is ever stored, uploaded or downloadable (checked in storage and network).
@@ -99,17 +99,17 @@ Ears v1, scope items 1–8 of the brief:
 2. Paste a **SoundCloud track or playlist URL** → the official embedded player loads. For a
    playlist, show the track list and let me pick a track.
 3. **Enable listening:** one "Allow tab audio" step per session, with clear instructions.
-4. **Analyse:** about 60 s of the playing track (configurable 30–90 s) with progress.
+4. **Analyse:** 4 snippets of 30 s at about 20%, 40%, 60% and 80% of the track (2 min, skipping intro and outro; a 30 s preview uses what plays), with progress (owner, 23 Oct; was the first ~60 s).
 5. **Result card:** top 3 genres with %, BPM, key and scale, energy, brightness; uploader genre
    tag and tags for comparison when available.
 6. **Copy for Claude:** summary plus the Appendix B prompt to the clipboard.
 7. **Set Six AM to this BPM:** one click sets the Studio tempo.
 8. **Session list:** results stored locally, survive reload, export CSV/JSON.
+9. **Queue** (owner, 23 Oct; was Phase 2): add tracks or "Analyse all" on a playlist; tracks are analysed one after another; the queue survives a reload and resumes after Enable listening.
 
 **Stop line:** everything in the brief's "Out of scope" (arrangement map, stems live or offline,
 built-in mentor, genre recipes, Remake mode, synths, AI generation, accounts, cloud sync, sharing,
-mobile, non-Chrome browsers) and every roadmap phase goes to [`backlog.md`](backlog.md). Batch
-analysis of a whole playlist (autoplay queue): Phase 2 (owner, 23 Oct).
+mobile, non-Chrome browsers) and every roadmap phase goes to [`backlog.md`](backlog.md). The queue (item 9) is in; the owner moved it from Phase 2 into the MVP on 23 Oct.
 
 ## Requirements
 
@@ -128,6 +128,7 @@ check in `evals.md`.
 | F8 | Persist results (not audio) locally; export CSV/JSON | Reload keeps the list; files download |
 | F9 | Copy for Claude builds the Appendix B text and writes it to the clipboard | Clipboard matches the template |
 | F10 | Set the Studio project BPM from the result | Studio shows and plays at the new BPM |
+| F11 | Queue: add tracks or a whole playlist; analysed one after another; survives reload, resumes after Enable listening (owner, 23 Oct) | 3 queued tracks finish without touching anything |
 | NF1 | Privacy and rights: no audio stored, uploaded or downloadable | Code review plus storage/network check |
 | NF2 | Result ≤ 10 s after the capture window ends; inference off the main thread | Timing; Web Worker in use |
 | NF3 | Models lazy-loaded on first use, browser-cached, loading state, download size shown the first time | First vs second run |
@@ -137,10 +138,11 @@ check in `evals.md`.
 | NF7 | Match the existing Six AM look (dark UI, monospace labels, warm accents, lane colours) | Design critic |
 | US1 | Load SoundCloud: player loads ≤ 5 s; a playlist lists all tracks (beyond 15); invalid, private or geo-blocked shows a clear message | |
 | US2 | Enable listening: explains the Chrome dialog; says so if not shared or silent and offers retry; detects Stop sharing | |
-| US3 | Analyse in about 60 s: visible progress, cancellable; top 3 genres with %, BPM (1 decimal), key + scale, energy and brightness as labels and bars; pauses with playback and resumes or restarts cleanly | |
+| US3 | Analyse in about 2 min (4 × 30 s snippets): visible progress, cancellable; top 3 genres with %, BPM (1 decimal), key + scale, energy and brightness as labels and bars; pauses with playback and resumes or restarts cleanly | |
 | US4 | Compare with tags: uploader genre tag next to the audio result | |
 | US5 | Ask Claude: copied text has title, uploader, URL, all results, uploader tags and the prompt | |
 | US6 | Use the BPM: one click sets the Studio tempo | |
+| US8 | Queue a playlist: press Analyse all, walk away, come back to every row filled (owner, 23 Oct) | |
 | US7 | Keep my results: every analysed track listed, survives reload, exportable | |
 
 **No-gos:**
@@ -152,7 +154,7 @@ check in `evals.md`.
 
 **Rabbit holes:**
 
-- Batch/autoplay analysis of whole playlists (6 h for 56 tracks).
+- Queue extras: reordering, priorities, parallel analysis, running without the tab audible.
 - Arrangement map or stems "while we're in there".
 - Making Studio tempo fully variable for synthesised loops and saved tracks (the Studio is fixed
   at 124 BPM today): F10 needs only the smallest change that works.

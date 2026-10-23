@@ -26,7 +26,7 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 
 | Idea | Why | Status |
 | --- | --- | --- |
-| Batch analysis of a whole playlist (autoplay queue, ~6 h for 56 tracks) | Sorting the dump playlist without clicking each track | Phase 2 (owner, 23 Oct) |
+| Batch analysis of a whole playlist (autoplay queue, ~6 h for 56 tracks) | Sorting the dump playlist without clicking each track | in the MVP (owner moved it in, 23 Oct) |
 | Genre families: map Discogs styles to the owner's Appendix A families and show the family as the headline (F5 option B/C) | Owner chose raw styles only for the MVP (23 Oct); families would match their playlists | Phase 2 |
 | Arrangement map (EA-6): sections and per-lane activity on the bar grid | "When does the bass come in? How long is the build?" | Phase 2 |
 | Uploader metadata disagreement flag (EA-8) beyond showing the tag | "Tagged Deep House, sounds like Progressive" | Phase 2 |

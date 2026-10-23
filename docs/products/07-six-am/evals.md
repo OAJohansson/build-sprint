@@ -40,10 +40,12 @@ picker, the grader reads the logs and screenshots.
 | NF7 | Existing Six AM look | design-critic judges the Analyse view against the Studio screenshots and the feel sentence | design-critic | | score |
 | US1 | Load SoundCloud | Valid track URL: player ready ≤ 5 s; the *B b baaangers* set lists all 56 tracks; an invalid URL, a private track and a geo-blocked track each show a clear message | user-tester | | timings, screenshots |
 | US2 | Enable listening | Instructions name "this tab" and "Share tab audio"; sharing without audio, or silent audio, shows a message with Retry; Chrome's Stop sharing returns the UI to "not listening" | user-tester (owner's hands for the dialog) | | screenshots |
-| US3 | Analyse a track | Progress visible; Cancel stops it with nothing saved; result shows top 3 genres with %, BPM to 1 decimal, key + scale, energy and brightness as labels and bars; pausing the player pauses the analysis and resuming continues or restarts cleanly | user-tester | | screenshots |
+| US3 | Analyse a track | Snippets taken at about 20/40/60/80% of the track (30 s each; a 30 s preview uses what plays); progress visible; Cancel stops it with nothing saved; result shows top 3 genres with %, BPM to 1 decimal, key + scale, energy and brightness as labels and bars; pausing the player pauses the analysis and resuming continues or restarts cleanly | user-tester | | screenshots |
 | US4 | Compare with tags | Uploader genre tag shown next to the result when available; left out (not "undefined") when not | user-tester | | screenshot |
 | US5 | Ask Claude | Copied text has title, uploader, URL, all results, uploader tags and the Appendix B prompt | user-tester | | clipboard text |
 | US6 | Use the BPM | One click sets the Studio tempo (as F10) | user-tester | | screenshot |
+| F11 | Queue | 3 tracks queued (and "Analyse all" on a playlist) are analysed one after another with no clicks; reload keeps the queue and it resumes after Enable listening | user-tester | | screenshots, log |
+| US8 | Queue a playlist | Analyse all on a 5+ track playlist fills every row unattended | user-tester (owner's hands to start) | | screenshots |
 | US7 | Keep my results | Every analysed track listed; list survives reload; exportable (as F8) | user-tester | | screenshot |
 
 ### Definition of done (from the brief)
@@ -54,15 +56,16 @@ picker, the grader reads the logs and screenshots.
 | Genre top-1 or top-2 agrees with the reference call | ≥ 7 / 10 | data-evals | |
 | BPM within ±2 of reference, or half/double-time correctly flagged | ≥ 8 / 10 | data-evals | |
 | No audio persisted or uploaded | storage and network clean (F7, NF1) | data-evals | |
-| Paste to result | ≤ 90 s on every validation track | data-evals | |
+| Result after listening ends | ≤ 10 s on every validation track; one track end to end ≤ 2½ min (owner, 23 Oct: was paste to result ≤ 90 s) | data-evals | |
+| Validation run as one queue | all 10 tracks analysed in one queue without touching anything | data-evals (owner's hands to start) | |
 
 ### User test (from `user-testing/plan.md`, written by `discovery`)
 
 | Scenario | Bar: time | Bar: taps | Bar: outcome | Result |
 | --- | --- | --- | --- | --- |
-| S1 What genre is this? Paste a track URL, enable listening, analyse | ≤ 90 s | ≤ 6 | Result card with top 3 genres, BPM, key, energy, brightness | |
+| S1 What genre is this? Paste a track URL, enable listening, analyse | ≤ 2½ min | ≤ 6 | Result card with top 3 genres, BPM, key, energy, brightness | |
 | S2 Where does this go? Copy for Claude from a result | ≤ 15 s | ≤ 2 | Clipboard holds the full prompt | |
-| S3 Pick a track from the playlist and analyse it | ≤ 2 min | ≤ 8 | Right track analysed, added to the session list | |
+| S3 Pick a track from the playlist and analyse it | ≤ 3 min | ≤ 8 | Right track analysed, added to the session list | |
 | S4 Set the Studio to this BPM and open the Studio | ≤ 10 s | ≤ 2 | Studio at the detected tempo | |
 
 Every top job scored ≥ 4/5 by `user-tester`, and no blocker or major finding left open.

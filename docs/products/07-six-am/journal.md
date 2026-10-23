@@ -303,3 +303,11 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   titles; Groove & Shoulder: 6, 5): the build must fetch the rest (e.g. by skipping to them)
   before listing. One set (cunty-lil-bangers) gives a widget ERROR: a useful real test for US1's
   "clear message".
+- **Step 0 capture spike: PASS** in the owner's Chrome 154 (87% audible, peak -10.5 dBFS, 32.7 s at
+  44.1 kHz): tab capture hears the cross-origin SoundCloud player. Proceed, no fallback (L15).
+- **Why the track stopped at ~33 s:** SoundCloud served a 30 s preview. The widget says so:
+  `policy: "SNIP"`, `duration` 30000 against `full_duration` 429270 (7:09 of audio). Checked all 10
+  validation tracks through the widget: only track 1 (Hard Reset, Redemption) is a preview; the
+  other 9 are `ALLOW` with full length. `monetization_model` is `NOT_APPLICABLE`, so it isn't a
+  Go+ track; it's the uploader's or a region setting, and it snips the same signed out and in the
+  owner's Chrome. Ears detects SNIP and analyses the preview, labelled as such (L16).

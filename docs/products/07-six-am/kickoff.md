@@ -160,17 +160,19 @@ check in `evals.md`.
 
 ## Feel references
 
-**(owner to confirm)** The brief gives NF7 only; the PM's recommended references:
+Owner, 23 Oct: chose the "tool" direction (sketch A of three: tool, listening-booth moment, mix).
 
-- The existing Six AM Studio — the look itself: dark UI, monospace labels, warm accents, lane
-  colours. Ears must feel like a second room of the same club, not a new app.
-- rekordbox's track analysis in the library — dense, legible facts (BPM, key) in a row you trust
-  at a glance.
-- A record-shop listening booth — you play a record and someone knowing tells you what it is.
+- rekordbox's track-analysis columns: scannable, every track one row, compare at a glance.
+- The existing Six AM Studio: the same warehouse look, gold LCD numbers, monospace labels, warm
+  accents, lane colours.
 
-**The feel in one sentence:** a listening booth in the same warehouse as the Studio: play a track
-you love and the facts come back calm, honest and precise, in Six AM's dark, warm, monospace look.
-**(owner to confirm)**
+Shape that follows from it: a compact player bar with the listening progress on top, then a table
+where every analysed track is one row (track, top-2 Discogs styles with %, BPM in gold, key, energy
+meter, uploader tag), the current track highlighted. The session list is the main surface, not a
+side panel; Copy for Claude and Set Studio BPM act on the selected row.
+
+**The feel in one sentence:** rekordbox in the Six AM warehouse: run through a playlist and each
+track's facts line up in calm, precise, scannable columns.
 
 ## Things to avoid
 

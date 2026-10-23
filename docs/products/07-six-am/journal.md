@@ -315,3 +315,6 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   backlog. The genre eval now uses a match set of Discogs styles per validation track, written
   before any result (L19). Discogs has no ballroom or "melodic house" style, so tracks 8 and 10
   use the closest styles.
+- **Feel, owner's call:** "I think I prefer the tool version", sketch A of three shown in the
+  parent session (rekordbox-style table of analysed tracks under a compact player bar). The session
+  list becomes the main surface; actions work on the selected row (L20).

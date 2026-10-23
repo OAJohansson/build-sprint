@@ -15,6 +15,7 @@ import { imageUrl, type Board, type BoardDoc, type BoardSummary, type Folder, ty
 import { cutOut } from "@/lib/cutout";
 import { paletteFrom } from "@/lib/palette";
 import { newBoardName } from "@/lib/season";
+import { byDay } from "@/lib/days";
 
 export default dynamic(() => Promise.resolve(BoardApp), { ssr: false });
 
@@ -77,9 +78,9 @@ function BoardApp() {
     return () => { document.removeEventListener("visibilitychange", away); removeEventListener("pagehide", leave); };
   }, [flush]);
 
-  async function makeBoard(name: string, picked: Save[]) {
-    // An empty board; the picked saves are its tray, dragged on by hand.
-    const next: Board = { id: crypto.randomUUID(), name, doc: { pieces: [], tray: picked.map((s) => s.id) }, updatedAt: new Date().toISOString() };
+  async function makeBoard(name: string) {
+    // An empty board; saves are dragged on from the tray, which shows them all (owner, 23 Oct).
+    const next: Board = { id: crypto.randomUUID(), name, doc: { pieces: [] }, updatedAt: new Date().toISOString() };
     const r = await fetch(`/api/boards?id=${next.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, doc: next.doc }) });
     if (!r.ok) return setSaveState("failed");
     setBoards((bs) => [{ id: next.id, name, updatedAt: next.updatedAt }, ...bs]);
@@ -106,7 +107,7 @@ function BoardApp() {
           <Header boards={boards} current={null} onSwitch={switchTo} onNew={() => setPicking(true)} />
           <aside className="ed-tray p-4" />
           <main className="ed-stage relative overflow-y-auto p-8">
-            <Picker photos={photos} name={newBoardName(new Date(), boards.map((b) => b.name))} onMake={makeBoard}
+            <NewBoard name={newBoardName(new Date(), boards.map((b) => b.name))} onMake={makeBoard}
               onCancel={board ? () => setPicking(false) : undefined} />
           </main>
         </>
@@ -136,22 +137,13 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
   board: Board; saves: Save[]; photos: Save[]; boards: BoardSummary[]; saveState: SaveState;
   onChange: (doc: BoardDoc) => void; onSwitch: (id: string) => void; onNew: () => void;
 }) {
-  // The board's tray: the saves picked for it. "All saves" shows everything; a save dragged on
-  // from there joins the board's tray. Older boards (no tray) show all saves.
-  const [tray, setTray] = useState<string[] | undefined>(board.doc.tray);
-  const [showAll, setShowAll] = useState(!board.doc.tray);
-  // All saves can be narrowed to one of the inbox's folders (owner, 23 Oct).
+  // The tray mirrors the inbox (owner, 23 Oct): Days (saves not in a folder, by day) and Folders,
+  // so every save is in reach while making the board; one already on it is marked. Folders are the
+  // shortlists; the per-board tray of picked saves is gone (an old board's `tray` is ignored).
   const [folders, setFolders] = useState<Folder[]>([]);
-  const [folderId, setFolderId] = useState("");
+  const [view, setView] = useState<"days" | "folders" | { folder: string }>("days");
   useEffect(() => { fetch("/api/folders").then((r) => (r.ok ? r.json() : null)).then((d) => d && setFolders(d.folders), () => {}); }, []);
-  const trayRef = useRef(tray);
-  useEffect(() => { trayRef.current = tray; }, [tray]);
-  const editor = useBoardEditor(board.doc.pieces, (pieces) => {
-    const used = pieces.flatMap((x) => (x.kind === "photo" && x.saveId ? [x.saveId] : []));
-    const t = trayRef.current ? [...new Set([...trayRef.current, ...used])] : undefined;
-    if (t && t.length !== trayRef.current?.length) setTray(t);
-    onChange(t ? { pieces, tray: t } : { pieces });
-  }, (id) => saves.find((x) => x.id === id)?.aspect ?? 0.75);
+  const editor = useBoardEditor(board.doc.pieces, (pieces) => onChange({ pieces }), (id) => saves.find((x) => x.id === id)?.aspect ?? 0.75);
   const p = editor.piece;
 
   // Background removal (feedback 7): made once per save in the browser, kept beside the original;
@@ -198,13 +190,15 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
       ]
     : base;
   const byId = useMemo(() => new Map(saves.map((s) => [s.id, s])), [saves]);
-  const shown = showAll || !tray ? photos : photos.filter((s) => tray.includes(s.id));
-  const listed = (showAll || !tray) && folderId ? shown.filter((s) => s.folderId === folderId) : shown;
+  const used = new Set(editor.pieces.flatMap((x) => (x.kind === "photo" && x.saveId ? [x.saveId] : [])));
+  const loose = photos.filter((s) => !s.folderId);
+  const folder = typeof view === "object" ? folders.find((f) => f.id === view.folder) : undefined;
 
   // Colours for shapes: the board's own palette, read from its photos, plus the pill's cream and
   // the logo's yellow.
   const [palette, setPalette] = useState<string[]>([PILL_CREAM, LOGO_YELLOW, ...FALLBACK_PALETTE]);
-  const paletteKey = shown.slice(0, 18).map((s) => s.id).join();
+  // Read from the photos on the board, or the newest saves while it's empty.
+  const paletteKey = (used.size ? [...used] : loose.map((s) => s.id)).slice(0, 18).join();
   useEffect(() => {
     const ids = paletteKey ? paletteKey.split(",") : [];
     paletteFrom(ids.map(imageUrl), 6, FALLBACK_PALETTE).then((c) => setPalette([PILL_CREAM, LOGO_YELLOW, ...c.filter((x) => x !== PILL_CREAM && x !== LOGO_YELLOW)]));
@@ -213,7 +207,7 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
   async function redraft() {
     if (!confirm("Start again from a draft? This board's arrangement will be replaced.")) return;
     const onBoard = editor.pieces.filter((x) => x.kind === "photo" && x.saveId).sort((a, b) => a.y - b.y || a.x - b.x).map((x) => byId.get(x.saveId!)).filter((s): s is Save => !!s);
-    const picked = onBoard.length ? onBoard : shown.slice(0, 14);
+    const picked = onBoard.length ? onBoard : loose.slice(0, 14);
     editor.actions.replaceAll(tiledDraft(picked));
   }
 
@@ -261,30 +255,36 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
             </button>
           ))}
         </div>
-        <p className="ed-tray-title mb-3">Your saves</p>
-        {tray && (
-          <div className="mb-3 flex gap-1">
-            <button className="ed-btn ed-tab" data-active={!showAll ? "" : undefined} onClick={() => setShowAll(false)}><span>This board</span></button>
-            <button className="ed-btn ed-tab" data-active={showAll ? "" : undefined} onClick={() => setShowAll(true)}><span>All saves</span></button>
-          </div>
-        )}
-        {(showAll || !tray) && folders.length > 0 && (
-          <select value={folderId} onChange={(e) => setFolderId(e.target.value)} aria-label="Show saves from"
-            className="mb-3 h-9 w-full rounded-md border border-black/20 bg-white/70 px-2 text-[16px]">
-            <option value="">Every save</option>
-            {folders.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
-          </select>
-        )}
-        <div className="grid grid-cols-2 gap-3">
-          {listed.map((s, i) => (
-            <button key={s.id} type="button" draggable className="ed-thumb relative aspect-[3/4] shrink-0 overflow-hidden"
-              style={{ ["--tilt" as string]: `${((i * 37) % 5) - 2}deg` }}
-              onDragStart={(e) => e.dataTransfer.setData("text/selvedge-save", s.id)}
-              onClick={() => editor.actions.addSave(s)} aria-label={`Add a ${s.source} save to the board`}>
-              <img src={imageUrl(s.id)} alt="" draggable={false} loading="lazy" className="h-full w-full object-cover" />
-            </button>
-          ))}
+        <div className="-ml-3 mb-3 flex gap-1">
+          <button className="ed-btn ed-tab" data-active={view === "days" ? "" : undefined} onClick={() => setView("days")}><span>Days</span></button>
+          <button className="ed-btn ed-tab" data-active={view !== "days" ? "" : undefined} onClick={() => setView("folders")}><span>Folders</span></button>
         </div>
+        {view === "days" ? (
+          loose.length ? byDay(loose).map((d) => (
+            <section key={d.label} className="mb-4">
+              <p className="ed-tray-title ed-day mb-2">{d.label}</p>
+              <Thumbs saves={d.items} used={used} onAdd={editor.actions.addSave} />
+            </section>
+          )) : <p className="ed-tray-foot">Nothing on your day pages. New saves land here.</p>
+        ) : view === "folders" ? (
+          folders.length ? (
+            <ul className="-ml-3 flex flex-col items-start">
+              {folders.map((f) => (
+                <li key={f.id}>
+                  <button className="ed-btn" onClick={() => setView({ folder: f.id })}>
+                    <span>{f.name} <span className="ed-quiet">{photos.filter((s) => s.folderId === f.id).length}</span></span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : <p className="ed-tray-foot">No folders yet. Make them in the inbox.</p>
+        ) : (
+          <>
+            <button className="ed-btn ed-quiet -ml-3" onClick={() => setView("folders")}><span>← Folders</span></button>
+            <p className="ed-tray-title ed-day mb-2 mt-1">{folder?.name ?? "Folder"}</p>
+            <Thumbs saves={photos.filter((s) => s.folderId === folder?.id)} used={used} onAdd={editor.actions.addSave} />
+          </>
+        )}
       </aside>
 
       <main className="ed-stage relative p-8">
@@ -294,42 +294,39 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
   );
 }
 
-// Making a board: name it (this season by default) and pick the saves to tile.
-function Picker({ photos, name: suggested, onMake, onCancel }: { photos: Save[]; name: string; onMake: (name: string, picked: Save[]) => Promise<void>; onCancel?: () => void }) {
-  const [name, setName] = useState(suggested);
-  const [picked, setPicked] = useState<Set<string>>(() => new Set());
-  const [busy, setBusy] = useState(false);
-  const toggle = (id: string) => setPicked((p) => { const n = new Set(p); if (n.has(id)) n.delete(id); else n.add(id); return n; });
-
-  if (!photos.length) {
-    return <p className="ed-tray-title max-w-md">Nothing to make a board from yet. Share a few pieces to Selvedge from your phone first.</p>;
-  }
+// A save in the tray: drag it onto the board or click to add it. A small tick marks one already
+// on this board.
+function Thumbs({ saves, used, onAdd }: { saves: Save[]; used: Set<string>; onAdd: (s: Save) => void }) {
   return (
-    <div className="mx-auto flex max-w-4xl flex-col gap-5">
-      <label className="flex items-center gap-3">
-        <span className="ed-tray-title">New board</span>
-        <input value={name} onChange={(e) => setName(e.target.value)} maxLength={80}
-          className="h-10 w-64 rounded-md border border-black/20 bg-white/70 px-3 text-[17px]" />
-      </label>
-      <div className="grid grid-cols-6 gap-3">
-        {photos.map((s) => (
-          // Picked: a small yellow dot and the faintest pencil frame (owner's pick D, 22 Oct).
-          <button key={s.id} type="button" onClick={() => toggle(s.id)} aria-pressed={picked.has(s.id)} className="pick-tile relative aspect-[3/4]">
-            <img src={imageUrl(s.id)} alt="" loading="lazy" className="h-full w-full rounded-[2px] object-cover" />
-            <svg className="pick-dot" viewBox="0 0 22 22" aria-hidden="true">
-              <circle cx="11" cy="11" r="7.5" fill="#f2d666" style={{ filter: "url(#ink-bleed)" }} />
-              <circle cx="9" cy="9" r="2.6" fill="#f7e595" opacity=".8" />
-            </svg>
-          </button>
-        ))}
-      </div>
-      <div className="flex gap-3">
-        <button disabled={!picked.size || !name.trim() || busy} className="ed-btn ed-tab" data-active=""
-          onClick={async () => { setBusy(true); await onMake(name.trim(), photos.filter((s) => picked.has(s.id))); setBusy(false); }}>
-          <span>{busy ? "Making…" : "Make the board"}</span>
+    <div className="grid grid-cols-2 gap-3">
+      {saves.map((s, i) => (
+        <button key={s.id} type="button" draggable className="ed-thumb relative aspect-[3/4] shrink-0"
+          style={{ ["--tilt" as string]: `${((i * 37) % 5) - 2}deg` }}
+          onDragStart={(e) => e.dataTransfer.setData("text/selvedge-save", s.id)}
+          onClick={() => onAdd(s)} aria-label={`Add a ${s.source} save to the board${used.has(s.id) ? " (already on it)" : ""}`}>
+          <img src={imageUrl(s.id)} alt="" draggable={false} loading="lazy" className="h-full w-full object-cover" />
+          {used.has(s.id) && <span className="ed-used" aria-hidden="true">✓</span>}
         </button>
-        {onCancel && <button className="ed-btn ed-quiet" onClick={onCancel}><span>Cancel</span></button>}
-      </div>
+      ))}
     </div>
+  );
+}
+
+// Making a board: name it (this season by default); it starts empty.
+function NewBoard({ name: suggested, onMake, onCancel }: { name: string; onMake: (name: string) => Promise<void>; onCancel?: () => void }) {
+  const [name, setName] = useState(suggested);
+  const [busy, setBusy] = useState(false);
+  return (
+    <form className="mx-auto flex max-w-md flex-col gap-4 pt-16" onSubmit={async (e) => { e.preventDefault(); if (!name.trim()) return; setBusy(true); await onMake(name.trim()); setBusy(false); }}>
+      <label className="flex flex-col gap-3">
+        <span className="ed-tray-title self-start">New board</span>
+        <input autoFocus onFocus={(e) => e.target.select()} value={name} onChange={(e) => setName(e.target.value)} maxLength={80}
+          className="h-10 w-full rounded-md border border-black/20 bg-white/70 px-3 text-[17px]" />
+      </label>
+      <div className="-ml-3 flex gap-1">
+        <button disabled={!name.trim() || busy} className="ed-btn ed-tab" data-active=""><span>{busy ? "Making…" : "Make the board"}</span></button>
+        {onCancel && <button type="button" className="ed-btn ed-quiet" onClick={onCancel}><span>Cancel</span></button>}
+      </div>
+    </form>
   );
 }

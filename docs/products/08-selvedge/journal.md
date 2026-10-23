@@ -556,3 +556,17 @@ target's service worker can't type a code. Build order, each step shippable:
 - **And back (owner):** the board's header gains an **Inbox** link next to the logo. Leaving a
   board saves it first (the autosave flushes when the page goes, not only after its 0.7 s wait):
   checked by adding a photo and following the link 50 ms later; the piece was kept.
+- **Owner: "I'm not sure what the value is" of picking photos in the inbox, then switching
+  between This board and All saves on the board;** adding a few more meant going back to the
+  inbox. Thought through together: there were three overlapping groupings (days, folders, and
+  each board's tray), and the tray was a shortlist from before folders existed. Picking first is
+  **premature commitment** (Green): choosing a board's photos before seeing them together; the
+  fix is **recognition rather than recall** (Nielsen): show everything where the choosing
+  happens. Owner's calls: the board's tray **mirrors the inbox** (Days, then Folders), with a
+  tick on photos already on the board; folders are the shortlists; and the inbox gets a
+  **Boards** link in the header (laptop only, where boards are made) instead of Make a board
+  in the pick bar. A new board is just a name now. Old boards' trays are ignored, not deleted.
+- **Built and checked** at 1440 × 900: a new board from a name; the tray's Days shows the 6 saves
+  not in a folder under "Today"; adding one puts it on the board with a tick in the tray;
+  Folders lists "Shirts 2" and opens its 2 photos. At 375 × 812 the inbox header fits once Boards
+  is hidden (it pushed "+ Add" off the screen).

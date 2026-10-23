@@ -22,3 +22,4 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 16 | Owner, live inbox design pass | No Select button: cards selectable by default | fixed (a tap picks; the bar shows while any are picked) |
 | 17 | Owner, live inbox design pass | Find the best place for Add photos | fixed (header, right; owner's pick of three) |
 | 18 | Owner, live inbox (23 Oct) | No way to start a mood board from the inbox | fixed (Make a board from picked photos) |
+| 19 | Owner, live board (23 Oct) | A link back to the inbox from the board | fixed (Inbox in the board's header) |

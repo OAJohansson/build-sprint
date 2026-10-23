@@ -552,4 +552,7 @@ target's service worker can't type a code. Build order, each step shippable:
   the owner chose **from picked photos**: the pick bar gains **Make a board**, a sheet names it
   (this season by default, as the board's picker does), and the board opens empty with the
   picked photos in its tray. Checked at phone size: two picked, "Autumn 2026", the board opens
-  with a tray of 2 and no pieces. Not built: a way back from the board to the inbox.
+  with a tray of 2 and no pieces.
+- **And back (owner):** the board's header gains an **Inbox** link next to the logo. Leaving a
+  board saves it first (the autosave flushes when the page goes, not only after its 0.7 s wait):
+  checked by adding a photo and following the link 50 ms later; the piece was kept.

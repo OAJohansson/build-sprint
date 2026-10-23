@@ -62,6 +62,7 @@ async function upload(item) {
   if (item.text) body.set("text", item.text);
   if (item.url) body.set("url", item.url);
   if (item.title) body.set("title", item.title);
+  if (item.source) body.set("source", item.source); // "upload": dropped on the laptop inbox
   if (item.file) {
     try {
       const { blob, aspect } = await shrink(item.file);
@@ -93,7 +94,8 @@ async function shrink(file) {
 }
 
 async function notify() {
-  for (const client of await self.clients.matchAll()) client.postMessage("queue-changed");
+  // includeUncontrolled: a page on its first load isn't controlled yet but still waits for news.
+  for (const client of await self.clients.matchAll({ includeUncontrolled: true })) client.postMessage("queue-changed");
 }
 
 // The queue, in IndexedDB (localStorage can't hold pictures, and a worker can't reach it).

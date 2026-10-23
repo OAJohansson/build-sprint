@@ -7,7 +7,7 @@ import { fetchLinkPicture } from "@/lib/server/link-picture";
 // My saves: GET lists them, newest first; POST adds one (a picture, a link, or both; multipart).
 // A link without a picture gets one from its page (og:image), kept as a copy; if that fails the
 // save is kept as a link and the inbox asks for a screenshot.
-// DELETE ?id= removes one with its picture. The id comes from the browser, so a share that's
+// DELETE ?id= removes one with its picture; PATCH moves saves between folders. The id comes from the browser, so a share that's
 // retried after a dropped connection lands once.
 const TYPES = ["image/webp", "image/jpeg", "image/png"];
 const MAX_BYTES = 4 * 1024 * 1024; // pictures are shrunk in the browser first; Vercel takes 4.5 MB
@@ -63,6 +63,22 @@ export async function DELETE(request: Request) {
   if (!UUID.test(id)) return Response.json({ error: "That save doesn't exist." }, { status: 404 });
   try {
     await g.store.removeSave(id);
+    return Response.json({ ok: true });
+  } catch (error) {
+    return serverError(error);
+  }
+}
+
+// PATCH { ids, folderId } moves saves into a folder, or back to their day pages with null.
+export async function PATCH(request: Request) {
+  const g = guard(request);
+  if ("error" in g) return g.error;
+  const body = (await request.json().catch(() => null)) as { ids?: unknown; folderId?: unknown } | null;
+  const ids = Array.isArray(body?.ids) ? body.ids.filter((x): x is string => typeof x === "string" && UUID.test(x)) : [];
+  const folderId = body?.folderId === null ? null : typeof body?.folderId === "string" && UUID.test(body.folderId) ? body.folderId : undefined;
+  if (!ids.length || ids.length > 500 || folderId === undefined) return Response.json({ error: "Those saves couldn't be moved." }, { status: 400 });
+  try {
+    await g.store.moveSaves(ids, folderId);
     return Response.json({ ok: true });
   } catch (error) {
     return serverError(error);

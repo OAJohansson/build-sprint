@@ -8,9 +8,10 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { SketchFilters } from "@/components/sketch-filters";
 import { AccessGate } from "@/components/access-gate";
 import { BoardCanvas, FALLBACK_PALETTE, LOGO_YELLOW, PILL_CREAM, SHAPES, tiledDraft, useBoardEditor, useTools, type Rect, type ShapeKind } from "@/components/board/engine";
-import { imageUrl, type Board, type BoardDoc, type BoardSummary, type Save } from "@/lib/library";
+import { imageUrl, type Board, type BoardDoc, type BoardSummary, type Folder, type Save } from "@/lib/library";
 import { cutOut } from "@/lib/cutout";
 import { paletteFrom } from "@/lib/palette";
 import { newBoardName } from "@/lib/season";
@@ -92,12 +93,7 @@ function BoardApp() {
 
   return (
     <div className="ed t-sketchbook1 grid h-dvh grid-cols-[264px_1fr] grid-rows-[64px_1fr]">
-      {/* The sketchy line: a little noise bends every border drawn with it. */}
-      <svg width="0" height="0" className="absolute" aria-hidden="true">
-        <filter id="pencil-line"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" /><feDisplacementMap in="SourceGraphic" scale="3.2" /></filter>
-        <filter id="wash-edge"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" seed="9" /><feDisplacementMap in="SourceGraphic" scale="9" /></filter>
-        <filter id="ink-bleed"><feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="7" /><feDisplacementMap in="SourceGraphic" scale="3" /></filter>
-      </svg>
+      <SketchFilters />
 
       {board && !picking ? (
         <Editor key={board.id} board={board} saves={saves} photos={photos} boards={boards} saveState={saveState}
@@ -140,6 +136,10 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
   // from there joins the board's tray. Older boards (no tray) show all saves.
   const [tray, setTray] = useState<string[] | undefined>(board.doc.tray);
   const [showAll, setShowAll] = useState(!board.doc.tray);
+  // All saves can be narrowed to one of the inbox's folders (owner, 23 Oct).
+  const [folders, setFolders] = useState<Folder[]>([]);
+  const [folderId, setFolderId] = useState("");
+  useEffect(() => { fetch("/api/folders").then((r) => (r.ok ? r.json() : null)).then((d) => d && setFolders(d.folders), () => {}); }, []);
   const trayRef = useRef(tray);
   useEffect(() => { trayRef.current = tray; }, [tray]);
   const editor = useBoardEditor(board.doc.pieces, (pieces) => {
@@ -195,6 +195,7 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
     : base;
   const byId = useMemo(() => new Map(saves.map((s) => [s.id, s])), [saves]);
   const shown = showAll || !tray ? photos : photos.filter((s) => tray.includes(s.id));
+  const listed = (showAll || !tray) && folderId ? shown.filter((s) => s.folderId === folderId) : shown;
 
   // Colours for shapes: the board's own palette, read from its photos, plus the pill's cream and
   // the logo's yellow.
@@ -263,8 +264,15 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
             <button className="ed-btn ed-tab" data-active={showAll ? "" : undefined} onClick={() => setShowAll(true)}><span>All saves</span></button>
           </div>
         )}
+        {(showAll || !tray) && folders.length > 0 && (
+          <select value={folderId} onChange={(e) => setFolderId(e.target.value)} aria-label="Show saves from"
+            className="mb-3 h-9 w-full rounded-md border border-black/20 bg-white/70 px-2 text-[16px]">
+            <option value="">Every save</option>
+            {folders.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
+          </select>
+        )}
         <div className="grid grid-cols-2 gap-3">
-          {shown.map((s, i) => (
+          {listed.map((s, i) => (
             <button key={s.id} type="button" draggable className="ed-thumb relative aspect-[3/4] shrink-0 overflow-hidden"
               style={{ ["--tilt" as string]: `${((i * 37) % 5) - 2}deg` }}
               onDragStart={(e) => e.dataTransfer.setData("text/selvedge-save", s.id)}

@@ -16,7 +16,12 @@ export type Save = {
   source: Source;
   title: string | null;
   createdAt: string;
+  /** The folder it was moved to, or null while it's on its day page. */
+  folderId: string | null;
 };
+
+/** A folder in the inbox: named by me, with colour notes on or off (owner, 23 Oct). */
+export type Folder = { id: string; name: string; colourNotes: boolean; createdAt: string };
 
 /** Where the picture of a save is served (the bucket is private; the server streams it). */
 export const imageUrl = (id: string) => `/api/photos?id=${id}`;

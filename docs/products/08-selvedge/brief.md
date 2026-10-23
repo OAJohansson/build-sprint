@@ -99,7 +99,9 @@ likeness later. Saving happens on the phone; boards are edited on the laptop, so
 
 1. **Capture:** installable web app in Android's share sheet, taking images and links into an
    inbox (links get their picture from the page's `og:image`; if that fails, I'm asked for a
-   screenshot); drag-and-drop bulk upload on the laptop. Same library on both devices.
+   screenshot); drag-and-drop bulk upload on the laptop. Same library on both devices. Inbox
+   (owner, 23 Oct): day pages by default, plus folders I make, name and rename; a save lives in
+   one place (a day page or a folder); colour notes per folder, on or off.
 2. **Boards by season:** several boards, each named by season ("Summer 2026", "Autumn 2026"), so
    I can see my taste change over time.
 3. **Board editor:** pick saves and the app tiles them edge to edge as a first draft, with the

@@ -1,6 +1,6 @@
 import "server-only";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { Board, BoardDoc, BoardSummary, Save, Source } from "@/lib/library";
+import type { Board, BoardDoc, BoardSummary, Folder, Save, Source } from "@/lib/library";
 
 // My saves and boards live in the shared Supabase project (supabase/schema.sql; decision 0021):
 // two tables and a private picture bucket. Only this server code holds the secret key. Without
@@ -19,6 +19,13 @@ export type Store = {
   readCutout(id: string): Promise<{ bytes: Uint8Array; type: string } | null>;
   writeCutout(id: string, image: { bytes: Uint8Array; type: string }): Promise<void>;
   removeCutout(id: string): Promise<void>;
+  /** Move saves into a folder, or back to their day pages with null. */
+  moveSaves(ids: string[], folderId: string | null): Promise<void>;
+  listFolders(): Promise<Folder[]>;
+  /** Create or update a folder by id (its name and colour notes). */
+  saveFolder(id: string, name: string, colourNotes: boolean): Promise<Folder>;
+  /** Delete a folder; its saves go back to their day pages. */
+  removeFolder(id: string): Promise<void>;
   listBoards(): Promise<BoardSummary[]>;
   getBoard(id: string): Promise<Board | null>;
   /** Create or update a board by id. Returns it as stored. */
@@ -36,7 +43,7 @@ function explain(error: DbError): string {
     return "The database refused. SUPABASE_SECRET_KEY must be the secret key (sb_secret_… or service_role), not the publishable key.";
   }
   if (error.code === "42P01" || error.code === "PGRST205" || /does not exist|could not find the table/i.test(error.message)) {
-    return "The selvedge tables are missing. Run apps/08-selvedge/supabase/schema.sql in the Supabase SQL Editor.";
+    return "The selvedge tables are missing or out of date. Run apps/08-selvedge/supabase/schema.sql in the Supabase SQL Editor.";
   }
   if (/bucket not found/i.test(error.message)) {
     return "The selvedge bucket is missing. Run apps/08-selvedge/supabase/schema.sql in the Supabase SQL Editor.";
@@ -47,8 +54,10 @@ function explain(error: DbError): string {
   return `Database error: ${error.message}${error.code ? ` (${error.code})` : ""}`;
 }
 
-type SaveRow = { id: string; image_path: string | null; aspect: number | null; link: string | null; source: Source; title: string | null; created_at: string };
-const toSave = (r: SaveRow): Save => ({ id: r.id, hasImage: !!r.image_path, aspect: r.aspect, link: r.link, source: r.source, title: r.title, createdAt: r.created_at });
+type SaveRow = { id: string; image_path: string | null; aspect: number | null; link: string | null; source: Source; title: string | null; created_at: string; folder_id: string | null };
+const toSave = (r: SaveRow): Save => ({ id: r.id, hasImage: !!r.image_path, aspect: r.aspect, link: r.link, source: r.source, title: r.title, createdAt: r.created_at, folderId: r.folder_id });
+type FolderRow = { id: string; name: string; colour_notes: boolean; created_at: string };
+const toFolder = (r: FolderRow): Folder => ({ id: r.id, name: r.name, colourNotes: r.colour_notes, createdAt: r.created_at });
 type BoardRow = { id: string; name: string; doc: BoardDoc; updated_at: string };
 const toBoard = (r: BoardRow): Board => ({ id: r.id, name: r.name, doc: r.doc, updatedAt: r.updated_at });
 
@@ -57,7 +66,8 @@ const EXT: Record<string, string> = { "image/webp": "webp", "image/jpeg": "jpg",
 function supabaseStore(db: SupabaseClient): Store {
   const check = (error: DbError | null) => { if (error) throw new StoreError(explain(error)); };
   const bucket = db.storage.from("selvedge");
-  const SAVE_COLS = "id, image_path, aspect, link, source, title, created_at";
+  const SAVE_COLS = "id, image_path, aspect, link, source, title, created_at, folder_id";
+  const FOLDER_COLS = "id, name, colour_notes, created_at";
   return {
     async listSaves() {
       const { data, error } = await db.from("selvedge_saves").select(SAVE_COLS).order("created_at", { ascending: false });
@@ -104,6 +114,24 @@ function supabaseStore(db: SupabaseClient): Store {
       const { error } = await bucket.remove([`cutouts/${id}.webp`]);
       check(error);
     },
+    async moveSaves(ids, folderId) {
+      const { error } = await db.from("selvedge_saves").update({ folder_id: folderId }).in("id", ids);
+      check(error);
+    },
+    async listFolders() {
+      const { data, error } = await db.from("selvedge_folders").select(FOLDER_COLS).order("created_at", { ascending: true });
+      check(error);
+      return (data as FolderRow[]).map(toFolder);
+    },
+    async saveFolder(id, name, colourNotes) {
+      const { data, error } = await db.from("selvedge_folders").upsert({ id, name, colour_notes: colourNotes }).select(FOLDER_COLS).single();
+      check(error);
+      return toFolder(data as FolderRow);
+    },
+    async removeFolder(id) {
+      const { error } = await db.from("selvedge_folders").delete().eq("id", id); // saves fall back to null
+      check(error);
+    },
     async listBoards() {
       const { data, error } = await db.from("selvedge_boards").select("id, name, updated_at").order("updated_at", { ascending: false });
       check(error);
@@ -130,15 +158,16 @@ function supabaseStore(db: SupabaseClient): Store {
 
 function memoryStore(): Store {
   type Img = { bytes: Uint8Array; type: string };
-  const g = globalThis as unknown as { __selvedgeMem?: { saves: Map<string, Save>; images: Map<string, Img>; cutouts?: Map<string, Img>; boards: Map<string, Board> } };
-  type Mem = { saves: Map<string, Save>; images: Map<string, Img>; cutouts?: Map<string, Img>; boards: Map<string, Board> };
+  type Mem = { saves: Map<string, Save>; images: Map<string, Img>; cutouts?: Map<string, Img>; folders?: Map<string, Folder>; boards: Map<string, Board> };
+  const g = globalThis as unknown as { __selvedgeMem?: Mem };
   const mem: Mem = (g.__selvedgeMem ??= { saves: new Map(), images: new Map(), boards: new Map() });
   const cutouts = (mem.cutouts ??= new Map<string, Img>());
+  const folders = (mem.folders ??= new Map<string, Folder>());
   return {
     async listSaves() { return [...mem.saves.values()].sort((a, b) => b.createdAt.localeCompare(a.createdAt)); },
     async addSave(s) {
       if (s.image) mem.images.set(s.id, s.image);
-      const save: Save = { id: s.id, hasImage: !!s.image, aspect: s.aspect, link: s.link, source: s.source, title: s.title, createdAt: new Date().toISOString() };
+      const save: Save = { id: s.id, hasImage: !!s.image, aspect: s.aspect, link: s.link, source: s.source, title: s.title, createdAt: new Date().toISOString(), folderId: mem.saves.get(s.id)?.folderId ?? null };
       mem.saves.set(s.id, save);
       return save;
     },
@@ -147,6 +176,20 @@ function memoryStore(): Store {
     async readCutout(id) { return cutouts.get(id) ?? null; },
     async writeCutout(id, image) { cutouts.set(id, image); },
     async removeCutout(id) { cutouts.delete(id); },
+    async moveSaves(ids, folderId) {
+      if (folderId && !folders.has(folderId)) throw new StoreError("That folder doesn't exist.");
+      for (const id of ids) { const s = mem.saves.get(id); if (s) mem.saves.set(id, { ...s, folderId }); }
+    },
+    async listFolders() { return [...folders.values()].sort((a, b) => a.createdAt.localeCompare(b.createdAt)); },
+    async saveFolder(id, name, colourNotes) {
+      const folder = { id, name, colourNotes, createdAt: folders.get(id)?.createdAt ?? new Date().toISOString() };
+      folders.set(id, folder);
+      return folder;
+    },
+    async removeFolder(id) {
+      folders.delete(id);
+      for (const s of mem.saves.values()) if (s.folderId === id) mem.saves.set(s.id, { ...s, folderId: null });
+    },
     async listBoards() {
       return [...mem.boards.values()].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).map(({ id, name, updatedAt }) => ({ id, name, updatedAt }));
     },

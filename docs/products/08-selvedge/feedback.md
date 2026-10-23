@@ -12,3 +12,6 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 6 | Owner, first board | Crop doesn't really crop; it needs to be a proper crop | fixed (a real crop: handles on every side, slide inside, Reset) |
 | 7 | Owner, first board | Removing the background is a separate feature from cropping; both are needed | fixed (automatic, in the browser; hand fixing in the backlog) |
 | 8 | Owner, first live cut-outs (23 Oct) | "Not perfect, but workable": a ghosted forearm, a car and grey bits left, part of a chair kept | fixed (tuned clean-up; "Cut out more carefully" with BEN2) |
+| 9 | Owner, inbox directions (23 Oct) | Day pages, plus folders I make and rename; a moved photo leaves its day page | fixed (Days and Folders, Select then Move to) |
+| 10 | Owner, inbox directions | Colour notes, but only in folders, and switchable | fixed (a switch per folder) |
+| 11 | Owner, inbox directions | Remove the yellow tape on the prints: the eye goes to the tape, not the clothes | fixed |

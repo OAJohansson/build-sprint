@@ -15,7 +15,37 @@ The practices are grounded in people who are great at this craft; who said what,
 matters, is in [Product craft](product-craft.md). Claude is my product coach as well as my
 builder: at each step it names the practice, makes me
 take the product decisions, challenges solution-first thinking, and explains the technical
-choices in plain words.
+choices in plain words. How many of those decisions come to me depends on the mode (step 0).
+
+## 0. Pick the mode (at kickoff)
+
+One pipeline, a dial with three settings (decision 0026). The steps below are the same in every
+mode; the mode decides **who makes which decision, and when I'm asked**. It goes on the card as
+`mode:` and can be turned down mid-product (Founder → Streamlined → Learning), never up.
+
+| Mode | When | I decide | I'm asked |
+| --- | --- | --- | --- |
+| **Learning** | I want the reps | Almost everything, coached | As things come up |
+| **Streamlined** | Most days | The learning decisions | At four gates, one decision sheet each |
+| **Founder** | A good idea I want live and tested | The kickoff pack and evals | Kickoff and the final review |
+
+Three kinds of decision:
+
+- **Learning:** problem, user, jobs, riskiest assumption, MVP cut, design direction, scope
+  changes, architecture and real technical choices. Mine in Learning and Streamlined; in Founder
+  I set them in the kickoff pack and the PM decides the rest inside it, logged.
+- **Toil:** copy, small UI fixes, minor bugs, naming. Claude decides in Streamlined and Founder
+  (default-with-veto, logged as T-numbers in `decisions.md`); I can veto any at any time.
+- **Ops:** branches, worktrees, commits, merges and conflicts, deploys, env keys, lockfile.
+  **Never mine, in any mode.** Claude only comes to me for my account or money (a login, a paid
+  plan, a key only I can create).
+
+The gates (Streamlined): **kickoff**, **design pick**, **first working version**, **final
+review**. Between gates Claude doesn't stop: it queues learning questions for the next gate and
+builds on the most reversible option, marked provisional in the journal. Founder mode: I write
+`kickoff.md` and `evals.md` (owner-only checks kept outside the repo), the PM session runs the
+squad in `.claude/agents/`, and I get a PR, a preview link and an eval report. Formats for the
+decision sheet, toil entries and the PM's steps are in decision 0026.
 
 ## 1. Discover and frame (≈60 min, before any code)
 
@@ -24,13 +54,19 @@ Fall in love with the problem, not the solution. Write it all in the product's *
 hour, not a day. Names in brackets are where each practice comes from; see
 [Product craft](product-craft.md).
 
-- Pick a problem from [Problems to solve](ideas.md), then `pnpm new <slug> "Display Title"`. This creates
-  the app, the card, the product folder (with an empty brief) and the README row.
-- **Ship the empty starter straight away** (04 Mallow): merge the scaffold and run
+- Pick a problem from [Problems to solve](ideas.md), then
+  `pnpm new <slug> "Display Title" --mode learning|streamlined|founder`. This creates the app, the
+  card (with `mode:`), the product folder (with an empty brief) and the README row; in Streamlined
+  and Founder also `kickoff.md`, `evals.md` and the decision log `decisions.md`.
+- **Ship the empty starter straight away** (04 Mallow): Claude merges the scaffold and runs
   `pnpm ship NN-slug` in the first hour, so every later change is seen on a real phone.
-- **Starting while another product wraps up** (07 Six AM): work in a worktree cut from the latest
-  `main`, keep a "to carry over" list in the journal for shared pages, and check `main` before
-  holding them back; the other product may already be merged.
+- **One worktree and one branch per product**, cut from the latest `main` (07 Six AM, 08
+  Selvedge). A spike is a commit on that branch, not a branch of its own. Shared pages are written
+  once, at wrap-up, from the journal's **To carry over** list (step 4).
+- **In Founder mode** this whole step is the kickoff pack I write (`kickoff.md`, from
+  `docs/operating-modes/kickoff-TEMPLATE.md`) plus `evals.md`; the PM turns it into the brief,
+  persona and test plan with the `discovery` agent. **In Streamlined** Claude drafts the brief
+  and I decide it on one decision sheet: the **kickoff gate**.
 - **Problem.** One or two sentences: who has it, when, and what it costs them today. No features.
   *(Perri: outcomes over outputs.)*
 - **Who.** A quick persona: one specific person, not a market. Full version in
@@ -104,7 +140,10 @@ hour, not a day. Names in brackets are where each practice comes from; see
   for AI tells and rewrite the copy by hand. Judge them against the success signals, not just looks. Pick
   one or a mix, and note why in `journal.md`. When the chosen variant becomes the real app, list
   the behaviours it brings along (e.g. "you can only edit at the end") as decisions for the owner.
-  *(Cagan: prototypes over documents.)*
+  *(Cagan: prototypes over documents.)* In Streamlined this is the **design-pick gate**: the three
+  screenshots and the critic's scores on one decision sheet (with one preview link if the
+  directions need a phone to judge). In Founder the PM picks against the kickoff pack's feel
+  references and logs why.
 - Fill in **user**, **problem** and **bet** (one line each) on the card `docs/products/NN-slug.md`.
   The bet is the smallest thing that could solve the problem by tonight. Cut everything else.
 
@@ -138,7 +177,12 @@ discoverable with one quiet cue (a muted badge at 0) rather than a sentence expl
 - Add UI pieces with `pnpm dlx shadcn@latest add <component>` from inside the app folder.
 - Polish with the `emil-design-eng` skill (press feedback, timing, when not to animate); `animate`
   only if a screen needs motion; `dataviz` for charts.
-- Commit and push often. Pushes to `main` deploy automatically once the Vercel project exists.
+- Commit and push the product's branch often (branch pushes cost no deploys). Claude opens the PR
+  and **merges it itself once the `checks` action is green** (standing approval, decision 0026),
+  in batches of about one or two merges a day; no green run means it asks me. Pushes to `main`
+  deploy automatically once the Vercel project exists.
+- **First working version** (the top job works end to end): in Streamlined this is a gate, with a
+  decision sheet of anything that changes the cut plus the toil log so far.
 - **Re-cut on every scope widening.** When a request adds anything past the stop line, name it
   before building: cut something, swap it for something, or re-bet the appetite out loud. Log the
   choice in `journal.md`. *(05 Inkling: "a few hours" quietly became the whole app.)*
@@ -152,22 +196,29 @@ discoverable with one quiet cue (a muted badge at 0) rather than a sentence expl
 
 ## 3. Ship (≈5 min, do it early, e.g. at lunch)
 
-First deploy of a new app, one command (to-do #8, from 03 Scribble's retro):
+Ops, so Claude does all of it in every mode (decision 0026). First deploy of a new app, one
+command (to-do #8, from 03 Scribble's retro):
 
 1. Merge the scaffold to `main` (Vercel builds from there).
-2. Put the app's keys in `apps/NN-slug/.env.local` (copy from the previous app; `.env.example`
-   lists what's needed). Git ignores this file.
-3. Run **`pnpm ship NN-slug`** yourself (`--dry-run` first if you like). It creates the Vercel
-   project named after the product with Root Directory `apps/NN-slug`, connects GitHub, sets the
-   env vars for Production and Preview, deploys `main`, waits until it's live and writes the URL
-   into the card. Keys go from the file straight to Vercel and are never printed.
-4. Commit the card. Each app's `vercel.json` skips builds when its folder didn't change (not on
+2. Run **`pnpm ship NN-slug`** (`--dry-run` first if you like). It fills `apps/NN-slug/.env.local`
+   from the root secrets file (`pnpm env-bootstrap`, using `.env.example` as the list of keys),
+   creates the Vercel project named after the product with Root Directory `apps/NN-slug`,
+   connects GitHub, sets the env vars for Production and Preview, deploys `main`, waits until it's
+   live and writes the URL into the card. Keys go from the files straight to Vercel and are never
+   printed.
+3. Commit the card. Each app's `vercel.json` skips builds when its folder didn't change (not on
    `website`, if it reads `docs/` and must rebuild when they change).
    Apps deploy from `main` only: branch pushes make no deployments, because even cancelled ones
    count toward the free plan's 100 a day (decision 0016). Push and merge in batches.
 
-One-time on a new machine: `vercel login`. To change a key later: edit `.env.local`, run
-`pnpm ship NN-slug` again (it updates the project and redeploys).
+**A preview for my big checks only:** `pnpm ship NN-slug --preview` deploys the pushed branch
+once as a preview (one deployment, not production) and prints the link. Used for the Founder
+final review, and the Streamlined design pick (if needed) and final review; in Learning only
+when I ask.
+
+One-time *(me)*: `vercel login` on a new machine, and the root `.env.secrets.local` with the
+shared keys (`KEY=value` lines; an app's own values under a `[NN-slug]` heading). To change a key
+later: edit the secrets file, `pnpm env-bootstrap NN-slug --force`, then `pnpm ship NN-slug`.
 
 Deploying in the morning means the rest of the day is iterating on a live app, which removes most of the last-minute risk.
 
@@ -185,6 +236,9 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
   straight away, and prioritise the rest together.
 - Triage rule for leaving a product: fix anything that shows wrong numbers or looks broken if it's
   quick; park the rest in `backlog.md` with a "start here" note.
+- **Final review** (every mode): in Streamlined a decision sheet plus the full decision log; in
+  Founder the PR, a preview link and the eval report (every agent-checkable check with pass/fail
+  and evidence, run by graders, never by the builder), then I run my owner-only checks.
 - Full method: [`user-testing/README.md`](user-testing/README.md).
 
 ## 4. Wrap up (≈30 min)
@@ -193,7 +247,13 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
   the problem? Honest is more useful than good.
 - **Retro** in `docs/products/NN-slug/learnings.md`: numbers (planned vs actual time, PRs, bugs and
   who found them), Keep / Change / Try, what surprised you, and one thing learned for each goal
-  (A product, B product craft, C technical).
+  (A product, B product craft, C technical). In Streamlined and Founder, read the decision log:
+  which defaults would I have made differently, and which learning decisions turned out to matter?
+  That tunes the dial for the next product.
+- **Carry over to the shared pages, once:** merge `main` into the product's branch, then write the
+  journal's **To carry over** list (knowledge bank entries, problems, learnings, process changes)
+  into the shared files in a single commit. Shared files are only touched here, so parallel
+  products stop conflicting on them.
 - **Knowledge bank:** add any general concept learned during the product (not product-specific),
   with quiz questions, to [`knowledge-bank.md`](knowledge-bank.md). Do a few minutes of the
   notebook's Quiz at the start of each day.
@@ -212,7 +272,8 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 
 - [ ] Live URL works on phone and desktop
 - [ ] Brief written before code, with its feature drill-down before design and its success check filled in at the end
-- [ ] Write-up has user, problem, bet, url, learned and `status: shipped`
+- [ ] Write-up has mode, user, problem, bet, url, learned and `status: shipped`
+- [ ] Streamlined and Founder: decision log reviewed in the retro; Founder: eval report and owner-only checks done
 - [ ] README table and notebook are up to date
 - [ ] A simulated user test has run, and its top findings are fixed or logged
 - [ ] Retro written, and its process changes made before the next product starts

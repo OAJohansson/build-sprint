@@ -1,9 +1,18 @@
+import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
 export const ROOT = path.resolve(import.meta.dirname, "..");
 export const APPS_DIR = path.join(ROOT, "apps");
 export const PRODUCTS_DIR = path.join(ROOT, "docs/products");
+
+// The root secrets file (decision 0026) is git-ignored, so it exists only in the main checkout;
+// worktrees find it there through git's shared directory.
+export function secretsPath() {
+  const r = spawnSync("git", ["rev-parse", "--path-format=absolute", "--git-common-dir"], { cwd: ROOT, encoding: "utf8" });
+  const mainRoot = r.status === 0 ? path.dirname(r.stdout.trim()) : ROOT;
+  return [ROOT, mainRoot].map((d) => path.join(d, ".env.secrets.local")).find((f) => fs.existsSync(f)) ?? path.join(mainRoot, ".env.secrets.local");
+}
 
 // Minimal frontmatter reader (flat `key: value` and `[a, b]` lists) so the
 // scripts run on a fresh clone before `pnpm install`.

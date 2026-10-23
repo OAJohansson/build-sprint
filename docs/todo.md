@@ -11,7 +11,8 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 - [ ] Selvedge: the AI features. First the style read over a board (palette, silhouettes, pieces, style names, brands with search links), tested against the brief's answer key; then the hand-drawn character (decision 0022, proposed)
 - [ ] Selvedge: put it in the Mac Dock (Chrome: the install icon in the address bar; Safari: File → Add to Dock) *(me)*
-- [ ] Before product 9: finish the operating modes (decision 0026), deferred until Selvedge shipped: the PLAYBOOK and AGENTS.md updates, `pnpm new` wiring, the ship and deploy rule changes; product 9 runs in Founder mode
+- [ ] Before product 9: create `.env.secrets.local` at the repo root with the shared keys (`KEY=value`; an app's own under `[NN-slug]`), so Claude can ship without asking *(me)*
+- [ ] Product 9 in Founder mode: write the kickoff pack and evals, keep the owner-only checks outside the repo *(me)*
 - [ ] Six AM: in the main folder, switch to `main`, pull, copy `.env.local` into `apps/07-six-am/`, then `pnpm ship 07-six-am` *(me)*
 - [ ] Six AM: the skipped checks on the live URL (`break-ui`, guidelines, simulated user test, a second device); see its backlog
 - [ ] Merge the Inkling pull request in kids-app so the new app and `/demo` go live at inkling-journal.vercel.app *(me)*
@@ -31,6 +32,7 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 ## Done
 
+- [x] Operating modes rolled out (decision 0026): playbook step 0, AGENTS.md, `pnpm new --mode`, `pnpm ship --preview`, shared docs at wrap-up (23 Oct)
 - [x] Folio shipped as product 06 (wrap-up on main)
 - [x] Six AM shipped as product 07: timeline, 48 synthesised loops, saving to Supabase (19 Oct)
 - [x] Mallow shipped: mallow-omega.vercel.app (12 Oct)

@@ -1,4 +1,4 @@
-// Usage: pnpm ship <NN-slug> [--dry-run] [--name <project-name>] [--scope <team>]
+// Usage: pnpm ship <NN-slug> [--dry-run] [--preview] [--name <project-name>] [--scope <team>]
 //
 // First deploy of a product in one command (to-do #8, process change from 03 Scribble):
 //   1. creates the Vercel project: named after the product, Root Directory apps/NN-slug, Next.js,
@@ -7,12 +7,16 @@
 //   2. deploys `main` to production and waits until it's live
 //   3. writes the .vercel.app URL into the product's card and refreshes the README
 //
-// Run it yourself after a one-time `vercel login`. Env values go straight from the file to Vercel
-// on stdin and are never printed, so keys don't pass through anyone else.
+// --preview: one preview deployment of the current, pushed branch for the owner's big checks
+// (decision 0026); needs the project to exist, changes nothing else and prints the link.
+//
+// Ops, so Claude runs it (decision 0026), after the owner's one-time `vercel login`. It first fills
+// .env.local from the root .env.secrets.local (pnpm env-bootstrap). Env values go straight from the
+// files to Vercel on stdin and are never printed.
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { ROOT, APPS_DIR, PRODUCTS_DIR } from "./products.mjs";
+import { ROOT, APPS_DIR, PRODUCTS_DIR, secretsPath } from "./products.mjs";
 import { syncReadme } from "./sync-readme.mjs";
 
 const REPO = "OAJohansson/build-sprint";
@@ -22,6 +26,7 @@ const flag = (name) => {
   return i >= 0 ? args[i + 1] : undefined;
 };
 const dryRun = args.includes("--dry-run");
+const preview = args.includes("--preview");
 const slug = args.find((a) => /^\d{2}-[a-z0-9-]+$/.test(a));
 const scope = flag("--scope");
 
@@ -66,6 +71,8 @@ const who = spawnSync("vercel", ["whoami", ...(scope ? ["--scope", scope] : [])]
 if (who.status !== 0) fail("Not logged in to Vercel. Run `vercel login` once, then try again.");
 console.log(`  logged in as ${who.stdout.trim().split("\n").pop()}`);
 
+if (preview) await shipPreview();
+
 // 2. The app must be on GitHub's main, because Vercel builds from there.
 step(`Checking that ${rootDirectory} is on GitHub's main`);
 spawnSync("git", ["fetch", "-q", "origin", "main"], { cwd: ROOT });
@@ -73,7 +80,15 @@ const onMain = spawnSync("git", ["ls-tree", "-d", "origin/main", rootDirectory],
 if (!onMain.stdout.trim()) fail(`${rootDirectory} isn't on origin/main yet. Merge the scaffold first, then ship.`);
 console.log("  yes");
 
-// 3. Env vars from .env.local; names only are ever printed.
+// 3. Env vars from .env.local, filled first from the root secrets file; names only are ever printed.
+if (fs.existsSync(secretsPath()) && fs.existsSync(path.join(appDir, ".env.example"))) {
+  step("Filling .env.local from .env.secrets.local");
+  const filled = spawnSync("node", [path.join(ROOT, "scripts/env-bootstrap.mjs"), slug, ...(dryRun ? ["--dry-run"] : [])], {
+    cwd: ROOT,
+    stdio: "inherit",
+  });
+  if (filled.status !== 0) fail("pnpm env-bootstrap failed (see above).");
+}
 const envFile = path.join(appDir, ".env.local");
 const env = [];
 if (fs.existsSync(envFile)) {
@@ -133,19 +148,7 @@ if (existing.ok) {
 
 // 5. Deploy main and wait.
 step("Deploying main to production (a minute or two)");
-const [org, repo] = REPO.split("/");
-const deploy = vercelApi("/v13/deployments", {
-  method: "POST",
-  body: { name, project: projectId, target: "production", gitSource: { type: "github", org, repo, ref: "main" } },
-});
-if (!deploy.ok) fail(`Couldn't start the deployment: ${deploy.data?.error?.message ?? deploy.stderr}`);
-let state = deploy.data.readyState;
-for (let i = 0; i < 90 && !["READY", "ERROR", "CANCELED"].includes(state); i++) {
-  await new Promise((r) => setTimeout(r, 5000));
-  state = vercelApi(`/v13/deployments/${deploy.data.id}`).data?.readyState ?? state;
-  process.stdout.write(".");
-}
-console.log(` ${state}`);
+const { state } = await deployAndWait(projectId, "main", "production");
 // shortcut: a key-only change is cancelled by the skip rule (decision 0016), and the API can't skip
 // it, so this prints the dashboard steps; automate it if key-only changes become frequent.
 if (state === "CANCELED") {
@@ -174,3 +177,46 @@ if (url && fs.existsSync(card)) {
   }
 }
 console.log("\nDone. Pushes to main now deploy this app; other apps skip builds via their vercel.json.\n");
+
+/** Starts a deployment of a GitHub ref (production when `target` is set, else a preview) and waits. */
+async function deployAndWait(projectId, ref, target) {
+  const [org, repo] = REPO.split("/");
+  const deploy = vercelApi("/v13/deployments", {
+    method: "POST",
+    body: { name, project: projectId, ...(target ? { target } : {}), gitSource: { type: "github", org, repo, ref } },
+  });
+  if (!deploy.ok) fail(`Couldn't start the deployment: ${deploy.data?.error?.message ?? deploy.stderr}`);
+  let state = deploy.data.readyState;
+  for (let i = 0; i < 90 && !["READY", "ERROR", "CANCELED"].includes(state); i++) {
+    await new Promise((r) => setTimeout(r, 5000));
+    state = vercelApi(`/v13/deployments/${deploy.data.id}`).data?.readyState ?? state;
+    process.stdout.write(".");
+  }
+  console.log(` ${state}`);
+  return { state, url: deploy.data.url };
+}
+
+/** --preview: one preview of the pushed product branch for the owner's big checks, then stop. */
+async function shipPreview() {
+  const git = (...a) => spawnSync("git", a, { cwd: ROOT, encoding: "utf8" }).stdout.trim();
+  const branch = git("branch", "--show-current");
+  if (!branch || branch === "main") fail("--preview deploys a product branch: switch to it first (main deploys by itself).");
+  step(`Checking that ${branch} is pushed`);
+  git("fetch", "-q", "origin", branch);
+  if (git("rev-parse", "HEAD") !== git("rev-parse", `origin/${branch}`)) fail(`Push ${branch} first: the preview builds what's on GitHub.`);
+  console.log("  yes");
+  const project = vercelApi(`/v9/projects/${name}`);
+  if (!project.ok) fail(`No Vercel project "${name}" yet: run pnpm ship ${slug} once after merging the scaffold.`);
+  if (dryRun) {
+    console.log(`\nDry run. Would deploy ${branch} once as a preview of "${name}".`);
+    process.exit(0);
+  }
+  step(`Deploying ${branch} as a preview (a minute or two; one of the day's 100 deployments)`);
+  const { state, url } = await deployAndWait(project.data.id, branch);
+  if (state !== "READY") {
+    const why = state === "CANCELED" ? ` (the skip rule: nothing in ${rootDirectory} changed on this branch)` : "";
+    fail(`The preview ended as ${state}${why}. See the Vercel dashboard (project ${name}).`);
+  }
+  console.log(`\nPreview: https://${url}\n`);
+  process.exit(0);
+}

@@ -1,7 +1,7 @@
 # 0026 — Operating modes: one pipeline, three settings
 
 - **Date:** 2026-10-23
-- **Status:** accepted (the owner calls are decided; the deferred pieces below are not)
+- **Status:** accepted; rolled out 23 Oct, first used on product 9
 
 ## Context
 
@@ -164,17 +164,23 @@ The squad's agents live in `.claude/agents/`: `discovery.md`, `designer.md`,
      review.
    - Learning: only when the owner asks.
 
-## Open: deferred
+## Rolled out after 08 Selvedge (23 Oct)
 
-Deferred until 08 Selvedge ships, because Selvedge sessions have these files open:
+The pieces deferred while Selvedge had these files open:
 
-- Changes to `pnpm ship`, the deploy rules and the branch rules.
-- `docs/PLAYBOOK.md` (the gates per step) and `AGENTS.md` (the mode rules and the PM's
-  behaviour).
-- Wiring the kickoff-pack and evals templates, `mode:` and `decisions.md` into `pnpm new` and
-  `docs/products/TEMPLATE.md`.
-- Moving where shared docs (`knowledge-bank.md`, `learnings.md`, `ideas.md`, `README.md`) are
-  written, so parallel sessions stop conflicting on them.
+- **Playbook** step 0 (the dial, the kinds of decision, the gates) and a gate note at each step;
+  **`AGENTS.md`** "Operating modes" (the rules per mode and the PM's behaviour) and "Parallel
+  sessions and ops".
+- **`pnpm new --mode`** writes `mode:` on the card (default `learning`) and, for Streamlined and
+  Founder, creates `kickoff.md`, `evals.md` (part 1 only; part 2 never enters the repo) and
+  `decisions.md`. The notebook shows them as Kickoff pack, Evals and Decisions sub-pages.
+- **Ops rules:** one worktree and one branch per product (a spike is a commit); Claude merges on a
+  green `checks` run; `pnpm ship` fills `.env.local` from `.env.secrets.local` first and Claude
+  runs it; `pnpm ship NN-slug --preview` makes the one deliberate preview.
+- **Shared docs written once:** during a product, entries for the knowledge bank, problems,
+  learnings and the playbook go under `## To carry over` at the top of the journal, and are
+  written into the shared files in one commit at wrap-up, after merging `main`. `README.md` is
+  generated, so a conflict is solved by taking `main`'s and running `pnpm sync`.
 
 ## Alternatives considered
 

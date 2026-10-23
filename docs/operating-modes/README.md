@@ -11,5 +11,5 @@ top of the brief and the user-testing templates.
   checks. Its second part, the owner-only checks, is copied somewhere outside the repo and never
   committed.
 
-Not yet wired into `pnpm new` (deferred until 08 Selvedge ships): copy the templates by hand for
-now.
+`pnpm new <slug> "Title" --mode streamlined|founder` copies both (part 1 of the evals only) and
+adds the decision log, `decisions.md`.

@@ -11,22 +11,68 @@ The apps use Next.js 16, which has breaking changes from older versions (async `
 ## Repo rules
 
 - **pnpm only.** Never npm or yarn.
-- **New product = `pnpm new <slug> "Title"`.** Never copy folders by hand. The script numbers the
-  day, fills the template and creates the write-up.
+- **New product = `pnpm new <slug> "Title" --mode <learning|streamlined|founder>`.** Never copy
+  folders by hand. The script numbers the day, fills the template and creates the write-up.
 - Apps are self-contained: no shared packages, no cross-app imports. Improvements meant for future
   products go into `templates/next-starter`.
 - Data goes in localStorage (`useLocalStorage`) unless the product genuinely needs a backend. If
   it does, record why in the product write-up.
 - Keep each app deployable on its own from `apps/NN-slug` (Vercel Root Directory).
 
-## Parallel sessions
+## Operating modes (decision 0026)
 
-- Each session works in its own worktree and branch, cut from the latest `origin/main`. Never
-  edit in the main checkout while another session is working there.
-- Touch only your own files (`apps/NN-slug`, `docs/products/NN-slug*`). Shared files
-  (`docs/knowledge-bank.md`, `docs/ideas.md`, `docs/learnings.md`, `README.md`, lockfile) come
-  last: merge `main` into your branch first, then add to them.
-- Merge or open the PR the same day; a branch that lives for days drifts from `main`.
+Read `mode:` on the product's card first (no `mode:` means learning). Every decision is one of
+three kinds; who makes it depends on the mode:
+
+- **Learning** (problem, user, jobs, riskiest assumption, MVP cut, design direction, scope
+  changes, architecture and real technical choices): ask the owner. In Learning, as it comes up;
+  in Streamlined, queue it for the next gate and keep building on the most reversible option,
+  marked provisional in the journal (stop early only if the next step depends on it); in
+  Founder, the kickoff pack decides it, or you decide inside the pack's appetite and no-gos and
+  log it as an L-number.
+- **Toil** (copy, small UI fixes, minor bugs, naming): in Learning ask; in Streamlined and
+  Founder decide, do it, and log one line as a T-number in `docs/products/NN-slug/decisions.md`.
+  "Veto T7" means undo it at once and note it; three vetoes of one kind make that kind learning
+  for the rest of the product.
+- **Ops** (branches, worktrees, commits, pushes, merges and conflicts, deploys, env keys,
+  lockfile): **yours in every mode. Never ask the owner about ops**; report only what needs their
+  account or money. When unsure of the kind: learning in Learning and Streamlined, your logged
+  call in Founder.
+
+Streamlined gates: kickoff, design pick, first working version, final review. One decision sheet
+per gate (format in decision 0026), each question with a recommendation, its reason and the
+practice behind it, plus the toil T-numbers since the last gate; copy it into `journal.md`.
+
+**Founder mode: you are the PM.** The main session, not a subagent: you hold `kickoff.md` and
+`evals.md`, own the plan, the decision log and the ops, and are the only one who talks to the
+owner. Run the squad in `.claude/agents/` one at a time, in playbook order: `discovery` →
+`designer` (scored by `design-critic`) → `full-stack-engineer` → `user-tester` and, for AI or
+data products, `data-evals` → fixes → re-check. **Whoever builds something never grades it**:
+graders get the artefact and the checks, not the builder's reasoning, and you report their
+results, not your opinion. Stop for the owner only if the pack contradicts itself or leaves the
+riskiest assumption untestable. Never ask for or read the owner-only checks. Deliver a PR, one
+preview link and an eval report (each agent-checkable check with pass/fail and evidence, the
+critic's score, the tester's numbers, the guardrails, the decision log, what you skipped).
+
+## Parallel sessions and ops
+
+- Each product has **one worktree and one branch**, cut from the latest `origin/main`; a spike is
+  a commit on it, not another branch. Never edit in the main checkout while another session is
+  working there.
+- Touch only your own files (`apps/NN-slug`, `docs/products/NN-slug*`). **Shared files**
+  (`docs/knowledge-bank.md`, `docs/ideas.md`, `docs/learnings.md`, `docs/PLAYBOOK.md`) are written
+  once, at wrap-up: until then, collect what belongs there under `## To carry over` at the top of
+  the product's journal; at wrap-up merge `main` into your branch, then write them in one commit.
+  (A session whose task *is* a shared page, like a process change, edits it directly.)
+- `README.md` is generated: on a conflict, take `main`'s and run `pnpm sync`; never hand-merge it.
+- **Merging is yours** (standing approval, decision 0026): open the PR, and merge it yourself once
+  the `checks` action is green. No green run, or checks failing for a reason you can't fix: ask
+  the owner. Batch merges (about once or twice a day) because each costs deploys (decision 0016),
+  and merge the same day; a branch that lives for days drifts from `main`.
+- **Deploys and keys are yours:** `pnpm ship NN-slug` (it fills `.env.local` from the root
+  `.env.secrets.local` first; never print or paste key values). Previews only for the owner's big
+  checks, with `pnpm ship NN-slug --preview`: Founder final review; Streamlined design pick (if a
+  phone is needed to judge) and final review; Learning only when asked.
 - **Notes are only safe once committed.** Commit `docs/` changes at each step, not only at the
   end, and push the branch (branch pushes cost no deploys, decision 0016), so nothing is lost if
   a worktree is cleaned up.
@@ -53,7 +99,8 @@ The owner's goals are in the playbook ("Why I'm doing this"): build good product
 product craft, and grow technically. Act as their product coach as well as their builder: name
 the practice behind each step (and where it comes from), ask them to make the product calls
 instead of making them silently, push back on solution-first thinking, and explain technical
-choices briefly in plain words.
+choices briefly in plain words. Which calls go to them, and when, follows the mode (above): in
+Streamlined the coaching lives in the decision sheets, in Founder in the decision log's reasons.
 - At the feature drill-down (playbook step 1, after the MVP and before design), list the product's
   objects and pre-fill the brief's table for each across lifecycle, connections, screen states
   and trust, with your call (MVP / Later / No) and a one-line reason per row. Ask the owner to
@@ -94,10 +141,13 @@ conflicts with the clean-and-minimal principle (decision 0007), the principle wi
   URL; never create a new one). `pnpm notebook` refuses unless the checkout is the latest `main`
   with no uncommitted notes, and warns about notes on branches not merged yet: tell the owner
   about any it lists.
+  - `kickoff.md`, `evals.md`, `decisions.md` (Streamlined and Founder): the kickoff pack, the
+    agent-checkable evals and the decision log (L- and T-numbers), from `docs/operating-modes/`.
 - `docs/knowledge-bank.md` is the owner's general knowledge, separate from product-specific
   learnings, in seven categories (customer insight, product strategy, product delivery, design and
   UX, technology, building with AI, communication and influence), each with subsections. Whenever
-  you teach a general concept, add it under the right subsection (what it is, why it matters,
+  you teach a general concept, add it (during a product: to the journal's To carry over list,
+  written at wrap-up) under the right subsection (what it is, why it matters,
   where we met it, and who it comes from) plus 1–3 quiz questions in the category's `### Quiz` as
   `**Q:**` / `**A:**` pairs; they feed the notebook's Quiz page.
 - Non-obvious setup or architecture choices → a new file in `docs/decisions/` from `TEMPLATE.md`.

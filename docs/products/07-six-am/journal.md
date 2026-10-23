@@ -330,3 +330,8 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   screenshots only: 6, 6.5 and 7.5 out of 10. Picked C (L24); round 2 fixes the critic's gaps
   (smaller deck, no gold pills for actions, drop the "Heard" column, plain Enable listening button
   that becomes the filling Listening pill, Analyse as a row-end action, plain empty state).
+- **Design, round 2:** C reworked (smaller deck, outlined actions, no Heard column, Listen pill,
+  row-end Analyse). A fresh critic scored it 7/10 (no memory of round 1, so not directly
+  comparable to the 7.5): styles column truncates, deck bars have unequal tracks, red "differs",
+  hover and selected look alike, empty state splits instructions from the table. Round 3 sent;
+  "Copy for Claude" keeps its name (the owner's label in the brief) despite the critic's note.

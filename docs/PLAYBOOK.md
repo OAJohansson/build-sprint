@@ -57,6 +57,27 @@ hour, not a day. Names in brackets are where each practice comes from; see
   When the product carries a learning ladder (several models, levels or versions to try), set
   the MVP cut first: only the first rung that ships on its own is in scope, and the rest of the
   ladder starts in the backlog (06 Folio).
+- **Feature drill-down (≈15 min, after the MVP, before design).** A request names the main
+  feature ("a moodboard"); the small actions around it get missed until someone uses it. So
+  Claude lists the product's **objects** (the things a person makes or keeps: a board, a save, a
+  folder; this list is also the product's vocabulary) and, under **Feature drill-down** in the
+  brief, pre-fills one table per object across four checklists, with a call and a one-line reason
+  on every row:
+  1. **Lifecycle:** create, find and open, change (rename, edit), organise (sort, group,
+     reorder), remove (and get back), take out (download, share, copy).
+  2. **Connections:** how one object gets into another (a save onto a board), and the way between
+     their screens.
+  3. **Screen states:** empty, working (loading, uploading, processing), error, and full (many
+     items, long names), for each main screen.
+  4. **Trust and forgiveness:** undo, a confirm before anything permanent, nothing lost offline or
+     on reload, saving that shows.
+
+  The owner changes only the rows they disagree with. Each row ends as **MVP** (the top job breaks
+  or feels broken without it), **Later** (straight to `backlog.md`) or **No**; the MVP rows become
+  requirements below. Keep to the obvious: the aim is not to be surprised by the basics, not to
+  design every case up front, and testing the live MVP still finds the rest. *(Prater, OOUX:
+  objects and their actions; Hurff: the UI stack; Nielsen: user control and freedom. 08 Selvedge:
+  rename, delete, download and undo were all found only after building.)*
 - **Requirements, no-gos and rabbit holes.** What the MVP must do, each as a user-visible
   behaviour with a check ("when location is blocked, search appears"), not a design. Then what
   it won't do (no-gos), and the traps that could eat the day (rabbit holes). This is what design
@@ -190,7 +211,7 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
 ## Definition of done
 
 - [ ] Live URL works on phone and desktop
-- [ ] Brief written before code, with its success check filled in at the end
+- [ ] Brief written before code, with its feature drill-down before design and its success check filled in at the end
 - [ ] Write-up has user, problem, bet, url, learned and `status: shipped`
 - [ ] README table and notebook are up to date
 - [ ] A simulated user test has run, and its top findings are fixed or logged

@@ -61,3 +61,6 @@ reload-and-compare check would have caught the worst one.
 **Process changes carried forward** (max 3, logged in `docs/learnings.md`)
 - A pick is a keep: the design-session critic's fixes go on a copy beside the owner's pick, never
   over it (playbook step 1 and the `design-session` skill).
+- A feature drill-down after the MVP and before design: every object through lifecycle,
+  connections, screen states and trust, pre-filled by Claude, decided by the owner (owner, 23 Oct:
+  rename, delete, download and undo were all found late).

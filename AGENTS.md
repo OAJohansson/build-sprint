@@ -65,9 +65,10 @@ critic's score, the tester's numbers, the guardrails, the decision log, what you
   the product's journal; at wrap-up merge `main` into your branch, then write them in one commit.
   (A session whose task *is* a shared page, like a process change, edits it directly.)
 - `README.md` is generated: on a conflict, take `main`'s and run `pnpm sync`; never hand-merge it.
-- **Merging is yours** (standing approval, decision 0026): open the PR, and merge it yourself once
-  the `checks` action is green. No green run, or checks failing for a reason you can't fix: ask
-  the owner. Batch merges (about once or twice a day) because each costs deploys (decision 0016),
+- **Merging is the owner's approval** (decision 0026): it puts code live. Do everything up to it
+  (PR, green `checks`, a preview link for a big review), then ask in one line what the merge puts
+  live; merge only on the owner's yes in this chat. Founder: one merge, after the final review
+  (a brand-new app's empty starter once at kickoff). Batch merges (about once or twice a day) because each costs deploys (decision 0016),
   and merge the same day; a branch that lives for days drifts from `main`.
 - **Deploys and keys are yours:** `pnpm ship NN-slug` (it fills `.env.local` from the root
   `.env.secrets.local` first; never print or paste key values). Previews only for the owner's big

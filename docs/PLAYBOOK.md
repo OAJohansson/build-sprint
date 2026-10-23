@@ -58,8 +58,8 @@ hour, not a day. Names in brackets are where each practice comes from; see
   `pnpm new <slug> "Display Title" --mode learning|streamlined|founder`. This creates the app, the
   card (with `mode:`), the product folder (with an empty brief) and the README row; in Streamlined
   and Founder also `kickoff.md`, `evals.md` and the decision log `decisions.md`.
-- **Ship the empty starter straight away** (04 Mallow): Claude merges the scaffold and runs
-  `pnpm ship NN-slug` in the first hour, so every later change is seen on a real phone.
+- **Ship the empty starter straight away** (04 Mallow): on my yes, Claude merges the scaffold and
+  runs `pnpm ship NN-slug` in the first hour, so every later change can be seen on a real phone.
 - **One worktree and one branch per product**, cut from the latest `main` (07 Six AM, 08
   Selvedge). A spike is a commit on that branch, not a branch of its own. Shared pages are written
   once, at wrap-up, from the journal's **To carry over** list (step 4).
@@ -178,9 +178,10 @@ discoverable with one quiet cue (a muted badge at 0) rather than a sentence expl
 - Polish with the `emil-design-eng` skill (press feedback, timing, when not to animate); `animate`
   only if a screen needs motion; `dataviz` for charts.
 - Commit and push the product's branch often (branch pushes cost no deploys). Claude opens the PR
-  and **merges it itself once the `checks` action is green** (standing approval, decision 0026),
-  in batches of about one or two merges a day; no green run means it asks me. Pushes to `main`
-  deploy automatically once the Vercel project exists.
+  and, once the `checks` action is green, **asks me to approve the merge**: merging puts it live,
+  so it's my last look (decision 0026). In Founder mode that's once, after the final review.
+  Merges are batched, about one or two a day. Pushes to `main` deploy automatically once the
+  Vercel project exists.
 - **First working version** (the top job works end to end): in Streamlined this is a gate, with a
   decision sheet of anything that changes the cut plus the toil log so far.
 - **Re-cut on every scope widening.** When a request adds anything past the stop line, name it

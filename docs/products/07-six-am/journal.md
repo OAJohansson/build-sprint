@@ -361,3 +361,11 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   looks unfinished, the empty state hides the table shape. Some points contradict earlier critics
   (the serif title was a "keep" twice), so the fix pass takes the concrete bugs and the accent
   discipline, not the type-voice reversal.
+- **Validation graded by data-evals** (owner's 10-track export, nothing re-run;
+  `apps/07-six-am/evals/validation-2026-10-23.md`). Genre 7/10, exactly on the bar; plain "House"
+  is top-1 on 6/10 tracks and two passes rely on L19's House allowance (5/10 without it). BPM 5/5 on
+  the tracks with a public reference (4 unsourced, 1 proxy that would pass), so the 8/10 bar can't be
+  shown. End to end 10/10, ≤ 2.1 min per track, no-audio code read clean. Track 1 (30 s preview, likely
+  the DJ intro) came out Techno; track 8 didn't hear past its Deep House tag. Stability and the
+  single 10-track queue weren't evidenced (two batches). Style % is a per-style likelihood, not a
+  share (L36).

@@ -5,7 +5,7 @@
 // track. The Listen button itself fills as the window runs.
 import { useState } from "react";
 import { BLOCKED, PLAYLIST, ROWS, SELECTED, STUDIO_BPM, WINDOW, bpmText, brightLabel, energyLabel, keyText, tagMismatch } from "./sample";
-import { AppBar, Embed, Energy, Icon, cx, useActions } from "./shared";
+import { AppBar, Embed, Energy, cx, useActions } from "./shared";
 import type { VariantProps } from "./harness";
 import s from "./analyse.module.css";
 
@@ -34,42 +34,53 @@ export function Deck({ state, seconds }: VariantProps) {
             <span className={s.by}>Cancel</span>
           </button>
         ) : (
-          <button className={cx(s.cListen, !empty && s.cListenOff)} disabled={empty} style={empty ? { opacity: 0.4, cursor: "default" } : undefined}>
-            <span>Enable listening</span><span className={cx(s.lcd, s.by)} style={{ marginLeft: "auto" }}>off</span>
-          </button>
+          <button className={cx(s.small, s.cEnable)}>Enable listening</button>
         )}
       </div>
 
       <main className={s.cTable}>
-        <div className={cx(s.cCols, s.cHead)}>
-          <span className={s.th}>#</span><span className={s.th}>Track</span><span className={s.th}>Top 2 styles</span>
-          <span className={s.th}>BPM</span><span className={s.th}>Key</span><span className={s.th}>Energy</span><span className={s.th}>Bright</span>
-          <span className={s.th}>Time</span><span className={s.th}>Uploader tag</span><span className={s.th}>Heard</span>
-        </div>
         {empty ? (
-          <div className={s.cEmptyBody}><b>No tracks yet</b>Paste a SoundCloud link above. A playlist lists all its tracks here; analysed ones fill in their columns.</div>
+          <p className={s.cEmptyLine}>Paste a SoundCloud link above.</p>
         ) : (
           <>
+            <div className={cx(s.cCols, s.cHead)}>
+              <span className={s.th}>#</span><span className={s.th}>Track</span><span className={s.th}>Top 2 styles</span>
+              <span className={s.th}>BPM</span><span className={s.th}>Key</span><span className={s.th}>Energy</span><span className={s.th}>Bright</span>
+              <span className={s.th}>Time</span><span className={s.th}>Uploader tag</span><span className={s.th} aria-hidden />
+            </div>
             {rows.map((r, i) => (
-              <div key={r.id} className={cx(s.cCols, s.cRow, r.id === sel && s.cSel, r.id === "10" && s.cCur)} onClick={() => r.styles && setSel(r.id)}>
+              <div
+                key={r.id}
+                tabIndex={0}
+                className={cx(s.cCols, s.cRow, r.id === sel && s.cSel, r.id === "10" && s.cCur)}
+                aria-selected={r.id === sel}
+                onClick={() => r.styles && setSel(r.id)}
+                onKeyDown={(e) => { if ((e.key === "Enter" || e.key === " ") && r.styles) { e.preventDefault(); setSel(r.id); } }}
+              >
                 <span className={cx(s.th, s.num)}>{i + 1}</span>
                 <span><b>{r.title}</b> <span className={s.by}>· {r.uploader}</span></span>
                 {r.styles ? (
                   <span>{r.styles[0].name} {r.styles[0].p}% <span className={s.by}>· {r.styles[1].name} {r.styles[1].p}%</span></span>
                 ) : (
-                  r.status === "ready" ? (
-                  <span><button className={s.small} disabled={!listening} title={listening ? undefined : "Enable listening first"}>Analyse</button></span>
-                ) : (
-                  <span className={r.status === "analysing" ? s.listening : s.dim}>{r.status === "analysing" ? "Listening…" : "Not available in your region"}</span>
-                )
+                  <span className={r.status === "analysing" ? s.listening : s.dim}>
+                    {r.status === "analysing" ? "Listening…" : r.status === "blocked" ? "Not available in your region" : "Not analysed"}
+                  </span>
                 )}
-                <span className={s.cBpm}>{bpmText(r) || <span className={s.dim}>–</span>}{r.halfDouble ? <span className={s.flag}> ½?</span> : null}</span>
+                <span className={s.cBpm}>{bpmText(r) || <span className={s.dim}>–</span>}{r.halfDouble ? <span className={s.flag} title="Might be half-time: 145 BPM"> ×2?</span> : null}</span>
                 <span>{keyText(r) || <span className={s.dim}>–</span>}</span>
                 <Energy value={r.energy} />
                 <span className={r.brightness == null ? s.dim : undefined}>{r.brightness == null ? "–" : brightLabel(r.brightness)}</span>
-                <span className={cx(s.num, s.by)}>{r.length || "–"}</span>
-                <span className={s.by}>{r.uploaderTag ?? <span className={s.dim}>none</span>}{tagMismatch(r) ? <span className={s.mismatch} title="Not in the top 3 styles">≠</span> : null}</span>
-                <span>{r.status === "preview" ? <span className={s.tagPreview}>30 s preview</span> : r.analysedSeconds ? <span className={s.by}>{r.analysedSeconds} s</span> : <span className={s.dim}>–</span>}</span>
+                {r.status === "preview" ? (
+                  <span className={s.cPreview} title={`The track is ${r.length}; SoundCloud plays only a 30 s preview, so 30 s were analysed`}>30 s preview</span>
+                ) : (
+                  <span className={cx(s.num, s.by)}>{r.length || "–"}</span>
+                )}
+                <span className={s.by}>{r.uploaderTag ?? <span className={s.dim}>none</span>}{tagMismatch(r) ? <span className={s.cDiffers} title="The uploader's tag isn't in the top 3 styles Six AM heard"> · differs</span> : null}</span>
+                <span className={s.cAct}>
+                  {r.status === "ready" ? (
+                    <button className={cx(s.small, r.id === "10" && s.cActOn)} disabled={!listening} title={listening ? undefined : "Enable listening first"} onClick={(e) => e.stopPropagation()}>Analyse</button>
+                  ) : null}
+                </span>
               </div>
             ))}
             <div className={s.cMore}>45 more tracks in {PLAYLIST.name}, not analysed yet<button className={s.small}>Show all</button></div>
@@ -79,47 +90,35 @@ export function Deck({ state, seconds }: VariantProps) {
 
       <section className={s.cDeck} aria-label={showSteps ? "Enable listening" : "Selected track"}>
         {showSteps ? (
-          <div className={s.cDeckEmpty}>
-            <div>
-              <span className={s.label}>{empty ? "Start here" : "Listening is off for this session"}</span>
-              <b>{empty ? "Load a track, then let Six AM hear it" : "Let Six AM hear this tab"}</b>
-            </div>
-            <div className={s.cDeckSteps}>
-              <ol className={s.steps}>
-                <li>{empty ? "Paste a SoundCloud track or playlist link." : "Press Enable listening. Chrome asks to share this tab."}</li>
-                <li><span>Leave <q>Also share tab audio</q> on and click <q>Share</q>, once per session.</span></li>
-                <li>Press Analyse on a track. About 60 s later its row fills in.</li>
-              </ol>
-              <p className={s.fine}>Six AM keeps the measurements only. The audio is never recorded or saved.</p>
-            </div>
+          <div className={s.cSteps}>
+            <span className={s.label}>{empty ? "How it works" : "Listening is off for this session"}</span>
+            <ol className={s.steps}>
+              <li>{empty ? "Paste a SoundCloud track or playlist link." : "Press Enable listening. Chrome asks to share this tab."}</li>
+              <li><span>Leave <q>Also share tab audio</q> on and click <q>Share</q>, once per session.</span></li>
+              <li>Press Analyse on a track. About 60 s later its row fills in.</li>
+            </ol>
+            <p className={s.fine}>Six AM keeps the measurements only, never the audio.</p>
           </div>
         ) : picked ? (
           <>
-            <div className={s.cDeckId}>
+            <div className={s.cHeadLine}>
               <b>{picked.title}</b>
-              <em>{picked.uploader} · {picked.analysedSeconds} s analysed</em>
-              <div className={s.cDeckNums}>
-                <span><span className={s.aBig}>{bpmText(picked)}</span><span className={s.lcdUnit}>bpm</span></span>
-                <strong>{keyText(picked)}</strong>
-              </div>
+              <span className={s.by}>{picked.uploader}</span>
+              <span className={s.cLcd}>{bpmText(picked)}<span className={s.lcdUnit}>bpm</span></span>
+              <strong>{keyText(picked)}</strong>
+              <span className={s.fine}>{picked.analysedSeconds} s analysed · never the audio</span>
+              <span className={s.cActions}>
+                <button className={s.small} onClick={() => a.copy(picked)}>Copy for Claude</button>
+                <button className={s.small} onClick={() => a.setBpm(picked)} title={`Studio is at ${STUDIO_BPM} BPM`}>Set Studio to {Math.round(picked.bpm!)} BPM</button>
+              </span>
             </div>
-            <div className={s.cDeckMid}>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                <span className={s.label}>Styles it sounds like</span>
-                {picked.styles!.map((x) => (
-                  <div key={x.name} className={s.prob}><b>{x.name}</b><span className={s.probTrack}><i style={{ width: `${x.p}%` }} /></span><span>{x.p}%</span></div>
-                ))}
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}><span className={s.label}>Energy · {energyLabel(picked.energy)}</span><Energy value={picked.energy} wide /></div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}><span className={s.label}>Brightness</span><span style={{ fontSize: 14 }}>{brightLabel(picked.brightness)}</span></div>
-                <p className={s.aCompare}>Uploader tag <b>{picked.uploaderTag ?? "none"}</b>{picked.tags.length ? <><br />{picked.tags.join(", ")}</> : null}</p>
-              </div>
-            </div>
-            <div className={s.cDeckSide}>
-              <button className={cx(s.pill, s.gold)} onClick={() => a.copy(picked)}>{Icon.copy} Copy for Claude</button>
-              <button className={s.pill} onClick={() => a.setBpm(picked)}>{Icon.tempo} Set Studio to {Math.round(picked.bpm!)} BPM</button>
-              <span className={s.fine} style={{ textAlign: "center" }}>Studio is at {STUDIO_BPM} BPM</span>
+            <div className={s.cFacts}>
+              {picked.styles!.map((x) => (
+                <div key={x.name} className={s.prob}><b>{x.name}</b><span className={s.probTrack}><i style={{ width: `${x.p}%` }} /></span><span>{x.p}%</span></div>
+              ))}
+              <div className={s.cFact}><span className={s.label}>Energy · {energyLabel(picked.energy)}</span><Energy value={picked.energy} /></div>
+              <div className={s.cFact}><span className={s.label}>Brightness</span><span>{brightLabel(picked.brightness)}</span></div>
+              <div className={s.cFact}><span className={s.label}>Uploader tag</span><span title={picked.tags.join(", ")}>{picked.uploaderTag ?? "none"}{picked.tags.length > 1 ? <span className={s.by}> · {picked.tags.filter((x) => x !== picked.uploaderTag).join(", ")}</span> : null}</span></div>
             </div>
           </>
         ) : null}

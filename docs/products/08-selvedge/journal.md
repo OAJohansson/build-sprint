@@ -533,3 +533,8 @@ target's service worker can't type a code. Build order, each step shippable:
   notes added and the tape removed. Copy: the owner read every string on the screen and kept it
   as written. No critic round this time: the owner picked a direction from the contact sheet, and
   the board's identity was already locked. Live on 23 Oct after the folders schema was run.
+- **Owner: "I need an option to upload images from my computer as well."** Added **+ Add photos**
+  on the day pages: it opens the computer's file picker (the gallery on a phone), several photos
+  at once, and uses the same path as dropping photos (queued, shrunk, retried). Checked headless:
+  three photos picked, three "upload" saves, "Saved ✓" shown. The empty-inbox line now points
+  to Add photos instead of dropping.

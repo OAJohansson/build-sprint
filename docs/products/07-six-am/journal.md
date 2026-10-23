@@ -311,3 +311,7 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   other 9 are `ALLOW` with full length. `monetization_model` is `NOT_APPLICABLE`, so it isn't a
   Go+ track; it's the uploader's or a region setting, and it snips the same signed out and in the
   owner's Chrome. Ears detects SNIP and analyses the preview, labelled as such (L16).
+- **Genre display, owner's call (option A):** raw Discogs styles only in the MVP; families to the
+  backlog. The genre eval now uses a match set of Discogs styles per validation track, written
+  before any result (L19). Discogs has no ballroom or "melodic house" style, so tracks 8 and 10
+  use the closest styles.

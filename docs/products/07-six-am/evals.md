@@ -25,7 +25,7 @@ picker, the grader reads the logs and screenshots.
 | F2 | Widget API drives playback | Load, play, pause, seek and `READY`/`PLAY`/`PAUSE`/`FINISH` each reflected in the UI | user-tester | | screenshot, console |
 | F3 | Tab capture into an in-memory buffer | With tab audio shared, RMS of the captured stream is non-silent while the widget plays (owner's hands); the video track's `readyState` is `ended` straight after the grant | data-evals | | RMS log |
 | F4 | 16 kHz mono, mel patches, EffNet inference in a worker, averaged | A captured window yields a ranked list of Discogs styles summing to a probability distribution; input rate logged as 16000 | data-evals | | log |
-| F5 | Discogs style → display name (+ family) | Unit test: `Electronic---Deep House` → *Deep House*, every one of the 400 styles maps to a name, unknown style falls back to its raw name | data-evals | | test log |
+| F5 | Discogs style → display name | Unit test: `Electronic---Deep House` → *Deep House*, every one of the 400 styles maps to a name, unknown style falls back to its raw name | data-evals | | test log |
 | F6 | BPM, key/scale, energy, brightness | All four shown for every validation track | data-evals | | validation table |
 | F7 | Raw audio discarded, never stored or uploaded | After an analysis: localStorage, IndexedDB, Cache Storage and OPFS hold no audio-sized blobs or PCM arrays; network log has no outgoing request with an audio body or size > 100 kB (model downloads are inbound only) | data-evals | | storage dump, HAR summary |
 | F8 | Results persisted locally; CSV/JSON export | Reload keeps the session list; CSV and JSON exports open and hold every row's fields | user-tester | | files, screenshot |
@@ -77,11 +77,31 @@ Every top job scored ≥ 4/5 by `user-tester`, and no blocker or major finding l
 
 | Eval | Dataset | Metric | Bar | Result |
 | --- | --- | --- | --- | --- |
-| Genre agreement | 10 validation tracks (Appendix B) | Reference call in top-1 or top-2 (style or family) | ≥ 7 / 10 | |
+| Genre agreement | 10 validation tracks (Appendix B) | Discogs top-1 or top-2 is in the track's match set (table below) | ≥ 7 / 10 | |
 | Hears past the tag | Track 8 (Dubspinna, tagged Deep House) | Melodic house/progressive ranks above deep house | reported, not gated | |
 | BPM | 10 validation tracks | ±2 BPM or half/double flagged | ≥ 8 / 10 | |
 | Key | 10 validation tracks | Reported with key strength; no reference, so no bar | reported | |
 | Stability | 1 track analysed twice | Same top-1 style and BPM within ±1 | same | |
+
+#### Genre match sets (L19)
+
+The model speaks Discogs styles; the reference calls use the owner's genre words. A track agrees
+when its Discogs top-1 or top-2 is one of the styles below (all `Electronic---…`). Written before
+any result was seen; changing a row after a run is not allowed. Plain "House" counts only where the
+reference call is itself a house-lineage call with no Discogs equivalent.
+
+| # | Track | Reference call | Match set |
+| --- | --- | --- | --- |
+| 1 | Hard Reset – Redemption (Extended Mix) | Progressive house | Progressive House, Progressive Trance |
+| 2 | Knober, Jaime Soeiro – Realize | Tech house (minimal/deep tech lean) | Tech House, Minimal, Minimal Techno |
+| 3 | Kolter – Symphony No. 5 | Jackin' / tech house | Tech House, Ghetto House, Garage House, UK Garage, Speed Garage |
+| 4 | Retrouve – Music Is The Answer (Edit) | Roots / deep NY house | Deep House, Garage House, House |
+| 5 | Cărbune Adrian – Lost in The Loop | Jazzy deep house | Deep House, House, Future Jazz, Acid Jazz |
+| 6 | Pupa Nas T x FOVOS – Work (Edit) | Hard bounce / hard trance | Hard Trance, Hard House, Hardstyle, Jumpstyle, Hard Techno, Trance |
+| 7 | KI/KI – What's a Girl to Do (KI/KI Remix) | Hard trance | Hard Trance, Trance, Hard House, Hard Techno, Acid |
+| 8 | Dubspinna – What's A Girl To Do (Festival Remix) | Melodic house (tagged Deep House) | Progressive House, Progressive Trance, Techno, Trance (not Deep House: the test is whether it hears past the tag) |
+| 9 | Mason Flint – It Just Won't Do (Remix) | Tech house | Tech House, Bassline |
+| 10 | MikeQ – Alien Superstar (MikeQ x DJ Fade Remix) | Ballroom / vogue house | Ghetto House, Ghetto, Juke, House (Discogs has no ballroom style; closest available) |
 
 ### Guardrails (must not get worse; measured with a number)
 

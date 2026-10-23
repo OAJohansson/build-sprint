@@ -122,7 +122,7 @@ check in `evals.md`.
 | F2 | SoundCloud Widget API for load, play, pause, seek, current sound, events (`PLAY`, `PAUSE`, `FINISH`, `READY`) | Widget events drive the UI |
 | F3 | Tab audio via `getDisplayMedia` (audio required, video stopped at once) → Web Audio → `AudioWorklet` buffer in memory only | Non-silent RMS from the embedded player; no video track live |
 | F4 | Resample to 16 kHz mono, mel patches, Discogs-EffNet inference via Essentia.js / TF.js, averaged over the window | Top styles printed for a captured window |
-| F5 | Map the 400 Discogs styles to display names; optionally group into Appendix A families and show both | `Electronic---Deep House` → *Deep House* |
+| F5 | Map the 400 Discogs styles to display names (no family grouping in the MVP, owner 23 Oct) | `Electronic---Deep House` → *Deep House* |
 | F6 | BPM, key/scale, energy (RMS/loudness), brightness (spectral centroid) with Essentia.js over the same buffer | Values on the result card |
 | F7 | Discard raw audio once features are computed; never write it to storage, never upload it | Storage and network inspection |
 | F8 | Persist results (not audio) locally; export CSV/JSON | Reload keeps the list; files download |
@@ -197,8 +197,9 @@ you love and the facts come back calm, honest and precise, in Six AM's dark, war
   laptop question; it matters for Phase 4 live stems.)
 - **Fallbacks if capture fails** (brief's Risks table): play in a separate SoundCloud tab and
   capture that tab; capture system audio; or a small Chrome extension using `chrome.tabCapture`.
-- **Genre display:** both: the Appendix A family as the headline, the raw Discogs style and % under
-  it. **(owner to confirm)**
+- **Genre display (owner, 23 Oct, option A):** raw Discogs styles only, as display names with %
+  (e.g. "Deep House 58% · House 21% · Downtempo 7%"). No Appendix A family headline in the MVP;
+  mapping styles to the owner's genre families is in the backlog.
 
 ## Unit tests
 
@@ -206,5 +207,5 @@ PM's call (L1 in `decisions.md`), the logic that would hurt most if silently wro
 
 1. SoundCloud URL parsing (F1): track vs set, `?si=`, `utm_`, `?in=`, mobile and `on.soundcloud`
    short links, junk input.
-2. Discogs style → display name and genre family (F5): known styles, unknown styles, ties.
+2. Discogs style → display name (F5): known styles, unknown styles, ties.
 3. BPM normalisation and half/double-time flag: 61 vs 122, 148 vs 74, edges of the house range.

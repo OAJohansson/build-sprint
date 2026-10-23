@@ -289,3 +289,17 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   (L3); batch analysis is Phase 2 (L4). Feel, things to avoid and genre display are still being
   discussed; the owner wants the design as close to the existing MVP as possible. PM defaults stay
   provisional until relayed.
+
+- **Step 0 capture spike page** ready (`apps/07-six-am/public/spike/capture.html`, throwaway, served at localhost:3007/spike/capture.html): SoundCloud widget loads and reports READY in 2.4 s with the right title in the built-in browser; tab capture needs the owner in real Chrome (asked).
+- **Discovery (light)** done by the `discovery` agent: Ears section appended to `brief.md`, persona
+  and test plan updated (S1–S5). Its assumptions are logged as L5–L11; the PM settled the first-run
+  timing question (L12), how capture is graded given agents can't click Chrome's picker (L13) and
+  the private/geo-blocked test case (L14).
+- **Playlist check in the spike** (in the built-in browser, no owner needed): *B b baaangers* no
+  longer loads in the widget (ERROR; oEmbed 404), so it looks already emptied or private: the owner
+  has sorted it into genre sets (Gospel in the Forest, Bounce Therapy, The Category Is: SERVE, You
+  Are Edging Me, Groove & Shoulder, To the Warehouse, House Reworks, and more). The widget lists a
+  set's tracks, but only the first ~5 come with full details (House Reworks: 9 tracks, 5 with
+  titles; Groove & Shoulder: 6, 5): the build must fetch the rest (e.g. by skipping to them)
+  before listing. One set (cunty-lil-bangers) gives a widget ERROR: a useful real test for US1's
+  "clear message".

@@ -103,6 +103,12 @@ $("load").onclick = () => {
     state.widgetReady = true;
     log(`widget READY in ${((performance.now() - loadStart) / 1000).toFixed(1)}s`);
     widget.getCurrentSound((s) => { state.sound = s ? `${s.title} — ${s.user && s.user.username}` : null; log(`sound: ${state.sound}`); });
+    // US1 check: does the widget list every track of a set, with titles, beyond the first few?
+    widget.getSounds((list) => {
+      const titled = list.filter((x) => x && x.title).length;
+      state.setTracks = list.length; state.setTracksWithTitle = titled;
+      log(`sounds in widget: ${list.length}, with title: ${titled}`);
+    });
   });
   widget.bind(SC.Widget.Events.PLAY, () => { state.playing = true; log("widget PLAY"); });
   widget.bind(SC.Widget.Events.PAUSE, () => { state.playing = false; log("widget PAUSE"); });

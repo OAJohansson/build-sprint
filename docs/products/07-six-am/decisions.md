@@ -9,3 +9,13 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L2 | 2026-10-23 | Kickoff gaps (appetite, feel references and sentence, things to avoid, genre display, batch analysis) filled with PM defaults marked "owner to confirm", sent to the owner in one message; building continues on them meanwhile (most reversible) | PM | kickoff | provisional |
 | L3 | 2026-10-23 | Appetite: no fixed day budget, work may run overnight; owner-hands steps ready within ~3 h of kickoff | owner | kickoff | |
 | L4 | 2026-10-23 | Batch analysis of a whole playlist → Phase 2 | owner | kickoff | |
+| L5 | 2026-10-23 | Energy and brightness: three labels each, thresholds set from the validation tracks (one constant, easy to change) | PM (discovery) | discovery | |
+| L6 | 2026-10-23 | Analysing the same track again adds a second row, no merge (stability eval needs two runs) | PM (discovery) | discovery | |
+| L7 | 2026-10-23 | Session list newest first; a past result can be reopened to copy for Claude or set BPM | PM (discovery) | discovery | |
+| L8 | 2026-10-23 | Errors or audio drops during analysis reuse the listening message-and-Retry pattern | PM (discovery) | discovery | |
+| L9 | 2026-10-23 | Pasting a new URL replaces the loaded track; delete row, manual genre fix, sort/filter → backlog | PM (discovery) | discovery | |
+| L10 | 2026-10-23 | User-test tap bars count Chrome's 3 share-dialog clicks (stricter reading) | PM (discovery) | discovery | |
+| L11 | 2026-10-23 | Plan adds S5 'time passes' (Stop sharing, reload, export); Studio-unbroken guardrail reuses the Studio plan's S1, S2, S4 | PM (discovery) | discovery | |
+| L12 | 2026-10-23 | Paste-to-result ≤ 90 s applies with models cached; the first run (with model download) is timed and reported separately | PM | discovery | |
+| L13 | 2026-10-23 | Capture checks graded from the owner's real-Chrome runs (spike, validation) plus a stubbed getDisplayMedia for agent user tests; the stub alone never counts for F3/US2 | PM | discovery | |
+| L14 | 2026-10-23 | Private/geo-blocked US1 cases: tested with a widget ERROR from a real unavailable set if no geo-blocked track is reachable from this region; reported as such | PM | discovery | |

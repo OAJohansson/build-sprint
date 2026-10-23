@@ -37,3 +37,15 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 31 | Owner, board | The photo menu is cut off for a photo near the screen edge | fixed (the menu stays on screen, flips below) |
 | 32 | Owner, board | Hide the sidebar, best practice, no clutter | fixed (hover handle on the edge, faint › to reopen, ⌘\) |
 | 33 | Owner, board | A colour picker to copy a colour from a photo for shapes | fixed (pipette by the shape colours) |
+| 34 | User test F1 (23 Oct) | Undo shows the piece again but isn't saved; after reload it's gone | fixed (an undo back to the loaded board is saved like any edit; checked: delete, Undo and ⌘Z, reload) |
+| 35 | User test F2 | A piece can be dragged past the board: clipped, handle unreachable | fixed (move and resize stay on the board) |
+| 36 | User test F3 | A cut-out's empty area still selects the piece | open (backlog) |
+| 37 | User test F4 | The › to reopen the sidebar is too faint (2.59:1) | fixed (75% opacity); hover zone unchanged |
+| 38 | User test F5 | The pick bar covers the last row; no picked count | half fixed (room under the grid); no count, as the owner removed that line in feedback 1 |
+| 39 | User test F6 | Move to… opens as a phone sheet on the laptop | open (backlog) |
+| 40 | User test F7 | Quiet grey text is 3.45:1, Undo and Saving… among it | open (backlog: the sketchbook's muted tone is a design call) |
+| 41 | User test F8 | Cut-out progress jumps back from 100% to 1% | open (backlog) |
+| 42 | User test F9 | No hint on an empty board; one place named three ways (Inspo link, Inbox tab, Inspo heading) | open (backlog) |
+| 43 | User test F10 | Crop handles are small (8–22 px) | open (backlog) |
+| 44 | User test F11 | The focus ring stays after a mouse click | open (backlog) |
+| 45 | User test F12 | A waiting share shows "Photo" with no picture | open (backlog) |

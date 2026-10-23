@@ -77,7 +77,9 @@ hour, not a day. Names in brackets are where each practice comes from; see
   direction before building three. A feel is evoked, not drawn: no illustrating the object behind a
   theme. *(Day 3: four rounds of literal typewriters.)* Then run `/design-session` on the main screen
   (decision 0013): seeds and broad ideas, `/prototype` for three genuinely different directions
-  behind a picker, a fresh-eyes critic that scores screenshots until 9/10, then subtract, check
+  behind a picker, a fresh-eyes critic that scores screenshots until 9/10 (its fixes go on a copy beside the
+  owner's pick, never over it: a pick is a keep; *day 8: a loved design was overwritten and had to
+  come back from git*), then subtract, check
   for AI tells and rewrite the copy by hand. Judge them against the success signals, not just looks. Pick
   one or a mix, and note why in `journal.md`. When the chosen variant becomes the real app, list
   the behaviours it brings along (e.g. "you can only edit at the end") as decisions for the owner.

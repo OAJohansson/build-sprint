@@ -154,7 +154,7 @@ function Inbox() {
         </label>
       </header>
 
-      <main className={`mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 pt-5 ${picked.size ? "pb-28" : "pb-12"}`}>
+      <main className={`mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 pt-5 ${picked.size ? "pb-40" : "pb-12"}`}>
         {view.page !== "folder" && <h1 className="ed-tray-title self-start">Inspo</h1>}
         {view.page === "days" && (
           <>

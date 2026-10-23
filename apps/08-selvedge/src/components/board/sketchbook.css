@@ -104,3 +104,8 @@
 .crop-e, .crop-w { cursor: ew-resize; width: 8px; height: 22px; margin: -11px 0 0 -4px; border-radius: 4px; }
 .crop-nw, .crop-se { cursor: nwse-resize; }
 .crop-ne, .crop-sw { cursor: nesw-resize; }
+
+/* The tray mirrors the inbox (owner, 23 Oct): day titles in the blue wash, a little smaller, and a
+   pencil tick on a save that's already on the board. */
+.t-sketchbook1 .ed-day { font-size: 22px; }
+.ed-used { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: #fffdf8; color: #3a2a20; font-size: 14px; line-height: 1; box-shadow: 0 1px 3px rgba(58, 42, 32, 0.3); }

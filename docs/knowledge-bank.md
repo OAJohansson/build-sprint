@@ -533,6 +533,21 @@ anxiety was "quite, as before" while the Summary said "a little better"; the own
 caption say then → now in the Summary's words. From: Jakob Nielsen's heuristic "Consistency and
 standards" (1994).
 
+#### Premature commitment
+Making people decide something before they have what they need to decide it well. Why it matters:
+the choice is a guess, and fixing it costs a detour. Where we met it: Selvedge (08): picking photos
+in the inbox before making a board asked the owner to choose a board's photos before seeing them
+together; on a moodboard you find out what fits by placing it. The board's tray now shows every
+save (Days and Folders), so choosing happens on the board. From: Thomas Green's cognitive
+dimensions of notations (1989).
+
+#### Recognition rather than recall
+Let people see the options instead of having to remember them. Why it matters: memory is slow
+and patchy; seeing is fast. Where we met it: Selvedge (08): a board's tray showed only the photos
+picked for it, so adding one more meant remembering what was in the inbox and going back; now the
+tray shows the inbox's Days and Folders, with a tick on photos already used. From: Jakob Nielsen's
+sixth usability heuristic (1994).
+
 #### Proximity (Gestalt)
 Things placed close together are read as one group; things far apart as unrelated. Why it
 matters: a control far from what it changes looks like it belongs to something else, so people
@@ -615,6 +630,12 @@ the graph and named medicines instead of colouring them. *(Edward Tufte's data-i
 Visual Display of Quantitative Information; Stephen Few on dashboards)*
 
 ### Quiz
+
+**Q:** What is premature commitment, and how did Selvedge remove it?
+**A:** Being made to decide before you can judge; picking a board's photos in the inbox before seeing them together. The board's tray now shows every save, so you choose while placing.
+
+**Q:** What is "recognition rather than recall"?
+**A:** Show the options instead of making people remember them (Nielsen's sixth heuristic); Selvedge's board tray shows the inbox's Days and Folders, with used photos ticked.
 
 **Q:** What does the Gestalt principle of proximity say, and what did it change in Selvedge's inbox?
 **A:** Close things read as a group; the Days/Folders tabs moved from the far right to beside the logo they belong to.

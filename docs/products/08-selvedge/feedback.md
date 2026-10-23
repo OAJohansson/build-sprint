@@ -23,3 +23,4 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 17 | Owner, live inbox design pass | Find the best place for Add photos | fixed (header, right; owner's pick of three) |
 | 18 | Owner, live inbox (23 Oct) | No way to start a mood board from the inbox | fixed (Make a board from picked photos) |
 | 19 | Owner, live board (23 Oct) | A link back to the inbox from the board | fixed (Inbox in the board's header) |
+| 20 | Owner, live board (23 Oct) | Picking photos in the inbox, then This board / All saves on the board, adds little; more photos means going back to the inbox | fixed (the tray mirrors the inbox: Days and Folders; Boards link in the inbox; Make a board from picks removed) |

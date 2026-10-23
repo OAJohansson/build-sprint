@@ -106,7 +106,7 @@ likeness later. Saving happens on the phone; boards are edited on the laptop, so
    I can see my taste change over time.
 3. **Board editor:** pick saves and the app tiles them edge to edge as a first draft, with the
    palette as colour squares and a title pill (like my Spring / Summer board). Changed after the
-   first board (22 Oct): a new board starts empty, its picked saves become its tray, and shapes
+   first board (22 Oct): a new board starts empty (23 Oct: its tray shows the inbox's Days and Folders), and shapes
    (square, rectangle, pill) with text are added by hand. Then I make it
    mine: drag, resize, crop (a real crop with handles, not only pan and zoom), bring forward or back, delete, and an optional rough "cut from a
    magazine" edge on any piece (off by default). It saves itself.

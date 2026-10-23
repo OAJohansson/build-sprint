@@ -346,3 +346,8 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - **Design rounds 4 and 5:** 8/10, then 7/10 from fresh critics. Each critic finds new gaps rather
   than re-checking the old ones, so the loop was stopped (L28): the build starts from round 5 with
   the last critic's concrete gaps folded in, and the graded score comes from a critic on the built app.
+- **Ears engine built** (`src/lib/ears/`): BPM rebuilt (synthetic 120–174 BPM all right; FOVOS's
+  2:3 case fixed on synthetic loops only), 4 × 30 s snippet plan, queue with localStorage, results
+  store, SoundCloud URL parsing and style names, all with unit tests (66 pass). Playlists: the
+  widget gives details for the first 20 tracks; skipping through the set fills the rest (L29–L31,
+  T3, T4). Wired into `/spike/model` for the owner's queue test tonight.

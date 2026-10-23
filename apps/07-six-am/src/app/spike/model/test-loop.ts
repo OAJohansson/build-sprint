@@ -2,7 +2,7 @@
 // Four-on-the-floor kick, offbeat A bass (55 + 110 Hz sines), offbeat noise hat, A minor stab per bar.
 export const TEST_BPM = 124;
 
-export async function renderTestLoop(rate: number, seconds: number): Promise<Float32Array> {
+export async function renderTestLoop(rate: number, seconds: number): Promise<Float32Array<ArrayBuffer>> {
   const ctx = new OfflineAudioContext(1, rate * seconds, rate);
   const beat = 60 / TEST_BPM;
 

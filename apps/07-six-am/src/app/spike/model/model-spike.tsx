@@ -1,313 +1,282 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import type { EarsModelInfo, EarsRequest, EarsResponse, EarsResult } from "@/lib/ears/ears.worker";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { startTabCapture, CaptureError, type TabCapture } from "@/lib/ears/capture";
+import { EarsClient, TARGET_RATE } from "@/lib/ears/ears-client";
+import { queueCounts, type QueueItem, type QueueTrack } from "@/lib/ears/queue";
+import type { EarsAnalysis } from "@/lib/ears/results";
+import { snippetPlan, type Snippet } from "@/lib/ears/snippets";
+import { parseSoundCloudList } from "@/lib/ears/soundcloud-url";
+import { styleDisplayName, styleLabels } from "@/lib/ears/styles";
+import type { EarsModelInfo, EarsResult } from "@/lib/ears/types";
+import { useEarsQueue } from "@/lib/ears/use-ears-queue";
+import { oembedTitle, Player, soundUrl, widgetSrc } from "@/lib/ears/widget";
 import { renderTestLoop, TEST_BPM } from "./test-loop";
 
-// Minimal typing for the SoundCloud Widget API (https://developers.soundcloud.com/docs/api/html5-widget).
-type ScSound = { title?: string; user?: { username?: string }; policy?: string; duration?: number; full_duration?: number };
-type ScWidget = {
-  bind(ev: string, cb: () => void): void;
-  play(): void;
-  getCurrentSound(cb: (s: ScSound | null) => void): void;
-  getPosition(cb: (ms: number) => void): void;
-  getDuration(cb: (ms: number) => void): void;
-};
-type ScApi = { Widget: ((el: HTMLIFrameElement) => ScWidget) & { Events: Record<string, string> } };
-declare global {
-  interface Window { SC?: ScApi }
-}
-
-const TARGET_RATE = 16000;
 const DEFAULT_URL = "https://soundcloud.com/hardreset90087/redemption-extended-mix";
-
-type Run = {
-  source: "tab" | "test";
-  track: string | null;
-  preview: boolean;
-  capturedSeconds: number;
-  captureRate: number;
-  resampleMs: number;
-  model: EarsModelInfo | null;
-  result: EarsResult;
-};
+type Mode = "snippets" | "window";
 
 export function ModelSpike({ testMode }: { testMode: boolean }) {
-  const [url, setUrl] = useState(DEFAULT_URL);
-  const [iframeSrc, setIframeSrc] = useState<string | null>(null);
-  const [sound, setSound] = useState<ScSound | null>(null);
-  const [listening, setListening] = useState(false);
-  const [seconds, setSeconds] = useState(60);
-  const [status, setStatus] = useState("Idle.");
-  const [busy, setBusy] = useState(false);
-  const [progress, setProgress] = useState<number | null>(null);
+  const [ears, setEars] = useState<EarsClient | null>(null);
   const [model, setModel] = useState<EarsModelInfo | null>(null);
-  const [run, setRun] = useState<Run | null>(null);
+  const [progress, setProgress] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
-
-  const workerRef = useRef<Worker | null>(null);
-  const widgetRef = useRef<ScWidget | null>(null);
-  const playingRef = useRef(false);
-  const capture = useRef<{ stream: MediaStream; ctx: AudioContext; tap: AudioWorkletNode } | null>(null);
-  const pending = useRef<((r: EarsResult) => void) | null>(null);
-  const modelRef = useRef<EarsModelInfo | null>(null);
 
   // Worker: created once, loads the model straight away so the first analysis is quick.
   useEffect(() => {
-    const w = new Worker(new URL("../../../lib/ears/ears.worker.ts", import.meta.url), { type: "module" });
-    workerRef.current = w;
-    w.onmessage = (e: MessageEvent<EarsResponse>) => {
-      const m = e.data;
-      if (m.type === "progress") setProgress(m.total ? m.loaded / m.total : null);
-      else if (m.type === "loaded") { modelRef.current = m.info; setModel(m.info); setProgress(null); }
-      else if (m.type === "result") { pending.current?.(m.result); pending.current = null; }
-      else if (m.type === "error") { setError(m.message); setBusy(false); pending.current = null; }
-    };
-    w.postMessage({ type: "load" } satisfies EarsRequest);
-    return () => w.terminate();
+    const client = new EarsClient();
+    client.onProgress = setProgress;
+    client.onError = setError;
+    client.ready().then((info) => { setModel(info); setEars(client); });
+    return () => client.terminate();
   }, []);
 
-  // SoundCloud widget API script.
-  useEffect(() => {
-    if (testMode || window.SC) return;
-    const s = document.createElement("script");
-    s.src = "https://w.soundcloud.com/player/api.js";
-    document.head.appendChild(s);
-  }, [testMode]);
-
-  useEffect(() => () => stopCapture(), []);
-
-  function loadPlayer() {
-    setSound(null);
-    setIframeSrc(
-      "https://w.soundcloud.com/player/?url=" + encodeURIComponent(url.trim()) + "&auto_play=false&visual=false&show_comments=false",
-    );
-  }
-
-  function onIframe(el: HTMLIFrameElement | null) {
-    if (!el || !window.SC) return;
-    const SC = window.SC;
-    const w = SC.Widget(el);
-    widgetRef.current = w;
-    w.bind(SC.Widget.Events.READY, () => w.getCurrentSound((s) => setSound(s)));
-    w.bind(SC.Widget.Events.PLAY, () => { playingRef.current = true; });
-    w.bind(SC.Widget.Events.PAUSE, () => { playingRef.current = false; });
-    w.bind(SC.Widget.Events.FINISH, () => { playingRef.current = false; });
-  }
-
-  async function enableListening() {
-    setError(null);
-    try {
-      const stream = await navigator.mediaDevices.getDisplayMedia({
-        video: true,
-        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
-        // Chrome-only hints (Step 0 used the same set).
-        ...({ preferCurrentTab: true, selfBrowserSurface: "include", surfaceSwitching: "exclude", systemAudio: "exclude" } as object),
-      });
-      stream.getVideoTracks().forEach((t) => t.stop()); // audio only; we never look at the picture
-      const audio = stream.getAudioTracks();
-      if (!audio.length) { setError("No audio shared: switch on 'Also share tab audio' and try again."); stream.getTracks().forEach((t) => t.stop()); return; }
-      const ctx = new AudioContext();
-      await ctx.audioWorklet.addModule("/ears/pcm-tap.js");
-      const src = ctx.createMediaStreamSource(new MediaStream(audio));
-      const tap = new AudioWorkletNode(ctx, "pcm-tap");
-      src.connect(tap); // not connected to ctx.destination: no echo
-      audio[0].onended = () => stopCapture();
-      capture.current = { stream, ctx, tap };
-      setListening(true);
-      setStatus(`Listening at ${ctx.sampleRate} Hz. Press Analyse.`);
-    } catch (e) {
-      setError(`Sharing cancelled or failed: ${e instanceof Error ? e.message : String(e)}`);
-    }
-  }
-
-  function stopCapture() {
-    const c = capture.current;
-    if (!c) return;
-    c.tap.port.postMessage({ on: false });
-    c.stream.getTracks().forEach((t) => t.stop());
-    c.ctx.close();
-    capture.current = null;
-    setListening(false);
-  }
-
-  const ask = <T,>(cb: (r: (v: T) => void) => void) => new Promise<T>(cb);
-
-  async function analyseTab() {
-    const c = capture.current, w = widgetRef.current;
-    if (!c || !w) return;
-    setError(null); setRun(null); setBusy(true);
-    const current = await ask<ScSound | null>((r) => w.getCurrentSound(r));
-    const preview = current?.policy === "SNIP";
-    const [pos, dur] = await Promise.all([ask<number>((r) => w.getPosition(r)), ask<number>((r) => w.getDuration(r))]);
-    const left = dur > 0 ? Math.max(0, (dur - pos) / 1000) : seconds;
-    const want = Math.max(3, Math.min(seconds, left || seconds));
-    if (!playingRef.current) w.play();
-
-    // PCM blocks live in this array, in memory only, until the resample below; then they're dropped.
-    let chunks: Float32Array[] = [];
-    let got = 0;
-    const rate = c.ctx.sampleRate;
-    await new Promise<void>((resolve) => {
-      const started = performance.now();
-      c.tap.port.onmessage = (e: MessageEvent<Float32Array>) => {
-        if (!playingRef.current) return; // only count audio while the widget plays
-        chunks.push(e.data);
-        got += e.data.length;
-        setStatus(`Capturing ${(got / rate).toFixed(0)} / ${want.toFixed(0)} s${preview ? " (preview only, 30 s)" : ""}…`);
-        if (got >= want * rate) resolve();
-      };
-      c.tap.port.postMessage({ on: true });
-      const idle = setInterval(() => {
-        // Track ended or paused for good: analyse what we have.
-        if (!capture.current || (!playingRef.current && performance.now() - started > 4000 && got > 3 * rate)) { clearInterval(idle); resolve(); }
-      }, 500);
-    });
-    c.tap.port.postMessage({ on: false });
-    c.tap.port.onmessage = null;
-    if (got < 3 * rate) { chunks = []; setBusy(false); setError("Under 3 s captured. Is the track playing?"); return; }
-
-    const t0 = performance.now();
-    const pcm = new Float32Array(got);
-    let o = 0;
-    for (const ch of chunks) { pcm.set(ch, o); o += ch.length; }
-    chunks = [];
-    const pcm16 = await resample(pcm, rate);
-    const resampleMs = Math.round(performance.now() - t0);
-    setStatus("Analysing…");
-    const result = await analyse(pcm16);
-    setRun({
-      source: "tab",
-      track: current ? `${current.title} — ${current.user?.username}` : null,
-      preview,
-      capturedSeconds: Math.round((got / rate) * 10) / 10,
-      captureRate: rate,
-      resampleMs,
-      model: modelRef.current,
-      result,
-    });
-    setStatus("Done.");
-    setBusy(false);
-  }
-
-  async function analyseTest() {
-    setError(null); setRun(null); setBusy(true);
-    setStatus(`Rendering a 30 s test loop at ${TEST_BPM} BPM…`);
-    const t0 = performance.now();
-    const pcm16 = await renderTestLoop(TARGET_RATE, 30);
-    const resampleMs = Math.round(performance.now() - t0);
-    setStatus("Analysing…");
-    const result = await analyse(pcm16);
-    setRun({ source: "test", track: `synthetic loop, ${TEST_BPM} BPM, A minor`, preview: false, capturedSeconds: 30, captureRate: TARGET_RATE, resampleMs, model: modelRef.current, result });
-    setStatus("Done.");
-    setBusy(false);
-  }
-
-  function analyse(pcm16: Float32Array) {
-    return new Promise<EarsResult>((resolve) => {
-      pending.current = resolve;
-      // Transferred, not copied: after this the page no longer holds the samples.
-      workerRef.current!.postMessage({ type: "analyse", pcm: pcm16, sampleRate: TARGET_RATE } satisfies EarsRequest, [pcm16.buffer]);
-    });
-  }
-
-  async function copyResults() {
-    if (!run) return;
-    await navigator.clipboard.writeText(JSON.stringify({ userAgent: navigator.userAgent, ...run }, null, 2));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  }
-
-  const r = run?.result;
-  const testPass = run?.source === "test" && r ? Math.abs(r.bpm - TEST_BPM) <= 1 && r.activations.count === 400 && r.activations.finite : null;
-
   return (
-    <main className="mx-auto w-full max-w-2xl space-y-3 px-4 py-6 font-mono text-sm">
+    <main className="mx-auto w-full max-w-3xl space-y-3 px-4 py-6 font-mono text-sm">
       <h1 className="text-base font-semibold uppercase tracking-widest">Six AM · model spike</h1>
       <p className="text-neutral-500">
-        Discogs-EffNet in a Web Worker on audio from this tab. Nothing is recorded or uploaded: PCM stays in memory for one analysis, only numbers come out.
+        Discogs-EffNet in a Web Worker on audio from this tab. Nothing is recorded or uploaded: PCM stays in memory for one snippet, only numbers come out and only numbers are saved.
       </p>
-
       <Section title="Model">
         {model ? (
           <p>Loaded in {(model.loadMs / 1000).toFixed(1)} s · {(model.bytes / 1e6).toFixed(1)} MB · {model.classes} classes · input {model.inputName} · outputs {model.outputNames.join(", ")}</p>
         ) : (
           <p>Loading model… {progress !== null ? `${Math.round(progress * 100)}%` : ""}</p>
         )}
-      </Section>
-
-      {testMode ? (
-        <Section title="Test mode (no tab capture)">
-          <p className="text-neutral-500">Renders a 30 s kick + bass + hat loop at {TEST_BPM} BPM with an A minor stab per bar, at 16 kHz, and runs the same worker path.</p>
-          <Button onClick={analyseTest} disabled={busy}>Run test loop</Button>
-        </Section>
-      ) : (
-        <>
-          <Section title="1 · SoundCloud track">
-            <input className="w-full rounded border border-neutral-300 px-2 py-2" value={url} onChange={(e) => setUrl(e.target.value)} spellCheck={false} />
-            <Button onClick={loadPlayer}>Load player</Button>
-            {iframeSrc && (
-              <iframe key={iframeSrc} ref={onIframe} className="mt-3 w-full" height={166} allow="autoplay" src={iframeSrc} title="SoundCloud player" />
-            )}
-            {sound && (
-              <p className="mt-2">
-                {sound.title} — {sound.user?.username}
-                {sound.policy === "SNIP" && <b className="ml-2 text-amber-600">preview only (30 s)</b>}
-              </p>
-            )}
-          </Section>
-          <Section title="2 · Enable listening">
-            <p className="text-neutral-500">Keep this tab selected and switch on “Also share tab audio”.</p>
-            <Button onClick={enableListening} disabled={listening}>Enable listening</Button>{" "}
-            <Button onClick={stopCapture} disabled={!listening} ghost>Stop</Button>
-          </Section>
-          <Section title="3 · Analyse">
-            <label className="flex items-center gap-2">
-              Seconds
-              <input type="number" min={5} max={180} className="w-20 rounded border border-neutral-300 px-2 py-1" value={seconds} onChange={(e) => setSeconds(Number(e.target.value) || 60)} />
-            </label>
-            <Button onClick={analyseTab} disabled={!listening || !sound || busy || !model}>Analyse</Button>
-          </Section>
-        </>
-      )}
-
-      <Section title="Result">
-        <p className="text-neutral-500">{status}</p>
         {error && <p className="text-red-600">{error}</p>}
-        {run && r && (
-          <div className="mt-2 space-y-2">
-            {testPass !== null && (
-              <p className={testPass ? "font-semibold text-green-700" : "font-semibold text-red-600"}>
-                {testPass ? "Test PASS" : "Test FAIL"}: BPM {r.bpm} (want {TEST_BPM} ± 1), {r.activations.count} activations, finite {String(r.activations.finite)}
-              </p>
-            )}
-            <p>{run.track}{run.preview && " · preview only (30 s)"}</p>
-            <p>{run.capturedSeconds} s at {run.captureRate} Hz · resample {run.resampleMs} ms · features {r.timings.featuresMs} ms · inference {r.timings.inferenceMs} ms ({r.patches} patches)</p>
-            <ol className="list-decimal pl-5">
-              {r.styles.map((s) => <li key={s.style}>{s.style.replace("---", " / ")} <b>{s.pct}%</b></li>)}
-            </ol>
-            <p>BPM <b>{r.bpm}</b> (confidence {r.bpmConfidence}) · key <b>{r.key} {r.scale}</b> ({r.keyStrength}) · energy <b>{r.energy.dbfs} dBFS</b> · brightness <b>{r.brightness.centroidHz} Hz</b></p>
-            <Button onClick={copyResults} ghost>{copied ? "Copied" : "Copy results"}</Button>
-          </div>
-        )}
       </Section>
+      {testMode ? <TestMode ears={ears} model={model} /> : <QueueMode ears={ears} />}
     </main>
   );
 }
 
-/** Downmixed PCM at the capture rate → 16 kHz mono, in memory (OfflineAudioContext's resampler). */
-async function resample(pcm: Float32Array<ArrayBuffer>, rate: number): Promise<Float32Array<ArrayBuffer>> {
-  if (rate === TARGET_RATE) return pcm;
-  const off = new OfflineAudioContext(1, Math.ceil((pcm.length * TARGET_RATE) / rate), TARGET_RATE);
-  const buf = off.createBuffer(1, pcm.length, rate);
-  buf.copyToChannel(pcm, 0);
-  const src = off.createBufferSource();
-  src.buffer = buf;
-  src.connect(off.destination);
-  src.start();
-  const out = await off.startRendering();
-  return new Float32Array(out.getChannelData(0)); // own copy, so it can be transferred to the worker
+// ---------- Real tracks: queue ----------
+
+function QueueMode({ ears }: { ears: EarsClient | null }) {
+  const [text, setText] = useState(DEFAULT_URL);
+  const [player, setPlayer] = useState<Player | null>(null);
+  const [capture, setCapture] = useState<TabCapture | null>(null);
+  const [mode, setMode] = useState<Mode>("snippets");
+  const [seconds, setSeconds] = useState(60);
+  const [note, setNote] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // "One window" = the old spike behaviour (N s from the start); "Snippets" = L26's 4 × 30 s.
+  const plan = useMemo(
+    () => (mode === "window" ? (d: number, policy?: string): Snippet[] => (policy === "SNIP" ? snippetPlan(d, policy) : [{ startMs: 0, lengthMs: Math.min(seconds * 1000, d || seconds * 1000) }]) : undefined),
+    [mode, seconds],
+  );
+  const q = useEarsQueue({ player, capture, ears, plan });
+  const counts = queueCounts(q.queue);
+  const resultsById = useMemo(() => new Map(q.results.map((r) => [r.id, r])), [q.results]);
+
+  useEffect(() => () => capture?.stop(), [capture]);
+
+  const onIframe = useCallback((el: HTMLIFrameElement | null) => {
+    if (!el) return;
+    Player.attach(el).then(setPlayer, (e: Error) => setError(e.message));
+  }, []);
+
+  async function enableListening() {
+    setError(null);
+    try {
+      const c = await startTabCapture(() => setCapture(null));
+      setCapture(c);
+    } catch (e) {
+      setError(e instanceof CaptureError ? e.message : String(e));
+    }
+  }
+
+  async function addToQueue() {
+    if (!player) return;
+    setError(null); setNote(null); setBusy(true);
+    const { valid, invalid } = parseSoundCloudList(text);
+    const tracks: QueueTrack[] = [];
+    const notes: string[] = [];
+    try {
+      for (const p of valid) {
+        if (p.kind !== "set") { tracks.push({ url: p.url }); continue; }
+        // A playlist: load it, read every track (beyond the ~20 the widget details), queue them all.
+        setNote(`Reading playlist ${p.url}…`);
+        await player.load(p.url);
+        const t0 = performance.now();
+        const sounds = await player.loadSetDetails((done, of) => setNote(`Reading playlist: details ${done} / ${of}…`));
+        const missing = sounds.filter((s) => !s.title);
+        for (const s of missing) {
+          const url = soundUrl(s);
+          const o = url ? await oembedTitle(url) : null;
+          if (o) { s.title = o.title; s.user = { username: o.uploader }; }
+        }
+        for (const s of sounds) {
+          const url = soundUrl(s);
+          if (url) tracks.push({ url, title: s.title, uploader: s.user?.username, durationMs: s.full_duration ?? s.duration });
+        }
+        notes.push(`${p.url}: ${sounds.length} tracks, ${sounds.filter((s) => s.title).length} with titles (${missing.length} via oEmbed fallback), ${((performance.now() - t0) / 1000).toFixed(1)} s`);
+      }
+      q.add(tracks);
+      setNote([`Queued ${tracks.length} track(s).`, ...notes, ...invalid.map((i) => `Skipped "${i.input}": ${i.message}`)].join("\n"));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function copyResults() {
+    const payload = { userAgent: navigator.userAgent, captureRate: capture?.rate ?? null, model: ears?.info ?? null, analyses: q.results };
+    await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  }
+
+  return (
+    <>
+      <Section title="1 · Player">
+        <iframe ref={onIframe} className="w-full" height={166} allow="autoplay" src={widgetSrc(DEFAULT_URL)} title="SoundCloud player" />
+        {!player && <p className="text-neutral-500">Loading the SoundCloud player…</p>}
+      </Section>
+
+      <Section title="2 · Enable listening">
+        <p className="text-neutral-500">Keep this tab selected and switch on “Also share tab audio”. After a reload the queue waits here.</p>
+        <Button onClick={enableListening} disabled={!!capture}>Enable listening</Button>{" "}
+        <Button onClick={() => capture?.stop()} disabled={!capture} ghost>Stop</Button>
+        <span className="ml-3">{capture ? `Listening at ${capture.rate} Hz` : "Not listening"}</span>
+      </Section>
+
+      <Section title="3 · Queue">
+        <p className="text-neutral-500">SoundCloud links, one per line. A playlist link adds every track in it.</p>
+        <textarea className="h-24 w-full rounded border border-neutral-300 px-2 py-2" value={text} onChange={(e) => setText(e.target.value)} spellCheck={false} />
+        <div className="flex flex-wrap items-center gap-3">
+          <Button onClick={addToQueue} disabled={!player || busy}>{busy ? "Reading…" : "Add / Analyse all"}</Button>
+          <label className="mt-2 flex items-center gap-1"><input type="radio" checked={mode === "snippets"} onChange={() => setMode("snippets")} /> Snippets (4 × 30 s)</label>
+          <label className="mt-2 flex items-center gap-1">
+            <input type="radio" checked={mode === "window"} onChange={() => setMode("window")} /> One window from the start,
+            <input type="number" min={5} max={180} className="w-16 rounded border border-neutral-300 px-1" value={seconds} onChange={(e) => setSeconds(Number(e.target.value) || 60)} /> s
+          </label>
+        </div>
+        {note && <pre className="mt-2 whitespace-pre-wrap text-neutral-600">{note}</pre>}
+        {error && <p className="mt-2 text-red-600">{error}</p>}
+        {q.lastError && <p className="mt-2 text-red-600">Last error: {q.lastError}</p>}
+        <p className="mt-3">
+          {counts.total} in queue · {counts.done} done · {counts.failed} failed · {counts.queued} waiting
+          {counts.queued > 0 && !capture && <b className="ml-2 text-amber-600">waiting for listening</b>}
+        </p>
+        <div className="flex gap-2">
+          <Button onClick={q.cancel} disabled={!counts.active} ghost>Cancel current</Button>
+          <Button onClick={q.clear} disabled={!counts.total} ghost>Clear queue</Button>
+        </div>
+        <ol className="mt-2 space-y-1">
+          {q.queue.items.map((i) => <QueueRow key={i.id} item={i} result={i.resultId ? resultsById.get(i.resultId) : undefined} onRemove={() => q.remove(i.id)} onRetry={() => q.retry(i.id)} />)}
+        </ol>
+      </Section>
+
+      <Section title={`Results (${q.results.length}, saved in this browser)`}>
+        {q.results.map((r) => <ResultCard key={r.id} r={r} />)}
+        <div className="flex gap-2">
+          <Button onClick={copyResults} disabled={!q.results.length} ghost>{copied ? "Copied" : "Copy results"}</Button>
+          <Button onClick={q.clearResults} disabled={!q.results.length} ghost>Clear results</Button>
+        </div>
+      </Section>
+    </>
+  );
+}
+
+function statusText(i: QueueItem) {
+  switch (i.status) {
+    case "listening": return i.progress ? `listening ${i.progress.snippet}/${i.progress.of} · ${i.progress.seconds}/${i.progress.snippetSeconds} s` : "listening";
+    case "failed": return `failed: ${i.reason}${i.message ? ` (${i.message})` : ""}`;
+    default: return i.status;
+  }
+}
+
+function QueueRow({ item, result, onRemove, onRetry }: { item: QueueItem; result?: EarsAnalysis; onRemove: () => void; onRetry: () => void }) {
+  const top = result?.genres[0];
+  return (
+    <li className="flex flex-wrap items-baseline gap-x-3 border-b border-neutral-100 py-1">
+      <span className="min-w-0 flex-1 truncate">{item.title ? `${item.title}${item.uploader ? ` — ${item.uploader}` : ""}` : item.url}</span>
+      <span className={item.status === "failed" ? "text-red-600" : item.status === "done" ? "text-green-700" : "text-amber-600"}>{statusText(item)}</span>
+      {result && <span>{result.bpm} BPM · {top ? `${styleDisplayName(top.style)} ${Math.round(top.p * 100)}%` : ""}</span>}
+      {(item.status === "failed" || item.status === "done") && <button className="underline" onClick={onRetry}>again</button>}
+      <button className="underline" onClick={onRemove}>remove</button>
+    </li>
+  );
+}
+
+function ResultCard({ r }: { r: EarsAnalysis }) {
+  const labels = styleLabels(r.genres.map((g) => g.style));
+  return (
+    <div className="mb-3 border-b border-neutral-200 pb-2">
+      <p className="font-semibold">{r.title} — {r.uploader}{r.preview && <b className="ml-2 text-amber-600">preview only (30 s)</b>}</p>
+      <p className="text-neutral-500">{r.soundcloudUrl} · tag: {r.uploaderGenreTag ?? "none"} · heard {r.analysedSeconds} s</p>
+      <p>{r.genres.slice(0, 3).map((g, i) => `${labels[i]} ${(g.p * 100).toFixed(1)}%`).join(" · ")}</p>
+      <p>
+        BPM <b>{r.bpm}</b>
+        {r.bpmAlternative && <span className={r.bpmAmbiguous ? "text-amber-600" : "text-neutral-500"}> (or {r.bpmAlternative.bpm}, {r.bpmAlternative.relation}, {Math.round(r.bpmAlternative.ratio * 100)}%{r.bpmAmbiguous ? ", ambiguous" : ""})</span>}
+        {" "}· key <b>{r.key} {r.scale}</b> ({r.keyStrength}) · energy <b>{r.energy}</b> ({r.energyDbfs} dBFS) · brightness <b>{r.brightness}</b> ({r.brightnessHz} Hz)
+      </p>
+      <p className="text-neutral-500">
+        snippets: {r.snippets.map((s) => `@${fmt(s.startMs)} ${s.heardSeconds}s ${s.topStyle ? styleDisplayName(s.topStyle) : "–"} ${s.bpm}`).join(" | ")}
+      </p>
+    </div>
+  );
+}
+
+const fmt = (ms: number) => `${Math.floor(ms / 60000)}:${String(Math.floor((ms % 60000) / 1000)).padStart(2, "0")}`;
+
+// ---------- ?test=tone: no tab capture ----------
+
+type TestRun = { label: string; pass: boolean; detail: string; result: Omit<EarsResult, "stats"> | null };
+
+function TestMode({ ears, model }: { ears: EarsClient | null; model: EarsModelInfo | null }) {
+  const [runs, setRuns] = useState<TestRun[]>([]);
+  const [status, setStatus] = useState("Idle.");
+  const [busy, setBusy] = useState(false);
+
+  async function run(kind: "single" | "snippets") {
+    if (!ears) return;
+    setBusy(true);
+    try {
+      if (kind === "single") {
+        setStatus(`Rendering a 30 s test loop at ${TEST_BPM} BPM…`);
+        const r = await ears.analyse(await renderTestLoop(TARGET_RATE, 30));
+        const pass = Math.abs(r.bpm - TEST_BPM) <= 1 && r.activations.count === 400 && r.activations.finite;
+        const { stats: _stats, ...rest } = r; // eslint-disable-line @typescript-eslint/no-unused-vars
+        setRuns((x) => [{ label: "single 30 s", pass, detail: `BPM ${r.bpm} (want ${TEST_BPM} ± 1), alt ${r.bpmAlternative?.bpm} ${r.bpmAlternative?.relation}, ${r.activations.count} activations`, result: rest }, ...x]);
+      } else {
+        // The snippet path: 4 separate 30 s loops analysed one by one, then combined in the worker.
+        const stats = [];
+        for (let i = 0; i < 4; i++) {
+          setStatus(`Snippet ${i + 1} / 4…`);
+          stats.push((await ears.analyse(await renderTestLoop(TARGET_RATE, 30))).stats);
+        }
+        const c = await ears.combine(stats);
+        const pass = Math.abs(c.bpm - TEST_BPM) <= 1 && c.activations.count === 400 && c.activations.finite && c.seconds >= 119;
+        setRuns((x) => [{ label: "4 × 30 s combined", pass, detail: `BPM ${c.bpm} (want ${TEST_BPM} ± 1), ${c.seconds} s, ${c.patches} patches, key ${c.key} ${c.scale}`, result: { ...c, timings: { featuresMs: 0, inferenceMs: 0 } } }, ...x]);
+      }
+      setStatus("Done.");
+    } catch (e) {
+      setStatus(`Error: ${e instanceof Error ? e.message : String(e)}`);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Section title="Test mode (no tab capture)">
+      <p className="text-neutral-500">Renders a 30 s kick + bass + hat loop at {TEST_BPM} BPM with an A minor stab per bar, at 16 kHz, and runs the same worker path.</p>
+      <Button onClick={() => run("single")} disabled={busy || !model}>Run test loop</Button>{" "}
+      <Button onClick={() => run("snippets")} disabled={busy || !model}>Run 4 × 30 s snippets</Button>
+      <p className="mt-2 text-neutral-500">{status}</p>
+      {runs.map((r, i) => (
+        <div key={i} className="mt-2">
+          <p className={r.pass ? "font-semibold text-green-700" : "font-semibold text-red-600"}>Test {r.pass ? "PASS" : "FAIL"} ({r.label}): {r.detail}</p>
+          {r.result && <p>{r.result.styles.map((s) => `${styleDisplayName(s.style)} ${s.pct}%`).join(" · ")}</p>}
+        </div>
+      ))}
+    </Section>
+  );
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {

@@ -2,32 +2,12 @@
 // Ears worker: 16 kHz mono PCM in, numbers out. The PCM is only held for the length of one
 // analysis and dropped afterwards; nothing here stores, uploads or records audio.
 import * as ort from "onnxruntime-web/wasm";
-import { estimateBpm, estimateKey, melFrames, median, patches, rmsDb, topStyles, SAMPLE_RATE } from "./features";
+import { combineSnippets } from "./combine";
+import { chromaProfile, keyFromChroma, meanActivations, melFrames, median, onsetAcf, patches, rmsDb, tempoFromAcf, topFromMean, SAMPLE_RATE } from "./features";
+import type { EarsCombined, EarsModelInfo, EarsRequest, EarsResponse, EarsResult, EarsSnippetStats } from "./types";
 
 export const MODEL_URL = "/models/feature-extractors/discogs-effnet/discogs-effnet-bsdynamic-1.onnx";
 export const META_URL = "/models/feature-extractors/discogs-effnet/discogs-effnet-bsdynamic-1.json";
-
-export type EarsRequest = { type: "load" } | { type: "analyse"; pcm: Float32Array; sampleRate: number };
-export type EarsModelInfo = { loadMs: number; bytes: number; inputName: string; outputNames: string[]; classes: number };
-export type EarsResult = {
-  seconds: number;
-  patches: number;
-  timings: { featuresMs: number; inferenceMs: number };
-  styles: { style: string; pct: number }[];
-  activations: { count: number; finite: boolean };
-  bpm: number;
-  bpmConfidence: number;
-  key: string;
-  scale: string;
-  keyStrength: number;
-  energy: { rms: number; dbfs: number };
-  brightness: { centroidHz: number };
-};
-export type EarsResponse =
-  | { type: "progress"; loaded: number; total: number }
-  | { type: "loaded"; info: EarsModelInfo }
-  | { type: "result"; result: EarsResult }
-  | { type: "error"; message: string };
 
 const post = (m: EarsResponse) => (self as unknown as DedicatedWorkerGlobalScope).postMessage(m);
 
@@ -89,9 +69,14 @@ async function analyse(pcm: Float32Array, sampleRate: number): Promise<EarsResul
   const frames = melFrames(pcm);
   const p = patches(frames);
   if (!p.n) throw new Error("need at least ~2.1 s of audio (128 frames)");
-  const bpm = estimateBpm(frames);
-  const key = estimateKey(pcm);
+  const acf = onsetAcf(frames);
+  const bpm = tempoFromAcf(acf);
+  const chroma = chromaProfile(pcm);
+  const key = keyFromChroma(chroma);
   const energy = rmsDb(pcm);
+  let sumSquares = 0;
+  for (let i = 0; i < pcm.length; i++) sumSquares += pcm[i] * pcm[i];
+  const centroidHz = median(frames.centroid);
   const t1 = performance.now();
 
   const input = new ort.Tensor("float32", p.data, [p.n, 128, 96]);
@@ -100,10 +85,22 @@ async function analyse(pcm: Float32Array, sampleRate: number): Promise<EarsResul
   // Output 0 is the 400 sigmoid style activations, output 1 the 1280-d embeddings (model JSON).
   const actsName = session.outputNames.find((n) => out[n].dims[1] === classes.length) ?? session.outputNames[0];
   const acts = out[actsName].data as Float32Array;
-  const styles = topStyles(acts, p.n, classes, 5);
+  const mean = meanActivations(acts, p.n, classes.length);
+  const styles = topFromMean(mean, classes, 5);
   input.dispose();
   for (const n of session.outputNames) out[n].dispose();
 
+  const stats: EarsSnippetStats = {
+    seconds: pcm.length / SAMPLE_RATE,
+    frames: frames.frames,
+    patches: p.n,
+    acf: acf ? Array.from(acf) : null,
+    chroma,
+    sumSquares,
+    samples: pcm.length,
+    centroidHz,
+    meanActivations: Array.from(mean),
+  };
   return {
     seconds: Math.round((pcm.length / SAMPLE_RATE) * 10) / 10,
     patches: p.n,
@@ -112,29 +109,34 @@ async function analyse(pcm: Float32Array, sampleRate: number): Promise<EarsResul
     activations: { count: acts.length / p.n, finite: styles.finite },
     bpm: bpm.bpm,
     bpmConfidence: bpm.confidence,
+    bpmAlternative: bpm.alternative,
+    bpmAmbiguous: bpm.ambiguous,
     key: key.key,
     scale: key.scale,
     keyStrength: key.strength,
     energy: { rms: Math.round(energy.rms * 10000) / 10000, dbfs: Math.round(energy.dbfs * 10) / 10 },
-    brightness: { centroidHz: Math.round(median(frames.centroid)) },
+    brightness: { centroidHz: Math.round(centroidHz) },
+    stats,
   };
 }
 
+async function combine(snippets: EarsSnippetStats[]): Promise<EarsCombined> {
+  if (!snippets.length) throw new Error("no snippets to combine");
+  return combineSnippets(snippets, classes);
+}
+
 self.onmessage = async (e: MessageEvent<EarsRequest>) => {
+  const m = e.data;
+  const id = m.type === "load" ? undefined : m.id;
   try {
-    if (e.data.type === "load") {
-      loading ??= load();
-      await loading;
-      post({ type: "loaded", info: info! });
-    } else if (e.data.type === "analyse") {
-      loading ??= load();
-      await loading;
-      const result = await analyse(e.data.pcm, e.data.sampleRate);
-      post({ type: "result", result });
-    }
+    loading ??= load();
+    await loading;
+    if (m.type === "load") post({ type: "loaded", info: info! });
+    else if (m.type === "analyse") post({ type: "result", id: m.id, result: await analyse(m.pcm, m.sampleRate) });
+    else if (m.type === "combine") post({ type: "combined", id: m.id, result: await combine(m.snippets) });
   } catch (err) {
-    loading = session ? loading : null;
-    post({ type: "error", message: err instanceof Error ? err.message : String(err) });
+    if (!session) loading = null;
+    post({ type: "error", id, message: err instanceof Error ? err.message : String(err) });
   }
   // The PCM goes out of scope here; nothing keeps a reference to it.
 };

@@ -1,6 +1,8 @@
 // Ears v1 audio features, plain TS with no DOM so it runs in a Web Worker (and in Node for checks).
 // Input everywhere: 16 kHz mono Float32Array PCM that lives in memory only and is never stored.
 
+import { pickTempo, type TempoRelation } from "./bpm";
+
 export const SAMPLE_RATE = 16000;
 const FRAME = 512;
 const HOP = 256;
@@ -159,66 +161,129 @@ export function median(a: Float32Array) {
 }
 
 // ---------- BPM ----------
-// shortcut: BPM is spectral-flux onset autocorrelation with a 120 BPM prior, not Essentia's
-// RhythmExtractor2013; fine for steady 4/4 house/techno, upgrade (essentia.js or a tempo CNN) if
-// broken-beat or half-time tracks come out wrong in the evals.
+// shortcut: BPM is spectral-flux onset autocorrelation scored over the first four beat multiples
+// with a broad prior (bpm.ts), not Essentia's RhythmExtractor2013; fine for steady 4/4 club music,
+// upgrade (a tempo CNN) if broken-beat or half-time tracks come out wrong in the evals.
 
 const FPS = SAMPLE_RATE / HOP; // 62.5 frames/s
+// Onset mix (low bands vs all bands) and the weight of the half-beat lag in the tempo score: the
+// half-beat term punishes 2:3 and 4:3 candidates, whose half-beat falls between 8th notes.
+const TUNE = { half: 0.5, low: 1, all: 0.5 };
+const LOW_BANDS = 9; // slaney bands are ~31 Hz wide below 1 kHz: bands 0–8 ≈ 0–280 Hz
+/** Autocorrelation lags kept: four beats at 60 BPM, so every candidate down to 60 has 4 multiples. */
+export const ACF_LAGS = Math.ceil((FPS * 60 * 4) / 60);
 
-export function estimateBpm(f: FrameFeatures): { bpm: number; confidence: number } {
+/**
+ * Normalised autocorrelation of the onset strength (half-wave-rectified log-mel flux, low bands boosted), lags
+ * 0..ACF_LAGS, ac[0] = 1. Null when the audio is too short (< 4 s) or silent. Snippets combine by
+ * averaging these (combine.ts), which is steadier than voting on per-snippet BPMs.
+ */
+export function onsetAcf(f: FrameFeatures): Float64Array | null {
   const n = f.frames;
-  if (n < FPS * 4) return { bpm: 0, confidence: 0 };
-  // Onset strength: half-wave-rectified log-mel flux, mean removed.
-  const onset = new Float64Array(n);
+  if (n < FPS * 4) return null;
+  // Two onset curves: the low bands (kick and bass, < ~280 Hz) and all bands. Each is
+  // standardised before mixing, so hats (broadband noise, huge log-flux in quiet high bands)
+  // can't drown the kick that carries the beat in club music.
+  const low = new Float64Array(n), all = new Float64Array(n);
   for (let i = 1; i < n; i++) {
-    let s = 0;
+    let s = 0, sl = 0;
     for (let b = 0; b < BANDS; b++) {
       const d = f.mel[i * BANDS + b] - f.mel[(i - 1) * BANDS + b];
-      if (d > 0) s += d;
+      if (d > 0) { s += d; if (b < LOW_BANDS) sl += d; }
     }
-    onset[i] = s;
+    all[i] = s;
+    low[i] = sl;
   }
-  let mean = 0;
-  for (let i = 0; i < n; i++) mean += onset[i];
-  mean /= n;
-  for (let i = 0; i < n; i++) onset[i] -= mean;
-
-  const maxLag = Math.min(n - 1, Math.ceil((FPS * 60 * 4) / 60)); // up to 4 beats at 60 BPM
-  const ac = new Float64Array(maxLag + 1);
-  for (let lag = 1; lag <= maxLag; lag++) {
+  const standardise = (x: Float64Array) => {
+    let m = 0;
+    for (let i = 0; i < n; i++) m += x[i];
+    m /= n;
+    let v = 0;
+    for (let i = 0; i < n; i++) { x[i] -= m; v += x[i] * x[i]; }
+    const sd = Math.sqrt(v / n);
+    if (sd > 0) for (let i = 0; i < n; i++) x[i] /= sd;
+  };
+  standardise(low);
+  standardise(all);
+  const onset = new Float64Array(n);
+  for (let i = 0; i < n; i++) onset[i] = TUNE.low * low[i] + TUNE.all * all[i];
+  const maxLag = Math.min(n - 1, ACF_LAGS);
+  const ac = new Float64Array(ACF_LAGS + 1);
+  for (let lag = 0; lag <= maxLag; lag++) {
     let s = 0;
     for (let i = lag; i < n; i++) s += onset[i] * onset[i - lag];
     ac[lag] = s / (n - lag);
   }
+  if (!(ac[0] > 0)) return null;
+  const a0 = ac[0];
+  for (let lag = 0; lag <= ACF_LAGS; lag++) ac[lag] /= a0;
+  return ac;
+}
+
+export type BpmEstimate = {
+  bpm: number;
+  confidence: number;
+  /** The strongest related tempo (half, double, 3:2, 2:3) and how close it came (0–1). */
+  alternative: { bpm: number; relation: TempoRelation; ratio: number } | null;
+  /** True when the alternative scored ≥ 80% of the winner: show both. */
+  ambiguous: boolean;
+};
+
+const NO_BPM: BpmEstimate = { bpm: 0, confidence: 0, alternative: null, ambiguous: false };
+
+export function tempoFromAcf(ac: Float64Array | number[] | null): BpmEstimate {
+  if (!ac) return NO_BPM;
+  const maxLag = ac.length - 1;
   const at = (x: number) => {
     // linear interpolation of the autocorrelation at a fractional lag
     const i = Math.floor(x), t = x - i;
     if (i + 1 > maxLag) return 0;
     return ac[i] * (1 - t) + ac[i + 1] * t;
   };
-  // Score candidate tempi 60–200 BPM, summing the beat, 2-beat and bar lags, weighted by a log-normal prior.
-  let best = 0, bestScore = -Infinity, total = 0, count = 0;
-  for (let bpm = 60; bpm <= 200; bpm += 0.25) {
+  // A tempo is as good as the mean autocorrelation at its first four beat multiples. A 2:3 error
+  // (150 heard as 100) puts half of 100's multiples on offbeats, so it loses to the true 150;
+  // half and double share their multiples, so the prior and the `alternative` handle those.
+  const score = (bpm: number) => {
     const lag = (FPS * 60) / bpm;
-    if (lag * 4 > maxLag) continue;
-    const prior = Math.exp(-0.5 * Math.pow(Math.log2(bpm / 120) / 0.6, 2));
-    const score = (at(lag) + 0.5 * at(2 * lag) + 0.5 * at(4 * lag)) * prior;
-    total += Math.max(0, score); count++;
-    if (score > bestScore) { bestScore = score; best = bpm; }
-  }
-  // Refine on the bar lag (4 beats): finer resolution than the single-beat lag.
-  const barLag = (FPS * 60 * 4) / best;
-  let peak = Math.round(barLag), peakVal = -Infinity;
-  for (let l = Math.max(2, Math.floor(barLag - 3)); l <= Math.min(maxLag - 1, Math.ceil(barLag + 3)); l++) {
-    if (ac[l] > peakVal) { peakVal = ac[l]; peak = l; }
-  }
-  const a = ac[peak - 1], b = ac[peak], c = ac[peak + 1];
-  const denom = a - 2 * b + c;
-  const offset = denom !== 0 ? (0.5 * (a - c)) / denom : 0;
-  const refined = (FPS * 60 * 4) / (peak + Math.max(-0.5, Math.min(0.5, offset)));
-  const bpm = Math.abs(refined - best) < 3 ? refined : best;
-  const confidence = count && total > 0 ? Math.max(0, bestScore) / (total / count) : 0;
-  return { bpm: Math.round(bpm * 10) / 10, confidence: Math.round(confidence * 10) / 10 };
+    let s = 0;
+    for (let k = 1; k <= 4; k++) s += at(k * lag);
+    return Math.max(0, s / 4 + TUNE.half * at(lag / 2));
+  };
+  const pick = pickTempo(score);
+  if (!pick.bpm) return NO_BPM;
+
+  // Refine on the largest beat multiple in range (finer than the grid), parabolic peak.
+  const refine = (bpm: number) => {
+    const k = Math.max(1, Math.min(4, Math.floor((maxLag - 2) / ((FPS * 60) / bpm))));
+    const target = (FPS * 60 * k) / bpm;
+    let peak = Math.round(target), peakVal = -Infinity;
+    for (let l = Math.max(2, Math.floor(target - 3)); l <= Math.min(maxLag - 1, Math.ceil(target + 3)); l++) {
+      if (ac[l] > peakVal) { peakVal = ac[l]; peak = l; }
+    }
+    const a = ac[peak - 1], b = ac[peak], c = ac[peak + 1];
+    const denom = a - 2 * b + c;
+    const offset = denom !== 0 ? (0.5 * (a - c)) / denom : 0;
+    const refined = (FPS * 60 * k) / (peak + Math.max(-0.5, Math.min(0.5, offset)));
+    return Math.abs(refined / bpm - 1) < 0.02 ? refined : bpm;
+  };
+
+  // Confidence: the winner against the average score over the search range (as before).
+  let total = 0, count = 0;
+  for (let b = 60; b <= 200; b += 1) { total += score(b); count++; }
+  const confidence = total > 0 ? score(pick.bpm) / (total / count) : 0;
+  const r1 = (x: number) => Math.round(x * 10) / 10;
+  return {
+    bpm: r1(refine(pick.bpm)),
+    confidence: r1(confidence),
+    alternative: pick.alternative
+      ? { bpm: r1(refine(pick.alternative.bpm)), relation: pick.alternative.relation, ratio: Math.round(pick.alternative.ratio * 100) / 100 }
+      : null,
+    ambiguous: pick.ambiguous,
+  };
+}
+
+export function estimateBpm(f: FrameFeatures): BpmEstimate {
+  return tempoFromAcf(onsetAcf(f));
 }
 
 // ---------- Key ----------
@@ -238,7 +303,8 @@ function pearson(a: number[], b: number[]) {
   return da && db ? num / Math.sqrt(da * db) : 0;
 }
 
-export function estimateKey(pcm: Float32Array): { key: string; scale: "major" | "minor"; strength: number } {
+/** Peak chroma profile (12 bins, C first), summed over frames; snippets combine by adding these. */
+export function chromaProfile(pcm: Float32Array): number[] {
   const size = 4096, hop = 2048, binHz = SAMPLE_RATE / size;
   const chroma = new Array(12).fill(0);
   // From 100 Hz: below that a 4096-point frame can't separate semitones and the kick smears into
@@ -257,7 +323,13 @@ export function estimateKey(pcm: Float32Array): { key: string; scale: "major" | 
       chroma[pc] += b / frame; // each frame counts equally
     }
   });
-  let best = { key: "C", scale: "major" as "major" | "minor", strength: -1 };
+  return chroma;
+}
+
+export type KeyEstimate = { key: string; scale: "major" | "minor"; strength: number };
+
+export function keyFromChroma(chroma: number[]): KeyEstimate {
+  let best: KeyEstimate = { key: "C", scale: "major", strength: -1 };
   for (let tonic = 0; tonic < 12; tonic++) {
     const rotated = chroma.map((_, i) => chroma[(i + tonic) % 12]);
     const maj = pearson(rotated, KK_MAJOR), min = pearson(rotated, KK_MINOR);
@@ -267,18 +339,31 @@ export function estimateKey(pcm: Float32Array): { key: string; scale: "major" | 
   return { ...best, strength: Math.round(best.strength * 100) / 100 };
 }
 
+export function estimateKey(pcm: Float32Array): KeyEstimate {
+  return keyFromChroma(chromaProfile(pcm));
+}
+
 // ---------- Model output ----------
 
-/** Mean of per-patch sigmoid activations, then the top k with their class names. */
-export function topStyles(acts: Float32Array, nPatches: number, classes: string[], k = 5) {
-  const nClasses = classes.length;
+/** Mean of per-patch sigmoid activations (one value per class). */
+export function meanActivations(acts: Float32Array, nPatches: number, nClasses: number): Float64Array {
   const mean = new Float64Array(nClasses);
   for (let p = 0; p < nPatches; p++) for (let c = 0; c < nClasses; c++) mean[c] += acts[p * nClasses + c];
   for (let c = 0; c < nClasses; c++) mean[c] /= Math.max(1, nPatches);
-  const finite = mean.every((x) => Number.isFinite(x));
+  return mean;
+}
+
+/** The top k classes of a mean activation vector, as % with one decimal. */
+export function topFromMean(mean: ArrayLike<number>, classes: string[], k = 5) {
+  const finite = Array.from(mean).every((x) => Number.isFinite(x));
   const top = Array.from(mean, (v, i) => ({ style: classes[i], score: v }))
     .sort((a, b) => b.score - a.score)
     .slice(0, k)
     .map((x) => ({ style: x.style, pct: Math.round(x.score * 1000) / 10 }));
-  return { top, finite, count: nClasses };
+  return { top, finite, count: classes.length };
+}
+
+/** Mean of per-patch sigmoid activations, then the top k with their class names. */
+export function topStyles(acts: Float32Array, nPatches: number, classes: string[], k = 5) {
+  return topFromMean(meanActivations(acts, nPatches, classes.length), classes, k);
 }

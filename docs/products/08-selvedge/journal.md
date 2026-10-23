@@ -570,3 +570,22 @@ target's service worker can't type a code. Build order, each step shippable:
   not in a folder under "Today"; adding one puts it on the board with a tick in the tray;
   Folders lists "Shirts 2" and opens its 2 photos. At 375 × 812 the inbox header fits once Boards
   is hidden (it pushed "+ Add" off the screen).
+- **Owner's board pass (23 Oct), seven asks:** delete a board (there was no way); "Today" in the
+  board tray doesn't make sense; "Shapes" and "Today" in different sizes, and Days / Folders
+  should sit by that title; remove "Start again from a draft"; rename boards; a visible sign that
+  background removal is working; download the board.
+- **Owner's calls:** the tray's title is **Inspo** (the owner's word: it should say "your saved
+  inspiration", not a date; "Swipe file" was the alternative), with **Days | Folders** on its
+  line and saves newest first, no date headings (the inbox keeps its day pages); a **menu on
+  the open board's name** for Rename, Download and Delete; download as a **PNG**.
+- **Built:** the board menu (rename in place; delete asks first, then opens the next board or
+  the New board form; nothing left to autosave after a delete); Download draws the board itself
+  with `html-to-image` (loaded only when used) at 3200 × 1800. Gotcha: the library keeps an
+  element's own position, so the first exports came out shifted (the on-screen offset) or empty;
+  it now exports a full-size copy at 0, 0 in an off-screen holder. A soft light sweeps over a
+  photo while its background is removed (still for reduced motion). "Start again from a draft"
+  is gone. "Inspo" and "Shapes" are both 28 px.
+- **Checked** at 1440 × 900: Rename ("Summer 2026" → "Holiday looks", 3 pieces kept); Download
+  (headless: a 3200 × 1800 PNG with the photos and the hand-lettered pill); Delete (the board
+  gone, the New board form shown); the shimmer's animation runs. Not checked: a real cut-out with
+  the shimmer on the live site.

@@ -7,15 +7,14 @@
 // later, so the board is the same on any device.
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { SketchFilters } from "@/components/sketch-filters";
 import { AccessGate } from "@/components/access-gate";
-import { BoardCanvas, FALLBACK_PALETTE, LOGO_YELLOW, PILL_CREAM, SHAPES, tiledDraft, useBoardEditor, useTools, type Rect, type ShapeKind } from "@/components/board/engine";
+import { BOARD_H, BOARD_W, BoardCanvas, FALLBACK_PALETTE, LOGO_YELLOW, PILL_CREAM, SHAPES, useBoardEditor, useTools, type Rect, type ShapeKind } from "@/components/board/engine";
 import { imageUrl, type Board, type BoardDoc, type BoardSummary, type Folder, type Save } from "@/lib/library";
 import { cutOut } from "@/lib/cutout";
 import { paletteFrom } from "@/lib/palette";
 import { newBoardName } from "@/lib/season";
-import { byDay } from "@/lib/days";
 
 export default dynamic(() => Promise.resolve(BoardApp), { ssr: false });
 
@@ -29,9 +28,14 @@ function BoardApp() {
   const [picking, setPicking] = useState(false);
   const [saveState, setSaveState] = useState<SaveState>("saved");
 
+  // The latest arrangement of the open board, so a rename saves it under the new name.
+  const latest = useRef<BoardDoc | null>(null);
   const open = useCallback(async (id: string) => {
     const r = await fetch(`/api/boards?id=${id}`);
-    if (r.ok) setBoard((await r.json()).board);
+    if (!r.ok) return;
+    const b: Board = (await r.json()).board;
+    latest.current = b.doc;
+    setBoard(b);
   }, []);
 
   const load = useCallback(async () => {
@@ -84,8 +88,30 @@ function BoardApp() {
     const r = await fetch(`/api/boards?id=${next.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, doc: next.doc }) });
     if (!r.ok) return setSaveState("failed");
     setBoards((bs) => [{ id: next.id, name, updatedAt: next.updatedAt }, ...bs]);
+    latest.current = next.doc;
     setBoard(next);
     setPicking(false);
+  }
+
+  // The board menu (owner, 23 Oct): rename the open board, or delete it for good.
+  async function renameBoard(name: string) {
+    if (!board) return;
+    setBoard({ ...board, name });
+    setBoards((bs) => bs.map((b) => (b.id === board.id ? { ...b, name } : b)));
+    queueSave(board.id, name, latest.current ?? board.doc);
+    await flush();
+  }
+  async function deleteBoard() {
+    if (!board || !confirm(`Delete "${board.name}"? This can't be undone.`)) return;
+    clearTimeout(timer.current);
+    pending.current = null; // nothing left to autosave
+    const r = await fetch(`/api/boards?id=${board.id}`, { method: "DELETE" });
+    if (!r.ok) return setSaveState("failed");
+    const rest = boards.filter((b) => b.id !== board.id);
+    setBoards(rest);
+    history.replaceState(null, "", "/board");
+    if (rest[0]) await open(rest[0].id);
+    else { setBoard(null); setPicking(true); }
   }
 
   if (access === false) return <AccessGate onOpen={() => load()} />;
@@ -100,8 +126,9 @@ function BoardApp() {
 
       {board && !picking ? (
         <Editor key={board.id} board={board} saves={saves} photos={photos} boards={boards} saveState={saveState}
-          onChange={(doc) => queueSave(board.id, board.name, doc)}
-          onSwitch={switchTo} onNew={async () => { await flush(); setPicking(true); }} />
+          onChange={(doc) => { latest.current = doc; queueSave(board.id, board.name, doc); }}
+          onSwitch={switchTo} onNew={async () => { await flush(); setPicking(true); }}
+          onRename={renameBoard} onDelete={deleteBoard} />
       ) : (
         <>
           <Header boards={boards} current={null} onSwitch={switchTo} onNew={() => setPicking(true)} />
@@ -116,16 +143,18 @@ function BoardApp() {
   );
 }
 
-function Header({ boards, current, onSwitch, onNew, right }: { boards: BoardSummary[]; current: string | null; onSwitch: (id: string) => void; onNew: () => void; right?: React.ReactNode }) {
+type BoardMenuActions = { onRename: (name: string) => void; onDownload: () => void; onDelete: () => void; downloading: boolean };
+
+function Header({ boards, current, onSwitch, onNew, menu, right }: { boards: BoardSummary[]; current: string | null; onSwitch: (id: string) => void; onNew: () => void; menu?: BoardMenuActions; right?: React.ReactNode }) {
   return (
     <header className="ed-top col-span-2 flex items-center gap-5 px-6">
       <span className="ed-logo">Selvedge</span>
       {/* Back to where saves land (owner, 23 Oct); the autosave flushes as the page goes. */}
       <a href="/inbox" className="ed-btn ed-tab inline-flex items-center"><span>Inbox</span></a>
       <nav className="flex items-center gap-1">
-        {boards.map((b) => (
+        {boards.map((b) => (b.id === current && menu ? <BoardMenu key={b.id} name={b.name} {...menu} /> : (
           <button key={b.id} onClick={() => onSwitch(b.id)} className="ed-btn ed-tab" data-active={b.id === current ? "" : undefined}><span>{b.name}</span></button>
-        ))}
+        )))}
         <button onClick={onNew} className="ed-btn ed-tab ed-quiet"><span>+ New board</span></button>
       </nav>
       {right}
@@ -133,9 +162,50 @@ function Header({ boards, current, onSwitch, onNew, right }: { boards: BoardSumm
   );
 }
 
-function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, onNew }: {
+// The open board's tab: click its name for Rename, Download and Delete (owner, 23 Oct).
+function BoardMenu({ name, onRename, onDownload, onDelete, downloading }: { name: string } & BoardMenuActions) {
+  const [open, setOpen] = useState(false);
+  const [renaming, setRenaming] = useState(false);
+  const [draft, setDraft] = useState(name);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const away = (e: PointerEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false); };
+    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    addEventListener("pointerdown", away);
+    addEventListener("keydown", esc);
+    return () => { removeEventListener("pointerdown", away); removeEventListener("keydown", esc); };
+  }, [open]);
+  if (renaming) {
+    return (
+      <form className="flex items-center gap-1" onSubmit={(e) => { e.preventDefault(); if (draft.trim()) { onRename(draft.trim()); setRenaming(false); } }}>
+        <input autoFocus onFocus={(e) => e.target.select()} value={draft} onChange={(e) => setDraft(e.target.value)} maxLength={80} aria-label="Board name"
+          onKeyDown={(e) => { if (e.key === "Escape") { setDraft(name); setRenaming(false); } }}
+          className="h-8 w-48 rounded-md border border-black/20 bg-white/70 px-2 text-[16px]" />
+        <button className="ed-btn ed-tab" data-active="" disabled={!draft.trim()}><span>Save</span></button>
+      </form>
+    );
+  }
+  return (
+    <div ref={ref} className="relative">
+      <button className="ed-btn ed-tab" data-active="" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+        <span>{downloading ? "Getting the image ready…" : name} <span aria-hidden="true">▾</span></span>
+      </button>
+      {open && (
+        <div role="menu" className="ed-chip desk-chip absolute left-0 top-full z-50 mt-2 flex flex-col items-start" style={{ transform: "none" }}>
+          <button role="menuitem" className="ed-btn" onClick={() => { setOpen(false); setDraft(name); setRenaming(true); }}><span>Rename</span></button>
+          <button role="menuitem" className="ed-btn" onClick={() => { setOpen(false); onDownload(); }}><span>Download</span></button>
+          <button role="menuitem" className="ed-btn ed-tool" data-danger="" onClick={() => { setOpen(false); onDelete(); }}><span>Delete</span></button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, onNew, onRename, onDelete }: {
   board: Board; saves: Save[]; photos: Save[]; boards: BoardSummary[]; saveState: SaveState;
   onChange: (doc: BoardDoc) => void; onSwitch: (id: string) => void; onNew: () => void;
+  onRename: (name: string) => void; onDelete: () => void;
 }) {
   // The tray mirrors the inbox (owner, 23 Oct): Days (saves not in a folder, by day) and Folders,
   // so every save is in reach while making the board; one already on it is marked. Folders are the
@@ -189,7 +259,6 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
         ...base.slice(1),
       ]
     : base;
-  const byId = useMemo(() => new Map(saves.map((s) => [s.id, s])), [saves]);
   const used = new Set(editor.pieces.flatMap((x) => (x.kind === "photo" && x.saveId ? [x.saveId] : [])));
   const loose = photos.filter((s) => !s.folderId);
   const folder = typeof view === "object" ? folders.find((f) => f.id === view.folder) : undefined;
@@ -204,11 +273,37 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
     paletteFrom(ids.map(imageUrl), 6, FALLBACK_PALETTE).then((c) => setPalette([PILL_CREAM, LOGO_YELLOW, ...c.filter((x) => x !== PILL_CREAM && x !== LOGO_YELLOW)]));
   }, [paletteKey]);
 
-  async function redraft() {
-    if (!confirm("Start again from a draft? This board's arrangement will be replaced.")) return;
-    const onBoard = editor.pieces.filter((x) => x.kind === "photo" && x.saveId).sort((a, b) => a.y - b.y || a.x - b.x).map((x) => byId.get(x.saveId!)).filter((s): s is Save => !!s);
-    const picked = onBoard.length ? onBoard : loose.slice(0, 14);
-    editor.actions.replaceAll(tiledDraft(picked));
+  // Download (owner, 23 Oct): the board as a PNG at twice its size (3200 × 1800), drawn from the
+  // board itself so crops, cut-outs and rough edges come out as they look. Nothing is selected
+  // while it's taken, so no handles show.
+  const [downloading, setDownloading] = useState(false);
+  async function download() {
+    if (downloading) return;
+    setDownloading(true);
+    editor.actions.select(null);
+    try {
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      const sheet = document.querySelector<HTMLElement>(".ed-stage .board-sheet");
+      if (!sheet?.parentElement) throw new Error("No board on the page");
+      // A full-size copy at 0, 0 in a holder off-screen: the board on screen is scaled and offset
+      // to fit the window, and html-to-image keeps an element's own position.
+      const holder = document.createElement("div");
+      Object.assign(holder.style, { position: "fixed", left: "-20000px", top: "0px", width: `${BOARD_W}px`, height: `${BOARD_H}px` });
+      const copy = sheet.cloneNode(true) as HTMLElement;
+      Object.assign(copy.style, { transform: "none", left: "0px", top: "0px" });
+      holder.appendChild(copy);
+      sheet.parentElement.appendChild(holder);
+      const { toPng } = await import("html-to-image");
+      const url = await toPng(copy, { width: BOARD_W, height: BOARD_H, pixelRatio: 2 }).finally(() => holder.remove());
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${board.name.trim().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "") || "board"}.png`;
+      a.click();
+    } catch (error) {
+      console.error(error);
+      alert("Couldn't make the image. Try again.");
+    }
+    setDownloading(false);
   }
 
   const chip = (r: Rect) => (
@@ -237,11 +332,9 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
 
   return (
     <>
-      <Header boards={boards} current={board.id} onSwitch={onSwitch} onNew={onNew} right={
-        <>
-          <span className="ed-quiet ml-auto text-[15px]" aria-live="polite">{saveState === "saving" ? "Saving…" : saveState === "failed" ? "Couldn't save. Check your connection" : ""}</span>
-          <button className="ed-btn ed-quiet" onClick={redraft}><span>Start again from a draft</span></button>
-        </>
+      <Header boards={boards} current={board.id} onSwitch={onSwitch} onNew={onNew}
+        menu={{ onRename, onDownload: download, onDelete, downloading }} right={
+        <span className="ed-quiet ml-auto text-[15px]" aria-live="polite">{saveState === "saving" ? "Saving…" : saveState === "failed" ? "Couldn't save. Check your connection" : ""}</span>
       } />
 
       <aside className="ed-tray overflow-y-auto p-4">
@@ -255,17 +348,16 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
             </button>
           ))}
         </div>
-        <div className="-ml-3 mb-3 flex gap-1">
-          <button className="ed-btn ed-tab" data-active={view === "days" ? "" : undefined} onClick={() => setView("days")}><span>Days</span></button>
-          <button className="ed-btn ed-tab" data-active={view !== "days" ? "" : undefined} onClick={() => setView("folders")}><span>Folders</span></button>
+        {/* Inspo: every save, newest first (owner, 23 Oct: the tray is about my saved
+            inspiration, not dates), with Days and Folders on the same line. */}
+        <div className="mb-3 flex items-center">
+          <p className="ed-tray-title mr-auto">Inspo</p>
+          <button className="ed-btn ed-tab !px-2" data-active={view === "days" ? "" : undefined} onClick={() => setView("days")}><span>Days</span></button>
+          <button className="ed-btn ed-tab !px-2" data-active={view !== "days" ? "" : undefined} onClick={() => setView("folders")}><span>Folders</span></button>
         </div>
         {view === "days" ? (
-          loose.length ? byDay(loose).map((d) => (
-            <section key={d.label} className="mb-4">
-              <p className="ed-tray-title ed-day mb-2">{d.label}</p>
-              <Thumbs saves={d.items} used={used} onAdd={editor.actions.addSave} />
-            </section>
-          )) : <p className="ed-tray-foot">Nothing on your day pages. New saves land here.</p>
+          loose.length ? <Thumbs saves={loose} used={used} onAdd={editor.actions.addSave} />
+            : <p className="ed-tray-foot">Nothing on your day pages. New saves land here.</p>
         ) : view === "folders" ? (
           folders.length ? (
             <ul className="-ml-3 flex flex-col items-start">
@@ -280,15 +372,17 @@ function Editor({ board, saves, photos, boards, saveState, onChange, onSwitch, o
           ) : <p className="ed-tray-foot">No folders yet. Make them in the inbox.</p>
         ) : (
           <>
-            <button className="ed-btn ed-quiet -ml-3" onClick={() => setView("folders")}><span>← Folders</span></button>
-            <p className="ed-tray-title ed-day mb-2 mt-1">{folder?.name ?? "Folder"}</p>
+            <div className="-ml-3 mb-2 flex items-baseline gap-1">
+              <button className="ed-btn ed-quiet" onClick={() => setView("folders")}><span>← Folders</span></button>
+              <span className="truncate">{folder?.name}</span>
+            </div>
             <Thumbs saves={photos.filter((s) => s.folderId === folder?.id)} used={used} onAdd={editor.actions.addSave} />
           </>
         )}
       </aside>
 
       <main className="ed-stage relative p-8">
-        <BoardCanvas board={editor} saves={saves} versions={versions} chrome={chip} className="h-full w-full" />
+        <BoardCanvas board={editor} saves={saves} versions={versions} busy={cutting?.id} chrome={chip} className="h-full w-full" />
       </main>
     </>
   );

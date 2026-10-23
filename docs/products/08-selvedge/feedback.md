@@ -24,3 +24,10 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 18 | Owner, live inbox (23 Oct) | No way to start a mood board from the inbox | fixed (Make a board from picked photos) |
 | 19 | Owner, live board (23 Oct) | A link back to the inbox from the board | fixed (Inbox in the board's header) |
 | 20 | Owner, live board (23 Oct) | Picking photos in the inbox, then This board / All saves on the board, adds little; more photos means going back to the inbox | fixed (the tray mirrors the inbox: Days and Folders; Boards link in the inbox; Make a board from picks removed) |
+| 21 | Owner, board pass (23 Oct) | No way to delete a board | fixed (board menu: Delete) |
+| 22 | Owner, board pass | "Today" in the board tray doesn't make sense | fixed ("Inspo", the owner's word) |
+| 23 | Owner, board pass | "Shapes" and "Today" in different sizes; Days / Folders by the title | fixed (both 28 px; tabs on the Inspo line) |
+| 24 | Owner, board pass | "Start again from a draft" is redundant | fixed (removed) |
+| 25 | Owner, board pass | Rename boards, saved and in progress | fixed (board menu: Rename) |
+| 26 | Owner, board pass | Not obvious that background removal is working | fixed (a soft shimmer over the photo) |
+| 27 | Owner, board pass | Export the board to download it | fixed (board menu: Download, a 3200 × 1800 PNG) |

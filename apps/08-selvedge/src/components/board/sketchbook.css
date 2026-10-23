@@ -107,5 +107,12 @@
 
 /* The tray mirrors the inbox (owner, 23 Oct): day titles in the blue wash, a little smaller, and a
    pencil tick on a save that's already on the board. */
-.t-sketchbook1 .ed-day { font-size: 22px; }
+
 .ed-used { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: #fffdf8; color: #3a2a20; font-size: 14px; line-height: 1; box-shadow: 0 1px 3px rgba(58, 42, 32, 0.3); }
+
+/* Removing a background (owner, 23 Oct): a soft light passes over the photo until it's done. */
+.board-piece [data-busy]::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(100deg, transparent 35%, rgba(255, 253, 248, 0.55) 50%, transparent 65%); background-size: 260% 100%;
+  animation: cut-shimmer 1.6s ease-in-out infinite; }
+@keyframes cut-shimmer { from { background-position: 130% 0; } to { background-position: -30% 0; } }
+@media (prefers-reduced-motion: reduce) { .board-piece [data-busy]::after { animation: none; background: rgba(255, 253, 248, 0.35); } }

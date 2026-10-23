@@ -1,0 +1,57 @@
+# Light checks on every PR to main (decision 0026): lint, unit tests and a production build, only
+# for the apps the PR changed, plus a syntax check of the repo scripts. A docs-only PR passes in
+# seconds. Claude merges its own PR only once this passes.
+name: checks
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: checks-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Changed apps
+        id: changed
+        run: |
+          apps=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" -- apps \
+            | cut -d/ -f2 | sort -u | while read -r a; do [ -f "apps/$a/package.json" ] && echo "$a"; done | xargs)
+          echo "apps=$apps" >> "$GITHUB_OUTPUT"
+          echo "Changed apps: ${apps:-none}"
+
+      - name: Repo scripts parse
+        run: for f in scripts/*.mjs scripts/**/*.mjs; do [ -f "$f" ] && node --check "$f"; done
+
+      - uses: pnpm/action-setup@v4
+        if: steps.changed.outputs.apps != ''
+
+      - uses: actions/setup-node@v4
+        if: steps.changed.outputs.apps != ''
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install
+        if: steps.changed.outputs.apps != ''
+        run: pnpm install --frozen-lockfile
+
+      # Builds need no keys: the apps read them at request time, not at build time.
+      - name: Lint, test, build
+        if: steps.changed.outputs.apps != ''
+        run: |
+          for app in ${{ steps.changed.outputs.apps }}; do
+            echo "::group::$app"
+            pnpm -F "$app" lint
+            if grep -q '"test"' "apps/$app/package.json"; then pnpm -F "$app" test --passWithNoTests; fi
+            pnpm -F "$app" build
+            echo "::endgroup::"
+          done

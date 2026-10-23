@@ -10,6 +10,7 @@
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
     "ship": "node scripts/ship.mjs",
+    "env-bootstrap": "node scripts/env-bootstrap.mjs",
     "test": "pnpm -r --if-present test"
   }
 }

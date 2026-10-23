@@ -533,6 +533,14 @@ anxiety was "quite, as before" while the Summary said "a little better"; the own
 caption say then → now in the Summary's words. From: Jakob Nielsen's heuristic "Consistency and
 standards" (1994).
 
+#### Proximity (Gestalt)
+Things placed close together are read as one group; things far apart as unrelated. Why it
+matters: a control far from what it changes looks like it belongs to something else, so people
+hunt for it or misread it. Where we met it: Selvedge (08) inbox: the Days and Folders tabs sat at
+the far right, away from the title they switch; the owner moved them next to the logo, as the
+board editor already had them, and the main action (Add photos) took the right side. From: the
+Gestalt psychologists (Wertheimer, 1923), brought to screens by designers like Alan Cooper.
+
 #### Progressive disclosure
 Show the simple, cheap option first and offer the heavier one only once it's relevant. Why it
 matters: most people never need the advanced path, so making it the default costs everyone the
@@ -607,6 +615,9 @@ the graph and named medicines instead of colouring them. *(Edward Tufte's data-i
 Visual Display of Quantitative Information; Stephen Few on dashboards)*
 
 ### Quiz
+
+**Q:** What does the Gestalt principle of proximity say, and what did it change in Selvedge's inbox?
+**A:** Close things read as a group; the Days/Folders tabs moved from the far right to beside the logo they belong to.
 
 **Q:** What is progressive disclosure, and where did Selvedge use it?
 **A:** Offer the simple option first and the heavier one only when needed; "Cut out more carefully" (the slow, 219 MB model) appears only after the quick cut-out.

@@ -16,3 +16,8 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 10 | Owner, inbox directions | Colour notes, but only in folders, and switchable | fixed (a switch per folder) |
 | 11 | Owner, inbox directions | Remove the yellow tape on the prints: the eye goes to the tape, not the clothes | fixed |
 | 12 | Owner, live inbox (23 Oct) | An option to upload images from the computer, not only drag and drop | fixed (+ Add photos on the day pages) |
+| 13 | Owner, live inbox design pass (23 Oct) | Days and Folders should sit next to the title, not on the right | fixed |
+| 14 | Owner, live inbox design pass | Day titles in the board's blue style | fixed |
+| 15 | Owner, live inbox design pass | "Saved" and "Today" are two confusing titles; "Saved" is redundant | fixed (removed) |
+| 16 | Owner, live inbox design pass | No Select button: cards selectable by default | fixed (a tap picks; the bar shows while any are picked) |
+| 17 | Owner, live inbox design pass | Find the best place for Add photos | fixed (header, right; owner's pick of three) |

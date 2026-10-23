@@ -3,8 +3,8 @@
 /* eslint-disable @next/next/no-img-element */
 // The inbox: where a share lands (design session, 23 Oct). Day pages by default: every save not
 // yet in a folder, grouped by the day it was saved, as prints in the sketchbook look. Folders are
-// mine to make and name; Select, then Move to, puts saves in one, and then they leave their day
-// page (a save lives in one place). A folder can show each save's colours (colour notes, per
+// mine to make and name; tap saves to pick them, then Move to puts them in one, and they leave
+// their day page (a save lives in one place). A folder can show each save's colours (colour notes, per
 // folder). Add photos picks them from the computer or gallery, or drop them anywhere on a laptop;
 // both upload like shares. What's still waiting on this device shows on top; a link whose picture
 // couldn't be fetched asks for a screenshot (3b).
@@ -43,12 +43,12 @@ function Inbox() {
   const [saves, setSaves] = useState<Save[] | null>(null);
   const [folders, setFolders] = useState<Folder[]>([]);
   const [queue, setQueue] = useState<QueueItem[]>([]);
-  const [params] = useState(() => new URLSearchParams(location.search));
+  const [missed] = useState(() => new URLSearchParams(location.search).get("missed"));
   const [view, setView] = useState<View>(readView);
-  const [picked, setPicked] = useState<Set<string> | null>(null); // null: not selecting
+  // A tap on any card picks it (owner, 23 Oct: no Select step); the bar shows while any are picked.
+  const [picked, setPicked] = useState<Set<string>>(() => new Set());
   const [moving, setMoving] = useState(false);
   const [dragging, setDragging] = useState(false);
-  const [dropped, setDropped] = useState(0);
 
   const refresh = useCallback(() => {
     listQueue().then(setQueue, () => setQueue([]));
@@ -61,7 +61,7 @@ function Inbox() {
     refresh();
     retryUploads();
     const off = onQueueChange(refresh);
-    const back = () => { setView(readView()); setPicked(null); };
+    const back = () => { setView(readView()); setPicked(new Set()); };
     addEventListener("online", retryUploads);
     addEventListener("popstate", back);
     return () => { off(); removeEventListener("online", retryUploads); removeEventListener("popstate", back); };
@@ -70,24 +70,24 @@ function Inbox() {
   function go(v: View) {
     history.pushState(null, "", viewUrl(v));
     setView(v);
-    setPicked(null);
+    setPicked(new Set());
     scrollTo(0, 0);
   }
 
   async function moveTo(folderId: string | null) {
-    if (!picked?.size) return;
+    if (!picked.size) return;
     const ids = [...picked];
     setSaves((all) => all && all.map((s) => (picked.has(s.id) ? { ...s, folderId } : s)));
-    setPicked(null);
+    setPicked(new Set());
     setMoving(false);
     await fetch("/api/saves", { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ ids, folderId }) });
     refresh();
   }
 
   async function removePicked() {
-    if (!picked?.size || !confirm(picked.size === 1 ? "Remove this save for good?" : `Remove these ${picked.size} saves for good?`)) return;
+    if (!picked.size || !confirm(picked.size === 1 ? "Remove this save for good?" : `Remove these ${picked.size} saves for good?`)) return;
     await Promise.all([...picked].map((id) => fetch(`/api/saves?id=${id}`, { method: "DELETE" })));
-    setPicked(null);
+    setPicked(new Set());
     refresh();
   }
 
@@ -117,7 +117,7 @@ function Inbox() {
   async function addFiles(list: FileList | null) {
     const files = [...(list ?? [])].filter((f) => f.type.startsWith("image/"));
     if (!files.length) return;
-    setDropped(await enqueueFiles(files));
+    await enqueueFiles(files);
     if (view.page !== "days") go({ page: "days" });
     refresh();
   }
@@ -133,8 +133,6 @@ function Inbox() {
   const loose = saves?.filter((s) => !s.folderId) ?? [];
   const inFolder = (id: string) => saves?.filter((s) => s.folderId === id) ?? [];
   const toggle = (id: string) => setPicked((p) => { const n = new Set(p); if (n.has(id)) n.delete(id); else n.add(id); return n; });
-  const shared = Number(params.get("shared") || 0), missed = params.get("missed");
-  const canSelect = view.page === "days" ? loose.length > 0 : view.page === "folder" && !!folder && inFolder(folder.id).length > 0;
 
   return (
     <div className="ed t-sketchbook1 min-h-dvh"
@@ -142,16 +140,20 @@ function Inbox() {
       onDragLeave={(e) => { if (!e.relatedTarget) setDragging(false); }}
       onDrop={drop}>
       <SketchFilters />
-      <header className="ed-top mx-auto flex w-full max-w-4xl items-center gap-2 px-4 pb-2 pt-[max(1rem,env(safe-area-inset-top))]">
-        <a href="/board" className="ed-logo mr-auto">Selvedge</a>
+      {/* The tabs sit by the logo, as on the board; the main action, Add photos, on the right. */}
+      <header className="ed-top mx-auto flex w-full max-w-4xl items-center gap-1 px-4 pb-2 pt-[max(1rem,env(safe-area-inset-top))]">
+        <a href="/board" className="ed-logo mr-3 sm:mr-5">Selvedge</a>
         <button className="ed-btn ed-tab" data-active={view.page === "days" ? "" : undefined} onClick={() => go({ page: "days" })}><span>Days</span></button>
         <button className="ed-btn ed-tab" data-active={view.page !== "days" ? "" : undefined} onClick={() => go({ page: "folders" })}><span>Folders</span></button>
+        <label className="ed-btn ed-quiet ml-auto inline-flex cursor-pointer items-center !text-[var(--ink)]">
+          <span>+ Add<span className="hidden sm:inline"> photos</span></span>
+          <input type="file" accept="image/*" multiple className="sr-only" onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
+        </label>
       </header>
 
-      <main className={`mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 pt-4 ${picked ? "pb-28" : "pb-12"}`}>
+      <main className={`mx-auto flex w-full max-w-4xl flex-col gap-4 px-4 pt-5 ${picked.size ? "pb-28" : "pb-12"}`}>
         {view.page === "days" && (
           <>
-            {(shared > 0 || dropped > 0) && <p className="inbox-day">Saved ✓</p>}
             {missed && <p className="inbox-miss">That share arrived before the app was ready, so it wasn&apos;t kept. Share it again.</p>}
             {queue.length > 0 && (
               <ul className="flex flex-col gap-2">
@@ -171,18 +173,6 @@ function Inbox() {
           <FolderHead folder={folder} onBack={() => go({ page: "folders" })} onSave={saveFolder} onDelete={() => deleteFolder(folder)} />
         )}
 
-        {(view.page === "days" || canSelect) && (
-          <div className="-mx-3 -mb-2 flex items-center">
-            {view.page === "days" && !picked && (
-              <label className="ed-btn ed-tab inline-flex cursor-pointer items-center">
-                <span>+ Add photos</span>
-                <input type="file" accept="image/*" multiple className="sr-only" onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
-              </label>
-            )}
-            {canSelect && <button className="ed-btn ed-quiet ml-auto" onClick={() => setPicked(picked ? null : new Set())}><span>{picked ? "Cancel" : "Select"}</span></button>}
-          </div>
-        )}
-
         {saves === null ? null : view.page === "days" ? (
           loose.length === 0 && queue.length === 0 ? (
             <p className="text-[var(--muted)]">
@@ -191,7 +181,7 @@ function Inbox() {
           ) : (
             byDay(loose).map((d) => (
               <section key={d.label} className="flex flex-col gap-3">
-                <h2 className="inbox-day">{d.label}</h2>
+                <h2 className="ed-tray-title self-start">{d.label}</h2>
                 <Prints saves={d.items} picked={picked} onToggle={toggle} />
               </section>
             ))
@@ -202,21 +192,22 @@ function Inbox() {
           inFolder(folder.id).length ? (
             <Prints saves={inFolder(folder.id)} picked={picked} onToggle={toggle} notes={folder.colourNotes} />
           ) : (
-            <p className="text-[var(--muted)]">Nothing in here yet. On your day pages, tap Select, pick photos, then Move to.</p>
+            <p className="text-[var(--muted)]">Nothing in here yet. On your day pages, tap photos to pick them, then Move to.</p>
           )
         ) : (
           <p className="text-[var(--muted)]">That folder is gone. <button className="underline" onClick={() => go({ page: "folders" })}>Back to folders</button></p>
         )}
       </main>
 
-      {picked && (
+      {picked.size > 0 && (
         <div className="inbox-bar gap-2">
-          <button className="ed-btn ed-tab" data-active="" disabled={!picked.size} onClick={() => setMoving(true)}><span>Move to…</span></button>
-          <button className="ed-btn ed-tool" data-danger="" disabled={!picked.size} onClick={removePicked}><span>Remove</span></button>
+          <button className="ed-btn ed-tab" data-active="" onClick={() => setMoving(true)}><span>Move to…</span></button>
+          <button className="ed-btn ed-tool" data-danger="" onClick={removePicked}><span>Remove</span></button>
+          <button className="ed-btn ed-quiet" onClick={() => setPicked(new Set())}><span>Cancel</span></button>
         </div>
       )}
 
-      {moving && picked && (
+      {moving && picked.size > 0 && (
         <MoveSheet folders={folders.filter((f) => view.page !== "folder" || f.id !== view.id)} fromFolder={view.page === "folder"}
           onPick={moveTo} onNew={async (name) => { const id = await newFolder(name); if (id) await moveTo(id); }} onClose={() => setMoving(false)} />
       )}
@@ -226,8 +217,9 @@ function Inbox() {
   );
 }
 
-// Saves as prints. While selecting, a tap picks one: the board picker's yellow dot (pick D).
-function Prints({ saves, picked, onToggle, notes }: { saves: Save[]; picked: Set<string> | null; onToggle: (id: string) => void; notes?: boolean }) {
+// Saves as prints. A tap picks one: the board picker's yellow dot (pick D). The card isn't a
+// <button> so a link inside it (a post without its picture) stays a real link.
+function Prints({ saves, picked, onToggle, notes }: { saves: Save[]; picked: Set<string>; onToggle: (id: string) => void; notes?: boolean }) {
   return (
     <ul className="grid grid-cols-2 gap-x-3 gap-y-4 sm:grid-cols-3 lg:grid-cols-4">
       {saves.map((s, i) => {
@@ -238,7 +230,7 @@ function Prints({ saves, picked, onToggle, notes }: { saves: Save[]; picked: Set
             ) : (
               <div className="inbox-miss" style={{ aspectRatio: 3 / 4 }}>
                 <span>Couldn&apos;t get the picture from this {s.source === "instagram" ? "post" : s.source === "pinterest" ? "pin" : "link"}. Take a screenshot and share that instead.</span>
-                {s.link && <a href={s.link} target="_blank" rel="noreferrer" className="truncate text-[var(--muted)] underline">{new URL(s.link).hostname}</a>}
+                {s.link && <a href={s.link} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="truncate text-[var(--muted)] underline">{new URL(s.link).hostname}</a>}
               </div>
             )}
             {notes && s.hasImage && <ColourNotes id={s.id} />}
@@ -246,15 +238,14 @@ function Prints({ saves, picked, onToggle, notes }: { saves: Save[]; picked: Set
         );
         return (
           <li key={s.id}>
-            {picked ? (
-              <button type="button" className="pick-tile inbox-pick relative block w-full" aria-pressed={picked.has(s.id)} onClick={() => onToggle(s.id)}>
-                {print}
-                <svg className="pick-dot" viewBox="0 0 22 22" aria-hidden="true">
-                  <circle cx="11" cy="11" r="7.5" fill="#f2d666" style={{ filter: "url(#ink-bleed)" }} />
-                  <circle cx="9" cy="9" r="2.6" fill="#f7e595" opacity=".8" />
-                </svg>
-              </button>
-            ) : print}
+            <div role="button" tabIndex={0} className="pick-tile inbox-pick relative block w-full" aria-pressed={picked.has(s.id)} aria-label="Pick this save"
+              onClick={() => onToggle(s.id)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onToggle(s.id); } }}>
+              {print}
+              <svg className="pick-dot" viewBox="0 0 22 22" aria-hidden="true">
+                <circle cx="11" cy="11" r="7.5" fill="#f2d666" style={{ filter: "url(#ink-bleed)" }} />
+                <circle cx="9" cy="9" r="2.6" fill="#f7e595" opacity=".8" />
+              </svg>
+            </div>
           </li>
         );
       })}

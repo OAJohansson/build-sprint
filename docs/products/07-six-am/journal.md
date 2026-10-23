@@ -343,3 +343,6 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   Agreed: 4 × 30 s snippets at about 20/40/60/80% (L26) and a queue in the MVP (L27, reverses L4);
   the speed bar changes with it. Owner confirmed the Deck design (L25). The first spike run (FOVOS)
   read 101.3 BPM for a ~150 BPM track (2:3 error); the BPM shortcut gets fixed with the snippet work.
+- **Design rounds 4 and 5:** 8/10, then 7/10 from fresh critics. Each critic finds new gaps rather
+  than re-checking the old ones, so the loop was stopped (L28): the build starts from round 5 with
+  the last critic's concrete gaps folded in, and the graded score comes from a critic on the built app.

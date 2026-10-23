@@ -354,3 +354,10 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - **Analyse view built** at `/analyse` (Deck design plus the last critic's fixes), Studio tempo now
   variable (Set Studio BPM), Copy for Claude, CSV/JSON export, licence note in the app README.
   72 tests, lint, tsc and build pass. Not yet run on real tab audio (owner's Chrome). L32–L34, T5–T10.
+- **Design score on the built view** (fresh critic, screenshots of `/analyse?demo=1`, empty and
+  listening-off): **7/10**. Kept: the ledger rows, right-aligned numbers, energy blocks, Camelot,
+  snippet columns. Gaps: gold used for too many things, title truncation at 1280, the strip repeats
+  BPM and shows a real bug ("Tags House · House"), "differs" reads as an error, the demo player box
+  looks unfinished, the empty state hides the table shape. Some points contradict earlier critics
+  (the serif title was a "keep" twice), so the fix pass takes the concrete bugs and the accent
+  discipline, not the type-voice reversal.

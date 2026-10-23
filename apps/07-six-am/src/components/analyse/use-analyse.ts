@@ -106,7 +106,7 @@ export function useAnalyse(): AnalyseModel {
     // The worker already retried 3 times; a fresh worker on Retry starts the download again.
     client.onError = (m) => {
       setModel({ state: "error", fraction: null });
-      setMessage({ tone: "error", text: "Couldn't download the listening model", detail: m, action: { label: "Retry", run: retryModel } });
+      setMessage({ tone: "error", text: "Couldn't get Six AM's ears ready", detail: m, action: { label: "Retry", run: retryModel } });
     };
     client.ready().then(() => { ready = true; setModel({ state: "ready", fraction: null }); setEars(client); });
   };
@@ -179,7 +179,7 @@ export function useAnalyse(): AnalyseModel {
       const blocked = tracks.filter((t) => t.blocked).length;
       const repeats = tracks.length - added;
       if (problems.length) setMessage({ tone: "error", text: problems.join(" · ") });
-      else if (source && tracks.length) setMessage({ tone: "info", text: `Added ${added} track${added === 1 ? "" : "s"} to the list${repeats ? ` · ${repeats} already on it` : ""}${blocked ? ` · ${blocked} not available in your region` : ""}.` });
+      else if (source && tracks.length) setMessage({ tone: "info", text: `Added ${added} track${added === 1 ? "" : "s"}${repeats ? ` · ${repeats} already on the list` : ""}${blocked ? ` · ${blocked} not available in your region` : ""}` });
       else if (blocked) setMessage({ tone: "info", text: `${blocked} track${blocked > 1 ? "s aren't" : " isn't"} available in your region.` });
     } catch (e) {
       setMessage({ tone: "error", text: e instanceof Error ? e.message : String(e) });

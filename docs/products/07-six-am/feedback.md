@@ -20,5 +20,5 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 14 | User test, findings 4–7, 9–11 (minor) | Prompt missing confidence/differs/playlists; quiet not-listening cue, no Retry; no title tooltip or filter; guide vanishes before Enable listening; jargon; small buttons; jitter | fixed (re-checked 24 Oct) |
 | 15 | Owner, 23 Oct | Wanted to add a second URL to the list; pasting replaces the list instead of adding to it | fixed (re-checked 24 Oct) |
 | 16 | User test, value | Mark a track as filed into a playlist; "31 / 56 placed" progress | parked (backlog) |
-| 17 | User re-test 24 Oct, N1–N6 (minor/polish) | Half-time big number vs button; step 2 hint lost after a second paste; download hang needs a timeout; copy only top 3 styles; "model" jargon cut off; Camelot cell tooltip | open |
-| 18 | Design critic after fix pass (7/10) | % not aligned down the column; hover invisible (3rd critic); BPM–Key gutter; ghost rows in the empty state; duplicated toolbar banner | open |
+| 17 | User re-test 24 Oct, N1–N6 (minor/polish) | Half-time big number vs button; step 2 hint lost after a second paste; download hang needs a timeout; copy only top 3 styles; "model" jargon cut off; Camelot cell tooltip | fixed |
+| 18 | Design critic after fix pass (7/10) | % not aligned down the column; hover invisible (3rd critic); BPM–Key gutter; ghost rows in the empty state; duplicated toolbar banner | fixed (final score pending) |

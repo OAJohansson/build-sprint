@@ -35,7 +35,7 @@ export const bpmText = (bpm: number) => (bpm > 0 ? bpm.toFixed(1) : "–");
 
 /** Short marker for an ambiguous tempo: what the alternative is relative to the main one. */
 export function tempoMarker(relation: TempoRelation): string {
-  return relation === "2:1" ? "×2" : relation === "1:2" ? "½" : relation === "3:2" ? "×1.5" : "×⅔";
+  return relation === "2:1" ? "×2" : relation === "1:2" ? "×½" : relation === "3:2" ? "×1.5" : "×⅔";
 }
 export function tempoRelationWords(relation: TempoRelation): string {
   return relation === "2:1" ? "double time" : relation === "1:2" ? "half time" : relation === "3:2" ? "a 3:2 feel" : "a 2:3 feel";
@@ -55,6 +55,14 @@ export const pct = (p: number) => Math.round(p * 100);
 export function namedStyles(a: Pick<EarsAnalysis, "genres">): { name: string; p: number }[] {
   const names = styleLabels(a.genres.map((g) => g.style));
   return a.genres.map((g, i) => ({ name: names[i], p: g.p }));
+}
+
+/** The styles the detail strip and Copy for Claude list (N4): every one above 5 %, else the top 3. */
+export const SHOWN_STYLE_MIN = 0.05;
+export function shownStyles(a: Pick<EarsAnalysis, "genres">): { name: string; p: number }[] {
+  const all = namedStyles(a);
+  const above = all.filter((x) => x.p > SHOWN_STYLE_MIN);
+  return above.length ? above : all.slice(0, 3);
 }
 
 /** US4: the uploader's genre tag isn't one of the top 3 styles heard. */

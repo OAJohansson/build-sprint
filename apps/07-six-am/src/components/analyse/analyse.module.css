@@ -3,11 +3,12 @@
    serif only for the selected track's name. Flat, square buttons (T2).
    Gold means three things only: BPM numbers, the one progress bar, the selected row's edge.
    Greys are lifted so every text is ≥ 4.5:1 on its real background, selected row included
-   (--faint 4.8:1 on buttons, 4.9:1 on the selected row; --muted 6.1:1+). */
+   (--faint 4.8:1 on buttons, 4.9:1 on a hovered row, 4.6:1 on the selected row; --muted 5.8:1+).
+   Rows: hover is one solid step up (--hover), selected a stronger step (--selFill) + gold edge. */
 .root {
   --bg: #131110; --panel: #1a1715; --crate: #1d1814; --ink: #f1e6d3; --muted: #aa9c88; --faint: #958a7c;
   --line: #2c2622; --gold: #f2b134; --goldDim: #a68a5a; --orange: #ef5b37; --amber: #c4923f;
-  --hover: rgba(241, 230, 211, .04); --selFill: rgba(241, 230, 211, .06); --meterOn: #cdbfa8;
+  --hover: #211d1a; --selFill: #28231f; --meterOn: #cdbfa8;
   --cols: 32px minmax(320px, 1fr) 156px 140px 70px 104px 50px 56px 66px 124px;
   height: 100dvh; display: grid; grid-template-rows: 64px auto auto auto 1fr; background: var(--bg); color: var(--ink);
   font-family: var(--f-mono), monospace; overflow: hidden;
@@ -54,7 +55,7 @@
 .menu button:hover, .menu button:focus-visible { background: rgba(241, 230, 211, .07); outline: none; }
 
 /* Toolbar: link, the SoundCloud embed (shrinks first), listening */
-.bar { display: grid; grid-template-columns: minmax(220px, 380px) minmax(100px, 1fr) 430px; align-items: center; gap: 16px; padding: 10px 20px; background: var(--panel); border-bottom: 1px solid var(--line); }
+.bar { display: grid; grid-template-columns: minmax(220px, 380px) minmax(100px, 1fr) 480px; align-items: center; gap: 16px; padding: 10px 20px; background: var(--panel); border-bottom: 1px solid var(--line); }
 .url {
   font: 400 12px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--line); border-radius: 6px;
   padding: 7px 10px; outline: none; min-width: 0; text-overflow: ellipsis;
@@ -64,12 +65,12 @@
 .embed { display: block; width: 100%; min-width: 0; height: 20px; border: 0; border-radius: 3px; background: #fff; }
 .embedEmpty { display: flex; align-items: center; height: 20px; font: 400 11px var(--f-mono); color: var(--faint); white-space: nowrap; overflow: hidden; min-width: 0; }
 /* Fixed width, so the player beside it never shifts as the status text changes */
-.listen { display: flex; align-items: center; justify-content: flex-end; gap: 14px; min-width: 0; width: 430px; overflow: hidden; }
+.listen { display: flex; align-items: center; justify-content: flex-end; gap: 14px; min-width: 0; width: 480px; overflow: hidden; }
 .offNote { font: 400 11.5px var(--f-mono); color: var(--muted); white-space: nowrap; max-width: 60ch; overflow: hidden; text-overflow: ellipsis; }
 .offNote q { quotes: "“" "”"; }
 
 /* The one progress indicator: a text line over a 2 px gold bar */
-.prog { display: flex; flex-direction: column; gap: 5px; width: 270px; flex: none; font: 500 12px var(--f-mono); }
+.prog { display: flex; flex-direction: column; gap: 5px; flex: 0 1 350px; min-width: 0; font: 500 12px var(--f-mono); }
 .progText { display: flex; justify-content: space-between; gap: 10px; color: var(--ink); white-space: nowrap; }
 .progText span:first-child { overflow: hidden; text-overflow: ellipsis; }
 .progText span:last-child { font-variant-numeric: tabular-nums; }
@@ -113,6 +114,7 @@
 .pick { cursor: pointer; }
 .row:hover { background: var(--hover); }
 .row:focus-visible { background: var(--hover); box-shadow: inset 2px 0 0 var(--ink); }
+/* Hover: one clear step up, no bar. Selected: a stronger step plus the gold edge. */
 .sel, .sel:hover { background: var(--selFill); box-shadow: inset 3px 0 0 var(--gold); }
 .sel:focus-visible { background: var(--selFill); box-shadow: inset 3px 0 0 var(--gold), inset 0 0 0 1px rgba(241, 230, 211, .35); }
 .num { font-variant-numeric: tabular-nums; text-align: right; }
@@ -121,11 +123,15 @@
 .track { display: flex; gap: 8px; }
 .track b { font-weight: 500; flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .by { color: var(--muted); flex: 0 100 auto; min-width: 4ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-/* Style name with its % right after it */
-.styleCell { display: flex; align-items: baseline; gap: 6px; }
+/* Style · % and Also · %: the name left (bright, truncates), the % in its own right-aligned
+   sub-column (dim, never cut) so the numbers line up down the table */
+.styleCell { display: grid; grid-template-columns: minmax(0, 1fr) 3ch; column-gap: 8px; align-items: baseline; }
 .sName { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.also { color: var(--muted); }
-.pct { flex: none; color: var(--muted); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.pct { color: var(--muted); font-size: 11.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.thSplit { display: grid; grid-template-columns: minmax(0, 1fr) 3ch; column-gap: 8px; }
+.thSplit > :last-child { text-align: right; }
+/* 16 px between BPM and Key (12 px gap + 4) */
+.keyCell { padding-left: 4px; }
 .bpm { color: var(--gold); font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; overflow: visible !important; }
 .mark2 { font: 400 10px var(--f-mono); color: var(--amber); margin-left: 3px; cursor: help; vertical-align: 1px; }
 .differs { font: 400 10.5px var(--f-mono); color: var(--amber); margin-left: 6px; }
@@ -155,10 +161,9 @@
 .steps li::before { content: counter(step); width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); font: 500 11px var(--f-mono); color: var(--muted); }
 .steps q { quotes: "“" "”"; }
 .fine { padding: 18px 20px 0 98px; font: 400 11.5px/1.6 var(--f-mono); color: var(--faint); max-width: 780px; margin: 0; }
-/* The table's shape before the first paste: its header and three empty rows */
+/* The table's shape before the first paste: its header row alone */
 .ghost { margin-top: 28px; min-width: 1180px; }
 .ghost .head { position: static; }
-.ghostRow { height: 34px; border-bottom: 1px solid rgba(44, 38, 34, .7); }
 
 /* The detail strip for the selected track */
 .strip {

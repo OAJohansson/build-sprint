@@ -24,19 +24,29 @@ let loading: Promise<void> | null = null;
 // would otherwise download 18 MB on every visit.
 const MODEL_CACHE = "ears-models-v1";
 
+/** No bytes for this long (headers or body) counts as a failed try (N3, 24 Oct: one download hung ~64 s). */
+export const STALL_MS = 15_000;
+
 /** fetch with 3 tries (0.6 s, then 1.8 s apart): the dev proxy to essentia.upf.edu sometimes
- *  answers 500 once. A non-OK answer is an error, never parsed. */
-async function fetchOk(url: string, tries = 3): Promise<Response> {
+ *  answers 500 once, or stalls. A non-OK answer is an error, never parsed. `read` consumes the
+ *  body and calls `touch()` on each chunk; a stall aborts the try and the next one starts. */
+async function fetchTries<T>(url: string, read: (res: Response, touch: () => void) => Promise<T>, tries = 3): Promise<T> {
   let last: unknown;
   for (let i = 0; i < tries; i++) {
     if (i) await new Promise((r) => setTimeout(r, 600 * 3 ** (i - 1)));
+    const ctrl = new AbortController();
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const touch = () => { clearTimeout(timer); timer = setTimeout(() => ctrl.abort(), STALL_MS); };
+    touch();
     try {
-      const res = await fetch(url);
-      if (res.ok && res.body) return res;
+      const res = await fetch(url, { signal: ctrl.signal });
+      if (res.ok && res.body) { touch(); return await read(res, touch); }
       last = new Error(`HTTP ${res.status}`);
       if (res.status >= 400 && res.status < 500 && res.status !== 408 && res.status !== 429) break;
     } catch (e) {
-      last = e;
+      last = ctrl.signal.aborted ? new Error(`no data for ${STALL_MS / 1000} s`) : e;
+    } finally {
+      clearTimeout(timer);
     }
   }
   throw new Error(`${url.split("/").pop()}: ${last instanceof Error ? last.message : String(last)}`);
@@ -46,29 +56,31 @@ async function fetchWithProgress(url: string): Promise<Uint8Array> {
   const cache = "caches" in self ? await caches.open(MODEL_CACHE).catch(() => null) : null;
   const hit = await cache?.match(url);
   if (hit) return new Uint8Array(await hit.arrayBuffer());
-  const res = await fetchOk(url);
-  const total = Number(res.headers.get("content-length")) || 0;
-  post({ type: "progress", loaded: 0, total }); // the UI shows "18 MB" from the first second
-  const reader = res.body!.getReader();
-  const chunks: Uint8Array[] = [];
-  let loaded = 0, lastPost = 0;
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    chunks.push(value);
-    loaded += value.length;
-    if (loaded - lastPost > 512 * 1024) { post({ type: "progress", loaded, total }); lastPost = loaded; }
-  }
-  const out = new Uint8Array(loaded);
-  let o = 0;
-  for (const c of chunks) { out.set(c, o); o += c.length; }
+  const out = await fetchTries(url, async (res, touch) => {
+    const total = Number(res.headers.get("content-length")) || 0;
+    post({ type: "progress", loaded: 0, total }); // the UI shows "18 MB" from the first second
+    const reader = res.body!.getReader();
+    const chunks: Uint8Array[] = [];
+    let loaded = 0, lastPost = 0;
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      touch();
+      chunks.push(value);
+      loaded += value.length;
+      if (loaded - lastPost > 512 * 1024) { post({ type: "progress", loaded, total }); lastPost = loaded; }
+    }
+    const bytes = new Uint8Array(loaded);
+    let o = 0;
+    for (const c of chunks) { bytes.set(c, o); o += c.length; }
+    return bytes;
+  });
   await cache?.put(url, new Response(out, { headers: { "content-type": "application/octet-stream" } })).catch(() => {});
   return out;
 }
 
 async function fetchMeta(url: string): Promise<{ classes: string[] }> {
-  const res = await fetchOk(url);
-  const meta = (await res.json().catch(() => null)) as { classes?: unknown } | null;
+  const meta = (await fetchTries(url, (res) => res.json().catch(() => null))) as { classes?: unknown } | null;
   if (!meta || !Array.isArray(meta.classes)) throw new Error(`${url.split("/").pop()}: not the model's metadata`);
   return { classes: meta.classes as string[] };
 }

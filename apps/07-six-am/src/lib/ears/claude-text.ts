@@ -2,7 +2,7 @@
 // plus the key confidence, the tag-differs note and the owner's target playlists (so Claude can
 // answer "which of my playlists").
 import { bpmSentence } from "./bpm-choice";
-import { brightnessLabel, energyLabel, keyWord, namedStyles, pct, tagDiffers } from "./labels";
+import { brightnessLabel, energyLabel, keyWord, pct, shownStyles, tagDiffers } from "./labels";
 import type { EarsAnalysis } from "./results";
 
 // shortcut: the owner's playlists are fixed from kickoff-source.md Appendix B "Target playlists";
@@ -24,7 +24,8 @@ export const TARGET_PLAYLISTS: [name: string, rule: string][] = [
 ];
 
 export function claudeText(a: EarsAnalysis): string {
-  const g = namedStyles(a).slice(0, 3);
+  // The same styles the card shows (N4): all above 5 %, else the top 3.
+  const g = shownStyles(a);
   const genres = g.map((s) => `${s.name} ${pct(s.p)}%`).join(", ") || "none";
   const differs = tagDiffers(a) ? " (differs from the styles heard)" : "";
   const playlists = TARGET_PLAYLISTS.map(([n, r]) => `${n} (${r})`).join("; ");

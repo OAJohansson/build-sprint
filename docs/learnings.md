@@ -131,15 +131,23 @@ Rules I now apply to every product (detail in the playbook).
 - **A hidden feature isn't a feature.** Delete worked but nothing said so; a bin that appears
   while you hold a loop is the signifier (Don Norman).
 
-### 08 Selvedge (in progress)
+### 08 Selvedge
 
 - **Probe before you design.** An hour-long share-target probe showed Instagram and Pinterest
   send only a link, which reshaped capture before a single screen was drawn.
+- **Look at what the user makes.** Ten collage directions missed; the owner's own hand-made board
+  showed they wanted to make the board, not have it made, and the generator became an editor.
+- **A pick is a keep.** The critic loop rewrote a design the owner had just picked and loved; it
+  came back from git. Critic fixes now go on a copy beside the pick.
+- **Name things by what they mean.** "Today", "Days", "This board" and "All saves" each confused;
+  "Inspo" (the collection), "Inbox" and "Folders" (its views) held on every screen.
+- **Don't make people choose too early.** Picking a board's photos in the inbox asked for a
+  decision before the photos were side by side; the tray now shows every save (premature
+  commitment, recognition over recall).
+- **Let each tool do what it's good at.** The image model paints; Claude replays the painting
+  stroke by stroke. In-browser models cut out backgrounds well enough to skip a paid API.
 - **Spikes need a stop.** The character spike answered its question in four drawings, then ran
   on until the owner called time; set the question and timebox first.
-- **Let each tool do what it's good at.** The image model paints; Claude replays the painting
-  stroke by stroke. Claude painting in code was "really bad"; Claude animating a painting was
-  the moment the owner loved.
 
 ## Process changelog
 
@@ -179,3 +187,4 @@ Every change to how I build, and the product that taught it.
 | 19 Oct | 07 Six AM | Shared pages were held back for a parallel product's wrap-up that had already happened on `main`. | Playbook step 1: a product started in parallel gets a worktree from the latest `main` and a carry-over list in its journal; check `main` before holding shared pages. |
 | 19 Oct | 07 Six AM | The owner couldn't choose from ten one-line directions and wanted to blend them all. | Playbook step 1: if the owner can't choose from words, show a contact sheet of rough thumbnails of every direction first, then build three. |
 | 20 Oct | 04 Mallow, 08 Selvedge | Three sessions shared one folder on a stale branch, leaving mixed uncommitted work; the 19 Oct worktree rule lived in the playbook, which sessions don't read. | `AGENTS.md` "Parallel sessions": own worktree from the latest `main`, own files only, shared docs last, merge the same day, regenerate the lockfile. |
+| 23 Oct | 08 Selvedge | The critic loop rebuilt the Sketchbook design the owner had just picked; it had to be restored from git. | A pick is a keep: the design-session critic's fixes go on a copy beside the owner's pick, never over it (playbook step 1, `design-session` skill). |

@@ -127,6 +127,6 @@
 .tray-fold, .tray-unfold { position: absolute; z-index: 40; width: 22px; height: 44px; display: grid; place-items: center; border: 0; padding: 0; background: #fffdf8; color: #3a2a20; font: 400 20px/1 var(--font-hand); cursor: pointer; border-radius: 8px; box-shadow: 0 1px 4px rgba(58, 42, 32, 0.18); transition: opacity 150ms ease-out; }
 .tray-fold { position: sticky; float: right; top: 50%; margin-right: -12px; opacity: 0; }
 .ed-tray:hover .tray-fold, .tray-fold:focus-visible { opacity: 0.85; }
-.tray-unfold { left: 4px; top: 50%; transform: translateY(-50%); opacity: 0.45; }
+.tray-unfold { left: 4px; top: 50%; transform: translateY(-50%); opacity: 0.75; } /* F4: findable, still quiet */
 .tray-unfold:hover, .tray-unfold:focus-visible { opacity: 0.9; }
 @media (prefers-reduced-motion: reduce) { .tray-fold, .tray-unfold, .shape-pipette { transition: none; } }

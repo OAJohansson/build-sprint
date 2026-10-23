@@ -52,3 +52,5 @@ overweighted, and what changed in the templates or agent because of it.
 - Day 1, CrossFit Log: day-one PBs dated "today" and seeded history dated earlier didn't share one
   timeline, which skewed PB results. Next: a per-product `seed.json` with a "returning user since
   <date>" start, so runs are comparable.
+- Day 8, Selvedge: undo looked right on screen but wasn't saved; only a later reload showed it.
+  Next: every editor scenario ends with a reload-and-compare (the stored data vs the screen).

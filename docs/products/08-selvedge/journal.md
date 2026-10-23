@@ -622,3 +622,23 @@ target's service worker can't type a code. Build order, each step shippable:
   flips below at the top); Undo steps back through text, a pill and a photo, ⇧⌘Z redoes; the
   sidebar folds and unfolds by handle and by ⌘\; the pipette (fallback path) turns a pill the
   photo's brown. Not checked: Chrome's own EyeDropper (needs a real click on screen).
+
+## 23 Oct: wrap-up
+
+- **Owner: "I'm happy with the MVP now; the next thing is the AI features."** And make sure it
+  installs on the Mac. Chrome already could (manifest, 192 and 512 icons, standalone, service
+  worker); Safari's Add to Dock had no `apple-touch-icon`, so it would have used a screenshot.
+  Added a 180 × 180 `apple-icon` from the same denim design.
+- **Owner's calls:** one process change, "a pick is a keep"; run the simulated user test before
+  closing (it had never run).
+- **User test** (`user-testing/report-2026-10-23.md`): saving and sorting passed; the board
+  struggled; mistakes and time-passes failed. **F1, data loss:** an undo back to the board as
+  loaded was never saved (the editor skipped saving whenever the pieces matched the loaded set,
+  and an undo can land exactly on it). Fixed at the root: the loaded set is only special until
+  the first edit. **F2:** pieces could be dragged and resized past the board; now they stay on it.
+  Also the › to reopen the sidebar is easier to see, and the grid has room under the pick bar.
+  Checked headless: delete, Undo and ⌘Z, then reload, every piece kept; a far drag stops at the
+  board's corner. Eight smaller findings logged (feedback 36–45, backlog).
+- **Wrapped:** success check, retro, story, card (`status: shipped`), key learnings and the process
+  change, to-do list (next: the AI features; put it in the Dock; finish the operating modes before
+  product 9).

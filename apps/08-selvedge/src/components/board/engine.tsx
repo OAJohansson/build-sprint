@@ -104,10 +104,12 @@ export function useBoardEditor(initial: Piece[], onChange: (pieces: Piece[]) => 
   const setPieces = useCallback((fn: (p: Piece[]) => Piece[]) => setState(fn), []);
   // Every edit goes to onChange (the page autosaves). The callback sits in a ref so a new one on
   // each render doesn't count as an edit; only a new set of pieces does.
-  const loaded = useRef(initial);
+  const loaded = useRef<Piece[] | null>(initial);
   const report = useRef(onChange);
   useEffect(() => { report.current = onChange; });
-  useEffect(() => { if (pieces !== loaded.current) report.current(pieces); }, [pieces]);
+  // The loaded set is only special until the first edit: after that an undo back to it is a
+  // change like any other and must be saved (user test F1, 23 Oct: undos were lost on reload).
+  useEffect(() => { if (pieces !== loaded.current) { loaded.current = null; report.current(pieces); } }, [pieces]);
   const update = useCallback((id: string, patch: Partial<Piece>) => setPieces((ps) => ps.map((p) => (p.id === id ? { ...p, ...patch } : p))), [setPieces]);
 
   // Undo (owner, 23 Oct): before each change the board as it was goes on a stack. A drag is one
@@ -249,13 +251,16 @@ export function BoardCanvas({ board, saves, versions = {}, busy, chrome, classNa
   const onMove = (e: React.PointerEvent) => {
     const d = drag.current; if (!d || !s) return;
     const dx = (e.clientX - d.sx) / s, dy = (e.clientY - d.sy) / s, p = d.start;
-    if (d.mode === "move") update(d.id, { x: Math.round(p.x + dx), y: Math.round(p.y + dy) });
+    // Pieces stay on the board when moved or resized, so nothing gets clipped and the resize
+    // handle stays in reach (user test F2, 23 Oct).
+    if (d.mode === "move") update(d.id, { x: Math.round(within(p.x + dx, Math.min(0, BOARD_W - p.w), Math.max(0, BOARD_W - p.w))), y: Math.round(within(p.y + dy, Math.min(0, BOARD_H - p.h), Math.max(0, BOARD_H - p.h))) });
     else if (d.mode === "resize") {
       if (p.kind === "photo") {
         // A photo keeps its shape when resized, so nothing gets cropped; only Crop changes the framing.
-        const k = Math.max(40 / Math.min(p.w, p.h), (p.w + dx) / p.w, (p.h + dy) / p.h);
+        const room = Math.min((BOARD_W - p.x) / p.w, (BOARD_H - p.y) / p.h);
+        const k = Math.max(40 / Math.min(p.w, p.h), Math.min(room, Math.max((p.w + dx) / p.w, (p.h + dy) / p.h)));
         update(d.id, { w: Math.round(p.w * k), h: Math.round(p.h * k) });
-      } else update(d.id, { w: Math.max(40, Math.round(p.w + dx)), h: Math.max(40, Math.round(p.h + dy)) });
+      } else update(d.id, { w: Math.round(within(p.w + dx, 40, Math.max(40, BOARD_W - p.x))), h: Math.round(within(p.h + dy, 40, Math.max(40, BOARD_H - p.y))) });
     }
     else {
       // Cropping: the whole photo is fullW × fullH board units; the crop box is a part of it.

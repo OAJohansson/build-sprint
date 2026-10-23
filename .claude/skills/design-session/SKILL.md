@@ -50,7 +50,9 @@ Feel comes from still framing and sound, not per-keystroke motion.
    and the references as words (or image paths, as a moodboard, not a template). Never the code,
    the conversation or the stopping score: it must judge what's on screen, not what we meant.
    Use the same wording every round.
-3. Fix the gaps it names, biggest first, then screenshot again and rerun the critic.
+3. Fix the gaps it names, biggest first, **on a copy** of the picked screen, kept beside the pick
+   so the owner can compare and keep theirs (a pick is a keep; day 8). Then screenshot the copy
+   again and rerun the critic.
 4. **Stop** when it scores 9 or more. After two rounds, check that the score is rising; if not,
    stop and show the owner. Four rounds at most. Log each score and the top gap in the journal.
 5. **Checkpoint:** the owner can overrule any critic note.

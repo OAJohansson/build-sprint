@@ -1,7 +1,7 @@
 ---
 day: 8
 title: Selvedge
-status: building
+status: shipped
 date: 2026-10-19
 user: "Me: likes dressing well but knows little about fashion; saves pieces on an Android phone"
 problem: "My saved pieces are scattered across Instagram, Pinterest and screenshots and a moodboard takes an evening, so I can't put my style into words or find brands that match"
@@ -14,4 +14,7 @@ tags: ["pwa", "share-target", "vision-ai", "moodboard", "supabase"]
 
 ## Learned
 
--
+- The owner wanted to make the board, not have it made: their own moodboard turned a generator
+  into an editor, and that was the product.
+- Naming by meaning ("Inspo", "Inbox", "Folders") beat naming by sort order ("Today", "Days").
+- Next: the AI features (the style read and the hand-drawn character).

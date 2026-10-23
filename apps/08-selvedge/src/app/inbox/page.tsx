@@ -184,7 +184,7 @@ function Inbox() {
             </p>
           ) : (
             byDay(loose).map((d) => (
-              <section key={d.label} className="flex flex-col gap-3">
+              <section key={d.label} className="inbox-day-group flex flex-col gap-3">
                 <h2 className="inbox-divider">{d.label}</h2>
                 <Prints saves={d.items} picked={picked} onToggle={toggle} />
               </section>

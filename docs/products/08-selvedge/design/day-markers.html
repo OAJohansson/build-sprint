@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selvedge day markers</title>
+<!-- Five ways to mark the day inside the Inbox (owner, 23 Oct: not the line divider). Same
+     phone, same saves (board/, git-ignored), only the day marker changes. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #3a2a20; --paper: #f7f0e3; --muted: #8f7e6c; --hi: #f2d666; --denim: #5d7aa6; --cream: #f2e3c6 }
+  * { box-sizing: border-box; margin: 0; padding: 0 }
+  body { background: #e9e3d6; color: var(--ink); font: 16px/1.35 'Patrick Hand', system-ui, sans-serif; padding: 28px 32px 80px }
+  h1.page { font: 400 34px/1 'Caveat Brush'; margin-bottom: 6px }
+  .lead { color: var(--muted); margin-bottom: 28px; max-width: 820px }
+  .sheet { display: grid; grid-template-columns: repeat(auto-fill, 340px); gap: 34px 28px }
+  figure h2 { font: 400 24px/1 'Caveat Brush'; margin-bottom: 2px }
+  figure h2 b { font-weight: 400; color: var(--muted); margin-right: 6px }
+  figcaption { color: var(--muted); font-size: 15px; margin: 2px 0 10px; min-height: 64px }
+  .phone { width: 340px; height: 680px; background: var(--paper); border-radius: 26px; overflow: hidden; position: relative; box-shadow: 0 10px 30px rgba(58,42,32,.14) }
+  .scroll { position: absolute; inset: 0; overflow: auto; padding: 16px 16px 30px; scrollbar-width: none }
+  .top { display: flex; align-items: center; gap: 6px; padding-bottom: 8px; margin-bottom: 16px; position: relative }
+  .top::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; border-bottom: 1.5px solid var(--ink); filter: url(#pencil-line) }
+  .logo { font: 400 28px/1 'Caveat Brush'; position: relative; z-index: 0; margin-right: 8px }
+  .logo::before { content: ""; position: absolute; left: -8px; right: -10px; top: 9px; bottom: -3px; background: var(--hi); opacity: .75; border-radius: 40% 55% 45% 60%; filter: url(#wash-edge); z-index: -1 }
+  .tab { padding: 3px 9px; font-size: 16px; position: relative; z-index: 0 }
+  .tab.on::before { content: ""; position: absolute; inset: 2px -2px 0 2px; border-radius: 45% 55% 50% 40% / 55% 45% 55% 45%; background: var(--hi); opacity: .7; filter: url(#wash-edge); z-index: -1 }
+  .add { margin-left: auto; font-size: 16px }
+  .inspo { font: 400 28px/1 'Caveat Brush'; display: inline-block; position: relative; z-index: 0; margin-bottom: 14px }
+  .inspo::before { content: ""; position: absolute; left: -6px; right: -10px; top: 12px; bottom: -2px; background: var(--denim); opacity: .35; border-radius: 50% 40% 55% 45%; filter: url(#wash-edge); z-index: -1 }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 12px }
+  .print { position: relative; padding: 6px 6px 14px; background: #fffdf8; box-shadow: 0 2px 6px rgba(58,42,32,.16) }
+  .print img { display: block; width: 100%; aspect-ratio: 3/4; object-fit: cover }
+  .day { margin-bottom: 22px }
+
+  /* A: Margin note — the day written sideways up the left margin, like a note in a sketchbook's gutter. */
+  .a .day { display: grid; grid-template-columns: 18px 1fr; gap: 6px }
+  .a .note { writing-mode: vertical-rl; transform: rotate(180deg); font: 400 17px/1 'Caveat Brush'; color: var(--muted); text-align: right; letter-spacing: .02em; padding-top: 2px }
+
+  /* B: Date stamp — a small rubber-stamped date in muted denim ink, slightly tilted, the way
+     darkrooms stamped the back of prints. Says when, without a heading. */
+  .b .stamp { display: inline-block; margin: 0 0 10px 2px; padding: 3px 8px 2px; font: 600 12px/1 ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .16em; color: var(--denim); border: 1.6px solid currentColor; border-radius: 3px; opacity: .75; transform: rotate(-2.5deg); filter: url(#ink-bleed) }
+
+  /* C: Index card — the day is its own small card in the grid, first in its row, like a
+     divider card in a card file. The photos keep flowing around it. */
+  .c .grid { margin-bottom: 0 }
+  .c .card { display: flex; align-items: flex-end; padding: 12px 12px 14px; background: var(--cream); box-shadow: 0 2px 6px rgba(58,42,32,.12); font: 400 26px/1 'Caveat Brush'; color: var(--ink); aspect-ratio: 3/4.3 }
+  .c .card small { display: block; font: 15px/1.2 'Patrick Hand'; color: var(--muted); margin-top: 6px }
+
+  /* D: Written on the print — the day written by hand on the white border of the day's first
+     print, like a date on a photo's margin. No marker at all between the photos. */
+  .d .print .on-print { position: absolute; left: 8px; bottom: 0; font: 400 14px/14px 'Caveat Brush'; color: var(--muted) }
+  .d .day { margin-bottom: 14px }
+
+  /* E: Gallery label — a small, spaced label in caps with plenty of air above it, like a
+     museum wall label. No line; the space does the dividing. */
+  .e .label { font: 500 11px/1 system-ui, sans-serif; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px 2px }
+  .e .day + .day { margin-top: 30px }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="pencil-line"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+  <filter id="wash-edge"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" seed="9"/><feDisplacementMap in="SourceGraphic" scale="9"/></filter>
+  <filter id="ink-bleed"><feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="1.6"/></filter>
+</svg>
+<h1 class="page">Marking the day, five ways</h1>
+<p class="lead">Same phone, same saves: only the way the day is marked changes. Scroll inside a phone to see Yesterday and older days. Say which you like, or what you'd change.</p>
+<div class="sheet" id="sheet"></div>
+
+<script>
+const P = (n) => `board/${String(n).padStart(2, "0")}.jpg`;
+const DAYS = [["Today", "Thu 23 Oct", [1, 2, 3, 4]], ["Yesterday", "Wed 22 Oct", [5, 6, 7]], ["Monday 20 Oct", "Mon 20 Oct", [8, 9, 10, 11]]];
+const tilt = (i) => `rotate(${((i * 37) % 5) - 2}deg)`;
+const print = (p, i, extra = "") => `<div class="print" style="transform:${tilt(i)}"><img src="${P(p)}" alt="">${extra}</div>`;
+const shell = (body) => `<div class="top"><span class="logo">Selvedge</span><span class="tab on">Inbox</span><span class="tab">Folders</span><span class="add">+ Add</span></div><span class="inspo">Inspo</span>${body}`;
+const stampText = (label, date) => (label === "Today" ? "TODAY" : label === "Yesterday" ? "YESTERDAY" : date.toUpperCase());
+
+const F = [
+  { k: "a", n: "Margin note", why: "The day is written sideways up the left margin, like a note in a sketchbook's gutter. The photos get the full width of attention; the date is there when you look for it.",
+    html: () => DAYS.map(([d, , ps]) => `<section class="day"><span class="note">${d}</span><div class="grid">${ps.map((p, i) => print(p, i)).join("")}</div></section>`).join("") },
+  { k: "b", n: "Date stamp", why: "A small rubber-stamped date in faded denim ink, slightly crooked, like the stamp on the back of an old print. It says when, without being a heading.",
+    html: () => DAYS.map(([d, date, ps]) => `<section class="day"><span class="stamp">${stampText(d, date)}</span><div class="grid">${ps.map((p, i) => print(p, i)).join("")}</div></section>`).join("") },
+  { k: "c", n: "Index card", why: "The day becomes its own small cream card at the start of the day, like a divider card in a card file. The grid never breaks; the day is just another card.",
+    html: () => `<div class="grid">${DAYS.map(([d, date, ps]) => `<div class="card"><div>${d}<small>${ps.length} saved${d === "Today" || d === "Yesterday" ? ` · ${date}` : ""}</small></div></div>${ps.map((p, i) => print(p, i)).join("")}`).join("")}</div>` },
+  { k: "d", n: "Written on the print", why: "No marker between the photos at all: the day is handwritten on the white border of the day's first print, the way you'd date a photo. The quietest one.",
+    html: () => DAYS.map(([d, , ps]) => `<section class="day"><div class="grid">${ps.map((p, i) => print(p, i, i === 0 ? `<span class="on-print">${d}</span>` : "")).join("")}</div></section>`).join("") },
+  { k: "e", n: "Gallery label", why: "A small, spaced label in capitals with plenty of air above it, like a museum wall label. No line: the space between days does the dividing.",
+    html: () => DAYS.map(([d, , ps]) => `<section class="day"><p class="label">${d}</p><div class="grid">${ps.map((p, i) => print(p, i)).join("")}</div></section>`).join("") },
+];
+document.getElementById("sheet").innerHTML = F.map((f, i) => `<figure class="${f.k}"><h2><b>${"ABCDE"[i]}</b>${f.n}</h2><figcaption>${f.why}</figcaption><div class="phone"><div class="scroll">${shell(f.html())}</div></div></figure>`).join("");
+</script>
+</body>
+</html>

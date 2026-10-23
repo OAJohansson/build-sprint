@@ -26,7 +26,7 @@
    it reads against the print's white border. */
 .inbox-pick .pick-dot { top: -4px; right: -4px; width: 30px; height: 30px; }
 .inbox-bar button:disabled { opacity: 0.4; }
-/* The small day markers inside the Inbox (owner, 23 Oct): Inspo is the title; the day only
-   splits a long pile, in the muted pencil with a faint line after it. */
-.inbox-divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 15px; }
-.inbox-divider::after { content: ""; flex: 1; border-top: 1.2px solid var(--muted); opacity: 0.45; filter: url(#pencil-line); }
+/* The day markers inside the Inbox: a gallery label (owner's pick E, 23 Oct). Small spaced
+   capitals in the muted ink, with air above; the space between days does the dividing. */
+.inbox-divider { font: 500 11px/1 system-ui, sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin-left: 2px; }
+.inbox-day-group + .inbox-day-group { margin-top: 14px; }

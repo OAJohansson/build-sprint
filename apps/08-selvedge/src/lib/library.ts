@@ -20,6 +20,8 @@ export type Save = {
 
 /** Where the picture of a save is served (the bucket is private; the server streams it). */
 export const imageUrl = (id: string) => `/api/photos?id=${id}`;
+/** Where a save's cut-out (background removed) is served; `v` busts the cache after a redo. */
+export const cutoutUrl = (id: string, v?: number) => `/api/cutouts?id=${id}${v ? `&v=${v}` : ""}`;
 
 export type Piece = {
   id: string;
@@ -28,10 +30,17 @@ export type Piece = {
   x: number; y: number; w: number; h: number; z: number;
   cropX: number; cropY: number; zoom: number;
   rough: boolean;
+  /** The part of the original photo that shows, as fractions of its width and height (feedback 6). */
+  crop?: { x: number; y: number; w: number; h: number };
+  /** Show the save's cut-out (background removed) instead of the photo (feedback 7). */
+  cutout?: boolean;
+  /** The cut-out was redone with the careful model, so "Cut out more carefully" isn't offered again. */
+  careful?: boolean;
   color?: string;
   text?: string;
 };
-export type BoardDoc = { pieces: Piece[] };
+/** A board: its pieces, and the saves picked for it (its tray); older boards have no tray. */
+export type BoardDoc = { pieces: Piece[]; tray?: string[] };
 export type Board = { id: string; name: string; doc: BoardDoc; updatedAt: string };
 export type BoardSummary = Omit<Board, "doc">;
 
@@ -65,6 +74,12 @@ export function sourceOf(link: string | null, hasFile: boolean): Source {
 }
 
 const num = (v: unknown) => typeof v === "number" && Number.isFinite(v);
+const cropOk = (c: unknown) => {
+  const r = c as { x?: unknown; y?: unknown; w?: unknown; h?: unknown } | null;
+  if (!r || ![r.x, r.y, r.w, r.h].every(num)) return false;
+  const { x, y, w, h } = r as { x: number; y: number; w: number; h: number };
+  return x >= 0 && y >= 0 && w > 0.01 && h > 0.01 && x + w <= 1.0001 && y + h <= 1.0001;
+};
 
 /** A board as sent by the browser, checked piece by piece; null if it isn't one. */
 export function parseDoc(v: unknown): BoardDoc | null {
@@ -80,9 +95,14 @@ export function parseDoc(v: unknown): BoardDoc | null {
       ...(p.kind === "photo" ? { saveId: p.saveId as string } : {}),
       x: p.x as number, y: p.y as number, w: p.w as number, h: p.h as number, z: p.z as number,
       cropX: p.cropX as number, cropY: p.cropY as number, zoom: p.zoom as number, rough: p.rough === true,
+      ...(cropOk(p.crop) ? { crop: p.crop as Piece["crop"] } : {}),
+      ...(p.cutout === true ? { cutout: true } : {}),
+      ...(p.careful === true ? { careful: true } : {}),
       ...(typeof p.color === "string" && /^#[0-9a-f]{6}$/i.test(p.color) ? { color: p.color } : {}),
       ...(typeof p.text === "string" ? { text: p.text.slice(0, 80) } : {}),
     });
   }
-  return { pieces: out };
+  const trayIn = (v as { tray?: unknown }).tray;
+  const tray = Array.isArray(trayIn) ? trayIn.filter((t): t is string => typeof t === "string" && UUID.test(t)).slice(0, 500) : undefined;
+  return tray ? { pieces: out, tray } : { pieces: out };
 }

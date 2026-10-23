@@ -18,3 +18,6 @@
 | The same character across boards (one face, new outfits) | Image models vary between runs; a season-to-season story needs one recognisable figure | Day 2 (check), later |
 | Cut-outs: automatic background removal, then hand-traced scissors to fix | Owner, 22 Oct: like cutting from a magazine | Day 2 |
 | Generated collage (shuffle) | The collage lab: the owner wants to make the board, not have it made | Parked |
+| **Design concept: the selvedge thread.** A fine yellow stitched line with a small knot, like the coloured thread on denim's finished edge. Ties the UI to the name and the logo's yellow. Shown first as a select state (`design/select-states-2.html`, F) | Owner, 22 Oct: "I really like it as a concept... I want to use it somewhere." Not for picking (the yellow dot won) | Design concept, to use |
+| Fix a cut-out by hand: scissors traced around what to keep, or a brush to add back and erase | The owner's "auto, then fix"; the automatic half shipped first (decision 0025) | Next, after real saves |
+| Careful cut-outs on WebGPU (faster than 40 s on the CPU) or on the server | BEN2 on WebGPU ran out of memory in headless Chrome; matters most on a phone | Later |

@@ -427,3 +427,70 @@ target's service worker can't type a code. Build order, each step shippable:
   quiet "Saving…" shows meanwhile. Checked: a dragged title saved and survived a reload.
 - **Tested** in the browser at 1440 × 900 against the in-memory store with the 18 design photos.
   Not yet: the owner's real saves, a second device, the real crop (step 5).
+
+## 22 Oct: the owner's first board, and fixes
+
+- **Feedback 1–7** logged (`feedback.md`): drop the pick count; nothing picked by default and a
+  clearer selected state (3 options); a new board starts empty, photos dragged on; resizing a
+  photo must not crop it; no palette squares by default, instead a shapes-with-text tool; a real
+  crop; background removal as its own feature.
+- **Owner's calls:** the picker picks the board's tray (the board starts empty, you drag from
+  it; "All saves" shows everything and a save dragged on from there joins the tray); order: the
+  quick fixes, then shapes with text, then the real crop, then background removal.
+- **Fixed:** 1 (the count line is gone), 3 (empty board, the board's own tray saved with it),
+  4 (a photo keeps its shape when resized, so its whole picture stays; only Crop reframes it),
+  and half of 2 (nothing pre-picked). "Start again from a draft" now tiles photos only.
+- **Select states** for 2: `design/select-states.html`, A Pencil tick, B Taped in, C Highlighter.
+- **Select states, round 2** (owner: "not sure about any of these"; wants the logo's yellow, soft
+  and subtle, "surprise me"): `design/select-states-2.html`. D Yellow dot (a watercolour dot at
+  the corner and the faintest pencil frame), E Underlined (a highlighter stroke under the photo
+  that grows in), F Selvedge thread (a fine yellow stitch down the photo's edge with a knot: a
+  selvedge is denim's finished edge, marked with a coloured thread). Every photo stays in full
+  colour; no hard outlines.
+- **Owner's pick: D, the yellow dot**, now in the picker (a small watercolour dot of the logo's
+  yellow and the faintest pencil frame). **The selvedge thread (F) is kept as a design concept**
+  for later ("it ties back to the brand... I want to use it somewhere"), recorded in the backlog.
+  Feedback 2 fixed.
+- **Shapes with text** (feedback 5): the tray has a Shapes row (square, rectangle, a round pill,
+  drawn in pencil) to click or drag on. A picked shape's tool box gets colour dots (the pill's
+  cream, the logo's yellow, then the palette read from the board's photos) and a text field;
+  text is hand-lettered and turns cream on dark colours by itself. Checked: a yellow
+  "SPRING / SUMMER" pill and a denim "DENIM" square, both autosaved with colour and text. The
+  stop line now allows text inside shapes (still no loose text, no rotation).
+- **The real crop** (feedback 6): each photo keeps a crop box, the part of the original that
+  shows, as fractions of the photo; the original is never cut. Crop shows the whole photo faded
+  around the piece and the kept part bright, with handles on every corner and side: drag one to
+  trim, and the piece takes the new shape; drag inside to slide the photo under the box. Done
+  cropping keeps it, Reset brings back the whole photo at its own shape. Older pieces (framed
+  with cover and a focus point) carry their framing into a crop box unchanged. Picking another
+  piece leaves crop mode. Checked: a bottom trim (450 → 344 high), a right trim (308 → 240 wide),
+  a slide to the photo's left edge, Done, and Reset (back to 240 × 300, the photo's 0.8 shape).
+
+## 23 Oct: background removal
+
+- Built locally while the owner tests the live site. **Remove background** in a photo's tool box
+  cuts it out in the browser with `ormbg` (Apache-2.0, 44 MB once, decision 0025): a Web Worker
+  runs the model, the cut-out (WebP with transparency, same size as the photo) is kept beside the
+  original in the bucket, and the piece switches to it; **Restore background** switches back.
+- **Model choice:** imgly (AGPL) and RMBG (non-commercial) ruled out by licence, BiRefNet by
+  reported browser memory crashes, MODNet by being portrait-only.
+- **Tested** in headless Chromium at 1440 × 900: a person in front of a fence and building came
+  out clean (17 s, including the first download), and the jersey flat lay kept every item with the
+  grey backdrop gone (7 s with the model cached). No errors.
+- Not yet: hand fixing of misses (backlog), real saves, a phone.
+- **Owner's first live cut-outs (23 Oct): "not perfect, but workable."** Three misses: a ghosted
+  forearm (the model unsure, so half-transparent), leftover background (a car and grey bits by
+  a bag), part of a chair kept. Compared on the owner's three photos, in Node: **A** today's ormbg;
+  **B** ormbg plus a tuned clean-up ("fairly sure" counts as solid, stray islands dropped, small
+  holes filled); **C** BEN2 (MIT, 219 MB) plus the same clean-up. B brings the arm back but keeps
+  the car (it touches the bag) and a clothes pile; **C wins all three**: the arm with its watch,
+  no car, no clothes pile. In the browser, BEN2 on WebGPU ran out of memory in headless Chrome; on
+  the CPU (WASM) it works at about 37 s a photo (ormbg about 7 s).
+- **Owner's call: keep quick as the default (with the tuned clean-up), add "Cut out more
+  carefully" with BEN2 for the hard ones.** Built: the tuned clean-up now runs after both models;
+  after a quick cut-out the tool box offers **Cut out more carefully**, which shows the download
+  progress the first time and then "about half a minute". Checked end to end in headless Chromium
+  on the owner's mirror selfie: quick 8 s (arm back, clothes pile still there), careful 48 s
+  including the 219 MB download (clothes pile gone); the option disappears once careful is done.
+  No errors. Practice: **progressive disclosure**, the expensive option appears only when the
+  cheap one has been tried.

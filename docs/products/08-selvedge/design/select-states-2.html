@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selvedge select states, round 2</title>
+<!-- Round 2 of the picked state (feedback 2): subtle, soft, in the logo's yellow. Every photo
+     stays full colour; picking adds a small yellow mark, never a hard outline. Click to try.
+     The photos in board/ are the owner's saves and stay out of git. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+  :root { --hi: #f2d666; --ink: #3a2a20; --paper: #f6efe2; --muted: #8f7e6c; --ease: cubic-bezier(.23, 1, .32, 1); }
+  * { box-sizing: border-box; margin: 0; padding: 0 }
+  body { background: var(--paper); color: var(--ink); font: 17px/1.4 'Patrick Hand', system-ui, sans-serif; padding: 32px 40px 80px }
+  h1 { font: 400 34px/1 'Caveat Brush'; margin-bottom: 6px }
+  .lead { color: var(--muted); margin-bottom: 30px }
+  section { margin-bottom: 48px }
+  h2 { font: 400 26px/1 'Caveat Brush'; margin-bottom: 4px }
+  h2 b { font-weight: 400; color: var(--muted); margin-right: 8px }
+  .why { color: var(--muted); margin-bottom: 18px; font-size: 16px; max-width: 760px }
+  .grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 18px 16px; max-width: 1200px }
+  .tile { position: relative; aspect-ratio: 3 / 4; cursor: pointer; border: 0; padding: 0; background: none; transition: transform 150ms ease-out }
+  .tile img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 2px }
+  .tile:active { transform: scale(.97) }
+  .tile svg { position: absolute; pointer-events: none; overflow: visible }
+
+  /* D — Yellow dot: a small watercolour dot at the corner, like a highlighter tip touched to the
+     page, and the faintest pencil frame. */
+  .d .tile::before { content: ""; position: absolute; inset: -5px; border: 1.4px solid var(--ink); border-radius: 4px 7px 3px 6px; filter: url(#pencil); opacity: 0; transition: opacity 180ms ease-out }
+  .d .tile.on::before { opacity: .22 }
+  .d .dot { top: -10px; right: -10px; width: 24px; height: 24px; opacity: 0; transform: scale(.4); transition: opacity 160ms ease-out, transform 220ms var(--ease) }
+  .d .tile.on .dot { opacity: 1; transform: scale(1) }
+
+  /* E — Underlined: a soft highlighter stroke under the photo, the way you'd underline a word
+     you like in a magazine. It draws from left to right when you pick. */
+  .e .under { left: -6px; bottom: -15px; width: calc(100% + 12px); height: 16px }
+  .e .under { transform: scaleX(0); transform-origin: 0 50%; opacity: 0; transition: transform 260ms var(--ease), opacity 120ms ease-out }
+  .e .tile.on .under { transform: scaleX(1); opacity: 1 }
+
+  /* F — Selvedge thread: a selvedge is denim's self-finished edge, marked with a coloured thread.
+     A picked photo gets a fine yellow stitched line along its left edge, stitched in. */
+  .f .thread { position: absolute; left: -8px; top: 3px; bottom: 3px; width: 2.6px; border-radius: 2px;
+    background: repeating-linear-gradient(to bottom, #e2b23a 0 6px, transparent 6px 10px);
+    transform: scaleY(0); transform-origin: 50% 0; transition: transform 280ms var(--ease) }
+  .f .thread::after { content: ""; position: absolute; left: 50%; bottom: -4px; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%; background: #e2b23a }
+  .f .tile.on .thread { transform: scaleY(1) }
+
+  @media (prefers-reduced-motion: reduce) { .tile, .tile * { transition: none !important; animation: none !important } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="pencil"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="3.2"/></filter>
+  <filter id="bleed"><feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter>
+  <filter id="marker"><feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="2"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter>
+</svg>
+<h1>Picking saves, in yellow</h1>
+<p class="lead">Three soft ways to mark a picked save with the logo's yellow. Click photos in each row to try it; three are picked to start.</p>
+
+<section class="d"><h2><b>D</b>Yellow dot</h2><p class="why">A small watercolour dot at the corner, as if you'd touched a highlighter tip to the page, and the faintest pencil frame. The quietest of the three.</p><div class="grid"></div></section>
+<section class="e"><h2><b>E</b>Underlined</h2><p class="why">A soft highlighter stroke under the photo, the way you'd underline something you like in a magazine. It draws in as you pick.</p><div class="grid"></div></section>
+<section class="f"><h2><b>F</b>Selvedge thread</h2><p class="why">A selvedge is the finished edge of denim, marked with a coloured thread. A picked photo gets a fine yellow stitch down its edge, ending in a tiny knot: picking a save is stitching it into the board.</p><div class="grid"></div></section>
+
+<script>
+  const marks = {
+    d: `<svg class="dot" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="7.5" fill="#f2d666" style="filter:url(#bleed)"/><circle cx="9" cy="9" r="2.6" fill="#f7e595" opacity=".8"/></svg>`,
+    e: `<svg class="under" viewBox="0 0 120 16" preserveAspectRatio="none" aria-hidden="true"><path d="M4 9 C 30 6, 70 11, 116 7" fill="none" stroke="#efc94a" stroke-width="9" stroke-linecap="round" opacity=".9" vector-effect="non-scaling-stroke" style="filter:url(#marker)"/></svg>`,
+    f: `<span class="thread" aria-hidden="true"></span>`,
+  };
+  document.querySelectorAll("section").forEach((sec) => {
+    const kind = sec.className, grid = sec.querySelector(".grid");
+    for (let i = 1; i <= 16; i++) {
+      const t = document.createElement("button");
+      t.className = "tile";
+      t.setAttribute("aria-pressed", "false");
+      t.innerHTML = `<img src="board/${String(i).padStart(2, "0")}.jpg" alt="">${marks[kind]}`;
+      t.onclick = () => t.setAttribute("aria-pressed", String(t.classList.toggle("on")));
+      grid.append(t);
+    }
+    [2, 5, 9].forEach((n) => grid.children[n].click());
+  });
+</script>
+</body>
+</html>

@@ -325,3 +325,8 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   cache in 0.1 s (18 MB), inference 294 ms for 30 s, top styles Minimal Techno / Minimal / Techno /
   Tech House. Real tracks need the owner's Chrome (asked: FOVOS Work, Gag On It remix, Knober
   Realize; the brief's Brejcha example has no URL, so Realize stands in for the minimal/tech end).
+- **Design, round 1:** the designer built three takes on the tool direction (prototype at
+  `/prototypes/analyse?v=1|2|3`): A Inspector, B Inline, C Deck. The design critic scored them from
+  screenshots only: 6, 6.5 and 7.5 out of 10. Picked C (L24); round 2 fixes the critic's gaps
+  (smaller deck, no gold pills for actions, drop the "Heard" column, plain Enable listening button
+  that becomes the filling Listening pill, Analyse as a row-end action, plain empty state).

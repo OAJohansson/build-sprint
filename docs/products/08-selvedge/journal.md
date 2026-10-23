@@ -598,3 +598,9 @@ target's service worker can't type a code. Build order, each step shippable:
   dividers. Applied on both screens: the inbox page reads "Inspo", then "Today ——"; its tabs are
   Inbox | Folders | Boards; the board's link back says "Inspo" and its tray reads
   "Inspo · Inbox | Folders"; every "day pages" string and comment now says "inbox".
+- **Day marker (owner, 23 Oct): "I don't like the today divider line."** Five options sketched
+  on phone frames with the owner's saves (`design/day-markers.html`): Margin note (sideways in the
+  gutter), Date stamp (rubber-stamped, denim ink), Index card (the day as a card in the grid),
+  Written on the print (on the first print's white border), Gallery label (small spaced capitals,
+  air above). **Owner's pick: Gallery label.** Built: "TODAY" in small spaced capitals in the
+  muted ink, no line, a little more space between days.

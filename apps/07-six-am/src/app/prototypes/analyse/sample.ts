@@ -82,3 +82,51 @@ track like this in Six AM?`;
 /** The uploader's genre tag isn't among the top 3 styles the audio suggests (US4). */
 export const tagMismatch = (r: Row) =>
   !!r.uploaderTag && !!r.styles && !r.styles.some((x) => x.name.toLowerCase() === r.uploaderTag!.toLowerCase());
+
+// ---- Round 4 (Deck detail strip): depth the row can't show. All values ILLUSTRATIVE. ----
+
+const CAMELOT_MINOR: Record<string, string> = { "G#": "1A", Ab: "1A", "D#": "2A", Eb: "2A", "A#": "3A", Bb: "3A", F: "4A", C: "5A", G: "6A", D: "7A", A: "8A", E: "9A", B: "10A", "F#": "11A", "C#": "12A" };
+const CAMELOT_MAJOR: Record<string, string> = { B: "1B", "F#": "2B", Db: "3B", "C#": "3B", Ab: "4B", Eb: "5B", Bb: "6B", F: "7B", C: "8B", G: "9B", D: "10B", A: "11B", E: "12B" };
+export const camelot = (key?: string, scale?: string) => (key ? (scale === "minor" ? CAMELOT_MINOR : CAMELOT_MAJOR)[key] ?? "" : "");
+export const keyCell = (r: { key?: string; scale?: string }) => (r.key ? `${camelot(r.key, r.scale)} · ${r.key} ${r.scale}` : "");
+
+/** The relative key: the usual runner-up when the key detector is unsure. */
+const RELATIVE_MAJOR: Record<string, string> = { A: "C", B: "D", C: "Eb", D: "F", E: "G", F: "Ab", G: "Bb" };
+const RELATIVE_MINOR: Record<string, string> = { A: "F#", C: "A", G: "E" };
+export function runnerUp(r: Row) {
+  if (!r.key) return null;
+  if (r.scale === "minor") { const k = RELATIVE_MAJOR[r.key]; return k ? { key: k, scale: "major" as const } : null; }
+  const k = RELATIVE_MINOR[r.key]; return k ? { key: k, scale: "minor" as const } : null;
+}
+export const KEY_STRENGTH: Record<string, number> = { "1": 0.71, "2": 0.64, "3": 0.69, "4": 0.58, "5": 0.74, "6": 0.81, "7": 0.62, "8": 0.55, "9": 0.66 };
+
+/** Every style above 5 %, not just the top 3. */
+export const MORE_STYLES: Record<string, Style[]> = {
+  "1": [{ name: "Trance", p: 18 }, { name: "Tech House", p: 9 }, { name: "Progressive Trance", p: 6 }],
+  "2": [{ name: "Minimal", p: 27 }, { name: "Deep House", p: 12 }, { name: "Deep Techno", p: 6 }],
+  "3": [{ name: "House", p: 19 }, { name: "Minimal", p: 8 }, { name: "Electro House", p: 6 }],
+  "4": [{ name: "House", p: 31 }, { name: "Garage House", p: 9 }],
+  "5": [{ name: "House", p: 21 }, { name: "Nu Jazz", p: 7 }, { name: "Downtempo", p: 6 }],
+  "6": [{ name: "Hardstyle", p: 23 }, { name: "Trance", p: 14 }, { name: "Hard House", p: 7 }],
+  "7": [{ name: "Acid", p: 22 }, { name: "Hard House", p: 17 }, { name: "Trance", p: 9 }],
+  "8": [{ name: "Deep House", p: 24 }, { name: "Synth-pop", p: 11 }, { name: "Italo-Disco", p: 8 }],
+  "9": [{ name: "House", p: 26 }, { name: "Electro House", p: 10 }],
+};
+
+export type Snippet = { at: string; style?: Style; bpm?: number };
+const toSec = (len: string) => { const [m, s] = len.split(":").map(Number); return m * 60 + s; };
+const fmt = (sec: number) => `${Math.floor(sec / 60)}:${String(Math.round(sec % 60)).padStart(2, "0")}`;
+/** Four ~30 s snippets at 20/40/60/80 % of the track (design for the pending owner decision). */
+export function snippets(r: Row): Snippet[] {
+  const len = toSec(r.length);
+  const at = [0.2, 0.4, 0.6, 0.8].map((f) => fmt(len * f));
+  const g = r.styles ?? [];
+  if (r.status === "preview") return at.map((a, i) => (i === 0 ? { at: "0:00", style: g[0], bpm: r.bpm } : { at: a }));
+  const plan: Record<string, [number, number][]> = {
+    "5": [[0, 52], [0, 61], [2, 38], [0, 57]],
+    "8": [[0, 29], [1, 34], [0, 41], [2, 27]],
+    "1": [[1, 31], [0, 44], [0, 55], [0, 49]],
+  };
+  const p = plan[r.id] ?? [[0, g[0]?.p ?? 0], [0, (g[0]?.p ?? 0) + 6], [1, (g[1]?.p ?? 0) + 9], [0, (g[0]?.p ?? 0) - 3]];
+  return at.map((a, i) => ({ at: a, style: g[p[i][0]] ? { name: g[p[i][0]].name, p: p[i][1] } : undefined, bpm: r.bpm }));
+}

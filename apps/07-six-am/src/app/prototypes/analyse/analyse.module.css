@@ -279,3 +279,39 @@
 .cFacts { grid-template-columns: minmax(380px, 520px) 120px 100px minmax(160px, 1fr); gap: 36px; align-items: start; }
 .cBars { display: flex; flex-direction: column; gap: 6px; }
 .cBars .prob { grid-template-columns: 130px 1fr 40px; font-size: 12.5px; }
+
+/* Round 4: depth-only detail strip, artist always visible, clear hover, square buttons */
+.cRoot { grid-template-rows: 64px auto 1fr 184px; }
+.cNoDeck { grid-template-rows: 64px auto 1fr; }
+.cCols { grid-template-columns: 28px minmax(220px, 1.6fr) minmax(300px, 1.4fr) 74px 98px 52px 60px 92px 136px; }
+.cTrack { display: flex; gap: 8px; min-width: 0; overflow: hidden !important; }
+.cTrack b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cTrack .by { flex: none; overflow: visible; }
+.cRow:hover { background: rgba(241,230,211,.07); }
+.cSel, .cSel:hover, .cSel:nth-child(even) { background: rgba(242,177,52,.16); box-shadow: inset 2px 0 0 var(--gold); }
+.cRoot .meter i { background: #3a322c; }
+.cRoot .meter .meterOn { background: var(--gold); }
+.cRoot .small { border-radius: 6px; background: #231f1c; color: var(--ink); padding: 6px 12px; }
+.cRoot .small:hover { background: #2b2622; }
+.cRoot .cEnable { padding: 8px 14px; }
+.cMenu { border-radius: 6px; }
+.cDeck { justify-content: flex-start; padding-top: 18px; padding-bottom: 18px; gap: 14px; }
+.cHeadLine { align-items: center; }
+.cFacts { grid-template-columns: minmax(340px, 440px) minmax(260px, 320px) 1fr; gap: 40px; align-items: start; }
+.cBars { gap: 4px; }
+.cBars .prob { font-size: 12px; grid-template-columns: 150px 1fr 36px; }
+.cDl { margin: 0; display: grid; grid-template-columns: 84px 1fr; gap: 6px 12px; font: 400 12.5px var(--f-mono); }
+.cDl dt { color: var(--muted); font-size: 11px; letter-spacing: .06em; align-self: center; }
+.cDl dd { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cSnips { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-left: 1px solid var(--line); }
+.cSnip { display: flex; flex-direction: column; gap: 5px; padding: 0 14px; border-right: 1px solid var(--line); font: 400 12.5px var(--f-mono); min-width: 0; }
+.cSnip:last-child { border-right: 0; }
+.cSnipStyle { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cSnipBpm { color: var(--muted); font-variant-numeric: tabular-nums; }
+.cFacts { grid-template-columns: minmax(280px, 400px) minmax(240px, 300px) 1fr; }
+.cSnipBpm { white-space: nowrap; }
+.cSnipBpm { overflow: hidden; text-overflow: clip; }
+.cDl { grid-template-columns: 76px 1fr; }
+.cFacts { grid-template-columns: minmax(240px, 400px) minmax(220px, 300px) minmax(440px, 1fr); gap: 28px; }
+.cBars .prob { grid-template-columns: 120px 1fr 36px; }
+.cSnip { padding: 0 12px; }

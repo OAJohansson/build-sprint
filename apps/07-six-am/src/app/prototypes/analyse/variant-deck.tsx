@@ -4,7 +4,7 @@
 // analysed, over a fixed deck along the bottom (the Studio's crate position) for the selected
 // track. The Listen button itself fills as the window runs.
 import { useState } from "react";
-import { BLOCKED, PLAYLIST, ROWS, SELECTED, STUDIO_BPM, WINDOW, bpmText, brightLabel, energyLabel, keyText, tagMismatch } from "./sample";
+import { BLOCKED, KEY_STRENGTH, MORE_STYLES, PLAYLIST, ROWS, SELECTED, STUDIO_BPM, WINDOW, bpmText, brightLabel, camelot, keyCell, runnerUp, snippets, tagMismatch } from "./sample";
 import { AppBar, Embed, Energy, cx, useActions } from "./shared";
 import type { VariantProps } from "./harness";
 import s from "./analyse.module.css";
@@ -81,7 +81,7 @@ export function Deck({ state, seconds }: VariantProps) {
                 onKeyDown={(e) => { if ((e.key === "Enter" || e.key === " ") && r.styles) { e.preventDefault(); setSel(r.id); } }}
               >
                 <span className={cx(s.th, s.num)}>{i + 1}</span>
-                <span><b>{r.title}</b> <span className={s.by}>· {r.uploader}</span></span>
+                <span className={s.cTrack}><b>{r.title}</b><span className={s.by}>· {r.uploader}</span></span>
                 {r.styles ? (
                   <span className={s.cStyles}>{r.styles[0].name} {r.styles[0].p}% <span className={s.by}>· {r.styles[1].name} {r.styles[1].p}%</span></span>
                 ) : r.status === "ready" ? (
@@ -90,7 +90,7 @@ export function Deck({ state, seconds }: VariantProps) {
                   <span className={r.status === "analysing" ? s.cListeningText : s.dim}>{r.status === "analysing" ? "Listening…" : "Not available in your region"}</span>
                 )}
                 <span className={s.cBpm}>{bpmText(r) || <span className={s.dim}>–</span>}{r.halfDouble ? <span className={s.cDoubt} title="Could be 145 BPM (half-time)"> ×2?</span> : null}</span>
-                <span>{keyText(r) || <span className={s.dim}>–</span>}</span>
+                <span>{keyCell(r) || <span className={s.dim}>–</span>}</span>
                 <Energy value={r.energy} />
                 <span className={r.brightness == null ? s.dim : undefined}>{r.brightness == null ? "–" : brightLabel(r.brightness)}</span>
                 {r.status === "preview" ? (
@@ -101,7 +101,7 @@ export function Deck({ state, seconds }: VariantProps) {
                 <span className={s.by}>{r.uploaderTag ?? <span className={s.dim}>none</span>}{tagMismatch(r) ? <span className={s.cDoubt} title="The uploader's tag isn't in the top 3 styles Six AM heard"> · differs</span> : null}</span>
               </div>
             ))}
-            <div className={s.cMore}>{done} of {PLAYLIST.count} analysed · 45 more tracks in {PLAYLIST.name} not analysed yet<button className={s.small}>Show all</button></div>
+            <div className={s.cMore}>{done} of {PLAYLIST.count} analysed<button className={s.small}>Show all</button></div>
           </>
         )}
       </main>
@@ -112,22 +112,33 @@ export function Deck({ state, seconds }: VariantProps) {
             <b>{picked.title}</b>
             <span className={s.by}>{picked.uploader}</span>
             <span className={s.cLcd}>{bpmText(picked)}<span className={s.lcdUnit}>bpm</span></span>
-            <strong>{keyText(picked)}</strong>
-            <span className={s.fine}>{picked.analysedSeconds} s analysed · never the audio</span>
             <span className={s.cActions}>
               <button className={s.small} onClick={() => a.copy(picked)}>Copy for Claude</button>
               <button className={s.small} onClick={() => a.setBpm(picked)} title={`Studio is at ${STUDIO_BPM} BPM`}>Set Studio to {Math.round(picked.bpm!)} BPM</button>
             </span>
           </div>
           <div className={s.cFacts}>
-            <div className={s.cBars}>
-              {picked.styles!.map((x) => (
+            <div className={s.cBars} aria-label="Every style above 5 %">
+              {[picked.styles![0], ...(MORE_STYLES[picked.id] ?? picked.styles!.slice(1))].map((x) => (
                 <div key={x.name} className={s.prob}><b>{x.name}</b><span className={s.probTrack}><i style={{ width: `${x.p}%` }} /></span><span>{x.p}%</span></div>
               ))}
             </div>
-            <div className={s.cFact}><span className={s.label}>Energy · {energyLabel(picked.energy)}</span><Energy value={picked.energy} /></div>
-            <div className={s.cFact}><span className={s.label}>Brightness</span><span>{brightLabel(picked.brightness)}</span></div>
-            <div className={s.cFact}><span className={s.label}>Uploader tag</span><span title={picked.tags.join(", ")}>{picked.uploaderTag ?? "none"}{picked.tags.length > 1 ? <span className={s.by}> · {picked.tags.filter((x) => x !== picked.uploaderTag).join(", ")}</span> : null}</span></div>
+            <dl className={s.cDl}>
+              <dt>BPM</dt>
+              <dd>{picked.halfDouble ? <>{bpmText(picked)} or {(picked.bpm! * 2).toFixed(1)} <span className={s.cDoubt}>· half-time ambiguous</span></> : <>{bpmText(picked)} <span className={s.by}>· steady</span></>}</dd>
+              <dt>Key</dt>
+              <dd>{keyCell(picked)} <span className={s.by} title="How sure the key detector is, 0 to 1">({(KEY_STRENGTH[picked.id] ?? 0.6).toFixed(2)})</span></dd>
+              <dt>Runner-up</dt>
+              <dd>{(() => { const k = runnerUp(picked); return k ? <>{camelot(k.key, k.scale)} · {k.key} {k.scale}</> : <span className={s.dim}>–</span>; })()}</dd>
+            </dl>
+            <div className={s.cSnips} aria-label="Four snippets across the track">
+              {snippets(picked).map((x) => (
+                <div key={x.at} className={s.cSnip}>
+                  <span className={s.label}>{x.at}</span>
+                  {x.style ? <><span className={s.cSnipStyle}>{x.style.name}</span><span className={s.cSnipBpm}>{x.style.p}% · {x.bpm?.toFixed(1)}</span></> : <span className={s.dim}>not in preview</span>}
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       )}

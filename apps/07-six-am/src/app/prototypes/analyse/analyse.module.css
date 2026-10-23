@@ -244,3 +244,38 @@
 .cSteps { display: flex; flex-direction: column; gap: 12px; }
 .cSteps .steps { flex-direction: row; gap: 32px; }
 .cSteps .steps li { max-width: 340px; }
+
+/* Round 3 (critic gaps): column weights, one meaning per row signal, steps in the table body */
+.root { --amber: #c4923f; }
+.cRoot { grid-template-rows: 64px auto 1fr 150px; }
+.cNoDeck { grid-template-rows: 64px auto 1fr; }
+.cCols { grid-template-columns: 28px minmax(200px, 1.5fr) minmax(320px, 1.6fr) 74px 70px 52px 60px 92px 150px; column-gap: 14px; }
+.cStyles { overflow: visible !important; text-overflow: clip !important; }
+.cRow:nth-child(even) { background: transparent; }
+.cRow:hover { background: rgba(241,230,211,.035); }
+.cSel, .cSel:hover, .cSel:nth-child(even) { background: rgba(242,177,52,.12); box-shadow: inset 2px 0 0 var(--gold); }
+.cRow:focus-visible { box-shadow: inset 0 0 0 1px var(--gold); }
+.cSel:focus-visible { box-shadow: inset 2px 0 0 var(--gold), inset 0 0 0 1px var(--gold); }
+.cListeningText { color: var(--gold); }
+.cDoubt { color: var(--amber); cursor: help; }
+.cTextBtn { font: 500 12.5px var(--f-mono); color: var(--muted); background: none; border: 0; padding: 4px 2px; cursor: pointer; border-radius: 4px; }
+.cTextBtn:hover { color: var(--ink); }
+.cTextBtn:focus-visible, .cAnalyse:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+.cAnalyse { color: var(--gold); padding: 0; }
+.cAnalyse:hover { color: #f6bf52; text-decoration: underline; text-underline-offset: 3px; }
+.cListenWrap { display: inline-flex; align-items: center; gap: 12px; }
+.cListen { cursor: default; min-width: 200px; justify-content: space-between; }
+.cListen > span:nth-child(2) { color: var(--gold); }
+.cOff { padding: 10px 20px 10px 62px; border-bottom: 1px solid var(--line); font: 400 12.5px/1.5 var(--f-mono); color: var(--muted); }
+.cOff b { color: var(--ink); font-weight: 500; }
+.cOff q { quotes: "“" "”"; color: var(--ink); }
+.cBodySteps { flex-direction: column; gap: 14px; padding: 28px 20px 0 62px; max-width: 760px; }
+.cBodySteps li { font-size: 12.5px; }
+.cExport { position: relative; }
+.cMenu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 20; display: flex; flex-direction: column; min-width: 120px; padding: 4px; background: #1d1916; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 12px 28px rgba(0,0,0,.5); }
+.cMenu button { font: 400 12px var(--f-mono); color: var(--ink); background: none; border: 0; border-radius: 6px; padding: 8px 10px; text-align: left; cursor: pointer; }
+.cMenu button:hover { background: rgba(241,230,211,.06); }
+.cDeck { gap: 12px; }
+.cFacts { grid-template-columns: minmax(380px, 520px) 120px 100px minmax(160px, 1fr); gap: 36px; align-items: start; }
+.cBars { display: flex; flex-direction: column; gap: 6px; }
+.cBars .prob { grid-template-columns: 130px 1fr 40px; font-size: 12.5px; }

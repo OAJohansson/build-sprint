@@ -18,21 +18,35 @@ export function Deck({ state, seconds }: VariantProps) {
   const picked = rows.find((r) => r.id === sel && r.styles);
   const current = rows.find((r) => r.id === "10");
   const done = rows.filter((r) => r.styles).length;
-  const showSteps = state !== "main";
+  const [menu, setMenu] = useState(false);
 
   return (
-    <div className={cx(s.root, s.cRoot)}>
-      <AppBar right={empty ? null : <><span className={s.by}>{done} of {PLAYLIST.count} analysed</span><button className={s.small}>Export CSV</button><button className={s.small}>JSON</button></>} />
+    <div className={cx(s.root, s.cRoot, (empty || !picked) && s.cNoDeck)}>
+      <AppBar
+        right={empty ? null : (
+          <span className={s.cExport}>
+            <button className={s.small} aria-haspopup="menu" aria-expanded={menu} onClick={() => setMenu((v) => !v)}>Export ▾</button>
+            {menu ? (
+              <span className={s.cMenu} role="menu">
+                <button role="menuitem" onClick={() => setMenu(false)}>CSV</button>
+                <button role="menuitem" onClick={() => setMenu(false)}>JSON</button>
+              </span>
+            ) : null}
+          </span>
+        )}
+      />
       <div className={s.cBar}>
         <input className={s.url} aria-label="SoundCloud link" placeholder="Paste a SoundCloud track or playlist link" defaultValue={empty ? "" : PLAYLIST.url} spellCheck={false} />
         <Embed url={current?.url} />
         {listening ? (
-          <button className={s.cListen} aria-label={`Listening, ${seconds} of ${WINDOW} seconds. Cancel`}>
-            <i style={{ width: `${(seconds / WINDOW) * 100}%` }} />
-            <span className={s.listening}>Listening</span>
-            <span className={s.lcd}>{seconds} / {WINDOW} s</span>
-            <span className={s.by}>Cancel</span>
-          </button>
+          <span className={s.cListenWrap}>
+            <span className={s.cListen} role="progressbar" aria-label="Listening" aria-valuemin={0} aria-valuemax={WINDOW} aria-valuenow={seconds}>
+              <i style={{ width: `${(seconds / WINDOW) * 100}%` }} />
+              <span>Listening</span>
+              <span className={s.lcd}>{seconds} / {WINDOW} s</span>
+            </span>
+            <button className={s.cTextBtn}>Cancel</button>
+          </span>
         ) : (
           <button className={cx(s.small, s.cEnable)}>Enable listening</button>
         )}
@@ -40,19 +54,28 @@ export function Deck({ state, seconds }: VariantProps) {
 
       <main className={s.cTable}>
         {empty ? (
-          <p className={s.cEmptyLine}>Paste a SoundCloud link above.</p>
+          <ol className={cx(s.steps, s.cBodySteps)}>
+            <li>Paste a SoundCloud track or playlist link above. A playlist lists all its tracks here.</li>
+            <li><span>Press Enable listening. In Chrome&apos;s dialog leave <q>Also share tab audio</q> on and click <q>Share</q>, once per session.</span></li>
+            <li>Press Analyse on a track. About 60 s later its row fills in. Six AM keeps the measurements only, never the audio.</li>
+          </ol>
         ) : (
           <>
             <div className={cx(s.cCols, s.cHead)}>
               <span className={s.th}>#</span><span className={s.th}>Track</span><span className={s.th}>Top 2 styles</span>
               <span className={s.th}>BPM</span><span className={s.th}>Key</span><span className={s.th}>Energy</span><span className={s.th}>Bright</span>
-              <span className={s.th}>Time</span><span className={s.th}>Uploader tag</span><span className={s.th} aria-hidden />
+              <span className={s.th}>Time</span><span className={s.th}>Uploader tag</span>
             </div>
+            {listening ? null : (
+              <div className={s.cOff}>
+                <span><b>Listening is off for this session.</b> Press Enable listening, leave <q>Also share tab audio</q> on and click <q>Share</q>. Six AM keeps the measurements only, never the audio.</span>
+              </div>
+            )}
             {rows.map((r, i) => (
               <div
                 key={r.id}
                 tabIndex={0}
-                className={cx(s.cCols, s.cRow, r.id === sel && s.cSel, r.id === "10" && s.cCur)}
+                className={cx(s.cCols, s.cRow, r.id === sel && s.cSel)}
                 aria-selected={r.id === sel}
                 onClick={() => r.styles && setSel(r.id)}
                 onKeyDown={(e) => { if ((e.key === "Enter" || e.key === " ") && r.styles) { e.preventDefault(); setSel(r.id); } }}
@@ -60,69 +83,54 @@ export function Deck({ state, seconds }: VariantProps) {
                 <span className={cx(s.th, s.num)}>{i + 1}</span>
                 <span><b>{r.title}</b> <span className={s.by}>· {r.uploader}</span></span>
                 {r.styles ? (
-                  <span>{r.styles[0].name} {r.styles[0].p}% <span className={s.by}>· {r.styles[1].name} {r.styles[1].p}%</span></span>
+                  <span className={s.cStyles}>{r.styles[0].name} {r.styles[0].p}% <span className={s.by}>· {r.styles[1].name} {r.styles[1].p}%</span></span>
+                ) : r.status === "ready" ? (
+                  <span><button className={cx(s.cTextBtn, s.cAnalyse)} title={listening ? "Analyse about 60 s of this track" : "Enable listening first"} onClick={(e) => e.stopPropagation()}>Analyse</button></span>
                 ) : (
-                  <span className={r.status === "analysing" ? s.listening : s.dim}>
-                    {r.status === "analysing" ? "Listening…" : r.status === "blocked" ? "Not available in your region" : "Not analysed"}
-                  </span>
+                  <span className={r.status === "analysing" ? s.cListeningText : s.dim}>{r.status === "analysing" ? "Listening…" : "Not available in your region"}</span>
                 )}
-                <span className={s.cBpm}>{bpmText(r) || <span className={s.dim}>–</span>}{r.halfDouble ? <span className={s.flag} title="Might be half-time: 145 BPM"> ×2?</span> : null}</span>
+                <span className={s.cBpm}>{bpmText(r) || <span className={s.dim}>–</span>}{r.halfDouble ? <span className={s.cDoubt} title="Could be 145 BPM (half-time)"> ×2?</span> : null}</span>
                 <span>{keyText(r) || <span className={s.dim}>–</span>}</span>
                 <Energy value={r.energy} />
                 <span className={r.brightness == null ? s.dim : undefined}>{r.brightness == null ? "–" : brightLabel(r.brightness)}</span>
                 {r.status === "preview" ? (
-                  <span className={s.cPreview} title={`The track is ${r.length}; SoundCloud plays only a 30 s preview, so 30 s were analysed`}>30 s preview</span>
+                  <span className={s.dim} title={`The track is ${r.length}; SoundCloud plays only a 30 s preview, so 30 s were analysed`}>30 s preview</span>
                 ) : (
                   <span className={cx(s.num, s.by)}>{r.length || "–"}</span>
                 )}
-                <span className={s.by}>{r.uploaderTag ?? <span className={s.dim}>none</span>}{tagMismatch(r) ? <span className={s.cDiffers} title="The uploader's tag isn't in the top 3 styles Six AM heard"> · differs</span> : null}</span>
-                <span className={s.cAct}>
-                  {r.status === "ready" ? (
-                    <button className={cx(s.small, r.id === "10" && s.cActOn)} disabled={!listening} title={listening ? undefined : "Enable listening first"} onClick={(e) => e.stopPropagation()}>Analyse</button>
-                  ) : null}
-                </span>
+                <span className={s.by}>{r.uploaderTag ?? <span className={s.dim}>none</span>}{tagMismatch(r) ? <span className={s.cDoubt} title="The uploader's tag isn't in the top 3 styles Six AM heard"> · differs</span> : null}</span>
               </div>
             ))}
-            <div className={s.cMore}>45 more tracks in {PLAYLIST.name}, not analysed yet<button className={s.small}>Show all</button></div>
+            <div className={s.cMore}>{done} of {PLAYLIST.count} analysed · 45 more tracks in {PLAYLIST.name} not analysed yet<button className={s.small}>Show all</button></div>
           </>
         )}
       </main>
 
-      <section className={s.cDeck} aria-label={showSteps ? "Enable listening" : "Selected track"}>
-        {showSteps ? (
-          <div className={s.cSteps}>
-            <span className={s.label}>{empty ? "How it works" : "Listening is off for this session"}</span>
-            <ol className={s.steps}>
-              <li>{empty ? "Paste a SoundCloud track or playlist link." : "Press Enable listening. Chrome asks to share this tab."}</li>
-              <li><span>Leave <q>Also share tab audio</q> on and click <q>Share</q>, once per session.</span></li>
-              <li>Press Analyse on a track. About 60 s later its row fills in.</li>
-            </ol>
-            <p className={s.fine}>Six AM keeps the measurements only, never the audio.</p>
+      {empty || !picked ? null : (
+        <section className={s.cDeck} aria-label="Selected track">
+          <div className={s.cHeadLine}>
+            <b>{picked.title}</b>
+            <span className={s.by}>{picked.uploader}</span>
+            <span className={s.cLcd}>{bpmText(picked)}<span className={s.lcdUnit}>bpm</span></span>
+            <strong>{keyText(picked)}</strong>
+            <span className={s.fine}>{picked.analysedSeconds} s analysed · never the audio</span>
+            <span className={s.cActions}>
+              <button className={s.small} onClick={() => a.copy(picked)}>Copy for Claude</button>
+              <button className={s.small} onClick={() => a.setBpm(picked)} title={`Studio is at ${STUDIO_BPM} BPM`}>Set Studio to {Math.round(picked.bpm!)} BPM</button>
+            </span>
           </div>
-        ) : picked ? (
-          <>
-            <div className={s.cHeadLine}>
-              <b>{picked.title}</b>
-              <span className={s.by}>{picked.uploader}</span>
-              <span className={s.cLcd}>{bpmText(picked)}<span className={s.lcdUnit}>bpm</span></span>
-              <strong>{keyText(picked)}</strong>
-              <span className={s.fine}>{picked.analysedSeconds} s analysed · never the audio</span>
-              <span className={s.cActions}>
-                <button className={s.small} onClick={() => a.copy(picked)}>Copy for Claude</button>
-                <button className={s.small} onClick={() => a.setBpm(picked)} title={`Studio is at ${STUDIO_BPM} BPM`}>Set Studio to {Math.round(picked.bpm!)} BPM</button>
-              </span>
-            </div>
-            <div className={s.cFacts}>
+          <div className={s.cFacts}>
+            <div className={s.cBars}>
               {picked.styles!.map((x) => (
                 <div key={x.name} className={s.prob}><b>{x.name}</b><span className={s.probTrack}><i style={{ width: `${x.p}%` }} /></span><span>{x.p}%</span></div>
               ))}
-              <div className={s.cFact}><span className={s.label}>Energy · {energyLabel(picked.energy)}</span><Energy value={picked.energy} /></div>
-              <div className={s.cFact}><span className={s.label}>Brightness</span><span>{brightLabel(picked.brightness)}</span></div>
-              <div className={s.cFact}><span className={s.label}>Uploader tag</span><span title={picked.tags.join(", ")}>{picked.uploaderTag ?? "none"}{picked.tags.length > 1 ? <span className={s.by}> · {picked.tags.filter((x) => x !== picked.uploaderTag).join(", ")}</span> : null}</span></div>
             </div>
-          </>
-        ) : null}
-      </section>
+            <div className={s.cFact}><span className={s.label}>Energy · {energyLabel(picked.energy)}</span><Energy value={picked.energy} /></div>
+            <div className={s.cFact}><span className={s.label}>Brightness</span><span>{brightLabel(picked.brightness)}</span></div>
+            <div className={s.cFact}><span className={s.label}>Uploader tag</span><span title={picked.tags.join(", ")}>{picked.uploaderTag ?? "none"}{picked.tags.length > 1 ? <span className={s.by}> · {picked.tags.filter((x) => x !== picked.uploaderTag).join(", ")}</span> : null}</span></div>
+          </div>
+        </section>
+      )}
       {a.note ? <div className={s.note} role="status">{a.note}</div> : null}
     </div>
   );

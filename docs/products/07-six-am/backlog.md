@@ -18,3 +18,27 @@ skipped checks below, on the live URL. Then song analysis, the biggest wish.
 | Humming → notes (Basic Pitch) | Make a melody truly yours | v2 |
 | Live jam mode (lanes, clips start on the next bar), recorded onto the timeline | The first design idea; fun for performing once the timeline works | parked |
 | More sounds for more complex songs | The 24-loop crate got limiting fast (owner, 19 Oct) | done: 48 loops |
+
+## Ears and the roadmap (from the owner's brief, 23 Oct)
+
+Past Ears v1's stop line (`kickoff.md`). Phases are sequenced, not dated; each starts when the
+previous gate is passed. Full detail in `kickoff-source.md`.
+
+| Idea | Why | Status |
+| --- | --- | --- |
+| Batch analysis of a whole playlist (autoplay queue, ~6 h for 56 tracks) | Sorting the dump playlist without clicking each track | Phase 2 (owner to confirm) |
+| Arrangement map (EA-6): sections and per-lane activity on the bar grid | "When does the bass come in? How long is the build?" | Phase 2 |
+| Uploader metadata disagreement flag (EA-8) beyond showing the tag | "Tagged Deep House, sounds like Progressive" | Phase 2 |
+| Character extras: loudness, bass weight, swing (EA-5); BPM/key stability over time (EA-4) | Ear training vocabulary | Phase 2 |
+| Local audio files as a source (EA-1) | Owned tracks | Phase 2 |
+| Compare two tracks side by side | "Why does this feel deeper than that?" | later |
+| Built-in Mentor (ME-1–ME-8) via Claude API and a small backend for the key | Replaces Copy for Claude once proven | Phase 3 |
+| Genre lessons, ear training, discovery paths (ME-3, ME-4, ME-6) | Learn the genres; Appendix A is the seed curriculum | Phase 3 |
+| Genre recipes (GR-1–GR-3) | Start a track from a genre | Phase 3 |
+| Studio: set key from analysis, reference track alongside (ST-2, ST-4) | Make it like this track | Phase 3 |
+| Full layer model, automation lanes, mixer (ST-5–ST-10) | Real arrangements; needed by Remake | Phase 4 |
+| Synth Lab: playable 303, sub, organ, reese (LA-1, LA-2) | Shape my own sounds | Phase 4 |
+| Remake mode (DR-4) | Rebuild a track lane by lane with the original alongside | Phase 4 |
+| Live stem separation "Neural Mix" (DR-2), offline stems for owned files (DR-3) | Hear just the bassline; personal use only, licence needed if public | Phase 5 (last: most uncertain) |
+| AI-generated loops (LA-3) | Generate new sounds; licences to check | later |
+| Accounts, cloud sync, sharing, mobile, non-Chrome browsers | Out of scope for a personal tool | no (for now) |

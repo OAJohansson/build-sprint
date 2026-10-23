@@ -1,0 +1,102 @@
+# Evals: Six AM, Ears v1
+
+How the owner will judge the delivery (decision 0026). Written at kickoff, before any code, in
+two parts that never live together:
+
+- **Agent-checkable checks** (this file, `docs/products/07-six-am/evals.md`): the squad reads them,
+  runs them and reports each with evidence in the eval report.
+- **Owner-only checks**: kept **outside the repo**, never committed, never pasted into a session.
+  The squad must never read them.
+
+Whoever builds something never grades it: the checks below are run by `user-tester`,
+`design-critic` and `data-evals`, not by the agent that built the thing. Checks marked **owner's
+hands** need a real Chrome tab-share dialog and real SoundCloud audio: the owner clicks through the
+picker, the grader reads the logs and screenshots.
+
+---
+
+## Part 1: agent-checkable checks
+
+### Requirements (one pass/fail check per requirement in the kickoff pack)
+
+| # | Requirement | Check (how to tell, on a fresh install) | Run by | Result | Evidence |
+| --- | --- | --- | --- | --- | --- |
+| F1 | Parse SoundCloud track and set URLs | Unit tests pass for track, set, `?si=`, `utm_`, `?in=`, short links, junk; junk input shows a message in the UI | data-evals (tests), user-tester (UI) | | test log, screenshot |
+| F2 | Widget API drives playback | Load, play, pause, seek and `READY`/`PLAY`/`PAUSE`/`FINISH` each reflected in the UI | user-tester | | screenshot, console |
+| F3 | Tab capture into an in-memory buffer | With tab audio shared, RMS of the captured stream is non-silent while the widget plays (owner's hands); the video track's `readyState` is `ended` straight after the grant | data-evals | | RMS log |
+| F4 | 16 kHz mono, mel patches, EffNet inference in a worker, averaged | A captured window yields a ranked list of Discogs styles summing to a probability distribution; input rate logged as 16000 | data-evals | | log |
+| F5 | Discogs style → display name (+ family) | Unit test: `Electronic---Deep House` → *Deep House*, every one of the 400 styles maps to a name, unknown style falls back to its raw name | data-evals | | test log |
+| F6 | BPM, key/scale, energy, brightness | All four shown for every validation track | data-evals | | validation table |
+| F7 | Raw audio discarded, never stored or uploaded | After an analysis: localStorage, IndexedDB, Cache Storage and OPFS hold no audio-sized blobs or PCM arrays; network log has no outgoing request with an audio body or size > 100 kB (model downloads are inbound only) | data-evals | | storage dump, HAR summary |
+| F8 | Results persisted locally; CSV/JSON export | Reload keeps the session list; CSV and JSON exports open and hold every row's fields | user-tester | | files, screenshot |
+| F9 | Copy for Claude | Clipboard text matches the Appendix B template with every field filled (or explicitly "none") | user-tester | | clipboard text |
+| F10 | Set Studio BPM | After the click, the Studio's tempo display shows the detected BPM and the transport plays at it | user-tester | | screenshot |
+| NF1 | No audio stored, uploaded or downloadable | F7's check plus a code read: no `MediaRecorder`, no audio `Blob`/`File` creation, no download link for audio, no audio in any `fetch` body | data-evals | | grep output |
+| NF2 | Result ≤ 10 s after the window ends; UI responsive | Timed on the validation runs (max ≤ 10 s); inference runs in a Web Worker (no long task > 200 ms on the main thread during inference) | data-evals | | timings, performance trace |
+| NF3 | Lazy model load, cached, loading state, size shown first time | Model requests appear only on first Analyse; second run fetches them from cache; first run shows the loading state with the total size | user-tester | | network log, screenshot |
+| NF4 | Chrome desktop only, others explained | In a non-Chromium browser (or with `getDisplayMedia` missing) the view explains Chrome is needed instead of failing | user-tester | | screenshot |
+| NF5 | Genres as probabilities | Result card shows % on every genre; no copy states one genre as fact | user-tester, design-critic | | screenshot |
+| NF6 | Licence flagged | App README states Essentia.js / Discogs-EffNet are AGPLv3 / non-commercial, revisit before public release | data-evals | | README line |
+| NF7 | Existing Six AM look | design-critic judges the Analyse view against the Studio screenshots and the feel sentence | design-critic | | score |
+| US1 | Load SoundCloud | Valid track URL: player ready ≤ 5 s; the *B b baaangers* set lists all 56 tracks; an invalid URL, a private track and a geo-blocked track each show a clear message | user-tester | | timings, screenshots |
+| US2 | Enable listening | Instructions name "this tab" and "Share tab audio"; sharing without audio, or silent audio, shows a message with Retry; Chrome's Stop sharing returns the UI to "not listening" | user-tester (owner's hands for the dialog) | | screenshots |
+| US3 | Analyse a track | Progress visible; Cancel stops it with nothing saved; result shows top 3 genres with %, BPM to 1 decimal, key + scale, energy and brightness as labels and bars; pausing the player pauses the analysis and resuming continues or restarts cleanly | user-tester | | screenshots |
+| US4 | Compare with tags | Uploader genre tag shown next to the result when available; left out (not "undefined") when not | user-tester | | screenshot |
+| US5 | Ask Claude | Copied text has title, uploader, URL, all results, uploader tags and the Appendix B prompt | user-tester | | clipboard text |
+| US6 | Use the BPM | One click sets the Studio tempo (as F10) | user-tester | | screenshot |
+| US7 | Keep my results | Every analysed track listed; list survives reload; exportable (as F8) | user-tester | | screenshot |
+
+### Definition of done (from the brief)
+
+| Check | Bar | Run by | Result |
+| --- | --- | --- | --- |
+| End to end on the 10 validation tracks (Appendix B) | 10 / 10 without errors | data-evals (owner's hands) | |
+| Genre top-1 or top-2 agrees with the reference call | ≥ 7 / 10 | data-evals | |
+| BPM within ±2 of reference, or half/double-time correctly flagged | ≥ 8 / 10 | data-evals | |
+| No audio persisted or uploaded | storage and network clean (F7, NF1) | data-evals | |
+| Paste to result | ≤ 90 s on every validation track | data-evals | |
+
+### User test (from `user-testing/plan.md`, written by `discovery`)
+
+| Scenario | Bar: time | Bar: taps | Bar: outcome | Result |
+| --- | --- | --- | --- | --- |
+| S1 What genre is this? Paste a track URL, enable listening, analyse | ≤ 90 s | ≤ 6 | Result card with top 3 genres, BPM, key, energy, brightness | |
+| S2 Where does this go? Copy for Claude from a result | ≤ 15 s | ≤ 2 | Clipboard holds the full prompt | |
+| S3 Pick a track from the playlist and analyse it | ≤ 2 min | ≤ 8 | Right track analysed, added to the session list | |
+| S4 Set the Studio to this BPM and open the Studio | ≤ 10 s | ≤ 2 | Studio at the detected tempo | |
+
+Every top job scored ≥ 4/5 by `user-tester`, and no blocker or major finding left open.
+
+### Design
+
+- `design-critic` score **≥ 9/10** on the Analyse view, from screenshots only, against the kickoff
+  pack's "feel in one sentence".
+- No item from the kickoff pack's "Things to avoid" visible on any screen.
+
+### AI and data (run by `data-evals`)
+
+| Eval | Dataset | Metric | Bar | Result |
+| --- | --- | --- | --- | --- |
+| Genre agreement | 10 validation tracks (Appendix B) | Reference call in top-1 or top-2 (style or family) | ≥ 7 / 10 | |
+| Hears past the tag | Track 8 (Dubspinna, tagged Deep House) | Melodic house/progressive ranks above deep house | reported, not gated | |
+| BPM | 10 validation tracks | ±2 BPM or half/double flagged | ≥ 8 / 10 | |
+| Key | 10 validation tracks | Reported with key strength; no reference, so no bar | reported | |
+| Stability | 1 track analysed twice | Same top-1 style and BPM within ±1 | same | |
+
+### Guardrails (must not get worse; measured with a number)
+
+| Guardrail | How measured | Bar | Result |
+| --- | --- | --- | --- |
+| No audio stored or uploaded | F7 storage and network check | 0 audio blobs, 0 audio uploads | |
+| Readable text | contrast ratio, worst state | ≥ 4.5:1 | |
+| Correct data | copied/exported values vs result card, field by field | 100% | |
+| Studio unbroken | Studio loads, plays and saves a track as before | yes | |
+| Desktop | works at 1280 × 800 and 1440 × 900 (phone is out of scope) | yes | |
+
+### Build hygiene
+
+- `pnpm -F 07-six-am build` and `pnpm -F 07-six-am lint` pass; `pnpm -F 07-six-am test` passes,
+  including the kickoff pack's unit tests (URL parsing, style mapping, BPM normalisation).
+- No secrets in the diff; every new key is in `.env.example` (Ears needs none).
+
+Owner-only checks: Part 2 of `docs/operating-modes/evals-TEMPLATE.md`, kept outside the repo.

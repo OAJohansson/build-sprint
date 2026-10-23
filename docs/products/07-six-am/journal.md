@@ -2,6 +2,16 @@
 
 What happened, what was decided and why. Newest last.
 
+## To carry over
+
+Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.md).
+
+- `docs/learnings.md` process changelog: first Founder-mode run (decision 0026) on a rebuild of an
+  existing app rather than a new product; how the kickoff pack worked when written from a brief
+  made with another agent.
+- `docs/knowledge-bank.md` (technology): cross-origin audio and tab capture (`getDisplayMedia`
+  with `preferCurrentTab`, why Web Audio can't tap an iframe but tab capture can).
+
 ## 18 Oct: discovery while Folio wraps up
 
 - **Parallel work, kept safe.** Folio (06) is still being wrapped up in another session, so 07
@@ -255,3 +265,22 @@ What happened, what was decided and why. Newest last.
   Fix in `scripts/ship.mjs`: one upsert per env var, and `vercelApi` refuses arrays with a clear
   message. Checked without touching real values: `{}` gets Vercel's "missing `key`" validation
   error, `[{}]` gets "Invalid JSON".
+
+## 23 Oct: Ears v1, the first Founder-mode session
+
+- **Owner's call:** rebuild Six AM beyond its MVP, starting with **Ears v1** (paste a SoundCloud
+  link, play it in Six AM, capture tab audio, get top-3 genres, BPM, key, energy and brightness in
+  about a minute, Copy for Claude, set Studio BPM, local session list). Run as the first Founder
+  session (decision 0026): the PM session runs the squad, the owner writes the kickoff and judges
+  the result. Hard rule: works with streamed, undownloadable tracks; never stores or uploads audio.
+- **Kickoff pack** transcribed from the owner's brief (copied in as `kickoff-source.md`):
+  `kickoff.md`, `evals.md` (part 1) and `decisions.md` added, matching `pnpm new --mode founder`.
+  Card set to `mode: founder`, `status: building`. Out-of-scope items and roadmap phases moved to
+  `backlog.md`.
+- **Gaps sent to the owner in one message** (L2): appetite, feel references and sentence, things
+  to avoid, genre display (style vs family vs both), batch analysis in MVP or Phase 2. PM defaults
+  stand, marked "owner to confirm", until answered. The laptop question is answered: MacBook Pro,
+  Apple silicon.
+- **Found in the repo** (brief's open question 2): the Studio's tempo is a constant (`BPM = 124` in
+  `src/lib/timeline.ts`, loops synthesised at it), so F10 needs the tempo to become variable; kept
+  to the smallest change (rabbit hole noted in the pack).

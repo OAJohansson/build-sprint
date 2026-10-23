@@ -43,3 +43,5 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Live stem separation "Neural Mix" (DR-2), offline stems for owned files (DR-3) | Hear just the bassline; personal use only, licence needed if public | Phase 5 (last: most uncertain) |
 | AI-generated loops (LA-3) | Generate new sounds; licences to check | later |
 | Accounts, cloud sync, sharing, mobile, non-Chrome browsers | Out of scope for a personal tool | no (for now) |
+| Mark each analysed track as filed into a playlist, with a "31 / 56 placed · 6 unsure" progress line and a per-row playlist picker | User test 23 Oct: the thing that would bring them back tomorrow | next after Ears v1 |
+| Search / type-to-filter in long lists | User test 23 Oct | later |

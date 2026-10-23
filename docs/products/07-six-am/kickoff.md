@@ -7,10 +7,11 @@ brief differ, the brief wins. Lines marked **(owner to confirm)** are gaps the b
 with the PM's recommended default until the owner answers.
 
 **Mode:** founder
-**Appetite:** two working days for Ears v1 (day 1: capture and model spikes, Analyse view; day 2:
-pipeline, Copy for Claude, session list, validation run). Fixed time: if it runs over, cut in this
-order: playlist track list (track URLs only), CSV export (JSON only), uploader tags. **(owner to
-confirm)**
+**Appetite:** no fixed day budget (owner, 23 Oct: the laptop stays on so the squad can work
+overnight). The constraint is the owner's hands: anything needing them (the capture spike in real
+Chrome first) must be ready within about 3 hours of kickoff, before the owner goes to bed. The
+scope stays Ears v1; if something has to give, cut in this order: playlist track list (track URLs
+only), CSV export (JSON only), uploader tags.
 **Evals:** `evals.md` (agent-checkable part) · owner-only checks kept outside the repo
 
 ## Problem
@@ -108,7 +109,7 @@ Ears v1, scope items 1–8 of the brief:
 **Stop line:** everything in the brief's "Out of scope" (arrangement map, stems live or offline,
 built-in mentor, genre recipes, Remake mode, synths, AI generation, accounts, cloud sync, sharing,
 mobile, non-Chrome browsers) and every roadmap phase goes to [`backlog.md`](backlog.md). Batch
-analysis of a whole playlist (autoplay queue): Phase 2 **(owner to confirm)**.
+analysis of a whole playlist (autoplay queue): Phase 2 (owner, 23 Oct).
 
 ## Requirements
 

@@ -284,3 +284,8 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - **Found in the repo** (brief's open question 2): the Studio's tempo is a constant (`BPM = 124` in
   `src/lib/timeline.ts`, loops synthesised at it), so F10 needs the tempo to become variable; kept
   to the smallest change (rabbit hole noted in the pack).
+- **Owner's answers, gaps 1 and 5** (relayed from the parent session): no fixed appetite, the
+  squad may work overnight, but the owner has about 3 hours for anything that needs their hands
+  (L3); batch analysis is Phase 2 (L4). Feel, things to avoid and genre display are still being
+  discussed; the owner wants the design as close to the existing MVP as possible. PM defaults stay
+  provisional until relayed.

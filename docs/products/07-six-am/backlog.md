@@ -26,7 +26,7 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 
 | Idea | Why | Status |
 | --- | --- | --- |
-| Batch analysis of a whole playlist (autoplay queue, ~6 h for 56 tracks) | Sorting the dump playlist without clicking each track | Phase 2 (owner to confirm) |
+| Batch analysis of a whole playlist (autoplay queue, ~6 h for 56 tracks) | Sorting the dump playlist without clicking each track | Phase 2 (owner, 23 Oct) |
 | Arrangement map (EA-6): sections and per-lane activity on the bar grid | "When does the bass come in? How long is the build?" | Phase 2 |
 | Uploader metadata disagreement flag (EA-8) beyond showing the tag | "Tagged Deep House, sounds like Progressive" | Phase 2 |
 | Character extras: loudness, bass weight, swing (EA-5); BPM/key stability over time (EA-4) | Ear training vocabulary | Phase 2 |

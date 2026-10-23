@@ -4,7 +4,7 @@
 // analysed, over a fixed deck along the bottom (the Studio's crate position) for the selected
 // track. The Listen button itself fills as the window runs.
 import { useState } from "react";
-import { BLOCKED, KEY_STRENGTH, MORE_STYLES, PLAYLIST, ROWS, SELECTED, STUDIO_BPM, WINDOW, bpmText, brightLabel, camelot, keyCell, runnerUp, snippets, tagMismatch } from "./sample";
+import { type Row, BLOCKED, SNIPPETS, SNIPPET_S, KEY_STRENGTH, MORE_STYLES, PLAYLIST, ROWS, SELECTED, STUDIO_BPM, bpmText, brightLabel, camelot, keyCell, runnerUp, snippets, tagMismatch } from "./sample";
 import { AppBar, Embed, Energy, cx, useActions } from "./shared";
 import type { VariantProps } from "./harness";
 import s from "./analyse.module.css";
@@ -12,7 +12,15 @@ import s from "./analyse.module.css";
 export function Deck({ state, seconds }: VariantProps) {
   const empty = state === "empty";
   const listening = state === "main";
-  const rows = empty ? [] : [...ROWS.map((r) => (r.status === "analysing" && !listening ? { ...r, status: "ready" as const } : r)), BLOCKED];
+  // Owner, round 5: a queue (one track after another). In the listening sample, Kolter waits in it.
+  const rows: (Row & { queued?: number })[] = empty ? [] : [
+    ...ROWS.map((r) => (r.status === "analysing" && !listening ? { ...r, status: "ready" as const } : r))
+      .map((r) => (listening && r.id === "3" ? { ...r, status: "ready" as const, styles: undefined, bpm: undefined, key: undefined, energy: undefined, brightness: undefined, analysedSeconds: undefined, queued: 1 } : r)),
+    BLOCKED,
+  ];
+  const queuedCount = rows.filter((r) => r.queued).length;
+  const heard = seconds; // of 4 × 30 s
+  const snippet = Math.min(SNIPPETS, Math.floor(heard / SNIPPET_S) + 1);
   const [sel, setSel] = useState(SELECTED);
   const a = useActions();
   const picked = rows.find((r) => r.id === sel && r.styles);
@@ -40,11 +48,11 @@ export function Deck({ state, seconds }: VariantProps) {
         <Embed url={current?.url} />
         {listening ? (
           <span className={s.cListenWrap}>
-            <span className={s.cListen} role="progressbar" aria-label="Listening" aria-valuemin={0} aria-valuemax={WINDOW} aria-valuenow={seconds}>
-              <i style={{ width: `${(seconds / WINDOW) * 100}%` }} />
-              <span>Listening</span>
-              <span className={s.lcd}>{seconds} / {WINDOW} s</span>
+            <span className={s.cProg} role="progressbar" aria-label={`Listening, snippet ${snippet} of ${SNIPPETS}`} aria-valuemin={0} aria-valuemax={SNIPPETS * SNIPPET_S} aria-valuenow={heard}>
+              <span className={s.cProgText}><span>Listening {snippet}/{SNIPPETS}</span><span className={s.lcd}>{heard} s</span></span>
+              <span className={s.cProgBar}><i style={{ width: `${(heard / (SNIPPETS * SNIPPET_S)) * 100}%` }} /></span>
             </span>
+            {queuedCount ? <span className={s.by}>{queuedCount} queued</span> : null}
             <button className={s.cTextBtn}>Cancel</button>
           </span>
         ) : (
@@ -57,13 +65,13 @@ export function Deck({ state, seconds }: VariantProps) {
           <ol className={cx(s.steps, s.cBodySteps)}>
             <li>Paste a SoundCloud track or playlist link above. A playlist lists all its tracks here.</li>
             <li><span>Press Enable listening. In Chrome&apos;s dialog leave <q>Also share tab audio</q> on and click <q>Share</q>, once per session.</span></li>
-            <li>Press Analyse on a track. About 60 s later its row fills in. Six AM keeps the measurements only, never the audio.</li>
+            <li>Press Analyse on a track. Six AM listens to 4 snippets of 30 s; about 2 minutes later its row fills in. It keeps the measurements only, never the audio.</li>
           </ol>
         ) : (
           <>
             <div className={cx(s.cCols, s.cHead)}>
               <span className={s.th}>#</span><span className={s.th}>Track</span><span className={s.th}>Top 2 styles</span>
-              <span className={s.th}>BPM</span><span className={s.th}>Key</span><span className={s.th}>Energy</span><span className={s.th}>Bright</span>
+              <span className={s.th}>BPM</span><span className={s.th}>Key</span><span className={s.th}>Energy</span><span className={s.th}>Tone</span>
               <span className={s.th}>Time</span><span className={s.th}>Uploader tag</span>
             </div>
             {listening ? null : (
@@ -83,9 +91,15 @@ export function Deck({ state, seconds }: VariantProps) {
                 <span className={cx(s.th, s.num)}>{i + 1}</span>
                 <span className={s.cTrack}><b>{r.title}</b><span className={s.by}>· {r.uploader}</span></span>
                 {r.styles ? (
-                  <span className={s.cStyles}>{r.styles[0].name} {r.styles[0].p}% <span className={s.by}>· {r.styles[1].name} {r.styles[1].p}%</span></span>
+                  <span className={s.cStyles}>
+                    <span>{r.styles[0].name}</span><span className={s.cPct}>{r.styles[0].p}%</span>
+                    <span className={s.by}>{r.styles[1].name}</span><span className={s.cPct}>{r.styles[1].p}%</span>
+                    {r.status === "preview" ? <span className={s.dim} title={`SoundCloud plays only a 30 s preview of this ${r.length} track, so one snippet was analysed`}>preview</span> : null}
+                  </span>
+                ) : r.queued ? (
+                  <span className={s.dim}>Queued · {r.queued}</span>
                 ) : r.status === "ready" ? (
-                  <span><button className={cx(s.cTextBtn, s.cAnalyse)} title={listening ? "Analyse about 60 s of this track" : "Enable listening first"} onClick={(e) => e.stopPropagation()}>Analyse</button></span>
+                  <span><button className={cx(s.cTextBtn, s.cAnalyse)} title={listening ? "Listen to 4 snippets of 30 s" : "Enable listening first"} onClick={(e) => e.stopPropagation()}>Analyse</button></span>
                 ) : (
                   <span className={r.status === "analysing" ? s.cListeningText : s.dim}>{r.status === "analysing" ? "Listening…" : "Not available in your region"}</span>
                 )}
@@ -93,15 +107,11 @@ export function Deck({ state, seconds }: VariantProps) {
                 <span>{keyCell(r) || <span className={s.dim}>–</span>}</span>
                 <Energy value={r.energy} />
                 <span className={r.brightness == null ? s.dim : undefined}>{r.brightness == null ? "–" : brightLabel(r.brightness)}</span>
-                {r.status === "preview" ? (
-                  <span className={s.dim} title={`The track is ${r.length}; SoundCloud plays only a 30 s preview, so 30 s were analysed`}>30 s preview</span>
-                ) : (
-                  <span className={cx(s.num, s.by)}>{r.length || "–"}</span>
-                )}
+                <span className={cx(s.num, s.by)}>{r.length || "–"}</span>
                 <span className={s.by}>{r.uploaderTag ?? <span className={s.dim}>none</span>}{tagMismatch(r) ? <span className={s.cDoubt} title="The uploader's tag isn't in the top 3 styles Six AM heard"> · differs</span> : null}</span>
               </div>
             ))}
-            <div className={s.cMore}>{done} of {PLAYLIST.count} analysed<button className={s.small}>Show all</button></div>
+            <div className={s.cMore}>{done} of {PLAYLIST.count} analysed · {PLAYLIST.count - done} not analysed<button className={s.small}>Show</button></div>
           </>
         )}
       </main>
@@ -131,6 +141,8 @@ export function Deck({ state, seconds }: VariantProps) {
               <dt>Runner-up</dt>
               <dd>{(() => { const k = runnerUp(picked); return k ? <>{camelot(k.key, k.scale)} · {k.key} {k.scale}</> : <span className={s.dim}>–</span>; })()}</dd>
             </dl>
+            <div className={s.cSnipBlock}>
+            <span className={s.label}>Snippets · 4 × 30 s</span>
             <div className={s.cSnips} aria-label="Four snippets across the track">
               {snippets(picked).map((x) => (
                 <div key={x.at} className={s.cSnip}>
@@ -138,6 +150,7 @@ export function Deck({ state, seconds }: VariantProps) {
                   {x.style ? <><span className={s.cSnipStyle}>{x.style.name}</span><span className={s.cSnipBpm}>{x.style.p}% · {x.bpm?.toFixed(1)}</span></> : <span className={s.dim}>not in preview</span>}
                 </div>
               ))}
+            </div>
             </div>
           </div>
         </section>

@@ -315,3 +315,31 @@
 .cFacts { grid-template-columns: minmax(240px, 400px) minmax(220px, 300px) minmax(440px, 1fr); gap: 28px; }
 .cBars .prob { grid-template-columns: 120px 1fr 36px; }
 .cSnip { padding: 0 12px; }
+
+/* Round 5: aligned probabilities, allocated columns, one hover family, a chrome-free progress */
+.cCols { grid-template-columns: 28px minmax(220px, 1fr) 384px 74px 98px 52px 60px 48px 132px; }
+.cStyles { display: grid !important; grid-template-columns: 132px 36px 92px 36px 56px; column-gap: 8px; align-items: baseline; }
+.cStyles > * { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cPct { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cRow:hover { background: rgba(242,177,52,.065); }
+.cSel, .cSel:hover, .cSel:nth-child(even) { background: rgba(242,177,52,.16); box-shadow: inset 2px 0 0 var(--gold); }
+.cRow:focus-visible { background: rgba(242,177,52,.065); box-shadow: inset 0 0 0 1px var(--gold); }
+.cSel:focus-visible { background: rgba(242,177,52,.16); box-shadow: inset 2px 0 0 var(--gold), inset 0 0 0 1px var(--gold); }
+.cProg { display: flex; flex-direction: column; gap: 5px; width: 200px; font: 500 12.5px var(--f-mono); }
+.cProgText { display: flex; justify-content: space-between; color: var(--gold); }
+.cProgBar { height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.cProgBar i { display: block; height: 100%; background: var(--gold); transition: width 1s linear; }
+@media (prefers-reduced-motion: reduce) { .cProgBar i { transition: none; } }
+.cListenWrap { gap: 16px; }
+.cSnipBlock { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.cSnips { border-left: 0; gap: 20px; }
+.cSnip { border-right: 0 !important; padding: 0; }
+.cCols { grid-template-columns: 28px minmax(220px, 1fr) 370px 74px 98px 52px 60px 48px 132px; }
+.cStyles { grid-template-columns: 126px 32px 104px 32px 52px; column-gap: 6px; }
+.cStyles > :nth-child(3) { padding-left: 16px; }
+.cRow:hover, .cRow:focus-visible { background: rgba(242,177,52,.085); }
+.cSel, .cSel:hover, .cSel:focus-visible { background: rgba(242,177,52,.16); }
+.cCols { grid-template-columns: 28px minmax(220px, 1fr) 372px 74px 98px 52px 60px 48px 132px; }
+.cStyles { grid-template-columns: 136px 30px 94px 30px 58px; column-gap: 6px; }
+.cStyles > :nth-child(3) { padding-left: 14px; }
+.cStyles > :nth-child(5) { overflow: visible; }

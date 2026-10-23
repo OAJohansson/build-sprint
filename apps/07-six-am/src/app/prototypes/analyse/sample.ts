@@ -130,3 +130,7 @@ export function snippets(r: Row): Snippet[] {
   const p = plan[r.id] ?? [[0, g[0]?.p ?? 0], [0, (g[0]?.p ?? 0) + 6], [1, (g[1]?.p ?? 0) + 9], [0, (g[0]?.p ?? 0) - 3]];
   return at.map((a, i) => ({ at: a, style: g[p[i][0]] ? { name: g[p[i][0]].name, p: p[i][1] } : undefined, bpm: r.bpm }));
 }
+
+/** Owner, round 5: Ears listens to 4 snippets of 30 s at 20/40/60/80 % of the track. */
+export const SNIPPETS = 4;
+export const SNIPPET_S = 30;

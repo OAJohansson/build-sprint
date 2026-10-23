@@ -172,9 +172,11 @@ export type BoardEditor = ReturnType<typeof useBoardEditor>;
 export type Rect = { left: number; top: number; width: number; height: number };
 
 /** The board itself: scales 1600 × 900 into its box and handles the pointer work. */
-export function BoardCanvas({ board, saves, versions = {}, chrome, className = "" }: {
+export function BoardCanvas({ board, saves, versions = {}, busy, chrome, className = "" }: {
   board: BoardEditor;
   saves: Save[];
+  /** A save whose background is being removed: its pieces shimmer until it's done. */
+  busy?: string | null;
   /** A version per save whose cut-out was just (re)made, so the new one shows straight away. */
   versions?: Record<string, number>;
   chrome?: (rect: Rect) => React.ReactNode;
@@ -270,7 +272,7 @@ export function BoardCanvas({ board, saves, versions = {}, chrome, className = "
           <div key={p.id} className="board-piece absolute" data-selected={selected === p.id ? "" : undefined} style={{ left: p.x, top: p.y, width: p.w, height: p.h, zIndex: p.z, cursor: cropping && selected === p.id ? "grab" : "move",
             filter: p.rough ? "drop-shadow(0 3px 4px rgba(0,0,0,.28))" : undefined }}
             onPointerDown={(e) => onDown(e, p, "move")}>
-            <div className="relative h-full w-full overflow-hidden" style={{ clipPath: p.rough ? roughEdge(p.id) : undefined }}>
+            <div className="relative h-full w-full overflow-hidden" data-busy={busy && p.saveId === busy ? "" : undefined} style={{ clipPath: p.rough ? roughEdge(p.id) : undefined }}>
               {p.kind === "photo" && p.saveId && <CroppedPhoto src={photoSrc(p)} crop={cropOf(p, aspectOf(p))} />}
               {p.kind === "swatch" && (
                 <div className="flex h-full w-full items-center justify-center p-[6%] text-center" style={{ background: p.color }}>

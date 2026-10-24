@@ -100,3 +100,8 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   lines). In-pack gaps taken for round 4, the last allowed: the slip state's grey reads as
   disabled; the dashed seat shows every day; the steamer deserves more width; duplicate date;
   "Log a slip" is system copy. Then on to the other screens.
+- **Critic round 4** (last allowed): 6/10. Loop stopped at the cap; four flat rounds. Remaining
+  in-pack gap for the build: centre the steamer vertically in the card, add a press tint. The
+  rest again asks to remove pack requirements (numbers, anchors, week strip, comeback copy).
+- **Other screens prototyped** in the v3 system: intro (18 s, three scenes), new habit, new stop
+  habit, slip and urge. Shown to the owner in one batch.

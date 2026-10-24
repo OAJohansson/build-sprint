@@ -24,3 +24,4 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 18 | Owner, icon sheet | Loves 08 Calm face but worried it reads as a Headspace copy: differentiate it | fixing |
 | 19 | Owner, icon sheet | Likes 05 Riso | open |
 | 20 | Owner, icon sheet | 06 Enamel pin is cute, unsure about the colours: explore other colourways | fixing |
+| 21 | Critic round 4 | Steamer sits bottom-left with dead space above; no press tint on cards | open |

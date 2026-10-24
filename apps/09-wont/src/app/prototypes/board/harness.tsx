@@ -2,13 +2,19 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Board, type DemoState } from "./board";
+import { Board2 } from "./board2";
+import { Steamer2 } from "./steamer2";
 import { Jar, Pot, Steamer, type VesselProps } from "./vessels";
 import "./picker.css";
+import "./board2.css";
 
-const VARIANTS: { name: string; title: string; Vessel: (p: VesselProps) => React.ReactNode }[] = [
+type BoardComp = typeof Board;
+const VARIANTS: { name: string; title: string; Vessel: (p: VesselProps) => React.ReactNode; Comp?: BoardComp }[] = [
   { name: "Jars", title: "Saturday's jars", Vessel: Jar },
   { name: "Wontons", title: "Saturday's wontons", Vessel: Steamer },
   { name: "Seed sprout", title: "Saturday's garden", Vessel: Pot },
+  // Define round 1: fixes on a copy beside the pick (B), so the pick stays as it was.
+  { name: "Wontons v2", title: "Saturday's wontons", Vessel: Steamer2, Comp: Board2 },
 ];
 
 // Prototype picker (prototype skill, PICKER.md): same markup, classes and behaviour.
@@ -63,9 +69,10 @@ export function Harness({ initial, demo }: { initial: number; demo: DemoState })
   });
 
   const v = VARIANTS[current];
+  const B = v.Comp ?? Board;
   return (
     <>
-      <Board key={`${current}-${nonce}`} title={v.title} Vessel={v.Vessel} demo={demo} />
+      <B key={`${current}-${nonce}`} title={v.title} Vessel={v.Vessel} demo={demo} />
       <nav ref={navRef} className="proto-picker" aria-label="Prototype variants">
         <span ref={highlightRef} className="proto-picker-highlight" aria-hidden="true" />
         {VARIANTS.map((x, i) => (

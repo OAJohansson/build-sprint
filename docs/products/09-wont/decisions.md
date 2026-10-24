@@ -29,3 +29,6 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L17 | 24 Oct | Shortlist: one layout (Jars, one card per line, container on the left) in three variants: jar of marbles, wontons, seed sprout | owner | design | |
 | T7 | 24 Oct | The three go straight to working prototypes, no fourth sketch sheet (one-day appetite) | PM | design | |
 | T8 | 24 Oct | Prototypes: the one celebration is the new marble, wonton or leaf arriving (420 ms ease-out, off with reduced motion) plus "Kept. N of last N."; tap again to undo; a slip asks its size and leaves clean days untouched; sprout leaves green (illustration only) | PM (designer) | design | |
+| L18 | 24 Oct | Design pick: Wontons (critic 6/10). Intended aesthetic stays the pack's feel sentence | owner | design | |
+| L19 | 24 Oct | Critic overruled on two points: keep the rolling number (R6, P6) and the week strip (owner's request), both quieter | PM | design | |
+| T9 | 24 Oct | Wontons v2: every card one tap target (nicotine tap = clean so far; slip and urge as quiet text buttons); kept = whole-card honey wash (200 ms fade); number muted under the name; comeback as one plain line | PM (designer) | design | |

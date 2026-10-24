@@ -66,3 +66,10 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Shortlist** (owner, after sheet 3): changed their mind back to sheet 2's Jars, all cards one per
   line like its nicotine card. Three variants of that one layout: jars with marbles, wontons (a
   pun on the name), and the seed sprout. Built straight as the three prototypes to save a round.
+- **Prototype critic round 1** (design-critic, screenshots only): Wontons 6/10, Jars 5/10, Seed
+  sprout 4/10. Shared gaps: a kept card looks like an open one (only a text line changes); the big
+  "6 of last 7" outshines the habit name; the pink comeback box reads as a soft failure state with
+  coach-bot copy; the slip is the loudest colour on screen. Critic's calls that clash with the
+  pack (owner decides): drop the rolling number (R6, P6) and the week strip (owner's request).
+- **Pick: Wontons** (owner). Asked for wontons that look more like wontons, and prototypes of
+  the other features. Define loop next on a copy beside the pick.

@@ -16,3 +16,6 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 10 | Owner, contact sheet 2 | Moon phases: don't like it | won't do |
 | 11 | Owner, after sheet 3 | Back to sheet 2's 06 Jars: like it, but every card like its last (nicotine) card: one card per line, jar on the left | fixing |
 | 12 | Owner, after sheet 3 | Same jars design with wontons (fits the name Wont) as a second option, and the seed sprout as a third | fixing |
+| 13 | Owner, prototypes | Pick Wontons; make the wontons look even more like wontons | fixing |
+| 14 | Owner, prototypes | Prototype the other features too (not only the board) | open |
+| 15 | Critic round 1 | Kept card looks like an open one; number louder than the name; pink comeback box reads as failure; slip in the warmest colour | fixing |

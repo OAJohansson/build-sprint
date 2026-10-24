@@ -251,7 +251,8 @@ function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
           canLearn={canLearn}
           earsBusy={!m.demo && !!activeItem(m.queue)}
           onClose={() => setOpen(false)}
-          onSetGenre={(id, g) => { saveGenre(id, g); flash(g ? `My genre set to ${g}` : "My genre cleared"); }}
+          // The answer itself shows "Set to X · Undo", so no toast here.
+          onSetGenre={(id, g) => { saveGenre(id, g); }}
           onOpenStudio={(start, title) => {
             // N1: a new, unsaved Studio track with the loops placed, at its own tempo; the device
             // tempo and the saved tracks are left alone.

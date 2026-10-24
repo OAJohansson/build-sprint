@@ -12,10 +12,12 @@ import { formatBpm } from "@/lib/tempo";
 import { LOOPS, TRACKS } from "@/lib/timeline";
 import s from "./mentor.module.css";
 
-const FROM_WORD: Record<Source, string> = {
-  ears: "Ears' measurements", uploader: "SoundCloud info", web: "the web", profile: "your taste profile",
-  library: "your library", memory: "earlier chats", general: "general knowledge",
+const FROM_WORD: Record<Source, string | null> = {
+  ears: "Ears' measurements", uploader: "the uploader", web: "the web", profile: "your taste profile",
+  library: "your library", memory: "memory", general: null,
 };
+/** Whether the prose already says where it comes from ("Ears measured…"): then no source line. */
+const NAMED_IN_TEXT: Partial<Record<Source, RegExp>> = { ears: /\bEars\b/, uploader: /\buploader\b/i, library: /\byou(?:'ve)? (?:tagged|set)\b|\byour (?:library|tag|genre)\b/i };
 /** Model text can carry no-break spaces; they make odd line breaks in a narrow column. */
 const clean = (t: string) => t.replace(/[\u00a0\u202f]/g, " ");
 /** Opens in a new tab: the arrow is decoration, the words are for screen readers. */
@@ -71,7 +73,11 @@ function Paras({ list, lines }: { list: Sentence[]; lines?: boolean }) {
 /** One dim line of sources, no label (clutter review): "Ears' measurements · uploader tag · discogs.com ↗". */
 function Sources({ answer, skip }: { answer: MentorAnswer; skip?: ReadonlySet<string> }) {
   // F7: only what this answer's sentences used; web pages by their own domain, once each.
-  const used = SOURCES.filter((x) => x !== "web" && answer.sentences.some((y) => y.source === x));
+  // Spoken as a person would ("from Ears' measurements · the uploader"); general knowledge is never listed.
+  const used = SOURCES.filter((x) => x !== "web" && FROM_WORD[x] && answer.sentences.some((y) => y.source === x));
+  const one = new Set(answer.sentences.map((x) => x.source));
+  const only = one.size === 1 ? [...one][0] : null;
+  if (only && NAMED_IN_TEXT[only] && answer.sentences.every((x) => NAMED_IN_TEXT[only]!.test(x.text)) && !answer.listenNext?.length) return null;
   const pages = answer.sentences.filter((x) => x.source === "web" && x.url && !skip?.has(x.url)).map((x) => x.url!);
   const byDomain = new Map<string, string>();
   for (const u of pages) if (!byDomain.has(shortUrl(u))) byDomain.set(shortUrl(u), u);
@@ -81,8 +87,7 @@ function Sources({ answer, skip }: { answer: MentorAnswer; skip?: ReadonlySet<st
   if (!used.length && !web.length && !pickSites.length) return null;
   return (
     <p className={s.from}>
-      <span className={s.sr}>Sources: </span>
-      {used.map((x) => FROM_WORD[x]).join(" · ")}
+      from {used.map((x) => FROM_WORD[x]).join(" · ")}
       {web.map((u, i) => <span key={u}>{used.length || i ? " · " : ""}<a href={u} target="_blank" rel="noreferrer" title={u}>{shortUrl(u)}<NewTab /></a></span>)}
       {pickSites.map((d, i) => <span key={d}>{used.length || web.length || i ? " · " : ""}{d}</span>)}
     </p>
@@ -122,7 +127,7 @@ export function Turn({ ask, answer, job, track, studio, dropped, myGenre, onTell
           <Paras list={list} />
           {pick ? <PickLink it={pick} /> : null}
         </section>
-      )) : <Paras list={answer.sentences} lines={help} />}
+      )) : <Paras list={answer.sentences} lines={help || kind === "ear_training"} />}
 
       {!teach && answer.listenNext?.length ? <Picks items={answer.listenNext} onFeedback={onFeedback} /> : null}
       {start ? <StudioBlock start={start} onOpen={onOpenStudio} hideKeyNote={saysKey} /> : null}

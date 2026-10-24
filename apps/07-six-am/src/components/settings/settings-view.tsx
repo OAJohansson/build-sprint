@@ -15,7 +15,7 @@ import { money } from "@/lib/mentor/client";
 import type { UsageSummary } from "@/lib/mentor/periods";
 
 /** This month's short name in the owner's locale ("Oct"). */
-const monthShort = () => new Intl.DateTimeFormat(undefined, { month: "short" }).format(new Date());
+const monthLong = () => new Intl.DateTimeFormat(undefined, { month: "long" }).format(new Date());
 import { unlockProgress, unlockText } from "@/lib/mentor/taste-unlock";
 import s from "./settings.module.css";
 
@@ -99,9 +99,10 @@ export function SettingsView() {
         <div className={s.right}><SettingsLink current /></div>
       </header>
       <main className={s.main}>
+        <h1 className={s.h1}>Settings</h1>
         <section>
           <div className={s.fieldHead}>
-            <h1 className={s.h1}>Music taste profile</h1>
+            <h2 className={s.h2}>Music taste profile</h2>
             {unlock.unlocked ? (
               status === "error" ? (
                 <button className={s.errBtn} onClick={() => text !== null && void save(text)}>Not saved. Try again</button>
@@ -122,15 +123,16 @@ export function SettingsView() {
               onBlur={() => { if (timer.current && text !== null) { clearTimeout(timer.current); timer.current = null; void save(text); } }}
             />
           ) : (
-            <p className={s.locked}>{unlockText(unlock)} · <span className={s.num}>{unlockProgress(unlock)}</span></p>
+            <>
+              <p className={s.locked}>{unlockText(unlock)}</p>
+              <p className={s.counts}>{unlockProgress(unlock)}</p>
+            </>
           )}
           {/* Reads playlists into the library (titles and artists only); they count toward unlocking. */}
           <button className={s.textBtn} onClick={() => setSetup(true)}>Import playlists</button>
         </section>
+        <p className={s.spend}>Mentor spend: <span className={s.num}>{usage ? `${money(usage.todayUsd)} today · ${money(usage.monthUsd)} in ${monthLong()}` : "–"}</span> <span className={s.est}>(estimate)</span></p>
       </main>
-      <footer className={s.foot}>
-        Mentor · <span className={s.num}>{usage ? `est. today ${money(usage.todayUsd)} · ${monthShort()} ${money(usage.monthUsd)}` : "est. today –"}</span>
-      </footer>
       {setup ? <SetupDialog data={data} mode={unlock.unlocked ? "setup" : "import"} onClose={() => { setSetup(false); data.reload(); }} /> : null}
     </div>
   );

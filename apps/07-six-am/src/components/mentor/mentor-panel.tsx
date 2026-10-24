@@ -25,9 +25,8 @@ export const HELP_QUESTION = "What can you help me with?";
 const HELP_ANSWER: AskReply["answer"] = {
   intent: "help", tellMore: false,
   sentences: [
-    { text: "Name a track and ask what it is, or which genre fits it.", source: "general" },
-    { text: "Ask for music like it, what to listen for in it, or a Studio starting point.", source: "general" },
-    { text: "Or type “teach me acid house”, “let's do a taste session” or “group my tracks”.", source: "general" },
+    { text: "Name a track and ask what it is, which genre fits, what to listen for or what to play next.", source: "general" },
+    { text: "Or ask me to teach a genre, start a Studio track, run a taste session or group your tracks.", source: "general" },
   ],
 };
 

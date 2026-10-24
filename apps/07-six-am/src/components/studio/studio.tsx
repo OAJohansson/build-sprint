@@ -247,7 +247,7 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
             className={s.trackTitle}
             value={name}
             // F3: a long draft name is capped and ends in an ellipsis; the full name is the tooltip.
-            size={Math.min(Math.max(8, name.length + 1), 28)}
+            size={Math.min(Math.max(8, name.length + 1), 40)}
             title={name}
             maxLength={80}
             aria-label="Track name"
@@ -260,7 +260,10 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
             My tracks <ChevronDown aria-hidden />
           </button>
           {draft ? (
-            <button className={cx(s.saveState, s.saveError)} onClick={() => onSaveDraft(savedName.current, t.doc)} title="A starting point from the Mentor. It isn't saved until you press this.">Not saved · Save track</button>
+            <span className={s.saveState}>
+              Not saved ·
+              <button className={s.saveDraft} onClick={() => onSaveDraft(savedName.current, t.doc)} title="A starting point from the Mentor. It isn't saved until you press this.">Save track</button>
+            </span>
           ) : status === "error" ? (
             <button className={cx(s.saveState, s.saveError)} onClick={onRetry}>Not saved · Retry</button>
           ) : (

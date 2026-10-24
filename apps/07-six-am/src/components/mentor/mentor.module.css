@@ -49,7 +49,7 @@
 .kind { margin-left: 6px; font: 400 11px var(--f-mono); color: var(--muted); }
 .listen { margin: 6px 0 0; }
 
-.list { margin: 14px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.list { margin: 14px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
 .list li { display: grid; grid-template-columns: 20px minmax(0, 1fr); }
 .n { font: 400 12px/28px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .itemTitle { display: inline-block; padding: 3px 0; min-height: 28px; box-sizing: border-box; font: 500 14px/22px var(--f-mono); color: var(--ink); text-decoration: none; overflow-wrap: anywhere; }
@@ -102,12 +102,12 @@
   border-radius: 6px; padding: 8px 12px; min-height: 38px; outline: none; resize: none; overflow-y: hidden; field-sizing: content; max-height: calc(6 * 21px + 18px);
 }
 /* The one cue under the input (L87): a quiet text button */
-.help { display: inline-flex; align-items: center; margin: 8px 0 0; padding: 0 10px; min-height: 28px; border: 1px solid var(--line); border-radius: 99px; background: none; font: 400 12px var(--f-mono); color: var(--muted); cursor: pointer; transition: color 150ms ease, border-color 150ms ease; }
-.help:hover { color: var(--ink); border-color: #4a4038; }
+.help { display: inline-flex; align-items: center; margin: 6px 0 0 -6px; padding: 0 6px; min-height: 28px; border: 0; border-radius: 4px; background: none; font: 400 12px var(--f-mono); color: var(--faint); cursor: pointer; transition: color 150ms ease; }
+.help:hover { color: var(--ink); }
 .help[aria-disabled="true"] { color: var(--faint); cursor: default; }
 .field::placeholder { color: var(--faint); }
-.field:focus { border-color: var(--muted); }
-.field:focus-visible { outline: 2px solid var(--muted); outline-offset: 1px; }
+/* The only input: a lighter 1px border is its focus state, no outer ring */
+.field:focus { border-color: #8a7d6d; }
 .field[aria-disabled="true"] { opacity: .6; }
 /* No dot separators: a wrapped row would start with an orphan "·" */
 

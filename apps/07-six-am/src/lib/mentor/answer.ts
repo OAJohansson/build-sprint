@@ -226,7 +226,7 @@ export function linkKind(u: string, said: LinkKind): LinkKind {
 const KEY_JARGON = /semitone|key wheel|camelot|\b(?:1[0-2]|[1-9])[AB]\b/;
 /** At most this many sentences per answer (F8): 2–4 everywhere but teach. */
 /** Clutter review: chat, explain and genre answers say 2–3 sentences first, the rest behind "Tell me more". */
-export const maxSentences = (job: Job) => (job === "teach" ? 10 : job === "chat" || job === "explain" || job === "suggest_genre" ? 3 : 4);
+export const maxSentences = (job: Job) => (job === "teach" ? 10 : job === "chat" || job === "explain" || job === "suggest_genre" ? 2 : job === "ear_training" ? 3 : 4);
 /** Raw measurement jargon the person shouldn't see (F2): say bright/warm, loud/quiet, likely/unsure. */
 const RAW_NUMBERS = /\b\d+(?:[.,]\d+)?\s*(?:k?hz|dbfs|db)\b|spectral centroid|\bcentroid\b|\bdbfs\b|\bstrength\s*(?:of\s*)?[01]?[.,]\d+/i;
 const isSource = (v: unknown): v is Source => typeof v === "string" && (SOURCES as readonly string[]).includes(v);
@@ -258,6 +258,7 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
     if ((o.source === "ears" && UPLOADER_TALK.test(text)) || (o.source === "uploader" && EARS_NUMBER.test(text))) {
       return { ok: false, problem: `sentences[${i}] mixes the uploader's title or tags with Ears' measurements: split it into an uploader sentence and an ears sentence.` };
     }
+    if (job === "ear_training" && /\d\s*%/.test(text)) return { ok: false, problem: `sentences[${i}] has a percentage: ear-training cues name the style Ears heard there, without percentages.` };
     // Ear training only: other answers may quote general genre tempo ranges.
     if (job === "ear_training" && needs.bpms?.length) {
       for (const m of text.matchAll(BPM_FIGURE)) {
@@ -275,7 +276,7 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
     sentences.push(sentence);
   }
   if (sentences.length > maxSentences(job)) {
-    return { ok: false, problem: `${sentences.length} sentences: keep to ${maxSentences(job) === 4 ? "2–4" : maxSentences(job) === 3 ? "2–3" : `at most ${maxSentences(job)}`} and offer tellMore for the rest.` };
+    return { ok: false, problem: `${sentences.length} sentences: keep to at most ${maxSentences(job)} and offer tellMore for the rest.` };
   }
   const answer: MentorAnswer = { sentences, tellMore: r.tellMore === true };
   // Ear training anchors to where Ears listened when it listened at two or more points (Re-run 4).

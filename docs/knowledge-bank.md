@@ -672,7 +672,54 @@ symptoms changed and what they were on") cut daily dots from long ranges, put th
 the graph and named medicines instead of colouring them. *(Edward Tufte's data-ink ratio, The
 Visual Display of Quantitative Information; Stephen Few on dashboards)*
 
+### Behaviour change
+
+#### COM-B: why a behaviour does or doesn't happen
+A behaviour happens when someone has the **C**apability, the **O**pportunity and the
+**M**otivation for it. Use it to find the real gap before designing: if people already know what to
+do (capability), more information won't help. *Why it matters:* it stops you building lectures for
+a motivation or opportunity problem. *Where:* Wont (09) cut the habit-science explainer to a short
+intro, because the owner already knew what to do. *(Susan Michie, the Behaviour Change Wheel)*
+
+#### If-then plans (implementation intentions)
+"After I [something I already do], I will [new habit]." Tying a habit to an existing cue is one of
+the strongest, cheapest techniques (d ≈ 0.65 across 94 tests), and time-based reminders do the
+opposite: the phone becomes the cue. *Where:* every Wont card shows its anchor instead of a time.
+*(Peter Gollwitzer and Paschal Sheeran; Katarzyna Stawarz on reminders)*
+
+#### The what-the-hell effect
+After a small slip, people treat the whole goal as broken and give up for the day or longer
+(the abstinence-violation effect). A broken streak shown on screen lowers motivation even when the
+real record is the same. *Why it matters:* the moment after a miss decides whether a habit
+survives. *Where:* Wont never resets to zero, logs a slip honestly and marks the next good day as a
+comeback. *(Polivy and Herman; Marlatt; Silverman and Barasch 2023)*
+
+#### Reward the return
+In a megastudy of 54 gym interventions (61,000 people), the winner was a tiny bonus for coming back
+after a missed workout. Habits take about two months (median 59–66 days, range 4–335), and one
+missed day doesn't reset them. *Where:* Wont's winking comeback wonton and its "about two months,
+not 21 days" intro. *(Katy Milkman 2021; Phillippa Lally 2010)*
+
+#### Distinctive brand assets
+A brand grows when people recognise it instantly: a colour, a shape, a character that is yours
+and no one else's. Ask what your "only" is ("the only habit app that…") and let the mark carry it;
+test the mark at its smallest size (29 px) first. *Where:* Wont's Dough-on-ink wonton, moved away
+from Headspace's orange blob, with a wink for comebacks. *(Byron Sharp, How Brands Grow; Marty
+Neumeier, Zag)*
+
 ### Quiz
+
+**Q:** What are the three parts of COM-B, and why check them before designing?
+**A:** Capability, Opportunity, Motivation. If the gap is motivation or opportunity, giving people more information (capability) won't change the behaviour.
+
+**Q:** Why do habit researchers prefer "after I make coffee, I'll write" over a 7:00 reminder?
+**A:** An if-then plan ties the habit to a cue in your routine, which builds automaticity; a reminder makes the phone the cue, so the habit fades when the reminders stop.
+
+**Q:** What is the what-the-hell effect, and how should a habit app respond to a slip?
+**A:** After one slip people feel the whole goal is broken and give up. Don't reset to zero: keep the record, log the slip honestly, give one next step and mark the comeback.
+
+**Q:** What is a distinctive brand asset, and what's a good first test for a logo mark?
+**A:** Something people recognise as only yours (a colour, shape, character). Test the mark at its smallest size, like a 29 px icon.
 
 **Q:** A critic says a panel is cluttered. What do you do before adding anything?
 **A:** List everything on screen the user didn't ask for and remove it; add only what's still missing after that.
@@ -1112,6 +1159,12 @@ AI is fast at building, testing and drafting; the product decisions stay with yo
 the main job, what to cut, what "done" means. Review its work: AI drafts can look right and still
 be wrong (a too-subtle animation, a wrong-number bug).
 
+#### A grader must know the non-negotiables
+A grader that sees only the artefact will score it against its own idea of good, and may keep
+asking to remove things you need. Give it the requirements it may not touch, alongside the feel.
+*Where:* Wont's design critic scored 6/10 five times, each time asking to remove the numbers and
+if-then anchors the research supports.
+
 #### The agreeable-AI risk
 Language models tend to agree with the user (sycophancy). For reflection or advice products that's
 the core failure: people say ChatGPT "just agrees with me". Design against it: one question that
@@ -1291,6 +1344,9 @@ stands. *Where:* Six AM Mentor E1 (L81–L82). *(Goodhart's law)*
 **A:** When changes stop improving the method and start fitting the test cases, or scores bounce run to run; then report the result as it stands.
 
 ### Quiz
+
+**Q:** Why can an AI design critic get stuck at the same score, and what fixes it?
+**A:** It judges against requirements it never saw and keeps asking to remove them; give it the non-negotiables alongside the brief.
 
 **Q:** What three kinds of decision decide what you hand to an agent, and who owns each?
 **A:** Learning decisions stay yours; toil the agent decides with your veto; ops (git, deploys, keys) is never yours.

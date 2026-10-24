@@ -189,3 +189,20 @@ The 0–3 pieces of logic that would hurt most if silently wrong, and the edges 
    on the first kept day); first day ever (no comeback).
 
 ## Success check (at wrap-up)
+
+Checked 25 Oct, the day Wont shipped. The outcome is about four weeks of real use, so the honest
+answer today is **not yet known**; the graders' results stand in until then.
+
+| Signal | Target | What happened |
+| --- | --- | --- |
+| Logs every day | 14 of 14 days | Not measured yet: real use starts 26 Oct. Check on 8 Nov from the app's history |
+| Comes back after a slip | every slip gets a comeback day | In the simulated week: every slip and miss was followed by a comeback, and the message named the right day (after two fixes: F2, N1). Real data from 26 Oct |
+| Wakes on time | ≥ 5 of 7 days a week | Not measured yet; the owner was on day 5 of 7am wake-ups at kickoff |
+| Guardrail: never feels punished | never; zero guilt words | Simulated: 0 guilt words on app screens, "Did that feel like punishment? No." Owner's own check after the first real slip |
+| User-test bars | S1–S4, jobs ≥ 4 | Pass (S1 1 tap / ~3 s, S3 2 taps / ~6 s; jobs 4, 5, 5) |
+| Design critic | ≥ 9/10 | **Fail, 6/10** in every round: it scored against requirements it never saw (rolling number, anchors, week strip) |
+| Guardrails | contrast, data, phone | Pass (4.92:1 worst; 12/12 and 25/25; 44 px) |
+
+**Did it solve the problem?** The riskiest moment (the morning after a slip) works in simulation:
+two taps, the clean days stay, one next step, a winking comeback wonton. Whether it keeps the owner
+at 7am and off pouches is the four-week check on **21 Nov** (in `docs/todo.md`).

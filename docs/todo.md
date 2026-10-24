@@ -9,6 +9,10 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 ## Next
 
+- [ ] Wont: use it daily from 26 Oct (7am, pouches, reading, writing); add it to the Home Screen *(me)*
+- [ ] Wont: four-week success check on 21 Nov: days logged, comebacks ÷ slips, 7am kept per week, and did a slip ever feel like punishment? *(me)*
+- [ ] Wont: rewrite the draft copy in my own voice (`apps/09-wont/src/lib/copy.ts`) *(me)*
+- [ ] Wont retro: which of the squad's defaults (decisions.md) would I have made differently? *(me)*
 - [ ] Selvedge: the AI features. First the style read over a board (palette, silhouettes, pieces, style names, brands with search links), tested against the brief's answer key; then the hand-drawn character (decision 0022, proposed)
 - [ ] Selvedge: put it in the Mac Dock (Chrome: the install icon in the address bar; Safari: File → Add to Dock) *(me)*
 - [ ] Fill in the keyring: paste each key into `.env.secrets.local` in the main folder (the empty lines are there; values from each app's `.env.local`) *(me)*
@@ -32,6 +36,7 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 
 ## Done
 
+- [x] Wont shipped as product 09: wont-peach.vercel.app (25 Oct)
 - [x] Operating modes rolled out (decision 0026): playbook step 0, AGENTS.md, `pnpm new --mode`, `pnpm ship --preview`, shared docs at wrap-up (23 Oct)
 - [x] Folio shipped as product 06 (wrap-up on main)
 - [x] Six AM shipped as product 07: timeline, 48 synthesised loops, saving to Supabase (19 Oct)

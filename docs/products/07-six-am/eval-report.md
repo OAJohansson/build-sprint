@@ -246,7 +246,7 @@ line, Settings behind a corner icon, a locked "Music taste profile" (20 tracks, 
 3 chats), full context and a persistent memory. Then an Emil pass, a Web Interface Guidelines review
 (focus, labels, live region, dark color-scheme: fixed), a critic clutter check and three fix passes.
 
-**Preview:** https://six-fa4j4ar7l-mimirswell.vercel.app/analyse (Vercel login)
+**Preview:** https://six-hsztcm21j-mimirswell.vercel.app/analyse (Vercel login)
 
 | Check | Result |
 | --- | --- |

@@ -424,3 +424,4 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   sessions, listen next), everything in Supabase incl. migrating Ears' results, the record-shop
   voice, evals E1–E10. Kickoff pack and evals appended to `kickoff.md` / `evals.md` (T26);
   L45–L54; decision 0027 for the backend.
+- **Mentor discovery:** brief section with an 8-object drill-down, persona 2 (Robin, a new user), plan M-S0–M-S13. Gaps answered by the PM: clean-start testing on an empty dev store (L57), key relative to the crate's A minor (L58), the value comparison reported not graded and E1 fed from the committed export (L59); discovery's 12 assumptions accepted (L56). No contradiction needing the owner.

@@ -80,3 +80,82 @@ Studio (from 18 Oct):
 - Confusing: spectral centroid, RMS, mel, inference, model, embedding, Discogs style codes
   (`Electronic---Deep House`), "capture" or "record" (sounds like copying), quantise, sidechain,
   MIDI, LFO, DAW. Name concepts the club way: "brightness" (soft/warm vs hard/bright), "energy".
+
+---
+
+# Persona 2: Robin, a new user with no brief who loves dance music on SoundCloud
+
+Use they/them. Added for the Mentor (24 Oct, Founder mode): the pack says the Mentor must work
+**without predefined taste data** and learn the person from their own playlists and use. Robin is
+that person: Six AM knows nothing about them on day one. Persona 1 (the owner) above still holds
+for the owner's jobs.
+
+## Who
+
+- 29, works shifts as a physiotherapist in Manchester. Has gone out dancing since uni: warehouse
+  parties, Pride weekenders, a monthly house night with friends. Never DJed or produced.
+- Listens on **SoundCloud** every day (commute, gym, getting ready to go out). Likes a lot of
+  tracks and keeps a few loose playlists: singalong house reworks of pop and R&B classics, bouncy
+  hard dance for the gym, ballroom and vogue edits a friend got them into. Can't say what most of
+  it is called; "the bouncy one", "that sort of 90s piano house".
+- Heard about Six AM from a friend (the owner), who gave them the access code. Has never seen the
+  owner's brief, playlists or genre list, and wouldn't share the owner's taste.
+- Medium-high tech comfort (uses Spotify, SoundCloud, ChatGPT now and then), low patience for
+  setup. Laptop with desktop Chrome at home, earbuds.
+
+## Moments of use
+
+1. **First open (setup).** A day off, on the sofa with the laptop, 10 minutes and some curiosity.
+   Will paste a couple of playlist links if it's quick, answer a few taps, and wants to see
+   something useful before the tea goes cold.
+2. **Going through a playlist.** An evening, one track at a time in the Analyse view, asking the
+   Mentor "what is this?" and "what else sounds like this?".
+3. **A word they don't know.** A genre name comes up ("hard bounce", "ballroom") and they want it
+   explained with tracks they know, not a lecture.
+4. **Coming back.** A week later on a different laptop or browser; expects the Mentor to remember
+   what it learned about them.
+
+## Jobs to be done
+
+Ranked for Robin (the Mentor's six jobs, in their words):
+
+1. "When I find a track I love, I want to know what it is and why, in normal words, so I can find
+   more of it."
+2. "When I want more music like this, I want a few real suggestions that say why they fit me, so I
+   don't have to dig through SoundCloud's autoplay."
+3. "When a genre name comes up, I want it explained with examples, so I stop nodding along when
+   friends say it."
+4. "When I'm sorting my likes, I want a genre suggested that I can take with one click, so my
+   playlists make sense."
+5. "When I want to get better at hearing music, I want a quick game: which of these two, and why?"
+6. "When a track makes me want to try making one, I want to know where to start." (Least likely:
+   curious, not a producer.)
+
+## Frustrations
+
+- Setup that feels like a form or a quiz; anything over five minutes before it's useful.
+- Being guessed at: a "your taste" summary that's wrong or flattering ("you have amazing taste").
+- Answers that are walls of text, or sound like a textbook when they asked a quick question.
+- Being told a genre as fact by something that obviously didn't listen.
+- Made-up artists or dead links (they will click them).
+- Surprise costs or limits they didn't know about; and losing what it learned when they switch
+  laptop.
+- Jargon: BPM is fine, "spectral", "Discogs style", "embedding", "prompt" are not.
+
+## What "worth it" means
+
+- After the first session: the profile reads like them, and one listen-next suggestion they
+  actually like.
+- After a week: they can name the two or three styles they keep coming back to, and the Mentor's
+  genre suggestions feel right more often than not.
+- After a month: their playlists are sorted by names they understand, and the Mentor's
+  suggestions feel more "them" than SoundCloud's or a plain chatbot's.
+- They'd recommend it to a friend who loves dancing if it felt like a record-shop person who knows
+  them, not a generic AI.
+
+## Language they use
+
+- Use: track, tune, remix, edit, playlist, vibe, bouncy, hard, chill, piano bit, drop, build,
+  singalong, "the 90s sort", BPM (as a number, roughly), genre.
+- Confusing: key and scale (beyond a label), energy/brightness as numbers, any Discogs code,
+  "profile embedding", "model", "tokens" (cost should be in dollars), "capture", "record".

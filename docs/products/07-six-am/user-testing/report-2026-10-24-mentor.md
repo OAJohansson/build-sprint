@@ -38,3 +38,20 @@ key exposure, Ears and Studio unbroken, contrast worst 5.27:1.
 Side-by-side (reported, not graded; plain chat simulated): "more me for listen next; about the
 same for the genre." Wish: a "Your styles" strip (groups with counts and BPM ranges, suggestions
 taken).
+
+## Re-test after the fix pass (real Supabase, 574412a)
+
+Jobs: Explain 4, Suggest genre 3 (contradicted its own Explain on Dubspinna, N2), Teach 4, Ear
+training 4, Studio start 3 (opens the last saved track instead of a new one with the loops, N1),
+Listen next 4. **E10 still fails (two jobs at 3).** F1, F2 (ear training), F3, F5, F7, F9, F13
+fixed; F4 not fixed (1 of 3 links a track page, honestly said); F8 mostly; F12 partly.
+**E9 pass on the real database**: 10 analyses, 5 My genres, every thread, 3 groups and the cost line
+survived a reload and a fresh browser profile. E8 pass (shown $0.17 = sum of per-call costs; not
+checked against the Anthropic invoice). E7 p90 ≈ 11 s. 0 audio, 0 key exposure. New: N1 major
+(Studio start hand-off), N2 major (suggest contradicts explain), N3 /analyse doesn't ask for the
+code on a fresh browser, N4 artist page labelled "article", N5 jargon in Studio start, N6 "$0.00"
+after a $0.005 answer, N7 uploader fact labelled Ears, N8 Settings target 20 px.
+
+Test data left in the real database: 10 analyses (the owner's own validation results) with 5 My
+genres, 18 Mentor messages ($0.17), 3 genre groups; taste profile and the owner's 2 Studio tracks
+untouched.

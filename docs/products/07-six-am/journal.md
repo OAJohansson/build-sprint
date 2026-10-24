@@ -447,3 +447,4 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - **Final E1 grading:** 5/10 twice (50%) with an always-on search: the search finds the artist's own scene words (Afro, soulful, tech house), not the owner's. Reverted suggest_genre to the L75 method, graded once at 7/10 (L82). E1 stays a fail against ≥ 8/10, reported as is.
 - **suggest_genre back on the L75 method** (sanity call: Tech House for Mason Flint, 3.2 s, $0.006). Switching local dev to the real Supabase for E9.
 - **Ops:** ANTHROPIC_API_KEY added to the six-am Vercel project (production + preview, sensitive; value never printed). Local dev now on the real Supabase (store: supabase).
+- **Re-test on the real Supabase:** E9 passes (everything survives reload and a fresh browser). Jobs 4/3/4/4/3/4 (E10 still fails): Studio start opens the old saved track instead of a new one with the loops (N1), Suggest contradicted Explain on Dubspinna (N2). Final fix pass on N1–N8.

@@ -141,3 +141,6 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Merged main** (Six AM's wrap-up and decision 0028, Founder v2). Conflict on who picks the
   final design: the owner chose 0028 otherwise, but the final pick of the 3 is theirs (0028
   amended, playbook, AGENTS.md, designer agent).
+- **Shipped** (owner's yes): PR #80 merged after green `checks`; Vercel project linked to GitHub;
+  `pnpm ship 09-wont` deployed main to production at https://wont-peach.vercel.app (replacing
+  the accidental first build).

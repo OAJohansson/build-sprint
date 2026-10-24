@@ -81,6 +81,7 @@ export async function askClaude(input: MentorInput, needs: Omit<Needs, "searchUr
   const params0 = buildRequest(input);
   /** The retry continues the same conversation when it can (below), so searches aren't redone. */
   let carried: Anthropic.Beta.BetaMessageParam[] | null = null;
+  let firstRaw: unknown = null;
   for (let attempt = 0; attempt < 2; attempt++) {
     const params: ReturnType<typeof buildRequest> = carried ? params0 : buildRequest({ ...input, retryProblem: problem });
     const messages: Anthropic.Beta.BetaMessageParam[] = carried ?? [...params.messages];
@@ -108,7 +109,11 @@ export async function askClaude(input: MentorInput, needs: Omit<Needs, "searchUr
     if (response.stop_reason === "refusal") {
       throw new MentorError("refused", `Claude declined (${response.stop_details?.category ?? "no category"}).`, usage, round6(cost));
     }
-    const checked = checkAnswer(input.job, rawAnswer(response.content), { ...needs, searchUrls: seen });
+    // A retry may resend only the corrected fields: lay them over the first answer's.
+    const raw = rawAnswer(response.content);
+    const merged = firstRaw && raw && typeof raw === "object" && typeof firstRaw === "object" ? { ...(firstRaw as object), ...(raw as object) } : raw;
+    firstRaw ??= raw;
+    const checked = checkAnswer(input.job, merged, { ...needs, searchUrls: seen });
     if (checked.ok) {
       return { answer: checked.answer, usage, costUsd: round6(cost), latencyMs: Date.now() - t0, dropped: checked.dropped, searchUrls: [...seenRaw] };
     }
@@ -121,7 +126,7 @@ export async function askClaude(input: MentorInput, needs: Omit<Needs, "searchUr
       ? [
           ...messages,
           { role: "assistant", content: response.content as unknown as Anthropic.Beta.BetaContentBlockParam[] },
-          { role: "user", content: [{ type: "tool_result", tool_use_id: call.id, is_error: true, content: `Rejected: ${problem} Call the answer tool once more with a corrected answer; don't search again.` }] },
+          { role: "user", content: [{ type: "tool_result", tool_use_id: call.id, is_error: true, content: `Rejected: ${problem} Call the answer tool once more with the whole corrected answer (every field, not only the fix); don't search again.` }] },
         ]
       : null;
   }

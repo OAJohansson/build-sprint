@@ -147,6 +147,17 @@ export type Needs = {
 
 /** A tempo or key stated as a number in a listen-next "because" (data-evals: two were wrong; the
  *  model can't check them against what it found, so the reason is given in words). */
+/** Download and file-sharing sites (usually unlicensed): never linked (data-evals re-run). */
+const DOWNLOAD_HOST = /(^|\.)(edmdls|zippyshare|mediafire|4shared|rapidgator|nitroflare|uploaded|turbobit|mega|krakenfiles|hitfile|katfile)\.[a-z.]+$|mp3|download|flac|320kbps/i;
+export function isDownloadLink(u: string): boolean {
+  try {
+    const url = new URL(u);
+    return DOWNLOAD_HOST.test(url.hostname) || /\.(mp3|zip|rar|flac|wav)(\?|$)/i.test(url.pathname);
+  } catch {
+    return true;
+  }
+}
+
 const NUMERIC_FACT = /\b\d{2,3}(?:[.,]\d)?\s*bpm\b|\b(?:1[0-2]|[1-9])[ab]\b|\b[a-g](?:#|b|♯|♭)?\s+(?:major|minor)\b/i;
 
 export type Checked = { ok: true; answer: MentorAnswer; dropped: string[] } | { ok: false; problem: string };
@@ -202,6 +213,10 @@ export function checkAnswer(job: Job, raw: unknown, needs: Needs = {}): Checked 
       }
       if (!artist || !title || !because || !isUrl(o.url)) {
         dropped.push(`listen-next item without artist, title, link or because`);
+        continue;
+      }
+      if (isDownloadLink(o.url)) {
+        dropped.push(`${artist} – ${title}: no clean link (download site)`);
         continue;
       }
       if (needs.searchUrls && !needs.searchUrls.has(urlKey(o.url))) {
@@ -274,8 +289,13 @@ export function checkAnswer(job: Job, raw: unknown, needs: Needs = {}): Checked 
   // What each job must have.
   if (job === "suggest_genre" && !answer.genre) return { ok: false, problem: "suggest_genre needs genre {name, reason}." };
   if (job === "studio_start" && !answer.loops?.length) return { ok: false, problem: "studio_start needs at least one loop id from the crate." };
-  if (job === "setup" && (!answer.profileUpdate || (answer.questions?.length ?? 0) < 3)) {
-    return { ok: false, problem: "setup needs profileUpdate and 3–5 questions with 2+ options each." };
+  if (job === "setup") {
+    // Name exactly what's missing, so the retry adds it (a vague message got the same answer back).
+    const missing = [
+      !answer.profileUpdate && "profileUpdate (the whole profile, with a one-line note)",
+      (answer.questions?.length ?? 0) < 3 && `questions: 3–5 tap questions with 2–4 options each (got ${answer.questions?.length ?? 0})`,
+    ].filter(Boolean);
+    if (missing.length) return { ok: false, problem: `setup is missing ${missing.join(" and ")}.` };
   }
   if (job === "learn" && !answer.profileUpdate) return { ok: false, problem: "learn needs profileUpdate." };
   if (job === "propose_groups" && !answer.groups) return { ok: false, problem: "propose_groups needs groups (may be empty)." };

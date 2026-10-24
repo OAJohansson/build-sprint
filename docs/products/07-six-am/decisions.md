@@ -112,3 +112,6 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L76 | 2026-10-24 | Owner lines (from hand edits in history) are kept verbatim: the validator rejects any profile update that drops one; setup merges | PM | Mentor fixes | |
 | L77 | 2026-10-24 | Group reasons derived live from current tracks for prompts (one-time repair of stored split reasons); listen-next because-lines carry no tempo/key numbers; source rules sharpened (general facts are general) | PM | Mentor fixes | |
 | T30 | 2026-10-24 | A "recent edit" passed to prompts = the lines a hand edit added (≤ 3 sentences, 7 days, not a restore) | PM | Mentor fixes | |
+| L78 | 2026-10-24 | In-conversation retry merges corrected fields over the first answer; validation errors name the missing part (fixes the setup 502) | PM (engineer's proposal) | Mentor fixes | |
+| L79 | 2026-10-24 | Listen next never links download or file-sharing sites (validator drops them; "no clean link found") | PM | Mentor fixes | |
+| L80 | 2026-10-24 | Uploader tags count as genre evidence only when they agree with Ears' measurements; on conflict the measurements and the web win and the reason says "tagged X, but it measures more like Y" (the brief: uploader tags are unreliable) | PM | Mentor fixes | |

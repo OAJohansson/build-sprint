@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { checkAnswer, urlKey } from "./answer";
+import { checkAnswer, isDownloadLink, urlKey } from "./answer";
 
 const ok = { sentences: [{ text: "Ears measured 128 BPM.", source: "ears" }], tellMore: true };
 
@@ -41,6 +41,14 @@ describe("checkAnswer", () => {
     const pick = (because: string) => ({ ...ok, listenNext: [{ artist: "A", title: "T", url: "https://x.com/t", because, kind: "track" }] });
     for (const bad of ["Same 124 BPM groove.", "Also in 8A.", "Sits in F minor too."]) expect(checkAnswer("listen_next", pick(bad)).ok, bad).toBe(false);
     expect(checkAnswer("listen_next", pick("A similar tempo and the same warm, rolling feel.")).ok).toBe(true);
+  });
+  it("drops picks that link to download sites; setup names what it's missing", () => {
+    for (const u of ["https://edmdls.com/x", "https://freemp3cloud.com/t", "https://soundcloud.com/a/t.mp3"]) expect(isDownloadLink(u), u).toBe(true);
+    for (const u of ["https://soundcloud.com/a/t", "https://artist.bandcamp.com/track/t", "https://www.beatport.com/track/t/1", "https://www.discogs.com/release/1"]) expect(isDownloadLink(u), u).toBe(false);
+    const r = checkAnswer("listen_next", { ...ok, listenNext: [{ artist: "A", title: "T", url: "https://edmdls.com/t", because: "same feel", kind: "track" }] });
+    expect(r.ok && r.answer.listenNext).toEqual([]);
+    const s = checkAnswer("setup", { ...ok, profileUpdate: { text: "You like bounce.", note: "draft" } });
+    expect(!s.ok && s.problem).toMatch(/missing questions/);
   });
   it("suggest_genre needs a genre; studio_start needs a real loop", () => {
     expect(checkAnswer("suggest_genre", ok).ok).toBe(false);

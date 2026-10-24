@@ -86,7 +86,7 @@ export function Turn({ ask, answer, job, costUsd, track, studio, updatedNote, dr
 
       {!teach && answer.listenNext?.length ? <Picks items={answer.listenNext} onFeedback={onFeedback} /> : null}
       {start ? <StudioBlock start={start} onOpen={onOpenStudio} /> : null}
-      {dropped?.length ? <p className={s.dropped}>Left out {dropped.length} suggestion{dropped.length > 1 ? "s" : ""} whose link didn&apos;t check out.</p> : null}
+      {dropped?.length ? <p className={s.dropped}>Left out {dropped.length} pick{dropped.length > 1 ? "s" : ""}: no clean link found.</p> : null}
 
       {web.length ? (
         <p className={s.webRefs}>

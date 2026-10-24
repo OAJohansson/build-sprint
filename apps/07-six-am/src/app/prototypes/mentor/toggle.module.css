@@ -1,0 +1,14 @@
+/* Harness layout + the Mentor toggle, placed in the app bar just left of Export */
+.wrap { position: relative; height: 100dvh; overflow: hidden; }
+.pushWrap { position: relative; height: 100dvh; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr) 460px; }
+.analyse { min-width: 0; height: 100dvh; overflow: hidden; }
+.toggle {
+  position: fixed; top: 17px; right: 122px; z-index: 40; height: 30px; display: inline-flex; align-items: center; gap: 6px;
+  font: 400 12px var(--f-mono); color: #f1e6d3; background: #231f1c; border: 1px solid #2c2622; border-radius: 6px; padding: 0 12px; cursor: pointer;
+  transition: background 150ms ease-out, transform 120ms ease-out;
+}
+.toggle:hover { background: #2b2622; }
+.toggle:active { transform: scale(.97); }
+.toggle[aria-pressed="true"] { background: #2b2622; border-color: #4a4038; }
+.toggle:focus-visible { outline: 1px solid #f1e6d3; outline-offset: 2px; }
+.togglePush { right: 568px; }

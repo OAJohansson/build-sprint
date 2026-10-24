@@ -32,3 +32,14 @@ buttons, Studio key paragraph repeating the answer, teach links twice, "Your own
 | F10 | polish | Help button reads like a caption |
 
 Data written: 20 messages in `main` (+$0.20), one reversible My genre change (cleared again).
+
+## Re-check after the fix pass (cbcf1a7)
+
+Jobs: Explain 5, Suggest genre 4, Teach 4 (not re-run), Ear training 4, Studio start 5, Listen next
+4. **Every job ≥ 4: E10 passes on jobs.** Fixed: F1 follow-ups (right pair, no selected row sent),
+F3 Studio header, F5 local help, F6 Undo, F8 one-step import; F2 mostly (3 named real tracks, but
+all linked to one "similar songs" page); F4 improved (correct, but whole-track based, no snippet
+times); F9 mostly. **Not fixed: F7** (source line says "your library"/"general" for web or Ears
+facts). New: **N1 (major, trust)** the Mentor said "you already accepted House" after an Undo
+(memory, not the live My genre); N2 the 50/day check-in hit during testing (shared chat); N3
+Studio "Save track" link 14 px. Data: 14 messages in `main`, one reversible My genre change.

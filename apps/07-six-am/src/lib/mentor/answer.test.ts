@@ -67,17 +67,32 @@ describe("checkAnswer", () => {
     const r = checkAnswer("studio_start", { ...ok, loops: [{ id: "fake", why: "" }, { id: "deep-sub", why: "warm" }] }, { loopIds });
     expect(r.ok && r.answer.loops).toEqual([{ id: "deep-sub", why: "warm" }]);
   });
-  it("drops listen-next links that weren't in this answer's search results", () => {
-    const searchUrls = new Set([urlKey("https://soundcloud.com/a/real-track/")]);
+  it("a pick's link must name the pick; otherwise, or when reused, it becomes a SoundCloud search (Re-run 4)", () => {
+    const searchUrls = new Set([urlKey("https://soundcloud.com/a/real-track/"), urlKey("https://www.youtube.com/watch?v=x1")]);
+    const searchTitles = new Map([[urlKey("https://soundcloud.com/a/real-track"), "Real Track by Artist A | SoundCloud"], [urlKey("https://www.youtube.com/watch?v=x1"), "FETISH - Something Deeper"]]);
     const r = checkAnswer("listen_next", {
       ...ok,
       listenNext: [
-        { artist: "A", title: "Real", url: "https://soundcloud.com/a/real-track", because: "same groove" },
-        { artist: "B", title: "Invented", url: "https://soundcloud.com/b/nope", because: "?" },
+        { artist: "Artist A", title: "Real Track", url: "https://soundcloud.com/a/real-track", because: "same groove", kind: "track" },
+        { artist: "Lay-Far", title: "Submerging (Crackazat Rework)", url: "https://www.youtube.com/watch?v=x1", because: "deep", kind: "playlist" },
+        { artist: "B", title: "Invented", url: "https://soundcloud.com/b/nope", because: "?", kind: "track" },
+        { artist: "Artist A", title: "Real Track", url: "https://soundcloud.com/a/real-track", because: "again", kind: "track" },
       ],
-    }, { searchUrls });
-    expect(r.ok && r.answer.listenNext?.map((x) => x.title)).toEqual(["Real"]);
-    expect(r.ok && r.dropped.length).toBe(1);
+    }, { searchUrls, searchTitles });
+    expect(r.ok && r.answer.listenNext?.map((x) => x.kind)).toEqual(["track", "search", "search"]);
+    expect(r.ok && r.answer.listenNext?.[1].url).toBe("https://soundcloud.com/search?q=Lay-Far%20Submerging%20(Crackazat%20Rework)");
+  });
+  it("where picks came from is web, not general; uploader tags and Ears numbers don't share a sentence", () => {
+    expect(checkAnswer("listen_next", { sentences: [{ text: "I took these from a similar-songs list.", source: "general" }], tellMore: false }).ok).toBe(false);
+    expect(checkAnswer("explain", { sentences: [{ text: "Ears measured 126 BPM and the uploader tags it Latin House.", source: "ears" }], tellMore: false }).ok).toBe(false);
+    expect(checkAnswer("explain", { sentences: [{ text: "The uploader calls it a 128 BPM edit.", source: "uploader" }], tellMore: false }).ok).toBe(false);
+  });
+  it("ear training anchors to Ears' snippet times when there are two or more", () => {
+    const snippetTimes = new Map([["id1", ["0:58", "1:57", "2:55"]]]);
+    const trackRefs = new Map([["T1", "id1"]]);
+    const ear = (texts: string[]) => checkAnswer("chat", { intent: "ear_training", trackIds: ["T1"], sentences: texts.map((text) => ({ text, source: "ears" })), tellMore: false }, { snippetTimes, trackRefs });
+    expect(ear(["Early on, notice the kick.", "Near the end, notice the hats."]).ok).toBe(false);
+    expect(ear(["Around 0:58 Ears heard House: notice the kick.", "Around 2:55 it leans Techno: notice drier drums."]).ok).toBe(true);
   });
   it("setup needs a profile draft and 3+ tap questions; notes get the Updated: prefix", () => {
     const q = { question: "Do vocals matter?", options: [{ label: "Yes" }, { label: "No" }] };

@@ -182,9 +182,12 @@ function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
   // Demo rows never teach the real profile: in ?demo=1 learning only runs on the in-memory dev store.
   const canLearn = !m.demo || mentor.storeKind === "memory";
   const typeGenre = (id: string, typed: string) => {
+    const before = m.results.find((r) => r.id === id)?.myGenre;
     const g = saveGenre(id, typed);
     if (!canLearn) return;
     const a = m.results.find((r) => r.id === id);
+    // N1: clearing a genre is a fact the memory needs, so it doesn't repeat the old one.
+    if (!g && a && before) learn(mentor.code, { type: "note", detail: `Cleared My genre "${before}" on "${a.title || id}".`, trackId: id });
     if (!g || !a) return;
     const sug = lastSuggestion(id);
     const label = `"${a.title || id}" by ${a.uploader || "unknown"}`;

@@ -126,7 +126,12 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
   const byId = (id?: string) => (id ? library.find((a) => a.id === id) ?? null : null);
   const onFeedback = (it: ListenNext, kind: "more_like_this" | "not_for_me") =>
     canLearn && learn(data.code, { type: kind, detail: `${it.artist} – ${it.title} (${it.because})`.slice(0, 480) });
-  const undoGenre = (a: EarsAnalysis) => (previous: string) => onSetGenre(a.id, previous);
+  // N1: an undo goes into the memory too, so it never repeats the undone genre as fact.
+  const undoGenre = (a: EarsAnalysis) => (previous: string) => {
+    const was = a.myGenre;
+    onSetGenre(a.id, previous);
+    if (canLearn) learn(data.code, { type: "note", detail: previous ? `Undid the Mentor's genre "${was}" on "${a.title}"; My genre is back to "${previous}".` : `Undid the Mentor's genre "${was}" on "${a.title}"; My genre is empty again.`, trackId: a.id });
+  };
   const acceptGenre = (a: EarsAnalysis) => (name: string) => {
     onSetGenre(a.id, name);
     if (canLearn) learn(data.code, { type: "note", detail: `Accepted the Mentor's suggested genre "${name}" as My genre for "${a.title}".`, trackId: a.id });

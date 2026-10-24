@@ -38,12 +38,15 @@ function getClient(): Anthropic {
   return (client ??= new Anthropic({ maxRetries: 1, timeout: 60_000 }));
 }
 
-/** Every URL inside server-tool result blocks (web search results, and web fetch if ever used). */
-function resultUrls(content: Anthropic.Beta.BetaContentBlock[], into: Set<string>, raw: Set<string>) {
+/** Every URL inside server-tool result blocks (web search results, and web fetch if ever used),
+ *  with the result's page title where there is one (a listen-next link must name its pick). */
+function resultUrls(content: Anthropic.Beta.BetaContentBlock[], into: Set<string>, raw: Set<string>, titles: Map<string, string>) {
   const walk = (v: unknown) => {
     if (Array.isArray(v)) v.forEach(walk);
     else if (v && typeof v === "object") {
-      for (const [k, x] of Object.entries(v)) {
+      const o = v as Record<string, unknown>;
+      if (typeof o.url === "string" && typeof o.title === "string") titles.set(urlKey(o.url), o.title);
+      for (const [k, x] of Object.entries(o)) {
         if (k === "url" && typeof x === "string" && /^https?:\/\//.test(x)) {
           into.add(urlKey(x));
           raw.add(x);
@@ -70,13 +73,13 @@ function rawAnswer(content: Anthropic.Beta.BetaContentBlock[]): unknown {
 
 const MAX_CONTINUES = 2;
 
-export async function askClaude(input: MentorInput, needs: Omit<Needs, "searchUrls"> = {}): Promise<MentorResult> {
+export async function askClaude(input: MentorInput, needs: Omit<Needs, "searchUrls" | "searchTitles"> = {}): Promise<MentorResult> {
   const anthropic = getClient();
   const t0 = Date.now();
   const usage = emptyUsage();
   let cost = 0;
   let problem: string | undefined;
-  const seen = new Set<string>(), seenRaw = new Set<string>();
+  const seen = new Set<string>(), seenRaw = new Set<string>(), titles = new Map<string, string>();
 
   const params0 = buildRequest(input);
   /** The retry continues the same conversation when it can (below), so searches aren't redone. */
@@ -100,7 +103,7 @@ export async function askClaude(input: MentorInput, needs: Omit<Needs, "searchUr
         throw toMentorError(error, usage, cost);
       }
       cost += addUsage(usage, response.usage, response.model ?? MENTOR_MODEL);
-      resultUrls(response.content, seen, seenRaw);
+      resultUrls(response.content, seen, seenRaw, titles);
       // A long server-tool turn can pause; send it back unchanged to let it finish.
       if (response.stop_reason !== "pause_turn") break;
       messages.push({ role: "assistant", content: response.content as unknown as Anthropic.Beta.BetaContentBlockParam[] });
@@ -113,7 +116,7 @@ export async function askClaude(input: MentorInput, needs: Omit<Needs, "searchUr
     const raw = rawAnswer(response.content);
     const merged = firstRaw && raw && typeof raw === "object" && typeof firstRaw === "object" ? { ...(firstRaw as object), ...(raw as object) } : raw;
     firstRaw ??= raw;
-    const checked = checkAnswer(input.job, merged, { ...needs, searchUrls: seen });
+    const checked = checkAnswer(input.job, merged, { ...needs, searchUrls: seen, searchTitles: titles });
     if (checked.ok) {
       return { answer: checked.answer, usage, costUsd: round6(cost), latencyMs: Date.now() - t0, dropped: checked.dropped, searchUrls: [...seenRaw] };
     }

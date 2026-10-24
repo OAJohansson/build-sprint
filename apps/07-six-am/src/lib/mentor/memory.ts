@@ -7,6 +7,7 @@
 //   reserved message thread "memory" (no schema change).
 import { bpmSentence } from "@/lib/ears/bpm-choice";
 import { brightnessLabel, energyLabel, keyLabel, pct, shownStyles } from "@/lib/ears/labels";
+import { styleDisplayName } from "@/lib/ears/styles";
 import type { EarsAnalysis } from "@/lib/ears/results";
 import { LOOPS, TRACKS, type Doc } from "@/lib/timeline";
 import type { LearnEvent } from "./prompt";
@@ -77,12 +78,17 @@ export const refOf = (i: number) => `T${i + 1}`;
 /** One short line per analysed track (L88): ref | artist – title | BPM | key | energy, tone | top styles | uploader tag | My genre. */
 export function libraryLine(a: EarsAnalysis, i: number): string {
   const styles = shownStyles(a).slice(0, 3).map((x) => `${x.name} ${pct(x.p)}%`).join(", ") || "-";
-  return `${refOf(i)} | ${a.uploader || "?"} – ${a.title || "untitled"} | ${bpmSentence(a)} BPM | ${keyLabel(a.key, a.scale)} | ${energyLabel(a.energy)} energy, ${brightnessLabel(a.brightness)} | ${styles} | tag: ${a.uploaderGenreTag ?? "-"} | my genre: ${a.myGenre?.trim() || "-"}`;
+  // Where Ears listened (for ear-training moments); a preview-only measurement says so.
+  const heard = a.snippets.map((x) => `${clock(x.startMs)} ${styleDisplayName(x.topStyle)}${x.p != null ? ` ${pct(x.p)}%` : ""}`).join(", ");
+  return `${refOf(i)} | ${a.uploader || "?"} – ${a.title || "untitled"} | ${bpmSentence(a)} BPM | ${keyLabel(a.key, a.scale)} | ${energyLabel(a.energy)} energy, ${brightnessLabel(a.brightness)} | ${styles} | tag: ${a.uploaderGenreTag ?? "-"} | my genre: ${a.myGenre?.trim() || "-"} | heard${a.preview ? " (30 s preview only)" : ""}: ${heard || "-"}`;
 }
+
+/** m:ss, as the prompt and the ear-training check write Ears' snippet times. */
+export const clock = (ms: number) => { const t = Math.round(ms / 1000); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`; };
 
 export function libraryText(ordered: EarsAnalysis[]): string {
   if (!ordered.length) return "The person's Analyse library is empty: no tracks analysed yet.";
-  return `The person's Analyse library (${ordered.length} tracks; ref | uploader – title | BPM [ears] | key [ears] | energy, tone [ears] | top styles [ears] | uploader genre tag [uploader] | My genre [library]):\n${ordered.map(libraryLine).join("\n")}`;
+  return `The person's Analyse library (${ordered.length} tracks; ref | uploader – title | BPM [ears] | key [ears] | energy, tone [ears] | top styles [ears] | uploader genre tag [uploader] | My genre [library], live | where Ears listened: time and top style [ears]):\n${ordered.map(libraryLine).join("\n")}`;
 }
 
 export type StudioTrackLike = { name: string; doc: Doc };

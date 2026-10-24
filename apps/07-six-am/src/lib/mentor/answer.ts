@@ -32,7 +32,7 @@ export const TEACH_SECTIONS = ["what", "sound", "start"] as const;
 export type TeachSection = (typeof TEACH_SECTIONS)[number];
 export type Sentence = { text: string; source: Source; url?: string; section?: TeachSection };
 /** kind: what the link opens (F4): a track page, a playlist/tracklist/tag page, or an article. */
-export type LinkKind = "track" | "artist" | "playlist" | "chart" | "article";
+export type LinkKind = "track" | "artist" | "playlist" | "chart" | "article" | "search";
 export type ListenNext = { artist: string; title: string; url: string; because: string; kind?: LinkKind; section?: TeachSection };
 export type GenreCall = { name: string; reason: string };
 export type LoopPick = { id: string; why: string };
@@ -155,6 +155,10 @@ export type Needs = {
   trackIds?: ReadonlySet<string>;
   /** URLs seen in this answer's web search results; listen-next links must be among them. */
   searchUrls?: ReadonlySet<string>;
+  /** urlKey → the search result's page title: a pick's link must name the pick (Re-run 4). */
+  searchTitles?: ReadonlyMap<string, string>;
+  /** Track id → the clock times Ears listened at ("2:55"); ear training anchors to these. */
+  snippetTimes?: ReadonlyMap<string, readonly string[]>;
   /** Lines the person wrote themselves: a profile update must keep each word for word. */
   keepLines?: readonly string[];
   /** F4: every tempo the facts give (lead and other readings, Studio tempo); a BPM figure in an
@@ -179,6 +183,10 @@ export function isDownloadLink(u: string): boolean {
 
 /** F2: a chart, playlist or compilation named as if it were a track. */
 const NOT_A_TRACK = /\b(top\s*\d+|charts?|playlists?|compilations?|best of|various artists|hits of|\d{4}\s+(?:selection|list|mix)|essential mix|tracklist)\b/i;
+const RESEARCH_TALK = /\b(search(?:ed|ing)?|similar[- ]songs?|lists?|queues?|found|took these|pulled these|according to|web ?page|charts?)\b/i;
+const UPLOADER_TALK = /\buploader\b|\btagged\b|\b(?:genre )?tags?\b/i;
+const EARS_NUMBER = /\b\d{2,3}(?:[.,]\d)?\s*(?:bpm|%)/i;
+const CLOCK = /\b\d{1,2}:[0-5]\d\b/g;
 const BPM_FIGURE = /\b(\d{2,3}(?:[.,]\d)?)\s*bpm\b/gi;
 
 const NUMERIC_FACT = /\b\d{2,3}(?:[.,]\d)?\s*bpm\b|\b(?:1[0-2]|[1-9])[ab]\b|\b[a-g](?:#|b|♯|♭)?\s+(?:major|minor)\b/i;
@@ -189,6 +197,17 @@ const str = (v: unknown, max = 2000) => (typeof v === "string" && v.trim() ? v.t
 const isUrl = (v: unknown): v is string => typeof v === "string" && /^https?:\/\/\S+$/i.test(v.trim());
 const isSection = (v: unknown): v is TeachSection => typeof v === "string" && (TEACH_SECTIONS as readonly string[]).includes(v);
 const KINDS: LinkKind[] = ["track", "artist", "playlist", "chart", "article"];
+const fold = (t: string) => t.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+/** Whether a search result's title names the pick: its main artist or its title (without the
+ *  remix part), as whole words. */
+export function namesPick(pageTitle: string | undefined, artist: string, title: string): boolean {
+  if (!pageTitle) return false;
+  const page = ` ${fold(pageTitle)} `;
+  const mainArtist = fold(artist.split(/\s*(?:,|&|\bfeat\.?|\bft\.?|\bx\b|\band\b)\s*/i)[0] ?? "");
+  const core = fold(title.replace(/\([^)]*\)|\[[^\]]*\]/g, ""));
+  return (mainArtist.length >= 3 && page.includes(` ${mainArtist} `)) || (core.length >= 4 && page.includes(` ${core} `));
+}
+export const soundcloudSearch = (artist: string, title: string) => `https://soundcloud.com/search?q=${encodeURIComponent(`${artist} ${title}`)}`;
 /** N4: a SoundCloud or Bandcamp profile is an artist page, whatever the model called it. */
 export function linkKind(u: string, said: LinkKind): LinkKind {
   try {
@@ -231,6 +250,14 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
     if (!isSource(o.source)) return { ok: false, problem: `sentences[${i}] has no valid source (one of ${SOURCES.join(", ")}).` };
     if (o.source === "web" && !isUrl(o.url)) return { ok: false, problem: `sentences[${i}] is from the web but has no url.` };
     if (RAW_NUMBERS.test(text)) return { ok: false, problem: `sentences[${i}] uses raw measurement numbers ("${text.match(RAW_NUMBERS)?.[0]}"): describe them in words (bright/warm, loud/quiet, likely/unsure), no Hz, dBFS, centroid or strength figures.` };
+    // Where picks or facts were found is web, with the page: never general (Re-run 4).
+    if ((job === "listen_next" || job === "teach") && o.source === "general" && RESEARCH_TALK.test(text)) {
+      return { ok: false, problem: `sentences[${i}] says where you found something ("${text.match(RESEARCH_TALK)?.[0]}") but is labelled general: label it web with that page's URL, or leave it out.` };
+    }
+    // One source per sentence: an uploader tag and an Ears number don't share one.
+    if ((o.source === "ears" && UPLOADER_TALK.test(text)) || (o.source === "uploader" && EARS_NUMBER.test(text))) {
+      return { ok: false, problem: `sentences[${i}] mixes the uploader's title or tags with Ears' measurements: split it into an uploader sentence and an ears sentence.` };
+    }
     // Ear training only: other answers may quote general genre tempo ranges.
     if (job === "ear_training" && needs.bpms?.length) {
       for (const m of text.matchAll(BPM_FIGURE)) {
@@ -251,6 +278,15 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
     return { ok: false, problem: `${sentences.length} sentences: keep to ${maxSentences(job) === 4 ? "2–4" : maxSentences(job) === 3 ? "2–3" : `at most ${maxSentences(job)}`} and offer tellMore for the rest.` };
   }
   const answer: MentorAnswer = { sentences, tellMore: r.tellMore === true };
+  // Ear training anchors to where Ears listened when it listened at two or more points (Re-run 4).
+  if (job === "ear_training" && needs.snippetTimes && Array.isArray(r.trackIds)) {
+    const first = typeof r.trackIds[0] === "string" ? needs.trackRefs?.get(r.trackIds[0].trim().toUpperCase()) ?? r.trackIds[0] : null;
+    const times = first ? needs.snippetTimes.get(first) : undefined;
+    if (times && times.length >= 2) {
+      const used = new Set(sentences.flatMap((x) => x.text.match(CLOCK) ?? []).filter((t) => times.includes(t)));
+      if (used.size < 2) return { ok: false, problem: `Anchor the moments to the times Ears listened at (${times.join(", ")}) and what it measured there, at least two of them; no early / middle / end.` };
+    }
+  }
   if (asked === "chat") {
     answer.intent = isIntent(r.intent) ? r.intent : "chat";
     const ids = (Array.isArray(r.trackIds) ? r.trackIds : [])
@@ -284,11 +320,16 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
         dropped.push(`${artist} – ${title}: no clean link (download site)`);
         continue;
       }
-      if (needs.searchUrls && !needs.searchUrls.has(urlKey(o.url))) {
-        dropped.push(`${artist} – ${title}: link not from this answer's web search`);
-        continue;
-      }
-      const item: ListenNext = { artist, title, url: o.url.trim(), because, kind: linkKind(o.url.trim(), KINDS.includes(o.kind as LinkKind) ? (o.kind as LinkKind) : "article") };
+      // A pick's link must lead to that pick: from this answer's search results, its page title
+      // naming the artist or the title, and not already used for another pick. Otherwise the pick
+      // keeps its name and links a SoundCloud search for it (Re-run 4).
+      const key = urlKey(o.url);
+      const fromSearch = !needs.searchUrls || needs.searchUrls.has(key);
+      const named = !needs.searchTitles || namesPick(needs.searchTitles.get(key), artist, title);
+      const reused = list.some((x) => urlKey(x.url) === key);
+      const item: ListenNext = fromSearch && named && !reused
+        ? { artist, title, url: o.url.trim(), because, kind: linkKind(o.url.trim(), KINDS.includes(o.kind as LinkKind) ? (o.kind as LinkKind) : "article") }
+        : { artist, title, url: soundcloudSearch(artist, title), because, kind: "search" };
       if (job === "teach" && isSection(o.section)) item.section = o.section;
       list.push(item);
     }

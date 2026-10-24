@@ -76,12 +76,15 @@ function Sources({ answer, skip }: { answer: MentorAnswer; skip?: ReadonlySet<st
   const byDomain = new Map<string, string>();
   for (const u of pages) if (!byDomain.has(shortUrl(u))) byDomain.set(shortUrl(u), u);
   const web = [...byDomain.values()];
-  if (!used.length && !web.length) return null;
+  // Picks found on the web: their sites show as domains too (the links themselves are on the picks).
+  const pickSites = [...new Set((answer.listenNext ?? []).filter((l) => l.kind !== "search").map((l) => shortUrl(l.url)))].filter((d) => !byDomain.has(d));
+  if (!used.length && !web.length && !pickSites.length) return null;
   return (
     <p className={s.from}>
       <span className={s.sr}>Sources: </span>
       {used.map((x) => FROM_WORD[x]).join(" · ")}
       {web.map((u, i) => <span key={u}>{used.length || i ? " · " : ""}<a href={u} target="_blank" rel="noreferrer" title={u}>{shortUrl(u)}<NewTab /></a></span>)}
+      {pickSites.map((d, i) => <span key={d}>{used.length || web.length || i ? " · " : ""}{d}</span>)}
     </p>
   );
 }
@@ -145,7 +148,7 @@ export function Turn({ ask, answer, job, track, studio, dropped, myGenre, onTell
 }
 
 /** What the link opens when it isn't the track's own page (F4, N4), as a mono suffix after ↗. */
-const KIND_WORD: Record<string, string> = { artist: "artist page", playlist: "playlist", chart: "chart", article: "article" };
+const KIND_WORD: Record<string, string> = { artist: "artist page", playlist: "playlist", chart: "chart", article: "article", search: "search" };
 const kindTag = (it: ListenNext) => (it.kind && it.kind !== "track" ? <span className={s.kind}>{KIND_WORD[it.kind]}</span> : null);
 
 function PickLink({ it }: { it: ListenNext }) {

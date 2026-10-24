@@ -22,7 +22,7 @@
 .libBtn { flex: none; display: flex; align-items: center; gap: 4px; font: 400 12px var(--f-mono); color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 99px; padding: 6px 10px 6px 12px; cursor: pointer; }
 .libBtn svg { width: 14px; height: 14px; }
 .libBtn:hover, .libBtn[aria-expanded="true"] { color: var(--ink); }
-.saveState { flex: none; font: 400 11px var(--f-mono); color: #6f6357; white-space: nowrap; background: none; border: 0; padding: 0 4px; }
+.saveState { flex: none; display: inline-flex; align-items: center; min-height: 28px; font: 400 11px var(--f-mono); color: #6f6357; white-space: nowrap; background: none; border: 0; padding: 0 4px; }
 .saveError { color: #ef5b37; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .library {
   position: absolute; left: 18px; top: calc(100% + 18px); z-index: 20; width: 360px; max-height: 420px; display: flex; flex-direction: column;

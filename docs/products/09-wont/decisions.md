@@ -22,3 +22,5 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L15 | 24 Oct | R9: today and yesterday can be re-logged, habit wording edited with history kept, delete asks first | PM (discovery) | discovery | |
 | L16 | 24 Oct | Pouches goal is quit (owner said "quit", "days without nicotine"); cut-down to backlog | PM | discovery | |
 | T2 | 24 Oct | "Ride it out" lasts 60 s, exit in one tap; persona's job-hunt detail kept | PM (discovery) | discovery | |
+| T3 | 24 Oct | Board sketches: the card is the tap target; stop habit has three taps (clean, slip, urge); main number always a rolling rate or clean-day total; not-logged days drawn light, never red | PM (designer) | design | |
+| T4 | 24 Oct | Draft comeback copy: "Friday's page stayed empty. That's part of it. Today, after your coffee: one sentence is enough." (owner rewrites at review) | PM (designer) | design | |

@@ -50,3 +50,7 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   picks 1 of the 3 built prototypes. Process change made at once in the playbook, `AGENTS.md`,
   decision 0026 and the designer agent (a session whose task is a process change edits shared
   pages directly).
+- **Contact sheet, 10 directions** for the board (`design/contact-sheet.html`): 01 Ink zigzag, 02
+  Pairs on a tray, 03 Rising tide, 04 Masonry wall (seeds); 05 Bold slabs, 06 Soft fill
+  (references); 07 Drafting table, 08 Poster wall (far away); 09 Seed packets, 10 A hand of cards
+  (sound wrong). Waiting for the owner's shortlist of three.

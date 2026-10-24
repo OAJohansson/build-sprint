@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wont contact sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,500;12..96,800&family=Caveat:wght@500;700&family=DM+Mono:wght@400;500&family=Familjen+Grotesk:wght@400;500;700&family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,800&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=Syne:wght@500;800&family=Young+Serif&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Sheet chrome (not a contestant) ---------- */
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#141414;color:#e8e6e1;font:14px/1.45 Inter,system-ui,sans-serif;padding:40px 40px 80px}
+  .sheet-head{max-width:1520px;margin:0 auto 32px}
+  .sheet-head h1{font:500 22px Inter,sans-serif;letter-spacing:-.01em;margin-bottom:6px}
+  .sheet-head p{color:#9a978f;max-width:900px}
+  .grid{max-width:1520px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:40px 28px}
+  .cell{cursor:zoom-in;min-width:0}
+  .thumb{position:relative;width:100%;aspect-ratio:390/844;overflow:hidden;border-radius:14px;outline:1px solid #2a2a2a}
+  .thumb .frame{position:absolute;top:0;left:0;transform-origin:0 0}
+  .cap{display:flex;gap:10px;margin-top:12px;align-items:baseline;flex-wrap:wrap}
+  .cap b{font:500 13px 'DM Mono',monospace;color:#9a978f}
+  .cap .txt{flex:1;min-width:0}
+  .cap strong{font-weight:500}
+  .cap span{color:#9a978f;font-size:13px}
+  .tag{font-size:11px;border:1px solid #3a3a3a;border-radius:99px;padding:1px 8px;color:#9a978f;white-space:nowrap;font-style:normal}
+  .overlay{position:fixed;inset:0;background:rgba(10,10,10,.92);display:none;align-items:center;justify-content:center;z-index:10;cursor:zoom-out}
+  .overlay.on{display:flex}
+  .overlay .holder{position:relative;overflow:hidden;border-radius:18px}
+  @media (max-width:1200px){.grid{grid-template-columns:repeat(3,1fr)}}
+  @media (max-width:700px){body{padding:24px 16px}.grid{grid-template-columns:repeat(2,1fr);gap:28px 16px}}
+
+  /* ---------- Shared frame: a 390 x 844 phone screen ---------- */
+  .frame{width:390px;height:844px;overflow:hidden;position:relative}
+  .sb{height:44px;display:flex;justify-content:space-between;align-items:center;padding:0 26px;font:500 14px Inter,sans-serif}
+
+  /* ---------- 01 Ink zigzag (seed) ---------- */
+  .f1{background:#efe9dc;color:#14213d}
+  .f1 .hd{padding:6px 22px 14px;display:flex;justify-content:space-between;align-items:flex-end}
+  .f1 .hd h1{font:34px/0.95 'Archivo Black';text-transform:uppercase;letter-spacing:-.01em}
+  .f1 .hd small{font:500 12px 'DM Mono';opacity:.6}
+  .f1 .c{width:296px;height:122px;border-radius:6px;padding:14px 16px;position:relative;margin-bottom:12px;display:flex;justify-content:space-between;gap:10px;box-shadow:0 1px 0 rgba(0,0,0,.08)}
+  .f1 .c:nth-child(odd){margin-left:16px;transform:rotate(-1.2deg)}
+  .f1 .c:nth-child(even){margin-left:78px;transform:rotate(1deg)}
+  .f1 .c::before{content:"";position:absolute;top:-5px;left:50%;width:12px;height:12px;border-radius:50%;background:#e2552d;box-shadow:0 2px 0 rgba(0,0,0,.25)}
+  .f1 .c h2{font:22px/1 'Archivo Black';text-transform:uppercase;letter-spacing:-.01em;margin-bottom:6px}
+  .f1 .c p{font:500 12px/1.3 'Familjen Grotesk';opacity:.75;max-width:170px}
+  .f1 .c .n{font:52px/0.9 Anton;text-align:right}
+  .f1 .c .n small{display:block;font:500 11px 'DM Mono';opacity:.7;margin-top:4px}
+  .f1 .c .st{position:absolute;left:16px;bottom:12px;font:500 11px 'DM Mono';letter-spacing:.06em;text-transform:uppercase}
+  .f1 .ink{background:#1d3a8a;color:#efe9dc}
+  .f1 .lime{background:#cfdc4f;color:#14213d}
+  .f1 .paper{background:#fbf8f1;color:#14213d;outline:2px solid #14213d}
+  .f1 .stop{display:flex;gap:6px;position:absolute;left:16px;bottom:12px}
+  .f1 .stop span{font:500 11px 'DM Mono';text-transform:uppercase;border:1.5px solid currentColor;border-radius:99px;padding:3px 9px}
+  .f1 .stop span.on{background:#cfdc4f;color:#14213d;border-color:#cfdc4f}
+
+  /* ---------- 02 Pairs on a tray (seed) ---------- */
+  .f2{background:#e9e5e0;color:#1c2540}
+  .f2 .hd{padding:10px 20px 16px}
+  .f2 .hd h1{font:500 36px/1 Fraunces;letter-spacing:-.02em}
+  .f2 .hd p{font:400 14px 'Familjen Grotesk';opacity:.6;margin-top:4px}
+  .f2 .g{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px}
+  .f2 .c{border-radius:26px;height:214px;padding:16px;display:flex;flex-direction:column;justify-content:space-between}
+  .f2 .c h2{font:800 21px/1.05 Fraunces;letter-spacing:-.01em}
+  .f2 .c p{font:400 12px/1.3 'Familjen Grotesk';opacity:.7;margin-top:6px}
+  .f2 .c .n{font:300 46px/1 Fraunces;letter-spacing:-.03em}
+  .f2 .c .n small{font:400 12px 'Familjen Grotesk';letter-spacing:0;opacity:.7;display:block}
+  .f2 .rose{background:#c94f7c;color:#fff4f7}
+  .f2 .rose-l{background:#f2d3df;color:#4a1830}
+  .f2 .blue-l{background:#d4dcef;color:#1c2540}
+  .f2 .trough{grid-column:span 2;height:196px;background:#1f3b73;color:#e9eefb;border-radius:26px 26px 44px 44px;padding:16px 18px;display:grid;grid-template-rows:auto 1fr;gap:12px}
+  .f2 .trough .top{display:flex;justify-content:space-between}
+  .f2 .trough h2{font:800 21px Fraunces}
+  .f2 .trough p{font:400 12px 'Familjen Grotesk';opacity:.7}
+  .f2 .trough .n{font:300 46px/1 Fraunces;text-align:right}
+  .f2 .trough .n small{display:block;font:400 12px 'Familjen Grotesk';opacity:.7}
+  .f2 .trough .zones{display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px}
+  .f2 .trough .zones div{border-radius:16px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font:500 15px 'Familjen Grotesk'}
+  .f2 .trough .zones .on{background:#c94f7c;color:#fff}
+
+  /* ---------- 03 Rising tide (seed) ---------- */
+  .f3{background:#f4f1ea;color:#23332f;font-family:'Familjen Grotesk'}
+  .f3 .hd{padding:8px 22px 12px;display:flex;justify-content:space-between;align-items:baseline}
+  .f3 .hd h1{font-weight:400;font-size:30px;letter-spacing:-.03em}
+  .f3 .hd span{font-size:13px;opacity:.55}
+  .f3 .note{margin:0 14px 12px;background:#fff;border-radius:22px;padding:16px 18px 14px}
+  .f3 .note p{font:italic 20px/1.2 'Instrument Serif'}
+  .f3 .note .go{display:inline-block;margin-top:10px;font-size:13px;background:#23332f;color:#f4f1ea;border-radius:99px;padding:7px 14px}
+  .f3 .note .go + span{font-size:13px;opacity:.5;margin-left:12px}
+  .f3 .c{margin:0 14px 8px;height:100px;border-radius:22px;background:#e5dfd2;position:relative;overflow:hidden;padding:14px 18px;display:flex;justify-content:space-between}
+  .f3 .c .fill{position:absolute;left:0;right:0;bottom:0;background:#9cc7c0}
+  .f3 .c.kept .fill{background:#5f9f96}
+  .f3 .c > *:not(.fill){position:relative}
+  .f3 .c h2{font-weight:400;font-size:24px;letter-spacing:-.02em;line-height:1}
+  .f3 .c p{font-size:12px;opacity:.65;margin-top:5px}
+  .f3 .c .r{text-align:right;font-size:13px;opacity:.75;display:flex;flex-direction:column;justify-content:space-between}
+  .f3 .c.kept{color:#fff}
+  .f3 .c.kept .r{opacity:.9}
+
+  /* ---------- 04 Masonry wall (seed) ---------- */
+  .f4{background:#211c18;color:#f5ead9;font-family:'Bricolage Grotesque'}
+  .f4 .hd{padding:8px 18px 14px;display:flex;justify-content:space-between;align-items:baseline}
+  .f4 .hd h1{font-weight:800;font-size:30px;letter-spacing:-.03em}
+  .f4 .hd span{font-weight:300;font-size:14px;opacity:.6}
+  .f4 .g{display:grid;grid-template-columns:1.25fr 1fr;grid-template-rows:200px 150px 150px 172px;gap:8px;padding:0 12px}
+  .f4 .t{border-radius:18px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+  .f4 .t h2{font-weight:800;font-size:22px;line-height:1;letter-spacing:-.02em}
+  .f4 .t p{font-weight:300;font-size:12px;line-height:1.3;opacity:.8;margin-top:6px}
+  .f4 .t .n{font-weight:800;font-size:44px;letter-spacing:-.04em;line-height:.9}
+  .f4 .t .n small{font-weight:300;font-size:12px;letter-spacing:0;opacity:.8;display:block;margin-top:4px}
+  .f4 .up{grid-column:span 2;background:#d2643a}
+  .f4 .up .n{font-size:84px}
+  .f4 .up .row{display:flex;justify-content:space-between;align-items:flex-end}
+  .f4 .nic{grid-row:span 2;background:#e3a63b;color:#2b1d0c}
+  .f4 .nic .acts{display:flex;flex-direction:column;gap:6px}
+  .f4 .nic .acts div{border-radius:12px;border:1.5px solid rgba(43,29,12,.5);padding:8px 10px;font-weight:500;font-size:14px}
+  .f4 .nic .acts .on{background:#2b1d0c;color:#e3a63b;border-color:#2b1d0c}
+  .f4 .read{background:#8ea37f;color:#1d2618}
+  .f4 .write{background:#efe3cc;color:#2b2118}
+  .f4 .bed{grid-column:span 2;background:#4a3442}
+  .f4 .bed .row{display:flex;justify-content:space-between;align-items:flex-end}
+
+  /* ---------- 05 Bold slabs (references 1-3) ---------- */
+  .f5{background:#0d0d0e;color:#fff;font-family:'Syne'}
+  .f5 .hd{padding:10px 20px 18px}
+  .f5 .hd h1{font-weight:800;font-size:38px;letter-spacing:-.01em;line-height:1}
+  .f5 .hd p{font-weight:500;font-size:14px;opacity:.55;margin-top:4px}
+  .f5 .s{margin:0 12px 10px;border-radius:24px;height:104px;padding:16px 18px;position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center}
+  .f5 .s .fl{position:absolute;inset:0 auto 0 0;background:rgba(255,255,255,.14)}
+  .f5 .s > *:not(.fl){position:relative}
+  .f5 .s h2{font-weight:800;font-size:23px;line-height:1.05}
+  .f5 .s p{font-weight:500;font-size:12px;opacity:.75;margin-top:5px}
+  .f5 .s .n{text-align:right;font-weight:800;font-size:26px;line-height:1}
+  .f5 .s .n small{display:block;font-weight:500;font-size:11px;opacity:.75;margin-top:3px}
+  .f5 .s .dot{width:52px;height:52px;flex:none;border-radius:50%;background:#fff;color:#14803f;display:grid;place-items:center;font-weight:800;font-size:10px}
+  .f5 .green{background:#178a49}
+  .f5 .indigo{background:#2f3fbf}
+  .f5 .orange{background:#ea7a19}
+  .f5 .teal{background:#0f8f8f;height:172px;flex-direction:column;align-items:stretch;justify-content:space-between}
+  .f5 .teal .top{display:flex;justify-content:space-between}
+  .f5 .teal .msg{background:rgba(0,0,0,.22);border-radius:16px;padding:10px 12px;font-weight:500;font-size:13px;line-height:1.35;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .f5 .teal .msg b{background:#fff;color:#0f6f6f;border-radius:99px;padding:6px 12px;white-space:nowrap;font-size:12px}
+  .f5 .amber{background:#e8b517;color:#1c1606}
+  .f5 .amber .acts{display:flex;gap:6px;margin-top:8px}
+  .f5 .amber .acts span{font-weight:800;font-size:11px;border-radius:99px;padding:4px 10px;background:rgba(0,0,0,.12)}
+  .f5 .amber .acts span.on{background:#1c1606;color:#e8b517}
+
+  /* ---------- 06 Soft fill (references 4-6) ---------- */
+  .f6{background:#fbf3f1;color:#3b3236}
+  .f6 .hd{padding:8px 20px 16px}
+  .f6 .hd h1{font:28px 'Young Serif';letter-spacing:-.01em}
+  .f6 .hd p{font:400 14px 'Familjen Grotesk';opacity:.55}
+  .f6 .c{margin:0 14px 10px;border-radius:22px;padding:14px 16px 12px;height:136px;display:flex;flex-direction:column;justify-content:space-between}
+  .f6 .c .top{display:flex;justify-content:space-between;align-items:flex-start}
+  .f6 .c h2{font:19px/1.1 'Young Serif'}
+  .f6 .c p{font:400 12px 'Familjen Grotesk';opacity:.65;margin-top:3px}
+  .f6 .c .n{font:500 13px 'Familjen Grotesk';opacity:.8;white-space:nowrap}
+  .f6 .bar{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;height:34px}
+  .f6 .bar i{border-radius:9px;background:rgba(255,255,255,.65);position:relative;font:500 10px 'Familjen Grotesk';font-style:normal;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px;color:rgba(0,0,0,.4)}
+  .f6 .bar i.dk{background:var(--d)}
+  .f6 .bar i.dc{background:var(--d)}
+  .f6 .bar i.dc::after{content:"back";position:absolute;top:3px;left:0;right:0;text-align:center;font-size:9px;color:rgba(0,0,0,.55)}
+  .f6 .bar i.dt{background:transparent;border:2px dashed var(--d)}
+  .f6 .bar i.dx{background:transparent}
+  .f6 .blue{background:#dbe8f7;--d:#a9c6ea}
+  .f6 .pink{background:#f7dde3;--d:#eeb0bf}
+  .f6 .lav{background:#e8e0f5;--d:#c7b5e8}
+  .f6 .grn{background:#dcefd6;--d:#a9d69c}
+  .f6 .peach{background:#fbe6d4;--d:#f2c39b}
+  .f6 .peach .acts{display:flex;gap:6px}
+  .f6 .peach .acts span{flex:1;text-align:center;border-radius:12px;padding:8px 0;font:500 13px 'Familjen Grotesk';background:rgba(255,255,255,.7)}
+  .f6 .peach .acts span.on{background:#f2c39b}
+
+  /* ---------- 07 Drafting table (far away) ---------- */
+  .f7{background:#2e5b4c;color:#1d2a33;
+     background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.18) 1px,transparent 1px);
+     background-size:13px 13px,13px 13px,65px 65px,65px 65px}
+  .f7 .sb{color:#e9f1ec}
+  .f7 .rule{margin:4px 0 16px;height:50px;background:#d8b77f;border-top:1px solid #f0d7a6;border-bottom:1px solid #9d7c46;display:flex;align-items:center;justify-content:space-between;padding:0 18px;
+     background-image:repeating-linear-gradient(90deg,#5b4423 0 1px,transparent 1px 10px);background-size:100% 9px;background-repeat:no-repeat;background-position:0 0}
+  .f7 .rule b{font:500 15px 'DM Mono';color:#3a2a14;letter-spacing:.04em}
+  .f7 .rule span{font:500 11px 'DM Mono';color:#3a2a14;opacity:.7}
+  .f7 .c{background:#fbfaf5;width:352px;margin:0 auto 14px;border-radius:2px;padding:12px 16px 12px;position:relative;
+     background-image:linear-gradient(#e2553f,#e2553f),repeating-linear-gradient(#fbfaf5 0 21px,#cfe0ea 21px 22px);background-size:100% 1px,100% 100%;background-position:0 30px,0 30px;background-repeat:no-repeat,no-repeat}
+  .f7 .c:nth-of-type(2n){transform:rotate(.8deg)}
+  .f7 .c:nth-of-type(2n+1){transform:rotate(-.6deg)}
+  .f7 .tape{position:absolute;top:-8px;width:56px;height:18px;background:rgba(238,226,190,.85)}
+  .f7 .tape.l{left:20px;transform:rotate(-4deg)}
+  .f7 .tape.r{right:20px;transform:rotate(3deg)}
+  .f7 .c .top{display:flex;justify-content:space-between;align-items:baseline;height:22px}
+  .f7 .c h2{font:500 15px 'DM Mono';text-transform:uppercase;letter-spacing:.03em}
+  .f7 .c .n{font:500 13px 'DM Mono'}
+  .f7 .c p{font:700 21px/22px Caveat;color:#2747a8;margin-top:6px}
+  .f7 .c .st{font:700 20px/22px Caveat;color:#2747a8}
+  .f7 .c .st em{font-style:normal;border:2px solid #2747a8;border-radius:50% 46% 52% 48%;padding:0 8px}
+  .f7 .sticky{position:absolute;right:-6px;top:-20px;width:170px;background:#f6d860;padding:10px 12px;transform:rotate(3deg);font:700 18px/1.05 Caveat;color:#3d3207;box-shadow:0 3px 6px rgba(0,0,0,.18)}
+  .f7 .sticky u{text-decoration:none;border-bottom:2px solid #3d3207}
+
+  /* ---------- 08 Poster wall (far away) ---------- */
+  .f8{background:#f3f1ea;color:#111}
+  .f8 .hd{padding:6px 16px 10px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #111;margin:0 16px 10px;padding-left:0;padding-right:0}
+  .f8 .hd h1{font:28px Anton;text-transform:uppercase;letter-spacing:.01em}
+  .f8 .hd span{font:500 12px 'DM Mono'}
+  .f8 .p{margin:0 16px 8px;height:134px;position:relative;overflow:hidden;display:grid;grid-template-columns:1fr 130px;align-items:stretch}
+  .f8 .p .num{font:128px/0.85 Anton;letter-spacing:-.02em;margin-top:-6px;white-space:nowrap}
+  .f8 .p .num sup{font-size:40px;vertical-align:top;margin-left:2px;line-height:1}
+  .f8 .p .side{padding:10px 0 10px 10px;display:flex;flex-direction:column;justify-content:space-between;border-left:2px solid currentColor}
+  .f8 .p h2{font:700 15px/1.1 'Familjen Grotesk';text-transform:uppercase}
+  .f8 .p p{font:400 11px/1.25 'Familjen Grotesk';opacity:.75;margin-top:4px}
+  .f8 .p .st{font:500 11px 'DM Mono';text-transform:uppercase;letter-spacing:.04em}
+  .f8 .blk{background:#111;color:#f3f1ea;padding-left:12px}
+  .f8 .org{background:#ff6a1f;color:#111;padding-left:12px}
+  .f8 .wht{background:#fff;outline:2px solid #111;outline-offset:-2px;padding-left:12px}
+  .f8 .acts{display:flex;gap:4px;flex-wrap:wrap}
+  .f8 .acts span{font:500 10px 'DM Mono';border:1.5px solid currentColor;padding:2px 6px;text-transform:uppercase}
+  .f8 .acts span.on{background:#111;color:#ff6a1f}
+
+  /* ---------- 09 Seed packets (sounds wrong) ---------- */
+  .f9{background:#c49c6c;color:#2d2316;background-image:repeating-linear-gradient(90deg,rgba(0,0,0,.0) 0 64px,rgba(60,35,10,.35) 64px 66px),repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 3px,transparent 3px 9px)}
+  .f9 .hd{padding:6px 18px 14px}
+  .f9 .hd h1{font:800 28px Fraunces;letter-spacing:-.02em;color:#2d2316}
+  .f9 .hd p{font:400 13px 'Familjen Grotesk';opacity:.75}
+  .f9 .g{display:grid;grid-template-columns:1fr 1fr;gap:12px 10px;padding:0 12px}
+  .f9 .pk{background:#f6eedb;border-radius:4px 4px 6px 6px;height:226px;position:relative;overflow:hidden;box-shadow:0 2px 0 rgba(0,0,0,.15);display:flex;flex-direction:column}
+  .f9 .pk::before{content:"";height:12px;background:repeating-linear-gradient(135deg,#e6d9bb 0 6px,#f6eedb 6px 12px)}
+  .f9 .pk .art{height:104px;position:relative;display:flex;align-items:flex-end;justify-content:center}
+  .f9 .pk .art svg{display:block}
+  .f9 .pk .bd{padding:8px 10px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+  .f9 .pk h2{font:800 15px/1.05 Fraunces}
+  .f9 .pk p{font:400 11px/1.25 'Familjen Grotesk';opacity:.7;margin-top:3px}
+  .f9 .pk .st{font:500 11px 'DM Mono';display:flex;justify-content:space-between}
+  .f9 .pk.wide{grid-column:span 2;height:150px;flex-direction:row}
+  .f9 .pk.wide::before{width:12px;height:auto;background:repeating-linear-gradient(45deg,#e6d9bb 0 6px,#f6eedb 6px 12px)}
+  .f9 .pk.wide .art{width:120px;height:auto}
+  .f9 .pk.wide .acts{display:flex;gap:6px}
+  .f9 .pk.wide .acts span{font:500 12px 'Familjen Grotesk';border:1.5px solid #2d2316;border-radius:99px;padding:4px 10px}
+  .f9 .pk.wide .acts span.on{background:#3f6b35;color:#f6eedb;border-color:#3f6b35}
+  .f9 .gtag{position:absolute;right:8px;top:18px;background:#fffaf0;border:1px solid #b9a37d;border-radius:3px 12px 12px 3px;padding:6px 10px 6px 14px;font:700 15px/1.05 Caveat;width:118px;transform:rotate(4deg);color:#3f6b35}
+  .f9 .gtag::before{content:"";position:absolute;left:4px;top:50%;width:5px;height:5px;margin-top:-2px;border-radius:50%;border:1px solid #b9a37d}
+
+  /* ---------- 10 A hand of cards (sounds wrong) ---------- */
+  .f10{background:#1d2534;color:#ece6d8;font-family:'Familjen Grotesk'}
+  .f10 .hd{padding:10px 22px 0}
+  .f10 .hd h1{font:italic 34px/1 'Instrument Serif'}
+  .f10 .hd p{font-size:13px;opacity:.55;margin-top:4px}
+  .f10 .played{display:flex;gap:8px;padding:16px 22px 0}
+  .f10 .played div{flex:1;border-radius:10px;border:1px solid rgba(236,230,216,.25);padding:8px 10px;font-size:11px;line-height:1.25}
+  .f10 .played b{display:block;font:400 15px 'Instrument Serif';margin-bottom:2px}
+  .f10 .table{position:absolute;left:0;right:0;bottom:0;height:610px}
+  .f10 .card{position:absolute;width:250px;height:360px;left:70px;bottom:120px;border-radius:16px;background:#f4ede0;color:#1d2534;padding:18px;transform-origin:50% 120%;box-shadow:0 6px 20px rgba(0,0,0,.35)}
+  .f10 .card .ix{font:500 13px 'DM Mono';position:absolute;top:14px;left:16px;line-height:1.1}
+  .f10 .card .ix.br{top:auto;left:auto;bottom:14px;right:16px;transform:rotate(180deg)}
+  .f10 .card h2{font:38px/1 'Instrument Serif';margin-top:34px}
+  .f10 .card p{font-size:13px;opacity:.7;margin-top:8px}
+  .f10 .card .msg{margin-top:18px;border-top:1px solid rgba(29,37,52,.2);padding-top:14px;font:italic 19px/1.2 'Instrument Serif'}
+  .f10 .card .play{position:absolute;left:18px;right:18px;bottom:42px;background:#1d2534;color:#f4ede0;border-radius:99px;text-align:center;padding:11px 0;font-weight:500;font-size:14px}
+  .f10 .back{background:#e7dcc6}
+  .f10 .back h2{font-size:22px;margin-top:30px}
+  .f10 .hint{position:absolute;bottom:40px;left:0;right:0;text-align:center;font-size:12px;opacity:.5}
+</style>
+</head>
+<body>
+<div class="sheet-head">
+  <h1>Wont: contact sheet, the board</h1>
+  <p>Ten directions for the main screen, same data in each: Saturday 24 Oct, morning. Up by 7:00 is kept today; Write was not logged yesterday, so some sketches show the comeback message; Wednesday's wake-up was a comeback. Rough and static on purpose. All copy is draft. Click a frame to see it full size; pick your three.</p>
+</div>
+<div class="grid" id="grid"></div>
+<div class="overlay" id="ov"><div class="holder" id="holder"></div></div>
+
+<script>
+// Real data. Days Sun 18 .. Sat 24. k kept, m not kept, c comeback (kept after a miss), t today open, x before start.
+const H = {
+  up:   { name: "Up by 7:00", anchor: "After the alarm, I get straight out of bed", kept: 6, of: 7, days: "kkmckkk", today: "kept" },
+  bed:  { name: "In bed by 23:00", anchor: "After I brush my teeth", kept: 4, of: 7, days: "mckmckt", today: "open" },
+  read: { name: "Read 10 pages", anchor: "After dinner", kept: 5, of: 7, days: "kmckmct", today: "open" },
+  write:{ name: "Write", goal: "A journal entry or a short story", anchor: "After my morning coffee", kept: 3, of: 5, days: "xkkmcmt", today: "open" },
+  nic:  { name: "Nicotine pouches", quit: "23 Oct", trigger: "After meals and with coffee", instead: "Chewing gum", clean: 2 },
+};
+const comeback = "Friday's page stayed empty. That's part of it. Today, after your coffee: one sentence is enough.";
+const sb = (c = "") => `<div class="sb" style="${c}"><span>9:41</span><span>●●● ▮</span></div>`;
+const DAYS = ["S", "M", "T", "W", "T", "F", "S"];
+
+const frames = [
+  {
+    n: "01", name: "Ink zigzag", line: "Cards pinned in a zigzag on a cream board; heavy caps, ink blue and lime", tag: "seed",
+    html: () => `<div class="frame f1">${sb()}
+      <div class="hd"><h1>Sat<br>24 Oct</h1><small>WONT · 5 PROMISES</small></div>
+      <div>
+        <div class="c ink"><div><h2>${H.up.name}</h2><p>${H.up.anchor}</p></div><div class="n">6/7<small>LAST 7</small></div><div class="st">● Kept this morning</div></div>
+        <div class="c lime"><div><h2>Write</h2><p>${H.write.anchor}</p></div><div class="n">3/5<small>LAST 5</small></div><div class="st">Tap when it's done</div></div>
+        <div class="c paper"><div><h2>Nicotine</h2><p>Instead: chewing gum</p></div><div class="n">2<small>CLEAN DAYS</small></div><div class="stop"><span class="on">Clean so far</span><span>Slip</span><span>Urge</span></div></div>
+        <div class="c ink"><div><h2>Read 10 pages</h2><p>${H.read.anchor}</p></div><div class="n">5/7<small>LAST 7</small></div><div class="st">Tonight</div></div>
+        <div class="c lime"><div><h2>Bed by 23:00</h2><p>${H.bed.anchor}</p></div><div class="n">4/7<small>LAST 7</small></div><div class="st">Tonight</div></div>
+      </div></div>`,
+  },
+  {
+    n: "02", name: "Pairs on a tray", line: "Square cards two by two; the stop habit is the wide tray at the bottom, split into its three taps", tag: "seed",
+    html: () => `<div class="frame f2">${sb()}
+      <div class="hd"><h1>Saturday</h1><p>24 October · one kept, four to go</p></div>
+      <div class="g">
+        <div class="c rose"><div><h2>${H.up.name}</h2><p>After the alarm, straight out of bed</p></div><div class="n">6 of 7<small>Kept this morning</small></div></div>
+        <div class="c rose-l"><div><h2>Write</h2><p>After my morning coffee</p></div><div class="n">3 of 5<small>Tap when done</small></div></div>
+        <div class="c blue-l"><div><h2>Read 10 pages</h2><p>After dinner</p></div><div class="n">5 of 7<small>This evening</small></div></div>
+        <div class="c blue-l"><div><h2>In bed by 23:00</h2><p>After I brush my teeth</p></div><div class="n">4 of 7<small>This evening</small></div></div>
+        <div class="trough"><div class="top"><div><h2>Nicotine pouches</h2><p>After meals, with coffee · instead: gum</p></div><div class="n">2<small>clean days</small></div></div>
+          <div class="zones"><div class="on">Clean so far</div><div>Slip</div><div>Urge</div></div></div>
+      </div></div>`,
+  },
+  {
+    n: "03", name: "Rising tide", line: "Lowercase and light; each card fills from below to its rolling rate, the comeback note on top", tag: "seed · comeback",
+    html: () => {
+      const c = (h, pct, right, kept = false) => `<div class="c ${kept ? "kept" : ""}"><div class="fill" style="height:${pct}%"></div><div><h2>${h.name.toLowerCase()}</h2><p>${h.anchor.toLowerCase()}</p></div><div class="r"><span>${right}</span><span>${h.kept} of last ${h.of}</span></div></div>`;
+      return `<div class="frame f3">${sb()}
+        <div class="hd"><h1>saturday</h1><span>24 oct</span></div>
+        <div class="note"><p>${comeback.toLowerCase()}</p><span class="go">write one sentence</span><span>later</span></div>
+        ${c(H.up, 86, "kept this morning", true)}
+        ${c(H.write, 60, "after coffee")}
+        <div class="c"><div class="fill" style="height:28%"></div><div><h2>nicotine pouches</h2><p>instead: chewing gum · clean · slip · urge</p></div><div class="r"><span>clean so far</span><span>2 clean days</span></div></div>
+        ${c(H.read, 71, "tonight")}
+        ${c(H.bed, 57, "tonight")}
+      </div>`;
+    },
+  },
+  {
+    n: "04", name: "Masonry wall", line: "Tiles sized by when they matter today; warm walnut, terracotta, ochre, sage", tag: "seed",
+    html: () => `<div class="frame f4">${sb()}
+      <div class="hd"><h1>Today</h1><span>Saturday 24 Oct</span></div>
+      <div class="g">
+        <div class="t up"><div><h2>${H.up.name}</h2><p>${H.up.anchor}</p></div><div class="row"><div class="n">6/7<small>of the last 7 days</small></div><div style="font-weight:500;font-size:15px">Kept today</div></div></div>
+        <div class="t write"><div><h2>Write</h2><p>After my morning coffee</p></div><div class="n">3/5<small>last 5 days</small></div></div>
+        <div class="t nic"><div><h2>Nicotine pouches</h2><p>Instead: chewing gum</p></div><div class="n">2<small>clean days</small></div><div class="acts"><div class="on">Clean so far</div><div>Had one</div><div>Urge</div></div></div>
+        <div class="t read"><div><h2>Read 10 pages</h2><p>After dinner</p></div><div class="n">5/7<small>last 7 days</small></div></div>
+        <div class="t bed"><div><h2>In bed by 23:00</h2><p>${H.bed.anchor}</p></div><div class="row"><div class="n">4/7<small>of the last 7 days</small></div><div style="font-weight:300;font-size:14px;opacity:.7">Tonight</div></div></div>
+      </div></div>`,
+  },
+  {
+    n: "05", name: "Bold slabs", line: "Full-width saturated slabs on black, the slab is the button; comeback note inside the Write slab", tag: "reference · comeback",
+    html: () => `<div class="frame f5">${sb()}
+      <div class="hd"><h1>TODAY</h1><p>Saturday 24 October</p></div>
+      <div class="s green"><div><h2>${H.up.name}</h2><p>After the alarm, straight up</p></div><div class="dot">KEPT</div></div>
+      <div class="s teal"><div class="fl" style="width:60%"></div><div class="top"><div><h2>Write</h2><p>After my morning coffee</p></div><div class="n">3/5<small>last 5</small></div></div>
+        <div class="msg"><span>Friday stayed empty. That's fine. One sentence today.</span><b>Write it</b></div></div>
+      <div class="s amber"><div><h2>Nicotine pouches</h2><div class="acts"><span class="on">CLEAN SO FAR</span><span>SLIP</span><span>URGE</span></div></div><div class="n">2<small>clean days</small></div></div>
+      <div class="s indigo"><div class="fl" style="width:71%"></div><div><h2>Read 10 pages</h2><p>After dinner</p></div><div class="n">5/7<small>last 7</small></div></div>
+      <div class="s orange"><div class="fl" style="width:57%"></div><div><h2>In bed by 23:00</h2><p>After I brush my teeth</p></div><div class="n">4/7<small>last 7</small></div></div>
+    </div>`,
+  },
+  {
+    n: "06", name: "Soft fill", line: "Pastel cards, the week drawn as seven soft cells; today's cell is the dashed one you tap; comebacks marked 'back'", tag: "reference",
+    html: () => {
+      const bar = (d) => `<div class="bar">${d.split("").map((s, i) => `<i class="d${s}">${DAYS[i]}</i>`).join("")}</div>`;
+      const c = (h, col, right) => `<div class="c ${col}"><div class="top"><div><h2>${h.name}</h2><p>${h.anchor}</p></div><span class="n">${right}</span></div>${bar(h.days)}</div>`;
+      return `<div class="frame f6">${sb()}
+        <div class="hd"><h1>Saturday 24</h1><p>October · tap today's cell</p></div>
+        ${c(H.up, "blue", "6 of 7")}
+        ${c(H.write, "pink", "3 of 5")}
+        <div class="c peach"><div class="top"><div><h2>Nicotine pouches</h2><p>Instead: chewing gum</p></div><span class="n">2 clean days</span></div><div class="acts"><span class="on">Clean so far</span><span>Slip</span><span>Urge</span></div></div>
+        ${c(H.read, "lav", "5 of 7")}
+        ${c(H.bed, "grn", "4 of 7")}
+      </div>`;
+    },
+  },
+  {
+    n: "07", name: "Drafting table", line: "Index cards taped to a green cutting mat, anchors in pencil, the comeback as a sticky note", tag: "far away · comeback",
+    html: () => `<div class="frame f7">${sb()}
+      <div class="rule"><b>SAT 24 OCT</b><span>5 ON THE BOARD</span></div>
+      <div class="c"><i class="tape l"></i><i class="tape r"></i><div class="top"><h2>${H.up.name}</h2><span class="n">6 / 7</span></div><p>after the alarm, straight out of bed</p><div class="st"><em>kept</em> &nbsp;· wed was a comeback</div></div>
+      <div class="c"><i class="tape l"></i><div class="top"><h2>Write</h2><span class="n">3 / 5</span></div><p>after my morning coffee</p><div class="st">a journal entry or a short story</div>
+        <div class="sticky">Friday stayed empty. That's ok. <u>One sentence</u> after coffee.</div></div>
+      <div class="c"><i class="tape r"></i><div class="top"><h2>Nicotine</h2><span class="n">2 clean days</span></div><p>instead: chewing gum</p><div class="st"><em>clean so far</em> &nbsp;slip &nbsp;urge</div></div>
+      <div class="c"><i class="tape l"></i><div class="top"><h2>Read 10 pages</h2><span class="n">5 / 7</span></div><p>after dinner</p></div>
+      <div class="c"><i class="tape r"></i><div class="top"><h2>Bed by 23:00</h2><span class="n">4 / 7</span></div><p>after I brush my teeth</p></div>
+    </div>`,
+  },
+  {
+    n: "08", name: "Poster wall", line: "Each habit a typographic poster with one huge number; black, orange and paper", tag: "far away",
+    html: () => `<div class="frame f8">${sb()}
+      <div class="hd"><h1>Saturday 24.10</h1><span>WONT</span></div>
+      <div class="p org"><div class="num">6<sup>/7</sup></div><div class="side"><div><h2>${H.up.name}</h2><p>After the alarm, straight out of bed</p></div><div class="st">Kept today</div></div></div>
+      <div class="p wht"><div class="num">3<sup>/5</sup></div><div class="side"><div><h2>Write</h2><p>After my morning coffee</p></div><div class="st">Tap when done</div></div></div>
+      <div class="p blk"><div class="num">2<sup> days</sup></div><div class="side"><div><h2>Nicotine pouches</h2><p>Instead: chewing gum</p></div><div class="acts"><span class="on" style="background:#ff6a1f;color:#111">Clean</span><span>Slip</span><span>Urge</span></div></div></div>
+      <div class="p wht"><div class="num">5<sup>/7</sup></div><div class="side"><div><h2>Read 10 pages</h2><p>After dinner</p></div><div class="st">Tonight</div></div></div>
+      <div class="p wht"><div class="num">4<sup>/7</sup></div><div class="side"><div><h2>In bed by 23:00</h2><p>After I brush my teeth</p></div><div class="st">Tonight</div></div></div>
+    </div>`,
+  },
+  {
+    n: "09", name: "Seed packets", line: "Habits as seed packets on a shed wall; the sprout grows one leaf per kept day; the comeback is a garden tag", tag: "sounds wrong · comeback",
+    html: () => {
+      const sprout = (leaves, col = "#3f6b35", h = 92) => {
+        let s = `<svg width="80" height="${h}" viewBox="0 0 80 ${h}"><path d="M40 ${h} C40 ${h - 30} 42 ${h - 60} 40 ${h - 12 - leaves * 11}" stroke="${col}" stroke-width="3" fill="none"/>`;
+        for (let i = 0; i < leaves; i++) { const y = h - 18 - i * 11, d = i % 2 ? 1 : -1; s += `<ellipse cx="${40 + d * 12}" cy="${y}" rx="12" ry="5" fill="${col}" transform="rotate(${d * -25} ${40 + d * 12} ${y})"/>`; }
+        return s + `<rect x="18" y="${h - 6}" width="44" height="6" rx="3" fill="#7a5a36"/></svg>`;
+      };
+      const pk = (h, leaves, st, col) => `<div class="pk"><div class="art" style="background:${col}">${sprout(leaves)}</div><div class="bd"><div><h2>${h.name}</h2><p>${h.anchor}</p></div><div class="st"><span>${h.kept} of last ${h.of}</span><span>${st}</span></div></div></div>`;
+      return `<div class="frame f9">${sb()}
+        <div class="hd"><h1>Saturday's garden</h1><p>24 Oct · tap a packet to water it</p></div>
+        <div class="g">
+          ${pk(H.up, 6, "watered", "#d9e8c4")}
+          <div class="pk"><div class="art" style="background:#f3d9c8">${sprout(3)}</div><div class="gtag">Regrows today: one sentence after coffee</div><div class="bd"><div><h2>Write</h2><p>${H.write.anchor}</p></div><div class="st"><span>3 of last 5</span><span>after coffee</span></div></div></div>
+          ${pk(H.read, 5, "tonight", "#e4dcef")}
+          ${pk(H.bed, 4, "tonight", "#d6e2ee")}
+          <div class="pk wide"><div class="art" style="background:#efe2b5">${sprout(2, "#3f6b35", 110)}</div><div class="bd"><div><h2>No nicotine pouches</h2><p>Since 23 Oct · instead: chewing gum</p></div><div class="st"><span>2 clean days</span></div><div class="acts"><span class="on">Clean so far</span><span>Slip</span><span>Urge</span></div></div></div>
+        </div></div>`;
+    },
+  },
+  {
+    n: "10", name: "A hand of cards", line: "Today is a hand you play; the card in front is the next one due, the rest fan behind; comeback written on the card", tag: "sounds wrong · comeback",
+    html: () => `<div class="frame f10">${sb()}
+      <div class="hd"><h1>Saturday's hand</h1><p>24 October · one played, four in hand</p></div>
+      <div class="played"><div><b>Up by 7:00</b>Played this morning · 6 of 7</div><div><b>Nicotine</b>Clean so far · 2 clean days</div></div>
+      <div class="table">
+        <div class="card back" style="transform:rotate(-16deg) translateX(-34px)"><span class="ix">4/7</span><h2>In bed by 23:00</h2></div>
+        <div class="card back" style="transform:rotate(-8deg) translateX(-16px)"><span class="ix">5/7</span><h2>Read 10 pages</h2></div>
+        <div class="card back" style="transform:rotate(9deg) translateX(18px)"><span class="ix">2 clean</span><h2>Urge? Play this</h2></div>
+        <div class="card"><span class="ix">3/5</span><span class="ix br">3/5</span><h2>Write</h2><p>After my morning coffee · a journal entry or a short story</p>
+          <div class="msg">${comeback}</div><div class="play">Play it: written</div></div>
+        <div class="hint">Swipe the fan to see the rest</div>
+      </div></div>`,
+  },
+];
+
+const grid = document.getElementById("grid");
+grid.innerHTML = frames.map((f, k) => `<div class="cell" data-k="${k}"><div class="thumb">${f.html()}</div>
+  <div class="cap"><b>${f.n}</b><div class="txt"><strong>${f.name}</strong><br><span>${f.line}</span></div><em class="tag">${f.tag}</em></div></div>`).join("");
+
+const fit = () => document.querySelectorAll(".thumb").forEach((t) => {
+  t.querySelector(".frame").style.transform = `scale(${t.clientWidth / 390})`;
+});
+addEventListener("resize", fit); fit();
+document.fonts?.ready.then(fit);
+
+const ov = document.getElementById("ov"), holder = document.getElementById("holder");
+grid.addEventListener("click", (e) => {
+  const cell = e.target.closest(".cell"); if (!cell) return;
+  const s = Math.min((innerWidth - 48) / 390, (innerHeight - 48) / 844);
+  holder.style.width = 390 * s + "px"; holder.style.height = 844 * s + "px";
+  holder.innerHTML = frames[cell.dataset.k].html();
+  holder.firstElementChild.style.transform = `scale(${s})`;
+  holder.firstElementChild.style.transformOrigin = "0 0";
+  ov.classList.add("on");
+});
+const close = () => ov.classList.remove("on");
+ov.addEventListener("click", close);
+addEventListener("keydown", (e) => e.key === "Escape" && close());
+</script>
+</body>
+</html>

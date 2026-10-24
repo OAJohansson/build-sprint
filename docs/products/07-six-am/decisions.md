@@ -64,3 +64,5 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T17 | 2026-10-24 | Wording "Getting Six AM's ears ready · 18 MB, once" instead of "listening model"; "×½" marker; Camelot tooltip on every key cell | PM | polish | |
 | T18 | 2026-10-24 | Style and Also split into name + right-aligned % sub-columns; solid hover (#211d1a) and selected (#28231f + gold edge) colours; 16 px BPM–Key gutter; empty state without ghost rows; no duplicate Enable listening button; "Added N · next: Enable listening" | PM | polish | |
 | T19 | 2026-10-24 | Copy for Claude lists every style the card shows (above 5%), not only the top 3 | PM | polish | |
+| L41 | 2026-10-24 | Ears v1.1 scope: manual genre per track (free text with suggestions, local, in copy and exports) and filters (BPM range, my-genre). Out: playlist filing (obsolete), automatic families (Phase 3 with the Mentor), play a filtered list (next) | owner | v1.1 | |
+| T20 | 2026-10-24 | No separate Discogs-style filter: the existing text filter already matches the top styles; the new genre filter is on the owner's own genre | PM | v1.1 | |

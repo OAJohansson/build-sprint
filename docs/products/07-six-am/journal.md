@@ -399,3 +399,10 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   unmerged branch from another product: `website-discovery` (3 commits, 22 Oct).
 - Phase 2 is the owner's to kick off separately. The "To carry over" entries at the top wait for
   the wrap-up.
+
+## 24 Oct: Ears v1.1 (small slice)
+
+- **Owner's calls** (relayed from the parent session): no playlist filing (*B b baaangers* is
+  already sorted by hand); no automatic genre families yet ("I think we need the mentor to make
+  this feature good"). In: my own genre per track and filters (BPM range, my-genre). Next after it:
+  play a filtered list one after another. L41, T20; F12 and F13 added to the kickoff and evals.

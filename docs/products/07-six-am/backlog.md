@@ -27,7 +27,7 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Idea | Why | Status |
 | --- | --- | --- |
 | Batch analysis of a whole playlist (autoplay queue, ~6 h for 56 tracks) | Sorting the dump playlist without clicking each track | in the MVP (owner moved it in, 23 Oct) |
-| Genre families: map Discogs styles to the owner's Appendix A families and show the family as the headline (F5 option B/C) | Owner chose raw styles only for the MVP (23 Oct); families would match their playlists | Phase 2 |
+| Genre families: map Discogs styles to the owner's Appendix A families and show the family as the headline (F5 option B/C) | Owner chose raw styles only for the MVP (23 Oct); 24 Oct: "I think we need the mentor to make this feature good" | Phase 3, with the Mentor |
 | Arrangement map (EA-6): sections and per-lane activity on the bar grid | "When does the bass come in? How long is the build?" | Phase 2 |
 | Uploader metadata disagreement flag (EA-8) beyond showing the tag | "Tagged Deep House, sounds like Progressive" | Phase 2 |
 | Character extras: loudness, bass weight, swing (EA-5); BPM/key stability over time (EA-4) | Ear training vocabulary | Phase 2 |
@@ -43,8 +43,9 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Live stem separation "Neural Mix" (DR-2), offline stems for owned files (DR-3) | Hear just the bassline; personal use only, licence needed if public | Phase 5 (last: most uncertain) |
 | AI-generated loops (LA-3) | Generate new sounds; licences to check | later |
 | Accounts, cloud sync, sharing, mobile, non-Chrome browsers | Out of scope for a personal tool | no (for now) |
-| Mark each analysed track as filed into a playlist, with a "31 / 56 placed · 6 unsure" progress line and a per-row playlist picker | User test 23 Oct: the thing that would bring them back tomorrow | next after Ears v1 |
-| Search / type-to-filter in long lists | User test 23 Oct | later |
+| Mark each analysed track as filed into a playlist, with a "31 / 56 placed · 6 unsure" progress line and a per-row playlist picker | User test 23 Oct: the thing that would bring them back tomorrow | obsolete (owner, 24 Oct: sorted *B b baaangers* by hand) |
+| Search / type-to-filter in long lists | User test 23 Oct | done (24 Oct fix pass) |
 | Design to 9/10 (final critic, 7/10): one toolbar with one status slot instead of three stacked bars; listening state in one place; Style columns wider, Track capped ~380 px; quieter in-row "Analyse"; two-line empty state | Founder eval report, 24 Oct | next |
-| Sharper house sub-genres: map Discogs styles to the owner's families (deep, jackin', melodic, ballroom) with their own rules, or a second signal (swing, chords) | Validation: plain House tops 6/10 | next |
+| Sharper house sub-genres: map Discogs styles to the owner's families (deep, jackin', melodic, ballroom) with their own rules, or a second signal (swing, chords) | Validation: plain House tops 6/10 | Phase 3, with the Mentor (owner, 24 Oct) |
 | Stability check and a single 10-track queue run in real Chrome; a geo-blocked track | Not evidenced in the eval report | next |
+| Play a filtered list one track after another ("hear all my deep house in a row") | Owner wants it (24 Oct), after v1.1 | next |

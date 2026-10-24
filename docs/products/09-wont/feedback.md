@@ -14,3 +14,5 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 8 | Owner, contact sheet 2 | Soft fill: the colour mix doesn't work (two same-colour cards, then green, then two purple); try even colours | fixing |
 | 9 | Owner, contact sheet 2 | Seed packets: like the idea; redo as one card per line, like Soft fill | fixing |
 | 10 | Owner, contact sheet 2 | Moon phases: don't like it | won't do |
+| 11 | Owner, after sheet 3 | Back to sheet 2's 06 Jars: like it, but every card like its last (nicotine) card: one card per line, jar on the left | fixing |
+| 12 | Owner, after sheet 3 | Same jars design with wontons (fits the name Wont) as a second option, and the seed sprout as a third | fixing |

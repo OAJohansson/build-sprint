@@ -26,3 +26,6 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T4 | 24 Oct | Draft comeback copy: "Friday's page stayed empty. That's part of it. Today, after your coffee: one sentence is enough." (owner rewrites at review) | PM (designer) | design | |
 | T5 | 24 Oct | Sheet 2: one card anatomy per board (name+number, anchor, comeback slot, tap slot); week strip shows share kept per day; no red; no full-bleed saturated cards or wide display faces | PM (designer) | design | |
 | T6 | 24 Oct | Sheet 3: one card per line and light boards everywhere; Soft fill colours follow the order of the day (dawn rose to dusk teal) so neighbours never repeat | PM (designer) | design | |
+| L17 | 24 Oct | Shortlist: one layout (Jars, one card per line, container on the left) in three variants: jar of marbles, wontons, seed sprout | owner | design | |
+| T7 | 24 Oct | The three go straight to working prototypes, no fourth sketch sheet (one-day appetite) | PM | design | |
+| T8 | 24 Oct | Prototypes: the one celebration is the new marble, wonton or leaf arriving (420 ms ease-out, off with reduced motion) plus "Kept. N of last N."; tap again to undo; a slip asks its size and leaves clean days untouched; sprout leaves green (illustration only) | PM (designer) | design | |

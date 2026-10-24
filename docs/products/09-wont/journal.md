@@ -63,3 +63,6 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   doesn't work (same-colour pairs, then green, then purple pairs): try even colours. Seed packets
   again as one card per line. Moon phases out. Asked for seven more new directions. Taste so far:
   one column, calm, one hue family, warm; not dark, not mixed pastels.
+- **Shortlist** (owner, after sheet 3): changed their mind back to sheet 2's Jars, all cards one per
+  line like its nicotine card. Three variants of that one layout: jars with marbles, wontons (a
+  pun on the name), and the seed sprout. Built straight as the three prototypes to save a round.

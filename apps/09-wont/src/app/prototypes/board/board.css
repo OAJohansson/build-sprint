@@ -1,0 +1,70 @@
+/* The board, Jars system (contact sheet 2 #06): cream shelf, Bricolage Grotesque,
+   honey = kept and today, rose = comeback, brown text. One card per line. */
+.wb {
+  --shelf: #f3ece0;
+  --card: #fbf7f0;
+  --honey: #e2a43b;
+  --rose: #d9788a;
+  --rose-bg: #f7e1e5;
+  --ink: #3b3026;
+  min-height: 100dvh;
+  background: var(--shelf);
+  color: var(--ink);
+  font-family: var(--font-wb), system-ui, sans-serif;
+  padding: calc(env(safe-area-inset-top) + 14px) 12px calc(env(safe-area-inset-bottom) + 96px);
+  max-width: 480px;
+  margin: 0 auto;
+  -webkit-tap-highlight-color: transparent;
+}
+.wb button { font: inherit; color: inherit; }
+
+.wb-top { display: flex; justify-content: space-between; align-items: baseline; padding: 0 6px 12px; }
+.wb-top h1 { font-weight: 800; font-size: 27px; letter-spacing: -0.03em; }
+.wb-top span { font-size: 14px; opacity: 0.6; }
+
+.wb-week { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--card); border-radius: 16px; padding: 9px 4px; margin-bottom: 12px; }
+.wb-day { text-align: center; }
+.wb-day b { display: block; font-size: 10px; font-weight: 400; opacity: 0.55; }
+.wb-day span { display: block; font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+.wb-day i { display: block; width: 14px; height: 14px; margin: 0 auto; border-radius: 50%; background: var(--honey); }
+.wb-day.today i { background: conic-gradient(var(--honey) calc(var(--v) * 360deg), transparent 0); box-shadow: inset 0 0 0 2px var(--honey); }
+
+.wb-cards { display: flex; flex-direction: column; gap: 8px; }
+.wb-card {
+  display: grid; grid-template-columns: 84px 1fr; gap: 12px; align-items: start;
+  width: 100%; text-align: left; background: var(--card); border: 0; border-radius: 20px; padding: 12px 14px 12px 10px;
+  cursor: pointer; touch-action: manipulation; user-select: none; -webkit-user-select: none;
+  transition: transform 120ms ease-out;
+}
+button.wb-card:active { transform: scale(0.985); }
+.wb-card.stop { cursor: default; }
+.wb-art { display: flex; align-items: center; justify-content: center; height: 84px; }
+.wb-body { display: flex; flex-direction: column; min-width: 0; }
+.wb-hd { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.wb-nm { font-weight: 600; font-size: 17px; line-height: 1.15; }
+.wb-num { font-weight: 800; font-size: 22px; line-height: 1; text-align: right; white-space: nowrap; }
+.wb-num small { display: block; font-weight: 400; font-size: 10px; opacity: 0.6; margin-top: 2px; }
+.wb-an { display: block; font-size: 12px; line-height: 1.35; opacity: 0.65; margin-top: 2px; }
+.wb-cb { display: block; margin-top: 8px; background: var(--rose-bg); border-radius: 12px; padding: 8px 10px; font-size: 13px; line-height: 1.35; }
+.wb-cb.done { font-weight: 600; }
+.wb-note { margin-top: 8px; background: #f0e7d8; border-radius: 12px; padding: 8px 10px; font-size: 13px; line-height: 1.35; }
+.wb-tap { display: block; margin-top: 8px; font-weight: 600; font-size: 12px; }
+.wb-tap em { font-style: normal; font-weight: 400; opacity: 0.55; }
+.wb-card.kept .wb-tap { color: #a46d0f; }
+
+.wb-seg, .wb-ask { display: flex; gap: 6px; margin-top: 10px; }
+.wb-seg button { flex: 1; border: 0; border-radius: 12px; padding: 9px 0; background: #f0e7d8; font-weight: 600; font-size: 12px; cursor: pointer; touch-action: manipulation; }
+.wb-seg button[aria-pressed="true"] { background: var(--honey); }
+.wb-ask { align-items: center; font-size: 13px; }
+.wb-ask span { flex: 1; }
+.wb-ask button { border: 1.5px solid var(--ink); background: transparent; border-radius: 99px; padding: 5px 14px; font-weight: 600; font-size: 13px; cursor: pointer; }
+
+/* The one small celebration (kickoff): the new marble or wonton drops in, the new leaf unfurls. */
+.wb-fresh { animation: wb-drop 420ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+.wb-fresh-leaf { transform-box: fill-box; transform-origin: center; animation: wb-grow 420ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+@keyframes wb-drop { from { transform: translateY(-22px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes wb-grow { from { scale: 0.2; opacity: 0; } to { scale: 1; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .wb-fresh, .wb-fresh-leaf { animation: none; }
+  .wb-card { transition: none; }
+}

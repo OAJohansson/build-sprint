@@ -27,7 +27,7 @@
 .turn { padding: 28px 0; }
 /* Turns are separated by whitespace only (clutter review) */
 .turn + .turn { padding-top: 12px; }
-.ask { margin: 0 0 12px; font: 500 11.5px/18px var(--f-mono); color: var(--muted); letter-spacing: .02em; overflow-wrap: anywhere; }
+.ask { margin: 0 0 12px; font: 500 11.5px/18px var(--f-mono); color: var(--ink); letter-spacing: .02em; overflow-wrap: anywhere; }
 /* The panel's one source key: the numbers mean the same in every answer */
 /* The source key, pinned in the foot; sources the latest answer didn't use are dimmed */
 /* L90: comfortable line height, clear space between paragraphs */

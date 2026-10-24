@@ -67,7 +67,7 @@
 .url::placeholder { color: var(--faint); }
 .url:focus { border-color: var(--muted); }
 .embed { display: block; flex: 1 1 120px; min-width: 80px; height: 20px; border: 0; border-radius: 3px; background: #fff; }
-.embedEmpty { flex: 1 1 0; min-width: 0; font: 400 11px var(--f-mono); color: var(--faint); white-space: nowrap; overflow: hidden; }
+.embedEmpty { flex: 1 1 0; min-width: 0; font: 400 11px var(--f-mono); color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .filters { display: flex; align-items: center; gap: 12px; flex: none; }
 /* Fixed width, so nothing beside it shifts as the status changes */
 .status { display: flex; align-items: center; justify-content: flex-end; gap: 12px; flex: 0 0 360px; min-width: 0; margin-left: auto; font: 400 12px var(--f-mono); color: var(--muted); }
@@ -157,8 +157,8 @@
 /* 16 px between BPM and Key (12 px gap + 4) */
 .keyCell { padding-left: 4px; }
 .bpm { color: var(--gold); font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; overflow: visible !important; }
-.mark2 { font: 400 10px var(--f-mono); color: var(--amber); margin-left: 3px; cursor: help; vertical-align: 1px; }
-.differs { font: 400 10.5px var(--f-mono); color: var(--amber); margin-left: 6px; }
+.mark2 { font: 400 10px var(--f-mono); color: var(--muted); margin-left: 3px; cursor: help; vertical-align: 1px; }
+.differs { font: 500 10.5px var(--f-mono); color: var(--muted); margin-left: 6px; }
 .doubt { color: var(--amber); }
 .tagCell { display: flex; align-items: baseline; }
 .tagCell .differs { flex: none; }

@@ -173,7 +173,7 @@ export function Turn({ ask, answer, job, track, studio, dropped, myGenre, onTell
           already My genre shows nothing (clutter review). */}
       {accept || justSet || more ? (
         <div className={s.actions}>
-          {accept ? <button ref={acceptRef} className={s.btn} onClick={() => { moved.current = true; setSetFrom(myGenre ?? ""); onAcceptGenre!(genre!.name); }} title={myGenre ? `Replaces your “${myGenre}”` : undefined}>Use “{genre!.name}” as My genre</button> : null}
+          {accept ? <button ref={acceptRef} className={s.btn} onClick={() => { moved.current = true; setSetFrom(myGenre ?? ""); onAcceptGenre!(genre!.name); }} title={myGenre ? `Replaces your “${myGenre}”` : undefined}>Set My genre to {genre!.name}</button> : null}
           {justSet ? (
             <span className={s.noted} role="status">
               Set to {genre!.name} ·

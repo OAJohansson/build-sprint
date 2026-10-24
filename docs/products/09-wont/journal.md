@@ -59,3 +59,7 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   week calendar moves out of the cards into one strip at the top. Asked for 8 new directions:
   coherent, simple to scan, nice to look at. Feedback 1–6. Lesson: the first sheet optimised for
   difference; the owner judges coherence first.
+- **Contact sheet 2** (owner): Terracotta is the favourite, kept as is. Soft fill's colour mix
+  doesn't work (same-colour pairs, then green, then purple pairs): try even colours. Seed packets
+  again as one card per line. Moon phases out. Asked for seven more new directions. Taste so far:
+  one column, calm, one hue family, warm; not dark, not mixed pastels.

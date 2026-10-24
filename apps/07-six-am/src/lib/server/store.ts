@@ -21,14 +21,14 @@ const toTrack = (r: Row): Track => ({ id: r.id, name: r.name, doc: r.doc, update
 /** A database error with a plain-language reason for the server logs. */
 export class StoreError extends Error {}
 
-type DbError = { message: string; code?: string };
+export type DbError = { message: string; code?: string };
 
-function explain(error: DbError): string {
+export function explain(error: DbError, table = "sixam_tracks"): string {
   if (error.code === "42501" || /row-level security|permission denied/i.test(error.message)) {
     return "The database refused. SUPABASE_SECRET_KEY must be the secret key (sb_secret_… or service_role), not the publishable key.";
   }
   if (error.code === "42P01" || error.code === "PGRST205" || /does not exist|could not find the table/i.test(error.message)) {
-    return "The sixam_tracks table is missing. Run apps/07-six-am/supabase/schema.sql in the Supabase SQL Editor.";
+    return `The ${table} table is missing. Run apps/07-six-am/supabase/schema.sql in the Supabase SQL Editor.`;
   }
   if (/invalid api key|jwt|unauthorized/i.test(error.message)) {
     return "Supabase rejected the key. Check SUPABASE_SECRET_KEY (copied in full, no spaces).";
@@ -100,15 +100,22 @@ function keyKind(key: string): "secret" | "public" | "unknown" {
   return "unknown";
 }
 
-export function getStore(): { store: Store } | { problem: string } {
+/** The Supabase client from env, "memory" in development without env, or what's wrong. */
+export function connect(): { db: SupabaseClient } | { memory: true } | { problem: string } {
   const url = process.env.SUPABASE_URL?.trim().replace(/\/+$/, "");
   const key = process.env.SUPABASE_SECRET_KEY?.trim();
   if (url && key) {
     if (keyKind(key) === "public") {
       return { problem: "SUPABASE_SECRET_KEY is the publishable key. Use the secret key (sb_secret_…) and redeploy." };
     }
-    return { store: supabaseStore(createClient(url, key, { auth: { persistSession: false } })) };
+    return { db: createClient(url, key, { auth: { persistSession: false } }) };
   }
-  if (process.env.NODE_ENV !== "production") return { store: memoryStore() };
+  if (process.env.NODE_ENV !== "production") return { memory: true };
   return { problem: "Database is not configured (SUPABASE_URL / SUPABASE_SECRET_KEY)." };
+}
+
+export function getStore(): { store: Store } | { problem: string } {
+  const c = connect();
+  if ("problem" in c) return c;
+  return { store: "db" in c ? supabaseStore(c.db) : memoryStore() };
 }

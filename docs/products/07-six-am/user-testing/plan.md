@@ -1,7 +1,7 @@
 # Test plan: Six AM
 
-Two plans on one page: **Ears v1** (23 Oct, Founder mode) first, then the **Studio MVP plan**
-(18 Oct) unchanged below it. The "Studio unbroken" guardrail in `evals.md` reuses the Studio
+Three plans on one page: **Ears v1** (23 Oct, Founder mode) first, then the **Studio MVP plan**
+(18 Oct) unchanged below it, then the **Mentor** plan (24 Oct, Founder mode) at the end. The "Studio unbroken" guardrail in `evals.md` reuses the Studio
 plan's S1, S2 and S4.
 
 ## Ears v1
@@ -190,3 +190,213 @@ the guardrail.
 
 Phone layout, humming (v2), Freesound search, export, sound quality beyond "does it play" (the
 owner judges sound by ear).
+
+## Mentor
+
+Phase 2, 24 Oct, Founder mode. Bars are copied from the Mentor part of [`../evals.md`](../evals.md)
+(E1–E10, requirements M1–M16 and the guardrails), not made up here; where `evals.md` gives no time
+or tap bar, the tester reports the numbers without a pass/fail. Personas:
+[`persona.md`](persona.md), **persona 2 (Robin, new user, no brief)** for M-S0 to M-S10 on a clean
+start, and **persona 1 (the owner)** for the returning-user runs and M-S7, M-S11, M-S12, M-S13.
+Every job scenario is scored 1–5 by the tester (E10: every job ≥ 4/5).
+
+### How to run the app for testing
+
+- Start: `pnpm -F 07-six-am dev` (port 3007), with `ANTHROPIC_API_KEY`, `SUPABASE_URL`,
+  `SUPABASE_SECRET_KEY` and `ACCESS_CODE` in `.env.local` (filled from the root secrets by the PM;
+  never printed). Type the access code once. Real Claude calls cost real money: keep each sample at
+  the size `evals.md` asks for.
+- Browser: desktop Chrome/Chromium, 1440 × 900, plus one pass at 1280 × 800 (Ears' desktop
+  guardrail). Phone is out of scope.
+- **Clean start (new user, Robin):** empty Mentor data and empty library: no taste profile, no
+  chats, no genre groups, no results, no My genre, no cost records. Six AM is single-owner, so this
+  is a separate Supabase test dataset or a reset by the PM before the run, plus cleared
+  localStorage for the origin *(assumed: the pack has no accounts; how to get a clean start is an
+  ops call for the PM)*.
+- **Returning user (the owner):** setup done from the public sets below, the 10 Ears validation
+  tracks (Appendix B of [`../kickoff-source.md`](../kickoff-source.md)) analysed with their results
+  in Supabase, 5 or more with My genre set.
+- **Test playlists:** the owner's public sets at
+  https://soundcloud.com/andreas-johansson-303905204/sets, e.g.
+  `/sets/you-are-edging-me`, `/sets/groove-shoulder`, `/sets/bounce-therapy`,
+  `/sets/the-category-is-serve`, `/sets/house-reworks` (check each loads as public before the run;
+  never *B b baaangers*, which is private). For Robin, use `house-reworks`, `bounce-therapy` and
+  `the-category-is-serve` (closest to persona 2); for the owner, all five. Plus the private
+  *B b baaangers* link once, for the "private set" message.
+- Simulated parts:
+  - **The agent can't hear,** and neither can the Mentor: judge answers by what they say and their
+    source labels, never by "does it sound right" (that is `data-evals` and the owner's ear).
+  - **Owner's hands in real Chrome (batched into one ask, page ready):** anything that plays audio
+    the tester must judge or that needs Chrome's own dialogs: (1) the setup step's track previews
+    ("which of these three tracks is most you?"), (2) the taste session's two snippets, (3) Ears'
+    tab-audio share if a track has to be analysed live during the run (Chrome's picker is browser
+    chrome; the Ears stub can stand in for the flow, as in the Ears plan). Each of these steps is
+    marked **[owner's hands]** below. The simulated tester drives the rest and can still check the
+    widget's `PLAY`/`PAUSE` state for previews and snippets.
+  - **Clock:** the "time passes" scenario changes the local date with Chrome DevTools' timezone
+    emulation (Sensors → Location / timezone) rather than waiting for midnight; unit test 2 is the
+    main check for midnight and month change.
+- Network log kept for every scenario (no audio in request bodies, no API key in responses).
+
+### Scenarios
+
+#### M-S0 · Setup: "get to know me" (Robin, clean start)
+- **Moment:** first open, on the sofa, 10 minutes free; Six AM knows nothing about them.
+- **Task:** "Fine, here are my playlists." Open the Mentor, paste the three test set links, answer
+  the 3–5 tap questions (use "say more" once), the "which of these three is most you?" question
+  **[owner's hands: previews play audio]**, and add one line in "anything else I should know?".
+- **Success:** M10: playlists → draft profile → 3–5 tap questions (+ say more, track previews) →
+  optional notes. E4: the profile reasonably describes the playlists (grader rubric pass on ≥ 2
+  public playlists). Setup says it read titles, artists and tags and didn't listen (E2 honesty).
+  The pack's "~5 min" is reported as measured, not graded. Edge: the private *B b baaangers* link
+  gives a clear message.
+
+#### M-S1 · Explain this track (job 1)
+- **Moment:** going through a playlist; an analysed track selected.
+- **Task:** "What is this, and why does it feel like that?" Press Explain, then "Tell me more"
+  once. Then deselect the track and ask a general question ("what's the difference between deep
+  and tech house?").
+- **Success:** M1: the panel slides in from the right, follows the selected track, has job buttons
+  and a follow-up chat, and works with no track. M2: plain words, a source label on every fact
+  (Ears measured / uploader tagged / web source / your taste profile / general knowledge). 2–4
+  sentences before "Tell me more". E2: no claim to have heard the music. E7: answer within 15 s
+  (p90 over the sample). Job score ≥ 4/5 (E10).
+
+#### M-S2 · Suggest a genre and take it (job 2)
+- **Moment:** tagging a track that has no My genre; then one that already has one.
+- **Task:** "What should I call this?" Accept the suggestion in one click. On the second track
+  (My genre already typed), ask again.
+- **Success:** M3: one click fills My genre; a typed genre is never overwritten. The call is
+  hedged, not certain (things to avoid). On the owner's returning-user run: E1, Mentor suggestion
+  matches the reference call on the 10 validation tracks ≥ 8/10 (rubric fixed before the run;
+  `data-evals`). Suggestions use the person's own genre words and accepted groups, never the old
+  built-in list (L55). Job score ≥ 4/5.
+
+#### M-S3 · Teach me a genre (job 3)
+- **Moment:** a genre word came up in M-S2 they don't know ("hard bounce", "ballroom").
+- **Task:** "Teach me ballroom."
+- **Success:** M4: structured teacher voice (roots, traits, artists), web sources as links. M8:
+  web supports Ears' measurements, never overrules them. Examples tied to tracks in their library
+  where it has them. Job score ≥ 4/5.
+
+#### M-S4 · Ear-training prompts (job 4, prompts)
+- **Moment:** a track selected, headphones on.
+- **Task:** "What should I listen for in this one?"
+- **Success:** M5: prompts tied to the selected track (its measured BPM, key, energy, tags), with
+  source labels; nothing says it heard the track (E2). Job score ≥ 4/5.
+
+#### M-S5 · Studio starting point (job 5)
+- **Moment:** a track has made them want to make something.
+- **Task:** "How would I start something like this?" Then follow the starting point into the
+  Studio.
+- **Success:** M6: tempo, key and loops from the existing crate, real loop names only (unit test 3
+  checks them against the crate); the Studio opens at the track's tempo and plays (Ears' F10
+  reused). Studio still loads, plays and saves (guardrail). Job score ≥ 4/5.
+
+#### M-S6 · Listen next (job 6)
+- **Moment:** a track they love, wanting more like it.
+- **Task:** "What should I listen to next?" Open two links. Mark one "more like this" and one "not
+  for me".
+- **Success:** M7: from the profile + web, each with "because…", links resolve, no invented
+  artists or tracks. E3: 0 invented in a sample of ≥ 10 answers; ≥ 90% of links resolve. M8:
+  "nothing online" said honestly when it finds nothing. Job score ≥ 4/5. The two marks feed M-S8.
+
+#### M-S7 · My taste in Settings (owner, then Robin)
+- **Moment:** curious what Six AM thinks of them.
+- **Task:** "What has it learned about me?" Open Settings, read "What Six AM has learned about
+  you", change one line (e.g. "I don't like big festival drops"), then ask for listen next again.
+- **Success:** M9: readable and editable under Settings, read before every answer: the next answer
+  reflects the edited line and labels it "your taste profile" (E2). The edit is still there after
+  a reload (M15).
+
+#### M-S8 · Learning from use (E5's three scripted actions)
+- **Moment:** a normal sorting session after setup.
+- **Task:** three scripted actions, one at a time, checking the profile after each: (1) type a My
+  genre the Mentor didn't suggest, (2) correct a genre suggestion, (3) "not for me" on a
+  listen-next suggestion (from M-S6).
+- **Success:** E5: each of the 3 scripted actions shows up in the profile. M11: the profile
+  updates and "Updated: …" appears now and then (reported: after which actions it appeared).
+
+#### M-S9 · Genre groups: accept, rename, split
+- **Moment:** owner, returning user, 5+ tracks tagged; Robin, clean start, with fewer.
+- **Task:** "Can you group what I've tagged?" Accept one proposed group, rename another, split a
+  third. On Robin's clean start, ask before enough tracks are tagged.
+- **Success:** M12 and E6: groups proposed from tagged tracks with a name and a reason; every
+  group's reason checks out against the tracks (shared BPM, style mix, traits; `data-evals`); all
+  three actions work (`user-tester`). Accepted names then show in My genre suggestions (L55). Too
+  few tagged tracks gives a clear "needs more" state, not an empty or invented group.
+
+#### M-S10 · Taste session **[owner's hands: snippets play audio]**
+- **Moment:** a slow evening, wanting to train their ear.
+- **Task:** "Give me a taste session." Listen to both snippets, pick one and say why in their own
+  words ("the bouncier one, I like the hard kick").
+- **Success:** M13: two snippets from the library, preference + why, named back (the Mentor names
+  what they described, not what it "heard"; E2). Snippets play through the SoundCloud player;
+  nothing is recorded (guardrail). The simulated tester checks the flow and widget state; the
+  owner judges the listening.
+
+#### M-S11 · Cost and the 50/day warning (owner)
+- **Moment:** a long sorting evening, many questions.
+- **Task:** "How much is this costing me?" Hover one answer's cost; read Today and Month. Then reach
+  the 50th question of the day (seeded count, or a scripted run) and press "Continue anyway".
+- **Success:** M14: cost estimate per answer and "Today $x · <Month> $y" in the panel, labelled
+  estimate. E8: shown cost within $0.03 per day total of real usage (`data-evals` vs the API
+  usage); the 50/day warning appears and "Continue anyway" works (not a hard stop).
+
+#### M-S12 · Reload and another browser (owner, then Robin)
+- **Moment:** a week later, on another laptop or a fresh Chrome profile.
+- **Task:** carry on: open the Analyse page, select a track asked about before, open Settings.
+- **Success:** M15 and E9: Supabase holds profile, chats, genre groups, results and My genre;
+  reload and a fresh browser profile keep everything (each thread back with its track, the
+  profile, accepted groups, Today/Month). Request bodies hold no audio. Ears' results and My
+  genre migrated from localStorage on the first run after the update, nothing lost.
+
+#### M-S13 · Time passes (04 Mallow): the daily count across midnight
+- **Moment:** the owner asks questions late in the evening, carries on after midnight without a
+  reload, and comes back on the 1st of the next month.
+- **Task:** with ~48 questions asked before midnight, ask 3 more after midnight (timezone
+  emulation, page not reloaded); later, move the date into the next month.
+- **Success:** after midnight Today restarts from $0.00 and the count from 0, so no 50/day warning
+  appears for the 3 new questions; the previous day's answers keep their costs on hover; on the new
+  month, Month restarts and the old month's total isn't lost from the records. "Continue anyway"
+  pressed the day before doesn't carry over. Bars from unit test 2 (daily count and the 50/day
+  warning across midnight and month change) and E8; nothing silently resets the profile or chats.
+
+### Edge passes (inside the scenarios)
+
+- No track selected: job buttons that need a track say so; general questions and Teach work (M1).
+- Web search finds nothing: said honestly, no invented sources (M8).
+- An answer slower than 15 s or failing: what it's doing is shown, then a Retry (E7; Ears' "no
+  spinner-only waits").
+- Private, invalid or empty set link in setup; a set with no tags.
+- Long genre, artist and track names in answers, groups and the profile (`break-ui`).
+
+### Value questions
+
+- **Riskiest assumption:** after M-S2 and M-S6, did the genre call and listen-next feel more "them"
+  than a plain chat? Run one side by side: the same track's Copy for Claude text in a plain Claude
+  chat vs the Mentor's answer, and ask the persona which fits them and why (reported, not a bar;
+  `evals.md` has no comparison eval).
+- Did the setup profile read like them, or like a horoscope? Was the setup worth ~5 minutes?
+- Which jobs would they use weekly (explain, suggest, listen next?) and which never (Studio
+  starting point, for Robin)?
+- Did "Updated: …" feel helpful or creepy?
+- Was the cost line reassuring or worrying?
+
+### Trust checks
+
+- Every answer has source labels; none says or implies it heard the music (E2, 100% of ≥ 20).
+- Network: no request body holds audio; the API key appears in no response and not in the browser
+  bundle (M16, guardrails); the Mentor route refuses without the access code.
+- Accepting a suggestion never overwrites a typed My genre (M3); a hand edit to the profile stays
+  (M9).
+- Profile, chats and groups saved match what was typed word for word after a reload (M15).
+- Ears and Studio unbroken: Analyse, queue, My genre, filters, Studio play/save (guardrail).
+- Ask afterwards: "Did anything make you think the Mentor had listened to the track, or was keeping
+  a copy?" and "What did it know about you that you didn't tell it?" (should be nothing).
+
+### Out of scope
+
+ME-7 remake coaching; multi-user accounts; the owner-only checks; phone layout; genre accuracy
+beyond E1's sample; the design critic's score (run separately, E10); building a recommender;
+perfect cost accounting.

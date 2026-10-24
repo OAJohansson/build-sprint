@@ -9,6 +9,7 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - `docs/learnings.md` process changelog: first Founder-mode run (decision 0026) on a rebuild of an
   existing app rather than a new product; how the kickoff pack worked when written from a brief
   made with another agent.
+- `docs/learnings.md` + Founder retro (owner, 24 Oct): the Mentor squad's design ignored clean-and-minimal (0007) and Emil's restraint; review the design flow at wrap-up: skills each agent used (design-session, emil-design-eng, web-design-guidelines, break-ui), why repeated 6–7 critic scores didn't produce simpler designs, whether to install new design skills (L93).
 - `docs/knowledge-bank.md` (technology): cross-origin audio and tab capture (`getDisplayMedia`
   with `preferCurrentTab`, why Web Audio can't tap an iframe but tab capture can).
 
@@ -411,3 +412,52 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - **v1.1 graded:** user re-check 5/5, F12/F13 all pass, no blocker/major/minor open. Design
   critic 7/10 (bar 9: not met, reported); its one trust issue, BPM placeholders that looked like an
   active filter, is fixed (T25). Its other points repeat or contradict earlier critics.
+- **v1.1 merged** (PR 78, d32b3d7) on the owner's yes ("merge 1.1, then start the mentor work and
+  we can do the wrap-up after the mentor work"). Production deploy Ready; `/analyse` serves My genre
+  and the filters. Notebook republished from `main` (version 177).
+
+## 24 Oct: Six AM Mentor (Phase 2, Founder mode)
+
+- **Owner's calls** (relayed from the parent session, made one at a time): six Mentor jobs (ME-7
+  out), honesty rule, web search when it helps, a slide-in side panel, Sonnet 5.5 with caching and
+  a 50/day warning, cost shown as an estimate, a server route behind the access code, no
+  predefined taste data (taste profile, setup step, learning from use, growing genres, taste
+  sessions, listen next), everything in Supabase incl. migrating Ears' results, the record-shop
+  voice, evals E1–E10. Kickoff pack and evals appended to `kickoff.md` / `evals.md` (T26);
+  L45–L54; decision 0027 for the backend.
+- **Mentor discovery:** brief section with an 8-object drill-down, persona 2 (Robin, a new user), plan M-S0–M-S13. Gaps answered by the PM: clean-start testing on an empty dev store (L57), key relative to the crate's A minor (L58), the value comparison reported not graded and E1 fed from the committed export (L59); discovery's 12 assumptions accepted (L56). No contradiction needing the owner.
+- **Mentor backend built** (`src/lib/mentor/`, `src/lib/server/claude.ts`, `mentor-store.ts`, routes under `/api/mentor*` and `/api/analyses`, Supabase migration): Sonnet 5.5 via the answer tool with validation, web search, caching, cost from usage, 50/day flag, in-memory fallback. 129 tests pass. L55 not yet done in code (Appendix A/B lists still in Ears) → goes to the UI build. L60–L65, T27.
+- **Mentor design round 1:** critic scored A Counter 5, B Liner notes 7, C Rack 6; picked B (L66).
+- **First real Mentor call** (dev, in-memory store): Explain on the MikeQ track came back in 4.3 s,
+  $0.026 estimated (first call writes the 8.4k-token cache), every sentence labelled ears or
+  uploader, says the genre read is loose, says it doesn't know the owner's taste yet. 
+- **Supabase migration not applied:** the auto-mode permission check refused `apply_migration` on
+  the shared Supabase project as a production change. It needs the owner's OK (or the SQL pasted in
+  the Supabase SQL Editor). Until then local testing runs on the in-memory store.
+- **Mentor UI built** (after a network cut and a resume): panel, setup, /settings, genre groups, taste sessions, learning events, Ears ↔ Supabase sync, L55 removals. 129 tests, lint, tsc, build pass. 13 real calls, about $0.19. Open: listen_next with a track didn't run a web search once (honest answer, no invented tracks); a setup-dialog close crash patched but unconfirmed. L67–L70, T28.
+- **Fixes:** listen_next now searches (basic web search tool, L71) and returns real links with because-lines; the setup-dialog close crash is fixed (no widget pause after unmount, close cancels a read, focus trapped). 18 real calls so far, about $0.37.
+- **Design score on the built panel:** 6/10 (setup 5, settings 6). Combined fix pass sent to the engineer with the user test's F1–F13 (answer discipline, all jobs visible, one fixed source legend, cost to the panel foot, groups bug, 1280 widths, teach sections, listen-next track links, a separate "your library" source).
+- **Supabase migration applied** on the owner's yes in this chat ("Yes, apply the Mentor migration…"): `sixam_taste_profile`, `sixam_mentor_messages`, `sixam_genre_groups`, `sixam_analyses` exist in the crossfit-log project, RLS on, empty. Local dev switches to it after the fix pass, once the dev-only demo copy is guarded to the in-memory store.
+- **Mentor fix pass:** General overflow fixed; answers lead with a judgement, 2–4 sentences, no raw figures; every job visible; one fixed source legend; cost in the panel foot; groups rename bug and split reasons; 340 px panel below 1366; teach in three sections; listen next 3 picks, track pages first, ~11 s; "your library" source; setup saves only on Save; demo data guarded from the real store. 131 tests pass. ~31 real calls so far in the build, about \$1.10. L72–L74, T29.
+- **Mentor data-evals** (35 real answers, $1.20; `apps/07-six-am/evals/mentor-2026-10-24.md`): E2–E9 pass (0 invented picks, 30/30 links resolve, p90 9.8 s, cost matches to the cent, 0 audio, 0 key). **E1 genre fails, 3/10**: with an empty profile it names Ears' top style and collapses sub-genres to plain House, ignores specific uploader tags, and never searches. Also: a setup draft could overwrite the profile, stale split reasons repeated as fact, two wrong BPM/key facts in because-lines, soft source mislabels. Fix pass sent; no reference calls go into prompts.
+- **E1 fix (method, not cases):** suggest_genre now names the most specific supported sub-genre and searches when Ears is weak. Setup merges and keeps owner lines; group reasons are live; because-lines carry no numbers. 134 tests pass. L75–L77, T30. Re-grading by data-evals next.
+- **Re-grade:** E1 7/10 (was 3/10; one short of the bar; track 8 followed the uploader's Deep House tag, the deliberate trap). E3 12/12 picks real and resolving, no numbers in because-lines; one link to an unlicensed download site. **Setup now fails (502) on any profile with text**: the owner-lines validator broke it. Fix sent.
+- **Setup regression fixed** (the model dropped the questions after the merge rule; the retry didn't say what was missing): empty and existing profiles both pass, owner lines kept verbatim. Uploader-tag conflicts now go to the measurements (L80), download sites blocked (L79). 135 tests pass.
+- **Re-grade 2:** E1 6/10 and 5/10 (55% over 20; consistent per track, so not noise). L80 made a 30 s preview's measurement beat a correct tag (Redemption), and searches fell to 3–5 of 10. Setup keeps owner lines but dropped 10 of 15 learned lines. E2, E3 pass. One last method change, then E1 is reported as it stands (L81).
+- **L81 in:** suggest_genre always searches (enforced; ~10 s, $0.05–0.08 a call), previews count as weak evidence, setup strictly additive (15/15 sentences kept on the dev profile). Final E1 grading next, reported as it stands.
+- **Final E1 grading:** 5/10 twice (50%) with an always-on search: the search finds the artist's own scene words (Afro, soulful, tech house), not the owner's. Reverted suggest_genre to the L75 method, graded once at 7/10 (L82). E1 stays a fail against ≥ 8/10, reported as is.
+- **suggest_genre back on the L75 method** (sanity call: Tech House for Mason Flint, 3.2 s, $0.006). Switching local dev to the real Supabase for E9.
+- **Ops:** ANTHROPIC_API_KEY added to the six-am Vercel project (production + preview, sensitive; value never printed). Local dev now on the real Supabase (store: supabase).
+- **Re-test on the real Supabase:** E9 passes (everything survives reload and a fresh browser). Jobs 4/3/4/4/3/4 (E10 still fails): Studio start opens the old saved track instead of a new one with the loops (N1), Suggest contradicted Explain on Dubspinna (N2). Final fix pass on N1–N8.
+- **Final design score:** 6/10 on the built panel (target 9, not a blocker; reported). Its cheap repeated points go into the last fix pass; no more design rounds (L53).
+- **Last fix pass:** Studio start opens a new unsaved track with the loops placed (owner's 2 tracks unchanged, checked in the real DB); Suggest names conflicts with the thread and the tag; /analyse gated by the access code; link labels, plain-word key notes, pinned source key. 137 tests pass. L83, L84, T31.
+- **Final re-check:** Studio start 4 and Suggest genre 4, so every job is ≥ 4 (E10 jobs pass). Preview made (`pnpm ship 07-six-am --preview`), eval report written. Minor findings N9–N14 to the backlog.
+
+## 24 Oct: owner's review of the Mentor
+
+- **"Too much going on."** The owner reviewed PR 79 and asked for a simpler panel, not a merge.
+  Owner's calls L85–L93: one chat with no tabs or song header; nothing under the input but "What can
+  you help me with?"; full context and a persistent memory in Supabase; a growing input with
+  "Type your question" / "Reply"; readable answers with quiet sources; Settings in a corner; a short,
+  locked "Music taste profile" with a threshold constant (numbers to come); and a learning note for
+  the Founder retro about the squad ignoring clean-and-minimal.

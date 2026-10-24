@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { matchesFilters, NO_FILTERS, NO_GENRE, parseBound, sanitiseFilters, type Filters } from "./filters";
-import { canonicalGenre, genreKey, genreSuggestions, GENRE_FAMILIES, usedGenres, withMyGenre } from "./my-genre";
+import { canonicalGenre, genreKey, genreSuggestions, usedGenres, withMyGenre } from "./my-genre";
 import type { EarsAnalysis } from "./results";
 
 const steady = (bpm: number, myGenre?: string) => ({ bpm, bpmAlternative: null, bpmAmbiguous: false, myGenre });
@@ -75,13 +75,12 @@ describe("parseBound and sanitiseFilters", () => {
 });
 
 describe("my genre helpers", () => {
-  it("used genres once each, A–Z, ahead of the Appendix A families", () => {
+  it("used genres once each, A–Z, then accepted group names; no built-in list (L55)", () => {
     const list = [{ myGenre: "Tech house" }, { myGenre: "tech house" }, { myGenre: "Afro bounce" }, {}];
     expect(usedGenres(list)).toEqual(["Afro bounce", "Tech house"]);
-    const s = genreSuggestions(list);
-    expect(s.slice(0, 2)).toEqual(["Afro bounce", "Tech house"]);
-    expect(s.filter((x) => x.toLowerCase() === "tech house")).toHaveLength(1);
-    expect(s).toHaveLength(2 + GENRE_FAMILIES.length - 1);
+    expect(genreSuggestions(list)).toEqual(["Afro bounce", "Tech house"]);
+    expect(genreSuggestions([])).toEqual([]);
+    expect(genreSuggestions(list, ["tech-house", "Sunrise vocal house", " "])).toEqual(["Afro bounce", "Tech house", "Sunrise vocal house"]);
   });
 
   it("withMyGenre trims, and empty clears the field", () => {
@@ -100,16 +99,15 @@ describe("my genre helpers", () => {
     expect(genreKey("!!")).toBe("!!");
   });
 
-  it("canonicalGenre prefers an existing spelling, then a family, else the typed text", () => {
+  it("canonicalGenre prefers an existing spelling, else the typed text", () => {
     expect(canonicalGenre("deep  House", ["Deep house"])).toBe("Deep house");
     expect(canonicalGenre("afro BOUNCE", ["Afro bounce"])).toBe("Afro bounce");
-    expect(canonicalGenre("tech-house", [])).toBe("Tech house");
+    expect(canonicalGenre("tech-house", [])).toBe("tech-house");
     expect(canonicalGenre("  Gqom ", [])).toBe("Gqom");
     expect(canonicalGenre("   ", ["Deep house"])).toBeUndefined();
   });
 
-  it("families are short names (no parentheses), and a used spelling merges with its family", () => {
-    expect(GENRE_FAMILIES.every((g) => !/[()]/.test(g) && g.length <= 24)).toBe(true);
+  it("two spellings of a used genre merge", () => {
     expect(usedGenres([{ myGenre: "Deep house" }, { myGenre: "deep-house" }])).toEqual(["Deep house"]);
     expect(genreSuggestions([{ myGenre: "deep house" }]).filter((x) => genreKey(x) === "deephouse")).toEqual(["deep house"]);
   });

@@ -125,3 +125,41 @@ reference call is itself a house-lineage call with no Discogs equivalent.
 - No secrets in the diff; every new key is in `.env.example` (Ears needs none).
 
 Owner-only checks: Part 2 of `docs/operating-modes/evals-TEMPLATE.md`, kept outside the repo.
+
+---
+
+# Evals: Six AM Mentor (Phase 2)
+
+Agreed by the owner on 24 Oct as listed (L53). Graders: `user-tester`, `design-critic`,
+`data-evals`; never the builder. Owner-only checks live outside the repo.
+
+| # | Eval | Bar | Run by | Result |
+| --- | --- | --- | --- | --- |
+| E1 | Mentor genre suggestion matches the reference call on the 10 Ears validation tracks (Appendix B), judged by a written rubric: the suggested genre names the same genre as the reference call (synonyms and the parent family count, e.g. "hard bounce" for hard trance; plain "house" does not count for a sub-genre call); rubric fixed before any run | ≥ 8/10 | data-evals | |
+| E2 | Every answer cites sources (Ears measured / uploader tagged / web source / your taste profile / general knowledge); none claims to have heard the music | 100% of a sample of ≥ 20 answers across all jobs | data-evals | |
+| E3 | Listen-next answers: no invented artists or tracks; links resolve | 0 invented in a sample of ≥ 10 answers; ≥ 90% of links resolve | data-evals | |
+| E4 | After the setup step, the profile reasonably describes the playlist | grader rubric pass on ≥ 2 public playlists | data-evals | |
+| E5 | The profile reflects tagging and corrections | each of 3 scripted actions shows up in the profile | data-evals | |
+| E6 | Proposed genre groups are grounded in real shared traits; accept, rename and split work | every group's reason checks out against the tracks; all three actions work | data-evals + user-tester | |
+| E7 | An answer arrives within 15 s | p90 ≤ 15 s over the sample | data-evals | |
+| E8 | Shown cost within a few cents of real usage; 50/day warning appears and can be overruled | within $0.03 per day total; warning + Continue anyway work | data-evals + user-tester | |
+| E9 | Nothing lost on reload or in another browser; no audio sent to Claude | reload + fresh browser profile keep everything; request bodies hold no audio | user-tester + data-evals | |
+| E10 | User test: every job ≥ 4/5; design critic scores the panel against the feel | jobs ≥ 4/5; design **9/10 is a target, not a blocker**, reported as is | user-tester, design-critic | |
+
+### Requirements M1–M16
+
+One pass/fail per requirement in the Mentor kickoff (`kickoff.md`), run by the grader named there.
+
+### Guardrails
+
+| Guardrail | Bar |
+| --- | --- |
+| No audio stored, uploaded or sent to Claude | 0 |
+| API key never in the browser bundle or responses | 0 occurrences |
+| Ears and Studio unbroken (Analyse, queue, My genre, filters, Studio play/save) | yes |
+| Readable text, hit areas | ≥ 4.5:1, ≥ 28 px |
+
+### Build hygiene
+
+`pnpm -F 07-six-am lint`, `test` (incl. the Mentor unit tests), `build` pass; every new key in
+`.env.example`; `checks` green on the PR.

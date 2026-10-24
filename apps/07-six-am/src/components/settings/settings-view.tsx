@@ -83,7 +83,7 @@ export function SettingsView() {
         </div>
         <section className={s.col}>
           <div className={s.fieldHead}>
-            <label htmlFor="taste" className={s.label}>My taste</label>
+            <label htmlFor="taste" className={s.label}>My taste <span className={s.editHint}>· click to edit</span></label>
             <span className={status === "error" ? s.err : s.saved} role="status">
               {status === "saving" ? "Saving…" : status === "error" ? "Not saved. Check the connection; it saves again as you type." : data.profile.updatedAt ? `Saved · ${ago(data.profile.updatedAt)}` : "Empty"}
             </span>
@@ -125,19 +125,26 @@ export function SettingsView() {
   );
 }
 
+/** One line per update; was / now behind a disclosure (critic, round 2). */
 function Update({ u }: { u: ProfileNote }) {
   const from = u.from ?? (u.by === "owner" ? "Settings" : "the Mentor");
+  const line = (
+    <span className={s.updLine}>
+      <span className={s.when}>{ago(u.at)}</span>
+      <span className={s.updNote}>{u.note.replace(/^Updated:\s*/, "")}</span>
+      <span className={s.from}>{u.by === "owner" ? "you" : `from ${from}`}</span>
+    </span>
+  );
+  if (!u.was && !u.now) return <li>{line}</li>;
   return (
     <li>
-      <span className={s.when}>{ago(u.at)}</span>
-      <p>{u.note}</p>
-      {u.was || u.now ? (
+      <details className={s.details}>
+        <summary>{line}</summary>
         <dl className={s.diff}>
           {u.was ? <><dt>was</dt><dd>{u.was}</dd></> : null}
           {u.now ? <><dt>now</dt><dd className={s.own}>{u.now}</dd></> : null}
         </dl>
-      ) : null}
-      <span className={s.from}>{u.by === "owner" ? "You, in" : "From"} {from}</span>
+      </details>
     </li>
   );
 }

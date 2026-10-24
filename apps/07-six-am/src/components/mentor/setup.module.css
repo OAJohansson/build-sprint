@@ -5,13 +5,11 @@
   --bg: #131110; --panel: #1a1715; --ink: #f1e6d3; --muted: #aa9c88; --faint: #958a7c; --line: #2c2622; --gold: #f2b134; --err: #f08a6e;
   position: fixed; inset: 0; z-index: 100; background: rgba(10, 9, 8, .72); display: grid; place-items: center; padding: 24px;
   font-family: var(--f-mono), monospace; color: var(--ink);
-  animation: fade 160ms ease-out;
 }
 @keyframes fade { from { opacity: 0; } }
 .dialog {
   width: min(600px, 100%); max-height: calc(100dvh - 48px); overflow: auto; box-sizing: border-box;
   background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 24px 60px rgba(0, 0, 0, .6); padding: 18px 24px 16px;
-  animation: rise 200ms cubic-bezier(.23, 1, .32, 1);
 }
 @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
 @media (prefers-reduced-motion: reduce) { .scrim, .dialog { animation: none; } }

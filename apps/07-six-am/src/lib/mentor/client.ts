@@ -5,6 +5,7 @@
 // audio is ever sent. The server builds the prompts.
 import { ApiError } from "@/lib/api";
 import type { EarsAnalysis } from "@/lib/ears/results";
+import { useSyncExternalStore } from "react";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import type { Job, MentorAnswer } from "./answer";
 import type { StudioStart } from "./studio";
@@ -14,9 +15,18 @@ import type { PlaylistLike } from "./playlist";
 
 export { ApiError };
 export const CODE_KEY = "07-six-am:code";
-export const useAccessCode = () => useLocalStorage(CODE_KEY, "");
+const noSubscribe = () => () => {};
+/** [code, setCode, ready]: ready once the browser's stored code has been read (F12: no call goes
+ *  out with the empty code of the first, server-rendered pass). */
+export function useAccessCode() {
+  const [code, setCode] = useLocalStorage(CODE_KEY, "");
+  const ready = useSyncExternalStore(noSubscribe, () => true, () => false);
+  return [code, setCode, ready] as const;
+}
 
 export type ProfileNote = { at: string; note: string; by: "owner" | "mentor"; from?: string; was?: string; now?: string };
+/** memory = the dev server's in-memory store (a clean start); supabase = the real data. */
+export type StoreKind = "memory" | "supabase";
 export type Profile = { text: string; updatedAt: string | null; history: ProfileNote[] };
 export type Group = { id: string; name: string; reason: string; trackIds: string[]; status: "proposed" | "accepted" | "dismissed"; createdAt: string; updatedAt: string };
 
@@ -44,6 +54,8 @@ export type AskInput = {
   events?: LearnEvent[];
   playlists?: PlaylistLike[];
   taste?: { a: string; b: string; preferred: "a" | "b"; why: string };
+  /** "setup": learn events from the setup dialog (Settings says "From setup"). */
+  source?: "setup";
 };
 
 /** getTimezoneOffset(): the server sums Today / Month in the owner's local time. */
@@ -74,19 +86,22 @@ export const mentorApi = (code: string) => ({
         events: i.events,
         playlists: i.playlists,
         taste: i.taste,
+        source: i.source,
         tz: tz(),
       }),
     }),
   thread: (id: string) => call<{ thread: string; messages: ThreadMessage[] }>(code, `/api/mentor?thread=${encodeURIComponent(id)}`).then((r) => r.messages),
   usage: () => call<{ usage: UsageSummary }>(code, `/api/mentor/usage?tz=${tz()}`).then((r) => r.usage),
-  profile: () => call<{ profile: Profile }>(code, "/api/mentor/profile").then((r) => r.profile),
-  saveProfile: (text: string) => call<{ profile: Profile }>(code, "/api/mentor/profile", { method: "PUT", body: JSON.stringify({ text }) }).then((r) => r.profile),
+  profile: () => call<{ profile: Profile; store: StoreKind }>(code, "/api/mentor/profile"),
+  saveProfile: (text: string, from?: "setup") => call<{ profile: Profile }>(code, "/api/mentor/profile", { method: "PUT", body: JSON.stringify({ text, from }) }).then((r) => r.profile),
   groups: () => call<{ groups: Group[] }>(code, "/api/mentor/groups").then((r) => r.groups),
   proposeGroups: () => call<AskReply>(code, "/api/mentor/groups", { method: "POST", body: JSON.stringify({ tz: tz() }) }),
   patchGroup: (body: { id: string; action: "accept" | "rename" | "split" | "dismiss"; name?: string; parts?: { name: string; trackIds: string[] }[] }) =>
     call<{ group?: Group; groups?: Group[] }>(code, "/api/mentor/groups", { method: "PATCH", body: JSON.stringify(body) }),
-  analyses: () => call<{ analyses: EarsAnalysis[] }>(code, "/api/analyses").then((r) => r.analyses),
+  analyses: () => call<{ analyses: EarsAnalysis[]; store: StoreKind }>(code, "/api/analyses"),
   putAnalysis: (a: EarsAnalysis) => call<{ analysis: EarsAnalysis }>(code, `/api/analyses?id=${encodeURIComponent(a.id)}`, { method: "PUT", body: JSON.stringify({ analysis: a }) }),
+  /** The ?demo=1 view's dev-only copy: the server refuses it unless its store is in memory. */
+  putDemoAnalysis: (a: EarsAnalysis) => call<{ analysis: EarsAnalysis }>(code, `/api/analyses?id=${encodeURIComponent(a.id)}`, { method: "PUT", body: JSON.stringify({ analysis: a }), headers: { "x-six-am-demo": "1" } }),
   importAnalyses: (list: EarsAnalysis[]) => call<{ added: number; genresFilled: number; kept: number; rejected: number }>(code, "/api/analyses", { method: "POST", body: JSON.stringify({ analyses: list }) }),
   deleteAnalyses: (ids: string[]) => call<{ deleted: number }>(code, "/api/analyses", { method: "DELETE", body: JSON.stringify({ ids }) }),
 });

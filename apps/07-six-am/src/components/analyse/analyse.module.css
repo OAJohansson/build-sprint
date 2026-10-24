@@ -249,6 +249,8 @@
    and the strip's actions fit without sideways scrolling (critic's fix). */
 .shell { height: 100dvh; display: grid; grid-template-columns: minmax(0, 1fr); overflow: hidden; background: #131110; }
 .shellOpen { grid-template-columns: minmax(0, 1fr) 400px; }
+/* Below 1366 px the panel narrows to 340 so the table keeps its key columns (critic, round 2) */
+@media (max-width: 1365px) { .shellOpen { grid-template-columns: minmax(0, 1fr) 340px; } }
 .panelSlot { min-width: 0; height: 100dvh; }
 .root { min-width: 0; }
 @media (max-width: 1679px) {

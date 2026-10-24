@@ -25,7 +25,7 @@ import type { EarsAnalysis } from "@/lib/ears/results";
 import { styleDisplayName } from "@/lib/ears/styles";
 import { clampBpm, DEFAULT_BPM, formatBpm, TEMPO_KEY } from "@/lib/tempo";
 import { useEarsSync, type SyncState } from "@/lib/ears/use-ears-sync";
-import { mentorApi, useAccessCode } from "@/lib/mentor/client";
+import { ApiError, mentorApi, useAccessCode } from "@/lib/mentor/client";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { DEMO_RESULTS, DEMO_SOURCE, demoQueue } from "./demo";
 import { buildRows, type Row } from "./rows";
@@ -49,9 +49,9 @@ const GENRE_INPUT_ID = "my-genre";
 const DEMO_IDS: ReadonlySet<string> | undefined = process.env.NODE_ENV === "development" ? new Set(DEMO_RESULTS.map((r) => r.id)) : undefined;
 
 export function LiveAnalyse() {
-  const [code] = useAccessCode();
+  const [code, , ready] = useAccessCode();
   // M15: results and My genre mirrored to the server; localStorage stays the cache.
-  const sync = useEarsSync(code, DEMO_IDS);
+  const sync = useEarsSync(code, ready, DEMO_IDS);
   return <Screen m={useAnalyse()} sync={sync} />;
 }
 
@@ -86,10 +86,10 @@ export function DemoAnalyse({ listening }: { listening: boolean }) {
 // shortcut: dev only, the demo rows (illustrative numbers) go to the in-memory store so the
 // server-side jobs (genre groups, taste sessions) can be tried with ?demo=1; never in production.
 function useDemoServerCopy(results: EarsAnalysis[]) {
-  const [code] = useAccessCode();
+  const [code, , ready] = useAccessCode();
   const sent = useRef({ code: "", rows: new Map<string, string>() });
   useEffect(() => {
-    if (!DEMO_IDS) return;
+    if (!DEMO_IDS || !ready) return;
     // A new code (the first render has none yet) starts over, so rows refused with 401 go again.
     if (sent.current.code !== code) sent.current = { code, rows: new Map() };
     const rows = sent.current.rows;
@@ -98,9 +98,10 @@ function useDemoServerCopy(results: EarsAnalysis[]) {
       const j = JSON.stringify(a);
       if (rows.get(a.id) === j) continue;
       rows.set(a.id, j);
-      api.putAnalysis(a).catch(() => rows.delete(a.id));
+      // A real (Supabase) store answers 409: the rows stay marked as sent, so it isn't retried.
+      api.putDemoAnalysis(a).catch((e) => { if (!(e instanceof ApiError && e.status === 409)) rows.delete(a.id); });
     }
-  }, [results, code]);
+  }, [results, code, ready]);
 }
 
 const OPEN_KEY = "six-am:mentor-open:v1";
@@ -171,8 +172,11 @@ function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
     if (k && genreKey(g) !== k && !others.some((o) => genreKey(o) === k)) setRawFilters({ ...filters, genre: "" });
   };
   // Learning from use (M11): a typed genre, or a correction of the Mentor's suggestion.
+  // Demo rows never teach the real profile: in ?demo=1 learning only runs on the in-memory dev store.
+  const canLearn = !m.demo || mentor.storeKind === "memory";
   const typeGenre = (id: string, typed: string) => {
     const g = saveGenre(id, typed);
+    if (!canLearn) return;
     const a = m.results.find((r) => r.id === id);
     if (!g || !a) return;
     const sug = lastSuggestion(id);
@@ -232,6 +236,7 @@ function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
           data={mentor}
           track={selected}
           library={m.results}
+          canLearn={canLearn}
           earsBusy={!m.demo && !!activeItem(m.queue)}
           onClose={() => setOpen(false)}
           onSetGenre={(id, g) => { saveGenre(id, g); flash(`My genre set to ${g}`); }}

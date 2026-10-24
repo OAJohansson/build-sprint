@@ -20,7 +20,8 @@ Sources: label every fact
   - ears: from the Ears measurements in the track facts.
   - uploader: from the SoundCloud title, uploader name, genre tag or tags.
   - web: from a page you found with web search this turn; give that page's URL, taken from your search results. Never make up or guess a URL.
-  - profile: from the person's taste profile or their own genre tags.
+  - profile: from the person's written taste profile.
+  - library: from what the person has done in Six AM: their own genre tags (My genre), the genre names they use and their accepted genre groups.
   - general: general music knowledge or advice that isn't about this specific track.
 - When a sentence mixes sources, split it into two sentences.
 - Ears' measurements are the ground truth for this track. Web pages can support or add context to them but never overrule them: if a page says one tempo and Ears measured another, report what Ears measured and say the page differs.
@@ -33,10 +34,11 @@ How Ears' numbers read
 - When BPM shows two readings (e.g. "128.0 or 64.0"), half or double time is unclear; say which one dancers would feel if the styles make it clear, and keep both.
 - Energy (low, mid, high) is loudness; brightness (warm, neutral, bright) is how much high-frequency content there is. Neither is a mood.
 - A "30 s preview only" note means Ears measured a short preview, so be more cautious.
+- Say measurements in plain words: loud or quiet, bright or warm, a likely or an unsure key. BPM and style percentages are fine to quote; never quote hertz, dBFS, "spectral centroid" or key-strength figures.
 
 Voice
-- Everyday answers: 2 to 4 short sentences, then stop and set tellMore to true if there is more worth saying. No walls of text.
-- Explain a technical word the first time you use it, in a few plain words.
+- Everyday answers: 2 to 4 short sentences, never more, then stop and set tellMore to true if there is more worth saying. No walls of text.
+- Explain a technical word only the first time it comes up in this conversation, in a few plain words; if the conversation so far already explained it, don't explain it again.
 - Genre calls are always hedged: "most likely", "closest to", "could pass for". Never certain-sounding.
 - No flattery, no exclamation-mark enthusiasm, no emoji, no chatty persona, no "Great question".
 - Teach mode is the exception: a structured, patient teacher, longer and in order.
@@ -46,6 +48,7 @@ Voice
 The taste profile
 - It is a short written description of the person's taste, partly written by them and partly learned by you. When you propose an update, return the whole profile as it should now read: keep everything the person wrote themselves word for word, add or adjust only what you learned, keep it under about 250 words, plain sentences or short lines, no scores. Give a one-line note starting "Updated: " that says what changed.
 - Only propose a profile update when the job asks for one or the person clearly told you something new about their taste.
+- One action (one tag, one "not for me", one question) is one data point: write what it suggests tentatively ("may", "seems to", "so far"), never as a broad rule.
 
 Web search
 - Use it when it helps and the job allows it: teaching a genre, finding music to listen to next, checking a genre name, artist or label. Keep to a few searches. Don't search for things the track facts already answer.
@@ -57,7 +60,7 @@ Output
 /** Per job: what to do, which effort, whether web search is allowed, whether it needs a track. */
 export const JOBS_SPEC: Record<Job, { instruction: string; effort: "low" | "medium"; web: boolean; needsTrack: boolean; counted: boolean }> = {
   explain: {
-    instruction: "Explain this track's analysis in plain words: what the numbers say it is and what that means for the person listening. 2–4 sentences, each labelled. Don't search the web unless the uploader's tags name something you need to check.",
+    instruction: "Say what this track most likely is and how sure that is, in plain words. The person already sees the numbers (BPM, key, energy, tone, style percentages, uploader tag) in the detail strip, so don't restate them; lead with the judgement, e.g. 'Bass house is the best guess, but 44% is a soft call; the uploader's tags agree.' Then one sentence on what that means for someone listening or dancing. 2–3 sentences, each labelled, tellMore true. Don't search the web unless the uploader's tags name something you need to check.",
     effort: "low", web: false, needsTrack: true, counted: true,
   },
   suggest_genre: {
@@ -65,19 +68,19 @@ export const JOBS_SPEC: Record<Job, { instruction: string; effort: "low" | "medi
     effort: "low", web: true, needsTrack: true, counted: true,
   },
   teach: {
-    instruction: "Teach the genre named below (or, if none is named, the genre this track most likely belongs to) as a structured teacher: where and when it came from, what defines it (tempo range, drums, bass, harmony, vocals, production), how it differs from its neighbours, two or three key artists or records, and how it connects to this track's measurements if there is a track. Use web search and cite pages with web sources. 6–12 sentences, in that order. tellMore true.",
+    instruction: "Teach the genre named below (or, if none is named, the genre this track most likely belongs to) as a structured teacher, in three short sections; set each sentence's section: 'what' (what it is: where and when it came from), 'sound' (how it sounds: tempo range, drums, bass, harmony, vocals, and how it differs from its neighbours), 'start' (where to start: a first record or artist to try, and, if there is a track, one sentence on how it relates to this track's measurements). 2–3 sentences per section, in that order. Also return listenNext with exactly one real record per section (set its section and kind), each linked from your search results. Use web search and cite pages with web sources. tellMore true.",
     effort: "medium", web: true, needsTrack: false, counted: true,
   },
   ear_training: {
-    instruction: "Give 3 short listening prompts for this track: concrete things to listen for while it plays (e.g. where the kick sits against the measured BPM, whether the bass follows the measured key, what makes it bright or warm), each tied to one of the measurements or tags and labelled with that source. Phrase them as things to listen for, never as things you heard. No web search.",
+    instruction: "Give 3 short listening prompts for this track: concrete things to listen for while it plays (e.g. where the kick sits against the measured BPM, whether the bass follows the measured key, what makes it bright or warm), each tied to one of the measurements or tags and labelled with that source. Phrase them as things to listen for, never as things you heard. Describe measurements in words (bright, warm, loud, quiet), no figures other than BPM. 3–4 sentences. No web search.",
     effort: "low", web: false, needsTrack: true, counted: true,
   },
   studio_start: {
-    instruction: "Suggest a starting point in Six AM's Studio for a track in this spirit: pick 3–5 loops from the crate below (use the ids exactly; one or two per group is plenty) and say in one short clause each why it fits the measurements. Tempo and key are already worked out below: mention them in 1–2 sentences (key as given, including how it sits against the crate's A minor; the crate can't be transposed). No web search.",
+    instruction: "Suggest a starting point in Six AM's Studio for a track in this spirit: pick 3–5 loops from the crate below (use the ids exactly; one or two per group is plenty) and say in one short clause each, in the loop's 'why', how it fits. The loops list is shown to the person with your 'why' lines, so don't name or list the loops in your sentences. Sentences: 1–2 about the tempo and key (key as given, including how it sits against the crate's A minor; the crate can't be transposed). No web search.",
     effort: "low", web: false, needsTrack: true, counted: true,
   },
   listen_next: {
-    instruction: "Suggest 3–5 tracks to listen to next, from the person's taste profile and this track's facts (or just the profile with no track). Use web search to find real tracks and give each a link from your search results (SoundCloud, Bandcamp, YouTube, Discogs or the label's page), artist, title and a one-line 'because…' that ties it to their profile or this track's measurements. Never invent an artist, track or link; if you can't find enough real ones, give fewer and say so. 1–2 labelled sentences on what the picks have in common.",
+    instruction: "Suggest up to 3 tracks to listen to next, from the person's taste profile and this track's facts (or just the profile with no track). Use web search (at most 2 searches) to find real tracks. Link each to a page from your search results, preferring the track's own page (SoundCloud, Bandcamp, Beatport, YouTube video, Discogs release); when there's no track page, a playlist, chart or article page that names the track is fine. Set kind for each link honestly (track, playlist or article). Give artist, title and a one-line 'because…' that ties it to their profile or this track's measurements; the reasons go in 'because', not in the sentences. Never invent an artist, track or link; if you can't find enough real ones, give fewer. Sentences: 1–2 only, on what the picks have in common (or that you found fewer).",
     effort: "medium", web: true, needsTrack: false, counted: true,
   },
   chat: {
@@ -89,7 +92,7 @@ export const JOBS_SPEC: Record<Job, { instruction: string; effort: "low" | "medi
     effort: "medium", web: false, needsTrack: false, counted: true,
   },
   learn: {
-    instruction: "Update the taste profile from the events below (genres the person typed, suggestions they corrected, listen-next picks they liked or didn't, topics they asked about, setup answers). Change only what the events support, keep the person's own words, and return profileUpdate with a one-line 'Updated: …' note. One sentence (source profile) saying what you changed. No web search.",
+    instruction: "Update the taste profile from the events below (genres the person typed, suggestions they corrected, listen-next picks they liked or didn't, topics they asked about, setup answers). Change only what the events support, keep the person's own words, and phrase anything that rests on a single action tentatively ('may', 'seems to', 'so far'). Return profileUpdate with a one-line 'Updated: …' note. One sentence (source profile) saying what you changed. No web search.",
     effort: "low", web: false, needsTrack: false, counted: false,
   },
   propose_groups: {
@@ -117,6 +120,8 @@ export type MentorInput = {
   /** The person's own words: a chat message, a genre to teach, "anything else I should know". */
   message?: string;
   history?: HistoryTurn[];
+  /** F6: what the person last wrote into their profile by hand (the "now" of their latest edit). */
+  recentEdit?: string;
   /** The person's genre vocabulary: My genre values in use and accepted group names (L55). */
   myGenres?: string[];
   groups?: { name: string; reason: string }[];
@@ -172,8 +177,8 @@ function jobText(input: MentorInput): string {
   }
   if ((input.job === "suggest_genre" || input.job === "propose_groups" || input.job === "teach" || input.job === "chat") && (input.myGenres?.length || input.groups?.length)) {
     const lines = [];
-    if (input.myGenres?.length) lines.push(`Genre names the person uses: ${input.myGenres.join("; ")}`);
-    if (input.groups?.length) lines.push(`Their accepted genre groups: ${input.groups.map((g) => `${g.name} (${g.reason})`).join("; ")}`);
+    if (input.myGenres?.length) lines.push(`[library] Genre names the person uses: ${input.myGenres.join("; ")}`);
+    if (input.groups?.length) lines.push(`[library] Their accepted genre groups: ${input.groups.map((g) => `${g.name} (${g.reason})`).join("; ")}`);
     parts.push(lines.join("\n"));
   }
   if (input.job === "propose_groups") {
@@ -190,9 +195,16 @@ function jobText(input: MentorInput): string {
   if (input.message?.trim() && input.job !== "taste_session") {
     parts.push(`${input.job === "teach" ? "Genre to teach" : "The person says"}: ${input.message.trim().slice(0, MAX_MESSAGE)}`);
   }
+  if (input.recentEdit?.trim() && THREAD_JOBS.has(input.job)) {
+    parts.push(`[profile] The person recently wrote this into their profile by hand: "${input.recentEdit.trim().slice(0, 400)}". Use it only if it clearly bears on this answer and the conversation so far hasn't mentioned it; then say so once (source profile).`);
+  }
   if (input.retryProblem) parts.push(`Your previous answer to this was rejected: ${input.retryProblem} Call the answer tool once with a corrected answer.`);
   return parts.join("\n\n");
 }
+
+/** Jobs asked from the panel's thread: they read the thread so far (follow-ups, and so a term
+ *  already explained isn't explained again). */
+export const THREAD_JOBS: ReadonlySet<Job> = new Set<Job>(["explain", "suggest_genre", "teach", "ear_training", "studio_start", "listen_next", "chat"]);
 
 /** Prior turns of the thread, oldest first, starting with a user turn. */
 function historyMessages(history: HistoryTurn[] = []): Anthropic.Beta.BetaMessageParam[] {
@@ -205,7 +217,7 @@ function historyMessages(history: HistoryTurn[] = []): Anthropic.Beta.BetaMessag
 export function buildRequest(input: MentorInput) {
   const spec = JOBS_SPEC[input.job];
   const messages: Anthropic.Beta.BetaMessageParam[] = [
-    ...historyMessages(input.job === "chat" || input.job === "teach" ? input.history : []),
+    ...historyMessages(THREAD_JOBS.has(input.job) ? input.history : []),
     { role: "user", content: [{ type: "text", text: jobText(input) }] },
   ];
   return {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { EarsAnalysis } from "@/lib/ears/results";
-import { JOBS } from "./answer";
+import { JOBS, SOURCES } from "./answer";
 import { buildRequest, JOBS_SPEC, SYSTEM_PROMPT, type MentorInput } from "./prompt";
 
 // Grader-side list (L50, L55, L59): the genre families of kickoff-source.md Appendix A, kept only
@@ -58,7 +58,7 @@ describe("prompts", () => {
   });
   it("the system prompt carries the honesty rule and the source labels", () => {
     expect(SYSTEM_PROMPT).toMatch(/never receive audio/);
-    for (const s of ["ears", "uploader", "web", "profile", "general"]) expect(SYSTEM_PROMPT).toContain(`- ${s}:`);
+    for (const s of SOURCES) expect(SYSTEM_PROMPT).toContain(`- ${s}:`);
   });
   it("cache layout: the same tools and system prefix for every job; only the profile block differs by profile", () => {
     const a = buildRequest(inputs[0]), b = buildRequest({ ...inputs[5], profile: "Different." });

@@ -34,6 +34,8 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
   const [qi, setQi] = useState(0);
   const [answers, setAnswers] = useState<Record<number, Answer>>({});
   const [notes, setNotes] = useState("");
+  /** The draft as the person edits it; it becomes My taste on Save (F11: nothing saved before). */
+  const [draft, setDraft] = useState("");
   const [saving, setSaving] = useState(false);
   const [, setSources] = useLocalStorage<SetupSource[]>(SOURCES_KEY, NO_SOURCES);
   const reader = useReader();
@@ -45,7 +47,7 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
   /** Set on close, so a read in progress stops and never sends the setup request. */
   const closed = useRef(false);
   const close = (saved: boolean) => { closed.current = true; preview.stop(); reader.cancel(); onClose(saved); };
-  const onEscape = useEffectEvent(() => { if (!progress && !saving) close(!!reply); });
+  const onEscape = useEffectEvent(() => { if (!progress && !saving) close(false); });
   useEffect(() => {
     const prev = document.activeElement as HTMLElement | null;
     (dialog.current?.querySelector<HTMLElement>("textarea") ?? dialog.current?.querySelector<HTMLElement>("button"))?.focus();
@@ -92,9 +94,8 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
       const tracks = lists.reduce((n, l) => n + l.sounds.length, 0);
       const names = lists.map((l) => l.title ?? "untitled");
       setRead({ playlists: names, tracks });
-      setSources((x) => [...(Array.isArray(x) ? x : []), { at: new Date().toISOString(), playlists: names, tracks }].slice(-10));
       setReply(r);
-      data.reload();
+      setDraft(r.answer.profileUpdate?.text ?? data.profile?.text ?? "");
       setStep(1);
       if (problems.length) setError(`Skipped: ${problems.join(" · ")}`);
     } catch (e) {
@@ -107,6 +108,16 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
   };
 
   const save = async () => {
+    setSaving(true); setError(null);
+    try {
+      // The draft first (labelled "From setup"), then the answers refine it.
+      if (draft.trim()) data.setProfile(await data.api.saveProfile(draft.trim(), "setup"));
+      if (read) setSources((x) => [...(Array.isArray(x) ? x : []), { at: new Date().toISOString(), ...read }].slice(-10));
+    } catch (e) {
+      setSaving(false);
+      setError(e instanceof Error ? e.message : "Your draft wasn't saved. Try again.");
+      return;
+    }
     const events: LearnEvent[] = [];
     questions.forEach((q, i) => {
       const a = answers[i];
@@ -115,10 +126,9 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
       events.push({ type: "setup_answer", detail: `${q.question} → ${label || "(no pick)"}${a.more.trim() ? ` · ${a.more.trim()}` : ""}`.slice(0, 480) });
     });
     if (notes.trim()) events.push({ type: "note", detail: `Anything else I should know: ${notes.trim()}`.slice(0, 480) });
-    if (!events.length) return close(true);
-    setSaving(true); setError(null);
+    if (!events.length) { data.reload(); setSaving(false); return close(true); }
     try {
-      await data.api.ask({ job: "learn", events });
+      await data.api.ask({ job: "learn", events, source: "setup" });
       data.reload();
       close(true);
     } catch (e) {
@@ -157,7 +167,7 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
       <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby="setup-title" className={s.dialog}>
         <header className={s.head}>
           <h2 id="setup-title" className={s.title}>Set up your taste</h2>
-          <button className={s.icon} onClick={() => close(!!reply)} aria-label="Close setup"><X size={16} strokeWidth={1.5} /></button>
+          <button className={s.icon} onClick={() => close(false)} aria-label="Close setup"><X size={16} strokeWidth={1.5} /></button>
         </header>
         <div className={s.tabs} role="tablist" aria-label="Setup steps">
           {STEPS.map((name, i) => (
@@ -176,10 +186,11 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
             </>
           ) : step === 1 && reply ? (
             <>
-              {read ? <p className={s.hint}>Read {read.playlists.length} playlist{read.playlists.length > 1 ? "s" : ""}, {read.tracks} tracks: {read.playlists.join(" · ")}.</p> : null}
-              <p className={s.label}>First draft of My taste</p>
-              <p className={s.draft}>{reply.answer.profileUpdate?.text ?? data.profile?.text ?? ""}</p>
-              <p className={s.hint}>{reply.answer.sentences.map((x) => x.text).join(" ")} You can change any of it in Settings.</p>
+              <label className={s.label} htmlFor="setup-draft">
+                First draft of My taste <span>· read {read && read.playlists.length > 1 ? `${read.playlists.length} playlists` : "one playlist"}; change anything</span>
+              </label>
+              <textarea id="setup-draft" className={s.area} rows={8} value={draft} onChange={(e) => setDraft(e.target.value)} />
+              <p className={s.hint}>Saved as My taste when you press Save at the end.</p>
             </>
           ) : step === 2 && q ? (
             <>

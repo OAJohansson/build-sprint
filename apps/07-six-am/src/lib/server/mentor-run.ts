@@ -6,7 +6,7 @@ import { parseAnalysis } from "@/lib/mentor/context";
 import type { StoredUsage } from "@/lib/mentor/cost";
 import { monthRange, summarise, type UsageSummary } from "@/lib/mentor/periods";
 import { setupInput, type PlaylistLike } from "@/lib/mentor/playlist";
-import { JOBS_SPEC, type HistoryTurn, type LearnEvent, type MentorInput } from "@/lib/mentor/prompt";
+import { JOBS_SPEC, THREAD_JOBS, type HistoryTurn, type LearnEvent, type MentorInput } from "@/lib/mentor/prompt";
 import { CRATE_IDS, studioStart, type StudioStart } from "@/lib/mentor/studio";
 import { askClaude, MentorError, UPDATES_PROFILE } from "./claude";
 import type { Group, MentorStore, MessageRow } from "./mentor-store";
@@ -28,6 +28,8 @@ export type AskBody = {
   playlists?: unknown;
   taste?: unknown;
   tz?: unknown;
+  /** "setup": learn events from the setup dialog, so Settings says "From setup" (F11). */
+  source?: unknown;
 };
 
 export type AskReply = {
@@ -78,12 +80,13 @@ function historyOf(rows: MessageRow[]): HistoryTurn[] {
 /** What the person asked, as stored in the thread. */
 function askedText(job: Job, message: string, track: EarsAnalysis | null): string {
   const label: Record<Job, string> = {
-    explain: "Explain this track", suggest_genre: "Suggest a genre", teach: "Teach me a genre", ear_training: "Train my ear",
-    studio_start: "Studio starting point", listen_next: "Listen next", chat: "", setup: "Set up my taste",
+    explain: "Explain", suggest_genre: "Suggest genre", teach: "Teach me a genre", ear_training: "Ear training",
+    studio_start: "Studio start", listen_next: "Listen next", chat: "", setup: "Set up my taste",
     learn: "Learn from use", propose_groups: "Propose genre groups", taste_session: "Taste session",
   };
+  // "Explain · Work (Edit)": the track named once (critic, round 2).
   const base = job === "chat" ? message : message ? `${label[job]}: ${message}` : label[job];
-  return track && job !== "chat" ? `${base} (${track.title || track.id})` : base;
+  return track && job !== "chat" ? `${base} · ${track.title || track.id}` : base;
 }
 
 export async function ask(store: MentorStore, body: AskBody, now: Date, tz: number): Promise<AskReply | Fail> {
@@ -98,7 +101,11 @@ export async function ask(store: MentorStore, body: AskBody, now: Date, tz: numb
   if (trackId && !track) return fail("That track isn't in the library yet. Analyse it first.", 404);
   if (spec.needsTrack && !track) return fail("Pick a track first.");
 
-  const input: MentorInput = { job, profile: (await store.getProfile()).text, track, message };
+  const profile = await store.getProfile();
+  const input: MentorInput = { job, profile: profile.text, track, message };
+  // F6: the latest hand edit (within a week), so the next answer can use the new line.
+  const edit = [...profile.history].reverse().find((h) => h.by === "owner");
+  if (edit?.now && Date.now() - Date.parse(edit.at) < 7 * 86_400_000) input.recentEdit = edit.now;
 
   if (job === "suggest_genre" || job === "propose_groups" || job === "teach" || job === "chat") {
     const [library, groups] = await Promise.all([store.listAnalyses(), store.listGroups()]);
@@ -114,7 +121,7 @@ export async function ask(store: MentorStore, body: AskBody, now: Date, tz: numb
       input.groups = groups.filter((g) => g.status !== "dismissed").map((g) => ({ name: g.name, reason: g.reason }));
     }
   }
-  if (job === "chat" || job === "teach") input.history = historyOf(await store.thread(threadFor(job, trackId), 16));
+  if (THREAD_JOBS.has(job)) input.history = historyOf(await store.thread(threadFor(job, trackId), 16));
   if (job === "setup") {
     const lists = (Array.isArray(body.playlists) ? body.playlists : []).filter(
       (p): p is PlaylistLike => !!p && typeof p === "object" && Array.isArray((p as PlaylistLike).sounds),
@@ -168,9 +175,11 @@ export async function ask(store: MentorStore, body: AskBody, now: Date, tz: numb
     message: { id: saved.id, createdAt: saved.createdAt, costUsd: result.costUsd, tokens: result.usage },
     usage: await usageSummary(store, now, tz),
   };
-  // At most one "Updated: …" per answer (L56).
-  if (result.answer.profileUpdate && UPDATES_PROFILE.has(job)) {
-    await store.saveProfile(result.answer.profileUpdate.text, { at: now.toISOString(), note: result.answer.profileUpdate.note, by: "mentor", from: FROM[job] });
+  // At most one "Updated: …" per answer (L56). Setup's draft is only returned: the dialog saves it
+  // on Save (F11), so leaving setup halfway changes nothing.
+  if (result.answer.profileUpdate && UPDATES_PROFILE.has(job) && job !== "setup") {
+    const from = job === "learn" && body.source === "setup" ? "setup" : FROM[job];
+    await store.saveProfile(result.answer.profileUpdate.text, { at: now.toISOString(), note: result.answer.profileUpdate.note, by: "mentor", from });
     reply.profileUpdated = { note: result.answer.profileUpdate.note };
   }
   if (job === "studio_start" && track) reply.studio = studioStart(track, result.answer.loops ?? []);
@@ -197,5 +206,7 @@ export function mentorErrorResponse(error: MentorError): Response {
     api: [502, "The Mentor couldn't be reached. Try again."],
   };
   const [status, msg] = map[error.kind];
-  return Response.json({ error: msg, kind: error.kind, costUsd: error.costUsd }, { status });
+  // In development the validator's reason comes along, to debug prompts (never in production).
+  const detail = process.env.NODE_ENV === "development" ? { detail: error.message } : {};
+  return Response.json({ error: msg, kind: error.kind, costUsd: error.costUsd, ...detail }, { status });
 }

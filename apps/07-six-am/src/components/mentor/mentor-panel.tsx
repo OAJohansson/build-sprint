@@ -5,7 +5,7 @@
 // links under the input; "/" lists them all. Every answer comes from the server (the key stays
 // there); the browser sends ids and the person's words, never audio.
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Settings2, X } from "lucide-react";
+import { X } from "lucide-react";
 import Link from "next/link";
 import { Unlock } from "@/components/studio/unlock";
 import { bpmChoice } from "@/lib/ears/bpm-choice";
@@ -15,7 +15,8 @@ import type { Job, ListenNext } from "@/lib/mentor/answer";
 import { ApiError, money, type AskReply, type ThreadMessage } from "@/lib/mentor/client";
 import { DAILY_WARNING_AT, type UsageSummary } from "@/lib/mentor/periods";
 import { useLocalStorage } from "@/lib/use-local-storage";
-import { Turn } from "./answer-view";
+import { SOURCE_WORD, Turn } from "./answer-view";
+import { SOURCES } from "@/lib/mentor/answer";
 import { GroupsView } from "./groups-view";
 import { learn, onLearned, rememberSuggestion } from "./learn";
 import { TasteView } from "./taste-view";
@@ -37,8 +38,8 @@ const ALL_JOBS: PanelJob[] = [
 ];
 const job = (id: PanelJob["id"]) => ALL_JOBS.find((j) => j.id === id)!;
 const ASK_LABEL: Partial<Record<Job, string>> = {
-  explain: "Explain this track", suggest_genre: "Suggest a genre", teach: "Teach me a genre", ear_training: "Train my ear",
-  studio_start: "Studio starting point", listen_next: "Listen next",
+  explain: "Explain", suggest_genre: "Suggest genre", teach: "Teach me a genre", ear_training: "Ear training",
+  studio_start: "Studio start", listen_next: "Listen next",
 };
 
 type Item = { id: string; job: string; ask?: string; reply?: Pick<AskReply, "answer" | "studio" | "dropped"> & { costUsd: number; updatedNote?: string } };
@@ -63,13 +64,15 @@ export type PanelProps = {
   library: EarsAnalysis[];
   /** Ears is analysing a track: snippet previews would mix into what it hears. */
   earsBusy: boolean;
+  /** False in ?demo=1 against a real store: demo actions don't teach the real profile. */
+  canLearn: boolean;
   onClose: () => void;
   onSetGenre: (id: string, genre: string) => void;
   onOpenStudio: (bpm: number) => void;
   onOpenSetup: () => void;
 };
 
-export function MentorPanel({ data, track, library, earsBusy, onClose, onSetGenre, onOpenStudio, onOpenSetup }: PanelProps) {
+export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose, onSetGenre, onOpenStudio, onOpenSetup }: PanelProps) {
   const { api } = data;
   const [scope, setScope] = useState<"track" | "general">("track");
   const inTrack = scope === "track" && !!track;
@@ -99,24 +102,26 @@ export function MentorPanel({ data, track, library, earsBusy, onClose, onSetGenr
   const warning = overToday && continued !== today && !isStopped;
 
   // Usage on open and after an unlock.
+  const { ready } = data;
   useEffect(() => {
+    if (!ready) return;
     let live = true;
     api.usage().then((u) => { if (live) setUsage(u); }, data.onError);
     return () => { live = false; };
-  }, [api, data.onError]);
+  }, [api, data.onError, ready]);
 
   // The thread for the current scope, once per session (answers added here are appended).
   const requested = useRef(new Map<string, typeof api>());
   const { onError, locked } = data;
   useEffect(() => {
-    if (locked || requested.current.get(threadId) === api) return;
+    if (!ready || locked || requested.current.get(threadId) === api) return;
     requested.current.set(threadId, api);
     setLoading(threadId);
     api.thread(threadId).then(
       (m) => setThreads((t) => ({ ...t, [threadId]: itemsFrom(m) })),
       (e) => { requested.current.delete(threadId); onError(e); },
     ).finally(() => setLoading((l) => (l === threadId ? null : l)));
-  }, [api, threadId, locked, onError]);
+  }, [api, threadId, locked, onError, ready]);
 
   const { reload } = data;
   useEffect(() => onLearned((note) => { setLearned(note); reload(); }), [reload]);
@@ -133,7 +138,9 @@ export function MentorPanel({ data, track, library, earsBusy, onClose, onSetGenr
     const spec = ALL_JOBS.find((x) => x.id === j);
     if (spec?.needsTrack && !inTrack) return;
     const sendTrack = inTrack ? track : null;
-    const ask = askText ?? (j === "chat" ? message : message ? `${ASK_LABEL[j] ?? j}: ${message}` : ASK_LABEL[j] ?? j);
+    // "Explain · Work (Edit)": the track named once, as the server stores it.
+    const base = j === "chat" ? message : message ? `${ASK_LABEL[j] ?? j}: ${message}` : ASK_LABEL[j] ?? j;
+    const ask = askText ?? (sendTrack && j !== "chat" ? `${base} · ${sendTrack.title || "this track"}` : base);
     setError(null);
     setView("thread");
     const p: Pending = { job: j, ask, thread: threadId, web: !!spec?.web || j === "chat", at: performance.now() };
@@ -148,21 +155,21 @@ export function MentorPanel({ data, track, library, earsBusy, onClose, onSetGenr
       setUsage(r.usage);
       if (r.profileUpdated) data.reload();
       if (j === "suggest_genre" && r.answer.genre && sendTrack) rememberSuggestion(sendTrack.id, r.answer.genre.name);
-      if ((j === "chat" || j === "teach") && message && message !== "Tell me more.") learn(data.code, { type: "asked_about", detail: message.slice(0, 300), ...(sendTrack ? { trackId: sendTrack.id } : {}) });
+      if (canLearn && (j === "chat" || j === "teach") && message && message !== "Tell me more.") learn(data.code, { type: "asked_about", detail: message.slice(0, 300), ...(sendTrack ? { trackId: sendTrack.id } : {}) });
     } catch (e) {
       if (e instanceof ApiError && e.status === 401) data.onError(e);
       else setError({ text: e instanceof Error ? e.message : "Something went wrong.", job: j, message, askText });
     } finally {
       setPending((cur) => (cur === p ? null : cur));
     }
-  }, [api, data, inTrack, threadId, track]);
+  }, [api, data, inTrack, threadId, track, canLearn]);
 
   const onFeedback = (it: ListenNext, kind: "more_like_this" | "not_for_me") =>
-    learn(data.code, { type: kind, detail: `${it.artist} – ${it.title} (${it.because})`.slice(0, 480), ...(inTrack ? { trackId: track!.id } : {}) });
+    canLearn && learn(data.code, { type: kind, detail: `${it.artist} – ${it.title} (${it.because})`.slice(0, 480), ...(inTrack ? { trackId: track!.id } : {}) });
   const onAcceptGenre = (name: string) => {
     if (!track) return;
     onSetGenre(track.id, name);
-    learn(data.code, { type: "note", detail: `Accepted the Mentor's suggested genre "${name}" as My genre for "${track.title}".`, trackId: track.id });
+    if (canLearn) learn(data.code, { type: "note", detail: `Accepted the Mentor's suggested genre "${name}" as My genre for "${track.title}".`, trackId: track.id });
   };
 
   const showOffer = !!data.profile && !data.profile.text.trim() && !setupSkipped && view === "thread";
@@ -172,8 +179,6 @@ export function MentorPanel({ data, track, library, earsBusy, onClose, onSetGenr
     <aside className={s.panel} aria-label="Mentor">
       <header className={s.head}>
         <h2 className={s.name}>Mentor</h2>
-        <span className={s.costHead} title="An estimate from each answer's tokens and web searches at published prices, in your local day and month">{usageText}</span>
-        <Link className={s.icon} href="/settings" aria-label="My taste and settings" title="My taste"><Settings2 size={16} strokeWidth={1.5} /></Link>
         <button className={s.icon} onClick={onClose} aria-label="Close Mentor" title="Close"><X size={16} strokeWidth={1.5} /></button>
       </header>
 
@@ -194,6 +199,11 @@ export function MentorPanel({ data, track, library, earsBusy, onClose, onSetGenr
           </div>
 
           <div className={s.thread} ref={threadRef} style={{ position: "relative" }}>
+            {items.length && view === "thread" ? (
+              <p className={s.key} aria-label="Source numbers">
+                {SOURCES.map((x, i) => <span key={x}><b>{i + 1}</b> {SOURCE_WORD[x]}</span>)}
+              </p>
+            ) : null}
             {showOffer ? (
               <div className={s.offer}>
                 <p>Six AM doesn&apos;t know your taste yet.</p>
@@ -241,6 +251,7 @@ export function MentorPanel({ data, track, library, earsBusy, onClose, onSetGenr
           </div>
 
           <Foot
+            usageText={usageText}
             track={inTrack ? track : null}
             busy={!!pending}
             warning={warning}
@@ -279,11 +290,12 @@ function Thinking({ p }: { p: Pending }) {
 }
 
 type FootProps = {
+  usageText: string;
   track: EarsAnalysis | null; busy: boolean; warning: boolean; stopped: boolean; usage: UsageSummary | null;
   onContinue: () => void; onStop: () => void; onJob: (id: PanelJob["id"]) => void; onSend: (text: string, mode?: "teach") => void;
 };
 
-function Foot({ track, busy, warning, stopped, usage, onContinue, onStop, onJob, onSend }: FootProps) {
+function Foot({ usageText, track, busy, warning, stopped, usage, onContinue, onStop, onJob, onSend }: FootProps) {
   const [text, setText] = useState("");
   const [mode, setMode] = useState<"teach" | null>(null);
   const [hi, setHi] = useState(0);
@@ -295,6 +307,9 @@ function Foot({ track, busy, warning, stopped, usage, onContinue, onStop, onJob,
     ? ALL_JOBS.filter((j) => j.label.toLowerCase().includes(q)).sort((a, b) => Number(b.label.toLowerCase().startsWith(q)) - Number(a.label.toLowerCase().startsWith(q)))
     : [];
   const links: PanelJob[] = track ? [job("explain"), job("suggest_genre"), job("listen_next")] : [job("teach"), job("listen_next")];
+  // F3: every job reachable without "/": the rest on a second row behind "All jobs".
+  const [more, setMore] = useState(false);
+  const rest = ALL_JOBS.filter((j) => !links.includes(j));
   const blocked = busy || warning || stopped;
 
   const pick = (j: PanelJob | undefined) => {
@@ -367,8 +382,16 @@ function Foot({ track, busy, warning, stopped, usage, onContinue, onStop, onJob,
       <div className={s.jobs}>
         {links.map((j) => <button key={j.id} className={s.link} disabled={blocked} onClick={() => pick(j)}>{j.label}</button>)}
         {!track ? <button className={s.link} disabled={blocked} onClick={() => field.current?.focus()}>Ask anything</button> : null}
-        <span className={s.slashHint}>/ for all</span>
+        <button className={cx(s.link, s.moreBtn)} aria-expanded={more} aria-controls="mentor-more-jobs" onClick={() => setMore(!more)}>All jobs {more ? "▴" : "▾"}</button>
       </div>
+      {more ? (
+        <div className={s.jobs} id="mentor-more-jobs">
+          {rest.map((j) => (
+            <button key={j.id} className={s.link} disabled={blocked || (j.needsTrack && !track)} title={j.needsTrack && !track ? "Pick a track first" : j.hint} onClick={() => pick(j)}>{j.label}</button>
+          ))}
+        </div>
+      ) : null}
+      <p className={s.usage} title="An estimate from each answer's tokens and web searches at published prices, in your local day and month">{usageText}</p>
     </div>
   );
 }

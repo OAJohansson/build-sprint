@@ -23,7 +23,7 @@ const json = (a: EarsAnalysis) => JSON.stringify(a);
 const newestFirst = (a: EarsAnalysis, b: EarsAnalysis) => b.analysedAt.localeCompare(a.analysedAt);
 
 /** `skip` drops server rows (dev only: the demo's copies, see DemoAnalyse). */
-export function useEarsSync(code: string, skip?: ReadonlySet<string>): SyncState {
+export function useEarsSync(code: string, ready: boolean, skip?: ReadonlySet<string>): SyncState {
   const [rawResults, setResults] = useLocalStorage<EarsAnalysis[]>(RESULTS_KEY, NO_RESULTS);
   const results = Array.isArray(rawResults) ? rawResults : NO_RESULTS;
   const [imported, setImported] = useLocalStorage<boolean>(IMPORTED_KEY, false);
@@ -39,6 +39,7 @@ export function useEarsSync(code: string, skip?: ReadonlySet<string>): SyncState
 
   // Load: import once, then the server's list is the truth, plus whatever is pending here.
   useEffect(() => {
+    if (!ready) return;
     let live = true;
     synced.current = null;
     const api = mentorApi(code);
@@ -50,8 +51,9 @@ export function useEarsSync(code: string, skip?: ReadonlySet<string>): SyncState
           if (local.length) await api.importAnalyses(local);
           setImported(true);
         }
-        let server = await api.analyses();
-        if (skip?.size) server = server.filter((a) => !skip.has(a.id));
+        const got = await api.analyses();
+        // The demo's copies exist only in the in-memory dev store; a real store's rows are all real.
+        const server = skip?.size && got.store === "memory" ? got.analyses.filter((a) => !skip.has(a.id)) : got.analyses;
         if (!live) return;
         const byId = new Map(server.map((a) => [a.id, a]));
         // shortcut: a result deleted in another browser comes back if this one still has it; add
@@ -72,7 +74,7 @@ export function useEarsSync(code: string, skip?: ReadonlySet<string>): SyncState
     return () => { live = false; };
     // skip is a constant set; the load runs once per access code.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [code]);
+  }, [code, ready]);
 
   // Before the load (or while locked / offline): remember which results changed here.
   const prev = useRef(results);

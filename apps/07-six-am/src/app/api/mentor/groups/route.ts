@@ -4,6 +4,7 @@ import { serverError } from "@/lib/server/failure";
 import { ask, isFail, mentorErrorResponse } from "@/lib/server/mentor-run";
 import type { Group } from "@/lib/server/mentor-store";
 import { cleanGenre } from "@/lib/ears/my-genre";
+import { sharedTraits } from "@/lib/mentor/group-traits";
 import { cleanTzOffset } from "@/lib/mentor/periods";
 
 // Genre groups that grow from the library (M12). GET lists them; POST asks the Mentor to propose
@@ -66,8 +67,11 @@ export async function PATCH(request: Request) {
           })
           .filter((p): p is { name: string; trackIds: string[] } => p !== null);
         if (parts.length < 2) return bad("Split into at least two named parts, each with tracks from this group.");
+        // Each part's reason comes from its own tracks' numbers (F7), not the old group's.
+        const library = await g.store.listAnalyses();
+        const reasonOf = (ids: string[]) => sharedTraits(library.filter((a) => ids.includes(a.id))) || `Split from "${group.name}"`;
         const created: Group[] = await g.store.addGroups(
-          parts.map((p) => ({ name: p.name, trackIds: p.trackIds, reason: `Split from "${group.name}": ${group.reason}`, status: group.status === "dismissed" ? "proposed" : group.status })),
+          parts.map((p) => ({ name: p.name, trackIds: p.trackIds, reason: reasonOf(p.trackIds), status: group.status === "dismissed" ? "proposed" : group.status })),
         );
         await g.store.deleteGroup(id);
         return Response.json({ groups: created });

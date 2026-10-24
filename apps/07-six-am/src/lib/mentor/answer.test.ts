@@ -17,6 +17,21 @@ describe("checkAnswer", () => {
     expect(checkAnswer("explain", { sentences: [], tellMore: false }).ok).toBe(false);
     expect(checkAnswer("explain", null).ok).toBe(false);
   });
+  it("keeps everyday answers to 4 sentences (teach may run longer) and rejects raw figures (F2, F8)", () => {
+    const five = { sentences: Array.from({ length: 5 }, (_, i) => ({ text: `Fact ${i}.`, source: "general" })), tellMore: true };
+    expect(checkAnswer("explain", five).ok).toBe(false);
+    expect(checkAnswer("teach", five).ok).toBe(true);
+    for (const bad of ["Its spectral centroid is 2329 Hz.", "It sits at -28.8 dBFS.", "Key strength 0.66 says G major.", "Brightness of 1.5 kHz."]) {
+      expect(checkAnswer("explain", { sentences: [{ text: bad, source: "ears" }], tellMore: false }).ok, bad).toBe(false);
+    }
+    expect(checkAnswer("explain", { sentences: [{ text: "Ears measured 126 BPM and Tech House at 47%.", source: "ears" }], tellMore: false }).ok).toBe(true);
+  });
+  it("library is its own source (F9); listen next keeps 3 picks, track pages first", () => {
+    expect(checkAnswer("explain", { sentences: [{ text: "You tagged it Tech house.", source: "library" }], tellMore: false }).ok).toBe(true);
+    const item = (n: number, kind: string) => ({ artist: `A${n}`, title: `T${n}`, url: `https://x.com/${n}`, because: "b", kind });
+    const r = checkAnswer("listen_next", { ...ok, listenNext: [item(1, "article"), item(2, "track"), item(3, "playlist"), item(4, "track")] });
+    expect(r.ok && r.answer.listenNext?.map((x) => x.title)).toEqual(["T2", "T4", "T1"]);
+  });
   it("suggest_genre needs a genre; studio_start needs a real loop", () => {
     expect(checkAnswer("suggest_genre", ok).ok).toBe(false);
     expect(checkAnswer("suggest_genre", { ...ok, genre: { name: "Bass house", reason: "Most likely, given the styles." } }).ok).toBe(true);

@@ -92,7 +92,8 @@ function GroupRow({ g, library, patch }: { g: Group; library: EarsAnalysis[]; pa
     <div className={s.group}>
       {mode === "rename" ? (
         <form className={s.row} style={{ marginTop: 0 }} onSubmit={async (e) => { e.preventDefault(); if (cleanGenre(name) && (await patch({ id: g.id, action: "rename", name }))) setMode("view"); }}>
-          <input className={s.input} aria-label="Group name" value={name} onChange={(e) => setName(e.target.value)} autoFocus style={{ flex: "1 1 160px" }} />
+          {/* F7: the old name is selected on focus, so typing replaces it instead of appending. */}
+          <input className={s.input} aria-label="Group name" value={name} onChange={(e) => setName(e.target.value)} onFocus={(e) => e.currentTarget.select()} autoFocus style={{ flex: "1 1 160px" }} />
           <button className={s.btn} disabled={!cleanGenre(name)}>Save</button>
           <button type="button" className={s.textBtn} onClick={() => { setName(g.name); setMode("view"); }}>Cancel</button>
         </form>
@@ -125,11 +126,11 @@ function GroupRow({ g, library, patch }: { g: Group; library: EarsAnalysis[]; pa
         </>
       ) : (
         <>
-          <ul className={s.groupTracks}>{g.trackIds.map((id) => <li key={id} title={title(id)}>{title(id)}</li>)}</ul>
+          <p className={s.groupLine} title={g.trackIds.map(title).join("\n")}>{g.trackIds.map((id) => title(id).split(" · ")[0]).join(" · ")}</p>
           {mode === "view" ? (
             <div className={s.actions}>
               {g.status === "proposed" ? <button className={s.btn} onClick={() => void patch({ id: g.id, action: "accept" })}>Accept</button> : null}
-              <button className={s.textBtn} onClick={() => setMode("rename")}>Rename</button>
+              <button className={s.textBtn} onClick={() => { setName(g.name); setMode("rename"); }}>Rename</button>
               {g.trackIds.length >= 2 ? <button className={s.textBtn} onClick={() => setMode("split")}>Split</button> : null}
               {g.status === "proposed" ? <button className={s.textBtn} onClick={() => void patch({ id: g.id, action: "dismiss" })}>Dismiss</button> : null}
             </div>

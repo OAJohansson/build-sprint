@@ -4,10 +4,14 @@
 // the taste profile (for Copy for Claude and the setup offer) and the genre groups (accepted
 // names join My genre suggestions, L55).
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ApiError, mentorApi, useAccessCode, type Group, type Profile } from "@/lib/mentor/client";
+import { ApiError, mentorApi, useAccessCode, type Group, type Profile, type StoreKind } from "@/lib/mentor/client";
 
 export type MentorData = {
   code: string;
+  /** The stored access code has been read; calls wait for it (F12). */
+  ready: boolean;
+  /** Which store the server uses (null until known). */
+  storeKind: StoreKind | null;
   setCode: (c: string) => void;
   api: ReturnType<typeof mentorApi>;
   /** null = not loaded yet (or offline). */
@@ -25,11 +29,12 @@ export type MentorData = {
 };
 
 export function useMentorData(): MentorData {
-  const [code, setCodeRaw] = useAccessCode();
+  const [code, setCodeRaw, ready] = useAccessCode();
   const api = useMemo(() => mentorApi(code), [code]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [groups, setGroupsRaw] = useState<Group[]>([]);
   const [locked, setLocked] = useState(false);
+  const [storeKind, setStoreKind] = useState<StoreKind | null>(null);
   const [tried, setTried] = useState(false);
   const [n, setN] = useState(0);
 
@@ -38,19 +43,22 @@ export function useMentorData(): MentorData {
   }, []);
 
   useEffect(() => {
+    if (!ready) return;
     let live = true;
     Promise.all([api.profile(), api.groups()]).then(
-      ([p, g]) => { if (live) { setProfile(p); setGroupsRaw(g); setLocked(false); } },
+      ([p, g]) => { if (live) { setProfile(p.profile); setStoreKind(p.store); setGroupsRaw(g); setLocked(false); } },
       (e) => { if (live) onError(e); },
     );
     return () => { live = false; };
-  }, [api, onError, n]);
+  }, [api, onError, n, ready]);
 
   const setGroups = useCallback((fn: (g: Group[]) => Group[]) => setGroupsRaw(fn), []);
   const reload = useCallback(() => setN((x) => x + 1), []);
   const acceptedNames = useMemo(() => groups.filter((g) => g.status === "accepted").map((g) => g.name), [groups]);
   return {
     code,
+    ready,
+    storeKind,
     setCode: (c) => { setTried(true); setCodeRaw(c); },
     api, profile, setProfile, groups, setGroups, acceptedNames, locked,
     lockError: locked && tried ? "That code didn't work." : null,

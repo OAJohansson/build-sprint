@@ -9,12 +9,20 @@ export const JOBS = [
 export type Job = (typeof JOBS)[number];
 export const isJob = (v: unknown): v is Job => typeof v === "string" && (JOBS as readonly string[]).includes(v);
 
-/** Where a fact came from. Ears = the browser's measurements; uploader = SoundCloud title/tags. */
-export const SOURCES = ["ears", "uploader", "web", "profile", "general"] as const;
+/** Where a fact came from (E2's source labels). Ears = the browser's measurements; uploader =
+ *  SoundCloud title/tags; profile = the written taste profile; library = the person's own tags and
+ *  accepted genre groups in Six AM (F9: kept apart from the profile). The order is the panel's
+ *  fixed footnote numbering. */
+export const SOURCES = ["ears", "uploader", "web", "profile", "library", "general"] as const;
 export type Source = (typeof SOURCES)[number];
 
-export type Sentence = { text: string; source: Source; url?: string };
-export type ListenNext = { artist: string; title: string; url: string; because: string };
+/** Teach answers come in three labelled sections (critic, round 2). */
+export const TEACH_SECTIONS = ["what", "sound", "start"] as const;
+export type TeachSection = (typeof TEACH_SECTIONS)[number];
+export type Sentence = { text: string; source: Source; url?: string; section?: TeachSection };
+/** kind: what the link opens (F4): a track page, a playlist/tracklist/tag page, or an article. */
+export type LinkKind = "track" | "playlist" | "article";
+export type ListenNext = { artist: string; title: string; url: string; because: string; kind?: LinkKind; section?: TeachSection };
 export type GenreCall = { name: string; reason: string };
 export type LoopPick = { id: string; why: string };
 export type Question = { question: string; options: { label: string; url?: string }[] };
@@ -51,6 +59,7 @@ export const ANSWER_SCHEMA = {
           text: { type: "string" },
           source: { type: "string", enum: [...SOURCES] },
           url: { type: "string", description: "Required when source is web: the page it came from (from your search results)." },
+          section: { type: "string", enum: [...TEACH_SECTIONS], description: "Teach only: what (what it is), sound (how it sounds), start (where to start listening)." },
         },
       },
     },
@@ -61,7 +70,11 @@ export const ANSWER_SCHEMA = {
         type: "object",
         additionalProperties: false,
         required: ["artist", "title", "url", "because"],
-        properties: { artist: { type: "string" }, title: { type: "string" }, url: { type: "string" }, because: { type: "string" } },
+        properties: {
+          artist: { type: "string" }, title: { type: "string" }, url: { type: "string" }, because: { type: "string" },
+          kind: { type: "string", enum: ["track", "playlist", "article"], description: "track = the track's own page (SoundCloud, Bandcamp, Beatport, YouTube video, Discogs release); playlist = a playlist, tracklist, chart or tag page; article = anything else." },
+          section: { type: "string", enum: [...TEACH_SECTIONS], description: "Teach only: which section this listen link belongs to (one per section)." },
+        },
       },
     },
     genre: {
@@ -132,6 +145,12 @@ export type Checked = { ok: true; answer: MentorAnswer; dropped: string[] } | { 
 
 const str = (v: unknown, max = 2000) => (typeof v === "string" && v.trim() ? v.trim().slice(0, max) : null);
 const isUrl = (v: unknown): v is string => typeof v === "string" && /^https?:\/\/\S+$/i.test(v.trim());
+const isSection = (v: unknown): v is TeachSection => typeof v === "string" && (TEACH_SECTIONS as readonly string[]).includes(v);
+const KINDS: LinkKind[] = ["track", "playlist", "article"];
+/** At most this many sentences per answer (F8): 2–4 everywhere but teach. */
+export const maxSentences = (job: Job) => (job === "teach" ? 10 : 4);
+/** Raw measurement jargon the person shouldn't see (F2): say bright/warm, loud/quiet, likely/unsure. */
+const RAW_NUMBERS = /\b\d+(?:[.,]\d+)?\s*(?:k?hz|dbfs|db)\b|spectral centroid|\bcentroid\b|\bdbfs\b|\bstrength\s*(?:of\s*)?[01]?[.,]\d+/i;
 const isSource = (v: unknown): v is Source => typeof v === "string" && (SOURCES as readonly string[]).includes(v);
 /** Same page, ignoring a trailing slash, the fragment and http/https. */
 export const urlKey = (u: string) => u.trim().replace(/^https?:\/\//i, "").replace(/#.*$/, "").replace(/\/+$/, "").toLowerCase();
@@ -150,7 +169,13 @@ export function checkAnswer(job: Job, raw: unknown, needs: Needs = {}): Checked 
     if (!text) return { ok: false, problem: `sentences[${i}] has no text.` };
     if (!isSource(o.source)) return { ok: false, problem: `sentences[${i}] has no valid source (one of ${SOURCES.join(", ")}).` };
     if (o.source === "web" && !isUrl(o.url)) return { ok: false, problem: `sentences[${i}] is from the web but has no url.` };
-    sentences.push(o.url && isUrl(o.url) ? { text, source: o.source, url: o.url.trim() } : { text, source: o.source });
+    if (RAW_NUMBERS.test(text)) return { ok: false, problem: `sentences[${i}] uses raw measurement numbers ("${text.match(RAW_NUMBERS)?.[0]}"): describe them in words (bright/warm, loud/quiet, likely/unsure), no Hz, dBFS, centroid or strength figures.` };
+    const sentence: Sentence = o.url && isUrl(o.url) ? { text, source: o.source, url: o.url.trim() } : { text, source: o.source };
+    if (job === "teach") sentence.section = isSection(o.section) ? o.section : sentences.at(-1)?.section ?? "what";
+    sentences.push(sentence);
+  }
+  if (sentences.length > maxSentences(job)) {
+    return { ok: false, problem: `${sentences.length} sentences: keep to ${maxSentences(job) === 4 ? "2–4" : `at most ${maxSentences(job)}`} and offer tellMore for the rest.` };
   }
   const answer: MentorAnswer = { sentences, tellMore: r.tellMore === true };
 
@@ -172,9 +197,12 @@ export function checkAnswer(job: Job, raw: unknown, needs: Needs = {}): Checked 
         dropped.push(`${artist} – ${title}: link not from this answer's web search`);
         continue;
       }
-      list.push({ artist, title, url: o.url.trim(), because });
+      const item: ListenNext = { artist, title, url: o.url.trim(), because, kind: KINDS.includes(o.kind as LinkKind) ? (o.kind as LinkKind) : "article" };
+      if (job === "teach" && isSection(o.section)) item.section = o.section;
+      list.push(item);
     }
-    answer.listenNext = list.slice(0, 6);
+    // Three picks at most (F4); track pages first.
+    answer.listenNext = [...list].sort((a, b) => Number(b.kind === "track") - Number(a.kind === "track")).slice(0, 3);
   }
   if (Array.isArray(r.loops)) {
     const picks: LoopPick[] = [];

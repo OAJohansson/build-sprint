@@ -13,7 +13,8 @@ export async function GET(request: Request) {
   if ("error" in g) return g.error;
   const id = idOf(request);
   try {
-    if (!id) return Response.json({ analyses: await g.store.listAnalyses() });
+    // store: "memory" | "supabase", so the dev-only demo filter applies only to the memory store.
+    if (!id) return Response.json({ analyses: await g.store.listAnalyses(), store: g.store.kind });
     const analysis = await g.store.getAnalysis(id);
     return analysis ? Response.json({ analysis }) : Response.json({ error: "That result doesn't exist." }, { status: 404 });
   } catch (error) {
@@ -21,9 +22,17 @@ export async function GET(request: Request) {
   }
 }
 
+/** Sent by the ?demo=1 view's dev-only copy of its sample rows (L70). */
+const DEMO_HEADER = "x-six-am-demo";
+
 export async function PUT(request: Request) {
   const g = mentorGuard(request);
   if ("error" in g) return g.error;
+  // Demo rows (illustrative numbers) may only go to the in-memory dev store, never to Supabase,
+  // whatever NODE_ENV says: checked here on the store itself.
+  if (request.headers.get(DEMO_HEADER) && g.store.kind !== "memory") {
+    return Response.json({ error: "Demo rows are only copied to the in-memory development store." }, { status: 409 });
+  }
   const body = (await request.json().catch(() => null)) as { analysis?: unknown } | null;
   const analysis = parseAnalysis(body?.analysis);
   if (!analysis || analysis.id !== idOf(request)) return Response.json({ error: "That result couldn't be saved." }, { status: 400 });

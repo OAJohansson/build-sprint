@@ -17,16 +17,25 @@
 .err { font: 400 11.5px var(--f-mono); color: var(--err); }
 .profile {
   display: block; width: 100%; box-sizing: border-box; margin-top: 10px; padding: 0 0 14px; field-sizing: content; min-height: 88px;
-  font: 400 14px/1.75 var(--f-mono) !important; color: var(--ink); background: none; border: 0; border-bottom: 1px solid var(--line);
-  border-radius: 0; outline: none; resize: none; overflow: hidden;
+  font: 400 14px/1.75 var(--f-mono) !important; color: var(--ink); background: #161311; border: 1px solid var(--line);
+  border-radius: 6px; padding: 14px 16px; outline: none; resize: none; overflow: hidden; cursor: text; transition: border-color 150ms ease-out, background 150ms ease-out;
 }
-.profile:focus { border-bottom-color: var(--muted); }
+.profile:hover { border-color: #3a322c; }
+.profile:focus { border-color: var(--muted); background: #0b0a09; }
 .profile::placeholder { color: var(--faint); }
 .side { min-width: 0; }
 .updates { margin: 10px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
-.updates li { padding: 10px 0; border-top: 1px solid var(--line); }
+.updates li { padding: 4px 0; border-top: 1px solid var(--line); }
 .updates li:last-child { border-bottom: 1px solid var(--line); }
 .updates p { margin: 3px 0; font: 400 12.5px/1.55 var(--f-mono); }
+.editHint { font-weight: 400; color: var(--muted); }
+.updLine { display: grid; grid-template-columns: 9ch minmax(0, 1fr) auto; gap: 10px; align-items: baseline; min-height: 28px; font: 400 12.5px/1.5 var(--f-mono); }
+.updNote { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.details summary { list-style: none; cursor: pointer; }
+.details summary::-webkit-details-marker { display: none; }
+.details summary:hover .updNote { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--faint); }
+.details[open] .updNote { white-space: normal; }
+.details summary:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
 .diff { margin: 6px 0; display: grid; grid-template-columns: 4ch minmax(0, 1fr); gap: 2px 10px; font: 400 12px/1.55 var(--f-mono); }
 .diff dt { color: var(--muted); }
 .diff dd { margin: 0; color: var(--muted); }

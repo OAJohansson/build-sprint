@@ -8,8 +8,11 @@
   --own: var(--ink); --err: #f08a6e;
   height: 100dvh; min-width: 0; display: grid; grid-template-rows: 64px auto 1fr auto; background: var(--bg); color: var(--ink);
   border-left: 1px solid var(--line); font-family: var(--f-mono), monospace; overflow: hidden;
-  animation: panelIn 220ms cubic-bezier(.23, 1, .32, 1);
+  /* No entrance animation: a paused timeline (background tab, screenshot pane) left it at opacity 0 */
 }
+/* F1: nothing may widen the column (long URLs, link rows): every row shrinks and long words wrap */
+.panel > * { min-width: 0; }
+.thread, .foot, .turn, .voice, .because, .listen, .webRefs, .updated, .groupReason { min-width: 0; overflow-wrap: anywhere; }
 @keyframes panelIn { from { opacity: 0; transform: translateX(16px); } }
 @media (prefers-reduced-motion: reduce) { .panel { animation: none; } }
 
@@ -36,17 +39,26 @@
 .empty i { font-style: normal; color: var(--ink); }
 .turn { padding: 24px 0; }
 .turn + .turn { border-top: 1px solid var(--line); }
-.ask { margin: 0 0 10px; font: 400 12.5px/20px var(--f-mono); color: var(--muted); }
+.ask { margin: 0 0 10px; font: 500 11.5px/18px var(--f-mono); color: var(--muted); letter-spacing: .02em; overflow-wrap: anywhere; }
+/* The panel's one source key: the numbers mean the same in every answer */
+.key { margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 2px 12px; font: 400 11px/18px var(--f-mono); color: var(--muted); }
+.key b { font-weight: 500; color: var(--ink); margin-right: 2px; }
 .voice { margin: 0; font: 400 14px/22px var(--f-mono); color: var(--ink); }
 .voice + .voice { margin-top: 10px; }
 /* Footnote markers tight to the word */
-.sup { font: 500 9.5px var(--f-mono); color: var(--muted); vertical-align: 6px; line-height: 0; margin-left: 1px; }
-.sup a { color: inherit; text-decoration: none; }
+.sup { font: 500 10px var(--f-mono); color: var(--muted); vertical-align: 6px; line-height: 0; margin-left: 1px; cursor: help; }
+.sup a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; text-decoration-color: var(--faint); cursor: pointer; }
+.sup a:hover { text-decoration-color: var(--ink); }
+/* This answer's web pages, under marker 3 */
+.webRefs { margin: 10px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0 12px; font: 400 11.5px var(--f-mono); color: var(--muted); }
+.webRefs a { color: var(--ink); text-underline-offset: 3px; display: inline-flex; align-items: center; min-height: 28px; min-width: 0; }
+.kind { margin-left: 8px; font: 400 10.5px var(--f-mono); color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; vertical-align: 1px; }
+.listen { margin: 6px 0 0; }
 
 .list { margin: 14px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
 .list li { display: grid; grid-template-columns: 20px minmax(0, 1fr); }
-.n { font: 400 12px/22px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
-.itemTitle { font: 500 14px/22px var(--f-mono); color: var(--ink); text-decoration: none; overflow-wrap: anywhere; }
+.n { font: 400 12px/28px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.itemTitle { display: inline-block; padding: 3px 0; min-height: 28px; box-sizing: border-box; font: 500 14px/22px var(--f-mono); color: var(--ink); text-decoration: none; overflow-wrap: anywhere; }
 .itemTitle:hover { text-decoration: underline; text-underline-offset: 3px; }
 .arrow { font-weight: 400; color: var(--muted); }
 .because { margin: 2px 0 0; font: 400 13px/20px var(--f-mono); color: var(--ink); }
@@ -78,6 +90,10 @@
 .updated { margin: 10px 0 0; font: 400 12px/20px var(--f-mono); color: var(--muted); }
 .updated a { color: var(--ink); text-underline-offset: 3px; }
 
+.teachSec { margin-top: 14px; }
+.teachSec:first-of-type { margin-top: 0; }
+.teachSec h4 { margin: 0 0 4px; font: 500 11px/18px var(--f-mono); color: var(--muted); letter-spacing: .04em; }
+
 /* Thinking, errors */
 .status { margin: 0; padding: 24px 0 0; font: 400 13px/20px var(--f-mono); color: var(--ink); }
 .status + .status { padding-top: 6px; }
@@ -106,15 +122,17 @@
 .field::placeholder { color: var(--faint); }
 .field:focus { border-color: var(--muted); }
 .field:disabled { opacity: .6; }
-.jobs { display: flex; flex-wrap: nowrap; min-width: 0; align-items: center; margin: 6px 0 0 -6px; font: 400 12px var(--f-mono); color: var(--faint); }
-.jobs .link + .link::before { content: "·"; color: var(--faint); margin-right: 8px; margin-left: -2px; }
+.jobs { display: flex; flex-wrap: wrap; gap: 0 6px; min-width: 0; align-items: center; margin: 6px 0 0 -6px; font: 400 12px var(--f-mono); color: var(--faint); }
+.moreBtn { margin-left: auto; }
+.usage { margin: 6px 0 0; font: 400 11px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+/* No dot separators: a wrapped row would start with an orphan "·" */
 .link { font: 400 12px var(--f-mono); color: var(--muted); background: none; border: 0; padding: 0 6px; min-height: 28px; cursor: pointer; border-radius: 4px; white-space: nowrap; text-underline-offset: 3px; }
 .link:hover { color: var(--ink); text-decoration: underline; }
 .link:disabled { color: var(--faint); text-decoration: none; cursor: default; }
 .slashHint { margin-left: auto; white-space: nowrap; padding-left: 8px; color: var(--faint); font-size: 11px; padding-right: 2px; }
 
 /* "/" list: a plain list of every job, not a command palette */
-.all { position: absolute; left: 20px; right: 20px; bottom: calc(100% + 6px); margin: 0; padding: 6px 0; list-style: none; z-index: 5; background: #1d1916; border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 -12px 28px rgba(0, 0, 0, .5); transform-origin: bottom left; animation: pop 140ms ease-out; }
+.all { position: absolute; left: 20px; right: 20px; bottom: calc(100% + 6px); margin: 0; padding: 6px 0; list-style: none; z-index: 5; background: #1d1916; border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 -12px 28px rgba(0, 0, 0, .5); }
 @keyframes pop { from { opacity: 0; transform: translateY(4px); } }
 @media (prefers-reduced-motion: reduce) { .all { animation: none; } }
 .allRow { width: 100%; display: grid; grid-template-columns: 124px minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 6px 12px; min-height: 30px; border: 0; background: none; text-align: left; font: 400 12.5px var(--f-mono); color: var(--ink); cursor: pointer; }
@@ -168,3 +186,5 @@
 /* The access-code prompt inside the panel: the Studio's gate, sized to the panel */
 .gateWrap { overflow: auto; }
 .gateWrap main { min-height: 100%; padding: 32px 24px; }
+.groupLine { margin: 4px 0 0; font: 400 12px/20px var(--f-mono); color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.head .icon:last-child { margin-left: auto; }

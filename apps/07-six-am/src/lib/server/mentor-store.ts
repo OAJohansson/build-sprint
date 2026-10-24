@@ -36,6 +36,8 @@ export type Group = { id: string; name: string; reason: string; trackIds: string
 export type NewGroup = Pick<Group, "name" | "reason" | "trackIds" | "status">;
 
 export type MentorStore = {
+  /** Which store this is: demo rows may only ever go to "memory" (dev without Supabase). */
+  kind: "memory" | "supabase";
   getProfile(): Promise<Profile>;
   saveProfile(text: string, note: ProfileNote): Promise<Profile>;
   thread(threadId: string, limit?: number): Promise<MessageRow[]>;
@@ -87,6 +89,7 @@ function supabaseMentor(db: SupabaseClient): MentorStore {
     if (error) throw new StoreError(explain(error, table));
   };
   return {
+    kind: "supabase",
     async getProfile() {
       const { data, error } = await db.from("sixam_taste_profile").select("text, history, updated_at").eq("id", 1).maybeSingle();
       check(error, "sixam_taste_profile");
@@ -207,6 +210,7 @@ function memoryMentor(): MentorStore {
   const mem = (g.__sixamMentorMem ??= { profile: { text: "", updatedAt: null, history: [] }, messages: [], groups: new Map(), analyses: new Map() } as Mem);
   const now = () => new Date().toISOString();
   return {
+    kind: "memory",
     async getProfile() {
       return structuredClone(mem.profile);
     },

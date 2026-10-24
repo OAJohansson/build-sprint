@@ -78,9 +78,12 @@ export async function askClaude(input: MentorInput, needs: Omit<Needs, "searchUr
   let problem: string | undefined;
   const seen = new Set<string>(), seenRaw = new Set<string>();
 
+  const params0 = buildRequest(input);
+  /** The retry continues the same conversation when it can (below), so searches aren't redone. */
+  let carried: Anthropic.Beta.BetaMessageParam[] | null = null;
   for (let attempt = 0; attempt < 2; attempt++) {
-    const params = buildRequest({ ...input, retryProblem: problem });
-    const messages = [...params.messages];
+    const params: ReturnType<typeof buildRequest> = carried ? params0 : buildRequest({ ...input, retryProblem: problem });
+    const messages: Anthropic.Beta.BetaMessageParam[] = carried ?? [...params.messages];
     let response: Anthropic.Beta.BetaMessage | null = null;
     for (let turn = 0; turn <= MAX_CONTINUES; turn++) {
       try {
@@ -110,6 +113,17 @@ export async function askClaude(input: MentorInput, needs: Omit<Needs, "searchUr
       return { answer: checked.answer, usage, costUsd: round6(cost), latencyMs: Date.now() - t0, dropped: checked.dropped, searchUrls: [...seenRaw] };
     }
     problem = response.stop_reason === "max_tokens" ? "The answer was cut off; keep it shorter." : checked.problem;
+    // The answer tool was called but its input failed our checks: hand the problem back as that
+    // call's error result, in the same conversation, so the model fixes the answer without
+    // searching again (cheaper and faster than a fresh request).
+    const call: Anthropic.Beta.BetaToolUseBlock | undefined = response.content.findLast((b): b is Anthropic.Beta.BetaToolUseBlock => b.type === "tool_use" && b.name === "answer");
+    carried = call && response.stop_reason !== "max_tokens"
+      ? [
+          ...messages,
+          { role: "assistant", content: response.content as unknown as Anthropic.Beta.BetaContentBlockParam[] },
+          { role: "user", content: [{ type: "tool_result", tool_use_id: call.id, is_error: true, content: `Rejected: ${problem} Call the answer tool once more with a corrected answer; don't search again.` }] },
+        ]
+      : null;
   }
   throw new MentorError("invalid", `The answer failed validation twice: ${problem}`, usage, round6(cost));
 }

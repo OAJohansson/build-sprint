@@ -79,9 +79,10 @@ export function trackContext(a: EarsAnalysis): string {
     `[uploader] Genre tag: ${a.uploaderGenreTag ?? "none"}${tagDiffers(a) ? " (differs from the styles Ears measured)" : ""} | Tags: ${a.uploaderTags.join(", ") || "none"}`,
     `[ears] Measured over ${Math.round(a.analysedSeconds)} s${a.preview ? " (30 s preview only)" : ""}, in the person's browser`,
     `[ears] Styles (each style's own likelihood from a Discogs-style classifier): ${styles}`,
-    `[ears] BPM: ${bpmSentence(a)} | Key: ${keyLabel(a.key, a.scale)} (${keyWord(a.keyStrength)}, strength ${a.keyStrength.toFixed(2)}${runner})`,
-    `[ears] Energy: ${energyLabel(a.energy)} (${a.energyDbfs.toFixed(1)} dBFS) | Brightness: ${brightnessLabel(a.brightness)} (spectral centroid ${Math.round(a.brightnessHz)} Hz)`,
-    `[profile] My genre (the person's own tag; it always wins): ${a.myGenre?.trim() || "not set yet"}`,
+    // F2: words, not raw figures (no strength, dBFS or Hz), so answers can't quote them.
+    `[ears] BPM: ${bpmSentence(a)} | Key: ${keyLabel(a.key, a.scale)} (${keyWord(a.keyStrength)}${runner})`,
+    `[ears] Energy (loudness): ${energyLabel(a.energy)} | Brightness (tone): ${brightnessLabel(a.brightness)}`,
+    `[library] My genre (the person's own tag; it always wins): ${a.myGenre?.trim() || "not set yet"}`,
   ].join("\n");
 }
 

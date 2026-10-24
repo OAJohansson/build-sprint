@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { RECIPES } from "@/lib/recipes";
 import { LOOPS } from "@/lib/timeline";
-import { CRATE_IDS, crateText, keyNote, realLoops, studioStart } from "./studio";
+import { parseDoc } from "@/lib/tracks";
+import { CRATE_IDS, crateText, keyNote, realLoops, starterDoc, studioStart } from "./studio";
 
 const track = { bpm: 128.1, bpmAlternative: null, bpmAmbiguous: false, key: "F", scale: "minor" };
 
@@ -36,9 +37,20 @@ describe("keyNote: the track's key against the crate's A minor (L58)", () => {
   it("F minor is far: says it clashes, and that the crate stays in A minor", () => {
     const k = keyNote("F", "minor");
     expect(k.relation).toBe("far");
-    expect(k.trackKey).toBe("F minor (4A)");
-    expect(k.note).toMatch(/4 semitones below A/);
-    expect(k.note).toMatch(/no transposing/);
+    expect(k.trackKey).toBe("F minor");
+    expect(k.note).toMatch(/bass and chords would clash/);
+    expect(k.note).not.toMatch(/semitone|wheel|\b\d{1,2}[AB]\b/);
   });
   it("an unknown key says so", () => expect(keyNote("", "").relation).toBe("unknown"));
+});
+
+describe("starterDoc: the Mentor's loops placed on a new track (N1)", () => {
+  it("puts real loops on their own lanes in 16-bar blocks and passes the save check", () => {
+    const d = starterDoc(["four-to-the-floor", "clap-stack", "acid-line", "made-up"]);
+    expect(d.regions.map((r) => [r.loopId, r.track, r.start, r.length])).toEqual([
+      ["four-to-the-floor", 0, 1, 16], ["clap-stack", 0, 17, 16], ["acid-line", 1, 1, 16],
+    ]);
+    expect(parseDoc(d)).not.toBeNull();
+    expect(starterDoc([]).regions).toEqual([]);
+  });
 });

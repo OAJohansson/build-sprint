@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { checkAnswer, isDownloadLink, urlKey } from "./answer";
+import { checkAnswer, isDownloadLink, linkKind, urlKey } from "./answer";
 
 const ok = { sentences: [{ text: "Ears measured 128 BPM.", source: "ears" }], tellMore: true };
 
@@ -49,6 +49,15 @@ describe("checkAnswer", () => {
     expect(r.ok && r.answer.listenNext).toEqual([]);
     const s = checkAnswer("setup", { ...ok, profileUpdate: { text: "You like bounce.", note: "draft" } });
     expect(!s.ok && s.problem).toMatch(/missing questions/);
+  });
+  it("profiles are artist pages, sets are playlists (N4); Studio start has no key jargon (N5)", () => {
+    expect(linkKind("https://soundcloud.com/someartist", "article")).toBe("artist");
+    expect(linkKind("https://someartist.bandcamp.com/", "article")).toBe("artist");
+    expect(linkKind("https://soundcloud.com/a/sets/b", "article")).toBe("playlist");
+    expect(linkKind("https://soundcloud.com/a/track", "track")).toBe("track");
+    const studio = (text: string) => checkAnswer("studio_start", { sentences: [{ text, source: "ears" }], tellMore: false, loops: [{ id: "x", why: "" }] });
+    expect(studio("It's 2 semitones above A.").ok).toBe(false);
+    expect(studio("Ears read it as 9A.").ok).toBe(false);
   });
   it("suggest_genre needs a genre; studio_start needs a real loop", () => {
     expect(checkAnswer("suggest_genre", ok).ok).toBe(false);

@@ -107,6 +107,6 @@ export const mentorApi = (code: string) => ({
 });
 export type MentorApi = ReturnType<typeof mentorApi>;
 
-export const money = (usd: number) => `$${usd < 10 ? usd.toFixed(2) : usd.toFixed(0)}`;
-/** Per answer: three decimals when under a cent, so a cheap answer doesn't read as $0.00. */
-export const moneyFine = (usd: number) => (usd < 0.01 ? `$${usd.toFixed(3)}` : money(usd));
+/** N6: anything above zero but under a cent reads "< $0.01", never "$0.00". */
+export const money = (usd: number) => (usd > 0 && usd < 0.01 ? "< $0.01" : `$${usd < 10 ? usd.toFixed(2) : usd.toFixed(0)}`);
+export const moneyFine = money;

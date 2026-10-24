@@ -21,6 +21,7 @@ import { GroupsView } from "./groups-view";
 import { learn, onLearned, rememberSuggestion } from "./learn";
 import { TasteView } from "./taste-view";
 import type { MentorData } from "./use-mentor-data";
+import type { StudioStart } from "@/lib/mentor/studio";
 import s from "./mentor.module.css";
 
 const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(" ");
@@ -68,7 +69,7 @@ export type PanelProps = {
   canLearn: boolean;
   onClose: () => void;
   onSetGenre: (id: string, genre: string) => void;
-  onOpenStudio: (bpm: number) => void;
+  onOpenStudio: (start: StudioStart, title: string) => void;
   onOpenSetup: () => void;
 };
 
@@ -104,24 +105,24 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
   // Usage on open and after an unlock.
   const { ready } = data;
   useEffect(() => {
-    if (!ready) return;
+    if (!ready || !data.code) return;
     let live = true;
     api.usage().then((u) => { if (live) setUsage(u); }, data.onError);
     return () => { live = false; };
-  }, [api, data.onError, ready]);
+  }, [api, data.onError, ready, data.code]);
 
   // The thread for the current scope, once per session (answers added here are appended).
   const requested = useRef(new Map<string, typeof api>());
   const { onError, locked } = data;
   useEffect(() => {
-    if (!ready || locked || requested.current.get(threadId) === api) return;
+    if (!ready || locked || !data.code || requested.current.get(threadId) === api) return;
     requested.current.set(threadId, api);
     setLoading(threadId);
     api.thread(threadId).then(
       (m) => setThreads((t) => ({ ...t, [threadId]: itemsFrom(m) })),
       (e) => { requested.current.delete(threadId); onError(e); },
     ).finally(() => setLoading((l) => (l === threadId ? null : l)));
-  }, [api, threadId, locked, onError, ready]);
+  }, [api, threadId, locked, onError, ready, data.code]);
 
   const { reload } = data;
   useEffect(() => onLearned((note) => { setLearned(note); reload(); }), [reload]);
@@ -194,16 +195,12 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
               <button role="tab" aria-selected={!inTrack} className={s.tab} onClick={() => setScope("general")}>General</button>
             </div>
             {inTrack ? (
-              <p className={s.on}><b>{track!.title || "Untitled"}</b><span className={s.by}>{track!.uploader}</span><span className={s.bpm}>{bpmText(bpmChoice(track!).lead)}</span></p>
+              <p className={s.on}><b>{track!.title || "Untitled"}</b><span className={s.bpm}>{bpmText(bpmChoice(track!).lead)}</span></p>
             ) : <p className={s.on}><span className={s.by}>Questions not about one track</span></p>}
           </div>
 
           <div className={s.thread} ref={threadRef} style={{ position: "relative" }}>
-            {items.length && view === "thread" ? (
-              <p className={s.key} aria-label="Source numbers">
-                {SOURCES.map((x, i) => <span key={x}><b>{i + 1}</b> {SOURCE_WORD[x]}</span>)}
-              </p>
-            ) : null}
+
             {showOffer ? (
               <div className={s.offer}>
                 <p>Six AM doesn&apos;t know your taste yet.</p>
@@ -228,7 +225,7 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
                     onTellMore={pending ? undefined : () => void send("chat", "Tell me more.", "Tell me more")}
                     onAcceptGenre={inTrack ? onAcceptGenre : undefined}
                     onFeedback={onFeedback}
-                    onOpenStudio={onOpenStudio}
+                    onOpenStudio={(start) => onOpenStudio(start, inTrack ? track!.title : "")}
                   />
                 ) : null)}
                 {!items.length && !pending && loading !== threadId && !showOffer ? (
@@ -252,6 +249,7 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
 
           <Foot
             usageText={usageText}
+            used={new Set(items.at(-1)?.reply?.answer.sentences.map((x) => x.source) ?? [])}
             track={inTrack ? track : null}
             busy={!!pending}
             warning={warning}
@@ -291,11 +289,13 @@ function Thinking({ p }: { p: Pending }) {
 
 type FootProps = {
   usageText: string;
+  /** Sources the latest answer used: the pinned key dims the others. */
+  used: ReadonlySet<string>;
   track: EarsAnalysis | null; busy: boolean; warning: boolean; stopped: boolean; usage: UsageSummary | null;
   onContinue: () => void; onStop: () => void; onJob: (id: PanelJob["id"]) => void; onSend: (text: string, mode?: "teach") => void;
 };
 
-function Foot({ usageText, track, busy, warning, stopped, usage, onContinue, onStop, onJob, onSend }: FootProps) {
+function Foot({ usageText, used, track, busy, warning, stopped, usage, onContinue, onStop, onJob, onSend }: FootProps) {
   const [text, setText] = useState("");
   const [mode, setMode] = useState<"teach" | null>(null);
   const [hi, setHi] = useState(0);
@@ -391,6 +391,9 @@ function Foot({ usageText, track, busy, warning, stopped, usage, onContinue, onS
           ))}
         </div>
       ) : null}
+      <p className={s.key} aria-label="Source numbers">
+        {SOURCES.map((x, i) => <span key={x} className={used.size && !used.has(x) ? s.keyDim : undefined}><b>{i + 1}</b> {SOURCE_WORD[x]}</span>)}
+      </p>
       <p className={s.usage} title="An estimate from each answer's tokens and web searches at published prices, in your local day and month">{usageText}</p>
     </div>
   );

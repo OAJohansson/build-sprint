@@ -23,7 +23,7 @@ export const TEACH_SECTIONS = ["what", "sound", "start"] as const;
 export type TeachSection = (typeof TEACH_SECTIONS)[number];
 export type Sentence = { text: string; source: Source; url?: string; section?: TeachSection };
 /** kind: what the link opens (F4): a track page, a playlist/tracklist/tag page, or an article. */
-export type LinkKind = "track" | "playlist" | "article";
+export type LinkKind = "track" | "artist" | "playlist" | "article";
 export type ListenNext = { artist: string; title: string; url: string; because: string; kind?: LinkKind; section?: TeachSection };
 export type GenreCall = { name: string; reason: string };
 export type LoopPick = { id: string; why: string };
@@ -74,7 +74,7 @@ export const ANSWER_SCHEMA = {
         required: ["artist", "title", "url", "because"],
         properties: {
           artist: { type: "string" }, title: { type: "string" }, url: { type: "string" }, because: { type: "string" },
-          kind: { type: "string", enum: ["track", "playlist", "article"], description: "track = the track's own page (SoundCloud, Bandcamp, Beatport, YouTube video, Discogs release); playlist = a playlist, tracklist, chart or tag page; article = anything else." },
+          kind: { type: "string", enum: ["track", "artist", "playlist", "article"], description: "track = the track's own page (SoundCloud, Bandcamp, Beatport, YouTube video, Discogs release); artist = the artist's or label's profile page; playlist = a playlist, tracklist, chart or tag page; article = a written article or review." },
           section: { type: "string", enum: [...TEACH_SECTIONS], description: "Teach only: which section this listen link belongs to (one per section)." },
         },
       },
@@ -165,7 +165,23 @@ export type Checked = { ok: true; answer: MentorAnswer; dropped: string[] } | { 
 const str = (v: unknown, max = 2000) => (typeof v === "string" && v.trim() ? v.trim().slice(0, max) : null);
 const isUrl = (v: unknown): v is string => typeof v === "string" && /^https?:\/\/\S+$/i.test(v.trim());
 const isSection = (v: unknown): v is TeachSection => typeof v === "string" && (TEACH_SECTIONS as readonly string[]).includes(v);
-const KINDS: LinkKind[] = ["track", "playlist", "article"];
+const KINDS: LinkKind[] = ["track", "artist", "playlist", "article"];
+/** N4: a SoundCloud or Bandcamp profile is an artist page, whatever the model called it. */
+export function linkKind(u: string, said: LinkKind): LinkKind {
+  try {
+    const url = new URL(u);
+    const host = url.hostname.replace(/^(www|m)\./, "");
+    const parts = url.pathname.split("/").filter(Boolean);
+    if (host === "soundcloud.com" && parts.length === 1) return "artist";
+    if (host === "soundcloud.com" && parts[1] === "sets") return "playlist";
+    if (host.endsWith(".bandcamp.com") && (parts.length === 0 || parts[0] === "music")) return "artist";
+    return said;
+  } catch {
+    return said;
+  }
+}
+/** N5: Studio start talks about keys in plain words. */
+const KEY_JARGON = /semitone|key wheel|camelot|\b(?:1[0-2]|[1-9])[AB]\b/;
 /** At most this many sentences per answer (F8): 2–4 everywhere but teach. */
 export const maxSentences = (job: Job) => (job === "teach" ? 10 : 4);
 /** Raw measurement jargon the person shouldn't see (F2): say bright/warm, loud/quiet, likely/unsure. */
@@ -189,6 +205,9 @@ export function checkAnswer(job: Job, raw: unknown, needs: Needs = {}): Checked 
     if (!isSource(o.source)) return { ok: false, problem: `sentences[${i}] has no valid source (one of ${SOURCES.join(", ")}).` };
     if (o.source === "web" && !isUrl(o.url)) return { ok: false, problem: `sentences[${i}] is from the web but has no url.` };
     if (RAW_NUMBERS.test(text)) return { ok: false, problem: `sentences[${i}] uses raw measurement numbers ("${text.match(RAW_NUMBERS)?.[0]}"): describe them in words (bright/warm, loud/quiet, likely/unsure), no Hz, dBFS, centroid or strength figures.` };
+    if (job === "studio_start" && KEY_JARGON.test(text)) {
+      return { ok: false, problem: `sentences[${i}] uses key jargon ("${text.match(KEY_JARGON)?.[0]}"): say it in plain words ("the bass and chords would clash, drums still fit").` };
+    }
     const sentence: Sentence = o.url && isUrl(o.url) ? { text, source: o.source, url: o.url.trim() } : { text, source: o.source };
     if (job === "teach") sentence.section = isSection(o.section) ? o.section : sentences.at(-1)?.section ?? "what";
     sentences.push(sentence);
@@ -223,7 +242,7 @@ export function checkAnswer(job: Job, raw: unknown, needs: Needs = {}): Checked 
         dropped.push(`${artist} – ${title}: link not from this answer's web search`);
         continue;
       }
-      const item: ListenNext = { artist, title, url: o.url.trim(), because, kind: KINDS.includes(o.kind as LinkKind) ? (o.kind as LinkKind) : "article" };
+      const item: ListenNext = { artist, title, url: o.url.trim(), because, kind: linkKind(o.url.trim(), KINDS.includes(o.kind as LinkKind) ? (o.kind as LinkKind) : "article") };
       if (job === "teach" && isSection(o.section)) item.section = o.section;
       list.push(item);
     }

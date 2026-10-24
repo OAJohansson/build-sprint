@@ -4,7 +4,7 @@ import { bpmChoice, type BpmInput } from "@/lib/ears/bpm-choice";
 import { camelot } from "@/lib/ears/labels";
 import type { EarsAnalysis } from "@/lib/ears/results";
 import { clampBpm } from "@/lib/tempo";
-import { LOOPS, TRACKS } from "@/lib/timeline";
+import { BARS, LOOPS, newId, TRACKS, type Doc, type Region } from "@/lib/timeline";
 
 /** Every loop in the crate is written in A minor (recipes.ts, decision 0019). */
 export const CRATE_KEY = { key: "A", scale: "minor", camelot: "8A" } as const;
@@ -16,31 +16,29 @@ const PITCH: Record<string, number> = {
 export type KeyRelation = "same" | "relative" | "neighbour" | "far" | "unknown";
 export type KeyNote = { trackKey: string; crateKey: string; relation: KeyRelation; note: string };
 
-/** How the track's key sits against the crate's A minor, in one plain sentence. */
+/** How the track's key sits against the crate's A minor, in one plain sentence (N5: no semitones,
+ *  key wheel or Camelot codes; the wheel is only used to decide). */
 export function keyNote(key: string, scale: string): KeyNote {
-  const crateKey = `A minor (${CRATE_KEY.camelot})`;
+  const crateKey = "A minor";
   const code = camelot(key, scale);
   if (!code || PITCH[key] === undefined) {
-    return { trackKey: `${key} ${scale}`.trim() || "unknown", crateKey, relation: "unknown", note: "Ears couldn't name the track's key, so the crate's A minor is a starting guess." };
+    return { trackKey: `${key} ${scale}`.trim() || "unknown", crateKey, relation: "unknown", note: "Ears couldn't name the track's key, so treat the crate's A minor as a starting guess." };
   }
-  const trackKey = `${key} ${scale} (${code})`;
+  const trackKey = `${key} ${scale}`;
   const num = Number.parseInt(code, 10), letter = code.slice(-1);
   const wheel = Math.min(Math.abs(num - 8), 12 - Math.abs(num - 8));
   if (code === CRATE_KEY.camelot) {
-    return { trackKey, crateKey, relation: "same", note: "Same key as the crate (A minor), so every loop sits in key with the track." };
+    return { trackKey, crateKey, relation: "same", note: "The same key as the crate, so every loop fits." };
   }
   if (num === 8 && letter === "B") {
-    return { trackKey, crateKey, relation: "relative", note: "C major is A minor's relative major: the same notes, so the crate's loops fit." };
+    return { trackKey, crateKey, relation: "relative", note: "C major uses the same notes as the crate's A minor, so every loop fits." };
   }
   if (wheel === 1 && letter === "A") {
-    return { trackKey, crateKey, relation: "neighbour", note: `Next to A minor on the key wheel (${code} vs 8A): all but one note shared, so the crate should blend.` };
+    return { trackKey, crateKey, relation: "neighbour", note: "A close key to the crate's A minor: nearly the same notes, so the loops should blend." };
   }
-  const semis = (((PITCH[key] - PITCH.A) % 12) + 12) % 12;
-  const up = semis <= 6 ? semis : semis - 12;
-  const dir = up === 0 ? "the same root as A" : `${Math.abs(up)} semitone${Math.abs(up) === 1 ? "" : "s"} ${up > 0 ? "above" : "below"} A`;
   return {
     trackKey, crateKey, relation: "far",
-    note: `The track's root is ${dir} and its key is ${wheel} step${wheel === 1 ? "" : "s"} from the crate's A minor on the key wheel, so tonal loops (bass, chords) will clash with it; drums and percussion still fit. The crate stays in A minor (no transposing).`,
+    note: "A different key from the crate's A minor: the bass and chords would clash with the track, while drums and percussion still fit. The crate can't change key.",
   };
 }
 
@@ -73,4 +71,23 @@ export function studioStart(a: BpmInput & Pick<EarsAnalysis, "key" | "scale">, p
     key: keyNote(a.key, a.scale),
     loops: ids.map((id) => ({ id, why: picks.find((p) => p.id === id)?.why?.trim() ?? "" })),
   };
+}
+
+/** Where the Studio picks up a Mentor starting point (N1): a new, unsaved track. */
+export const STUDIO_DRAFT_KEY = "six-am:studio-draft:v1";
+export type StudioDraft = { name: string; bpm: number; doc: Doc; at: string };
+
+/** The suggested loops laid out on the timeline: each lane's loops one after another in 16-bar
+ *  blocks from bar 1 (every crate loop is 2, 4 or 8 bars, so 16 always fits whole loops). */
+export function starterDoc(ids: string[]): Doc {
+  const regions: Region[] = [];
+  const next = TRACKS.map(() => 1);
+  for (const id of realLoops(ids)) {
+    const loop = LOOPS.find((l) => l.id === id)!;
+    const start = next[loop.track];
+    if (start + 16 - 1 > BARS) continue;
+    regions.push({ id: newId(), loopId: id, track: loop.track, start, length: 16 });
+    next[loop.track] = start + 16;
+  }
+  return { regions, muted: TRACKS.map(() => false) };
 }

@@ -10,6 +10,7 @@ import { learn, lastSuggestion } from "@/components/mentor/learn";
 import { MentorPanel } from "@/components/mentor/mentor-panel";
 import { SetupDialog } from "@/components/mentor/setup-dialog";
 import { useMentorData } from "@/components/mentor/use-mentor-data";
+import { Unlock } from "@/components/studio/unlock";
 import { Logo } from "@/components/studio/logo";
 import { ViewsNav } from "@/components/views-nav";
 import { bpmChoice } from "@/lib/ears/bpm-choice";
@@ -26,6 +27,7 @@ import { styleDisplayName } from "@/lib/ears/styles";
 import { clampBpm, DEFAULT_BPM, formatBpm, TEMPO_KEY } from "@/lib/tempo";
 import { useEarsSync, type SyncState } from "@/lib/ears/use-ears-sync";
 import { ApiError, mentorApi, useAccessCode } from "@/lib/mentor/client";
+import { starterDoc, STUDIO_DRAFT_KEY, type StudioDraft } from "@/lib/mentor/studio";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { DEMO_RESULTS, DEMO_SOURCE, demoQueue } from "./demo";
 import { buildRows, type Row } from "./rows";
@@ -49,9 +51,16 @@ const GENRE_INPUT_ID = "my-genre";
 const DEMO_IDS: ReadonlySet<string> | undefined = process.env.NODE_ENV === "development" ? new Set(DEMO_RESULTS.map((r) => r.id)) : undefined;
 
 export function LiveAnalyse() {
-  const [code, , ready] = useAccessCode();
+  const [code, setCode, ready] = useAccessCode();
+  // N3: a browser without the access code gets the Studio's gate first; nothing is requested
+  // before a code exists (F12).
+  if (ready && !code) return <Unlock error={null} onUnlock={setCode} />;
+  return <LiveScreen code={code} ready={ready} />;
+}
+
+function LiveScreen({ code, ready }: { code: string; ready: boolean }) {
   // M15: results and My genre mirrored to the server; localStorage stays the cache.
-  const sync = useEarsSync(code, ready, DEMO_IDS);
+  const sync = useEarsSync(code, ready && !!code, DEMO_IDS);
   return <Screen m={useAnalyse()} sync={sync} />;
 }
 
@@ -240,7 +249,13 @@ function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
           earsBusy={!m.demo && !!activeItem(m.queue)}
           onClose={() => setOpen(false)}
           onSetGenre={(id, g) => { saveGenre(id, g); flash(`My genre set to ${g}`); }}
-          onOpenStudio={(bpm) => { setStudioBpm(clampBpm(bpm)); router.push("/"); }}
+          onOpenStudio={(start, title) => {
+            // N1: a new, unsaved Studio track with the loops placed, at its own tempo; the device
+            // tempo and the saved tracks are left alone.
+            const draft: StudioDraft = { name: `Start from ${title || "the Mentor"}`.slice(0, 80), bpm: start.bpm, doc: starterDoc(start.loops.map((l) => l.id)), at: new Date().toISOString() };
+            try { localStorage.setItem(STUDIO_DRAFT_KEY, JSON.stringify(draft)); } catch { /* storage blocked */ }
+            router.push("/");
+          }}
           onOpenSetup={() => setSetupOpen(true)}
         />
       </div>

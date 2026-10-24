@@ -13,6 +13,8 @@
 .col { min-width: 0; }
 .fieldHead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; min-height: 20px; }
 .label { margin: 0; font: 500 12px/20px var(--f-mono); color: var(--ink); }
+/* N8: the "My taste · click to edit" label is a 28 px target that focuses the field */
+.fieldHead .label { display: inline-flex; align-items: center; min-height: 28px; cursor: pointer; }
 .saved { font: 400 11.5px var(--f-mono); color: var(--muted); }
 .err { font: 400 11.5px var(--f-mono); color: var(--err); }
 .profile {

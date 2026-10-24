@@ -44,13 +44,15 @@ export function useMentorData(): MentorData {
 
   useEffect(() => {
     if (!ready) return;
+    // No code yet: send nothing (F12); `locked` below asks for it.
+    if (!code) return;
     let live = true;
     Promise.all([api.profile(), api.groups()]).then(
       ([p, g]) => { if (live) { setProfile(p.profile); setStoreKind(p.store); setGroupsRaw(g); setLocked(false); } },
       (e) => { if (live) onError(e); },
     );
     return () => { live = false; };
-  }, [api, onError, n, ready]);
+  }, [api, onError, n, ready, code]);
 
   const setGroups = useCallback((fn: (g: Group[]) => Group[]) => setGroupsRaw(fn), []);
   const reload = useCallback(() => setN((x) => x + 1), []);
@@ -60,7 +62,8 @@ export function useMentorData(): MentorData {
     ready,
     storeKind,
     setCode: (c) => { setTried(true); setCodeRaw(c); },
-    api, profile, setProfile, groups, setGroups, acceptedNames, locked,
+    api, profile, setProfile, groups, setGroups, acceptedNames,
+    locked: locked || (ready && !code),
     lockError: locked && tried ? "That code didn't work." : null,
     onError,
     reload,

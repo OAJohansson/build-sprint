@@ -25,3 +25,5 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 19 | Owner, icon sheet | Likes 05 Riso | open |
 | 20 | Owner, icon sheet | 06 Enamel pin is cute, unsure about the colours: explore other colourways | fixing |
 | 21 | Critic round 4 | Steamer sits bottom-left with dead space above; no press tint on cards | open |
+| 22 | Owner, board v3 | The dark header band is far too much contrast against the light board; not best practice | fixing |
+| 23 | Owner, board v3 | Thought the icon was dark purple; should the app's dark match it as a dark purple? | fixing |

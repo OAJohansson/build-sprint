@@ -105,3 +105,9 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   rest again asks to remove pack requirements (numbers, anchors, week strip, comeback copy).
 - **Other screens prototyped** in the v3 system: intro (18 s, three scenes), new habit, new stop
   habit, slip and urge. Shown to the owner in one batch.
+- **Header contrast** (owner): the ink band is too harsh against the cream; asked why it passed
+  the critic. It didn't: the critic flagged the dark block in rounds 3 and 4 ("heaviest thing on
+  screen") and the PM kept it, because the band came from the PM's own brief (echo the icon's
+  ink). PM's miss: it should have gone to the owner or been dropped. Also: the owner read the
+  icon's warm near-black (#2a2420) as purple. Comparing no band / soft band / softened plum /
+  plum type, and the icon in ink vs plum.

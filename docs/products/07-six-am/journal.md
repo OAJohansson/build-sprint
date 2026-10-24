@@ -407,3 +407,4 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   this feature good"). In: my own genre per track and filters (BPM range, my-genre). Next after it:
   play a filtered list one after another. L41, T20; F12 and F13 added to the kickoff and evals.
 - **v1.1 built:** My genre field in the strip and a column in the table (datalist suggestions: used genres, then the 17 Appendix A families), in Copy for Claude and both exports; BPM range and genre filters with pure, tested matching (`filters.ts`). 91 tests, lint, tsc, build pass. L42, L43, T21, T22.
+- **v1.1 fix pass:** short family suggestions and one spelling per genre (L44), strip follows the filter, Six AM-styled genre select, readable filter bar, owner's words in ivory, full-height genre cell, toast out of the way. 94 tests, lint, tsc, build pass. T23, T24.

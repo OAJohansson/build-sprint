@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { matchesFilters, NO_FILTERS, NO_GENRE, parseBound, sanitiseFilters, type Filters } from "./filters";
-import { genreSuggestions, GENRE_FAMILIES, usedGenres, withMyGenre } from "./my-genre";
+import { canonicalGenre, genreKey, genreSuggestions, GENRE_FAMILIES, usedGenres, withMyGenre } from "./my-genre";
 import type { EarsAnalysis } from "./results";
 
 const steady = (bpm: number, myGenre?: string) => ({ bpm, bpmAlternative: null, bpmAmbiguous: false, myGenre });
@@ -89,5 +89,28 @@ describe("my genre helpers", () => {
     expect(withMyGenre([a], "x", "  Jackin'  house ")[0].myGenre).toBe("Jackin' house");
     expect("myGenre" in withMyGenre([a], "x", "   ")[0]).toBe(false);
     expect(withMyGenre([a], "y", "New")[0].myGenre).toBe("Old");
+  });
+
+  it("genreKey ignores case, spaces and punctuation", () => {
+    expect(genreKey("deep  House")).toBe(genreKey("Deep house"));
+    expect(genreKey("Deep-house")).toBe(genreKey("Deep house"));
+    expect(genreKey("Jackin house")).toBe(genreKey("Jackin' house"));
+    expect(genreKey("Tech house")).not.toBe(genreKey("Deep house"));
+    expect(genreKey("")).toBe("");
+    expect(genreKey("!!")).toBe("!!");
+  });
+
+  it("canonicalGenre prefers an existing spelling, then a family, else the typed text", () => {
+    expect(canonicalGenre("deep  House", ["Deep house"])).toBe("Deep house");
+    expect(canonicalGenre("afro BOUNCE", ["Afro bounce"])).toBe("Afro bounce");
+    expect(canonicalGenre("tech-house", [])).toBe("Tech house");
+    expect(canonicalGenre("  Gqom ", [])).toBe("Gqom");
+    expect(canonicalGenre("   ", ["Deep house"])).toBeUndefined();
+  });
+
+  it("families are short names (no parentheses), and a used spelling merges with its family", () => {
+    expect(GENRE_FAMILIES.every((g) => !/[()]/.test(g) && g.length <= 24)).toBe(true);
+    expect(usedGenres([{ myGenre: "Deep house" }, { myGenre: "deep-house" }])).toEqual(["Deep house"]);
+    expect(genreSuggestions([{ myGenre: "deep house" }]).filter((x) => genreKey(x) === "deephouse")).toEqual(["deep house"]);
   });
 });

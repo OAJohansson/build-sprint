@@ -70,3 +70,6 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L43 | 2026-10-24 | Any genre filter (incl. "No genre yet") shows only analysed tracks, since only results carry a genre | PM (engineer's proposal) | v1.1 | |
 | T21 | 2026-10-24 | BPM range and genre filter persist per device; the text filter stays session-only; "Clear filters" clears all three | PM | v1.1 | |
 | T22 | 2026-10-24 | "My genre" column last, field in the strip next to Copy for Claude; columns narrowed to fit 1280 (Track min 220 px); text filter also matches my genre; genre matching ignores case | PM | v1.1 | |
+| L44 | 2026-10-24 | A typed genre takes an existing spelling (another track's, else a family name) when only case, spaces or punctuation differ; the genre filter matches the same way | PM (engineer's proposal) | v1.1 | provisional |
+| T23 | 2026-10-24 | Appendix A suggestions as 17 short family names ("Deep house", "Jackin' house" …); old long names already stored aren't migrated | PM | v1.1 | |
+| T24 | 2026-10-24 | Strip follows the first visible row when filters hide the selected one; stale genre filter falls back to All; toast in the app bar, hides at 2.5 s; owner's words in ivory (`--own`); columns rebalanced; friendlier empty-filter messages; BPM boxes digits only | PM | v1.1 | |

@@ -1,9 +1,9 @@
 // Table filters (F13, L41): a BPM range and the owner's genre. Pure, so it's tested on its own.
 // A track whose half/double time is unclear matches on either reading (bpm-choice.ts).
 import { bpmChoice, type BpmInput } from "./bpm-choice";
-import { cleanGenre } from "./my-genre";
+import { cleanGenre, genreKey } from "./my-genre";
 
-/** "" = all genres; NO_GENRE = tracks without one; else the genre (case-insensitive). */
+/** "" = all genres; NO_GENRE = tracks without one; else the genre (case, spaces, punctuation ignored). */
 export const NO_GENRE = "__no_genre__";
 
 export type Filters = { bpmMin: number | null; bpmMax: number | null; genre: string };
@@ -43,7 +43,7 @@ export function matchesFilters(a: Filterable | undefined, f: Filters): boolean {
     if (!a) return false;
     const g = cleanGenre(a?.myGenre);
     if (f.genre === NO_GENRE) { if (g) return false; }
-    else if (!g || g.toLowerCase() !== f.genre.toLowerCase()) return false;
+    else if (!g || genreKey(g) !== genreKey(f.genre)) return false;
   }
   return true;
 }

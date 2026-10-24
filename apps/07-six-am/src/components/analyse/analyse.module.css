@@ -9,7 +9,10 @@
   --bg: #131110; --panel: #1a1715; --crate: #1d1814; --ink: #f1e6d3; --muted: #aa9c88; --faint: #958a7c;
   --line: #2c2622; --gold: #f2b134; --goldDim: #a68a5a; --orange: #ef5b37; --amber: #c4923f;
   --hover: #211d1a; --selFill: #28231f; --meterOn: #cdbfa8;
-  --cols: 32px minmax(220px, 1fr) 150px 128px 70px 104px 50px 56px 66px 116px 112px;
+  /* Track gets the room (critic, v1.1): Style, Also, Energy, Tone and Time are as narrow as their longest value */
+  --cols: 28px minmax(240px, 1fr) 140px 116px 70px 104px 48px 54px 58px 116px 140px;
+  /* The owner's own words (my genre): the strip title's warm ivory, never a model grey */
+  --own: var(--ink);
   height: 100dvh; display: grid; grid-template-rows: 64px auto auto auto 1fr; background: var(--bg); color: var(--ink);
   font-family: var(--f-mono), monospace; overflow: hidden;
 }
@@ -95,7 +98,7 @@
 }
 .filter::placeholder { color: var(--faint); }
 .filter:focus { border-color: var(--muted); }
-.filter, .bound, .select { min-height: 28px; box-sizing: border-box; }
+.filter, .bound, .select { min-height: 28px; height: 28px; box-sizing: border-box; }
 /* BPM range and my-genre filter (F13): the filter's look, narrow */
 .range { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
 .bound {
@@ -104,10 +107,14 @@
 }
 .bound::placeholder { color: var(--faint); }
 .bound:focus { border-color: var(--muted); }
+/* The native select dressed as the BPM boxes: same height, border and mono text, a thin chevron */
 .select {
-  font: 400 12px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--line); border-radius: 6px;
-  padding: 4px 8px; max-width: 200px; outline: none; cursor: pointer;
+  appearance: none; -webkit-appearance: none; height: 28px;
+  font: 400 12px var(--f-mono); color: var(--ink); border: 1px solid var(--line); border-radius: 6px;
+  background: #0b0a09 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23aa9c88' stroke-width='1.2'/%3E%3C/svg%3E") no-repeat right 10px center;
+  padding: 0 28px 0 9px; min-width: 180px; max-width: 240px; outline: none; cursor: pointer; text-overflow: ellipsis;
 }
+.select:hover, .select:focus { border-color: var(--muted); }
 .selectIdle { color: var(--muted); }
 .select option { color: var(--ink); background: #1d1916; }
 .listCount { font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -134,10 +141,12 @@
 .sel:focus-visible { background: var(--selFill); box-shadow: inset 3px 0 0 var(--gold), inset 0 0 0 1px rgba(241, 230, 211, .35); }
 .num { font-variant-numeric: tabular-nums; text-align: right; }
 .idx { color: var(--faint); font-size: 11px; }
-/* The artist gives way first (shrinks 100× faster), then the title */
-.track { display: flex; gap: 8px; }
-.track b { font-weight: 500; flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.by { color: var(--muted); flex: 0 100 auto; min-width: 4ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* The uploader gives way first, down to nothing; the title (never shrinking, capped at the cell)
+   is cut only once the uploader is gone: so only one of the two is ever cut (critic, v1.1) */
+.track { display: flex; }
+.track b { font-weight: 500; flex: 0 0 auto; max-width: 100%; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.by { color: var(--muted); flex: 0 100 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.track .by { flex: 0 1 auto; padding-left: 8px; }
 /* Style · % and Also · %: the name left (bright, truncates), the % in its own right-aligned
    sub-column (dim, never cut) so the numbers line up down the table */
 .styleCell { display: grid; grid-template-columns: minmax(0, 1fr) 3ch; column-gap: 8px; align-items: baseline; }
@@ -155,8 +164,11 @@
 .tagCell .differs { flex: none; }
 .status { color: var(--ink); }
 .failed { color: #c98a74; }
-/* My genre (F12): the owner's own label, plain ink; dim "–" when not set. Click edits it in the strip. */
-.genreCell { cursor: text; }
+/* My genre (F12): the owner's own label in --own; dim "–" when not set. Click edits it in the strip. */
+/* My genre (F12): the whole cell, row height, is the click target (F3) */
+.genreCell { cursor: text; align-self: stretch; display: flex; align-items: center; }
+.genreCell > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.own { color: var(--own); }
 .genreCell:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--faint); }
 .time { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
 
@@ -185,20 +197,21 @@
 
 /* The detail strip for the selected track */
 .strip {
-  position: sticky; bottom: 0; z-index: 3; min-width: 1260px; margin-top: 0; background: var(--crate); border-top: 1px solid var(--line);
+  position: sticky; bottom: 0; z-index: 3; min-width: 1260px; margin-top: auto; /* pinned to the bottom even with few rows (F9) */ background: var(--crate); border-top: 1px solid var(--line);
   padding: 16px 20px 18px 64px; display: flex; flex-direction: column; gap: 14px;
 }
+.stripEmpty { font: 400 12.5px var(--f-mono); color: var(--muted); min-height: 64px; justify-content: center; }
 .headLine { display: flex; align-items: center; gap: 16px; min-width: 0; white-space: nowrap; }
-.headLine b { font: italic 400 26px/1.05 var(--f-serif); overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.headLine b { font: italic 400 26px/1.05 var(--f-serif); overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 0 1 auto; }
 .headLine .by { font-size: 12.5px; max-width: none; }
 .lcd { font: 500 22px var(--f-mono); color: var(--gold); font-variant-numeric: tabular-nums; }
 .lcdUnit { font-size: 11px; color: var(--goldDim); letter-spacing: .1em; margin-left: 6px; }
 .lcdAlt { font: 400 12.5px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .actions { display: flex; gap: 8px; }
 /* My genre field in the strip's head line, just before the actions */
-.genre { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; flex: 0 1 260px; min-width: 160px; }
+.genre { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; flex: 0 4 350px; min-width: 220px; } /* input ~280 px when there is room; gives way before the title */
 .genreInput {
-  font: 400 12.5px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--line); border-radius: 6px;
+  font: 400 12.5px var(--f-mono); color: var(--own); background: #0b0a09; border: 1px solid var(--line); border-radius: 6px;
   padding: 6px 9px; min-height: 30px; box-sizing: border-box; width: 100%; min-width: 0; outline: none; text-overflow: ellipsis;
 }
 .genreInput::placeholder { color: var(--faint); }
@@ -220,9 +233,9 @@
 .snip > * { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .snipSub { color: var(--muted); font-variant-numeric: tabular-nums; }
 
-/* Toast */
+/* Toast: in the app bar's empty middle, so it never covers the toolbar or the filters (F4) */
 .toast {
-  position: fixed; left: 50%; top: 120px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 14px;
+  position: fixed; left: 50%; top: 14px; height: 36px; box-sizing: border-box; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 14px;
   font: 500 12.5px var(--f-mono); color: var(--bg); background: var(--ink); border-radius: 6px; padding: 8px 14px;
   animation: toastIn 160ms ease-out;
 }

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Map directions</title>
+<style>
+:root { color-scheme: dark; }
+body { margin: 0; background: #131110; color: #f1e6d3; font: 14px/1.5 ui-monospace, "IBM Plex Mono", Menlo, monospace; }
+main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font: italic 400 32px/1.1 Georgia, serif; margin: 0 0 8px; }
+p.lede { color: #aa9c88; margin: 0 0 24px; max-width: 640px; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 28px; }
+@media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+figure { margin: 0; }
+img { display: block; width: 100%; height: auto; border: 1px solid #2c2622; border-radius: 6px; }
+figcaption { display: flex; gap: 12px; padding-top: 10px; }
+figcaption b { flex: none; width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid #f2b134; color: #f2b134; border-radius: 50%; font-weight: 500; }
+figcaption strong { display: block; font-weight: 500; }
+figcaption span { color: #aa9c88; }
+figcaption strong { color: #f1e6d3; }
+</style></head>
+<body><main>
+<h1>Six AM · Arrangement map, ten directions</h1>
+<p class="lede">Rough prototypes, same track in each: Lost in The Loop, 124 BPM, A minor, 7:44, 240 bars. Pick three. Tap an image for full size. Extra: <a href="map/map-01-studio-listening.png" style="color:#f2b134">direction 1 while listening</a>.</p>
+<div class="grid">
+  <figure>
+    <a href="map/map-01-studio.png"><img src="map/map-01-studio.png" alt="Direction 1, Studio" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>1</b><span><strong>Studio</strong>The Studio's own timeline, reused: five lanes with blocks where each layer seems to play, sections on the ruler. (seed 1)</span></figcaption>
+  </figure>
+  <figure>
+    <a href="map/map-02-ledger.png"><img src="map/map-02-ledger.png" alt="Direction 2, Ledger" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>2</b><span><strong>Ledger</strong>Text first: a section strip with big bar numbers, and under each section the changes in words (+ bass at 17). (seed 2)</span></figcaption>
+  </figure>
+  <figure>
+    <a href="map/map-03-liner-notes.png"><img src="map/map-03-liner-notes.png" alt="Direction 3, Liner notes" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>3</b><span><strong>Liner notes</strong>The back of a record sleeve: title and facts on the left, sections as a tracklist with a dot per layer. (seed 3)</span></figcaption>
+  </figure>
+  <figure>
+    <a href="map/map-04-phrase-grid.png"><img src="map/map-04-phrase-grid.png" alt="Direction 4, Phrase grid" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>4</b><span><strong>Phrase grid</strong>One cell per 4-bar phrase, five rows: a step-sequencer view; point at a cell to read it. (seed 4)</span></figcaption>
+  </figure>
+  <figure>
+    <a href="map/map-05-timetable.png"><img src="map/map-05-timetable.png" alt="Direction 5, Timetable" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>5</b><span><strong>Timetable</strong>Opens inside the Analyse list under the track's row: layers × sections as a timetable of words.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="map/map-06-skyline.png"><img src="map/map-06-skyline.png" alt="Direction 6, Skyline" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>6</b><span><strong>Skyline</strong>All layers stacked into one silhouette, so the shape of builds, drops and breakdowns reads at a glance.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="map/map-07-wall-label.png"><img src="map/map-07-wall-label.png" alt="Direction 7, Wall label" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>7</b><span><strong>Wall label</strong>One section at a time, like a museum label: a mini-map on top, the chosen section large with what plays there.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="map/map-08-vertical.png"><img src="map/map-08-vertical.png" alt="Direction 8, Vertical" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>8</b><span><strong>Vertical</strong>Sounds wrong: the track runs down the page like a DJ's vertical waveform, layers as columns.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="map/map-09-score.png"><img src="map/map-09-score.png" alt="Direction 9, Score" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>9</b><span><strong>Score</strong>Sounds wrong: a conductor's score in ivory ink, staves per layer, rehearsal marks A to G for the sections.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="map/map-10-record.png"><img src="map/map-10-record.png" alt="Direction 10, Record" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>10</b><span><strong>Record</strong>Sounds wrong: the track as a disc read clockwise from the top; sections on the rim, layers as inner rings.</span></figcaption>
+  </figure>
+</div>
+</main></body></html>

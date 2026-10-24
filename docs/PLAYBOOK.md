@@ -27,7 +27,7 @@ mode; the mode decides **who makes which decision, and when I'm asked**. It goes
 | --- | --- | --- | --- |
 | **Learning** | I want the reps | Almost everything, coached | As things come up |
 | **Streamlined** | Most days | The learning decisions | At four gates, one decision sheet each |
-| **Founder** | A good idea I want live and tested | The kickoff pack and evals | Kickoff and the final review |
+| **Founder** | A good idea I want live and tested | The kickoff pack and evals, and 3 of ~10 designs | Kickoff, the design pick and the final review |
 
 Three kinds of decision:
 
@@ -44,7 +44,8 @@ The gates (Streamlined): **kickoff**, **design pick**, **first working version**
 review**. Between gates Claude doesn't stop: it queues learning questions for the next gate and
 builds on the most reversible option, marked provisional in the journal. Founder mode: I write
 `kickoff.md` and `evals.md` (owner-only checks kept outside the repo), the PM session runs the
-squad in `.claude/agents/`, and I get a PR, a preview link and an eval report. Formats for the
+squad in `.claude/agents/` in slices, one session per phase (decision 0028), and I get a PR, a
+preview link and an eval report. Formats for the
 decision sheet, toil entries and the PM's steps are in decision 0026.
 
 ## 1. Discover and frame (≈60 min, before any code)
@@ -142,8 +143,9 @@ hour, not a day. Names in brackets are where each practice comes from; see
   the behaviours it brings along (e.g. "you can only edit at the end") as decisions for the owner.
   *(Cagan: prototypes over documents.)* In Streamlined this is the **design-pick gate**: the three
   screenshots and the critic's scores on one decision sheet (with one preview link if the
-  directions need a phone to judge). In Founder the PM picks against the kickoff pack's feel
-  references and logs why.
+  directions need a phone to judge). In Founder (decision 0028) the designer builds about 10
+  directions, I pick 3, the squad develops those, and the PM picks the final one against the
+  pack with one critic and a fixed scorecard, and logs why.
 - Fill in **user**, **problem** and **bet** (one line each) on the card `docs/products/NN-slug.md`.
   The bet is the smallest thing that could solve the problem by tonight. Cut everything else.
 
@@ -239,7 +241,8 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
   quick; park the rest in `backlog.md` with a "start here" note.
 - **Final review** (every mode): in Streamlined a decision sheet plus the full decision log; in
   Founder the PR, a preview link and the eval report (every agent-checkable check with pass/fail
-  and evidence, run by graders, never by the builder), then I run my owner-only checks.
+  and evidence, run by graders, never by the builder), then I run my owner-only checks and any
+  check that needs my taste data (decision 0028).
 - Full method: [`user-testing/README.md`](user-testing/README.md).
 
 ## 4. Wrap up (≈30 min)

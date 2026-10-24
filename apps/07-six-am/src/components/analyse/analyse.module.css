@@ -163,7 +163,11 @@
 .tagCell { display: flex; align-items: baseline; }
 .tagCell .differs { flex: none; }
 /* The track being heard: its state and Cancel in the row, a 2 px gold line along the bottom */
-.now { display: flex; align-items: baseline; gap: 14px; color: var(--ink); }
+.now { display: flex; align-items: baseline; gap: 14px; min-width: 0; color: var(--ink); }
+/* A narrow cell (Mentor open) cuts the text, never Cancel (user test B1) */
+.nowText { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.now .actBtn { flex: none; margin: -3px 0; }
+.hidden { visibility: hidden; }
 .active .track b { color: var(--ink); font-weight: 500; }
 .rowProg { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: transparent; }
 .rowProg i { display: block; height: 100%; background: var(--gold); transform-origin: left; transition: transform 1s linear; }

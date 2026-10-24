@@ -45,7 +45,7 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Accounts, cloud sync, sharing, mobile, non-Chrome browsers | Out of scope for a personal tool | no (for now) |
 | Mark each analysed track as filed into a playlist, with a "31 / 56 placed · 6 unsure" progress line and a per-row playlist picker | User test 23 Oct: the thing that would bring them back tomorrow | obsolete (owner, 24 Oct: sorted *B b baaangers* by hand) |
 | Search / type-to-filter in long lists | User test 23 Oct | done (24 Oct fix pass) |
-| Design to 9/10 (final critic, 7/10): one toolbar with one status slot instead of three stacked bars; listening state in one place; Style columns wider, Track capped ~380 px; quieter in-row "Analyse"; two-line empty state | Founder eval report, 24 Oct | next |
+| Design to 9/10 (final critic, 7/10): one toolbar with one status slot instead of three stacked bars; listening state in one place; Style columns wider, Track capped ~380 px; quieter in-row "Analyse"; two-line empty state | Founder eval report, 24 Oct | done (25 Oct cleanup: critic 9/10, L99, T46) |
 | Sharper house sub-genres: map Discogs styles to the owner's families (deep, jackin', melodic, ballroom) with their own rules, or a second signal (swing, chords) | Validation: plain House tops 6/10 | Phase 3, with the Mentor (owner, 24 Oct) |
 | Stability check and a single 10-track queue run in real Chrome; a geo-blocked track | Not evidenced in the eval report | next |
 | Play a filtered list one track after another ("hear all my deep house in a row") | Owner wants it (24 Oct), after v1.1 | next |
@@ -54,4 +54,9 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | ME-7 remake coaching | Owner, 24 Oct: consider when building the Studio Lab and Remake mode | later |
 | "Your styles" strip: accepted groups and My genres with track counts and BPM ranges, suggestions taken | Mentor user test (24 Oct) | later |
 | Dev-only reset of the Mentor store for clean-start tests | Mentor user test (24 Oct) | later |
-| Mentor polish from the last re-check: Studio header overflows with a draft open (Save 14 px tall); warn before leaving an unsaved draft; hide accept buttons on superseded suggest turns; lead suggestions with the pick; draft playhead at bar 1; no request on / before the code | Mentor re-check 24 Oct (N9–N14) | next |
+| Mentor polish from the last re-check: Studio header overflows with a draft open (Save 14 px tall); warn before leaving an unsaved draft; hide accept buttons on superseded suggest turns; lead suggestions with the pick; draft playhead at bar 1; no request on / before the code | Mentor re-check 24 Oct (N9–N14) | done (25 Oct cleanup, T40–T45) |
+| A saved track opens at bar 1 (today every saved track opens at bar 37, the demo's mid-song start) | User test 25 Oct (D1, major) | next (small) |
+| "This track" follows a row selected after the last answer; the accept button names the track ("Set Lost in The Loop to Deep house"). Reverses part of L86/T35, so the owner's call | User test 25 Oct (C1, major) | owner to decide |
+| Analyse polish left by the critic at 9/10: tell the two % headers apart; actions (Analyse, Cancel) vs passive statuses; toolbar stays one row with the Mentor open; drop the Mentor button's pressed look while the panel shows its own close | Critic 25 Oct, round 2 | later |
+| Fewer columns: drop Also/% and Tone from the table (both in the strip) so Track gets the room | Critic 25 Oct, round 1 (kept for now: not in the owner's two rows) | owner to decide |
+| Sandbox: reset the in-memory Mentor chat between test runs (or a thread per run) | User test 25 Oct | later |

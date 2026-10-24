@@ -378,7 +378,8 @@ function FilterControls({ narrowed, query, setQuery, filters, setFilters, genres
         {genres.map((g) => <option key={g} value={g}>{g}</option>)}
         <option value={NO_GENRE}>No genre yet</option>
       </select>
-      {narrowed ? <button className={s.textBtn} onClick={onClear}>Clear</button> : null}
+      {/* Always laid out, shown only while filtering, so the filters never jump (user test B2). */}
+      <button className={cx(s.textBtn, !narrowed && s.hidden)} onClick={onClear} tabIndex={narrowed ? undefined : -1} aria-hidden={!narrowed || undefined}>Clear</button>
     </div>
   );
 }
@@ -637,7 +638,7 @@ function TableRow({ r, n, m, selected, tabbable, onSelect, onEditGenre }: { r: R
       prog = trackProgress(r.item);
       status = (
         <span className={s.now}>
-          <span>{prog.text}</span>
+          <span className={s.nowText} title={prog.label}>{prog.text}</span>
           {r.state === "analysing" ? null : <button className={cx(s.actBtn, s.quiet)} onClick={(e) => { e.stopPropagation(); m.cancel(); }}>Cancel</button>}
         </span>
       );

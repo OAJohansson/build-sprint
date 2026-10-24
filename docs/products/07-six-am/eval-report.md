@@ -237,3 +237,36 @@ web-search answers). Typical answer: $0.006–0.02; listen next and teach $0.05�
 
 The owner's 10 validation results (5 with a My genre), ~22 Mentor messages (~$0.20), 3 genre
 groups. Taste profile empty; the owner's Studio tracks untouched.
+
+## After the owner's review (simplified Mentor, 24 Oct)
+
+The owner rejected the first Mentor as "too much going on" (L85). Owner's calls L86–L94: one chat,
+only "What can you help me with?" under a growing input, readable answers with one quiet source
+line, Settings behind a corner icon, a locked "Music taste profile" (20 tracks, 5 with your genre,
+3 chats), full context and a persistent memory. Then an Emil pass, a Web Interface Guidelines review
+(focus, labels, live region, dark color-scheme: fixed), a critic clutter check and three fix passes.
+
+**Preview:** https://six-rmna2prvl-mimirswell.vercel.app/analyse (Vercel login)
+
+| Check | Result |
+| --- | --- |
+| User test, every job ≥ 4 (E10) | **pass**: Explain 5, Suggest genre 4, Teach 4, Ear training 4, Studio start 5, Listen next 4 ("Finally it feels calm") |
+| E9 nothing lost (real Supabase) | **pass**: every turn back after reload and in a fresh browser |
+| E2 honesty, ear training | **pass 5/5**: every time is one of Ears' snippet positions, every number Ears' own; 0 "I heard" |
+| E2 source labels | **partial**: listen-next sometimes labels a web-derived description "general" (validator catches research sentences, not every description) |
+| E3 listen next | picks 8/8 real and named; links now kept only when the page names the pick, else a SoundCloud search |
+| Track found from the question | 8/8 |
+| Follow-ups ("compare with the first track") | right pair |
+| Guardrails | 0 audio, 0 key, contrast ≥ 5.56:1, hit areas ≥ 28 px, focus kept after actions |
+| Design critic | see below |
+
+**Memory and cost:** a running summary in a reserved `memory` thread in Supabase, rewritten every
+10 exchanges (5 kept word for word), plus the library, Studio tracks and (once unlocked) the taste
+profile, all in cached system blocks. A cached answer costs about $0.007–0.008; the first after a
+5-minute pause about $0.03–0.05; listen next and teach $0.04–0.05; a memory rewrite about $0.01
+every 10 exchanges; learning events cost nothing.
+
+**Real database after testing:** the shared `main` chat holds ~60 test turns from graders, the
+memory summary is built from them, today's question count passed 50 (the check-in shows), and ~$1.2
+of today's cost is testing. The owner's 15 analyses (5 My genres, all restored), taste profile and
+Studio tracks are unchanged. A clean start (deleting the test turns and memory) is the owner's call.

@@ -113,7 +113,12 @@ export async function askClaude(input: MentorInput, needs: Omit<Needs, "searchUr
     const raw = rawAnswer(response.content);
     const merged = firstRaw && raw && typeof raw === "object" && typeof firstRaw === "object" ? { ...(firstRaw as object), ...(raw as object) } : raw;
     firstRaw ??= raw;
-    const checked = checkAnswer(input.job, merged, { ...needs, searchUrls: seen });
+    let checked = checkAnswer(input.job, merged, { ...needs, searchUrls: seen });
+    // L81: a genre call always rests on one web search (accuracy tracked whether it searched).
+    const mustSearch = input.job === "suggest_genre" && usage.server_tool_use.web_search_requests === 0;
+    if (checked.ok && mustSearch) {
+      checked = { ok: false, problem: "You named a genre without the required web search. Run exactly one web search (the artist plus the remixer or title, or the label), then answer." };
+    }
     if (checked.ok) {
       return { answer: checked.answer, usage, costUsd: round6(cost), latencyMs: Date.now() - t0, dropped: checked.dropped, searchUrls: [...seenRaw] };
     }
@@ -126,7 +131,9 @@ export async function askClaude(input: MentorInput, needs: Omit<Needs, "searchUr
       ? [
           ...messages,
           { role: "assistant", content: response.content as unknown as Anthropic.Beta.BetaContentBlockParam[] },
-          { role: "user", content: [{ type: "tool_result", tool_use_id: call.id, is_error: true, content: `Rejected: ${problem} Call the answer tool once more with the whole corrected answer (every field, not only the fix); don't search again.` }] },
+          { role: "user", content: [{ type: "tool_result", tool_use_id: call.id, is_error: true, content: mustSearch
+            ? `Rejected: ${problem} Then call the answer tool once more with the whole answer.`
+            : `Rejected: ${problem} Call the answer tool once more with the whole corrected answer (every field, not only the fix); don't search again.` }] },
         ]
       : null;
   }

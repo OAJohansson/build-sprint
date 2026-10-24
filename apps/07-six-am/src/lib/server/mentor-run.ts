@@ -9,7 +9,7 @@ import { setupInput, type PlaylistLike } from "@/lib/mentor/playlist";
 import { JOBS_SPEC, THREAD_JOBS, type HistoryTurn, type LearnEvent, type MentorInput } from "@/lib/mentor/prompt";
 import { CRATE_IDS, studioStart, type StudioStart } from "@/lib/mentor/studio";
 import { sharedTraits } from "@/lib/mentor/group-traits";
-import { ownerLines, recentEditLines } from "@/lib/mentor/owner-lines";
+import { ownerLines, recentEditLines, sentencesOf } from "@/lib/mentor/owner-lines";
 import { askClaude, MentorError, UPDATES_PROFILE } from "./claude";
 import type { Group, MentorStore, MessageRow } from "./mentor-store";
 
@@ -108,7 +108,8 @@ export async function ask(store: MentorStore, body: AskBody, now: Date, tz: numb
   // F6: the lines the latest hand edit added (within a week; a restore or paste doesn't count).
   input.recentEdit = recentEditLines(profile.history, now);
   // The person's own lines, which every profile update must keep (setup merges, learning adjusts).
-  const keepLines = ownerLines(profile.text, profile.history);
+  // Setup only adds (L56, L81): every existing sentence stays. Learning keeps the person's own lines.
+  const keepLines = job === "setup" ? sentencesOf(profile.text) : ownerLines(profile.text, profile.history);
   if (UPDATES_PROFILE.has(job) && keepLines.length) input.keepLines = keepLines;
 
   if (job === "suggest_genre" || job === "propose_groups" || job === "teach" || job === "chat") {

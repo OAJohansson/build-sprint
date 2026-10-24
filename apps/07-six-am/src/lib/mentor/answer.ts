@@ -283,7 +283,7 @@ export function checkAnswer(job: Job, raw: unknown, needs: Needs = {}): Checked 
   // The person's own lines survive every profile update (setup merges, learning adjusts).
   if (answer.profileUpdate && needs.keepLines?.length) {
     const gone = missingLines(answer.profileUpdate.text, needs.keepLines);
-    if (gone.length) return { ok: false, problem: `profileUpdate dropped lines the person wrote themselves; keep each word for word: ${gone.map((l) => `"${l}"`).join(" ")}` };
+    if (gone.length) return { ok: false, problem: `profileUpdate dropped lines it must keep; keep each word for word: ${gone.map((l) => `"${l}"`).join(" ")}` };
   }
 
   // What each job must have.

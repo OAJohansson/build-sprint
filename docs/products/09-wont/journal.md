@@ -54,3 +54,8 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   Pairs on a tray, 03 Rising tide, 04 Masonry wall (seeds); 05 Bold slabs, 06 Soft fill
   (references); 07 Drafting table, 08 Poster wall (far away); 09 Seed packets, 10 A hand of cards
   (sound wrong). Waiting for the owner's shortlist of three.
+- **Contact sheet 1 rejected** (owner): "no brand consistency", hard to scan, Bold slabs gives a
+  headache. Kept 09 Seed packets (cute) and 06 Soft fill (colour, simple layout) to iterate; the
+  week calendar moves out of the cards into one strip at the top. Asked for 8 new directions:
+  coherent, simple to scan, nice to look at. Feedback 1–6. Lesson: the first sheet optimised for
+  difference; the owner judges coherence first.

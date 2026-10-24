@@ -24,3 +24,4 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T2 | 24 Oct | "Ride it out" lasts 60 s, exit in one tap; persona's job-hunt detail kept | PM (discovery) | discovery | |
 | T3 | 24 Oct | Board sketches: the card is the tap target; stop habit has three taps (clean, slip, urge); main number always a rolling rate or clean-day total; not-logged days drawn light, never red | PM (designer) | design | |
 | T4 | 24 Oct | Draft comeback copy: "Friday's page stayed empty. That's part of it. Today, after your coffee: one sentence is enough." (owner rewrites at review) | PM (designer) | design | |
+| T5 | 24 Oct | Sheet 2: one card anatomy per board (name+number, anchor, comeback slot, tap slot); week strip shows share kept per day; no red; no full-bleed saturated cards or wide display faces | PM (designer) | design | |

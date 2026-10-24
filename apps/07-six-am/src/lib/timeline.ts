@@ -2,8 +2,6 @@
 // and the drawn waveforms. No React here, so the rules can be unit tested.
 
 export const BARS = 64;
-export const BPM = 124;
-export const BARS_PER_SECOND = BPM / 60 / 4;
 export const TRACKS = ["Drums", "Bass", "Chords", "Top / FX"] as const;
 
 export type Kind =

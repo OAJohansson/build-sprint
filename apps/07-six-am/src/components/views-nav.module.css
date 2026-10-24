@@ -1,0 +1,9 @@
+/* Studio · Analyse switch: mono labels, the current view underlined in gold (Analyse design, round 5). */
+.views { display: flex; gap: 22px; align-self: stretch; padding-left: 22px; border-left: 1px solid #2c2622; margin: 14px 0 0; }
+.view {
+  display: flex; align-items: center; font: 400 13px var(--f-mono); color: #9a8b78; text-decoration: none;
+  border-bottom: 2px solid transparent; padding-bottom: 2px; transition: color 150ms ease-out;
+}
+.view:hover { color: #f1e6d3; }
+.view:focus-visible { outline: 1px solid #f2b134; outline-offset: 2px; border-radius: 2px; }
+.view[aria-current="page"] { color: #f1e6d3; border-bottom-color: #f2b134; cursor: default; }

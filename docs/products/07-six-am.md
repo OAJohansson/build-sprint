@@ -1,7 +1,8 @@
 ---
 day: 7
 title: Six AM
-status: shipped
+status: building
+mode: founder
 date: 2026-10-18
 user: "Me: a house and techno lover who has never produced, on a laptop"
 problem: "Real DAWs look like a cockpit and GarageBand isn't built for dance music, so I never get from \"I'd love to\" to a track I can play"

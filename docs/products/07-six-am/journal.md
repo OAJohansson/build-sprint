@@ -2,6 +2,16 @@
 
 What happened, what was decided and why. Newest last.
 
+## To carry over
+
+Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.md).
+
+- `docs/learnings.md` process changelog: first Founder-mode run (decision 0026) on a rebuild of an
+  existing app rather than a new product; how the kickoff pack worked when written from a brief
+  made with another agent.
+- `docs/knowledge-bank.md` (technology): cross-origin audio and tab capture (`getDisplayMedia`
+  with `preferCurrentTab`, why Web Audio can't tap an iframe but tab capture can).
+
 ## 18 Oct: discovery while Folio wraps up
 
 - **Parallel work, kept safe.** Folio (06) is still being wrapped up in another session, so 07
@@ -255,3 +265,121 @@ What happened, what was decided and why. Newest last.
   Fix in `scripts/ship.mjs`: one upsert per env var, and `vercelApi` refuses arrays with a clear
   message. Checked without touching real values: `{}` gets Vercel's "missing `key`" validation
   error, `[{}]` gets "Invalid JSON".
+
+## 23 Oct: Ears v1, the first Founder-mode session
+
+- **Owner's call:** rebuild Six AM beyond its MVP, starting with **Ears v1** (paste a SoundCloud
+  link, play it in Six AM, capture tab audio, get top-3 genres, BPM, key, energy and brightness in
+  about a minute, Copy for Claude, set Studio BPM, local session list). Run as the first Founder
+  session (decision 0026): the PM session runs the squad, the owner writes the kickoff and judges
+  the result. Hard rule: works with streamed, undownloadable tracks; never stores or uploads audio.
+- **Kickoff pack** transcribed from the owner's brief (copied in as `kickoff-source.md`):
+  `kickoff.md`, `evals.md` (part 1) and `decisions.md` added, matching `pnpm new --mode founder`.
+  Card set to `mode: founder`, `status: building`. Out-of-scope items and roadmap phases moved to
+  `backlog.md`.
+- **Gaps sent to the owner in one message** (L2): appetite, feel references and sentence, things
+  to avoid, genre display (style vs family vs both), batch analysis in MVP or Phase 2. PM defaults
+  stand, marked "owner to confirm", until answered. The laptop question is answered: MacBook Pro,
+  Apple silicon.
+- **Found in the repo** (brief's open question 2): the Studio's tempo is a constant (`BPM = 124` in
+  `src/lib/timeline.ts`, loops synthesised at it), so F10 needs the tempo to become variable; kept
+  to the smallest change (rabbit hole noted in the pack).
+- **Owner's answers, gaps 1 and 5** (relayed from the parent session): no fixed appetite, the
+  squad may work overnight, but the owner has about 3 hours for anything that needs their hands
+  (L3); batch analysis is Phase 2 (L4). Feel, things to avoid and genre display are still being
+  discussed; the owner wants the design as close to the existing MVP as possible. PM defaults stay
+  provisional until relayed.
+
+- **Step 0 capture spike page** ready (`apps/07-six-am/public/spike/capture.html`, throwaway, served at localhost:3007/spike/capture.html): SoundCloud widget loads and reports READY in 2.4 s with the right title in the built-in browser; tab capture needs the owner in real Chrome (asked).
+- **Discovery (light)** done by the `discovery` agent: Ears section appended to `brief.md`, persona
+  and test plan updated (S1–S5). Its assumptions are logged as L5–L11; the PM settled the first-run
+  timing question (L12), how capture is graded given agents can't click Chrome's picker (L13) and
+  the private/geo-blocked test case (L14).
+- **Playlist check in the spike** (in the built-in browser, no owner needed): *B b baaangers* no
+  longer loads in the widget (ERROR; oEmbed 404), so it looks already emptied or private: the owner
+  has sorted it into genre sets (Gospel in the Forest, Bounce Therapy, The Category Is: SERVE, You
+  Are Edging Me, Groove & Shoulder, To the Warehouse, House Reworks, and more). The widget lists a
+  set's tracks, but only the first ~5 come with full details (House Reworks: 9 tracks, 5 with
+  titles; Groove & Shoulder: 6, 5): the build must fetch the rest (e.g. by skipping to them)
+  before listing. One set (cunty-lil-bangers) gives a widget ERROR: a useful real test for US1's
+  "clear message".
+- **Step 0 capture spike: PASS** in the owner's Chrome 154 (87% audible, peak -10.5 dBFS, 32.7 s at
+  44.1 kHz): tab capture hears the cross-origin SoundCloud player. Proceed, no fallback (L15).
+- **Why the track stopped at ~33 s:** SoundCloud served a 30 s preview. The widget says so:
+  `policy: "SNIP"`, `duration` 30000 against `full_duration` 429270 (7:09 of audio). Checked all 10
+  validation tracks through the widget: only track 1 (Hard Reset, Redemption) is a preview; the
+  other 9 are `ALLOW` with full length. `monetization_model` is `NOT_APPLICABLE`, so it isn't a
+  Go+ track; it's the uploader's or a region setting, and it snips the same signed out and in the
+  owner's Chrome. Ears detects SNIP and analyses the preview, labelled as such (L16).
+- **Genre display, owner's call (option A):** raw Discogs styles only in the MVP; families to the
+  backlog. The genre eval now uses a match set of Discogs styles per validation track, written
+  before any result (L19). Discogs has no ballroom or "melodic house" style, so tracks 8 and 10
+  use the closest styles.
+- **Feel, owner's call:** "I think I prefer the tool version", sketch A of three shown in the
+  parent session (rekordbox-style table of analysed tracks under a compact player bar). The session
+  list becomes the main surface; actions work on the selected row (L20).
+- **Things to avoid, owner's call:** "I'm happy with the default list" (L21). All kickoff gaps settled; the pack is complete and the squad runs without further kickoff questions.
+- **Step 1 model spike built** by the engineer (`/spike/model`, worker and features in
+  `src/lib/ears/`): Discogs-EffNet ONNX in a worker, mel and features in plain TS (L22, L23, T1).
+  PM smoke check of `?test=tone` in the built-in browser: Test PASS, BPM 124, A minor, model from
+  cache in 0.1 s (18 MB), inference 294 ms for 30 s, top styles Minimal Techno / Minimal / Techno /
+  Tech House. Real tracks need the owner's Chrome (asked: FOVOS Work, Gag On It remix, Knober
+  Realize; the brief's Brejcha example has no URL, so Realize stands in for the minimal/tech end).
+- **Design, round 1:** the designer built three takes on the tool direction (prototype at
+  `/prototypes/analyse?v=1|2|3`): A Inspector, B Inline, C Deck. The design critic scored them from
+  screenshots only: 6, 6.5 and 7.5 out of 10. Picked C (L24); round 2 fixes the critic's gaps
+  (smaller deck, no gold pills for actions, drop the "Heard" column, plain Enable listening button
+  that becomes the filling Listening pill, Analyse as a row-end action, plain empty state).
+- **Design, round 2:** C reworked (smaller deck, outlined actions, no Heard column, Listen pill,
+  row-end Analyse). A fresh critic scored it 7/10 (no memory of round 1, so not directly
+  comparable to the 7.5): styles column truncates, deck bars have unequal tracks, red "differs",
+  hover and selected look alike, empty state splits instructions from the table. Round 3 sent;
+  "Copy for Claude" keeps its name (the owner's label in the brief) despite the critic's note.
+- **Design, round 3:** fresh critic 8/10 ("the table itself is exactly the feel"). Round 4: the
+  detail strip must add depth instead of echoing the row (all styles, BPM alternative, key
+  runner-up, a per-snippet breakdown for the proposed 4 × 30 s window; no energy sparkline, it
+  would look like captured audio), artist always visible, visible hover, Camelot keys, square buttons.
+- **Owner, after the spike runs:** spotted that 60 s from the start heard only Gag On It's intro.
+  Agreed: 4 × 30 s snippets at about 20/40/60/80% (L26) and a queue in the MVP (L27, reverses L4);
+  the speed bar changes with it. Owner confirmed the Deck design (L25). The first spike run (FOVOS)
+  read 101.3 BPM for a ~150 BPM track (2:3 error); the BPM shortcut gets fixed with the snippet work.
+- **Design rounds 4 and 5:** 8/10, then 7/10 from fresh critics. Each critic finds new gaps rather
+  than re-checking the old ones, so the loop was stopped (L28): the build starts from round 5 with
+  the last critic's concrete gaps folded in, and the graded score comes from a critic on the built app.
+- **Ears engine built** (`src/lib/ears/`): BPM rebuilt (synthetic 120–174 BPM all right; FOVOS's
+  2:3 case fixed on synthetic loops only), 4 × 30 s snippet plan, queue with localStorage, results
+  store, SoundCloud URL parsing and style names, all with unit tests (66 pass). Playlists: the
+  widget gives details for the first 20 tracks; skipping through the set fills the rest (L29–L31,
+  T3, T4). Wired into `/spike/model` for the owner's queue test tonight.
+- **Analyse view built** at `/analyse` (Deck design plus the last critic's fixes), Studio tempo now
+  variable (Set Studio BPM), Copy for Claude, CSV/JSON export, licence note in the app README.
+  72 tests, lint, tsc and build pass. Not yet run on real tab audio (owner's Chrome). L32–L34, T5–T10.
+- **Design score on the built view** (fresh critic, screenshots of `/analyse?demo=1`, empty and
+  listening-off): **7/10**. Kept: the ledger rows, right-aligned numbers, energy blocks, Camelot,
+  snippet columns. Gaps: gold used for too many things, title truncation at 1280, the strip repeats
+  BPM and shows a real bug ("Tags House · House"), "differs" reads as an error, the demo player box
+  looks unfinished, the empty state hides the table shape. Some points contradict earlier critics
+  (the serif title was a "keep" twice), so the fix pass takes the concrete bugs and the accent
+  discipline, not the type-voice reversal.
+- **Validation graded by data-evals** (owner's 10-track export, nothing re-run;
+  `apps/07-six-am/evals/validation-2026-10-23.md`). Genre 7/10, exactly on the bar; plain "House"
+  is top-1 on 6/10 tracks and two passes rely on L19's House allowance (5/10 without it). BPM 5/5 on
+  the tracks with a public reference (4 unsourced, 1 proxy that would pass), so the 8/10 bar can't be
+  shown. End to end 10/10, ≤ 2.1 min per track, no-audio code read clean. Track 1 (30 s preview, likely
+  the DJ intro) came out Techno; track 8 didn't hear past its Deep House tag. Stability and the
+  single 10-track queue weren't evidenced (two batches). Style % is a per-style likelihood, not a
+  share (L36).
+- **Fix pass** on the user test and the critic: BPM choice shared by row, strip, Claude text, export
+  and Set Studio (KI/KI → "Set Studio to 145 BPM"); contrast ≥ 4.5:1; model download retries; pasted
+  links add to the list; playlists in the Claude text; gold only for BPM, progress and the selected
+  edge; strip bug fixed. 82 tests, lint, tsc, build pass. L37, L38, T11–T16.
+- **Design score after the fix pass:** 7/10 (fresh critic). Keeps the strip ("must not be
+  redesigned"). Asks again for aligned % sub-columns (the previous critic asked for % next to the
+  name: critics disagree), a clearly visible hover (asked by three critics in a row: a real gap), a
+  gutter between BPM and Key, no ghost rows in the empty state, and one toolbar instead of the
+  not-listening banner (which the user test asked for). One last polish pass takes the points more
+  than one grader agreed on; the final score is reported as it comes.
+- **Cleanup:** the throwaway spike pages and design prototypes are removed (their code lives on in `src/lib/ears/` and `/analyse`). Lint, 82 tests and the production build pass.
+- **Final design score:** 7/10 (bar 9: not met, reported as is). **Preview** made once
+  (`pnpm ship 07-six-am --preview`). **Eval report** written (`eval-report.md`); the design gaps,
+  sharper house sub-genres and the untested runs went to the backlog.

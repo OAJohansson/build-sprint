@@ -9,6 +9,8 @@ import { api, ApiError } from "@/lib/api";
 import { demoDoc, TRACKS, type Doc } from "@/lib/timeline";
 import type { Track, TrackSummary } from "@/lib/tracks";
 import { useLocalStorage } from "@/lib/use-local-storage";
+import { clampBpm, DEFAULT_BPM, formatBpm, TEMPO_KEY } from "@/lib/tempo";
+import { ViewsNav } from "@/components/views-nav";
 import { useTimeline } from "./use-timeline";
 import { TimelineView, cx } from "./timeline";
 import { Crate } from "./crate";
@@ -163,7 +165,12 @@ function Session({ track, tracks, status, onChange, onRetry, onOpen, onNew, onDe
   onChange: (name: string, doc: Doc) => void; onRetry: () => void;
   onOpen: (id: string) => void; onNew: () => void; onDelete: (id: string) => void;
 }) {
-  const t = useTimeline(track.doc);
+  // The project tempo (F10): set from Analyse ("Set Studio to N BPM"), stored on this device.
+  // shortcut: one tempo per device (localStorage), not saved with each track; move it into Doc
+  // (and the Supabase track) when tracks need their own tempo.
+  const [storedBpm] = useLocalStorage<number>(TEMPO_KEY, DEFAULT_BPM);
+  const bpm = clampBpm(storedBpm);
+  const t = useTimeline(track.doc, bpm);
   const [name, setName] = useState(track.name);
   const savedName = useRef(track.name);
   const [library, setLibrary] = useState(false);
@@ -185,6 +192,7 @@ function Session({ track, tracks, status, onChange, onRetry, onOpen, onNew, onDe
     <div className={s.root}>
       <header className={s.bar}>
         <div className={s.logo}><Logo className={s.mark} />Six AM</div>
+        <ViewsNav current="studio" />
         <div className={s.trackBox}>
           <input
             className={s.trackTitle}
@@ -219,7 +227,7 @@ function Session({ track, tracks, status, onChange, onRetry, onOpen, onNew, onDe
         <div className={s.transport}>
           <button className={s.tb} onClick={() => t.jumpTo(1)} aria-label="Back to start">{Icon.start}</button>
           <button className={cx(s.tb, s.play)} onClick={() => t.setPlaying(!t.playing)} aria-label={t.playing ? "Pause" : "Play"}>{t.playing ? Icon.pause : Icon.play}</button>
-          <div className={s.lcd}><b>{t.bar}.{t.beat}</b><small>bar</small><b>124</b><small>bpm</small></div>
+          <div className={s.lcd}><b>{t.bar}.{t.beat}</b><small>bar</small><b title={bpm === DEFAULT_BPM ? undefined : `Set from Analyse; the Studio's default is ${DEFAULT_BPM}`}>{formatBpm(bpm)}</b><small>bpm</small></div>
           <button className={s.undo} onClick={t.undo} disabled={!t.canUndo}>{Icon.undo} Undo</button>
           <div className={s.knobWrap}>
             Filter

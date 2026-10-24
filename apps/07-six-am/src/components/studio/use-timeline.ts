@@ -17,8 +17,8 @@ type Drag =
 const THRESHOLD = 4;
 const HOLD_MS = 250; // press and hold a block this long and the bin appears
 
-/** One open track. `initial` is the saved arrangement; Studio remounts this per track. */
-export function useTimeline(initial: Doc) {
+/** One open track. `initial` is the saved arrangement; Studio remounts this per track. `bpm` is the project tempo. */
+export function useTimeline(initial: Doc, bpm: number) {
   const [doc, setDoc] = useState<Doc>(initial);
   const [past, setPast] = useState<Doc[]>([]);
   const docRef = useRef(doc);
@@ -83,6 +83,7 @@ export function useTimeline(initial: Doc) {
   useEffect(() => { engine().then((e) => e.setMuted(doc.muted)); }, [engine, doc.muted]);
   useEffect(() => { engine().then((e) => e.setFilter(filter)); }, [engine, filter]);
   useEffect(() => { engine().then((e) => e.setPreview(preview)); }, [engine, preview]);
+  useEffect(() => { engine().then((e) => e.setTempo(bpm)); }, [engine, bpm]);
 
   // Transport: the music runs on the audio clock; the playhead just reads where it is.
   useEffect(() => {

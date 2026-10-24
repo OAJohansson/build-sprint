@@ -1,0 +1,205 @@
+/* Analyse view (Ears v1): prototype C "Deck", round 5, plus the round-5 critic's fixes (L28).
+   Tokens and type are the Studio's: near-black warehouse, gold LCD numbers, mono labels, the
+   serif only for the selected track's name. Flat, square buttons (T2).
+   Gold means three things only: BPM numbers, the one progress bar, the selected row's edge.
+   Greys are lifted so every text is ≥ 4.5:1 on its real background, selected row included
+   (--faint 4.8:1 on buttons, 4.9:1 on a hovered row, 4.6:1 on the selected row; --muted 5.8:1+).
+   Rows: hover is one solid step up (--hover), selected a stronger step (--selFill) + gold edge. */
+.root {
+  --bg: #131110; --panel: #1a1715; --crate: #1d1814; --ink: #f1e6d3; --muted: #aa9c88; --faint: #958a7c;
+  --line: #2c2622; --gold: #f2b134; --goldDim: #a68a5a; --orange: #ef5b37; --amber: #c4923f;
+  --hover: #211d1a; --selFill: #28231f; --meterOn: #cdbfa8;
+  --cols: 32px minmax(320px, 1fr) 156px 140px 70px 104px 50px 56px 66px 124px;
+  height: 100dvh; display: grid; grid-template-rows: 64px auto auto auto 1fr; background: var(--bg); color: var(--ink);
+  font-family: var(--f-mono), monospace; overflow: hidden;
+}
+.dim { color: var(--faint); }
+.muted { color: var(--muted); }
+
+/* App bar: the Studio's bar with the two views */
+.appBar { display: flex; align-items: center; gap: 28px; padding: 0 24px; background: var(--panel); border-bottom: 1px solid var(--line); }
+.logo { font: italic 400 30px var(--f-serif); display: flex; align-items: center; gap: 12px; }
+.mark { width: 30px; height: 30px; flex: none; }
+.appRight { margin-left: auto; display: flex; align-items: center; gap: 10px; position: relative; }
+
+/* Buttons: one flat, square family */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font: 400 12px var(--f-mono); color: var(--ink);
+  background: #231f1c; border: 1px solid var(--line); border-radius: 6px; padding: 6px 12px; cursor: pointer;
+  transition: background 150ms ease-out, transform 120ms ease-out;
+}
+.btn:hover { background: #2b2622; }
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .45; cursor: default; transform: none; }
+.btn:disabled:hover { background: #231f1c; }
+.btn:focus-visible, .textBtn:focus-visible, .actBtn:focus-visible, .url:focus-visible, .filter:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
+.textBtn { font: 500 12.5px var(--f-mono); color: var(--muted); background: none; border: 0; padding: 0 6px; min-height: 28px; cursor: pointer; border-radius: 4px; white-space: nowrap; }
+.textBtn:hover { color: var(--ink); }
+/* Row actions (Analyse, Retry, Analyse all): plain light mono text, underline on hover, 28 px hit area */
+.actBtn {
+  font: 500 12.5px var(--f-mono); color: var(--ink); background: none; border: 0; border-radius: 4px; cursor: pointer; white-space: nowrap;
+  min-height: 28px; min-width: 28px; padding: 0 6px; margin: -3px -6px; text-underline-offset: 3px;
+}
+.actBtn:hover { text-decoration: underline; }
+.actBtn:disabled { color: var(--muted); text-decoration: none; cursor: default; }
+
+/* Export menu */
+.menu {
+  position: absolute; right: 0; top: calc(100% + 6px); z-index: 30; display: flex; flex-direction: column; min-width: 150px; padding: 4px;
+  background: #1d1916; border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 12px 28px rgba(0, 0, 0, .5);
+  transform-origin: top right; animation: menuIn 140ms ease-out;
+}
+@keyframes menuIn { from { opacity: 0; transform: scale(.97); } }
+@media (prefers-reduced-motion: reduce) { .menu { animation: none; } }
+.menu button { font: 400 12px var(--f-mono); color: var(--ink); background: none; border: 0; border-radius: 4px; padding: 8px 10px; text-align: left; cursor: pointer; }
+.menu button:hover, .menu button:focus-visible { background: rgba(241, 230, 211, .07); outline: none; }
+
+/* Toolbar: link, the SoundCloud embed (shrinks first), listening */
+.bar { display: grid; grid-template-columns: minmax(220px, 380px) minmax(100px, 1fr) 480px; align-items: center; gap: 16px; padding: 10px 20px; background: var(--panel); border-bottom: 1px solid var(--line); }
+.url {
+  font: 400 12px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--line); border-radius: 6px;
+  padding: 7px 10px; outline: none; min-width: 0; text-overflow: ellipsis;
+}
+.url::placeholder { color: var(--faint); }
+.url:focus { border-color: var(--muted); }
+.embed { display: block; width: 100%; min-width: 0; height: 20px; border: 0; border-radius: 3px; background: #fff; }
+.embedEmpty { display: flex; align-items: center; height: 20px; font: 400 11px var(--f-mono); color: var(--faint); white-space: nowrap; overflow: hidden; min-width: 0; }
+/* Fixed width, so the player beside it never shifts as the status text changes */
+.listen { display: flex; align-items: center; justify-content: flex-end; gap: 14px; min-width: 0; width: 480px; overflow: hidden; }
+.offNote { font: 400 11.5px var(--f-mono); color: var(--muted); white-space: nowrap; max-width: 60ch; overflow: hidden; text-overflow: ellipsis; }
+.offNote q { quotes: "“" "”"; }
+
+/* The one progress indicator: a text line over a 2 px gold bar */
+.prog { display: flex; flex-direction: column; gap: 5px; flex: 0 1 350px; min-width: 0; font: 500 12px var(--f-mono); }
+.progText { display: flex; justify-content: space-between; gap: 10px; color: var(--ink); white-space: nowrap; }
+.progText span:first-child { overflow: hidden; text-overflow: ellipsis; }
+.progText span:last-child { font-variant-numeric: tabular-nums; }
+.progBar { height: 2px; background: var(--line); overflow: hidden; }
+.progBar i { display: block; height: 100%; background: var(--gold); transition: width 1s linear; }
+@media (prefers-reduced-motion: reduce) { .progBar i { transition: none; } }
+.side { font: 400 12px var(--f-mono); color: var(--muted); white-space: nowrap; }
+
+/* One line of news under the toolbar */
+.msg { display: flex; align-items: center; gap: 16px; padding: 8px 20px 8px 64px; border-bottom: 1px solid var(--line); font: 400 12.5px/1.5 var(--f-mono); color: var(--muted); background: var(--bg); }
+.msgError { color: #f08a6e; }
+.msgWait { color: var(--ink); }
+.msg > span { flex: 1; min-width: 0; }
+.msg b { font-weight: 500; }
+.msg q { quotes: "“" "”"; }
+
+/* Above the table: filter and Clear list */
+.listBar { display: flex; align-items: center; gap: 16px; padding: 8px 20px 8px 64px; border-bottom: 1px solid var(--line); background: var(--bg); font: 400 11.5px var(--f-mono); color: var(--muted); }
+.filter {
+  font: 400 12px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--line); border-radius: 6px;
+  padding: 5px 9px; width: 280px; outline: none;
+}
+.filter::placeholder { color: var(--faint); }
+.filter:focus { border-color: var(--muted); }
+.listCount { font-variant-numeric: tabular-nums; }
+.clear { margin-left: auto; }
+.confirm { margin-left: auto; display: flex; align-items: center; gap: 14px; color: var(--ink); }
+
+/* The table and the strip share one scroller: the strip follows the last row, then pins */
+.main { overflow: auto; min-height: 0; display: flex; flex-direction: column; scrollbar-color: #3a322c transparent; }
+.grid { min-width: 1180px; }
+.cols { display: grid; grid-template-columns: var(--cols); column-gap: 12px; align-items: center; padding: 0 20px; }
+.head { position: sticky; top: 0; z-index: 4; height: 30px; background: var(--panel); border-bottom: 1px solid var(--line); }
+.th { font: 400 10.5px var(--f-mono); color: var(--muted); letter-spacing: .06em; white-space: nowrap; }
+.span2 { grid-column: span 2; }
+
+.right { text-align: right; justify-self: end; }
+
+.row { height: 34px; border-bottom: 1px solid rgba(44, 38, 34, .7); font: 400 12.5px var(--f-mono); cursor: default; outline: none; transition: background 120ms ease-out; }
+.row > * { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pick { cursor: pointer; }
+.row:hover { background: var(--hover); }
+.row:focus-visible { background: var(--hover); box-shadow: inset 2px 0 0 var(--ink); }
+/* Hover: one clear step up, no bar. Selected: a stronger step plus the gold edge. */
+.sel, .sel:hover { background: var(--selFill); box-shadow: inset 3px 0 0 var(--gold); }
+.sel:focus-visible { background: var(--selFill); box-shadow: inset 3px 0 0 var(--gold), inset 0 0 0 1px rgba(241, 230, 211, .35); }
+.num { font-variant-numeric: tabular-nums; text-align: right; }
+.idx { color: var(--faint); font-size: 11px; }
+/* The artist gives way first (shrinks 100× faster), then the title */
+.track { display: flex; gap: 8px; }
+.track b { font-weight: 500; flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.by { color: var(--muted); flex: 0 100 auto; min-width: 4ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Style · % and Also · %: the name left (bright, truncates), the % in its own right-aligned
+   sub-column (dim, never cut) so the numbers line up down the table */
+.styleCell { display: grid; grid-template-columns: minmax(0, 1fr) 3ch; column-gap: 8px; align-items: baseline; }
+.sName { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pct { color: var(--muted); font-size: 11.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.thSplit { display: grid; grid-template-columns: minmax(0, 1fr) 3ch; column-gap: 8px; }
+.thSplit > :last-child { text-align: right; }
+/* 16 px between BPM and Key (12 px gap + 4) */
+.keyCell { padding-left: 4px; }
+.bpm { color: var(--gold); font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; overflow: visible !important; }
+.mark2 { font: 400 10px var(--f-mono); color: var(--amber); margin-left: 3px; cursor: help; vertical-align: 1px; }
+.differs { font: 400 10.5px var(--f-mono); color: var(--amber); margin-left: 6px; }
+.doubt { color: var(--amber); }
+.tagCell { display: flex; align-items: baseline; }
+.tagCell .differs { flex: none; }
+.status { color: var(--ink); }
+.failed { color: #c98a74; }
+.time { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* The link's tracks not analysed yet: muted rows below a thin divider */
+.divider { display: flex; align-items: center; gap: 16px; height: 30px; padding: 0 20px 0 64px; border-bottom: 1px solid var(--line); border-top: 1px solid var(--line); font: 400 11px var(--f-mono); color: var(--faint); letter-spacing: .04em; }
+.divider span { margin-right: auto; }
+.rest { color: var(--faint); }
+.rest .track b { font-weight: 400; color: var(--muted); }
+.rest .by { color: var(--faint); }
+.rest:hover .track b { color: var(--ink); }
+
+/* Energy: five still steps */
+.meter { display: inline-flex; gap: 3px; vertical-align: middle; }
+.meter i { width: 7px; height: 11px; border-radius: 1.5px; background: #3a322c; }
+.meter .on { background: var(--meterOn); }
+
+/* Empty state: three steps in the table body */
+.steps { margin: 0; padding: 28px 20px 0 64px; list-style: none; counter-reset: step; display: flex; flex-direction: column; gap: 14px; max-width: 780px; }
+.steps li { counter-increment: step; display: grid; grid-template-columns: 22px 1fr; gap: 12px; font: 400 12.5px/1.6 var(--f-mono); color: var(--ink); }
+.steps li::before { content: counter(step); width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); font: 500 11px var(--f-mono); color: var(--muted); }
+.steps q { quotes: "“" "”"; }
+.fine { padding: 18px 20px 0 98px; font: 400 11.5px/1.6 var(--f-mono); color: var(--faint); max-width: 780px; margin: 0; }
+/* The table's shape before the first paste: its header row alone */
+.ghost { margin-top: 28px; min-width: 1180px; }
+.ghost .head { position: static; }
+
+/* The detail strip for the selected track */
+.strip {
+  position: sticky; bottom: 0; z-index: 3; min-width: 1180px; margin-top: 0; background: var(--crate); border-top: 1px solid var(--line);
+  padding: 16px 20px 18px 64px; display: flex; flex-direction: column; gap: 14px;
+}
+.headLine { display: flex; align-items: center; gap: 16px; min-width: 0; white-space: nowrap; }
+.headLine b { font: italic 400 26px/1.05 var(--f-serif); overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.headLine .by { font-size: 12.5px; max-width: none; }
+.lcd { font: 500 22px var(--f-mono); color: var(--gold); font-variant-numeric: tabular-nums; }
+.lcdUnit { font-size: 11px; color: var(--goldDim); letter-spacing: .1em; margin-left: 6px; }
+.lcdAlt { font: 400 12.5px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.actions { margin-left: auto; display: flex; gap: 8px; }
+.facts { display: grid; grid-template-columns: minmax(240px, 380px) minmax(240px, 330px) minmax(420px, 1fr); gap: 32px; align-items: start; }
+.label { font: 400 10.5px var(--f-mono); color: var(--muted); letter-spacing: .06em; }
+.bars { display: flex; flex-direction: column; gap: 5px; }
+.prob { display: grid; grid-template-columns: 124px 1fr 34px; align-items: center; gap: 10px; font: 400 12px var(--f-mono); }
+.prob b { font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.probTrack { height: 5px; border-radius: 2px; background: var(--line); overflow: hidden; }
+.probTrack i { display: block; height: 100%; background: var(--ink); opacity: .6; }
+.prob span { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+.dl { margin: 0; display: grid; grid-template-columns: 76px 1fr; gap: 5px 12px; font: 400 12.5px var(--f-mono); }
+.dl dt { color: var(--muted); font-size: 10.5px; letter-spacing: .06em; align-self: center; }
+.dl dd { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.snipBlock { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.snips { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.snip { display: flex; flex-direction: column; gap: 4px; font: 400 12.5px var(--f-mono); min-width: 0; }
+.snip > * { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.snipSub { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* Toast */
+.toast {
+  position: fixed; left: 50%; top: 120px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 14px;
+  font: 500 12.5px var(--f-mono); color: var(--bg); background: var(--ink); border-radius: 6px; padding: 8px 14px;
+  animation: toastIn 160ms ease-out;
+}
+.toast a { color: var(--bg); text-underline-offset: 3px; }
+@keyframes toastIn { from { opacity: 0; transform: translate(-50%, -4px); } }
+@media (prefers-reduced-motion: reduce) { .toast { animation: none; } }

@@ -1,0 +1,1099 @@
+{
+  "app": "Six AM · Ears v1",
+  "exportedAt": "2026-10-23T16:17:36.330Z",
+  "analyses": [
+    {
+      "version": 1,
+      "id": "https://soundcloud.com/djmikeq/beyonce-alien-superstar-mikeq-x-dj-fade-remix-dirty",
+      "soundcloudUrl": "https://soundcloud.com/djmikeq/beyonce-alien-superstar-mikeq-x-dj-fade-remix-dirty",
+      "trackId": 1544889322,
+      "title": "Beyonce - Alien Superstar (MikeQ X Dj Fade Remix) Dirty",
+      "uploader": "djmikeq",
+      "uploaderGenreTag": "Ballroom Vogue / House",
+      "uploaderTags": [
+        "Beyonce",
+        "renaissance",
+        "vogue",
+        "ballroom",
+        "house",
+        "beatz",
+        "mikeq",
+        "dj fade",
+        "jersey",
+        "lgbt",
+        "pride"
+      ],
+      "preview": false,
+      "durationMs": 168620,
+      "analysedSeconds": 120,
+      "bpm": 128.1,
+      "bpmConfidence": 14.5,
+      "bpmAlternative": {
+        "bpm": 64,
+        "relation": "1:2",
+        "ratio": 0.77
+      },
+      "bpmAmbiguous": false,
+      "key": "F",
+      "scale": "minor",
+      "keyStrength": 0.48,
+      "keyRunnerUp": {
+        "key": "F",
+        "scale": "major",
+        "strength": 0.39
+      },
+      "energy": 0.85,
+      "energyDbfs": -10.1,
+      "brightness": 0.62,
+      "brightnessHz": 1822,
+      "genres": [
+        {
+          "style": "Electronic---House",
+          "p": 0.281
+        },
+        {
+          "style": "Electronic---Bassline",
+          "p": 0.208
+        },
+        {
+          "style": "Electronic---Techno",
+          "p": 0.178
+        },
+        {
+          "style": "Electronic---Grime",
+          "p": 0.151
+        },
+        {
+          "style": "Hip Hop---Grime",
+          "p": 0.108
+        }
+      ],
+      "snippetPlan": [
+        {
+          "startMs": 33724,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 67448,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 101172,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 134896,
+          "lengthMs": 30000
+        }
+      ],
+      "snippets": [
+        {
+          "startMs": 33724,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.342,
+          "bpm": 128.1
+        },
+        {
+          "startMs": 67448,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.248,
+          "bpm": 128.1
+        },
+        {
+          "startMs": 101172,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Bassline",
+          "p": 0.259,
+          "bpm": 128.1
+        },
+        {
+          "startMs": 134896,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Techno",
+          "p": 0.344,
+          "bpm": 128.1
+        }
+      ],
+      "analysedAt": "2026-10-23T16:13:10.279Z"
+    },
+    {
+      "version": 1,
+      "id": "https://soundcloud.com/masonflint/tim-deluxe-feat-sam-obernik-it-just-wont-do-mason-flint-remix",
+      "soundcloudUrl": "https://soundcloud.com/masonflint/tim-deluxe-feat-sam-obernik-it-just-wont-do-mason-flint-remix",
+      "trackId": 1852606548,
+      "title": "Tim Deluxe [Feat.] Sam Obernik - It Just Won't Do (Mason Flint Remix)",
+      "uploader": "Mason Flint",
+      "uploaderGenreTag": "House",
+      "uploaderTags": [
+        "timdeluxe",
+        "itjustwontdo",
+        "masonflint",
+        "House",
+        "techouse",
+        "fisher",
+        "chrislake",
+        "domdolla",
+        "maup"
+      ],
+      "preview": false,
+      "durationMs": 205740,
+      "analysedSeconds": 120,
+      "bpm": 126,
+      "bpmConfidence": 15.1,
+      "bpmAlternative": {
+        "bpm": 63,
+        "relation": "1:2",
+        "ratio": 0.67
+      },
+      "bpmAmbiguous": false,
+      "key": "G",
+      "scale": "minor",
+      "keyStrength": 0.83,
+      "keyRunnerUp": {
+        "key": "G",
+        "scale": "major",
+        "strength": 0.53
+      },
+      "energy": 0.8,
+      "energyDbfs": -11.9,
+      "brightness": 0.59,
+      "brightnessHz": 1716,
+      "genres": [
+        {
+          "style": "Electronic---House",
+          "p": 0.314
+        },
+        {
+          "style": "Electronic---Tech House",
+          "p": 0.271
+        },
+        {
+          "style": "Electronic---Deep House",
+          "p": 0.146
+        },
+        {
+          "style": "Electronic---Electro House",
+          "p": 0.082
+        },
+        {
+          "style": "Electronic---Techno",
+          "p": 0.075
+        }
+      ],
+      "snippetPlan": [
+        {
+          "startMs": 41148,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 82296,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 123444,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 164592,
+          "lengthMs": 30000
+        }
+      ],
+      "snippets": [
+        {
+          "startMs": 41148,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.429,
+          "bpm": 126
+        },
+        {
+          "startMs": 82296,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.384,
+          "bpm": 126
+        },
+        {
+          "startMs": 123444,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Tech House",
+          "p": 0.237,
+          "bpm": 126
+        },
+        {
+          "startMs": 164592,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Tech House",
+          "p": 0.367,
+          "bpm": 126
+        }
+      ],
+      "analysedAt": "2026-10-23T16:11:05.910Z"
+    },
+    {
+      "version": 1,
+      "id": "https://soundcloud.com/dubspinna/whats-a-girl-to-do-dubspinna-festival-remix-fatima-yamaha",
+      "soundcloudUrl": "https://soundcloud.com/dubspinna/whats-a-girl-to-do-dubspinna-festival-remix-fatima-yamaha",
+      "trackId": 260258026,
+      "title": "What's A Girl To Do (Dubspinna Festival Remix) - Fatima Yamaha",
+      "uploader": "dubspinna",
+      "uploaderGenreTag": "Deep House",
+      "uploaderTags": [
+        "House"
+      ],
+      "preview": false,
+      "durationMs": 453213,
+      "analysedSeconds": 120,
+      "bpm": 125,
+      "bpmConfidence": 17.8,
+      "bpmAlternative": {
+        "bpm": 62.5,
+        "relation": "1:2",
+        "ratio": 0.66
+      },
+      "bpmAmbiguous": false,
+      "key": "G#",
+      "scale": "major",
+      "keyStrength": 0.7,
+      "keyRunnerUp": {
+        "key": "A#",
+        "scale": "minor",
+        "strength": 0.65
+      },
+      "energy": 0.84,
+      "energyDbfs": -10.5,
+      "brightness": 0.43,
+      "brightnessHz": 1223,
+      "genres": [
+        {
+          "style": "Electronic---House",
+          "p": 0.404
+        },
+        {
+          "style": "Electronic---Deep House",
+          "p": 0.224
+        },
+        {
+          "style": "Electronic---Bassline",
+          "p": 0.189
+        },
+        {
+          "style": "Electronic---Electro House",
+          "p": 0.122
+        },
+        {
+          "style": "Electronic---Tropical House",
+          "p": 0.109
+        }
+      ],
+      "snippetPlan": [
+        {
+          "startMs": 90643,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 181285,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 271928,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 362570,
+          "lengthMs": 30000
+        }
+      ],
+      "snippets": [
+        {
+          "startMs": 90643,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Bassline",
+          "p": 0.322,
+          "bpm": 125
+        },
+        {
+          "startMs": 181285,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.306,
+          "bpm": 125
+        },
+        {
+          "startMs": 271928,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.383,
+          "bpm": 125
+        },
+        {
+          "startMs": 362570,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.687,
+          "bpm": 125
+        }
+      ],
+      "analysedAt": "2026-10-23T16:09:01.010Z"
+    },
+    {
+      "version": 1,
+      "id": "https://soundcloud.com/retrouve/music-is-the-answer",
+      "soundcloudUrl": "https://soundcloud.com/retrouve/music-is-the-answer",
+      "trackId": 1840973991,
+      "title": "Retrouve - Music Is The Answer (Edit)",
+      "uploader": "Retrouve",
+      "uploaderGenreTag": "House",
+      "uploaderTags": [],
+      "preview": false,
+      "durationMs": 361038,
+      "analysedSeconds": 120,
+      "bpm": 128.1,
+      "bpmConfidence": 13.7,
+      "bpmAlternative": {
+        "bpm": 64,
+        "relation": "1:2",
+        "ratio": 0.66
+      },
+      "bpmAmbiguous": false,
+      "key": "A#",
+      "scale": "major",
+      "keyStrength": 0.6,
+      "keyRunnerUp": {
+        "key": "A#",
+        "scale": "minor",
+        "strength": 0.52
+      },
+      "energy": 0.82,
+      "energyDbfs": -11.4,
+      "brightness": 0.7,
+      "brightnessHz": 2131,
+      "genres": [
+        {
+          "style": "Electronic---House",
+          "p": 0.39
+        },
+        {
+          "style": "Electronic---Tech House",
+          "p": 0.291
+        },
+        {
+          "style": "Electronic---Techno",
+          "p": 0.255
+        },
+        {
+          "style": "Electronic---Tribal House",
+          "p": 0.228
+        },
+        {
+          "style": "Electronic---Progressive House",
+          "p": 0.19
+        }
+      ],
+      "snippetPlan": [
+        {
+          "startMs": 72208,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 144415,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 216623,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 288830,
+          "lengthMs": 30000
+        }
+      ],
+      "snippets": [
+        {
+          "startMs": 72208,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.388,
+          "bpm": 128.1
+        },
+        {
+          "startMs": 144415,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.467,
+          "bpm": 128.1
+        },
+        {
+          "startMs": 216623,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.4,
+          "bpm": 128.1
+        },
+        {
+          "startMs": 288830,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Tech House",
+          "p": 0.321,
+          "bpm": 128.1
+        }
+      ],
+      "analysedAt": "2026-10-23T16:06:56.992Z"
+    },
+    {
+      "version": 1,
+      "id": "https://soundcloud.com/koltercologne/symphony-no-5",
+      "soundcloudUrl": "https://soundcloud.com/koltercologne/symphony-no-5",
+      "trackId": 2235685166,
+      "title": "Symphony No. 5 [FREE DOWNLOAD]",
+      "uploader": "Kolter",
+      "uploaderGenreTag": null,
+      "uploaderTags": [],
+      "preview": false,
+      "durationMs": 304274,
+      "analysedSeconds": 120,
+      "bpm": 127.1,
+      "bpmConfidence": 14.3,
+      "bpmAlternative": {
+        "bpm": 63.5,
+        "relation": "1:2",
+        "ratio": 0.61
+      },
+      "bpmAmbiguous": false,
+      "key": "G",
+      "scale": "minor",
+      "keyStrength": 0.74,
+      "keyRunnerUp": {
+        "key": "C",
+        "scale": "minor",
+        "strength": 0.62
+      },
+      "energy": 0.86,
+      "energyDbfs": -9.8,
+      "brightness": 0.48,
+      "brightnessHz": 1351,
+      "genres": [
+        {
+          "style": "Electronic---House",
+          "p": 0.416
+        },
+        {
+          "style": "Electronic---Deep House",
+          "p": 0.159
+        },
+        {
+          "style": "Electronic---Tech House",
+          "p": 0.147
+        },
+        {
+          "style": "Electronic---Techno",
+          "p": 0.107
+        },
+        {
+          "style": "Electronic---Ghetto House",
+          "p": 0.084
+        }
+      ],
+      "snippetPlan": [
+        {
+          "startMs": 60855,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 121710,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 182564,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 243419,
+          "lengthMs": 30000
+        }
+      ],
+      "snippets": [
+        {
+          "startMs": 60855,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.478,
+          "bpm": 127.1
+        },
+        {
+          "startMs": 121710,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.237,
+          "bpm": 127
+        },
+        {
+          "startMs": 182564,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.489,
+          "bpm": 127.1
+        },
+        {
+          "startMs": 243419,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.461,
+          "bpm": 127.1
+        }
+      ],
+      "analysedAt": "2026-10-23T16:04:52.180Z"
+    },
+    {
+      "version": 1,
+      "id": "https://soundcloud.com/jaimesoeiro/knober-jaime-soeiro-realize",
+      "soundcloudUrl": "https://soundcloud.com/jaimesoeiro/knober-jaime-soeiro-realize",
+      "trackId": 1523948143,
+      "title": "Knober, Jaime Soeiro - Realize (Original Mix)",
+      "uploader": "JAIME SOEIRO",
+      "uploaderGenreTag": null,
+      "uploaderTags": [],
+      "preview": false,
+      "durationMs": 335673,
+      "analysedSeconds": 120,
+      "bpm": 128.2,
+      "bpmConfidence": 13.6,
+      "bpmAlternative": {
+        "bpm": 85.3,
+        "relation": "2:3",
+        "ratio": 0.69
+      },
+      "bpmAmbiguous": false,
+      "key": "A#",
+      "scale": "minor",
+      "keyStrength": 0.76,
+      "keyRunnerUp": {
+        "key": "A#",
+        "scale": "major",
+        "strength": 0.48
+      },
+      "energy": 0.88,
+      "energyDbfs": -9.1,
+      "brightness": 0.54,
+      "brightnessHz": 1538,
+      "genres": [
+        {
+          "style": "Electronic---Techno",
+          "p": 0.4
+        },
+        {
+          "style": "Electronic---Minimal Techno",
+          "p": 0.305
+        },
+        {
+          "style": "Electronic---Tech House",
+          "p": 0.272
+        },
+        {
+          "style": "Electronic---Deep Techno",
+          "p": 0.231
+        },
+        {
+          "style": "Electronic---Minimal",
+          "p": 0.173
+        }
+      ],
+      "snippetPlan": [
+        {
+          "startMs": 67135,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 134269,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 201404,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 268538,
+          "lengthMs": 30000
+        }
+      ],
+      "snippets": [
+        {
+          "startMs": 67135,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Techno",
+          "p": 0.384,
+          "bpm": 128.2
+        },
+        {
+          "startMs": 134269,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Techno",
+          "p": 0.347,
+          "bpm": 128.2
+        },
+        {
+          "startMs": 201404,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Techno",
+          "p": 0.428,
+          "bpm": 128.1
+        },
+        {
+          "startMs": 268538,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Techno",
+          "p": 0.441,
+          "bpm": 128.2
+        }
+      ],
+      "analysedAt": "2026-10-23T16:02:48.638Z"
+    },
+    {
+      "version": 1,
+      "id": "https://soundcloud.com/hardreset90087/redemption-extended-mix",
+      "soundcloudUrl": "https://soundcloud.com/hardreset90087/redemption-extended-mix",
+      "trackId": 1199999842,
+      "title": "Redemption (Extended Mix)",
+      "uploader": "Hard Reset",
+      "uploaderGenreTag": "Progressive House",
+      "uploaderTags": [],
+      "preview": true,
+      "durationMs": 429270,
+      "analysedSeconds": 30,
+      "bpm": 122,
+      "bpmConfidence": 15.6,
+      "bpmAlternative": {
+        "bpm": 61,
+        "relation": "1:2",
+        "ratio": 0.67
+      },
+      "bpmAmbiguous": false,
+      "key": "C#",
+      "scale": "major",
+      "keyStrength": 0.72,
+      "keyRunnerUp": {
+        "key": "F#",
+        "scale": "major",
+        "strength": 0.6
+      },
+      "energy": 0.57,
+      "energyDbfs": -20.2,
+      "brightness": 0.81,
+      "brightnessHz": 2719,
+      "genres": [
+        {
+          "style": "Electronic---Techno",
+          "p": 0.412
+        },
+        {
+          "style": "Electronic---Deep Techno",
+          "p": 0.329
+        },
+        {
+          "style": "Electronic---Minimal Techno",
+          "p": 0.198
+        },
+        {
+          "style": "Electronic---Tech House",
+          "p": 0.194
+        },
+        {
+          "style": "Electronic---Deep House",
+          "p": 0.191
+        }
+      ],
+      "snippetPlan": [
+        {
+          "startMs": 0,
+          "lengthMs": 30000
+        }
+      ],
+      "snippets": [
+        {
+          "startMs": 0,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Techno",
+          "p": 0.412,
+          "bpm": 122
+        }
+      ],
+      "analysedAt": "2026-10-23T16:00:45.171Z"
+    },
+    {
+      "version": 1,
+      "id": "https://soundcloud.com/carbune/lost-in-the-loop-o-deibys",
+      "soundcloudUrl": "https://soundcloud.com/carbune/lost-in-the-loop-o-deibys",
+      "trackId": 2383522344,
+      "title": "Lost in The Loop •  Deibys Marquez",
+      "uploader": "Cărbune Adrian",
+      "uploaderGenreTag": null,
+      "uploaderTags": [
+        "Electronic",
+        "House",
+        "dance",
+        "piano"
+      ],
+      "preview": false,
+      "durationMs": 198842,
+      "analysedSeconds": 120,
+      "bpm": 123,
+      "bpmConfidence": 15.5,
+      "bpmAlternative": {
+        "bpm": 61.5,
+        "relation": "1:2",
+        "ratio": 0.7
+      },
+      "bpmAmbiguous": false,
+      "key": "G",
+      "scale": "major",
+      "keyStrength": 0.77,
+      "keyRunnerUp": {
+        "key": "G",
+        "scale": "minor",
+        "strength": 0.62
+      },
+      "energy": 0.89,
+      "energyDbfs": -8.9,
+      "brightness": 0.32,
+      "brightnessHz": 967,
+      "genres": [
+        {
+          "style": "Electronic---House",
+          "p": 0.386
+        },
+        {
+          "style": "Electronic---Deep House",
+          "p": 0.3
+        },
+        {
+          "style": "Electronic---Tech House",
+          "p": 0.202
+        },
+        {
+          "style": "Electronic---Tropical House",
+          "p": 0.196
+        },
+        {
+          "style": "Electronic---Bassline",
+          "p": 0.087
+        }
+      ],
+      "snippetPlan": [
+        {
+          "startMs": 39768,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 79537,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 119305,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 159074,
+          "lengthMs": 30000
+        }
+      ],
+      "snippets": [
+        {
+          "startMs": 39768,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.445,
+          "bpm": 123
+        },
+        {
+          "startMs": 79537,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.343,
+          "bpm": 123
+        },
+        {
+          "startMs": 119305,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---House",
+          "p": 0.512,
+          "bpm": 123
+        },
+        {
+          "startMs": 159074,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Tech House",
+          "p": 0.303,
+          "bpm": 123
+        }
+      ],
+      "analysedAt": "2026-10-23T15:45:46.191Z"
+    },
+    {
+      "version": 1,
+      "id": "https://soundcloud.com/djlekkerman/kiki-whats-a-girl-to-do-kiki-remix",
+      "soundcloudUrl": "https://soundcloud.com/djlekkerman/kiki-whats-a-girl-to-do-kiki-remix",
+      "trackId": 2087579421,
+      "title": "KI/KI - What's a Girl to Do (KI/KI Remix)",
+      "uploader": "DJ LEKKERMAN 🪩",
+      "uploaderGenreTag": "Trance",
+      "uploaderTags": [
+        "Fatima",
+        "Yamaha",
+        "KIKI",
+        "Remix",
+        "BBC",
+        "Essential",
+        "Mix",
+        "Sounds",
+        "Trance",
+        "Hardhouse",
+        "Eurodance",
+        "Luvstruck",
+        "Acid",
+        "Hardtrance"
+      ],
+      "preview": false,
+      "durationMs": 213420,
+      "analysedSeconds": 120,
+      "bpm": 145.8,
+      "bpmConfidence": 8.8,
+      "bpmAlternative": {
+        "bpm": 97.4,
+        "relation": "2:3",
+        "ratio": 0.73
+      },
+      "bpmAmbiguous": false,
+      "key": "F",
+      "scale": "minor",
+      "keyStrength": 0.78,
+      "keyRunnerUp": {
+        "key": "G#",
+        "scale": "major",
+        "strength": 0.63
+      },
+      "energy": 0.67,
+      "energyDbfs": -16.6,
+      "brightness": 0.6,
+      "brightnessHz": 1743,
+      "genres": [
+        {
+          "style": "Electronic---Trance",
+          "p": 0.33
+        },
+        {
+          "style": "Electronic---Hard Trance",
+          "p": 0.185
+        },
+        {
+          "style": "Electronic---Euro House",
+          "p": 0.162
+        },
+        {
+          "style": "Electronic---Hands Up",
+          "p": 0.136
+        },
+        {
+          "style": "Electronic---Tech Trance",
+          "p": 0.101
+        }
+      ],
+      "snippetPlan": [
+        {
+          "startMs": 42684,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 85368,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 128052,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 170736,
+          "lengthMs": 30000
+        }
+      ],
+      "snippets": [
+        {
+          "startMs": 42684,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Trance",
+          "p": 0.245,
+          "bpm": 145.8
+        },
+        {
+          "startMs": 85368,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Trance",
+          "p": 0.395,
+          "bpm": 145.7
+        },
+        {
+          "startMs": 128052,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Trance",
+          "p": 0.286,
+          "bpm": 145.8
+        },
+        {
+          "startMs": 170736,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Trance",
+          "p": 0.393,
+          "bpm": 145.9
+        }
+      ],
+      "analysedAt": "2026-10-23T15:43:41.778Z"
+    },
+    {
+      "version": 1,
+      "id": "https://soundcloud.com/fovosmusic/fovos-work-edit-extended",
+      "soundcloudUrl": "https://soundcloud.com/fovosmusic/fovos-work-edit-extended",
+      "trackId": 2153425884,
+      "title": "Pupa Nas T x FOVOS - Work (Edit)",
+      "uploader": "FOVOS",
+      "uploaderGenreTag": "Trance",
+      "uploaderTags": [
+        "hard bounce",
+        "Edit",
+        "hard trance",
+        "Techno"
+      ],
+      "preview": false,
+      "durationMs": 259082,
+      "analysedSeconds": 120,
+      "bpm": 151.8,
+      "bpmConfidence": 11.1,
+      "bpmAlternative": {
+        "bpm": 76,
+        "relation": "1:2",
+        "ratio": 0.79
+      },
+      "bpmAmbiguous": false,
+      "key": "G#",
+      "scale": "major",
+      "keyStrength": 0.74,
+      "keyRunnerUp": {
+        "key": "G#",
+        "scale": "minor",
+        "strength": 0.65
+      },
+      "energy": 0.92,
+      "energyDbfs": -7.8,
+      "brightness": 0.59,
+      "brightnessHz": 1703,
+      "genres": [
+        {
+          "style": "Electronic---Hard House",
+          "p": 0.158
+        },
+        {
+          "style": "Electronic---Trance",
+          "p": 0.126
+        },
+        {
+          "style": "Electronic---Makina",
+          "p": 0.124
+        },
+        {
+          "style": "Electronic---Donk",
+          "p": 0.121
+        },
+        {
+          "style": "Electronic---Hard Trance",
+          "p": 0.117
+        }
+      ],
+      "snippetPlan": [
+        {
+          "startMs": 51816,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 103633,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 155449,
+          "lengthMs": 30000
+        },
+        {
+          "startMs": 207266,
+          "lengthMs": 30000
+        }
+      ],
+      "snippets": [
+        {
+          "startMs": 51816,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Hard House",
+          "p": 0.156,
+          "bpm": 151.8
+        },
+        {
+          "startMs": 103633,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Hands Up",
+          "p": 0.172,
+          "bpm": 151.8
+        },
+        {
+          "startMs": 155449,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Donk",
+          "p": 0.293,
+          "bpm": 151.9
+        },
+        {
+          "startMs": 207266,
+          "lengthMs": 30000,
+          "heardSeconds": 30,
+          "topStyle": "Electronic---Makina",
+          "p": 0.242,
+          "bpm": 151.8
+        }
+      ],
+      "analysedAt": "2026-10-23T15:41:37.292Z"
+    }
+  ]
+}

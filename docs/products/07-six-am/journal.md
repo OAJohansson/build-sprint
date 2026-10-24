@@ -483,3 +483,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   card set to shipped, shared pages written from To carry over, and the owner's requested
   `founder-run-report.md` (timeline, where the time went, agents vs owner, why design stalled, a
   proposed process). PLAYBOOK.md and AGENTS.md unchanged: the owner decides from the report.
+- **Clean start** on the owner's yes in this chat: all 141 rows of `sixam_mentor_messages` deleted (the shared `main` chat, the memory summary, old per-track and background threads; incl. the owner's few real questions). Kept: 15 analyses (5 My genres), the 344-character taste profile, 3 genre groups (made by testers; the owner's to keep or dismiss), 2 Studio tracks. Today/Month cost, the 50/day count and the chats-toward-unlock count restart from zero.

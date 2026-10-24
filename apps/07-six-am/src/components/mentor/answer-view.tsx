@@ -94,6 +94,12 @@ export function Block({ text, className }: { text: string; className: string }) 
   );
 }
 
+/** N12: a genre suggestion reads from the pick: the sentence that names it goes first. */
+function pickFirst(list: Sentence[], name: string): Sentence[] {
+  const i = list.findIndex((x) => x.text.toLowerCase().includes(name.trim().toLowerCase()));
+  return i > 0 ? [list[i], ...list.slice(0, i), ...list.slice(i + 1)] : list;
+}
+
 function Paras({ list, lines }: { list: Sentence[]; lines?: boolean }) {
   const groups = lines ? list.map((x) => [x]) : paragraphs(list);
   return <>{groups.map((p, i) => <Block key={i} className={lines ? s.line : s.voice} text={clean(p.map((x) => x.text).join(" "))} />)}</>;
@@ -156,7 +162,7 @@ export function Turn({ ask, answer, job, track, studio, dropped, myGenre, onTell
           <Paras list={list} />
           {pick ? <PickLink it={pick} /> : null}
         </section>
-      )) : <Paras list={answer.sentences} lines={kind === "ear_training"} />}
+      )) : <Paras list={genre ? pickFirst(answer.sentences, genre.name) : answer.sentences} lines={kind === "ear_training"} />}
 
       {!teach && answer.listenNext?.length ? <Picks items={answer.listenNext} onFeedback={onFeedback} /> : null}
       {/* The computed key note is hidden only when the key is the crate's own and the answer says so. */}

@@ -9,11 +9,11 @@
   --bg: #131110; --panel: #1a1715; --crate: #1d1814; --ink: #f1e6d3; --muted: #aa9c88; --faint: #958a7c;
   --line: #2c2622; --gold: #f2b134; --goldDim: #a68a5a; --orange: #ef5b37; --amber: #c4923f;
   --hover: #211d1a; --selFill: #28231f; --meterOn: #cdbfa8;
-  /* Track gets the room (critic, v1.1): Style, Also, Energy, Tone and Time are as narrow as their longest value */
-  --cols: 28px minmax(240px, 1fr) 140px 116px 70px 104px 48px 54px 58px 116px 140px;
+  /* Track is capped at 380 px; the room left goes to Style, Also and My genre (design to 9/10) */
+  --cols: 28px minmax(220px, 380px) minmax(150px, 1fr) minmax(130px, .8fr) 70px 104px 48px 54px 58px 116px minmax(140px, .8fr);
   /* The owner's own words (my genre): the strip title's warm ivory, never a model grey */
   --own: var(--ink);
-  height: 100dvh; display: grid; grid-template-rows: 64px auto auto auto 1fr; background: var(--bg); color: var(--ink);
+  height: 100dvh; display: grid; grid-template-rows: 64px auto 1fr; background: var(--bg); color: var(--ink);
   font-family: var(--f-mono), monospace; overflow: hidden;
 }
 .dim { color: var(--faint); }
@@ -58,23 +58,25 @@
 .menu button { font: 400 12px var(--f-mono); color: var(--ink); background: none; border: 0; border-radius: 4px; padding: 8px 10px; text-align: left; cursor: pointer; }
 .menu button:hover, .menu button:focus-visible { background: rgba(241, 230, 211, .07); outline: none; }
 
-/* Toolbar: link, the SoundCloud embed (shrinks first), listening */
-.bar { display: grid; grid-template-columns: minmax(220px, 380px) minmax(100px, 1fr) 480px; align-items: center; gap: 16px; padding: 10px 20px; background: var(--panel); border-bottom: 1px solid var(--line); }
+/* The one toolbar: link, the SoundCloud player (shrinks first), the filters, one status slot */
+.bar { display: flex; align-items: center; gap: 14px; padding: 10px 20px; background: var(--panel); border-bottom: 1px solid var(--line); min-width: 0; }
 .url {
   font: 400 12px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--line); border-radius: 6px;
-  padding: 7px 10px; outline: none; min-width: 0; text-overflow: ellipsis;
+  padding: 0 10px; height: 28px; box-sizing: border-box; outline: none; flex: 0 1 220px; min-width: 150px; text-overflow: ellipsis;
 }
 .url::placeholder { color: var(--faint); }
 .url:focus { border-color: var(--muted); }
-.embed { display: block; width: 100%; min-width: 0; height: 20px; border: 0; border-radius: 3px; background: #fff; }
-.embedEmpty { display: flex; align-items: center; height: 20px; font: 400 11px var(--f-mono); color: var(--faint); white-space: nowrap; overflow: hidden; min-width: 0; }
-/* Fixed width, so the player beside it never shifts as the status text changes */
-.listen { display: flex; align-items: center; justify-content: flex-end; gap: 14px; min-width: 0; width: 480px; overflow: hidden; }
-.offNote { font: 400 11.5px var(--f-mono); color: var(--muted); white-space: nowrap; max-width: 60ch; overflow: hidden; text-overflow: ellipsis; }
-.offNote q { quotes: "“" "”"; }
+.embed { display: block; flex: 1 1 120px; min-width: 80px; height: 20px; border: 0; border-radius: 3px; background: #fff; }
+.embedEmpty { flex: 1 1 0; min-width: 0; font: 400 11px var(--f-mono); color: var(--faint); white-space: nowrap; overflow: hidden; }
+.filters { display: flex; align-items: center; gap: 12px; flex: none; }
+/* Fixed width, so nothing beside it shifts as the status changes */
+.status { display: flex; align-items: center; justify-content: flex-end; gap: 12px; flex: 0 0 360px; min-width: 0; margin-left: auto; font: 400 12px var(--f-mono); color: var(--muted); }
+.statusText { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.statusWait { color: var(--ink); }
+.statusError { color: #f08a6e; }
 
 /* The one progress indicator: a text line over a 2 px gold bar */
-.prog { display: flex; flex-direction: column; gap: 5px; flex: 0 1 350px; min-width: 0; font: 500 12px var(--f-mono); }
+.prog { display: flex; flex-direction: column; gap: 5px; flex: 1 1 auto; min-width: 0; font: 500 12px var(--f-mono); }
 .progText { display: flex; justify-content: space-between; gap: 10px; color: var(--ink); white-space: nowrap; }
 .progText span:first-child { overflow: hidden; text-overflow: ellipsis; }
 .progText span:last-child { font-variant-numeric: tabular-nums; }
@@ -83,28 +85,18 @@
 @media (prefers-reduced-motion: reduce) { .progBar i { transition: none; } }
 .side { font: 400 12px var(--f-mono); color: var(--muted); white-space: nowrap; }
 
-/* One line of news under the toolbar */
-.msg { display: flex; align-items: center; gap: 16px; padding: 8px 20px 8px 64px; border-bottom: 1px solid var(--line); font: 400 12.5px/1.5 var(--f-mono); color: var(--muted); background: var(--bg); }
-.msgError { color: #f08a6e; }
-.msgWait { color: var(--ink); }
-.msg > span { flex: 1; min-width: 0; }
-.msg b { font-weight: 500; }
-.msg q { quotes: "“" "”"; }
-
-/* Above the table: filter and Clear list */
-.listBar { display: flex; align-items: center; gap: 16px; padding: 8px 20px 8px 64px; border-bottom: 1px solid var(--line); background: var(--bg); font: 400 11.5px var(--f-mono); color: var(--muted); }
 .filter {
   font: 400 12px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--line); border-radius: 6px;
-  padding: 5px 9px; width: 260px; outline: none;
+  padding: 5px 9px; width: 150px; outline: none;
 }
 .filter::placeholder { color: var(--faint); }
 .filter:focus { border-color: var(--muted); }
 .filter, .bound, .select { min-height: 28px; height: 28px; box-sizing: border-box; }
 /* BPM range and my-genre filter (F13): the filter's look, narrow */
-.range { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+.range { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font: 400 11.5px var(--f-mono); }
 .bound {
   font: 400 12px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--line); border-radius: 6px;
-  width: 52px; padding: 5px 6px; text-align: center; outline: none; font-variant-numeric: tabular-nums;
+  width: 46px; padding: 5px 6px; text-align: center; outline: none; font-variant-numeric: tabular-nums;
 }
 .bound::placeholder { color: var(--faint); }
 .bound:focus { border-color: var(--muted); }
@@ -113,14 +105,17 @@
   appearance: none; -webkit-appearance: none; height: 28px;
   font: 400 12px var(--f-mono); color: var(--ink); border: 1px solid var(--line); border-radius: 6px;
   background: #0b0a09 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23aa9c88' stroke-width='1.2'/%3E%3C/svg%3E") no-repeat right 10px center;
-  padding: 0 28px 0 9px; min-width: 180px; max-width: 240px; outline: none; cursor: pointer; text-overflow: ellipsis;
+  padding: 0 28px 0 9px; min-width: 140px; max-width: 200px; outline: none; cursor: pointer; text-overflow: ellipsis;
 }
 .select:hover, .select:focus { border-color: var(--muted); }
 .selectIdle { color: var(--muted); }
 .select option { color: var(--ink); background: #1d1916; }
-.listCount { font-variant-numeric: tabular-nums; white-space: nowrap; }
-.clear { margin-left: auto; }
-.confirm { margin-left: auto; display: flex; align-items: center; gap: 14px; color: var(--ink); }
+/* Clear list's question, inside the List menu */
+.confirm { padding: 6px 10px; max-width: 240px; font: 400 12px/1.5 var(--f-mono); color: var(--ink); }
+.confirm p { margin: 0 0 6px; white-space: normal; }
+.confirm span { display: flex; gap: 4px; margin: 0 -10px; }
+.menu .danger { color: #f08a6e; }
+.menu button:disabled { color: var(--faint); cursor: default; background: none; }
 
 /* The table and the strip share one scroller: the strip follows the last row, then pins */
 .main { overflow: auto; min-height: 0; display: flex; flex-direction: column; scrollbar-color: #3a322c transparent; }
@@ -128,11 +123,12 @@
 .cols { display: grid; grid-template-columns: var(--cols); column-gap: 12px; align-items: center; padding: 0 20px; }
 .head { position: sticky; top: 0; z-index: 4; height: 30px; background: var(--panel); border-bottom: 1px solid var(--line); }
 .th { font: 400 10.5px var(--f-mono); color: var(--muted); letter-spacing: .06em; white-space: nowrap; }
+.thCount { color: var(--faint); margin-left: 6px; font-variant-numeric: tabular-nums; }
 .span2 { grid-column: span 2; }
 
 .right { text-align: right; justify-self: end; }
 
-.row { height: 34px; border-bottom: 1px solid rgba(44, 38, 34, .7); font: 400 12.5px var(--f-mono); cursor: default; outline: none; transition: background 120ms ease-out; }
+.row { position: relative; height: 34px; border-bottom: 1px solid rgba(44, 38, 34, .7); font: 400 12.5px var(--f-mono); cursor: default; outline: none; transition: background 120ms ease-out; }
 .row > * { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pick { cursor: pointer; }
 .row:hover { background: var(--hover); }
@@ -163,7 +159,15 @@
 .doubt { color: var(--amber); }
 .tagCell { display: flex; align-items: baseline; }
 .tagCell .differs { flex: none; }
-.status { color: var(--ink); }
+/* The track being heard: its state and Cancel in the row, a 2 px gold line along the bottom */
+.now { display: flex; align-items: baseline; gap: 14px; color: var(--ink); }
+.active .track b { color: var(--ink); font-weight: 500; }
+.rowProg { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: transparent; }
+.rowProg i { display: block; height: 100%; background: var(--gold); transition: width 1s linear; }
+@media (prefers-reduced-motion: reduce) { .rowProg i { transition: none; } }
+/* In-row actions not yet asked for (Analyse, Cancel): quiet until the row is pointed at */
+.quiet { color: var(--muted); font-weight: 400; }
+.row:hover .quiet, .row:focus-within .quiet, .quiet:focus-visible { color: var(--ink); }
 .failed { color: #c98a74; }
 /* My genre (F12): the owner's own label in --own; dim "–" when not set. Click edits it in the strip. */
 /* My genre (F12): the whole cell, row height, is the click target (F3) */
@@ -186,15 +190,9 @@
 .meter i { width: 7px; height: 11px; border-radius: 1.5px; background: #3a322c; }
 .meter .on { background: var(--meterOn); }
 
-/* Empty state: three steps in the table body */
-.steps { margin: 0; padding: 28px 20px 0 64px; list-style: none; counter-reset: step; display: flex; flex-direction: column; gap: 14px; max-width: 780px; }
-.steps li { counter-increment: step; display: grid; grid-template-columns: 22px 1fr; gap: 12px; font: 400 12.5px/1.6 var(--f-mono); color: var(--ink); }
-.steps li::before { content: counter(step); width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); font: 500 11px var(--f-mono); color: var(--muted); }
-.steps q { quotes: "“" "”"; }
-.fine { padding: 18px 20px 0 98px; font: 400 11.5px/1.6 var(--f-mono); color: var(--faint); max-width: 780px; margin: 0; }
-/* The table's shape before the first paste: its header row alone */
-.ghost { margin-top: 28px; min-width: 1260px; }
-.ghost .head { position: static; }
+/* Empty state: two lines */
+.empty { padding: 32px 20px 0 64px; max-width: 900px; font: 400 12.5px/1.6 var(--f-mono); color: var(--ink); }
+.empty p { margin: 0 0 6px; }
 
 /* The detail strip for the selected track */
 .strip {
@@ -254,19 +252,16 @@
 .panelSlot { min-width: 0; height: 100dvh; }
 .root { min-width: 0; }
 @media (max-width: 1679px) {
-  .narrow { --cols: 28px minmax(180px, 1fr) 140px 70px 104px 48px 140px; }
+  .narrow { --cols: 28px minmax(180px, 380px) minmax(140px, 1fr) 70px 104px 48px minmax(120px, .8fr); }
   .narrow .lo { display: none; }
   .narrow .span2 { grid-column: span 1; }
-  .narrow .grid, .narrow .ghost, .narrow .strip { min-width: 0; }
-  .narrow .strip, .narrow .listBar, .narrow .msg, .narrow .divider, .narrow .steps { padding-left: 20px; }
-  .narrow .fine { padding-left: 54px; }
+  .narrow .grid, .narrow .strip { min-width: 0; }
+  .narrow .strip, .narrow .divider, .narrow .empty { padding-left: 20px; }
   .narrow .facts { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 28px; }
   .narrow .snipBlock { grid-column: 1 / -1; }
   .narrow .headLine { flex-wrap: wrap; row-gap: 10px; }
   .narrow .genre { margin-left: 0; flex: 1 1 220px; }
-  .narrow .bar { grid-template-columns: minmax(160px, 1fr) minmax(80px, 1fr) auto; }
-  .narrow .listen { width: auto; max-width: 360px; }
-  .narrow .listBar { flex-wrap: wrap; row-gap: 8px; }
-  .narrow .filter { width: 180px; }
-  .narrow .select { min-width: 140px; }
+  /* The toolbar wraps: link, player and status on top, the filters below */
+  .narrow .bar { flex-wrap: wrap; row-gap: 8px; }
+  .narrow .filters { order: 3; }
 }

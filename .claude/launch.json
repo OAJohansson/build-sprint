@@ -47,6 +47,23 @@
       "port": 3007
     },
     {
+      "name": "07-six-am-test",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "-F",
+        "07-six-am",
+        "dev",
+        "--port",
+        "3017"
+      ],
+      "port": 3017,
+      "env": {
+        "SUPABASE_URL": "",
+        "SUPABASE_SECRET_KEY": "",
+        "ACCESS_CODE": "test-code"
+      }
+    },
+    {
       "name": "06-folio",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": [

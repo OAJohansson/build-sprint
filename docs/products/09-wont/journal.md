@@ -81,3 +81,6 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Wonton style sheet** (owner): the wonton is the whole design, so a separate exercise of 10
   wonton styles (cute, cartoon/anime, playing with colour and shape). v1's wontons preferred over
   v2's "realistic" ones.
+- **Wonton sheet 1 rejected** (owner): too childish; adults should want to use it, still cute.
+  Reframed as an icon exercise: design the mark first, then use it for the wontons. Sheet 1 kept
+  (`design/wonton-sheet.html`).

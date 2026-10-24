@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wont icon sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root{--shelf:#f3ece0;--card:#fbf7f0;--ink:#3b3026;--muted:rgba(59,48,38,.62)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--shelf);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,sans-serif;padding:36px 32px 64px}
+  header{max-width:1500px;margin:0 auto 26px}
+  header h1{font-weight:800;font-size:30px;letter-spacing:-.03em}
+  header p{color:var(--muted);max-width:940px;margin-top:6px;font-size:15px;line-height:1.45}
+  .grid{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .cell{background:var(--card);border-radius:22px;padding:18px 20px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start}
+  .tiles{display:flex;align-items:flex-end;gap:12px}
+  .tiles svg{display:block;filter:drop-shadow(0 1px 2px rgba(59,48,38,.18))}
+  .info .t{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+  .info .t b{font-weight:400;font-size:13px;color:var(--muted)}
+  .info .t strong{font-weight:800;font-size:19px;letter-spacing:-.01em}
+  .info p{font-size:14px;color:var(--muted);margin-top:4px;line-height:1.4}
+  .ctx{display:flex;align-items:center;gap:14px;margin-top:12px;flex-wrap:wrap}
+  .real{background:var(--shelf);border-radius:14px;padding:6px;display:flex;flex-direction:column;align-items:center}
+  .real small{font-size:10px;color:var(--muted)}
+  .sw{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
+  .sw span{display:flex;gap:7px;align-items:center}
+  .sw i{width:14px;height:14px;border-radius:4px;outline:1px solid rgba(59,48,38,.15);flex:none}
+  @media (max-width:1150px){.grid{grid-template-columns:1fr}}
+  @media (max-width:640px){.cell{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Wont: the mark</h1>
+  <p>Ten directions for one wonton glyph that is both the app icon and the repeating unit in the steamer. Grown-up cute, ten different styles. Each shows the icon at 180, 60 and 29 px, then the glyph in the 84 px steamer holding 6 of 7 (5 kept, 1 comeback, 1 empty seat), at real size and at 2×. Seeds: jbJh5GE8…, AGAnPH45…, IoryBCom…, oFdR8jM9….</p>
+</header>
+<div class="grid" id="grid"></div>
+
+<script>
+// Each glyph is drawn in local units: about 24 wide, centred on 0,0, bottom near +7.
+// role: "k" kept, "c" comeback, "p" empty seat.
+let uidN = 0;
+const uid = () => "u" + (uidN++);
+const dash = (d, col, w = 1.1) => `<path d="${d}" fill="none" stroke="${col}" stroke-width="${w}" stroke-dasharray="2.2 1.8" stroke-linejoin="round" opacity=".75"/>`;
+
+const PURSE = "M-11 5 Q-12 -4 -4.5 -5.5 Q0 -12 4.5 -5.5 Q12 -4 11 5 Q0 10 -11 5 Z";
+const PLUMP = "M-11 4 C-11 -6 -5 -9.5 0 -9.5 C5 -9.5 11 -6 11 4 C11 8 -11 8 -11 4 Z";
+const INGOT = "M-12 -3 Q-13 -7.5 -9.5 -7.5 Q-6 -2.5 0 -2.5 Q6 -2.5 9.5 -7.5 Q13 -7.5 12 -3 Q10 7 0 7 Q-10 7 -12 -3 Z";
+const BELLY = "M-6.5 -1 Q-6.5 -10 0 -10 Q6.5 -10 6.5 -1 Z";
+const ROUNDO = "M-10 3 C-10 -8.5 10 -8.5 10 3 C10 8 -10 8 -10 3 Z";
+
+const STYLES = [
+  {
+    name: "Pleat W", seed: "seed 1 · jbJh5GE8…",
+    from: "lowercase start = light line; the doubled 'ww' = a W; three 5s = five-stroke rhythm; 5 → teal",
+    line: "A single-weight line mark: the five pleat strokes form a W for Wont. Reads as a monogram and a dumpling at once.",
+    cols: [["#1f5a55", "line, icon ground"], ["#f3e7cf", "kept"], ["#f2b49c", "comeback"]],
+    draw(r) {
+      if (r === "p") return dash(PURSE, "#7fa29e");
+      const f = r === "c" ? "#f2b49c" : "#f3e7cf";
+      return `<path d="${PURSE}" fill="${f}" stroke="#1f5a55" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M-6.5 -2.4 L-3.3 3.2 L0 -2 L3.3 3.2 L6.5 -2.4" fill="none" stroke="#1f5a55" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`;
+    },
+    tile() {
+      return `<rect width="100" height="100" fill="#1f5a55"/>
+        <g transform="translate(50 55) scale(3)"><path d="${PURSE}" fill="none" stroke="#f3e7cf" stroke-width="1.3" stroke-linejoin="round"/>
+        <path d="M-6.5 -2.4 L-3.3 3.2 L0 -2 L3.3 3.2 L6.5 -2.4" fill="none" stroke="#f3e7cf" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+    },
+  },
+  {
+    name: "Construction", seed: "seed 2 · AGAnPH45…",
+    from: "'AGA' symmetry and the A's triangle = a compass-and-ruler build; 4 → sage green",
+    line: "Built from three circles and a triangle, like a drafted logo. Flat sage on paper; the construction circles show on the icon only.",
+    cols: [["#efe9da", "paper"], ["#8a9a5b", "kept"], ["#c96f4a", "comeback"], ["#2f3523", "ink"]],
+    draw(r) {
+      if (r === "p") return dash("M-12 1 A3.6 3.6 0 0 1 -8 -1.6 A8.4 8.4 0 0 1 8 -1.6 A3.6 3.6 0 0 1 12 1 A11.5 6.6 0 0 1 -12 1 Z", "#a4ad86");
+      const f = r === "c" ? "#c96f4a" : "#8a9a5b";
+      return `<circle cx="-9" cy="0.2" r="3.6" fill="${f}" opacity=".7"/><circle cx="9" cy="0.2" r="3.6" fill="${f}" opacity=".7"/>
+        <path d="M-8.4 1 A8.4 8.4 0 0 1 8.4 1 Z" fill="${f}"/><path d="M-8.4 1 A8.4 5.6 0 0 0 8.4 1 Z" fill="${f}"/>
+        <path d="M-2.6 -6.6 L0 -10.4 L2.6 -6.6 Z" fill="${f}"/>
+        <path d="M-5.2 1 A5.2 5.2 0 0 1 5.2 1" fill="none" stroke="#efe9da" stroke-width="1" opacity=".85"/>`;
+    },
+    tile() {
+      return `<rect width="100" height="100" fill="#efe9da"/>
+        <g transform="translate(50 54) scale(3)" fill="none" stroke="#2f3523" stroke-width=".18" opacity=".55">
+          <circle cy="1" r="8.4"/><circle cx="-9" cy="0.2" r="3.6"/><circle cx="9" cy="0.2" r="3.6"/><line x1="-14" y1="1" x2="14" y2="1"/><line x1="0" y1="-14" x2="0" y2="9"/><circle r="12" stroke-dasharray=".6 .6"/></g>
+        <g transform="translate(50 54) scale(3)">${this.draw("k")}</g>`;
+    },
+  },
+  {
+    name: "Negative space", seed: "seed 3 · IoryBCom…",
+    from: "upright 'I' and few digits = cut-out, sparse; mixed case = hard figure/ground contrast; 6 → indigo",
+    line: "The wonton is a cream shape with its pleats cut out of it, so the ground shows through as the folds.",
+    cols: [["#2c3e75", "ground, cuts"], ["#f4ecdc", "kept"], ["#f0b49a", "comeback"]],
+    draw(r, big, ground = "#2c3e75") {
+      if (r === "p") return dash(PLUMP, "#8b97b8");
+      const f = r === "c" ? "#f0b49a" : "#f4ecdc";
+      return `<path d="${PLUMP}" fill="${f}" ${big ? "" : 'stroke="#2c3e75" stroke-width=".6"'}/>
+        <path d="M0 -9.5 L0 -1.5 M-5 -8.4 Q-3.6 -5 -2.8 -1.8 M5 -8.4 Q3.6 -5 2.8 -1.8 M-7 1.8 Q0 4.6 7 1.8" fill="none" stroke="${ground}" stroke-width="1.5" stroke-linecap="round"/>`;
+    },
+    tile() { return `<rect width="100" height="100" fill="#2c3e75"/><g transform="translate(50 54) scale(3.1)">${this.draw("k", true)}</g>`; },
+  },
+  {
+    name: "Glaze", seed: "seed 4 · oFdR8jM9…",
+    from: "'o' start = a round, thrown form; 8, 9 → plum and berry; 'Gy57' = a soft drip",
+    line: "A small ceramic piece: oat clay body, a plum glaze poured over the top that pools and drips, one glossy highlight.",
+    cols: [["#e9dfd0", "oat clay"], ["#6d3b5c", "kept glaze"], ["#7fa597", "comeback, celadon"]],
+    draw(r) {
+      if (r === "p") return dash(PURSE, "#bba98f");
+      const g = r === "c" ? "#7fa597" : "#6d3b5c", id = uid();
+      return `<defs><clipPath id="${id}"><path d="${PURSE}"/></clipPath></defs>
+        <path d="${PURSE}" fill="#e9dfd0" stroke="#c8b69c" stroke-width=".6" stroke-linejoin="round"/>
+        <path clip-path="url(#${id})" d="M-14 -14 H14 V-1 Q11 1 9.6 -0.8 Q8.4 4 6.6 0 Q3.4 2 0 0.6 Q-3 3 -4.6 0.4 Q-6.6 3.6 -8 0 Q-10.6 1.8 -14 -0.6 Z" fill="${g}"/>
+        <path d="M-7 -2.6 Q-5.6 -4.8 -3 -5.4" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" opacity=".75"/>`;
+    },
+    tile() { return `<rect width="100" height="100" fill="#e3d6c3"/><ellipse cx="50" cy="76" rx="30" ry="5" fill="#6d3b5c" opacity=".12"/><g transform="translate(50 56) scale(3.1)">${this.draw("k")}</g>`; },
+  },
+  {
+    name: "Riso", seed: "far away · risograph print",
+    from: null,
+    line: "Two-ink riso print: sunflower body with a fluoro-pink outline printed slightly off-register, and a fine grain.",
+    cols: [["#f6f1e7", "paper"], ["#ffb000", "kept ink"], ["#ff5f8a", "outline, comeback ink"], ["#3b6ff5", "comeback outline"]],
+    draw(r) {
+      if (r === "p") return dash(PURSE, "#e6a8b6");
+      const id = uid();
+      const [f, s] = r === "c" ? ["#ff5f8a", "#3b6ff5"] : ["#ffb000", "#ff5f8a"];
+      return `<defs><pattern id="${id}" width="1.6" height="1.6" patternUnits="userSpaceOnUse"><circle cx=".4" cy=".4" r=".32" fill="#f6f1e7" opacity=".55"/><circle cx="1.2" cy="1.1" r=".22" fill="#f6f1e7" opacity=".4"/></pattern></defs>
+        <path d="${PURSE}" fill="${f}" style="mix-blend-mode:multiply"/><path d="${PURSE}" fill="url(#${id})"/>
+        <g transform="translate(1 -0.8)" style="mix-blend-mode:multiply"><path d="${PURSE}" fill="none" stroke="${s}" stroke-width="1.3" stroke-linejoin="round"/>
+        <path d="M-5 -1 L-1.6 -5.6 M5 -1 L1.6 -5.6" stroke="${s}" stroke-width="1.1" stroke-linecap="round"/></g>`;
+    },
+    tile() { return `<rect width="100" height="100" fill="#f6f1e7"/><g transform="translate(48 56) scale(3)">${this.draw("k")}</g>`; },
+  },
+  {
+    name: "Enamel pin", seed: "far away · a good enamel pin",
+    from: null,
+    line: "Hard enamel in a polished gold outline, with a calm closed-eye smile. A pin you'd actually wear on a coat.",
+    cols: [["#22304a", "pin card"], ["#c9a14a", "gold metal"], ["#f7efe0", "kept enamel"], ["#e8a6a6", "comeback enamel"]],
+    draw(r) {
+      if (r === "p") return dash(PURSE, "#c9a14a");
+      const f = r === "c" ? "#e8a6a6" : "#f7efe0";
+      return `<path d="${PURSE}" fill="${f}" stroke="#c9a14a" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M-4.6 -5.4 Q0 -3.8 4.6 -5.4" fill="none" stroke="#c9a14a" stroke-width="1.1" stroke-linecap="round"/>
+        <path d="M-4.6 0.6 Q-3.4 1.8 -2.2 0.6 M2.2 0.6 Q3.4 1.8 4.6 0.6 M-1.2 3.2 Q0 4.1 1.2 3.2" fill="none" stroke="#a27c2c" stroke-width=".8" stroke-linecap="round"/>
+        <path d="M-7.6 -1.4 Q-7 -3.6 -5.2 -4.2" fill="none" stroke="#fff" stroke-width=".9" stroke-linecap="round" opacity=".9"/>`;
+    },
+    tile() { return `<rect width="100" height="100" fill="#22304a"/><g transform="translate(50 55) scale(3)">${this.draw("k")}</g>`; },
+  },
+  {
+    name: "Paper cut", seed: "far away · Matisse paper cut-outs",
+    from: null,
+    line: "Cut and layered paper: a cream body, a mustard folded flap laid on top, each piece throwing a soft shadow.",
+    cols: [["#d0643c", "icon ground, comeback"], ["#f4e9d8", "kept body"], ["#e3a83b", "folded flap"]],
+    draw(r) {
+      if (r === "p") return dash(PLUMP, "#c9a874");
+      const b = r === "c" ? "#d0643c" : "#f4e9d8";
+      return `<g transform="rotate(-4)"><path d="${PLUMP}" transform="translate(.7 .9)" fill="#3b3026" opacity=".18"/><path d="${PLUMP}" fill="${b}"/>
+        <path d="M-7.5 -5.6 Q0 -0.4 7.5 -5.6 Q4 -10.4 0 -10.2 Q-4 -10.4 -7.5 -5.6 Z" transform="translate(.5 .7)" fill="#3b3026" opacity=".18"/>
+        <path d="M-7.5 -5.6 Q0 -0.4 7.5 -5.6 Q4 -10.4 0 -10.2 Q-4 -10.4 -7.5 -5.6 Z" fill="#e3a83b"/></g>`;
+    },
+    tile() { return `<rect width="100" height="100" fill="#d0643c"/><g transform="translate(50 56) scale(3.1)">${this.draw("k")}</g>`; },
+  },
+  {
+    name: "Calm face", seed: "far away · Headspace's characters",
+    from: null,
+    line: "One warm orange shape, no outline, a face set low and close: two dots and a small line. Quietly content, not cartoon.",
+    cols: [["#fbf3e6", "icon ground"], ["#f2803a", "kept"], ["#c75b7a", "comeback, berry"], ["#3b2418", "face"]],
+    draw(r) {
+      if (r === "p") return dash(ROUNDO, "#e6b48f");
+      const f = r === "c" ? "#c75b7a" : "#f2803a";
+      return `<path d="M-10 4 C-11 -6 -5 -9 -1.4 -9.2 Q0 -11.6 1.4 -9.2 C5 -9 11 -6 10 4 C8 8 -8 8 -10 4 Z" fill="${f}"/>
+        <circle cx="-2.2" cy="1.6" r=".9" fill="#3b2418"/><circle cx="2.2" cy="1.6" r=".9" fill="#3b2418"/>
+        <path d="M-1 3.8 Q0 4.4 1 3.8" fill="none" stroke="#3b2418" stroke-width=".7" stroke-linecap="round"/>`;
+    },
+    tile() { return `<rect width="100" height="100" fill="#fbf3e6"/><g transform="translate(50 55) scale(3.2)">${this.draw("k")}</g>`; },
+  },
+  {
+    name: "Hairline", seed: "far away · Muji and Aesop labels",
+    from: null,
+    line: "A hairline ingot drawn once and left alone, small in a lot of oat space. The most adult of the ten.",
+    cols: [["#e7dccb", "oat"], ["#4a3b2c", "hairline"], ["#f6efe3", "kept fill"], ["#d6ad92", "comeback, clay"]],
+    draw(r, big) {
+      if (r === "p") return dash(INGOT, "#a8987f", .8);
+      const f = r === "c" ? "#d6ad92" : "#f6efe3";
+      const w = big ? .62 : .9;
+      return `<path d="${BELLY}" fill="${f}" stroke="#4a3b2c" stroke-width="${w}"/><path d="${INGOT}" fill="${f}" stroke="#4a3b2c" stroke-width="${w}" stroke-linejoin="round"/>
+        <circle cx="0" cy="2" r="${big ? .5 : .8}" fill="#4a3b2c"/>`;
+    },
+    tile() { return `<rect width="100" height="100" fill="#e7dccb"/><g transform="translate(50 56) scale(2.6)">${this.draw("k", true)}</g>`; },
+  },
+  {
+    name: "Mid-century", seed: "far away · 1950s packaging",
+    from: null,
+    line: "A flat ingot in mustard with a cream belly line, and three teal steam strokes on the icon. Optimistic, like a vintage tin.",
+    cols: [["#f3e9d6", "cream"], ["#e1a73a", "kept, mustard"], ["#2e7d7a", "comeback, steam"]],
+    draw(r) {
+      if (r === "p") return dash(INGOT, "#b9a27a");
+      const f = r === "c" ? "#2e7d7a" : "#e1a73a";
+      return `<path d="${BELLY}" fill="${f}"/><path d="${INGOT}" fill="${f}"/>
+        <path d="M-7 -1 Q0 1.6 7 -1" fill="none" stroke="#f3e9d6" stroke-width="1.2" stroke-linecap="round"/>
+        <circle cx="-9.5" cy="-7.5" r="1.2" fill="#f3e9d6"/><circle cx="9.5" cy="-7.5" r="1.2" fill="#f3e9d6"/>`;
+    },
+    tile() {
+      return `<rect width="100" height="100" fill="#f3e9d6"/>
+        <path d="M38 30 q-4 -6 0 -12 M50 28 q-4 -6 0 -12 M62 30 q-4 -6 0 -12" fill="none" stroke="#2e7d7a" stroke-width="3.2" stroke-linecap="round"/>
+        <g transform="translate(50 62) scale(2.8)">${this.draw("k")}</g>`;
+    },
+  },
+];
+
+const tile = (st, size) => {
+  const id = uid();
+  return `<svg width="${size}" height="${size}" viewBox="0 0 100 100"><defs><clipPath id="${id}"><rect width="100" height="100" rx="22.4"/></clipPath></defs><g clip-path="url(#${id})">${st.tile()}</g></svg>`;
+};
+const W = (st, r, x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})">${st.draw(r)}</g>`;
+
+// B's steamer: back row of three, front row of four. 6 of 7: 5 kept, 1 comeback, 1 empty seat.
+function steamer(st, size = 84) {
+  const seats = [[18, 54, "k"], [34, 54, "k"], [50, 54, "c"], [66, 54, "k"], [26, 42, "k"], [42, 42, "k"], [58, 42, "p"]];
+  return `<svg width="${size}" height="${size}" viewBox="0 0 84 84">
+    <ellipse cx="42" cy="60" rx="36" ry="7" fill="#c49a62"/>
+    ${seats.filter((s) => s[1] < 50).map(([x, y, r]) => W(st, r, x, y, .72)).join("")}
+    ${seats.filter((s) => s[1] >= 50).map(([x, y, r]) => W(st, r, x, y, .72)).join("")}
+    <path d="M6 61 Q42 70 78 61 V74 Q78 81 70 81 H14 Q6 81 6 74 Z" fill="#dcb883" stroke="#b98f55" stroke-width="1.5"/>
+    <line x1="8" y1="74" x2="76" y2="74" stroke="#c9a067" stroke-width="1.2"/>
+  </svg>`;
+}
+
+document.getElementById("grid").innerHTML = STYLES.map((st, i) => `<section class="cell">
+  <div class="tiles">${tile(st, 180)}${tile(st, 60)}${tile(st, 29)}</div>
+  <div class="info">
+    <div class="t"><b>${String(i + 1).padStart(2, "0")}</b><strong>${st.name}</strong><b>${st.seed}</b></div>
+    <p>${st.line}</p>
+    ${st.from ? `<p style="font-size:12.5px">From the seed: ${st.from}</p>` : ""}
+    <div class="ctx">
+      <div class="real">${steamer(st)}<small>real size</small></div>
+      ${steamer(st, 168)}
+      <div class="sw">${st.cols.map(([c, r]) => `<span><i style="background:${c}"></i>${r} ${c}</span>`).join("")}</div>
+    </div>
+  </div>
+</section>`).join("");
+</script>
+</body>
+</html>

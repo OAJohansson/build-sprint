@@ -3,18 +3,23 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Board, type DemoState } from "./board";
 import { Board2 } from "./board2";
+import { Board3 } from "./board3";
 import { Steamer2 } from "./steamer2";
+import { Steamer3 } from "./steamer3";
 import { Jar, Pot, Steamer, type VesselProps } from "./vessels";
 import "./picker.css";
 import "./board2.css";
+import "./board3.css";
 
 type BoardComp = typeof Board;
 const VARIANTS: { name: string; title: string; Vessel: (p: VesselProps) => React.ReactNode; Comp?: BoardComp }[] = [
   { name: "Jars", title: "Saturday's jars", Vessel: Jar },
   { name: "Wontons", title: "Saturday's wontons", Vessel: Steamer },
-  { name: "Seed sprout", title: "Saturday's garden", Vessel: Pot },
+  { name: "Sprout", title: "Saturday's garden", Vessel: Pot },
   // Define round 1: fixes on a copy beside the pick (B), so the pick stays as it was.
-  { name: "Wontons v2", title: "Saturday's wontons", Vessel: Steamer2, Comp: Board2 },
+  { name: "v2", title: "Saturday's wontons", Vessel: Steamer2, Comp: Board2 },
+  // Define round 3: B's layout rebuilt around the chosen mark (Dough on ink).
+  { name: "v3", title: "Saturday", Vessel: Steamer3, Comp: Board3 },
 ];
 
 // Prototype picker (prototype skill, PICKER.md): same markup, classes and behaviour.

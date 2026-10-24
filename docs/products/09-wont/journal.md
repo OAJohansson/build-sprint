@@ -90,3 +90,5 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Mark shortlist** (owner): Calm face (loves it, worried it reads as Headspace), Riso, Enamel
   pin (colours). Brand pros/cons given in chat; designer exploring 4 differentiated Calm faces
   (one in riso), 2 Riso refinements, 4 enamel colourways (`design/mark-sheet.html`).
+- **Mark chosen** (owner): Dough on ink with closed content eyes; a winking version marks a
+  comeback ("a bit of extra motivation"). Board to be rebuilt around it.

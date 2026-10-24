@@ -6,10 +6,10 @@ import "./board.css";
 const bricolage = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-wb" });
 
 // Prototype surface for the board (design-session, Discover run 2). Delete once a variant is promoted.
-// ?v=1..4 picks the variant; ?state=write|slip opens a key state for screenshots.
+// ?v=1..5 picks the variant; ?state=write|slip opens a key state for screenshots.
 export default async function Page(props: PageProps<"/prototypes/board">) {
   const sp = await props.searchParams;
-  const v = Math.min(Math.max(parseInt(String(sp.v ?? "1"), 10) || 1, 1), 4) - 1;
+  const v = Math.min(Math.max(parseInt(String(sp.v ?? "1"), 10) || 1, 1), 5) - 1;
   const demo: DemoState = sp.state === "write" ? "write" : sp.state === "slip" ? "slip" : "main";
   return (
     <div className={bricolage.variable}>

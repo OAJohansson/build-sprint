@@ -37,3 +37,5 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L22 | 24 Oct | Rate window ends yesterday until today is logged; "clean so far" counts as kept today; clean-day total counts finished days only | PM (engineer) | build | |
 | L23 | 24 Oct | A slip counts as a miss for the comeback message; undoing a slip restores the earlier clean tap | PM (engineer) | build | |
 | T10 | 24 Oct | Slip size 1 / 2 / 3+, one per day; urges only on the current day; comeback message keyed by the first missed day of the run | PM (engineer) | build | |
+| L24 | 24 Oct | The mark: Dough on ink, closed content eyes; the comeback wonton winks (Plum wink's eyes) as a little extra motivation | owner | design | |
+| T11 | 24 Oct | Board v3: ink header band with the week strip, dough and paper cards; clean so far shares the kept wash, a slip turns the stop card cool oat-grey; app icon full-bleed square in public/ | PM (designer) | design | |

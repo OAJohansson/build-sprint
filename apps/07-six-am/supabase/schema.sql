@@ -80,3 +80,14 @@ alter table sixam_taste_profile enable row level security;
 alter table sixam_mentor_messages enable row level security;
 alter table sixam_genre_groups enable row level security;
 alter table sixam_analyses enable row level security;
+
+-- ── Arrangement maps (25 Oct, Phase 3). Same as supabase/migrations/2026-10-25-maps.sql. ──
+-- One map per track, id = the analysis id (SoundCloud URL). Numbers only, never audio.
+create table if not exists sixam_maps (
+  id text primary key check (char_length(id) between 1 and 600),
+  data jsonb not null,
+  mapped_at timestamptz,
+  updated_at timestamptz not null default now()
+);
+
+alter table sixam_maps enable row level security;

@@ -135,7 +135,8 @@ export function Studio() {
     setStatus("saving");
     try {
       const saved = await client.save(track.id, name, doc);
-      setDeviceBpm(draft.bpm);
+      // A template keeps its own tempo in the doc (S2); a Mentor draft sets the device tempo.
+      if (doc.bpm === undefined) setDeviceBpm(draft.bpm);
       setDraft(null);
       setTrack(saved);
       setLastId(saved.id);
@@ -234,7 +235,8 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
   // shortcut: one tempo per device (localStorage), not saved with each track; move it into Doc
   // (and the Supabase track) when tracks need their own tempo.
   const [storedBpm] = useLocalStorage<number>(TEMPO_KEY, DEFAULT_BPM);
-  const bpm = draft ? draft.bpm : clampBpm(storedBpm);
+  // A template track (S2) carries its own tempo; older tracks use the device tempo.
+  const bpm = draft ? draft.bpm : track.doc.bpm !== undefined ? clampBpm(track.doc.bpm) : clampBpm(storedBpm);
   const t = useTimeline(track.doc, bpm, draft ? 1 : 37);
   const [name, setName] = useState(track.name);
   const savedName = useRef(track.name);
@@ -301,7 +303,7 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
         <div className={s.transport}>
           <button className={s.tb} onClick={() => t.jumpTo(1)} aria-label="Back to start">{Icon.start}</button>
           <button className={cx(s.tb, s.play)} onClick={() => t.setPlaying(!t.playing)} aria-label={t.playing ? "Pause" : "Play"}>{t.playing ? Icon.pause : Icon.play}</button>
-          <div className={s.lcd}><b>{t.bar}.{t.beat}</b><small>bar</small><b title={bpm === DEFAULT_BPM ? undefined : `Set from Analyse; the Studio's default is ${DEFAULT_BPM}`}>{formatBpm(bpm)}</b><small>bpm</small></div>
+          <div className={s.lcd}><b>{t.bar}.{t.beat}</b><small>bar</small><b title={bpm === DEFAULT_BPM ? undefined : `Set from Analyse; the Studio's default is ${DEFAULT_BPM}`}>{formatBpm(bpm)}</b><small>bpm</small>{track.doc.key ? <><b>{track.doc.key.key}{track.doc.key.scale === "minor" ? "m" : ""}</b><small>key</small></> : null}</div>
           <button className={s.undo} onClick={t.undo} disabled={!t.canUndo} aria-label="Undo">{Icon.undo} <span className={s.undoWord}>Undo</span></button>
           <div className={s.knobWrap}>
             Filter

@@ -5,7 +5,7 @@
 // the crate, its own track lights up, the drop spot shows in the track's colour and the ruler
 // marks the bar it will land on.
 import { memo } from "react";
-import { BARS, TRACKS, loopById, wavePath, type Kind } from "@/lib/timeline";
+import { TRACKS, loopById, wavePath, type Kind } from "@/lib/timeline";
 import type { Timeline } from "./use-timeline";
 import s from "./studio.module.css";
 
@@ -35,9 +35,15 @@ export function TimelineView({ t, colors }: { t: Timeline; colors: string[] }) {
     <div className={s.timeline}>
       <div className={s.corner} />
       <div className={s.ruler} {...t.ruler}>
-        {Array.from({ length: BARS }, (_, b) => (
+        {Array.from({ length: t.bars }, (_, b) => (
           <span key={b} className={cx(s.tick, b % 4 === 0 && s.tickBig)} style={{ left: b * ppb }}>
-            {b % RULER_EVERY === 0 ? <em className={s.tickNum}>{b + 1}</em> : null}
+            {b % (t.bars > 96 ? RULER_EVERY * 2 : RULER_EVERY) === 0 ? <em className={s.tickNum}>{b + 1}</em> : null}
+          </span>
+        ))}
+        {/* S2: a template's section markers, plain until the map view's design lands. */}
+        {t.markers.map((m) => (
+          <span key={`${m.bar}-${m.label}`} data-marker={m.label} title={`${m.label} · bar ${m.bar}`} style={{ position: "absolute", left: (m.bar - 1) * ppb, top: 0, fontSize: 10, lineHeight: "12px", color: "#fff", borderLeft: "1px solid #fff", paddingLeft: 2, whiteSpace: "nowrap", pointerEvents: "none" }}>
+            {m.label}
           </span>
         ))}
         {t.ghost && t.ghost.bar !== null ? (

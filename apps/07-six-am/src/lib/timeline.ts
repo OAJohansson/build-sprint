@@ -1,7 +1,11 @@
 // The track model: the crate, the demo track, the pure edit rules (snap, repeat, overwrite)
 // and the drawn waveforms. No React here, so the rules can be unit tested.
 
+/** A track's length when it doesn't set its own (every track saved before Phase 3). */
 export const BARS = 64;
+/** Lengths a track may set (a template takes the reference track's length). */
+export const MIN_BARS = 4;
+export const MAX_BARS = 512;
 export const TRACKS = ["Drums", "Bass", "Chords", "Top / FX"] as const;
 
 export type Kind =
@@ -12,7 +16,24 @@ export type Kind =
 
 export type Loop = { id: string; track: number; name: string; bars: number; vibe: string; kind: Kind };
 export type Region = { id: string; loopId: string; track: number; start: number; length: number };
-export type Doc = { regions: Region[]; muted: boolean[] };
+/** A section marker on the timeline: bar is 1-based (bar 1 = the start), label like "drop". */
+export type Marker = { bar: number; label: string };
+/**
+ * A track. regions and muted are all that tracks saved before Phase 3 have; the rest is optional
+ * and set by a template (S2): its own length in bars (else BARS), tempo (else the device tempo),
+ * key, and section markers.
+ */
+export type Doc = {
+  regions: Region[];
+  muted: boolean[];
+  bars?: number;
+  bpm?: number;
+  key?: { key: string; scale: string };
+  markers?: Marker[];
+};
+
+/** How many bars a track has. */
+export const docBars = (d: Pick<Doc, "bars">) => d.bars ?? BARS;
 
 const L = (track: number, name: string, bars: number, vibe: string, kind: Kind): Loop => ({
   id: name.toLowerCase().replace(/[^a-z]+/g, "-"),
@@ -92,16 +113,16 @@ export const demoDoc = (): Doc => ({
   muted: [false, false, false, false],
 });
 
-/** Nearest bar line for a pixel offset into the lanes, kept inside the timeline. */
-export function snapBar(x: number, pxPerBar: number, length: number) {
+/** Nearest bar line for a pixel offset into the lanes, kept inside the timeline (`total` bars). */
+export function snapBar(x: number, pxPerBar: number, length: number, total = BARS) {
   const bar = Math.round(x / pxPerBar) + 1;
-  return Math.min(Math.max(bar, 1), BARS - length + 1);
+  return Math.min(Math.max(bar, 1), total - length + 1);
 }
 
 /** Length in whole loop repeats for a pixel width, at least one repeat, never past the end. */
-export function snapLength(width: number, pxPerBar: number, loopBars: number, start: number) {
+export function snapLength(width: number, pxPerBar: number, loopBars: number, start: number, total = BARS) {
   const reps = Math.max(1, Math.round(width / pxPerBar / loopBars));
-  const maxReps = Math.max(1, Math.floor((BARS - start + 1) / loopBars));
+  const maxReps = Math.max(1, Math.floor((total - start + 1) / loopBars));
   return Math.min(reps, maxReps) * loopBars;
 }
 

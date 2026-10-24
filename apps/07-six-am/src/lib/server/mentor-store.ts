@@ -5,6 +5,8 @@ import type { Sentence } from "@/lib/mentor/answer";
 import type { StoredUsage } from "@/lib/mentor/cost";
 import type { CostRow } from "@/lib/mentor/periods";
 import { parseAnalysis } from "@/lib/mentor/context";
+import { parseMap } from "@/lib/map/context";
+import type { TrackMap } from "@/lib/map/types";
 import { profileDiff } from "@/lib/mentor/profile-diff";
 import { connect, explain, StoreError, type DbError } from "./store";
 
@@ -55,8 +57,12 @@ export type MentorStore = {
   /** One-time migration from localStorage: adds missing results and fills a missing My genre;
    *  never overwrites what the server already has. */
   importAnalyses(list: EarsAnalysis[]): Promise<{ added: number; genresFilled: number; kept: number }>;
-  /** Clear list in Ears: the results go from the server too, so a sync doesn't bring them back. */
+  /** Clear list in Ears: the results go from the server too (and their maps), so a sync doesn't bring them back. */
   deleteAnalyses(ids: string[]): Promise<number>;
+  /** A track's arrangement map (Phase 3), or null. */
+  getMap(id: string): Promise<TrackMap | null>;
+  /** Create or replace a track's map. */
+  putMap(map: TrackMap): Promise<TrackMap>;
 };
 
 const MAX_HISTORY = 50;
@@ -196,14 +202,27 @@ function supabaseMentor(db: SupabaseClient): MentorStore {
       if (!ids.length) return 0;
       const { error, count } = await db.from("sixam_analyses").delete({ count: "exact" }).in("id", ids);
       check(error, "sixam_analyses");
+      const { error: e } = await db.from("sixam_maps").delete().in("id", ids);
+      // shortcut: a missing sixam_maps table (migration not run yet) mustn't block Clear list.
+      if (e && !/does not exist|could not find the table/i.test(e.message) && e.code !== "42P01" && e.code !== "PGRST205") check(e, "sixam_maps");
       return count ?? ids.length;
+    },
+    async getMap(id) {
+      const { data, error } = await db.from("sixam_maps").select("data").eq("id", id).maybeSingle();
+      check(error, "sixam_maps");
+      return data ? parseMap((data as { data: unknown }).data) : null;
+    },
+    async putMap(map) {
+      const { error } = await db.from("sixam_maps").upsert({ id: map.id, data: map, mapped_at: map.mappedAt, updated_at: new Date().toISOString() });
+      check(error, "sixam_maps");
+      return map;
     },
   };
 }
 
 // ── Memory (development without Supabase) ──────────────────────────────────────────────────────
 
-type Mem = { profile: Profile; messages: MessageRow[]; groups: Map<string, Group>; analyses: Map<string, EarsAnalysis> };
+type Mem = { profile: Profile; messages: MessageRow[]; groups: Map<string, Group>; analyses: Map<string, EarsAnalysis>; maps?: Map<string, TrackMap> };
 
 function memoryMentor(): MentorStore {
   const g = globalThis as unknown as { __sixamMentorMem?: Mem };
@@ -277,8 +296,18 @@ function memoryMentor(): MentorStore {
     },
     async deleteAnalyses(ids) {
       let n = 0;
-      for (const id of ids) if (mem.analyses.delete(id)) n += 1;
+      for (const id of ids) {
+        if (mem.analyses.delete(id)) n += 1;
+        mem.maps?.delete(id);
+      }
       return n;
+    },
+    async getMap(id) {
+      return mem.maps?.get(id) ?? null;
+    },
+    async putMap(map) {
+      (mem.maps ??= new Map()).set(map.id, map);
+      return map;
     },
   };
 }

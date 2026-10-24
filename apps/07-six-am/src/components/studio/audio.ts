@@ -162,6 +162,9 @@ export class AudioEngine {
   private channels: Tone.Channel[] = [];
   private master!: Tone.Filter;
   private index = new Map<number, Hit[]>();
+  /** The open track's length in 16th steps (64 bars unless a template set its own). */
+  private steps = STEPS;
+  private regions: Region[] = [];
   private muted = [false, false, false, false];
   private timer: ReturnType<typeof setInterval> | null = null;
   // The clock: step `nextStep` sounds at audio time `nextTime`.
@@ -202,7 +205,15 @@ export class AudioEngine {
     this.synced.forEach((d) => d.node.delayTime.rampTo(d.steps * next, 0.05));
   }
 
-  setRegions(regions: Region[]) { this.index = buildIndex(regions, RECIPES); }
+  setRegions(regions: Region[]) { this.regions = regions; this.index = buildIndex(regions, RECIPES, this.steps); }
+
+  /** The track's length in bars: playback wraps there. */
+  setBars(bars: number) {
+    const steps = Math.max(16, Math.round(bars) * 16);
+    if (steps === this.steps) return;
+    this.steps = steps;
+    this.setRegions(this.regions);
+  }
 
   setMuted(muted: boolean[]) {
     this.muted = muted;
@@ -217,7 +228,7 @@ export class AudioEngine {
   async playFrom(bar: number) {
     await this.start();
     this.playing = true;
-    this.resetClock(stepOfBar(bar));
+    this.resetClock(stepOfBar(bar, this.steps));
   }
 
   stop() {
@@ -236,7 +247,7 @@ export class AudioEngine {
   position(): number | null {
     if (!this.playing) return null;
     const step = this.originStep + (Tone.immediate() - this.originTime) / this.sps;
-    return (((step % STEPS) + STEPS) % STEPS) / 16 + 1;
+    return (((step % this.steps) + this.steps) % this.steps) / 16 + 1;
   }
 
   private cutoff() { return 120 * Math.pow(20000 / 120, this.filter); }
@@ -259,7 +270,7 @@ export class AudioEngine {
     while (this.nextTime < until) {
       const k = this.nextStep, t = this.nextTime;
       if (this.playing) {
-        for (const hit of this.index.get(k % STEPS) ?? []) {
+        for (const hit of this.index.get(k % this.steps) ?? []) {
           if (!this.muted[hit.track]) this.sound(hit.loopId, hit.note, t);
         }
       }

@@ -426,3 +426,10 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   L45–L54; decision 0027 for the backend.
 - **Mentor discovery:** brief section with an 8-object drill-down, persona 2 (Robin, a new user), plan M-S0–M-S13. Gaps answered by the PM: clean-start testing on an empty dev store (L57), key relative to the crate's A minor (L58), the value comparison reported not graded and E1 fed from the committed export (L59); discovery's 12 assumptions accepted (L56). No contradiction needing the owner.
 - **Mentor backend built** (`src/lib/mentor/`, `src/lib/server/claude.ts`, `mentor-store.ts`, routes under `/api/mentor*` and `/api/analyses`, Supabase migration): Sonnet 5.5 via the answer tool with validation, web search, caching, cost from usage, 50/day flag, in-memory fallback. 129 tests pass. L55 not yet done in code (Appendix A/B lists still in Ears) → goes to the UI build. L60–L65, T27.
+- **Mentor design round 1:** critic scored A Counter 5, B Liner notes 7, C Rack 6; picked B (L66).
+- **First real Mentor call** (dev, in-memory store): Explain on the MikeQ track came back in 4.3 s,
+  $0.026 estimated (first call writes the 8.4k-token cache), every sentence labelled ears or
+  uploader, says the genre read is loose, says it doesn't know the owner's taste yet. 
+- **Supabase migration not applied:** the auto-mode permission check refused `apply_migration` on
+  the shared Supabase project as a production change. It needs the owner's OK (or the SQL pasted in
+  the Supabase SQL Editor). Until then local testing runs on the in-memory store.

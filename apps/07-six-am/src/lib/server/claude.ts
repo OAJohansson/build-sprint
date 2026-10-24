@@ -145,4 +145,57 @@ function toMentorError(error: unknown, usage: StoredUsage, cost: number): Mentor
 const round6 = (x: number) => Math.round(x * 1e6) / 1e6;
 
 /** Whether a job's answer may come back with a profile update that gets saved. */
-export const UPDATES_PROFILE: ReadonlySet<Job> = new Set<Job>(["setup", "learn", "taste_session", "chat"]);
+export const UPDATES_PROFILE: ReadonlySet<Job> = new Set<Job>(["setup"]);
+
+// ── Memory and taste profile refresh (L88, L92) ────────────────────────────────────────────────
+
+export type MemoryReply = { summary: string; profile?: { text: string; note: string } };
+
+const REMEMBER_TOOL: Anthropic.Beta.BetaTool = {
+  name: "remember",
+  description: "Save the rewritten memory summary (and the taste profile when asked). Call exactly once.",
+  input_schema: {
+    type: "object",
+    additionalProperties: false,
+    required: ["summary"],
+    properties: {
+      summary: { type: "string", description: "The whole memory summary as it should now read." },
+      profile: {
+        type: "object", additionalProperties: false, required: ["text", "note"],
+        properties: { text: { type: "string", description: "3–6 short lines, one per line." }, note: { type: "string", description: "One short line starting 'Updated: '." } },
+      },
+    },
+  },
+};
+
+/** One cheap call that rewrites the memory summary and, when unlocked, the taste profile.
+ *  Sonnet 5.5 can't force a tool or turn thinking off: auto + low effort + a plain instruction. */
+export async function askMemory(system: string, prompt: string): Promise<{ reply: MemoryReply | null; usage: StoredUsage; costUsd: number }> {
+  const anthropic = getClient();
+  const usage = emptyUsage();
+  let response: Anthropic.Beta.BetaMessage;
+  try {
+    response = await anthropic.beta.messages.create({
+      model: MENTOR_MODEL,
+      max_tokens: 4000,
+      thinking: { type: "adaptive" },
+      output_config: { effort: "low" },
+      tools: [REMEMBER_TOOL],
+      tool_choice: { type: "auto" },
+      system,
+      messages: [{ role: "user", content: [{ type: "text", text: prompt }] }],
+    });
+  } catch (error) {
+    throw toMentorError(error, usage, 0);
+  }
+  const costUsd = round6(addUsage(usage, response.usage, response.model ?? MENTOR_MODEL));
+  const tool = response.content.findLast((b): b is Anthropic.Beta.BetaToolUseBlock => b.type === "tool_use" && b.name === "remember");
+  const raw = (tool?.input ?? null) as { summary?: unknown; profile?: { text?: unknown; note?: unknown } } | null;
+  if (!raw || typeof raw.summary !== "string" || !raw.summary.trim()) return { reply: null, usage, costUsd };
+  const reply: MemoryReply = { summary: raw.summary.trim().slice(0, 3000) };
+  const p = raw.profile;
+  if (p && typeof p.text === "string" && p.text.trim() && typeof p.note === "string") {
+    reply.profile = { text: p.text.trim().slice(0, 1200), note: p.note.trim().startsWith("Updated:") ? p.note.trim().slice(0, 200) : `Updated: ${p.note.trim()}`.slice(0, 200) };
+  }
+  return { reply, usage, costUsd };
+}

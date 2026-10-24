@@ -93,4 +93,15 @@ describe("checkAnswer", () => {
     ] }, { trackIds });
     expect(r.ok && r.answer.groups).toEqual([{ name: "Warm 122", reason: "122–124 BPM, warm", trackIds: ["t1", "t2"] }]);
   });
+  it("chat answers are checked by their intent's rules; track refs map to ids (L86, L87)", () => {
+    const trackRefs = new Map([["T1", "https://soundcloud.com/a/one"], ["T2", "https://soundcloud.com/b/two"]]);
+    expect(checkAnswer("chat", { ...ok, intent: "suggest_genre", trackIds: ["T2"] }, { trackRefs }).ok).toBe(false);
+    const r = checkAnswer("chat", { ...ok, intent: "suggest_genre", trackIds: ["t2", "T9"], genre: { name: "Bass house", reason: "Soft call." } }, { trackRefs });
+    expect(r.ok && r.answer.trackIds).toEqual(["https://soundcloud.com/b/two"]);
+    expect(r.ok && r.answer.intent).toBe("suggest_genre");
+    // taste_session and groups are chat-shaped: no groups needed; unknown intents read as chat.
+    expect(checkAnswer("chat", { ...ok, intent: "propose_groups" }).ok).toBe(true);
+    const odd = checkAnswer("chat", { ...ok, intent: "dance" });
+    expect(odd.ok && odd.answer.intent).toBe("chat");
+  });
 });

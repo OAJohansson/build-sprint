@@ -1,39 +1,27 @@
 "use client";
 
-// One turn of the thread: the question as a small heading, then the answer's sentences with
-// footnote markers. Sources have one fixed numbering for the whole panel (1 Ears, 2 Uploader,
-// 3 Web, 4 Taste, 5 Library, 6 General; the key sits once at the top of the thread). A marker shows
-// its source on hover and, for the web, opens the page; an answer lists only its web pages, under
-// marker 3. Job extras: the genre to accept, listen-next picks, teach sections, the Studio start.
-import Link from "next/link";
+// One turn of the chat: the question as a small line, then the answer as plain paragraphs (L90:
+// no footnote markers), then one dim "From: …" line with the web pages as links. Sources are still
+// required per sentence on the server; here they are only summed up. Job extras sit inline as
+// quiet actions: the genre to accept, listen-next picks, teach sections, the Studio start.
 import { useState } from "react";
 import type { EarsAnalysis } from "@/lib/ears/results";
 import { SOURCES, type ListenNext, type MentorAnswer, type Sentence, type Source, type TeachSection } from "@/lib/mentor/answer";
-import { moneyFine } from "@/lib/mentor/client";
 import { studioStart, type StudioStart } from "@/lib/mentor/studio";
 import { formatBpm } from "@/lib/tempo";
 import { LOOPS, TRACKS } from "@/lib/timeline";
 import s from "./mentor.module.css";
 
-export const SOURCE_WORD: Record<Source, string> = { ears: "Ears", uploader: "Uploader", web: "Web", profile: "Taste", library: "Library", general: "General" };
-const SOURCE_TIP: Record<Source, string> = {
-  ears: "Ears: measured in your browser",
-  uploader: "Uploader: SoundCloud title and tags",
-  web: "Web",
-  profile: "Taste: your taste profile",
-  library: "Library: your genres and groups in Six AM",
-  general: "General knowledge",
+const FROM_WORD: Record<Source, string> = {
+  ears: "Ears' measurements", uploader: "the uploader's tags", web: "the web", profile: "your taste profile",
+  library: "your library", memory: "our earlier chats", general: "general music knowledge",
 };
-const ONLY_WORD: Record<Source, string> = { ears: "Ears' measurements", uploader: "the uploader's title and tags", web: "the web", profile: "your taste profile", library: "your genres and groups", general: "general knowledge" };
-export const sourceNumber = (x: Source) => SOURCES.indexOf(x) + 1;
 const SECTION_TITLE: Record<TeachSection, string> = { what: "What it is", sound: "How it sounds", start: "Where to start" };
 
-/** example.com/path, short. */
+/** example.com, short. */
 export function shortUrl(u: string): string {
   try {
-    const url = new URL(u);
-    const path = url.pathname.replace(/\/+$/, "");
-    return `${url.hostname.replace(/^www\./, "")}${path.length > 24 ? `${path.slice(0, 23)}…` : path}`;
+    return new URL(u).hostname.replace(/^www\./, "");
   } catch {
     return u;
   }
@@ -43,10 +31,9 @@ export type TurnProps = {
   ask?: string;
   answer: MentorAnswer;
   job: string;
-  costUsd?: number;
+  /** The track the answer is about (for the Studio start and the genre to accept). */
   track: EarsAnalysis | null;
   studio?: StudioStart;
-  updatedNote?: string;
   dropped?: string[];
   /** The current My genre of the track, to say "My genre is X" instead of offering the same. */
   myGenre?: string;
@@ -55,27 +42,41 @@ export type TurnProps = {
   onFeedback?: (item: ListenNext, kind: "more_like_this" | "not_for_me") => void;
   /** N1: open a new, unsaved Studio track with these loops at this tempo. */
   onOpenStudio?: (start: StudioStart) => void;
+  /** Rendered under the answer (the taste session or genre groups it opened). */
+  children?: React.ReactNode;
 };
 
-function Marker({ x }: { x: Sentence }) {
-  const n = sourceNumber(x.source);
-  if (x.source === "web" && x.url) {
-    return <sup className={s.sup}><a href={x.url} target="_blank" rel="noreferrer" title={`Web: ${shortUrl(x.url)}`} aria-label={`source ${n}, web: ${shortUrl(x.url)}`}>{n}</a></sup>;
+/** Sentences as paragraphs: a new paragraph where the source changes after two sentences or more. */
+function paragraphs(list: Sentence[]): Sentence[][] {
+  const out: Sentence[][] = [];
+  for (const x of list) {
+    const cur = out.at(-1);
+    if (cur && (cur.length < 2 || cur.at(-1)!.source === x.source) && cur.length < 3) cur.push(x);
+    else out.push([x]);
   }
-  return <sup className={s.sup} title={SOURCE_TIP[x.source]} aria-label={`source ${n}, ${SOURCE_TIP[x.source]}`}>{n}</sup>;
+  return out;
 }
 
-/** `quiet`: every sentence has the same source, shown once at the answer's foot instead. */
-function Para({ list, quiet }: { list: Sentence[]; quiet?: boolean }) {
-  return <p className={s.voice}>{list.map((x, j) => <span key={j}>{x.text}{quiet ? null : <Marker x={x} />}{j < list.length - 1 ? " " : ""}</span>)}</p>;
+function Paras({ list }: { list: Sentence[] }) {
+  return <>{paragraphs(list).map((p, i) => <p key={i} className={s.voice}>{p.map((x) => x.text).join(" ")}</p>)}</>;
 }
 
-export function Turn({ ask, answer, job, costUsd, track, studio, updatedNote, dropped, myGenre, onTellMore, onAcceptGenre, onFeedback, onOpenStudio }: TurnProps) {
+function From({ answer }: { answer: MentorAnswer }) {
+  const used = SOURCES.filter((x) => x !== "web" && answer.sentences.some((y) => y.source === x));
   const web = [...new Set(answer.sentences.filter((x) => x.source === "web" && x.url).map((x) => x.url!))];
-  const start = studio ?? (job === "studio_start" && track && answer.loops?.length ? studioStart(track, answer.loops) : undefined);
-  const teach = job === "teach" && answer.sentences.some((x) => x.section);
-  // One source for the whole answer (e.g. teach all general): say it once, at the foot.
-  const only = new Set(answer.sentences.map((x) => x.source)).size === 1 && answer.sentences[0].source !== "web" ? answer.sentences[0].source : null;
+  if (!used.length && !web.length) return null;
+  return (
+    <p className={s.from}>
+      From: {used.map((x) => FROM_WORD[x]).join(", ")}
+      {web.map((u, i) => <span key={u}>{used.length || i ? ", " : ""}<a href={u} target="_blank" rel="noreferrer" title={u}>{shortUrl(u)} ↗</a></span>)}
+    </p>
+  );
+}
+
+export function Turn({ ask, answer, job, track, studio, dropped, myGenre, onTellMore, onAcceptGenre, onFeedback, onOpenStudio, children }: TurnProps) {
+  const kind = answer.intent ?? job;
+  const start = studio ?? (kind === "studio_start" && track && answer.loops?.length ? studioStart(track, answer.loops) : undefined);
+  const teach = kind === "teach" && answer.sentences.some((x) => x.section);
   const sections = (["what", "sound", "start"] as const).map((sec) => ({ sec, list: answer.sentences.filter((x) => (x.section ?? "what") === sec), pick: answer.listenNext?.find((l) => l.section === sec) }));
 
   return (
@@ -84,36 +85,30 @@ export function Turn({ ask, answer, job, costUsd, track, studio, updatedNote, dr
       {teach ? sections.filter((x) => x.list.length).map(({ sec, list, pick }) => (
         <section key={sec} className={s.teachSec}>
           <h4>{SECTION_TITLE[sec]}</h4>
-          <Para list={list} quiet={!!only} />
+          <Paras list={list} />
           {pick ? <PickLink it={pick} /> : null}
         </section>
-      )) : <Para list={answer.sentences} quiet={!!only} />}
-      {only ? <p className={s.allFrom}><span className={s.noteN}>{sourceNumber(only)}</span> All from {ONLY_WORD[only]}</p> : null}
+      )) : <Paras list={answer.sentences} />}
 
       {!teach && answer.listenNext?.length ? <Picks items={answer.listenNext} onFeedback={onFeedback} /> : null}
       {start ? <StudioBlock start={start} onOpen={onOpenStudio} /> : null}
       {dropped?.length ? <p className={s.dropped}>Left out {dropped.length} pick{dropped.length > 1 ? "s" : ""}: no clean link found.</p> : null}
-
-      {web.length ? (
-        <p className={s.webRefs}>
-          <span className={s.noteN}>{sourceNumber("web")}</span>
-          {web.map((u) => <a key={u} href={u} target="_blank" rel="noreferrer" title={u}>{shortUrl(u)} ↗</a>)}
-        </p>
+      {children}
+      {(kind === "suggest_genre" && answer.genre && onAcceptGenre) || (answer.tellMore && onTellMore) ? (
+        <div className={s.actions}>
+          {kind === "suggest_genre" && answer.genre && onAcceptGenre ? <AcceptGenre name={answer.genre.name} current={myGenre} onAccept={onAcceptGenre} /> : null}
+          {answer.tellMore && onTellMore ? <button className={s.textBtn} onClick={onTellMore}>Tell me more</button> : null}
+        </div>
       ) : null}
-      <div className={s.actions}>
-        {job === "suggest_genre" && answer.genre && onAcceptGenre ? <AcceptGenre name={answer.genre.name} current={myGenre} onAccept={onAcceptGenre} /> : null}
-        {answer.tellMore && onTellMore ? <button className={s.textBtn} onClick={onTellMore}>Tell me more</button> : null}
-        {costUsd != null ? <span className={s.cost} title="Estimate from the tokens and web searches this answer used, at published prices">est. {moneyFine(costUsd)}</span> : null}
-      </div>
-      {updatedNote ? <p className={s.updated}>{updatedNote} · <Link href="/settings">See My taste</Link></p> : null}
+      <From answer={answer} />
     </article>
   );
 }
 
+/** Follows the track's live My genre: accepted shows a note, cleared or changed offers it again. */
 function AcceptGenre({ name, current, onAccept }: { name: string; current?: string; onAccept: (name: string) => void }) {
-  const [done, setDone] = useState(false);
-  if (done || current?.trim().toLowerCase() === name.trim().toLowerCase()) return <span className={s.noted}>My genre is {name}</span>;
-  return <button className={s.btn} onClick={() => { onAccept(name); setDone(true); }} title={current ? `Replaces your “${current}”` : undefined}>Use “{name}” as My genre</button>;
+  if (current?.trim().toLowerCase() === name.trim().toLowerCase()) return <span className={s.noted}>My genre is {name}</span>;
+  return <button className={s.btn} onClick={() => onAccept(name)} title={current ? `Replaces your “${current}”` : undefined}>Use “{name}” as My genre</button>;
 }
 
 /** What the link opens when it isn't the track's own page (F4, N4), as a mono suffix after ↗. */

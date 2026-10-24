@@ -1,3 +1,4 @@
+import { after } from "next/server";
 import { mentorGuard } from "@/lib/server/access";
 import { MentorError } from "@/lib/server/claude";
 import { serverError } from "@/lib/server/failure";
@@ -5,14 +6,15 @@ import { ask, isFail, mentorErrorResponse, type AskBody } from "@/lib/server/men
 import { cleanTzOffset } from "@/lib/mentor/periods";
 
 // The Mentor (decision 0027). POST { job, trackId?, message?, … } → one validated answer (the
-// server builds the prompt; no audio ever). GET ?thread=<track id | general> → that thread.
+// server builds the prompt; no audio ever); the memory rewrite runs after the response (L88).
+// GET ?thread=main (default) → the one chat (L86); older per-track threads stay readable here.
 // Claude with web search can take a while; the 15 s target is a median, not a cap.
 export const maxDuration = 60;
 
 export async function GET(request: Request) {
   const g = mentorGuard(request);
   if ("error" in g) return g.error;
-  const thread = (new URL(request.url).searchParams.get("thread") ?? "general").slice(0, 600);
+  const thread = (new URL(request.url).searchParams.get("thread") ?? "main").slice(0, 600);
   try {
     const rows = await g.store.thread(thread, 100);
     const messages = rows
@@ -33,7 +35,7 @@ export async function POST(request: Request) {
   if ("error" in g) return g.error;
   const body = ((await request.json().catch(() => null)) ?? {}) as AskBody;
   try {
-    const reply = await ask(g.store, body, new Date(), cleanTzOffset(body.tz));
+    const reply = await ask(g.store, body, new Date(), cleanTzOffset(body.tz), (fn) => after(fn));
     if (isFail(reply)) return Response.json({ error: reply.error, ...reply.extra }, { status: reply.status });
     return Response.json(reply);
   } catch (error) {

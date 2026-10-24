@@ -12,6 +12,7 @@ import type { StudioStart } from "./studio";
 import type { UsageSummary } from "./periods";
 import type { LearnEvent } from "./prompt";
 import type { PlaylistLike } from "./playlist";
+import type { UnlockState } from "./taste-unlock";
 
 export { ApiError };
 export const CODE_KEY = "07-six-am:code";
@@ -42,6 +43,8 @@ export type AskReply = {
   studio?: StudioStart;
   groups?: Group[];
   profileUpdated?: { note: string };
+  /** suggest_genre: the track "Use as My genre" applies to. */
+  genreTrackId?: string;
   dropped: string[];
   latencyMs: number;
   usage: UsageSummary;
@@ -92,7 +95,7 @@ export const mentorApi = (code: string) => ({
     }),
   thread: (id: string) => call<{ thread: string; messages: ThreadMessage[] }>(code, `/api/mentor?thread=${encodeURIComponent(id)}`).then((r) => r.messages),
   usage: () => call<{ usage: UsageSummary }>(code, `/api/mentor/usage?tz=${tz()}`).then((r) => r.usage),
-  profile: () => call<{ profile: Profile; store: StoreKind }>(code, "/api/mentor/profile"),
+  profile: () => call<{ profile: Profile; store: StoreKind; unlock: UnlockState }>(code, "/api/mentor/profile"),
   saveProfile: (text: string, from?: "setup") => call<{ profile: Profile }>(code, "/api/mentor/profile", { method: "PUT", body: JSON.stringify({ text, from }) }).then((r) => r.profile),
   groups: () => call<{ groups: Group[] }>(code, "/api/mentor/groups").then((r) => r.groups),
   proposeGroups: () => call<AskReply>(code, "/api/mentor/groups", { method: "POST", body: JSON.stringify({ tz: tz() }) }),

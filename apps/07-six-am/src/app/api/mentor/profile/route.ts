@@ -1,12 +1,15 @@
 import { mentorGuard } from "@/lib/server/access";
 import { serverError } from "@/lib/server/failure";
+import { unlockFor } from "@/lib/server/mentor-memory";
 
-// My taste (M9): GET reads the profile, PUT { text } saves a hand edit (the owner's words win).
+// Music taste profile (M9, L92): GET reads the profile and whether it's unlocked yet (L94);
+// PUT { text } saves a hand edit (the owner's words win).
 export async function GET(request: Request) {
   const g = mentorGuard(request);
   if ("error" in g) return g.error;
   try {
-    return Response.json({ profile: await g.store.getProfile(), store: g.store.kind });
+    const [profile, unlock] = await Promise.all([g.store.getProfile(), unlockFor(g.store)]);
+    return Response.json({ profile, store: g.store.kind, unlock });
   } catch (error) {
     return serverError(error);
   }

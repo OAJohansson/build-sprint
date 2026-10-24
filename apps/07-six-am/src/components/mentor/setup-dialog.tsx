@@ -187,10 +187,10 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
           ) : step === 1 && reply ? (
             <>
               <label className={s.label} htmlFor="setup-draft">
-                First draft of My taste <span>· read {read && read.playlists.length > 1 ? `${read.playlists.length} playlists` : "one playlist"}; change anything</span>
+                First draft of your music taste profile <span>· read {read && read.playlists.length > 1 ? `${read.playlists.length} playlists` : "one playlist"}; change anything</span>
               </label>
               <textarea id="setup-draft" className={s.area} rows={8} value={draft} onChange={(e) => setDraft(e.target.value)} />
-              <p className={s.hint}>Saved as My taste when you press Save at the end.</p>
+              <p className={s.hint}>Saved as your music taste profile when you press Save at the end.</p>
             </>
           ) : step === 2 && q ? (
             <>

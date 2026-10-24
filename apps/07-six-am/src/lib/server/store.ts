@@ -13,6 +13,8 @@ export type Store = {
   /** Create or update a track by id. Returns it as stored. */
   save(id: string, name: string, doc: Doc): Promise<Track>;
   remove(id: string): Promise<void>;
+  /** Read-only: the newest tracks with their docs, for the Mentor's context (L88). */
+  listWithDocs(limit: number): Promise<Track[]>;
 };
 
 type Row = { id: string; name: string; doc: Doc; updated_at: string };
@@ -64,6 +66,11 @@ function supabaseStore(db: SupabaseClient): Store {
       const { error } = await db.from("sixam_tracks").delete().eq("id", id);
       check(error);
     },
+    async listWithDocs(limit) {
+      const { data, error } = await db.from("sixam_tracks").select("id, name, doc, updated_at").order("updated_at", { ascending: false }).limit(limit);
+      check(error);
+      return (data as Row[]).map(toTrack);
+    },
   };
 }
 
@@ -84,6 +91,9 @@ function memoryStore(): Store {
     },
     async remove(id) {
       mem.delete(id);
+    },
+    async listWithDocs(limit) {
+      return [...mem.values()].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, limit);
     },
   };
 }

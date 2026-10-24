@@ -1,56 +1,32 @@
-/* Settings: the prototype with the critic's fixes. My taste is plain text that grows with its
-   content over a hairline (no boxed textarea); the right column starts level with "My taste";
-   updates read as was / now. The owner's own words in ivory (--ink); greys as in Analyse. */
-.root { --bg: #131110; --panel: #1a1715; --ink: #f1e6d3; --muted: #aa9c88; --faint: #958a7c; --line: #2c2622; --err: #f08a6e;
+/* Settings (L91, L92): the music taste profile and the cost estimate, nothing else. Greys as in
+   Analyse (--muted ≥ 5.8:1 on --bg); gold only for the unlock progress. */
+.root { --bg: #131110; --panel: #1a1715; --ink: #f1e6d3; --muted: #aa9c88; --faint: #958a7c; --line: #2c2622; --err: #f08a6e; --gold: #f2b134;
   min-height: 100dvh; background: var(--bg); color: var(--ink); font-family: var(--f-mono), monospace; }
 .appBar { height: 64px; display: flex; align-items: center; gap: 28px; padding: 0 24px; background: var(--panel); border-bottom: 1px solid var(--line); box-sizing: border-box; }
 .logo { font: italic 400 30px var(--f-serif); display: flex; align-items: center; gap: 12px; }
 .mark { width: 30px; height: 30px; flex: none; }
-.main { display: grid; grid-template-columns: minmax(0, 680px) minmax(260px, 360px); column-gap: 72px; padding: 40px 64px 64px; align-items: start; }
-.intro { grid-column: 1 / -1; margin-bottom: 32px; }
-.h1 { margin: 0; font: italic 400 36px/1.1 var(--f-serif); }
-.lede { margin: 10px 0 0; font: 400 13px/1.6 var(--f-mono); color: var(--muted); max-width: 60ch; }
-.col { min-width: 0; }
-.fieldHead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; min-height: 20px; }
+.right { margin-left: auto; display: flex; align-items: center; }
+.main { max-width: 640px; padding: 48px 64px 64px; display: flex; flex-direction: column; gap: 48px; }
+.fieldHead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.h1 { margin: 0; font: italic 400 34px/1.1 var(--f-serif); }
 .label { margin: 0; font: 500 12px/20px var(--f-mono); color: var(--ink); }
-/* N8: the "My taste · click to edit" label is a 28 px target that focuses the field */
-.fieldHead .label { display: inline-flex; align-items: center; min-height: 28px; cursor: pointer; }
 .saved { font: 400 11.5px var(--f-mono); color: var(--muted); }
 .err { font: 400 11.5px var(--f-mono); color: var(--err); }
 .profile {
-  display: block; width: 100%; box-sizing: border-box; margin-top: 10px; padding: 0 0 14px; field-sizing: content; min-height: 88px;
-  font: 400 14px/1.75 var(--f-mono) !important; color: var(--ink); background: #161311; border: 1px solid var(--line);
-  border-radius: 6px; padding: 14px 16px; outline: none; resize: none; overflow: hidden; cursor: text; transition: border-color 150ms ease-out, background 150ms ease-out;
+  display: block; width: 100%; box-sizing: border-box; margin-top: 18px; field-sizing: content; min-height: 88px;
+  font: 400 14px/1.8 var(--f-mono) !important; color: var(--ink); background: #161311; border: 1px solid var(--line);
+  border-radius: 6px; padding: 14px 16px; outline: none; resize: none; overflow: hidden; cursor: text; transition: border-color 150ms ease, background 150ms ease;
 }
 .profile:hover { border-color: #3a322c; }
 .profile:focus { border-color: var(--muted); background: #0b0a09; }
-.profile::placeholder { color: var(--faint); }
-.side { min-width: 0; }
-.updates { margin: 10px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
-.updates li { padding: 4px 0; border-top: 1px solid var(--line); }
-.updates li:last-child { border-bottom: 1px solid var(--line); }
-.updates p { margin: 3px 0; font: 400 12.5px/1.55 var(--f-mono); }
-.editHint { font-weight: 400; color: var(--muted); }
-.updLine { display: grid; grid-template-columns: 9ch minmax(0, 1fr) auto; gap: 10px; align-items: baseline; min-height: 28px; font: 400 12.5px/1.5 var(--f-mono); }
-.updNote { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.details summary { list-style: none; cursor: pointer; }
-.details summary::-webkit-details-marker { display: none; }
-.details summary:hover .updNote { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--faint); }
-.details[open] .updNote { white-space: normal; }
-.details summary:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
-.diff { margin: 6px 0; display: grid; grid-template-columns: 4ch minmax(0, 1fr); gap: 2px 10px; font: 400 12px/1.55 var(--f-mono); }
-.diff dt { color: var(--muted); }
-.diff dd { margin: 0; color: var(--muted); }
-.diff dd.own { color: var(--ink); }
-.when { font: 400 11px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
-.from { font: 400 11.5px var(--f-mono); color: var(--muted); }
-.src { margin: 10px 0 8px; padding: 0; list-style: none; font: 400 12.5px/1.7 var(--f-mono); }
-.dim { color: var(--muted); }
-.fine { margin: 8px 0; font: 400 11.5px/1.6 var(--f-mono); color: var(--muted); }
-.btn { margin-top: 6px; display: inline-flex; align-items: center; font: 400 12px var(--f-mono); color: var(--ink); background: #231f1c; border: 1px solid var(--line); border-radius: 6px; padding: 6px 12px; min-height: 30px; cursor: pointer; transition: background 150ms ease-out, transform 120ms ease-out; }
+.lockedBox { margin-top: 18px; }
+.lockedText { margin: 0; font: 400 13px/1.7 var(--f-mono); color: var(--muted); max-width: 52ch; }
+.progress { margin: 6px 0 0; font: 500 13px var(--f-mono); color: var(--gold); font-variant-numeric: tabular-nums; }
+.costSec .cost { margin: 6px 0 0; font: 400 13px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.btn { margin-top: 18px; display: inline-flex; align-items: center; font: 400 12px var(--f-mono); color: var(--ink); background: #231f1c; border: 1px solid var(--line); border-radius: 6px; padding: 6px 12px; min-height: 30px; cursor: pointer; transition: background 150ms ease-out, transform 120ms ease-out; }
 .btn:hover { background: #2b2622; }
 .btn:active { transform: scale(.97); }
 .btn:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
 @media (max-width: 900px) {
-  .main { grid-template-columns: minmax(0, 1fr); padding: 28px 20px 48px; row-gap: 40px; }
+  .main { padding: 28px 20px 48px; }
 }

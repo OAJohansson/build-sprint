@@ -461,3 +461,4 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   "Type your question" / "Reply"; readable answers with quiet sources; Settings in a corner; a short,
   locked "Music taste profile" with a threshold constant (numbers to come); and a learning note for
   the Founder retro about the squad ignoring clean-and-minimal.
+- **Simplified Mentor built** (after a network cut and resume): one chat, only "What can you help me with?" under a growing input, readable answers with one quiet source line, Settings behind a corner gear, Music taste profile locked behind the owner's numbers, full context plus a memory summary in Supabase. Cost per answer ~\$0.007–0.008 when cached (first after a pause ~\$0.03); learning now free. 142 tests pass. L95, L96, T33.

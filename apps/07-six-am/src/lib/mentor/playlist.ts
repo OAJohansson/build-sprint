@@ -12,7 +12,7 @@ export type SoundLike = {
 };
 export type PlaylistLike = { title?: string | null; url?: string | null; sounds: SoundLike[] };
 
-export type SetupInput = { text: string; playlists: number; tracks: number; urls: string[] };
+export type SetupInput = { text: string; playlists: number; tracks: number; urls: string[]; items: { url: string; title: string; uploader: string }[] };
 
 const clean = (v: string | null | undefined, max: number) => (v ?? "").replace(/\s+/g, " ").trim().slice(0, max);
 
@@ -32,6 +32,7 @@ export function setupInput(playlists: PlaylistLike[]): SetupInput {
     else counts.set(k, { label, n: 1 });
   };
   const urls: string[] = [];
+  const items: SetupInput["items"] = [];
   const blocks: string[] = [];
   let tracks = 0, used = 0;
   for (const [i, p] of playlists.entries()) {
@@ -48,7 +49,7 @@ export function setupInput(playlists: PlaylistLike[]): SetupInput {
       const tags = parseTagList(s.tag_list).map((t) => clean(t, 40)).filter(Boolean).slice(0, 8);
       if (genre) bump(genre);
       tags.forEach(bump);
-      if (s.permalink_url) urls.push(s.permalink_url);
+      if (s.permalink_url) { urls.push(s.permalink_url); items.push({ url: s.permalink_url, title, uploader }); }
       lines.push([uploader || "?", title, genre || "-", tags.join(", ") || "-", s.permalink_url ?? ""].join(" | "));
     }
     if (!lines.length) continue;
@@ -62,5 +63,6 @@ export function setupInput(playlists: PlaylistLike[]): SetupInput {
     playlists: used,
     tracks,
     urls,
+    items,
   };
 }

@@ -9,13 +9,22 @@ export const JOBS = [
   "setup", "learn", "propose_groups", "taste_session",
 ] as const;
 export type Job = (typeof JOBS)[number];
+
+/** What a free-text question in the one chat asks for (L87): the model picks it in the answer
+ *  tool, and the server checks the answer by that job's rules. help = "What can you help me with?". */
+export const INTENTS = ["explain", "suggest_genre", "teach", "ear_training", "studio_start", "listen_next", "taste_session", "propose_groups", "help", "chat"] as const;
+export type Intent = (typeof INTENTS)[number];
+const isIntent = (v: unknown): v is Intent => typeof v === "string" && (INTENTS as readonly string[]).includes(v);
+/** The job whose rules a chat answer follows. */
+const ANSWER_JOBS: readonly Job[] = ["explain", "suggest_genre", "teach", "ear_training", "studio_start", "listen_next"];
+export const ruleJob = (job: Job, intent: unknown): Job => (job === "chat" && isJob(intent) && ANSWER_JOBS.includes(intent) ? intent : job);
 export const isJob = (v: unknown): v is Job => typeof v === "string" && (JOBS as readonly string[]).includes(v);
 
 /** Where a fact came from (E2's source labels). Ears = the browser's measurements; uploader =
  *  SoundCloud title/tags; profile = the written taste profile; library = the person's own tags and
  *  accepted genre groups in Six AM (F9: kept apart from the profile). The order is the panel's
  *  fixed footnote numbering. */
-export const SOURCES = ["ears", "uploader", "web", "profile", "library", "general"] as const;
+export const SOURCES = ["ears", "uploader", "web", "profile", "library", "memory", "general"] as const;
 export type Source = (typeof SOURCES)[number];
 
 /** Teach answers come in three labelled sections (critic, round 2). */
@@ -32,6 +41,9 @@ export type GroupProposal = { name: string; reason: string; trackIds: string[] }
 export type ProfileUpdate = { text: string; note: string };
 
 export type MentorAnswer = {
+  /** Chat only: what the question asked for, and the analysed track(s) it is about (ids). */
+  intent?: Intent;
+  trackIds?: string[];
   sentences: Sentence[];
   /** Offer "Tell me more" (everyday answers are 2–4 sentences). */
   tellMore: boolean;
@@ -50,6 +62,8 @@ export const ANSWER_SCHEMA = {
   additionalProperties: false,
   required: ["sentences", "tellMore"],
   properties: {
+    intent: { type: "string", enum: [...INTENTS], description: "Chat only: what the question asks for (see the Jobs list)." },
+    trackIds: { type: "array", items: { type: "string" }, description: "Chat only: refs (T1, T2…) of the library tracks this answer is about, most relevant first; empty if none." },
     sentences: {
       type: "array",
       description: "The answer, one fact or idea per item, each with where it came from.",
@@ -143,6 +157,8 @@ export type Needs = {
   searchUrls?: ReadonlySet<string>;
   /** Lines the person wrote themselves: a profile update must keep each word for word. */
   keepLines?: readonly string[];
+  /** Chat: library refs (T1…) → track ids; trackIds outside it are dropped. */
+  trackRefs?: ReadonlyMap<string, string>;
 };
 
 /** A tempo or key stated as a number in a listen-next "because" (data-evals: two were wrong; the
@@ -191,9 +207,11 @@ const isSource = (v: unknown): v is Source => typeof v === "string" && (SOURCES 
 export const urlKey = (u: string) => u.trim().replace(/^https?:\/\//i, "").replace(/#.*$/, "").replace(/\/+$/, "").toLowerCase();
 
 /** Validate and clean the model's answer for a job. Unknown fields are dropped. */
-export function checkAnswer(job: Job, raw: unknown, needs: Needs = {}): Checked {
+export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checked {
   if (!raw || typeof raw !== "object") return { ok: false, problem: "The answer is not an object." };
   const r = raw as Record<string, unknown>;
+  // A chat answer is checked by the rules of the job it turned out to be (L87).
+  const job = ruleJob(asked, r.intent);
   const dropped: string[] = [];
 
   if (!Array.isArray(r.sentences) || r.sentences.length === 0) return { ok: false, problem: "sentences must be a non-empty array." };
@@ -216,6 +234,14 @@ export function checkAnswer(job: Job, raw: unknown, needs: Needs = {}): Checked 
     return { ok: false, problem: `${sentences.length} sentences: keep to ${maxSentences(job) === 4 ? "2–4" : `at most ${maxSentences(job)}`} and offer tellMore for the rest.` };
   }
   const answer: MentorAnswer = { sentences, tellMore: r.tellMore === true };
+  if (asked === "chat") {
+    answer.intent = isIntent(r.intent) ? r.intent : "chat";
+    const ids = (Array.isArray(r.trackIds) ? r.trackIds : [])
+      .map((x) => (typeof x === "string" ? x.trim() : ""))
+      .map((x) => needs.trackRefs?.get(x.toUpperCase()) ?? ([...(needs.trackRefs?.values() ?? [])].includes(x) ? x : null))
+      .filter((x): x is string => !!x);
+    answer.trackIds = [...new Set(ids)].slice(0, 10);
+  }
 
   if (r.genre && typeof r.genre === "object") {
     const g = r.genre as Record<string, unknown>;

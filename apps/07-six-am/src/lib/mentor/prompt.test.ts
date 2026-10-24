@@ -34,8 +34,10 @@ const inputs: MentorInput[] = JOBS.map((job) => ({
 const promptText = (job: MentorInput["job"]) => {
   const r = buildRequest(inputs.find((i) => i.job === job)!);
   // The crate's own loop descriptions are instrument data, not taste data: check the rest.
-  return JSON.stringify({ system: r.system, messages: r.messages }).replace(/The crate \(every loop[\s\S]*?(\\n\\n|"\})/, "");
+  return withoutCrate(JSON.stringify({ system: r.system, messages: r.messages }));
 };
+/** The crate's own loop descriptions are instrument data, not taste data. */
+const withoutCrate = (t: string) => t.replace(/The Studio crate \(for studio_start[\s\S]*$/, "").replace(/The crate \(every loop[\s\S]*?(\\n\\n|"\})/, "");
 
 describe("prompts", () => {
   it("every request is text only: no audio, image or document blocks, no base64 blobs", () => {
@@ -51,7 +53,7 @@ describe("prompts", () => {
     }
   });
   it("no prompt carries the Appendix A families or Appendix B playlists", () => {
-    const texts = [SYSTEM_PROMPT, ...Object.values(JOBS_SPEC).map((s) => s.instruction), ...JOBS.map(promptText)];
+    const texts = [withoutCrate(SYSTEM_PROMPT), ...Object.values(JOBS_SPEC).map((s) => s.instruction), ...JOBS.map(promptText)];
     for (const t of texts) {
       for (const name of [...APPENDIX_A, ...APPENDIX_B]) expect(t.toLowerCase(), name).not.toContain(name.toLowerCase());
     }
@@ -60,11 +62,26 @@ describe("prompts", () => {
     expect(SYSTEM_PROMPT).toMatch(/never receive audio/);
     for (const s of SOURCES) expect(SYSTEM_PROMPT).toContain(`- ${s}:`);
   });
-  it("cache layout: the same tools and system prefix for every job; only the profile block differs by profile", () => {
-    const a = buildRequest(inputs[0]), b = buildRequest({ ...inputs[5], profile: "Different." });
+  it("cache layout (L88): same tools and rules block for every job; library, then profile + memory, each cached", () => {
+    const a = buildRequest({ ...inputs[0], context: "lib" }), b = buildRequest({ ...inputs[5], context: "lib", profile: "Different." });
     expect(JSON.stringify(a.tools)).toBe(JSON.stringify(b.tools));
+    expect(a.system).toHaveLength(3);
     expect(a.system[0]).toEqual(b.system[0]);
-    expect(a.system[1]).not.toEqual(b.system[1]);
-    expect(buildRequest({ ...inputs[0], profile: "" }).system[1].text).toMatch(/empty/);
+    expect(a.system[1]).toEqual(b.system[1]);
+    expect(a.system[2]).not.toEqual(b.system[2]);
+    expect(a.system.every((x) => x.cache_control)).toBe(true);
+    const locked = buildRequest({ ...inputs[0], profile: "", memory: "Talked about Fovos." }).system[2].text;
+    expect(locked).toMatch(/No taste profile/);
+    expect(locked).toMatch(/Talked about Fovos/);
+  });
+  it("chat: the selected track is light context; history alternates and ends cached", () => {
+    const chat = inputs.find((i) => i.job === "chat")!;
+    const r = buildRequest({ ...chat, track: null, selected: track, history: [
+      { role: "user", content: "q1" }, { role: "assistant", content: "a1" }, { role: "assistant", content: "a1b" }, { role: "user", content: "q2" }, { role: "assistant", content: "a2" },
+    ] });
+    expect(r.messages.map((m) => m.role)).toEqual(["user", "assistant", "user", "assistant", "user"]);
+    const last = r.messages.at(-2)!.content as { cache_control?: unknown }[];
+    expect(last[0].cache_control).toBeTruthy();
+    expect(JSON.stringify(r.messages.at(-1))).toMatch(/Currently selected in the table/);
   });
 });

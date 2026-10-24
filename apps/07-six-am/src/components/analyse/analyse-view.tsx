@@ -8,11 +8,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { learn, lastSuggestion } from "@/components/mentor/learn";
 import { MentorPanel } from "@/components/mentor/mentor-panel";
-import { SetupDialog } from "@/components/mentor/setup-dialog";
 import { useMentorData } from "@/components/mentor/use-mentor-data";
 import { Unlock } from "@/components/studio/unlock";
 import { Logo } from "@/components/studio/logo";
-import { ViewsNav } from "@/components/views-nav";
+import { SettingsLink, ViewsNav } from "@/components/views-nav";
 import { bpmChoice } from "@/lib/ears/bpm-choice";
 import { claudeText } from "@/lib/ears/claude-text";
 import { saveFile, toCsv, toJson } from "@/lib/ears/export";
@@ -119,7 +118,6 @@ function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
   const router = useRouter();
   const mentor = useMentorData();
   const [open, setOpen] = useLocalStorage<boolean>(OPEN_KEY, false);
-  const [setupOpen, setSetupOpen] = useState(false);
   const { main, rest } = useMemo(() => buildRows(m.results, m.queue, m.source), [m.results, m.queue, m.source]);
   const latest = useMemo(() => [...m.results].sort((a, b) => b.analysedAt.localeCompare(a.analysedAt))[0], [m.results]);
   const [selId, setSelId] = useState<string | null>(null);
@@ -136,7 +134,7 @@ function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
 
   const copy = async (a: EarsAnalysis) => {
     try {
-      await navigator.clipboard.writeText(claudeText(a, mentor.profile?.text));
+      await navigator.clipboard.writeText(claudeText(a, mentor.unlock?.unlocked ? mentor.profile?.text : undefined));
       flash("Copied for Claude · paste it into a chat");
     } catch {
       flash("Couldn't copy: the browser blocked the clipboard");
@@ -210,8 +208,9 @@ function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
         <ViewsNav current="analyse" />
         <div className={s.appRight}>
           {sync === "offline" ? <span className={s.side} title="Results are kept in this browser and saved to the server when it's reachable again">Offline · saved here</span> : null}
-          <button className={s.btn} aria-pressed={open} aria-controls="mentor-panel" onClick={() => setOpen(!open)} title={open ? "Close the Mentor" : "Ask the Mentor about the selected track"}>Mentor</button>
+          <button className={s.btn} aria-pressed={open} aria-controls="mentor-panel" onClick={() => setOpen(!open)} title={open ? "Close the Mentor" : "Open the Mentor"}>Mentor</button>
           <ExportMenu results={m.results} />
+          <SettingsLink />
         </div>
       </header>
       <Toolbar m={m} empty={empty} bannerEnables={noticeEnables(m, empty)} />
@@ -256,11 +255,9 @@ function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
             try { localStorage.setItem(STUDIO_DRAFT_KEY, JSON.stringify(draft)); } catch { /* storage blocked */ }
             router.push("/");
           }}
-          onOpenSetup={() => setSetupOpen(true)}
         />
       </div>
     ) : null}
-    {setupOpen ? <SetupDialog data={mentor} onClose={() => setSetupOpen(false)} /> : null}
     </div>
   );
 }

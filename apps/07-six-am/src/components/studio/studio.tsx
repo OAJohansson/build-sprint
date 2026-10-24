@@ -12,7 +12,7 @@ import { useLocalStorage } from "@/lib/use-local-storage";
 import { clampBpm, DEFAULT_BPM, formatBpm, TEMPO_KEY } from "@/lib/tempo";
 import { STUDIO_DRAFT_KEY, type StudioDraft } from "@/lib/mentor/studio";
 import { parseDoc } from "@/lib/tracks";
-import { ViewsNav } from "@/components/views-nav";
+import { SettingsLink, ViewsNav } from "@/components/views-nav";
 import { useTimeline } from "./use-timeline";
 import { TimelineView, cx } from "./timeline";
 import { Crate } from "./crate";
@@ -283,6 +283,7 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
             <div className={s.knob} {...t.knob} role="slider" aria-label="Filter" aria-valuenow={Math.round(t.filter * 100)} style={{ ["--a" as string]: `${-135 + t.filter * 270}deg` }} />
           </div>
         </div>
+        <SettingsLink />
       </header>
       <main className={s.main}>
         <TimelineView t={t} colors={COLORS} />

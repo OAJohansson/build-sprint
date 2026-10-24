@@ -5,6 +5,7 @@
 // names join My genre suggestions, L55).
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ApiError, mentorApi, useAccessCode, type Group, type Profile, type StoreKind } from "@/lib/mentor/client";
+import type { UnlockState } from "@/lib/mentor/taste-unlock";
 
 export type MentorData = {
   code: string;
@@ -17,6 +18,8 @@ export type MentorData = {
   /** null = not loaded yet (or offline). */
   profile: Profile | null;
   setProfile: (p: Profile) => void;
+  /** L92/L94: whether the music taste profile is unlocked, with progress (null until loaded). */
+  unlock: UnlockState | null;
   groups: Group[];
   setGroups: (fn: (g: Group[]) => Group[]) => void;
   acceptedNames: string[];
@@ -32,6 +35,7 @@ export function useMentorData(): MentorData {
   const [code, setCodeRaw, ready] = useAccessCode();
   const api = useMemo(() => mentorApi(code), [code]);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [unlock, setUnlock] = useState<UnlockState | null>(null);
   const [groups, setGroupsRaw] = useState<Group[]>([]);
   const [locked, setLocked] = useState(false);
   const [storeKind, setStoreKind] = useState<StoreKind | null>(null);
@@ -48,7 +52,7 @@ export function useMentorData(): MentorData {
     if (!code) return;
     let live = true;
     Promise.all([api.profile(), api.groups()]).then(
-      ([p, g]) => { if (live) { setProfile(p.profile); setStoreKind(p.store); setGroupsRaw(g); setLocked(false); } },
+      ([p, g]) => { if (live) { setProfile(p.profile); setUnlock(p.unlock); setStoreKind(p.store); setGroupsRaw(g); setLocked(false); } },
       (e) => { if (live) onError(e); },
     );
     return () => { live = false; };
@@ -62,7 +66,7 @@ export function useMentorData(): MentorData {
     ready,
     storeKind,
     setCode: (c) => { setTried(true); setCodeRaw(c); },
-    api, profile, setProfile, groups, setGroups, acceptedNames,
+    api, profile, setProfile, unlock, groups, setGroups, acceptedNames,
     locked: locked || (ready && !code),
     lockError: locked && tried ? "That code didn't work." : null,
     onError,

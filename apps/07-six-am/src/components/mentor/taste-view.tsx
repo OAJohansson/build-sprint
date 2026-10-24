@@ -39,7 +39,7 @@ export function TasteView({ data, library, earsBusy, onClose, onUsage }: { data:
   if (!pair) {
     return (
       <section className={s.view} aria-label="Taste session">
-        <div className={s.viewHead}><h3>Taste session</h3><button className={s.textBtn} onClick={onClose}>Back to the thread</button></div>
+        <div className={s.viewHead}><h3>Taste session</h3><button className={s.textBtn} onClick={onClose}>Close</button></div>
         <p className={s.lede}>A taste session needs at least 2 analysed tracks ({library.length} so far). Analyse another track, then come back.</p>
       </section>
     );
@@ -68,8 +68,8 @@ export function TasteView({ data, library, earsBusy, onClose, onUsage }: { data:
   return (
     <section className={s.view} aria-label="Taste session">
       {player.frame}
-      <div className={s.viewHead}><h3>Taste session</h3><button className={s.textBtn} onClick={onClose}>Back to the thread</button></div>
-      <p className={s.lede}>Play 10 seconds from the middle of each. Which do you prefer, and why? The SoundCloud player plays them; nothing is recorded.</p>
+      <div className={s.viewHead}><h3>Taste session</h3><button className={s.textBtn} onClick={onClose}>Close</button></div>
+      <p className={s.lede}>Play 10 seconds of each. Which do you prefer, and why?</p>
       <ul className={s.pair} role="radiogroup" aria-label="Which do you prefer?">
         {([["a", a], ["b", b]] as const).map(([k, t]) => {
           const playing = player.state.url === t.soundcloudUrl;
@@ -112,7 +112,7 @@ export function TasteView({ data, library, earsBusy, onClose, onUsage }: { data:
         </>
       ) : (
         <>
-          <Turn ask={`I prefer ${pick === "a" ? a.title : b.title}: ${reason}`} job="taste_session" answer={reply.answer} costUsd={reply.message.costUsd} track={null} updatedNote={reply.profileUpdated?.note} />
+          <Turn ask={`I prefer ${pick === "a" ? a.title : b.title}: ${reason}`} job="taste_session" answer={reply.answer} track={null} />
           <div className={s.actions}><button className={s.textBtn} onClick={again}>Another pair</button></div>
         </>
       )}

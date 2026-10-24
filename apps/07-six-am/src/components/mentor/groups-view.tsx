@@ -3,7 +3,7 @@
 // Genres that grow from the library (M12, L50): the Mentor proposes groups among tagged tracks,
 // each with a name and a reason from the tracks' own numbers; accept, rename, split or dismiss.
 // Accepted names join My genre suggestions (L55).
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cleanGenre } from "@/lib/ears/my-genre";
 import type { EarsAnalysis } from "@/lib/ears/results";
 import { ApiError, type Group } from "@/lib/mentor/client";
@@ -13,7 +13,7 @@ import s from "./mentor.module.css";
 
 const MIN_TAGGED = 4;
 
-export function GroupsView({ data, library, onClose, onUsage }: { data: MentorData; library: EarsAnalysis[]; onClose: () => void; onUsage: (u: UsageSummary) => void }) {
+export function GroupsView({ data, library, auto, onClose, onUsage }: { data: MentorData; library: EarsAnalysis[]; auto?: boolean; onClose: () => void; onUsage: (u: UsageSummary) => void }) {
   const tagged = library.filter((a) => cleanGenre(a.myGenre)).length;
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<string | null>(null);
@@ -36,6 +36,15 @@ export function GroupsView({ data, library, onClose, onUsage }: { data: MentorDa
     }
   };
 
+  // Asked for in the chat ("group my tracks"): propose straight away, once.
+  const started = useRef(false);
+  useEffect(() => {
+    if (!auto || started.current || tagged < MIN_TAGGED) return;
+    started.current = true;
+    void propose();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auto, tagged]);
+
   const patch = async (body: Parameters<MentorData["api"]["patchGroup"]>[0]) => {
     setError(null);
     try {
@@ -56,9 +65,8 @@ export function GroupsView({ data, library, onClose, onUsage }: { data: MentorDa
     <section className={s.view} aria-label="Genre groups">
       <div className={s.viewHead}>
         <h3>Genre groups</h3>
-        <button className={s.textBtn} onClick={onClose}>Back to the thread</button>
+        <button className={s.textBtn} onClick={onClose}>Close</button>
       </div>
-      <p className={s.lede}>Groups among your tagged tracks, named from what they share. Accept one and its name joins your My genre suggestions.</p>
       <div className={s.row}>
         <button className={s.btn} onClick={propose} disabled={busy || tagged < MIN_TAGGED}>
           {busy ? "Looking across your tagged tracks…" : shown.length ? "Propose more groups" : "Propose groups"}

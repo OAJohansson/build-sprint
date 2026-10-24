@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { SettingsView } from "@/components/settings/settings-view";
 
-// Settings (M9, L56): My taste, what changed it, where it came from, run setup again.
+// Settings (L91, L92): the music taste profile (locked until enough data) and the cost estimate.
 export const metadata: Metadata = { title: "Six AM · Settings" };
 
 export default function Page() {

@@ -199,7 +199,8 @@ export function linkKind(u: string, said: LinkKind): LinkKind {
 /** N5: Studio start talks about keys in plain words. */
 const KEY_JARGON = /semitone|key wheel|camelot|\b(?:1[0-2]|[1-9])[AB]\b/;
 /** At most this many sentences per answer (F8): 2–4 everywhere but teach. */
-export const maxSentences = (job: Job) => (job === "teach" ? 10 : 4);
+/** Clutter review: chat, explain and genre answers say 2–3 sentences first, the rest behind "Tell me more". */
+export const maxSentences = (job: Job) => (job === "teach" ? 10 : job === "chat" || job === "explain" || job === "suggest_genre" ? 3 : 4);
 /** Raw measurement jargon the person shouldn't see (F2): say bright/warm, loud/quiet, likely/unsure. */
 const RAW_NUMBERS = /\b\d+(?:[.,]\d+)?\s*(?:k?hz|dbfs|db)\b|spectral centroid|\bcentroid\b|\bdbfs\b|\bstrength\s*(?:of\s*)?[01]?[.,]\d+/i;
 const isSource = (v: unknown): v is Source => typeof v === "string" && (SOURCES as readonly string[]).includes(v);
@@ -231,7 +232,7 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
     sentences.push(sentence);
   }
   if (sentences.length > maxSentences(job)) {
-    return { ok: false, problem: `${sentences.length} sentences: keep to ${maxSentences(job) === 4 ? "2–4" : `at most ${maxSentences(job)}`} and offer tellMore for the rest.` };
+    return { ok: false, problem: `${sentences.length} sentences: keep to ${maxSentences(job) === 4 ? "2–4" : maxSentences(job) === 3 ? "2–3" : `at most ${maxSentences(job)}`} and offer tellMore for the rest.` };
   }
   const answer: MentorAnswer = { sentences, tellMore: r.tellMore === true };
   if (asked === "chat") {

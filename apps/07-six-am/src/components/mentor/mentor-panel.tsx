@@ -4,7 +4,7 @@
 // track(s) from the question; the row selected in the table goes along as light context only.
 // Under the input there is only "What can you help me with?". Every answer comes from the server
 // (the key stays there); the browser sends ids and the person's words, never audio.
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { Unlock } from "@/components/studio/unlock";
 import type { EarsAnalysis } from "@/lib/ears/results";
@@ -61,6 +61,11 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
   const [continued, setContinued] = useLocalStorage("six-am:mentor-continue", "");
   const [stopped, setStopped] = useLocalStorage("six-am:mentor-stop", "");
   const threadRef = useRef<HTMLDivElement>(null);
+  /** The input: focus comes back here when the control that had it goes away (a11y review). */
+  const fieldRef = useRef<{ focus: () => void }>(null);
+  const focusField = () => fieldRef.current?.focus();
+  /** The newest answer, read out once by screen readers. */
+  const [announce, setAnnounce] = useState("");
 
   // shortcut: ?mentorWarnAt=N lowers the 50/day check-in in development, to test it without 50
   // real questions; the server's own flag is used everywhere else.
@@ -97,6 +102,7 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
       const r = await api.ask({ job: "chat", track, message });
       console.info(`[mentor] ${r.answer.intent ?? "chat"}: ${r.latencyMs} ms at Claude, est. $${r.message.costUsd}`);
       setItems((list) => [...list.map((x) => ({ ...x, live: false })), { id: r.message.id, ask: message, answer: r.answer, studio: r.studio, dropped: r.dropped, genreTrackId: r.genreTrackId, live: true }]);
+      setAnnounce(`The Mentor answered: ${r.answer.sentences.map((x) => x.text).join(" ")}`);
       setUsage(r.usage);
       if (r.answer.genre && r.genreTrackId) rememberSuggestion(r.genreTrackId, r.answer.genre.name);
       if (canLearn && message !== "Tell me more." && message !== HELP_QUESTION) learn(data.code, { type: "asked_about", detail: message.slice(0, 300), ...(track ? { trackId: track.id } : {}) });
@@ -113,6 +119,7 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
     canLearn && learn(data.code, { type: kind, detail: `${it.artist} – ${it.title} (${it.because})`.slice(0, 480) });
   const acceptGenre = (a: EarsAnalysis) => (name: string) => {
     onSetGenre(a.id, name);
+    focusField();
     if (canLearn) learn(data.code, { type: "note", detail: `Accepted the Mentor's suggested genre "${name}" as My genre for "${a.title}".`, trackId: a.id });
   };
   const [closedViews, setClosedViews] = useState<Set<string>>(new Set());
@@ -122,7 +129,7 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
     <aside className={s.panel} aria-label="Mentor">
       <header className={s.head}>
         <h2 className={s.name}>Mentor</h2>
-        <button className={s.icon} onClick={onClose} aria-label="Close Mentor" title="Close"><X size={16} strokeWidth={1.5} /></button>
+        <button className={s.icon} onClick={onClose} aria-label="Close Mentor" title="Close"><X size={16} strokeWidth={1.5} aria-hidden /></button>
       </header>
 
       {locked ? (
@@ -131,7 +138,7 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
         </div>
       ) : (
         <>
-          <div className={s.thread} ref={threadRef}>
+          <div className={s.thread} ref={threadRef} aria-busy={!!pending}>
             {items.map((it) => {
               const about = byId(it.genreTrackId ?? it.answer.trackIds?.[0]) ?? (it.live ? track : null);
               const intent = it.answer.intent;
@@ -140,7 +147,7 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
                 <Turn
                   key={it.id} ask={it.ask} job={intent ?? "chat"} answer={it.answer} studio={it.studio} dropped={it.dropped}
                   track={about} myGenre={about?.myGenre}
-                  onTellMore={pending || it !== items.at(-1) ? undefined : () => void send("Tell me more.")}
+                  onTellMore={pending || it !== items.at(-1) ? undefined : () => { focusField(); void send("Tell me more."); }}
                   onAcceptGenre={about ? acceptGenre(about) : undefined}
                   onFeedback={onFeedback}
                   onOpenStudio={(start) => onOpenStudio(start, about?.title ?? "")}
@@ -155,13 +162,15 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
             {error ? (
               <p className={s.error} role="alert" data-status>
                 <span>{error.text}</span>
-                <button className={s.btn} onClick={() => void send(error.message)}>Retry</button>
-                <button className={s.textBtn} onClick={() => setError(null)}>Dismiss</button>
+                <button className={s.btn} onClick={() => { focusField(); void send(error.message); }}>Retry</button>
+                <button className={s.textBtn} onClick={() => { setError(null); focusField(); }}>Dismiss</button>
               </p>
             ) : null}
           </div>
+          <p className={s.sr} role="status" aria-live="polite">{announce}</p>
 
           <Foot
+            field={fieldRef}
             replied={items.length > 0}
             busy={!!pending}
             warning={warning}
@@ -188,6 +197,7 @@ function Thinking({ ask }: { ask: string }) {
 }
 
 type FootProps = {
+  field: React.RefObject<{ focus: () => void } | null>;
   replied: boolean; busy: boolean; warning: boolean; stopped: boolean; usage: UsageSummary | null;
   onContinue: () => void; onStop: () => void; onSend: (text: string) => void;
 };
@@ -195,14 +205,18 @@ type FootProps = {
 /** About six lines, then the field scrolls (L89). */
 const MAX_FIELD_PX = 6 * 21 + 18;
 
-function Foot({ replied, busy, warning, stopped, usage, onContinue, onStop, onSend }: FootProps) {
+function Foot({ field, replied, busy, warning, stopped, usage, onContinue, onStop, onSend }: FootProps) {
   const [text, setText] = useState("");
-  const field = useRef<HTMLTextAreaElement>(null);
+  const own = useRef<HTMLTextAreaElement>(null);
+  useImperativeHandle(field, () => ({ focus: () => own.current?.focus() }), []);
   const blocked = busy || warning || stopped;
+  // The check-in takes focus when it appears; the field stays focusable (read-only), never disabled.
+  const continueRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => { if (warning || stopped) continueRef.current?.focus(); }, [warning, stopped]);
 
   // Grows with what's typed (field-sizing where supported; this as the fallback).
   useLayoutEffect(() => {
-    const el = field.current;
+    const el = own.current;
     if (!el) return;
     el.style.height = "auto";
     el.style.height = `${Math.min(el.scrollHeight + 2, MAX_FIELD_PX)}px`;
@@ -221,24 +235,25 @@ function Foot({ replied, busy, warning, stopped, usage, onContinue, onStop, onSe
       {warning ? (
         <div className={s.warn} role="alert">
           <span><b>{usage?.questionsToday ?? DAILY_WARNING_AT} questions today</b>, about {money(usage?.todayUsd ?? 0)} so far (estimate). A check-in, not a limit.</span>
-          <button className={s.btn} onClick={onContinue}>Continue anyway</button>
+          <button ref={continueRef} className={s.btn} onClick={() => { onContinue(); field.current?.focus(); }}>Continue anyway</button>
           <button className={s.textBtn} onClick={onStop}>Stop for today</button>
         </div>
       ) : stopped ? (
         <div className={s.warn} role="status">
           <span>Stopped for today.</span>
-          <button className={s.textBtn} onClick={onContinue}>Continue anyway</button>
+          <button ref={continueRef} className={s.textBtn} onClick={() => { onContinue(); field.current?.focus(); }}>Continue anyway</button>
         </div>
       ) : null}
       <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
         <textarea
-          ref={field}
+          ref={own}
           className={s.field}
           rows={1}
           value={text}
-          disabled={warning || stopped}
+          readOnly={warning || stopped}
+          aria-disabled={warning || stopped || undefined}
           aria-label="Ask the Mentor"
-          placeholder={replied ? "Reply" : "Type your question"}
+          placeholder={replied ? "Reply…" : "Type your question…"}
           spellCheck
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => {
@@ -247,7 +262,8 @@ function Foot({ replied, busy, warning, stopped, usage, onContinue, onStop, onSe
           }}
         />
       </form>
-      <button className={s.help} disabled={blocked} onClick={() => onSend(HELP_QUESTION)}>{HELP_QUESTION}</button>
+      {/* aria-disabled, not disabled: a disabled button drops keyboard focus while the answer loads. */}
+      <button className={s.help} aria-disabled={blocked || undefined} onClick={() => { if (!blocked) onSend(HELP_QUESTION); }}>{HELP_QUESTION}</button>
     </div>
   );
 }

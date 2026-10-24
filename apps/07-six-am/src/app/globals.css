@@ -29,6 +29,8 @@
 }
 
 :root {
+  /* One dark theme: native controls and scrollbars follow it */
+  color-scheme: dark;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

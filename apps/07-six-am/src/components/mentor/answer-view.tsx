@@ -13,9 +13,13 @@ import { LOOPS, TRACKS } from "@/lib/timeline";
 import s from "./mentor.module.css";
 
 const FROM_WORD: Record<Source, string> = {
-  ears: "Ears' measurements", uploader: "the uploader's tags", web: "the web", profile: "your taste profile",
-  library: "your library", memory: "our earlier chats", general: "general music knowledge",
+  ears: "Ears' measurements", uploader: "uploader tag", web: "the web", profile: "your taste profile",
+  library: "your library", memory: "earlier chats", general: "general knowledge",
 };
+/** Model text can carry no-break spaces; they make odd line breaks in a narrow column. */
+const clean = (t: string) => t.replace(/[\u00a0\u202f]/g, " ");
+/** Opens in a new tab: the arrow is decoration, the words are for screen readers. */
+export const NewTab = () => <><span aria-hidden="true"> ↗</span><span className={s.sr}> (opens in new tab)</span></>;
 const SECTION_TITLE: Record<TeachSection, string> = { what: "What it is", sound: "How it sounds", start: "Where to start" };
 
 /** example.com, short. */
@@ -57,18 +61,21 @@ function paragraphs(list: Sentence[]): Sentence[][] {
   return out;
 }
 
-function Paras({ list }: { list: Sentence[] }) {
-  return <>{paragraphs(list).map((p, i) => <p key={i} className={s.voice}>{p.map((x) => x.text).join(" ")}</p>)}</>;
+function Paras({ list, lines }: { list: Sentence[]; lines?: boolean }) {
+  const groups = lines ? list.map((x) => [x]) : paragraphs(list);
+  return <>{groups.map((p, i) => <p key={i} className={lines ? s.line : s.voice}>{clean(p.map((x) => x.text).join(" "))}</p>)}</>;
 }
 
-function From({ answer }: { answer: MentorAnswer }) {
+/** One dim line of sources, no label (clutter review): "Ears' measurements · uploader tag · discogs.com ↗". */
+function Sources({ answer }: { answer: MentorAnswer }) {
   const used = SOURCES.filter((x) => x !== "web" && answer.sentences.some((y) => y.source === x));
   const web = [...new Set(answer.sentences.filter((x) => x.source === "web" && x.url).map((x) => x.url!))];
   if (!used.length && !web.length) return null;
   return (
     <p className={s.from}>
-      From: {used.map((x) => FROM_WORD[x]).join(", ")}
-      {web.map((u, i) => <span key={u}>{used.length || i ? ", " : ""}<a href={u} target="_blank" rel="noreferrer" title={u}>{shortUrl(u)} ↗</a></span>)}
+      <span className={s.sr}>Sources: </span>
+      {used.map((x) => FROM_WORD[x]).join(" · ")}
+      {web.map((u, i) => <span key={u}>{used.length || i ? " · " : ""}<a href={u} target="_blank" rel="noreferrer" title={u}>{shortUrl(u)}<NewTab /></a></span>)}
     </p>
   );
 }
@@ -77,6 +84,8 @@ export function Turn({ ask, answer, job, track, studio, dropped, myGenre, onTell
   const kind = answer.intent ?? job;
   const start = studio ?? (kind === "studio_start" && track && answer.loops?.length ? studioStart(track, answer.loops) : undefined);
   const teach = kind === "teach" && answer.sentences.some((x) => x.section);
+  const help = kind === "help";
+  const accept = kind === "suggest_genre" && answer.genre && onAcceptGenre && myGenre?.trim().toLowerCase() !== answer.genre.name.trim().toLowerCase();
   const sections = (["what", "sound", "start"] as const).map((sec) => ({ sec, list: answer.sentences.filter((x) => (x.section ?? "what") === sec), pick: answer.listenNext?.find((l) => l.section === sec) }));
 
   return (
@@ -88,27 +97,23 @@ export function Turn({ ask, answer, job, track, studio, dropped, myGenre, onTell
           <Paras list={list} />
           {pick ? <PickLink it={pick} /> : null}
         </section>
-      )) : <Paras list={answer.sentences} />}
+      )) : <Paras list={answer.sentences} lines={help} />}
 
       {!teach && answer.listenNext?.length ? <Picks items={answer.listenNext} onFeedback={onFeedback} /> : null}
       {start ? <StudioBlock start={start} onOpen={onOpenStudio} /> : null}
       {dropped?.length ? <p className={s.dropped}>Left out {dropped.length} pick{dropped.length > 1 ? "s" : ""}: no clean link found.</p> : null}
       {children}
-      {(kind === "suggest_genre" && answer.genre && onAcceptGenre) || (answer.tellMore && onTellMore) ? (
+      {/* One place for the answer's actions: under the answer, before the sources. A genre that is
+          already My genre shows nothing (clutter review). */}
+      {accept || (answer.tellMore && onTellMore) ? (
         <div className={s.actions}>
-          {kind === "suggest_genre" && answer.genre && onAcceptGenre ? <AcceptGenre name={answer.genre.name} current={myGenre} onAccept={onAcceptGenre} /> : null}
+          {accept ? <button className={s.btn} onClick={() => onAcceptGenre!(answer.genre!.name)} title={myGenre ? `Replaces your “${myGenre}”` : undefined}>Use “{answer.genre!.name}” as My genre</button> : null}
           {answer.tellMore && onTellMore ? <button className={s.textBtn} onClick={onTellMore}>Tell me more</button> : null}
         </div>
       ) : null}
-      <From answer={answer} />
+      {help ? null : <Sources answer={answer} />}
     </article>
   );
-}
-
-/** Follows the track's live My genre: accepted shows a note, cleared or changed offers it again. */
-function AcceptGenre({ name, current, onAccept }: { name: string; current?: string; onAccept: (name: string) => void }) {
-  if (current?.trim().toLowerCase() === name.trim().toLowerCase()) return <span className={s.noted}>My genre is {name}</span>;
-  return <button className={s.btn} onClick={() => onAccept(name)} title={current ? `Replaces your “${current}”` : undefined}>Use “{name}” as My genre</button>;
 }
 
 /** What the link opens when it isn't the track's own page (F4, N4), as a mono suffix after ↗. */
@@ -118,7 +123,7 @@ const kindTag = (it: ListenNext) => (it.kind && it.kind !== "track" ? <span clas
 function PickLink({ it }: { it: ListenNext }) {
   return (
     <p className={s.listen}>
-      <a className={s.itemTitle} href={it.url} target="_blank" rel="noreferrer">Listen: {it.artist} – {it.title} <span className={s.arrow}>↗{kindTag(it)}</span></a>
+      <a className={s.itemTitle} href={it.url} target="_blank" rel="noreferrer">Listen: {it.artist} – {it.title}<NewTab />{kindTag(it)}</a>
     </p>
   );
 }
@@ -138,16 +143,14 @@ function Picks({ items, onFeedback }: { items: ListenNext[]; onFeedback?: TurnPr
         <li key={`${i}-${it.url}`}>
           <span className={s.n}>{i + 1}</span>
           <div>
-            <a className={s.itemTitle} href={it.url} target="_blank" rel="noreferrer">{it.artist} – {it.title} <span className={s.arrow}>↗{kindTag(it)}</span></a>
+            <a className={s.itemTitle} href={it.url} target="_blank" rel="noreferrer">{it.artist} – {it.title}<NewTab />{kindTag(it)}</a>
             <p className={s.because}>{plain(it.because)}</p>
             {onFeedback ? (
+              // The buttons stay mounted (disabled once used) so focus isn't lost; the note is announced.
               <div className={s.fb}>
-                {fb[i] ? <span className={s.noted}>{fb[i]}</span> : (
-                  <>
-                    <button className={s.textBtn} onClick={() => { onFeedback(it, "more_like_this"); setFb({ ...fb, [i]: "Noted: more like this" }); }}>More like this</button>
-                    <button className={s.textBtn} onClick={() => { onFeedback(it, "not_for_me"); setFb({ ...fb, [i]: "Noted: not for you" }); }}>Not for me</button>
-                  </>
-                )}
+                <button className={s.textBtn} disabled={!!fb[i]} aria-pressed={fb[i] === "more"} aria-label={`More like ${it.artist} – ${it.title}`} onClick={() => { onFeedback(it, "more_like_this"); setFb({ ...fb, [i]: "more" }); }}>More like this</button>
+                <button className={s.textBtn} disabled={!!fb[i]} aria-pressed={fb[i] === "less"} aria-label={`${it.artist} – ${it.title} is not for me`} onClick={() => { onFeedback(it, "not_for_me"); setFb({ ...fb, [i]: "less" }); }}>Not for me</button>
+                <span className={s.noted} role="status">{fb[i] === "more" ? "Noted" : fb[i] === "less" ? "Noted" : ""}</span>
               </div>
             ) : null}
           </div>
@@ -169,7 +172,7 @@ function StudioBlock({ start, onOpen }: { start: StudioStart; onOpen?: (start: S
         <dt>Loops</dt>
         <dd>
           <ul className={s.loops}>
-            {loops.map((l) => <li key={l.id}>{l.loop!.name} <span>· {TRACKS[l.loop!.track]}{l.why ? ` · ${l.why}` : ""}</span></li>)}
+            {loops.map((l) => <li key={l.id}>{l.loop!.name} <span>· {TRACKS[l.loop!.track]}</span></li>)}
           </ul>
         </dd>
       </dl>

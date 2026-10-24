@@ -13,6 +13,9 @@ import { SettingsLink, ViewsNav } from "@/components/views-nav";
 import { ago } from "@/lib/ago";
 import { money } from "@/lib/mentor/client";
 import type { UsageSummary } from "@/lib/mentor/periods";
+
+/** This month's short name in the owner's locale ("Oct"). */
+const monthShort = () => new Intl.DateTimeFormat(undefined, { month: "short" }).format(new Date());
 import { unlockProgress, unlockText } from "@/lib/mentor/taste-unlock";
 import s from "./settings.module.css";
 
@@ -71,7 +74,18 @@ export function SettingsView() {
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => { timer.current = null; void save(v); }, SAVE_AFTER_MS);
   };
-  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+  // Leaving mid-edit: flush the pending save on unmount, and ask before closing the tab while saving.
+  const latest = useRef<{ text: string | null; save: (v: string) => Promise<void> }>({ text: null, save });
+  useEffect(() => { latest.current = { text, save }; });
+  useEffect(() => () => {
+    if (timer.current) { clearTimeout(timer.current); timer.current = null; if (latest.current.text !== null) void latest.current.save(latest.current.text); }
+  }, []);
+  useEffect(() => {
+    if (status !== "saving") return;
+    const guard = (e: BeforeUnloadEvent) => { e.preventDefault(); };
+    window.addEventListener("beforeunload", guard);
+    return () => window.removeEventListener("beforeunload", guard);
+  }, [status]);
 
   if (data.locked) return <Unlock error={data.lockError} onUnlock={data.setCode} />;
   if (!data.profile || !data.unlock || text === null) return <Notice text="Loading…" />;
@@ -89,9 +103,11 @@ export function SettingsView() {
           <div className={s.fieldHead}>
             <h1 className={s.h1}>Music taste profile</h1>
             {unlock.unlocked ? (
-              <span className={status === "error" ? s.err : s.saved} role="status">
-                {status === "saving" ? "Saving…" : status === "error" ? "Not saved" : data.profile.updatedAt ? `Updated ${ago(data.profile.updatedAt)}` : ""}
-              </span>
+              status === "error" ? (
+                <button className={s.errBtn} onClick={() => text !== null && void save(text)}>Not saved. Try again</button>
+              ) : (
+                <span className={s.saved} role="status">{status === "saving" ? "Saving…" : data.profile.updatedAt ? `Updated ${ago(data.profile.updatedAt)}` : ""}</span>
+              )
             ) : null}
           </div>
           {unlock.unlocked ? (
@@ -106,19 +122,15 @@ export function SettingsView() {
               onBlur={() => { if (timer.current && text !== null) { clearTimeout(timer.current); timer.current = null; void save(text); } }}
             />
           ) : (
-            <div className={s.lockedBox}>
-              <p className={s.lockedText}>{unlockText(unlock)}</p>
-              <p className={s.progress}>{unlockProgress(unlock)}</p>
-            </div>
+            <p className={s.locked}>{unlockText(unlock)} · <span className={s.num}>{unlockProgress(unlock)}</span></p>
           )}
-          <button className={s.btn} onClick={() => setSetup(true)}>Run setup</button>
-        </section>
-
-        <section className={s.costSec}>
-          <h2 className={s.label}>Mentor cost</h2>
-          <p className={s.cost}>{usage ? `est. Today ${money(usage.todayUsd)} · ${usage.month.slice(0, 3)} ${money(usage.monthUsd)}` : "est. Today –"}</p>
+          {/* Reads playlists into the library (titles and artists only); they count toward unlocking. */}
+          <button className={s.textBtn} onClick={() => setSetup(true)}>Import playlists</button>
         </section>
       </main>
+      <footer className={s.foot}>
+        Mentor · <span className={s.num}>{usage ? `est. today ${money(usage.todayUsd)} · ${monthShort()} ${money(usage.monthUsd)}` : "est. today –"}</span>
+      </footer>
       {setup ? <SetupDialog data={data} onClose={() => { setSetup(false); data.reload(); }} /> : null}
     </div>
   );

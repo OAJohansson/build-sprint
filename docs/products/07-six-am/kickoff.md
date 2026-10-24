@@ -226,3 +226,168 @@ PM's call (L1 in `decisions.md`), the logic that would hurt most if silently wro
    short links, junk input.
 2. Discogs style → display name (F5): known styles, unknown styles, ties.
 3. BPM normalisation and half/double-time flag: 61 vs 122, 148 vs 74, edges of the house range.
+
+---
+
+# Kickoff pack: Six AM Mentor (Phase 2, Founder mode)
+
+The owner's calls of 24 Oct, made one at a time in the parent session and transcribed here by the
+PM (L45–L54 in `decisions.md`). The Mentor is the "Learn" step of the brief (`kickoff-source.md`,
+pillar 3 "Mentor"). Ears v1 and v1.1 above are shipped; this pack builds on them.
+
+**Mode:** founder
+**Appetite:** no fixed day budget; the squad works unattended. Owner-hands steps (anything in real
+Chrome, e.g. taste-session snippets) are batched into one ask with a page ready.
+**Evals:** the "Mentor" part of `evals.md` · owner-only checks kept outside the repo
+
+## Problem
+
+Ears says what a track measures, but not what that means or what to do with it. Today the owner
+pastes the Copy for Claude text into a separate chat, re-explains their taste every time, and the
+answer never comes back into Six AM. Nothing learns their taste, and the genre words they use
+aren't anyone's fixed list.
+
+## Who
+
+The same owner as Ears (a club-goer turned bedroom producer sorting SoundCloud by feel), and, for
+the first time, **a new user with no brief**: the Mentor must work without predefined taste data
+and learn the person from their own playlists and use.
+
+## Moment of use and jobs to be done
+
+At the laptop in the Analyse view, a track selected (or none, for general questions).
+
+1. When I've analysed a track, I want it **explained** in plain words, saying where each fact
+   came from, so I understand what I'm hearing.
+2. When I'm tagging, I want a **genre suggestion** I can accept in one click (it fills My genre;
+   my choice always wins), so tagging is fast and I learn the words.
+3. When a genre name comes up, I want to be **taught** it (roots, traits, artists), so the words
+   stick to music I know.
+4. When I want to train my ear, I want **listening prompts** and **taste sessions** (pick between
+   two snippets and say why), so I can name what I like.
+5. When a track makes me want to make something, I want a **Studio starting point** (tempo, key,
+   loops from the existing crate), so I can start straight away.
+6. When I want more music like this, I want **listen next** suggestions that say why, from my
+   taste and the web, so I find music I'll actually like.
+
+Out: ME-7 remake coaching (backlog: "consider when building the Studio Lab and Remake mode").
+
+## Today's alternatives
+
+A normal Claude chat with Copy for Claude pasted in: good answers, but no memory of the owner's
+taste, no link back into Six AM, and nothing learned from tagging. Genre wikis and RA/Discogs pages
+explain genres but not the owner's library.
+
+## Riskiest assumptions
+
+- **Value (riskiest):** a taste profile learned from a few playlists plus use makes the Mentor's
+  suggestions and listen-next noticeably more "me" than a generic chat.
+- **Honesty:** the Mentor stays honest about sources and never claims to have heard audio, while
+  still being useful (it only ever gets Ears' numbers, uploader tags, the web and the profile).
+- **Feasibility:** Claude with web search answers within 15 s, and listen-next doesn't invent
+  artists or tracks.
+- **Viability:** cost stays small and visible (estimate per answer and per day/month).
+
+## Success: what good looks like
+
+Outcome: the owner uses the Mentor while sorting and learning, and its genre calls and suggestions
+fit their taste better over time. The checkable versions are in `evals.md` (Mentor part).
+
+## MVP and stop line
+
+1. **Mentor panel** on the Analyse page: slides in from the right, follows the selected track, a
+   button per job plus a follow-up chat box; works with no track selected for general questions.
+2. **The six jobs** above (explain, suggest genre, teach, ear-training prompts, Studio starting
+   point, listen next), every answer with source labels.
+3. **Web search** when it helps (genre questions, listen next, teaching), sources shown as links;
+   web facts support Ears' measurements and never overrule them; nothing online is said honestly.
+4. **My taste:** a short written profile the Mentor reads before every answer, readable and
+   editable under Settings ("What Six AM has learned about you").
+5. **Setup step (~5 min):** paste SoundCloud playlist links → titles, artists, tags read via the
+   widget (no listening) → first profile drafted → 3–5 quick questions with tap answers plus "say
+   more" (vocals; dancing, driving or deep listening; "which of these three tracks is most you?"
+   with short previews) → optional "anything else I should know?".
+6. **Learning from use:** typed genres, corrected suggestions, "more like this" / "not for me" on
+   listen next and what the owner asks about update the profile; occasionally "Updated: …".
+7. **Genres that grow from the library:** no fixed family list; the Mentor proposes groups among
+   tagged tracks (shared BPM, style mix, traits) with a name and reason; accept, rename or split.
+8. **Taste sessions:** on request, two snippets from the library, "which do you prefer and why?",
+   then name what was described.
+9. **Cost:** each answer's cost estimated from API usage (tokens + web searches) and published
+   prices; "Today $x · <Month> $y" in the panel, per answer on hover, labelled as an estimate; a
+   warning at 50 questions a day with "Continue anyway" (not a hard stop).
+10. **Everything in Supabase:** taste profile, Mentor chats, genre groups, and the Analyse results
+    and My genre migrated from localStorage, so nothing depends on one browser.
+
+**Stop line:** ME-7 remake coaching; multi-user accounts; built-in Appendix A data; model choice
+per job; anything past these ten items → `backlog.md`.
+
+## Requirements
+
+| # | Must | Check |
+| --- | --- | --- |
+| M1 | Panel slides in from the right on /analyse, follows the selected track, job buttons + follow-up chat, works with no track | user-tester |
+| M2 | Explain an analysis in plain words with a source label on every fact | data-evals rubric |
+| M3 | Genre suggestion; one click fills My genre; the owner's typed genre is never overwritten | user-tester + data-evals |
+| M4 | Teach me a genre (structured teacher voice), with web sources as links | data-evals rubric |
+| M5 | Ear-training prompts tied to the selected track | data-evals rubric |
+| M6 | Studio starting point: tempo, key, loops from the existing crate (real loop names only) | user-tester + unit check against the crate |
+| M7 | Listen next from the profile + web, each with "because…", links resolve, no invented artists or tracks | data-evals |
+| M8 | Web search used when it helps; web never overrules Ears; "nothing online" handled honestly | data-evals |
+| M9 | My taste profile read before every answer; readable and editable under Settings | user-tester |
+| M10 | Setup step: playlists → draft profile → 3–5 tap questions (+ say more, track previews) → optional notes | user-tester (owner's hands for previews) |
+| M11 | Learning from use updates the profile and shows "Updated: …" now and then | data-evals + user-tester |
+| M12 | Genre groups proposed from tagged tracks with name + reason; accept, rename, split | data-evals + user-tester |
+| M13 | Taste session: two snippets, preference + why, named back | user-tester (owner's hands) |
+| M14 | Cost estimate per answer and Today/Month in the panel, labelled estimate; 50/day warning with Continue anyway | data-evals (vs usage) + user-tester |
+| M15 | Supabase holds profile, chats, groups, results and My genre; nothing lost on reload or in another browser | user-tester |
+| M16 | API key server-side only, route behind the access code; no audio ever sent to Claude | code read + network check |
+
+**No-gos:**
+
+- Never send audio to Claude, never store or upload audio (Ears' C2 stands).
+- Never claim to have heard the music.
+- No predefined taste data in the app (no Appendix A).
+- The API key never reaches the browser.
+- No multi-user accounts.
+
+**Rabbit holes:** fine-tuning prompts per genre; building a recommender of our own; scraping
+SoundCloud beyond the widget; perfect cost accounting (an estimate is the bar).
+
+## Feel references
+
+Same as Ears (the tool: rekordbox columns in the Six AM warehouse) for the panel's frame. For the
+voice: **a friendly record-shop expert** for everyday answers (warm, plain, short, jargon explained
+on first use), and **a structured teacher** in "Teach me a genre".
+
+**The feel in one sentence:** the record-shop expert at the end of the counter: one short, honest
+answer about the track in your hands, says how they know, and offers more if you want it.
+
+## Things to avoid
+
+All of Ears' list, plus:
+
+- A chatty persona or emoji.
+- Walls of text: 2–4 sentences then "Tell me more" (except teach mode).
+- Certain-sounding genre calls.
+- Flattery.
+- Claiming to have heard the music.
+
+## Decisions already made
+
+- **Model:** Claude Sonnet 5.5 (`claude-sonnet-5-5`) for every job for now; prompt caching; short
+  answers; adaptive thinking at a modest effort (PM's call, logged). Read the claude-api skill for
+  current API usage before writing code.
+- **Backend:** a Next.js route behind Six AM's existing access code holds `ANTHROPIC_API_KEY`
+  (server-side only; Vercel env for 07). A decision file records adding it.
+- **Storage:** Supabase, the existing single-owner project (decision 0020).
+- **Web search:** on when it helps, sources as links.
+- **Test data:** the owner's public playlists at
+  https://soundcloud.com/andreas-johansson-303905204/sets (not *B b baaangers*, which is private).
+
+## Unit tests
+
+1. Cost estimate from a usage object (input, output, cache read/write tokens, web searches) and the
+   price table, incl. edge cases (no searches, all cached).
+2. Daily question count and the 50/day warning across midnight and month change.
+3. Studio starting point: suggested loops exist in the crate; tempo/key from the analysis.

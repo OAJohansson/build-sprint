@@ -65,3 +65,14 @@ recipe test guards the 48-loop list. The pick pointed at the right logic.
    carry-over list; check `main` before holding back shared pages.
 3. Playbook step 1: if the owner can't choose from one-liners, show a contact sheet of rough
    thumbnails of all directions, then build three.
+
+## Mentor (Founder mode), 24 Oct
+
+- **The squad's design ignored our own principles.** The owner found the Mentor panel "too much
+  going on": tabs, job links, a slash menu, footnote markers, a cost line, a long taste text. Clean
+  and minimal (decision 0007) and Emil's restraint were in the rules, but nothing in the flow
+  enforced them, and the critic scored 6–7 round after round without the designs getting simpler,
+  because each fix added a control instead of removing one. For the Founder-mode retro: which
+  skills each agent actually used (design-session, emil-design-eng, web-design-guidelines,
+  break-ui), why critic scores didn't drive subtraction, and whether to add design skills or a
+  "remove first" rule to the designer and critic.

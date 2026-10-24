@@ -7,3 +7,8 @@
 .view:hover { color: #f1e6d3; }
 .view:focus-visible { outline: 1px solid #f2b134; outline-offset: 2px; border-radius: 2px; }
 .view[aria-current="page"] { color: #f1e6d3; border-bottom-color: #f2b134; cursor: default; }
+/* Settings: a quiet icon in the app bar's right corner (L91) */
+.corner { flex: none; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 6px; color: #aa9c88; transition: color 150ms ease, background 150ms ease; }
+.corner:hover { color: #f1e6d3; background: rgba(241, 230, 211, .06); }
+.corner:focus-visible { outline: 1px solid #f1e6d3; outline-offset: 2px; }
+.corner[aria-current="page"] { color: #f1e6d3; }

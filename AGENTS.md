@@ -50,7 +50,9 @@ owner. Run the squad in `.claude/agents/` one at a time, in playbook order: `dis
 data products, `data-evals` → fixes → re-check. **Whoever builds something never grades it**:
 graders get the artefact and the checks, not the builder's reasoning, and you report their
 results, not your opinion. Stop for the owner only if the pack contradicts itself or leaves the
-riskiest assumption untestable. Never ask for or read the owner-only checks. Deliver a PR, one
+riskiest assumption untestable, **and at the two design checkpoints, which are the owner's in
+every mode** (playbook step 1b): the owner shortlists 3 of the designer's 8–10 sketches on a
+contact sheet, then picks 1 of the 3 built prototypes. Never ask for or read the owner-only checks. Deliver a PR, one
 preview link and an eval report (each agent-checkable check with pass/fail and evidence, the
 critic's score, the tester's numbers, the guardrails, the decision log, what you skipped).
 

@@ -12,3 +12,13 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L6 | 24 Oct | Appetite: one day; animation capped at ~1.5 h, cut order named in the pack | owner | kickoff | |
 | L7 | 24 Oct | Feel: a drawing board of big, bold cards, not a checkbox list; references in design/references | owner | kickoff | |
 | T1 | 24 Oct | Feel sentence worded by the PM from the owner's words; streak and trophy parts of the references excluded (A1, A5) | PM | kickoff | |
+| L8 | 24 Oct | Design calls are the owner's in Founder mode too, and for every future product: shortlist 3 of 8–10 sketches, then pick 1 of 3 prototypes (decision 0026 amended, playbook, AGENTS.md, designer agent) | owner | design | |
+| L9 | 24 Oct | Day boundary 04:00 local for every habit (a log at 00:30 belongs to the evening before); calendar-date maths, safe over the 25 Oct clock change | PM (discovery) | discovery | |
+| L10 | 24 Oct | A finished day with no log counts as not kept and triggers the comeback; history shows it as "not logged", never "failed" | PM (discovery) | discovery | |
+| L11 | 24 Oct | Stop habit: a day is clean once it is over with a clean tap and no slip; a slip overrides; clean days are a total, not consecutive; "clean" counts as kept | PM (discovery) | discovery | |
+| L12 | 24 Oct | Rolling rate over the last 7 days (or the habit's age if younger) | PM (discovery) | discovery | |
+| L13 | 24 Oct | Wake-up kept is self-reported by the tap; tap time never judges it (A8, P12) | PM (discovery) | discovery | |
+| L14 | 24 Oct | Comeback message once per comeback per habit, never stacked | PM (discovery) | discovery | |
+| L15 | 24 Oct | R9: today and yesterday can be re-logged, habit wording edited with history kept, delete asks first | PM (discovery) | discovery | |
+| L16 | 24 Oct | Pouches goal is quit (owner said "quit", "days without nicotine"); cut-down to backlog | PM | discovery | |
+| T2 | 24 Oct | "Ride it out" lasts 60 s, exit in one tap; persona's job-hunt detail kept | PM (discovery) | discovery | |

@@ -52,7 +52,7 @@ the PM's call (logged) in Founder.
 | Gate | Learning | Streamlined | Founder |
 | --- | --- | --- | --- |
 | **Kickoff** (problem, user, jobs, riskiest assumption, success, MVP and stop line, mode) | Worked through together | One decision sheet; Claude drafts, owner decides | Owner writes the kickoff pack and evals alone |
-| **Design pick** (one of three directions) | Together, through `/design-session` | Decision sheet with the three screenshots and the critic's scores | PM picks against the kickoff pack's feel references; logged |
+| **Design pick** (shortlist 3 of 8–10, then pick 1 of 3) | Together, through `/design-session` | Decision sheet: the contact sheet, then the three prototypes and the critic's scores | Owner, at the same two checkpoints (changed 24 Oct, see below) |
 | **First working version** (core job works end to end) | Continuous | Decision sheet: anything that changes the cut, plus the toil log so far | None |
 | **Final review** (PR, user test, success check) | Together | Decision sheet plus the full decision log | PR, eval report and the owner-only checks |
 
@@ -186,6 +186,16 @@ The pieces deferred while Selvedge had these files open:
   learnings and the playbook go under `## To carry over` at the top of the journal, and are
   written into the shared files in one commit at wrap-up, after merging `main`. `README.md` is
   generated, so a conflict is solved by taking `main`'s and running `pnpm sync`.
+
+## Changed 24 Oct: the design pick is the owner's in every mode
+
+On product 9 (Wont) the owner asked to make the design calls in Founder mode too, and for every
+future product: taste is the one learning decision a kickoff pack can't fully carry. In every
+mode the designer now shows a **contact sheet of 8–10 quick sketches** (one HTML page), the owner
+**shortlists three**, those are built as prototypes behind the picker, and the owner **picks one**
+(or a mix) and gives the intended aesthetic in one sentence. In Founder these are the only stops
+between kickoff and the final review; the critic loop, subtracting and the tells check still run
+without the owner. Playbook step 1b, `AGENTS.md` and `.claude/agents/designer.md` say the same.
 
 ## Alternatives considered
 

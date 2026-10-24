@@ -42,3 +42,11 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   counted (not reset to zero), slips logged with size, urges logged with "ride it out".
 - **Name: Wont** (an old word for habit, "as is my wont"), picked from a creative round; Loop
   is taken by Loop Habit Tracker.
+- **Kickoff pack finished** (owner): one-day appetite; feel "a drawing board with big cards, not a
+  checkbox list", with six app screenshots as references (cards and colour taken, streaks and
+  trophies left out).
+- **Design stays with the owner** (owner, for this and every future product): Founder mode had the
+  PM pick the design. Changed so the owner shortlists 3 of 8–10 sketches on a contact sheet and
+  picks 1 of the 3 built prototypes. Process change made at once in the playbook, `AGENTS.md`,
+  decision 0026 and the designer agent (a session whose task is a process change edits shared
+  pages directly).

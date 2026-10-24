@@ -4,7 +4,7 @@ What happened, what was decided and why. Newest last.
 
 ## To carry over
 
-Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.md).
+Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one commit.
 
 - `docs/learnings.md` process changelog: first Founder-mode run (decision 0026) on a rebuild of an
   existing app rather than a new product; how the kickoff pack worked when written from a brief
@@ -472,3 +472,14 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - **Final critic on the simplified panel:** 6/10 (Settings 4/10). Kept: the single thread and the bare input with one help prompt. A last subtraction pass (no new elements): toast removed, two-line help, shorter answers, quieter or no source line, single-border focus, a tidier Settings page.
 - **Honesty bug caught in the PM's own check:** Studio start claimed an A# minor track fits the A minor crate. Fixed: the key fit now comes from code and the validator rejects the claim (T38). 146 tests pass.
 - **Owner's list feedback (L97):** help is now the 7-line list, answers can show spaced lists; checked on screen at 1440. Fixed a race found in that check (help pressed before the chat loaded was wiped). 147 tests pass.
+
+## 24 Oct: Mentor merged, wrap-up
+
+- **PR 79 merged** (7bf83fb) on the owner's yes in the parent session ("Merge + clean start"; "ok
+  lets wrap up and move onto the next phase"). Production deploy Ready; `/analyse` and `/settings`
+  serve; a live Mentor question answered in 4.4 s ($0.05, cold cache). Notebook republished from
+  `main` (version 178).
+- **Wrap-up:** success checks in the brief, retro in `learnings.md`, second story in `story.md`,
+  card set to shipped, shared pages written from To carry over, and the owner's requested
+  `founder-run-report.md` (timeline, where the time went, agents vs owner, why design stalled, a
+  proposed process). PLAYBOOK.md and AGENTS.md unchanged: the owner decides from the report.

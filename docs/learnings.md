@@ -130,6 +130,15 @@ Rules I now apply to every product (detail in the playbook).
   sample curation, and forced the audio-clock timing to be right early.
 - **A hidden feature isn't a feature.** Delete worked but nothing said so; a bin that appears
   while you hold a loop is the signifier (Don Norman).
+- **Ears: listen where the music is.** The first 60 s of a club track is the DJ intro; four 30 s
+  snippets across the track gave the model the real song (caught by the owner, not the squad).
+- **Answer in the owner's words.** A genre model and the web speak scene labels; the owner's own
+  genre field and taste profile are what make suggestions feel right. Forcing a web search made
+  genre calls worse (7/10 → 5/10).
+- **Founder mode: correctness yes, design no.** Graders caught nearly every bug; nobody caught "too
+  much going on" until the owner looked. Show pictures early and remove before adding.
+- **Honesty needs validators, not just prompts.** Sources per sentence, links that must name the
+  pick, numbers that must come from the measurements: each rule caught a real slip.
 
 ### 08 Selvedge
 

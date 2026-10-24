@@ -525,3 +525,12 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   Lyria adapters, bake-off generation).
 - **Ops (pre-approved, logged):** `.env.example` gained `STABILITY_API_KEY` and `GEMINI_API_KEY`;
   `pnpm env-bootstrap 07-six-am` filled them into `.env.local` (names only printed).
+- **Design:** the designer's 10 rough directions (`design/map-directions.html`, `design/map/`).
+  PM picked 1, 3, 7 (L112) while the owner was away; the owner then picked **1 Studio** alone
+  ("studio design makes most sense lets go with that one", L114). Build-out of Studio running.
+- **X1 references frozen (L113):** none of the 10 validation tracks has a public section source;
+  a backup set of 5 Raveform-annotated tracks with official SoundCloud uploads is the scored set.
+- **S4 server built:** `/api/loops/generate` behind the access code, Stable Audio 2.5 default
+  (provisional) with Lyria fallback, daily cap, `sixam_ai_loops` migration (not applied yet).
+  Bake-off: 5 prompts × 3 variants, 15/15 OK, $1.20 total spend; neither API takes BPM or key
+  (prompt only), so X4 (in key, on tempo) is the real question. L115–L119, T49, T50.

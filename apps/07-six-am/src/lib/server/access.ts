@@ -2,6 +2,7 @@ import "server-only";
 import { failure } from "@/lib/server/failure";
 import { getMentorStore, type MentorStore } from "@/lib/server/mentor-store";
 import { getStore, type Store } from "@/lib/server/store";
+import { getLoopStore, type LoopStore } from "@/lib/server/ai-loops/store";
 
 // Six AM is on a public URL, but its routes read and write my tracks with a secret key, so every
 // route needs ACCESS_CODE. Fails closed in production. Pattern from Scribble and Folio.
@@ -30,6 +31,15 @@ export function mentorGuard(request: Request): { store: MentorStore } | { error:
   const denied = checkAccess(request);
   if (denied) return { error: denied };
   const result = getMentorStore();
+  if ("problem" in result) return { error: failure(result.problem, 503) };
+  return result;
+}
+
+/** Access check plus the AI loops store (S4), or the error response to return. */
+export function loopGuard(request: Request): { store: LoopStore } | { error: Response } {
+  const denied = checkAccess(request);
+  if (denied) return { error: denied };
+  const result = getLoopStore();
   if ("problem" in result) return { error: failure(result.problem, 503) };
   return result;
 }

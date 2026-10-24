@@ -1,0 +1,109 @@
+# AI loops bake-off: Stable Audio vs Lyria (S4, A10)
+
+Generation run by the engineer on 25 Oct 2026 (local time). **Not graded here**: data-evals
+grades key, tempo, loop and quality from the files (X4, X5). The winner is logged by the PM.
+
+## API facts (checked from the official docs, 25 Oct 2026)
+
+### Stability AI: Stable Audio
+
+Sources: [API reference overview](https://docs.stability.ai/api-reference),
+[Stable Audio 2.5 text-to-audio](https://docs.stability.ai/api-reference/stable-audio-2/text-to-audio),
+[Stable Audio 3.0 text-to-audio](https://docs.stability.ai/api-reference/stable-audio/text-to-audio),
+[Fetch audio result](https://docs.stability.ai/api-reference/audio-results/fetch-audio-result),
+[Pricing](https://docs.stability.ai/pricing), [Release notes](https://docs.stability.ai/release-notes)
+(Stable Audio 3.0 API released 20 May 2026). The old `platform.stability.ai/docs` URLs now
+redirect to `docs.stability.ai`.
+
+- **Auth:** `Authorization: Bearer <key>`; base `https://api.stability.ai`; body
+  `multipart/form-data`. Rate limit 150 requests / 10 s.
+- **Stable Audio 2.5** (`model=stable-audio-2.5`): `POST /v2beta/audio/stable-audio-2/text-to-audio`,
+  **synchronous**. `accept: audio/*` returns the bytes (headers `seed`, `finish-reason`,
+  `x-request-id`); `application/json` returns base64. Parameters: `prompt` (required, ≤ 10,000
+  chars), `duration` 1–190 s (default 190), `seed` 0–4294967294, `steps` 4–8 (default 8),
+  `cfg_scale` 1–25 (default 1 for 2.5), `output_format` `mp3` | `wav` (default mp3).
+  **No BPM or key parameters**: tempo and key go in the prompt.
+- **Stable Audio 3.0** (`model=stable-audio-3`): `POST /v2beta/audio/stable-audio/text-to-audio`,
+  **asynchronous**: returns `{ id }`, then poll `GET /v2beta/audio/results/{id}` (202 in progress,
+  200 with the audio; results kept 24 h). `duration` 1–380 s, `steps` 4–8, same other parameters.
+- **Price:** flat **8 credits per successful generation** for both 2.5 and 3.0; 1 credit = $0.01,
+  so **$0.08 per loop**. Failed generations aren't charged. (Stable Audio 2.0 is 17 + 0.06 × steps
+  credits, ≈ 20.) A free `GET /v1/user/balance` returns the credit balance, used here to check the
+  real charge.
+
+### Google: Lyria via the Gemini API
+
+Sources: [Music generation (Lyria 3.5 / Lyria 3 Clip)](https://ai.google.dev/gemini-api/docs/music-generation),
+[Lyria 3 Clip Preview model page](https://ai.google.dev/gemini-api/docs/models/lyria-3-clip-preview),
+[Lyria 3.5 model page](https://ai.google.dev/gemini-api/docs/models/lyria-3.5),
+[Lyria RealTime](https://ai.google.dev/gemini-api/docs/realtime-music-generation),
+[Lyria prompt guide](https://ai.google.dev/gemini-api/docs/lyria-prompt-guide),
+[Interactions overview](https://ai.google.dev/gemini-api/docs/interactions-overview),
+[Pricing](https://ai.google.dev/gemini-api/docs/pricing).
+
+- **Two APIs.** (1) **Request/response** through the Interactions API:
+  `POST https://generativelanguage.googleapis.com/v1beta/interactions`, header `x-goog-api-key`,
+  JSON `{ model, input }`; the answer's `steps[]` hold `model_output` blocks with `audio` (base64)
+  and `text` (lyrics / structure; `<instrumental>` for ours). (2) **Lyria RealTime**
+  (`lyria-realtime-exp`, experimental): a WebSocket stream of 48 kHz 16-bit stereo PCM.
+- **Models our key can use** (from `GET /v1beta/models`, 25 Oct): `lyria-3-clip-preview`,
+  `lyria-3-pro-preview`, `lyria-3.5`, `lyria-realtime-exp`. (`lyria-3.5-clip-preview` is documented
+  but not listed for our key, and has no published price.)
+- **lyria-3-clip-preview:** always a **30-second** clip, **MP3** (192 kbps, 44.1 kHz stereo in our
+  files). **No BPM, key, duration or seed parameters**: everything goes in the prompt; results vary
+  between calls. Instrumental by asking for it. SynthID watermark on all audio. **$0.04 per request**
+  (paid tier; no free tier). `lyria-3.5`: full songs (minutes), $0.08, can return WAV.
+- **Lyria RealTime** is the only Lyria with real controls: `bpm` 60–200, `scale` (12 enum values,
+  each a relative major/minor pair, e.g. `A_FLAT_MAJOR_F_MINOR`), `density`, `brightness`,
+  `only_bass_and_drums`, `seed`. No published price; experimental. Not used here (see decisions).
+- Interactions are stored for 55 days by default (paid tier); we send `store: false`.
+
+## What was run
+
+`node scripts/loops-bakeoff.mjs --out <scratchpad>/bakeoff` (from `apps/07-six-am`), using the
+app's own adapters (`src/lib/server/ai-loops/`) and prompt builder (`src/lib/ai-loops/prompt.ts`).
+The same five prompts on each service; the requested values were fixed in the script before any
+result was heard:
+
+| # | Style words | BPM | Key | Bars | Seconds asked |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Deep House | 120 | A minor | 8 | 16.0 |
+| 2 | Tech House | 124 | F minor | 8 | 15.48 |
+| 3 | Disco, House | 126 | C major | 4 | 7.62 |
+| 4 | Techno | 128 | D# minor | 8 | 15.0 |
+| 5 | Trance | 145 | G minor | 8 | 13.24 |
+
+Prompt shape (#2): *"Tech House bass loop. Solo bassline only: no drums, no percussion, no chords,
+no vocals. 124 BPM, in F minor, 8 bars of 4/4, a seamless loop that repeats cleanly. Tight, groovy,
+clean studio mix."* Lyria gets one extra line, because its clip is always 30 s: *"The 8-bar phrase
+repeats, unchanged, for the whole clip."*
+
+Variants: **Stable Audio 2.5** (WAV, `duration` = the loop's exact length, seed 42), **Lyria 3
+Clip** (MP3, 30 s, no seed), and **Stable Audio 3.0** as a third column (same price as 2.5, the
+newest model, async). Files and the manifest are outside the repo (generated audio is never
+committed): `<scratchpad>/bakeoff/{stability,lyria,stability-3}/NN.{wav,mp3}` and
+`<scratchpad>/bakeoff/manifest.json`.
+
+## Numbers from the run (not quality)
+
+| Service | Model | Loops OK | Format | Length | Median time | Cost per loop | Cost (5) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Stable Audio 2.5 | `stable-audio-2.5` | 5/5 | WAV 44.1 kHz stereo | as asked | 3.5 s | $0.08 | $0.40 |
+| Lyria 3 Clip | `lyria-3-clip-preview` | 5/5 | MP3 192 kbps | 30 s always | 13.2 s | $0.04 | $0.20 |
+| Stable Audio 3.0 | `stable-audio-3` | 5/5 | WAV 44.1 kHz stereo | as asked | 3.3 s | $0.08 | $0.40 |
+
+**Cost check (X5 evidence):** the Stability balance went 525 → 517 for the single probe loop and
+517 → 437 over the run (read a minute later; the immediate read lagged one charge): 88 credits for
+11 loops = **exactly 8 credits ($0.08) per loop**, matching the shown estimate. Lyria has no balance
+API; its cost is the published $0.04 per request (the response's `usage` only reports tokens:
+72 in, 315 out).
+
+**Total spend:** $1.12 ($0.12 probe: one Stable Audio 2.5 and one Lyria loop to check the response
+shapes, plus $1.00 for the run). No failures, no retries.
+
+## For data-evals
+
+- Grade X4 per service: key (or relative) and tempo within ±1 BPM on ≥ 4 of 5. Lyria's files are
+  30 s with the phrase repeated; grade the whole clip or its first `bars`.
+- The manifest has, per file: prompt, requested BPM / key / scale / bars / seconds, provider,
+  model, seconds taken, cost and response metadata (seed, request id, Lyria usage).

@@ -19,3 +19,4 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 13 | Owner, prototypes | Pick Wontons; make the wontons look even more like wontons | fixing |
 | 14 | Owner, prototypes | Prototype the other features too (not only the board) | open |
 | 15 | Critic round 1 | Kept card looks like an open one; number louder than the name; pink comeback box reads as failure; slip in the warmest colour | fixing |
+| 16 | Owner, Wontons v2 | v1's wontons were cuter than v2's; like the different wonton colours; wants a separate exercise: 10 wonton styles, cartoon or anime rather than realistic | fixing |

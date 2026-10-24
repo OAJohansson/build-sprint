@@ -73,3 +73,11 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   pack (owner decides): drop the rolling number (R6, P6) and the week strip (owner's request).
 - **Pick: Wontons** (owner). Asked for wontons that look more like wontons, and prototypes of
   the other features. Define loop next on a copy beside the pick.
+- **Critic round 2** (Wontons v2): 6/10, flat (v1 also 6). Its top asks clash with the pack:
+  cut the anchor sentence (P1, the strongest evidence) and drop the steamer (owner's pick).
+  Valid and in-pack: steamer too small to read progress; week dots all look the same; stop card
+  "loses" colour after a slip; slip/urge links too small. Score not rising after two rounds, so
+  stopped and shown to the owner (design-session rule).
+- **Wonton style sheet** (owner): the wonton is the whole design, so a separate exercise of 10
+  wonton styles (cute, cartoon/anime, playing with colour and shape). v1's wontons preferred over
+  v2's "realistic" ones.

@@ -383,3 +383,19 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - **Final design score:** 7/10 (bar 9: not met, reported as is). **Preview** made once
   (`pnpm ship 07-six-am --preview`). **Eval report** written (`eval-report.md`); the design gaps,
   sharper house sub-genres and the untested runs went to the backlog.
+
+## 24 Oct: merged and live
+
+- **Owner's final review** (in the parent session): "I am happy with this as a first pass, lets
+  merge to live and move on to the next phase". PR 77 merged on green checks (merge commit
+  8e97d42). The owner kept the provisional calls L37/L39 (Set Studio picks the reading in
+  90–160 BPM) and L38 ("Clear list" also deletes stored results).
+- **Live:** Vercel's production deploy of `main` went Ready; https://six-am.vercel.app/analyse
+  serves the Analyse view. The model download through the `/models/*` rewrite works in production:
+  18,027,718 bytes in 3–4 s with curl and 5.4 s in a browser (same-origin fetch on the live page),
+  where the dev proxy took ~50 s. Not yet seen: a real analysis on the live site in the owner's
+  Chrome.
+- **Notebook** rebuilt from `main` and republished (version 176). `pnpm notebook` warned about an
+  unmerged branch from another product: `website-discovery` (3 commits, 22 Oct).
+- Phase 2 is the owner's to kick off separately. The "To carry over" entries at the top wait for
+  the wrap-up.

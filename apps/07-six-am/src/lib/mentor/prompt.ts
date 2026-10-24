@@ -24,6 +24,8 @@ Sources: label every fact
   - library: from what the person has done in Six AM: their own genre tags (My genre), the genre names they use and their accepted genre groups.
   - general: general music knowledge or advice that isn't about this specific track.
 - When a sentence mixes sources, split it into two sentences.
+- General facts about a genre or scene (typical tempo ranges, history, instruments) are general, even when they sit next to this track's numbers; ears is only for what Ears measured on this track.
+- profile and library are only for sentences that cite stored data (their profile text, their tags, their groups). Sentences about what you did in this answer (what you read, searched or found) are general.
 - Ears' measurements are the ground truth for this track. Web pages can support or add context to them but never overrule them: if a page says one tempo and Ears measured another, report what Ears measured and say the page differs.
 - If a search finds nothing useful, say so plainly ("I couldn't find anything online about this track") and carry on from Ears and the uploader's tags. Don't fill the gap with guesses about the artist, label or release.
 - Only name artists, tracks and labels you are confident exist; for anything specific about a track or artist, check with web search or leave it out.
@@ -64,7 +66,7 @@ export const JOBS_SPEC: Record<Job, { instruction: string; effort: "low" | "medi
     effort: "low", web: false, needsTrack: true, counted: true,
   },
   suggest_genre: {
-    instruction: "Suggest one genre name for this track that the person can accept into My genre with one click. Prefer one of the person's own genre names (listed below) when it fits; otherwise the plainest common name. Return genre {name, reason}, with the reason in one hedged sentence that cites the measurements or tags it rests on, and 1–3 labelled sentences. If My genre is already set, say how your suggestion compares without saying theirs is wrong. Search the web only to check a genre name you're unsure of.",
+    instruction: "Suggest one genre name for this track that the person can accept into My genre with one click. Name the most specific sub-genre the evidence supports, not the broad parent style. Weigh the evidence together: Ears' top styles and how far apart their scores are, the tempo, energy and tone, the uploader's genre tag and tags, and the title, artist and remixer names. A specific uploader tag that fits the measurements is strong evidence. When Ears' top style is weak (under about 40%) or the evidence conflicts (tag vs measurements, or two close styles), run one web search on the artist, remixer or label to see which scene they are known for, and cite it. Prefer a well-known specific sub-genre name over its broad parent whenever the evidence supports it; use the parent only when nothing narrower holds up. If one of the person's own genre names (listed below as library) fits, use it: their words win. Return genre {name, reason}: the reason is one sentence saying what the call rests on and how sure it is ('fairly sure', 'a soft call'). 1–3 labelled sentences. If My genre is already set, say how your suggestion compares without saying theirs is wrong.",
     effort: "low", web: true, needsTrack: true, counted: true,
   },
   teach: {
@@ -80,7 +82,7 @@ export const JOBS_SPEC: Record<Job, { instruction: string; effort: "low" | "medi
     effort: "low", web: false, needsTrack: true, counted: true,
   },
   listen_next: {
-    instruction: "Suggest up to 3 tracks to listen to next, from the person's taste profile and this track's facts (or just the profile with no track). Use web search (at most 2 searches) to find real tracks. Link each to a page from your search results, preferring the track's own page (SoundCloud, Bandcamp, Beatport, YouTube video, Discogs release); when there's no track page, a playlist, chart or article page that names the track is fine. Set kind for each link honestly (track, playlist or article). Give artist, title and a one-line 'because…' that ties it to their profile or this track's measurements; the reasons go in 'because', not in the sentences. Never invent an artist, track or link; if you can't find enough real ones, give fewer. Sentences: 1–2 only, on what the picks have in common (or that you found fewer).",
+    instruction: "Suggest up to 3 tracks to listen to next, from the person's taste profile and this track's facts (or just the profile with no track). Use web search (at most 2 searches) to find real tracks. Link each to a page from your search results, preferring the track's own page (SoundCloud, Bandcamp, Beatport, YouTube video, Discogs release); when there's no track page, a playlist, chart or article page that names the track is fine. Set kind for each link honestly (track, playlist or article). Give artist, title and a one-line 'because…' that ties it to their profile or this track's measurements, in words: no BPM, key or Camelot numbers in 'because' (say 'a similar tempo', 'the same dark key feel'), since you can't check those figures; the reasons go in 'because', not in the sentences. Never invent an artist, track or link; if you can't find enough real ones, give fewer. Sentences: 1–2 only, on what the picks have in common (or that you found fewer).",
     effort: "medium", web: true, needsTrack: false, counted: true,
   },
   chat: {
@@ -88,11 +90,11 @@ export const JOBS_SPEC: Record<Job, { instruction: string; effort: "low" | "medi
     effort: "low", web: true, needsTrack: false, counted: true,
   },
   setup: {
-    instruction: "First-run setup. Below are the titles, uploaders, genres and tags of the person's playlists (read via the SoundCloud widget; nobody listened to anything). Draft their taste profile from them as profileUpdate (if a profile already exists, add to it rather than replacing it). Then ask 3–5 quick questions they can answer with a tap, each with 2–4 short options: cover vocals (do they matter), what they mostly use music for (dancing, driving, deep listening or similar), and one 'which of these three tracks is most you?' question whose 3 options are tracks from the playlists, with each option's label 'Uploader – Title' and its url from the list. 1–2 sentences that say what you read (titles, artists and tags only) and that this is a first draft. No web search.",
+    instruction: "First-run setup (or a re-run that adds playlists). Below are the titles, uploaders, genres and tags of the person's playlists (read via the SoundCloud widget; nobody listened to anything). Return profileUpdate as the whole profile: if a profile already exists, keep every existing line, and every line listed below as the person's own word for word, and only add to it or adjust lines you wrote earlier; never shorten it to a summary of the new playlists. Write it to the person as 'you'. Then ask 3–5 quick questions they can answer with a tap, each with 2–4 short options: cover vocals (do they matter), what they mostly use music for (dancing, driving, deep listening or similar), and one 'which of these three tracks is most you?' question whose 3 options are tracks from the playlists, with each option's label 'Uploader – Title' and its url from the list. 1–2 sentences (source general) that say what you read (titles, artists and tags only) and that this is a draft. No web search.",
     effort: "medium", web: false, needsTrack: false, counted: true,
   },
   learn: {
-    instruction: "Update the taste profile from the events below (genres the person typed, suggestions they corrected, listen-next picks they liked or didn't, topics they asked about, setup answers). Change only what the events support, keep the person's own words, and phrase anything that rests on a single action tentatively ('may', 'seems to', 'so far'). Return profileUpdate with a one-line 'Updated: …' note. One sentence (source profile) saying what you changed. No web search.",
+    instruction: "Update the taste profile from the events below (genres the person typed, suggestions they corrected, listen-next picks they liked or didn't, topics they asked about, setup answers). Change only what the events support, keep the person's own words, and phrase anything that rests on a single action tentatively ('may', 'seems to', 'so far'). Return profileUpdate with a one-line 'Updated: …' note. Write new lines, the note and the sentence to the person as 'you' ('you seem to like…'), never 'they' or 'the person'. One sentence (source profile) saying what you changed. No web search.",
     effort: "low", web: false, needsTrack: false, counted: false,
   },
   propose_groups: {
@@ -120,8 +122,10 @@ export type MentorInput = {
   /** The person's own words: a chat message, a genre to teach, "anything else I should know". */
   message?: string;
   history?: HistoryTurn[];
-  /** F6: what the person last wrote into their profile by hand (the "now" of their latest edit). */
+  /** F6: the lines the person's latest hand edit added (not a whole-profile restore). */
   recentEdit?: string;
+  /** Lines the person wrote themselves, to keep word for word in any profile update. */
+  keepLines?: string[];
   /** The person's genre vocabulary: My genre values in use and accepted group names (L55). */
   myGenres?: string[];
   groups?: { name: string; reason: string }[];
@@ -185,6 +189,9 @@ function jobText(input: MentorInput): string {
     parts.push(`Tagged tracks (id | track | my genre | BPM | key | energy, brightness | styles | uploader tags):\n${(input.library ?? []).map(trackLine).join("\n")}`);
   }
   if (input.job === "setup" && input.playlists) parts.push(`The person's playlists:\n${input.playlists}`);
+  if ((input.job === "setup" || input.job === "learn") && input.keepLines?.length) {
+    parts.push(`[profile] Lines the person wrote themselves (keep each word for word in profileUpdate):\n${input.keepLines.map((l) => `- ${l}`).join("\n")}`);
+  }
   if (input.job === "learn" && input.events?.length) {
     parts.push(`Events since the last update:\n${input.events.map((e) => `- ${e.type}: ${e.detail}${e.trackId ? ` (track ${e.trackId})` : ""}`).join("\n")}`);
   }

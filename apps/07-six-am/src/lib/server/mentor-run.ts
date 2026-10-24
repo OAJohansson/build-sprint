@@ -8,6 +8,8 @@ import { monthRange, summarise, type UsageSummary } from "@/lib/mentor/periods";
 import { setupInput, type PlaylistLike } from "@/lib/mentor/playlist";
 import { JOBS_SPEC, THREAD_JOBS, type HistoryTurn, type LearnEvent, type MentorInput } from "@/lib/mentor/prompt";
 import { CRATE_IDS, studioStart, type StudioStart } from "@/lib/mentor/studio";
+import { sharedTraits } from "@/lib/mentor/group-traits";
+import { ownerLines, recentEditLines } from "@/lib/mentor/owner-lines";
 import { askClaude, MentorError, UPDATES_PROFILE } from "./claude";
 import type { Group, MentorStore, MessageRow } from "./mentor-store";
 
@@ -103,14 +105,19 @@ export async function ask(store: MentorStore, body: AskBody, now: Date, tz: numb
 
   const profile = await store.getProfile();
   const input: MentorInput = { job, profile: profile.text, track, message };
-  // F6: the latest hand edit (within a week), so the next answer can use the new line.
-  const edit = [...profile.history].reverse().find((h) => h.by === "owner");
-  if (edit?.now && Date.now() - Date.parse(edit.at) < 7 * 86_400_000) input.recentEdit = edit.now;
+  // F6: the lines the latest hand edit added (within a week; a restore or paste doesn't count).
+  input.recentEdit = recentEditLines(profile.history, now);
+  // The person's own lines, which every profile update must keep (setup merges, learning adjusts).
+  const keepLines = ownerLines(profile.text, profile.history);
+  if (UPDATES_PROFILE.has(job) && keepLines.length) input.keepLines = keepLines;
 
   if (job === "suggest_genre" || job === "propose_groups" || job === "teach" || job === "chat") {
     const [library, groups] = await Promise.all([store.listAnalyses(), store.listGroups()]);
     input.myGenres = usedGenres(library);
-    input.groups = groups.filter((g) => g.status === "accepted").map((g) => ({ name: g.name, reason: g.reason }));
+    // A group's reason is derived live from its current tracks, so a split or a re-tag never leaves
+    // an outdated reason for the Mentor to repeat as fact.
+    const live = (g: Group) => sharedTraits(library.filter((a) => g.trackIds.includes(a.id))) || g.reason;
+    input.groups = groups.filter((g) => g.status === "accepted").map((g) => ({ name: g.name, reason: `${live(g)} (${g.trackIds.length} track${g.trackIds.length === 1 ? "" : "s"})` }));
     if (job === "propose_groups") {
       const tagged = library.filter((a) => cleanGenre(a.myGenre));
       if (tagged.length < MIN_TAGGED_FOR_GROUPS) {
@@ -118,7 +125,7 @@ export async function ask(store: MentorStore, body: AskBody, now: Date, tz: numb
       }
       // shortcut: the newest 150 tagged tracks; page or summarise per genre past that.
       input.library = tagged.slice(0, 150);
-      input.groups = groups.filter((g) => g.status !== "dismissed").map((g) => ({ name: g.name, reason: g.reason }));
+      input.groups = groups.filter((g) => g.status !== "dismissed").map((g) => ({ name: g.name, reason: live(g) }));
     }
   }
   if (THREAD_JOBS.has(job)) input.history = historyOf(await store.thread(threadFor(job, trackId), 16));
@@ -154,6 +161,7 @@ export async function ask(store: MentorStore, body: AskBody, now: Date, tz: numb
   try {
     result = await askClaude(input, {
       loopIds: job === "studio_start" ? CRATE_IDS : undefined,
+      keepLines: input.keepLines,
       trackIds: job === "propose_groups" ? new Set((input.library ?? []).map((a) => a.id)) : undefined,
     });
   } catch (error) {

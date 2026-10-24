@@ -32,6 +32,16 @@ describe("checkAnswer", () => {
     const r = checkAnswer("listen_next", { ...ok, listenNext: [item(1, "article"), item(2, "track"), item(3, "playlist"), item(4, "track")] });
     expect(r.ok && r.answer.listenNext?.map((x) => x.title)).toEqual(["T2", "T4", "T1"]);
   });
+  it("a profile update must keep the person's own lines; listen-next reasons give no BPM or key numbers", () => {
+    const q = { question: "Vocals?", options: [{ label: "Yes" }, { label: "No" }] };
+    const draft = (text: string) => ({ ...ok, questions: [q, q, q], profileUpdate: { text, note: "draft" } });
+    const keepLines = ["I love piano house."];
+    expect(checkAnswer("setup", draft("You like hard bounce."), { keepLines }).ok).toBe(false);
+    expect(checkAnswer("setup", draft("I love piano house. You like hard bounce."), { keepLines }).ok).toBe(true);
+    const pick = (because: string) => ({ ...ok, listenNext: [{ artist: "A", title: "T", url: "https://x.com/t", because, kind: "track" }] });
+    for (const bad of ["Same 124 BPM groove.", "Also in 8A.", "Sits in F minor too."]) expect(checkAnswer("listen_next", pick(bad)).ok, bad).toBe(false);
+    expect(checkAnswer("listen_next", pick("A similar tempo and the same warm, rolling feel.")).ok).toBe(true);
+  });
   it("suggest_genre needs a genre; studio_start needs a real loop", () => {
     expect(checkAnswer("suggest_genre", ok).ok).toBe(false);
     expect(checkAnswer("suggest_genre", { ...ok, genre: { name: "Bass house", reason: "Most likely, given the styles." } }).ok).toBe(true);

@@ -15,7 +15,19 @@ export async function GET(request: Request) {
   const g = mentorGuard(request);
   if ("error" in g) return g.error;
   try {
-    return Response.json({ groups: await g.store.listGroups() });
+    // One-time repair: groups split before split reasons were derived still carry their old
+    // parent's reason ("Split from …"); recompute those from their own tracks.
+    let groups = await g.store.listGroups();
+    const stale = groups.filter((x) => x.reason.startsWith("Split from \""));
+    if (stale.length) {
+      const library = await g.store.listAnalyses();
+      for (const x of stale) {
+        const reason = sharedTraits(library.filter((a) => x.trackIds.includes(a.id)));
+        if (reason) await g.store.updateGroup(x.id, { reason });
+      }
+      groups = await g.store.listGroups();
+    }
+    return Response.json({ groups });
   } catch (error) {
     return serverError(error);
   }

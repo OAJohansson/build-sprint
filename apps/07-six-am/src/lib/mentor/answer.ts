@@ -2,6 +2,8 @@
 // checks it must pass before anyone sees it (M2 source on every fact, M6 real loops, M7 real
 // links). Pure, shared by the server and the panel.
 
+import { missingLines } from "./owner-lines";
+
 export const JOBS = [
   "explain", "suggest_genre", "teach", "ear_training", "studio_start", "listen_next", "chat",
   "setup", "learn", "propose_groups", "taste_session",
@@ -139,7 +141,13 @@ export type Needs = {
   trackIds?: ReadonlySet<string>;
   /** URLs seen in this answer's web search results; listen-next links must be among them. */
   searchUrls?: ReadonlySet<string>;
+  /** Lines the person wrote themselves: a profile update must keep each word for word. */
+  keepLines?: readonly string[];
 };
+
+/** A tempo or key stated as a number in a listen-next "because" (data-evals: two were wrong; the
+ *  model can't check them against what it found, so the reason is given in words). */
+const NUMERIC_FACT = /\b\d{2,3}(?:[.,]\d)?\s*bpm\b|\b(?:1[0-2]|[1-9])[ab]\b|\b[a-g](?:#|b|♯|♭)?\s+(?:major|minor)\b/i;
 
 export type Checked = { ok: true; answer: MentorAnswer; dropped: string[] } | { ok: false; problem: string };
 
@@ -189,6 +197,9 @@ export function checkAnswer(job: Job, raw: unknown, needs: Needs = {}): Checked 
     for (const x of r.listenNext) {
       const o = (x ?? {}) as Record<string, unknown>;
       const artist = str(o.artist, 120), title = str(o.title, 200), because = str(o.because, 400);
+      if (job === "listen_next" && because && NUMERIC_FACT.test(because)) {
+        return { ok: false, problem: `The "because" for ${artist} – ${title} states a tempo or key ("${because.match(NUMERIC_FACT)?.[0]}"). Give the reason in words ("a similar tempo", "the same dark, driving feel") without BPM, key or Camelot numbers.` };
+      }
       if (!artist || !title || !because || !isUrl(o.url)) {
         dropped.push(`listen-next item without artist, title, link or because`);
         continue;
@@ -252,6 +263,12 @@ export function checkAnswer(job: Job, raw: unknown, needs: Needs = {}): Checked 
     const p = r.profileUpdate as Record<string, unknown>;
     const text = str(p.text, 8000), note = str(p.note, 200);
     if (text && note) answer.profileUpdate = { text, note: note.startsWith("Updated:") ? note : `Updated: ${note}` };
+  }
+
+  // The person's own lines survive every profile update (setup merges, learning adjusts).
+  if (answer.profileUpdate && needs.keepLines?.length) {
+    const gone = missingLines(answer.profileUpdate.text, needs.keepLines);
+    if (gone.length) return { ok: false, problem: `profileUpdate dropped lines the person wrote themselves; keep each word for word: ${gone.map((l) => `"${l}"`).join(" ")}` };
   }
 
   // What each job must have.

@@ -52,3 +52,5 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Genre counts and tagged share in the filter bar ("31 of 56 tagged · deep house 9 …"), each count a filter | User test v1.1 (24 Oct) | later |
 | Empty-filter message: count "Not available in your region" tracks apart from "not analysed yet" | User re-check v1.1 (N2) | later |
 | ME-7 remake coaching | Owner, 24 Oct: consider when building the Studio Lab and Remake mode | later |
+| "Your styles" strip: accepted groups and My genres with track counts and BPM ranges, suggestions taken | Mentor user test (24 Oct) | later |
+| Dev-only reset of the Mentor store for clean-start tests | Mentor user test (24 Oct) | later |

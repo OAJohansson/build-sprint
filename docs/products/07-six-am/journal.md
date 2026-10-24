@@ -518,3 +518,10 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   Founder v2: design first (about 10 directions, owner picks 3 tonight), non-visual slices while
   waiting. Own branch `claude/07-six-am-arrangement-3746ad` from `main` (PR 83 merged).
 - **Slices:** S1 Map, S2 Template, S3 Sounds, S4 AI loops.
+- **Squad started (L107–L109):** designer on ~10 map-view directions (contact sheet for the
+  owner's pick); data-evals sourcing reference section times before any result (L108); three
+  engineers in parallel on disjoint files: S1+S2 engine (full-track listen, sections, layers,
+  template doc), S3 engine (bass/chord synths, 909/808 CC0 kits), S4 server (Stable Audio vs
+  Lyria adapters, bake-off generation).
+- **Ops (pre-approved, logged):** `.env.example` gained `STABILITY_API_KEY` and `GEMINI_API_KEY`;
+  `pnpm env-bootstrap 07-six-am` filled them into `.env.local` (names only printed).

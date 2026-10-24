@@ -7,6 +7,10 @@
 //   duration or seed parameters: tempo and key go in the prompt. lyria-3.5 is full songs, $0.08.
 // - Lyria RealTime (lyria-realtime-exp, WebSocket) is the only one with bpm / scale parameters;
 //   not used here (streaming, experimental, no published price).
+// Off by default since the bake-off (L124): LOOPS_PROVIDER / LOOPS_FALLBACK switch it on.
+// shortcut: returned as the full 30 s MP3, not trimmed to `bars` and not shifted off its ~50 ms
+// MP3 padding (no server-side MP3 decoder without a dependency); trim in the browser with
+// decodeAudioData before Lyria is ever switched on for the owner.
 // store: false so Google doesn't keep the interaction (default is 55 days on the paid tier).
 // Types-only imports: Node runs this file directly (bake-off).
 import type { LoopAdapter, LoopProviderError, LoopRequest, LoopResult } from "./types";

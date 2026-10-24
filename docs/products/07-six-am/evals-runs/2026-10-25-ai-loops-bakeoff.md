@@ -107,3 +107,32 @@ shapes, plus $1.00 for the run). No failures, no retries.
   30 s with the phrase repeated; grade the whole clip or its first `bars`.
 - The manifest has, per file: prompt, requested BPM / key / scale / bars / seconds, provider,
   model, seconds taken, cost and response metadata (seed, request id, Lyria usage).
+
+## Fix pass and re-run (bakeoff-2, after L124)
+
+Fixes from the grading (`2026-10-25-ai-loops-grading.md`), built by the engineer and not graded here:
+
+1. **Length:** Stable Audio returns `floor(duration)` whole seconds, so the adapter now asks for
+   `ceil(seconds + 0.05)`. `finishLoop` (`src/lib/ai-loops/wav.ts`, shared by the route and the
+   script) parses the 16-bit PCM WAV and trims it to exactly `round(bars × 240 / bpm × 44100)`
+   frames.
+2. **Seam:** the 20 ms of audio that followed the loop end is crossfaded (linearly) into the
+   head, so sample 0 continues from the last sample. When there's no tail to use, both ends get a
+   3 ms fade instead. In this run every file had a tail and got the crossfade.
+3. **Mode wording ("B"):** the key is now spelled out, with the root, the seven notes and the
+   third. For example: *"in D# minor: a dark natural-minor bassline rooted on D#, using only the
+   notes D# F F# G# A# B C# (minor third F#, no major third)"*. Wording A (the first run) was
+   *"in D# minor"*. Seed 42 is shared with the first run, so files `NN-s42` are the direct A/B
+   against `bakeoff/stability/NN.wav`. Seed 7 is a second sample.
+4. **Lyria:** off by default. It is used only with `LOOPS_PROVIDER=lyria` or `LOOPS_FALLBACK=lyria`.
+   It is **not trimmed**: decoding MP3 on the server would need a dependency, so it stays at 30 s
+   with its ~50 ms MP3 padding (marked as a `shortcut:`). **Stable Audio 3.0 was removed** from the
+   adapter and the script.
+
+Run: `node scripts/loops-bakeoff.mjs --out <scratchpad>/bakeoff-2 --seeds 42,7 --max-usd 1.2`.
+The same 5 prompts × seeds 42 and 7 on Stable Audio 2.5 gave 10 of 10 OK. Every file was trimmed
+from the whole second it came back as (17/16/8/16/14 s) to the exact bar length (16 / 15.4839 /
+7.619 / 15 / 13.2414 s), with the crossfade seam. Median time 2.9 s. Cost: **$0.80**, and the
+Stability balance went 429 → 349, 80 credits = 8 per loop (read 20 s after the run). Files are in
+`<scratchpad>/bakeoff-2/stability/NN-s{42,7}.wav`, with `manifest.json` (each item has `finish`:
+raw and trimmed seconds, and the seam method).

@@ -43,6 +43,35 @@ export function styleWords(src: LoopSource): string[] {
 /** "D#" + "minor" → "D# minor"; junk scale → "minor". */
 export const keyLabel = (key: string, scale: string) => `${key.trim()} ${/^maj/i.test(scale) ? "major" : "minor"}`;
 
+const SHARPS = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const FLATS: Record<string, string> = { Db: "C#", Eb: "D#", Gb: "F#", Ab: "G#", Bb: "A#", Cb: "B", Fb: "E", "E#": "F", "B#": "C" };
+const MINOR_STEPS = [0, 2, 3, 5, 7, 8, 10];
+const MAJOR_STEPS = [0, 2, 4, 5, 7, 9, 11];
+
+/** The seven notes of the key, in sharps: "A" minor → A B C D E F G. null for an unknown root. */
+export function scaleNotes(key: string, scale: string): string[] | null {
+  const k = key.trim();
+  const root = SHARPS.indexOf(FLATS[k] ?? k);
+  if (root < 0) return null;
+  return (/^maj/i.test(scale) ? MAJOR_STEPS : MINOR_STEPS).map((s) => SHARPS[(root + s) % 12]);
+}
+
+/**
+ * The key, spelled out so the model can't drift into the parallel major (L124: Stable Audio 2.5
+ * kept the tonic on 5/5 but used the major third on 3 of 4 minor prompts). Names the root, the
+ * notes and the third, and rules out the other third. Fix pass wording ("B"); the first run's
+ * wording ("A") was just "in F minor".
+ */
+export function keyPhrase(key: string, scale: string): string {
+  const major = /^maj/i.test(scale);
+  const label = keyLabel(key, scale);
+  const notes = scaleNotes(key, scale);
+  if (!notes) return `in ${label}`;
+  const root = notes[0];
+  if (major) return `in ${label}: a bright major-key bassline rooted on ${root}, using only the notes ${notes.join(" ")} (major third ${notes[2]}, no minor third)`;
+  return `in ${label}: a dark natural-minor bassline rooted on ${root}, using only the notes ${notes.join(" ")} (minor third ${notes[2]}, no major third)`;
+}
+
 /**
  * A bass-loop prompt from a track's analysis. Genre first, then instrument, tempo, key and the
  * loop length, which is the order both providers' prompt guides recommend (Stable Audio prompt
@@ -56,7 +85,7 @@ export function bassLoopRequest(src: LoopSource, bars: number, seed?: number): L
   const genre = styles.length ? `${styles.join(", ")} ` : "House ";
   const prompt =
     `${genre}bass loop. Solo bassline only: no drums, no percussion, no chords, no vocals. ` +
-    `${bpm} BPM, in ${keyLabel(src.key, scale)}, ${bars} bars of 4/4, a seamless loop that repeats cleanly. ` +
+    `${bpm} BPM, ${keyPhrase(src.key, scale)}. ${bars} bars of 4/4, a seamless loop that repeats cleanly. ` +
     `Tight, groovy, clean studio mix.`;
   return { prompt, bpm, key: src.key.trim(), scale, bars, ...(seed !== undefined ? { seed } : {}) };
 }

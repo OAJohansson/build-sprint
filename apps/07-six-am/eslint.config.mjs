@@ -5,5 +5,6 @@ import nextTs from "eslint-config-next/typescript";
 export default defineConfig([
   ...nextVitals,
   ...nextTs,
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+  // evals/: graders' scripts; src/app/prototypes/: throwaway design prototypes (deleted after the build).
+  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "evals/**", "src/app/prototypes/**"]),
 ]);

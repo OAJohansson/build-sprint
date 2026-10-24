@@ -1,21 +1,21 @@
 import { loopGuard } from "@/lib/server/access";
-import { generateLoop, LoopsUnavailable, primaryProvider, providerModels } from "@/lib/server/ai-loops";
+import { fallbackProvider, generateLoop, LoopsUnavailable, primaryProvider, providerModels } from "@/lib/server/ai-loops";
 import { isLoopProviderError } from "@/lib/server/ai-loops/types";
 import { failure, serverError } from "@/lib/server/failure";
 import { getMentorStore } from "@/lib/server/mentor-store";
 import { dailyLoopCap, loopUsage } from "@/lib/ai-loops/cap";
-import { bassLoopRequest, LOOP_BARS, type LoopProviderId, type LoopSource } from "@/lib/ai-loops/prompt";
+import { bassLoopRequest, LOOP_BARS, type LoopSource } from "@/lib/ai-loops/prompt";
 import { cleanTzOffset, monthRange } from "@/lib/mentor/periods";
 
 // "Generate a bass loop like this track" (S4, A9, A11). Behind the access code; the provider keys
 // stay on the server. The prompt is built here from the track's analysis (numbers and style words,
 // never audio). A hard per-day cap (LOOPS_DAILY_CAP, default 20) because each loop costs money.
 //
-// POST { analysisId? | analysis?: { bpm, key, scale, genres?, myGenre? }, bars?: 4 | 8, seed?,
-//        provider?: "stability" | "lyria", tz? }
+// POST { analysisId? | analysis?: { bpm, key, scale, genres?, myGenre? }, bars?: 4 | 8, seed?, tz? }
+//   The service is picked by env only (LOOPS_PROVIDER / LOOPS_FALLBACK, both off = Stable Audio).
 //   → { loop: { id, provider, model, prompt, bpm, key, scale, bars, mime, costUsd, seconds, … },
-//       audio: { base64, mime }, fellBack, usage: { today, cap, left, todayUsd, monthUsd } }
-// GET ?tz= → { usage, provider, models }
+//       audio: { base64, mime }, finish: { trimmed, seam, rawSeconds, seconds }, fellBack, usage: { today, cap, left, todayUsd, monthUsd } }
+// GET ?tz= → { usage, provider, fallback, models }
 export const maxDuration = 60;
 
 type Body = {
@@ -23,7 +23,6 @@ type Body = {
   analysis?: Partial<LoopSource>;
   bars?: unknown;
   seed?: unknown;
-  provider?: unknown;
   tz?: unknown;
 };
 
@@ -49,7 +48,7 @@ export async function GET(request: Request) {
   const now = new Date();
   try {
     const rows = await g.store.costRows(monthRange(now, tz).start);
-    return Response.json({ usage: loopUsage(rows, now, tz, dailyLoopCap(process.env.LOOPS_DAILY_CAP)), provider: primaryProvider(), models: providerModels() });
+    return Response.json({ usage: loopUsage(rows, now, tz, dailyLoopCap(process.env.LOOPS_DAILY_CAP)), provider: primaryProvider(), fallback: fallbackProvider(), models: providerModels() });
   } catch (error) {
     return serverError(error);
   }
@@ -78,7 +77,6 @@ export async function POST(request: Request) {
     }
     const bars = LOOP_BARS.includes(Number(body.bars) as (typeof LOOP_BARS)[number]) ? Number(body.bars) : 8;
     const seed = Number.isInteger(body.seed) && (body.seed as number) >= 0 && (body.seed as number) < 4294967295 ? (body.seed as number) : undefined;
-    const prefer: LoopProviderId | undefined = body.provider === "lyria" || body.provider === "stability" ? body.provider : undefined;
 
     // 2. The daily cap, before any money is spent.
     const before = loopUsage(await g.store.costRows(monthRange(now, tz).start), now, tz, cap);
@@ -88,7 +86,7 @@ export async function POST(request: Request) {
 
     // 3. Generate (primary, then the fallback on a retryable failure) and keep the file.
     const req = bassLoopRequest(source, bars, seed);
-    const result = await generateLoop(req, prefer);
+    const result = await generateLoop(req);
     const meta = {
       provider: result.provider, model: result.model, prompt: req.prompt, bpm: req.bpm, key: req.key, scale: req.scale,
       bars: req.bars, seed: seed ?? (Number(result.meta.seed) || null), mime: result.mime, costUsd: result.costUsd,
@@ -109,6 +107,7 @@ export async function POST(request: Request) {
     return Response.json({
       loop: { ...loop, requestedSeconds: result.requestedSeconds, estimate: true },
       audio: { base64: Buffer.from(result.audio).toString("base64"), mime: result.mime },
+      finish: result.finish,
       fellBack: result.fellBack,
       stored,
       usage: after,

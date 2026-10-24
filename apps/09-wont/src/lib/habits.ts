@@ -58,7 +58,8 @@ export interface WontState {
   version: 1;
   habits: Habit[];
   logs: Logs;
-  /** habitId → id (first missed day) of the latest comeback message already shown (L14). */
+  /** habitId → id (last missed day of the run) of the latest comeback message already shown (L14,
+   * feedback 37). Older stored ids (first missed day) are earlier, so at worst one extra showing. */
   comebacksSeen: Record<string, DayKey>;
   introSeen: boolean;
 }

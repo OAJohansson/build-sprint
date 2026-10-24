@@ -124,19 +124,44 @@ describe("comeback", () => {
     expect(dueComeback(h, after, todayKey())).toBeNull();
   });
 
-  it("two misses in a row: one message, shown once; the first kept day is the comeback", () => {
+  it("two misses, no visit in between: one message for the whole run; the first kept day is the comeback", () => {
     const h = build("2026-10-15");
     const days = kept(...dayRange("2026-10-15", "2026-10-23"));
-    at(2026, 10, 25, 9); // Sunday: Saturday missed
-    const sun = dueComeback(h, days, todayKey());
-    expect(sun?.id).toBe("2026-10-24");
-    const seen = markComebackSeen({ version: 1, habits: [h], logs: {}, comebacksSeen: {}, introSeen: true }, h.id, sun!.id).comebacksSeen[h.id];
-    at(2026, 10, 26, 7, 5); // Monday: Saturday and Sunday missed, same comeback
-    expect(dueComeback(h, days, todayKey())).toMatchObject({ id: "2026-10-24", missed: ["2026-10-24", "2026-10-25"] });
-    expect(dueComeback(h, days, todayKey(), seen)).toBeNull();
+    at(2026, 10, 26, 7, 5); // Monday: Saturday and Sunday missed, app not opened since Friday
+    expect(dueComeback(h, days, todayKey())).toMatchObject({ id: "2026-10-25", missed: ["2026-10-24", "2026-10-25"] });
     const mon = { ...days, "2026-10-26": { kept: 1 } };
+    expect(dueComeback(h, mon, todayKey())).toBeNull();
     expect(isComebackDay(h, mon, "2026-10-26", todayKey())).toBe(true);
     expect(isComebackDay(h, mon, "2026-10-25", todayKey())).toBe(false);
+  });
+
+  it("N1: seen mid-run, then the run grows while away: due again on the return", () => {
+    const h = build("2026-10-15");
+    const days = kept(...dayRange("2026-10-15", "2026-10-23"));
+    const s0: WontState = { version: 1, habits: [h], logs: { up: days }, comebacksSeen: {}, introSeen: true };
+    at(2026, 10, 25, 9); // Sunday: opened, Saturday missed, message seen, nothing logged
+    const sun = dueComeback(h, days, todayKey());
+    const s1 = markComebackSeen(s0, h.id, sun!.id);
+    at(2026, 10, 28, 8); // Wednesday, back after staying away: run is Sat to Tue
+    const wed = dueComeback(h, days, todayKey(), s1.comebacksSeen[h.id]);
+    expect(wed).toMatchObject({ id: "2026-10-27", lastMissed: "2026-10-27" });
+    expect(wed?.missed).toHaveLength(4);
+    // Month end: seen on 31 Oct, away, back on 2 Nov at 02:00 (still 1 Nov): due again.
+    const s2 = markComebackSeen(s1, h.id, "2026-10-30");
+    at(2026, 11, 2, 2);
+    expect(dueComeback(h, days, todayKey(), s2.comebacksSeen[h.id])).toMatchObject({ id: "2026-10-31" });
+  });
+
+  it("N1: once seen, not shown again the same day (also across midnight before 04:00)", () => {
+    const h = build("2026-10-15");
+    const days = kept(...dayRange("2026-10-15", "2026-10-23"));
+    at(2026, 10, 25, 9);
+    const due = dueComeback(h, days, todayKey());
+    const seen = markComebackSeen({ version: 1, habits: [h], logs: {}, comebacksSeen: {}, introSeen: true }, h.id, due!.id).comebacksSeen[h.id];
+    at(2026, 10, 25, 22);
+    expect(dueComeback(h, days, todayKey(), seen)).toBeNull();
+    at(2026, 10, 26, 3, 30); // 03:30 still belongs to Sunday
+    expect(dueComeback(h, days, todayKey(), seen)).toBeNull();
   });
 
   it("a slip yesterday makes a comeback due, and today's clean tap is the comeback", () => {
@@ -162,7 +187,7 @@ describe("comeback", () => {
     for (const [d, last] of [[26, "2026-10-25"], [27, "2026-10-26"], [28, "2026-10-27"]] as const) {
       at(2026, 10, d, 8);
       const due = dueComeback(h, days, todayKey());
-      expect(due).toMatchObject({ id: "2026-10-24", lastMissed: last, lastKind: "unlogged" });
+      expect(due).toMatchObject({ id: last, lastMissed: last, lastKind: "unlogged" });
       expect(days[due!.lastMissed as keyof typeof days]).toBeUndefined();
     }
     // Month end: a slip on 31 Oct still named as a slip on 1 Nov, after midnight but before 04:00.

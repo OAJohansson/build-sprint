@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { copy } from "@/lib/copy";
+import { copy, titleCase } from "@/lib/copy";
 import type { BuildHabit, HabitDraft, HabitPatch, StopHabit } from "@/lib/habits";
 import { Steamer } from "./wonton";
 
@@ -22,12 +22,15 @@ function Field({
   label,
   optional,
   hint,
+  missing,
   children,
 }: {
   id: string;
   label: string;
   optional?: boolean;
   hint?: string;
+  /** Feedback 32 / N2: the submit was tapped with this required field empty. */
+  missing?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -37,12 +40,20 @@ function Field({
         {optional && <span className="w-opt">{copy.form.optional}</span>}
       </label>
       {children}
+      {missing && <small id={`${id}-note`} className="w-note">{copy.form.required}</small>}
       {hint && <small>{hint}</small>}
     </div>
   );
 }
 
-const input = (id: string, value: string, set: (v: string) => void, placeholder: string, max = MAX.text) => (
+const input = (
+  id: string,
+  value: string,
+  set: (v: string) => void,
+  placeholder: string,
+  max = MAX.text,
+  missing = false,
+) => (
   <input
     id={id}
     value={value}
@@ -51,8 +62,34 @@ const input = (id: string, value: string, set: (v: string) => void, placeholder:
     autoComplete="off"
     dir="auto"
     maxLength={max}
+    aria-invalid={missing || undefined}
+    aria-describedby={missing ? `${id}-note` : undefined}
   />
 );
+
+/**
+ * Feedback 32 / N2: the submit stays enabled at full contrast. Tapped with a required field empty,
+ * it notes the first empty one and focuses it; the note goes once that field is filled.
+ * Feedback 39 / N4 (editing): the button reads "Saved" while the fields match what was saved.
+ */
+function useSubmitState(required: [string, string][]) {
+  const [tried, setTried] = useState(false);
+  const [savedAs, setSavedAs] = useState<string | null>(null);
+  const firstEmpty = required.find(([, v]) => !v.trim())?.[0];
+  return {
+    /** The field showing the note, if any. */
+    missing: tried ? firstEmpty : undefined,
+    /** True when the form may be saved; otherwise notes and focuses the first empty field. */
+    check: () => {
+      if (!firstEmpty) return true;
+      setTried(true);
+      document.getElementById(firstEmpty)?.focus();
+      return false;
+    },
+    markSaved: (all: unknown) => setSavedAs(JSON.stringify(all)),
+    isSaved: (all: unknown) => savedAs === JSON.stringify(all),
+  };
+}
 
 const whyArea = (value: string, set: (v: string) => void) => (
   <textarea
@@ -95,11 +132,17 @@ export function BuildForm({
     setNameFollows(false);
     setOwnName(v);
   };
-  const ready = after.trim() && will.trim() && goal.trim() && name.trim();
+  const form = useSubmitState([
+    ...(editing ? [["name", name] as [string, string]] : []),
+    ["after", after],
+    ["will", will],
+    ["goal", goal],
+  ]);
+  const current = { name, after, will, goal, why };
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!ready) return;
+    if (!form.check()) return;
     const fields = {
       // shortcut: a new habit's card title is its action ("write in my journal"); a separate
       // title field only appears when editing. Add one to the create form if titles read badly.
@@ -110,17 +153,24 @@ export function BuildForm({
       why: why.trim() || undefined,
     };
     onSave(editing ? fields : { kind: "build", ...fields });
+    if (editing) form.markSaved(current);
   };
 
   return (
     <form className="w-form" onSubmit={submit}>
-      {editing && <Field id="name" label={f.name}>{input("name", name, setName, derivedName, MAX.name)}</Field>}
-      <Field id="after" label={f.after} hint={f.afterHint}>
-        {input("after", after, setAfter, f.afterPlaceholder)}
+      {editing && (
+        <Field id="name" label={f.name} missing={form.missing === "name"}>
+          {input("name", name, setName, derivedName, MAX.name, form.missing === "name")}
+        </Field>
+      )}
+      <Field id="after" label={f.after} hint={f.afterHint} missing={form.missing === "after"}>
+        {input("after", after, setAfter, f.afterPlaceholder, MAX.text, form.missing === "after")}
       </Field>
-      <Field id="will" label={f.will}>{input("will", will, setWill, f.willPlaceholder)}</Field>
-      <Field id="goal" label={f.goal} hint={f.goalHint}>
-        {input("goal", goal, setGoal, f.goalPlaceholder)}
+      <Field id="will" label={f.will} missing={form.missing === "will"}>
+        {input("will", will, setWill, f.willPlaceholder, MAX.text, form.missing === "will")}
+      </Field>
+      <Field id="goal" label={f.goal} hint={f.goalHint} missing={form.missing === "goal"}>
+        {input("goal", goal, setGoal, f.goalPlaceholder, MAX.text, form.missing === "goal")}
         <div className="w-chips">
           {f.goalChips.map((g) => (
             <button key={g} type="button" onClick={() => setGoal(g)} aria-pressed={goal === g}>
@@ -140,7 +190,7 @@ export function BuildForm({
             <div className="w-art"><Steamer marks={[]} /></div>
             <div className="w-body">
               <h2 className={`w-nm ${derivedName ? "" : "w-ph"}`} dir="auto">
-                {derivedName ? <bdi>{derivedName}</bdi> : f.previewBuildName}
+                {derivedName ? <bdi>{titleCase(derivedName)}</bdi> : f.previewBuildName}
               </h2>
               <p className="w-rate">{goal.trim() ? f.previewGoal(goal.trim()) : copy.card.rate(0, 0)}</p>
               <p className="w-an">
@@ -152,8 +202,8 @@ export function BuildForm({
         </>
       )}
 
-      <button type="submit" className="w-primary" disabled={!ready}>
-        {editing ? f.saveEdit : f.save}
+      <button type="submit" className="w-primary">
+        {editing ? (form.isSaved(current) ? f.saved : f.saveEdit) : f.save}
       </button>
     </form>
   );
@@ -173,11 +223,16 @@ export function StopForm({
   const [friction, setFriction] = useState(initial?.friction ?? "");
   const [instead, setInstead] = useState(initial?.replacement ?? "");
   const [why, setWhy] = useState(initial?.why ?? "");
-  const ready = name.trim() && trigger.trim() && instead.trim();
+  const form = useSubmitState([
+    ["name", name],
+    ["trigger", trigger],
+    ["instead", instead],
+  ]);
+  const current = { name, trigger, friction, instead, why };
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!ready) return;
+    if (!form.check()) return;
     const fields = {
       name: name.trim(),
       trigger: trigger.trim(),
@@ -186,6 +241,7 @@ export function StopForm({
       why: why.trim() || undefined,
     };
     onSave(editing ? fields : { kind: "stop", ...fields });
+    if (editing) form.markSaved(current);
   };
 
   const line =
@@ -195,17 +251,17 @@ export function StopForm({
 
   return (
     <form className="w-form" onSubmit={submit}>
-      <Field id="name" label={editing ? f.name : f.stopName}>
-        {input("name", name, setName, f.stopNamePlaceholder, MAX.name)}
+      <Field id="name" label={editing ? f.name : f.stopName} missing={form.missing === "name"}>
+        {input("name", name, setName, f.stopNamePlaceholder, MAX.name, form.missing === "name")}
       </Field>
-      <Field id="trigger" label={f.trigger} hint={f.triggerHint}>
-        {input("trigger", trigger, setTrigger, f.triggerPlaceholder)}
+      <Field id="trigger" label={f.trigger} hint={f.triggerHint} missing={form.missing === "trigger"}>
+        {input("trigger", trigger, setTrigger, f.triggerPlaceholder, MAX.text, form.missing === "trigger")}
       </Field>
       <Field id="friction" label={f.friction} optional hint={f.frictionHint}>
         {input("friction", friction, setFriction, f.frictionPlaceholder)}
       </Field>
-      <Field id="instead" label={f.instead} hint={f.insteadHint}>
-        {input("instead", instead, setInstead, f.insteadPlaceholder)}
+      <Field id="instead" label={f.instead} hint={f.insteadHint} missing={form.missing === "instead"}>
+        {input("instead", instead, setInstead, f.insteadPlaceholder, MAX.text, form.missing === "instead")}
       </Field>
       {editing && (
         <Field id="why" label={f.why} optional>
@@ -220,7 +276,7 @@ export function StopForm({
             <div className="w-art"><Steamer marks={[]} /></div>
             <div className="w-body">
               <h2 className={`w-nm ${name.trim() ? "" : "w-ph"}`} dir="auto">
-                {name.trim() ? <bdi>{name.trim()}</bdi> : f.previewStopName}
+                {name.trim() ? <bdi>{titleCase(name.trim())}</bdi> : f.previewStopName}
               </h2>
               <p className="w-rate">{copy.card.cleanDays(0)}</p>
               <p className="w-an">{line ?? <span className="w-ph">{f.previewStopLine}</span>}</p>
@@ -230,8 +286,8 @@ export function StopForm({
         </>
       )}
 
-      <button type="submit" className="w-primary" disabled={!ready}>
-        {editing ? f.saveEdit : f.save}
+      <button type="submit" className="w-primary">
+        {editing ? (form.isSaved(current) ? f.saved : f.saveEdit) : f.save}
       </button>
     </form>
   );

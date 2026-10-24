@@ -120,7 +120,11 @@ export function missedRun(habit: Habit, days: HabitDays, today: DayKey): DayKey[
 }
 
 export interface DueComeback {
-  /** Stable id of this comeback: the first missed day of the run. Pass to markComebackSeen. */
+  /**
+   * Id of this comeback: the run's last missed day (always yesterday). Pass to markComebackSeen.
+   * Keyed on the last day, not the first (feedback 37, N1), so a run that grows after being seen
+   * makes the message due again on the next visit.
+   */
   id: DayKey;
   /** The missed days, oldest first (one or more; one message however many). */
   missed: DayKey[];
@@ -135,9 +139,11 @@ export interface DueComeback {
 }
 
 /**
- * R7 / L14: the comeback message due for a habit, or null. Due when yesterday was missed and
- * today isn't kept yet; one message per run of misses (two misses in a row = one message), and
- * once marked seen (`seenId` = comebacksSeen[habit.id]) it is not shown again for that run.
+ * R7 / L14 (revised, feedback 37): the comeback message due for a habit, or null. Due whenever
+ * today opens with yesterday missed (unlogged or a slip) and today not yet kept. Never stacked:
+ * one message per habit however long the run. Once marked seen (`seenId` =
+ * comebacksSeen[habit.id], the run's last missed day) it is not shown again that same day; if
+ * the user stays away and the run grows, the new last missed day is later, so it is due again.
  */
 export function dueComeback(
   habit: Habit,
@@ -148,7 +154,7 @@ export function dueComeback(
   if (isKeptLog(habit, days?.[today])) return null;
   const missed = missedRun(habit, days, today);
   if (missed.length === 0) return null;
-  const id = missed[0];
+  const id = missed[missed.length - 1];
   if (seenId !== undefined && seenId >= id) return null;
   return {
     id,

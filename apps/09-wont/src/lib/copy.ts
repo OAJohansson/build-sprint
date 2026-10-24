@@ -15,6 +15,20 @@ const nf = new Intl.NumberFormat();
 /** Counts in the reader's number format (feedback 32). */
 export const num = (n: number) => nf.format(n);
 
+/** "Friday", "Saturday and Sunday", or "The last few days" for three or more. */
+const missedDays = (missed: number[]) =>
+  missed.length === 1
+    ? WEEKDAYS[missed[0]]
+    : missed.length === 2
+      ? `${WEEKDAYS[missed[0]]} and ${WEEKDAYS[missed[1]]}`
+      : "The last few days";
+
+/**
+ * Feedback 38 (N5): a card title shown with only its first letter capitalised. Display only, the
+ * stored text stays as typed; the one place Wont changes case (titles, never the user's phrases).
+ */
+export const titleCase = (s: string) => s.charAt(0).toLocaleUpperCase() + s.slice(1);
+
 export const copy = {
   app: {
     name: "Wont",
@@ -58,7 +72,7 @@ export const copy = {
     stopLine: (trigger: string, replacement: string) =>
       `Usually ${u(trigger)}. Instead: ${u(replacement)}`,
     /** Under a stop habit's steamer, so its pile (last 7 days) isn't read as the clean-day total. */
-    pileCaption: "this week",
+    pileCaption: "last 7 days",
     open: "Tap when kept",
     kept: "Kept",
     comeback: "Comeback",
@@ -81,17 +95,17 @@ export const copy = {
     ariaSlipped: (name: string) => `${u(name)}: slipped today, tap to change`,
   },
 
-  // R7: one short, quiet line (feedback 24, 27). Names the most recent missed day as what it was.
-  // Never failure words, never a count of zero.
+  // R7: one short, quiet line (feedback 24, 27). Names the most recent missed day as what it was;
+  // two missed days are both named (feedback 40, N6). Never failure words, never a count of zero.
+  // `missed` is the run's weekdays (0 = Sunday), oldest first.
   comeback: {
-    build: (lastMissedWeekday: number, runLength: number) =>
-      `${runLength > 1 ? "The last few days stayed empty" : `${WEEKDAYS[lastMissedWeekday]} stayed empty`}. Today counts.`,
-    stopSlip: (lastMissedWeekday: number, clean: number) =>
+    build: (missed: number[]) => `${missedDays(missed)} stayed empty. Today counts.`,
+    /** Feedback 39 (N3): the morning after a slip gets one next step, the replacement first. */
+    stopSlip: (lastMissedWeekday: number, clean: number, replacement: string) =>
       `${WEEKDAYS[lastMissedWeekday]} had a slip. ${
-        clean === 0 ? "Today counts." : clean === 1 ? "Your clean day still counts." : `Your ${num(clean)} clean days still count.`
-      }`,
-    stopUnlogged: (lastMissedWeekday: number, runLength: number) =>
-      `${runLength > 1 ? "The last few days went unlogged" : `${WEEKDAYS[lastMissedWeekday]} went unlogged`}. Today counts.`,
+        clean === 0 ? "" : clean === 1 ? "Your clean day still counts. " : `Your ${num(clean)} clean days still count. `
+      }Next time: ${u(replacement)} first.`,
+    stopUnlogged: (missed: number[]) => `${missedDays(missed)} went unlogged. Today counts.`,
   },
 
   slip: {
@@ -150,6 +164,10 @@ export const copy = {
     previewStopLine: "Usually … Instead: …",
     save: "Add to my board",
     saveEdit: "Save changes",
+    /** On the button after an edit is saved, until a field changes again (feedback 39, N4). */
+    saved: "Saved",
+    /** Under the first empty required field when the submit is tapped (feedback 32, N2). */
+    required: "Fill this in first.",
   },
 
   detail: {
@@ -178,7 +196,6 @@ export const copy = {
     },
     editTitle: "Wording",
     editHint: "Your history stays as it is.",
-    saved: "Saved",
     deleteButton: "Delete this habit",
     deleteConfirm: (name: string) => `Delete “${u(name)}” and all its history? This can't be undone.`,
     deleteYes: "Delete it",

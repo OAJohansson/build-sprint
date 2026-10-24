@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { canEditDay } from "@/lib/actions";
 import { cardModel, dayParts, history, type HistoryRow } from "@/lib/card";
-import { copy } from "@/lib/copy";
+import { copy, titleCase } from "@/lib/copy";
 import { addDays, type DayKey } from "@/lib/day";
 import type { Habit, HabitPatch, SlipSize } from "@/lib/habits";
 import { useWont } from "@/lib/store";
@@ -19,7 +19,6 @@ export function HabitDetail({ id }: { id: string }) {
   const router = useRouter();
   const { state, today } = w;
   const [confirming, setConfirming] = useState(false);
-  const [saved, setSaved] = useState(false);
   const d = copy.detail;
 
   if (!today) return <main className="w" />;
@@ -40,16 +39,13 @@ export function HabitDetail({ id }: { id: string }) {
   const yesterday = addDays(today, -1);
   const editable = [today, yesterday].filter((day) => canEditDay(habit, day, today));
 
-  const save = (patch: HabitPatch) => {
-    w.updateHabit(habit.id, patch);
-    setSaved(true);
-  };
+  const save = (patch: HabitPatch) => w.updateHabit(habit.id, patch);
 
   return (
     <main className="w">
       <header className="w-head w-head-form">
         <Link href="/" className="w-back">{copy.form.back}</Link>
-        <h1 dir="auto"><bdi>{habit.name}</bdi></h1>
+        <h1 dir="auto"><bdi>{titleCase(habit.name)}</bdi></h1>
         <p>
           {habit.kind === "build"
             ? copy.card.rate(m.rate.kept, m.rate.of, m.today === "pending")
@@ -82,7 +78,7 @@ export function HabitDetail({ id }: { id: string }) {
 
         <section className="w-panel">
           <h2>{d.editTitle}</h2>
-          <small>{saved ? d.saved : d.editHint}</small>
+          <small>{d.editHint}</small>
           {habit.kind === "build" ? (
             <BuildForm key={habit.id} initial={habit} onSave={(p) => save(p as HabitPatch)} />
           ) : (

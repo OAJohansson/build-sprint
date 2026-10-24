@@ -35,12 +35,12 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 29 | Audit (major) | Muted text 3.9–4.3:1 throughout; ⋯ 3.3:1; placeholder 1.9:1 | fixed |
 | 30 | Audit (minor) | No length limits; long anchors make huge cards; edit fields too small | partly fixed (limits, clamp) |
 | 31 | Audit (minor) | History shows 14 days only | parked (backlog) |
-| 32 | Audit (minor) | RTL text jumbled; counts unformatted; sheets lack focus management; aria on non-roles; intro progress ignores reduced motion; disabled Save gives no reason; titles and theme colour | mostly fixed (disabled Save reason open) |
+| 32 | Audit (minor) | RTL text jumbled; counts unformatted; sheets lack focus management; aria on non-roles; intro progress ignores reduced motion; disabled Save gives no reason; titles and theme colour | fixed |
 | 33 | User test F2 (major) | Resumed without reload, the stop message names unlogged days as slips | fixed |
 | 34 | User test F4/F6/F7/F9 | "Today" → "Tap when kept"; stop history "Clean"; title follows action; "1 urge" not "ridden out" at tap; intro "not a failure"; "0 of last 7" | fixed |
 | 35 | User test F5 | No way to close a day as "not today" | parked (backlog) |
 | 36 | User test, progress | A comebacks line per habit (slips vs comebacks) | parked (backlog, scope) |
-| 37 | Re-check N1 (major) | Comeback message once per run: returning after a longer absence (seen mid-run) shows nothing | open |
-| 38 | Re-check N3 | Morning-after-slip message has no next step | open |
-| 39 | Re-check N2/N4/N6/N7 | Disabled submit 2.82:1 without reason; "Saved" far from the button; "this week" label; intro Skip 39 px wide | open |
-| 40 | Re-check N5 | Card title shows lowercase as typed ("read in bed") | open |
+| 37 | Re-check N1 (major) | Comeback message once per run: returning after a longer absence (seen mid-run) shows nothing | fixed |
+| 38 | Re-check N3 | Morning-after-slip message has no next step | fixed |
+| 39 | Re-check N2/N4/N6/N7 | Disabled submit 2.82:1 without reason; "Saved" far from the button; "this week" label; intro Skip 39 px wide | fixed |
+| 40 | Re-check N5 | Card title shows lowercase as typed ("read in bed") | fixed |

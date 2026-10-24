@@ -130,3 +130,8 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   https://wont-peach.vercel.app is public before the owner's review. Nothing is merged; the
   data is local to each phone. At ship, `pnpm ship 09-wont` links GitHub and redeploys main.
   Lesson: pass `--target preview` (or create via `pnpm ship`) for a project's first deploy.
+- **Re-check** (user-tester): all five scenarios and R1–R8 pass; F2 verified gone in the
+  no-reload path. New major N1: the comeback message showed once per run, so a return after a
+  longer absence (opened mid-run) got nothing. Fixed in pass 2 (L26, supersedes L14) with three
+  unit tests, plus the slip next step, "Saved" at the button, required-field notes, two-day
+  naming, Skip width, title capitalised for display. 34 tests.

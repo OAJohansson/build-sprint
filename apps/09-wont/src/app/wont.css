@@ -204,6 +204,7 @@ body {
 .w-field label { font-weight: 700; font-size: 15px; }
 .w-opt { font-weight: 400; color: var(--muted); }
 .w-field small { font-size: 12.5px; color: var(--muted); line-height: 1.35; }
+.w-field small.w-note { color: var(--ink); font-weight: 700; }
 .w-field input, .w-field textarea {
   font-size: 16px; /* 16px stops iOS zooming into the field */
   border: 1px solid rgba(42, 36, 32, 0.16); border-radius: 12px; background: #fff; padding: 11px 12px; width: 100%; min-height: 44px;
@@ -266,7 +267,7 @@ body {
 @keyframes in-fill { to { transform: none; } }
 /* Paused with the scene timers while the tab is hidden (feedback 32). */
 .in[data-hidden] .in-progress i.now { animation-play-state: paused; }
-.in-skip { border: 0; background: none; color: var(--dough); opacity: 0.7; font: inherit; font-size: 15px; min-height: 44px; padding: 0 4px; cursor: pointer; }
+.in-skip { border: 0; background: none; color: var(--dough); opacity: 0.7; font: inherit; font-size: 15px; min-height: 44px; min-width: 44px; padding: 0 4px; cursor: pointer; }
 .in-scene { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 12px; }
 .in-art { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; }
 .in-scene h1 { font-weight: 800; font-size: 32px; line-height: 1.08; letter-spacing: -0.03em; }

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cardModel, dayParts, type CardModel } from "@/lib/card";
-import { copy } from "@/lib/copy";
+import { copy, titleCase } from "@/lib/copy";
 import type { Habit, SlipSize } from "@/lib/habits";
 import { weekStrip } from "@/lib/progress";
 import { peekState, useWont } from "@/lib/store";
@@ -36,8 +36,8 @@ export function Board() {
     ? habits.map((h) => [h, cardModel(h, state.logs[h.id], today, state.comebacksSeen[h.id])])
     : [];
 
-  // L14: a comeback line shows for this whole visit, then counts as seen once the app is closed
-  // or put away, so it is never shown again for the same run of misses.
+  // L14 (feedback 37): a comeback line shows for this whole visit, then counts as seen once the
+  // app is closed or put away: not again that day, but again on a later day if the run grew.
   const dueKey = models
     .filter(([, m]) => m.comeback && !m.keptToday)
     .map(([h, m]) => `${h.id}=${m.comeback!.id}`)
@@ -223,14 +223,14 @@ function HabitCard({
   onUrge: () => void;
 }) {
   const cb = m.comeback && !m.keptToday ? m.comeback : null;
-  const cbDay = cb ? dayParts(cb.lastMissed).weekday : 0;
+  const cbDays = cb ? cb.missed.map((d) => dayParts(d).weekday) : [];
   const comebackLine = !cb
     ? null
     : h.kind === "build"
-      ? copy.comeback.build(cbDay, cb.missed.length)
+      ? copy.comeback.build(cbDays)
       : cb.lastKind === "slip"
-        ? copy.comeback.stopSlip(cbDay, m.cleanDays)
-        : copy.comeback.stopUnlogged(cbDay, cb.missed.length);
+        ? copy.comeback.stopSlip(cbDays[cbDays.length - 1], m.cleanDays, h.replacement)
+        : copy.comeback.stopUnlogged(cbDays);
 
   let status: string;
   let aria: string;
@@ -264,7 +264,7 @@ function HabitCard({
         {h.kind === "stop" && <small className="w-art-cap">{copy.card.pileCaption}</small>}
       </div>
       <div className="w-body">
-        <h2 className="w-nm" dir="auto"><bdi>{h.name}</bdi></h2>
+        <h2 className="w-nm" dir="auto"><bdi>{titleCase(h.name)}</bdi></h2>
         <p className="w-rate">
           {h.kind === "build"
             ? copy.card.rate(m.rate.kept, m.rate.of, m.today === "pending")

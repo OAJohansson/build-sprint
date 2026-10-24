@@ -411,3 +411,16 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - **v1.1 graded:** user re-check 5/5, F12/F13 all pass, no blocker/major/minor open. Design
   critic 7/10 (bar 9: not met, reported); its one trust issue, BPM placeholders that looked like an
   active filter, is fixed (T25). Its other points repeat or contradict earlier critics.
+- **v1.1 merged** (PR 78, d32b3d7) on the owner's yes ("merge 1.1, then start the mentor work and
+  we can do the wrap-up after the mentor work"). Production deploy Ready; `/analyse` serves My genre
+  and the filters. Notebook republished from `main` (version 177).
+
+## 24 Oct: Six AM Mentor (Phase 2, Founder mode)
+
+- **Owner's calls** (relayed from the parent session, made one at a time): six Mentor jobs (ME-7
+  out), honesty rule, web search when it helps, a slide-in side panel, Sonnet 5.5 with caching and
+  a 50/day warning, cost shown as an estimate, a server route behind the access code, no
+  predefined taste data (taste profile, setup step, learning from use, growing genres, taste
+  sessions, listen next), everything in Supabase incl. migrating Ears' results, the record-shop
+  voice, evals E1–E10. Kickoff pack and evals appended to `kickoff.md` / `evals.md` (T26);
+  L45–L54; decision 0027 for the backend.

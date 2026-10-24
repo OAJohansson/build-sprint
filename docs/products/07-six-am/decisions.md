@@ -73,3 +73,4 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L44 | 2026-10-24 | A typed genre takes an existing spelling (another track's, else a family name) when only case, spaces or punctuation differ; the genre filter matches the same way | PM (engineer's proposal) | v1.1 | provisional |
 | T23 | 2026-10-24 | Appendix A suggestions as 17 short family names ("Deep house", "Jackin' house" …); old long names already stored aren't migrated | PM | v1.1 | |
 | T24 | 2026-10-24 | Strip follows the first visible row when filters hide the selected one; stale genre filter falls back to All; toast in the app bar, hides at 2.5 s; owner's words in ivory (`--own`); columns rebalanced; friendlier empty-filter messages; BPM boxes digits only | PM | v1.1 | |
+| T25 | 2026-10-24 | BPM range placeholders "min" / "max" (the sample numbers read like an active filter: critic and user re-check) | PM | v1.1 | |

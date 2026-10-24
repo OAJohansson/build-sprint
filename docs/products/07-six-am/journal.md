@@ -408,3 +408,6 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   play a filtered list one after another. L41, T20; F12 and F13 added to the kickoff and evals.
 - **v1.1 built:** My genre field in the strip and a column in the table (datalist suggestions: used genres, then the 17 Appendix A families), in Copy for Claude and both exports; BPM range and genre filters with pure, tested matching (`filters.ts`). 91 tests, lint, tsc, build pass. L42, L43, T21, T22.
 - **v1.1 fix pass:** short family suggestions and one spelling per genre (L44), strip follows the filter, Six AM-styled genre select, readable filter bar, owner's words in ivory, full-height genre cell, toast out of the way. 94 tests, lint, tsc, build pass. T23, T24.
+- **v1.1 graded:** user re-check 5/5, F12/F13 all pass, no blocker/major/minor open. Design
+  critic 7/10 (bar 9: not met, reported); its one trust issue, BPM placeholders that looked like an
+  active filter, is fixed (T25). Its other points repeat or contradict earlier critics.

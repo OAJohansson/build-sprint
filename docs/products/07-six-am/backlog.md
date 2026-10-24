@@ -50,3 +50,4 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Stability check and a single 10-track queue run in real Chrome; a geo-blocked track | Not evidenced in the eval report | next |
 | Play a filtered list one track after another ("hear all my deep house in a row") | Owner wants it (24 Oct), after v1.1 | next |
 | Genre counts and tagged share in the filter bar ("31 of 56 tagged · deep house 9 …"), each count a filter | User test v1.1 (24 Oct) | later |
+| Empty-filter message: count "Not available in your region" tracks apart from "not analysed yet" | User re-check v1.1 (N2) | later |

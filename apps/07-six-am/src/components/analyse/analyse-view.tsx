@@ -251,9 +251,9 @@ function ListBar({ m, count, shown, narrowed, query, setQuery, filters, setFilte
       />
       <span className={s.range} role="group" aria-label="BPM range" title="A track matches if its BPM is in the range; when half/double time is unclear, either reading counts. Tracks not analysed yet are hidden while a range is set.">
         <span className={s.label}>BPM</span>
-        <BpmBound label="Lowest BPM" ghost="120" value={filters.bpmMin} onChange={(v) => setFilters({ ...filters, bpmMin: v })} />
+        <BpmBound label="Lowest BPM" ghost="min" value={filters.bpmMin} onChange={(v) => setFilters({ ...filters, bpmMin: v })} />
         <span aria-hidden="true">–</span>
-        <BpmBound label="Highest BPM" ghost="130" value={filters.bpmMax} onChange={(v) => setFilters({ ...filters, bpmMax: v })} />
+        <BpmBound label="Highest BPM" ghost="max" value={filters.bpmMax} onChange={(v) => setFilters({ ...filters, bpmMax: v })} />
       </span>
       <select className={cx(s.select, !filters.genre && s.selectIdle)} aria-label="Filter by my genre" value={picked} onChange={(e) => setFilters({ ...filters, genre: e.target.value })}>
         <option value="">All genres</option>

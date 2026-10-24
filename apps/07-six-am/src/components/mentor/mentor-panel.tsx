@@ -21,6 +21,15 @@ import type { MentorData } from "./use-mentor-data";
 import s from "./mentor.module.css";
 
 export const HELP_QUESTION = "What can you help me with?";
+/** F5: answered here, free and instantly, and not stored. Only things you can ask by typing. */
+const HELP_ANSWER: AskReply["answer"] = {
+  intent: "help", tellMore: false,
+  sentences: [
+    { text: "Name a track and ask what it is, or which genre fits it.", source: "general" },
+    { text: "Ask for music like it, what to listen for in it, or a Studio starting point.", source: "general" },
+    { text: "Or type “teach me acid house”, “let's do a taste session” or “group my tracks”.", source: "general" },
+  ],
+};
 
 type Item = { id: string; ask?: string; answer: AskReply["answer"]; studio?: StudioStart; dropped?: string[]; genreTrackId?: string; live?: boolean };
 
@@ -117,9 +126,9 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
   const byId = (id?: string) => (id ? library.find((a) => a.id === id) ?? null : null);
   const onFeedback = (it: ListenNext, kind: "more_like_this" | "not_for_me") =>
     canLearn && learn(data.code, { type: kind, detail: `${it.artist} – ${it.title} (${it.because})`.slice(0, 480) });
+  const undoGenre = (a: EarsAnalysis) => (previous: string) => onSetGenre(a.id, previous);
   const acceptGenre = (a: EarsAnalysis) => (name: string) => {
     onSetGenre(a.id, name);
-    focusField();
     if (canLearn) learn(data.code, { type: "note", detail: `Accepted the Mentor's suggested genre "${name}" as My genre for "${a.title}".`, trackId: a.id });
   };
   const [closedViews, setClosedViews] = useState<Set<string>>(new Set());
@@ -149,6 +158,7 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
                   track={about} myGenre={about?.myGenre}
                   onTellMore={pending || it !== items.at(-1) ? undefined : () => { focusField(); void send("Tell me more."); }}
                   onAcceptGenre={about ? acceptGenre(about) : undefined}
+                  onUndoGenre={about ? undoGenre(about) : undefined}
                   onFeedback={onFeedback}
                   onOpenStudio={(start) => onOpenStudio(start, about?.title ?? "")}
                 >
@@ -179,6 +189,10 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
             onContinue={() => { setContinued(today); setStopped(""); }}
             onStop={() => setStopped(today)}
             onSend={(t) => void send(t)}
+            onHelp={() => {
+              setItems((list) => [...list.map((x) => ({ ...x, live: false })), { id: `help-${Date.now()}`, ask: HELP_QUESTION, answer: HELP_ANSWER, live: true }]);
+              setAnnounce(HELP_ANSWER.sentences.map((x) => x.text).join(" "));
+            }}
           />
         </>
       )}
@@ -199,13 +213,13 @@ function Thinking({ ask }: { ask: string }) {
 type FootProps = {
   field: React.RefObject<{ focus: () => void } | null>;
   replied: boolean; busy: boolean; warning: boolean; stopped: boolean; usage: UsageSummary | null;
-  onContinue: () => void; onStop: () => void; onSend: (text: string) => void;
+  onContinue: () => void; onStop: () => void; onSend: (text: string) => void; onHelp: () => void;
 };
 
 /** About six lines, then the field scrolls (L89). */
 const MAX_FIELD_PX = 6 * 21 + 18;
 
-function Foot({ field, replied, busy, warning, stopped, usage, onContinue, onStop, onSend }: FootProps) {
+function Foot({ field, replied, busy, warning, stopped, usage, onContinue, onStop, onSend, onHelp }: FootProps) {
   const [text, setText] = useState("");
   const own = useRef<HTMLTextAreaElement>(null);
   useImperativeHandle(field, () => ({ focus: () => own.current?.focus() }), []);
@@ -263,7 +277,7 @@ function Foot({ field, replied, busy, warning, stopped, usage, onContinue, onSto
         />
       </form>
       {/* aria-disabled, not disabled: a disabled button drops keyboard focus while the answer loads. */}
-      <button className={s.help} aria-disabled={blocked || undefined} onClick={() => { if (!blocked) onSend(HELP_QUESTION); }}>{HELP_QUESTION}</button>
+      <button className={s.help} aria-disabled={blocked || undefined} onClick={() => { if (!blocked) onHelp(); }}>{HELP_QUESTION}</button>
     </div>
   );
 }

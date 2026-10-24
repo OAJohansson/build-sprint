@@ -24,7 +24,11 @@ const NO_SOURCES: SetupSource[] = [];
 
 type Answer = { pick: number | null; more: string };
 
-export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (saved: boolean) => void }) {
+/** mode "import" (user test F8): one step, paste links → Read → done, no Claude call. The draft and
+ *  questions ("setup") only once the taste profile is unlocked. */
+export function SetupDialog({ data, onClose, mode = "setup" }: { data: MentorData; onClose: (saved: boolean) => void; mode?: "setup" | "import" }) {
+  const importOnly = mode === "import";
+  const [imported, setImported] = useState<string | null>(null);
   const [step, setStep] = useState(0);
   const [links, setLinks] = useState("");
   const [progress, setProgress] = useState<string | null>(null);
@@ -89,6 +93,13 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
       }
       if (closed.current) return;
       if (!lists.length) throw new Error(problems.join(" · ") || "None of those playlists could be read.");
+      if (importOnly) {
+        const r = await data.api.importPlaylists(lists);
+        const tracks = lists.reduce((n, l) => n + l.sounds.length, 0);
+        setImported(`Read ${tracks} track${tracks === 1 ? "" : "s"} from ${lists.length} playlist${lists.length === 1 ? "" : "s"}${r.added < tracks ? ` (${r.added} new)` : ""}.`);
+        if (problems.length) setError(`Skipped: ${problems.join(" · ")}`);
+        return;
+      }
       setProgress("Drafting your taste from what was read…");
       const r = await data.api.ask({ job: "setup", playlists: lists });
       const tracks = lists.reduce((n, l) => n + l.sounds.length, 0);
@@ -166,15 +177,15 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
       {preview.frame}
       <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby="setup-title" className={s.dialog}>
         <header className={s.head}>
-          <h2 id="setup-title" className={s.title}>Set up your taste</h2>
-          <button className={s.icon} onClick={() => close(false)} aria-label="Close setup"><X size={16} strokeWidth={1.5} /></button>
+          <h2 id="setup-title" className={s.title}>{importOnly ? "Import playlists" : "Set up your taste"}</h2>
+          <button className={s.icon} onClick={() => close(!!imported)} aria-label="Close"><X size={16} strokeWidth={1.5} aria-hidden /></button>
         </header>
-        <div className={s.tabs} role="tablist" aria-label="Setup steps">
+        {importOnly ? null : <div className={s.tabs} role="tablist" aria-label="Setup steps">
           {STEPS.map((name, i) => (
             <button key={name} role="tab" aria-selected={step === i} className={s.tab} disabled={busy || (i > 0 && i > reached) || (i === 0 && !!reply)} onClick={() => { preview.stop(); setStep(i); }}>{name}</button>
           ))}
-        </div>
-        <p className={s.privacy}>Six AM reads titles, artists and tags only. Nothing is listened to or recorded.</p>
+        </div>}
+        <p className={s.privacy}>Titles, artists and tags only. Nothing is listened to.</p>
 
         <div className={s.body}>
           {step === 0 ? (
@@ -182,7 +193,7 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
               <label className={s.label} htmlFor="setup-links">SoundCloud playlist links, one per line</label>
               <textarea id="setup-links" className={s.area} rows={4} spellCheck={false} disabled={busy} value={links} onChange={(e) => setLinks(e.target.value)}
                 placeholder="https://soundcloud.com/you/sets/a-playlist" />
-              {progress ? <p className={s.progress} role="status">{progress}</p> : <p className={s.hint}>Public playlists work best; a private one can&apos;t be read. Reading takes about a second per track past the first twenty.</p>}
+              {progress ? <p className={s.progress} role="status">{progress}</p> : imported ? <p className={s.progress} role="status">{imported}</p> : <p className={s.hint}>Public playlists only.</p>}
             </>
           ) : step === 1 && reply ? (
             <>
@@ -227,13 +238,24 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
           {error ? <p className={s.error} role="alert">{error}</p> : null}
         </div>
 
-        <footer className={s.foot}>
+        {importOnly ? (
+          <footer className={s.foot}>
+            {imported ? (
+              <button className={s.btn} onClick={() => close(true)} style={{ marginLeft: "auto" }}>Done</button>
+            ) : (
+              <>
+                <button className={s.textBtn} onClick={() => close(false)} disabled={busy} style={{ marginLeft: "auto" }}>Cancel</button>
+                <button className={s.btn} onClick={() => void readPlaylists()} disabled={busy || !links.trim()}>{progress ? "Reading…" : "Read"}</button>
+              </>
+            )}
+          </footer>
+        ) : <footer className={s.foot}>
           {step > 0 ? <button className={s.textBtn} onClick={back} disabled={busy || (step === 1)}>Back</button> : <span />}
           <button className={s.textBtn} onClick={skip} disabled={busy} style={{ marginLeft: "auto" }}>{step === 0 ? "Skip setup" : "Skip"}</button>
           <button className={s.btn} onClick={next} disabled={busy || (step === 0 && !links.trim())}>
             {step === 0 ? (progress ? "Reading…" : "Read playlists") : step === 3 ? (saving ? "Saving…" : "Save") : "Next"}
           </button>
-        </footer>
+        </footer>}
       </div>
     </div>
   );

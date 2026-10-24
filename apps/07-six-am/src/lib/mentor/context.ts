@@ -3,6 +3,7 @@
 import { bpmSentence } from "@/lib/ears/bpm-choice";
 import { brightnessLabel, energyLabel, keyLabel, keyWord, pct, shownStyles, tagDiffers } from "@/lib/ears/labels";
 import { cleanGenre } from "@/lib/ears/my-genre";
+import { styleDisplayName } from "@/lib/ears/styles";
 import type { EarsAnalysis, SnippetResult } from "@/lib/ears/results";
 import type { Snippet } from "@/lib/ears/snippets";
 import type { TempoRelation } from "@/lib/ears/bpm";
@@ -69,6 +70,8 @@ export function parseAnalysis(raw: unknown): EarsAnalysis | null {
   };
 }
 
+const clock = (ms: number) => { const t = Math.round(ms / 1000); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`; };
+
 /** The track's facts for the prompt, each line labelled with its source. */
 export function trackContext(a: EarsAnalysis): string {
   const styles = shownStyles(a).map((x) => `${x.name} ${pct(x.p)}%`).join(", ") || "none";
@@ -82,6 +85,8 @@ export function trackContext(a: EarsAnalysis): string {
     // F2: words, not raw figures (no strength, dBFS or Hz), so answers can't quote them.
     `[ears] BPM: ${bpmSentence(a)} | Key: ${keyLabel(a.key, a.scale)} (${keyWord(a.keyStrength)}${runner})`,
     `[ears] Energy (loudness): ${energyLabel(a.energy)} | Brightness (tone): ${brightnessLabel(a.brightness)}`,
+    // F4: where Ears listened, so ear-training moments can say where in the track.
+    ...(a.snippets.length ? [`[ears] Heard at: ${a.snippets.map((x) => `${clock(x.startMs)} ${styleDisplayName(x.topStyle)}${x.p != null ? ` ${pct(x.p)}%` : ""}`).join(", ")}`] : []),
     `[library] My genre (the person's own tag; it always wins): ${a.myGenre?.trim() || "not set yet"}`,
   ].join("\n");
 }

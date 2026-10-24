@@ -32,7 +32,7 @@ export const TEACH_SECTIONS = ["what", "sound", "start"] as const;
 export type TeachSection = (typeof TEACH_SECTIONS)[number];
 export type Sentence = { text: string; source: Source; url?: string; section?: TeachSection };
 /** kind: what the link opens (F4): a track page, a playlist/tracklist/tag page, or an article. */
-export type LinkKind = "track" | "artist" | "playlist" | "article";
+export type LinkKind = "track" | "artist" | "playlist" | "chart" | "article";
 export type ListenNext = { artist: string; title: string; url: string; because: string; kind?: LinkKind; section?: TeachSection };
 export type GenreCall = { name: string; reason: string };
 export type LoopPick = { id: string; why: string };
@@ -88,7 +88,7 @@ export const ANSWER_SCHEMA = {
         required: ["artist", "title", "url", "because"],
         properties: {
           artist: { type: "string" }, title: { type: "string" }, url: { type: "string" }, because: { type: "string" },
-          kind: { type: "string", enum: ["track", "artist", "playlist", "article"], description: "track = the track's own page (SoundCloud, Bandcamp, Beatport, YouTube video, Discogs release); artist = the artist's or label's profile page; playlist = a playlist, tracklist, chart or tag page; article = a written article or review." },
+          kind: { type: "string", enum: ["track", "artist", "playlist", "chart", "article"], description: "What the link opens: track = the track's own page (SoundCloud, Bandcamp, Beatport, YouTube video, Discogs release); artist = the artist's or label's page; playlist = a playlist or tracklist; chart = a chart page; article = a written article or review. The pick itself is always one named track." },
           section: { type: "string", enum: [...TEACH_SECTIONS], description: "Teach only: which section this listen link belongs to (one per section)." },
         },
       },
@@ -157,6 +157,9 @@ export type Needs = {
   searchUrls?: ReadonlySet<string>;
   /** Lines the person wrote themselves: a profile update must keep each word for word. */
   keepLines?: readonly string[];
+  /** F4: every tempo the facts give (lead and other readings, Studio tempo); a BPM figure in an
+   *  answer must be one of these (±0.6), so no half/double maths slips into prose. */
+  bpms?: readonly number[];
   /** Chat: library refs (T1…) → track ids; trackIds outside it are dropped. */
   trackRefs?: ReadonlyMap<string, string>;
 };
@@ -174,6 +177,10 @@ export function isDownloadLink(u: string): boolean {
   }
 }
 
+/** F2: a chart, playlist or compilation named as if it were a track. */
+const NOT_A_TRACK = /\b(top\s*\d+|charts?|playlists?|compilations?|best of|various artists|hits of|\d{4}\s+(?:selection|list|mix)|essential mix|tracklist)\b/i;
+const BPM_FIGURE = /\b(\d{2,3}(?:[.,]\d)?)\s*bpm\b/gi;
+
 const NUMERIC_FACT = /\b\d{2,3}(?:[.,]\d)?\s*bpm\b|\b(?:1[0-2]|[1-9])[ab]\b|\b[a-g](?:#|b|♯|♭)?\s+(?:major|minor)\b/i;
 
 export type Checked = { ok: true; answer: MentorAnswer; dropped: string[] } | { ok: false; problem: string };
@@ -181,7 +188,7 @@ export type Checked = { ok: true; answer: MentorAnswer; dropped: string[] } | { 
 const str = (v: unknown, max = 2000) => (typeof v === "string" && v.trim() ? v.trim().slice(0, max) : null);
 const isUrl = (v: unknown): v is string => typeof v === "string" && /^https?:\/\/\S+$/i.test(v.trim());
 const isSection = (v: unknown): v is TeachSection => typeof v === "string" && (TEACH_SECTIONS as readonly string[]).includes(v);
-const KINDS: LinkKind[] = ["track", "artist", "playlist", "article"];
+const KINDS: LinkKind[] = ["track", "artist", "playlist", "chart", "article"];
 /** N4: a SoundCloud or Bandcamp profile is an artist page, whatever the model called it. */
 export function linkKind(u: string, said: LinkKind): LinkKind {
   try {
@@ -224,6 +231,15 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
     if (!isSource(o.source)) return { ok: false, problem: `sentences[${i}] has no valid source (one of ${SOURCES.join(", ")}).` };
     if (o.source === "web" && !isUrl(o.url)) return { ok: false, problem: `sentences[${i}] is from the web but has no url.` };
     if (RAW_NUMBERS.test(text)) return { ok: false, problem: `sentences[${i}] uses raw measurement numbers ("${text.match(RAW_NUMBERS)?.[0]}"): describe them in words (bright/warm, loud/quiet, likely/unsure), no Hz, dBFS, centroid or strength figures.` };
+    // Ear training only: other answers may quote general genre tempo ranges.
+    if (job === "ear_training" && needs.bpms?.length) {
+      for (const m of text.matchAll(BPM_FIGURE)) {
+        const v = Number(m[1].replace(",", "."));
+        if (!needs.bpms.some((b) => Math.abs(b - v) <= 0.6)) {
+          return { ok: false, problem: `sentences[${i}] states ${m[0]}, which isn't a tempo in the facts. Quote tempos exactly as the facts give them (lead or other reading); never work out half or double time yourself.` };
+        }
+      }
+    }
     if (job === "studio_start" && KEY_JARGON.test(text)) {
       return { ok: false, problem: `sentences[${i}] uses key jargon ("${text.match(KEY_JARGON)?.[0]}"): say it in plain words ("the bass and chords would clash, drums still fit").` };
     }
@@ -256,6 +272,9 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
       const artist = str(o.artist, 120), title = str(o.title, 200), because = str(o.because, 400);
       if (job === "listen_next" && because && NUMERIC_FACT.test(because)) {
         return { ok: false, problem: `The "because" for ${artist} – ${title} states a tempo or key ("${because.match(NUMERIC_FACT)?.[0]}"). Give the reason in words ("a similar tempo", "the same dark, driving feel") without BPM, key or Camelot numbers.` };
+      }
+      if (job === "listen_next" && artist && title && (NOT_A_TRACK.test(artist) || NOT_A_TRACK.test(title))) {
+        return { ok: false, problem: `"${artist} – ${title}" is a chart, playlist or compilation, not a track. Every pick must be one named track (artist and track title); link the chart page with kind chart if that's where you found it.` };
       }
       if (!artist || !title || !because || !isUrl(o.url)) {
         dropped.push(`listen-next item without artist, title, link or because`);

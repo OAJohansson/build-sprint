@@ -3,26 +3,26 @@
 .root {
   --bg: #131110; --panel: #1a1715; --crate-bg: #1d1814; --ink: #f1e6d3; --muted: #9a8b78; --line: #2c2622;
   --gold: #f2b134;
-  height: 100dvh; display: grid; grid-template-columns: 1fr; grid-template-rows: 76px 1fr 262px;
+  height: 100dvh; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 76px 1fr 262px;
   background: var(--bg); color: var(--ink); font-family: var(--f-mono), monospace; overflow: hidden; user-select: none;
 }
 
 /* Control bar */
-.bar { position: relative; z-index: 10; display: flex; align-items: center; padding: 0 24px; gap: 18px; background: var(--panel); border-bottom: 1px solid var(--line); }
-.logo { font: italic 400 34px var(--f-serif); display: flex; align-items: center; gap: 12px; }
+.bar { position: relative; z-index: 10; min-width: 0; display: flex; align-items: center; padding: 0 24px; gap: 18px; background: var(--panel); border-bottom: 1px solid var(--line); }
+.logo { font: italic 400 34px var(--f-serif); display: flex; align-items: center; gap: 12px; flex: none; white-space: nowrap; }
 
 /* The open track: its name (click to rename), My tracks, and whether it's saved */
 .trackBox { position: relative; display: flex; align-items: center; gap: 8px; margin: 0 auto 0 18px; padding-left: 18px; border-left: 1px solid var(--line); min-width: 0; }
 .trackTitle {
   font: 500 15px var(--f-mono); color: var(--ink); background: transparent; border: 1px solid transparent; border-radius: 6px;
-  padding: 6px 8px; outline: none; max-width: 320px; text-overflow: ellipsis; transition: border-color 150ms ease-out, background 150ms ease-out;
+  padding: 6px 8px; outline: none; max-width: 320px; min-width: 96px; flex: 0 1 auto; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; transition: border-color 150ms ease-out, background 150ms ease-out;
 }
 .trackTitle:hover { border-color: var(--line); }
 .trackTitle:focus { border-color: var(--gold); background: #0b0a09; }
-.libBtn { display: flex; align-items: center; gap: 4px; font: 400 12px var(--f-mono); color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 99px; padding: 6px 10px 6px 12px; cursor: pointer; }
+.libBtn { flex: none; display: flex; align-items: center; gap: 4px; font: 400 12px var(--f-mono); color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 99px; padding: 6px 10px 6px 12px; cursor: pointer; }
 .libBtn svg { width: 14px; height: 14px; }
 .libBtn:hover, .libBtn[aria-expanded="true"] { color: var(--ink); }
-.saveState { font: 400 11px var(--f-mono); color: #6f6357; white-space: nowrap; background: none; border: 0; padding: 0 4px; }
+.saveState { flex: none; font: 400 11px var(--f-mono); color: #6f6357; white-space: nowrap; background: none; border: 0; padding: 0 4px; }
 .saveError { color: #ef5b37; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .library {
   position: absolute; left: 18px; top: calc(100% + 18px); z-index: 20; width: 360px; max-height: 420px; display: flex; flex-direction: column;
@@ -60,7 +60,7 @@
 .gateForm button { margin-top: 8px; font: 500 14px var(--f-mono); color: #131110; background: #f2b134; border: 0; border-radius: 99px; padding: 12px; cursor: pointer; }
 .notice { color: #9a8b78; font-size: 14px; margin: 0; }
 .mark { width: 34px; height: 34px; flex: none; }
-.transport { display: flex; align-items: center; gap: 12px; }
+.transport { flex: none; display: flex; align-items: center; gap: 12px; }
 .tb {
   width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line);
   background: #231f1c; color: var(--ink); cursor: pointer; transition: transform 120ms ease-out, background 150ms ease-out;
@@ -196,3 +196,12 @@
 .right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
 .right em { font: normal 400 11px var(--f-mono); color: var(--muted); }
 .mini { width: 84px; height: 20px; }
+
+/* Laptop widths (user test F3): a long draft name keeps a readable start; the bar tightens so
+   Save, the transport and the Settings icon all fit. */
+@media (max-width: 1366px) {
+  .bar { gap: 12px; padding: 0 16px; }
+  .trackBox { margin-left: 12px; padding-left: 12px; gap: 6px; }
+  .transport { gap: 8px; }
+  .undoWord { display: none; }
+}

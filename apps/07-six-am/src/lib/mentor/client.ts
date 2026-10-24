@@ -94,6 +94,7 @@ export const mentorApi = (code: string) => ({
       }),
     }),
   thread: (id: string) => call<{ thread: string; messages: ThreadMessage[] }>(code, `/api/mentor?thread=${encodeURIComponent(id)}`).then((r) => r.messages),
+  importPlaylists: (playlists: PlaylistLike[]) => call<{ added: number; total: number; unlock: UnlockState }>(code, "/api/mentor/import", { method: "POST", body: JSON.stringify({ playlists }) }),
   usage: () => call<{ usage: UsageSummary }>(code, `/api/mentor/usage?tz=${tz()}`).then((r) => r.usage),
   profile: () => call<{ profile: Profile; store: StoreKind; unlock: UnlockState }>(code, "/api/mentor/profile"),
   saveProfile: (text: string, from?: "setup") => call<{ profile: Profile }>(code, "/api/mentor/profile", { method: "PUT", body: JSON.stringify({ text, from }) }).then((r) => r.profile),

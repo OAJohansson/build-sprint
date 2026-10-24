@@ -242,12 +242,13 @@ function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
       <div id="mentor-panel" className={s.panelSlot}>
         <MentorPanel
           data={mentor}
-          track={selected}
+          // F1: only a row the person clicked this session goes along, never the default selection.
+          track={selId ? selected : null}
           library={m.results}
           canLearn={canLearn}
           earsBusy={!m.demo && !!activeItem(m.queue)}
           onClose={() => setOpen(false)}
-          onSetGenre={(id, g) => { saveGenre(id, g); flash(`My genre set to ${g}`); }}
+          onSetGenre={(id, g) => { saveGenre(id, g); flash(g ? `My genre set to ${g}` : "My genre cleared"); }}
           onOpenStudio={(start, title) => {
             // N1: a new, unsaved Studio track with the loops placed, at its own tempo; the device
             // tempo and the saved tracks are left alone.

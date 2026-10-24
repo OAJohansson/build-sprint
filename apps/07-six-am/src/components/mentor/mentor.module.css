@@ -58,7 +58,10 @@
 .because { margin: 2px 0 0; font: 400 14px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); }
 .panel { --goldDim: #c4a46a; }
 .because span { color: var(--muted); }
-.fb { display: flex; gap: 12px; margin: 4px 0 0 -6px; }
+/* One quiet pair per pick, shown on hover or keyboard focus (always on touch screens) */
+.fb { display: flex; gap: 12px; margin: 4px 0 0 -6px; opacity: 0; transition: opacity 150ms ease; }
+.list li:hover .fb, .fb:focus-within, .fb:has([aria-pressed="true"]) { opacity: 1; }
+@media (hover: none) { .fb { opacity: 1; } }
 .noted { font: 400 12px var(--f-mono); color: var(--muted); display: inline-flex; align-items: center; min-height: 28px; }
 
 /* Studio start */
@@ -99,8 +102,8 @@
   border-radius: 6px; padding: 8px 12px; min-height: 38px; outline: none; resize: none; overflow-y: hidden; field-sizing: content; max-height: calc(6 * 21px + 18px);
 }
 /* The one cue under the input (L87): a quiet text button */
-.help { display: inline-flex; align-items: center; margin: 6px 0 0 -6px; padding: 0 6px; min-height: 28px; border: 0; border-radius: 4px; background: none; font: 400 12px var(--f-mono); color: var(--muted); cursor: pointer; transition: color 150ms ease; }
-.help:hover { color: var(--ink); }
+.help { display: inline-flex; align-items: center; margin: 8px 0 0; padding: 0 10px; min-height: 28px; border: 1px solid var(--line); border-radius: 99px; background: none; font: 400 12px var(--f-mono); color: var(--muted); cursor: pointer; transition: color 150ms ease, border-color 150ms ease; }
+.help:hover { color: var(--ink); border-color: #4a4038; }
 .help[aria-disabled="true"] { color: var(--faint); cursor: default; }
 .field::placeholder { color: var(--faint); }
 .field:focus { border-color: var(--muted); }

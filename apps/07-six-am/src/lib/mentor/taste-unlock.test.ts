@@ -17,13 +17,13 @@ describe("taste unlock", () => {
     expect(countConversations([])).toBe(0);
     const u = unlockState({ tracks: 0, genresTagged: 0, conversations: 0 });
     expect(u.unlocked).toBe(false);
-    expect(unlockProgress(u)).toBe(`0/${TASTE_UNLOCK.tracks} · 0/5 · 0/3`);
+    expect(unlockProgress(u)).toBe(`0/${TASTE_UNLOCK.tracks} tracks · 0/5 with your genre · 0/3 chats`);
   });
   it("unlocks only when all three are met; progress caps at the target", () => {
     expect(unlockState({ tracks: 20, genresTagged: 5, conversations: 2 }).unlocked).toBe(false);
     const u = unlockState({ tracks: 31, genresTagged: 5, conversations: 3 });
     expect(u.unlocked).toBe(true);
-    expect(unlockProgress(u)).toBe("20/20 · 5/5 · 3/3");
+    expect(unlockProgress(u)).toBe("20/20 tracks · 5/5 with your genre · 3/3 chats");
     expect(unlockText(u)).toBe("Your music taste profile unlocks at 20 tracks, 5 with your genre and 3 Mentor chats.");
   });
 });

@@ -4,7 +4,7 @@
 // no footnote markers), then one dim "From: …" line with the web pages as links. Sources are still
 // required per sentence on the server; here they are only summed up. Job extras sit inline as
 // quiet actions: the genre to accept, listen-next picks, teach sections, the Studio start.
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { EarsAnalysis } from "@/lib/ears/results";
 import { SOURCES, type ListenNext, type MentorAnswer, type Sentence, type Source, type TeachSection } from "@/lib/mentor/answer";
 import { studioStart, type StudioStart } from "@/lib/mentor/studio";
@@ -13,7 +13,7 @@ import { LOOPS, TRACKS } from "@/lib/timeline";
 import s from "./mentor.module.css";
 
 const FROM_WORD: Record<Source, string> = {
-  ears: "Ears' measurements", uploader: "uploader tag", web: "the web", profile: "your taste profile",
+  ears: "Ears' measurements", uploader: "SoundCloud info", web: "the web", profile: "your taste profile",
   library: "your library", memory: "earlier chats", general: "general knowledge",
 };
 /** Model text can carry no-break spaces; they make odd line breaks in a narrow column. */
@@ -43,6 +43,8 @@ export type TurnProps = {
   myGenre?: string;
   onTellMore?: () => void;
   onAcceptGenre?: (name: string) => void;
+  /** F6: put the previous My genre back ("" = none). */
+  onUndoGenre?: (previous: string) => void;
   onFeedback?: (item: ListenNext, kind: "more_like_this" | "not_for_me") => void;
   /** N1: open a new, unsaved Studio track with these loops at this tempo. */
   onOpenStudio?: (start: StudioStart) => void;
@@ -67,9 +69,13 @@ function Paras({ list, lines }: { list: Sentence[]; lines?: boolean }) {
 }
 
 /** One dim line of sources, no label (clutter review): "Ears' measurements · uploader tag · discogs.com ↗". */
-function Sources({ answer }: { answer: MentorAnswer }) {
+function Sources({ answer, skip }: { answer: MentorAnswer; skip?: ReadonlySet<string> }) {
+  // F7: only what this answer's sentences used; web pages by their own domain, once each.
   const used = SOURCES.filter((x) => x !== "web" && answer.sentences.some((y) => y.source === x));
-  const web = [...new Set(answer.sentences.filter((x) => x.source === "web" && x.url).map((x) => x.url!))];
+  const pages = answer.sentences.filter((x) => x.source === "web" && x.url && !skip?.has(x.url)).map((x) => x.url!);
+  const byDomain = new Map<string, string>();
+  for (const u of pages) if (!byDomain.has(shortUrl(u))) byDomain.set(shortUrl(u), u);
+  const web = [...byDomain.values()];
   if (!used.length && !web.length) return null;
   return (
     <p className={s.from}>
@@ -80,12 +86,28 @@ function Sources({ answer }: { answer: MentorAnswer }) {
   );
 }
 
-export function Turn({ ask, answer, job, track, studio, dropped, myGenre, onTellMore, onAcceptGenre, onFeedback, onOpenStudio, children }: TurnProps) {
+export function Turn({ ask, answer, job, track, studio, dropped, myGenre, onTellMore, onAcceptGenre, onUndoGenre, onFeedback, onOpenStudio, children }: TurnProps) {
   const kind = answer.intent ?? job;
   const start = studio ?? (kind === "studio_start" && track && answer.loops?.length ? studioStart(track, answer.loops) : undefined);
   const teach = kind === "teach" && answer.sentences.some((x) => x.section);
   const help = kind === "help";
-  const accept = kind === "suggest_genre" && answer.genre && onAcceptGenre && myGenre?.trim().toLowerCase() !== answer.genre.name.trim().toLowerCase();
+  // F6: accepting shows "Set to X · Undo"; Undo puts the previous My genre back. Focus follows.
+  const [setFrom, setSetFrom] = useState<string | null>(null);
+  const undoRef = useRef<HTMLButtonElement>(null), acceptRef = useRef<HTMLButtonElement>(null);
+  const moved = useRef(false);
+  useEffect(() => {
+    if (!moved.current) return;
+    moved.current = false;
+    (setFrom !== null ? undoRef : acceptRef).current?.focus();
+  }, [setFrom]);
+  const genre = kind === "suggest_genre" ? answer.genre : undefined;
+  const accept = !!genre && !!onAcceptGenre && setFrom === null && myGenre?.trim().toLowerCase() !== genre.name.trim().toLowerCase();
+  const justSet = !!genre && setFrom !== null;
+  const more = answer.tellMore && !!onTellMore;
+  // Clutter: the key note is dropped when the answer already talks about the key.
+  const saysKey = answer.sentences.some((x) => /\bkey\b|\b[A-G](?:#|b)?\s+(?:major|minor)\b/i.test(x.text));
+  // Teach: links shown as picks aren't repeated in the source line.
+  const shown = new Set((answer.listenNext ?? []).map((l) => l.url));
   const sections = (["what", "sound", "start"] as const).map((sec) => ({ sec, list: answer.sentences.filter((x) => (x.section ?? "what") === sec), pick: answer.listenNext?.find((l) => l.section === sec) }));
 
   return (
@@ -100,24 +122,30 @@ export function Turn({ ask, answer, job, track, studio, dropped, myGenre, onTell
       )) : <Paras list={answer.sentences} lines={help} />}
 
       {!teach && answer.listenNext?.length ? <Picks items={answer.listenNext} onFeedback={onFeedback} /> : null}
-      {start ? <StudioBlock start={start} onOpen={onOpenStudio} /> : null}
+      {start ? <StudioBlock start={start} onOpen={onOpenStudio} hideKeyNote={saysKey} /> : null}
       {dropped?.length ? <p className={s.dropped}>Left out {dropped.length} pick{dropped.length > 1 ? "s" : ""}: no clean link found.</p> : null}
       {children}
       {/* One place for the answer's actions: under the answer, before the sources. A genre that is
           already My genre shows nothing (clutter review). */}
-      {accept || (answer.tellMore && onTellMore) ? (
+      {accept || justSet || more ? (
         <div className={s.actions}>
-          {accept ? <button className={s.btn} onClick={() => onAcceptGenre!(answer.genre!.name)} title={myGenre ? `Replaces your “${myGenre}”` : undefined}>Use “{answer.genre!.name}” as My genre</button> : null}
-          {answer.tellMore && onTellMore ? <button className={s.textBtn} onClick={onTellMore}>Tell me more</button> : null}
+          {accept ? <button ref={acceptRef} className={s.btn} onClick={() => { moved.current = true; setSetFrom(myGenre ?? ""); onAcceptGenre!(genre!.name); }} title={myGenre ? `Replaces your “${myGenre}”` : undefined}>Use “{genre!.name}” as My genre</button> : null}
+          {justSet ? (
+            <span className={s.noted} role="status">
+              Set to {genre!.name} ·
+              <button ref={undoRef} className={s.textBtn} onClick={() => { moved.current = true; onUndoGenre?.(setFrom!); setSetFrom(null); }}>Undo</button>
+            </span>
+          ) : null}
+          {more ? <button className={s.textBtn} onClick={onTellMore}>Tell me more</button> : null}
         </div>
       ) : null}
-      {help ? null : <Sources answer={answer} />}
+      {help ? null : <Sources answer={answer} skip={shown} />}
     </article>
   );
 }
 
 /** What the link opens when it isn't the track's own page (F4, N4), as a mono suffix after ↗. */
-const KIND_WORD: Record<string, string> = { artist: "artist page", playlist: "playlist", article: "article" };
+const KIND_WORD: Record<string, string> = { artist: "artist page", playlist: "playlist", chart: "chart", article: "article" };
 const kindTag = (it: ListenNext) => (it.kind && it.kind !== "track" ? <span className={s.kind}>{KIND_WORD[it.kind]}</span> : null);
 
 function PickLink({ it }: { it: ListenNext }) {
@@ -160,7 +188,7 @@ function Picks({ items, onFeedback }: { items: ListenNext[]; onFeedback?: TurnPr
   );
 }
 
-function StudioBlock({ start, onOpen }: { start: StudioStart; onOpen?: (start: StudioStart) => void }) {
+function StudioBlock({ start, onOpen, hideKeyNote }: { start: StudioStart; onOpen?: (start: StudioStart) => void; hideKeyNote?: boolean }) {
   const loops = start.loops.map((l) => ({ ...l, loop: LOOPS.find((x) => x.id === l.id) })).filter((l) => l.loop);
   return (
     <>
@@ -168,7 +196,7 @@ function StudioBlock({ start, onOpen }: { start: StudioStart; onOpen?: (start: S
         <dt>Tempo</dt>
         <dd><span className={s.gold}>{formatBpm(start.bpm)}</span> BPM</dd>
         <dt>Key</dt>
-        <dd>{start.key.trackKey} · crate {start.key.crateKey}<br /><span className={s.by}>{start.key.note}</span></dd>
+        <dd>{start.key.trackKey} · crate {start.key.crateKey}{hideKeyNote ? null : <><br /><span className={s.by}>{start.key.note}</span></>}</dd>
         <dt>Loops</dt>
         <dd>
           <ul className={s.loops}>

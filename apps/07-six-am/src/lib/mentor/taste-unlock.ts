@@ -25,6 +25,8 @@ export function unlockState(have: UnlockCounts): UnlockState {
 /** The prompt and progress lines shown while locked (owner's copy, L94). */
 export const unlockText = (u: UnlockState) =>
   `Your music taste profile unlocks at ${u.need.tracks} tracks, ${u.need.genresTagged} with your genre and ${u.need.conversations} Mentor chats.`;
-export const unlockProgress = (u: UnlockState) =>
-  [["tracks", u.have.tracks, u.need.tracks], ["genresTagged", u.have.genresTagged, u.need.genresTagged], ["conversations", u.have.conversations, u.need.conversations]]
-    .map(([, h, n]) => `${Math.min(h as number, n as number)}/${n}`).join(" · ");
+/** "15/20 tracks · 5/5 with your genre · 3/3 chats" (user test F9: labelled). */
+export const unlockProgress = (u: UnlockState) => {
+  const n = (h: number, need: number) => `${Math.min(h, need)}/${need}`;
+  return `${n(u.have.tracks, u.need.tracks)} tracks · ${n(u.have.genresTagged, u.need.genresTagged)} with your genre · ${n(u.have.conversations, u.need.conversations)} chats`;
+};

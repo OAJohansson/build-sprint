@@ -82,6 +82,6 @@ describe("prompts", () => {
     expect(r.messages.map((m) => m.role)).toEqual(["user", "assistant", "user", "assistant", "user"]);
     const last = r.messages.at(-2)!.content as { cache_control?: unknown }[];
     expect(last[0].cache_control).toBeTruthy();
-    expect(JSON.stringify(r.messages.at(-1))).toMatch(/Currently selected in the table/);
+    expect(JSON.stringify(r.messages.at(-1))).toMatch(/The row the person clicked in the table this session/);
   });
 });

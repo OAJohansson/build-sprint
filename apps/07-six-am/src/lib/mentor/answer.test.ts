@@ -104,4 +104,15 @@ describe("checkAnswer", () => {
     const odd = checkAnswer("chat", { ...ok, intent: "dance" });
     expect(odd.ok && odd.answer.intent).toBe("chat");
   });
+  it("listen next picks are named tracks, never charts (F2); ear training quotes only real tempos (F4)", () => {
+    const pick = (artist: string, title: string) => ({ ...ok, listenNext: [{ artist, title, url: "https://x.com/t", because: "same rolling feel", kind: "chart" }] });
+    expect(checkAnswer("listen_next", pick("Beatport", "Top 100 Techno")).ok).toBe(false);
+    expect(checkAnswer("listen_next", pick("Various Artists", "Warehouse Sessions")).ok).toBe(false);
+    const r = checkAnswer("listen_next", pick("Some Artist", "Real Track"));
+    expect(r.ok && r.answer.listenNext?.[0].kind).toBe("chart");
+    const ear = (text: string) => checkAnswer("chat", { intent: "ear_training", sentences: [{ text, source: "ears" }], tellMore: false }, { bpms: [125.9, 63] });
+    expect(ear("Around 1:00, the kick sits on every beat at 125.9 BPM.").ok).toBe(true);
+    expect(ear("Half time would be 62.9 BPM.").ok).toBe(true);
+    expect(ear("Half time would be 61 BPM.").ok).toBe(false);
+  });
 });

@@ -25,7 +25,7 @@ export const JOBS_SPEC: Record<Job, { instruction: string; effort: "low" | "medi
     effort: "medium", web: true, needsTrack: false, counted: true,
   },
   ear_training: {
-    instruction: "Give 3 short listening prompts for this track: concrete things to listen for while it plays (e.g. where the kick sits against the measured BPM, whether the bass follows the measured key, what makes it bright or warm), each tied to one of the measurements or tags and labelled with that source. Phrase them as things to listen for, never as things you heard. Describe measurements in words (bright, warm, loud, quiet), no figures other than BPM. 3–4 sentences. No web search.",
+    instruction: "Give 2 or 3 concrete moments to listen for in this track, one sentence each: where in the track (use the times Ears listened at, given as 'Heard at', or say early on / in the middle / near the end) and what to notice there, in plain words tied to a measurement or tag (e.g. 'Around 2:00, notice how the kick sits on every beat at the measured tempo'). Phrase them as things to listen for, never as things you heard. Describe measurements in words (bright, warm, loud, quiet). If you mention the tempo or its other reading, quote the numbers exactly as the facts give them; never work out half or double time yourself. 2–3 sentences, tellMore false. No web search.",
     effort: "low", web: false, needsTrack: true, counted: true,
   },
   studio_start: {
@@ -33,7 +33,7 @@ export const JOBS_SPEC: Record<Job, { instruction: string; effort: "low" | "medi
     effort: "low", web: false, needsTrack: true, counted: true,
   },
   listen_next: {
-    instruction: "Suggest up to 3 tracks to listen to next, from the person's taste profile and this track's facts (or just the profile with no track). Use web search (at most 2 searches) to find real tracks. Link each to a page from your search results, preferring the track's own page (SoundCloud, Bandcamp, Beatport, YouTube video, Discogs release); when there's no track page, a playlist, chart or article page that names the track is fine, or the artist's or label's own page. Never link to download or file-sharing sites (MP3 or zip download pages, DJ-pool or 'free download' mirrors): they are usually unlicensed; if that's the only link, leave the pick out. Set kind for each link honestly (track, playlist or article). Give artist, title and a one-line 'because…' that ties it to their profile or this track's measurements, in words: no BPM, key or Camelot numbers in 'because' (say 'a similar tempo', 'the same dark key feel'), since you can't check those figures; the reasons go in 'because', not in the sentences. Never invent an artist, track or link; if you can't find enough real ones, give fewer. Sentences: 1–2 only, on what the picks have in common (or that you found fewer).",
+    instruction: "Suggest 3 tracks to listen to next, from the person's library, taste profile and this track's facts. Every pick is one named track: a real artist and a real track title, never a chart, playlist, compilation, label or mix as the pick itself. Use web search (at most 2 searches) to find real tracks. Link each pick to the track's own page when you found one (SoundCloud, Bandcamp, Beatport, YouTube video, Discogs release) and set kind track; if only a chart, playlist or article page names the track, still name the track as the pick and link that page with kind chart, playlist or article. Never link to download or file-sharing sites (MP3 or zip download pages, DJ-pool or 'free download' mirrors); leave such a pick out. Give artist, title and a one-line 'because…' tied to their library or this track's measurements, in words: no BPM, key or Camelot numbers in 'because' (say 'a similar tempo', 'the same dark key feel'). Never invent an artist, track or link; if you can't find 3 real named tracks, give fewer and say so in one sentence. Sentences: 1–2 only, on what the picks have in common; the reasons go in 'because'",
     effort: "medium", web: true, needsTrack: false, counted: true,
   },
   chat: {
@@ -77,6 +77,7 @@ Sources: label every fact
   - memory: from earlier conversations with you (the memory summary or earlier turns).
   - general: general music knowledge or advice that isn't about this specific track.
 - When a sentence mixes sources, split it into two sentences.
+- A fact taken from a page you found with web search this turn is always web, with that page's URL, never general.
 - General facts about a genre or scene (typical tempo ranges, history, instruments) are general, even when they sit next to this track's numbers; ears is only for what Ears measured on this track. Never put a general fact and a measurement in one sentence: split them.
 - Describing this track as loud, quiet, driving, punchy, bright, warm or dark in tone comes from Ears' energy and brightness: label it ears, even in plain words.
 - What the uploader's title, name, genre tag or tags say is uploader, even when Ears agrees; a sentence that reports both the tag and a measurement must be split.
@@ -99,6 +100,8 @@ Voice
 - Explain a technical word only the first time it comes up in this conversation, in a few plain words; if the conversation so far already explained it, don't explain it again.
 - Genre calls are always hedged: "most likely", "closest to", "could pass for". Never certain-sounding.
 - No flattery, no exclamation-mark enthusiasm, no emoji, no chatty persona, no "Great question".
+- Set tellMore to true only when there is something specific and worth hearing left to say; otherwise false.
+- Don't restate the person's own My genre ("your own tag is X") unless they ask about it or your call differs from it.
 - Teach mode is the exception: a structured, patient teacher, longer and in order.
 - The person's own genre tag ("My genre") always wins: never tell them it's wrong; you may say how the measurements compare.
 - Use the person's own words for genres when they fit (their genre tags, their accepted groups, their profile). If there is no taste profile, answer from the library and the track facts; never mention that the profile is missing or locked.
@@ -118,7 +121,8 @@ Output
 
 The one chat (job "chat")
 - The person types anything into one chat. Work out what they ask for and set intent to one of: explain, suggest_genre, teach, ear_training, studio_start, listen_next (then follow that job's instructions below), taste_session, propose_groups, help, or chat (anything else: answer it in 2–3 sentences).
-- Work out which track(s) the question is about from the library (match titles and artists loosely: "the Fovos one", "that Hot Creations track"); put their refs in trackIds, most relevant first. "This track", "it" or no named track means the currently selected one, if any. A track not in the library: say you only know the tracks in their library and answer generally.
+- Work out which track(s) the question is about from the library (match titles and artists loosely: "the Fovos one", "that Hot Creations track"); put their refs in trackIds, most relevant first.
+- "That", "it", "this track", "the first track you explained", "the last one": resolve these from the conversation first, using the list of tracks discussed so far (in order). Only when the conversation names no track, use the row the person clicked in the table (if any). A track not in the library: say you only know the tracks in their library and answer generally.
 - Each job's "this track" is the track the question is about; its library line holds the facts. The selected track's full facts come with the question when one is selected.
 - taste_session: they want to compare two snippets and say which they prefer. One short sentence (source general) saying Six AM picked two of their tracks to compare below. Nothing else.
 - propose_groups: they want their tagged tracks grouped. One short sentence (source general) saying you'll look for groups among their tagged tracks below.
@@ -165,8 +169,12 @@ export type MentorInput = {
   context?: string;
   /** L88: the running memory summary of earlier conversations, cached with the profile. */
   memory?: string;
-  /** L86: the track selected in the table, as light context for a chat question. */
+  /** L86: the row the person clicked in the table this session, as light context. */
   selected?: EarsAnalysis | null;
+  /** F1: tracks discussed in this conversation, oldest first ("T5 | artist – title"). */
+  discussed?: string[];
+  /** F1: full facts of the most recently discussed track (for follow-ups and ear training). */
+  lastDiscussed?: EarsAnalysis | null;
 };
 
 export const ANSWER_TOOL: Anthropic.Beta.BetaTool = {
@@ -203,9 +211,11 @@ function jobText(input: MentorInput): string {
   const t = input.track;
   if (t) parts.push(`Track facts (each line starts with its source):\n${trackContext(t)}`);
   else if (input.job === "chat") {
+    if (input.discussed?.length) parts.push(`Tracks discussed in this conversation, oldest first:\n${input.discussed.map((d, i) => `${i + 1}. ${d}`).join("\n")}`);
+    if (input.lastDiscussed) parts.push(`Full facts of the most recently discussed track:\n${trackContext(input.lastDiscussed)}`);
     parts.push(input.selected
-      ? `Currently selected in the table (light context: the question may be about another track, or none):\n${trackContext(input.selected)}`
-      : "No track is selected in the table.");
+      ? `The row the person clicked in the table this session (light context only; the conversation comes first):\n${trackContext(input.selected)}`
+      : "The person hasn't clicked a row in the table this session.");
   } else if (input.job !== "setup" && input.job !== "learn" && input.job !== "propose_groups" && input.job !== "taste_session") {
     parts.push("No track is selected: answer generally.");
   }

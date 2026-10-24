@@ -131,7 +131,7 @@ export function SettingsView() {
       <footer className={s.foot}>
         Mentor · <span className={s.num}>{usage ? `est. today ${money(usage.todayUsd)} · ${monthShort()} ${money(usage.monthUsd)}` : "est. today –"}</span>
       </footer>
-      {setup ? <SetupDialog data={data} onClose={() => { setSetup(false); data.reload(); }} /> : null}
+      {setup ? <SetupDialog data={data} mode={unlock.unlocked ? "setup" : "import"} onClose={() => { setSetup(false); data.reload(); }} /> : null}
     </div>
   );
 }

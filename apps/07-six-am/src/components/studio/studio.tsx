@@ -102,6 +102,8 @@ export function Studio() {
         if (me !== run.current) return;
         setTracks(list);
         setTrack(open);
+        // A re-run of this load (e.g. the access code changing) opens a saved track: it is no draft.
+        setDraft(null);
         setPhase({ is: "ready" });
       } catch (e) {
         if (me !== run.current) return;
@@ -217,7 +219,7 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
   // (and the Supabase track) when tracks need their own tempo.
   const [storedBpm] = useLocalStorage<number>(TEMPO_KEY, DEFAULT_BPM);
   const bpm = draft ? draft.bpm : clampBpm(storedBpm);
-  const t = useTimeline(track.doc, bpm);
+  const t = useTimeline(track.doc, bpm, draft ? 1 : 37);
   const [name, setName] = useState(track.name);
   const savedName = useRef(track.name);
   const [library, setLibrary] = useState(false);
@@ -244,7 +246,9 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
           <input
             className={s.trackTitle}
             value={name}
-            size={Math.max(8, name.length + 1)}
+            // F3: a long draft name is capped and ends in an ellipsis; the full name is the tooltip.
+            size={Math.min(Math.max(8, name.length + 1), 28)}
+            title={name}
             maxLength={80}
             aria-label="Track name"
             spellCheck={false}
@@ -277,7 +281,7 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
           <button className={s.tb} onClick={() => t.jumpTo(1)} aria-label="Back to start">{Icon.start}</button>
           <button className={cx(s.tb, s.play)} onClick={() => t.setPlaying(!t.playing)} aria-label={t.playing ? "Pause" : "Play"}>{t.playing ? Icon.pause : Icon.play}</button>
           <div className={s.lcd}><b>{t.bar}.{t.beat}</b><small>bar</small><b title={bpm === DEFAULT_BPM ? undefined : `Set from Analyse; the Studio's default is ${DEFAULT_BPM}`}>{formatBpm(bpm)}</b><small>bpm</small></div>
-          <button className={s.undo} onClick={t.undo} disabled={!t.canUndo}>{Icon.undo} Undo</button>
+          <button className={s.undo} onClick={t.undo} disabled={!t.canUndo} aria-label="Undo">{Icon.undo} <span className={s.undoWord}>Undo</span></button>
           <div className={s.knobWrap}>
             Filter
             <div className={s.knob} {...t.knob} role="slider" aria-label="Filter" aria-valuenow={Math.round(t.filter * 100)} style={{ ["--a" as string]: `${-135 + t.filter * 270}deg` }} />

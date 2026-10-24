@@ -10,6 +10,7 @@ import { JOBS_SPEC, type HistoryTurn, type LearnEvent, type MentorInput } from "
 import { CRATE_IDS, studioStart, type StudioStart } from "@/lib/mentor/studio";
 import { libraryOrder, libraryText, MAIN_THREAD, mergeSetupTracks, refOf, studioText } from "@/lib/mentor/memory";
 import { DEFAULT_BPM } from "@/lib/tempo";
+import { bpmChoice } from "@/lib/ears/bpm-choice";
 import { getStore } from "./store";
 import { loadMemory, refreshMemory, saveMemory, unlockFor, verbatim } from "./mentor-memory";
 import { sharedTraits } from "@/lib/mentor/group-traits";
@@ -256,8 +257,19 @@ async function askChat(store: MentorStore, body: AskBody, now: Date, tz: number,
     accepted.length ? `[library] Their accepted genre groups: ${accepted.map((g) => `${g.name} (${live(g)}; ${g.trackIds.length} tracks)`).join("; ")}` : "",
   ].filter(Boolean).join("\n\n");
 
+  // F1: the tracks this conversation has been about, in order of first mention.
+  const discussedIds: string[] = [];
+  for (const r of rows) {
+    if (r.role !== "assistant" || r.content.startsWith('{"error"')) continue;
+    try {
+      for (const id of (JSON.parse(r.content) as MentorAnswer).trackIds ?? []) if (!discussedIds.includes(id)) discussedIds.push(id);
+    } catch { /* not an answer */ }
+  }
+  const discussed = discussedIds.map((id) => library.find((a) => a.id === id)).filter((a): a is EarsAnalysis => !!a);
   const input: MentorInput = {
     job: "chat", message, context, selected,
+    discussed: discussed.map((a) => `${refById.get(a.id)} | ${a.uploader || "?"} – ${a.title || "untitled"}`),
+    lastDiscussed: discussed.at(-1) ?? null,
     // L92: while locked the Mentor neither uses nor shows a profile.
     profile: unlock.unlocked ? profile.text : "",
     memory: mem.summary,
@@ -267,7 +279,8 @@ async function askChat(store: MentorStore, body: AskBody, now: Date, tz: number,
   const threadId = MAIN_THREAD;
   let result;
   try {
-    result = await askClaude(input, { loopIds: CRATE_IDS, trackRefs: refs });
+    const bpms = library.flatMap((a) => { const c = bpmChoice(a); return [a.bpm, a.bpmAlternative?.bpm ?? 0, c.lead, c.other ?? 0, c.studio]; }).filter((x) => x > 0);
+    result = await askClaude(input, { loopIds: CRATE_IDS, trackRefs: refs, bpms });
   } catch (error) {
     if (error instanceof MentorError && error.costUsd > 0) {
       await store.addMessage({ threadId, role: "assistant", job: "chat", content: JSON.stringify({ error: error.kind }), sources: null, usage: error.usage, costUsd: error.costUsd, counted: false });

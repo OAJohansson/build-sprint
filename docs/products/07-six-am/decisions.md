@@ -66,3 +66,7 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T19 | 2026-10-24 | Copy for Claude lists every style the card shows (above 5%), not only the top 3 | PM | polish | |
 | L41 | 2026-10-24 | Ears v1.1 scope: manual genre per track (free text with suggestions, local, in copy and exports) and filters (BPM range, my-genre). Out: playlist filing (obsolete), automatic families (Phase 3 with the Mentor), play a filtered list (next) | owner | v1.1 | |
 | T20 | 2026-10-24 | No separate Discogs-style filter: the existing text filter already matches the top styles; the new genre filter is on the owner's own genre | PM | v1.1 | |
+| L42 | 2026-10-24 | BPM filter matches the other reading only when half/double time is unclear; a "less likely" alternative doesn't count (so 120–126 doesn't pull in 62 BPM ghosts) | PM (engineer's proposal) | v1.1 | |
+| L43 | 2026-10-24 | Any genre filter (incl. "No genre yet") shows only analysed tracks, since only results carry a genre | PM (engineer's proposal) | v1.1 | |
+| T21 | 2026-10-24 | BPM range and genre filter persist per device; the text filter stays session-only; "Clear filters" clears all three | PM | v1.1 | |
+| T22 | 2026-10-24 | "My genre" column last, field in the strip next to Copy for Claude; columns narrowed to fit 1280 (Track min 220 px); text filter also matches my genre; genre matching ignores case | PM | v1.1 | |

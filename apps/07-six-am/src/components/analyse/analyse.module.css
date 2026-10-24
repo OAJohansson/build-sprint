@@ -9,7 +9,7 @@
   --bg: #131110; --panel: #1a1715; --crate: #1d1814; --ink: #f1e6d3; --muted: #aa9c88; --faint: #958a7c;
   --line: #2c2622; --gold: #f2b134; --goldDim: #a68a5a; --orange: #ef5b37; --amber: #c4923f;
   --hover: #211d1a; --selFill: #28231f; --meterOn: #cdbfa8;
-  --cols: 32px minmax(320px, 1fr) 156px 140px 70px 104px 50px 56px 66px 124px;
+  --cols: 32px minmax(220px, 1fr) 150px 128px 70px 104px 50px 56px 66px 116px 112px;
   height: 100dvh; display: grid; grid-template-rows: 64px auto auto auto 1fr; background: var(--bg); color: var(--ink);
   font-family: var(--f-mono), monospace; overflow: hidden;
 }
@@ -32,7 +32,7 @@
 .btn:active { transform: scale(.97); }
 .btn:disabled { opacity: .45; cursor: default; transform: none; }
 .btn:disabled:hover { background: #231f1c; }
-.btn:focus-visible, .textBtn:focus-visible, .actBtn:focus-visible, .url:focus-visible, .filter:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
+.btn:focus-visible, .textBtn:focus-visible, .actBtn:focus-visible, .url:focus-visible, .filter:focus-visible, .bound:focus-visible, .select:focus-visible, .genreInput:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
 .textBtn { font: 500 12.5px var(--f-mono); color: var(--muted); background: none; border: 0; padding: 0 6px; min-height: 28px; cursor: pointer; border-radius: 4px; white-space: nowrap; }
 .textBtn:hover { color: var(--ink); }
 /* Row actions (Analyse, Retry, Analyse all): plain light mono text, underline on hover, 28 px hit area */
@@ -91,17 +91,32 @@
 .listBar { display: flex; align-items: center; gap: 16px; padding: 8px 20px 8px 64px; border-bottom: 1px solid var(--line); background: var(--bg); font: 400 11.5px var(--f-mono); color: var(--muted); }
 .filter {
   font: 400 12px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--line); border-radius: 6px;
-  padding: 5px 9px; width: 280px; outline: none;
+  padding: 5px 9px; width: 260px; outline: none;
 }
 .filter::placeholder { color: var(--faint); }
 .filter:focus { border-color: var(--muted); }
-.listCount { font-variant-numeric: tabular-nums; }
+.filter, .bound, .select { min-height: 28px; box-sizing: border-box; }
+/* BPM range and my-genre filter (F13): the filter's look, narrow */
+.range { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+.bound {
+  font: 400 12px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--line); border-radius: 6px;
+  width: 52px; padding: 5px 6px; text-align: center; outline: none; font-variant-numeric: tabular-nums;
+}
+.bound::placeholder { color: var(--faint); }
+.bound:focus { border-color: var(--muted); }
+.select {
+  font: 400 12px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--line); border-radius: 6px;
+  padding: 4px 8px; max-width: 200px; outline: none; cursor: pointer;
+}
+.selectIdle { color: var(--muted); }
+.select option { color: var(--ink); background: #1d1916; }
+.listCount { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .clear { margin-left: auto; }
 .confirm { margin-left: auto; display: flex; align-items: center; gap: 14px; color: var(--ink); }
 
 /* The table and the strip share one scroller: the strip follows the last row, then pins */
 .main { overflow: auto; min-height: 0; display: flex; flex-direction: column; scrollbar-color: #3a322c transparent; }
-.grid { min-width: 1180px; }
+.grid { min-width: 1260px; }
 .cols { display: grid; grid-template-columns: var(--cols); column-gap: 12px; align-items: center; padding: 0 20px; }
 .head { position: sticky; top: 0; z-index: 4; height: 30px; background: var(--panel); border-bottom: 1px solid var(--line); }
 .th { font: 400 10.5px var(--f-mono); color: var(--muted); letter-spacing: .06em; white-space: nowrap; }
@@ -140,6 +155,9 @@
 .tagCell .differs { flex: none; }
 .status { color: var(--ink); }
 .failed { color: #c98a74; }
+/* My genre (F12): the owner's own label, plain ink; dim "–" when not set. Click edits it in the strip. */
+.genreCell { cursor: text; }
+.genreCell:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--faint); }
 .time { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 /* The link's tracks not analysed yet: muted rows below a thin divider */
@@ -162,12 +180,12 @@
 .steps q { quotes: "“" "”"; }
 .fine { padding: 18px 20px 0 98px; font: 400 11.5px/1.6 var(--f-mono); color: var(--faint); max-width: 780px; margin: 0; }
 /* The table's shape before the first paste: its header row alone */
-.ghost { margin-top: 28px; min-width: 1180px; }
+.ghost { margin-top: 28px; min-width: 1260px; }
 .ghost .head { position: static; }
 
 /* The detail strip for the selected track */
 .strip {
-  position: sticky; bottom: 0; z-index: 3; min-width: 1180px; margin-top: 0; background: var(--crate); border-top: 1px solid var(--line);
+  position: sticky; bottom: 0; z-index: 3; min-width: 1260px; margin-top: 0; background: var(--crate); border-top: 1px solid var(--line);
   padding: 16px 20px 18px 64px; display: flex; flex-direction: column; gap: 14px;
 }
 .headLine { display: flex; align-items: center; gap: 16px; min-width: 0; white-space: nowrap; }
@@ -176,7 +194,15 @@
 .lcd { font: 500 22px var(--f-mono); color: var(--gold); font-variant-numeric: tabular-nums; }
 .lcdUnit { font-size: 11px; color: var(--goldDim); letter-spacing: .1em; margin-left: 6px; }
 .lcdAlt { font: 400 12.5px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
-.actions { margin-left: auto; display: flex; gap: 8px; }
+.actions { display: flex; gap: 8px; }
+/* My genre field in the strip's head line, just before the actions */
+.genre { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; flex: 0 1 260px; min-width: 160px; }
+.genreInput {
+  font: 400 12.5px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--line); border-radius: 6px;
+  padding: 6px 9px; min-height: 30px; box-sizing: border-box; width: 100%; min-width: 0; outline: none; text-overflow: ellipsis;
+}
+.genreInput::placeholder { color: var(--faint); }
+.genreInput:focus { border-color: var(--muted); }
 .facts { display: grid; grid-template-columns: minmax(240px, 380px) minmax(240px, 330px) minmax(420px, 1fr); gap: 32px; align-items: start; }
 .label { font: 400 10.5px var(--f-mono); color: var(--muted); letter-spacing: .06em; }
 .bars { display: flex; flex-direction: column; gap: 5px; }

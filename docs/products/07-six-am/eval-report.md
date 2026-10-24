@@ -139,3 +139,24 @@ Provisional calls for the owner to review: L37/L39 (Set Studio picks the reading
   - per-device tempo
   - hard-coded playlists in the Claude text
   - the skip-walk relies on undocumented widget behaviour
+
+---
+
+# Ears v1.1: my genre and filters (24 Oct)
+
+Small slice after the v1 merge (L41). Graders: `user-tester` (2 runs), `design-critic` (fresh each
+round).
+
+| Check | Bar | Result |
+| --- | --- | --- |
+| F12 My genre (typed, picked, reload, Copy for Claude, CSV `my_genre`, JSON `myGenre`, clearing) | pass | **pass** (picking from Chrome's native list simulated by filling the field) |
+| F13 Filters (BPM range incl. half/double tracks on either reading, genre All / used / No genre yet, combining, Clear filters, reload) | pass | **pass** |
+| User test job "tag and find my tracks by my own genre and tempo" | ≥ 4/5, no blocker/major | **5/5** (4/5 before the fix pass), none open |
+| Design critic | ≥ 9/10 | **fail: 7/10** (7 before and after the fix pass) |
+| No audio stored | 0 | **pass** (only small JSON keys) |
+| Contrast / hit areas of new controls | ≥ 4.5:1 / ≥ 28 px | **pass** (worst 4.59:1; smallest 52 × 28) |
+| Build hygiene | lint, test, build | **pass** (94 tests); `checks` on the PR |
+
+Decisions: L41–L44, T20–T25. L44 (a typed genre takes an existing spelling) is provisional.
+Not done: per-genre counts and a tagged share, separate count of unavailable tracks in the empty
+message, the critic's toolbar consolidation (all in the backlog); playing a filtered list (next).

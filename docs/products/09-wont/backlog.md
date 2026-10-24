@@ -24,3 +24,10 @@
 | Warn when browser storage is cleared or full | Drill-down: one device, localStorage only | Idea (drill-down) |
 | "Pair it with" (temptation bundle) field | P18 | Idea (discovery) |
 | Owner-set day boundary (instead of the assumed 04:00) | Brief day rules | Idea (discovery) |
+
+## From the first test round (25 Oct)
+
+- Comebacks line on each habit page: "3 slips, 3 comebacks, back within 1 day" (user test; tests the bet directly).
+- "Not today" to close a day honestly (user test F5).
+- History beyond 14 days, a month grid (audit 7).
+- Show "why this matters" back, e.g. on the morning-after message (user test).

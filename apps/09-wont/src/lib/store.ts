@@ -35,6 +35,16 @@ export function migrate(raw: unknown): WontState {
   };
 }
 
+/** The stored state right now, read straight from localStorage (for one-off checks in effects). */
+export function peekState(): WontState {
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    return migrate(raw === null ? null : JSON.parse(raw));
+  } catch {
+    return emptyState();
+  }
+}
+
 // The clock: re-checks the day every 30 s and when the tab comes back, so a tab left open
 // overnight turns the day by itself.
 function subscribeClock(onChange: () => void) {

@@ -5,6 +5,7 @@ import type { DayLog, Habit, Logs, WontState } from "./habits";
 
 export const SEED_NAMES = [
   "fresh",
+  "board-empty",
   "returning",
   "owner-today",
   "after-miss",
@@ -81,6 +82,9 @@ export function seed(name: SeedName, now: number = Date.now()): WontState {
   switch (name) {
     case "fresh":
       return emptyState();
+    // Intro already seen, no habits yet: the board's empty state.
+    case "board-empty":
+      return { ...emptyState(), introSeen: true };
     // Plan's "returning user": wake-up and pouches, six kept / clean days, today open.
     case "returning":
       return build([{ ...UP, history: "kkkkkk" }, { ...POUCHES, history: "kkkkkk" }], now);

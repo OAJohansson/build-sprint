@@ -1,13 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Bricolage_Grotesque } from "next/font/google";
+import { copy } from "@/lib/copy";
 import "./globals.css";
+import "./wont.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+// The board's typeface (from the prototypes), on every screen.
+const bricolage = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-wb" });
 
 export const metadata: Metadata = {
-  title: "Wont",
-  description: "Day 9 of the 20-day build sprint.",
+  title: copy.app.name,
+  description: copy.app.description,
+  applicationName: copy.app.name,
+  appleWebApp: { capable: true, title: copy.app.name, statusBarStyle: "default" },
   // The mark: Dough on ink (design/mark-sheet.html #01).
   icons: {
     icon: [
@@ -20,24 +24,20 @@ export const metadata: Metadata = {
 };
 
 // Phone baseline (mobile-native skill): content can sit under the notch (pad with
-// env(safe-area-inset-*)), the keyboard resizes the layout, and the status bar matches the
-// background in both themes. Zoom stays enabled.
+// env(safe-area-inset-*)), the keyboard resizes the layout, and the status bar matches the cream
+// board (L25: no dark band). Zoom stays enabled. Wont has one light theme.
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
   interactiveWidget: "resizes-content",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
-  ],
+  themeColor: "#f2ebde",
+  colorScheme: "light",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${bricolage.variable} h-full antialiased`}>
       <body className="min-h-dvh flex flex-col">{children}</body>
     </html>
   );

@@ -41,3 +41,9 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T11 | 24 Oct | Board v3: ink header band with the week strip, dough and paper cards; clean so far shares the kept wash, a slip turns the stop card cool oat-grey; app icon full-bleed square in public/ | PM (designer) | design | |
 | T12 | 25 Oct | Round 4: slip keeps the stop card on paper; no ghost seat; 124 px steamer; week key "share kept each day"; "Slipped" / "Had an urge"; "Tap if clean so far" | PM (designer) | design | |
 | T13 | 25 Oct | Other screens: intro ~18 s in three scenes (comeback wonton winks), "Done when" chips on new habit, optional friction step "do it once, today", 60 s full-screen urge pause with one-tap exit, slip size in a sheet | PM (designer) | design | |
+| L25 | 25 Oct | Icon stays Dough on ink (#2a2420); header: no band, ink for type only, week strip on a soft dough card | owner | design | |
+| T14 | 25 Oct | Intro Skip goes straight to the board; the empty board carries "Make my first promise"; replay is a quiet footer link | PM (engineer) | build | |
+| T15 | 25 Oct | No dark band on form and habit screens either; intro and ride-out stay on ink | PM (engineer) | build | |
+| T16 | 25 Oct | Edit, delete, re-log yesterday and 14-day history live on /habit/[id], reached by "⋯" on each card | PM (engineer) | build | |
+| T17 | 25 Oct | Comeback line marked seen when the app is hidden or closed; an urge is logged on tap, even if the pause is left early; tapping a stop card with a slip opens the slip sheet | PM (engineer) | build | |
+| T18 | 25 Oct | Status bar cream to match the board; web app manifest with the ink icon; new habit's title is its action | PM (engineer) | build | |

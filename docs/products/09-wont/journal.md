@@ -111,3 +111,9 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   ink). PM's miss: it should have gone to the owner or been dropped. Also: the owner read the
   icon's warm near-black (#2a2420) as purple. Comparing no band / soft band / softened plum /
   plum type, and the icon in ink vs plum.
+- **Header and icon decided** (owner): Dough on ink stays; no dark band, ink only for type, week
+  strip on a soft dough card. Design closed; the engineer builds the real app from the
+  prototypes.
+- **Real app built** (engineer): board, intro, new habit, new stop habit, habit page (edit,
+  delete, re-log yesterday, history), slip sheet, ride-out, manifest; prototypes promoted and
+  deleted; all copy in `src/lib/copy.ts`. 31 tests, lint and build pass. T14–T18.

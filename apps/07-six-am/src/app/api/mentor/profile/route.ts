@@ -20,7 +20,7 @@ export async function PUT(request: Request) {
   const text = body.text.replace(/\r\n/g, "\n").trim();
   if (text.length > 8000) return Response.json({ error: "Keep the profile under 8,000 characters." }, { status: 400 });
   try {
-    const profile = await g.store.saveProfile(text, { at: new Date().toISOString(), note: "Edited by you", by: "owner" });
+    const profile = await g.store.saveProfile(text, { at: new Date().toISOString(), note: "Edited by you", by: "owner", from: "Settings" });
     return Response.json({ profile });
   } catch (error) {
     return serverError(error);

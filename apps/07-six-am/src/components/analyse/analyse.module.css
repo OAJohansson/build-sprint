@@ -32,6 +32,7 @@
   transition: background 150ms ease-out, transform 120ms ease-out;
 }
 .btn:hover { background: #2b2622; }
+.btn[aria-pressed="true"] { background: #2b2622; border-color: #4a4038; }
 .btn:active { transform: scale(.97); }
 .btn:disabled { opacity: .45; cursor: default; transform: none; }
 .btn:disabled:hover { background: #231f1c; }
@@ -242,3 +243,28 @@
 .toast a { color: var(--bg); text-underline-offset: 3px; }
 @keyframes toastIn { from { opacity: 0; transform: translate(-50%, -4px); } }
 @media (prefers-reduced-motion: reduce) { .toast { animation: none; } }
+
+/* The Mentor panel (L66) docks on the right and pushes the view. Below 1680 px the table drops its
+   low-value columns (Also, Tone, Time, Uploader tag) while the panel is open, so the key columns
+   and the strip's actions fit without sideways scrolling (critic's fix). */
+.shell { height: 100dvh; display: grid; grid-template-columns: minmax(0, 1fr); overflow: hidden; background: #131110; }
+.shellOpen { grid-template-columns: minmax(0, 1fr) 400px; }
+.panelSlot { min-width: 0; height: 100dvh; }
+.root { min-width: 0; }
+@media (max-width: 1679px) {
+  .narrow { --cols: 28px minmax(180px, 1fr) 140px 70px 104px 48px 140px; }
+  .narrow .lo { display: none; }
+  .narrow .span2 { grid-column: span 1; }
+  .narrow .grid, .narrow .ghost, .narrow .strip { min-width: 0; }
+  .narrow .strip, .narrow .listBar, .narrow .msg, .narrow .divider, .narrow .steps { padding-left: 20px; }
+  .narrow .fine { padding-left: 54px; }
+  .narrow .facts { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 28px; }
+  .narrow .snipBlock { grid-column: 1 / -1; }
+  .narrow .headLine { flex-wrap: wrap; row-gap: 10px; }
+  .narrow .genre { margin-left: 0; flex: 1 1 220px; }
+  .narrow .bar { grid-template-columns: minmax(160px, 1fr) minmax(80px, 1fr) auto; }
+  .narrow .listen { width: auto; max-width: 360px; }
+  .narrow .listBar { flex-wrap: wrap; row-gap: 8px; }
+  .narrow .filter { width: 180px; }
+  .narrow .select { min-width: 140px; }
+}

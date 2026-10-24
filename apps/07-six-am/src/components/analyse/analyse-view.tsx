@@ -5,6 +5,11 @@
 // follows the last row and pins to the bottom once the list is long.
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { learn, lastSuggestion } from "@/components/mentor/learn";
+import { MentorPanel } from "@/components/mentor/mentor-panel";
+import { SetupDialog } from "@/components/mentor/setup-dialog";
+import { useMentorData } from "@/components/mentor/use-mentor-data";
 import { Logo } from "@/components/studio/logo";
 import { ViewsNav } from "@/components/views-nav";
 import { bpmChoice } from "@/lib/ears/bpm-choice";
@@ -19,6 +24,8 @@ import { activeItem, queueCounts, type QueueItem } from "@/lib/ears/queue";
 import type { EarsAnalysis } from "@/lib/ears/results";
 import { styleDisplayName } from "@/lib/ears/styles";
 import { clampBpm, DEFAULT_BPM, formatBpm, TEMPO_KEY } from "@/lib/tempo";
+import { useEarsSync, type SyncState } from "@/lib/ears/use-ears-sync";
+import { mentorApi, useAccessCode } from "@/lib/mentor/client";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { DEMO_RESULTS, DEMO_SOURCE, demoQueue } from "./demo";
 import { buildRows, type Row } from "./rows";
@@ -37,8 +44,15 @@ const DEMO_GENRES_KEY = "six-am:ears-demo-genres:v1";
 const NO_DEMO_GENRES: Record<string, string> = {};
 const GENRE_INPUT_ID = "my-genre";
 
+/** Dev only: the demo's rows are copied to the (in-memory) server so groups and taste sessions can
+ *  be tried on them; the live view leaves those copies out. */
+const DEMO_IDS: ReadonlySet<string> | undefined = process.env.NODE_ENV === "development" ? new Set(DEMO_RESULTS.map((r) => r.id)) : undefined;
+
 export function LiveAnalyse() {
-  return <Screen m={useAnalyse()} />;
+  const [code] = useAccessCode();
+  // M15: results and My genre mirrored to the server; localStorage stays the cache.
+  const sync = useEarsSync(code, DEMO_IDS);
+  return <Screen m={useAnalyse()} sync={sync} />;
 }
 
 /** shortcut: ?demo=1 shows sample rows (demo.ts) without tab capture, for graders; remove with the prototypes. */
@@ -65,10 +79,37 @@ export function DemoAnalyse({ listening }: { listening: boolean }) {
     load: say, enable: say, stopListening: say, analyse: say, cancel: say, retry: say, clearList: say,
     setMyGenre: (id, g) => setGenres((prev) => ({ ...(prev ?? {}), [id]: cleanGenre(g) ?? "" })),
   };
+  useDemoServerCopy(results);
   return <Screen m={m} />;
 }
 
-function Screen({ m }: { m: AnalyseModel }) {
+// shortcut: dev only, the demo rows (illustrative numbers) go to the in-memory store so the
+// server-side jobs (genre groups, taste sessions) can be tried with ?demo=1; never in production.
+function useDemoServerCopy(results: EarsAnalysis[]) {
+  const [code] = useAccessCode();
+  const sent = useRef({ code: "", rows: new Map<string, string>() });
+  useEffect(() => {
+    if (!DEMO_IDS) return;
+    // A new code (the first render has none yet) starts over, so rows refused with 401 go again.
+    if (sent.current.code !== code) sent.current = { code, rows: new Map() };
+    const rows = sent.current.rows;
+    const api = mentorApi(code);
+    for (const a of results) {
+      const j = JSON.stringify(a);
+      if (rows.get(a.id) === j) continue;
+      rows.set(a.id, j);
+      api.putAnalysis(a).catch(() => rows.delete(a.id));
+    }
+  }, [results, code]);
+}
+
+const OPEN_KEY = "six-am:mentor-open:v1";
+
+function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
+  const router = useRouter();
+  const mentor = useMentorData();
+  const [open, setOpen] = useLocalStorage<boolean>(OPEN_KEY, false);
+  const [setupOpen, setSetupOpen] = useState(false);
   const { main, rest } = useMemo(() => buildRows(m.results, m.queue, m.source), [m.results, m.queue, m.source]);
   const latest = useMemo(() => [...m.results].sort((a, b) => b.analysedAt.localeCompare(a.analysedAt))[0], [m.results]);
   const [selId, setSelId] = useState<string | null>(null);
@@ -85,7 +126,7 @@ function Screen({ m }: { m: AnalyseModel }) {
 
   const copy = async (a: EarsAnalysis) => {
     try {
-      await navigator.clipboard.writeText(claudeText(a));
+      await navigator.clipboard.writeText(claudeText(a, mentor.profile?.text));
       flash("Copied for Claude · paste it into a chat");
     } catch {
       flash("Couldn't copy: the browser blocked the clipboard");
@@ -104,7 +145,7 @@ function Screen({ m }: { m: AnalyseModel }) {
     const f = sanitiseFilters(rawFilters);
     return f.genre && f.genre !== NO_GENRE && !genres.some((g) => genreKey(g) === genreKey(f.genre)) ? { ...f, genre: "" } : f;
   }, [rawFilters, genres]);
-  const suggestions = useMemo(() => genreSuggestions(m.results), [m.results]);
+  const suggestions = useMemo(() => genreSuggestions(m.results, mentor.acceptedNames), [m.results, mentor.acceptedNames]);
 
   // Numbers stay those of the whole list while filtering.
   const q = query.trim();
@@ -121,12 +162,23 @@ function Screen({ m }: { m: AnalyseModel }) {
   // punctuation differ, so "deep  House" saves as "Deep house" (F2).
   const saveGenre = (id: string, typed: string) => {
     const others = usedGenres(m.results.filter((r) => r.id !== id));
-    const g = canonicalGenre(typed, others) ?? "";
+    const g = canonicalGenre(typed, [...others, ...mentor.acceptedNames]) ?? "";
     m.setMyGenre(id, g);
+    return g;
     // Untagging the last track of the filtered genre drops that filter for good (F8), so it can't
     // come back later when another track gets the genre.
     const k = filters.genre && filters.genre !== NO_GENRE ? genreKey(filters.genre) : "";
     if (k && genreKey(g) !== k && !others.some((o) => genreKey(o) === k)) setRawFilters({ ...filters, genre: "" });
+  };
+  // Learning from use (M11): a typed genre, or a correction of the Mentor's suggestion.
+  const typeGenre = (id: string, typed: string) => {
+    const g = saveGenre(id, typed);
+    const a = m.results.find((r) => r.id === id);
+    if (!g || !a) return;
+    const sug = lastSuggestion(id);
+    const label = `"${a.title || id}" by ${a.uploader || "unknown"}`;
+    if (sug && genreKey(sug) !== genreKey(g)) learn(mentor.code, { type: "corrected_suggestion", detail: `The Mentor suggested "${sug}" for ${label}; I set My genre to "${g}".`, trackId: id });
+    else if (!sug) learn(mentor.code, { type: "typed_genre", detail: `I set My genre to "${g}" for ${label}.`, trackId: id });
   };
   const clearFilters = () => { setQuery(""); setRawFilters(NO_FILTERS); };
 
@@ -138,11 +190,14 @@ function Screen({ m }: { m: AnalyseModel }) {
   const editGenre = (id: string) => { setSelId(id); setFocusGenre((n) => n + 1); };
 
   return (
-    <div className={s.root}>
+    <div className={cx(s.shell, open && s.shellOpen)}>
+    <div className={cx(s.root, open && s.narrow)}>
       <header className={s.appBar}>
         <div className={s.logo}><Logo className={s.mark} />Six AM</div>
         <ViewsNav current="analyse" />
         <div className={s.appRight}>
+          {sync === "offline" ? <span className={s.side} title="Results are kept in this browser and saved to the server when it's reachable again">Offline · saved here</span> : null}
+          <button className={s.btn} aria-pressed={open} aria-controls="mentor-panel" onClick={() => setOpen(!open)} title={open ? "Close the Mentor" : "Ask the Mentor about the selected track"}>Mentor</button>
           <ExportMenu results={m.results} />
         </div>
       </header>
@@ -159,7 +214,7 @@ function Screen({ m }: { m: AnalyseModel }) {
           <Table m={m} main={shownMain} rest={shownRest} narrowed={narrowed} emptyText={noMatchText(m.results, main.length + rest.length, q, filters)} selectedId={selected?.id ?? null} onSelect={setSelId} onEditGenre={editGenre} />
         )}
         {empty ? null : selected ? (
-          <Strip a={selected} studioBpm={studioBpm} onCopy={copy} onSetBpm={setBpm} suggestions={suggestions} onGenre={(g) => saveGenre(selected.id, g)} />
+          <Strip a={selected} studioBpm={studioBpm} onCopy={copy} onSetBpm={setBpm} suggestions={suggestions} onGenre={(g) => typeGenre(selected.id, g)} />
         ) : narrowed ? (
           <section className={cx(s.strip, s.stripEmpty)} aria-label="Selected track"><span>No track selected</span></section>
         ) : null}
@@ -170,6 +225,22 @@ function Screen({ m }: { m: AnalyseModel }) {
           {toast.link ? <Link href="/">Open Studio</Link> : null}
         </div>
       ) : null}
+    </div>
+    {open ? (
+      <div id="mentor-panel" className={s.panelSlot}>
+        <MentorPanel
+          data={mentor}
+          track={selected}
+          library={m.results}
+          earsBusy={!m.demo && !!activeItem(m.queue)}
+          onClose={() => setOpen(false)}
+          onSetGenre={(id, g) => { saveGenre(id, g); flash(`My genre set to ${g}`); }}
+          onOpenStudio={(bpm) => { setStudioBpm(clampBpm(bpm)); router.push("/"); }}
+          onOpenSetup={() => setSetupOpen(true)}
+        />
+      </div>
+    ) : null}
+    {setupOpen ? <SetupDialog data={mentor} onClose={() => setSetupOpen(false)} /> : null}
     </div>
   );
 }
@@ -435,7 +506,7 @@ function EmptySteps() {
         <li><span>Press Enable listening. In Chrome&apos;s dialog pick this tab, leave <q>Also share tab audio</q> on and click <q>Share</q>, once per session.</span></li>
         <li>Press Analyse on a track, or Analyse all. Six AM listens to 4 snippets of 30 s; about 2 minutes later its row fills in. It keeps the measurements only, never the audio.</li>
       </ol>
-      <p className={s.fine}>Styles are likelihoods, not one answer. Results stay in this browser.</p>
+      <p className={s.fine}>Styles are likelihoods, not one answer. Results are kept in this browser and saved to your Six AM.</p>
       <div className={s.ghost} aria-hidden="true">
         <HeadRow />
       </div>
@@ -449,13 +520,13 @@ function HeadRow() {
       <span className={cx(s.th, s.right)} role="columnheader">#</span>
       <span className={s.th} role="columnheader">Track</span>
       <span className={cx(s.th, s.thSplit)} role="columnheader" title="The style heard most strongly, and how strongly (%)"><span>Style</span><span>%</span></span>
-      <span className={cx(s.th, s.thSplit)} role="columnheader" title="The next style heard, and how strongly (%)"><span>Also</span><span>%</span></span>
+      <span className={cx(s.th, s.thSplit, s.lo)} role="columnheader" title="The next style heard, and how strongly (%)"><span>Also</span><span>%</span></span>
       <span className={cx(s.th, s.right)} role="columnheader">BPM</span>
       <span className={cx(s.th, s.keyCell)} role="columnheader" title={KEY_TITLE}>Key</span>
       <span className={s.th} role="columnheader">Energy</span>
-      <span className={s.th} role="columnheader">Tone</span>
-      <span className={cx(s.th, s.right)} role="columnheader">Time</span>
-      <span className={s.th} role="columnheader" title="The genre the uploader set on SoundCloud">Uploader tag</span>
+      <span className={cx(s.th, s.lo)} role="columnheader">Tone</span>
+      <span className={cx(s.th, s.right, s.lo)} role="columnheader">Time</span>
+      <span className={cx(s.th, s.lo)} role="columnheader" title="The genre the uploader set on SoundCloud">Uploader tag</span>
       <span className={s.th} role="columnheader" title="Your own genre for the track: click a cell to type it">My genre</span>
     </div>
   );
@@ -581,7 +652,7 @@ function TableRow({ r, n, m, selected, tabbable, onSelect, onEditGenre }: { r: R
       {a && bpm ? (
         <>
           <StyleCell x={styles[0]} />
-          <StyleCell x={styles[1]} also />
+          <StyleCell x={styles[1]} also lo />
           <span className={s.bpm} role="gridcell">
             {bpmText(bpm.lead)}
             {bpm.unclear && bpm.other != null ? (
@@ -590,12 +661,12 @@ function TableRow({ r, n, m, selected, tabbable, onSelect, onEditGenre }: { r: R
           </span>
           <span role="gridcell" className={s.keyCell} title={KEY_TITLE}>{keyLabel(a.key, a.scale)}</span>
           <span role="gridcell"><Energy value={a.energy} /></span>
-          <span role="gridcell" className={s.muted}>{brightnessLabel(a.brightness)}</span>
-          <span className={s.time} role="gridcell">
+          <span role="gridcell" className={cx(s.muted, s.lo)}>{brightnessLabel(a.brightness)}</span>
+          <span className={cx(s.time, s.lo)} role="gridcell">
             {formatDuration(a.durationMs)}
             {a.preview ? <span className={s.mark2} title="30 s preview: SoundCloud only plays a preview of this track">30s</span> : null}
           </span>
-          <span role="gridcell" className={cx(s.muted, s.tagCell)} title={a.uploaderGenreTag ? `Uploader tag: ${a.uploaderGenreTag}${tagDiffers(a) ? " · differs: not among the top 3 styles Six AM heard" : ""}` : "The uploader set no genre tag"}>
+          <span role="gridcell" className={cx(s.muted, s.tagCell, s.lo)} title={a.uploaderGenreTag ? `Uploader tag: ${a.uploaderGenreTag}${tagDiffers(a) ? " · differs: not among the top 3 styles Six AM heard" : ""}` : "The uploader set no genre tag"}>
             {a.uploaderGenreTag ? <span className={s.sName}>{a.uploaderGenreTag}</span> : <span className={s.dim}>none</span>}
             {tagDiffers(a) ? <span className={s.differs}>differs</span> : null}
           </span>
@@ -614,9 +685,9 @@ function TableRow({ r, n, m, selected, tabbable, onSelect, onEditGenre }: { r: R
           <span className={s.bpm} role="gridcell"><span className={s.dim}>{dash}</span></span>
           <span className={s.dim} role="gridcell">{dash}</span>
           <span className={s.dim} role="gridcell">{dash}</span>
-          <span className={s.dim} role="gridcell">{dash}</span>
-          <span className={s.time} role="gridcell">{formatDuration(r.durationMs)}</span>
-          <span className={s.dim} role="gridcell">{dash}</span>
+          <span className={cx(s.dim, s.lo)} role="gridcell">{dash}</span>
+          <span className={cx(s.time, s.lo)} role="gridcell">{formatDuration(r.durationMs)}</span>
+          <span className={cx(s.dim, s.lo)} role="gridcell">{dash}</span>
           <span className={s.dim} role="gridcell">{r.result?.myGenre ?? dash}</span>
         </>
       )}
@@ -624,10 +695,10 @@ function TableRow({ r, n, m, selected, tabbable, onSelect, onEditGenre }: { r: R
   );
 }
 
-function StyleCell({ x, also }: { x?: { name: string; p: number }; also?: boolean }) {
-  if (!x) return <span role="gridcell" className={s.dim}>{also ? "" : "–"}</span>;
+function StyleCell({ x, also, lo }: { x?: { name: string; p: number }; also?: boolean; lo?: boolean }) {
+  if (!x) return <span role="gridcell" className={cx(s.dim, lo && s.lo)}>{also ? "" : "–"}</span>;
   return (
-    <span role="gridcell" className={s.styleCell} title={`${x.name} · ${pct(x.p)} % likely`}>
+    <span role="gridcell" className={cx(s.styleCell, lo && s.lo)} title={`${x.name} · ${pct(x.p)} % likely`}>
       <span className={s.sName}>{x.name}</span><span className={s.pct}>{pct(x.p)}</span>
     </span>
   );
@@ -653,7 +724,7 @@ type StripProps = {
   suggestions: string[]; onGenre: (genre: string) => void;
 };
 
-/** My genre (F12): free text with suggestions (used genres first, then Appendix A's families).
+/** My genre (F12): free text with suggestions (used genres first, then accepted group names, L55).
  *  Saved on blur or Enter, trimmed; empty clears it; Escape puts back what was saved. */
 function GenreField({ value, suggestions, onSave }: { value: string; suggestions: string[]; onSave: (genre: string) => void }) {
   const [text, setText] = useState(value);

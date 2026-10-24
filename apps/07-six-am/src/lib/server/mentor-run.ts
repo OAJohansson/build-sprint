@@ -170,7 +170,7 @@ export async function ask(store: MentorStore, body: AskBody, now: Date, tz: numb
   };
   // At most one "Updated: …" per answer (L56).
   if (result.answer.profileUpdate && UPDATES_PROFILE.has(job)) {
-    await store.saveProfile(result.answer.profileUpdate.text, { at: now.toISOString(), note: result.answer.profileUpdate.note, by: "mentor" });
+    await store.saveProfile(result.answer.profileUpdate.text, { at: now.toISOString(), note: result.answer.profileUpdate.note, by: "mentor", from: FROM[job] });
     reply.profileUpdated = { note: result.answer.profileUpdate.note };
   }
   if (job === "studio_start" && track) reply.studio = studioStart(track, result.answer.loops ?? []);
@@ -179,6 +179,9 @@ export async function ask(store: MentorStore, body: AskBody, now: Date, tz: numb
   }
   return reply;
 }
+
+/** "From …" in Settings' recent updates. */
+const FROM: Partial<Record<Job, string>> = { setup: "setup", learn: "what you did in Six AM", taste_session: "a taste session", chat: "a chat with the Mentor" };
 
 export const isFail = (r: AskReply | Fail): r is Fail => "error" in r;
 

@@ -5,13 +5,16 @@ import type { Sentence } from "@/lib/mentor/answer";
 import type { StoredUsage } from "@/lib/mentor/cost";
 import type { CostRow } from "@/lib/mentor/periods";
 import { parseAnalysis } from "@/lib/mentor/context";
+import { profileDiff } from "@/lib/mentor/profile-diff";
 import { connect, explain, StoreError, type DbError } from "./store";
 
 // The Mentor's data (decision 0027, L51): taste profile, chats, genre groups and Ears results, in
 // Supabase (supabase/migrations/2026-10-24-mentor.sql). Without Supabase env in development an
 // in-memory store stands in, so a fresh dev server is the clean-start "new user" (L57).
 
-export type ProfileNote = { at: string; note: string; by: "owner" | "mentor" };
+/** One profile change: when, the one-line note, who, what prompted it (a job or "Settings") and
+ *  the sentences that went (was) and came (now). from / was / now are missing on older notes. */
+export type ProfileNote = { at: string; note: string; by: "owner" | "mentor"; from?: string; was?: string; now?: string };
 export type Profile = { text: string; updatedAt: string | null; history: ProfileNote[] };
 
 export type MessageRow = {
@@ -50,10 +53,13 @@ export type MentorStore = {
   /** One-time migration from localStorage: adds missing results and fills a missing My genre;
    *  never overwrites what the server already has. */
   importAnalyses(list: EarsAnalysis[]): Promise<{ added: number; genresFilled: number; kept: number }>;
+  /** Clear list in Ears: the results go from the server too, so a sync doesn't bring them back. */
+  deleteAnalyses(ids: string[]): Promise<number>;
 };
 
 const MAX_HISTORY = 50;
-const pushNote = (h: ProfileNote[], n: ProfileNote) => [...h, n].slice(-MAX_HISTORY);
+const pushNote = (h: ProfileNote[], n: ProfileNote, before: string, after: string) =>
+  [...h, { ...n, ...profileDiff(before, after) }].slice(-MAX_HISTORY);
 
 // ── Supabase ────────────────────────────────────────────────────────────────────────────────────
 
@@ -88,7 +94,7 @@ function supabaseMentor(db: SupabaseClient): MentorStore {
     },
     async saveProfile(text, note) {
       const current = await this.getProfile();
-      const row = { id: 1, text, history: pushNote(current.history, note), updated_at: new Date().toISOString() };
+      const row = { id: 1, text, history: pushNote(current.history, note, current.text, text), updated_at: new Date().toISOString() };
       const { data, error } = await db.from("sixam_taste_profile").upsert(row).select("text, history, updated_at").single();
       check(error, "sixam_taste_profile");
       if (!data) throw new StoreError("The taste profile wasn't saved.");
@@ -183,6 +189,12 @@ function supabaseMentor(db: SupabaseClient): MentorStore {
       }
       return { added: fresh.length, genresFilled: fill.length, kept: list.length - fresh.length - fill.length };
     },
+    async deleteAnalyses(ids) {
+      if (!ids.length) return 0;
+      const { error, count } = await db.from("sixam_analyses").delete({ count: "exact" }).in("id", ids);
+      check(error, "sixam_analyses");
+      return count ?? ids.length;
+    },
   };
 }
 
@@ -199,7 +211,7 @@ function memoryMentor(): MentorStore {
       return structuredClone(mem.profile);
     },
     async saveProfile(text, note) {
-      mem.profile = { text, updatedAt: now(), history: pushNote(mem.profile.history, note) };
+      mem.profile = { text, updatedAt: now(), history: pushNote(mem.profile.history, note, mem.profile.text, text) };
       return structuredClone(mem.profile);
     },
     async thread(threadId, limit = 100) {
@@ -258,6 +270,11 @@ function memoryMentor(): MentorStore {
         }
       }
       return { added, genresFilled, kept: list.length - added - genresFilled };
+    },
+    async deleteAnalyses(ids) {
+      let n = 0;
+      for (const id of ids) if (mem.analyses.delete(id)) n += 1;
+      return n;
     },
   };
 }

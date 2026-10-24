@@ -9,6 +9,7 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - `docs/learnings.md` process changelog: first Founder-mode run (decision 0026) on a rebuild of an
   existing app rather than a new product; how the kickoff pack worked when written from a brief
   made with another agent.
+- `docs/learnings.md` + Founder retro (owner, 24 Oct): the Mentor squad's design ignored clean-and-minimal (0007) and Emil's restraint; review the design flow at wrap-up: skills each agent used (design-session, emil-design-eng, web-design-guidelines, break-ui), why repeated 6–7 critic scores didn't produce simpler designs, whether to install new design skills (L93).
 - `docs/knowledge-bank.md` (technology): cross-origin audio and tab capture (`getDisplayMedia`
   with `preferCurrentTab`, why Web Audio can't tap an iframe but tab capture can).
 
@@ -451,3 +452,12 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - **Final design score:** 6/10 on the built panel (target 9, not a blocker; reported). Its cheap repeated points go into the last fix pass; no more design rounds (L53).
 - **Last fix pass:** Studio start opens a new unsaved track with the loops placed (owner's 2 tracks unchanged, checked in the real DB); Suggest names conflicts with the thread and the tag; /analyse gated by the access code; link labels, plain-word key notes, pinned source key. 137 tests pass. L83, L84, T31.
 - **Final re-check:** Studio start 4 and Suggest genre 4, so every job is ≥ 4 (E10 jobs pass). Preview made (`pnpm ship 07-six-am --preview`), eval report written. Minor findings N9–N14 to the backlog.
+
+## 24 Oct: owner's review of the Mentor
+
+- **"Too much going on."** The owner reviewed PR 79 and asked for a simpler panel, not a merge.
+  Owner's calls L85–L93: one chat with no tabs or song header; nothing under the input but "What can
+  you help me with?"; full context and a persistent memory in Supabase; a growing input with
+  "Type your question" / "Reply"; readable answers with quiet sources; Settings in a corner; a short,
+  locked "Music taste profile" with a threshold constant (numbers to come); and a learning note for
+  the Founder retro about the squad ignoring clean-and-minimal.

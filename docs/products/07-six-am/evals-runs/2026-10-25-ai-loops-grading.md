@@ -154,3 +154,100 @@ dominant. This is already marked as a `shortcut:`.
 - The Stability balance reading of 437 and Lyria's actual bill (no key or billing access used).
 - Whether the app's displayed cost matches these, since the UI wasn't graded. X5 used the
   adapters' `costUsd` as recorded in the manifest.
+
+## Re-grade, 25 Oct 2026: fix-pass re-run (Stable Audio 2.5 only)
+
+The files are in `<scratchpad>/bakeoff-2/` (manifest `ranAt` 2026-10-24T17:58Z): 10 loops, the same
+5 requests, seeds 42 and 7. The builder claims three changes: the loop is trimmed to the exact bar
+length, the seam is crossfaded, and the key wording is new ("a dark natural-minor bassline rooted
+on F, using only the notes F G G# A# C C# D# (minor third G#, no major third)"). The method,
+scripts and bars are the same as above (scratchpad `grade/analyse.ts`, raw output in
+`grade/results-run2.json`).
+
+**Bottom line: X4 still fails.** Seed 42 got 3/5, seed 7 got 1/5, and the pooled result is 4/10
+(40%; the bar is 80%). Length and seams are now fixed: 10/10 exact, 0/10 clicks. X5 passes.
+
+### Per file
+
+Tempo uses the app's estimator. Key uses the bass-range estimator (the app's key in brackets).
+m3/M3 is the share of bass chroma on the requested tonic's minor and major third.
+
+| File | Requested | Tempo (app; alt) | Tempo | Key (bass) [app] | Key | m3 / M3 | In scale | Length error | Wrap: jump dB / click | X4 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 01-s42 | 120 A min | 120.0 | pass | A min [A min] | same | 6 / 3 | 78% | 0 ms | −1.4 / 0.0 | ✅ |
+| 01-s7 | 120 A min | 120.0 | pass | A maj [A maj] | parallel | 4 / 3 | 79% | 0 ms | −0.5 / 0.0 | ❌ |
+| 02-s42 | 124 F min | 124.0 | pass | C maj [A min] | fifth | 5 / 11 | 56% | 0 ms | +6.6 / 0.3 | ❌ |
+| 02-s7 | 124 F min | 82.7 (alt 124, 3:2) | fail | F min [G# maj] | same | 16 / 5 | 75% | 0 ms | +8.7 / 0.2 | ❌ |
+| 03-s42 | 126 C maj | 126.0 | pass | C maj [G maj] | same | 2 / 6 | 85% | 0 ms | +3.4 / 0.9 | ✅ |
+| 03-s7 | 126 C maj | 125.9 | pass | C maj [A min] | same | 2 / 10 | 91% | 0 ms | +1.4 / 0.3 | ✅ |
+| 04-s42 | 128 D# min | 128.2 | pass | D# min [D# maj] | same | 8 / 6 | 84% | 0 ms | +6.9 / 0.1 | ✅ |
+| 04-s7 | 128 D# min | 85.3 (alt 128.1, 3:2) | fail | G# maj [G# maj] | fifth (below) | 14 / 4 | 83% | 0 ms | **+19.5** / 0.0 | ❌ |
+| 05-s42 | 145 G min | 72.5 (alt 145.2) | half | G min [D min] | same | 20 / 3 | 91% | 0 ms | +5.6 / 1.7 | ❌ |
+| 05-s7 | 145 G min | 145.1 | pass | C# maj [C# maj] | other | 7 / 3 | 55% | 0 ms | +5.9 / 0.1 | ❌ |
+
+("Fifth" means a fifth above or below, as in run 1. C# major for G minor is a tritone away, so it
+counts as "other".)
+
+### Summary
+
+| | Tempo ±1 | Key same/relative (bass) [app] | **X4** (bass) [app] | Length on the grid | Wrap clicks (>10) | Clipped samples |
+| --- | --- | --- | --- | --- | --- | --- |
+| Run 1, seed 42 (old wording) | 5/5 | 2/5 [2/5] | 2/5 [2/5] | 2/5 | 3/5 | 0 |
+| **Seed 42 (fix pass)** | 4/5 | 4/5 [1/5] | **3/5 FAIL** [1/5] | **5/5** | **0/5** | 0 |
+| **Seed 7 (fix pass)** | 3/5 | 2/5 [1/5] | **1/5 FAIL** [1/5] | **5/5** | **0/5** | 0 |
+| **Pooled (10)** | 7/10 | 6/10 [2/10] | **4/10 = 40% FAIL** [2/10] (bar ≥ 80%) | 10/10 | 0/10 | 0 |
+
+- **Length:** all 10 are exactly `bars × 240 / bpm` (0 ms error), and none has leading silence.
+  **Fixed.**
+- **Seams:** the click ratio is at most 1.7 on all 10 (run 1 had 30–48 on three files).
+  **Fixed.** The level step from the last 20 ms to the first 20 ms is still +1 to +9 dB on most
+  files, which is likely a new note's attack starting at the downbeat. The exception is 04-s7 at
+  **+19.5 dB**: the end is much louder than the start, so expect an audible drop at the loop
+  point. That one is worth a listen in the owner's review.
+- **Tempo got worse on new draws.** There are two 3:2 misreads (02-s7, 04-s7: the requested tempo
+  is only the estimator's alternative) and one half-time read (05-s42). Run 1 had 5/5. The
+  estimator might just have trouble with these lines, but my own estimator also has its best
+  peak at the half tempo on 02-s7 and 04-s7. Two draws per prompt is too few to tell model
+  variance from estimator variance.
+
+### A/B: did the wording fix the mode?
+
+This is not a clean A/B. Seed 42 is the same, but the requested `duration` also changed (whole
+seconds rounded up, then trimmed), so the model drew a different generation. Read it as "new
+wording + new draw".
+
+- **Minor third over major third on the four minor prompts:** run 1 got 1/4 (#1 only). The fix
+  pass got 3/4 on seed 42 and 4/4 on seed 7, so **7/8 pooled**. The major prompt (#3) has M3 > m3
+  on both seeds and is now estimated as C major, where run 1 read A minor. **On mode, the wording
+  works.**
+- **The cost is a wandering tonal centre.** 3 of 10 now land on a different root: 02-s42 (C major,
+  only 56% in scale), 04-s7 (G# major) and 05-s7 (C# major, 55% in scale). In run 1, 5/5 had the
+  right tonic (including the parallel ones). The longer note list in the prompt may pull the
+  bassline off its root, but n is small.
+- Key on seed 42 went from 2/5 to 4/5. Seed 7 got 2/5.
+
+### X5
+
+- **Shown cost:** $0.08 per loop.
+- **Balance:** 429 → 349 = **80 credits for 10 loops = exactly 8 credits ($0.08) per loop**,
+  matching the published price. **PASS.**
+- **8 credits not in either manifest:** the builder's post-run-1 reading was 437 and this run
+  starts at 429. That is one generation (probably a probe) that isn't recorded in either
+  manifest. Worth a line in the journal.
+- **Speed:** median 2.90 s.
+
+### Recommendation after the re-grade
+
+- **Stable Audio 2.5 is still the best variant, but it doesn't meet X4** (40% vs 80%). The
+  engineering fixes are confirmed (length and seams 10/10), and the wording fixed the mode (7/8).
+- What now fails is draw-to-draw variance in tempo feel and in the tonal centre, so prompt
+  tweaks alone are unlikely to reach 80%. Options for the PM (not my call):
+  - (a) Generate 2–3 candidates per request and auto-pick the one that passes the app's own
+    tempo and key check before showing it. That costs $0.16–0.24 per loop and needs a check
+    that uses bass-range chroma; the app's current key code read 2/10 correctly here.
+  - (b) Accept that A9 is "close" and say so in the UI: show the measured tempo and key next to
+    each loop.
+  - (c) Move the bar. That is the owner's decision, not mine.
+- **Not checked:** listening or taste; more seeds; the repo copy at
+  `apps/07-six-am/evals/ai-loops/analyse.ts`. It still imports `./ears/features.ts`, which
+  doesn't exist next to it. I used the scratchpad copy and didn't edit the repo one.

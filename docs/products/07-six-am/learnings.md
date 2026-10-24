@@ -76,3 +76,43 @@ recipe test guards the 48-loop list. The pick pointed at the right logic.
   skills each agent actually used (design-session, emil-design-eng, web-design-guidelines,
   break-ui), why critic scores didn't drive subtraction, and whether to add design skills or a
   "remove first" rule to the designer and critic.
+
+## Retro: Ears and Mentor (Founder mode, 23–24 Oct)
+
+Full account: [`founder-run-report.md`](founder-run-report.md).
+
+**Numbers:** no fixed appetite (overnight allowed); took about 27 hours of wall-clock time for three
+slices: Ears v1 (PR 77), v1.1 (PR 78), Mentor (PR 79, after one rejected review). 97 learning and
+39 toil decisions logged, 0 toil vetoes. 9 user tests, 6 data-evals runs, 20 critic runs. About
+$6–7 of Claude usage, almost all Mentor testing. Bugs: agents caught most correctness bugs (preview
+tracks, CORS, a 2:3 BPM error, half-time BPM sent to the Studio, profile wipes, wrong links, a
+false key-fit claim); the owner caught the scope and design calls (snippets not the intro, queue
+in the MVP, "too much going on", one chat, the help list).
+
+**Keep**
+- Spikes before the build: capture and model risks were answered on day one.
+- Graders who never build: they caught real bugs every round, and the honesty checks held.
+- Logging every call with a reason: the decision log made the review and this retro possible.
+
+**Change**
+- The owner sees screenshots early (a 2-minute check after the first prototype round), not only at the PR.
+- Remove before adding: a critic gap is fixed by taking something away first.
+- One critic with a fixed rubric per slice, and visual references instead of feel words.
+
+**Try**
+- Smaller slices (one screen or job per PR), a fresh PM session per phase, pre-approved routine ops (migrations, env keys) in the kickoff pack, a sandbox for graders.
+
+**Surprised me:** how far apart "every check passes" and "the owner likes it" can be; that a fresh
+critic each round made scores bounce instead of converge; that forcing a web search made genre
+calls worse, because the web speaks the artists' scene words, not the owner's.
+
+**For each goal**
+- **A (product):** an analyser and a mentor only feel useful when they answer in the owner's words; the taste profile and My genre carry that, not the model.
+- **B (product craft):** Founder mode needs an early owner look at pictures; a single late review is too late for layout.
+- **C (technical):** tab capture of a cross-origin iframe, ONNX in a worker, prompt caching with a running memory summary, and validators that enforce honesty (sources, no invented links or numbers).
+
+**Decision log read:** the owner would have chosen differently on the Mentor's information
+architecture (L47's buttons-per-job panel became one chat, L86–L87) and on showing cost in the
+panel (moved to Settings). The learning decisions that mattered most: L26 (snippets), L27 (queue),
+L55 (no built-in taste data), L85–L88 (the simplification and memory). Defaults that held: the
+storage, backend and honesty calls (L18, L49, L51, L60, L64).

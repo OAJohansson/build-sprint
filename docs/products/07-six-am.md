@@ -1,7 +1,7 @@
 ---
 day: 7
 title: Six AM
-status: building
+status: shipped
 mode: founder
 date: 2026-10-18
 user: "Me: a house and techno lover who has never produced, on a laptop"
@@ -15,6 +15,6 @@ tags: ["web-audio", "tone-js", "music", "supabase"]
 
 ## Learned
 
-- Use the user's mental model: my jam grid failed before code; the GarageBand-style timeline won.
-- Agree what the screen must hold before designing it, and choose directions from pictures, not words.
-- Get to the real experience early: synthesised sound on day one tested the riskiest assumption.
+- Use the user's mental model and get to the real experience early: the GarageBand-style timeline won, and synthesised sound tested the riskiest assumption on day one.
+- Ears: analyse snippets across the track, not the first minute (the owner caught that the intro fooled the model); BPM is reliable, house sub-genres need the owner's own words.
+- Founder mode worked for correctness and failed for design: the owner's first look at the Mentor was "too much going on". Show pictures early, remove before adding.

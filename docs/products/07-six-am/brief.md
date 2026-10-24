@@ -353,7 +353,19 @@ PM's call (L1):
 
 ### Success check (at wrap-up)
 
-To fill in at wrap-up: each signal above with what happened, and whether all 56 tracks were placed.
+Filled 24 Oct (Founder run; eval report `eval-report.md`).
+
+| Signal | Target | What happened |
+| --- | --- | --- |
+| Genre agreement (top-1/2 in the match set) | ≥ 7/10 | **7/10, exactly on the bar**; plain "House" tops 6/10, so house sub-genres are a hint, not a call |
+| BPM within ±2 or flagged | ≥ 8/10 | **5/5 where a public reference exists**; 4 tracks had no reference, so the bar can't be shown |
+| Speed | result ≤ 10 s after listening, ≤ 2½ min per track (L26) | **pass**: ≤ 4.9 s, ~2 min per track |
+| All 56 tracks placed using Ears | all 56 | **Not measured, overtaken**: the owner sorted *B b baaangers* by hand before Ears shipped (the set is now private); filing was dropped (L41) |
+| No audio stored or uploaded | 0 | **pass** (code read, storage and network) |
+
+Did it solve the problem? Partly. Ears hears streamed tracks honestly and fast, and BPM is reliable;
+for the fine house sub-genres the owner cares about most it mostly says "House". The owner's own
+genre field (v1.1) and the Mentor are how the gap gets closed.
 
 ## Mentor (24 Oct, Founder mode)
 
@@ -657,5 +669,5 @@ From the pack:
 
 ### Success check (at wrap-up)
 
-To fill in at wrap-up: each signal above with what happened, and whether the riskiest assumption
+Filled 24 Oct (Founder run; eval report, Mentor sections). The riskiest assumption (a profile from a few playlists plus use makes the Mentor more "me" than a plain chat) was reported, not graded: the simulated side-by-side said "more me for listen next; about the same for the genre", and the profile is still locked for the owner (15/20 tracks), so it is untested with the owner's real taste. Evals: E1 genre 7/10 (bar 8, fail), E2 honesty pass (ear-training times 5/5 from Ears), E3 listen next real and named (links now checked), E4–E6 pass, E7 p90 ~10 s, E8 cost to the cent, E9 nothing lost in another browser, E10 every job ≥ 4/5 after the owner's simplification; design critic 6/10 (target 9). The owner rejected the first Mentor as "too much going on" and the simplified one shipped. Whether
 held (were the Mentor's genre calls and listen-next noticeably more "me" than a generic chat?).

@@ -152,8 +152,10 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
       ) : (
         <>
           <div className={s.thread} ref={threadRef} aria-busy={!!pending}>
-            {items.map((it) => {
+            {items.map((it, i) => {
               const about = byId(it.genreTrackId ?? it.answer.trackIds?.[0]) ?? (it.live ? track : null);
+              // N11: a later genre suggestion for the same track replaces this one's accept button.
+              const superseded = !!it.answer.genre && items.slice(i + 1).some((x) => x.answer.genre && (x.genreTrackId ?? x.answer.trackIds?.[0]) === (it.genreTrackId ?? it.answer.trackIds?.[0]));
               const intent = it.answer.intent;
               const view = it.live && !closedViews.has(it.id) && (intent === "taste_session" || intent === "propose_groups");
               return (
@@ -161,7 +163,7 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
                   key={it.id} ask={it.ask} job={intent ?? "chat"} answer={it.answer} studio={it.studio} dropped={it.dropped}
                   track={about} myGenre={about?.myGenre}
                   onTellMore={pending || it !== items.at(-1) ? undefined : () => { focusField(); void send("Tell me more."); }}
-                  onAcceptGenre={about ? acceptGenre(about) : undefined}
+                  onAcceptGenre={about && !superseded ? acceptGenre(about) : undefined}
                   onUndoGenre={about ? undoGenre(about) : undefined}
                   onFeedback={onFeedback}
                   onOpenStudio={(start) => onOpenStudio(start, about?.title ?? "")}

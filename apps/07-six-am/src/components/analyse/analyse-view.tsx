@@ -212,21 +212,28 @@ function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
         <div className={s.appRight}>
           {sync === "offline" ? <span className={s.side} title="Results are kept in this browser and saved to the server when it's reachable again">Offline · saved here</span> : null}
           <button className={s.btn} aria-pressed={open} aria-controls="mentor-panel" onClick={() => setOpen(!open)} title={open ? "Close the Mentor" : "Open the Mentor"}>Mentor</button>
-          <ExportMenu results={m.results} />
+          <ListMenu results={m.results} count={main.length + rest.length} onClear={() => { m.clearList(); setQuery(""); }} />
           <SettingsLink />
         </div>
       </header>
-      <Toolbar m={m} empty={empty} bannerEnables={noticeEnables(m, empty)} />
-      <Notice m={m} empty={empty} />
-      {empty ? <div /> : (
-        <ListBar
-          m={m} count={main.length + rest.length} shown={shownMain.length + shownRest.length} narrowed={narrowed}
-          query={query} setQuery={setQuery} filters={filters} setFilters={setRawFilters} genres={genres} onClear={clearFilters}
-        />
-      )}
+      {/* One toolbar (design to 9/10): the link and player, the filters, and one status slot. */}
+      <div className={s.bar}>
+        <LinkInput m={m} />
+        <Embed url={m.embedUrl} attach={m.onIframe} demo={m.demo} />
+        {empty ? null : (
+          <FilterControls
+            narrowed={narrowed} query={query} setQuery={setQuery} filters={filters} setFilters={setRawFilters} genres={genres} onClear={clearFilters}
+          />
+        )}
+        <Status m={m} empty={empty} />
+      </div>
       <main className={s.main}>
         {empty ? <EmptySteps /> : (
-          <Table m={m} main={shownMain} rest={shownRest} narrowed={narrowed} emptyText={noMatchText(m.results, main.length + rest.length, q, filters)} selectedId={selected?.id ?? null} onSelect={setSelId} onEditGenre={editGenre} />
+          <Table
+            m={m} main={shownMain} rest={shownRest} narrowed={narrowed} emptyText={noMatchText(m.results, main.length + rest.length, q, filters)}
+            count={narrowed ? `${shownMain.length + shownRest.length} of ${main.length + rest.length}` : `${main.length + rest.length}`}
+            selectedId={selected?.id ?? null} onSelect={setSelId} onEditGenre={editGenre}
+          />
         )}
         {empty ? null : selected ? (
           <Strip a={selected} studioBpm={studioBpm} onCopy={copy} onSetBpm={setBpm} suggestions={suggestions} onGenre={(g) => typeGenre(selected.id, g)} />
@@ -286,65 +293,76 @@ function noMatchText(results: EarsAnalysis[], rows: number, q: string, f: Filter
   return `No tracks match these filters${tail}`;
 }
 
-/** The line under the toolbar carries an Enable listening button (then the toolbar doesn't repeat it). */
-function noticeEnables(m: AnalyseModel, empty: boolean): boolean {
-  if (m.message?.action) return m.message.action.label === "Enable listening";
-  if (m.message?.tone === "error") return false;
-  return !empty && m.listening === "off";
-}
-
-/** One line under the toolbar: news (with its action), else what's needed to go on. */
-function Notice({ m, empty }: { m: AnalyseModel; empty: boolean }) {
+/** The toolbar's one status slot: news (with its action), else whether Six AM is listening, or the
+ *  one global progress (reading a playlist, getting the ears ready). A track's own progress is in
+ *  its row, so listening shows in one place. */
+function Status({ m, empty }: { m: AnalyseModel; empty: boolean }) {
+  const active = activeItem(m.queue);
   const queued = queueCounts(m.queue).queued;
+  const off = m.listening === "off" || m.listening === "unknown";
+  const enable = <button className={s.btn} onClick={m.enable} disabled={m.listening === "unknown" || !!m.busy} title={SHARE_HINT}>Enable listening</button>;
   if (m.message) {
     const err = m.message.tone === "error";
-    // News without its own action keeps the next step in view while listening is off (N2).
-    const next = !err && !m.message.action && !empty && m.listening === "off";
     return (
-      <div className={cx(s.msg, err && s.msgError)} role={err ? "alert" : "status"}>
-        <span title={m.message.detail}>{m.message.text}{next ? " · next: Enable listening" : ""}</span>
-        {m.message.action ? <button className={s.btn} onClick={m.message.action.run}>{m.message.action.label}</button>
-          : next ? <button className={s.btn} onClick={m.enable}>Enable listening</button> : null}
+      <div className={cx(s.status, s.statusNews, err && s.statusError)} role={err ? "alert" : "status"}>
+        <span className={s.statusText} title={m.message.detail ?? m.message.text}>{m.message.text}</span>
+        {m.message.action ? <button className={s.btn} onClick={m.message.action.run}>{m.message.action.label}</button> : !err && !empty && off ? enable : null}
         <button className={s.textBtn} onClick={m.dismiss}>Dismiss</button>
       </div>
     );
   }
-  if (empty || m.listening !== "off") return <div />;
-  if (queued) {
+  const prog = globalProgress(m);
+  if (prog) {
     return (
-      <div className={cx(s.msg, s.msgWait)} role="status">
-        <span><b>Not listening</b> · {queued} track{queued > 1 ? "s" : ""} waiting</span>
-        <button className={s.btn} onClick={m.enable}>Enable listening</button>
+      <div className={s.status}>
+        <div className={s.prog} role="progressbar" aria-label={prog.label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={prog.fraction == null ? undefined : Math.round(prog.fraction * 100)}>
+          <div className={s.progText}><span>{prog.left}</span><span>{prog.right}</span></div>
+          <div className={s.progBar}><i style={{ width: `${(prog.fraction ?? 0) * 100}%` }} /></div>
+        </div>
       </div>
     );
   }
-  // Step 2 of the empty state stays in view until listening is on.
+  if (m.listening === "unsupported") {
+    return <div className={s.status}><span className={s.statusText}>Needs desktop Chrome to hear this tab</span></div>;
+  }
+  if (off) {
+    return (
+      <div className={s.status} role="status">
+        <span className={cx(s.statusText, queued > 0 && s.statusWait)} title={SHARE_HINT}>{queued ? `Not listening · ${queued} waiting` : "Not listening"}</span>
+        {enable}
+      </div>
+    );
+  }
   return (
-    <div className={s.msg} role="status">
-      <span>Next: press Enable listening. In Chrome&apos;s dialog pick this tab, leave <q>Also share tab audio</q> on and click <q>Share</q>, once per session.</span>
-      <button className={s.btn} onClick={m.enable}>Enable listening</button>
+    <div className={s.status} role="status">
+      <span className={s.statusText}>Listening{queued ? ` · ${queued} queued` : ""}</span>
+      {active || m.busy ? null : <button className={s.textBtn} onClick={m.stopListening} title="Stop sharing this tab's audio">Stop</button>}
     </div>
   );
 }
 
-type ListBarProps = {
-  m: AnalyseModel; count: number; shown: number; narrowed: boolean; query: string; setQuery: (q: string) => void;
+/** What Chrome asks once per session, on the button and the "Not listening" line. */
+const SHARE_HINT = "Chrome asks which tab to share: pick this tab, keep “Also share tab audio” on, then press Share. Once per session.";
+
+type FiltersProps = {
+  narrowed: boolean; query: string; setQuery: (q: string) => void;
   filters: Filters; setFilters: (f: Filters) => void; genres: string[]; onClear: () => void;
 };
 
-/** Above the table: type to filter, BPM range and my genre (F13), and Clear list (asks once, inline). */
-function ListBar({ m, count, shown, narrowed, query, setQuery, filters, setFilters, genres, onClear }: ListBarProps) {
-  const [confirm, setConfirm] = useState(false);
-  const analysed = m.results.length;
+/** In the toolbar: type to filter, BPM range and my genre (F13). */
+function FilterControls({ narrowed, query, setQuery, filters, setFilters, genres, onClear }: FiltersProps) {
   // The picked genre's option, in the spelling in use (the stored one may differ in case).
   const picked = filters.genre === NO_GENRE ? NO_GENRE : genres.find((g) => genreKey(g) === genreKey(filters.genre)) ?? "";
   return (
-    <div className={s.listBar}>
+    <div className={s.filters}>
       <input
         className={s.filter}
         type="search"
         aria-label="Filter tracks"
-        placeholder="Filter title, uploader, style"
+        name="filter"
+        autoComplete="off"
+        placeholder="Filter tracks…"
+        title="Title, uploader, style or genre"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={(e) => { if (e.key === "Escape") setQuery(""); }}
@@ -360,19 +378,8 @@ function ListBar({ m, count, shown, narrowed, query, setQuery, filters, setFilte
         {genres.map((g) => <option key={g} value={g}>{g}</option>)}
         <option value={NO_GENRE}>No genre yet</option>
       </select>
-      <span className={s.listCount}>
-        {narrowed ? `${shown} of ${count} tracks` : `${count} track${count === 1 ? "" : "s"}`} · {analysed} analysed
-      </span>
-      {narrowed ? <button className={s.textBtn} onClick={onClear}>Clear filters</button> : null}
-      {confirm ? (
-        <span className={s.confirm} role="group" aria-label="Clear the list?">
-          <span>Clear all {count}{analysed ? `, with ${analysed} result${analysed > 1 ? "s" : ""} (export first to keep them)` : ""}?</span>
-          <button className={s.actBtn} onClick={() => { m.clearList(); setConfirm(false); setQuery(""); }}>Clear</button>
-          <button className={s.actBtn} onClick={() => setConfirm(false)}>Keep</button>
-        </span>
-      ) : (
-        <button className={cx(s.actBtn, s.clear)} onClick={() => setConfirm(true)} title="Empty the list: pasted tracks, the queue and the results in this browser">Clear list</button>
-      )}
+      {/* Always laid out, shown only while filtering, so the filters never jump (user test B2). */}
+      <button className={cx(s.textBtn, !narrowed && s.hidden)} onClick={onClear} tabIndex={narrowed ? undefined : -1} aria-hidden={!narrowed || undefined}>Clear</button>
     </div>
   );
 }
@@ -399,59 +406,75 @@ function BpmBound({ label, ghost, value, onChange }: { label: string; ghost: str
   );
 }
 
-function ExportMenu({ results }: { results: EarsAnalysis[] }) {
+/** Export, and Clear list (rarely used and destructive, so out of the toolbar; asks once, inline). */
+function ListMenu({ results, count, onClear }: { results: EarsAnalysis[]; count: number; onClear: () => void }) {
   const [open, setOpen] = useState(false);
+  const [confirm, setConfirm] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const close = () => { setOpen(false); setConfirm(false); };
   useEffect(() => {
     if (!open) return;
-    const close = (e: Event) => {
-      if (e instanceof KeyboardEvent ? e.key === "Escape" : !ref.current?.contains(e.target as Node)) setOpen(false);
+    const onEvent = (e: Event) => {
+      if (e instanceof KeyboardEvent ? e.key === "Escape" : !ref.current?.contains(e.target as Node)) { setOpen(false); setConfirm(false); }
     };
-    window.addEventListener("pointerdown", close);
-    window.addEventListener("keydown", close);
-    return () => { window.removeEventListener("pointerdown", close); window.removeEventListener("keydown", close); };
+    window.addEventListener("pointerdown", onEvent);
+    window.addEventListener("keydown", onEvent);
+    return () => { window.removeEventListener("pointerdown", onEvent); window.removeEventListener("keydown", onEvent); };
   }, [open]);
   const stamp = () => new Date().toISOString().slice(0, 10);
+  const n = results.length;
   return (
     <div ref={ref}>
-      <button className={s.btn} aria-haspopup="menu" aria-expanded={open} disabled={!results.length} onClick={() => setOpen((v) => !v)} title={results.length ? `Export ${results.length} analysed tracks` : "Nothing analysed yet"}>
-        Export ▾
+      <button className={s.btn} aria-haspopup="menu" aria-expanded={open} disabled={!count} onClick={() => (open ? close() : setOpen(true))} title={count ? undefined : "Nothing in the list yet"}>
+        List ▾
       </button>
       {open ? (
         <div className={s.menu} role="menu">
-          <button role="menuitem" onClick={() => { saveFile(`six-am-ears-${stamp()}.csv`, toCsv(results), "text/csv"); setOpen(false); }}>CSV</button>
-          <button role="menuitem" onClick={() => { saveFile(`six-am-ears-${stamp()}.json`, toJson(results), "application/json"); setOpen(false); }}>JSON</button>
+          {confirm ? (
+            <div className={s.confirm} role="group" aria-label="Clear the list?">
+              <p>Clear all {count}{n ? `, with ${n} result${n > 1 ? "s" : ""}? Export first to keep them.` : "?"}</p>
+              <span>
+                <button role="menuitem" className={s.danger} onClick={() => { onClear(); close(); }}>Clear</button>
+                <button role="menuitem" onClick={() => setConfirm(false)}>Keep</button>
+              </span>
+            </div>
+          ) : (
+            <>
+              <button role="menuitem" disabled={!n} onClick={() => { saveFile(`six-am-ears-${stamp()}.csv`, toCsv(results), "text/csv"); close(); }}>Export CSV</button>
+              <button role="menuitem" disabled={!n} onClick={() => { saveFile(`six-am-ears-${stamp()}.json`, toJson(results), "application/json"); close(); }}>Export JSON</button>
+              <button role="menuitem" title="Empty the list: pasted tracks, the queue and the results in this browser" onClick={() => setConfirm(true)}>Clear list…</button>
+            </>
+          )}
         </div>
       ) : null}
     </div>
   );
 }
 
-function Toolbar({ m, empty, bannerEnables }: { m: AnalyseModel; empty: boolean; bannerEnables: boolean }) {
+function LinkInput({ m }: { m: AnalyseModel }) {
   const [text, setText] = useState("");
   const submit = (value: string) => { if (value.trim()) m.load(value); };
   return (
-    <div className={s.bar}>
-      <input
-        className={s.url}
-        aria-label="SoundCloud link"
-        placeholder="Paste a SoundCloud track or playlist link"
-        spellCheck={false}
-        value={text}
-        disabled={!!m.busy}
-        onChange={(e) => setText(e.target.value)}
-        onKeyDown={(e) => { if (e.key === "Enter") submit(text); }}
-        onPaste={(e) => { const v = e.clipboardData.getData("text"); if (v.trim()) { e.preventDefault(); setText(v.trim()); submit(v); } }}
-      />
-      <Embed url={m.embedUrl} attach={m.onIframe} demo={m.demo} />
-      <Listen m={m} empty={empty} bannerEnables={bannerEnables} />
-    </div>
+    <input
+      className={s.url}
+      aria-label="SoundCloud link"
+      name="soundcloud-link"
+      autoComplete="off"
+      placeholder="Paste a SoundCloud link…"
+      title="A track or a playlist"
+      spellCheck={false}
+      value={text}
+      disabled={!!m.busy}
+      onChange={(e) => setText(e.target.value)}
+      onKeyDown={(e) => { if (e.key === "Enter") submit(text); }}
+      onPaste={(e) => { const v = e.clipboardData.getData("text"); if (v.trim()) { e.preventDefault(); setText(v.trim()); submit(v); } }}
+    />
   );
 }
 
 /** The official SoundCloud widget, compact (its own look is SoundCloud's). Its src never changes once set. */
 function Embed({ url, attach, demo }: { url: string | null; attach: (el: HTMLIFrameElement | null) => void; demo: boolean }) {
-  if (!url) return <div className={s.embedEmpty}>{demo ? "Demo data · no player" : "The SoundCloud player appears here"}</div>;
+  if (!url) return <div className={s.embedEmpty}>{demo ? "Demo data · no player" : ""}</div>;
   return (
     <iframe
       ref={attach}
@@ -463,51 +486,8 @@ function Embed({ url, attach, demo }: { url: string | null; attach: (el: HTMLIFr
   );
 }
 
-function Listen({ m, empty, bannerEnables }: { m: AnalyseModel; empty: boolean; bannerEnables: boolean }) {
-  const active = activeItem(m.queue);
-  const counts = queueCounts(m.queue);
-  const queued = counts.queued;
-  const prog = progressOf(m, active);
-
-  if (m.listening === "unsupported") {
-    return (
-      <div className={s.listen}>
-        <button className={s.btn} disabled>Enable listening</button>
-        <span className={s.offNote}>Needs desktop Chrome to hear this tab</span>
-      </div>
-    );
-  }
-  const block = prog ? (
-    <div className={s.prog} role="progressbar" aria-label={prog.label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={prog.fraction == null ? undefined : Math.round(prog.fraction * 100)}>
-      <div className={s.progText}><span>{prog.left}</span><span>{prog.right}</span></div>
-      <div className={s.progBar}><i style={{ width: `${(prog.fraction ?? 0) * 100}%` }} /></div>
-    </div>
-  ) : null;
-  if (m.listening !== "on") {
-    // The banner under the toolbar has the button and the share reminder: here, status only.
-    // Before the first paste the reminder lives in step 2 of the instructions, not here.
-    const remind = !bannerEnables && !empty && !queued;
-    return (
-      <div className={s.listen}>
-        {bannerEnables ? null : <button className={s.btn} onClick={m.enable} disabled={m.listening === "unknown" || !!m.busy}>Enable listening</button>}
-        {block ?? <span className={s.offNote} title="Chrome asks which tab to share: pick this tab, keep “Also share tab audio” on, then press Share. Once per session.">
-          {queued ? `Off · ${queued} waiting` : remind ? <>Off · keep <q>Also share tab audio</q> on</> : "Not listening"}
-        </span>}
-      </div>
-    );
-  }
-  return (
-    <div className={s.listen}>
-      {block ?? <span className={s.side}>Listening on</span>}
-      {queued ? <span className={s.side}>{queued} queued</span> : null}
-      {active ? <button className={s.textBtn} onClick={m.cancel}>Cancel</button>
-        : m.listening === "on" && !m.busy ? <button className={s.textBtn} onClick={m.stopListening} title="Stop sharing this tab's audio">Stop</button> : null}
-    </div>
-  );
-}
-
-/** The one progress block: playlist reading, model download, or the track being heard. */
-function progressOf(m: AnalyseModel, active: QueueItem | undefined): { left: string; right: string; fraction: number | null; label: string } | null {
+/** The one global progress: reading a playlist, or getting the ears ready (first time only). */
+function globalProgress(m: AnalyseModel): { left: string; right: string; fraction: number | null; label: string } | null {
   if (m.busy) return { left: m.busy.text, right: m.busy.fraction != null ? `${Math.round(m.busy.fraction * 100)}%` : "", fraction: m.busy.fraction, label: m.busy.text };
   if (m.model.state === "downloading") {
     const f = m.model.fraction;
@@ -517,37 +497,39 @@ function progressOf(m: AnalyseModel, active: QueueItem | undefined): { left: str
     // Shown from the first second, before the download reports progress (or when it comes from the cache).
     return { left: EARS_READY, right: "", fraction: null, label: `${EARS_READY}: first time only` };
   }
-  if (!active) return null;
-  if (active.status === "loading") return { left: "Loading the track…", right: "", fraction: 0, label: "Loading the track" };
-  if (active.status === "analysing") return { left: "Working out the result…", right: "", fraction: 1, label: "Working out the result" };
-  const p = active.progress;
-  if (!p) return { left: "Listening…", right: "", fraction: 0, label: "Listening" };
-  const heard = (p.snippet - 1) * p.snippetSeconds + p.seconds;
-  const total = p.of * p.snippetSeconds;
-  return { left: `Listening ${p.snippet}/${p.of}`, right: `${Math.round(heard)} s`, fraction: Math.min(1, heard / total), label: `Listening, snippet ${p.snippet} of ${p.of}, ${Math.round(heard)} of ${Math.round(total)} seconds` };
+  return null;
 }
 
+/** The track being heard, in its own row: what's happening and how far (0–1). */
+function trackProgress(item: QueueItem): { text: string; fraction: number; label: string } {
+  if (item.status === "loading") return { text: "Loading…", fraction: 0, label: "Loading the track" };
+  if (item.status === "analysing") return { text: "Working it out…", fraction: 1, label: "Working out the result" };
+  const p = item.progress;
+  if (!p) return { text: "Listening…", fraction: 0, label: "Listening" };
+  const heard = (p.snippet - 1) * p.snippetSeconds + p.seconds;
+  const total = p.of * p.snippetSeconds;
+  return {
+    text: `Listening ${p.snippet}/${p.of} · ${Math.round(heard)} s`,
+    fraction: Math.min(1, heard / total),
+    label: `Listening, snippet ${p.snippet} of ${p.of}, ${Math.round(heard)} of ${Math.round(total)} seconds`,
+  };
+}
+
+/** Two lines (design to 9/10); Chrome's share step is on the Enable listening button. */
 function EmptySteps() {
   return (
-    <>
-      <ol className={s.steps}>
-        <li>Paste a SoundCloud track or playlist link above. A playlist lists all its tracks here.</li>
-        <li><span>Press Enable listening. In Chrome&apos;s dialog pick this tab, leave <q>Also share tab audio</q> on and click <q>Share</q>, once per session.</span></li>
-        <li>Press Analyse on a track, or Analyse all. Six AM listens to 4 snippets of 30 s; about 2 minutes later its row fills in. It keeps the measurements only, never the audio.</li>
-      </ol>
-      <p className={s.fine}>Styles are likelihoods, not one answer. Results are kept in this browser and saved to your Six AM.</p>
-      <div className={s.ghost} aria-hidden="true">
-        <HeadRow />
-      </div>
-    </>
+    <div className={s.empty}>
+      <p>Paste a SoundCloud track or playlist link above.</p>
+      <p className={s.muted}>Then Enable listening and Analyse: Six AM hears four 30&nbsp;s snippets and keeps the measurements, never the audio.</p>
+    </div>
   );
 }
 
-function HeadRow() {
+function HeadRow({ count }: { count: string }) {
   return (
     <div className={cx(s.cols, s.head)} role="row">
       <span className={cx(s.th, s.right)} role="columnheader">#</span>
-      <span className={s.th} role="columnheader">Track</span>
+      <span className={s.th} role="columnheader">Track <span className={s.thCount}>{count}</span></span>
       <span className={cx(s.th, s.thSplit)} role="columnheader" title="The style heard most strongly, and how strongly (%)"><span>Style</span><span>%</span></span>
       <span className={cx(s.th, s.thSplit, s.lo)} role="columnheader" title="The next style heard, and how strongly (%)"><span>Also</span><span>%</span></span>
       <span className={cx(s.th, s.right)} role="columnheader">BPM</span>
@@ -570,11 +552,11 @@ function matches(r: Row, q: string): boolean {
 
 type Numbered = { r: Row; n: number };
 type TableProps = {
-  m: AnalyseModel; main: Numbered[]; rest: Numbered[]; narrowed: boolean; emptyText: string; selectedId: string | null;
+  m: AnalyseModel; main: Numbered[]; rest: Numbered[]; narrowed: boolean; emptyText: string; count: string; selectedId: string | null;
   onSelect: (id: string) => void; onEditGenre: (id: string) => void;
 };
 
-function Table({ m, main, rest, narrowed, emptyText, selectedId, onSelect, onEditGenre }: TableProps) {
+function Table({ m, main, rest, narrowed, emptyText, count, selectedId, onSelect, onEditGenre }: TableProps) {
   const ref = useRef<HTMLDivElement>(null);
   const analysable = rest.map((x) => x.r).filter((r) => r.state === "new");
   const blocked = rest.length - analysable.length;
@@ -595,7 +577,7 @@ function Table({ m, main, rest, narrowed, emptyText, selectedId, onSelect, onEdi
 
   return (
     <div className={s.grid} role="grid" aria-label="Analysed tracks" ref={ref} onKeyDown={onKeyDown}>
-      <HeadRow />
+      <HeadRow count={count} />
       {main.map(({ r, n }) => (
         <TableRow key={r.key} r={r} n={n} m={m} selected={!!r.result && r.result.id === selectedId} tabbable={r.key === tabKey} onSelect={onSelect} onEditGenre={onEditGenre} />
       ))}
@@ -642,18 +624,25 @@ function TableRow({ r, n, m, selected, tabbable, onSelect, onEditGenre }: { r: R
   const bpm = a ? bpmChoice(a) : null;
 
   let status: React.ReactNode = null;
+  let prog: ReturnType<typeof trackProgress> | null = null;
   if (!a) {
     if (r.state === "new") {
       status = (
-        <button className={s.actBtn} onClick={(e) => { e.stopPropagation(); m.analyse([r]); }} title={m.listening === "on" ? "Listen to 4 snippets of 30 s (about 2 min)" : "Queue it; it starts once listening is on"}>
+        <button className={cx(s.actBtn, s.quiet)} onClick={(e) => { e.stopPropagation(); m.analyse([r]); }} title={m.listening === "on" ? "Listen to 4 snippets of 30 s (about 2 min)" : "Queue it; it starts once listening is on"}>
           Analyse
         </button>
       );
     } else if (r.state === "blocked") status = <span className={s.dim}>Not available in your region</span>;
     else if (r.state === "queued") status = <span className={s.muted}>Queued · {r.queuePos}</span>;
-    else if (r.state === "loading") status = <span className={s.status}>Loading…</span>;
-    else if (r.state === "listening") status = <span className={s.status}>Listening {r.item?.progress ? `${r.item.progress.snippet}/${r.item.progress.of}` : ""}…</span>;
-    else if (r.state === "analysing") status = <span className={s.status}>Working it out…</span>;
+    else if ((r.state === "loading" || r.state === "listening" || r.state === "analysing") && r.item) {
+      prog = trackProgress(r.item);
+      status = (
+        <span className={s.now}>
+          <span className={s.nowText} title={prog.label}>{prog.text}</span>
+          {r.state === "analysing" ? null : <button className={cx(s.actBtn, s.quiet)} onClick={(e) => { e.stopPropagation(); m.cancel(); }}>Cancel</button>}
+        </span>
+      );
+    }
     else if (r.state === "failed") {
       const reason = r.item?.reason ?? "error";
       status = (
@@ -667,7 +656,7 @@ function TableRow({ r, n, m, selected, tabbable, onSelect, onEditGenre }: { r: R
 
   return (
     <div
-      className={cx(s.cols, s.row, isRest && s.rest, r.result && s.pick, selected && s.sel)}
+      className={cx(s.cols, s.row, isRest && s.rest, r.result && s.pick, selected && s.sel, prog && s.active)}
       role="row"
       aria-selected={r.result ? selected : undefined}
       tabIndex={tabbable ? 0 : -1}
@@ -720,6 +709,8 @@ function TableRow({ r, n, m, selected, tabbable, onSelect, onEditGenre }: { r: R
           <span className={s.dim} role="gridcell">{r.result?.myGenre ?? dash}</span>
         </>
       )}
+      {/* The one bar for the track being heard: a 2 px gold line along its row. */}
+      {prog ? <span className={s.rowProg} role="progressbar" aria-label={prog.label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(prog.fraction * 100)}><i style={{ transform: `scaleX(${prog.fraction})` }} /></span> : null}
     </div>
   );
 }

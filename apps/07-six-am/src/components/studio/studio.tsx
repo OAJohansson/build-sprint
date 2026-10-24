@@ -11,6 +11,7 @@ import type { Track, TrackSummary } from "@/lib/tracks";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { clampBpm, DEFAULT_BPM, formatBpm, TEMPO_KEY } from "@/lib/tempo";
 import { STUDIO_DRAFT_KEY, type StudioDraft } from "@/lib/mentor/studio";
+import { useAccessCode } from "@/lib/mentor/client";
 import { parseDoc } from "@/lib/tracks";
 import { SettingsLink, ViewsNav } from "@/components/views-nav";
 import { useTimeline } from "./use-timeline";
@@ -23,6 +24,7 @@ import s from "./studio.module.css";
 
 const COLORS = ["#f2b134", "#ef5b37", "#23b3a5", "#a9c95a"]; // drums, bass, chords, top/FX
 const SAVE_AFTER_MS = 700;
+const LEAVE_DRAFT = "This Mentor draft isn't saved. Leave it?";
 const emptyDoc = (): Doc => ({ regions: [], muted: TRACKS.map(() => false) });
 const summary = (t: Track): TrackSummary => ({ id: t.id, name: t.name, updatedAt: t.updatedAt });
 
@@ -30,7 +32,7 @@ type Phase = { is: "loading" } | { is: "locked"; error: string | null } | { is: 
 export type SaveStatus = "saved" | "saving" | "error";
 
 export function Studio() {
-  const [code, setCode] = useLocalStorage("07-six-am:code", "");
+  const [code, setCode, ready] = useAccessCode();
   const [lastId, setLastId] = useLocalStorage("07-six-am:last", "");
   const client = useMemo(() => api(code), [code]);
   const [phase, setPhase] = useState<Phase>({ is: "loading" });
@@ -71,6 +73,8 @@ export function Studio() {
   // Load my tracks; a first visit gets the demo track to start from. The latest call wins.
   const run = useRef(0);
   useEffect(() => {
+    // N14: no request until the stored code has been read, and none without a code.
+    if (!ready || !code) return;
     const me = ++run.current;
     (async () => {
       try {
@@ -113,7 +117,16 @@ export function Studio() {
     })();
     // lastId is read once per load on purpose: opening a track shouldn't reload the list.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [client]);
+  }, [client, ready]);
+
+  // N10: an unsaved draft is lost on leaving, so ask first (closing the tab, links, other tracks).
+  useEffect(() => {
+    if (!draft) return;
+    const warn = (e: BeforeUnloadEvent) => e.preventDefault();
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [draft]);
+  const leaveDraft = () => !draft || window.confirm(LEAVE_DRAFT);
 
   /** Save the draft as a new track; from then on it autosaves like any other, and its tempo
    *  becomes the device tempo (one tempo per device, see Session). */
@@ -134,8 +147,9 @@ export function Studio() {
   };
 
   const openTrack = async (id: string) => {
-    setDraft(null);
     if (id === track?.id) return;
+    if (!leaveDraft()) return;
+    setDraft(null);
     await flush();
     try {
       const next = await client.get(id);
@@ -148,6 +162,7 @@ export function Studio() {
   };
 
   const newTrack = async () => {
+    if (!leaveDraft()) return;
     setDraft(null);
     await flush();
     const n = tracks.filter((x) => /^Untitled track/.test(x.name)).length + 1;
@@ -177,6 +192,7 @@ export function Studio() {
     }
   };
 
+  if (ready && !code) return <Unlock error={null} onUnlock={(c) => { setPhase({ is: "loading" }); setCode(c); }} />;
   if (phase.is === "loading") return <Notice text="Loading your tracks…" />;
   if (phase.is === "locked") return <Unlock error={phase.error} onUnlock={(c) => { setPhase({ is: "loading" }); setCode(c); }} />;
   if (phase.is === "problem" || !track) {
@@ -239,7 +255,11 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
 
   return (
     <div className={s.root}>
-      <header className={s.bar}>
+      <header
+        className={s.bar}
+        // N10: the views and Settings links leave the page; a draft asks first.
+        onClickCapture={(e) => { if (draft && (e.target as HTMLElement).closest("a[href]") && !window.confirm(LEAVE_DRAFT)) e.preventDefault(); }}
+      >
         <div className={s.logo}><Logo className={s.mark} />Six AM</div>
         <ViewsNav current="studio" />
         <div className={s.trackBox}>
@@ -260,10 +280,8 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
             My tracks <ChevronDown aria-hidden />
           </button>
           {draft ? (
-            <span className={s.saveState}>
-              Not saved ·
-              <button className={s.saveDraft} onClick={() => onSaveDraft(savedName.current, t.doc)} title="A starting point from the Mentor. It isn't saved until you press this.">Save track</button>
-            </span>
+            // The gold "Save track" alone says it isn't saved yet (N9: no "Not saved ·" beside it).
+            <button className={s.saveDraft} onClick={() => onSaveDraft(savedName.current, t.doc)} title="A starting point from the Mentor. It isn't saved until you press this.">Save track</button>
           ) : status === "error" ? (
             <button className={cx(s.saveState, s.saveError)} onClick={onRetry}>Not saved · Retry</button>
           ) : (

@@ -22,9 +22,9 @@
 .libBtn { flex: none; display: flex; align-items: center; gap: 4px; font: 400 12px var(--f-mono); color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 99px; padding: 6px 10px 6px 12px; cursor: pointer; }
 .libBtn svg { width: 14px; height: 14px; }
 .libBtn:hover, .libBtn[aria-expanded="true"] { color: var(--ink); }
-.saveState { flex: none; display: inline-flex; align-items: center; min-height: 28px; font: 400 11px var(--f-mono); color: #6f6357; white-space: nowrap; background: none; border: 0; padding: 0 4px; }
+.saveState { flex: none; display: inline-flex; align-items: center; min-height: 28px; font: 400 11px var(--f-mono); color: #958a7c; white-space: nowrap; background: none; border: 0; padding: 0 4px; }
 /* A Mentor draft: "Not saved" stays dim; "Save track" is the one accent */
-.saveDraft { display: inline-flex; align-items: center; min-height: 28px; padding: 0 4px; border: 0; background: none; font: 500 11px var(--f-mono); color: var(--gold); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.saveDraft { flex: none; white-space: nowrap; display: inline-flex; align-items: center; min-height: 28px; padding: 0 4px; border: 0; background: none; font: 500 11px var(--f-mono); color: var(--gold); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .saveDraft:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; border-radius: 4px; }
 .saveError { color: #ef5b37; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .library {

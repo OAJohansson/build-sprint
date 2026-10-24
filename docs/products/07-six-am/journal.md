@@ -484,3 +484,29 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   `founder-run-report.md` (timeline, where the time went, agents vs owner, why design stalled, a
   proposed process). PLAYBOOK.md and AGENTS.md unchanged: the owner decides from the report.
 - **Clean start** on the owner's yes in this chat: all 141 rows of `sixam_mentor_messages` deleted (the shared `main` chat, the memory summary, old per-track and background threads; incl. the owner's few real questions). Kept: 15 analyses (5 My genres), the 344-character taste profile, 3 genre groups (made by testers; the owner's to keep or dismiss), 2 Studio tracks. Today/Month cost, the 50/day count and the chats-toward-unlock count restart from zero.
+
+## 25 Oct: cleanup slice (Mentor polish, Analyse design)
+
+- **Scope (L98):** the owner picked two backlog rows before the arrangement map: Mentor polish
+  (N9–N14) and Analyse "design to 9/10". Founder v2 rules: remove first, one critic with the fixed
+  scorecard, one user test in a sandbox. Own branch `claude/07-six-am-cleanup-4d0df6` from `main`.
+- **Test sandbox (ops):** a second dev server, `07-six-am-test` in `.claude/launch.json` (port
+  3017, Supabase vars blanked so it uses the in-memory store, its own access code). Graders and the
+  PM's real Mentor calls ran only there (about 9 questions, a few cents); the owner's Supabase rows
+  and chat were not touched. `.env.local` filled by `pnpm env-bootstrap` (key names only printed).
+- **Mentor polish:** N9 and N13 were already fixed on `main` (checked on screen); N10, N11, N12
+  and N14 built (T40–T45). The Studio no longer sends a request before the code is known.
+- **Analyse, remove first (L99, T46):** removed the notice bar, the filter bar, the track progress
+  in the toolbar, the count line, the Clear list button and the three-step empty state; then one
+  toolbar with a fixed status slot, progress and Cancel in the track's own row, Track capped at
+  380 px, a quiet in-row Analyse, two-line empty state, Clear list in "List ▾".
+- **Design passes:** `emil-design-eng` (row progress as a transform, no new motion),
+  `web-design-guidelines` (placeholders with …, a no-break space, input names), `break-ui` (long
+  news was cut to ~16 characters in the slot: it now wraps to two lines; an 80-character draft name
+  truncates cleanly).
+- **Critic (one instance, two rounds):** Analyse 8 → 9/10, Mentor panel 8 → 9/10 (were 7 and 6).
+  Cheap round-1 points done (T47); owner-decided items kept; rounds stopped at 9.
+- **User test (sandbox):** A 5, B 4, C 3, D 4; report in `user-testing/report-2026-10-25-cleanup.md`.
+  B1, B2, D2 fixed (T48). Two majors outside the slice to the backlog: saved tracks open at bar 37
+  (D1), and "this track" follows the conversation, not a newly selected row (C1, owner's call).
+- Lint, 147 tests and the build pass.

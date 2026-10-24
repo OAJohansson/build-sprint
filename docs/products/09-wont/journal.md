@@ -135,3 +135,6 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   longer absence (opened mid-run) got nothing. Fixed in pass 2 (L26, supersedes L14) with three
   unit tests, plus the slip next step, "Saved" at the button, required-field notes, two-day
   naming, Skip width, title capitalised for display. 34 tests.
+- **Targeted re-check** (user-tester): N1 and rows 37–40 pass; new N8 double tap made duplicate
+  habits, fixed with a ref guard in the shared submit hook. Preview redeployed; eval report
+  written. Waiting for the owner's final review.

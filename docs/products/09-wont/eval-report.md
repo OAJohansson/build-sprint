@@ -5,7 +5,7 @@ it. Graders: `user-tester` (3 runs: full test, full re-check, targeted re-check)
 (a fresh critic each round, screenshots only), a break-ui and guidelines audit. The owner-only
 checks are the owner's and not here.
 
-**Preview:** https://wont-9e1n9o4pf-mimirswell.vercel.app (behind Vercel login; the latest build)
+**Preview:** https://wont-5f8nua409-mimirswell.vercel.app (behind Vercel login; the latest build)
 · **Branch:** `09-habits` · **PR:** OAJohansson/build-sprint#80
 
 Note: https://wont-peach.vercel.app is public and shows the **first** build (before both fix
@@ -18,7 +18,7 @@ CLI deploy (journal, T21); it is replaced when the owner approves the merge and 
 | --- | --- | --- |
 | Riskiest assumption: a written commitment plus a gentle comeback keeps me going after a miss (S3) | slip ≤ 20 s / ≤ 3 taps; next open shows one next step, no guilt words; next clean day marked as a comeback | **pass** (2 taps / ~6 s; "Friday had a slip. Your 6 clean days still count. Next time: chew gum first."; green winking "Comeback") |
 | Requirements R1–R8 | all pass | **pass** (8/8, two user-test runs) |
-| User test | every top job ≥ 4/5, no blocker or major open | **pass** after fix pass 2 (jobs 4, 5, 5); N1 fixed and re-checked, see below |
+| User test | every top job ≥ 4/5, no blocker or major open | **pass** after fix passes 2 and 3 (jobs 4, 5, 5); N1 and the double-tap duplicate (N8) fixed and re-checked |
 | Design | design-critic ≥ 9/10 | **fail: 6/10** in every round (5 rounds), see below |
 | Guardrails | contrast ≥ 4.5:1, data word for word 100%, phone 390×844 with ≥ 44 px targets | **pass** (worst enabled text 4.92:1; 12/12 fields and 25/25 day entries; 0 overflow, all targets ≥ 44 px) |
 | Things to avoid | none visible | **pass** (0 guilt words on app screens, no red, no streak reset, no badges) |

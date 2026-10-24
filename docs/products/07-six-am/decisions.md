@@ -174,3 +174,9 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L119 | 2026-10-25 | Generated loops stored in a new `sixam_ai_loops` table (base64 audio, RLS on; additive migration), not a Storage bucket: one migration, no bucket setup; movable later | PM (engineer's proposal) | S4 | |
 | T49 | 2026-10-25 | Stable Audio asked for WAV, not MP3, so loops repeat without the MP3 padding gap | PM | S4 | |
 | T50 | 2026-10-25 | Lyria calls send `store:false` (Google keeps nothing; default would be 55 days) | PM | S4 | |
+| L120 | 2026-10-25 | Drum kits: Freesound CC0 sounds (909-style from GRD-music-'s JD-Xi "TR-909 Drum Hits", 808-style from Karman_Lyne's Roland TR-08), as Freesound's HQ MP3 previews (WAV originals need a login); licences per file in `public/kits/LICENSES.md` | PM (engineer's proposal) | S3 | |
+| L121 | 2026-10-25 | Synth patterns written as diatonic scale degrees (minor = natural minor), so every note is in key by construction; no chromatic passing notes or harmonic-minor V7 for now | PM (engineer's proposal) | S3 | |
+| L122 | 2026-10-25 | Exactly 3 knobs per synth: cutoff, resonance, one envelope knob (Decay; Release on the pad); accent and slide are pattern data, not knobs (not-list: no cockpit) | PM (engineer's proposal) | S3 | |
+| T51 | 2026-10-25 | Registers: bass E1–D#2, chords E3–D#4 | PM | S3 | |
+| T52 | 2026-10-25 | Kit MP3 encoder padding compensated by measuring leading silence | PM | S3 | |
+| T53 | 2026-10-25 | Offline render check page only under `next dev` (`/dev/synths`) | PM | S3 | |

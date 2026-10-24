@@ -304,7 +304,7 @@ function Status({ m, empty }: { m: AnalyseModel; empty: boolean }) {
   if (m.message) {
     const err = m.message.tone === "error";
     return (
-      <div className={cx(s.status, err && s.statusError)} role={err ? "alert" : "status"}>
+      <div className={cx(s.status, s.statusNews, err && s.statusError)} role={err ? "alert" : "status"}>
         <span className={s.statusText} title={m.message.detail ?? m.message.text}>{m.message.text}</span>
         {m.message.action ? <button className={s.btn} onClick={m.message.action.run}>{m.message.action.label}</button> : !err && !empty && off ? enable : null}
         <button className={s.textBtn} onClick={m.dismiss}>Dismiss</button>
@@ -359,7 +359,9 @@ function FilterControls({ narrowed, query, setQuery, filters, setFilters, genres
         className={s.filter}
         type="search"
         aria-label="Filter tracks"
-        placeholder="Filter tracks"
+        name="filter"
+        autoComplete="off"
+        placeholder="Filter tracks…"
         title="Title, uploader, style or genre"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
@@ -455,7 +457,9 @@ function LinkInput({ m }: { m: AnalyseModel }) {
     <input
       className={s.url}
       aria-label="SoundCloud link"
-      placeholder="Paste a SoundCloud link"
+      name="soundcloud-link"
+      autoComplete="off"
+      placeholder="Paste a SoundCloud link…"
       title="A track or a playlist"
       spellCheck={false}
       value={text}
@@ -515,7 +519,7 @@ function EmptySteps() {
   return (
     <div className={s.empty}>
       <p>Paste a SoundCloud track or playlist link above.</p>
-      <p className={s.muted}>Then Enable listening and Analyse: Six AM hears four 30 s snippets and keeps the measurements, never the audio.</p>
+      <p className={s.muted}>Then Enable listening and Analyse: Six AM hears four 30&nbsp;s snippets and keeps the measurements, never the audio.</p>
     </div>
   );
 }
@@ -705,7 +709,7 @@ function TableRow({ r, n, m, selected, tabbable, onSelect, onEditGenre }: { r: R
         </>
       )}
       {/* The one bar for the track being heard: a 2 px gold line along its row. */}
-      {prog ? <span className={s.rowProg} role="progressbar" aria-label={prog.label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(prog.fraction * 100)}><i style={{ width: `${prog.fraction * 100}%` }} /></span> : null}
+      {prog ? <span className={s.rowProg} role="progressbar" aria-label={prog.label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(prog.fraction * 100)}><i style={{ transform: `scaleX(${prog.fraction})` }} /></span> : null}
     </div>
   );
 }

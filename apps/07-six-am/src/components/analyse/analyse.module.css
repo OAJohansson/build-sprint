@@ -73,6 +73,9 @@
 .status { display: flex; align-items: center; justify-content: flex-end; gap: 12px; flex: 0 0 360px; min-width: 0; margin-left: auto; font: 400 12px var(--f-mono); color: var(--muted); }
 .statusText { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .statusWait { color: var(--ink); }
+/* News and errors must be read in full: the slot takes the player's room and wraps to two lines */
+.statusNews { flex: 1 1 360px; max-width: 640px; }
+.statusNews .statusText { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-height: 1.35; }
 .statusError { color: #f08a6e; }
 
 /* The one progress indicator: a text line over a 2 px gold bar */
@@ -163,7 +166,7 @@
 .now { display: flex; align-items: baseline; gap: 14px; color: var(--ink); }
 .active .track b { color: var(--ink); font-weight: 500; }
 .rowProg { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: transparent; }
-.rowProg i { display: block; height: 100%; background: var(--gold); transition: width 1s linear; }
+.rowProg i { display: block; height: 100%; background: var(--gold); transform-origin: left; transition: transform 1s linear; }
 @media (prefers-reduced-motion: reduce) { .rowProg i { transition: none; } }
 /* In-row actions not yet asked for (Analyse, Cancel): quiet until the row is pointed at */
 .quiet { color: var(--muted); font-weight: 400; }

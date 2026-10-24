@@ -10,6 +10,9 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   `research.md`: if-then plans (Gollwitzer), automaticity takes ~2 months (Lally, Singh), the
   what-the-hell / abstinence-violation effect, reminders vs cues (Stawarz), why streaks backfire
   (Silverman & Barasch), "ask about past behaviour" (The Mom Test), job to be done (Christensen).
+- `docs/knowledge-bank.md` (design and UX / product strategy): distinctive brand assets (Byron
+  Sharp, *How Brands Grow*) and "only-ness" (Marty Neumeier, *Zag*); a character sheet / mark
+  tested at 29 px before it becomes an illustration system.
 - `docs/learnings.md` process changelog: running a deep-research step (5 parallel researchers and
   a report writer) before writing a Founder kickoff pack.
 
@@ -84,3 +87,6 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Wonton sheet 1 rejected** (owner): too childish; adults should want to use it, still cute.
   Reframed as an icon exercise: design the mark first, then use it for the wontons. Sheet 1 kept
   (`design/wonton-sheet.html`).
+- **Mark shortlist** (owner): Calm face (loves it, worried it reads as Headspace), Riso, Enamel
+  pin (colours). Brand pros/cons given in chat; designer exploring 4 differentiated Calm faces
+  (one in riso), 2 Riso refinements, 4 enamel colourways (`design/mark-sheet.html`).

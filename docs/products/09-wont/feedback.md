@@ -21,3 +21,6 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 15 | Critic round 1 | Kept card looks like an open one; number louder than the name; pink comeback box reads as failure; slip in the warmest colour | fixing |
 | 16 | Owner, Wontons v2 | v1's wontons were cuter than v2's; like the different wonton colours; wants a separate exercise: 10 wonton styles, cartoon or anime rather than realistic | fixing |
 | 17 | Owner, wonton sheet 1 | None hits the mark; too childish. Want adult-but-cute, designed as an icon first, then used for the wontons in the app. 10 new options with seeds, different styles. Keep sheet 1 to come back to | fixing |
+| 18 | Owner, icon sheet | Loves 08 Calm face but worried it reads as a Headspace copy: differentiate it | fixing |
+| 19 | Owner, icon sheet | Likes 05 Riso | open |
+| 20 | Owner, icon sheet | 06 Enamel pin is cute, unsure about the colours: explore other colourways | fixing |

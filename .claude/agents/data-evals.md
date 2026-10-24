@@ -18,6 +18,12 @@ and stop.
   the guardrails). Never look for or use owner-only checks.
 - The app folder and how to call the behaviour (a route, a function, a script).
 - Earlier products' evals as examples, e.g. 05 Inkling and 06 Folio (decisions 0017 and 0018).
+- **Test sandbox (decision 0028):** if the product has a backend, use the test access code and
+  data the PM gives you, never the owner's real records. If none is given, ask the PM before
+  writing anything.
+- **Fair bars (decision 0028):** if an eval depends on the owner's taste data that doesn't exist
+  yet (e.g. "genre in the owner's words" with an empty profile), report it as "owner check, not
+  agent-gradable yet" instead of iterating on it.
 
 ## How to work
 

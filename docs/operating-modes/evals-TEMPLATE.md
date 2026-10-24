@@ -32,11 +32,15 @@ Every top job scored ≥ 4/5 by `user-tester`, and no blocker or major finding l
 
 ### Design
 
-- `design-critic` score **≥ 9/10** on the main screen, from screenshots only, against the
-  kickoff pack's "feel in one sentence".
+- `design-critic` scorecard (clutter, hierarchy, legibility, feel, copy; 0–2 each) **≥ 9/10**
+  on the main screen, from screenshots only, against the pinned references or the "feel in one
+  sentence". A target, not a blocker (decision 0028).
 - No item from the kickoff pack's "Things to avoid" visible on any screen.
 
 ### AI and data (only if the product has them; run by `data-evals`)
+
+Only bars the method can reach without the owner's taste data. Anything that needs it (e.g.
+"in my words") goes in part 2 or the final review (decision 0028).
 
 | Eval | Dataset | Metric | Bar | Result |
 | --- | --- | --- | --- | --- |

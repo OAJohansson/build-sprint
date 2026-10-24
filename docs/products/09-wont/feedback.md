@@ -44,3 +44,5 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 38 | Re-check N3 | Morning-after-slip message has no next step | fixed |
 | 39 | Re-check N2/N4/N6/N7 | Disabled submit 2.82:1 without reason; "Saved" far from the button; "this week" label; intro Skip 39 px wide | fixed |
 | 40 | Re-check N5 | Card title shows lowercase as typed ("read in bed") | fixed |
+| 41 | Re-check 3 N8 (major) | Double tap on "Add to my board" adds the habit twice | fixed |
+| 42 | Re-check 3 | Focused field after an empty submit hides its label; long-absence stop line vague ("went unlogged" though a slip was logged) | polish |

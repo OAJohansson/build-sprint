@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { copy, titleCase } from "@/lib/copy";
 import type { BuildHabit, HabitDraft, HabitPatch, StopHabit } from "@/lib/habits";
 import { Steamer } from "./wonton";
@@ -72,8 +72,13 @@ const input = (
  * it notes the first empty one and focuses it; the note goes once that field is filled.
  * Feedback 39 / N4 (editing): the button reads "Saved" while the fields match what was saved.
  */
-function useSubmitState(required: [string, string][]) {
+function useSubmitState(required: [string, string][], editing: boolean) {
   const [tried, setTried] = useState(false);
+  // Feedback N8: a double tap on "Add to my board" added the habit twice. A ref (not state, which
+  // lags a render behind) lets only the first valid create submit through; the button is then
+  // disabled while the board loads. Editing stays repeatable.
+  const doneRef = useRef(false);
+  const [locked, setLocked] = useState(false);
   const [savedAs, setSavedAs] = useState<string | null>(null);
   const firstEmpty = required.find(([, v]) => !v.trim())?.[0];
   return {
@@ -81,11 +86,23 @@ function useSubmitState(required: [string, string][]) {
     missing: tried ? firstEmpty : undefined,
     /** True when the form may be saved; otherwise notes and focuses the first empty field. */
     check: () => {
-      if (!firstEmpty) return true;
+      if (doneRef.current) return false;
+      if (!firstEmpty) {
+        if (!editing) {
+          doneRef.current = true;
+          setLocked(true);
+        }
+        return true;
+      }
       setTried(true);
-      document.getElementById(firstEmpty)?.focus();
+      const el = document.getElementById(firstEmpty);
+      el?.focus({ preventScroll: true });
+      // Bring the field's label into view too, not just the input.
+      el?.closest(".w-field")?.scrollIntoView({ block: "center" });
       return false;
     },
+    /** True after a create was submitted: the button is disabled while navigating. */
+    locked,
     markSaved: (all: unknown) => setSavedAs(JSON.stringify(all)),
     isSaved: (all: unknown) => savedAs === JSON.stringify(all),
   };
@@ -137,7 +154,7 @@ export function BuildForm({
     ["after", after],
     ["will", will],
     ["goal", goal],
-  ]);
+  ], editing);
   const current = { name, after, will, goal, why };
 
   const submit = (e: React.FormEvent) => {
@@ -202,7 +219,7 @@ export function BuildForm({
         </>
       )}
 
-      <button type="submit" className="w-primary">
+      <button type="submit" className="w-primary" disabled={form.locked}>
         {editing ? (form.isSaved(current) ? f.saved : f.saveEdit) : f.save}
       </button>
     </form>
@@ -227,7 +244,7 @@ export function StopForm({
     ["name", name],
     ["trigger", trigger],
     ["instead", instead],
-  ]);
+  ], editing);
   const current = { name, trigger, friction, instead, why };
 
   const submit = (e: React.FormEvent) => {
@@ -286,7 +303,7 @@ export function StopForm({
         </>
       )}
 
-      <button type="submit" className="w-primary">
+      <button type="submit" className="w-primary" disabled={form.locked}>
         {editing ? (form.isSaved(current) ? f.saved : f.saveEdit) : f.save}
       </button>
     </form>

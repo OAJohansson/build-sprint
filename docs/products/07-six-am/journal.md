@@ -448,3 +448,4 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - **suggest_genre back on the L75 method** (sanity call: Tech House for Mason Flint, 3.2 s, $0.006). Switching local dev to the real Supabase for E9.
 - **Ops:** ANTHROPIC_API_KEY added to the six-am Vercel project (production + preview, sensitive; value never printed). Local dev now on the real Supabase (store: supabase).
 - **Re-test on the real Supabase:** E9 passes (everything survives reload and a fresh browser). Jobs 4/3/4/4/3/4 (E10 still fails): Studio start opens the old saved track instead of a new one with the loops (N1), Suggest contradicted Explain on Dubspinna (N2). Final fix pass on N1–N8.
+- **Final design score:** 6/10 on the built panel (target 9, not a blocker; reported). Its cheap repeated points go into the last fix pass; no more design rounds (L53).

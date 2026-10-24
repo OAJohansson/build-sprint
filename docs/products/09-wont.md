@@ -1,7 +1,7 @@
 ---
 day: 9
 title: Wont
-status: building
+status: shipped
 mode: founder
 date: 2026-10-24
 user: "Me: on day 5 of waking at 7am and day 2 without nicotine pouches; sleeps in whenever the morning has no commitment"
@@ -15,4 +15,6 @@ tags: ["habits", "behaviour-science", "animation", "localstorage"]
 
 ## Learned
 
--
+- Research removed features: reminders, morning motivation and heavy animation were cut on evidence; the comeback became the product.
+- Taste calls stay with the owner: two contact sheets rejected, wontons over jars, a mark at 29 px; both design picks are now the owner's in every mode.
+- Graders found what the builders' tests didn't: day-logic bugs that only show when the app is resumed across days.

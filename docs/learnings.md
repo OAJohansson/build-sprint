@@ -158,6 +158,22 @@ Rules I now apply to every product (detail in the playbook).
 - **Spikes need a stop.** The character spike answered its question in four drawings, then ran
   on until the owner called time; set the question and timebox first.
 
+### 09 Wont
+
+- **Research removes features.** A deep research pass cut reminders, morning motivation and heavy
+  animation, and gave the product its idea: design the comeback, not the streak.
+- **Ask what went wrong last time.** "I sleep in when I have no commitments, then feel bad"
+  pointed straight at the moment after a slip (The Mom Test).
+- **Taste calls stay with the owner.** Two contact sheets rejected, wontons over jars,
+  adult-but-cute, a harsh header the critic and PM let through; both design picks are now the
+  owner's in every mode.
+- **Design the mark first.** Reframing the wonton as an icon that must read at 29 px fixed the
+  childishness and then decided the board.
+- **A grader must see the requirements.** The critic scored 6/10 five times while asking to remove
+  the numbers and anchors the research supports.
+- **Test the user's week, not the spec's rule.** Both real logic bugs appeared only when the app
+  was resumed across days; the unit tests had encoded the tidy rule.
+
 ## Process changelog
 
 Every change to how I build, and the product that taught it.
@@ -199,3 +215,6 @@ Every change to how I build, and the product that taught it.
 | 23 Oct | 08 Selvedge | The critic loop rebuilt the Sketchbook design the owner had just picked; it had to be restored from git. | A pick is a keep: the design-session critic's fixes go on a copy beside the owner's pick, never over it (playbook step 1, `design-session` skill). |
 | 23 Oct | 08 Selvedge | Small, obvious features (rename, delete and download a board; undo) were found only after building, one complaint at a time. | Playbook step 1: a feature drill-down after the MVP and before design. Claude lists the objects and pre-fills a table (lifecycle, connections, screen states, trust) with a call per row; the owner changes what they disagree with; MVP rows become requirements (brief template, AGENTS.md). |
 | 23 Oct | 08 Selvedge | Ops (merge conflicts across parallel sessions, many branches, Vercel, keys) took more of the owner's attention than the product calls, and every small decision came back one at a time. | Operating modes (decision 0026): one pipeline, a Learning / Streamlined / Founder dial; ops is never the owner's; Streamlined batches learning decisions at four gates; Founder runs a PM with a squad. One branch per product, every merge is the owner's approval after green checks, `pnpm ship` fills keys, previews only for big checks, shared docs written once at wrap-up. |
+| 25 Oct | 09 Wont | The owner asked to make the design calls in Founder mode too; every call that mattered on Wont was taste the pack couldn't carry. | Both design picks (3 of ~10, then the final one) are the owner's in every mode: playbook step 1b, `AGENTS.md`, designer agent, decision 0028 as amended. |
+| 25 Oct | 09 Wont | The design critic scored 6/10 five times because it judged against requirements it never saw. | Critic briefs include the pack's non-negotiables (the requirements it may not ask to remove), next to the feel sentence. |
+| 25 Oct | 09 Wont | A new Vercel project's first CLI deploy went to Production before the owner's review. | A project's first deploy is a preview (`vercel deploy --target preview`) or goes through `pnpm ship`. |

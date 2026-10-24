@@ -144,3 +144,10 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Shipped** (owner's yes): PR #80 merged after green `checks`; Vercel project linked to GitHub;
   `pnpm ship 09-wont` deployed main to production at https://wont-peach.vercel.app (replacing
   the accidental first build).
+
+## 25 Oct: wrap-up
+
+- Success check written (outcome not measurable yet; four-week check on 21 Nov), retro with the
+  decision-log review, interview story, card shipped. Carried over: knowledge bank (a new
+  Behaviour change subsection, a grader entry, quiz), learnings (09 Wont and three process
+  changes), problems (Wont, self-doubt), to-do.

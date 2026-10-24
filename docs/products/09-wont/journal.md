@@ -121,3 +121,12 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   day in the missed run; now the named day's own log, plus a test), anchors stored as typed, no
   re-casing of user text, contrast worst 4.92:1, copy and board polish, accessibility minors.
   32 tests. Re-check by graders next.
+- **Critic after fixes:** 6/10 (fifth time). Eval bar ≥ 9: not met. Its asks are still mostly to
+  remove pack requirements (numbers, anchors, comeback line, week strip); new valid points: the
+  anchor clamp ends in "…" on cards; "Tap when kept" repeated on every card.
+- **Preview link (ops):** created the Vercel project `wont` without a GitHub link (so pushes to
+  main by other sessions don't try to build an app that isn't on main yet) and deployed the
+  branch from the CLI. Mistake: the first CLI deploy of a new project went to Production, so
+  https://wont-peach.vercel.app is public before the owner's review. Nothing is merged; the
+  data is local to each phone. At ship, `pnpm ship 09-wont` links GitHub and redeploys main.
+  Lesson: pass `--target preview` (or create via `pnpm ship`) for a project's first deploy.

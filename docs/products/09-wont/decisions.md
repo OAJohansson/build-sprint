@@ -48,3 +48,6 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T17 | 25 Oct | Comeback line marked seen when the app is hidden or closed; an urge is logged on tap, even if the pause is left early; tapping a stop card with a slip opens the slip sheet | PM (engineer) | build | |
 | T18 | 25 Oct | Status bar cream to match the board; web app manifest with the ink icon; new habit's title is its action | PM (engineer) | build | |
 | T19 | 25 Oct | Fix pass: card keeps " · goal"; stop line "Usually {trigger}. Instead: {replacement}"; comeback line names the last missed day as what it was; "ridden out" lasts the visit only; muted text ink at 70% | PM (engineer) | fixes | |
+| L26 | 25 Oct | Comeback message rule changed (supersedes L14): due whenever today opens with yesterday missed and today not yet kept; "seen" keyed on the run's last missed day; one message per habit, not repeated the same day | PM | fixes | |
+| T20 | 25 Oct | Card titles shown with a capital first letter (display only); morning-after-slip message gets one next step | PM | fixes | |
+| T21 | 25 Oct | Preview: Vercel project `wont` created without a GitHub link; branch deployed from the CLI (went to Production by mistake, wont-peach.vercel.app) | PM | ops | |

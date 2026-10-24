@@ -40,3 +40,7 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 34 | User test F4/F6/F7/F9 | "Today" → "Tap when kept"; stop history "Clean"; title follows action; "1 urge" not "ridden out" at tap; intro "not a failure"; "0 of last 7" | fixed |
 | 35 | User test F5 | No way to close a day as "not today" | parked (backlog) |
 | 36 | User test, progress | A comebacks line per habit (slips vs comebacks) | parked (backlog, scope) |
+| 37 | Re-check N1 (major) | Comeback message once per run: returning after a longer absence (seen mid-run) shows nothing | open |
+| 38 | Re-check N3 | Morning-after-slip message has no next step | open |
+| 39 | Re-check N2/N4/N6/N7 | Disabled submit 2.82:1 without reason; "Saved" far from the button; "this week" label; intro Skip 39 px wide | open |
+| 40 | Re-check N5 | Card title shows lowercase as typed ("read in bed") | open |

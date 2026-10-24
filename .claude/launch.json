@@ -103,6 +103,18 @@
         "3008"
       ],
       "port": 3008
+    },
+    {
+      "name": "09-wont",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "-F",
+        "09-wont",
+        "dev",
+        "--port",
+        "3109"
+      ],
+      "port": 3109
     }
   ]
 }

@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wont contact sheet 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Caveat:wght@500;700&family=DM+Mono:wght@400;500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Familjen+Grotesk:wght@400;500;700&family=Figtree:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,800;1,9..144,300;1,9..144,400&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=Manrope:wght@400;500;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Sheet chrome (not a contestant) ---------- */
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#141414;color:#e8e6e1;font:14px/1.45 Inter,system-ui,sans-serif;padding:40px 40px 80px}
+  .sheet-head{max-width:1520px;margin:0 auto 32px}
+  .sheet-head h1{font:500 22px Inter,sans-serif;letter-spacing:-.01em;margin-bottom:6px}
+  .sheet-head p{color:#9a978f;max-width:980px}
+  .grid{max-width:1520px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:44px 28px}
+  .cell{cursor:zoom-in;min-width:0}
+  .thumb{position:relative;width:100%;aspect-ratio:390/844;overflow:hidden;border-radius:14px;outline:1px solid #2a2a2a}
+  .thumb .frame{position:absolute;top:0;left:0;transform-origin:0 0}
+  .cap{margin-top:12px}
+  .cap .t1{display:flex;gap:8px;align-items:baseline}
+  .cap .t1 b{font:500 13px 'DM Mono',monospace;color:#9a978f}
+  .cap .t1 strong{font-weight:500;font-size:15px}
+  .cap .idea{color:#b5b2aa;font-size:13px;margin-top:4px}
+  .cap .tag{display:inline-block;font-size:11px;border:1px solid #3a3a3a;border-radius:99px;padding:1px 8px;color:#9a978f;margin-top:8px}
+  .cap .sys{margin-top:8px;font-size:12px;color:#9a978f;line-height:1.5}
+  .cap .sys .ty{color:#d8d5cd}
+  .cap .sw{display:flex;flex-direction:column;gap:3px;margin-top:5px}
+  .cap .sw span{display:flex;gap:7px;align-items:center}
+  .cap .sw i{width:12px;height:12px;border-radius:3px;outline:1px solid rgba(255,255,255,.15);flex:none}
+  .overlay{position:fixed;inset:0;background:rgba(10,10,10,.92);display:none;align-items:center;justify-content:center;z-index:10;cursor:zoom-out}
+  .overlay.on{display:flex}
+  .overlay .holder{position:relative;overflow:hidden;border-radius:18px}
+  @media (max-width:1200px){.grid{grid-template-columns:repeat(3,1fr)}}
+  @media (max-width:700px){body{padding:24px 16px}.grid{grid-template-columns:repeat(2,1fr);gap:28px 16px}}
+
+  /* ---------- Shared frame and anatomy ---------- */
+  .frame{width:390px;height:844px;overflow:hidden;position:relative}
+  .sb{height:44px;display:flex;justify-content:space-between;align-items:center;padding:0 26px;font:500 14px Inter,sans-serif}
+  .cd{position:relative}
+  .cd .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .cd .num{text-align:right;white-space:nowrap;line-height:1}
+  .cd .num small{display:block}
+  .cd .tap .seg{display:flex;gap:5px}
+  .cd .tap .seg span{flex:1;text-align:center}
+  .wk{display:grid;grid-template-columns:repeat(7,1fr)}
+  .wk .d{text-align:center;position:relative}
+  .wk .d b,.wk .d span{display:block}
+
+  /* ---------- 01 Seed packets, iterated ---------- */
+  .g1{background:#eadfc8;color:#3a2a1a;font-family:'Familjen Grotesk'}
+  .g1 .top{padding:2px 18px 10px;display:flex;justify-content:space-between;align-items:baseline}
+  .g1 h1{font:800 28px Fraunces;letter-spacing:-.02em}
+  .g1 .top span{font-size:13px;opacity:.65}
+  .g1 .wk{margin:0 12px 12px;background:#fbf6ea;border-radius:12px;padding:8px 4px 6px}
+  .g1 .wk b{font-weight:500;font-size:10px;opacity:.55}
+  .g1 .wk span{font:500 14px Fraunces}
+  .g1 .wk .today span{color:#c8693f}
+  .g1 .wk .today::after{content:"";position:absolute;left:50%;bottom:-3px;width:16px;height:2px;margin-left:-8px;background:#c8693f;border-radius:2px}
+  .g1 .g{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px}
+  .g1 .cd{background:#fbf6ea;border-radius:6px;overflow:hidden;display:flex;flex-direction:column}
+  .g1 .art{height:76px;background:#efe5cc;display:flex;align-items:flex-end;justify-content:center;border-bottom:1px dashed rgba(58,42,26,.2)}
+  .g1 .kept .art{background:#dce7cb}
+  .g1 .bd{padding:9px 11px 10px;flex:1;display:flex;flex-direction:column}
+  .g1 .nm{font:800 16px/1.1 Fraunces}
+  .g1 .num{font:500 22px Fraunces}
+  .g1 .num small{font:400 10px 'Familjen Grotesk';opacity:.6;margin-top:2px}
+  .g1 .an{font-size:11px;line-height:1.3;opacity:.7;margin-top:3px}
+  .g1 .cb{margin-top:8px;background:#fff;border:1px solid #cdbb94;border-radius:3px 12px 12px 3px;padding:6px 9px;font:italic 400 12px/1.25 Fraunces;color:#3f6b35}
+  .g1 .tap{margin-top:auto;padding-top:8px;font-size:11px;font-weight:500}
+  .g1 .kept .tap{color:#3f6b35}
+  .g1 .stop{grid-column:span 2;flex-direction:row}
+  .g1 .stop .art{width:104px;height:auto;border-bottom:0;border-right:1px dashed rgba(58,42,26,.2)}
+  .g1 .seg span{border:1.5px solid rgba(58,42,26,.35);border-radius:99px;padding:5px 0}
+  .g1 .seg span.on{background:#3f6b35;border-color:#3f6b35;color:#fbf6ea}
+
+  /* ---------- 02 Soft fill, redone ---------- */
+  .g2{background:#fbf7f3;color:#3a3236;font-family:Figtree}
+  .g2 .top{padding:2px 20px 12px;display:flex;justify-content:space-between;align-items:baseline}
+  .g2 h1{font-weight:700;font-size:26px;letter-spacing:-.02em}
+  .g2 .top span{font-size:14px;opacity:.55}
+  .g2 .wk{gap:6px;margin:0 16px 14px}
+  .g2 .wk .d{height:56px;border-radius:14px;background:#f1eae4;overflow:hidden;padding-top:6px}
+  .g2 .wk .d i{position:absolute;left:0;right:0;bottom:0;height:calc(var(--v)*100%);background:#f3c9ac}
+  .g2 .wk .d b,.g2 .wk .d span{position:relative;z-index:1}
+  .g2 .wk b{font-weight:500;font-size:10px;opacity:.6}
+  .g2 .wk span{font-weight:600;font-size:15px}
+  .g2 .wk .today{outline:2px solid #3a3236;outline-offset:-2px}
+  .g2 .note{margin:0 16px 10px;background:#fff;border-radius:18px;padding:12px 14px;font-size:14px;line-height:1.35}
+  .g2 .note b{display:block;margin-top:6px;font-weight:600;font-size:13px;color:#b0602f}
+  .g2 .cd{margin:0 16px 8px;border-radius:20px;padding:13px 16px 12px;overflow:hidden;background:var(--t)}
+  .g2 .cd::before{content:"";position:absolute;inset:0 auto 0 0;width:calc(var(--r)*100%);background:var(--f);opacity:.55}
+  .g2 .cd.kept::before{width:100%;opacity:1}
+  .g2 .cd > *{position:relative}
+  .g2 .am{--t:#fbe7d9;--f:#f3c9ac}
+  .g2 .pm{--t:#ece6f6;--f:#cdbfe9}
+  .g2 .stop{--t:#dff0e5;--f:#b2dbc0}
+  .g2 .nm{font-weight:600;font-size:18px}
+  .g2 .num{font-weight:700;font-size:20px}
+  .g2 .num small{font-weight:500;font-size:11px;opacity:.6}
+  .g2 .an{font-size:12px;opacity:.65;margin-top:1px}
+  .g2 .tap{margin-top:8px;font-weight:600;font-size:12px}
+  .g2 .seg span{background:rgba(255,255,255,.7);border-radius:12px;padding:7px 0}
+  .g2 .seg span.on{background:#3a3236;color:#fff}
+
+  /* ---------- 03 Morning and evening ---------- */
+  .g3{background:#f6f1e8;color:#22252e;font-family:Manrope}
+  .g3 .top{padding:2px 20px 10px}
+  .g3 h1{font-weight:800;font-size:26px;letter-spacing:-.03em}
+  .g3 .wk{gap:4px;margin:0 16px 12px}
+  .g3 .wk .d{background:#fff;border-radius:10px;padding:6px 0 8px}
+  .g3 .wk b{font-weight:500;font-size:10px;opacity:.5}
+  .g3 .wk span{font-weight:700;font-size:14px}
+  .g3 .wk i{display:block;height:4px;border-radius:2px;margin:5px 9px 0;background:linear-gradient(90deg,#22252e calc(var(--v)*100%),#e6e1d6 0)}
+  .g3 .wk .today{background:#22252e;color:#fff}
+  .g3 .wk .today i{background:linear-gradient(90deg,#f3b44c calc(var(--v)*100%),#4a4d58 0)}
+  .g3 .band{padding:12px 14px 14px}
+  .g3 .band h3{font-weight:700;font-size:13px;margin:0 4px 8px;display:flex;justify-content:space-between}
+  .g3 .band h3 span{font-weight:500;opacity:.55}
+  .g3 .am{background:#fbe9c9}
+  .g3 .pm{background:#dfe3f2}
+  .g3 .day{background:#f6f1e8}
+  .g3 .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .g3 .cd{background:#fff;border-radius:18px;padding:13px 14px;min-height:118px;display:flex;flex-direction:column}
+  .g3 .cd.kept{background:#f3b44c}
+  .g3 .nm{font-weight:800;font-size:16px;line-height:1.15}
+  .g3 .num{font-weight:800;font-size:24px;letter-spacing:-.03em}
+  .g3 .num small{font-weight:500;font-size:10px;letter-spacing:0;opacity:.6}
+  .g3 .an{font-size:11px;line-height:1.3;opacity:.65;margin-top:3px}
+  .g3 .tap{margin-top:auto;padding-top:8px;font-weight:700;font-size:11px}
+  .g3 .pm .tap{color:#4a5aa3}
+  .g3 .stop{min-height:0}
+  .g3 .seg span{border-radius:10px;padding:7px 0;background:#f1ece2}
+  .g3 .seg span.on{background:#22252e;color:#fff}
+
+  /* ---------- 04 Moon phases ---------- */
+  .g4{background:#1b2033;color:#f1e9d8;font-family:'Instrument Sans'}
+  .g4 .top{padding:2px 22px 12px;display:flex;justify-content:space-between;align-items:baseline}
+  .g4 h1{font:italic 32px 'Instrument Serif'}
+  .g4 .top span{font-size:13px;color:#8f93a8}
+  .g4 .wk{margin:0 14px 14px;padding:10px 4px;border-radius:16px;background:#232a42}
+  .g4 .wk b{font-size:10px;color:#8f93a8;font-weight:500}
+  .g4 .wk span{font:16px 'Instrument Serif';margin-bottom:4px}
+  .g4 .wk .today span{color:#f2b65a}
+  .g4 .cd{margin:0 14px 8px;background:#262d46;border-radius:20px;padding:13px 16px;display:flex;gap:14px;align-items:flex-start}
+  .g4 .cd.kept{box-shadow:inset 0 0 0 1px #f2b65a}
+  .g4 .art{flex:none;padding-top:2px}
+  .g4 .bd{flex:1;min-width:0}
+  .g4 .nm{font:23px/1.05 'Instrument Serif'}
+  .g4 .num{font:24px 'Instrument Serif'}
+  .g4 .num small{font:500 10px 'Instrument Sans';color:#8f93a8}
+  .g4 .an{font-size:12px;color:#8f93a8;margin-top:2px}
+  .g4 .cb{margin-top:8px;font:italic 16px/1.2 'Instrument Serif'}
+  .g4 .tap{margin-top:8px;font-weight:500;font-size:12px;color:#c9c3b5}
+  .g4 .kept .tap,.g4 .write .tap{color:#f2b65a}
+  .g4 .seg span{border:1px solid #3a4262;border-radius:99px;padding:5px 0}
+  .g4 .seg span.on{background:#f2b65a;border-color:#f2b65a;color:#1b2033}
+
+  /* ---------- 05 Rings ---------- */
+  .g5{background:#f5f4ef;color:#1f2421;font-family:Outfit}
+  .g5 .top{padding:2px 18px 12px;display:flex;justify-content:space-between;align-items:baseline}
+  .g5 h1{font-weight:500;font-size:28px;letter-spacing:-.02em}
+  .g5 .top span{font-size:14px;opacity:.55}
+  .g5 .wk{margin:0 12px 14px;background:#fff;border:1px solid #e6e3da;border-radius:18px;padding:10px 4px}
+  .g5 .wk b{font-size:10px;opacity:.5;font-weight:400}
+  .g5 .wk span{font-weight:500;font-size:13px;margin-bottom:4px}
+  .g5 .g{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px}
+  .g5 .cd{background:#fff;border:1px solid #e6e3da;border-radius:22px;padding:14px;display:flex;flex-direction:column;min-height:196px}
+  .g5 .bd{display:flex;flex-direction:column;flex:1}
+  .g5 .art{margin-bottom:10px}
+  .g5 .nm{font-weight:500;font-size:17px;line-height:1.15}
+  .g5 .num{font-weight:300;font-size:26px}
+  .g5 .num small{font-weight:400;font-size:10px;opacity:.55}
+  .g5 .an{font-size:12px;opacity:.6;margin-top:3px}
+  .g5 .tap{margin-top:auto;padding-top:10px;font-weight:500;font-size:12px;display:flex;align-items:center;gap:6px}
+  .g5 .kept .tap{color:#2f7d5b}
+  .g5 .kept .tap::before{content:"";width:8px;height:8px;border-radius:50%;background:#2f7d5b}
+  .g5 .stop{grid-column:span 2;min-height:0;flex-direction:row;gap:14px}
+  .g5 .stop .art{margin:0}
+  .g5 .stop .tap{display:block}
+  .g5 .seg span{border-radius:12px;padding:7px 0;background:#f2f0ea}
+  .g5 .seg span.on{background:#2f7d5b;color:#fff}
+
+  /* ---------- 06 Jars ---------- */
+  .g6{background:#f3ece0;color:#3b3026;font-family:'Bricolage Grotesque'}
+  .g6 .top{padding:2px 18px 10px;display:flex;justify-content:space-between;align-items:baseline}
+  .g6 h1{font-weight:800;font-size:27px;letter-spacing:-.03em}
+  .g6 .top span{font-size:13px;opacity:.6}
+  .g6 .wk{margin:0 12px 12px;background:#fbf7f0;border-radius:16px;padding:8px 4px}
+  .g6 .wk b{font-size:10px;opacity:.55;font-weight:400}
+  .g6 .wk span{font-weight:600;font-size:14px;margin-bottom:3px}
+  .g6 .wk i{display:block;width:14px;height:14px;border-radius:50%;margin:0 auto;background:#e2a43b;opacity:calc(.2 + var(--v)*.8)}
+  .g6 .wk .today i{opacity:1;background:transparent;box-shadow:inset 0 0 0 2px #e2a43b}
+  .g6 .g{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px}
+  .g6 .cd{background:#fbf7f0;border-radius:20px;padding:12px;display:flex;flex-direction:column}
+  .g6 .art{height:76px;display:flex;justify-content:center;margin-bottom:8px}
+  .g6 .bd{display:flex;flex-direction:column;flex:1}
+  .g6 .nm{font-weight:600;font-size:16px;line-height:1.15}
+  .g6 .num{font-weight:800;font-size:22px}
+  .g6 .num small{font-weight:400;font-size:10px;opacity:.6}
+  .g6 .an{font-size:11px;opacity:.65;margin-top:3px}
+  .g6 .cb{margin-top:8px;background:#f7e1e5;border-radius:12px;padding:7px 9px;font-size:12px;line-height:1.3}
+  .g6 .tap{margin-top:auto;padding-top:8px;font-weight:600;font-size:11px}
+  .g6 .kept .tap{color:#b57a14}
+  .g6 .stop{grid-column:span 2;flex-direction:row;gap:12px}
+  .g6 .stop .art{width:84px;height:auto;margin:0}
+  .g6 .seg span{border-radius:12px;padding:6px 0;background:#f0e7d8}
+  .g6 .seg span.on{background:#e2a43b;color:#3b3026}
+
+  /* ---------- 07 Polaroids ---------- */
+  .g7{background:#e7e2d6;color:#2c2a26;font-family:'Familjen Grotesk'}
+  .g7 .top{padding:2px 18px 6px;display:flex;justify-content:space-between;align-items:baseline}
+  .g7 h1{font:700 34px Caveat}
+  .g7 .top span{font-size:13px;opacity:.6}
+  .g7 .wk{margin:0 22px 16px;background:rgba(240,162,107,.35);padding:6px 4px;transform:rotate(-1deg)}
+  .g7 .wk b{font:700 14px Caveat;opacity:.7}
+  .g7 .wk span{font-weight:700;font-size:13px}
+  .g7 .wk i{display:block;height:3px;margin:3px 10px 0;background:linear-gradient(90deg,#2c2a26 calc(var(--v)*100%),transparent 0)}
+  .g7 .wk .today span{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+  .g7 .g{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px;padding:0 14px}
+  .g7 .cd{background:#fffdf8;padding:8px 8px 10px;box-shadow:0 2px 6px rgba(0,0,0,.12);display:flex;flex-direction:column}
+  .g7 .g > .cd:nth-child(odd){transform:rotate(-1.2deg)}
+  .g7 .g > .cd:nth-child(even){transform:rotate(1.1deg)}
+  .g7 .art{height:86px;background:#f8dcc6;display:flex;align-items:flex-end;justify-content:space-between;padding:8px 10px}
+  .g7 .art b{font-weight:700;font-size:44px;line-height:.9}
+  .g7 .art small{font-size:11px;font-weight:500;opacity:.75}
+  .g7 .kept .art{background:#f0a26b}
+  .g7 .stop .art{background:#bcd2b9}
+  .g7 .num{display:none}
+  .g7 .bd{padding:6px 2px 0;display:flex;flex-direction:column;flex:1}
+  .g7 .nm{font:700 23px/1 Caveat}
+  .g7 .an{font-size:11px;opacity:.65;margin-top:2px}
+  .g7 .cb{margin-top:6px;font:500 17px/1.05 Caveat;color:#2c2a26}
+  .g7 .tap{margin-top:auto;padding-top:6px;font-weight:500;font-size:11px}
+  .g7 .stop{grid-column:span 2;flex-direction:row;gap:10px}
+  .g7 .stop .art{width:120px;height:auto}
+  .g7 .seg span{border:1.5px solid #2c2a26;border-radius:99px;padding:4px 0}
+  .g7 .seg span.on{background:#2c2a26;color:#fffdf8}
+
+  /* ---------- 08 Terracotta, one hue ---------- */
+  .g8{background:#f4ece2;color:#3d2a20;font-family:Fraunces}
+  .g8 .top{padding:2px 20px 12px}
+  .g8 h1{font-weight:300;font-size:34px;letter-spacing:-.02em}
+  .g8 h1 em{font-style:italic}
+  .g8 .wk{margin:0 14px 14px;gap:4px}
+  .g8 .wk b{font-size:10px;font-weight:500;opacity:.55}
+  .g8 .wk span{font-size:15px;font-weight:500;margin-bottom:4px}
+  .g8 .wk i{display:block;width:26px;height:26px;margin:0 auto;border-radius:50%;background:conic-gradient(#b85c38 calc(var(--v)*360deg),#e6d3bf 0)}
+  .g8 .wk .today i{background:conic-gradient(#b85c38 calc(var(--v)*360deg),#f4ece2 0);box-shadow:0 0 0 2px #3d2a20}
+  .g8 .cd{margin:0 14px 8px;background:#ecdccb;border-radius:22px;padding:14px 18px 14px}
+  .g8 .cd::after{content:"";position:absolute;left:18px;right:18px;bottom:0;height:3px;border-radius:3px;background:linear-gradient(90deg,#b85c38 calc(var(--r)*100%),#dcc6b0 0)}
+  .g8 .cd.kept{background:#b85c38;color:#fbf5ee}
+  .g8 .cd.kept::after{background:linear-gradient(90deg,#fbf5ee calc(var(--r)*100%),rgba(251,245,238,.35) 0)}
+  .g8 .nm{font-weight:500;font-size:21px}
+  .g8 .num{font-weight:300;font-style:italic;font-size:30px}
+  .g8 .num small{font-style:normal;font-weight:500;font-size:10px;opacity:.65}
+  .g8 .an{font-size:13px;opacity:.7;margin-top:-6px}
+  .g8 .tap{margin-top:8px;font-weight:500;font-size:12px;margin-bottom:4px}
+  .g8 .seg span{border-radius:99px;padding:6px 0;background:rgba(255,255,255,.5)}
+  .g8 .seg span.on{background:#3d2a20;color:#fbf5ee}
+
+  /* ---------- 09 Sticky notes ---------- */
+  .g9{background:#f1f0ec;color:#2b2b2b;font-family:'Familjen Grotesk';background-image:radial-gradient(#cfcdc4 1px,transparent 1.2px);background-size:16px 16px}
+  .g9 .top{padding:0 18px 4px;display:flex;justify-content:space-between;align-items:baseline}
+  .g9 h1{font:700 36px Caveat}
+  .g9 .top span{font-size:13px;opacity:.6}
+  .g9 .wk{margin:0 16px 14px}
+  .g9 .wk b{font:700 17px Caveat;opacity:.75}
+  .g9 .wk span{font-size:11px;opacity:.6;margin-bottom:3px}
+  .g9 .wk i{display:block;margin:0 auto;width:calc(6px + var(--v)*14px);height:calc(6px + var(--v)*14px);border-radius:50%;background:#2b2b2b}
+  .g9 .wk .today b{border:2px solid #2b2b2b;border-radius:48% 52% 50% 46%;margin:0 6px}
+  .g9 .wk .today i{background:transparent;box-shadow:inset 0 0 0 1.5px #2b2b2b}
+  .g9 .g{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px;padding:0 16px}
+  .g9 .cd{padding:12px 12px 10px;min-height:168px;display:flex;flex-direction:column;box-shadow:0 3px 5px rgba(0,0,0,.08)}
+  .g9 .am{background:#f7df7a}
+  .g9 .pm{background:#bfd8ef}
+  .g9 .stop{background:#c8e2b8;grid-column:span 2;min-height:0}
+  .g9 .g > .cd:nth-child(odd){transform:rotate(-1deg)}
+  .g9 .g > .cd:nth-child(even){transform:rotate(1.2deg)}
+  .g9 .nm{font:700 26px/0.95 Caveat}
+  .g9 .num{font-weight:700;font-size:20px}
+  .g9 .num small{font-weight:400;font-size:10px;opacity:.65}
+  .g9 .an{font-size:11px;opacity:.7;margin-top:4px}
+  .g9 .cb{margin-top:6px;font:700 18px/1 Caveat}
+  .g9 .tap{margin-top:auto;padding-top:6px;font:700 18px Caveat}
+  .g9 .kept .tap span.ring{border:2px solid #2b2b2b;border-radius:50% 46% 52% 48%;padding:0 8px}
+  .g9 .seg span{border:2px solid #2b2b2b;border-radius:48% 52% 46% 54%;padding:1px 0}
+  .g9 .seg span.on{background:#2b2b2b;color:#c8e2b8}
+
+  /* ---------- 10 Promise letters ---------- */
+  .g10{background:#ece6da;color:#24324d;font-family:'EB Garamond'}
+  .g10 .top{padding:2px 20px 10px;display:flex;justify-content:space-between;align-items:baseline}
+  .g10 h1{font-weight:500;font-size:30px}
+  .g10 .top span{font-style:italic;font-size:15px;opacity:.65}
+  .g10 .wk{margin:0 14px 14px;gap:4px}
+  .g10 .wk .d{width:42px;height:42px;margin:0 auto;border-radius:50%;border:1.5px solid rgba(36,50,77,.5);padding-top:5px;background:rgba(47,107,79,calc(var(--v)*.35))}
+  .g10 .wk b{font-size:9px;letter-spacing:.08em;line-height:1}
+  .g10 .wk span{font-size:17px;line-height:1.1;font-weight:500}
+  .g10 .wk .today{border:1.5px dashed #24324d;background:transparent}
+  .g10 .cd{margin:0 14px 10px;background:#fbf7ee;border-radius:4px;padding:30px 18px 12px;box-shadow:0 1px 2px rgba(36,50,77,.12)}
+  .g10 .cd::before{content:"";position:absolute;left:0;right:0;top:0;height:22px;background:#f1e9d8;clip-path:polygon(0 0,100% 0,50% 100%)}
+  .g10 .seal{position:absolute;left:50%;top:6px;width:34px;height:34px;margin-left:-17px;border-radius:50%;background:#2f6b4f;color:#fbf7ee;font-size:10px;letter-spacing:.06em;display:grid;place-items:center;font-style:italic}
+  .g10 .nm{font-weight:500;font-size:22px;line-height:1.05}
+  .g10 .num{font-size:24px;font-style:italic}
+  .g10 .num small{font-style:normal;font-size:11px;opacity:.65}
+  .g10 .an{font-style:italic;font-size:14px;opacity:.75;margin-top:1px}
+  .g10 .cb{margin-top:8px;border-top:1px solid #e2d8c4;padding-top:8px;font-size:15px;line-height:1.25}
+  .g10 .tap{margin-top:6px;font-size:13px;letter-spacing:.04em}
+  .g10 .kept .tap{color:#2f6b4f}
+  .g10 .seg span{border:1px solid rgba(36,50,77,.4);border-radius:99px;padding:3px 0}
+  .g10 .seg span.on{background:#2f6b4f;border-color:#2f6b4f;color:#fbf7ee}
+</style>
+</head>
+<body>
+<div class="sheet-head">
+  <h1>Wont: contact sheet 2, the board</h1>
+  <p>Ten directions, coherence first. Each one has one type system, a small palette with clear roles and a single card anatomy (name, number, anchor, then the tap slot), with one shared week strip at the top of the board. Same data as sheet 1: Saturday 24 Oct, morning; Up by 7:00 kept; Write not logged on Friday, so the comeback note shows; nicotine clean so far. All copy is draft. Click a frame for full size; pick your three.</p>
+</div>
+<div class="grid" id="grid"></div>
+<div class="overlay" id="ov"><div class="holder" id="holder"></div></div>
+
+<script>
+// Real data. Rates are the rolling rate the card's number shows.
+const H = {
+  up:    { id: "up", part: "am", name: "Up by 7:00", anchor: "After the alarm, I get straight out of bed", num: "6", of: "of last 7", r: 6 / 7, kept: 1, tap: "Kept this morning", leaves: 6 },
+  write: { id: "write", part: "am", name: "Write", anchor: "After my morning coffee: a journal entry or a short story", num: "3", of: "of last 5", r: 3 / 5, cbk: 1, tap: "Tap when written", leaves: 3 },
+  read:  { id: "read", part: "pm", name: "Read 10 pages", anchor: "After dinner", num: "5", of: "of last 7", r: 5 / 7, tap: "Tonight", leaves: 5 },
+  bed:   { id: "bed", part: "pm", name: "In bed by 23:00", anchor: "After I brush my teeth", num: "4", of: "of last 7", r: 4 / 7, tap: "Tonight", leaves: 4 },
+  nic:   { id: "nic", part: "stop", stop: 1, name: "Nicotine pouches", anchor: "After meals, with coffee. Instead: chewing gum", num: "2", of: "clean days", r: 2 / 7, leaves: 2 },
+};
+// Week strip: share of the day's habits kept. Today (Sat 24) so far: 2 of 5.
+const W = [["S", 18, .67], ["M", 19, .75], ["T", 20, .75], ["W", 21, .5], ["T", 22, .75], ["F", 23, .8], ["S", 24, .4, 1]];
+const CB = "Friday's page stayed empty. That's part of it. One sentence after your coffee today.";
+const SEG = `<div class="seg"><span class="on">Clean so far</span><span>Slip</span><span>Urge</span></div>`;
+const sb = (c = "") => `<div class="sb" style="${c}"><span>9:41</span><span>●●● ▮</span></div>`;
+
+// One card anatomy for every direction: [art] name + number, anchor, [comeback], tap slot.
+const card = (h, o = {}) => `<div class="cd ${h.id} ${h.part} ${h.kept ? "kept" : ""}" style="--r:${h.r}">
+  ${o.art ? `<div class="art">${o.art(h)}</div>` : ""}${o.extra ? o.extra(h) : ""}
+  <div class="bd"><div class="hd"><div class="nm">${h.name}</div><div class="num">${h.num}<small>${h.of}</small></div></div>
+  <div class="an">${h.anchor}</div>${o.cb && h.cbk ? `<div class="cb">${o.cbText || CB}</div>` : ""}
+  <div class="tap">${h.stop ? SEG : (o.tap ? o.tap(h) : h.tap)}</div></div></div>`;
+const wk = (art) => `<div class="wk">${W.map(([l, n, v, t]) => `<div class="d ${t ? "today" : ""}" style="--v:${v}"><b>${l}</b><span>${n}</span>${art ? art(v, t, n) : "<i></i>"}</div>`).join("")}</div>`;
+
+// Art helpers
+const sprout = (leaves, h = 70) => {
+  let s = `<svg width="70" height="${h}" viewBox="0 0 70 ${h}"><path d="M35 ${h - 4} C35 ${h - 24} 37 ${h - 44} 35 ${h - 14 - leaves * 8}" stroke="#3f6b35" stroke-width="2.5" fill="none"/>`;
+  for (let i = 0; i < leaves; i++) { const y = h - 16 - i * 8, d = i % 2 ? 1 : -1; s += `<ellipse cx="${35 + d * 9}" cy="${y}" rx="9" ry="3.6" fill="#3f6b35" transform="rotate(${d * -25} ${35 + d * 9} ${y})"/>`; }
+  return s + `<rect x="17" y="${h - 5}" width="36" height="5" rx="2.5" fill="#8a6a44"/></svg>`;
+};
+let mid = 0;
+const moon = (v, r = 22, lit = "#f1e9d8", dark = "#262d46") => {
+  const id = "m" + (mid++), sh = 2 * r * v;
+  return `<svg width="${2 * r}" height="${2 * r}" viewBox="0 0 ${2 * r} ${2 * r}"><defs><clipPath id="${id}"><circle cx="${r}" cy="${r}" r="${r}"/></clipPath></defs><circle cx="${r}" cy="${r}" r="${r}" fill="${lit}"/><circle clip-path="url(#${id})" cx="${r - sh}" cy="${r}" r="${r}" fill="${dark}" opacity=".92"/><circle cx="${r}" cy="${r}" r="${r - .5}" fill="none" stroke="${lit}" stroke-opacity=".35"/></svg>`;
+};
+const ring = (v, s = 56, w = 7, col = "#2f7d5b", dashed = false) => {
+  const r = (s - w) / 2, c = 2 * Math.PI * r;
+  return `<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" style="display:block;margin:0 auto"><circle cx="${s / 2}" cy="${s / 2}" r="${r}" fill="none" stroke="#e9e6dd" stroke-width="${w}" ${dashed ? 'stroke-dasharray="3 3"' : ""}/><circle cx="${s / 2}" cy="${s / 2}" r="${r}" fill="none" stroke="${col}" stroke-width="${w}" stroke-linecap="round" stroke-dasharray="${c * v} ${c}" transform="rotate(-90 ${s / 2} ${s / 2})"/></svg>`;
+};
+const jar = (n, back = 0, w = 64, h = 74) => {
+  let s = `<svg width="${w}" height="${h}" viewBox="0 0 64 74"><rect x="16" y="2" width="32" height="8" rx="3" fill="#c9b8a0"/><path d="M12 14 Q12 10 16 10 H48 Q52 10 52 14 V64 Q52 72 44 72 H20 Q12 72 12 64 Z" fill="#e3eeec" stroke="#9fbcb8" stroke-width="1.5"/>`;
+  const pos = [[22, 63], [32, 63], [42, 63], [27, 54], [37, 54], [22, 45], [32, 45], [42, 45]];
+  for (let i = 0; i < n; i++) { const [x, y] = pos[i]; s += `<circle cx="${x}" cy="${y}" r="5" fill="${i >= n - back ? "#d9788a" : "#e2a43b"}"/>`; }
+  return s + `</svg>`;
+};
+const cards = (o, order = ["up", "write", "read", "bed", "nic"]) => order.map((k) => card(H[k], o)).join("");
+
+const frames = [
+  {
+    n: "01", name: "Seed packets", tag: "kept from sheet 1, iterated · comeback",
+    idea: "Every habit is the same cream packet; a sprout grows one leaf per kept day. The comeback is a garden tag in its own slot.",
+    sys: ["Fraunces (names, numbers) + Familjen Grotesk (small text)", [["#eadfc8", "kraft board"], ["#fbf6ea", "packet"], ["#3f6b35", "growth: kept, clean, comeback"], ["#3a2a1a", "text"], ["#c8693f", "today"]]],
+    html: () => `<div class="frame g1">${sb()}
+      <div class="top"><h1>Saturday</h1><span>24 Oct · 1 of 5 so far</span></div>
+      ${wk((v) => `<i style="display:block;height:30px;margin-top:2px">${sprout(Math.round(v * 5), 30).replace('width="70"', 'width="30"').replace('viewBox="0 0 70 30"', 'viewBox="17 0 36 30"')}</i>`)}
+      <div class="g">${cards({ art: (h) => sprout(h.leaves), cb: 1, cbText: "Regrows today: one sentence after your coffee." })}</div></div>`,
+  },
+  {
+    n: "02", name: "Soft fill", tag: "kept from sheet 1, redone · comeback",
+    idea: "One calm column of pastel cards; each card's tint fills left to right to its rolling rate. Three pastels only: morning, evening, stop.",
+    sys: ["Figtree only", [["#fbf7f3", "board"], ["#f3c9ac", "morning, week fill"], ["#cdbfe9", "evening"], ["#b2dbc0", "stop habit"], ["#3a3236", "text, today"]]],
+    html: () => `<div class="frame g2">${sb()}
+      <div class="top"><h1>Saturday 24</h1><span>October</span></div>
+      ${wk()}
+      <div class="note">${CB}<b>Write one sentence</b></div>
+      ${cards({}, ["up", "write", "nic", "read", "bed"])}</div>`,
+  },
+  {
+    n: "03", name: "Morning and evening", tag: "new",
+    idea: "The board splits by time of day: a warm morning band, a dusk evening band, the stop habit between. Cards are plain white; kept turns sun yellow.",
+    sys: ["Manrope only", [["#f6f1e8", "board"], ["#fbe9c9", "morning band"], ["#dfe3f2", "evening band"], ["#f3b44c", "kept, today"], ["#22252e", "text"]]],
+    html: () => `<div class="frame g3">${sb()}
+      <div class="top"><h1>Saturday 24 Oct</h1></div>
+      ${wk()}
+      <div class="band am"><h3>Morning <span>1 of 2 kept</span></h3><div class="two">${card(H.up)}${card(H.write, { tap: () => "Tap when written" })}</div></div>
+      <div class="band day">${card(H.nic)}</div>
+      <div class="band pm"><h3>Evening <span>after dinner</span></h3><div class="two">${card(H.read)}${card(H.bed)}</div></div></div>`,
+  },
+  {
+    n: "04", name: "Moon phases", tag: "new · comeback",
+    idea: "A night-blue board; each card's moon is as full as its rolling rate, and the week strip is seven small moons. Amber marks kept and today.",
+    sys: ["Instrument Serif (names, numbers) + Instrument Sans", [["#1b2033", "night board"], ["#262d46", "card"], ["#f1e9d8", "moonlight, text"], ["#f2b65a", "kept, today, next step"], ["#8f93a8", "quiet text"]]],
+    html: () => { mid = 0; return `<div class="frame g4">${sb("color:#f1e9d8")}
+      <div class="top"><h1>Saturday night sky</h1><span>24 Oct</span></div>
+      ${wk((v, t) => moon(v, 10, t ? "#f2b65a" : "#f1e9d8", "#232a42"))}
+      ${cards({ art: (h) => moon(h.r, 22, h.kept ? "#f2b65a" : "#f1e9d8"), cb: 1 }, ["up", "write", "nic", "read", "bed"])}</div>`; },
+  },
+  {
+    n: "05", name: "Rings", tag: "new",
+    idea: "Quiet paper and white cards; one green ring per habit shows the rolling rate, the week is seven small rings. Only green means anything.",
+    sys: ["Outfit only", [["#f5f4ef", "board"], ["#ffffff", "card"], ["#2f7d5b", "progress, kept"], ["#e9e6dd", "ring track"], ["#1f2421", "text"]]],
+    html: () => `<div class="frame g5">${sb()}
+      <div class="top"><h1>Saturday</h1><span>24 Oct</span></div>
+      ${wk((v, t) => ring(v, 28, 4, "#2f7d5b", t))}
+      <div class="g">${cards({ art: (h) => ring(h.r, 56, 7).replace("margin:0 auto", "margin:0") })}</div></div>`,
+  },
+  {
+    n: "06", name: "Jars", tag: "new · comeback",
+    idea: "Each habit is a jar on a shelf; a honey marble drops in for each kept day, a rose one for a comeback. The comeback note is rose too.",
+    sys: ["Bricolage Grotesque only", [["#f3ece0", "shelf"], ["#fbf7f0", "card"], ["#e2a43b", "kept marble, today"], ["#d9788a", "comeback"], ["#3b3026", "text"]]],
+    html: () => `<div class="frame g6">${sb()}
+      <div class="top"><h1>Saturday's jars</h1><span>24 Oct</span></div>
+      ${wk()}
+      <div class="g">${cards({ art: (h) => jar(+h.num, { up: 1, write: 1, read: 2, bed: 2 }[h.id] || 0), cb: 1, cbText: "Friday stayed empty. That's fine. One sentence after coffee." })}</div></div>`,
+  },
+  {
+    n: "07", name: "Polaroids", tag: "new · comeback",
+    idea: "Habits as instant photos pinned to the board; the photo holds the big number, the name is handwritten underneath. Kept prints develop to full colour.",
+    sys: ["Caveat (names, voice) + Familjen Grotesk (numbers, small text)", [["#e7e2d6", "board"], ["#fffdf8", "print"], ["#f0a26b", "build habit; full = kept"], ["#bcd2b9", "stop habit"], ["#2c2a26", "text"]]],
+    html: () => `<div class="frame g7">${sb()}
+      <div class="top"><h1>Saturday, 24 Oct</h1><span>1 of 5 so far</span></div>
+      ${wk()}
+      <div class="g">${cards({ art: (h) => `<b>${h.num}</b><small>${h.of}</small>`, cb: 1, cbText: "Friday stayed blank. One sentence after coffee is enough." })}</div></div>`,
+  },
+  {
+    n: "08", name: "Terracotta", tag: "new",
+    idea: "One hue, many tones: clay cards on sand, a kept card fired to solid terracotta. A thin line under each card shows the rolling rate.",
+    sys: ["Fraunces only (roman and italic)", [["#f4ece2", "sand board"], ["#ecdccb", "open card"], ["#b85c38", "kept, progress"], ["#3d2a20", "text, today"]]],
+    html: () => `<div class="frame g8">${sb()}
+      <div class="top"><h1>Saturday, <em>24 Oct</em></h1></div>
+      ${wk()}
+      ${cards({}, ["up", "write", "nic", "read", "bed"])}</div>`,
+  },
+  {
+    n: "09", name: "Sticky notes", tag: "new · sounds wrong",
+    idea: "A dotted drawing board with square notes stuck on it: yellow for morning, blue for evening, green for the stop habit. The week is pencilled across the top.",
+    sys: ["Caveat (names, voice) + Familjen Grotesk (numbers, anchors)", [["#f1f0ec", "dotted board"], ["#f7df7a", "morning note"], ["#bfd8ef", "evening note"], ["#c8e2b8", "stop note"], ["#2b2b2b", "pencil"]]],
+    html: () => `<div class="frame g9">${sb()}
+      <div class="top"><h1>Saturday</h1><span>24 Oct</span></div>
+      ${wk()}
+      <div class="g">${cards({ cb: 1, cbText: "Friday stayed empty. One sentence after coffee.", tap: (h) => h.kept ? '<span class="ring">kept</span>' : h.tap.toLowerCase() })}</div></div>`,
+  },
+  {
+    n: "10", name: "Promise letters", tag: "new · sounds wrong · comeback",
+    idea: "Each habit is a letter to yourself; keeping it seals the envelope in green. The week strip is a row of postmarks, darker on fuller days.",
+    sys: ["EB Garamond only (roman and italic)", [["#ece6da", "desk"], ["#fbf7ee", "envelope"], ["#2f6b4f", "seal: kept, clean"], ["#24324d", "ink, today"]]],
+    html: () => `<div class="frame g10">${sb()}
+      <div class="top"><h1>Saturday</h1><span>the 24th of October</span></div>
+      ${wk()}
+      ${cards({ extra: (h) => h.kept ? '<div class="seal">kept</div>' : "", cb: 1 }, ["up", "write", "nic", "read", "bed"])}</div>`,
+  },
+];
+
+const grid = document.getElementById("grid");
+grid.innerHTML = frames.map((f, k) => `<div class="cell" data-k="${k}"><div class="thumb">${f.html()}</div>
+  <div class="cap"><div class="t1"><b>${f.n}</b><strong>${f.name}</strong></div>
+  <div class="idea">${f.idea}</div><span class="tag">${f.tag}</span>
+  <div class="sys"><span class="ty">${f.sys[0]}</span><div class="sw">${f.sys[1].map(([c, r]) => `<span><i style="background:${c}"></i>${r}</span>`).join("")}</div></div></div></div>`).join("");
+
+const fit = () => document.querySelectorAll(".thumb").forEach((t) => {
+  t.querySelector(".frame").style.transform = `scale(${t.clientWidth / 390})`;
+});
+addEventListener("resize", fit); fit();
+document.fonts?.ready.then(fit);
+
+const ov = document.getElementById("ov"), holder = document.getElementById("holder");
+grid.addEventListener("click", (e) => {
+  const cell = e.target.closest(".cell"); if (!cell) return;
+  const s = Math.min((innerWidth - 48) / 390, (innerHeight - 48) / 844);
+  holder.style.width = 390 * s + "px"; holder.style.height = 844 * s + "px";
+  holder.innerHTML = frames[cell.dataset.k].html();
+  holder.firstElementChild.style.transform = `scale(${s})`;
+  holder.firstElementChild.style.transformOrigin = "0 0";
+  ov.classList.add("on");
+});
+const close = () => ov.classList.remove("on");
+ov.addEventListener("click", close);
+addEventListener("keydown", (e) => e.key === "Escape" && close());
+</script>
+</body>
+</html>

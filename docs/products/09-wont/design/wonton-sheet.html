@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wont wonton sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root{--shelf:#f3ece0;--card:#fbf7f0;--ink:#3b3026;--muted:rgba(59,48,38,.62);--honey:#e2a43b}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--shelf);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,sans-serif;padding:36px 32px 64px}
+  header{max-width:1500px;margin:0 auto 26px}
+  header h1{font-weight:800;font-size:30px;letter-spacing:-.03em}
+  header p{color:var(--muted);max-width:900px;margin-top:6px;font-size:15px;line-height:1.45}
+  .grid{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .cell{background:var(--card);border-radius:22px;padding:18px 22px;display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:center}
+  .big{display:flex;align-items:flex-end;gap:6px}
+  .info .t{display:flex;gap:10px;align-items:baseline}
+  .info .t b{font-weight:400;font-size:13px;color:var(--muted)}
+  .info .t strong{font-weight:800;font-size:19px;letter-spacing:-.01em}
+  .info p{font-size:14px;color:var(--muted);margin-top:4px;line-height:1.4}
+  .ctx{display:flex;align-items:center;gap:14px;margin-top:12px}
+  .ctx .real{background:var(--shelf);border-radius:14px;padding:6px;display:flex;flex-direction:column;align-items:center}
+  .ctx .real small{font-size:10px;color:var(--muted)}
+  .sw{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
+  .sw span{display:flex;gap:7px;align-items:center}
+  .sw i{width:14px;height:14px;border-radius:4px;outline:1px solid rgba(59,48,38,.15);flex:none}
+  .sw i.dash{background:none;outline:1.5px dashed rgba(59,48,38,.45)}
+  @media (max-width:1100px){.grid{grid-template-columns:1fr}}
+  @media (max-width:560px){.cell{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Wonton style sheet</h1>
+  <p>Ten wonton styles, leaning cartoon rather than realistic. Each shows a large kept wonton with its comeback sibling, and the same style at real size in the 84px steamer holding 6 of 7 (5 kept, 1 comeback, 1 empty seat). Colours under each: kept, comeback, empty seat.</p>
+</header>
+<div class="grid" id="grid"></div>
+
+<script>
+// Every style draws one wonton in local units (about 22 wide, centred on 0,0, bottom near +7).
+// role: "k" kept, "c" comeback, "p" pending (empty seat).
+const face = {
+  dots: (c = "#4a2e1c") => `<circle cx="-3.4" cy="0.6" r=".95" fill="${c}"/><circle cx="3.4" cy="0.6" r=".95" fill="${c}"/>`,
+  blush: (c = "#f29aa6", y = 2.6, dx = 6, o = .7) => `<ellipse cx="${-dx}" cy="${y}" rx="1.6" ry=".9" fill="${c}" opacity="${o}"/><ellipse cx="${dx}" cy="${y}" rx="1.6" ry=".9" fill="${c}" opacity="${o}"/>`,
+  smile: (c = "#4a2e1c", y = 2.3) => `<path d="M-1.1 ${y} Q0 ${y + 1.1} 1.1 ${y}" fill="none" stroke="${c}" stroke-width=".7" stroke-linecap="round"/>`,
+};
+const pend = (path, col) => `<path d="${path}" fill="none" stroke="${col}" stroke-width="1" stroke-dasharray="2.2 1.8" stroke-linejoin="round" opacity=".8"/>`;
+
+const PURSE = "M-10 5 Q-11 -5 -4 -6 Q0 -12 4 -6 Q11 -5 10 5 Q0 9 -10 5 Z";
+const ROUND = "M-10 3 C-10 -6 10 -6 10 3 C10 8 -10 8 -10 3 Z";
+const ROUND_TOP = "M-4 -4.6 Q-6.4 -9 -2 -9.6 Q0 -12.4 2 -9.6 Q6.4 -9 4 -4.6 Z";
+
+const STYLES = [
+  {
+    name: "Little purse", tag: "no face",
+    line: "Variant B's wonton, tidied: a plump dome with a knot on top, soft outline, one highlight. The cute baseline.",
+    pal: { k: ["#f5d58f", "#e2a43b"], c: ["#f3c6cd", "#d9788a"], p: "#c9a874" },
+    draw(r, p) {
+      if (r === "p") return pend(PURSE, p.p);
+      const [f, s] = p[r];
+      return `<path d="M-10 5 Q-11 -4 0 -5 Q11 -4 10 5 Q0 9 -10 5 Z" fill="${f}" stroke="${s}" stroke-width="1.3" stroke-linejoin="round"/>
+        <path d="M-4.5 -5 Q0 -12 4.5 -5" fill="${f}" stroke="${s}" stroke-width="1.3" stroke-linejoin="round"/>
+        <path d="M-4 1.5 Q0 3.5 4 1.5" fill="none" stroke="${s}" stroke-width=".9" opacity=".55"/>
+        <ellipse cx="-5.6" cy="-0.6" rx="1.3" ry="2" fill="#fff" opacity=".75"/>`;
+    },
+  },
+  {
+    name: "Kawaii purse", tag: "face",
+    line: "A round little body with a gathered frill, dark outline, dot eyes, rosy blush and a tiny smile.",
+    pal: { k: ["#fff1cf", "#5a3d24"], c: ["#ffd5d2", "#5a3d24"], p: "#b99773" },
+    draw(r, p) {
+      if (r === "p") return pend(ROUND, p.p) + pend(ROUND_TOP, p.p);
+      const [f, s] = p[r];
+      return `<path d="${ROUND_TOP}" fill="${f}" stroke="${s}" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M-1.4 -9.4 L-0.8 -6 M1.4 -9.4 L0.8 -6" stroke="${s}" stroke-width=".7" stroke-linecap="round"/>
+        <path d="${ROUND}" fill="${f}" stroke="${s}" stroke-width="1.2"/>
+        ${face.dots(s)}${face.blush(r === "c" ? "#f07f93" : "#f4a3a0")}${face.smile(s)}`;
+    },
+  },
+  {
+    name: "Sleepy ingot", tag: "face",
+    line: "The folded ingot: a full belly with two wrapper corners curling up like ears, eyes closed in a contented doze.",
+    pal: { k: ["#f8e3a3", "#c38a2e"], c: ["#e6d6f3", "#9479b8"], p: "#c9a874" },
+    draw(r, p) {
+      const shape = "M-11.5 -2 Q-13 -6 -9.5 -6.5 Q-7 -9 0 -9 Q7 -9 9.5 -6.5 Q13 -6 11.5 -2 Q9 7 0 7 Q-9 7 -11.5 -2 Z";
+      if (r === "p") return pend(shape, p.p);
+      const [f, s] = p[r];
+      return `<path d="M-6.5 1 Q-7 -9 0 -9 Q7 -9 6.5 1 Z" fill="${f}" stroke="${s}" stroke-width="1.1"/>
+        <path d="M-11.5 -2 Q-13 -6 -9.5 -6.5 Q-8 -2.5 -6 -0.5 Q0 1.6 6 -0.5 Q8 -2.5 9.5 -6.5 Q13 -6 11.5 -2 Q9 7 0 7 Q-9 7 -11.5 -2 Z" fill="${f}" stroke="${s}" stroke-width="1.1" stroke-linejoin="round"/>
+        <path d="M-4.2 -4 Q-3.2 -3 -2.2 -4 M2.2 -4 Q3.2 -3 4.2 -4" fill="none" stroke="#4a2e1c" stroke-width=".7" stroke-linecap="round"/>
+        <ellipse cx="0" cy="-1.6" rx=".7" ry=".55" fill="#4a2e1c"/>
+        ${face.blush("#f29aa6", -2.4, 5, .6)}`;
+    },
+  },
+  {
+    name: "Sticker", tag: "no face",
+    line: "A triangle fold cut out like a sticker: thick white border, flat colour, one fold line. Bold at any size.",
+    pal: { k: ["#f2b84b", "#7a4a12"], c: ["#f28f7a", "#7a3326"], p: "#c9a874" },
+    draw(r, p) {
+      const tri = "M0 -9 Q1.4 -9 2.2 -7.6 L10 4.4 Q10.8 6.6 8.4 6.8 L-8.4 6.8 Q-10.8 6.6 -10 4.4 L-2.2 -7.6 Q-1.4 -9 0 -9 Z";
+      if (r === "p") return pend(tri, p.p);
+      const [f, s] = p[r];
+      return `<path d="${tri}" fill="#fff" stroke="#fff" stroke-width="4.4" stroke-linejoin="round"/>
+        <path d="${tri}" fill="${f}" stroke="${s}" stroke-width="1" stroke-linejoin="round"/>
+        <path d="M-5.6 0.6 L0 -2.6 L5.6 0.6" fill="none" stroke="${s}" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/>`;
+    },
+  },
+  {
+    name: "Mochi blob", tag: "face",
+    line: "No outline at all: a soft squishy blob with one big highlight, happy ^ ^ eyes and blush. The softest one.",
+    pal: { k: ["#ffe2a3", "#f5c66a"], c: ["#ffc9d6", "#f39ab1"], p: "#d2b07c" },
+    draw(r, p) {
+      const blob = "M-10.5 5 C-11.5 -3 -6 -8.5 0 -8.5 C6 -8.5 11.5 -3 10.5 5 C6 8 -6 8 -10.5 5 Z";
+      if (r === "p") return pend(blob, p.p);
+      const [f, sh] = p[r];
+      return `<ellipse cx="0" cy="7.2" rx="9" ry="1.6" fill="#7a5a33" opacity=".14"/>
+        <path d="${blob}" fill="${f}"/>
+        <path d="M-10.5 5 C-6 8 6 8 10.5 5 C9 3.6 6 4.6 0 4.8 C-6 4.6 -9 3.6 -10.5 5 Z" fill="${sh}" opacity=".7"/>
+        <ellipse cx="-4.6" cy="-4.4" rx="2.8" ry="1.5" fill="#fff" opacity=".85" transform="rotate(-20 -4.6 -4.4)"/>
+        <path d="M-4.6 1 L-3.5 -0.2 L-2.4 1 M2.4 1 L3.5 -0.2 L4.6 1" fill="none" stroke="#5a3d24" stroke-width=".75" stroke-linecap="round" stroke-linejoin="round"/>
+        ${face.blush("#f2829a", 2.4, 6.2, .55)}
+        <path d="M-1 2.4 Q-.5 3.2 0 2.4 Q.5 3.2 1 2.4" fill="none" stroke="#5a3d24" stroke-width=".6" stroke-linecap="round"/>`;
+    },
+  },
+  {
+    name: "Bao squish", tag: "face",
+    line: "A round bun with pleats swirling to the top, soft brown outline and a little open-mouthed grin. Comeback is matcha green.",
+    pal: { k: ["#fbf0d9", "#b98f55"], c: ["#d8eac4", "#7a9a5a"], p: "#c9a874" },
+    draw(r, p) {
+      const bun = "M-10.5 3.5 C-10.5 -8 10.5 -8 10.5 3.5 C10.5 7.4 -10.5 7.4 -10.5 3.5 Z";
+      if (r === "p") return pend(bun, p.p);
+      const [f, s] = p[r];
+      return `<path d="${bun}" fill="${f}" stroke="${s}" stroke-width="1.1"/>
+        <path d="M0 -5.6 Q-3.2 -4.6 -5.4 -2.4 M0 -5.6 Q-1 -3.6 -1.8 -2.2 M0 -5.6 Q1 -3.6 1.8 -2.2 M0 -5.6 Q3.2 -4.6 5.4 -2.4" fill="none" stroke="${s}" stroke-width=".7" stroke-linecap="round" opacity=".75"/>
+        <circle cx="0" cy="-5.6" r=".9" fill="${s}"/>
+        <circle cx="-3.6" cy="1" r=".9" fill="#4a2e1c"/><circle cx="3.6" cy="1" r=".9" fill="#4a2e1c"/>
+        <path d="M-1.5 2.2 Q0 4.6 1.5 2.2 Z" fill="#b5523f"/>
+        ${face.blush("#f29aa6", 2.8, 6.2, .6)}`;
+    },
+  },
+  {
+    name: "Ink line", tag: "no face",
+    line: "A monoline drawing on cream: one even honey line, three pleats, the filling as a single dot. The quietest style.",
+    pal: { k: ["#fffaf0", "#d39a2c"], c: ["#fffaf0", "#d9788a"], p: "#cdb48c" }, swatch: ["#d39a2c", "#d9788a"],
+    draw(r, p) {
+      if (r === "p") return pend(PURSE, p.p);
+      const [f, s] = p[r];
+      return `<path d="${PURSE}" fill="${f}" stroke="${s}" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M-6 0 L-2 -5.4 M0 -1 L0 -5.6 M6 0 L2 -5.4" stroke="${s}" stroke-width=".9" stroke-linecap="round"/>
+        <circle cx="0" cy="2.6" r="1.6" fill="${s}"/>`;
+    },
+  },
+  {
+    name: "Anime chunky", tag: "face",
+    line: "Thick cartoon outline, cel shading on one side, a big glossy highlight and tall shiny eyes with blush hatching.",
+    pal: { k: ["#ffd06e", "#f0a93a", "#4a2e1c"], c: ["#ffa9b8", "#ee7f95", "#4a2e1c"], p: "#b99773" },
+    draw(r, p) {
+      const body = "M-10.5 5 Q-11.5 -4.6 -3.8 -6 Q0 -11.6 3.8 -6 Q11.5 -4.6 10.5 5 Q0 9.4 -10.5 5 Z";
+      if (r === "p") return pend(body, p.p);
+      const [f, sh, s] = p[r];
+      return `<path d="${body}" fill="${f}"/>
+        <path d="M10.5 5 Q11.4 -3 5.6 -5.2 Q8.6 -1 7 6.6 Q9.5 6 10.5 5 Z" fill="${sh}"/>
+        <path d="${body}" fill="none" stroke="${s}" stroke-width="1.7" stroke-linejoin="round"/>
+        <ellipse cx="-5.4" cy="-2.2" rx="1.9" ry="1.1" fill="#fff" transform="rotate(-30 -5.4 -2.2)"/><circle cx="-3.4" cy="-3.6" r=".5" fill="#fff"/>
+        <ellipse cx="-3.2" cy="1" rx=".95" ry="1.45" fill="${s}"/><ellipse cx="3.2" cy="1" rx=".95" ry="1.45" fill="${s}"/>
+        <circle cx="-2.9" cy=".4" r=".38" fill="#fff"/><circle cx="3.5" cy=".4" r=".38" fill="#fff"/>
+        <path d="M-7 2.8 L-6.2 2.2 M-6 3.2 L-5.2 2.6 M5.2 2.6 L6 3.2 M6.2 2.2 L7 2.8" stroke="#e86a7e" stroke-width=".55" stroke-linecap="round"/>
+        <path d="M-.8 3 Q0 3.7 .8 3" fill="none" stroke="${s}" stroke-width=".65" stroke-linecap="round"/>`;
+    },
+  },
+  {
+    name: "Half-moon wink", tag: "face",
+    line: "A crescent dumpling with crimped pleats along the top, one eye winking. The comeback is sky blue.",
+    pal: { k: ["#fde5ad", "#c99a56"], c: ["#d3e6f6", "#6f98c2"], p: "#c9a874" },
+    draw(r, p) {
+      const moon = "M-11.5 4.5 Q0 9.4 11.5 4.5 Q9.6 -8 0 -8 Q-9.6 -8 -11.5 4.5 Z";
+      if (r === "p") return pend(moon, p.p);
+      const [f, s] = p[r];
+      let crimps = "";
+      for (let i = 0; i < 7; i++) { const a = Math.PI * (0.18 + i * 0.107), x = -10.6 * Math.cos(a), y = -7.4 * Math.sin(a) + 1.2; crimps += `M${x.toFixed(2)} ${(y).toFixed(2)} L${(x * .82).toFixed(2)} ${(y + 1.6).toFixed(2)} `; }
+      return `<path d="${moon}" fill="${f}" stroke="${s}" stroke-width="1.1" stroke-linejoin="round"/>
+        <path d="${crimps}" stroke="${s}" stroke-width=".75" stroke-linecap="round" opacity=".8"/>
+        <path d="M-4.4 1.6 L-3.3 .6 L-2.2 1.6" fill="none" stroke="#4a2e1c" stroke-width=".75" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="3.3" cy="1.2" r=".95" fill="#4a2e1c"/>
+        ${face.blush("#f29aa6", 3.4, 6, .65)}${face.smile("#4a2e1c", 3.4)}`;
+    },
+  },
+  {
+    name: "Plush", tag: "face",
+    line: "A soft toy: felt colours, a dashed stitch seam just inside the edge, two button eyes and felt cheeks. No mouth.",
+    pal: { k: ["#f1dbb2", "#a9814f"], c: ["#e9b6ba", "#a46a70"], p: "#bfa27c" },
+    draw(r, p) {
+      if (r === "p") return pend(ROUND, p.p) + pend(ROUND_TOP, p.p);
+      const [f, s] = p[r];
+      return `<path d="${ROUND_TOP}" fill="${f}" stroke="${s}" stroke-width=".9" stroke-linejoin="round"/>
+        <path d="${ROUND}" fill="${f}" stroke="${s}" stroke-width=".9"/>
+        <path d="M-8.2 2.8 C-8.2 -4.2 8.2 -4.2 8.2 2.8 C8.2 6.4 -8.2 6.4 -8.2 2.8 Z" fill="none" stroke="${s}" stroke-width=".55" stroke-dasharray="1.2 1" opacity=".75"/>
+        <circle cx="-3.4" cy=".6" r="1.25" fill="#4a2e1c"/><circle cx="3.4" cy=".6" r="1.25" fill="#4a2e1c"/>
+        <circle cx="-3.75" cy=".25" r=".35" fill="#fff" opacity=".8"/><circle cx="3.05" cy=".25" r=".35" fill="#fff" opacity=".8"/>
+        <circle cx="-6" cy="3" r="1.3" fill="${r === "c" ? "#d98790" : "#e7a28b"}" opacity=".75"/><circle cx="6" cy="3" r="1.3" fill="${r === "c" ? "#d98790" : "#e7a28b"}" opacity=".75"/>`;
+    },
+  },
+];
+
+const W = (st, role, x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})">${st.draw(role, st.pal)}</g>`;
+
+// B's steamer, 84 x 84: back row of three, front row of four. 6 of 7: 5 kept, 1 comeback, 1 empty seat.
+function steamer(st, size = 84) {
+  const seats = [[18, 54, "k"], [34, 54, "k"], [50, 54, "c"], [66, 54, "k"], [26, 42, "k"], [42, 42, "k"], [58, 42, "p"]];
+  const back = seats.filter((s) => s[1] < 50), front = seats.filter((s) => s[1] >= 50);
+  return `<svg width="${size}" height="${size}" viewBox="0 0 84 84">
+    <ellipse cx="42" cy="60" rx="36" ry="7" fill="#c49a62"/>
+    ${back.map(([x, y, r]) => W(st, r, x, y, .82)).join("")}
+    ${front.map(([x, y, r]) => W(st, r, x, y, .82)).join("")}
+    <path d="M6 61 Q42 70 78 61 V74 Q78 81 70 81 H14 Q6 81 6 74 Z" fill="#dcb883" stroke="#b98f55" stroke-width="1.5"/>
+    <line x1="8" y1="74" x2="76" y2="74" stroke="#c9a067" stroke-width="1.2"/>
+  </svg>`;
+}
+
+const grid = document.getElementById("grid");
+grid.innerHTML = STYLES.map((st, i) => {
+  const n = String(i + 1).padStart(2, "0");
+  const [k, c] = st.swatch || [st.pal.k[0], st.pal.c[0]];
+  return `<section class="cell">
+    <div class="big">
+      <svg width="160" height="140" viewBox="-14 -15 28 25"><title>${st.name}, kept</title>${W(st, "k", 0, 0, 1)}</svg>
+      <svg width="110" height="96" viewBox="-14 -15 28 25"><title>${st.name}, comeback</title>${W(st, "c", 0, 0, 1)}</svg>
+    </div>
+    <div class="info">
+      <div class="t"><b>${n}</b><strong>${st.name}</strong><b>${st.tag}</b></div>
+      <p>${st.line}</p>
+      <div class="ctx">
+        <div class="real">${steamer(st)}<small>real size</small></div>
+        ${steamer(st, 168)}
+        <div class="sw">
+          <span><i style="background:${k}"></i>kept ${k}</span>
+          <span><i style="background:${c}"></i>comeback ${c}</span>
+          <span><i class="dash"></i>empty seat, dashed</span>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}).join("");
+</script>
+</body>
+</html>

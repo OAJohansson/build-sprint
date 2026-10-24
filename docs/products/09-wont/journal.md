@@ -1,0 +1,143 @@
+# Journey
+
+What happened, what was decided and why. Newest last.
+
+## To carry over
+
+For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md).
+
+- `docs/knowledge-bank.md` (customer insight / product strategy): the habit-science basics from
+  `research.md`: if-then plans (Gollwitzer), automaticity takes ~2 months (Lally, Singh), the
+  what-the-hell / abstinence-violation effect, reminders vs cues (Stawarz), why streaks backfire
+  (Silverman & Barasch), "ask about past behaviour" (The Mom Test), job to be done (Christensen).
+- `docs/knowledge-bank.md` (design and UX / product strategy): distinctive brand assets (Byron
+  Sharp, *How Brands Grow*) and "only-ness" (Marty Neumeier, *Zag*); a character sheet / mark
+  tested at 29 px before it becomes an illustration system.
+- `docs/learnings.md` process changelog: the design critic scored flat (6/10 × 3) because it
+  judged against requirements it never saw (rolling number, week strip). Try: give the critic the
+  pack's non-negotiables as words alongside the aesthetic, or score only what's negotiable.
+- `docs/learnings.md` process changelog: running a deep-research step (5 parallel researchers and
+  a report writer) before writing a Founder kickoff pack.
+
+## 24 Oct: kickoff conversation
+
+- **Parallel work.** The Six AM Founder session runs in its own worktree; Wont started in
+  `.claude/worktrees/09-habits` on branch `09-habits`, cut from the latest `origin/main`. No
+  shared app files; shared pages wait for wrap-up.
+- **Deep research first.** The owner asked for evidence before features. Five researchers
+  (frameworks, forming habits, breaking habits and lapses, digital interventions, app landscape)
+  and one report writer: `research.md`, notes in `research/`. Headline: design the comeback,
+  not the streak.
+- **Problem before solution.** Asked which habits, then what happened last time (The Mom Test:
+  past behaviour, not intentions). Owner's habits: wake and go to bed early, read 10 pages, write
+  a journal entry or short story, stop nicotine pouches, stop self-doubt. Sleep has been a
+  constant battle: without a morning commitment they sleep in and then feel bad. They are on day 5
+  of 7am wake-ups and quit pouches on 23 Oct, so the app is needed now.
+- **Self-doubt** is a thought pattern, not a behaviour; suppression rebounds. Left out of the MVP
+  (backlog).
+- **Owner's MVP sketch, tested against the research.** Kept: a written commitment to myself
+  (shaped as an if-then plan), a SMART daily goal, one-tap tracking, a gentle message after a
+  miss. Cut: notifications (morning motivation fades by ~week 4 and the phone becomes the cue;
+  evening log reminder also dropped for the MVP, so no backend). The comeback message shows in
+  the app the next time it opens instead of by email.
+- **Intro animation kept as a learning goal** (the owner has never built animation). Scoped: about
+  15–20 s, skippable, once at first launch, three messages from the research (about two months
+  not 21 days; tie it to something you already do; missing a day doesn't reset you).
+- **Stop habits in the MVP** (owner, against Claude's recommendation to start with build habits
+  only): the owner quit pouches yesterday and needs it now. Mechanics from the research: clean days
+  counted (not reset to zero), slips logged with size, urges logged with "ride it out".
+- **Name: Wont** (an old word for habit, "as is my wont"), picked from a creative round; Loop
+  is taken by Loop Habit Tracker.
+- **Kickoff pack finished** (owner): one-day appetite; feel "a drawing board with big cards, not a
+  checkbox list", with six app screenshots as references (cards and colour taken, streaks and
+  trophies left out).
+- **Design stays with the owner** (owner, for this and every future product): Founder mode had the
+  PM pick the design. Changed so the owner shortlists 3 of 8–10 sketches on a contact sheet and
+  picks 1 of the 3 built prototypes. Process change made at once in the playbook, `AGENTS.md`,
+  decision 0026 and the designer agent (a session whose task is a process change edits shared
+  pages directly).
+- **Contact sheet, 10 directions** for the board (`design/contact-sheet.html`): 01 Ink zigzag, 02
+  Pairs on a tray, 03 Rising tide, 04 Masonry wall (seeds); 05 Bold slabs, 06 Soft fill
+  (references); 07 Drafting table, 08 Poster wall (far away); 09 Seed packets, 10 A hand of cards
+  (sound wrong). Waiting for the owner's shortlist of three.
+- **Contact sheet 1 rejected** (owner): "no brand consistency", hard to scan, Bold slabs gives a
+  headache. Kept 09 Seed packets (cute) and 06 Soft fill (colour, simple layout) to iterate; the
+  week calendar moves out of the cards into one strip at the top. Asked for 8 new directions:
+  coherent, simple to scan, nice to look at. Feedback 1–6. Lesson: the first sheet optimised for
+  difference; the owner judges coherence first.
+- **Contact sheet 2** (owner): Terracotta is the favourite, kept as is. Soft fill's colour mix
+  doesn't work (same-colour pairs, then green, then purple pairs): try even colours. Seed packets
+  again as one card per line. Moon phases out. Asked for seven more new directions. Taste so far:
+  one column, calm, one hue family, warm; not dark, not mixed pastels.
+- **Shortlist** (owner, after sheet 3): changed their mind back to sheet 2's Jars, all cards one per
+  line like its nicotine card. Three variants of that one layout: jars with marbles, wontons (a
+  pun on the name), and the seed sprout. Built straight as the three prototypes to save a round.
+- **Prototype critic round 1** (design-critic, screenshots only): Wontons 6/10, Jars 5/10, Seed
+  sprout 4/10. Shared gaps: a kept card looks like an open one (only a text line changes); the big
+  "6 of last 7" outshines the habit name; the pink comeback box reads as a soft failure state with
+  coach-bot copy; the slip is the loudest colour on screen. Critic's calls that clash with the
+  pack (owner decides): drop the rolling number (R6, P6) and the week strip (owner's request).
+- **Pick: Wontons** (owner). Asked for wontons that look more like wontons, and prototypes of
+  the other features. Define loop next on a copy beside the pick.
+- **Critic round 2** (Wontons v2): 6/10, flat (v1 also 6). Its top asks clash with the pack:
+  cut the anchor sentence (P1, the strongest evidence) and drop the steamer (owner's pick).
+  Valid and in-pack: steamer too small to read progress; week dots all look the same; stop card
+  "loses" colour after a slip; slip/urge links too small. Score not rising after two rounds, so
+  stopped and shown to the owner (design-session rule).
+- **Wonton style sheet** (owner): the wonton is the whole design, so a separate exercise of 10
+  wonton styles (cute, cartoon/anime, playing with colour and shape). v1's wontons preferred over
+  v2's "realistic" ones.
+- **Wonton sheet 1 rejected** (owner): too childish; adults should want to use it, still cute.
+  Reframed as an icon exercise: design the mark first, then use it for the wontons. Sheet 1 kept
+  (`design/wonton-sheet.html`).
+- **Mark shortlist** (owner): Calm face (loves it, worried it reads as Headspace), Riso, Enamel
+  pin (colours). Brand pros/cons given in chat; designer exploring 4 differentiated Calm faces
+  (one in riso), 2 Riso refinements, 4 enamel colourways (`design/mark-sheet.html`).
+- **Mark chosen** (owner): Dough on ink with closed content eyes; a winking version marks a
+  comeback ("a bit of extra motivation"). Board to be rebuilt around it.
+- **Critic round 3** (v3 on the mark): 6/10 again. Flat since round 1 because its top asks keep
+  removing pack requirements (the rolling number R6, the week strip the owner asked for, status
+  lines). In-pack gaps taken for round 4, the last allowed: the slip state's grey reads as
+  disabled; the dashed seat shows every day; the steamer deserves more width; duplicate date;
+  "Log a slip" is system copy. Then on to the other screens.
+- **Critic round 4** (last allowed): 6/10. Loop stopped at the cap; four flat rounds. Remaining
+  in-pack gap for the build: centre the steamer vertically in the card, add a press tint. The
+  rest again asks to remove pack requirements (numbers, anchors, week strip, comeback copy).
+- **Other screens prototyped** in the v3 system: intro (18 s, three scenes), new habit, new stop
+  habit, slip and urge. Shown to the owner in one batch.
+- **Header contrast** (owner): the ink band is too harsh against the cream; asked why it passed
+  the critic. It didn't: the critic flagged the dark block in rounds 3 and 4 ("heaviest thing on
+  screen") and the PM kept it, because the band came from the PM's own brief (echo the icon's
+  ink). PM's miss: it should have gone to the owner or been dropped. Also: the owner read the
+  icon's warm near-black (#2a2420) as purple. Comparing no band / soft band / softened plum /
+  plum type, and the icon in ink vs plum.
+- **Header and icon decided** (owner): Dough on ink stays; no dark band, ink only for type, week
+  strip on a soft dough card. Design closed; the engineer builds the real app from the
+  prototypes.
+- **Real app built** (engineer): board, intro, new habit, new stop habit, habit page (edit,
+  delete, re-log yesterday, history), slip sheet, ride-out, manifest; prototypes promoted and
+  deleted; all copy in `src/lib/copy.ts`. 31 tests, lint and build pass. T14–T18.
+- **Fix pass** (engineer) on all three graders: blocker button, F2 root cause (`hadSlip` read any
+  day in the missed run; now the named day's own log, plus a test), anchors stored as typed, no
+  re-casing of user text, contrast worst 4.92:1, copy and board polish, accessibility minors.
+  32 tests. Re-check by graders next.
+- **Critic after fixes:** 6/10 (fifth time). Eval bar ≥ 9: not met. Its asks are still mostly to
+  remove pack requirements (numbers, anchors, comeback line, week strip); new valid points: the
+  anchor clamp ends in "…" on cards; "Tap when kept" repeated on every card.
+- **Preview link (ops):** created the Vercel project `wont` without a GitHub link (so pushes to
+  main by other sessions don't try to build an app that isn't on main yet) and deployed the
+  branch from the CLI. Mistake: the first CLI deploy of a new project went to Production, so
+  https://wont-peach.vercel.app is public before the owner's review. Nothing is merged; the
+  data is local to each phone. At ship, `pnpm ship 09-wont` links GitHub and redeploys main.
+  Lesson: pass `--target preview` (or create via `pnpm ship`) for a project's first deploy.
+- **Re-check** (user-tester): all five scenarios and R1–R8 pass; F2 verified gone in the
+  no-reload path. New major N1: the comeback message showed once per run, so a return after a
+  longer absence (opened mid-run) got nothing. Fixed in pass 2 (L26, supersedes L14) with three
+  unit tests, plus the slip next step, "Saved" at the button, required-field notes, two-day
+  naming, Skip width, title capitalised for display. 34 tests.
+- **Targeted re-check** (user-tester): N1 and rows 37–40 pass; new N8 double tap made duplicate
+  habits, fixed with a ref guard in the shared submit hook. Preview redeployed; eval report
+  written. Waiting for the owner's final review.
+- **Merged main** (Six AM's wrap-up and decision 0028, Founder v2). Conflict on who picks the
+  final design: the owner chose 0028 otherwise, but the final pick of the 3 is theirs (0028
+  amended, playbook, AGENTS.md, designer agent).

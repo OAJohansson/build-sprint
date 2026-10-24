@@ -24,8 +24,8 @@ the next one feels slow).
 1. **Owner design pick, early, using the usual workflow.** The designer runs the design-session
    flow up to the prototypes: about 10 directions, screenshotted. The owner picks 3 (their one
    design moment), and the squad develops those 3 into the starting designs before any build.
-   The critic scores the 3, and the PM picks one against the pack and logs it. No other owner
-   checkpoint until the final review.
+   The critic scores the 3, and the owner picks the final one (amended 25 Oct, see below). No
+   other owner checkpoint until the final review.
 2. **Visual references are optional.** The kickoff pack can pin 2–3 real screenshots ("like
    Claude's chat panel"); the critic scores against them when they exist. The owner can leave it
    blank to let the squad be creative, and the feel sentence then carries the brief.
@@ -81,3 +81,11 @@ Phone push for "needs you" notifications was the eleventh point; the owner has t
 - Routine actions no longer stall overnight runs; destructive ones still always ask.
 - Revisit after the next Founder product's retro: did the pick-3 moment and the scorecard lift
   the final design score, and did any slice still need a late rebuild?
+
+## Amended 25 Oct: the final pick is the owner's too
+
+On merging 09 Wont, this decision met Wont's rule (decision 0026, changed 24 Oct) that the owner
+makes both design picks. The owner chose: keep 0028 otherwise, but the final pick of the 3 is
+theirs. On Wont every design call that mattered was a taste call the pack couldn't carry (two
+contact sheets rejected, wontons over jars, the mark, the harsh header the critic and PM let
+through). The PM still gives a recommendation with the critic's scorecard.

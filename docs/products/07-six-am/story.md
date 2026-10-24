@@ -74,3 +74,62 @@ experience, here sound, as early as possible; that's where the riskiest assumpti
 - **Speed:** *How did I ship fast without lowering the bar?* Synthesised sound, copied save pattern from earlier products; the checks were skipped to ship, and logged.
 
 **Evidence:** journal, feedback 1–9, decisions 0019–0020, design contact sheets in `design/`.
+
+---
+
+# Interview story: Six AM Ears and Mentor (Founder mode)
+
+**Headline:** I let an AI squad build my music analyser and mentor overnight from a written brief;
+the code and the evals held up, and the one thing they got wrong was design, which taught me where
+a human still has to look early.
+
+**Themes:** Working with AI, Evals, Failure, Prioritisation
+
+## In 30 seconds
+
+I wanted Six AM to tell me what a SoundCloud track is and help me learn the genres. I wrote the
+brief and the success checks, and ran an AI "squad" (a PM plus specialist agents that build,
+test and critique) mostly unattended. In two days it shipped track analysis from streamed audio,
+my own genre tags with filters, and a mentor chat with memory, all graded by agents that never
+graded their own work. The code passed; my first look at the mentor didn't: "too much going on".
+One review rebuilt it into a single chat, and I changed the process so I see pictures first next
+time.
+
+## The story
+
+**Situation.** Day 7's product, a loop studio, worked, but I couldn't name the genres of the tracks
+I loved, and SoundCloud tags are unreliable. Analysis tools need downloadable files; my music is
+streamed edits.
+
+**Task.** Analyse streamed tracks without storing audio, get genre and BPM right on 10 reference
+tracks, and add a mentor that explains, suggests and learns my taste, while trying the new Founder
+mode: I write the kickoff and evals, the squad builds and reports.
+
+**Action.** Spikes first: tab capture of the SoundCloud player (passed), then the genre model in a
+browser worker. My own test runs showed the first 60 s is the DJ intro, so the squad switched to
+four snippets across the track and added a queue. For the mentor I banned built-in taste data so it
+would work for anyone, required sources on every answer and no claims of having heard the music,
+and graded it on honesty, links, cost and memory. When the genre eval stalled at 7/10, I stopped
+the prompt loop rather than fit the test.
+
+**Result.** Three PRs live. BPM matched every public reference; genre 7/10; the mentor's every job
+scored ≥ 4/5 for a simulated user, answers in ~5 s for about a cent. Design never passed its bar
+(6/10), and my late review rejected the first mentor, which cost a rebuild.
+
+**Learned.** AI squads are strong on correctness and honesty checks and weak on taste and scope;
+the fix is an early two-minute look at screenshots, a remove-first rule, and visual references.
+
+## Assumptions: right and wrong
+
+| Assumption | Turned out |
+| --- | --- |
+| Tab capture can hear a cross-origin player | Right, first try |
+| A genre model can name my sub-genres | Partly: BPM and the hard styles yes, house sub-genres mostly "House" |
+| A written feel sentence is enough for design | Wrong: the squad built every requirement as a button |
+| One final review is enough in Founder mode | Wrong for design; fine for logic |
+
+## Likely follow-ups
+
+- *How did you stop the agents gaming their own evals?* Builders never grade; graders get the artefact and the checks; rubrics fixed before runs; I stopped iterating on E1 when changes started fitting the test.
+- *What would you do differently?* Look at three screenshots after the first prototype round, and cut slices smaller.
+- *What did it cost?* About $6–7 of Claude usage, mostly testing the mentor.

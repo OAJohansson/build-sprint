@@ -596,6 +596,17 @@ the quick model (44 MB, 8 s) is the default, and "Cut out more carefully" (219 M
 appears only after a quick cut-out, for the photos it missed. From: Jakob Nielsen (2006), going
 back to Xerox Star's design in the early 1980s.
 
+#### Remove before adding
+When a design review finds a gap, first ask what on screen the user didn't ask for, and take it
+away; only then add. Without that rule every fix adds a control and the screen fills up. *Where:*
+Six AM Mentor: the owner's "too much going on" after rounds of additive fixes. *(Clean and
+minimal, decision 0007; Dieter Rams, "less but better")*
+
+#### One critic, one rubric
+A fresh critic each round gives fresh opinions, so scores bounce (7.5, 7, 8, 8, 7) instead of
+converging. Keep one reviewer and a fixed rubric for a slice, anchored to visual references.
+*Where:* Six AM Ears and Mentor design rounds.
+
 ### Accessibility
 
 #### Contrast ratio
@@ -662,6 +673,12 @@ the graph and named medicines instead of colouring them. *(Edward Tufte's data-i
 Visual Display of Quantitative Information; Stephen Few on dashboards)*
 
 ### Quiz
+
+**Q:** A critic says a panel is cluttered. What do you do before adding anything?
+**A:** List everything on screen the user didn't ask for and remove it; add only what's still missing after that.
+
+**Q:** Why can a fresh critic each round stop design scores from improving?
+**A:** Each critic brings new taste and new gaps, so scores measure the reviewer, not progress; one critic with a fixed rubric makes rounds comparable.
 
 **Q:** Why did Selvedge rename "Days" and "Today", and to what?
 **A:** They named a sort order, not the thing; now "Inspo" is the whole collection, "Inbox" the unsorted pile and "Folders" the sorted ones, the same words on every screen.
@@ -961,6 +978,15 @@ the raw files inside another app. CC0 sounds can be shipped. *Where:* Six AM's c
 Dance tracks change every 8 bars (and 16, 32): that's where sounds come in and drop out and how
 DJs count. *Where:* Six AM's ruler labels every 8 bars, with grid lines every 4.
 
+#### Tab capture hears what Web Audio can't
+A cross-origin iframe (like SoundCloud's player) hides its audio from your page's Web Audio
+graph, but `getDisplayMedia` with `preferCurrentTab` and "share tab audio" captures everything the
+tab plays. Keep the PCM in memory, measure, discard. *Where:* Six AM Ears. *(Chrome's Screen
+Capture API docs)*
+
+**Q:** Why can't Web Audio analyse an embedded SoundCloud player directly, and what can?
+**A:** The iframe is cross-origin, so its media elements aren't reachable; tab capture (`getDisplayMedia` with tab audio) captures the tab's mixed output instead.
+
 ### Quiz
 
 **Q:** What does a website need before "Add to Dock" or "Add to Home Screen" makes it feel like an app?
@@ -1069,6 +1095,15 @@ realistic people. Why it matters: pick by what the drawing must be, and combine 
 with one, animate with the other). Where we met it: Selvedge (08): the image model's
 character was "my style, full stop"; Claude's one-pass SVG of the same outfit was "really
 bad". From: practice; the doodle-chess projects made with Claude use rough.js plus GSAP.
+
+#### Prompt caching and a running memory
+Put the stable parts of a request (rules, the user's library, a memory summary) first and cache
+them; later calls read them for a tenth of the price. Keep a running summary refreshed every N
+turns plus the last few turns verbatim, so the model remembers without resending everything.
+*Where:* Six AM Mentor: ~$0.007 a cached answer, ~$0.03 after a pause. *(Anthropic prompt caching docs)*
+
+**Q:** How does a chat remember weeks of conversation without resending all of it?
+**A:** A running summary rewritten every N turns plus the last few turns verbatim, with the stable parts cached.
 
 ### Judgment
 
@@ -1238,6 +1273,22 @@ cost about $1.20, where Opus on everything would have been about $13.
 Surprise → theory → check with data → lesson, and ask whether the first cause explains *all* of
 it. Where we met it: Folio (06): bestsellers finds the next liked book only 2% of the time because
 these readers have already read 3.3 of the top 10, and only 9% of hidden books are in the top 100.
+
+#### Multi-label scores aren't shares
+A multi-label model (sigmoid outputs, like Discogs-EffNet's 400 styles) scores each label on its
+own: "House 39%, Tech House 29%" can sum past 100. Show them as each label's own likelihood, never
+as a pie. *Where:* Six AM Ears (L36).
+
+#### Don't iterate prompts against a small eval
+With 10 cases, each prompt change moves the score by 10 points; four runs went 3 → 7 → 5.5 → 5.
+Stop when changes start fitting the cases rather than the method, and report the score as it
+stands. *Where:* Six AM Mentor E1 (L81–L82). *(Goodhart's law)*
+
+**Q:** "House 39%, Tech House 29%, Deep House 30%" sums to 98%. Is that a distribution?
+**A:** No: in a multi-label model each score is that label's own likelihood; they're independent and can sum to anything.
+
+**Q:** When should you stop changing a prompt to pass an eval?
+**A:** When changes stop improving the method and start fitting the test cases, or scores bounce run to run; then report the result as it stands.
 
 ### Quiz
 

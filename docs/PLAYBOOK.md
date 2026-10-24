@@ -27,7 +27,7 @@ mode; the mode decides **who makes which decision, and when I'm asked**. It goes
 | --- | --- | --- | --- |
 | **Learning** | I want the reps | Almost everything, coached | As things come up |
 | **Streamlined** | Most days | The learning decisions | At four gates, one decision sheet each |
-| **Founder** | A good idea I want live and tested | The kickoff pack, evals and the design | Kickoff, the two design checkpoints and the final review |
+| **Founder** | A good idea I want live and tested | The kickoff pack and evals, 3 of ~10 designs and the final design | Kickoff, the two design picks and the final review |
 
 Three kinds of decision:
 
@@ -45,7 +45,8 @@ The gates (Streamlined): **kickoff**, **design pick**, **first working version**
 review**. Between gates Claude doesn't stop: it queues learning questions for the next gate and
 builds on the most reversible option, marked provisional in the journal. Founder mode: I write
 `kickoff.md` and `evals.md` (owner-only checks kept outside the repo), the PM session runs the
-squad in `.claude/agents/`, and I get a PR, a preview link and an eval report. Formats for the
+squad in `.claude/agents/` in slices, one session per phase (decision 0028), and I get a PR, a
+preview link and an eval report. Formats for the
 decision sheet, toil entries and the PM's steps are in decision 0026.
 
 ## 1. Discover and frame (≈60 min, before any code)
@@ -141,13 +142,12 @@ hour, not a day. Names in brackets are where each practice comes from; see
   for AI tells and rewrite the copy by hand. Judge them against the success signals, not just looks. Pick
   one or a mix, and note why in `journal.md`. When the chosen variant becomes the real app, list
   the behaviours it brings along (e.g. "you can only edit at the end") as decisions for the owner.
-  *(Cagan: prototypes over documents.)* **I make the design calls in every mode, at two checkpoints**
-  (09 Wont): (1) **shortlist:** a contact sheet of 8–10 quick sketches (one HTML page, one sketch
-  per direction, real data), and I choose the three to build; (2) **pick:** the three working
-  prototypes (with the critic's first scores, and a preview link if they need a phone to judge),
-  and I choose one or a mix and say in one sentence how it should feel. In Streamlined these two
-  checkpoints are the **design-pick gate**; in Founder they are the only stops between kickoff
-  and the final review. The critic loop, subtracting and the tells check then run without me.
+  *(Cagan: prototypes over documents.)* **The design calls are mine in every mode, at two picks**
+  (09 Wont, decision 0028 as amended 25 Oct): (1) the designer builds about 10 directions and I
+  pick 3; (2) the squad develops those 3 and the critic scores them, then I pick the final one (or
+  a mix) and say in one sentence how it should feel. In Streamlined these two picks are the
+  **design-pick gate** (with one preview link if the directions need a phone to judge); in
+  Founder they are the only stops between kickoff and the final review.
 - Fill in **user**, **problem** and **bet** (one line each) on the card `docs/products/NN-slug.md`.
   The bet is the smallest thing that could solve the problem by tonight. Cut everything else.
 
@@ -243,7 +243,8 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
   quick; park the rest in `backlog.md` with a "start here" note.
 - **Final review** (every mode): in Streamlined a decision sheet plus the full decision log; in
   Founder the PR, a preview link and the eval report (every agent-checkable check with pass/fail
-  and evidence, run by graders, never by the builder), then I run my owner-only checks.
+  and evidence, run by graders, never by the builder), then I run my owner-only checks and any
+  check that needs my taste data (decision 0028).
 - Full method: [`user-testing/README.md`](user-testing/README.md).
 
 ## 4. Wrap up (≈30 min)

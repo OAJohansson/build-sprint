@@ -138,3 +138,6 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Targeted re-check** (user-tester): N1 and rows 37–40 pass; new N8 double tap made duplicate
   habits, fixed with a ref guard in the shared submit hook. Preview redeployed; eval report
   written. Waiting for the owner's final review.
+- **Merged main** (Six AM's wrap-up and decision 0028, Founder v2). Conflict on who picks the
+  final design: the owner chose 0028 otherwise, but the final pick of the 3 is theirs (0028
+  amended, playbook, AGENTS.md, designer agent).

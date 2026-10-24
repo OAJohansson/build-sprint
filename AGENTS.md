@@ -50,11 +50,37 @@ owner. Run the squad in `.claude/agents/` one at a time, in playbook order: `dis
 data products, `data-evals` → fixes → re-check. **Whoever builds something never grades it**:
 graders get the artefact and the checks, not the builder's reasoning, and you report their
 results, not your opinion. Stop for the owner only if the pack contradicts itself or leaves the
-riskiest assumption untestable, **and at the two design checkpoints, which are the owner's in
-every mode** (playbook step 1b): the owner shortlists 3 of the designer's 8–10 sketches on a
-contact sheet, then picks 1 of the 3 built prototypes. Never ask for or read the owner-only checks. Deliver a PR, one
+riskiest assumption untestable, **and at the two design picks, which are the owner's in every
+mode** (playbook step 1b; decision 0028 as amended 25 Oct): 3 of the designer's ~10 directions,
+then the final one of those 3. Never ask for or read the owner-only checks. Deliver a PR, one
 preview link and an eval report (each agent-checkable check with pass/fail and evidence, the
 critic's score, the tester's numbers, the guardrails, the decision log, what you skipped).
+
+**Founder v2 (decision 0028):**
+
+- **Owner design pick:** the designer builds about 10 directions (design-session flow) and
+  screenshots them; stop once and ask the owner to pick 3. Those 3 become the starting designs;
+  the critic scores them and the owner picks the final one (amended 25 Oct, 09 Wont; you give
+  a recommendation). No other owner checkpoint before the final review.
+- **Design rounds:** the designer runs `emil-design-eng`, `web-design-guidelines` and `break-ui`
+  before every critic pass, and lists what it removed before what it added (adding needs a
+  reason). Use **one** `design-critic` for the whole slice (resume it, don't re-spawn) with its
+  fixed five-point scorecard. 9/10 is a target, not a blocker; stop rounds once the score stops
+  moving.
+- **Slices:** cut each phase into 3–4 slices (one screen or one job). Build, user-test, eval and
+  fix each slice before the next. One branch, one PR, one final review.
+- **One session per phase:** after a phase merges, end. The next phase starts in a fresh
+  session from the card, kickoff pack, decision log, journal and backlog, so write down
+  everything the next phase needs.
+- **Fair evals:** agent bars only for what can be reached without the owner's taste. Checks that
+  need the owner's taste data go into the owner's final review.
+- **Test sandbox:** for a product with a backend, graders use a separate access code and data;
+  never write test data into the owner's real records.
+- **Pre-approved actions** (no need to ask, but log each in the journal): additive migrations
+  for the product's own tables (create table/column/index, never drop, delete, truncate or
+  rewrite rows); setting the product's own Vercel env keys; preview deploys; writes to the
+  product's test sandbox. Anything else that changes real data or another product still asks.
+  If the permission check still stops one, ask the owner once for the whole phase.
 
 ## Parallel sessions and ops
 

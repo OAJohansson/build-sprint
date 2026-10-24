@@ -160,3 +160,115 @@ round).
 Decisions: L41–L44, T20–T25. L44 (a typed genre takes an existing spelling) is provisional.
 Not done: per-genre counts and a tagged share, separate count of unavailable tracks in the empty
 message, the critic's toolbar consolidation (all in the backlog); playing a filtered list (next).
+
+---
+
+# Six AM Mentor (Phase 2), 24 Oct
+
+Graders: `user-tester` (3 runs), `design-critic` (fresh each round), `data-evals` (4 runs on the
+live model). Builders never graded. Owner-only checks are the owner's.
+
+**Preview:** https://six-5mbqkd560-mimirswell.vercel.app/analyse (behind Vercel login) · real
+Supabase · `ANTHROPIC_API_KEY` in Vercel env (production + preview)
+
+## Evals E1–E10
+
+| # | Eval | Bar | Result | Pass/fail |
+| --- | --- | --- | --- | --- |
+| E1 | Genre suggestion vs reference calls (empty profile, rubric fixed before any run) | ≥ 8/10 | 3/10 → **7/10** with the shipped method (L75, graded once); L80 and L81 variants 6, 5, 5, 5 | **fail** |
+| E2 | Every answer sourced, none claims to have heard | 100% of ≥ 20 | 30/30 + 10 spot checks: all sourced, 0 hearing claims; label nits fixed | pass |
+| E3 | Listen next: no invented artists/tracks, links resolve | 0 invented, ≥ 90% | 0 invented of 50 picks across runs; all links resolve; no download sites; only ~1 in 3 links is the track's own page (honestly labelled) | pass |
+| E4 | Setup profile describes the playlist | ≥ 2 playlists | 3/3 | pass |
+| E5 | Profile reflects tagging and corrections | 3 scripted actions | 3/3, hedged, owner's words kept | pass |
+| E6 | Genre groups grounded; accept, rename, split work | all | reasons check out (now derived live); all actions work | pass |
+| E7 | Answer within 15 s | p90 ≤ 15 s | p90 9.8–11 s; teach ~15–17 s at the slow end | pass |
+| E8 | Shown cost within a few cents; 50/day warning overrulable | ≤ $0.03/day | matches recomputation to the cent; warning + Continue anyway work (not checked against the Anthropic invoice) | pass |
+| E9 | Nothing lost on reload or another browser; no audio to Claude | yes; 0 | real Supabase: analyses, My genres, threads, groups, cost all survive a fresh browser profile; 0 audio in 160+ request bodies; 0 key exposure | pass |
+| E10 | User test every job ≥ 4/5; design critic | ≥ 4; 9/10 target | every job 4/5 after the last fix pass; critic **6/10** (target, not a blocker) | jobs pass; design target missed |
+
+**User test jobs** (re-test on the real database, before the last fix pass): Explain 4, Suggest
+genre 3, Teach 4, Ear training 4, Studio start 3, Listen next 4. The last fix pass targeted the two
+3s (Studio start now opens a new unsaved track with the loops placed; Suggest names conflicts);
+their re-check (build 25f73d7): **Studio start 4, Suggest genre 4** ("Earlier I said Deep House; on balance House…"), so every job is now ≥ 4. New minor findings from that check (Studio header overflows with a draft open, leaving a draft has no warning, older suggest turns keep their accept buttons, the pick sits mid-paragraph, the draft's playhead starts after the loops, `/` fires one request before the code) are in the backlog.
+
+**Design:** prototype round A 5 / B 7 / C 6 (picked B, L66); built panel 6, then 6 (final);
+Settings 6–7; setup 5. Kept by every critic: the visual language and the honest voice.
+
+## Requirements M1–M16
+
+All pass in the user tests except: M3 genre quality (E1); M9 learning from a hand edit (F6) not
+re-checked; M13 taste session flow passes, the listening judgement needs the owner's ears.
+
+## Guardrails
+
+0 audio stored, uploaded or sent to Claude · API key never in the browser or responses · Ears and
+Studio unbroken (filters, My genre, Copy for Claude, Studio plays; owner's saved tracks unchanged)
+· contrast worst 4.59:1 · hit areas ≥ 28 px · lint, 137 tests, build pass.
+
+## What it means
+
+The Mentor is honest and useful for Explain, Listen next (real music, never invented, says why),
+teaching, ear training and genre groups, and it keeps everything in Supabase. Its weak spot is
+naming the owner's sub-genres from an empty profile: it uses the web's and the artists' scene words
+(Afro, soulful, tech house), not the owner's. That is what the taste profile is for; the real test
+is Suggest genre after the owner runs setup on their own playlists (an owner-only check).
+
+## Decision log
+
+L45–L84, T26–T31 in `decisions.md`. Owner's calls: L45–L54 and the migration. The ones that
+mattered most: L55 (no built-in taste data), L66 (design B), L71 (basic web search), L75/L82 (the
+genre method kept), L76/L81 (setup never drops lines), L83 (Studio start opens a new draft).
+
+## Cost of testing
+
+About $6 of Claude usage across ~180 real calls by builders and graders (most of it E1 reruns and
+web-search answers). Typical answer: $0.006–0.02; listen next and teach $0.05–0.11.
+
+## Skipped or not verified
+
+- E1 under the owner's real profile (owner-only).
+- Taste-session and setup-preview listening (owner's ears).
+- Midnight/month rollover end to end (unit-tested only).
+- The Anthropic invoice vs the estimate.
+- A live re-check of F6 (hand-edited taste line used in the next answer).
+- The preview itself (behind Vercel login), including the model download through Vercel and the Mentor against production Supabase.
+
+## Test data in the real database
+
+The owner's 10 validation results (5 with a My genre), ~22 Mentor messages (~$0.20), 3 genre
+groups. Taste profile empty; the owner's Studio tracks untouched.
+
+## After the owner's review (simplified Mentor, 24 Oct)
+
+The owner rejected the first Mentor as "too much going on" (L85). Owner's calls L86–L94: one chat,
+only "What can you help me with?" under a growing input, readable answers with one quiet source
+line, Settings behind a corner icon, a locked "Music taste profile" (20 tracks, 5 with your genre,
+3 chats), full context and a persistent memory. Then an Emil pass, a Web Interface Guidelines review
+(focus, labels, live region, dark color-scheme: fixed), a critic clutter check and three fix passes.
+
+**Preview:** https://six-hsztcm21j-mimirswell.vercel.app/analyse (Vercel login)
+
+| Check | Result |
+| --- | --- |
+| User test, every job ≥ 4 (E10) | **pass**: Explain 5, Suggest genre 4, Teach 4, Ear training 4, Studio start 5, Listen next 4 ("Finally it feels calm") |
+| E9 nothing lost (real Supabase) | **pass**: every turn back after reload and in a fresh browser |
+| E2 honesty, ear training | **pass 5/5**: every time is one of Ears' snippet positions, every number Ears' own; 0 "I heard" |
+| E2 source labels | **partial**: listen-next sometimes labels a web-derived description "general" (validator catches research sentences, not every description) |
+| E3 listen next | picks 8/8 real and named; links now kept only when the page names the pick, else a SoundCloud search |
+| Track found from the question | 8/8 |
+| Follow-ups ("compare with the first track") | right pair |
+| Guardrails | 0 audio, 0 key, contrast ≥ 5.56:1, hit areas ≥ 28 px, focus kept after actions |
+| Design critic | see below |
+
+**Memory and cost:** a running summary in a reserved `memory` thread in Supabase, rewritten every
+10 exchanges (5 kept word for word), plus the library, Studio tracks and (once unlocked) the taste
+profile, all in cached system blocks. A cached answer costs about $0.007–0.008; the first after a
+5-minute pause about $0.03–0.05; listen next and teach $0.04–0.05; a memory rewrite about $0.01
+every 10 exchanges; learning events cost nothing.
+
+**Real database after testing:** the shared `main` chat holds ~60 test turns from graders, the
+memory summary is built from them, today's question count passed 50 (the check-in shows), and ~$1.2
+of today's cost is testing. The owner's 15 analyses (5 My genres, all restored), taste profile and
+Studio tracks are unchanged. A clean start (deleting the test turns and memory) is the owner's call.
+
+**After the final critic (6/10 on the pre-subtraction screens; Settings 4/10):** a last subtraction pass (no genre toast, two-line help, 2-sentence answers, quieter source line, 1px focus, Settings re-laid out) and an honesty fix found in the PM's own check (Studio start had said an A# minor track fits the A minor crate; the key fit is now computed in code and enforced). Not re-scored by a critic after these.

@@ -15,6 +15,8 @@ designer reviewing a mockup: you are that person, in their moment, with their pa
 - `docs/products/<product>/feedback.md` (if present): issues already known. Don't re-report them; reference
   them by number if you hit them.
 - A scratch folder for scripts and screenshots, and where to copy key screenshots, given in your task.
+- **Test sandbox (decision 0028):** if the app has a backend, sign in with the test access code
+  from your task, never the owner's. If none is given, test read-only and say so in Method notes.
 
 Don't write the report to a file: return it as your final message, in the format below. The
 calling session saves it as `docs/products/<product>/user-testing/report-YYYY-MM-DD.md`.

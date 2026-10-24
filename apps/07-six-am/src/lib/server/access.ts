@@ -1,5 +1,6 @@
 import "server-only";
 import { failure } from "@/lib/server/failure";
+import { getMentorStore, type MentorStore } from "@/lib/server/mentor-store";
 import { getStore, type Store } from "@/lib/server/store";
 
 // Six AM is on a public URL, but its routes read and write my tracks with a secret key, so every
@@ -20,6 +21,15 @@ export function guard(request: Request): { store: Store } | { error: Response } 
   const denied = checkAccess(request);
   if (denied) return { error: denied };
   const result = getStore();
+  if ("problem" in result) return { error: failure(result.problem, 503) };
+  return result;
+}
+
+/** Access check plus the Mentor's data store (decision 0027), or the error response to return. */
+export function mentorGuard(request: Request): { store: MentorStore } | { error: Response } {
+  const denied = checkAccess(request);
+  if (denied) return { error: denied };
+  const result = getMentorStore();
   if ("problem" in result) return { error: failure(result.problem, 503) };
   return result;
 }

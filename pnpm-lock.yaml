@@ -312,6 +312,9 @@ importers:
 
   apps/07-six-am:
     dependencies:
+      '@anthropic-ai/sdk':
+        specifier: ^0.131.0
+        version: 0.131.0(zod@4.6.5)
       '@supabase/supabase-js':
         specifier: ^2.117.2
         version: 2.117.2

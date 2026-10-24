@@ -52,7 +52,7 @@ the PM's call (logged) in Founder.
 | Gate | Learning | Streamlined | Founder |
 | --- | --- | --- | --- |
 | **Kickoff** (problem, user, jobs, riskiest assumption, success, MVP and stop line, mode) | Worked through together | One decision sheet; Claude drafts, owner decides | Owner writes the kickoff pack and evals alone |
-| **Design pick** (shortlist 3 of 8–10, then pick 1 of 3) | Together, through `/design-session` | Decision sheet: the contact sheet, then the three prototypes and the critic's scores | Owner, at the same two checkpoints (changed 24 Oct, see below) |
+| **Design pick** (shortlist 3 of 8–10, then pick 1 of 3) | Together, through `/design-session` | Decision sheet: the contact sheet, then the three prototypes and the critic's scores | Owner: 3 of ~10, then the final one (changed 24 Oct; decision 0028 as amended 25 Oct) |
 | **First working version** (core job works end to end) | Continuous | Decision sheet: anything that changes the cut, plus the toil log so far | None |
 | **Final review** (PR, user test, success check) | Together | Decision sheet plus the full decision log | PR, eval report and the owner-only checks |
 

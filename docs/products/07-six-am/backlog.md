@@ -51,3 +51,7 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Play a filtered list one track after another ("hear all my deep house in a row") | Owner wants it (24 Oct), after v1.1 | next |
 | Genre counts and tagged share in the filter bar ("31 of 56 tagged · deep house 9 …"), each count a filter | User test v1.1 (24 Oct) | later |
 | Empty-filter message: count "Not available in your region" tracks apart from "not analysed yet" | User re-check v1.1 (N2) | later |
+| ME-7 remake coaching | Owner, 24 Oct: consider when building the Studio Lab and Remake mode | later |
+| "Your styles" strip: accepted groups and My genres with track counts and BPM ranges, suggestions taken | Mentor user test (24 Oct) | later |
+| Dev-only reset of the Mentor store for clean-start tests | Mentor user test (24 Oct) | later |
+| Mentor polish from the last re-check: Studio header overflows with a draft open (Save 14 px tall); warn before leaving an unsaved draft; hide accept buttons on superseded suggest turns; lead suggestions with the pick; draft playhead at bar 1; no request on / before the code | Mentor re-check 24 Oct (N9–N14) | next |

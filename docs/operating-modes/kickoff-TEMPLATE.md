@@ -61,6 +61,9 @@ one quality to take from it. A feel is evoked, not drawn.
 
 - [reference] — [what to take from it]
 
+**Visual references (optional, decision 0028):** 2–3 screenshots to design toward ("like Claude's
+chat panel"), as image paths. Leave empty to let the squad be creative.
+
 **The feel in one sentence:** (this is what the design critic judges against)
 
 ## Things to avoid

@@ -163,3 +163,37 @@ One pass/fail per requirement in the Mentor kickoff (`kickoff.md`), run by the g
 
 `pnpm -F 07-six-am lint`, `test` (incl. the Mentor unit tests), `build` pass; every new key in
 `.env.example`; `checks` green on the PR.
+
+# Evals: Six AM Arrangement map, template and sounds (Phase 3)
+
+Owner's evals from the 25 Oct kickoff (L104), part 1 (agent-checkable). Graders: `user-tester`,
+`design-critic`, `data-evals`; never the builder. Test sandbox only. Owner-only checks live
+outside the repo.
+
+| # | Eval | Bar | Run by | Result |
+| --- | --- | --- | --- | --- |
+| X1 | Map sections within 4 bars of the reference sections; reference times sourced and committed before any result is seen | on most validation tracks (≥ 7 of 10 boundaries-sets, the roadmap's Phase 2 metric) | data-evals | |
+| X2 | Template matches the map's tempo, key and length; markers on the map's bars | exact (tempo ±0.1, key equal, length equal) | data-evals | |
+| X3 | Synths in key and on tempo: every note in the track's scale; note onsets on the grid at the track's tempo | 100% of notes; onsets within 5 ms | data-evals (offline render) | |
+| X4 | AI loops in key and on tempo | key matches (or relative) and tempo within ±1 BPM on ≥ 4 of 5 generated loops; reported per service | data-evals | |
+| X5 | AI cost shown matches the real usage | within a cent per loop, from the provider's published prices / usage | data-evals | |
+| X6 | User test: every job ≥ 4/5 (test sandbox only) | jobs ≥ 4/5 | user-tester | |
+| X7 | Design scorecard (one critic, five points) | **9/10 is a target, not a blocker**, reported as is | design-critic | |
+| X8 | No audio stored or uploaded from streamed tracks (AI-generated loops are the owner's own files and may be stored) | 0 | data-evals (code + network) | |
+
+### Requirements A1–A11
+
+One pass/fail per requirement in the Phase 3 kickoff (`kickoff.md`), run by the grader named there.
+
+### Guardrails
+
+| Guardrail | Bar |
+| --- | --- |
+| No streamed audio stored, uploaded or sent anywhere | 0 |
+| AI keys never in the browser bundle or responses | 0 occurrences |
+| Ears, the Mentor and the Studio unbroken (Analyse, queue, My genre, Mentor chat, Studio play/save of existing tracks) | yes |
+| Readable text, hit areas | ≥ 4.5:1, ≥ 28 px |
+
+### Build hygiene
+
+`pnpm -F 07-six-am lint`, `test`, `build` pass; every new key in `.env.example`; `checks` green on the PR.

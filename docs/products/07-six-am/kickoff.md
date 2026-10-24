@@ -391,3 +391,145 @@ All of Ears' list, plus:
    price table, incl. edge cases (no searches, all cached).
 2. Daily question count and the 50/day warning across midnight and month change.
 3. Studio starting point: suggested loops exist in the crate; tempo/key from the analysis.
+
+# Kickoff pack: Six AM Arrangement map, template and sounds (Phase 3, Founder v2)
+
+The owner's kickoff calls of 25 Oct, made in the parent session and transcribed here by the PM
+(L100–L106 in `decisions.md`). Sources in `kickoff-source.md`: EA-6 (arrangement map), the
+track-layers table and ST-9, LA-1/LA-2 (Synth Lab), LA-3 (AI sounds), GR (recipes), DR-4 (Remake,
+past the line). Runs under Founder v2 (decision 0028): an early owner pick of 3 of ~10 designs,
+one critic with the fixed scorecard, slices, the test sandbox, pre-approved routine actions.
+
+**Mode:** founder (v2)
+**Appetite:** one night: handed off on 25 Oct evening, done by the morning of 26 Oct. One owner
+moment (the design pick); if it hasn't come by the time the non-visual work is done, the squad
+continues on the critic's top 3.
+**Evals:** the "Arrangement and sounds" part of `evals.md` · owner-only checks kept outside the repo
+
+## Problem
+
+The owner learns by copying tracks they love, but Six AM stops at "this is 124 BPM, A minor,
+deep house". Nothing shows how a loved track is *built* (when the bass comes in, how long the
+build is), nothing turns that into a starting point in the Studio, and the Studio's 48 fixed
+loops can't be shaped, so a remake never gets the same DNA.
+
+## Who
+
+The owner: a beginner producer, house and techno lover, on a laptop in Chrome. Learns by
+mimicking: "recreate something similar to the songs I like in the studio. Not completely a copy
+but same DNA."
+
+## Moment of use and jobs to be done
+
+At the laptop with a track they love open in Analyse, then in the Studio.
+
+1. When I love a track, I want to **see how it's built** (its sections on the bar grid and which
+   layers play when), so I understand its structure.
+2. When I don't get the structure, I want the **Mentor to explain it**, so I learn what a build or
+   a breakdown does.
+3. When I want to make something like it, I want **one click to a Studio track with the same
+   bones** (tempo, key, length, section markers, empty lanes), so I start from its DNA.
+4. When I fill the lanes, I want **sounds I can shape**: playable bass and chord synths with a few
+   knobs, classic drum kits, so my version sounds like that kind of track.
+5. When the crate has nothing close, I want to **generate a loop like this track** with AI and see
+   what it cost, so I get closer without hunting for samples.
+
+## Today's alternatives
+
+Listening with a notebook and counting bars; YouTube "how X was made" videos; a real DAW with
+sample packs (the cockpit the owner bounced off); Splice for samples.
+
+## Riskiest assumptions
+
+- **Feasibility (riskiest):** sections can be found from a full-track capture in the browser
+  (measurements only) within 4 bars of where they really are, on most tracks.
+- **Value:** a template with the reference's bones plus shapeable sounds gets the owner to "same
+  DNA" in one sitting.
+- **Feasibility:** an AI service makes a loop that's in key, on tempo and loops cleanly, cheaply
+  and fast enough to use.
+- **Viability:** AI cost per loop is small and visible.
+
+## Success: what good looks like
+
+The owner maps a loved track, opens it as a template and starts their own version with synths,
+kits and maybe a generated loop, in one sitting. Checkable versions in `evals.md` (Arrangement
+and sounds part).
+
+## MVP and stop line
+
+1. **Map:** analyse a whole track (full playback via the existing Ears tab capture, measurements
+   only, audio never stored) and show its sections (intro, build, drop, breakdown, outro) on the
+   bar grid, plus estimated per-layer activity (kick, bass, chords, hats, vocals) labelled as
+   estimates. The Mentor can explain the structure.
+2. **Template:** one click turns a map into a new Studio track with the same tempo, key, length
+   and section markers, lanes ready and empty.
+3. **Synths:** a playable bass (sub, 303 acid, reese) and chords (organ, Rhodes, pad), with a few
+   knobs each (cutoff, resonance, envelope), always in key and on tempo; the Mentor explains the
+   knobs.
+4. **Drums:** classic free 909/808-style kits (kick, clap, hats). Licences checked (CC0 or
+   similar) and recorded.
+5. **AI loops:** "generate a bass loop like this track" via the winning service, cost shown in
+   Six AM like the Mentor's. Stable Audio (Stability AI) and Google Lyria (Gemini API) tested on
+   the same prompts (in key, on tempo, quality, cost per loop, speed); winner on evidence, the
+   loser kept as a switchable fallback if cheap.
+
+**Stop line:** the full layer model with automation and mixer (ST-5–ST-8), Remake mode and ME-7
+coaching (DR-4), vocals, stems (DR-2, DR-3) → `backlog.md`.
+
+## Slices (decision 0028: built, tested and fixed one at a time; one branch, one PR)
+
+| Slice | Job | Contents |
+| --- | --- | --- |
+| S1 Map | 1, 2 | Full-track listen, section detection, layer activity, the map view, Mentor explains structure |
+| S2 Template | 3 | Map → new Studio draft: tempo, key, length, section markers, empty lanes |
+| S3 Sounds | 4 | Bass and chord synths with knobs, in key and on tempo; 909/808 kits; Mentor explains knobs |
+| S4 AI loops | 5 | Service bake-off, "generate a bass loop like this track", cost shown, loops stored as the owner's files |
+
+## Requirements
+
+| # | Must | Check |
+| --- | --- | --- |
+| A1 | Full-track analysis through the existing tab capture; measurements only; no audio stored or uploaded | code read + network check |
+| A2 | Sections (intro, build, drop, breakdown, outro) on the bar grid | data-evals vs reference times |
+| A3 | Per-layer activity (kick, bass, chords, hats, vocals), every one labelled an estimate | user-tester + code read |
+| A4 | The Mentor explains a track's structure from the map's numbers | data-evals rubric |
+| A5 | One click: map → new Studio track with the same tempo, key, length, section markers, empty lanes | data-evals + user-tester |
+| A6 | Bass synth (sub, 303 acid, reese) and chord synth (organ, Rhodes, pad), knobs: cutoff, resonance, envelope; in key and on tempo | data-evals (offline render) + user-tester |
+| A7 | The Mentor explains each knob | data-evals rubric |
+| A8 | 909/808-style kits (kick, clap, hats) from free samples, licences recorded | code read of the licence file |
+| A9 | AI bass loop "like this track", in key and on tempo, via the winning service; cost per loop shown like the Mentor's | data-evals |
+| A10 | Bake-off of Stable Audio vs Lyria recorded with numbers; winner logged with the reason | file in `evals-runs/` |
+| A11 | AI keys server-side only, route behind the access code | code read + bundle grep |
+
+**No-gos:** storing or uploading streamed audio; the AI keys in the browser; test data in the
+owner's real records; anything past the stop line.
+
+## Feel references
+
+No new pictures (owner, 25 Oct): use the existing Six AM look (dark warehouse, mono labels, the
+lane colours, the Studio's timeline) and the tool feel.
+
+**The feel in one sentence:** the Studio's own bar grid, turned into a map of someone else's
+track: quiet, exact, and clearly yours to build on.
+
+## Things to avoid
+
+All of Ears' and the Mentor's lists, plus: a DAW cockpit (rows of knobs, meters everywhere);
+estimates that look like measurements; more than a few knobs per synth.
+
+## Decisions already made
+
+- AI services: both tested; keys `STABILITY_API_KEY` and `GEMINI_API_KEY` in the root
+  `.env.secrets.local`, server-side only, set on Vercel as ops; each API's shape checked from its
+  official docs before coding.
+- Validation: reference section times for the validation tracks written down **before** seeing
+  any result (like L35 for BPM).
+- Graders use the test sandbox (`07-six-am-test`, port 3017, in-memory store); never the owner's
+  real data.
+
+## Unit tests
+
+1. Seconds ↔ bars at a tempo, and snapping a boundary to the nearest 4- or 8-bar phrase (edges:
+   a boundary at 0, past the end, a half-time tempo).
+2. Map → template: length rounded to whole bars, markers on bars, tempo and key copied.
+3. Notes in key: every synth note the patterns play is in the track's scale.

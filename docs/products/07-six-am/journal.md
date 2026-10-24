@@ -510,3 +510,11 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   B1, B2, D2 fixed (T48). Two majors outside the slice to the backlog: saved tracks open at bar 37
   (D1), and "this track" follows the conversation, not a newly selected row (C1, owner's call).
 - Lint, 147 tests and the build pass.
+
+## 25 Oct: Phase 3 kickoff (arrangement map, template, synths, drums, AI loops)
+
+- **Kickoff (L100–L106):** the owner's calls from the parent session, written into a new pack in
+  `kickoff.md` and evals X1–X8 in `evals.md`. Job: learn by copying loved tracks, "same DNA".
+  Founder v2: design first (about 10 directions, owner picks 3 tonight), non-visual slices while
+  waiting. Own branch `claude/07-six-am-arrangement-3746ad` from `main` (PR 83 merged).
+- **Slices:** S1 Map, S2 Template, S3 Sounds, S4 AI loops.

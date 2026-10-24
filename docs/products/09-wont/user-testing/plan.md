@@ -106,3 +106,27 @@ Written as the persona's real moments. Each has a success bar.
 Notifications, reminders, weekly review, automaticity check, accounts and sync (not built). The
 intro animation's craft is judged by the design critic, not here (R1 is checked in `evals.md`).
 Editing days older than yesterday. Desktop layout.
+
+## Seeding
+
+Data lives under the localStorage key `wont:v1` (one JSON object: `version`, `habits`, `logs`
+keyed habit → day `YYYY-MM-DD` → `{ kept | clean | slip {size, at} | urges[] }`, `comebacksSeen`,
+`introSeen`). Code: `apps/09-wont/src/lib/seed.ts` (states), `store.ts` (key, migration).
+Every state is built relative to the current clock, so set the clock first, then seed.
+
+- **From the URL:** open the app with `?seed=<name>`, e.g. `http://localhost:3000/?seed=after-miss`.
+  The state is written once and the parameter is removed from the address bar.
+- **From the console:** `wontSeed("after-miss")` (available once the Today screen has mounted).
+- **Clear everything:** `localStorage.removeItem("wont:v1")` and reload (same as `?seed=fresh`).
+
+| Name | What it is | Use for |
+| --- | --- | --- |
+| `fresh` | Empty, intro not seen | First run, R1 |
+| `returning` | Up by 7:00 + Nicotine pouches, 6 kept / clean days before today, today open | S1, S2 |
+| `owner-today` | The owner's five habits with the prototype history: Up 5 of 7, Write's comeback due (yesterday not logged), Read, In bed, pouches 2 clean days | Main-screen review, design critic |
+| `after-miss` | `returning` plus yesterday: wake-up not logged, a pouch slip of 1; both cards owe a comeback message | S3 second half, R7, R8 |
+| `after-slip` | Yesterday: clean tap then a slip of 2 that evening (slip wins); wake-up kept | S3, slip-after-clean rule |
+| `week-two-misses` | Wake-up missed the last two days (one comeback message, not two), Read with one older miss, pouches clean | S4 step 4, R7 |
+
+Note: the habit's first day is a grace day. If it is left unlogged, it is neither a miss nor
+counted in the rate (so a habit made late in the evening doesn't open with a comeback message).

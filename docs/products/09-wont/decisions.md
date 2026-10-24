@@ -32,3 +32,8 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L18 | 24 Oct | Design pick: Wontons (critic 6/10). Intended aesthetic stays the pack's feel sentence | owner | design | |
 | L19 | 24 Oct | Critic overruled on two points: keep the rolling number (R6, P6) and the week strip (owner's request), both quieter | PM | design | |
 | T9 | 24 Oct | Wontons v2: every card one tap target (nicotine tap = clean so far; slip and urge as quiet text buttons); kept = whole-card honey wash (200 ms fade); number muted under the name; comeback as one plain line | PM (designer) | design | |
+| L20 | 24 Oct | No "missed" event: an unlogged finished day is the miss (L10) | PM (engineer) | build | |
+| L21 | 24 Oct | Grace first day: an unlogged first day is neither a miss nor in the rate | PM (engineer) | build | |
+| L22 | 24 Oct | Rate window ends yesterday until today is logged; "clean so far" counts as kept today; clean-day total counts finished days only | PM (engineer) | build | |
+| L23 | 24 Oct | A slip counts as a miss for the comeback message; undoing a slip restores the earlier clean tap | PM (engineer) | build | |
+| T10 | 24 Oct | Slip size 1 / 2 / 3+, one per day; urges only on the current day; comeback message keyed by the first missed day of the run | PM (engineer) | build | |

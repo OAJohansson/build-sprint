@@ -137,4 +137,8 @@ describe("checkAnswer", () => {
     expect(studio("Every loop is in A minor, so the bass and chords will sit together.").ok).toBe(false);
     expect(studio("The bass and chords would clash with the track; the drums still fit.").ok).toBe(true);
   });
+  it("a list of options counts as one sentence item", () => {
+    const r = checkAnswer("chat", { intent: "chat", sentences: [{ text: "Three ways in:", source: "general" }, { text: "- Name a track\n- Ask for a genre\n- Ask what to play next", source: "general" }], tellMore: false });
+    expect(r.ok && r.answer.sentences[1].text.split("\n")).toHaveLength(3);
+  });
 });

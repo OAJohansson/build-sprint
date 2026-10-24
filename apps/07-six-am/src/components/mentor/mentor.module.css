@@ -38,6 +38,13 @@
 /* The help answer: three short lines */
 .line { margin: 0; font: 400 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); }
 .line + .line { margin-top: 6px; }
+/* Lists in answers (options or steps): same face, slight indent, ~6px between items */
+.mdList { margin: 10px 0 0; padding-left: 20px; list-style: disc; font: 400 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); }
+.mdList li + li { margin-top: 6px; }
+ol.mdList { list-style: decimal; }
+.mdList li::marker { color: var(--muted); }
+.voice + .mdList, .mdList + .voice { margin-top: 10px; }
+.mdList:first-child { margin-top: 0; }
 .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .by { color: var(--muted); }
 /* One dim line of sources per answer, web pages as links */

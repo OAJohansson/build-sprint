@@ -55,19 +55,48 @@ export type TurnProps = {
 };
 
 /** Sentences as paragraphs: a new paragraph where the source changes after two sentences or more. */
+const LIST_LINE = /^\s*(?:[-*•]|(\d+)[.)])\s+/;
+const hasList = (t: string) => t.split("\n").some((l) => LIST_LINE.test(l));
+
 function paragraphs(list: Sentence[]): Sentence[][] {
   const out: Sentence[][] = [];
   for (const x of list) {
     const cur = out.at(-1);
-    if (cur && (cur.length < 2 || cur.at(-1)!.source === x.source) && cur.length < 3) cur.push(x);
+    // A sentence holding a list is a block of its own.
+    if (cur && !hasList(x.text) && !hasList(cur.at(-1)!.text) && (cur.length < 2 || cur.at(-1)!.source === x.source) && cur.length < 3) cur.push(x);
     else out.push([x]);
   }
   return out;
 }
 
+/** Text with simple "- " / "1. " lines rendered as a list (plain text only, never raw HTML). */
+export function Block({ text, className }: { text: string; className: string }) {
+  if (!hasList(text)) return <p className={className}>{text}</p>;
+  const parts: { kind: "p" | "ul" | "ol"; items: string[] }[] = [];
+  for (const raw of text.split("\n")) {
+    const line = raw.trim();
+    if (!line) continue;
+    const m = line.match(LIST_LINE);
+    const kind = m ? (m[1] ? "ol" : "ul") : "p";
+    const item = m ? line.slice(m[0].length) : line;
+    const last = parts.at(-1);
+    if (last && last.kind === kind && kind !== "p") last.items.push(item);
+    else parts.push({ kind, items: [item] });
+  }
+  return (
+    <>
+      {parts.map((p, i) => p.kind === "p"
+        ? <p key={i} className={className}>{p.items[0]}</p>
+        : p.kind === "ol"
+          ? <ol key={i} className={s.mdList}>{p.items.map((x, j) => <li key={j}>{x}</li>)}</ol>
+          : <ul key={i} className={s.mdList}>{p.items.map((x, j) => <li key={j}>{x}</li>)}</ul>)}
+    </>
+  );
+}
+
 function Paras({ list, lines }: { list: Sentence[]; lines?: boolean }) {
   const groups = lines ? list.map((x) => [x]) : paragraphs(list);
-  return <>{groups.map((p, i) => <p key={i} className={lines ? s.line : s.voice}>{clean(p.map((x) => x.text).join(" "))}</p>)}</>;
+  return <>{groups.map((p, i) => <Block key={i} className={lines ? s.line : s.voice} text={clean(p.map((x) => x.text).join(" "))} />)}</>;
 }
 
 /** One dim line of sources, no label (clutter review): "Ears' measurements · uploader tag · discogs.com ↗". */
@@ -127,7 +156,7 @@ export function Turn({ ask, answer, job, track, studio, dropped, myGenre, onTell
           <Paras list={list} />
           {pick ? <PickLink it={pick} /> : null}
         </section>
-      )) : <Paras list={answer.sentences} lines={help || kind === "ear_training"} />}
+      )) : <Paras list={answer.sentences} lines={kind === "ear_training"} />}
 
       {!teach && answer.listenNext?.length ? <Picks items={answer.listenNext} onFeedback={onFeedback} /> : null}
       {/* The computed key note is hidden only when the key is the crate's own and the answer says so. */}

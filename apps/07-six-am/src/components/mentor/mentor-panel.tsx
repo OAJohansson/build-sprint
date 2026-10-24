@@ -24,10 +24,10 @@ export const HELP_QUESTION = "What can you help me with?";
 /** F5: answered here, free and instantly, and not stored. Only things you can ask by typing. */
 const HELP_ANSWER: AskReply["answer"] = {
   intent: "help", tellMore: false,
-  sentences: [
-    { text: "Name a track and ask what it is, which genre fits, what to listen for or what to play next.", source: "general" },
-    { text: "Or ask me to teach a genre, start a Studio track, run a taste session or group your tracks.", source: "general" },
-  ],
+  sentences: [{
+    text: ["Ask what a track is, or which genre fits", "What to listen for in a track", "What to play next", "Teach me a genre", "Start a Studio track from a song", "Run a taste session", "Group my tracks"].map((x) => `- ${x}`).join("\n"),
+    source: "general",
+  }],
 };
 
 type Item = { id: string; ask?: string; answer: AskReply["answer"]; studio?: StudioStart; dropped?: string[]; genreTrackId?: string; live?: boolean };
@@ -91,7 +91,7 @@ export function MentorPanel({ data, track, library, earsBusy, canLearn, onClose,
   useEffect(() => {
     if (!ready || locked || !data.code) return;
     let live = true;
-    api.thread("main").then((m) => { if (live) { setItems(itemsFrom(m)); setLoaded(true); } }, (e) => { if (live) { setLoaded(true); onError(e); } });
+    api.thread("main").then((m) => { if (live) { setItems((list) => [...itemsFrom(m), ...list]); setLoaded(true); } }, (e) => { if (live) { setLoaded(true); onError(e); } });
     api.usage().then((u) => { if (live) setUsage(u); }, onError);
     return () => { live = false; };
   }, [api, ready, locked, onError, data.code]);

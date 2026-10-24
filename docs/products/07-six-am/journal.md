@@ -446,3 +446,4 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - **L81 in:** suggest_genre always searches (enforced; ~10 s, $0.05–0.08 a call), previews count as weak evidence, setup strictly additive (15/15 sentences kept on the dev profile). Final E1 grading next, reported as it stands.
 - **Final E1 grading:** 5/10 twice (50%) with an always-on search: the search finds the artist's own scene words (Afro, soulful, tech house), not the owner's. Reverted suggest_genre to the L75 method, graded once at 7/10 (L82). E1 stays a fail against ≥ 8/10, reported as is.
 - **suggest_genre back on the L75 method** (sanity call: Tech House for Mason Flint, 3.2 s, $0.006). Switching local dev to the real Supabase for E9.
+- **Ops:** ANTHROPIC_API_KEY added to the six-am Vercel project (production + preview, sensitive; value never printed). Local dev now on the real Supabase (store: supabase).

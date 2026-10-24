@@ -87,15 +87,6 @@ export function StudioMap({ track, initialState, initialMentor }: { track: Track
         </div>
       </div>
 
-      {mentor && (
-        <section className={s.mentor} aria-label="Mentor" aria-live="polite">
-          <p>
-            {mentorAnswer(track)}{more && <> {MENTOR_MORE}</>}
-            {!more && <> <button className={s.textBtn} onClick={() => setMore(true)}>Tell me more</button></>}
-          </p>
-          <p className={s.source}>From this map&apos;s estimates, not the track&apos;s stems.</p>
-        </section>
-      )}
 
       {state !== "empty" && <div className={s.info}>
         <span className={s.read} aria-live="polite">{read}</span>
@@ -156,11 +147,19 @@ export function StudioMap({ track, initialState, initialMentor }: { track: Track
         {state === "empty" && (
           <div className={s.empty}>
             <h2>Not mapped yet</h2>
-            <p>Play the whole track and the map fills in as it plays. Six AM keeps the measurements, never the audio.</p>
+            <p>Play the whole track; the map fills in as it plays.</p>
             <button className={s.start} onClick={() => setState("listening")}>Listen and map</button>
           </div>
         )}
       </div>
+      {mentor && (
+        <section className={s.mentor} aria-label="Mentor" aria-live="polite">
+          <p>
+            {mentorAnswer(track)}{more && <> {MENTOR_MORE}</>}
+            {!more && <> <button className={s.textBtn} onClick={() => setMore(true)}>Tell me more</button></>}
+          </p>
+        </section>
+      )}
     </div>
   );
 }

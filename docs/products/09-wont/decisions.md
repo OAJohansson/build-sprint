@@ -9,3 +9,6 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L3 | 24 Oct | Short intro animation in the MVP as a learning goal (15–20 s, skippable, three research messages) | owner | kickoff | |
 | L4 | 24 Oct | Stop habits in the MVP: clean days counted, slips and urges logged, no reset to zero | owner | kickoff | |
 | L5 | 24 Oct | Name: Wont | owner | kickoff | |
+| L6 | 24 Oct | Appetite: one day; animation capped at ~1.5 h, cut order named in the pack | owner | kickoff | |
+| L7 | 24 Oct | Feel: a drawing board of big, bold cards, not a checkbox list; references in design/references | owner | kickoff | |
+| T1 | 24 Oct | Feel sentence worded by the PM from the owner's words; streak and trophy parts of the references excluded (A1, A5) | PM | kickoff | |

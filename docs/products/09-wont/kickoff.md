@@ -1,13 +1,13 @@
 # Kickoff pack: Wont
 
 The owner's kickoff for a product (decision 0026). In Founder mode the owner writes it alone and
-the PM session builds from it. **Draft by Claude from the owner's calls in the kickoff
-conversation (24 Oct); the owner edits and confirms it. Lines marked _(owner to confirm)_ are
-still open.**
+the PM session builds from it. Drafted by Claude from the owner's calls in the kickoff
+conversation (24 Oct), in the owner's words where possible; the owner can edit any line.
 
 **Mode:** founder
-**Appetite:** _(owner to confirm)_ suggestion: two days; the animation gets a fixed half day and is
-cut back first if it runs over
+**Appetite:** one day (owner). The intro animation gets at most ~1.5 hours; if it runs over it
+becomes three still panels and the animation moves to the backlog. Other cuts, in order, if the day
+runs out: the urge "ride it out" pause (keep the one-tap urge log), the friction-step field.
 **Evals:** `evals.md` (agent-checkable part) · owner-only checks kept outside the repo
 **Evidence:** `research.md` (principles P1–P18, anti-patterns A1–A14)
 
@@ -104,11 +104,21 @@ beyond daily; editing past days beyond the last few.
 
 ## Feel references
 
-_(owner to confirm)_
+Owner's words: "I don't want it to feel like a checkbox list, I want it to feel like a drawing
+board, with big cards." Screenshots in `design/references/` (inspiration, not templates; the squad
+should go further than them).
 
-- [reference] — [what to take from it]
+- **A drawing board / pinboard** (owner) — habits are big cards laid out on a surface you work
+  on, not rows in a list.
+- **Bold full-width colour cards** (`ref-1`–`ref-3`, a dark habit planner) — each habit as a big,
+  saturated, colour-coded card with large type; the card itself is the button.
+- **Soft cards with progress as fill** (`ref-4`–`ref-6`, a pastel tracker) — progress shown by
+  the card filling with colour, not by a number or a tick.
+- Not taken from these references: the streak counters, "keep long streaks" banners, coins,
+  crowns and trophies (research anti-patterns A1, A5).
 
-**The feel in one sentence:** _(owner to confirm)_
+**The feel in one sentence:** A drawing board of big, bold cards, each one a promise to myself,
+calm and warm, never a checklist and never a scold.
 
 ## Things to avoid
 
@@ -117,7 +127,8 @@ _(owner to confirm)_
 - Points, XP, badges
 - Lots of motion: one small moment on keeping a habit, nothing per tap (my design rule)
 - "21 days to a habit" or "1% better = 37x"
-- _(owner to add)_
+- A checkbox list: rows with tick boxes (owner)
+- Trophies, coins, crowns, streak banners (seen in the references; not wanted)
 
 ## Decisions already made
 

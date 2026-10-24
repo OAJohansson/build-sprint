@@ -20,13 +20,23 @@ Whoever builds something never grades it: the checks below are run by `user-test
 
 | # | Requirement | Check (how to tell, on a fresh install) | Run by | Result | Evidence |
 | --- | --- | --- | --- | --- | --- |
-| R1 | | | user-tester | pass / fail | screenshot / log |
+| R1 | Intro animation on first launch, skippable, replayable | Fresh storage: intro plays; Skip lands on the board; replay from settings plays it again | user-tester | | |
+| R2 | Build habit as an if-then commitment with a daily goal | Create "After I wake up, I will get out of bed by 7:00": card shows anchor, action and goal | user-tester | | |
+| R3 | Stop habit with trigger, friction step, replacement | Create "Nicotine pouches": card shows trigger and replacement | user-tester | | |
+| R4 | One-tap log for today, saved | Tap a card once: logged; reload: still logged | user-tester | | |
+| R5 | Stop habit logs clean day, slip (with size) and urge separately | Log each once: three distinct entries in history | user-tester | | |
+| R6 | A miss never resets progress to zero | Seed 6 kept days then a miss: main number dents (e.g. 6 of 7), never shows 0 | user-tester | | |
+| R7 | Gentle comeback message after a missed day | Seed yesterday as missed, open: message with one next step; no words from the not-list | user-tester | | |
+| R8 | First kept day after a miss marked as a comeback | Log today kept after a seeded miss: comeback mark visible | user-tester | | |
 
 ### User test (from `user-testing/plan.md`)
 
 | Scenario | Bar: time | Bar: taps | Bar: outcome | Result |
 | --- | --- | --- | --- | --- |
-| S1 | ≤ s | ≤ | | |
+| S1 Log this morning's wake-up | ≤ 5 s | ≤ 1 | logged, small celebration | |
+| S2 Set up a new build habit as a commitment | ≤ 60 s | ≤ 8 | card on the board | |
+| S3 Log a pouch slip, then come back the next day | ≤ 20 s | ≤ 3 | slip saved, comeback message, no guilt words | |
+| S4 Time passes: a week with two misses | — | — | numbers right, history intact | |
 
 Every top job scored ≥ 4/5 by `user-tester`, and no blocker or major finding left open.
 
@@ -49,11 +59,10 @@ Every top job scored ≥ 4/5 by `user-tester`, and no blocker or major finding l
 | Readable text | contrast ratio, worst state | ≥ 4.5:1 | |
 | Correct data | saved vs typed, word for word | 100% | |
 | Phone | works at 390 × 844, targets ≥ 44 px | yes | |
-| | | | |
 
 ### Build hygiene
 
-- `pnpm -F NN-slug build` and `pnpm -F NN-slug lint` pass; `pnpm -F NN-slug test` passes if the
+- `pnpm -F 09-wont build` and `pnpm -F 09-wont lint` pass; `pnpm -F 09-wont test` passes if the
   kickoff pack named unit tests.
 - No secrets in the diff; every new key is in `.env.example`.
 

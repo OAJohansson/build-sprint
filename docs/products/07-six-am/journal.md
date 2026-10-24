@@ -535,3 +535,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   Bake-off: 5 prompts × 3 variants, 15/15 OK, $1.20 total spend; neither API takes BPM or key
   (prompt only), so X4 (in key, on tempo) is the real question. L115–L119, T49, T50.
 - **S3 engine built:** 6 synth presets (sub, 303 acid, reese; M1 organ, Rhodes, pad) with 3 knobs each, 15 patterns as scale degrees, two CC0 kits (909/808-style, 8 one-shots), knob explanations for the Mentor, an offline render page for graders. Not wired into the Studio yet. L120–L122, T51–T53.
+- **Studio map built out** (/prototype, `prototypes/map3`): main, listening, Mentor, empty states; emil-design-eng, web-design-guidelines and break-ui (12-min track, 3-min edit, 3 sections, long title) run before the critic. Removed: three-level shading, per-lane estimate labels, the bottom legend, a second Hide. L123, T54. Screenshots in `design/map3/`.

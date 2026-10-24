@@ -180,3 +180,5 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T51 | 2026-10-25 | Registers: bass E1–D#2, chords E3–D#4 | PM | S3 | |
 | T52 | 2026-10-25 | Kit MP3 encoder padding compensated by measuring leading silence | PM | S3 | |
 | T53 | 2026-10-25 | Offline render check page only under `next dev` (`/dev/synths`) | PM | S3 | |
+| L123 | 2026-10-25 | Map (Studio direction) build-out: two looks for layer activity (solid = likely, hatched = maybe), not three shades (three read as measured levels); one honest estimate line plus "Layers est." and "(estimate)" in every read-out instead of a label per lane; disabled actions show their reason as text; no motion | PM (designer's proposal, from the pack's not-list and feel sentence) | S1 design | |
+| T54 | 2026-10-25 | Map details: read-out strip above the timeline; section names in the ruler are buttons that shade the section's column (Esc clears); "Not heard yet" edge while listening; "Not heard in this track" on silent lanes; bar-number spacing by track length; "Listen and map" in the empty state | PM | S1 design | |

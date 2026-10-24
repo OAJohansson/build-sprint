@@ -10,6 +10,8 @@ import { ViewsNav } from "@/components/views-nav";
 import { bpmChoice } from "@/lib/ears/bpm-choice";
 import { claudeText } from "@/lib/ears/claude-text";
 import { saveFile, toCsv, toJson } from "@/lib/ears/export";
+import { bpmRangeSet, filtersActive, matchesFilters, NO_FILTERS, NO_GENRE, parseBound, sanitiseFilters, type Filters } from "@/lib/ears/filters";
+import { canonicalGenre, cleanGenre, genreKey, genreSuggestions, usedGenres, withMyGenre } from "@/lib/ears/my-genre";
 import {
   bpmText, brightnessLabel, camelot, energyLabel, formatDuration, keyLabel, keyWord, namedStyles, pct, shownStyles, SHOWN_STYLE_MIN, tagDiffers, tempoMarker, tempoRelationWords,
 } from "@/lib/ears/labels";
@@ -27,6 +29,13 @@ const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).jo
 const MODEL_MB = 18;
 /** N5: no "model" or "download" (it can read as copying music). */
 const EARS_READY = `Getting Six AM's ears ready · ${MODEL_MB} MB, once`;
+/** Filters persist per device (F13); the demo keeps its own so it never hides real rows. */
+const FILTERS_KEY = "six-am:ears-filters:v1";
+const DEMO_FILTERS_KEY = "six-am:ears-demo-filters:v1";
+/** Demo genres typed by a grader, over the seeds (so a reload can be checked without capture). */
+const DEMO_GENRES_KEY = "six-am:ears-demo-genres:v1";
+const NO_DEMO_GENRES: Record<string, string> = {};
+const GENRE_INPUT_ID = "my-genre";
 
 export function LiveAnalyse() {
   return <Screen m={useAnalyse()} />;
@@ -36,9 +45,14 @@ export function LiveAnalyse() {
 export function DemoAnalyse({ listening }: { listening: boolean }) {
   const [note, setNote] = useState<string | null>(null);
   const say = () => setNote("Demo data: open /analyse without ?demo to analyse for real.");
+  const [genres, setGenres] = useLocalStorage<Record<string, string>>(DEMO_GENRES_KEY, NO_DEMO_GENRES);
+  const results = useMemo(
+    () => DEMO_RESULTS.map((r) => (r.id in (genres ?? {}) ? withMyGenre([r], r.id, genres[r.id])[0] : r)),
+    [genres],
+  );
   const m: AnalyseModel = {
     demo: true,
-    results: DEMO_RESULTS,
+    results,
     queue: demoQueue(listening),
     source: DEMO_SOURCE,
     listening: listening ? "on" : "off",
@@ -49,6 +63,7 @@ export function DemoAnalyse({ listening }: { listening: boolean }) {
     embedUrl: null,
     onIframe: () => {},
     load: say, enable: say, stopListening: say, analyse: say, cancel: say, retry: say, clearList: say,
+    setMyGenre: (id, g) => setGenres((prev) => ({ ...(prev ?? {}), [id]: cleanGenre(g) ?? "" })),
   };
   return <Screen m={m} />;
 }
@@ -57,13 +72,12 @@ function Screen({ m }: { m: AnalyseModel }) {
   const { main, rest } = useMemo(() => buildRows(m.results, m.queue, m.source), [m.results, m.queue, m.source]);
   const latest = useMemo(() => [...m.results].sort((a, b) => b.analysedAt.localeCompare(a.analysedAt))[0], [m.results]);
   const [selId, setSelId] = useState<string | null>(null);
-  const selected = m.results.find((r) => r.id === selId) ?? latest ?? null;
   const [toast, setToast] = useState<{ text: string; link?: boolean } | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const flash = (text: string, link?: boolean) => {
     setToast({ text, link });
     if (toastTimer.current) clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToast(null), 2600);
+    toastTimer.current = setTimeout(() => setToast(null), 2500);
   };
   const [storedBpm, setStudioBpm] = useLocalStorage<number>(TEMPO_KEY, DEFAULT_BPM);
   const studioBpm = clampBpm(storedBpm);
@@ -83,6 +97,45 @@ function Screen({ m }: { m: AnalyseModel }) {
     flash(`Studio set to ${formatBpm(b)} BPM`, true);
   };
   const [query, setQuery] = useState("");
+  const [rawFilters, setRawFilters] = useLocalStorage<Filters>(m.demo ? DEMO_FILTERS_KEY : FILTERS_KEY, NO_FILTERS);
+  const genres = useMemo(() => usedGenres(m.results), [m.results]);
+  // A stored genre filter whose last track lost that genre falls back to All genres (F8).
+  const filters = useMemo(() => {
+    const f = sanitiseFilters(rawFilters);
+    return f.genre && f.genre !== NO_GENRE && !genres.some((g) => genreKey(g) === genreKey(f.genre)) ? { ...f, genre: "" } : f;
+  }, [rawFilters, genres]);
+  const suggestions = useMemo(() => genreSuggestions(m.results), [m.results]);
+
+  // Numbers stay those of the whole list while filtering.
+  const q = query.trim();
+  const keep = (r: Row) => matches(r, q) && matchesFilters(r.state === "done" ? r.result : undefined, filters);
+  const shownMain = main.map((r, i) => ({ r, n: i + 1 })).filter((x) => keep(x.r));
+  const shownRest = rest.map((r, i) => ({ r, n: main.length + i + 1 })).filter((x) => keep(x.r));
+  const narrowed = !!q || filtersActive(filters);
+  // The strip shows a visible track: the picked one (else the latest), and once filters hide it,
+  // the first visible analysed row; none visible = an empty strip (F1).
+  const visible = [...shownMain, ...shownRest].flatMap((x) => (x.r.result ? [x.r.result] : []));
+  const wanted = m.results.find((r) => r.id === selId) ?? latest ?? null;
+  const selected = !narrowed ? wanted : wanted && visible.some((r) => r.id === wanted.id) ? wanted : visible[0] ?? null;
+  // A typed genre takes the spelling already in use (or a family's) when only case, spaces or
+  // punctuation differ, so "deep  House" saves as "Deep house" (F2).
+  const saveGenre = (id: string, typed: string) => {
+    const others = usedGenres(m.results.filter((r) => r.id !== id));
+    const g = canonicalGenre(typed, others) ?? "";
+    m.setMyGenre(id, g);
+    // Untagging the last track of the filtered genre drops that filter for good (F8), so it can't
+    // come back later when another track gets the genre.
+    const k = filters.genre && filters.genre !== NO_GENRE ? genreKey(filters.genre) : "";
+    if (k && genreKey(g) !== k && !others.some((o) => genreKey(o) === k)) setRawFilters({ ...filters, genre: "" });
+  };
+  const clearFilters = () => { setQuery(""); setRawFilters(NO_FILTERS); };
+
+  // Clicking a row's My genre cell selects it and puts the cursor in the strip's field.
+  const [focusGenre, setFocusGenre] = useState(0);
+  useEffect(() => {
+    if (focusGenre) document.getElementById(GENRE_INPUT_ID)?.focus();
+  }, [focusGenre]);
+  const editGenre = (id: string) => { setSelId(id); setFocusGenre((n) => n + 1); };
 
   return (
     <div className={s.root}>
@@ -95,12 +148,21 @@ function Screen({ m }: { m: AnalyseModel }) {
       </header>
       <Toolbar m={m} empty={empty} bannerEnables={noticeEnables(m, empty)} />
       <Notice m={m} empty={empty} />
-      {empty ? <div /> : <ListBar m={m} count={main.length + rest.length} query={query} setQuery={setQuery} />}
+      {empty ? <div /> : (
+        <ListBar
+          m={m} count={main.length + rest.length} shown={shownMain.length + shownRest.length} narrowed={narrowed}
+          query={query} setQuery={setQuery} filters={filters} setFilters={setRawFilters} genres={genres} onClear={clearFilters}
+        />
+      )}
       <main className={s.main}>
         {empty ? <EmptySteps /> : (
-          <Table m={m} main={main} rest={rest} query={query} selectedId={selected?.id ?? null} onSelect={setSelId} />
+          <Table m={m} main={shownMain} rest={shownRest} narrowed={narrowed} emptyText={noMatchText(m.results, main.length + rest.length, q, filters)} selectedId={selected?.id ?? null} onSelect={setSelId} onEditGenre={editGenre} />
         )}
-        {selected && !empty ? <Strip a={selected} studioBpm={studioBpm} onCopy={copy} onSetBpm={setBpm} /> : null}
+        {empty ? null : selected ? (
+          <Strip a={selected} studioBpm={studioBpm} onCopy={copy} onSetBpm={setBpm} suggestions={suggestions} onGenre={(g) => saveGenre(selected.id, g)} />
+        ) : narrowed ? (
+          <section className={cx(s.strip, s.stripEmpty)} aria-label="Selected track"><span>No track selected</span></section>
+        ) : null}
       </main>
       {toast ? (
         <div className={s.toast} role="status">
@@ -110,6 +172,18 @@ function Screen({ m }: { m: AnalyseModel }) {
       ) : null}
     </div>
   );
+}
+
+/** What an empty filtered table says (F5): why nothing matches, and the tracks a filter leaves out
+ *  because they have no result yet. */
+function noMatchText(results: EarsAnalysis[], rows: number, q: string, f: Filters): string {
+  const n = results.length;
+  const notYet = rows - n;
+  const tail = notYet > 0 && filtersActive(f) ? ` · ${notYet} not analysed yet` : "";
+  if (!q && f.genre === NO_GENRE && !bpmRangeSet(f) && n > 0 && results.every((r) => cleanGenre(r.myGenre))) {
+    return `${n === 1 ? "The analysed track has" : `All ${n} analysed tracks have`} a genre${tail}`;
+  }
+  return `No tracks match these filters${tail}`;
 }
 
 /** The line under the toolbar carries an Enable listening button (then the toolbar doesn't repeat it). */
@@ -153,22 +227,43 @@ function Notice({ m, empty }: { m: AnalyseModel; empty: boolean }) {
   );
 }
 
-/** Above the table: type to filter, and Clear list (asks once, inline). */
-function ListBar({ m, count, query, setQuery }: { m: AnalyseModel; count: number; query: string; setQuery: (q: string) => void }) {
+type ListBarProps = {
+  m: AnalyseModel; count: number; shown: number; narrowed: boolean; query: string; setQuery: (q: string) => void;
+  filters: Filters; setFilters: (f: Filters) => void; genres: string[]; onClear: () => void;
+};
+
+/** Above the table: type to filter, BPM range and my genre (F13), and Clear list (asks once, inline). */
+function ListBar({ m, count, shown, narrowed, query, setQuery, filters, setFilters, genres, onClear }: ListBarProps) {
   const [confirm, setConfirm] = useState(false);
   const analysed = m.results.length;
+  // The picked genre's option, in the spelling in use (the stored one may differ in case).
+  const picked = filters.genre === NO_GENRE ? NO_GENRE : genres.find((g) => genreKey(g) === genreKey(filters.genre)) ?? "";
   return (
     <div className={s.listBar}>
       <input
         className={s.filter}
         type="search"
         aria-label="Filter tracks"
-        placeholder="Filter by title, uploader or style"
+        placeholder="Filter title, uploader, style"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={(e) => { if (e.key === "Escape") setQuery(""); }}
       />
-      <span className={s.listCount}>{count} track{count === 1 ? "" : "s"} · {analysed} analysed</span>
+      <span className={s.range} role="group" aria-label="BPM range" title="A track matches if its BPM is in the range; when half/double time is unclear, either reading counts. Tracks not analysed yet are hidden while a range is set.">
+        <span className={s.label}>BPM</span>
+        <BpmBound label="Lowest BPM" ghost="min" value={filters.bpmMin} onChange={(v) => setFilters({ ...filters, bpmMin: v })} />
+        <span aria-hidden="true">–</span>
+        <BpmBound label="Highest BPM" ghost="max" value={filters.bpmMax} onChange={(v) => setFilters({ ...filters, bpmMax: v })} />
+      </span>
+      <select className={cx(s.select, !filters.genre && s.selectIdle)} aria-label="Filter by my genre" value={picked} onChange={(e) => setFilters({ ...filters, genre: e.target.value })}>
+        <option value="">All genres</option>
+        {genres.map((g) => <option key={g} value={g}>{g}</option>)}
+        <option value={NO_GENRE}>No genre yet</option>
+      </select>
+      <span className={s.listCount}>
+        {narrowed ? `${shown} of ${count} tracks` : `${count} track${count === 1 ? "" : "s"}`} · {analysed} analysed
+      </span>
+      {narrowed ? <button className={s.textBtn} onClick={onClear}>Clear filters</button> : null}
       {confirm ? (
         <span className={s.confirm} role="group" aria-label="Clear the list?">
           <span>Clear all {count}{analysed ? `, with ${analysed} result${analysed > 1 ? "s" : ""} (export first to keep them)` : ""}?</span>
@@ -179,6 +274,28 @@ function ListBar({ m, count, query, setQuery }: { m: AnalyseModel; count: number
         <button className={cx(s.actBtn, s.clear)} onClick={() => setConfirm(true)} title="Empty the list: pasted tracks, the queue and the results in this browser">Clear list</button>
       )}
     </div>
+  );
+}
+
+/** One end of the BPM range: typed freely, applied as you type; empty = open-ended. */
+function BpmBound({ label, ghost, value, onChange }: { label: string; ghost: string; value: number | null; onChange: (v: number | null) => void }) {
+  const [text, setText] = useState(value == null ? "" : String(value));
+  // Follow outside changes (Clear filters) without fighting the typing.
+  const [seen, setSeen] = useState(value);
+  if (value !== seen) { setSeen(value); if (parseBound(text) !== value) setText(value == null ? "" : String(value)); }
+  return (
+    <input
+      className={s.bound}
+      type="text"
+      inputMode="decimal"
+      aria-label={label}
+      placeholder={ghost}
+      maxLength={6}
+      value={text}
+      // Numbers only (F6): anything but digits and one decimal mark is dropped as it's typed.
+      onChange={(e) => { const v = e.target.value.replace(/[^\d.,]/g, "").replace(/([.,].*)[.,]/g, "$1"); setText(v); onChange(parseBound(v)); }}
+      onKeyDown={(e) => { if (e.key === "Escape") { setText(""); onChange(null); } }}
+    />
   );
 }
 
@@ -339,6 +456,7 @@ function HeadRow() {
       <span className={s.th} role="columnheader">Tone</span>
       <span className={cx(s.th, s.right)} role="columnheader">Time</span>
       <span className={s.th} role="columnheader" title="The genre the uploader set on SoundCloud">Uploader tag</span>
+      <span className={s.th} role="columnheader" title="Your own genre for the track: click a cell to type it">My genre</span>
     </div>
   );
 }
@@ -346,16 +464,18 @@ function HeadRow() {
 /** Type-to-filter: title, uploader, the styles heard and the uploader's tag. */
 function matches(r: Row, q: string): boolean {
   if (!q) return true;
-  const hay = [r.title, r.uploader, r.result?.uploaderGenreTag ?? "", ...(r.result ? namedStyles(r.result).slice(0, 3).map((x) => x.name) : [])].join(" ").toLowerCase();
+  const hay = [r.title, r.uploader, r.result?.uploaderGenreTag ?? "", r.result?.myGenre ?? "", ...(r.result ? namedStyles(r.result).slice(0, 3).map((x) => x.name) : [])].join(" ").toLowerCase();
   return q.toLowerCase().split(/\s+/).filter(Boolean).every((w) => hay.includes(w));
 }
 
-function Table({ m, main: allMain, rest: allRest, query, selectedId, onSelect }: { m: AnalyseModel; main: Row[]; rest: Row[]; query: string; selectedId: string | null; onSelect: (id: string) => void }) {
+type Numbered = { r: Row; n: number };
+type TableProps = {
+  m: AnalyseModel; main: Numbered[]; rest: Numbered[]; narrowed: boolean; emptyText: string; selectedId: string | null;
+  onSelect: (id: string) => void; onEditGenre: (id: string) => void;
+};
+
+function Table({ m, main, rest, narrowed, emptyText, selectedId, onSelect, onEditGenre }: TableProps) {
   const ref = useRef<HTMLDivElement>(null);
-  // Numbers stay those of the whole list while filtering.
-  const q = query.trim();
-  const main = allMain.map((r, i) => ({ r, n: i + 1 })).filter((x) => matches(x.r, q));
-  const rest = allRest.map((r, i) => ({ r, n: allMain.length + i + 1 })).filter((x) => matches(x.r, q));
   const analysable = rest.map((x) => x.r).filter((r) => r.state === "new");
   const blocked = rest.length - analysable.length;
   const firstKey = main[0]?.r.key ?? rest[0]?.r.key;
@@ -377,10 +497,10 @@ function Table({ m, main: allMain, rest: allRest, query, selectedId, onSelect }:
     <div className={s.grid} role="grid" aria-label="Analysed tracks" ref={ref} onKeyDown={onKeyDown}>
       <HeadRow />
       {main.map(({ r, n }) => (
-        <TableRow key={r.key} r={r} n={n} m={m} selected={!!r.result && r.result.id === selectedId} tabbable={r.key === tabKey} onSelect={onSelect} />
+        <TableRow key={r.key} r={r} n={n} m={m} selected={!!r.result && r.result.id === selectedId} tabbable={r.key === tabKey} onSelect={onSelect} onEditGenre={onEditGenre} />
       ))}
-      {q && !main.length && !rest.length ? (
-        <div className={s.divider} role="row"><span role="gridcell">No tracks match “{q}”</span></div>
+      {narrowed && !main.length && !rest.length ? (
+        <div className={s.divider} role="row"><span role="gridcell">{emptyText}</span></div>
       ) : null}
       {rest.length ? (
         <>
@@ -396,7 +516,7 @@ function Table({ m, main: allMain, rest: allRest, query, selectedId, onSelect }:
             ) : null}
           </div>
           {rest.map(({ r, n }) => (
-            <TableRow key={r.key} r={r} n={n} m={m} selected={false} tabbable={r.key === tabKey} onSelect={onSelect} />
+            <TableRow key={r.key} r={r} n={n} m={m} selected={false} tabbable={r.key === tabKey} onSelect={onSelect} onEditGenre={onEditGenre} />
           ))}
         </>
       ) : null}
@@ -412,7 +532,7 @@ const FAIL_TEXT: Record<string, string> = {
   error: "Couldn't analyse",
 };
 
-function TableRow({ r, n, m, selected, tabbable, onSelect }: { r: Row; n: number; m: AnalyseModel; selected: boolean; tabbable: boolean; onSelect: (id: string) => void }) {
+function TableRow({ r, n, m, selected, tabbable, onSelect, onEditGenre }: { r: Row; n: number; m: AnalyseModel; selected: boolean; tabbable: boolean; onSelect: (id: string) => void; onEditGenre: (id: string) => void }) {
   const a = r.state === "done" ? r.result : undefined;
   const isRest = r.state === "new" || r.state === "blocked";
   const dash = isRest ? "" : "–";
@@ -479,6 +599,14 @@ function TableRow({ r, n, m, selected, tabbable, onSelect }: { r: Row; n: number
             {a.uploaderGenreTag ? <span className={s.sName}>{a.uploaderGenreTag}</span> : <span className={s.dim}>none</span>}
             {tagDiffers(a) ? <span className={s.differs}>differs</span> : null}
           </span>
+          <span
+            role="gridcell"
+            className={cx(s.genreCell, a.myGenre ? s.own : s.dim)}
+            title={a.myGenre ? `My genre: ${a.myGenre} · click to edit` : "No genre yet · click to type one"}
+            onClick={(e) => { e.stopPropagation(); onEditGenre(a.id); }}
+          >
+            <span>{a.myGenre ?? "–"}</span>
+          </span>
         </>
       ) : (
         <>
@@ -489,6 +617,7 @@ function TableRow({ r, n, m, selected, tabbable, onSelect }: { r: Row; n: number
           <span className={s.dim} role="gridcell">{dash}</span>
           <span className={s.time} role="gridcell">{formatDuration(r.durationMs)}</span>
           <span className={s.dim} role="gridcell">{dash}</span>
+          <span className={s.dim} role="gridcell">{r.result?.myGenre ?? dash}</span>
         </>
       )}
     </div>
@@ -519,7 +648,46 @@ function Energy({ value }: { value: number }) {
   );
 }
 
-function Strip({ a, studioBpm, onCopy, onSetBpm }: { a: EarsAnalysis; studioBpm: number; onCopy: (a: EarsAnalysis) => void; onSetBpm: (bpm: number) => void }) {
+type StripProps = {
+  a: EarsAnalysis; studioBpm: number; onCopy: (a: EarsAnalysis) => void; onSetBpm: (bpm: number) => void;
+  suggestions: string[]; onGenre: (genre: string) => void;
+};
+
+/** My genre (F12): free text with suggestions (used genres first, then Appendix A's families).
+ *  Saved on blur or Enter, trimmed; empty clears it; Escape puts back what was saved. */
+function GenreField({ value, suggestions, onSave }: { value: string; suggestions: string[]; onSave: (genre: string) => void }) {
+  const [text, setText] = useState(value);
+  const [seen, setSeen] = useState(value);
+  if (value !== seen) { setSeen(value); setText(value); }
+  // The saved spelling may differ from the typed one (an existing genre's): show what was saved.
+  const save = () => { if (text.trim() !== value) onSave(text); setText(value); };
+  return (
+    <label className={s.genre}>
+      <span className={s.label}>My genre</span>
+      <input
+        id={GENRE_INPUT_ID}
+        className={s.genreInput}
+        list="my-genre-suggestions"
+        placeholder="Type or pick a genre"
+        spellCheck={false}
+        autoComplete="off"
+        value={text}
+        title={text || undefined}
+        onChange={(e) => setText(e.target.value)}
+        onBlur={save}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") { e.preventDefault(); e.currentTarget.blur(); } // blur saves
+          else if (e.key === "Escape") { setText(value); }
+        }}
+      />
+      <datalist id="my-genre-suggestions">
+        {suggestions.map((g) => <option key={g} value={g} />)}
+      </datalist>
+    </label>
+  );
+}
+
+function Strip({ a, studioBpm, onCopy, onSetBpm, suggestions, onGenre }: StripProps) {
   const styles = namedStyles(a);
   const above = styles.filter((x) => x.p > SHOWN_STYLE_MIN);
   const bars = shownStyles(a);
@@ -540,6 +708,7 @@ function Strip({ a, studioBpm, onCopy, onSetBpm }: { a: EarsAnalysis; studioBpm:
         {bpm.other != null ? (
           <span className={s.lcdAlt}>or {bpmText(bpm.other)} <span className={bpm.unclear ? s.doubt : undefined}>· {tempoRelationWords(bpm.otherRelation!)}{bpm.unclear ? ", unsure" : ", less likely"}</span></span>
         ) : <span className={s.lcdAlt}>steady</span>}
+        <GenreField key={a.id} value={a.myGenre ?? ""} suggestions={suggestions} onSave={onGenre} />
         <span className={s.actions}>
           <button className={s.btn} onClick={() => onCopy(a)} title="Copies the results and a question for Claude to the clipboard">Copy for Claude</button>
           <button className={s.btn} onClick={() => onSetBpm(target)} disabled={target === studioBpm} title={target === studioBpm ? "The Studio is already at this tempo" : `The Studio is at ${formatBpm(studioBpm)} BPM`}>

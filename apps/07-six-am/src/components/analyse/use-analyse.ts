@@ -40,6 +40,8 @@ export type AnalyseModel = {
   retry(id: string): void;
   /** Empty the list: pasted tracks, the queue and the stored results. */
   clearList(): void;
+  /** Set or clear the owner's genre on one result (F12). */
+  setMyGenre(id: string, genre: string): void;
 };
 
 /** NF4: desktop Chrome/Chromium only. Firefox has getDisplayMedia but can't share a tab's audio; Safari can't either. */
@@ -235,5 +237,6 @@ export function useAnalyse(): AnalyseModel {
     cancel: q.cancel,
     retry: (id) => { ensureEars(); q.retry(id); },
     clearList: () => { q.clear(); q.clearResults(); setSource(null); setMessage(null); },
+    setMyGenre: q.setMyGenre,
   };
 }

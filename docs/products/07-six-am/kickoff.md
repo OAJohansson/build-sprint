@@ -107,6 +107,17 @@ Ears v1, scope items 1–8 of the brief:
 8. **Session list:** results stored locally, survive reload, export CSV/JSON.
 9. **Queue** (owner, 23 Oct; was Phase 2): add tracks or "Analyse all" on a playlist; tracks are analysed one after another; the queue survives a reload and resumes after Enable listening.
 
+**Ears v1.1** (owner, 24 Oct, after the v1 merge; a small slice, no new pack):
+
+10. **My genre:** a field per track where I type my own genre (suggests the Appendix A family names
+    and genres I've already used; free text allowed), saved locally with the result, in Copy for
+    Claude and the CSV/JSON export.
+11. **Filters:** a BPM range (min–max; a half/double-ambiguous track matches on either reading) and
+    a genre filter on my genre ("All", each used genre, "No genre yet").
+
+Out of v1.1: playlist filing (obsolete: the owner sorted *B b baaangers* by hand), automatic
+genre families (needs the Mentor, Phase 3), playing a filtered list one after another (next).
+
 **Stop line:** everything in the brief's "Out of scope" (arrangement map, stems live or offline,
 built-in mentor, genre recipes, Remake mode, synths, AI generation, accounts, cloud sync, sharing,
 mobile, non-Chrome browsers) and every roadmap phase goes to [`backlog.md`](backlog.md). The queue (item 9) is in; the owner moved it from Phase 2 into the MVP on 23 Oct.
@@ -128,6 +139,8 @@ check in `evals.md`.
 | F8 | Persist results (not audio) locally; export CSV/JSON | Reload keeps the list; files download |
 | F9 | Copy for Claude builds the Appendix B text and writes it to the clipboard | Clipboard matches the template |
 | F10 | Set the Studio project BPM from the result | Studio shows and plays at the new BPM |
+| F12 | My genre per track: type or pick (Appendix A families + used genres), free text, saved with the result, in Copy for Claude and CSV/JSON (owner, 24 Oct) | Typed genre survives reload, shows in copy and both exports |
+| F13 | Filters: BPM range (ambiguous tracks match on either reading) and my-genre filter (All / each used genre / No genre yet) (owner, 24 Oct) | Filters narrow the table as expected |
 | F11 | Queue: add tracks or a whole playlist; analysed one after another; survives reload, resumes after Enable listening (owner, 23 Oct) | 3 queued tracks finish without touching anything |
 | NF1 | Privacy and rights: no audio stored, uploaded or downloadable | Code review plus storage/network check |
 | NF2 | Result ≤ 10 s after the capture window ends; inference off the main thread | Timing; Web Worker in use |

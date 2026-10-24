@@ -9,6 +9,7 @@ import { analyseTrack, TrackError, type TrackStage } from "./analyse-track";
 import type { TabCapture } from "./capture";
 import type { EarsClient } from "./ears-client";
 import { activeItem, EMPTY_QUEUE, nextQueued, queueReducer, sanitiseQueue, type QueueAction, type QueueState, type QueueTrack } from "./queue";
+import { withMyGenre } from "./my-genre";
 import { QUEUE_KEY, RESULTS_KEY, upsertAnalysis, type EarsAnalysis } from "./results";
 import type { Snippet } from "./snippets";
 import type { Player } from "./widget";
@@ -105,5 +106,7 @@ export function useEarsQueue({
       dispatch({ type: "clear" });
     }, [dispatch, stopCurrent]),
     clearResults: useCallback(() => setResults(NO_RESULTS), [setResults]),
+    /** The owner's genre for one result (F12); empty clears it. */
+    setMyGenre: useCallback((id: string, genre: string) => setResults((prev) => withMyGenre(Array.isArray(prev) ? prev : [], id, genre)), [setResults]),
   };
 }

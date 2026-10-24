@@ -383,3 +383,31 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
 - **Final design score:** 7/10 (bar 9: not met, reported as is). **Preview** made once
   (`pnpm ship 07-six-am --preview`). **Eval report** written (`eval-report.md`); the design gaps,
   sharper house sub-genres and the untested runs went to the backlog.
+
+## 24 Oct: merged and live
+
+- **Owner's final review** (in the parent session): "I am happy with this as a first pass, lets
+  merge to live and move on to the next phase". PR 77 merged on green checks (merge commit
+  8e97d42). The owner kept the provisional calls L37/L39 (Set Studio picks the reading in
+  90–160 BPM) and L38 ("Clear list" also deletes stored results).
+- **Live:** Vercel's production deploy of `main` went Ready; https://six-am.vercel.app/analyse
+  serves the Analyse view. The model download through the `/models/*` rewrite works in production:
+  18,027,718 bytes in 3–4 s with curl and 5.4 s in a browser (same-origin fetch on the live page),
+  where the dev proxy took ~50 s. Not yet seen: a real analysis on the live site in the owner's
+  Chrome.
+- **Notebook** rebuilt from `main` and republished (version 176). `pnpm notebook` warned about an
+  unmerged branch from another product: `website-discovery` (3 commits, 22 Oct).
+- Phase 2 is the owner's to kick off separately. The "To carry over" entries at the top wait for
+  the wrap-up.
+
+## 24 Oct: Ears v1.1 (small slice)
+
+- **Owner's calls** (relayed from the parent session): no playlist filing (*B b baaangers* is
+  already sorted by hand); no automatic genre families yet ("I think we need the mentor to make
+  this feature good"). In: my own genre per track and filters (BPM range, my-genre). Next after it:
+  play a filtered list one after another. L41, T20; F12 and F13 added to the kickoff and evals.
+- **v1.1 built:** My genre field in the strip and a column in the table (datalist suggestions: used genres, then the 17 Appendix A families), in Copy for Claude and both exports; BPM range and genre filters with pure, tested matching (`filters.ts`). 91 tests, lint, tsc, build pass. L42, L43, T21, T22.
+- **v1.1 fix pass:** short family suggestions and one spelling per genre (L44), strip follows the filter, Six AM-styled genre select, readable filter bar, owner's words in ivory, full-height genre cell, toast out of the way. 94 tests, lint, tsc, build pass. T23, T24.
+- **v1.1 graded:** user re-check 5/5, F12/F13 all pass, no blocker/major/minor open. Design
+  critic 7/10 (bar 9: not met, reported); its one trust issue, BPM placeholders that looked like an
+  active filter, is fixed (T25). Its other points repeat or contradict earlier critics.

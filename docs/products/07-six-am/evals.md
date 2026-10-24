@@ -46,6 +46,8 @@ picker, the grader reads the logs and screenshots.
 | US6 | Use the BPM | One click sets the Studio tempo (as F10) | user-tester | | screenshot |
 | F11 | Queue | 3 tracks queued (and "Analyse all" on a playlist) are analysed one after another with no clicks; reload keeps the queue and it resumes after Enable listening | user-tester | | screenshots, log |
 | US8 | Queue a playlist | Analyse all on a 5+ track playlist fills every row unattended | user-tester (owner's hands to start) | | screenshots |
+| F12 | My genre per track | Type a genre on a row (free text) and pick a suggestion on another (Appendix A family names and genres already used appear); both survive a reload; both appear in Copy for Claude, the CSV and the JSON export; clearing the field removes it everywhere | user-tester | | screenshots, files |
+| F13 | Filters | BPM range 120–126 shows only tracks with a reading in range; a 72.5/145 ambiguous track matches 140–150 and 70–75; my-genre filter offers All, each used genre and "No genre yet", each narrowing the table correctly; filters combine with each other and with the text filter; clearing restores the full list | user-tester | | screenshots |
 | US7 | Keep my results | Every analysed track listed; list survives reload; exportable (as F8) | user-tester | | screenshot |
 
 ### Definition of done (from the brief)

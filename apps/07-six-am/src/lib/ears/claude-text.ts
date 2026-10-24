@@ -34,6 +34,7 @@ export function claudeText(a: EarsAnalysis): string {
 Track: ${a.title || "Untitled"} by ${a.uploader || "unknown"}
 URL: ${a.soundcloudUrl}
 Uploader genre tag: ${a.uploaderGenreTag ?? "none"}${differs} | Tags: ${a.uploaderTags.join(", ") || "none"}
+My genre: ${a.myGenre?.trim() || "not set yet"}
 
 Results (${Math.round(a.analysedSeconds)}s analysed${a.preview ? ", 30 s preview only" : ""}):
 - Genres (each style's own likelihood): ${genres}

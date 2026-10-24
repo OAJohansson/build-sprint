@@ -51,6 +51,8 @@ export type EarsAnalysis = {
   snippetPlan: Snippet[];
   snippets: SnippetResult[];
   analysedAt: string;
+  /** The owner's own genre, free text (F12); missing = not set yet. Kept when re-analysed. */
+  myGenre?: string;
 };
 
 // shortcut: energy and brightness 0–1 scales are fixed guesses (-40…-5 dBFS, 500 Hz…4 kHz log),
@@ -126,9 +128,10 @@ export function toAnalysis(meta: TrackMeta, combined: EarsCombined, plan: Snippe
   };
 }
 
-/** Newest first; a re-analysis of the same track replaces the old record. */
+/** Newest first; a re-analysis of the same track replaces the old record but keeps its my genre. */
 export function upsertAnalysis(list: EarsAnalysis[], a: EarsAnalysis): EarsAnalysis[] {
-  return [a, ...list.filter((x) => x.id !== a.id)];
+  const myGenre = a.myGenre ?? list.find((x) => x.id === a.id)?.myGenre;
+  return [myGenre ? { ...a, myGenre } : a, ...list.filter((x) => x.id !== a.id)];
 }
 
 const clamp01 = (x: number) => Math.max(0, Math.min(1, x));

@@ -256,7 +256,7 @@ function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
           onOpenStudio={(start, title) => {
             // N1: a new, unsaved Studio track with the loops placed, at its own tempo; the device
             // tempo and the saved tracks are left alone.
-            const draft: StudioDraft = { name: `Start from ${title || "the Mentor"}`.slice(0, 80), bpm: start.bpm, doc: starterDoc(start.loops.map((l) => l.id)), at: new Date().toISOString() };
+            const draft: StudioDraft = { name: draftName(title), bpm: start.bpm, doc: starterDoc(start.loops.map((l) => l.id)), at: new Date().toISOString() };
             try { localStorage.setItem(STUDIO_DRAFT_KEY, JSON.stringify(draft)); } catch { /* storage blocked */ }
             router.push("/");
           }}
@@ -265,6 +265,13 @@ function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
     ) : null}
     </div>
   );
+}
+
+/** A Mentor draft's name leads with the track's own title: "Artist - Realize (Original Mix)" →
+ *  "Realize (start)", so a narrow bar still shows which track it came from. */
+function draftName(title: string): string {
+  const t = (title.includes(" - ") ? title.slice(title.lastIndexOf(" - ") + 3) : title).replace(/\s*[([](?:original|extended|radio)\s+(?:mix|edit)[)\]]/gi, "").trim();
+  return (t ? `${t} (start)` : "Mentor start").slice(0, 80);
 }
 
 /** What an empty filtered table says (F5): why nothing matches, and the tracks a filter leaves out

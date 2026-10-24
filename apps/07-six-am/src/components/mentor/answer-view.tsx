@@ -130,7 +130,8 @@ export function Turn({ ask, answer, job, track, studio, dropped, myGenre, onTell
       )) : <Paras list={answer.sentences} lines={help || kind === "ear_training"} />}
 
       {!teach && answer.listenNext?.length ? <Picks items={answer.listenNext} onFeedback={onFeedback} /> : null}
-      {start ? <StudioBlock start={start} onOpen={onOpenStudio} hideKeyNote={saysKey} /> : null}
+      {/* The computed key note is hidden only when the key is the crate's own and the answer says so. */}
+      {start ? <StudioBlock start={start} onOpen={onOpenStudio} hideKeyNote={saysKey && start.key.relation === "same"} /> : null}
       {dropped?.length ? <p className={s.dropped}>Left out {dropped.length} pick{dropped.length > 1 ? "s" : ""}: no clean link found.</p> : null}
       {children}
       {/* One place for the answer's actions: under the answer, before the sources. A genre that is

@@ -157,6 +157,9 @@ export type Needs = {
   searchUrls?: ReadonlySet<string>;
   /** urlKey → the search result's page title: a pick's link must name the pick (Re-run 4). */
   searchTitles?: ReadonlyMap<string, string>;
+  /** Track id → how its key sits against the crate (studio.ts keyNote); a Studio start may not
+   *  say the bass and chords fit when it clashes. */
+  keyRelations?: ReadonlyMap<string, string>;
   /** Track id → the clock times Ears listened at ("2:55"); ear training anchors to these. */
   snippetTimes?: ReadonlyMap<string, readonly string[]>;
   /** Lines the person wrote themselves: a profile update must keep each word for word. */
@@ -186,6 +189,8 @@ const NOT_A_TRACK = /\b(top\s*\d+|charts?|playlists?|compilations?|best of|vario
 const RESEARCH_TALK = /\b(search(?:ed|ing)?|similar[- ]songs?|lists?|queues?|found|took these|pulled these|according to|web ?page|charts?)\b/i;
 const UPLOADER_TALK = /\buploader\b|\btagged\b|\b(?:genre )?tags?\b/i;
 const EARS_NUMBER = /\b\d{2,3}(?:[.,]\d)?\s*(?:bpm|%)/i;
+const KEY_FITS_CLAIM = /\b(bass|chords?|every loop|all (?:the )?loops)\b[^.]*\b(fit|fits|sit|sits|blend|blends|together|match|matches|work)\b|\bsame key\b/i;
+const KEY_CLASH_WORDS = /\b(clash|clashes|clashing|not|won't|don't|doesn't|wouldn't|only)\b/i;
 const CLOCK = /\b\d{1,2}:[0-5]\d\b/g;
 const BPM_FIGURE = /\b(\d{2,3}(?:[.,]\d)?)\s*bpm\b/gi;
 
@@ -279,6 +284,14 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
     return { ok: false, problem: `${sentences.length} sentences: keep to at most ${maxSentences(job)} and offer tellMore for the rest.` };
   }
   const answer: MentorAnswer = { sentences, tellMore: r.tellMore === true };
+  // Studio start: the key fit comes from code; claiming bass and chords fit over a clash is rejected.
+  if (job === "studio_start" && needs.keyRelations && Array.isArray(r.trackIds)) {
+    const first = typeof r.trackIds[0] === "string" ? needs.trackRefs?.get(r.trackIds[0].trim().toUpperCase()) ?? r.trackIds[0] : null;
+    if (first && needs.keyRelations.get(first) === "far") {
+      const bad = sentences.find((x) => KEY_FITS_CLAIM.test(x.text) && !KEY_CLASH_WORDS.test(x.text));
+      if (bad) return { ok: false, problem: `"${bad.text}" says the loops fit, but the track's key clashes with the crate's A minor: the bass and chords would clash, only drums and percussion fit. Say that instead.` };
+    }
+  }
   // Ear training anchors to where Ears listened when it listened at two or more points (Re-run 4).
   if (job === "ear_training" && needs.snippetTimes && Array.isArray(r.trackIds)) {
     const first = typeof r.trackIds[0] === "string" ? needs.trackRefs?.get(r.trackIds[0].trim().toUpperCase()) ?? r.trackIds[0] : null;

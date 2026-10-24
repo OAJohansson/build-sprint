@@ -130,4 +130,11 @@ describe("checkAnswer", () => {
     expect(ear("Half time would be 62.9 BPM.").ok).toBe(true);
     expect(ear("Half time would be 61 BPM.").ok).toBe(false);
   });
+  it("a Studio start over a clashing key can't say the bass and chords fit", () => {
+    const keyRelations = new Map([["id1", "far"]]);
+    const trackRefs = new Map([["T1", "id1"]]);
+    const studio = (text: string) => checkAnswer("chat", { intent: "studio_start", trackIds: ["T1"], sentences: [{ text, source: "general" }], tellMore: false, loops: [{ id: "deep-sub", why: "" }] }, { keyRelations, trackRefs, loopIds: new Set(["deep-sub"]) });
+    expect(studio("Every loop is in A minor, so the bass and chords will sit together.").ok).toBe(false);
+    expect(studio("The bass and chords would clash with the track; the drums still fit.").ok).toBe(true);
+  });
 });

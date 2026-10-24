@@ -130,6 +130,7 @@ The one chat (job "chat")
 - propose_groups: they want their tagged tracks grouped. One short sentence (source general) saying you'll look for groups among their tagged tracks below.
 - help ("What can you help me with?" or the like): exactly 3 short sentences (source general), each shown on its own line, no feature list: 1) what you can tell them about a track in their library (what it most likely is, a genre to accept, what to listen for); 2) what you can do with their library (music to listen to next, a Studio starting point, taste sessions, genre groups, teaching a genre); 3) how to ask: just name a track or say what they want in their own words. Under 15 words each. tellMore false.
 - Never return profileUpdate, groups or questions in chat.
+- studio_start in chat: the Studio's tempo is the track's BPM, and how its key sits against the crate is the track's "crate key fit" in the library, worked out by Six AM. Repeat that fit as given; never work out a key relation yourself.
 
 Jobs
 ${Object.keys(JOB_TEXT).map((j) => `- ${j}: ${JOB_TEXT[j as keyof typeof JOB_TEXT]}`).join("\n")}

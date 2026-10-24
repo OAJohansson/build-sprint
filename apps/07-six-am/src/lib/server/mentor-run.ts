@@ -7,7 +7,7 @@ import type { StoredUsage } from "@/lib/mentor/cost";
 import { monthRange, summarise, type UsageSummary } from "@/lib/mentor/periods";
 import { setupInput, type PlaylistLike } from "@/lib/mentor/playlist";
 import { JOBS_SPEC, type HistoryTurn, type LearnEvent, type MentorInput } from "@/lib/mentor/prompt";
-import { CRATE_IDS, studioStart, type StudioStart } from "@/lib/mentor/studio";
+import { CRATE_IDS, keyNote, studioStart, type StudioStart } from "@/lib/mentor/studio";
 import { clock, libraryOrder, libraryText, MAIN_THREAD, mergeSetupTracks, refOf, studioText } from "@/lib/mentor/memory";
 import { DEFAULT_BPM } from "@/lib/tempo";
 import { bpmChoice } from "@/lib/ears/bpm-choice";
@@ -281,7 +281,8 @@ async function askChat(store: MentorStore, body: AskBody, now: Date, tz: number,
   try {
     const bpms = library.flatMap((a) => { const c = bpmChoice(a); return [a.bpm, a.bpmAlternative?.bpm ?? 0, c.lead, c.other ?? 0, c.studio]; }).filter((x) => x > 0);
     const snippetTimes = new Map(library.map((a) => [a.id, a.snippets.map((x) => clock(x.startMs))] as const));
-    result = await askClaude(input, { loopIds: CRATE_IDS, trackRefs: refs, bpms, snippetTimes });
+    const keyRelations = new Map(library.map((a) => [a.id, keyNote(a.key, a.scale).relation] as const));
+    result = await askClaude(input, { loopIds: CRATE_IDS, trackRefs: refs, bpms, snippetTimes, keyRelations });
   } catch (error) {
     if (error instanceof MentorError && error.costUsd > 0) {
       await store.addMessage({ threadId, role: "assistant", job: "chat", content: JSON.stringify({ error: error.kind }), sources: null, usage: error.usage, costUsd: error.costUsd, counted: false });

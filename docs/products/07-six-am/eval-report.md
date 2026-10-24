@@ -270,3 +270,5 @@ every 10 exchanges; learning events cost nothing.
 memory summary is built from them, today's question count passed 50 (the check-in shows), and ~$1.2
 of today's cost is testing. The owner's 15 analyses (5 My genres, all restored), taste profile and
 Studio tracks are unchanged. A clean start (deleting the test turns and memory) is the owner's call.
+
+**After the final critic (6/10 on the pre-subtraction screens; Settings 4/10):** a last subtraction pass (no genre toast, two-line help, 2-sentence answers, quieter source line, 1px focus, Settings re-laid out) and an honesty fix found in the PM's own check (Studio start had said an A# minor track fits the A minor crate; the key fit is now computed in code and enforced). Not re-scored by a critic after these.

@@ -8,6 +8,14 @@
 import { bpmSentence } from "@/lib/ears/bpm-choice";
 import { brightnessLabel, energyLabel, keyLabel, pct, shownStyles } from "@/lib/ears/labels";
 import { styleDisplayName } from "@/lib/ears/styles";
+import { keyNote, type KeyRelation } from "./studio";
+
+/** How the track's key sits against the crate's A minor, worked out in code (studio.ts keyNote);
+ *  the model takes this as a fact and never infers it. */
+const KEY_FIT: Record<KeyRelation, string> = {
+  same: "same key, every loop fits", relative: "same notes, every loop fits", neighbour: "close key, loops should blend",
+  far: "clashes: bass and chords would clash, drums fit", unknown: "key unknown",
+};
 import type { EarsAnalysis } from "@/lib/ears/results";
 import { LOOPS, TRACKS, type Doc } from "@/lib/timeline";
 import type { LearnEvent } from "./prompt";
@@ -80,7 +88,7 @@ export function libraryLine(a: EarsAnalysis, i: number): string {
   const styles = shownStyles(a).slice(0, 3).map((x) => `${x.name} ${pct(x.p)}%`).join(", ") || "-";
   // Where Ears listened (for ear-training moments); a preview-only measurement says so.
   const heard = a.snippets.map((x) => `${clock(x.startMs)} ${styleDisplayName(x.topStyle)}${x.p != null ? ` ${pct(x.p)}%` : ""}`).join(", ");
-  return `${refOf(i)} | ${a.uploader || "?"} – ${a.title || "untitled"} | ${bpmSentence(a)} BPM | ${keyLabel(a.key, a.scale)} | ${energyLabel(a.energy)} energy, ${brightnessLabel(a.brightness)} | ${styles} | tag: ${a.uploaderGenreTag ?? "-"} | my genre: ${a.myGenre?.trim() || "-"} | heard${a.preview ? " (30 s preview only)" : ""}: ${heard || "-"}`;
+  return `${refOf(i)} | ${a.uploader || "?"} – ${a.title || "untitled"} | ${bpmSentence(a)} BPM | ${keyLabel(a.key, a.scale)} | ${energyLabel(a.energy)} energy, ${brightnessLabel(a.brightness)} | ${styles} | tag: ${a.uploaderGenreTag ?? "-"} | my genre: ${a.myGenre?.trim() || "-"} | crate key fit: ${KEY_FIT[keyNote(a.key, a.scale).relation]} | heard${a.preview ? " (30 s preview only)" : ""}: ${heard || "-"}`;
 }
 
 /** m:ss, as the prompt and the ear-training check write Ears' snippet times. */
@@ -88,7 +96,7 @@ export const clock = (ms: number) => { const t = Math.round(ms / 1000); return `
 
 export function libraryText(ordered: EarsAnalysis[]): string {
   if (!ordered.length) return "The person's Analyse library is empty: no tracks analysed yet.";
-  return `The person's Analyse library (${ordered.length} tracks; ref | uploader – title | BPM [ears] | key [ears] | energy, tone [ears] | top styles [ears] | uploader genre tag [uploader] | My genre [library], live | where Ears listened: time and top style [ears]):\n${ordered.map(libraryLine).join("\n")}`;
+  return `The person's Analyse library (${ordered.length} tracks; ref | uploader – title | BPM [ears] | key [ears] | energy, tone [ears] | top styles [ears] | uploader genre tag [uploader] | My genre [library], live | crate key fit (worked out by Six AM) | where Ears listened: time and top style [ears]):\n${ordered.map(libraryLine).join("\n")}`;
 }
 
 export type StudioTrackLike = { name: string; doc: Doc };

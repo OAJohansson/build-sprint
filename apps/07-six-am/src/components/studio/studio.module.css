@@ -203,8 +203,9 @@
 /* Laptop widths (user test F3): a long draft name keeps a readable start; the bar tightens so
    Save, the transport and the Settings icon all fit. */
 @media (max-width: 1366px) {
-  .bar { gap: 12px; padding: 0 16px; }
-  .trackBox { margin-left: 12px; padding-left: 12px; gap: 6px; }
+  .bar { gap: 10px; padding: 0 12px; }
+  .trackBox { margin-left: 8px; padding-left: 10px; gap: 6px; }
+  .trackTitle { min-width: 152px; }
   .transport { gap: 8px; }
   .undoWord { display: none; }
 }

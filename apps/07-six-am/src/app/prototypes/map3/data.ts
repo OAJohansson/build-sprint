@@ -155,7 +155,6 @@ export function mentorAnswer(t: Track) {
   } else if (drops[0]) {
     s.push(`There's no breakdown: one long drop runs ${drops[0].to - drops[0].from} bars and changes by small layers instead.`);
   }
-  s.push("I'm reading the map's estimates, not the stems.");
   return s.join(" ");
 }
 

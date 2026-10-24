@@ -1,6 +1,6 @@
 "use client";
-// The arrangement map in the Studio's own language: the bar ruler, the four-colour lanes (plus
-// vocals) and loop-like blocks where each layer seems to play. Read-only; one way out: a template.
+// The arrangement map in the Studio's own language: the bar ruler, the lane colours and flat
+// blocks where each layer seems to play. Read-only; one way out: a template.
 import { Fragment, useState } from "react";
 import { Logo } from "@/components/studio/logo";
 import { SettingsLink, ViewsNav } from "@/components/views-nav";
@@ -8,6 +8,8 @@ import { MENTOR_MORE, barTime, barsOf, heardOf, lengthText, mentorAnswer, type L
 import s from "./map3.module.css";
 
 export type MapState = "main" | "listening" | "empty";
+
+const RULER_PX = 1290; // the ruler's width at the 1440 px laptop layout
 
 /** Two looks only (likely, maybe): neighbouring spans that look the same become one block. */
 function blocks(spans: Span[]): Span[] {
@@ -23,9 +25,9 @@ function blocks(spans: Span[]): Span[] {
 
 const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? "" : "s"}`;
 
-/** Bar-number step so labels sit at least ~56 px apart on a ~1,300 px ruler. */
+/** Bar-number step so labels sit at least ~56 px apart on the ruler. */
 function step(bars: number) {
-  for (const st of [8, 16, 32, 64]) if ((st / bars) * 1300 >= 56) return st;
+  for (const st of [8, 16, 32, 64]) if ((st / bars) * RULER_PX >= 56) return st;
   return 128;
 }
 
@@ -49,7 +51,8 @@ export function StudioMap({ track, initialState, initialMentor }: { track: Track
 
   const secText = (x: Section) => `${x.name} · bars ${x.from}–${x.to - 1} · ${barTime(track, x.from)}–${barTime(track, x.to)}`;
   const spanText = (l: Layer, sp: Span) => `${l.name} · bars ${sp.from}–${sp.to - 1} · ${sp.level === 1 ? "maybe" : "likely"} (estimate)`;
-  const reason = state === "empty" ? "Map the track first" : state === "listening" ? "Ready when the whole track has played" : null;
+  const reason = state === "empty" ? "Map the track first" : state === "listening" ? "Ready when the whole track has played" : undefined;
+  const lines = t.sections.slice(1).map((x) => x.from);
 
   return (
     <div className={s.root} onKeyDown={(e) => { if (e.key === "Escape") { setSel(null); setRead(null); } }}>
@@ -63,74 +66,75 @@ export function StudioMap({ track, initialState, initialMentor }: { track: Track
         <a className={s.back} href="/analyse">← Analyse</a>
         <div className={s.title}>
           <h1 title={track.title}>{track.title}</h1>
-          <p title={track.uploader}>{track.uploader}</p>
+          <p>
+            <span className={s.uploader} title={track.uploader}>{track.uploader}</span>
+            <span className={s.facts}><span className={s.sep} aria-hidden>·</span>{track.bpm} BPM · {track.key} · {lengthText(track)}{state !== "empty" && ` · ${bars} bars`}</span>
+          </p>
         </div>
-        <p className={s.facts}>
-          <span>{track.bpm} BPM</span><span>{track.key}</span><span>{lengthText(track)}</span>
-          {state !== "empty" && <span>{bars} bars</span>}
-        </p>
         <div className={s.actions}>
-          {reason && <span className={s.reason} id="why">{reason}</span>}
-          {started && <span className={s.reason} aria-live="polite">Opening a new Studio track: {track.bpm} BPM, {track.key}, {bars} bars, {plural(t.sections.length, "marker")}…</span>}
-          <button className={s.textBtn} disabled={!done} aria-describedby={reason ? "why" : undefined} aria-expanded={mentor} onClick={() => setMentor((m) => !m)}>
-            {mentor ? "Hide explanation" : "Explain the structure"}
-          </button>
-          <button className={s.start} disabled={!done || started} aria-describedby={reason ? "why" : undefined} onClick={() => setStarted(true)}>
-            Start a track from this
-          </button>
+          {reason && <span id="why" className={s.srOnly}>{reason}</span>}
+          {started && <span className={s.done} aria-live="polite">Opening a new Studio track: {track.bpm} BPM, {track.key}, {bars} bars, {plural(t.sections.length, "marker")}…</span>}
+          <span title={reason}>
+            <button className={s.textBtn} disabled={!done} aria-describedby={reason ? "why" : undefined} aria-expanded={mentor} onClick={() => setMentor((m) => !m)}>
+              {mentor ? "Hide explanation" : "Explain the structure"}
+            </button>
+          </span>
+          <span title={reason}>
+            <button className={s.start} disabled={!done || started} aria-describedby={reason ? "why" : undefined} onClick={() => setStarted(true)}>
+              Start a track from this
+            </button>
+          </span>
         </div>
       </div>
 
-      {state === "listening" && (
-        <div className={s.prog} role="status">
-          <div className={s.progText}>
-            <span>Listening · bar {heard} of {bars}</span>
-            <span>{Math.floor(left / 60)}:{String(left % 60).padStart(2, "0")} left</span>
-          </div>
-          <div className={s.progBar}><i style={{ width: `${(heard / bars) * 100}%` }} /></div>
-        </div>
-      )}
-
       {mentor && (
         <section className={s.mentor} aria-label="Mentor" aria-live="polite">
-          <p><span className={s.who}>Mentor</span>{mentorAnswer(track)}{more && <> {MENTOR_MORE}</>}</p>
-          <div className={s.mentorAct}>
-            {!more && <button className={s.textBtn} onClick={() => setMore(true)}>Tell me more</button>}
-          </div>
+          <p>
+            {mentorAnswer(track)}{more && <> {MENTOR_MORE}</>}
+            {!more && <> <button className={s.textBtn} onClick={() => setMore(true)}>Tell me more</button></>}
+          </p>
+          <p className={s.source}>From this map&apos;s estimates, not the track&apos;s stems.</p>
         </section>
       )}
 
       {state !== "empty" && <div className={s.info}>
-        <span className={s.read} aria-live="polite">{read ?? "Point at a block or a section to read it."}</span>
-        <span className={s.note}>Layers are estimates from the sound, not stems. <i className={s.hatchKey} aria-hidden /> maybe</span>
+        <span className={s.read} aria-live="polite">{read}</span>
+        <span className={s.note}><i className={s.hatchKey} aria-hidden /> maybe <span className={s.sep} aria-hidden>·</span> Layers are estimates from the sound, not stems.</span>
       </div>}
 
-      <div className={s.grid} onMouseLeave={() => setRead(sel === null ? null : secText(t.sections[sel]))}>
-        <div className={s.corner}>Layers <em>est.</em></div>
+      <div className={s.grid} style={{ "--step": `${(st / bars) * 100}%` } as React.CSSProperties} onMouseLeave={() => setRead(sel === null ? null : secText(t.sections[sel]))}>
+        <div className={s.corner} title="Estimated from the sound, not stems">Layers</div>
         <div className={s.ruler}>
-          {t.sections.map((x, i) => (
-            <button
-              key={i}
-              className={s.sec}
-              style={{ left: pct(x.from), width: w(x.from, x.to) }}
-              title={x.name}
-              aria-pressed={sel === i}
-              aria-label={secText(x)}
-              onMouseEnter={() => setRead(secText(x))}
-              onFocus={() => setRead(secText(x))}
-              onClick={() => { setSel(sel === i ? null : i); setRead(secText(x)); }}
-            >
-              {x.name}
-            </button>
-          ))}
-          {state === "listening" && <span className={s.later} style={{ left: pct(heard + 1) }}>Not heard yet</span>}
+          {t.sections.map((x, i) => {
+            // Hidden (shown on hover/focus) when the name would not fit; never elided.
+            const narrow = ((x.to - x.from) / bars) * RULER_PX < x.name.length * 7 + 16;
+            return (
+              <button
+                key={i}
+                className={narrow ? `${s.sec} ${s.narrow}` : s.sec}
+                style={{ left: pct(x.from), width: w(x.from, x.to) }}
+                aria-pressed={sel === i}
+                aria-label={secText(x)}
+                onMouseEnter={() => setRead(secText(x))}
+                onFocus={() => setRead(secText(x))}
+                onClick={() => { setSel(sel === i ? null : i); setRead(secText(x)); }}
+              >
+                <span>{x.name}</span>
+              </button>
+            );
+          })}
+          {state === "listening" && <span className={s.unheard} style={{ left: pct(heard + 1) }} />}
+          {state === "listening" && (
+            <span className={s.here} style={{ left: pct(heard + 1) }} role="status">bar {heard} · {Math.floor(left / 60)}:{String(left % 60).padStart(2, "0")} left</span>
+          )}
           {nums.map((b) => <span key={b} className={s.num} style={{ left: pct(b) }}>{b}</span>)}
+          {lines.map((b) => <i key={b} className={s.secLine} style={{ left: pct(b) }} />)}
         </div>
         {t.layers.map((l) => (
           <Fragment key={l.id}>
             <div className={s.lh} style={{ "--c": l.color } as React.CSSProperties}>{l.name}</div>
-            <div className={s.lane} style={{ "--step": `${(st / bars) * 100}%` } as React.CSSProperties}>
-              {t.sections.slice(1).map((x, i) => <i key={i} className={s.line} style={{ left: pct(x.from) }} />)}
+            <div className={s.lane}>
+              {lines.map((b) => <i key={b} className={s.secLine} style={{ left: pct(b) }} />)}
               {sel !== null && t.sections[sel] && <i className={s.selCol} style={{ left: pct(t.sections[sel].from), width: w(t.sections[sel].from, t.sections[sel].to) }} />}
               {blocks(l.spans).map((sp, i) => (
                 <span

@@ -184,12 +184,12 @@ Supabase · `ANTHROPIC_API_KEY` in Vercel env (production + preview)
 | E7 | Answer within 15 s | p90 ≤ 15 s | p90 9.8–11 s; teach ~15–17 s at the slow end | pass |
 | E8 | Shown cost within a few cents; 50/day warning overrulable | ≤ $0.03/day | matches recomputation to the cent; warning + Continue anyway work (not checked against the Anthropic invoice) | pass |
 | E9 | Nothing lost on reload or another browser; no audio to Claude | yes; 0 | real Supabase: analyses, My genres, threads, groups, cost all survive a fresh browser profile; 0 audio in 160+ request bodies; 0 key exposure | pass |
-| E10 | User test every job ≥ 4/5; design critic | ≥ 4; 9/10 target | jobs after the last fix pass: see below; critic **6/10** (target, not a blocker) | see below |
+| E10 | User test every job ≥ 4/5; design critic | ≥ 4; 9/10 target | every job 4/5 after the last fix pass; critic **6/10** (target, not a blocker) | jobs pass; design target missed |
 
 **User test jobs** (re-test on the real database, before the last fix pass): Explain 4, Suggest
 genre 3, Teach 4, Ear training 4, Studio start 3, Listen next 4. The last fix pass targeted the two
 3s (Studio start now opens a new unsaved track with the loops placed; Suggest names conflicts);
-their re-check is below.
+their re-check (build 25f73d7): **Studio start 4, Suggest genre 4** ("Earlier I said Deep House; on balance House…"), so every job is now ≥ 4. New minor findings from that check (Studio header overflows with a draft open, leaving a draft has no warning, older suggest turns keep their accept buttons, the pick sits mid-paragraph, the draft's playhead starts after the loops, `/` fires one request before the code) are in the backlog.
 
 **Design:** prototype round A 5 / B 7 / C 6 (picked B, L66); built panel 6, then 6 (final);
 Settings 6–7; setup 5. Kept by every critic: the visual language and the honest voice.

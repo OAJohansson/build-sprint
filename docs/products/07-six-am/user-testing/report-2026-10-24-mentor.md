@@ -55,3 +55,7 @@ after a $0.005 answer, N7 uploader fact labelled Ears, N8 Settings target 20 px.
 Test data left in the real database: 10 analyses (the owner's own validation results) with 5 My
 genres, 18 Mentor messages ($0.17), 3 genre groups; taste profile and the owner's 2 Studio tracks
 untouched.
+
+## Re-check of Studio start and Suggest genre (25f73d7)
+
+Studio start **4/5** (new unsaved draft with the 5 loops at the suggested tempo; owner's tracks and tempo unchanged; plain-word key note). Suggest genre **4/5** (names its change of mind, agrees with Explain; one-click accept works). Source key pinned, "< $0.01" shown, /analyse gate with 0 requests. New: N9 Studio header overflow with a draft (minor), N10 leaving a draft has no warning (minor), N11 superseded accept buttons (minor), N12 pick mid-paragraph, N13 playhead after the loops, N14 one request on / before the code (polish).

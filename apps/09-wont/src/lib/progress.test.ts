@@ -117,7 +117,7 @@ describe("comeback", () => {
     at(2026, 10, 22, 8);
     const h = build("2026-10-15");
     const days = kept("2026-10-19", "2026-10-20");
-    expect(dueComeback(h, days, todayKey())).toMatchObject({ id: "2026-10-21", missed: ["2026-10-21"], hadSlip: false });
+    expect(dueComeback(h, days, todayKey())).toMatchObject({ id: "2026-10-21", missed: ["2026-10-21"], lastKind: "unlogged" });
     const after = { ...days, "2026-10-22": { kept: 1 } };
     expect(isComebackDay(h, after, "2026-10-22", todayKey())).toBe(true);
     expect(isComebackDay(h, after, "2026-10-20", todayKey())).toBe(false);
@@ -143,9 +143,32 @@ describe("comeback", () => {
     at(2026, 10, 24, 8);
     const h = stop("2026-10-20");
     const days = { ...clean("2026-10-20", "2026-10-21", "2026-10-22"), "2026-10-23": { clean: 1, slip: { size: "1" as const, at: 2 } } };
-    expect(dueComeback(h, days, todayKey())).toMatchObject({ id: "2026-10-23", hadSlip: true });
+    expect(dueComeback(h, days, todayKey())).toMatchObject({ id: "2026-10-23", lastKind: "slip" });
     const today = { ...days, "2026-10-24": { clean: 3 } };
     expect(isComebackDay(h, today, "2026-10-24", todayKey())).toBe(true);
+  });
+
+  it("F2: resumed without a reload over several days, unlogged days are never called slips", () => {
+    const h = stop("2026-10-15");
+    // Clean to Friday, a slip on Saturday 24 Oct, then nothing logged (the tab stays open).
+    const days = {
+      ...clean(...dayRange("2026-10-15", "2026-10-23")),
+      "2026-10-24": { slip: { size: "1" as const, at: 1 } },
+    };
+    at(2026, 10, 25, 9); // Sunday: the named day is Saturday, a real slip
+    expect(dueComeback(h, days, todayKey())).toMatchObject({ lastMissed: "2026-10-24", lastKind: "slip" });
+    // Monday to Wednesday, same open tab (the clock moves, nothing is marked seen): the run grows
+    // and the named day is the latest unlogged one, so the message must not say "slip".
+    for (const [d, last] of [[26, "2026-10-25"], [27, "2026-10-26"], [28, "2026-10-27"]] as const) {
+      at(2026, 10, d, 8);
+      const due = dueComeback(h, days, todayKey());
+      expect(due).toMatchObject({ id: "2026-10-24", lastMissed: last, lastKind: "unlogged" });
+      expect(days[due!.lastMissed as keyof typeof days]).toBeUndefined();
+    }
+    // Month end: a slip on 31 Oct still named as a slip on 1 Nov, after midnight but before 04:00.
+    const oct = { ...clean(...dayRange("2026-10-15", "2026-10-30")), "2026-10-31": { slip: { size: "2" as const, at: 1 } } };
+    at(2026, 11, 2, 2); // 02:00 on 2 Nov still belongs to 1 Nov
+    expect(dueComeback(h, oct, todayKey())).toMatchObject({ lastMissed: "2026-10-31", lastKind: "slip" });
   });
 
   it("first day ever: no comeback and no message", () => {

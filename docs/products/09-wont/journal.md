@@ -117,3 +117,7 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Real app built** (engineer): board, intro, new habit, new stop habit, habit page (edit,
   delete, re-log yesterday, history), slip sheet, ride-out, manifest; prototypes promoted and
   deleted; all copy in `src/lib/copy.ts`. 31 tests, lint and build pass. T14–T18.
+- **Fix pass** (engineer) on all three graders: blocker button, F2 root cause (`hadSlip` read any
+  day in the missed run; now the named day's own log, plus a test), anchors stored as typed, no
+  re-casing of user text, contrast worst 4.92:1, copy and board polish, accessibility minors.
+  32 tests. Re-check by graders next.

@@ -10,7 +10,11 @@
   --paper: #fcf9f3;
   --wash: #f0dcb2;
   --week: #fbf4e6;
-  --muted: rgba(42, 36, 32, 0.6);
+  /* Secondary text: 4.9:1 on the darkest surface it sits on (the kept wash), 5.2+ elsewhere
+     (feedback 29). Use this for every quiet text; don't add lighter greys. */
+  --muted: rgba(42, 36, 32, 0.7);
+  --tan: #c49a62;
+  --tan-track: #eadcc0;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 }
@@ -30,23 +34,19 @@ body {
   font-family: var(--font-wb), system-ui, sans-serif;
   padding-bottom: calc(env(safe-area-inset-bottom) + 24px);
 }
-.w button,
-.w input,
-.w textarea {
+/* Zero-specificity reset (feedback 25): any class, e.g. .w-primary's dough text, wins over it. */
+:where(.w) button,
+:where(.w) input,
+:where(.w) textarea {
   font: inherit;
   color: inherit;
 }
+:where(.w) ::placeholder { color: var(--muted); opacity: 1; }
 
 /* Header: ink type on the cream board, the week strip on a soft dough card (L25). */
 .w-head { padding: calc(env(safe-area-inset-top) + 16px) 12px 0; margin-bottom: 12px; }
 .w-top { display: flex; align-items: center; gap: 10px; padding: 0 4px 12px; }
 .w-top h1 { font-weight: 800; font-size: 27px; letter-spacing: -0.03em; flex: 1; }
-.w-key { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
-.w-key i {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: conic-gradient(var(--ink) 240deg, rgba(42, 36, 32, 0.08) 0);
-  box-shadow: inset 0 0 0 1px rgba(42, 36, 32, 0.35);
-}
 .w-add {
   width: 44px; height: 44px; margin-right: -6px; display: grid; place-items: center; border: 0; border-radius: 50%;
   background: transparent; cursor: pointer; transition: background-color 120ms ease;
@@ -54,17 +54,18 @@ body {
 .w-add:active { background: rgba(42, 36, 32, 0.08); }
 .w-add:focus-visible { outline: 2px solid var(--ink); outline-offset: 0; }
 .w-week { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--week); border-radius: 18px; padding: 10px 4px; }
-.w-day { text-align: center; }
-.w-day b { display: block; font-size: 10px; font-weight: 400; color: rgba(42, 36, 32, 0.6); }
+.w-day { text-align: center; margin: 0 2px; padding: 4px 0 6px; border-radius: 12px; }
+.w-day b { display: block; font-size: 11px; font-weight: 500; color: var(--muted); }
 .w-day span { display: block; font-size: 14px; color: rgba(42, 36, 32, 0.85); margin-bottom: 6px; }
-/* Each dot is a small pie: the filled share is that day's share of habits kept. */
+/* Each dot fills with steamer tan by the share of habits kept that day: one soft colour, no
+   outline, no legend (feedback 24). */
 .w-day i {
-  display: block; width: 14px; height: 14px; margin: 0 auto; border-radius: 50%;
-  background: conic-gradient(var(--ink) calc(var(--v) * 360deg), rgba(42, 36, 32, 0.08) 0);
-  box-shadow: inset 0 0 0 1px rgba(42, 36, 32, 0.35);
+  display: block; width: 12px; height: 12px; margin: 0 auto; border-radius: 50%;
+  background: conic-gradient(var(--tan) calc(var(--v) * 360deg), var(--tan-track) 0);
 }
+/* Today: the whole column sits on a soft dough tile with the date in bold; no ring around the dot. */
+.w-day.today { background: var(--dough); }
 .w-day.today span { color: var(--ink); font-weight: 700; }
-.w-day.today i { box-shadow: inset 0 0 0 1px rgba(42, 36, 32, 0.35), 0 0 0 2px var(--week), 0 0 0 3.5px var(--ink); }
 
 /* Cards: one per line, the whole card is the button. */
 .w-cards { display: flex; flex-direction: column; gap: 8px; padding: 0 12px; }
@@ -82,20 +83,27 @@ body {
 .w-hit:active { background: rgba(42, 36, 32, 0.05); }
 .w-hit:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .w-art, .w-body { pointer-events: none; }
-/* The steamer sits in the middle of the card's height (feedback 21). */
-.w-art { display: flex; justify-content: center; align-self: center; height: 123px; margin: -6px 0; }
+/* The steamer sits in the middle of the card's height (feedback 21, 24): the svg's empty sky
+   above the back row is cropped so the visible basket, not the svg box, is what gets centred. */
+.w-art { display: flex; flex-direction: column; align-items: center; align-self: center; }
+.w-art svg { display: block; margin: -40px 0 -2px; overflow: visible; }
+.w-art-cap { font-size: 11px; color: var(--muted); margin-top: 2px; }
 .w-body { min-width: 0; padding-top: 2px; }
 /* Room for the card's ⋯ button on the first two lines. */
 .w-nm { font-weight: 700; font-size: 17px; line-height: 1.2; overflow-wrap: anywhere; padding-right: 30px; }
 .w-rate { padding-right: 30px; }
 .w-rate { font-size: 12px; font-weight: 500; letter-spacing: 0.01em; color: rgba(42, 36, 32, 0.72); margin-top: 2px; }
-.w-an { font-size: 13px; line-height: 1.35; color: rgba(42, 36, 32, 0.62); margin-top: 4px; overflow-wrap: anywhere; }
-.w-cb { font-size: 13px; line-height: 1.35; margin-top: 6px; }
+/* At most two lines on the card (feedback 30); the full wording is on the habit page's form. */
+.w-an {
+  font-size: 13px; line-height: 1.35; color: var(--muted); margin-top: 4px; overflow-wrap: anywhere;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden;
+}
+.w-cb { font-size: 13px; line-height: 1.35; margin-top: 6px; color: var(--muted); }
 .w-st { font-size: 13px; color: rgba(42, 36, 32, 0.85); margin-top: 6px; }
-.w-ph { color: rgba(42, 36, 32, 0.32); }
+.w-ph { color: var(--muted); }
 .w-more {
   position: absolute; z-index: 1; top: 2px; right: 2px; width: 44px; height: 44px; display: grid; place-items: center;
-  border-radius: 50%; color: rgba(42, 36, 32, 0.55); transition: background-color 120ms ease;
+  border-radius: 50%; color: var(--muted); transition: background-color 120ms ease;
 }
 .w-more:active { background: rgba(42, 36, 32, 0.08); }
 .w-more:focus-visible { outline: 2px solid var(--ink); }
@@ -110,7 +118,7 @@ body {
 }
 .w-quiet:active { transform: scale(0.98); }
 .w-quiet[aria-pressed="true"] { border-color: var(--ink); background: #fff; }
-.w-quiet-strong { background: var(--ink); color: var(--dough) !important; border-color: var(--ink); }
+.w-quiet-strong { background: var(--ink); color: var(--dough); border-color: var(--ink); }
 .w-quiet-link { display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 14px; }
 .w-wide { width: 100%; }
 .w-quiet:focus-visible, .w-primary:focus-visible, .w-choice:focus-visible, .w-link:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
@@ -180,7 +188,7 @@ body {
 .w-ride p:not(.w-ride-time) { font-size: 15px; line-height: 1.45; opacity: 0.75; margin-top: 8px; max-width: 300px; }
 .w-ride-exit {
   margin-top: 28px; min-height: 52px; padding: 0 28px; border-radius: 16px; border: 1px solid rgba(246, 232, 204, 0.35);
-  background: transparent; color: var(--dough) !important; font-size: 16px; font-weight: 600; cursor: pointer;
+  background: transparent; color: var(--dough); font-size: 16px; font-weight: 600; cursor: pointer;
 }
 .w-ride-exit:focus-visible { outline: 2px solid var(--dough); outline-offset: 2px; }
 
@@ -256,6 +264,8 @@ body {
 /* Constant motion: linear. */
 .in-progress i.now { animation: in-fill linear forwards; }
 @keyframes in-fill { to { transform: none; } }
+/* Paused with the scene timers while the tab is hidden (feedback 32). */
+.in[data-hidden] .in-progress i.now { animation-play-state: paused; }
 .in-skip { border: 0; background: none; color: var(--dough); opacity: 0.7; font: inherit; font-size: 15px; min-height: 44px; padding: 0 4px; cursor: pointer; }
 .in-scene { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 12px; }
 .in-art { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; }
@@ -266,8 +276,8 @@ body {
 @keyframes in-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 .in-weeks { flex-direction: row; flex-wrap: wrap; justify-content: center; align-content: center; gap: 10px 6px; max-width: 300px; margin: 0 auto; }
 .in-weeks > div { display: flex; flex-direction: column; align-items: center; width: 52px; }
-.in-weeks small { font-size: 11px; opacity: 0.5; }
-.in-axis { width: 100%; text-align: center; font-size: 12px; opacity: 0.5; margin-top: 4px; }
+.in-weeks small { font-size: 11px; opacity: 0.72; }
+.in-axis { width: 100%; text-align: center; font-size: 12px; opacity: 0.72; margin-top: 4px; }
 .in-tie { gap: 10px; }
 .in-pill { border: 1px solid rgba(246, 232, 204, 0.35); border-radius: 99px; padding: 12px 20px; font-size: 16px; }
 .in-pill.dough { background: var(--dough); color: var(--ink); border-color: var(--dough); font-weight: 600; }
@@ -284,5 +294,7 @@ body {
   .w-quiet:active, .w-primary:active, .w-choice:active { transform: none; }
   /* Intro: fewer and gentler, keep the fades, drop the movement. */
   .in-a { animation-name: in-fade; animation-duration: 400ms; }
+  /* The progress bar doesn't move: the current step shows half filled (feedback 32). */
+  .in-progress i.now { animation: none; transform: scaleX(0.5); }
   @keyframes in-fade { from { opacity: 0; } to { opacity: 1; } }
 }

@@ -5,14 +5,20 @@
 const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-/** First letter lower case, for user wording placed mid-sentence. */
-const lower = (s: string) => (!s || /^I\b/.test(s) ? s : s[0].toLowerCase() + s.slice(1));
-/** First letter upper case, for user wording at the start of a sentence. */
-export const upper = (s: string) => (s ? s[0].toUpperCase() + s.slice(1) : s);
+/**
+ * User wording placed inside a template, exactly as typed (never re-cased, feedback 28), wrapped
+ * in Unicode isolates (FSI … PDI, the plain-text twin of <bdi>) so a right-to-left phrase can't
+ * scramble the template words around it (feedback 32).
+ */
+const u = (s: string) => `\u2068${s}\u2069`;
+const nf = new Intl.NumberFormat();
+/** Counts in the reader's number format (feedback 32). */
+export const num = (n: number) => nf.format(n);
 
 export const copy = {
   app: {
     name: "Wont",
+    titles: { intro: "Intro", newBuild: "A new promise", newStop: "Something to stop", habit: "Habit" },
     description: "A drawing board of promises to yourself. Missing a day doesn't reset you.",
   },
 
@@ -25,9 +31,8 @@ export const copy = {
   },
 
   board: {
-    key: "share kept each day",
-    weekLabel: "Share of habits kept each day this week",
-    dayKept: (pct: number) => `${pct}% kept`,
+    weekLabel: "This week",
+    dayKept: (day: string, kept: number, total: number) => `${day}: ${num(kept)} of ${num(total)} kept`,
     add: "Add a habit",
     replayIntro: "Watch the intro again",
     emptyTitle: "Your board is empty",
@@ -40,17 +45,21 @@ export const copy = {
     addStop: "Something to stop",
     addStopHint: "A habit to leave behind",
     notNow: "Not now",
-    open: (name: string) => `Open ${name}`,
+    open: (name: string) => `Open ${u(name)}`,
   },
 
   card: {
-    rate: (kept: number, of: number) => (of === 0 ? "New, no days yet" : `${kept} of last ${of}`),
-    cleanDays: (n: number) => (n === 0 ? "No clean days yet" : n === 1 ? "1 clean day" : `${n} clean days`),
+    /** "4 of last 7". A rate of 0 while today is still open reads as the way back, not the gap. */
+    rate: (kept: number, of: number, todayOpen = false) =>
+      of === 0 ? "New, no days yet" : kept === 0 && todayOpen ? "Back today" : `${num(kept)} of last ${num(of)}`,
+    cleanDays: (n: number) => (n === 0 ? "No clean days yet" : n === 1 ? "1 clean day" : `${num(n)} clean days`),
     buildLine: (anchor: string, action: string, goal: string) =>
-      `After ${lower(anchor)}, I will ${lower(action)} · ${lower(goal)}`,
+      `After ${u(anchor)}, I will ${u(action)} · ${u(goal)}`,
     stopLine: (trigger: string, replacement: string) =>
-      `${upper(trigger)}. Instead: ${lower(replacement)}`,
-    open: "Today",
+      `Usually ${u(trigger)}. Instead: ${u(replacement)}`,
+    /** Under a stop habit's steamer, so its pile (last 7 days) isn't read as the clean-day total. */
+    pileCaption: "this week",
+    open: "Tap when kept",
     kept: "Kept",
     comeback: "Comeback",
     cleanSoFar: "Clean so far",
@@ -58,26 +67,31 @@ export const copy = {
     slipped: (size: string, clean: number) =>
       clean === 0
         ? `Slip of ${size} today`
-        : `Slip of ${size} today · ${clean === 1 ? "1 clean day still counts" : `${clean} clean days still count`}`,
-    slipNext: (replacement: string) => `Next time: ${lower(replacement)} first.`,
-    urges: (n: number) => ` · ${n === 1 ? "an urge" : `${n} urges`} ridden out`,
+        : `Slip of ${size} today · ${clean === 1 ? "1 clean day still counts" : `${num(clean)} clean days still count`}`,
+    slipNext: (replacement: string) => `Next time: ${u(replacement)} first.`,
+    /** "ridden out" only once the 60 s pause has run to the end (feedback 34). */
+    urges: (n: number, riddenOut = false) =>
+      ` · ${n === 1 ? "1 urge" : `${num(n)} urges`}${riddenOut ? (n === 1 ? " ridden out" : ", the last ridden out") : ""}`,
     slipButton: "Slipped",
     urgeButton: "Had an urge",
     ariaBuild: (name: string, kept: boolean) =>
-      `${name}: ${kept ? "kept today, tap to undo" : "tap when kept"}`,
+      `${u(name)}: ${kept ? "kept today, tap to undo" : "tap when kept"}`,
     ariaStop: (name: string, clean: boolean) =>
-      `${name}: ${clean ? "clean so far, tap to undo" : "tap if clean so far"}`,
-    ariaSlipped: (name: string) => `${name}: slipped today, tap to change`,
+      `${u(name)}: ${clean ? "clean so far, tap to undo" : "tap if clean so far"}`,
+    ariaSlipped: (name: string) => `${u(name)}: slipped today, tap to change`,
   },
 
-  // R7: one gentle line with one next step. Never failure words.
+  // R7: one short, quiet line (feedback 24, 27). Names the most recent missed day as what it was.
+  // Never failure words, never a count of zero.
   comeback: {
-    build: (lastMissedWeekday: number, runLength: number, anchor: string, goal: string) =>
-      `${runLength > 1 ? "The last few days stayed empty" : `${WEEKDAYS[lastMissedWeekday]} stayed empty`}. That's part of it. Today, after ${lower(anchor)}: ${lower(goal)} is enough.`,
-    stopSlip: (lastMissedWeekday: number, clean: number, replacement: string) =>
-      `${WEEKDAYS[lastMissedWeekday]} had a slip. ${clean === 1 ? "Your clean day still counts" : `Your ${clean} clean days still count`}. Today: ${lower(replacement)} first.`,
-    stopUnlogged: (lastMissedWeekday: number) =>
-      `${WEEKDAYS[lastMissedWeekday]} went unlogged. That's part of it. Today counts: tap the card if you're clean so far.`,
+    build: (lastMissedWeekday: number, runLength: number) =>
+      `${runLength > 1 ? "The last few days stayed empty" : `${WEEKDAYS[lastMissedWeekday]} stayed empty`}. Today counts.`,
+    stopSlip: (lastMissedWeekday: number, clean: number) =>
+      `${WEEKDAYS[lastMissedWeekday]} had a slip. ${
+        clean === 0 ? "Today counts." : clean === 1 ? "Your clean day still counts." : `Your ${num(clean)} clean days still count.`
+      }`,
+    stopUnlogged: (lastMissedWeekday: number, runLength: number) =>
+      `${runLength > 1 ? "The last few days went unlogged" : `${WEEKDAYS[lastMissedWeekday]} went unlogged`}. Today counts.`,
   },
 
   slip: {
@@ -94,7 +108,7 @@ export const copy = {
     seconds: (n: number) => `${n} s`,
     title: "Let this one pass",
     body: (replacement: string) =>
-      `Urges rise and fall, usually within a few minutes. ${upper(replacement)}, and breathe out slowly.`,
+      `Urges rise and fall, usually within a few minutes. Your plan: ${u(replacement)}. Breathe out slowly.`,
     exit: "I'm OK now",
   },
 
@@ -102,9 +116,8 @@ export const copy = {
     back: "← Board",
     buildTitle: "A new promise",
     buildIntro: "Tie it to something you already do every day.",
-    after: "After I…",
-    afterEdit: "After…",
-    afterPlaceholder: "make my morning coffee",
+    after: "After…",
+    afterPlaceholder: "my morning coffee",
     afterHint: "Something you already do every day, at about the right time.",
     will: "I will…",
     willPlaceholder: "write in my journal",
@@ -132,9 +145,9 @@ export const copy = {
     preview: "Preview",
     previewBuildName: "I will…",
     previewStopName: "What to stop",
-    previewAfter: (after: string) => `After ${after}`,
-    previewGoal: (goal: string) => `Done when: ${goal}`,
-    previewStopLine: "Trigger. Instead: …",
+    previewAfter: (after: string, action: string) => (action ? `After ${u(after)}, I will ${u(action)}` : `After ${u(after)}`),
+    previewGoal: (goal: string) => `Done when: ${u(goal)}`,
+    previewStopLine: "Usually … Instead: …",
     save: "Add to my board",
     saveEdit: "Save changes",
   },
@@ -148,25 +161,26 @@ export const copy = {
     keptToggle: "Kept",
     cleanToggle: "Clean",
     noSlip: "No slip",
-    urgeCount: (n: number) => (n === 0 ? "No urges" : n === 1 ? "1 urge" : `${n} urges`),
+    urgeCount: (n: number) => (n === 0 ? "No urges" : n === 1 ? "1 urge" : `${num(n)} urges`),
     removeUrge: "Remove one",
     historyTitle: "History",
     historyHint: "The last two weeks. Nothing here is ever wiped.",
     status: {
       kept: "Kept",
       comeback: "Comeback",
+      /** A stop habit's finished clean day (feedback 34: "Clean", not "Kept"). */
       clean: "Clean",
       cleanSoFar: "Clean so far",
       slip: (size: string) => `Slip of ${size}`,
       notLogged: "Not logged",
       pending: "Not logged yet",
-      urges: (n: number) => ` · ${n === 1 ? "1 urge" : `${n} urges`}`,
+      urges: (n: number) => ` · ${n === 1 ? "1 urge" : `${num(n)} urges`}`,
     },
     editTitle: "Wording",
     editHint: "Your history stays as it is.",
     saved: "Saved",
     deleteButton: "Delete this habit",
-    deleteConfirm: (name: string) => `Delete “${name}” and all its history? This can't be undone.`,
+    deleteConfirm: (name: string) => `Delete “${u(name)}” and all its history? This can't be undone.`,
     deleteYes: "Delete it",
     deleteNo: "Keep it",
   },
@@ -175,7 +189,7 @@ export const copy = {
     skip: "Skip",
     s1Title: "About two months, not 21 days.",
     s1Body:
-      "Most habits take around two months to feel automatic, sometimes longer. That's normal, not a failure.",
+      "Most habits take around two months to feel automatic, sometimes longer. That's normal.",
     s1Axis: "weeks",
     s2Title: "Tie it to something you already do.",
     s2Body: "Pick a moment that already happens every day. The new habit rides along with it.",

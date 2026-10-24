@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { copy } from "@/lib/copy";
 import { useWont } from "@/lib/store";
 import { Steamer, Wonton } from "./wonton";
@@ -12,7 +12,16 @@ import { Steamer, Wonton } from "./wonton";
 // (transform + opacity, strong ease-out), a linear progress bar, React state only to step the
 // scenes. Reduced motion: fades only, no movement.
 const SCENE_MS = 6000;
+const WINK_MS = 2200;
 type Scene = 0 | 1 | 2 | 3; // 3 = the end card
+
+// Feedback 32: the intro pauses while the tab is hidden (timers and the progress bar).
+function subscribeVisibility(onChange: () => void) {
+  document.addEventListener("visibilitychange", onChange);
+  return () => document.removeEventListener("visibilitychange", onChange);
+}
+const useHidden = () =>
+  useSyncExternalStore(subscribeVisibility, () => document.visibilityState === "hidden", () => false);
 
 export function Intro() {
   const w = useWont();
@@ -23,17 +32,25 @@ export function Intro() {
   const t = copy.intro;
   const { setIntroSeen } = w;
   const hasHabits = w.state.habits.length > 0;
+  const hidden = useHidden();
+  // Time already spent on the current scene, so a hidden tab resumes where it paused.
+  const spent = useRef({ key: "", ms: 0 });
 
   useEffect(() => {
-    if (scene === 3) return;
-    const next = setTimeout(() => setScene((s) => (s + 1) as Scene), SCENE_MS);
+    if (scene === 3 || hidden) return;
+    const key = `${run}-${scene}`;
+    if (spent.current.key !== key) spent.current = { key, ms: 0 };
+    const started = Date.now();
+    const before = spent.current.ms;
+    const next = setTimeout(() => setScene((s) => (s + 1) as Scene), Math.max(0, SCENE_MS - before));
     // Scene 3: the comeback wonton drops in, then the big wonton winks.
-    const wink = scene === 2 ? setTimeout(() => setWinked(true), 2200) : undefined;
+    const wink = scene === 2 ? setTimeout(() => setWinked(true), Math.max(0, WINK_MS - before)) : undefined;
     return () => {
       clearTimeout(next);
       if (wink) clearTimeout(wink);
+      if (spent.current.key === key) spent.current.ms = before + (Date.now() - started);
     };
-  }, [scene, run]);
+  }, [scene, run, hidden]);
 
   // Seen once the end card is reached (by watching or by Skip).
   useEffect(() => {
@@ -52,7 +69,7 @@ export function Intro() {
   const d = (ms: number) => ({ ["--d" as string]: `${ms}ms` });
 
   return (
-    <main className="in">
+    <main className="in" data-hidden={hidden ? "" : undefined}>
       {scene < 3 && (
         <div className="in-top">
           <div className="in-progress" aria-hidden="true">

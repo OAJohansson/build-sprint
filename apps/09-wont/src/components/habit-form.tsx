@@ -1,20 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { copy, upper } from "@/lib/copy";
+import { copy } from "@/lib/copy";
 import type { BuildHabit, HabitDraft, HabitPatch, StopHabit } from "@/lib/habits";
 import { Steamer } from "./wonton";
 
 // The build and stop habit forms (prototypes new-habit and new-stop-habit), used to create a
 // habit (R2, R3) and to edit its wording (R9). Editing adds a card-title field and drops the preview.
 
-/** "I make coffee" / "make coffee" / "After I make coffee" → "I make coffee". */
-function normaliseAnchor(text: string) {
-  const t = text.trim().replace(/^after\s+/i, "");
-  return /^i\s/i.test(t) ? `I ${t.slice(2)}` : `I ${t}`;
-}
+// User wording is stored as typed, trimmed (feedback 26, 28): the label already says "After…",
+// so the anchor is never rewritten and no case is ever changed. The one exception: a leading
+// "I will" typed into the "I will…" field is dropped so the card doesn't say it twice.
 /** "I will read" → "read". */
 const normaliseAction = (text: string) => text.trim().replace(/^i\s+will\s+/i, "");
+
+/** Length limits (feedback 30): a card title fits one line, the rest at most two on the card. */
+const MAX = { name: 40, text: 80, why: 160 };
 
 function Field({
   id,
@@ -41,9 +42,35 @@ function Field({
   );
 }
 
-const input = (id: string, value: string, set: (v: string) => void, placeholder: string) => (
-  <input id={id} value={value} onChange={(e) => set(e.target.value)} placeholder={placeholder} autoComplete="off" />
+const input = (id: string, value: string, set: (v: string) => void, placeholder: string, max = MAX.text) => (
+  <input
+    id={id}
+    value={value}
+    onChange={(e) => set(e.target.value)}
+    placeholder={placeholder}
+    autoComplete="off"
+    dir="auto"
+    maxLength={max}
+  />
 );
+
+const whyArea = (value: string, set: (v: string) => void) => (
+  <textarea
+    id="why"
+    value={value}
+    onChange={(e) => set(e.target.value)}
+    placeholder={copy.form.whyPlaceholder}
+    dir="auto"
+    maxLength={MAX.why}
+  />
+);
+
+/**
+ * Feedback 34: a build habit's card title is its action until the title itself is edited. A
+ * title still "follows" when it equals the action (ignoring case, as older versions capitalised it).
+ */
+const follows = (h?: BuildHabit) =>
+  !h || h.name.trim().toLowerCase() === h.action.trim().toLowerCase();
 
 export function BuildForm({
   initial,
@@ -55,22 +82,29 @@ export function BuildForm({
 }) {
   const f = copy.form;
   const editing = !!initial;
-  const [name, setName] = useState(initial?.name ?? "");
+  const [nameFollows, setNameFollows] = useState(follows(initial));
+  const [ownName, setOwnName] = useState(initial?.name ?? "");
   const [after, setAfter] = useState(initial?.anchor ?? "");
   const [will, setWill] = useState(initial?.action ?? "");
   const [goal, setGoal] = useState(initial?.goal ?? "");
   const [why, setWhy] = useState(initial?.why ?? "");
-  const ready = after.trim() && will.trim() && goal.trim() && (!editing || name.trim());
-  const derivedName = upper(normaliseAction(will));
+  const derivedName = normaliseAction(will).slice(0, MAX.name);
+  // Until the action changes, a following title keeps its stored wording exactly.
+  const name = nameFollows ? (initial && will === initial.action ? initial.name : derivedName) : ownName;
+  const setName = (v: string) => {
+    setNameFollows(false);
+    setOwnName(v);
+  };
+  const ready = after.trim() && will.trim() && goal.trim() && name.trim();
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!ready) return;
     const fields = {
-      // shortcut: a new habit's card title is its action ("Write in my journal"); a separate
+      // shortcut: a new habit's card title is its action ("write in my journal"); a separate
       // title field only appears when editing. Add one to the create form if titles read badly.
-      name: editing ? name.trim() : derivedName,
-      anchor: editing ? after.trim() : normaliseAnchor(after),
+      name: name.trim(),
+      anchor: after.trim(),
       action: normaliseAction(will),
       goal: goal.trim(),
       why: why.trim() || undefined,
@@ -80,8 +114,8 @@ export function BuildForm({
 
   return (
     <form className="w-form" onSubmit={submit}>
-      {editing && <Field id="name" label={f.name}>{input("name", name, setName, derivedName)}</Field>}
-      <Field id="after" label={editing ? f.afterEdit : f.after} hint={f.afterHint}>
+      {editing && <Field id="name" label={f.name}>{input("name", name, setName, derivedName, MAX.name)}</Field>}
+      <Field id="after" label={f.after} hint={f.afterHint}>
         {input("after", after, setAfter, f.afterPlaceholder)}
       </Field>
       <Field id="will" label={f.will}>{input("will", will, setWill, f.willPlaceholder)}</Field>
@@ -96,7 +130,7 @@ export function BuildForm({
         </div>
       </Field>
       <Field id="why" label={f.why} optional>
-        <textarea id="why" value={why} onChange={(e) => setWhy(e.target.value)} placeholder={f.whyPlaceholder} />
+        {whyArea(why, setWhy)}
       </Field>
 
       {!editing && (
@@ -105,10 +139,12 @@ export function BuildForm({
           <div className="w-card w-card-static">
             <div className="w-art"><Steamer marks={[]} /></div>
             <div className="w-body">
-              <h2 className={`w-nm ${derivedName ? "" : "w-ph"}`}>{derivedName || f.previewBuildName}</h2>
+              <h2 className={`w-nm ${derivedName ? "" : "w-ph"}`} dir="auto">
+                {derivedName ? <bdi>{derivedName}</bdi> : f.previewBuildName}
+              </h2>
               <p className="w-rate">{goal.trim() ? f.previewGoal(goal.trim()) : copy.card.rate(0, 0)}</p>
               <p className="w-an">
-                {after.trim() ? f.previewAfter(normaliseAnchor(after)) : <span className="w-ph">{f.after}</span>}
+                {after.trim() ? f.previewAfter(after.trim(), normaliseAction(will)) : <span className="w-ph">{f.after}</span>}
               </p>
               <p className="w-st">{copy.card.open}</p>
             </div>
@@ -152,14 +188,15 @@ export function StopForm({
     onSave(editing ? fields : { kind: "stop", ...fields });
   };
 
-  const line = trigger.trim() || instead.trim()
-    ? `${trigger.trim()}${trigger.trim() && instead.trim() ? ". " : ""}${instead.trim() ? `Instead: ${instead.trim().toLowerCase()}` : ""}`
-    : null;
+  const line =
+    trigger.trim() || instead.trim()
+      ? copy.card.stopLine(trigger.trim() || "…", normaliseAction(instead) || "…")
+      : null;
 
   return (
     <form className="w-form" onSubmit={submit}>
       <Field id="name" label={editing ? f.name : f.stopName}>
-        {input("name", name, setName, f.stopNamePlaceholder)}
+        {input("name", name, setName, f.stopNamePlaceholder, MAX.name)}
       </Field>
       <Field id="trigger" label={f.trigger} hint={f.triggerHint}>
         {input("trigger", trigger, setTrigger, f.triggerPlaceholder)}
@@ -172,7 +209,7 @@ export function StopForm({
       </Field>
       {editing && (
         <Field id="why" label={f.why} optional>
-          <textarea id="why" value={why} onChange={(e) => setWhy(e.target.value)} placeholder={f.whyPlaceholder} />
+          {whyArea(why, setWhy)}
         </Field>
       )}
 
@@ -182,7 +219,9 @@ export function StopForm({
           <div className="w-card w-card-static">
             <div className="w-art"><Steamer marks={[]} /></div>
             <div className="w-body">
-              <h2 className={`w-nm ${name.trim() ? "" : "w-ph"}`}>{name.trim() || f.previewStopName}</h2>
+              <h2 className={`w-nm ${name.trim() ? "" : "w-ph"}`} dir="auto">
+                {name.trim() ? <bdi>{name.trim()}</bdi> : f.previewStopName}
+              </h2>
               <p className="w-rate">{copy.card.cleanDays(0)}</p>
               <p className="w-an">{line ?? <span className="w-ph">{f.previewStopLine}</span>}</p>
               <p className="w-st">{copy.card.tapIfClean}</p>

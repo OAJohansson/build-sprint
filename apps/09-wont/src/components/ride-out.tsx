@@ -8,7 +8,17 @@ import { Wonton } from "./wonton";
 // The urge is already logged when this opens, so leaving early loses nothing.
 const RIDE_S = 60;
 
-export function RideOut({ replacement, onDone }: { replacement: string; onDone: () => void }) {
+export function RideOut({
+  replacement,
+  onExit,
+  onComplete,
+}: {
+  replacement: string;
+  /** Left early with "I'm OK now". */
+  onExit: () => void;
+  /** The 60 s ran to the end: the urge was ridden out. */
+  onComplete: () => void;
+}) {
   const [left, setLeft] = useState(RIDE_S);
 
   useEffect(() => {
@@ -17,11 +27,11 @@ export function RideOut({ replacement, onDone }: { replacement: string; onDone: 
       const next = RIDE_S - Math.floor((Date.now() - start) / 1000);
       if (next <= 0) {
         window.clearInterval(id);
-        onDone();
+        onComplete();
       } else setLeft(next);
     }, 250);
     return () => window.clearInterval(id);
-  }, [onDone]);
+  }, [onComplete]);
 
   return (
     <section className="w-ride" role="dialog" aria-modal="true" aria-label={copy.ride.label}>
@@ -45,7 +55,7 @@ export function RideOut({ replacement, onDone }: { replacement: string; onDone: 
       <p className="w-ride-time" aria-live="off">{copy.ride.seconds(left)}</p>
       <h2>{copy.ride.title}</h2>
       <p>{copy.ride.body(replacement)}</p>
-      <button type="button" className="w-ride-exit" onClick={onDone} autoFocus>
+      <button type="button" className="w-ride-exit" onClick={onExit} autoFocus>
         {copy.ride.exit}
       </button>
     </section>

@@ -47,3 +47,4 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T16 | 25 Oct | Edit, delete, re-log yesterday and 14-day history live on /habit/[id], reached by "⋯" on each card | PM (engineer) | build | |
 | T17 | 25 Oct | Comeback line marked seen when the app is hidden or closed; an urge is logged on tap, even if the pause is left early; tapping a stop card with a slip opens the slip sheet | PM (engineer) | build | |
 | T18 | 25 Oct | Status bar cream to match the board; web app manifest with the ink icon; new habit's title is its action | PM (engineer) | build | |
+| T19 | 25 Oct | Fix pass: card keeps " · goal"; stop line "Usually {trigger}. Instead: {replacement}"; comeback line names the last missed day as what it was; "ridden out" lasts the visit only; muted text ink at 70% | PM (engineer) | fixes | |

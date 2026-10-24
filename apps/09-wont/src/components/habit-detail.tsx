@@ -49,9 +49,11 @@ export function HabitDetail({ id }: { id: string }) {
     <main className="w">
       <header className="w-head w-head-form">
         <Link href="/" className="w-back">{copy.form.back}</Link>
-        <h1>{habit.name}</h1>
+        <h1 dir="auto"><bdi>{habit.name}</bdi></h1>
         <p>
-          {habit.kind === "build" ? copy.card.rate(m.rate.kept, m.rate.of) : copy.card.cleanDays(m.cleanDays)}
+          {habit.kind === "build"
+            ? copy.card.rate(m.rate.kept, m.rate.of, m.today === "pending")
+            : copy.card.cleanDays(m.cleanDays)}
         </p>
       </header>
 
@@ -72,7 +74,7 @@ export function HabitDetail({ id }: { id: string }) {
             {history(habit, days, today).map((r) => (
               <li key={r.day} className={r.comeback ? "comeback" : undefined}>
                 <span>{copy.days.short(dayParts(r.day).weekday, dayParts(r.day).date, dayParts(r.day).month)}</span>
-                <b>{statusText(r)}</b>
+                <b>{statusText(habit, r)}</b>
               </li>
             ))}
           </ul>
@@ -119,13 +121,13 @@ export function HabitDetail({ id }: { id: string }) {
   );
 }
 
-function statusText(r: HistoryRow) {
+function statusText(habit: Habit, r: HistoryRow) {
   const s = copy.detail.status;
   const base =
     r.status === "slip"
       ? s.slip(r.slipSize ?? "1")
       : r.status === "kept"
-        ? r.comeback ? s.comeback : s.kept
+        ? r.comeback ? s.comeback : habit.kind === "stop" ? s.clean : s.kept
         : r.status === "clean-so-far"
           ? r.comeback ? `${s.cleanSoFar} · ${s.comeback}` : s.cleanSoFar
           : r.status === "pending"

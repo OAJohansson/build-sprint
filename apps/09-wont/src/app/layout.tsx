@@ -8,7 +8,8 @@ import "./wont.css";
 const bricolage = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-wb" });
 
 export const metadata: Metadata = {
-  title: copy.app.name,
+  // Per-page titles (feedback 32): "Intro · Wont"; the board is plain "Wont".
+  title: { default: copy.app.name, template: `%s · ${copy.app.name}` },
   description: copy.app.description,
   applicationName: copy.app.name,
   appleWebApp: { capable: true, title: copy.app.name, statusBarStyle: "default" },
@@ -25,7 +26,8 @@ export const metadata: Metadata = {
 
 // Phone baseline (mobile-native skill): content can sit under the notch (pad with
 // env(safe-area-inset-*)), the keyboard resizes the layout, and the status bar matches the cream
-// board (L25: no dark band). Zoom stays enabled. Wont has one light theme.
+// board (L25: no dark band). Zoom stays enabled. Wont has one light theme and one theme colour,
+// cream, here and in the manifest (feedback 32).
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,

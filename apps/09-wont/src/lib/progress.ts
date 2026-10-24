@@ -124,10 +124,14 @@ export interface DueComeback {
   id: DayKey;
   /** The missed days, oldest first (one or more; one message however many). */
   missed: DayKey[];
-  /** The most recent missed day (for copy like "Friday's page stayed empty"). */
+  /** The most recent missed day: the day the message names ("Friday stayed empty"). */
   lastMissed: DayKey;
-  /** True when any missed day was a slip (stop habit), not just an unlogged day. */
-  hadSlip: boolean;
+  /**
+   * What the named day (lastMissed) was: a slip, or a day left unlogged. Read from that day's own
+   * log, never from the rest of the run, so an unlogged day is never described as a slip (F2:
+   * a Saturday slip followed by unlogged days used to make "Tuesday had a slip").
+   */
+  lastKind: "slip" | "unlogged";
 }
 
 /**
@@ -150,7 +154,7 @@ export function dueComeback(
     id,
     missed,
     lastMissed: missed[missed.length - 1],
-    hadSlip: missed.some((d) => !!days?.[d]?.slip),
+    lastKind: days?.[missed[missed.length - 1]]?.slip ? "slip" : "unlogged",
   };
 }
 

@@ -42,12 +42,24 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
   const questions: Question[] = reply?.answer.questions ?? [];
   const reached = reply ? 3 : 0;
 
-  const close = (saved: boolean) => { preview.stop(); reader.cancel(); onClose(saved); };
+  /** Set on close, so a read in progress stops and never sends the setup request. */
+  const closed = useRef(false);
+  const close = (saved: boolean) => { closed.current = true; preview.stop(); reader.cancel(); onClose(saved); };
   const onEscape = useEffectEvent(() => { if (!progress && !saving) close(!!reply); });
   useEffect(() => {
     const prev = document.activeElement as HTMLElement | null;
     (dialog.current?.querySelector<HTMLElement>("textarea") ?? dialog.current?.querySelector<HTMLElement>("button"))?.focus();
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onEscape(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") return onEscape();
+      // Focus stays inside the dialog: Tab from the last control goes to the first, and back.
+      if (e.key !== "Tab" || !dialog.current) return;
+      const items = [...dialog.current.querySelectorAll<HTMLElement>("button:not(:disabled), textarea:not(:disabled), input:not(:disabled), [href]")];
+      if (!items.length) return;
+      const first = items[0], last = items[items.length - 1];
+      const inside = dialog.current.contains(document.activeElement);
+      if (e.shiftKey && (document.activeElement === first || !inside)) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && (document.activeElement === last || !inside)) { e.preventDefault(); first.focus(); }
+    };
     window.addEventListener("keydown", onKey);
     return () => { window.removeEventListener("keydown", onKey); prev?.focus?.(); };
   }, []);
@@ -67,11 +79,13 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
         const where = sets.length > 1 ? `playlist ${i + 1} of ${sets.length}` : "the playlist";
         setProgress(`Reading ${where}…`);
         const sounds = await reader.read(set.url, (done, of) => setProgress(`Reading ${where} · ${done}/${of}`));
+        if (closed.current) return;
         if (!sounds) { problems.push(`${set.slug ?? set.url}: didn't load (private, removed or a wrong link)`); continue; }
         if (!sounds.length) { problems.push(`${set.slug ?? set.url}: empty or private`); continue; }
         const meta = await oembedTitle(set.url);
         lists.push({ title: meta?.title ?? set.slug ?? null, url: set.url, sounds });
       }
+      if (closed.current) return;
       if (!lists.length) throw new Error(problems.join(" · ") || "None of those playlists could be read.");
       setProgress("Drafting your taste from what was read…");
       const r = await data.api.ask({ job: "setup", playlists: lists });
@@ -84,6 +98,7 @@ export function SetupDialog({ data, onClose }: { data: MentorData; onClose: (sav
       setStep(1);
       if (problems.length) setError(`Skipped: ${problems.join(" · ")}`);
     } catch (e) {
+      if (closed.current) return;
       if (e instanceof ApiError && e.status === 401) { data.onError(e); close(false); return; }
       setError(e instanceof Error ? e.message : "Something went wrong.");
     } finally {
@@ -244,6 +259,8 @@ function useReader() {
     }
     return sounds.filter((x) => x.title);
   };
+  // The iframe goes with the dialog; drop the player so nothing talks to a removed widget.
+  useEffect(() => () => { abort.current?.abort(); player.current = null; }, []);
   const frame = src ? (
     <iframe ref={onIframe} title="SoundCloud player for reading playlists" aria-hidden="true" tabIndex={-1} allow="autoplay" src={widgetSrc(src)}
       style={{ position: "fixed", left: -9999, top: 0, width: 300, height: 20, border: 0, opacity: 0, pointerEvents: "none" }} />

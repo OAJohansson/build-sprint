@@ -434,3 +434,4 @@ Entries for the shared pages, written once at wrap-up of the Ears phase (AGENTS.
   the shared Supabase project as a production change. It needs the owner's OK (or the SQL pasted in
   the Supabase SQL Editor). Until then local testing runs on the in-memory store.
 - **Mentor UI built** (after a network cut and a resume): panel, setup, /settings, genre groups, taste sessions, learning events, Ears ↔ Supabase sync, L55 removals. 129 tests, lint, tsc, build pass. 13 real calls, about $0.19. Open: listen_next with a track didn't run a web search once (honest answer, no invented tracks); a setup-dialog close crash patched but unconfirmed. L67–L70, T28.
+- **Fixes:** listen_next now searches (basic web search tool, L71) and returns real links with because-lines; the setup-dialog close crash is fixed (no widget pause after unmount, close cancels a read, focus trapped). 18 real calls so far, about $0.37.

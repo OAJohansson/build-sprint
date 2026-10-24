@@ -112,7 +112,7 @@ function Picks({ items, onFeedback }: { items: ListenNext[]; onFeedback?: TurnPr
   return (
     <ol className={s.list}>
       {items.map((it, i) => (
-        <li key={it.url}>
+        <li key={`${i}-${it.url}`}>
           <span className={s.n}>{i + 1}</span>
           <div>
             <a className={s.itemTitle} href={it.url} target="_blank" rel="noreferrer">{it.artist} – {it.title} <span className={s.arrow}>↗</span></a>

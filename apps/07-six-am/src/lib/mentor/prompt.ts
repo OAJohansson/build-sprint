@@ -138,7 +138,12 @@ export const ANSWER_TOOL: Anthropic.Beta.BetaTool = {
 
 // shortcut: max_uses 3 for every job keeps the tool list byte-identical (cache-stable) across
 // jobs; jobs that shouldn't search are told so in their instruction. Per-job caps would bust the cache.
-export const WEB_SEARCH_TOOL: Anthropic.Beta.BetaWebSearchTool20260209 = { type: "web_search_20260209", name: "web_search", max_uses: 3 };
+// The basic web search (not web_search_20260209's dynamic filtering): with dynamic filtering the
+// model ran its searches inside code execution, spent all 3 uses in one script, didn't trust the
+// printed output and answered "no results" for listen next. Basic search puts the results (title,
+// URL) straight into the model's context, which is what the answer's links must come from (L64).
+// Upgrade back when dynamic filtering reliably returns usable results inside 3 uses.
+export const WEB_SEARCH_TOOL: Anthropic.Beta.BetaWebSearchTool20250305 = { type: "web_search_20250305", name: "web_search", max_uses: 3 };
 
 // shortcut: follow-ups resend the last 8 turns as plain text, uncached (only the system prompt and
 // profile are cached); add a messages cache breakpoint if long threads get expensive.

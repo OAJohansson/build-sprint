@@ -2,7 +2,7 @@
 // Run: node analyse.ts <bakeoffDir> <pcmDir>   (Node 24, type stripping)
 import fs from "node:fs";
 import path from "node:path";
-import { melFrames, estimateBpm, estimateKey, rankKeys, chromaProfile } from "./ears/features.ts";
+import { melFrames, estimateBpm, estimateKey, rankKeys, chromaProfile } from "../../src/lib/ears/features.ts";
 
 const [BAKE, PCM] = process.argv.slice(2);
 const manifest = JSON.parse(fs.readFileSync(path.join(BAKE, "manifest.json"), "utf8"));

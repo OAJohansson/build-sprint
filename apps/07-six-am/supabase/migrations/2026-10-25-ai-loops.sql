@@ -19,10 +19,16 @@ create table if not exists sixam_ai_loops (
   bars smallint not null check (bars between 1 and 64),
   seed bigint,
   mime text not null,
-  -- Estimated from the provider's published price (Stable Audio 8 credits = $0.08; Lyria Clip $0.04).
+  -- Estimated from the provider's published price (Stable Audio 8 credits = $0.08 per draw; Lyria Clip $0.04).
   cost_usd numeric(10, 6) not null default 0,
   -- Seconds the provider took (wall clock), not the audio length.
   seconds numeric(8, 3) not null default 0,
+  -- L126: the server checks each draw (tempo ±1 BPM, same or relative key) and draws again, up to
+  -- 3. draws = paid draws (each counts towards the daily cap; cost_usd is their sum), checked =
+  -- the kept one passed, measured = { bpm, key, scale, keyStrength, inKey, onTempo }.
+  draws smallint not null default 1 check (draws between 1 and 3),
+  checked boolean not null default false,
+  measured jsonb,
   -- The Ears result it was made from (sixam_analyses.id, the SoundCloud URL), if any. No FK: a
   -- cleared analysis keeps its loops.
   analysis_id text check (analysis_id is null or char_length(analysis_id) <= 600),

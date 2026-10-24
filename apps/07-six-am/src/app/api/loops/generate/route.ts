@@ -1,5 +1,6 @@
 import { loopGuard } from "@/lib/server/access";
 import { fallbackProvider, generateLoop, LoopsUnavailable, primaryProvider, providerModels } from "@/lib/server/ai-loops";
+import { MAX_DRAWS } from "@/lib/server/ai-loops/draws";
 import { isLoopProviderError } from "@/lib/server/ai-loops/types";
 import { failure, serverError } from "@/lib/server/failure";
 import { getMentorStore } from "@/lib/server/mentor-store";
@@ -9,12 +10,17 @@ import { cleanTzOffset, monthRange } from "@/lib/mentor/periods";
 
 // "Generate a bass loop like this track" (S4, A9, A11). Behind the access code; the provider keys
 // stay on the server. The prompt is built here from the track's analysis (numbers and style words,
-// never audio). A hard per-day cap (LOOPS_DAILY_CAP, default 20) because each loop costs money.
+// never audio). The server checks each draw (tempo ±1 BPM, same or relative key) and draws again
+// until one passes, at most MAX_DRAWS = 3 (L126); each paid draw counts towards the hard per-day
+// cap (LOOPS_DAILY_CAP, default 20 draws ≈ $1.60).
 //
 // POST { analysisId? | analysis?: { bpm, key, scale, genres?, myGenre? }, bars?: 4 | 8, seed?, tz? }
 //   The service is picked by env only (LOOPS_PROVIDER / LOOPS_FALLBACK, both off = Stable Audio).
-//   → { loop: { id, provider, model, prompt, bpm, key, scale, bars, mime, costUsd, seconds, … },
-//       audio: { base64, mime }, finish: { trimmed, seam, rawSeconds, seconds }, fellBack, usage: { today, cap, left, todayUsd, monthUsd } }
+//   → { loop: { id, provider, model, prompt, bpm, key, scale, bars, seed, mime, costUsd (all draws),
+//               seconds, draws, checked, measured, … },
+//       measured: { bpm, key, scale, inKey, onTempo } | null, checked, draws, costUsd,
+//       audio: { base64, mime }, finish: { trimmed, seam, rawSeconds, seconds }, fellBack,
+//       usage: { today (draws), cap, left, todayUsd, monthUsd } }
 // GET ?tz= → { usage, provider, fallback, models }
 export const maxDuration = 60;
 
@@ -81,16 +87,17 @@ export async function POST(request: Request) {
     // 2. The daily cap, before any money is spent.
     const before = loopUsage(await g.store.costRows(monthRange(now, tz).start), now, tz, cap);
     if (before.left <= 0) {
-      return Response.json({ error: `That's the daily limit of ${cap} AI loops. More tomorrow.`, kind: "cap", usage: before }, { status: 429 });
+      return Response.json({ error: `That's the daily limit of ${cap} AI loop draws. More tomorrow.`, kind: "cap", usage: before }, { status: 429 });
     }
 
-    // 3. Generate (primary, then the fallback on a retryable failure) and keep the file.
+    // 3. Draw until one passes the check (never past the cap), then keep the file.
     const req = bassLoopRequest(source, bars, seed);
-    const result = await generateLoop(req);
+    const result = await generateLoop(req, Math.min(MAX_DRAWS, before.left));
     const meta = {
       provider: result.provider, model: result.model, prompt: req.prompt, bpm: req.bpm, key: req.key, scale: req.scale,
-      bars: req.bars, seed: seed ?? (Number(result.meta.seed) || null), mime: result.mime, costUsd: result.costUsd,
-      seconds: result.seconds, analysisId,
+      bars: req.bars, seed: result.seed, mime: result.mime, costUsd: result.totalCostUsd,
+      seconds: Math.round(result.log.reduce((s, d) => s + d.seconds, 0) * 1000) / 1000,
+      draws: result.draws, checked: result.checked, measured: result.measured, analysisId,
     };
     let loop;
     let stored = true;
@@ -106,6 +113,12 @@ export async function POST(request: Request) {
     const after = loopUsage(await g.store.costRows(monthRange(now, tz).start).catch(() => []), now, tz, cap);
     return Response.json({
       loop: { ...loop, requestedSeconds: result.requestedSeconds, estimate: true },
+      measured: result.measured
+        ? { bpm: result.measured.bpm, key: result.measured.key, scale: result.measured.scale, inKey: result.measured.inKey, onTempo: result.measured.onTempo }
+        : null,
+      checked: result.checked,
+      draws: result.draws,
+      costUsd: result.totalCostUsd,
       audio: { base64: Buffer.from(result.audio).toString("base64"), mime: result.mime },
       finish: result.finish,
       fellBack: result.fellBack,

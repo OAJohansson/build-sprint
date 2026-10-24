@@ -1,6 +1,7 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { LoopCostRow } from "@/lib/ai-loops/cap";
+import type { Measured } from "@/lib/ai-loops/check";
 import type { LoopProviderId } from "@/lib/ai-loops/prompt";
 import { connect, explain, StoreError, type DbError } from "../store";
 
@@ -21,8 +22,13 @@ export type LoopMeta = {
   bars: number;
   seed: number | null;
   mime: string;
+  /** All paid draws together (L126). */
   costUsd: number;
   seconds: number;
+  /** Paid draws it took (1–3), and whether the returned one passed the tempo/key check. */
+  draws: number;
+  checked: boolean;
+  measured: Measured | null;
   /** The Ears result it was made from (its SoundCloud URL), if any. */
   analysisId: string | null;
   createdAt: string;
@@ -42,14 +48,15 @@ const TABLE = "sixam_ai_loops";
 type Row = {
   id: string; provider: LoopProviderId; model: string; prompt: string; bpm: number | string; key: string; scale: string;
   bars: number; seed: number | string | null; mime: string; cost_usd: number | string; seconds: number | string;
-  analysis_id: string | null; created_at: string;
+  analysis_id: string | null; draws: number | null; checked: boolean | null; measured: Measured | null; created_at: string;
 };
 const toMeta = (r: Row): LoopMeta => ({
   id: r.id, provider: r.provider, model: r.model, prompt: r.prompt, bpm: Number(r.bpm), key: r.key, scale: r.scale,
   bars: r.bars, seed: r.seed === null ? null : Number(r.seed), mime: r.mime, costUsd: Number(r.cost_usd) || 0,
-  seconds: Number(r.seconds) || 0, analysisId: r.analysis_id, createdAt: r.created_at,
+  seconds: Number(r.seconds) || 0, draws: r.draws ?? 1, checked: r.checked ?? false, measured: r.measured ?? null,
+  analysisId: r.analysis_id, createdAt: r.created_at,
 });
-const COLUMNS = "id, provider, model, prompt, bpm, key, scale, bars, seed, mime, cost_usd, seconds, analysis_id, created_at";
+const COLUMNS = "id, provider, model, prompt, bpm, key, scale, bars, seed, mime, cost_usd, seconds, draws, checked, measured, analysis_id, created_at";
 
 function supabaseLoops(db: SupabaseClient): LoopStore {
   const check = (error: DbError | null) => {
@@ -62,7 +69,8 @@ function supabaseLoops(db: SupabaseClient): LoopStore {
         .from(TABLE)
         .insert({
           provider: l.provider, model: l.model, prompt: l.prompt, bpm: l.bpm, key: l.key, scale: l.scale, bars: l.bars,
-          seed: l.seed, mime: l.mime, cost_usd: l.costUsd, seconds: l.seconds, analysis_id: l.analysisId,
+          seed: l.seed, mime: l.mime, cost_usd: l.costUsd, seconds: l.seconds, draws: l.draws, checked: l.checked,
+          measured: l.measured, analysis_id: l.analysisId,
           audio_b64: Buffer.from(l.audio).toString("base64"),
         })
         .select(COLUMNS)
@@ -71,9 +79,9 @@ function supabaseLoops(db: SupabaseClient): LoopStore {
       return toMeta(data as Row);
     },
     async costRows(since) {
-      const { data, error } = await db.from(TABLE).select("created_at, cost_usd").gte("created_at", since.toISOString());
+      const { data, error } = await db.from(TABLE).select("created_at, cost_usd, draws").gte("created_at", since.toISOString());
       check(error);
-      return (data as Pick<Row, "created_at" | "cost_usd">[]).map((r) => ({ createdAt: r.created_at, costUsd: Number(r.cost_usd) || 0 }));
+      return (data as Pick<Row, "created_at" | "cost_usd" | "draws">[]).map((r) => ({ createdAt: r.created_at, costUsd: Number(r.cost_usd) || 0, draws: r.draws ?? 1 }));
     },
     async getAudio(id) {
       const { data, error } = await db.from(TABLE).select(`${COLUMNS}, audio_b64`).eq("id", id).maybeSingle();
@@ -98,7 +106,7 @@ function memoryLoops(): LoopStore {
     async costRows(since) {
       return [...mem.values()]
         .filter((l) => Date.parse(l.meta.createdAt) >= since.getTime())
-        .map((l) => ({ createdAt: l.meta.createdAt, costUsd: l.meta.costUsd }));
+        .map((l) => ({ createdAt: l.meta.createdAt, costUsd: l.meta.costUsd, draws: l.meta.draws }));
     },
     async getAudio(id) {
       return mem.get(id) ?? null;

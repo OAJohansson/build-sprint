@@ -1,5 +1,5 @@
 import "server-only";
-import { finishLoop, type LoopFinish } from "@/lib/ai-loops/wav";
+import { drawLoop, type DrawnLoop } from "./draws";
 import { lyriaAdapter } from "./lyria";
 import { stabilityAdapter } from "./stability";
 import { isLoopProviderError, type LoopAdapter, type LoopProviderId, type LoopRequest, type LoopResult } from "./types";
@@ -12,8 +12,9 @@ import { isLoopProviderError, type LoopAdapter, type LoopProviderId, type LoopRe
 export const DEFAULT_PROVIDER: LoopProviderId = "stability";
 
 const ADAPTERS: Record<LoopProviderId, LoopAdapter> = {
-  stability: stabilityAdapter("stable-audio-2.5"),
-  lyria: lyriaAdapter("lyria-3-clip-preview"),
+  // Timeouts keep up to 3 draws inside the route's 60 s (a draw takes ~3 s; Lyria ~13 s, 1 draw).
+  stability: stabilityAdapter("stable-audio-2.5", 18_000),
+  lyria: lyriaAdapter("lyria-3-clip-preview", 40_000),
 };
 
 const KEY_ENV: Record<LoopProviderId, string> = { stability: "STABILITY_API_KEY", lyria: "GEMINI_API_KEY" };
@@ -38,11 +39,8 @@ export const providerModels = () => ({ stability: ADAPTERS.stability.model, lyri
 
 export class LoopsUnavailable extends Error {}
 
-/**
- * Generate one loop with the primary, then the fallback (if switched on) on a retryable failure.
- * WAV results are trimmed to exactly `bars` with a clean seam (finishLoop).
- */
-export async function generateLoop(req: LoopRequest): Promise<LoopResult & { fellBack: boolean; finish: LoopFinish }> {
+/** One provider call: the primary, then the fallback (if switched on) on a retryable failure. */
+async function generateOnce(req: LoopRequest): Promise<LoopResult & { fellBack: boolean }> {
   const first = primaryProvider();
   const fb = fallbackProvider();
   const order = [first, ...(fb ? [fb] : [])].filter((p) => keyFor(p));
@@ -50,9 +48,7 @@ export async function generateLoop(req: LoopRequest): Promise<LoopResult & { fel
   let lastError: unknown;
   for (const p of order) {
     try {
-      const result = await ADAPTERS[p].generate(req, keyFor(p));
-      const { audio, finish } = finishLoop(result.audio, result.mime, req.bpm, req.bars);
-      return { ...result, audio, finish, fellBack: p !== first };
+      return { ...(await ADAPTERS[p].generate(req, keyFor(p))), fellBack: p !== first };
     } catch (e) {
       lastError = e;
       // Not retryable (bad prompt, moderation, no credits): the fallback would fail the same way
@@ -61,4 +57,22 @@ export async function generateLoop(req: LoopRequest): Promise<LoopResult & { fel
     }
   }
   throw lastError;
+}
+
+/**
+ * Generate a checked loop (L126): up to `maxDraws` (≤ MAX_DRAWS) draws until one is on tempo and in
+ * key, each trimmed to exactly `bars` with a clean seam. See draws.ts.
+ */
+export async function generateLoop(req: LoopRequest, maxDraws: number): Promise<DrawnLoop & { fellBack: boolean }> {
+  let fellBack = false;
+  const drawn = await drawLoop(
+    req,
+    async (r) => {
+      const res = await generateOnce(r);
+      fellBack ||= res.fellBack;
+      return res;
+    },
+    { maxDraws },
+  );
+  return { ...drawn, fellBack };
 }

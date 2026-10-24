@@ -136,3 +136,38 @@ from the whole second it came back as (17/16/8/16/14 s) to the exact bar length 
 Stability balance went 429 → 349, 80 credits = 8 per loop (read 20 s after the run). Files are in
 `<scratchpad>/bakeoff-2/stability/NN-s{42,7}.wav`, with `manifest.json` (each item has `finish`:
 raw and trimmed seconds, and the seam method).
+
+## Checked draws (bakeoff-3, after L126)
+
+The server now checks every draw and draws again until one passes, at most `MAX_DRAWS = 3`.
+Each draw goes through generate → `finishLoop` (exact length, seam) → `checkLoop`
+(`src/lib/ai-loops/check.ts`) → `drawLoop` (`src/lib/server/ai-loops/draws.ts`). If none pass,
+the best-scoring draw is kept with `checked: false` and what was measured. Every paid draw counts
+towards the daily cap, and the shown cost is the sum of the draws.
+
+- **Tempo:** the app's own Ears estimator (onset autocorrelation) on 16 kHz mono (windowed-sinc
+  resample). It's the estimator data-evals grades with. On tempo = within ±1 BPM of the request, so
+  half, double and 3:2 reads fail.
+- **Key:** bass-range peak chroma (30–400 Hz, 16384-point frames, each frame normalised) against
+  Krumhansl–Kessler profiles. In key = the same key or its relative major/minor.
+- **Unit tests** on synthetic sine bass lines: `src/lib/ai-loops/check.test.ts`.
+- **Agreement check (not a grade):** on the 10 bakeoff-2 files, `checkLoop` reproduces the
+  re-grade's tempo and bass-key readings on 10/10.
+
+Run: `node --import ./scripts/ts-resolve.mjs scripts/loops-draws.mjs --out <scratchpad>/bakeoff-3`.
+It used the script path because another session's `next dev` holds this app folder, and Next
+allows one dev server per folder. The script runs the same `drawLoop` and the same Stable Audio 2.5
+adapter as the route, with the same 18 s timeout. It made the 5 requests once each, starting from
+seed 42:
+
+| # | Request | Draws | Kept loop (measured by the server) | Checked | Cost |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 120 A minor 8 bars | 1 | 120 BPM, A minor | pass | $0.08 |
+| 2 | 124 F minor 8 bars | 2 (draw 1 read C major) | 124 BPM, F minor | pass | $0.16 |
+| 3 | 126 C major 4 bars | 1 | 126 BPM, C major | pass | $0.08 |
+| 4 | 128 D# minor 8 bars | 1 | 128.2 BPM, D# minor | pass | $0.08 |
+| 5 | 145 G minor 8 bars | 3 (72.5 G min; 145 A# min; 145.3 F# maj) | best: 72.5 BPM, G minor | **none passed** | $0.24 |
+
+That is 8 draws and **$0.64**. The Stability balance went 349 → 285 = 64 credits = 8 per draw.
+The files and `manifest.json` (every draw's seed, time, cost and measured values) are in
+`<scratchpad>/bakeoff-3/`.

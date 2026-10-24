@@ -117,3 +117,18 @@ export function finishLoop(audio: Uint8Array, mime: string, bpm: number, bars: n
   }
   return { audio: writeWav16(out, sr, ch), finish: { trimmed: true, seam, rawSeconds, seconds: Math.round((n / sr) * 1e4) / 1e4 } };
 }
+
+/** A 16-bit PCM WAV as one mono Float32 channel (-1…1) for the loop check; null for anything else. */
+export function decodeMono(bytes: Uint8Array): { pcm: Float32Array; sampleRate: number } | null {
+  const p = readPcm16(bytes);
+  if (!p) return null;
+  const frames = Math.floor(p.dataBytes / 2 / p.channels);
+  const dv = new DataView(bytes.buffer, bytes.byteOffset + p.dataOffset, frames * p.channels * 2);
+  const pcm = new Float32Array(frames);
+  for (let i = 0; i < frames; i++) {
+    let s = 0;
+    for (let c = 0; c < p.channels; c++) s += dv.getInt16((i * p.channels + c) * 2, true);
+    pcm[i] = s / p.channels / 32768;
+  }
+  return { pcm, sampleRate: p.sampleRate };
+}

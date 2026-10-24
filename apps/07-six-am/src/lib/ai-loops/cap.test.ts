@@ -40,6 +40,17 @@ describe("loopUsage", () => {
     expect(u.monthUsd).toBe(0);
   });
 
+  it("counts every paid draw towards the cap", () => {
+    const rows = [
+      { createdAt: "2026-10-25T10:00:00Z", costUsd: 0.24, draws: 3 },
+      { createdAt: "2026-10-25T11:00:00Z", costUsd: 0.08 },
+    ];
+    const u = loopUsage(rows, new Date("2026-10-25T12:00:00Z"), 0, 20);
+    expect(u.today).toBe(4);
+    expect(u.left).toBe(16);
+    expect(u.todayUsd).toBeCloseTo(0.32, 6);
+  });
+
   it("handles an empty history and a spent cap", () => {
     expect(loopUsage([], new Date("2026-10-25T12:00:00Z"), 0, 20)).toMatchObject({ today: 0, left: 20, todayUsd: 0 });
     const full = Array.from({ length: 3 }, () => ({ createdAt: "2026-10-25T10:00:00Z", costUsd: 0.04 }));

@@ -46,7 +46,7 @@ export function Steamer3(p: VesselProps) {
     ...(pend && (pend[1] < 52) === back ? [seat(pend[0], pend[1], <MarkWonton pending />, "pend")] : []),
   ];
   return (
-    <svg width="96" height="95" viewBox="0 0 89 88" aria-hidden="true">
+    <svg width="124" height="123" viewBox="0 0 89 88" aria-hidden="true">
       <ellipse cx="44.5" cy="66" rx="40" ry="7.5" fill="#c49a62" />
       {row(true)}
       {row(false)}

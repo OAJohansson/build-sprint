@@ -13,6 +13,9 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - `docs/knowledge-bank.md` (design and UX / product strategy): distinctive brand assets (Byron
   Sharp, *How Brands Grow*) and "only-ness" (Marty Neumeier, *Zag*); a character sheet / mark
   tested at 29 px before it becomes an illustration system.
+- `docs/learnings.md` process changelog: the design critic scored flat (6/10 × 3) because it
+  judged against requirements it never saw (rolling number, week strip). Try: give the critic the
+  pack's non-negotiables as words alongside the aesthetic, or score only what's negotiable.
 - `docs/learnings.md` process changelog: running a deep-research step (5 parallel researchers and
   a report writer) before writing a Founder kickoff pack.
 
@@ -92,3 +95,8 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   (one in riso), 2 Riso refinements, 4 enamel colourways (`design/mark-sheet.html`).
 - **Mark chosen** (owner): Dough on ink with closed content eyes; a winking version marks a
   comeback ("a bit of extra motivation"). Board to be rebuilt around it.
+- **Critic round 3** (v3 on the mark): 6/10 again. Flat since round 1 because its top asks keep
+  removing pack requirements (the rolling number R6, the week strip the owner asked for, status
+  lines). In-pack gaps taken for round 4, the last allowed: the slip state's grey reads as
+  disabled; the dashed seat shows every day; the steamer deserves more width; duplicate date;
+  "Log a slip" is system copy. Then on to the other screens.

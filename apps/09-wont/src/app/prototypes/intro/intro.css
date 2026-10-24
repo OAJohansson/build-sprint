@@ -1,0 +1,48 @@
+/* First-launch intro on ink, like the app icon. */
+.in {
+  --ink: #2a2420; --dough: #f6e8cc; --matcha: #b9d29a;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  min-height: 100dvh; max-width: 480px; margin: 0 auto; background: var(--ink); color: var(--dough);
+  font-family: var(--font-wb), system-ui, sans-serif; display: flex; flex-direction: column;
+  padding: calc(env(safe-area-inset-top) + 16px) 24px calc(env(safe-area-inset-bottom) + 32px);
+}
+.in-top { display: flex; align-items: center; gap: 14px; }
+.in-progress { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.in-progress span { height: 3px; border-radius: 3px; background: rgba(246, 232, 204, 0.18); overflow: hidden; }
+.in-progress i { display: block; height: 100%; background: var(--dough); transform: scaleX(0); transform-origin: left; }
+.in-progress i.done { transform: none; }
+/* Constant motion: linear. */
+.in-progress i.now { animation: in-fill linear forwards; }
+@keyframes in-fill { to { transform: none; } }
+.in-skip { border: 0; background: none; color: var(--dough); opacity: 0.7; font: inherit; font-size: 15px; min-height: 44px; padding: 0 4px; cursor: pointer; }
+
+.in-scene { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 12px; }
+.in-art { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; }
+.in-scene h1 { font-weight: 800; font-size: 32px; line-height: 1.08; letter-spacing: -0.03em; }
+.in-scene > p { font-size: 16px; line-height: 1.45; opacity: 0.72; margin-top: 12px; max-width: 330px; }
+
+/* Entrance: rise and fade with a strong ease-out, staggered by --d. */
+.in-a { animation: in-rise 640ms var(--ease-out) both; animation-delay: var(--d, 0ms); }
+@keyframes in-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+.in-weeks { flex-direction: row; flex-wrap: wrap; justify-content: center; align-content: center; gap: 10px 6px; max-width: 300px; margin: 0 auto; }
+.in-weeks > div { display: flex; flex-direction: column; align-items: center; width: 52px; }
+.in-weeks small { font-size: 11px; opacity: 0.5; }
+.in-axis { width: 100%; text-align: center; font-size: 12px; opacity: 0.5; margin-top: 4px; }
+
+.in-tie { gap: 10px; }
+.in-pill { border: 1px solid rgba(246, 232, 204, 0.35); border-radius: 99px; padding: 12px 20px; font-size: 16px; }
+.in-pill.dough { background: var(--dough); color: var(--ink); border-color: var(--dough); font-weight: 600; }
+
+.in-back { gap: 6px; }
+.in-back svg[width="124"] { transform: scale(1.4); transform-origin: center top; }
+
+.in-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 28px; }
+.in-go { display: flex; align-items: center; justify-content: center; min-height: 52px; border-radius: 16px; background: var(--dough); color: var(--ink); font-weight: 700; font-size: 16px; text-decoration: none; }
+.in-again { min-height: 44px; border: 0; background: none; color: var(--dough); opacity: 0.7; font: inherit; font-size: 15px; cursor: pointer; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Fewer and gentler: keep the fades, drop the movement. */
+  .in-a { animation-name: in-fade; animation-duration: 400ms; }
+  @keyframes in-fade { from { opacity: 0; } to { opacity: 1; } }
+}

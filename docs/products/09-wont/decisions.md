@@ -39,3 +39,5 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T10 | 24 Oct | Slip size 1 / 2 / 3+, one per day; urges only on the current day; comeback message keyed by the first missed day of the run | PM (engineer) | build | |
 | L24 | 24 Oct | The mark: Dough on ink, closed content eyes; the comeback wonton winks (Plum wink's eyes) as a little extra motivation | owner | design | |
 | T11 | 24 Oct | Board v3: ink header band with the week strip, dough and paper cards; clean so far shares the kept wash, a slip turns the stop card cool oat-grey; app icon full-bleed square in public/ | PM (designer) | design | |
+| T12 | 25 Oct | Round 4: slip keeps the stop card on paper; no ghost seat; 124 px steamer; week key "share kept each day"; "Slipped" / "Had an urge"; "Tap if clean so far" | PM (designer) | design | |
+| T13 | 25 Oct | Other screens: intro ~18 s in three scenes (comeback wonton winks), "Done when" chips on new habit, optional friction step "do it once, today", 60 s full-screen urge pause with one-tap exit, slip size in a sheet | PM (designer) | design | |

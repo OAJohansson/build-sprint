@@ -43,7 +43,7 @@ export function Board3({ title, Vessel, demo = "main" }: { title: string; Vessel
   const pouches = nic.size === "1" ? "1 pouch" : `${nic.size} pouches`;
   const nicStatus =
     nic.status === "clean" ? "Clean so far" :
-    nic.status === "open" ? "Today" :
+    nic.status === "open" ? "Tap if clean so far" :
     nic.status === "asking" ? "How many today?" :
     `${pouches} today · 2 clean days still count`;
 
@@ -52,7 +52,7 @@ export function Board3({ title, Vessel, demo = "main" }: { title: string; Vessel
       <header className="w3-band">
         <div className="w3-top">
           <h1>{title}</h1>
-          <span>24 Oct</span>
+          <span className="w3-key"><i aria-hidden="true" />share kept each day</span>
         </div>
         <div className="w3-week" aria-label="Share of habits kept each day this week">
           {[...WEEK, ["S", 24, keptToday / 5] as [string, number, number]].map(([l, n, v], i) => (
@@ -86,10 +86,10 @@ export function Board3({ title, Vessel, demo = "main" }: { title: string; Vessel
           );
         })}
 
-        <article className={`w3-card stop ${clean ? "kept" : ""} ${nic.status === "slip" ? "slipped" : ""}`}>
+        <article className={`w3-card stop ${clean ? "kept" : ""}`}>
           <button type="button" className="w3-hit" aria-pressed={clean} aria-label={`Nicotine pouches: ${clean ? "clean so far, tap to undo" : "tap if clean so far"}`} onClick={() => setNic({ status: clean ? "open" : "clean", urges: nic.urges })} />
           <div className="w3-art">
-            <Vessel marks={["k", "k"]} fresh={false} pending={clean} />
+            <Vessel marks={["k", "k"]} fresh={false} />
           </div>
           <div className="w3-body">
             <h2 className="w3-nm">Nicotine pouches</h2>
@@ -106,8 +106,8 @@ export function Board3({ title, Vessel, demo = "main" }: { title: string; Vessel
                 ))
               ) : (
                 <>
-                  <button type="button" onClick={() => setNic({ ...nic, status: "asking" })}>Log a slip</button>
-                  <button type="button" onClick={() => setNic({ ...nic, urges: nic.urges + 1 })}>Log an urge</button>
+                  <button type="button" onClick={() => setNic({ ...nic, status: "asking" })}>Slipped</button>
+                  <button type="button" onClick={() => setNic({ ...nic, urges: nic.urges + 1 })}>Had an urge</button>
                 </>
               )}
             </div>

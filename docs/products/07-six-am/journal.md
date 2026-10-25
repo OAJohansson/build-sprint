@@ -565,3 +565,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Ops:** fresh preview of PR 86 at 764ba27: https://six-184fx48zw-mimirswell.vercel.app. X1 run 3 incomplete (B1 only: 5/11, 0 extras) because the screen locked again ~02:33.
 - **Follow-up: Studio ship checks** (break-ui with worst-case data, web guidelines): 8 problems fixed (narrow control bar, keyboard access to blocks, crate and knob, Space hijack, 512-bar markers, library tooltips, unit-label contrast); 8 minors to the backlog. T78. Sandbox user test next.
 - **Follow-up fixes (T80):** M1 fixed (another preset drafts a new sound), Add never overwrites, Duplicate, Play-all end message, minors. Leftovers to the backlog.
+- **Follow-up PR 87** opened, stacked on PR 86 ("depends on #86, merge after it"); preview https://six-ocslv0aoi-mimirswell.vercel.app. "Vercel – wont" failing on both PRs is another product's project. One push sent for both PRs.

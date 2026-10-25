@@ -66,3 +66,8 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Idea | Why | Status |
 | --- | --- | --- |
 | Tone Transport one-tick slip at some tempos (≤ 3.5 ms at 90 BPM) in the offline/Transport path | X3 finding F1; under the 5 ms bar above 62.5 BPM | later |
+| Section labelling: merge repeated same-label pieces in the ruler, label by role (build before a drop, cooldown near the end), catch intro → build; then re-run X1 (0/5 twice: recall 74%, precision 57%) | X1 failed; the map's ruler shows e.g. six "Intro" sections | next |
+| A real listen of the owner's own loved tracks to judge the map by ear (no public section times exist for the 10 validation tracks) | X1 can only be scored on public annotated tracks | owner review |
+| "Add to lane" for synths and kits never overwrites (AI loops already don't) | user test F1 scope | next (small) |
+| Store AI loop try reasons (now shown once) | L136 | later |
+| Reference layers shown faintly above the Studio lanes ("what's left to fill to get the same DNA") | user test: most wanted next | next big piece |

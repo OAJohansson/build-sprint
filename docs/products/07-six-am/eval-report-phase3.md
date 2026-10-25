@@ -13,7 +13,7 @@ Supabase, so it's for the owner's review only) · **Branch:** `claude/07-six-am-
 | Eval | Bar | Result |
 | --- | --- | --- |
 | Riskiest assumption: a full track can be mapped in the browser from tab capture, measurements only | works end to end | **pass**: launched Chrome mapped real tracks with no clicks (Mason Flint 3:26, Kolter 5:04; 100% heard, ~1× track length) |
-| X1 sections within 4 bars | ≥ 4 of 5 scored tracks | **fail, 0/5** first run (boundaries precise, median 0.1 s, but only 21/39 found). Re-run after one method change (L137): X1_RERUN |
+| X1 sections within 4 bars | ≥ 4 of 5 scored tracks | **fail, 0/5** first run (boundaries precise, median 0.1 s, but only 21/39 found). Re-run after one method change (L137): **still 0/5**: recall 54% → 74% (29/39) but 16 extra boundaries (precision 78% → 57%), mostly repeated same-label sections (e.g. intro ×6); reported as it stands |
 | X2 template matches tempo, key, length, markers | exact | **pass** (user test: 126.1 BPM, Gm, 108 bars, markers 1/9/49/77/85, empty lanes; unit tests) |
 | X3 synths in key and on tempo | 100% in scale, onsets ≤ 5 ms | **pass**: 1,829/1,829 bass notes and all chord tones in scale; every cleanly measurable onset ≤ 5 ms at A♯m 124, F♯ 122.4, Cm 128 (dense acid/reese lines: detector limit, worst 6 checked by hand at 0–0.5 ms) |
 | X4 AI loops in key and on tempo | ≥ 4 of 5 | **pass, 4/5** with checked draws (L126); single draws 4/10, so the server checks each draw and retries up to 3 times. Partly circular: the check and the grade share Ears' tempo estimator. #5 (145 BPM) fails as half time, likely an estimator limit |
@@ -91,8 +91,9 @@ kits or AI loops by ear: that's the owner's.
 
 ## What was skipped or is weak
 
-- **X1 fails** on the scored backup set; section detection finds too few boundaries, labels are
-  sometimes inverted, and results vary between captures of the same track. None of the 10 owner
+- **X1 fails** on the scored backup set (0/5 twice). After L137 it finds 74% of boundaries but splits
+  sections into repeated same-label pieces and labels are sometimes inverted (B1 reads intro then
+  outro only), and results vary between captures of the same track. None of the 10 owner
   validation tracks had public section times; V2–V3 were mapped and listed, V4–V10 not run.
 - The re-check had no real full-track listen (screen locked); N1–N4 fixes not re-tested.
 - Synth and kit "Add to lane" still overwrites (AI loops don't).

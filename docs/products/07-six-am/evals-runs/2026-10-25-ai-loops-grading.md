@@ -251,3 +251,65 @@ wording + new draw".
 - **Not checked:** listening or taste; more seeds; the repo copy at
   `apps/07-six-am/evals/ai-loops/analyse.ts`. It still imports `./ears/features.ts`, which
   doesn't exist next to it. I used the scratchpad copy and didn't edit the repo one.
+
+## Checked draws, 25 Oct 2026 (Stable Audio 2.5, up to 3 draws per loop)
+
+Files are in `<scratchpad>/bakeoff-3/` (manifest `ranAt` 2026-10-24T18:09Z). The route's
+`drawLoop` keeps the first draw that passes its own check (Ears tempo ±1, bass-range key
+same/relative), with at most 3 draws. That leaves 5 kept loops from 8 draws. Loops 01, 03, 04 and
+05 are byte-identical to the re-grade's seed-42 files. Only 02 is a new draw (seed 1358171928).
+Raw output is in `grade/results-run3.json`. The beat-grid check is in `grade/grid.ts`.
+
+**Bottom line: X4 = 4/5 PASS (bar ≥ 4/5) and X5 PASS. Read the independence caveat below before
+counting the X4 pass.**
+
+| # | Requested | Ears tempo (alt) | Own ACF: best; peak near request; score there / best | Tempo | Key (bass) [app] | Key | Length error | Wrap: jump dB / click | Draws (shown cost) | X4 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 01 | 120 A min | 120.0 (60) | 60.0; 120.0; 0.86 | pass | A min [A min] | same | 0 ms | −1.4 / 0.0 | 1 ($0.08) | ✅ |
+| 02 | 124 F min | 124.0 (62) | 62.0; 124.0; 0.96 | pass | F min [C min] | same | 0 ms | −28.5 / 0.0 | 2 ($0.16) | ✅ |
+| 03 | 126 C maj | 126.0 (63) | 126.0; 126.0; 1.00 | pass | C maj [G maj] | same | 0 ms | +3.4 / 0.9 | 1 ($0.08) | ✅ |
+| 04 | 128 D# min | 128.2 (64.1) | 64.0; 128.0; 0.97 | pass | D# min [D# maj] | same | 0 ms | +6.9 / 0.1 | 1 ($0.08) | ✅ |
+| 05 | 145 G min | **72.5** (145.2, ratio 0.77) | 72.5; 145.0; 0.97 | half ❌ | G min [D min] | same | 0 ms | +5.6 / 1.7 | 3, check failed, seed-42 draw kept ($0.24) | ❌ |
+
+- **Tempo, Ears vs my own estimator.** The two estimators never disagree on where the
+  periodicity is. Both find a peak within ±1 BPM of the request on 5/5 loops, and both see the
+  half tempo as about equally strong (0.86–1.00) on 4/5. My own estimator has no tempo prior, so
+  it can't settle half vs double: it picks the half tempo on 4/5, including 01, 02 and 04, which
+  Ears passes. Only the Ears prior, a log-normal centred on 128 BPM, breaks those ties. So Ears is
+  the deciding vote on the octave, and nothing independent backs it up.
+- **#5 (is it really half time?)**
+  - It looks like an estimator limit, not a 72.5 BPM loop.
+  - On my comb (8 beat multiples), 145 scores 0.97 of the 72.5 score, the same picture as the
+    loops Ears passes.
+  - Ears' own score (4 multiples) only gives 145 about 0.56 of the raw 72.5 score. The prior
+    (0.984 at 145 vs 0.714 at 72.5) then can't close the gap. The likely reason is a riff that
+    repeats every 2 beats (the line's odd beats are slightly weaker: 0.81 vs 1.07 of a random
+    position on the beat grid). Loop 03, which passes, shows a stronger version of the same thing
+    (0.37 vs 0.79).
+  - The loop is exactly 8 bars at 145 (13.241 s), so it sits on the 145 grid in the Studio either
+    way.
+  - By the rule, half time is still not a pass, so #5 fails. X4 passes without it.
+- **Independence caveat (matters for X4).**
+  - The loops were *selected* by the same two measures I grade with: Ears tempo and bass-range
+    key. A pass on the kept loops is therefore partly circular. It shows that the selection
+    works, not that a single draw is in key and on tempo.
+  - The independent signals: my own tempo estimator confirms the requested periodicity on 5/5,
+    with the octave unresolved. The app's 100–2000 Hz key code agrees on only 1/5 (C min, G maj,
+    D# maj and D min on the others: the fifth or parallel errors on bass-only material described
+    above).
+  - Per draw, 4 of 8 draws passed the product's check.
+- **Length and seams:** 0 ms length error on all 5, click ratio ≤ 1.7, no clipping, no leading
+  silence. On 02 the end is 28.5 dB quieter than the start: the line decays before the loop point,
+  and there is no click.
+- **X5:**
+  - Shown costs sum to 0.08 + 0.16 + 0.08 + 0.08 + 0.24 = **$0.64**.
+  - The balance went 349 → 285 = **64 credits = 8 draws × 8 credits = $0.64**. Exact. **PASS.**
+  - Cost per kept loop is now $0.08–0.24 (mean $0.128).
+  - #5 cost $0.24 and was delivered *unchecked* (`checked: false`). Whether the UI says so wasn't
+    graded.
+- **Verdict:** Stable Audio 2.5 with checked draws meets X4 (4/5) and X5. Count it as a PASS
+  under that caveat. For #5-style cases, the check, not the model, is the weak point at
+  140+ BPM: Ears halves a riff that repeats every 2 beats. That is the engineer's call (for
+  example, accept the requested tempo when it is Ears' named 2:1 alternative with ratio ≥ 0.75).
+- **Not checked:** listening or taste; more prompts or seeds (n = 5); the UI's cost and
+  "unchecked" display.

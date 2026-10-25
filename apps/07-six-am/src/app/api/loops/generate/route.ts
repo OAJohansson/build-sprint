@@ -5,7 +5,7 @@ import { isLoopProviderError } from "@/lib/server/ai-loops/types";
 import { failure, serverError } from "@/lib/server/failure";
 import { getMentorStore } from "@/lib/server/mentor-store";
 import { dailyLoopCap, loopUsage } from "@/lib/ai-loops/cap";
-import { bassLoopRequest, LOOP_BARS, type LoopSource } from "@/lib/ai-loops/prompt";
+import { bassLoopRequest, LOOP_BARS, mergeSource, type LoopSource } from "@/lib/ai-loops/prompt";
 import { cleanTzOffset, monthRange } from "@/lib/mentor/periods";
 
 // "Generate a bass loop like this track" (S4, A9, A11). Behind the access code; the provider keys
@@ -14,7 +14,8 @@ import { cleanTzOffset, monthRange } from "@/lib/mentor/periods";
 // until one passes, at most MAX_DRAWS = 3 (L126); each paid draw counts towards the hard per-day
 // cap (LOOPS_DAILY_CAP, default 20 draws ≈ $1.60).
 //
-// POST { analysisId? | analysis?: { bpm, key, scale, genres?, myGenre? }, bars?: 4 | 8, seed?, tz? }
+// POST { analysisId?, analysis?: { bpm, key, scale, genres?, myGenre? }, bars?: 4 | 8, seed?, tz? }
+//   Sent analysis numbers win; the stored analysisId only adds style words (either may be alone).
 //   The service is picked by env only (LOOPS_PROVIDER / LOOPS_FALLBACK, both off = Stable Audio).
 //   → { loop: { id, provider, model, prompt, bpm, key, scale, bars, seed, mime, costUsd (all draws),
 //               seconds, draws, checked, measured, … },
@@ -69,17 +70,22 @@ export async function POST(request: Request) {
   const cap = dailyLoopCap(process.env.LOOPS_DAILY_CAP);
 
   try {
-    // 1. What to make it from: a stored Ears result by id, or the numbers sent with the request.
+    // 1. What to make it from (L134 + fix): the sent numbers (the Studio track's tempo and key) for
+    // the prompt and the check; the stored Ears result by id adds its style words when found. A
+    // missing or unreadable analysis is not an error while numbers were sent.
     const analysisId = typeof body.analysisId === "string" ? body.analysisId.slice(0, 600) : null;
-    let source: LoopSource | null = null;
+    const sent = cleanSource(body.analysis);
+    let fromStore: LoopSource | null = null;
     if (analysisId) {
       const m = getMentorStore();
-      if ("problem" in m) return failure(m.problem, 503);
-      source = cleanSource(await m.store.getAnalysis(analysisId));
-      if (!source) return Response.json({ error: "That track has no analysis with a usable BPM and key yet." }, { status: 404 });
-    } else {
-      source = cleanSource(body.analysis);
-      if (!source) return Response.json({ error: "Send analysisId, or analysis with bpm (60–200) and key." }, { status: 400 });
+      if ("problem" in m) { if (!sent) return failure(m.problem, 503); }
+      else fromStore = cleanSource(await m.store.getAnalysis(analysisId).catch(() => null));
+    }
+    const source = mergeSource(sent, fromStore);
+    if (!source) {
+      return analysisId
+        ? Response.json({ error: "That track has no analysis with a usable BPM and key yet." }, { status: 404 })
+        : Response.json({ error: "Send analysisId, or analysis with bpm (60–200) and key." }, { status: 400 });
     }
     const bars = LOOP_BARS.includes(Number(body.bars) as (typeof LOOP_BARS)[number]) ? Number(body.bars) : 8;
     const seed = Number.isInteger(body.seed) && (body.seed as number) >= 0 && (body.seed as number) < 4294967295 ? (body.seed as number) : undefined;

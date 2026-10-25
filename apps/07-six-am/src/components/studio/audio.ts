@@ -431,7 +431,7 @@ export class AudioEngine {
         // shortcut: playbackRate changes pitch with tempo; time-stretch if tracks move far from the loop's tempo.
         const src = new Tone.ToneBufferSource({ url: buf, playbackRate: this.bpm / x.bpm }).connect(this.channels[x.lane]);
         src.onended = () => { this.aiPlaying.delete(src); src.dispose(); };
-        src.start(t, 0, undefined, 0.8);
+        src.start(t, 0, undefined, 0.35); // -9 dB: a full template mix stays under 0 dBFS (X3 F3)
         src.stop(t + hit.dur * this.sps);
         this.aiPlaying.add(src);
         return;

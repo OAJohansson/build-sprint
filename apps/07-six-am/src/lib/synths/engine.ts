@@ -26,9 +26,9 @@ export type SynthVoice = {
 // (seconds, time constants are a third of these so each stage is ~95% done in its time).
 type BassDesign = { gainDb: number; filterOctaves: number; accentOctaves: number; ampDecay: (k: KnobValues) => number; sustain: number; release: number };
 const BASS: Record<BassPresetId, BassDesign> = {
-  sub: { gainDb: -4, filterOctaves: 0, accentOctaves: 0, ampDecay: (k) => k.envelope, sustain: 0.45, release: 0.05 },
-  acid: { gainDb: -13, filterOctaves: 3, accentOctaves: 4.3, ampDecay: () => 0.35, sustain: 0.7, release: 0.02 },
-  reese: { gainDb: -10, filterOctaves: 1.2, accentOctaves: 1.6, ampDecay: () => 0.5, sustain: 0.9, release: 0.12 },
+  sub: { gainDb: -6, filterOctaves: 0, accentOctaves: 0, ampDecay: (k) => k.envelope, sustain: 0.45, release: 0.05 },
+  acid: { gainDb: -15, filterOctaves: 3, accentOctaves: 4.3, ampDecay: () => 0.35, sustain: 0.7, release: 0.02 },
+  reese: { gainDb: -12, filterOctaves: 1.2, accentOctaves: 1.6, ampDecay: () => 0.5, sustain: 0.9, release: 0.12 },
 };
 const GLIDE = 0.06; // a 303-style slide, seconds (capped below one 16th)
 const MAX_HZ = 18000;
@@ -87,7 +87,7 @@ const ORGAN_PARTIALS = [1, 0.75, 0.08, 0.45, 0, 0.22, 0, 0.12];
 function chordVoice(preset: ChordPresetId, knobs: KnobValues, destination: Tone.InputNode): SynthVoice {
   let k = { ...knobs };
   const attack = PRESETS[preset].attack;
-  const output = new Tone.Gain(Tone.dbToGain(preset === "pad" ? -16 : preset === "organ" ? -14 : -10)).connect(destination);
+  const output = new Tone.Gain(Tone.dbToGain(preset === "pad" ? -18 : preset === "organ" ? -16 : -12)).connect(destination);
   const filter = new Tone.Filter({ type: "lowpass", frequency: k.cutoff, Q: k.resonance }).connect(output);
   const envelopeFor = (kv: KnobValues) =>
     preset === "pad" ? { attack, decay: 0.6, sustain: 0.85, release: kv.envelope }
@@ -169,7 +169,8 @@ export type KitVoice = { play(hit: DrumHit, time: number): void; output: Tone.Ga
 
 /** One-shot players for a loaded kit; a closed hat chokes a ringing open hat, like the machines. */
 export function createKitVoice(kit: LoadedKit, destination: Tone.InputNode): KitVoice {
-  const output = new Tone.Gain(Tone.dbToGain(-7)).connect(destination);
+  // Headroom (X3 F3): a full template (kit + bass + chords + AI loop) stays under 0 dBFS before the limiter.
+  const output = new Tone.Gain(Tone.dbToGain(-11)).connect(destination);
   let openHat: Tone.ToneBufferSource | null = null;
   return {
     output,

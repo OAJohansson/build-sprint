@@ -17,6 +17,21 @@ export type LoopSource = {
   myGenre?: string;
 };
 
+/**
+ * The numbers the Studio sends win (a template's refined tempo, e.g. 126.04, and its key), so the
+ * prompt and the loop check match the track it lands in; the stored analysis, when there is one,
+ * only adds its style words. No stored analysis → the sent numbers alone.
+ */
+export function mergeSource(sent: LoopSource | null, stored: LoopSource | null): LoopSource | null {
+  if (!sent) return stored;
+  if (!stored) return sent;
+  return {
+    bpm: sent.bpm, key: sent.key, scale: sent.scale,
+    genres: stored.genres ?? [],
+    ...(stored.myGenre ? { myGenre: stored.myGenre } : {}),
+  };
+}
+
 export const LOOP_BARS = [4, 8] as const;
 export type LoopBars = (typeof LOOP_BARS)[number];
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { bassLoopRequest, keyPhrase, loopSeconds, scaleNotes } from "./prompt";
+import { bassLoopRequest, keyPhrase, loopSeconds, mergeSource, scaleNotes } from "./prompt";
 
 // The prompt string decides whether the loop comes back in minor (L124), so it's pinned here.
 describe("bass loop prompt", () => {
@@ -30,5 +30,20 @@ describe("bass loop prompt", () => {
         "8 bars of 4/4, a seamless loop that repeats cleanly. Tight, groovy, clean studio mix.",
     );
     expect(loopSeconds(124, 8)).toBe(15.484);
+  });
+});
+
+describe("mergeSource", () => {
+  const sent = { bpm: 126.04, key: "A", scale: "minor" };
+  const stored = { bpm: 126, key: "C", scale: "major", genres: [{ style: "Electronic---Deep House", p: 0.7 }], myGenre: "Deep" };
+  it("keeps the sent tempo and key and takes only the style words from the stored analysis", () => {
+    expect(mergeSource(sent, stored)).toEqual({ bpm: 126.04, key: "A", scale: "minor", genres: stored.genres, myGenre: "Deep" });
+  });
+  it("carries on with the numbers alone when the analysis isn't found", () => {
+    expect(mergeSource(sent, null)).toEqual(sent);
+  });
+  it("falls back to the stored analysis when no numbers were sent, and null when neither", () => {
+    expect(mergeSource(null, stored)).toEqual(stored);
+    expect(mergeSource(null, null)).toBeNull();
   });
 });

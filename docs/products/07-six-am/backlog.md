@@ -71,3 +71,4 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | "Add to lane" for synths and kits never overwrites (AI loops already don't) | user test F1 scope | next (small) |
 | Store AI loop try reasons (now shown once) | L136 | later |
 | Reference layers shown faintly above the Studio lanes ("what's left to fill to get the same DNA") | user test: most wanted next | next big piece |
+| Pasting two links separated by a space in Analyse adds only the first | Found in the follow-up pass | later (small) |

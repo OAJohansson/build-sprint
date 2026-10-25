@@ -79,7 +79,10 @@ export function Studio() {
     const me = ++run.current;
     (async () => {
       try {
-        let list = await client.list();
+        // One request for the list and the track to open (the last one, else the newest): the first
+        // load used to wait for the list, then fetch the track.
+        const first = await client.listAndOpen(lastId);
+        let list = first.tracks;
         let open: Track;
         // A starting point handed over from the Mentor opens as a new, unsaved track (read once).
         let handed: StudioDraft | null = null;
@@ -102,7 +105,7 @@ export function Studio() {
           open = await client.save(crypto.randomUUID(), "My first track", demoDoc());
           list = [summary(open)];
         } else {
-          open = await client.get((list.find((x) => x.id === lastId) ?? list[0]).id);
+          open = first.track ?? await client.get((list.find((x) => x.id === lastId) ?? list[0]).id);
         }
         if (me !== run.current) return;
         setTracks(list);
@@ -238,7 +241,8 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
   const [storedBpm] = useLocalStorage<number>(TEMPO_KEY, DEFAULT_BPM);
   // A template track (S2) carries its own tempo; older tracks use the device tempo.
   const bpm = draft ? draft.bpm : track.doc.bpm !== undefined ? clampBpm(track.doc.bpm) : clampBpm(storedBpm);
-  const t = useTimeline(track.doc, bpm, draft ? 1 : 37);
+  // D1: every track opens at bar 1 (it used to open saved tracks at the demo's mid-song bar 37).
+  const t = useTimeline(track.doc, bpm, 1);
   const [name, setName] = useState(track.name);
   const savedName = useRef(track.name);
   const [library, setLibrary] = useState(false);

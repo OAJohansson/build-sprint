@@ -21,6 +21,8 @@ export type Row = {
   item?: QueueItem;
   /** 1-based place among waiting tracks. */
   queuePos?: number;
+  /** SoundCloud only plays a 30 s preview (from the pasted link's details). */
+  preview?: boolean;
 };
 
 export function sanitiseSource(raw: unknown): Source | null {
@@ -95,7 +97,7 @@ export function buildRows(results: EarsAnalysis[], queue: QueueState, source: So
   for (const t of source?.tracks ?? []) {
     if (covered.has(t.url)) continue;
     covered.add(t.url);
-    rest.push({ key: t.url, url: t.url, title: t.title ?? "", uploader: t.uploader ?? "", durationMs: t.durationMs ?? null, state: t.blocked ? "blocked" : "new" });
+    rest.push({ key: t.url, url: t.url, title: t.title ?? "", uploader: t.uploader ?? "", durationMs: t.durationMs ?? null, state: t.blocked ? "blocked" : "new", ...(t.preview ? { preview: true } : {}) });
   }
   return { main, rest };
 }

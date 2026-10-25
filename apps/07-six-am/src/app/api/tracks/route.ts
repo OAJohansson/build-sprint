@@ -10,6 +10,14 @@ export async function GET(request: Request) {
   if ("error" in g) return g.error;
   const id = idOf(request);
   try {
+    const open = new URL(request.url).searchParams.get("open");
+    if (!id && open !== null) {
+      // The Studio's first load: the list and the track to open in one round trip (the last one
+      // opened if it still exists, else the newest).
+      const tracks = await g.store.list();
+      const pick = tracks.find((t) => t.id === open && UUID.test(open)) ?? tracks[0];
+      return Response.json({ tracks, track: pick ? await g.store.get(pick.id) : null });
+    }
     if (!id) return Response.json({ tracks: await g.store.list() });
     if (!UUID.test(id)) return Response.json({ error: "That track doesn't exist." }, { status: 404 });
     const track = await g.store.get(id);

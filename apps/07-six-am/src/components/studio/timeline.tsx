@@ -7,6 +7,7 @@
 import { memo } from "react";
 import { TRACKS, loopById, wavePath, type Kind } from "@/lib/timeline";
 import type { Timeline } from "./use-timeline";
+import { sectionName } from "@/lib/map/view";
 import s from "./studio.module.css";
 
 export const cx = (...c: (string | false | undefined | null)[]) => c.filter(Boolean).join(" ");
@@ -46,8 +47,8 @@ export function TimelineView({ t, colors, onSound, soundLane }: {
         ))}
         {/* A template's section markers: the name in the ruler, a faint line through the lanes. */}
         {t.markers.map((m) => (
-          <span key={`${m.bar}-${m.label}`} className={s.marker} data-marker={m.label} title={`${m.label} · bar ${m.bar}`} style={{ left: (m.bar - 1) * ppb }}>
-            {m.label}
+          <span key={`${m.bar}-${m.label}`} className={s.marker} data-marker={m.label} title={`${sectionName(m.label)} · bar ${m.bar}`} style={{ left: (m.bar - 1) * ppb }}>
+            {sectionName(m.label)}
           </span>
         ))}
         {t.ghost && t.ghost.bar !== null ? (

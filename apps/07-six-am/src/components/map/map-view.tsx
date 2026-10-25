@@ -281,7 +281,7 @@ function MapScreen({ map, analysis, live, problem, code, canListen, onListen, on
       {!empty && <div className={s.info}>
         <span className={s.read} aria-live="polite">
           {problem ? <span className={s.problem}>{problem}</span> : playing !== null && sections[playing]
-            ? <>Playing {sections[playing].name.toLowerCase()} from bar {sections[playing].from}{playBar !== null && playBar >= 1 ? ` · now bar ${Math.floor(playBar)}` : ""} <button className={s.textBtn} onClick={stopPlaying}>Stop</button></>
+            ? <>Playing {sections[playing].name} from bar {sections[playing].from}{playBar !== null && playBar >= 1 ? ` · now bar ${Math.floor(playBar)}` : ""} <button className={s.textBtn} onClick={stopPlaying}>Stop</button></>
             : read}
         </span>
         <span className={s.note}><i className={s.hatchKey} aria-hidden /> maybe <span className={s.sep} aria-hidden>·</span> Layers are estimates from the sound, not stems.</span>

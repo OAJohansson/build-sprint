@@ -20,7 +20,7 @@ const THRESHOLD = 4;
 const HOLD_MS = 250; // press and hold a block this long and the bin appears
 
 /** One open track. `initial` is the saved arrangement; Studio remounts this per track. `bpm` is the project tempo. */
-export function useTimeline(initial: Doc, bpm: number, startBar = 37) {
+export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
   const [doc, setDoc] = useState<Doc>(initial);
   const [past, setPast] = useState<Doc[]>([]);
   const docRef = useRef(doc);
@@ -35,7 +35,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 37) {
   const bars = docBars(initial);
 
   const [playing, setPlaying] = useState(false);
-  // The demo track opens mid-song (bar 37); a Mentor starting point opens at bar 1 (user test F3).
+  // Every track opens at bar 1 (D1; drafts already did, user test F3).
   const [playhead, setPlayhead] = useState(startBar);
   const [selected, setSelected] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);

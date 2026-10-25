@@ -7,7 +7,8 @@
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { ApiError, mentorApi, money, useAccessCode } from "@/lib/mentor/client";
-import { newId } from "@/lib/timeline";
+import { firstFreeBar, newId } from "@/lib/timeline";
+import { aiCostLine, triesReason, type Try } from "@/lib/synths/ai-text";
 import { DRUM_PATTERNS, KITS, type KitId } from "@/lib/synths/kits";
 import { makeKitLoop, makeSynthLoop, type AiLoop, type Sound } from "@/lib/synths/loop";
 import { SYNTH_PATTERNS } from "@/lib/synths/patterns";
@@ -33,8 +34,10 @@ function starter(lane: number, choice?: PresetId | KitId, pattern?: string): Sou
   return makeSynthLoop(preset, pattern && fits.some((p) => p.id === pattern) ? pattern : fits[0].id, undefined, id)!;
 }
 
-type AiResult = { soundId: string; draws: number; costUsd: number; todayUsd: number | null; monthUsd: number | null; bar: number };
-type AiState = { is: "idle" } | { is: "waiting" } | { is: "error"; text: string } | { is: "done"; result: AiResult };
+/** One of this track's stored AI loops, as GET /api/loops/generate?analysisId= lists it (numbers only). */
+type Listed = { id: string; bpm: number; key: string; scale: string; bars: number; costUsd: number; draws: number; checked: boolean; measured: { bpm: number; key: string; scale: string } | null; createdAt: string };
+type AiState = { is: "idle" } | { is: "waiting" } | { is: "error" | "limit"; text: string } | { is: "done"; id: string; bar: number | null; why: string | null };
+const usdShort = (v: number) => `$${v.toFixed(2)}`;
 
 export function SoundDrawer({ t, lane, sound, color, onClose }: {
   t: Timeline; lane: number;
@@ -86,9 +89,12 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
     const k = cur.knobs;
     // The chat job keeps answers to two sentences (with "Tell me more"), so ask for exactly that.
     const env = PRESETS[cur.preset].knobs[2].label.toLowerCase();
-    const message = `In two short sentences: what do cutoff, resonance and ${env} do on my ${PRESETS[cur.preset].name} ${cur.lane === 1 ? "bass" : "chords"} in the Studio, and which one should I turn first for a house track? It's at cutoff ${Math.round(k.cutoff)} Hz, resonance ${k.resonance.toFixed(1)}, ${env} ${k.envelope.toFixed(2)} s.\n\nWhat the knobs do (from Six AM):\n${knobGuide(cur.preset)}`;
+    // F9: the history shows only the short question; the knob guide and settings go as hidden context.
+    const message = `What do cutoff, resonance and ${env} do on my ${PRESETS[cur.preset].name} ${cur.lane === 1 ? "bass" : "chords"}, and which should I turn first?`;
+    // F8: the Studio has no automation, so advice must be about one setting per sound.
+    const context = `Answer in two short sentences, for a house track. Current settings: cutoff ${Math.round(k.cutoff)} Hz, resonance ${k.resonance.toFixed(1)}, ${env} ${k.envelope.toFixed(2)} s.\nWhat the knobs do (from Six AM):\n${knobGuide(cur.preset)}\nThe Six AM Studio has no automation: knobs are set once per sound and don't move over time. To change a sound over time (e.g. open the filter for the drop), use two blocks of the sound with different settings. Never suggest automating or sweeping a knob during playback.`;
     try {
-      const reply = await mentorApi(code).ask({ job: "chat", message });
+      const reply = await mentorApi(code).ask({ job: "chat", message, context });
       setMentor({ is: "done", text: reply.answer.sentences.map((x) => x.text).join(" "), cost: reply.message.costUsd });
     } catch (e) {
       setMentor({ is: "error", text: e instanceof ApiError ? e.message : "The Mentor didn't answer. Try again." });
@@ -96,6 +102,38 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
   };
 
   const fromTrack = t.doc.bpm !== undefined && !!t.doc.key;
+  const tz = () => new Date().getTimezoneOffset();
+
+  // F2: this track's AI loops (stored server-side, newest first) and today's / this month's spend.
+  const [mine, setMine] = useState<Listed[]>([]);
+  const [usage, setUsage] = useState<{ todayUsd: number; monthUsd: number } | null>(null);
+  const analysisId = t.doc.analysisId;
+  useEffect(() => {
+    if (lane !== 1 || !code) return;
+    let live = true;
+    const q = `/api/loops/generate?tz=${tz()}${analysisId ? `&analysisId=${encodeURIComponent(analysisId)}` : ""}`;
+    fetch(q, { headers: { "x-access-code": code } }).then((r) => (r.ok ? r.json() : null)).then((d) => {
+      if (!live || !d) return;
+      if (d.usage) setUsage({ todayUsd: d.usage.todayUsd, monthUsd: d.usage.monthUsd });
+      if (Array.isArray(d.loops)) setMine(d.loops);
+    }).catch(() => {});
+    return () => { live = false; };
+  }, [lane, code, analysisId]);
+
+  /** A stored loop as a sound for the Bass lane (a new sound id each time it's added). */
+  const asSound = (l: Listed): AiLoop => ({
+    id: `snd${newId()}`, source: "ai", name: "AI bass loop", bars: l.bars === 8 ? 8 : 4, lane: 1, aiId: l.id,
+    bpm: l.bpm, key: l.key, scale: l.scale === "major" ? "major" : "minor",
+    measured: l.measured ? { bpm: l.measured.bpm, key: l.measured.key, scale: l.measured.scale === "major" ? "major" : "minor" } : null,
+    checked: l.checked, costUsd: l.costUsd, draws: l.draws,
+  });
+  /** F1: into the first empty bars at or after the playhead, never over another block. */
+  const place = (x: AiLoop): number | null => {
+    const at = firstFreeBar(t.doc.regions, 1, x.bars, bar, t.bars);
+    if (at !== null) t.addSound(x, at);
+    return at;
+  };
+
   const generate = async () => {
     if (!fromTrack) return;
     setAi({ is: "waiting" });
@@ -105,30 +143,31 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
         headers: { "content-type": "application/json", "x-access-code": code },
         // The track's own tempo and key always go along (the template's refined tempo wins); the
         // analysis id only adds the reference's style words, and a missing one is no error.
-        body: JSON.stringify({ ...(t.doc.analysisId ? { analysisId: t.doc.analysisId } : {}), analysis: { bpm: t.doc.bpm, key: t.doc.key!.key, scale: t.doc.key!.scale }, bars: 4, tz: new Date().getTimezoneOffset() }),
+        body: JSON.stringify({ ...(analysisId ? { analysisId } : {}), analysis: { bpm: t.doc.bpm, key: t.doc.key!.key, scale: t.doc.key!.scale }, bars: 4, tz: tz() }),
       }).catch(() => null);
       if (!res) { setAi({ is: "error", text: "No connection. Check your internet and try again." }); return; }
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const text = res.status === 429 ? (data.error ?? "That's today's limit for AI loops. More tomorrow.")
-          : res.status === 503 ? "AI loops aren't set up on this server yet."
+        if (res.status === 429) { setAi({ is: "limit", text: data.error ?? "That's today's limit for AI loops. More tomorrow." }); return; }
+        const text = res.status === 503 ? "AI loops aren't set up on this server yet."
           : res.status === 401 ? "Your access code didn't work. Reload and enter it again."
           : (data.error ?? "The AI loop service failed. Try again in a minute.");
         setAi({ is: "error", text });
         return;
       }
       const loop = data.loop, m = data.measured;
-      const aiId: string = loop.id ?? crypto.randomUUID();
-      const x: AiLoop = {
-        id: `snd${newId()}`, source: "ai", name: "AI bass loop", bars: 4, lane: 1, aiId,
-        bpm: loop.bpm, key: loop.key, scale: loop.scale === "major" ? "major" : "minor",
-        measured: m ? { bpm: m.bpm, key: m.key, scale: m.scale } : null,
-        checked: data.checked === true, costUsd: data.costUsd ?? 0, draws: data.draws ?? 1,
+      const listed: Listed = {
+        id: loop.id ?? crypto.randomUUID(), bpm: loop.bpm, key: loop.key, scale: loop.scale, bars: loop.bars ?? 4,
+        costUsd: data.costUsd ?? 0, draws: data.draws ?? 1, checked: data.checked === true,
+        measured: m ? { bpm: m.bpm, key: m.key, scale: m.scale } : null, createdAt: new Date().toISOString(),
       };
       const bytes = Uint8Array.from(atob(data.audio.base64), (c) => c.charCodeAt(0)).buffer;
-      await t.engine().then((e) => e.addAiAudio(aiId, bytes));
-      t.addSound(x, bar);
-      setAi({ is: "done", result: { soundId: x.id, draws: x.draws, costUsd: x.costUsd, todayUsd: data.usage?.todayUsd ?? x.costUsd, monthUsd: data.usage?.monthUsd ?? x.costUsd, bar } });
+      await t.engine().then((e) => e.addAiAudio(listed.id, bytes));
+      if (data.usage) setUsage({ todayUsd: data.usage.todayUsd, monthUsd: data.usage.monthUsd });
+      // F2: a new loop joins the list; it never replaces an earlier one.
+      setMine((list) => [listed, ...list.filter((x) => x.id !== listed.id)].slice(0, 10));
+      const tries: Try[] = Array.isArray(data.tries) ? data.tries : [];
+      setAi({ is: "done", id: listed.id, bar: place(asSound(listed)), why: triesReason(tries) });
     } catch {
       setAi({ is: "error", text: "Something went wrong making the loop. Try again." });
     }
@@ -142,22 +181,19 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
   const line = focusKnob ? <><b>{focusKnob.label}:</b> {focusKnob.explain}</>
     : cur.source === "kit" ? DRUM_PATTERNS.find((p) => p.id === cur.pattern)?.idiom
     : "Plays once every 4 bars on the grid. An AI loop's notes are fixed, so it has no knobs.";
-  // AI cost, once, in the Mentor's format.
   const aiLoop = cur.source === "ai" ? cur : null;
-  const fresh = ai.is === "done" && (!aiLoop || ai.result.soundId === aiLoop.id) ? ai.result : null;
-  const result: Omit<AiResult, "soundId" | "bar"> | null = fresh ?? (aiLoop ? { costUsd: aiLoop.costUsd, draws: aiLoop.draws, todayUsd: null, monthUsd: null } : null);
-  const costLine = result ? [money(result.costUsd), result.draws > 1 ? `${result.draws} tries` : null,
-    result.todayUsd !== null ? `today ${money(result.todayUsd)}` : null, result.monthUsd !== null ? `${month()} ${money(result.monthUsd)}` : null]
-    .filter(Boolean).join(" · ") + " (estimate)" : null;
+  // F10: the template's first drop, by its marker label.
+  const drop = t.markers.find((m) => /drop/i.test(m.label));
+  const listenTo = (x: Sound) => t.setPreviewSound(t.previewSound?.id === x.id ? null : x);
+  // One cost line in every state (the Mentor's form): the selected or newest loop, plus today / month.
+  const shown = aiLoop ? mine.find((l) => l.id === aiLoop.aiId) ?? { costUsd: aiLoop.costUsd, draws: aiLoop.draws }
+    : ai.is === "done" ? mine.find((l) => l.id === ai.id) : null;
+  const costLine = shown ? aiCostLine(shown.costUsd, shown.draws, usage?.todayUsd ?? null, usage?.monthUsd ?? null, month()) : null;
+  // Listen from the list: a stable preview id per stored loop, so Stop finds it again.
+  const previewOf = (l: Listed): AiLoop => ({ ...asSound(l), id: `listen-${l.id}` });
 
   return (
-    <aside className={cx(s.drawer, lane === 1 && s.withAi)} style={{ ["--c" as string]: color }} aria-label={cur.source === "ai" ? "AI bass loop" : `${LANE_WORD[lane]} sound`}>
-      {mentor.is === "done" || mentor.is === "error" ? (
-        <div className={s.answer} role="status">
-          <p>{mentor.text}{mentor.is === "done" ? <span className={s.dim}> {money(mentor.cost)} (estimate)</span> : null}</p>
-          <button className={s.link} onClick={() => setMentor({ is: "idle" })}>Hide</button>
-        </div>
-      ) : null}
+    <aside className={s.drawer} style={{ ["--c" as string]: color }} aria-label={cur.source === "ai" ? "AI bass loop" : `${LANE_WORD[lane]} sound`}>
       <div className={s.body}>
         <section className={s.pick}>
           {aiLoop ? (
@@ -200,35 +236,81 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
               <output className={s.knobValue}>{fmtKnob(cur.knobs[k.id], k.unit)}</output>
             </label>
           )) : null}
-          <p className={s.line}>{line}</p>
-          {cur.source !== "ai" ? (
-            <div className={s.row}>
-              <button className={s.secondary} aria-pressed={listening} onClick={() => t.setPreviewSound(listening ? null : cur)}>{listening ? "Stop" : "Listen"}</button>
-              {editing ? <span className={s.dim}>Changes apply to every block of this sound.</span> : (
-                <button className={s.primary} onClick={() => { t.setPreviewSound(null); t.addSound(draft, bar); setDraft(starter(lane, chosen ?? undefined, "pattern" in draft ? draft.pattern : undefined)); }}>
-                  Add to lane at bar {bar}
-                </button>
-              )}
-              {cur.source === "synth" ? (
-                <button className={s.link} onClick={askMentor} disabled={mentor.is === "asking"} title={KNOB_BASICS[focus]}>
-                  {mentor.is === "asking" ? "The Mentor is answering…" : "Ask the Mentor about these knobs"}
-                </button>
-              ) : null}
+          {mentor.is === "done" || mentor.is === "error" ? (
+            // The Mentor's answer takes the knob line's place, fixed height, its own scroll (critic r2).
+            <div className={s.answer} role="status" tabIndex={0} aria-label="The Mentor's answer">
+              <p>{mentor.text}{mentor.is === "done" ? <span className={s.dim}> {money(mentor.cost)} (estimate)</span> : null}</p>
             </div>
+          ) : (
+            <p className={s.line}>{line}</p>
+          )}
+          {cur.source !== "ai" ? (
+            <>
+              <div className={s.row}>
+                <button className={s.secondary} aria-pressed={listening && t.previewSound?.id === cur.id} onClick={() => listenTo(cur)}>{listening && t.previewSound?.id === cur.id ? "Stop" : "Listen"}</button>
+                {editing ? null : (
+                  <>
+                    <button className={s.primary} onClick={() => { t.setPreviewSound(null); t.addSound(draft, bar); setDraft(starter(lane, chosen ?? undefined, "pattern" in draft ? draft.pattern : undefined)); }}>
+                      Add to lane at bar {bar}
+                    </button>
+                    {drop && drop.bar !== bar ? (
+                      <button className={s.secondary} onClick={() => { t.setPreviewSound(null); t.addSound(draft, drop.bar); setDraft(starter(lane, chosen ?? undefined, "pattern" in draft ? draft.pattern : undefined)); }}>
+                        Add at the {drop.label.toLowerCase()} (bar {drop.bar})
+                      </button>
+                    ) : null}
+                  </>
+                )}
+                {cur.source === "synth" ? (
+                  <button className={s.link} onClick={askMentor} disabled={mentor.is === "asking"} title={KNOB_BASICS[focus]}>
+                    {mentor.is === "asking" ? "The Mentor is answering…" : "Ask the Mentor about these knobs"}
+                  </button>
+                ) : null}
+              </div>
+              {editing ? <p className={s.dim}>Changes apply to every block of this sound.</p> : null}
+            </>
           ) : null}
         </section>
 
-        {lane === 1 ? (
-          <section className={s.ai}>
-            <button className={s.link} onClick={generate} disabled={!fromTrack || ai.is === "waiting"}>Generate a bass loop like this track</button>
-            {!fromTrack ? <p className={s.dim}>Start a track from a map first: the loop copies that track&apos;s tempo and key.</p>
-              : ai.is === "waiting" ? <p className={s.dim} role="status">Making a 4-bar loop at {t.doc.bpm} BPM in {t.doc.key!.key} {t.doc.key!.scale}. This takes 5–30 seconds.</p>
-              : ai.is === "error" ? <p className={s.err} role="alert">{ai.text}</p>
-              : costLine ? <p className={s.dim} role="status">{fresh ? `Added at bar ${fresh.bar}. ` : ""}{costLine}</p>
-              : <p className={s.dim}>About $0.08 a try, up to 3 tries if a loop misses the tempo or key.</p>}
-          </section>
-        ) : null}
+        <section className={s.ai}>
+          {lane === 1 ? (
+            <>
+              <button className={s.link} onClick={generate} disabled={!fromTrack || ai.is === "waiting"}>Generate a bass loop like this track</button>
+              {!fromTrack ? <p className={s.dim}>Start a track from a map first: the loop copies that track&apos;s tempo and key.</p>
+                : ai.is === "waiting" ? <p className={s.dim} role="status">Making a 4-bar loop at {t.doc.bpm} BPM in {t.doc.key!.key} {t.doc.key!.scale}. This takes 5–30 seconds.</p>
+                : ai.is === "error" ? <p className={s.err} role="alert">{ai.text}</p>
+                : ai.is === "limit" ? <p className={s.dim} role="status">{ai.text}</p>
+                : ai.is === "done" ? (
+                  <p className={s.dim} role="status">
+                    {ai.bar !== null ? `Added at bar ${ai.bar}.` : "The Bass lane is full: it's in your loops below."}{ai.why ? ` ${ai.why}` : ""}
+                  </p>
+                ) : <p className={s.dim}>About $0.08 a try, up to 3 tries ($0.24).</p>}
+              {costLine ? <p className={s.dim}>{costLine}</p> : null}
+              {mine.length ? (
+                <div className={s.mine}>
+                  <h3 className={s.mineHead}>Your AI loops</h3>
+                  <ul>
+                    {mine.map((l, i) => {
+                      const x = previewOf(l), on = t.previewSound?.id === x.id;
+                      return (
+                        <li key={l.id} className={cx(s.loop, aiLoop?.aiId === l.id && s.loopOn)}>
+                          <span title={l.measured ? `Measured ${l.measured.bpm.toFixed(1)} BPM, ${l.measured.key} ${l.measured.scale}` : undefined}>
+                            {mine.length - i}. {l.bpm} BPM · {l.key}{l.scale === "minor" ? "m" : ""} · {usdShort(l.costUsd)}{l.checked ? "" : " · check missed"}
+                          </span>
+                          <button className={s.mini} aria-pressed={on} onClick={() => listenTo(x)}>{on ? "Stop" : "Listen"}</button>
+                          <button className={s.mini} onClick={() => { const at = place(asSound(l)); if (at === null) setAi({ is: "limit", text: "The Bass lane is full: make room, then add it." }); }}>Add</button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ) : null}
+            </>
+          ) : null}
+        </section>
       </div>
+      {mentor.is === "done" || mentor.is === "error" ? (
+        <button className={cx(s.link, s.hide)} onClick={() => setMentor({ is: "idle" })}>Hide answer</button>
+      ) : null}
       <button className={s.close} onClick={onClose} aria-label="Close the sound drawer"><X aria-hidden /></button>
     </aside>
   );

@@ -1,4 +1,5 @@
 import { loopGuard } from "@/lib/server/access";
+import type { LoopMeta } from "@/lib/server/ai-loops/store";
 import { fallbackProvider, generateLoop, LoopsUnavailable, primaryProvider, providerModels } from "@/lib/server/ai-loops";
 import { MAX_DRAWS } from "@/lib/server/ai-loops/draws";
 import { isLoopProviderError } from "@/lib/server/ai-loops/types";
@@ -22,7 +23,8 @@ import { cleanTzOffset, monthRange } from "@/lib/mentor/periods";
 //       measured: { bpm, key, scale, inKey, onTempo } | null, checked, draws, costUsd,
 //       audio: { base64, mime }, finish: { trimmed, seam, rawSeconds, seconds }, fellBack,
 //       usage: { today (draws), cap, left, todayUsd, monthUsd } }
-// GET ?tz= → { usage, provider, fallback, models }
+// GET ?tz=&analysisId= → { usage, provider, fallback, models, loops? } — loops: the ≤ 10 newest made
+//   from that track (numbers only, no audio; F2).
 export const maxDuration = 60;
 
 type Body = {
@@ -48,6 +50,12 @@ function cleanSource(a: Partial<LoopSource> | null | undefined): LoopSource | nu
   return { bpm, key, scale: a.scale === "major" ? "major" : "minor", genres, ...(myGenre ? { myGenre } : {}) };
 }
 
+/** A stored loop for the browser: numbers only (no prompt, no audio). */
+const loopNumbers = (m: LoopMeta) => ({
+  id: m.id, bpm: m.bpm, key: m.key, scale: m.scale, bars: m.bars, costUsd: m.costUsd, draws: m.draws, checked: m.checked,
+  measured: m.measured ? { bpm: m.measured.bpm, key: m.measured.key, scale: m.measured.scale } : null, createdAt: m.createdAt,
+});
+
 export async function GET(request: Request) {
   const g = loopGuard(request);
   if ("error" in g) return g.error;
@@ -55,7 +63,9 @@ export async function GET(request: Request) {
   const now = new Date();
   try {
     const rows = await g.store.costRows(monthRange(now, tz).start);
-    return Response.json({ usage: loopUsage(rows, now, tz, dailyLoopCap(process.env.LOOPS_DAILY_CAP)), provider: primaryProvider(), fallback: fallbackProvider(), models: providerModels() });
+    const analysisId = new URL(request.url).searchParams.get("analysisId")?.slice(0, 600) || null;
+    const loops = analysisId ? (await g.store.listFor(analysisId, 10)).map(loopNumbers) : undefined;
+    return Response.json({ usage: loopUsage(rows, now, tz, dailyLoopCap(process.env.LOOPS_DAILY_CAP)), provider: primaryProvider(), fallback: fallbackProvider(), models: providerModels(), ...(loops ? { loops } : {}) });
   } catch (error) {
     return serverError(error);
   }
@@ -124,6 +134,11 @@ export async function POST(request: Request) {
         : null,
       checked: result.checked,
       draws: result.draws,
+      // F3: each paid try's measured tempo and key, so the page can say why it took more than one.
+      tries: result.log.map((d) => d.error ? { error: true } : {
+        bpm: d.measured?.bpm ?? null, key: d.measured?.key ?? null, scale: d.measured?.scale ?? null,
+        onTempo: d.measured?.onTempo ?? null, inKey: d.measured?.inKey ?? null,
+      }),
       costUsd: result.totalCostUsd,
       audio: { base64: Buffer.from(result.audio).toString("base64"), mime: result.mime },
       finish: result.finish,

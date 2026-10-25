@@ -41,6 +41,8 @@ export type LoopStore = {
   /** Loops created at or after `since`, for the daily cap and Today / Month sums. */
   costRows(since: Date): Promise<LoopCostRow[]>;
   getAudio(id: string): Promise<{ meta: LoopMeta; audio: Uint8Array } | null>;
+  /** The newest loops made from one track's analysis (metadata only, no audio), newest first. */
+  listFor(analysisId: string, limit: number): Promise<LoopMeta[]>;
 };
 
 const TABLE = "sixam_ai_loops";
@@ -90,6 +92,11 @@ function supabaseLoops(db: SupabaseClient): LoopStore {
       const row = data as Row & { audio_b64: string };
       return { meta: toMeta(row), audio: new Uint8Array(Buffer.from(row.audio_b64, "base64")) };
     },
+    async listFor(analysisId, limit) {
+      const { data, error } = await db.from(TABLE).select(COLUMNS).eq("analysis_id", analysisId).order("created_at", { ascending: false }).limit(limit);
+      check(error);
+      return (data as Row[]).map(toMeta);
+    },
   };
 }
 
@@ -110,6 +117,10 @@ function memoryLoops(): LoopStore {
     },
     async getAudio(id) {
       return mem.get(id) ?? null;
+    },
+    async listFor(analysisId, limit) {
+      return [...mem.values()].map((l) => l.meta).filter((m) => m.analysisId === analysisId)
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, limit);
     },
   };
 }

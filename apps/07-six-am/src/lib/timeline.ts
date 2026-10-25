@@ -204,3 +204,16 @@ export function wavePath(kind: Kind, loopBars: number, totalBars: number, seed =
   }
   return d;
 }
+
+/**
+ * The first bar at or after `from` where `length` bars are free on a track, else the first free
+ * span from bar 1; null when the track has no room (F1: a generated loop never overwrites).
+ */
+export function firstFreeBar(regions: Region[], track: number, length: number, from: number, total = BARS): number | null {
+  const taken = regions.filter((r) => r.track === track);
+  const free = (b: number) => taken.every((r) => r.start + r.length <= b || r.start >= b + length);
+  const last = total - length + 1;
+  for (let b = Math.max(1, Math.floor(from)); b <= last; b++) if (free(b)) return b;
+  for (let b = 1; b < Math.min(Math.floor(from), last + 1); b++) if (free(b)) return b;
+  return null;
+}

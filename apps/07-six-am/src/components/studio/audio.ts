@@ -268,6 +268,9 @@ export class AudioEngine {
     if (!sound) { if (!this.playing && !this.preview) this.halt(); return; }
     await this.start();
     this.refreshVoice(sound);
+    // An AI loop starts on its first beat, so wait for its audio before the clock starts.
+    if (sound.source === "ai") await this.aiLoads.get(sound.aiId);
+    if (this.previewSound?.id !== sound.id) return;
     if (!this.timer) this.resetClock(0);
   }
 
@@ -403,13 +406,15 @@ export class AudioEngine {
     }).catch((e) => { this.kitLoads.delete(id); console.error(`[six-am] couldn't load the ${id} kit:`, e); });
   }
 
+  private aiLoads = new Map<string, Promise<void>>();
   private loadAi(aiId: string) {
     if (this.aiAudio.has(aiId) || !this.code) return;
     this.aiAudio.set(aiId, "loading");
-    fetch(`/api/loops/${aiId}`, { headers: { "x-access-code": this.code } })
+    const p = fetch(`/api/loops/${aiId}`, { headers: { "x-access-code": this.code } })
       .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.arrayBuffer(); })
       .then((b) => this.addAiAudio(aiId, b))
       .catch((e) => { this.aiAudio.set(aiId, "failed"); console.error("[six-am] couldn't load an AI loop:", e); });
+    this.aiLoads.set(aiId, p);
   }
 
   private stopAi() {

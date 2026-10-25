@@ -86,9 +86,11 @@ export function TimelineView({ t, colors, onSound, soundLane }: {
                   key={r.id}
                   className={cx(s.region, t.selected === r.id && s.selected, live && s.live, t.bin?.id === r.id && t.bin.over && s.removing)}
                   style={{ left: (r.start - 1) * ppb, width: r.length * ppb - 2 }}
+                  title={l.name}
                   {...t.blockBody(r)}
                 >
-                  <b className={s.regionName}>{l.name}</b>
+                  {/* F12: a narrow block shows the engine name only ("303 Acid"); the full name is the tooltip. */}
+                  <b className={s.regionName}>{r.length * ppb < 140 ? l.name.split(" · ")[0] : l.name}</b>
                   <Wave kind={l.kind} loopBars={l.bars} bars={r.length} seed={tr * 7 + (i % 3)} className={s.wave} />
                   {Array.from({ length: r.length / l.bars - 1 }, (_, j) => (
                     <i key={j} className={s.rep} style={{ left: (j + 1) * l.bars * ppb }} />

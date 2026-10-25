@@ -40,7 +40,7 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Full layer model, automation lanes, mixer (ST-5–ST-10) | Real arrangements; needed by Remake | Phase 4 |
 | Synth Lab: playable 303, sub, organ, reese (LA-1, LA-2) | Shape my own sounds | Phase 4 |
 | Remake mode (DR-4) | Rebuild a track lane by lane with the original alongside | Phase 4 |
-| Live stem separation "Neural Mix" (DR-2), offline stems for owned files (DR-3) | Hear just the bassline; personal use only, licence needed if public | Phase 5 (last: most uncertain) |
+| Live stem separation "Neural Mix" (DR-2), offline stems for owned files (DR-3) | Hear just the bassline; personal use only, licence needed if public. Owner, 26 Oct: "only listen to the bass" of the original (Solo on the draft's lanes shipped in Phase 3, L140) | Phase 5 (last: most uncertain) |
 | AI-generated loops (LA-3) | Generate new sounds; licences to check | later |
 | Accounts, cloud sync, sharing, mobile, non-Chrome browsers | Out of scope for a personal tool | no (for now) |
 | Mark each analysed track as filed into a playlist, with a "31 / 56 placed · 6 unsure" progress line and a per-row playlist picker | User test 23 Oct: the thing that would bring them back tomorrow | obsolete (owner, 24 Oct: sorted *B b baaangers* by hand) |

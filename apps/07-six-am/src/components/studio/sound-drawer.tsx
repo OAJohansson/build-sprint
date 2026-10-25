@@ -36,8 +36,11 @@ function starter(lane: number, choice?: PresetId | KitId, pattern?: string): Sou
 
 /** One of this track's stored AI loops, as GET /api/loops/generate?analysisId= lists it (numbers only). */
 type Listed = { id: string; bpm: number; key: string; scale: string; bars: number; costUsd: number; draws: number; checked: boolean; measured: { bpm: number; key: string; scale: string } | null; createdAt: string };
-type AiState = { is: "idle" } | { is: "waiting" } | { is: "error" | "limit"; text: string } | { is: "done"; id: string; bar: number | null; why: string | null };
+type AiState = { is: "idle" } | { is: "waiting" } | { is: "error" | "limit"; text: string } | { is: "done"; id: string; bar: number | null; why: string | null; missed: boolean };
 const usdShort = (v: number) => `$${v.toFixed(2)}`;
+/** N2: why a stored loop missed the check, from what was measured; null when it passed. */
+const missTag = (l: { bpm: number; checked: boolean; measured: { bpm: number } | null }) =>
+  l.checked ? null : !l.measured ? "not measured" : Math.abs(l.measured.bpm - l.bpm) > 1 ? "off tempo" : "off key";
 
 export function SoundDrawer({ t, lane, sound, color, onClose }: {
   t: Timeline; lane: number;
@@ -92,7 +95,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
     // F9: the history shows only the short question; the knob guide and settings go as hidden context.
     const message = `What do cutoff, resonance and ${env} do on my ${PRESETS[cur.preset].name} ${cur.lane === 1 ? "bass" : "chords"}, and which should I turn first?`;
     // F8: the Studio has no automation, so advice must be about one setting per sound.
-    const context = `Answer in two short sentences, for a house track. Current settings: cutoff ${Math.round(k.cutoff)} Hz, resonance ${k.resonance.toFixed(1)}, ${env} ${k.envelope.toFixed(2)} s.\nWhat the knobs do (from Six AM):\n${knobGuide(cur.preset)}\nThe Six AM Studio has no automation: knobs are set once per sound and don't move over time. To change a sound over time (e.g. open the filter for the drop), use two blocks of the sound with different settings. Never suggest automating or sweeping a knob during playback.`;
+    const context = `Answer in two short sentences, for a house track. Current settings: cutoff ${Math.round(k.cutoff)} Hz, resonance ${k.resonance.toFixed(1)}, ${env} ${k.envelope.toFixed(2)} s.\nWhat the knobs do (from Six AM):\n${knobGuide(cur.preset)}\nThe Six AM Studio has no automation: knobs are set once per sound and don't move over time. Knobs belong to the sound, so every block of one sound sounds the same. To change the sound for a part (e.g. a brighter filter for the drop), add the same preset again as a second sound with different knob settings ("Add as a new sound" in the drawer copies the current sound with its knobs) and use that one there. Never suggest automating or sweeping a knob during playback.`;
     try {
       const reply = await mentorApi(code).ask({ job: "chat", message, context });
       setMentor({ is: "done", text: reply.answer.sentences.map((x) => x.text).join(" "), cost: reply.message.costUsd });
@@ -167,7 +170,8 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
       // F2: a new loop joins the list; it never replaces an earlier one.
       setMine((list) => [listed, ...list.filter((x) => x.id !== listed.id)].slice(0, 10));
       const tries: Try[] = Array.isArray(data.tries) ? data.tries : [];
-      setAi({ is: "done", id: listed.id, bar: place(asSound(listed)), why: triesReason(tries) });
+      // N1: a loop that missed the tempo/key check stays in Your loops ("Add anyway"), off the lane.
+      setAi({ is: "done", id: listed.id, bar: listed.checked ? place(asSound(listed)) : null, why: triesReason(tries), missed: !listed.checked });
     } catch {
       setAi({ is: "error", text: "Something went wrong making the loop. Try again." });
     }
@@ -189,8 +193,9 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
   const at = atDrop ? drop!.bar : bar;
   const listenTo = (x: Sound) => t.setPreviewSound(t.previewSound?.id === x.id ? null : x);
   // One cost line in every state (the Mentor's form): the selected or newest loop, plus today / month.
-  const shown = aiLoop ? mine.find((l) => l.id === aiLoop.aiId) ?? { costUsd: aiLoop.costUsd, draws: aiLoop.draws }
-    : ai.is === "done" ? mine.find((l) => l.id === ai.id) : mine[0] ?? null;
+  // A loop just made (placed, or kept off the lane after a missed check) is the subject until another is picked.
+  const justMade = ai.is === "done" && (!aiLoop || ai.missed || aiLoop.aiId === ai.id) ? mine.find((l) => l.id === ai.id) : undefined;
+  const shown = justMade ?? (aiLoop ? mine.find((l) => l.id === aiLoop.aiId) ?? { costUsd: aiLoop.costUsd, draws: aiLoop.draws } : mine[0] ?? null);
   const costLine = shown ? aiCostLine(shown.costUsd, shown.draws, usage?.todayUsd ?? null, usage?.monthUsd ?? null, month()) : null;
   // Listen from the list: a stable preview id per stored loop, so Stop finds it again.
   const previewOf = (l: Listed): AiLoop => ({ ...asSound(l), id: `listen-${l.id}` });
@@ -257,12 +262,15 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
             <>
               <div className={s.row}>
                 <button className={s.secondary} aria-pressed={listening && t.previewSound?.id === cur.id} onClick={() => listenTo(cur)}>{listening && t.previewSound?.id === cur.id ? "Stop" : "Listen"}</button>
-                {editing ? null : (
-                  <>
-                    <button className={s.primary} onClick={() => { t.setPreviewSound(null); t.addSound(draft, at); setDraft(starter(lane, chosen ?? undefined, "pattern" in draft ? draft.pattern : undefined)); }}>
-                      Add to lane
-                    </button>
-                  </>
+                {editing ? (
+                  // N3: knobs belong to the sound; a copy with its own knobs is how a part gets a different sound.
+                  <button className={s.secondary} title="A copy of this sound with its own knobs" onClick={() => { t.setPreviewSound(null); t.addSound({ ...cur, id: `snd${newId()}` }, at); }}>
+                    Add as a new sound
+                  </button>
+                ) : (
+                  <button className={s.primary} onClick={() => { t.setPreviewSound(null); t.addSound(draft, at); setDraft(starter(lane, chosen ?? undefined, "pattern" in draft ? draft.pattern : undefined)); }}>
+                    {atDrop ? `Add at the ${drop!.label.toLowerCase()} (bar ${drop!.bar})` : "Add to lane"}
+                  </button>
                 )}
                 {cur.source === "synth" ? (
                   <button className={s.link} onClick={askMentor} disabled={mentor.is === "asking"} title={KNOB_BASICS[focus]}>
@@ -270,9 +278,11 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
                   </button>
                 ) : null}
               </div>
-              {editing ? <p className={s.dim}>Changes apply to every block of this sound.</p> : (
-                // F10: where Add puts it: the playhead, or the template's drop.
+              {/* F10: where Add (or a new sound) goes: the playhead, or the template's drop. In edit mode the
+                  same line first says that knob changes reach every block of this sound. */}
+              {editing && !(drop && drop.bar !== bar) ? <p className={s.dim}>Changes apply to every block of this sound.</p> : (
                 <p className={s.where} role="radiogroup" aria-label="Where to add">
+                  {editing ? <span>Changes apply to every block. New sound:&nbsp;</span> : null}
                   <button role="radio" aria-checked={!atDrop} className={cx(s.whereBtn, !atDrop && s.whereOn)} onClick={() => setWhere("playhead")}>at bar {bar}</button>
                   {drop && drop.bar !== bar ? <>
                     <span aria-hidden> · </span>
@@ -294,7 +304,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
                 : ai.is === "limit" ? <p className={s.dim} role="status">{ai.text}</p>
                 : ai.is === "done" ? (
                   <p className={s.dim} role="status">
-                    {ai.bar !== null ? `Added at bar ${ai.bar}.` : "The Bass lane is full: it's in your loops below."}
+                    {ai.missed ? "It missed the tempo or key check, so it's not on the lane: it's in your loops below." : ai.bar !== null ? `Added at bar ${ai.bar}.` : "The Bass lane is full: it's in your loops below."}
                   </p>
                 ) : costLine ? null : <p className={s.dim}>About $0.08 a try, up to 3 tries ($0.24).</p>}
               {costLine ? <p className={s.dim}>{costLine}</p> : null}
@@ -306,11 +316,13 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
                       const x = previewOf(l), on = t.previewSound?.id === x.id;
                       return (
                         <li key={l.id} className={cx(s.loop, aiLoop?.aiId === l.id && s.loopOn)} aria-current={aiLoop?.aiId === l.id || undefined}>
-                          <span title={l.measured ? `Measured ${l.measured.bpm.toFixed(1)} BPM, ${l.measured.key} ${l.measured.scale}` : undefined}>
-                            {mine.length - i}. {l.bpm} BPM · {l.key}{l.scale === "minor" ? "m" : ""} · {usdShort(l.costUsd)}{l.checked ? "" : " · check missed"}
+                          {/* N2: what was measured, with a short tag when the check missed. */}
+                          <span title={`Loop ${mine.length - i}: asked for ${l.bpm} BPM in ${l.key} ${l.scale}; ${usdShort(l.costUsd)}${l.draws > 1 ? `, ${l.draws} tries` : ""}`}>
+                            {l.measured ? `${l.measured.bpm.toFixed(1)} BPM · ${l.measured.key}${l.measured.scale === "minor" ? "m" : ""}` : `${l.bpm} BPM · not measured`}
+                            {missTag(l) ? <b className={s.tag}> · {missTag(l)}</b> : null}
                           </span>
                           <button className={s.mini} aria-pressed={on} onClick={() => listenTo(x)}>{on ? "Stop" : "Listen"}</button>
-                          <button className={s.mini} onClick={() => { const at = place(asSound(l)); if (at === null) setAi({ is: "limit", text: "The Bass lane is full: make room, then add it." }); }}>Add</button>
+                          <button className={s.mini} onClick={() => { const at = place(asSound(l)); if (at === null) setAi({ is: "limit", text: "The Bass lane is full: make room, then add it." }); }}>{l.checked ? "Add" : "Add anyway"}</button>
                         </li>
                       );
                     })}

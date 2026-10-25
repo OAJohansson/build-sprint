@@ -59,7 +59,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     id: "acid", kind: "bass", name: "303 Acid", attack: 0.003,
     about: "A Roland TB-303-style line: a sawtooth through a resonant filter that snaps open on every note, with accents and slides. Chicago acid house, 1987.",
     knobs: [
-      knob("cutoff", "Cutoff", 80, 3000, 420, "Hz", "Where the filter sits between notes. Slowly turning it up over a few bars is the classic acid build: the line goes from a muffled bubble to a scream."),
+      knob("cutoff", "Cutoff", 80, 3000, 420, "Hz", "Where the filter sits between notes: low is a muffled, rubbery bubble, high is a bright scream. For a brighter acid line in the drop, add it again as a second sound with a higher cutoff."),
       knob("resonance", "Resonance", 1, 22, 12, "Q", "The squelch. High resonance makes the filter whistle as it sweeps on each note; it is what makes a 303 sound 'acid'."),
       knob("envelope", "Decay", 0.04, 1, 0.22, "s", "How long the filter stays open after each note hits: short is plucky and tight, long is a wide 'wow' on every step. Accented notes open further."),
     ],

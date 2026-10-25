@@ -78,7 +78,8 @@
 .mineHead { margin: 0 0 2px; font: 400 11.5px var(--f-mono); color: var(--muted); }
 .mine ul { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-bottom: 1px solid var(--line); scrollbar-color: #3a322c transparent; }
 .loop { display: flex; align-items: center; gap: 10px; min-height: 28px; flex: none; font: 400 11.5px var(--f-mono); color: var(--muted); }
-.loop span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.loop span { flex: 1; min-width: 0; line-height: 1.35; font-variant-numeric: tabular-nums; }
+.tag { font-weight: 400; color: var(--gold); }
 .loopOn span { color: var(--ink); }
 /* F10: where Add puts the sound */
 .where { margin: 0; display: flex; align-items: center; gap: 2px; font: 400 11.5px var(--f-mono); color: var(--muted); }

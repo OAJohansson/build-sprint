@@ -10,7 +10,7 @@ import { MapError } from "@/lib/map/listen";
 import { Logo } from "@/components/studio/logo";
 import { Notice, Unlock } from "@/components/studio/unlock";
 import { SettingsLink, ViewsNav } from "@/components/views-nav";
-import { startTabCapture, type TabCapture } from "@/lib/ears/capture";
+import { CaptureError, startTabCapture, type TabCapture } from "@/lib/ears/capture";
 import { EarsClient } from "@/lib/ears/ears-client";
 import { keyLabel } from "@/lib/ears/labels";
 import type { EarsAnalysis } from "@/lib/ears/results";
@@ -102,7 +102,11 @@ export function MapView({ id, auto }: { id: string; auto: boolean }) {
     } catch (e) {
       // F7: Stop ends the listen before anything is saved, so nothing half-done is kept.
       const stopped = e instanceof MapError && e.reason === "cancelled";
-      const message = stopped ? "Stopped. Nothing was saved; the map stays as it was." : e instanceof Error ? e.message : String(e);
+      // N4: the browser's own wording ("Could not start video source") means nothing to the owner.
+      const noShare = e instanceof CaptureError && e.reason === "cancelled";
+      const message = stopped ? "Stopped. Nothing was saved; the map stays as it was."
+        : noShare ? "Couldn't hear the tab. Press Listen and map, choose this tab and turn on Share tab audio."
+        : e instanceof Error ? e.message : String(e);
       player.pause();
       setLive(null);
       setProblem(message);

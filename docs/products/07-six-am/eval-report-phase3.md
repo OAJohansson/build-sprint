@@ -5,7 +5,7 @@ it. Graders: `user-tester` (2 runs, test sandbox only), one `design-critic` with
 five-point scorecard, `data-evals` (references frozen before results). The owner-only checks are
 the owner's and not here.
 
-**Preview:** https://six-49p02na2b-mimirswell.vercel.app (behind Vercel login; uses the real
+**Preview:** https://six-184fx48zw-mimirswell.vercel.app (behind Vercel login; uses the real
 Supabase, so it's for the owner's review only) · **Branch:** `claude/07-six-am-arrangement-3746ad`
 
 ## Summary
@@ -13,12 +13,12 @@ Supabase, so it's for the owner's review only) · **Branch:** `claude/07-six-am-
 | Eval | Bar | Result |
 | --- | --- | --- |
 | Riskiest assumption: a full track can be mapped in the browser from tab capture, measurements only | works end to end | **pass**: launched Chrome mapped real tracks with no clicks (Mason Flint 3:26, Kolter 5:04; 100% heard, ~1× track length) |
-| X1 sections within 4 bars | ≥ 4 of 5 scored tracks | **fail, 0/5** first run (boundaries precise, median 0.1 s, but only 21/39 found). Re-run after one method change (L137): **still 0/5**: recall 54% → 74% (29/39) but 16 extra boundaries (precision 78% → 57%), mostly repeated same-label sections (e.g. intro ×6); reported as it stands |
+| X1 sections within 4 bars | ≥ 4 of 5 scored tracks | **fail, 0/5** first run (boundaries precise, median 0.1 s, but only 21/39 found). Re-run after one method change (L137): **still 0/5**: recall 54% → 74% (29/39) but 16 extra boundaries (precision 78% → 57%), mostly repeated same-label sections (e.g. intro ×6); reported as it stands. Run 3 after the label guards (L141), information only: B1 5/11 matched, 0 extras, precision 100% (merging brings long sections back); B2–B5 not run (the Mac's screen locked, so tab capture failed) |
 | X2 template matches tempo, key, length, markers | exact | **pass** (user test: 126.1 BPM, Gm, 108 bars, markers 1/9/49/77/85, empty lanes; unit tests) |
 | X3 synths in key and on tempo | 100% in scale, onsets ≤ 5 ms | **pass**: 1,829/1,829 bass notes and all chord tones in scale; every cleanly measurable onset ≤ 5 ms at A♯m 124, F♯ 122.4, Cm 128 (dense acid/reese lines: detector limit, worst 6 checked by hand at 0–0.5 ms) |
 | X4 AI loops in key and on tempo | ≥ 4 of 5 | **pass, 4/5** with checked draws (L126); single draws 4/10, so the server checks each draw and retries up to 3 times. Partly circular: the check and the grade share Ears' tempo estimator. #5 (145 BPM) fails as half time, likely an estimator limit |
 | X5 AI cost shown = real usage | within a cent | **pass, exact**: $0.64 shown = 64 Stability credits for 8 draws |
-| X6 user test: every job ≥ 4 | all ≥ 4 | **pass on re-check**: 5 / 4 / 5 / 4 / 4 (first run 4 / 2 / 5 / 4 / 3) |
+| X6 user test: every job ≥ 4 | all ≥ 4 | **pass**: first run 4 / 2 / 5 / 4 / 3; re-check 5 / 4 / 5 / 4 / 4; final check after the owner's review items, real listen: jobs 1, 3, 4 = 4 |
 | X7 design scorecard (target 9, not a blocker) | 9/10 | **map 9/10** (7 → 8 → 9); **sound drawer 8/10** (6 → 8 → 8, rounds stopped when the score stopped moving) |
 | X8 no streamed audio stored or uploaded | 0 | **pass**: during a 3:36 listen only `PUT /api/analyses` (1.7 KB) and `/api/maps` (4 KB) JSON; a stopped listen sends nothing |
 | AI keys server-side only | 0 in the bundle | **pass**: 0 hits in 13.1 MB of JS or any response; loop and map routes 401 without the code |
@@ -101,6 +101,10 @@ kits or AI loops by ear: that's the owner's.
 - Section-click playback (F6) checked from screen and network only.
 - One Tone Transport tick slip (≤ 3.5 ms at 90 BPM) in the render path (backlog).
 
+## After the owner's review (26 Oct)
+
+Owner calls L138 (map playhead), L139 ("Start a track from this" builds a rough draft you can hear: 909 drums, Sub bass, Rhodes chords where the map says each plays, markers kept) and L140 (Solo per lane; stems stay Phase 5). The "nothing on the board" report was not a handover bug: the lanes were empty by design and the markers too small (now readable, T74). The re-check found mid-track "Outro" ×5 from the L137 method; label guards (L141) fixed it: Mason Flint now reads Intro, Drop, Breakdown, Outro. Still weak: two real listens of the same track disagree about the second drop. Final fixes T75, T76 (items 1–3 of T76 not checked on screen).
+
 ## Decision log
 
-L100–L137 and T49–T72 in `decisions.md` (owner calls L100–L106, L110, L111, L114).
+L100–L142 and T49–T76 in `decisions.md` (owner calls L100–L106, L110, L111, L114, L138–L140, L142).

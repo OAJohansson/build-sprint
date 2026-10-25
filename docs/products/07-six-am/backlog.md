@@ -60,3 +60,9 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Analyse polish left by the critic at 9/10: tell the two % headers apart; actions (Analyse, Cancel) vs passive statuses; toolbar stays one row with the Mentor open; drop the Mentor button's pressed look while the panel shows its own close | Critic 25 Oct, round 2 | later |
 | Fewer columns: drop Also/% and Tone from the table (both in the strip) so Track gets the room | Critic 25 Oct, round 1 (kept for now: not in the owner's two rows) | owner to decide |
 | Sandbox: reset the in-memory Mentor chat between test runs (or a thread per run) | User test 25 Oct | later |
+
+## Phase 3 follow-ups (26 Oct)
+
+| Idea | Why | Status |
+| --- | --- | --- |
+| Tone Transport one-tick slip at some tempos (≤ 3.5 ms at 90 BPM) in the offline/Transport path | X3 finding F1; under the 5 ms bar above 62.5 BPM | later |

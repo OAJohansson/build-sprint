@@ -400,3 +400,45 @@ Every job scenario is scored 1–5 by the tester (E10: every job ≥ 4/5).
 ME-7 remake coaching; multi-user accounts; the owner-only checks; phone layout; genre accuracy
 beyond E1's sample; the design critic's score (run separately, E10); building a recommender;
 perfect cost accounting.
+
+## Phase 3: arrangement map, template and sounds (26 Oct)
+
+Persona: the owner (`persona.md`), a beginner producer who learns by copying tracks they love
+("same DNA"). **Test sandbox only** (`ACCESS_CODE=test-code`, in-memory store; L108, 0028); never
+the owner's real data. Laptop, 1440 × 900, Chrome. Score each job 1–5 (bar: every job ≥ 4, X6).
+A full-track listen takes the track's length: use one short track (e.g. Mason Flint, 3:26) with
+Chrome launched with the tab auto-select flags, or a map already saved in the sandbox.
+
+#### P-S1 · See how a loved track is built (job 1)
+From Analyse, select an analysed track → Map → listen (or open a saved map). Can you say where
+the first drop starts, when the bass comes in and how long the breakdown is? Are estimates
+clearly estimates?
+
+#### P-S2 · Ask what the structure means (job 2)
+Explain the structure; Tell me more. Is it short, plain, honest (no "I heard"), and does it teach
+what a build or breakdown does?
+
+#### P-S3 · Start your own version (job 3)
+Start a track from this. Does the Studio open a new, unsaved track with the same tempo, key,
+length and section markers, lanes empty? Save it, reload: still there; the existing saved tracks
+unchanged.
+
+#### P-S4 · Shape a bass and chords (job 4)
++ Sound on Bass → try Sub, 303 Acid, Reese and a pattern; move the three knobs while listening;
+Add to lane. Same on Chords (Organ, Rhodes, Pad). Do the knobs make sense? Ask the Mentor about
+the knobs. Does it all stay in key and on the beat by ear?
+
+#### P-S5 · Drums (job 4)
++ Sound on Drums → 909 and 808 kits, a pattern, Add to lane; play with the bass and chords.
+
+#### P-S6 · Generate a bass loop like this track (job 5)
+In the template's Bass drawer: Generate. Is the wait clear, the result in key and on tempo by
+ear, the cost clear (per loop, today, month, estimate)? What happens if a loop "may be off"?
+At most 2 generations (≤ $0.48).
+
+### Trust checks (Phase 3)
+- Network: no request body holds audio during a map listen (only numbers to `/api/maps`); the AI
+  keys appear in no response and not in the bundle; `/api/loops/*` and `/api/maps` refuse without
+  the code.
+- Ears, the Mentor chat and the Studio's old tracks unbroken (guardrail).
+- Ask afterwards: "Did anything make you think Six AM kept a copy of the track?"

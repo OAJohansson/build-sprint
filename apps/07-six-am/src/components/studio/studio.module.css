@@ -121,7 +121,7 @@
 .muteOn { background: var(--gold); border-color: var(--gold); color: var(--bg); }
 /* L140: Solo sits beside Mute, same size; on, it is ink (mute is gold) */
 .ms { display: flex; gap: 4px; }
-.soloOn { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.soloOn, .soloOn:hover { background: var(--ink); border-color: var(--ink); color: var(--bg); } /* :hover too: .mute:hover would turn the letter ink on ink */
 /* N4: muted, but a solo overrides it: the M stays on, dimmed */
 .muteOverridden { opacity: .45; }
 /* S3: opens the sound drawer for this lane */
@@ -147,6 +147,10 @@
 /* N5: a silent lane dims the block's fill and waveform, never its name (kept ≥ 3:1) */
 .muted .region { background: color-mix(in srgb, var(--c) 6%, var(--bg)); box-shadow: inset 0 2px 0 color-mix(in srgb, var(--c) 35%, var(--bg)); }
 .muted .wave { opacity: .3; }
+/* A selected block on a silent lane: still dim, but outlined and named in the lane colour (≥ 3:1) */
+.muted .selected { color: var(--c); box-shadow: inset 0 2px 0 color-mix(in srgb, var(--c) 35%, var(--bg)), 0 0 0 2px var(--ink); }
+.muted .selected .regionName { color: var(--c); }
+.muted .selected .wave { opacity: .6; }
 .live, .selected { background: var(--c); color: rgba(19,17,16,.45); }
 .selected { box-shadow: inset 0 2px 0 var(--c), 0 0 0 2px var(--ink); }
 .regionName { position: absolute; left: 8px; right: 6px; top: 4px; z-index: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; font: 500 11.5px var(--f-mono); letter-spacing: .02em; color: var(--c); }

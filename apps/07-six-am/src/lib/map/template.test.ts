@@ -78,6 +78,16 @@ describe("mapToTemplate fills the lanes (L139)", () => {
     expect(drums.map((r) => [r.start, r.length])).toEqual([[1, 32]]); // the run ends at bar 30, rounded to the phrase line at 33
     for (const r of drums) { expect((r.start - 1) % 4).toBe(0); expect(r.length % 4).toBe(0); }
   });
+  it("plays no kick in a breakdown: hats only where hats play there, nothing where they don't", () => {
+    // Kick and hats all through 32 bars, but the map calls bars 9–24 a breakdown with hats only at 9–16.
+    const d = mapToTemplate({
+      ...map, bars: n,
+      sections: [{ label: "drop", startBar: 0, endBar: 8, startSec: 0, endSec: 0 }, { label: "breakdown", startBar: 8, endBar: 24, startSec: 0, endSec: 0 }, { label: "drop", startBar: 24, endBar: 32, startSec: 0, endSec: 0 }],
+      layers: { ...layers, kick: arr([1, 33]), hats: arr([1, 17], [25, 33]) },
+    });
+    const drums = d.regions.filter((r) => r.track === 0).map((r) => [d.sounds!.find((x) => x.id === r.loopId)!.name, r.start, r.length]);
+    expect(drums).toEqual([["909 · House Groove", 1, 8], ["909 · Offbeat Open Hat", 9, 8], ["909 · House Groove", 25, 8]]);
+  });
   it("lays only drums when the map has no key", () => {
     const d = mapToTemplate({ ...map, key: "", scale: "", bars: n, sections: [], layers });
     expect(d.regions.every((r) => r.track === 0)).toBe(true);

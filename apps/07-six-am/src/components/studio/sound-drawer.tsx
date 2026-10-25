@@ -189,7 +189,8 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
   // F10: the template's first drop, by its marker label.
   const drop = t.markers.find((m) => /drop/i.test(m.label));
   const [where, setWhere] = useState<"playhead" | "drop">("playhead");
-  const [noRoom, setNoRoom] = useState(false);
+  /** N2/3: where "Add as a new sound" put the copy when that wasn't the chosen bar, or that it couldn't. */
+  const [addNote, setAddNote] = useState<string | null>(null);
   const atDrop = where === "drop" && !!drop && drop.bar !== bar;
   const at = atDrop ? drop!.bar : bar;
   const listenTo = (x: Sound) => t.setPreviewSound(t.previewSound?.id === x.id ? null : x);
@@ -270,8 +271,8 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
                   <button className={s.secondary} title="A copy of this sound with its own knobs, in the first free bars" onClick={() => {
                     t.setPreviewSound(null);
                     const free = firstFreeBar(t.doc.regions, cur.lane, cur.bars, at, t.bars);
-                    if (free === null) { setNoRoom(true); return; }
-                    setNoRoom(false);
+                    if (free === null) { setAddNote(`No free bars on this lane after bar ${at}: make room first.`); return; }
+                    setAddNote(free !== at ? `Added at bar ${free}, the first free bars after bar ${at}.` : null);
                     t.addSound({ ...cur, id: `snd${newId()}` }, free);
                   }}>
                     Add as a new sound
@@ -281,7 +282,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
                     {atDrop ? `Add at the ${drop!.label.toLowerCase()} (bar ${drop!.bar})` : "Add to lane"}
                   </button>
                 )}
-                {noRoom ? <span className={s.dim} role="status">No free bars on this lane after bar {at}: make room first.</span> : null}
+                {addNote ? <span className={s.dim} role="status">{addNote}</span> : null}
                 {cur.source === "synth" ? (
                   <button className={s.link} onClick={askMentor} disabled={mentor.is === "asking"} title={KNOB_BASICS[focus]}>
                     {mentor.is === "asking" ? "The Mentor is answering…" : "Ask the Mentor about these knobs"}

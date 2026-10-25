@@ -75,8 +75,13 @@ function snapped(from: number, to: number, pass: number): { start: number; lengt
 }
 
 /** The starter regions and the sounds they use, from the map's layer estimates. */
-export function starterLanes(layers: Layers, bars: number, hasKey: boolean): { sounds: PlayableLoop[]; regions: Region[] } {
+export function starterLanes(layers: Layers, bars: number, hasKey: boolean, sections: Pick<TrackMap["sections"][number], "label" | "startBar" | "endBar">[] = []): { sounds: PlayableLoop[]; regions: Region[] } {
   const kick = kickBars(layers.kick, bars), hats = likelyBars(layers.hats, bars);
+  // No kick inside a breakdown (final check 4): the map's section wins over a stray kick estimate;
+  // hats only where hats play there, nothing where they don't. Map bars are 0-based.
+  const breakdown = Array(bars + 2).fill(false);
+  for (const x of sections) if (x.label === "breakdown") for (let b = x.startBar + 1; b <= x.endBar && b <= bars; b++) breakdown[b] = true;
+  for (let b = 1; b <= bars; b++) if (breakdown[b]) kick[b] = false;
   const used = new Map<string, PlayableLoop>();
   const regions: Region[] = [];
   const lay = (sound: PlayableLoop, from: number, to: number) => {
@@ -111,7 +116,7 @@ export function mapToTemplate(map: Pick<TrackMap, "bpm" | "key" | "scale" | "bar
     .filter((m) => m.bar >= 1 && m.bar <= bars);
   if (map.layers) {
     // Bass and chords need the key to play in; without one only the drums are laid.
-    const lanes = starterLanes(map.layers, bars, !!doc.key);
+    const lanes = starterLanes(map.layers, bars, !!doc.key, map.sections);
     if (lanes.regions.length) { doc.sounds = lanes.sounds; doc.regions = lanes.regions; }
   }
   return doc;

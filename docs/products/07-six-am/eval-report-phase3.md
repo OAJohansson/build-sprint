@@ -5,7 +5,7 @@ it. Graders: `user-tester` (2 runs, test sandbox only), one `design-critic` with
 five-point scorecard, `data-evals` (references frozen before results). The owner-only checks are
 the owner's and not here.
 
-**Preview:** https://six-49p02na2b-mimirswell.vercel.app (behind Vercel login; uses the real
+**Preview:** https://six-184fx48zw-mimirswell.vercel.app (behind Vercel login; uses the real
 Supabase, so it's for the owner's review only) · **Branch:** `claude/07-six-am-arrangement-3746ad`
 
 ## Summary

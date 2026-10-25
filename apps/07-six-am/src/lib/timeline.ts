@@ -1,5 +1,6 @@
 // The track model: the crate, the demo track, the pure edit rules (snap, repeat, overwrite)
 // and the drawn waveforms. No React here, so the rules can be unit tested.
+import { soundMeta, type Sound } from "./synths/loop";
 
 /** A track's length when it doesn't set its own (every track saved before Phase 3). */
 export const BARS = 64;
@@ -30,6 +31,8 @@ export type Doc = {
   bpm?: number;
   key?: { key: string; scale: string };
   markers?: Marker[];
+  /** S3/S4: the track's own sounds (synths, kits, AI loops); a region plays one by its id. */
+  sounds?: Sound[];
 };
 
 /** How many bars a track has. */
@@ -93,7 +96,16 @@ export const LOOPS: Loop[] = [
   L(3, "Siren", 4, "rave · alarm", "chop"),
   L(3, "Vinyl Crackle", 4, "dusty · record shop", "shaker"),
 ];
-export const loopById = (id: string) => LOOPS.find((l) => l.id === id)!;
+// A track's own sounds (synths, kits, AI loops, S3/S4) look like crate loops to the timeline.
+// shortcut: a module-wide, add-only registry the open track fills (registerSounds), so the edit
+// rules keep their one-argument loopById; pass the doc's sounds through instead if two tracks
+// ever need to be open at once.
+const SOUND_LOOPS = new Map<string, Loop>();
+export function registerSounds(sounds: Sound[] | undefined) {
+  for (const x of sounds ?? []) SOUND_LOOPS.set(x.id, { id: x.id, ...soundMeta(x) });
+}
+export const loopById = (id: string) => (LOOPS.find((l) => l.id === id) ?? SOUND_LOOPS.get(id))!;
+export const isCrateLoop = (id: string) => LOOPS.some((l) => l.id === id);
 
 // Random, so blocks added after reopening a saved track never clash with the saved ones.
 export const newId = () => `r${Math.random().toString(36).slice(2, 10)}${Date.now().toString(36).slice(-4)}`;

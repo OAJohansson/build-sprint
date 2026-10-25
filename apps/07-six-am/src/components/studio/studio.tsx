@@ -17,6 +17,7 @@ import { SettingsLink, ViewsNav } from "@/components/views-nav";
 import { useTimeline } from "./use-timeline";
 import { TimelineView, cx } from "./timeline";
 import { Crate } from "./crate";
+import { SoundDrawer } from "./sound-drawer";
 import { Library } from "./library";
 import { Logo } from "./logo";
 import { Notice, Unlock } from "./unlock";
@@ -241,6 +242,14 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
   const [name, setName] = useState(track.name);
   const savedName = useRef(track.name);
   const [library, setLibrary] = useState(false);
+  const [code] = useAccessCode();
+  useEffect(() => { t.engine().then((e) => e.setAccessCode(code)); }, [t, code]);
+  // The sound drawer (S3): adding to a lane, or editing the selected block's sound.
+  const [addLane, setAddLane] = useState<number | null>(null);
+  const selRegion = t.doc.regions.find((r) => r.id === t.selected);
+  const selSound = selRegion ? t.doc.sounds?.find((x) => x.id === selRegion.loopId) ?? null : null;
+  const drawerLane = selSound ? selSound.lane : addLane;
+  const closeDrawer = () => { setAddLane(null); t.setSelected(null); };
 
   // Every edit (and undo) is saved; the track as loaded is already saved.
   const changed = useEffectEvent((doc: Doc) => { if (!draft && doc !== track.doc) onChange(savedName.current, doc); });
@@ -313,9 +322,13 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
         <SettingsLink />
       </header>
       <main className={s.main}>
-        <TimelineView t={t} colors={COLORS} />
+        <TimelineView t={t} colors={COLORS} soundLane={drawerLane} onSound={(tr) => { t.setSelected(null); setAddLane((l) => (l === tr && !selSound ? null : tr)); }} />
       </main>
-      <Crate t={t} colors={COLORS} />
+      {drawerLane !== null ? (
+        <SoundDrawer key={drawerLane} t={t} lane={drawerLane} sound={selSound} color={COLORS[drawerLane]} onClose={closeDrawer} />
+      ) : (
+        <Crate t={t} colors={COLORS} />
+      )}
       {t.bin ? (
         <div className={s.binZone}>
           <div data-bin className={cx(s.bin, t.bin.over && s.binOver)}>

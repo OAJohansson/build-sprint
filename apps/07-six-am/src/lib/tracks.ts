@@ -1,6 +1,7 @@
 // A saved track and the check every save goes through (client and server share it).
 import { BARS, LOOPS, MAX_BARS, MIN_BARS, TRACKS, loopById, type Doc, type Marker } from "./timeline";
 import { MAX_BPM, MIN_BPM } from "./tempo";
+import { parseSound, soundMeta, type Sound } from "./synths/loop";
 
 export type TrackSummary = { id: string; name: string; updatedAt: string };
 export type Track = TrackSummary & { doc: Doc };
@@ -20,7 +21,7 @@ const KEYS = new Set(["C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G
  */
 export function parseDoc(v: unknown): Doc | null {
   if (!v || typeof v !== "object") return null;
-  const d = v as { regions?: unknown; muted?: unknown; bars?: unknown; bpm?: unknown; key?: unknown; markers?: unknown };
+  const d = v as { regions?: unknown; muted?: unknown; bars?: unknown; bpm?: unknown; key?: unknown; markers?: unknown; sounds?: unknown };
   const extra: Omit<Doc, "regions" | "muted"> = {};
   if (d.bars !== undefined) {
     if (!Number.isInteger(d.bars) || (d.bars as number) < MIN_BARS || (d.bars as number) > MAX_BARS) return null;
@@ -46,12 +47,27 @@ export function parseDoc(v: unknown): Doc | null {
     }
     extra.markers = markers;
   }
+  // S3/S4: the track's own sounds; regions may play them by id (a doc without sounds is unchanged).
+  const sounds = new Map<string, { track: number; bars: number }>();
+  if (d.sounds !== undefined) {
+    if (!Array.isArray(d.sounds) || d.sounds.length > 64) return null;
+    const list: Sound[] = [];
+    for (const x of d.sounds) {
+      const sound = parseSound(x);
+      if (!sound || sounds.has(sound.id) || LOOP_IDS.has(sound.id)) return null;
+      const m = soundMeta(sound);
+      sounds.set(sound.id, { track: m.track, bars: m.bars });
+      list.push(sound);
+    }
+    extra.sounds = list;
+  }
   if (!Array.isArray(d.regions) || d.regions.length > 500) return null;
   if (!Array.isArray(d.muted) || d.muted.length !== TRACKS.length || !d.muted.every((m) => typeof m === "boolean")) return null;
   const regions = [];
   for (const r of d.regions as Record<string, unknown>[]) {
-    if (!r || typeof r.id !== "string" || r.id.length > 40 || typeof r.loopId !== "string" || !LOOP_IDS.has(r.loopId)) return null;
-    const loop = loopById(r.loopId);
+    if (!r || typeof r.id !== "string" || r.id.length > 40 || typeof r.loopId !== "string") return null;
+    const loop = LOOP_IDS.has(r.loopId) ? loopById(r.loopId) : sounds.get(r.loopId);
+    if (!loop) return null;
     const { start, length } = r;
     if (r.track !== loop.track || !Number.isInteger(start) || !Number.isInteger(length)) return null;
     if ((start as number) < 1 || (length as number) < loop.bars || (length as number) % loop.bars !== 0) return null;

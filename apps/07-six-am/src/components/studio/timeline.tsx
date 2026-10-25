@@ -28,7 +28,11 @@ export function MiniWave({ loopId, className }: { loopId: string; className?: st
 
 const RULER_EVERY = 8; // house is built in 8-bar phrases
 
-export function TimelineView({ t, colors }: { t: Timeline; colors: string[] }) {
+export function TimelineView({ t, colors, onSound, soundLane }: {
+  t: Timeline; colors: string[];
+  /** S3: open the sound drawer for a lane (Drums, Bass, Chords); the lane it's open for. */
+  onSound?: (track: number) => void; soundLane?: number | null;
+}) {
   const ppb = t.pxPerBar;
   const target = t.ghost?.loop.track ?? null;
   return (
@@ -60,6 +64,9 @@ export function TimelineView({ t, colors }: { t: Timeline; colors: string[] }) {
               aria-pressed={t.doc.muted[tr]}
               aria-label={`Mute ${name}`}
             >M</button>
+            {onSound && tr < 3 ? (
+              <button className={cx(s.soundBtn, soundLane === tr && s.soundOn)} onClick={() => onSound(tr)} aria-pressed={soundLane === tr} aria-label={`Add a sound to ${name}`}>+ Sound</button>
+            ) : null}
           </div>
         </div>
       ))}

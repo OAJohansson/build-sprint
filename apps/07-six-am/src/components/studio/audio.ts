@@ -9,6 +9,11 @@ import { RECIPES, type Inst, type Note } from "@/lib/recipes";
 import { STEPS, buildIndex, previewHits, stepOfBar, type Hit } from "@/lib/schedule";
 import { DEFAULT_BPM, clampBpm, secondsPerStep } from "@/lib/tempo";
 import { loopById, type Region } from "@/lib/timeline";
+import { createKitVoice, createSynthVoice, loadKit, type KitVoice, type LoadedKit, type SynthVoice } from "@/lib/synths/engine";
+import type { KitId } from "@/lib/synths/kits";
+import type { Sound } from "@/lib/synths/loop";
+import { buildSoundIndex, previewSoundHits, type SoundHit } from "@/lib/synths/schedule";
+import type { Scale } from "@/lib/synths/theory";
 
 const LOOKAHEAD = 0.12, TICK_MS = 25;
 const TRACK_DB = [0, -3, -7, -9]; // drums, bass, chords, top/FX
@@ -176,6 +181,19 @@ export class AudioEngine {
   private preview: string | null = null;
   private filter = 1;
 
+  // The track's own sounds (S3/S4): synth and kit voices per sound, AI loop audio per stored loop.
+  private sounds: Sound[] = [];
+  private key = "A";
+  private scale: Scale = "minor";
+  private bpm = DEFAULT_BPM;
+  private soundIndex = new Map<number, SoundHit[]>();
+  private voices = new Map<string, { sig: string; voice: SynthVoice | KitVoice }>();
+  private kits = new Map<KitId, LoadedKit>();
+  private aiAudio = new Map<string, Tone.ToneAudioBuffer | "loading" | "failed">();
+  private aiPlaying = new Set<Tone.ToneBufferSource>();
+  private previewSound: Sound | null = null;
+  private code = "";
+
   /** Start the audio context; browsers only allow this after a click or key press. */
   start() {
     this.ready ??= (async () => {
@@ -202,10 +220,56 @@ export class AudioEngine {
       this.originTime = this.nextTime;
     }
     this.sps = next;
+    this.bpm = clampBpm(bpm);
     this.synced.forEach((d) => d.node.delayTime.rampTo(d.steps * next, 0.05));
   }
 
-  setRegions(regions: Region[]) { this.regions = regions; this.index = buildIndex(regions, RECIPES, this.steps); }
+  setRegions(regions: Region[]) {
+    this.regions = regions;
+    this.index = buildIndex(regions, RECIPES, this.steps);
+    this.soundIndex = buildSoundIndex(regions, this.sounds, this.key, this.scale, this.steps);
+  }
+
+  /** The track's own sounds; a changed sound (knobs, pattern) applies from its next note. */
+  setSounds(sounds: Sound[]) {
+    this.sounds = sounds;
+    for (const x of sounds) this.refreshVoice(x);
+    const keep = new Set([...sounds.map((x) => x.id), this.previewSound?.id]);
+    for (const [id, v] of this.voices) if (!keep.has(id)) { v.voice.dispose(); this.voices.delete(id); }
+    this.setRegions(this.regions);
+  }
+
+  /** The track's key: synth patterns are rendered in it (A minor when the track has none). */
+  setKey(key: string, scale: Scale) {
+    this.key = key;
+    this.scale = scale;
+    this.setRegions(this.regions);
+  }
+
+  /** The access code, for fetching stored AI loops' audio. */
+  setAccessCode(code: string) { this.code = code; }
+
+  /** Hand over a just-generated AI loop's audio so it plays without a fetch. */
+  async addAiAudio(aiId: string, bytes: ArrayBuffer) {
+    try {
+      const decoded = await Tone.getContext().decodeAudioData(bytes);
+      this.aiAudio.set(aiId, new Tone.ToneAudioBuffer(decoded));
+    } catch { this.aiAudio.set(aiId, "failed"); }
+  }
+
+  /** Loop one sound alone (the sound drawer's Listen), or null to stop. */
+  async setPreviewSound(sound: Sound | null) {
+    const was = this.previewSound;
+    this.previewSound = sound;
+    if (was && was.id !== sound?.id && !this.sounds.some((x) => x.id === was.id)) {
+      this.voices.get(was.id)?.voice.dispose();
+      this.voices.delete(was.id);
+    }
+    if (!sound) { if (!this.playing && !this.preview) this.halt(); return; }
+    await this.start();
+    this.refreshVoice(sound);
+    if (!this.timer) this.resetClock(0);
+  }
 
   /** The track's length in bars: playback wraps there. */
   setBars(bars: number) {
@@ -233,12 +297,13 @@ export class AudioEngine {
 
   stop() {
     this.playing = false;
-    if (!this.preview) this.halt();
+    this.stopAi();
+    if (!this.preview && !this.previewSound) this.halt();
   }
 
   async setPreview(loopId: string | null) {
     this.preview = loopId;
-    if (!loopId) { if (!this.playing) this.halt(); return; }
+    if (!loopId) { if (!this.playing && !this.previewSound) this.halt(); return; }
     await this.start();
     if (!this.timer) this.resetClock(0);
   }
@@ -254,6 +319,7 @@ export class AudioEngine {
 
   private resetClock(step: number) {
     this.halt();
+    this.stopAi();
     this.originStep = this.nextStep = step;
     this.originTime = this.nextTime = Tone.immediate() + 0.05;
     this.timer = setInterval(() => this.tick(), TICK_MS);
@@ -274,9 +340,17 @@ export class AudioEngine {
           if (!this.muted[hit.track]) this.sound(hit.loopId, hit.note, t);
         }
       }
+      if (this.playing) {
+        for (const hit of this.soundIndex.get(k % this.steps) ?? []) {
+          if (!this.muted[hit.track]) this.playSound(hit, t);
+        }
+      }
       if (this.preview) {
         const recipe = RECIPES[this.preview], loop = loopById(this.preview);
         if (recipe && loop) for (const note of previewHits(recipe, loop.bars, k)) this.sound(this.preview, note, t);
+      }
+      if (this.previewSound) {
+        for (const hit of previewSoundHits(this.previewSound, this.key, this.scale, k)) this.playSound(hit, t);
       }
       this.nextStep = k + 1;
       this.nextTime = t + this.sps;
@@ -295,6 +369,82 @@ export class AudioEngine {
       if (!this.failed.has(loopId)) {
         this.failed.add(loopId);
         console.error(`[six-am] couldn't play "${loopId}":`, e);
+      }
+    }
+  }
+
+  /** Build (or re-knob) a sound's voice. Same preset → knobs glide; another preset or kit → a new voice. */
+  private refreshVoice(x: Sound) {
+    if (!this.channels.length || x.source === "ai") { if (x.source === "ai") this.loadAi(x.aiId); else if (x.source === "kit") this.loadKitOnce(x.kit); return; }
+    const sig = x.source === "kit" ? `kit:${x.kit}` : `synth:${x.preset}`;
+    const have = this.voices.get(x.id);
+    if (have && have.sig === sig) {
+      if (x.source === "synth") (have.voice as SynthVoice).setKnobs(x.knobs);
+      return;
+    }
+    have?.voice.dispose();
+    this.voices.delete(x.id);
+    if (x.source === "synth") {
+      this.voices.set(x.id, { sig, voice: createSynthVoice(x.preset, x.knobs, this.channels[x.lane]) });
+    } else {
+      const kit = this.kits.get(x.kit);
+      if (kit) this.voices.set(x.id, { sig, voice: createKitVoice(kit, this.channels[x.lane]) });
+      else this.loadKitOnce(x.kit);
+    }
+  }
+
+  private kitLoads = new Set<KitId>();
+  private loadKitOnce(id: KitId) {
+    if (this.kitLoads.has(id)) return;
+    this.kitLoads.add(id);
+    loadKit(id).then((k) => {
+      this.kits.set(id, k);
+      for (const x of [...this.sounds, ...(this.previewSound ? [this.previewSound] : [])]) if (x.source === "kit" && x.kit === id) this.refreshVoice(x);
+    }).catch((e) => { this.kitLoads.delete(id); console.error(`[six-am] couldn't load the ${id} kit:`, e); });
+  }
+
+  private loadAi(aiId: string) {
+    if (this.aiAudio.has(aiId) || !this.code) return;
+    this.aiAudio.set(aiId, "loading");
+    fetch(`/api/loops/${aiId}`, { headers: { "x-access-code": this.code } })
+      .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.arrayBuffer(); })
+      .then((b) => this.addAiAudio(aiId, b))
+      .catch((e) => { this.aiAudio.set(aiId, "failed"); console.error("[six-am] couldn't load an AI loop:", e); });
+  }
+
+  private stopAi() {
+    const now = Tone.immediate();
+    for (const src of this.aiPlaying) { try { src.stop(now); } catch { /* already stopped */ } }
+    this.aiPlaying.clear();
+  }
+
+  /** Play one hit of a track sound; like sound(), a failure is reported once and skipped. */
+  private playSound(hit: SoundHit, t: number) {
+    const x = hit.soundId === this.previewSound?.id ? this.previewSound : this.sounds.find((s) => s.id === hit.soundId);
+    if (!x) return;
+    try {
+      if (hit.kind === "ai" && x.source === "ai") {
+        const buf = this.aiAudio.get(x.aiId);
+        if (!buf) this.loadAi(x.aiId);
+        if (!(buf instanceof Tone.ToneAudioBuffer)) return;
+        // One pass is exactly `bars` bars at the tempo it was made at; another tempo resamples it.
+        // shortcut: playbackRate changes pitch with tempo; time-stretch if tracks move far from the loop's tempo.
+        const src = new Tone.ToneBufferSource({ url: buf, playbackRate: this.bpm / x.bpm }).connect(this.channels[x.lane]);
+        src.onended = () => { this.aiPlaying.delete(src); src.dispose(); };
+        src.start(t, 0, undefined, 0.8);
+        src.stop(t + hit.dur * this.sps);
+        this.aiPlaying.add(src);
+        return;
+      }
+      if (!this.voices.has(x.id)) this.refreshVoice(x);
+      const v = this.voices.get(x.id)?.voice;
+      if (!v) return;
+      if (hit.kind === "synth") (v as SynthVoice).play(hit.note, t, this.sps);
+      else if (hit.kind === "kit") (v as KitVoice).play(hit.hit, t);
+    } catch (e) {
+      if (!this.failed.has(x.id)) {
+        this.failed.add(x.id);
+        console.error(`[six-am] couldn't play sound "${x.name}":`, e);
       }
     }
   }

@@ -22,8 +22,10 @@ export type SyncState = "local" | "syncing" | "synced" | "locked" | "offline";
 const json = (a: EarsAnalysis) => JSON.stringify(a);
 const newestFirst = (a: EarsAnalysis, b: EarsAnalysis) => b.analysedAt.localeCompare(a.analysedAt);
 
-/** `skip` drops server rows (dev only: the demo's copies, see DemoAnalyse). */
-export function useEarsSync(code: string, ready: boolean, skip?: ReadonlySet<string>): SyncState {
+/** `skip` drops server rows (dev only: the demo's copies, see DemoAnalyse). Keyed by id, the value
+ *  is the demo copy's analysedAt: a real result for the same track (the validation tracks share
+ *  their URLs with the demo rows) has another time and is kept (F11). */
+export function useEarsSync(code: string, ready: boolean, skip?: ReadonlyMap<string, string>): SyncState {
   const [rawResults, setResults] = useLocalStorage<EarsAnalysis[]>(RESULTS_KEY, NO_RESULTS);
   const results = Array.isArray(rawResults) ? rawResults : NO_RESULTS;
   const [imported, setImported] = useLocalStorage<boolean>(IMPORTED_KEY, false);
@@ -53,7 +55,7 @@ export function useEarsSync(code: string, ready: boolean, skip?: ReadonlySet<str
         }
         const got = await api.analyses();
         // The demo's copies exist only in the in-memory dev store; a real store's rows are all real.
-        const server = skip?.size && got.store === "memory" ? got.analyses.filter((a) => !skip.has(a.id)) : got.analyses;
+        const server = skip?.size && got.store === "memory" ? got.analyses.filter((a) => skip.get(a.id) !== a.analysedAt) : got.analyses;
         if (!live) return;
         const byId = new Map(server.map((a) => [a.id, a]));
         // shortcut: a result deleted in another browser comes back if this one still has it; add

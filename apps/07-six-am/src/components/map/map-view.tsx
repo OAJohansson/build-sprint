@@ -6,6 +6,7 @@
 // structure underneath, and one way out: a new Studio track with the same bones.
 // Graders: ?url=<track>&auto=1 starts the listen at once; window.__sixamMap reports it.
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { MapError } from "@/lib/map/listen";
 import { Logo } from "@/components/studio/logo";
 import { Notice, Unlock } from "@/components/studio/unlock";
 import { SettingsLink, ViewsNav } from "@/components/views-nav";
@@ -99,12 +100,16 @@ export function MapView({ id, auto }: { id: string; auto: boolean }) {
       window.__sixamFrames = { fps: run.series.fps, t0: run.series.t0, n: run.series.n, data: Array.from(run.series.data, (x) => Math.round(x * 100) / 100) };
       report({ status: "done", map: run.map, timings: run.timings, saved, endedAt: Date.now() });
     } catch (e) {
-      const message = e instanceof Error ? e.message : String(e);
+      // F7: Stop ends the listen before anything is saved, so nothing half-done is kept.
+      const stopped = e instanceof MapError && e.reason === "cancelled";
+      const message = stopped ? "Stopped. Nothing was saved; the map stays as it was." : e instanceof Error ? e.message : String(e);
+      player.pause();
       setLive(null);
       setProblem(message);
-      report({ status: "error", error: message, endedAt: Date.now() });
+      report({ status: stopped ? "stopped" : "error", error: message, endedAt: Date.now() });
     }
   }, [player, code, id, analysis]);
+  const stop = useCallback(() => abort.current?.abort(), []);
 
   useEffect(() => {
     if (auto && phase.is === "ready" && player && !autoStarted.current) {
@@ -124,17 +129,20 @@ export function MapView({ id, auto }: { id: string; auto: boolean }) {
     <>
       <MapScreen
         map={map} analysis={analysis} live={live} problem={problem} code={code}
-        canListen={!!player} onListen={listen}
+        canListen={!!player} onListen={listen} onStop={stop} player={player}
       />
       <iframe ref={onIframe} className={s.player} title="SoundCloud player" src={widgetSrc(id)} allow="autoplay" tabIndex={-1} aria-hidden />
     </>
   );
 }
 
-function MapScreen({ map, analysis, live, problem, code, canListen, onListen }: {
+function MapScreen({ map, analysis, live, problem, code, canListen, onListen, onStop, player }: {
   map: TrackMap | null; analysis: EarsAnalysis | null; live: Live | null; problem: string | null; code: string;
-  canListen: boolean; onListen: () => void;
+  canListen: boolean; onListen: () => void; onStop: () => void; player: Player | null;
 }) {
+  // F6: the reference plays from a section's start in the hidden player (only once the map is done).
+  const [playing, setPlaying] = useState<number | null>(null);
+  const mentorRef = useRef<HTMLElement | null>(null);
   const [mentor, setMentor] = useState<Mentor | null>(null);
   const [showMentor, setShowMentor] = useState(false);
   const [started, setStarted] = useState(false);
@@ -178,7 +186,9 @@ function MapScreen({ map, analysis, live, problem, code, canListen, onListen }: 
     try {
       const reply = await mentorApi(code).ask({
         job: "chat", track: analysis,
-        message: more ? "Tell me more about how this track is built." : `How is "${title}" built? Explain its structure from the arrangement map: the sections with their bars, how long the build is, and which layers come in or drop out where.`,
+        message: more
+          ? `Tell me more about how "${title}" is built: one level deeper, how I'd copy that structure in the Studio.`
+          : `Teach me how "${title}" is built: what its map shows, and what those sections do and why producers use them.`,
       });
       const text = reply.answer.sentences.map((x) => x.text).join(" ");
       setMentor((m) => more && m?.is === "answer" ? { is: "answer", text: `${m.text} ${text}`, more: false } : { is: "answer", text, more: reply.answer.tellMore });
@@ -186,6 +196,18 @@ function MapScreen({ map, analysis, live, problem, code, canListen, onListen }: 
       setMentor({ is: "error", text: e instanceof Error ? e.message : "The Mentor couldn't answer." });
     }
   };
+  // F5: the answer sits under the map; bring it into view when it arrives.
+  useEffect(() => {
+    if (mentor?.is === "answer" || mentor?.is === "error") mentorRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [mentor]);
+  useEffect(() => () => player?.pause(), [player]);
+  const play = (i: number, x: ViewSection) => {
+    if (!done || !player) return;
+    if (playing === i) { player.pause(); setPlaying(null); return; }
+    setPlaying(i);
+    player.seekAndPlay(Math.max(0, x.startSec) * 1000).catch(() => setPlaying(null));
+  };
+  const stopPlaying = () => { player?.pause(); setPlaying(null); };
   const toggleMentor = () => {
     const next = !showMentor;
     setShowMentor(next);
@@ -221,6 +243,7 @@ function MapScreen({ map, analysis, live, problem, code, canListen, onListen }: 
         <div className={s.actions}>
           {reason && <span id="why" className={s.srOnly}>{reason}</span>}
           {started && map && <span className={s.done} aria-live="polite">Opening a new Studio track: {Math.round(map.bpm * 10) / 10} BPM, {key}, {map.bars} bars, {plural(map.sections.length, "marker")}…</span>}
+          {listening ? <button className={s.textBtn} onClick={onStop}>Stop listening</button> : null}
           <span title={reason ?? (!analysis ? "Analyse the track first" : undefined)}>
             <button className={s.textBtn} disabled={!done || !analysis} aria-describedby={reason ? "why" : undefined} aria-expanded={showMentor} onClick={toggleMentor}>
               {showMentor ? "Hide explanation" : "Explain the structure"}
@@ -235,7 +258,11 @@ function MapScreen({ map, analysis, live, problem, code, canListen, onListen }: 
       </div>
 
       {!empty && <div className={s.info}>
-        <span className={s.read} aria-live="polite">{problem ? <span className={s.problem}>{problem}</span> : read}</span>
+        <span className={s.read} aria-live="polite">
+          {problem ? <span className={s.problem}>{problem}</span> : playing !== null && sections[playing]
+            ? <>Playing {sections[playing].name.toLowerCase()} from bar {sections[playing].from} <button className={s.textBtn} onClick={stopPlaying}>Stop</button></>
+            : read}
+        </span>
         <span className={s.note}><i className={s.hatchKey} aria-hidden /> maybe <span className={s.sep} aria-hidden>·</span> Layers are estimates from the sound, not stems.</span>
       </div>}
 
@@ -254,7 +281,7 @@ function MapScreen({ map, analysis, live, problem, code, canListen, onListen }: 
                 aria-label={secText(x)}
                 onMouseEnter={() => setRead(secText(x))}
                 onFocus={() => setRead(secText(x))}
-                onClick={() => { setSel(sel === i ? null : i); setRead(secText(x)); }}
+                onClick={() => { setSel(sel === i ? null : i); setRead(secText(x)); play(i, x); }}
               >
                 <span>{x.name}</span>
               </button>
@@ -262,8 +289,8 @@ function MapScreen({ map, analysis, live, problem, code, canListen, onListen }: 
           })}
           {listening && <span className={s.unheard} style={{ left: pct(heard + 1) }} />}
           {listening && (
-            <span className={s.here} style={{ left: pct(heard + 1) }} role="status">
-              {bpm ? `bar ${heard} · ` : "Listening · "}{clock(leftSec)} left
+            <span className={s.here} style={{ left: shown ? pct(heard + 1) : 0 }} role="status">
+              {shown && bpm ? `bar ${heard} · ` : "Finding the beat… · "}{clock(leftSec)} left
             </span>
           )}
           {nums.map((b) => <span key={b} className={s.num} style={{ left: pct(b) }}>{b}</span>)}
@@ -295,6 +322,11 @@ function MapScreen({ map, analysis, live, problem, code, canListen, onListen }: 
             </Fragment>
           );
         })}
+        {listening && !shown && (
+          <div className={s.empty}>
+            <p>Finding the beat… The map draws in as soon as Ears has the tempo.</p>
+          </div>
+        )}
         {empty && (
           <div className={s.empty}>
             <h2>Not mapped yet</h2>
@@ -305,7 +337,7 @@ function MapScreen({ map, analysis, live, problem, code, canListen, onListen }: 
         )}
       </div>
       {showMentor && mentor && (
-        <section className={s.mentor} aria-label="Mentor" aria-live="polite">
+        <section ref={mentorRef} className={s.mentor} aria-label="Mentor" aria-live="polite">
           {mentor.is === "asking" ? <p className={s.quietLine}>Asking the Mentor…</p> : null}
           {mentor.is === "error" ? <p className={s.problem}>{mentor.text}</p> : null}
           {mentor.is === "answer" ? (

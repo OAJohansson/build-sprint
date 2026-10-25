@@ -47,7 +47,7 @@ const GENRE_INPUT_ID = "my-genre";
 
 /** Dev only: the demo's rows are copied to the (in-memory) server so groups and taste sessions can
  *  be tried on them; the live view leaves those copies out. */
-const DEMO_IDS: ReadonlySet<string> | undefined = process.env.NODE_ENV === "development" ? new Set(DEMO_RESULTS.map((r) => r.id)) : undefined;
+const DEMO_IDS: ReadonlyMap<string, string> | undefined = process.env.NODE_ENV === "development" ? new Map(DEMO_RESULTS.map((r) => [r.id, r.analysedAt])) : undefined;
 
 export function LiveAnalyse() {
   const [code, setCode, ready] = useAccessCode();

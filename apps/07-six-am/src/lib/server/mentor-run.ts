@@ -35,6 +35,8 @@ export type AskBody = {
   /** Fallback when the result isn't synced yet: the Ears record itself (whitelisted). */
   analysis?: unknown;
   message?: unknown;
+  /** F9: background for this question only; never stored as the person's turn. */
+  context?: unknown;
   events?: unknown;
   playlists?: unknown;
   taste?: unknown;
@@ -284,6 +286,7 @@ async function askChat(store: MentorStore, body: AskBody, now: Date, tz: number,
     history: historyOf(rows, refById),
     myGenres: words,
     maps: await mapsFor(store, mapIds),
+    background: text(body.context, 4000) || undefined,
   };
   const threadId = MAIN_THREAD;
   let result;

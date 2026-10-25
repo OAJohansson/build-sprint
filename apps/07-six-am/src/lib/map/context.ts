@@ -1,27 +1,9 @@
 // The map as the Mentor reads it (A4): sections with bars and times, and when each estimated layer
 // plays, in plain lines; plus the whitelist parser for maps arriving from the browser. Pure.
 import { BEATS_PER_BAR, LAYERS, MAP_VERSION, SECTION_LABELS, type LayerName, type Section, type SectionLabel, type TrackMap } from "./types";
+import { layerBlocks } from "./view";
 
 const clock = (sec: number) => { const t = Math.max(0, Math.round(sec)); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`; };
-
-/** Bar spans (0-based, end exclusive) where a layer estimate is on: above 0.5, gaps of ≤ 2 bars
- *  bridged, spans under 2 bars dropped. */
-export function layerSpans(values: number[], on = 0.5): { start: number; end: number }[] {
-  const spans: { start: number; end: number }[] = [];
-  let start = -1;
-  values.forEach((v, i) => {
-    if (v >= on && start < 0) start = i;
-    if (v < on && start >= 0) { spans.push({ start, end: i }); start = -1; }
-  });
-  if (start >= 0) spans.push({ start, end: values.length });
-  const merged: { start: number; end: number }[] = [];
-  for (const s of spans) {
-    const prev = merged.at(-1);
-    if (prev && s.start - prev.end <= 2) prev.end = s.end;
-    else merged.push({ ...s });
-  }
-  return merged.filter((s) => s.end - s.start >= 2);
-}
 
 /** "bars 1–16" in the Studio's 1-based bars. */
 const bars = (a: number, b: number) => (b - a <= 1 ? `bar ${a + 1}` : `bars ${a + 1}–${b}`);
@@ -29,9 +11,20 @@ const bars = (a: number, b: number) => (b - a <= 1 ? `bar ${a + 1}` : `bars ${a 
 /** The map's facts for the prompt, each line labelled [ears]. Layers are said to be estimates. */
 export function mapContext(m: TrackMap): string {
   const sections = m.sections.map((s) => `${s.label} ${bars(s.startBar, s.endBar)} (${clock(s.startSec)}–${clock(s.endSec)})`).join("; ");
+  // F4: the same blocks the map view draws (view.ts), so every range the Mentor quotes is on screen.
+  // Touching blocks join into one run; a run is "maybe" when none of it is drawn solid. Runs under
+  // 4 bars are left out (fills and flickers), at most 6 per layer.
   const layers = LAYERS.map((k) => {
-    const spans = layerSpans(m.layers[k]);
-    return `${k}: ${spans.length ? spans.map((s) => bars(s.start, s.end)).join(", ") : "not detected"}`;
+    const runs: { from: number; to: number; likely: boolean }[] = [];
+    for (const b of layerBlocks(m.layers[k])) {
+      const last = runs.at(-1);
+      if (last && last.to === b.from) { last.to = b.to; last.likely ||= b.level === "likely"; }
+      else runs.push({ from: b.from, to: b.to, likely: b.level === "likely" });
+    }
+    const long = runs.filter((r) => r.to - r.from >= 4);
+    const shown = long.slice(0, 6).map((r) => `${bars(r.from - 1, r.to - 1)}${r.likely ? "" : " (maybe)"}`);
+    const rest = long.length - shown.length + (runs.length - long.length);
+    return `${k}: ${shown.length ? shown.join(", ") : "not detected"}${rest > 0 ? ` (plus ${rest} short bit${rest === 1 ? "" : "s"})` : ""}`;
   }).join(" | ");
   return [
     `[ears] Arrangement map: Ears measured the whole track (${Math.round(m.coverage * 100)}% heard) in the person's browser. Grid: ${m.bpm} BPM, ${m.beatsPerBar} beats a bar, bar 1 at ${clock(m.originSec)}, ${m.bars} bars.`,

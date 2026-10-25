@@ -55,6 +55,9 @@ export type AskInput = {
   job: Job;
   track?: EarsAnalysis | null;
   message?: string;
+  /** F9: background for this one question (e.g. the drawer's knob guide). It goes to the Mentor
+   *  but is not stored as the person's words: the history shows `message` only. */
+  context?: string;
   events?: LearnEvent[];
   playlists?: PlaylistLike[];
   taste?: { a: string; b: string; preferred: "a" | "b"; why: string };
@@ -87,6 +90,7 @@ export const mentorApi = (code: string) => ({
         // Fallback when the result isn't on the server yet (demo rows, an unsynced analysis).
         analysis: i.track ?? undefined,
         message: i.message,
+        context: i.context,
         events: i.events,
         playlists: i.playlists,
         taste: i.taste,

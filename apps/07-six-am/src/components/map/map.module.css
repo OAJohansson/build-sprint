@@ -26,11 +26,11 @@
 .done { font-size: 12px; color: var(--muted); max-width: 340px; }
 .textBtn { font: 500 12.5px var(--f-mono); color: var(--muted); background: none; border: 0; border-radius: 4px; padding: 0 6px; min-height: 32px; cursor: pointer; white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #5a4f45; transition: color 150ms ease; }
 .textBtn:hover { color: var(--ink); }
-.textBtn:disabled { color: #7a6d5d; cursor: default; text-decoration: none; }
+.textBtn:disabled { color: #7a6d5d; cursor: not-allowed; text-decoration: none; }
 .start { font: 500 12px var(--f-mono); color: var(--bg); background: var(--gold); border: 1px solid var(--gold); border-radius: 99px; padding: 6px 12px; cursor: pointer; white-space: nowrap; transition: background-color 150ms ease, transform 120ms ease-out; }
 .start:hover { background: #f6bf52; }
 .start:active { transform: scale(.97); }
-.start:disabled { background: transparent; border-color: #3a322c; color: var(--muted); cursor: default; transform: none; }
+.start:disabled { background: transparent; border-color: #3a322c; color: var(--muted); cursor: not-allowed; transform: none; opacity: .45; }
 
 /* Mentor: plain text under the map, the map's own note */
 .mentor { flex: none; margin: 0 24px 32px 128px; }

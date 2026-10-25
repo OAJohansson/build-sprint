@@ -38,6 +38,38 @@ describe("detectSections", () => {
     expect(s).toHaveLength(1);
     expect(s[0]).toMatchObject({ label: "drop", startBar: 0, endBar: 64 });
   });
+  it("keeps a build apart from the drop where the kick comes back (L137)", () => {
+    // 16 bars intro, then 16 bars of rising build with no kick, straight into 32 bars of drop.
+    const t = [
+      ...run(16, () => bar(0.4, 0.9, 0.2, 0.6, 0)),
+      ...run(16, (i) => bar(0.4 + 0.03 * i, 0, 0.2, 0.3 + 0.04 * i, 0.5)),
+      ...run(32, () => bar(1, 1, 0.9, 0.8, 0.6)),
+      ...run(16, () => bar(0.4, 0.9, 0.1, 0.4, 0)),
+    ];
+    const cuts = detectSections(t, 124, 0).map((x) => x.startBar);
+    expect(cuts).toContain(16);
+    expect(cuts).toContain(32);
+  });
+  it("splits the tail where the energy steps down (drop → cooldown → outro)", () => {
+    const t = [
+      ...run(16, () => bar(0.4, 0.9, 0.2, 0.6, 0)),
+      ...run(48, () => bar(1, 1, 0.9, 0.8, 0.6)),
+      ...run(16, () => bar(0.65, 1, 0.5, 0.7, 0.3)),
+      ...run(16, () => bar(0.3, 0.9, 0, 0.4, 0)),
+    ];
+    const cuts = detectSections(t, 124, 0).map((x) => x.startBar);
+    expect(cuts).toEqual(expect.arrayContaining([16, 64, 80]));
+  });
+  it("splits a long section at its strongest phrase-aligned change", () => {
+    // 64 bars of drop whose hats and chords change at bar 48 (a modest change).
+    const t = [
+      ...run(16, () => bar(0.4, 0.9, 0.2, 0.6, 0)),
+      ...run(32, () => bar(1, 1, 0.9, 0.8, 0.6)),
+      ...run(32, () => bar(0.95, 1, 0.9, 0.5, 0.2)),
+    ];
+    const cuts = detectSections(t, 124, 0).map((x) => x.startBar);
+    expect(cuts).toContain(48);
+  });
   it("returns nothing for an empty track", () => {
     expect(detectSections([], 124, 0)).toEqual([]);
   });

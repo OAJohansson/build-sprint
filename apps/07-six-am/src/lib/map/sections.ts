@@ -30,14 +30,48 @@ export function novelty(bars: BarFeatures[]): number[] {
   });
 }
 
-/** Section boundaries in bars (0 and the end included), snapped to phrases, at least MIN_SECTION apart. */
+const quantile = (v: number[], q: number) => { const s = [...v].sort((a, b) => a - b); return s.length ? s[Math.min(s.length - 1, Math.round(q * (s.length - 1)))] : 0; };
+const mean = (bars: BarFeatures[], k: keyof BarFeatures, a: number, b: number) => {
+  let t = 0; const lo = Math.max(0, a), hi = Math.min(bars.length, b);
+  for (let i = lo; i < hi; i++) t += bars[i][k];
+  return hi > lo ? t / (hi - lo) : 0;
+};
+/** Novelty below this is never a boundary (a steady track has none). */
+const MIN_NOVELTY = 0.1;
+/** Sections longer than this get split at their strongest phrase-aligned change (L137). */
+const LONG_SECTION = 32;
+
+/**
+ * Section boundaries in bars (0 and the end included), at least MIN_SECTION apart (L137: one method
+ * for more boundaries). Candidates, strongest first:
+ * 1. Rule changes on the phrase grid (every 4 bars): the kick returning or leaving (8 bars each side;
+ *    a build ends where the kick comes back, so build and drop stay apart), and, in the last third,
+ *    the energy stepping down (drop → cooldown → outro).
+ * 2. Novelty peaks above a threshold set by the track's own novelty (its median plus half the spread
+ *    to its 90th percentile), not by its single biggest change, snapped to phrases.
+ * 3. Any section still longer than 32 bars is split at its strongest change on an 8-bar line.
+ */
 export function boundaries(bars: BarFeatures[]): number[] {
   const n = bars.length;
   if (n < MIN_SECTION * 2) return n ? [0, n] : [0];
   const nov = novelty(bars);
-  const max = Math.max(...nov);
-  const threshold = Math.max(0.15, 0.3 * max);
-  // Local peaks (highest within ±2 bars), snapped to the phrase grid, strongest kept first.
+  const kept: number[] = [];
+  const fits = (b: number) => b >= MIN_SECTION / 2 && n - b >= MIN_SECTION / 2 && !kept.some((k) => Math.abs(k - b) < MIN_SECTION);
+
+  const rules: { bar: number; score: number }[] = [];
+  for (let b = 8; b <= n - 8; b += 4) {
+    const before = mean(bars, "kick", b - 8, b), after = mean(bars, "kick", b, b + 8);
+    if ((before < KICK_OFF && after >= KICK_ON) || (before >= KICK_ON && after < KICK_OFF)) rules.push({ bar: b, score: 2 + Math.abs(after - before) });
+    if (b >= (2 * n) / 3) {
+      const step = mean(bars, "energy", b - 8, b) - mean(bars, "energy", b, b + 8);
+      if (step >= 0.2 && nov[b] >= MIN_NOVELTY) rules.push({ bar: b, score: 1 + step });
+    }
+  }
+  // Of neighbouring rule hits (4 bars apart), the strongest wins.
+  rules.sort((a, b) => b.score - a.score);
+  for (const r of rules) if (fits(r.bar)) kept.push(r.bar);
+
+  const threshold = Math.max(MIN_NOVELTY, quantile(nov, 0.5) + 0.5 * (quantile(nov, 0.9) - quantile(nov, 0.5)));
   const peaks: { bar: number; score: number }[] = [];
   for (let b = 1; b < n; b++) {
     if (nov[b] < threshold) continue;
@@ -46,11 +80,19 @@ export function boundaries(bars: BarFeatures[]): number[] {
     if (top) peaks.push({ bar: snapToPhrase(b, n), score: nov[b] });
   }
   peaks.sort((a, b) => b.score - a.score);
-  const kept: number[] = [];
-  for (const p of peaks) {
-    if (p.bar < MIN_SECTION / 2 || n - p.bar < MIN_SECTION / 2) continue;
-    if (kept.some((k) => Math.abs(k - p.bar) < MIN_SECTION)) continue;
-    kept.push(p.bar);
+  for (const p of peaks) if (fits(p.bar)) kept.push(p.bar);
+
+  for (let guard = 0; guard < 32; guard++) {
+    const cuts = [0, ...kept.sort((a, b) => a - b), n];
+    let added = false;
+    for (let i = 0; i + 1 < cuts.length; i++) {
+      const [a, b] = [cuts[i], cuts[i + 1]];
+      if (b - a <= LONG_SECTION) continue;
+      let best = -1, score = MIN_NOVELTY;
+      for (let c = Math.ceil((a + MIN_SECTION) / 8) * 8; c <= b - MIN_SECTION; c += 8) if (nov[c] > score) { score = nov[c]; best = c; }
+      if (best > 0) { kept.push(best); added = true; }
+    }
+    if (!added) break;
   }
   return [0, ...kept.sort((a, b) => a - b), n];
 }
@@ -118,18 +160,15 @@ function splitBuilds(bars: BarFeatures[], spans: (readonly [number, number])[]):
   return out;
 }
 
-/** Sections of a track: boundaries, labels, adjacent equal labels merged, and their times. */
+/** Sections of a track: boundaries, labels and their times. */
 export function detectSections(bars: BarFeatures[], bpm: number, originSec: number): Section[] {
   const cuts = boundaries(bars);
   if (cuts.length < 2) return [];
   const spans = splitBuilds(bars, cuts.slice(0, -1).map((a, i) => [a, cuts[i + 1]] as const));
   const labels = labelSections(spans.map(([a, b]) => stats(bars, a, b)));
-  const merged: { label: SectionLabel; startBar: number; endBar: number }[] = [];
-  spans.forEach(([a, b], i) => {
-    const prev = merged.at(-1);
-    if (prev && prev.label === labels[i]) prev.endBar = b;
-    else merged.push({ label: labels[i], startBar: a, endBar: b });
-  });
+  // L137: neighbouring sections with the same label stay apart (drop → drop is still a change the
+  // track makes, and a cooldown before the outro reads as two outros).
+  const merged = spans.map(([a, b], i) => ({ label: labels[i], startBar: a, endBar: b }));
   const sec = (bar: number) => Math.round(barsToSeconds(bar, bpm, originSec) * 100) / 100;
   return merged.map((m) => ({ ...m, startSec: sec(m.startBar), endSec: sec(m.endBar) }));
 }

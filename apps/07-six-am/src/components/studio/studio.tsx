@@ -320,7 +320,7 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
           <button className={s.undo} onClick={t.undo} disabled={!t.canUndo} aria-label="Undo">{Icon.undo} <span className={s.undoWord}>Undo</span></button>
           <div className={s.knobWrap}>
             Filter
-            <div className={s.knob} {...t.knob} role="slider" aria-label="Filter" aria-valuenow={Math.round(t.filter * 100)} style={{ ["--a" as string]: `${-135 + t.filter * 270}deg` }} />
+            <div className={s.knob} {...t.knob} role="slider" aria-label="Filter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(t.filter * 100)} style={{ ["--a" as string]: `${-135 + t.filter * 270}deg` }} />
           </div>
         </div>
         <SettingsLink />

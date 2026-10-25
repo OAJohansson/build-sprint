@@ -76,7 +76,7 @@
 .lcd { display: flex; align-items: baseline; gap: 8px; padding: 0 8px; color: var(--gold); font: 500 20px var(--f-mono); }
 .lcd b { font-weight: 500; font-variant-numeric: tabular-nums; }
 .lcd b:first-child { min-width: 52px; }
-.lcd small { font-size: 11px; color: #8c6a33; letter-spacing: .1em; margin-right: 8px; }
+.lcd small { font-size: 11px; color: #a8844a; letter-spacing: .1em; margin-right: 8px; }
 .undo {
   display: flex; align-items: center; gap: 6px; font: 400 13px var(--f-mono); color: var(--muted); background: none;
   border: 0; border-radius: 99px; padding: 8px 10px; cursor: pointer;
@@ -228,4 +228,21 @@
   .trackTitle { min-width: 152px; }
   .transport { gap: 8px; }
   .undoWord { display: none; }
+}
+
+/* Keyboard focus (web-design-guidelines pass): blocks, crate loops and the filter knob are focusable. */
+.region:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; z-index: 2; }
+.item:focus-visible { outline: 1px solid var(--ink); outline-offset: -3px; }
+.knob:focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; }
+
+/* Narrow laptop windows (break-ui pass, 1024–1180 px): the control bar overlapped itself. The logo
+   keeps its mark, the track name and the labels yield first; every control keeps its size. */
+@media (max-width: 1180px) {
+  .logo { font-size: 0; gap: 0; }
+  .trackBox { margin-left: 4px; padding-left: 8px; }
+  .trackTitle { min-width: 72px; max-width: 220px; }
+  .saveState:not(.saveError) { display: none; }
+  .lcd { font-size: 17px; gap: 4px; padding: 0 2px; }
+  .lcd small { margin-right: 4px; }
+  .knobWrap { font-size: 0; gap: 0; padding: 8px 4px; }
 }

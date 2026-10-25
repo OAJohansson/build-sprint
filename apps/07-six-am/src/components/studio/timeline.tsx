@@ -46,11 +46,17 @@ export function TimelineView({ t, colors, onSound, soundLane }: {
           </span>
         ))}
         {/* A template's section markers: the name in the ruler, a faint line through the lanes. */}
-        {t.markers.map((m) => (
-          <span key={`${m.bar}-${m.label}`} className={s.marker} data-marker={m.label} title={`${sectionName(m.label)} · bar ${m.bar}`} style={{ left: (m.bar - 1) * ppb }}>
-            {sectionName(m.label)}
-          </span>
-        ))}
+        {t.markers.map((m, i) => {
+          // break-ui: on a long track (512 bars) markers sit a few px apart; a name that doesn't fit
+          // before the next marker shows as a plain tick, with the name in the tooltip.
+          const room = ((t.markers[i + 1]?.bar ?? t.bars + 1) - m.bar) * ppb;
+          const name = sectionName(m.label), fits = room >= name.length * 7 + 12;
+          return (
+            <span key={`${m.bar}-${m.label}`} className={s.marker} data-marker={m.label} title={`${name} · bar ${m.bar}`} aria-label={`${name}, bar ${m.bar}`} style={{ left: (m.bar - 1) * ppb, ...(fits ? {} : { padding: 0, background: "none" }) }}>
+              {fits ? name : null}
+            </span>
+          );
+        })}
         {t.ghost && t.ghost.bar !== null ? (
           <span className={s.rulerMark} style={{ left: (t.ghost.bar - 1) * ppb, ["--c" as string]: colors[t.ghost.loop.track] }}>{t.ghost.bar}</span>
         ) : null}

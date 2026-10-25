@@ -72,3 +72,4 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Store AI loop try reasons (now shown once) | L136 | later |
 | Reference layers shown faintly above the Studio lanes ("what's left to fill to get the same DNA") | user test: most wanted next | next big piece |
 | Pasting two links separated by a space in Analyse adds only the first | Found in the follow-up pass | later (small) |
+| Studio minors from break-ui/web guidelines (26 Oct): no zoom/scroll on long tracks (3 px blocks at 512 bars); ruler not settable by keyboard; crate names wrap at 1024; no empty-track hint; arrow-key moves overwrite neighbours; subtle focus on the name field; mixed RTL names truncate mid-word; disabled Undo faint | Studio ship checks (L142) | later |

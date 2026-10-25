@@ -185,8 +185,22 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
     window.addEventListener("pointerup", up);
   };
 
-  /** Spread onto a crate item: click previews, drag drops it onto its own track. */
+  /** Spread onto a crate item: click previews, drag drops it onto its own track. By keyboard
+   *  (break-ui pass): Space previews, Enter adds it to its own track at the playhead. */
   const crateItem = (loop: Loop) => ({
+    tabIndex: 0,
+    role: "button",
+    "aria-label": `${loop.name}, ${loop.bars} ${loop.bars === 1 ? "bar" : "bars"}. Space to hear it, Enter to add it at bar ${Math.floor(playhead)}`,
+    onKeyDown: (e: React.KeyboardEvent) => {
+      if (e.key === " ") { e.preventDefault(); e.stopPropagation(); setPreviewSound(null); setPreview((p) => (p === loop.id ? null : loop.id)); }
+      else if (e.key === "Enter") {
+        e.preventDefault(); e.stopPropagation();
+        const start = Math.min(Math.max(1, Math.floor(playheadRef.current)), bars - loop.bars + 1);
+        const r: Region = { id: newId(), loopId: loop.id, track: loop.track, start, length: loop.bars };
+        commit({ ...docRef.current, regions: place(docRef.current.regions, r) });
+        setSelected(r.id);
+      }
+    },
     onPointerDown: (e: React.PointerEvent) => {
       if (e.button !== 0) return;
       e.preventDefault();
@@ -211,6 +225,22 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
   /** Spread onto a block: click selects, drag moves along its track, drop on the bin removes it.
    *  The bin appears once you hold the block or start dragging it (owner, feedback 8). */
   const blockBody = (r: Region) => ({
+    // Keyboard (break-ui pass): Tab to a block, Enter selects it (a sound opens its drawer),
+    // ←/→ move it a bar (Shift: 4 bars), Delete removes it (the window handler below).
+    tabIndex: 0,
+    role: "button",
+    "aria-label": `${loopById(r.loopId).name}, bars ${r.start}–${r.start + r.length - 1}`,
+    "aria-pressed": selected === r.id,
+    onKeyDown: (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); setSelected(r.id); }
+      else if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        e.preventDefault(); e.stopPropagation();
+        const step = (e.key === "ArrowLeft" ? -1 : 1) * (e.shiftKey ? 4 : 1);
+        const start = Math.min(Math.max(1, r.start + step), bars - r.length + 1);
+        setSelected(r.id);
+        if (start !== r.start) commit({ ...docRef.current, regions: place(docRef.current.regions, { ...r, start }) });
+      }
+    },
     onPointerDown: (e: React.PointerEvent) => {
       if (e.button !== 0) return;
       e.stopPropagation();
@@ -267,6 +297,14 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
 
   /** Spread onto a knob: drag up or down to turn it. */
   const knob = {
+    // Keyboard (web-design-guidelines pass): focusable, arrows turn it, Home/End go to the ends.
+    tabIndex: 0,
+    onKeyDown: (e: React.KeyboardEvent) => {
+      const by = { ArrowUp: 0.05, ArrowRight: 0.05, ArrowDown: -0.05, ArrowLeft: -0.05, PageUp: 0.2, PageDown: -0.2 }[e.key];
+      if (by === undefined && e.key !== "Home" && e.key !== "End") return;
+      e.preventDefault(); e.stopPropagation();
+      setFilter((f) => (e.key === "Home" ? 0 : e.key === "End" ? 1 : Math.min(1, Math.max(0, f + by!))));
+    },
     onPointerDown: (e: React.PointerEvent) => {
       e.preventDefault();
       const sy = e.clientY, start = filter;
@@ -279,6 +317,8 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement;
       if (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable) return;
+      // Space on a focused control is that control's own press, not play/pause (break-ui pass).
+      if (e.key === " " && t.closest("button, a, [role='button'], [role='slider'], [role='radio']")) return;
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "z") { e.preventDefault(); undo(); return; }
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.key === " ") { e.preventDefault(); setPlaying((p) => !p); }

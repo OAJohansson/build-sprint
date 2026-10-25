@@ -6,10 +6,12 @@ import { clampBpm } from "@/lib/tempo";
 import { MAX_BARS, MIN_BARS, TRACKS, type Doc } from "@/lib/timeline";
 import type { TrackMap } from "./types";
 
-export function mapToTemplate(map: Pick<TrackMap, "bpm" | "key" | "scale" | "bars" | "sections">): Doc {
+export function mapToTemplate(map: Pick<TrackMap, "bpm" | "key" | "scale" | "bars" | "sections"> & { id?: string }): Doc {
   // shortcut: a track longer than MAX_BARS (512) is cut to 512 bars; raise MAX_BARS if that happens.
   const bars = Math.min(MAX_BARS, Math.max(MIN_BARS, Math.round(map.bars)));
   const doc: Doc = { regions: [], muted: TRACKS.map(() => false), bars, bpm: clampBpm(map.bpm) };
+  // L134: the reference track, so the Studio's AI loop request can ask for its style.
+  if (map.id) doc.analysisId = map.id;
   if (map.key && (map.scale === "major" || map.scale === "minor")) doc.key = { key: map.key, scale: map.scale };
   // Map bars are 0-based from the first downbeat; the Studio's bar 1 is that downbeat.
   doc.markers = map.sections
@@ -22,5 +24,5 @@ export function mapToTemplate(map: Pick<TrackMap, "bpm" | "key" | "scale" | "bar
 export function templateDraft(map: TrackMap, now = new Date()): StudioDraft {
   const doc = mapToTemplate(map);
   const name = `${map.title || "Untitled"} · template`.slice(0, 80);
-  return { name, bpm: doc.bpm!, doc, at: now.toISOString() };
+  return { name, bpm: doc.bpm!, doc, at: now.toISOString(), ...(doc.analysisId ? { analysisId: doc.analysisId } : {}) };
 }

@@ -33,6 +33,9 @@ export type Doc = {
   markers?: Marker[];
   /** S3/S4: the track's own sounds (synths, kits, AI loops); a region plays one by its id. */
   sounds?: Sound[];
+  /** The reference track's analysis id (its SoundCloud URL), for a template made from a map (L134):
+   *  the AI loop request sends it so the loop gets the track's style words. */
+  analysisId?: string;
 };
 
 /** How many bars a track has. */

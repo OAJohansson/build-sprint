@@ -34,8 +34,11 @@ describe("mapToTemplate", () => {
   it("is a doc the Studio and the server accept, and a draft named after the track", () => {
     const doc = mapToTemplate(map);
     expect(parseDoc(doc)).toEqual(doc);
-    const d = templateDraft({ ...(map as TrackMap), title: "Symphony No. 5" }, new Date("2026-10-25T21:00:00Z"));
-    expect(d).toMatchObject({ name: "Symphony No. 5 · template", bpm: 126, at: "2026-10-25T21:00:00.000Z" });
+    const id = "https://soundcloud.com/koltercologne/symphony-no-5";
+    const d = templateDraft({ ...(map as TrackMap), id, title: "Symphony No. 5" }, new Date("2026-10-25T21:00:00Z"));
+    expect(d).toMatchObject({ name: "Symphony No. 5 · template", bpm: 126, at: "2026-10-25T21:00:00.000Z", analysisId: id });
+    expect(d.doc.analysisId).toBe(id);
+    expect(parseDoc(d.doc)).toEqual(d.doc);
   });
 });
 

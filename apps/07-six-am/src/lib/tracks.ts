@@ -21,13 +21,17 @@ const KEYS = new Set(["C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G
  */
 export function parseDoc(v: unknown): Doc | null {
   if (!v || typeof v !== "object") return null;
-  const d = v as { regions?: unknown; muted?: unknown; bars?: unknown; bpm?: unknown; key?: unknown; markers?: unknown; sounds?: unknown };
+  const d = v as { regions?: unknown; muted?: unknown; bars?: unknown; bpm?: unknown; key?: unknown; markers?: unknown; sounds?: unknown; analysisId?: unknown };
   const extra: Omit<Doc, "regions" | "muted"> = {};
   if (d.bars !== undefined) {
     if (!Number.isInteger(d.bars) || (d.bars as number) < MIN_BARS || (d.bars as number) > MAX_BARS) return null;
     extra.bars = d.bars as number;
   }
   const total = extra.bars ?? BARS;
+  if (d.analysisId !== undefined) {
+    if (typeof d.analysisId !== "string" || d.analysisId.length > 600 || !/^https:\/\/(on\.|m\.)?soundcloud\.com\/\S+$/i.test(d.analysisId)) return null;
+    extra.analysisId = d.analysisId;
+  }
   if (d.bpm !== undefined) {
     if (typeof d.bpm !== "number" || !Number.isFinite(d.bpm) || d.bpm < MIN_BPM || d.bpm > MAX_BPM) return null;
     extra.bpm = Math.round(d.bpm * 10) / 10;

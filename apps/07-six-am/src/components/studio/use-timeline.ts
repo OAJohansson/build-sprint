@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   docBars, type Doc, type Loop, type Region,
-  loopById, newId, place, registerSounds, snapBar, snapLength,
+  loopById, newId, place, registerSounds, silentLanes, snapBar, snapLength,
 } from "@/lib/timeline";
 import type { Sound } from "@/lib/synths/loop";
 import type { Scale } from "@/lib/synths/theory";
@@ -82,6 +82,13 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 37) {
     commit({ ...d, muted: d.muted.map((m, i) => (i === track ? !m : m)) });
   }, [commit]);
 
+  /** L140: solo a lane (several may be); saved with the track, undoable like mute. */
+  const toggleSolo = useCallback((track: number) => {
+    const { soloed, ...d } = docRef.current;
+    const next = d.muted.map((_, i) => (i === track ? !soloed?.[i] : !!soloed?.[i]));
+    commit(next.some(Boolean) ? { ...d, soloed: next } : d);
+  }, [commit]);
+
   const remove = useCallback((id: string) => {
     const d = docRef.current;
     commit({ ...d, regions: d.regions.filter((r) => r.id !== id) });
@@ -95,7 +102,10 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 37) {
   useLayoutEffect(() => { playheadRef.current = playhead; });
 
   useEffect(() => { engine().then((e) => { e.setBars(bars); e.setRegions(doc.regions); }); }, [engine, doc.regions, bars]);
-  useEffect(() => { engine().then((e) => e.setMuted(doc.muted)); }, [engine, doc.muted]);
+  // The engine only knows "silent": solo (L140) decides over mute.
+  const silent = silentLanes(doc);
+  const silentKey = silent.join();
+  useEffect(() => { engine().then((e) => e.setMuted(silentKey.split(",").map((x) => x === "true"))); }, [engine, silentKey]);
   useEffect(() => { engine().then((e) => e.setFilter(filter)); }, [engine, filter]);
   useEffect(() => { engine().then((e) => e.setPreview(preview)); }, [engine, preview]);
   useEffect(() => { engine().then((e) => e.setTempo(bpm)); }, [engine, bpm]);
@@ -291,13 +301,13 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 37) {
   const ghost = drag?.type === "new" ? drag : null;
   const bin = drag?.type === "move" ? { id: drag.id, over: drag.overBin } : null;
   const inTrack = new Set(doc.regions.map((r) => r.loopId));
-  const sounding = doc.muted.map((m, t) => !m && regions.some((r) => r.track === t && playhead >= r.start && playhead < r.start + r.length));
+  const sounding = silent.map((m, t) => !m && regions.some((r) => r.track === t && playhead >= r.start && playhead < r.start + r.length));
   const bar = Math.floor(playhead), beat = Math.floor((playhead - bar) * 4) + 1;
 
   return {
     doc, bars, key, scale, engine, previewSound, setPreviewSound, addSound, updateSound, markers: initial.markers ?? [], regions, playing, setPlaying, playhead, jumpTo, bar, beat, selected, setSelected,
     preview, setPreview, group, setGroup, filter, ghost, bin, inTrack, sounding, pxPerBar, lanesRef,
-    canUndo: past.length > 0, undo, toggleMute, remove,
+    canUndo: past.length > 0, undo, toggleMute, toggleSolo, silent, remove,
     crateItem, blockBody, blockGrip, ruler, knob,
   };
 }

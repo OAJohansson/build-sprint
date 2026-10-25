@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { demoDoc } from "@/lib/timeline";
 import { parseDoc } from "@/lib/tracks";
+import { patternById, renderPattern } from "@/lib/synths/patterns";
+import { inScale, pitchClass } from "@/lib/synths/theory";
+import type { SynthLoop } from "@/lib/synths/loop";
 import { mapToTemplate, templateDraft } from "./template";
 import type { TrackMap } from "./types";
 
@@ -39,6 +42,38 @@ describe("mapToTemplate", () => {
     expect(d).toMatchObject({ name: "Symphony No. 5 · template", bpm: 126, at: "2026-10-25T21:00:00.000Z", analysisId: id });
     expect(d.doc.analysisId).toBe(id);
     expect(parseDoc(d.doc)).toEqual(d.doc);
+  });
+});
+
+describe("mapToTemplate fills the lanes (L139)", () => {
+  // 32 bars: kick + hats 1–16, hats only 17–24 (a break), kick only 25–32; bass 9–32; chords 17–24
+  // Blocks are snapped inward to whole passes of their sound, starting from bar 1.
+  const n = 32;
+  const arr = (...spans: [number, number][]) => Array.from({ length: n }, (_, i) => (spans.some(([a, b]) => i + 1 >= a && i + 1 < b) ? 0.9 : 0));
+  const layers = { kind: "estimate" as const, method: "test", kick: arr([1, 17], [25, 33]), hats: arr([1, 25]), bass: arr([9, 33]), chords: arr([17, 25]), vocals: arr([1, 33]) };
+  const doc = mapToTemplate({ ...map, bars: n, sections: [], layers });
+  const lane = (t: number) => doc.regions.filter((r) => r.track === t).map((r) => [doc.sounds!.find((x) => x.id === r.loopId)!.name, r.start, r.length]);
+
+  it("puts drums where the kick and hats play, a Sub bass and Rhodes chords on their bars", () => {
+    expect(lane(0)).toEqual([["909 · House Groove", 1, 16], ["909 · Offbeat Open Hat", 17, 8], ["909 · Four to the Floor", 25, 8]]);
+    expect(lane(1)).toEqual([["Sub · Offbeat Bass", 9, 24]]);
+    expect(lane(2)).toEqual([["Rhodes · Rhodes Swing", 17, 8]]);
+    expect(lane(3)).toEqual([]); // vocals have no lane
+  });
+  it("plays every bass and chord note in the track's key", () => {
+    const tonic = pitchClass("G")!;
+    for (const s of doc.sounds!.filter((x): x is SynthLoop => x.source === "synth")) {
+      const notes = renderPattern(patternById(s.pattern)!, "G", "minor")!;
+      expect(notes.length).toBeGreaterThan(0);
+      for (const x of notes) expect(inScale(x.midi, tonic, "minor")).toBe(true);
+    }
+  });
+  it("is a doc the Studio accepts, with whole passes only", () => {
+    expect(parseDoc(JSON.parse(JSON.stringify(doc)))).toEqual(doc);
+  });
+  it("lays only drums when the map has no key", () => {
+    const d = mapToTemplate({ ...map, key: "", scale: "", bars: n, sections: [], layers });
+    expect(d.regions.every((r) => r.track === 0)).toBe(true);
   });
 });
 

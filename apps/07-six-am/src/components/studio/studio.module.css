@@ -115,6 +115,9 @@
 }
 .mute:hover { color: var(--ink); }
 .muteOn { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+/* L140: Solo sits beside Mute, same size; on, it is ink (mute is gold) */
+.ms { display: flex; gap: 4px; }
+.soloOn { background: var(--ink); border-color: var(--ink); color: var(--bg); }
 /* S3: opens the sound drawer for this lane */
 .soundBtn { min-height: 28px; padding: 0 2px; background: none; border: 0; color: var(--muted); font: 500 11px var(--f-mono); cursor: pointer; white-space: nowrap; }
 .soundBtn:hover { color: var(--ink); }

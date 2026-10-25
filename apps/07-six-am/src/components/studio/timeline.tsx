@@ -58,12 +58,21 @@ export function TimelineView({ t, colors, onSound, soundLane }: {
         <div key={tr} className={s.row} style={{ gridRow: tr + 2, ["--c" as string]: colors[tr] }}>
           <div className={s.header}>
             <div className={s.trackName}>{name}</div>
+            <div className={s.ms}>
             <button
               className={cx(s.mute, t.doc.muted[tr] && s.muteOn)}
               onClick={() => t.toggleMute(tr)}
               aria-pressed={t.doc.muted[tr]}
               aria-label={`Mute ${name}`}
             >M</button>
+            <button
+              className={cx(s.mute, t.doc.soloed?.[tr] && s.soloOn)}
+              onClick={() => t.toggleSolo(tr)}
+              aria-pressed={!!t.doc.soloed?.[tr]}
+              aria-label={`Solo ${name}`}
+              title="Solo: only soloed lanes play"
+            >S</button>
+            </div>
             {onSound && tr < 3 ? (
               <button className={cx(s.soundBtn, soundLane === tr && s.soundOn)} onClick={() => onSound(tr)} aria-pressed={soundLane === tr} aria-label={`Add a sound to ${name}`}>+ Sound</button>
             ) : null}
@@ -75,7 +84,7 @@ export function TimelineView({ t, colors, onSound, soundLane }: {
           <div
             key={tr}
             data-track={tr}
-            className={cx(s.lane, t.doc.muted[tr] && s.muted, target !== null && (target === tr ? s.laneTarget : s.laneDim))}
+            className={cx(s.lane, t.silent[tr] && s.muted, target !== null && (target === tr ? s.laneTarget : s.laneDim))}
             style={{ backgroundSize: `${ppb * 4}px 100%`, ["--c" as string]: colors[tr] }}
           >
             {t.regions.filter((r) => r.track === tr).map((r, i) => {

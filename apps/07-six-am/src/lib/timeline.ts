@@ -36,7 +36,15 @@ export type Doc = {
   /** The reference track's analysis id (its SoundCloud URL), for a template made from a map (L134):
    *  the AI loop request sends it so the loop gets the track's style words. */
   analysisId?: string;
+  /** L140: soloed lanes (any solo silences the others; solo beats mute). Missing when none is. */
+  soloed?: boolean[];
 };
+
+/** Which lanes are silent: with any lane soloed, every lane that isn't; otherwise the muted ones. */
+export function silentLanes(d: Pick<Doc, "muted" | "soloed">): boolean[] {
+  const solo = d.soloed?.some(Boolean) ? d.soloed : null;
+  return d.muted.map((m, i) => (solo ? !solo[i] : m));
+}
 
 /** How many bars a track has. */
 export const docBars = (d: Pick<Doc, "bars">) => d.bars ?? BARS;

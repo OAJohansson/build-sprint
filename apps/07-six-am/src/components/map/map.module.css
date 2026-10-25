@@ -88,3 +88,7 @@
 /* The SoundCloud player plays the track for the listen; it stays in the page but out of sight. */
 .player { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; border: 0; }
 .problem { color: #ef8a6b; font-size: 12px; }
+
+/* L138: the reference's playhead, like the Studio's: a plain ink line that moves with the player. */
+.playhead { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--ink); pointer-events: none; z-index: 2; }
+.playheadTop::before { content: ""; position: absolute; bottom: 0; left: -5px; border: 6px solid transparent; border-bottom: 8px solid var(--ink); border-top: 0; }

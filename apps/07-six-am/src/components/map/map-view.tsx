@@ -209,9 +209,26 @@ function MapScreen({ map, analysis, live, problem, code, canListen, onListen, on
     if (!done || !player) return;
     if (playing === i) { player.pause(); setPlaying(null); return; }
     setPlaying(i);
+    setPlaySec(null);
     player.seekAndPlay(Math.max(0, x.startSec) * 1000).catch(() => setPlaying(null));
   };
   const stopPlaying = () => { player?.pause(); setPlaying(null); };
+  // L138: while the reference plays, a playhead follows the hidden player's position (polled every
+  // 100 ms, the line simply moves; no other motion). It clears when the player stops or finishes.
+  const [playSec, setPlaySec] = useState<number | null>(null);
+  useEffect(() => {
+    if (playing === null || !player) return;
+    let on = true, started = false;
+    const tick = setInterval(async () => {
+      const ms = await player.position().catch(() => null);
+      if (!on || ms === null) return;
+      if (player.playing) started = true;
+      else if (started) { setPlaying(null); setPlaySec(null); return; } // paused or finished in the widget
+      setPlaySec(ms / 1000);
+    }, 100);
+    return () => { on = false; clearInterval(tick); };
+  }, [playing, player]);
+  const playBar = playing === null || playSec === null || !bpm ? null : (playSec - origin) * bpm / 240 + 1;
   const toggleMentor = () => {
     const next = !showMentor;
     setShowMentor(next);
@@ -264,7 +281,7 @@ function MapScreen({ map, analysis, live, problem, code, canListen, onListen, on
       {!empty && <div className={s.info}>
         <span className={s.read} aria-live="polite">
           {problem ? <span className={s.problem}>{problem}</span> : playing !== null && sections[playing]
-            ? <>Playing {sections[playing].name.toLowerCase()} from bar {sections[playing].from} <button className={s.textBtn} onClick={stopPlaying}>Stop</button></>
+            ? <>Playing {sections[playing].name.toLowerCase()} from bar {sections[playing].from}{playBar !== null && playBar >= 1 ? ` · now bar ${Math.floor(playBar)}` : ""} <button className={s.textBtn} onClick={stopPlaying}>Stop</button></>
             : read}
         </span>
         <span className={s.note}><i className={s.hatchKey} aria-hidden /> maybe <span className={s.sep} aria-hidden>·</span> Layers are estimates from the sound, not stems.</span>
@@ -298,6 +315,7 @@ function MapScreen({ map, analysis, live, problem, code, canListen, onListen, on
             </span>
           )}
           {nums.map((b) => <span key={b} className={s.num} style={{ left: pct(b) }}>{b}</span>)}
+          {playBar !== null && playBar >= 1 ? <i className={`${s.playhead} ${s.playheadTop}`} style={{ left: pct(playBar) }} aria-hidden /> : null}
           {lines.map((b) => <i key={b} className={s.secLine} style={{ left: pct(b) }} />)}
         </div>
         {(layers.length ? layers : viewLayers({ layers: { kind: "estimate", method: "", kick: [], bass: [], chords: [], hats: [], vocals: [] } })).map((l) => {
@@ -322,6 +340,7 @@ function MapScreen({ map, analysis, live, problem, code, canListen, onListen, on
                 ))}
                 {done && blocks.length === 0 && <span className={s.none}>Not heard in this track</span>}
                 {listening && <span className={s.unheard} style={{ left: pct(heard + 1) }} />}
+                {playBar !== null && playBar >= 1 ? <i className={s.playhead} style={{ left: pct(playBar) }} aria-hidden /> : null}
               </div>
             </Fragment>
           );

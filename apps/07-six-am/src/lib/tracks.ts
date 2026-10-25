@@ -21,13 +21,17 @@ const KEYS = new Set(["C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G
  */
 export function parseDoc(v: unknown): Doc | null {
   if (!v || typeof v !== "object") return null;
-  const d = v as { regions?: unknown; muted?: unknown; bars?: unknown; bpm?: unknown; key?: unknown; markers?: unknown; sounds?: unknown; analysisId?: unknown };
+  const d = v as { regions?: unknown; muted?: unknown; bars?: unknown; bpm?: unknown; key?: unknown; markers?: unknown; sounds?: unknown; analysisId?: unknown; soloed?: unknown };
   const extra: Omit<Doc, "regions" | "muted"> = {};
   if (d.bars !== undefined) {
     if (!Number.isInteger(d.bars) || (d.bars as number) < MIN_BARS || (d.bars as number) > MAX_BARS) return null;
     extra.bars = d.bars as number;
   }
   const total = extra.bars ?? BARS;
+  if (d.soloed !== undefined) {
+    if (!Array.isArray(d.soloed) || d.soloed.length !== TRACKS.length || !d.soloed.every((x) => typeof x === "boolean")) return null;
+    if (d.soloed.some(Boolean)) extra.soloed = d.soloed as boolean[];
+  }
   if (d.analysisId !== undefined) {
     if (typeof d.analysisId !== "string" || d.analysisId.length > 600 || !/^https:\/\/(on\.|m\.)?soundcloud\.com\/\S+$/i.test(d.analysisId)) return null;
     extra.analysisId = d.analysisId;

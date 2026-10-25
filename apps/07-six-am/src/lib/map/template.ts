@@ -22,11 +22,37 @@ export const STARTERS = {
 
 type Layers = Pick<TrackMap["layers"], "kick" | "bass" | "chords" | "hats">;
 
-/** Bars (1-based) where a layer is drawn solid ("likely") on the map. */
-function likelyBars(values: number[], bars: number): boolean[] {
-  const on = Array(bars + 2).fill(false);
-  for (const b of layerBlocks(values)) if (b.level === "likely") for (let x = b.from; x < b.to && x <= bars; x++) on[x] = true;
-  return on;
+/** Per bar (1-based): 2 where the map draws a layer solid ("likely"), 1 hatched ("maybe"), else 0. */
+function levels(values: number[], bars: number): number[] {
+  const lv = Array(bars + 2).fill(0);
+  for (const b of layerBlocks(values)) for (let x = b.from; x < b.to && x <= bars; x++) lv[x] = b.level === "likely" ? 2 : 1;
+  return lv;
+}
+/** Bars where a layer is drawn solid ("likely") on the map. */
+const likelyBars = (values: number[], bars: number) => levels(values, bars).map((l) => l === 2);
+
+/**
+ * N3: the drum skeleton's kick. Solid bars, plus "maybe" bars that sit inside a run (a solid kick
+ * within 8 bars on both sides), so a kick doesn't stop for one doubtful bar.
+ */
+function kickBars(values: number[], bars: number): boolean[] {
+  const lv = levels(values, bars);
+  const near = (from: number, dir: 1 | -1) => { for (let k = 1; k <= 8; k++) { const x = from + dir * k; if (x < 1 || x > bars) return false; if (lv[x] === 2) return true; if (lv[x] === 0) return false; } return false; };
+  return lv.map((l, b) => l === 2 || (l === 1 && near(b, -1) && near(b, 1)));
+}
+
+/** N3: drum runs rounded to 4-bar phrases (bar 1, 5, 9…), in order, never overlapping: no slivers. */
+function phraseRuns<T>(list: { from: number; to: number; v: T }[], bars: number): { from: number; to: number; v: T }[] {
+  const out: { from: number; to: number; v: T }[] = [];
+  let cursor = 1;
+  for (const r of list) {
+    const from = Math.max(cursor, Math.round((r.from - 1) / 4) * 4 + 1);
+    const to = Math.min(bars + 1, Math.round((r.to - 1) / 4) * 4 + 1);
+    if (to - from < 4) continue;
+    out.push({ from, to, v: r.v });
+    cursor = to;
+  }
+  return out;
 }
 
 /** Runs of bars with the same value, as [from, to) in 1-based bars. */
@@ -50,7 +76,7 @@ function snapped(from: number, to: number, pass: number): { start: number; lengt
 
 /** The starter regions and the sounds they use, from the map's layer estimates. */
 export function starterLanes(layers: Layers, bars: number, hasKey: boolean): { sounds: PlayableLoop[]; regions: Region[] } {
-  const kick = likelyBars(layers.kick, bars), hats = likelyBars(layers.hats, bars);
+  const kick = kickBars(layers.kick, bars), hats = likelyBars(layers.hats, bars);
   const used = new Map<string, PlayableLoop>();
   const regions: Region[] = [];
   const lay = (sound: PlayableLoop, from: number, to: number) => {
@@ -60,7 +86,7 @@ export function starterLanes(layers: Layers, bars: number, hasKey: boolean): { s
     regions.push({ id: newId(), loopId: sound.id, track: sound.lane, start: s.start, length: s.length });
   };
   const drums = { groove: STARTERS.groove(), kick: STARTERS.kick(), hats: STARTERS.hats() };
-  for (const r of runs((b) => (kick[b] && hats[b] ? "groove" : kick[b] ? "kick" : hats[b] ? "hats" : null), bars)) {
+  for (const r of phraseRuns(runs((b) => (kick[b] && hats[b] ? "groove" : kick[b] ? "kick" : hats[b] ? "hats" : null), bars), bars)) {
     lay(drums[r.v as keyof typeof drums], r.from, r.to);
   }
   if (hasKey) {

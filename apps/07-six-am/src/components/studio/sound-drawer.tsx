@@ -189,6 +189,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
   // F10: the template's first drop, by its marker label.
   const drop = t.markers.find((m) => /drop/i.test(m.label));
   const [where, setWhere] = useState<"playhead" | "drop">("playhead");
+  const [noRoom, setNoRoom] = useState(false);
   const atDrop = where === "drop" && !!drop && drop.bar !== bar;
   const at = atDrop ? drop!.bar : bar;
   const listenTo = (x: Sound) => t.setPreviewSound(t.previewSound?.id === x.id ? null : x);
@@ -264,7 +265,15 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
                 <button className={s.secondary} aria-pressed={listening && t.previewSound?.id === cur.id} onClick={() => listenTo(cur)}>{listening && t.previewSound?.id === cur.id ? "Stop" : "Listen"}</button>
                 {editing ? (
                   // N3: knobs belong to the sound; a copy with its own knobs is how a part gets a different sound.
-                  <button className={s.secondary} title="A copy of this sound with its own knobs" onClick={() => { t.setPreviewSound(null); t.addSound({ ...cur, id: `snd${newId()}` }, at); }}>
+                  // N2 (re-check): the copy goes into the first free bars at or after `at` (as AI loops do),
+                  // never over another block; with no room it says so.
+                  <button className={s.secondary} title="A copy of this sound with its own knobs, in the first free bars" onClick={() => {
+                    t.setPreviewSound(null);
+                    const free = firstFreeBar(t.doc.regions, cur.lane, cur.bars, at, t.bars);
+                    if (free === null) { setNoRoom(true); return; }
+                    setNoRoom(false);
+                    t.addSound({ ...cur, id: `snd${newId()}` }, free);
+                  }}>
                     Add as a new sound
                   </button>
                 ) : (
@@ -272,6 +281,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
                     {atDrop ? `Add at the ${drop!.label.toLowerCase()} (bar ${drop!.bar})` : "Add to lane"}
                   </button>
                 )}
+                {noRoom ? <span className={s.dim} role="status">No free bars on this lane after bar {at}: make room first.</span> : null}
                 {cur.source === "synth" ? (
                   <button className={s.link} onClick={askMentor} disabled={mentor.is === "asking"} title={KNOB_BASICS[focus]}>
                     {mentor.is === "asking" ? "The Mentor is answering…" : "Ask the Mentor about these knobs"}

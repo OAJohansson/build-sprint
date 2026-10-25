@@ -4,7 +4,8 @@
 export const MAP_VERSION = 1;
 export const BEATS_PER_BAR = 4;
 
-export const SECTION_LABELS = ["intro", "build", "drop", "breakdown", "outro"] as const;
+/** "section": a change the rules can't name with confidence (N1), rather than a guess. */
+export const SECTION_LABELS = ["intro", "build", "drop", "breakdown", "outro", "section"] as const;
 export type SectionLabel = (typeof SECTION_LABELS)[number];
 
 /** One section on the grid. Bars are 0-based from the first downbeat; endBar is exclusive. */

@@ -111,33 +111,49 @@ function stats(bars: BarFeatures[], a: number, b: number): Stats {
 
 const KICK_ON = 0.5, KICK_OFF = 0.3, RISING = 0.1;
 
+/** Outro and intro are only called near the track's ends (N1): the last quarter, the start. */
+const OUTRO_FROM = 0.75;
+
 /**
- * Labels by rules, per section:
+ * Labels by rules, per section (N1: every label has to earn its place; when none does, "section"):
  * - drop: the kick plays and the section is among the fullest (≥ 85 % of the fullest section).
- * - before the first drop: intro; the last one before the drop is a build if it rises or the kick
- *   is out (a breakdown-style lead-in).
- * - after the last drop: outro.
- * - between drops: kick out → breakdown (or build, if it rises straight into a drop); kick in but
- *   not full → build if a drop follows and it rises, else breakdown when clearly quieter, else drop.
- * - no drop at all: first intro, last outro, middle by the kick (breakdown without, drop with).
+ * - before the first drop: intro (it runs from the start); the last one before the drop is a build
+ *   if it rises or the kick is out.
+ * - outro: only a section starting in the last quarter of the track, after the last drop.
+ * - elsewhere, not full: kick out or clearly quieter than the drop → breakdown; rising straight into
+ *   a drop → build; nearly as loud as the drop with the kick in → drop; anything else → section.
+ * - no drop at all: intro at the start, outro in the last quarter, breakdown without kick, else section.
  */
-export function labelSections(stat: Stats[]): SectionLabel[] {
+export function labelSections(stat: (Stats & { start: number })[], total: number): SectionLabel[] {
   const n = stat.length;
   if (!n) return [];
+  const late = (i: number) => n > 1 && i > 0 && stat[i].start >= OUTRO_FROM * total;
   const maxFull = Math.max(...stat.map((s) => s.fullness));
   const full = stat.map((s) => s.kick >= KICK_ON && s.fullness >= 0.85 * maxFull);
   const first = full.indexOf(true), last = full.lastIndexOf(true);
   if (first < 0) {
-    return stat.map((s, i) => (i === 0 && n > 1 ? "intro" : i === n - 1 && n > 1 ? "outro" : s.kick < KICK_OFF ? "breakdown" : "drop"));
+    return stat.map((s, i) => (i === 0 && n > 1 ? "intro" : late(i) ? "outro" : s.kick < KICK_OFF ? "breakdown" : "section"));
+  }
+  const dropEnergy = Math.max(...stat.filter((_, i) => full[i]).map((s) => s.energy));
+  const between = (s: Stats, i: number): SectionLabel => {
+    const intoDrop = full[i + 1] === true;
+    if (intoDrop && s.rise >= RISING) return "build";
+    if (s.kick < KICK_OFF || s.energy < 0.6 * dropEnergy) return "breakdown";
+    if (s.kick >= KICK_ON && s.energy >= 0.8 * dropEnergy) return "drop";
+    return "section";
+  };
+  // The build before the first drop reaches back over the kick-less sections right before it.
+  let buildFrom = first;
+  const pre = stat[first - 1];
+  if (first - 1 > 0 && pre && (pre.rise >= RISING || pre.kick < KICK_OFF)) {
+    buildFrom = first - 1;
+    while (buildFrom - 1 > 0 && stat[buildFrom - 1].kick < KICK_OFF && stat[buildFrom].kick < KICK_OFF) buildFrom--;
   }
   return stat.map((s, i): SectionLabel => {
     if (full[i]) return "drop";
-    if (i < first) return i === first - 1 && i > 0 && (s.rise >= RISING || s.kick < KICK_OFF) ? "build" : "intro";
-    if (i > last) return "outro";
-    const intoDrop = full[i + 1] === true;
-    if (s.kick < KICK_OFF) return intoDrop && s.rise >= RISING && stat[i - 1]?.kick < KICK_OFF ? "build" : "breakdown";
-    if (intoDrop && s.rise >= RISING) return "build";
-    return s.energy < 0.6 * stat[first].energy ? "breakdown" : "drop";
+    if (i < first) return i >= buildFrom ? "build" : "intro";
+    if (i > last && late(i)) return "outro";
+    return between(s, i);
   });
 }
 
@@ -160,15 +176,20 @@ function splitBuilds(bars: BarFeatures[], spans: (readonly [number, number])[]):
   return out;
 }
 
-/** Sections of a track: boundaries, labels and their times. */
+/** Sections of a track: boundaries, labels (same labels merged) and their times. */
 export function detectSections(bars: BarFeatures[], bpm: number, originSec: number): Section[] {
   const cuts = boundaries(bars);
   if (cuts.length < 2) return [];
   const spans = splitBuilds(bars, cuts.slice(0, -1).map((a, i) => [a, cuts[i + 1]] as const));
-  const labels = labelSections(spans.map(([a, b]) => stats(bars, a, b)));
-  // L137: neighbouring sections with the same label stay apart (drop → drop is still a change the
-  // track makes, and a cooldown before the outro reads as two outros).
-  const merged = spans.map(([a, b], i) => ({ label: labels[i], startBar: a, endBar: b }));
+  const labels = labelSections(spans.map(([a, b]) => ({ ...stats(bars, a, b), start: a })), bars.length);
+  // N1: neighbouring sections with the same label are one section (the boundary between them was a
+  // phrase change inside it); the map, the Mentor and the template markers all read these.
+  const merged: { label: SectionLabel; startBar: number; endBar: number }[] = [];
+  spans.forEach(([a, b], i) => {
+    const prev = merged.at(-1);
+    if (prev && prev.label === labels[i]) prev.endBar = b;
+    else merged.push({ label: labels[i], startBar: a, endBar: b });
+  });
   const sec = (bar: number) => Math.round(barsToSeconds(bar, bpm, originSec) * 100) / 100;
   return merged.map((m) => ({ ...m, startSec: sec(m.startBar), endSec: sec(m.endBar) }));
 }

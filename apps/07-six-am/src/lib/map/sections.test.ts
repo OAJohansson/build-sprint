@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { detectSections } from "./sections";
+import { boundaries, detectSections } from "./sections";
 import type { BarFeatures } from "./types";
 
 const bar = (energy: number, kick: number, bass: number, hats: number, chords: number, vocals = 0): BarFeatures => ({ energy, kick, bass, hats, chords, vocals });
@@ -67,8 +67,24 @@ describe("detectSections", () => {
       ...run(32, () => bar(1, 1, 0.9, 0.8, 0.6)),
       ...run(32, () => bar(0.95, 1, 0.9, 0.5, 0.2)),
     ];
-    const cuts = detectSections(t, 124, 0).map((x) => x.startBar);
-    expect(cuts).toContain(48);
+    // The split exists, but both halves are drops, so the map shows one drop (N1).
+    expect(boundaries(t)).toContain(48);
+    expect(detectSections(t, 124, 0).map((x) => x.label)).toEqual(["intro", "drop"]);
+  });
+  it("never repeats a label back to back, and calls no outro mid-track (N1)", () => {
+    // Intro, a drop, then 64 bars that thin out unevenly: the old rules called all of it "outro".
+    const t = [
+      ...run(8, () => bar(0.4, 0.9, 0.2, 0.6, 0)),
+      ...run(24, () => bar(1, 1, 0.9, 0.8, 0.6)),
+      ...run(16, () => bar(0.45, 0.2, 0.5, 0.6, 0.3)),
+      ...run(16, () => bar(0.7, 0.6, 0.6, 0.7, 0.2)),
+      ...run(16, () => bar(0.5, 0.3, 0.4, 0.5, 0.4)),
+      ...run(24, () => bar(0.3, 0.8, 0, 0.4, 0)),
+    ];
+    const s = detectSections(t, 124, 0);
+    for (let i = 1; i < s.length; i++) expect(s[i].label).not.toBe(s[i - 1].label);
+    for (const x of s) if (x.label === "outro") expect(x.startBar).toBeGreaterThanOrEqual(0.75 * t.length);
+    for (const x of s) if (x.label === "intro") expect(x.startBar).toBe(0);
   });
   it("returns nothing for an empty track", () => {
     expect(detectSections([], 124, 0)).toEqual([]);

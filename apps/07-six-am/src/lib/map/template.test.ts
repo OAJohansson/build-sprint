@@ -71,6 +71,13 @@ describe("mapToTemplate fills the lanes (L139)", () => {
   it("is a doc the Studio accepts, with whole passes only", () => {
     expect(parseDoc(JSON.parse(JSON.stringify(doc)))).toEqual(doc);
   });
+  it("keeps the drum skeleton whole: maybe bars inside a kick run filled, 4-bar phrases, no slivers (N3)", () => {
+    const kick = arr([1, 11], [14, 31]).map((v, i) => (i + 1 >= 11 && i + 1 < 14 ? 0.45 : v)); // bars 11–13 only "maybe"
+    const d = mapToTemplate({ ...map, bars: n, sections: [], layers: { ...layers, kick, hats: arr() } });
+    const drums = d.regions.filter((r) => r.track === 0);
+    expect(drums.map((r) => [r.start, r.length])).toEqual([[1, 32]]); // the run ends at bar 30, rounded to the phrase line at 33
+    for (const r of drums) { expect((r.start - 1) % 4).toBe(0); expect(r.length % 4).toBe(0); }
+  });
   it("lays only drums when the map has no key", () => {
     const d = mapToTemplate({ ...map, key: "", scale: "", bars: n, sections: [], layers });
     expect(d.regions.every((r) => r.track === 0)).toBe(true);

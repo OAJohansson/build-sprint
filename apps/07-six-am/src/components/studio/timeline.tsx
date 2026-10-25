@@ -60,10 +60,11 @@ export function TimelineView({ t, colors, onSound, soundLane }: {
             <div className={s.trackName}>{name}</div>
             <div className={s.ms}>
             <button
-              className={cx(s.mute, t.doc.muted[tr] && s.muteOn)}
+              className={cx(s.mute, t.doc.muted[tr] && s.muteOn, t.doc.muted[tr] && !t.silent[tr] && s.muteOverridden)}
               onClick={() => t.toggleMute(tr)}
               aria-pressed={t.doc.muted[tr]}
               aria-label={`Mute ${name}`}
+              title={t.doc.muted[tr] && !t.silent[tr] ? "Muted, but soloed" : undefined}
             >M</button>
             <button
               className={cx(s.mute, t.doc.soloed?.[tr] && s.soloOn)}

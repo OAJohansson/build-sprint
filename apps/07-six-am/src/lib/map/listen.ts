@@ -105,6 +105,9 @@ export async function listenWholeTrack(o: {
   known: EarsAnalysis | null;
   signal: AbortSignal;
   onStage: (s: MapStage) => void;
+  /** While it plays: the map of what has been heard so far (every few seconds, once the tempo is
+   *  known), with `heardSec` and the track's length, so a view can fill in live. */
+  onPartial?: (p: { map: TrackMap; heardSec: number; durationSec: number }) => void;
 }): Promise<MapRun> {
   const { player, capture, signal, onStage } = o;
   const t0 = performance.now();
@@ -149,6 +152,25 @@ export async function listenWholeTrack(o: {
     for (const p of pend) { buf.set(p, off); off += p.length; }
     pend = []; pendLen = 0;
     frameParts.push(analyser.push(buf)); // buf goes out of scope here: only numbers stay
+    partial();
+  };
+  let liveBpm = o.known?.bpm ?? 0, lastPartial = 0;
+  const partial = () => {
+    if (!o.onPartial || !liveBpm || performance.now() - lastPartial < 3000) return;
+    lastPartial = performance.now();
+    const all = new Float32Array(frameParts.reduce((t, p) => t + p.length, 0));
+    let at = 0;
+    for (const p of frameParts) { all.set(p, at); at += p.length; }
+    const heard = got / rate + nowOffset();
+    if (heard < 8) return;
+    try {
+      const series = toTrackTime(all, (i) => analyser.frameTime(i), analyser.fps, offsetSegments(anchors));
+      const { map } = buildMap(series, {
+        id: o.known?.id ?? o.url, title: sound.title ?? "", uploader: sound.user?.username ?? "",
+        durationSec: heard, earsBpm: liveBpm, key: o.known?.key ?? "", scale: o.known?.scale ?? "", heardSec: got / rate,
+      });
+      o.onPartial({ map, heardSec: heard, durationSec });
+    } catch { /* a partial map is only a preview */ }
   };
   const nowOffset = () => (anchors.length ? median(anchors.slice(-9).map((a) => a.pos - a.cap)) : 0);
 
@@ -206,6 +228,8 @@ export async function listenWholeTrack(o: {
     for (const p of s.parts) { pcm.set(p, off); off += p.length; }
     s.parts = [];
     s.result = s.got < rate * 3 ? Promise.resolve(null) : resampleTo16k(pcm, rate).then((p16) => o.ears!.analyse(p16)).catch(() => null);
+    // The first snippet's tempo is enough to draw the live map until the full result is in.
+    s.result.then((r) => { if (r && !liveBpm) liveBpm = r.bpm; });
   }
 
   onStage({ stage: "analysing" });

@@ -801,6 +801,9 @@ function Strip({ a, studioBpm, onCopy, onSetBpm, suggestions, onGenre }: StripPr
         ) : <span className={s.lcdAlt}>steady</span>}
         <GenreField key={a.id} value={a.myGenre ?? ""} suggestions={suggestions} onSave={onGenre} />
         <span className={s.actions}>
+          {/* Phase 3: the arrangement map (a full listen if it isn't mapped yet). The row's time
+              column has no room for it, so it sits with the selected track's other actions. */}
+          {!a.preview ? <button className={s.btn} onClick={() => { location.href = `/map?id=${encodeURIComponent(a.id)}`; }} title="See how this track is built: its sections and layers on the bar grid">Map</button> : null}
           <button className={s.btn} onClick={() => onCopy(a)} title="Copies the results and a question for Claude to the clipboard">Copy for Claude</button>
           <button className={s.btn} onClick={() => onSetBpm(target)} disabled={target === studioBpm} title={target === studioBpm ? "The Studio is already at this tempo" : `The Studio is at ${formatBpm(studioBpm)} BPM`}>
             {target === studioBpm ? `Studio is at ${formatBpm(target)} BPM` : `Set Studio to ${formatBpm(target)} BPM`}

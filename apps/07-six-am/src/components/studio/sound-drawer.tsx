@@ -31,7 +31,9 @@ function starter(lane: number, choice?: PresetId | KitId, pattern?: string): Sou
   }
   const preset = (choice as PresetId) ?? (lane === 1 ? "sub" : "organ");
   const fits = SYNTH_PATTERNS.filter((p) => (p.presets as string[]).includes(preset));
-  return makeSynthLoop(preset, pattern && fits.some((p) => p.id === pattern) ? pattern : fits[0].id, undefined, id)!;
+  // A preset's own pattern first (Pad → Sustained Pad, not the Rhodes Nines it also plays).
+  const own = fits.find((p) => p.presets[0] === preset) ?? fits[0];
+  return makeSynthLoop(preset, pattern && fits.some((p) => p.id === pattern) ? pattern : own.id, undefined, id)!;
 }
 
 /** One of this track's stored AI loops, as GET /api/loops/generate?analysisId= lists it (numbers only). */
@@ -42,11 +44,13 @@ const usdShort = (v: number) => `$${v.toFixed(2)}`;
 const missTag = (l: { bpm: number; checked: boolean; measured: { bpm: number } | null }) =>
   l.checked ? null : !l.measured ? "not measured" : Math.abs(l.measured.bpm - l.bpm) > 1 ? "off tempo" : "off key";
 
-export function SoundDrawer({ t, lane, sound, color, onClose }: {
+export function SoundDrawer({ t, lane, sound, color, onClose, onNewSound }: {
   t: Timeline; lane: number;
   /** Editing this sound (a selected block); null = adding a new one to `lane`. */
   sound: Sound | null;
   color: string; onClose: () => void;
+  /** M1 (T79): another preset or kit picked on a selected block: leave that sound alone and add a new one. */
+  onNewSound: () => void;
 }) {
   const [code] = useAccessCode();
   const [draft, setDraft] = useState<Sound>(() => starter(lane));
@@ -71,9 +75,19 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
 
   const pick = (choice: PresetId | KitId) => {
     if (cur.source === "ai") return;
-    const next = starter(lane, choice, cur.pattern);
-    change({ ...next, id: cur.id });
     setMentor({ is: "idle" });
+    const same = cur.source === "kit" ? cur.kit === choice : cur.preset === choice;
+    if (editing && !same) {
+      // M1 (T79): picking another preset on a selected block starts a NEW sound in add mode; the
+      // selected sound and all its blocks stay exactly as they were.
+      const name = lane === 0 ? KITS[choice as KitId].name : PRESETS[choice as PresetId].name;
+      const was = cur.source === "kit" ? KITS[cur.kit].name : PRESETS[cur.preset].name;
+      setDraft(starter(lane, choice));
+      setAddNote(`New ${name} sound. Your ${was} blocks stay as they are.`);
+      onNewSound();
+      return;
+    }
+    change({ ...starter(lane, choice, cur.pattern), id: cur.id });
   };
   const pickPattern = (id: string) => {
     if (cur.source === "ai") return;
@@ -95,7 +109,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
     // F9: the history shows only the short question; the knob guide and settings go as hidden context.
     const message = `What do cutoff, resonance and ${env} do on my ${PRESETS[cur.preset].name} ${cur.lane === 1 ? "bass" : "chords"}, and which should I turn first?`;
     // F8: the Studio has no automation, so advice must be about one setting per sound.
-    const context = `Answer in two short sentences, for a house track. Current settings: cutoff ${Math.round(k.cutoff)} Hz, resonance ${k.resonance.toFixed(1)}, ${env} ${k.envelope.toFixed(2)} s.\nWhat the knobs do (from Six AM):\n${knobGuide(cur.preset)}\nThe Six AM Studio has no automation: knobs are set once per sound and don't move over time. Knobs belong to the sound, so every block of one sound sounds the same. To change the sound for a part (e.g. a brighter filter for the drop), add the same preset again as a second sound with different knob settings ("Add as a new sound" in the drawer copies the current sound with its knobs) and use that one there. Never suggest automating or sweeping a knob during playback.`;
+    const context = `Answer in two short sentences, for a house track. Current settings: cutoff ${Math.round(k.cutoff)} Hz, resonance ${k.resonance.toFixed(1)}, ${env} ${k.envelope.toFixed(2)} s.\nWhat the knobs do (from Six AM):\n${knobGuide(cur.preset)}\nThe Six AM Studio has no automation: knobs are set once per sound and don't move over time. Knobs belong to the sound, so every block of one sound sounds the same. To change the sound for a part (e.g. a brighter filter for the drop), add the same preset again as a second sound with different knob settings ("Duplicate" in the drawer copies the current sound with its knobs; picking another preset on a block starts a new sound) and use that one there. Never suggest automating or sweeping a knob during playback.`;
     try {
       const reply = await mentorApi(code).ask({ job: "chat", message, context });
       setMentor({ is: "done", text: reply.answer.sentences.map((x) => x.text).join(" "), cost: reply.message.costUsd });
@@ -189,7 +203,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
   // F10: the template's first drop, by its marker label.
   const drop = t.markers.find((m) => /drop/i.test(m.label));
   const [where, setWhere] = useState<"playhead" | "drop">("playhead");
-  /** N2/3: where "Add as a new sound" put the copy when that wasn't the chosen bar, or that it couldn't. */
+  /** Where Add or Duplicate put the sound (or that it couldn't), or that a new preset starts a new sound (M1). */
   const [addNote, setAddNote] = useState<string | null>(null);
   const atDrop = where === "drop" && !!drop && drop.bar !== bar;
   const at = atDrop ? drop!.bar : bar;
@@ -268,17 +282,25 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
                   // N3: knobs belong to the sound; a copy with its own knobs is how a part gets a different sound.
                   // N2 (re-check): the copy goes into the first free bars at or after `at` (as AI loops do),
                   // never over another block; with no room it says so.
-                  <button className={s.secondary} title="A copy of this sound with its own knobs, in the first free bars" onClick={() => {
+                  <button className={s.secondary} title="A copy of this sound with its own knobs, in the first free bars" aria-label="Duplicate this sound (its own knobs)" onClick={() => {
                     t.setPreviewSound(null);
                     const free = firstFreeBar(t.doc.regions, cur.lane, cur.bars, at, t.bars);
                     if (free === null) { setAddNote(`No free bars on this lane after bar ${at}: make room first.`); return; }
                     setAddNote(free !== at ? `Added at bar ${free}, the first free bars after bar ${at}.` : null);
                     t.addSound({ ...cur, id: `snd${newId()}` }, free);
                   }}>
-                    Add as a new sound
+                    Duplicate
                   </button>
                 ) : (
-                  <button className={s.primary} onClick={() => { t.setPreviewSound(null); t.addSound(draft, at); setDraft(starter(lane, chosen ?? undefined, "pattern" in draft ? draft.pattern : undefined)); }}>
+                  <button className={s.primary} onClick={() => {
+                    // Like AI loops and Duplicate: the first free bars at or after the chosen bar, never over a block.
+                    t.setPreviewSound(null);
+                    const free = firstFreeBar(t.doc.regions, draft.lane, draft.bars, at, t.bars);
+                    if (free === null) { setAddNote(`No free bars on this lane after bar ${at}: make room first.`); return; }
+                    t.addSound(draft, free);
+                    setAddNote(`Added at bar ${free}${free !== at ? `, the first free bars after bar ${at}` : ""}.`);
+                    setDraft(starter(lane, chosen ?? undefined, "pattern" in draft ? draft.pattern : undefined));
+                  }}>
                     {atDrop ? `Add at the ${drop!.label.toLowerCase()} (bar ${drop!.bar})` : "Add to lane"}
                   </button>
                 )}

@@ -318,8 +318,11 @@ function Status({ m, empty }: { m: AnalyseModel; empty: boolean }) {
     const skipped = [p.skipped, p.failed ? `${p.failed} wouldn't load` : ""].filter(Boolean).join(" · ");
     return (
       <div className={cx(s.status, s.statusNews)} role="status">
-        <span className={s.statusText} title={p.title}>
-          <span className={s.statusWait}>Playing {p.index + 1} of {p.list.keys.length}</span> · {p.title}{skipped ? ` · ${skipped}` : ""}
+        {/* Follow-up user test: the title gets its own line (ellipsis, full title on hover) and what was
+            skipped a second line, so neither is cut at 1440. */}
+        <span className={s.playText}>
+          <span className={s.playLine} title={p.title}><span className={s.statusWait}>Playing {p.index + 1} of {p.list.keys.length}</span> · {p.title}</span>
+          {skipped ? <span className={s.playLine}>{skipped}</span> : null}
         </span>
         <button className={s.btn} onClick={m.stopPlay}>Stop</button>
       </div>

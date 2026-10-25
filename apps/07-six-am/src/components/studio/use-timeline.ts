@@ -229,7 +229,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
     // ←/→ move it a bar (Shift: 4 bars), Delete removes it (the window handler below).
     tabIndex: 0,
     role: "button",
-    "aria-label": `${loopById(r.loopId).name}, bars ${r.start}–${r.start + r.length - 1}`,
+    "aria-label": `${loopById(r.loopId).name}, bars ${r.start}–${r.start + r.length - 1}. Enter selects, ←/→ move, Shift 4 bars, Delete removes`,
     "aria-pressed": selected === r.id,
     onKeyDown: (e: React.KeyboardEvent) => {
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); setSelected(r.id); }

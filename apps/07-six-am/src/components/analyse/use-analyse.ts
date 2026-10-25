@@ -235,7 +235,12 @@ export function useAnalyse(): AnalyseModel {
     const run = ++playRun.current;
     offFinish.current?.();
     offFinish.current = null;
-    if (i === null) { setPlayback(null); return; }
+    if (i === null) {
+      setPlayback(null);
+      // Follow-up user test: the end of the list says so (cleared by the next action, like any news).
+      if (list.keys.length) { const n = list.keys.length - failed; setMessage({ tone: "info", text: `Finished · ${n} played${failed ? ` · ${failed} wouldn't load` : ""}` }); }
+      return;
+    }
     const url = list.urls[i];
     setPlayback({ list, index: i, key: list.keys[i], title: list.titles[i], skipped, failed });
     try {

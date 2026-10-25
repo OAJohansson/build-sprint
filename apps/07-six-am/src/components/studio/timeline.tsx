@@ -44,9 +44,9 @@ export function TimelineView({ t, colors, onSound, soundLane }: {
             {b % (t.bars > 96 ? RULER_EVERY * 2 : RULER_EVERY) === 0 ? <em className={s.tickNum}>{b + 1}</em> : null}
           </span>
         ))}
-        {/* S2: a template's section markers, plain until the map view's design lands. */}
+        {/* A template's section markers: the name in the ruler, a faint line through the lanes. */}
         {t.markers.map((m) => (
-          <span key={`${m.bar}-${m.label}`} data-marker={m.label} title={`${m.label} · bar ${m.bar}`} style={{ position: "absolute", left: (m.bar - 1) * ppb, top: 0, fontSize: 10, lineHeight: "12px", color: "#fff", borderLeft: "1px solid #fff", paddingLeft: 2, whiteSpace: "nowrap", pointerEvents: "none" }}>
+          <span key={`${m.bar}-${m.label}`} className={s.marker} data-marker={m.label} title={`${m.label} · bar ${m.bar}`} style={{ left: (m.bar - 1) * ppb }}>
             {m.label}
           </span>
         ))}
@@ -115,6 +115,7 @@ export function TimelineView({ t, colors, onSound, soundLane }: {
             ) : null}
           </div>
         ))}
+        {t.markers.filter((m) => m.bar > 1).map((m) => <i key={`${m.bar}-${m.label}`} className={s.markerLine} style={{ left: (m.bar - 1) * ppb }} aria-hidden />)}
         <div className={s.playhead} style={{ transform: `translateX(${(t.playhead - 1) * ppb}px)` }} />
       </div>
     </div>

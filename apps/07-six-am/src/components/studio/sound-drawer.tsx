@@ -184,20 +184,29 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
   const aiLoop = cur.source === "ai" ? cur : null;
   // F10: the template's first drop, by its marker label.
   const drop = t.markers.find((m) => /drop/i.test(m.label));
+  const [where, setWhere] = useState<"playhead" | "drop">("playhead");
+  const atDrop = where === "drop" && !!drop && drop.bar !== bar;
+  const at = atDrop ? drop!.bar : bar;
   const listenTo = (x: Sound) => t.setPreviewSound(t.previewSound?.id === x.id ? null : x);
   // One cost line in every state (the Mentor's form): the selected or newest loop, plus today / month.
   const shown = aiLoop ? mine.find((l) => l.id === aiLoop.aiId) ?? { costUsd: aiLoop.costUsd, draws: aiLoop.draws }
-    : ai.is === "done" ? mine.find((l) => l.id === ai.id) : null;
+    : ai.is === "done" ? mine.find((l) => l.id === ai.id) : mine[0] ?? null;
   const costLine = shown ? aiCostLine(shown.costUsd, shown.draws, usage?.todayUsd ?? null, usage?.monthUsd ?? null, month()) : null;
   // Listen from the list: a stable preview id per stored loop, so Stop finds it again.
   const previewOf = (l: Listed): AiLoop => ({ ...asSound(l), id: `listen-${l.id}` });
 
   return (
     <aside className={s.drawer} style={{ ["--c" as string]: color }} aria-label={cur.source === "ai" ? "AI bass loop" : `${LANE_WORD[lane]} sound`}>
+      <div className={s.top}>
+        {mentor.is === "done" || mentor.is === "error" ? (
+          <button className={s.link} onClick={() => setMentor({ is: "idle" })}>Hide answer</button>
+        ) : null}
+        <button className={s.close} onClick={onClose} aria-label="Close the sound drawer"><X aria-hidden /></button>
+      </div>
       <div className={s.body}>
         <section className={s.pick}>
           {aiLoop ? (
-            <AiFacts x={aiLoop} />
+            <AiFacts x={aiLoop} why={ai.is === "done" && ai.id === aiLoop.aiId ? ai.why : null} />
           ) : (
             <>
               <div className={s.choices} role="radiogroup" aria-label={lane === 0 ? "Kit" : "Preset"}>
@@ -250,14 +259,9 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
                 <button className={s.secondary} aria-pressed={listening && t.previewSound?.id === cur.id} onClick={() => listenTo(cur)}>{listening && t.previewSound?.id === cur.id ? "Stop" : "Listen"}</button>
                 {editing ? null : (
                   <>
-                    <button className={s.primary} onClick={() => { t.setPreviewSound(null); t.addSound(draft, bar); setDraft(starter(lane, chosen ?? undefined, "pattern" in draft ? draft.pattern : undefined)); }}>
-                      Add to lane at bar {bar}
+                    <button className={s.primary} onClick={() => { t.setPreviewSound(null); t.addSound(draft, at); setDraft(starter(lane, chosen ?? undefined, "pattern" in draft ? draft.pattern : undefined)); }}>
+                      Add to lane
                     </button>
-                    {drop && drop.bar !== bar ? (
-                      <button className={s.secondary} onClick={() => { t.setPreviewSound(null); t.addSound(draft, drop.bar); setDraft(starter(lane, chosen ?? undefined, "pattern" in draft ? draft.pattern : undefined)); }}>
-                        Add at the {drop.label.toLowerCase()} (bar {drop.bar})
-                      </button>
-                    ) : null}
                   </>
                 )}
                 {cur.source === "synth" ? (
@@ -266,7 +270,16 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
                   </button>
                 ) : null}
               </div>
-              {editing ? <p className={s.dim}>Changes apply to every block of this sound.</p> : null}
+              {editing ? <p className={s.dim}>Changes apply to every block of this sound.</p> : (
+                // F10: where Add puts it: the playhead, or the template's drop.
+                <p className={s.where} role="radiogroup" aria-label="Where to add">
+                  <button role="radio" aria-checked={!atDrop} className={cx(s.whereBtn, !atDrop && s.whereOn)} onClick={() => setWhere("playhead")}>at bar {bar}</button>
+                  {drop && drop.bar !== bar ? <>
+                    <span aria-hidden> · </span>
+                    <button role="radio" aria-checked={atDrop} className={cx(s.whereBtn, atDrop && s.whereOn)} onClick={() => setWhere("drop")}>at the {drop.label.toLowerCase()} (bar {drop.bar})</button>
+                  </> : null}
+                </p>
+              )}
             </>
           ) : null}
         </section>
@@ -281,18 +294,18 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
                 : ai.is === "limit" ? <p className={s.dim} role="status">{ai.text}</p>
                 : ai.is === "done" ? (
                   <p className={s.dim} role="status">
-                    {ai.bar !== null ? `Added at bar ${ai.bar}.` : "The Bass lane is full: it's in your loops below."}{ai.why ? ` ${ai.why}` : ""}
+                    {ai.bar !== null ? `Added at bar ${ai.bar}.` : "The Bass lane is full: it's in your loops below."}
                   </p>
-                ) : <p className={s.dim}>About $0.08 a try, up to 3 tries ($0.24).</p>}
+                ) : costLine ? null : <p className={s.dim}>About $0.08 a try, up to 3 tries ($0.24).</p>}
               {costLine ? <p className={s.dim}>{costLine}</p> : null}
               {mine.length ? (
                 <div className={s.mine}>
-                  <h3 className={s.mineHead}>Your AI loops</h3>
+                  <h3 className={s.mineHead}>Your loops</h3>
                   <ul>
                     {mine.map((l, i) => {
                       const x = previewOf(l), on = t.previewSound?.id === x.id;
                       return (
-                        <li key={l.id} className={cx(s.loop, aiLoop?.aiId === l.id && s.loopOn)}>
+                        <li key={l.id} className={cx(s.loop, aiLoop?.aiId === l.id && s.loopOn)} aria-current={aiLoop?.aiId === l.id || undefined}>
                           <span title={l.measured ? `Measured ${l.measured.bpm.toFixed(1)} BPM, ${l.measured.key} ${l.measured.scale}` : undefined}>
                             {mine.length - i}. {l.bpm} BPM · {l.key}{l.scale === "minor" ? "m" : ""} · {usdShort(l.costUsd)}{l.checked ? "" : " · check missed"}
                           </span>
@@ -308,16 +321,12 @@ export function SoundDrawer({ t, lane, sound, color, onClose }: {
           ) : null}
         </section>
       </div>
-      {mentor.is === "done" || mentor.is === "error" ? (
-        <button className={cx(s.link, s.hide)} onClick={() => setMentor({ is: "idle" })}>Hide answer</button>
-      ) : null}
-      <button className={s.close} onClick={onClose} aria-label="Close the sound drawer"><X aria-hidden /></button>
     </aside>
   );
 }
 
 /** What an AI loop is: made at, measured, and whether it passed the check (plain words). */
-function AiFacts({ x }: { x: AiLoop }) {
+function AiFacts({ x, why }: { x: AiLoop; why: string | null }) {
   const m = x.measured;
   const offTempo = m ? Math.abs(m.bpm - x.bpm) > 1 : false;
   const warn = !x.checked ? (offTempo ? "may be off tempo" : "may be off key") : null;
@@ -327,6 +336,7 @@ function AiFacts({ x }: { x: AiLoop }) {
       <p>Made at {x.bpm} BPM in {x.key} {x.scale}.</p>
       {m ? <p>Measured {m.bpm.toFixed(1)} BPM, {m.key} {m.scale}{warn ? <> — <b className={s.warn}>{warn}</b></> : null}</p>
         : <p>Not measured{warn ? <> — <b className={s.warn}>{warn}</b></> : null}</p>}
+      {why ? <p className={s.dim}>{why}</p> : null}
     </div>
   );
 }

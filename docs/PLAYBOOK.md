@@ -27,13 +27,14 @@ mode; the mode decides **who makes which decision, and when I'm asked**. It goes
 | --- | --- | --- | --- |
 | **Learning** | I want the reps | Almost everything, coached | As things come up |
 | **Streamlined** | Most days | The learning decisions | At four gates, one decision sheet each |
-| **Founder** | A good idea I want live and tested | The kickoff pack and evals, and 3 of ~10 designs | Kickoff, the design pick and the final review |
+| **Founder** | A good idea I want live and tested | The kickoff pack and evals, 3 of ~10 designs and the final design | Kickoff, the two design picks and the final review |
 
 Three kinds of decision:
 
 - **Learning:** problem, user, jobs, riskiest assumption, MVP cut, design direction, scope
   changes, architecture and real technical choices. Mine in Learning and Streamlined; in Founder
-  I set them in the kickoff pack and the PM decides the rest inside it, logged.
+  I set them in the kickoff pack and the PM decides the rest inside it, logged. **Design direction
+  is always mine, in every mode** (two checkpoints in step 1b below; 09 Wont).
 - **Toil:** copy, small UI fixes, minor bugs, naming. Claude decides in Streamlined and Founder
   (default-with-veto, logged as T-numbers in `decisions.md`); I can veto any at any time.
 - **Ops:** branches, worktrees, commits, merges and conflicts, deploys, env keys, lockfile.
@@ -141,11 +142,12 @@ hour, not a day. Names in brackets are where each practice comes from; see
   for AI tells and rewrite the copy by hand. Judge them against the success signals, not just looks. Pick
   one or a mix, and note why in `journal.md`. When the chosen variant becomes the real app, list
   the behaviours it brings along (e.g. "you can only edit at the end") as decisions for the owner.
-  *(Cagan: prototypes over documents.)* In Streamlined this is the **design-pick gate**: the three
-  screenshots and the critic's scores on one decision sheet (with one preview link if the
-  directions need a phone to judge). In Founder (decision 0028) the designer builds about 10
-  directions, I pick 3, the squad develops those, and the PM picks the final one against the
-  pack with one critic and a fixed scorecard, and logs why.
+  *(Cagan: prototypes over documents.)* **The design calls are mine in every mode, at two picks**
+  (09 Wont, decision 0028 as amended 25 Oct): (1) the designer builds about 10 directions and I
+  pick 3; (2) the squad develops those 3 and the critic scores them, then I pick the final one (or
+  a mix) and say in one sentence how it should feel. In Streamlined these two picks are the
+  **design-pick gate** (with one preview link if the directions need a phone to judge); in
+  Founder they are the only stops between kickoff and the final review.
 - Fill in **user**, **problem** and **bet** (one line each) on the card `docs/products/NN-slug.md`.
   The bet is the smallest thing that could solve the problem by tonight. Cut everything else.
 

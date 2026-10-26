@@ -1,0 +1,301 @@
+/* Wont: Dough on ink (L24), board v3 with no header band (L25). Promoted from the prototypes
+   (board3.css, _shared/screens.css, intro.css, slip.css). Ink is for type only on the board;
+   cards are paper on a dough shelf; kept = toasted-dough wash; comeback = matcha. No red. */
+:root {
+  --ink: #2a2420;
+  --line: #3b2f2a;
+  --dough: #f6e8cc;
+  --matcha: #b9d29a;
+  --shelf: #f2ebde;
+  --paper: #fcf9f3;
+  --wash: #f0dcb2;
+  --week: #fbf4e6;
+  /* Secondary text: 4.9:1 on the darkest surface it sits on (the kept wash), 5.2+ elsewhere
+     (feedback 29). Use this for every quiet text; don't add lighter greys. */
+  --muted: rgba(42, 36, 32, 0.7);
+  --tan: #c49a62;
+  --tan-track: #eadcc0;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+html,
+body {
+  background: var(--shelf);
+  color: var(--ink);
+}
+
+.w {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  background: var(--shelf);
+  color: var(--ink);
+  font-family: var(--font-wb), system-ui, sans-serif;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 24px);
+}
+/* Zero-specificity reset (feedback 25): any class, e.g. .w-primary's dough text, wins over it. */
+:where(.w) button,
+:where(.w) input,
+:where(.w) textarea {
+  font: inherit;
+  color: inherit;
+}
+:where(.w) ::placeholder { color: var(--muted); opacity: 1; }
+
+/* Header: ink type on the cream board, the week strip on a soft dough card (L25). */
+.w-head { padding: calc(env(safe-area-inset-top) + 16px) 12px 0; margin-bottom: 12px; }
+.w-top { display: flex; align-items: center; gap: 10px; padding: 0 4px 12px; }
+.w-top h1 { font-weight: 800; font-size: 27px; letter-spacing: -0.03em; flex: 1; }
+.w-add {
+  width: 44px; height: 44px; margin-right: -6px; display: grid; place-items: center; border: 0; border-radius: 50%;
+  background: transparent; cursor: pointer; transition: background-color 120ms ease;
+}
+.w-add:active { background: rgba(42, 36, 32, 0.08); }
+.w-add:focus-visible { outline: 2px solid var(--ink); outline-offset: 0; }
+.w-week { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--week); border-radius: 18px; padding: 10px 4px; }
+.w-day { text-align: center; margin: 0 2px; padding: 4px 0 6px; border-radius: 12px; }
+.w-day b { display: block; font-size: 11px; font-weight: 500; color: var(--muted); }
+.w-day span { display: block; font-size: 14px; color: rgba(42, 36, 32, 0.85); margin-bottom: 6px; }
+/* Each dot fills with steamer tan by the share of habits kept that day: one soft colour, no
+   outline, no legend (feedback 24). */
+.w-day i {
+  display: block; width: 12px; height: 12px; margin: 0 auto; border-radius: 50%;
+  background: conic-gradient(var(--tan) calc(var(--v) * 360deg), var(--tan-track) 0);
+}
+/* Today: the whole column sits on a soft dough tile with the date in bold; no ring around the dot. */
+.w-day.today { background: var(--dough); }
+.w-day.today span { color: var(--ink); font-weight: 700; }
+
+/* Cards: one per line, the whole card is the button. */
+.w-cards { display: flex; flex-direction: column; gap: 8px; padding: 0 12px; }
+.w-card {
+  position: relative; display: grid; grid-template-columns: 124px 1fr; gap: 10px; align-items: start;
+  background: var(--paper); border-radius: 20px; padding: 12px 14px 12px 6px;
+  transition: background-color 200ms ease-out;
+}
+.w-card.kept { background: var(--wash); }
+.w-hit {
+  position: absolute; inset: 0; border: 0; border-radius: 20px; background: transparent; cursor: pointer;
+  transition: background-color 120ms ease;
+}
+/* Press tint (feedback 21): the card reads as a button the moment a finger lands. */
+.w-hit:active { background: rgba(42, 36, 32, 0.05); }
+.w-hit:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.w-art, .w-body { pointer-events: none; }
+/* The steamer sits in the middle of the card's height (feedback 21, 24): the svg's empty sky
+   above the back row is cropped so the visible basket, not the svg box, is what gets centred. */
+.w-art { display: flex; flex-direction: column; align-items: center; align-self: center; }
+.w-art svg { display: block; margin: -40px 0 -2px; overflow: visible; }
+.w-art-cap { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.w-body { min-width: 0; padding-top: 2px; }
+/* Room for the card's ⋯ button on the first two lines. */
+.w-nm { font-weight: 700; font-size: 17px; line-height: 1.2; overflow-wrap: anywhere; padding-right: 30px; }
+.w-rate { padding-right: 30px; }
+.w-rate { font-size: 12px; font-weight: 500; letter-spacing: 0.01em; color: rgba(42, 36, 32, 0.72); margin-top: 2px; }
+/* At most two lines on the card (feedback 30); the full wording is on the habit page's form. */
+.w-an {
+  font-size: 13px; line-height: 1.35; color: var(--muted); margin-top: 4px; overflow-wrap: anywhere;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden;
+}
+.w-cb { font-size: 13px; line-height: 1.35; margin-top: 6px; color: var(--muted); }
+.w-st { font-size: 13px; color: rgba(42, 36, 32, 0.85); margin-top: 6px; }
+.w-ph { color: var(--muted); }
+.w-more {
+  position: absolute; z-index: 1; top: 2px; right: 2px; width: 44px; height: 44px; display: grid; place-items: center;
+  border-radius: 50%; color: var(--muted); transition: background-color 120ms ease;
+}
+.w-more:active { background: rgba(42, 36, 32, 0.08); }
+.w-more:focus-visible { outline: 2px solid var(--ink); }
+.w-card-static .w-nm, .w-card-static .w-rate { padding-right: 0; }
+
+/* Slip and urge: quiet, but real buttons with a 44px target, above the card's hit area. */
+.w-quiet-row { display: flex; gap: 8px; margin-top: 10px; pointer-events: auto; position: relative; z-index: 1; }
+.w-quiet {
+  flex: 1; min-height: 44px; border-radius: 12px; border: 1px solid rgba(42, 36, 32, 0.18); background: rgba(255, 255, 255, 0.45);
+  font-size: 13px; font-weight: 500; color: var(--ink); cursor: pointer; transition: transform 120ms var(--ease-out);
+  white-space: nowrap; padding: 0 8px;
+}
+.w-quiet:active { transform: scale(0.98); }
+.w-quiet[aria-pressed="true"] { border-color: var(--ink); background: #fff; }
+.w-quiet-strong { background: var(--ink); color: var(--dough); border-color: var(--ink); }
+.w-quiet-link { display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 14px; }
+.w-wide { width: 100%; }
+.w-quiet:focus-visible, .w-primary:focus-visible, .w-choice:focus-visible, .w-link:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* The one small celebration: the new wonton settles into the steamer. */
+.w-fresh { animation: w-drop 420ms var(--ease-out) both; }
+@keyframes w-drop { from { transform: translateY(-18px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* Empty board: one clear way in. */
+.w-empty { background: var(--paper); border-radius: 20px; padding: 20px 18px 18px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+.w-empty > svg { margin-top: -48px; margin-bottom: -6px; }
+.w-empty h2 { font-weight: 700; font-size: 19px; margin-top: 4px; }
+.w-empty p { font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+.w-empty .w-primary, .w-empty .w-quiet { width: 100%; flex: none; }
+
+.w-foot { display: flex; justify-content: center; padding: 20px 12px 0; }
+.w-foot-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; font-size: 13px; color: var(--muted); text-decoration: none; }
+
+/* Buttons */
+.w-primary {
+  display: flex; align-items: center; justify-content: center; border: 0; border-radius: 16px; min-height: 52px; width: 100%;
+  background: var(--ink); color: var(--dough); font-weight: 700; font-size: 16px; cursor: pointer; text-decoration: none;
+  transition: transform 120ms var(--ease-out), opacity 150ms ease;
+}
+.w-primary:active { transform: scale(0.98); }
+.w-primary:disabled { opacity: 0.35; cursor: default; transform: none; }
+.w-link { display: block; margin: 8px auto 0; border: 0; background: none; min-height: 44px; padding: 0 16px; font-size: 14px; color: var(--muted); cursor: pointer; }
+.w-link-inline { display: inline-block; margin: 0; padding: 0 8px; }
+
+/* Sheets: slip size and add. */
+.w-scrim { position: fixed; inset: 0; z-index: 20; background: rgba(42, 36, 32, 0.4); opacity: 0; pointer-events: none; transition: opacity 240ms ease; }
+.w-scrim[data-open] { opacity: 1; pointer-events: auto; }
+.w-sheet {
+  position: fixed; z-index: 21; left: 0; right: 0; bottom: 0; max-width: 480px; margin: 0 auto;
+  background: var(--paper); border-radius: 26px 26px 0 0; padding: 22px 20px calc(env(safe-area-inset-bottom) + 18px);
+  transform: translateY(100%); transition: transform 280ms var(--ease-drawer); visibility: hidden;
+}
+.w-sheet[data-open] { transform: none; visibility: visible; }
+.w-sheet:not([data-open]) { transition: transform 280ms var(--ease-drawer), visibility 0s 280ms; }
+.w-sheet h2 { font-weight: 700; font-size: 20px; }
+.w-sheet > p { font-size: 14px; color: var(--muted); margin-top: 4px; }
+.w-sizes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+.w-sizes button { min-height: 52px; font-size: 17px; }
+.w-choices { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.w-choice {
+  display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; min-height: 60px; border-radius: 16px;
+  border: 1px solid rgba(42, 36, 32, 0.16); background: #fff; color: var(--ink); text-decoration: none;
+  transition: transform 120ms var(--ease-out);
+}
+.w-choice:active { transform: scale(0.98); }
+.w-choice b { font-size: 16px; }
+.w-choice span { font-size: 13px; color: var(--muted); }
+
+/* Ride it out: full screen on ink, one tap to leave. */
+.w-ride {
+  position: fixed; z-index: 30; inset: 0; background: var(--ink); color: var(--dough);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+  padding: calc(env(safe-area-inset-top) + 24px) 28px calc(env(safe-area-inset-bottom) + 24px);
+}
+.w-ring { position: relative; width: 220px; height: 220px; display: grid; place-items: center; }
+.w-ring > svg:first-child { position: absolute; inset: 0; }
+/* Constant motion = linear; the ring empties over the 60 s. */
+.w-ring-progress { stroke-dasharray: 628.3; stroke-dashoffset: 0; animation: w-empty 60s linear forwards; }
+@keyframes w-empty { to { stroke-dashoffset: 628.3; } }
+.w-ride-time { font-size: 15px; opacity: 0.7; margin-top: 16px; font-variant-numeric: tabular-nums; }
+.w-ride h2 { font-weight: 800; font-size: 24px; letter-spacing: -0.02em; margin-top: 6px; }
+.w-ride p:not(.w-ride-time) { font-size: 15px; line-height: 1.45; opacity: 0.75; margin-top: 8px; max-width: 300px; }
+.w-ride-exit {
+  margin-top: 28px; min-height: 52px; padding: 0 28px; border-radius: 16px; border: 1px solid rgba(246, 232, 204, 0.35);
+  background: transparent; color: var(--dough); font-size: 16px; font-weight: 600; cursor: pointer;
+}
+.w-ride-exit:focus-visible { outline: 2px solid var(--dough); outline-offset: 2px; }
+
+/* Forms and the habit page: ink type on cream, no band (L25). */
+.w-head-form { padding-left: 20px; padding-right: 20px; }
+.w-head-form h1 { font-weight: 800; font-size: 26px; letter-spacing: -0.03em; overflow-wrap: anywhere; }
+.w-head-form p { font-size: 14px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+.w-back { display: inline-flex; align-items: center; min-height: 44px; margin: -10px 0 0 -4px; padding: 0 4px; font-size: 14px; color: var(--muted); text-decoration: none; }
+.w-form { padding: 0 14px; display: flex; flex-direction: column; gap: 12px; }
+.w-panel .w-form { padding: 0; margin-top: 12px; }
+.w-panel .w-field { padding: 0; }
+.w-field { background: var(--paper); border-radius: 18px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+.w-field label { font-weight: 700; font-size: 15px; }
+.w-opt { font-weight: 400; color: var(--muted); }
+.w-field small { font-size: 12.5px; color: var(--muted); line-height: 1.35; }
+.w-field small.w-note { color: var(--ink); font-weight: 700; }
+.w-field input, .w-field textarea {
+  font-size: 16px; /* 16px stops iOS zooming into the field */
+  border: 1px solid rgba(42, 36, 32, 0.16); border-radius: 12px; background: #fff; padding: 11px 12px; width: 100%; min-height: 44px;
+}
+.w-field textarea { resize: none; min-height: 66px; }
+.w-field input:focus-visible, .w-field textarea:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.w-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.w-chips button {
+  border: 1px solid rgba(42, 36, 32, 0.16); background: transparent; border-radius: 99px; padding: 0 14px; min-height: 44px;
+  font-size: 13px; cursor: pointer;
+}
+.w-chips button[aria-pressed="true"] { border-color: var(--ink); background: #fff; }
+.w-label { font-size: 12px; color: var(--muted); padding: 2px 4px 0; }
+
+.w-stack { padding: 0 12px; display: flex; flex-direction: column; gap: 10px; }
+.w-panel { background: var(--paper); border-radius: 20px; padding: 16px; }
+.w-panel > h2 { font-weight: 700; font-size: 17px; }
+.w-panel > small { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.w-panel-art { float: right; margin: -16px -6px 0 0; }
+.w-logrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0 0; }
+.w-logrow > span { font-weight: 600; font-size: 14px; }
+.w-logrow-stop { align-items: flex-start; flex-direction: column; gap: 8px; }
+.w-logrow-controls { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.w-toggle {
+  min-height: 44px; min-width: 96px; padding: 0 16px; border-radius: 12px; border: 1px solid rgba(42, 36, 32, 0.18);
+  background: rgba(255, 255, 255, 0.6); font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.w-toggle[aria-pressed="true"] { background: var(--wash); border-color: var(--ink); }
+.w-toggle[aria-pressed="true"]::before { content: "✓ "; }
+.w-logrow-stop .w-toggle { align-self: flex-start; }
+.w-seg { display: grid; grid-template-columns: repeat(3, 1fr) 1.6fr; border: 1px solid rgba(42, 36, 32, 0.18); border-radius: 12px; overflow: hidden; }
+.w-seg button { min-height: 44px; border: 0; border-left: 1px solid rgba(42, 36, 32, 0.12); background: rgba(255, 255, 255, 0.6); font-size: 14px; cursor: pointer; }
+.w-seg button:first-child { border-left: 0; }
+.w-seg button[aria-pressed="true"] { background: var(--ink); color: var(--dough); }
+.w-seg button:focus-visible, .w-toggle:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+.w-urges { display: flex; align-items: center; font-size: 13px; color: var(--muted); min-height: 44px; }
+.w-history { list-style: none; margin-top: 10px; clear: both; }
+.w-history li { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid rgba(42, 36, 32, 0.08); font-size: 14px; }
+.w-history li span { color: var(--muted); }
+.w-history li b { font-weight: 500; text-align: right; }
+.w-history li.comeback b::after {
+  content: ""; display: inline-block; width: 9px; height: 9px; margin-left: 6px; border-radius: 50%;
+  background: var(--matcha); box-shadow: inset 0 0 0 1px var(--line); vertical-align: 0;
+}
+.w-confirm { font-size: 14px; line-height: 1.4; }
+
+/* First-launch intro on ink, like the app icon. */
+.in {
+  width: 100%; min-height: 100dvh; max-width: 480px; margin: 0 auto; background: var(--ink); color: var(--dough);
+  font-family: var(--font-wb), system-ui, sans-serif; display: flex; flex-direction: column;
+  padding: calc(env(safe-area-inset-top) + 16px) 24px calc(env(safe-area-inset-bottom) + 32px);
+}
+.in-top { display: flex; align-items: center; gap: 14px; }
+.in-progress { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.in-progress span { height: 3px; border-radius: 3px; background: rgba(246, 232, 204, 0.18); overflow: hidden; }
+.in-progress i { display: block; height: 100%; background: var(--dough); transform: scaleX(0); transform-origin: left; }
+.in-progress i.done { transform: none; }
+/* Constant motion: linear. */
+.in-progress i.now { animation: in-fill linear forwards; }
+@keyframes in-fill { to { transform: none; } }
+/* Paused with the scene timers while the tab is hidden (feedback 32). */
+.in[data-hidden] .in-progress i.now { animation-play-state: paused; }
+.in-skip { border: 0; background: none; color: var(--dough); opacity: 0.7; font: inherit; font-size: 15px; min-height: 44px; min-width: 44px; padding: 0 4px; cursor: pointer; }
+.in-scene { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 12px; }
+.in-art { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; }
+.in-scene h1 { font-weight: 800; font-size: 32px; line-height: 1.08; letter-spacing: -0.03em; }
+.in-scene > p { font-size: 16px; line-height: 1.45; opacity: 0.72; margin-top: 12px; max-width: 330px; }
+/* Entrance: rise and fade with a strong ease-out, staggered by --d. */
+.in-a { animation: in-rise 640ms var(--ease-out) both; animation-delay: var(--d, 0ms); }
+@keyframes in-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.in-weeks { flex-direction: row; flex-wrap: wrap; justify-content: center; align-content: center; gap: 10px 6px; max-width: 300px; margin: 0 auto; }
+.in-weeks > div { display: flex; flex-direction: column; align-items: center; width: 52px; }
+.in-weeks small { font-size: 11px; opacity: 0.72; }
+.in-axis { width: 100%; text-align: center; font-size: 12px; opacity: 0.72; margin-top: 4px; }
+.in-tie { gap: 10px; }
+.in-pill { border: 1px solid rgba(246, 232, 204, 0.35); border-radius: 99px; padding: 12px 20px; font-size: 16px; }
+.in-pill.dough { background: var(--dough); color: var(--ink); border-color: var(--dough); font-weight: 600; }
+.in-back { gap: 6px; }
+.in-back svg[width="124"] { transform: scale(1.4); transform-origin: center top; }
+.in-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 28px; }
+.in-go { display: flex; align-items: center; justify-content: center; min-height: 52px; border-radius: 16px; background: var(--dough); color: var(--ink); font-weight: 700; font-size: 16px; text-decoration: none; }
+.in-again { min-height: 44px; border: 0; background: none; color: var(--dough); opacity: 0.7; font: inherit; font-size: 15px; cursor: pointer; }
+.in-skip:focus-visible, .in-go:focus-visible, .in-again:focus-visible { outline: 2px solid var(--dough); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .w-fresh, .w-ring-progress { animation: none; }
+  .w-card, .w-sheet, .w-scrim, .w-sheet:not([data-open]) { transition: none; }
+  .w-quiet:active, .w-primary:active, .w-choice:active { transform: none; }
+  /* Intro: fewer and gentler, keep the fades, drop the movement. */
+  .in-a { animation-name: in-fade; animation-duration: 400ms; }
+  /* The progress bar doesn't move: the current step shows half filled (feedback 32). */
+  .in-progress i.now { animation: none; transform: scaleX(0.5); }
+  @keyframes in-fade { from { opacity: 0; } to { opacity: 1; } }
+}

@@ -50,7 +50,9 @@ owner. Run the squad in `.claude/agents/` one at a time, in playbook order: `dis
 data products, `data-evals` → fixes → re-check. **Whoever builds something never grades it**:
 graders get the artefact and the checks, not the builder's reasoning, and you report their
 results, not your opinion. Stop for the owner only if the pack contradicts itself or leaves the
-riskiest assumption untestable. Never ask for or read the owner-only checks. Deliver a PR, one
+riskiest assumption untestable, **and at the two design picks, which are the owner's in every
+mode** (playbook step 1b; decision 0028 as amended 25 Oct): 3 of the designer's ~10 directions,
+then the final one of those 3. Never ask for or read the owner-only checks. Deliver a PR, one
 preview link and an eval report (each agent-checkable check with pass/fail and evidence, the
 critic's score, the tester's numbers, the guardrails, the decision log, what you skipped).
 
@@ -58,8 +60,8 @@ critic's score, the tester's numbers, the guardrails, the decision log, what you
 
 - **Owner design pick:** the designer builds about 10 directions (design-session flow) and
   screenshots them; stop once and ask the owner to pick 3. Those 3 become the starting designs;
-  the critic scores them and you pick one against the pack. No other owner checkpoint before
-  the final review.
+  the critic scores them and the owner picks the final one (amended 25 Oct, 09 Wont; you give
+  a recommendation). No other owner checkpoint before the final review.
 - **Design rounds:** the designer runs `emil-design-eng`, `web-design-guidelines` and `break-ui`
   before every critic pass, and lists what it removed before what it added (adding needs a
   reason). Use **one** `design-critic` for the whole slice (resume it, don't re-spawn) with its

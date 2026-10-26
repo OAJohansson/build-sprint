@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wont header compare</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#e7e1d6;color:#2a2420;font-family:'Bricolage Grotesque',system-ui,sans-serif;padding:32px 28px 56px}
+  .head{max-width:1700px;margin:0 auto 22px}
+  .head h1{font-weight:800;font-size:28px;letter-spacing:-.03em}
+  .head p{color:rgba(42,36,32,.62);font-size:15px;margin-top:6px;max-width:900px;line-height:1.45}
+  .icons{max-width:1700px;margin:0 auto 30px;display:flex;gap:48px;flex-wrap:wrap}
+  .icons figure{display:flex;flex-direction:column;gap:10px}
+  .icons .row{display:flex;align-items:flex-end;gap:12px}
+  .icons svg{display:block;filter:drop-shadow(0 1px 2px rgba(42,36,32,.2))}
+  figcaption{font-size:13px;color:rgba(42,36,32,.7)}
+  figcaption b{color:#2a2420}
+  .grid{max-width:1700px;margin:0 auto;display:grid;grid-template-columns:repeat(4,390px);gap:28px;justify-content:start}
+  .cap{margin-top:10px;font-size:13px;line-height:1.4;color:rgba(42,36,32,.7);max-width:390px}
+  .cap b{color:#2a2420;font-size:14px}
+
+  /* ---------- v3 board, top half ---------- */
+  .ph{
+    --type:#2a2420; --line:#3b2f2a; --dough:#f6e8cc; --shelf:#f2ebde; --paper:#fcf9f3; --wash:#f0dcb2;
+    --band:transparent; --band-fg:var(--type); --dot:var(--type); --dot-empty:rgba(42,36,32,.08); --ring:rgba(42,36,32,.35);
+    width:390px;height:560px;overflow:hidden;border-radius:22px;background:var(--shelf);color:var(--type);position:relative;
+    box-shadow:0 1px 3px rgba(42,36,32,.15)
+  }
+  .sb{height:44px;display:flex;justify-content:space-between;align-items:center;padding:0 26px;font:500 14px system-ui;color:var(--band-fg)}
+  .band{background:var(--band);color:var(--band-fg);padding:0 16px 14px;border-radius:0 0 26px 26px;margin-bottom:12px}
+  .band-wrap{background:var(--band);border-radius:0 0 26px 26px;margin-bottom:12px}
+  .band-wrap .band{background:none;margin:0}
+  .top{display:flex;justify-content:space-between;align-items:baseline;padding:2px 4px 14px}
+  .top h1{font-weight:800;font-size:27px;letter-spacing:-.03em}
+  .key{display:flex;align-items:center;gap:6px;font-size:12px;opacity:.6}
+  .key i,.day i{border-radius:50%;box-shadow:inset 0 0 0 1px var(--ring)}
+  .key i{width:10px;height:10px;background:conic-gradient(var(--dot) 240deg,var(--dot-empty) 0)}
+  .week{display:grid;grid-template-columns:repeat(7,1fr)}
+  .week.card{background:#fbf4e6;border-radius:18px;padding:10px 4px}
+  .day{text-align:center}
+  .day b{display:block;font-size:10px;font-weight:400;opacity:.55}
+  .day span{display:block;font-size:14px;opacity:.85;margin-bottom:6px}
+  .day i{display:block;width:14px;height:14px;margin:0 auto;background:conic-gradient(var(--dot) calc(var(--v)*360deg),var(--dot-empty) 0)}
+  .day.today span{opacity:1;font-weight:700}
+  .day.today i{box-shadow:inset 0 0 0 1px var(--ring),0 0 0 2px var(--today-gap,var(--shelf)),0 0 0 3.5px var(--dot)}
+  .cards{display:flex;flex-direction:column;gap:8px;padding:0 12px}
+  .cd{display:grid;grid-template-columns:124px 1fr;gap:10px;background:var(--paper);border-radius:20px;padding:12px 14px 12px 6px}
+  .cd.kept{background:var(--wash)}
+  .cd .art{height:123px;margin:-10px 0 -6px;display:flex;justify-content:center}
+  .cd h2{font-weight:700;font-size:17px;line-height:1.2}
+  .cd .rate{font-size:12px;font-weight:500;opacity:.72;margin-top:2px}
+  .cd .an{font-size:13px;line-height:1.35;opacity:.55;margin-top:4px}
+  .cd .cb{font-size:13px;line-height:1.35;margin-top:6px}
+  .cd .st{font-size:13px;opacity:.85;margin-top:6px}
+
+  /* Variants */
+  .v1{--band:transparent}
+  .v2{--band:#e9d6b0;--today-gap:#e9d6b0;--dot-empty:rgba(42,36,32,.1)}
+  .v3{--band:#5a4256;--band-fg:#f6e8cc;--today-gap:#5a4256}
+  .v3 .band{--dot:#f6e8cc;--dot-empty:rgba(246,232,204,.14);--ring:rgba(246,232,204,.5)}
+  .v4{--type:#3b2536;--dot-empty:rgba(59,37,54,.08);--ring:rgba(59,37,54,.35)}
+</style>
+</head>
+<body>
+<div class="head">
+  <h1>Header: how much dark, and which dark</h1>
+  <p>Top half of board v3 at 390 px: header and the first two cards. Cards, steamer and colours are unchanged from v3. Above: the app icon on the current ink (#2a2420, a warm near-black) next to a deep plum (#3b2536).</p>
+</div>
+<div class="icons" id="icons"></div>
+<div class="grid" id="grid"></div>
+
+<script>
+// v3's mark and steamer (steamer3.tsx), as SVG strings.
+const PURSE = "M-11 5 Q-12 -4 -4.5 -5.5 Q0 -12 4.5 -5.5 Q12 -4 11 5 Q0 10 -11 5 Z";
+function mark(m) {
+  const wink = m === "c";
+  const eyes = wink
+    ? `<circle cx="-2.8" cy="1.5" r=".9" fill="#3b2f2a" stroke="none"/><path d="M1.8 1.2 Q2.8 2.3 3.8 1.2" stroke-width=".75"/>`
+    : `<path d="M-3.8 1.2 Q-2.8 2.3 -1.8 1.2 M1.8 1.2 Q2.8 2.3 3.8 1.2" stroke-width=".75"/>`;
+  return `<g fill="none" stroke="#3b2f2a" stroke-linecap="round"><path d="${PURSE}" fill="${wink ? "#b9d29a" : "#f6e8cc"}" stroke-width=".9" stroke-linejoin="round"/>
+    <path d="M-4.6 -5.4 Q0 -3.8 4.6 -5.4 M-1.3 -7.9 L-1 -5.9 M1.3 -7.9 L1 -5.9" stroke-width=".75"/>${eyes}<path d="M-.8 3.6 Q0 4.1 .8 3.6" stroke-width=".7"/></g>`;
+}
+const SEATS = [[16, 60], [35, 60], [54, 60], [73, 60], [25.5, 46], [44.5, 46], [63.5, 46]];
+function steamer(marks) {
+  const seat = (i) => `<g transform="translate(${SEATS[i][0]} ${SEATS[i][1]}) scale(.86)">${mark(marks[i])}</g>`;
+  const idx = marks.map((_, i) => i);
+  return `<svg width="124" height="123" viewBox="0 0 89 88"><ellipse cx="44.5" cy="66" rx="40" ry="7.5" fill="#c49a62"/>
+    ${idx.filter((i) => SEATS[i][1] < 52).map(seat).join("")}${idx.filter((i) => SEATS[i][1] >= 52).map(seat).join("")}
+    <path d="M4 67 Q44.5 76.5 85 67 V79 Q85 86 77 86 H12 Q4 86 4 79 Z" fill="#dcb883" stroke="#b98f55" stroke-width="1.5"/>
+    <line x1="6" y1="79.5" x2="83" y2="79.5" stroke="#c9a067" stroke-width="1.2"/></svg>`;
+}
+function icon(ground, size) {
+  return `<svg width="${size}" height="${size}" viewBox="0 0 100 100"><defs><clipPath id="c${ground.slice(1)}${size}"><rect width="100" height="100" rx="22.4"/></clipPath></defs>
+    <g clip-path="url(#c${ground.slice(1)}${size})"><rect width="100" height="100" fill="${ground}"/><g transform="translate(50 55) scale(3.1)">${mark("k")}</g></g></svg>`;
+}
+
+const WEEK = [["S", 18, 2 / 3], ["M", 19, .75], ["T", 20, .75], ["W", 21, .5], ["T", 22, .75], ["F", 23, .8], ["S", 24, .4, 1]];
+const week = (card) => `<div class="week ${card ? "card" : ""}">${WEEK.map(([l, n, v, t]) => `<div class="day ${t ? "today" : ""}" style="--v:${v}"><b>${l}</b><span>${n}</span><i></i></div>`).join("")}</div>`;
+const cards = `<div class="cards">
+  <div class="cd kept"><div class="art">${steamer(["k", "k", "c", "k", "k", "k"])}</div><div><h2>Up by 7:00</h2><p class="rate">6 of last 7</p><p class="an">After the alarm, I get straight out of bed</p><p class="st">Kept</p></div></div>
+  <div class="cd"><div class="art">${steamer(["k", "k", "c"])}</div><div><h2>Write</h2><p class="rate">3 of last 5</p><p class="an">After my morning coffee: a journal entry or a short story</p><p class="cb">Friday's page is blank. Today counts.</p><p class="st">Today</p></div></div>
+</div>`;
+const topRow = `<div class="top"><h1>Saturday</h1><span class="key"><i></i>share kept each day</span></div>`;
+const sb = `<div class="sb"><span>9:41</span><span>●●● ▮</span></div>`;
+
+const VARIANTS = [
+  { cls: "v1", name: "1 · No band", line: "Ink only for type; the week strip sits on a soft dough card. Calmest, and the darkest block on screen is the text.",
+    html: () => `${sb}<div class="band">${topRow}${week(true)}</div>${cards}` },
+  { cls: "v2", name: "2 · Soft band", line: "Header on toasted dough (#e9d6b0) with ink type. Keeps a header area, with a gentle step to the cream board.",
+    html: () => `<div class="band-wrap">${sb}<div class="band">${topRow}${week(false)}</div></div>${cards}` },
+  { cls: "v3", name: "3 · Plum, softened", line: "A muted plum band (#5a4256) with cream type: a lighter, warmer dark than ink, so the step to cream is less harsh.",
+    html: () => `<div class="band-wrap">${sb}<div class="band">${topRow}${week(false)}</div></div>${cards}` },
+  { cls: "v4", name: "4 · No band, plum type", line: "Like 1, with deep plum (#3b2536) as the dark for title, names, text and dots. Plum as the brand dark, no big block.",
+    html: () => `${sb}<div class="band">${topRow}${week(true)}</div>${cards}` },
+];
+
+document.getElementById("icons").innerHTML = [["#2a2420", "Dough on ink", "#2a2420, current"], ["#3b2536", "Dough on plum", "#3b2536"]].map(([g, n, d]) =>
+  `<figure><div class="row">${icon(g, 180)}${icon(g, 60)}${icon(g, 29)}</div><figcaption><b>${n}</b> · ${d}</figcaption></figure>`).join("");
+document.getElementById("grid").innerHTML = VARIANTS.map((v) => `<div><div class="ph ${v.cls}">${v.html()}</div><p class="cap"><b>${v.name}</b><br>${v.line}</p></div>`).join("");
+</script>
+</body>
+</html>

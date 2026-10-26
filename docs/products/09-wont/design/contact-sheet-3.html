@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wont contact sheet 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Familjen+Grotesk:wght@400;500;700&family=Figtree:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,800;1,9..144,300;1,9..144,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400;1,500&family=Manrope:wght@400;500;700;800&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Sheet chrome (not a contestant) ---------- */
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#141414;color:#e8e6e1;font:14px/1.45 Inter,system-ui,sans-serif;padding:40px 40px 80px}
+  .sheet-head{max-width:1520px;margin:0 auto 32px}
+  .sheet-head h1{font:500 22px Inter,sans-serif;letter-spacing:-.01em;margin-bottom:6px}
+  .sheet-head p{color:#9a978f;max-width:980px}
+  .grid{max-width:1520px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:44px 28px}
+  .cell{cursor:zoom-in;min-width:0}
+  .thumb{position:relative;width:100%;aspect-ratio:390/844;overflow:hidden;border-radius:14px;outline:1px solid #2a2a2a}
+  .thumb .frame{position:absolute;top:0;left:0;transform-origin:0 0}
+  .cap{margin-top:12px}
+  .cap .t1{display:flex;gap:8px;align-items:baseline}
+  .cap .t1 b{font:500 13px 'DM Mono',monospace;color:#9a978f}
+  .cap .t1 strong{font-weight:500;font-size:15px}
+  .cap .idea{color:#b5b2aa;font-size:13px;margin-top:4px}
+  .cap .tag{display:inline-block;font-size:11px;border:1px solid #3a3a3a;border-radius:99px;padding:1px 8px;color:#9a978f;margin-top:8px}
+  .cap .sys{margin-top:8px;font-size:12px;color:#9a978f;line-height:1.5}
+  .cap .sys .ty{color:#d8d5cd}
+  .cap .sw{display:flex;flex-direction:column;gap:3px;margin-top:5px}
+  .cap .sw span{display:flex;gap:7px;align-items:center}
+  .cap .sw i{width:12px;height:12px;border-radius:3px;outline:1px solid rgba(255,255,255,.15);flex:none}
+  .overlay{position:fixed;inset:0;background:rgba(10,10,10,.92);display:none;align-items:center;justify-content:center;z-index:10;cursor:zoom-out}
+  .overlay.on{display:flex}
+  .overlay .holder{position:relative;overflow:hidden;border-radius:18px}
+  @media (max-width:1200px){.grid{grid-template-columns:repeat(3,1fr)}}
+  @media (max-width:700px){body{padding:24px 16px}.grid{grid-template-columns:repeat(2,1fr);gap:28px 16px}}
+
+  /* ---------- Shared frame and anatomy ---------- */
+  .frame{width:390px;height:844px;overflow:hidden;position:relative}
+  .sb{height:44px;display:flex;justify-content:space-between;align-items:center;padding:0 26px;font:500 14px Inter,sans-serif}
+  .cd{position:relative}
+  .cd .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .cd .num{text-align:right;white-space:nowrap;line-height:1}
+  .cd .num small{display:block}
+  .cd .tap .seg{display:flex;gap:5px}
+  .cd .tap .seg span{flex:1;text-align:center}
+  .wk{display:grid;grid-template-columns:repeat(7,1fr)}
+  .wk .d{text-align:center;position:relative}
+  .wk .d b,.wk .d span{display:block;position:relative;z-index:1}
+
+  /* ---------- 01 Terracotta (sheet 2 #08, unchanged) ---------- */
+  .g8{background:#f4ece2;color:#3d2a20;font-family:Fraunces}
+  .g8 .top{padding:2px 20px 12px}
+  .g8 h1{font-weight:300;font-size:34px;letter-spacing:-.02em}
+  .g8 h1 em{font-style:italic}
+  .g8 .wk{margin:0 14px 14px;gap:4px}
+  .g8 .wk b{font-size:10px;font-weight:500;opacity:.55}
+  .g8 .wk span{font-size:15px;font-weight:500;margin-bottom:4px}
+  .g8 .wk i{display:block;width:26px;height:26px;margin:0 auto;border-radius:50%;background:conic-gradient(#b85c38 calc(var(--v)*360deg),#e6d3bf 0)}
+  .g8 .wk .today i{background:conic-gradient(#b85c38 calc(var(--v)*360deg),#f4ece2 0);box-shadow:0 0 0 2px #3d2a20}
+  .g8 .cd{margin:0 14px 8px;background:#ecdccb;border-radius:22px;padding:14px 18px 14px}
+  .g8 .cd::after{content:"";position:absolute;left:18px;right:18px;bottom:0;height:3px;border-radius:3px;background:linear-gradient(90deg,#b85c38 calc(var(--r)*100%),#dcc6b0 0)}
+  .g8 .cd.kept{background:#b85c38;color:#fbf5ee}
+  .g8 .cd.kept::after{background:linear-gradient(90deg,#fbf5ee calc(var(--r)*100%),rgba(251,245,238,.35) 0)}
+  .g8 .nm{font-weight:500;font-size:21px}
+  .g8 .num{font-weight:300;font-style:italic;font-size:30px}
+  .g8 .num small{font-style:normal;font-weight:500;font-size:10px;opacity:.65}
+  .g8 .an{font-size:13px;opacity:.7;margin-top:-6px}
+  .g8 .tap{margin-top:8px;font-weight:500;font-size:12px;margin-bottom:4px}
+  .g8 .seg span{border-radius:99px;padding:6px 0;background:rgba(255,255,255,.5)}
+  .g8 .seg span.on{background:#3d2a20;color:#fbf5ee}
+
+  /* ---------- 02 Soft fill, dawn to dusk ---------- */
+  .s2{background:#fbf8f4;color:#38323a;font-family:Figtree}
+  .s2 .top{padding:2px 20px 12px;display:flex;justify-content:space-between;align-items:baseline}
+  .s2 h1{font-weight:700;font-size:26px;letter-spacing:-.02em}
+  .s2 .top span{font-size:14px;opacity:.55}
+  .s2 .wk{gap:6px;margin:0 16px 12px}
+  .s2 .wk .d{height:56px;border-radius:14px;background:#f2ede8;overflow:hidden;padding-top:6px}
+  .s2 .wk .d i{position:absolute;left:0;right:0;bottom:0;height:calc(var(--v)*100%);background:var(--dk)}
+  .s2 .wk b{font-weight:500;font-size:10px;opacity:.6}
+  .s2 .wk span{font-weight:600;font-size:15px}
+  .s2 .wk .today{outline:2px solid #38323a;outline-offset:-2px}
+  .s2 .note{margin:0 16px 10px;background:#fff;border-radius:18px;padding:12px 14px;font-size:14px;line-height:1.35}
+  .s2 .note b{display:block;margin-top:6px;font-weight:600;font-size:13px;color:#b0606a}
+  .s2 .cd{margin:0 16px 8px;border-radius:20px;padding:13px 16px 12px;overflow:hidden;background:var(--t)}
+  .s2 .cd::before{content:"";position:absolute;inset:0 auto 0 0;width:calc(var(--r)*100%);background:var(--f)}
+  .s2 .cd.kept::before{width:100%}
+  .s2 .cd > *{position:relative}
+  .s2 .up{--t:#fbe3e3;--f:#f4c5c8}
+  .s2 .write{--t:#fbe6da;--f:#f5cbb2}
+  .s2 .nic{--t:#f8ecd6;--f:#ecd6a9}
+  .s2 .read{--t:#e8eedd;--f:#cbdbb5}
+  .s2 .bed{--t:#dfeae8;--f:#b9d3cf}
+  .s2 .nm{font-weight:600;font-size:18px}
+  .s2 .num{font-weight:700;font-size:20px}
+  .s2 .num small{font-weight:500;font-size:11px;opacity:.6}
+  .s2 .an{font-size:12px;opacity:.65;margin-top:1px}
+  .s2 .tap{margin-top:8px;font-weight:600;font-size:12px}
+  .s2 .seg span{background:rgba(255,255,255,.7);border-radius:12px;padding:7px 0}
+  .s2 .seg span.on{background:#38323a;color:#fff}
+
+  /* ---------- 03 Seed packets, one per line ---------- */
+  .s3{background:#eee5d2;color:#3a2a1a;font-family:'Familjen Grotesk'}
+  .s3 .top{padding:2px 18px 10px;display:flex;justify-content:space-between;align-items:baseline}
+  .s3 h1{font:800 28px Fraunces;letter-spacing:-.02em}
+  .s3 .top span{font-size:13px;opacity:.65}
+  .s3 .wk{margin:0 14px 12px;background:#fbf6ea;border-radius:12px;padding:8px 4px 6px}
+  .s3 .wk b{font-weight:500;font-size:10px;opacity:.55}
+  .s3 .wk span{font:500 14px Fraunces}
+  .s3 .wk .today span{color:#c8693f}
+  .s3 .wk em{display:block;font-style:normal;font-size:9px;opacity:.6;margin-top:1px}
+  .s3 .cd{margin:0 14px 8px;background:#fbf6ea;border-radius:6px;overflow:hidden;display:flex}
+  .s3 .art{width:84px;flex:none;background:#efe5cc;display:flex;align-items:flex-end;justify-content:center;border-right:1px dashed rgba(58,42,26,.22)}
+  .s3 .kept .art{background:#dce7cb}
+  .s3 .bd{padding:11px 14px 11px;flex:1;display:flex;flex-direction:column}
+  .s3 .nm{font:800 18px/1.1 Fraunces}
+  .s3 .num{font:500 24px Fraunces}
+  .s3 .num small{font:400 10px 'Familjen Grotesk';opacity:.6;margin-top:2px}
+  .s3 .an{font-size:12px;line-height:1.3;opacity:.7;margin-top:2px}
+  .s3 .cb{margin-top:7px;background:#fff;border:1px solid #cdbb94;border-radius:3px 12px 12px 3px;padding:6px 10px;font:italic 400 13px/1.25 Fraunces;color:#3f6b35}
+  .s3 .tap{margin-top:8px;font-size:12px;font-weight:500}
+  .s3 .kept .tap{color:#3f6b35}
+  .s3 .seg span{border:1.5px solid rgba(58,42,26,.35);border-radius:99px;padding:5px 0}
+  .s3 .seg span.on{background:#3f6b35;border-color:#3f6b35;color:#fbf6ea}
+
+  /* ---------- 04 Linen and thread ---------- */
+  .s4{background:#ede7dc;color:#2b3550;font-family:Lora;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.18) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(0,0,0,.025) 0 1px,transparent 1px 3px)}
+  .s4 .top{padding:2px 20px 12px;display:flex;justify-content:space-between;align-items:baseline}
+  .s4 h1{font-weight:600;font-size:27px}
+  .s4 .top span{font-style:italic;font-size:14px;opacity:.65}
+  .s4 .wk{margin:0 14px 14px;background:#faf6ef;border-radius:10px;padding:9px 6px 10px;outline:1.5px dashed #a9b6cf;outline-offset:-5px}
+  .s4 .wk b{font-size:10px;opacity:.55}
+  .s4 .wk span{font-weight:600;font-size:15px;margin-bottom:5px}
+  .s4 .wk i{display:block;height:3px;margin:0 8px;background:linear-gradient(90deg,#3e5a8a calc(var(--v)*100%),#d7dde9 0);-webkit-mask:repeating-linear-gradient(90deg,#000 0 4px,transparent 4px 6px);mask:repeating-linear-gradient(90deg,#000 0 4px,transparent 4px 6px)}
+  .s4 .wk .today{color:#3e5a8a}
+  .s4 .cd{margin:0 14px 10px;background:#faf6ef;border-radius:10px;padding:15px 18px 22px;outline:1.5px dashed #b9c4d8;outline-offset:-6px}
+  .s4 .cd.kept{background:#e9eef7;outline:2.5px dashed #3e5a8a}
+  .s4 .thread{position:absolute;left:18px;right:18px;bottom:11px;height:3px;background:#dde2ec;-webkit-mask:repeating-linear-gradient(90deg,#000 0 7px,transparent 7px 11px);mask:repeating-linear-gradient(90deg,#000 0 7px,transparent 7px 11px)}
+  .s4 .thread i{display:block;height:100%;background:#3e5a8a}
+  .s4 .nm{font-weight:600;font-size:19px}
+  .s4 .num{font-style:italic;font-size:26px}
+  .s4 .num small{font-style:normal;font-size:10px;opacity:.6}
+  .s4 .an{font-style:italic;font-size:13px;opacity:.7;margin-top:-4px}
+  .s4 .tap{margin-top:6px;font-size:12px;font-weight:600}
+  .s4 .kept .tap{color:#3e5a8a}
+  .s4 .seg span{border:1.5px dashed #8c9bb8;border-radius:99px;padding:4px 0}
+  .s4 .seg span.on{background:#3e5a8a;border:1.5px solid #3e5a8a;color:#faf6ef}
+
+  /* ---------- 05 Watercolour wash ---------- */
+  .s5{background:#f8f6f0;color:#2e3b2c;font-family:Spectral}
+  .s5 .top{padding:2px 20px 12px;display:flex;justify-content:space-between;align-items:baseline}
+  .s5 h1{font-weight:500;font-size:30px;font-style:italic}
+  .s5 .top span{font-size:14px;opacity:.6}
+  .s5 .wk{margin:0 14px 14px;gap:2px}
+  .s5 .wk b{font-size:10px;opacity:.55}
+  .s5 .wk span{font-weight:600;font-size:15px}
+  .s5 .wk i{position:absolute;left:50%;top:50%;width:calc(14px + var(--v)*26px);height:calc(14px + var(--v)*26px);transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(127,164,119,.55),rgba(127,164,119,0) 70%)}
+  .s5 .wk .d{height:44px;padding-top:4px}
+  .s5 .wk .today span{text-decoration:underline;text-decoration-color:#7fa477;text-decoration-thickness:2px;text-underline-offset:3px}
+  .s5 .cd{margin:0 14px 10px;background:#fffdf8;border-radius:16px;padding:14px 18px;overflow:hidden;box-shadow:0 1px 2px rgba(46,59,44,.06)}
+  .s5 .wash{position:absolute;right:-30px;top:50%;width:calc(70px + var(--r)*190px);height:calc(70px + var(--r)*190px);transform:translateY(-50%);border-radius:50%;background:radial-gradient(circle at 45% 50%,rgba(141,180,132,.55),rgba(186,212,176,.35) 45%,rgba(207,224,200,0) 70%);filter:blur(3px)}
+  .s5 .kept .wash{right:-60px;width:520px;height:520px}
+  .s5 .bd{position:relative}
+  .s5 .nm{font-weight:600;font-size:20px}
+  .s5 .num{font-weight:400;font-size:28px}
+  .s5 .num small{font-size:11px;opacity:.65}
+  .s5 .an{font-style:italic;font-size:14px;opacity:.75;margin-top:-6px}
+  .s5 .cb{margin-top:8px;font-style:italic;font-size:15px;line-height:1.3;color:#4f7348}
+  .s5 .tap{margin-top:7px;font-size:13px;font-weight:600;color:#4f7348}
+  .s5 .seg span{border-radius:99px;padding:5px 0;background:rgba(207,224,200,.55)}
+  .s5 .seg span.on{background:#4f7348;color:#fffdf8}
+
+  /* ---------- 06 Sunrise ---------- */
+  .s6{background:#fbf8ef;color:#3b3320;font-family:Manrope}
+  .s6 .top{padding:2px 20px 12px;display:flex;justify-content:space-between;align-items:baseline}
+  .s6 h1{font-weight:800;font-size:26px;letter-spacing:-.03em}
+  .s6 .top span{font-size:14px;opacity:.55}
+  .s6 .wk{margin:0 14px 14px;gap:5px}
+  .s6 .wk .d{background:#fdf4dc;border-radius:12px;height:66px;padding-top:6px;overflow:hidden}
+  .s6 .wk b{font-size:10px;opacity:.55;font-weight:500}
+  .s6 .wk span{font-weight:700;font-size:14px}
+  .s6 .wk i{position:absolute;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#f2c14e;bottom:calc(-7px + var(--v)*22px)}
+  .s6 .wk .d::after{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:#f6e3b0}
+  .s6 .wk .today{box-shadow:inset 0 0 0 2px #3b3320}
+  .s6 .cd{margin:0 14px 9px;background:#fdf4dc;border-radius:18px;padding:14px 112px 13px 16px;overflow:hidden;min-height:96px}
+  .s6 .cd.kept{background:#fae2a0}
+  .s6 .art{position:absolute;right:0;top:0;bottom:0;width:100px;border-left:1px solid rgba(59,51,32,.08)}
+  .s6 .art .sun{position:absolute;left:50%;width:34px;height:34px;margin-left:-17px;border-radius:50%;background:#f2c14e;bottom:calc(-17px + var(--r)*58px)}
+  .s6 .kept .art .sun{background:#e6a52e}
+  .s6 .art::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;background:#f3dfa8}
+  .s6 .kept .art::after{background:#f0cf78}
+  .s6 .nm{font-weight:800;font-size:17px;letter-spacing:-.01em}
+  .s6 .num{font-weight:800;font-size:22px}
+  .s6 .num small{font-weight:500;font-size:10px;opacity:.6}
+  .s6 .an{font-size:12px;opacity:.65;margin-top:1px}
+  .s6 .cb{margin-top:8px;font-size:13px;line-height:1.35;font-weight:500}
+  .s6 .tap{margin-top:8px;font-weight:700;font-size:12px}
+  .s6 .seg span{border-radius:10px;padding:6px 0;background:rgba(255,255,255,.7);font-size:11px}
+  .s6 .seg span.on{background:#3b3320;color:#fdf4dc}
+
+  /* ---------- 07 Gauges ---------- */
+  .s7{background:#f1f3f2;color:#22313b;font-family:'IBM Plex Sans'}
+  .s7 .top{padding:2px 20px 12px;display:flex;justify-content:space-between;align-items:baseline}
+  .s7 h1{font-weight:600;font-size:26px;letter-spacing:-.01em}
+  .s7 .top span{font-size:14px;opacity:.55}
+  .s7 .wk{margin:0 14px 14px;background:#fff;border:1px solid #dfe4e6;border-radius:14px;padding:8px 4px}
+  .s7 .wk b{font-size:10px;opacity:.5;font-weight:500}
+  .s7 .wk span{font-weight:600;font-size:14px;margin-bottom:4px}
+  .s7 .wk .today span{color:#2f6f8f}
+  .s7 .cd{margin:0 14px 9px;background:#fff;border:1px solid #dfe4e6;border-radius:16px;padding:13px 16px 13px 96px;min-height:96px}
+  .s7 .cd.kept{background:#e5eff4;border-color:#c6dbe6}
+  .s7 .art{position:absolute;left:14px;top:16px}
+  .s7 .art svg{margin:0 !important}
+  .s7 .nm{font-weight:600;font-size:17px}
+  .s7 .num{font-weight:500;font-size:22px}
+  .s7 .num small{font-weight:400;font-size:10px;opacity:.6}
+  .s7 .an{font-size:12px;opacity:.65;margin-top:2px}
+  .s7 .tap{margin-top:8px;font-size:12px;font-weight:500}
+  .s7 .kept .tap{color:#2f6f8f}
+  .s7 .seg span{border-radius:8px;padding:6px 0;background:#eef2f4}
+  .s7 .seg span.on{background:#2f6f8f;color:#fff}
+
+  /* ---------- 08 Gets bolder ---------- */
+  .s8{background:#f3f6fa;color:#1d2b44;font-family:'Bricolage Grotesque'}
+  .s8 .top{padding:2px 20px 12px;display:flex;justify-content:space-between;align-items:baseline}
+  .s8 h1{font-weight:500;font-size:28px;letter-spacing:-.03em}
+  .s8 .top span{font-size:14px;opacity:.55}
+  .s8 .wk{margin:0 14px 14px;gap:4px}
+  .s8 .wk .d{background:#fff;border-radius:12px;padding:6px 0 7px}
+  .s8 .wk b{font-size:10px;opacity:.5;font-weight:400}
+  .s8 .wk span{font-size:20px;line-height:1.1}
+  .s8 .wk .today{background:#dbe6f4}
+  .s8 .cd{margin:0 14px 9px;background:#fff;border-radius:18px;padding:14px 18px 13px}
+  .s8 .cd.kept{background:#dbe6f4}
+  .s8 .nm{font-size:23px;letter-spacing:-.02em;line-height:1.05}
+  .s8 .num{font-size:30px;letter-spacing:-.03em}
+  .s8 .num small{font-weight:400;font-size:10px;letter-spacing:0;opacity:.55}
+  .s8 .an{font-weight:400;font-size:12px;opacity:.6;margin-top:3px}
+  .s8 .cb{margin-top:8px;font-weight:400;font-size:13px;line-height:1.35;background:#f3f6fa;border-radius:12px;padding:8px 10px}
+  .s8 .tap{margin-top:8px;font-weight:600;font-size:12px;color:#4f78b3}
+  .s8 .kept .tap{color:#1d2b44}
+  .s8 .seg span{border-radius:10px;padding:6px 0;background:#f3f6fa;color:#1d2b44}
+  .s8 .seg span.on{background:#1d2b44;color:#fff}
+
+  /* ---------- 09 Book spines ---------- */
+  .s9{background:#f4f2ea;color:#24372c;font-family:'Libre Baskerville'}
+  .s9 .top{padding:2px 20px 10px;display:flex;justify-content:space-between;align-items:baseline}
+  .s9 h1{font-weight:400;font-size:24px;font-style:italic}
+  .s9 .top span{font-size:12px;opacity:.6}
+  .s9 .wk{margin:0 14px 14px;gap:5px;align-items:end;border-bottom:3px solid #b7c9b8;padding-bottom:0}
+  .s9 .wk .d{height:calc(26px + var(--v)*34px);background:#d4e2d3;border-radius:3px 3px 0 0;padding-top:4px;box-shadow:inset 0 5px 0 #b7c9b8}
+  .s9 .wk b{display:none}
+  .s9 .wk span{font-size:11px;padding-top:4px}
+  .s9 .wk .today{background:#f4f2ea;box-shadow:inset 0 0 0 1.5px #5d7f67}
+  .s9 .cd{margin:0 14px 9px;border-radius:4px;padding:13px 22px 14px 30px;background:var(--b);box-shadow:inset 12px 0 0 rgba(36,55,44,.07),inset -12px 0 0 rgba(36,55,44,.07)}
+  .s9 .up{--b:#e6eee3}.s9 .write{--b:#dfe9dd}.s9 .nic{--b:#d8e4d8}.s9 .read{--b:#d1dfd3}.s9 .bed{--b:#cadacd}
+  .s9 .ribbon{position:absolute;bottom:-7px;width:10px;height:16px;left:calc(30px + var(--r)*(100% - 60px));background:#5d7f67;clip-path:polygon(0 0,100% 0,100% 100%,50% 70%,0 100%)}
+  .s9 .foil{position:absolute;right:22px;top:12px;border:1px solid #9b7b3a;color:#9b7b3a;font-size:10px;letter-spacing:.14em;padding:2px 6px;text-transform:uppercase}
+  .s9 .kept .num{display:none}
+  .s9 .nm{font-weight:700;font-size:17px}
+  .s9 .num{font-size:22px;font-style:italic}
+  .s9 .num small{font-style:normal;font-size:9px;opacity:.6}
+  .s9 .an{font-style:italic;font-size:12px;opacity:.75;margin-top:2px}
+  .s9 .cb{margin-top:7px;font-size:12.5px;line-height:1.4;font-style:italic;color:#3f6650}
+  .s9 .tap{margin-top:7px;font-size:11px;letter-spacing:.04em}
+  .s9 .seg span{border:1px solid rgba(36,55,44,.35);border-radius:99px;padding:3px 0;font-size:11px}
+  .s9 .seg span.on{background:#5d7f67;border-color:#5d7f67;color:#f4f2ea}
+
+  /* ---------- 10 Folders ---------- */
+  .s10{background:#f3ead7;color:#3a2f20;font-family:'DM Sans'}
+  .s10 .top{padding:2px 20px 12px;display:flex;justify-content:space-between;align-items:baseline}
+  .s10 h1{font-weight:700;font-size:26px;letter-spacing:-.02em}
+  .s10 .top span{font:400 12px 'DM Mono';opacity:.6}
+  .s10 .wk{margin:0 14px 30px;gap:4px;align-items:end}
+  .s10 .wk .d{background:#fbf5e6;border-radius:8px 8px 4px 4px;padding:6px 0 6px}
+  .s10 .wk i{position:absolute;left:6px;right:6px;top:-6px;height:6px;border-radius:4px 4px 0 0;background:#ead9b4;transform-origin:left;transform:scaleX(var(--v))}
+  .s10 .wk b{font:400 10px 'DM Mono';opacity:.55}
+  .s10 .wk span{font-weight:700;font-size:15px}
+  .s10 .wk .today{background:#3a2f20;color:#fbf5e6}
+  .s10 .cd{margin:22px 14px 0;background:#fbf5e6;border-radius:0 12px 12px 12px;padding:13px 16px}
+  .s10 .cd:first-of-type{margin-top:4px}
+  .s10 .tab{position:absolute;left:0;top:-18px;height:18px;width:calc(70px + var(--r)*200px);background:#ead9b4;border-radius:8px 8px 0 0;font:500 10px 'DM Mono';padding:3px 10px;color:#6b5733}
+  .s10 .kept .tab{background:#c99a56;color:#fbf5e6;top:-22px;height:22px}
+  .s10 .nm{font-weight:700;font-size:17px}
+  .s10 .num{font-weight:700;font-size:22px}
+  .s10 .num small{font:400 10px 'DM Mono';opacity:.6}
+  .s10 .an{font-size:12px;opacity:.65;margin-top:2px}
+  .s10 .cb{margin-top:8px;font-size:13px;line-height:1.35;border-top:1px dashed #d9c79f;padding-top:8px}
+  .s10 .tap{margin-top:8px;font:500 11px 'DM Mono'}
+  .s10 .seg span{border-radius:6px;padding:5px 0;background:#f3ead7}
+  .s10 .seg span.on{background:#3a2f20;color:#fbf5e6}
+</style>
+</head>
+<body>
+<div class="sheet-head">
+  <h1>Wont: contact sheet 3, the board</h1>
+  <p>One card per line, light and warm, every direction built on the same card anatomy (name, number, anchor, then the tap slot) with one shared week strip on top. 01 is Terracotta from sheet 2, unchanged; 02 and 03 redo Soft fill and Seed packets; 04–10 are new. Same data: Saturday 24 Oct, morning; Up by 7:00 kept; Write not logged on Friday, so the comeback note shows; nicotine clean so far. All copy is draft. Click a frame for full size.</p>
+</div>
+<div class="grid" id="grid"></div>
+<div class="overlay" id="ov"><div class="holder" id="holder"></div></div>
+
+<script>
+const H = {
+  up:    { id: "up", part: "am", name: "Up by 7:00", anchor: "After the alarm, I get straight out of bed", num: "6", of: "of last 7", r: 6 / 7, kept: 1, tap: "Kept this morning", leaves: 6 },
+  write: { id: "write", part: "am", name: "Write", anchor: "After my morning coffee: a journal entry or a short story", num: "3", of: "of last 5", r: 3 / 5, cbk: 1, tap: "Tap when written", leaves: 3 },
+  read:  { id: "read", part: "pm", name: "Read 10 pages", anchor: "After dinner", num: "5", of: "of last 7", r: 5 / 7, tap: "Tonight", leaves: 5 },
+  bed:   { id: "bed", part: "pm", name: "In bed by 23:00", anchor: "After I brush my teeth", num: "4", of: "of last 7", r: 4 / 7, tap: "Tonight", leaves: 4 },
+  nic:   { id: "nic", part: "stop", stop: 1, name: "Nicotine pouches", anchor: "After meals, with coffee. Instead: chewing gum", num: "2", of: "clean days", r: 2 / 7, leaves: 2 },
+};
+// Week strip: share of the day's habits kept, and the count kept. Today (Sat 24) so far: 2 of 5.
+const W = [["S", 18, .67, 0, 2], ["M", 19, .75, 0, 3], ["T", 20, .75, 0, 3], ["W", 21, .5, 0, 2], ["T", 22, .75, 0, 3], ["F", 23, .8, 0, 4], ["S", 24, .4, 1, 2]];
+const CB = "Friday's page stayed empty. That's part of it. One sentence after your coffee today.";
+const SEG = `<div class="seg"><span class="on">Clean so far</span><span>Slip</span><span>Urge</span></div>`;
+const sb = (c = "") => `<div class="sb" style="${c}"><span>9:41</span><span>●●● ▮</span></div>`;
+const ORDER = ["up", "write", "nic", "read", "bed"];
+
+// One card anatomy for every direction: [art] [extra] name + number, anchor, [comeback], tap slot.
+const card = (h, o = {}) => `<div class="cd ${h.id} ${h.part} ${h.kept ? "kept" : ""}" style="--r:${h.r}">
+  ${o.art ? `<div class="art">${o.art(h)}</div>` : ""}${o.extra ? o.extra(h) : ""}
+  <div class="bd"><div class="hd"><div class="nm" ${o.nmStyle ? `style="${o.nmStyle(h)}"` : ""}>${h.name}</div><div class="num" ${o.nmStyle ? `style="${o.nmStyle(h)}"` : ""}>${h.num}<small>${h.of}</small></div></div>
+  <div class="an">${h.anchor}</div>${o.cb && h.cbk ? `<div class="cb">${o.cbText || CB}</div>` : ""}
+  <div class="tap">${h.stop ? SEG : (o.tap ? o.tap(h) : h.tap)}</div></div></div>`;
+const wk = (art, dstyle) => `<div class="wk">${W.map(([l, n, v, t, c]) => `<div class="d ${t ? "today" : ""}" style="--v:${v};${dstyle ? dstyle(v, t) : ""}"><b>${l}</b><span ${dstyle ? "" : ""}>${n}</span>${art ? art(v, t, c) : "<i></i>"}</div>`).join("")}</div>`;
+const cards = (o, order = ORDER) => order.map((k) => card(H[k], o)).join("");
+
+const sprout = (leaves, h = 70, w = 70, leaf = 9) => {
+  const cx = w / 2;
+  let s = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><path d="M${cx} ${h - 4} L${cx} ${h - 12 - leaves * leaf * .85}" stroke="#3f6b35" stroke-width="2.2" fill="none"/>`;
+  for (let i = 0; i < leaves; i++) { const y = h - 14 - i * leaf * .85, d = i % 2 ? 1 : -1, lx = cx + d * leaf; s += `<ellipse cx="${lx}" cy="${y}" rx="${leaf}" ry="${leaf * .4}" fill="#3f6b35" transform="rotate(${d * -25} ${lx} ${y})"/>`; }
+  return s + `<rect x="${cx - w * .26}" y="${h - 5}" width="${w * .52}" height="5" rx="2.5" fill="#8a6a44"/></svg>`;
+};
+const gauge = (v, kept, s = 66) => {
+  const r = 28, cx = 33, cy = 34, a = Math.PI * (1 - v), x = cx + r * Math.cos(a), y = cy - r * Math.sin(a);
+  const nx = cx + (r - 6) * Math.cos(a), ny = cy - (r - 6) * Math.sin(a);
+  return `<svg width="${s}" height="${Math.round(s * 44 / 66)}" viewBox="0 0 66 44" style="display:block;margin:0 auto"><path d="M5 34 A28 28 0 0 1 61 34" fill="none" stroke="#d6dde2" stroke-width="6" stroke-linecap="round"/><path d="M5 34 A28 28 0 0 1 ${x.toFixed(1)} ${y.toFixed(1)}" fill="none" stroke="${kept ? "#2f6f8f" : "#7fa6bb"}" stroke-width="6" stroke-linecap="round"/><line x1="${cx}" y1="${cy}" x2="${nx.toFixed(1)}" y2="${ny.toFixed(1)}" stroke="#22313b" stroke-width="2" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="3.5" fill="#22313b"/></svg>`;
+};
+
+const frames = [
+  {
+    n: "01", name: "Terracotta", tag: "sheet 2 #08, unchanged",
+    idea: "One hue, many tones: clay cards on sand, a kept card fired to solid terracotta. A thin line under each card shows the rolling rate.",
+    sys: ["Fraunces only (roman and italic)", [["#f4ece2", "sand board"], ["#ecdccb", "open card"], ["#b85c38", "kept, progress"], ["#3d2a20", "text, today"]]],
+    html: () => `<div class="frame g8">${sb()}
+      <div class="top"><h1>Saturday, <em>24 Oct</em></h1></div>
+      ${wk()}
+      ${cards({})}</div>`,
+  },
+  {
+    n: "02", name: "Soft fill, dawn to dusk", tag: "sheet 2 #02, redesigned · comeback",
+    idea: "The cards run in even steps from dawn rose to dusk teal, in the order of the day, so no two neighbours share a colour. Each tint fills to its rolling rate.",
+    sys: ["Figtree only", [["#fbf8f4", "board"], ["#f4c5c8 → #b9d3cf", "five even steps, rose to teal, one per card, in day order"], ["deeper step", "fill = rolling rate; full = kept"], ["#38323a", "text, today"]]],
+    html: () => {
+      const dk = ["#f4c5c8", "#f5cbb2", "#ecd6a9", "#cbdbb5", "#b9d3cf", "#b9d3cf", "#f4c5c8"];
+      return `<div class="frame s2">${sb()}
+        <div class="top"><h1>Saturday 24</h1><span>October</span></div>
+        <div class="wk">${W.map(([l, n, v, t], i) => `<div class="d ${t ? "today" : ""}" style="--v:${v};--dk:${["#f4c5c8", "#f5cbb2", "#f0d2ad", "#ecd6a9", "#d8dfb0", "#cbdbb5", "#b9d3cf"][i]}"><b>${l}</b><span>${n}</span><i></i></div>`).join("")}</div>
+        <div class="note">${CB}<b>Write one sentence</b></div>
+        ${cards({})}</div>`;
+    },
+  },
+  {
+    n: "03", name: "Seed packets, one per line", tag: "sheet 2 #01, redesigned · comeback",
+    idea: "Same packets, now one per line with the sprout on the left. The week strip's sprouts show how many habits were kept each day, so they differ.",
+    sys: ["Fraunces (names, numbers) + Familjen Grotesk (small text)", [["#eee5d2", "kraft board"], ["#fbf6ea", "packet"], ["#3f6b35", "growth: kept, clean, comeback"], ["#3a2a1a", "text"], ["#c8693f", "today"]]],
+    html: () => `<div class="frame s3">${sb()}
+      <div class="top"><h1>Saturday</h1><span>24 Oct · 2 of 5 so far</span></div>
+      ${wk((v, t, c) => `<i style="display:block;height:44px;margin-top:2px">${sprout(c, 44, 30, 6)}</i><em>${c} kept</em>`)}
+      ${cards({ art: (h) => sprout(h.leaves, 92, 70, 9), cb: 1, cbText: "Regrows today: one sentence after your coffee." })}</div>`,
+  },
+  {
+    n: "04", name: "Linen and thread", tag: "new",
+    idea: "Cream cards stitched onto linen. A running stitch along the bottom of each card is sewn as far as its rolling rate; a kept card gets its border sewn in indigo.",
+    sys: ["Lora only (roman and italic)", [["#ede7dc", "linen board"], ["#faf6ef", "card"], ["#3e5a8a", "thread: progress, kept"], ["#b9c4d8", "unsewn stitch"], ["#2b3550", "text"]]],
+    html: () => `<div class="frame s4">${sb()}
+      <div class="top"><h1>Saturday</h1><span>24 October</span></div>
+      ${wk()}
+      ${cards({ extra: (h) => `<div class="thread"><i style="width:${h.r * 100}%"></i></div>` })}</div>`,
+  },
+  {
+    n: "05", name: "Watercolour wash", tag: "new · comeback",
+    idea: "Paper cards with a soft sage wash bleeding in from the right; the wash grows with the rolling rate and floods the whole card when kept.",
+    sys: ["Spectral only (roman and italic)", [["#f8f6f0", "paper board"], ["#fffdf8", "card"], ["#cfe0c8", "light wash"], ["#4f7348", "deep wash: kept, next step"], ["#2e3b2c", "text"]]],
+    html: () => `<div class="frame s5">${sb()}
+      <div class="top"><h1>Saturday</h1><span>24 Oct</span></div>
+      ${wk()}
+      ${cards({ extra: () => `<div class="wash"></div>`, cb: 1 })}</div>`,
+  },
+  {
+    n: "06", name: "Sunrise", tag: "new · comeback",
+    idea: "Each card has a small horizon on the right; the sun rises as high as the rolling rate and turns deep gold on a kept day. The week strip is seven small sunrises.",
+    sys: ["Manrope only", [["#fbf8ef", "board"], ["#fdf4dc", "card"], ["#f2c14e", "sun: progress"], ["#fae2a0", "kept card"], ["#3b3320", "text, today"]]],
+    html: () => `<div class="frame s6">${sb()}
+      <div class="top"><h1>Saturday 24 Oct</h1><span>2 of 5 so far</span></div>
+      ${wk()}
+      ${cards({ art: () => `<div class="sun"></div>`, cb: 1, cbText: "Friday stayed empty. That's fine. One sentence after coffee today." })}</div>`,
+  },
+  {
+    n: "07", name: "Gauges", tag: "new",
+    idea: "Quiet white cards, each with a small dial whose needle sits at the rolling rate. Kept cards tint to pale sky. Calm, slate blues and greys only.",
+    sys: ["IBM Plex Sans only", [["#f1f3f2", "board"], ["#ffffff", "card"], ["#7fa6bb", "dial: progress"], ["#2f6f8f", "kept, today"], ["#22313b", "text, needle"]]],
+    html: () => `<div class="frame s7">${sb()}
+      <div class="top"><h1>Saturday</h1><span>24 Oct</span></div>
+      ${wk((v, t) => `<i style="display:block">${gauge(v, t, 30)}</i>`)}
+      ${cards({ art: (h) => gauge(h.r, h.kept) })}</div>`,
+  },
+  {
+    n: "08", name: "Gets bolder", tag: "new · comeback",
+    idea: "Type only: each habit's name and number get heavier as the rolling rate rises, so the habits you're building look stronger. Kept tints the card pale blue.",
+    sys: ["Bricolage Grotesque only (variable weight 200–800 = rolling rate)", [["#f3f6fa", "board"], ["#ffffff", "card"], ["#dbe6f4", "kept, today"], ["#4f78b3", "tap"], ["#1d2b44", "text"]]],
+    html: () => `<div class="frame s8">${sb()}
+      <div class="top"><h1>Saturday</h1><span>24 Oct</span></div>
+      <div class="wk">${W.map(([l, n, v, t]) => `<div class="d ${t ? "today" : ""}"><b>${l}</b><span style="font-weight:${Math.round(200 + v * 600)}">${n}</span></div>`).join("")}</div>
+      ${cards({ nmStyle: (h) => `font-weight:${Math.round(200 + h.r * 600)}`, cb: 1 })}</div>`,
+  },
+  {
+    n: "09", name: "Book spines", tag: "new · sounds wrong · comeback",
+    idea: "Each habit is a book lying on a shelf, in even steps of green; a ribbon bookmark marks the rolling rate along the spine; a kept book gets a foil stamp.",
+    sys: ["Libre Baskerville only (roman, bold, italic)", [["#f4f2ea", "board"], ["#e6eee3 → #cadacd", "spines, five even green steps"], ["#5d7f67", "ribbon: progress, clean"], ["#9b7b3a", "foil: kept"], ["#24372c", "text"]]],
+    html: () => `<div class="frame s9">${sb()}
+      <div class="top"><h1>Saturday's shelf</h1><span>24 Oct</span></div>
+      ${wk()}
+      ${cards({ extra: (h) => `<div class="ribbon"></div>${h.kept ? '<div class="foil">Kept</div>' : ""}`, cb: 1 })}</div>`,
+  },
+  {
+    n: "10", name: "Folders", tag: "new · comeback",
+    idea: "Manila folders in a drawer; the folder's tab is as long as its rolling rate, and a kept folder's tab is pulled up in amber.",
+    sys: ["DM Sans + DM Mono (small labels)", [["#f3ead7", "drawer"], ["#fbf5e6", "folder"], ["#ead9b4", "tab: progress"], ["#c99a56", "kept tab"], ["#3a2f20", "text, today"]]],
+    html: () => `<div class="frame s10">${sb()}
+      <div class="top"><h1>Saturday</h1><span>24 OCT · 2 OF 5</span></div>
+      ${wk()}
+      ${cards({ extra: (h) => `<div class="tab">${h.kept ? "KEPT · " : ""}${h.num} ${h.of.toUpperCase()}</div>`, cb: 1, cbText: "Friday's page stayed empty. One sentence after your coffee today is enough." })}</div>`,
+  },
+];
+
+const grid = document.getElementById("grid");
+grid.innerHTML = frames.map((f, k) => `<div class="cell" data-k="${k}"><div class="thumb">${f.html()}</div>
+  <div class="cap"><div class="t1"><b>${f.n}</b><strong>${f.name}</strong></div>
+  <div class="idea">${f.idea}</div><span class="tag">${f.tag}</span>
+  <div class="sys"><span class="ty">${f.sys[0]}</span><div class="sw">${f.sys[1].map(([c, r]) => `<span><i style="background:${c.startsWith("#") ? (c.includes("→") ? `linear-gradient(90deg,${c.split(" → ")[0]},${c.split(" → ")[1]})` : c) : "transparent"}"></i>${c.startsWith("#") && c.includes("→") ? c + ": " : ""}${r}</span>`).join("")}</div></div></div></div>`).join("");
+
+const fit = () => document.querySelectorAll(".thumb").forEach((t) => {
+  t.querySelector(".frame").style.transform = `scale(${t.clientWidth / 390})`;
+});
+addEventListener("resize", fit); fit();
+document.fonts?.ready.then(fit);
+
+const ov = document.getElementById("ov"), holder = document.getElementById("holder");
+grid.addEventListener("click", (e) => {
+  const cell = e.target.closest(".cell"); if (!cell) return;
+  const s = Math.min((innerWidth - 48) / 390, (innerHeight - 48) / 844);
+  holder.style.width = 390 * s + "px"; holder.style.height = 844 * s + "px";
+  holder.innerHTML = frames[cell.dataset.k].html();
+  holder.firstElementChild.style.transform = `scale(${s})`;
+  holder.firstElementChild.style.transformOrigin = "0 0";
+  ov.classList.add("on");
+});
+const close = () => ov.classList.remove("on");
+ov.addEventListener("click", close);
+addEventListener("keydown", (e) => e.key === "Escape" && close());
+</script>
+</body>
+</html>

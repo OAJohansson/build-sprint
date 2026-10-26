@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wont mark compare</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root{--shelf:#f3ece0;--card:#fbf7f0;--ink:#3b3026;--muted:rgba(59,48,38,.62)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--shelf);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,sans-serif;padding:36px 32px 64px}
+  header{max-width:1500px;margin:0 auto 26px}
+  header h1{font-weight:800;font-size:30px;letter-spacing:-.03em}
+  header p{color:var(--muted);max-width:940px;margin-top:6px;font-size:15px;line-height:1.45}
+  .grid{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .cell{background:var(--card);border-radius:22px;padding:18px 20px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start}
+  .tiles{display:flex;align-items:flex-end;gap:12px}
+  .tiles svg{display:block;filter:drop-shadow(0 1px 2px rgba(59,48,38,.18))}
+  .info .t{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+  .info .t b{font-weight:400;font-size:13px;color:var(--muted)}
+  .info .t strong{font-weight:800;font-size:19px;letter-spacing:-.01em}
+  .info p{font-size:14px;color:var(--muted);margin-top:4px;line-height:1.4}
+  .info p.hs{font-size:12.5px;color:var(--ink);opacity:.8}
+  .ctx{display:flex;align-items:center;gap:14px;margin-top:12px;flex-wrap:wrap}
+  .real{background:var(--shelf);border-radius:14px;padding:6px;display:flex;flex-direction:column;align-items:center}
+  .real small{font-size:10px;color:var(--muted)}
+  .sw{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted)}
+  .sw span{display:flex;gap:7px;align-items:center}
+  .sw i{width:14px;height:14px;border-radius:4px;outline:1px solid rgba(59,48,38,.15);flex:none}
+  @media (max-width:1150px){.grid{grid-template-columns:1fr}}
+  @media (max-width:640px){.cell{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Dough on ink: two faces</h1>
+  <p>Left: 01 Dough on ink as picked, eyes closed in content curves. Right: the same mark with 08 Calm face's face, two dot eyes and a short line mouth set low and close. Everything else is unchanged.</p>
+</header>
+<div class="grid" id="grid"></div>
+
+<script>
+// Glyphs in local units: about 24 wide, centred on 0,0, bottom near +7.
+// role: "k" kept, "c" comeback, "p" empty seat. ctx: "icon" or "steam".
+let n = 0;
+const uid = () => "u" + n++;
+const dash = (d, col) => `<path d="${d}" fill="none" stroke="${col}" stroke-width="1.1" stroke-dasharray="2.2 1.8" stroke-linejoin="round" opacity=".75"/>`;
+const PURSE = "M-11 5 Q-12 -4 -4.5 -5.5 Q0 -12 4.5 -5.5 Q12 -4 11 5 Q0 10 -11 5 Z";
+const INGOT = "M-12 -3 Q-13 -7.5 -9.5 -7.5 Q-6 -2.5 0 -2.5 Q6 -2.5 9.5 -7.5 Q13 -7.5 12 -3 Q10 7 0 7 Q-10 7 -12 -3 Z";
+const BELLY = "M-6.5 -1 Q-6.5 -10 0 -10 Q6.5 -10 6.5 -1 Z";
+const grain = (id, col = "#f6f1e7") => `<defs><pattern id="${id}" width="1.6" height="1.6" patternUnits="userSpaceOnUse"><circle cx=".4" cy=".4" r=".32" fill="${col}" opacity=".55"/><circle cx="1.2" cy="1.1" r=".22" fill="${col}" opacity=".4"/></pattern></defs>`;
+const closedEyes = (c, y = 1.2, w = .75) => `<path d="M-3.8 ${y} Q-2.8 ${y + 1.1} -1.8 ${y} M1.8 ${y} Q2.8 ${y + 1.1} 3.8 ${y}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`;
+const pleats = (c, w = .8) => `<path d="M-4.6 -5.4 Q0 -3.8 4.6 -5.4 M-1.3 -7.9 L-1 -5.9 M1.3 -7.9 L1 -5.9" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`;
+
+// Enamel pin drawing, reused for 07-10 with different colourways.
+const pin = (o) => ({
+  draw(r) {
+    if (r === "p") return dash(PURSE, o.metal);
+    const f = r === "c" ? o.back : o.enamel;
+    return `<path d="${PURSE}" fill="${f}" stroke="${o.metal}" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M-4.6 -5.4 Q0 -3.8 4.6 -5.4" fill="none" stroke="${o.metal}" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="M-4.6 0.6 Q-3.4 1.8 -2.2 0.6 M2.2 0.6 Q3.4 1.8 4.6 0.6 M-1.2 3.2 Q0 4.1 1.2 3.2" fill="none" stroke="${o.line}" stroke-width=".8" stroke-linecap="round"/>
+      <path d="M-7.6 -1.4 Q-7 -3.6 -5.2 -4.2" fill="none" stroke="#fff" stroke-width=".9" stroke-linecap="round" opacity=".85"/>`;
+  },
+  tile() { return `<rect width="100" height="100" fill="${o.ground}"/><g transform="translate(50 55) scale(3)">${this.draw("k")}</g>`; },
+});
+
+const STYLES = [
+  {
+    name: "Dough on ink", group: "01 as picked",
+    line: "Warm dough cream with a pinched top and two pleats, a fine brown outline, and eyes closed in content curves. Set on deep ink.",
+    hs: "Differs from Headspace: cream not orange, a visible pinched top and pleats, closed-curve eyes, and a thin outline.",
+    cols: [["#2a2420", "icon ground"], ["#f6e8cc", "kept, dough"], ["#b9d29a", "comeback, matcha"], ["#3b2f2a", "line, face"]],
+    draw(r) {
+      if (r === "p") return dash(PURSE, "#b9a37f");
+      const f = r === "c" ? "#b9d29a" : "#f6e8cc";
+      return `<path d="${PURSE}" fill="${f}" stroke="#3b2f2a" stroke-width=".9" stroke-linejoin="round"/>${pleats("#3b2f2a", .75)}
+        ${closedEyes("#3b2f2a")}<path d="M-.8 3.6 Q0 4.1 .8 3.6" fill="none" stroke="#3b2f2a" stroke-width=".7" stroke-linecap="round"/>`;
+    },
+    tile() { return `<rect width="100" height="100" fill="#2a2420"/><g transform="translate(50 55) scale(3.1)">${this.draw("k")}</g>`; },
+  },
+  {
+    name: "Dough on ink, dot face", group: "with 08 Calm face's face",
+    line: "The same dough purse, outline, ink ground and matcha comeback, with Calm face's face: two small dot eyes and a short line mouth, set low and close together.",
+    hs: null,
+    cols: [["#2a2420", "icon ground"], ["#f6e8cc", "kept, dough"], ["#b9d29a", "comeback, matcha"], ["#3b2f2a", "line, face"]],
+    draw(r) {
+      if (r === "p") return dash(PURSE, "#b9a37f");
+      const f = r === "c" ? "#b9d29a" : "#f6e8cc";
+      return `<path d="${PURSE}" fill="${f}" stroke="#3b2f2a" stroke-width=".9" stroke-linejoin="round"/>${pleats("#3b2f2a", .75)}
+        <circle cx="-2.2" cy="1.6" r=".9" fill="#3b2f2a"/><circle cx="2.2" cy="1.6" r=".9" fill="#3b2f2a"/><path d="M-1 3.8 Q0 4.4 1 3.8" fill="none" stroke="#3b2f2a" stroke-width=".7" stroke-linecap="round"/>`;
+    },
+    tile() { return `<rect width="100" height="100" fill="#2a2420"/><g transform="translate(50 55) scale(3.1)">${this.draw("k")}</g>`; },
+  },
+];
+
+const tile = (st, size) => {
+  const id = uid();
+  return `<svg width="${size}" height="${size}" viewBox="0 0 100 100"><defs><clipPath id="${id}"><rect width="100" height="100" rx="22.4"/></clipPath></defs><g clip-path="url(#${id})">${st.tile()}</g></svg>`;
+};
+const W = (st, r, x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})">${st.draw(r, "steam")}</g>`;
+
+// B's steamer: back row of three, front row of four. 6 of 7: 5 kept, 1 comeback, 1 empty seat.
+function steamer(st, size = 84) {
+  const seats = [[18, 54, "k"], [34, 54, "k"], [50, 54, "c"], [66, 54, "k"], [26, 42, "k"], [42, 42, "k"], [58, 42, "p"]];
+  return `<svg width="${size}" height="${size}" viewBox="0 0 84 84">
+    <ellipse cx="42" cy="60" rx="36" ry="7" fill="#c49a62"/>
+    ${seats.filter((s) => s[1] < 50).map(([x, y, r]) => W(st, r, x, y, .72)).join("")}
+    ${seats.filter((s) => s[1] >= 50).map(([x, y, r]) => W(st, r, x, y, .72)).join("")}
+    <path d="M6 61 Q42 70 78 61 V74 Q78 81 70 81 H14 Q6 81 6 74 Z" fill="#dcb883" stroke="#b98f55" stroke-width="1.5"/>
+    <line x1="8" y1="74" x2="76" y2="74" stroke="#c9a067" stroke-width="1.2"/>
+  </svg>`;
+}
+
+document.getElementById("grid").innerHTML = STYLES.map((st, i) => `<section class="cell">
+  <div class="tiles">${tile(st, 180)}${tile(st, 60)}${tile(st, 29)}</div>
+  <div class="info">
+    <div class="t"><b>${String(i + 1).padStart(2, "0")}</b><strong>${st.name}</strong><b>${st.group}</b></div>
+    <p>${st.line}</p>
+    ${st.hs ? `<p class="hs">${st.hs}</p>` : ""}
+    <div class="ctx">
+      <div class="real">${steamer(st)}<small>real size</small></div>
+      ${steamer(st, 168)}
+      <div class="sw">${st.cols.map(([c, r]) => `<span><i style="background:${c}"></i>${r} ${c}</span>`).join("")}</div>
+    </div>
+  </div>
+</section>`).join("");
+</script>
+</body>
+</html>

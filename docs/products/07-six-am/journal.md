@@ -583,3 +583,12 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   if the SoundCloud widget sits in the Lab's own tab, the separated part would be muted too (and
   re-captured). The spike therefore plays the widget in a small separate "deck" window and
   captures that tab; the Lab tab plays only the part.
+- **Spike built and measured (L150):** `/dev/lab-spike` (dev only) with a Deck window, a worker
+  running htdemucs on WebGPU, solo/mute per part and a bench on Six AM's own loop. On the owner's
+  M5 Pro in Chrome 155: 4.4× real time on the bench, **3× real time live** on a real SoundCloud
+  stream (0 late windows of 28), delay 5.5 s at 3 s hops (3.2 s possible at 1.5 s hops). Capture
+  reports `suppressLocalAudioPlayback` true; bass 18.5 dB and drums 34.6 dB SDR on the own loop.
+  Details in `evals-runs/lab-spike-2026-10-26.md`. Gotchas: getDisplayMedia needs the Lab tab
+  visible (InvalidStateError otherwise) and should be called before awaiting the model.
+- **Waiting for the owner's ear** on (a) silence of the original and (c) usefulness of bass and
+  drums, in their own Chrome. Nothing past the spike is built until then (L144).

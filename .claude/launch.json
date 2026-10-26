@@ -115,6 +115,23 @@
         "3109"
       ],
       "port": 3109
+    },
+    {
+      "name": "07-six-am-lab",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "-F",
+        "07-six-am",
+        "dev",
+        "--port",
+        "3047"
+      ],
+      "port": 3047,
+      "env": {
+        "SUPABASE_URL": "",
+        "SUPABASE_SECRET_KEY": "",
+        "ACCESS_CODE": "test-code"
+      }
     }
   ]
 }

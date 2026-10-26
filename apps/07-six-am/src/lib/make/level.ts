@@ -67,8 +67,15 @@ export function lufs(s: Stereo): number {
  * capped at ±24 dB so a near-silent render can't jump in volume.
  */
 export function matchGain(original: Stereo, mine: Stereo, method: LevelMethod = "rms"): { db: number; gain: number } {
-  const m = method === "lufs" ? lufs : rmsDb;
-  const a = m(original), b = m(mine);
+  return gainToLevel((method === "lufs" ? lufs : rmsDb)(original), mine, method);
+}
+
+/**
+ * The same gain from the original's level alone (dB, measured the same way), so the original's
+ * audio can be dropped once it is measured (Make's worker keeps this number only, L161).
+ */
+export function gainToLevel(targetDb: number, mine: Stereo, method: LevelMethod = "rms"): { db: number; gain: number } {
+  const a = targetDb, b = (method === "lufs" ? lufs : rmsDb)(mine);
   if (a <= -120 || b <= -120) return { db: 0, gain: 1 };
   const d = Math.max(-24, Math.min(24, a - b));
   return { db: Math.round(d * 100) / 100, gain: Math.pow(10, d / 20) };

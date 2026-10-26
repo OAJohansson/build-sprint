@@ -21,10 +21,11 @@ import { HATS_ROW, KICK_ROW, referenceDb } from "@/lib/lab/activity";
 import { measurePart } from "@/lib/lab/measure";
 import { HearChip, Lanes, heardParts, type Hear } from "./lanes";
 import { LabNotes, type LabTurn } from "./lab-notes";
+import { MakeRoom, useMake, type MakeModel } from "./make-room";
 import s from "./lab.module.css";
 
 declare global {
-  interface Window { __sixamLab?: { state: () => TransportState | null; heardMs: () => number; bar: () => number; hear: () => Hear; levels: () => number[]; barLevels: () => (number | null)[][] } }
+  interface Window { __sixamLab?: { state: () => TransportState | null; heardMs: () => number; bar: () => number; hear: () => Hear; levels: () => number[]; barLevels: () => (number | null)[][]; mineLevel: () => number; make: () => ReturnType<MakeModel["debug"]> | null } }
 }
 
 type Mode = "listen" | "make";
@@ -63,6 +64,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const [usageNote, setUsageNote] = useState<string | null>(null);
   const hearRef = useRef(hear);
   useEffect(() => { hearRef.current = hear; }, [hear]);
+  const makeRef = useRef<MakeModel | null>(null);
 
   // One transport per page: the Deck link, the separator and the loop's memory. Gone on leave.
   useEffect(() => {
@@ -95,13 +97,29 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
-    window.__sixamLab = { state: () => tr.current?.state ?? null, heardMs: () => t.heardMs(), bar: () => msToBar(t.heardMs(), bpm, origin), hear: () => hearRef.current, levels: () => t.partLevels(), barLevels: () => t.levels() };
+    window.__sixamLab = { state: () => tr.current?.state ?? null, heardMs: () => t.heardMs(), bar: () => msToBar(t.heardMs(), bpm, origin), hear: () => hearRef.current, levels: () => t.partLevels(), barLevels: () => t.levels(), mineLevel: () => t.mineLevel(), make: () => makeRef.current?.debug() ?? null };
     return () => { cancelAnimationFrame(raf); clearTimeout(saveTimer); t.dispose(); tr.current = null; };
   }, [map, bpm, origin, bars, code, quiet]);
 
-  // What you hear → the part gains (again once the parts start playing).
+  // S3 Make: the same transport, the same loop; Make's own state survives the switch (T87).
+  const title = analysis?.title || map.title || "Untitled";
+  const make = useMake({
+    tr, active: mode === "make", focus, loop: ts?.loop ?? null, bpm, code, title, url: map.id,
+    keyName: map.key || analysis?.key || "", scale: map.scale || analysis?.scale || "",
+  });
+  useEffect(() => { makeRef.current = make; });
+
+  // What you hear → the part gains (again once the parts start playing). Make plays the focus part
+  // alone (A) or Mine (B), with its own A/B; the Hear bar is Listen only (T87).
   const phase = ts?.phase;
-  useEffect(() => { tr.current?.setParts(heardParts(hear, [...PART_NAMES])); }, [hear, phase]);
+  const mineOn = mode === "make" && make.isBass && make.ab === "b" && make.mineReady;
+  useEffect(() => {
+    const t = tr.current;
+    if (!t) return;
+    if (mode === "make") t.setParts(PART_NAMES.map((id) => !mineOn && id === focus));
+    else t.setParts(heardParts(hear, [...PART_NAMES]));
+    t.setMineOn(mineOn);
+  }, [hear, phase, mode, focus, mineOn]);
 
   const onPlay = useCallback(() => {
     const t = tr.current;
@@ -175,8 +193,10 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     const part = win(rows?.[PART_NAMES.indexOf(focus)]);
     const kick = focus === "drums" ? win(rows?.[KICK_ROW]) : undefined, hats = focus === "drums" ? win(rows?.[HATS_ROW]) : undefined;
     const heard = part ? { part, ...(kick && hats ? { kick, hats } : {}) } : null;
-    return { part: focus, hear, bar, playheadBar: pos.bar, loop: loopB, chords, measure, heard };
-  }, [focus, hear, pos.bar, chords, bpm, origin, bars, map.key, map.scale, analysis]);
+    const inMake = mode === "make" ? make.labMake : null;
+    const heardNow: LabAsk["hear"] = mode === "make" ? { kind: "only", parts: [focus] } : hear;
+    return { part: focus, hear: heardNow, bar, playheadBar: pos.bar, loop: loopB, chords, measure, heard, ...(inMake ? { make: inMake } : {}) };
+  }, [focus, hear, pos.bar, chords, bpm, origin, bars, map.key, map.scale, analysis, mode, make.labMake]);
 
   const send = useCallback(async (id: string, q: string, bar: number, lab: LabAsk) => {
     try {
@@ -207,6 +227,18 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     void send(id, x.q, x.bar, lab);
   }, [turns, send]);
 
+  /** Loops the section holding the playhead (16-bar cap), without toggling an existing loop off. */
+  const loopHere = useCallback(() => {
+    const t = tr.current, x = sectionAt(sections, Math.floor(msToBar(t?.heardMs() ?? 0, bpm, origin)));
+    if (!t || !x) return;
+    const r = loopBars({ from: x.from, to: x.to }, msToBar(t.heardMs(), bpm, origin));
+    t.setLoop({ startMs: barToMs(r.from, bpm, origin), endMs: barToMs(r.to, bpm, origin) });
+  }, [sections, bpm, origin]);
+  // Entering Make on the bass needs the loop in memory: set one on the current section if none.
+  useEffect(() => {
+    if (mode === "make" && focus === "bass" && tr.current && !tr.current.state.loop) loopHere();
+  }, [mode, focus, loopHere]);
+
   const go = (m: Mode) => {
     setMode(m);
     const url = new URL(location.href);
@@ -215,7 +247,6 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   };
 
   const focusTurns = turns.filter((x) => x.part === focus);
-  const title = analysis?.title || map.title || "Untitled";
   const artist = analysis?.uploader || map.uploader;
   const key = map.key || analysis?.key ? `${map.key || analysis!.key} ${map.scale || analysis!.scale}` : "";
   const bpmText = `${Math.round(bpm * 10) / 10}`;
@@ -230,6 +261,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     // LS1-N4: a loop's first passes wait at the wrap while the Deck goes back to its start.
     : ts?.catching ? `${ts.loop?.state === "filling" ? "filling the loop…" : "catching up…"}${ts.catchLeftS ? ` ${ts.catchLeftS} s` : ""}` : "";
   const here = sectionAt(sections, pos.bar);
+  const heardMsFn = useCallback(() => tr.current?.heardMs() ?? 0, []);
   const loopSec = loop ? sectionAt(sections, loop.from) : null;
   // A long section loops 16 bars of it (L161): say which (LS1-2).
   const loopPart = loop && loopSec && loop.to - loop.from < loopSec.to - loopSec.from
@@ -256,7 +288,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
         <div className={s.actions}>
           <div className={s.transport}>
             <button className={s.play} onClick={onPlay} disabled={starting} aria-label={ts?.playing ? "Pause" : "Play"}>{ts?.playing ? "❚❚" : "▶"}</button>
-            <HearChip hear={hear} parts={parts} onClear={() => setHear({ kind: "all" })} />
+            {mode === "listen" && <HearChip hear={hear} parts={parts} onClear={() => setHear({ kind: "all" })} />}
             <span className={s.clock}>{clockMs(pos.sec * 1000)}{here ? ` · in ${here.label}` : ""} <small>bar {pos.bar}</small></span>
             <span className={s.status} aria-live="polite">{status}</span>
             {loop && ts?.loop && (
@@ -293,12 +325,10 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
             )} />
         </div>
       ) : (
-        <div className={s.soon}>
-          <div>
-            <h2>Make</h2>
-            <p>Your own {parts.find((p) => p.id === focus)?.name.toLowerCase()} beside the looping part comes in the next build.<br />Listen keeps playing meanwhile.</p>
-          </div>
-        </div>
+        <MakeRoom m={make} part={parts.find((x) => x.id === focus)!} loop={ts?.loop ?? null} section={loopSec ?? here} bpm={bpm} originSec={origin}
+          chords={chords} levels={levels} heardMs={heardMsFn} status={status} ready={ready} playing={!!ts?.playing}
+          bar={pos.bar} turns={focusTurns} onAsk={onAsk} onRetry={onRetry} onSeek={onSeek} onLoopHere={loopHere}
+          busy={focusTurns.some((x) => !x.answer && !x.error)} note={usageNote} />
       )}
     </div>
   );

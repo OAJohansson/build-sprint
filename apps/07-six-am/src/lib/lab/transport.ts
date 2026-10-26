@@ -120,6 +120,10 @@ export class LabTransport {
   /** Playing from recent parts while the Deck catches up behind (LS1-4). */
   private mem: { t0: number; startMs: number; endMs: number; endAt: number; sources: AudioBufferSourceNode[] } | null = null;
   private analysers: AnalyserNode[] = [];
+  // Make (S3): "Mine" loops with the memory loop, in sync; B on the A/B turns it up (mineOn).
+  private mine: { buf: AudioBuffer; src: AudioBufferSourceNode | null; fade: GainNode | null } | null = null;
+  private mineOut: { gain: GainNode; an: AnalyserNode } | null = null;
+  private mineOnS = false;
   private deckClosed = false;
   private lastOrphanPause = 0;
   private dl = { t: 0, loaded: 0, speed: 0 };
@@ -315,6 +319,87 @@ export class LabTransport {
     const l = this.loopS;
     const b = l?.state === "memory" ? l.audio?.[p] : null;
     return b && l ? { left: b.getChannelData(0), right: b.getChannelData(1), rate: b.sampleRate, startMs: l.startMs, endMs: l.endMs } : null;
+  }
+
+  /**
+   * Make's "Mine" (S3): a stereo buffer that loops with the memory loop, starting with it at the
+   * loop's start (its own length repeats; a buffer within 1% of the loop's length is fitted to it).
+   * Swapped in place while playing, in sync, with a 15 ms crossfade. Null removes it. Not original
+   * audio: it is the owner's own render (or an AI loop).
+   */
+  setMine(m: { left: Float32Array; right: Float32Array; rate: number } | null) {
+    const live = this.live;
+    if (!m || !live) { this.stopMine(); this.mine = null; return; }
+    const loopLen = this.loopS?.audio?.[0]?.length ?? 0;
+    const n = loopLen && Math.abs(m.left.length - loopLen) <= loopLen * 0.01 ? loopLen : m.left.length;
+    const buf = live.ctx.createBuffer(2, n, m.rate);
+    buf.copyToChannel(m.left.subarray(0, n) as Float32Array<ArrayBuffer>, 0);
+    buf.copyToChannel(m.right.subarray(0, n) as Float32Array<ArrayBuffer>, 1);
+    this.mine = { buf, src: this.mine?.src ?? null, fade: this.mine?.fade ?? null };
+    if (this.playingS && this.loopS?.state === "memory") this.startMine();
+  }
+
+  /** B on Make's A/B: Mine heard (the parts' gains are set separately with setParts). */
+  setMineOn(on: boolean) {
+    this.mineOnS = on;
+    const o = this.mineOutput();
+    if (o) o.gain.gain.setTargetAtTime(on ? 1 : 0, o.gain.context.currentTime, 0.01);
+  }
+
+  /** Mine's level now (dB RMS over ~186 ms, before the master), for graders; −120 when silent. */
+  mineLevel(): number {
+    const a = this.mineOut?.an;
+    if (!a) return -120;
+    const buf = new Float32Array(a.fftSize);
+    a.getFloatTimeDomainData(buf);
+    let e = 0;
+    for (const x of buf) e += x * x;
+    return Math.max(-120, Math.round(10 * Math.log10(e / buf.length + 1e-12) * 10) / 10);
+  }
+
+  private mineOutput() {
+    const live = this.live;
+    if (!live) return null;
+    if (this.mineOut && this.mineOut.gain.context === live.ctx) return this.mineOut;
+    const gain = live.ctx.createGain();
+    gain.gain.value = this.mineOnS ? 1 : 0;
+    gain.connect(live.master);
+    const an = live.ctx.createAnalyser();
+    an.fftSize = 8192;
+    gain.connect(an);
+    this.mineOut = { gain, an };
+    return this.mineOut;
+  }
+
+  /** Starts Mine in step with the memory loop (at `when`, default just ahead), replacing the old source. */
+  private startMine(when?: number) {
+    const live = this.live, l = this.loopS, m = this.mine, out = this.mineOutput();
+    if (!live || !l || l.state !== "memory" || !m || !out) return;
+    const ctx = live.ctx;
+    const t = when ?? ctx.currentTime + 0.03;
+    this.stopMine(t);
+    const src = ctx.createBufferSource();
+    src.buffer = m.buf;
+    src.loop = true;
+    src.loopStart = 0;
+    src.loopEnd = m.buf.duration;
+    const fade = ctx.createGain();
+    fade.gain.setValueAtTime(0, t);
+    fade.gain.linearRampToValueAtTime(1, t + 0.015);
+    src.connect(fade).connect(out.gain);
+    const off = (((t - l.t0) % m.buf.duration) + m.buf.duration) % m.buf.duration;
+    src.start(t, off);
+    m.src = src; m.fade = fade;
+  }
+
+  private stopMine(at?: number) {
+    const m = this.mine;
+    if (!m?.src) return;
+    const src = m.src, fade = m.fade, ctx = src.context, t = Math.max(at ?? 0, ctx.currentTime);
+    if (fade) { fade.gain.cancelScheduledValues(t); fade.gain.setValueAtTime(fade.gain.value, t); fade.gain.linearRampToValueAtTime(0, t + 0.015); }
+    try { src.stop(t + 0.02); } catch { /* not started */ }
+    src.onended = () => { src.disconnect(); fade?.disconnect(); };
+    m.src = null; m.fade = null;
   }
 
   /** Each part's level per bar as heard so far (a copy). */
@@ -547,6 +632,7 @@ export class LabTransport {
       return s;
     });
     l.t0 = t - offset;
+    this.startMine(t);
   }
 
   private stopLoopSources() {
@@ -554,6 +640,7 @@ export class LabTransport {
     if (!l) return;
     for (const s of l.sources) { try { s.stop(); } catch { /* not started */ } s.disconnect(); }
     l.sources = [];
+    this.stopMine();
   }
 
   /**
@@ -602,6 +689,7 @@ export class LabTransport {
     const l = this.loopS;
     if (!l) return;
     this.stopLoopSources();
+    this.mine = null; // Mine belongs to this loop's reading
     l.buf?.drop();
     l.audio?.forEach((b) => { for (let c = 0; c < b.numberOfChannels; c++) b.getChannelData(c).fill(0); });
     l.audio = null;

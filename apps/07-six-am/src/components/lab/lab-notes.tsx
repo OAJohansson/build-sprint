@@ -6,7 +6,8 @@
 // of the playhead at the lane's foot. The open dot hangs a card below the lane (beside the dot when
 // the focus lane is the last or there's no room below), on the side away from the playhead.
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
-import { cardLeft, groupNotes } from "@/lib/mentor/lab";
+import type { PartName } from "@/lib/lab/live";
+import { barsNamed, cardLeft, groupNotes, partNoun, whatDoing } from "@/lib/mentor/lab";
 import { Composer, Turn, type ThreadTurn } from "./mentor-thread";
 import s from "./lab.module.css";
 
@@ -108,7 +109,11 @@ export function LabNotes(p: Props) {
   let cardStyle: CSSProperties | undefined;
   if (anchor !== null) {
     const beside = geo.mode === "beside";
-    const left = cardLeft(px(anchor), px(side.anchor === anchor ? side.head : playheadBar), geo.w, CARD_W, beside);
+    // LS2-N10: beside the dot, keep the bars the newest answer talks about in view.
+    const said = open?.notes.filter((x) => x.answer).at(-1)?.answer;
+    const named = said ? barsNamed(said.sentences.map((t) => t.text).join(" ")).filter((b) => b >= 1 && b <= bars) : [];
+    const avoid = named.length ? { from: px(Math.min(...named)), to: px(Math.max(...named) + 1) } : null;
+    const left = cardLeft(px(anchor), px(side.anchor === anchor ? side.head : playheadBar), geo.w, CARD_W, beside, avoid);
     if (geo.mode === "below") cardStyle = { left, top: "calc(100% + 10px)", maxHeight: geo.maxH };
     else if (geo.mode === "above") cardStyle = { left, bottom: "calc(100% + 10px)", maxHeight: geo.maxH };
     else {
@@ -126,6 +131,7 @@ export function LabNotes(p: Props) {
     return () => ro.disconnect();
   }, [anchor]);
   const name = p.partName.toLowerCase();
+  const part = name as PartName;
   return (
     <div ref={box} className={s.notes} onClick={(e) => e.stopPropagation()}>
       {groups.map((g) => (
@@ -151,7 +157,7 @@ export function LabNotes(p: Props) {
         <button className={s.askBtn} aria-expanded={false}
           style={{ left: askLeft ? "calc(var(--ph, 0%) - 8px)" : "calc(var(--ph, 0%) + 8px)", transform: askLeft ? "translateX(-100%)" : undefined }}
           onClick={() => { p.setOpenBar(null); p.setAsking(playheadBar); }}>
-          {p.turns.length === 0 ? `+ Ask about the ${name} here` : "+ Ask"}
+          {p.turns.length === 0 ? `+ Ask about ${partNoun(part)} here` : "+ Ask"}
         </button>
       )}
       {anchor !== null && (
@@ -160,7 +166,7 @@ export function LabNotes(p: Props) {
           {geo.mode === "above" && <i className={s.leader} style={{ left: pct(anchor), top: -10, bottom: "auto", height: 19 }} aria-hidden />}
           <div ref={cardRef} className={s.card} style={cardStyle} role="dialog" aria-label={open ? `Mentor at bar ${open.bar}` : "Ask the Mentor"}>
             <div className={s.cardHead}>
-              <span className={s.ctx}>{open && p.asking === null ? `Mentor, at bar ${open.bar}` : `Ask about the ${name} at bar ${anchor}`}</span>
+              <span className={s.ctx}>{open && p.asking === null ? `Mentor, at bar ${open.bar}` : `Ask about ${partNoun(part)} at bar ${anchor}`}</span>
               <button className={s.x} onClick={close} aria-label="Close">×</button>
             </div>
             {open && p.asking === null ? (
@@ -174,7 +180,7 @@ export function LabNotes(p: Props) {
               </>
             ) : (
               <>
-                <Composer placeholder={`What's the ${name} doing here?`} onAsk={(q) => p.onAsk(q, anchor)} autoFocus disabled={p.busy} />
+                <Composer placeholder={whatDoing(part)} onAsk={(q) => p.onAsk(q, anchor)} autoFocus disabled={p.busy} />
                 <p className={s.facts}>{p.knows(anchor)}</p>
               </>
             )}

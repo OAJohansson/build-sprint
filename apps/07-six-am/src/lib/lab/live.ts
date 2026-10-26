@@ -51,6 +51,8 @@ export class LiveParts {
   readonly gains: GainNode[];
   /** Live regions only, per part, before `gains`: the transport mutes these around a seek or a loop. */
   readonly liveIn: GainNode[];
+  /** Everything heard goes through this (0 in graders' quiet runs); Make's "Mine" joins here. */
+  readonly master: GainNode;
   private marks: DeckMark[] = [];
   private stopped = false;
 
@@ -58,9 +60,11 @@ export class LiveParts {
     readonly ctx: AudioContext,
     gains: GainNode[],
     liveIn: GainNode[],
+    master: GainNode,
     delayS: number,
     private teardown: () => void,
   ) {
+    this.master = master;
     this.gains = gains;
     this.liveIn = liveIn;
     this.delayS = delayS;
@@ -196,7 +200,7 @@ export class LiveParts {
       ctx.close();
       opts.onEnded?.();
     };
-    live = new LiveParts(ctx, gains, liveIn, delayS, teardown);
+    live = new LiveParts(ctx, gains, liveIn, master, delayS, teardown);
     track.onended = () => live?.stop(); // Chrome's "Stop sharing"
     return live;
   }

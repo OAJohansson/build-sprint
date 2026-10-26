@@ -17,7 +17,7 @@ import { sharedTraits } from "@/lib/mentor/group-traits";
 import { ownerLines, recentEditLines, sentencesOf } from "@/lib/mentor/owner-lines";
 import { askClaude, MentorError, UPDATES_PROFILE } from "./claude";
 import { mapContext } from "@/lib/map/context";
-import { factsLine, keyFlats, labContextText, unheardLoop, labThread, notesFromThread, parseLabAsk, PART_LABEL, type LabMeta, type ThreadItem } from "@/lib/mentor/lab";
+import { factsLine, keyFlats, labContextText, unheardBars, unheardLoop, labThread, notesFromThread, parseLabAsk, PART_LABEL, type LabMeta, type ThreadItem } from "@/lib/mentor/lab";
 import type { Group, MentorStore, MessageRow } from "./mentor-store";
 
 // One Mentor request end to end: load what the job needs from the store (the server builds the
@@ -366,7 +366,7 @@ async function askLab(store: MentorStore, body: AskBody, now: Date, tz: number):
   if (!track) input.lab = `[ears] Track: ${map.title || "untitled"} by ${map.uploader || "unknown"}, ${map.bpm} BPM, key ${map.key} ${map.scale}.\n${mapContext(map)}\n${input.lab}`;
   let result;
   try {
-    result = await askClaude(input, { labQuestion: message, labUnheard: unheardLoop(lab, map) ?? undefined });
+    result = await askClaude(input, { labQuestion: message, labUnheard: unheardLoop(lab, map) ?? undefined, labUnheardBars: new Set(unheardBars(lab)) });
   } catch (error) {
     if (error instanceof MentorError && error.costUsd > 0) {
       await store.addMessage({ threadId, role: "assistant", job: "lab", content: JSON.stringify({ error: error.kind }), sources: null, usage: error.usage, costUsd: error.costUsd, counted: false });

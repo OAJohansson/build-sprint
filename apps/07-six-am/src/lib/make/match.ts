@@ -25,8 +25,7 @@ export function featuresOf(preset: MakePresetId, m: Macros, notes: MakeNote[], b
  * `target`. Coordinate search from the preset's own settings: a coarse sweep of each macro, then a
  * finer one around the best. `fixed` keeps some macros where they are.
  */
-// shortcut: ~50 renders on the main thread (0.3–0.7 s for a 1–4 bar pattern on the owner's Mac);
-// move into a worker when the Make UI calls it, so the page doesn't stall.
+// ~50 renders, 0.4 s for a 4-bar pattern: Make runs it in its own worker (make.worker.ts, make-client.ts).
 export function suggestMacros(target: PartFeatures, preset: MakePresetId, notes: MakeNote[], bpm: number, steps: number, o: { start?: Partial<Macros>; fixed?: MacroId[]; rate?: number } = {}): Suggestion {
   let renders = 0;
   const cost = (m: Macros) => { renders++; return featureDistance(featuresOf(preset, m, notes, bpm, steps, o.rate), target); };

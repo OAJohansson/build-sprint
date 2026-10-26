@@ -9,9 +9,15 @@ import { barActivity } from "@/lib/lab/activity";
 import { loopBars } from "@/lib/lab/timing";
 import type { TrackMap } from "@/lib/map/types";
 import { midiName, pitchClass, usesFlats } from "@/lib/synths/theory";
+import { MACRO_IDS, MACRO_SPECS, MAKE_PRESETS, clampMacros, macroGuide, macroWord, type Macros, type MakePresetId } from "@/lib/make/presets";
 import type { MentorAnswer } from "./answer";
 
 export const PART_LABEL: Record<PartName, string> = { drums: "Drums", bass: "Bass", other: "Other", vocals: "Vocals" };
+
+/** A part in a sentence (LS2-N11): "the bass", "the drums", but "Other" (a lane's name, not a thing). */
+export const partNoun = (p: PartName) => (p === "other" ? "Other" : `the ${p}`);
+/** "What's the bass doing here?", "What are the vocals doing here?", "What's Other doing here?" */
+export const whatDoing = (p: PartName) => `What${p === "drums" || p === "vocals" ? " are" : "'s"} ${partNoun(p)} doing here?`;
 
 /** What you hear (L177): everything, only some parts, or everything without some. */
 export type LabHear = { kind: "all" } | { kind: "only"; parts: PartName[] } | { kind: "mute"; parts: PartName[] };
@@ -56,7 +62,10 @@ export type LabAsk = {
   chords: (string | null)[];
   measure: PartMeasure | null;
   heard?: LabHeard | null;
+  /** S3: asked from Make: the preset and knob values they're making, and the gold ticks if any. */
+  make?: LabMake | null;
 };
+export type LabMake = { preset: MakePresetId; macros: Macros; ticks: Macros | null };
 
 /** One exchange, as the map and the Mentor rail show it. */
 export type LabNote = { id: string; part: PartName; bar: number; q: string; answer: MentorAnswer; facts: string; createdAt: string; costUsd: number };
@@ -112,7 +121,39 @@ export function parseLabAsk(raw: unknown, bars: number): LabAsk | null {
   const hr = (r.heard ?? null) as Record<string, unknown> | null;
   const hw = hr ? win(hr.part) : undefined;
   const heard: LabHeard | null = hw ? { part: hw, ...(win(hr!.kick) ? { kick: win(hr!.kick) } : {}), ...(win(hr!.hats) ? { hats: win(hr!.hats) } : {}) } : null;
-  return { part: r.part, hear, bar, playheadBar: playheadBar ?? bar, loop, chords, measure, heard };
+  const mk = (r.make ?? null) as Record<string, unknown> | null;
+  const preset = mk && typeof mk.preset === "string" && mk.preset in MAKE_PRESETS ? (mk.preset as MakePresetId) : null;
+  const make: LabMake | null = preset ? {
+    preset, macros: clampMacros(preset, (mk!.macros ?? {}) as Partial<Macros>),
+    ticks: mk!.ticks && typeof mk!.ticks === "object" ? clampMacros(preset, mk!.ticks as Partial<Macros>) : null,
+  } : null;
+  return { part: r.part, hear, bar, playheadBar: playheadBar ?? bar, loop, chords, measure, heard, ...(make ? { make } : {}) };
+}
+
+/** Bars around the asked bar the Lab hasn't heard yet (LS2-N9): unknown, never "a gap". */
+export function unheardBars(ask: Pick<LabAsk, "heard">): number[] {
+  const w = ask.heard?.part;
+  return w ? w.levels.flatMap((v, i) => (v === null ? [w.from + i] : [])) : [];
+}
+
+/** "bars 97–104, 113": runs of bar numbers. */
+export function barRuns(bars: number[]): string {
+  const runs: [number, number][] = [];
+  for (const b of [...bars].sort((x, y) => x - y)) {
+    const last = runs.at(-1);
+    if (last && b === last[1] + 1) last[1] = b; else runs.push([b, b]);
+  }
+  return `${runs.length === 1 && runs[0][0] === runs[0][1] ? "bar" : "bars"} ${runs.map(([a, b]) => (a === b ? `${a}` : `${a}–${b}`)).join(", ")}`;
+}
+
+/** Every bar an answer names ("bar 97", "bars 97–104", "bars 9 to 12"), for placing its card (LS2-N10) and the gap check. */
+export function barsNamed(text: string): number[] {
+  const out: number[] = [];
+  for (const m of text.matchAll(/\bbars?\s+(\d{1,4})(?:\s*(?:–|—|-|to)\s*(\d{1,4}))?/gi)) {
+    const a = Number(m[1]), b = m[2] ? Number(m[2]) : a;
+    if (b >= a && b - a <= 256) for (let x = a; x <= b; x++) out.push(x);
+  }
+  return out;
 }
 
 /** A1, Bb1: spelled for the key (G minor writes flats). */
@@ -219,9 +260,22 @@ export function labContextText(ask: LabAsk, map: TrackMap): string {
         `level ${m.levelDb} dB RMS (${m.levelDb > -18 ? "loud" : m.levelDb > -30 ? "moderate" : "quiet"})`,
       ].filter(Boolean).join(", ")}.`
       : `[lab] No loop is held, so there are no measurements of the ${name.toLowerCase()} itself, only the map's estimates.`,
+    ...(!unheardLoop(ask, map) && unheardBars(ask).length ? [`[lab] ${barRuns(unheardBars(ask)).replace(/^b/, "B")} near it haven't been heard yet: unknown, not quiet. Never call them a gap, a break or silence; say "not heard yet" if they matter.`] : []),
+    ...(ask.make ? makeLines(ask.make, name) : []),
     ...(unheardLoop(ask, map) ? [`[lab] Bar ${ask.bar} hasn't been heard yet. Answer in two sentences only: what the map estimates for the ${name.toLowerCase()} there, then exactly "Loop ${unheardLoop(ask, map)} to hear it and get its notes." No chords, no guesses.`] : []),
   ];
   return lines.join("\n");
+}
+
+/** S3: what they're making in Make, so the Mentor can talk about the knobs by name. */
+function makeLines(mk: LabMake, name: string): string[] {
+  const at = (m: Macros) => MACRO_IDS.map((id) => `${MACRO_SPECS[id].name} ${Math.round(m[id] * 100)}% (${macroWord(id, m[id])})`).join(", ");
+  return [
+    `[make] They are in Make, building their own ${name.toLowerCase()} on Six AM's synth beside the looped part, comparing A (the original part) and B (theirs) at the same loudness. Their preset and knobs:\n${macroGuide(mk.preset, mk.macros)}`,
+    mk.ticks
+      ? `[make] Suggest settings (local patch matching against the looped part's measurements, not your call) puts gold ticks at: ${at(mk.ticks)}. Talk about these knobs by name; you can't hear their sound either.`
+      : `[make] No gold ticks yet. Talk about the knobs by name; you can't hear their sound either.`,
+  ];
 }
 
 /** "at bar 20 playing; bars 4–19 playing, 20–23 quiet, 24–36 not heard yet". */
@@ -275,12 +329,19 @@ export function groupNotes<T extends { bar: number; createdAt: string }>(notes: 
  * playhead or runs out of room, then left. `beside` (the focus lane is the last): the card sits
  * next to the dot instead, 20 px off. Pixel positions on the timeline; returns the card's left.
  */
-export function cardLeft(dotPx: number, playheadPx: number, widthPx: number, cardPx = 420, beside = false): number {
+export function cardLeft(dotPx: number, playheadPx: number, widthPx: number, cardPx = 420, beside = false, avoid?: { from: number; to: number } | null): number {
   const right = dotPx + (beside ? 20 : 0);
+  const leftX = Math.max(0, Math.min(widthPx - cardPx, dotPx - (beside ? 20 : -14) - cardPx));
   const fits = right + cardPx <= widthPx;
+  // LS2-N10: beside the dot, the side that leaves the bars its answer talks about in view wins.
+  if (beside && avoid && avoid.to > avoid.from) {
+    const cover = (x: number) => Math.max(0, Math.min(x + cardPx, avoid.to) - Math.max(x, avoid.from));
+    const r = fits ? cover(right) : Infinity, l = leftX + cardPx <= dotPx ? cover(leftX) : Infinity;
+    if (r !== l) return r < l ? right : leftX;
+  }
   const crosses = dotPx < playheadPx && right + cardPx > playheadPx;
   if (fits && !crosses) return right;
-  return Math.max(0, Math.min(widthPx - cardPx, dotPx - (beside ? 20 : -14) - cardPx));
+  return leftX;
 }
 
 // ── "Never claims to hear" (B6) ──────────────────────────────────────────────────────────────────

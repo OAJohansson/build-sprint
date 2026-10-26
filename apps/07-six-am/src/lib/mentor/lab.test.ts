@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { TrackMap } from "@/lib/map/types";
 import { checkAnswer } from "./answer";
-import { cardLeft, factsLine, heardText, keyFlats, perBar, unheardLoop, groupNotes, knowsLine, labContextText, labThread, notesFromThread, parseLabAsk, type LabAsk } from "./lab";
+import { barRuns, barsNamed, partNoun, unheardBars, whatDoing, cardLeft, factsLine, heardText, keyFlats, perBar, unheardLoop, groupNotes, knowsLine, labContextText, labThread, notesFromThread, parseLabAsk, type LabAsk } from "./lab";
 import { buildRequest, SYSTEM_PROMPT } from "./prompt";
 
 // The Mentor in the Lab (S2, B6): what the Lab sends, how it reads in the prompt, what comes back
@@ -97,7 +97,7 @@ describe("what the Lab heard (LS2-M3)", () => {
 });
 
 describe("a bar not heard yet (LS2-M6)", () => {
-  const unheard = { ...ask, bar: 50, loop: null, measure: null, heard: { part: { from: 34, levels: Array.from({ length: 17 }, () => -20).concat([null]), refDb: -20 } } };
+  const unheard = { ...ask, bar: 50, loop: null, measure: null, heard: { part: { from: 34, levels: [...Array.from({ length: 17 }, () => -20), null], refDb: -20 } } };
   it("asks for the map's estimate and the loop to hear it; a heard or measured bar doesn't", () => {
     expect(unheardLoop({ ...unheard, bar: 51 }, map)).toBe("bars 41–56");
     expect(labContextText({ ...unheard, bar: 51 }, map)).toMatch(/Answer in two sentences only[^\n]*"Loop bars 41–56 to hear it and get its notes\." No chords/);
@@ -174,5 +174,49 @@ describe("Lab answers never claim to hear (B6)", () => {
   it("keeps to 3 sentences and no hertz", () => {
     expect(checkAnswer("lab", answer("a.", "b.", "c.", "d.")).ok).toBe(false);
     expect(checkAnswer("lab", answer("It sits at 55 Hz.")).ok).toBe(false);
+  });
+});
+
+describe("S3 folds (LS2-N9, N10, N11) and Make's context", () => {
+  it("names parts the way a person says them", () => {
+    expect(partNoun("bass")).toBe("the bass");
+    expect(partNoun("other")).toBe("Other");
+    expect(whatDoing("vocals")).toBe("What are the vocals doing here?");
+    expect(whatDoing("drums")).toBe("What are the drums doing here?");
+    expect(whatDoing("bass")).toBe("What's the bass doing here?");
+    expect(whatDoing("other")).toBe("What's Other doing here?");
+  });
+  it("finds the bars an answer names, and the unheard bars near a question", () => {
+    expect(barsNamed("From bar 97 the line rests; bars 99–101 and bars 9 to 10.")).toEqual([97, 99, 100, 101, 9, 10]);
+    const heard = { part: { from: 18, levels: [-12, -12, null, null, -14, null], refDb: -12 } };
+    expect(unheardBars({ heard })).toEqual([20, 21, 23]);
+    expect(barRuns([20, 21, 23])).toBe("bars 20–21, 23");
+    expect(labContextText({ ...ask, heard }, map)).toMatch(/Bars 20–21, 23 near it haven't been heard yet: unknown, not quiet/);
+  });
+  it("rejects long Lab sentences and a gap at a bar not heard yet", () => {
+    const answer = (...texts: string[]) => ({ sentences: texts.map((text) => ({ text, source: "ears" })), tellMore: false });
+    const long = Array.from({ length: 31 }, () => "word").join(" ") + ".";
+    expect(checkAnswer("lab", answer(long)).ok).toBe(false);
+    const needs = { labUnheardBars: new Set([21, 22]) };
+    expect(checkAnswer("lab", answer("Then a gap at bars 21–22 before the drop."), needs).ok).toBe(false);
+    expect(checkAnswer("lab", answer("Bars 21–22 haven't been heard yet."), needs).ok).toBe(true);
+    expect(checkAnswer("lab", answer("A short gap at bar 19 lets the kick through."), needs).ok).toBe(true);
+  });
+  it("puts a beside card on the side away from the bars its answer covers", () => {
+    // Dot at 600 px; card 420 wide: right is 620–1040, left 160–580.
+    expect(cardLeft(600, 0, 1240, 420, true, { from: 700, to: 900 })).toBe(160);
+    expect(cardLeft(600, 0, 1240, 420, true, { from: 300, to: 500 })).toBe(620);
+    expect(cardLeft(600, 0, 1240, 420, true, null)).toBe(620);
+  });
+  it("tells the Mentor what they're making in Make, knobs and ticks", () => {
+    const p = parseLabAsk({ ...ask, make: { preset: "rubber-pluck", macros: { tone: 0.5, length: 9 }, ticks: { length: 0.25 }, audio: [1] } }, BARS)!;
+    expect(p.make?.preset).toBe("rubber-pluck");
+    expect(p.make?.macros.length).toBe(1);
+    expect(p.make?.ticks?.length).toBe(0.25);
+    expect(parseLabAsk({ ...ask, make: { preset: "piano" } }, BARS)!.make).toBeUndefined();
+    const t = labContextText(p, map);
+    expect(t).toMatch(/\[make\] They are in Make, building their own bass/);
+    expect(t).toMatch(/Rubber pluck \(short, bouncy\)/);
+    expect(t).toMatch(/gold ticks at: Tone 35%[^\n]*Length 25% \(1\/8\)/);
   });
 });

@@ -2,7 +2,7 @@
 // checks it must pass before anyone sees it (M2 source on every fact, M6 real loops, M7 real
 // links). Pure, shared by the server and the panel.
 
-import { CANT_HEAR, HEARD_CLAIM, TONE_QUESTION } from "./lab";
+import { barsNamed, CANT_HEAR, HEARD_CLAIM, TONE_QUESTION } from "./lab";
 import { missingLines } from "./owner-lines";
 
 export const JOBS = [
@@ -152,6 +152,8 @@ export const ANSWER_SCHEMA = {
 
 /** What a job's answer must contain beyond sentences. */
 export type Needs = {
+  /** LS2-N9: bars near a Lab question the Lab hasn't heard yet: never "a gap". */
+  labUnheardBars?: ReadonlySet<number>;
   loopIds?: ReadonlySet<string>;
   trackIds?: ReadonlySet<string>;
   /** URLs seen in this answer's web search results; listen-next links must be among them. */
@@ -232,6 +234,9 @@ export function linkKind(u: string, said: LinkKind): LinkKind {
     return said;
   }
 }
+/** LS2-N9: a Lab sentence is short. */
+export const LAB_MAX_WORDS = 30;
+const GAP_WORDS = /\b(gaps?|silen(?:t|ce)|drops? out|dropped out|rests?|empty|quiet|breaks?)\b/i;
 const INTERVAL_JARGON = /\b(?:minor|major|perfect|diminished|augmented) (?:second|third|fourth|fifth|sixth|seventh)s?\b(?!\s*\()/i;
 /** N5: Studio start talks about keys in plain words. */
 const KEY_JARGON = /semitone|key wheel|camelot|\b(?:1[0-2]|[1-9])[AB]\b/;
@@ -282,6 +287,14 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
     // B6: the Mentor never claims to have heard the part (it gets numbers only).
     if (job === "lab" && HEARD_CLAIM.test(text)) {
       return { ok: false, problem: `sentences[${i}] claims to hear the audio ("${text.match(HEARD_CLAIM)?.[0]}"): you get numbers only. Say what the measurements or the map show instead ("the loop measures…", "the map estimates…").` };
+    }
+    // LS2-N9: short sentences, and a bar the Lab hasn't heard is unknown, not a gap.
+    if (job === "lab" && text.split(/\s+/).length > LAB_MAX_WORDS) {
+      return { ok: false, problem: `sentences[${i}] has ${text.split(/\s+/).length} words: keep each Lab sentence under ${LAB_MAX_WORDS} words (at most 3 short sentences).` };
+    }
+    if (job === "lab" && needs.labUnheardBars?.size && GAP_WORDS.test(text)) {
+      const unheard = barsNamed(text).filter((b) => needs.labUnheardBars!.has(b));
+      if (unheard.length) return { ok: false, problem: `sentences[${i}] calls bar ${unheard[0]} "${text.match(GAP_WORDS)?.[0]}", but the Lab hasn't heard it yet: it's unknown, not quiet. Say "not heard yet", or leave it out.` };
     }
     // LS2-M5: plain words for a beginner: an interval name only with a short explanation in brackets.
     if (job === "lab" && INTERVAL_JARGON.test(text)) {

@@ -6,6 +6,11 @@ What happened, what was decided and why. Newest last.
 
 ### Lab (Phase 4): for `docs/knowledge-bank.md`, Technology, at the Lab wrap-up (owner via parent session, 26 Oct)
 
+**Process (owner, 26 Oct), for `AGENTS.md` and `docs/PLAYBOOK.md` at wrap-up, as an amendment to
+decision 0028:** a permanent **design canvas sign-off** step in Founder mode: the final screens go
+on a Claude Design canvas, the owner comments in place, quick-mockup options for open questions,
+updated screens beside the originals, and the UI build starts only after the owner's approval.
+
 Each with what it is, why it matters, where we met it (the Six AM Lab spike) and who it comes from,
 plus 2–3 quiz Q/A pairs per entry:
 
@@ -682,3 +687,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   feature distance on all four presets (Reese 155 → 15, Acid only 166 → 127) but go to extremes
   on pitch drop from kick bleed; A/B gain +1.3 dB. Nobody has listened yet. 309 tests.
 - **Ops (pre-approved, logged):** applied the additive migration `sixam_sounds` (create table, 3 indexes, RLS on, no policies; nothing dropped or rewritten) on the Six AM Supabase project (crossfit-log). Empty; the sandbox stays in memory.
+- **Design approved (L176):** with option B for hearing parts (L177: headphones/speaker on hover, a chip by Play) and Play opening the Deck in one go (L178). Last tidy-up round, then the UI build. Process change for the wrap-up: design canvas sign-off as a permanent Founder step (To carry over).

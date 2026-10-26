@@ -1,11 +1,16 @@
 import "server-only";
-import sharp from "sharp";
 import type { Image, Library, Store } from "@/lib/server/store";
 import { kindLabel, stickerShape, subKindInfo, type Yum } from "@/lib/yum";
 
 // The sticker: an image model draws the yum as a flat, thick-outlined die-cut sticker, then the
 // white outside the sticker's outline is cut away (decision 0029). The prompt is the one the
 // spike and the eval used (spike/sticker-shared.mjs); keep them in step.
+
+/**
+ * sharp, loaded only when an image is actually processed: it's a native module, so routes that
+ * just list yums never pay for it (or fail with it). See next.config.ts for its bundling.
+ */
+export const loadSharp = async () => (await import("sharp")).default;
 
 export const STICKER_MODEL = "google/gemini-2.5-flash-image";
 
@@ -40,6 +45,7 @@ ${frame(shape)}`;
 
 /** Asks the model for the sticker. Throws with a plain reason on failure. */
 async function draw(prompt: string, photo: Image | null): Promise<Buffer> {
+  const sharp = await loadSharp();
   const key = process.env.OPENROUTER_API_KEY;
   if (!key) throw new Error("OPENROUTER_API_KEY is not set.");
   const content: object[] = [{ type: "text", text: prompt }];
@@ -73,6 +79,7 @@ async function draw(prompt: string, photo: Image | null): Promise<Buffer> {
  * shrinks to a 512 px WebP.
  */
 export async function cutOut(input: Buffer): Promise<Buffer> {
+  const sharp = await loadSharp();
   const { data, info } = await sharp(input).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width: w, height: h } = info;
   const light = (i: number) => data[i] > 225 && data[i + 1] > 225 && data[i + 2] > 225;
@@ -110,6 +117,7 @@ export async function cutOut(input: Buffer): Promise<Buffer> {
  */
 const SIZE = 512, PAD = 38, RIM = 9, LINE = 6;
 async function dieCut(png: Buffer): Promise<Buffer> {
+  const sharp = await loadSharp();
   const clear = { r: 0, g: 0, b: 0, alpha: 0 };
   const inner = SIZE - PAD * 2;
   const { data } = await sharp(png).resize(inner, inner, { fit: "contain", background: clear }).extend({ top: PAD, bottom: PAD, left: PAD, right: PAD, background: clear }).raw().toBuffer({ resolveWithObject: true });

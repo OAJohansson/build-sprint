@@ -1,8 +1,7 @@
 import { after } from "next/server";
-import sharp from "sharp";
 import { guard } from "@/lib/server/access";
 import { serverError } from "@/lib/server/failure";
-import { makeSticker } from "@/lib/server/sticker";
+import { loadSharp, makeSticker } from "@/lib/server/sticker";
 import { parseFields } from "@/lib/yum";
 
 // The sticker is drawn after the response (decision 0029), within this route's time limit.
@@ -41,6 +40,7 @@ export async function POST(request: Request) {
     let photo = null;
     if (file instanceof File && file.size > 0) {
       // Keep the original as it came (already shrunk on the phone), only re-encoded to WebP.
+      const sharp = await loadSharp();
       const bytes = await sharp(Buffer.from(await file.arrayBuffer())).rotate().resize(1600, 1600, { fit: "inside", withoutEnlargement: true }).webp({ quality: 84 }).toBuffer();
       photo = { bytes: new Uint8Array(bytes), type: "image/webp" };
     }

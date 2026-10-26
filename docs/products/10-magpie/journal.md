@@ -130,6 +130,15 @@ What happened, what was decided and why. Newest last.
   bypass token on the real project (a security setting).
 - **Eval report** written (`eval-report.md`).
 
+- **Final-review blocker (27 Oct, early):** on the preview every `/api/yums` returned 500:
+  `sharp` couldn't load `libvips-cpp.so` on Vercel. Root cause: Next's file tracer follows
+  sharp's JS but not the shared library its native addon loads, so the bundle had sharp without
+  libvips (the local trace showed the same gap for the macOS build). And `sharp` was imported at
+  the top of the list route, so even listing yums failed. Fix: load sharp lazily only where
+  images are processed, and add the libvips package to every API route's bundle
+  (`outputFileTracingIncludes` in `next.config.ts`). Lesson: check a native module on the real
+  platform early: the first preview should have been opened, not just deployed.
+
 ## To carry over
 
 For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md).
@@ -141,6 +150,8 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   so a slow AI step never makes the user wait (Magpie's stickers).
 - Building with AI: move a rule the model won't keep (Magpie's sticker outline) out of the prompt
   and into deterministic code around the model; prompt for what it does well.
+- Technology: native Node modules (sharp) on Vercel: Next's tracer misses shared libraries loaded
+  by the addon; add them with `outputFileTracingIncludes`, and import native modules lazily.
 - Process: `vercel curl --yes` links (and creates!) a project named after the folder; link the
   folder to the right project first, or don't pass --yes.
 - Process: the `data-evals` agent file existed but wasn't loadable as an agent type in a session

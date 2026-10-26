@@ -633,3 +633,12 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   client and the sync math as plain functions with tests (12). Live re-run: 4.2× real time, 0
   late, playhead 5.4 s behind the Deck, pause and seek behave. The spike page uses the engine; no
   product UI built. `evals-runs/2026-10-26-lab-spike.md` has the numbers.
+- **Revised Lab brief (L153–L161):** the jobs agreed with the owner in the parent session, one
+  question at a time: see the structure with layers; re-listen and isolate; ask the Mentor; make my
+  own on the same screen; save and use in the Studio. 4 soloable parts with estimated sub-layers
+  and a chord lane; Studio-like playback with seek, section loop and "catching up…"; Mentor aware
+  of what's soloed; Make synth-first with A/B, macro presets, Mentor suggestions and local patch
+  matching; library of sound + loop; full Studio lane model. Kickoff slices, requirements (B1–B11),
+  evals (Y1–Y10), cost ($150–250 Claude) and backlog updated. PM call L161: a loop's separated
+  parts stay in memory only while the loop is on, for seamless loops and A/B. Design restarts: 10
+  new rough directions.

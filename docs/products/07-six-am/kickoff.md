@@ -536,8 +536,8 @@ estimates that look like measurements; more than a few knobs per synth.
 
 # Kickoff pack: Six AM Lab (Phase 4, Founder v2)
 
-The owner's calls of 26 Oct, given in the parent session and transcribed here by the PM (L143–L149
-in `decisions.md`). Sources in `kickoff-source.md`: C2 "listen, never copy", DR-2 (live stems),
+The owner's calls of 26 Oct, given in the parent session and transcribed here by the PM (L143–L149,
+revised after the design pause by L153–L161 in `decisions.md`). Sources in `kickoff-source.md`: C2 "listen, never copy", DR-2 (live stems),
 LA-1/LA-2/LA-3 (Lab). In the owner's words: "the arrangement map screen will become my lab where I
 listen to a piece, get inspired and then create my own sound files. And then I can move over to
 studio mode after and start combining all the files I created into new songs." Option B+C.
@@ -560,20 +560,17 @@ spirit. Their sounds also don't outlive one Studio track.
 The owner: a beginner producer who learns by copying tracks they love, on a MacBook (Apple silicon)
 in Chrome. Most loved tracks are SoundCloud streams they can't download.
 
-## Moment of use and jobs to be done
+## Moment of use and jobs to be done (revised, L153)
 
-At the laptop with a loved track open in the Lab, later in the Studio.
+The owner picks a track in Analyse, clicks Map, and lands on the arrangement map screen, which
+becomes the Lab. Later, the Studio.
 
-1. When a track plays, I want to **solo or mute its parts** (drums, bass, chords/other, vocals) in
-   step with the map, so I can hear what each part does.
-2. When I hear a part, I want the **Mentor to explain it** (what it is, what makes it sound that
-   way), so I learn the craft, not just the name.
-3. When a part inspires me, I want to **make my own sound like it**: shape a bass or chord synth
-   with the Mentor's suggested settings, or generate one with AI from words and numbers.
-4. When I like what I made, I want to **save it to my library** with a name and tags and play it
-   back any time.
-5. When I'm in the Studio, I want to **use my library sounds in lanes**, so my songs are built from
-   my own sounds.
+1. **See the whole song's structure** on a timeline with its layers (visuals help understanding).
+2. **Re-listen and isolate parts**: play, seek, loop a section, solo or mute any part.
+3. **Ask the Mentor about parts**: it knows what's soloed, where the playhead is and the track's
+   numbers.
+4. **Make a similar sound of my own** on the same screen, matching it by ear.
+5. **Save it and use it later in the Studio** for new songs.
 
 ## Today's alternatives
 
@@ -595,36 +592,37 @@ The owner plays a loved track in the Lab, solos the bass, asks the Mentor what m
 shapes their own bass toward it, saves it as "rubber sub", and drops it into a Studio track the same
 evening. Checkable versions in `evals.md` (Lab part).
 
-## MVP and stop line
+## MVP and stop line (revised, L154–L161)
 
 Slices (decision 0028: built, user-tested, evaluated and fixed one at a time; one branch, one PR):
 
 | Slice | Job | Contents |
 | --- | --- | --- |
-| S1 Parts | 1 | Live solo/mute per part (drums, bass, other, vocals) on the map screen, in sync with its playhead; original silent locally |
-| S2 Explain | 2 | The Mentor explains the part you're hearing from measurements and the map; never claims to hear what it can't |
-| S3 Make | 3 | Shape a bass or chord synth toward the part, Mentor suggests settings; AI generation (Stable Audio, text and measurements only) second |
-| S4 Library | 4 | Personal sound library in Supabase (own sounds only): save, name, tag, play |
-| S5 Studio | 5 | The Studio's lanes can use library sounds |
+| S1 Listen | 1, 2 | The map as the Lab: 4 soloable parts (drums, bass, other, vocals) with estimated sub-layers inside (kick, hats… visible, not soloable) and a chord lane; Studio-like playback (play to the end, click to seek, click a section to loop, solo/mute any time, "catching up…" after a seek); the Deck window; delayed playhead |
+| S2 Mentor | 3 | The Mentor on the same screen, aware of the soloed part, section, playhead and measurements |
+| S3 Make | 4 | Synth beside the looping soloed part; level-matched A/B (original vs mine); tagged presets with 4–8 macro knobs; the Mentor's knob suggestions; local AI patch matching from the soloed part; Stable Audio loop as a secondary button |
+| S4 Save | 5 | Personal library in Supabase: sound + loop linked (preset, knob values, note pattern), tags (part, key, BPM, source song), suggested name, rename |
+| S5 Studio | 5 | Full lane model (~11 lane types in collapsible families; add, remove, rename, reorder; volume, pan, mute, solo per lane); library sounds drop into the matching lane type and stay editable |
 
-**Stop line:** saved or exported stems of streamed tracks (never, C2); offline stems of owned files
-(DR-3, the fallback); Remake mode (DR-4); more than four parts (6-stem) → `backlog.md`.
-**If the spike fails:** stop and report to the owner with option A (stems from audio files the
-owner owns) instead of building around it.
+**Stop line:** stored or exported stems of streamed tracks (never, C2); slow-down; live drum split;
+sample search by sound; closeness meter; mixer sends and sidechain pump; automation lanes; ME-7
+remake coaching (owner's backlog, L160); offline stems of owned files (DR-3).
 
-## Requirements
+## Requirements (revised)
 
 | # | Must | Check |
 | --- | --- | --- |
-| B1 | Separation of streamed audio happens in the browser in transient chunks, played and discarded; nothing of the original stored, saved, exported or uploaded | code read + storage + network check |
-| B2 | Original silent locally while a part is soloed | settings check + owner's ear |
+| B1 | Separation of streamed audio only in the browser, in transient memory: chunks played and dropped; a looped section's parts held only while the loop is on (L161); nothing of the original stored, exported or uploaded | code read + storage + network check |
+| B2 | Original silent locally while parts play | settings check + owner's ear |
 | B3 | Separation faster than real time on the owner's Mac; delay reported | measured ratio and delay |
-| B4 | Solo/mute per part follows the map's playhead (delay compensated) | user-tester + code read |
-| B5 | Mentor explains the soloed part from measurements and the map; says what it can't hear | data-evals rubric |
-| B6 | Synth settings suggested toward the part; sounds in key and on tempo | data-evals (offline render) |
-| B7 | AI prompts get text and measurements only, never audio | code read + network check |
-| B8 | Library: save, name, tag, play; survives a reload; own sounds only | data-evals + user-tester |
-| B9 | Studio lanes play library sounds | user-tester |
+| B4 | Map shows 4 soloable parts, each with estimated sub-layers (labelled estimates), and a chord lane | user-tester + code read |
+| B5 | Play to the end, click to seek (with "catching up…"), click a section to loop it seamlessly, solo/mute any time; playhead shows what you hear | user-tester + data-evals (loop seam, playhead offset) |
+| B6 | Mentor knows the soloed part, section, playhead and measurements; never claims to hear what it can't | data-evals rubric |
+| B7 | Make: synth beside the looping part, level-matched A/B, tagged presets with 4–8 macros, Mentor suggestions; sounds in key and on tempo | data-evals (offline render, levels) + user-tester |
+| B8 | AI patch matching runs locally on the in-memory part; no audio leaves the browser | network check + code read |
+| B9 | AI loop prompts get text and measurements only | code read + network check |
+| B10 | Library: sound + loop linked, tags, suggested name, rename; survives a reload; own sounds only | data-evals + user-tester |
+| B11 | Studio full lane model (families, add/remove/rename/reorder, volume/pan/mute/solo); library sounds land in the matching lane and stay editable | user-tester + data-evals |
 
 **No-gos:** storing or uploading any audio of the original, in any form; sending it to Stable Audio,
 Lyria or any API; AI keys in the browser; test data in the owner's real records; past the stop line.
@@ -632,7 +630,11 @@ Lyria or any API; AI keys in the browser; test data in the owner's real records;
 ## Feel references
 
 The existing Six AM look and the arrangement map screen as the starting point. Ten rough
-prototypes, the owner picks 3, then 1 (L148). Remove first: the owner dislikes clutter.
+prototypes, the owner picks 3, then 1 (L148). Restarted from the revised jobs after the pause
+(L152): the first 10 rough directions are kept for reference only. Remove first: the owner dislikes
+clutter. Competitive references (research in the parent session): Ableton/Logic stems as stacked
+colour-coded lanes with solo; Logic's chord track; Ableton's time selection; Syntorial's match by
+ear; Splice's key- and tempo-matched stacks; Learning Synths' step explanations.
 
 **The feel in one sentence:** the map, with headphones on: one part at a time, quiet, and a clear
 way from "I hear it" to "I made mine".
@@ -647,21 +649,25 @@ if it heard it.
 
 - Rights (L143): the original never leaves memory; AI gets words and numbers only; personal use;
   a public release would need a licence.
-- Spike first, max about 2 hours (L144); fail → stop and offer option A.
-- Library in Supabase, the owner's own sounds only (L146); graders use the test sandbox.
+- Spike first (L144): **passed** (L150, L151): 3–4× real time live, ~5.5 s delay, original silent.
+- Library in Supabase, the owner's own sounds only (L146, L158): sound + loop linked; graders use
+  the test sandbox.
+- Section loops and A/B replay the loop's separated parts from memory while the loop is on (L161).
 
-## Cost estimate (L149)
+## Cost estimate (L149, revised for the bigger scope)
 
 | Item | Estimate |
 | --- | --- |
-| Claude for PM and squad (spike, 10 rough designs, prototypes, one critic, 5 slices, user tests, evals) | roughly $80–130, kept lean: one agent at a time, short briefs |
-| Mentor calls (builders, tests) | ~$0.20 |
+| Claude for PM and squad (10 new rough designs, prototypes of 3, one critic, 5 slices incl. the Studio lane model, user tests, evals) | roughly $150–250, kept lean: one agent at a time, short briefs |
+| Mentor calls (builders, tests) | ~$0.30 |
 | Stable Audio (S3 checks and tests, ~20 draws at ~8 credits) | ~$1.60 |
-| Model download (htdemucs, ~170 MB from Hugging Face, cached by the browser) | free |
+| Model download (htdemucs, 180 MB, cached) and local patch matching | free |
 | Supabase (existing free project) | free |
 
 ## Unit tests
 
-1. Chunk scheduler: chunk start/end times, overlap trim, the playback delay against the playhead
-   (edges: first chunk, a seek, a pause).
-2. Library: tag normalisation and name defaults.
+1. Chunk plan and playhead sync (done: `src/lib/lab/stream.test.ts`, `sync.test.ts`): window and
+   region positions, delay, pause, seek, empty history.
+2. Section loop: loop start/end on bars, wrap-around, a loop longer than the buffer cap.
+3. Library: tag normalisation and the suggested name.
+4. Studio lane model: reorder, rename, and which lane type a library sound lands in.

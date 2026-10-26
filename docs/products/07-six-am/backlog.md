@@ -74,3 +74,15 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Pasting two links separated by a space in Analyse adds only the first | Found in the follow-up pass | later (small) |
 | Studio minors from break-ui/web guidelines (26 Oct): no zoom/scroll on long tracks (3 px blocks at 512 bars); ruler not settable by keyboard; crate names wrap at 1024; no empty-track hint; arrow-key moves overwrite neighbours; subtle focus on the name field; mixed RTL names truncate mid-word; disabled Undo faint | Studio ship checks (L142) | later |
 | Follow-up leftovers: Studio ruler numbers 2.40:1; blank SoundCloud widget while a track loads; first visit sends two requests (creates "My first track"); crate names wrap at 1024 | User test 26 Oct (follow-up) | later |
+
+## Lab follow-ups (owner, 26 Oct, L160)
+
+| Idea | Why | Status |
+| --- | --- | --- |
+| Sample search by sound (Splice-like) | Find a real sample close to the part you hear | later |
+| Closeness meter (how near my sound is to the part) | Feedback while matching by ear | later |
+| Mixer with sends and sidechain pump | Real mixes; house's pump | later |
+| Automation lanes | Filter sweeps and builds | later |
+| Slow-down for owned files | Hear fast parts note by note (the SoundCloud widget can't) | later |
+| Live drum split (kick, snare, hats as separate soloable parts) | Only Moises does it; experiment | experiment |
+| ME-7 remake coaching | Mentor coaches a remake lane by lane | later |

@@ -115,7 +115,7 @@ export function DetailsForm({ title, submitLabel, photoUrl, initial, onBack, onS
           {kind === "drink" && (
             <div className="sub-row mt-0.5">
               {SUB_KINDS.drink.map((s) => (
-                <button key={s.id} type="button" className="chip chip-small" aria-pressed={sub === s.id} onClick={() => setSub(sub === s.id ? null : s.id)}>{s.label}</button>
+                <button key={s.id} type="button" className="chip chip-small px-3" aria-pressed={sub === s.id} onClick={() => setSub(sub === s.id ? null : s.id)}>{s.label}</button>
               ))}
             </div>
           )}
@@ -142,10 +142,10 @@ export function DetailsForm({ title, submitLabel, photoUrl, initial, onBack, onS
           <div className="flex min-h-11 items-center gap-2 text-[14px] text-bark">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E9A97" strokeWidth="2.2" aria-hidden="true" className="flex-none"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z" /><circle cx="12" cy="9" r="2.5" /></svg>
             {city || country ? (
-              <span className="min-w-0 break-words">
-                {[city, country].filter(Boolean).join(", ")}
-                {cityFrom === "here" && <span className="text-dusk"> · from where you are</span>}
-                {cityFrom === "last" && <span className="text-dusk"> · where you were last</span>}
+              <span className="flex min-w-0 flex-col leading-tight">
+                <span className="break-words">{[city, country].filter(Boolean).join(", ")}</span>
+                {cityFrom === "here" && <span className="text-[13px] text-dusk">from where you are</span>}
+                {cityFrom === "last" && <span className="text-[13px] text-dusk">where you were last</span>}
               </span>
             ) : (
               <span className="text-dusk">Which city?</span>

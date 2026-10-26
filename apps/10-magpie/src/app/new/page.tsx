@@ -7,7 +7,7 @@ import { Camera } from "@/components/camera";
 import { DetailsForm } from "@/components/details-form";
 import { Gate } from "@/components/gate";
 import { Maggie, Sparkles } from "@/components/maggie";
-import { Hearts, Sticker } from "@/components/sticker";
+import { Sticker } from "@/components/sticker";
 import { putYum, useBook } from "@/lib/book";
 import { takeSharedPhoto } from "@/lib/photo";
 import { subKindInfo, kindLabel, type Yum, type YumFields } from "@/lib/yum";
@@ -160,23 +160,24 @@ function Saved({ yum: saved }: { yum: Yum }) {
   const book = useBook();
   const yum = book.yums.find((y) => y.id === saved.id) ?? saved;
   const sub = subKindInfo(yum.kind, yum.subKind);
-  const chip = "flex h-8 items-center rounded-full border-2 border-cocoa bg-cream px-3 text-[14px]";
+  const chip = "flex h-8 items-center rounded-full border-2 border-cocoa px-3 text-[14px]";
   return (
     <main className="flex flex-1 flex-col bg-coral">
       <div className="mx-auto flex w-full max-w-[440px] flex-1 flex-col items-center gap-[14px] px-6 pt-[max(48px,env(safe-area-inset-top))] safe-bottom">
         <h1 className="text-center text-[34px] font-semibold leading-[1.1]">Ooh, shiny!</h1>
         <p className="text-center text-[17px]">{yum.name} is on your Latest shelf</p>
-        <div className="relative flex w-[330px] max-w-full flex-col items-center pt-3">
+        {/* Maggie holds the new sticker up (design G): the sticker sits between her raised wings. */}
+        <div className="relative flex w-[330px] max-w-full flex-col items-center">
           <Sparkles className="pointer-events-none absolute inset-0 h-full w-full" />
-          <div className="stick-in">
-            <Sticker yum={yum} size={180} tilt={false} />
+          <div className="stick-in relative z-10">
+            <Sticker yum={yum} size={170} tilt={false} />
           </div>
-          <Maggie pose="cheer" size={210} className="-mt-3" />
+          <Maggie pose="cheer" size={330} className="-mt-[50px]" />
         </div>
         <ul className="flex flex-wrap justify-center gap-2" aria-label="Saved details">
-          <li className={chip}>{sub?.label ?? kindLabel(yum.kind)}</li>
-          {yum.place && <li className={`${chip} max-w-full`}><span className="truncate">{yum.place}</span></li>}
-          <li className={chip}><Hearts n={yum.hearts} size={14} /></li>
+          <li className={`${chip} bg-cream`}>{sub?.label ?? kindLabel(yum.kind)}</li>
+          {yum.place && <li className={`${chip} max-w-full bg-cream`}><span className="truncate">{yum.place}</span></li>}
+          <li className={`${chip} bg-cream`} aria-label={`${yum.hearts} of 5 hearts`}>{"♥".repeat(yum.hearts)}</li>
           <li className={`${chip} bg-[#FFD166]`}>yum no. {yum.number}</li>
         </ul>
         <div className="flex-1" />

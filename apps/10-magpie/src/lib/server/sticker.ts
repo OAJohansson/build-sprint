@@ -9,17 +9,19 @@ import { kindLabel, stickerShape, subKindInfo, type Yum } from "@/lib/yum";
 
 export const STICKER_MODEL = "google/gemini-2.5-flash-image";
 
-const STYLE = `Style: a flat cartoon illustration with bold, thick, even dark-brown outlines (#3B1F1A) around every shape. Flat colour fills, no gradients, no shading except one small white highlight, no texture, no photo detail. Simple, chunky, friendly shapes, like a cute vinyl sticker.`;
+const STYLE = `Style: a flat cartoon illustration with bold, thick, even dark-brown outlines (#3B1F1A) around every shape. Flat colour fills only: no gradients, no shading, no shine or glossy highlights, no drop shadow, no texture, no photo detail. Plain surfaces: leave out patterns, prints and writing on bowls, plates, cups and cloths. Simple, chunky, friendly shapes with few details, like a cute vinyl sticker.`;
 
 const frame = (shape: "round" | "square") =>
-  `${shape === "round" ? "The sticker is round: a soft pastel disc behind the item" : "The sticker is a rounded square with generous round corners: a soft pastel rounded square behind the item"}, in a light colour that suits it; a thick white border around it; a thin dark-brown outline around the white border. Outside the sticker the background is plain pure white.
+  `${shape === "round" ? "The sticker is round: a soft pastel disc behind the item" : "The sticker is a rounded square with generous round corners: a soft pastel rounded square behind the item"}, in a light colour that suits it; a narrow white border around it; and around the white border a bold dark-brown outline, as thick as the outlines on the item. Outside the sticker the background is plain pure white.
 
 No text, no letters, no logos, no labels, no hands, no table, no background scene.`;
 
 export function stickerPrompt(yum: Pick<Yum, "name" | "kind" | "subKind" | "number">, fromPhoto: boolean): string {
   const shape = stickerShape(yum.number);
+  const what = subKindInfo(yum.kind, yum.subKind)?.label ?? kindLabel(yum.kind);
+  const name = yum.name.replace(/"/g, "'");
   if (fromPhoto) {
-    return `Turn the food or drink in this photo into one die-cut sticker for a cheerful sticker book.
+    return `Turn the ${what.toLowerCase()} in this photo, "${name}", into one die-cut sticker for a cheerful sticker book. If the photo shows several things, draw only that one.
 
 ${STYLE}
 
@@ -27,8 +29,7 @@ Draw only the main dish or drink with its glass, cup, plate or bowl, centred and
 
 ${frame(shape)}`;
   }
-  const what = subKindInfo(yum.kind, yum.subKind)?.label ?? kindLabel(yum.kind);
-  return `Draw one die-cut sticker for a cheerful sticker book of "${yum.name.replace(/"/g, "'")}" (${what.toLowerCase()}).
+  return `Draw one die-cut sticker for a cheerful sticker book of "${name}" (${what.toLowerCase()}).
 
 ${STYLE}
 

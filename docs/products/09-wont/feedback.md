@@ -46,3 +46,9 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 40 | Re-check N5 | Card title shows lowercase as typed ("read in bed") | fixed |
 | 41 | Re-check 3 N8 (major) | Double tap on "Add to my board" adds the habit twice | fixed |
 | 42 | Re-check 3 | Focused field after an empty submit hides its label; long-absence stop line vague ("went unlogged" though a slip was logged) | polish |
+| 43 | Critic, Sync screen (6.5/10) | Four names for one idea; unclear where the code comes from; reassurance buried under the field; card-in-card field; three corner radii; footer links read as one sentence | fixing (names, reassurance, hint, footer dot); frame and radii kept: they are the approved habit-form style |
+| 44 | User test v1.1, F1 | Offline cold open / reload / offline footer link → browser error page | fixing |
+| 45 | User test v1.1, F2 | Offline status only in the footer, often below the fold | won't fix: quiet by design, taps never wait |
+| 46 | User test v1.1, F3 | Stop syncing gives no confirmation | fixing |
+| 47 | User test v1.1, F4 | Comeback seen on one device never shows on the other | fixing (L31) |
+| 48 | User test v1.1, F5 | Code typed blind on the phone | fixing |

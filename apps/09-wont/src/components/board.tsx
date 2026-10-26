@@ -150,9 +150,13 @@ export function Board() {
 
       <footer className="w-foot">
         <Link href="/intro" className="w-foot-link">{copy.board.replayIntro}</Link>
-        <Link href="/sync" className="w-foot-link">
-          {!sync.connected ? copy.board.syncOff : sync.status === "offline" ? copy.board.syncOffline : copy.board.syncOn}
-        </Link>
+        <span className="w-foot-dot" aria-hidden="true">·</span>
+        {/* Feedback 44: offline the status is plain text; the Sync screen needs the network. */}
+        {sync.connected && sync.status === "offline" ? (
+          <span className="w-foot-link" role="status">{copy.board.syncOffline}</span>
+        ) : (
+          <Link href="/sync" className="w-foot-link">{sync.connected ? copy.board.syncOn : copy.board.syncOff}</Link>
+        )}
       </footer>
 
       <Sheet open={addOpen} onClose={closeAdd} label={copy.board.addSheetTitle}>

@@ -304,3 +304,6 @@ body {
 .w-sync-status { font-size: 15px; line-height: 1.4; }
 .w-sync-note { text-align: center; margin-top: -6px; }
 .w-foot { flex-wrap: wrap; }
+.w-foot { align-items: center; }
+.w-foot-dot { color: var(--muted); font-size: 13px; }
+.w-sync-stopped { color: var(--ink) !important; font-weight: 700; margin-top: 10px !important; }

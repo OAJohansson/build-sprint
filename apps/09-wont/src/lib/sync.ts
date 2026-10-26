@@ -72,7 +72,7 @@ function pick<T>(va: T | undefined, sa: number, vb: T | undefined, sb: number, t
   return { value: va ?? vb, stamp };
 }
 
-/** L28: merge two devices' documents. Deterministic; `a` wins exact ties on a habit's wording. */
+/** L28: merge two documents, `a` being this side. Deterministic; `a` wins exact ties on a habit's wording. */
 export function mergeDocs(a: SyncDoc, b: SyncDoc): SyncDoc {
   const stamps = emptyStamps();
 
@@ -101,13 +101,11 @@ export function mergeDocs(a: SyncDoc, b: SyncDoc): SyncDoc {
     if (r.value && Object.keys(r.value).length) (logs[id] ??= {})[day] = r.value;
   }
 
-  // Seen comebacks only move forward; the intro, once seen anywhere, is seen.
+  // L31 (feedback 47): a seen comeback is per device, so the morning's phone still shows the
+  // message the laptop showed last night. `a` is always this device's side (the client merges
+  // (mine, server)); the server's copy of it is never read. The intro, once seen anywhere, is seen.
   const comebacksSeen: Record<string, DayKey> = {};
-  for (const id of alive) {
-    const x = a.state.comebacksSeen[id], y = b.state.comebacksSeen[id];
-    const v = x === undefined ? y : y === undefined ? x : x >= y ? x : y;
-    if (v !== undefined) comebacksSeen[id] = v;
-  }
+  for (const id of alive) if (a.state.comebacksSeen[id] !== undefined) comebacksSeen[id] = a.state.comebacksSeen[id];
 
   return {
     state: { version: 1, habits, logs, comebacksSeen, introSeen: a.state.introSeen || b.state.introSeen },

@@ -195,12 +195,30 @@ describe("habits", () => {
     expect(laptop.doc.state.habits.find((h) => h.id === "up")?.name).toBe("Up by 7:15");
   });
 
-  it("seen comebacks only move forward and the intro stays seen", () => {
+  it("a seen comeback stays on its own device and the intro stays seen", () => {
     const a: SyncDoc = { state: { ...emptyState(), habits: seed("returning").habits, comebacksSeen: { up: "2026-10-20" }, introSeen: true }, stamps: emptyStamps() };
     const b: SyncDoc = { state: { ...emptyState(), habits: seed("returning").habits, comebacksSeen: { up: "2026-10-24" } }, stamps: emptyStamps() };
     const m = mergeDocs(a, b);
-    expect(m.state.comebacksSeen.up).toBe("2026-10-24");
+    expect(m.state.comebacksSeen.up).toBe("2026-10-20");
+    expect(mergeDocs(b, a).state.comebacksSeen.up).toBe("2026-10-24");
     expect(m.state.introSeen).toBe(true);
+  });
+});
+
+describe("seeding a device that then joins a server with today's taps", () => {
+  it("keeps the server's today tap the seed never touched", () => {
+    const t0 = at(2026, 10, 26, 7);
+    const server = emptyServer();
+    const phone = new Device(seed("returning", t0));
+    phone.sync(server);
+    at(2026, 10, 26, 7, 5);
+    phone.do((s) => toggleKept(s, "up", todayKey(), todayKey(), Date.now()));
+    phone.sync(server);
+    at(2026, 10, 26, 8);
+    const laptop = new Device();
+    laptop.do(() => seed("returning", Date.now()));
+    laptop.sync(server);
+    expect(laptop.doc.state.logs.up[todayKey()].kept).toBeDefined();
   });
 });
 

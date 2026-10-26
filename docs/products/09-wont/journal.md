@@ -173,3 +173,11 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   it. 47 tests, build and lint green. Day logic, copy and design otherwise unchanged.
 - **Graders:** user-tester on V1–V5 (plan.md, v1.1 section) with the sandbox code; design critic
   on the Sync screen.
+- **Grader results:** user test V1, V2, V3, V5 pass, V4 struggle (offline reload / cold open
+  shows the browser's error page; data safe). Every habit-day equal on laptop, phone and server;
+  0 secrets in 355 responses (`report-2026-10-26-sync.md`). Critic 6.5/10 on the Sync screen
+  (feedback 43).
+- **Fixes:** offline shell (L30), comeback seen per device (L31), critic's naming and copy
+  (T24), offline footer as text (T25), stop confirmation, a unit test for the grader's
+  unreproduced "seeded laptop + server-only tap" (passes). 48 tests green. Re-check on the preview
+  deploy, so the service worker runs in a real production build.

@@ -86,7 +86,10 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
 
   // Edits that come in a stream (a knob or fader being dragged) share one undo step: same `merge` key, one entry.
   const lastMerge = useRef<string | null>(null);
+  // The remove-lane note (S5-2) belongs to one doc: any other edit or undo hides it.
+  const [toastFor, setToastFor] = useState<{ text: string; doc: Doc } | null>(null);
   const commit = useCallback((next: Doc, merge?: string) => {
+    setToastFor(null);
     const prev = docRef.current;
     if (!merge || merge !== lastMerge.current) setPast((p) => [...p.slice(-49), prev]);
     lastMerge.current = merge ?? null;
@@ -100,6 +103,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
   const undo = useCallback(() => {
     const p = pastRef.current;
     if (!p.length) return;
+    setToastFor(null);
     setDoc(p[p.length - 1]);
     setPast(p.slice(0, -1));
   }, []);
@@ -120,14 +124,19 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
   const renameLane = useCallback((id: string, name: string) => editLanes((ls) => renameLaneIn(ls, id, name)), [editLanes]);
   const moveLane = useCallback((id: string, dir: -1 | 1) => editLanes((ls) => moveLaneIn(ls, id, dir)), [editLanes]);
   /** S5-2: removing a lane with blocks says so, with Undo (no confirmation dialog). */
-  const [toast, setToast] = useState<string | null>(null);
-  useEffect(() => { if (!toast) return; const h = setTimeout(() => setToast(null), 6000); return () => clearTimeout(h); }, [toast]);
+  useEffect(() => { if (!toastFor) return; const h = setTimeout(() => setToastFor(null), 6000); return () => clearTimeout(h); }, [toastFor]);
+  const toast = toastFor && toastFor.doc === doc ? toastFor.text : null;
+  /** The note's Undo: undoes the removal only while the doc is still the one right after it. */
+  const undoToast = useCallback(() => {
+    if (toastFor && toastFor.doc === docRef.current) undo();
+    setToastFor(null);
+  }, [toastFor, undo]);
   const removeLane = useCallback((id: string) => {
     const d = docRef.current, ls = lanesOf(d), lane = ls.find((l) => l.id === id);
     const n = d.regions.filter((r) => laneOfRegion(r, ls)?.id === id).length;
     editLanes((l2, d2) => removeLaneFrom(l2, d2.regions, id));
     setSelected(null);
-    if (lane && n) setToast(`Removed ${lane.name}${n > 1 ? ` and ${n} blocks` : " and its block"}`);
+    if (lane && n) setToastFor({ text: `Removed ${lane.name}${n > 1 ? ` and ${n} blocks` : " and its block"}`, doc: docRef.current });
   }, [editLanes]);
   /** A new lane of `type` at the end of its family; returns its id (null when the track is full). */
   const addLane = useCallback((type: LaneType) => {
@@ -445,7 +454,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
     preview, setPreview, group, setGroup, ghost, bin, pxPerBar, lanesRef,
     lanes, silent, laneOf, toggleMute, toggleSolo, setLaneVolume, setLanePan, renameLane, moveLane, removeLane, addLane,
     soundTarget, setSoundTarget,
-    canUndo: past.length > 0, undo, remove, toast, setToast,
+    canUndo: past.length > 0, undo, remove, toast, undoToast,
     crateItem, blockBody, blockGrip, ruler,
   };
 }

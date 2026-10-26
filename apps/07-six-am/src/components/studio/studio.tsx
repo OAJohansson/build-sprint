@@ -15,6 +15,7 @@ import { mentorApi, useAccessCode } from "@/lib/mentor/client";
 import { FAMILIES, colorOf, laneType, type LaneType } from "@/lib/studio-lanes";
 import v from "./lanes.module.css";
 import { parseDoc } from "@/lib/tracks";
+import { autosave } from "@/lib/autosave";
 import { SettingsLink, ViewsNav } from "@/components/views-nav";
 import { useTimeline } from "./use-timeline";
 import { LanesView, cx } from "./lanes";
@@ -272,11 +273,11 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
   // Every edit and undo is saved. S5-1: compare with the doc last sent (at first, the track as
   // loaded), not with the loaded doc: an undo back to the opening state restores that very object
   // and used to be skipped, so the undone edit stayed saved (bug since 19 Oct, 0a25c59).
-  const lastSent = useRef(track.doc);
+  const [saver] = useState(() => autosave(track.doc));
   const changed = useEffectEvent((doc: Doc) => {
-    if (draft || doc === lastSent.current) return;
-    lastSent.current = doc;
-    onChange(savedName.current, doc);
+    if (!saver.change(doc, !!draft)) return;
+    // The debounced save in Studio keeps only the latest doc, as saver.flush() would.
+    onChange(savedName.current, saver.flush()!);
   });
   useEffect(() => { changed(t.doc); }, [t.doc]);
 
@@ -359,7 +360,7 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
       {t.toast ? (
         <div className={v.toast} role="status">
           <span>{t.toast}</span>
-          <button onClick={() => { t.undo(); t.setToast(null); }}>Undo</button>
+          <button onClick={t.undoToast}>Undo</button>
         </div>
       ) : null}
       {t.bin ? (

@@ -269,8 +269,15 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
   const drawerLaneObj = selLane ?? t.lanes.find((l) => l.id === t.soundTarget);
   const closeDrawer = () => { setAddLane(null); t.setSoundTarget(null); t.setSelected(null); };
 
-  // Every edit (and undo) is saved; the track as loaded is already saved.
-  const changed = useEffectEvent((doc: Doc) => { if (!draft && doc !== track.doc) onChange(savedName.current, doc); });
+  // Every edit and undo is saved. S5-1: compare with the doc last sent (at first, the track as
+  // loaded), not with the loaded doc: an undo back to the opening state restores that very object
+  // and used to be skipped, so the undone edit stayed saved (bug since 19 Oct, 0a25c59).
+  const lastSent = useRef(track.doc);
+  const changed = useEffectEvent((doc: Doc) => {
+    if (draft || doc === lastSent.current) return;
+    lastSent.current = doc;
+    onChange(savedName.current, doc);
+  });
   useEffect(() => { changed(t.doc); }, [t.doc]);
 
   const commitName = () => {
@@ -349,6 +356,12 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
       ) : (
         <Crate t={t} mine={mine} />
       )}
+      {t.toast ? (
+        <div className={v.toast} role="status">
+          <span>{t.toast}</span>
+          <button onClick={() => { t.undo(); t.setToast(null); }}>Undo</button>
+        </div>
+      ) : null}
       {t.bin ? (
         <div className={s.binZone}>
           <div data-bin className={cx(s.bin, t.bin.over && s.binOver)}>

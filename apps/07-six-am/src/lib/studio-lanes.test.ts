@@ -113,6 +113,12 @@ describe("mute and solo", () => {
     expect(audible(toggleSolo(toggleMute(ls, "b"), "b"))).toEqual(["b"]);
     expect(audible(toggleSolo(toggleSolo(ls, "b"), "b"))).toEqual(["k", "h", "b", "c"]);
   });
+  it("hear-only clears that lane's mute, and mute clears its hear-only (S5-7)", () => {
+    const m = toggleMute(ls, "b");
+    expect(toggleSolo(m, "b")[2]).toMatchObject({ muted: false, soloed: true });
+    expect(toggleMute(toggleSolo(ls, "b"), "b")[2]).toMatchObject({ muted: true, soloed: false });
+    expect(toggleSolo(toggleSolo(m, "b"), "b")[2]).toMatchObject({ muted: false, soloed: false });
+  });
   it("gain is the type's trim plus the fader; pan −1…1", () => {
     expect(laneMix(ls)[2]).toEqual({ id: "b", audible: true, gainDb: -1, pan: -0.5 });
   });

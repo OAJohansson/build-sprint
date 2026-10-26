@@ -119,7 +119,16 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
   const setLanePan = useCallback((id: string, pan: number) => editLanes((ls) => setPan(ls, id, pan), `pan:${id}`), [editLanes]);
   const renameLane = useCallback((id: string, name: string) => editLanes((ls) => renameLaneIn(ls, id, name)), [editLanes]);
   const moveLane = useCallback((id: string, dir: -1 | 1) => editLanes((ls) => moveLaneIn(ls, id, dir)), [editLanes]);
-  const removeLane = useCallback((id: string) => { editLanes((ls, d) => removeLaneFrom(ls, d.regions, id)); setSelected(null); }, [editLanes]);
+  /** S5-2: removing a lane with blocks says so, with Undo (no confirmation dialog). */
+  const [toast, setToast] = useState<string | null>(null);
+  useEffect(() => { if (!toast) return; const h = setTimeout(() => setToast(null), 6000); return () => clearTimeout(h); }, [toast]);
+  const removeLane = useCallback((id: string) => {
+    const d = docRef.current, ls = lanesOf(d), lane = ls.find((l) => l.id === id);
+    const n = d.regions.filter((r) => laneOfRegion(r, ls)?.id === id).length;
+    editLanes((l2, d2) => removeLaneFrom(l2, d2.regions, id));
+    setSelected(null);
+    if (lane && n) setToast(`Removed ${lane.name}${n > 1 ? ` and ${n} blocks` : " and its block"}`);
+  }, [editLanes]);
   /** A new lane of `type` at the end of its family; returns its id (null when the track is full). */
   const addLane = useCallback((type: LaneType) => {
     const r = addLaneTo(lanesOf(docRef.current), type);
@@ -436,7 +445,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
     preview, setPreview, group, setGroup, ghost, bin, pxPerBar, lanesRef,
     lanes, silent, laneOf, toggleMute, toggleSolo, setLaneVolume, setLanePan, renameLane, moveLane, removeLane, addLane,
     soundTarget, setSoundTarget,
-    canUndo: past.length > 0, undo, remove,
+    canUndo: past.length > 0, undo, remove, toast, setToast,
     crateItem, blockBody, blockGrip, ruler,
   };
 }

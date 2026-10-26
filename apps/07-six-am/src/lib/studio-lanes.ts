@@ -78,7 +78,8 @@ export const LEGACY_LANES: { id: string; type: LaneType; name: string }[] = [
 /** A track's lanes: its own when it has them, else the 4 old lanes with its mute and solo. */
 export function lanesOf(d: Pick<Doc, "muted" | "soloed" | "lanes">): Lane[] {
   if (d.lanes?.length) return d.lanes;
-  return LEGACY_LANES.map((l, i) => ({ ...l, volumeDb: 0, pan: 0, muted: !!d.muted[i], soloed: !!d.soloed?.[i] }));
+  // S5-7: an old track could save a lane both muted and soloed; solo always won, so it opens soloed only.
+  return LEGACY_LANES.map((l, i) => ({ ...l, volumeDb: 0, pan: 0, muted: !!d.muted[i] && !d.soloed?.[i], soloed: !!d.soloed?.[i] }));
 }
 
 /** The lane a region is on: its own `lane` when that lane exists, else the first lane playing
@@ -203,8 +204,9 @@ export const clampPan = (pan: number) => (Number.isFinite(pan) ? Math.min(100, M
 
 export const setVolume = (lanes: Lane[], id: string, db: number) => patch(lanes, id, () => ({ volumeDb: clampDb(db) }));
 export const setPan = (lanes: Lane[], id: string, pan: number) => patch(lanes, id, () => ({ pan: clampPan(pan) }));
-export const toggleMute = (lanes: Lane[], id: string) => patch(lanes, id, (l) => ({ muted: !l.muted }));
-export const toggleSolo = (lanes: Lane[], id: string) => patch(lanes, id, (l) => ({ soloed: !l.soloed }));
+/** Mute on clears that lane's hear-only, and hear-only on clears its mute (S5-7: never both lit). */
+export const toggleMute = (lanes: Lane[], id: string) => patch(lanes, id, (l) => (l.muted ? { muted: false } : { muted: true, soloed: false }));
+export const toggleSolo = (lanes: Lane[], id: string) => patch(lanes, id, (l) => (l.soloed ? { soloed: false } : { soloed: true, muted: false }));
 
 // ── Mix: mute and solo rules ──────────────────────────────────────────────────────────────────────
 
@@ -237,7 +239,7 @@ export function parseLanes(v: unknown): Lane[] | null {
     if (!isLaneType(x.type) || typeof x.name !== "string") return null;
     if (typeof x.volumeDb !== "number" || typeof x.pan !== "number" || typeof x.muted !== "boolean" || typeof x.soloed !== "boolean") return null;
     const name = x.name.normalize("NFC").replace(/\s+/g, " ").trim().slice(0, MAX_LANE_NAME).trim() || laneType(x.type).name;
-    out.push({ id: x.id, type: x.type, name, volumeDb: clampDb(x.volumeDb), pan: clampPan(x.pan), muted: x.muted, soloed: x.soloed });
+    out.push({ id: x.id, type: x.type, name, volumeDb: clampDb(x.volumeDb), pan: clampPan(x.pan), muted: x.muted && !x.soloed, soloed: x.soloed });
   }
   return sortLanes(out);
 }

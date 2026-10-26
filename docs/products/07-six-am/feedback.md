@@ -120,10 +120,10 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| S5-1 | blocker | Undo/redo not saved: an undone lane removal is lost after a reload | open |
-| S5-2 | major | Removing a lane with blocks has no confirmation or toast | open |
-| S5-3 | minor | Hit areas < 28 px in the lane header, fold, + Add lane | open |
-| S5-4 | minor | Contrast 3.0:1 on crate meta, ruler numbers, counts | open |
-| S5-5 | minor | Crate shows ~1¼ rows of My sounds | open |
-| S5-6 | minor | Block drawer sliders unlabelled, unlike the Lab's knobs | open |
-| S5-7 | polish | Hear-only and mute lit together on one lane | open |
+| S5-1 | blocker | Undo/redo not saved: an undone lane removal is lost after a reload | fixed (L206, T108), re-test |
+| S5-2 | major | Removing a lane with blocks has no confirmation or toast | fixed (L206, T108), re-test |
+| S5-3 | minor | Hit areas < 28 px in the lane header, fold, + Add lane | fixed (L206, T108), re-test |
+| S5-4 | minor | Contrast 3.0:1 on crate meta, ruler numbers, counts | fixed (L206, T108), re-test |
+| S5-5 | minor | Crate shows ~1¼ rows of My sounds | fixed (L206, T108), re-test |
+| S5-6 | minor | Block drawer sliders unlabelled, unlike the Lab's knobs | fixed (L206, T108), re-test |
+| S5-7 | polish | Hear-only and mute lit together on one lane | fixed (L206, T108), re-test |

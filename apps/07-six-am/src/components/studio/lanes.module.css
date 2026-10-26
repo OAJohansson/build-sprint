@@ -1,7 +1,7 @@
 /* The Studio's lanes (S5, Fold, L194/L200; from the approved prototype in /dev/studio-lanes): every
    lane under a family row that folds, 56 px lanes with a 220 px gutter, flat clips at 25% of the
    lane colour, mix controls on hover, one accent (Play) outside the lanes. No motion beyond 150 ms colour. */
-.tl { --faint: #6f6357; grid-row: 2; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: #3a322c transparent; position: relative; }
+.tl { --faint: #958a7c; grid-row: 2; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: #3a322c transparent; position: relative; }
 .tl :focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
 .fadeEnd { -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent); }
 .content { position: relative; min-height: 100%; display: flex; flex-direction: column; }
@@ -28,6 +28,10 @@
 .famGutFolded { height: 34px; }
 .famHead { height: 20px; display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; padding: 0 8px; background: none; border: 0; color: var(--muted); font: 500 11px var(--f-mono); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; text-align: left; white-space: nowrap; }
 .famHead:hover { color: var(--ink); }
+/* S5-3: the fold row stays 20 px to look at; its hit area is 28 px */
+.famHead, .famPlus, .addBtn { position: relative; }
+.famHead::after, .famPlus::after { content: ""; position: absolute; inset: -4px 0; }
+.addBtn::after { content: ""; position: absolute; inset: -2px 0; }
 .famHead svg { width: 12px; height: 12px; flex: none; transition: transform 150ms ease-out; }
 .folded svg { transform: rotate(-90deg); }
 .famCount { color: var(--faint); text-transform: none; letter-spacing: 0; }
@@ -38,24 +42,24 @@
 
 /* A lane's gutter: name, hear-only and mute icons, ⋯; volume and pan on their own line on hover */
 .colorBar { position: absolute; left: 14px; top: 7px; bottom: 7px; width: 3px; border-radius: 2px; background: var(--c); }
-.laneHead { height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 0 8px 0 24px; }
-.line1 { display: flex; align-items: center; gap: 2px; min-width: 0; height: 24px; }
+.laneHead { height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 0; padding: 0 8px 0 24px; }
+.line1 { display: flex; align-items: center; gap: 0; min-width: 0; height: 28px; }
 .name { flex: 0 1 auto; min-width: 0; max-width: 14ch; font: 500 12.5px var(--f-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: none; border: 1px solid transparent; border-radius: 4px; color: var(--ink); padding: 3px 4px; text-align: left; cursor: text; transition: color 150ms ease-out; }
 .nameInput { flex: 1; min-width: 0; font: 500 12.5px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--gold); border-radius: 4px; padding: 3px 4px; outline: none; user-select: text; }
 .icons { display: flex; align-items: center; gap: 2px; margin-left: auto; }
 /* The Lab's option B (L177, L200): shown on hover or focus; a lit one stays. */
-.hearIcon { width: 24px; height: 24px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 5px; background: none; color: var(--muted); cursor: pointer; opacity: 0; transition: opacity 150ms ease-out, color 150ms ease-out; }
+.hearIcon { width: 28px; height: 28px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 5px; background: none; color: var(--muted); cursor: pointer; opacity: 0; transition: opacity 150ms ease-out, color 150ms ease-out; }
 .gut:hover .hearIcon, .gut:focus-within .hearIcon, .hearIcon[data-lit] { opacity: 1; }
 .hearIcon[data-lit] { color: var(--gold); }
 .hearIcon[data-lit="mute"] { color: var(--ink); }
 @media (hover: hover) and (pointer: fine) { .hearIcon:hover { background: #2b2622; color: var(--ink); } }
-.more { width: 24px; height: 24px; flex: none; border: 0; border-radius: 5px; background: none; color: var(--muted); cursor: pointer; font: 600 13px var(--f-mono); visibility: hidden; }
+.more { width: 28px; height: 28px; flex: none; border: 0; border-radius: 5px; background: none; color: var(--muted); cursor: pointer; font: 600 13px var(--f-mono); visibility: hidden; }
 .gut:hover .more, .gut:focus-within .more, .more[aria-expanded="true"] { visibility: visible; }
 .more:hover { color: var(--ink); background: rgba(241,230,211,.06); }
 .mix { display: flex; align-items: center; gap: 12px; padding-left: 4px; height: 16px; visibility: hidden; }
 .gut:hover .mix, .gut:focus-within .mix { visibility: visible; }
 .mixItem { display: flex; align-items: center; gap: 6px; font: 400 11px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.mixItem input { -webkit-appearance: none; appearance: none; height: 16px; margin: 0; background: transparent; cursor: pointer; }
+.mixItem input { -webkit-appearance: none; appearance: none; height: 28px; margin: -6px 0; background: transparent; cursor: pointer; }
 .mixItem input::-webkit-slider-runnable-track { height: 2px; background: #3a322c; }
 .mixItem input::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; margin-top: -4px; border-radius: 50%; background: var(--c); }
 .mixItem input::-moz-range-track { height: 2px; background: #3a322c; }
@@ -119,7 +123,7 @@
 .facts b { font-weight: 400; }
 
 /* The crate (168 px): tabs and a 40 px still disc in one header row; 300 px cards with a grip */
-.crate { grid-row: 3; min-height: 0; height: 168px; display: flex; flex-direction: column; border-top: 1px solid var(--line); background: var(--crate-bg); --faint: #6f6357; }
+.crate { grid-row: 3; min-height: 0; height: 200px; display: flex; flex-direction: column; border-top: 1px solid var(--line); background: var(--crate-bg); --faint: #958a7c; }
 .crateHead { display: flex; align-items: flex-end; gap: 24px; padding: 0 24px; border-bottom: 1px solid var(--line); min-height: 52px; flex: none; }
 .tabs { display: flex; gap: 22px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
 .tab { flex: none; background: none; border: 0; padding: 0 0 12px; font: 400 13px var(--f-mono); color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: color 150ms ease-out; }
@@ -133,9 +137,9 @@
 .disc i { width: 14px; height: 14px; border-radius: 50%; background: #3b2a1f; transition: background 150ms ease-out; }
 .discOn i { background: var(--c); }
 .faint { color: var(--faint); }
-.cards { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(auto-fill, 300px); justify-content: start; grid-auto-rows: 100px; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: #3a322c transparent; }
+.cards { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(auto-fill, 300px); justify-content: start; grid-auto-rows: 74px; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: #3a322c transparent; }
 .card { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 0 36px 0 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); cursor: grab; touch-action: none; position: relative; transition: background 150ms ease-out, box-shadow 150ms ease-out; }
-.card::before { content: ""; position: absolute; left: 10px; top: 22px; bottom: 22px; width: 3px; border-radius: 2px; background: var(--c); }
+.card::before { content: ""; position: absolute; left: 10px; top: 16px; bottom: 16px; width: 3px; border-radius: 2px; background: var(--c); }
 .card::after { content: "⋮⋮"; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font: 600 13px/1 var(--f-mono); letter-spacing: -2px; color: var(--muted); opacity: 0; transition: opacity 150ms ease-out; }
 @media (hover: hover) {
   .card:hover { background: rgba(241,230,211,.05); box-shadow: inset 0 0 0 1px #3a322c; }
@@ -150,3 +154,10 @@
 .cardMeta span { font: 400 11px var(--f-mono); color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .empty { padding: 18px 24px; font: 400 12px var(--f-mono); color: var(--muted); max-width: 640px; line-height: 1.5; }
 .dragChip { position: fixed; z-index: 50; padding: 6px 10px; border-radius: 6px; background: var(--c); color: var(--bg); font: 500 12px var(--f-mono); box-shadow: 0 8px 20px rgba(0,0,0,.5); pointer-events: none; white-space: nowrap; transform: translate(12px, 12px); }
+
+/* S5-2: after removing a lane with blocks, a short note with Undo (6 s) */
+.toast { position: fixed; left: 50%; bottom: 216px; transform: translateX(-50%); z-index: 40; display: flex; align-items: center; gap: 14px; padding: 8px 8px 8px 14px; border-radius: 8px; background: #2b2622; border: 1px solid #3a322c; box-shadow: 0 12px 28px rgba(0,0,0,.5); font: 400 12px var(--f-mono); color: var(--ink); animation: toastIn 150ms ease-out; }
+@keyframes toastIn { from { opacity: 0; } }
+.toast button { min-height: 28px; padding: 0 10px; border: 0; border-radius: 6px; background: none; color: var(--gold); font: 500 12px var(--f-mono); cursor: pointer; }
+.toast button:hover { background: rgba(241,230,211,.06); }
+@media (prefers-reduced-motion: reduce) { .toast { animation: none; } }

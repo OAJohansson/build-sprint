@@ -39,7 +39,7 @@ export function LibDrawer({ t, sound, color, onClose }: { t: Timeline; sound: Li
               <span className={s.knobName}>{MACRO_SPECS[id].name}</span>
               <input type="range" min={0} max={1000} step={1} value={Math.round(sound.macros[id] * 1000)}
                 onChange={(e) => change(editLibLoop(sound, { macros: { [id]: Number(e.target.value) / 1000 } }), `lib:${sound.id}:${id}`)}
-                aria-valuetext={macroWord(id, sound.macros[id])} />
+                aria-label={MACRO_SPECS[id].name} aria-valuetext={`${macroWord(id, sound.macros[id])}, ${Math.round(sound.macros[id] * 100)}%`} />
               <output className={s.knobValue}>{macroWord(id, sound.macros[id])}</output>
             </label>
           ))}

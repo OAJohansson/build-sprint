@@ -673,3 +673,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   16-bar loop switched to memory after its first pass and wrapped seamlessly (wrap step below each
   part's 99th-percentile step); storage after runs: only the model in Cache Storage. Chords read
   Gm, –, Gm on one track: unproven. 278 tests. Open: Y8 at the speaker output; by-ear loop timing.
+- **Sign-off feedback (L167–L171):** Send arrow in the Mentor input; one Hear bar (All / parts, only/without, Shift-click two) instead of S/M on the map; clearer position, loop chip and song facts; no "← Whole song", "← All tracks"; Mentor as a plain chat with bar tags, dots instead of numbered pins. One design round, then the screens go back on the canvas.

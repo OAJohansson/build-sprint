@@ -130,3 +130,54 @@ Every state is built relative to the current clock, so set the clock first, then
 
 Note: the habit's first day is a grace day. If it is left unlogged, it is neither a miss nor
 counted in the rate (so a habit made late in the evening doesn't open with a comeback message).
+
+## v1.1 · Sync between phone and laptop (26 Oct)
+
+Checks S1–S8 in [`../kickoff-v1.1-sync.md`](../kickoff-v1.1-sync.md). Riskiest assumption: **no
+data is lost on first sync**.
+
+**Setup.** `pnpm -F 09-wont dev --port 3109`; `apps/09-wont/.env.local` holds the Supabase keys and
+two codes. Use **only `SANDBOX_ACCESS_CODE`** (read it from `.env.local`, never print it in the
+report); never `ACCESS_CODE`, which opens the owner's real board. The two devices are **two separate
+browser contexts** (own localStorage and cookies) on the same server: "laptop" at 1280 × 800,
+"phone" at 390 × 844. The sandbox document may hold data from an earlier run: before starting,
+reset it with one call that replaces nothing real (the PM does this; graders start from an empty
+sandbox). Seeding is refused on a device synced to the owner's board, by design.
+
+### V1 · First connect keeps the laptop's history (riskiest assumption)
+
+The laptop has used Wont since Saturday; the phone has never opened it. Laptop: `?seed=owner-today`,
+note every card's number and each habit's 14-day history (⋯ → habit screen). Footer → "Use on
+another device" → type the code → Turn on sync.
+**Bar:** after connecting, every number and history day on the laptop is exactly as before; nothing
+flickers to empty.
+
+### V2 · The empty phone gets everything
+
+Phone: fresh context, intro (Skip), empty board. Footer → type the code.
+**Bar:** within a few seconds without a reload the phone shows the same habits, numbers, week
+strip and 14-day histories as the laptop.
+
+### V3 · A morning tap on the phone, seen on the laptop
+
+Phone: tap "Up by 7:00" kept. Laptop: switch back to the tab (focus) or reload.
+**Bar:** the tap shows on the phone at once (no wait, no spinner); the laptop shows it after focus
+or reload; undo on the laptop disappears on the phone after its next focus.
+
+### V4 · Offline tap, then reconnect
+
+Phone: go offline (`context.setOffline(true)`), tap pouches "clean so far" and log one urge. The
+footer reads "Offline, saved here". Laptop: meanwhile tap a different habit kept. Phone back
+online.
+**Bar:** the offline taps show at once and survive a reload while offline; after reconnecting both
+devices show all three changes; nothing duplicated or lost.
+
+### V5 · Wrong code and turning sync off
+
+A third context types a wrong code; then the phone taps "Stop syncing on this device".
+**Bar:** wrong code says so plainly and changes nothing; turning off keeps the phone's board as it
+was.
+
+**Trust checks (sync).** After V4, compare every habit-day on both devices with each other and
+with the laptop's notes from V1: equal, nothing lost. The browser never receives a Supabase key
+(search network responses and page source for `sb_secret`/`SUPABASE`).

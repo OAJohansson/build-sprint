@@ -616,3 +616,8 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   (original silent locally) and solo worked on drums, bass and other. With L150's numbers, the
   riskiest assumptions hold. Next: 10 rough Lab designs (with the separate Deck window), owner
   picks 3.
+- **10 rough Lab directions** (designer, no critic yet, L148): Map, Columns, Tabs, Steps, Bench,
+  Mentor, Room, Crate, Subtitles, Chain. Contact sheet `design/lab-directions.html`, screenshots
+  `design/lab/`, prototypes at `/dev/lab-directions?v=N` (dev only). From the pack: no faders,
+  meters or stem waveforms; the Deck shown as a status, never a player; the Mentor says what it
+  can't measure; four parts in the map's lane colours (T81). Waiting for the owner's 3.

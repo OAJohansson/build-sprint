@@ -1,0 +1,4 @@
+/* The Make macro knob (moved from the Lab's CSS unchanged, T110). Colours come from the page's --muted. */
+.knob { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; white-space: nowrap; border-radius: 8px; padding: 4px; cursor: ns-resize; touch-action: none; user-select: none; }
+.knob[aria-disabled] { cursor: default; }
+.knob small { color: var(--muted); font-size: 10.5px; }

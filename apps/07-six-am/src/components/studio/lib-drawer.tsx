@@ -6,7 +6,8 @@
 // track's key on play, L197).
 import { ChevronDown, X } from "lucide-react";
 import { editLibLoop, type LibLoop } from "@/lib/make/lib-loop";
-import { MACRO_IDS, MACRO_SPECS, MAKE_PRESETS, MAKE_PRESET_IDS, macroWord, type MacroId, type MakePresetId } from "@/lib/make/presets";
+import { MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, type MacroId, type MakePresetId } from "@/lib/make/presets";
+import { Knob } from "@/components/ui/knob";
 import type { Timeline } from "./use-timeline";
 import s from "./sound-drawer.module.css";
 import l from "./lanes.module.css";
@@ -36,15 +37,11 @@ export function LibDrawer({ t, sound, color, onClose }: { t: Timeline; sound: Li
           <p className={s.dim}>{MAKE_PRESETS[sound.preset].about}</p>
           <p className={s.dim}>{sound.name}: saved in {sound.key} {sound.scale} at {Math.round(sound.bpm)} BPM; plays in the track&apos;s key and tempo.</p>
         </section>
-        <section className={s.shape}>
+        {/* T110: the Make room's own knobs (components/ui/knob), so a sound turns the same in both places. */}
+        <section className={s.shape} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
           {MACRO_IDS.map((id: MacroId) => (
-            <label key={id} className={s.knob} title={MACRO_SPECS[id].explain}>
-              <span className={s.knobName}>{MACRO_SPECS[id].name}</span>
-              <input type="range" min={0} max={1000} step={1} value={Math.round(sound.macros[id] * 1000)}
-                onChange={(e) => change(editLibLoop(sound, { macros: { [id]: Number(e.target.value) / 1000 } }), `lib:${sound.id}:${id}`)}
-                aria-label={MACRO_SPECS[id].name} aria-valuetext={`${macroWord(id, sound.macros[id])}, ${Math.round(sound.macros[id] * 100)}%`} />
-              <output className={s.knobValue}>{macroWord(id, sound.macros[id])}</output>
-            </label>
+            <Knob key={id} id={id} value={sound.macros[id]} color={color} disabled={false} reset={MAKE_PRESETS[sound.preset].macros[id]}
+              onChange={(v) => change(editLibLoop(sound, { macros: { [id]: v } }), `lib:${sound.id}:${id}`)} />
           ))}
         </section>
         <section className={s.ai}>

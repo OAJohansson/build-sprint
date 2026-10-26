@@ -117,6 +117,19 @@ What happened, what was decided and why. Newest last.
   every sticker (L9). Practice: when a model won't follow a rule reliably, move the rule into
   deterministic code around it.
 
+- **User test** (R1–R12 all pass; S1, S2, S4 pass; S3 6 taps against 5). Fixes F1–F8; the
+  re-check put S3 at 5 taps, ~9 s. Relive scored 3/5: the tester's top idea is a Trips row (one
+  card per away city and month), now first in the backlog for the owner to decide.
+- **A sticker failed on an OpenRouter 429**: the photo stood in, "Draw it again" worked; added one
+  retry on 429/5xx.
+- **Critic round 3:** H 9, E 9, G 9.5, K 9, L 8.5. Rounds stopped (0028: stop once the score stops
+  moving or hits the target).
+- **Ops:** first preview deploy READY. It sits behind Vercel's login, so scripts can't check it;
+  `vercel curl --yes` then silently created an empty stray project "10-magpie" while linking.
+  Deleting it was refused by the permission check, so it's left for the owner. Not generating a
+  bypass token on the real project (a security setting).
+- **Eval report** written (`eval-report.md`).
+
 ## To carry over
 
 For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md).
@@ -128,5 +141,7 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   so a slow AI step never makes the user wait (Magpie's stickers).
 - Building with AI: move a rule the model won't keep (Magpie's sticker outline) out of the prompt
   and into deterministic code around the model; prompt for what it does well.
+- Process: `vercel curl --yes` links (and creates!) a project named after the folder; link the
+  folder to the right project first, or don't pass --yes.
 - Process: the `data-evals` agent file existed but wasn't loadable as an agent type in a session
   started from another session; check `.claude/agents` registration.

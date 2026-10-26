@@ -49,3 +49,5 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 43 | PM check | A sticker failed on an OpenRouter 429 (rate limit); the photo stood in and Draw it again worked | fixed (one retry after 3 s on 429/5xx) |
 | 44 | User re-check | 'red wine' still finds nothing (no yum has 'red') | fixed (no full match → any-word matches, best first) |
 | 45 | User re-check | Fallback city labelled 'where you were last' on a device that never had one | fixed ('your home city') |
+| 46 | Critic r3 (L 8.5) | Laptop panel shows drink sub-kinds before Drinks is picked | won't do (F1 brought S3 inside its tap bar; the user test wins) |
+| 47 | Critic r3 (H) | Plum hot shot sticker has a flame ('hot' taken literally) | parked |

@@ -7,7 +7,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { DEMO, SUGGEST, WORST, clock, suggestName, type Note, type PartId, type Section } from "./data";
 import {
-  AB, DataProvider, DeckDot, Head, Lanes, LoopStrip, Macros, PresetHead, Shell, Transport, s, useD,
+  AB, DataProvider, TIMELINE_PX, DeckDot, Head, Lanes, LoopStrip, Macros, PresetHead, Shell, Transport, s, useD,
   type DeckState, type LaneState,
 } from "./ui";
 
@@ -113,20 +113,20 @@ function Inner({ initialMode, view }: { initialMode: Mode; view: View }) {
           <section className={s.synth}>
             <div className={s.synthTop}>
               <button className={s.textBtn} onClick={() => go("listen")}>← Whole song</button>
-              <span className={s.who}>{solo.name} alone · {sec.name} · bars {sec.from}–{sec.to - 1} · looping</span>
+              <span className={s.who}>{solo.name} alone, {sec.name}, bars {sec.from}–{sec.to - 1}, looping</span>
             </div>
             <LoopStrip id={soloId} sec={sec} bar={bar} />
-            <AB partName={solo.name.toLowerCase()} ab={ab} setAb={setAb} />
             <PresetHead />
-            <Macros size={76} />
+            <Macros size={96} color={solo.color} />
             <p className={s.suggest}><span className={s.tick} aria-hidden /> <span><b>Mentor:</b> {SUGGEST}</span></p>
-            <div className={s.matchRow}>
+            <div className={s.checkRow}>
+              <AB partName={solo.name.toLowerCase()} ab={ab} setAb={setAb} />
               <button className={s.ghost}>Match it</button>
-              <button className={s.textBtn}>Make a loop from words</button>
+              <button className={s.textBtn} style={{ marginLeft: "auto" }}>Describe a {solo.name.toLowerCase()} instead</button>
             </div>
           </section>
           <SaveBar name={suggestName(solo, d.track.short)} tags={[solo.name.toLowerCase(), d.track.key, `${d.track.bpm} BPM`, d.track.short]} />
-          <MentorColumn notes={notes} open={open} setOpen={setOpen} onAsk={ask} bar={bar} partName={solo.name} section={sectionAt(bar).name} />
+          <MentorColumn notes={notes} open={open} setOpen={setOpen} onAsk={ask} bar={bar} partName={solo.name} />
         </div>
       )}
     </Shell>
@@ -176,10 +176,16 @@ function Notes({ notes, open, setOpen, bar, asking, setAsking, partName, section
   // "+ Ask" sits left of the playhead (cards open to the right of it), unless the song has just begun.
   const askLeft = bar > d.track.bars * 0.1;
   const anchor = asking ? bar : openGroup?.bar;
-  // Card side: right of the anchor when it is at or after the playhead, else left of it.
-  const cardPos = (at: number): CSSProperties => at >= bar
-    ? { left: `min(calc(${pct(at)} + 4px), calc(100% - 424px))` }
-    : { left: `max(0px, calc(${pct(at)} + 24px - 420px))` };
+  // Figma-style: the card's top-left sits 24px right of the pin, level with it. It goes left of
+  // the pin instead when there's no room, or when going right would cross the playhead.
+  const px = (b: number) => ((b - 1) / d.track.bars) * TIMELINE_PX;
+  const pinW = (g?: Group) => (g ? label(g).length * 6.5 + 12 : 0); // shortcut: estimated pin width; measure it in the real build
+  const cardPos = (at: number): CSSProperties => {
+    const off = 4 + Math.max(20, pinW(openGroup)) + 4;
+    const room = px(at) + off + 420 <= TIMELINE_PX;
+    const crosses = at < bar && px(at) + off + 420 >= px(bar);
+    return room && !crosses ? { left: `calc(${pct(at)} + ${off}px)` } : { left: `max(0px, calc(${pct(at)} - 428px))` };
+  };
   return (
     <div onClick={(e) => e.stopPropagation()}>
       {groups.map((g) => (
@@ -190,17 +196,16 @@ function Notes({ notes, open, setOpen, bar, asking, setAsking, partName, section
           {label(g)}
         </button>
       ))}
-      <button className={s.askBtn} aria-expanded={asking}
+      {!(asking || note) && <button className={s.askBtn} aria-expanded={asking}
         style={{ left: askLeft ? `calc(${pct(bar)} - 8px)` : `calc(${pct(bar)} + 8px)`, transform: askLeft ? "translateX(-100%)" : undefined }}
         onClick={() => setAsking(!asking)}>
         {notes.length === 0 ? `+ Ask about the ${partName.toLowerCase()} here` : "+ Ask"}
-      </button>
+      </button>}
       {anchor !== undefined && (asking || note) && (
         <>
-          {!asking && <i className={s.stem} style={{ left: `calc(${pct(anchor)} + 13px)`, top: 24 }} aria-hidden />}
           <div className={s.card} style={cardPos(anchor)} role="dialog" aria-label={note ? `Note ${note.n}` : "Ask the Mentor"}>
             <div className={s.cardHead}>
-              <span className={s.ctx}>{note ? `Note ${note.n} · bar ${note.bar}` : `New note · ${section} · bar ${bar}`}</span>
+              <span className={s.ctx}>{note ? `Note ${note.n}, bar ${note.bar}` : `New note, ${section}, bar ${bar}`}</span>
               {note && openGroup && openGroup.notes.length > 1 && (
                 <span className={s.cardNav}>
                   {openGroup.notes.map((x) => <button key={x.n} aria-pressed={x.n === open} onClick={() => setOpen(x.n)} aria-label={`Note ${x.n}`}>{x.n}</button>)}
@@ -238,12 +243,12 @@ function AskForm({ placeholder, onAsk, autoFocus }: { placeholder: string; onAsk
   );
 }
 
-function MentorColumn({ notes, open, setOpen, onAsk, bar, partName, section }: {
-  notes: Note[]; open: number | null; setOpen: (n: number | null) => void; onAsk: (q: string) => void; bar: number; partName: string; section: string;
+function MentorColumn({ notes, open, setOpen, onAsk, bar, partName }: {
+  notes: Note[]; open: number | null; setOpen: (n: number | null) => void; onAsk: (q: string) => void; bar: number; partName: string;
 }) {
   return (
     <aside className={s.mentorCol} aria-label="Mentor">
-      <span className={s.ctx}>Mentor · {partName} alone · {section} · bar {bar}</span>
+      <span className={s.ctx}>Mentor, on the {partName.toLowerCase()} at bar {bar}</span>
       <div className={s.list}>
         {notes.length === 0 && <p className={s.facts}>No notes yet. Ask about the {partName.toLowerCase()}: the answer is pinned at bar {bar} on the map.</p>}
         {notes.map((x) => (
@@ -280,7 +285,7 @@ function Answer({ text, lines }: { text: string; lines: number }) {
   const long = text.length > lines * 60;
   return (
     <>
-      <p className={s.answer} data-clamp={long && !all ? "" : undefined} style={{ WebkitLineClamp: lines }}>{text}</p>
+      <p className={s.answer} data-clamp={long && !all ? "" : undefined} data-expanded={long && all ? "" : undefined} style={{ WebkitLineClamp: lines }}>{text}</p>
       {long && <button className={s.textBtn} onClick={() => setAll(!all)} aria-expanded={all}>{all ? "Show less" : "Read all"}</button>}
     </>
   );

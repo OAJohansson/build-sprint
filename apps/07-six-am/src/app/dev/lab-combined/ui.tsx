@@ -94,7 +94,7 @@ type LanesProps = {
 };
 
 const LABEL = 200;
-const TIMELINE_PX = 1240; // shortcut: the 1440 layout's timeline width, used to pick label sizes; measure it if the Lab gets other widths.
+export const TIMELINE_PX = 1240; // shortcut: the 1440 layout's timeline width, used to pick label sizes; measure it if the Lab gets other widths.
 const CODES: Record<string, string> = { breakdown: "Brk", "interlude (long version)": "Int", interlude: "Int", "beatless outro": "Out 2", build: "Bld", outro: "Out", intro: "Intro", drop: "Drop" };
 
 /** The map's timeline, filling the space below the head. Click to seek, a section to loop it, a
@@ -157,6 +157,8 @@ function Lane({ x, st, bar, loop, catching, onSolo, onMute, overlay, seekAt }: L
           <button className={s.sm} data-on={state === "off" ? "" : undefined} onClick={() => onMute(x.id)} aria-label={`Mute ${x.name}`} aria-pressed={state === "off"}>M</button>
         </div>
         {x.subs.length > 0 && <span className={s.subList}>{x.subs.length} layers <i>est.</i></span>}
+        {/* sub-layer names sit in the gutter, each level with its row in the lane */}
+        {x.subs.length > 0 && <div className={s.lhSubs} aria-hidden>{x.subs.map((y) => <span key={y.name}>{y.name}</span>)}</div>}
       </div>
       <div className={s.lane} data-st={state} onClick={seekAt}>
         {loop && <i className={s.loopShade} style={{ left: pct(loop.from), width: w(loop.from, loop.to) }} />}
@@ -164,7 +166,6 @@ function Lane({ x, st, bar, loop, catching, onSolo, onMute, overlay, seekAt }: L
           {rows.map((y, i) => (
             <div key={i} className={s.subRow}>
               {y.blocks.map(([a, b]) => <span key={a} className={s.subBlock} style={{ left: pct(a), width: w(a, b), "--c": x.color } as CSSProperties} />)}
-              {y.name && <span className={s.subName}>{y.name}</span>}
             </div>
           ))}
         </div>
@@ -212,7 +213,7 @@ export function LoopStrip({ id, sec, bar }: { id: PartId; sec: Section; bar: num
   );
 }
 
-export function Knob({ name, value, hint, sug, size = 56 }: { name: string; value: number; hint?: string; sug?: number; size?: number }) {
+export function Knob({ name, value, hint, sug, size = 56, color = "#f1e6d3" }: { name: string; value: number; hint?: string; sug?: number; size?: number; color?: string }) {
   const a0 = -135, a = a0 + 270 * value, r = size / 2 - 4, c = size / 2;
   const pt = (deg: number, rr = r) => [c + rr * Math.sin((deg * Math.PI) / 180), c - rr * Math.cos((deg * Math.PI) / 180)];
   const [x0, y0] = pt(a0), [x1, y1] = pt(a), [xe, ye] = pt(135);
@@ -220,8 +221,10 @@ export function Knob({ name, value, hint, sug, size = 56 }: { name: string; valu
   return (
     <div className={s.knob} role="slider" tabIndex={0} aria-label={name} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(value * 100)} aria-valuetext={hint}>
       <svg width={size} height={size} aria-hidden>
-        <path d={`M${x0} ${y0} A${r} ${r} 0 1 1 ${xe} ${ye}`} fill="none" stroke="#2c2622" strokeWidth="3" strokeLinecap="round" />
-        <path d={`M${x0} ${y0} A${r} ${r} 0 ${a - a0 > 180 ? 1 : 0} 1 ${x1} ${y1}`} fill="none" stroke="#f1e6d3" strokeWidth="3" strokeLinecap="round" />
+        <path d={`M${x0} ${y0} A${r} ${r} 0 1 1 ${xe} ${ye}`} fill="none" stroke="rgba(241,230,211,.25)" strokeWidth="2" strokeLinecap="round" />
+        {(() => { const [p1, q1] = pt(a0, r + 4), [p2, q2] = pt(a0, r - 4); return <line x1={p1} y1={q1} x2={p2} y2={q2} stroke="rgba(241,230,211,.45)" strokeWidth="1.5" strokeLinecap="round" />; })()}
+        {value > 0.005 && <path d={`M${x0} ${y0} A${r} ${r} 0 ${a - a0 > 180 ? 1 : 0} 1 ${x1} ${y1}`} fill="none" stroke={color} strokeWidth="3" strokeLinecap="round" />}
+        <circle cx={x1} cy={y1} r="3.5" fill={color} />
         {sa !== null && (() => { const [p1, q1] = pt(sa, r + 4), [p2, q2] = pt(sa, r - 4); return <line x1={p1} y1={q1} x2={p2} y2={q2} stroke="#f2b134" strokeWidth="2.5" strokeLinecap="round" />; })()}
       </svg>
       <span>{name}</span>
@@ -230,8 +233,8 @@ export function Knob({ name, value, hint, sug, size = 56 }: { name: string; valu
   );
 }
 
-export function Macros({ size = 64 }: { size?: number }) {
-  return <div className={s.macros}>{MACROS.map((k) => <Knob key={k.name} {...k} size={size} />)}</div>;
+export function Macros({ size = 64, color }: { size?: number; color?: string }) {
+  return <div className={s.macros}>{MACROS.map((k) => <Knob key={k.name} {...k} size={size} color={color} />)}</div>;
 }
 
 export function AB({ partName, ab, setAb }: { partName: string; ab: "a" | "b"; setAb: (x: "a" | "b") => void }) {

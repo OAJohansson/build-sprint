@@ -87,3 +87,4 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Live drum split (kick, snare, hats as separate soloable parts) | Only Moises does it; experiment | experiment |
 | ME-7 remake coaching | Mentor coaches a remake lane by lane | later |
 | Real estimated sub-layers for Bass, Other and Vocals (from the separated parts) | User test LS1-1: only Drums shows what's inside | next |
+| Filter knob on the transport? (removed with the lane model, L200) | The owner accepted its removal for the MVP | later |

@@ -46,6 +46,13 @@ What happened, what was decided and why. Newest last.
   filter, and the shelf on laptop as a two-page book spread. The phone shelf and the saved moment
   come from round 2.
 
+- **Shelf organisation rethought (owner).** Country shouldn't lead: most yums happen in London
+  (about three weeks of travel a year), so kind leads (Food, Drinks, Desserts; wine and cocktails
+  matter most under Drinks) and "where" means the restaurant and city, with country secondary.
+  Three options on the canvas: 1 kind tabs with sub-chips; 2 a book with "By kind" chapters and a
+  "By place" view (restaurants inside cities, home vs away); 3 smart shelves the magpie fills
+  (Latest, Your top wines, Around London) plus one filter sheet (kind, sub-kind, hearts, where).
+
 ## To carry over
 
 For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md).

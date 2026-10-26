@@ -7,6 +7,7 @@
 import { memo } from "react";
 import { TRACKS, loopById, wavePath, type Kind } from "@/lib/timeline";
 import type { Timeline } from "./use-timeline";
+import { sectionName } from "@/lib/map/view";
 import s from "./studio.module.css";
 
 export const cx = (...c: (string | false | undefined | null)[]) => c.filter(Boolean).join(" ");
@@ -45,11 +46,17 @@ export function TimelineView({ t, colors, onSound, soundLane }: {
           </span>
         ))}
         {/* A template's section markers: the name in the ruler, a faint line through the lanes. */}
-        {t.markers.map((m) => (
-          <span key={`${m.bar}-${m.label}`} className={s.marker} data-marker={m.label} title={`${m.label} · bar ${m.bar}`} style={{ left: (m.bar - 1) * ppb }}>
-            {m.label}
-          </span>
-        ))}
+        {t.markers.map((m, i) => {
+          // break-ui: on a long track (512 bars) markers sit a few px apart; a name that doesn't fit
+          // before the next marker shows as a plain tick, with the name in the tooltip.
+          const room = ((t.markers[i + 1]?.bar ?? t.bars + 1) - m.bar) * ppb;
+          const name = sectionName(m.label), fits = room >= name.length * 7 + 12;
+          return (
+            <span key={`${m.bar}-${m.label}`} className={s.marker} data-marker={m.label} title={`${name} · bar ${m.bar}`} aria-label={`${name}, bar ${m.bar}`} style={{ left: (m.bar - 1) * ppb, ...(fits ? {} : { padding: 0, background: "none" }) }}>
+              {fits ? name : null}
+            </span>
+          );
+        })}
         {t.ghost && t.ghost.bar !== null ? (
           <span className={s.rulerMark} style={{ left: (t.ghost.bar - 1) * ppb, ["--c" as string]: colors[t.ghost.loop.track] }}>{t.ghost.bar}</span>
         ) : null}
@@ -96,7 +103,7 @@ export function TimelineView({ t, colors, onSound, soundLane }: {
                   key={r.id}
                   className={cx(s.region, t.selected === r.id && s.selected, live && s.live, t.bin?.id === r.id && t.bin.over && s.removing)}
                   style={{ left: (r.start - 1) * ppb, width: r.length * ppb - 2 }}
-                  title={l.name}
+                  title={`${l.name} · ←/→ move, Shift 4 bars, Delete`}
                   {...t.blockBody(r)}
                 >
                   {/* F12: a narrow block shows the engine name only ("303 Acid"); the full name is the tooltip. */}

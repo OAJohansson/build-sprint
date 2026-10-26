@@ -13,6 +13,7 @@ import { useEarsQueue } from "@/lib/ears/use-ears-queue";
 import { LoadError, oembedTitle, Player, soundUrl, type ScSound } from "@/lib/ears/widget";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { appendToSource, sanitiseSource, SOURCE_KEY, type Row, type Source, type SourceTrack } from "./rows";
+import { nextIndex, playList, skippedText, type PlayList } from "./play-all";
 
 export type Listening = "unknown" | "unsupported" | "off" | "on";
 export type ModelState = { state: "idle" | "loading" | "downloading" | "ready" | "error"; fraction: number | null };
@@ -42,7 +43,15 @@ export type AnalyseModel = {
   clearList(): void;
   /** Set or clear the owner's genre on one result (F12). */
   setMyGenre(id: string, genre: string): void;
+  /** L142 Play all: the shown tracks one after another in the player (null when not playing). */
+  playback: Playback | null;
+  playAll(rows: Row[]): void;
+  /** While playing: jump to this row (if it can play). */
+  playRow(row: Row): void;
+  stopPlay(): void;
 };
+
+export type Playback = { list: PlayList; index: number; key: string; title: string; skipped: string; failed: number };
 
 /** NF4: desktop Chrome/Chromium only. Firefox has getDisplayMedia but can't share a tab's audio; Safari can't either. */
 function detectSupport(): boolean {
@@ -192,6 +201,7 @@ export function useAnalyse(): AnalyseModel {
 
   const enable = async () => {
     if (support === "no") return;
+    if (playback) stopPlay();
     setMessage(null);
     if (q.queue.items.some((i) => i.status === "queued")) ensureEars();
     try {
@@ -209,7 +219,56 @@ export function useAnalyse(): AnalyseModel {
     }
   };
 
+  // ── Play all (L142) ──────────────────────────────────────────────────────────────────────────────
+  const [playback, setPlayback] = useState<Playback | null>(null);
+  const playRun = useRef(0);
+  const offFinish = useRef<(() => void) | null>(null);
+  const stopPlay = () => {
+    playRun.current += 1;
+    offFinish.current?.();
+    offFinish.current = null;
+    playerRef.current?.pause();
+    setPlayback(null);
+  };
+  /** Play list[i]; a track that won't load is skipped (counted) and the next one tried. */
+  const playAt = async (list: PlayList, i: number | null, skipped: string, failed: number): Promise<void> => {
+    const run = ++playRun.current;
+    offFinish.current?.();
+    offFinish.current = null;
+    if (i === null) {
+      setPlayback(null);
+      // Follow-up user test: the end of the list says so (cleared by the next action, like any news).
+      if (list.keys.length) { const n = list.keys.length - failed; setMessage({ tone: "info", text: `Finished · ${n} played${failed ? ` · ${failed} wouldn't load` : ""}` }); }
+      return;
+    }
+    const url = list.urls[i];
+    setPlayback({ list, index: i, key: list.keys[i], title: list.titles[i], skipped, failed });
+    try {
+      const p = await getPlayer(url);
+      await p.load(url);
+      if (run !== playRun.current) return;
+      p.play();
+      offFinish.current = p.onFinish(() => { if (run === playRun.current) void playAt(list, nextIndex(list, i), skipped, failed); }) as () => void;
+    } catch {
+      if (run === playRun.current) void playAt(list, nextIndex(list, i), skipped, failed + 1);
+    }
+  };
+  const playAll = (rows: Row[]) => {
+    const list = playList(rows);
+    void playAt(list, list.keys.length ? 0 : null, skippedText(list.skipped), 0);
+    if (!list.keys.length) setMessage({ tone: "info", text: skippedText(list.skipped) || "Nothing to play." });
+  };
+  const playRow = (row: Row) => {
+    if (!playback) return;
+    const i = playback.list.keys.indexOf(row.key);
+    if (i >= 0 && i !== playback.index) void playAt(playback.list, i, playback.skipped, playback.failed);
+  };
+  // Analysing needs the player: anything that can start an analysis ends Play all first
+  // (Analyse, Retry, Enable listening); Play all is disabled while one runs.
+  useEffect(() => () => { offFinish.current?.(); }, []);
+
   const analyse = (rows: Row[]) => {
+    if (playback) stopPlay();
     const tracks: QueueTrack[] = rows
       .filter((r) => r.state !== "blocked")
       .map((r) => ({ url: r.url, title: r.title || undefined, uploader: r.uploader || undefined, durationMs: r.durationMs ?? undefined }));
@@ -228,6 +287,7 @@ export function useAnalyse(): AnalyseModel {
     busy,
     message,
     dismiss: () => setMessage(null),
+    playback, playAll, playRow, stopPlay,
     embedUrl,
     onIframe,
     load: (t) => void load(t),
@@ -235,7 +295,7 @@ export function useAnalyse(): AnalyseModel {
     stopListening: () => capture?.stop(),
     analyse,
     cancel: q.cancel,
-    retry: (id) => { ensureEars(); q.retry(id); },
+    retry: (id) => { if (playback) stopPlay(); ensureEars(); q.retry(id); },
     clearList: () => { q.clear(); q.clearResults(); setSource(null); setMessage(null); },
     setMyGenre: q.setMyGenre,
   };

@@ -22,7 +22,7 @@ describe("mapToTemplate", () => {
     expect(doc.bpm).toBe(126);
     expect(doc.key).toEqual({ key: "G", scale: "minor" });
     expect(doc.bars).toBe(108);
-    expect(doc.markers).toEqual([{ bar: 1, label: "intro" }, { bar: 17, label: "drop" }, { bar: 97, label: "outro" }]);
+    expect(doc.markers).toEqual([{ bar: 1, label: "Intro" }, { bar: 17, label: "Drop" }, { bar: 97, label: "Outro" }]);
     expect(doc.regions).toEqual([]);
     expect(doc.muted).toEqual([false, false, false, false]);
   });

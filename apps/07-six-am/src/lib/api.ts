@@ -28,6 +28,8 @@ const q = (id: string) => `/api/tracks?id=${encodeURIComponent(id)}`;
 export const api = (code: string) => ({
   list: () => call<{ tracks: TrackSummary[] }>(code, "/api/tracks").then((r) => r.tracks),
   get: (id: string) => call<{ track: Track }>(code, q(id)).then((r) => r.track),
+  /** The list plus the track to open (`open` if it exists, else the newest) in one request. */
+  listAndOpen: (open: string) => call<{ tracks: TrackSummary[]; track: Track | null }>(code, `/api/tracks?open=${encodeURIComponent(open || "newest")}`),
   save: (id: string, name: string, doc: Doc) =>
     call<{ track: Track }>(code, q(id), { method: "PUT", body: JSON.stringify({ name, doc }) }).then((r) => r.track),
   remove: (id: string) => call<{ ok: true }>(code, q(id), { method: "DELETE" }),

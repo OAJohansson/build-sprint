@@ -11,7 +11,9 @@ export const MAYBE = 0.35;
 export type Block = { from: number; to: number; level: "likely" | "maybe" };
 export type ViewSection = { name: string; from: number; to: number; startSec: number; endSec: number };
 
-const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
+const cap = (s: string) => (s ? s[0].toUpperCase() + s.slice(1) : s);
+/** A section's name as people see it, in proper case: "intro" → "Intro" (L142). */
+export const sectionName = cap;
 
 export function viewSections(m: Pick<TrackMap, "sections">): ViewSection[] {
   return m.sections.map((s) => ({ name: cap(s.label), from: s.startBar + 1, to: s.endBar + 1, startSec: s.startSec, endSec: s.endSec }));

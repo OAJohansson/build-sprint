@@ -23,6 +23,8 @@ import { Logo } from "./logo";
 import { Notice, Unlock } from "./unlock";
 import s from "./studio.module.css";
 
+/** The master filter's cutoff in words (the engine maps 0–1 to 120 Hz–20 kHz on a log scale). */
+const filterHz = (v: number) => { const hz = 120 * Math.pow(20000 / 120, v); return hz >= 1000 ? `${(hz / 1000).toFixed(1)} kHz` : `${Math.round(hz)} Hz`; };
 const COLORS = ["#f2b134", "#ef5b37", "#23b3a5", "#a9c95a"]; // drums, bass, chords, top/FX
 const SAVE_AFTER_MS = 700;
 const LEAVE_DRAFT = "This Mentor draft isn't saved. Leave it?";
@@ -79,7 +81,10 @@ export function Studio() {
     const me = ++run.current;
     (async () => {
       try {
-        let list = await client.list();
+        // One request for the list and the track to open (the last one, else the newest): the first
+        // load used to wait for the list, then fetch the track.
+        const first = await client.listAndOpen(lastId);
+        let list = first.tracks;
         let open: Track;
         // A starting point handed over from the Mentor opens as a new, unsaved track (read once).
         let handed: StudioDraft | null = null;
@@ -102,7 +107,7 @@ export function Studio() {
           open = await client.save(crypto.randomUUID(), "My first track", demoDoc());
           list = [summary(open)];
         } else {
-          open = await client.get((list.find((x) => x.id === lastId) ?? list[0]).id);
+          open = first.track ?? await client.get((list.find((x) => x.id === lastId) ?? list[0]).id);
         }
         if (me !== run.current) return;
         setTracks(list);
@@ -238,7 +243,8 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
   const [storedBpm] = useLocalStorage<number>(TEMPO_KEY, DEFAULT_BPM);
   // A template track (S2) carries its own tempo; older tracks use the device tempo.
   const bpm = draft ? draft.bpm : track.doc.bpm !== undefined ? clampBpm(track.doc.bpm) : clampBpm(storedBpm);
-  const t = useTimeline(track.doc, bpm, draft ? 1 : 37);
+  // D1: every track opens at bar 1 (it used to open saved tracks at the demo's mid-song bar 37).
+  const t = useTimeline(track.doc, bpm, 1);
   const [name, setName] = useState(track.name);
   const savedName = useRef(track.name);
   const [library, setLibrary] = useState(false);
@@ -312,11 +318,13 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
         <div className={s.transport}>
           <button className={s.tb} onClick={() => t.jumpTo(1)} aria-label="Back to start">{Icon.start}</button>
           <button className={cx(s.tb, s.play)} onClick={() => t.setPlaying(!t.playing)} aria-label={t.playing ? "Pause" : "Play"}>{t.playing ? Icon.pause : Icon.play}</button>
-          <div className={s.lcd}><b>{t.bar}.{t.beat}</b><small>bar</small><b title={bpm === DEFAULT_BPM ? undefined : `Set from Analyse; the Studio's default is ${DEFAULT_BPM}`}>{formatBpm(bpm)}</b><small>bpm</small>{track.doc.key ? <><b>{track.doc.key.key}{track.doc.key.scale === "minor" ? "m" : ""}</b><small>key</small></> : null}</div>
+          <div className={s.lcd}><b>{t.bar}.{t.beat}</b><small>bar</small><b title={bpm === DEFAULT_BPM ? undefined : `Set from Analyse; the Studio's default is ${DEFAULT_BPM}`}>{formatBpm(bpm)}</b><small>bpm</small>{/* A track without its own key plays synths in A minor (the crate's key): say so. */}
+            {track.doc.key ? <><b>{track.doc.key.key}{track.doc.key.scale === "minor" ? "m" : ""}</b><small>key</small></>
+              : <><b title="No key set: synths play in A minor, the crate's key">Am</b><small>key</small></>}</div>
           <button className={s.undo} onClick={t.undo} disabled={!t.canUndo} aria-label="Undo">{Icon.undo} <span className={s.undoWord}>Undo</span></button>
           <div className={s.knobWrap}>
             Filter
-            <div className={s.knob} {...t.knob} role="slider" aria-label="Filter" aria-valuenow={Math.round(t.filter * 100)} style={{ ["--a" as string]: `${-135 + t.filter * 270}deg` }} />
+            <div className={s.knob} {...t.knob} role="slider" aria-label="Filter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(t.filter * 100)} aria-valuetext={t.filter >= 0.99 ? "Open" : `Cutoff ${filterHz(t.filter)}`} style={{ ["--a" as string]: `${-135 + t.filter * 270}deg` }} />
           </div>
         </div>
         <SettingsLink />
@@ -325,7 +333,8 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
         <TimelineView t={t} colors={COLORS} soundLane={drawerLane} onSound={(tr) => { t.setSelected(null); setAddLane((l) => (l === tr && !selSound ? null : tr)); }} />
       </main>
       {drawerLane !== null ? (
-        <SoundDrawer key={drawerLane} t={t} lane={drawerLane} sound={selSound} color={COLORS[drawerLane]} onClose={closeDrawer} />
+        <SoundDrawer key={drawerLane} t={t} lane={drawerLane} sound={selSound} color={COLORS[drawerLane]} onClose={closeDrawer}
+          onNewSound={() => { setAddLane(drawerLane); t.setSelected(null); }} />
       ) : (
         <Crate t={t} colors={COLORS} />
       )}

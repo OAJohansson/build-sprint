@@ -85,6 +85,7 @@ export function DemoAnalyse({ listening }: { listening: boolean }) {
     embedUrl: null,
     onIframe: () => {},
     load: say, enable: say, stopListening: say, analyse: say, cancel: say, retry: say, clearList: say,
+    playback: null, playAll: say, playRow: () => {}, stopPlay: () => {},
     setMyGenre: (id, g) => setGenres((prev) => ({ ...(prev ?? {}), [id]: cleanGenre(g) ?? "" })),
   };
   useDemoServerCopy(results);
@@ -225,6 +226,17 @@ function Screen({ m, sync }: { m: AnalyseModel; sync?: SyncState }) {
             narrowed={narrowed} query={query} setQuery={setQuery} filters={filters} setFilters={setRawFilters} genres={genres} onClear={clearFilters}
           />
         )}
+        {/* L142: the shown tracks one after another in the player; Stop sits in the status slot. */}
+        {empty || m.playback ? null : (
+          <button
+            className={s.btn}
+            onClick={() => m.playAll([...shownMain, ...shownRest].map((x) => x.r))}
+            disabled={!!activeItem(m.queue) || !!m.busy || !(shownMain.length + shownRest.length)}
+            title={activeItem(m.queue) ? "Wait for the analysis to finish" : narrowed ? "Play the tracks shown, one after another" : "Play the list, one after another"}
+          >
+            {narrowed ? `Play ${shownMain.length + shownRest.length}` : "Play all"}
+          </button>
+        )}
         <Status m={m} empty={empty} />
       </div>
       <main className={s.main}>
@@ -301,6 +313,21 @@ function Status({ m, empty }: { m: AnalyseModel; empty: boolean }) {
   const queued = queueCounts(m.queue).queued;
   const off = m.listening === "off" || m.listening === "unknown";
   const enable = <button className={s.btn} onClick={m.enable} disabled={m.listening === "unknown" || !!m.busy} title={SHARE_HINT}>Enable listening</button>;
+  if (m.playback) {
+    const p = m.playback;
+    const skipped = [p.skipped, p.failed ? `${p.failed} wouldn't load` : ""].filter(Boolean).join(" · ");
+    return (
+      <div className={cx(s.status, s.statusNews)} role="status">
+        {/* Follow-up user test: the title gets its own line (ellipsis, full title on hover) and what was
+            skipped a second line, so neither is cut at 1440. */}
+        <span className={s.playText}>
+          <span className={s.playLine} title={p.title}><span className={s.statusWait}>Playing {p.index + 1} of {p.list.keys.length}</span> · {p.title}</span>
+          {skipped ? <span className={s.playLine}>{skipped}</span> : null}
+        </span>
+        <button className={s.btn} onClick={m.stopPlay}>Stop</button>
+      </div>
+    );
+  }
   if (m.message) {
     const err = m.message.tone === "error";
     return (
@@ -662,7 +689,7 @@ function TableRow({ r, n, m, selected, tabbable, onSelect, onEditGenre }: { r: R
       tabIndex={tabbable ? 0 : -1}
       data-row=""
       data-result={r.result?.id}
-      onClick={select}
+      onClick={() => { select(); m.playRow(r); }}
       onKeyDown={(e) => { if ((e.key === "Enter" || e.key === " ") && e.target === e.currentTarget) { e.preventDefault(); select(); } }}
     >
       <span className={cx(s.num, s.idx)} role="gridcell">{n}</span>

@@ -9,7 +9,7 @@ import { makeKitLoop, makeSynthLoop, type PlayableLoop } from "@/lib/synths/loop
 import { clampBpm } from "@/lib/tempo";
 import { MAX_BARS, MIN_BARS, TRACKS, newId, type Doc, type Region } from "@/lib/timeline";
 import type { TrackMap } from "./types";
-import { layerBlocks } from "./view";
+import { layerBlocks, sectionName } from "./view";
 
 /** The starter sounds (L139). Ids are fixed per draft: one sound each, used by every block. */
 export const STARTERS = {
@@ -112,7 +112,7 @@ export function mapToTemplate(map: Pick<TrackMap, "bpm" | "key" | "scale" | "bar
   if (map.key && (map.scale === "major" || map.scale === "minor")) doc.key = { key: map.key, scale: map.scale };
   // Map bars are 0-based from the first downbeat; the Studio's bar 1 is that downbeat.
   doc.markers = map.sections
-    .map((s) => ({ bar: Math.round(s.startBar) + 1, label: s.label }))
+    .map((s) => ({ bar: Math.round(s.startBar) + 1, label: sectionName(s.label) }))
     .filter((m) => m.bar >= 1 && m.bar <= bars);
   if (map.layers) {
     // Bass and chords need the key to play in; without one only the drums are laid.

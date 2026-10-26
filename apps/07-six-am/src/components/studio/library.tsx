@@ -40,7 +40,7 @@ export function Library({ tracks, currentId, onOpen, onNew, onDelete, onClose }:
               </div>
             ) : (
               <>
-                <button className={s.libOpen} onClick={() => onOpen(tr.id)}>
+                <button className={s.libOpen} onClick={() => onOpen(tr.id)} title={tr.name}>
                   <b>{tr.name}</b>
                   <em>{tr.id === currentId ? "open now" : ago(tr.updatedAt)}</em>
                 </button>

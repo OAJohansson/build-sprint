@@ -1,7 +1,7 @@
 // The map as the Mentor reads it (A4): sections with bars and times, and when each estimated layer
 // plays, in plain lines; plus the whitelist parser for maps arriving from the browser. Pure.
 import { BEATS_PER_BAR, LAYERS, MAP_VERSION, SECTION_LABELS, type LayerName, type Section, type SectionLabel, type TrackMap } from "./types";
-import { layerBlocks } from "./view";
+import { layerBlocks, sectionName } from "./view";
 
 const clock = (sec: number) => { const t = Math.max(0, Math.round(sec)); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`; };
 
@@ -10,7 +10,7 @@ const bars = (a: number, b: number) => (b - a <= 1 ? `bar ${a + 1}` : `bars ${a 
 
 /** The map's facts for the prompt, each line labelled [ears]. Layers are said to be estimates. */
 export function mapContext(m: TrackMap): string {
-  const sections = m.sections.map((s) => `${s.label} ${bars(s.startBar, s.endBar)} (${clock(s.startSec)}–${clock(s.endSec)})`).join("; ");
+  const sections = m.sections.map((s) => `${sectionName(s.label)} ${bars(s.startBar, s.endBar)} (${clock(s.startSec)}–${clock(s.endSec)})`).join("; ");
   // F4: the same blocks the map view draws (view.ts), so every range the Mentor quotes is on screen.
   // Touching blocks join into one run; a run is "maybe" when none of it is drawn solid. Runs under
   // 4 bars are left out (fills and flickers), at most 6 per layer.

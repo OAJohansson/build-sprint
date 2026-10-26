@@ -165,6 +165,10 @@ Day 1 lost half a day to setup surprising us late, one problem at a time. Check 
   Claude can check deploys and test with real data. For browser tests, run a production build
   (`pnpm -F NN-slug build && pnpm -F NN-slug start`) and open it by the machine's address: Next's
   dev server only serves its scripts to localhost. *(Day 2 lost about an hour to this.)*
+- [ ] **Founder, design first (10 Magpie):** the owner can design with Claude in Claude Design
+  before the PM session: agree the features and screens, ~10 directions, a round with only the
+  brand moments (home and the peak moment), then every key screen as one final flow on the
+  canvas. The PM builds from that canvas and skips the design-pick steps.
 - [ ] Server errors are logged with the real reason (`failure()` in `src/lib/server/failure.ts`),
   while users only see a general message. Buttons that retry show that they're working.
 
@@ -215,6 +219,12 @@ command (to-do #8, from 03 Scribble's retro):
    `website`, if it reads `docs/` and must rebuild when they change).
    Apps deploy from `main` only: branch pushes make no deployments, because even cancelled ones
    count toward the free plan's 100 a day (decision 0016). Push and merge in batches.
+
+**Before the final-review push (10 Magpie):** open the preview's main path and read its logs. A
+preview behind Vercel's login is opened in the owner's logged-in browser; don't add a bypass
+token without the owner's yes. Native modules (sharp) crash only on the real platform. And link
+the folder to its project (`vercel link --project <name>`) before any `vercel` command with
+`--yes`, which otherwise creates a project named after the folder.
 
 **A preview for my big checks only:** `pnpm ship NN-slug --preview` deploys the pushed branch
 once as a preview (one deployment, not production) and prints the link. Used for the Founder

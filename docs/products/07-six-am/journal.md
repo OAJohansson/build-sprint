@@ -628,3 +628,8 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   playback position, discarding chunks). No UI, no library.
 - **Learning for the retro:** design started straight after the spike, from the kickoff's five jobs
   written by the PM from the parent's brief, without the owner agreeing them for this screen.
+- **Engine hardened (L152 scope):** `LiveParts` in `src/lib/lab/live.ts` (capture, chunks, delay,
+  per-part gains, heard playhead, silent skip, late remainder, ring zeroed on stop), the worker
+  client and the sync math as plain functions with tests (12). Live re-run: 4.2× real time, 0
+  late, playhead 5.4 s behind the Deck, pause and seek behave. The spike page uses the engine; no
+  product UI built. `evals-runs/2026-10-26-lab-spike.md` has the numbers.

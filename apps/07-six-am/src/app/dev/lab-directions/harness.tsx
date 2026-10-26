@@ -37,6 +37,7 @@ export function Harness({ clean }: { clean: boolean }) {
 
   useEffect(() => {
     const v = parseInt(new URLSearchParams(location.search).get("v") ?? "1", 10) - 1;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- dev picker: reads ?v= after mount
     if (v >= 0 && v < VARIANTS.length) setCur(v);
     requestAnimationFrame(() => requestAnimationFrame(() => setReady(true)));
   }, []);

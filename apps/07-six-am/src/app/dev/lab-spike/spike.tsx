@@ -7,49 +7,23 @@
 // Results on window.__labSpike for a grader.
 import { useEffect, useRef, useState } from "react";
 import { BENCH_RATE, benchMix, sdr } from "@/lib/lab/bench-mix";
-import type { SepRequest, SepResponse } from "@/lib/lab/separator.worker";
-import { makePlan, playDelay, step, type StreamPlan } from "@/lib/lab/stream";
+import { LiveParts, type LiveStats } from "@/lib/lab/live";
+import { Separator } from "@/lib/lab/separator-client";
+import { makePlan, playDelay, step } from "@/lib/lab/stream";
 import type { DeckMsg } from "./deck/deck";
 
 const PARTS = ["Drums", "Bass", "Other", "Vocals"] as const;
-const RATE = 44100;
 
 type Stat = { k: number; computeMs: number; prep: number; run: number; post: number; lateMs: number };
 type Api = {
   model?: { backend: string; loadMs: number; bytes: number; cached: boolean };
   bench?: Record<string, number | string>;
-  live?: { inDb: number; partsDb: number[]; suppressLocalAudioPlayback: unknown; label: string; delayS: number; steps: number; late: number; meanComputeMs: number; ratio: number; heardS: number };
+  live?: LiveStats;
+  heardMs?: number | null;
   error?: string;
   log: string[];
 };
 declare global { interface Window { __labSpike?: Api } }
-
-class Separator {
-  private worker = new Worker(new URL("../../../lib/lab/separator.worker.ts", import.meta.url), { type: "module" });
-  private waits = new Map<number, (m: Extract<SepResponse, { type: "parts" }>) => void>();
-  private next = 1;
-  loaded: Promise<Extract<SepResponse, { type: "loaded" }>>;
-  constructor(onProgress: (loaded: number, total: number) => void, onError: (msg: string) => void) {
-    let resolve!: (m: Extract<SepResponse, { type: "loaded" }>) => void;
-    this.loaded = new Promise((r) => (resolve = r));
-    this.worker.onmessage = (e: MessageEvent<SepResponse>) => {
-      const m = e.data;
-      if (m.type === "progress") onProgress(m.loaded, m.total);
-      else if (m.type === "loaded") resolve(m);
-      else if (m.type === "parts") { this.waits.get(m.id)?.(m); this.waits.delete(m.id); }
-      else if (m.type === "error") onError(m.message);
-    };
-    this.worker.postMessage({ type: "load" } satisfies SepRequest);
-  }
-  separate(left: Float32Array, right: Float32Array, from: number, length: number) {
-    const id = this.next++;
-    return new Promise<Extract<SepResponse, { type: "parts" }>>((resolve) => {
-      this.waits.set(id, resolve);
-      this.worker.postMessage({ type: "separate", id, left, right, from, length } satisfies SepRequest, [left.buffer, right.buffer]);
-    });
-  }
-  stop() { this.worker.terminate(); }
-}
 
 /** The window [start, start+len) from a source, zero where it is before 0. A fresh copy. */
 function cut(read: (i: number) => number, start: number, len: number) {
@@ -58,7 +32,6 @@ function cut(read: (i: number) => number, start: number, len: number) {
   return out;
 }
 
-const db = (a: Float32Array) => { let e = 0; for (let i = 0; i < a.length; i++) e += a[i] * a[i]; return +(10 * Math.log10(e / Math.max(1, a.length) + 1e-12)).toFixed(1); };
 
 function fadeInOut(a: Float32Array, fade: number) {
   for (let i = 0; i < fade && i < a.length; i++) { const g = i / fade; a[i] *= g; a[a.length - 1 - i] *= g; }
@@ -72,7 +45,9 @@ export function LabSpike({ url, hop, guard, auto }: { url: string; hop: number; 
   const [live, setLive] = useState<Api["live"] | null>(null);
   const [trackUrl, setTrackUrl] = useState(url);
   const sep = useRef<Separator | null>(null);
-  const gains = useRef<GainNode[]>([]);
+  const liveRef = useRef<LiveParts | null>(null);
+  const onRef = useRef(on);
+  const [heard, setHeard] = useState<number | null>(null);
   const stopLive = useRef<(() => void) | null>(null);
   const api = useRef<Api>({ log: [] });
   const benchOut = useRef<{ parts: Float32Array<ArrayBuffer>[][]; mix: Float32Array<ArrayBuffer> } | null>(null);
@@ -86,7 +61,7 @@ export function LabSpike({ url, hop, guard, auto }: { url: string; hop: number; 
   useEffect(() => {
     window.__labSpike = api.current;
     const ch = new BroadcastChannel("sixam-deck");
-    ch.onmessage = (e: MessageEvent<DeckMsg>) => { if (e.data.kind === "state") setDeck(e.data); };
+    ch.onmessage = (e: MessageEvent<DeckMsg>) => { if (e.data.kind === "state") { setDeck(e.data); liveRef.current?.noteDeck(e.data.pos, e.data.playing); } };
     return () => { ch.close(); stopLive.current?.(); sep.current?.stop(); };
   }, []);
 
@@ -95,16 +70,21 @@ export function LabSpike({ url, hop, guard, auto }: { url: string; hop: number; 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => { gains.current.forEach((g, i) => g.gain.setTargetAtTime(on[i] ? 1 : 0, g.context.currentTime, 0.01)); }, [on]);
+  useEffect(() => { onRef.current = on; liveRef.current?.setParts(on); }, [on]);
+
+  // The heard playhead: the Deck's position one delay ago (what the parts are playing now).
+  useEffect(() => {
+    const t = window.setInterval(() => { const h = liveRef.current?.heardMs() ?? null; api.current.heardMs = h; setHeard(h); }, 250);
+    return () => clearInterval(t);
+  }, []);
 
   async function loadModel() {
     if (sep.current) return sep.current.loaded;
     setModelState("downloading…");
     sep.current = new Separator(
       (l, t) => setModelState(`downloading ${Math.round(l / 1e6)} / ${Math.round(t / 1e6)} MB`),
-      (msg) => { api.current.error = msg; say("error: " + msg); },
     );
-    const m = await sep.current.loaded;
+    const m = await sep.current.loaded.catch((e: Error) => { api.current.error = e.message; say("error: " + e.message); throw e; });
     api.current.model = { backend: m.backend, loadMs: m.loadMs, bytes: m.bytes, cached: m.cached };
     setModelState(`${m.backend} · ${Math.round(m.bytes / 1e6)} MB · ${m.cached ? "from cache" : "downloaded"} · ready in ${(m.loadMs / 1000).toFixed(1)} s`);
     say(`model ready: ${m.backend}, ${(m.loadMs / 1000).toFixed(1)} s`);
@@ -188,98 +168,24 @@ export function LabSpike({ url, hop, guard, auto }: { url: string; hop: number; 
   const cmd = (c: "play" | "pause") => { const ch = new BroadcastChannel("sixam-deck"); ch.postMessage({ kind: "cmd", cmd: c } satisfies DeckMsg); ch.close(); };
 
   async function startLive() {
-    const model = loadModel(); // getDisplayMedia first: it needs the click's user activation
-    let stream: MediaStream;
+    const model = loadModel(); // started, not awaited: getDisplayMedia needs the click's activation
+    model.catch(() => {});
     try {
-      stream = await navigator.mediaDevices.getDisplayMedia({
-        video: true,
-        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false, suppressLocalAudioPlayback: true } as MediaTrackConstraints,
-        // Chrome hints: offer tabs, not this one (its own output must stay audible).
-        ...({ preferCurrentTab: false, selfBrowserSurface: "exclude", surfaceSwitching: "exclude", systemAudio: "exclude", monitorTypeSurfaces: "exclude" } as object),
+      const live = await LiveParts.start(sep.current!, {
+        hopS: hop,
+        guardS: guard,
+        muted: auto.includes("mute"),
+        onStats: (st) => { api.current.live = st; setLive(st); },
+        onEnded: () => { stopLive.current = null; say("stopped"); },
       });
+      liveRef.current = live;
+      live.setParts(onRef.current);
+      delayRef.current = live.delayS;
+      stopLive.current = () => live.stop();
+      say(`listening, delay ${live.delayS.toFixed(2)} s`);
     } catch (e) {
-      say("share cancelled: " + String(e));
-      return;
+      say("couldn't start: " + String(e instanceof Error ? e.message : e));
     }
-    const vt = stream.getVideoTracks()[0];
-    const label = vt?.label ?? "";
-    stream.getVideoTracks().forEach((t) => t.stop());
-    const at = stream.getAudioTracks()[0];
-    if (!at) { say("no audio shared: tick 'Also share tab audio'"); return; }
-    const settings = at.getSettings() as MediaTrackSettings & { suppressLocalAudioPlayback?: boolean };
-    await model;
-    say(`capturing "${label}", suppressLocalAudioPlayback = ${String(settings.suppressLocalAudioPlayback)}`);
-
-    const ctx = new AudioContext({ sampleRate: RATE, latencyHint: "playback" });
-    await ctx.audioWorklet.addModule("/lab/stereo-tap.js");
-    const src = ctx.createMediaStreamSource(new MediaStream([at]));
-    const tap = new AudioWorkletNode(ctx, "stereo-tap");
-    src.connect(tap); // never to the speakers: only separated parts play
-    const master = ctx.createGain();
-    master.gain.value = auto.includes("mute") ? 0 : 1; // grader runs stay quiet
-    master.connect(ctx.destination);
-    gains.current = PARTS.map((_, i) => { const g = ctx.createGain(); g.gain.value = on[i] ? 1 : 0; g.connect(master); return g; });
-
-    const plan: StreamPlan = makePlan(RATE, hop, guard);
-    const delayS = playDelay(plan, RATE, 1.5);
-    delayRef.current = delayS;
-    // Ring of the last 12 s; sample n of the capture sits at ring[n % size].
-    const size = RATE * 12;
-    const ringL = new Float32Array(size);
-    const ringR = new Float32Array(size);
-    let written = 0;
-    let frame0 = -1;
-    let k = 0;
-    let busy = false;
-    let late = 0;
-    const stats: Stat[] = [];
-    const tick = async () => {
-      if (busy) return;
-      const s = step(plan, k);
-      if (written < s.end) return;
-      if (written - s.end > size - plan.window) { k = Math.floor((written - plan.hop - plan.guard) / plan.hop); say("fell behind: skipped ahead"); return; }
-      busy = true;
-      const L = cut((i) => ringL[i % size], s.windowStart, plan.window);
-      const R = cut((i) => ringR[i % size], s.windowStart, plan.window);
-      const inDb = db(L.subarray(s.from, s.from + s.length)); // level only: proves the capture isn't silent
-      const w0 = performance.now();
-      const r = await sep.current!.separate(L, R, s.from, s.length);
-      const computeMs = performance.now() - w0;
-      const partsDb = [0, 1, 2, 3].map((p) => db(r.parts[p * 2]));
-      const at = (frame0 + s.regionStart) / RATE + delayS;
-      const lateMs = Math.max(0, (ctx.currentTime - at) * 1000);
-      if (lateMs > 0) late++;
-      else {
-        for (let p = 0; p < 4; p++) {
-          const buf = ctx.createBuffer(2, s.length, RATE);
-          for (let ch = 0; ch < 2; ch++) { const a = r.parts[p * 2 + ch]; fadeInOut(a, plan.fade); buf.copyToChannel(a, ch); }
-          const node = ctx.createBufferSource();
-          node.buffer = buf; // played once, then garbage: never kept
-          node.connect(gains.current[p]);
-          node.start(at);
-        }
-      }
-      stats.push({ k, computeMs, ...r.ms, lateMs });
-      const steady = stats.slice(1);
-      const mean = steady.length ? steady.reduce((a, x) => a + x.computeMs, 0) / steady.length : computeMs;
-      const state = { inDb, partsDb, suppressLocalAudioPlayback: settings.suppressLocalAudioPlayback, label, delayS: +delayS.toFixed(2), steps: stats.length, late, meanComputeMs: Math.round(mean), ratio: +((hop * 1000) / mean).toFixed(2), heardS: Math.round((stats.length * plan.hop) / RATE) };
-      api.current.live = state;
-      setLive(state);
-      k++;
-      busy = false;
-      tick();
-    };
-    tap.port.onmessage = (e: MessageEvent<{ frame: number; l: Float32Array; r: Float32Array }>) => {
-      const { frame, l, r } = e.data;
-      if (frame0 < 0) frame0 = frame;
-      for (let i = 0; i < l.length; i++) { const j = (written + i) % size; ringL[j] = l[i]; ringR[j] = r[i]; }
-      written += l.length;
-      tick();
-    };
-    tap.port.postMessage({ on: true });
-    const stop = () => { tap.port.postMessage({ on: false }); stream.getTracks().forEach((t) => t.stop()); ctx.close(); stopLive.current = null; say("stopped"); };
-    at.onended = stop;
-    stopLive.current = stop;
   }
 
   const solo = (i: number) => setOn(PARTS.map((_, j) => j === i));
@@ -297,10 +203,10 @@ export function LabSpike({ url, hop, guard, auto }: { url: string; hop: number; 
         <input value={trackUrl} onChange={(e) => setTrackUrl(e.target.value)} placeholder="SoundCloud track link" style={{ width: 460, padding: 6, background: "#1a1a1a", color: "#eee", border: "1px solid #444" }} />{" "}
         <button style={btn} onClick={openDeck}>Open Deck window</button>
       </p>
-      <p>Deck: {deck ? `${deck.title || "…"} · ${deck.playing ? "playing" : "paused"} · ${(deck.pos / 1000).toFixed(1)} s · heard now (delayed): ${Math.max(0, deck.pos / 1000 - delayRef.current).toFixed(1)} s` : "not open"} <button style={btn} onClick={() => cmd("play")}>Play</button><button style={btn} onClick={() => cmd("pause")}>Pause</button></p>
+      <p>Deck: {deck ? `${deck.title || "…"} · ${deck.playing ? "playing" : "paused"} · ${(deck.pos / 1000).toFixed(1)} s ` : "not open"} <button style={btn} onClick={() => cmd("play")}>Play</button><button style={btn} onClick={() => cmd("pause")}>Pause</button></p>
       <h2 style={{ fontSize: 15, marginTop: 24 }}>2 · Listen</h2>
       <p><button style={btn} onClick={() => startLive()}>Start listening</button> In Chrome&apos;s dialog pick the <b>Six AM Deck</b> tab and keep &quot;Also share tab audio&quot; on.</p>
-      {live && <p>Capturing {live.label} · original muted here: <b>{String(live.suppressLocalAudioPlayback)}</b> · delay {live.delayS} s · {live.steps} windows · {live.meanComputeMs} ms each · <b>{live.ratio}× real time</b> · late {live.late} · heard {live.heardS} s <button style={btn} onClick={() => stopLive.current?.()}>Stop</button></p>}
+      {live && <p>Original muted here: <b>{String(live.suppressLocalAudioPlayback)}</b> · delay {live.delayS} s · {live.windows} windows ({live.skippedSilent} silent skipped) · {live.meanComputeMs} ms each · <b>{live.ratio}× real time</b> · late {live.late} · hearing {heard === null ? "–" : (heard / 1000).toFixed(1) + " s"} · in {live.inDb} dB · parts {live.partsDb.join(" / ")} dB <button style={btn} onClick={() => stopLive.current?.()}>Stop</button></p>}
       <h2 style={{ fontSize: 15, marginTop: 24 }}>3 · Parts</h2>
       <p>
         {PARTS.map((p, i) => (

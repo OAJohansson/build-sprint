@@ -7,7 +7,7 @@
 // transport stops; chords are kept as names only. Nothing is stored, exported or uploaded.
 import { ChordCells } from "./chords";
 import { DeckRemote, type DeckState } from "./deck-protocol";
-import { LiveParts, type LiveStats, type Region } from "./live";
+import { LiveError, LiveParts, type LiveStats, type Region } from "./live";
 import { LoopBuffer } from "./loop-buffer";
 import { Separator } from "./separator-client";
 import { gateResume, isCatching, loopPositionMs, msToSamples, playTimeOf, runOffset } from "./timing";
@@ -101,6 +101,7 @@ export class LabTransport {
   private lastKey = "";
   private timer: ReturnType<typeof setInterval>;
   private dlStart = 0;
+  private deckWaiters = new Set<() => void>();
 
   constructor(private o: TransportOptions) {
     this.chordCells = new ChordCells(o.bars, o.bpm, o.originSec, o.knownChords);
@@ -133,6 +134,44 @@ export class LabTransport {
   openDeck() {
     this.prepare();
     return this.deck.openWindow(this.o.url, this.o.deckPath);
+  }
+
+  /**
+   * L178, the first Play, from one click: opens the Deck window, waits for its first report (it
+   * has loaded and carries its title, ~2 s), then asks Chrome to share it. Checked in Chrome 155
+   * with fresh profiles (`/dev/lab-spike/share-test`):
+   * - window.open uses up the click's activation, yet getDisplayMedia still opens the picker
+   *   afterwards (no activation needed in Chrome 155);
+   * - asking right after window.open (same task) opens the picker before the Deck tab has its
+   *   title, so --auto-select-tab-capture-source-by-title missed it 3 of 4 times; sharing first, or
+   *   an about:blank window navigated after, missed it every time;
+   * - waiting for the Deck's first report, then asking: auto-select found it 2 of 2 (~2.3 s), and
+   *   without the flag the picker opens with the Deck already listed.
+   * With a Deck already open it shares at once, in the click (the dependable path, and the fallback
+   * if a later Chrome requires the activation: the first Play leaves the Deck open, the second shares).
+   * Throws LiveError("popup") when the Deck window was blocked (nothing is asked then).
+   */
+  async openDeckAndListen(waitMs = 5000) {
+    if (this.deck.open) return this.listen(); // shares in this click
+    const w = this.openDeck();
+    if (!w) {
+      this.error = "Chrome blocked the Deck window. Allow pop-ups for Six AM, then press Play again.";
+      this.emit(true);
+      throw new LiveError("popup", this.error);
+    }
+    this.phase = "starting";
+    this.emit(true);
+    await this.waitForDeck(waitMs);
+    return this.listen();
+  }
+
+  /** Resolves on the Deck's next report, or after `ms` (true if it reported). */
+  waitForDeck(ms: number) {
+    return new Promise<boolean>((resolve) => {
+      const t = setTimeout(() => { this.deckWaiters.delete(done); resolve(false); }, ms);
+      const done = () => { clearTimeout(t); resolve(true); };
+      this.deckWaiters.add(done);
+    });
   }
 
   /**
@@ -318,6 +357,8 @@ export class LabTransport {
   }
 
   private onDeck(s: DeckState) {
+    this.deckWaiters.forEach((f) => f());
+    this.deckWaiters.clear();
     const live = this.live;
     if (!live) { this.emit(); return; }
     live.noteDeck(s.pos, s.playing);

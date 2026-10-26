@@ -248,6 +248,7 @@ export function LabSpike({ url, hop, guard, auto, bpm, origin, durS }: { url: st
         <p>{url} · grid {bpm} BPM, bar 1 at {origin} s, {durS} s <button style={btn} onClick={() => tr.current?.openDeck()}>Open Deck window</button></p>
         <p>Deck: {st?.deckOpen ? "open" : "not open"} · model: {m ? (m.error ? `error ${m.error}` : m.ready ? "ready" : m.downloading ? `downloading ${Math.round((m.loaded / Math.max(1, m.total)) * 100)} %${m.etaS !== null ? `, ~${Math.round(m.etaS)} s left` : ""}` : "loading from cache…") : "not started"}</p>
         <h2 style={{ fontSize: 15, marginTop: 24 }}>2 · Listen</h2>
+        <p><button style={btn} id="play-first" onClick={() => tr.current?.openDeckAndListen().then(() => say("listening (one click)"), (e) => say("couldn't start: " + String(e?.message ?? e)))}>Play (opens the Deck and shares, one click)</button></p>
         <p><button style={btn} onClick={() => startLive()}>Start listening</button> In Chrome&apos;s dialog pick the <b>Six AM Deck</b> tab and keep &quot;Also share tab audio&quot; on. Phase: {st?.phase ?? "–"} {st?.error ? `· ${st.error}` : ""}</p>
         {live && <p>Original muted here: <b>{String(live.suppressLocalAudioPlayback)}</b> · delay {live.delayS} s · {live.windows} windows ({live.skippedSilent} silent skipped) · {live.meanComputeMs} ms each · <b>{live.ratio}× real time</b> · late {live.late} · in {live.inDb} dB · parts {live.partsDb.join(" / ")} dB</p>}
         <h2 style={{ fontSize: 15, marginTop: 24 }}>3 · Transport</h2>

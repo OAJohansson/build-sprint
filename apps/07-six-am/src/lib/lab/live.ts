@@ -27,7 +27,7 @@ export type LiveStats = {
 };
 
 export class LiveError extends Error {
-  constructor(public reason: "cancelled" | "no-audio" | "unsupported" | "hidden", message: string) {
+  constructor(public reason: "cancelled" | "no-audio" | "unsupported" | "hidden" | "popup", message: string) {
     super(message);
   }
 }

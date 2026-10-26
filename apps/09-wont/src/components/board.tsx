@@ -8,6 +8,7 @@ import { copy, titleCase } from "@/lib/copy";
 import type { Habit, SlipSize } from "@/lib/habits";
 import { weekStrip } from "@/lib/progress";
 import { peekState, useWont } from "@/lib/store";
+import { useSyncStatus } from "@/lib/sync-client";
 import { RideOut } from "./ride-out";
 import { Sheet } from "./sheet";
 import { Steamer } from "./wonton";
@@ -18,6 +19,7 @@ export function Board() {
   const w = useWont();
   const router = useRouter();
   const { state, today } = w;
+  const sync = useSyncStatus();
   const [fresh, setFresh] = useState<string | null>(null);
   const [addOpen, setAddOpen] = useState(false);
   const [slipFor, setSlipFor] = useState<string | null>(null);
@@ -148,6 +150,13 @@ export function Board() {
 
       <footer className="w-foot">
         <Link href="/intro" className="w-foot-link">{copy.board.replayIntro}</Link>
+        <span className="w-foot-dot" aria-hidden="true">·</span>
+        {/* Feedback 44: offline the status is plain text; the Sync screen needs the network. */}
+        {sync.connected && sync.status === "offline" ? (
+          <span className="w-foot-link" role="status">{copy.board.syncOffline}</span>
+        ) : (
+          <Link href="/sync" className="w-foot-link">{sync.connected ? copy.board.syncOn : copy.board.syncOff}</Link>
+        )}
       </footer>
 
       <Sheet open={addOpen} onClose={closeAdd} label={copy.board.addSheetTitle}>

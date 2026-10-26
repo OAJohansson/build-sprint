@@ -19,6 +19,7 @@ reps in going from idea to something live, plus an honest write-up of what I lea
 | 7 | **Six AM** | Real DAWs look like a cockpit and GarageBand isn't built for dance music, so I never get from \"I'd love to\" to a track I can play | ✅ shipped | [live](https://six-am.vercel.app) | [write-up](docs/products/07-six-am.md) · [code](apps/07-six-am) |
 | 8 | **Selvedge** | My saved pieces are scattered across Instagram, Pinterest and screenshots and a moodboard takes an evening, so I can't put my style into words or find brands that match | ✅ shipped | [live](https://selvedge-sandy.vercel.app) | [write-up](docs/products/08-selvedge.md) · [code](apps/08-selvedge) |
 | 9 | **Wont** | When a new habit is fragile, one late morning or one pouch feels like failure, and the bad feeling turns one slip into a lost week | ✅ shipped | [live](https://wont-peach.vercel.app) | [write-up](docs/products/09-wont.md) · [code](apps/09-wont) |
+| 10 | **Magpie** | I taste something I love and weeks later can't remember its name or where I had it, so I can't order it again, and a trip's food memories fade | ✅ shipped | [live](https://magpie-book.vercel.app) | [write-up](docs/products/10-magpie.md) · [code](apps/10-magpie) |
 <!-- products:end -->
 
 _This table is generated from `docs/products/*.md`. Run `pnpm sync` after editing frontmatter._

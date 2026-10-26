@@ -1,0 +1,85 @@
+{
+  "judge": "data-evals (Claude), by eye, sticker vs its photo; contact sheet on cream #FFF4E0 and a check sheet on green to show halos",
+  "prompt": "v2 (commit 92cb4a0)",
+  "rubric": {
+    "recognisable": "1 if someone who saw only the photo would pick this sticker as the same dish or drink: same item, its main colours, vessel shape and signature garnish. Generic-but-right (a cheese wedge for Comte) counts. 0 if it shows a different item or loses what makes it that item.",
+    "style": "1 only if all hold: (a) flat fills, no gradients, texture or photo detail beyond one highlight; (b) thick dark-brown outlines on the item's shapes; (c) a white die-cut border all round; (d) transparent outside, corners alpha 0, no leftover white or background visible on green; (e) no text, logos, table or scene; (f) reads as the same set as 01/02/11 (pastel backing, shape matches the yum number: odd round, even rounded square)."
+  },
+  "cases": {
+    "10": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "croissant plate with berries; borderline: small subject, thin food lines, dotted texture"
+    },
+    "11": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "dark pint with foam"
+    },
+    "12": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "tiramisu on a plain plate, tablecloth gone; borderline: small, thin lines, reads a little like pancakes"
+    },
+    "01": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "red wine glass; bold outer outline"
+    },
+    "02": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "rocks glass, red, orange, straw"
+    },
+    "03": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "blue margarita, salt rim, lime; borderline: glass foot sticks out past the disc and border"
+    },
+    "04": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "dumplings in steamer with spoon; borderline: steamer mesh texture and soft shading remain"
+    },
+    "05": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "red bowl, dal, cream swirl, toppings"
+    },
+    "06": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "cheese wedge; outline just inside a white edge"
+    },
+    "07": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "two-scoop gelato cup, pink spoon; pistachio now green (from the name)"
+    },
+    "08": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "latte art cup; now has the bold outer outline"
+    },
+    "09": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "ramen, nori, chashu, scallions; bowl text and logos gone"
+    },
+    "E1": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "orange wine from the name"
+    },
+    "E2": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "dark photo still a ramen bowl"
+    },
+    "E3": {
+      "recognisable": 1,
+      "style": 1,
+      "why": "collage named Negroni: now draws the negroni (fixed)"
+    }
+  }
+}

@@ -151,3 +151,43 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   decision-log review, interview story, card shipped. Carried over: knowledge bank (a new
   Behaviour change subsection, a grader entry, quiz), learnings (09 Wont and three process
   changes), problems (Wont, self-doubt), to-do.
+
+## 26 Oct: v1.1, sync (Founder phase)
+
+- **Problem (owner):** the laptop has the real history since 24 Oct; on the phone Wont is empty,
+  because everything is in one browser's localStorage. Owner's call (L27): sync through the
+  shared Supabase project with an access code, like Selvedge.
+- Branch reset to the latest `origin/main`. Kickoff addendum `kickoff-v1.1-sync.md`: MVP, stop
+  line, riskiest assumption (no data lost on first sync) and checks S1–S8.
+- Merge rule (L28) and storage shape (L29) decided inside the pack's appetite.
+- **Ops (pre-approved by 0028, logged here):** additive migration `wont_docs` on the shared
+  Supabase project (crossfit-log): one table, RLS on, no policies; nothing else touched. Wont's
+  own `ACCESS_CODE` and `SANDBOX_ACCESS_CODE` generated into the root `.env.secrets.local` under
+  `[09-wont]` (env keys are ops); `.env.example` + `pnpm env-bootstrap 09-wont`. The owner's code
+  is in that file when they connect their devices.
+- **Built:** `src/lib/sync.ts` (pure: stamp changes, merge, read a document) with 13 unit tests
+  (first connect, empty phone, offline on both devices, undo, delete, midnight); server routes
+  `/api/access` (cookie, Selvedge/Magpie pattern) and `/api/sync` (merge + revision-checked save);
+  `src/lib/sync-client.ts` (background sync on open, focus, online, every minute, 0.8 s after a
+  tap); Sync screen and footer link (T23). `migrate` moved to its own module so the server shares
+  it. 47 tests, build and lint green. Day logic, copy and design otherwise unchanged.
+- **Graders:** user-tester on V1–V5 (plan.md, v1.1 section) with the sandbox code; design critic
+  on the Sync screen.
+- **Grader results:** user test V1, V2, V3, V5 pass, V4 struggle (offline reload / cold open
+  shows the browser's error page; data safe). Every habit-day equal on laptop, phone and server;
+  0 secrets in 355 responses (`report-2026-10-26-sync.md`). Critic 6.5/10 on the Sync screen
+  (feedback 43).
+- **Fixes:** offline shell (L30), comeback seen per device (L31), critic's naming and copy
+  (T24), offline footer as text (T25), stop confirmation, a unit test for the grader's
+  unreproduced "seeded laptop + server-only tap" (passes). 48 tests green. Re-check on the preview
+  deploy, so the service worker runs in a real production build.
+- **Re-check** on a local production build (previews are behind Vercel's login): every bar
+  passes, including offline reload and cold open. Critic round 2: 7.5/10; copy fixed (T26),
+  rounds stopped. Eval report `eval-report-v1.1-sync.md`.
+- **Ops:** Wont's four env keys set on Vercel (production and preview) with the same API calls as
+  `pnpm ship` (its `--preview` path skips env). Sandbox reset after each grader run.
+- **PR** https://github.com/OAJohansson/build-sprint/pull/93 (checks green, main merged in),
+  preview https://wont-1ndheg7ka-mimirswell.vercel.app. Waiting for the owner's final review and
+  merge yes. Note for the review: the laptop's real history lives on the production origin
+  (wont-peach.vercel.app), so the real first connect happens after the merge; the preview starts
+  empty and, with the owner's code, writes the owner's real document.

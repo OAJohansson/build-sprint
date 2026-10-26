@@ -1,0 +1,121 @@
+# Kickoff pack: Magpie
+
+The owner's kickoff for a product (decision 0026). In Founder mode the owner writes it alone and
+the PM session builds from it. Drafted by Claude from the owner's calls in the kickoff
+conversation (26 Oct), in the owner's words where possible; the owner can edit any line. Lines
+marked **Open** are still the owner's to decide before the PM session starts.
+
+**Mode:** founder
+**Appetite:** **Open** (suggested: one day; cuts in order if it runs out: the AI illustration
+falls back to the photo, then the country filter falls back to search only)
+**Evals:** `evals.md` (agent-checkable part) · owner-only checks kept outside the repo
+
+## Problem
+
+I taste something I love (a plum hot shot in Taiwan, a wine, a cheese) and weeks later I can't
+remember its name or where I had it, so I can't order it again or recommend it. The food memories
+from a trip fade with everything else: the photo sits somewhere in the camera roll, but the name
+and the feeling are gone.
+
+## Who
+
+Me. I travel, I like food and drink, and I have favourite wines and cheeses whose names I keep
+forgetting. I take photos of good dishes but never look at them again. "Worth it" = when I want
+to remember something I loved, it's on the shelf, and after a trip I can look back at
+everything delicious I tried.
+
+## Moment of use and jobs to be done
+
+At the table or the bar, right after the first taste (phone, one hand, often with friends, a
+little distracted). Later: in a shop or restaurant when I need a name, and at home after a trip
+when I want to look back.
+
+1. **Recall:** When I'm in a shop or restaurant and want something I loved before, I want to find
+   its name in seconds, so I can order or buy it again.
+2. **Relive:** When I'm back from a trip (or just remembering), I want to see everything
+   delicious I tried there, so I can enjoy it again and show friends.
+3. **Capture:** When I taste something I love, I want to save it in under 30 seconds with a
+   photo, a name, a rating and a note, so it's not lost in the camera roll.
+
+## Today's alternatives
+
+- **The camera roll:** the photo is there, but no name, no place I can search, no feeling.
+- **Vivino (wine), Untappd (beer):** good at recall, but only for one drink type each.
+- **Beli:** ranks restaurants by comparing them in pairs, but it's about places, not dishes.
+- **Notes app:** fast, but a list I never reopen.
+
+Why switch: one collection across all food and drink, lovely enough to browse that I'd open it
+for fun, and searchable when I need a name.
+
+## Riskiest assumptions
+
+- **Usability (riskiest):** that I'll actually capture at the table, in under 30 seconds, instead
+  of taking a photo and forgetting it. Everything depends on capture happening.
+- Value: that a collection that's beautiful to look back on (the illustrations, the shelf) makes
+  me want to keep adding to it.
+- Feasibility: that an image model turns a phone photo into a simple illustration that's
+  recognisable and consistent across items, fast enough not to spoil capture.
+- Viability: none, it's for me.
+
+## Success: what good looks like
+
+Outcome: when I want to remember something I loved, it's on the shelf.
+
+- Signal: I capture at least 10 things in the first two weeks (count of items).
+- Signal: capture takes under 30 seconds from opening the app to saved (timed).
+- Signal: I find a saved item by name or country in under 10 seconds (timed).
+- Guardrail: the AI illustration never loses or replaces my original photo.
+
+## MVP and stop line
+
+**In (owner's calls so far):**
+- Capture: a photo, the name, a type (food, drink, dessert), the place and country, a small
+  rating and a short note.
+- An AI-made simple illustration of the photo, saved in the app as the item's picture (the
+  original photo kept too).
+- The shelf as the home screen: the collection, browsable, with a country filter (relive).
+- Search pinned at the top of the shelf (recall).
+
+**Open:** which devices (phone only, or phone and laptop like Selvedge); the rating scale.
+
+**Out (to `backlog.md`):** recipes, the music-moments diary (lives in Six AM's backlog),
+sharing, a map, recommendations.
+
+## Requirements
+
+Filled in once the open calls above are settled.
+
+| # | Must | Check |
+| --- | --- | --- |
+| R1 | | |
+
+**No-gos:**
+
+**Rabbit holes:**
+
+## Feel references
+
+**Open.** The owner picked Magpie as the name and brand (26 Oct): a collector who keeps what it
+loves. The quick brand sketch was ink, a teal sheen, gold and cream, with each item as a shiny
+trinket in the nest; it's a starting point, not a decision.
+
+- [reference] — [what to take from it]
+
+**The feel in one sentence:** **Open**
+
+## Things to avoid
+
+- **Open**
+
+## Decisions already made
+
+- Name and brand: Magpie, with a magpie mascot (owner, 26 Oct). Tastebud was dropped because
+  several food apps already use it.
+- Reuse Selvedge's setup where it fits: phone capture and image AI (owner, 26 Oct). Selvedge
+  uses Supabase, an access code and image models through OpenRouter (decisions 0021, 0022).
+- Both jobs in the MVP, on one screen: the shelf is home (relive), search sits on top (recall)
+  (owner, 26 Oct).
+
+## Unit tests
+
+**Open** (likely none: no date or streak logic so far).

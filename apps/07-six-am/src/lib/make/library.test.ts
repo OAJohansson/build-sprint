@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { normalizeTags, parseNewSound, parseSoundPatch, shortTitle, soundWord, suggestName, suggestTags } from "./library";
+import { normalizeTags, saveAction, soundId, parseNewSound, parseSoundPatch, shortTitle, soundWord, suggestName, suggestTags } from "./library";
 import { MAKE_PRESETS } from "./presets";
 
 const SONG = "It Just Won't Do (Mason Flint Remix) [feat. Sam Obernik]";
@@ -61,5 +61,23 @@ describe("parseNewSound", () => {
   it("renames and retags; keeps a rename tidy", () => {
     expect(parseSoundPatch({ name: "  rubber   sub  ", tags: ["Sub", "sub"], audio: "x" }, { preset: "round-sub" })).toEqual({ name: "rubber sub", tags: ["sub"] });
     expect(parseSoundPatch({ name: "   " }, { preset: "round-sub" })).toEqual({});
+  });
+});
+
+describe("saving from Make (S5-1)", () => {
+  const m = MAKE_PRESETS["rubber-pluck"].macros;
+  const sound = soundId("rubber-pluck", m);
+  it("names a sound by preset and knobs, not by name", () => {
+    expect(soundId("rubber-pluck", { ...m })).toBe(sound);
+    expect(soundId("rubber-pluck", { ...m, tone: m.tone + 0.05 })).not.toBe(sound);
+    expect(soundId("reese", m)).not.toBe(sound);
+  });
+  it("posts a new sound, renames a saved one, or does nothing", () => {
+    expect(saveAction({ sound, name: "Rubber sub" }, null)).toEqual({ kind: "post" });
+    const last = { id: "s1", sound, name: "Rubbery bass, from X" };
+    expect(saveAction({ sound, name: " Rubbery bass,  from X " }, last)).toEqual({ kind: "none" });
+    expect(saveAction({ sound, name: "Rubber sub" }, last)).toEqual({ kind: "patch", id: "s1" });
+    expect(saveAction({ sound, name: "" }, last)).toEqual({ kind: "none" });
+    expect(saveAction({ sound: soundId("reese", m), name: "Rubber sub" }, last)).toEqual({ kind: "post" });
   });
 });

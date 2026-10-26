@@ -7,12 +7,12 @@ import { MACRO_IDS, MACRO_SPECS, macroWord, type MacroId, type Macros } from "./
 export const TICK_REACHED = 0.08;
 
 const MORE: Record<MacroId, [string, string]> = {
-  tone: ["darker", "brighter"],
-  length: ["shorter", "longer"],
+  tone: ["a darker tone", "a brighter tone"],
+  length: ["shorter notes", "longer notes"],
   pitchDrop: ["less pitch drop", "more pitch drop"],
-  drive: ["cleaner", "more clipped"],
-  wobble: ["steadier", "more movement"],
-  width: ["narrower", "wider"],
+  drive: ["a cleaner sound", "more clipping"],
+  wobble: ["a steadier filter", "more filter movement"],
+  width: ["a narrower sound", "a wider sound"],
 };
 
 /** The knobs furthest from their ticks (at most `n`), biggest move first. */
@@ -24,7 +24,7 @@ export function movesTo(current: Macros, ticks: Macros, n = 2): { id: MacroId; u
 }
 
 /**
- * "Length down to 1/8, Pitch drop up. The original measures shorter, with more pitch drop." A
+ * "Length down to 1/8, Pitch drop up. The original bass measures shorter notes and more pitch drop." A
  * move names the word it lands on when the word changes ("down to 1/8"), else just the way.
  */
 export function suggestLine(current: Macros, ticks: Macros, partName = "bass"): string {
@@ -35,5 +35,12 @@ export function suggestLine(current: Macros, ticks: Macros, partName = "bass"): 
     return `${MACRO_SPECS[id].name} ${up ? "up" : "down"}${to !== from ? ` to ${to}` : ""}`;
   });
   const traits = moves.map(({ id, up }) => MORE[id][up ? 1 : 0]);
-  return `${say.join(", ")}. The original ${partName} measures ${traits.join(", with ")}.`;
+  return `${say.join(", ")}. The original ${partName} measures ${traits.join(" and ")}.`;
+}
+
+/** After "Suggest settings" (S3-2): which ticks moved, briefly. */
+export function ticksMoved(before: Macros | null, after: Macros): string {
+  if (!before) return "Gold ticks mark those.";
+  const moved = MACRO_IDS.filter((id) => Math.abs(after[id] - before[id]) >= 0.05).map((id) => MACRO_SPECS[id].name);
+  return moved.length ? `Ticks moved: ${moved.join(", ")}.` : "The ticks stayed where they were.";
 }

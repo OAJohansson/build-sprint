@@ -136,3 +136,19 @@ export function parseSoundPatch(raw: unknown, current: Pick<LibrarySound, "prese
   if (r.macros && typeof r.macros === "object") out.macros = clampMacros(preset ?? current.preset, r.macros as Partial<Macros>);
   return out;
 }
+
+// ── Saving from Make (S4 fix, S5-1) ──────────────────────────────────────────────────────────────
+
+/** A sound's identity in Make: its preset and knob values (rounded), whatever its name. */
+export const soundId = (preset: MakePresetId, m: Macros) => `${preset}|${(Object.keys(m) as (keyof Macros)[]).sort().map((k) => Math.round(m[k] * 1000)).join(",")}`;
+
+/**
+ * What "Save to library" does now, given the last sound saved (or loaded) here: nothing when it's
+ * that sound under that name; a rename (PATCH) when only the name changed; a new sound (POST)
+ * otherwise.
+ */
+export function saveAction(now: { sound: string; name: string }, last: { id: string; sound: string; name: string } | null): { kind: "none" } | { kind: "patch"; id: string } | { kind: "post" } {
+  if (!last || last.sound !== now.sound) return { kind: "post" };
+  const a = now.name.replace(/\s+/g, " ").trim(), b = last.name.replace(/\s+/g, " ").trim();
+  return !a || a === b ? { kind: "none" } : { kind: "patch", id: last.id };
+}

@@ -14,14 +14,16 @@ import type { PartName } from "@/lib/lab/live";
 import type { LabTransport, LoopState } from "@/lib/lab/transport";
 import { msToBar } from "@/lib/lab/timing";
 import { clockMs, type LabPart, type LabSection } from "@/lib/lab/view";
-import { suggestLine, movesTo } from "@/lib/make/coach";
+import { suggestLine, movesTo, ticksMoved } from "@/lib/make/coach";
 import type { PartReading } from "@/lib/make/from-part";
+import type { MakeNote } from "@/lib/make/render";
 import { gainToLevel } from "@/lib/make/level";
+import { notesForLoop } from "@/lib/make/pattern";
 import { MakeClient } from "@/lib/make/make-client";
-import { suggestName, suggestTags } from "@/lib/make/library";
+import { saveAction, soundId, suggestName, suggestTags, type LibrarySound } from "@/lib/make/library";
 import { MACRO_IDS, MACRO_SPECS, MAKE_PRESETS, MAKE_PRESET_IDS, macroWord, type MacroId, type Macros, type MakePresetId } from "@/lib/make/presets";
 import { ApiError, mentorApi } from "@/lib/mentor/client";
-import { partNoun, type LabMake } from "@/lib/mentor/lab";
+import { noteName, partNoun, type LabMake } from "@/lib/mentor/lab";
 import type { Scale } from "@/lib/synths/theory";
 import { Composer, Turn, type ThreadTurn } from "./mentor-thread";
 import s from "./lab.module.css";
@@ -64,7 +66,14 @@ export function useMake(o: MakeOpts) {
   const [wordsS, setWords] = useState<WordsLoop & { loopKey: string } | null>(null);
   const [wordsState, setWordsState] = useState<{ busy: boolean; error: string | null }>({ busy: false, error: null });
   const [name, setName] = useState<string | null>(null); // null = the suggested name
-  const [savedS, setSaved] = useState<{ state: "idle" | "saving" | "saved" | "error"; text?: string; key: string }>({ state: "idle", key: "" });
+  // The last sound saved or loaded here (S5-1): a rename of it is a PATCH, not a second sound.
+  const [last, setLast] = useState<{ id: string; sound: string; name: string } | null>(null);
+  const [saveState, setSaveState] = useState<{ state: "idle" | "saving" | "error"; text?: string }>({ state: "idle" });
+  // S5-2: this track's sounds in the library, for one quiet line in Make.
+  const [sounds, setSounds] = useState<LibrarySound[]>([]);
+  // S3-2: which knob values the ticks were worked out from, and what the last run moved.
+  const [ticksFor, setTicksFor] = useState<string | null>(null);
+  const [moved, setMoved] = useState<string | null>(null);
   const renderMs = useRef<number | null>(null);
   const isBass = o.focus === "bass";
   const loopKey = loopKeyOf(o.loop);
@@ -80,12 +89,15 @@ export function useMake(o: MakeOpts) {
   useEffect(() => () => { client.current?.stop(); client.current = null; }, []);
   const cl = () => (client.current ??= new MakeClient());
 
-  const suggest = useCallback(async (r: Reading, p: MakePresetId, start?: Macros) => {
+  const suggest = useCallback(async (r: Reading, p: MakePresetId, start?: Macros, before?: Macros | null) => {
     setSuggesting(true);
+    const t0 = performance.now();
     try {
       const res = await cl().suggest({ reading: r.r, preset: p, bpm: o.bpm, start });
-      console.info(`[make] suggest ${p}: ${res.suggestion.renders} renders in ${res.ms} ms, distance ${res.suggestion.distance.toFixed(2)} (preset ${res.suggestion.presetDistance.toFixed(2)})`);
+      console.info(`[make] suggest ${p}: ${res.suggestion.renders} renders in ${res.ms} ms (${Math.round(performance.now() - t0)} ms round trip), distance ${res.suggestion.distance.toFixed(2)} (preset ${res.suggestion.presetDistance.toFixed(2)})`);
       setTicks(res.suggestion.macros);
+      setTicksFor(soundId(p, start ?? MAKE_PRESETS[p].macros));
+      setMoved(before === undefined ? null : ticksMoved(before, res.suggestion.macros));
     } catch (e) {
       console.warn("[make] suggest failed", e);
     } finally {
@@ -140,8 +152,27 @@ export function useMake(o: MakeOpts) {
     setPresetS(p);
     setMacros(MAKE_PRESETS[p].macros);
     setTicks(null);
+    setMoved(null);
     if (reading) void suggest(reading, p);
   }, [reading, suggest]);
+
+  // S5-2: the sounds already made from this track (numbers only), and loading one back.
+  useEffect(() => {
+    if (!o.code || !o.url) return;
+    let live = true;
+    mentorApi(o.code).sounds({ source: o.url, part: "bass" }).then((xs) => { if (live) setSounds(xs); }, () => { /* the line just stays away */ });
+    return () => { live = false; };
+  }, [o.code, o.url]);
+  const loadSound = (x: LibrarySound) => {
+    setWords(null);
+    setPresetS(x.preset);
+    setMacros(x.macros);
+    setName(x.name);
+    setLast({ id: x.id, sound: soundId(x.preset, x.macros), name: x.name });
+    setTicks(null);
+    setMoved(null);
+    if (reading) void suggest(reading, x.preset);
+  };
   const setMacro = useCallback((id: MacroId, v: number) => setMacros((m) => (m[id] === v ? m : { ...m, [id]: v })), []);
 
   // "Describe a bass in words…": Stable Audio, from the words and the track's tempo and key only.
@@ -174,33 +205,48 @@ export function useMake(o: MakeOpts) {
 
   const suggested = suggestName("bass", preset, macros, o.title);
   const tags = useMemo(() => (scale && o.keyName ? suggestTags("bass", preset, o.keyName, scale, o.bpm, o.title) : []), [scale, preset, o.keyName, o.bpm, o.title]);
-  // "Saved" belongs to the sound it saved: a change after saving makes a new sound to save.
-  const soundKey = `${loopKey}|${preset}|${MACRO_IDS.map((id) => macros[id]).join(",")}`;
-  const saved = savedS.key === soundKey || savedS.state === "saving" ? savedS : { state: "idle" as const, key: soundKey };
+  // S5-1: Save posts a new sound, renames the one saved here (PATCH), or rests when it's saved.
+  const sound = soundId(preset, macros);
+  // A new sound after a save starts from the suggested name again, not the saved one's.
+  const nameField = name === null || (last && last.sound !== sound && name === last.name) ? suggested : name;
+  const nameNow = nameField.trim() || suggested;
+  const action = saveAction({ sound, name: nameNow }, last);
+  const savedAs = last && last.sound === sound ? last.name : null;
   const save = async () => {
-    if (!reading || !scale || words) return;
-    const key = soundKey;
-    setSaved({ state: "saving", key });
+    if (!reading || !scale || words || action.kind === "none") return;
+    setSaveState({ state: "saving" });
     try {
-      const snd = await mentorApi(o.code).addSound({
-        name: (name ?? suggested).trim() || suggested, part: "bass", preset, macros,
-        pattern: { bars: reading.r.pattern.bars, notes: reading.r.pattern.notes },
-        key: o.keyName, scale, bpm: o.bpm, source: { title: o.title, url: o.url }, tags,
-      });
-      setSaved({ state: "saved", text: snd.name, key });
+      const api = mentorApi(o.code);
+      const snd = action.kind === "patch"
+        ? await api.patchSound(action.id, { name: nameNow })
+        : await api.addSound({
+          name: nameNow, part: "bass", preset, macros,
+          pattern: { bars: reading.r.pattern.bars, notes: reading.r.pattern.notes },
+          key: o.keyName, scale, bpm: o.bpm, source: { title: o.title, url: o.url }, tags,
+        });
+      setLast({ id: snd.id, sound, name: snd.name });
+      setName(snd.name);
+      setSounds((xs) => [snd, ...xs.filter((x) => x.id !== snd.id)]);
+      setSaveState({ state: "idle" });
     } catch (e) {
-      setSaved({ state: "error", text: e instanceof ApiError ? e.message : "Couldn't save. Try again.", key });
+      setSaveState({ state: "error", text: e instanceof ApiError ? e.message : "Couldn't save. Try again." });
     }
   };
+  const saved = { state: saveState.state, text: saveState.text, savedAs, action: action.kind };
+  // The loop's notes as read, repeated over the loop (S3-5): drawn in the strip's bass row.
+  const loopNotes = useMemo(() => (reading ? notesForLoop(reading.r.pattern, reading.r.loopSteps).map((n, i, all) => ({ ...n, dur: Math.min(n.dur, reading.r.pattern.notes.find((x) => x.step === n.step % (reading.r.pattern.bars * 16))?.dur ?? n.dur, (all[i + 1]?.step ?? reading.r.loopSteps) - n.step) })) : null), [reading]);
 
   return {
     isBass, preset, setPreset, macros, setMacro, ticks, ab, setAb, reading, readState, readError, suggesting,
-    suggestAgain: () => { if (reading) void suggest(reading, preset, macros); },
+    suggestAgain: () => { if (reading) void suggest(reading, preset, macros, ticks); },
+    /** The ticks were worked out from exactly these knobs: nothing new to suggest (S3-2). */
+    suggestedNow: !!ticks && ticksFor === sound, moved,
+    sounds, loadSound, loopNotes, loopSteps: reading?.r.loopSteps ?? null,
     mineReady: mineKey !== null, words, wordsState, fromWords, clearWords: () => { setWords(null); setMineKey(null); },
-    name: name ?? suggested, setName, tags, save, saved,
+    name: nameField, setName, tags, save, saved,
     /** What the Lab Mentor gets with a question asked in Make. */
     labMake: (isBass && !words ? { preset, macros, ticks } : null) as LabMake | null,
-    debug: () => ({ preset, macros, ticks, ab, readState, mineKey, renderMs: renderMs.current, words: words?.text ?? null, pattern: reading?.r.pattern ?? null, levelDb: reading?.levelDb ?? null, features: reading?.r.features ?? null, saved }),
+    debug: () => ({ preset, macros, ticks, ab, readState, mineKey, renderMs: renderMs.current, sounds: sounds.map((x) => x.name), words: words?.text ?? null, pattern: reading?.r.pattern ?? null, levelDb: reading?.levelDb ?? null, features: reading?.r.features ?? null, saved }),
   };
 }
 export type MakeModel = ReturnType<typeof useMake>;
@@ -225,6 +271,8 @@ type RoomProps = {
   onRetry: (id: string) => void;
   onSeek: (bar: number) => void;
   onLoopHere: () => void;
+  /** S3-4: from Drums, Other or Vocals in Make, focus the bass. */
+  onBass: () => void;
   busy: boolean;
   note: string | null;
 };
@@ -243,10 +291,10 @@ export function MakeRoom(p: RoomProps) {
       <section className={s.synth} aria-label={`Make a ${name}`}>
         <p className={s.who} aria-live="polite">{caption}</p>
         {loop && from !== null && to !== null
-          ? <LoopStrip part={part} from={from} to={to} chords={p.chords} levels={p.levels} heardMs={p.heardMs} bpm={p.bpm} originSec={p.originSec} />
+          ? <LoopStrip part={part} from={from} to={to} chords={p.chords} levels={p.levels} heardMs={p.heardMs} bpm={p.bpm} originSec={p.originSec} notes={m.isBass ? m.loopNotes : null} steps={m.loopSteps} />
           : <div className={s.makeEmpty}><p>Make works on a loop of the part, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
         {!m.isBass ? (
-          <p className={s.makeQuiet}>Make is bass-only for now.</p>
+          <p className={s.makeQuiet}>Make is bass-only for now. <button className={s.makeText} onClick={p.onBass}>Make a bass instead</button></p>
         ) : (
           <SynthControls m={m} part={part} loop={loop} ready={p.ready} />
         )}
@@ -267,7 +315,7 @@ function SynthControls({ m, part, loop, ready }: { m: MakeModel; part: LabPart; 
   else if (m.readState === "error") line = <>{m.readError}</>;
   else if (m.words) line = <>Mine is a loop Stable Audio made from your words and the track&apos;s tempo and key.<br /><span className={s.faintLine}>The knobs work on presets. Pick one to go back.</span></>;
   else if (!m.ticks) line = <>{m.suggesting ? `Measuring the bass against ${MAKE_PRESETS[m.preset].name}…` : "Mentor: press Suggest settings to compare this preset with the bass."}</>;
-  else line = <>Mentor: {suggestLine(m.macros, m.ticks)}{moves.length > 0 && <><br /><span className={s.faintLine}>Gold ticks mark those.</span></>}</>;
+  else line = <>Mentor: {suggestLine(m.macros, m.ticks)}{(moves.length > 0 || m.moved) && <><br /><span className={s.faintLine}>{m.moved ?? "Gold ticks mark those."}</span></>}</>;
   return (
     <>
       <PresetHead m={m} partName={part.name.toLowerCase()} />
@@ -279,7 +327,7 @@ function SynthControls({ m, part, loop, ready }: { m: MakeModel; part: LabPart; 
       <div className={s.suggestRow}>
         <p className={s.suggest} aria-live="polite">{line}</p>
         {/* Suggest settings (L157, T85): local patch matching; it only moves the gold ticks. */}
-        <button className={s.ghost} onClick={m.suggestAgain} disabled={off || m.suggesting} aria-describedby="suggest-hint">{m.suggesting ? "Suggesting…" : "Suggest settings"}</button>
+        <button className={s.ghost} onClick={m.suggestAgain} disabled={off || m.suggesting || m.suggestedNow} aria-describedby="suggest-hint">{m.suggesting ? "Suggesting…" : m.suggestedNow ? "Suggested" : "Suggest settings"}</button>
         <span id="suggest-hint" hidden>Places gold ticks where the knobs come closest to the original; it never turns a knob</span>
       </div>
       <div className={s.checkRow}>
@@ -313,8 +361,19 @@ function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
   const canWords = m.readState === "ready";
   return (
     <div className={s.preset} ref={box}>
+      <div className={s.presetRow}>
       <button className={s.presetName} aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen(!open)}
         aria-label={`Preset: ${current}. Change preset`}>{current} <span aria-hidden>▾</span></button>
+        {/* S5-2: one quiet line, the sounds saved from this track; one click loads it. */}
+        {m.sounds.length > 0 && (
+          <p className={s.yours}>Your sounds from this track:{" "}
+            {m.sounds.slice(0, 4).map((x, i) => (
+              <span key={x.id}>{i > 0 && " · "}<button className={s.soundLink} onClick={() => m.loadSound(x)} disabled={m.readState !== "ready"} title={`${MAKE_PRESETS[x.preset].name}: load its preset, knobs and name`}>{x.name}</button></span>
+            ))}
+            {m.sounds.length > 4 && ` +${m.sounds.length - 4}`}
+          </p>
+        )}
+      </div>
       {open && (
         <div className={s.menu} role="menu" aria-label="Presets">
           {MAKE_PRESET_IDS.map((id) => (
@@ -366,7 +425,7 @@ function Knob({ id, value, sug, color, disabled, onChange, reset, size = 96 }: {
       onDoubleClick={() => { if (!disabled) set(reset); }}
       onKeyDown={(e) => {
         if (disabled) return;
-        const step = e.shiftKey ? 0.1 : 0.01;
+        const step = e.shiftKey ? 0.1 : 0.05;
         const k: Record<string, number> = { ArrowUp: value + step, ArrowRight: value + step, ArrowDown: value - step, ArrowLeft: value - step, PageUp: value + 0.1, PageDown: value - 0.1, Home: 0, End: 1 };
         if (e.key in k) { e.preventDefault(); set(k[e.key]); }
       }}>
@@ -384,7 +443,7 @@ function Knob({ id, value, sug, color, disabled, onChange, reset, size = 96 }: {
 
 /** The loop, zoomed (handoff §Make 3): chords, bar numbers, the part's clips (heard, else the map's
  *  estimate, faint), the playhead. Grows from 118 to 280 px with spare height. */
-function LoopStrip({ part, from, to, chords, levels, heardMs, bpm, originSec }: { part: LabPart; from: number; to: number; chords: (string | null)[]; levels: (number | null)[][] | null; heardMs: () => number; bpm: number; originSec: number }) {
+function LoopStrip({ part, from, to, chords, levels, heardMs, bpm, originSec, notes, steps }: { part: LabPart; from: number; to: number; chords: (string | null)[]; levels: (number | null)[][] | null; heardMs: () => number; bpm: number; originSec: number; notes: MakeNote[] | null; steps: number | null }) {
   const head = useRef<HTMLElement>(null);
   const len = to - from;
   useLayoutEffect(() => {
@@ -422,7 +481,15 @@ function LoopStrip({ part, from, to, chords, levels, heardMs, bpm, originSec }: 
         <div key={row.label} className={s.lsRow}>
           <span className={s.lsLabel}>{row.label}</span>
           <div className={s.lsTrack}>
-            {clip(row.heard).map((x) => <span key={`h${x.from}`} className={s.lsClip} style={{ left: pct(x.from), width: w(x.from, x.to), background: part.color }} />)}
+            {clip(row.heard).map((x) => <span key={`h${x.from}`} className={s.lsClip} data-under={notes?.length ? "" : undefined} style={{ left: pct(x.from), width: w(x.from, x.to), background: part.color }} />)}
+            {/* S3-5: the notes Make read from the loop (what Mine plays), by pitch. */}
+            {notes && steps && notes.length > 0 && !part.subs.length && (() => {
+              const lo = Math.min(...notes.map((n) => n.midi)), hi = Math.max(...notes.map((n) => n.midi)), span = Math.max(1, hi - lo);
+              return notes.map((n) => (
+                <span key={`n${n.step}`} className={s.lsNote} title={`${noteName(n.midi)}, bar ${from + Math.floor(n.step / 16)}`}
+                  style={{ left: `${(n.step / steps) * 100}%`, width: `${(Math.max(0.5, n.dur) / steps) * 100}%`, top: `calc(${((hi - n.midi) / span) * 100}% * 0.8 + 10%)`, background: part.color }} />
+              ));
+            })()}
             {clip(row.estimate).map((x) => <span key={`e${x.from}`} className={s.lsClip} data-est="" style={{ left: pct(x.from), width: w(x.from, x.to), borderColor: part.color }} />)}
           </div>
         </div>
@@ -434,13 +501,13 @@ function LoopStrip({ part, from, to, chords, levels, heardMs, bpm, originSec }: 
 
 function SaveBar({ m }: { m: MakeModel }) {
   // Saved once: the button rests until the sound changes (a change is a new sound to save).
-  const can = m.readState === "ready" && !m.words && m.saved.state !== "saving" && m.saved.state !== "saved";
+  const can = m.readState === "ready" && !m.words && m.saved.state !== "saving" && m.saved.action !== "none";
   return (
     <div className={s.saveBar}>
       <label className={s.saveLabel} htmlFor="save-name">Name</label>
       <input id="save-name" name="sound-name" autoComplete="off" className={s.input} value={m.name} maxLength={60} onChange={(e) => m.setName(e.target.value)} disabled={!!m.words} />
       <span className={s.facts} title={m.tags.join(" · ")}>{m.tags.join(" · ")}</span>
-      <span className={s.saved} role="status">{m.saved.state === "saved" ? "Saved to your library" : m.saved.state === "error" ? m.saved.text : m.words ? "A loop from words can't be saved yet" : ""}</span>
+      <span className={s.saved} role="status">{m.saved.state === "error" ? m.saved.text : m.words ? "A loop from words can't be saved yet" : m.saved.savedAs && m.saved.action === "none" ? `Saved as ${m.saved.savedAs}` : ""}</span>
       <button className={s.gold} onClick={() => void m.save()} disabled={!can}>{m.saved.state === "saving" ? "Saving…" : "Save to library"}</button>
     </div>
   );
@@ -454,7 +521,7 @@ function MentorRail({ turns, part, bar, onAsk, onRetry, onSeek, busy, note }: { 
   const noun = partNoun(part.id);
   return (
     <aside className={s.mentorCol} aria-label="Mentor">
-      <span className={s.ctx}>Mentor, on {noun} at bar {bar}</span>
+      <span className={s.ctx}>Mentor, on {noun}</span>
       <div className={s.list} ref={list}>
         {turns.length === 0 && <p className={s.facts}>No questions yet. Ask about {noun}: the answer is also pinned at bar {bar} on the map.</p>}
         {turns.map((x) => <Turn key={x.id} x={x} lines={6} onSeek={onSeek} onRetry={() => onRetry(x.id)} />)}

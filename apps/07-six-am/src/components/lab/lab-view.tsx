@@ -327,7 +327,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       ) : (
         <MakeRoom m={make} part={parts.find((x) => x.id === focus)!} loop={ts?.loop ?? null} section={loopSec ?? here} bpm={bpm} originSec={origin}
           chords={chords} levels={levels} heardMs={heardMsFn} status={status} ready={ready} playing={!!ts?.playing}
-          bar={pos.bar} turns={focusTurns} onAsk={onAsk} onRetry={onRetry} onSeek={onSeek} onLoopHere={loopHere}
+          bar={pos.bar} turns={focusTurns} onAsk={onAsk} onRetry={onRetry} onSeek={onSeek} onLoopHere={loopHere} onBass={() => setFocus("bass")}
           busy={focusTurns.some((x) => !x.answer && !x.error)} note={usageNote} />
       )}
     </div>

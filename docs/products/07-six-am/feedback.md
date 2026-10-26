@@ -99,10 +99,10 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| S5-1 | major | Rename after Save isn't saved; Save stays disabled | open |
-| S3-1 | major | A/B below the fold at a 734 px page | open |
-| S5-2 | major | No trace of saved sounds in the Lab after a reload | open |
-| S3-2 | minor | Suggest settings spins 9 s, no visible change when ticks are current | open |
-| S3-3 | minor | Make rail titled "at bar 41" but shows the whole thread | open |
-| S3-4 | minor | Drums in Make: no route to the bass | open |
-| S3-5 | polish | Knob step 0.01; cut Mentor sentence; loop strip shows a block, not the notes | open |
+| S5-1 | major | Rename after Save isn't saved; Save stays disabled | fixed (T101), re-test |
+| S3-1 | major | A/B below the fold at a 734 px page | fixed (T101), re-test |
+| S5-2 | major | No trace of saved sounds in the Lab after a reload | fixed (T101), re-test |
+| S3-2 | minor | Suggest settings spins 9 s, no visible change when ticks are current | fixed (T101), re-test |
+| S3-3 | minor | Make rail titled "at bar 41" but shows the whole thread | fixed (T101), re-test |
+| S3-4 | minor | Drums in Make: no route to the bass | fixed (T101), re-test |
+| S3-5 | polish | Knob step 0.01; cut Mentor sentence; loop strip shows a block, not the notes | fixed (T101), re-test |

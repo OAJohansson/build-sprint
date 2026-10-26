@@ -1,7 +1,7 @@
 // Make's worker jobs (S3) and the Mentor's knob line: read a part and drop it, Mine at the
 // original's level and length, Suggest settings, and the words under the knobs.
 import { describe, expect, it } from "vitest";
-import { suggestLine, movesTo } from "./coach";
+import { suggestLine, movesTo, ticksMoved } from "./coach";
 import { fitLoop, runMakeJob } from "./jobs";
 import { rmsDb } from "./level";
 import { MAKE_PRESETS, synthParams } from "./presets";
@@ -64,10 +64,15 @@ describe("the Mentor's knob line", () => {
   it("names the two biggest moves, with the word they land on", () => {
     const ticks = { ...cur, length: 0.25, pitchDrop: 0.6, drive: 0.25 };
     expect(movesTo(cur, ticks).map((m) => m.id)).toEqual(["length", "pitchDrop"]);
-    expect(suggestLine(cur, ticks)).toBe("Length down to 1/8, Pitch drop up to deep. The original bass measures shorter, with more pitch drop.");
+    expect(suggestLine(cur, ticks)).toBe("Length down to 1/8, Pitch drop up to deep. The original bass measures shorter notes and more pitch drop.");
   });
   it("says just the way when the word stays", () => {
-    expect(suggestLine(cur, { ...cur, tone: 0.2 })).toBe("Tone down. The original bass measures darker.");
+    expect(suggestLine(cur, { ...cur, tone: 0.2 })).toBe("Tone down. The original bass measures a darker tone.");
+  });
+  it("says which ticks a new suggestion moved", () => {
+    expect(ticksMoved(cur, { ...cur, tone: 0.5, wobble: 0.3 })).toBe("Ticks moved: Tone, Wobble.");
+    expect(ticksMoved(cur, { ...cur, tone: cur.tone + 0.02 })).toBe("The ticks stayed where they were.");
+    expect(ticksMoved(null, cur)).toBe("Gold ticks mark those.");
   });
   it("on the ticks, it hands over to the ears", () => {
     expect(suggestLine(cur, { ...cur, tone: cur.tone + 0.05 })).toMatch(/^You're on the gold ticks/);

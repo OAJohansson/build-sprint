@@ -261,3 +261,20 @@
 .ab button { background: none; border: 0; border-radius: 99px; padding: 7px 16px; cursor: pointer; font-size: 12.5px; color: var(--muted) !important; white-space: nowrap; }
 .ab button[aria-pressed="true"] { background: #2b2622; color: var(--ink) !important; }
 .ab button:disabled { color: #6f665b !important; cursor: default; }
+
+/* S3/S4 fix pass: fit at a 734 px page (S3-1), the saved-sounds line (S5-2), read notes in the strip (S3-5) */
+.synth { gap: clamp(10px, 2.2vh, 34px); padding: clamp(10px, 1.8vh, 20px) 32px clamp(10px, 1.8vh, 24px); }
+.loopStrip { flex: 1 1 96px; min-height: 96px; padding: 6px 0; }
+.makeEmpty { min-height: 96px; }
+.checkRow { padding-top: clamp(8px, 1.6vh, 18px); }
+.suggest { min-height: 0; }
+.preset { gap: 6px; }
+.presetRow { display: flex; align-items: baseline; gap: 24px; width: 100%; min-width: 0; }
+.yours { margin: 0 0 0 auto; padding-right: 24px; min-width: 0; font-size: 11px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.soundLink { background: none; border: 0; padding: 0; font: 11px var(--f-mono); color: var(--muted) !important; cursor: pointer; text-decoration: underline; text-decoration-color: #4a4038; text-underline-offset: 3px; }
+.soundLink:disabled { cursor: default; text-decoration: none; }
+@media (hover: hover) and (pointer: fine) { .soundLink:hover:not(:disabled) { color: var(--ink) !important; } }
+.lsClip[data-under] { opacity: .16; }
+.lsNote { position: absolute; height: 4px; margin-top: -2px; border-radius: 1px; min-width: 2px; }
+.makeQuiet .makeText { margin-left: 8px; }
+.presetRow .presetName { flex: none; white-space: nowrap; }

@@ -40,9 +40,10 @@ export function Bar() {
   );
 }
 
-export function Ruler({ dropBar, dropColor }: { dropBar?: number | null; dropColor?: string }) {
+export function Ruler({ dropBar, dropColor, numbers }: { dropBar?: number | null; dropColor?: string; numbers?: boolean }) {
   return (
-    <div className={v.ruler}>
+    <div className={cx(v.ruler, numbers && v.rulerNums)}>
+      {numbers && Array.from({ length: BARS / 8 }, (_, i) => <em key={`n${i}`} className={v.barNum} style={{ left: pct(i * 8 + 1) }}>{i * 8 + 1}</em>)}
       {Array.from({ length: BARS / 4 }, (_, i) => (
         <i key={i} className={cx(v.tick, i % 4 === 0 && v.tickBig)} style={{ left: pct(i * 4 + 1) }} />
       ))}
@@ -53,9 +54,11 @@ export function Ruler({ dropBar, dropColor }: { dropBar?: number | null; dropCol
 }
 
 /** One lane's blocks. `ghost` = a library sound held over it; `summary` = a folded family. */
-export function LaneBody({ lanes, silent, ghost, summary, dim, target, onDrop, h }: {
+export function LaneBody({ lanes, silent, ghost, summary, dim, target, onDrop, h, flat }: {
   lanes: Lane[]; silent?: (l: Lane) => boolean; ghost?: { bar: number; bars: number; name: string } | null;
   summary?: boolean; dim?: boolean; target?: boolean; onDrop?: () => void; h?: number;
+  /** Round 2 (critic): flat clips, no "live" highlight, so a clip is only dimmer when its lane is silent. */
+  flat?: boolean;
 }) {
   const [over, setOver] = useState(false);
   return (
@@ -67,7 +70,7 @@ export function LaneBody({ lanes, silent, ghost, summary, dim, target, onDrop, h
       onDrop={onDrop ? (e) => { e.preventDefault(); setOver(false); onDrop(); } : undefined}
     >
       {lanes.flatMap((l, li) => l.blocks.map((bk, i) => (
-        <div key={`${l.id}-${i}`} className={cx(v.block, silent?.(l) && v.blockSilent, bk.start <= PLAYHEAD && PLAYHEAD < bk.start + bk.len && !summary && v.blockLive)}
+        <div key={`${l.id}-${i}`} className={cx(v.block, silent?.(l) && v.blockSilent, bk.start <= PLAYHEAD && PLAYHEAD < bk.start + bk.len && !summary && !flat && v.blockLive, flat && v.flat)}
           style={{ left: pct(bk.start), width: wpct(bk.len), ...(summary ? { top: 7 + li * 7, bottom: "auto", height: 4 } : {}) } as CSSProperties}
           title={`${bk.name} · bar ${bk.start}`}>
           {!summary && <b className={v.blockName}>{bk.name}</b>}

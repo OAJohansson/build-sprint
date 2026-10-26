@@ -709,3 +709,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **S5 design:** 3 directions (Fold, Inspect, Shelf); PM picked Fold from the pack (L194, T102). Skills run on Fold. Critic next.
 - **S5 canvas sign-off (L195):** the Studio lanes design goes on the owner's canvas after the critic round; UI build waits for approval; lane-model engine and data work go ahead.
 - **S5 critic round 1 (Fold): 6/10** (clutter 1 · hierarchy 1 · legibility 1 · feel 2 · copy 1): family rows half-built (only Drums), textured clip bodies, a yellow-heavy transport with a Filter knob, no bar numbers, cramped hover mix controls and yellow M, a big preview disc in the crate. Gaps 2–3 touch today's Studio look: fixed in the prototype and flagged for the owner on the canvas. Fix round sent.
+- **S5 Fold round 2 (T104):** all six critic gaps fixed; ten changes to today's Studio look listed for the owner. Critic round 2 next, then the canvas.

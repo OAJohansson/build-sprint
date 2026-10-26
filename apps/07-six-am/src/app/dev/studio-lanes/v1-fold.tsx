@@ -1,56 +1,69 @@
 "use client";
 
-// Direction 1, Fold (axis: in place, revealed on hover). Today's Studio layout kept: lanes on top,
-// the crate below. A family with 2+ lanes gets a thin header that folds it to one summary row; a
-// family with one lane is just that lane. At rest a lane shows its name, M and S. Hovering or
-// focusing the lane reveals volume and pan (one small slider each) and a ⋯ menu (rename, move,
-// remove). "+ Add lane" lists the 11 types by family. The crate gains a "My sounds" tab; holding
-// a library sound lights the lane of its type and dims the rest.
-import { useEffect, useState } from "react";
+// Direction 1, Fold, round 2 (picked: L194; critic round 1 = 6/10). Today's layout kept: lanes on
+// top, the crate below. Every lane sits under its family row (one rule, one-lane families too); a
+// family folds to one summary row. At rest a lane shows its name, M and S; hover or focus reveals
+// volume and pan on their own line and a ⋯ menu (rename, move, remove). Flat clips. One accent in
+// the bar (Play); bar/BPM/key in the title colour; the Filter moves to a Master row under the lanes.
+// The crate: tabs and a small disc in one header row, the cards take the width.
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { FAMILIES, MY_SOUNDS, colorOf, fmtDb, fmtPan, type, type Lane, type MySound, type TypeId } from "./data";
-import { DROP_BAR } from "./data";
-import { Bar, LaneBody, Ruler, SoundItem, TypeList, Wrap, cx, useLanes, v, type Lanes } from "./shared";
+import { Logo } from "@/components/studio/logo";
+import { SettingsLink, ViewsNav } from "@/components/views-nav";
+import st from "@/components/studio/studio.module.css";
+import { DROP_BAR, FAMILIES, MY_SOUNDS, PLAYHEAD, TRACK, colorOf, fmtDb, fmtPan, type, type Lane, type MySound, type TypeId } from "./data";
+import { LaneBody, Ruler, SoundItem, TypeList, cx, useLanes, v, type Lanes } from "./shared";
 
 export function V1Fold({ state, worst }: { state: string; worst: boolean }) {
-  const L = useLanes(worst, state === "add" ? ["drums"] : []);
+  const L = useLanes(worst, state === "fold" || state === "add" ? ["drums"] : []);
   const [held, setHeld] = useState<MySound | null>(state === "drop" ? MY_SOUNDS[0] : null);
+  const placed = useRef(false);
   const [adding, setAdding] = useState<{ fam?: string } | null>(state === "add" ? {} : null);
   const [menu, setMenu] = useState<string | null>(null);
+  const [tab, setTab] = useState("mine");
+  const [filter, setFilter] = useState(100);
+  const reveal = state === "mix" ? "l4" : null;
+  const hasTarget = held && L.lanes.some((l) => l.type === held.type);
+  // The "dropped" state: Rubber sub already placed on Sub at the Break.
+  useEffect(() => { if (state === "dropped" && !placed.current) { placed.current = true; L.drop("l4", MY_SOUNDS[0]); } }, [state, L]);
   useEffect(() => {
     const esc = (e: KeyboardEvent) => { if (e.key === "Escape") { setMenu(null); setAdding(null); } };
     addEventListener("keydown", esc);
     return () => removeEventListener("keydown", esc);
   }, []);
-  const [tab, setTab] = useState("mine");
-  const reveal = state === "main" ? "l4" : null;
-  const hasTarget = held && L.lanes.some((l) => l.type === held.type);
 
   return (
-    <Wrap>
-      <Bar />
-      <div className={v.tl}>
-        <div className={cx(v.rowR, v.rulerRow)}><div className={v.gut} style={{ borderBottom: "1px solid var(--line)" }} /><Ruler dropBar={held ? DROP_BAR : null} dropColor={held ? colorOf(held.type) : undefined} /></div>
+    <div className={cx(v.root, v.r2)}>
+      <Bar2 />
+      <div className={cx(v.tl, v.fadeEnd)}>
+        <div className={cx(v.rowR, v.rulerRow)}>
+          {/* The ruler's empty corner holds "+ Add lane", so it stays in view however many lanes there are. */}
+          <div className={cx(v.gut, v.corner)}>
+            <button className={v.addBtn} aria-expanded={!!adding} onClick={() => setAdding(adding ? null : {})}>+ Add lane</button>
+            {adding ? (
+              <div className={v.pop} style={{ left: 8, top: 34, width: 760 }} role="dialog" aria-label="Add a lane">
+                <TypeList onPick={(t: TypeId) => { L.add(t); setAdding(null); }} />
+              </div>
+            ) : null}
+          </div>
+          <Ruler numbers dropBar={held ? DROP_BAR : null} dropColor={held ? colorOf(held.type) : undefined} /></div>
         {L.groups.map((g) => {
           const folded = L.fold.includes(g.id);
-          const multi = g.lanes.length > 1;
           return (
             <div key={g.id} style={{ ["--c" as string]: g.color }}>
-              {multi ? (
-                <div className={v.rowR}>
-                  <div className={v.gut} style={{ height: folded ? 36 : 26 }}>
-                    <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
-                      <button className={cx(v.famHead, folded && v.folded)} onClick={() => L.toggleFold(g.id)} aria-expanded={!folded}>
-                        <ChevronDown aria-hidden /><i className={v.famDot} />{g.name}<span className={v.famCount}>{g.lanes.length} lanes</span>
-                      </button>
-                      <button className={v.famPlus} aria-label={`Add a ${g.name} lane`} onClick={() => setAdding({ fam: g.id })}>+</button>
-                    </div>
+              <div className={v.rowR}>
+                <div className={v.gut} style={{ height: folded ? 34 : 20 }}>
+                  <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
+                    <button className={cx(v.famHead, folded && v.folded)} onClick={() => L.toggleFold(g.id)} aria-expanded={!folded}>
+                      <ChevronDown aria-hidden />{g.name}{g.lanes.length > 1 || folded ? <span className={v.famCount}>{g.lanes.length}</span> : null}
+                    </button>
+                    <button className={v.famPlus} aria-label={`Add a ${g.name} lane`} onClick={() => setAdding({ fam: g.id })}>+</button>
                   </div>
-                  {folded ? <LaneBody lanes={g.lanes} summary silent={L.silent} h={36} dim={!!held && held.type !== g.lanes[0].type} /> : <div className={v.famBody} />}
                 </div>
-              ) : null}
+                {folded ? <LaneBody flat lanes={g.lanes} summary silent={L.silent} h={34} dim={!!held && held.type !== g.lanes[0].type} /> : <div className={v.famBody} />}
+              </div>
               {!folded && g.lanes.map((l) => (
-                <LaneRow key={l.id} l={l} L={L} reveal={reveal === l.id} menu={menu === l.id} setMenu={setMenu} indent={multi}
+                <LaneRow key={l.id} l={l} L={L} reveal={reveal === l.id} menu={menu === l.id} setMenu={setMenu}
                   held={held} onDrop={() => { if (held) L.drop(l.id, held); setHeld(null); }} />
               ))}
             </div>
@@ -61,28 +74,60 @@ export function V1Fold({ state, worst }: { state: string; worst: boolean }) {
             <div className={v.gut} /><div className={v.newDrop}>Drop here for a new {type(held.type).name} lane</div>
           </div>
         ) : null}
-        <div className={v.rowR} style={{ flex: 1 }}>
-          <div className={v.gut} style={{ borderBottom: 0 }}>
-            <div className={v.addRow}>
-              <button className={v.addBtn} aria-expanded={!!adding} onClick={() => setAdding(adding ? null : {})}>+ Add lane</button>
-            </div>
-            {adding ? (
-              <div className={cx(v.pop, v.popUp)} style={{ left: 12, bottom: 48, width: 760 }} role="dialog" aria-label="Add a lane">
-                <TypeList used={L.lanes.map((l) => l.type)} onPick={(t: TypeId) => { L.add(t); setAdding(null); }} />
-              </div>
-            ) : null}
-          </div>
-          <div style={{ flex: 1 }} />
-        </div>
+        <Master filter={filter} setFilter={setFilter} />
+        <div className={v.rowR} style={{ flex: 1 }}><div className={v.gut} style={{ borderBottom: 0 }} /><div style={{ flex: 1 }} /></div>
       </div>
       <Crate tab={tab} setTab={setTab} L={L} held={held} setHeld={setHeld} />
-    </Wrap>
+    </div>
   );
 }
 
-function LaneRow({ l, L, reveal, menu, setMenu, indent, held, onDrop }: {
-  l: Lane; L: Lanes; reveal: boolean; menu: boolean; setMenu: (id: string | null) => void; indent: boolean;
-  held: MySound | null; onDrop: () => void;
+/** The control bar, round 2: one accent (Play). Bar, BPM and key in 14 px mono, title colour. */
+function Bar2() {
+  return (
+    <header className={st.bar}>
+      <div className={st.logo}><Logo className={st.mark} />Six AM</div>
+      <ViewsNav current="studio" />
+      <div className={st.trackBox}>
+        <input className={st.trackTitle} defaultValue={TRACK.name} aria-label="Track name" size={16} spellCheck={false} />
+        <button className={st.libBtn}>My tracks <ChevronDown aria-hidden /></button>
+        <span className={st.saveState}>Saved</span>
+      </div>
+      <div className={st.transport}>
+        <button className={st.tb} aria-label="Back to start"><svg viewBox="0 0 16 16" aria-hidden><path d="M3 2h2v12H3zM14 2v12L6 8z" fill="currentColor" /></svg></button>
+        <button className={cx(st.tb, st.play)} aria-label="Play"><svg viewBox="0 0 16 16" aria-hidden><path d="M4 2l10 6-10 6z" fill="currentColor" /></svg></button>
+        <div className={v.facts}><b>{PLAYHEAD}.1</b><small>bar</small><b>{TRACK.bpm}</b><small>BPM</small><b>{TRACK.key}</b><small>key</small></div>
+        <button className={st.undo} aria-label="Undo"><svg viewBox="0 0 16 16" aria-hidden><path d="M6 3 2 7l4 4V8h4a3 3 0 0 1 0 6H8v2h2a5 5 0 0 0 0-10H6z" fill="currentColor" /></svg> <span className={st.undoWord}>Undo</span></button>
+      </div>
+      <SettingsLink />
+    </header>
+  );
+}
+
+/** The Filter, moved out of the bar: the master row under the lanes, revealed like a lane's mix. */
+function Master({ filter, setFilter }: { filter: number; setFilter: (n: number) => void }) {
+  const hz = 120 * Math.pow(20000 / 120, filter / 100);
+  const label = filter >= 99 ? "open" : hz >= 1000 ? `${(hz / 1000).toFixed(1)} kHz` : `${Math.round(hz)} Hz`;
+  return (
+    <div className={v.rowR} style={{ ["--c" as string]: "#f1e6d3" }}>
+      <div className={cx(v.gut, v.r2Gut)} style={{ height: 56 }}>
+        <div className={v.laneHead}>
+          <div className={v.line1}><span className={v.r2Name} style={{ color: "var(--muted)" }}>Master</span></div>
+          <div className={v.mix}>
+            <label className={v.mixItem} title="Filter on the whole mix">Filter
+              <input className={v.vol} type="range" min={0} max={100} value={filter} onChange={(e) => setFilter(+e.target.value)} aria-label="Master filter" aria-valuetext={label} />
+              <span className={v.mixVal}>{label}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div className={v.masterBody} />
+    </div>
+  );
+}
+
+function LaneRow({ l, L, reveal, menu, setMenu, held, onDrop }: {
+  l: Lane; L: Lanes; reveal: boolean; menu: boolean; setMenu: (id: string | null) => void; held: MySound | null; onDrop: () => void;
 }) {
   const [editing, setEditing] = useState(false);
   const i = L.lanes.indexOf(l);
@@ -90,35 +135,35 @@ function LaneRow({ l, L, reveal, menu, setMenu, indent, held, onDrop }: {
   const match = held?.type === l.type;
   return (
     <div className={v.rowR} style={{ ["--c" as string]: colorOf(l.type) }}>
-      <div className={cx(v.gut, reveal && v.reveal, !reveal && v.hideRest)} style={{ height: 52 }}
+      <div className={cx(v.gut, v.r2Gut, reveal && v.reveal, !reveal && v.hideRest)} style={{ height: 56 }}
         onKeyDown={(e) => { if (e.altKey && e.key === "ArrowUp") L.move(l.id, -1); if (e.altKey && e.key === "ArrowDown") L.move(l.id, 1); }}>
-        <i className={v.colorBar} style={indent ? { left: 10 } : undefined} />
-        <div className={v.laneHead} style={indent ? { paddingLeft: 24 } : undefined}>
+        <i className={v.colorBar} style={{ left: 14 }} />
+        <div className={v.laneHead}>
           <div className={v.line1}>
             {editing ? (
               <input className={v.nameInput} defaultValue={l.name} autoFocus maxLength={40} aria-label="Lane name"
                 onBlur={(e) => { L.rename(l.id, e.target.value); setEditing(false); }}
                 onKeyDown={(e) => { if (e.key === "Enter") e.currentTarget.blur(); if (e.key === "Escape") setEditing(false); }} />
             ) : (
-              <button className={v.name} onDoubleClick={() => setEditing(true)} onKeyDown={(e) => { if (e.key === "F2" || e.key === "Enter") setEditing(true); }} title={`${l.name} · ${type(l.type).name} · double-click to rename`}>{l.name}</button>
+              <button className={cx(v.name, v.r2Name)} onDoubleClick={() => setEditing(true)} onKeyDown={(e) => { if (e.key === "F2" || e.key === "Enter") setEditing(true); }} title={`${l.name} · ${type(l.type).name} · double-click to rename`}>{l.name}</button>
             )}
-            <button className={cx(v.ms, l.mute && v.muteOn)} style={l.mute && !L.silent(l) ? { opacity: .45 } : undefined} onClick={() => L.mute(l.id)} aria-pressed={l.mute} aria-label={`Mute ${l.name}`}>M</button>
-            <button className={cx(v.ms, l.solo && v.soloOn)} onClick={() => L.solo(l.id)} aria-pressed={l.solo} aria-label={`Solo ${l.name}`}>S</button>
+            <button className={cx(v.ms, v.msFirst, l.mute && v.r2MuteOn)} style={l.mute && !L.silent(l) ? { opacity: .45 } : undefined} onClick={() => L.mute(l.id)} aria-pressed={l.mute} aria-label={`Mute ${l.name}`}>M</button>
+            <button className={cx(v.ms, l.solo && v.r2SoloOn)} onClick={() => L.solo(l.id)} aria-pressed={l.solo} aria-label={`Solo ${l.name}`}>S</button>
             <button className={v.more} onClick={() => setMenu(menu ? null : l.id)} aria-label={`More for ${l.name}`} aria-expanded={menu}>⋯</button>
           </div>
           <div className={v.mix}>
             <label className={v.mixItem} title="Volume">
               <input className={v.vol} type="range" min={-30} max={6} value={Math.max(-30, l.vol)} onChange={(e) => L.vol(l.id, +e.target.value)} aria-label={`${l.name} volume`} aria-valuetext={fmtDb(l.vol)} />
-              <span className={v.mixVal}>{fmtDb(l.vol)}</span>
+              <span className={v.mixVal}>{l.vol < -30 ? "−∞" : fmtDb(l.vol)}</span>
             </label>
-            <label className={v.mixItem} title="Pan: left or right">
+            <label className={v.mixItem} title="Pan: left or right · double-click for centre">
               <input className={v.pan} type="range" min={-100} max={100} step={5} value={l.pan} onChange={(e) => L.pan(l.id, +e.target.value)} onDoubleClick={() => L.pan(l.id, 0)} aria-label={`${l.name} pan`} aria-valuetext={fmtPan(l.pan)} />
               <span>{fmtPan(l.pan)}</span>
             </label>
           </div>
         </div>
         {menu ? (
-          <div className={cx(v.pop, v.menu)} style={{ left: 120, top: 40 }} role="menu">
+          <div className={cx(v.pop, v.menu)} style={{ left: 120, top: 44 }} role="menu">
             <button role="menuitem" onClick={() => { setMenu(null); setEditing(true); }}>Rename</button>
             <button role="menuitem" disabled={!sameFam(i - 1)} onClick={() => L.move(l.id, -1)}>Move up <kbd>⌥↑</kbd></button>
             <button role="menuitem" disabled={!sameFam(i + 1)} onClick={() => L.move(l.id, 1)}>Move down <kbd>⌥↓</kbd></button>
@@ -127,35 +172,32 @@ function LaneRow({ l, L, reveal, menu, setMenu, indent, held, onDrop }: {
           </div>
         ) : null}
       </div>
-      <LaneBody lanes={[l]} silent={L.silent} h={52} dim={!!held && !match} target={match} onDrop={match ? onDrop : undefined}
+      <LaneBody flat lanes={[l]} silent={L.silent} h={56} dim={!!held && !match} target={match} onDrop={match ? onDrop : undefined}
         ghost={match && held ? { bar: DROP_BAR, bars: held.bars, name: held.name } : null} />
     </div>
   );
 }
 
 function Crate({ tab, setTab, L, held, setHeld }: { tab: string; setTab: (t: string) => void; L: Lanes; held: MySound | null; setHeld: (s: MySound | null) => void }) {
-  const show = held ?? null;
   return (
-    <aside className={v.crate}>
-      <div className={v.deck} style={{ ["--c" as string]: show ? colorOf(show.type) : undefined }}>
-        <div className={v.record}><i /></div>
-        <div style={{ minWidth: 0 }}><b>{show ? show.name : "—"}</b><em>{show ? `${show.bars} bars · from ${show.from}` : "Click a sound to hear it"}</em></div>
-      </div>
-      <div className={v.browse}>
-        <div className={v.tabs} role="tablist">
+    <aside className={v.crate2}>
+      <div className={v.crateHead}>
+        <div className={v.tabs2} role="tablist">
           <button role="tab" aria-selected={tab === "mine"} className={cx(v.tab, tab === "mine" && v.tabOn)} onClick={() => setTab("mine")}>My sounds<span className={v.tabCount}>{L.library.length}</span></button>
           {FAMILIES.map((f) => <button key={f.id} role="tab" aria-selected={tab === f.id} className={cx(v.tab, tab === f.id && v.tabOn)} onClick={() => setTab(f.id)}>{f.name}</button>)}
         </div>
-        {tab === "mine" ? (
-          <div className={v.grid3}>
-            {L.library.map((s) => (
-              <SoundItem key={s.id} s={s} held={held?.id === s.id} onDragStart={() => setHeld(s)} onDragEnd={() => setHeld(null)} />
-            ))}
-          </div>
-        ) : (
-          <p className={v.hint}>The built-in {FAMILIES.find((f) => f.id === tab)?.name} sounds, as in today’s crate.</p>
-        )}
+        <div className={v.nowPlaying} style={{ ["--c" as string]: held ? colorOf(held.type) : undefined }} aria-live="polite">
+          <span className={cx(v.disc, held && v.discOn)} aria-hidden><i /></span>
+          {held ? <span><b>{held.name}</b> · {held.bars} bars</span> : <span className={v.faint}>Click a sound to hear it</span>}
+        </div>
       </div>
+      {tab === "mine" ? (
+        <div className={v.cards}>
+          {L.library.map((s) => <SoundItem key={s.id} s={s} held={held?.id === s.id} onDragStart={() => setHeld(s)} onDragEnd={() => setHeld(null)} />)}
+        </div>
+      ) : (
+        <p className={v.hint}>The built-in {FAMILIES.find((f) => f.id === tab)?.name} sounds, as in today’s crate.</p>
+      )}
     </aside>
   );
 }

@@ -13,6 +13,8 @@ import { Separator } from "@/lib/lab/separator-client";
 import { makePlan, playDelay, step } from "@/lib/lab/stream";
 import { LabTransport, type TransportState } from "@/lib/lab/transport";
 import { barToMs, loopBars, msToBar } from "@/lib/lab/timing";
+import { readPart, renderMine, suggestFor, type PartReading } from "@/lib/make/from-part";
+import { MAKE_PRESET_IDS, MAKE_PRESETS, macroWord, MACRO_IDS, type MakePresetId } from "@/lib/make/presets";
 
 const PARTS = ["Drums", "Bass", "Other", "Vocals"] as const;
 
@@ -21,6 +23,7 @@ type Api = {
   model?: { backend: string; loadMs: number; bytes: number; cached: boolean };
   bench?: Record<string, number | string>;
   state?: TransportState;
+  make?: Record<string, unknown>;
   t?: LabTransport;
   error?: string;
   log: string[];
@@ -178,6 +181,49 @@ export function LabSpike({ url, hop, guard, auto, bpm, origin, durS }: { url: st
     }
   }
 
+  // Make (dev, S3 engine): read the looped part in memory, suggest settings, play Mine level-matched.
+  const [key, setKey] = useState("G");
+  const [preset, setPreset] = useState<MakePresetId>("round-sub");
+  const [reading, setReading] = useState<PartReading | null>(null);
+  const [sugg, setSugg] = useState<string>("");
+  const mineCtx = useRef<AudioContext | null>(null);
+  const readBass = () => {
+    const part = tr.current?.loopPart(1);
+    if (!part) { say("make: no loop in memory yet"); return; }
+    const t0 = performance.now();
+    let steps: unknown = null;
+    const r = readPart(part.left, part.right, part.rate, bpm, key, "minor", (x) => { steps = x; });
+    setReading(r);
+    api.current.make = { reading: r, readMs: Math.round(performance.now() - t0), steps };
+    say(r ? `make: ${r.pattern.bars}-bar pattern (${Math.round(r.pattern.confidence * 100)} %): ${r.pattern.notes.map((n) => `${n.step}:${n.midi}`).join(" ")} · ${Math.round(performance.now() - t0)} ms` : "make: no pattern found");
+  };
+  const suggest = () => {
+    if (!reading) return;
+    const t0 = performance.now();
+    const x = suggestFor(reading, preset, bpm);
+    const text = MACRO_IDS.map((id) => `${id} ${x.macros[id]} (${macroWord(id, x.macros[id])})`).join(", ");
+    setSugg(`${MAKE_PRESETS[preset].name}: ${text} · distance ${x.distance.toFixed(2)} vs preset ${x.presetDistance.toFixed(2)} · ${Math.round(performance.now() - t0)} ms`);
+    api.current.make = { ...api.current.make, [preset]: { ...x, ms: Math.round(performance.now() - t0) } };
+  };
+  const playMine = () => {
+    const part = tr.current?.loopPart(1);
+    if (!reading || !part) return;
+    const m = (api.current.make?.[preset] as { macros?: typeof MAKE_PRESETS["round-sub"]["macros"] } | undefined)?.macros ?? MAKE_PRESETS[preset].macros;
+    const r = renderMine(reading, preset, m, bpm, part);
+    mineCtx.current?.close();
+    const ctx = new AudioContext({ sampleRate: r.rate });
+    mineCtx.current = ctx;
+    const b = ctx.createBuffer(2, r.left.length, r.rate);
+    b.copyToChannel(r.left, 0); b.copyToChannel(r.right, 1);
+    const src = ctx.createBufferSource();
+    src.buffer = b; src.loop = true;
+    const g = ctx.createGain(); g.gain.value = auto.includes("mute") ? 0 : 1;
+    src.connect(g).connect(ctx.destination); src.start();
+    tr.current?.setParts([false, false, false, false]); // B · Mine alone
+    say(`make: playing Mine (${MAKE_PRESETS[preset].name}), gain ${r.gainDb} dB to match the original bass`);
+  };
+  const stopMine = () => { mineCtx.current?.close(); mineCtx.current = null; tr.current?.setParts(on); };
+
   const loop = () => {
     const r = loopBars({ from: Number(loopFrom), to: Number(loopTo) }, msToBar(heard, bpm, origin));
     tr.current?.setLoop({ startMs: barToMs(r.from, bpm, origin), endMs: barToMs(r.to, bpm, origin) });
@@ -216,6 +262,15 @@ export function LabSpike({ url, hop, guard, auto, bpm, origin, durS }: { url: st
           {st?.loop ? `${st.loop.state} ${Math.round(st.loop.filled * 100)} % · ${(st.loop.startMs / 1000).toFixed(1)}–${(st.loop.endMs / 1000).toFixed(1)} s` : "no loop"}
         </p>
         <p>Chords est.: {st?.chords.map((c, i) => <span key={i} style={{ marginRight: 6, color: c === null ? "#555" : "#ddd" }}>{c === null ? "·" : c || "–"}</span>)}</p>
+        <h2 style={{ fontSize: 15, marginTop: 24 }}>Make (dev): bass from the loop in memory</h2>
+        <p>
+          Key <input style={inp} value={key} onChange={(e) => setKey(e.target.value)} aria-label="Key" /> minor
+          <button style={btn} onClick={readBass}>Read bass</button>
+          <select value={preset} onChange={(e) => setPreset(e.target.value as MakePresetId)} style={{ ...inp, width: 140 }} aria-label="Preset">{MAKE_PRESET_IDS.map((id) => <option key={id} value={id}>{MAKE_PRESETS[id].name}</option>)}</select>
+          <button style={btn} onClick={suggest} disabled={!reading}>Suggest settings</button>
+          <button style={btn} onClick={playMine} disabled={!reading}>B · Mine</button><button style={btn} onClick={stopMine}>A · Original</button>
+        </p>
+        {sugg && <p>{sugg}</p>}
         <h2 style={{ fontSize: 15, marginTop: 24 }}>4 · Parts</h2>
         <p>
           {PARTS.map((p, i) => (

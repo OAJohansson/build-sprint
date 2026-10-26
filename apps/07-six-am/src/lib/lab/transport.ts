@@ -229,6 +229,17 @@ export class LabTransport {
     this.emit(true);
   }
 
+  /**
+   * One part of the loop held in memory (0 drums, 1 bass, 2 other, 3 vocals), for Make's pattern,
+   * patch matching and A/B (L161): the in-memory arrays themselves, valid only while the loop is
+   * on. Null before the loop is in memory. Read it; never store or send it.
+   */
+  loopPart(p: number): { left: Float32Array; right: Float32Array; rate: number; startMs: number; endMs: number } | null {
+    const l = this.loopS;
+    const b = l?.state === "memory" ? l.audio?.[p] : null;
+    return b && l ? { left: b.getChannelData(0), right: b.getChannelData(1), rate: b.sampleRate, startMs: l.startMs, endMs: l.endMs } : null;
+  }
+
   /** What you hear now, track ms. */
   heardMs(): number {
     const live = this.live;

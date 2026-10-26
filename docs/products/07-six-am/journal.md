@@ -675,3 +675,9 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   Gm, –, Gm on one track: unproven. 278 tests. Open: Y8 at the speaker output; by-ear loop timing.
 - **Sign-off feedback (L167–L171):** Send arrow in the Mentor input; one Hear bar (All / parts, only/without, Shift-click two) instead of S/M on the map; clearer position, loop chip and song facts; no "← Whole song", "← All tracks"; Mentor as a plain chat with bar tags, dots instead of numbered pins. One design round, then the screens go back on the canvas.
 - **Sign-off round 1 built (designer):** Send composer, Hear bar with only/without and a focus part (T87), position "3:06 · in Drop 1", loop chip only while looping, "← All tracks", Mentor as a plain chat with bar tags, dots on the map. 9 `signoff-r1-*` screens; handoff updated. Back to the owner's canvas.
+- **Make and Save engine (no UI):** four bass presets with six macros on a pure-TS synth (L172),
+  note pattern from the in-memory loop, local "Suggest settings" by analysis-by-synthesis (L173),
+  level-matched A/B, library model + `/api/sounds` + additive migration `sixam_sounds` (L175),
+  T88. On the real track: bass read as a 4-bar G1/Bb1 pattern in 76 ms; suggestions cut the
+  feature distance on all four presets (Reese 155 → 15, Acid only 166 → 127) but go to extremes
+  on pitch drop from kick bleed; A/B gain +1.3 dB. Nobody has listened yet. 309 tests.

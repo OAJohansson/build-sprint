@@ -160,3 +160,16 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - Branch reset to the latest `origin/main`. Kickoff addendum `kickoff-v1.1-sync.md`: MVP, stop
   line, riskiest assumption (no data lost on first sync) and checks S1–S8.
 - Merge rule (L28) and storage shape (L29) decided inside the pack's appetite.
+- **Ops (pre-approved by 0028, logged here):** additive migration `wont_docs` on the shared
+  Supabase project (crossfit-log): one table, RLS on, no policies; nothing else touched. Wont's
+  own `ACCESS_CODE` and `SANDBOX_ACCESS_CODE` generated into the root `.env.secrets.local` under
+  `[09-wont]` (env keys are ops); `.env.example` + `pnpm env-bootstrap 09-wont`. The owner's code
+  is in that file when they connect their devices.
+- **Built:** `src/lib/sync.ts` (pure: stamp changes, merge, read a document) with 13 unit tests
+  (first connect, empty phone, offline on both devices, undo, delete, midnight); server routes
+  `/api/access` (cookie, Selvedge/Magpie pattern) and `/api/sync` (merge + revision-checked save);
+  `src/lib/sync-client.ts` (background sync on open, focus, online, every minute, 0.8 s after a
+  tap); Sync screen and footer link (T23). `migrate` moved to its own module so the server shares
+  it. 47 tests, build and lint green. Day logic, copy and design otherwise unchanged.
+- **Graders:** user-tester on V1–V5 (plan.md, v1.1 section) with the sandbox code; design critic
+  on the Sync screen.

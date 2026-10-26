@@ -3,11 +3,13 @@
 The owner's kickoff for a product (decision 0026). In Founder mode the owner writes it alone and
 the PM session builds from it. Drafted by Claude from the owner's calls in the kickoff
 conversation (26 Oct), in the owner's words where possible; the owner can edit any line. Lines
-marked **Open** are still the owner's to decide before the PM session starts.
+settled by the owner on 26 Oct; nothing is open.
 
 **Mode:** founder
-**Appetite:** **Open** (suggested: one day; cuts in order if it runs out: the AI illustration
-falls back to the photo, then the country filter falls back to search only)
+**Appetite:** the whole designed flow, however long it takes (owner, 26 Oct: "I want to make
+this a nice app"; overnight runs are fine). Not a day cap. If something must give, cut in this
+order: the share target falls back to "pick from photos", the laptop filter panel falls back to
+the phone's filter sheet.
 **Evals:** `evals.md` (agent-checkable part) · owner-only checks kept outside the repo
 
 ## Problem
@@ -92,22 +94,37 @@ capture flow (photo, details, saved with the illustration appearing), the item p
 filter results, the empty shelf and first run, the access code. Canvas:
 https://claude.ai/artifact/X4hmxGD5oek8NvT7XbxgjE
 
-**Open:** the rating scale.
+**Rating:** 1–5 hearts (the design).
 
 **Out (to `backlog.md`):** recipes, a map, sharing with friends, recommendations, a "want to
 try" list, recommendations built on the smart shelves. The music-moments diary lives in Six AM's backlog.
 
 ## Requirements
 
-Filled in once the open calls above are settled.
+The design is the spec: the "Final flow for hand-off" row (A–L) on the canvas,
+https://claude.ai/artifact/X4hmxGD5oek8NvT7XbxgjE. Exploration rows above it are history.
 
 | # | Must | Check |
 | --- | --- | --- |
-| R1 | | |
+| R1 | First run introduces Maggie once; the access code is asked once per device (A, B) | Fresh install shows both; reload skips them |
+| R2 | Capture from the camera, from the photo library, or with no photo (D) | Each path reaches the details screen |
+| R3 | Details: name, kind, sub-kind, restaurant/bar/spot, city and country suggested from location and editable, 1–5 hearts, optional note; date saved automatically (E) | Every field saved word for word and shown on the item page |
+| R4 | Saving never waits for the AI: the item is saved first, the drawing screen can be closed, the sticker appears when ready, the original photo is always kept (F, K) | Close during drawing: item on the shelf with photo, sticker arrives later; photo toggle on the item page |
+| R5 | Share a photo from the camera roll or Instagram into Magpie and land in capture with it (Android share target, as Selvedge) | Share from Photos opens E with that photo |
+| R6 | The saved moment: Maggie's "Ooh, shiny!" with the new sticker and its chips (G) | Shown after every save |
+| R7 | Home is smart shelves: Latest, Your top [sub-kind] (5 hearts), Around [home city]; a row shows only when it has items (H) | Rows match the data; empty rows hidden |
+| R8 | Search covers name, restaurant and note (H, J) | "noble" finds Barolo by restaurant; a word from a note finds its item |
+| R9 | Filter sheet: kind, sub-kind, hearts, where (home, away, a restaurant); results show active filters as removable chips (I, J) | Each filter narrows correctly; removing a chip widens again |
+| R10 | Item page: sticker/photo toggle, details, note, edit, remove with a way back (K) | Edit saves; remove asks or offers undo |
+| R11 | One library on phone and laptop; laptop layout with the filter panel always open (L) | Save on the phone, see it on the laptop after reload |
+| R12 | Empty shelf with Maggie and the share tip (C) | Fresh library shows C, not empty rows |
 
-**No-gos:**
+**No-gos:** accounts or sign-up, a social feed or public sharing, recommendations (backlog),
+a map, nutrition or calories.
 
-**Rabbit holes:**
+**Rabbit holes:** perfect sticker consistency (spike it first and set a bar, don't chase it);
+a places API for restaurants (free text plus reverse geocoding for the city is enough); offline
+sync.
 
 ## Feel references
 
@@ -122,14 +139,29 @@ screen" is the design to build).
   sticker, cheers on the saved moment ("Ooh, shiny!").
 - **Fredoka**, rounded type, friendly copy ("yums", "Stick it in my book").
 
-**The feel in one sentence (draft, owner to confirm):** A cheerful sticker book of everything I've
-tasted, kept by a greedy little magpie who gets excited about every shiny new yum.
+**The feel in one sentence (owner: "follow the design, it's great"):** A cheerful sticker book of
+everything I've tasted, kept by Maggie, a greedy little magpie who gets excited about every shiny
+new yum. The final-flow screens are the visual references; the critic scores against them.
 
 ## Things to avoid
 
-- **Open**
+Proposed by Claude from the design and past products; the owner asked for suggestions and said
+go (26 Oct).
+
+- Streaks, points, badges, "you haven't logged in a while" guilt
+- Motion on every tap: one celebration (the saved moment), nothing per keystroke (design rule)
+- Maggie talking too much: at most one short line per screen, never blocking a task
+- Glossy or photoreal AI images: stickers stay flat, thick-outlined and in one style
+- Capture waiting on the AI, or the original photo ever lost
+- Country as the main way in: kind leads, place means the restaurant
+- Gradients, glass effects, stock food photos
+- Restaurant-review language (stars for the venue, "best in town"): it's my taste, not a review
 
 ## Decisions already made
+
+- Mascot name: **Maggie** (owner, 26 Oct).
+- Home city for "Around [city]": the city with the most yums, no setting (Claude's default;
+  provisional, the PM may revisit).
 
 - Name and brand: Magpie, with a magpie mascot (owner, 26 Oct). Tastebud was dropped because
   several food apps already use it.
@@ -144,4 +176,7 @@ tasted, kept by a greedy little magpie who gets excited about every shiny new yu
 
 ## Unit tests
 
-**Open** (likely none: no date or streak logic so far).
+- "New this month" count for Maggie's line: start of month, last day of month, month with no
+  yums, a yum saved at 23:59 on the last day.
+- Latest order and date saved: two yums the same day, a yum edited later keeps its date.
+- Home city: a tie between two cities, empty history.

@@ -306,4 +306,3 @@ body {
 .w-foot { flex-wrap: wrap; }
 .w-foot { align-items: center; }
 .w-foot-dot { color: var(--muted); font-size: 13px; }
-.w-sync-stopped { color: var(--ink) !important; font-weight: 700; margin-top: 10px !important; }

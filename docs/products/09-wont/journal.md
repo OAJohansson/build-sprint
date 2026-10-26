@@ -181,3 +181,8 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   (T24), offline footer as text (T25), stop confirmation, a unit test for the grader's
   unreproduced "seeded laptop + server-only tap" (passes). 48 tests green. Re-check on the preview
   deploy, so the service worker runs in a real production build.
+- **Re-check** on a local production build (previews are behind Vercel's login): every bar
+  passes, including offline reload and cold open. Critic round 2: 7.5/10; copy fixed (T26),
+  rounds stopped. Eval report `eval-report-v1.1-sync.md`.
+- **Ops:** Wont's four env keys set on Vercel (production and preview) with the same API calls as
+  `pnpm ship` (its `--preview` path skips env). Sandbox reset after each grader run.

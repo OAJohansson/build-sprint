@@ -42,7 +42,7 @@ export function SyncScreen() {
         <h1>{s.connected ? c.onTitle : c.title}</h1>
         <p>{s.connected ? c.onBody : s.status === "denied" ? c.denied : c.intro}</p>
         {/* Feedback 46: say that stopping worked and that the board stays. */}
-        {!s.connected && stopped && <p role="status" className="w-sync-stopped">{c.stopped}</p>}
+        
       </header>
 
       {s.connected ? (
@@ -62,6 +62,8 @@ export function SyncScreen() {
         </div>
       ) : (
         <form className="w-form" onSubmit={submit}>
+          {/* Feedback 46/50: after stopping, one plain status line in the paper card. */}
+          {stopped && <p className="w-field w-sync-status" role="status">{c.stopped}</p>}
           <div className="w-field">
             <label htmlFor="code">{c.label}</label>
             <input
@@ -76,9 +78,9 @@ export function SyncScreen() {
               autoCapitalize="none"
               spellCheck={false}
               aria-invalid={!!problem || undefined}
-              aria-describedby={problem ? "code-note" : "code-hint"}
+              aria-describedby={problem ? "code-note" : undefined}
             />
-            {problem ? <small id="code-note" className="w-note" role="alert">{problem}</small> : <small id="code-hint">{c.keeps}</small>}
+            {problem && <small id="code-note" className="w-note" role="alert">{problem}</small>}
           </div>
           <button type="submit" className="w-primary" disabled={busy}>{busy ? c.connecting : c.connect}</button>
         </form>

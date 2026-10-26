@@ -115,3 +115,15 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | S3-N2 | minor | Mine's 4-bar pattern repeats over the 16-bar loop, so it may play where the original bass is silent | fixed (T103); S3-N2 shown by unit test, re-check on a loop with a gap |
 | S3-N4 | polish | "Make a bass instead" and sound names 15–16 px tall | fixed (T103); S3-N2 shown by unit test, re-check on a loop with a gap |
 | S3-N3 | polish | A garbled test name in the sandbox library | sandbox data, no fix |
+
+## S5 Studio lanes test (26 Oct, `user-testing/report-2026-10-26-studio-s5.md`): jobs 4 / 4
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| S5-1 | blocker | Undo/redo not saved: an undone lane removal is lost after a reload | open |
+| S5-2 | major | Removing a lane with blocks has no confirmation or toast | open |
+| S5-3 | minor | Hit areas < 28 px in the lane header, fold, + Add lane | open |
+| S5-4 | minor | Contrast 3.0:1 on crate meta, ruler numbers, counts | open |
+| S5-5 | minor | Crate shows ~1¼ rows of My sounds | open |
+| S5-6 | minor | Block drawer sliders unlabelled, unlike the Lab's knobs | open |
+| S5-7 | polish | Hear-only and mute lit together on one lane | open |

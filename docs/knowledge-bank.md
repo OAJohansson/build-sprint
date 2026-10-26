@@ -707,6 +707,14 @@ test the mark at its smallest size (29 px) first. *Where:* Wont's Dough-on-ink w
 from Headspace's orange blob, with a wink for comebacks. *(Byron Sharp, How Brands Grow; Marty
 Neumeier, Zag)*
 
+#### A name is a promise plus a character
+A strong product name says what it does for you and gives you a character to design around, so
+the brand grows out of the name. Test candidates on four things: the meaning fits the job, a
+character can live in it, it covers the whole scope, and a design world follows. Then search the
+app stores before you fall for it. *Where:* Wont ("I won't" plus a wonton); Magpie, a bird that
+collects what it loves, picked over Tastebud because several food apps already used that name.
+*(Marty Neumeier, The Brand Gap)*
+
 ### Quiz
 
 **Q:** What are the three parts of COM-B, and why check them before designing?
@@ -720,6 +728,9 @@ Neumeier, Zag)*
 
 **Q:** What is a distinctive brand asset, and what's a good first test for a logo mark?
 **A:** Something people recognise as only yours (a colour, shape, character). Test the mark at its smallest size, like a 29 px icon.
+
+**Q:** What four tests make a product name something a brand can grow from?
+**A:** The meaning fits the job, a character can live in it, it covers the whole scope, and a design world follows from it. Then check the app stores for clashes.
 
 **Q:** A critic says a panel is cluttered. What do you do before adding anything?
 **A:** List everything on screen the user didn't ask for and remove it; add only what's still missing after that.

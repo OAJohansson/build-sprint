@@ -1,0 +1,641 @@
+{
+ "ab": [
+  {
+   "loop": "76270",
+   "bars": 8,
+   "preset": "round-sub",
+   "originalDb": -15.5,
+   "mineStereoDb": -15.5,
+   "mineMonoDb": -15.5
+  },
+  {
+   "loop": "76270",
+   "bars": 8,
+   "preset": "rubber-pluck",
+   "originalDb": -15.5,
+   "mineStereoDb": -15.5,
+   "mineMonoDb": -15.55
+  },
+  {
+   "loop": "76270",
+   "bars": 8,
+   "preset": "reese",
+   "originalDb": -15.5,
+   "mineStereoDb": -15.5,
+   "mineMonoDb": -16.6
+  },
+  {
+   "loop": "76270",
+   "bars": 8,
+   "preset": "acid-line",
+   "originalDb": -15.5,
+   "mineStereoDb": -15.5,
+   "mineMonoDb": -15.5
+  },
+  {
+   "loop": "110",
+   "bars": 16,
+   "preset": "round-sub",
+   "originalDb": -18.94,
+   "mineStereoDb": -18.94,
+   "mineMonoDb": -18.94
+  },
+  {
+   "loop": "110",
+   "bars": 16,
+   "preset": "rubber-pluck",
+   "originalDb": -18.94,
+   "mineStereoDb": -18.94,
+   "mineMonoDb": -18.98
+  },
+  {
+   "loop": "110",
+   "bars": 16,
+   "preset": "reese",
+   "originalDb": -18.94,
+   "mineStereoDb": -18.94,
+   "mineMonoDb": -20.03
+  },
+  {
+   "loop": "110",
+   "bars": 16,
+   "preset": "acid-line",
+   "originalDb": -18.94,
+   "mineStereoDb": -18.94,
+   "mineMonoDb": -18.94
+  },
+  {
+   "loop": "30574",
+   "bars": 8,
+   "preset": "round-sub",
+   "originalDb": -16.1,
+   "mineStereoDb": -16.1,
+   "mineMonoDb": -16.1
+  },
+  {
+   "loop": "30574",
+   "bars": 8,
+   "preset": "rubber-pluck",
+   "originalDb": -16.1,
+   "mineStereoDb": -16.1,
+   "mineMonoDb": -16.15
+  },
+  {
+   "loop": "30574",
+   "bars": 8,
+   "preset": "reese",
+   "originalDb": -16.1,
+   "mineStereoDb": -16.1,
+   "mineMonoDb": -17.2
+  },
+  {
+   "loop": "30574",
+   "bars": 8,
+   "preset": "acid-line",
+   "originalDb": -16.1,
+   "mineStereoDb": -16.1,
+   "mineMonoDb": -16.1
+  },
+  {
+   "loop": "45806",
+   "bars": 16,
+   "preset": "round-sub",
+   "originalDb": -16.18,
+   "mineStereoDb": -16.18,
+   "mineMonoDb": -16.18
+  },
+  {
+   "loop": "45806",
+   "bars": 16,
+   "preset": "rubber-pluck",
+   "originalDb": -16.18,
+   "mineStereoDb": -16.18,
+   "mineMonoDb": -16.23
+  },
+  {
+   "loop": "45806",
+   "bars": 16,
+   "preset": "reese",
+   "originalDb": -16.18,
+   "mineStereoDb": -16.18,
+   "mineMonoDb": -17.31
+  },
+  {
+   "loop": "45806",
+   "bars": 16,
+   "preset": "acid-line",
+   "originalDb": -16.18,
+   "mineStereoDb": -16.18,
+   "mineMonoDb": -16.18
+  },
+  {
+   "loop": "144814",
+   "bars": 16,
+   "preset": "round-sub",
+   "originalDb": -16.09,
+   "mineStereoDb": -16.09,
+   "mineMonoDb": -16.09
+  },
+  {
+   "loop": "144814",
+   "bars": 16,
+   "preset": "rubber-pluck",
+   "originalDb": -16.09,
+   "mineStereoDb": -16.09,
+   "mineMonoDb": -16.13
+  },
+  {
+   "loop": "144814",
+   "bars": 16,
+   "preset": "reese",
+   "originalDb": -16.09,
+   "mineStereoDb": -16.09,
+   "mineMonoDb": -17.22
+  },
+  {
+   "loop": "144814",
+   "bars": 16,
+   "preset": "acid-line",
+   "originalDb": -16.09,
+   "mineStereoDb": -16.09,
+   "mineMonoDb": -16.09
+  }
+ ],
+ "sug": [
+  {
+   "loop": "76270",
+   "preset": "round-sub",
+   "presetDistance": 98.5,
+   "suggestedDistance": 23.5,
+   "dropPct": 76,
+   "macros": {
+    "tone": 0.2,
+    "length": 0.05,
+    "pitchDrop": 1,
+    "drive": 0,
+    "wobble": 0.95,
+    "width": 0
+   },
+   "extremes": [
+    "length=0.05",
+    "pitchDrop=1",
+    "drive=0",
+    "wobble=0.95",
+    "width=0"
+   ],
+   "targetDropSemis": 11.3,
+   "targetBrightHz": 97
+  },
+  {
+   "loop": "76270",
+   "preset": "rubber-pluck",
+   "presetDistance": 89.6,
+   "suggestedDistance": 29.1,
+   "dropPct": 68,
+   "macros": {
+    "tone": 0,
+    "length": 0.05,
+    "pitchDrop": 1,
+    "drive": 0,
+    "wobble": 1,
+    "width": 0
+   },
+   "extremes": [
+    "tone=0",
+    "length=0.05",
+    "pitchDrop=1",
+    "drive=0",
+    "wobble=1",
+    "width=0"
+   ],
+   "targetDropSemis": 11.3,
+   "targetBrightHz": 97
+  },
+  {
+   "loop": "76270",
+   "preset": "reese",
+   "presetDistance": 156.6,
+   "suggestedDistance": 5.4,
+   "dropPct": 97,
+   "macros": {
+    "tone": 0,
+    "length": 0,
+    "pitchDrop": 0.8,
+    "drive": 0,
+    "wobble": 0.9,
+    "width": 0
+   },
+   "extremes": [
+    "tone=0",
+    "length=0",
+    "drive=0",
+    "width=0"
+   ],
+   "targetDropSemis": 11.3,
+   "targetBrightHz": 97
+  },
+  {
+   "loop": "76270",
+   "preset": "acid-line",
+   "presetDistance": 190.9,
+   "suggestedDistance": 121.9,
+   "dropPct": 36,
+   "macros": {
+    "tone": 1,
+    "length": 0.1,
+    "pitchDrop": 0.9,
+    "drive": 0.2,
+    "wobble": 0,
+    "width": 0
+   },
+   "extremes": [
+    "tone=1",
+    "wobble=0",
+    "width=0"
+   ],
+   "targetDropSemis": 11.3,
+   "targetBrightHz": 97
+  },
+  {
+   "loop": "110",
+   "preset": "round-sub",
+   "presetDistance": 109.7,
+   "suggestedDistance": 22.5,
+   "dropPct": 79,
+   "macros": {
+    "tone": 1,
+    "length": 0.05,
+    "pitchDrop": 0.9,
+    "drive": 0,
+    "wobble": 0,
+    "width": 0
+   },
+   "extremes": [
+    "tone=1",
+    "length=0.05",
+    "drive=0",
+    "wobble=0",
+    "width=0"
+   ],
+   "targetDropSemis": 2.3,
+   "targetBrightHz": 101
+  },
+  {
+   "loop": "110",
+   "preset": "rubber-pluck",
+   "presetDistance": 65.5,
+   "suggestedDistance": 10.2,
+   "dropPct": 84,
+   "macros": {
+    "tone": 0,
+    "length": 0,
+    "pitchDrop": 0.5,
+    "drive": 0,
+    "wobble": 1,
+    "width": 0
+   },
+   "extremes": [
+    "tone=0",
+    "length=0",
+    "drive=0",
+    "wobble=1",
+    "width=0"
+   ],
+   "targetDropSemis": 2.3,
+   "targetBrightHz": 101
+  },
+  {
+   "loop": "110",
+   "preset": "reese",
+   "presetDistance": 148.9,
+   "suggestedDistance": 7,
+   "dropPct": 95,
+   "macros": {
+    "tone": 0.2,
+    "length": 0,
+    "pitchDrop": 1,
+    "drive": 0,
+    "wobble": 0.65,
+    "width": 0
+   },
+   "extremes": [
+    "length=0",
+    "pitchDrop=1",
+    "drive=0",
+    "width=0"
+   ],
+   "targetDropSemis": 2.3,
+   "targetBrightHz": 101
+  },
+  {
+   "loop": "110",
+   "preset": "acid-line",
+   "presetDistance": 156.1,
+   "suggestedDistance": 92.1,
+   "dropPct": 41,
+   "macros": {
+    "tone": 1,
+    "length": 0,
+    "pitchDrop": 0.2,
+    "drive": 0.15,
+    "wobble": 0,
+    "width": 0
+   },
+   "extremes": [
+    "tone=1",
+    "length=0",
+    "wobble=0",
+    "width=0"
+   ],
+   "targetDropSemis": 2.3,
+   "targetBrightHz": 101
+  },
+  {
+   "loop": "30574",
+   "preset": "round-sub",
+   "presetDistance": 153.1,
+   "suggestedDistance": 54.7,
+   "dropPct": 64,
+   "macros": {
+    "tone": 0.2,
+    "length": 0,
+    "pitchDrop": 1,
+    "drive": 0,
+    "wobble": 1,
+    "width": 0
+   },
+   "extremes": [
+    "length=0",
+    "pitchDrop=1",
+    "drive=0",
+    "wobble=1",
+    "width=0"
+   ],
+   "targetDropSemis": 14.9,
+   "targetBrightHz": 98
+  },
+  {
+   "loop": "30574",
+   "preset": "rubber-pluck",
+   "presetDistance": 144.8,
+   "suggestedDistance": 66.8,
+   "dropPct": 54,
+   "macros": {
+    "tone": 0,
+    "length": 0,
+    "pitchDrop": 1,
+    "drive": 0,
+    "wobble": 0.9,
+    "width": 0
+   },
+   "extremes": [
+    "tone=0",
+    "length=0",
+    "pitchDrop=1",
+    "drive=0",
+    "width=0"
+   ],
+   "targetDropSemis": 14.9,
+   "targetBrightHz": 98
+  },
+  {
+   "loop": "30574",
+   "preset": "reese",
+   "presetDistance": 222.1,
+   "suggestedDistance": 14,
+   "dropPct": 94,
+   "macros": {
+    "tone": 0,
+    "length": 0,
+    "pitchDrop": 0.95,
+    "drive": 0,
+    "wobble": 1,
+    "width": 0
+   },
+   "extremes": [
+    "tone=0",
+    "length=0",
+    "pitchDrop=0.95",
+    "drive=0",
+    "wobble=1",
+    "width=0"
+   ],
+   "targetDropSemis": 14.9,
+   "targetBrightHz": 98
+  },
+  {
+   "loop": "30574",
+   "preset": "acid-line",
+   "presetDistance": 247.2,
+   "suggestedDistance": 161,
+   "dropPct": 35,
+   "macros": {
+    "tone": 1,
+    "length": 0,
+    "pitchDrop": 0.8,
+    "drive": 0.35,
+    "wobble": 0,
+    "width": 0
+   },
+   "extremes": [
+    "tone=1",
+    "length=0",
+    "wobble=0",
+    "width=0"
+   ],
+   "targetDropSemis": 14.9,
+   "targetBrightHz": 98
+  },
+  {
+   "loop": "45806",
+   "preset": "round-sub",
+   "presetDistance": 129.6,
+   "suggestedDistance": 28.8,
+   "dropPct": 78,
+   "macros": {
+    "tone": 0.2,
+    "length": 0.05,
+    "pitchDrop": 1,
+    "drive": 0,
+    "wobble": 0.95,
+    "width": 0
+   },
+   "extremes": [
+    "length=0.05",
+    "pitchDrop=1",
+    "drive=0",
+    "wobble=0.95",
+    "width=0"
+   ],
+   "targetDropSemis": 11.8,
+   "targetBrightHz": 96
+  },
+  {
+   "loop": "45806",
+   "preset": "rubber-pluck",
+   "presetDistance": 104.5,
+   "suggestedDistance": 34,
+   "dropPct": 67,
+   "macros": {
+    "tone": 0,
+    "length": 0.05,
+    "pitchDrop": 1,
+    "drive": 0,
+    "wobble": 1,
+    "width": 0
+   },
+   "extremes": [
+    "tone=0",
+    "length=0.05",
+    "pitchDrop=1",
+    "drive=0",
+    "wobble=1",
+    "width=0"
+   ],
+   "targetDropSemis": 11.8,
+   "targetBrightHz": 96
+  },
+  {
+   "loop": "45806",
+   "preset": "reese",
+   "presetDistance": 190.6,
+   "suggestedDistance": 22.1,
+   "dropPct": 88,
+   "macros": {
+    "tone": 0.05,
+    "length": 0,
+    "pitchDrop": 0.95,
+    "drive": 0,
+    "wobble": 1,
+    "width": 0
+   },
+   "extremes": [
+    "tone=0.05",
+    "length=0",
+    "pitchDrop=0.95",
+    "drive=0",
+    "wobble=1",
+    "width=0"
+   ],
+   "targetDropSemis": 11.8,
+   "targetBrightHz": 96
+  },
+  {
+   "loop": "45806",
+   "preset": "acid-line",
+   "presetDistance": 207.8,
+   "suggestedDistance": 131.1,
+   "dropPct": 37,
+   "macros": {
+    "tone": 1,
+    "length": 0.05,
+    "pitchDrop": 0.95,
+    "drive": 0.35,
+    "wobble": 0,
+    "width": 0
+   },
+   "extremes": [
+    "tone=1",
+    "length=0.05",
+    "pitchDrop=0.95",
+    "wobble=0",
+    "width=0"
+   ],
+   "targetDropSemis": 11.8,
+   "targetBrightHz": 96
+  },
+  {
+   "loop": "144814",
+   "preset": "round-sub",
+   "presetDistance": 96.6,
+   "suggestedDistance": 18.5,
+   "dropPct": 81,
+   "macros": {
+    "tone": 0.8,
+    "length": 0.05,
+    "pitchDrop": 1,
+    "drive": 0,
+    "wobble": 0,
+    "width": 0
+   },
+   "extremes": [
+    "length=0.05",
+    "pitchDrop=1",
+    "drive=0",
+    "wobble=0",
+    "width=0"
+   ],
+   "targetDropSemis": 9.1,
+   "targetBrightHz": 98
+  },
+  {
+   "loop": "144814",
+   "preset": "rubber-pluck",
+   "presetDistance": 69.7,
+   "suggestedDistance": 17.3,
+   "dropPct": 75,
+   "macros": {
+    "tone": 0,
+    "length": 0.1,
+    "pitchDrop": 1,
+    "drive": 0,
+    "wobble": 0.6,
+    "width": 0
+   },
+   "extremes": [
+    "tone=0",
+    "pitchDrop=1",
+    "drive=0",
+    "width=0"
+   ],
+   "targetDropSemis": 9.1,
+   "targetBrightHz": 98
+  },
+  {
+   "loop": "144814",
+   "preset": "reese",
+   "presetDistance": 141.8,
+   "suggestedDistance": 14.4,
+   "dropPct": 90,
+   "macros": {
+    "tone": 0.1,
+    "length": 0,
+    "pitchDrop": 0,
+    "drive": 0,
+    "wobble": 0.9,
+    "width": 0
+   },
+   "extremes": [
+    "length=0",
+    "pitchDrop=0",
+    "drive=0",
+    "width=0"
+   ],
+   "targetDropSemis": 9.1,
+   "targetBrightHz": 98
+  },
+  {
+   "loop": "144814",
+   "preset": "acid-line",
+   "presetDistance": 169.3,
+   "suggestedDistance": 108.9,
+   "dropPct": 36,
+   "macros": {
+    "tone": 1,
+    "length": 0.1,
+    "pitchDrop": 1,
+    "drive": 0.2,
+    "wobble": 0,
+    "width": 0
+   },
+   "extremes": [
+    "tone=1",
+    "pitchDrop=1",
+    "wobble=0",
+    "width=0"
+   ],
+   "targetDropSemis": 9.1,
+   "targetBrightHz": 98
+  }
+ ]
+}

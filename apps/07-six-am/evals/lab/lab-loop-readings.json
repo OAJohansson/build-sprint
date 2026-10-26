@@ -1,0 +1,878 @@
+{
+ "loops": [
+  {
+   "bar": null,
+   "loop": {
+    "startMs": 76270.25386751289,
+    "endMs": 91502.30464101546
+   },
+   "preset": "round-sub",
+   "macros": {
+    "tone": 0.3,
+    "length": 0.55,
+    "pitchDrop": 0.35,
+    "drive": 0.2,
+    "wobble": 0,
+    "width": 0
+   },
+   "ticks": {
+    "tone": 0.2,
+    "length": 0.05,
+    "pitchDrop": 1,
+    "drive": 0,
+    "wobble": 0.95,
+    "width": 0
+   },
+   "pattern": {
+    "bars": 4,
+    "notes": [
+     {
+      "step": 0,
+      "midi": 34,
+      "dur": 1,
+      "vel": 0.84
+     },
+     {
+      "step": 2,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.76
+     },
+     {
+      "step": 3,
+      "midi": 27,
+      "dur": 1,
+      "vel": 0.74
+     },
+     {
+      "step": 7,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.99
+     },
+     {
+      "step": 12,
+      "midi": 31,
+      "dur": 1,
+      "vel": 1
+     },
+     {
+      "step": 15,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.93
+     },
+     {
+      "step": 18,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.75
+     },
+     {
+      "step": 19,
+      "midi": 27,
+      "dur": 1,
+      "vel": 0.77
+     },
+     {
+      "step": 23,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.99
+     },
+     {
+      "step": 28,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.99
+     },
+     {
+      "step": 31,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.94
+     },
+     {
+      "step": 34,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.82
+     },
+     {
+      "step": 35,
+      "midi": 26,
+      "dur": 1,
+      "vel": 0.8
+     },
+     {
+      "step": 39,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.99
+     },
+     {
+      "step": 44,
+      "midi": 31,
+      "dur": 1,
+      "vel": 1
+     },
+     {
+      "step": 47,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.94
+     },
+     {
+      "step": 50,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.8
+     },
+     {
+      "step": 51,
+      "midi": 27,
+      "dur": 1,
+      "vel": 0.78
+     },
+     {
+      "step": 55,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.99
+     },
+     {
+      "step": 60,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.99
+     }
+    ],
+    "confidence": 0.93,
+    "offsetMs": 33
+   },
+   "features": {
+    "brightHz": 97.18806640296174,
+    "lengthSteps": 0.8551963718820862,
+    "dropSemis": 11.251857985379136,
+    "crestDb": 8.845420246469136,
+    "wobble": 0.1236742929908138,
+    "width": 0.0008940378655873152,
+    "levelDb": -15.499796056065186
+   },
+   "levelDb": -15.499792584889125,
+   "active": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "readState": "ready"
+  },
+  {
+   "bar": 5,
+   "loop": {
+    "startMs": 110,
+    "endMs": 30574.101547005157
+   },
+   "preset": "acid-line",
+   "macros": {
+    "tone": 0.3,
+    "length": 0.3,
+    "pitchDrop": 0,
+    "drive": 0.3,
+    "wobble": 0,
+    "width": 0
+   },
+   "ticks": {
+    "tone": 1,
+    "length": 0,
+    "pitchDrop": 0.2,
+    "drive": 0.15,
+    "wobble": 0,
+    "width": 0
+   },
+   "pattern": {
+    "bars": 4,
+    "notes": [
+     {
+      "step": 2,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.72
+     },
+     {
+      "step": 7,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.95
+     },
+     {
+      "step": 12,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.99
+     },
+     {
+      "step": 15,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.91
+     },
+     {
+      "step": 18,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.72
+     },
+     {
+      "step": 23,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.95
+     },
+     {
+      "step": 28,
+      "midi": 31,
+      "dur": 1,
+      "vel": 1
+     },
+     {
+      "step": 31,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.91
+     },
+     {
+      "step": 34,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.74
+     },
+     {
+      "step": 39,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.96
+     },
+     {
+      "step": 44,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.99
+     },
+     {
+      "step": 47,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.91
+     },
+     {
+      "step": 50,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.74
+     },
+     {
+      "step": 55,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.97
+     },
+     {
+      "step": 60,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.98
+     }
+    ],
+    "confidence": 0.76,
+    "offsetMs": -12
+   },
+   "features": {
+    "brightHz": 100.78384701489625,
+    "lengthSteps": 0.6539736961451247,
+    "dropSemis": 2.332374649518669,
+    "crestDb": 10.202869030157949,
+    "wobble": 0.10732591972381388,
+    "width": 0.0020146131119339237,
+    "levelDb": -18.935058981734777
+   },
+   "levelDb": -18.935041355548304,
+   "active": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    false,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "readState": "ready"
+  },
+  {
+   "bar": 20,
+   "loop": {
+    "startMs": 30574.101547005157,
+    "endMs": 45806.15232050773
+   },
+   "preset": "acid-line",
+   "macros": {
+    "tone": 0.3,
+    "length": 0.3,
+    "pitchDrop": 0,
+    "drive": 0.3,
+    "wobble": 0,
+    "width": 0
+   },
+   "ticks": {
+    "tone": 1,
+    "length": 0,
+    "pitchDrop": 0.8,
+    "drive": 0.35,
+    "wobble": 0,
+    "width": 0
+   },
+   "pattern": {
+    "bars": 4,
+    "notes": [
+     {
+      "step": 2,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.76
+     },
+     {
+      "step": 3,
+      "midi": 27,
+      "dur": 1,
+      "vel": 0.72
+     },
+     {
+      "step": 7,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.97
+     },
+     {
+      "step": 12,
+      "midi": 31,
+      "dur": 1,
+      "vel": 1
+     },
+     {
+      "step": 15,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.91
+     },
+     {
+      "step": 18,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.75
+     },
+     {
+      "step": 19,
+      "midi": 27,
+      "dur": 1,
+      "vel": 0.71
+     },
+     {
+      "step": 23,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.97
+     },
+     {
+      "step": 28,
+      "midi": 31,
+      "dur": 1,
+      "vel": 1
+     },
+     {
+      "step": 31,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.91
+     },
+     {
+      "step": 34,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.74
+     },
+     {
+      "step": 35,
+      "midi": 26,
+      "dur": 1,
+      "vel": 0.72
+     },
+     {
+      "step": 39,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.97
+     },
+     {
+      "step": 44,
+      "midi": 31,
+      "dur": 1,
+      "vel": 1
+     },
+     {
+      "step": 47,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.91
+     },
+     {
+      "step": 50,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.8
+     },
+     {
+      "step": 51,
+      "midi": 27,
+      "dur": 1,
+      "vel": 0.72
+     },
+     {
+      "step": 55,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.97
+     },
+     {
+      "step": 60,
+      "midi": 31,
+      "dur": 1,
+      "vel": 1
+     }
+    ],
+    "confidence": 0.92,
+    "offsetMs": -6
+   },
+   "features": {
+    "brightHz": 97.60422137175769,
+    "lengthSteps": 0.5365938019652305,
+    "dropSemis": 14.905356139485683,
+    "crestDb": 8.225302550376547,
+    "wobble": 0.09677142486025782,
+    "width": 0.001467144097229456,
+    "levelDb": -16.102842404882924
+   },
+   "levelDb": -16.10283305683016,
+   "active": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "readState": "ready"
+  },
+  {
+   "bar": 30,
+   "loop": {
+    "startMs": 45806.15232050773,
+    "endMs": 76270.25386751289
+   },
+   "preset": "acid-line",
+   "macros": {
+    "tone": 0.3,
+    "length": 0.3,
+    "pitchDrop": 0,
+    "drive": 0.3,
+    "wobble": 0,
+    "width": 0
+   },
+   "ticks": {
+    "tone": 1,
+    "length": 0.05,
+    "pitchDrop": 0.95,
+    "drive": 0.35,
+    "wobble": 0,
+    "width": 0
+   },
+   "pattern": {
+    "bars": 4,
+    "notes": [
+     {
+      "step": 0,
+      "midi": 34,
+      "dur": 1,
+      "vel": 0.86
+     },
+     {
+      "step": 2,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.76
+     },
+     {
+      "step": 3,
+      "midi": 27,
+      "dur": 1,
+      "vel": 0.73
+     },
+     {
+      "step": 7,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.96
+     },
+     {
+      "step": 12,
+      "midi": 31,
+      "dur": 1,
+      "vel": 1
+     },
+     {
+      "step": 15,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.9
+     },
+     {
+      "step": 18,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.75
+     },
+     {
+      "step": 19,
+      "midi": 27,
+      "dur": 1,
+      "vel": 0.73
+     },
+     {
+      "step": 23,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.96
+     },
+     {
+      "step": 28,
+      "midi": 31,
+      "dur": 1,
+      "vel": 1
+     },
+     {
+      "step": 31,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.89
+     },
+     {
+      "step": 34,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.76
+     },
+     {
+      "step": 39,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.96
+     },
+     {
+      "step": 44,
+      "midi": 31,
+      "dur": 1,
+      "vel": 1
+     },
+     {
+      "step": 47,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.9
+     },
+     {
+      "step": 50,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.81
+     },
+     {
+      "step": 55,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.95
+     },
+     {
+      "step": 60,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.99
+     }
+    ],
+    "confidence": 0.92,
+    "offsetMs": 6
+   },
+   "features": {
+    "brightHz": 96.3624983347944,
+    "lengthSteps": 0.6372051398337113,
+    "dropSemis": 11.774553583291642,
+    "crestDb": 8.386644917040693,
+    "wobble": 0.11085989344145694,
+    "width": 0.0013871844135428277,
+    "levelDb": -16.181234939056694
+   },
+   "levelDb": -16.181226582200672,
+   "active": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "readState": "ready"
+  },
+  {
+   "bar": 85,
+   "loop": {
+    "startMs": 144814.4823482745,
+    "endMs": 175278.58389527968
+   },
+   "preset": "acid-line",
+   "macros": {
+    "tone": 0.3,
+    "length": 0.3,
+    "pitchDrop": 0,
+    "drive": 0.3,
+    "wobble": 0,
+    "width": 0
+   },
+   "ticks": {
+    "tone": 1,
+    "length": 0.1,
+    "pitchDrop": 1,
+    "drive": 0.2,
+    "wobble": 0,
+    "width": 0
+   },
+   "pattern": {
+    "bars": 4,
+    "notes": [
+     {
+      "step": 0,
+      "midi": 34,
+      "dur": 1,
+      "vel": 0.83
+     },
+     {
+      "step": 2,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.76
+     },
+     {
+      "step": 7,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.96
+     },
+     {
+      "step": 12,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.99
+     },
+     {
+      "step": 15,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.89
+     },
+     {
+      "step": 18,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.75
+     },
+     {
+      "step": 23,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.96
+     },
+     {
+      "step": 28,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.99
+     },
+     {
+      "step": 31,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.89
+     },
+     {
+      "step": 34,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.75
+     },
+     {
+      "step": 35,
+      "midi": 27,
+      "dur": 1,
+      "vel": 0.72
+     },
+     {
+      "step": 39,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.96
+     },
+     {
+      "step": 44,
+      "midi": 31,
+      "dur": 1,
+      "vel": 1
+     },
+     {
+      "step": 47,
+      "midi": 34,
+      "dur": 2,
+      "vel": 0.9
+     },
+     {
+      "step": 50,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.81
+     },
+     {
+      "step": 51,
+      "midi": 26,
+      "dur": 1,
+      "vel": 0.73
+     },
+     {
+      "step": 55,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.96
+     },
+     {
+      "step": 60,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.99
+     }
+    ],
+    "confidence": 0.91,
+    "offsetMs": 45
+   },
+   "features": {
+    "brightHz": 97.76096447448673,
+    "lengthSteps": 0.9725762660619803,
+    "dropSemis": 9.136072326737974,
+    "crestDb": 9.185159369637693,
+    "wobble": 0.14995338060688185,
+    "width": 0.0013919308556176757,
+    "levelDb": -16.08806785577984
+   },
+   "levelDb": -16.088059441632502,
+   "active": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "readState": "ready"
+  }
+ ],
+ "ab": [
+  {
+   "bar": null,
+   "preset": "round-sub",
+   "A": -15.5,
+   "B": -15.5,
+   "diff": 0,
+   "mineLevel": -15.2
+  },
+  {
+   "bar": null,
+   "preset": "rubber-pluck",
+   "A": -15.48,
+   "B": -15.55,
+   "diff": -0.07,
+   "mineLevel": -16.8
+  },
+  {
+   "bar": null,
+   "preset": "reese",
+   "A": -15.5,
+   "B": -16.6,
+   "diff": -1.1,
+   "mineLevel": -16.6
+  },
+  {
+   "bar": null,
+   "preset": "acid-line",
+   "A": -15.5,
+   "B": -15.5,
+   "diff": 0,
+   "mineLevel": -14.7
+  },
+  {
+   "bar": 20,
+   "preset": "acid-line",
+   "A": -16.1,
+   "B": -16.1,
+   "diff": 0,
+   "mineLevel": -17.4
+  },
+  {
+   "bar": 85,
+   "preset": "round-sub",
+   "A": null,
+   "B": null,
+   "diff": 0,
+   "mineLevel": -120
+  }
+ ]
+}

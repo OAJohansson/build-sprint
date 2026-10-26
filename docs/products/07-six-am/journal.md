@@ -648,3 +648,9 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   aware of context, Make with A/B, 6 macros, Match it, and save with the suggested name. Sheet
   `design/lab-directions-2.html`, screenshots `design/lab2/`, prototypes `/dev/lab-directions-2?v=N`
   (dev only); round 1 kept untouched. T82. Push sent for the owner's 3.
+- **Combined prototype (owner liked 3 Two rooms and 5 Margin notes):** one rough build for the
+  decision, no critic. Listen = the full map with Mentor answers as numbered pins on the timeline
+  (a pin opens a small thread; cards open away from the playhead); Make = the focused room
+  (original part alone, your synth with A/B and macros, the Mentor's notes) reached by "Make a bass
+  like this" from the soloed lane or a note; same header and transport, a Listen/Make switch; notes
+  kept across modes. `design/lab-combined.html`, `/dev/lab-combined?mode=listen|make`.

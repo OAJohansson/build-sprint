@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio lanes</title>
+<style>
+:root { color-scheme: dark; }
+body { margin: 0; background: #131110; color: #f1e6d3; font: 14px/1.5 ui-monospace, "IBM Plex Mono", Menlo, monospace; }
+main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font: italic 400 32px/1.1 Georgia, serif; margin: 0 0 8px; }
+p.lede { color: #aa9c88; margin: 0 0 24px; max-width: 640px; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 28px; }
+@media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+figure { margin: 0; }
+img { display: block; width: 100%; height: auto; border: 1px solid #2c2622; border-radius: 6px; }
+figcaption { display: flex; gap: 12px; padding-top: 10px; }
+figcaption b { flex: none; width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid #f2b134; color: #f2b134; border-radius: 50%; font-weight: 500; }
+figcaption strong { display: block; font-weight: 500; }
+figcaption span { color: #aa9c88; }
+figcaption strong { color: #f1e6d3; }
+</style></head>
+<body><main>
+<h1>Six AM · Studio lanes, three directions</h1>
+<p class="lede">Slice S5 (L159): about 11 lane types in 7 families; add, remove, rename, reorder; volume, pan, mute and solo per lane; My sounds dropped into the lane of their type. Same track in each: Night bus home, 124 BPM, A minor, 128 bars, 8 lanes. Rough prototypes at <code>/dev/studio-lanes</code> (<code>?v=1–3</code>, <code>?s=main|add|drop</code>, <code>?data=worst</code>). Tap an image for full size. All copy is draft copy.</p>
+<div class="grid">
+  <figure>
+    <a href="studio-lanes/1-fold-main.png"><img src="studio-lanes/1-fold-main.png" alt="Direction 1, Fold, main" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>1</b><span><strong>Fold · main (pointer on Sub)</strong>Today’s layout kept. A family with 2+ lanes gets a thin header that folds it; one-lane families are just the lane. Volume, pan and ⋯ (rename, move, remove) appear on hover. The crate gains a My sounds tab.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="studio-lanes/1-fold-drop.png"><img src="studio-lanes/1-fold-drop.png" alt="Direction 1, Fold, dropping Rubber sub" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>1</b><span><strong>Fold · holding Rubber sub</strong>The Sub lane lights, the rest dim, the ruler marks bar 65. With no Bass lane, a “Drop here for a new Bass lane” row appears.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="studio-lanes/1-fold-add-lane.png"><img src="studio-lanes/1-fold-add-lane.png" alt="Direction 1, Fold, add a lane" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>1</b><span><strong>Fold · Add lane (Drums folded)</strong>The 11 types by family, each with a few plain words. Folded Drums shows one strip per lane.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="studio-lanes/1-fold-worst.png"><img src="studio-lanes/1-fold-worst.png" alt="Direction 1, Fold, worst-case data" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>1</b><span><strong>Fold · worst case</strong>Six drum lanes, a long and a one-letter name, Shaker soloed, a long My sounds name. The timeline scrolls past 9 lanes.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="studio-lanes/2-inspect-main.png"><img src="studio-lanes/2-inspect-main.png" alt="Direction 2, Inspect, main" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>2</b><span><strong>Inspect · Sub selected</strong>Lanes hold only name, M and S; a family is a thin vertical rail. Click a lane: the bottom panel becomes that lane (name, volume, pan, move, remove) and the sounds that fit it, My sounds first.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="studio-lanes/2-inspect-add-lane.png"><img src="studio-lanes/2-inspect-add-lane.png" alt="Direction 2, Inspect, add a lane" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>2</b><span><strong>Inspect · Add a lane</strong>The bottom panel turns into the 11 types in 7 family columns.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="studio-lanes/2-inspect-drop.png"><img src="studio-lanes/2-inspect-drop.png" alt="Direction 2, Inspect, dropping Rubber sub" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>2</b><span><strong>Inspect · holding Rubber sub</strong>Same drop, or “Add” puts it at the playhead’s phrase.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="studio-lanes/3-shelf-main.png"><img src="studio-lanes/3-shelf-main.png" alt="Direction 3, Shelf, main" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>3</b><span><strong>Shelf · main</strong>The crate moves to a left shelf (My sounds on top, built-in by family). Lanes get the full height in a family tree. A short volume line and a pan dot always show, grey and small.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="studio-lanes/3-shelf-add-lane.png"><img src="studio-lanes/3-shelf-add-lane.png" alt="Direction 3, Shelf, add a lane" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>3</b><span><strong>Shelf · Add lane</strong>Opens in place as one row of type chips.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="studio-lanes/3-shelf-drop.png"><img src="studio-lanes/3-shelf-drop.png" alt="Direction 3, Shelf, dropping Rubber sub" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>3</b><span><strong>Shelf · holding Rubber sub</strong>Dragged from the shelf onto Sub.</span></figcaption>
+  </figure>
+</div>
+</main></body></html>

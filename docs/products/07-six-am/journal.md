@@ -706,3 +706,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **S3/S4 fix pass (T101):** rename is a PATCH (no duplicate), everything fits a 734 px page with A/B visible, saved sounds line that reopens a sound, honest Suggest, Make a bass instead, notes in the strip. 358 tests. Re-check next.
 - **S5 started:** a quick Studio lane-model design pass (L193) runs while the Make/Save re-check runs.
 - **S3+S4 re-check: jobs 4 / 4 (pass).** All fixes hold; Suggest 0.45 s round trip. Small fixes sent (saved sounds clickable before the loop is read, Mine silent where the original bass is, 28 px targets).
+- **S5 design:** 3 directions (Fold, Inspect, Shelf); PM picked Fold from the pack (L194, T102). Skills run on Fold. Critic next.

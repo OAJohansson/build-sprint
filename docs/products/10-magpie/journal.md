@@ -58,6 +58,21 @@ What happened, what was decided and why. Newest last.
   gained a sub-kind picker and "Restaurant, bar or spot"; saved, item, filter sheet, filtered
   results and the laptop (filter panel always open) were redone to match.
 
+## 26 Oct (evening): build, slice 1, the sticker spike
+
+- **PM session started** (Founder mode) from the merged kickoff (PR #88). The design is final
+  (canvas row "Final flow for hand-off", A–L), so the design-pick steps are skipped.
+- **Ops (pre-approved, decision 0028 #7):** added a `[10-magpie]` section to the root secrets
+  file (ACCESS_CODE = Selvedge's, T1; a new SANDBOX_ACCESS_CODE for graders) and filled
+  `.env.local` with `pnpm env-bootstrap`.
+- **Eval photos:** no photos of the owner's yet, so 12 freely licensed food and drink photos from
+  Wikimedia Commons (`apps/10-magpie/evals/photos/SOURCES.md`).
+- **Spike:** four image models through OpenRouter, the sticker prompt in words, then a flood-fill
+  cut-out of the white outside the sticker. Gemini 2.5 Flash Image won: 12 of 12 drawn, median
+  8.2 s, $0.039, an outer outline on every sticker (L1, decision 0029). Rounded squares work too.
+  The sticker bar looks reachable; the formal eval is the data-evals grader's, once the app route
+  exists.
+
 ## To carry over
 
 For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md).

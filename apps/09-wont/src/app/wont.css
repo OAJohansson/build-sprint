@@ -299,3 +299,8 @@ body {
   .in-progress i.now { animation: none; transform: scaleX(0.5); }
   @keyframes in-fade { from { opacity: 0; } to { opacity: 1; } }
 }
+
+/* v1.1 Sync screen: the status sits in a paper field; the off link and its note stay quiet. */
+.w-sync-status { font-size: 15px; line-height: 1.4; }
+.w-sync-note { text-align: center; margin-top: -6px; }
+.w-foot { flex-wrap: wrap; }

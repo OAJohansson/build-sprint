@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque } from "next/font/google";
+import { SyncEngine } from "@/components/sync-engine";
 import { copy } from "@/lib/copy";
 import "./globals.css";
 import "./wont.css";
@@ -40,7 +41,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${bricolage.variable} h-full antialiased`}>
-      <body className="min-h-dvh flex flex-col">{children}</body>
+      <body className="min-h-dvh flex flex-col">
+        {children}
+        <SyncEngine />
+      </body>
     </html>
   );
 }

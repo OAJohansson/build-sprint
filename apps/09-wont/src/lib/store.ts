@@ -8,33 +8,15 @@ import * as A from "./actions";
 import { todayKey, type DayKey } from "./day";
 import type { HabitDraft, HabitPatch, SlipSize, WontState } from "./habits";
 import { emptyState, isSeedName, seed, SEED_NAMES, type SeedName } from "./seed";
+import { migrate } from "./migrate";
+import { recordChange, syncSpace } from "./sync-client";
 import { useLocalStorage } from "./use-local-storage";
 
-// shortcut: localStorage on one device only (no-go: backend); move to a synced store if the
-// owner ever wants a second device.
+export { CURRENT_VERSION, migrate } from "./migrate";
+
+// v1.1: localStorage stays the source of truth on each device (local-first); sync-client.ts
+// merges it with the other devices in the background (L27).
 export const STORAGE_KEY = "wont:v1";
-export const CURRENT_VERSION = 1;
-
-/**
- * Migration hook: turns whatever is stored into the current shape. Bump CURRENT_VERSION and add a
- * step here when the shape changes; anything unreadable becomes a fresh state.
- */
-export function migrate(raw: unknown): WontState {
-  if (!raw || typeof raw !== "object") return emptyState();
-  const s = raw as Partial<WontState> & { version?: number };
-  // Future steps go here, e.g. if (s.version === 1) s = fromV1(s);
-  // shortcut: an unknown version starts fresh instead of keeping the old data aside; add a
-  // backup copy before the first real migration ships.
-  if (s.version !== CURRENT_VERSION) return emptyState();
-  return {
-    version: 1,
-    habits: Array.isArray(s.habits) ? s.habits : [],
-    logs: s.logs && typeof s.logs === "object" ? s.logs : {},
-    comebacksSeen: s.comebacksSeen && typeof s.comebacksSeen === "object" ? s.comebacksSeen : {},
-    introSeen: !!s.introSeen,
-  };
-}
-
 /** The stored state right now, read straight from localStorage (for one-off checks in effects). */
 export function peekState(): WontState {
   try {
@@ -78,28 +60,49 @@ export function useWont() {
   const state = useMemo(() => migrate(raw), [raw]);
   const today = useToday();
 
+  // Every change is stamped for sync (L28) as it's saved; the save itself never waits.
   const update = useCallback(
-    (fn: (s: WontState) => WontState) => setRaw((prev: unknown) => fn(migrate(prev))),
+    (fn: (s: WontState) => WontState) =>
+      setRaw((prev: unknown) => {
+        const before = migrate(prev);
+        const next = fn(before);
+        if (next !== before) recordChange(before, next);
+        return next;
+      }),
     [setRaw],
+  );
+
+  // A seed replaces everything, so it would replace the owner's synced board on every device:
+  // only allowed on a device that isn't synced or is on the graders' sandbox (decision 0028).
+  const applySeed = useCallback(
+    (name: SeedName) => {
+      if (syncSpace() === "owner") throw new Error("Seeding is off on a device synced to the owner's board.");
+      update(() => seed(name, Date.now()));
+    },
+    [update],
   );
 
   // Seeding for user tests (plan.md, "Seeding").
   useEffect(() => {
     window.wontSeed = (name) => {
       if (!isSeedName(name)) throw new Error(`Unknown seed. Try: ${SEED_NAMES.join(", ")}`);
-      setRaw(seed(name, Date.now()));
+      applySeed(name);
     };
     const url = new URL(window.location.href);
     const name = url.searchParams.get("seed");
     if (name && isSeedName(name)) {
-      setRaw(seed(name, Date.now()));
+      try {
+        applySeed(name);
+      } catch (e) {
+        console.warn(e);
+      }
       url.searchParams.delete("seed");
       window.history.replaceState(null, "", url);
     }
     return () => {
       delete window.wontSeed;
     };
-  }, [setRaw]);
+  }, [applySeed]);
 
   const day = (d?: DayKey) => d ?? todayKey();
 
@@ -124,6 +127,6 @@ export function useWont() {
     markComebackSeen: (habitId: string, id: DayKey) =>
       update((s) => A.markComebackSeen(s, habitId, id)),
     setIntroSeen: (seen: boolean) => update((s) => A.setIntroSeen(s, seen)),
-    seed: (name: SeedName) => setRaw(seed(name, Date.now())),
+    seed: applySeed,
   };
 }

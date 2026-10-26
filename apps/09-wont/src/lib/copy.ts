@@ -32,7 +32,7 @@ export const titleCase = (s: string) => s.charAt(0).toLocaleUpperCase() + s.slic
 export const copy = {
   app: {
     name: "Wont",
-    titles: { intro: "Intro", newBuild: "A new promise", newStop: "Something to stop", habit: "Habit" },
+    titles: { intro: "Intro", newBuild: "A new promise", newStop: "Something to stop", habit: "Habit", sync: "Sync" },
     description: "A drawing board of promises to yourself. Missing a day doesn't reset you.",
   },
 
@@ -49,6 +49,9 @@ export const copy = {
     dayKept: (day: string, kept: number, total: number) => `${day}: ${num(kept)} of ${num(total)} kept`,
     add: "Add a habit",
     replayIntro: "Watch the intro again",
+    syncOff: "Use on another device",
+    syncOn: "Synced",
+    syncOffline: "Offline, saved here",
     emptyTitle: "Your board is empty",
     emptyBody: "Start with one promise to yourself.",
     emptyPrimary: "Make my first promise",
@@ -219,5 +222,29 @@ export const copy = {
     endFirst: "Make my first promise",
     endBoard: "Back to my board",
     again: "Watch again",
+  },
+
+  // v1.1 (L27): the Sync screen, reached from the board's footer.
+  sync: {
+    back: "← Board",
+    title: "Your other devices",
+    intro: "Type the same code on your phone and laptop and they share one board.",
+    label: "Access code",
+    keeps: "Everything on this device stays and is added to the others.",
+    connect: "Turn on sync",
+    connecting: "Connecting…",
+    wrong: "That's not the code.",
+    offline: "You're offline. Try again when you're connected.",
+    onTitle: "Sync is on",
+    onBody: "This device shares one board with your others. Taps save here first, so they never wait.",
+    status: {
+      syncing: "Syncing…",
+      synced: (time: string) => `Last synced ${time}`,
+      offline: "Offline. Taps are saved here and sync when you're back.",
+      error: "Couldn't sync just now. Taps are saved here; it tries again in a minute.",
+    },
+    denied: "The code was changed. Type the new one to sync again.",
+    off: "Stop syncing on this device",
+    offNote: "This device keeps everything it has.",
   },
 };

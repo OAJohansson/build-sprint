@@ -33,6 +33,14 @@ function read<T>(key: string, fallback: T): T {
   return value;
 }
 
+/** Writes a value outside React (e.g. a background sync) and tells every reader. */
+export function writeLocalStorage(key: string, value: unknown) {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch {}
+  listeners.forEach((l) => l());
+}
+
 export function useLocalStorage<T>(key: string, fallback: T) {
   const value = useSyncExternalStore(
     subscribe,

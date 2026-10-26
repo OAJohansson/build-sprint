@@ -73,8 +73,36 @@ What happened, what was decided and why. Newest last.
   The sticker bar looks reachable; the formal eval is the data-evals grader's, once the app route
   exists.
 
+## 26 Oct (night): slices 2–4, the MVP build
+
+- **Database (pre-approved additive migration):** `magpie_yums` and the private `magpie` bucket in
+  the shared Supabase project (`apps/10-magpie/supabase/schema.sql`). The access code picks the
+  library: the owner's or the graders' `sandbox`.
+- **Built** every final-flow screen A–L: first run and access code, camera with Maggie peeking (live
+  viewfinder, with the phone camera as fallback), details with sub-kinds and the city from location,
+  the drawing screen, "Ooh, shiny!", smart shelves, search, the filter sheet with removable chips,
+  the item page with the sticker/photo toggle and Undo on remove, the laptop layout with the filter
+  panel always open, and the Android share target (Selvedge's manifest and service worker).
+- **Save before AI (R4):** the yum and photo save in ~2 s; the sticker is drawn on the server after
+  the response (`after()`); the shelf checks every 3 s while one is drawing. Smoke test: sticker in
+  ~14–16 s on the dev server.
+- **Bug found in my own check:** my plain CSS (button reset, `.btn`) sat outside Tailwind's layers,
+  so it beat the utilities: `lg:hidden` was ignored on the laptop and the toggle's text vanished.
+  Moved into `@layer base` / `components`. (Knowledge bank: CSS cascade layers.)
+- **Unit tests** named in the kickoff (new this month, latest order, home city) plus shelves and
+  filters: 16 passing.
+- **Grader sandbox seeded** with 12 yums (`apps/10-magpie/evals/seed.mjs`, sandbox code only).
+- Persona and test plan written (`user-testing/`). The `data-evals` agent wasn't registered in this
+  session, so its role file was given to a general-purpose agent instead.
+
 ## To carry over
 
 For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md).
 
--
+- Knowledge bank (technology): CSS cascade layers. Unlayered CSS always beats `@layer` rules, so a
+  hand-written `.btn { display: inline-flex }` outside a layer silently overrides Tailwind's
+  `lg:hidden`. Put resets in `@layer base` and component classes in `@layer components`.
+- Knowledge bank (technology): `after()` in a Next.js route runs work after the response is sent,
+  so a slow AI step never makes the user wait (Magpie's stickers).
+- Process: the `data-evals` agent file existed but wasn't loadable as an agent type in a session
+  started from another session; check `.claude/agents` registration.

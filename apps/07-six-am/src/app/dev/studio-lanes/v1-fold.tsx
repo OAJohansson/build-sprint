@@ -4,7 +4,7 @@
 // top, the crate below. Every lane sits under its family row (one rule, one-lane families too); a
 // family folds to one summary row. At rest a lane shows its name, M and S; hover or focus reveals
 // volume and pan on their own line and a ⋯ menu (rename, move, remove). Flat clips. One accent in
-// the bar (Play); bar/BPM/key in the title colour; the Filter moves to a Master row under the lanes.
+// the bar (Play); bar · BPM · key as one 13 px string. Final pass: Filter knob removed (owner can ask it back).
 // The crate: tabs and a small disc in one header row, the cards take the width.
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
@@ -21,7 +21,7 @@ export function V1Fold({ state, worst }: { state: string; worst: boolean }) {
   const [adding, setAdding] = useState<{ fam?: string } | null>(state === "add" ? {} : null);
   const [menu, setMenu] = useState<string | null>(null);
   const [tab, setTab] = useState("mine");
-  const [filter, setFilter] = useState(100);
+  const [scrolled, setScrolled] = useState(false);
   const reveal = state === "mix" ? "l4" : null;
   const hasTarget = held && L.lanes.some((l) => l.type === held.type);
   // The "dropped" state: Rubber sub already placed on Sub at the Break.
@@ -35,8 +35,8 @@ export function V1Fold({ state, worst }: { state: string; worst: boolean }) {
   return (
     <div className={cx(v.root, v.r2)}>
       <Bar2 />
-      <div className={cx(v.tl, v.fadeEnd)}>
-        <div className={cx(v.rowR, v.rulerRow)}>
+      <div className={cx(v.tl, v.fadeEnd)} onScroll={(e) => setScrolled(e.currentTarget.scrollTop > 0)}>
+        <div className={cx(v.rowR, v.rulerRow, scrolled && v.rulerShadow)}>
           {/* The ruler's empty corner holds "+ Add lane", so it stays in view however many lanes there are. */}
           <div className={cx(v.gut, v.corner)}>
             <button className={v.addBtn} aria-expanded={!!adding} onClick={() => setAdding(adding ? null : {})}>+ Add lane</button>
@@ -55,7 +55,7 @@ export function V1Fold({ state, worst }: { state: string; worst: boolean }) {
                 <div className={v.gut} style={{ height: folded ? 34 : 20 }}>
                   <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
                     <button className={cx(v.famHead, folded && v.folded)} onClick={() => L.toggleFold(g.id)} aria-expanded={!folded}>
-                      <ChevronDown aria-hidden />{g.name}{g.lanes.length > 1 || folded ? <span className={v.famCount}>{g.lanes.length}</span> : null}
+                      <ChevronDown aria-hidden />{g.name}{folded ? <span className={v.famCount}>{g.lanes.length} {g.lanes.length === 1 ? "lane" : "lanes"}</span> : null}
                     </button>
                     <button className={v.famPlus} aria-label={`Add a ${g.name} lane`} onClick={() => setAdding({ fam: g.id })}>+</button>
                   </div>
@@ -74,8 +74,7 @@ export function V1Fold({ state, worst }: { state: string; worst: boolean }) {
             <div className={v.gut} /><div className={v.newDrop}>Drop here for a new {type(held.type).name} lane</div>
           </div>
         ) : null}
-        <Master filter={filter} setFilter={setFilter} />
-        <div className={v.rowR} style={{ flex: 1 }}><div className={v.gut} style={{ borderBottom: 0 }} /><div style={{ flex: 1 }} /></div>
+        <div className={v.rowR} style={{ flex: 1, minHeight: 56 }}><div className={v.gut} style={{ borderBottom: 0 }} /><div style={{ flex: 1 }} /></div>
       </div>
       <Crate tab={tab} setTab={setTab} L={L} held={held} setHeld={setHeld} />
     </div>
@@ -96,33 +95,11 @@ function Bar2() {
       <div className={st.transport}>
         <button className={st.tb} aria-label="Back to start"><svg viewBox="0 0 16 16" aria-hidden><path d="M3 2h2v12H3zM14 2v12L6 8z" fill="currentColor" /></svg></button>
         <button className={cx(st.tb, st.play)} aria-label="Play"><svg viewBox="0 0 16 16" aria-hidden><path d="M4 2l10 6-10 6z" fill="currentColor" /></svg></button>
-        <div className={v.facts}><b>{PLAYHEAD}.1</b><small>bar</small><b>{TRACK.bpm}</b><small>BPM</small><b>{TRACK.key}</b><small>key</small></div>
+        <div className={v.facts}>bar {PLAYHEAD}.1 · {TRACK.bpm} bpm · {TRACK.key}</div>
         <button className={st.undo} aria-label="Undo"><svg viewBox="0 0 16 16" aria-hidden><path d="M6 3 2 7l4 4V8h4a3 3 0 0 1 0 6H8v2h2a5 5 0 0 0 0-10H6z" fill="currentColor" /></svg> <span className={st.undoWord}>Undo</span></button>
       </div>
       <SettingsLink />
     </header>
-  );
-}
-
-/** The Filter, moved out of the bar: the master row under the lanes, revealed like a lane's mix. */
-function Master({ filter, setFilter }: { filter: number; setFilter: (n: number) => void }) {
-  const hz = 120 * Math.pow(20000 / 120, filter / 100);
-  const label = filter >= 99 ? "open" : hz >= 1000 ? `${(hz / 1000).toFixed(1)} kHz` : `${Math.round(hz)} Hz`;
-  return (
-    <div className={v.rowR} style={{ ["--c" as string]: "#f1e6d3" }}>
-      <div className={cx(v.gut, v.r2Gut)} style={{ height: 56 }}>
-        <div className={v.laneHead}>
-          <div className={v.line1}><span className={v.r2Name} style={{ color: "var(--muted)" }}>Master</span></div>
-          <div className={v.mix}>
-            <label className={v.mixItem} title="Filter on the whole mix">Filter
-              <input className={v.vol} type="range" min={0} max={100} value={filter} onChange={(e) => setFilter(+e.target.value)} aria-label="Master filter" aria-valuetext={label} />
-              <span className={v.mixVal}>{label}</span>
-            </label>
-          </div>
-        </div>
-      </div>
-      <div className={v.masterBody} />
-    </div>
   );
 }
 

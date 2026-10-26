@@ -566,3 +566,20 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Follow-up: Studio ship checks** (break-ui with worst-case data, web guidelines): 8 problems fixed (narrow control bar, keyboard access to blocks, crate and knob, Space hijack, 512-bar markers, library tooltips, unit-label contrast); 8 minors to the backlog. T78. Sandbox user test next.
 - **Follow-up fixes (T80):** M1 fixed (another preset drafts a new sound), Add never overwrites, Duplicate, Play-all end message, minors. Leftovers to the backlog.
 - **Follow-up PR 87** opened, stacked on PR 86 ("depends on #86, merge after it"); preview https://six-ocslv0aoi-mimirswell.vercel.app. "Vercel – wont" failing on both PRs is another product's project. One push sent for both PRs.
+
+## 26 Oct: Phase 4 kickoff (the Lab)
+
+- **Kickoff (L143–L149):** the owner's calls from the parent session, written into a new pack in
+  `kickoff.md` and evals Y1–Y7 in `evals.md`. The map screen becomes the Lab: live parts of a
+  streamed track, the Mentor explaining each, own sounds made from it, a library the Studio uses.
+  Rights first (L143): the original never leaves memory, AI gets words and numbers only. Own branch
+  `claude/07-six-am-lab-4c61e0` from `main` (PRs 86 and 87 merged).
+- **Spike first (L144), sources checked:** `suppressLocalAudioPlayback` is a Screen Capture
+  constraint, Chrome 109+ (MDN). htdemucs in the browser: `demucs-web` 1.0.2 (MIT, npm) with
+  `timcsy/demucs-web-onnx` `htdemucs_embedded.onnx` (~172 MB, Meta's htdemucs weights, 7.8 s
+  segments at 44.1 kHz stereo); a faster mixed-precision 21-piece export exists
+  (`monteslu/htdemucs-web-onnx`, MIT, 126 MB, ~2.4× faster) as plan B.
+- **Design catch before coding:** `suppressLocalAudioPlayback` mutes the *whole* captured tab, so
+  if the SoundCloud widget sits in the Lab's own tab, the separated part would be muted too (and
+  re-captured). The spike therefore plays the widget in a small separate "deck" window and
+  captures that tab; the Lab tab plays only the part.

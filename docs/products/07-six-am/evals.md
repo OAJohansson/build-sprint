@@ -197,3 +197,36 @@ One pass/fail per requirement in the Phase 3 kickoff (`kickoff.md`), run by the 
 ### Build hygiene
 
 `pnpm -F 07-six-am lint`, `test`, `build` pass; every new key in `.env.example`; `checks` green on the PR.
+
+# Evals: Six AM Lab (Phase 4)
+
+Owner's evals from the 26 Oct kickoff (L147), part 1 (agent-checkable). Graders: `user-tester`,
+`design-critic`, `data-evals`; never the builder. Test sandbox only. Owner-only checks (by ear:
+is a soloed part useful; does my own sound feel inspired by it) are in the owner's final review.
+
+| # | Eval | Bar | Run by | Result |
+| --- | --- | --- | --- | --- |
+| Y1 | Separation faster than real time on the owner's Mac (Apple silicon, Chrome); measured ratio and delay reported | ratio > 1.0 sustained; delay a few seconds | data-evals | |
+| Y2 | Original silent locally while a part is soloed | `suppressLocalAudioPlayback` true in the track's settings, and the owner hears only the part | data-evals + owner | |
+| Y3 | Zero bytes of the original stored or uploaded | 0 (storage, network, code read) | data-evals | |
+| Y4 | Synth or AI sounds in key and on tempo | every synth note in scale, onsets ≤ 5 ms; AI key and tempo ±1 BPM on ≥ 4 of 5 | data-evals | |
+| Y5 | Library save and load survive a reload | 5 of 5 | data-evals | |
+| Y6 | User test: every job ≥ 4/5 (sandbox) | jobs ≥ 4/5 | user-tester | |
+| Y7 | Design scorecard (one critic, five points) | **9/10 is a target, not a blocker** | design-critic | |
+
+### Requirements B1–B9
+
+One pass/fail per requirement in the Lab kickoff (`kickoff.md`), run by the grader named there.
+
+### Guardrails
+
+| Guardrail | Bar |
+| --- | --- |
+| No audio of a streamed original stored, uploaded or sent to any API | 0 |
+| AI keys never in the browser bundle or responses | 0 occurrences |
+| Ears, the Mentor, the map and the Studio unbroken | yes |
+| Readable text, hit areas | ≥ 4.5:1, ≥ 28 px |
+
+### Build hygiene
+
+`pnpm -F 07-six-am lint`, `test`, `build` pass; `checks` green on the PR.

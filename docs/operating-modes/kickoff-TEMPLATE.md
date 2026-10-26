@@ -76,7 +76,8 @@ gradients", "no streak guilt", "never ask for an account").
 ## Decisions already made
 
 Learning decisions the owner has settled up front (stack, data source, a model, where data lives),
-so the squad doesn't reopen them. Anything not here and not toil goes in the decision log with a
+so the squad doesn't reopen them. Say which devices it's used on (phone, laptop, both) before
+choosing where data lives: "local only" breaks the day it's opened on a second device (09 Wont). Anything not here and not toil goes in the decision log with a
 reason.
 
 -

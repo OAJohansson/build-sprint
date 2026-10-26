@@ -171,6 +171,8 @@ Rules I now apply to every product (detail in the playbook).
   childishness and then decided the board.
 - **A grader must see the requirements.** The critic scored 6/10 five times while asking to remove
   the numbers and anchors the research supports.
+- **Ask which devices before choosing "local only".** "One device, no backend" broke on day two,
+  when the owner opened Wont on their phone; v1.1 added sync (Selvedge learned the same).
 - **Test the user's week, not the spec's rule.** Both real logic bugs appeared only when the app
   was resumed across days; the unit tests had encoded the tidy rule.
 
@@ -236,3 +238,4 @@ Every change to how I build, and the product that taught it.
 | 27 Oct | 10 Magpie | Designing every screen with the owner in Claude Design before the PM session (features first, ~10 directions, a brand-moment round, the final flow) gave a build that matched and a critic score of 9. | Playbook step 1b: in Founder mode the owner can design with Claude in Claude Design before the PM session; the PM builds from the canvas and skips the design-pick steps. |
 | 27 Oct | 10 Magpie | The final review was the first time anyone opened the deployed app, and it crashed (sharp on Vercel). | Playbook step 3: before the final-review push, open the preview's main path and read its logs (the owner's logged-in browser if a script can't reach it). |
 | 27 Oct | 10 Magpie | `vercel curl --yes` created a stray project named after the folder. | Playbook step 3: link the folder to its Vercel project before any `vercel` command with `--yes`. |
+| 26 Oct | 09 Wont | "One device, no backend" was decided at kickoff without asking which devices the owner uses; sync had to follow the next day. | Kickoff template, "Decisions already made": state which devices the product is used on before choosing where data lives. |

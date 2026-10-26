@@ -191,3 +191,10 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   merge yes. Note for the review: the laptop's real history lives on the production origin
   (wont-peach.vercel.app), so the real first connect happens after the merge; the preview starts
   empty and, with the owner's code, writes the owner's real document.
+
+## 26 Oct: v1.1 sync live
+
+- PR #93 merged; sync live on wont-peach.vercel.app. The owner did the real first connect
+  (laptop, then phone) and confirmed it works. Phase closed; more Wont work later from the backlog.
+- Lesson: the kickoff's "one device, no backend" was decided without asking which devices the
+  owner uses (Selvedge had the same lesson). The kickoff template now asks.

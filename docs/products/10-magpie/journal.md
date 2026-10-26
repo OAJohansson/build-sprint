@@ -95,6 +95,13 @@ What happened, what was decided and why. Newest last.
 - Persona and test plan written (`user-testing/`). The `data-evals` agent wasn't registered in this
   session, so its role file was given to a general-purpose agent instead.
 
+- **Design-skill audit** (web-design-guidelines, break-ui, mobile-native, emil-design-eng, run by
+  a subagent on the code): 20 findings, 19 fixed (feedback 1–19), one parked.
+- **Ops (pre-approved):** created the Vercel project `magpie` (Root Directory `apps/10-magpie`, env
+  keys for production and preview) with the same API calls as `pnpm ship`, but **without**
+  deploying main, so production stays untouched until the owner says yes. Previews deploy from the
+  branch with `pnpm ship 10-magpie --preview`.
+
 ## To carry over
 
 For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md).

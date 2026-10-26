@@ -566,3 +566,7 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Follow-up: Studio ship checks** (break-ui with worst-case data, web guidelines): 8 problems fixed (narrow control bar, keyboard access to blocks, crate and knob, Space hijack, 512-bar markers, library tooltips, unit-label contrast); 8 minors to the backlog. T78. Sandbox user test next.
 - **Follow-up fixes (T80):** M1 fixed (another preset drafts a new sound), Add never overwrites, Duplicate, Play-all end message, minors. Leftovers to the backlog.
 - **Follow-up PR 87** opened, stacked on PR 86 ("depends on #86, merge after it"); preview https://six-ocslv0aoi-mimirswell.vercel.app. "Vercel – wont" failing on both PRs is another product's project. One push sent for both PRs.
+
+## 26 Oct: Phase 3 merged
+
+- **PRs 86 (319c2e5) and 87 (9d5c16a) merged** on the owner's yes in the parent session ("lets merge 86 and 87"); checks green (87 after updating from main). Production deploy of main Ready; `/` and `/map` serve, `/api/loops/generate` refuses without the code (401). Notebook republished from `main` (version 183). Next phase (the Lab) starts in a fresh session from the card, kickoff pack, decision log, journal and backlog ("Phase 3 follow-ups").

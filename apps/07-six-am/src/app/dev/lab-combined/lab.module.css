@@ -57,9 +57,6 @@
 .progress i { display: block; height: 100%; background: var(--gold); }
 
 /* first visit */
-.steps { flex: none; display: flex; align-items: center; gap: 16px; padding: 12px 24px; border-bottom: 1px solid var(--line); background: #1d1915; }
-.steps p { margin: 0; flex: 1; min-width: 0; color: var(--muted); }
-.steps b { color: var(--ink); font-weight: 500; }
 
 /* lanes */
 .grid { flex: 1; min-height: 0; position: relative; display: grid; }
@@ -123,19 +120,6 @@
 .dot2[data-many] { width: 13px; height: 13px; margin-left: -6.5px; top: 7px; }
 .dot2[data-open] { background: var(--gold); box-shadow: 0 0 0 3px rgba(242,177,52,.25); }
 .dot2::after { content: ""; position: absolute; inset: -8px; }
-/* Hear bar */
-.hearBar { flex: none; display: flex; align-items: center; gap: 16px; padding: 10px 24px; border-bottom: 1px solid var(--line); font-size: 12px; }
-.hearBar[data-disabled] { opacity: .5; }
-.hearLabel { color: var(--muted); width: 160px; }
-.hearSeg { display: flex; border: 1px solid var(--edge); border-radius: 8px; padding: 2px; }
-.hearSeg button { --c: var(--muted); display: inline-flex; align-items: center; gap: 7px; background: none; border: 0; border-radius: 6px; padding: 5px 12px; font: 12px var(--f-mono); color: var(--muted) !important; cursor: pointer; }
-.hearSeg button i { width: 7px; height: 7px; border-radius: 50%; background: var(--c); opacity: .5; }
-.hearSeg button[aria-pressed="true"] { background: #2b2622; color: var(--ink) !important; }
-.hearSeg button[aria-pressed="true"] i { opacity: 1; }
-.hearMode { display: flex; gap: 2px; }
-.hearMode button { background: none; border: 0; padding: 4px 6px; font: 11.5px var(--f-mono); color: var(--faint) !important; cursor: pointer; border-radius: 4px; }
-.hearMode button[aria-pressed="true"] { color: var(--ink) !important; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--gold); }
-.hearNow { margin-left: auto; color: var(--muted); }
 .ctx { font-size: 11px; color: var(--muted); }
 .who { font-size: 11px; color: var(--muted); }
 
@@ -195,3 +179,14 @@
 .title p.facts1 { display: flex; }
 .facts1 .artist { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .facts1 > span:last-child { flex: none; }
+
+/* Hearing parts (L177): icons by the lane name on hover/focus; a lit one stays. */
+.lhTop { display: flex; align-items: center; gap: 4px; }
+.lhName { margin-right: 4px; }
+.hearIcon { width: 24px; height: 24px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 5px; background: none; color: var(--muted) !important; cursor: pointer; opacity: 0; }
+.lh:hover .hearIcon, .lh:focus-within .hearIcon, .lhTop[data-show] .hearIcon, .hearIcon[data-lit] { opacity: 1; }
+.hearIcon[data-lit] { color: var(--gold) !important; }
+.hearIcon:disabled { cursor: default; }
+@media (hover: hover) and (pointer: fine) { .hearIcon:hover:not(:disabled) { background: #2b2622; color: var(--ink) !important; } }
+.hearChip { display: inline-flex; align-items: center; gap: 4px; color: var(--ink); background: #2b2622; border-radius: 6px; padding: 1px 2px 1px 9px; font-size: 12px; white-space: nowrap; }
+.firstLine { flex: none; margin: 0; padding: 10px 24px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 12px; text-align: right; }

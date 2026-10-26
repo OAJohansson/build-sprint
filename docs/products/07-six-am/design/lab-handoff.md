@@ -1,41 +1,49 @@
-# Lab design handoff (after the owner's sign-off comments, L167–L171)
+# Lab design handoff (approved, L176; option B L177; first Play L178)
 
 The owner's pick (L162): Listen = full map with the Mentor's questions on the timeline; Make =
 focused room. Prototype `apps/07-six-am/src/app/dev/lab-combined/` (`?mode=listen|make`,
-`?state=first|loading|catching|empty|menu`, `?data=worst`). Screens `lab-combined/signoff-r1-*.png`
-(the earlier `define-final-*` are superseded). All copy is draft copy for the owner.
+`?state=first|loading|catching|empty|menu|onlybass|muted|hover`, `?data=worst`). Screens
+`lab-combined/final-*.png`; all earlier screens (`signoff-r1-*`, `define-*`, `lab-combined-*`) are
+superseded. All copy is draft copy for the owner.
 
 ## Shared header (both modes)
 
 1. App bar: logo, Studio / Analyse nav, settings.
 2. Head: "← All tracks"; track title (serif, one line, ellipsis, full on hover); facts line
    "{artist} · {BPM} BPM · key {key}" (the artist truncates first; BPM and key always show).
-3. Transport: play/pause (drives the Deck; disabled until the Deck is on); position
+3. Transport: play/pause (drives the Deck; the first press opens it, see below); the hearing chip
+   right after Play, only while you're not hearing everything ("Only Bass ×", "Only Bass, Drums ×",
+   "Bass muted ×"; × = hear everything again); position
    "3:06 · in Drop 1" with a smaller "bar 97" beside it (tabular numerals; a repeated section name
    gets its number: Drop 1, Drop 2); status (aria-live) "catching up…" / "Getting ready… N%"; loop
    chip "Looping Drop 1 · 2:04–4:08 ×", shown only while a loop is on (× stops it).
 4. Listen/Make switch (keeps `?mode=` in sync). It is also the way back from Make.
-5. Deck status: dot + "Deck on" / "Deck off".
+5. Deck status: dot + "Deck on" / "Deck opening…" / "Deck off". It's the only sign of the Deck.
 6. Getting ready: a 2 px gold line under the head.
-7. First-visit banner: one instruction at a time, one button (Open the Deck → I've shared it /
-   Cancel). The Hear bar and the map are dimmed until the Deck is on.
+7. First Play (no banner): the first press of Play opens the Deck window and Chrome's tab-sharing
+   dialog in one go, with one line under the head: "To split the parts, Six AM plays the song again
+   from SoundCloud in a small window. It never keeps the audio." Then the getting-ready line; after
+   that Play just plays. The map is dimmed until the Deck is on.
 8. What you hear, the focus part, playhead, loop and the Mentor chat survive the mode switch.
 
 ## Listen
 
-1. Hear bar (replaces S/M on the lanes; the Studio keeps S/M): "Hear" · segmented
-   [All] [● Drums] [● Bass] [● Other] [● Vocals] · "only / without" · a plain readout on the right
-   ("Only the bass", "Everything without the bass", "Everything"). Click a part = only it (or
-   everything without it); click it again or All = back to everything; Shift-click adds a second
-   part. The last part picked on its own is the **focus part** (bass to start): its lane carries
-   the Mentor dots, "+ Ask", and Make works on it.
+1. Hearing parts (option B, L177; no Hear bar, no S/M): hovering a lane's name (or keyboard focus
+   inside its gutter) shows two 24 px icons after the name: headphones = hear only this part,
+   speaker = mute this part. Nothing shows until hover/focus, except a lit icon, which stays:
+   - Only: headphones lit gold; the other lanes dim; chip "Only Bass ×". Headphones on a second part
+     = hear both ("Only Bass, Drums ×"). The lit headphones again removes that part.
+   - Mute: crossed speaker lit gold and the lane dims; chip "Bass muted ×" (more parts add).
+   - Only and mute are exclusive: pressing one replaces the other. × on the chip = everything.
+   - Focus part (T87) = the last part heard "only" (bass to start): it carries the Mentor dots,
+     "+ Ask", and Make works on it.
 2. Ruler (46 px) = seek slider: click to seek, ←/→ ±4 bars; section buttons loop on click (short
    codes when narrow, full name in title and aria-label); bar ticks every 32 bars (64 above 300);
    loop band; playhead with head marker.
 3. Chord lane (26 px), "Chords est.": a cell per 8 bars with a tooltip; names when cells ≥ 24 px,
    otherwise only the chord at each section start.
-4. Four part lanes filling the height (≥ 60 px each). Gutter 200 px, no buttons: left name and
-   "N layers est."; right one sub-layer name per row, 11 px. Lane: one row per estimated sub-layer,
+4. Four part lanes filling the height (≥ 60 px each). Gutter 200 px: left name (+ the hover icons)
+   and "N layers est."; right one sub-layer name per row, 11 px. Lane: one row per estimated sub-layer,
    or the part's clips if none (no label). Dimming follows what you hear: parts you hear in their
    colour, the rest in one neutral at one alpha. Focus lane has a faint lift. Loop shade; click to
    seek.
@@ -87,8 +95,9 @@ inside on the right, dimmed and disabled until there's text; aria-label "Send".
 | --- | --- |
 | Head | ← All tracks · Lost in The Loop · Mason Flint · 124 BPM · key A minor |
 | Transport | 3:06 · in Drop 1 · bar 97 · Looping Drop 1 · 2:04–4:08 × · catching up… · Getting ready… 42% · first time only, about 18 s |
-| Switch / Deck | Listen · Make · Deck on / Deck off |
-| Hear bar | Hear · All · Drums · Bass · Other · Vocals · only · without · Only the bass / Everything without the bass / Everything · (title) Shift-click to pick two |
+| Switch | Listen · Make |
+| Hearing | (icon labels) Hear only Bass · Mute Bass · chip: Only Bass × · Only Bass, Drums × · Bass muted × |
+| Deck | Deck on · Deck opening… · Deck off |
 | Gutter | Drums · 3 layers est. · kick · hats · clap · Bass · 2 layers est. · sub · pluck … |
 | Map | Chords est. · section names/codes · + Ask · + Ask about the bass here |
 | Card | Mentor, at bar 97 · × · What's this bass doing? · bar 97 · (answer) · Read all / Show less · A1 · 55 Hz · notes ≈ 1/8 · off the kick · −11 LUFS · Reply about bar 97… · Make a bass like this → |
@@ -98,9 +107,7 @@ inside on the right, dimmed and disabled until there's text; aria-label "Send".
 | Save | Name · Rubbery bass, from Lost in The Loop · bass · A minor · 124 BPM · Lost in The Loop · Save to library |
 | Mentor rail | Mentor, on the bass at bar 97 · No questions yet. Ask about the bass: the answer is also pinned at bar 97 on the map. · Ask about the bass… · Send |
 
-## First visit, copy
+## First Play, copy
 
-1. **Open the Deck to listen.** It plays this track from SoundCloud in a small window, and you
-   hear the parts here. · [Open the Deck]
-2. **In Chrome's dialog, pick the "Six AM Deck" tab and press Share.** Its sound moves here;
-   nothing is recorded. · [I've shared it] · Cancel
+To split the parts, Six AM plays the song again from SoundCloud in a small window. It never keeps
+the audio.

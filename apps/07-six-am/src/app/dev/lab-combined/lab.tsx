@@ -8,12 +8,12 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { DEMO, SUGGEST, WORST, clock, suggestName, type Note, type PartId, type Section } from "./data";
 import {
-  AB, DataProvider, TIMELINE_PX, DeckDot, Head, HearBar, Lanes, LoopStrip, Macros, PresetHead, Shell, Transport, s, useD,
+  AB, DataProvider, TIMELINE_PX, DeckDot, Head, HearChip, Lanes, LoopStrip, Macros, PresetHead, Shell, Transport, s, useD,
   type DeckState, type Hear, type LaneState,
 } from "./ui";
 
 type Mode = "listen" | "make";
-export type View = "main" | "first" | "loading" | "catching" | "empty" | "menu";
+export type View = "main" | "first" | "loading" | "catching" | "empty" | "menu" | "onlybass" | "muted" | "hover";
 
 export function Lab({ mode, view, worst, clean }: { mode: Mode; view: View; worst: boolean; clean: boolean }) {
   return (
@@ -26,25 +26,39 @@ export function Lab({ mode, view, worst, clean }: { mode: Mode; view: View; wors
 
 const laneState = (h: Hear): LaneState => {
   const ids: PartId[] = ["drums", "bass", "other", "vocals"];
-  return Object.fromEntries(ids.map((id) => [id, !h.parts.length ? "on" : (h.parts.includes(id) === (h.mode === "only")) ? "on" : "dim"])) as LaneState;
+  const heard = (id: PartId) => h.kind === "all" || (h.kind === "only" ? h.parts.includes(id) : !h.parts.includes(id));
+  return Object.fromEntries(ids.map((id) => [id, heard(id) ? "on" : "dim"])) as LaneState;
 };
 
 function Inner({ initialMode, view }: { initialMode: Mode; view: View }) {
   const { d, part, sectionAt, secName } = useD();
   const first = view === "first";
   const [mode, setMode] = useState<Mode>(initialMode);
-  const [deck, setDeck] = useState<DeckState>(first ? "closed" : view === "loading" ? "loading" : "ready");
+  const [deck, setDeck] = useState<DeckState>(first ? "sharing" : view === "loading" ? "loading" : "ready");
   const [ready, setReady] = useState(view === "loading" ? 42 : 100);
   const [playing, setPlaying] = useState(!first && view !== "loading");
-  const [hear, setHearRaw] = useState<Hear>({ parts: ["bass"], mode: "only" });
-  // The part the notes, "+ Ask" and Make are about: the last part picked on its own (bass to start).
+  const [hear, setHear] = useState<Hear>(view === "muted" ? { kind: "mute", parts: ["bass"] } : first || view === "loading" ? { kind: "all" } : { kind: "only", parts: ["bass"] });
+  // The focus part (T87): the last part heard "only" (bass to start). It carries the dots, "+ Ask"
+  // and Make.
   const [focus, setFocus] = useState<PartId>("bass");
-  const setHear = (h: Hear) => { setHearRaw(h); if (h.parts.length === 1) setFocus(h.parts[0]); };
+  // Headphones: hear only this part (a second part adds to it; the lit one again goes back to all).
+  const onOnly = (id: PartId) => {
+    const cur = hear.kind === "only" ? hear.parts : [];
+    const next = cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id];
+    setHear(next.length ? { kind: "only", parts: next } : { kind: "all" });
+    if (!cur.includes(id)) setFocus(id);
+  };
+  // Speaker: everything without this part (more parts add to it).
+  const onMute = (id: PartId) => {
+    const cur = hear.kind === "mute" ? hear.parts : [];
+    const next = cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id];
+    setHear(next.length ? { kind: "mute", parts: next } : { kind: "all" });
+  };
   const [bar, setBar] = useState(first || view === "loading" ? 1 : view === "catching" ? 113 : 97);
   const [loop, setLoop] = useState<Section | null>(first || view === "loading" ? null : d.sections[2]);
   const [catching, setCatching] = useState(view === "catching");
   const [notes, setNotes] = useState<Note[]>(first || view === "empty" ? [] : d.notes);
-  const [open, setOpen] = useState<number | null>(first || view === "empty" ? null : (d.notes.find((n) => n.bar === 97)?.n ?? null));
+  const [open, setOpen] = useState<number | null>(first || view === "empty" || view === "onlybass" || view === "muted" || view === "hover" ? null : (d.notes.find((n) => n.bar === 97)?.n ?? null));
   const [asking, setAsking] = useState(false);
   const [ab, setAb] = useState<"a" | "b">("a");
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -76,6 +90,11 @@ function Inner({ initialMode, view }: { initialMode: Mode; view: View }) {
     return () => clearInterval(t);
   }, [deck, view, d.sections]);
 
+  const play = () => {
+    // shortcut: the real first Play opens the Deck window and Chrome's share dialog; here it waits 2.5 s.
+    if (deck === "closed") { setDeck("sharing"); setTimeout(() => { setReady(0); setDeck("loading"); }, 2500); return; }
+    setPlaying(!playing);
+  };
   const ask = (q: string) => {
     const n = Math.max(0, ...notes.map((x) => x.n)) + 1;
     setNotes([...notes, { n, part: soloId, bar, q, a: "…" }]);
@@ -93,7 +112,8 @@ function Inner({ initialMode, view }: { initialMode: Mode; view: View }) {
   return (
     <Shell>
       <Head>
-        <Transport playing={playing} onPlay={() => setPlaying(!playing)} disabled={deck !== "ready"}
+        <Transport playing={playing} onPlay={play} disabled={deck === "sharing" || deck === "loading"}
+          chip={<HearChip hear={hear} onClear={() => setHear({ kind: "all" })} />}
           bar={bar} loop={loop} onClearLoop={() => setLoop(null)} status={status} />
         <div className={s.switch} role="group" aria-label="Mode">
           <button aria-pressed={mode === "listen"} onClick={() => go("listen")}>Listen</button>
@@ -102,12 +122,14 @@ function Inner({ initialMode, view }: { initialMode: Mode; view: View }) {
         <DeckDot deck={deck} />
       </Head>
       {deck === "loading" && <div className={s.progress}><i style={{ width: `${ready}%` }} /></div>}
-      {(deck === "closed" || deck === "sharing") && <DeckSteps deck={deck} setDeck={setDeck} setReady={setReady} />}
+      {deck === "sharing" && (
+        // The first Play (L178): opens the Deck and Chrome's tab-sharing dialog in one go, with one line.
+        <p className={s.firstLine} role="status">To split the parts, Six AM plays the song again from SoundCloud in a small window. It never keeps the audio.</p>
+      )}
       {mode === "listen" ? (
         <>
-          <HearBar hear={hear} setHear={setHear} disabled={deck !== "ready"} />
           <Lanes
-            st={laneState(hear)} focus={focus} bar={bar} onSeek={seek} catching={catching} loop={loop} disabled={deck !== "ready"}
+            st={laneState(hear)} focus={focus} hear={hear} onOnly={onOnly} onMute={onMute} showIcons={view === "hover" ? "other" : undefined} bar={bar} onSeek={seek} catching={catching} loop={loop} disabled={deck !== "ready"}
             onLoop={(x) => setLoop(loop?.from === x.from ? null : x)}
             overlay={(id) => id === focus && deck === "ready" ? (
               <Notes notes={notes.filter((x) => x.part === id)} open={open} setOpen={(n) => { setOpen(n); setAsking(false); }}
@@ -138,26 +160,6 @@ function Inner({ initialMode, view }: { initialMode: Mode; view: View }) {
         </div>
       )}
     </Shell>
-  );
-}
-
-/** First visit: one calm instruction at a time to get the Deck playing. */
-function DeckSteps({ deck, setDeck, setReady }: { deck: DeckState; setDeck: (d: DeckState) => void; setReady: (n: number) => void }) {
-  return (
-    <div className={s.steps} aria-live="polite">
-      {deck === "closed" ? (
-        <>
-          <p><b>Open the Deck to listen.</b> It plays this track from SoundCloud in a small window, and you hear the parts here.</p>
-          <button className={s.gold} onClick={() => setDeck("sharing")}>Open the Deck</button>
-        </>
-      ) : (
-        <>
-          <p><b>In Chrome&rsquo;s dialog, pick the “Six AM Deck” tab and press Share.</b> Its sound moves here; nothing is recorded.</p>
-          <button className={s.ghost} onClick={() => { setReady(0); setDeck("loading"); }}>I&rsquo;ve shared it</button>
-          <button className={s.textBtn} onClick={() => setDeck("closed")}>Cancel</button>
-        </>
-      )}
-    </div>
   );
 }
 

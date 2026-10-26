@@ -65,22 +65,23 @@ export function DeckDot({ deck }: { deck: DeckState }) {
   return (
     <span className={s.deck} title="SoundCloud plays in the small Six AM Deck window; you hear the parts here">
       <i className={on ? s.dot : s.dotOff} aria-hidden />
-      <span className={s.muted}>{on ? "Deck on" : "Deck off"}</span>
+      <span className={s.muted}>{on ? "Deck on" : deck === "sharing" ? "Deck opening…" : "Deck off"}</span>
     </span>
   );
 }
 
 /** Position as a time and a place ("3:06 · in Drop 1", bar beside it), status, and the loop chip
  *  (only while a loop is on). */
-export function Transport({ playing, onPlay, bar, loop, onClearLoop, status, disabled }: {
+export function Transport({ playing, onPlay, bar, loop, onClearLoop, status, disabled, chip }: {
   playing: boolean; onPlay: () => void; bar: number; loop: Section | null; onClearLoop: () => void;
-  status: ReactNode; disabled?: boolean;
+  status: ReactNode; disabled?: boolean; chip?: ReactNode;
 }) {
   const { d, sectionAt, secName } = useD();
   const t = (b: number) => clock(b, d.track.bpm);
   return (
     <div className={s.transport}>
       <button className={s.play} onClick={onPlay} disabled={disabled} aria-label={playing ? "Pause" : "Play"}>{playing ? "❚❚" : "▶"}</button>
+      {chip}
       <span className={s.clock}>{t(bar)} · in {secName(sectionAt(bar))} <small>bar {bar}</small></span>
       <span className={s.status} aria-live="polite">{status}</span>
       {loop && (
@@ -93,45 +94,36 @@ export function Transport({ playing, onPlay, bar, loop, onClearLoop, status, dis
   );
 }
 
-/** Who you hear: All, one part, or (Shift-click) two; "only" or "without" them. */
-export type Hear = { parts: PartId[]; mode: "only" | "without" };
-export function HearBar({ hear, setHear, disabled }: { hear: Hear; setHear: (h: Hear) => void; disabled?: boolean }) {
-  const { d } = useD();
-  const pick = (id: PartId, add: boolean) => {
-    if (add && hear.parts.length && !hear.parts.includes(id)) return setHear({ ...hear, parts: [...hear.parts, id].slice(-2) });
-    setHear({ ...hear, parts: hear.parts.length === 1 && hear.parts[0] === id ? [] : [id] });
-  };
+/** What you hear (L177, option B): everything, only some parts (headphones), or everything
+ *  without some parts (speaker). Only one of the two at a time. */
+export type Hear = { kind: "all" } | { kind: "only"; parts: PartId[] } | { kind: "mute"; parts: PartId[] };
+
+/** The chip by Play while you're not hearing everything: "Only Bass ×" / "Bass muted ×". */
+export function HearChip({ hear, onClear }: { hear: Hear; onClear: () => void }) {
+  const { part } = useD();
+  if (hear.kind === "all") return null;
+  const names = hear.parts.map((id) => part(id).name).join(", ");
+  const text = hear.kind === "only" ? `Only ${names}` : `${names} muted`;
   return (
-    <div className={s.hearBar} data-disabled={disabled ? "" : undefined}>
-      <span className={s.hearLabel} id="hear-label">Hear</span>
-      <div className={s.hearSeg} role="group" aria-labelledby="hear-label">
-        <button aria-pressed={hear.parts.length === 0} onClick={() => setHear({ ...hear, parts: [] })} disabled={disabled}>All</button>
-        {d.parts.map((p) => (
-          <button key={p.id} aria-pressed={hear.parts.includes(p.id)} style={{ "--c": p.color } as CSSProperties} disabled={disabled}
-            onClick={(e) => pick(p.id, e.shiftKey)} title="Shift-click to pick two">
-            <i aria-hidden />{p.name}
-          </button>
-        ))}
-      </div>
-      <div className={s.hearMode} role="group" aria-label="Only or without">
-        <button aria-pressed={hear.mode === "only"} onClick={() => setHear({ ...hear, mode: "only" })} disabled={disabled}>only</button>
-        <button aria-pressed={hear.mode === "without"} onClick={() => setHear({ ...hear, mode: "without" })} disabled={disabled}>without</button>
-      </div>
-      <span className={s.hearNow} aria-live="polite">{hearText(hear, d.parts)}</span>
-    </div>
+    <span className={s.hearChip}>
+      {text}
+      <button className={s.x} onClick={onClear} aria-label={`${text}: hear everything again`}>×</button>
+    </span>
   );
 }
-export function hearText(h: Hear, parts: Part[]) {
-  if (!h.parts.length) return "Everything";
-  const names = h.parts.map((id) => parts.find((p) => p.id === id)!.name.toLowerCase()).join(" and ");
-  return h.mode === "only" ? `Only the ${names}` : `Everything without the ${names}`;
-}
+
+const Phones = () => (
+  <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden><path d="M2.5 10V8a5.5 5.5 0 0 1 11 0v2" fill="none" stroke="currentColor" strokeWidth="1.4" /><rect x="1.8" y="9.3" width="3" height="4.6" rx="1" fill="currentColor" /><rect x="11.2" y="9.3" width="3" height="4.6" rx="1" fill="currentColor" /></svg>
+);
+const Speaker = ({ off }: { off?: boolean }) => (
+  <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden><path d="M2 6h2.5L8 3v10L4.5 10H2z" fill="currentColor" />{off ? <path d="M10.5 5.5l4 5m0-5l-4 5" stroke="currentColor" strokeWidth="1.4" /> : <path d="M10.5 5.5a3.5 3.5 0 0 1 0 5" fill="none" stroke="currentColor" strokeWidth="1.4" />}</svg>
+);
 
 /** "on": you hear it (in its colour); "dim": you don't (neutral, the same for every lane). */
 export type LaneState = Record<PartId, "on" | "dim">;
 
 type LanesProps = {
-  st: LaneState; focus: PartId;
+  st: LaneState; focus: PartId; hear: Hear; onOnly: (id: PartId) => void; onMute: (id: PartId) => void; showIcons?: PartId;
   bar: number; onSeek: (bar: number) => void; catching: boolean;
   loop: Section | null; onLoop: (x: Section) => void;
   overlay?: (id: PartId) => ReactNode; disabled?: boolean;
@@ -188,15 +180,24 @@ export function Lanes(p: LanesProps) {
   );
 }
 
-function Lane({ x, st, focus, bar, loop, catching, overlay, seekAt }: LanesProps & { x: Part; seekAt: (e: React.MouseEvent<HTMLElement>) => void }) {
+function Lane({ x, st, focus, hear, onOnly, onMute, showIcons, disabled, bar, loop, catching, overlay, seekAt }: LanesProps & { x: Part; seekAt: (e: React.MouseEvent<HTMLElement>) => void }) {
   const { pct, w } = useD();
   const state = st[x.id];
   const f = focus === x.id ? "" : undefined;
+  const only = hear.kind === "only" && hear.parts.includes(x.id);
+  const muted = hear.kind === "mute" && hear.parts.includes(x.id);
   const rows = x.subs.length ? x.subs : [{ name: "", blocks: x.blocks }];
   return (
     <>
       <div className={s.lh} data-st={state} data-focus={f} style={{ "--c": x.color } as CSSProperties}>
-        <span className={s.lhName}>{x.name}</span>
+        <div className={s.lhTop} data-show={showIcons === x.id ? "" : undefined}>
+          <span className={s.lhName}>{x.name}</span>
+          {/* Hover (or keyboard focus) shows the two icons; a lit one stays visible. */}
+          <button className={s.hearIcon} data-lit={only ? "" : undefined} aria-pressed={only} disabled={disabled}
+            onClick={() => onOnly(x.id)} aria-label={`Hear only ${x.name}`} title={`Hear only ${x.name}`}><Phones /></button>
+          <button className={s.hearIcon} data-lit={muted ? "" : undefined} aria-pressed={muted} disabled={disabled}
+            onClick={() => onMute(x.id)} aria-label={`Mute ${x.name}`} title={`Mute ${x.name}`}><Speaker off={muted} /></button>
+        </div>
         {x.subs.length > 0 && <span className={s.subList}>{x.subs.length} layers <i>est.</i></span>}
         {/* sub-layer names sit in the gutter, each level with its row in the lane */}
         {x.subs.length > 0 && <div className={s.lhSubs} aria-hidden>{x.subs.map((y) => <span key={y.name}>{y.name}</span>)}</div>}

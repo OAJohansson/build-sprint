@@ -132,6 +132,6 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| S5-9 | blocker | Dragging a block reflows the timeline (the remove bin appears, lanes shrink 1,220 → 393 px), so blocks land 20+ bars off and cut their neighbours | open |
-| S5-3b | minor | Still < 28 px: Mute clickable 16 px tall (covered), sliders 20 px, + Add lane 26, fold 22 | open |
+| S5-9 | blocker | Dragging a block reflows the timeline (the remove bin appears, lanes shrink 1,220 → 393 px), so blocks land 20+ bars off and cut their neighbours | fixed (L207, T109), re-test |
+| S5-3b | minor | Still < 28 px: Mute clickable 16 px tall (covered), sliders 20 px, + Add lane 26, fold 22 | fixed (L207, T109), re-test |
 | S5-6 | minor | Drawer sliders not re-checked (no library block on the re-seeded tracks) | re-check |

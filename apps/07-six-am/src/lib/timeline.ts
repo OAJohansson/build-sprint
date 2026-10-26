@@ -148,6 +148,16 @@ export function snapBar(x: number, pxPerBar: number, length: number, total = BAR
   return Math.min(Math.max(bar, 1), total - length + 1);
 }
 
+/**
+ * Where a dragged block starts (S5-9): its start plus the pointer's movement since the press, in
+ * whole bars at the bar width measured when the drag began, kept inside the track. Releasing where
+ * you pressed never moves it, whatever the layout does meanwhile.
+ */
+export function moveStart(start: number, dxPx: number, pxPerBar: number, length: number, total = BARS) {
+  const bar = start + Math.round(dxPx / pxPerBar);
+  return Math.min(Math.max(bar, 1), Math.max(1, total - length + 1));
+}
+
 /** Length in whole loop repeats for a pixel width, at least one repeat, never past the end. */
 export function snapLength(width: number, pxPerBar: number, loopBars: number, start: number, total = BARS) {
   const reps = Math.max(1, Math.round(width / pxPerBar / loopBars));

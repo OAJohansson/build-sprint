@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   docBars, type Doc, type Loop, type Region,
-  loopById, newId, registerSounds, snapBar, snapLength,
+  loopById, moveStart, newId, registerSounds, snapBar, snapLength,
 } from "@/lib/timeline";
 import {
   accepts, addLane as addLaneTo, crateLaneType, laneMix, laneOfRegion, lanesOf, legacyTrack, moveLane as moveLaneIn,
@@ -370,13 +370,14 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
       if (e.button !== 0) return;
       e.stopPropagation();
       setSelected(r.id);
-      const offset = laneX(e.clientX) - (r.start - 1) * ppbRef.current;
+      // S5-9: the bar width and press point at drag start; the move is the pointer's delta from there.
+      const sx = e.clientX, ppb0 = ppbRef.current, offset = 0;
       const hold = setTimeout(() => setDrag({ type: "move", id: r.id, offset, start: r.start, overBin: false }), HOLD_MS);
       track(e, (ev) => {
         clearTimeout(hold);
         const overBin = !!(document.elementFromPoint(ev.clientX, ev.clientY) as HTMLElement | null)?.closest("[data-bin]");
         // Over the bin, the block stays put; elsewhere it follows along its lane.
-        const start = overBin ? r.start : snapBar(laneX(ev.clientX) - offset, ppbRef.current, r.length, bars);
+        const start = overBin ? r.start : moveStart(r.start, ev.clientX - sx, ppb0, r.length, bars);
         setDrag({ type: "move", id: r.id, offset, start, overBin });
       }, () => {
         clearTimeout(hold);
@@ -395,9 +396,10 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
       e.stopPropagation();
       setSelected(r.id);
       const lb = loopById(r.loopId).bars;
+      const sx = e.clientX, ppb0 = ppbRef.current;
       track(e, (ev) => {
-        const w = laneX(ev.clientX) - (r.start - 1) * ppbRef.current;
-        setDrag({ type: "resize", id: r.id, length: snapLength(w, ppbRef.current, lb, r.start, bars) });
+        const w = r.length * ppb0 + (ev.clientX - sx);
+        setDrag({ type: "resize", id: r.id, length: snapLength(w, ppb0, lb, r.start, bars) });
       }, (_ev, moved) => {
         if (!moved) return;
         const d = dragRef.current;

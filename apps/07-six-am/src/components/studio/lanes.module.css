@@ -1,7 +1,9 @@
 /* The Studio's lanes (S5, Fold, L194/L200; from the approved prototype in /dev/studio-lanes): every
    lane under a family row that folds, 56 px lanes with a 220 px gutter, flat clips at 25% of the
    lane colour, mix controls on hover, one accent (Play) outside the lanes. No motion beyond 150 ms colour. */
-.tl { --faint: #958a7c; grid-row: 2; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: #3a322c transparent; position: relative; }
+/* S5-9: both pinned to column 1, so the bin (row 3, column 1) overlays the crate instead of
+   pushing it into a second grid column that squeezed the lanes mid-drag. */
+.tl { --faint: #958a7c; grid-row: 2; grid-column: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: #3a322c transparent; position: relative; }
 .tl :focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
 .fadeEnd { -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent); }
 .content { position: relative; min-height: 100%; display: flex; flex-direction: column; }
@@ -20,29 +22,27 @@
 .barNum { position: absolute; bottom: 2px; padding-left: 4px; font: normal 400 10px var(--f-mono); color: var(--faint); font-variant-numeric: tabular-nums; pointer-events: none; }
 .section { position: absolute; top: 0; height: 17px; padding: 0 8px 0 6px; border-left: 1px solid #8f806e; background: var(--panel); font: 500 11px/17px var(--f-mono); color: var(--ink); white-space: nowrap; pointer-events: none; }
 .rulerMark { position: absolute; bottom: 0; z-index: 3; transform: translateX(-50%); padding: 1px 6px; border-radius: 4px 4px 0 0; background: var(--c); color: var(--bg); font: 500 11px var(--f-mono); pointer-events: none; }
-.addBtn { display: inline-flex; align-items: center; gap: 6px; min-height: 24px; padding: 0 10px; border: 1px solid var(--line); border-radius: 99px; background: none; color: var(--muted); font: 500 11.5px var(--f-mono); cursor: pointer; }
+.addBtn { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 0 10px; border: 1px solid var(--line); border-radius: 99px; background: none; color: var(--muted); font: 500 11.5px var(--f-mono); cursor: pointer; }
 .addBtn:hover, .addBtn[aria-expanded="true"] { color: var(--ink); border-color: #4a4038; }
 
 /* Family rows */
-.famGut { height: 20px; display: flex; align-items: center; }
+.famGut { height: 29px; display: flex; align-items: center; } /* 28 px of row + its 1 px rule */
 .famGutFolded { height: 34px; }
-.famHead { height: 20px; display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; padding: 0 8px; background: none; border: 0; color: var(--muted); font: 500 11px var(--f-mono); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; text-align: left; white-space: nowrap; }
+.famHead { height: 28px; display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; padding: 0 8px; background: none; border: 0; color: var(--muted); font: 500 11px var(--f-mono); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; text-align: left; white-space: nowrap; }
 .famHead:hover { color: var(--ink); }
-/* S5-3: the fold row stays 20 px to look at; its hit area is 28 px */
-.famHead, .famPlus, .addBtn { position: relative; }
-.famHead::after, .famPlus::after { content: ""; position: absolute; inset: -4px 0; }
-.addBtn::after { content: ""; position: absolute; inset: -2px 0; }
+/* S5-3b: family rows are 28 px (design 20): an enlarged hit area spilled into the lanes and covered their icons. */
+
 .famHead svg { width: 12px; height: 12px; flex: none; transition: transform 150ms ease-out; }
 .folded svg { transform: rotate(-90deg); }
 .famCount { color: var(--faint); text-transform: none; letter-spacing: 0; }
-.famPlus { margin-right: 6px; visibility: hidden; width: 22px; height: 20px; border: 0; border-radius: 5px; background: none; color: var(--muted); cursor: pointer; font: 500 14px var(--f-mono); }
+.famPlus { margin-right: 6px; visibility: hidden; width: 28px; height: 28px; border: 0; border-radius: 5px; background: none; color: var(--muted); cursor: pointer; font: 500 14px var(--f-mono); }
 .gut:hover .famPlus, .gut:focus-within .famPlus { visibility: visible; }
 .famPlus:hover { color: var(--ink); background: rgba(241,230,211,.06); }
 .famBody { flex: 1; border-bottom: 1px solid var(--line); }
 
 /* A lane's gutter: name, hear-only and mute icons, ⋯; volume and pan on their own line on hover */
 .colorBar { position: absolute; left: 14px; top: 7px; bottom: 7px; width: 3px; border-radius: 2px; background: var(--c); }
-.laneHead { height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 0; padding: 0 8px 0 24px; }
+.laneHead { height: 100%; display: flex; flex-direction: column; justify-content: flex-start; gap: 0; padding: 0 8px 0 24px; }
 .line1 { display: flex; align-items: center; gap: 0; min-width: 0; height: 28px; }
 .name { flex: 0 1 auto; min-width: 0; max-width: 14ch; font: 500 12.5px var(--f-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: none; border: 1px solid transparent; border-radius: 4px; color: var(--ink); padding: 3px 4px; text-align: left; cursor: text; transition: color 150ms ease-out; }
 .nameInput { flex: 1; min-width: 0; font: 500 12.5px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--gold); border-radius: 4px; padding: 3px 4px; outline: none; user-select: text; }
@@ -56,10 +56,10 @@
 .more { width: 28px; height: 28px; flex: none; border: 0; border-radius: 5px; background: none; color: var(--muted); cursor: pointer; font: 600 13px var(--f-mono); visibility: hidden; }
 .gut:hover .more, .gut:focus-within .more, .more[aria-expanded="true"] { visibility: visible; }
 .more:hover { color: var(--ink); background: rgba(241,230,211,.06); }
-.mix { display: flex; align-items: center; gap: 12px; padding-left: 4px; height: 16px; visibility: hidden; }
+.mix { display: flex; align-items: center; gap: 12px; padding-left: 4px; height: 28px; visibility: hidden; }
 .gut:hover .mix, .gut:focus-within .mix { visibility: visible; }
 .mixItem { display: flex; align-items: center; gap: 6px; font: 400 11px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.mixItem input { -webkit-appearance: none; appearance: none; height: 28px; margin: -6px 0; background: transparent; cursor: pointer; }
+.mixItem input { -webkit-appearance: none; appearance: none; height: 28px; margin: 0; background: transparent; cursor: pointer; }
 .mixItem input::-webkit-slider-runnable-track { height: 2px; background: #3a322c; }
 .mixItem input::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; margin-top: -4px; border-radius: 50%; background: var(--c); }
 .mixItem input::-moz-range-track { height: 2px; background: #3a322c; }
@@ -123,7 +123,7 @@
 .facts b { font-weight: 400; }
 
 /* The crate (168 px): tabs and a 40 px still disc in one header row; 300 px cards with a grip */
-.crate { grid-row: 3; min-height: 0; height: 200px; display: flex; flex-direction: column; border-top: 1px solid var(--line); background: var(--crate-bg); --faint: #958a7c; }
+.crate { grid-row: 3; grid-column: 1; min-height: 0; height: 200px; display: flex; flex-direction: column; border-top: 1px solid var(--line); background: var(--crate-bg); --faint: #958a7c; }
 .crateHead { display: flex; align-items: flex-end; gap: 24px; padding: 0 24px; border-bottom: 1px solid var(--line); min-height: 52px; flex: none; }
 .tabs { display: flex; gap: 22px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
 .tab { flex: none; background: none; border: 0; padding: 0 0 12px; font: 400 13px var(--f-mono); color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: color 150ms ease-out; }

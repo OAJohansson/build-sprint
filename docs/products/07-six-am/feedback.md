@@ -94,3 +94,15 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | LS2-N9 | minor | Heard-bar answers can run 4 long sentences and call unheard bars a "gap" | open (S3 brief) |
 | LS2-N10 | minor | The beside card can cover the bars its answer describes | open (S3 brief) |
 | LS2-N11 | polish | "+ Ask about the other here", "What's the vocals doing here?" | open (S3 brief) |
+
+## Lab S3+S4 test (26 Oct, `user-testing/report-2026-10-26-lab-s3s4.md`): jobs 4 / 3
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| S5-1 | major | Rename after Save isn't saved; Save stays disabled | open |
+| S3-1 | major | A/B below the fold at a 734 px page | open |
+| S5-2 | major | No trace of saved sounds in the Lab after a reload | open |
+| S3-2 | minor | Suggest settings spins 9 s, no visible change when ticks are current | open |
+| S3-3 | minor | Make rail titled "at bar 41" but shows the whole thread | open |
+| S3-4 | minor | Drums in Make: no route to the bass | open |
+| S3-5 | polish | Knob step 0.01; cut Mentor sentence; loop strip shows a block, not the notes | open |

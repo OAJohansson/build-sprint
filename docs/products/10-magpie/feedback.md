@@ -46,3 +46,4 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 40 | User test F9 | Shared photo gets today's date, not the photo's | parked (backlog) |
 | 41 | User test F10 | Empty card behind Maggie on the access screen reads like an input | won't do (in the approved design) |
 | 42 | User test: Relive 3/5 | No view per trip or city; 'Away' mixes Taipei, Tokyo, Rome | parked (backlog: Trips row; owner's call) |
+| 43 | PM check | A sticker failed on an OpenRouter 429 (rate limit); the photo stood in and Draw it again worked | fixed (one retry after 3 s on 429/5xx) |

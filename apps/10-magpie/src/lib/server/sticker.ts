@@ -47,16 +47,24 @@ async function draw(prompt: string, photo: Image | null): Promise<Buffer> {
     const small = await sharp(photo.bytes).rotate().resize(1024, 1024, { fit: "inside" }).jpeg({ quality: 82 }).toBuffer();
     content.push({ type: "image_url", image_url: { url: `data:image/jpeg;base64,${small.toString("base64")}` } });
   }
-  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ model: STICKER_MODEL, modalities: ["image", "text"], image_config: { aspect_ratio: "1:1" }, messages: [{ role: "user", content }] }),
-    signal: AbortSignal.timeout(50_000),
-  });
-  const body = await res.json().catch(() => ({}));
-  const url: string | undefined = body.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-  if (!res.ok || !url) throw new Error(`Sticker model failed (${res.status}): ${JSON.stringify(body.error ?? body).slice(0, 300)}`);
-  return Buffer.from(url.split(",")[1], "base64");
+  const request = JSON.stringify({ model: STICKER_MODEL, modalities: ["image", "text"], image_config: { aspect_ratio: "1:1" }, messages: [{ role: "user", content }] });
+  // One retry after a short wait when OpenRouter is busy (429) or hiccups (5xx), within the
+  // route's 60 s: two tries of up to 25 s each (decision 0022 planned for rate limits).
+  for (let attempt = 1; ; attempt++) {
+    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: request,
+      signal: AbortSignal.timeout(25_000),
+    }).catch((e: unknown) => ({ ok: false, status: 0, json: async () => ({ error: String(e) }) }) as const);
+    const body = await res.json().catch(() => ({}));
+    const url: string | undefined = body.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+    if (res.ok && url) return Buffer.from(url.split(",")[1], "base64");
+    const retry = attempt === 1 && (res.status === 429 || res.status === 0 || res.status >= 500);
+    if (!retry) throw new Error(`Sticker model failed (${res.status}): ${JSON.stringify(body.error ?? body).slice(0, 300)}`);
+    console.warn(`[magpie] sticker model ${res.status}, retrying once`);
+    await new Promise((r) => setTimeout(r, 3000));
+  }
 }
 
 /**

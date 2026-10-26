@@ -172,11 +172,12 @@ function Saved({ yum: saved }: { yum: Yum }) {
           <div className="stick-in relative z-10">
             <Sticker yum={yum} size={170} tilt={false} />
           </div>
-          <Maggie pose="cheer" size={330} className="-mt-[50px]" />
+          <Maggie pose="cheer" size={330} className="-mt-[30px]" />
         </div>
         <ul className="flex flex-wrap justify-center gap-2" aria-label="Saved details">
           <li className={`${chip} bg-cream`}>{sub?.label ?? kindLabel(yum.kind)}</li>
           {yum.place && <li className={`${chip} max-w-full bg-cream`}><span className="truncate">{yum.place}</span></li>}
+          <li className="basis-full" aria-hidden="true" />
           <li className={`${chip} bg-cream`} aria-label={`${yum.hearts} of 5 hearts`}>{"♥".repeat(yum.hearts)}</li>
           <li className={`${chip} bg-[#FFD166]`}>yum no. {yum.number}</li>
         </ul>

@@ -57,7 +57,7 @@ function Book() {
         <Link href="/new" className="btn btn-primary h-[54px] text-[17px]">Add a yum</Link>
       </aside>
 
-      <main className="mx-auto flex w-full max-w-[440px] flex-1 flex-col gap-[14px] px-5 pb-28 pt-[max(20px,env(safe-area-inset-top))] lg:max-w-none lg:gap-[22px] lg:px-9 lg:pb-10 lg:pt-7">
+      <main className="mx-auto flex w-full min-w-0 max-w-[440px] flex-1 flex-col gap-[14px] px-5 pb-28 pt-[max(20px,env(safe-area-inset-top))] lg:max-w-none lg:gap-[22px] lg:px-9 lg:pb-10 lg:pt-7">
         {!filtered && (
           <>
             <header className="flex items-center justify-between lg:hidden">
@@ -131,7 +131,7 @@ function Shelves({ yums, go }: { yums: Yum[]; go: (f: Filters) => void }) {
               <button type="button" onClick={() => go(s.seeAll)} className="-my-3 min-h-11 flex-none px-1 text-[14px] text-dusk active:opacity-60">{s.aside}</button>
             )}
           </div>
-          <ul className="no-scrollbar -mx-5 flex snap-x overscroll-x-contain gap-2.5 overflow-x-auto px-5 pb-1 pt-1 lg:mx-0 lg:gap-[18px] lg:px-0">
+          <ul className="no-scrollbar -mx-5 flex snap-x scroll-px-5 overscroll-x-contain gap-2.5 overflow-x-auto px-5 pb-1 pt-1 lg:mx-0 lg:scroll-px-0 lg:gap-[18px] lg:px-0">
             {s.yums.map((y) => (
               <li key={y.id} className="flex-none snap-start">
                 <Link href={`/yum/${y.id}`} className="flex w-20 flex-col items-center gap-1 text-center transition-transform active:scale-[0.97] lg:w-[110px]">
@@ -224,7 +224,7 @@ function FilterSheet({ yums, initial, home, onClose, onApply }: { yums: Yum[]; i
 
 function Empty() {
   return (
-    <main className="mx-auto flex w-full max-w-[440px] flex-1 flex-col gap-[14px] px-5 pb-28 pt-[max(20px,env(safe-area-inset-top))]">
+    <main className="mx-auto flex w-full min-w-0 max-w-[440px] flex-1 flex-col gap-[14px] px-5 pb-28 pt-[max(20px,env(safe-area-inset-top))]">
       <header className="flex items-center justify-between">
         <h1 className="text-[28px] font-semibold">magpie</h1>
         <span className="flex h-8 items-center rounded-full border-[2.5px] border-cocoa bg-white px-3 text-[14px]">0 yums</span>

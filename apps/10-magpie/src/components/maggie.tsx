@@ -92,6 +92,7 @@ export function Sparkles({ className }: { className?: string }) {
       <path d="M14 30l3 6 6 3-6 3-3 6-3-6-6-3 6-3z" fill="#FFD166" />
       <path d="M104 18l2 4 4 2-4 2-2 4-2-4-4-2 4-2z" fill="#FFFFFF" />
       <path d="M100 96l2 4 4 2-4 2-2 4-2-4-4-2 4-2z" fill="#FFD166" />
+      <circle cx="20" cy="96" r="2.5" fill="#FFFFFF" />
     </svg>
   );
 }

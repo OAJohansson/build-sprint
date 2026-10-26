@@ -72,7 +72,7 @@ function Item() {
         </Link>
       </div>
 
-      <div className="relative flex h-[300px] items-center justify-center overflow-hidden rounded-[26px] border-[2.5px] border-cocoa lg:row-span-4 lg:h-[420px]" style={{ background: HERO[yum.kind] }}>
+      <div className={`relative flex h-[300px] items-center justify-center overflow-hidden rounded-[26px] ${yum.hasPhoto && !showPhoto ? "pb-9" : ""} border-[2.5px] border-cocoa lg:row-span-4 lg:h-[420px]`} style={{ background: HERO[yum.kind] }}>
         {showPhoto ? (
           // eslint-disable-next-line @next/next/no-img-element -- private, cookie-guarded image route
           <img src={`/api/yums/${yum.id}/photo`} alt={`My photo of ${yum.name}`} className="absolute inset-0 h-full w-full object-cover" />

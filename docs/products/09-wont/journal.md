@@ -186,3 +186,8 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   rounds stopped. Eval report `eval-report-v1.1-sync.md`.
 - **Ops:** Wont's four env keys set on Vercel (production and preview) with the same API calls as
   `pnpm ship` (its `--preview` path skips env). Sandbox reset after each grader run.
+- **PR** https://github.com/OAJohansson/build-sprint/pull/93 (checks green, main merged in),
+  preview https://wont-1ndheg7ka-mimirswell.vercel.app. Waiting for the owner's final review and
+  merge yes. Note for the review: the laptop's real history lives on the production origin
+  (wont-peach.vercel.app), so the real first connect happens after the merge; the preview starts
+  empty and, with the owner's code, writes the owner's real document.

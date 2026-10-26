@@ -102,6 +102,21 @@ What happened, what was decided and why. Newest last.
   deploying main, so production stays untouched until the owner says yes. Previews deploy from the
   branch with `pnpm ship 10-magpie --preview`.
 
+- **Sticker eval v1 (grader):** every bar passed (12/12 recognisable, 10/12 style with no margin,
+  median 15 s, $0.04, photos 12/12). Worst: a busy photo drew the wrong item (the prompt didn't
+  name it), the ramen copied the bowl's print and glyphs, and a third of stickers had no outer
+  outline, so the cut-out kept their white border only by luck.
+- **Critic round 1:** H 7, E 7, G 6, K 8, L 7. The saved moment needed Maggie as the hero holding
+  the sticker; stickers read glossy with thin edges.
+- **Prompt v2** (names the item, flat, no prints, bold outline): eval v2 passed with more margin
+  (12/12 and 12/12) and fixed the wrong item, but the outer outline still went missing on 5 of 15.
+- **Critic round 2:** H 8, E 8.5, G 8, K 8, L 8. It caught a real regression: the laptop's
+  scrolling shelves widened the page past the screen (`min-w-0` missing).
+- **v3: the edge in code.** The model can't be made to draw the outer outline every time, so it
+  now draws only the item on a pastel shape and the server adds the white ring and cocoa line to
+  every sticker (L9). Practice: when a model won't follow a rule reliably, move the rule into
+  deterministic code around it.
+
 ## To carry over
 
 For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md).
@@ -111,5 +126,7 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   `lg:hidden`. Put resets in `@layer base` and component classes in `@layer components`.
 - Knowledge bank (technology): `after()` in a Next.js route runs work after the response is sent,
   so a slow AI step never makes the user wait (Magpie's stickers).
+- Building with AI: move a rule the model won't keep (Magpie's sticker outline) out of the prompt
+  and into deterministic code around the model; prompt for what it does well.
 - Process: the `data-evals` agent file existed but wasn't loadable as an agent type in a session
   started from another session; check `.claude/agents` registration.

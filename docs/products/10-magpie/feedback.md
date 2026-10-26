@@ -51,4 +51,4 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 45 | User re-check | Fallback city labelled 'where you were last' on a device that never had one | fixed ('your home city') |
 | 46 | Critic r3 (L 8.5) | Laptop panel shows drink sub-kinds before Drinks is picked | won't do (F1 brought S3 inside its tap bar; the user test wins) |
 | 47 | Critic r3 (H) | Plum hot shot sticker has a flame ('hot' taken literally) | parked |
-| 48 | Owner's final review (blocker) | Preview couldn't open the book: every /api/yums returned 500 on Vercel (sharp: libvips-cpp.so not in the function bundle) | fixed (sharp loaded only where images are processed; libvips added with outputFileTracingIncludes) |
+| 48 | Owner's final review (blocker) | Preview couldn't open the book: every /api/yums returned 500 on Vercel (sharp: libvips-cpp.so not in the function bundle) | fixed (sharp loaded only where images are processed; libvips added with outputFileTracingIncludes); local production build verified; **check on the deployed preview pending the owner** (no bypass token, by decision) |

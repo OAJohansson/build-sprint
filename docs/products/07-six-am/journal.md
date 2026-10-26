@@ -642,3 +642,9 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   evals (Y1–Y10), cost ($150–250 Claude) and backlog updated. PM call L161: a loop's separated
   parts stay in memory only while the loop is on, for seamless loops and A/B. Design restarts: 10
   new rough directions.
+- **10 new rough Lab directions (round 2, from L153–L161):** Bench, Drawer, Two rooms, Steps,
+  Margin notes, Twin lane, Ear trainer, Lesson, Rack, Command line. Each has the 4 parts with S/M
+  and est. sub-layers, a chord lane, section loop, seek with "catching up…", Deck status, Mentor
+  aware of context, Make with A/B, 6 macros, Match it, and save with the suggested name. Sheet
+  `design/lab-directions-2.html`, screenshots `design/lab2/`, prototypes `/dev/lab-directions-2?v=N`
+  (dev only); round 1 kept untouched. T82. Push sent for the owner's 3.

@@ -1,0 +1,93 @@
+/* Per-direction layout, round 2, rough. Colours come from the root's tokens (lab.module.css). */
+.col { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; min-width: 0; }
+.rowBetween { display: flex; justify-content: space-between; align-items: center; gap: 16px; width: 100%; flex-wrap: wrap; }
+.foot { margin-top: auto; width: 100%; }
+.hr { border: 0; border-top: 1px solid var(--line); width: 100%; margin: 4px 0; }
+.bar { height: 50px; display: flex; align-items: center; padding: 0 24px; border-top: 1px solid var(--line); }
+.pad { padding: 0 24px 12px; }
+
+/* 1 Bench */
+.b1 { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 420px; min-height: 0; }
+.b1map { min-width: 0; }
+.b1side { background: var(--panel); border-left: 1px solid var(--line); border-top: 1px solid var(--line); padding: 18px 24px 20px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+
+/* 2 Drawer */
+.d2 { margin-top: auto; background: var(--panel); border-top: 1px solid #3a322c; box-shadow: 0 -12px 30px rgba(0,0,0,.35); }
+.d2tabs { display: flex; align-items: center; gap: 24px; padding: 0 24px; height: 48px; border-bottom: 1px solid var(--line); }
+.d2tabs > button:not([class]) { background: none; border: 0; border-bottom: 2px solid transparent; height: 48px; padding: 0; cursor: pointer; font-size: 12.5px; color: var(--muted) !important; }
+.d2tabs > button[aria-current] { color: var(--ink) !important; border-bottom-color: var(--gold); }
+.d2last { margin-left: auto; font-size: 12px; color: var(--muted); max-width: 520px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.d2body { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 40px; padding: 22px 24px 26px; }
+
+/* 3 Two rooms */
+.r3switch { display: flex; border: 1px solid #3a322c; border-radius: 99px; padding: 3px; }
+.r3switch button { background: none; border: 0; border-radius: 99px; padding: 6px 22px; font: italic 400 20px var(--f-serif); color: var(--faint) !important; cursor: pointer; }
+.r3switch button[aria-pressed="true"] { background: #2b2622; color: var(--ink) !important; }
+.r3 { flex: 1; display: grid; grid-template-columns: 1.2fr 1fr 0.9fr; gap: 0; border-top: 1px solid var(--line); }
+.r3 > section { padding: 24px; border-right: 1px solid var(--line); }
+.r3mentor { background: var(--panel); border-right: 0 !important; }
+
+/* 4 Steps */
+.s4 { flex: 1; display: grid; grid-template-columns: 260px minmax(0, 1fr); }
+.s4rail { list-style: none; margin: 0; padding: 24px 18px; display: flex; flex-direction: column; gap: 6px; background: var(--panel); border-right: 1px solid var(--line); }
+.s4rail li { display: flex; gap: 12px; align-items: flex-start; padding: 10px 8px; border-radius: 8px; color: var(--faint); }
+.s4rail li b { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; border: 1px solid #3a322c; font-weight: 500; font-size: 11px; }
+.s4rail li div { display: flex; flex-direction: column; gap: 3px; }
+.s4rail li small { font-size: 11px; color: var(--muted); line-height: 1.45; }
+.s4rail li[data-done] { color: var(--ink); }
+.s4rail li[data-done] b { color: var(--muted); }
+.s4rail li[data-at] { background: #221d1a; color: var(--ink); }
+.s4rail li[data-at] b { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+.s4deck { margin-top: auto; }
+.s4main { min-width: 0; display: flex; flex-direction: column; }
+.s4card { flex: 1; padding: 22px 24px; display: flex; flex-direction: column; gap: 20px; }
+.s4cardHead { display: flex; justify-content: space-between; align-items: center; }
+.s4cols { display: grid; grid-template-columns: 1fr 1.3fr; gap: 48px; }
+
+/* 5 Margin notes */
+.m5wrap { position: relative; }
+.m5layer { position: absolute; top: 0; right: 0; bottom: 0; pointer-events: none; }
+.m5pin { position: absolute; width: 20px; height: 20px; margin-left: -10px; border-radius: 50%; background: var(--ink); color: var(--bg); font-size: 10.5px; display: grid; place-items: center; font-weight: 500; z-index: 3; }
+.m5note { position: absolute; width: 360px; pointer-events: auto; z-index: 4; background: #241f1b; border: 1px solid #3a322c; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+.m5note::before { content: ""; position: absolute; left: -7px; top: 44px; width: 12px; height: 12px; background: #241f1b; border-left: 1px solid #3a322c; border-bottom: 1px solid #3a322c; transform: rotate(45deg); }
+.m5make { margin-top: auto; display: flex; gap: 36px; align-items: flex-start; padding: 20px 24px 24px; border-top: 1px solid var(--line); background: var(--panel); }
+
+/* 6 Twin lane */
+.t6head { background: #241c18; border: solid var(--line); border-width: 0 1px 1px 0; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 10px; padding: 0 12px; position: relative; }
+.t6head::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; background: repeating-linear-gradient(var(--bass) 0 4px, transparent 4px 7px); }
+.t6name { font-weight: 500; display: flex; gap: 8px; align-items: center; }
+.t6dot { width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--bass); }
+.t6ab { display: flex; gap: 4px; align-items: center; }
+.t6ab button { width: 26px; height: 22px; border-radius: 4px; border: 1px solid #3a322c; background: none; font-size: 11px; cursor: pointer; color: var(--muted) !important; }
+.t6ab button[aria-pressed="true"] { background: var(--ink); color: var(--bg) !important; }
+.t6lane { position: relative; border-bottom: 1px solid var(--line); background: rgba(239,91,55,.03); }
+.t6block { position: absolute; top: 10px; bottom: 10px; border: 1px dashed var(--bass); border-radius: 4px; background: rgba(239,91,55,.08); display: flex; align-items: center; justify-content: center; }
+.t6knobs { display: flex; gap: 14px; }
+.t6foot { display: flex; align-items: center; gap: 24px; padding: 14px 24px; border-top: 1px solid var(--line); }
+.t6sub { margin: 0; flex: 1; font-size: 13px; line-height: 1.6; }
+
+/* 7 Ear trainer */
+.e7 { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 320px; border-top: 1px solid var(--line); }
+.e7main { padding: 20px 32px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.e7top { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+.e7ab { display: flex; justify-content: center; }
+.e7make { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.e7hint { background: var(--panel); border-left: 1px solid var(--line); padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+
+/* 8 Lesson */
+.l8 { width: 820px; margin: 0 auto; padding: 22px 0 28px; display: flex; flex-direction: column; gap: 14px; }
+.l8text { margin: 0; font: italic 400 21px/1.45 var(--f-serif); text-wrap: pretty; }
+.l8card { border: 1px solid #3a322c; border-radius: 12px; background: var(--panel); padding: 16px 18px; display: flex; flex-direction: column; gap: 14px; }
+
+/* 9 Rack */
+.k9 { flex: 1; display: grid; grid-template-columns: 1fr 0.9fr 1.5fr 1fr; gap: 12px; padding: 16px 24px 24px; }
+.k9mod .ab button { padding: 6px 10px; }
+.k9mod { border: 1px solid var(--line); border-radius: 10px; background: var(--panel); padding: 16px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; min-width: 0; }
+
+/* 10 Command line */
+.c10float { position: absolute; right: 24px; bottom: 84px; display: flex; gap: 12px; align-items: flex-end; z-index: 5; }
+.c10card { width: 380px; background: rgba(36,31,27,.97); border: 1px solid #3a322c; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; box-shadow: 0 16px 40px rgba(0,0,0,.5); }
+.c10card:first-child { width: 300px; }
+.c10bar { position: absolute; left: 24px; right: 24px; bottom: 20px; height: 48px; display: flex; align-items: center; gap: 12px; padding: 0 16px; border: 1px solid #3a322c; border-radius: 12px; background: var(--panel); z-index: 5; }
+.c10prompt { color: var(--gold); font-size: 16px; }
+.c10input { flex: 1; font: 14px var(--f-mono); color: var(--ink); background: none; border: 0; outline: none; }

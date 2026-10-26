@@ -592,3 +592,7 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   visible (InvalidStateError otherwise) and should be called before awaiting the model.
 - **Waiting for the owner's ear** on (a) silence of the original and (c) usefulness of bass and
   drums, in their own Chrome. Nothing past the spike is built until then (L144).
+- **Spike passed (L151):** the owner listened in their own Chrome: only Six AM's version was heard
+  (original silent locally) and solo worked on drums, bass and other. With L150's numbers, the
+  riskiest assumptions hold. Next: 10 rough Lab designs (with the separate Deck window), owner
+  picks 3.

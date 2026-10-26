@@ -70,10 +70,10 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| LS2-M1 | major | Card thread 150 px, nested scrolls, answers cut after 3 lines | open |
-| LS2-M2 | minor | Hit areas < 28 px: dots, "+ Ask", bar tag, Send, Make link | open |
-| LS2-M3 | minor | Outside a loop the Mentor uses the full-mix estimate, not the heard lanes | open |
-| LS2-M4 | minor | Hovering a dot shows nothing visible | open |
-| LS2-M5 | polish | Jargon (Hz, "minor third"); "can't hear tone, only pitch…" implies hearing | open |
-| LS1-N7 | minor | Heard Drums merges the kick/hats rows | open |
-| LS1-N6 | polish | "Not heard yet" hyphen still dim | re-check |
+| LS2-M1 | major | Card thread 150 px, nested scrolls, answers cut after 3 lines | fixed (L187, L188, T96), re-test |
+| LS2-M2 | minor | Hit areas < 28 px: dots, "+ Ask", bar tag, Send, Make link | fixed (L187, L188, T96), re-test |
+| LS2-M3 | minor | Outside a loop the Mentor uses the full-mix estimate, not the heard lanes | fixed (L187, L188, T96), re-test |
+| LS2-M4 | minor | Hovering a dot shows nothing visible | fixed (L187, L188, T96), re-test |
+| LS2-M5 | polish | Jargon (Hz, "minor third"); "can't hear tone, only pitch…" implies hearing | fixed (L187, L188, T96), re-test |
+| LS1-N7 | minor | Heard Drums merges the kick/hats rows | fixed (L187, L188, T96), re-test |
+| LS1-N6 | polish | "Not heard yet" hyphen still dim | fixed (T96) |

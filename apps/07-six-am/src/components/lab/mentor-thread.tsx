@@ -35,6 +35,7 @@ export function Turn({ x, lines, onSeek, onRetry, current }: { x: ThreadTurn; li
 /** A long answer shows a few lines and "Read all". */
 function Answer({ text, lines }: { text: string; lines: number }) {
   const [all, setAll] = useState(false);
+  // "Read all" only for a really long answer (LS2-M1); everything else shows whole.
   const long = text.length > lines * 52;
   return (
     <>

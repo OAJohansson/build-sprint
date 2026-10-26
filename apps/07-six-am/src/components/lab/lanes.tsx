@@ -8,7 +8,7 @@ import { memo, useEffect, useRef, useState, type CSSProperties, type ReactNode }
 import type { PartName } from "@/lib/lab/live";
 import { chordCells, type LabPart, type LabSection } from "@/lib/lab/view";
 import { BARS_PER_CHORD } from "@/lib/lab/chords";
-import { laneBlocks } from "@/lib/lab/activity";
+import { HATS_ROW, KICK_ROW, laneBlocks } from "@/lib/lab/activity";
 import type { Block } from "@/lib/map/view";
 import s from "./lab.module.css";
 
@@ -124,15 +124,15 @@ export const Lanes = memo(function Lanes(p: LanesProps) {
         {head}
       </div>
       {p.parts.map((x, i) => (
-        <Lane key={x.id} x={x} levels={p.levels?.[PART_ORDER.indexOf(x.id)] ?? null} on={on[i]} focus={p.focus === x.id} hear={p.hear} onOnly={p.onOnly} onMute={p.onMute} loop={p.loop} pct={pct} w={w} seekAt={seekAt} head={head}
+        <Lane key={x.id} x={x} levels={p.levels?.[PART_ORDER.indexOf(x.id)] ?? null} bands={x.id === "drums" ? { kick: p.levels?.[KICK_ROW], hats: p.levels?.[HATS_ROW] } : undefined} on={on[i]} focus={p.focus === x.id} hear={p.hear} onOnly={p.onOnly} onMute={p.onMute} loop={p.loop} pct={pct} w={w} seekAt={seekAt} head={head}
           overlay={p.focus === x.id ? p.overlay : null} />
       ))}
     </div>
   );
 });
 
-function Lane({ x, levels, on, focus, hear, onOnly, onMute, loop, pct, w, seekAt, head, overlay }: {
-  x: LabPart; levels: (number | null)[] | null; on: boolean; focus: boolean; hear: Hear; onOnly: (id: PartName) => void; onMute: (id: PartName) => void;
+function Lane({ x, levels, bands, on, focus, hear, onOnly, onMute, loop, pct, w, seekAt, head, overlay }: {
+  x: LabPart; levels: (number | null)[] | null; bands?: Record<string, (number | null)[] | undefined>; on: boolean; focus: boolean; hear: Hear; onOnly: (id: PartName) => void; onMute: (id: PartName) => void;
   loop: { from: number; to: number } | null; pct: (b: number) => string; w: (a: number, b: number) => string;
   seekAt: (e: React.MouseEvent<HTMLElement>) => void; head: React.ReactNode; overlay: ReactNode;
 }) {
@@ -141,9 +141,16 @@ function Lane({ x, levels, on, focus, hear, onOnly, onMute, loop, pct, w, seekAt
   const only = hear.kind === "only" && hear.parts.includes(x.id);
   const muted = hear.kind === "mute" && hear.parts.includes(x.id);
   // LS1-N1: bars heard come from the separated part itself; the rest keep the map's estimate, faint.
-  const empty = levels ?? [];
-  const heard = laneBlocks(empty, []).heard;
-  const rows: { name: string; blocks: Block[] }[] = (x.subs.length ? x.subs : [{ name: "", blocks: x.blocks }]).map((y) => ({ ...y, blocks: laneBlocks(empty, y.blocks).estimate }));
+  // LS1-N7: the drums' sub-rows (kick, hats) each get their own heard band when there is one.
+  const part = levels ?? [];
+  const rowLevels = (name: string) => { const b = bands?.[name]; return b && b.some((v) => v !== null) ? b : null; };
+  const banded = x.subs.length > 0 && x.subs.every((y) => rowLevels(y.name));
+  const heard = banded ? [] : laneBlocks(part, []).heard;
+  const rows: { name: string; blocks: Block[]; heard: Block[] }[] = (x.subs.length ? x.subs : [{ name: "", blocks: x.blocks }]).map((y) => {
+    const lv = banded ? rowLevels(y.name)! : part;
+    const r = laneBlocks(lv, y.blocks);
+    return { ...y, blocks: r.estimate, heard: banded ? r.heard : [] };
+  });
   return (
     <>
       <div className={s.lh} data-st={state} data-focus={f} style={{ "--c": x.color } as CSSProperties}>
@@ -166,6 +173,11 @@ function Lane({ x, levels, on, focus, hear, onOnly, onMute, loop, pct, w, seekAt
               {y.blocks.map((b) => (
                 <span key={b.from} className={s.subBlock} data-est="" data-maybe={b.level === "maybe" ? "" : undefined}
                   title={`${y.name || x.name}, bars ${b.from}–${b.to - 1} (${b.level === "maybe" ? "maybe, " : ""}estimated; not heard yet)`}
+                  style={{ left: pct(b.from), width: w(b.from, b.to), "--c": x.color } as CSSProperties} />
+              ))}
+              {y.heard.map((b) => (
+                <span key={`h${b.from}`} className={s.subBlock} data-maybe={b.level === "maybe" ? "" : undefined}
+                  title={`${y.name}, bars ${b.from}–${b.to - 1} (${b.level === "maybe" ? "quiet, " : ""}heard)`}
                   style={{ left: pct(b.from), width: w(b.from, b.to), "--c": x.color } as CSSProperties} />
               ))}
             </div>

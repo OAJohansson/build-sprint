@@ -181,3 +181,21 @@
 .chord[data-unheard] { color: #6f665b; opacity: 1; }
 .back { display: inline-flex; align-items: center; min-height: 28px; padding: 0 4px; margin-left: -4px; }
 .heardRow > span { pointer-events: auto; }
+
+/* S2 fix pass: the card grows to the space below (one scroll area), 28 px targets, hover preview (LS2-M1, M2, M4) */
+.card { overflow: hidden; }
+.cardThread { flex: 1 1 auto; min-height: 0; max-height: none; padding-bottom: 12px; mask-image: linear-gradient(#000 calc(100% - 16px), transparent); }
+.card .answer[data-expanded] { max-height: none; overflow: visible; padding-bottom: 0; mask-image: none; }
+.card > :not(.cardThread) { flex: none; }
+.dot2::after { inset: -10px; }
+.askBtn::before, .barTag::after, .makeText::after { content: ""; position: absolute; }
+.askBtn::before { inset: -5px -2px; }
+.barTag, .makeText { position: relative; }
+.barTag::after { inset: -7px -4px; }
+.makeText::after { inset: -8px -4px; }
+.send { width: 28px; height: 28px; right: 5px; bottom: 5px; }
+.peek { position: absolute; bottom: calc(100% - 4px); z-index: 12; max-width: 280px; display: flex; flex-direction: column; gap: 3px; padding: 7px 10px; background: #221d1a; border: 1px solid var(--edge); border-radius: 6px; box-shadow: 0 8px 20px rgba(0,0,0,.45); pointer-events: none !important; font-size: 11.5px; line-height: 1.4; color: var(--ink); }
+.peek span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.peek small { color: var(--muted); font-size: 10.5px; }
+/* LS1-N6: the "not heard yet" hyphen at 4:1 on the lane */
+.chord[data-unheard] { color: #7d7366; }

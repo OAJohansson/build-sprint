@@ -5,6 +5,7 @@
 // Pure: shared by the Lab, the server and the tests.
 import type { PartName } from "@/lib/lab/live";
 import { labParts, labSections, sectionAt } from "@/lib/lab/view";
+import { barActivity } from "@/lib/lab/activity";
 import type { TrackMap } from "@/lib/map/types";
 import { midiName, pitchClass, usesFlats } from "@/lib/synths/theory";
 import type { MentorAnswer } from "./answer";
@@ -35,6 +36,14 @@ export type PartMeasure = {
   patternBars?: number;
 };
 
+/** Per-bar levels of one separated row (dB, null = not heard) from bar `from`, with the row's
+ *  reference level over the whole track (activity.ts referenceDb). */
+export type HeardWindow = { from: number; levels: (number | null)[]; refDb: number | null };
+/** LS2-M3: what the Lab heard of the focus part around the bar (and, for drums, its two bands). */
+export type LabHeard = { part: HeardWindow; kick?: HeardWindow; hats?: HeardWindow };
+/** Bars each side of the asked bar sent with a question. */
+export const HEARD_WINDOW = 16;
+
 /** The `lab` field of a Lab question. `bar` is where the note pins (the card's bar, or the playhead). */
 export type LabAsk = {
   part: PartName;
@@ -45,6 +54,7 @@ export type LabAsk = {
   /** Chord names per 8 bars heard so far ("" no clear chord, null not heard). */
   chords: (string | null)[];
   measure: PartMeasure | null;
+  heard?: LabHeard | null;
 };
 
 /** One exchange, as the map and the Mentor rail show it. */
@@ -90,7 +100,18 @@ export function parseLabAsk(raw: unknown, bars: number): LabAsk | null {
       if (pb !== undefined) measure.patternBars = Math.round(pb);
     }
   }
-  return { part: r.part, hear, bar, playheadBar: playheadBar ?? bar, loop, chords, measure };
+  const win = (v: unknown): HeardWindow | undefined => {
+    const w = (v ?? null) as Record<string, unknown> | null;
+    const from = w ? int(w.from, 1, bars) : null;
+    const lv = w && Array.isArray(w.levels) ? w.levels.slice(0, 2 * HEARD_WINDOW + 1) : null;
+    if (from === null || !lv || !lv.every((x) => x === null || (typeof x === "number" && Number.isFinite(x) && x >= -140 && x <= 20))) return undefined;
+    const ref = num(w!.refDb, -140, 20);
+    return { from, levels: (lv as (number | null)[]).map((x) => (x === null ? null : Math.round(x))), refDb: ref === undefined ? null : Math.round(ref) };
+  };
+  const hr = (r.heard ?? null) as Record<string, unknown> | null;
+  const hw = hr ? win(hr.part) : undefined;
+  const heard: LabHeard | null = hw ? { part: hw, ...(win(hr!.kick) ? { kick: win(hr!.kick) } : {}), ...(win(hr!.hats) ? { hats: win(hr!.hats) } : {}) } : null;
+  return { part: r.part, hear, bar, playheadBar: playheadBar ?? bar, loop, chords, measure, heard };
 }
 
 /** A1, Bb1: spelled for the key (G minor writes flats). */
@@ -100,7 +121,6 @@ export function keyFlats(key: string, scale: string): boolean {
   const pc = pitchClass(key);
   return pc !== null && (scale === "major" || scale === "minor") && usesFlats(pc, scale);
 }
-const hz = (midi: number) => Math.round(440 * Math.pow(2, (midi - 69) / 12));
 /** 16ths as the note value people say: 2 → "1/8", 4 → "1/4", 1 → "1/16". */
 export function noteValue(steps: number): string {
   if (steps <= 0.75) return "1/32";
@@ -111,13 +131,12 @@ export function noteValue(steps: number): string {
   return "a bar or more";
 }
 
-/** The mono facts line under an answer: what was measured, never a judgement ("A1 · 55 Hz · notes ≈ 1/8 · −14 dB"). */
+/** The mono facts line under an answer: what was measured, never a judgement ("A1–C2 · notes ≈ 1/8 · −14 dB"); no hertz (LS2-M5). */
 export function factsLine(m: PartMeasure | null, flats = false): string {
   if (!m) return "";
   const out: string[] = [];
   if (m.lowMidi !== undefined && m.highMidi !== undefined) {
     out.push(m.lowMidi === m.highMidi ? noteName(m.lowMidi, flats) : `${noteName(m.lowMidi, flats)}–${noteName(m.highMidi, flats)}`);
-    out.push(m.lowMidi === m.highMidi ? `${hz(m.lowMidi)} Hz` : `${hz(m.lowMidi)}–${hz(m.highMidi)} Hz`);
   }
   if (m.lengthSteps !== undefined && m.lengthSteps > 0) out.push(`notes ≈ ${noteValue(m.lengthSteps)}`);
   if (m.notesPerBar !== undefined) out.push(`${m.notesPerBar} a bar`);
@@ -159,6 +178,7 @@ export function labContextText(ask: LabAsk, map: TrackMap): string {
     else chordRuns.push({ name, from: x.from, to: x.from + 8 });
   }
   const chordAt = ask.chords[Math.floor((ask.bar - 1) / 8)];
+  const heardHere = ask.heard ? ask.heard.part.levels[ask.bar - ask.heard.part.from] ?? null : null;
   const m = ask.measure;
   const flats = keyFlats(map.key, map.scale);
   const lines = [
@@ -166,7 +186,8 @@ export function labContextText(ask: LabAsk, map: TrackMap): string {
     `[lab] Question pinned at bar ${ask.bar}${sec ? `, in ${sec.label} (bars ${sec.from}–${sec.to - 1})` : ""}. The playhead is at bar ${ask.playheadBar}${head ? ` (${head.label})` : ""}.`,
     `[lab] Focus part (what the question is about unless it names another): ${name}. They are hearing ${hearText(ask.hear)}.`,
     `[lab] Sections: ${sections.map((x) => `${x.label} ${x.from}–${x.to - 1}`).join("; ") || "none"}.`,
-    `[ears] The map's estimate for the ${name.toLowerCase()} (from frequency bands of the full mix, not the separated part): at bar ${ask.bar} ${block ? (block.level === "likely" ? "likely playing" : "maybe playing") : "probably not playing"}; plays ${runs.join(", ") || "nowhere clearly"}.`,
+    ...(ask.heard ? [`[lab] What the Lab heard of the ${name.toLowerCase()} itself (the separated part's level per bar, as played): ${heardText(ask.heard.part, ask.bar)}.${ask.heard.kick && ask.heard.hats ? ` Its low band (kick): ${heardText(ask.heard.kick, ask.bar)}. Its high band (hats): ${heardText(ask.heard.hats, ask.bar)}.` : ""}`] : []),
+    `[ears] The map's estimate for the ${name.toLowerCase()} (from frequency bands of the full mix, not the separated part; ${heardHere !== null ? "bar " + ask.bar + " has been heard, so prefer what the Lab heard" : "use it only where the Lab hasn't heard the part yet"}): at bar ${ask.bar} ${block ? (block.level === "likely" ? "likely playing" : "maybe playing") : "probably not playing"}; plays ${runs.join(", ") || "nowhere clearly"}.`,
     chordRuns.length
       ? `[lab] Chords heard so far (estimated per 8 bars from the separated bass and other parts, triads only): ${chordRuns.map((x) => `bars ${x.from}–${Math.min(x.to, map.bars + 1) - 1} ${x.name}`).join("; ")}.${chordAt !== undefined && chordAt !== null ? ` At bar ${ask.bar}: ${chordAt || "no clear chord"}.` : ` Bar ${ask.bar} not heard yet.`}`
       : `[lab] No chords heard yet.`,
@@ -181,6 +202,20 @@ export function labContextText(ask: LabAsk, map: TrackMap): string {
       : `[lab] No loop is held, so there are no measurements of the ${name.toLowerCase()} itself, only the map's estimates.`,
   ];
   return lines.join("\n");
+}
+
+/** "at bar 20 playing; bars 4–19 playing, 20–23 quiet, 24–36 not heard yet". */
+export function heardText(w: HeardWindow, bar: number): string {
+  const act = barActivity(w.levels, w.refDb);
+  const word = (a: 0 | 1 | 2 | null) => (a === null ? "not heard yet" : a === 2 ? "playing" : a === 1 ? "playing softly" : "quiet");
+  const here = act[bar - w.from];
+  const out: { w: string; from: number; to: number }[] = [];
+  act.forEach((a, i) => {
+    const last = out.at(-1), b = w.from + i, t = word(a);
+    if (last && last.w === t) last.to = b;
+    else out.push({ w: t, from: b, to: b });
+  });
+  return `at bar ${bar} ${here === undefined ? "not heard yet" : word(here)}; ${out.map((x) => `${x.from === x.to ? `bar ${x.from}` : `bars ${x.from}–${x.to}`} ${x.w}`).join(", ")}`;
 }
 
 /** Pairs the stored thread back into notes: a question, then its answer (the answer row carries the bar and part). */

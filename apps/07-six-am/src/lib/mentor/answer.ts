@@ -230,6 +230,7 @@ export function linkKind(u: string, said: LinkKind): LinkKind {
     return said;
   }
 }
+const INTERVAL_JARGON = /\b(?:minor|major|perfect|diminished|augmented) (?:second|third|fourth|fifth|sixth|seventh)s?\b(?!\s*\()/i;
 /** N5: Studio start talks about keys in plain words. */
 const KEY_JARGON = /semitone|key wheel|camelot|\b(?:1[0-2]|[1-9])[AB]\b/;
 /** At most this many sentences per answer (F8): 2–4 everywhere but teach. */
@@ -280,6 +281,10 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
     if (job === "lab" && HEARD_CLAIM.test(text)) {
       return { ok: false, problem: `sentences[${i}] claims to hear the audio ("${text.match(HEARD_CLAIM)?.[0]}"): you get numbers only. Say what the measurements or the map show instead ("the loop measures…", "the map estimates…").` };
     }
+    // LS2-M5: plain words for a beginner: an interval name only with a short explanation in brackets.
+    if (job === "lab" && INTERVAL_JARGON.test(text)) {
+      return { ok: false, problem: `sentences[${i}] uses theory jargon ("${text.match(INTERVAL_JARGON)?.[0]}"): say it in plain words ("three notes up"), or explain it in brackets right after.` };
+    }
     if (job === "studio_start" && KEY_JARGON.test(text)) {
       return { ok: false, problem: `sentences[${i}] uses key jargon ("${text.match(KEY_JARGON)?.[0]}"): say it in plain words ("the bass and chords would clash, drums still fit").` };
     }
@@ -293,7 +298,7 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
   const answer: MentorAnswer = { sentences, tellMore: r.tellMore === true };
   // B6: a question about tone gets one plain line that you can't hear it (and what you can measure).
   if (job === "lab" && needs.labQuestion && TONE_QUESTION.test(needs.labQuestion) && !sentences.some((x) => CANT_HEAR.test(x.text))) {
-    return { ok: false, problem: `The question is about tone or sound ("${needs.labQuestion.match(TONE_QUESTION)?.[0]}"), which you can't hear: say so plainly in one sentence ("I can't hear tone; I only get pitch, timing and loudness"), then answer from what the numbers do show.` };
+    return { ok: false, problem: `The question is about tone or sound ("${needs.labQuestion.match(TONE_QUESTION)?.[0]}"), which you can't hear: say so in one sentence: "I can't hear the sound itself; I read measurements: pitch, timing and loudness.", then answer from what the numbers do show.` };
   }
   // Studio start: the key fit comes from code; claiming bass and chords fit over a clash is rejected.
   if (job === "studio_start" && needs.keyRelations && Array.isArray(r.trackIds)) {

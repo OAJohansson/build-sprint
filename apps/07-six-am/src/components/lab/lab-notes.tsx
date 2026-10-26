@@ -16,7 +16,9 @@ const CARD_W = 420;
 /** "Make a bass like this →", "Make drums like this →". */
 const MAKE_WHAT: Record<string, string> = { bass: "a bass", drums: "drums", other: "a sound", vocals: "vocals" };
 /** Below the lane needs about this much height under it; otherwise the card goes beside the dot. */
-const ROOM_BELOW = 290;
+const ROOM_BELOW = 220;
+/** Space kept under the card at the bottom of the Lab. */
+const FOOT = 12;
 
 type Props = {
   bars: number;
@@ -41,7 +43,8 @@ type Props = {
 
 export function LabNotes(p: Props) {
   const box = useRef<HTMLDivElement>(null);
-  const [geo, setGeo] = useState({ w: 1240, below: true });
+  const [geo, setGeo] = useState({ w: 1240, below: true, maxH: 400 });
+  const [peek, setPeek] = useState<number | null>(null);
   const { bars, playheadBar } = p;
   useLayoutEffect(() => {
     const el = box.current;
@@ -49,8 +52,10 @@ export function LabNotes(p: Props) {
     const measure = () => {
       const r = el.getBoundingClientRect();
       const root = el.closest("[data-lab-root]")?.getBoundingClientRect();
-      const room = (root ? root.bottom : window.innerHeight) - r.bottom;
-      setGeo({ w: r.width || 1240, below: !p.lastLane && room >= ROOM_BELOW });
+      const bottom = root ? root.bottom : window.innerHeight;
+      const below = !p.lastLane && bottom - r.bottom >= ROOM_BELOW;
+      // LS2-M1: the card may use the height down to the bottom of the Lab.
+      setGeo({ w: r.width || 1240, below, maxH: Math.max(160, Math.round(below ? bottom - r.bottom - 10 - FOOT : bottom - r.top - 5 - FOOT)) });
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -92,7 +97,7 @@ export function LabNotes(p: Props) {
   let cardStyle: CSSProperties | undefined;
   if (anchor !== null) {
     const left = cardLeft(px(anchor), px(side.anchor === anchor ? side.head : playheadBar), geo.w, CARD_W, !geo.below);
-    cardStyle = { left, top: geo.below ? "calc(100% + 10px)" : 5 };
+    cardStyle = { left, top: geo.below ? "calc(100% + 10px)" : 5, maxHeight: geo.maxH };
   }
   const name = p.partName.toLowerCase();
   return (
@@ -100,10 +105,22 @@ export function LabNotes(p: Props) {
       {groups.map((g) => (
         <button key={g.bar} className={s.dot2} data-open={open === g ? "" : undefined} data-many={g.notes.length > 1 ? "" : undefined}
           style={{ left: pct(g.bar) }}
-          onClick={() => { p.setAsking(null); p.setOpenBar(open === g ? null : g.bar); }}
-          title={g.notes.map((x) => x.q).join("\n")}
+          onClick={() => { setPeek(null); p.setAsking(null); p.setOpenBar(open === g ? null : g.bar); }}
+          onMouseEnter={() => setPeek(g.bar)} onMouseLeave={() => setPeek(null)} onFocus={() => setPeek(g.bar)} onBlur={() => setPeek(null)}
           aria-label={g.notes.length === 1 ? `Question at bar ${g.bar}: ${g.notes[0].q}` : `${g.notes.length} questions near bar ${g.bar}`} aria-expanded={open === g} />
       ))}
+      {/* LS2-M4: hovering (or focusing) a dot shows its questions. */}
+      {(() => {
+        const g = peek === null ? null : groups.find((x) => x.bar === peek);
+        if (!g || g === open) return null;
+        const x = px(g.bar), left = Math.max(0, Math.min(geo.w - 280, x - 20));
+        return (
+          <div className={s.peek} style={{ left }} aria-hidden>
+            {g.notes.slice(0, 3).map((n) => <span key={n.id}>{n.q}</span>)}
+            {g.notes.length > 3 && <small>+{g.notes.length - 3} more</small>}
+          </div>
+        );
+      })()}
       {anchor === null && (
         <button className={s.askBtn} aria-expanded={false}
           style={{ left: askLeft ? "calc(var(--ph, 0%) - 8px)" : "calc(var(--ph, 0%) + 8px)", transform: askLeft ? "translateX(-100%)" : undefined }}
@@ -122,7 +139,7 @@ export function LabNotes(p: Props) {
             {open && p.asking === null ? (
               <>
                 <div className={s.cardThread} ref={thread}>
-                  {open.notes.map((x) => <Turn key={x.id} x={x} lines={3} onSeek={p.onSeek} onRetry={() => p.onRetry(x.id)} />)}
+                  {open.notes.map((x) => <Turn key={x.id} x={x} lines={12} onSeek={p.onSeek} onRetry={() => p.onRetry(x.id)} />)}
                 </div>
                 <Composer placeholder={`Reply about bar ${open.bar}…`} onAsk={(q) => p.onAsk(q, open.bar)} disabled={p.busy} />
                 {p.note && <p className={s.facts}>{p.note}</p>}

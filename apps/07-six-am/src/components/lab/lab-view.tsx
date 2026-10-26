@@ -16,7 +16,8 @@ import { LabTransport, type TransportState } from "@/lib/lab/transport";
 import { clockMs, labParts, labSections, sectionAt, type LabSection } from "@/lib/lab/view";
 import type { TrackMap } from "@/lib/map/types";
 import { ApiError, mentorApi, money } from "@/lib/mentor/client";
-import { knowsLine, PART_LABEL, type LabAsk } from "@/lib/mentor/lab";
+import { HEARD_WINDOW, knowsLine, PART_LABEL, type LabAsk } from "@/lib/mentor/lab";
+import { HATS_ROW, KICK_ROW, referenceDb } from "@/lib/lab/activity";
 import { measurePart } from "@/lib/lab/measure";
 import { HearChip, Lanes, heardParts, type Hear } from "./lanes";
 import { LabNotes, type LabTurn } from "./lab-notes";
@@ -167,8 +168,15 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     const loopB = l ? { from: Math.round(msToBar(l.startMs, bpm, origin)), to: Math.round(msToBar(l.endMs, bpm, origin)) } : null;
     const held = loopB && t ? t.loopPart(PART_NAMES.indexOf(focus)) : null;
     const measure = held && loopB ? measurePart(focus, held, loopB, bpm, map.key || analysis?.key || "", map.scale || analysis?.scale || "") : null;
-    return { part: focus, hear, bar, playheadBar: pos.bar, loop: loopB, chords, measure };
-  }, [focus, hear, pos.bar, chords, bpm, origin, map.key, map.scale, analysis]);
+    // LS2-M3: what the Lab heard of the focus part around the bar (levels only), drums with its bands.
+    const rows = t?.levels() ?? null;
+    const from = Math.max(1, bar - HEARD_WINDOW), to = Math.min(bars, bar + HEARD_WINDOW);
+    const win = (row: (number | null)[] | undefined) => row && row.some((v) => v !== null) ? { from, levels: row.slice(from - 1, to), refDb: referenceDb(row) } : undefined;
+    const part = win(rows?.[PART_NAMES.indexOf(focus)]);
+    const kick = focus === "drums" ? win(rows?.[KICK_ROW]) : undefined, hats = focus === "drums" ? win(rows?.[HATS_ROW]) : undefined;
+    const heard = part ? { part, ...(kick && hats ? { kick, hats } : {}) } : null;
+    return { part: focus, hear, bar, playheadBar: pos.bar, loop: loopB, chords, measure, heard };
+  }, [focus, hear, pos.bar, chords, bpm, origin, bars, map.key, map.scale, analysis]);
 
   const send = useCallback(async (id: string, q: string, bar: number, lab: LabAsk) => {
     try {

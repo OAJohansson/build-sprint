@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { TrackMap } from "@/lib/map/types";
 import { checkAnswer } from "./answer";
-import { cardLeft, factsLine, keyFlats, groupNotes, knowsLine, labContextText, labThread, notesFromThread, parseLabAsk, type LabAsk } from "./lab";
+import { cardLeft, factsLine, heardText, keyFlats, groupNotes, knowsLine, labContextText, labThread, notesFromThread, parseLabAsk, type LabAsk } from "./lab";
 import { buildRequest, SYSTEM_PROMPT } from "./prompt";
 
 // The Mentor in the Lab (S2, B6): what the Lab sends, how it reads in the prompt, what comes back
@@ -60,10 +60,10 @@ describe("Lab question context", () => {
     expect(t).toMatch(/hearing everything/);
   });
   it("facts line and the 'knows' line", () => {
-    expect(factsLine(ask.measure)).toBe("A1–C2 · 55–65 Hz · notes ≈ 1/8 · 4 a bar · −14 dB");
+    expect(factsLine(ask.measure)).toBe("A1–C2 · notes ≈ 1/8 · 4 a bar · −14 dB");
     expect(factsLine({ from: 1, to: 9, levelDb: -20 })).toBe("−20 dB");
     // G minor writes flats: A#1 is Bb1.
-    expect(factsLine({ from: 41, to: 49, levelDb: -16, lowMidi: 26, highMidi: 34, notesPerBar: 4.5, lengthSteps: 0.9 }, keyFlats("G", "minor"))).toBe("D1–Bb1 · 37–58 Hz · notes ≈ 1/16 · 4.5 a bar · −16 dB");
+    expect(factsLine({ from: 41, to: 49, levelDb: -16, lowMidi: 26, highMidi: 34, notesPerBar: 4.5, lengthSteps: 0.9 }, keyFlats("G", "minor"))).toBe("D1–Bb1 · notes ≈ 1/16 · 4.5 a bar · −16 dB");
     expect(factsLine(null)).toBe("");
     expect(knowsLine("bass", ask.hear, "Drop 1", 97)).toBe("The Mentor knows: Bass alone, Drop 1, bar 97; pitch, timing and loudness. Not tone.");
     expect(knowsLine("bass", { kind: "all" }, null, 3)).toBe("The Mentor knows: Bass, bar 3; pitch, timing and loudness. Not tone.");
@@ -76,6 +76,23 @@ describe("Lab question context", () => {
     expect(r.messages.map((m) => m.role)).toEqual(["user", "assistant", "user"]);
     expect(all).not.toMatch(/No track is selected/);
     expect(SYSTEM_PROMPT).toMatch(/The Lab \(job "lab"\)[\s\S]*can't hear the part, its tone/);
+  });
+});
+
+describe("what the Lab heard (LS2-M3)", () => {
+  const heard = { part: { from: 12, levels: [-60, -22, -20, -21, null, null], refDb: -20 } };
+  it("parses the heard window and says it before the map's estimate, preferring it for a heard bar", () => {
+    const p = parseLabAsk({ ...ask, bar: 14, heard: { ...heard, kick: { from: 12, levels: ["x"] } } }, BARS)!;
+    expect(p.heard).toEqual(heard);
+    const t = labContextText(p, map);
+    expect(t).toMatch(/What the Lab heard of the bass itself[^\n]*at bar 14 playing; bar 12 quiet, bars 13–15 playing, bars 16–17 not heard yet/);
+    expect(t).toMatch(/bar 14 has been heard, so prefer what the Lab heard/);
+    expect(t.indexOf("What the Lab heard")).toBeLessThan(t.indexOf("The map's estimate"));
+  });
+  it("a bar not heard yet says so and keeps the estimate", () => {
+    expect(heardText(heard.part, 17)).toMatch(/^at bar 17 not heard yet/);
+    const t = labContextText({ ...ask, bar: 30, heard }, map);
+    expect(t).toMatch(/use it only where the Lab hasn't heard the part yet/);
   });
 });
 
@@ -126,8 +143,12 @@ describe("Lab answers never claim to hear (B6)", () => {
   it("a question about tone must get 'I can't hear that' said", () => {
     const needs = { labQuestion: "Why is this bass so rubbery?" };
     expect(checkAnswer("lab", answer("Short A1 notes with gaps between the kicks."), needs).ok).toBe(false);
-    expect(checkAnswer("lab", answer("I can't hear tone; I only get pitch, timing and loudness.", "The notes are short A1s between the kicks."), needs).ok).toBe(true);
+    expect(checkAnswer("lab", answer("I can't hear the sound itself; I read measurements: pitch, timing and loudness.", "The notes are short A1s between the kicks."), needs).ok).toBe(true);
     expect(checkAnswer("lab", answer("Short A1 notes between the kicks."), { labQuestion: "What notes does it play?" }).ok).toBe(true);
+  });
+  it("plain words: an interval name only with a short explanation (LS2-M5)", () => {
+    expect(checkAnswer("lab", answer("It jumps up a minor third on the last note.")).ok).toBe(false);
+    expect(checkAnswer("lab", answer("It jumps up a minor third (three notes up) on the last note.")).ok).toBe(true);
   });
   it("keeps to 3 sentences and no hertz", () => {
     expect(checkAnswer("lab", answer("a.", "b.", "c.", "d.")).ok).toBe(false);

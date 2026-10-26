@@ -12,7 +12,7 @@ describe("bar levels from the separated parts", () => {
     const L = new BarLevels(4, 120, 0.5);
     // 3 s of audio from track 0.5 s (bar 1 start): bar 1 whole, bar 2 half.
     L.add(region(300, [0.1, 0, 1, 0.01]), 0, 300, 0.5, RATE, 1);
-    expect(L.levels.map((p) => p[0])).toEqual([-20, -120, 0, -40]);
+    expect(L.levels.slice(0, 4).map((p) => p[0])).toEqual([-20, -120, 0, -40]);
     expect(L.levels[0][1]).toBe(-20);
     expect(L.levels[0][2]).toBeNull();
   });
@@ -25,6 +25,18 @@ describe("bar levels from the separated parts", () => {
     // Before the first downbeat: nothing.
     const M = new BarLevels(2, 120, 2);
     expect(M.add(region(100, [1, 1, 1, 1]), 0, 100, 0, RATE, 1)).toEqual([]);
+  });
+  it("splits the drums into a low band (kick) and a high band (hats), LS1-N7", () => {
+    const rate = 44100, n = rate * 2;
+    const low = Float32Array.from({ length: n }, (_, i) => 0.5 * Math.sin((2 * Math.PI * 50 * i) / rate));
+    const high = Float32Array.from({ length: n }, (_, i) => 0.5 * Math.sin((2 * Math.PI * 12000 * i) / rate));
+    const z = new Float32Array(n);
+    const K = new BarLevels(1, 120, 0);
+    K.add([low, low, z, z, z, z, z, z], 0, n, 0, rate, 1);
+    const H = new BarLevels(1, 120, 0);
+    H.add([high, high, z, z, z, z, z, z], 0, n, 0, rate, 1);
+    expect(K.levels[4][0]! - K.levels[5][0]!).toBeGreaterThan(20);
+    expect(H.levels[5][0]! - H.levels[4][0]!).toBeGreaterThan(20);
   });
   it("keeps levels saved on the map until a bar is heard again", () => {
     const L = new BarLevels(2, 120, 0, [[-10, null], [null, null], [null, null], [null, null]]);
@@ -49,6 +61,7 @@ describe("lane clips", () => {
     expect(parseLevels([[1.4, null], [null, null], [null, null], [null, -200]], 2)).toBeNull();
     expect(parseLevels([[1.4, null], [null, null], [null, null], [null, -20]], 2)).toEqual([[1, null], [null, null], [null, null], [null, -20]]);
     expect(parseLevels([[1]], 1)).toBeNull();
+    expect(parseLevels([[1], [1], [1], [1], [1], [null]], 1)).toEqual([[1], [1], [1], [1], [1], [null]]);
   });
 });
 

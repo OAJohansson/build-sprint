@@ -111,7 +111,7 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| S3-N1 | minor | Saved sounds look dead until the loop is read (37 s), nothing says why | small fix |
-| S3-N2 | minor | Mine's 4-bar pattern repeats over the 16-bar loop, so it may play where the original bass is silent | small fix |
-| S3-N4 | polish | "Make a bass instead" and sound names 15–16 px tall | small fix |
+| S3-N1 | minor | Saved sounds look dead until the loop is read (37 s), nothing says why | fixed (T103); S3-N2 shown by unit test, re-check on a loop with a gap |
+| S3-N2 | minor | Mine's 4-bar pattern repeats over the 16-bar loop, so it may play where the original bass is silent | fixed (T103); S3-N2 shown by unit test, re-check on a loop with a gap |
+| S3-N4 | polish | "Make a bass instead" and sound names 15–16 px tall | fixed (T103); S3-N2 shown by unit test, re-check on a loop with a gap |
 | S3-N3 | polish | A garbled test name in the sandbox library | sandbox data, no fix |

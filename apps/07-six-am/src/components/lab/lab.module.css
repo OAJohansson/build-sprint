@@ -278,3 +278,9 @@
 .lsNote { position: absolute; height: 4px; margin-top: -2px; border-radius: 1px; min-width: 2px; }
 .makeQuiet .makeText { margin-left: 8px; }
 .presetRow .presetName { flex: none; white-space: nowrap; }
+/* S3-N4: 28 px hit areas on the sound names and "Make a bass instead" */
+.soundLink, .makeQuiet .makeText { position: relative; display: inline-flex; align-items: center; min-height: 28px; vertical-align: middle; }
+.soundLink::after, .makeQuiet .makeText::after { content: ""; position: absolute; inset: 0 -3px; }
+.yours { overflow: visible; line-height: 28px; }
+.yours { display: flex; align-items: center; gap: 0; min-width: 0; }
+.yours > span { white-space: nowrap; }

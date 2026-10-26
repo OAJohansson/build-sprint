@@ -19,6 +19,7 @@ import type { PartReading } from "@/lib/make/from-part";
 import type { MakeNote } from "@/lib/make/render";
 import { gainToLevel } from "@/lib/make/level";
 import { notesForLoop } from "@/lib/make/pattern";
+import { gateNotes } from "@/lib/make/gate";
 import { MakeClient } from "@/lib/make/make-client";
 import { saveAction, soundId, suggestName, suggestTags, type LibrarySound } from "@/lib/make/library";
 import { MACRO_IDS, MACRO_SPECS, MAKE_PRESETS, MAKE_PRESET_IDS, macroWord, type MacroId, type Macros, type MakePresetId } from "@/lib/make/presets";
@@ -28,7 +29,7 @@ import type { Scale } from "@/lib/synths/theory";
 import { Composer, Turn, type ThreadTurn } from "./mentor-thread";
 import s from "./lab.module.css";
 
-type Reading = { loopKey: string; r: PartReading; levelDb: number; samples: number; rate: number };
+type Reading = { loopKey: string; r: PartReading; levelDb: number; active: boolean[]; samples: number; rate: number };
 type ReadState = "idle" | "reading" | "ready" | "nonotes" | "error";
 /** A loop Stable Audio made from the owner's words (L157), playing as Mine instead of the synth. */
 type WordsLoop = { text: string };
@@ -118,7 +119,7 @@ export function useMake(o: MakeOpts) {
     cl().read({ left, right, rate, bpm: o.bpm, key: o.keyName, scale }).then((res) => {
       console.info(`[make] read in ${res.ms} ms: ${res.reading ? `${res.reading.pattern.bars}-bar pattern, ${res.reading.pattern.notes.length} notes, confidence ${res.reading.pattern.confidence}, offset ${res.reading.pattern.offsetMs} ms` : "no notes"}`);
       if (!res.reading) { setRead({ loopKey, state: "nonotes" }); return; }
-      const r: Reading = { loopKey, r: res.reading, levelDb: res.levelDb, samples, rate };
+      const r: Reading = { loopKey, r: res.reading, levelDb: res.levelDb, active: res.active, samples, rate };
       setReading(r);
       setRead({ loopKey, state: "ready" });
       void suggest(r, presetRef.current);
@@ -137,7 +138,7 @@ export function useMake(o: MakeOpts) {
     if (key === mineKey) return;
     const t = setTimeout(() => {
       const t0 = performance.now();
-      cl().render({ reading: reading.r, preset, macros, bpm: o.bpm, rate: reading.rate, levelDb: reading.levelDb, samples: reading.samples }).then(({ res, stale }) => {
+      cl().render({ reading: reading.r, active: reading.active, preset, macros, bpm: o.bpm, rate: reading.rate, levelDb: reading.levelDb, samples: reading.samples }).then(({ res, stale }) => {
         if (stale || loopKeyOf(tr.current?.state.loop ?? null) !== reading.loopKey) return;
         renderMs.current = Math.round(performance.now() - t0);
         tr.current?.setMine(res);
@@ -234,7 +235,8 @@ export function useMake(o: MakeOpts) {
   };
   const saved = { state: saveState.state, text: saveState.text, savedAs, action: action.kind };
   // The loop's notes as read, repeated over the loop (S3-5): drawn in the strip's bass row.
-  const loopNotes = useMemo(() => (reading ? notesForLoop(reading.r.pattern, reading.r.loopSteps).map((n, i, all) => ({ ...n, dur: Math.min(n.dur, reading.r.pattern.notes.find((x) => x.step === n.step % (reading.r.pattern.bars * 16))?.dur ?? n.dur, (all[i + 1]?.step ?? reading.r.loopSteps) - n.step) })) : null), [reading]);
+  // …only in the bars the original plays in, as Mine plays them (S3-N2).
+  const loopNotes = useMemo(() => (reading ? gateNotes(notesForLoop(reading.r.pattern, reading.r.loopSteps).map((n, i, all) => ({ ...n, dur: Math.min(n.dur, reading.r.pattern.notes.find((x) => x.step === n.step % (reading.r.pattern.bars * 16))?.dur ?? n.dur, (all[i + 1]?.step ?? reading.r.loopSteps) - n.step) })), reading.active) : null), [reading]);
 
   return {
     isBass, preset, setPreset, macros, setMacro, ticks, ab, setAb, reading, readState, readError, suggesting,
@@ -246,7 +248,7 @@ export function useMake(o: MakeOpts) {
     name: nameField, setName, tags, save, saved,
     /** What the Lab Mentor gets with a question asked in Make. */
     labMake: (isBass && !words ? { preset, macros, ticks } : null) as LabMake | null,
-    debug: () => ({ preset, macros, ticks, ab, readState, mineKey, renderMs: renderMs.current, sounds: sounds.map((x) => x.name), words: words?.text ?? null, pattern: reading?.r.pattern ?? null, levelDb: reading?.levelDb ?? null, features: reading?.r.features ?? null, saved }),
+    debug: () => ({ preset, macros, ticks, ab, readState, mineKey, renderMs: renderMs.current, active: reading?.active ?? null, sounds: sounds.map((x) => x.name), words: words?.text ?? null, pattern: reading?.r.pattern ?? null, levelDb: reading?.levelDb ?? null, features: reading?.r.features ?? null, saved }),
   };
 }
 export type MakeModel = ReturnType<typeof useMake>;
@@ -368,7 +370,7 @@ function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
         {m.sounds.length > 0 && (
           <p className={s.yours}>Your sounds from this track:{" "}
             {m.sounds.slice(0, 4).map((x, i) => (
-              <span key={x.id}>{i > 0 && " · "}<button className={s.soundLink} onClick={() => m.loadSound(x)} disabled={m.readState !== "ready"} title={`${MAKE_PRESETS[x.preset].name}: load its preset, knobs and name`}>{x.name}</button></span>
+              <span key={x.id}>{i > 0 && " · "}<button className={s.soundLink} onClick={() => m.loadSound(x)} title={`${MAKE_PRESETS[x.preset].name}: load its preset, knobs and name`}>{x.name}</button></span>
             ))}
             {m.sounds.length > 4 && ` +${m.sounds.length - 4}`}
           </p>

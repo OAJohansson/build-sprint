@@ -707,3 +707,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **S5 started:** a quick Studio lane-model design pass (L193) runs while the Make/Save re-check runs.
 - **S3+S4 re-check: jobs 4 / 4 (pass).** All fixes hold; Suggest 0.45 s round trip. Small fixes sent (saved sounds clickable before the loop is read, Mine silent where the original bass is, 28 px targets).
 - **S5 design:** 3 directions (Fold, Inspect, Shelf); PM picked Fold from the pack (L194, T102). Skills run on Fold. Critic next.
+- **S5 canvas sign-off (L195):** the Studio lanes design goes on the owner's canvas after the critic round; UI build waits for approval; lane-model engine and data work go ahead.

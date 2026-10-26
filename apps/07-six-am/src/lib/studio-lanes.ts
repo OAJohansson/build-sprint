@@ -3,10 +3,12 @@
 // reorder within a family, mix), the solo/mute rules and the migration from the 4 fixed lanes
 // every track saved before S5 has (Drums, Bass, Chords, Top / FX). studio-lanes.test.ts.
 //
-// How it sits beside today's 4-lane Studio: a region keeps its `track` (0–3, the old lane), which
-// every lane maps back to through its family (`legacyTrack`), so the old view keeps working; the
-// new optional `region.lane` and `doc.lanes` say which of the new lanes it is on.
-import type { Doc, Region } from "./timeline";
+// How it sits beside the old 4-lane Studio: a region keeps its `track` (0–3, its loop's old lane),
+// so a build from before S5 still opens the track; the optional `region.lane` and `doc.lanes` say
+// which lane it is on. A region without a lane (every pre-S5 track) is on the first lane of its
+// old track's family (`legacyTrack`).
+import type { Doc, Kind, Region } from "./timeline";
+import type { Sound } from "./synths/loop";
 
 export type FamilyId = "drums" | "bass" | "harmony" | "melody" | "vocals" | "fx" | "texture";
 export type LaneType = "kick" | "clap" | "hats" | "perc" | "bass" | "chords" | "pads" | "lead" | "vocals" | "fx" | "texture";
@@ -98,6 +100,53 @@ export function legacyMix(lanes: Lane[]): { muted: boolean[]; soloed: boolean[] 
   const muted = [0, 1, 2, 3].map((t) => { const ls = lanes.filter((l) => legacyTrack(l.type) === t); return ls.length > 0 && ls.every((l) => l.muted); });
   const soloed = [0, 1, 2, 3].map((t) => lanes.some((l) => legacyTrack(l.type) === t && l.soloed));
   return { muted, soloed };
+}
+
+/**
+ * A doc with these lanes: every region gets its lane id, and `muted`/`soloed` follow the lanes
+ * (legacyMix), so a build from before S5 opening it hears roughly the same. `soloed` is left out
+ * when nothing is soloed, as before.
+ */
+export function withLanes(d: Doc, lanes: Lane[]): Doc {
+  const regions = d.regions.map((r) => (r.lane && lanes.some((l) => l.id === r.lane) ? r : { ...r, lane: laneOfRegion(r, lanes)?.id }));
+  const { muted, soloed } = legacyMix(lanes);
+  const { soloed: _old, ...rest } = d;
+  void _old;
+  return { ...rest, lanes, regions: regions.filter((r) => r.lane), muted, ...(soloed.some(Boolean) ? { soloed } : {}) };
+}
+
+// ── What goes on which lane ─────────────────────────────────────────────────────────────────────
+
+const KIND_TYPE: Record<Kind, LaneType> = {
+  kick: "kick", hats: "hats", ride: "hats", clap: "clap", broken: "perc", perc: "perc", shaker: "perc",
+  sub: "bass", acid: "bass", pump: "bass", stab: "chords", pad: "pads", arp: "lead", chop: "vocals", riser: "fx", fall: "fx",
+};
+// Loops whose kind says less than their name: a snare fill is a snare, a siren an effect, crackle a texture.
+const LOOP_TYPE: Record<string, LaneType> = { "snare-fill": "clap", siren: "fx", "vinyl-crackle": "texture", "crash-swell": "fx" };
+
+/** The lane type a crate loop belongs on (its crate tab's family, its drop target). */
+export const crateLaneType = (l: { id: string; kind: Kind }): LaneType => LOOP_TYPE[l.id] ?? KIND_TYPE[l.kind];
+
+/** The lane type a track sound belongs on: kits on Kick, synths on Bass / Chords / Pads, AI loops
+ *  on Bass, library sounds on their own type. */
+export function soundLaneType(x: Sound): LaneType {
+  if (x.source === "lib") return x.type;
+  if (x.source === "kit") return "kick";
+  if (x.source === "ai") return "bass";
+  return x.lane === 1 ? "bass" : x.preset === "pad" ? "pads" : "chords";
+}
+
+const LEGACY_IDS = LEGACY_LANES.map((l) => l.id);
+
+/**
+ * Whether a lane takes an item (a crate loop, a track sound or a library sound) of `type` whose old
+ * lane is `track`: any lane of the same family, and an old track's own 4 lanes also take what they
+ * always took ("Top / FX" keeps taking shakers and congas).
+ */
+export function accepts(lane: Lane, item: { type: LaneType; track: number }): boolean {
+  if (laneType(lane.type).family === laneType(item.type).family) return true;
+  const i = LEGACY_IDS.indexOf(lane.id);
+  return i >= 0 && i === item.track && LEGACY_LANES[i].type === lane.type;
 }
 
 // ── Edit rules ────────────────────────────────────────────────────────────────────────────────────

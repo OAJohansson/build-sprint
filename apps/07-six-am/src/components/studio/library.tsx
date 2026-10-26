@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { ago } from "@/lib/ago";
 import type { TrackSummary } from "@/lib/tracks";
-import { cx } from "./timeline";
+import { cx } from "./lanes";
 import s from "./studio.module.css";
 
 export function Library({ tracks, currentId, onOpen, onNew, onDelete, onClose }: {

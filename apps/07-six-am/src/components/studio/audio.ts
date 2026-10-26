@@ -1,9 +1,9 @@
 "use client";
 
-// The sound engine (decision 0019): synthesised instruments, one channel per track, a master
-// filter, and a lookahead scheduler on the audio clock. Every 25 ms it books the notes that fall
-// in the next 120 ms at their exact time ("A Tale of Two Clocks", Chris Wilson), so timing never
-// depends on the screen.
+// The sound engine (decision 0019): synthesised instruments, one channel per lane (S5: LaneMixer,
+// volume, pan, mute, solo), a master filter, and a lookahead scheduler on the audio clock. Every
+// 25 ms it books the notes that fall in the next 120 ms at their exact time ("A Tale of Two
+// Clocks", Chris Wilson), so timing never depends on the screen.
 import * as Tone from "tone";
 import { RECIPES, type Inst, type Note } from "@/lib/recipes";
 import { STEPS, buildIndex, previewHits, stepOfBar, type Hit } from "@/lib/schedule";
@@ -14,10 +14,14 @@ import type { KitId } from "@/lib/synths/kits";
 import type { Sound } from "@/lib/synths/loop";
 import { buildSoundIndex, previewSoundHits, type SoundHit } from "@/lib/synths/schedule";
 import type { Scale } from "@/lib/synths/theory";
-import { passSignature, renderLibPass, type LibLoop } from "@/lib/make/lib-loop";
+import { levelled, passSignature, renderLibPass, type LibLoop } from "@/lib/make/lib-loop";
+import { laneMix, laneOfRegion, lanesOf, type Lane } from "@/lib/studio-lanes";
+import { LaneMixer } from "@/lib/studio-mixer";
 
 const LOOKAHEAD = 0.12, TICK_MS = 25;
-const TRACK_DB = [0, -3, -7, -9]; // drums, bass, chords, top/FX
+// Previews (crate loops, the sound drawer's Listen) play at the old lanes' levels: drums, bass,
+// chords, top/FX. A lane's own level is its type's trim (studio-lanes.ts, the same numbers) + fader.
+const TRACK_DB = [0, -3, -7, -9];
 
 type Play = (note: Note, time: number) => void;
 
@@ -25,7 +29,7 @@ type Play = (note: Note, time: number) => void;
 type Synced = { node: Tone.FeedbackDelay; steps: number };
 
 /** Build every instrument once, each wired into its track's channel. `sps` is the current 16th length. */
-function makeInstruments(channels: Tone.Channel[], sps: () => number): { play: Record<Inst, Play>; synced: Synced[] } {
+function makeInstruments(channels: Tone.InputNode[], sps: () => number): { play: Record<Inst, Play>; synced: Synced[] } {
   const [drums, bass, chords, top] = channels;
   const sec = (steps: number) => steps * sps();
 
@@ -159,19 +163,29 @@ function makeInstruments(channels: Tone.Channel[], sps: () => number): { play: R
   return { play, synced: [{ node: echo, steps: 3 }, { node: arpDelay, steps: 2 }] };
 }
 
+/** Crate instruments wired to one output (a lane, or the previews' four channels). */
+type InstrumentSet = { play: Record<Inst, Play>; synced: Synced[]; bus?: Tone.Gain };
+
 export class AudioEngine {
   private ready: Promise<void> | null = null;
-  private play!: Record<Inst, Play>;
-  private synced: Synced[] = [];
   /** Seconds per 16th at the project tempo (F10). */
   private sps = secondsPerStep(DEFAULT_BPM);
-  private channels: Tone.Channel[] = [];
   private master!: Tone.Filter;
-  private index = new Map<number, Hit[]>();
+  private mixer: LaneMixer | null = null;
+  /** The previews' channels, at the old lanes' levels and never muted (a muted lane's loop can
+   *  still be auditioned in the crate). */
+  private previewChannels: Tone.Channel[] = [];
+  private previewSet: InstrumentSet | null = null;
+  /** Crate instruments per lane, built the first time a lane holds a crate loop (S5): each lane
+   *  pans and mutes on its own, and two lanes of one kind never share a mono synth. */
+  private laneSets = new Map<string, InstrumentSet>();
   /** The open track's length in 16th steps (64 bars unless a template set its own). */
   private steps = STEPS;
   private regions: Region[] = [];
-  private muted = [false, false, false, false];
+  private lanes: Lane[] = lanesOf({ muted: [false, false, false, false] });
+  private audible = new Set(this.lanes.map((l) => l.id));
+  /** Per lane: crate notes and the track's own sounds by the step they start on. */
+  private laneIndex: { lane: string; crate: Map<number, Hit[]>; sounds: Map<number, SoundHit[]> }[] = [];
   private timer: ReturnType<typeof setInterval> | null = null;
   // The clock: step `nextStep` sounds at audio time `nextTime`.
   private nextStep = 0;
@@ -180,21 +194,21 @@ export class AudioEngine {
   private originTime = 0;
   private playing = false;
   private preview: string | null = null;
-  private filter = 1;
 
-  // The track's own sounds (S3/S4): synth and kit voices per sound, AI loop audio per stored loop.
+  // The track's own sounds (S3/S4): synth and kit voices per sound and lane, AI loop audio per
+  // stored loop, library blocks as rendered passes (S5).
   private sounds: Sound[] = [];
   private key = "A";
   private scale: Scale = "minor";
   private bpm = DEFAULT_BPM;
-  private soundIndex = new Map<number, SoundHit[]>();
-  private voices = new Map<string, { sig: string; voice: SynthVoice | KitVoice }>();
+  /** Voices by `${soundId}@${laneId}` (or `@preview` for the drawer's Listen). */
+  private voices = new Map<string, { soundId: string; sig: string; voice: SynthVoice | KitVoice }>();
   private kits = new Map<KitId, LoadedKit>();
   private aiAudio = new Map<string, Tone.ToneAudioBuffer | "loading" | "failed">();
   private aiPlaying = new Set<Tone.ToneBufferSource>();
   private previewSound: Sound | null = null;
   private code = "";
-  /** Library blocks (S5): one rendered pass per sound, in the track's key at its tempo. */
+  /** Library blocks (S5): one rendered, level-matched pass per sound, in the track's key and tempo. */
   private libPasses = new Map<string, { sig: string; buf: Tone.ToneAudioBuffer }>();
 
   /** Start the audio context; browsers only allow this after a click or key press. */
@@ -202,12 +216,13 @@ export class AudioEngine {
     this.ready ??= (async () => {
       await Tone.start();
       const limiter = new Tone.Limiter(-1).toDestination();
-      this.master = new Tone.Filter({ type: "lowpass", frequency: this.cutoff(), Q: 1 }).connect(limiter);
-      this.channels = TRACK_DB.map((db) => new Tone.Channel({ volume: db }).connect(this.master));
-      this.channels.forEach((c, i) => (c.mute = this.muted[i]));
-      const built = makeInstruments(this.channels, () => this.sps);
-      this.play = built.play;
-      this.synced = built.synced;
+      // The master filter stays fully open (the Filter knob went in S5, L200); kept so the sound is as before.
+      this.master = new Tone.Filter({ type: "lowpass", frequency: 20000, Q: 1 }).connect(limiter);
+      this.mixer = new LaneMixer(this.master);
+      this.mixer.sync(this.lanes);
+      this.previewChannels = TRACK_DB.map((db) => new Tone.Channel({ volume: db }).connect(this.master));
+      this.previewSet = makeInstruments(this.previewChannels, () => this.sps);
+      this.prepare();
     })();
     return this.ready;
   }
@@ -224,24 +239,38 @@ export class AudioEngine {
     }
     this.sps = next;
     this.bpm = clampBpm(bpm);
-    this.synced.forEach((d) => d.node.delayTime.rampTo(d.steps * next, 0.05));
+    for (const set of this.sets()) set.synced.forEach((d) => d.node.delayTime.rampTo(d.steps * next, 0.05));
     this.warmLib();
   }
 
   setRegions(regions: Region[]) {
     this.regions = regions;
-    this.index = buildIndex(regions, RECIPES, this.steps);
-    this.soundIndex = buildSoundIndex(regions, this.sounds, this.key, this.scale, this.steps);
+    this.reindex();
+  }
+
+  /** The track's lanes (S5): their mix is heard at once; blocks follow their lane. */
+  setLanes(lanes: Lane[]) {
+    this.lanes = lanes;
+    const mix = laneMix(lanes);
+    this.audible = new Set(mix.filter((m) => m.audible).map((m) => m.id));
+    this.mixer?.sync(lanes);
+    for (const [id, set] of this.laneSets) {
+      if (lanes.some((l) => l.id === id)) continue;
+      // shortcut: a removed lane's instruments are cut loose (bus disposed) for the GC, not disposed one by one; fine for a few lanes a session.
+      set.bus?.dispose();
+      this.laneSets.delete(id);
+    }
+    this.reindex();
   }
 
   /** The track's own sounds; a changed sound (knobs, pattern) applies from its next note. */
   setSounds(sounds: Sound[]) {
     this.sounds = sounds;
-    for (const x of sounds) this.refreshVoice(x);
     const keep = new Set([...sounds.map((x) => x.id), this.previewSound?.id]);
-    for (const [id, v] of this.voices) if (!keep.has(id)) { v.voice.dispose(); this.voices.delete(id); }
+    for (const [k, v] of this.voices) if (!keep.has(v.soundId)) { v.voice.dispose(); this.voices.delete(k); }
     for (const id of this.libPasses.keys()) if (!keep.has(id)) this.libPasses.delete(id);
-    this.setRegions(this.regions);
+    for (const x of sounds) for (const [k, v] of this.voices) if (v.soundId === x.id) this.refreshVoice(x, k);
+    this.reindex();
     this.warmLib();
   }
 
@@ -249,7 +278,7 @@ export class AudioEngine {
   setKey(key: string, scale: Scale) {
     this.key = key;
     this.scale = scale;
-    this.setRegions(this.regions);
+    this.reindex();
     this.warmLib();
   }
 
@@ -264,17 +293,16 @@ export class AudioEngine {
     } catch { this.aiAudio.set(aiId, "failed"); }
   }
 
-  /** Loop one sound alone (the sound drawer's Listen), or null to stop. */
+  /** Loop one sound alone (the sound drawer's Listen, a library card), or null to stop. */
   async setPreviewSound(sound: Sound | null) {
     const was = this.previewSound;
     this.previewSound = sound;
-    if (was && was.id !== sound?.id && !this.sounds.some((x) => x.id === was.id)) {
-      this.voices.get(was.id)?.voice.dispose();
-      this.voices.delete(was.id);
-    }
+    if (was && was.id !== sound?.id) this.dropVoice(`${was.id}@preview`);
     if (!sound) { if (!this.playing && !this.preview) this.halt(); return; }
     await this.start();
-    this.refreshVoice(sound);
+    if (sound.source === "ai") this.loadAi(sound.aiId);
+    else if (sound.source === "lib") this.libPass(sound);
+    else this.voiceFor(sound, null);
     // An AI loop starts on its first beat, so wait for its audio before the clock starts.
     if (sound.source === "ai") await this.aiLoads.get(sound.aiId);
     if (this.previewSound?.id !== sound.id) return;
@@ -286,17 +314,7 @@ export class AudioEngine {
     const steps = Math.max(16, Math.round(bars) * 16);
     if (steps === this.steps) return;
     this.steps = steps;
-    this.setRegions(this.regions);
-  }
-
-  setMuted(muted: boolean[]) {
-    this.muted = muted;
-    this.channels.forEach((c, i) => (c.mute = muted[i]));
-  }
-
-  setFilter(v: number) {
-    this.filter = v;
-    this.master?.frequency.rampTo(this.cutoff(), 0.05);
+    this.reindex();
   }
 
   async playFrom(bar: number) {
@@ -325,7 +343,54 @@ export class AudioEngine {
     return (((step % this.steps) + this.steps) % this.steps) / 16 + 1;
   }
 
-  private cutoff() { return 120 * Math.pow(20000 / 120, this.filter); }
+  private *sets() {
+    if (this.previewSet) yield this.previewSet;
+    yield* this.laneSets.values();
+  }
+
+  /** Rebuild the per-lane note index, then make sure every lane has what it needs to play. */
+  private reindex() {
+    const byLane = new Map<string, Region[]>();
+    for (const r of this.regions) {
+      const lane = laneOfRegion(r, this.lanes);
+      if (!lane) continue;
+      byLane.set(lane.id, [...(byLane.get(lane.id) ?? []), r]);
+    }
+    this.laneIndex = this.lanes.map((l) => {
+      const rs = byLane.get(l.id) ?? [];
+      return { lane: l.id, crate: buildIndex(rs, RECIPES, this.steps), sounds: buildSoundIndex(rs, this.sounds, this.key, this.scale, this.steps) };
+    });
+    this.prepare();
+  }
+
+  /** Before the music needs them: crate instruments for every lane with a crate loop, voices for
+   *  every sound on its lane, kits and AI audio loading. Nothing until the audio has started. */
+  private prepare() {
+    if (!this.mixer) return;
+    const byId = new Map(this.sounds.map((x) => [x.id, x]));
+    for (const r of this.regions) {
+      const lane = laneOfRegion(r, this.lanes);
+      if (!lane) continue;
+      const x = byId.get(r.loopId);
+      if (!x) { if (RECIPES[r.loopId]) this.laneSet(lane.id); continue; }
+      if (x.source === "ai") this.loadAi(x.aiId);
+      else if (x.source !== "lib") this.voiceFor(x, lane.id);
+    }
+  }
+
+  /** A lane's crate instruments, built on first use into its channel. */
+  private laneSet(laneId: string): InstrumentSet | null {
+    const have = this.laneSets.get(laneId);
+    if (have) return have;
+    const input = this.mixer?.input(laneId);
+    if (!input) return null;
+    const bus = new Tone.Gain(1).connect(input);
+    // All four kinds of crate instrument go to this lane's one bus.
+    const built = makeInstruments([bus, bus, bus, bus], () => this.sps);
+    const set = { ...built, bus };
+    this.laneSets.set(laneId, set);
+    return set;
+  }
 
   private resetClock(step: number) {
     this.halt();
@@ -345,33 +410,52 @@ export class AudioEngine {
     const until = Tone.immediate() + LOOKAHEAD;
     while (this.nextTime < until) {
       const k = this.nextStep, t = this.nextTime;
-      if (this.playing) {
-        for (const hit of this.index.get(k % this.steps) ?? []) {
-          if (!this.muted[hit.track]) this.sound(hit.loopId, hit.note, t);
-        }
-      }
-      if (this.playing) {
-        for (const hit of this.soundIndex.get(k % this.steps) ?? []) {
-          if (!this.muted[hit.track]) this.playSound(hit, t);
-        }
-      }
+      if (this.playing) for (const b of this.booked(k)) b.play(t);
       if (this.preview) {
         const recipe = RECIPES[this.preview], loop = loopById(this.preview);
-        if (recipe && loop) for (const note of previewHits(recipe, loop.bars, k)) this.sound(this.preview, note, t);
+        if (recipe && loop && this.previewSet) for (const note of previewHits(recipe, loop.bars, k)) this.sound(this.previewSet, this.preview, note, t);
       }
       if (this.previewSound) {
-        for (const hit of previewSoundHits(this.previewSound, this.key, this.scale, k)) this.playSound(hit, t);
+        for (const hit of previewSoundHits(this.previewSound, this.key, this.scale, k)) this.playSound(hit, t, null);
       }
       this.nextStep = k + 1;
       this.nextTime = t + this.sps;
     }
   }
 
+  /** What the track books on step k, lane by lane (a silent lane books nothing), each with where it
+   *  goes; tick plays them, and the dev-only schedule dump describes them (S5 before/after check). */
+  private booked(k: number): { play: (t: number) => void; what: unknown[] }[] {
+    const out: { play: (t: number) => void; what: unknown[] }[] = [];
+    const gain = new Map(laneMix(this.lanes).map((m) => [m.id, m.gainDb]));
+    for (const li of this.laneIndex) {
+      if (!this.audible.has(li.lane)) continue;
+      const db = gain.get(li.lane);
+      for (const hit of li.crate.get(k % this.steps) ?? []) {
+        out.push({ play: (t) => { const set = this.laneSet(li.lane); if (set) this.sound(set, hit.loopId, hit.note, t); }, what: [k, hit.loopId, hit.note, db] });
+      }
+      for (const hit of li.sounds.get(k % this.steps) ?? []) {
+        out.push({ play: (t) => this.playSound(hit, t, li.lane), what: [k, hit.soundId, { ...hit, track: undefined, soundId: undefined }, db] });
+      }
+    }
+    return out;
+  }
+
+  /** Dev only: a level meter on the master bus (before the limiter), for before/after level checks. */
+  devMeter() { const m = new Tone.Meter({ smoothing: 0 }); this.master.connect(m); return m; }
+
+  /** Dev only: every note the open track books over its whole length, as plain data. */
+  devSchedule(): unknown[][] {
+    const out: unknown[][] = [];
+    for (let k = 0; k < this.steps; k++) for (const b of this.booked(k)) out.push(b.what);
+    return out;
+  }
+
   /** Play one note. A loop the engine doesn't know, or an instrument that throws, is skipped
    *  (and reported once) so one bad sound can never stop the music. */
   private failed = new Set<string>();
-  private sound(loopId: string, note: Note, t: number) {
-    const play = this.play[RECIPES[loopId]?.inst];
+  private sound(set: InstrumentSet, loopId: string, note: Note, t: number) {
+    const play = set.play[RECIPES[loopId]?.inst];
     try {
       if (!play) throw new Error("no recipe or instrument");
       play(note, t);
@@ -383,23 +467,42 @@ export class AudioEngine {
     }
   }
 
+  /** Where a sound plays: its lane's channel, or (laneId null) the previews' channel of its old lane. */
+  private dest(x: Sound, laneId: string | null): Tone.InputNode | undefined {
+    return laneId ? this.mixer?.input(laneId) : this.previewChannels[x.lane];
+  }
+
+  /** A synth or kit sound's voice on a lane (null = preview), built the first time it's needed. */
+  private voiceFor(x: Sound, laneId: string | null): SynthVoice | KitVoice | undefined {
+    const key = `${x.id}@${laneId ?? "preview"}`;
+    if (!this.voices.has(key)) this.refreshVoice(x, key);
+    return this.voices.get(key)?.voice;
+  }
+
+  private dropVoice(key: string) {
+    this.voices.get(key)?.voice.dispose();
+    this.voices.delete(key);
+  }
+
   /** Build (or re-knob) a sound's voice. Same preset → knobs glide; another preset or kit → a new voice. */
-  private refreshVoice(x: Sound) {
-    if (x.source === "lib") return; // played from a rendered pass (libPass), no voice
-    if (!this.channels.length || x.source === "ai") { if (x.source === "ai") this.loadAi(x.aiId); else if (x.source === "kit") this.loadKitOnce(x.kit); return; }
+  private refreshVoice(x: Sound, key: string) {
+    if (x.source === "lib" || x.source === "ai") return; // played from audio, no voice
+    if (!this.mixer) { if (x.source === "kit") this.loadKitOnce(x.kit); return; }
+    const laneId = key.slice(key.lastIndexOf("@") + 1);
+    const dest = this.dest(x, laneId === "preview" ? null : laneId);
+    if (!dest) return;
     const sig = x.source === "kit" ? `kit:${x.kit}` : `synth:${x.preset}`;
-    const have = this.voices.get(x.id);
+    const have = this.voices.get(key);
     if (have && have.sig === sig) {
       if (x.source === "synth") (have.voice as SynthVoice).setKnobs(x.knobs);
       return;
     }
-    have?.voice.dispose();
-    this.voices.delete(x.id);
+    this.dropVoice(key);
     if (x.source === "synth") {
-      this.voices.set(x.id, { sig, voice: createSynthVoice(x.preset, x.knobs, this.channels[x.lane]) });
+      this.voices.set(key, { soundId: x.id, sig, voice: createSynthVoice(x.preset, x.knobs, dest) });
     } else {
       const kit = this.kits.get(x.kit);
-      if (kit) this.voices.set(x.id, { sig, voice: createKitVoice(kit, this.channels[x.lane]) });
+      if (kit) this.voices.set(key, { soundId: x.id, sig, voice: createKitVoice(kit, dest) });
       else this.loadKitOnce(x.kit);
     }
   }
@@ -410,7 +513,8 @@ export class AudioEngine {
     this.kitLoads.add(id);
     loadKit(id).then((k) => {
       this.kits.set(id, k);
-      for (const x of [...this.sounds, ...(this.previewSound ? [this.previewSound] : [])]) if (x.source === "kit" && x.kit === id) this.refreshVoice(x);
+      this.prepare();
+      if (this.previewSound?.source === "kit" && this.previewSound.kit === id) this.voiceFor(this.previewSound, null);
     }).catch((e) => { this.kitLoads.delete(id); console.error(`[six-am] couldn't load the ${id} kit:`, e); });
   }
 
@@ -431,16 +535,16 @@ export class AudioEngine {
     this.aiPlaying.clear();
   }
 
-  /** A library block's pass in the track's key and tempo, rendered on first use and again when the
-   *  sound, key or tempo changes. */
-  // shortcut: renders on the main thread (cost of a 4-bar Reese pass not measured yet); move to make.worker.ts if tempo drags stutter.
+  /** A library block's pass in the track's key and tempo, level-matched to the crate (LIB_LEVEL_DB),
+   *  rendered on first use and again when the sound, key or tempo changes. */
+  // shortcut: renders on the main thread (23 ms for a 4-bar acid pass, measured S5; again on each tempo or key change); move to make.worker.ts if tempo drags stutter.
   private libPass(x: LibLoop): Tone.ToneAudioBuffer | null {
-    if (!this.channels.length) return null;
+    if (!this.mixer) return null;
     const track = { key: this.key, scale: this.scale, bpm: this.bpm };
     const sig = passSignature(x, track);
     const have = this.libPasses.get(x.id);
     if (have?.sig === sig) return have.buf;
-    const r = renderLibPass(x, track, Tone.getContext().sampleRate);
+    const r = levelled(renderLibPass(x, track, Tone.getContext().sampleRate));
     const buf = Tone.ToneAudioBuffer.fromArray([r.left, r.right]);
     this.libPasses.set(x.id, { sig, buf });
     return buf;
@@ -451,37 +555,37 @@ export class AudioEngine {
     for (const x of this.sounds) if (x.source === "lib") this.libPass(x);
   }
 
-  /** Play one hit of a track sound; like sound(), a failure is reported once and skipped. */
-  private playSound(hit: SoundHit, t: number) {
-    const x = hit.soundId === this.previewSound?.id ? this.previewSound : this.sounds.find((s) => s.id === hit.soundId);
-    if (!x) return;
+  /** Play one hit of a track sound on a lane (null = preview); like sound(), a failure is reported once and skipped. */
+  private playSound(hit: SoundHit, t: number, laneId: string | null) {
+    const x = laneId === null ? this.previewSound : this.sounds.find((s) => s.id === hit.soundId);
+    if (!x || x.id !== hit.soundId) return;
     try {
-      if (hit.kind === "ai" && x.source === "ai") {
-        const buf = this.aiAudio.get(x.aiId);
-        if (!buf) this.loadAi(x.aiId);
-        if (!(buf instanceof Tone.ToneAudioBuffer)) return;
-        // One pass is exactly `bars` bars at the tempo it was made at; another tempo resamples it.
-        // shortcut: playbackRate changes pitch with tempo; time-stretch if tracks move far from the loop's tempo.
-        const src = new Tone.ToneBufferSource({ url: buf, playbackRate: this.bpm / x.bpm }).connect(this.channels[x.lane]);
-        src.onended = () => { this.aiPlaying.delete(src); src.dispose(); };
-        src.start(t, 0, undefined, 0.35); // -9 dB: a full template mix stays under 0 dBFS (X3 F3)
-        src.stop(t + hit.dur * this.sps);
-        this.aiPlaying.add(src);
-        return;
-      }
-      if (hit.kind === "lib" && x.source === "lib") {
-        const buf = this.libPass(x);
+      if ((hit.kind === "ai" && x.source === "ai") || (hit.kind === "lib" && x.source === "lib")) {
+        const dest = this.dest(x, laneId);
+        if (!dest) return;
+        let buf: Tone.ToneAudioBuffer | null;
+        let rate = 1, gain = 1;
+        if (x.source === "ai") {
+          const a = this.aiAudio.get(x.aiId);
+          if (!a) this.loadAi(x.aiId);
+          buf = a instanceof Tone.ToneAudioBuffer ? a : null;
+          // One pass is exactly `bars` bars at the tempo it was made at; another tempo resamples it.
+          // shortcut: playbackRate changes pitch with tempo; time-stretch if tracks move far from the loop's tempo.
+          rate = this.bpm / x.bpm;
+          gain = 0.35; // -9 dB: a full template mix stays under 0 dBFS (X3 F3)
+        } else {
+          // Rendered at the track's tempo, so it plays at its own rate and stays on the grid.
+          buf = this.libPass(x);
+        }
         if (!buf) return;
-        // Rendered at the track's tempo, so it plays at its own rate and stays on the grid.
-        const src = new Tone.ToneBufferSource({ url: buf }).connect(this.channels[x.lane]);
+        const src = new Tone.ToneBufferSource({ url: buf, playbackRate: rate }).connect(dest);
         src.onended = () => { this.aiPlaying.delete(src); src.dispose(); };
-        src.start(t);
+        src.start(t, 0, undefined, gain);
         src.stop(t + hit.dur * this.sps);
         this.aiPlaying.add(src);
         return;
       }
-      if (!this.voices.has(x.id)) this.refreshVoice(x);
-      const v = this.voices.get(x.id)?.voice;
+      const v = this.voiceFor(x, laneId);
       if (!v) return;
       if (hit.kind === "synth") (v as SynthVoice).play(hit.note, t, this.sps);
       else if (hit.kind === "kit") (v as KitVoice).play(hit.hit, t);

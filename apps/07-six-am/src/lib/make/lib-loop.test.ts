@@ -7,7 +7,7 @@ import { buildSoundIndex } from "@/lib/synths/schedule";
 import { inScale, midiToHz, pitchClass, type Scale } from "@/lib/synths/theory";
 import type { Doc } from "@/lib/timeline";
 import type { LibrarySound } from "./library";
-import { dropLength, editLibLoop, libLoopFrom, notesInKey, parseLibLoop, passSignature, phraseStart, renderLibPass, transposeSemis } from "./lib-loop";
+import { LIB_LEVEL_DB, levelled, midRmsDb, dropLength, editLibLoop, libLoopFrom, notesInKey, parseLibLoop, passSignature, phraseStart, renderLibPass, transposeSemis } from "./lib-loop";
 import { pitchHz } from "./pattern";
 import { secondsPer16th } from "./render";
 
@@ -153,5 +153,19 @@ describe("dropping a library sound on a track", () => {
     const idx = buildSoundIndex(r.doc.regions, r.doc.sounds!, "C", "minor", 64 * 16);
     const hits = [...idx.entries()].flatMap(([step, h]) => h.map((x) => [step, x.kind, "dur" in x ? x.dur : 0]));
     expect(hits).toEqual([[128, "lib", 32], [160, "lib", 32], [192, "lib", 32], [224, "lib", 32]]);
+  });
+});
+
+describe("level-matched to the crate", () => {
+  it("every preset's pass comes out at LIB_LEVEL_DB (mid RMS), whatever its own level", () => {
+    for (const preset of ["round-sub", "rubber-pluck", "reese", "acid-line"] as const) for (const drive of [0, 0.9]) {
+      const l = libLoopFrom({ ...SOUND, preset, macros: { ...SOUND.macros, drive } }, "bass", "s1");
+      expect(midRmsDb(levelled(renderLibPass(l, { key: "A", scale: "minor", bpm: 124 }, RATE)))).toBeCloseTo(LIB_LEVEL_DB, 1);
+    }
+  });
+  it("leaves silence alone", () => {
+    const l = libLoopFrom({ ...SOUND, pattern: { bars: 1, notes: [] } }, "bass", "s1");
+    const r = renderLibPass(l, { key: "A", scale: "minor", bpm: 124 }, RATE);
+    expect(levelled(r)).toBe(r);
   });
 });

@@ -10,6 +10,7 @@ import { parseNotes, type LibPart, type LibrarySound } from "./library";
 import { notesForLoop, snapToKey } from "./pattern";
 import { MAKE_PRESETS, clampMacros, synthParams, type Macros, type MakePresetId } from "./presets";
 import { renderBass, type MakeNote, type Rendered } from "./render";
+import { rmsDb } from "./level";
 
 export type LibLoop = {
   id: string;
@@ -107,6 +108,30 @@ export function renderLibPass(l: LibLoop, track: { key: string; scale: Scale; bp
   const steps = l.bars * 16;
   const notes = notesForLoop({ bars: l.bars, notes: notesInKey(l, track.key, track.scale) }, steps);
   return renderBass(notes, synthParams(l.preset, l.macros), { bpm: track.bpm, steps, rate });
+}
+
+/**
+ * The level a library block plays at before its lane's trim and fader: −23 dB RMS (mid) over the
+ * pass. Calibrated by ear-equivalent on the Studio's master meter (26 Oct, S5): the crate's bass
+ * loops read −27…−29 dB through the bass lane, and a pass at −23 reads about −29 there (the meter's
+ * short window reads a steady Make line lower than its true RMS). Make's own level varies by preset
+ * and Drive; in the Studio each sound starts level with the crate, and the lane fader does the rest.
+ */
+export const LIB_LEVEL_DB = -23;
+const MAX_LIFT_DB = 18, MAX_CUT_DB = 24;
+
+/** The pass's level as the crate was measured: RMS of the mid, (L+R)/2 (Width is side signal). */
+export function midRmsDb(r: Rendered): number {
+  const mid = r.left.map((x, i) => (x + r.right[i]) / 2);
+  return rmsDb({ left: mid, right: mid, rate: r.rate });
+}
+
+/** The pass scaled to LIB_LEVEL_DB (a silent pass, a pattern with no notes, stays as it is). */
+export function levelled(r: Rendered): Rendered {
+  const now = midRmsDb(r);
+  if (now < -90) return r;
+  const g = Math.pow(10, Math.min(MAX_LIFT_DB, Math.max(-MAX_CUT_DB, LIB_LEVEL_DB - now)) / 20);
+  return { left: r.left.map((x) => x * g), right: r.right.map((x) => x * g), rate: r.rate };
 }
 
 /** What a rendered pass depends on: a changed sound, key or tempo needs a new render. */

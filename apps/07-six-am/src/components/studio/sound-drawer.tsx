@@ -14,7 +14,7 @@ import { makeKitLoop, makeSynthLoop, type AiLoop, type Sound } from "@/lib/synth
 import { SYNTH_PATTERNS } from "@/lib/synths/patterns";
 import { BASS_PRESETS, CHORD_PRESETS, KNOB_BASICS, PRESETS, knobGuide, knobPosition, knobValue, type KnobId, type PresetId } from "@/lib/synths/presets";
 import type { Timeline } from "./use-timeline";
-import { cx } from "./timeline";
+import { cx } from "./lanes";
 import s from "./sound-drawer.module.css";
 
 const LANE_WORD = ["Drums", "Bass", "Chords"];
@@ -74,7 +74,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose, onNewSound }: {
   };
 
   const pick = (choice: PresetId | KitId) => {
-    // shortcut: a library block (S5, source "lib") opens read-only here like an AI loop; its own editor comes with the lane UI.
+    // A library block (S5) has its own drawer (lib-drawer.tsx); this one never edits it.
     if (cur.source === "ai" || cur.source === "lib") return;
     setMentor({ is: "idle" });
     const same = cur.source === "kit" ? cur.kit === choice : cur.preset === choice;

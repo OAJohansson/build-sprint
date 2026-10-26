@@ -70,7 +70,7 @@ export function parseDoc(v: unknown): Doc | null {
     }
     extra.sounds = list;
   }
-  // S5: the track's own lanes; a region may name one (it must play through the region's old lane).
+  // S5: the track's own lanes; a region may name one (any lane: a lane takes loops of its family).
   if (d.lanes !== undefined) {
     const lanes = parseLanes(d.lanes);
     if (!lanes) return null;
@@ -90,7 +90,7 @@ export function parseDoc(v: unknown): Doc | null {
     if (r.track !== loop.track || !Number.isInteger(start) || !Number.isInteger(length)) return null;
     if ((start as number) < 1 || (length as number) < loop.bars || (length as number) % loop.bars !== 0) return null;
     if ((start as number) + (length as number) - 1 > total) return null;
-    if (r.lane !== undefined && (typeof r.lane !== "string" || laneTrack.get(r.lane) !== loop.track)) return null;
+    if (r.lane !== undefined && (typeof r.lane !== "string" || !laneTrack.has(r.lane))) return null;
     regions.push({ id: r.id, loopId: r.loopId, track: loop.track, start: start as number, length: length as number, ...(r.lane !== undefined ? { lane: r.lane as string } : {}) });
   }
   return { regions, muted: d.muted as boolean[], ...extra };

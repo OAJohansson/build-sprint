@@ -1,11 +1,13 @@
 // The Studio's lane model (S5): types and families, edit rules, mute/solo, migration, saved docs.
 import { describe, expect, it } from "vitest";
 import {
-  FAMILIES, LANE_TYPES, addLane, clampDb, clampPan, colorOf, laneMix, laneOfRegion, lanesOf, legacyMix, legacyTrack,
+  FAMILIES, LANE_TYPES, accepts, crateLaneType, soundLaneType, withLanes as docWithLanes, addLane, clampDb, clampPan, colorOf, laneMix, laneOfRegion, lanesOf, legacyMix, legacyTrack,
   migrateDoc, moveLane, removeLane, renameLane, setPan, setVolume, sortLanes, toggleMute, toggleSolo, type Lane,
 } from "./studio-lanes";
 import { parseDoc } from "./tracks";
-import { demoDoc, type Doc } from "./timeline";
+import { LOOPS, demoDoc, type Doc } from "./timeline";
+import { placeInLane } from "./studio-drop";
+import { makeKitLoop, makeSynthLoop } from "./synths/loop";
 
 const muted = [false, false, false, false];
 const lane = (id: string, type: Lane["type"], extra: Partial<Lane> = {}): Lane => ({ id, type, name: id, volumeDb: 0, pan: 0, muted: false, soloed: false, ...extra });
@@ -138,9 +140,9 @@ describe("saved docs", () => {
   it("an old region may name a migrated lane", () => {
     expect(parseDoc({ regions: [{ id: "r1", loopId: "deep-sub", track: 1, start: 1, length: 4, lane: "bass" }], muted })).not.toBeNull();
   });
-  it("rejects a region on a lane that doesn't exist or plays through another old lane", () => {
+  it("rejects a region on a lane that doesn't exist; any existing lane is fine (S5: a lane takes its family)", () => {
     expect(parseDoc({ ...withLanes(), regions: [{ id: "r1", loopId: "deep-sub", track: 1, start: 1, length: 4, lane: "zz" }] })).toBeNull();
-    expect(parseDoc({ ...withLanes(), regions: [{ id: "r1", loopId: "deep-sub", track: 1, start: 1, length: 4, lane: "k" }] })).toBeNull();
+    expect(parseDoc({ ...withLanes(), regions: [{ id: "r1", loopId: "shaker-loop", track: 3, start: 1, length: 2, lane: "k" }] })).not.toBeNull();
   });
   it("rejects bad lanes, clamps mix values and sorts families", () => {
     expect(parseDoc({ ...withLanes(), lanes: [lane("a", "kick"), lane("a", "bass")] })).toBeNull();
@@ -148,5 +150,53 @@ describe("saved docs", () => {
     expect(parseDoc({ ...withLanes(), lanes: [] })).toBeNull();
     const p = parseDoc({ ...withLanes(), regions: [], lanes: [lane("b", "bass", { volumeDb: 40, pan: -300 }), lane("k", "kick")] })!;
     expect(p.lanes!.map((l) => [l.id, l.volumeDb, l.pan])).toEqual([["k", 0, 0], ["b", 6, -100]]);
+  });
+});
+
+describe("what goes on which lane (S5 UI)", () => {
+  it("gives every crate loop a type, and every family a crate tab", () => {
+    const fams = new Set(LOOPS.map((l) => LANE_TYPES.find((t) => t.id === crateLaneType(l))!.family));
+    expect([...fams].sort()).toEqual(FAMILIES.map((f) => f.id).sort());
+    expect(crateLaneType(LOOPS.find((l) => l.id === "shaker-loop")!)).toBe("perc");
+    expect(crateLaneType(LOOPS.find((l) => l.id === "vinyl-crackle")!)).toBe("texture");
+    expect(crateLaneType(LOOPS.find((l) => l.id === "siren")!)).toBe("fx");
+  });
+  it("types the track's own sounds", () => {
+    expect(soundLaneType(makeKitLoop("808", "kit-four-floor")!)).toBe("kick");
+    expect(soundLaneType(makeSynthLoop("acid", "rolling-acid")!)).toBe("bass");
+    expect(soundLaneType(makeSynthLoop("pad", "long-pad")!)).toBe("pads");
+    expect(soundLaneType(makeSynthLoop("rhodes", "rhodes-swing")!)).toBe("chords");
+  });
+  it("a lane takes its family; the 4 old lanes keep taking what they always took", () => {
+    const old = lanesOf({ muted });
+    const shaker = { type: "perc" as const, track: 3 };
+    expect(accepts(old[3], shaker)).toBe(true); // Top / FX
+    expect(accepts(old[0], shaker)).toBe(true); // Drums (drums family)
+    expect(accepts(old[1], shaker)).toBe(false);
+    expect(accepts(lane("v", "vocals"), { type: "fx", track: 3 })).toBe(false);
+    expect(accepts(lane("h", "hats"), { type: "kick", track: 0 })).toBe(true);
+    // A renamed copy of an old lane id with another type doesn't inherit the old rule.
+    expect(accepts(lane("top", "vocals"), shaker)).toBe(false);
+  });
+  it("withLanes gives regions their lane and keeps muted/soloed in step for older builds", () => {
+    const d = demoDoc();
+    const ls = toggleSolo(toggleMute(lanesOf(d), "chords"), "bass");
+    const w = docWithLanes(d, ls);
+    expect(w.regions.every((r) => r.lane)).toBe(true);
+    expect(w.muted).toEqual([false, false, true, false]);
+    expect(w.soloed).toEqual([false, true, false, false]);
+    expect(docWithLanes(d, lanesOf(d)).soloed).toBeUndefined();
+  });
+  it("placing on a lane trims only that lane, also when it holds loops from several old tracks", () => {
+    const ls = [lane("p", "perc"), lane("p2", "perc")];
+    const regions = [
+      { id: "a", loopId: "shaker-loop", track: 3, lane: "p", start: 1, length: 16 },
+      { id: "b", loopId: "conga-loop", track: 3, lane: "p2", start: 1, length: 16 },
+    ];
+    const out = placeInLane(regions, { id: "n", loopId: "tribal-toms", track: 0, lane: "p", start: 5, length: 4 }, ls);
+    expect(out.filter((r) => r.lane === "p").map((r) => [r.loopId, r.track, r.start, r.length]).sort()).toEqual([
+      ["shaker-loop", 3, 1, 4], ["shaker-loop", 3, 9, 8], ["tribal-toms", 0, 5, 4],
+    ]);
+    expect(out.find((r) => r.id === "b")).toEqual(regions[1]);
   });
 });

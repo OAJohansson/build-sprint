@@ -1,12 +1,9 @@
 "use client";
 
 // Per-lane volume, pan, mute and solo in the audio graph (S5, L159, T102): one Tone.Channel per lane
-// into the output, set from laneMix() (studio-lanes.ts, where the mute/solo rules are tested). A
-// sound's voice connects to its lane's channel (input(id)). Not wired into audio.ts yet: the
-// 4-lane Studio keeps its 4 channels until the lane UI lands.
-// shortcut: crate loops share one instrument set per old lane (audio.ts makeInstruments), so they
-// can't take a lane's pan; when the lane UI lands, either build crate instruments per lane on first
-// use or route crate notes by velocity (volume and mute/solo only). Decide with the lane UI.
+// into the output, set from laneMix() (studio-lanes.ts, where the mute/solo rules are tested). The
+// engine (audio.ts) connects each lane's crate instruments (built per lane on first use) and its
+// sounds' voices to input(id).
 import * as Tone from "tone";
 import { laneMix, type Lane } from "./studio-lanes";
 

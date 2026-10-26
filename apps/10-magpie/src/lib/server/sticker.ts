@@ -12,7 +12,7 @@ export const STICKER_MODEL = "google/gemini-2.5-flash-image";
 const STYLE = `Style: a flat cartoon illustration with bold, thick, even dark-brown outlines (#3B1F1A) around every shape. Flat colour fills only: no gradients, no shading, no shine or glossy highlights, no drop shadow, no texture, no photo detail. Plain surfaces: leave out patterns, prints and writing on bowls, plates, cups and cloths. Simple, chunky, friendly shapes with few details, like a cute vinyl sticker.`;
 
 const frame = (shape: "round" | "square") =>
-  `${shape === "round" ? "The sticker is round: a soft pastel disc behind the item" : "The sticker is a rounded square with generous round corners: a soft pastel rounded square behind the item"}, in a light colour that suits it; a narrow white border around it; and around the white border a bold dark-brown outline, as thick as the outlines on the item. Outside the sticker the background is plain pure white.
+  `${shape === "round" ? "Behind the item, a round disc" : "Behind the item, a rounded square with generous round corners"} in a clear pastel colour that suits it (not white, not cream), filling most of the picture. No border and no outline around that shape: it sits straight on the background. Outside the sticker the background is plain pure white.
 
 No text, no letters, no logos, no labels, no hands, no table, no background scene.`;
 
@@ -91,7 +91,45 @@ export async function cutOut(input: Buffer): Promise<Buffer> {
     if ((x > 0 && data[(p - 1) * 4 + 3] === 0) || (x < w - 1 && data[(p + 1) * 4 + 3] === 0) || (p >= w && data[(p - w) * 4 + 3] === 0) || (p < w * (h - 1) && data[(p + w) * 4 + 3] === 0)) data[p * 4 + 3] = 128;
   }
   const trimmed = await sharp(data, { raw: { width: w, height: h, channels: 4 } }).trim({ threshold: 1 }).png().toBuffer();
-  return sharp(trimmed).resize(512, 512, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } }).webp({ quality: 86, alphaQuality: 90 }).toBuffer();
+  return dieCut(trimmed);
+}
+
+/**
+ * The die-cut edge, drawn the same on every sticker: a white ring and a cocoa outline around the
+ * pastel shape the model draws (prompt v3). Asking the model for them didn't hold (sticker eval
+ * v2: 5 of 15 ended in white), so the code draws them, as in the design's stickers. Grows the shape's mask with a blur and a
+ * threshold, then layers cocoa, white and the sticker. Returns a 512 px WebP.
+ */
+const SIZE = 512, PAD = 38, RIM = 9, LINE = 6;
+async function dieCut(png: Buffer): Promise<Buffer> {
+  const clear = { r: 0, g: 0, b: 0, alpha: 0 };
+  const inner = SIZE - PAD * 2;
+  const { data } = await sharp(png).resize(inner, inner, { fit: "contain", background: clear }).extend({ top: PAD, bottom: PAD, left: PAD, right: PAD, background: clear }).raw().toBuffer({ resolveWithObject: true });
+  const alpha = Buffer.alloc(SIZE * SIZE);
+  for (let p = 0; p < SIZE * SIZE; p++) alpha[p] = data[p * 4 + 3];
+  // Grow the shape: blur its mask, then keep everything the blur reached (a short ramp, so the
+  // edge is smooth). Sharp runs threshold before blur whatever the order, so this step is JS.
+  const grow = async (sigma: number) => {
+    const blurred = await sharp(alpha, { raw: { width: SIZE, height: SIZE, channels: 1 } }).blur(sigma).extractChannel(0).raw().toBuffer();
+    for (let p = 0; p < blurred.length; p++) blurred[p] = Math.max(0, Math.min(255, (blurred[p] - 6) * 32));
+    return blurred;
+  };
+  const rim = await grow(RIM), line = await grow(RIM + LINE);
+  const out = Buffer.alloc(SIZE * SIZE * 4);
+  const layers: [number, number, number, Buffer, number][] = [[0x3b, 0x1f, 0x1a, line, 1], [255, 255, 255, rim, 1], [0, 0, 0, data, 4]];
+  for (let p = 0; p < SIZE * SIZE; p++) {
+    let r = 0, g = 0, b = 0, a = 0;
+    for (const [lr, lg, lb, mask, stride] of layers) {
+      const la = mask[stride === 4 ? p * 4 + 3 : p] / 255;
+      if (!la) continue;
+      const [cr, cg, cb] = stride === 4 ? [data[p * 4], data[p * 4 + 1], data[p * 4 + 2]] : [lr, lg, lb];
+      const na = la + a * (1 - la);
+      r = (cr * la + r * a * (1 - la)) / na; g = (cg * la + g * a * (1 - la)) / na; b = (cb * la + b * a * (1 - la)) / na;
+      a = na;
+    }
+    out[p * 4] = r; out[p * 4 + 1] = g; out[p * 4 + 2] = b; out[p * 4 + 3] = Math.round(a * 255);
+  }
+  return sharp(out, { raw: { width: SIZE, height: SIZE, channels: 4 } }).webp({ quality: 86, alphaQuality: 90 }).toBuffer();
 }
 
 /** Draws a yum's sticker and stores it; on failure the yum keeps its photo and shows "failed". */

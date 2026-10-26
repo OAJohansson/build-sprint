@@ -681,3 +681,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   T88. On the real track: bass read as a 4-bar G1/Bb1 pattern in 76 ms; suggestions cut the
   feature distance on all four presets (Reese 155 → 15, Acid only 166 → 127) but go to extremes
   on pitch drop from kick bleed; A/B gain +1.3 dB. Nobody has listened yet. 309 tests.
+- **Ops (pre-approved, logged):** applied the additive migration `sixam_sounds` (create table, 3 indexes, RLS on, no policies; nothing dropped or rewritten) on the Six AM Supabase project (crossfit-log). Empty; the sandbox stays in memory.

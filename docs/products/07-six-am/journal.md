@@ -654,3 +654,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   (original part alone, your synth with A/B and macros, the Mentor's notes) reached by "Make a bass
   like this" from the soloed lane or a note; same header and transport, a Listen/Make switch; notes
   kept across modes. `design/lab-combined.html`, `/dev/lab-combined?mode=listen|make`.
+- **Owner picked the combined design (L162):** "perfect, lets go with that combination". Next: define round (skills, states, rough spots), one critic, then the slices.

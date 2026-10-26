@@ -4,6 +4,26 @@ What happened, what was decided and why. Newest last.
 
 ## To carry over
 
+### Lab (Phase 4): for `docs/knowledge-bank.md`, Technology, at the Lab wrap-up (owner via parent session, 26 Oct)
+
+Each with what it is, why it matters, where we met it (the Six AM Lab spike) and who it comes from,
+plus 2–3 quiz Q/A pairs per entry:
+
+1. **Tab audio capture** with `getDisplayMedia` and `suppressLocalAudioPlayback` (W3C Screen
+   Capture spec, Chrome 109+): a cross-origin player (the SoundCloud iframe) can't be read
+   directly because of the browser's same-origin rule, so the only way in is capturing the tab's
+   sound; the mute silences the whole captured tab, so the player needs its own window.
+2. **Source separation with Demucs/htdemucs** (Meta AI, Défossez et al.): trained on multitrack
+   recordings; the hybrid model works on both the waveform and the spectrogram and sums the two.
+3. **In-browser ML with ONNX Runtime Web and WebGPU** (Microsoft's ONNX Runtime; W3C WebGPU): the
+   model runs on the laptop's own graphics chip, no server, no running cost.
+4. **Faster-than-real-time chunked processing with overlap-add**: separate rolling 7.8 s windows,
+   play only the newest seconds with short crossfades; a few seconds of delay is fine for learning
+   (unlike DJ use, which needs it instant); discarding every chunk after playback is rights by
+   design (C2, L143).
+
+### Ears + Mentor
+
 Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one commit.
 
 - `docs/learnings.md` process changelog: first Founder-mode run (decision 0026) on a rebuild of an

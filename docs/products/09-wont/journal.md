@@ -151,3 +151,12 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   decision-log review, interview story, card shipped. Carried over: knowledge bank (a new
   Behaviour change subsection, a grader entry, quiz), learnings (09 Wont and three process
   changes), problems (Wont, self-doubt), to-do.
+
+## 26 Oct: v1.1, sync (Founder phase)
+
+- **Problem (owner):** the laptop has the real history since 24 Oct; on the phone Wont is empty,
+  because everything is in one browser's localStorage. Owner's call (L27): sync through the
+  shared Supabase project with an access code, like Selvedge.
+- Branch reset to the latest `origin/main`. Kickoff addendum `kickoff-v1.1-sync.md`: MVP, stop
+  line, riskiest assumption (no data lost on first sync) and checks S1–S8.
+- Merge rule (L28) and storage shape (L29) decided inside the pack's appetite.

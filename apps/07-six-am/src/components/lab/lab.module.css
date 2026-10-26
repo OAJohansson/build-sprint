@@ -302,3 +302,7 @@
 .menuSounds { display: flex; flex-direction: column; }
 .preset .menu { overflow-y: auto; overscroll-behavior: contain; }
 .preset .menu { max-width: 460px; }
+
+/* Owner bug 27 Oct: until the knobs are live, say so over them, plainly */
+.macros { position: relative; }
+.makeWait { position: absolute; inset: 0 24px 0 0; z-index: 2; margin: 0; display: grid; place-items: center; text-align: center; font-size: 13px; color: var(--ink); background: color-mix(in srgb, var(--bg) 55%, transparent); border-radius: 8px; padding: 0 24px; line-height: 1.6; }

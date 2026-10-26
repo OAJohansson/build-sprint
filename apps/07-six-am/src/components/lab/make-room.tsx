@@ -287,7 +287,7 @@ export function MakeRoom(p: RoomProps) {
   const to = loop ? Math.round(msToBar(loop.endMs, p.bpm, p.originSec)) : null;
   const where = p.section ? `${p.section.label}${from !== null && to !== null && (from !== p.section.from || to !== p.section.to) ? `, bars ${from}–${to - 1}` : ""}` : null;
   const caption = loop
-    ? `${part.name} alone, ${[where, `${clockMs(loop.startMs)}–${clockMs(loop.endMs)}`].filter(Boolean).join(", ")}, ${loop.state === "memory" ? "looping" : p.status || (p.playing ? "filling the loop…" : "the loop fills when you press Play")}`
+    ? `${part.name} alone, ${[where, `${clockMs(loop.startMs)}–${clockMs(loop.endMs)}`].filter(Boolean).join(", ")}, ${loop.state === "memory" ? "looping" : p.playing ? `filling the loop… ${loop.etaS ?? ""} s`.replace(/ {2}s$/, "") : "the loop fills when you press Play"}`
     : `${part.name} alone`;
   return (
     <div className={s.room}>
@@ -299,7 +299,7 @@ export function MakeRoom(p: RoomProps) {
         {!m.isBass ? (
           <p className={s.makeQuiet}>Make is bass-only for now. <button className={s.makeText} onClick={p.onBass}>Make a bass instead</button></p>
         ) : (
-          <SynthControls m={m} part={part} loop={loop} ready={p.ready} />
+          <SynthControls m={m} part={part} loop={loop} ready={p.ready} playing={p.playing} />
         )}
       </section>
       {m.isBass && <SaveBar m={m} />}
@@ -308,14 +308,30 @@ export function MakeRoom(p: RoomProps) {
   );
 }
 
-function SynthControls({ m, part, loop, ready }: { m: MakeModel; part: LabPart; loop: LoopState | null; ready: boolean }) {
+/**
+ * Until the knobs are live, what's happening and how long (owner bug, 27 Oct: the bass looped and
+ * nothing said Make was still waiting for it). Null once Mine can be made.
+ */
+function waitLine(m: MakeModel, loop: LoopState | null, ready: boolean, playing: boolean): string | null {
+  if (m.readState === "ready" || m.words) return null;
+  if (!loop) return "Loop a section first: Make builds your bass on a loop of the song.";
+  const lenS = Math.round((loop.endMs - loop.startMs) / 1000);
+  if (loop.state === "filling") {
+    if (loop.laps >= 2) return "The loop isn't filling: the part splitter is running behind on this Mac. Loop a shorter section, or close other tabs, then press Play again.";
+    if (!playing) return `Press Play. The loop fills from the song first (about ${lenS + 7} s), then your bass appears here.`;
+    return `Filling the loop… ${loop.etaS ?? lenS} s, then your bass appears here.`;
+  }
+  if (m.readState === "reading" || m.readState === "idle") return "Reading the bass's notes… a second.";
+  if (m.readState === "nonotes") return "No bass notes in this loop. Loop a section where the bass plays.";
+  return m.readError ?? (ready ? null : "Press Play.");
+}
+
+function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: LabPart; loop: LoopState | null; ready: boolean; playing: boolean }) {
   const off = !!m.words || m.readState !== "ready";
+  const wait = waitLine(m, loop, ready, playing);
   const moves = m.ticks ? movesTo(m.macros, m.ticks) : [];
   let line: React.ReactNode;
-  if (!loop || loop.state !== "memory") line = <>Mentor: {ready ? "once the loop is in memory I'll read the bass's notes and suggest settings." : "press Play; once the loop is in memory I'll read the bass's notes."}</>;
-  else if (m.readState === "reading") line = <>Reading the bass&apos;s notes…</>;
-  else if (m.readState === "nonotes") line = <>No bass notes found in this loop. Loop a section where the bass plays.</>;
-  else if (m.readState === "error") line = <>{m.readError}</>;
+  if (wait) line = <span className={s.faintLine}>The knobs and B · Mine come alive once the loop is in memory.</span>;
   else if (m.words) line = <>Mine is a loop Stable Audio made from your words and the track&apos;s tempo and key.<br /><span className={s.faintLine}>The knobs work on presets. Pick one to go back.</span></>;
   else if (!m.ticks) line = <>{m.suggesting ? `Measuring the bass against ${MAKE_PRESETS[m.preset].name}…` : "Mentor: press Suggest settings to compare this preset with the bass."}</>;
   else line = <>Mentor: {suggestLine(m.macros, m.ticks)}{(moves.length > 0 || m.moved) && <><br /><span className={s.faintLine}>{m.moved ?? "Gold ticks mark those."}</span></>}</>;
@@ -323,6 +339,7 @@ function SynthControls({ m, part, loop, ready }: { m: MakeModel; part: LabPart; 
     <>
       <PresetHead m={m} partName={part.name.toLowerCase()} />
       <div className={s.macros} data-off={off ? "" : undefined}>
+        {wait && <p className={s.makeWait} role="status">{wait}</p>}
         {MACRO_IDS.map((id) => (
           <Knob key={id} id={id} value={m.macros[id]} sug={m.ticks?.[id]} color={part.color} disabled={off} onChange={(v) => m.setMacro(id, v)} reset={MAKE_PRESETS[m.preset].macros[id]} />
         ))}

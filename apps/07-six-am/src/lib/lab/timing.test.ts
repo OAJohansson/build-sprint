@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { LoopBuffer } from "./loop-buffer";
-import { barToMs, gateResume, isCatching, loopBars, loopPositionMs, msToBar, msToSamples, playTimeOf, runOffset } from "./timing";
+import { barToMs, gateResume, isCatching, loopBars, loopFillEtaS, loopPositionMs, msToBar, msToSamples, playTimeOf, runOffset } from "./timing";
 
 describe("bars and time", () => {
   it("bar 1 is the first downbeat; 124 BPM bars are 1.935 s", () => {
@@ -119,5 +119,19 @@ describe("LoopBuffer", () => {
     b.write(region(0, 12), 0);
     expect(b.complete).toBe(false);
     expect(b.build()).toEqual([]);
+  });
+});
+
+describe("loopFillEtaS (Make waits for the loop)", () => {
+  const base = { loopS: 30, catchS: 6.5, catchLeftS: null };
+  it("counts down the rest of the pass when the loop is filled up to the playhead", () => {
+    expect(loopFillEtaS({ ...base, posS: 12, filledS: 12 })).toBe(19);
+    expect(loopFillEtaS({ ...base, posS: -0.8, filledS: 0 })).toBe(32); // in the pre-roll
+  });
+  it("adds a catch-up and a whole pass when there's a hole behind the playhead", () => {
+    expect(loopFillEtaS({ ...base, posS: 12, filledS: 3 })).toBe(55);
+  });
+  it("while catching up: what's left of it plus a pass", () => {
+    expect(loopFillEtaS({ ...base, posS: 0, filledS: 0, catchLeftS: 4 })).toBe(34);
   });
 });

@@ -44,3 +44,13 @@ describe("RecentParts", () => {
     expect(r.seconds).toBe(0);
   });
 });
+
+describe("firstHeld (a loop filled from what was just heard)", () => {
+  it("finds the first sample held near the start, or none", () => {
+    const r = new RecentParts(100, 30, 1);
+    r.add(30, [new Float32Array(50)]);
+    expect(r.firstHeld(0, 100)).toBe(30);
+    expect(r.firstHeld(40, 100)).toBe(40);
+    expect(r.firstHeld(0, 20)).toBeNull();
+  });
+});

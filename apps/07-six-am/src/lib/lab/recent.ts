@@ -52,6 +52,18 @@ export class RecentParts {
     return end;
   }
 
+  /** The first held sample in [from, from + maxGap], or null (a run starts a little after the track's 0). */
+  firstHeld(from: number, maxGap: number): number | null {
+    let best: number | null = null;
+    for (const c of this.chunks) {
+      const end = c.start + c.data[0].length;
+      if (end <= from || c.start > from + maxGap) continue;
+      const s = Math.max(from, c.start);
+      if (best === null || s < best) best = s;
+    }
+    return best;
+  }
+
   /** The stretch [from, to) per channel (overlap-added), or null when it isn't all held. */
   build(from: number, to: number): Float32Array<ArrayBuffer>[] | null {
     const until = this.coveredUntil(from);

@@ -13,7 +13,7 @@ import { LoopBuffer } from "./loop-buffer";
 import { StereoMeter } from "@/lib/make/meter";
 import { RecentParts, faded } from "./recent";
 import { Separator } from "./separator-client";
-import { gateResume, isCatching, loopPositionMs, msToSamples, playTimeOf, runOffset } from "./timing";
+import { gateResume, isCatching, loopFillEtaS, loopPositionMs, msToSamples, playTimeOf, runOffset } from "./timing";
 
 /** Seconds of the track played before a loop's start while it fills, so the Deck's seek settles. */
 const PRE_ROLL_MS = 1000;
@@ -36,7 +36,11 @@ export type ModelProgress = {
   error: string | null;
 };
 
-export type LoopState = { startMs: number; endMs: number; state: "filling" | "memory"; filled: number };
+export type LoopState = {
+  startMs: number; endMs: number; state: "filling" | "memory"; filled: number;
+  /** While filling: seconds until it's in memory (estimate), and how many times a pass fell short. */
+  etaS: number | null; laps: number;
+};
 
 export type TransportState = {
   /** A Deck window for this track has reported in the last 2 s. */
@@ -66,6 +70,8 @@ type Loop = {
   audio: AudioBuffer[] | null; // memory: one stereo buffer per part
   sources: AudioBufferSourceNode[];
   t0: number; // memory: ctx time at which the loop was at startMs
+  laps: number; // passes that reached the loop's end without all of it
+  graceAt?: number; // ctx time a nearly full pass started waiting for its last regions
 };
 
 export type TransportOptions = {
@@ -304,12 +310,34 @@ export class LabTransport {
     }
     const rate = this.live?.rate ?? 44100;
     const len = msToSamples(range.endMs - range.startMs, rate);
-    this.loopS = { ...range, state: "filling", buf: new LoopBuffer(len, Math.round(TAIL_S * rate)), audio: null, sources: [], t0: 0 };
+    this.loopS = { ...range, state: "filling", buf: new LoopBuffer(len, Math.round(TAIL_S * rate)), audio: null, sources: [], t0: 0, laps: 0 };
     const inside = at >= range.startMs && at < range.endMs;
-    if (this.playingS && this.run && inside && !wasMemory) { /* keep playing; fills from here, refills at the end */ }
+    // Owner bug (27 Oct): looping from mid-section kept playing to the loop's end, then threw that
+    // pass away and filled a whole second pass (~50 s for 16 bars, "Make never starts"). Now the
+    // stretch already heard comes from the recent parts in memory (the same run, so the joins line
+    // up); if they don't reach back to the loop's start, it goes back to the start at once.
+    if (this.playingS && this.run && inside && !wasMemory) { if (!this.prefillLoop(this.loopS, at)) this.seekLive(range.startMs); }
     else if (this.playingS) this.seekLive(range.startMs);
     else this.pausedMs = range.startMs;
     this.emit(true);
+  }
+
+  /** Copies the loop's start up to now from the recent parts into its buffer; false when they don't reach back. */
+  private prefillLoop(l: Loop, atMs: number): boolean {
+    const recent = this.recent, rate = this.live?.rate;
+    if (!recent || !rate || !l.buf) return false;
+    if (atMs - l.startMs < 300) return true; // just started: this pass fills it
+    const start = Math.round((l.startMs / 1000) * rate);
+    // At the track's start a run begins a little after 0 (≤ 1 s): that head counts as silence.
+    const from = l.startMs < PRE_ROLL_MS ? recent.firstHeld(start, rate) ?? start : start;
+    const until = recent.coveredUntil(from);
+    if (until === null || until < Math.round((atMs / 1000) * rate) - rate * 0.5) return false;
+    const chans = recent.build(from, Math.min(until, start + l.buf.total));
+    if (!chans) return false;
+    if (from > start) l.buf.fillSilence(from - start);
+    l.buf.write(chans, from - start);
+    chans.forEach((a) => a.fill(0));
+    return true;
   }
 
   /**
@@ -448,11 +476,20 @@ export class LabTransport {
       catching: this.catching,
       catchLeftS: this.catchLeftS,
       deckClosed: this.deckClosed,
-      loop: l ? { startMs: l.startMs, endMs: l.endMs, state: l.state, filled: l.state === "memory" ? 1 : l.buf?.progress ?? 0 } : null,
+      loop: l ? { startMs: l.startMs, endMs: l.endMs, state: l.state, filled: l.state === "memory" ? 1 : l.buf?.progress ?? 0, etaS: this.fillEta(l), laps: l.laps } : null,
       chords: [...this.chordCells.cells],
       stats: this.stats,
       error: this.error,
     };
+  }
+
+  private fillEta(l: Loop): number | null {
+    if (l.state !== "filling" || !l.buf || !this.playingS) return null;
+    const rate = this.live?.rate ?? 44100;
+    return loopFillEtaS({
+      loopS: (l.endMs - l.startMs) / 1000, posS: (this.heardMs() - l.startMs) / 1000, filledS: (l.buf.progress * l.buf.total) / rate,
+      catchLeftS: this.gate ? this.catchLeftS ?? 1 : null, catchS: CATCH_S,
+    });
   }
 
   /** Stops everything: sharing, the worker, the loop's memory, the Deck's playback. */
@@ -706,12 +743,14 @@ export class LabTransport {
     if (live && this.playingS) {
       const now = live.ctx.currentTime;
       const l = this.loopS, run = this.run;
-      // shortcut: if separation runs late (regions arrive after their play time), the buffer may still be
-      // filling at the loop's end and this re-seeks every lap; fine at 3–4× real time, add a
-      // "wait for the last region" grace if a slower Mac shows it.
-      // The first pass reached the loop's end without all of it (the loop began mid-way): go
-      // back to its start and fill it in one run.
-      if (l?.state === "filling" && run && !this.gate && now >= playTimeOf(l.endMs, run.offsetS, live.delayS) - 0.02) this.seekLive(l.startMs);
+      // A pass reached the loop's end without all of it: go back to its start and fill it in one
+      // run. A nearly full pass first waits up to 1.5 s for its last regions (separation running
+      // late on a busy Mac used to re-seek every lap, so the loop never got into memory).
+      if (l?.state === "filling" && l.buf && run && !this.gate && now >= playTimeOf(l.endMs, run.offsetS, live.delayS) - 0.02) {
+        const nearly = l.buf.progress >= 0.95;
+        if (nearly && l.graceAt === undefined) l.graceAt = now;
+        if (!nearly || now - (l.graceAt ?? now) > 1.5) { l.laps++; l.graceAt = undefined; this.seekLive(l.startMs); }
+      }
       // The Deck stopped by itself and what it played has been heard.
       if (this.deckStoppedAt !== null && now - this.deckStoppedAt > live.delayS + 0.3) {
         this.pausedMs = this.heardMs();
@@ -732,7 +771,7 @@ export class LabTransport {
   private emit(force = false) {
     if (!this.o.onChange) return;
     const s = this.state;
-    const key = JSON.stringify([s.deckOpen, s.phase, s.playing, s.catching, s.catchLeftS, s.loop?.state, s.loop?.startMs, Math.round((s.loop?.filled ?? 0) * 20), s.error, s.model?.ready]);
+    const key = JSON.stringify([s.deckOpen, s.phase, s.playing, s.catching, s.catchLeftS, s.loop?.state, s.loop?.startMs, Math.round((s.loop?.filled ?? 0) * 20), s.loop?.etaS, s.loop?.laps, s.error, s.model?.ready]);
     if (!force && key === this.lastKey) return;
     this.lastKey = key;
     this.o.onChange(s);

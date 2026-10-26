@@ -17,6 +17,7 @@ import { SettingsLink, ViewsNav } from "@/components/views-nav";
 import { useTimeline } from "./use-timeline";
 import { TimelineView, cx } from "./timeline";
 import { Crate } from "./crate";
+import { SoundDrawer } from "./sound-drawer";
 import { Library } from "./library";
 import { Logo } from "./logo";
 import { Notice, Unlock } from "./unlock";
@@ -135,7 +136,8 @@ export function Studio() {
     setStatus("saving");
     try {
       const saved = await client.save(track.id, name, doc);
-      setDeviceBpm(draft.bpm);
+      // A template keeps its own tempo in the doc (S2); a Mentor draft sets the device tempo.
+      if (doc.bpm === undefined) setDeviceBpm(draft.bpm);
       setDraft(null);
       setTrack(saved);
       setLastId(saved.id);
@@ -234,11 +236,20 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
   // shortcut: one tempo per device (localStorage), not saved with each track; move it into Doc
   // (and the Supabase track) when tracks need their own tempo.
   const [storedBpm] = useLocalStorage<number>(TEMPO_KEY, DEFAULT_BPM);
-  const bpm = draft ? draft.bpm : clampBpm(storedBpm);
+  // A template track (S2) carries its own tempo; older tracks use the device tempo.
+  const bpm = draft ? draft.bpm : track.doc.bpm !== undefined ? clampBpm(track.doc.bpm) : clampBpm(storedBpm);
   const t = useTimeline(track.doc, bpm, draft ? 1 : 37);
   const [name, setName] = useState(track.name);
   const savedName = useRef(track.name);
   const [library, setLibrary] = useState(false);
+  const [code] = useAccessCode();
+  useEffect(() => { t.engine().then((e) => e.setAccessCode(code)); }, [t, code]);
+  // The sound drawer (S3): adding to a lane, or editing the selected block's sound.
+  const [addLane, setAddLane] = useState<number | null>(null);
+  const selRegion = t.doc.regions.find((r) => r.id === t.selected);
+  const selSound = selRegion ? t.doc.sounds?.find((x) => x.id === selRegion.loopId) ?? null : null;
+  const drawerLane = selSound ? selSound.lane : addLane;
+  const closeDrawer = () => { setAddLane(null); t.setSelected(null); };
 
   // Every edit (and undo) is saved; the track as loaded is already saved.
   const changed = useEffectEvent((doc: Doc) => { if (!draft && doc !== track.doc) onChange(savedName.current, doc); });
@@ -301,7 +312,7 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
         <div className={s.transport}>
           <button className={s.tb} onClick={() => t.jumpTo(1)} aria-label="Back to start">{Icon.start}</button>
           <button className={cx(s.tb, s.play)} onClick={() => t.setPlaying(!t.playing)} aria-label={t.playing ? "Pause" : "Play"}>{t.playing ? Icon.pause : Icon.play}</button>
-          <div className={s.lcd}><b>{t.bar}.{t.beat}</b><small>bar</small><b title={bpm === DEFAULT_BPM ? undefined : `Set from Analyse; the Studio's default is ${DEFAULT_BPM}`}>{formatBpm(bpm)}</b><small>bpm</small></div>
+          <div className={s.lcd}><b>{t.bar}.{t.beat}</b><small>bar</small><b title={bpm === DEFAULT_BPM ? undefined : `Set from Analyse; the Studio's default is ${DEFAULT_BPM}`}>{formatBpm(bpm)}</b><small>bpm</small>{track.doc.key ? <><b>{track.doc.key.key}{track.doc.key.scale === "minor" ? "m" : ""}</b><small>key</small></> : null}</div>
           <button className={s.undo} onClick={t.undo} disabled={!t.canUndo} aria-label="Undo">{Icon.undo} <span className={s.undoWord}>Undo</span></button>
           <div className={s.knobWrap}>
             Filter
@@ -311,9 +322,13 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
         <SettingsLink />
       </header>
       <main className={s.main}>
-        <TimelineView t={t} colors={COLORS} />
+        <TimelineView t={t} colors={COLORS} soundLane={drawerLane} onSound={(tr) => { t.setSelected(null); setAddLane((l) => (l === tr && !selSound ? null : tr)); }} />
       </main>
-      <Crate t={t} colors={COLORS} />
+      {drawerLane !== null ? (
+        <SoundDrawer key={drawerLane} t={t} lane={drawerLane} sound={selSound} color={COLORS[drawerLane]} onClose={closeDrawer} />
+      ) : (
+        <Crate t={t} colors={COLORS} />
+      )}
       {t.bin ? (
         <div className={s.binZone}>
           <div data-bin className={cx(s.bin, t.bin.over && s.binOver)}>

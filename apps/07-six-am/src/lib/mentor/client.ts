@@ -5,6 +5,7 @@
 // audio is ever sent. The server builds the prompts.
 import { ApiError } from "@/lib/api";
 import type { EarsAnalysis } from "@/lib/ears/results";
+import type { TrackMap } from "@/lib/map/types";
 import { useSyncExternalStore } from "react";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import type { Job, MentorAnswer } from "./answer";
@@ -54,6 +55,9 @@ export type AskInput = {
   job: Job;
   track?: EarsAnalysis | null;
   message?: string;
+  /** F9: background for this one question (e.g. the drawer's knob guide). It goes to the Mentor
+   *  but is not stored as the person's words: the history shows `message` only. */
+  context?: string;
   events?: LearnEvent[];
   playlists?: PlaylistLike[];
   taste?: { a: string; b: string; preferred: "a" | "b"; why: string };
@@ -86,6 +90,7 @@ export const mentorApi = (code: string) => ({
         // Fallback when the result isn't on the server yet (demo rows, an unsynced analysis).
         analysis: i.track ?? undefined,
         message: i.message,
+        context: i.context,
         events: i.events,
         playlists: i.playlists,
         taste: i.taste,
@@ -108,6 +113,10 @@ export const mentorApi = (code: string) => ({
   putDemoAnalysis: (a: EarsAnalysis) => call<{ analysis: EarsAnalysis }>(code, `/api/analyses?id=${encodeURIComponent(a.id)}`, { method: "PUT", body: JSON.stringify({ analysis: a }), headers: { "x-six-am-demo": "1" } }),
   importAnalyses: (list: EarsAnalysis[]) => call<{ added: number; genresFilled: number; kept: number; rejected: number }>(code, "/api/analyses", { method: "POST", body: JSON.stringify({ analyses: list }) }),
   deleteAnalyses: (ids: string[]) => call<{ deleted: number }>(code, "/api/analyses", { method: "DELETE", body: JSON.stringify({ ids }) }),
+  analysis: (id: string) => call<{ analysis: EarsAnalysis }>(code, `/api/analyses?id=${encodeURIComponent(id)}`).then((r) => r.analysis),
+  /** Phase 3: a track's arrangement map (404 → ApiError status 404 when there is none). */
+  map: (id: string) => call<{ map: TrackMap }>(code, `/api/maps?id=${encodeURIComponent(id)}`).then((r) => r.map),
+  putMap: (m: TrackMap) => call<{ map: TrackMap }>(code, `/api/maps?id=${encodeURIComponent(m.id)}`, { method: "PUT", body: JSON.stringify({ map: m }) }).then((r) => r.map),
 });
 export type MentorApi = ReturnType<typeof mentorApi>;
 

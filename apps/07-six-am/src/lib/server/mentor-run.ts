@@ -16,6 +16,7 @@ import { loadMemory, refreshMemory, saveMemory, unlockFor, verbatim } from "./me
 import { sharedTraits } from "@/lib/mentor/group-traits";
 import { ownerLines, recentEditLines, sentencesOf } from "@/lib/mentor/owner-lines";
 import { askClaude, MentorError, UPDATES_PROFILE } from "./claude";
+import { mapContext } from "@/lib/map/context";
 import type { Group, MentorStore, MessageRow } from "./mentor-store";
 
 // One Mentor request end to end: load what the job needs from the store (the server builds the
@@ -34,6 +35,8 @@ export type AskBody = {
   /** Fallback when the result isn't synced yet: the Ears record itself (whitelisted). */
   analysis?: unknown;
   message?: unknown;
+  /** F9: background for this question only; never stored as the person's turn. */
+  context?: unknown;
   events?: unknown;
   playlists?: unknown;
   taste?: unknown;
@@ -121,6 +124,8 @@ export async function ask(store: MentorStore, body: AskBody, now: Date, tz: numb
 
   const profile = await store.getProfile();
   const input: MentorInput = { job, profile: profile.text, track, message };
+  // A4: the track's arrangement map, when it has one, so the Mentor can explain its structure.
+  if (track) input.maps = await mapsFor(store, [track.id]);
   // F6: the lines the latest hand edit added (within a week; a restore or paste doesn't count).
   input.recentEdit = recentEditLines(profile.history, now);
   // The person's own lines, which every profile update must keep (setup merges, learning adjusts).
@@ -266,6 +271,11 @@ async function askChat(store: MentorStore, body: AskBody, now: Date, tz: number,
     } catch { /* not an answer */ }
   }
   const discussed = discussedIds.map((id) => library.find((a) => a.id === id)).filter((a): a is EarsAnalysis => !!a);
+  // A4: maps of the tracks in view: the selected row, the last discussed, and any the question
+  // names by title (at most 3 in all).
+  const lower = message.toLowerCase();
+  const namedIds = library.filter((a) => a.title.trim().length >= 4 && lower.includes(a.title.trim().toLowerCase())).map((a) => a.id);
+  const mapIds = [...new Set([selected?.id, discussed.at(-1)?.id, ...namedIds].filter((x): x is string => !!x))].slice(0, 3);
   const input: MentorInput = {
     job: "chat", message, context, selected,
     discussed: discussed.map((a) => `${refById.get(a.id)} | ${a.uploader || "?"} – ${a.title || "untitled"}`),
@@ -275,6 +285,8 @@ async function askChat(store: MentorStore, body: AskBody, now: Date, tz: number,
     memory: mem.summary,
     history: historyOf(rows, refById),
     myGenres: words,
+    maps: await mapsFor(store, mapIds),
+    background: text(body.context, 4000) || undefined,
   };
   const threadId = MAIN_THREAD;
   let result;
@@ -307,6 +319,16 @@ async function askChat(store: MentorStore, body: AskBody, now: Date, tz: number,
   // refreshMemory checks itself whether a rewrite is due (every MEMORY_EVERY exchanges, or the profile).
   if (later) later(() => refreshMemory(store, new Date()));
   return reply;
+}
+
+/** The stored maps of these tracks as prompt text; a missing map (or table) is simply left out. */
+async function mapsFor(store: MentorStore, ids: string[]): Promise<Record<string, string> | undefined> {
+  const out: Record<string, string> = {};
+  for (const id of ids) {
+    const m = await store.getMap(id).catch(() => null);
+    if (m) out[id] = mapContext(m);
+  }
+  return Object.keys(out).length ? out : undefined;
 }
 
 export const isFail = (r: AskReply | Fail): r is Fail => "error" in r;

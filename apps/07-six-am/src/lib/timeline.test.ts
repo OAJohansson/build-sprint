@@ -45,3 +45,24 @@ describe("place", () => {
     expect(place([other], r("b", 1, 4))).toContainEqual(other);
   });
 });
+
+import { silentLanes } from "./timeline";
+import { parseDoc } from "./tracks";
+
+describe("solo (L140)", () => {
+  const muted = [false, true, false, false];
+  it("without a solo, the muted lanes are silent", () => {
+    expect(silentLanes({ muted })).toEqual([false, true, false, false]);
+    expect(silentLanes({ muted, soloed: [false, false, false, false] })).toEqual([false, true, false, false]);
+  });
+  it("any solo silences the others and beats mute", () => {
+    expect(silentLanes({ muted, soloed: [false, true, true, false] })).toEqual([true, false, false, true]);
+  });
+  it("is saved with the track; old docs parse unchanged", () => {
+    const old = { regions: [], muted };
+    expect(parseDoc(old)).toEqual(old);
+    expect(parseDoc({ ...old, soloed: [true, false, false, false] })).toEqual({ ...old, soloed: [true, false, false, false] });
+    expect(parseDoc({ ...old, soloed: [false, false, false, false] })).toEqual(old);
+    expect(parseDoc({ ...old, soloed: [true] })).toBeNull();
+  });
+});

@@ -75,7 +75,8 @@ export function studioStart(a: BpmInput & Pick<EarsAnalysis, "key" | "scale">, p
 
 /** Where the Studio picks up a Mentor starting point (N1): a new, unsaved track. */
 export const STUDIO_DRAFT_KEY = "six-am:studio-draft:v1";
-export type StudioDraft = { name: string; bpm: number; doc: Doc; at: string };
+/** analysisId: the reference track of a map template (L134), also kept on the doc. */
+export type StudioDraft = { name: string; bpm: number; doc: Doc; at: string; analysisId?: string };
 
 /** The suggested loops laid out on the timeline: each lane's loops one after another in 16-bar
  *  blocks from bar 1 (every crate loop is 2, 4 or 8 bars, so 16 always fits whole loops). */

@@ -1,0 +1,94 @@
+/* Arrangement map (L114, T54–T58), built from the map3 prototype. Studio direction: the Studio's tokens and timeline, read-only.
+   Colour lives in the map; the header stays ivory and grey with one gold action. */
+.root {
+  --bg: #131110; --panel: #1a1715; --ink: #f1e6d3; --muted: #aa9c88; --faint: #958a7c; --line: #2c2622; --gold: #f2b134;
+  min-height: 100dvh; display: flex; flex-direction: column; background: var(--bg); color: var(--ink);
+  font-family: var(--f-mono), monospace; font-size: 13px;
+}
+.root :focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.appBar { height: 64px; flex: none; display: flex; align-items: center; gap: 28px; padding: 0 24px; background: var(--panel); border-bottom: 1px solid var(--line); }
+.logo { font: italic 400 30px var(--f-serif); display: flex; align-items: center; gap: 12px; flex: none; }
+.mark { width: 30px; height: 30px; flex: none; }
+.appRight { margin-left: auto; }
+
+/* Track head: back, name with its facts underneath, the two actions. The name yields first. */
+.head { flex: none; display: flex; align-items: center; gap: 24px; padding: 16px 24px; min-width: 0; }
+.back { flex: none; color: var(--muted); text-decoration: none; font-size: 12px; border-radius: 4px; transition: color 150ms ease; }
+.back:hover { color: var(--ink); }
+.title { min-width: 0; flex: 1 1 auto; }
+.title h1 { margin: 0; font: italic 400 34px/1.1 var(--f-serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.title p { margin: 3px 0 0; display: flex; gap: 0; font-size: 12px; color: var(--muted); min-width: 0; }
+.uploader { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.facts { flex: none; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.actions { flex: none; margin-left: auto; display: flex; align-items: center; gap: 14px; }
+.done { font-size: 12px; color: var(--muted); max-width: 340px; }
+.textBtn { font: 500 12.5px var(--f-mono); color: var(--muted); background: none; border: 0; border-radius: 4px; padding: 0 6px; min-height: 32px; cursor: pointer; white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #5a4f45; transition: color 150ms ease; }
+.textBtn:hover { color: var(--ink); }
+.textBtn:disabled { color: #7a6d5d; cursor: not-allowed; text-decoration: none; }
+.start { font: 500 12px var(--f-mono); color: var(--bg); background: var(--gold); border: 1px solid var(--gold); border-radius: 99px; padding: 6px 12px; cursor: pointer; white-space: nowrap; transition: background-color 150ms ease, transform 120ms ease-out; }
+.start:hover { background: #f6bf52; }
+.start:active { transform: scale(.97); }
+.start:disabled { background: transparent; border-color: #3a322c; color: var(--muted); cursor: not-allowed; transform: none; opacity: .45; }
+
+/* Mentor: plain text under the map, the map's own note */
+.mentor { flex: none; margin: 0 24px 32px 128px; }
+.mentor .quietLine { color: var(--muted); }
+.mentor p { margin: 0; max-width: 92ch; line-height: 1.7; color: var(--ink); text-wrap: pretty; }
+.mentor .textBtn { min-height: 0; padding: 0 2px; }
+
+/* Read-out (empty until pointed) and the one estimate line */
+.info { flex: none; display: flex; align-items: center; gap: 24px; height: 36px; padding: 0 24px; border-top: 1px solid var(--line); font-size: 12px; }
+.read { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.note { flex: none; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.sep { color: #6f6357; margin: 0 8px; }
+.hatchKey { width: 16px; height: 10px; border: 1px solid rgba(241,230,211,.35); background: repeating-linear-gradient(135deg, rgba(241,230,211,.4) 0 1px, transparent 1px 5px); }
+
+/* Timeline: fixed 60 px lanes, air below */
+.grid { flex: none; position: relative; display: grid; grid-template-columns: 128px minmax(0, 1fr); grid-template-rows: 48px repeat(5, clamp(60px, calc((100dvh - 330px) / 5), 96px)); border-top: 1px solid var(--line); margin-bottom: 24px; }
+.corner { background: var(--panel); border: solid var(--line); border-width: 0 1px 1px 0; display: flex; align-items: flex-end; justify-content: flex-end; padding: 0 14px 8px; font-size: 11px; color: var(--muted); cursor: help; }
+.ruler { position: relative; background: var(--panel); border-bottom: 1px solid var(--line); }
+.sec { position: absolute; top: 0; height: 26px; padding: 0 8px; background: none; border: 0; font: 400 11.5px/26px var(--f-mono); color: var(--ink); text-align: left; white-space: nowrap; overflow: hidden; cursor: pointer; transition: background-color 150ms ease; }
+.sec:hover { background: rgba(241,230,211,.05); }
+.sec[aria-pressed="true"] { background: rgba(241,230,211,.09); }
+.root .sec:focus-visible { outline-offset: -1px; }
+/* Too narrow to name: the label appears on hover or focus, on a plate over its neighbours */
+.narrow { overflow: visible; z-index: 2; }
+/* A small notch says a section is there even when its name is hidden */
+.narrow::before { content: ""; position: absolute; left: 4px; top: 9px; width: 3px; height: 8px; border-radius: 1px; background: var(--muted); }
+.narrow:hover::before, .narrow:focus-visible::before { visibility: hidden; }
+.narrow span { visibility: hidden; position: absolute; left: 0; top: 0; padding: 0 8px; background: #2b2622; border-radius: 0 3px 3px 0; }
+.narrow:hover span, .narrow:focus-visible span { visibility: visible; }
+.num { position: absolute; bottom: 4px; padding-left: 5px; font-size: 10.5px; line-height: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.here { position: absolute; top: 0; height: 26px; padding: 0 8px; font: 500 11.5px/26px var(--f-mono); color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; z-index: 3; background: var(--panel); }
+.secLine { position: absolute; top: 0; bottom: 0; width: 1px; background: #8f806e; pointer-events: none; }
+.lh { --c: var(--muted); position: relative; display: flex; align-items: center; justify-content: flex-end; padding: 0 14px; background: var(--panel); border: solid var(--line); border-width: 0 1px 1px 0; font-weight: 500; font-size: 13px; }
+.lh::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; background: var(--c); }
+.lane { position: relative; border-bottom: 1px solid var(--line); background-image: linear-gradient(90deg, rgba(241,230,211,.018) 1px, transparent 1px); background-size: var(--step) 100%; }
+.selCol { position: absolute; top: 0; bottom: 0; background: rgba(241,230,211,.05); pointer-events: none; }
+
+/* Blocks: one flat fill and a 1 px edge in the lane colour. "Maybe" is hatched. */
+.block {
+  --c: var(--muted); position: absolute; top: 8px; bottom: 8px; border-radius: 3px;
+  background: color-mix(in srgb, var(--c) 30%, var(--bg)); border: 1px solid color-mix(in srgb, var(--c) 70%, var(--bg));
+}
+.block:hover, .block:focus-visible { background: color-mix(in srgb, var(--c) 44%, var(--bg)); }
+.maybe { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--c) 50%, transparent) 0 1px, transparent 1px 6px); border-color: color-mix(in srgb, var(--c) 45%, var(--bg)); }
+.maybe:hover, .maybe:focus-visible { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--c) 75%, transparent) 0 1px, transparent 1px 6px); }
+.none { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--faint); }
+.unheard { position: absolute; top: 0; bottom: 0; right: 0; border-left: 1px dashed rgba(241,230,211,.55); background: rgba(19,17,16,.55); }
+.ruler .unheard { top: 0; }
+
+/* Not mapped yet */
+.empty { position: absolute; left: 128px; right: 0; top: 48px; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 16px; background: rgba(19,17,16,.6); }
+.empty h2 { margin: 0; font: italic 400 30px var(--f-serif); }
+.empty p { margin: 0 0 6px; max-width: 46ch; color: var(--muted); line-height: 1.6; text-wrap: pretty; }
+
+/* The SoundCloud player plays the track for the listen; it stays in the page but out of sight. */
+.player { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; border: 0; }
+.problem { color: #ef8a6b; font-size: 12px; }
+
+/* L138: the reference's playhead, like the Studio's: a plain ink line that moves with the player. */
+.playhead { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--ink); pointer-events: none; z-index: 2; }
+.playheadTop::before { content: ""; position: absolute; bottom: 0; left: -5px; border: 6px solid transparent; border-bottom: 8px solid var(--ink); border-top: 0; }

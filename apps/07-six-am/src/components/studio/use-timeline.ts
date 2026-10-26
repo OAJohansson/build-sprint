@@ -4,9 +4,11 @@
 // blocks, mute, the transport and the filter knob. The edit rules live in @/lib/timeline.
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
-  BARS, type Doc, type Loop, type Region,
-  loopById, newId, place, snapBar, snapLength,
+  docBars, type Doc, type Loop, type Region,
+  loopById, newId, place, registerSounds, silentLanes, snapBar, snapLength,
 } from "@/lib/timeline";
+import type { Sound } from "@/lib/synths/loop";
+import type { Scale } from "@/lib/synths/theory";
 import type { AudioEngine } from "./audio";
 
 type Drag =
@@ -22,6 +24,15 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 37) {
   const [doc, setDoc] = useState<Doc>(initial);
   const [past, setPast] = useState<Doc[]>([]);
   const docRef = useRef(doc);
+  // The track's own sounds draw like crate loops (add-only registry, see timeline.ts).
+  registerSounds(doc.sounds);
+  // A synth's key: the track's (a template copies the reference's), else the crate's A minor.
+  const key = doc.key?.key ?? "A";
+  const scale: Scale = doc.key?.scale === "major" ? "major" : "minor";
+  // The track's length: 64 bars, or a template's own (S2). It never changes while the track is open.
+  // shortcut: every bar is squeezed into the lanes' width (a 200-bar template gets ~6 px bars); add
+  // horizontal scroll or zoom when the map view's design lands.
+  const bars = docBars(initial);
 
   const [playing, setPlaying] = useState(false);
   // The demo track opens mid-song (bar 37); a Mentor starting point opens at bar 1 (user test F3).
@@ -41,14 +52,17 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 37) {
   useEffect(() => {
     const el = lanesRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(() => setPxPerBar(el.clientWidth / BARS));
+    const ro = new ResizeObserver(() => setPxPerBar(el.clientWidth / bars));
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [bars]);
 
-  const commit = useCallback((next: Doc) => {
+  // Edits that come in a stream (a knob being dragged) share one undo step: same `merge` key, one entry.
+  const lastMerge = useRef<string | null>(null);
+  const commit = useCallback((next: Doc, merge?: string) => {
     const prev = docRef.current;
-    setPast((p) => [...p.slice(-49), prev]);
+    if (!merge || merge !== lastMerge.current) setPast((p) => [...p.slice(-49), prev]);
+    lastMerge.current = merge ?? null;
     docRef.current = next;
     setDoc(next);
   }, []);
@@ -68,6 +82,13 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 37) {
     commit({ ...d, muted: d.muted.map((m, i) => (i === track ? !m : m)) });
   }, [commit]);
 
+  /** L140: solo a lane (several may be); saved with the track, undoable like mute. */
+  const toggleSolo = useCallback((track: number) => {
+    const { soloed, ...d } = docRef.current;
+    const next = d.muted.map((_, i) => (i === track ? !soloed?.[i] : !!soloed?.[i]));
+    commit(next.some(Boolean) ? { ...d, soloed: next } : d);
+  }, [commit]);
+
   const remove = useCallback((id: string) => {
     const d = docRef.current;
     commit({ ...d, regions: d.regions.filter((r) => r.id !== id) });
@@ -80,11 +101,43 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 37) {
   const playheadRef = useRef(playhead);
   useLayoutEffect(() => { playheadRef.current = playhead; });
 
-  useEffect(() => { engine().then((e) => e.setRegions(doc.regions)); }, [engine, doc.regions]);
-  useEffect(() => { engine().then((e) => e.setMuted(doc.muted)); }, [engine, doc.muted]);
+  useEffect(() => { engine().then((e) => { e.setBars(bars); e.setRegions(doc.regions); }); }, [engine, doc.regions, bars]);
+  // The engine only knows "silent": solo (L140) decides over mute.
+  const silent = silentLanes(doc);
+  const silentKey = silent.join();
+  useEffect(() => { engine().then((e) => e.setMuted(silentKey.split(",").map((x) => x === "true"))); }, [engine, silentKey]);
   useEffect(() => { engine().then((e) => e.setFilter(filter)); }, [engine, filter]);
   useEffect(() => { engine().then((e) => e.setPreview(preview)); }, [engine, preview]);
   useEffect(() => { engine().then((e) => e.setTempo(bpm)); }, [engine, bpm]);
+  // Sounds before regions: the regions' sound index is built from them.
+  useEffect(() => { engine().then((e) => e.setSounds(doc.sounds ?? [])); }, [engine, doc.sounds]);
+  useEffect(() => { engine().then((e) => e.setKey(key, scale)); }, [engine, key, scale]);
+
+  /** The sound drawer's Listen: loop one sound alone (null stops). Stops the crate preview. */
+  const [previewSound, setPreviewSoundState] = useState<Sound | null>(null);
+  const setPreviewSound = useCallback((x: Sound | null) => {
+    setPreviewSoundState(x);
+    if (x) setPreview(null);
+    engine().then((e) => e.setPreviewSound(x));
+  }, [engine]);
+
+  /** Add a sound to its lane at `bar` (one pass long, overwriting what's there) and select it. */
+  const addSound = useCallback((x: Sound, bar: number) => {
+    const d = docRef.current, lb = x.bars;
+    registerSounds([x]);
+    const start = Math.min(Math.max(1, Math.floor(bar)), Math.max(1, bars - lb + 1));
+    const r: Region = { id: newId(), loopId: x.id, track: x.lane, start, length: lb };
+    commit({ ...d, sounds: [...(d.sounds ?? []), x], regions: place(d.regions, r) });
+    setSelected(r.id);
+    return r;
+  }, [commit, bars]);
+
+  /** Change a sound everywhere it plays (knobs live; a knob drag is one undo step). */
+  const updateSound = useCallback((x: Sound, merge?: string) => {
+    const d = docRef.current;
+    registerSounds([x]);
+    commit({ ...d, sounds: (d.sounds ?? []).map((o) => (o.id === x.id ? x : o)) }, merge);
+  }, [commit]);
 
   // Transport: the music runs on the audio clock; the playhead just reads where it is.
   useEffect(() => {
@@ -140,10 +193,10 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 37) {
       track(e, (ev) => {
         const lane = (document.elementFromPoint(ev.clientX, ev.clientY) as HTMLElement | null)?.closest<HTMLElement>("[data-track]");
         const onOwnTrack = lane && Number(lane.dataset.track) === loop.track;
-        const bar = onOwnTrack ? snapBar(laneX(ev.clientX) - (loop.bars * ppbRef.current) / 2, ppbRef.current, loop.bars) : null;
+        const bar = onOwnTrack ? snapBar(laneX(ev.clientX) - (loop.bars * ppbRef.current) / 2, ppbRef.current, loop.bars, bars) : null;
         setDrag({ type: "new", loop, x: ev.clientX, y: ev.clientY, bar });
       }, (_ev, moved) => {
-        if (!moved) { setPreview((p) => (p === loop.id ? null : loop.id)); return; }
+        if (!moved) { setPreviewSound(null); setPreview((p) => (p === loop.id ? null : loop.id)); return; }
         const d = dragRef.current;
         if (d?.type === "new" && d.bar !== null) {
           const r: Region = { id: newId(), loopId: loop.id, track: loop.track, start: d.bar, length: loop.bars };
@@ -168,7 +221,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 37) {
         clearTimeout(hold);
         const overBin = !!(document.elementFromPoint(ev.clientX, ev.clientY) as HTMLElement | null)?.closest("[data-bin]");
         // Over the bin, the block stays put; elsewhere it follows along its track.
-        const start = overBin ? r.start : snapBar(laneX(ev.clientX) - offset, ppbRef.current, r.length);
+        const start = overBin ? r.start : snapBar(laneX(ev.clientX) - offset, ppbRef.current, r.length, bars);
         setDrag({ type: "move", id: r.id, offset, start, overBin });
       }, () => {
         clearTimeout(hold);
@@ -191,7 +244,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 37) {
       const lb = loopById(r.loopId).bars;
       track(e, (ev) => {
         const w = laneX(ev.clientX) - (r.start - 1) * ppbRef.current;
-        setDrag({ type: "resize", id: r.id, length: snapLength(w, ppbRef.current, lb, r.start) });
+        setDrag({ type: "resize", id: r.id, length: snapLength(w, ppbRef.current, lb, r.start, bars) });
       }, (_ev, moved) => {
         if (!moved) return;
         const d = dragRef.current;
@@ -206,7 +259,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 37) {
   /** Spread onto the ruler: click or drag sets where play starts. */
   const ruler = {
     onPointerDown: (e: React.PointerEvent) => {
-      const set = (x: number) => jumpTo(Math.min(Math.max(Math.floor(x / ppbRef.current) + 1, 1), BARS));
+      const set = (x: number) => jumpTo(Math.min(Math.max(Math.floor(x / ppbRef.current) + 1, 1), bars));
       set(laneX(e.clientX));
       track(e, (ev) => set(laneX(ev.clientX)), () => {});
     },
@@ -248,13 +301,13 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 37) {
   const ghost = drag?.type === "new" ? drag : null;
   const bin = drag?.type === "move" ? { id: drag.id, over: drag.overBin } : null;
   const inTrack = new Set(doc.regions.map((r) => r.loopId));
-  const sounding = doc.muted.map((m, t) => !m && regions.some((r) => r.track === t && playhead >= r.start && playhead < r.start + r.length));
+  const sounding = silent.map((m, t) => !m && regions.some((r) => r.track === t && playhead >= r.start && playhead < r.start + r.length));
   const bar = Math.floor(playhead), beat = Math.floor((playhead - bar) * 4) + 1;
 
   return {
-    doc, regions, playing, setPlaying, playhead, jumpTo, bar, beat, selected, setSelected,
+    doc, bars, key, scale, engine, previewSound, setPreviewSound, addSound, updateSound, markers: initial.markers ?? [], regions, playing, setPlaying, playhead, jumpTo, bar, beat, selected, setSelected,
     preview, setPreview, group, setGroup, filter, ghost, bin, inTrack, sounding, pxPerBar, lanesRef,
-    canUndo: past.length > 0, undo, toggleMute, remove,
+    canUndo: past.length > 0, undo, toggleMute, toggleSolo, silent, remove,
     crateItem, blockBody, blockGrip, ruler, knob,
   };
 }

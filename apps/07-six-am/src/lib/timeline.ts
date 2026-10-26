@@ -1,7 +1,12 @@
 // The track model: the crate, the demo track, the pure edit rules (snap, repeat, overwrite)
 // and the drawn waveforms. No React here, so the rules can be unit tested.
+import { soundMeta, type Sound } from "./synths/loop";
 
+/** A track's length when it doesn't set its own (every track saved before Phase 3). */
 export const BARS = 64;
+/** Lengths a track may set (a template takes the reference track's length). */
+export const MIN_BARS = 4;
+export const MAX_BARS = 512;
 export const TRACKS = ["Drums", "Bass", "Chords", "Top / FX"] as const;
 
 export type Kind =
@@ -12,7 +17,37 @@ export type Kind =
 
 export type Loop = { id: string; track: number; name: string; bars: number; vibe: string; kind: Kind };
 export type Region = { id: string; loopId: string; track: number; start: number; length: number };
-export type Doc = { regions: Region[]; muted: boolean[] };
+/** A section marker on the timeline: bar is 1-based (bar 1 = the start), label like "drop". */
+export type Marker = { bar: number; label: string };
+/**
+ * A track. regions and muted are all that tracks saved before Phase 3 have; the rest is optional
+ * and set by a template (S2): its own length in bars (else BARS), tempo (else the device tempo),
+ * key, and section markers.
+ */
+export type Doc = {
+  regions: Region[];
+  muted: boolean[];
+  bars?: number;
+  bpm?: number;
+  key?: { key: string; scale: string };
+  markers?: Marker[];
+  /** S3/S4: the track's own sounds (synths, kits, AI loops); a region plays one by its id. */
+  sounds?: Sound[];
+  /** The reference track's analysis id (its SoundCloud URL), for a template made from a map (L134):
+   *  the AI loop request sends it so the loop gets the track's style words. */
+  analysisId?: string;
+  /** L140: soloed lanes (any solo silences the others; solo beats mute). Missing when none is. */
+  soloed?: boolean[];
+};
+
+/** Which lanes are silent: with any lane soloed, every lane that isn't; otherwise the muted ones. */
+export function silentLanes(d: Pick<Doc, "muted" | "soloed">): boolean[] {
+  const solo = d.soloed?.some(Boolean) ? d.soloed : null;
+  return d.muted.map((m, i) => (solo ? !solo[i] : m));
+}
+
+/** How many bars a track has. */
+export const docBars = (d: Pick<Doc, "bars">) => d.bars ?? BARS;
 
 const L = (track: number, name: string, bars: number, vibe: string, kind: Kind): Loop => ({
   id: name.toLowerCase().replace(/[^a-z]+/g, "-"),
@@ -72,7 +107,16 @@ export const LOOPS: Loop[] = [
   L(3, "Siren", 4, "rave · alarm", "chop"),
   L(3, "Vinyl Crackle", 4, "dusty · record shop", "shaker"),
 ];
-export const loopById = (id: string) => LOOPS.find((l) => l.id === id)!;
+// A track's own sounds (synths, kits, AI loops, S3/S4) look like crate loops to the timeline.
+// shortcut: a module-wide, add-only registry the open track fills (registerSounds), so the edit
+// rules keep their one-argument loopById; pass the doc's sounds through instead if two tracks
+// ever need to be open at once.
+const SOUND_LOOPS = new Map<string, Loop>();
+export function registerSounds(sounds: Sound[] | undefined) {
+  for (const x of sounds ?? []) SOUND_LOOPS.set(x.id, { id: x.id, ...soundMeta(x) });
+}
+export const loopById = (id: string) => (LOOPS.find((l) => l.id === id) ?? SOUND_LOOPS.get(id))!;
+export const isCrateLoop = (id: string) => LOOPS.some((l) => l.id === id);
 
 // Random, so blocks added after reopening a saved track never clash with the saved ones.
 export const newId = () => `r${Math.random().toString(36).slice(2, 10)}${Date.now().toString(36).slice(-4)}`;
@@ -92,16 +136,16 @@ export const demoDoc = (): Doc => ({
   muted: [false, false, false, false],
 });
 
-/** Nearest bar line for a pixel offset into the lanes, kept inside the timeline. */
-export function snapBar(x: number, pxPerBar: number, length: number) {
+/** Nearest bar line for a pixel offset into the lanes, kept inside the timeline (`total` bars). */
+export function snapBar(x: number, pxPerBar: number, length: number, total = BARS) {
   const bar = Math.round(x / pxPerBar) + 1;
-  return Math.min(Math.max(bar, 1), BARS - length + 1);
+  return Math.min(Math.max(bar, 1), total - length + 1);
 }
 
 /** Length in whole loop repeats for a pixel width, at least one repeat, never past the end. */
-export function snapLength(width: number, pxPerBar: number, loopBars: number, start: number) {
+export function snapLength(width: number, pxPerBar: number, loopBars: number, start: number, total = BARS) {
   const reps = Math.max(1, Math.round(width / pxPerBar / loopBars));
-  const maxReps = Math.max(1, Math.floor((BARS - start + 1) / loopBars));
+  const maxReps = Math.max(1, Math.floor((total - start + 1) / loopBars));
   return Math.min(reps, maxReps) * loopBars;
 }
 
@@ -167,4 +211,17 @@ export function wavePath(kind: Kind, loopBars: number, totalBars: number, seed =
     d += `M${i + 0.5} ${(50 - h).toFixed(1)}V${(50 + h).toFixed(1)}`;
   }
   return d;
+}
+
+/**
+ * The first bar at or after `from` where `length` bars are free on a track, else the first free
+ * span from bar 1; null when the track has no room (F1: a generated loop never overwrites).
+ */
+export function firstFreeBar(regions: Region[], track: number, length: number, from: number, total = BARS): number | null {
+  const taken = regions.filter((r) => r.track === track);
+  const free = (b: number) => taken.every((r) => r.start + r.length <= b || r.start >= b + length);
+  const last = total - length + 1;
+  for (let b = Math.max(1, Math.floor(from)); b <= last; b++) if (free(b)) return b;
+  for (let b = 1; b < Math.min(Math.floor(from), last + 1); b++) if (free(b)) return b;
+  return null;
 }

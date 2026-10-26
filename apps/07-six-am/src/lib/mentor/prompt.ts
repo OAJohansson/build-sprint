@@ -66,6 +66,8 @@ export const SYSTEM_PROMPT = `You are the Mentor inside Six AM, a small app wher
 What you receive, and what you never receive
 - You only ever get text and numbers: measurements that Six AM's "Ears" made in the person's browser (BPM, key, energy, brightness, and style likelihoods from a classifier trained on Discogs styles), the uploader's own title, genre tag and tags from SoundCloud, the person's taste profile and their own genre tags, and what you find with web search.
 - You never receive audio and you have never heard any track. Never say or imply that you listened ("I hear", "sounds like", "that bassline"). Say "Ears measured…", "the uploader tags it…", "going by the numbers…" instead.
+- Some tracks also have an arrangement map: Ears measured the whole track in the person's browser and gives its bar grid, its sections (intro, build, drop, breakdown, outro) with bars and times, and per-layer ESTIMATES (kick, bass, chords, hats, vocals) read from frequency bands of the full mix. When asked how a track is built, explain its structure from those numbers: which section starts at which bar, how long the build is, which layers come in or drop out where, and what that section does for a dancer or a DJ. Label those sentences ears. Call the layers estimates ("Ears estimates the bass comes in at bar 17"), never certainties, and say vocals are the roughest. Still never claim to have heard it. Bars are counted from 1 at the first downbeat, as in the Studio.
+- Explaining a structure means teaching it, not reading the map back (the person sees the map): up to 3 sentences. One sentence (ears) on what the map shows, with the bars of the one or two sections that matter most; then one or two (general) on what that section does and why producers use it (a breakdown takes the kick out so tension builds; a build lifts energy so the drop lands harder; a long intro gives DJs room to mix), tied to this track. Quote only bar ranges that appear in the map facts, exactly as written there. Asked to tell more about a structure, go one level deeper instead of adding numbers: how to copy it in the Six AM Studio ("Start a track from this" opens a track with the same tempo, key, length and section markers; fill the lanes section by section, keep the kick out where the breakdown is) or the idea behind it.
 
 Sources: label every fact
 - Every sentence you return carries exactly one source:
@@ -178,6 +180,10 @@ export type MentorInput = {
   discussed?: string[];
   /** F1: full facts of the most recently discussed track (for follow-ups and ear training). */
   lastDiscussed?: EarsAnalysis | null;
+  /** F9: background Six AM sends with this one question (not the person's words, not stored). */
+  background?: string;
+  /** Phase 3 (A4): arrangement maps as text (mapContext), by track id, for the tracks in view. */
+  maps?: Record<string, string>;
 };
 
 export const ANSWER_TOOL: Anthropic.Beta.BetaTool = {
@@ -212,13 +218,19 @@ function jobText(input: MentorInput): string {
   const spec = JOBS_SPEC[input.job];
   const parts = [`Job: ${input.job}\n${spec.instruction}${spec.web ? "" : "\nDo not use web search for this job."}`];
   const t = input.track;
-  if (t) parts.push(`Track facts (each line starts with its source):\n${trackContext(t)}`);
+  const withMap = (a: EarsAnalysis) => `${trackContext(a)}${input.maps?.[a.id] ? `\n${input.maps[a.id]}` : ""}`;
+  if (t) parts.push(`Track facts (each line starts with its source):\n${withMap(t)}`);
   else if (input.job === "chat") {
     if (input.discussed?.length) parts.push(`Tracks discussed in this conversation, oldest first:\n${input.discussed.map((d, i) => `${i + 1}. ${d}`).join("\n")}`);
-    if (input.lastDiscussed) parts.push(`Full facts of the most recently discussed track:\n${trackContext(input.lastDiscussed)}`);
+    if (input.lastDiscussed) parts.push(`Full facts of the most recently discussed track:\n${withMap(input.lastDiscussed)}`);
     parts.push(input.selected
-      ? `The row the person clicked in the table this session (light context only; the conversation comes first):\n${trackContext(input.selected)}`
+      ? `The row the person clicked in the table this session (light context only; the conversation comes first):\n${withMap(input.selected)}`
       : "The person hasn't clicked a row in the table this session.");
+    // Maps of library tracks the question names (found by title), not already shown above.
+    const shown = new Set([input.lastDiscussed?.id, input.selected?.id]);
+    const named = Object.entries(input.maps ?? {}).filter(([id]) => !shown.has(id));
+    if (input.background) parts.push(`Background from Six AM for this question (not the person's words; use it, don't quote it back as theirs):\n${input.background}`);
+    if (named.length) parts.push(`Arrangement maps of tracks the question names:\n${named.map(([id, text]) => `Track id: ${id}\n${text}`).join("\n\n")}`);
   } else if (input.job !== "setup" && input.job !== "learn" && input.job !== "propose_groups" && input.job !== "taste_session") {
     parts.push("No track is selected: answer generally.");
   }

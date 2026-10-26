@@ -40,7 +40,7 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Full layer model, automation lanes, mixer (ST-5–ST-10) | Real arrangements; needed by Remake | Phase 4 |
 | Synth Lab: playable 303, sub, organ, reese (LA-1, LA-2) | Shape my own sounds | Phase 4 |
 | Remake mode (DR-4) | Rebuild a track lane by lane with the original alongside | Phase 4 |
-| Live stem separation "Neural Mix" (DR-2), offline stems for owned files (DR-3) | Hear just the bassline; personal use only, licence needed if public | Phase 5 (last: most uncertain) |
+| Live stem separation "Neural Mix" (DR-2), offline stems for owned files (DR-3) | Hear just the bassline; personal use only, licence needed if public. Owner, 26 Oct: "only listen to the bass" of the original (Solo on the draft's lanes shipped in Phase 3, L140) | Phase 5 (last: most uncertain) |
 | AI-generated loops (LA-3) | Generate new sounds; licences to check | later |
 | Accounts, cloud sync, sharing, mobile, non-Chrome browsers | Out of scope for a personal tool | no (for now) |
 | Mark each analysed track as filed into a playlist, with a "31 / 56 placed · 6 unsure" progress line and a per-row playlist picker | User test 23 Oct: the thing that would bring them back tomorrow | obsolete (owner, 24 Oct: sorted *B b baaangers* by hand) |
@@ -60,3 +60,14 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Analyse polish left by the critic at 9/10: tell the two % headers apart; actions (Analyse, Cancel) vs passive statuses; toolbar stays one row with the Mentor open; drop the Mentor button's pressed look while the panel shows its own close | Critic 25 Oct, round 2 | later |
 | Fewer columns: drop Also/% and Tone from the table (both in the strip) so Track gets the room | Critic 25 Oct, round 1 (kept for now: not in the owner's two rows) | owner to decide |
 | Sandbox: reset the in-memory Mentor chat between test runs (or a thread per run) | User test 25 Oct | later |
+
+## Phase 3 follow-ups (26 Oct)
+
+| Idea | Why | Status |
+| --- | --- | --- |
+| Tone Transport one-tick slip at some tempos (≤ 3.5 ms at 90 BPM) in the offline/Transport path | X3 finding F1; under the 5 ms bar above 62.5 BPM | later |
+| Section labelling: merge repeated same-label pieces in the ruler, label by role (build before a drop, cooldown near the end), catch intro → build; then re-run X1 (0/5 twice: recall 74%, precision 57%) | X1 failed; the map's ruler shows e.g. six "Intro" sections | next |
+| A real listen of the owner's own loved tracks to judge the map by ear (no public section times exist for the 10 validation tracks) | X1 can only be scored on public annotated tracks | owner review |
+| "Add to lane" for synths and kits never overwrites (AI loops already don't) | user test F1 scope | next (small) |
+| Store AI loop try reasons (now shown once) | L136 | later |
+| Reference layers shown faintly above the Studio lanes ("what's left to fill to get the same DNA") | user test: most wanted next | next big piece |

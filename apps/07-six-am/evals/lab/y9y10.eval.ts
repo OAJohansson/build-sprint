@@ -10,13 +10,15 @@ import { notesForLoop } from "@/lib/make/pattern";
 import { MAKE_PRESETS, MAKE_PRESET_IDS } from "@/lib/make/presets";
 import { rmsDb } from "@/lib/make/level";
 
-const loops = JSON.parse(fs.readFileSync(new URL("./lab-loop-readings.json", import.meta.url), "utf8")).loops.filter((l: { readState: string }) => l.readState === "ready");
-const BPM = 126.05, RATE = 44100;
+// Re-grade (after L205/T107): my own live readings of the current build, both tracks.
+const loops = ["y10-readings-mason.json", "y10-readings-track2.json"].flatMap((f) => { const j = JSON.parse(fs.readFileSync(new URL(`./${f}`, import.meta.url), "utf8")); return j.loops.filter((l: { readState: string }) => l.readState === "ready").map((l: object) => ({ ...l, bpm: j.bpm ?? 126.05 })); });
+const RATE = 44100;
 const db = (x: number) => 10 * Math.log10(x + 1e-20);
 describe("Y9/Y10", () => {
   it("runs", () => {
     const ab: unknown[] = [], sug: unknown[] = [];
     for (const l of loops) {
+      const BPM = l.bpm;
       const bars = Math.round((l.loop.endMs - l.loop.startMs) / 1000 / (240 / BPM));
       const reading = { pattern: l.pattern, features: l.features, loopSteps: bars * 16 };
       const samples = Math.round(((l.loop.endMs - l.loop.startMs) / 1000) * RATE);

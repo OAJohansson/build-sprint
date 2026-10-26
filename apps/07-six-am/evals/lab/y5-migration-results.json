@@ -9,7 +9,7 @@
  "laneTrackSame": 301,
  "gainsSameAsToday": 301,
  "audibleSame": 301,
- "legacyMixRoundTrip": 301,
+ "legacyMixRoundTrip": 287,
  "migratedReparses": 301,
  "migratedIndexSame": 301,
  "regions": 2410,

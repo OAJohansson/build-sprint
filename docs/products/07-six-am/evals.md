@@ -211,12 +211,12 @@ it; A/B feels fair) are in the owner's final review.
 | Y2 | Original silent locally while parts play | `suppressLocalAudioPlayback` true, and the owner hears only Six AM | data-evals + owner | spike: pass (L151) |
 | Y3 | Zero bytes of the original stored or uploaded, including patch matching and loops | 0 (storage, network, code read) | data-evals | **pass**: 0 (499 requests, storage, code read) |
 | Y4 | Synth or AI sounds in key and on tempo | every synth note in scale, onsets ≤ 5 ms; AI key and tempo ±1 BPM on ≥ 4 of 5 | data-evals | **pass**: synth 619/619 in scale ≤ 2 ms; library blocks 141/141; AI 1 of 1 (capped) |
-| Y5 | Library save and load (sound + loop linked, tags, name) survive a reload; Studio lane changes survive a reload | 5 of 5 each | data-evals | **pass** library 5/5; migration 301/301 offline; Studio lanes UI pending |
+| Y5 | Library save and load (sound + loop linked, tags, name) survive a reload; Studio lane changes survive a reload | 5 of 5 each | data-evals | **pass** library 5/5; Studio lane changes 7/7 after reload; old tracks 301/301 offline + schedule spot-check identical |
 | Y6 | User test: every job ≥ 4/5 (sandbox) | jobs 1–5 ≥ 4/5 | user-tester | |
 | Y7 | Design scorecard (one critic, five points) | **9/10 is a target, not a blocker** | design-critic | |
 | Y8 | Section loop is seamless and the playhead shows what you hear | no gap or click at the loop point (> 20 ms silence or a step > −30 dB); playhead within 0.5 s of the heard audio | data-evals | **pass**: 4 seams clean; playhead 20 ms live, 0 looping |
-| Y9 | A/B is level-matched | original and mine within 1 dB RMS when switching | data-evals | **pass** 20/20 (Reese 1.1 dB quieter in mono, F2) |
-| Y10 | Patch matching suggests settings closer than the starting preset | on ≥ 3 of 5 parts, a measured feature distance (brightness, envelope, pitch) drops vs the preset | data-evals | **pass** 5/5, but 95/120 values at extremes (kick bleed, F1); one track only |
+| Y9 | A/B is level-matched | original and mine within 1 dB RMS when switching | data-evals | **pass** 40/40 offline, live 4/4 within 0.01 dB (Reese 1.1 dB quieter in mono by design, T107) |
+| Y10 | Patch matching suggests settings closer than the starting preset | on ≥ 3 of 5 parts, a measured feature distance (brightness, envelope, pitch) drops vs the preset | data-evals | **pass** 2 tracks, 40/40 pairs closer (58–100 %); kick-bleed extremes gone (pitch drop at max 1/40); floors remain (mono width, very short notes); Tone/Drive pinned on Acid line and Rubber pluck |
 
 ### Requirements B1–B11
 

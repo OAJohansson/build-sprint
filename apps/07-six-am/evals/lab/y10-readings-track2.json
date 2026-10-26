@@ -1,0 +1,946 @@
+{
+ "track": "https://soundcloud.com/carbune/lost-in-the-loop-o-deibys",
+ "loops": [
+  {
+   "loop": {
+    "startMs": 40425,
+    "endMs": 56032
+   },
+   "got": {
+    "startMs": 40425,
+    "endMs": 56032
+   },
+   "readState": "ready",
+   "preset": "round-sub",
+   "macros": {
+    "tone": 0.3,
+    "length": 0.55,
+    "pitchDrop": 0.35,
+    "drive": 0.2,
+    "wobble": 0,
+    "width": 0
+   },
+   "ticks": {
+    "tone": 0.25,
+    "length": 0.1,
+    "pitchDrop": 0.15,
+    "drive": 0.5,
+    "wobble": 0,
+    "width": 0.05
+   },
+   "pattern": {
+    "bars": 4,
+    "notes": [
+     {
+      "step": 4,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.93
+     },
+     {
+      "step": 7,
+      "midi": 36,
+      "dur": 3,
+      "vel": 0.74
+     },
+     {
+      "step": 12,
+      "midi": 36,
+      "dur": 2,
+      "vel": 0.94
+     },
+     {
+      "step": 15,
+      "midi": 36,
+      "dur": 1,
+      "vel": 0.65
+     },
+     {
+      "step": 16,
+      "midi": 36,
+      "dur": 2,
+      "vel": 0.93
+     },
+     {
+      "step": 19,
+      "midi": 36,
+      "dur": 1,
+      "vel": 0.71
+     },
+     {
+      "step": 20,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.91
+     },
+     {
+      "step": 23,
+      "midi": 38,
+      "dur": 3,
+      "vel": 0.74
+     },
+     {
+      "step": 24,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.86
+     },
+     {
+      "step": 28,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.92
+     },
+     {
+      "step": 31,
+      "midi": 38,
+      "dur": 1,
+      "vel": 0.64
+     },
+     {
+      "step": 32,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.87
+     },
+     {
+      "step": 35,
+      "midi": 42,
+      "dur": 1,
+      "vel": 0.71
+     },
+     {
+      "step": 36,
+      "midi": 43,
+      "dur": 2,
+      "vel": 0.93
+     },
+     {
+      "step": 39,
+      "midi": 43,
+      "dur": 1,
+      "vel": 0.78
+     },
+     {
+      "step": 40,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.96
+     },
+     {
+      "step": 44,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.97
+     },
+     {
+      "step": 47,
+      "midi": 43,
+      "dur": 1,
+      "vel": 0.72
+     },
+     {
+      "step": 48,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.93
+     },
+     {
+      "step": 49,
+      "midi": 43,
+      "dur": 1,
+      "vel": 0.85
+     },
+     {
+      "step": 55,
+      "midi": 43,
+      "dur": 1,
+      "vel": 0.75
+     },
+     {
+      "step": 56,
+      "midi": 43,
+      "dur": 2,
+      "vel": 0.97
+     },
+     {
+      "step": 60,
+      "midi": 43,
+      "dur": 2,
+      "vel": 1
+     },
+     {
+      "step": 63,
+      "midi": 43,
+      "dur": 1,
+      "vel": 0.72
+     }
+    ],
+    "confidence": 0.76,
+    "offsetMs": -55
+   },
+   "features": {
+    "brightHz": 107.95492383477803,
+    "lengthSteps": 1.3583342101284956,
+    "dropSemis": 0.3669763133866826,
+    "crestDb": 7.999615765981646,
+    "wobble": 0.10507728233688696,
+    "width": 0.03555451530820436,
+    "levelDb": -12.657773642429861
+   },
+   "levelDb": -12.652287090759364,
+   "active": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "suggestLine": "[make] suggest round-sub: 53 renders in 436 ms (437 ms round trip), distance 2.32 (preset 16.15)"
+  },
+  {
+   "loop": {
+    "startMs": 56032,
+    "endMs": 71639
+   },
+   "got": {
+    "startMs": 56032,
+    "endMs": 71639
+   },
+   "readState": "ready",
+   "preset": "round-sub",
+   "macros": {
+    "tone": 0.3,
+    "length": 0.55,
+    "pitchDrop": 0.35,
+    "drive": 0.2,
+    "wobble": 0,
+    "width": 0
+   },
+   "ticks": {
+    "tone": 0.3,
+    "length": 0.05,
+    "pitchDrop": 0.15,
+    "drive": 0.5,
+    "wobble": 0.05,
+    "width": 0
+   },
+   "pattern": {
+    "bars": 4,
+    "notes": [
+     {
+      "step": 4,
+      "midi": 36,
+      "dur": 2,
+      "vel": 0.96
+     },
+     {
+      "step": 7,
+      "midi": 36,
+      "dur": 1,
+      "vel": 0.82
+     },
+     {
+      "step": 8,
+      "midi": 36,
+      "dur": 2,
+      "vel": 0.97
+     },
+     {
+      "step": 12,
+      "midi": 36,
+      "dur": 2,
+      "vel": 1
+     },
+     {
+      "step": 15,
+      "midi": 36,
+      "dur": 1,
+      "vel": 0.77
+     },
+     {
+      "step": 16,
+      "midi": 36,
+      "dur": 2,
+      "vel": 0.94
+     },
+     {
+      "step": 19,
+      "midi": 36,
+      "dur": 1,
+      "vel": 0.74
+     },
+     {
+      "step": 20,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.88
+     },
+     {
+      "step": 28,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.98
+     },
+     {
+      "step": 31,
+      "midi": 38,
+      "dur": 3,
+      "vel": 0.81
+     },
+     {
+      "step": 32,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.93
+     },
+     {
+      "step": 35,
+      "midi": 40,
+      "dur": 1,
+      "vel": 0.8
+     },
+     {
+      "step": 36,
+      "midi": 43,
+      "dur": 2,
+      "vel": 0.94
+     },
+     {
+      "step": 39,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.77
+     },
+     {
+      "step": 40,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.93
+     },
+     {
+      "step": 44,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.92
+     },
+     {
+      "step": 47,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.68
+     },
+     {
+      "step": 48,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.94
+     },
+     {
+      "step": 51,
+      "midi": 38,
+      "dur": 1,
+      "vel": 0.73
+     },
+     {
+      "step": 52,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.91
+     },
+     {
+      "step": 55,
+      "midi": 43,
+      "dur": 1,
+      "vel": 0.77
+     },
+     {
+      "step": 56,
+      "midi": 43,
+      "dur": 2,
+      "vel": 0.99
+     },
+     {
+      "step": 60,
+      "midi": 43,
+      "dur": 2,
+      "vel": 0.97
+     },
+     {
+      "step": 63,
+      "midi": 43,
+      "dur": 1,
+      "vel": 0.69
+     }
+    ],
+    "confidence": 0.73,
+    "offsetMs": -58
+   },
+   "features": {
+    "brightHz": 98.05097033586077,
+    "lengthSteps": 1.3092377928949357,
+    "dropSemis": 0.5736531562385853,
+    "crestDb": 8.096135966471008,
+    "wobble": 0.07262480282547795,
+    "width": 0.015516514622092824,
+    "levelDb": -12.939251902524587
+   },
+   "levelDb": -12.938206411400335,
+   "active": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "suggestLine": "[make] suggest round-sub: 53 renders in 393 ms (393 ms round trip), distance 1.95 (preset 16.25)"
+  },
+  {
+   "loop": {
+    "startMs": 79443,
+    "endMs": 95050
+   },
+   "got": {
+    "startMs": 79443,
+    "endMs": 95050
+   },
+   "readState": "ready",
+   "preset": "round-sub",
+   "macros": {
+    "tone": 0.3,
+    "length": 0.55,
+    "pitchDrop": 0.35,
+    "drive": 0.2,
+    "wobble": 0,
+    "width": 0
+   },
+   "ticks": {
+    "tone": 0.35,
+    "length": 0.1,
+    "pitchDrop": 0.1,
+    "drive": 0.4,
+    "wobble": 0,
+    "width": 0
+   },
+   "pattern": {
+    "bars": 4,
+    "notes": [
+     {
+      "step": 2,
+      "midi": 38,
+      "dur": 1,
+      "vel": 0.81
+     },
+     {
+      "step": 3,
+      "midi": 36,
+      "dur": 2,
+      "vel": 0.93
+     },
+     {
+      "step": 6,
+      "midi": 36,
+      "dur": 3,
+      "vel": 0.75
+     },
+     {
+      "step": 11,
+      "midi": 36,
+      "dur": 2,
+      "vel": 0.96
+     },
+     {
+      "step": 14,
+      "midi": 36,
+      "dur": 3,
+      "vel": 0.73
+     },
+     {
+      "step": 18,
+      "midi": 36,
+      "dur": 1,
+      "vel": 0.79
+     },
+     {
+      "step": 19,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.9
+     },
+     {
+      "step": 22,
+      "midi": 38,
+      "dur": 3,
+      "vel": 0.68
+     },
+     {
+      "step": 23,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.89
+     },
+     {
+      "step": 27,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.96
+     },
+     {
+      "step": 30,
+      "midi": 38,
+      "dur": 3,
+      "vel": 0.67
+     },
+     {
+      "step": 34,
+      "midi": 30,
+      "dur": 1,
+      "vel": 0.79
+     },
+     {
+      "step": 35,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.91
+     },
+     {
+      "step": 54,
+      "midi": 31,
+      "dur": 3,
+      "vel": 0.83
+     },
+     {
+      "step": 56,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.86
+     },
+     {
+      "step": 59,
+      "midi": 38,
+      "dur": 2,
+      "vel": 1
+     },
+     {
+      "step": 62,
+      "midi": 43,
+      "dur": 1,
+      "vel": 0.68
+     },
+     {
+      "step": 63,
+      "midi": 43,
+      "dur": 1,
+      "vel": 0.89
+     }
+    ],
+    "confidence": 0.81,
+    "offsetMs": 44
+   },
+   "features": {
+    "brightHz": 82.04988007276172,
+    "lengthSteps": 1.3746996825396824,
+    "dropSemis": 0.1041083665611896,
+    "crestDb": 7.8540634003048435,
+    "wobble": 0.11886546769701688,
+    "width": 0.02324230807996891,
+    "levelDb": -11.189793308971726
+   },
+   "levelDb": -11.187447862476665,
+   "active": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "suggestLine": "[make] suggest round-sub: 53 renders in 506 ms (506 ms round trip), distance 2.05 (preset 14.38)"
+  },
+  {
+   "loop": {
+    "startMs": 149676,
+    "endMs": 165283
+   },
+   "got": {
+    "startMs": 149676,
+    "endMs": 165283
+   },
+   "readState": "ready",
+   "preset": "round-sub",
+   "macros": {
+    "tone": 0.3,
+    "length": 0.55,
+    "pitchDrop": 0.35,
+    "drive": 0.2,
+    "wobble": 0,
+    "width": 0
+   },
+   "ticks": {
+    "tone": 0.25,
+    "length": 0,
+    "pitchDrop": 0.15,
+    "drive": 0.3,
+    "wobble": 0,
+    "width": 0
+   },
+   "pattern": {
+    "bars": 4,
+    "notes": [
+     {
+      "step": 2,
+      "midi": 38,
+      "dur": 1,
+      "vel": 0.83
+     },
+     {
+      "step": 3,
+      "midi": 36,
+      "dur": 2,
+      "vel": 0.94
+     },
+     {
+      "step": 6,
+      "midi": 36,
+      "dur": 3,
+      "vel": 0.8
+     },
+     {
+      "step": 11,
+      "midi": 36,
+      "dur": 2,
+      "vel": 0.98
+     },
+     {
+      "step": 14,
+      "midi": 36,
+      "dur": 1,
+      "vel": 0.79
+     },
+     {
+      "step": 18,
+      "midi": 36,
+      "dur": 1,
+      "vel": 0.79
+     },
+     {
+      "step": 19,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.98
+     },
+     {
+      "step": 22,
+      "midi": 38,
+      "dur": 3,
+      "vel": 0.79
+     },
+     {
+      "step": 27,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.98
+     },
+     {
+      "step": 30,
+      "midi": 38,
+      "dur": 3,
+      "vel": 0.82
+     },
+     {
+      "step": 34,
+      "midi": 30,
+      "dur": 1,
+      "vel": 0.72
+     },
+     {
+      "step": 35,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.93
+     },
+     {
+      "step": 38,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.74
+     },
+     {
+      "step": 43,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.88
+     },
+     {
+      "step": 46,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.69
+     },
+     {
+      "step": 47,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.96
+     },
+     {
+      "step": 50,
+      "midi": 40,
+      "dur": 1,
+      "vel": 0.69
+     },
+     {
+      "step": 51,
+      "midi": 38,
+      "dur": 2,
+      "vel": 1
+     },
+     {
+      "step": 54,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.74
+     },
+     {
+      "step": 59,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.98
+     },
+     {
+      "step": 62,
+      "midi": 43,
+      "dur": 1,
+      "vel": 0.75
+     },
+     {
+      "step": 63,
+      "midi": 43,
+      "dur": 2,
+      "vel": 0.84
+     }
+    ],
+    "confidence": 0.91,
+    "offsetMs": 59
+   },
+   "features": {
+    "brightHz": 80.16684263939113,
+    "lengthSteps": 1.000153529856387,
+    "dropSemis": 0.11894018419045983,
+    "crestDb": 8.386728920287014,
+    "wobble": 0.20073769233727334,
+    "width": 0.010434450434542789,
+    "levelDb": -10.641666670642847
+   },
+   "levelDb": -10.641193846347345,
+   "active": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "suggestLine": "[make] suggest round-sub: 53 renders in 575 ms (575 ms round trip), distance 2.40 (preset 24.32)"
+  },
+  {
+   "loop": {
+    "startMs": 165283,
+    "endMs": 180890
+   },
+   "got": {
+    "startMs": 165283,
+    "endMs": 180890
+   },
+   "readState": "ready",
+   "preset": "round-sub",
+   "macros": {
+    "tone": 0.3,
+    "length": 0.55,
+    "pitchDrop": 0.35,
+    "drive": 0.2,
+    "wobble": 0,
+    "width": 0
+   },
+   "ticks": {
+    "tone": 0.35,
+    "length": 0.1,
+    "pitchDrop": 0,
+    "drive": 0.35,
+    "wobble": 0.05,
+    "width": 0
+   },
+   "pattern": {
+    "bars": 4,
+    "notes": [
+     {
+      "step": 3,
+      "midi": 38,
+      "dur": 1,
+      "vel": 0.84
+     },
+     {
+      "step": 4,
+      "midi": 36,
+      "dur": 2,
+      "vel": 0.96
+     },
+     {
+      "step": 7,
+      "midi": 36,
+      "dur": 3,
+      "vel": 0.77
+     },
+     {
+      "step": 12,
+      "midi": 36,
+      "dur": 2,
+      "vel": 0.99
+     },
+     {
+      "step": 15,
+      "midi": 36,
+      "dur": 3,
+      "vel": 0.79
+     },
+     {
+      "step": 19,
+      "midi": 36,
+      "dur": 1,
+      "vel": 0.81
+     },
+     {
+      "step": 20,
+      "midi": 38,
+      "dur": 2,
+      "vel": 1
+     },
+     {
+      "step": 23,
+      "midi": 38,
+      "dur": 1,
+      "vel": 0.81
+     },
+     {
+      "step": 24,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.98
+     },
+     {
+      "step": 28,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.94
+     },
+     {
+      "step": 31,
+      "midi": 38,
+      "dur": 3,
+      "vel": 0.82
+     },
+     {
+      "step": 35,
+      "midi": 30,
+      "dur": 1,
+      "vel": 0.75
+     },
+     {
+      "step": 36,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.93
+     },
+     {
+      "step": 39,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.72
+     },
+     {
+      "step": 44,
+      "midi": 31,
+      "dur": 2,
+      "vel": 0.86
+     },
+     {
+      "step": 47,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.76
+     },
+     {
+      "step": 48,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.97
+     },
+     {
+      "step": 51,
+      "midi": 40,
+      "dur": 1,
+      "vel": 0.75
+     },
+     {
+      "step": 52,
+      "midi": 38,
+      "dur": 2,
+      "vel": 1
+     },
+     {
+      "step": 55,
+      "midi": 31,
+      "dur": 1,
+      "vel": 0.77
+     },
+     {
+      "step": 60,
+      "midi": 38,
+      "dur": 2,
+      "vel": 0.99
+     },
+     {
+      "step": 63,
+      "midi": 43,
+      "dur": 1,
+      "vel": 0.75
+     }
+    ],
+    "confidence": 0.71,
+    "offsetMs": -58
+   },
+   "features": {
+    "brightHz": 78.84442100275929,
+    "lengthSteps": 1.3910651549508692,
+    "dropSemis": -0.8987474425721788,
+    "crestDb": 8.80122615608968,
+    "wobble": 0.1110015693064231,
+    "width": 0.012212213938832468,
+    "levelDb": -11.413982170971286
+   },
+   "levelDb": -11.41333452048575,
+   "active": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    false,
+    true
+   ],
+   "suggestLine": "[make] suggest round-sub: 51 renders in 442 ms (442 ms round trip), distance 2.25 (preset 15.85)"
+  }
+ ],
+ "bpm": 123.02
+}

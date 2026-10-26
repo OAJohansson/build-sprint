@@ -29,6 +29,7 @@ function Item() {
   const yum = yums.find((y) => y.id === id);
   const [view, setView] = useState<"sticker" | "photo">("sticker");
   const [busy, setBusy] = useState(false);
+  const [trouble, setTrouble] = useState(false);
 
   if (!yum) {
     return (
@@ -47,7 +48,7 @@ function Item() {
     if (!yum || busy) return;
     setBusy(true);
     const r = await fetch(`/api/yums/${yum.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ removed: true }) }).catch(() => null);
-    if (!r?.ok) { setBusy(false); return; }
+    if (!r?.ok) { setBusy(false); setTrouble(true); return; }
     dropYum(yum.id);
     setLastRemoved(yum);
     router.push("/");
@@ -57,6 +58,7 @@ function Item() {
     if (!yum) return;
     const r = await fetch(`/api/yums/${yum.id}/sticker`, { method: "POST" }).catch(() => null);
     if (r?.ok) putYum(((await r.json()) as { yum: Yum }).yum);
+    else setTrouble(true);
   }
 
   return (
@@ -80,7 +82,7 @@ function Item() {
         {yum.hasPhoto && (
           <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 rounded-[18px] border-2 border-cocoa bg-white p-[3px]" role="group" aria-label="Show">
             {(["sticker", "photo"] as const).map((v) => (
-              <button key={v} type="button" aria-pressed={view === v} onClick={() => setView(v)} className={`h-[30px] rounded-[15px] px-3 text-[13px] ${view === v ? "bg-cocoa text-cream" : ""}`}>
+              <button key={v} type="button" aria-pressed={view === v} onClick={() => setView(v)} className={`relative h-[30px] rounded-[15px] px-3 text-[13px] after:absolute after:inset-x-0 after:-inset-y-2 ${view === v ? "bg-cocoa text-cream" : ""}`}>
                 {v === "sticker" ? "Sticker" : "My photo"}
               </button>
             ))}
@@ -92,7 +94,7 @@ function Item() {
       {yum.sticker === "failed" && (
         <p className="-mt-1 flex items-center justify-center gap-2 text-[14px] text-bark lg:justify-start">
           The sticker didn&apos;t come out.
-          <button type="button" onClick={redraw} className="min-h-11 px-1 text-link">Draw it again</button>
+          <button type="button" onClick={redraw} className="min-h-11 px-1 text-link active:opacity-60">Draw it again</button>
         </p>
       )}
 
@@ -129,7 +131,8 @@ function Item() {
       )}
 
       <div className="flex-1" />
-      <button type="button" onClick={remove} disabled={busy} className="min-h-11 self-center px-2.5 text-[15px] text-link lg:col-start-2 lg:self-start lg:px-0">
+      {trouble && <p role="alert" className="text-center text-[15px] text-link lg:col-start-2 lg:text-left">Couldn&apos;t reach your book. Try again?</p>}
+      <button type="button" onClick={remove} disabled={busy} className="min-h-11 self-center px-2.5 text-[15px] text-link active:opacity-60 lg:col-start-2 lg:self-start lg:px-0">
         {busy ? "Removing…" : "Remove from my book"}
       </button>
     </main>

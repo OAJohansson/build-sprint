@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { DetailsForm } from "@/components/details-form";
 import { Gate } from "@/components/gate";
+import { Maggie } from "@/components/maggie";
 import { putYum, useBook } from "@/lib/book";
 import type { Yum, YumFields } from "@/lib/yum";
 
@@ -23,7 +24,9 @@ function Edit() {
   const yum = useBook().yums.find((y) => y.id === id);
   if (!yum) {
     return (
-      <main className="flex flex-1 items-center justify-center">
+      <main className="mx-auto flex w-full max-w-[440px] flex-1 flex-col items-center justify-center gap-4 px-7 text-center">
+        <Maggie pose="head" size={110} />
+        <p className="text-[18px]">I can&apos;t find that one in your book.</p>
         <Link href="/" className="btn btn-quiet">Back to my book</Link>
       </main>
     );

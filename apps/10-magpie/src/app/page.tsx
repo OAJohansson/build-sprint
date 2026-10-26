@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { FilterControls } from "@/components/filter-controls";
 import { Gate } from "@/components/gate";
 import { Maggie } from "@/components/maggie";
@@ -44,7 +44,7 @@ function Book() {
   if (!yums.length) return <Empty />;
 
   return (
-    <div className="flex flex-1 lg:flex-row">
+    <div id="book" className="flex flex-1 lg:flex-row">
       {/* L: the always-open filter panel. */}
       <aside className="hidden w-[290px] flex-none flex-col gap-[18px] border-r-[2.5px] border-cocoa px-6 py-7 lg:flex lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto">
         <Link href="/" className="text-[32px] font-semibold leading-none">magpie</Link>
@@ -124,20 +124,20 @@ function Shelves({ yums, go }: { yums: Yum[]; go: (f: Filters) => void }) {
       {shelves.map((s) => (
         <section key={s.id} className="flex flex-col gap-2 lg:gap-2.5" aria-labelledby={`shelf-${s.id}`}>
           <div className="flex items-baseline justify-between">
-            <h2 id={`shelf-${s.id}`} className="text-[18px] font-semibold lg:text-[21px]">{s.title}</h2>
+            <h2 id={`shelf-${s.id}`} className="min-w-0 break-words text-[18px] font-semibold lg:text-[21px]">{s.title}</h2>
             {s.id === "latest" ? (
-              <button type="button" onClick={() => go({ ...NO_FILTERS, all: true })} className="-my-3 min-h-11 px-1 text-[14px] text-link">{s.aside}</button>
+              <button type="button" onClick={() => go({ ...NO_FILTERS, all: true })} className="-my-3 min-h-11 flex-none px-1 text-[14px] text-link active:opacity-60">{s.aside}</button>
             ) : (
-              <button type="button" onClick={() => go(s.seeAll)} className="-my-3 min-h-11 px-1 text-[14px] text-dusk">{s.aside}</button>
+              <button type="button" onClick={() => go(s.seeAll)} className="-my-3 min-h-11 flex-none px-1 text-[14px] text-dusk active:opacity-60">{s.aside}</button>
             )}
           </div>
-          <ul className="no-scrollbar -mx-5 flex snap-x gap-2.5 overflow-x-auto px-5 pb-1 pt-1 lg:mx-0 lg:flex-wrap lg:gap-[18px] lg:overflow-visible lg:px-0">
+          <ul className="no-scrollbar -mx-5 flex snap-x overscroll-x-contain gap-2.5 overflow-x-auto px-5 pb-1 pt-1 lg:mx-0 lg:flex-wrap lg:gap-[18px] lg:overflow-visible lg:px-0">
             {s.yums.map((y) => (
               <li key={y.id} className="flex-none snap-start">
-                <Link href={`/yum/${y.id}`} className="flex w-20 flex-col items-center gap-1 text-center lg:w-[110px]">
+                <Link href={`/yum/${y.id}`} className="flex w-20 flex-col items-center gap-1 text-center transition-transform active:scale-[0.97] lg:w-[110px]">
                   <span className="lg:hidden"><Sticker yum={y} size={76} /></span>
                   <span className="hidden lg:block"><Sticker yum={y} size={100} /></span>
-                  <span className="line-clamp-2 w-full break-words text-[12px] leading-tight lg:text-[14px]">{y.name}</span>
+                  <span className="line-clamp-2 w-full break-words text-[12px] leading-snug lg:text-[14px]">{y.name}</span>
                 </Link>
               </li>
             ))}
@@ -163,7 +163,7 @@ function Results({ f, results, home, go, openSheet }: { f: Filters; results: Yum
       </div>
       <div className="flex items-center gap-2">
         <Maggie pose="head" size={40} />
-        <p className="text-[16px]" role="status">{resultsLine(f, results.length, home)}</p>
+        <p className="min-w-0 break-words text-[16px]" role="status">{resultsLine(f, results.length, home)}</p>
         {isFiltered({ ...f, q: "" }) && (
           <button type="button" onClick={() => go(NO_FILTERS)} className="ml-auto hidden min-h-11 px-1 text-[14px] text-link lg:block">Clear</button>
         )}
@@ -174,7 +174,7 @@ function Results({ f, results, home, go, openSheet }: { f: Filters; results: Yum
             <Link href={`/yum/${y.id}`} className="card flex h-full flex-col items-center gap-1 p-3 text-center transition-transform active:scale-[0.98]">
               <Sticker yum={y} size={84} />
               <span className="mt-1 line-clamp-2 break-words text-[15px] font-medium leading-tight">{y.name}</span>
-              {y.place && <span className="line-clamp-1 break-all text-[12px] text-bark">{y.place}</span>}
+              {y.place && <span title={y.place} className="w-full truncate text-[12px] text-bark">{y.place}</span>}
               <Hearts n={y.hearts} size={12} />
             </Link>
           </li>
@@ -187,20 +187,31 @@ function Results({ f, results, home, go, openSheet }: { f: Filters; results: Yum
 function FilterSheet({ yums, initial, home, onClose, onApply }: { yums: Yum[]; initial: Filters; home: string | null; onClose: () => void; onApply: (f: Filters) => void }) {
   const [f, setF] = useState<Filters>({ ...initial, all: false });
   const n = applyFilters(yums, f).length;
+  const title = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
+    // A real dialog: focus moves in, the page behind is inert, focus returns on close.
+    const opener = document.activeElement as HTMLElement | null;
+    const behind = [...document.querySelectorAll<HTMLElement>("#book > aside, #book > main, #book > a")];
+    title.current?.focus();
+    behind.forEach((el) => el.setAttribute("inert", ""));
     const esc = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", esc);
     document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", esc); document.body.style.overflow = ""; };
+    return () => {
+      window.removeEventListener("keydown", esc);
+      document.body.style.overflow = "";
+      behind.forEach((el) => el.removeAttribute("inert"));
+      opener?.focus();
+    };
   }, [onClose]);
   return (
     <div className="fixed inset-0 z-40 flex flex-col justify-end" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
       <button type="button" aria-label="Close" className="shade absolute inset-0 bg-[#3B1F1A]/45" onClick={onClose} />
-      <div className="sheet relative mx-auto flex max-h-[92dvh] w-full max-w-[440px] flex-col gap-4 overflow-y-auto rounded-t-[28px] border-t-[2.5px] border-cocoa bg-cream px-5 pt-3 safe-bottom">
+      <div className="sheet relative mx-auto flex max-h-[92dvh] w-full max-w-[440px] flex-col gap-4 overflow-y-auto overscroll-contain rounded-t-[28px] border-t-[2.5px] border-cocoa bg-cream px-5 pt-3 safe-bottom">
         <span className="h-[5px] w-11 self-center rounded-full bg-[#C9A98F]" />
         <div className="flex items-center justify-between">
-          <h2 id="sheet-title" className="text-[22px] font-semibold">What are you after?</h2>
-          <button type="button" onClick={() => setF({ ...NO_FILTERS, q: f.q })} className="min-h-11 px-1 text-[15px] text-link">Clear</button>
+          <h2 id="sheet-title" tabIndex={-1} ref={title} className="text-[22px] font-semibold outline-none">What are you after?</h2>
+          <button type="button" onClick={() => setF({ ...NO_FILTERS, q: f.q })} className="min-h-11 px-1 text-[15px] text-link active:opacity-60">Clear</button>
         </div>
         <FilterControls f={f} set={setF} home={home} />
         <button type="button" onClick={() => onApply(f)} className="btn btn-primary h-14 w-full" disabled={n === 0}>
@@ -238,22 +249,29 @@ function Empty() {
 /** After "Remove from my book": the way back (R10). */
 function UndoToast() {
   const removed = useLastRemoved();
+  const [failed, setFailed] = useState(false);
   useEffect(() => {
     if (!removed) return;
-    const t = setTimeout(() => setLastRemoved(null), 8000);
-    return () => clearTimeout(t);
+    // 8 s of the page being seen; the clock stops while the tab is hidden.
+    let left = 8000, started = Date.now(), t: ReturnType<typeof setTimeout> | undefined;
+    const run = () => { started = Date.now(); t = setTimeout(() => setLastRemoved(null), left); };
+    const vis = () => { if (document.hidden) { clearTimeout(t); left -= Date.now() - started; } else run(); };
+    run();
+    document.addEventListener("visibilitychange", vis);
+    return () => { clearTimeout(t); document.removeEventListener("visibilitychange", vis); };
   }, [removed]);
   if (!removed) return null;
   async function undo() {
     const y = removed!;
     setLastRemoved(null);
     const r = await fetch(`/api/yums/${y.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ removed: false }) }).catch(() => null);
-    if (r?.ok) putYum(((await r.json()) as { yum: Yum }).yum);
+    if (r?.ok) { setFailed(false); putYum(((await r.json()) as { yum: Yum }).yum); }
+    else { setFailed(true); setLastRemoved(y); }
   }
   return (
     <div role="status" className="fixed inset-x-0 bottom-[max(100px,calc(env(safe-area-inset-bottom)+80px))] z-30 mx-auto flex w-[calc(100%-40px)] max-w-[400px] items-center gap-3 rounded-2xl border-[2.5px] border-cocoa bg-cocoa px-4 py-2 text-cream lg:bottom-8">
-      <span className="min-w-0 flex-1 truncate text-[15px]">Removed {removed.name}.</span>
-      <button type="button" onClick={undo} className="min-h-11 flex-none px-2 text-[15px] font-medium text-butter">Undo</button>
+      <span className="min-w-0 flex-1 truncate text-[15px]">{failed ? "Couldn\u2019t reach your book. Try again?" : `Removed ${removed.name}.`}</span>
+      <button type="button" onClick={undo} className="min-h-11 flex-none px-2 text-[15px] font-medium text-butter active:opacity-60">Undo</button>
     </div>
   );
 }

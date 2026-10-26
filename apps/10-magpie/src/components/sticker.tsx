@@ -16,14 +16,14 @@ export function Sticker({ yum, size, tilt = true, show = "auto" }: { yum: Yum; s
   const style = { width: size, height: size, transform: tilt ? `rotate(${tiltOf(yum.number)}deg)` : undefined };
   if (show === "auto" && yum.sticker === "ready" && !broken) {
     // eslint-disable-next-line @next/next/no-img-element -- private, cookie-guarded image route
-    return <img src={`/api/yums/${yum.id}/sticker?v=${yum.updatedAt}`} alt="" width={size} height={size} style={style} className="object-contain" onError={() => setBroken(true)} draggable={false} />;
+    return <img src={`/api/yums/${yum.id}/sticker?v=${yum.updatedAt}`} alt="" width={size} height={size} loading="lazy" decoding="async" style={style} className="object-contain" onError={() => setBroken(true)} draggable={false} />;
   }
   if (yum.hasPhoto) {
     const radius = shape === "round" ? "50%" : `${Math.round(size * 0.26)}px`;
     return (
       <span className={`relative block flex-none ${yum.sticker === "drawing" && show === "auto" ? "drawing-pulse" : ""}`} style={{ ...style, borderRadius: radius, border: "2px solid var(--cocoa)", background: "#fff", padding: Math.max(3, Math.round(size * 0.06)) }}>
         {/* eslint-disable-next-line @next/next/no-img-element -- private, cookie-guarded image route */}
-        <img src={`/api/yums/${yum.id}/photo`} alt="" className="h-full w-full object-cover" style={{ borderRadius: shape === "round" ? "50%" : `${Math.round(size * 0.2)}px` }} draggable={false} />
+        <img src={`/api/yums/${yum.id}/photo`} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" style={{ borderRadius: shape === "round" ? "50%" : `${Math.round(size * 0.2)}px` }} draggable={false} />
       </span>
     );
   }

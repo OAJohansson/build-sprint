@@ -121,9 +121,15 @@ a,
   border-radius: 999px;
   background: #fff;
   font-size: 15px;
+  position: relative;
   white-space: nowrap;
   cursor: pointer;
   transition: background-color 120ms var(--ease-out), transform 120ms var(--ease-out);
+}
+.chip::after {
+  content: "";
+  position: absolute;
+  inset: -4px 0;
 }
 .chip:active {
   transform: scale(0.96);
@@ -241,10 +247,10 @@ a,
 
 @keyframes fill {
   from {
-    width: 8%;
+    transform: scaleX(0.08);
   }
   to {
-    width: 92%;
+    transform: scaleX(0.92);
   }
 }
 

@@ -132,13 +132,13 @@ function Drawing({ yum, photoUrl, onDone, onClose }: { yum: Yum; photoUrl: strin
             // eslint-disable-next-line @next/next/no-img-element -- the local photo just taken
             <img src={photoUrl} alt="" className="drawing-pulse h-[150px] w-[150px] rounded-full object-cover opacity-50 grayscale-[40%]" />
           ) : (
-            <span className="drawing-pulse text-center text-[18px] font-medium text-bark">{yum.name}</span>
+            <span className="drawing-pulse line-clamp-3 break-words px-5 text-center text-[18px] font-medium text-bark">{yum.name}</span>
           )}
         </div>
         <Maggie pose="draw" size={200} className="-mt-2" />
       </div>
       <div className="h-3 w-[220px] overflow-hidden rounded-md border-2 border-cocoa bg-white" role="progressbar" aria-label="Drawing the sticker">
-        <div className="h-full bg-butter" style={{ animation: "fill 12s cubic-bezier(0.2, 0.7, 0.3, 1) forwards" }} />
+        <div className="h-full origin-left bg-butter" style={{ animation: "fill 12s cubic-bezier(0.2, 0.7, 0.3, 1) forwards" }} />
       </div>
       {slow && <p className="text-[15px] text-bark">Taking a little longer. It&apos;ll pop up on your shelf.</p>}
       <div className="flex-1" />

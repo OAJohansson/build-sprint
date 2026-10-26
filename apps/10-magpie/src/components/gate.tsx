@@ -31,7 +31,7 @@ const Paper = () => <main className="flex-1 bg-cream" aria-busy="true" />;
 
 function Welcome({ onNext }: { onNext: () => void }) {
   return (
-    <main className="mx-auto flex w-full max-w-[440px] flex-1 flex-col items-center gap-[18px] px-7 pt-14 safe-bottom">
+    <main className="mx-auto flex w-full max-w-[440px] flex-1 flex-col items-center gap-[18px] px-7 pt-[max(56px,env(safe-area-inset-top))] safe-bottom">
       <span className="text-[22px] font-semibold">magpie</span>
       <Maggie pose="hello" size={260} />
       <h1 className="text-center text-[30px] font-semibold leading-[1.15]">Hi! I collect<br />shiny things.</h1>
@@ -58,7 +58,7 @@ function Access() {
   }
   return (
     <main className="mx-auto flex w-full max-w-[440px] flex-1 flex-col">
-      <form onSubmit={submit} className="flex flex-1 flex-col gap-[18px] px-7 pt-14 safe-bottom">
+      <form onSubmit={submit} className="flex flex-1 flex-col gap-[18px] px-7 pt-[max(56px,env(safe-area-inset-top))] safe-bottom">
         <div className="relative h-[150px]">
           <div className="card absolute inset-x-0 bottom-0 h-[70px]" />
           <Maggie pose="head" size={130} className="absolute left-1/2 top-0 -ml-[65px]" />

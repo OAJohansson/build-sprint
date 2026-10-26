@@ -3,7 +3,7 @@ import { Fredoka } from "next/font/google";
 import { RegisterServiceWorker } from "@/components/register-sw";
 import "./globals.css";
 
-const fredoka = Fredoka({ variable: "--font-fredoka", subsets: ["latin"], weight: ["400", "500", "600"] });
+const fredoka = Fredoka({ variable: "--font-fredoka", subsets: ["latin", "latin-ext"], weight: ["400", "500", "600"] });
 
 export const metadata: Metadata = {
   title: "Magpie",

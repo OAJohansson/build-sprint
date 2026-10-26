@@ -58,9 +58,16 @@ export function DetailsForm({ title, submitLabel, photoUrl, initial, onBack, onS
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (busy) return;
-    if (!name.trim()) return setProblem({ field: "name", text: "What's it called? Even a guess helps future you." });
-    if (!kind) return setProblem({ field: "kind", text: "Is it food, a drink or a dessert?" });
-    if (!hearts) return setProblem({ field: "hearts", text: "How much did you love it?" });
+    // A missing answer: say so next to the field and take the person there (it may be off-screen).
+    const ask = (field: string, text: string) => {
+      setProblem({ field, text });
+      const el = document.getElementById(`f-${field}`);
+      el?.scrollIntoView({ block: "center", behavior: "smooth" });
+      el?.focus({ preventScroll: true });
+    };
+    if (!name.trim()) return ask("name", "What's it called? Even a guess helps future you.");
+    if (!kind) return ask("kind", "Is it food, a drink or a dessert?");
+    if (!hearts) return ask("hearts", "How much did you love it?");
     setProblem(null);
     setBusy(true);
     const fields: YumFields = { name: name.trim(), kind, subKind: sub, place: place.trim() || null, city: city.trim() || null, country: country.trim() || null, hearts, note: note.trim() || null };
@@ -69,7 +76,7 @@ export function DetailsForm({ title, submitLabel, photoUrl, initial, onBack, onS
     if (failed) { setProblem({ field: "save", text: failed }); setBusy(false); }
   }
 
-  const err = (field: string) => (problem?.field === field ? <p role="alert" className="text-[14px] text-link">{problem.text}</p> : null);
+  const err = (field: string) => (problem?.field === field ? <p role="alert" id={`err-${field}`} className="text-[14px] text-link">{problem.text}</p> : null);
 
   return (
     <main className="mx-auto flex w-full max-w-[440px] flex-1 flex-col">
@@ -93,14 +100,14 @@ export function DetailsForm({ title, submitLabel, photoUrl, initial, onBack, onS
           </div>
           <label className="flex flex-1 flex-col gap-1.5">
             <span className="label">Name</span>
-            <input value={name} onChange={(e) => { setName(e.target.value); if (problem?.field === "name") setProblem(null); }} maxLength={120} autoCapitalize="sentences" enterKeyHint="next" className="field text-[18px]" aria-invalid={problem?.field === "name"} />
+            <input value={name} onChange={(e) => { setName(e.target.value); if (problem?.field === "name") setProblem(null); }} id="f-name" maxLength={120} autoCapitalize="sentences" autoComplete="off" enterKeyHint="done" onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); e.currentTarget.blur(); } }} className="field text-[18px]" aria-invalid={problem?.field === "name"} aria-describedby={problem?.field === "name" ? "err-name" : undefined} />
           </label>
         </div>
         {err("name")}
 
         <fieldset className="flex flex-col gap-1.5">
           <legend className="label mb-1.5">It&apos;s a…</legend>
-          <div className="flex gap-2">
+          <div className="flex gap-2" id="f-kind" tabIndex={-1} aria-describedby={problem?.field === "kind" ? "err-kind" : undefined}>
             {KINDS.map((k) => (
               <button key={k.id} type="button" className="chip" aria-pressed={kind === k.id} onClick={() => pickKind(k.id)}>{k.label}</button>
             ))}
@@ -117,18 +124,18 @@ export function DetailsForm({ title, submitLabel, photoUrl, initial, onBack, onS
 
         <label className="flex flex-col gap-1.5">
           <span className="label">Restaurant, bar or spot</span>
-          <input value={place} onChange={(e) => setPlace(e.target.value)} maxLength={120} autoCapitalize="words" className="field" />
+          <input value={place} onChange={(e) => setPlace(e.target.value)} maxLength={120} autoCapitalize="words" autoComplete="off" className="field" />
         </label>
 
         {editingCity ? (
           <div className="flex gap-2">
             <label className="flex flex-1 flex-col gap-1.5">
               <span className="label">City</span>
-              <input value={city} onChange={(e) => { touchedCity.current = true; setCity(e.target.value); setCityFrom("typed"); }} maxLength={80} autoCapitalize="words" className="field" />
+              <input value={city} onChange={(e) => { touchedCity.current = true; setCity(e.target.value); setCityFrom("typed"); }} maxLength={80} autoCapitalize="words" autoComplete="off" className="field" />
             </label>
             <label className="flex flex-1 flex-col gap-1.5">
               <span className="label">Country</span>
-              <input value={country} onChange={(e) => { touchedCity.current = true; setCountry(e.target.value); setCityFrom("typed"); }} maxLength={80} autoCapitalize="words" className="field" />
+              <input value={country} onChange={(e) => { touchedCity.current = true; setCountry(e.target.value); setCityFrom("typed"); }} maxLength={80} autoCapitalize="words" autoComplete="off" className="field" />
             </label>
           </div>
         ) : (
@@ -143,13 +150,13 @@ export function DetailsForm({ title, submitLabel, photoUrl, initial, onBack, onS
             ) : (
               <span className="text-dusk">Which city?</span>
             )}
-            <button type="button" onClick={() => { touchedCity.current = true; setEditingCity(true); }} className="ml-auto min-h-11 flex-none px-1 text-link">{city || country ? "Change" : "Add"}</button>
+            <button type="button" onClick={() => { touchedCity.current = true; setEditingCity(true); }} className="ml-auto min-h-11 flex-none px-1 text-link active:opacity-60">{city || country ? "Change" : "Add"}</button>
           </div>
         )}
 
         <fieldset className="flex flex-col gap-1.5">
           <legend className="label mb-1.5">How much did you love it?</legend>
-          <div className="flex gap-1.5">
+          <div className="flex gap-1.5" id="f-hearts" tabIndex={-1} aria-describedby={problem?.field === "hearts" ? "err-hearts" : undefined}>
             {[1, 2, 3, 4, 5].map((n) => (
               <button key={n} type="button" aria-label={`${n} ${n === 1 ? "heart" : "hearts"}`} aria-pressed={hearts === n} onClick={() => { setHearts(n); if (problem?.field === "hearts") setProblem(null); }} className="flex h-12 w-12 items-center justify-center transition-transform active:scale-90">
                 <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21l-8-8a5 5 0 0 1 8-6 5 5 0 0 1 8 6z" fill={n <= hearts ? "#F2705B" : "#FFFFFF"} stroke="#3B1F1A" strokeWidth="1.6" /></svg>

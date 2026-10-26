@@ -86,7 +86,7 @@ function Book() {
               className="min-w-0 flex-1 bg-transparent text-[16px] placeholder:text-dusk focus-visible:outline-none lg:text-[17px] [&::-webkit-search-cancel-button]:hidden"
             />
             {f.q && (
-              <button type="button" aria-label="Clear search" onClick={() => go({ ...f, q: "" })} className="-mr-2 flex h-10 w-10 flex-none items-center justify-center">
+              <button type="button" aria-label="Clear search" onClick={() => go({ ...f, q: "" })} className="-mr-2 flex h-11 w-11 flex-none items-center justify-center">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3B1F1A" strokeWidth="3" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
               </button>
             )}
@@ -128,7 +128,7 @@ function Shelves({ yums, go }: { yums: Yum[]; go: (f: Filters) => void }) {
             {s.id === "latest" ? (
               <button type="button" onClick={() => go({ ...NO_FILTERS, all: true })} className="-my-3 min-h-11 flex-none px-1 text-[14px] text-link active:opacity-60">{s.aside}</button>
             ) : (
-              <button type="button" onClick={() => go(s.seeAll)} className="-my-3 min-h-11 flex-none px-1 text-[14px] text-dusk active:opacity-60">{s.aside}</button>
+              <button type="button" onClick={() => go(s.seeAll)} className="-my-3 min-h-11 min-w-11 flex-none px-1 text-right text-[14px] text-dusk active:opacity-60">{s.aside}</button>
             )}
           </div>
           <ul className="no-scrollbar -mx-5 flex snap-x scroll-px-5 overscroll-x-contain gap-2.5 overflow-x-auto px-5 pb-1 pt-1 lg:mx-0 lg:scroll-px-0 lg:gap-[18px] lg:px-0">

@@ -20,10 +20,10 @@ export function FilterControls({ f, set, home, compact }: { f: Filters; set: (f:
             <button key={k.id} type="button" className={chip} aria-pressed={f.kind === k.id} onClick={() => pickKind(k.id)}>{k.plural}</button>
           ))}
         </div>
-        {f.kind === "drink" && (
+        {(f.kind === "drink" || f.kind === "") && (
           <div className="sub-row">
             {SUB_KINDS.drink.map((s) => (
-              <button key={s.id} type="button" className="chip chip-small" aria-pressed={f.sub === s.id} onClick={() => set({ ...f, sub: f.sub === s.id ? "" : s.id })}>{SUB_LABELS[s.id]}</button>
+              <button key={s.id} type="button" className="chip chip-small" aria-pressed={f.sub === s.id} onClick={() => set({ ...f, kind: "drink", sub: f.sub === s.id ? "" : s.id })}>{SUB_LABELS[s.id]}</button>
             ))}
           </div>
         )}

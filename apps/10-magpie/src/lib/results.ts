@@ -17,7 +17,7 @@ export function noun(f: Filters, n: number): string {
 }
 
 export function resultsLine(f: Filters, n: number, home: string | null): string {
-  if (n === 0) return "Nothing here yet. Try fewer filters?";
+  if (n === 0) return f.kind || f.hearts || f.where !== "any" || f.place.trim() ? "Nothing here yet. Try fewer filters?" : "Nothing matches that. Try another word?";
   let line = `${n < WORDS.length ? WORDS[n] : n} ${noun(f, n)}`;
   if (f.hearts) line += " you loved";
   if (f.place.trim()) line += ` at ${f.place.trim()}`;

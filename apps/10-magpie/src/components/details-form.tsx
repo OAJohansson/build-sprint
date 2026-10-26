@@ -10,6 +10,8 @@ import { defaultSubKind, KINDS, SUB_KINDS, type Kind, type YumFields } from "@/l
 
 type Props = {
   title: string;
+  /** The book's home city and country, used when this phone has no last city and no location. */
+  fallback?: { city: string; country: string } | null;
   submitLabel: string;
   photoUrl: string | null;
   initial?: YumFields;
@@ -17,7 +19,7 @@ type Props = {
   onSubmit: (fields: YumFields) => Promise<string | null>;
 };
 
-export function DetailsForm({ title, submitLabel, photoUrl, initial, onBack, onSubmit }: Props) {
+export function DetailsForm({ title, submitLabel, photoUrl, initial, fallback, onBack, onSubmit }: Props) {
   const [name, setName] = useState(initial?.name ?? "");
   const [kind, setKind] = useState<Kind | null>(initial?.kind ?? null);
   const [sub, setSub] = useState<string | null>(initial?.subKind ?? null);
@@ -35,7 +37,7 @@ export function DetailsForm({ title, submitLabel, photoUrl, initial, onBack, onS
   // A new yum starts with the last city at once, then the city where the phone is, if it can tell.
   useEffect(() => {
     if (initial) return;
-    const last = lastSpot();
+    const last = lastSpot() ?? fallback ?? null;
     if (last) {
       // Reading this device's memory after mount.
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -47,6 +49,7 @@ export function DetailsForm({ title, submitLabel, photoUrl, initial, onBack, onS
       setCity(here.city); setCountry(here.country); setCityFrom("here");
     });
     return () => { alive = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, when the form opens
   }, [initial]);
 
   function pickKind(k: Kind) {
@@ -100,7 +103,7 @@ export function DetailsForm({ title, submitLabel, photoUrl, initial, onBack, onS
           </div>
           <label className="flex flex-1 flex-col gap-1.5">
             <span className="label">Name</span>
-            <input value={name} onChange={(e) => { setName(e.target.value); if (problem?.field === "name") setProblem(null); }} id="f-name" maxLength={120} autoCapitalize="sentences" autoComplete="off" enterKeyHint="done" onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); e.currentTarget.blur(); } }} className="field text-[18px]" aria-invalid={problem?.field === "name"} aria-describedby={problem?.field === "name" ? "err-name" : undefined} />
+            <input autoFocus={!initial} value={name} onChange={(e) => { setName(e.target.value); if (problem?.field === "name") setProblem(null); }} id="f-name" maxLength={120} autoCapitalize="sentences" autoComplete="off" enterKeyHint="done" onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); e.currentTarget.blur(); } }} className="field text-[18px]" aria-invalid={problem?.field === "name"} aria-describedby={problem?.field === "name" ? "err-name" : undefined} />
           </label>
         </div>
         {err("name")}

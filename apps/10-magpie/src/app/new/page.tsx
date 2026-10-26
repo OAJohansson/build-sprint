@@ -10,6 +10,7 @@ import { Maggie, Sparkles } from "@/components/maggie";
 import { Sticker } from "@/components/sticker";
 import { putYum, useBook } from "@/lib/book";
 import { takeSharedPhoto } from "@/lib/photo";
+import { homeCity, inCity } from "@/lib/shelves";
 import { subKindInfo, kindLabel, type Yum, type YumFields } from "@/lib/yum";
 
 // The capture flow: camera (D) → details (E) → drawing the sticker (F) → "Ooh, shiny!" (G).
@@ -35,6 +36,9 @@ function Capture() {
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const id = useRef<string>("");
+  const { yums } = useBook();
+  const home = homeCity(yums);
+  const fallback = home ? { city: home, country: yums.find((y) => inCity(y, home) && y.country)?.country ?? "" } : null;
 
   useEffect(() => {
     id.current = crypto.randomUUID();
@@ -83,7 +87,7 @@ function Capture() {
     );
   }
   if (step.at === "details") {
-    return <DetailsForm title="What did you find?" submitLabel="Stick it in my book" photoUrl={photoUrl} onBack={() => setStep({ at: "camera" })} onSubmit={save} />;
+    return <DetailsForm title="What did you find?" fallback={fallback} submitLabel="Stick it in my book" photoUrl={photoUrl} onBack={() => setStep({ at: "camera" })} onSubmit={save} />;
   }
   if (step.at === "drawing") return <Drawing yum={step.yum} photoUrl={photoUrl} onDone={(yum) => setStep({ at: "saved", yum })} onClose={() => router.push("/")} />;
   return <Saved yum={step.yum} />;

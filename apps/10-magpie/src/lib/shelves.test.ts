@@ -103,6 +103,7 @@ describe("smart shelves and filters", () => {
     const yums = [barolo, yum({ name: "Chablis" })];
     expect(applyFilters(yums, { ...NO_FILTERS, q: "noble" })).toEqual([barolo]);
     expect(applyFilters(yums, { ...NO_FILTERS, q: "ROSES" })).toEqual([barolo]);
+    expect(applyFilters(yums, { ...NO_FILTERS, q: "noble wine" })).toEqual([barolo]);
   });
 
   it("narrows by kind, hearts and away, and widens again", () => {

@@ -1,7 +1,7 @@
 // The smart shelves (design H): which rows Maggie fills, the home city, her line, and search and
 // filters. Plain functions so they can be unit tested (shelves.test.ts).
 
-import { groupOf, groupPlural, type Kind, type Yum } from "@/lib/yum";
+import { groupOf, groupPlural, subKindInfo, type Kind, type Yum } from "@/lib/yum";
 
 type Dated = Pick<Yum, "savedAt" | "number">;
 
@@ -36,7 +36,7 @@ export const inCity = (y: Pick<Yum, "city">, city: string | null) => !!city && !
 
 export type Shelf = { id: string; title: string; aside: string; yums: Yum[]; seeAll: Filters };
 
-/** Latest, Your top [group] (5 hearts, up to two rows), Around [home city]. Empty rows are left out. */
+/** Latest, Your top [group] (5 hearts, up to three rows), Around [home city]. Empty rows are left out. */
 export function smartShelves(yums: Yum[]): Shelf[] {
   const all = latestFirst(yums);
   const shelves: Shelf[] = [];
@@ -44,7 +44,7 @@ export function smartShelves(yums: Yum[]): Shelf[] {
 
   const loved = new Map<string, Yum[]>();
   for (const y of all) if (y.hearts === 5) loved.set(groupOf(y), [...(loved.get(groupOf(y)) ?? []), y]);
-  const top = [...loved.values()].sort((a, b) => b.length - a.length || b[0].savedAt.localeCompare(a[0].savedAt)).slice(0, 2);
+  const top = [...loved.values()].sort((a, b) => b.length - a.length || b[0].savedAt.localeCompare(a[0].savedAt)).slice(0, 3);
   for (const group of top) {
     const { kind, subKind } = group[0];
     shelves.push({
@@ -108,11 +108,15 @@ export const NO_FILTERS: Filters = { q: "", kind: "", sub: "", hearts: 0, where:
 
 const fold = (s: string) => s.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase();
 
-/** Search covers name, restaurant, note, city and country, ignoring case and accents. */
-export function matchesQuery(y: Pick<Yum, "name" | "place" | "note" | "city" | "country">, q: string): boolean {
+/**
+ * Search covers name, restaurant, note, city and country, plus the kind's words ("red wine" finds
+ * a Barolo saved as a wine), ignoring case and accents. Every word must match somewhere.
+ */
+export function matchesQuery(y: Pick<Yum, "name" | "place" | "note" | "city" | "country" | "kind" | "subKind">, q: string): boolean {
   const words = fold(q).split(/\s+/).filter(Boolean);
   if (!words.length) return true;
-  const hay = fold([y.name, y.place, y.note, y.city, y.country].filter(Boolean).join(" \n "));
+  const kinds = [y.kind === "food" ? "food dish" : y.kind === "drink" ? "drink" : "dessert sweet", subKindInfo(y.kind, y.subKind)?.label];
+  const hay = fold([y.name, y.place, y.note, y.city, y.country, ...kinds].filter(Boolean).join(" \n "));
   return words.every((w) => hay.includes(w));
 }
 

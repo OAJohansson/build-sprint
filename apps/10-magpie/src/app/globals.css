@@ -86,7 +86,10 @@ a,
 }
 .btn:disabled {
   cursor: default;
-  opacity: 0.6;
+}
+/* Busy or not ready: the fill pales, the label stays readable (cocoa on #F9B8AC is 7:1). */
+.btn-primary:disabled {
+  background: #f9b8ac;
 }
 /* Cocoa on coral: white on coral is 2.9:1, under the 4.5:1 guardrail (toil T2). */
 .btn-primary {

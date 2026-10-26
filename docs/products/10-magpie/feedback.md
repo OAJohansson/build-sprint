@@ -35,3 +35,14 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 29 | Critic r2 (H, G, K) | Row snap ignored padding; saved chips 3+1; sticker sat on Maggie's head; tail dot gone; hero sticker high | fixed |
 | 30 | Sticker eval v2 | 5 of 15 stickers end in white (no outer outline): cut-out risk | fixed in v3 (edge drawn in code; 15/15) |
 | 31 | Sticker eval v3 | Double ring on 4 stickers where the model still draws its own outline; die-cut bumps where a glass foot sticks out | parked (kickoff rabbit hole: don't chase perfect consistency) |
+| 32 | User test F1 (S3 6 taps, bar 5) | Wine hidden until Drinks is tapped | fixed (sub-kinds always shown; picking one picks Drinks) |
+| 33 | User test F2 | 'red wine' finds nothing; no-filter empty copy says 'fewer filters' | fixed (kind words searchable; 'Try another word?') |
+| 34 | User test F3 | Shelf slots blank for ~1.5 s while images load | fixed (paper-coloured placeholder shape) |
+| 35 | User test F4 | A yum with no city falls out of London and Away | fixed (city falls back to the book's home city) |
+| 36 | User test F5 | Name not focused after the shutter | fixed |
+| 37 | User test F6 | Only two 'Your top' rows; cocktails vanish | fixed (up to three) |
+| 38 | User test F7 | Around London count and Clear search under 44 px | fixed |
+| 39 | User test F8 | Disabled button labels 2.3–2.6:1 | fixed (fill pales, label stays 7:1) |
+| 40 | User test F9 | Shared photo gets today's date, not the photo's | parked (backlog) |
+| 41 | User test F10 | Empty card behind Maggie on the access screen reads like an input | won't do (in the approved design) |
+| 42 | User test: Relive 3/5 | No view per trip or city; 'Away' mixes Taipei, Tokyo, Rome | parked (backlog: Trips row; owner's call) |

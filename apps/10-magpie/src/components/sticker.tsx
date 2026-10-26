@@ -12,18 +12,21 @@ export const tiltOf = (n: number) => TILTS[n % TILTS.length];
 
 export function Sticker({ yum, size, tilt = true, show = "auto" }: { yum: Yum; size: number; tilt?: boolean; show?: "auto" | "photo" }) {
   const [broken, setBroken] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  // A soft paper-coloured shape holds the place while the image loads, so the shelf never looks empty.
+  const holder = loaded ? undefined : "#F6E3C6";
   const shape = stickerShape(yum.number);
   const style = { width: size, height: size, transform: tilt ? `rotate(${tiltOf(yum.number)}deg)` : undefined };
   if (show === "auto" && yum.sticker === "ready" && !broken) {
     // eslint-disable-next-line @next/next/no-img-element -- private, cookie-guarded image route
-    return <img src={`/api/yums/${yum.id}/sticker?v=${yum.updatedAt}`} alt="" width={size} height={size} loading="lazy" decoding="async" style={style} className="object-contain" onError={() => setBroken(true)} draggable={false} />;
+    return <img src={`/api/yums/${yum.id}/sticker?v=${yum.updatedAt}`} alt="" width={size} height={size} loading="lazy" decoding="async" style={{ ...style, background: holder, borderRadius: shape === "round" ? "50%" : `${Math.round(size * 0.24)}px` }} className="object-contain" onLoad={() => setLoaded(true)} onError={() => setBroken(true)} draggable={false} />;
   }
   if (yum.hasPhoto) {
     const radius = shape === "round" ? "50%" : `${Math.round(size * 0.26)}px`;
     return (
       <span className={`relative block flex-none ${yum.sticker === "drawing" && show === "auto" ? "drawing-pulse" : ""}`} style={{ ...style, borderRadius: radius, border: "2px solid var(--cocoa)", background: "#fff", padding: Math.max(3, Math.round(size * 0.06)) }}>
         {/* eslint-disable-next-line @next/next/no-img-element -- private, cookie-guarded image route */}
-        <img src={`/api/yums/${yum.id}/photo`} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" style={{ borderRadius: shape === "round" ? "50%" : `${Math.round(size * 0.2)}px` }} draggable={false} />
+        <img src={`/api/yums/${yum.id}/photo`} alt="" loading="lazy" decoding="async" onLoad={() => setLoaded(true)} className="h-full w-full object-cover" style={{ background: holder, borderRadius: shape === "round" ? "50%" : `${Math.round(size * 0.2)}px` }} draggable={false} />
       </span>
     );
   }

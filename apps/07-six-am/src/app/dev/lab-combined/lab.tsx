@@ -12,7 +12,7 @@ import {
 } from "./ui";
 
 type Mode = "listen" | "make";
-export type View = "main" | "first" | "loading" | "catching" | "empty";
+export type View = "main" | "first" | "loading" | "catching" | "empty" | "menu";
 
 export function Lab({ mode, view, worst, clean }: { mode: Mode; view: View; worst: boolean; clean: boolean }) {
   return (
@@ -116,12 +116,16 @@ function Inner({ initialMode, view }: { initialMode: Mode; view: View }) {
               <span className={s.who}>{solo.name} alone, {sec.name}, bars {sec.from}–{sec.to - 1}, looping</span>
             </div>
             <LoopStrip id={soloId} sec={sec} bar={bar} />
-            <PresetHead partName={solo.name.toLowerCase()} />
+            <PresetHead partName={solo.name.toLowerCase()} initialOpen={view === "menu"} />
             <Macros size={96} color={solo.color} />
-            <p className={s.suggest}><span className={s.tick} aria-hidden /> <span>gold tick: the Mentor&rsquo;s suggestion. {SUGGEST}</span></p>
+            <div className={s.suggestRow}>
+              <p className={s.suggest}>Mentor: {SUGGEST}<br /><span className={s.faintLine}>Gold ticks mark those.</span></p>
+              {/* Suggest settings (L157, T85): local patch matching on the soloed part. It only places or
+                  updates the gold ticks; it never turns a knob. */}
+              <button className={s.ghost}>Suggest settings</button>
+            </div>
             <div className={s.checkRow}>
               <AB partName={solo.name.toLowerCase()} ab={ab} setAb={setAb} />
-              <button className={s.ghost}>Suggest settings</button>
             </div>
           </section>
           <SaveBar name={suggestName(solo, d.track.short)} tags={[solo.name.toLowerCase(), d.track.key, `${d.track.bpm} BPM`, d.track.short]} />

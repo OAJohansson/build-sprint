@@ -161,9 +161,10 @@
 .ab button[aria-pressed="true"] { background: #2b2622; color: var(--ink) !important; }
 .presetName { background: none; border: 0; padding: 0; font: italic 400 24px var(--f-serif); cursor: pointer; }
 .matchRow { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.suggest { margin: 0; font-size: 11px; color: var(--muted); display: flex; align-items: baseline; gap: 8px; line-height: 1.5; }
+.suggest { margin: 0; font-size: 12px; color: var(--ink); line-height: 1.7; }
+.faintLine { color: var(--faint); }
+.suggestRow { display: flex; align-items: center; justify-content: space-between; gap: 24px; width: 100%; padding-right: 24px; }
 .suggest b { font-weight: 500; color: var(--ink); }
-.tick { width: 10px; height: 2px; background: var(--gold); flex: none; transform: translateY(-3px); }
 
 .lhSubs { position: absolute; right: 12px; top: 10px; bottom: 10px; display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--faint); text-align: right; }
 .lh[data-st="solo"] .lhSubs { top: 30px; bottom: 36px; color: var(--muted); }
@@ -172,4 +173,10 @@
 .checkRow { display: flex; align-items: center; gap: 16px; width: 100%; flex-wrap: wrap; padding-top: 18px; border-top: 1px solid var(--line); }
 .card .answer[data-expanded] { max-height: 220px; overflow-y: auto; padding-bottom: 24px; mask-image: linear-gradient(#000 calc(100% - 32px), transparent); overscroll-behavior: contain; }
 .leader { position: absolute; width: 1px; bottom: -10px; background: rgba(242,177,52,.7); z-index: 2; pointer-events: none; }
-.preset { display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; }
+.preset { position: relative; }
+.menu { position: absolute; top: calc(100% + 6px); left: 0; z-index: 20; min-width: 320px; background: #221d1a; border: 1px solid var(--edge); border-radius: 8px; padding: 6px; display: flex; flex-direction: column; box-shadow: 0 12px 32px rgba(0,0,0,.5); }
+.menuItem { display: flex; align-items: baseline; gap: 10px; width: 100%; background: none; border: 0; border-radius: 5px; padding: 8px 10px; text-align: left; cursor: pointer; font-size: 12.5px; }
+.menuItem small { margin-left: auto; padding-left: 16px; color: var(--faint); font-size: 11px; }
+.menuCheck { width: 12px; color: var(--gold); flex: none; }
+.menuRule { display: block; height: 1px; background: var(--line); margin: 4px 0; }
+@media (hover: hover) and (pointer: fine) { .menuItem:hover { background: #2b2622; } }

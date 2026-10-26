@@ -99,6 +99,13 @@ export const WORST: Data = {
 };
 
 export const PRESET = { name: "Round sub", tags: ["bass", "sub", "clean"] };
+/** Tagged starting points for a bass (the menu under the preset name). */
+export const PRESETS = [
+  { name: "Round sub", tags: ["sub", "clean"] },
+  { name: "Rubber pluck", tags: ["short", "bouncy"] },
+  { name: "Reese", tags: ["wide", "dark"] },
+  { name: "Acid line", tags: ["squelchy", "resonant"] },
+];
 /** 6 macros. `sug` is the Mentor's suggested value, shown as a quiet gold tick. */
 export const MACROS = [
   { name: "Tone", value: 0.3, hint: "dark" },
@@ -106,9 +113,9 @@ export const MACROS = [
   { name: "Pitch drop", value: 0.35, hint: "slow", sug: 0.75 },
   { name: "Drive", value: 0.2, hint: "clean" },
   { name: "Wobble", value: 0, hint: "off" },
-  { name: "Width", value: 0.1, hint: "mono" },
+  { name: "Width", value: 0, hint: "mono" },
 ];
-export const SUGGEST = "Length down to 1/8 and Pitch drop up: that's the bounce.";
+export const SUGGEST = "Length down to 1/8, Pitch drop up. That's the bounce.";
 
 /** The suggested library name: a word for the sound plus the song's short title, never a full
  *  mix title (so it fits the field). */

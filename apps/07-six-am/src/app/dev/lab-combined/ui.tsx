@@ -3,10 +3,10 @@
 // Rough pieces for the combined Lab (dev only): app bar, head, Deck, transport, the controlled
 // part lanes (state lives in lab.tsx so it survives the Listen/Make switch), the zoomed loop and
 // the Make pieces. Data comes from context so the worst case enters at the same boundary.
-import { createContext, useContext, type CSSProperties, type ReactNode } from "react";
+import { createContext, useContext, useState, type CSSProperties, type ReactNode } from "react";
 import { Logo } from "@/components/studio/logo";
 import { SettingsLink, ViewsNav } from "@/components/views-nav";
-import { MACROS, PRESET, type Data, type Part, type PartId, type Section } from "./data";
+import { MACROS, PRESET, PRESETS, type Data, type Part, type PartId, type Section } from "./data";
 import s from "./lab.module.css";
 
 export { s };
@@ -107,12 +107,12 @@ export function Lanes(p: LanesProps) {
     const r = e.currentTarget.getBoundingClientRect();
     p.onSeek(Math.max(1, Math.min(bars, Math.round(1 + ((e.clientX - r.left) / r.width) * bars))));
   };
-  // Chord names need ~24px per 8-bar cell. On long tracks the cells stay as ticks and each section
-  // shows its progression once ("Am F C G"), so no chord is hidden or misplaced.
+  // Chord names need ~24px per 8-bar cell. On long tracks the cells stay as ticks with the chord on
+  // hover, and only the chord at each section start is written.
   const narrow = (TIMELINE_PX * 8) / bars < 24;
   const progressions = narrow ? d.sections.map((x) => {
     const names = d.chords.filter((c) => c.from >= x.from && c.from < x.to).map((c) => c.name);
-    return { ...x, text: names.slice(0, 4).join(" ") };
+    return { ...x, text: names[0] ?? "" };
   }).filter((x) => x.text) : [];
   const tickStep = bars > 300 ? 64 : 32;
   const ticks = Array.from({ length: Math.floor((bars - 1) / tickStep) + 1 }, (_, i) => 1 + i * tickStep);
@@ -222,6 +222,7 @@ export function Knob({ name, value, hint, sug, size = 56, color = "#f1e6d3" }: {
     <div className={s.knob} role="slider" tabIndex={0} aria-label={name} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(value * 100)} aria-valuetext={hint}>
       <svg width={size} height={size} aria-hidden>
         <path d={`M${x0} ${y0} A${r} ${r} 0 1 1 ${xe} ${ye}`} fill="none" stroke="rgba(241,230,211,.25)" strokeWidth="2" strokeLinecap="round" />
+        {value <= 0.005 && <circle cx={x0} cy={y0} r="2" fill={color} />}
         {value > 0.005 && <path d={`M${x0} ${y0} A${r} ${r} 0 ${a - a0 > 180 ? 1 : 0} 1 ${x1} ${y1}`} fill="none" stroke={color} strokeWidth="3" strokeLinecap="round" />}
         {sa !== null && (() => { const [p1, q1] = pt(sa, r + 4), [p2, q2] = pt(sa, r - 4); return <line x1={p1} y1={q1} x2={p2} y2={q2} stroke="#f2b134" strokeWidth="2.5" strokeLinecap="round" />; })()}
       </svg>
@@ -247,11 +248,29 @@ export function AB({ partName, ab, setAb }: { partName: string; ab: "a" | "b"; s
   );
 }
 
-export function PresetHead({ partName }: { partName: string }) {
+/** The preset name opens a menu of tagged starting points; describing one in words is its last item. */
+export function PresetHead({ partName, initialOpen = false }: { partName: string; initialOpen?: boolean }) {
+  const [open, setOpen] = useState(initialOpen);
   return (
     <div className={s.preset}>
-      <button className={s.presetName} aria-label={`Preset: ${PRESET.name}. Change preset`}>{PRESET.name} <span aria-hidden>▾</span></button>
-      <button className={s.textBtn}>or describe a {partName} in words</button>
+      <button className={s.presetName} aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen(!open)}
+        aria-label={`Preset: ${PRESET.name}. Change preset`}>{PRESET.name} <span aria-hidden>▾</span></button>
+      {open && (
+        <div className={s.menu} role="menu" aria-label="Presets">
+          {PRESETS.map((x) => (
+            <button key={x.name} role="menuitemradio" aria-checked={x.name === PRESET.name} className={s.menuItem} onClick={() => setOpen(false)}>
+              <span className={s.menuCheck} aria-hidden>{x.name === PRESET.name ? "✓" : ""}</span>
+              <span>{x.name}</span>
+              <small>{x.tags.join(" · ")}</small>
+            </button>
+          ))}
+          <i className={s.menuRule} aria-hidden />
+          <button role="menuitem" className={s.menuItem} onClick={() => setOpen(false)}>
+            <span className={s.menuCheck} aria-hidden />
+            <span>Describe a {partName} in words…</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

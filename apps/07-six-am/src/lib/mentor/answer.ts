@@ -172,6 +172,8 @@ export type Needs = {
   trackRefs?: ReadonlyMap<string, string>;
   /** Lab (B6): the person's question, so a question about tone gets "I can't hear that" said. */
   labQuestion?: string;
+  /** Lab (LS2-M6): the bar isn't heard yet: the loop to suggest ("bars 49–56"). */
+  labUnheard?: string;
 };
 
 /** A tempo or key stated as a number in a listen-next "because" (data-evals: two were wrong; the
@@ -296,6 +298,14 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
     return { ok: false, problem: `${sentences.length} sentences: keep to at most ${maxSentences(job)} and offer tellMore for the rest.` };
   }
   const answer: MentorAnswer = { sentences, tellMore: r.tellMore === true };
+  // LS2-M6: a bar not heard yet gets the map's estimate and the loop to hear it, nothing more.
+  if (job === "lab" && needs.labUnheard) {
+    const loopLine = `Loop ${needs.labUnheard} to hear it and get its notes.`;
+    if (sentences.length > 2 || !sentences.some((x) => x.text.includes(loopLine))) {
+      return { ok: false, problem: `Bar not heard yet: answer in two sentences: what the map estimates there, then exactly "${loopLine}"` };
+    }
+    if (sentences.some((x) => /\bchords?\b/i.test(x.text))) return { ok: false, problem: "Bar not heard yet: no chords. Say what the map estimates, then the loop line." };
+  }
   // B6: a question about tone gets one plain line that you can't hear it (and what you can measure).
   if (job === "lab" && needs.labQuestion && TONE_QUESTION.test(needs.labQuestion) && !sentences.some((x) => CANT_HEAR.test(x.text))) {
     return { ok: false, problem: `The question is about tone or sound ("${needs.labQuestion.match(TONE_QUESTION)?.[0]}"), which you can't hear: say so in one sentence: "I can't hear the sound itself; I read measurements: pitch, timing and loudness.", then answer from what the numbers do show.` };

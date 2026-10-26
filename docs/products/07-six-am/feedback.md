@@ -82,7 +82,7 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| LS2-M1 | major | Card still opens low: thread 97–107 px at 1440×900 (1–2 lines); room above | open, fix pass 3 |
-| LS2-N8 | minor | Drums' previously heard bars reset to estimates after the band change | open |
-| LS2-M6 | minor | At unheard bars the answer pads with chord guesses; should say "loop bars X–Y to see it" | open |
-| LS2-M7 | polish | "4.5 note starts a bar" → "4–5 notes a bar" | open |
+| LS2-M1 | major | Card still opens low: thread 97–107 px at 1440×900 (1–2 lines); room above | fixed (T97), re-test |
+| LS2-N8 | minor | Drums' previously heard bars reset to estimates after the band change | fixed (T97) |
+| LS2-M6 | minor | At unheard bars the answer pads with chord guesses; should say "loop bars X–Y to see it" | fixed (T97) |
+| LS2-M7 | polish | "4.5 note starts a bar" → "4–5 notes a bar" | fixed (T97) |

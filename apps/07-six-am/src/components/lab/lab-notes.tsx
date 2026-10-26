@@ -16,7 +16,10 @@ const CARD_W = 420;
 /** "Make a bass like this →", "Make drums like this →". */
 const MAKE_WHAT: Record<string, string> = { bass: "a bass", drums: "drums", other: "a sound", vocals: "vocals" };
 /** Below the lane needs about this much height under it; otherwise the card goes beside the dot. */
-const ROOM_BELOW = 220;
+/** A card needs about this much height for a ~300 px thread (head, composer and link take ~140). */
+const NEED = 440;
+/** The ruler and chord lane above the part lanes: a card above or beside never covers them. */
+const HEAD_ROWS = 72;
 /** Space kept under the card at the bottom of the Lab. */
 const FOOT = 12;
 
@@ -43,8 +46,12 @@ type Props = {
 
 export function LabNotes(p: Props) {
   const box = useRef<HTMLDivElement>(null);
-  const [geo, setGeo] = useState({ w: 1240, below: true, maxH: 400 });
+  // LS2-M1: where the card goes. Below the lane when there's room for a ~300 px thread; else above
+  // when there's that room above; else beside the dot, spanning the lane stack (never the ruler).
+  const [geo, setGeo] = useState({ w: 1240, mode: "below" as "below" | "above" | "beside", maxH: 400, laneTop: 0, minTop: 0, bottom: 900 });
   const [peek, setPeek] = useState<number | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [cardH, setCardH] = useState(200);
   const { bars, playheadBar } = p;
   useLayoutEffect(() => {
     const el = box.current;
@@ -52,15 +59,19 @@ export function LabNotes(p: Props) {
     const measure = () => {
       const r = el.getBoundingClientRect();
       const root = el.closest("[data-lab-root]")?.getBoundingClientRect();
-      const bottom = root ? root.bottom : window.innerHeight;
-      const below = !p.lastLane && bottom - r.bottom >= ROOM_BELOW;
-      // LS2-M1: the card may use the height down to the bottom of the Lab.
-      setGeo({ w: r.width || 1240, below, maxH: Math.max(160, Math.round(below ? bottom - r.bottom - 10 - FOOT : bottom - r.top - 5 - FOOT)) });
+      const grid = el.closest("[data-lab-grid]")?.getBoundingClientRect();
+      const bottom = (root ? root.bottom : window.innerHeight) - FOOT;
+      const minTop = (grid ? grid.top : 0) + HEAD_ROWS + 4;
+      const below = bottom - r.bottom - 10, above = r.top - 10 - minTop;
+      const mode = !p.lastLane && below >= NEED ? "below" : above >= NEED && above >= below ? "above" : "beside";
+      const maxH = Math.round(mode === "below" ? below : mode === "above" ? above : bottom - minTop);
+      setGeo({ w: r.width || 1240, mode, maxH: Math.max(160, maxH), laneTop: r.top, minTop, bottom });
     };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
-    return () => ro.disconnect();
+    window.addEventListener("resize", measure);
+    return () => { ro.disconnect(); window.removeEventListener("resize", measure); };
   }, [p.lastLane]);
 
   const groups = groupNotes(p.turns, bars);
@@ -96,9 +107,24 @@ export function LabNotes(p: Props) {
   if (side.anchor !== anchor) setSide({ anchor, head: playheadBar });
   let cardStyle: CSSProperties | undefined;
   if (anchor !== null) {
-    const left = cardLeft(px(anchor), px(side.anchor === anchor ? side.head : playheadBar), geo.w, CARD_W, !geo.below);
-    cardStyle = { left, top: geo.below ? "calc(100% + 10px)" : 5, maxHeight: geo.maxH };
+    const beside = geo.mode === "beside";
+    const left = cardLeft(px(anchor), px(side.anchor === anchor ? side.head : playheadBar), geo.w, CARD_W, beside);
+    if (geo.mode === "below") cardStyle = { left, top: "calc(100% + 10px)", maxHeight: geo.maxH };
+    else if (geo.mode === "above") cardStyle = { left, bottom: "calc(100% + 10px)", maxHeight: geo.maxH };
+    else {
+      // Beside: next to the dot's height where it fits, moved up as the card grows.
+      const top = Math.max(geo.minTop, Math.min(geo.laneTop + 5, geo.bottom - Math.min(cardH, geo.maxH)));
+      cardStyle = { left, top: top - geo.laneTop, maxHeight: geo.maxH };
+    }
   }
+  // The card's own height, for placing it beside the dot.
+  useLayoutEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setCardH(el.offsetHeight));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [anchor]);
   const name = p.partName.toLowerCase();
   return (
     <div ref={box} className={s.notes} onClick={(e) => e.stopPropagation()}>
@@ -130,8 +156,9 @@ export function LabNotes(p: Props) {
       )}
       {anchor !== null && (
         <>
-          {geo.below && <i className={s.leader} style={{ left: pct(anchor), top: p.asking !== null ? "calc(100% - 4px)" : 14 }} aria-hidden />}
-          <div className={s.card} style={cardStyle} role="dialog" aria-label={open ? `Mentor at bar ${open.bar}` : "Ask the Mentor"}>
+          {geo.mode === "below" && <i className={s.leader} style={{ left: pct(anchor), top: p.asking !== null ? "calc(100% - 4px)" : 14 }} aria-hidden />}
+          {geo.mode === "above" && <i className={s.leader} style={{ left: pct(anchor), top: -10, bottom: "auto", height: 19 }} aria-hidden />}
+          <div ref={cardRef} className={s.card} style={cardStyle} role="dialog" aria-label={open ? `Mentor at bar ${open.bar}` : "Ask the Mentor"}>
             <div className={s.cardHead}>
               <span className={s.ctx}>{open && p.asking === null ? `Mentor, at bar ${open.bar}` : `Ask about the ${name} at bar ${anchor}`}</span>
               <button className={s.x} onClick={close} aria-label="Close">×</button>

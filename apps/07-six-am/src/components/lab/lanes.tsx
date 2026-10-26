@@ -8,7 +8,7 @@ import { memo, useEffect, useRef, useState, type CSSProperties, type ReactNode }
 import type { PartName } from "@/lib/lab/live";
 import { chordCells, type LabPart, type LabSection } from "@/lib/lab/view";
 import { BARS_PER_CHORD } from "@/lib/lab/chords";
-import { HATS_ROW, KICK_ROW, laneBlocks } from "@/lib/lab/activity";
+import { bandActivity, blocksFromActivity, HATS_ROW, KICK_ROW, laneBlocks } from "@/lib/lab/activity";
 import type { Block } from "@/lib/map/view";
 import s from "./lab.module.css";
 
@@ -95,7 +95,7 @@ export const Lanes = memo(function Lanes(p: LanesProps) {
   const on = heardParts(p.hear, p.parts.map((x) => x.id));
   const head = <i className={s.playhead} data-catching={p.catching ? "" : undefined} style={{ left: "var(--ph, 0%)" }} />;
   return (
-    <div className={s.grid} data-disabled={p.dimmed ? "" : undefined} style={{ gridTemplateColumns: `${LABEL}px minmax(0,1fr)`, gridTemplateRows: `46px 26px repeat(${p.parts.length}, minmax(60px, 1fr))` } as CSSProperties}>
+    <div className={s.grid} data-lab-grid data-disabled={p.dimmed ? "" : undefined} style={{ gridTemplateColumns: `${LABEL}px minmax(0,1fr)`, gridTemplateRows: `46px 26px repeat(${p.parts.length}, minmax(60px, 1fr))` } as CSSProperties}>
       <div className={s.corner} />
       <div ref={ruler} className={s.ruler} onClick={seekAt} role="slider" tabIndex={0} aria-label="Playhead, bar" aria-valuemin={1} aria-valuemax={bars} aria-valuenow={Math.floor(p.bar)}
         onKeyDown={(e) => {
@@ -143,12 +143,11 @@ function Lane({ x, levels, bands, on, focus, hear, onOnly, onMute, loop, pct, w,
   // LS1-N1: bars heard come from the separated part itself; the rest keep the map's estimate, faint.
   // LS1-N7: the drums' sub-rows (kick, hats) each get their own heard band when there is one.
   const part = levels ?? [];
-  const rowLevels = (name: string) => { const b = bands?.[name]; return b && b.some((v) => v !== null) ? b : null; };
-  const banded = x.subs.length > 0 && x.subs.every((y) => rowLevels(y.name));
+  // LS2-N8: per bar, the band where it was heard, else the part as a whole (older saved maps).
+  const banded = x.subs.length > 0 && !!bands;
   const heard = banded ? [] : laneBlocks(part, []).heard;
   const rows: { name: string; blocks: Block[]; heard: Block[] }[] = (x.subs.length ? x.subs : [{ name: "", blocks: x.blocks }]).map((y) => {
-    const lv = banded ? rowLevels(y.name)! : part;
-    const r = laneBlocks(lv, y.blocks);
+    const r = banded ? blocksFromActivity(bandActivity(bands![y.name] ?? undefined, part), y.blocks) : laneBlocks(part, y.blocks);
     return { ...y, blocks: r.estimate, heard: banded ? r.heard : [] };
   });
   return (

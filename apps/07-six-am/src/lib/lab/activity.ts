@@ -130,7 +130,21 @@ function runs(flags: boolean[], level: (i: number) => Block["level"]): Block[] {
  * the bars not heard yet (drawn faintly). Blocks touching across a likely/maybe change stay apart.
  */
 export function laneBlocks(levels: (number | null)[], estimate: Block[]): { heard: Block[]; estimate: Block[]; heardBars: boolean[] } {
-  const act = barActivity(levels);
+  return blocksFromActivity(barActivity(levels), estimate);
+}
+
+/**
+ * LS2-N8: a drums band row where it was heard, else the drums part as a whole (older saved maps
+ * have only the four part rows), so bars heard before the bands existed stay heard.
+ */
+export function bandActivity(band: (number | null)[] | undefined, part: (number | null)[]): (0 | 1 | 2 | null)[] {
+  const b = band ? barActivity(band) : [];
+  const whole = barActivity(part);
+  return whole.map((a, i) => b[i] ?? a);
+}
+
+/** Lane clips from per-bar activity (2 likely, 1 maybe, 0 quiet, null not heard). */
+export function blocksFromActivity(act: (0 | 1 | 2 | null)[], estimate: Block[]): { heard: Block[]; estimate: Block[]; heardBars: boolean[] } {
   const heardBars = act.map((a) => a !== null);
   const heard = runs(act.map((a) => !!a), (i) => (act[i] === 2 ? "likely" : "maybe"));
   const est: Block[] = [];

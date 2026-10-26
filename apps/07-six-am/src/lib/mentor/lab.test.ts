@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { TrackMap } from "@/lib/map/types";
 import { checkAnswer } from "./answer";
-import { cardLeft, factsLine, heardText, keyFlats, groupNotes, knowsLine, labContextText, labThread, notesFromThread, parseLabAsk, type LabAsk } from "./lab";
+import { cardLeft, factsLine, heardText, keyFlats, perBar, unheardLoop, groupNotes, knowsLine, labContextText, labThread, notesFromThread, parseLabAsk, type LabAsk } from "./lab";
 import { buildRequest, SYSTEM_PROMPT } from "./prompt";
 
 // The Mentor in the Lab (S2, B6): what the Lab sends, how it reads in the prompt, what comes back
@@ -51,7 +51,7 @@ describe("Lab question context", () => {
     expect(t).toMatch(/at bar 20 likely playing; plays bars 17–48/);
     expect(t).toMatch(/bars 1–8 Am; bars 9–16 F; bars 17–24 Am\. At bar 20: Am/);
     expect(t).toMatch(/notes from A1 to C2/);
-    expect(t).toMatch(/4 note starts a bar, notes about 1\/8 long, level -14 dB RMS/);
+    expect(t).toMatch(/4 notes a bar, notes about 1\/8 long, level -14 dB RMS/);
     expect(t).toMatch(/never the audio/);
   });
   it("without a loop it says there are no numbers of the part itself", () => {
@@ -63,7 +63,7 @@ describe("Lab question context", () => {
     expect(factsLine(ask.measure)).toBe("A1–C2 · notes ≈ 1/8 · 4 a bar · −14 dB");
     expect(factsLine({ from: 1, to: 9, levelDb: -20 })).toBe("−20 dB");
     // G minor writes flats: A#1 is Bb1.
-    expect(factsLine({ from: 41, to: 49, levelDb: -16, lowMidi: 26, highMidi: 34, notesPerBar: 4.5, lengthSteps: 0.9 }, keyFlats("G", "minor"))).toBe("D1–Bb1 · notes ≈ 1/16 · 4.5 a bar · −16 dB");
+    expect(factsLine({ from: 41, to: 49, levelDb: -16, lowMidi: 26, highMidi: 34, notesPerBar: 4.5, lengthSteps: 0.9 }, keyFlats("G", "minor"))).toBe("D1–Bb1 · notes ≈ 1/16 · 4–5 a bar · −16 dB");
     expect(factsLine(null)).toBe("");
     expect(knowsLine("bass", ask.hear, "Drop 1", 97)).toBe("The Mentor knows: Bass alone, Drop 1, bar 97; pitch, timing and loudness. Not tone.");
     expect(knowsLine("bass", { kind: "all" }, null, 3)).toBe("The Mentor knows: Bass, bar 3; pitch, timing and loudness. Not tone.");
@@ -93,6 +93,27 @@ describe("what the Lab heard (LS2-M3)", () => {
     expect(heardText(heard.part, 17)).toMatch(/^at bar 17 not heard yet/);
     const t = labContextText({ ...ask, bar: 30, heard }, map);
     expect(t).toMatch(/use it only where the Lab hasn't heard the part yet/);
+  });
+});
+
+describe("a bar not heard yet (LS2-M6)", () => {
+  const unheard = { ...ask, bar: 50, loop: null, measure: null, heard: { part: { from: 34, levels: Array.from({ length: 17 }, () => -20).concat([null]), refDb: -20 } } };
+  it("asks for the map's estimate and the loop to hear it; a heard or measured bar doesn't", () => {
+    expect(unheardLoop({ ...unheard, bar: 51 }, map)).toBe("bars 41–56");
+    expect(labContextText({ ...unheard, bar: 51 }, map)).toMatch(/Answer in two sentences only[^\n]*"Loop bars 41–56 to hear it and get its notes\." No chords/);
+    expect(unheardLoop(unheard, map)).toBeNull(); // bar 50 was heard
+    expect(unheardLoop({ ...ask }, map)).toBeNull(); // a loop measures it
+  });
+  it("the answer check holds it to two sentences with the loop line and no chords", () => {
+    const answer = (...texts: string[]) => ({ sentences: texts.map((text) => ({ text, source: "ears" })), tellMore: false });
+    const needs = { labUnheard: "bars 41–56" };
+    expect(checkAnswer("lab", answer("The map estimates the bass plays here.", "Loop bars 41–56 to hear it and get its notes."), needs).ok).toBe(true);
+    expect(checkAnswer("lab", answer("The map estimates the bass plays here.", "The chord is Gm.", "Loop bars 41–56 to hear it and get its notes."), needs).ok).toBe(false);
+    expect(checkAnswer("lab", answer("The map estimates the bass plays here over a Gm chord.", "Loop bars 41–56 to hear it and get its notes."), needs).ok).toBe(false);
+    expect(checkAnswer("lab", answer("The map estimates the bass plays here."), needs).ok).toBe(false);
+  });
+  it("notes a bar as people say it (LS2-M7)", () => {
+    expect([perBar(4), perBar(4.5), perBar(4.1), perBar(5.9)]).toEqual(["4", "4–5", "4", "6"]);
   });
 });
 

@@ -6,6 +6,7 @@
 import type { PartName } from "@/lib/lab/live";
 import { labParts, labSections, sectionAt } from "@/lib/lab/view";
 import { barActivity } from "@/lib/lab/activity";
+import { loopBars } from "@/lib/lab/timing";
 import type { TrackMap } from "@/lib/map/types";
 import { midiName, pitchClass, usesFlats } from "@/lib/synths/theory";
 import type { MentorAnswer } from "./answer";
@@ -131,6 +132,24 @@ export function noteValue(steps: number): string {
   return "a bar or more";
 }
 
+/** Notes a bar as people say it (LS2-M7): 4 → "4", 4.5 → "4–5". */
+export function perBar(n: number): string {
+  const r = Math.round(n);
+  return Math.abs(n - r) < 0.15 ? `${r}` : `${Math.floor(n)}–${Math.ceil(n)}`;
+}
+
+/**
+ * LS2-M6: the bar hasn't been heard and no loop measures the part: the loop to suggest ("bars
+ * 49–56", the section's 16-bar phrase holding the bar), or null when it has been heard.
+ */
+export function unheardLoop(ask: LabAsk, map: TrackMap): string | null {
+  const heardHere = ask.heard ? ask.heard.part.levels[ask.bar - ask.heard.part.from] ?? null : null;
+  if (heardHere !== null || ask.measure) return null;
+  const sec = sectionAt(labSections(map), ask.bar);
+  const r = loopBars(sec ? { from: sec.from, to: sec.to } : { from: ask.bar, to: Math.min(map.bars + 1, ask.bar + 8) }, ask.bar);
+  return `bars ${r.from}–${r.to - 1}`;
+}
+
 /** The mono facts line under an answer: what was measured, never a judgement ("A1–C2 · notes ≈ 1/8 · −14 dB"); no hertz (LS2-M5). */
 export function factsLine(m: PartMeasure | null, flats = false): string {
   if (!m) return "";
@@ -139,7 +158,7 @@ export function factsLine(m: PartMeasure | null, flats = false): string {
     out.push(m.lowMidi === m.highMidi ? noteName(m.lowMidi, flats) : `${noteName(m.lowMidi, flats)}–${noteName(m.highMidi, flats)}`);
   }
   if (m.lengthSteps !== undefined && m.lengthSteps > 0) out.push(`notes ≈ ${noteValue(m.lengthSteps)}`);
-  if (m.notesPerBar !== undefined) out.push(`${m.notesPerBar} a bar`);
+  if (m.notesPerBar !== undefined) out.push(`${perBar(m.notesPerBar)} a bar`);
   out.push(`${m.levelDb <= -90 ? "silent" : `${m.levelDb > 0 ? "+" : m.levelDb < 0 ? "−" : ""}${Math.abs(m.levelDb)} dB`}`);
   return out.join(" · ");
 }
@@ -195,11 +214,12 @@ export function labContextText(ask: LabAsk, map: TrackMap): string {
       ? `[lab] Measured from the ${name.toLowerCase()} itself, looped in memory over bars ${m.from}–${m.to - 1}: ${[
         m.lowMidi !== undefined && m.highMidi !== undefined ? `notes from ${noteName(m.lowMidi, flats)} to ${noteName(m.highMidi, flats)} (estimated, snapped into the key)` : "",
         m.patternBars ? `a ${m.patternBars}-bar pattern` : "",
-        m.notesPerBar !== undefined ? `${m.notesPerBar} note starts a bar` : "",
+        m.notesPerBar !== undefined ? `${perBar(m.notesPerBar)} notes a bar` : "",
         m.lengthSteps !== undefined && m.lengthSteps > 0 ? `notes about ${noteValue(m.lengthSteps)} long` : "",
         `level ${m.levelDb} dB RMS (${m.levelDb > -18 ? "loud" : m.levelDb > -30 ? "moderate" : "quiet"})`,
       ].filter(Boolean).join(", ")}.`
       : `[lab] No loop is held, so there are no measurements of the ${name.toLowerCase()} itself, only the map's estimates.`,
+    ...(unheardLoop(ask, map) ? [`[lab] Bar ${ask.bar} hasn't been heard yet. Answer in two sentences only: what the map estimates for the ${name.toLowerCase()} there, then exactly "Loop ${unheardLoop(ask, map)} to hear it and get its notes." No chords, no guesses.`] : []),
   ];
   return lines.join("\n");
 }

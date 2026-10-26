@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BarLevels, barActivity, laneBlocks, parseLevels } from "./activity";
+import { BarLevels, bandActivity, barActivity, laneBlocks, parseLevels } from "./activity";
 import { LoopBuffer } from "./loop-buffer";
 
 // LS1-N1: lanes from what the separated parts play, bar by bar. Bars at 120 BPM are 2 s.
@@ -56,6 +56,11 @@ describe("lane clips", () => {
     const r = laneBlocks(levels, [{ from: 1, to: 7, level: "likely" }]);
     expect(r.heard).toEqual([{ from: 3, to: 5, level: "likely" }]);
     expect(r.estimate).toEqual([{ from: 1, to: 3, level: "likely" }, { from: 6, to: 7, level: "likely" }]);
+  });
+  it("drums bands fall back to the whole part where a band wasn't measured (older maps, LS2-N8)", () => {
+    // Bars 1–2 heard before the bands existed; bars 3–4 with bands (kick quiet in bar 4).
+    expect(bandActivity([null, null, -12, -60], [-15, -15, -15, -15])).toEqual([2, 2, 2, 0]);
+    expect(bandActivity(undefined, [-15, null])).toEqual([2, null]);
   });
   it("the map's saved levels are whitelisted", () => {
     expect(parseLevels([[1.4, null], [null, null], [null, null], [null, -200]], 2)).toBeNull();

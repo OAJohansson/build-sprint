@@ -705,3 +705,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **S3+S4 test:** jobs 4 / 3. Make works (A/B 0.2 dB, fast knobs, honest Mentor); Save works but a rename after saving is lost, A/B is below the fold at 734 px, and saved sounds leave no trace in the Lab. Fix pass sent (T100: keep the approved order, fit it on a 734 px page).
 - **S3/S4 fix pass (T101):** rename is a PATCH (no duplicate), everything fits a 734 px page with A/B visible, saved sounds line that reopens a sound, honest Suggest, Make a bass instead, notes in the strip. 358 tests. Re-check next.
 - **S5 started:** a quick Studio lane-model design pass (L193) runs while the Make/Save re-check runs.
+- **S3+S4 re-check: jobs 4 / 4 (pass).** All fixes hold; Suggest 0.45 s round trip. Small fixes sent (saved sounds clickable before the loop is read, Mine silent where the original bass is, 28 px targets).

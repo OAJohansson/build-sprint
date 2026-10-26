@@ -106,3 +106,12 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | S3-3 | minor | Make rail titled "at bar 41" but shows the whole thread | fixed (T101), re-test |
 | S3-4 | minor | Drums in Make: no route to the bass | fixed (T101), re-test |
 | S3-5 | polish | Knob step 0.01; cut Mentor sentence; loop strip shows a block, not the notes | fixed (T101), re-test |
+
+## Lab S3+S4 re-check (26 Oct): jobs 4 / 4 (pass)
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| S3-N1 | minor | Saved sounds look dead until the loop is read (37 s), nothing says why | small fix |
+| S3-N2 | minor | Mine's 4-bar pattern repeats over the 16-bar loop, so it may play where the original bass is silent | small fix |
+| S3-N4 | polish | "Make a bass instead" and sound names 15–16 px tall | small fix |
+| S3-N3 | polish | A garbled test name in the sandbox library | sandbox data, no fix |

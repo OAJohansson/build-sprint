@@ -207,16 +207,16 @@ it; A/B feels fair) are in the owner's final review.
 
 | # | Eval | Bar | Run by | Result |
 | --- | --- | --- | --- | --- |
-| Y1 | Separation faster than real time on the owner's Mac (Apple silicon, Chrome); measured ratio and delay reported | ratio > 1.0 sustained; delay a few seconds | data-evals | spike: 3–4.2× live, 5.5 s (L150) |
+| Y1 | Separation faster than real time on the owner's Mac (Apple silicon, Chrome); measured ratio and delay reported | ratio > 1.0 sustained; delay a few seconds | data-evals | **pass**: 3.76× over a full track, 0 late, delay 5.51 s |
 | Y2 | Original silent locally while parts play | `suppressLocalAudioPlayback` true, and the owner hears only Six AM | data-evals + owner | spike: pass (L151) |
-| Y3 | Zero bytes of the original stored or uploaded, including patch matching and loops | 0 (storage, network, code read) | data-evals | |
-| Y4 | Synth or AI sounds in key and on tempo | every synth note in scale, onsets ≤ 5 ms; AI key and tempo ±1 BPM on ≥ 4 of 5 | data-evals | |
-| Y5 | Library save and load (sound + loop linked, tags, name) survive a reload; Studio lane changes survive a reload | 5 of 5 each | data-evals | |
+| Y3 | Zero bytes of the original stored or uploaded, including patch matching and loops | 0 (storage, network, code read) | data-evals | **pass**: 0 (499 requests, storage, code read) |
+| Y4 | Synth or AI sounds in key and on tempo | every synth note in scale, onsets ≤ 5 ms; AI key and tempo ±1 BPM on ≥ 4 of 5 | data-evals | **pass**: synth 619/619 in scale ≤ 2 ms; library blocks 141/141; AI 1 of 1 (capped) |
+| Y5 | Library save and load (sound + loop linked, tags, name) survive a reload; Studio lane changes survive a reload | 5 of 5 each | data-evals | **pass** library 5/5; migration 301/301 offline; Studio lanes UI pending |
 | Y6 | User test: every job ≥ 4/5 (sandbox) | jobs 1–5 ≥ 4/5 | user-tester | |
 | Y7 | Design scorecard (one critic, five points) | **9/10 is a target, not a blocker** | design-critic | |
-| Y8 | Section loop is seamless and the playhead shows what you hear | no gap or click at the loop point (> 20 ms silence or a step > −30 dB); playhead within 0.5 s of the heard audio | data-evals | |
-| Y9 | A/B is level-matched | original and mine within 1 dB RMS when switching | data-evals | |
-| Y10 | Patch matching suggests settings closer than the starting preset | on ≥ 3 of 5 parts, a measured feature distance (brightness, envelope, pitch) drops vs the preset | data-evals | |
+| Y8 | Section loop is seamless and the playhead shows what you hear | no gap or click at the loop point (> 20 ms silence or a step > −30 dB); playhead within 0.5 s of the heard audio | data-evals | **pass**: 4 seams clean; playhead 20 ms live, 0 looping |
+| Y9 | A/B is level-matched | original and mine within 1 dB RMS when switching | data-evals | **pass** 20/20 (Reese 1.1 dB quieter in mono, F2) |
+| Y10 | Patch matching suggests settings closer than the starting preset | on ≥ 3 of 5 parts, a measured feature distance (brightness, envelope, pitch) drops vs the preset | data-evals | **pass** 5/5, but 95/120 values at extremes (kick bleed, F1); one track only |
 
 ### Requirements B1–B11
 

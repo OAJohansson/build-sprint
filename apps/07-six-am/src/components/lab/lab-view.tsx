@@ -20,10 +20,12 @@ import { HearChip, Lanes, heardParts, type Hear } from "./lanes";
 import s from "./lab.module.css";
 
 declare global {
-  interface Window { __sixamLab?: { state: () => TransportState | null; heardMs: () => number; bar: () => number; hear: () => Hear } }
+  interface Window { __sixamLab?: { state: () => TransportState | null; heardMs: () => number; bar: () => number; hear: () => Hear; levels: () => number[] } }
 }
 
 type Mode = "listen" | "make";
+/** Where you were in this track, for a reload (LS1-8): a position only, per tab. */
+const POS_KEY = (id: string) => `07-six-am:lab-pos:${id}`;
 const FIRST_LINE = "To split the parts, Six AM plays the song again from SoundCloud in a small window. It never keeps the audio.";
 
 function problemText(e: unknown): string {
@@ -66,17 +68,21 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       },
     });
     tr.current = t;
+    try { const saved = Number(sessionStorage.getItem(POS_KEY(map.id))); if (saved > 0) t.seek(saved); } catch { /* storage blocked */ }
     let raf = 0, lastSec = -1, lastBar = -1;
     const frame = () => {
       const ms = t.heardMs();
       const b = Math.min(bars + 0.999, Math.max(1, msToBar(ms, bpm, origin)));
       grid.current?.style.setProperty("--ph", `${((b - 1) / bars) * 100}%`);
       const sec = Math.floor(ms / 1000), bi = Math.floor(b);
-      if (sec !== lastSec || bi !== lastBar) { lastSec = sec; lastBar = bi; setPos({ sec, bar: bi }); }
+      if (sec !== lastSec || bi !== lastBar) {
+        lastSec = sec; lastBar = bi; setPos({ sec, bar: bi });
+        try { sessionStorage.setItem(POS_KEY(map.id), String(Math.round(ms))); } catch { /* storage blocked */ }
+      }
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
-    window.__sixamLab = { state: () => tr.current?.state ?? null, heardMs: () => t.heardMs(), bar: () => msToBar(t.heardMs(), bpm, origin), hear: () => hearRef.current };
+    window.__sixamLab = { state: () => tr.current?.state ?? null, heardMs: () => t.heardMs(), bar: () => msToBar(t.heardMs(), bpm, origin), hear: () => hearRef.current, levels: () => t.partLevels() };
     return () => { cancelAnimationFrame(raf); clearTimeout(saveTimer); t.dispose(); tr.current = null; };
   }, [map, bpm, origin, bars, code, quiet]);
 
@@ -150,10 +156,14 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const pctLoaded = model && model.total ? Math.floor((model.loaded / model.total) * 100) : 0;
   const status = loading
     ? `Getting ready… ${model!.downloading ? `${pctLoaded}%` : ""}${model!.downloading && model!.etaS !== null && model!.etaS > 3 ? ` · first time only, about ${Math.round(model!.etaS)} s` : ""}`
-    : ts?.catching ? "catching up…" : "";
+    : ts?.catching ? `catching up…${ts.catchLeftS ? ` ${ts.catchLeftS} s` : ""}` : "";
   const here = sectionAt(sections, pos.bar);
   const loopSec = loop ? sectionAt(sections, loop.from) : null;
-  const deckText = ready ? "Deck on" : starting ? "Deck opening…" : "Deck off";
+  // A long section loops 16 bars of it (L161): say which (LS1-2).
+  const loopPart = loop && loopSec && loop.to - loop.from < loopSec.to - loopSec.from
+    ? (loop.from === loopSec.from ? ", first 16 bars" : `, bars ${loop.from}–${loop.to - 1}`) : "";
+  const deckText = ready ? "Deck on" : starting ? "Deck opening…" : ts?.deckOpen ? "Deck open" : "Deck off";
+  const closedLine = ts?.phase === "stopped" && ts.deckClosed ? "Deck closed. Press Play to open it again." : null;
 
   return (
     <div className={s.root}>
@@ -179,7 +189,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
             <span className={s.status} aria-live="polite">{status}</span>
             {loop && ts?.loop && (
               <span className={s.loopChip}>
-                Looping {loopSec?.label ?? "section"} · {clockMs(ts.loop.startMs)}–{clockMs(ts.loop.endMs)}
+                Looping {loopSec?.label ?? "section"}{loopPart} · {clockMs(ts.loop.startMs)}–{clockMs(ts.loop.endMs)}
                 <button className={s.x} onClick={() => tr.current?.setLoop(null)} aria-label={`Stop looping ${loopSec?.label ?? "the section"}`}>×</button>
               </span>
             )}
@@ -195,7 +205,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
         </div>
       </div>
       {loading && <div className={s.progress}><i style={{ width: `${model!.downloading ? pctLoaded : 100}%` }} /></div>}
-      {problem ? <p className={s.alertLine} role="alert">{problem}</p>
+      {problem || closedLine ? <p className={s.alertLine} role="alert">{problem ?? closedLine}</p>
         : starting ? <p className={s.firstLine} role="status">{FIRST_LINE}</p> : null}
       {mode === "listen" ? (
         <div ref={grid} style={{ display: "contents" }}>

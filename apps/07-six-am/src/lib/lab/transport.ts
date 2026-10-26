@@ -9,6 +9,7 @@ import { ChordCells } from "./chords";
 import { DeckRemote, type DeckState } from "./deck-protocol";
 import { LiveError, LiveParts, type LiveStats, type Region } from "./live";
 import { LoopBuffer } from "./loop-buffer";
+import { RecentParts, faded } from "./recent";
 import { Separator } from "./separator-client";
 import { gateResume, isCatching, loopPositionMs, msToSamples, playTimeOf, runOffset } from "./timing";
 
@@ -18,6 +19,9 @@ const PRE_ROLL_MS = 1000;
 const TAIL_S = 0.01;
 const POLL_MS = 50;
 const KEEP_MARKS = 600; // 60 s of Deck reports
+/** How long a seek usually takes to bring new audio (measured ~5.8 s): the length played from
+ *  recent parts while the Deck catches up behind it. */
+const CATCH_S = 6.5;
 
 export type ModelProgress = {
   /** Bytes so far and in all (0 when unknown); `downloading` false when it came from the cache. */
@@ -42,6 +46,10 @@ export type TransportState = {
   /** What you hear now (the seek target while catching up), track ms. */
   heardMs: number;
   catching: boolean;
+  /** Seconds until new audio, roughly, while catching up (null otherwise). */
+  catchLeftS: number | null;
+  /** The parts were playing and the Deck went away (window closed, sharing stopped). */
+  deckClosed: boolean;
   loop: LoopState | null;
   chords: (string | null)[];
   stats: LiveStats | null;
@@ -102,6 +110,13 @@ export class LabTransport {
   private timer: ReturnType<typeof setInterval>;
   private dlStart = 0;
   private deckWaiters = new Set<() => void>();
+  private recent: RecentParts | null = null;
+  /** Playing from recent parts while the Deck catches up behind (LS1-4). */
+  private mem: { t0: number; startMs: number; endMs: number; endAt: number; sources: AudioBufferSourceNode[] } | null = null;
+  private analysers: AnalyserNode[] = [];
+  private deckClosed = false;
+  private lastOrphanPause = 0;
+  private dl = { t: 0, loaded: 0, speed: 0 };
 
   constructor(private o: TransportOptions) {
     this.chordCells = new ChordCells(o.bars, o.bpm, o.originSec, o.knownChords);
@@ -117,10 +132,17 @@ export class LabTransport {
     this.model = { loaded: 0, total: 0, downloading: false, etaS: null, ready: false, error: null };
     this.sep = new Separator((loaded, total) => {
       if (!this.model) return;
-      if (!this.model.downloading) this.dlStart = performance.now();
-      const el = (performance.now() - this.dlStart) / 1000;
-      const speed = el > 0.5 && loaded > 0 ? loaded / el : 0;
-      this.model = { ...this.model, loaded, total, downloading: true, etaS: speed && total ? Math.max(0, (total - loaded) / speed) : null };
+      const now = performance.now();
+      if (!this.model.downloading) { this.dlStart = now; this.dl = { t: now, loaded, speed: 0 }; }
+      // A moving average of the speed, and no estimate for the first 3 s (LS1-7).
+      const dt = (now - this.dl.t) / 1000;
+      if (dt > 0.2) {
+        const inst = (loaded - this.dl.loaded) / dt;
+        this.dl = { t: now, loaded, speed: this.dl.speed ? 0.8 * this.dl.speed + 0.2 * inst : inst };
+      }
+      const el = (now - this.dlStart) / 1000;
+      const etaS = el >= 3 && this.dl.speed > 0 && total ? Math.max(0, (total - loaded) / this.dl.speed) : null;
+      this.model = { ...this.model, loaded, total, downloading: true, etaS };
       this.emit(true);
     });
     this.sep.loaded.then(
@@ -197,6 +219,10 @@ export class LabTransport {
       throw e;
     }
     this.phase = "ready";
+    this.deckClosed = false;
+    this.recent = new RecentParts(this.live.rate);
+    // Graders (LS1 tester): what each part sends out after hear-only/mute, as a level.
+    this.analysers = this.live.gains.map((g) => { const a = this.live!.ctx.createAnalyser(); a.fftSize = 8192; /* ~186 ms */ g.connect(a); return a; });
     this.play();
   }
 
@@ -209,13 +235,14 @@ export class LabTransport {
     const l = this.loopS;
     if (l?.state === "memory") { this.startLoopSources(this.pausedMs); this.playingS = true; this.emit(true); return; }
     if (this.pausedMs >= this.o.durationMs - 1000) this.pausedMs = 0; // at the end: from the top
-    this.seekLive(this.pausedMs);
+    if (!this.startRecent(this.pausedMs)) this.seekLive(this.pausedMs);
   }
 
   pause() {
     if (!this.live || !this.playingS) return;
     this.pausedMs = this.heardMs();
     this.playingS = false;
+    this.stopRecent();
     if (this.loopS?.state === "memory") this.stopLoopSources();
     else {
       this.deck.pause();
@@ -238,7 +265,7 @@ export class LabTransport {
       this.emit(true);
       return;
     }
-    if (this.playingS) this.seekLive(ms);
+    if (this.playingS) { if (!this.startRecent(ms)) this.seekLive(ms); }
     else { this.pausedMs = ms; this.emit(true); }
   }
 
@@ -287,6 +314,7 @@ export class LabTransport {
     const l = this.loopS;
     if (!this.playingS) return this.pausedMs;
     if (l?.state === "memory") return loopPositionMs(l.startMs, l.endMs, l.t0, now);
+    if (this.mem && now < this.mem.endAt) return this.mem.startMs + Math.max(0, now - this.mem.t0) * 1000;
     if (this.gate) return this.gate.fromMs;
     if (!this.run || (this.unmuteAt !== null && now < this.unmuteAt)) return this.pausedMs;
     return Math.min(this.o.durationMs, (now - live.delayS + this.run.offsetS) * 1000);
@@ -294,7 +322,32 @@ export class LabTransport {
 
   get catching() {
     if (!this.live || !this.playingS || this.loopS?.state === "memory") return false;
-    return isCatching(!!this.gate, this.unmuteAt, this.live.ctx.currentTime);
+    const now = this.live.ctx.currentTime;
+    if (this.mem && now < this.mem.endAt) return false;
+    return isCatching(!!this.gate, this.unmuteAt, now);
+  }
+
+  /** Roughly how many seconds until new audio while catching up. */
+  get catchLeftS(): number | null {
+    if (!this.catching || !this.live) return null;
+    const now = this.live.ctx.currentTime;
+    if (this.gate) return Math.max(1, Math.ceil(this.gate.since + CATCH_S - now));
+    return this.unmuteAt !== null ? Math.max(1, Math.ceil(this.unmuteAt - now)) : null;
+  }
+
+  /** What each part (drums, bass, other, vocals) is sending out now, RMS dB after hear-only/mute
+   *  (−120 for silence or before the parts play). For graders: a part you hear only should be
+   *  well above −60 dB where its lane shows a block. */
+  partLevels(): number[] {
+    return [0, 1, 2, 3].map((p) => {
+      const a = this.analysers[p];
+      if (!a) return -120;
+      const buf = new Float32Array(a.fftSize);
+      a.getFloatTimeDomainData(buf);
+      let e = 0;
+      for (const x of buf) e += x * x;
+      return Math.max(-120, Math.round(10 * Math.log10(e / buf.length + 1e-12) * 10) / 10);
+    });
   }
 
   get state(): TransportState {
@@ -306,6 +359,8 @@ export class LabTransport {
       playing: this.playingS,
       heardMs: this.heardMs(),
       catching: this.catching,
+      catchLeftS: this.catchLeftS,
+      deckClosed: this.deckClosed,
       loop: l ? { startMs: l.startMs, endMs: l.endMs, state: l.state, filled: l.state === "memory" ? 1 : l.buf?.progress ?? 0 } : null,
       chords: [...this.chordCells.cells],
       stats: this.stats,
@@ -316,6 +371,8 @@ export class LabTransport {
   /** Stops everything: sharing, the worker, the loop's memory, the Deck's playback. */
   dispose() {
     clearInterval(this.timer);
+    this.stopRecent();
+    this.recent?.clear();
     this.dropLoop();
     if (this.live) this.deck.pause();
     this.live?.stop();
@@ -328,9 +385,10 @@ export class LabTransport {
   // ── Internals ──────────────────────────────────────────────────────────────────────────────────
 
   /** Seek the Deck to `ms` (a pre-roll before a loop's start) and mute until new audio plays. */
-  private seekLive(ms: number) {
+  private seekLive(ms: number, keepRecent = false) {
     const live = this.live;
     if (!live) return;
+    if (!keepRecent) this.stopRecent();
     const pre = this.loopS && Math.abs(ms - this.loopS.startMs) < 1 ? PRE_ROLL_MS : 0;
     const target = Math.max(0, ms - pre);
     this.setLive(false);
@@ -360,7 +418,13 @@ export class LabTransport {
     this.deckWaiters.forEach((f) => f());
     this.deckWaiters.clear();
     const live = this.live;
-    if (!live) { this.emit(); return; }
+    if (!live) {
+      // A Deck left playing (the Lab was reloaded, sharing stopped): nobody hears its parts, and
+      // without sharing its sound is the original, so stop it (LS1-8).
+      if (s.playing && performance.now() - this.lastOrphanPause > 1000) { this.lastOrphanPause = performance.now(); this.deck.pause(); }
+      this.emit();
+      return;
+    }
     live.noteDeck(s.pos, s.playing);
     const at = live.ctx.currentTime;
     this.marks.push({ at, posMs: s.pos, playing: s.playing });
@@ -384,15 +448,21 @@ export class LabTransport {
       const t = gateResume({ cs, ce, captureFrom: g.captureFrom, offsetS, fromMs: g.fromMs, delayS: live.delayS });
       if (t === null || offsetS === null) return;
       this.run = { captureFrom: g.captureFrom, offsetS };
-      this.unmuteAt = t;
+      // While recent parts still play, the live parts take over where they end (a jump of a few
+      // hundred ms at most if the Deck was quicker than usual).
+      const at = this.mem ? Math.max(t, this.mem.endAt) : t;
+      this.unmuteAt = at;
       this.gate = null;
-      this.setLive(true, t);
+      this.setLive(true, at);
       this.loopS?.buf?.reset(); // a loop fills from one run only, so its joins line up
     }
     const run = this.run;
     if (!run) return;
     const skip = Math.max(0, Math.round((run.captureFrom - cs) * rate));
     const startSec = cs + run.offsetS; // track time of the region's first sample
+
+    // Recent parts (LS1-4): as played, crossfades and all, at their track position.
+    if (this.recent && skip < r.length) this.recent.add(Math.round((startSec + skip / rate) * rate), r.parts.map((a) => faded(a.subarray(skip), Math.min(r.fade, r.length - skip))));
 
     // Chords: bass + other, read into chroma and dropped.
     if (skip < r.length) {
@@ -462,6 +532,45 @@ export class LabTransport {
     l.sources = [];
   }
 
+  /**
+   * Plays from recent parts at `ms` at once, for up to CATCH_S seconds, while the Deck seeks to where
+   * they end and the live parts take over there (LS1-4). False when they don't hold `ms`.
+   */
+  private startRecent(ms: number): boolean {
+    const live = this.live, recent = this.recent;
+    if (!live || !recent) return false;
+    const rate = live.rate, from = Math.round((ms / 1000) * rate);
+    const until = recent.coveredUntil(from);
+    if (until === null) return false;
+    const endMs = Math.min((until / rate) * 1000 - 20, ms + CATCH_S * 1000);
+    if (endMs - ms < 1500) return false;
+    const chans = recent.build(from, Math.round((endMs / 1000) * rate));
+    if (!chans) return false;
+    this.stopRecent();
+    const ctx = live.ctx, when = ctx.currentTime + 0.03;
+    const sources = [0, 1, 2, 3].map((p) => {
+      const b = ctx.createBuffer(2, chans[0].length, rate);
+      b.copyToChannel(chans[p * 2], 0);
+      b.copyToChannel(chans[p * 2 + 1], 1);
+      const src = ctx.createBufferSource();
+      src.buffer = b;
+      src.connect(live.gains[p]);
+      src.onended = () => src.disconnect();
+      src.start(when);
+      return src;
+    });
+    chans.forEach((a) => a.fill(0));
+    this.mem = { t0: when, startMs: ms, endMs, endAt: when + (endMs - ms) / 1000, sources };
+    this.seekLive(endMs, true);
+    return true;
+  }
+
+  private stopRecent() {
+    if (!this.mem) return;
+    for (const src of this.mem.sources) { try { src.stop(); } catch { /* not started */ } src.disconnect(); }
+    this.mem = null;
+  }
+
   /** Ends the loop and zeroes its audio (L161). */
   private dropLoop() {
     const l = this.loopS;
@@ -475,6 +584,13 @@ export class LabTransport {
   }
 
   private onLiveEnded() {
+    // Resume where you were (LS1-3), not where the Deck had got to.
+    if (this.live && this.phase === "ready") this.pausedMs = this.heardMs();
+    this.deckClosed = this.phase === "ready";
+    this.stopRecent();
+    this.recent?.clear();
+    this.recent = null;
+    this.analysers = [];
     this.dropLoop();
     this.live = null;
     this.gate = null;

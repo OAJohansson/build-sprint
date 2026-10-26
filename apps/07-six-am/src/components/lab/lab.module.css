@@ -124,3 +124,14 @@
 .soon h2 { margin: 0 0 6px; font: italic 400 24px var(--f-serif); color: var(--ink); }
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .empty { position: absolute; left: 200px; right: 0; top: 46px; height: 26px; display: flex; align-items: center; padding-left: 10px; font-size: 10.5px; color: var(--faint); pointer-events: none; }
+
+/* fix pass LS1 */
+.chord[data-unheard] { color: var(--faint); opacity: .5; }
+.chordNote { position: absolute; left: 8px; top: 0; line-height: 26px; font-size: 10.5px; color: var(--faint); pointer-events: none; }
+.hearIcon { width: 28px; height: 28px; opacity: .35; }
+.x { width: 28px; height: 28px; }
+.sec { height: 28px; line-height: 28px; }
+.title { min-width: 200px; }
+.actions { min-width: 0; flex: 0 1 auto; }
+.transport { flex-wrap: wrap; justify-content: flex-end; row-gap: 4px; min-width: 0; }
+.deckOpen { color: var(--muted); }

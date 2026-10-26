@@ -7,6 +7,7 @@
 import { memo, useEffect, useRef, useState, type CSSProperties } from "react";
 import type { PartName } from "@/lib/lab/live";
 import { chordCells, type LabPart, type LabSection } from "@/lib/lab/view";
+import { BARS_PER_CHORD } from "@/lib/lab/chords";
 import type { Block } from "@/lib/map/view";
 import s from "./lab.module.css";
 
@@ -35,7 +36,7 @@ export function HearChip({ hear, parts, onClear }: { hear: Hear; parts: LabPart[
 }
 
 const LABEL = 200;
-const CODES: Record<string, string> = { breakdown: "Brk", build: "Bld", outro: "Out", intro: "Intro", drop: "Drop", section: "Sec" };
+const CODES: Record<string, string> = { breakdown: "Brk", build: "Bld", outro: "Out", intro: "Intro", drop: "Drop", groove: "Grv", break: "Brk", section: "Sec" };
 
 type LanesProps = {
   bars: number;
@@ -81,6 +82,9 @@ export const Lanes = memo(function Lanes(p: LanesProps) {
   const ticks = Array.from({ length: Math.floor((bars - 1) / tickStep) + 1 }, (_, i) => 1 + i * tickStep);
   // A section name that doesn't fit becomes a short code, never an ellipsis (full name in its label).
   const label = (x: LabSection) => (x.label.length * 7.2 + 16 <= ((x.to - x.from) / bars) * px ? x.label : CODES[x.name.toLowerCase()] ?? x.name.slice(0, 3));
+  // Every 8-bar cell (LS1-5): not heard yet (faint dash), heard without a clear chord (–), or a name.
+  const allCells = p.chords.map((name, i) => ({ from: 1 + i * BARS_PER_CHORD, to: Math.min(1 + (i + 1) * BARS_PER_CHORD, bars + 1), name })).filter((c) => c.from <= bars);
+  const anyHeard = p.chords.some((c) => c !== null);
   const loopedSection = p.loop ? p.sections.find((x) => p.loop!.from >= x.from && p.loop!.from < x.to) : null;
   const on = heardParts(p.hear, p.parts.map((x) => x.id));
   const head = <i className={s.playhead} data-catching={p.catching ? "" : undefined} style={{ left: "var(--ph, 0%)" }} />;
@@ -104,7 +108,12 @@ export const Lanes = memo(function Lanes(p: LanesProps) {
       </div>
       <div className={s.lhChord}>Chords <small>est.</small></div>
       <div className={s.chordLane} onClick={seekAt}>
-        {cells.map((c) => <span key={c.from} className={s.chord} title={c.name ? `${c.name} (estimate), bars ${c.from}–${c.to - 1}` : `No clear chord, bars ${c.from}–${c.to - 1}`} style={{ left: pct(c.from), width: w(c.from, c.to) }}>{narrow ? "" : c.name}</span>)}
+        {!anyHeard && <span className={s.chordNote}>Chords fill in as you listen</span>}
+        {anyHeard && allCells.map((c) => (
+          <span key={c.from} className={s.chord} data-unheard={c.name === null ? "" : undefined}
+            title={c.name === null ? `Not heard yet, bars ${c.from}–${c.to - 1}` : c.name ? `${c.name} (estimate), bars ${c.from}–${c.to - 1}` : `No clear chord, bars ${c.from}–${c.to - 1}`}
+            style={{ left: pct(c.from), width: w(c.from, c.to) }}>{narrow ? "" : c.name === null ? "-" : c.name || "–"}</span>
+        ))}
         {progressions.map((x) => <span key={x.from} className={s.prog} style={{ left: pct(x.from), width: w(x.from, x.to) }}>{x.text}</span>)}
         {head}
       </div>
@@ -136,7 +145,7 @@ function Lane({ x, on, focus, hear, onOnly, onMute, loop, pct, w, seekAt, head }
           <button className={s.hearIcon} data-lit={muted ? "" : undefined} aria-pressed={muted}
             onClick={() => onMute(x.id)} aria-label={`Mute ${x.name}`} title={`Mute ${x.name}`}><Speaker off={muted} /></button>
         </div>
-        <span className={s.subList}>{x.subs.length > 1 ? <>{x.subs.length} layers <i>est.</i></> : <i>estimated</i>}</span>
+        <span className={s.subList} title="Estimated from the sound">{x.subs.length > 1 ? <>{x.subs.length} layers <i>est.</i></> : <>{x.hint} <i>est.</i></>}</span>
         {x.subs.length > 0 && <div className={s.lhSubs} aria-hidden>{x.subs.map((y) => <span key={y.name}>{y.name}</span>)}</div>}
       </div>
       <div className={s.lane} data-st={state} data-focus={f} onClick={seekAt}>

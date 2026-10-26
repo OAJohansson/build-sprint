@@ -86,3 +86,4 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Slow-down for owned files | Hear fast parts note by note (the SoundCloud widget can't) | later |
 | Live drum split (kick, snare, hats as separate soloable parts) | Only Moises does it; experiment | experiment |
 | ME-7 remake coaching | Mentor coaches a remake lane by lane | later |
+| Real estimated sub-layers for Bass, Other and Vocals (from the separated parts) | User test LS1-1: only Drums shows what's inside | next |

@@ -10,7 +10,7 @@ bet: "Writing each habit as a commitment to myself, logging it in one tap, and a
 url: "https://wont-peach.vercel.app"
 repo: ""  # only if the code lives outside apps/, e.g. a separate GitHub repo
 notebook: ""  # only if the product has its own notebook outside this one
-tags: ["habits", "behaviour-science", "animation", "localstorage"]
+tags: ["habits", "behaviour-science", "animation", "local-first", "supabase"]
 ---
 
 ## Learned

@@ -32,7 +32,7 @@ export const titleCase = (s: string) => s.charAt(0).toLocaleUpperCase() + s.slic
 export const copy = {
   app: {
     name: "Wont",
-    titles: { intro: "Intro", newBuild: "A new promise", newStop: "Something to stop", habit: "Habit" },
+    titles: { intro: "Intro", newBuild: "A new promise", newStop: "Something to stop", habit: "Habit", sync: "Sync" },
     description: "A drawing board of promises to yourself. Missing a day doesn't reset you.",
   },
 
@@ -49,6 +49,9 @@ export const copy = {
     dayKept: (day: string, kept: number, total: number) => `${day}: ${num(kept)} of ${num(total)} kept`,
     add: "Add a habit",
     replayIntro: "Watch the intro again",
+    syncOff: "Use on another device",
+    syncOn: "Shared with your devices",
+    syncOffline: "Offline, saved here",
     emptyTitle: "Your board is empty",
     emptyBody: "Start with one promise to yourself.",
     emptyPrimary: "Make my first promise",
@@ -219,5 +222,29 @@ export const copy = {
     endFirst: "Make my first promise",
     endBoard: "Back to my board",
     again: "Watch again",
+  },
+
+  // v1.1 (L27): the Sync screen, reached from the board's footer.
+  sync: {
+    back: "← Board",
+    title: "Use on another device",
+    intro: "Type your Wont code here and on your other device, and they share one board. Nothing on this device is lost.",
+    label: "Your Wont code",
+    connect: "Share this board",
+    connecting: "Connecting…",
+    wrong: "That's not the code.",
+    offline: "You're offline. Try again when you're connected.",
+    onTitle: "This board is shared",
+    onBody: "Your phone and laptop show the same board. Taps are saved here first.",
+    status: {
+      syncing: "Bringing it up to date…",
+      synced: (time: string) => `Up to date, ${time}`,
+      offline: "Offline. Taps are kept here and shared when you're back.",
+      error: "Couldn't share just now. Taps are kept here; it tries again in a minute.",
+    },
+    denied: "The code was changed. Type the new one to share this board again.",
+    off: "Stop sharing on this device",
+    offNote: "This device keeps everything it has.",
+    stopped: "This board stays on this device as it is.",
   },
 };

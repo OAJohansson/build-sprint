@@ -34,6 +34,13 @@ What happened, what was decided and why. Newest last.
   with the same six items: nest of treasures, cabinet of curiosities, passport stamps, sticker
   book, field journal, trading cards, bistro menu, polaroid wall, travel atlas, quiet gallery.
 
+- **Round 2: four directions with the magpie.** The owner kept 2 (cabinet), 4 (sticker book), 9
+  (atlas) and 10 (gallery), and asked how the brand story and the mascot show up. Instead of all
+  screens four times, each direction got two screens: the shelf with the magpie living on it, and
+  the "saved" moment (the emotional peak; Kahneman's peak-end rule, as Horizon's sunset taught).
+  Four brand stories: the curator (cabinet), the greedy little friend (sticker book), the travel
+  buddy (atlas), the quiet signature (gallery).
+
 ## To carry over
 
 For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md).

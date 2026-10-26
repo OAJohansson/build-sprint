@@ -655,3 +655,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   like this" from the soloed lane or a note; same header and transport, a Listen/Make switch; notes
   kept across modes. `design/lab-combined.html`, `/dev/lab-combined?mode=listen|make`.
 - **Owner picked the combined design (L162):** "perfect, lets go with that combination". Next: define round (skills, states, rough spots), one critic, then the slices.
+- **Define round 1 (designer):** removed first (Make's song strip, labels, floating card, "level-matched" jargon), added the states (first visit, getting ready, catching up, empty notes), ran emil-design-eng, web-design-guidelines and break-ui (7 fixed, 2 left). T83. Critic next.

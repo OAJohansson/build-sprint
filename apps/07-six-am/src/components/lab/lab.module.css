@@ -284,3 +284,8 @@
 .yours { overflow: visible; line-height: 28px; }
 .yours { display: flex; align-items: center; gap: 0; min-width: 0; }
 .yours > span { white-space: nowrap; }
+/* F3: all saved sounds, from "+N more" */
+.soundsMenu { left: auto; right: 24px; min-width: 360px; max-width: 520px; max-height: 260px; overflow-y: auto; overscroll-behavior: contain; }
+.menuName { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.menuItem small { white-space: nowrap; }
+.yours { display: block; white-space: nowrap; }

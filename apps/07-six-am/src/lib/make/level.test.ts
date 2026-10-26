@@ -1,0 +1,25 @@
+// F2 (evals 26 Oct): the meter and the A/B match use one measure, RMS over both channels.
+import { describe, expect, it } from "vitest";
+import { gainToLevel, rmsDb } from "./level";
+import { stereoDb } from "./meter";
+import { MAKE_PRESETS, synthParams } from "./presets";
+import { renderBass, type MakeNote } from "./render";
+
+const notes: MakeNote[] = [0, 4, 8, 12, 16, 20, 24, 28].map((step) => ({ step, midi: 33, dur: 3, vel: 0.9 }));
+
+describe("one level measure for A/B (F2)", () => {
+  it("the meter reads what the match matched, even for a wide Reese", () => {
+    const r = renderBass(notes, synthParams("reese", MAKE_PRESETS.reese.macros), { bpm: 124, steps: 32, rate: 22050 });
+    const g = gainToLevel(-16, r);
+    const left = r.left.map((x) => x * g.gain), right = r.right.map((x) => x * g.gain);
+    expect(Math.abs(stereoDb(left, right) - -16)).toBeLessThan(0.1);
+    expect(Math.abs(stereoDb(left, right) - rmsDb({ left, right, rate: 22050 }))).toBeLessThan(0.05);
+    // The mono sum is the one that reads lower (the Width layer cancels in it).
+    const mono = left.map((x, i) => (x + right[i]) / 2);
+    expect(stereoDb(mono, mono)).toBeLessThan(stereoDb(left, right) - 0.5);
+  });
+  it("silence is the floor", () => {
+    expect(stereoDb(new Float32Array(10), new Float32Array(10))).toBe(-120);
+    expect(stereoDb(new Float32Array(0), new Float32Array(0))).toBe(-120);
+  });
+});

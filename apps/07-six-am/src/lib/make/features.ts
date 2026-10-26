@@ -21,6 +21,14 @@ export type PartFeatures = {
   levelDb: number;
 };
 
+/** The largest fall in pitch read as a pitch drop (semitones): the presets go up to 12. */
+export const DROP_MAX = 12;
+/** Brightness movement inside notes under this is the filter envelope and separation noise, not
+ *  a wobble (renders with Wobble off read 0.03–0.19; the real basses 0.10–0.15). */
+export const WOBBLE_FLOOR = 0.2;
+/** The most a crest difference counts (dB). */
+export const CREST_CAP = 2;
+
 const db = (x: number) => 10 * Math.log10(x + 1e-12);
 const p99 = (xs: number[]) => { const s = [...xs].sort((a, b) => a - b); return s[Math.floor(0.99 * (s.length - 1))]; };
 const median = (xs: number[]) => { const s = xs.filter(Number.isFinite).sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : 0; };
@@ -63,6 +71,12 @@ export function measureFeatures(left: Float32Array, right: Float32Array, rate: n
   const brightHz = bw > 0 ? Math.pow(2, bs / bw) : 0;
 
   const sorted = [...new Set(onsets)].sort((a, b) => a - b);
+  // F1 (evals 26 Oct): in a separated bass the kick bleeds in on the beats, and its falling pitch
+  // read as a 9–15 semitone "pitch drop" (and a high crest). Notes off the beat carry no kick: the
+  // drop and crest come from those when there are enough of them (both sides, original and Mine,
+  // are measured this way, so the comparison stays fair).
+  const offBeat = sorted.filter((st) => st % 4 !== 0);
+  const useOff = offBeat.length >= 3 ? new Set(offBeat) : null;
   const lengths: number[] = [], drops: number[] = [], wob: number[] = [];
   let sq = 0, cnt = 0;
   const mags: number[] = [];
@@ -79,9 +93,12 @@ export function measureFeatures(left: Float32Array, right: Float32Array, rate: n
     // Pitch: the first periods after 5 ms against 60–100 ms in.
     const early = periodHz(lp, a + Math.round(rate * 0.005), a + Math.round(rate * 0.045), rate);
     const late = periodHz(lp, a + Math.round(rate * 0.06), Math.min(end, a + Math.round(rate * 0.12)), rate);
-    if (early && late) drops.push(12 * Math.log2(early / late));
+    const clean = !useOff || useOff.has(st);
+    // A fall outside −2…+12 semitones is not a synth's pitch drop (a kick's sweep, a wrong period).
+    const drop = early && late ? 12 * Math.log2(early / late) : null;
+    if (clean && drop !== null && drop >= -2 && drop <= DROP_MAX) drops.push(drop);
     // Crest and wobble inside the note's body.
-    for (let i = a; i < Math.min(fall, end); i++) { if ((i & 3) === 0) mags.push(Math.abs(mid[i])); sq += mid[i] * mid[i]; cnt++; }
+    if (clean) for (let i = a; i < Math.min(fall, end); i++) { if ((i & 3) === 0) mags.push(Math.abs(mid[i])); sq += mid[i] * mid[i]; cnt++; }
     const body: number[] = [];
     for (let f = Math.ceil((a + rate * 0.06) / F); f < Math.floor(Math.min(fall, end) / F); f++) if (bright[f] > 0) body.push(Math.log2(bright[f]));
     if (body.length >= 4) { const m = body.reduce((x, y) => x + y, 0) / body.length; wob.push(Math.sqrt(body.reduce((x, y) => x + (y - m) ** 2, 0) / body.length)); }
@@ -106,7 +123,9 @@ export function featureDistance(a: PartFeatures, b: PartFeatures): number {
   return (lg(a.brightHz, b.brightHz) / 0.25) ** 2
     + (lg(a.lengthSteps, b.lengthSteps) / 0.35) ** 2
     + ((a.dropSemis - b.dropSemis) / 1.5) ** 2
-    + ((a.crestDb - b.crestDb) / 1.5) ** 2
-    + ((a.wobble - b.wobble) / 0.05) ** 2
+    // F1: a separated part's transients keep its crest 5–7 dB above any render's; a gap that no
+    // knob can close counts at most CREST_CAP, so it stops pushing Drive to 0 on every sound.
+    + (Math.max(-CREST_CAP, Math.min(CREST_CAP, a.crestDb - b.crestDb)) / 1.5) ** 2
+    + ((Math.max(0, a.wobble - WOBBLE_FLOOR) - Math.max(0, b.wobble - WOBBLE_FLOOR)) / 0.05) ** 2
     + ((a.width - b.width) / 0.08) ** 2;
 }

@@ -10,6 +10,7 @@ import { ChordCells } from "./chords";
 import { DeckRemote, type DeckState } from "./deck-protocol";
 import { LiveError, LiveParts, type LiveStats, type Region } from "./live";
 import { LoopBuffer } from "./loop-buffer";
+import { StereoMeter } from "@/lib/make/meter";
 import { RecentParts, faded } from "./recent";
 import { Separator } from "./separator-client";
 import { gateResume, isCatching, loopPositionMs, msToSamples, playTimeOf, runOffset } from "./timing";
@@ -119,10 +120,10 @@ export class LabTransport {
   private recent: RecentParts | null = null;
   /** Playing from recent parts while the Deck catches up behind (LS1-4). */
   private mem: { t0: number; startMs: number; endMs: number; endAt: number; sources: AudioBufferSourceNode[] } | null = null;
-  private analysers: AnalyserNode[] = [];
+  private analysers: StereoMeter[] = [];
   // Make (S3): "Mine" loops with the memory loop, in sync; B on the A/B turns it up (mineOn).
   private mine: { buf: AudioBuffer; src: AudioBufferSourceNode | null; fade: GainNode | null } | null = null;
-  private mineOut: { gain: GainNode; an: AnalyserNode } | null = null;
+  private mineOut: { gain: GainNode; an: StereoMeter } | null = null;
   private mineOnS = false;
   private deckClosed = false;
   private lastOrphanPause = 0;
@@ -237,7 +238,8 @@ export class LabTransport {
     this.marks = [];
     this.recent = new RecentParts(this.live.rate);
     // Graders (LS1 tester): what each part sends out after hear-only/mute, as a level.
-    this.analysers = this.live.gains.map((g) => { const a = this.live!.ctx.createAnalyser(); a.fftSize = 8192; /* ~186 ms */ g.connect(a); return a; });
+    // Both channels' RMS (F2), the measure Make's A/B matches with (level.ts rmsDb).
+    this.analysers = this.live.gains.map((g) => new StereoMeter(this.live!.ctx, g));
     this.play();
   }
 
@@ -346,15 +348,9 @@ export class LabTransport {
     if (o) o.gain.gain.setTargetAtTime(on ? 1 : 0, o.gain.context.currentTime, 0.01);
   }
 
-  /** Mine's level now (dB RMS over ~186 ms, before the master), for graders; −120 when silent. */
+  /** Mine's level now (dB RMS of both channels over ~186 ms, before the master), for graders; −120 when silent. */
   mineLevel(): number {
-    const a = this.mineOut?.an;
-    if (!a) return -120;
-    const buf = new Float32Array(a.fftSize);
-    a.getFloatTimeDomainData(buf);
-    let e = 0;
-    for (const x of buf) e += x * x;
-    return Math.max(-120, Math.round(10 * Math.log10(e / buf.length + 1e-12) * 10) / 10);
+    return this.mineOut?.an.db() ?? -120;
   }
 
   private mineOutput() {
@@ -364,10 +360,7 @@ export class LabTransport {
     const gain = live.ctx.createGain();
     gain.gain.value = this.mineOnS ? 1 : 0;
     gain.connect(live.master);
-    const an = live.ctx.createAnalyser();
-    an.fftSize = 8192;
-    gain.connect(an);
-    this.mineOut = { gain, an };
+    this.mineOut = { gain, an: new StereoMeter(live.ctx, gain) };
     return this.mineOut;
   }
 
@@ -440,13 +433,7 @@ export class LabTransport {
    *  well above −60 dB where its lane shows a block. */
   partLevels(): number[] {
     return [0, 1, 2, 3].map((p) => {
-      const a = this.analysers[p];
-      if (!a) return -120;
-      const buf = new Float32Array(a.fftSize);
-      a.getFloatTimeDomainData(buf);
-      let e = 0;
-      for (const x of buf) e += x * x;
-      return Math.max(-120, Math.round(10 * Math.log10(e / buf.length + 1e-12) * 10) / 10);
+      return this.analysers[p]?.db() ?? -120;
     });
   }
 

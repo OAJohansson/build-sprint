@@ -25,7 +25,7 @@ import { MakeRoom, useMake, type MakeModel } from "./make-room";
 import s from "./lab.module.css";
 
 declare global {
-  interface Window { __sixamLab?: { state: () => TransportState | null; heardMs: () => number; bar: () => number; hear: () => Hear; levels: () => number[]; barLevels: () => (number | null)[][]; mineLevel: () => number; make: () => ReturnType<MakeModel["debug"]> | null } }
+  interface Window { __sixamLab?: { state: () => TransportState | null; heardMs: () => number; bar: () => number; hear: () => Hear; levels: () => number[]; barLevels: () => (number | null)[][]; mineLevel: () => number; make: () => ReturnType<MakeModel["debug"]> | null; setLoop: (startMs: number, endMs: number) => void } }
 }
 
 type Mode = "listen" | "make";
@@ -97,7 +97,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
-    window.__sixamLab = { state: () => tr.current?.state ?? null, heardMs: () => t.heardMs(), bar: () => msToBar(t.heardMs(), bpm, origin), hear: () => hearRef.current, levels: () => t.partLevels(), barLevels: () => t.levels(), mineLevel: () => t.mineLevel(), make: () => makeRef.current?.debug() ?? null };
+    window.__sixamLab = { state: () => tr.current?.state ?? null, heardMs: () => t.heardMs(), bar: () => msToBar(t.heardMs(), bpm, origin), hear: () => hearRef.current, levels: () => t.partLevels(), barLevels: () => t.levels(), mineLevel: () => t.mineLevel(), make: () => makeRef.current?.debug() ?? null, setLoop: (startMs: number, endMs: number) => t.setLoop({ startMs, endMs }) };
     return () => { cancelAnimationFrame(raf); clearTimeout(saveTimer); t.dispose(); tr.current = null; };
   }, [map, bpm, origin, bars, code, quiet]);
 

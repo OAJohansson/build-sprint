@@ -15,6 +15,9 @@ export type Suggestion = {
 };
 
 /** Renders the pattern with these macros and measures it. */
+/** Weight of the pull towards the preset's own settings (per macro, per full-range move squared). */
+export const PRIOR = 3;
+
 export function featuresOf(preset: MakePresetId, m: Macros, notes: MakeNote[], bpm: number, steps: number, rate = 22050): PartFeatures {
   const r = renderBass(notes, synthParams(preset, m), { bpm, steps, rate });
   return measureFeatures(r.left, r.right, rate, bpm, notes.map((x) => x.step));
@@ -28,7 +31,11 @@ export function featuresOf(preset: MakePresetId, m: Macros, notes: MakeNote[], b
 // ~50 renders, 0.4 s for a 4-bar pattern: Make runs it in its own worker (make.worker.ts, make-client.ts).
 export function suggestMacros(target: PartFeatures, preset: MakePresetId, notes: MakeNote[], bpm: number, steps: number, o: { start?: Partial<Macros>; fixed?: MacroId[]; rate?: number } = {}): Suggestion {
   let renders = 0;
-  const cost = (m: Macros) => { renders++; return featureDistance(featuresOf(preset, m, notes, bpm, steps, o.rate), target); };
+  // F1: a mild pull towards the preset's own values, so a knob only goes to an end when the
+  // measurements clearly ask for it (the ticks stay within sensible ranges).
+  const home = MAKE_PRESETS[preset].macros;
+  const prior = (m: Macros) => PRIOR * MACRO_IDS.reduce((a, id) => a + (m[id] - home[id]) ** 2, 0);
+  const cost = (m: Macros) => { renders++; return featureDistance(featuresOf(preset, m, notes, bpm, steps, o.rate), target) + prior(m); };
   const presetDistance = cost(clampMacros(preset, MAKE_PRESETS[preset].macros));
   let best = clampMacros(preset, { ...MAKE_PRESETS[preset].macros, ...o.start });
   let bestCost = o.start ? cost(best) : presetDistance;
@@ -46,5 +53,8 @@ export function suggestMacros(target: PartFeatures, preset: MakePresetId, notes:
     }
   }
   const round = (m: Macros) => Object.fromEntries(MACRO_IDS.map((k) => [k, Math.round(m[k] * 100) / 100])) as Macros;
-  return { macros: round(best), distance: bestCost, presetDistance, renders };
+  // The distance said is the measurements' alone (without the pull), like presetDistance.
+  const out = round(best);
+  renders++;
+  return { macros: out, distance: featureDistance(featuresOf(preset, out, notes, bpm, steps, o.rate), target), presetDistance, renders };
 }

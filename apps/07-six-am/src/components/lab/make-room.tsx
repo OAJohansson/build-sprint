@@ -348,23 +348,24 @@ function SynthControls({ m, part, loop, ready }: { m: MakeModel; part: LabPart; 
 /** The preset name opens a menu of tagged starting points; describing one in words is its last item (T85). */
 function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
   const [open, setOpen] = useState(false);
+  const [all, setAll] = useState(false);
   const [asking, setAsking] = useState(false);
   const [text, setText] = useState("");
   const box = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!open) return;
-    const away = (e: PointerEvent) => { if (!box.current?.contains(e.target as Node)) setOpen(false); };
-    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    if (!open && !all) return;
+    const away = (e: PointerEvent) => { if (!box.current?.contains(e.target as Node)) { setOpen(false); setAll(false); } };
+    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") { setOpen(false); setAll(false); } };
     document.addEventListener("pointerdown", away);
     document.addEventListener("keydown", esc);
     return () => { document.removeEventListener("pointerdown", away); document.removeEventListener("keydown", esc); };
-  }, [open]);
+  }, [open, all]);
   const current = m.words ? "From your words" : MAKE_PRESETS[m.preset].name;
   const canWords = m.readState === "ready";
   return (
     <div className={s.preset} ref={box}>
       <div className={s.presetRow}>
-      <button className={s.presetName} aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen(!open)}
+      <button className={s.presetName} aria-haspopup="menu" aria-expanded={open} onClick={() => { setOpen(!open); setAll(false); }}
         aria-label={`Preset: ${current}. Change preset`}>{current} <span aria-hidden>▾</span></button>
         {/* S5-2: one quiet line, the sounds saved from this track; one click loads it. */}
         {m.sounds.length > 0 && (
@@ -372,8 +373,20 @@ function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
             {m.sounds.slice(0, 4).map((x, i) => (
               <span key={x.id}>{i > 0 && " · "}<button className={s.soundLink} onClick={() => m.loadSound(x)} title={`${MAKE_PRESETS[x.preset].name}: load its preset, knobs and name`}>{x.name}</button></span>
             ))}
-            {m.sounds.length > 4 && ` +${m.sounds.length - 4}`}
+            {m.sounds.length > 4 && <span>{" · "}<button className={s.soundLink} aria-haspopup="menu" aria-expanded={all} onClick={() => setAll(!all)}>+{m.sounds.length - 4} more</button></span>}
           </p>
+        )}
+        {/* F3: every saved sound stays reachable: "+N more" opens the whole list, newest first. */}
+        {all && (
+          <div className={`${s.menu} ${s.soundsMenu}`} role="menu" aria-label="Your sounds from this track">
+            {m.sounds.map((x) => (
+              <button key={x.id} role="menuitem" className={s.menuItem} onClick={() => { setAll(false); m.loadSound(x); }}>
+                <span className={s.menuCheck} aria-hidden />
+                <span className={s.menuName}>{x.name}</span>
+                <small>{MAKE_PRESETS[x.preset].name} · {new Date(x.createdAt).toLocaleDateString(undefined, { day: "numeric", month: "short" })}</small>
+              </button>
+            ))}
+          </div>
         )}
       </div>
       {open && (

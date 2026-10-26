@@ -47,3 +47,5 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 41 | User test F10 | Empty card behind Maggie on the access screen reads like an input | won't do (in the approved design) |
 | 42 | User test: Relive 3/5 | No view per trip or city; 'Away' mixes Taipei, Tokyo, Rome | parked (backlog: Trips row; owner's call) |
 | 43 | PM check | A sticker failed on an OpenRouter 429 (rate limit); the photo stood in and Draw it again worked | fixed (one retry after 3 s on 429/5xx) |
+| 44 | User re-check | 'red wine' still finds nothing (no yum has 'red') | fixed (no full match → any-word matches, best first) |
+| 45 | User re-check | Fallback city labelled 'where you were last' on a device that never had one | fixed ('your home city') |

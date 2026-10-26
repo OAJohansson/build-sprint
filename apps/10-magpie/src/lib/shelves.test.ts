@@ -104,6 +104,8 @@ describe("smart shelves and filters", () => {
     expect(applyFilters(yums, { ...NO_FILTERS, q: "noble" })).toEqual([barolo]);
     expect(applyFilters(yums, { ...NO_FILTERS, q: "ROSES" })).toEqual([barolo]);
     expect(applyFilters(yums, { ...NO_FILTERS, q: "noble wine" })).toEqual([barolo]);
+    // No yum has every word: the ones with some of them, best first.
+    expect(applyFilters(yums, { ...NO_FILTERS, q: "red wine" }).map((y) => y.name)).toEqual(["Chablis", "Barolo 2016"]);
   });
 
   it("narrows by kind, hearts and away, and widens again", () => {

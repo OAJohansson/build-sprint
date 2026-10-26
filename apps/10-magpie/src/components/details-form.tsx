@@ -26,7 +26,7 @@ export function DetailsForm({ title, submitLabel, photoUrl, initial, fallback, o
   const [place, setPlace] = useState(initial?.place ?? "");
   const [city, setCity] = useState(initial?.city ?? "");
   const [country, setCountry] = useState(initial?.country ?? "");
-  const [cityFrom, setCityFrom] = useState<"here" | "last" | "typed" | null>(initial ? "typed" : null);
+  const [cityFrom, setCityFrom] = useState<"here" | "last" | "home" | "typed" | null>(initial ? "typed" : null);
   const [editingCity, setEditingCity] = useState(false);
   const [hearts, setHearts] = useState(initial?.hearts ?? 0);
   const [note, setNote] = useState(initial?.note ?? "");
@@ -37,11 +37,12 @@ export function DetailsForm({ title, submitLabel, photoUrl, initial, fallback, o
   // A new yum starts with the last city at once, then the city where the phone is, if it can tell.
   useEffect(() => {
     if (initial) return;
-    const last = lastSpot() ?? fallback ?? null;
-    if (last) {
+    const last = lastSpot();
+    const start = last ?? fallback ?? null;
+    if (start) {
       // Reading this device's memory after mount.
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setCity(last.city); setCountry(last.country); setCityFrom("last");
+      setCity(start.city); setCountry(start.country); setCityFrom(last ? "last" : "home");
     }
     let alive = true;
     void spotHere().then((here) => {
@@ -149,6 +150,7 @@ export function DetailsForm({ title, submitLabel, photoUrl, initial, fallback, o
                 <span className="break-words">{[city, country].filter(Boolean).join(", ")}</span>
                 {cityFrom === "here" && <span className="text-[13px] text-dusk">from where you are</span>}
                 {cityFrom === "last" && <span className="text-[13px] text-dusk">where you were last</span>}
+                {cityFrom === "home" && <span className="text-[13px] text-dusk">your home city</span>}
               </span>
             ) : (
               <span className="text-dusk">Which city?</span>

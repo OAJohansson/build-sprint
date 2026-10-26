@@ -113,17 +113,32 @@ const fold = (s: string) => s.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLo
  * a Barolo saved as a wine), ignoring case and accents. Every word must match somewhere.
  */
 export function matchesQuery(y: Pick<Yum, "name" | "place" | "note" | "city" | "country" | "kind" | "subKind">, q: string): boolean {
-  const words = fold(q).split(/\s+/).filter(Boolean);
-  if (!words.length) return true;
-  const kinds = [y.kind === "food" ? "food dish" : y.kind === "drink" ? "drink" : "dessert sweet", subKindInfo(y.kind, y.subKind)?.label];
-  const hay = fold([y.name, y.place, y.note, y.city, y.country, ...kinds].filter(Boolean).join(" \n "));
-  return words.every((w) => hay.includes(w));
+  return wordsMatched(y, q) === fold(q).split(/\s+/).filter(Boolean).length;
 }
 
+/** How many of the query's words a yum matches. */
+function wordsMatched(y: Pick<Yum, "name" | "place" | "note" | "city" | "country" | "kind" | "subKind">, q: string): number {
+  const words = fold(q).split(/\s+/).filter(Boolean);
+  if (!words.length) return 0;
+  const kinds = [y.kind === "food" ? "food dish" : y.kind === "drink" ? "drink" : "dessert sweet", subKindInfo(y.kind, y.subKind)?.label];
+  const hay = fold([y.name, y.place, y.note, y.city, y.country, ...kinds].filter(Boolean).join(" \n "));
+  return words.filter((w) => hay.includes(w)).length;
+}
+
+/**
+ * Search and filters together. Every search word must match; if that finds nothing, yums matching
+ * some of the words are shown instead, the best matches first ("red wine" still lists the wines).
+ */
 export function applyFilters(yums: Yum[], f: Filters): Yum[] {
+  const strict = narrow(yums, f, (y) => matchesQuery(y, f.q));
+  if (strict.length || fold(f.q).split(/\s+/).filter(Boolean).length < 2) return strict;
+  return narrow(yums, f, (y) => wordsMatched(y, f.q) > 0).sort((a, b) => wordsMatched(b, f.q) - wordsMatched(a, f.q));
+}
+
+function narrow(yums: Yum[], f: Filters, query: (y: Yum) => boolean): Yum[] {
   const home = homeCity(yums);
   return latestFirst(yums).filter((y) => {
-    if (!matchesQuery(y, f.q)) return false;
+    if (!query(y)) return false;
     if (f.kind && y.kind !== f.kind) return false;
     if (f.kind && f.sub && y.subKind !== f.sub) return false;
     if (f.hearts && y.hearts < f.hearts) return false;

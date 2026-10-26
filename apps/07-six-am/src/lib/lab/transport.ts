@@ -10,7 +10,7 @@ import { ChordCells } from "./chords";
 import { DeckRemote, type DeckState } from "./deck-protocol";
 import { LiveError, LiveParts, type LiveStats, type Region } from "./live";
 import { LoopBuffer } from "./loop-buffer";
-import { StereoMeter } from "@/lib/make/meter";
+import { bandShareDb, StereoMeter } from "@/lib/make/meter";
 import { RecentParts, faded } from "./recent";
 import { Separator } from "./separator-client";
 import { gateResume, isCatching, loopFillEtaS, loopPositionMs, msToSamples, playTimeOf, runOffset } from "./timing";
@@ -379,6 +379,13 @@ export class LabTransport {
   /** Mine's level now (dB RMS of both channels over ~186 ms, before the master), for graders; −120 when silent. */
   mineLevel(): number {
     return this.mineOut?.an.db() ?? -120;
+  }
+
+  /** Graders (owner's "thinner" note, 27 Oct): energy below 100 and 400 Hz, dB re total, of the original bass in the loop and of Mine. Numbers only. */
+  weight(): { original: [number, number] | null; mine: [number, number] | null } {
+    const o = this.loopPart(1), m = this.mine?.buf;
+    const two = (l: Float32Array, r: Float32Array, rate: number): [number, number] => [bandShareDb(l, r, rate, 100), bandShareDb(l, r, rate, 400)];
+    return { original: o ? two(o.left, o.right, o.rate) : null, mine: m ? two(m.getChannelData(0), m.getChannelData(1), m.sampleRate) : null };
   }
 
   private mineOutput() {

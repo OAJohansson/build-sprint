@@ -1,7 +1,7 @@
 // F2 (evals 26 Oct): the meter and the A/B match use one measure, RMS over both channels.
 import { describe, expect, it } from "vitest";
 import { gainToLevel, rmsDb } from "./level";
-import { stereoDb } from "./meter";
+import { bandShareDb, stereoDb } from "./meter";
 import { MAKE_PRESETS, synthParams } from "./presets";
 import { renderBass, type MakeNote } from "./render";
 
@@ -21,5 +21,14 @@ describe("one level measure for A/B (F2)", () => {
   it("silence is the floor", () => {
     expect(stereoDb(new Float32Array(10), new Float32Array(10))).toBe(-120);
     expect(stereoDb(new Float32Array(0), new Float32Array(0))).toBe(-120);
+  });
+});
+
+describe("bandShareDb (a bass's weight)", () => {
+  const sine = (hz: number) => Float32Array.from({ length: 44100 }, (_, i) => Math.sin((2 * Math.PI * hz * i) / 44100));
+  it("a 50 Hz sine is nearly all below 100 Hz, a 400 Hz one hardly any", () => {
+    const a = sine(50), b = sine(400);
+    expect(bandShareDb(a, a, 44100)).toBeGreaterThan(-1);
+    expect(bandShareDb(b, b, 44100)).toBeLessThan(-40);
   });
 });

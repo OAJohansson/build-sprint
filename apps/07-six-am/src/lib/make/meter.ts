@@ -34,3 +34,23 @@ export class StereoMeter {
     return stereoDb(this.bl, this.br);
   }
 }
+
+/**
+ * Share of a stereo sound's energy below `hz` (dB re its total; 0 = all of it), by a 4th-order
+ * Linkwitz–Riley low-pass (two Butterworth biquads) on the mid signal: how much "weight" a bass has.
+ */
+export function bandShareDb(left: Float32Array, right: Float32Array, rate: number, hz = 100): number {
+  const w = Math.tan((Math.PI * hz) / rate), q = Math.SQRT1_2;
+  const n0 = 1 / (1 + w / q + w * w);
+  const b0 = w * w * n0, b1 = 2 * b0, b2 = b0, a1 = 2 * (w * w - 1) * n0, a2 = (1 - w / q + w * w) * n0;
+  const st = [[0, 0, 0, 0], [0, 0, 0, 0]];
+  let lo = 0, all = 0;
+  const n = Math.min(left.length, right.length);
+  for (let i = 0; i < n; i++) {
+    const x = (left[i] + right[i]) / 2;
+    let y = x;
+    for (const s of st) { const o = b0 * y + b1 * s[0] + b2 * s[1] - a1 * s[2] - a2 * s[3]; s[1] = s[0]; s[0] = y; s[3] = s[2]; s[2] = o; y = o; }
+    lo += y * y; all += x * x;
+  }
+  return all > 0 ? Math.round(10 * Math.log10(lo / all + 1e-12) * 10) / 10 : -120;
+}

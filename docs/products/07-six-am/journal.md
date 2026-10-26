@@ -621,3 +621,10 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
   `design/lab/`, prototypes at `/dev/lab-directions?v=N` (dev only). From the pack: no faders,
   meters or stem waveforms; the Deck shown as a status, never a player; the Mentor says what it
   can't measure; four parts in the map's lane colours (T81). Waiting for the owner's 3.
+- **Design paused (L152):** the owner: "we rushed into the design to early … take a step back and
+  agree the jobs to be done on this screen". The pick push was already sent; it's withdrawn. The
+  jobs are being agreed with the owner in the parent session; a revised brief comes before any
+  design restarts. Until then: harden the live-separation engine only (chunking, sync with the
+  playback position, discarding chunks). No UI, no library.
+- **Learning for the retro:** design started straight after the spike, from the kickoff's five jobs
+  written by the PM from the parent's brief, without the owner agreeing them for this screen.

@@ -76,9 +76,13 @@ Outcome: when I want to remember something I loved, it's on the shelf.
   picture; the original photo kept too.
 - Share into Magpie from the camera roll or Instagram (Selvedge's share target), as a safety net
   for the riskiest assumption: a moment missed at the table isn't lost.
-- The shelf as the home screen, phone and laptop: the collection, with filters by country and
-  type (relive).
-- Search pinned at the top of the shelf: name, place, note (recall).
+- The shelf as the home screen, phone and laptop, as **smart shelves** (owner, 26 Oct, option 3
+  of three): rows the magpie fills (Latest, Your top wines, Around London, …) plus one Filter
+  button opening kind (Food, Drinks, Desserts), sub-kind (Drinks: Wine, Cocktail, Beer, Coffee and
+  tea; Food: one "Dishes" bucket to start), how much I loved it, and where (London, Away, a
+  restaurant or bar). Kind leads, not country: most yums happen at home in London (relive).
+- "Where" is the restaurant, bar or spot plus its city; country is secondary.
+- Search pinned at the top of the shelf: name, restaurant, note (recall).
 - Item page: illustration, photo, all details, edit, delete.
 - The magpie mascot in the empty shelf and the first-run moment.
 - An access code on each device, like Selvedge.
@@ -91,7 +95,7 @@ https://claude.ai/artifact/X4hmxGD5oek8NvT7XbxgjE
 **Open:** the rating scale.
 
 **Out (to `backlog.md`):** recipes, a map, sharing with friends, recommendations, a "want to
-try" list. The music-moments diary lives in Six AM's backlog.
+try" list, recommendations built on the smart shelves. The music-moments diary lives in Six AM's backlog.
 
 ## Requirements
 

@@ -53,6 +53,11 @@ What happened, what was decided and why. Newest last.
   "By place" view (restaurants inside cities, home vs away); 3 smart shelves the magpie fills
   (Latest, Your top wines, Around London) plus one filter sheet (kind, sub-kind, hearts, where).
 
+- **Owner picked option 3, smart shelves**, for the overview and because recommendations can grow
+  from it. The "every key screen" row became the final hand-off flow (A to L): the capture form
+  gained a sub-kind picker and "Restaurant, bar or spot"; saved, item, filter sheet, filtered
+  results and the laptop (filter panel always open) were redone to match.
+
 ## To carry over
 
 For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md).

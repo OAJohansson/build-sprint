@@ -38,3 +38,19 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 32 | User re-check after the owner's review (4 / – / 4 / 4 / 4), real capture; `user-testing/report-2026-10-26-owner-review-recheck.md` | N1 mid-track "outro" ×5, N2 Add as a new sound overwrites, N3 drum slivers, N4 M+S lit, N5 dimmed labels | fix pass |
 | 33 | Final check at 56a3ad6 (jobs 1, 3, 4 = 4), real capture | N1–N5 pass; lit S letterless, selected block hidden on silenced lanes, Add-as-new-sound placement unstated, drums through the breakdown | last small pass |
 | 34 | User test, follow-up PR (Studio 4, Play all 4); `user-testing/report-2026-10-26-followup.md` | M1 changing a block's preset then Add as a new sound loses the original; minors (strip truncation, end-of-list message, no key on a blank track, Pad pattern name, keyboard hints, knob value) | fix pass |
+
+## Lab S1 user test (26 Oct, `user-testing/report-2026-10-26-lab-s1.md`)
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| LS1-1 | major | Only Drums shows sub-layers; Bass, Other, Vocals are flat and "Other" isn't explained | fix pass: plain-word hint per part; real sub-layers → backlog |
+| LS1-2 | major | "Breakdown" (49–76) looped 49–64 without saying so | fix pass |
+| LS1-3 | major | Closing the Deck stops silently; Play then catches up 34 s and resumes 27 s late | fix pass |
+| LS1-4 | minor | 6–7 s silence on every jump, resume and loop stop | fix pass (recent parts in memory, L182) |
+| LS1-5 | minor | Chord row nearly empty before listening, blank cells unexplained | fix pass |
+| LS1-6 | minor | Hear/mute icons only on hover, nothing hints they exist | fix pass |
+| LS1-7 | minor | Download ETA started at 159 s, took 30 s | fix pass |
+| LS1-8 | minor | Reload: back to 0:00 and "Deck off" with the Deck open | fix pass |
+| LS1-9 | minor | Hit areas 24 px (guardrail 28 px) | fix pass |
+| LS1-10 | polish | Two chips truncate the title hard | fix pass |
+| LS1-11 | polish | "Section 1/2" names | fix pass |

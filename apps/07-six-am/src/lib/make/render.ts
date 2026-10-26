@@ -10,6 +10,12 @@ export type MakeNote = { step: number; midi: number; dur: number; vel: number };
 
 export type Rendered = { left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number };
 
+/** Sub at full: the sine's peak against the voice's (≈ 1); Weight at full: the body copy's level. */
+export const SUB_LEVEL = 0.9;
+export const WEIGHT_LEVEL = 4;
+export const WEIGHT_LP_HZ = 400;
+export const WEIGHT_HP_HZ = 90;
+
 export const secondsPer16th = (bpm: number) => 60 / bpm / 4;
 
 /** PolyBLEP: smooths the saw's jump so it doesn't alias into a whine. */
@@ -50,6 +56,15 @@ export function renderBass(notes: MakeNote[], p: SynthParams, o: { bpm: number; 
   const k = 1 / Math.max(0.5, p.resonance);
   let a1 = 0, a2 = 0, a3 = 0;
   let ni = -1, env = 0, env0 = 0;
+  // L209 Sub and Weight (both 0 = the sound as before, untouched).
+  const sub = (p.sub ?? 0) * SUB_LEVEL, weight = (p.weight ?? 0) * WEIGHT_LEVEL;
+  const wDrive = 3 + 9 * (p.weight ?? 0), wNorm = Math.tanh(wDrive), wBias = 0.35, wOff = Math.tanh(wBias);
+  const wc = Math.exp((-2 * Math.PI * WEIGHT_LP_HZ) / rate);
+  const wa = [0, 0], wb = [0, 0], wh = [0, 0], wx = [0, 0], wh2 = [0, 0], wx2 = [0, 0];
+  const hc = Math.exp((-2 * Math.PI * WEIGHT_HP_HZ) / rate);
+  let subPh = 0;
+  // The fundamental of each wave as a function of its phase: saw −sin, triangle cos, sine sin.
+  const subWave = p.wave === "saw" ? (ph: number) => -Math.sin(2 * Math.PI * ph) : p.wave === "triangle" ? (ph: number) => Math.cos(2 * Math.PI * ph) : (ph: number) => Math.sin(2 * Math.PI * ph);
 
   for (let i = 0; i < n; i++) {
     while (ni + 1 < sorted.length && starts[ni + 1] <= i) { ni++; env0 = env; }
@@ -71,6 +86,7 @@ export function renderBass(notes: MakeNote[], p: SynthParams, o: { bpm: number; 
       a1 = 1 / (1 + g * (g + k)); a2 = g * a1; a3 = g * a2;
     }
     if (env < 1e-6 && ni >= 0 && i - starts[ni] > rate) continue; // long silence: skip the work
+    subPh = phase[0][0];
     for (let l = 0; l < layers.length; l++) {
       let x = 0;
       for (let v = 0; v < voices; v++) {
@@ -85,13 +101,27 @@ export function renderBass(notes: MakeNote[], p: SynthParams, o: { bpm: number; 
       }
       layer[l] = x / Math.sqrt(voices);
     }
+    // The sub follows the voice's own phase, so it adds to the voice's fundamental (a sine on its own
+    // phase cancelled a sawtooth's fundamental: the sound got thinner, not deeper).
+    let subX = 0;
+    if (sub > 0) subX = sub * env * subWave(subPh);
     for (let s = 0; s < 2; s++) {
       const x = layers.length > 1 ? layer[0] + (s === 0 ? 1 : -1) * p.width * layer[1] : layer[0];
       // Cytomic SVF lowpass.
       const v3 = x - ic2[s], v1 = a1 * ic1[s] + a2 * v3, v2 = ic2[s] + a2 * ic1[s] + a3 * v3;
       ic1[s] = 2 * v1 - ic1[s]; ic2[s] = 2 * v2 - ic2[s];
-      const y = p.drive > 0 ? Math.tanh(v2 * env * dg) / dNorm : v2 * env;
-      out[s][i] = y * gain;
+      let y = p.drive > 0 ? Math.tanh(v2 * env * dg) / dNorm : v2 * env;
+      if (weight > 0) {
+        // Weight: the voice driven hard (new harmonics), kept to ~100–400 Hz by a high-pass that takes
+        // out its fundamental and two low-passes that keep it from getting brighter.
+        // A little bias makes the even harmonics too (2nd and 4th: the "body" of a driven bass).
+        const sat = (Math.tanh(v2 * env * wDrive + wBias * env) - wOff * env) / wNorm;
+        const hp1 = hc * (wh[s] + sat - wx[s]); wx[s] = sat; wh[s] = hp1;
+        const hp = hc * (wh2[s] + hp1 - wx2[s]); wx2[s] = hp1; wh2[s] = hp;
+        wa[s] = (1 - wc) * hp + wc * wa[s]; wb[s] = (1 - wc) * wa[s] + wc * wb[s];
+        y += weight * wb[s];
+      }
+      out[s][i] = (y + subX) * gain;
     }
   }
   return { left, right, rate };

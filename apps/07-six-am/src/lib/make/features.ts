@@ -1,6 +1,7 @@
 // What patch matching compares (S3, L157): a few numbers measured from a part in memory or from a
 // render of "Mine". Level-independent except `levelDb`, so loudness doesn't decide the match.
 // Pure; the audio is read and dropped (L143).
+import { bandShareDb } from "./meter";
 import { secondsPer16th } from "./render";
 
 export type PartFeatures = {
@@ -19,6 +20,10 @@ export type PartFeatures = {
   width: number;
   /** RMS level of the loop, dB. */
   levelDb: number;
+  /** L209: share of the energy below 100 Hz (the sub) and in 100–400 Hz (the body), dB re total.
+   *  Optional: readings taken before L209 don't have them, and then they don't count. */
+  lowDb?: number;
+  bodyDb?: number;
 };
 
 /** The largest fall in pitch read as a pitch drop (semitones): the presets go up to 12. */
@@ -111,12 +116,20 @@ export function measureFeatures(left: Float32Array, right: Float32Array, rate: n
     wobble: wob.length ? median(wob) : 0,
     width: em > 0 ? Math.sqrt(es / em) : 0,
     levelDb: db(em / Math.max(1, n)),
+    ...bands(left, right, rate),
   };
 }
 
 // shortcut: weights picked on renders of the presets plus one real bass (Mason Flint, where kick bleed
 // in the separated bass reads as a big pitch drop and high crest); tune with data-evals on Y10's
 // five parts, and gate drop/crest by a note's pitch confidence if bleed keeps steering them.
+/** L209: the sub and body shares (dB re total) of a stereo sound. */
+export function bands(left: Float32Array, right: Float32Array, rate: number): { lowDb: number; bodyDb: number } {
+  const lo = bandShareDb(left, right, rate, 100), mid = bandShareDb(left, right, rate, 400);
+  const body = Math.max(1e-6, Math.pow(10, mid / 10) - Math.pow(10, lo / 10));
+  return { lowDb: lo, bodyDb: Math.round(10 * Math.log10(body) * 10) / 10 };
+}
+
 /** How far apart two sounds are on the features patch matching uses (0 = the same). */
 export function featureDistance(a: PartFeatures, b: PartFeatures): number {
   const lg = (x: number, y: number) => Math.log2(Math.max(1e-3, x) / Math.max(1e-3, y));
@@ -127,5 +140,8 @@ export function featureDistance(a: PartFeatures, b: PartFeatures): number {
     // knob can close counts at most CREST_CAP, so it stops pushing Drive to 0 on every sound.
     + (Math.max(-CREST_CAP, Math.min(CREST_CAP, a.crestDb - b.crestDb)) / 1.5) ** 2
     + ((Math.max(0, a.wobble - WOBBLE_FLOOR) - Math.max(0, b.wobble - WOBBLE_FLOOR)) / 0.05) ** 2
-    + ((a.width - b.width) / 0.08) ** 2;
+    + ((a.width - b.width) / 0.08) ** 2
+    // L209: Sub and Weight move these; 1.5 dB counts like the others' steps.
+    + (a.lowDb !== undefined && b.lowDb !== undefined ? ((a.lowDb - b.lowDb) / 1.5) ** 2 : 0)
+    + (a.bodyDb !== undefined && b.bodyDb !== undefined ? ((a.bodyDb - b.bodyDb) / 1.5) ** 2 : 0);
 }

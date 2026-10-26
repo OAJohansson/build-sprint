@@ -79,7 +79,7 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 
 | Idea | Why | Status |
 | --- | --- | --- |
-| **Sub and Weight knobs in Make (next slice):** a clean sine sub layer with a level knob under a driven, harmonically rich body ("Weight" = saturation into 100–400 Hz) | Owner's review: "My sound is way thinner… the heaviness of the bass is missing." Measured: the original bass has 56 % of its energy at 100–400 Hz (the body), Mine puts ~85 % below 100 Hz (deep sub laptops barely play); octave and level match are right | next (top) |
+| **Sub and Weight knobs in Make (next slice):** a clean sine sub layer with a level knob under a driven, harmonically rich body ("Weight" = saturation into 100–400 Hz) | Owner's review: "My sound is way thinner… the heaviness of the bass is missing." Measured: the original bass has 56 % of its energy at 100–400 Hz (the body), Mine puts ~85 % below 100 Hz (deep sub laptops barely play); octave and level match are right | done (L210, PR 95) |
 | Sample search by sound (Splice-like) | Find a real sample close to the part you hear | later |
 | Closeness meter (how near my sound is to the part) | Feedback while matching by ear | later |
 | Mixer with sends and sidechain pump | Real mixes; house's pump | later |

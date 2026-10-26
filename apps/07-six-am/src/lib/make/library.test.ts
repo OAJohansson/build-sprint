@@ -46,7 +46,8 @@ describe("parseNewSound", () => {
     const s = parseNewSound(good)!;
     expect(s).not.toHaveProperty("audio");
     expect(s).not.toHaveProperty("pcm");
-    expect(s.macros).toEqual({ ...MAKE_PRESETS.reese.macros, tone: 0.4, width: 1 });
+    // A sound sent without Sub and Weight (saved before L209) keeps its old sound: both off.
+    expect(s.macros).toEqual({ ...MAKE_PRESETS.reese.macros, tone: 0.4, width: 1, sub: 0, weight: 0 });
     expect(s.pattern.notes.map((n) => n.step)).toEqual([2, 18]);
     expect(s.name).toBe("Wide bass, from It Just Won't Do");
     expect(s.tags).toContain("a minor");

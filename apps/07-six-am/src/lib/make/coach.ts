@@ -13,6 +13,8 @@ const MORE: Record<MacroId, [string, string]> = {
   drive: ["a cleaner sound", "more clipping"],
   wobble: ["a steadier filter", "more filter movement"],
   width: ["a narrower sound", "a wider sound"],
+  sub: ["less sub", "more sub"],
+  weight: ["a lighter body", "more body"],
 };
 
 /** The knobs furthest from their ticks (at most `n`), biggest move first. */

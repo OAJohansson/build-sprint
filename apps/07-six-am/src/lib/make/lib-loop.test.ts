@@ -18,7 +18,7 @@ const muted = [false, false, false, false];
 // A rubbery bass saved in A minor at 124 BPM: A1, C2, E1, G1 on a 2-bar pattern.
 const SOUND: LibrarySound = {
   id: "0f8fad5b-d9cb-469f-a165-70867728950e", name: "Rubbery bass, from It Just Won't Do", part: "bass", preset: "rubber-pluck",
-  macros: { tone: 0.4, length: 0.3, pitchDrop: 0, drive: 0.15, wobble: 0, width: 0.1 },
+  macros: { tone: 0.4, length: 0.3, pitchDrop: 0, drive: 0.15, wobble: 0, width: 0.1, sub: 0, weight: 0 },
   pattern: { bars: 2, notes: [{ step: 0, midi: 33, dur: 2, vel: 0.9 }, { step: 6, midi: 36, dur: 2, vel: 0.8 }, { step: 16, midi: 28, dur: 2, vel: 0.9 }, { step: 22, midi: 31, dur: 2, vel: 0.8 }] },
   key: "A", scale: "minor", bpm: 124, source: null, tags: ["bass"], createdAt: "", updatedAt: "",
 };
@@ -80,7 +80,7 @@ describe("rendered in key and on tempo (X3's bars)", () => {
     });
   }
   it("sounds the transposed pitch: A1 saved in A minor plays C2 in C minor", () => {
-    const held = { ...SOUND, preset: "round-sub" as const, macros: { tone: 0.3, length: 1, pitchDrop: 0, drive: 0, wobble: 0, width: 0 }, pattern: { bars: 1 as const, notes: [{ step: 0, midi: 33, dur: 16, vel: 1 }] } };
+    const held = { ...SOUND, preset: "round-sub" as const, macros: { tone: 0.3, length: 1, pitchDrop: 0, drive: 0, wobble: 0, width: 0, sub: 0, weight: 0 }, pattern: { bars: 1 as const, notes: [{ step: 0, midi: 33, dur: 16, vel: 1 }] } };
     const r = renderLibPass(libLoopFrom(held, "bass", "s2"), { key: "C", scale: "minor", bpm: 124 }, RATE);
     expect(pitchHz(r.left.subarray(Math.round(0.4 * RATE), Math.round(0.6 * RATE)), RATE)!).toBeCloseTo(midiToHz(36), 0);
   });

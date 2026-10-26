@@ -341,7 +341,7 @@ function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: 
       <div className={s.macros} data-off={off ? "" : undefined}>
         {wait && <p className={s.makeWait} role="status">{wait}</p>}
         {MACRO_IDS.map((id) => (
-          <Knob key={id} id={id} value={m.macros[id]} sug={m.ticks?.[id]} color={part.color} disabled={off} onChange={(v) => m.setMacro(id, v)} reset={MAKE_PRESETS[m.preset].macros[id]} />
+          <Knob key={id} id={id} value={m.macros[id]} sug={m.ticks?.[id]} color={part.color} disabled={off} onChange={(v) => m.setMacro(id, v)} reset={MAKE_PRESETS[m.preset].macros[id]} size={84} />
         ))}
       </div>
       <div className={s.suggestRow}>

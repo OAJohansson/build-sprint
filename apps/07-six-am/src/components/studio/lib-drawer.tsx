@@ -38,10 +38,10 @@ export function LibDrawer({ t, sound, color, onClose }: { t: Timeline; sound: Li
           <p className={s.dim}>{sound.name}: saved in {sound.key} {sound.scale} at {Math.round(sound.bpm)} BPM; plays in the track&apos;s key and tempo.</p>
         </section>
         {/* T110: the Make room's own knobs (components/ui/knob), so a sound turns the same in both places. */}
-        <section className={s.shape} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
+        <section className={s.shape} style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
           {MACRO_IDS.map((id: MacroId) => (
             <Knob key={id} id={id} value={sound.macros[id]} color={color} disabled={false} reset={MAKE_PRESETS[sound.preset].macros[id]}
-              onChange={(v) => change(editLibLoop(sound, { macros: { [id]: v } }), `lib:${sound.id}:${id}`)} />
+              onChange={(v) => change(editLibLoop(sound, { macros: { [id]: v } }), `lib:${sound.id}:${id}`)} size={72} />
           ))}
         </section>
         <section className={s.ai}>

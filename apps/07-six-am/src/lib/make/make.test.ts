@@ -6,7 +6,7 @@ import { featureDistance } from "./features";
 import { lufs, matchGain, rmsDb } from "./level";
 import { featuresOf, suggestMacros } from "./match";
 import { notesForLoop, pitchHz } from "./pattern";
-import { MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, clampMacros, lengthSteps, macroGuide, macroWord, synthParams, wobblePerBeat, type Macros } from "./presets";
+import { MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, clampMacros, lengthSteps, macroGuide, macroWord, synthParams, wobblePerBeat, type Macros, type MakePresetId } from "./presets";
 import { renderBass, secondsPer16th, type MakeNote } from "./render";
 
 const RATE = 22050;
@@ -22,7 +22,7 @@ describe("presets and macros", () => {
     }
   });
   it("clamps junk and keeps the preset's own values for missing ones", () => {
-    expect(clampMacros("reese", { tone: 2, length: -1, drive: Number.NaN, width: "x" })).toEqual({ ...MAKE_PRESETS.reese.macros, tone: 1, length: 0 });
+    expect(clampMacros("reese", { tone: 2, length: -1, drive: Number.NaN, width: "x" })).toEqual({ ...MAKE_PRESETS.reese.macros, tone: 1, length: 0, sub: 0, weight: 0 });
   });
   it("maps each macro onto its synth parameters", () => {
     const at = (m: Partial<Macros>) => synthParams("acid-line", clampMacros("acid-line", m));
@@ -80,19 +80,21 @@ describe("Mine: in key and on tempo (Y4)", () => {
 describe("Suggest settings: patch matching (Y10's pure half)", () => {
   const st = [0, 3, 6, 10, 14, 16, 19, 22, 26, 30];
   const notes: MakeNote[] = st.map((step, i) => ({ step, midi: [33, 33, 36, 33, 31][i % 5], dur: (st[i + 1] ?? 32) - step, vel: 0.9 }));
-  const target: Macros = { tone: 0.65, length: 0.35, pitchDrop: 0.6, drive: 0.5, wobble: 0, width: 0.3 };
+  const target: Macros = { tone: 0.65, length: 0.35, pitchDrop: 0.6, drive: 0.5, wobble: 0, width: 0.3, sub: 0, weight: 0 };
+  // The target keeps each preset's own Sub and Weight (L209), so the six original knobs are what's recovered.
+  const tgt = (id: MakePresetId): Macros => ({ ...target, sub: MAKE_PRESETS[id].macros.sub, weight: MAKE_PRESETS[id].macros.weight });
 
   it.each(MAKE_PRESET_IDS)("lands much closer than the preset's own settings on a render of %s", (id) => {
-    const f = featuresOf(id, target, notes, 124, 32);
+    const f = featuresOf(id, tgt(id), notes, 124, 32);
     const s = suggestMacros(f, id, notes, 124, 32);
     expect(s.distance).toBeLessThan(s.presetDistance / 5);
-    expect(Math.abs(s.macros.width - target.width)).toBeLessThanOrEqual(0.1);
+    expect(Math.abs(s.macros.width - target.width)).toBeLessThanOrEqual(0.1 + 1e-9);
   }, 20_000);
   it("recovers brightness and pitch drop on a pluck", () => {
-    const s = suggestMacros(featuresOf("rubber-pluck", target, notes, 124, 32), "rubber-pluck", notes, 124, 32);
-    expect(Math.abs(s.macros.tone - target.tone)).toBeLessThanOrEqual(0.15);
-    expect(Math.abs(s.macros.pitchDrop - target.pitchDrop)).toBeLessThanOrEqual(0.15);
-    expect(Math.abs(s.macros.length - target.length)).toBeLessThanOrEqual(0.15);
+    const s = suggestMacros(featuresOf("rubber-pluck", tgt("rubber-pluck"), notes, 124, 32), "rubber-pluck", notes, 124, 32);
+    expect(Math.abs(s.macros.tone - target.tone)).toBeLessThanOrEqual(0.15 + 1e-9);
+    expect(Math.abs(s.macros.pitchDrop - target.pitchDrop)).toBeLessThanOrEqual(0.15 + 1e-9);
+    expect(Math.abs(s.macros.length - target.length)).toBeLessThanOrEqual(0.15 + 1e-9);
   }, 20_000);
   it("an identical sound has distance 0", () => {
     const f = featuresOf("reese", target, notes, 124, 32);

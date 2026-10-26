@@ -6,7 +6,7 @@
 import { createContext, useContext, useState, type CSSProperties, type ReactNode } from "react";
 import { Logo } from "@/components/studio/logo";
 import { SettingsLink, ViewsNav } from "@/components/views-nav";
-import { MACROS, PRESET, PRESETS, type Data, type Part, type PartId, type Section } from "./data";
+import { MACROS, PRESET, PRESETS, clock, type Data, type Part, type PartId, type Section } from "./data";
 import s from "./lab.module.css";
 
 export { s };
@@ -22,6 +22,11 @@ export function useD() {
     w: (from: number, to: number) => `${((to - from) / bars) * 100}%`,
     part: (id: PartId) => d.parts.find((p) => p.id === id)!,
     sectionAt: (bar: number) => d.sections.find((x) => bar >= x.from && bar < x.to) ?? d.sections[0],
+    /** "Drop 1", "Drop 2" when a section name repeats; the plain name otherwise. */
+    secName: (x: Section) => {
+      const same = d.sections.filter((y) => y.name === x.name);
+      return same.length > 1 ? `${x.name} ${same.indexOf(same.find((y) => y.from === x.from)!) + 1}` : x.name;
+    },
   };
 }
 
@@ -43,10 +48,10 @@ export function Head({ children }: { children?: ReactNode }) {
   const t = d.track;
   return (
     <div className={s.head}>
-      <a className={s.back} href="#">← Songs</a>
+      <a className={s.back} href="#">← All tracks</a>
       <div className={s.title}>
         <h1 title={t.title}>{t.title}</h1>
-        <p title={t.artist}><span className={s.artist}>{t.artist}</span> · {t.bpm}&nbsp;BPM · {t.key}</p>
+        <p className={s.facts1} title={`${t.artist} · ${t.bpm} BPM · key ${t.key}`}><span className={s.artist}>{t.artist}</span><span>&nbsp;· {t.bpm}&nbsp;BPM · key {t.key}</span></p>
       </div>
       <div className={s.actions}>{children}</div>
     </div>
@@ -65,29 +70,68 @@ export function DeckDot({ deck }: { deck: DeckState }) {
   );
 }
 
+/** Position as a time and a place ("3:06 · in Drop 1", bar beside it), status, and the loop chip
+ *  (only while a loop is on). */
 export function Transport({ playing, onPlay, bar, loop, onClearLoop, status, disabled }: {
-  playing: boolean; onPlay: () => void; bar: string; loop: Section | null; onClearLoop: () => void;
+  playing: boolean; onPlay: () => void; bar: number; loop: Section | null; onClearLoop: () => void;
   status: ReactNode; disabled?: boolean;
 }) {
+  const { d, sectionAt, secName } = useD();
+  const t = (b: number) => clock(b, d.track.bpm);
   return (
     <div className={s.transport}>
       <button className={s.play} onClick={onPlay} disabled={disabled} aria-label={playing ? "Pause" : "Play"}>{playing ? "❚❚" : "▶"}</button>
-      <span className={s.clock}>{bar}</span>
+      <span className={s.clock}>{t(bar)} · in {secName(sectionAt(bar))} <small>bar {bar}</small></span>
       <span className={s.status} aria-live="polite">{status}</span>
       {loop && (
-        <span className={s.loopText}>
-          ⟲ {loop.name} {loop.from}–{loop.to - 1}
-          <button className={s.x} onClick={onClearLoop} aria-label={`Stop looping ${loop.name}`}>×</button>
+        <span className={s.loopChip}>
+          Looping {secName(loop)} · {t(loop.from)}–{t(loop.to)}
+          <button className={s.x} onClick={onClearLoop} aria-label={`Stop looping ${secName(loop)}`}>×</button>
         </span>
       )}
     </div>
   );
 }
 
-export type LaneState = Record<PartId, "solo" | "on" | "off" | "dim">;
+/** Who you hear: All, one part, or (Shift-click) two; "only" or "without" them. */
+export type Hear = { parts: PartId[]; mode: "only" | "without" };
+export function HearBar({ hear, setHear, disabled }: { hear: Hear; setHear: (h: Hear) => void; disabled?: boolean }) {
+  const { d } = useD();
+  const pick = (id: PartId, add: boolean) => {
+    if (add && hear.parts.length && !hear.parts.includes(id)) return setHear({ ...hear, parts: [...hear.parts, id].slice(-2) });
+    setHear({ ...hear, parts: hear.parts.length === 1 && hear.parts[0] === id ? [] : [id] });
+  };
+  return (
+    <div className={s.hearBar} data-disabled={disabled ? "" : undefined}>
+      <span className={s.hearLabel} id="hear-label">Hear</span>
+      <div className={s.hearSeg} role="group" aria-labelledby="hear-label">
+        <button aria-pressed={hear.parts.length === 0} onClick={() => setHear({ ...hear, parts: [] })} disabled={disabled}>All</button>
+        {d.parts.map((p) => (
+          <button key={p.id} aria-pressed={hear.parts.includes(p.id)} style={{ "--c": p.color } as CSSProperties} disabled={disabled}
+            onClick={(e) => pick(p.id, e.shiftKey)} title="Shift-click to pick two">
+            <i aria-hidden />{p.name}
+          </button>
+        ))}
+      </div>
+      <div className={s.hearMode} role="group" aria-label="Only or without">
+        <button aria-pressed={hear.mode === "only"} onClick={() => setHear({ ...hear, mode: "only" })} disabled={disabled}>only</button>
+        <button aria-pressed={hear.mode === "without"} onClick={() => setHear({ ...hear, mode: "without" })} disabled={disabled}>without</button>
+      </div>
+      <span className={s.hearNow} aria-live="polite">{hearText(hear, d.parts)}</span>
+    </div>
+  );
+}
+export function hearText(h: Hear, parts: Part[]) {
+  if (!h.parts.length) return "Everything";
+  const names = h.parts.map((id) => parts.find((p) => p.id === id)!.name.toLowerCase()).join(" and ");
+  return h.mode === "only" ? `Only the ${names}` : `Everything without the ${names}`;
+}
+
+/** "on": you hear it (in its colour); "dim": you don't (neutral, the same for every lane). */
+export type LaneState = Record<PartId, "on" | "dim">;
 
 type LanesProps = {
-  st: LaneState; onSolo: (id: PartId) => void; onMute: (id: PartId) => void;
+  st: LaneState; focus: PartId;
   bar: number; onSeek: (bar: number) => void; catching: boolean;
   loop: Section | null; onLoop: (x: Section) => void;
   overlay?: (id: PartId) => ReactNode; disabled?: boolean;
@@ -144,23 +188,20 @@ export function Lanes(p: LanesProps) {
   );
 }
 
-function Lane({ x, st, bar, loop, catching, onSolo, onMute, overlay, seekAt }: LanesProps & { x: Part; seekAt: (e: React.MouseEvent<HTMLElement>) => void }) {
+function Lane({ x, st, focus, bar, loop, catching, overlay, seekAt }: LanesProps & { x: Part; seekAt: (e: React.MouseEvent<HTMLElement>) => void }) {
   const { pct, w } = useD();
   const state = st[x.id];
+  const f = focus === x.id ? "" : undefined;
   const rows = x.subs.length ? x.subs : [{ name: "", blocks: x.blocks }];
   return (
     <>
-      <div className={s.lh} data-st={state} style={{ "--c": x.color } as CSSProperties}>
-        <div className={s.lhTop}>
-          <button className={s.lhName} onClick={() => onSolo(x.id)} aria-pressed={state === "solo"}>{x.name}</button>
-          <button className={s.sm} data-on={state === "solo" ? "" : undefined} onClick={() => onSolo(x.id)} aria-label={`Solo ${x.name}`} aria-pressed={state === "solo"}>S</button>
-          <button className={s.sm} data-on={state === "off" ? "" : undefined} onClick={() => onMute(x.id)} aria-label={`Mute ${x.name}`} aria-pressed={state === "off"}>M</button>
-        </div>
+      <div className={s.lh} data-st={state} data-focus={f} style={{ "--c": x.color } as CSSProperties}>
+        <span className={s.lhName}>{x.name}</span>
         {x.subs.length > 0 && <span className={s.subList}>{x.subs.length} layers <i>est.</i></span>}
         {/* sub-layer names sit in the gutter, each level with its row in the lane */}
         {x.subs.length > 0 && <div className={s.lhSubs} aria-hidden>{x.subs.map((y) => <span key={y.name}>{y.name}</span>)}</div>}
       </div>
-      <div className={s.lane} data-st={state} onClick={seekAt}>
+      <div className={s.lane} data-st={state} data-focus={f} onClick={seekAt}>
         {loop && <i className={s.loopShade} style={{ left: pct(loop.from), width: w(loop.from, loop.to) }} />}
         <div className={s.subs}>
           {rows.map((y, i) => (

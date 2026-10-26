@@ -1,51 +1,68 @@
-# Lab design handoff (final, after critic 9/10)
+# Lab design handoff (after the owner's sign-off comments, L167–L171)
 
-The owner's pick (L162): Listen = full map with Mentor notes pinned on the timeline; Make = focused
-room. Prototype `apps/07-six-am/src/app/dev/lab-combined/` (`?mode=listen|make`,
-`?state=first|loading|catching|empty|menu`, `?data=worst`). Screens `lab-combined/define-final-*.png`.
-All copy is draft copy for the owner.
+The owner's pick (L162): Listen = full map with the Mentor's questions on the timeline; Make =
+focused room. Prototype `apps/07-six-am/src/app/dev/lab-combined/` (`?mode=listen|make`,
+`?state=first|loading|catching|empty|menu`, `?data=worst`). Screens `lab-combined/signoff-r1-*.png`
+(the earlier `define-final-*` are superseded). All copy is draft copy for the owner.
 
 ## Shared header (both modes)
 
 1. App bar: logo, Studio / Analyse nav, settings.
-2. Head: "← Songs"; track title (serif, one line, ellipsis, full on hover); artist · BPM · key.
-3. Transport: play/pause (drives the Deck; disabled until the Deck is on); clock and bar
-   (tabular numerals); status (aria-live) "catching up…" / "Getting ready… N%"; loop
-   "⟲ {section} {from}–{to}" with × to stop.
-4. Listen/Make switch (keeps `?mode=` in sync).
+2. Head: "← All tracks"; track title (serif, one line, ellipsis, full on hover); facts line
+   "{artist} · {BPM} BPM · key {key}" (the artist truncates first; BPM and key always show).
+3. Transport: play/pause (drives the Deck; disabled until the Deck is on); position
+   "3:06 · in Drop 1" with a smaller "bar 97" beside it (tabular numerals; a repeated section name
+   gets its number: Drop 1, Drop 2); status (aria-live) "catching up…" / "Getting ready… N%"; loop
+   chip "Looping Drop 1 · 2:04–4:08 ×", shown only while a loop is on (× stops it).
+4. Listen/Make switch (keeps `?mode=` in sync). It is also the way back from Make.
 5. Deck status: dot + "Deck on" / "Deck off".
 6. Getting ready: a 2 px gold line under the head.
 7. First-visit banner: one instruction at a time, one button (Open the Deck → I've shared it /
-   Cancel).
-8. Solo/mute, playhead, loop, notes and the open note survive the mode switch.
+   Cancel). The Hear bar and the map are dimmed until the Deck is on.
+8. What you hear, the focus part, playhead, loop and the Mentor chat survive the mode switch.
 
 ## Listen
 
-1. Ruler (46 px) = seek slider: click to seek, ←/→ ±4 bars; section buttons loop on click (short
+1. Hear bar (replaces S/M on the lanes; the Studio keeps S/M): "Hear" · segmented
+   [All] [● Drums] [● Bass] [● Other] [● Vocals] · "only / without" · a plain readout on the right
+   ("Only the bass", "Everything without the bass", "Everything"). Click a part = only it (or
+   everything without it); click it again or All = back to everything; Shift-click adds a second
+   part. The last part picked on its own is the **focus part** (bass to start): its lane carries
+   the Mentor dots, "+ Ask", and Make works on it.
+2. Ruler (46 px) = seek slider: click to seek, ←/→ ±4 bars; section buttons loop on click (short
    codes when narrow, full name in title and aria-label); bar ticks every 32 bars (64 above 300);
    loop band; playhead with head marker.
-2. Chord lane (26 px), "Chords est.": a cell per 8 bars with a tooltip; names when cells ≥ 24 px,
+3. Chord lane (26 px), "Chords est.": a cell per 8 bars with a tooltip; names when cells ≥ 24 px,
    otherwise only the chord at each section start.
-3. Four part lanes filling the height (≥ 60 px each). Gutter 200 px: left name (click to solo), S,
-   M, "N layers est."; right one sub-layer name per row, 11 px. Lane: one row per estimated
-   sub-layer, or the part's clips if none (no label). Soloed part in its colour; every non-soloed
-   or muted lane in the same neutral at the same alpha. Loop shade; click to seek.
-4. Playhead: one white line through ruler, chords and lanes; dashed while catching up.
-5. Notes (soloed lane only; S2): pins in a 20 px strip above the clips, 4 px right of their bar;
-   notes within 3% of the track merge into a cluster pin ("4–6"); open pin gold. "+ Ask" plain
-   outlined button left of the playhead at the lane's foot ("+ Ask about the bass here" when
-   empty), hidden while a card is open. Note card 420 px, role="dialog", below the soloed lane with
-   a gold leader to its pin; right of the pin unless that crosses the playhead or runs out of room,
-   then left; beside the pin only if the soloed lane is the last. Content: "Note N, bar B", cluster
-   tabs, ×; "You: question"; answer (4 lines + Read all; expanded scrolls at 220 px with a fade);
-   facts as one mono line; one reply input (Enter sends); "Make a bass like this →" (switches to
-   Make). New-note card: question input + "The Mentor knows: … Not tone." Asking pins at the
-   playhead bar and opens it.
+4. Four part lanes filling the height (≥ 60 px each). Gutter 200 px, no buttons: left name and
+   "N layers est."; right one sub-layer name per row, 11 px. Lane: one row per estimated sub-layer,
+   or the part's clips if none (no label). Dimming follows what you hear: parts you hear in their
+   colour, the rest in one neutral at one alpha. Focus lane has a faint lift. Loop shade; click to
+   seek.
+5. Playhead: one white line through ruler, chords and lanes; dashed while catching up.
+6. Mentor on the map (focus lane only):
+   - Each question is a 9 px dot above the clips at its bar (no numbers); questions within 3% of the
+     track share one 13 px dot. Hover shows the question(s); the open dot is gold.
+   - "+ Ask" plain outlined button left of the playhead at the lane's foot ("+ Ask about the bass
+     here" when there are none), hidden while a card is open.
+   - The open dot hangs a 420 px card (role="dialog") below the focus lane, joined by a gold leader;
+     right of the dot unless that crosses the playhead or runs out of room, then left; beside the
+     dot only if the focus lane is the last. Content: "Mentor, at bar 97" · ×; a short chat thread
+     (max 150 px, scrolls, fades; every exchange at that dot): question right-aligned in a light
+     bubble with a "bar 97" tag under it (click = jump the playhead there), answer left as plain text
+     (3 lines + Read all), facts as one mono line; the composer; "Make a bass like this →".
+   - "+ Ask" opens the same card as "Ask about the bass at bar 97" with the composer and "The Mentor
+     knows: … Not tone." Asking adds a question at the playhead bar and opens it.
+
+## Composer (every Mentor input: Listen card, new question, Make's rail)
+
+A textarea that grows to 4 lines; Enter sends, Shift+Enter is a new line; a round Send arrow (↑)
+inside on the right, dimmed and disabled until there's text; aria-label "Send".
 
 ## Make
 
-1. Synth column takes the width; Mentor rail 340 px.
-2. Top: "← Whole song" · "Bass alone, Drop, bars 65–128, looping".
+1. Synth column takes the width; Mentor rail 340 px. No back link (the switch is the way back).
+2. Caption: "Bass alone, Drop 1, 2:04–4:08, looping".
 3. Loop strip: chords, bar numbers every 8 bars, one clip row per sub-layer, playhead; grows from
    118 to 280 px with spare height.
 4. Preset "Round sub ▾" (serif) opens a menu: radio items with tags as plain text, current checked,
@@ -59,9 +76,27 @@ All copy is draft copy for the owner.
 7. Check row above a hairline: A/B switch "A · Original {part} / B · Mine" · "same loudness".
 8. Save bar at the foot: "Name" label, input "{sound word}, from {short title}", tags as one mono
    line, "Save to library" (the only gold button).
-9. Mentor rail: "Mentor, on the {part} at bar B"; numbered questions with "bar N", open ones show
-   the answer (6 lines + Read all) and facts; empty line "No notes yet. Ask about the bass: the
-   answer is pinned at bar 97 on the map."; fixed Ask bar; 40 px end padding and a 56 px fade.
+9. Mentor rail = plain chat, no numbers: "Mentor, on the bass at bar 97"; every exchange in order
+   (question bubble right with its "bar N" tag, answer left, 6 lines + Read all, facts); opens
+   scrolled to the newest; empty line "No questions yet. Ask about the bass: the answer is also
+   pinned at bar 97 on the map."; fixed composer at the bottom; 40 px end padding and a 56 px fade.
+
+## Copy (draft)
+
+| Where | Text |
+| --- | --- |
+| Head | ← All tracks · Lost in The Loop · Mason Flint · 124 BPM · key A minor |
+| Transport | 3:06 · in Drop 1 · bar 97 · Looping Drop 1 · 2:04–4:08 × · catching up… · Getting ready… 42% · first time only, about 18 s |
+| Switch / Deck | Listen · Make · Deck on / Deck off |
+| Hear bar | Hear · All · Drums · Bass · Other · Vocals · only · without · Only the bass / Everything without the bass / Everything · (title) Shift-click to pick two |
+| Gutter | Drums · 3 layers est. · kick · hats · clap · Bass · 2 layers est. · sub · pluck … |
+| Map | Chords est. · section names/codes · + Ask · + Ask about the bass here |
+| Card | Mentor, at bar 97 · × · What's this bass doing? · bar 97 · (answer) · Read all / Show less · A1 · 55 Hz · notes ≈ 1/8 · off the kick · −11 LUFS · Reply about bar 97… · Make a bass like this → |
+| New question | Ask about the bass at bar 97 · What's the bass doing here? · The Mentor knows: Bass alone, Drop 1, bar 97; pitch, timing and loudness. Not tone. |
+| Make | Bass alone, Drop 1, 2:04–4:08, looping · chords est. · bars · sub est. · pluck est. · Round sub ▾ · Tone dark · Length 1/4 · Pitch drop slow · Drive clean · Wobble off · Width mono · Mentor: Length down to 1/8, Pitch drop up. That's the bounce. · Gold ticks mark those. · Suggest settings · A · Original bass · B · Mine · same loudness |
+| Preset menu | Round sub (sub · clean) · Rubber pluck (short · bouncy) · Reese (wide · dark) · Acid line (squelchy · resonant) · Describe a bass in words… |
+| Save | Name · Rubbery bass, from Lost in The Loop · bass · A minor · 124 BPM · Lost in The Loop · Save to library |
+| Mentor rail | Mentor, on the bass at bar 97 · No questions yet. Ask about the bass: the answer is also pinned at bar 97 on the map. · Ask about the bass… · Send |
 
 ## First visit, copy
 

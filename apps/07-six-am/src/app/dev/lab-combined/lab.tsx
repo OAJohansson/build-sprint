@@ -105,7 +105,7 @@ function Inner({ initialMode, view }: { initialMode: Mode; view: View }) {
           overlay={(id) => id === soloId && deck === "ready" ? (
             <Notes notes={notes.filter((x) => x.part === id)} open={open} setOpen={(n) => { setOpen(n); setAsking(false); }}
               bar={bar} asking={asking} setAsking={(a) => { setAsking(a); setOpen(null); }} partName={solo.name}
-              section={sectionAt(bar).name} onAsk={ask} onMake={() => go("make")} />
+              section={sectionAt(bar).name} onAsk={ask} onMake={() => go("make")} lastLane={d.parts[d.parts.length - 1].id === id} />
           ) : null}
         />
       ) : (
@@ -116,13 +116,12 @@ function Inner({ initialMode, view }: { initialMode: Mode; view: View }) {
               <span className={s.who}>{solo.name} alone, {sec.name}, bars {sec.from}–{sec.to - 1}, looping</span>
             </div>
             <LoopStrip id={soloId} sec={sec} bar={bar} />
-            <PresetHead />
+            <PresetHead partName={solo.name.toLowerCase()} />
             <Macros size={96} color={solo.color} />
-            <p className={s.suggest}><span className={s.tick} aria-hidden /> <span><b>Mentor:</b> {SUGGEST}</span></p>
+            <p className={s.suggest}><span className={s.tick} aria-hidden /> <span>gold tick: the Mentor&rsquo;s suggestion. {SUGGEST}</span></p>
             <div className={s.checkRow}>
               <AB partName={solo.name.toLowerCase()} ab={ab} setAb={setAb} />
-              <button className={s.ghost}>Match it</button>
-              <button className={s.textBtn} style={{ marginLeft: "auto" }}>Describe a {solo.name.toLowerCase()} instead</button>
+              <button className={s.ghost}>Suggest settings</button>
             </div>
           </section>
           <SaveBar name={suggestName(solo, d.track.short)} tags={[solo.name.toLowerCase(), d.track.key, `${d.track.bpm} BPM`, d.track.short]} />
@@ -158,8 +157,8 @@ type Group = { bar: number; notes: Note[] };
 /** Notes on the soloed lane. Pins live in a thin strip above the clips; notes closer than 3% of the
  *  track share one pin ("4–6"). The open note hangs as a card below the lane, on the side away
  *  from the playhead, so it never covers the playhead or the part you're hearing. */
-function Notes({ notes, open, setOpen, bar, asking, setAsking, partName, section, onAsk, onMake }: {
-  notes: Note[]; open: number | null; setOpen: (n: number | null) => void; bar: number;
+function Notes({ notes, open, setOpen, bar, asking, setAsking, partName, section, onAsk, onMake, lastLane }: {
+  lastLane: boolean; notes: Note[]; open: number | null; setOpen: (n: number | null) => void; bar: number;
   asking: boolean; setAsking: (a: boolean) => void; partName: string; section: string;
   onAsk: (q: string) => void; onMake: () => void;
 }) {
@@ -180,11 +179,18 @@ function Notes({ notes, open, setOpen, bar, asking, setAsking, partName, section
   // the pin instead when there's no room, or when going right would cross the playhead.
   const px = (b: number) => ((b - 1) / d.track.bars) * TIMELINE_PX;
   const pinW = (g?: Group) => (g ? label(g).length * 6.5 + 12 : 0); // shortcut: estimated pin width; measure it in the real build
+  // The card hangs below the soloed lane (over the dimmed lanes), joined to its pin by a short
+  // leader, so it never covers the part it talks about. Only when the soloed lane is the last one
+  // does it sit beside the pin instead. Right of the pin when there's room and the playhead stays
+  // clear; otherwise its right edge lines up with the pin.
+  const below = !lastLane;
   const cardPos = (at: number): CSSProperties => {
-    const off = 4 + Math.max(20, pinW(openGroup)) + 4;
+    const w = Math.max(20, pinW(openGroup));
+    const off = below ? 4 : 4 + w + 4;
     const room = px(at) + off + 420 <= TIMELINE_PX;
     const crosses = at < bar && px(at) + off + 420 >= px(bar);
-    return room && !crosses ? { left: `calc(${pct(at)} + ${off}px)` } : { left: `max(0px, calc(${pct(at)} - 428px))` };
+    const left = room && !crosses ? `calc(${pct(at)} + ${off}px)` : `max(0px, calc(${pct(at)} + ${below ? 4 + w : -8}px - 420px))`;
+    return { left, top: below ? "calc(100% + 10px)" : 5 };
   };
   return (
     <div onClick={(e) => e.stopPropagation()}>
@@ -203,6 +209,7 @@ function Notes({ notes, open, setOpen, bar, asking, setAsking, partName, section
       </button>}
       {anchor !== undefined && (asking || note) && (
         <>
+          {below && <i className={s.leader} style={{ left: `calc(${pct(anchor)} + ${asking ? 0 : 4 + Math.max(20, pinW(openGroup)) / 2}px)`, top: asking ? "calc(100% - 4px)" : 25 }} aria-hidden />}
           <div className={s.card} style={cardPos(anchor)} role="dialog" aria-label={note ? `Note ${note.n}` : "Ask the Mentor"}>
             <div className={s.cardHead}>
               <span className={s.ctx}>{note ? `Note ${note.n}, bar ${note.bar}` : `New note, ${section}, bar ${bar}`}</span>

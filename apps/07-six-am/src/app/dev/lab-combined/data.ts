@@ -105,10 +105,10 @@ export const MACROS = [
   { name: "Length", value: 0.55, hint: "1/4", sug: 0.3 },
   { name: "Pitch drop", value: 0.35, hint: "slow", sug: 0.75 },
   { name: "Drive", value: 0.2, hint: "clean" },
-  { name: "Wobble", value: 0.05, hint: "off" },
+  { name: "Wobble", value: 0, hint: "off" },
   { name: "Width", value: 0.1, hint: "mono" },
 ];
-export const SUGGEST = "Length down to 1/8, Pitch drop up: that's the bounce.";
+export const SUGGEST = "Length down to 1/8 and Pitch drop up: that's the bounce.";
 
 /** The suggested library name: a word for the sound plus the song's short title, never a full
  *  mix title (so it fits the field). */

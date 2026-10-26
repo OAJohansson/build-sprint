@@ -43,7 +43,7 @@ export function Head({ children }: { children?: ReactNode }) {
   const t = d.track;
   return (
     <div className={s.head}>
-      <a className={s.back} href="#">← Analyse</a>
+      <a className={s.back} href="#">← Songs</a>
       <div className={s.title}>
         <h1 title={t.title}>{t.title}</h1>
         <p title={t.artist}><span className={s.artist}>{t.artist}</span> · {t.bpm}&nbsp;BPM · {t.key}</p>
@@ -222,9 +222,7 @@ export function Knob({ name, value, hint, sug, size = 56, color = "#f1e6d3" }: {
     <div className={s.knob} role="slider" tabIndex={0} aria-label={name} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(value * 100)} aria-valuetext={hint}>
       <svg width={size} height={size} aria-hidden>
         <path d={`M${x0} ${y0} A${r} ${r} 0 1 1 ${xe} ${ye}`} fill="none" stroke="rgba(241,230,211,.25)" strokeWidth="2" strokeLinecap="round" />
-        {(() => { const [p1, q1] = pt(a0, r + 4), [p2, q2] = pt(a0, r - 4); return <line x1={p1} y1={q1} x2={p2} y2={q2} stroke="rgba(241,230,211,.45)" strokeWidth="1.5" strokeLinecap="round" />; })()}
         {value > 0.005 && <path d={`M${x0} ${y0} A${r} ${r} 0 ${a - a0 > 180 ? 1 : 0} 1 ${x1} ${y1}`} fill="none" stroke={color} strokeWidth="3" strokeLinecap="round" />}
-        <circle cx={x1} cy={y1} r="3.5" fill={color} />
         {sa !== null && (() => { const [p1, q1] = pt(sa, r + 4), [p2, q2] = pt(sa, r - 4); return <line x1={p1} y1={q1} x2={p2} y2={q2} stroke="#f2b134" strokeWidth="2.5" strokeLinecap="round" />; })()}
       </svg>
       <span>{name}</span>
@@ -249,6 +247,11 @@ export function AB({ partName, ab, setAb }: { partName: string; ab: "a" | "b"; s
   );
 }
 
-export function PresetHead() {
-  return <button className={s.presetName} aria-label={`Preset: ${PRESET.name}. Change preset`}>{PRESET.name} <span aria-hidden>▾</span></button>;
+export function PresetHead({ partName }: { partName: string }) {
+  return (
+    <div className={s.preset}>
+      <button className={s.presetName} aria-label={`Preset: ${PRESET.name}. Change preset`}>{PRESET.name} <span aria-hidden>▾</span></button>
+      <button className={s.textBtn}>or describe a {partName} in words</button>
+    </div>
+  );
 }

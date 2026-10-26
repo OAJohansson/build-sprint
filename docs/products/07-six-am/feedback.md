@@ -65,3 +65,15 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | LS1-N3 | minor | Resume after pause stutters (2.7 s, 2.8 s gap) | fixed (L186, T95), re-test |
 | LS1-N4 | minor | Loop's first passes freeze at the wrap 4–6 s | fixed (L186, T95), re-test |
 | LS1-N6 | polish | "Not heard yet" hyphen 2.28:1; "← All tracks" 18 px tall | fixed (L186, T95), re-test |
+
+## Lab S1+S2 test (26 Oct, `user-testing/report-2026-10-26-lab-s1s2.md`): jobs 4 / 4 / 3
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| LS2-M1 | major | Card thread 150 px, nested scrolls, answers cut after 3 lines | open |
+| LS2-M2 | minor | Hit areas < 28 px: dots, "+ Ask", bar tag, Send, Make link | open |
+| LS2-M3 | minor | Outside a loop the Mentor uses the full-mix estimate, not the heard lanes | open |
+| LS2-M4 | minor | Hovering a dot shows nothing visible | open |
+| LS2-M5 | polish | Jargon (Hz, "minor third"); "can't hear tone, only pitch…" implies hearing | open |
+| LS1-N7 | minor | Heard Drums merges the kick/hats rows | open |
+| LS1-N6 | polish | "Not heard yet" hyphen still dim | re-check |

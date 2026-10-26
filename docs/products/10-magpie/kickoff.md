@@ -107,13 +107,19 @@ Filled in once the open calls above are settled.
 
 ## Feel references
 
-**Open.** The owner picked Magpie as the name and brand (26 Oct): a collector who keeps what it
-loves. The quick brand sketch was ink, a teal sheen, gold and cream, with each item as a shiny
-trinket in the nest; it's a starting point, not a decision.
+**Direction picked by the owner (26 Oct): the sticker book**, out of 10 directions and a round 2
+of four (canvas: https://claude.ai/artifact/X4hmxGD5oek8NvT7XbxgjE, row "Sticker book: every key
+screen" is the design to build).
 
-- [reference] — [what to take from it]
+- **A sticker book from your travels** — every taste becomes a die-cut sticker on a country page;
+  chunky dark outlines, warm cream paper, coral, butter yellow and teal.
+- **A round cartoon magpie** (the owner's favourite touch) — the greedy little friend who gets
+  excited about every shiny new taste: greets you on the shelf, peeks in the camera, draws the
+  sticker, cheers on the saved moment ("Ooh, shiny!").
+- **Fredoka**, rounded type, friendly copy ("yums", "Stick it in my book").
 
-**The feel in one sentence:** **Open**
+**The feel in one sentence (draft, owner to confirm):** A cheerful sticker book of everything I've
+tasted, kept by a greedy little magpie who gets excited about every shiny new yum.
 
 ## Things to avoid
 

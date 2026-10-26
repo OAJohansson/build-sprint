@@ -41,6 +41,11 @@ What happened, what was decided and why. Newest last.
   Four brand stories: the curator (cabinet), the greedy little friend (sticker book), the travel
   buddy (atlas), the quiet signature (gallery).
 
+- **Owner picked the sticker book.** All key screens then designed in that direction: first run,
+  access code, empty shelf, capture (photo, details, drawing the sticker), item page, search and
+  filter, and the shelf on laptop as a two-page book spread. The phone shelf and the saved moment
+  come from round 2.
+
 ## To carry over
 
 For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md).

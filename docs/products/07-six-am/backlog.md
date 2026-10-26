@@ -89,3 +89,4 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Real estimated sub-layers for Bass, Other and Vocals (from the separated parts) | User test LS1-1: only Drums shows what's inside | next |
 | Filter knob on the transport? (removed with the lane model, L200) | The owner accepted its removal for the MVP | later |
 | Studio overwrite trims a neighbour by whole loop passes (a 1-bar overlap cut 8 bars); trim only the covered bars or show the cut | S5 re-check S5-10 | next (small) |
+| Lab note card: a horizontal leader to its dot when the card sits past the playhead, far from the dot | final polish T112 | later (small) |

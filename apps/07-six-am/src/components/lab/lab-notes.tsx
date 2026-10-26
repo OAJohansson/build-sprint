@@ -17,10 +17,10 @@ const CARD_W = 420;
 /** "Make a bass like this →", "Make drums like this →". */
 const MAKE_WHAT: Record<string, string> = { bass: "a bass", drums: "drums", other: "a sound", vocals: "vocals" };
 /** Below the lane needs about this much height under it; otherwise the card goes beside the dot. */
-/** T110: the card goes below the focus lane when this much fits there (head, composer and link
- *  take ~140, leaving a few lines of thread that scrolls), else above, beside only when neither fits,
- *  so it never covers the clips at its pin. */
-const NEED = 220;
+/** T110 + PM: the card goes below (or above) the focus lane only when its thread gets ~300 px
+ *  there (head, composer and padding take ~110), else beside the dot (~374 px of thread at a 734 px
+ *  page), never over the playhead, on the side away from the bars its answer names. */
+const NEED = 410;
 /** The ruler and chord lane above the part lanes: a card above or beside never covers them. */
 const HEAD_ROWS = 72;
 /** Space kept under the card at the bottom of the Lab. */

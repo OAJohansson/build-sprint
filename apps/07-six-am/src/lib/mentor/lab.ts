@@ -332,16 +332,25 @@ export function groupNotes<T extends { bar: number; createdAt: string }>(notes: 
 export function cardLeft(dotPx: number, playheadPx: number, widthPx: number, cardPx = 420, beside = false, avoid?: { from: number; to: number } | null): number {
   const right = dotPx + (beside ? 20 : 0);
   const leftX = Math.max(0, Math.min(widthPx - cardPx, dotPx - (beside ? 20 : -14) - cardPx));
-  const fits = right + cardPx <= widthPx;
-  // LS2-N10: beside the dot, the side that leaves the bars its answer talks about in view wins.
-  if (beside && avoid && avoid.to > avoid.from) {
-    const cover = (x: number) => Math.max(0, Math.min(x + cardPx, avoid.to) - Math.max(x, avoid.from));
-    const r = fits ? cover(right) : Infinity, l = leftX + cardPx <= dotPx ? cover(leftX) : Infinity;
-    if (r !== l) return r < l ? right : leftX;
+  const fits = (x: number) => x >= 0 && x + cardPx <= widthPx;
+  const over = (x: number) => playheadPx > x && playheadPx < x + cardPx; // would hide the playhead
+  if (!beside) {
+    const crosses = dotPx < playheadPx && right + cardPx > playheadPx;
+    return fits(right) && !crosses ? right : leftX;
   }
-  const crosses = dotPx < playheadPx && right + cardPx > playheadPx;
-  if (fits && !crosses) return right;
-  return leftX;
+  // Beside (T110): never over the dot or the playhead. Next to the dot first; when the playhead is
+  // too close for that, just past the playhead on the dot's side away from it. Among those, the one
+  // that leaves the bars its answer names in view (LS2-N10).
+  const clearOfDot = (x: number) => x >= dotPx + 10 || x + cardPx <= dotPx - 10;
+  const ok = (x: number) => fits(x) && !over(x) && clearOfDot(x);
+  const near = [right, dotPx - 20 - cardPx].filter(ok);
+  const cands = near.length ? near : [playheadPx + 20, playheadPx - 20 - cardPx].filter(ok);
+  if (!cands.length) return fits(right) ? right : leftX;
+  if (avoid && avoid.to > avoid.from) {
+    const cover = (x: number) => Math.max(0, Math.min(x + cardPx, avoid.to) - Math.max(x, avoid.from));
+    return cands.reduce((best, x) => (cover(x) < cover(best) ? x : best));
+  }
+  return cands[0];
 }
 
 // ── "Never claims to hear" (B6) ──────────────────────────────────────────────────────────────────

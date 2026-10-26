@@ -207,6 +207,10 @@ describe("S3 folds (LS2-N9, N10, N11) and Make's context", () => {
     expect(cardLeft(600, 0, 1240, 420, true, { from: 700, to: 900 })).toBe(160);
     expect(cardLeft(600, 0, 1240, 420, true, { from: 300, to: 500 })).toBe(620);
     expect(cardLeft(600, 0, 1240, 420, true, null)).toBe(620);
+    // …but never over the playhead: at 700 px the right side would hide it, so left wins.
+    expect(cardLeft(600, 700, 1240, 420, true, { from: 300, to: 500 })).toBe(160);
+    // Dot at 120, playhead at 450: neither side of the dot keeps the playhead clear, so past it.
+    expect(cardLeft(120, 450, 1240, 420, true, null)).toBe(470);
   });
   it("tells the Mentor what they're making in Make, knobs and ticks", () => {
     const p = parseLabAsk({ ...ask, make: { preset: "rubber-pluck", macros: { tone: 0.5, length: 9 }, ticks: { length: 0.25 }, audio: [1] } }, BARS)!;

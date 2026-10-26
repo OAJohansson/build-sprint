@@ -86,3 +86,11 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | LS2-N8 | minor | Drums' previously heard bars reset to estimates after the band change | fixed (T97) |
 | LS2-M6 | minor | At unheard bars the answer pads with chord guesses; should say "loop bars X–Y to see it" | fixed (T97) |
 | LS2-M7 | polish | "4.5 note starts a bar" → "4–5 notes a bar" | fixed (T97) |
+
+## Lab S2 re-check 2 (26 Oct): job 3 = 4 (pass)
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| LS2-N9 | minor | Heard-bar answers can run 4 long sentences and call unheard bars a "gap" | open (S3 brief) |
+| LS2-N10 | minor | The beside card can cover the bars its answer describes | open (S3 brief) |
+| LS2-N11 | polish | "+ Ask about the other here", "What's the vocals doing here?" | open (S3 brief) |

@@ -115,6 +115,18 @@
         "3109"
       ],
       "port": 3109
+    },
+    {
+      "name": "10-magpie",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "-F",
+        "10-magpie",
+        "dev",
+        "--port",
+        "3110"
+      ],
+      "port": 3110
     }
   ]
 }

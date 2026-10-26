@@ -74,7 +74,8 @@ export function SoundDrawer({ t, lane, sound, color, onClose, onNewSound }: {
   };
 
   const pick = (choice: PresetId | KitId) => {
-    if (cur.source === "ai") return;
+    // shortcut: a library block (S5, source "lib") opens read-only here like an AI loop; its own editor comes with the lane UI.
+    if (cur.source === "ai" || cur.source === "lib") return;
     setMentor({ is: "idle" });
     const same = cur.source === "kit" ? cur.kit === choice : cur.preset === choice;
     if (editing && !same) {
@@ -90,7 +91,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose, onNewSound }: {
     change({ ...starter(lane, choice, cur.pattern), id: cur.id });
   };
   const pickPattern = (id: string) => {
-    if (cur.source === "ai") return;
+    if (cur.source === "ai" || cur.source === "lib") return;
     const next = cur.source === "kit" ? makeKitLoop(cur.kit, id, cur.id) : makeSynthLoop(cur.preset, id, cur.knobs, cur.id);
     if (next) change(next);
   };
@@ -299,7 +300,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose, onNewSound }: {
                     if (free === null) { setAddNote(`No free bars on this lane after bar ${at}: make room first.`); return; }
                     t.addSound(draft, free);
                     setAddNote(`Added at bar ${free}${free !== at ? `, the first free bars after bar ${at}` : ""}.`);
-                    setDraft(starter(lane, chosen ?? undefined, "pattern" in draft ? draft.pattern : undefined));
+                    setDraft(starter(lane, chosen ?? undefined, "pattern" in draft && typeof draft.pattern === "string" ? draft.pattern : undefined));
                   }}>
                     {atDrop ? `Add at the ${drop!.label.toLowerCase()} (bar ${drop!.bar})` : "Add to lane"}
                   </button>

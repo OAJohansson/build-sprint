@@ -1,0 +1,141 @@
+// A library sound in a Studio track (S5, L158, L172, L174): a copy of the sound's settings (preset,
+// six macros, the MIDI note pattern with its key, scale and BPM) plus the library id it came from,
+// so it stays editable in the Studio and a later library edit never changes the song. It plays
+// in the track's key and tempo: the pattern is transposed from the sound's key to the track's and
+// rendered by the Make synth (render.ts) one pass at the track's tempo; the Studio loops that
+// buffer over the block. Pure, unit tested (lib-loop.test.ts).
+import { legacyTrack, type LaneType } from "@/lib/studio-lanes";
+import { inScale, pitchClass, type Scale } from "@/lib/synths/theory";
+import { parseNotes, type LibPart, type LibrarySound } from "./library";
+import { notesForLoop, snapToKey } from "./pattern";
+import { MAKE_PRESETS, clampMacros, synthParams, type Macros, type MakePresetId } from "./presets";
+import { renderBass, type MakeNote, type Rendered } from "./render";
+
+export type LibLoop = {
+  id: string;
+  source: "lib";
+  name: string;
+  /** One pass, in bars (the pattern's). */
+  bars: 1 | 2 | 4;
+  /** The lane type it belongs in, and the old lane (0–3) that type plays through. */
+  type: LaneType;
+  lane: 0 | 1 | 2 | 3;
+  /** The library sound it was copied from, or null when that's unknown. */
+  libId: string | null;
+  preset: MakePresetId;
+  macros: Macros;
+  pattern: { bars: 1 | 2 | 4; notes: MakeNote[] };
+  /** The key, scale and tempo the pattern was saved in; the track's are used to play it. */
+  key: string;
+  scale: Scale;
+  bpm: number;
+};
+
+/** The lane type a library part drops into (Make only makes bass today; the rest are guesses
+ *  until Make makes them: drums → Percussion, other → Lead). */
+export const PART_LANE: Record<LibPart, LaneType> = { bass: "bass", drums: "perc", other: "lead", vocals: "vocals" };
+
+const newId = () => `s${Math.random().toString(36).slice(2, 8)}${Date.now().toString(36).slice(-4)}`;
+
+/** A track's own copy of a library sound, for a lane of `type` (its part's type by default). */
+export function libLoopFrom(s: LibrarySound, type: LaneType = PART_LANE[s.part], id = newId()): LibLoop {
+  return {
+    id, source: "lib", name: s.name, bars: s.pattern.bars, type, lane: legacyTrack(type), libId: s.id,
+    preset: s.preset, macros: { ...s.macros }, pattern: { bars: s.pattern.bars, notes: s.pattern.notes.map((n) => ({ ...n })) },
+    key: s.key, scale: s.scale, bpm: s.bpm,
+  };
+}
+
+/** A block's sound edited in the Studio (preset and macros only; the pattern stays). */
+export function editLibLoop(l: LibLoop, edit: { preset?: MakePresetId; macros?: Partial<Macros> }): LibLoop {
+  const preset = edit.preset && edit.preset in MAKE_PRESETS ? edit.preset : l.preset;
+  return { ...l, preset, macros: clampMacros(preset, { ...l.macros, ...edit.macros }) };
+}
+
+// ── Key ─────────────────────────────────────────────────────────────────────────────────────────
+
+const mod = (n: number, m: number) => ((n % m) + m) % m;
+
+/**
+ * Semitones to move a pattern from its key to the track's, −6…+5 (the nearest way, down on a tie,
+ * so a bass stays low). Same scale: tonic onto tonic. A minor sound in a major track goes to the
+ * track's relative minor (and major into minor to the relative major), which has the same notes,
+ * so the line keeps its own mood and every note is in the track's scale.
+ */
+export function transposeSemis(from: { key: string; scale: Scale }, to: { key: string; scale: Scale }): number {
+  const a = pitchClass(from.key), b = pitchClass(to.key);
+  if (a === null || b === null) return 0;
+  const target = from.scale === to.scale ? b : from.scale === "minor" ? b + 9 : b + 3;
+  const up = mod(target - a, 12);
+  return up >= 6 ? up - 12 : up;
+}
+
+/** The pattern's notes in the track's key: moved by transposeSemis, then any note still outside
+ *  the track's scale (a passing note) snapped to the nearest one in it. */
+export function notesInKey(l: Pick<LibLoop, "pattern" | "key" | "scale">, key: string, scale: Scale): MakeNote[] {
+  const semis = transposeSemis(l, { key, scale });
+  const tonic = pitchClass(key) ?? 9;
+  return l.pattern.notes.map((n) => {
+    const m = n.midi + semis;
+    return { ...n, midi: inScale(m, tonic, scale) ? m : snapToKey(m, tonic, scale) };
+  });
+}
+
+// ── Tempo and length ─────────────────────────────────────────────────────────────────────────────
+
+/** Bars per phrase: house is built in 8-bar phrases (the ruler's numbers, timeline.tsx). */
+export const PHRASE = 8;
+
+/** The first bar of the phrase holding `bar` (1, 9, 17, …). */
+export const phraseStart = (bar: number, phrase = PHRASE) => 1 + Math.floor((Math.max(1, Math.floor(bar)) - 1) / phrase) * phrase;
+
+/** A dropped block's length: whole passes filling one phrase (at least one pass), never past the
+ *  track's last bar. 0 when not even one pass fits from `start`. */
+export function dropLength(passBars: number, start: number, total: number, phrase = PHRASE): number {
+  const room = total - start + 1;
+  const passes = Math.max(1, Math.floor(phrase / passBars));
+  return Math.max(0, Math.min(passes, Math.floor(room / passBars))) * passBars;
+}
+
+/**
+ * One pass of the block in the track's key at the track's tempo, rendered by the Make synth: the
+ * notes sit on the track's 16ths (the pattern is in 16ths, not seconds, so a new tempo only changes
+ * the 16th's length; the wobble follows the beat too), and the pass is exactly `bars` bars long.
+ * Each note lasts until the next and the Length macro shortens it, as in Make (L174).
+ */
+export function renderLibPass(l: LibLoop, track: { key: string; scale: Scale; bpm: number }, rate = 44100): Rendered {
+  const steps = l.bars * 16;
+  const notes = notesForLoop({ bars: l.bars, notes: notesInKey(l, track.key, track.scale) }, steps);
+  return renderBass(notes, synthParams(l.preset, l.macros), { bpm: track.bpm, steps, rate });
+}
+
+/** What a rendered pass depends on: a changed sound, key or tempo needs a new render. */
+export const passSignature = (l: LibLoop, track: { key: string; scale: Scale; bpm: number }) =>
+  JSON.stringify([l.preset, l.macros, l.pattern, l.key, l.scale, track.key, track.scale, Math.round(track.bpm * 100)]);
+
+// ── Parsing (saved docs) ─────────────────────────────────────────────────────────────────────────
+
+const LANE_TYPES: LaneType[] = ["kick", "clap", "hats", "perc", "bass", "chords", "pads", "lead", "vocals", "fx", "texture"];
+
+/** A stored block sound we can trust, or null: known preset and type, macros clamped, notes on the
+ *  grid inside the pass, a real key. Its old lane always follows from its type. */
+export function parseLibLoop(v: unknown): LibLoop | null {
+  if (!v || typeof v !== "object") return null;
+  const o = v as Record<string, unknown>;
+  if (o.source !== "lib" || typeof o.id !== "string" || !o.id || o.id.length > 40) return null;
+  if (typeof o.preset !== "string" || !(o.preset in MAKE_PRESETS)) return null;
+  if (typeof o.type !== "string" || !LANE_TYPES.includes(o.type as LaneType)) return null;
+  const pat = (o.pattern ?? {}) as Record<string, unknown>;
+  const bars = pat.bars === 1 || pat.bars === 2 || pat.bars === 4 ? pat.bars : null;
+  const notes = bars ? parseNotes(pat.notes, bars) : null;
+  if (!bars || !notes || (o.bars !== undefined && o.bars !== bars)) return null;
+  if (typeof o.key !== "string" || pitchClass(o.key) === null || (o.scale !== "major" && o.scale !== "minor")) return null;
+  if (typeof o.bpm !== "number" || !Number.isFinite(o.bpm) || o.bpm < 40 || o.bpm > 220) return null;
+  const preset = o.preset as MakePresetId, type = o.type as LaneType;
+  return {
+    id: o.id, source: "lib", name: typeof o.name === "string" && o.name.trim() ? o.name.trim().slice(0, 60) : MAKE_PRESETS[preset].name,
+    bars, type, lane: legacyTrack(type), libId: typeof o.libId === "string" && o.libId.length <= 40 ? o.libId : null,
+    preset, macros: clampMacros(preset, (o.macros ?? {}) as Partial<Macros>), pattern: { bars, notes },
+    key: o.key.trim(), scale: o.scale, bpm: o.bpm,
+  };
+}

@@ -14,6 +14,7 @@ import type { KitId } from "@/lib/synths/kits";
 import type { Sound } from "@/lib/synths/loop";
 import { buildSoundIndex, previewSoundHits, type SoundHit } from "@/lib/synths/schedule";
 import type { Scale } from "@/lib/synths/theory";
+import { passSignature, renderLibPass, type LibLoop } from "@/lib/make/lib-loop";
 
 const LOOKAHEAD = 0.12, TICK_MS = 25;
 const TRACK_DB = [0, -3, -7, -9]; // drums, bass, chords, top/FX
@@ -193,6 +194,8 @@ export class AudioEngine {
   private aiPlaying = new Set<Tone.ToneBufferSource>();
   private previewSound: Sound | null = null;
   private code = "";
+  /** Library blocks (S5): one rendered pass per sound, in the track's key at its tempo. */
+  private libPasses = new Map<string, { sig: string; buf: Tone.ToneAudioBuffer }>();
 
   /** Start the audio context; browsers only allow this after a click or key press. */
   start() {
@@ -222,6 +225,7 @@ export class AudioEngine {
     this.sps = next;
     this.bpm = clampBpm(bpm);
     this.synced.forEach((d) => d.node.delayTime.rampTo(d.steps * next, 0.05));
+    this.warmLib();
   }
 
   setRegions(regions: Region[]) {
@@ -236,7 +240,9 @@ export class AudioEngine {
     for (const x of sounds) this.refreshVoice(x);
     const keep = new Set([...sounds.map((x) => x.id), this.previewSound?.id]);
     for (const [id, v] of this.voices) if (!keep.has(id)) { v.voice.dispose(); this.voices.delete(id); }
+    for (const id of this.libPasses.keys()) if (!keep.has(id)) this.libPasses.delete(id);
     this.setRegions(this.regions);
+    this.warmLib();
   }
 
   /** The track's key: synth patterns are rendered in it (A minor when the track has none). */
@@ -244,6 +250,7 @@ export class AudioEngine {
     this.key = key;
     this.scale = scale;
     this.setRegions(this.regions);
+    this.warmLib();
   }
 
   /** The access code, for fetching stored AI loops' audio. */
@@ -378,6 +385,7 @@ export class AudioEngine {
 
   /** Build (or re-knob) a sound's voice. Same preset → knobs glide; another preset or kit → a new voice. */
   private refreshVoice(x: Sound) {
+    if (x.source === "lib") return; // played from a rendered pass (libPass), no voice
     if (!this.channels.length || x.source === "ai") { if (x.source === "ai") this.loadAi(x.aiId); else if (x.source === "kit") this.loadKitOnce(x.kit); return; }
     const sig = x.source === "kit" ? `kit:${x.kit}` : `synth:${x.preset}`;
     const have = this.voices.get(x.id);
@@ -423,6 +431,26 @@ export class AudioEngine {
     this.aiPlaying.clear();
   }
 
+  /** A library block's pass in the track's key and tempo, rendered on first use and again when the
+   *  sound, key or tempo changes. */
+  // shortcut: renders on the main thread (cost of a 4-bar Reese pass not measured yet); move to make.worker.ts if tempo drags stutter.
+  private libPass(x: LibLoop): Tone.ToneAudioBuffer | null {
+    if (!this.channels.length) return null;
+    const track = { key: this.key, scale: this.scale, bpm: this.bpm };
+    const sig = passSignature(x, track);
+    const have = this.libPasses.get(x.id);
+    if (have?.sig === sig) return have.buf;
+    const r = renderLibPass(x, track, Tone.getContext().sampleRate);
+    const buf = Tone.ToneAudioBuffer.fromArray([r.left, r.right]);
+    this.libPasses.set(x.id, { sig, buf });
+    return buf;
+  }
+
+  /** Render the track's library blocks ahead of the scheduler, so the first hit doesn't wait. */
+  private warmLib() {
+    for (const x of this.sounds) if (x.source === "lib") this.libPass(x);
+  }
+
   /** Play one hit of a track sound; like sound(), a failure is reported once and skipped. */
   private playSound(hit: SoundHit, t: number) {
     const x = hit.soundId === this.previewSound?.id ? this.previewSound : this.sounds.find((s) => s.id === hit.soundId);
@@ -437,6 +465,17 @@ export class AudioEngine {
         const src = new Tone.ToneBufferSource({ url: buf, playbackRate: this.bpm / x.bpm }).connect(this.channels[x.lane]);
         src.onended = () => { this.aiPlaying.delete(src); src.dispose(); };
         src.start(t, 0, undefined, 0.35); // -9 dB: a full template mix stays under 0 dBFS (X3 F3)
+        src.stop(t + hit.dur * this.sps);
+        this.aiPlaying.add(src);
+        return;
+      }
+      if (hit.kind === "lib" && x.source === "lib") {
+        const buf = this.libPass(x);
+        if (!buf) return;
+        // Rendered at the track's tempo, so it plays at its own rate and stays on the grid.
+        const src = new Tone.ToneBufferSource({ url: buf }).connect(this.channels[x.lane]);
+        src.onended = () => { this.aiPlaying.delete(src); src.dispose(); };
+        src.start(t);
         src.stop(t + hit.dur * this.sps);
         this.aiPlaying.add(src);
         return;

@@ -89,7 +89,8 @@ export function suggestTags(part: LibPart, preset: MakePresetId, key: string, sc
 const num = (v: unknown, lo: number, hi: number) => (typeof v === "number" && Number.isFinite(v) && v >= lo && v <= hi ? v : null);
 const cleanName = (v: unknown) => (typeof v === "string" ? v.normalize("NFC").replace(/\s+/g, " ").trim().slice(0, MAX_NAME) : "");
 
-function parseNotes(v: unknown, bars: number): MakeNote[] | null {
+/** A loop's notes we can trust (on the 16th grid inside `bars`, MIDI 12–96), sorted, or null. */
+export function parseNotes(v: unknown, bars: number): MakeNote[] | null {
   if (!Array.isArray(v) || v.length > MAX_NOTES) return null;
   const out: MakeNote[] = [];
   for (const x of v) {

@@ -869,6 +869,26 @@ pages carry an `og:image`. From: Facebook's Open Graph protocol (2010).
 A cloud sandbox only reaches domains its network policy allows. Allow what the product needs
 (`*.vercel.app`, the API domains) in the environment settings.
 
+#### CSS cascade layers
+Tailwind puts its styles in layers (`base`, `components`, `utilities`); any CSS written outside a
+layer beats every layered rule, whatever its specificity. Why it matters: a hand-written
+`.btn { display: inline-flex }` silently overrode `lg:hidden`, and a toggle's text vanished.
+*Where:* Magpie's laptop layout; fixed by putting resets in `@layer base` and component classes in
+`@layer components`. *(CSS Cascade Level 5, MDN)*
+
+#### Native modules on serverless
+Some npm packages (sharp, for images) ship a compiled part plus a shared system library. On Vercel
+the bundler follows the JavaScript but can miss the library, so the function crashes only when
+deployed. Why it matters: it passes every local test. *Where:* Magpie's preview, where every
+request failed until the library was traced in (`outputFileTracingIncludes`) and sharp was loaded
+lazily, only where images are processed. *(Next.js docs, output file tracing)*
+
+#### Work after the response
+Next.js's `after()` runs code once the response has gone back to the user, so a slow step (an AI
+image, a log) doesn't make them wait. Why it matters: the user's action finishes fast and the slow
+part can't be lost by closing the app. *Where:* Magpie saves a yum in about 2 s and draws its
+sticker afterwards. *(Next.js docs, `after`)*
+
 ### Data and storage
 
 #### localStorage
@@ -1125,6 +1145,16 @@ Capture API docs)*
 **Q:** What is a benchmark dataset, and what's its usual catch?
 **A:** A public dataset everyone tests on, so results compare; it's frozen in time, so it misses newer items.
 
+
+**Q:** Why can a hand-written `.btn` rule beat Tailwind's `lg:hidden`?
+**A:** CSS outside any `@layer` beats all layered CSS, and Tailwind's utilities live in a layer. Put your own resets and classes in `@layer base` or `@layer components`.
+
+**Q:** An app with sharp works locally but every request fails on Vercel. What's the likely cause?
+**A:** The bundle has sharp's JavaScript but not its native shared library. Trace the library into the function and load sharp only where it's needed.
+
+**Q:** What does `after()` buy you in a Next.js route?
+**A:** The response goes back first and the slow work (an AI image) runs afterwards, so the user never waits for it.
+
 ## Building with AI
 
 ### Tools
@@ -1205,6 +1235,13 @@ Asking a model to "be random" or "make it unique" doesn't work: it still picks t
 answer. Give it real randomness instead, such as a random string from a script, and have it
 derive choices (colours, layout, type) from patterns in the string. Where we met it:
 `design-session`'s Discover step. From: Sakana AI's "String Seed of Thought".
+
+#### Move the rule into code
+When a model won't keep a rule however you phrase it, take that part away from the model and do
+it in plain code around it; prompt only for what it does well. Why it matters: prompts give odds,
+code gives certainty. *Where:* Magpie's stickers left out the outer outline a third of the time,
+so the model now draws only the item and the server adds the die-cut edge to every sticker (15 of
+15 consistent).
 
 ### Evals
 
@@ -1439,6 +1476,10 @@ stands. *Where:* Six AM Mentor E1 (L81–L82). *(Goodhart's law)*
 
 **Q:** Why agree a model's success bar before you run it?
 **A:** So a disappointing result can't move the goalposts; you read the result honestly instead of explaining it away.
+
+
+**Q:** A model ignores one rule in a third of its outputs, whatever the prompt says. What do you do?
+**A:** Stop prompting for it: do that part in deterministic code around the model and prompt only for what it does well.
 
 ## Communication and influence
 

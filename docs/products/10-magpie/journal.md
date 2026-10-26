@@ -139,6 +139,22 @@ What happened, what was decided and why. Newest last.
   (`outputFileTracingIncludes` in `next.config.ts`). Lesson: check a native module on the real
   platform early: the first preview should have been opened, not just deployed.
 
+## 27 Oct: final review and wrap-up
+
+- **Final review.** The first preview showed "I can't reach your book": every request crashed on
+  Vercel because `sharp` had no native library there. Diagnosed from the Vercel logs, fixed by the
+  PM (lazy import, library traced into the bundle), redeployed. The PM asked for a login-bypass
+  token to check the preview by script; declined (a security setting, owner's call). The owner
+  opened the new preview with the access code (Selvedge's) and it worked: book opens, yum saved,
+  sticker drawn.
+- **Owner's verdict:** "I honestly love this app." Wants to keep building it: a Letterboxd for food
+  with short snappy reviews and a friends feed, starting with the cousin who is in Japan now.
+  Accounts, friends and a small feed are first in `backlog.md`; recipes later.
+- **Wrap-up:** success check, retro, story, card shipped; carried over to the knowledge bank (CSS
+  layers, native modules on serverless, `after()`, move the rule into code), `docs/learnings.md`
+  and three playbook changes (design first in Claude Design, open the preview before the review
+  push, link before `vercel --yes`).
+
 ## To carry over
 
 For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md).

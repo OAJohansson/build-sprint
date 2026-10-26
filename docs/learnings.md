@@ -174,6 +174,21 @@ Rules I now apply to every product (detail in the playbook).
 - **Test the user's week, not the spec's rule.** Both real logic bugs appeared only when the app
   was resumed across days; the unit tests had encoded the tidy rule.
 
+### 10 Magpie
+
+- **Separate the problem from the first solution.** "A recipe app" became forgetting what I loved,
+  with two jobs: recall the name fast, relive what I tasted.
+- **A name is a promise plus a character.** Magpie, a bird that collects what it loves, gave the
+  mascot a job; Tastebud was cute but taken by several food apps.
+- **Design the brand moments, not every screen.** A second round with only the shelf and the
+  saved moment per direction was enough to choose.
+- **Real context beats the first design.** Most yums happen at home in London, so kind and the
+  restaurant lead, not the country.
+- **Design first, then build.** With every screen agreed in Claude Design, the overnight build
+  matched it and the critic ended at 9/10.
+- **Move a rule the model won't keep into code.** The sticker edge is drawn by the server.
+- **Open the deployed preview.** A native module crashed only on Vercel, after every grader passed.
+
 ## Process changelog
 
 Every change to how I build, and the product that taught it.
@@ -218,3 +233,6 @@ Every change to how I build, and the product that taught it.
 | 25 Oct | 09 Wont | The owner asked to make the design calls in Founder mode too; every call that mattered on Wont was taste the pack couldn't carry. | Both design picks (3 of ~10, then the final one) are the owner's in every mode: playbook step 1b, `AGENTS.md`, designer agent, decision 0028 as amended. |
 | 25 Oct | 09 Wont | The design critic scored 6/10 five times because it judged against requirements it never saw. | Critic briefs include the pack's non-negotiables (the requirements it may not ask to remove), next to the feel sentence. |
 | 25 Oct | 09 Wont | A new Vercel project's first CLI deploy went to Production before the owner's review. | A project's first deploy is a preview (`vercel deploy --target preview`) or goes through `pnpm ship`. |
+| 27 Oct | 10 Magpie | Designing every screen with the owner in Claude Design before the PM session (features first, ~10 directions, a brand-moment round, the final flow) gave a build that matched and a critic score of 9. | Playbook step 1b: in Founder mode the owner can design with Claude in Claude Design before the PM session; the PM builds from the canvas and skips the design-pick steps. |
+| 27 Oct | 10 Magpie | The final review was the first time anyone opened the deployed app, and it crashed (sharp on Vercel). | Playbook step 3: before the final-review push, open the preview's main path and read its logs (the owner's logged-in browser if a script can't reach it). |
+| 27 Oct | 10 Magpie | `vercel curl --yes` created a stray project named after the folder. | Playbook step 3: link the folder to its Vercel project before any `vercel` command with `--yes`. |

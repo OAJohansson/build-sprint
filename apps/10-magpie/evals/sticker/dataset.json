@@ -1,0 +1,20 @@
+{
+  "note": "Sticker eval (data-evals, 26 Oct). 12 core cases = evals/photos (Wikimedia Commons, see SOURCES.md), named from what is in the photo. 3 edge cases: no photo (drawn from name), a dark photo and a cluttered 2x2 collage, both made with sharp by make-edges.mjs.",
+  "cases": [
+    { "key": "01", "photo": "../photos/01-red-wine.jpg", "name": "Glass of red wine", "kind": "drink", "subKind": "wine", "hearts": 4 },
+    { "key": "02", "photo": "../photos/02-negroni.jpg", "name": "Negroni", "kind": "drink", "subKind": "cocktail", "hearts": 5 },
+    { "key": "03", "photo": "../photos/03-margarita.jpg", "name": "Margarita with lime", "kind": "drink", "subKind": "cocktail", "hearts": 4 },
+    { "key": "04", "photo": "../photos/04-xiaolongbao.jpg", "name": "Xiao long bao", "kind": "food", "subKind": "dishes", "hearts": 5 },
+    { "key": "05", "photo": "../photos/05-dal.jpg", "name": "Dal makhani", "kind": "food", "subKind": "dishes", "hearts": 4 },
+    { "key": "06", "photo": "../photos/06-comte.jpg", "name": "Comté 14 months", "kind": "food", "subKind": "dishes", "hearts": 4 },
+    { "key": "07", "photo": "../photos/07-gelato.jpg", "name": "Rice and pistachio gelato", "kind": "dessert", "hearts": 4 },
+    { "key": "08", "photo": "../photos/08-flat-white.jpg", "name": "Flat white", "kind": "drink", "subKind": "coffee-tea", "hearts": 3 },
+    { "key": "09", "photo": "../photos/09-ramen.jpg", "name": "Tonkotsu ramen", "kind": "food", "subKind": "dishes", "hearts": 5 },
+    { "key": "10", "photo": "../photos/10-croissant.jpg", "name": "Croissant", "kind": "food", "subKind": "dishes", "hearts": 4 },
+    { "key": "11", "photo": "../photos/11-pint.jpg", "name": "Pint of ale", "kind": "drink", "subKind": "beer", "hearts": 4 },
+    { "key": "12", "photo": "../photos/12-tiramisu.jpg", "name": "Tiramisu", "kind": "dessert", "hearts": 5 },
+    { "key": "E1", "edge": true, "photo": null, "name": "Orange wine", "kind": "drink", "subKind": "wine", "hearts": 5 },
+    { "key": "E2", "edge": true, "photo": "edge-dark-ramen.jpg", "name": "Tonkotsu ramen (dark bar)", "kind": "food", "subKind": "dishes", "hearts": 4 },
+    { "key": "E3", "edge": true, "photo": "edge-cluttered-table.jpg", "name": "Negroni", "kind": "drink", "subKind": "cocktail", "hearts": 4, "note": "cluttered: collage of negroni, ramen, croissant, pint; the named item is the negroni" }
+  ]
+}

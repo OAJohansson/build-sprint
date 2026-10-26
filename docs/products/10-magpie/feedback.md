@@ -31,3 +31,7 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 25 | Critic r1 (H) | Cards narrower than the reference; fade behind Snap button | won't do (build matches the reference's 80 px cards and floating button) |
 | 26 | Sticker eval v1 | Cluttered photo drew the wrong item: the photo prompt didn't name it | fixed in prompt v2 |
 | 27 | Sticker eval v1 | Ramen copied bowl print and glyphs; tiramisu kept the tablecloth; some outlines thin | fixed in prompt v2 (re-evaluated) |
+| 28 | Critic r2 (L) | Laptop shelves pushed the page wider than the screen; See all off-screen | fixed (min-w-0) |
+| 29 | Critic r2 (H, G, K) | Row snap ignored padding; saved chips 3+1; sticker sat on Maggie's head; tail dot gone; hero sticker high | fixed |
+| 30 | Sticker eval v2 | 5 of 15 stickers end in white (no outer outline): cut-out risk | fixed in v3 (edge drawn in code; 15/15) |
+| 31 | Sticker eval v3 | Double ring on 4 stickers where the model still draws its own outline; die-cut bumps where a glass foot sticks out | parked (kickoff rabbit hole: don't chase perfect consistency) |

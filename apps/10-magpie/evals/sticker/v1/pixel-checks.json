@@ -1,0 +1,122 @@
+[
+  {
+    "key": "01",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.78,
+    "edgeDark": 0.15,
+    "edgeLight": 0.04
+  },
+  {
+    "key": "02",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.94,
+    "edgeDark": 0.23,
+    "edgeLight": 0.11
+  },
+  {
+    "key": "03",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.87,
+    "edgeDark": 0.43,
+    "edgeLight": 0.01
+  },
+  {
+    "key": "04",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.96,
+    "edgeDark": 0.07,
+    "edgeLight": 0
+  },
+  {
+    "key": "05",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.78,
+    "edgeDark": 0.41,
+    "edgeLight": 0
+  },
+  {
+    "key": "06",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.88,
+    "edgeDark": 0.01,
+    "edgeLight": 0
+  },
+  {
+    "key": "07",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.78,
+    "edgeDark": 0.42,
+    "edgeLight": 0
+  },
+  {
+    "key": "08",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.97,
+    "edgeDark": 0,
+    "edgeLight": 1
+  },
+  {
+    "key": "09",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.78,
+    "edgeDark": 0,
+    "edgeLight": 0.45
+  },
+  {
+    "key": "10",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.9,
+    "edgeDark": 0.44,
+    "edgeLight": 0
+  },
+  {
+    "key": "11",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.78,
+    "edgeDark": 0.29,
+    "edgeLight": 0.09
+  },
+  {
+    "key": "12",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.86,
+    "edgeDark": 0,
+    "edgeLight": 0.54
+  },
+  {
+    "key": "E1",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.78,
+    "edgeDark": 0,
+    "edgeLight": 0.47
+  },
+  {
+    "key": "E2",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.92,
+    "edgeDark": 0,
+    "edgeLight": 0.41
+  },
+  {
+    "key": "E3",
+    "size": "512x512",
+    "cornersTransparent": true,
+    "opaqueShare": 0.76,
+    "edgeDark": 0.18,
+    "edgeLight": 0.02
+  }
+]

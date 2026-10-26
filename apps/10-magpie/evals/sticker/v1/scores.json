@@ -1,0 +1,24 @@
+{
+  "judge": "data-evals (Claude), by eye, sticker vs its photo; contact sheet on cream #FFF4E0 and a check sheet on green to show halos",
+  "rubric": {
+    "recognisable": "1 if someone who saw only the photo would pick this sticker as the same dish or drink: same item, its main colours, vessel shape and signature garnish. Generic-but-right (a cheese wedge for Comte) counts. 0 if it shows a different item or loses what makes it that item.",
+    "style": "1 only if all hold: (a) flat fills, no gradients, texture or photo detail beyond one highlight; (b) thick dark-brown outlines on the item's shapes; (c) a white die-cut border all round; (d) transparent outside, corners alpha 0, no leftover white or background visible on green; (e) no text, logos, table or scene; (f) reads as the same set as 01/02/11 (pastel backing, shape matches the yum number: odd round, even rounded square)."
+  },
+  "cases": {
+    "01": { "recognisable": 1, "style": 1, "why": "red wine in a stemmed glass; chunky outline" },
+    "02": { "recognisable": 1, "style": 1, "why": "rocks glass, red, orange slice, black straw" },
+    "03": { "recognisable": 1, "style": 1, "why": "blue margarita, salt rim, lime wheel; outlines a bit thinner" },
+    "04": { "recognisable": 1, "style": 1, "why": "dumplings in a steamer with a black spoon; borderline style: thinner lighter lines, soft shading, mesh texture" },
+    "05": { "recognisable": 1, "style": 1, "why": "red bowl, dark dal, cream swirl, toppings" },
+    "06": { "recognisable": 1, "style": 1, "why": "cheese wedge with rind; generic, loses the label and stack" },
+    "07": { "recognisable": 1, "style": 1, "why": "two-flavour gelato cup with pink spoon" },
+    "08": { "recognisable": 1, "style": 1, "why": "latte art cup on saucer; no outer dark hairline, white border is the edge" },
+    "09": { "recognisable": 1, "style": 0, "why": "tonkotsu bowl with nori, chashu, scallions; FAIL (e): copies the bowl's characters and 金 logos; thinner lines, more detail" },
+    "10": { "recognisable": 1, "style": 1, "why": "croissant with berries and chocolate toast; borderline: soft shading, lighter outline" },
+    "11": { "recognisable": 1, "style": 1, "why": "dark pint with foam head" },
+    "12": { "recognisable": 1, "style": 0, "why": "tiramisu on the same patterned plate with the poppy; FAIL (a)(e): plaid tablecloth and leaf pattern kept, thin lines, reads as an illustration not a flat sticker" },
+    "E1": { "recognisable": 1, "style": 1, "why": "no photo: orange wine in a stemmed glass, from the name" },
+    "E2": { "recognisable": 1, "style": 1, "why": "dark, blurred ramen photo: still a ramen bowl with nori and scallions" },
+    "E3": { "recognisable": 0, "style": 1, "why": "collage, yum named Negroni: drew the croissant plate. The photo prompt never gets the yum's name, so the model picks its own subject" }
+  }
+}

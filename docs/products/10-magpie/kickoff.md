@@ -68,18 +68,30 @@ Outcome: when I want to remember something I loved, it's on the shelf.
 
 ## MVP and stop line
 
-**In (owner's calls so far):**
-- Capture: a photo, the name, a type (food, drink, dessert), the place and country, a small
-  rating and a short note.
-- An AI-made simple illustration of the photo, saved in the app as the item's picture (the
-  original photo kept too).
-- The shelf as the home screen: the collection, browsable, with a country filter (relive).
-- Search pinned at the top of the shelf (recall).
+**In (feature list agreed by the owner, 26 Oct):**
+- Capture: take a photo or pick one from the camera roll; name; type (food, drink, dessert);
+  place and country, the country suggested from where I am; a small rating; a short note; the
+  date saved automatically.
+- An AI-made simple illustration of the photo, made in the background, saved as the item's
+  picture; the original photo kept too.
+- Share into Magpie from the camera roll or Instagram (Selvedge's share target), as a safety net
+  for the riskiest assumption: a moment missed at the table isn't lost.
+- The shelf as the home screen, phone and laptop: the collection, with filters by country and
+  type (relive).
+- Search pinned at the top of the shelf: name, place, note (recall).
+- Item page: illustration, photo, all details, edit, delete.
+- The magpie mascot in the empty shelf and the first-run moment.
+- An access code on each device, like Selvedge.
 
-**Open:** which devices (phone only, or phone and laptop like Selvedge); the rating scale.
+**Key screens (designed before code, in Claude Design):** the shelf (phone and laptop), the
+capture flow (photo, details, saved with the illustration appearing), the item page, search and
+filter results, the empty shelf and first run, the access code. Canvas:
+https://claude.ai/artifact/X4hmxGD5oek8NvT7XbxgjE
 
-**Out (to `backlog.md`):** recipes, the music-moments diary (lives in Six AM's backlog),
-sharing, a map, recommendations.
+**Open:** the rating scale.
+
+**Out (to `backlog.md`):** recipes, a map, sharing with friends, recommendations, a "want to
+try" list. The music-moments diary lives in Six AM's backlog.
 
 ## Requirements
 
@@ -113,6 +125,10 @@ trinket in the nest; it's a starting point, not a decision.
   several food apps already use it.
 - Reuse Selvedge's setup where it fits: phone capture and image AI (owner, 26 Oct). Selvedge
   uses Supabase, an access code and image models through OpenRouter (decisions 0021, 0022).
+- Phone and laptop, one shared library, like Selvedge (owner, 26 Oct).
+- Design first, in Claude Design: the owner picks 3 of 10 directions, iterates on them with
+  comments on the canvas, picks 1, and every key screen and flow is designed before any code. Then
+  the owner hands off and the PM session builds from the finished design (owner, 26 Oct).
 - Both jobs in the MVP, on one screen: the shelf is home (relive), search sits on top (recall)
   (owner, 26 Oct).
 

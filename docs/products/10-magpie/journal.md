@@ -24,6 +24,16 @@ What happened, what was decided and why. Newest last.
 - Kickoff pack drafted from the owner's calls; appetite, devices, rating scale, feel references
   and things to avoid are still open.
 
+- **Devices and design process (owner).** Phone and laptop with one library, like Selvedge.
+  Design first in Claude Design: 10 directions, the owner picks 3, iterates with canvas
+  comments, picks 1, then every key screen is designed before code and handed to the PM session.
+- **Features before screens.** Agreed the MVP feature list and six key screens first (Six AM's
+  lesson: agree what the screen must hold before designing it). Share-to-Magpie went in as a
+  safety net for the riskiest assumption (capture at the table).
+- **10 shelf directions** on the canvas (https://claude.ai/artifact/X4hmxGD5oek8NvT7XbxgjE), all
+  with the same six items: nest of treasures, cabinet of curiosities, passport stamps, sticker
+  book, field journal, trading cards, bistro menu, polaroid wall, travel atlas, quiet gallery.
+
 ## To carry over
 
 For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md).

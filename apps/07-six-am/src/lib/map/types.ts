@@ -57,4 +57,7 @@ export type TrackMap = {
    *  null (not heard yet). Names only, read from the separated parts while the Lab plays. Optional:
    *  older maps have none. */
   chords?: (string | null)[];
+  /** Lab (LS1-N1): each separated part's level per bar as heard (drums, bass, other, vocals; RMS dB
+   *  integers, null = not heard yet). Numbers only, never audio; optional. */
+  partLevels?: (number | null)[][];
 };

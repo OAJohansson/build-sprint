@@ -2,6 +2,7 @@
 // plays, in plain lines; plus the whitelist parser for maps arriving from the browser. Pure.
 import { BEATS_PER_BAR, LAYERS, MAP_VERSION, SECTION_LABELS, type LayerName, type Section, type SectionLabel, type TrackMap } from "./types";
 import { layerBlocks, sectionName } from "./view";
+import { parseLevels } from "@/lib/lab/activity";
 
 const clock = (sec: number) => { const t = Math.max(0, Math.round(sec)); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`; };
 
@@ -86,5 +87,6 @@ export function parseMap(raw: unknown): TrackMap | null {
     coverage: num(r.coverage, 0, 1) ?? 0,
     mappedAt: typeof r.mappedAt === "string" && !Number.isNaN(Date.parse(r.mappedAt)) ? r.mappedAt : new Date(0).toISOString(),
     ...(chords ? { chords } : {}),
+    ...(parseLevels(r.partLevels, barsN) ? { partLevels: parseLevels(r.partLevels, barsN)! } : {}),
   };
 }

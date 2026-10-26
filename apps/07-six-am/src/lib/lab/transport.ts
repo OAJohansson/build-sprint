@@ -5,6 +5,7 @@
 // No UI. Rights (L143, L161): live regions play once and are dropped; a loop's parts live in memory
 // only while the loop is on (max 16 bars) and are zeroed when it ends, the loop changes or the
 // transport stops; chords are kept as names only. Nothing is stored, exported or uploaded.
+import { BarLevels, type PartLevels } from "./activity";
 import { ChordCells } from "./chords";
 import { DeckRemote, type DeckState } from "./deck-protocol";
 import { LiveError, LiveParts, type LiveStats, type Region } from "./live";
@@ -86,6 +87,10 @@ export type TransportOptions = {
   onChords?: (cells: (string | null)[], changed: number[]) => void;
   /** "catching up…" is over: new audio is playing. */
   onCaughtUp?: () => void;
+  /** Part levels per bar already known (from the saved map). */
+  knownLevels?: PartLevels | null;
+  /** The separated parts' levels per bar changed (numbers only; save them with the map if wanted). */
+  onLevels?: (levels: PartLevels) => void;
 };
 
 export class LabTransport {
@@ -104,6 +109,7 @@ export class LabTransport {
   private stats: LiveStats | null = null;
   private error: string | null = null;
   private chordCells: ChordCells;
+  private barLevels: BarLevels;
   private deckStoppedAt: number | null = null;
   private wasCatching = false;
   private lastKey = "";
@@ -120,6 +126,7 @@ export class LabTransport {
 
   constructor(private o: TransportOptions) {
     this.chordCells = new ChordCells(o.bars, o.bpm, o.originSec, o.knownChords);
+    this.barLevels = new BarLevels(o.bars, o.bpm, o.originSec, o.knownLevels);
     this.deck = new DeckRemote(o.url, (s) => this.onDeck(s));
     this.timer = setInterval(() => this.poll(), POLL_MS);
   }
@@ -220,6 +227,10 @@ export class LabTransport {
     }
     this.phase = "ready";
     this.deckClosed = false;
+    // LS1-3: Deck reports are timed on the AudioContext's clock, and a new listen has a new one.
+    // Old reports (from before the Deck was closed) would skew the new run's offset for as long as
+    // they outnumbered new ones: the Lab waited ~30 s and resumed ~26 s late.
+    this.marks = [];
     this.recent = new RecentParts(this.live.rate);
     // Graders (LS1 tester): what each part sends out after hear-only/mute, as a level.
     this.analysers = this.live.gains.map((g) => { const a = this.live!.ctx.createAnalyser(); a.fftSize = 8192; /* ~186 ms */ g.connect(a); return a; });
@@ -306,6 +317,9 @@ export class LabTransport {
     return b && l ? { left: b.getChannelData(0), right: b.getChannelData(1), rate: b.sampleRate, startMs: l.startMs, endMs: l.endMs } : null;
   }
 
+  /** Each part's level per bar as heard so far (a copy). */
+  levels(): PartLevels { return this.barLevels.levels.map((a) => [...a]); }
+
   /** What you hear now, track ms. */
   heardMs(): number {
     const live = this.live;
@@ -331,7 +345,8 @@ export class LabTransport {
   get catchLeftS(): number | null {
     if (!this.catching || !this.live) return null;
     const now = this.live.ctx.currentTime;
-    if (this.gate) return Math.max(1, Math.ceil(this.gate.since + CATCH_S - now));
+    // Counts down; past the usual wait the number goes (no "1 s" that never ends, LS1-N2).
+    if (this.gate) { const left = Math.ceil(this.gate.since + CATCH_S - now); return left >= 1 ? left : null; }
     return this.unmuteAt !== null ? Math.max(1, Math.ceil(this.unmuteAt - now)) : null;
   }
 
@@ -454,7 +469,14 @@ export class LabTransport {
       this.unmuteAt = at;
       this.gate = null;
       this.setLive(true, at);
-      this.loopS?.buf?.reset(); // a loop fills from one run only, so its joins line up
+      const l = this.loopS;
+      l?.buf?.reset(); // a loop fills from one run only, so its joins line up
+      // A loop at the track's start has no pre-roll: what comes before the run's first sample is
+      // the first moment of the track (≤ 1 s), taken as silence so the loop can complete.
+      if (l?.buf && l.startMs < PRE_ROLL_MS && g.fromMs === l.startMs) {
+        const firstMs = (Math.max(cs, g.captureFrom) + offsetS) * 1000;
+        if (firstMs > l.startMs && firstMs - l.startMs <= PRE_ROLL_MS) l.buf.fillSilence(((firstMs - l.startMs) / 1000) * rate);
+      }
     }
     const run = this.run;
     if (!run) return;
@@ -470,6 +492,8 @@ export class LabTransport {
       for (let i = 0; i < n; i++) mono[i] = (r.parts[2][skip + i] + r.parts[3][skip + i] + r.parts[4][skip + i] + r.parts[5][skip + i]) / 4;
       const changed = this.chordCells.add(mono, rate, startSec + skip / rate);
       if (changed.length) this.o.onChords?.([...this.chordCells.cells], changed);
+      // What each separated part plays, per bar (LS1-N1): a few numbers, the audio dropped.
+      if (this.barLevels.add(r.parts, skip, r.length - skip, startSec + skip / rate, rate, run.captureFrom).length) this.o.onLevels?.(this.levels());
     }
 
     const l = this.loopS;
@@ -533,7 +557,7 @@ export class LabTransport {
   }
 
   /**
-   * Plays from recent parts at `ms` at once, for up to CATCH_S seconds, while the Deck seeks to where
+   * Plays from recent parts at `ms` at once, for CATCH_S seconds, while the Deck seeks to where
    * they end and the live parts take over there (LS1-4). False when they don't hold `ms`.
    */
   private startRecent(ms: number): boolean {
@@ -543,7 +567,9 @@ export class LabTransport {
     const until = recent.coveredUntil(from);
     if (until === null) return false;
     const endMs = Math.min((until / rate) * 1000 - 20, ms + CATCH_S * 1000);
-    if (endMs - ms < 1500) return false;
+    // Only when memory covers the whole catch-up (LS1-N3): a short stretch of memory, then silence
+    // while the Deck catches up, then the parts again, is worse than one clean wait.
+    if (endMs - ms < CATCH_S * 1000 - 50) return false;
     const chans = recent.build(from, Math.round((endMs / 1000) * rate));
     if (!chans) return false;
     this.stopRecent();
@@ -631,7 +657,7 @@ export class LabTransport {
   private emit(force = false) {
     if (!this.o.onChange) return;
     const s = this.state;
-    const key = JSON.stringify([s.deckOpen, s.phase, s.playing, s.catching, s.loop?.state, s.loop?.startMs, Math.round((s.loop?.filled ?? 0) * 20), s.error, s.model?.ready]);
+    const key = JSON.stringify([s.deckOpen, s.phase, s.playing, s.catching, s.catchLeftS, s.loop?.state, s.loop?.startMs, Math.round((s.loop?.filled ?? 0) * 20), s.error, s.model?.ready]);
     if (!force && key === this.lastKey) return;
     this.lastKey = key;
     this.o.onChange(s);

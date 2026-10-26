@@ -59,9 +59,9 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| LS1-3 | major | Reopening a closed Deck: 35 s wait, resumes 26 s late | open, fix pass 2 |
-| LS1-N1 | major | Lanes come from the full-mix estimate and miss parts the separation plays (vocals in bars 12–20) | open, fix pass 2 |
-| LS1-N2 | minor | Catching-up seconds don't count down | open, fix pass 2 |
-| LS1-N3 | minor | Resume after pause stutters (2.7 s, 2.8 s gap) | open, fix pass 2 |
-| LS1-N4 | minor | Loop's first passes freeze at the wrap 4–6 s | open, fix pass 2 |
-| LS1-N6 | polish | "Not heard yet" hyphen 2.28:1; "← All tracks" 18 px tall | open, fix pass 2 |
+| LS1-3 | major | Reopening a closed Deck: 35 s wait, resumes 26 s late | fixed (L186, T95), re-test |
+| LS1-N1 | major | Lanes come from the full-mix estimate and miss parts the separation plays (vocals in bars 12–20) | fixed (L186, T95), re-test |
+| LS1-N2 | minor | Catching-up seconds don't count down | fixed (L186, T95), re-test |
+| LS1-N3 | minor | Resume after pause stutters (2.7 s, 2.8 s gap) | fixed (L186, T95), re-test |
+| LS1-N4 | minor | Loop's first passes freeze at the wrap 4–6 s | fixed (L186, T95), re-test |
+| LS1-N6 | polish | "Not heard yet" hyphen 2.28:1; "← All tracks" 18 px tall | fixed (L186, T95), re-test |

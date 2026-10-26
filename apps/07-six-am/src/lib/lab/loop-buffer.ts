@@ -9,6 +9,8 @@ export class LoopBuffer {
   private data: Float32Array<ArrayBuffer>[];
   private mask: Uint8Array;
   private filled = 0;
+  /** Where audio starts after a silent head (fillSilence), faded in over a few ms. */
+  private headAt = 0;
 
   /**
    * @param length loop length in samples
@@ -52,6 +54,17 @@ export class LoopBuffer {
   }
 
   /**
+   * Marks the loop's first `n` samples as silence. For a loop at the very start of the track, where
+   * no pre-roll is possible and the first captured sample comes a little after the loop's start:
+   * without it the loop could never be complete (LS1 re-test: a loop over bars 1–16 refilled forever).
+   */
+  fillSilence(n: number) {
+    n = Math.min(Math.max(0, Math.round(n)), this.total);
+    for (let j = 0; j < n; j++) if (!this.mask[j]) { this.mask[j] = 1; this.filled++; }
+    this.headAt = n;
+  }
+
+  /**
    * The loop, `length` samples per channel. The first `tail` samples fade from what follows the
    * loop's end into the loop's start, so the wrap (last sample → first) continues the audio.
    */
@@ -60,6 +73,8 @@ export class LoopBuffer {
     return this.data.map((a) => {
       const out = a.slice(0, L);
       for (let i = 0; i < N; i++) { const g = i / N; out[i] = a[i] * g + a[L + i] * (1 - g); }
+      // After a silent head, the audio fades in over N samples (no click where it starts).
+      for (let i = 0; i < N && this.headAt > 0 && this.headAt + i < L; i++) out[this.headAt + i] *= i / N;
       return out;
     });
   }
@@ -69,6 +84,7 @@ export class LoopBuffer {
     this.data.forEach((a) => a.fill(0));
     this.mask.fill(0);
     this.filled = 0;
+    this.headAt = 0;
   }
 
   /** Zeroes and lets go of the audio. The buffer is unusable after. */

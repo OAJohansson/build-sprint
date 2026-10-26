@@ -140,8 +140,12 @@ export class LiveParts {
       busy = true;
       const [L, R] = windowAt(s.windowStart);
       stats.inDb = +levelDb(L, s.from, s.from + s.length).toFixed(1);
-      if (stats.inDb < SILENT_DB) stats.skippedSilent++;
-      else {
+      if (stats.inDb < SILENT_DB) {
+        stats.skippedSilent++;
+        // Not separated (nothing to hear), but reported as a silent region, so a loop over a silent
+        // stretch (or the track's first moments) still fills and the lanes know it's quiet there.
+        opts.onRegion?.({ parts: Array.from({ length: 8 }, () => new Float32Array(s.length)), captureStart: (frame0 + s.regionStart) / RATE, length: s.length, at: (frame0 + s.regionStart) / RATE + delayS, fade: plan.fade });
+      } else {
         const w0 = performance.now();
         const r = await sep.separate(L, R, s.from, s.length).catch(() => null);
         if (r && !live?.stopped) {

@@ -23,7 +23,7 @@ import { LabNotes, type LabTurn } from "./lab-notes";
 import s from "./lab.module.css";
 
 declare global {
-  interface Window { __sixamLab?: { state: () => TransportState | null; heardMs: () => number; bar: () => number; hear: () => Hear; levels: () => number[] } }
+  interface Window { __sixamLab?: { state: () => TransportState | null; heardMs: () => number; bar: () => number; hear: () => Hear; levels: () => number[]; barLevels: () => (number | null)[][] } }
 }
 
 type Mode = "listen" | "make";
@@ -49,6 +49,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const grid = useRef<HTMLDivElement>(null);
   const [ts, setTs] = useState<TransportState | null>(null);
   const [chords, setChords] = useState<(string | null)[]>(() => map.chords ?? Array.from({ length: Math.ceil(bars / 8) }, () => null));
+  const [levels, setLevels] = useState<(number | null)[][] | null>(() => map.partLevels ?? null);
   const [hear, setHear] = useState<Hear>({ kind: "all" });
   const [focus, setFocus] = useState<PartName>("bass"); // T87: the last part heard "only"
   const [mode, setMode] = useState<Mode>(() => (typeof location !== "undefined" && new URLSearchParams(location.search).get("mode") === "make" ? "make" : "listen"));
@@ -65,15 +66,18 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   // One transport per page: the Deck link, the separator and the loop's memory. Gone on leave.
   useEffect(() => {
     let saveTimer: ReturnType<typeof setTimeout> | undefined;
+    // Chord names and part levels (numbers only, L181, LS1-N1) go onto the saved map together, a
+    // few seconds after they change.
+    const saved = { chords: map.chords, partLevels: map.partLevels };
+    const save = () => {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => { mentorApi(code).putMap({ ...map, ...saved }).catch(() => {}); }, 8000);
+    };
     const t = new LabTransport({
-      url: map.id, bpm, originSec: origin, bars, durationMs: map.durationSec * 1000, knownChords: map.chords, quiet, deckPath: "/deck",
+      url: map.id, bpm, originSec: origin, bars, durationMs: map.durationSec * 1000, knownChords: map.chords, knownLevels: map.partLevels, quiet, deckPath: "/deck",
       onChange: setTs,
-      onChords: (cells) => {
-        setChords(cells);
-        // Chord NAMES only go onto the saved map (L165), a few seconds after they change.
-        clearTimeout(saveTimer);
-        saveTimer = setTimeout(() => { mentorApi(code).putMap({ ...map, chords: cells }).catch(() => {}); }, 8000);
-      },
+      onChords: (cells) => { setChords(cells); saved.chords = cells; save(); },
+      onLevels: (lv) => { setLevels(lv); saved.partLevels = lv; save(); },
     });
     tr.current = t;
     try { const saved = Number(sessionStorage.getItem(POS_KEY(map.id))); if (saved > 0) t.seek(saved); } catch { /* storage blocked */ }
@@ -90,7 +94,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
-    window.__sixamLab = { state: () => tr.current?.state ?? null, heardMs: () => t.heardMs(), bar: () => msToBar(t.heardMs(), bpm, origin), hear: () => hearRef.current, levels: () => t.partLevels() };
+    window.__sixamLab = { state: () => tr.current?.state ?? null, heardMs: () => t.heardMs(), bar: () => msToBar(t.heardMs(), bpm, origin), hear: () => hearRef.current, levels: () => t.partLevels(), barLevels: () => t.levels() };
     return () => { cancelAnimationFrame(raf); clearTimeout(saveTimer); t.dispose(); tr.current = null; };
   }, [map, bpm, origin, bars, code, quiet]);
 
@@ -215,7 +219,8 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const pctLoaded = model && model.total ? Math.floor((model.loaded / model.total) * 100) : 0;
   const status = loading
     ? `Getting ready… ${model!.downloading ? `${pctLoaded}%` : ""}${model!.downloading && model!.etaS !== null && model!.etaS > 3 ? ` · first time only, about ${Math.round(model!.etaS)} s` : ""}`
-    : ts?.catching ? `catching up…${ts.catchLeftS ? ` ${ts.catchLeftS} s` : ""}` : "";
+    // LS1-N4: a loop's first passes wait at the wrap while the Deck goes back to its start.
+    : ts?.catching ? `${ts.loop?.state === "filling" ? "filling the loop…" : "catching up…"}${ts.catchLeftS ? ` ${ts.catchLeftS} s` : ""}` : "";
   const here = sectionAt(sections, pos.bar);
   const loopSec = loop ? sectionAt(sections, loop.from) : null;
   // A long section loops 16 bars of it (L161): say which (LS1-2).
@@ -268,7 +273,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
         : starting ? <p className={s.firstLine} role="status">{FIRST_LINE}</p> : null}
       {mode === "listen" ? (
         <div ref={grid} style={{ display: "contents" }}>
-          <Lanes bars={bars} sections={sections} parts={parts} chords={chords} hear={hear} focus={focus}
+          <Lanes bars={bars} sections={sections} parts={parts} chords={chords} levels={levels} hear={hear} focus={focus}
             onOnly={onOnly} onMute={onMute} onSeek={onSeek} bar={pos.bar} loop={loop} onLoop={onLoop}
             catching={!!ts?.catching} dimmed={!ready}
             overlay={(

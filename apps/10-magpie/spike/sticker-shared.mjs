@@ -1,5 +1,5 @@
-// The sticker prompt and the cut-out, shared by the spike so the eval and the app use the same
-// words. Keep promptFor in step with src/lib/server/sticker.ts.
+// The spike's v1 sticker prompt and cut-out, kept as they were run on 26 Oct. The app's prompt
+// (src/lib/server/sticker.ts) moved on to v2 (decision log L8); evals now run against the app.
 import sharp from "sharp";
 
 export const promptFor = (shape = "round") => `Turn the food or drink in this photo into one die-cut sticker for a cheerful sticker book.

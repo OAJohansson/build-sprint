@@ -23,3 +23,11 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 17 | Audit polish | Undo timer runs while the tab is hidden | fixed (pauses) |
 | 18 | Audit polish | Browser bar stays cream on the dark camera and coral saved screens | parked (backlog) |
 | 19 | Audit polish | Fredoka latin only: accented names mix fonts | fixed (latin-ext) |
+| 20 | Critic r1 (G 6/10) | Saved: Maggie too small under a big tilted sticker; she should hold it up | fixed |
+| 21 | Critic r1 (H, K, L) | Stickers glossy with thin outer edge and wide white border | fixed in prompt v2 (re-evaluated) |
+| 22 | Critic r1 (G) | yum no. chip lost its butter fill; hearts chip should be solid; stray white dot | fixed |
+| 23 | Critic r1 (E) | Sub-kinds wrap to two rows; location line wraps awkwardly | fixed |
+| 24 | Critic r1 (L) | Latest wraps into two uneven rows on the laptop | fixed (single scrolling rows) |
+| 25 | Critic r1 (H) | Cards narrower than the reference; fade behind Snap button | won't do (build matches the reference's 80 px cards and floating button) |
+| 26 | Sticker eval v1 | Cluttered photo drew the wrong item: the photo prompt didn't name it | fixed in prompt v2 |
+| 27 | Sticker eval v1 | Ramen copied bowl print and glyphs; tiramisu kept the tablecloth; some outlines thin | fixed in prompt v2 (re-evaluated) |

@@ -18,3 +18,5 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T5 | 26 Oct | Welcome screen without the three pager dots (only one intro page exists). | PM | Slice 2 | |
 | T6 | 26 Oct | The laptop's filter panel also has the sub-kinds and the restaurant field, like the phone sheet. | PM | Slice 4 | |
 | T7 | 26 Oct | Copy: "Fix the details" / "Save changes" for editing; "Taking a little longer. It'll pop up on your shelf." past 40 s; "Nothing here yet. Try fewer filters?" for no results. | PM | Slice 3 | |
+| L8 | 26 Oct | Sticker prompt v2: names the item and kind, flat fills with no gloss or shadow, plain dishes without prints, a bold outer outline. Reason: the eval's worst failures (wrong item on a busy photo, copied prints) and the critic's "glossy, thin edge" all pointed at the prompt; the model stays. Before/after eval run. | PM | Slice 1 rework | |
+| T8 | 26 Oct | Saved screen: Maggie at hero size holding the sticker up between her wings, untilted; the stray white sparkle dot removed. | PM | Critic r1 | |

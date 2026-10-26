@@ -2,11 +2,12 @@
 // checks it must pass before anyone sees it (M2 source on every fact, M6 real loops, M7 real
 // links). Pure, shared by the server and the panel.
 
+import { CANT_HEAR, HEARD_CLAIM, TONE_QUESTION } from "./lab";
 import { missingLines } from "./owner-lines";
 
 export const JOBS = [
   "explain", "suggest_genre", "teach", "ear_training", "studio_start", "listen_next", "chat",
-  "setup", "learn", "propose_groups", "taste_session",
+  "setup", "learn", "propose_groups", "taste_session", "lab",
 ] as const;
 export type Job = (typeof JOBS)[number];
 
@@ -169,6 +170,8 @@ export type Needs = {
   bpms?: readonly number[];
   /** Chat: library refs (T1…) → track ids; trackIds outside it are dropped. */
   trackRefs?: ReadonlyMap<string, string>;
+  /** Lab (B6): the person's question, so a question about tone gets "I can't hear that" said. */
+  labQuestion?: string;
 };
 
 /** A tempo or key stated as a number in a listen-next "because" (data-evals: two were wrong; the
@@ -231,7 +234,7 @@ export function linkKind(u: string, said: LinkKind): LinkKind {
 const KEY_JARGON = /semitone|key wheel|camelot|\b(?:1[0-2]|[1-9])[AB]\b/;
 /** At most this many sentences per answer (F8): 2–4 everywhere but teach. */
 /** Clutter review: chat, explain and genre answers say 2–3 sentences first, the rest behind "Tell me more". */
-export const maxSentences = (job: Job) => (job === "teach" ? 10 : job === "chat" || job === "explain" || job === "suggest_genre" ? 2 : job === "ear_training" ? 3 : 4);
+export const maxSentences = (job: Job) => (job === "teach" ? 10 : job === "chat" || job === "explain" || job === "suggest_genre" ? 2 : job === "ear_training" || job === "lab" ? 3 : 4);
 /** Raw measurement jargon the person shouldn't see (F2): say bright/warm, loud/quiet, likely/unsure. */
 const RAW_NUMBERS = /\b\d+(?:[.,]\d+)?\s*(?:k?hz|dbfs|db)\b|spectral centroid|\bcentroid\b|\bdbfs\b|\bstrength\s*(?:of\s*)?[01]?[.,]\d+/i;
 const isSource = (v: unknown): v is Source => typeof v === "string" && (SOURCES as readonly string[]).includes(v);
@@ -273,6 +276,10 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
         }
       }
     }
+    // B6: the Mentor never claims to have heard the part (it gets numbers only).
+    if (job === "lab" && HEARD_CLAIM.test(text)) {
+      return { ok: false, problem: `sentences[${i}] claims to hear the audio ("${text.match(HEARD_CLAIM)?.[0]}"): you get numbers only. Say what the measurements or the map show instead ("the loop measures…", "the map estimates…").` };
+    }
     if (job === "studio_start" && KEY_JARGON.test(text)) {
       return { ok: false, problem: `sentences[${i}] uses key jargon ("${text.match(KEY_JARGON)?.[0]}"): say it in plain words ("the bass and chords would clash, drums still fit").` };
     }
@@ -284,6 +291,10 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
     return { ok: false, problem: `${sentences.length} sentences: keep to at most ${maxSentences(job)} and offer tellMore for the rest.` };
   }
   const answer: MentorAnswer = { sentences, tellMore: r.tellMore === true };
+  // B6: a question about tone gets one plain line that you can't hear it (and what you can measure).
+  if (job === "lab" && needs.labQuestion && TONE_QUESTION.test(needs.labQuestion) && !sentences.some((x) => CANT_HEAR.test(x.text))) {
+    return { ok: false, problem: `The question is about tone or sound ("${needs.labQuestion.match(TONE_QUESTION)?.[0]}"), which you can't hear: say so plainly in one sentence ("I can't hear tone; I only get pitch, timing and loudness"), then answer from what the numbers do show.` };
+  }
   // Studio start: the key fit comes from code; claiming bass and chords fit over a clash is rejected.
   if (job === "studio_start" && needs.keyRelations && Array.isArray(r.trackIds)) {
     const first = typeof r.trackIds[0] === "string" ? needs.trackRefs?.get(r.trackIds[0].trim().toUpperCase()) ?? r.trackIds[0] : null;

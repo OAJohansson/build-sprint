@@ -52,6 +52,10 @@ export const JOBS_SPEC: Record<Job, { instruction: string; effort: "low" | "medi
     instruction: "Propose genre groups among the tagged tracks below: tracks that belong together by shared BPM range, style mix and traits (key, energy, brightness, tags). Each group needs at least 2 tracks (use the track ids exactly), a short name in the person's own vocabulary where possible, and a reason that cites the shared numbers, e.g. '122–125 BPM, warm, house and disco styles on top'. Don't repeat existing groups. Return groups (empty if nothing groups well) and 1–2 sentences. No web search.",
     effort: "medium", web: false, needsTrack: false, counted: true,
   },
+  lab: {
+    instruction: "A question asked in the Lab, about one part of the track at one bar (the Lab facts below say which part, which bar and section, what the person is hearing, and what was measured). Answer about that part at that bar in 1–3 short sentences, each labelled: ears for the map's estimates and the Lab's measurements, general for production knowledge. Lead with what the numbers show (notes and their range, how long the notes are, how many a bar, how loud, where it plays in the arrangement, the chord under it), then one practical idea for making something like it. You get only these numbers, never the audio: never say or imply you heard the part, and never describe its tone, timbre, character or effects as fact. If the question is about tone or sound (warm, gritty, rubbery, which synth, filter, effects), say plainly in one sentence that you can't hear tone and only get pitch, timing and loudness, then answer from what the numbers do show and give the usual ways producers get that kind of sound (source general, phrased as options, not as what this track does). When no loop is held there are no measurements of the part itself: say the answer comes from the map's estimate and suggest looping the section for numbers. Quote note names (A1) and note lengths (1/8) freely; no hertz or dB in sentences.",
+    effort: "low", web: false, needsTrack: true, counted: true,
+  },
   taste_session: {
     instruction: "Taste session: the person compared two snippets (facts below) and said which they prefer and why. Name what they described in music words (e.g. 'what you're describing is a rolling bassline with space between the notes'), tie it to the measurable differences between the two tracks, and say what to look for next time. 2–4 sentences, labelled. Don't return a profileUpdate (Six AM folds this into the taste profile itself). Speak about their words and the measurements, never about what the tracks sound like to you. No web search.",
     effort: "low", web: false, needsTrack: false, counted: true,
@@ -123,6 +127,11 @@ Output
 - Always finish by calling the answer tool exactly once with your whole answer. Don't write the answer as plain text outside the tool.
 - Put only the fields the job needs; sentences and tellMore are always required.
 
+The Lab (job "lab")
+- In the Lab the person plays a track as four parts separated in their browser (drums, bass, other, vocals), hears one or some of them, and asks about the part they are focused on at a bar. Six AM sends you the bar, the section, what they hear, the map's estimates, the chords it estimated and simple numbers measured from the looped part. It never sends audio: you can't hear the part, its tone, its sound design or its effects.
+- So never write "I hear", "it sounds", "sounds like" or describe the part's tone as fact. When asked about tone, say once that you can't hear tone, only pitch, timing and loudness, then help from the numbers and general production knowledge.
+- Earlier turns of the Lab conversation about this track come first; each question starts with its bar.
+
 The one chat (job "chat")
 - The person types anything into one chat. Work out what they ask for and set intent to one of: explain, suggest_genre, teach, ear_training, studio_start, listen_next (then follow that job's instructions below), taste_session, propose_groups, help, or chat (anything else: answer it in 1–2 sentences).
 - Work out which track(s) the question is about from the library (match titles and artists loosely: "the Fovos one", "that Hot Creations track"); put their refs in trackIds, most relevant first.
@@ -184,6 +193,8 @@ export type MentorInput = {
   background?: string;
   /** Phase 3 (A4): arrangement maps as text (mapContext), by track id, for the tracks in view. */
   maps?: Record<string, string>;
+  /** Lab (S2, B6): the Lab facts for this question (labContextText): part, bar, hearing, measurements. */
+  lab?: string;
 };
 
 export const ANSWER_TOOL: Anthropic.Beta.BetaTool = {
@@ -231,9 +242,10 @@ function jobText(input: MentorInput): string {
     const named = Object.entries(input.maps ?? {}).filter(([id]) => !shown.has(id));
     if (input.background) parts.push(`Background from Six AM for this question (not the person's words; use it, don't quote it back as theirs):\n${input.background}`);
     if (named.length) parts.push(`Arrangement maps of tracks the question names:\n${named.map(([id, text]) => `Track id: ${id}\n${text}`).join("\n\n")}`);
-  } else if (input.job !== "setup" && input.job !== "learn" && input.job !== "propose_groups" && input.job !== "taste_session") {
+  } else if (input.job !== "setup" && input.job !== "learn" && input.job !== "propose_groups" && input.job !== "taste_session" && input.job !== "lab") {
     parts.push("No track is selected: answer generally.");
   }
+  if (input.job === "lab" && input.lab) parts.push(`Lab facts (each line starts with its source; never audio):\n${input.lab}`);
   if (input.job === "studio_start" && t) {
     const { bpm, key: k } = studioStart(t, []);
     parts.push(`Studio tempo and key (worked out by Six AM): tempo ${bpm} BPM (Ears' reading, as Set Studio uses it); key ${k.trackKey} vs the crate's ${k.crateKey}: ${k.note}\nThe crate is in the system prompt.`);
@@ -270,7 +282,7 @@ function jobText(input: MentorInput): string {
 
 /** Jobs asked from the panel's thread: they read the thread so far (follow-ups, and so a term
  *  already explained isn't explained again). */
-export const THREAD_JOBS: ReadonlySet<Job> = new Set<Job>(["explain", "suggest_genre", "teach", "ear_training", "studio_start", "listen_next", "chat"]);
+export const THREAD_JOBS: ReadonlySet<Job> = new Set<Job>(["explain", "suggest_genre", "teach", "ear_training", "studio_start", "listen_next", "chat", "lab"]);
 
 /** Prior turns of the thread, oldest first, starting with a user turn. */
 function historyMessages(history: HistoryTurn[] = []): Anthropic.Beta.BetaMessageParam[] {

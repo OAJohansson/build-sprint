@@ -60,7 +60,8 @@
 
 /* lanes */
 .grid { flex: 1; min-height: 0; position: relative; display: grid; }
-.grid[data-disabled] .lane, .grid[data-disabled] .chordLane { opacity: .55; }
+/* The Mentor's notes and card stay at full strength while the map waits for the Deck (S2). */
+.grid[data-disabled] .lane > :not(.notes), .grid[data-disabled] .chordLane { opacity: .55; }
 .corner { background: var(--panel); border: solid var(--line); border-width: 0 1px 1px 0; }
 .ruler { position: relative; background: var(--panel); border-bottom: 1px solid var(--line); cursor: pointer; overflow: hidden; }
 .sec { position: absolute; top: 0; height: 24px; padding: 0 8px; font: 400 11.5px/24px var(--f-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; background: none; border: 0; cursor: pointer; }
@@ -135,3 +136,38 @@
 .actions { min-width: 0; flex: 0 1 auto; }
 .transport { flex-wrap: wrap; justify-content: flex-end; row-gap: 4px; min-width: 0; }
 .deckOpen { color: var(--muted); }
+
+/* S2: the Mentor on the map (handoff Listen §6; from the prototype dev/lab-combined) */
+.lane[data-focus] .subs { inset: 26px 0 38px; }
+.lh[data-focus] .lhSubs { top: 26px; bottom: 38px; }
+.notes { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+.notes > * { pointer-events: auto; }
+.dot2 { position: absolute; top: 9px; width: 9px; height: 9px; margin-left: -4.5px; border-radius: 50%; border: 0; padding: 0; background: var(--ink); cursor: pointer; }
+.dot2[data-many] { width: 13px; height: 13px; margin-left: -6.5px; top: 7px; }
+.dot2[data-open] { background: var(--gold); box-shadow: 0 0 0 3px rgba(242,177,52,.25); }
+.dot2::after { content: ""; position: absolute; inset: -8px; }
+.askBtn { position: absolute; bottom: 7px; font: 500 11px var(--f-mono); background: var(--bg); border: 1px solid var(--edge); color: var(--ink) !important; border-radius: 4px; padding: 3px 9px; cursor: pointer; white-space: nowrap; }
+@media (hover: hover) and (pointer: fine) { .askBtn:hover { border-color: var(--muted); } }
+.leader { position: absolute; width: 1px; bottom: -10px; margin-left: -0.5px; background: rgba(242,177,52,.7); pointer-events: none !important; }
+.card { position: absolute; width: 420px; z-index: 10; cursor: default; background: #221d1a; border: 1px solid var(--edge); border-radius: 8px; padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; box-shadow: 0 12px 32px rgba(0,0,0,.5); }
+.cardHead { display: flex; align-items: center; gap: 10px; width: 100%; }
+.cardHead .x { margin-left: auto; }
+.ctx { font-size: 11px; color: var(--muted); }
+.cardThread { width: 100%; max-height: 150px; padding-bottom: 16px; mask-image: linear-gradient(#000 calc(100% - 28px), transparent); overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; }
+.turn { flex: none; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; padding: 10px 0; width: 100%; }
+.mine { align-self: flex-end; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; max-width: 85%; }
+.bubble { margin: 0; background: #2f2925; color: var(--ink); border-radius: 12px 12px 4px 12px; padding: 7px 12px; font-size: 12.5px; line-height: 1.5; overflow-wrap: anywhere; white-space: pre-wrap; }
+.barTag { background: none; border: 0; padding: 0 2px; font: 11px var(--f-mono); color: var(--faint) !important; cursor: pointer; text-decoration: underline; text-decoration-color: #4a4038; text-underline-offset: 3px; font-variant-numeric: tabular-nums; }
+@media (hover: hover) and (pointer: fine) { .barTag:hover { color: var(--ink) !important; } }
+.answer { margin: 0; line-height: 1.6; text-wrap: pretty; overflow-wrap: anywhere; }
+.answer[data-clamp] { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+.card .answer[data-expanded] { max-height: 220px; overflow-y: auto; padding-bottom: 24px; mask-image: linear-gradient(#000 calc(100% - 32px), transparent); overscroll-behavior: contain; }
+.thinking { color: var(--faint); }
+.facts { margin: 0; font-size: 11px; color: var(--muted); line-height: 1.5; min-width: 0; }
+.makeText { background: none; border: 0; padding: 0; font: 500 12px var(--f-mono); color: var(--gold) !important; cursor: pointer; }
+@media (hover: hover) and (pointer: fine) { .makeText:hover { text-decoration: underline; text-underline-offset: 3px; } }
+.composer { position: relative; display: flex; width: 100%; }
+.ask { flex: 1; min-width: 0; resize: none; font: 12.5px/20px var(--f-mono); color: var(--ink); background: var(--bg); border: 1px solid var(--edge); border-radius: 8px; padding: 8px 40px 8px 10px; overflow-y: auto; }
+.ask::placeholder { color: var(--faint); }
+.send { position: absolute; right: 6px; bottom: 6px; width: 26px; height: 26px; border-radius: 50%; border: 0; background: var(--ink); color: var(--bg) !important; font: 600 14px var(--f-mono); cursor: pointer; display: grid; place-items: center; padding: 0; }
+.send:disabled { background: #3a322c; color: var(--faint) !important; cursor: default; }

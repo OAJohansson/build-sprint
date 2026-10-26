@@ -13,6 +13,7 @@ import type { Job, MentorAnswer } from "./answer";
 import type { StudioStart } from "./studio";
 import type { UsageSummary } from "./periods";
 import type { LearnEvent } from "./prompt";
+import { labThread, notesFromThread, type LabAsk, type LabMeta } from "./lab";
 import type { PlaylistLike } from "./playlist";
 import type { UnlockState } from "./taste-unlock";
 
@@ -50,6 +51,8 @@ export type AskReply = {
   dropped: string[];
   latencyMs: number;
   usage: UsageSummary;
+  /** Lab: where the exchange is pinned and its facts line. */
+  lab?: LabMeta;
 };
 
 export type AskInput = {
@@ -64,6 +67,8 @@ export type AskInput = {
   taste?: { a: string; b: string; preferred: "a" | "b"; why: string };
   /** "setup": learn events from the setup dialog (Settings says "From setup"). */
   source?: "setup";
+  /** Lab (S2): the focus part, bar, hearing, chords and the looped part's numbers. Never audio. */
+  lab?: LabAsk;
 };
 
 /** getTimezoneOffset(): the server sums Today / Month in the owner's local time. */
@@ -96,9 +101,13 @@ export const mentorApi = (code: string) => ({
         playlists: i.playlists,
         taste: i.taste,
         source: i.source,
+        lab: i.lab,
         tz: tz(),
       }),
     }),
+  /** Lab (S2): this track's notes, from its own thread. */
+  // shortcut: the thread GET returns the newest 100 rows, so a track shows its last 50 exchanges; page it if a track ever gets more.
+  labNotes: (trackId: string) => call<{ thread: string; messages: ThreadMessage[] }>(code, `/api/mentor?thread=${encodeURIComponent(labThread(trackId))}`).then((r) => notesFromThread(r.messages)),
   thread: (id: string) => call<{ thread: string; messages: ThreadMessage[] }>(code, `/api/mentor?thread=${encodeURIComponent(id)}`).then((r) => r.messages),
   importPlaylists: (playlists: PlaylistLike[]) => call<{ added: number; total: number; unlock: UnlockState }>(code, "/api/mentor/import", { method: "POST", body: JSON.stringify({ playlists }) }),
   usage: () => call<{ usage: UsageSummary }>(code, `/api/mentor/usage?tz=${tz()}`).then((r) => r.usage),

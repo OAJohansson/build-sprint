@@ -15,8 +15,11 @@ import { barToMs, loopBars, msToBar } from "@/lib/lab/timing";
 import { LabTransport, type TransportState } from "@/lib/lab/transport";
 import { clockMs, labParts, labSections, sectionAt, type LabSection } from "@/lib/lab/view";
 import type { TrackMap } from "@/lib/map/types";
-import { mentorApi } from "@/lib/mentor/client";
+import { ApiError, mentorApi, money } from "@/lib/mentor/client";
+import { knowsLine, PART_LABEL, type LabAsk } from "@/lib/mentor/lab";
+import { measurePart } from "@/lib/lab/measure";
 import { HearChip, Lanes, heardParts, type Hear } from "./lanes";
+import { LabNotes, type LabTurn } from "./lab-notes";
 import s from "./lab.module.css";
 
 declare global {
@@ -51,6 +54,11 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const [mode, setMode] = useState<Mode>(() => (typeof location !== "undefined" && new URLSearchParams(location.search).get("mode") === "make" ? "make" : "listen"));
   const [problem, setProblem] = useState<string | null>(null);
   const [pos, setPos] = useState({ sec: 0, bar: 1 });
+  // S2: the Mentor's notes on this track (every part), the open dot and a new question's bar.
+  const [turns, setTurns] = useState<(LabTurn & { part: PartName })[]>([]);
+  const [openBar, setOpenBar] = useState<number | null>(null);
+  const [asking, setAsking] = useState<number | null>(null);
+  const [usageNote, setUsageNote] = useState<string | null>(null);
   const hearRef = useRef(hear);
   useEffect(() => { hearRef.current = hear; }, [hear]);
 
@@ -116,7 +124,8 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     const next = cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id];
     setHear(next.length ? { kind: "only", parts: next } : { kind: "all" });
     if (!cur.includes(id)) setFocus(id); // the focus part is the last part heard "only" (T87)
-  }, [hear]);
+    if (!cur.includes(id) && id !== focus) { setOpenBar(null); setAsking(null); } // its own dots: close the card
+  }, [hear, focus]);
   const onMute = useCallback((id: PartName) => {
     setHear((h) => {
       const cur = h.kind === "mute" ? h.parts : [];
@@ -137,6 +146,55 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     t.setLoop({ startMs: barToMs(r.from, bpm, origin), endMs: barToMs(r.to, bpm, origin) });
   }, [bpm, origin]);
 
+  // The track's notes, once (they live in the Mentor's store, so they survive a reload).
+  useEffect(() => {
+    if (!code) return;
+    let live = true;
+    mentorApi(code).labNotes(map.id).then((ns) => {
+      if (live) setTurns(ns.map((n) => ({ id: n.id, part: n.part, bar: n.bar, q: n.q, answer: n.answer, facts: n.facts, createdAt: n.createdAt })));
+    }, () => { /* no notes shown; asking still says what's wrong */ });
+    return () => { live = false; };
+  }, [code, map.id]);
+
+  /** What the Lab knows right now, for one question (L156): never audio, only these numbers. */
+  const labAsk = useCallback((bar: number): LabAsk => {
+    const t = tr.current;
+    const l = t?.state.loop ?? null;
+    const loopB = l ? { from: Math.round(msToBar(l.startMs, bpm, origin)), to: Math.round(msToBar(l.endMs, bpm, origin)) } : null;
+    const held = loopB && t ? t.loopPart(PART_NAMES.indexOf(focus)) : null;
+    const measure = held && loopB ? measurePart(focus, held, loopB, bpm, map.key || analysis?.key || "", map.scale || analysis?.scale || "") : null;
+    return { part: focus, hear, bar, playheadBar: pos.bar, loop: loopB, chords, measure };
+  }, [focus, hear, pos.bar, chords, bpm, origin, map.key, map.scale, analysis]);
+
+  const send = useCallback(async (id: string, q: string, bar: number, lab: LabAsk) => {
+    try {
+      const r = await mentorApi(code).ask({ job: "lab", track: analysis, message: q, lab });
+      console.info(`[mentor] lab: ${r.latencyMs} ms at Claude, est. $${r.message.costUsd}`);
+      setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, id: r.message.id, answer: r.answer, facts: r.lab?.facts ?? "", error: undefined, createdAt: r.message.createdAt } : x)));
+      // The same check-in as the Analyse Mentor (50 questions a day): a line, not a limit.
+      setUsageNote(r.usage.warning ? `${r.usage.questionsToday} questions today, about ${money(r.usage.todayUsd)} so far (estimate).` : null);
+    } catch (e) {
+      const msg = e instanceof ApiError ? e.message : "The Mentor couldn't be reached. Try again.";
+      setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, error: msg } : x)));
+    }
+  }, [code, analysis]);
+  const pending = useRef(new Map<string, LabAsk>());
+  const onAsk = useCallback((q: string, bar: number) => {
+    const id = `pending-${Date.now()}`;
+    const lab = labAsk(bar);
+    pending.current.set(id, lab);
+    setTurns((ts) => [...ts, { id, part: focus, bar, q, answer: null, facts: "", createdAt: new Date().toISOString() }]);
+    setAsking(null);
+    setOpenBar(bar);
+    void send(id, q, bar, lab);
+  }, [labAsk, focus, send]);
+  const onRetry = useCallback((id: string) => {
+    const x = turns.find((t) => t.id === id), lab = pending.current.get(id);
+    if (!x || !lab) return;
+    setTurns((ts) => ts.map((t) => (t.id === id ? { ...t, error: undefined } : t)));
+    void send(id, x.q, x.bar, lab);
+  }, [turns, send]);
+
   const go = (m: Mode) => {
     setMode(m);
     const url = new URL(location.href);
@@ -144,6 +202,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     history.replaceState(null, "", url);
   };
 
+  const focusTurns = turns.filter((x) => x.part === focus);
   const title = analysis?.title || map.title || "Untitled";
   const artist = analysis?.uploader || map.uploader;
   const key = map.key || analysis?.key ? `${map.key || analysis!.key} ${map.scale || analysis!.scale}` : "";
@@ -166,7 +225,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const closedLine = ts?.phase === "stopped" && ts.deckClosed ? "Deck closed. Press Play to open it again." : null;
 
   return (
-    <div className={s.root}>
+    <div className={s.root} data-lab-root>
       <header className={s.appBar}>
         <div className={s.logo}><Logo className={s.mark} />Six AM</div>
         <ViewsNav current="analyse" />
@@ -211,7 +270,14 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
         <div ref={grid} style={{ display: "contents" }}>
           <Lanes bars={bars} sections={sections} parts={parts} chords={chords} hear={hear} focus={focus}
             onOnly={onOnly} onMute={onMute} onSeek={onSeek} bar={pos.bar} loop={loop} onLoop={onLoop}
-            catching={!!ts?.catching} dimmed={!ready} />
+            catching={!!ts?.catching} dimmed={!ready}
+            overlay={(
+              <LabNotes bars={bars} turns={focusTurns} partName={PART_LABEL[focus]} playheadBar={pos.bar}
+                openBar={openBar} setOpenBar={setOpenBar} asking={asking} setAsking={setAsking}
+                knows={(b) => knowsLine(focus, hear, sectionAt(sections, b)?.label ?? null, b)}
+                onAsk={onAsk} onRetry={onRetry} onSeek={onSeek} onMake={() => go("make")}
+                lastLane={parts.at(-1)?.id === focus} busy={focusTurns.some((x) => !x.answer && !x.error)} note={usageNote} />
+            )} />
         </div>
       ) : (
         <div className={s.soon}>

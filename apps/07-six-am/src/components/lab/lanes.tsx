@@ -4,7 +4,7 @@
 // with estimated sub-layers, hover icons to hear only / mute a part (option B, L177), one dimming
 // rule, and the playhead. The playhead's position comes from the CSS variable --ph on the grid, set
 // by the Lab every frame, so the lanes don't re-render as it moves.
-import { memo, useEffect, useRef, useState, type CSSProperties } from "react";
+import { memo, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { PartName } from "@/lib/lab/live";
 import { chordCells, type LabPart, type LabSection } from "@/lib/lab/view";
 import { BARS_PER_CHORD } from "@/lib/lab/chords";
@@ -55,6 +55,8 @@ type LanesProps = {
   onLoop: (x: LabSection) => void;
   catching: boolean;
   dimmed: boolean;
+  /** Drawn inside the focus lane: the Mentor's dots, "+ Ask" and the open card (S2). */
+  overlay?: ReactNode;
 };
 
 export const Lanes = memo(function Lanes(p: LanesProps) {
@@ -118,16 +120,17 @@ export const Lanes = memo(function Lanes(p: LanesProps) {
         {head}
       </div>
       {p.parts.map((x, i) => (
-        <Lane key={x.id} x={x} on={on[i]} focus={p.focus === x.id} hear={p.hear} onOnly={p.onOnly} onMute={p.onMute} loop={p.loop} pct={pct} w={w} seekAt={seekAt} head={head} />
+        <Lane key={x.id} x={x} on={on[i]} focus={p.focus === x.id} hear={p.hear} onOnly={p.onOnly} onMute={p.onMute} loop={p.loop} pct={pct} w={w} seekAt={seekAt} head={head}
+          overlay={p.focus === x.id ? p.overlay : null} />
       ))}
     </div>
   );
 });
 
-function Lane({ x, on, focus, hear, onOnly, onMute, loop, pct, w, seekAt, head }: {
+function Lane({ x, on, focus, hear, onOnly, onMute, loop, pct, w, seekAt, head, overlay }: {
   x: LabPart; on: boolean; focus: boolean; hear: Hear; onOnly: (id: PartName) => void; onMute: (id: PartName) => void;
   loop: { from: number; to: number } | null; pct: (b: number) => string; w: (a: number, b: number) => string;
-  seekAt: (e: React.MouseEvent<HTMLElement>) => void; head: React.ReactNode;
+  seekAt: (e: React.MouseEvent<HTMLElement>) => void; head: React.ReactNode; overlay: ReactNode;
 }) {
   const state = on ? "on" : "dim";
   const f = focus ? "" : undefined;
@@ -162,6 +165,7 @@ function Lane({ x, on, focus, hear, onOnly, onMute, loop, pct, w, seekAt, head }
           ))}
         </div>
         {head}
+        {overlay}
       </div>
     </>
   );

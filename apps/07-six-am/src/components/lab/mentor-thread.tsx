@@ -4,14 +4,36 @@
 // light bubble with a "bar N" tag that jumps the playhead, the answer left as plain text, the
 // measured facts as one mono line) and the composer (Enter sends, Shift+Enter is a new line, the
 // Send arrow is dimmed until there's text). Shared by the Listen card and, in S3, Make's rail.
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from "react";
+
+/**
+ * T110: a scrolling thread fades 32 px at an edge only while there is more to scroll there, so
+ * nothing at rest is clipped mid-shape (data-above / data-below drive the mask in the CSS).
+ */
+export function useEdgeFades(ref: RefObject<HTMLElement | null>, deps: unknown[] = []) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const set = () => {
+      el.toggleAttribute("data-above", el.scrollTop > 2);
+      el.toggleAttribute("data-below", el.scrollTop + el.clientHeight < el.scrollHeight - 2);
+    };
+    set();
+    el.addEventListener("scroll", set, { passive: true });
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    for (const c of Array.from(el.children)) ro.observe(c);
+    return () => { el.removeEventListener("scroll", set); ro.disconnect(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ref, ...deps]);
+}
 import type { MentorAnswer } from "@/lib/mentor/answer";
 import s from "./lab.module.css";
 
 /** One exchange as the thread shows it; `answer` null while the Mentor is thinking. */
 export type ThreadTurn = { id: string; bar: number; q: string; answer: MentorAnswer | null; facts: string; error?: string };
 
-export function Turn({ x, lines, onSeek, onRetry, current }: { x: ThreadTurn; lines: number; onSeek: (bar: number) => void; onRetry?: () => void; current?: boolean }) {
+export function Turn({ x, lines, onSeek, onRetry, current, showFacts = true }: { x: ThreadTurn; lines: number; onSeek: (bar: number) => void; onRetry?: () => void; current?: boolean; showFacts?: boolean }) {
   return (
     <div className={s.turn} data-current={current ? "" : undefined}>
       <div className={s.mine}>
@@ -23,7 +45,7 @@ export function Turn({ x, lines, onSeek, onRetry, current }: { x: ThreadTurn; li
       ) : x.answer ? (
         <>
           <Answer text={x.answer.sentences.map((t) => t.text).join(" ")} lines={lines} />
-          {x.facts && <p className={s.facts} title="Measured from the looped part">{x.facts}</p>}
+          {x.facts && showFacts && <p className={s.facts} title="Measured from the looped part">{x.facts}</p>}
         </>
       ) : (
         <p className={`${s.answer} ${s.thinking}`} aria-live="polite">Thinking…</p>

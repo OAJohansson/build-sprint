@@ -8,7 +8,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import type { PartName } from "@/lib/lab/live";
 import { barsNamed, cardLeft, groupNotes, partNoun, whatDoing } from "@/lib/mentor/lab";
-import { Composer, Turn, type ThreadTurn } from "./mentor-thread";
+import { Composer, Turn, useEdgeFades, type ThreadTurn } from "./mentor-thread";
 import s from "./lab.module.css";
 
 export type LabTurn = ThreadTurn & { createdAt: string };
@@ -17,8 +17,10 @@ const CARD_W = 420;
 /** "Make a bass like this →", "Make drums like this →". */
 const MAKE_WHAT: Record<string, string> = { bass: "a bass", drums: "drums", other: "a sound", vocals: "vocals" };
 /** Below the lane needs about this much height under it; otherwise the card goes beside the dot. */
-/** A card needs about this much height for a ~300 px thread (head, composer and link take ~140). */
-const NEED = 440;
+/** T110: the card goes below the focus lane when this much fits there (head, composer and link
+ *  take ~140, leaving a few lines of thread that scrolls), else above, beside only when neither fits,
+ *  so it never covers the clips at its pin. */
+const NEED = 220;
 /** The ruler and chord lane above the part lanes: a card above or beside never covers them. */
 const HEAD_ROWS = 72;
 /** Space kept under the card at the bottom of the Lab. */
@@ -64,7 +66,7 @@ export function LabNotes(p: Props) {
       const bottom = (root ? root.bottom : window.innerHeight) - FOOT;
       const minTop = (grid ? grid.top : 0) + HEAD_ROWS + 4;
       const below = bottom - r.bottom - 10, above = r.top - 10 - minTop;
-      const mode = !p.lastLane && below >= NEED ? "below" : above >= NEED && above >= below ? "above" : "beside";
+      const mode = !p.lastLane && below >= NEED ? "below" : above >= NEED ? "above" : "beside";
       const maxH = Math.round(mode === "below" ? below : mode === "above" ? above : bottom - minTop);
       setGeo({ w: r.width || 1240, mode, maxH: Math.max(160, maxH), laneTop: r.top, minTop, bottom });
     };
@@ -94,12 +96,13 @@ export function LabNotes(p: Props) {
 
   // The open thread scrolls to its newest exchange.
   const thread = useRef<HTMLDivElement>(null);
+  useEdgeFades(thread, [p.openBar, p.asking]);
   const count = open?.notes.length ?? 0;
   const lastAnswered = open?.notes.at(-1)?.answer ? 1 : 0;
   // The newest exchange starts at the top of the thread (its question in view, older ones above).
   useLayoutEffect(() => {
     const el = thread.current, last = el?.lastElementChild;
-    if (el && last) el.scrollTop += last.getBoundingClientRect().top - el.getBoundingClientRect().top;
+    if (el && last) el.scrollTop += last.getBoundingClientRect().top - el.getBoundingClientRect().top - (el.scrollTop > 0 ? 32 : 0); // clear of the 32 px fade
   }, [count, lastAnswered, p.openBar]);
 
   // The card's side is picked when it opens (against the playhead then), so it doesn't jump
@@ -167,16 +170,18 @@ export function LabNotes(p: Props) {
           <div ref={cardRef} className={s.card} style={cardStyle} role="dialog" aria-label={open ? `Mentor at bar ${open.bar}` : "Ask the Mentor"}>
             <div className={s.cardHead}>
               <span className={s.ctx}>{open && p.asking === null ? `Mentor, at bar ${open.bar}` : `Ask about ${partNoun(part)} at bar ${anchor}`}</span>
+              {/* T110: the Make link sits in the head, so the thread gets the card's height. */}
+              {open && p.asking === null && <button className={s.makeText} onClick={p.onMake}>Make {MAKE_WHAT[name] ?? `a ${name}`} like this →</button>}
               <button className={s.x} onClick={close} aria-label="Close">×</button>
             </div>
             {open && p.asking === null ? (
               <>
                 <div className={s.cardThread} ref={thread}>
-                  {open.notes.map((x) => <Turn key={x.id} x={x} lines={12} onSeek={p.onSeek} onRetry={() => p.onRetry(x.id)} />)}
+                  {/* T110: answers capped at 6 lines ("Read all"); a facts line once, not repeated by the next exchange. */}
+                  {open.notes.map((x, i) => <Turn key={x.id} x={x} lines={6} onSeek={p.onSeek} onRetry={() => p.onRetry(x.id)} showFacts={x.facts !== open.notes[i + 1]?.facts} />)}
                 </div>
                 <Composer placeholder={`Reply about bar ${open.bar}…`} onAsk={(q) => p.onAsk(q, open.bar)} disabled={p.busy} />
                 {p.note && <p className={s.facts}>{p.note}</p>}
-                <button className={s.makeText} onClick={p.onMake}>Make {MAKE_WHAT[name] ?? `a ${name}`} like this →</button>
               </>
             ) : (
               <>

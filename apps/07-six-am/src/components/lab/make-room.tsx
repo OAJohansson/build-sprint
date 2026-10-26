@@ -26,7 +26,7 @@ import { MACRO_IDS, MACRO_SPECS, MAKE_PRESETS, MAKE_PRESET_IDS, macroWord, type 
 import { ApiError, mentorApi } from "@/lib/mentor/client";
 import { noteName, partNoun, type LabMake } from "@/lib/mentor/lab";
 import type { Scale } from "@/lib/synths/theory";
-import { Composer, Turn, type ThreadTurn } from "./mentor-thread";
+import { Composer, Turn, useEdgeFades, type ThreadTurn } from "./mentor-thread";
 import s from "./lab.module.css";
 
 type Reading = { loopKey: string; r: PartReading; levelDb: number; active: boolean[]; samples: number; rate: number };
@@ -348,49 +348,33 @@ function SynthControls({ m, part, loop, ready }: { m: MakeModel; part: LabPart; 
 /** The preset name opens a menu of tagged starting points; describing one in words is its last item (T85). */
 function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
   const [open, setOpen] = useState(false);
-  const [all, setAll] = useState(false);
+  const [menuMax, setMenuMax] = useState<number | undefined>(undefined);
   const [asking, setAsking] = useState(false);
   const [text, setText] = useState("");
   const box = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!open && !all) return;
-    const away = (e: PointerEvent) => { if (!box.current?.contains(e.target as Node)) { setOpen(false); setAll(false); } };
-    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") { setOpen(false); setAll(false); } };
+    if (!open) return;
+    const away = (e: PointerEvent) => { if (!box.current?.contains(e.target as Node)) setOpen(false); };
+    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
     document.addEventListener("pointerdown", away);
     document.addEventListener("keydown", esc);
     return () => { document.removeEventListener("pointerdown", away); document.removeEventListener("keydown", esc); };
-  }, [open, all]);
+  }, [open]);
   const current = m.words ? "From your words" : MAKE_PRESETS[m.preset].name;
   const canWords = m.readState === "ready";
   return (
     <div className={s.preset} ref={box}>
       <div className={s.presetRow}>
-      <button className={s.presetName} aria-haspopup="menu" aria-expanded={open} onClick={() => { setOpen(!open); setAll(false); }}
-        aria-label={`Preset: ${current}. Change preset`}>{current} <span aria-hidden>▾</span></button>
-        {/* S5-2: one quiet line, the sounds saved from this track; one click loads it. */}
-        {m.sounds.length > 0 && (
-          <p className={s.yours}>Your sounds from this track:{" "}
-            {m.sounds.slice(0, 4).map((x, i) => (
-              <span key={x.id}>{i > 0 && " · "}<button className={s.soundLink} onClick={() => m.loadSound(x)} title={`${MAKE_PRESETS[x.preset].name}: load its preset, knobs and name`}>{x.name}</button></span>
-            ))}
-            {m.sounds.length > 4 && <span>{" · "}<button className={s.soundLink} aria-haspopup="menu" aria-expanded={all} onClick={() => setAll(!all)}>+{m.sounds.length - 4} more</button></span>}
-          </p>
-        )}
-        {/* F3: every saved sound stays reachable: "+N more" opens the whole list, newest first. */}
-        {all && (
-          <div className={`${s.menu} ${s.soundsMenu}`} role="menu" aria-label="Your sounds from this track">
-            {m.sounds.map((x) => (
-              <button key={x.id} role="menuitem" className={s.menuItem} onClick={() => { setAll(false); m.loadSound(x); }}>
-                <span className={s.menuCheck} aria-hidden />
-                <span className={s.menuName}>{x.name}</span>
-                <small>{MAKE_PRESETS[x.preset].name} · {new Date(x.createdAt).toLocaleDateString(undefined, { day: "numeric", month: "short" })}</small>
-              </button>
-            ))}
-          </div>
-        )}
+        <button className={s.presetName} aria-haspopup="menu" aria-expanded={open} onClick={(e) => {
+          // T110: the menu (presets, Your sounds, words) scrolls inside the synth column, never under the save bar.
+          const col = box.current?.closest("section")?.getBoundingClientRect();
+          setMenuMax(col ? Math.max(180, Math.round(col.bottom - e.currentTarget.getBoundingClientRect().bottom - 16)) : undefined);
+          setOpen(!open);
+        }}
+          aria-label={`Preset: ${current}. Change preset`}>{current} <span aria-hidden>▾</span></button>
       </div>
       {open && (
-        <div className={s.menu} role="menu" aria-label="Presets">
+        <div className={s.menu} role="menu" aria-label="Presets" style={{ maxHeight: menuMax }}>
           {MAKE_PRESET_IDS.map((id) => (
             <button key={id} role="menuitemradio" aria-checked={!m.words && id === m.preset} className={s.menuItem}
               onClick={() => { setOpen(false); setAsking(false); if (m.words || id !== m.preset) m.setPreset(id); }}>
@@ -399,6 +383,22 @@ function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
               <small>{MAKE_PRESETS[id].tags.join(" · ")}</small>
             </button>
           ))}
+          {/* T110 (S5-2, F3): every sound saved from this track, newest first; one click loads it. */}
+          {m.sounds.length > 0 && (
+            <>
+              <i className={s.menuRule} aria-hidden />
+              <span className={s.menuHead}>Your sounds</span>
+              <div className={s.menuSounds} role="group" aria-label="Your sounds from this track">
+                {m.sounds.map((x) => (
+                  <button key={x.id} role="menuitem" className={s.menuItem} onClick={() => { setOpen(false); setAsking(false); m.loadSound(x); }}>
+                    <span className={s.menuCheck} aria-hidden>{m.saved.savedAs === x.name && m.preset === x.preset ? "✓" : ""}</span>
+                    <span className={s.menuName}>{x.name}</span>
+                    <small>{MAKE_PRESETS[x.preset].name} · {new Date(x.createdAt).toLocaleDateString(undefined, { day: "numeric", month: "short" })}</small>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
           <i className={s.menuRule} aria-hidden />
           <button role="menuitem" className={s.menuItem} disabled={!canWords} onClick={() => { setOpen(false); setAsking(true); }}>
             <span className={s.menuCheck} aria-hidden>{m.words ? "✓" : ""}</span>
@@ -532,14 +532,27 @@ function SaveBar({ m }: { m: MakeModel }) {
 function MentorRail({ turns, part, bar, onAsk, onRetry, onSeek, busy, note }: { turns: ThreadTurn[]; part: LabPart; bar: number; onAsk: (q: string, bar: number) => void; onRetry: (id: string) => void; onSeek: (bar: number) => void; busy: boolean; note: string | null }) {
   const list = useRef<HTMLDivElement>(null);
   const last = turns.at(-1);
+  useEdgeFades(list, [turns.length]);
   useLayoutEffect(() => { if (list.current) list.current.scrollTop = list.current.scrollHeight; }, [turns.length, last?.answer, last?.error]);
+  // T110: the rail stays at its newest exchange while answers settle (fonts, "Read all"), until you scroll up.
+  useEffect(() => {
+    const el = list.current;
+    if (!el) return;
+    let stick = true;
+    const onScroll = () => { stick = el.scrollTop + el.clientHeight >= el.scrollHeight - 4; };
+    const ro = new ResizeObserver(() => { if (stick) el.scrollTop = el.scrollHeight; });
+    for (const c of Array.from(el.children)) ro.observe(c);
+    ro.observe(el);
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => { ro.disconnect(); el.removeEventListener("scroll", onScroll); };
+  }, [turns.length]);
   const noun = partNoun(part.id);
   return (
     <aside className={s.mentorCol} aria-label="Mentor">
       <span className={s.ctx}>Mentor, on {noun}</span>
       <div className={s.list} ref={list}>
         {turns.length === 0 && <p className={s.facts}>No questions yet. Ask about {noun}: the answer is also pinned at bar {bar} on the map.</p>}
-        {turns.map((x) => <Turn key={x.id} x={x} lines={6} onSeek={onSeek} onRetry={() => onRetry(x.id)} />)}
+        {turns.map((x, i) => <Turn key={x.id} x={x} lines={6} onSeek={onSeek} onRetry={() => onRetry(x.id)} showFacts={x.facts !== turns[i + 1]?.facts} />)}
       </div>
       <div className={s.askBar}>
         <Composer placeholder={`Ask about ${noun}…`} onAsk={(q) => onAsk(q, bar)} disabled={busy} />

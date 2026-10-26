@@ -161,3 +161,16 @@
 .toast button { min-height: 28px; padding: 0 10px; border: 0; border-radius: 6px; background: none; color: var(--gold); font: 500 12px var(--f-mono); cursor: pointer; }
 .toast button:hover { background: rgba(241,230,211,.06); }
 @media (prefers-reduced-motion: reduce) { .toast { animation: none; } }
+
+/* T110: My sounds grouped by source track: a header line per track, two-line cards */
+.cardsMine { grid-auto-rows: auto; align-content: start; }
+.cardMine { height: 58px; }
+.groupHead { grid-column: 1 / -1; margin: 0; height: 28px; display: flex; align-items: center; gap: 6px; padding: 0 24px; font: 500 11px var(--f-mono); letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.cardMine::before { top: 14px; bottom: 14px; }
+/* T110: the library block's preset as one picker */
+.presetPick { position: relative; display: flex; align-items: center; gap: 10px; min-height: 32px; }
+.presetLabel { font: 500 12px var(--f-mono); color: var(--muted); }
+.presetPick select { -webkit-appearance: none; appearance: none; flex: 1; min-width: 0; min-height: 32px; padding: 0 30px 0 12px; border: 1px solid var(--line); border-radius: 8px; background: #1a1715; color: var(--ink); font: 500 13px var(--f-mono); cursor: pointer; }
+.presetPick select:hover { border-color: #4a4038; }
+.presetPick select:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
+.presetPick svg { position: absolute; right: 10px; width: 14px; height: 14px; color: var(--muted); pointer-events: none; }

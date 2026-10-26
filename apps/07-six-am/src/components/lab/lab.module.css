@@ -289,3 +289,19 @@
 .menuName { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .menuItem small { white-space: nowrap; }
 .yours { display: block; white-space: nowrap; }
+
+/* T110 final pass: ruler numbers under their section names; 32 px fades on threads; the note card */
+.num { padding-left: 8px; }
+.list, .cardThread { --fa: #000; --fb: #000; mask-image: linear-gradient(var(--fa), #000 32px, #000 calc(100% - 32px), var(--fb)); scroll-padding: 32px 0; }
+.list[data-above], .cardThread[data-above] { --fa: transparent; }
+.list[data-below], .cardThread[data-below] { --fb: transparent; }
+.list { padding-top: 8px; padding-bottom: 16px; }
+.cardThread { padding-top: 0; padding-bottom: 8px; }
+.cardHead .makeText { margin-left: auto; font-size: 11.5px; }
+.cardHead .makeText + .x { margin-left: 4px; }
+.mentorCol { gap: 0; }
+.mentorCol > .ctx { padding-bottom: 2px; }
+.menuHead { display: block; padding: 8px 10px 4px 32px; font-size: 10.5px; color: var(--faint); }
+.menuSounds { display: flex; flex-direction: column; }
+.preset .menu { overflow-y: auto; overscroll-behavior: contain; }
+.preset .menu { max-width: 460px; }

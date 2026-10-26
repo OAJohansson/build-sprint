@@ -4,12 +4,12 @@
 // and its six macros, with the word under each, as in Make. It edits the track's own copy (L199),
 // so the library and other tracks don't change. The pattern stays as saved (transposed to the
 // track's key on play, L197).
-import { X } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
 import { editLibLoop, type LibLoop } from "@/lib/make/lib-loop";
-import { MACRO_IDS, MACRO_SPECS, MAKE_PRESETS, MAKE_PRESET_IDS, macroWord, type MacroId } from "@/lib/make/presets";
+import { MACRO_IDS, MACRO_SPECS, MAKE_PRESETS, MAKE_PRESET_IDS, macroWord, type MacroId, type MakePresetId } from "@/lib/make/presets";
 import type { Timeline } from "./use-timeline";
-import { cx } from "./lanes";
 import s from "./sound-drawer.module.css";
+import l from "./lanes.module.css";
 
 export function LibDrawer({ t, sound, color, onClose }: { t: Timeline; sound: LibLoop; color: string; onClose: () => void }) {
   const listening = t.previewSound?.id === sound.id;
@@ -25,13 +25,16 @@ export function LibDrawer({ t, sound, color, onClose }: { t: Timeline; sound: Li
       </div>
       <div className={s.body}>
         <section className={s.pick}>
-          <div className={s.choices} style={{ flexWrap: "wrap", gap: "4px 16px" }} role="radiogroup" aria-label="Preset">
-            {MAKE_PRESET_IDS.map((id) => (
-              <button key={id} role="radio" aria-checked={sound.preset === id} className={cx(s.choice, sound.preset === id && s.on)} title={MAKE_PRESETS[id].about}
-                onClick={() => change(editLibLoop(sound, { preset: id }))}>{MAKE_PRESETS[id].name}</button>
-            ))}
-          </div>
-          <p className={s.dim}>{sound.name}. Saved in {sound.key} {sound.scale} at {Math.round(sound.bpm)} BPM; it plays in the track&apos;s key and tempo.</p>
+          {/* T110: one picker labelled with the current preset (four tabs wrapped in 300 px); what it is, under it. */}
+          <label className={l.presetPick}>
+            <span className={l.presetLabel}>Preset</span>
+            <select value={sound.preset} onChange={(e) => change(editLibLoop(sound, { preset: e.target.value as MakePresetId }))} aria-label="Preset">
+              {MAKE_PRESET_IDS.map((id) => <option key={id} value={id}>{MAKE_PRESETS[id].name}</option>)}
+            </select>
+            <ChevronDown aria-hidden />
+          </label>
+          <p className={s.dim}>{MAKE_PRESETS[sound.preset].about}</p>
+          <p className={s.dim}>{sound.name}: saved in {sound.key} {sound.scale} at {Math.round(sound.bpm)} BPM; plays in the track&apos;s key and tempo.</p>
         </section>
         <section className={s.shape}>
           {MACRO_IDS.map((id: MacroId) => (

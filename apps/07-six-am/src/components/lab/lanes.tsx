@@ -84,8 +84,8 @@ export const Lanes = memo(function Lanes(p: LanesProps) {
   // Chord names need ~24 px per 8-bar cell; narrower, only the chord at each section start is written.
   const narrow = (px * 8) / bars < 24;
   const progressions = narrow ? p.sections.map((x) => ({ ...x, text: cells.find((c) => c.from >= x.from && c.from < x.to)?.name ?? "" })).filter((x) => x.text) : [];
-  const tickStep = bars > 300 ? 64 : 32;
-  const ticks = Array.from({ length: Math.floor((bars - 1) / tickStep) + 1 }, (_, i) => 1 + i * tickStep);
+  // T110: bar numbers at the section starts they label, left-aligned under the name (one where it fits).
+  const ticks = p.sections.filter((x) => ((x.to - x.from) / bars) * px >= 28).map((x) => x.from);
   // A section name that doesn't fit becomes a short code, never an ellipsis (full name in its label).
   const label = (x: LabSection) => (x.label.length * 7.2 + 16 <= ((x.to - x.from) / bars) * px ? x.label : CODES[x.name.toLowerCase()] ?? x.name.slice(0, 3));
   // Every 8-bar cell (LS1-5): not heard yet (faint dash), heard without a clear chord (–), or a name.

@@ -29,6 +29,7 @@ async function modelBytes(): Promise<{ bytes: Uint8Array; cached: boolean }> {
   const res = await fetch(MODEL_URL);
   if (!res.ok || !res.body) throw new Error(`Model download failed (${res.status})`);
   const total = Number(res.headers.get("content-length") ?? 0);
+  post({ type: "progress", loaded: 0, total }); // a download (not the cache): "first time only"
   const reader = res.body.getReader();
   const chunks: Uint8Array[] = [];
   let loaded = 0;

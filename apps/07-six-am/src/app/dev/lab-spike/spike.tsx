@@ -4,13 +4,15 @@
 // 7.8 s windows in a worker, plays each part's new region a fixed delay later, solo/mute per part.
 // Every window and region lives in memory for one step and is dropped (L143): no MediaRecorder,
 // no storage, no upload. Bench: the same loop on Six AM's own synthetic mix, as fast as it goes.
-// Results on window.__labSpike for a grader.
+// Since the engine hardening: the live part runs through LabTransport (seek with real catching
+// up, section loops from memory, chords, model progress). Results and the transport on
+// window.__labSpike for a grader (window.__labSpike.t.seek(ms), .setLoop(...), .state).
 import { useEffect, useRef, useState } from "react";
 import { BENCH_RATE, benchMix, sdr } from "@/lib/lab/bench-mix";
-import { LiveParts, type LiveStats } from "@/lib/lab/live";
 import { Separator } from "@/lib/lab/separator-client";
 import { makePlan, playDelay, step } from "@/lib/lab/stream";
-import type { DeckMsg } from "./deck/deck";
+import { LabTransport, type TransportState } from "@/lib/lab/transport";
+import { barToMs, loopBars, msToBar } from "@/lib/lab/timing";
 
 const PARTS = ["Drums", "Bass", "Other", "Vocals"] as const;
 
@@ -18,8 +20,8 @@ type Stat = { k: number; computeMs: number; prep: number; run: number; post: num
 type Api = {
   model?: { backend: string; loadMs: number; bytes: number; cached: boolean };
   bench?: Record<string, number | string>;
-  live?: LiveStats;
-  heardMs?: number | null;
+  state?: TransportState;
+  t?: LabTransport;
   error?: string;
   log: string[];
 };
@@ -37,21 +39,19 @@ function fadeInOut(a: Float32Array, fade: number) {
   for (let i = 0; i < fade && i < a.length; i++) { const g = i / fade; a[i] *= g; a[a.length - 1 - i] *= g; }
 }
 
-export function LabSpike({ url, hop, guard, auto }: { url: string; hop: number; guard: number; auto: string }) {
+export function LabSpike({ url, hop, guard, auto, bpm, origin, durS }: { url: string; hop: number; guard: number; auto: string; bpm: number; origin: number; durS: number }) {
   const [log, setLog] = useState<string[]>([]);
   const [modelState, setModelState] = useState("not loaded");
   const [on, setOn] = useState([true, true, true, true]);
-  const [deck, setDeck] = useState<{ pos: number; playing: boolean; title: string } | null>(null);
-  const [live, setLive] = useState<Api["live"] | null>(null);
-  const [trackUrl, setTrackUrl] = useState(url);
+  const [st, setSt] = useState<TransportState | null>(null);
+  const [heard, setHeard] = useState(0);
+  const [seekS, setSeekS] = useState("120");
+  const [loopFrom, setLoopFrom] = useState("17");
+  const [loopTo, setLoopTo] = useState("33");
   const sep = useRef<Separator | null>(null);
-  const liveRef = useRef<LiveParts | null>(null);
-  const onRef = useRef(on);
-  const [heard, setHeard] = useState<number | null>(null);
-  const stopLive = useRef<(() => void) | null>(null);
+  const tr = useRef<LabTransport | null>(null);
   const api = useRef<Api>({ log: [] });
   const benchOut = useRef<{ parts: Float32Array<ArrayBuffer>[][]; mix: Float32Array<ArrayBuffer> } | null>(null);
-  const delayRef = useRef(0);
 
   const say = (s: string) => {
     api.current.log.push(s);
@@ -60,24 +60,31 @@ export function LabSpike({ url, hop, guard, auto }: { url: string; hop: number; 
 
   useEffect(() => {
     window.__labSpike = api.current;
-    const ch = new BroadcastChannel("sixam-deck");
-    ch.onmessage = (e: MessageEvent<DeckMsg>) => { if (e.data.kind === "state") { setDeck(e.data); liveRef.current?.noteDeck(e.data.pos, e.data.playing); } };
-    return () => { ch.close(); stopLive.current?.(); sep.current?.stop(); };
-  }, []);
+    if (!url) return;
+    const bars = Math.max(1, Math.round(((durS - origin) * bpm) / 240));
+    const t = new LabTransport({
+      url, bpm, originSec: origin, bars, durationMs: durS * 1000, hopS: hop, guardS: guard, quiet: auto.includes("mute"),
+      deckPath: "/dev/lab-spike/deck",
+      onChange: (s) => { api.current.state = s; setSt(s); },
+      onChords: (cells, changed) => say(`chords: ${changed.map((i) => `bars ${i * 8 + 1}–${i * 8 + 8} ${cells[i] || "–"}`).join(", ")}`),
+      onCaughtUp: () => say(`caught up at ${(t.heardMs() / 1000).toFixed(2)} s`),
+    });
+    tr.current = t;
+    api.current.t = t;
+    const timer = window.setInterval(() => { const h = t.heardMs(); setHeard(h); api.current.state = t.state; }, 100);
+    return () => { clearInterval(timer); t.dispose(); tr.current = null; };
+  }, [url, hop, guard, auto, bpm, origin, durS]);
+
+  useEffect(() => () => sep.current?.stop(), []);
 
   useEffect(() => {
     if (auto.includes("bench")) runBench().catch((e) => { api.current.error = String(e); say("error: " + String(e)); });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => { onRef.current = on; liveRef.current?.setParts(on); }, [on]);
+  useEffect(() => { tr.current?.setParts(on); }, [on]);
 
-  // The heard playhead: the Deck's position one delay ago (what the parts are playing now).
-  useEffect(() => {
-    const t = window.setInterval(() => { const h = liveRef.current?.heardMs() ?? null; api.current.heardMs = h; setHeard(h); }, 250);
-    return () => clearInterval(t);
-  }, []);
-
+  // The bench has its own separator; the live transport has another (one worker each).
   async function loadModel() {
     if (sep.current) return sep.current.loaded;
     setModelState("downloading…");
@@ -160,60 +167,63 @@ export function LabSpike({ url, hop, guard, auto }: { url: string; hop: number; 
     s.onended = () => ctx.close();
   }
 
-  function openDeck() {
-    if (!trackUrl) return;
-    window.open(`/dev/lab-spike/deck?url=${encodeURIComponent(trackUrl)}${auto.includes("deck") ? "&auto=1" : ""}`, "sixam-deck", "width=520,height=220");
-  }
-
-  const cmd = (c: "play" | "pause") => { const ch = new BroadcastChannel("sixam-deck"); ch.postMessage({ kind: "cmd", cmd: c } satisfies DeckMsg); ch.close(); };
-
   async function startLive() {
-    const model = loadModel(); // started, not awaited: getDisplayMedia needs the click's activation
-    model.catch(() => {});
+    const t = tr.current;
+    if (!t) return;
     try {
-      const live = await LiveParts.start(sep.current!, {
-        hopS: hop,
-        guardS: guard,
-        muted: auto.includes("mute"),
-        onStats: (st) => { api.current.live = st; setLive(st); },
-        onEnded: () => { stopLive.current = null; say("stopped"); },
-      });
-      liveRef.current = live;
-      live.setParts(onRef.current);
-      delayRef.current = live.delayS;
-      stopLive.current = () => live.stop();
-      say(`listening, delay ${live.delayS.toFixed(2)} s`);
+      await t.listen();
+      say("listening");
     } catch (e) {
       say("couldn't start: " + String(e instanceof Error ? e.message : e));
     }
   }
 
+  const loop = () => {
+    const r = loopBars({ from: Number(loopFrom), to: Number(loopTo) }, msToBar(heard, bpm, origin));
+    tr.current?.setLoop({ startMs: barToMs(r.from, bpm, origin), endMs: barToMs(r.to, bpm, origin) });
+    say(`loop bars ${r.from}–${r.to - 1}`);
+  };
   const solo = (i: number) => setOn(PARTS.map((_, j) => j === i));
   const btn: React.CSSProperties = { minHeight: 32, padding: "4px 12px", marginRight: 8, background: "#222", color: "#eee", border: "1px solid #555", borderRadius: 6, cursor: "pointer" };
+  const inp: React.CSSProperties = { width: 70, padding: 6, background: "#1a1a1a", color: "#eee", border: "1px solid #444", marginRight: 8 };
+  const m = st?.model;
+  const live = st?.stats;
 
   return (
     <main style={{ padding: 24, fontFamily: "ui-monospace, monospace", fontSize: 13, color: "#ddd", background: "#0d0d0d", minHeight: "100vh", lineHeight: 1.6 }}>
       <h1 style={{ fontSize: 18 }}>Lab spike · live parts of a streamed track</h1>
-      <p>Model: {modelState} <button style={btn} onClick={() => loadModel()}>Load model</button> <button style={btn} onClick={() => runBench()}>Run bench (own loop)</button></p>
+      <p>Bench model: {modelState} <button style={btn} onClick={() => loadModel()}>Load model</button> <button style={btn} onClick={() => runBench()}>Run bench (own loop)</button></p>
       {benchOut.current && (
         <p>Bench audio (Six AM&apos;s own loop): <button style={btn} onClick={() => playBench(-1)}>Mix</button>{PARTS.map((p, i) => <button key={p} style={btn} onClick={() => playBench(i)}>{p}</button>)}</p>
       )}
-      <h2 style={{ fontSize: 15, marginTop: 24 }}>1 · Open the Deck</h2>
-      <p>
-        <input value={trackUrl} onChange={(e) => setTrackUrl(e.target.value)} placeholder="SoundCloud track link" style={{ width: 460, padding: 6, background: "#1a1a1a", color: "#eee", border: "1px solid #444" }} />{" "}
-        <button style={btn} onClick={openDeck}>Open Deck window</button>
-      </p>
-      <p>Deck: {deck ? `${deck.title || "…"} · ${deck.playing ? "playing" : "paused"} · ${(deck.pos / 1000).toFixed(1)} s ` : "not open"} <button style={btn} onClick={() => cmd("play")}>Play</button><button style={btn} onClick={() => cmd("pause")}>Pause</button></p>
-      <h2 style={{ fontSize: 15, marginTop: 24 }}>2 · Listen</h2>
-      <p><button style={btn} onClick={() => startLive()}>Start listening</button> In Chrome&apos;s dialog pick the <b>Six AM Deck</b> tab and keep &quot;Also share tab audio&quot; on.</p>
-      {live && <p>Original muted here: <b>{String(live.suppressLocalAudioPlayback)}</b> · delay {live.delayS} s · {live.windows} windows ({live.skippedSilent} silent skipped) · {live.meanComputeMs} ms each · <b>{live.ratio}× real time</b> · late {live.late} · hearing {heard === null ? "–" : (heard / 1000).toFixed(1) + " s"} · in {live.inDb} dB · parts {live.partsDb.join(" / ")} dB <button style={btn} onClick={() => stopLive.current?.()}>Stop</button></p>}
-      <h2 style={{ fontSize: 15, marginTop: 24 }}>3 · Parts</h2>
-      <p>
-        {PARTS.map((p, i) => (
-          <label key={p} style={{ marginRight: 16 }}><input type="checkbox" checked={on[i]} onChange={() => setOn((o) => o.map((v, j) => (j === i ? !v : v)))} /> {p} <button style={{ ...btn, minHeight: 28 }} onClick={() => solo(i)}>solo</button></label>
-        ))}
-        <button style={btn} onClick={() => setOn([true, true, true, true])}>All</button>
-      </p>
+      {!url && <p>Add <code>?url=&lt;SoundCloud track&gt;&amp;bpm=124&amp;origin=0.4&amp;dur=360</code> for the live part.</p>}
+      {url && <>
+        <h2 style={{ fontSize: 15, marginTop: 24 }}>1 · Open the Deck</h2>
+        <p>{url} · grid {bpm} BPM, bar 1 at {origin} s, {durS} s <button style={btn} onClick={() => tr.current?.openDeck()}>Open Deck window</button></p>
+        <p>Deck: {st?.deckOpen ? "open" : "not open"} · model: {m ? (m.error ? `error ${m.error}` : m.ready ? "ready" : m.downloading ? `downloading ${Math.round((m.loaded / Math.max(1, m.total)) * 100)} %${m.etaS !== null ? `, ~${Math.round(m.etaS)} s left` : ""}` : "loading from cache…") : "not started"}</p>
+        <h2 style={{ fontSize: 15, marginTop: 24 }}>2 · Listen</h2>
+        <p><button style={btn} onClick={() => startLive()}>Start listening</button> In Chrome&apos;s dialog pick the <b>Six AM Deck</b> tab and keep &quot;Also share tab audio&quot; on. Phase: {st?.phase ?? "–"} {st?.error ? `· ${st.error}` : ""}</p>
+        {live && <p>Original muted here: <b>{String(live.suppressLocalAudioPlayback)}</b> · delay {live.delayS} s · {live.windows} windows ({live.skippedSilent} silent skipped) · {live.meanComputeMs} ms each · <b>{live.ratio}× real time</b> · late {live.late} · in {live.inDb} dB · parts {live.partsDb.join(" / ")} dB</p>}
+        <h2 style={{ fontSize: 15, marginTop: 24 }}>3 · Transport</h2>
+        <p>
+          <button style={btn} onClick={() => tr.current?.play()}>Play</button><button style={btn} onClick={() => tr.current?.pause()}>Pause</button>
+          hearing <b>{(heard / 1000).toFixed(1)} s · bar {Math.floor(msToBar(heard, bpm, origin))}</b> {st?.playing ? "playing" : "paused"} {st?.catching ? <b style={{ color: "#f2b134" }}>catching up…</b> : null}
+        </p>
+        <p><input style={inp} value={seekS} onChange={(e) => setSeekS(e.target.value)} aria-label="Seek to seconds" /> s <button style={btn} onClick={() => tr.current?.seek(Number(seekS) * 1000)}>Seek</button></p>
+        <p>
+          Loop bars <input style={inp} value={loopFrom} onChange={(e) => setLoopFrom(e.target.value)} aria-label="Loop from bar" /> to <input style={inp} value={loopTo} onChange={(e) => setLoopTo(e.target.value)} aria-label="Loop to bar (exclusive)" />
+          <button style={btn} onClick={loop}>Loop (max 16 bars)</button><button style={btn} onClick={() => tr.current?.setLoop(null)}>End loop</button>
+          {st?.loop ? `${st.loop.state} ${Math.round(st.loop.filled * 100)} % · ${(st.loop.startMs / 1000).toFixed(1)}–${(st.loop.endMs / 1000).toFixed(1)} s` : "no loop"}
+        </p>
+        <p>Chords est.: {st?.chords.map((c, i) => <span key={i} style={{ marginRight: 6, color: c === null ? "#555" : "#ddd" }}>{c === null ? "·" : c || "–"}</span>)}</p>
+        <h2 style={{ fontSize: 15, marginTop: 24 }}>4 · Parts</h2>
+        <p>
+          {PARTS.map((p, i) => (
+            <label key={p} style={{ marginRight: 16 }}><input type="checkbox" checked={on[i]} onChange={() => setOn((o) => o.map((v, j) => (j === i ? !v : v)))} /> {p} <button style={{ ...btn, minHeight: 28 }} onClick={() => solo(i)}>solo</button></label>
+          ))}
+          <button style={btn} onClick={() => setOn([true, true, true, true])}>All</button>
+        </p>
+      </>}
       <pre style={{ marginTop: 24, whiteSpace: "pre-wrap", color: "#999" }}>{log.join("\n")}</pre>
     </main>
   );

@@ -11,5 +11,5 @@ export default async function Page(props: PageProps<"/dev/lab-spike">) {
   if (process.env.NODE_ENV === "production") notFound();
   const q = await props.searchParams;
   const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
-  return <LabSpike url={one(q.url) ?? ""} hop={Number(one(q.hop) ?? 3)} guard={Number(one(q.guard) ?? 0.5)} auto={one(q.auto) ?? ""} />;
+  return <LabSpike url={one(q.url) ?? ""} hop={Number(one(q.hop) ?? 3)} guard={Number(one(q.guard) ?? 0.5)} auto={one(q.auto) ?? ""} bpm={Number(one(q.bpm) ?? 124)} origin={Number(one(q.origin) ?? 0)} durS={Number(one(q.dur) ?? 360)} />;
 }

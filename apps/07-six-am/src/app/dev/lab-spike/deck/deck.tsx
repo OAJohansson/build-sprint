@@ -1,9 +1,10 @@
 "use client";
 
+// Dev spike Deck: the SoundCloud player in its own window, speaking the Deck protocol
+// (src/lib/lab/deck-protocol.ts) so the spike's transport can drive it.
 import { useEffect, useRef, useState } from "react";
+import { serveDeck } from "@/lib/lab/deck-protocol";
 import { Player, widgetSrc } from "@/lib/ears/widget";
-
-export type DeckMsg = { kind: "state"; pos: number; playing: boolean; title: string } | { kind: "cmd"; cmd: "play" | "pause" | "seek"; ms?: number };
 
 export function Deck({ url, auto }: { url: string; auto: boolean }) {
   const frame = useRef<HTMLIFrameElement>(null);
@@ -11,25 +12,25 @@ export function Deck({ url, auto }: { url: string; auto: boolean }) {
 
   useEffect(() => {
     if (!url || !frame.current) return;
-    const ch = new BroadcastChannel("sixam-deck");
-    let player: Player | null = null;
-    let title = "";
-    let tick = 0;
+    let stop = () => {};
+    let on = true;
     Player.attach(frame.current).then(async (p) => {
-      player = p;
-      title = (await p.currentSound().catch(() => null))?.title ?? "";
+      if (!on) return;
+      const title = (await p.currentSound().catch(() => null))?.title ?? "";
+      const durationMs = await p.duration().catch(() => 0);
       setStatus(title || "Ready");
       if (auto) p.play();
-      tick = window.setInterval(() => ch.postMessage({ kind: "state", pos: p.positionMs, playing: p.playing, title } satisfies DeckMsg), 250);
+      stop = serveDeck({
+        url,
+        read: async () => ({ pos: await p.position(), playing: p.playing, title, durationMs }),
+        onCmd: (c) => {
+          if (c.cmd === "play") p.play();
+          else if (c.cmd === "pause") p.pause();
+          else p.seekAndPlay(c.ms).catch(() => {});
+        },
+      });
     }).catch((e) => setStatus(String(e?.message ?? e)));
-    ch.onmessage = (e: MessageEvent<DeckMsg>) => {
-      const m = e.data;
-      if (m.kind !== "cmd" || !player) return;
-      if (m.cmd === "play") player.play();
-      else if (m.cmd === "pause") player.pause();
-      else if (m.cmd === "seek" && typeof m.ms === "number") player.seekAndPlay(m.ms).catch(() => {});
-    };
-    return () => { clearInterval(tick); ch.close(); };
+    return () => { on = false; stop(); };
   }, [url, auto]);
 
   if (!url) return <p style={{ padding: 16 }}>No track: open this from the Lab spike.</p>;

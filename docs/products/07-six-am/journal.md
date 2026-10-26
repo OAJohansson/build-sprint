@@ -666,3 +666,10 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Design done** (final pass after 9/10, T85): Suggest settings beside the knobs (ticks only), two Mentor lines, preset menu with "Describe a bass in words…", zero dots, section-start chords on long tracks. Tells pass clean. Final copy table and element list from the designer handed to the engineer. Screens `design/lab-combined/define-final-*.png`. Next: S1 Listen.
 - **Design sign-off step added (L163):** the final screens go on a Claude Design canvas for the owner's comments; no Lab UI until approved. The S1 engineer was redirected to engine-only work (section loop buffer, real catching-up state, Deck protocol, chord estimation, download progress) and told to revert any UI edits.
 - **Sign-off canvas live:** https://claude.ai/artifact/Y8HHwCbn1zd3QCGCceZHkc (the 9 define-final screens, private to the owner). The owner's comments come back as one list for one round of design changes; UI build after their "approved".
+- **S1 engine (no UI, L163):** section loop from memory (L164), real catching-up state and
+  playhead (L166), Deck protocol (T86), chord estimation (L165), model download progress. Real
+  capture on the Mac: 3.7–3.8× real time, 0 late, heard playhead within ~0.1 s of the Deck minus
+  the delay; seek / end-loop / play-after-pause caught up in 5.8–5.9 s at the target ±0.05 s; a
+  16-bar loop switched to memory after its first pass and wrapped seamlessly (wrap step below each
+  part's 99th-percentile step); storage after runs: only the model in Cache Storage. Chords read
+  Gm, –, Gm on one track: unproven. 278 tests. Open: Y8 at the speaker output; by-ear loop timing.

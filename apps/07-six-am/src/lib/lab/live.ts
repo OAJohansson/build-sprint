@@ -32,21 +32,37 @@ export class LiveError extends Error {
   }
 }
 
-type Options = { hopS?: number; guardS?: number; computeS?: number; onStats?: (s: LiveStats) => void; onEnded?: () => void; muted?: boolean };
+/** One separated region, before its crossfade: parts[p*2 + ch], `length` samples that were
+ *  captured from ctx time `captureStart` and play at `at`. Valid only during the call (copy what
+ *  you keep, in memory only: L161). */
+export type Region = { parts: Float32Array[]; captureStart: number; length: number; at: number; fade: number };
+
+type Options = {
+  hopS?: number; guardS?: number; computeS?: number; onStats?: (s: LiveStats) => void; onEnded?: () => void; muted?: boolean;
+  /** Start with the live parts silent (the Lab's transport opens them after a seek, timing.ts). */
+  gated?: boolean;
+  onRegion?: (r: Region) => void;
+};
 
 export class LiveParts {
   readonly delayS: number;
-  private gains: GainNode[];
+  readonly rate = RATE;
+  /** One gain per part (solo/mute); the live regions and a memory loop both play into these. */
+  readonly gains: GainNode[];
+  /** Live regions only, per part, before `gains`: the transport mutes these around a seek or a loop. */
+  readonly liveIn: GainNode[];
   private marks: DeckMark[] = [];
   private stopped = false;
 
   private constructor(
-    private ctx: AudioContext,
+    readonly ctx: AudioContext,
     gains: GainNode[],
+    liveIn: GainNode[],
     delayS: number,
     private teardown: () => void,
   ) {
     this.gains = gains;
+    this.liveIn = liveIn;
     this.delayS = delayS;
   }
 
@@ -92,6 +108,7 @@ export class LiveParts {
     master.gain.value = opts.muted ? 0 : 1; // graders' runs stay quiet
     master.connect(ctx.destination);
     const gains = PART_NAMES.map(() => { const g = ctx.createGain(); g.connect(master); return g; });
+    const liveIn = gains.map((g) => { const l = ctx.createGain(); l.gain.value = opts.gated ? 0 : 1; l.connect(g); return l; });
 
     const hopS = opts.hopS ?? 3;
     const plan = makePlan(RATE, hopS, opts.guardS ?? 0.5);
@@ -132,6 +149,7 @@ export class LiveParts {
           if (k > 0) { computeSum += ms; computeN++; } // the first run includes the GPU warm-up
           stats.partsDb = PART_NAMES.map((_, p) => +levelDb(r.parts[p * 2]).toFixed(1));
           const at = (frame0 + s.regionStart) / RATE + delayS;
+          opts.onRegion?.({ parts: r.parts, captureStart: (frame0 + s.regionStart) / RATE, length: s.length, at, fade: plan.fade });
           const now = ctx.currentTime + 0.02;
           const offset = Math.max(0, now - at); // late: play the rest of the region, not nothing
           if (offset > 0) stats.late++;
@@ -141,7 +159,7 @@ export class LiveParts {
               for (let ch = 0; ch < 2; ch++) { const a = r.parts[p * 2 + ch]; fade(a, plan.fade); buf.copyToChannel(a, ch); }
               const node = ctx.createBufferSource();
               node.buffer = buf; // played once, then garbage: never kept
-              node.connect(gains[p]);
+              node.connect(liveIn[p]);
               node.onended = () => node.disconnect();
               node.start(Math.max(at, now), offset);
             });
@@ -174,7 +192,7 @@ export class LiveParts {
       ctx.close();
       opts.onEnded?.();
     };
-    live = new LiveParts(ctx, gains, delayS, teardown);
+    live = new LiveParts(ctx, gains, liveIn, delayS, teardown);
     track.onended = () => live?.stop(); // Chrome's "Stop sharing"
     return live;
   }

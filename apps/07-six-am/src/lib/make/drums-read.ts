@@ -183,12 +183,12 @@ export function readDrums(left: Float32Array, right: Float32Array | undefined, r
       if (rise[c] < 0.05 * top || rise[c] < rise[c - 1] || rise[c] < rise[c + 1]) continue;
       const f = c * S;
       const lo = Math.max(LAG, f - 8), hi = Math.min(frames - 1, f + 10);
-      // Rise of the row's energy, smoothed over 3 frames; the first local peak at least half the
-      // steepest one (and at most 25 ms before it) is the attack: a clap's first burst, not its tail.
+      // Rise of the row's energy, smoothed over 3 frames; the first local peak at least 0.35 of the
+      // steepest one (and at most 35 ms before it) is the attack: a clap's first burst, not its tail.
       const r = (j: number) => (j - 1 - LAG >= 0 && j + 1 < frames ? (e[j - 1] - e[j - 1 - LAG] + e[j] - e[j - LAG] + e[j + 1] - e[j + 1 - LAG]) / 3 : 0);
       let br = 0, bf = f;
       for (let j = lo; j <= hi; j++) if (r(j) > br) { br = r(j); bf = j; }
-      for (let j = Math.max(lo + 1, bf - 9); j < bf; j++) if (r(j) >= 0.5 * br && r(j) >= r(j - 1) && r(j) >= r(j + 1)) { bf = j; break; }
+      for (let j = Math.max(LAG + 2, bf - 12); j < bf; j++) if (r(j) >= 0.35 * br && r(j) >= r(j - 1) && r(j) >= r(j + 1)) { bf = j; break; }
       // The hit's size: the row's activation over 30 ms; its jump: against the quietest point of
       // the 40 ms before (a click, a flicker or a ringing tail jumps little).
       const c0 = Math.round(bf / S);
@@ -196,7 +196,13 @@ export function readDrums(left: Float32Array, right: Float32Array | undefined, r
       for (let j = c0; j < Math.min(cols, c0 + Math.round(0.03 / fr / S)); j++) size = Math.max(size, h[j]);
       for (let j = Math.max(0, c0 - Math.round(0.04 / fr / S)); j < c0 - 1; j++) pre = Math.min(pre, h[j]);
       if (!isFinite(pre)) pre = 0;
-      mine.push({ row: k, f: bf, t: ((bf - 1) * hop) / rate, size, jump: size / (pre + 1e-6 * size + 1e-12) });
+      // The raw energy of the row's bands must jump too (an activation can shift between
+      // templates without anything new sounding).
+      let ePost = 0, ePre = Infinity;
+      for (let j = bf; j < Math.min(frames, bf + 5); j++) ePost = Math.max(ePost, e[j]);
+      for (let j = Math.max(0, bf - 12); j < bf - 2; j++) ePre = Math.min(ePre, e[j]);
+      if (!isFinite(ePre)) ePre = 0;
+      mine.push({ row: k, f: bf, t: ((bf - 1) * hop) / rate, size, jump: size / (pre + 1e-6 * size + 1e-12), raw: ePost / (ePre + 1e-9 * ePost + 1e-20) });
     }
     // One per row within the gap: the biggest.
     mine.sort((a, b) => b.size - a.size);
@@ -214,27 +220,30 @@ export function readDrums(left: Float32Array, right: Float32Array | undefined, r
     }
     c.flat = m ? fl / m : 0;
   }
-  // What each row's hits leak into the other rows' activations (lower quartile of the ratio),
+  // What each row's hits leak into the other rows' activations (the smallest ratio seen),
   // so a hit on top of another row's hit only counts if it stands clear of that leak.
   const win = Math.round(0.03 / fr / S);
   const act = (row: number, f: number) => { let m = 0; const c0 = Math.round(f / S); for (let j = c0; j < Math.min(cols, c0 + win); j++) m = Math.max(m, H[row * cols + j]); return m; };
   const leak = [0, 1, 2].map((a) => [0, 1, 2].map((b) => {
     if (a === b) return 0;
     const rs = cands.filter((c) => c.row === a && c.size > 0).map((c) => act(b, c.f) / c.size).sort((x, y) => x - y);
-    return rs.length >= 4 ? rs[Math.floor(rs.length / 4)] : 0;
+    // Only the leaks that fool a reader: a kick's click into claps and hats, a snare's noise into
+    // hats. The smallest ratio seen is the leak (a hit with a real one on top only raises it).
+    if (b === 0 || (a === 1 && b !== 2) || a === 2) return 0;
+    return rs.length >= 4 ? rs[0] : 0;
   }));
-  const hits = gate(cands, leak, Math.round(0.01 / fr));
+  const hits = gate(cands, leak, Math.round(0.015 / fr));
   debug?.(cands);
   hits.sort((a, b) => a.t - b.t);
   return { ...quantise(hits, sps, loopStartSec, steps), hits };
 }
 
-export type Cand = { row: number; f: number; t: number; size: number; jump: number; flat?: number; db?: number; keep?: boolean; why?: string };
+export type Cand = { row: number; f: number; t: number; size: number; jump: number; raw: number; flat?: number; db?: number; keep?: boolean; why?: string };
 
 // shortcut: fixed gates (dB under the loop's biggest hit per row, a minimum jump, a clap's minimum
-// flatness, 8 dB clear of another row's leak) picked on the synthetic bench; tune on separated
+// flatness, 6 dB clear of another row's leak) picked on the synthetic bench; tune on separated
 // real tracks once the hand check exists.
-export const GATE = { db: [-12, -22, -34], jump: 2, flat: 0.12, overLeak: 2.5 };
+export const GATE = { db: [-12, -22, -34], jump: 2, flat: 0.24, overLeak: 2, raw: 2 };
 
 /** Keeps candidates big enough against the loop's biggest hit, sharp, noisy (claps) and clear of other rows' leak. */
 function gate(cands: Cand[], leak: number[][], near: number): DrumHit[] {
@@ -242,7 +251,7 @@ function gate(cands: Cand[], leak: number[][], near: number): DrumHit[] {
   for (const c of cands) big = Math.max(big, c.size);
   for (const c of cands) {
     c.db = 20 * Math.log10(c.size / (big || 1));
-    c.why = c.db < GATE.db[c.row] ? "small" : c.jump < GATE.jump ? "flat jump" : c.row === 1 && (c.flat ?? 1) < GATE.flat ? "tonal" : "";
+    c.why = c.db < GATE.db[c.row] ? "small" : c.jump < GATE.jump ? "flat jump" : c.raw < GATE.raw ? "no raw rise" : c.row === 1 && (c.flat ?? 1) < GATE.flat ? "tonal" : "";
   }
   // Leak: against a bigger hit of another row at the same moment.
   for (const c of cands) {

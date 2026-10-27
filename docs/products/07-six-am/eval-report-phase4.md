@@ -78,13 +78,15 @@ on the first Play (unseen by agents: screen locked).
 
 ## Cost
 
-| Item | Kickoff estimate | Actual |
-| --- | --- | --- |
-| Claude (PM + squad: 2 design rounds of 10, prototypes, ~14 critic passes, 5 slices, ~10 user tests, 2 eval runs) | $150–250 | roughly $250–350 (estimate from agent token counts; the weekly plan limit reached 94 %) |
-| Mentor calls | ~$0.30 | ~$0.70 |
-| Stable Audio | ~$1.60 | ~$0.24 (3 loops) |
-| Model, Supabase | free | free |
+Reported as a share of the Claude plan (owner, 27 Oct), not in dollars.
+
+| Item | Used |
+| --- | --- |
+| Claude (PM + squad: 2 design rounds of 10, prototypes, ~14 critic passes, 5 slices, ~10 user tests, 2 eval runs) | about **94 % of that week's plan**, plus about 5 % of the next week for the review fixes (Sub and Weight, closeness test, drums under the A/B, the drawer's way back) |
+| Extra cost beyond the plan | **none** (extra usage is off) |
+| Mentor and Stable Audio API calls | negligible (Stable Audio: 3 loops) |
+| Separation model, Supabase | free |
 
 ## Decision log
 
-L143–L207, T81–T110 in `decisions.md`.
+L143–L213, T81–T115 in `decisions.md`.

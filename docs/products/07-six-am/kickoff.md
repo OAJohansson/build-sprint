@@ -671,3 +671,79 @@ if it heard it.
 2. Section loop: loop start/end on bars, wrap-around, a loop longer than the buffer cap.
 3. Library: tag normalisation and the suggested name.
 4. Studio lane model: reorder, rename, and which lane type a library sound lands in.
+
+# Kickoff pack (draft): Six AM Make for every layer (Phase 5, Founder v2)
+
+**Status: draft for the owner.** Written by the Lab PM at the Lab wrap-up (27 Oct) so a fresh phase
+session can start from `main`. The owner asked: "go ahead with building out the other layers for
+the make feature". The questions below are the owner's to answer, one at a time, before the
+pack is final.
+
+**Mode:** founder (v2)
+**Appetite:** to be set by the owner (proposal: one layer family per slice, about a night in all).
+Owner moments: the answers below, the design picks (3 of ~10, then 1 of 3), the canvas sign-off,
+the final review.
+**Evals:** a "Make for every layer" part of `evals.md`, to be written from this pack.
+
+## What Make does today (bass only)
+
+- **Where:** the Lab's Make mode, beside a looped section of a streamed track. Rights as in the
+  Lab (C2): the original stays in memory only, is never stored, saved, exported or uploaded, and
+  is never sent to any API (Stable Audio included).
+- **Pattern:** reads the looped bass part (notes, timing, which bars play) and plays it with a
+  pure-TS synth (`src/lib/make/render.ts`), in key and on tempo.
+- **Sound:** 4 presets (Round sub, Rubber pluck, Reese, Acid line) × 8 knobs (Tone, Length, Pitch
+  drop, Drive, Wobble, Width, Sub, Weight). "Suggest settings" places gold ticks where the knobs
+  come closest to the original (it never turns a knob). "Describe a bass in words…" makes an AI
+  loop (Stable Audio, from words only).
+- **Compare:** A/B at the same loudness (perceived, LUFS); "Drums under both" plays the original
+  drums under both sides (L213); a blind A/B with `&blind=1`.
+- **Measure:** the closeness score (0–100: per-step band envelopes plus the spectrum, L211); 37 →
+  46 at defaults, 61 after Suggest. The owner: "sounds closer now but still not the same".
+- **Save:** to the personal library (`sixam_sounds`, `/api/sounds`); in the Studio, My sounds in
+  the crate, dropped onto the matching lane, editable in the lane's drawer (the track's own copy).
+
+## What's open per layer family
+
+| Family | What it is | What Make would need | Hardest part |
+| --- | --- | --- | --- |
+| **Drums** | One-shot hits (kick, snare/clap, hats, percussion) on a step grid | Hit detection per band (kick/hats bands exist), a step pattern, a drum synth per hit (kick pitch drop, noise for hats, clap) | The separated drums are one part: telling kick, clap and hats apart, and swing |
+| **Melody / chords** ("other") | Pitched notes, often several at once (stabs, pads, leads, piano) | Note and chord reading (the Lab has chord names per 8 bars only), a poly synth with a few presets (stab, pad, pluck, organ) | Reading several notes at once reliably; "other" mixes many instruments |
+| **Vocals** | A voice: words, pitch, chops | Probably not a copy: a pitch line for a lead synth, or vocal-like chops; the words are the artist's | Rights and taste: what "my own vocal" means here |
+| **Texture / FX** | Risers, impacts, noise sweeps, atmosphere | A few generators (noise riser, downlifter, impact) timed to the section, not read note by note | Little to read from the original; mostly a sound palette |
+
+## Questions for the owner (one at a time)
+
+1. **Which family first?** Recommendation: drums, because they are the clearest to read (hits on a
+   grid), the most different from bass, and the owner already wants their own kick next to Mine.
+2. **Copy the pattern, or only the feel?** For drums: the same hits on the same steps, or a
+   pattern in the same style that's the owner's own? (Bass copies the pattern today.)
+3. **Vocals:** leave them out, make a lead synth that follows the vocal's pitch, or make
+   vocal-like chops? Recommendation: leave out of this phase; it is the riskiest for rights and taste.
+4. **One Make screen for every family, or a tailored one per family** (a step grid for drums, a
+   keyboard roll for chords)?
+5. **AI fine-tuning** (backlog): should the knobs be tuned toward the closeness score by a
+   search or a model in this phase, or stay "Suggest settings" as today?
+
+## Riskiest assumption
+
+That separated parts other than the bass can be read well enough (drum hits by type, several notes
+at once in "other") for Make's result to sound inspired by the original. Test it with a spike
+first, as for the Lab: read the drums and "other" of 2 tracks and measure against a hand check
+(hit timing ≤ 10 ms, kick/clap/hat labels, chord notes) before any design.
+
+## Design round plan
+
+1. Feature drill-down (objects, lifecycle, screen states) for the chosen families.
+2. The designer builds ~10 directions for Make with several families; the owner picks 3.
+3. The critic (one, fixed scorecard) scores the 3; the owner picks the final one.
+4. **Canvas sign-off** (decision 0028 amended 27 Oct): the final screens on a Claude Design canvas,
+   the owner comments in place; the UI build starts only after the owner approves.
+5. Slices: one family per slice, each built, user-tested, evaluated and fixed before the next; one
+   branch, one PR, one final review with an early owner listening check per family.
+
+## Things to keep
+
+- Clean and minimal (decision 0007); still framing, no per-keystroke motion.
+- Make's current bass flow must keep working exactly as it does (saved sounds render unchanged).
+- Graders use the sandbox (`ACCESS_CODE=test-code`, in-memory store), never the owner's real data.

@@ -6,6 +6,8 @@ What happened, what was decided and why. Newest last.
 
 ### Lab (Phase 4): for `docs/knowledge-bank.md`, Technology, at the Lab wrap-up (owner via parent session, 26 Oct)
 
+**Written at the Lab wrap-up (27 Oct)** on `claude/07-six-am-lab-wrapup`: knowledge bank (Audio, with quizzes), decision 0028 amended (canvas sign-off) with `AGENTS.md` and the playbook, learnings and retro, cost as a share of the plan, and the Phase 5 kickoff draft ("Make for every layer", in `kickoff.md`).
+
 **Process (owner, 26 Oct), for `AGENTS.md` and `docs/PLAYBOOK.md` at wrap-up, as an amendment to
 decision 0028:** a permanent **design canvas sign-off** step in Founder mode: the final screens go
 on a Claude Design canvas, the owner comments in place, quick-mockup options for open questions,
@@ -737,3 +739,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Owner's call (27 Oct, L213):** keep the kick out of the bass, as in real production (separate lanes, judge them together). Make's A/B now plays the original drums under both sides, on by default. Cleaning the kick bleed out of the separated bass parked in the backlog.
 - **Owner (27 Oct): drums under the A/B "sounds closer now but still not the same".** AI fine-tuning of Make's knobs against the closeness score added to the backlog. Bug fixed (T115): a saved sound opened in the Studio had no obvious way back to the crate; a "← My sounds" link and Esc now return to it.
 - **Owner wants Make for every layer (drums, other, vocals), not just bass, as the next thing.** Not built in PR 95; how to run it is being asked of the owner.
+- **Lab wrap-up (27 Oct):** PR 95 merged (eac5b95). Notebook republished from main. Shared pages written in one wrap-up PR; Phase 5 kickoff draft "Make for every layer" added to `kickoff.md` for a fresh session. The Lab phase ends here.

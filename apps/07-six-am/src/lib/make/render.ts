@@ -12,9 +12,9 @@ export type Rendered = { left: Float32Array<ArrayBuffer>; right: Float32Array<Ar
 
 /** Sub at full: the sine's peak against the voice's (≈ 1); Weight at full: the body copy's level. */
 export const SUB_LEVEL = 0.9;
-export const WEIGHT_LEVEL = 4;
-export const WEIGHT_LP_HZ = 400;
-export const WEIGHT_HP_HZ = 90;
+export const WEIGHT_LEVEL = 5;
+export const WEIGHT_LP_HZ = 250;
+export const WEIGHT_HP_HZ = 60;
 
 export const secondsPer16th = (bpm: number) => 60 / bpm / 4;
 
@@ -58,7 +58,6 @@ export function renderBass(notes: MakeNote[], p: SynthParams, o: { bpm: number; 
   let ni = -1, env = 0, env0 = 0;
   // L209 Sub and Weight (both 0 = the sound as before, untouched).
   const sub = (p.sub ?? 0) * SUB_LEVEL, weight = (p.weight ?? 0) * WEIGHT_LEVEL;
-  const wDrive = 3 + 9 * (p.weight ?? 0), wNorm = Math.tanh(wDrive), wBias = 0.35, wOff = Math.tanh(wBias);
   const wc = Math.exp((-2 * Math.PI * WEIGHT_LP_HZ) / rate);
   const wa = [0, 0], wb = [0, 0], wh = [0, 0], wx = [0, 0], wh2 = [0, 0], wx2 = [0, 0];
   const hc = Math.exp((-2 * Math.PI * WEIGHT_HP_HZ) / rate);
@@ -112,11 +111,11 @@ export function renderBass(notes: MakeNote[], p: SynthParams, o: { bpm: number; 
       ic1[s] = 2 * v1 - ic1[s]; ic2[s] = 2 * v2 - ic2[s];
       let y = p.drive > 0 ? Math.tanh(v2 * env * dg) / dNorm : v2 * env;
       if (weight > 0) {
-        // Weight: the voice driven hard (new harmonics), kept to ~100–400 Hz by a high-pass that takes
-        // out its fundamental and two low-passes that keep it from getting brighter.
-        // A little bias makes the even harmonics too (2nd and 4th: the "body" of a driven bass).
-        const sat = (Math.tanh(v2 * env * wDrive + wBias * env) - wOff * env) / wNorm;
-        const hp1 = hc * (wh[s] + sat - wx[s]); wx[s] = sat; wh[s] = hp1;
+        // Weight (closeness test, 27 Oct): the original basses carry their body at the octave above the
+        // note (≈ 100 Hz for G1), not at the odd harmonics. A rectified copy of the voice makes that
+        // octave; a high-pass takes out its DC and the note itself, two low-passes keep it below ~250 Hz.
+        const oct = Math.abs(Math.tanh(v2 * env * 2));
+        const hp1 = hc * (wh[s] + oct - wx[s]); wx[s] = oct; wh[s] = hp1;
         const hp = hc * (wh2[s] + hp1 - wx2[s]); wx2[s] = hp1; wh2[s] = hp;
         wa[s] = (1 - wc) * hp + wc * wa[s]; wb[s] = (1 - wc) * wa[s] + wc * wb[s];
         y += weight * wb[s];

@@ -30,7 +30,7 @@ import { Composer, Turn, useEdgeFades, type ThreadTurn } from "./mentor-thread";
 import { Knob } from "@/components/ui/knob";
 import s from "./lab.module.css";
 
-type Reading = { loopKey: string; r: PartReading; levelDb: number; active: boolean[]; samples: number; rate: number };
+type Reading = { loopKey: string; r: PartReading; levelDb: number; lufs: number; active: boolean[]; samples: number; rate: number };
 type ReadState = "idle" | "reading" | "ready" | "nonotes" | "error";
 /** A loop Stable Audio made from the owner's words (L157), playing as Mine instead of the synth. */
 type WordsLoop = { text: string };
@@ -120,7 +120,7 @@ export function useMake(o: MakeOpts) {
     cl().read({ left, right, rate, bpm: o.bpm, key: o.keyName, scale }).then((res) => {
       console.info(`[make] read in ${res.ms} ms: ${res.reading ? `${res.reading.pattern.bars}-bar pattern, ${res.reading.pattern.notes.length} notes, confidence ${res.reading.pattern.confidence}, offset ${res.reading.pattern.offsetMs} ms` : "no notes"}`);
       if (!res.reading) { setRead({ loopKey, state: "nonotes" }); return; }
-      const r: Reading = { loopKey, r: res.reading, levelDb: res.levelDb, active: res.active, samples, rate };
+      const r: Reading = { loopKey, r: res.reading, levelDb: res.levelDb, lufs: res.lufs, active: res.active, samples, rate };
       setReading(r);
       setRead({ loopKey, state: "ready" });
       void suggest(r, presetRef.current);
@@ -139,7 +139,7 @@ export function useMake(o: MakeOpts) {
     if (key === mineKey) return;
     const t = setTimeout(() => {
       const t0 = performance.now();
-      cl().render({ reading: reading.r, active: reading.active, preset, macros, bpm: o.bpm, rate: reading.rate, levelDb: reading.levelDb, samples: reading.samples }).then(({ res, stale }) => {
+      cl().render({ reading: reading.r, active: reading.active, preset, macros, bpm: o.bpm, rate: reading.rate, levelDb: reading.levelDb, lufs: reading.lufs, samples: reading.samples }).then(({ res, stale }) => {
         if (stale || loopKeyOf(tr.current?.state.loop ?? null) !== reading.loopKey) return;
         renderMs.current = Math.round(performance.now() - t0);
         tr.current?.setMine(res);
@@ -326,7 +326,40 @@ function waitLine(m: MakeModel, loop: LoopState | null, ready: boolean, playing:
   return m.readError ?? (ready ? null : "Press Play.");
 }
 
+/** `?blind=1` on the Lab URL: the owner's blind A/B (closeness test, 27 Oct). */
+const blindOn = () => { try { return new URLSearchParams(location.search).get("blind") === "1"; } catch { return false; } };
+
+/**
+ * Blind A/B: each "Play one" picks the original or Mine at random (same loudness), without saying
+ * which; you guess; it counts how often your ear picked the original right. Only in this tab
+ * (sessionStorage), never sent anywhere: 50 % means they can't be told apart.
+ */
+function BlindAB({ m, partName }: { m: MakeModel; partName: string }) {
+  const [cur, setCur] = useState<"a" | "b" | null>(null);
+  const [tally, setTally] = useState(() => { try { return JSON.parse(sessionStorage.getItem("07-six-am:blind") ?? "") as { n: number; right: number }; } catch { return { n: 0, right: 0 }; } });
+  const [last, setLast] = useState<string | null>(null);
+  const play = () => { const x = Math.random() < 0.5 ? "a" : "b"; setCur(x); m.setAb(x); setLast(null); };
+  const guess = (g: "a" | "b") => {
+    if (!cur) return;
+    const t = { n: tally.n + 1, right: tally.right + (g === cur ? 1 : 0) };
+    setTally(t);
+    try { sessionStorage.setItem("07-six-am:blind", JSON.stringify(t)); } catch { /* storage blocked */ }
+    setLast(g === cur ? "Right." : `No: that was ${cur === "a" ? "the original" : "Mine"}.`);
+    setCur(null);
+  };
+  return (
+    <div className={s.abWrap} aria-live="polite">
+      <span className={s.faint}>Blind test</span>
+      <button className={s.ghost} onClick={play} disabled={!m.mineReady || cur !== null}>{cur ? "Listening…" : "Play one"}</button>
+      <button className={s.ghost} onClick={() => guess("a")} disabled={!cur}>That&apos;s the original {partName}</button>
+      <button className={s.ghost} onClick={() => guess("b")} disabled={!cur}>That&apos;s Mine</button>
+      <span className={s.faint}>{last ? `${last} ` : ""}{tally.n ? `${tally.right} of ${tally.n} right (${Math.round((100 * tally.right) / tally.n)} %; 50 % = can't tell them apart)` : "same loudness"}</span>
+    </div>
+  );
+}
+
 function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: LabPart; loop: LoopState | null; ready: boolean; playing: boolean }) {
+  const [blind] = useState(blindOn);
   const off = !!m.words || m.readState !== "ready";
   const wait = waitLine(m, loop, ready, playing);
   const moves = m.ticks ? movesTo(m.macros, m.ticks) : [];
@@ -351,6 +384,7 @@ function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: 
         <span id="suggest-hint" hidden>Places gold ticks where the knobs come closest to the original; it never turns a knob</span>
       </div>
       <div className={s.checkRow}>
+        {blind ? <BlindAB m={m} partName={part.name.toLowerCase()} /> : (
         <div className={s.abWrap}>
           <div className={s.ab} role="group" aria-label="Compare at the same loudness">
             <button aria-pressed={m.ab === "a"} onClick={() => m.setAb("a")}>A · Original {part.name.toLowerCase()}</button>
@@ -358,6 +392,7 @@ function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: 
           </div>
           <span className={s.faint}>same loudness</span>
         </div>
+        )}
       </div>
     </>
   );

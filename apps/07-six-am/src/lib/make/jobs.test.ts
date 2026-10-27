@@ -60,7 +60,7 @@ describe("fitLoop", () => {
 });
 
 describe("the Mentor's knob line", () => {
-  const cur = { ...MAKE_PRESETS["round-sub"].macros }; // tone .3, length .55, pitchDrop .35, drive .2
+  const cur = { ...MAKE_PRESETS["round-sub"].macros, length: 0.55 }; // tone .3, length .55, pitchDrop .35, drive .2 // tone .3, length .55, pitchDrop .35, drive .2
   it("names the two biggest moves, with the word they land on", () => {
     const ticks = { ...cur, length: 0.25, pitchDrop: 0.6, drive: 0.25 };
     expect(movesTo(cur, ticks).map((m) => m.id)).toEqual(["length", "pitchDrop"]);

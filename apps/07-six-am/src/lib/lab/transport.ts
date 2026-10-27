@@ -11,6 +11,7 @@ import { DeckRemote, type DeckState } from "./deck-protocol";
 import { LiveError, LiveParts, type LiveStats, type Region } from "./live";
 import { LoopBuffer } from "./loop-buffer";
 import { bandShareDb, StereoMeter } from "@/lib/make/meter";
+import { analyseLoop, band, closeness, stepEnergy, type Closeness, type LoopReport } from "@/lib/make/closeness";
 import { RecentParts, faded } from "./recent";
 import { Separator } from "./separator-client";
 import { gateResume, isCatching, loopFillEtaS, loopPositionMs, msToSamples, playTimeOf, runOffset } from "./timing";
@@ -386,6 +387,21 @@ export class LabTransport {
     const o = this.loopPart(1), m = this.mine?.buf;
     const two = (l: Float32Array, r: Float32Array, rate: number): [number, number] => [bandShareDb(l, r, rate, 100), bandShareDb(l, r, rate, 400)];
     return { original: o ? two(o.left, o.right, o.rate) : null, mine: m ? two(m.getChannelData(0), m.getChannelData(1), m.sampleRate) : null };
+  }
+
+  /**
+   * Graders (the closeness test, 27 Oct): the looped original bass analysed (closeness.ts, numbers
+   * only), the drums' sub and low band per 16th (where the kick is), and Mine's report if there is one.
+   */
+  capture(onsets: number[]): { bass: LoopReport; kick: number[][]; mine: LoopReport | null; closeness: Closeness | null } | null {
+    const b = this.loopPart(1), d = this.loopPart(0), m = this.mine?.buf;
+    if (!b || !d) return null;
+    const bpm = this.o.bpm;
+    const mono = new Float32Array(d.left.length);
+    for (let i = 0; i < mono.length; i++) mono[i] = (d.left[i] + d.right[i]) / 2;
+    const kick = [band(mono, d.rate, 30, 60), band(mono, d.rate, 60, 120)].map((x) => stepEnergy(x, d.rate, bpm));
+    const bass = analyseLoop(b.left, b.right, b.rate, bpm, onsets), mine = m ? analyseLoop(m.getChannelData(0), m.getChannelData(1), m.sampleRate, bpm, onsets) : null;
+    return { bass, kick, mine, closeness: mine ? closeness(bass, mine) : null };
   }
 
   private mineOutput() {

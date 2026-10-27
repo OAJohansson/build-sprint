@@ -80,3 +80,19 @@ export function gainToLevel(targetDb: number, mine: Stereo, method: LevelMethod 
   const d = Math.max(-24, Math.min(24, a - b));
   return { db: Math.round(d * 100) / 100, gain: Math.pow(10, d / 20) };
 }
+
+/** How far a loudness match may move the RMS match (Y9's bar is 1 dB RMS). */
+export const RMS_LEEWAY_DB = 0.9;
+
+/**
+ * The A/B gain (closeness test, 27 Oct): at matched RMS, a darker or punchier Mine read up to 1.9 dB
+ * quieter in loudness (LUFS) than the original, so it sounded weaker. Match the loudness, but stay
+ * within 0.9 dB of the RMS match. Without a loudness target, the RMS match.
+ */
+export function abGain(target: { rmsDb: number; lufs?: number | null }, mine: Stereo): { db: number; gain: number } {
+  const r = gainToLevel(target.rmsDb, mine);
+  if (target.lufs === undefined || target.lufs === null || target.lufs <= -70 || r.db === 0) return r;
+  const l = target.lufs - lufs(mine);
+  const d = Math.max(-24, Math.min(24, Math.max(r.db - RMS_LEEWAY_DB, Math.min(r.db + RMS_LEEWAY_DB, l))));
+  return { db: Math.round(d * 100) / 100, gain: Math.pow(10, d / 20) };
+}

@@ -221,6 +221,6 @@ describe("S3 folds (LS2-N9, N10, N11) and Make's context", () => {
     const t = labContextText(p, map);
     expect(t).toMatch(/\[make\] They are in Make, building their own bass/);
     expect(t).toMatch(/Rubber pluck \(short, bouncy\)/);
-    expect(t).toMatch(/gold ticks at: Tone 35%[^\n]*Length 25% \(1\/8\)/);
+    expect(t).toMatch(/gold ticks at: Tone 15%[^\n]*Length 25% \(1\/8\)/);
   });
 });

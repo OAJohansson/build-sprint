@@ -1,6 +1,6 @@
 // F2 (evals 26 Oct): the meter and the A/B match use one measure, RMS over both channels.
 import { describe, expect, it } from "vitest";
-import { gainToLevel, rmsDb } from "./level";
+import { abGain, gainToLevel, lufs, rmsDb } from "./level";
 import { bandShareDb, stereoDb } from "./meter";
 import { MAKE_PRESETS, synthParams } from "./presets";
 import { renderBass, type MakeNote } from "./render";
@@ -30,5 +30,19 @@ describe("bandShareDb (a bass's weight)", () => {
     const a = sine(50), b = sine(400);
     expect(bandShareDb(a, a, 44100)).toBeGreaterThan(-1);
     expect(bandShareDb(b, b, 44100)).toBeLessThan(-40);
+  });
+});
+
+describe("A/B gain by loudness within the RMS bar (closeness test)", () => {
+  const r = renderBass(notes, synthParams("round-sub", MAKE_PRESETS["round-sub"].macros), { bpm: 124, steps: 32, rate: 22050 });
+  it("lands on the loudness target when that's within 0.9 dB of the RMS match", () => {
+    const g = abGain({ rmsDb: -16, lufs: lufs(r) + gainToLevel(-16, r).db + 0.5 }, r);
+    const out = { left: r.left.map((x) => x * g.gain), right: r.right.map((x) => x * g.gain), rate: 22050 };
+    expect(Math.abs(rmsDb(out) - -16)).toBeLessThanOrEqual(0.91);
+    expect(g.db).toBeCloseTo(gainToLevel(-16, r).db + 0.5, 1);
+  });
+  it("never moves more than 0.9 dB from the RMS match, and falls back to it without a loudness", () => {
+    expect(abGain({ rmsDb: -16, lufs: lufs(r) + 30 }, r).db).toBeCloseTo(gainToLevel(-16, r).db + 0.9, 1);
+    expect(abGain({ rmsDb: -16 }, r)).toEqual(gainToLevel(-16, r));
   });
 });

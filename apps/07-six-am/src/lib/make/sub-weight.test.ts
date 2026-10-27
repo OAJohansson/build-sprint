@@ -3,6 +3,7 @@
 import { describe, expect, it } from "vitest";
 import { parseNewSound } from "./library";
 import { parseLibLoop } from "./lib-loop";
+import { rmsDb } from "./level";
 import { bandShareDb } from "./meter";
 import { pitchHz } from "./pattern";
 import { MAKE_PRESETS, MAKE_PRESET_IDS, clampMacros, macroWord, synthParams, type SynthParams } from "./presets";
@@ -15,7 +16,8 @@ const shares = (p: SynthParams) => {
   const r = renderBass(notes, p, { bpm: 126, steps: 32, rate: RATE });
   const lo = bandShareDb(r.left, r.right, RATE, 100), mid = bandShareDb(r.left, r.right, RATE, 400), k = bandShareDb(r.left, r.right, RATE, 1000);
   const pct = (d: number) => 10 ** (d / 10);
-  return { sub: pct(lo), body: pct(mid) - pct(lo), above1k: 1 - pct(k) };
+  const o80 = bandShareDb(r.left, r.right, RATE, 80), o250 = bandShareDb(r.left, r.right, RATE, 250);
+  return { sub: pct(lo), body: pct(mid) - pct(lo), octaveDb: 10 * Math.log10(pct(o250) - pct(o80)) + rmsDb(r), above1k: 1 - pct(k) };
 };
 
 describe("Sub and Weight (L209)", () => {
@@ -38,7 +40,7 @@ describe("Sub and Weight (L209)", () => {
     const block = parseLibLoop({ libId: "x", name: "Old", preset: "reese", macros: six, pattern: { bars: 1, notes: [{ step: 0, midi: 31, dur: 2, vel: 0.9 }] }, key: "G", scale: "minor", bpm: 126 });
     if (block) expect([block.macros.sub, block.macros.weight]).toEqual([0, 0]);
   });
-  it("Sub adds the part below 100 Hz; Weight adds body at 100–400 Hz and doesn't get brighter", () => {
+  it("Sub adds the part below 100 Hz; Weight adds the octave above the note (80–250 Hz) and doesn't get brighter", () => {
     for (const id of MAKE_PRESET_IDS) {
       const off = shares(synthParams(id, { ...six, sub: 0, weight: 0 }));
       const sub = shares(synthParams(id, { ...six, sub: 1, weight: 0 }));
@@ -46,7 +48,7 @@ describe("Sub and Weight (L209)", () => {
       // Round sub is already a sine-like sub: more Sub there is just more of the same.
       if (id === "round-sub") expect(sub.sub, id).toBeGreaterThanOrEqual(off.sub - 1e-9);
       else expect(sub.sub, id).toBeGreaterThan(off.sub + 0.03);
-      expect(weight.body, id).toBeGreaterThan(off.body + 0.05);
+      expect(weight.octaveDb, id).toBeGreaterThan(off.octaveDb + 1); // more energy at the octave, in dB
       expect(weight.above1k, id).toBeLessThanOrEqual(off.above1k + 0.01);
     }
   });

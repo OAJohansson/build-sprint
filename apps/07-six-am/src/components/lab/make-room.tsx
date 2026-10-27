@@ -60,6 +60,8 @@ export function useMake(o: MakeOpts) {
   const presetRef = useRef(preset);
   useEffect(() => { presetRef.current = preset; }, [preset]);
   const [ab, setAb] = useState<"a" | "b">("a");
+  // The original's drums under both A and B (L213): judge the bass beside the kick, as producers do.
+  const [drums, setDrums] = useState(true);
   const [readingS, setReading] = useState<Reading | null>(null);
   // What was read for which loop: a state belongs to one loop (a new loop starts over).
   const [read, setRead] = useState<{ loopKey: string; state: ReadState; error?: string } | null>(null);
@@ -240,7 +242,7 @@ export function useMake(o: MakeOpts) {
   const loopNotes = useMemo(() => (reading ? gateNotes(notesForLoop(reading.r.pattern, reading.r.loopSteps).map((n, i, all) => ({ ...n, dur: Math.min(n.dur, reading.r.pattern.notes.find((x) => x.step === n.step % (reading.r.pattern.bars * 16))?.dur ?? n.dur, (all[i + 1]?.step ?? reading.r.loopSteps) - n.step) })), reading.active) : null), [reading]);
 
   return {
-    isBass, preset, setPreset, macros, setMacro, ticks, ab, setAb, reading, readState, readError, suggesting,
+    isBass, preset, setPreset, macros, setMacro, ticks, ab, setAb, drums, setDrums, reading, readState, readError, suggesting,
     suggestAgain: () => { if (reading) void suggest(reading, preset, macros, ticks); },
     /** The ticks were worked out from exactly these knobs: nothing new to suggest (S3-2). */
     suggestedNow: !!ticks && ticksFor === sound, moved,
@@ -393,6 +395,7 @@ function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: 
           <span className={s.faint}>same loudness</span>
         </div>
         )}
+        <button className={s.ghost} aria-pressed={m.drums} onClick={() => m.setDrums(!m.drums)} title="Plays the original drums under both A and B, so you judge the bass beside the kick">{m.drums ? "Drums under both: on" : "Drums under both: off"}</button>
       </div>
     </>
   );

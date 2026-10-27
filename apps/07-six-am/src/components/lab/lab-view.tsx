@@ -110,16 +110,17 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   useEffect(() => { makeRef.current = make; });
 
   // What you hear → the part gains (again once the parts start playing). Make plays the focus part
-  // alone (A) or Mine (B), with its own A/B; the Hear bar is Listen only (T87).
+  // alone (A) or Mine (B), with its own A/B, the drums under both when on (L213); the Hear bar is
+  // Listen only (T87).
   const phase = ts?.phase;
   const mineOn = mode === "make" && make.isBass && make.ab === "b" && make.mineReady;
   useEffect(() => {
     const t = tr.current;
     if (!t) return;
-    if (mode === "make") t.setParts(PART_NAMES.map((id) => !mineOn && id === focus));
+    if (mode === "make") t.setParts(PART_NAMES.map((id) => (!mineOn && id === focus) || (make.isBass && make.drums && id === "drums")));
     else t.setParts(heardParts(hear, [...PART_NAMES]));
     t.setMineOn(mineOn);
-  }, [hear, phase, mode, focus, mineOn]);
+  }, [hear, phase, mode, focus, mineOn, make.isBass, make.drums]);
 
   const onPlay = useCallback(() => {
     const t = tr.current;

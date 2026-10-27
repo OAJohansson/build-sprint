@@ -7,6 +7,7 @@ skipped checks below, on the live URL. Then song analysis, the biggest wish.
 
 | Idea | Why | Status |
 | --- | --- | --- |
+| Clean the kick out of the separated bass in the Lab (a stronger separation model, or turning the bass down on the kick hits found in the drums) | The original bass carries some kick thump, so it sounds bigger than Mine alone (owner, 27 Oct, L213). A bigger model is too slow live; the duck would also cut real notes on the beat | later |
 | Skipped checks: `break-ui` (worst-case track names, an empty track, 64 bars full), `web-design-guidelines`, then the simulated user test from `user-testing/plan.md` | Definition of done; nothing has tested the app with fresh eyes yet | next |
 | Own test on the live URL, on a second device | The point of Supabase is "any device"; only one laptop has seen it | next |
 | Faster first load: one request for the list and the open track, instead of two in a row | "Loading your tracks…" takes a moment on a cold server (owner, 19 Oct) | small |

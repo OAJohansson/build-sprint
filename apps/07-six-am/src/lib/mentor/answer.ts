@@ -2,11 +2,12 @@
 // checks it must pass before anyone sees it (M2 source on every fact, M6 real loops, M7 real
 // links). Pure, shared by the server and the panel.
 
+import { barsNamed, CANT_HEAR, HEARD_CLAIM, TONE_QUESTION } from "./lab";
 import { missingLines } from "./owner-lines";
 
 export const JOBS = [
   "explain", "suggest_genre", "teach", "ear_training", "studio_start", "listen_next", "chat",
-  "setup", "learn", "propose_groups", "taste_session",
+  "setup", "learn", "propose_groups", "taste_session", "lab",
 ] as const;
 export type Job = (typeof JOBS)[number];
 
@@ -151,6 +152,8 @@ export const ANSWER_SCHEMA = {
 
 /** What a job's answer must contain beyond sentences. */
 export type Needs = {
+  /** LS2-N9: bars near a Lab question the Lab hasn't heard yet: never "a gap". */
+  labUnheardBars?: ReadonlySet<number>;
   loopIds?: ReadonlySet<string>;
   trackIds?: ReadonlySet<string>;
   /** URLs seen in this answer's web search results; listen-next links must be among them. */
@@ -169,6 +172,10 @@ export type Needs = {
   bpms?: readonly number[];
   /** Chat: library refs (T1…) → track ids; trackIds outside it are dropped. */
   trackRefs?: ReadonlyMap<string, string>;
+  /** Lab (B6): the person's question, so a question about tone gets "I can't hear that" said. */
+  labQuestion?: string;
+  /** Lab (LS2-M6): the bar isn't heard yet: the loop to suggest ("bars 49–56"). */
+  labUnheard?: string;
 };
 
 /** A tempo or key stated as a number in a listen-next "because" (data-evals: two were wrong; the
@@ -227,11 +234,15 @@ export function linkKind(u: string, said: LinkKind): LinkKind {
     return said;
   }
 }
+/** LS2-N9: a Lab sentence is short. */
+export const LAB_MAX_WORDS = 30;
+const GAP_WORDS = /\b(gaps?|silen(?:t|ce)|drops? out|dropped out|rests?|empty|quiet|breaks?)\b/i;
+const INTERVAL_JARGON = /\b(?:minor|major|perfect|diminished|augmented) (?:second|third|fourth|fifth|sixth|seventh)s?\b(?!\s*\()/i;
 /** N5: Studio start talks about keys in plain words. */
 const KEY_JARGON = /semitone|key wheel|camelot|\b(?:1[0-2]|[1-9])[AB]\b/;
 /** At most this many sentences per answer (F8): 2–4 everywhere but teach. */
 /** Clutter review: chat, explain and genre answers say 2–3 sentences first, the rest behind "Tell me more". */
-export const maxSentences = (job: Job) => (job === "teach" ? 10 : job === "chat" || job === "explain" || job === "suggest_genre" ? 2 : job === "ear_training" ? 3 : 4);
+export const maxSentences = (job: Job) => (job === "teach" ? 10 : job === "chat" || job === "explain" || job === "suggest_genre" ? 2 : job === "ear_training" || job === "lab" ? 3 : 4);
 /** Raw measurement jargon the person shouldn't see (F2): say bright/warm, loud/quiet, likely/unsure. */
 const RAW_NUMBERS = /\b\d+(?:[.,]\d+)?\s*(?:k?hz|dbfs|db)\b|spectral centroid|\bcentroid\b|\bdbfs\b|\bstrength\s*(?:of\s*)?[01]?[.,]\d+/i;
 const isSource = (v: unknown): v is Source => typeof v === "string" && (SOURCES as readonly string[]).includes(v);
@@ -273,6 +284,22 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
         }
       }
     }
+    // B6: the Mentor never claims to have heard the part (it gets numbers only).
+    if (job === "lab" && HEARD_CLAIM.test(text)) {
+      return { ok: false, problem: `sentences[${i}] claims to hear the audio ("${text.match(HEARD_CLAIM)?.[0]}"): you get numbers only. Say what the measurements or the map show instead ("the loop measures…", "the map estimates…").` };
+    }
+    // LS2-N9: short sentences, and a bar the Lab hasn't heard is unknown, not a gap.
+    if (job === "lab" && text.split(/\s+/).length > LAB_MAX_WORDS) {
+      return { ok: false, problem: `sentences[${i}] has ${text.split(/\s+/).length} words: keep each Lab sentence under ${LAB_MAX_WORDS} words (at most 3 short sentences).` };
+    }
+    if (job === "lab" && needs.labUnheardBars?.size && GAP_WORDS.test(text)) {
+      const unheard = barsNamed(text).filter((b) => needs.labUnheardBars!.has(b));
+      if (unheard.length) return { ok: false, problem: `sentences[${i}] calls bar ${unheard[0]} "${text.match(GAP_WORDS)?.[0]}", but the Lab hasn't heard it yet: it's unknown, not quiet. Say "not heard yet", or leave it out.` };
+    }
+    // LS2-M5: plain words for a beginner: an interval name only with a short explanation in brackets.
+    if (job === "lab" && INTERVAL_JARGON.test(text)) {
+      return { ok: false, problem: `sentences[${i}] uses theory jargon ("${text.match(INTERVAL_JARGON)?.[0]}"): say it in plain words ("three notes up"), or explain it in brackets right after.` };
+    }
     if (job === "studio_start" && KEY_JARGON.test(text)) {
       return { ok: false, problem: `sentences[${i}] uses key jargon ("${text.match(KEY_JARGON)?.[0]}"): say it in plain words ("the bass and chords would clash, drums still fit").` };
     }
@@ -284,6 +311,18 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
     return { ok: false, problem: `${sentences.length} sentences: keep to at most ${maxSentences(job)} and offer tellMore for the rest.` };
   }
   const answer: MentorAnswer = { sentences, tellMore: r.tellMore === true };
+  // LS2-M6: a bar not heard yet gets the map's estimate and the loop to hear it, nothing more.
+  if (job === "lab" && needs.labUnheard) {
+    const loopLine = `Loop ${needs.labUnheard} to hear it and get its notes.`;
+    if (sentences.length > 2 || !sentences.some((x) => x.text.includes(loopLine))) {
+      return { ok: false, problem: `Bar not heard yet: answer in two sentences: what the map estimates there, then exactly "${loopLine}"` };
+    }
+    if (sentences.some((x) => /\bchords?\b/i.test(x.text))) return { ok: false, problem: "Bar not heard yet: no chords. Say what the map estimates, then the loop line." };
+  }
+  // B6: a question about tone gets one plain line that you can't hear it (and what you can measure).
+  if (job === "lab" && needs.labQuestion && TONE_QUESTION.test(needs.labQuestion) && !sentences.some((x) => CANT_HEAR.test(x.text))) {
+    return { ok: false, problem: `The question is about tone or sound ("${needs.labQuestion.match(TONE_QUESTION)?.[0]}"), which you can't hear: say so in one sentence: "I can't hear the sound itself; I read measurements: pitch, timing and loudness.", then answer from what the numbers do show.` };
+  }
   // Studio start: the key fit comes from code; claiming bass and chords fit over a clash is rejected.
   if (job === "studio_start" && needs.keyRelations && Array.isArray(r.trackIds)) {
     const first = typeof r.trackIds[0] === "string" ? needs.trackRefs?.get(r.trackIds[0].trim().toUpperCase()) ?? r.trackIds[0] : null;

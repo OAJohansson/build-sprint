@@ -324,6 +324,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      demucs-web:
+        specifier: 1.0.2
+        version: 1.0.2(onnxruntime-web@1.30.0)
       lucide-react:
         specifier: ^1.22.0
         version: 1.52.0(@types/react@19.3.0)(react@19.2.4)
@@ -366,7 +369,7 @@ importers:
         version: 9.39.5(jiti@2.7.0)
       eslint-config-next:
         specifier: 16.2.9
-        version: 16.2.9(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)
+        version: 16.2.9(@typescript-eslint/parser@8.71.1(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)
       tailwindcss:
         specifier: ^4
         version: 4.3.3
@@ -1902,6 +1905,12 @@ packages:
   define-properties@1.2.1:
     resolution: {integrity: sha512-8QmQKqEASLd5nx0U1B1okLElbUuuttJ/AnYmRXbbbGDWh6uS208EjD4Xqq/I9wK7u0v6O08XhTWnt5XtEbR6Dg==}
     engines: {node: '>= 0.4'}
+
+  demucs-web@1.0.2:
+    resolution: {integrity: sha512-G/HWbbBDvfGzaxDZQhqTp4+6i8nlCIRGEd6E1+EZJJONx5Es3bBc+jHqhfyblTlsKo/7cAdylA8HfetBpbQ98w==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      onnxruntime-web: '>=1.17.0'
 
   detect-libc@2.1.2:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
@@ -4364,6 +4373,10 @@ snapshots:
       define-data-property: 1.1.4
       has-property-descriptors: 1.0.2
       object-keys: 1.1.1
+
+  demucs-web@1.0.2(onnxruntime-web@1.30.0):
+    dependencies:
+      onnxruntime-web: 1.30.0
 
   detect-libc@2.1.2: {}
 

@@ -7,6 +7,9 @@ skipped checks below, on the live URL. Then song analysis, the biggest wish.
 
 | Idea | Why | Status |
 | --- | --- | --- |
+| Make for every layer (drums, other, vocals), not just bass | Owner's next wish (27 Oct) | next |
+| Match Make's sound to the original more closely, maybe with AI later: a model that tunes the preset and knobs to cut the closeness-test gap | Drums under the A/B helped, "sounds closer now but still not the same" (owner, 27 Oct): "Maybe we can use AI at a later stage to fine tune it?" | later |
+| Clean the kick out of the separated bass in the Lab (a stronger separation model, or turning the bass down on the kick hits found in the drums) | The original bass carries some kick thump, so it sounds bigger than Mine alone (owner, 27 Oct, L213). A bigger model is too slow live; the duck would also cut real notes on the beat | later |
 | Skipped checks: `break-ui` (worst-case track names, an empty track, 64 bars full), `web-design-guidelines`, then the simulated user test from `user-testing/plan.md` | Definition of done; nothing has tested the app with fresh eyes yet | next |
 | Own test on the live URL, on a second device | The point of Supabase is "any device"; only one laptop has seen it | next |
 | Faster first load: one request for the list and the open track, instead of two in a row | "Loading your tracks…" takes a moment on a cold server (owner, 19 Oct) | small |
@@ -74,3 +77,20 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Pasting two links separated by a space in Analyse adds only the first | Found in the follow-up pass | later (small) |
 | Studio minors from break-ui/web guidelines (26 Oct): no zoom/scroll on long tracks (3 px blocks at 512 bars); ruler not settable by keyboard; crate names wrap at 1024; no empty-track hint; arrow-key moves overwrite neighbours; subtle focus on the name field; mixed RTL names truncate mid-word; disabled Undo faint | Studio ship checks (L142) | later |
 | Follow-up leftovers: Studio ruler numbers 2.40:1; blank SoundCloud widget while a track loads; first visit sends two requests (creates "My first track"); crate names wrap at 1024 | User test 26 Oct (follow-up) | later |
+
+## Lab follow-ups (owner, 26 Oct, L160)
+
+| Idea | Why | Status |
+| --- | --- | --- |
+| **Sub and Weight knobs in Make (next slice):** a clean sine sub layer with a level knob under a driven, harmonically rich body ("Weight" = saturation into 100–400 Hz) | Owner's review: "My sound is way thinner… the heaviness of the bass is missing." Measured: the original bass has 56 % of its energy at 100–400 Hz (the body), Mine puts ~85 % below 100 Hz (deep sub laptops barely play); octave and level match are right | done (L210, PR 95) |
+| Sample search by sound (Splice-like) | Find a real sample close to the part you hear | later |
+| Closeness meter (how near my sound is to the part) | Feedback while matching by ear | later |
+| Mixer with sends and sidechain pump | Real mixes; house's pump | later |
+| Automation lanes | Filter sweeps and builds | later |
+| Slow-down for owned files | Hear fast parts note by note (the SoundCloud widget can't) | later |
+| Live drum split (kick, snare, hats as separate soloable parts) | Only Moises does it; experiment | experiment |
+| ME-7 remake coaching | Mentor coaches a remake lane by lane | later |
+| Real estimated sub-layers for Bass, Other and Vocals (from the separated parts) | User test LS1-1: only Drums shows what's inside | next |
+| Filter knob on the transport? (removed with the lane model, L200) | The owner accepted its removal for the MVP | later |
+| Studio overwrite trims a neighbour by whole loop passes (a 1-bar overlap cut 8 bars); trim only the covered bars or show the cut | S5 re-check S5-10 | next (small) |
+| Lab note card: a horizontal leader to its dot when the card sits past the playhead, far from the dot | final polish T112 | later (small) |

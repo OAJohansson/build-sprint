@@ -53,4 +53,11 @@ export type TrackMap = {
   heardSec: number;
   coverage: number;
   mappedAt: string;
+  /** Chord ESTIMATES, one per 8 bars from bar 1 (Lab, L165): a name, "" (heard, no clear chord) or
+   *  null (not heard yet). Names only, read from the separated parts while the Lab plays. Optional:
+   *  older maps have none. */
+  chords?: (string | null)[];
+  /** Lab (LS1-N1): each separated part's level per bar as heard (drums, bass, other, vocals; RMS dB
+   *  integers, null = not heard yet). Numbers only, never audio; optional. */
+  partLevels?: (number | null)[][];
 };

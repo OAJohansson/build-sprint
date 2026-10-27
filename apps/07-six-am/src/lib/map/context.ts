@@ -2,6 +2,7 @@
 // plays, in plain lines; plus the whitelist parser for maps arriving from the browser. Pure.
 import { BEATS_PER_BAR, LAYERS, MAP_VERSION, SECTION_LABELS, type LayerName, type Section, type SectionLabel, type TrackMap } from "./types";
 import { layerBlocks, sectionName } from "./view";
+import { parseLevels } from "@/lib/lab/activity";
 
 const clock = (sec: number) => { const t = Math.max(0, Math.round(sec)); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`; };
 
@@ -59,6 +60,10 @@ export function parseMap(raw: unknown): TrackMap | null {
     if (!SECTION_LABELS.includes(s.label as SectionLabel) || a === null || b === null || !Number.isInteger(a) || !Number.isInteger(b) || b <= a) return null;
     sections.push({ label: s.label as SectionLabel, startBar: a, endBar: b, startSec: num(s.startSec, 0, 7200) ?? 0, endSec: num(s.endSec, 0, 7200) ?? 0 });
   }
+  // Chord names per 8 bars (optional): "Am", "F#", "Bbm", "" or null; anything else drops the lot.
+  const cells = Math.ceil(barsN / 8);
+  const chords = Array.isArray(r.chords) && r.chords.length === cells && r.chords.every((c) => c === null || (typeof c === "string" && /^([A-G](#|b)?m?)?$/.test(c)))
+    ? (r.chords as (string | null)[]) : null;
   const tempo = (r.tempo ?? {}) as Record<string, unknown>;
   const down = (r.downbeat ?? {}) as Record<string, unknown>;
   return {
@@ -81,5 +86,7 @@ export function parseMap(raw: unknown): TrackMap | null {
     heardSec: num(r.heardSec, 0, 7200) ?? 0,
     coverage: num(r.coverage, 0, 1) ?? 0,
     mappedAt: typeof r.mappedAt === "string" && !Number.isNaN(Date.parse(r.mappedAt)) ? r.mappedAt : new Date(0).toISOString(),
+    ...(chords ? { chords } : {}),
+    ...(parseLevels(r.partLevels, barsN) ? { partLevels: parseLevels(r.partLevels, barsN)! } : {}),
   };
 }

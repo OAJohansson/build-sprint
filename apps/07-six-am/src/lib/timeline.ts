@@ -1,6 +1,7 @@
 // The track model: the crate, the demo track, the pure edit rules (snap, repeat, overwrite)
 // and the drawn waveforms. No React here, so the rules can be unit tested.
 import { soundMeta, type Sound } from "./synths/loop";
+import type { Lane } from "./studio-lanes";
 
 /** A track's length when it doesn't set its own (every track saved before Phase 3). */
 export const BARS = 64;
@@ -16,7 +17,9 @@ export type Kind =
   | "shaker" | "chop" | "ride" | "riser" | "perc" | "arp" | "fall";
 
 export type Loop = { id: string; track: number; name: string; bars: number; vibe: string; kind: Kind };
-export type Region = { id: string; loopId: string; track: number; start: number; length: number };
+/** A block. `track` is its old lane (0–3, what the 4-lane view shows); `lane` (S5, optional) is
+ *  the id of its lane in `Doc.lanes` (studio-lanes.ts; missing = the first lane on `track`). */
+export type Region = { id: string; loopId: string; track: number; start: number; length: number; lane?: string };
 /** A section marker on the timeline: bar is 1-based (bar 1 = the start), label like "drop". */
 export type Marker = { bar: number; label: string };
 /**
@@ -38,6 +41,9 @@ export type Doc = {
   analysisId?: string;
   /** L140: soloed lanes (any solo silences the others; solo beats mute). Missing when none is. */
   soloed?: boolean[];
+  /** S5 (L159): the track's lanes, in family order. Missing on every track saved before S5: its
+   *  lanes are then the 4 old ones (studio-lanes.ts lanesOf). `muted`/`soloed` stay the 4-lane view's. */
+  lanes?: Lane[];
 };
 
 /** Which lanes are silent: with any lane soloed, every lane that isn't; otherwise the muted ones. */
@@ -140,6 +146,16 @@ export const demoDoc = (): Doc => ({
 export function snapBar(x: number, pxPerBar: number, length: number, total = BARS) {
   const bar = Math.round(x / pxPerBar) + 1;
   return Math.min(Math.max(bar, 1), total - length + 1);
+}
+
+/**
+ * Where a dragged block starts (S5-9): its start plus the pointer's movement since the press, in
+ * whole bars at the bar width measured when the drag began, kept inside the track. Releasing where
+ * you pressed never moves it, whatever the layout does meanwhile.
+ */
+export function moveStart(start: number, dxPx: number, pxPerBar: number, length: number, total = BARS) {
+  const bar = start + Math.round(dxPx / pxPerBar);
+  return Math.min(Math.max(bar, 1), Math.max(1, total - length + 1));
 }
 
 /** Length in whole loop repeats for a pixel width, at least one repeat, never past the end. */

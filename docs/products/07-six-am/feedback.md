@@ -33,8 +33,111 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 27 | User test, cleanup re-check (A 5, B 4, C 3, D 4) | D1 saved tracks open at bar 37; C1 "this track" follows the conversation, not a newly selected row; B1 Cancel cut off; D2 "Saved" contrast; B2 filter jump; see `user-testing/report-2026-10-25-cleanup.md` | B1, B2, D2 fixed; D1, C1 to the backlog |
 | 28 | Design critic, map (one critic, scorecard): 7 → 8 → 9/10 | Header CTA and gold metadata, tall lanes, repeated estimate disclaimers, section starts, two listening indicators, Mentor chrome; then composition, notch | fixed (T55–T58); the gold Start kept (T56) |
 | 29 | Design critic, sound drawer: 6 → 8/10 | Prose under knobs, overflow, truncated patterns, far actions, cost ×3, meter sliders; then Mentor strip moves the timeline, cost form per state, slider width, red cap message, edit note, clip labels | round 1 fixed (T67); round 2 in the fix pass |
-| 30 | User test Phase 3 (1: 4, 2: 2, 3: 5, 4: 4, 5: 3); `user-testing/report-2026-10-26-phase3.md` | F1–F12 (AI loop overwrites and replaces, cost surprise, Explain recites numbers, can't hear a section, listen wait/Stop, history jargon, add at markers, Analyse list) | fix pass |
+| 30 | User test Phase 3 (1: 4, 2: 2, 3: 5, 4: 4, 5: 3); `user-testing/report-2026-10-26-phase3.md` | F1–F12 (AI loop overwrites and replaces, cost surprise, Explain recites numbers, can't hear a section, listen wait/Stop, history jargon, add at markers, Analyse list) | fixed (T93), re-test |
 | 31 | User re-check Phase 3 (5 / 4 / 5 / 4 / 4); `user-testing/report-2026-10-26-phase3-recheck.md` | F1–F12 hold; N1 off-key loop auto-placed, N2 list shows requested key, N3 knob advice vs shared knobs, N4 capture error wording | last fix pass |
-| 32 | User re-check after the owner's review (4 / – / 4 / 4 / 4), real capture; `user-testing/report-2026-10-26-owner-review-recheck.md` | N1 mid-track "outro" ×5, N2 Add as a new sound overwrites, N3 drum slivers, N4 M+S lit, N5 dimmed labels | fix pass |
+| 32 | User re-check after the owner's review (4 / – / 4 / 4 / 4), real capture; `user-testing/report-2026-10-26-owner-review-recheck.md` | N1 mid-track "outro" ×5, N2 Add as a new sound overwrites, N3 drum slivers, N4 M+S lit, N5 dimmed labels | fixed (T93), re-test |
 | 33 | Final check at 56a3ad6 (jobs 1, 3, 4 = 4), real capture | N1–N5 pass; lit S letterless, selected block hidden on silenced lanes, Add-as-new-sound placement unstated, drums through the breakdown | last small pass |
-| 34 | User test, follow-up PR (Studio 4, Play all 4); `user-testing/report-2026-10-26-followup.md` | M1 changing a block's preset then Add as a new sound loses the original; minors (strip truncation, end-of-list message, no key on a blank track, Pad pattern name, keyboard hints, knob value) | fix pass |
+| 34 | User test, follow-up PR (Studio 4, Play all 4); `user-testing/report-2026-10-26-followup.md` | M1 changing a block's preset then Add as a new sound loses the original; minors (strip truncation, end-of-list message, no key on a blank track, Pad pattern name, keyboard hints, knob value) | fixed (T93), re-test |
+
+## Lab S1 user test (26 Oct, `user-testing/report-2026-10-26-lab-s1.md`)
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| LS1-1 | major | Only Drums shows sub-layers; Bass, Other, Vocals are flat and "Other" isn't explained | hints fixed (T93); real sub-layers → backlog |
+| LS1-2 | major | "Breakdown" (49–76) looped 49–64 without saying so | fixed (T93), re-test |
+| LS1-3 | major | Closing the Deck stops silently; Play then catches up 34 s and resumes 27 s late | fixed (T93), re-test |
+| LS1-4 | minor | 6–7 s silence on every jump, resume and loop stop | fixed (L182, L183), re-test |
+| LS1-5 | minor | Chord row nearly empty before listening, blank cells unexplained | fixed (T93), re-test |
+| LS1-6 | minor | Hear/mute icons only on hover, nothing hints they exist | fixed (T93), re-test |
+| LS1-7 | minor | Download ETA started at 159 s, took 30 s | fixed (T93), re-test |
+| LS1-8 | minor | Reload: back to 0:00 and "Deck off" with the Deck open | fixed (T93), re-test |
+| LS1-9 | minor | Hit areas 24 px (guardrail 28 px) | fixed (T93), re-test |
+| LS1-10 | polish | Two chips truncate the title hard | fixed (T93), re-test |
+| LS1-11 | polish | "Section 1/2" names | fixed (T93), re-test |
+
+## Lab S1 re-test (26 Oct, `user-testing/report-2026-10-26-lab-s1-retest.md`): jobs 3 / 4
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| LS1-3 | major | Reopening a closed Deck: 35 s wait, resumes 26 s late | fixed (L186, T95), re-test |
+| LS1-N1 | major | Lanes come from the full-mix estimate and miss parts the separation plays (vocals in bars 12–20) | fixed (L186, T95), re-test |
+| LS1-N2 | minor | Catching-up seconds don't count down | fixed (L186, T95), re-test |
+| LS1-N3 | minor | Resume after pause stutters (2.7 s, 2.8 s gap) | fixed (L186, T95), re-test |
+| LS1-N4 | minor | Loop's first passes freeze at the wrap 4–6 s | fixed (L186, T95), re-test |
+| LS1-N6 | polish | "Not heard yet" hyphen 2.28:1; "← All tracks" 18 px tall | fixed (L186, T95), re-test |
+
+## Lab S1+S2 test (26 Oct, `user-testing/report-2026-10-26-lab-s1s2.md`): jobs 4 / 4 / 3
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| LS2-M1 | major | Card thread 150 px, nested scrolls, answers cut after 3 lines | fixed (L187, L188, T96), re-test |
+| LS2-M2 | minor | Hit areas < 28 px: dots, "+ Ask", bar tag, Send, Make link | fixed (L187, L188, T96), re-test |
+| LS2-M3 | minor | Outside a loop the Mentor uses the full-mix estimate, not the heard lanes | fixed (L187, L188, T96), re-test |
+| LS2-M4 | minor | Hovering a dot shows nothing visible | fixed (L187, L188, T96), re-test |
+| LS2-M5 | polish | Jargon (Hz, "minor third"); "can't hear tone, only pitch…" implies hearing | fixed (L187, L188, T96), re-test |
+| LS1-N7 | minor | Heard Drums merges the kick/hats rows | fixed (L187, L188, T96), re-test |
+| LS1-N6 | polish | "Not heard yet" hyphen still dim | fixed (T96) |
+
+## Lab S2 re-test (26 Oct): job 3 = 3
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| LS2-M1 | major | Card still opens low: thread 97–107 px at 1440×900 (1–2 lines); room above | fixed (T97), re-test |
+| LS2-N8 | minor | Drums' previously heard bars reset to estimates after the band change | fixed (T97) |
+| LS2-M6 | minor | At unheard bars the answer pads with chord guesses; should say "loop bars X–Y to see it" | fixed (T97) |
+| LS2-M7 | polish | "4.5 note starts a bar" → "4–5 notes a bar" | fixed (T97) |
+
+## Lab S2 re-check 2 (26 Oct): job 3 = 4 (pass)
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| LS2-N9 | minor | Heard-bar answers can run 4 long sentences and call unheard bars a "gap" | open (S3 brief) |
+| LS2-N10 | minor | The beside card can cover the bars its answer describes | open (S3 brief) |
+| LS2-N11 | polish | "+ Ask about the other here", "What's the vocals doing here?" | open (S3 brief) |
+
+## Lab S3+S4 test (26 Oct, `user-testing/report-2026-10-26-lab-s3s4.md`): jobs 4 / 3
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| S5-1 | major | Rename after Save isn't saved; Save stays disabled | fixed (T101), re-test |
+| S3-1 | major | A/B below the fold at a 734 px page | fixed (T101), re-test |
+| S5-2 | major | No trace of saved sounds in the Lab after a reload | fixed (T101), re-test |
+| S3-2 | minor | Suggest settings spins 9 s, no visible change when ticks are current | fixed (T101), re-test |
+| S3-3 | minor | Make rail titled "at bar 41" but shows the whole thread | fixed (T101), re-test |
+| S3-4 | minor | Drums in Make: no route to the bass | fixed (T101), re-test |
+| S3-5 | polish | Knob step 0.01; cut Mentor sentence; loop strip shows a block, not the notes | fixed (T101), re-test |
+
+## Lab S3+S4 re-check (26 Oct): jobs 4 / 4 (pass)
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| S3-N1 | minor | Saved sounds look dead until the loop is read (37 s), nothing says why | fixed (T103); S3-N2 shown by unit test, re-check on a loop with a gap |
+| S3-N2 | minor | Mine's 4-bar pattern repeats over the 16-bar loop, so it may play where the original bass is silent | fixed (T103); S3-N2 shown by unit test, re-check on a loop with a gap |
+| S3-N4 | polish | "Make a bass instead" and sound names 15–16 px tall | fixed (T103); S3-N2 shown by unit test, re-check on a loop with a gap |
+| S3-N3 | polish | A garbled test name in the sandbox library | sandbox data, no fix |
+
+## S5 Studio lanes test (26 Oct, `user-testing/report-2026-10-26-studio-s5.md`): jobs 4 / 4
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| S5-1 | blocker | Undo/redo not saved: an undone lane removal is lost after a reload | fixed (L206, T108), re-test |
+| S5-2 | major | Removing a lane with blocks has no confirmation or toast | fixed (L206, T108), re-test |
+| S5-3 | minor | Hit areas < 28 px in the lane header, fold, + Add lane | fixed (L206, T108), re-test |
+| S5-4 | minor | Contrast 3.0:1 on crate meta, ruler numbers, counts | fixed (L206, T108), re-test |
+| S5-5 | minor | Crate shows ~1¼ rows of My sounds | fixed (L206, T108), re-test |
+| S5-6 | minor | Block drawer sliders unlabelled, unlike the Lab's knobs | fixed (L206, T108), re-test |
+| S5-7 | polish | Hear-only and mute lit together on one lane | fixed (L206, T108), re-test |
+
+## S5 re-check (26 Oct): job 5b = 3; undo passes
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| S5-9 | blocker | Dragging a block reflows the timeline (the remove bin appears, lanes shrink 1,220 → 393 px), so blocks land 20+ bars off and cut their neighbours | fixed (L207, T109), re-test |
+| S5-3b | minor | Still < 28 px: Mute clickable 16 px tall (covered), sliders 20 px, + Add lane 26, fold 22 | fixed (L207, T109), re-test |
+| S5-6 | minor | Drawer sliders not re-checked (no library block on the re-seeded tracks) | re-check |
+
+## S5 last re-check (26 Oct): job 5b = 4 (pass)
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| S5-10 | minor | A 1-bar overlap trims 8 bars off the neighbour (the overwrite rule trims by whole loop passes) | backlog |

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { bassLoopRequest, keyPhrase, loopSeconds, mergeSource, scaleNotes } from "./prompt";
+import { bassLoopRequest, cleanWords, keyPhrase, loopSeconds, mergeSource, scaleNotes } from "./prompt";
 
 // The prompt string decides whether the loop comes back in minor (L124), so it's pinned here.
 describe("bass loop prompt", () => {
@@ -45,5 +45,15 @@ describe("mergeSource", () => {
   it("falls back to the stored analysis when no numbers were sent, and null when neither", () => {
     expect(mergeSource(null, stored)).toEqual(stored);
     expect(mergeSource(null, null)).toBeNull();
+  });
+});
+
+describe("Make's words (S3)", () => {
+  it("adds the owner's words to the prompt, cleaned and capped", () => {
+    expect(cleanWords("  short, rubbery pluck!!\n<script>  ")).toBe("short, rubbery pluck script");
+    expect(cleanWords("x".repeat(400))).toHaveLength(160);
+    const r = bassLoopRequest({ bpm: 124, key: "A", scale: "minor" }, 4, undefined, "deep round sub, short notes.");
+    expect(r.prompt).toMatch(/^House bass loop\. The bass: deep round sub, short notes\. Solo bassline only/);
+    expect(bassLoopRequest({ bpm: 124, key: "A", scale: "minor" }, 4).prompt).not.toMatch(/The bass:/);
   });
 });

@@ -15,7 +15,8 @@ import { cleanTzOffset, monthRange } from "@/lib/mentor/periods";
 // until one passes, at most MAX_DRAWS = 3 (L126); each paid draw counts towards the hard per-day
 // cap (LOOPS_DAILY_CAP, default 20 draws ≈ $1.60).
 //
-// POST { analysisId?, analysis?: { bpm, key, scale, genres?, myGenre? }, bars?: 4 | 8, seed?, tz? }
+// POST { analysisId?, analysis?: { bpm, key, scale, genres?, myGenre? }, bars?: 4 | 8, seed?, tz?, words? }
+//   words: Make's "Describe a bass in words…" (≤ 160 characters, cleaned in prompt.ts cleanWords).
 //   Sent analysis numbers win; the stored analysisId only adds style words (either may be alone).
 //   The service is picked by env only (LOOPS_PROVIDER / LOOPS_FALLBACK, both off = Stable Audio).
 //   → { loop: { id, provider, model, prompt, bpm, key, scale, bars, seed, mime, costUsd (all draws),
@@ -33,6 +34,8 @@ type Body = {
   bars?: unknown;
   seed?: unknown;
   tz?: unknown;
+  /** Make (S3): the owner's description of the bass, added to the prompt (text only). */
+  words?: unknown;
 };
 
 const KEYS = new Set(["C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G", "G#", "Ab", "A", "A#", "Bb", "B"]);
@@ -107,7 +110,7 @@ export async function POST(request: Request) {
     }
 
     // 3. Draw until one passes the check (never past the cap), then keep the file.
-    const req = bassLoopRequest(source, bars, seed);
+    const req = bassLoopRequest(source, bars, seed, typeof body.words === "string" ? body.words : undefined);
     const result = await generateLoop(req, Math.min(MAX_DRAWS, before.left));
     const meta = {
       provider: result.provider, model: result.model, prompt: req.prompt, bpm: req.bpm, key: req.key, scale: req.scale,

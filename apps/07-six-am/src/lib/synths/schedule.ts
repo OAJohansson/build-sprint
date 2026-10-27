@@ -11,11 +11,14 @@ export type SoundHit =
   | { track: number; soundId: string; kind: "synth"; note: SynthNote }
   | { track: number; soundId: string; kind: "kit"; hit: DrumHit }
   /** An AI loop: one pass of its audio starts here and lasts `dur` 16ths (cut at the region's end). */
-  | { track: number; soundId: string; kind: "ai"; dur: number };
+  | { track: number; soundId: string; kind: "ai"; dur: number }
+  /** A library sound (S5): one rendered pass starts here and lasts `dur` 16ths (cut at the region's end). */
+  | { track: number; soundId: string; kind: "lib"; dur: number };
 
 /** One pass of a sound as hits from its own start, or null when its pattern or the key is unknown. */
 export function soundPass(sound: Sound, key: string, scale: Scale): { step: number; make: (dur?: number) => Omit<SoundHit, "track" | "soundId">; dur: number }[] | null {
   if (sound.source === "ai") return [{ step: 0, dur: sound.bars * 16, make: (dur = sound.bars * 16) => ({ kind: "ai", dur }) }];
+  if (sound.source === "lib") return [{ step: 0, dur: sound.bars * 16, make: (dur = sound.bars * 16) => ({ kind: "lib", dur }) }];
   if (sound.source === "kit") {
     const p = drumPatternById(sound.pattern);
     return p ? p.hits.map((hit) => ({ step: hit.step, dur: 1, make: () => ({ kind: "kit", hit }) })) : null;

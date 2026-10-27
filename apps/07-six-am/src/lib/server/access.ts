@@ -3,6 +3,7 @@ import { failure } from "@/lib/server/failure";
 import { getMentorStore, type MentorStore } from "@/lib/server/mentor-store";
 import { getStore, type Store } from "@/lib/server/store";
 import { getLoopStore, type LoopStore } from "@/lib/server/ai-loops/store";
+import { getLibraryStore, type LibraryStore } from "@/lib/server/library-store";
 
 // Six AM is on a public URL, but its routes read and write my tracks with a secret key, so every
 // route needs ACCESS_CODE. Fails closed in production. Pattern from Scribble and Folio.
@@ -40,6 +41,15 @@ export function loopGuard(request: Request): { store: LoopStore } | { error: Res
   const denied = checkAccess(request);
   if (denied) return { error: denied };
   const result = getLoopStore();
+  if ("problem" in result) return { error: failure(result.problem, 503) };
+  return result;
+}
+
+/** Access check plus the sound library store (Lab S4), or the error response to return. */
+export function libraryGuard(request: Request): { store: LibraryStore } | { error: Response } {
+  const denied = checkAccess(request);
+  if (denied) return { error: denied };
+  const result = getLibraryStore();
   if ("problem" in result) return { error: failure(result.problem, 503) };
   return result;
 }

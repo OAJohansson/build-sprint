@@ -4,6 +4,31 @@ What happened, what was decided and why. Newest last.
 
 ## To carry over
 
+### Lab (Phase 4): for `docs/knowledge-bank.md`, Technology, at the Lab wrap-up (owner via parent session, 26 Oct)
+
+**Process (owner, 26 Oct), for `AGENTS.md` and `docs/PLAYBOOK.md` at wrap-up, as an amendment to
+decision 0028:** a permanent **design canvas sign-off** step in Founder mode: the final screens go
+on a Claude Design canvas, the owner comments in place, quick-mockup options for open questions,
+updated screens beside the originals, and the UI build starts only after the owner's approval.
+
+Each with what it is, why it matters, where we met it (the Six AM Lab spike) and who it comes from,
+plus 2–3 quiz Q/A pairs per entry:
+
+1. **Tab audio capture** with `getDisplayMedia` and `suppressLocalAudioPlayback` (W3C Screen
+   Capture spec, Chrome 109+): a cross-origin player (the SoundCloud iframe) can't be read
+   directly because of the browser's same-origin rule, so the only way in is capturing the tab's
+   sound; the mute silences the whole captured tab, so the player needs its own window.
+2. **Source separation with Demucs/htdemucs** (Meta AI, Défossez et al.): trained on multitrack
+   recordings; the hybrid model works on both the waveform and the spectrogram and sums the two.
+3. **In-browser ML with ONNX Runtime Web and WebGPU** (Microsoft's ONNX Runtime; W3C WebGPU): the
+   model runs on the laptop's own graphics chip, no server, no running cost.
+4. **Faster-than-real-time chunked processing with overlap-add**: separate rolling 7.8 s windows,
+   play only the newest seconds with short crossfades; a few seconds of delay is fine for learning
+   (unlike DJ use, which needs it instant); discarding every chunk after playback is rights by
+   design (C2, L143).
+
+### Ears + Mentor
+
 Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one commit.
 
 - `docs/learnings.md` process changelog: first Founder-mode run (decision 0026) on a rebuild of an
@@ -566,3 +591,149 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Follow-up: Studio ship checks** (break-ui with worst-case data, web guidelines): 8 problems fixed (narrow control bar, keyboard access to blocks, crate and knob, Space hijack, 512-bar markers, library tooltips, unit-label contrast); 8 minors to the backlog. T78. Sandbox user test next.
 - **Follow-up fixes (T80):** M1 fixed (another preset drafts a new sound), Add never overwrites, Duplicate, Play-all end message, minors. Leftovers to the backlog.
 - **Follow-up PR 87** opened, stacked on PR 86 ("depends on #86, merge after it"); preview https://six-ocslv0aoi-mimirswell.vercel.app. "Vercel – wont" failing on both PRs is another product's project. One push sent for both PRs.
+
+## 26 Oct: Phase 4 kickoff (the Lab)
+
+- **Kickoff (L143–L149):** the owner's calls from the parent session, written into a new pack in
+  `kickoff.md` and evals Y1–Y7 in `evals.md`. The map screen becomes the Lab: live parts of a
+  streamed track, the Mentor explaining each, own sounds made from it, a library the Studio uses.
+  Rights first (L143): the original never leaves memory, AI gets words and numbers only. Own branch
+  `claude/07-six-am-lab-4c61e0` from `main` (PRs 86 and 87 merged).
+- **Spike first (L144), sources checked:** `suppressLocalAudioPlayback` is a Screen Capture
+  constraint, Chrome 109+ (MDN). htdemucs in the browser: `demucs-web` 1.0.2 (MIT, npm) with
+  `timcsy/demucs-web-onnx` `htdemucs_embedded.onnx` (~172 MB, Meta's htdemucs weights, 7.8 s
+  segments at 44.1 kHz stereo); a faster mixed-precision 21-piece export exists
+  (`monteslu/htdemucs-web-onnx`, MIT, 126 MB, ~2.4× faster) as plan B.
+- **Design catch before coding:** `suppressLocalAudioPlayback` mutes the *whole* captured tab, so
+  if the SoundCloud widget sits in the Lab's own tab, the separated part would be muted too (and
+  re-captured). The spike therefore plays the widget in a small separate "deck" window and
+  captures that tab; the Lab tab plays only the part.
+- **Spike built and measured (L150):** `/dev/lab-spike` (dev only) with a Deck window, a worker
+  running htdemucs on WebGPU, solo/mute per part and a bench on Six AM's own loop. On the owner's
+  M5 Pro in Chrome 155: 4.4× real time on the bench, **3× real time live** on a real SoundCloud
+  stream (0 late windows of 28), delay 5.5 s at 3 s hops (3.2 s possible at 1.5 s hops). Capture
+  reports `suppressLocalAudioPlayback` true; bass 18.5 dB and drums 34.6 dB SDR on the own loop.
+  Details in `evals-runs/2026-10-26-lab-spike.md`. Gotchas: getDisplayMedia needs the Lab tab
+  visible (InvalidStateError otherwise) and should be called before awaiting the model.
+- **Waiting for the owner's ear** on (a) silence of the original and (c) usefulness of bass and
+  drums, in their own Chrome. Nothing past the spike is built until then (L144).
+- **Spike passed (L151):** the owner listened in their own Chrome: only Six AM's version was heard
+  (original silent locally) and solo worked on drums, bass and other. With L150's numbers, the
+  riskiest assumptions hold. Next: 10 rough Lab designs (with the separate Deck window), owner
+  picks 3.
+- **10 rough Lab directions** (designer, no critic yet, L148): Map, Columns, Tabs, Steps, Bench,
+  Mentor, Room, Crate, Subtitles, Chain. Contact sheet `design/lab-directions.html`, screenshots
+  `design/lab/`, prototypes at `/dev/lab-directions?v=N` (dev only). From the pack: no faders,
+  meters or stem waveforms; the Deck shown as a status, never a player; the Mentor says what it
+  can't measure; four parts in the map's lane colours (T81). Waiting for the owner's 3.
+- **Design paused (L152):** the owner: "we rushed into the design to early … take a step back and
+  agree the jobs to be done on this screen". The pick push was already sent; it's withdrawn. The
+  jobs are being agreed with the owner in the parent session; a revised brief comes before any
+  design restarts. Until then: harden the live-separation engine only (chunking, sync with the
+  playback position, discarding chunks). No UI, no library.
+- **Learning for the retro:** design started straight after the spike, from the kickoff's five jobs
+  written by the PM from the parent's brief, without the owner agreeing them for this screen.
+- **Engine hardened (L152 scope):** `LiveParts` in `src/lib/lab/live.ts` (capture, chunks, delay,
+  per-part gains, heard playhead, silent skip, late remainder, ring zeroed on stop), the worker
+  client and the sync math as plain functions with tests (12). Live re-run: 4.2× real time, 0
+  late, playhead 5.4 s behind the Deck, pause and seek behave. The spike page uses the engine; no
+  product UI built. `evals-runs/2026-10-26-lab-spike.md` has the numbers.
+- **Revised Lab brief (L153–L161):** the jobs agreed with the owner in the parent session, one
+  question at a time: see the structure with layers; re-listen and isolate; ask the Mentor; make my
+  own on the same screen; save and use in the Studio. 4 soloable parts with estimated sub-layers
+  and a chord lane; Studio-like playback with seek, section loop and "catching up…"; Mentor aware
+  of what's soloed; Make synth-first with A/B, macro presets, Mentor suggestions and local patch
+  matching; library of sound + loop; full Studio lane model. Kickoff slices, requirements (B1–B11),
+  evals (Y1–Y10), cost ($150–250 Claude) and backlog updated. PM call L161: a loop's separated
+  parts stay in memory only while the loop is on, for seamless loops and A/B. Design restarts: 10
+  new rough directions.
+- **10 new rough Lab directions (round 2, from L153–L161):** Bench, Drawer, Two rooms, Steps,
+  Margin notes, Twin lane, Ear trainer, Lesson, Rack, Command line. Each has the 4 parts with S/M
+  and est. sub-layers, a chord lane, section loop, seek with "catching up…", Deck status, Mentor
+  aware of context, Make with A/B, 6 macros, Match it, and save with the suggested name. Sheet
+  `design/lab-directions-2.html`, screenshots `design/lab2/`, prototypes `/dev/lab-directions-2?v=N`
+  (dev only); round 1 kept untouched. T82. Push sent for the owner's 3.
+- **Combined prototype (owner liked 3 Two rooms and 5 Margin notes):** one rough build for the
+  decision, no critic. Listen = the full map with Mentor answers as numbered pins on the timeline
+  (a pin opens a small thread; cards open away from the playhead); Make = the focused room
+  (original part alone, your synth with A/B and macros, the Mentor's notes) reached by "Make a bass
+  like this" from the soloed lane or a note; same header and transport, a Listen/Make switch; notes
+  kept across modes. `design/lab-combined.html`, `/dev/lab-combined?mode=listen|make`.
+- **Owner picked the combined design (L162):** "perfect, lets go with that combination". Next: define round (skills, states, rough spots), one critic, then the slices.
+- **Define round 1 (designer):** removed first (Make's song strip, labels, floating card, "level-matched" jargon), added the states (first visit, getting ready, catching up, empty notes), ran emil-design-eng, web-design-guidelines and break-ui (7 fixed, 2 left). T83. Critic next.
+- **Critic round 1: 6/10.** Gaps: open note as a band pushes the lanes and repeats the Make action (make it an anchored ~420 px card off the pin); worst case pins on clips and "no layers found" with clips drawn; Make's left column is two flat bricks (shrink to a loop strip, give room to the synth); Mentor column overflows in worst case; chips and pills everywhere; one dimming rule and sub-row labels. Keep: the lane architecture, the state treatments, the A/B heart. Note: the critic used its own five headings instead of the fixed scorecard; round 2 asks for the fixed one.
+- **Define round 2 (designer):** all six critic gaps fixed: anchored 420 px note card (one Make action), pins clustered in a strip above the clips, section codes, Make's original as a 118 px loop strip, Mentor column scrolls under a fixed Ask bar, chips → plain text, one dimming rule and sub-row labels. Skills run again. Critic round 2 next.
+- **Critic round 2: 7/10** (clutter 2 · hierarchy 1 · legibility 1 · feel 2 · copy 1; round 1 ≈ 6 on the same scale). Gaps: Make's column order (instrument before A/B; A/B + Match it as one check row; knobs spread), sub-row labels into the gutter, note card anchored at the pin's top-right and "+ Ask" hidden while open, worst-case thread fade, copy ("Describe a bass instead", sentence-case context lines), knob tracks and zero ticks. Fix round 3 sent.
+- **Define round 3 (designer):** Make reordered (preset → spread knobs → hint → check row A/B + Match it + "Describe a bass instead"), sub-layer names in the gutter, card level with its pin and "+ Ask" hidden while open, fades instead of cut text, knob tracks and zero ticks, sentence-case context lines. Trade-off: the card now covers ~420 px of the soloed bass right of the playhead. Critic round 3 next.
+- **Critic round 3: 8/10** (clutter 2 · hierarchy 2 · legibility 1 · feel 2 · copy 1). Gaps: knob colours (one arc colour, gold tick only for the Mentor's target, labelled once, no stub at zero); worst-case thread still cut; the card covers the bass it talks about (prefer below the Bass lane); "Match it" reads as do-it-for-me; "← Analyse" twice; empty band above Save. PM call on "Match it": the function stays (AI patch matching, L157; a closeness meter is backlog, L160), only the label changes (T84). Fix round 4 sent.
+- **Define round 4 (designer):** one knob arc colour with labelled gold Mentor ticks, worst-case thread fade fixed (checked on the screenshot), card below the Bass lane with a leader, "Suggest settings", "← Songs", loop strip takes Make's spare height. Critic round 4 next.
+- **Critic round 4: 9/10** (clutter 2 · hierarchy 2 · legibility 2 · feel 2 · copy 1): target reached, design rounds stop after one last small pass of cuts and renames. The critic's top gap was to cut "Suggest settings" (it does the matching for you next to the ear-training A/B). Not taken: AI patch matching is the owner's call (L157). Reconciled instead (T85): it *suggests*, never sets: it places the gold ticks from the local analysis, the owner turns the knobs by ear; it moves out of the check row next to the knobs. The owner sees this at the final review.
+- **Design done** (final pass after 9/10, T85): Suggest settings beside the knobs (ticks only), two Mentor lines, preset menu with "Describe a bass in words…", zero dots, section-start chords on long tracks. Tells pass clean. Final copy table and element list from the designer handed to the engineer. Screens `design/lab-combined/define-final-*.png`. Next: S1 Listen.
+- **Design sign-off step added (L163):** the final screens go on a Claude Design canvas for the owner's comments; no Lab UI until approved. The S1 engineer was redirected to engine-only work (section loop buffer, real catching-up state, Deck protocol, chord estimation, download progress) and told to revert any UI edits.
+- **Sign-off canvas live:** https://claude.ai/artifact/Y8HHwCbn1zd3QCGCceZHkc (the 9 define-final screens, private to the owner). The owner's comments come back as one list for one round of design changes; UI build after their "approved".
+- **S1 engine (no UI, L163):** section loop from memory (L164), real catching-up state and
+  playhead (L166), Deck protocol (T86), chord estimation (L165), model download progress. Real
+  capture on the Mac: 3.7–3.8× real time, 0 late, heard playhead within ~0.1 s of the Deck minus
+  the delay; seek / end-loop / play-after-pause caught up in 5.8–5.9 s at the target ±0.05 s; a
+  16-bar loop switched to memory after its first pass and wrapped seamlessly (wrap step below each
+  part's 99th-percentile step); storage after runs: only the model in Cache Storage. Chords read
+  Gm, –, Gm on one track: unproven. 278 tests. Open: Y8 at the speaker output; by-ear loop timing.
+- **Sign-off feedback (L167–L171):** Send arrow in the Mentor input; one Hear bar (All / parts, only/without, Shift-click two) instead of S/M on the map; clearer position, loop chip and song facts; no "← Whole song", "← All tracks"; Mentor as a plain chat with bar tags, dots instead of numbered pins. One design round, then the screens go back on the canvas.
+- **Sign-off round 1 built (designer):** Send composer, Hear bar with only/without and a focus part (T87), position "3:06 · in Drop 1", loop chip only while looping, "← All tracks", Mentor as a plain chat with bar tags, dots on the map. 9 `signoff-r1-*` screens; handoff updated. Back to the owner's canvas.
+- **Make and Save engine (no UI):** four bass presets with six macros on a pure-TS synth (L172),
+  note pattern from the in-memory loop, local "Suggest settings" by analysis-by-synthesis (L173),
+  level-matched A/B, library model + `/api/sounds` + additive migration `sixam_sounds` (L175),
+  T88. On the real track: bass read as a 4-bar G1/Bb1 pattern in 76 ms; suggestions cut the
+  feature distance on all four presets (Reese 155 → 15, Acid only 166 → 127) but go to extremes
+  on pitch drop from kick bleed; A/B gain +1.3 dB. Nobody has listened yet. 309 tests.
+- **Ops (pre-approved, logged):** applied the additive migration `sixam_sounds` (create table, 3 indexes, RLS on, no policies; nothing dropped or rewritten) on the Six AM Supabase project (crossfit-log). Empty; the sandbox stays in memory.
+- **Design approved (L176):** with option B for hearing parts (L177: headphones/speaker on hover, a chip by Play) and Play opening the Deck in one go (L178). Last tidy-up round, then the UI build. Process change for the wrap-up: design canvas sign-off as a permanent Founder step (To carry over).
+- **Final design (approved + option B):** Hear bar removed; headphones/speaker on hover by each lane name, chip by Play ("Only Bass ×", "Bass muted ×"); no Deck banner, the first Play opens the Deck with one line. 12 `final-*` screens; handoff updated. Next: the UI build.
+- **One-click Play checked (L179):** of five orders, only "open the Deck, wait for its first report, then share" worked reliably in Chrome 155 (2 of 2 with auto-select, picker opens without it); end to end the parts were heard 8 s after the click with the model cached, 39 s on first download. The real picker wasn't seen by eye (screen locked): owner checks at the final review.
+- **S1 Listen UI built:** `/map?id=` is the Lab (head, transport with first-Play, hearing chip, real getting-ready and catching-up, Listen/Make switch, Deck dot), map with ruler seek and section loops, chord lane filled as you listen, option B icons, production `/deck`. Real track: playing ~10 s after Play (cached), ~32 s cold; seek caught up ~5 s at the target ±0.7 s; storage clean. L180, L181, T91, T92. Shots in `user-testing/shots-2026-10-26-lab-s1/`. Weak: the section detector's "Section 1/2" labels; loop fill from mid-section ~60 s. User test next.
+- **S1 user test:** job 1 = 3, job 2 = 4 (`report-2026-10-26-lab-s1.md`). Majors: only Drums has sub-layers, a long section loops its first 16 bars silently, closing the Deck stops silently and resumes late. Guardrails pass except hit areas (24 px). Fix pass sent (LS1-1…11, L182: last ~30 s of parts in memory for instant jumps back).
+- **S1 fix pass (T93, L183):** all of LS1-1…11; jumps back within 30 s seamless; far jumps show seconds left; Deck closed / reload keep the position; part hints and chord row explained; 28 px targets. 314 tests. Re-test next.
+- **S1 re-test:** jobs 3 / 4. Most fixes hold; new major N1: the lanes (full-mix estimate) disagree with what the separated parts play. Fix pass 2 queued after S2 is built (same files): lanes from the separated levels as heard, Deck reopen, countdown, resume stutter, loop wrap.
+- **S2 Mentor in the Lab built:** questions carry the focus part, hearing, bar, loop, chords and, with a loop in memory, the part's numbers (never audio); answers pinned as dots on the focus lane with the chat card and Send composer; stored per track (L184); the Mentor can't claim to hear and says it can't hear tone (L185); T94. 3 real Claude calls ($0.05). Found: a loop at the very start of a track never reaches memory (S1 bug). The sandbox had no Claude key, so testers couldn't ask: fixed as ops (.env.local filled). 326 tests.
+- **S1 fix pass 2 (L186, T95):** lanes now drawn from what the separated parts play (vocals lane solid over bars 1–25 where it was empty), saved on the map; loop at the track start reaches memory in 20 s (was never); reopening a closed Deck resumes in ~9 s at the right place (was 34 s, 26 s late); countdown counts; one clean wait on resume; "filling the loop…". Sandbox Mentor answers for real now. 333 tests. Combined S1+S2 user test next.
+- **S1+S2 test:** jobs 4 / 4 / 3. S1 fixes hold; the Mentor is honest and uses the loop's numbers, but the card is too small to read (M1) and S2 targets are tiny. Fix pass on S2 next, then S3.
+- **S2 fix pass (L187, L188, T96):** taller card with one scroll, 28 px targets, the Mentor uses what the Lab heard (real answer: "the map estimates the bass stops after bar 48… but the Lab heard it playing at bar 52, so I'd trust the Lab here"), hover previews, plain honesty line, Drums kick/hats rows from bands. 337 tests. Limit: at 1440×900 the card under the Bass lane leaves ~190 px of thread.
+- **S2 re-test:** job 3 still 3: everything fixed (heard data first, hover previews, targets, honesty line, drums rows) except the card, which opens low and shows 1–2 lines at 1440×900. Fix pass 3: card gets ≥ 300 px.
+- **S2 fix pass 3 (T97):** card thread 374 px for every focus lane at 1440×900 (beside the dot), short honest answer at unheard bars, drums history kept. 341 tests. Quick job-3 re-check next.
+- **S2 re-check 2: job 3 = 4 (pass).** Whole answers readable beside the dot; unheard-bar answer exact; drums history kept. Minor leftovers folded into the S3 brief. S3 Make and S4 Save are built together (one room in the design, engine ready, T98).
+- **S3 Make + S4 Save built:** Mine loops with the original's bass in the same loop, A/B within 0.17 dB, knobs re-render in ~35 ms, Suggest in ~0.4 s off the main thread, preset menu, words loop via Stable Audio ($0.08), save to the library (read back), the Mentor rail with knob context. L189–L192, T99. 355 tests. Weak: Suggest goes to extremes on the real track (kick bleed): data-evals Y10 before anyone relies on the ticks. User test next.
+- **S3+S4 test:** jobs 4 / 3. Make works (A/B 0.2 dB, fast knobs, honest Mentor); Save works but a rename after saving is lost, A/B is below the fold at 734 px, and saved sounds leave no trace in the Lab. Fix pass sent (T100: keep the approved order, fit it on a 734 px page).
+- **S3/S4 fix pass (T101):** rename is a PATCH (no duplicate), everything fits a 734 px page with A/B visible, saved sounds line that reopens a sound, honest Suggest, Make a bass instead, notes in the strip. 358 tests. Re-check next.
+- **S5 started:** a quick Studio lane-model design pass (L193) runs while the Make/Save re-check runs.
+- **S3+S4 re-check: jobs 4 / 4 (pass).** All fixes hold; Suggest 0.45 s round trip. Small fixes sent (saved sounds clickable before the loop is read, Mine silent where the original bass is, 28 px targets).
+- **S5 design:** 3 directions (Fold, Inspect, Shelf); PM picked Fold from the pack (L194, T102). Skills run on Fold. Critic next.
+- **S5 canvas sign-off (L195):** the Studio lanes design goes on the owner's canvas after the critic round; UI build waits for approval; lane-model engine and data work go ahead.
+- **S5 critic round 1 (Fold): 6/10** (clutter 1 · hierarchy 1 · legibility 1 · feel 2 · copy 1): family rows half-built (only Drums), textured clip bodies, a yellow-heavy transport with a Filter knob, no bar numbers, cramped hover mix controls and yellow M, a big preview disc in the crate. Gaps 2–3 touch today's Studio look: fixed in the prototype and flagged for the owner on the canvas. Fix round sent.
+- **S5 Fold round 2 (T104):** all six critic gaps fixed; ten changes to today's Studio look listed for the owner. Critic round 2 next, then the canvas.
+- **S5 critic round 2: 8/10** (clutter 2 · hierarchy 2 · legibility 1 · feel 2 · copy 1). Last small pass of cuts (worst-case list end, solo not in the accent, cut the empty Master row, counts only when folded, transport string, crate cards), then the canvas.
+- **S5 design final (T105):** cuts after 8/10; `design/studio-lanes/final-*.png` with 11 listed changes to today's Studio look. Sent to the parent for the owner's canvas; S5 UI waits for approval.
+- **S5 engine (no UI):** lane model with 11 types in 7 families and its edit rules, backward-compatible track docs and a migration of the 4 lanes (L198), library sounds as copied blocks transposed into the track's key (L197, L199), rendered by the Make synth (L196), a per-lane mixer not yet wired. 400 tests. Not browser-checked; old tracks should play unchanged (guardrail for the evals).
+- **S5 design approved (L200):** Fold for the MVP, with option B headphones/speaker in the Studio instead of S/M. Filter knob removed (backlog). S5 UI build next.
+- **Lab evals (data-evals, `evals-runs/2026-10-26-lab-evals.md`):** Y1, Y3, Y4, Y5, Y8, Y9, Y10, B6 pass; 0 bytes of the original stored or sent; keys never served. Findings: F1 Suggest goes to extremes (kick bleed reads as pitch drop) — fix before the review; F2 Reese 1.1 dB quieter in mono; F3 older sounds hidden behind "+N"; F4 bars ~35–55 ms late. Chords unproven. $0.18 paid calls.
+- **S5 Studio lanes UI built** (Fold, option B headphones/speaker per lane, families, add/rename/reorder/remove, volume/pan on hover, crate with My sounds and drop to the matching lane, library block drawer, LaneMixer wired). **Old tracks unchanged in a real browser:** every scheduled note identical before and after on 3 seeded old-shape tracks (2557 / 1612 / 1612 notes), master level within noise. L201–L204, T106. 409 tests. User test, final critic next.
+- **Eval fixes (L205, T107):** Suggest no longer reads kick bleed as pitch drop (target pitch drop 0.2–3.5 semitones, was 2.3–14.9; top-end values 1 of 120, was 13+ pitch drop alone; distance still falls 72–92 %); A/B and meter both stereo RMS (Reese −0.11 dB); every saved sound reachable. Re-grade by data-evals next.
+- **S5 user test:** jobs 4 / 4 (Lab → Studio loop in under a minute), but a **blocker**: Undo is never saved, so an undone lane removal is lost on reload. Fix pass sent with the guardrail misses (hit areas, contrast).
+- **Real data untouched (checked in Supabase, read-only):** the owner's `sixam_tracks` has 3 tracks, last updated 2026-10-25 17:48 UTC, before this phase; `sixam_sounds` 0 rows, Lab Mentor threads 0, `sixam_maps` last updated 25 Oct. Every test this phase ran on the in-memory sandbox; the damaged track "S5 baseline C" was a seeded sandbox track. The Undo fix goes in before anything else in the PR.
+- **Undo fixed (L206):** the bug was older than this phase (19 Oct): undo back to the opened state was never saved. Fixed at the root; remove → undo → reload and block move → undo → reload both keep the work; old tracks still schedule identically. Plus the S5 guardrail fixes (T108). An automated test for undo-save asked for before the PR.
+- **Undo test added:** the autosave rule is a tested function (`src/lib/autosave.ts`, 7 cases incl. remove lane → undo → the opened doc is saved); the removed-lane note's Undo only undoes that removal. 417 tests.
+- **S5 re-check:** Undo never loses work now (4 of 4 cases pass across reloads). New **blocker S5-9**: dragging a block reflows the timeline (the remove bin squeezes the lanes), so a block lands far off and cuts its neighbours. Fix pass sent.
+- **Re-grade (data-evals):** Y9 pass (40/40, live within 0.01 dB), Y10 pass on 2 tracks (kick-bleed extremes gone; floors remain where the original asks; Tone/Drive pinned on two presets), Y5 Studio lane edits 7/7 survive a reload, old tracks still identical. Note: mapping the second track played it aloud on the Mac for ~3:20 (capture needs audible playback).
+- **Drag blocker fixed (L207):** layout pinned and moves measured from the press; 1/4/8-bar drags land exactly, release at the start = no move; all gutter controls hit-test ≥ 28 px (T109). 425 tests.
+- **S5 last re-check: job 5b = 4 (pass).** Drags exact, targets 28 px, drawer labelled, Undo safe. Minor S5-10 (coarse overwrite trim) to the backlog. Built screens for the final critic in `design/built-final/`.
+- **Ops:** Vercel preview refused: the account's free tier hit 100 deployments today ("try again in 24 hours", other products' deploys). For the final review the owner gets a local production build on http://localhost:3057 (real Supabase from `.env.local`, same as a preview would use) until the quota resets.
+- **Final critic (built product):** Lab 7/10, Studio 8/10. Taken: card size and duplication, fades, ruler alignment, Your sounds into the preset menu, Studio drawer knobs and preset picker, crate grouped by source. Not taken where the critic contradicts the owner's approved calls (T110). Last fix pass running.
+- **Shared knob:** the Studio block drawer now uses the Lab's knob (`src/components/ui/knob.tsx`); the Make room is pixel-identical. All final polish done; PR next.
+- **PR 95 opened** (https://github.com/OAJohansson/build-sprint/pull/95). Review on the local production build http://localhost:3057 (Vercel preview quota used up today). Eval report `eval-report-phase4.md`. Owner pushed once for the final review; merge only on their yes.
+- **Owner review bug fixed (L208, T113):** Make took ~50 s to come alive with no countdown when entered while playing mid-section. Now 22–35 s with a visible countdown; checked on a production build (knobs live, B · Mine plays, Save works). 425 tests.
+- **Owner: "Mine is way thinner" — measured, not a bug:** octave right (G1 ≈ 49 Hz both), level match right; the original's weight is the 100–400 Hz body (56 % of its energy), Mine is mostly deep sub (85 % below 100 Hz on Round sub). No preset has a sub layer plus a driven body. Sub and Weight knobs go to the top of the backlog as the next slice; for now: Drive or Tone up, or Rubber pluck / Reese. Measuring hook `__sixamLab.weight()` added.
+- **Owner (27 Oct): add Sub and Weight to PR 95** (L209). Built before the merge.
+- **Sub and Weight built (L210):** 8 knobs in Make and the Studio drawer. On the test loop the body (100–400 Hz) went from 17 % to 44 % on Round sub (original 54 %), Rubber pluck 47 %, Reese 43 %; old saved sounds unchanged; Save keeps both. 431 tests.
+- **"Still too thin, no boom boom boom" (27 Oct):** closeness test built (L211). Findings: Mine's notes rang 300–590 ms vs 65–190 ms in the original (a hum, not booms); a hole at the octave above the note (~100 Hz); Mine ~1–2 dB quieter in perceived loudness; saw presets too bright. Part of the on-beat thump in the Mason Flint bass stem behaves like the kick's low end (same on beats without a bass note), not the bass line. Tuned (L212): score 37 → 46 at defaults, 61 after Suggest. Blind A/B for the owner (T114). Open owner question: should Mine copy the on-beat kick thump?
+- **Owner's call (27 Oct, L213):** keep the kick out of the bass, as in real production (separate lanes, judge them together). Make's A/B now plays the original drums under both sides, on by default. Cleaning the kick bleed out of the separated bass parked in the backlog.
+- **Owner (27 Oct): drums under the A/B "sounds closer now but still not the same".** AI fine-tuning of Make's knobs against the closeness score added to the backlog. Bug fixed (T115): a saved sound opened in the Studio had no obvious way back to the crate; a "← My sounds" link and Esc now return to it.
+- **Owner wants Make for every layer (drums, other, vocals), not just bass, as the next thing.** Not built in PR 95; how to run it is being asked of the owner.

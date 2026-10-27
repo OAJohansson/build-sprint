@@ -93,14 +93,24 @@ export function keyPhrase(key: string, scale: string): string {
  * guide; Lyria prompt guide: genre, instruments, BPM, key). Instrumental and bass-only, so it
  * sits under the owner's own drums.
  */
-export function bassLoopRequest(src: LoopSource, bars: number, seed?: number): LoopRequest {
+export function bassLoopRequest(src: LoopSource, bars: number, seed?: number, words?: string): LoopRequest {
   const bpm = Math.round(src.bpm);
   const scale = /^maj/i.test(src.scale) ? "major" : "minor";
   const styles = styleWords(src);
   const genre = styles.length ? `${styles.join(", ")} ` : "House ";
+  const own = words ? cleanWords(words) : "";
   const prompt =
-    `${genre}bass loop. Solo bassline only: no drums, no percussion, no chords, no vocals. ` +
+    `${genre}bass loop.${own ? ` The bass: ${own}.` : ""} Solo bassline only: no drums, no percussion, no chords, no vocals. ` +
     `${bpm} BPM, ${keyPhrase(src.key, scale)}. ${bars} bars of 4/4, a seamless loop that repeats cleanly. ` +
     `Tight, groovy, clean studio mix.`;
   return { prompt, bpm, key: src.key.trim(), scale, bars, ...(seed !== undefined ? { seed } : {}) };
+}
+
+/**
+ * Make's "Describe a bass in words…" (S3, L157): the owner's own words go into the prompt with the
+ * track's numbers, nothing else. One line, at most 160 characters, letters, digits and plain
+ * punctuation only, no trailing full stop.
+ */
+export function cleanWords(words: string): string {
+  return words.normalize("NFC").replace(/[^\p{L}\p{N} ,;:'’()/&+-]+/gu, " ").replace(/\s+/g, " ").trim().slice(0, 160).replace(/[\s,;:]+$/, "");
 }

@@ -17,6 +17,7 @@ import { sharedTraits } from "@/lib/mentor/group-traits";
 import { ownerLines, recentEditLines, sentencesOf } from "@/lib/mentor/owner-lines";
 import { askClaude, MentorError, UPDATES_PROFILE } from "./claude";
 import { mapContext } from "@/lib/map/context";
+import { factsLine, keyFlats, labContextText, unheardBars, unheardLoop, labThread, notesFromThread, parseLabAsk, PART_LABEL, type LabMeta, type ThreadItem } from "@/lib/mentor/lab";
 import type { Group, MentorStore, MessageRow } from "./mentor-store";
 
 // One Mentor request end to end: load what the job needs from the store (the server builds the
@@ -43,6 +44,8 @@ export type AskBody = {
   tz?: unknown;
   /** "setup": learn events from the setup dialog, so Settings says "From setup" (F11). */
   source?: unknown;
+  /** Lab (S2): the focus part, bar, hearing, chords and the looped part's numbers (lab.ts LabAsk). */
+  lab?: unknown;
 };
 
 /** Work to run after the response (memory rewrite), so the answer isn't slowed down. */
@@ -62,6 +65,8 @@ export type AskReply = {
   dropped: string[];
   latencyMs: number;
   usage: UsageSummary;
+  /** Lab: where the exchange is pinned and its facts line. */
+  lab?: LabMeta;
 };
 
 type Fail = { error: string; status: number; extra?: Record<string, unknown> };
@@ -102,7 +107,7 @@ function askedText(job: Job, message: string, track: EarsAnalysis | null): strin
   const label: Record<Job, string> = {
     explain: "Explain", suggest_genre: "Suggest genre", teach: "Teach me a genre", ear_training: "Ear training",
     studio_start: "Studio start", listen_next: "Listen next", chat: "", setup: "Set up my taste",
-    learn: "Learn from use", propose_groups: "Propose genre groups", taste_session: "Taste session",
+    learn: "Learn from use", propose_groups: "Propose genre groups", taste_session: "Taste session", lab: "",
   };
   // "Explain · Work (Edit)": the track named once (critic, round 2).
   const base = job === "chat" ? message : message ? `${label[job]}: ${message}` : label[job];
@@ -114,6 +119,7 @@ export async function ask(store: MentorStore, body: AskBody, now: Date, tz: numb
   const job = body.job;
   if (job === "chat") return askChat(store, body, now, tz, later);
   if (job === "learn") return learnEvents(store, body, now, tz, later);
+  if (job === "lab") return askLab(store, body, now, tz);
   const spec = JOBS_SPEC[job];
   const trackId = text(body.trackId, 600) || null;
   const message = text(body.message);
@@ -319,6 +325,66 @@ async function askChat(store: MentorStore, body: AskBody, now: Date, tz: number,
   // refreshMemory checks itself whether a rewrite is due (every MEMORY_EVERY exchanges, or the profile).
   if (later) later(() => refreshMemory(store, new Date()));
   return reply;
+}
+
+/** How many earlier Lab exchanges about this track's part go back to the model (newest last). */
+const LAB_HISTORY = 6;
+
+/**
+ * A question from the Lab (S2, B6): the track's map and the Lab's facts (focus part, bar, what is
+ * heard, chords so far, the looped part's numbers) go with it; the exchange is stored in the
+ * track's own thread ("lab:<id>") with the bar and part it pins to, so the notes survive a reload.
+ * Not part of the one chat's memory.
+ */
+async function askLab(store: MentorStore, body: AskBody, now: Date, tz: number): Promise<AskReply | Fail> {
+  const message = text(body.message);
+  if (!message) return fail("Type a question first.");
+  const trackId = text(body.trackId, 600);
+  if (!trackId) return fail("Pick a track first.");
+  const map = await store.getMap(trackId).catch(() => null);
+  if (!map) return fail("This track has no map yet. Map it first.", 404);
+  const lab = parseLabAsk(body.lab, map.bars);
+  if (!lab) return fail("The Lab didn't say which part and bar this is about.");
+  const [track, profile] = await Promise.all([loadTrack(store, trackId, body.analysis), store.getProfile()]);
+  const threadId = labThread(trackId);
+  // The earlier exchanges about this part, each question starting with its bar.
+  const notes = notesFromThread((await store.thread(threadId, 100)).flatMap((r): ThreadItem[] => {
+    if (r.role === "user") return [{ id: r.id, role: "user" as const, text: r.content, createdAt: r.createdAt }];
+    if (r.content.startsWith('{"error"')) return [];
+    try { return [{ id: r.id, role: "assistant" as const, answer: JSON.parse(r.content) as unknown, createdAt: r.createdAt }]; } catch { return []; }
+  })).filter((n) => n.part === lab.part).slice(-LAB_HISTORY);
+  const history: HistoryTurn[] = notes.flatMap((n) => [
+    { role: "user" as const, content: `(bar ${n.bar}, ${PART_LABEL[n.part]}) ${n.q}` },
+    { role: "assistant" as const, content: answerText(n.answer) },
+  ]);
+  const input: MentorInput = {
+    job: "lab", profile: profile.text, track, message, history,
+    maps: { [trackId]: mapContext(map) },
+    lab: labContextText(lab, map),
+  };
+  // No analysis stored (a map made from a link): the map's own facts stand in for the track's.
+  if (!track) input.lab = `[ears] Track: ${map.title || "untitled"} by ${map.uploader || "unknown"}, ${map.bpm} BPM, key ${map.key} ${map.scale}.\n${mapContext(map)}\n${input.lab}`;
+  let result;
+  try {
+    result = await askClaude(input, { labQuestion: message, labUnheard: unheardLoop(lab, map) ?? undefined, labUnheardBars: new Set(unheardBars(lab)) });
+  } catch (error) {
+    if (error instanceof MentorError && error.costUsd > 0) {
+      await store.addMessage({ threadId, role: "assistant", job: "lab", content: JSON.stringify({ error: error.kind }), sources: null, usage: error.usage, costUsd: error.costUsd, counted: false });
+    }
+    throw error;
+  }
+  const meta: LabMeta = { bar: lab.bar, part: lab.part, facts: factsLine(lab.measure, keyFlats(map.key, map.scale)) };
+  await store.addMessage({ threadId, role: "user", job: "lab", content: message, sources: null, usage: null, costUsd: 0, counted: true });
+  const saved = await store.addMessage({
+    threadId, role: "assistant", job: "lab", content: JSON.stringify({ ...result.answer, lab: meta }), sources: result.answer.sentences,
+    usage: result.usage, costUsd: result.costUsd, counted: false,
+  });
+  return {
+    threadId, job: "lab", answer: result.answer, dropped: result.dropped, latencyMs: result.latencyMs,
+    message: { id: saved.id, createdAt: saved.createdAt, costUsd: result.costUsd, tokens: result.usage },
+    usage: await usageSummary(store, now, tz),
+    lab: meta,
+  };
 }
 
 /** The stored maps of these tracks as prompt text; a missing map (or table) is simply left out. */

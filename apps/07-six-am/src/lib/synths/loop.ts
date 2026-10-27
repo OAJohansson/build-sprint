@@ -4,6 +4,7 @@
 import { drumPatternById, KITS, type KitId } from "./kits";
 import { patternById } from "./patterns";
 import { clampKnobs, PRESETS, type KnobValues, type PresetId } from "./presets";
+import { parseLibLoop, type LibLoop } from "@/lib/make/lib-loop";
 
 /** Studio lane indexes, the same as timeline.ts TRACKS: Drums 0, Bass 1, Chords 2. */
 export const LANE = { drums: 0, bass: 1, chords: 2 } as const;
@@ -80,8 +81,8 @@ export type AiLoop = {
   draws: number;
 };
 
-/** Anything a doc's `sounds` list can hold: a synth, a kit, or an AI loop. */
-export type Sound = PlayableLoop | AiLoop;
+/** Anything a doc's `sounds` list can hold: a synth, a kit, an AI loop, or a library sound (S5). */
+export type Sound = PlayableLoop | AiLoop | LibLoop;
 
 const AI_KEYS = new Set(["C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G", "G#", "Ab", "A", "A#", "Bb", "B"]);
 const num = (v: unknown, lo: number, hi: number) => typeof v === "number" && Number.isFinite(v) && v >= lo && v <= hi;
@@ -90,6 +91,7 @@ const num = (v: unknown, lo: number, hi: number) => typeof v === "number" && Num
 export function parseSound(v: unknown): Sound | null {
   if (!v || typeof v !== "object") return null;
   const o = v as Record<string, unknown>;
+  if (o.source === "lib") return parseLibLoop(v);
   if (o.source !== "ai") return parsePlayableLoop(v);
   if (typeof o.id !== "string" || !o.id || o.id.length > 40) return null;
   if (typeof o.aiId !== "string" || !/^[0-9a-f-]{36}$/i.test(o.aiId)) return null;
@@ -110,6 +112,10 @@ export function parseSound(v: unknown): Sound | null {
 export function soundMeta(s: Sound): { track: number; name: string; bars: number; vibe: string; kind: "kick" | "sub" | "acid" | "pump" | "stab" | "pad" } {
   if (s.source === "kit") return { track: s.lane, name: s.name, bars: s.bars, vibe: `${s.kit} kit`, kind: "kick" };
   if (s.source === "ai") return { track: s.lane, name: s.name, bars: s.bars, vibe: "AI loop", kind: "sub" };
+  if (s.source === "lib") {
+    const kind = ({ "round-sub": "sub", "rubber-pluck": "pump", reese: "pump", "acid-line": "acid" } as const)[s.preset];
+    return { track: s.lane, name: s.name, bars: s.bars, vibe: "My sound", kind };
+  }
   const kind = ({ sub: "sub", acid: "acid", reese: "pump", organ: "stab", rhodes: "stab", pad: "pad" } as const)[s.preset];
   return { track: s.lane, name: s.name, bars: s.bars, vibe: PRESETS[s.preset].name, kind };
 }

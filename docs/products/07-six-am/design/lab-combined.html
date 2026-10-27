@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab combined</title>
+<style>
+:root { color-scheme: dark; }
+body { margin: 0; background: #131110; color: #f1e6d3; font: 14px/1.5 ui-monospace, "IBM Plex Mono", Menlo, monospace; }
+main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font: italic 400 32px/1.1 Georgia, serif; margin: 0 0 8px; }
+p.lede { color: #aa9c88; margin: 0 0 24px; max-width: 640px; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 28px; }
+@media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+figure { margin: 0; }
+img { display: block; width: 100%; height: auto; border: 1px solid #2c2622; border-radius: 6px; }
+figcaption { display: flex; gap: 12px; padding-top: 10px; }
+figcaption b { flex: none; width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid #f2b134; color: #f2b134; border-radius: 50%; font-weight: 500; }
+figcaption strong { display: block; font-weight: 500; }
+figcaption span { color: #aa9c88; }
+figcaption strong { color: #f1e6d3; }
+</style></head>
+<body><main>
+<h1>Six AM · The Lab, approved design (final)</h1>
+<p class="lede">Approved by the owner (L176), with option B for hearing parts (L177): headphones and speaker icons show by a lane's name on hover, and a chip by Play says what you're hearing. There is no Deck banner (L178): the first Play opens the Deck with one line. These screens are what the engineer builds. Everything below is superseded.</p>
+<div class="grid">
+  <figure>
+    <a href="lab-combined/final-listen.png"><img src="lab-combined/final-listen.png" alt="Listen, a question open" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>1</b><span><strong>Listen, a question open</strong>Only the bass: lit headphones by “Bass” and the chip “Only Bass ×” next to Play. The question dot at bar 97 is open as a short chat below the lane.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/final-listen-only-bass.png"><img src="lab-combined/final-listen-only-bass.png" alt="Listen, only the bass" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>2</b><span><strong>Listen, only the bass</strong>The same state with no card open. The other lanes are dimmed.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/final-listen-muted.png"><img src="lab-combined/final-listen-muted.png" alt="Listen, bass muted" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>3</b><span><strong>Listen, bass muted</strong>A crossed speaker stays lit by “Bass”, its lane is dimmed, and the chip reads “Bass muted ×”.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/final-listen-hover.png"><img src="lab-combined/final-listen-hover.png" alt="Listen, hovering a lane name" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>4</b><span><strong>Listen, hovering a lane name</strong>Hovering “Other” shows the headphones (hear only Other) and the speaker (mute Other). Nothing shows until you hover or tab to it.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/final-make.png"><img src="lab-combined/final-make.png" alt="Make" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>5</b><span><strong>Make</strong>Unchanged apart from the header chip.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/final-make-preset-menu.png"><img src="lab-combined/final-make-preset-menu.png" alt="Make, preset menu open" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>6</b><span><strong>Make, preset menu open</strong>Tagged presets; “Describe a bass in words…” last.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/final-first-play.png"><img src="lab-combined/final-first-play.png" alt="First Play" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>7</b><span><strong>First Play</strong>The first press of Play opens the Deck and Chrome's share dialog (not drawn) in one go, with one line. The dot reads “Deck opening…”.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/final-getting-ready.png"><img src="lab-combined/final-getting-ready.png" alt="Getting ready" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>8</b><span><strong>Getting ready</strong>Gold progress line and “Getting ready… 42% · first time only, about 18 s”.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/final-catching-up.png"><img src="lab-combined/final-catching-up.png" alt="Catching up" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>9</b><span><strong>Catching up</strong>After a seek: dashed playhead and “catching up…”.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/final-empty-notes.png"><img src="lab-combined/final-empty-notes.png" alt="No questions yet" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>10</b><span><strong>No questions yet</strong>“+ Ask about the bass here”.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/final-worst-listen.png"><img src="lab-combined/final-worst-listen.png" alt="Worst case, Listen" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>11</b><span><strong>Worst case, Listen</strong>Long names (the title and artist truncate; BPM and key stay) with the chip in place. 512 bars, clustered dots.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/final-worst-make.png"><img src="lab-combined/final-worst-make.png" alt="Worst case, Make" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>12</b><span><strong>Worst case, Make</strong>12 exchanges; the chat opens at the newest.</span></figcaption>
+  </figure>
+</div>
+<h1 style="margin-top:48px;font-size:24px">Superseded: sign-off round 1</h1>
+<h2 style="font:italic 400 20px Georgia,serif;margin:0 0 8px">Sign-off changes, round 1</h2>
+<p class="lede">The owner's sign-off comments (L167–L171): a Send arrow in the Mentor box (Enter sends, Shift+Enter for a new line); one Hear bar instead of S/M on every lane; position as “3:06 · in Drop 1”; a loop chip only while looping; “key A minor”; “← All tracks” and no back link in Make; the Mentor as a plain chat with clickable bar tags and dots on the map. The previous final design follows below.</p>
+<div class="grid">
+  <figure>
+    <a href="lab-combined/signoff-r1-listen.png"><img src="lab-combined/signoff-r1-listen.png" alt="Listen, a question open" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>1</b><span><strong>Listen, a question open</strong>A Hear bar above the lanes (All · Drums · Bass · Other · Vocals, “only” or “without”); no S/M in the gutters. Questions are dots on the bass. The open one is a short chat below the lane: your question on the right with a “bar 97” tag, the answer on the left, a reply box with a send arrow.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/signoff-r1-make.png"><img src="lab-combined/signoff-r1-make.png" alt="Make" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>2</b><span><strong>Make</strong>A caption says what's playing (no back link). The Mentor rail is a plain chat that opens at the latest exchange; each question's bar tag jumps the playhead. The Ask box has a send arrow.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/signoff-r1-make-preset-menu.png"><img src="lab-combined/signoff-r1-make-preset-menu.png" alt="Make, preset menu open" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>3</b><span><strong>Make, preset menu open</strong>Tagged starting points; “Describe a bass in words…” last.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/signoff-r1-first-visit.png"><img src="lab-combined/signoff-r1-first-visit.png" alt="Deck closed, first visit" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>4</b><span><strong>Deck closed, first visit</strong>One calm instruction. The Hear bar and the map are dimmed until the Deck is on.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/signoff-r1-getting-ready.png"><img src="lab-combined/signoff-r1-getting-ready.png" alt="Getting ready" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>5</b><span><strong>Getting ready</strong>Gold progress line and “Getting ready… 42% · first time only, about 18 s”.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/signoff-r1-catching-up.png"><img src="lab-combined/signoff-r1-catching-up.png" alt="Catching up" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>6</b><span><strong>Catching up</strong>After a seek: dashed playhead and “catching up…”.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/signoff-r1-empty-notes.png"><img src="lab-combined/signoff-r1-empty-notes.png" alt="No questions yet" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>7</b><span><strong>No questions yet</strong>No dots. One plain button: “+ Ask about the bass here”.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/signoff-r1-worst-listen.png"><img src="lab-combined/signoff-r1-worst-listen.png" alt="Worst case, Listen" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>8</b><span><strong>Worst case, Listen</strong>Long names: the artist truncates, BPM and key stay. 512 bars. Clustered questions show as a larger dot, and the open thread scrolls inside the card.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/signoff-r1-worst-make.png"><img src="lab-combined/signoff-r1-worst-make.png" alt="Worst case, Make" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>9</b><span><strong>Worst case, Make</strong>12 exchanges. The chat opens at the newest and fades above the Ask box.</span></figcaption>
+  </figure>
+</div>
+<h1 style="margin-top:48px;font-size:24px">Final design before sign-off</h1>
+<h2 style="font:italic 400 20px Georgia,serif;margin:0 0 8px">The Lab, final design</h2>
+<p class="lede">The owner's pick (L162): Listen with notes on the timeline, and Make, the focused room for the soloed part. The critic scored round 4 at 9/10; this is the last pass of cuts and renames (T85: “Suggest settings” only places gold ticks and never turns a knob). Same moment where it applies: Lost in The Loop, bar 97, Drop 1 looping, Bass soloed. Earlier rounds are below.</p>
+<div class="grid">
+  <figure>
+    <a href="lab-combined/define-final-listen.png"><img src="lab-combined/define-final-listen.png" alt="Listen, note open" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>1</b><span><strong>Listen, note open</strong>The full map. The Mentor's answers are pins above the soloed bass. Note 2 hangs below the Bass lane with a leader to its pin: question, answer, plain facts, one reply line, one “Make a bass like this →”.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-final-make.png"><img src="lab-combined/define-final-make.png" alt="Make" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>2</b><span><strong>Make</strong>Loop strip → Round sub ▾ → six knobs (one arc colour, a dot at zero, gold ticks from the Mentor) → “Mentor: Length down to 1/8, Pitch drop up. That's the bounce.” / “Gold ticks mark those.” with “Suggest settings” → the A/B switch at the same loudness → Save.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-final-make-preset-menu.png"><img src="lab-combined/define-final-make-preset-menu.png" alt="Make, preset menu open" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>3</b><span><strong>Make, preset menu open</strong>Tagged starting points, with the current one checked. The last item is “Describe a bass in words…”.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-final-first-visit.png"><img src="lab-combined/define-final-first-visit.png" alt="Deck closed, first visit" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>4</b><span><strong>Deck closed, first visit</strong>One calm instruction: open the Deck, then Chrome's Share dialog. The map is dimmed and play is off.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-final-getting-ready.png"><img src="lab-combined/define-final-getting-ready.png" alt="Getting ready" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>5</b><span><strong>Getting ready</strong>The first-time model download: gold progress line and “Getting ready… 42% · first time only, about 18 s”.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-final-catching-up.png"><img src="lab-combined/define-final-catching-up.png" alt="Catching up" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>6</b><span><strong>Catching up</strong>After a seek: dashed playhead and “catching up…” for about 5 s. The card hangs left of its pin, clear of the playhead.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-final-empty-notes.png"><img src="lab-combined/define-final-empty-notes.png" alt="No notes yet" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>7</b><span><strong>No notes yet</strong>No pins. One plain button at the playhead: “+ Ask about the bass here”.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-final-worst-listen.png"><img src="lab-combined/define-final-worst-listen.png" alt="Worst case, Listen" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>8</b><span><strong>Worst case, Listen</strong>Long names, 512 bars with section codes, the chord at each section start only (the rest on hover), clustered pins, the long answer clamped with “Read all”.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-final-worst-make.png"><img src="lab-combined/define-final-worst-make.png" alt="Worst case, Make" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>9</b><span><strong>Worst case, Make</strong>12 notes scroll above the Ask bar and fade out cleanly.</span></figcaption>
+  </figure>
+</div>
+<h1 style="margin-top:48px;font-size:24px">Earlier rounds</h1>
+<div class="grid">
+  <figure>
+    <a href="lab-combined/define-r4-listen.png"><img src="lab-combined/define-r4-listen.png" alt="Round 4, listen" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r4</b><span><strong>Round 4 · listen</strong>Before critic round 4 (9/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r4-make.png"><img src="lab-combined/define-r4-make.png" alt="Round 4, make" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r4</b><span><strong>Round 4 · make</strong>Before critic round 4 (9/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r4-first-visit.png"><img src="lab-combined/define-r4-first-visit.png" alt="Round 4, first-visit" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r4</b><span><strong>Round 4 · first-visit</strong>Before critic round 4 (9/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r4-getting-ready.png"><img src="lab-combined/define-r4-getting-ready.png" alt="Round 4, getting-ready" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r4</b><span><strong>Round 4 · getting-ready</strong>Before critic round 4 (9/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r4-catching-up.png"><img src="lab-combined/define-r4-catching-up.png" alt="Round 4, catching-up" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r4</b><span><strong>Round 4 · catching-up</strong>Before critic round 4 (9/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r4-empty-notes.png"><img src="lab-combined/define-r4-empty-notes.png" alt="Round 4, empty-notes" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r4</b><span><strong>Round 4 · empty-notes</strong>Before critic round 4 (9/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r4-worst-listen.png"><img src="lab-combined/define-r4-worst-listen.png" alt="Round 4, worst-listen" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r4</b><span><strong>Round 4 · worst-listen</strong>Before critic round 4 (9/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r4-worst-make.png"><img src="lab-combined/define-r4-worst-make.png" alt="Round 4, worst-make" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r4</b><span><strong>Round 4 · worst-make</strong>Before critic round 4 (9/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r3-listen.png"><img src="lab-combined/define-r3-listen.png" alt="Round 3, listen" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r3</b><span><strong>Round 3 · listen</strong>Before critic round 3 (8/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r3-make.png"><img src="lab-combined/define-r3-make.png" alt="Round 3, make" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r3</b><span><strong>Round 3 · make</strong>Before critic round 3 (8/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r3-first-visit.png"><img src="lab-combined/define-r3-first-visit.png" alt="Round 3, first-visit" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r3</b><span><strong>Round 3 · first-visit</strong>Before critic round 3 (8/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r3-getting-ready.png"><img src="lab-combined/define-r3-getting-ready.png" alt="Round 3, getting-ready" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r3</b><span><strong>Round 3 · getting-ready</strong>Before critic round 3 (8/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r3-catching-up.png"><img src="lab-combined/define-r3-catching-up.png" alt="Round 3, catching-up" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r3</b><span><strong>Round 3 · catching-up</strong>Before critic round 3 (8/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r3-empty-notes.png"><img src="lab-combined/define-r3-empty-notes.png" alt="Round 3, empty-notes" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r3</b><span><strong>Round 3 · empty-notes</strong>Before critic round 3 (8/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r3-worst-listen.png"><img src="lab-combined/define-r3-worst-listen.png" alt="Round 3, worst-listen" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r3</b><span><strong>Round 3 · worst-listen</strong>Before critic round 3 (8/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r3-worst-make.png"><img src="lab-combined/define-r3-worst-make.png" alt="Round 3, worst-make" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r3</b><span><strong>Round 3 · worst-make</strong>Before critic round 3 (8/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r2-listen.png"><img src="lab-combined/define-r2-listen.png" alt="Round 2, listen" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r2</b><span><strong>Round 2 · listen</strong>Before critic round 2 (7/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r2-make.png"><img src="lab-combined/define-r2-make.png" alt="Round 2, make" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r2</b><span><strong>Round 2 · make</strong>Before critic round 2 (7/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r2-first-visit.png"><img src="lab-combined/define-r2-first-visit.png" alt="Round 2, first-visit" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r2</b><span><strong>Round 2 · first-visit</strong>Before critic round 2 (7/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r2-getting-ready.png"><img src="lab-combined/define-r2-getting-ready.png" alt="Round 2, getting-ready" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r2</b><span><strong>Round 2 · getting-ready</strong>Before critic round 2 (7/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r2-catching-up.png"><img src="lab-combined/define-r2-catching-up.png" alt="Round 2, catching-up" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r2</b><span><strong>Round 2 · catching-up</strong>Before critic round 2 (7/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r2-empty-notes.png"><img src="lab-combined/define-r2-empty-notes.png" alt="Round 2, empty-notes" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r2</b><span><strong>Round 2 · empty-notes</strong>Before critic round 2 (7/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r2-worst-listen.png"><img src="lab-combined/define-r2-worst-listen.png" alt="Round 2, worst-listen" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r2</b><span><strong>Round 2 · worst-listen</strong>Before critic round 2 (7/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r2-worst-make.png"><img src="lab-combined/define-r2-worst-make.png" alt="Round 2, worst-make" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r2</b><span><strong>Round 2 · worst-make</strong>Before critic round 2 (7/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r1-listen.png"><img src="lab-combined/define-r1-listen.png" alt="Round 1, listen" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r1</b><span><strong>Round 1 · listen</strong>Before critic round 1 (6/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r1-make.png"><img src="lab-combined/define-r1-make.png" alt="Round 1, make" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r1</b><span><strong>Round 1 · make</strong>Before critic round 1 (6/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r1-first-visit.png"><img src="lab-combined/define-r1-first-visit.png" alt="Round 1, first-visit" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r1</b><span><strong>Round 1 · first-visit</strong>Before critic round 1 (6/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r1-getting-ready.png"><img src="lab-combined/define-r1-getting-ready.png" alt="Round 1, getting-ready" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r1</b><span><strong>Round 1 · getting-ready</strong>Before critic round 1 (6/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r1-catching-up.png"><img src="lab-combined/define-r1-catching-up.png" alt="Round 1, catching-up" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r1</b><span><strong>Round 1 · catching-up</strong>Before critic round 1 (6/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r1-empty-notes.png"><img src="lab-combined/define-r1-empty-notes.png" alt="Round 1, empty-notes" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r1</b><span><strong>Round 1 · empty-notes</strong>Before critic round 1 (6/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r1-worst-listen.png"><img src="lab-combined/define-r1-worst-listen.png" alt="Round 1, worst-listen" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r1</b><span><strong>Round 1 · worst-listen</strong>Before critic round 1 (6/10).</span></figcaption>
+  </figure>
+  <figure>
+    <a href="lab-combined/define-r1-worst-make.png"><img src="lab-combined/define-r1-worst-make.png" alt="Round 1, worst-make" loading="lazy" width="1440" height="900"></a>
+    <figcaption><b>r1</b><span><strong>Round 1 · worst-make</strong>Before critic round 1 (6/10).</span></figcaption>
+  </figure>
+</div>
+</main></body></html>

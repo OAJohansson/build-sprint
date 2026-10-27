@@ -197,3 +197,40 @@ One pass/fail per requirement in the Phase 3 kickoff (`kickoff.md`), run by the 
 ### Build hygiene
 
 `pnpm -F 07-six-am lint`, `test`, `build` pass; every new key in `.env.example`; `checks` green on the PR.
+
+# Evals: Six AM Lab (Phase 4)
+
+Owner's evals from the 26 Oct kickoff (L147), revised with the agreed jobs (L153–L161), part 1
+(agent-checkable). Graders: `user-tester`, `design-critic`, `data-evals`; never the builder. Test
+sandbox only. Owner-only checks (by ear: is a soloed part useful; does my own sound feel inspired by
+it; A/B feels fair) are in the owner's final review.
+
+| # | Eval | Bar | Run by | Result |
+| --- | --- | --- | --- | --- |
+| Y1 | Separation faster than real time on the owner's Mac (Apple silicon, Chrome); measured ratio and delay reported | ratio > 1.0 sustained; delay a few seconds | data-evals | **pass**: 3.76× over a full track, 0 late, delay 5.51 s |
+| Y2 | Original silent locally while parts play | `suppressLocalAudioPlayback` true, and the owner hears only Six AM | data-evals + owner | spike: pass (L151) |
+| Y3 | Zero bytes of the original stored or uploaded, including patch matching and loops | 0 (storage, network, code read) | data-evals | **pass**: 0 (499 requests, storage, code read) |
+| Y4 | Synth or AI sounds in key and on tempo | every synth note in scale, onsets ≤ 5 ms; AI key and tempo ±1 BPM on ≥ 4 of 5 | data-evals | **pass**: synth 619/619 in scale ≤ 2 ms; library blocks 141/141; AI 1 of 1 (capped) |
+| Y5 | Library save and load (sound + loop linked, tags, name) survive a reload; Studio lane changes survive a reload | 5 of 5 each | data-evals | **pass** library 5/5; Studio lane changes 7/7 after reload; old tracks 301/301 offline + schedule spot-check identical |
+| Y6 | User test: every job ≥ 4/5 (sandbox) | jobs 1–5 ≥ 4/5 | user-tester | |
+| Y7 | Design scorecard (one critic, five points) | **9/10 is a target, not a blocker** | design-critic | |
+| Y8 | Section loop is seamless and the playhead shows what you hear | no gap or click at the loop point (> 20 ms silence or a step > −30 dB); playhead within 0.5 s of the heard audio | data-evals | **pass**: 4 seams clean; playhead 20 ms live, 0 looping |
+| Y9 | A/B is level-matched | original and mine within 1 dB RMS when switching | data-evals | **pass** 40/40 offline, live 4/4 within 0.01 dB (Reese 1.1 dB quieter in mono by design, T107) |
+| Y10 | Patch matching suggests settings closer than the starting preset | on ≥ 3 of 5 parts, a measured feature distance (brightness, envelope, pitch) drops vs the preset | data-evals | **pass** 2 tracks, 40/40 pairs closer (58–100 %); kick-bleed extremes gone (pitch drop at max 1/40); floors remain (mono width, very short notes); Tone/Drive pinned on Acid line and Rubber pluck |
+
+### Requirements B1–B11
+
+One pass/fail per requirement in the Lab kickoff (`kickoff.md`), run by the grader named there.
+
+### Guardrails
+
+| Guardrail | Bar |
+| --- | --- |
+| No audio of a streamed original stored, uploaded or sent to any API | 0 |
+| AI keys never in the browser bundle or responses | 0 occurrences |
+| Ears, the Mentor, the map and the Studio unbroken (existing tracks open and play after the lane-model change) | yes |
+| Readable text, hit areas | ≥ 4.5:1, ≥ 28 px |
+
+### Build hygiene
+
+`pnpm -F 07-six-am lint`, `test`, `build` pass; `checks` green on the PR.

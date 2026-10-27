@@ -14,7 +14,7 @@ import { makeKitLoop, makeSynthLoop, type AiLoop, type Sound } from "@/lib/synth
 import { SYNTH_PATTERNS } from "@/lib/synths/patterns";
 import { BASS_PRESETS, CHORD_PRESETS, KNOB_BASICS, PRESETS, knobGuide, knobPosition, knobValue, type KnobId, type PresetId } from "@/lib/synths/presets";
 import type { Timeline } from "./use-timeline";
-import { cx } from "./timeline";
+import { cx } from "./lanes";
 import s from "./sound-drawer.module.css";
 
 const LANE_WORD = ["Drums", "Bass", "Chords"];
@@ -74,7 +74,8 @@ export function SoundDrawer({ t, lane, sound, color, onClose, onNewSound }: {
   };
 
   const pick = (choice: PresetId | KitId) => {
-    if (cur.source === "ai") return;
+    // A library block (S5) has its own drawer (lib-drawer.tsx); this one never edits it.
+    if (cur.source === "ai" || cur.source === "lib") return;
     setMentor({ is: "idle" });
     const same = cur.source === "kit" ? cur.kit === choice : cur.preset === choice;
     if (editing && !same) {
@@ -90,7 +91,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose, onNewSound }: {
     change({ ...starter(lane, choice, cur.pattern), id: cur.id });
   };
   const pickPattern = (id: string) => {
-    if (cur.source === "ai") return;
+    if (cur.source === "ai" || cur.source === "lib") return;
     const next = cur.source === "kit" ? makeKitLoop(cur.kit, id, cur.id) : makeSynthLoop(cur.preset, id, cur.knobs, cur.id);
     if (next) change(next);
   };
@@ -219,6 +220,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose, onNewSound }: {
   return (
     <aside className={s.drawer} style={{ ["--c" as string]: color }} aria-label={cur.source === "ai" ? "AI bass loop" : `${LANE_WORD[lane]} sound`}>
       <div className={s.top}>
+        <button className={s.back} onClick={onClose}>← All sounds</button>
         {mentor.is === "done" || mentor.is === "error" ? (
           <button className={s.link} onClick={() => setMentor({ is: "idle" })}>Hide answer</button>
         ) : null}
@@ -299,7 +301,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose, onNewSound }: {
                     if (free === null) { setAddNote(`No free bars on this lane after bar ${at}: make room first.`); return; }
                     t.addSound(draft, free);
                     setAddNote(`Added at bar ${free}${free !== at ? `, the first free bars after bar ${at}` : ""}.`);
-                    setDraft(starter(lane, chosen ?? undefined, "pattern" in draft ? draft.pattern : undefined));
+                    setDraft(starter(lane, chosen ?? undefined, "pattern" in draft && typeof draft.pattern === "string" ? draft.pattern : undefined));
                   }}>
                     {atDrop ? `Add at the ${drop!.label.toLowerCase()} (bar ${drop!.bar})` : "Add to lane"}
                   </button>

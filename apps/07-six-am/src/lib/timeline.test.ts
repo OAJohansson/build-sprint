@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BARS, place, snapBar, snapLength, type Region } from "./timeline";
+import { BARS, place, snapBar, snapLength, type Region, moveStart } from "./timeline";
 
 const PPB = 10; // pixels per bar
 
@@ -64,5 +64,28 @@ describe("solo (L140)", () => {
     expect(parseDoc({ ...old, soloed: [true, false, false, false] })).toEqual({ ...old, soloed: [true, false, false, false] });
     expect(parseDoc({ ...old, soloed: [false, false, false, false] })).toEqual(old);
     expect(parseDoc({ ...old, soloed: [true] })).toBeNull();
+  });
+});
+
+describe("moving a block by dragging (S5-9)", () => {
+  // 1,220 px of lanes for 64 bars, as at 1440 px wide.
+  const ppb = 1220 / 64;
+  it("moves by the pointer's delta in whole bars", () => {
+    expect(moveStart(9, ppb * 1, ppb, 16, 64)).toBe(10);
+    expect(moveStart(9, ppb * 4, ppb, 16, 64)).toBe(13);
+    expect(moveStart(9, ppb * 8, ppb, 16, 64)).toBe(17);
+    expect(moveStart(9, -ppb * 4, ppb, 16, 64)).toBe(5);
+  });
+  it("doesn't move when released where it was pressed, or within half a bar", () => {
+    expect(moveStart(9, 0, ppb, 16, 64)).toBe(9);
+    expect(moveStart(9, ppb * 0.49, ppb, 16, 64)).toBe(9);
+    expect(moveStart(9, -ppb * 0.49, ppb, 16, 64)).toBe(9);
+  });
+  it("20 px is one bar at this width, never 20 bars", () => {
+    expect(moveStart(9, 20, ppb, 16, 64)).toBe(10);
+  });
+  it("stays inside the track", () => {
+    expect(moveStart(9, -ppb * 40, ppb, 16, 64)).toBe(1);
+    expect(moveStart(9, ppb * 80, ppb, 16, 64)).toBe(49);
   });
 });

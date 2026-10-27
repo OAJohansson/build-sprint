@@ -1,0 +1,176 @@
+/* The Studio's lanes (S5, Fold, L194/L200; from the approved prototype in /dev/studio-lanes): every
+   lane under a family row that folds, 56 px lanes with a 220 px gutter, flat clips at 25% of the
+   lane colour, mix controls on hover, one accent (Play) outside the lanes. No motion beyond 150 ms colour. */
+/* S5-9: both pinned to column 1, so the bin (row 3, column 1) overlays the crate instead of
+   pushing it into a second grid column that squeezed the lanes mid-drag. */
+.tl { --faint: #958a7c; grid-row: 2; grid-column: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: #3a322c transparent; position: relative; }
+.tl :focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
+.fadeEnd { -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent); }
+.content { position: relative; min-height: 100%; display: flex; flex-direction: column; }
+.row { display: flex; flex: none; min-height: 0; }
+.gut { flex: none; width: 220px; min-width: 0; background: var(--panel); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); position: relative; }
+.filler { flex: 1; min-height: 56px; }
+.filler .gut { border-bottom: 0; }
+
+/* Ruler: section names on top, bar numbers every 8 under them; "+ Add lane" in its corner */
+.rulerRow { position: sticky; top: 0; z-index: 6; }
+.rulerShadow { box-shadow: 0 1px 0 rgba(0,0,0,.6), 0 4px 8px rgba(0,0,0,.35); }
+.corner { display: flex; align-items: center; padding-left: 8px; z-index: 7; }
+.ruler { flex: 1; min-width: 0; position: relative; height: 32px; background: var(--panel); border-bottom: 1px solid var(--line); overflow: hidden; cursor: pointer; }
+.tick { position: absolute; bottom: 0; width: 1px; height: 4px; background: var(--line); }
+.tickBig { height: 7px; background: #5a4f45; }
+.barNum { position: absolute; bottom: 2px; padding-left: 4px; font: normal 400 10px var(--f-mono); color: var(--faint); font-variant-numeric: tabular-nums; pointer-events: none; }
+.section { position: absolute; top: 0; height: 17px; padding: 0 8px 0 6px; border-left: 1px solid #8f806e; background: var(--panel); font: 500 11px/17px var(--f-mono); color: var(--ink); white-space: nowrap; pointer-events: none; }
+.rulerMark { position: absolute; bottom: 0; z-index: 3; transform: translateX(-50%); padding: 1px 6px; border-radius: 4px 4px 0 0; background: var(--c); color: var(--bg); font: 500 11px var(--f-mono); pointer-events: none; }
+.addBtn { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 0 10px; border: 1px solid var(--line); border-radius: 99px; background: none; color: var(--muted); font: 500 11.5px var(--f-mono); cursor: pointer; }
+.addBtn:hover, .addBtn[aria-expanded="true"] { color: var(--ink); border-color: #4a4038; }
+
+/* Family rows */
+.famGut { height: 29px; display: flex; align-items: center; } /* 28 px of row + its 1 px rule */
+.famGutFolded { height: 34px; }
+.famHead { height: 28px; display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; padding: 0 8px; background: none; border: 0; color: var(--muted); font: 500 11px var(--f-mono); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; text-align: left; white-space: nowrap; }
+.famHead:hover { color: var(--ink); }
+/* S5-3b: family rows are 28 px (design 20): an enlarged hit area spilled into the lanes and covered their icons. */
+
+.famHead svg { width: 12px; height: 12px; flex: none; transition: transform 150ms ease-out; }
+.folded svg { transform: rotate(-90deg); }
+.famCount { color: var(--faint); text-transform: none; letter-spacing: 0; }
+.famPlus { margin-right: 6px; visibility: hidden; width: 28px; height: 28px; border: 0; border-radius: 5px; background: none; color: var(--muted); cursor: pointer; font: 500 14px var(--f-mono); }
+.gut:hover .famPlus, .gut:focus-within .famPlus { visibility: visible; }
+.famPlus:hover { color: var(--ink); background: rgba(241,230,211,.06); }
+.famBody { flex: 1; border-bottom: 1px solid var(--line); }
+
+/* A lane's gutter: name, hear-only and mute icons, ⋯; volume and pan on their own line on hover */
+.colorBar { position: absolute; left: 14px; top: 7px; bottom: 7px; width: 3px; border-radius: 2px; background: var(--c); }
+.laneHead { height: 100%; display: flex; flex-direction: column; justify-content: flex-start; gap: 0; padding: 0 8px 0 24px; }
+.line1 { display: flex; align-items: center; gap: 0; min-width: 0; height: 28px; }
+.name { flex: 0 1 auto; min-width: 0; max-width: 14ch; font: 500 12.5px var(--f-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: none; border: 1px solid transparent; border-radius: 4px; color: var(--ink); padding: 3px 4px; text-align: left; cursor: text; transition: color 150ms ease-out; }
+.nameInput { flex: 1; min-width: 0; font: 500 12.5px var(--f-mono); color: var(--ink); background: #0b0a09; border: 1px solid var(--gold); border-radius: 4px; padding: 3px 4px; outline: none; user-select: text; }
+.icons { display: flex; align-items: center; gap: 2px; margin-left: auto; }
+/* The Lab's option B (L177, L200): shown on hover or focus; a lit one stays. */
+.hearIcon { width: 28px; height: 28px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 5px; background: none; color: var(--muted); cursor: pointer; opacity: 0; transition: opacity 150ms ease-out, color 150ms ease-out; }
+.gut:hover .hearIcon, .gut:focus-within .hearIcon, .hearIcon[data-lit] { opacity: 1; }
+.hearIcon[data-lit] { color: var(--gold); }
+.hearIcon[data-lit="mute"] { color: var(--ink); }
+@media (hover: hover) and (pointer: fine) { .hearIcon:hover { background: #2b2622; color: var(--ink); } }
+.more { width: 28px; height: 28px; flex: none; border: 0; border-radius: 5px; background: none; color: var(--muted); cursor: pointer; font: 600 13px var(--f-mono); visibility: hidden; }
+.gut:hover .more, .gut:focus-within .more, .more[aria-expanded="true"] { visibility: visible; }
+.more:hover { color: var(--ink); background: rgba(241,230,211,.06); }
+.mix { display: flex; align-items: center; gap: 12px; padding-left: 4px; height: 28px; visibility: hidden; }
+.gut:hover .mix, .gut:focus-within .mix { visibility: visible; }
+.mixItem { display: flex; align-items: center; gap: 6px; font: 400 11px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mixItem input { -webkit-appearance: none; appearance: none; height: 28px; margin: 0; background: transparent; cursor: pointer; }
+.mixItem input::-webkit-slider-runnable-track { height: 2px; background: #3a322c; }
+.mixItem input::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; margin-top: -4px; border-radius: 50%; background: var(--c); }
+.mixItem input::-moz-range-track { height: 2px; background: #3a322c; }
+.mixItem input::-moz-range-thumb { width: 10px; height: 10px; border: 0; border-radius: 50%; background: var(--c); }
+.vol { width: 60px; }
+.pan { width: 36px; }
+.mixVal { min-width: 40px; }
+/* A silent lane (muted, or another lane soloed): its name and clips dim */
+.gutSilent .name { color: var(--muted); }
+.gutSilent .colorBar { opacity: .4; }
+@media (hover: none) { .mix, .more, .famPlus, .hearIcon { visibility: visible !important; opacity: 1 !important; } }
+
+/* Lane body and clips */
+.laneBody { flex: 1; min-width: 0; position: relative; height: 56px; border-bottom: 1px solid var(--line); background-image: linear-gradient(90deg, rgba(241,230,211,.045) 1px, transparent 1px); transition: opacity 150ms ease-out; }
+.summary { height: 34px; }
+.laneDim { opacity: .3; }
+.laneTarget { background-color: color-mix(in srgb, var(--c) 7%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 45%, transparent); }
+.clip { position: absolute; top: 8px; bottom: 8px; border-radius: 4px; overflow: hidden; background: color-mix(in srgb, var(--c) 25%, var(--bg)); cursor: grab; touch-action: none; transition: background 150ms ease-out; }
+.clip:active { cursor: grabbing; }
+.clipName { position: absolute; left: 8px; right: 6px; top: 5px; font: 500 11px var(--f-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: color-mix(in srgb, var(--c) 35%, var(--ink)); pointer-events: none; }
+.clipSilent { background: color-mix(in srgb, var(--c) 9%, var(--bg)); }
+.clipSilent .clipName { color: color-mix(in srgb, var(--c) 45%, var(--muted)); }
+.clipSelected { box-shadow: 0 0 0 2px var(--ink); z-index: 2; }
+.clipRemoving { opacity: .35; }
+.clip:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; z-index: 2; }
+.grip { position: absolute; right: 0; top: 0; bottom: 0; width: 8px; cursor: ew-resize; z-index: 2; }
+.mini { position: absolute; height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--c) 55%, var(--bg)); pointer-events: none; }
+.ghost { position: absolute; top: 8px; bottom: 8px; border-radius: 4px; background: color-mix(in srgb, var(--c) 14%, transparent); box-shadow: inset 0 0 0 2px var(--c); z-index: 3; pointer-events: none; }
+.ghost b { position: absolute; left: 8px; top: 5px; font: 500 11px var(--f-mono); color: var(--c); white-space: nowrap; }
+.newDrop { flex: 1; margin: 6px 0; height: 44px; border: 1px dashed var(--c); border-radius: 6px; display: flex; align-items: center; padding: 0 12px; font: 500 12px var(--f-mono); color: var(--c); background: color-mix(in srgb, var(--c) 6%, transparent); }
+.newDropOn { background: color-mix(in srgb, var(--c) 14%, transparent); }
+
+/* One overlay over the lane bodies: playhead and section lines */
+.overlay { position: absolute; left: 220px; right: 0; top: 32px; bottom: 0; pointer-events: none; z-index: 4; }
+.playhead { position: absolute; top: 0; bottom: 0; left: 0; width: 2px; background: var(--ink); will-change: transform; }
+.markerLine { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(241, 230, 211, .14); }
+
+/* Popovers: the ⋯ menu and Add lane */
+.pop { position: absolute; z-index: 30; background: #1d1916; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 18px 40px rgba(0,0,0,.55); padding: 6px; animation: popIn 150ms ease-out; }
+@keyframes popIn { from { opacity: 0; transform: translateY(-4px); } }
+@media (prefers-reduced-motion: reduce) { .pop { animation: none; } }
+.menu { left: 120px; top: 44px; min-width: 196px; display: flex; flex-direction: column; }
+.menu button { text-align: left; background: none; border: 0; border-radius: 6px; padding: 7px 10px; color: var(--ink); font: 400 12px var(--f-mono); cursor: pointer; display: flex; justify-content: space-between; gap: 12px; white-space: nowrap; }
+.menu button:hover { background: rgba(241,230,211,.06); }
+.menu button:disabled { color: var(--faint); cursor: default; background: none; }
+.menu kbd { font: inherit; color: var(--faint); }
+.menu hr { border: 0; border-top: 1px solid var(--line); margin: 4px 0; width: 100%; }
+.danger { color: #ef5b37 !important; }
+.addPop { left: 8px; top: 30px; width: min(760px, calc(100vw - 32px)); }
+.typeList { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px 18px; padding: 10px 12px; }
+.typeFam { display: flex; flex-direction: column; gap: 2px; }
+.typeFamName { font: 500 10.5px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--c); padding: 6px 8px 2px; }
+.typeBtn { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; background: none; border: 0; border-radius: 6px; padding: 6px 8px; color: var(--ink); cursor: pointer; text-align: left; }
+.typeBtn:hover { background: rgba(241,230,211,.06); }
+.typeBtn b { font: 500 12.5px var(--f-mono); }
+.typeBtn em { font: normal 400 11px var(--f-mono); color: var(--muted); text-wrap: pretty; }
+.full { padding: 10px 14px; font: 400 12px var(--f-mono); color: var(--muted); }
+
+/* Transport facts: "bar 41.1 · 124 bpm · Am", one 13 px mono line */
+.facts { padding: 0 8px; font: 400 13px var(--f-mono); color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.facts b { font-weight: 400; }
+
+/* The crate (168 px): tabs and a 40 px still disc in one header row; 300 px cards with a grip */
+.crate { grid-row: 3; grid-column: 1; min-height: 0; height: 200px; display: flex; flex-direction: column; border-top: 1px solid var(--line); background: var(--crate-bg); --faint: #958a7c; }
+.crateHead { display: flex; align-items: flex-end; gap: 24px; padding: 0 24px; border-bottom: 1px solid var(--line); min-height: 52px; flex: none; }
+.tabs { display: flex; gap: 22px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.tab { flex: none; background: none; border: 0; padding: 0 0 12px; font: 400 13px var(--f-mono); color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: color 150ms ease-out; }
+.tab:hover { color: var(--ink); }
+.tabOn { color: var(--ink); border-bottom-color: var(--gold); }
+.tabCount { color: var(--faint); margin-left: 4px; }
+.nowPlaying { display: flex; align-items: center; gap: 10px; align-self: center; flex: none; max-width: 360px; min-width: 0; font: 400 12px var(--f-mono); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nowPlaying > span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.nowPlaying b { font: italic 400 18px var(--f-serif); color: var(--ink); }
+.disc { width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center; background: repeating-radial-gradient(circle, #0b0b0b 0 1.5px, #191919 1.5px 3px); }
+.disc i { width: 14px; height: 14px; border-radius: 50%; background: #3b2a1f; transition: background 150ms ease-out; }
+.discOn i { background: var(--c); }
+.faint { color: var(--faint); }
+.cards { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(auto-fill, 300px); justify-content: start; grid-auto-rows: 74px; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: #3a322c transparent; }
+.card { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 0 36px 0 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); cursor: grab; touch-action: none; position: relative; transition: background 150ms ease-out, box-shadow 150ms ease-out; }
+.card::before { content: ""; position: absolute; left: 10px; top: 16px; bottom: 16px; width: 3px; border-radius: 2px; background: var(--c); }
+.card::after { content: "⋮⋮"; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font: 600 13px/1 var(--f-mono); letter-spacing: -2px; color: var(--muted); opacity: 0; transition: opacity 150ms ease-out; }
+@media (hover: hover) {
+  .card:hover { background: rgba(241,230,211,.05); box-shadow: inset 0 0 0 1px #3a322c; }
+  .card:hover::after { opacity: 1; }
+}
+@media (hover: none) { .card::after { opacity: 1; } }
+.card:focus-visible { outline: 1px solid var(--ink); outline-offset: -3px; }
+.cardOn { background: color-mix(in srgb, var(--c) 12%, transparent); }
+.cardMeta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.cardMeta b { font: 500 14px var(--f-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cardMeta em { font: normal 400 12px var(--f-mono); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cardMeta span { font: 400 11px var(--f-mono); color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.empty { padding: 18px 24px; font: 400 12px var(--f-mono); color: var(--muted); max-width: 640px; line-height: 1.5; }
+.dragChip { position: fixed; z-index: 50; padding: 6px 10px; border-radius: 6px; background: var(--c); color: var(--bg); font: 500 12px var(--f-mono); box-shadow: 0 8px 20px rgba(0,0,0,.5); pointer-events: none; white-space: nowrap; transform: translate(12px, 12px); }
+
+/* S5-2: after removing a lane with blocks, a short note with Undo (6 s) */
+.toast { position: fixed; left: 50%; bottom: 216px; transform: translateX(-50%); z-index: 40; display: flex; align-items: center; gap: 14px; padding: 8px 8px 8px 14px; border-radius: 8px; background: #2b2622; border: 1px solid #3a322c; box-shadow: 0 12px 28px rgba(0,0,0,.5); font: 400 12px var(--f-mono); color: var(--ink); animation: toastIn 150ms ease-out; }
+@keyframes toastIn { from { opacity: 0; } }
+.toast button { min-height: 28px; padding: 0 10px; border: 0; border-radius: 6px; background: none; color: var(--gold); font: 500 12px var(--f-mono); cursor: pointer; }
+.toast button:hover { background: rgba(241,230,211,.06); }
+@media (prefers-reduced-motion: reduce) { .toast { animation: none; } }
+
+/* T110: My sounds grouped by source track: a header line per track, two-line cards */
+.cardsMine { grid-auto-rows: auto; align-content: start; }
+.cardMine { height: 58px; }
+.groupHead { grid-column: 1 / -1; margin: 0; height: 28px; display: flex; align-items: center; gap: 6px; padding: 0 24px; font: 500 11px var(--f-mono); letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.cardMine::before { top: 14px; bottom: 14px; }
+/* T110: the library block's preset as one picker */
+.presetPick { position: relative; display: flex; align-items: center; gap: 10px; min-height: 32px; }
+.presetLabel { font: 500 12px var(--f-mono); color: var(--muted); }
+.presetPick select { -webkit-appearance: none; appearance: none; flex: 1; min-width: 0; min-height: 32px; padding: 0 30px 0 12px; border: 1px solid var(--line); border-radius: 8px; background: #1a1715; color: var(--ink); font: 500 13px var(--f-mono); cursor: pointer; }
+.presetPick select:hover { border-color: #4a4038; }
+.presetPick select:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
+.presetPick svg { position: absolute; right: 10px; width: 14px; height: 14px; color: var(--muted); pointer-events: none; }

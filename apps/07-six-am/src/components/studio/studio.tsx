@@ -268,7 +268,19 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
   const drawerLane = selSound ? selSound.lane : addLane;
   const selLane = selRegion ? t.laneOf(selRegion) : undefined;
   const drawerLaneObj = selLane ?? t.lanes.find((l) => l.id === t.soundTarget);
-  const closeDrawer = () => { setAddLane(null); t.setSoundTarget(null); t.setSelected(null); };
+  const closeDrawer = () => {
+    if (selSound?.source === "lib") t.setGroup("mine"); // back to My sounds, where it came from
+    setAddLane(null); t.setSoundTarget(null); t.setSelected(null);
+  };
+  // T115: Esc closes the drawer back to the crate (not while typing or in a picker).
+  const drawerOpen = selSound?.source === "lib" || drawerLane !== null;
+  const escDrawer = useEffectEvent(() => closeDrawer());
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const on = (e: KeyboardEvent) => { if (e.key === "Escape" && !(e.target as HTMLElement).closest("input, textarea, select")) escDrawer(); };
+    addEventListener("keydown", on);
+    return () => removeEventListener("keydown", on);
+  }, [drawerOpen]);
 
   // Every edit and undo is saved. S5-1: compare with the doc last sent (at first, the track as
   // loaded), not with the loaded doc: an undo back to the opening state restores that very object

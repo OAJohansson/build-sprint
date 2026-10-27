@@ -22,6 +22,8 @@ export function LibDrawer({ t, sound, color, onClose }: { t: Timeline; sound: Li
   return (
     <aside className={s.drawer} style={{ ["--c" as string]: color }} aria-label={`${sound.name}, a sound from your library`}>
       <div className={s.top}>
+        {/* T115: the way back to the crate is a word, not only the ×; Esc does the same (studio.tsx). */}
+        <button className={s.back} onClick={onClose}>← My sounds</button>
         <button className={s.close} onClick={onClose} aria-label="Close the sound drawer"><X aria-hidden /></button>
       </div>
       <div className={s.body}>

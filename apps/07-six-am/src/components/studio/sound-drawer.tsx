@@ -220,6 +220,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose, onNewSound }: {
   return (
     <aside className={s.drawer} style={{ ["--c" as string]: color }} aria-label={cur.source === "ai" ? "AI bass loop" : `${LANE_WORD[lane]} sound`}>
       <div className={s.top}>
+        <button className={s.back} onClick={onClose}>← All sounds</button>
         {mentor.is === "done" || mentor.is === "error" ? (
           <button className={s.link} onClick={() => setMentor({ is: "idle" })}>Hide answer</button>
         ) : null}

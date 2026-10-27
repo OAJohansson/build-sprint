@@ -756,3 +756,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Critic round 1 (one critic, fixed scorecard):** Drawer 8/10 (clutter 1 · hierarchy 2 · legibility 1 · feel 2 · copy 2), Fold 6/10 (knobs move when picking a row), Twin 4/10 (per-row scores and 'heard' strips fight the one score). Critic takes Drawer forward. Owner picks the final one.
 - **Final direction (L224): Fold, knobs fixed in place** (owner's call; PM and critic had recommended Drawer). Designer round 2 on the critic's Fold gaps, then canvas.
 - **Doubtful hits off by default (L225)**, with Play them anyway. Fold round 2 built (T122); critic re-scoring.
+- **Fold round 3 (T123)** and the **canvas sign-off** set up: 7 screens on a private Claude Design canvas (https://claude.ai/artifact/W8oZyRe9NP3crYG8qxRYhn). Waiting for the owner's comments and approval before the UI build.

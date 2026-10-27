@@ -27,7 +27,7 @@ mode; the mode decides **who makes which decision, and when I'm asked**. It goes
 | --- | --- | --- | --- |
 | **Learning** | I want the reps | Almost everything, coached | As things come up |
 | **Streamlined** | Most days | The learning decisions | At four gates, one decision sheet each |
-| **Founder** | A good idea I want live and tested | The kickoff pack and evals, 3 of ~10 designs and the final design | Kickoff, the two design picks and the final review |
+| **Founder** | A good idea I want live and tested | The kickoff pack and evals, 3 of ~10 designs and the final design | Kickoff, the two design picks, the canvas sign-off and the final review |
 
 Three kinds of decision:
 
@@ -147,7 +147,10 @@ hour, not a day. Names in brackets are where each practice comes from; see
   pick 3; (2) the squad develops those 3 and the critic scores them, then I pick the final one (or
   a mix) and say in one sentence how it should feel. In Streamlined these two picks are the
   **design-pick gate** (with one preview link if the directions need a phone to judge); in
-  Founder they are the only stops between kickoff and the final review.
+  Founder they are the only stops between kickoff and the final review, plus (3) **the canvas
+  sign-off** (07 Six AM Lab, decision 0028 as amended 27 Oct): the final screens go on a Claude
+  Design canvas, I comment in place, open questions get quick mockup options, updated screens sit
+  beside the originals, and the UI build starts only after I approve the canvas.
 - Fill in **user**, **problem** and **bet** (one line each) on the card `docs/products/NN-slug.md`.
   The bet is the smallest thing that could solve the problem by tonight. Cut everything else.
 

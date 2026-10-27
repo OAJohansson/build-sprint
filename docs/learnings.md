@@ -139,6 +139,12 @@ Rules I now apply to every product (detail in the playbook).
   much going on" until the owner looked. Show pictures early and remove before adding.
 - **Honesty needs validators, not just prompts.** Sources per sentence, links that must name the
   pick, numbers that must come from the measurements: each rule caught a real slip.
+- **Lab: spike the scariest bet first.** Capturing a SoundCloud tab and separating it live in the
+  browser was proven on day one, before any design; everything else built on it.
+- **Lab: when the ear and the numbers disagree, measure the gap.** "Too thin" became a closeness
+  score and a blind A/B; it found notes ringing 3× too long and a missing octave of body.
+- **Lab: keep the kick and the bass apart.** Part of the original's "boom" was kick bleed in the
+  separated bass; producers judge the two together rather than copy one into the other.
 
 ### 08 Selvedge
 
@@ -238,4 +244,6 @@ Every change to how I build, and the product that taught it.
 | 27 Oct | 10 Magpie | Designing every screen with the owner in Claude Design before the PM session (features first, ~10 directions, a brand-moment round, the final flow) gave a build that matched and a critic score of 9. | Playbook step 1b: in Founder mode the owner can design with Claude in Claude Design before the PM session; the PM builds from the canvas and skips the design-pick steps. |
 | 27 Oct | 10 Magpie | The final review was the first time anyone opened the deployed app, and it crashed (sharp on Vercel). | Playbook step 3: before the final-review push, open the preview's main path and read its logs (the owner's logged-in browser if a script can't reach it). |
 | 27 Oct | 10 Magpie | `vercel curl --yes` created a stray project named after the folder. | Playbook step 3: link the folder to its Vercel project before any `vercel` command with `--yes`. |
+| 27 Oct | 07 Six AM Lab | Final screens on a Claude Design canvas, commented by the owner before the build, caught taste calls the picks and critic missed. | Founder: the canvas sign-off is a permanent third design moment before the UI build (decision 0028 amended 27 Oct, `AGENTS.md`, playbook step 1). |
+| 27 Oct | 07 Six AM Lab | The owner's ear found "too thin" after the eval report; agents can't hear. | Founder, audio products: an owner listening check early in each sound slice, with a measurement of the gap (as the closeness score) to steer fixes. |
 | 26 Oct | 09 Wont | "One device, no backend" was decided at kickoff without asking which devices the owner uses; sync had to follow the next day. | Kickoff template, "Decisions already made": state which devices the product is used on before choosing where data lives. |

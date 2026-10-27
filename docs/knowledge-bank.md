@@ -1065,7 +1065,77 @@ Capture API docs)*
 **Q:** Why can't Web Audio analyse an embedded SoundCloud player directly, and what can?
 **A:** The iframe is cross-origin, so its media elements aren't reachable; tab capture (`getDisplayMedia` with tab audio) captures the tab's mixed output instead.
 
+#### Hear only your version of a captured tab
+`getDisplayMedia` with `suppressLocalAudioPlayback: true` captures a tab's sound and mutes it on
+the speakers, so a page can play back only its own processed version. The mute covers the whole
+captured tab, so the player has to live in its own window. Why it matters: it's the one way to
+work on a cross-origin player's sound live (the same-origin rule blocks reading it directly).
+*Where:* the Six AM Lab: SoundCloud plays in a separate "Six AM Deck" window; the Lab plays only
+the separated parts. *(W3C Screen Capture spec; Chrome 109+)*
+
+#### Source separation (Demucs)
+A model trained on multitrack recordings that splits a finished mix into drums, bass, vocals and
+"other". The hybrid version (htdemucs) works on both the waveform and the spectrogram and combines
+the two. It's good, not perfect: some of one part bleeds into another (the kick's low end into the
+bass). *Where:* the Six AM Lab's live parts; the owner heard a kick-like thump in the bass part.
+*(Meta AI, Défossez et al.)*
+
+#### Machine learning in the browser (ONNX Runtime Web and WebGPU)
+A trained model exported to ONNX (a common model format) runs inside the browser on the laptop's
+own graphics chip through WebGPU. No server, no running cost, and the audio never leaves the
+device. The price is a big first download (180 MB here, cached after). *Where:* the Six AM Lab
+separates 3.8× faster than real time on a laptop. *(Microsoft ONNX Runtime; W3C WebGPU)*
+
+#### Chunked processing with overlap-add
+To run a slow model on a live stream, cut it into overlapping windows, process each, keep only the
+newest seconds and join them with short crossfades. A fixed delay of a few seconds buys time to
+compute; fine for learning, not for DJing. Throwing each chunk away after it plays keeps nothing
+stored (rights by design). *Where:* the Six AM Lab: 7.8 s windows, 30 ms crossfades, ~5.5 s delay.
+*(Standard DSP: overlap-add, as in streaming audio effects)*
+
+#### Sub versus body in a bass sound
+A bass has two jobs: the sub (below ~100 Hz, felt more than heard) and the body (~100–400 Hz,
+where laptop speakers and ears hear "weight"). A pure sine sub sounds thin on its own; producers
+add a driven or saturated layer an octave up for body, and keep notes short so each hit is a
+"boom" rather than a hum. *Where:* the Six AM Lab's Make: the owner heard Mine as "too thin";
+measured, it was 85 % sub and its notes rang 3× too long. Sub and Weight knobs fixed most of it.
+*(Mixing practice, e.g. Mike Senior, "Mixing Secrets for the Small Studio")*
+
+#### Keep the kick and the bass apart, judge them together
+Producers keep the kick drum and the bass on separate parts and listen to them together, often
+ducking the bass for a moment on each kick (sidechaining). Copying the kick's thump into the bass
+makes both harder to control later. *Where:* the Six AM Lab: instead of a "Punch" knob, Make plays
+the original drums under both sides of its A/B (L213). *(Dance-music mixing practice)*
+
+#### Measure closeness by re-synthesising (analysis by synthesis)
+To find knob settings that sound like a target, render the synth at many settings and compare each
+render with the target on measurable features (per-step loudness in a few bands, the spectrum).
+The score tells you what to fix and whether a change helped, but it is not the ear. *Where:* the
+Six AM Lab's closeness score (37 → 61) and "Suggest settings". *(Speech and music research:
+analysis by synthesis)*
+
 ### Quiz
+
+**Q:** Why does the Six AM Lab play SoundCloud in a separate window?
+**A:** `suppressLocalAudioPlayback` mutes the whole captured tab, so the player gets its own tab and the Lab plays only its separated version.
+
+**Q:** What does a source-separation model like Demucs do, and what's its typical flaw?
+**A:** It splits a finished mix into drums, bass, vocals and other; some of one part bleeds into another, like the kick's low end into the bass.
+
+**Q:** What do you gain and pay by running a model in the browser with WebGPU?
+**A:** No server, no running cost, and the data stays on the device; you pay a large first download and depend on the user's hardware.
+
+**Q:** How do you run a model slower than one pass on a live stream?
+**A:** Overlapping windows processed in turn, keeping only the newest seconds joined by short crossfades (overlap-add), with a fixed delay to compute in.
+
+**Q:** Why does a pure sub bass sound thin, and what fixes it?
+**A:** Most of what you hear as weight is the 100–400 Hz body; add a saturated layer an octave up and keep notes short.
+
+**Q:** Why not copy the kick's thump into the bass to make it sound bigger?
+**A:** Kick and bass are kept apart so each can be controlled; judge them together (and duck the bass on the kick) instead.
+
+**Q:** What is analysis by synthesis?
+**A:** Finding a sound's settings by rendering many candidates and comparing each with the target on measured features.
 
 **Q:** What does a website need before "Add to Dock" or "Add to Home Screen" makes it feel like an app?
 **A:** A web app manifest (name, icons, `display: standalone`) and an apple-touch-icon; then it opens in its own window with its own icon.

@@ -116,3 +116,32 @@ architecture (L47's buttons-per-job panel became one chat, L86–L87) and on sho
 panel (moved to Settings). The learning decisions that mattered most: L26 (snippets), L27 (queue),
 L55 (no built-in taste data), L85–L88 (the simplification and memory). Defaults that held: the
 storage, backend and honesty calls (L18, L49, L51, L60, L64).
+
+## Retro: the Lab (Phase 4, Founder v2, 26–27 Oct)
+
+Full account: [`eval-report-phase4.md`](eval-report-phase4.md).
+
+**Numbers:** about two days (26–27 Oct), one PR (95), merged on the owner's yes. 71 learning and 35
+toil decisions logged (L143–L213, T81–T115), 0 toil vetoes. A spike first (tab capture and live
+separation), two design rounds of ~10 directions, ~14 critic passes, 5 slices, ~10 user tests, 2
+data-evals runs; 431 unit tests. Usage: about 94 % of that week's Claude plan, extra usage off, so
+no cost beyond the plan; Mentor and Stable Audio calls were pennies. Bugs: graders found the big
+ones (Undo never saved since 19 Oct, block drags landing 20+ bars off, kick bleed pushing Suggest
+to extremes); the owner found what needs ears ("Mine is way thinner", "no boom boom boom"), a
+50 s wait with no countdown, and no way back from a sound drawer.
+
+**Keep**
+- Spike the riskiest technical bet first: tab capture plus in-browser separation was proven live
+  before any design.
+- The canvas sign-off: the owner commented on the final screens before the build, which caught
+  taste calls the picks and the critic missed (now permanent, decision 0028 amended 27 Oct).
+- When the owner's ear and the numbers disagree, build a measurement of the gap (the closeness
+  score) and a blind test for the ear, instead of guessing at fixes.
+
+**Change**
+- Agents can't hear: plan an owner listening check early in any audio slice, not only at the
+  final review. "Too thin" came after the eval report was written.
+- Explain music and production calls in plain words with one picture-like analogy; three
+  rewrites of the kick-and-bass explanation were needed (owner: "I'm like 10 years old").
+- Vercel's 100-deploys-a-day limit blocked the preview: review on a local production build and
+  keep previews for the final review only.

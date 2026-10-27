@@ -89,3 +89,13 @@ makes both design picks. The owner chose: keep 0028 otherwise, but the final pic
 theirs. On Wont every design call that mattered was a taste call the pack couldn't carry (two
 contact sheets rejected, wontons over jars, the mark, the harsh header the critic and PM let
 through). The PM still gives a recommendation with the critic's scorecard.
+
+## Amended 27 Oct: the canvas sign-off before the build
+
+On the Six AM Lab (Phase 4), the owner asked to see the final screens on a Claude Design canvas
+before any UI was built (L163, L195). It caught taste calls that the picks and the critic had not
+(card size, header pills, the Studio's lane rows) while they were still cheap to change. The owner
+made it permanent: after the final pick, the final screens go on a canvas, the owner comments in
+place, open questions get quick mockup options with updated screens beside the originals, and the
+UI build starts only after the owner approves the canvas. It is the owner's third design moment;
+there is still no other checkpoint before the final review.

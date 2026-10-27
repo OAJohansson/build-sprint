@@ -340,3 +340,8 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L218 | 2026-10-27 | One Make room with a family switch (Bass · Drums · Melody · FX; Vocals "not yet"); preset, knobs, Suggest, A/B, score and Save keep their place; only the middle is tailored per family; the bass flow stays exactly as it is | owner | Phase 5 kickoff | |
 | L219 | 2026-10-27 | No AI fine-tuning in Phase 5; every family (and drum row) gets Suggest settings (gold ticks only); fine-tuning stays in the backlog for its own later phase | owner | Phase 5 kickoff | |
 | L220 | 2026-10-27 | Phase 5 appetite: three slices (drums, melody/chords, FX), about a night; requirements P1–P10 and evals Z1–Z12 written from the owner's answers; riskiest assumption tested by a spike before design | PM | Phase 5 kickoff | |
+| T116 | 2026-10-27 | Drums knob arcs cream, not the drums gold: gold stays for Suggest ticks and Save only | PM (designer) | Phase 5 directions | |
+| T117 | 2026-10-27 | Step patterns are read-only in Make (edit steps in the Studio after Save, L215) | PM (designer) | Phase 5 directions | |
+| T118 | 2026-10-27 | Save stays in the foot bar and saves the focused row ("Save kick"); rows show "✓ saved" | PM (designer) | Phase 5 directions | |
+| T119 | 2026-10-27 | Bed under A/B: "Bass under both" for Drums, "Drums under both" for Melody and FX (P7) | PM (designer) | Phase 5 directions | |
+| T120 | 2026-10-27 | FX shows no closeness number ("not measured for FX", P8) | PM (designer) | Phase 5 directions | |

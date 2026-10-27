@@ -750,3 +750,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Vocals out of this phase (L217)**; lead-from-vocal-pitch to the backlog.
 - **One Make room with a family switch (L218)**, middle tailored per family.
 - **No AI fine-tuning this phase (L219)**; Suggest settings for every family. Kickoff pack final (P1–P10), evals Z1–Z12 written (L220).
+- **Ten directions (designer):** Fold, Machine, Tabs, Strips, Twin, Rings, Pads, Bars, Drawer, Tracker; drums state with Melody/FX glimpses; contact sheet published privately (https://claude.ai/artifact/2V9nkUkYkxAiUR5RyRvVNx). T116–T120. Owner picks 3.

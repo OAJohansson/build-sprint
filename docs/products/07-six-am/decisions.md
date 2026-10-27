@@ -350,3 +350,5 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T121 | 2026-10-27 | Directions contact sheet opens full-size shots in a new tab (owner got stuck on one zoomed screen) | PM | Phase 5 directions | |
 | L223 | 2026-10-27 | Owner's 3 of 10: 1 Fold, 5 Twin, 9 Drawer go forward to the critic | owner | Phase 5 design pick | |
 | L224 | 2026-10-27 | Owner's final direction: Fold, with the knob block fixed in place (no reflow when picking a row). PM recommended Drawer (critic 8/10 vs Fold 6/10); owner's call | owner | Phase 5 design pick | |
+| L225 | 2026-10-28 | Doubtful drum hits (faint, on a mostly empty row, likely bleed) are drawn hollow and left out of Mine by default, with "Play them anyway" to bring them back | owner | Phase 5 design | |
+| T122 | 2026-10-28 | Fold round 2: every row 64 px in any state (16-bar loops as two lines of 8 in every row), knob block anchored below the rows; "Gold ticks mark those." only in Bass (Suggest tooltip elsewhere) | PM (designer) | Phase 5 design | |

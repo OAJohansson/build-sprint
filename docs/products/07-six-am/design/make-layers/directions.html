@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make for every layer, ten directions</title>
+<style>
+:root { color-scheme: dark; }
+body { margin: 0; background: #131110; color: #f1e6d3; font: 14px/1.5 ui-monospace, "IBM Plex Mono", Menlo, monospace; }
+main { max-width: 1240px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font: italic 400 32px/1.1 Georgia, serif; margin: 0 0 8px; }
+p.lede { color: #aa9c88; margin: 0 0 24px; max-width: 760px; }
+a { color: #f2b134; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 36px; }
+@media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+figure { margin: 0; }
+img { display: block; width: 100%; height: auto; border: 1px solid #2c2622; border-radius: 6px; }
+.mini { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.mini a { text-decoration: none; color: #aa9c88; font-size: 12px; }
+.mini span { display: block; padding-top: 2px; }
+figcaption { display: flex; gap: 12px; padding-top: 10px; }
+figcaption b { flex: none; width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid #f2b134; color: #f2b134; border-radius: 50%; font-weight: 500; }
+figcaption strong { display: block; font-weight: 500; color: #f1e6d3; }
+figcaption span { color: #aa9c88; }
+</style></head>
+<body><main>
+<h1>Six AM · Make for every layer, ten directions</h1>
+<p class="lede">One Make room with a family switch (Bass · Drums · Melody · FX, Vocals "not yet", L218). The frame stays put in every direction: family switch, preset, knobs, Suggest, A/B with a bed under both, closeness score, Save. Only the middle changes. Same moment in each: Lost in The Loop, 124 BPM, A minor, Drop 1 bars 97–104 looping, the Kick row in focus (Clap &amp; snare already saved). The big image is Drums; the two small ones show Melody (notes, several at once) and FX (generators timed to the drop) in the same frame. Rough on purpose: pick three. Tap an image for full size. Flip through them live in <a href="prototype.html">prototype.html</a> (keys 1–9, 0 for 10, add <code>&amp;f=melody</code> or <code>&amp;f=fx</code>). All copy is draft copy.</p>
+<div class="grid">
+  <figure>
+    <a href="shots/01-fold-drums.png"><img src="shots/01-fold-drums.png" alt="Direction 1, Fold, drums" loading="lazy" width="2880" height="1800"></a>
+    <div class="mini"><a href="shots/01-fold-melody.png"><img src="shots/01-fold-melody.png" alt="Fold, melody" loading="lazy"><span>Melody</span></a><a href="shots/01-fold-fx.png"><img src="shots/01-fold-fx.png" alt="Fold, FX" loading="lazy"><span>FX</span></a></div>
+    <figcaption><b>1</b><span><strong>Fold</strong>Three stacked rows; the focused row unfolds in place with its preset, knobs and Suggest, the other two stay as one-line patterns. (seed 1)</span></figcaption>
+  </figure>
+  <figure>
+    <a href="shots/02-machine-drums.png"><img src="shots/02-machine-drums.png" alt="Direction 2, Machine, drums" loading="lazy" width="2880" height="1800"></a>
+    <div class="mini"><a href="shots/02-machine-melody.png"><img src="shots/02-machine-melody.png" alt="Machine, melody" loading="lazy"><span>Melody</span></a><a href="shots/02-machine-fx.png"><img src="shots/02-machine-fx.png" alt="Machine, FX" loading="lazy"><span>FX</span></a></div>
+    <figcaption><b>2</b><span><strong>Machine</strong>One drum-machine grid on top (all three rows, all 8 bars); the room below is the bass room, for whichever row you pick. (seed 2)</span></figcaption>
+  </figure>
+  <figure>
+    <a href="shots/03-tabs-drums.png"><img src="shots/03-tabs-drums.png" alt="Direction 3, Tabs, drums" loading="lazy" width="2880" height="1800"></a>
+    <div class="mini"><a href="shots/03-tabs-melody.png"><img src="shots/03-tabs-melody.png" alt="Tabs, melody" loading="lazy"><span>Melody</span></a><a href="shots/03-tabs-fx.png"><img src="shots/03-tabs-fx.png" alt="Tabs, FX" loading="lazy"><span>FX</span></a></div>
+    <figcaption><b>3</b><span><strong>Tabs</strong>Kick · Clap &amp; snare · Hats as tabs; one row big, the other two as thin lines above it; knobs at full 96 px as in Bass. (seed 3)</span></figcaption>
+  </figure>
+  <figure>
+    <a href="shots/04-strips-drums.png"><img src="shots/04-strips-drums.png" alt="Direction 4, Strips, drums" loading="lazy" width="2880" height="1800"></a>
+    <div class="mini"><a href="shots/04-strips-melody.png"><img src="shots/04-strips-melody.png" alt="Strips, melody" loading="lazy"><span>Melody</span></a><a href="shots/04-strips-fx.png"><img src="shots/04-strips-fx.png" alt="Strips, FX" loading="lazy"><span>FX</span></a></div>
+    <figcaption><b>4</b><span><strong>Strips</strong>Three channel strips side by side, mixer-style; each strip has its own preset, bars, four knobs and Suggest; the focused one is lit. (seed 4)</span></figcaption>
+  </figure>
+  <figure>
+    <a href="shots/05-twin-drums.png"><img src="shots/05-twin-drums.png" alt="Direction 5, Twin, drums" loading="lazy" width="2880" height="1800"></a>
+    <div class="mini"><a href="shots/05-twin-melody.png"><img src="shots/05-twin-melody.png" alt="Twin, melody" loading="lazy"><span>Melody</span></a><a href="shots/05-twin-fx.png"><img src="shots/05-twin-fx.png" alt="Twin, FX" loading="lazy"><span>FX</span></a></div>
+    <figcaption><b>5</b><span><strong>Twin</strong>Each row shows what was heard (with its timing off the grid) above Mine's copy, with a closeness number per row: start with the furthest off.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="shots/06-rings-drums.png"><img src="shots/06-rings-drums.png" alt="Direction 6, Rings, drums" loading="lazy" width="2880" height="1800"></a>
+    <div class="mini"><a href="shots/06-rings-melody.png"><img src="shots/06-rings-melody.png" alt="Rings, melody" loading="lazy"><span>Melody</span></a><a href="shots/06-rings-fx.png"><img src="shots/06-rings-fx.png" alt="Rings, FX" loading="lazy"><span>FX</span></a></div>
+    <figcaption><b>6</b><span><strong>Rings</strong>Sounds wrong on purpose: one bar at a time as three rings (kick inside, hats outside), the bars that differ marked; knobs beside.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="shots/07-pads-drums.png"><img src="shots/07-pads-drums.png" alt="Direction 7, Pads, drums" loading="lazy" width="2880" height="1800"></a>
+    <div class="mini"><a href="shots/07-pads-melody.png"><img src="shots/07-pads-melody.png" alt="Pads, melody" loading="lazy"><span>Melody</span></a><a href="shots/07-pads-fx.png"><img src="shots/07-pads-fx.png" alt="Pads, FX" loading="lazy"><span>FX</span></a></div>
+    <figcaption><b>7</b><span><strong>Pads</strong>Three big pads (press = hear that row alone and focus it), the pattern under each; the focused pad's knobs below. MPC feel.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="shots/08-bars-drums.png"><img src="shots/08-bars-drums.png" alt="Direction 8, Bars, drums" loading="lazy" width="2880" height="1800"></a>
+    <div class="mini"><a href="shots/08-bars-melody.png"><img src="shots/08-bars-melody.png" alt="Bars, melody" loading="lazy"><span>Melody</span></a><a href="shots/08-bars-fx.png"><img src="shots/08-bars-fx.png" alt="Bars, FX" loading="lazy"><span>FX</span></a></div>
+    <figcaption><b>8</b><span><strong>Bars</strong>The loop read as its distinct bars (A ×6, B, C) with one bar big on a readable 16-step grid; the loop order as letters.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="shots/09-drawer-drums.png"><img src="shots/09-drawer-drums.png" alt="Direction 9, Drawer, drums" loading="lazy" width="2880" height="1800"></a>
+    <div class="mini"><a href="shots/09-drawer-melody.png"><img src="shots/09-drawer-melody.png" alt="Drawer, melody" loading="lazy"><span>Melody</span></a><a href="shots/09-drawer-fx.png"><img src="shots/09-drawer-fx.png" alt="Drawer, FX" loading="lazy"><span>FX</span></a></div>
+    <figcaption><b>9</b><span><strong>Drawer</strong>Rows look like the Studio lanes they land on (Kick, Claps &amp; snares, Hats); the focused lane's drawer opens on the right, as in the Studio.</span></figcaption>
+  </figure>
+  <figure>
+    <a href="shots/10-tracker-drums.png"><img src="shots/10-tracker-drums.png" alt="Direction 10, Tracker, drums" loading="lazy" width="2880" height="1800"></a>
+    <div class="mini"><a href="shots/10-tracker-melody.png"><img src="shots/10-tracker-melody.png" alt="Tracker, melody" loading="lazy"><span>Melody</span></a><a href="shots/10-tracker-fx.png"><img src="shots/10-tracker-fx.png" alt="Tracker, FX" loading="lazy"><span>FX</span></a></div>
+    <figcaption><b>10</b><span><strong>Tracker</strong>Sounds wrong on purpose: the loop runs top to bottom, one line per 16th, three columns of hit strengths; knobs beside.</span></figcaption>
+  </figure>
+</div>
+</main></body></html>

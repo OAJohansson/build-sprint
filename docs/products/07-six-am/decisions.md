@@ -347,3 +347,5 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T120 | 2026-10-27 | FX shows no closeness number ("not measured for FX", P8) | PM (designer) | Phase 5 directions | |
 | L221 | 2026-10-27 | Drums and notes are read with plain DSP in the browser (no ML model, no new dependency): fast (< 0.3 s per 8 bars) and swappable behind the same output type (e.g. Basic Pitch for notes) if real tracks need it | PM (engineer) | Phase 5 spike | |
 | L222 | 2026-10-27 | Spike ground truth is synthetic loops with bleed mixed in (−25 to −15 dB), because htdemucs can't run headless; data-evals re-measures on parts separated in the browser (real-track hand check) before the drums slice is called done | PM (engineer) | Phase 5 spike | |
+| T121 | 2026-10-27 | Directions contact sheet opens full-size shots in a new tab (owner got stuck on one zoomed screen) | PM | Phase 5 directions | |
+| L223 | 2026-10-27 | Owner's 3 of 10: 1 Fold, 5 Twin, 9 Drawer go forward to the critic | owner | Phase 5 design pick | |

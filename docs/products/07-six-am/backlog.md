@@ -7,7 +7,9 @@ skipped checks below, on the live URL. Then song analysis, the biggest wish.
 
 | Idea | Why | Status |
 | --- | --- | --- |
-| Make for every layer (drums, other, vocals), not just bass | Owner's next wish (27 Oct) | next |
+| Make for every layer (drums, other, vocals), not just bass | Owner's next wish (27 Oct) | Phase 5 (drums, melody/chords, FX; vocals later, L217) |
+| Vocals in Make: a lead synth that follows the vocal's pitch (or vocal-like chops) | Left out of Phase 5 for rights and taste (L217); cheap once the melody slice reads notes | later |
+| Drums in Make: "make it my own" variation of the copied pattern | Phase 5 copies the pattern (L215) | later |
 | Match Make's sound to the original more closely, maybe with AI later: a model that tunes the preset and knobs to cut the closeness-test gap | Drums under the A/B helped, "sounds closer now but still not the same" (owner, 27 Oct): "Maybe we can use AI at a later stage to fine tune it?" | later |
 | Clean the kick out of the separated bass in the Lab (a stronger separation model, or turning the bass down on the kick hits found in the drums) | The original bass carries some kick thump, so it sounds bigger than Mine alone (owner, 27 Oct, L213). A bigger model is too slow live; the duck would also cut real notes on the beat | later |
 | Skipped checks: `break-ui` (worst-case track names, an empty track, 64 bars full), `web-design-guidelines`, then the simulated user test from `user-testing/plan.md` | Definition of done; nothing has tested the app with fresh eyes yet | next |

@@ -740,3 +740,13 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Owner (27 Oct): drums under the A/B "sounds closer now but still not the same".** AI fine-tuning of Make's knobs against the closeness score added to the backlog. Bug fixed (T115): a saved sound opened in the Studio had no obvious way back to the crate; a "← My sounds" link and Esc now return to it.
 - **Owner wants Make for every layer (drums, other, vocals), not just bass, as the next thing.** Not built in PR 95; how to run it is being asked of the owner.
 - **Lab wrap-up (27 Oct):** PR 95 merged (eac5b95). Notebook republished from main. Shared pages written in one wrap-up PR; Phase 5 kickoff draft "Make for every layer" added to `kickoff.md` for a fresh session. The Lab phase ends here.
+
+## Phase 5: Make for every layer (27 Oct)
+
+- **Kickoff started** from the draft in `kickoff.md`. Branch synced with main; notebook republished from main (version 191). Questions to the owner one at a time.
+- **Order (L214):** drums, then melody/chords, then texture/FX.
+- **Drums copy the pattern (L215)** with the owner's own sounds, like the bass.
+- **Drums split into kick, clap/snare and hats (L216)**, each saved to its own Studio lane.
+- **Vocals out of this phase (L217)**; lead-from-vocal-pitch to the backlog.
+- **One Make room with a family switch (L218)**, middle tailored per family.
+- **No AI fine-tuning this phase (L219)**; Suggest settings for every family. Kickoff pack final (P1–P10), evals Z1–Z12 written (L220).

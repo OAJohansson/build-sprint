@@ -672,15 +672,15 @@ if it heard it.
 3. Library: tag normalisation and the suggested name.
 4. Studio lane model: reorder, rename, and which lane type a library sound lands in.
 
-# Kickoff pack (draft): Six AM Make for every layer (Phase 5, Founder v2)
+# Kickoff pack: Six AM Make for every layer (Phase 5, Founder v2)
 
-**Status: draft for the owner.** Written by the Lab PM at the Lab wrap-up (27 Oct) so a fresh phase
-session can start from `main`. The owner asked: "go ahead with building out the other layers for
+**Status: final (27 Oct).** Drafted by the Lab PM at the Lab wrap-up; the owner answered the
+questions one at a time on 27 Oct (L214–L219). The draft text below is kept for context. The owner asked: "go ahead with building out the other layers for
 the make feature". The questions below are the owner's to answer, one at a time, before the
 pack is final.
 
 **Mode:** founder (v2)
-**Appetite:** to be set by the owner (proposal: one layer family per slice, about a night in all).
+**Appetite:** one layer family per slice, three slices, about a night in all (PM, inside the draft's proposal).
 Owner moments: the answers below, the design picks (3 of ~10, then 1 of 3), the canvas sign-off,
 the final review.
 **Evals:** a "Make for every layer" part of `evals.md`, to be written from this pack.
@@ -712,7 +712,33 @@ the final review.
 | **Vocals** | A voice: words, pitch, chops | Probably not a copy: a pitch line for a lead synth, or vocal-like chops; the words are the artist's | Rights and taste: what "my own vocal" means here |
 | **Texture / FX** | Risers, impacts, noise sweeps, atmosphere | A few generators (noise riser, downlifter, impact) timed to the section, not read note by note | Little to read from the original; mostly a sound palette |
 
-## Questions for the owner (one at a time)
+## Owner's answers (27 Oct)
+
+| # | Question | Answer | Log |
+| --- | --- | --- | --- |
+| 1 | Which family first? | Drums, then melody/chords, then texture/FX, one slice each | L214 |
+| 2 | Copy the pattern or the feel? | Copy the pattern (same hits, same steps) with the owner's own sounds; a "make it my own" variation is backlog | L215 |
+| 2b | One drum sound or split? | Three rows: kick, clap/snare, hats; each its own sound, knobs and Save, each to its own Studio lane | L216 |
+| 3 | Vocals? | Out of this phase ("not yet" in the switch); lead-from-vocal-pitch to the backlog | L217 |
+| 4 | One screen or tailored? | One Make room with a family switch; only the middle is tailored per family | L218 |
+| 5 | AI fine-tuning? | Not this phase; Suggest settings for every family; fine-tuning stays in the backlog | L219 |
+
+## Requirements (Phase 5)
+
+| # | Requirement |
+| --- | --- |
+| P1 | Make has a family switch: Bass · Drums · Melody · FX, Vocals shown as "not yet". Preset, knobs, Suggest, A/B, score and Save keep their place for every family. |
+| P2 | Bass works exactly as in PR 95; every saved sound renders sample-for-sample as before. |
+| P3 | Drums: the looped drum part is read into three step patterns (kick, clap/snare, hats) on the 16th grid, with swing/offsets kept; each row plays with a pure-TS drum synth, its own presets (3–4 per row) and knobs. |
+| P4 | Melody/chords: the looped "other" part is read into notes (several at once) and played with a pure-TS poly synth with 3–4 presets (e.g. stab, pad, pluck, keys) and knobs, in key and on tempo. |
+| P5 | Texture/FX: a few generators (e.g. riser, downlifter, impact, noise sweep) timed to the section and in key; knobs; nothing read note by note. |
+| P6 | Suggest settings for every family (and every drum row): gold ticks only, never turns a knob. |
+| P7 | A/B at matched perceived loudness for every family, with a bed under both sides (the original drums for bass, melody and FX; the original bass for drums), on by default. Drums compare the original drum part with Mine's three rows together. |
+| P8 | A closeness score (0–100) for drums and melody, measured on the in-memory loop, numbers only. |
+| P9 | Save to My sounds per family (per drum row); dropped in the Studio a sound lands on its lane (kick → Kick, clap/snare → Claps & snares, hats → Hats, chords/stabs/pads → Chords or Pads, leads/plucks → Lead, FX → FX) and is editable in the lane's drawer. |
+| P10 | Rights rule C2 unchanged: the original stays in memory only and is never stored, exported, uploaded or sent to any API. |
+
+## Questions for the owner (draft, answered above)
 
 1. **Which family first?** Recommendation: drums, because they are the clearest to read (hits on a
    grid), the most different from bass, and the owner already wants their own kick next to Mine.

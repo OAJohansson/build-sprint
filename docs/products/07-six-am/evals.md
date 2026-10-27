@@ -234,3 +234,46 @@ One pass/fail per requirement in the Lab kickoff (`kickoff.md`), run by the grad
 ### Build hygiene
 
 `pnpm -F 07-six-am lint`, `test`, `build` pass; `checks` green on the PR.
+
+# Evals: Six AM Make for every layer (Phase 5)
+
+From the Phase 5 kickoff (27 Oct, L214–L220), part 1 (agent-checkable). Graders: `user-tester`,
+`design-critic`, `data-evals`; never the builder. Test sandbox only (`ACCESS_CODE=test-code`,
+in-memory store). Owner-only checks (by ear: does my kick/chords/FX feel inspired by the original;
+is the A/B fair) are in the owner's final review.
+
+Reading is measured against a ground truth the grader knows: test loops built from known patterns
+and notes (crate loops and synth parts mixed, then separated by the Lab), plus a hand check on
+2 real tracks.
+
+| # | Eval | Bar | Run by | Result |
+| --- | --- | --- | --- | --- |
+| Z1 | Drum hits read on time | onsets within 10 ms of the truth; ≥ 90 % of hits found, ≤ 10 % extra | data-evals | |
+| Z2 | Drum hits labelled right (kick / clap-snare / hats) | ≥ 85 % of found hits | data-evals | |
+| Z3 | Melody/chord notes read | ≥ 70 % of note pitch classes per chord found; ≤ 20 % wrong notes; onsets within 30 ms | data-evals | |
+| Z4 | Every synth note in key and on tempo, every family | in scale, onsets ≤ 5 ms | data-evals | |
+| Z5 | A/B level-matched, every family | within 1 dB (perceived loudness) | data-evals | |
+| Z6 | Suggest closer than the starting preset, drums (per row) and melody | measured distance drops on ≥ 3 of 5 loops | data-evals | |
+| Z7 | Save and Studio drop: each family/row lands on its lane and survives a reload | 5 of 5 per family | data-evals | |
+| Z8 | Bass unchanged: old saved sounds render sample-for-sample; bass flow passes Phase 4's Y4, Y9, Y10 | yes | data-evals | |
+| Z9 | Zero bytes of the original stored or uploaded | 0 (storage, network, code read) | data-evals | |
+| Z10 | User test: jobs per slice ≥ 4/5 (sandbox) | ≥ 4/5 each | user-tester | |
+| Z11 | Design scorecard (one critic, five points) | **9/10 is a target, not a blocker** | design-critic | |
+| Z12 | Make comes alive quickly per family | knobs live ≤ 35 s after entering on a playing loop, with a countdown | data-evals | |
+
+### Requirements P1–P10
+
+One pass/fail per requirement in the Phase 5 kickoff (`kickoff.md`).
+
+### Guardrails
+
+| Guardrail | Bar |
+| --- | --- |
+| No audio of a streamed original stored, uploaded or sent to any API | 0 |
+| AI keys never in the browser bundle or responses | 0 occurrences |
+| Ears, Mentor, map, Studio and the bass Make flow unbroken | yes |
+| Readable text, hit areas | ≥ 4.5:1, ≥ 28 px |
+
+### Build hygiene
+
+`pnpm -F 07-six-am lint`, `test`, `build` pass; `checks` green on the PR.

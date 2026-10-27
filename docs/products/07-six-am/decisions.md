@@ -345,3 +345,5 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T118 | 2026-10-27 | Save stays in the foot bar and saves the focused row ("Save kick"); rows show "✓ saved" | PM (designer) | Phase 5 directions | |
 | T119 | 2026-10-27 | Bed under A/B: "Bass under both" for Drums, "Drums under both" for Melody and FX (P7) | PM (designer) | Phase 5 directions | |
 | T120 | 2026-10-27 | FX shows no closeness number ("not measured for FX", P8) | PM (designer) | Phase 5 directions | |
+| L221 | 2026-10-27 | Drums and notes are read with plain DSP in the browser (no ML model, no new dependency): fast (< 0.3 s per 8 bars) and swappable behind the same output type (e.g. Basic Pitch for notes) if real tracks need it | PM (engineer) | Phase 5 spike | |
+| L222 | 2026-10-27 | Spike ground truth is synthetic loops with bleed mixed in (−25 to −15 dB), because htdemucs can't run headless; data-evals re-measures on parts separated in the browser (real-track hand check) before the drums slice is called done | PM (engineer) | Phase 5 spike | |

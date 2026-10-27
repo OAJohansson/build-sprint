@@ -751,3 +751,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **One Make room with a family switch (L218)**, middle tailored per family.
 - **No AI fine-tuning this phase (L219)**; Suggest settings for every family. Kickoff pack final (P1–P10), evals Z1–Z12 written (L220).
 - **Ten directions (designer):** Fold, Machine, Tabs, Strips, Twin, Rings, Pads, Bars, Drawer, Tracker; drums state with Melody/FX glimpses; contact sheet published privately (https://claude.ai/artifact/2V9nkUkYkxAiUR5RyRvVNx). T116–T120. Owner picks 3.
+- **Spike passed on synthetic loops (L221, L222):** drums Z1 found 99 %, extra ≤ 2.3 %, onsets p95 ≤ 5.4 ms; Z2 labels 91–95 %; notes Z3 pitch classes 91–93 %, wrong 4–18 %; < 0.3 s per 8 bars. Weak: slow-swell pads with bleed, pluck over a held pad, hats-only breakdowns, hats under kicks dropped. Real-track check still open. `evals-runs/2026-10-27-make-layers-spike.md`.

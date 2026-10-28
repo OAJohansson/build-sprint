@@ -442,3 +442,29 @@ At most 2 generations (≤ $0.48).
   the code.
 - Ears, the Mentor chat and the Studio's old tracks unbroken (guardrail).
 - Ask afterwards: "Did anything make you think Six AM kept a copy of the track?"
+
+## Phase 5: Make for every layer (28 Oct)
+
+Persona as above (beginner bedroom producer, loves house, no music theory). Sandbox only
+(`ACCESS_CODE=test-code`, in-memory store, port 3017). Score each job 1–5.
+
+#### M-S1 · Make my own drums from a loop I love (slice 1)
+Open a track's Lab, loop the drop, switch Make to Drums. Expect: the three rows fill after a
+short countdown; I can tell which row the knobs change; picking a row moves nothing else.
+
+#### M-S2 · Get my kick close to the original
+Open Kick, try presets, follow the gold ticks / Mentor hint, A/B with the bass under both, watch
+the closeness score. Expect: I can hear and see it getting closer without knowing theory.
+
+#### M-S3 · Keep the drums I like and use them
+Save kick, clap and hats; open the Studio; find them in My sounds; drop each on its lane; reload.
+Expect: each lands on its own lane and survives a reload.
+
+#### M-S4 · A breakdown with almost no drums
+Loop a hats-only part. Expect: rows that are probably bleed are clearly "off", I understand why,
+and "Play anyway" brings them back.
+
+#### M-S5 · Bass still works as before
+Switch to Bass. Expect: nothing changed.
+
+(Melody and FX scenarios added with slices 2 and 3.)

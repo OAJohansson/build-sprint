@@ -1,7 +1,7 @@
 // Putting blocks on the new lanes (S5, L159, T102): place a block on one lane only, and drop a
 // library sound at the phrase under the pointer, creating its lane type when the track has none.
 // Pure apart from timeline.ts's sound registry (place() reads loop lengths from it).
-import { libLoopFrom, PART_LANE, dropLength, phraseStart } from "./make/lib-loop";
+import { libLoopFrom, libLaneType, dropLength, phraseStart } from "./make/lib-loop";
 import type { LibrarySound } from "./make/library";
 import { accepts, legacyTrack as legacyTrackOf, addLane, laneOfRegion, lanesOf, legacyMix, type Lane, type LaneType } from "./studio-lanes";
 import { docBars, newId, place, registerSounds, type Doc, type Region } from "./timeline";
@@ -32,7 +32,7 @@ export function dropLibSound(
   doc: Doc, s: LibrarySound, bar: number,
   o: { laneId?: string; type?: LaneType; soundId?: string; regionId?: string; newLane?: boolean } = {},
 ): { doc: Doc; laneId: string; regionId: string; soundId: string } | null {
-  const type = o.type ?? PART_LANE[s.part];
+  const type = o.type ?? libLaneType(s);
   const sounds = doc.sounds ?? [];
   if (sounds.length >= MAX_SOUNDS) return null;
   let lanes = lanesOf(doc);

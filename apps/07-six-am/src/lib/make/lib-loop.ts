@@ -7,12 +7,13 @@
 import { legacyTrack, type LaneType } from "@/lib/studio-lanes";
 import { inScale, pitchClass, type Scale } from "@/lib/synths/theory";
 import { parseNotes, type LibPart, type LibrarySound } from "./library";
+import { clampDrumMacros, isDrumPreset, renderDrumRow, rowOf, DRUM_PRESETS, type DrumMacros, type DrumPresetId, type DrumRow } from "./drum-synth";
 import { notesForLoop, snapToKey } from "./pattern";
 import { MAKE_PRESETS, clampMacros, synthParams, type Macros, type MakePresetId } from "./presets";
 import { renderBass, type MakeNote, type Rendered } from "./render";
 import { rmsDb } from "./level";
 
-export type LibLoop = {
+type LibLoopBase = {
   id: string;
   source: "lib";
   name: string;
@@ -23,34 +24,46 @@ export type LibLoop = {
   lane: 0 | 1 | 2 | 3;
   /** The library sound it was copied from, or null when that's unknown. */
   libId: string | null;
-  preset: MakePresetId;
-  macros: Macros;
   pattern: { bars: 1 | 2 | 4; notes: MakeNote[] };
   /** The key, scale and tempo the pattern was saved in; the track's are used to play it. */
   key: string;
   scale: Scale;
   bpm: number;
 };
+export type BassLoop = LibLoopBase & { preset: MakePresetId; macros: Macros };
+/** Phase 5: one drum row (kick, clap & snare or hats) with its own knobs; plays at the track's tempo, in no key. */
+export type DrumLoop = LibLoopBase & { preset: DrumPresetId; macros: DrumMacros };
+export type LibLoop = BassLoop | DrumLoop;
+export const isDrumLoop = (l: LibLoop): l is DrumLoop => isDrumPreset(l.preset);
 
 /** The lane type a library part drops into (Make only makes bass today; the rest are guesses
  *  until Make makes them: drums → Percussion, other → Lead). */
 export const PART_LANE: Record<LibPart, LaneType> = { bass: "bass", drums: "perc", other: "lead", vocals: "vocals" };
+/** Phase 5 (P9): a drum row lands on its own lane (L216). */
+export const DRUM_ROW_LANE: Record<DrumRow, LaneType> = { kick: "kick", clap: "clap", hats: "hats" };
+/** The lane type a library sound drops into: a drum row's own lane, else its part's. */
+export const libLaneType = (s: Pick<LibrarySound, "part" | "preset">): LaneType => (isDrumPreset(s.preset) ? DRUM_ROW_LANE[rowOf(s.preset)] : PART_LANE[s.part]);
 
 const newId = () => `s${Math.random().toString(36).slice(2, 8)}${Date.now().toString(36).slice(-4)}`;
 
 /** A track's own copy of a library sound, for a lane of `type` (its part's type by default). */
-export function libLoopFrom(s: LibrarySound, type: LaneType = PART_LANE[s.part], id = newId()): LibLoop {
+export function libLoopFrom(s: LibrarySound, type: LaneType = libLaneType(s), id = newId()): LibLoop {
   return {
     id, source: "lib", name: s.name, bars: s.pattern.bars, type, lane: legacyTrack(type), libId: s.id,
     preset: s.preset, macros: { ...s.macros }, pattern: { bars: s.pattern.bars, notes: s.pattern.notes.map((n) => ({ ...n })) },
     key: s.key, scale: s.scale, bpm: s.bpm,
-  };
+  } as LibLoop;
 }
 
 /** A block's sound edited in the Studio (preset and macros only; the pattern stays). */
-export function editLibLoop(l: LibLoop, edit: { preset?: MakePresetId; macros?: Partial<Macros> }): LibLoop {
-  const preset = edit.preset && edit.preset in MAKE_PRESETS ? edit.preset : l.preset;
-  return { ...l, preset, macros: clampMacros(preset, { ...l.macros, ...edit.macros }) };
+export function editLibLoop(l: LibLoop, edit: { preset?: MakePresetId | DrumPresetId; macros?: Partial<Macros> | DrumMacros }): LibLoop {
+  if (isDrumLoop(l)) {
+    // A drum row stays on its row (its lane depends on it).
+    const preset = isDrumPreset(edit.preset) && rowOf(edit.preset) === rowOf(l.preset) ? edit.preset : l.preset;
+    return { ...l, preset, macros: clampDrumMacros(preset, { ...l.macros, ...edit.macros }) };
+  }
+  const preset = edit.preset && edit.preset in MAKE_PRESETS ? (edit.preset as MakePresetId) : l.preset;
+  return { ...l, preset, macros: clampMacros(preset, { ...l.macros, ...(edit.macros as Partial<Macros>) }) };
 }
 
 // ── Key ─────────────────────────────────────────────────────────────────────────────────────────
@@ -106,6 +119,8 @@ export function dropLength(passBars: number, start: number, total: number, phras
  */
 export function renderLibPass(l: LibLoop, track: { key: string; scale: Scale; bpm: number }, rate = 44100): Rendered {
   const steps = l.bars * 16;
+  // A drum row: its hits at their steps and swing offsets, at the track's tempo; drums have no key.
+  if (isDrumLoop(l)) return renderDrumRow(l.preset, l.macros, l.pattern.notes, { bpm: track.bpm, steps, rate });
   const notes = notesForLoop({ bars: l.bars, notes: notesInKey(l, track.key, track.scale) }, steps);
   return renderBass(notes, synthParams(l.preset, l.macros), { bpm: track.bpm, steps, rate });
 }
@@ -126,11 +141,17 @@ export function midRmsDb(r: Rendered): number {
   return rmsDb({ left: mid, right: mid, rate: r.rate });
 }
 
-/** The pass scaled to LIB_LEVEL_DB (a silent pass, a pattern with no notes, stays as it is). */
-export function levelled(r: Rendered): Rendered {
+/** Phase 5: a drum row's level in a Studio block (mid RMS over the pass): a kick sits higher than a clap, a clap than hats. */
+// shortcut: per-row levels set by reasoning about a house mix (kick loudest, hats ~8 dB under), not measured against the crate's drum loops; measure them like LIB_LEVEL_DB if the owner finds a lane too loud.
+export const DRUM_LIB_LEVEL_DB: Record<DrumRow, number> = { kick: -21, clap: -25, hats: -29 };
+/** The level a library block plays at: LIB_LEVEL_DB for a bass, its row's for a drum. */
+export const libLevelDb = (l: Pick<LibLoop, "preset">) => (isDrumPreset(l.preset) ? DRUM_LIB_LEVEL_DB[rowOf(l.preset)] : LIB_LEVEL_DB);
+
+/** The pass scaled to `target` (LIB_LEVEL_DB; a silent pass, a pattern with no notes, stays as it is). */
+export function levelled(r: Rendered, target = LIB_LEVEL_DB): Rendered {
   const now = midRmsDb(r);
   if (now < -90) return r;
-  const g = Math.pow(10, Math.min(MAX_LIFT_DB, Math.max(-MAX_CUT_DB, LIB_LEVEL_DB - now)) / 20);
+  const g = Math.pow(10, Math.min(MAX_LIFT_DB, Math.max(-MAX_CUT_DB, target - now)) / 20);
   return { left: r.left.map((x) => x * g), right: r.right.map((x) => x * g), rate: r.rate };
 }
 
@@ -148,7 +169,8 @@ export function parseLibLoop(v: unknown): LibLoop | null {
   if (!v || typeof v !== "object") return null;
   const o = v as Record<string, unknown>;
   if (o.source !== "lib" || typeof o.id !== "string" || !o.id || o.id.length > 40) return null;
-  if (typeof o.preset !== "string" || !(o.preset in MAKE_PRESETS)) return null;
+  const drum = isDrumPreset(o.preset);
+  if (!drum && (typeof o.preset !== "string" || !(o.preset in MAKE_PRESETS))) return null;
   if (typeof o.type !== "string" || !LANE_TYPES.includes(o.type as LaneType)) return null;
   const pat = (o.pattern ?? {}) as Record<string, unknown>;
   const bars = pat.bars === 1 || pat.bars === 2 || pat.bars === 4 ? pat.bars : null;
@@ -156,7 +178,17 @@ export function parseLibLoop(v: unknown): LibLoop | null {
   if (!bars || !notes || (o.bars !== undefined && o.bars !== bars)) return null;
   if (typeof o.key !== "string" || pitchClass(o.key) === null || (o.scale !== "major" && o.scale !== "minor")) return null;
   if (typeof o.bpm !== "number" || !Number.isFinite(o.bpm) || o.bpm < 40 || o.bpm > 220) return null;
-  const preset = o.preset as MakePresetId, type = o.type as LaneType;
+  const type = o.type as LaneType;
+  if (drum) {
+    const preset = o.preset as DrumPresetId;
+    return {
+      id: o.id, source: "lib", name: typeof o.name === "string" && o.name.trim() ? o.name.trim().slice(0, 60) : DRUM_PRESETS[preset].name,
+      bars, type, lane: legacyTrack(type), libId: typeof o.libId === "string" && o.libId.length <= 40 ? o.libId : null,
+      preset, macros: clampDrumMacros(preset, (o.macros ?? {}) as Record<string, unknown>), pattern: { bars, notes },
+      key: o.key.trim(), scale: o.scale, bpm: o.bpm,
+    };
+  }
+  const preset = o.preset as MakePresetId;
   return {
     id: o.id, source: "lib", name: typeof o.name === "string" && o.name.trim() ? o.name.trim().slice(0, 60) : MAKE_PRESETS[preset].name,
     bars, type, lane: legacyTrack(type), libId: typeof o.libId === "string" && o.libId.length <= 40 ? o.libId : null,

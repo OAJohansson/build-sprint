@@ -14,7 +14,7 @@ import {
   toggleSolo as soloIn, withLanes, type FamilyId, type Lane, type LaneType,
 } from "@/lib/studio-lanes";
 import { dropLibSound, placeInLane } from "@/lib/studio-drop";
-import { PART_LANE, dropLength, libLoopFrom, phraseStart } from "@/lib/make/lib-loop";
+import { dropLength, libLaneType, libLoopFrom, phraseStart } from "@/lib/make/lib-loop";
 import type { LibrarySound } from "@/lib/make/library";
 import type { Sound } from "@/lib/synths/loop";
 import type { Scale } from "@/lib/synths/theory";
@@ -36,7 +36,7 @@ const HOLD_MS = 250; // press and hold a block this long and the bin appears
 /** An item's lane type, old lane and length in bars (a library sound's block fills a phrase). */
 export function itemInfo(item: CrateItem): { type: LaneType; track: number; bars: number; name: string } {
   if (item.kind === "loop") return { type: crateLaneType(item.loop), track: item.loop.track, bars: item.loop.bars, name: item.loop.name };
-  const type = PART_LANE[item.sound.part];
+  const type = libLaneType(item.sound);
   return { type, track: legacyTrack(type), bars: item.sound.pattern.bars, name: item.sound.name };
 }
 
@@ -307,7 +307,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
     if (item.kind === "loop") { setPreviewSound(null); setPreview((p) => (p === item.loop.id ? null : item.loop.id)); return; }
     const id = `listen-${item.sound.id}`;
     if (previewSound?.id === id) { setPreviewSound(null); return; }
-    setPreviewSound(libLoopFrom(item.sound, PART_LANE[item.sound.part], id));
+    setPreviewSound(libLoopFrom(item.sound, libLaneType(item.sound), id));
   };
 
   /** Spread onto a crate item or My sounds card: click hears it, drag drops it onto a lane that

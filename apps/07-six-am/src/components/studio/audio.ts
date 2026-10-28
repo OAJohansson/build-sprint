@@ -14,7 +14,7 @@ import type { KitId } from "@/lib/synths/kits";
 import type { Sound } from "@/lib/synths/loop";
 import { buildSoundIndex, previewSoundHits, type SoundHit } from "@/lib/synths/schedule";
 import type { Scale } from "@/lib/synths/theory";
-import { levelled, passSignature, renderLibPass, type LibLoop } from "@/lib/make/lib-loop";
+import { levelled, libLevelDb, passSignature, renderLibPass, type LibLoop } from "@/lib/make/lib-loop";
 import { laneMix, laneOfRegion, lanesOf, type Lane } from "@/lib/studio-lanes";
 import { LaneMixer } from "@/lib/studio-mixer";
 
@@ -544,7 +544,7 @@ export class AudioEngine {
     const sig = passSignature(x, track);
     const have = this.libPasses.get(x.id);
     if (have?.sig === sig) return have.buf;
-    const r = levelled(renderLibPass(x, track, Tone.getContext().sampleRate));
+    const r = levelled(renderLibPass(x, track, Tone.getContext().sampleRate), libLevelDb(x));
     const buf = Tone.ToneAudioBuffer.fromArray([r.left, r.right]);
     this.libPasses.set(x.id, { sig, buf });
     return buf;

@@ -38,7 +38,7 @@ describe("Sub and Weight (L209)", () => {
     expect(parseNewSound(sound)!.macros).toMatchObject({ sub: 0, weight: 0 });
     expect(parseNewSound({ ...sound, macros: { ...six, sub: 0.6, weight: 0.4 } })!.macros).toMatchObject({ sub: 0.6, weight: 0.4 });
     const block = parseLibLoop({ libId: "x", name: "Old", preset: "reese", macros: six, pattern: { bars: 1, notes: [{ step: 0, midi: 31, dur: 2, vel: 0.9 }] }, key: "G", scale: "minor", bpm: 126 });
-    if (block) expect([block.macros.sub, block.macros.weight]).toEqual([0, 0]);
+    if (block) expect([(block.macros as Record<string, number>).sub, (block.macros as Record<string, number>).weight]).toEqual([0, 0]);
   });
   it("Sub adds the part below 100 Hz; Weight adds the octave above the note (80–250 Hz) and doesn't get brighter", () => {
     for (const id of MAKE_PRESET_IDS) {

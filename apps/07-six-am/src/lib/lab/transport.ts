@@ -12,6 +12,8 @@ import { LiveError, LiveParts, type LiveStats, type Region } from "./live";
 import { LoopBuffer } from "./loop-buffer";
 import { bandShareDb, StereoMeter } from "@/lib/make/meter";
 import { analyseLoop, band, closeness, stepEnergy, type Closeness, type LoopReport } from "@/lib/make/closeness";
+import { drumsCloseness, drumsReport, type DrumsCloseness } from "@/lib/make/drums-make";
+import { lufs, rmsDb } from "@/lib/make/level";
 import { RecentParts, faded } from "./recent";
 import { Separator } from "./separator-client";
 import { gateResume, isCatching, loopFillEtaS, loopPositionMs, msToSamples, playTimeOf, runOffset } from "./timing";
@@ -402,6 +404,23 @@ export class LabTransport {
     const kick = [band(mono, d.rate, 30, 60), band(mono, d.rate, 60, 120)].map((x) => stepEnergy(x, d.rate, bpm));
     const bass = analyseLoop(b.left, b.right, b.rate, bpm, onsets), mine = m ? analyseLoop(m.getChannelData(0), m.getChannelData(1), m.sampleRate, bpm, onsets) : null;
     return { bass, kick, mine, closeness: mine ? closeness(bass, mine) : null };
+  }
+
+  /**
+   * Graders (Phase 5, Z5): the loudness of a looped part (0 drums, 1 bass, 2 other, 3 vocals) and of
+   * Mine, RMS dB and LUFS over the whole loop, so A/B can be checked level-matched. Numbers only.
+   */
+  compareLevels(p: number): { original: { rmsDb: number; lufs: number } | null; mine: { rmsDb: number; lufs: number } | null } {
+    const o = this.loopPart(p), m = this.mine?.buf;
+    const lv = (s: { left: Float32Array; right: Float32Array; rate: number }) => ({ rmsDb: Math.round(rmsDb(s) * 100) / 100, lufs: Math.round(lufs(s) * 100) / 100 });
+    return { original: o ? lv(o) : null, mine: m ? lv({ left: m.getChannelData(0), right: m.getChannelData(1), rate: m.sampleRate }) : null };
+  }
+
+  /** Graders (Phase 5, P8): the drums closeness of Mine against the looped drum part, measured here. Numbers only. */
+  captureDrums(): DrumsCloseness | null {
+    const d = this.loopPart(0), m = this.mine?.buf;
+    if (!d || !m) return null;
+    return drumsCloseness(drumsReport(d.left, d.right, d.rate, this.o.bpm), drumsReport(m.getChannelData(0), m.getChannelData(1), m.sampleRate, this.o.bpm));
   }
 
   private mineOutput() {

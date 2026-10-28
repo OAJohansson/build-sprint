@@ -7,8 +7,10 @@
 import { powerSpec, toMono } from "./dsp";
 
 export type DrumRow = "kick" | "clap" | "hats";
-export type DrumHit = { t: number; row: DrumRow; vel: number };
-export type StepHit = { step: number; offsetMs: number; vel: number };
+/** `vel`: against the row's biggest hit (0–1); `db`: the hit's size against the loop's biggest hit
+ *  of any row (Make uses it to tell faint bleed from real hits, L225). */
+export type DrumHit = { t: number; row: DrumRow; vel: number; db?: number };
+export type StepHit = { step: number; offsetMs: number; vel: number; db?: number };
 export type DrumReading = {
   hits: DrumHit[];
   rows: Record<DrumRow, StepHit[]>;
@@ -266,7 +268,7 @@ function gate(cands: Cand[], leak: number[][], near: number): DrumHit[] {
   const hits: DrumHit[] = [];
   for (const c of cands) {
     c.keep = !c.why;
-    if (c.keep) hits.push({ t: c.t, row: ROWS[c.row], vel: Math.round(Math.min(1, c.size / (rowBig[c.row] || 1)) * 100) / 100 });
+    if (c.keep) hits.push({ t: c.t, row: ROWS[c.row], vel: Math.round(Math.min(1, c.size / (rowBig[c.row] || 1)) * 100) / 100, db: Math.round((c.db ?? 0) * 10) / 10 });
   }
   return hits;
 }
@@ -300,7 +302,7 @@ export function quantise(hits: DrumHit[], sps: number, loopStartSec: number, ste
     const offsetMs = Math.round((h.t - gridSec - step * sps) * 10000) / 10;
     const row = rows[h.row];
     if (row.some((x) => x.step === step)) continue; // one hit per step and row
-    row.push({ step, offsetMs, vel: h.vel });
+    row.push(h.db === undefined ? { step, offsetMs, vel: h.vel } : { step, offsetMs, vel: h.vel, db: h.db });
     (step % 2 ? odd : even).push(offsetMs);
   }
   for (const r of ROWS) rows[r].sort((a, b) => a.step - b.step);

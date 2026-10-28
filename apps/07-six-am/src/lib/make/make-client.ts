@@ -34,6 +34,7 @@ export class MakeClient {
   private main = new Mailbox();
   private search = new Mailbox();
   private renders = 0;
+  private drumRenders = 0;
 
   /** Reads a copy of the part (the copy is transferred, then zeroed in the worker). */
   read(r: Omit<Extract<MakeRequest, { type: "read" }>, "id" | "type">) {
@@ -46,6 +47,18 @@ export class MakeClient {
   }
   suggest(r: Omit<Extract<MakeRequest, { type: "suggest" }>, "id" | "type">) {
     return this.search.send({ type: "suggest", ...r }) as Promise<Res<"suggest">>;
+  }
+  /** Phase 5 drums: read a copy of the looped drum part (transferred, then zeroed in the worker). */
+  drumsRead(r: Omit<Extract<MakeRequest, { type: "drums-read" }>, "id" | "type">) {
+    return this.main.send({ type: "drums-read", ...r }, [r.left.buffer, r.right.buffer]) as Promise<Res<"drums-read">>;
+  }
+  /** Mine's three rows; `stale` once a newer drums render was asked for. */
+  drumsRender(r: Omit<Extract<MakeRequest, { type: "drums-render" }>, "id" | "type">) {
+    const n = ++this.drumRenders;
+    return (this.main.send({ type: "drums-render", ...r }) as Promise<Res<"drums-render">>).then((res) => ({ res, stale: n !== this.drumRenders }));
+  }
+  drumsSuggest(r: Omit<Extract<MakeRequest, { type: "drums-suggest" }>, "id" | "type">) {
+    return this.search.send({ type: "drums-suggest", ...r }) as Promise<Res<"drums-suggest">>;
   }
   stop() { this.main.stop(); this.search.stop(); }
 }

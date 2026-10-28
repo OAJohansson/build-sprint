@@ -758,3 +758,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Doubtful hits off by default (L225)**, with Play them anyway. Fold round 2 built (T122); critic re-scoring.
 - **Fold round 3 (T123)** and the **canvas sign-off** set up: 7 screens on a private Claude Design canvas (https://claude.ai/artifact/W8oZyRe9NP3crYG8qxRYhn). Waiting for the owner's comments and approval before the UI build.
 - **Owner's canvas comment: "is that the main makeup of FX?"** Sound check against real tools (T124): kick and melody knobs right; clap Spread → Snap; hats drop Swing; FX add Reverse crash and Sub drop as presets. Updated screens go beside the originals on the canvas.
+- **Canvas approved (L226).** Build starts: slice 1 drums.

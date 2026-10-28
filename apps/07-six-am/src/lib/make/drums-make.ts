@@ -54,8 +54,13 @@ const SLICES: [number, number][] = [[0, 0.01], [0.01, 0.035], [0.035, 0.09], [0.
 /** Each row's own band (Hz), for its level and the closeness envelopes (drums-read's ROW_BANDS). */
 export const ROW_BAND: Record<DrumRow, [number, number]> = { kick: [30, 180], clap: [700, 5600], hats: [5600, 16000] };
 
-/** Band energies (dB re their sum) of each slice of a hit at sample `a`, slices cut at `end` s. */
-function hitShape(x: Float32Array, a: number, end: number, rate: number): number[] {
+/** Where each row's shape is measured from (Hz): a clap and hats often sit on a kick's tail (a clap
+ *  on the beat in four-on-the-floor), so the kick's range would swamp their shape. */
+export const SHAPE_FROM: Record<DrumRow, number> = { kick: 0, clap: 250, hats: 2000 };
+
+/** Band energies (dB re their sum) of each slice of a hit at sample `a`, slices cut at `end` s,
+ *  over the bands from `fromHz` up. */
+function hitShape(x: Float32Array, a: number, end: number, rate: number, fromHz = 0): number[] {
   const out: number[] = [];
   for (const [s0, s1] of SLICES) {
     const from = a + Math.round(s0 * rate), to = a + Math.round(Math.min(s1, end) * rate);
@@ -72,7 +77,7 @@ function hitShape(x: Float32Array, a: number, end: number, rate: number): number
         e[b] += re[k] * re[k] + im[k] * im[k];
       }
     }
-    out.push(...e);
+    out.push(...e.filter((_, b) => EDGES[b] >= fromHz));
   }
   const tot = out.reduce((s, v) => s + v, 0);
   return out.map((v) => Math.max(-60, Math.round(dB(v / (tot || 1)) * 10) / 10));
@@ -123,7 +128,7 @@ export function measureRows(left: Float32Array, right: Float32Array, rate: numbe
     const pool = clear.length >= 3 ? clear : hits, every = Math.max(1, Math.ceil(pool.length / MAX_HITS));
     const use = pool.filter((_, i) => i % every === 0).slice(0, MAX_HITS);
     const starts = use.map((h) => Math.round(h.t * rate));
-    const shapes = starts.map((a) => hitShape(mono, a, endS, rate));
+    const shapes = starts.map((a) => hitShape(mono, a, endS, rate, SHAPE_FROM[row]));
     const shape = shapes[0].map((_, i) => median(shapes.map((s) => s[i])));
     const levelDb = rowLevel(band(mono, rate, ...ROW_BAND[row]), hits.map((h) => Math.round(h.t * rate)), rate);
     out[row] = {
@@ -154,7 +159,7 @@ export function measureCandidate(preset: DrumPresetId, m: DrumMacros, t: RowTarg
   const r = renderDrumHits(preset, m, [{ t: 0, vel: 1 }, { t: t.endS, vel: 0 }], { lenS: t.endS + 0.01, rate, wrap: false });
   const mono = toMono(r.left, r.right), row = DRUM_PRESETS[preset].row;
   return {
-    shape: hitShape(mono, 0, t.endS, rate),
+    shape: hitShape(mono, 0, t.endS, rate, SHAPE_FROM[row]),
     hz: row === "kick" ? lowHz(band(mono, rate, 30, 150), 0, t.endS, rate) : null,
     side: row === "hats" ? sideDb(r.left, r.right, 0, t.endS, rate) : null,
   };

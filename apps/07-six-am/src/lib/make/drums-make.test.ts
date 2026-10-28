@@ -97,6 +97,7 @@ describe("Suggest and closeness on a known loop", () => {
   it("Suggest lands closer than the starting preset on every row (Z6)", () => {
     for (const row of DRUM_ROWS) {
       const s = suggestDrum(targets[row]!, ROW_PRESETS[row][0]);
+      expect(Number.isFinite(s.distance), row).toBe(true);
       expect(s.distance, row).toBeLessThan(s.presetDistance);
       expect(Object.keys(s.macros).sort()).toEqual([...ROW_KNOBS[row]].sort());
     }

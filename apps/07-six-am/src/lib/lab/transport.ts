@@ -360,9 +360,10 @@ export class LabTransport {
    * Swapped in place while playing, in sync, with a 15 ms crossfade. Null removes it. Not original
    * audio: it is the owner's own render (or an AI loop).
    */
-  setMine(m: { left: Float32Array; right: Float32Array; rate: number } | null) {
+  setMine(m: { left: Float32Array; right: Float32Array; rate: number } | null, owner: "bass" | "drums" = "bass") {
     const live = this.live;
-    if (!m || !live) { this.stopMine(); this.mine = null; return; }
+    if (!m || !live) { this.stopMine(); this.mine = null; this.mineOwnerS = null; return; }
+    this.mineOwnerS = owner;
     const loopLen = this.loopS?.audio?.[0]?.length ?? 0;
     const n = loopLen && Math.abs(m.left.length - loopLen) <= loopLen * 0.01 ? loopLen : m.left.length;
     const buf = live.ctx.createBuffer(2, n, m.rate);
@@ -371,6 +372,10 @@ export class LabTransport {
     this.mine = { buf, src: this.mine?.src ?? null, fade: this.mine?.fade ?? null };
     if (this.playingS && this.loopS?.state === "memory") this.startMine();
   }
+
+  /** Phase 5: which Make family's sound Mine holds now (one buffer for every family). */
+  get mineOwner() { return this.mine ? this.mineOwnerS : null; }
+  private mineOwnerS: "bass" | "drums" | null = null;
 
   /** B on Make's A/B: Mine heard (the parts' gains are set separately with setParts). */
   setMineOn(on: boolean) {

@@ -309,3 +309,47 @@
 
 /* L209: eight knobs (with Sub and Weight) in one row at 84 px */
 .macros { gap: 8px; }
+
+/* Phase 5 (Fold, round 3 + 4; L218, L224): the family switch, then the drum rows on top with the knob
+   block anchored under them. Every row is 64 px whatever is picked, so the knob block never moves. */
+.fam { display: flex; align-items: center; gap: 22px; height: 52px; width: 100%; flex: none; border-bottom: 1px solid var(--line); margin-top: -8px; min-width: 0; }
+.famTab { display: inline-flex; align-items: center; gap: 8px; height: 100%; background: none; border: 0; padding: 0; cursor: pointer; font-size: 13px; color: var(--muted) !important; white-space: nowrap; transition: color 150ms ease-out; }
+.famTab i { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.famTab[aria-selected="true"] { color: var(--ink) !important; box-shadow: inset 0 -2px var(--ink); }
+@media (hover: hover) and (pointer: fine) { .famTab:not([data-off]):hover { color: var(--ink) !important; } }
+.famTab[data-off] { color: var(--faint) !important; cursor: default; }
+.famTab em { font-style: normal; font-size: 11px; border: 1px solid var(--edge); border-radius: 4px; padding: 1px 6px; margin-left: 4px; }
+.famCap { margin-left: auto; min-width: 0; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.root .famTab:active:not(:disabled) { transform: none; }
+.grow { flex: 1 1 0; min-height: 0; }
+
+.drums { width: 100%; display: flex; flex-direction: column; flex: none; }
+.drRows { position: relative; width: 100%; }
+.drRow { display: grid; grid-template-columns: 156px minmax(0, 1fr) 150px; gap: 20px; align-items: center; height: 64px; border-bottom: 1px solid var(--line); }
+.drRow[data-head] { height: 22px; border-bottom: 0; align-items: end; }
+.drRow[data-lit] { background: rgba(241, 230, 211, .045); box-shadow: inset 2px 0 var(--ink); }
+.drName { height: 56px; text-align: left; background: none; border: 0; padding: 0 0 0 12px; cursor: pointer; font-size: 14px; color: var(--muted) !important; white-space: nowrap; }
+.drRow[data-lit] .drName { color: var(--ink) !important; }
+.drOff { font-size: 12px; color: var(--muted); }
+.drTrack { position: relative; height: 38px; min-width: 0; }
+.drPattern { display: block; width: 100%; height: 38px; overflow: visible; }
+.drBars { position: relative; height: 18px; }
+.drBars span { position: absolute; top: 0; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.drSlot { justify-self: end; text-align: right; padding-right: 4px; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.drPreset { font: italic 400 20px var(--f-serif); color: var(--muted); white-space: nowrap; }
+.drSaved { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.drSaved::before { content: "✓ "; color: #7fbf6a; }
+.drHeadBox { position: absolute; top: 22px; bottom: 0; left: calc(156px + 20px); right: calc(150px + 20px); pointer-events: none; }
+.drHead { position: absolute; top: 8px; bottom: 8px; width: 1.5px; background: #fff; }
+.drBlock { margin-top: 22px; display: flex; flex-direction: column; align-items: flex-start; width: 100%; }
+.drLabel { font-size: 12px; color: var(--muted); }
+.drPresetName { align-self: flex-start; background: none; border: 0; padding: 4px 0; cursor: pointer; font: italic 400 30px/1 var(--f-serif) !important; white-space: nowrap; }
+.drPresetName span { font: 13px var(--f-mono); color: var(--muted); margin-left: 6px; }
+.drBlock .menu { top: 44px; }
+.drKnobs { display: flex; gap: 56px; margin: 10px 0 12px; }
+.drKnobs[data-off] [role="slider"] { opacity: .45; }
+.drSuggest { display: flex; align-items: center; gap: 16px; min-height: 34px; }
+.drSuggest .suggest { min-height: 0; }
+.drWait { margin: 0; min-height: 34px; display: flex; align-items: center; font-size: 13px; color: var(--ink); }
+.drScore { margin-left: auto; display: flex; align-items: baseline; gap: 8px; color: var(--muted); white-space: nowrap; font-size: 12.5px; }
+.drScore b { font: 500 22px var(--f-mono); color: var(--ink); }

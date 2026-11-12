@@ -48,6 +48,8 @@ const toneKnob = (hz: number, lo: number, hi: number) => clamp01(Math.log(hz / l
 export type FxMeasure = { ticks: FxMacros | null; heard: string };
 // shortcut: the riser's margins (9 dB, a 0.7 time correlation, at least a bar) picked so a borderline climb reads "none" both times; check on real builds.
 export const RISER_MIN = { db: 9, corr: 0.7, bars: 1 };
+// shortcut: the impact's margins (a 9 dB jump, a quarter-bar ring) as the riser's, picked so a borderline hit reads the same each time.
+export const IMPACT_MIN = { db: 9, bars: 0.25 };
 
 /** What the original's FX-carrying parts do where each row sits (numbers only). `plan` in loop bars. */
 // shortcut: thresholds (a 6 dB rise with a 0.6 time correlation, a 6 dB hit over the drop's steady level, a ½-octave fall) picked on our own synthetic loops; chords or vocals moving there can read as FX. Check against data-evals' real drops.
@@ -84,11 +86,13 @@ export function measureFx(L: Float32Array, R: Float32Array, rate: number, bpm: n
     // …and above the drop's own steady level after it (a hit stands out from the section it opens).
     const steady = tr.filter((x) => x.t >= hit + barS && x.t < hit + 2 * barS).map((x) => x.db).sort((a, b) => a - b);
     const base = Math.max(pre.length ? Math.max(...pre) : -Infinity, steady.length ? steady[Math.floor(steady.length / 2)] : -Infinity);
-    if (peak.db - base >= 6) {
-      const fall = tr.find((x) => x.t > peak.t && x.db < peak.db - 20);
-      const bars = ((fall?.t ?? hit + 4 * barS) - hit) / barS;
+    const fall = tr.find((x) => x.t > peak.t && x.db < peak.db - 20);
+    const bars = ((fall?.t ?? hit + 4 * barS) - hit) / barS;
+    // FX-R1: a clear hit jumps 9 dB and rings a quarter bar or more; a 6–9 dB jump read "hit" one time
+    // and "none" the next (and a 0-bar ring put both ticks at 0), so it's a faint jump, without ticks.
+    if (peak.db - base >= IMPACT_MIN.db && bars >= IMPACT_MIN.bars) {
       out.impact = { ticks: { tail: Math.round(barsKnob(bars) * 100) / 100, tone: Math.round(toneKnob(peak.centroid, 300, 6000) * 100) / 100 }, heard: `a hit on the first beat (${Math.round(peak.db - base)} dB jump) ringing about ${Math.round(bars * 2) / 2} bars` };
-    } else out.impact = { ticks: null, heard: "no clear hit on the first beat in the original" };
+    } else out.impact = { ticks: null, heard: peak.db - base >= 6 ? "only a faint jump on the first beat in the original" : "no clear hit on the first beat in the original" };
   }
   // Downlifter: brightness falling after the hit while the level fades (200 Hz–8 kHz, quarter-bars).
   {

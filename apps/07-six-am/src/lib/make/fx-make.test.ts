@@ -79,6 +79,14 @@ describe("Suggest's measure (P6, honest when nothing is there)", () => {
     const fill = loop(8, [{ id: "fx-riser-noise", atBar: 7.5, lenBars: 0.5 }]);
     expect(measureFx(fill, fill, RATE, BPM, plan, 8, 97).riser.ticks).toBeNull();
   });
+  it("calls a borderline jump on the first beat a faint jump, without ticks (FX-R1)", () => {
+    // A short click 7 dB over the drop: not a hit worth ticking, every read.
+    const x = loop(8, []);
+    const a = 0, n = Math.round(0.02 * RATE);
+    for (let i = 0; i < n; i++) x[a + i] += (i % 2 ? 1 : -1) * 0.0068;
+    const m = measureFx(x, x, RATE, BPM, plan, 8, 97).impact;
+    expect(m.ticks).toBeNull();
+  });
   it("gives no ticks, and says so, where the original has no FX", () => {
     const x = loop(8, []);
     const m = measureFx(x, x, RATE, BPM, plan, 8);

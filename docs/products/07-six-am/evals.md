@@ -248,24 +248,25 @@ and notes (crate loops and synth parts mixed, then separated by the Lab), plus a
 
 | # | Eval | Bar | Run by | Result |
 | --- | --- | --- | --- | --- |
-| Z1 | Drum hits read on time | onsets within 10 ms of the truth; ≥ 90 % of hits found, ≤ 10 % extra | data-evals || **Fail** (drums slice): real tracks, 4 loops hand-labelled: 85.1 % found, 25.6 % extra; kicks 16–48 ms late on Mason (0/55 within 10 ms), claps/hats ≤ 3 ms; synthetic re-run passes |
-| Z2 | Drum hits labelled right (kick / clap-snare / hats) | ≥ 85 % of found hits | data-evals || **Fail** (drums slice): 63.3 % pooled (Lost 94.8 / 72.9, Mason 45.3 / 44.9): Mason offbeat open hats also read as claps |
+| Z1 | Drum hits read on time | onsets within 10 ms of the truth; ≥ 90 % of hits found, ≤ 10 % extra | data-evals | **Pass** (drums re-grade 12 Nov): 95.4 % found, 2.7 % extra (5 real loops incl. 1 held out, 370 events); kicks 151/151 within 10 ms. 28 Oct: fail 85.1 / 25.6 |
+| Z2 | Drum hits labelled right (kick / clap-snare / hats) | ≥ 85 % of found hits | data-evals | **Pass** (drums re-grade 12 Nov): 87.9 % pooled; Lost 21–28 81.2 % (flammed claps read late). 28 Oct: fail 63.3 % |
 | Z3 | Melody/chord notes read | ≥ 70 % of note pitch classes per chord found; ≤ 20 % wrong notes; onsets within 30 ms | data-evals | |
-| Z4 | Every synth note in key and on tempo, every family | in scale, onsets ≤ 5 ms | data-evals || **Pass** (drums slice): 1,152/1,152 hits ≤ 0.98 ms of intended; but Mine's kick inherits the reader's lateness; kick Tune not key-snapped (observation) |
-| Z5 | A/B level-matched, every family | within 1 dB (perceived loudness) | data-evals || **Fail** (drums slice): 40/45 within 1 LU; Tight+Rim+Shaker up to +1.53, build loop −2.37 (RMS-leeway clamp) |
-| Z6 | Suggest closer than the starting preset, drums (per row) and melody | measured distance drops on ≥ 3 of 5 loops | data-evals || **Pass** (drums slice): product distance down 27/27 rows on 9/9 loops; independent envelope check clap 8/9, hats 8/9, kick 2/9 |
-| Z7 | Save and Studio drop: each family/row lands on its lane and survives a reload | 5 of 5 per family | data-evals || **Pass** (drums slice): 5/5 saved, 5/5 on Kick / Claps & snares / Hats lanes after reload; on a default track all rows land on the one Drums lane (F4) |
-| Z8 | Bass unchanged: old saved sounds render sample-for-sample; bass flow passes Phase 4's Y4, Y9, Y10 | yes | data-evals || **Pass** (drums slice): golden hashes; Phase 4 Y4/Y9/Y10 offline identical at base and HEAD; live bass Make OK |
-| Z9 | Zero bytes of the original stored or uploaded | 0 (storage, network, code read) | data-evals || **Pass** (drums slice): 0 (4,771 requests, storage, code read) |
+| Z4 | Every synth note in key and on tempo, every family | in scale, onsets ≤ 5 ms | data-evals | **Pass** (drums slice): 1,152/1,152 hits ≤ 0.98 ms of intended; kicks now on the attack (12 Nov); kick Tune not key-snapped (observation) |
+| Z5 | A/B level-matched, every family | within 1 dB (perceived loudness) | data-evals | **Pass** (drums re-grade 12 Nov): 45/45 within 0.05 LU. 28 Oct: 40/45 |
+| Z6 | Suggest closer than the starting preset, drums (per row) and melody | measured distance drops on ≥ 3 of 5 loops | data-evals | **Pass** (drums re-grade 12 Nov): product distance 27/27; independent kick 6/8, clap 9/9, hats 7/9 |
+| Z7 | Save and Studio drop: each family/row lands on its lane and survives a reload | 5 of 5 per family | data-evals | **Pass** (drums re-grade 12 Nov): 5/5 on Kick / Claps & snares / Hats after reload; on a default track clap/hats make their own lanes, kick block never replaced |
+| Z8 | Bass unchanged: old saved sounds render sample-for-sample; bass flow passes Phase 4's Y4, Y9, Y10 | yes | data-evals | **Pass** (drums re-grade 12 Nov): 466/466 tests; Phase 4 Y4/Y9/Y10 offline identical at 077e188 and HEAD |
+| Z9 | Zero bytes of the original stored or uploaded | 0 (storage, network, code read) | data-evals | **Pass** (drums re-grade 12 Nov): 0 (2,326 requests, storage, code read) |
 | Z10 | User test: jobs per slice ≥ 4/5 (sandbox) | ≥ 4/5 each | user-tester | |
 | Z11 | Design scorecard (one critic, five points) | **9/10 is a target, not a blocker** | design-critic | |
-| Z12 | Make comes alive quickly per family | knobs live ≤ 35 s after entering on a playing loop, with a countdown | data-evals || **Partial** (drums slice): 0.8 s (loop in memory), 18–21 s (8-bar, 9/9); 16-bar 35.1 s, cold Play 38.3 s; countdown shown |
+| Z12 | Make comes alive quickly per family | knobs live ≤ 35 s after entering on a playing loop, with a countdown | data-evals | **Partial** (drums re-grade 12 Nov): 0.8 s in memory, 18.7–21.5 s for 8 bars; 16-bar 35.5 s, cold Play 37.7 s (fill-bound); countdown later figures within −2.8…+0.5 s |
 
 ### Requirements P1–P10
 
 One pass/fail per requirement in the Phase 5 kickoff (`kickoff.md`).
 
 Drums slice (data-evals, 28 Oct, `evals-runs/2026-10-28-drums-slice.md`): P1 partial (controls shift 126–138 px vs Bass), P3 fail (reading), P6 pass, P7 pass (Z5 caveat), P8 pass, P9 partial (default-track drop), P10 pass.
+Re-grade 12 Nov: P1 partial (A/B and score half under the save bar at 1440×741), P3 pass (reading meets Z1/Z2 pooled), P6 pass, P7 pass, P8 pass, P9 pass (default track makes Claps & snares / Hats lanes), P10 pass.
 
 ### Guardrails
 

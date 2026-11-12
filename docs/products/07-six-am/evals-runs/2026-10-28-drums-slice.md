@@ -188,3 +188,95 @@ before the knobs come alive.
 - "Play anyway" on a real doubtful row: none occurred on my loops.
 - A third track, or tempos far from 123–126 BPM.
 - Readable text and hit areas.
+
+## Re-grade 12 Nov (after f83b733, 9c16244)
+
+The setup was the same: sandbox on :3017, the grader's own Chrome over CDP with Deck auto-select,
+`?quiet=1`, and the same 9 eight-bar loops on the same 2 tracks, separated live in the browser.
+
+**Maps.** Phase 4's map files were gone, so I PUT rebuilt sandbox maps with the same tempo, bar
+origin, key, bars and sections:
+- Mason: 126.05 BPM, origin 0.11 s.
+- Lost: 123.02 BPM, origin 1.407 s.
+
+The loop positions are therefore identical to the first run.
+
+**Labels.** I kept the same hand labels from 28 Oct, now pinned to absolute times: each one is its
+original column on the grid of the read it was made from (22, −49.6, 50.2 and −55.4 ms). That means
+the engineer's new grid can't move them. I timed each labelled hit at its attack on this run's
+separation.
+
+**Held-out loop.** I labelled one more loop fresh, Lost 77–84, which the engineer had no labels for:
+- Kick on 0,4,8,12; clap on 0,8; hats on 2,6,10,14 (grid 176.6 ms).
+- Adjudicated in: swung ghost hats about 0.3 of a 16th after cols 3 and 11, at 7–16 kHz −13 to
+  −16 dB. This is the same rule as Lost 85–92's 5.26/13.26.
+
+Mason 41–48 was too fill-heavy to label honestly (filtered kicks, toms, a crash), so I left it out
+of Z1/Z2.
+
+**C2.** Numbers only, as before. I deleted the envelope files after grading. The engineer's
+`drums-fixture.ts` is synthetic kits placed at my label positions; it holds no audio.
+
+### Summary
+
+| Check | Bar | 28 Oct | 12 Nov | Result |
+| --- | --- | --- | --- | --- |
+| Z1 hits on time (5 loops, 370 events) | ≥ 90 % found, ≤ 10 % extra | 85.1 % / 25.6 % | **95.4 % / 2.7 %**. Kicks 151/151 within 10 ms (median 0–1 ms; was +45 on Mason) | **Pass** |
+| Z2 labels right | ≥ 85 % | 63.3 % | **87.9 %** pooled. Per loop: Lost 85–92 95.9, Lost 77–84 (held out) 89.3, Mason 17–24 86.5, Mason 81–88 85.6, Lost 21–28 **81.2** | **Pass** (pooled); Lost 21–28 under |
+| Z4 on tempo | ≤ 5 ms | pass | Not re-run offline: render path unchanged apart from the D-F5 gain. Kicks are now on the attack, so Mine no longer lands late | Pass |
+| Z5 A/B (LUFS) | within 1 dB | 40/45 | **45/45**, all within 0.05 LU (9 loops × home presets, ticks, 3 other preset sets). RMS now differs by −2.3 to +3.2 dB, by design. Live tap with the bed off (Lost 29–36): A −10.88, B −11.99 dB RMS, LUFS −10.64 on both | **Pass** |
+| Z6 Suggest closer (per row) | ≥ 3 of 5 loops | pass; kick independent 2/9 | Product distance 27/27 rows on 9/9 loops. Independent envelope check: **kick 6/8** (Mason 57–64 kick is off as doubtful), clap 9/9, hats 7/9 | **Pass** |
+| Z7 save + Studio + reload | 5 of 5 | pass with F4 | 5/5 saved. Default track: the kick lands on Drums. A clap dropped on the Drums lane is **refused** (kick block untouched), and "Drop here for a new Claps & snares lane" appears and creates it. Hats work the same way (new Hats lane). Punch kick goes to Drums, Ride to Hats. **5/5** on their lanes after a reload; the kick block is never replaced | **Pass** |
+| Z8 bass unchanged | yes | pass | `pnpm test` 466/466 (golden included). Phase 4 Y4/Y9/Y10 offline outputs identical at 077e188 and HEAD (timings aside) | **Pass** |
+| Z9 zero bytes | 0 | 0 | **0**. Network: 2,326 requests; bodies only to the local API (≤ 8.3 KB, longest numeric array 108) and SoundCloud's widget telemetry. Storage: the access code, playhead positions, Next dev debug entries, and the model in Cache Storage; IndexedDB and OPFS empty. The diff adds no fetch or storage path; the worker still zeroes the copy | **Pass** |
+| Z12 knobs live | ≤ 35 s | partial | Loop in memory → Drums: **0.8 s**. 8-bar loops: **18.7–21.5 s** (9/9). 16-bar loop set in Drums: **35.5 s**. Cold open with the default 16-bar loop: **37.7 s** from Play. Countdown: the first figure is 1.8–4.6 s high, later figures are within −2.8 to +0.5 s (16-bar: "4 s" at 30.8 s, ready at 35.5) | **Partial**: the 16-bar paths are fill-bound (31 s of music + 5.5 s delay) |
+| P1 layout at 1440 × 741 | A/B and score above the fold | below the fold | Preset +57 px, Suggest +17, A/B +28 against Bass (was +126–138). A/B (y 653–692) and the score (658–687) sit **partly under the sticky save bar** (top about 677): about 24 of 39 px of the A/B buttons show. Bass's A/B ends at 664 | **Partial** |
+| Doubtful row, "Play anyway" | — | not exercised | Mason 57–64 (breakdown into the build): kick row doubtful, 57 faint marks, "off" by the name, "Play anyway" in the row with the reason as its tooltip. Clicking it turns the row on and re-renders Mine (kick gain −19.7 dB, closeness 43 → 50). Clap and hats there stay on | Exercised |
+
+Grid stability (D-F3): the same Mason 81–88 loop, read twice this run, gave gridMs 56.7 and
+32.4, with kicks on steps 0/4/8/12 both times. The saved kick pattern has steps 0, 4, 8, 12 with
+`off` 0; the saved clap pattern has steps 4 and 12 only.
+
+| Loop | Events | Found | Extra | Labels | Kicks within 10 ms |
+| --- | --- | --- | --- | --- | --- |
+| Mason 17–24 | 68 | 97.1 % | 5.9 % | 86.5 % | 29/29 |
+| Mason 81–88 | 68 | 97.1 % | 2.9 % | 85.6 % | 29/29 |
+| Lost 21–28 | 75 | **85.3 %** | 1.3 % | **81.2 %** | 32/32 |
+| Lost 77–84 (held out) | 81 | 97.5 % | 1.2 % | 89.3 % | 30/30 |
+| Lost 85–92 | 78 | 100 % | 2.6 % | 95.9 % | 31/31 |
+| **Pooled** | 370 | **95.4 %** | **2.7 %** | **87.9 %** | 151/151 |
+
+### Remaining failures
+
+**R1 – Flammed claps on Lost 21–28 are read late.**
+- The clap's first burst comes 10–13 ms before the kick. The reader times the clap 8–13 ms after
+  its attack, close to the kick.
+- 5 of 16 claps are more than 10 ms off, which makes 11 missed clap events and 11 extra clap labels
+  on the kick events. Found 85.3 % and labels 81.2 % on this loop. The pooled bars still pass.
+- Repro: Lost in the Loop; `setLoop(40551, 56159)` (bars 21–28, map origin 1.407 s, 123.02 BPM).
+  Compare `drums().rows.clap.hits.map(h => h.t)` with the 1–3 kHz attack, for example 2.104 s
+  against the kick at 2.116 s.
+- Likely fix: time claps at their first burst (the earliest 1–3 kHz rise), not where it meets the
+  kick.
+
+**R2 – A/B and the score are half-covered by the save bar at 1440 × 741.**
+- Drums A/B sits at y 653–692 with the bar from about 677, so about 15 px of the buttons and the
+  closeness figure are under it.
+- In Bass the A/B ends at 664.
+- Repro: window 1440 × 741, Make → Drums on any ready loop; compare
+  `getBoundingClientRect()` of `[aria-label="Compare at the same loudness"]` with the save bar.
+
+**R3 – 16-bar loops take 35.5–37.7 s.** The fill plus the separation delay makes this physics, not
+a bug. It's a PM call: either the bar or the default loop length (16 bars at ≤ 123 BPM can't make
+35 s).
+
+**R4 (minor) – the first countdown figure is high.** It reads 23 s for an 8-bar loop that is ready
+at 18.7–21.5 s, so the first figure overstates by 1.8–4.6 s. Later figures are good.
+
+**R5 (minor) – Mason's pickup kicks are missed.** The one-off kick on step 15 of odd bars, and the
+filtered kicks in a few bars, are missed: 6–7 per Mason loop (kick → none). Twice it was read as a
+hat at step 15.
+
+Cost: $0. Time: about 20 s per 8-bar loop. This is the first re-grade.
+
+Not checked: by ear (owner); drawer editing of drum blocks (user-tester); a third track.

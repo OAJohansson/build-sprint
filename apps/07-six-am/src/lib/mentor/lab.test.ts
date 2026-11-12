@@ -223,4 +223,21 @@ describe("S3 folds (LS2-N9, N10, N11) and Make's context", () => {
     expect(t).toMatch(/Rubber pluck \(short, bouncy\)/);
     expect(t).toMatch(/gold ticks at: Tone 15%[^\n]*Length 25% \(1\/8\)/);
   });
+  it("tells the Mentor the open row in Drums, Melody or FX, with its knobs in words (Phase 5)", () => {
+    const d = parseLabAsk({ ...ask, makeRow: { family: "drums", preset: "kick-deep-909", knobs: { tune: 0.38, decay: 2, pitchDrop: 1 }, ticks: { click: 0.55 }, off: false } }, BARS)!;
+    expect(d.makeRow?.knobs).toEqual({ tune: 0.38, decay: 1 }); // only the row's knobs, clamped
+    const t = labContextText(d, map);
+    expect(t).toMatch(/\[make\] They are in Make, building their own drums[^\n]*The open row is Kick: preset Deep 909/);
+    expect(t).toMatch(/Tune 38% \(A1 · 54 Hz\)/);
+    expect(t).toMatch(/Gold ticks[^\n]*Click 55%/);
+    const off = labContextText(parseLabAsk({ ...ask, makeRow: { family: "melody", preset: "chords-pad", knobs: { tone: 0.3 }, ticks: null, off: true, note: "probably a held pad read as repeated notes" } }, BARS)!, map);
+    expect(off).toMatch(/The open row is Chords: preset Pad/);
+    expect(off).toMatch(/This row is off in their sound: probably a held pad/);
+    const fx = labContextText(parseLabAsk({ ...ask, makeRow: { family: "fx", preset: "fx-riser-noise", knobs: { rise: 0.5 }, ticks: null, note: "no clear riser in the original here" } }, BARS)!, map);
+    expect(fx).toMatch(/no closeness score for FX/);
+    expect(fx).toMatch(/Measured from the original at that moment[^\n]*no clear riser/);
+    // A preset from another family, or junk, gets nothing through.
+    expect(parseLabAsk({ ...ask, makeRow: { family: "fx", preset: "kick-deep-909", knobs: { tune: 0.5 } } }, BARS)!.makeRow).toBeUndefined();
+    expect(parseLabAsk({ ...ask, makeRow: { family: "drums", preset: "kick-punch", knobs: { audio: 1 } } }, BARS)!.makeRow).toBeUndefined();
+  });
 });

@@ -154,6 +154,8 @@ export function useFx(o: FxOpts) {
     ab, setAb, bed, setBed, mineReady: !!mine && mine.key === mineKeyNow, mineAny: !!mine, partsDb: mine?.partsDb ?? 0,
     mySounds, loadSound, name: nameField, setName: (v: string) => setNames((n) => ({ ...n, [open]: v })), tags, save, canSave, savedRows,
     saved: { state: saveState.state, text: saveState.text, savedAs: lastRow && lastRow.sound === sid ? lastRow.name : null, action: action.kind },
+    /** What the Lab Mentor gets with a question asked in FX: the open row and what the original measured there. */
+    labRow: { family: "fx" as const, preset: sounds[open].preset as string, knobs: sounds[open].macros as Record<string, number>, ticks: (ticks[open] ?? null) as Record<string, number> | null, note: read?.measures[open].heard ?? null },
     /** Graders (slice 3): what Make's FX hold now, numbers only. */
     debug: () => ({ readState, open, ab, bed, plan, sounds, measures: read?.measures ?? null, level: read ? { bed: { rmsDb: read.level.bed.rmsDb, lufs: read.level.bed.lufs }, noBed: { rmsDb: read.level.noBed.rmsDb, lufs: read.level.noBed.lufs } } : null, mine: mine ? { ready: mine.key === mineKeyNow, partsDb: mine.partsDb, renderMs: mine.ms } : null, saved: perRow((r) => last[r]), mySounds: mySounds.map((x) => ({ id: x.id, name: x.name, preset: x.preset })) }),
   };

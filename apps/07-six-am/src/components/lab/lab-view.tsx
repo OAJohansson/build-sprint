@@ -275,10 +275,12 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     const part = win(rows?.[PART_NAMES.indexOf(focus)]);
     const kick = focus === "drums" ? win(rows?.[KICK_ROW]) : undefined, hats = focus === "drums" ? win(rows?.[HATS_ROW]) : undefined;
     const heard = part ? { part, ...(kick && hats ? { kick, hats } : {}) } : null;
-    const inMake = mode === "make" ? make.labMake : null;
+    const inMake = mode === "make" && family === "bass" ? make.labMake : null;
+    // Phase 5: a question asked in Drums, Melody or FX knows the open row, its preset, knobs and ticks.
+    const inRow = mode === "make" ? (family === "drums" ? drums.labRow : family === "melody" ? melody.labRow : family === "fx" ? fx.labRow : null) : null;
     const heardNow: LabAsk["hear"] = mode === "make" ? { kind: "only", parts: [focus] } : hear;
-    return { part: focus, hear: heardNow, bar, playheadBar: pos.bar, loop: loopB, chords, measure, heard, ...(inMake ? { make: inMake } : {}) };
-  }, [focus, hear, pos.bar, chords, bpm, origin, bars, map.key, map.scale, analysis, mode, make.labMake]);
+    return { part: focus, hear: heardNow, bar, playheadBar: pos.bar, loop: loopB, chords, measure, heard, ...(inMake ? { make: inMake } : {}), ...(inRow ? { makeRow: inRow } : {}) };
+  }, [focus, hear, pos.bar, chords, bpm, origin, bars, map.key, map.scale, analysis, mode, make.labMake, family, drums.labRow, melody.labRow, fx.labRow]);
 
   const send = useCallback(async (id: string, q: string, bar: number, lab: LabAsk) => {
     try {

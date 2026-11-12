@@ -189,6 +189,8 @@ export function useMelody(o: MelodyOpts) {
     mySounds, loadSound, name: nameField, setName: (v: string) => setNames((n) => ({ ...n, [open]: v })), tags, save, canSave, savedRows,
     saved: { state: saveState.state, text: saveState.text, savedAs: lastRow && lastRow.sound === sid ? lastRow.name : null, action: action.kind },
     bpm: o.bpm,
+    /** What the Lab Mentor gets with a question asked in Melody: the open row (numbers and ids). */
+    labRow: { family: "melody" as const, preset: sounds[open].preset as string, knobs: sounds[open].macros as Record<string, number>, ticks: (ticks[open]?.macros ?? null) as Record<string, number> | null, off: !!read?.d.rows[open].doubtful && !anyway.includes(open), note: read?.d.rows[open].why ?? null },
     /** Graders (slice 2): what Make's melody holds now, numbers only. */
     debug: () => ({
       readState, open, rows, ab, bed, on, anyway, steps: read?.d.steps ?? null, lead: read?.d.lead ?? null, tuningCents: read?.d.tuningCents ?? null,

@@ -64,12 +64,27 @@ describe("rows", () => {
     expect(pl.rows.lead.doubtful).toBe(false);
   });
 
+  it("reads a part that is mostly one note at a time as a Lead row, not Chords (L242, M-F5)", () => {
+    const riff = Array.from({ length: 24 }, (_, i) => ({ t: i * 0.36, dur: 0.2, midi: [67, 65, 67, 70][i % 4], vel: 0.9, step: i * 3, offsetMs: 0 }));
+    const d = melodyFromReading({ notes: [...riff, { t: 2, dur: 0.2, midi: 62, vel: 0.5, step: 16, offsetMs: 0 }], tuningCents: 0 }, 120, 16);
+    expect(d.rows.chords.notes).toHaveLength(0);
+    expect(d.rows.lead.notes.length).toBe(25);
+  });
+
+  it("keeps a borderline repeat share on one side (M-F4: a margin under the old 0.4 bar)", () => {
+    // 12 chords, 4 of them repeating bar to bar (share ≈ 0.33): not doubtful any more, read to read.
+    const n = (step: number, midi: number) => ({ t: step * 0.125, dur: 0.1, midi, vel: 0.8, step, offsetMs: 0 });
+    const notes = [0, 16, 32, 48].flatMap((s) => [n(s, 57), n(s, 60)]).concat([5, 23, 41, 55, 61, 70, 77, 90].flatMap((s, i) => [n(s, 62 + i), n(s, 66 + i)]));
+    expect(melodyFromReading({ notes, tuningCents: 0 }, 120, 16).rows.chords.doubtful).toBe(false);
+  });
+
   it("marks a held note chopped into repeats, and faint sparse bleed, as doubtful", () => {
     const n = (t: number, midi = 57): MelNote => ({ t, dur: 0.24, midi, vel: 0.8, step: 0, off: 0, durSteps: 2 });
     expect(restrikeShare([n(0), n(0.25), n(0.5), n(0.75)])).toBeGreaterThanOrEqual(0.5);
     const chopped = melodyFromReading({ notes: Array.from({ length: 12 }, (_, i) => ({ t: i * 0.25, dur: 0.24, midi: 57, vel: 0.8, step: i * 2, offsetMs: 0 })), tuningCents: 0 }, 120, 16);
-    expect(chopped.rows.chords.doubtful).toBe(true);
-    expect(chopped.rows.chords.note).toMatch(/held pad/);
+    // One pitch at a time is a Lead row (L242); chopped into repeats, it's doubtful there.
+    expect(chopped.rows.lead.doubtful).toBe(true);
+    expect(chopped.rows.lead.note).toMatch(/held pad/);
     const faint = melodyFromReading({ notes: [{ t: 3, dur: 0.2, midi: 60, vel: 0.1, step: 24, offsetMs: 0 }], tuningCents: 0 }, 120, 16);
     expect(faint.rows.chords.doubtful).toBe(true);
     expect(read(0).d.rows.chords.doubtful).toBe(false);

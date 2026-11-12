@@ -23,12 +23,14 @@ import { secondsPer16th, type MakeNote } from "./render";
 /** One note as Make plays it: `t` and `dur` in seconds in the loop; `step`/`off` on the 16th grid. */
 export type MelNote = { t: number; dur: number; midi: number; vel: number; step: number; off: number; durSteps: number };
 export type MelodyRowRead = { notes: MelNote[]; doubtful: boolean; why: string | null; note: string | null };
-export type MelodyReading = { rows: Record<MelodyRow, MelodyRowRead>; steps: number; bars: number; lead: boolean; tuningCents: number };
+export type MelodyReading = { rows: Record<MelodyRow, MelodyRowRead>; steps: number; bars: number; lead: boolean; chords?: boolean; tuningCents: number };
 
 /** Notes starting within this of each other are one event (a chord). */
 const CLUSTER_S = 0.03;
 // shortcut: the Lead split (single notes above the chords' median top, at least max(4, bars/2) of them) and the doubtful rules below were picked on the spike's bench; re-check on real parts.
 export const LEAD_MIN = 4;
+/** Under this share of events with two or more notes, a part is a single line (a Lead row). */
+export const MONO_CHORD_SHARE = 0.25;
 
 /** Events: notes grouped by start (a chord is one event). */
 export function eventsOf(notes: Pick<MelNote, "t" | "midi" | "dur" | "vel">[]): { t: number; notes: number[] }[] {
@@ -46,6 +48,8 @@ export function eventsOf(notes: Pick<MelNote, "t" | "midi" | "dur" | "vel">[]): 
 export function splitRows(notes: ReadNote[], bars: number): { chords: ReadNote[]; lead: ReadNote[] } {
   const ev = eventsOf(notes);
   const chordEv = ev.filter((e) => e.notes.length >= 2);
+  // L242 (M-F5): a part that is mostly one note at a time (Mason's riff) is a Lead, not Chords.
+  if (ev.length >= LEAD_MIN && chordEv.length < MONO_CHORD_SHARE * ev.length) return { chords: [], lead: notes };
   if (chordEv.length < 2) return { chords: notes, lead: [] };
   const tops = chordEv.map((e) => Math.max(...e.notes.map((i) => notes[i].midi))).sort((a, b) => a - b);
   const top = tops[Math.floor(tops.length / 2)];
@@ -82,7 +86,9 @@ export function restrikeShare(notes: Pick<MelNote, "t" | "dur" | "midi">[]): num
   return re / notes.length;
 }
 
-export const MEL_DOUBT = { faintVel: 0.3, restrike: 0.35, repeat: 0.4, minNotes: 8 };
+// M-F4: the repeat test is doubtful only clearly under its old 0.4 bar (a margin), so two reads of the
+// same loop that land either side of 0.4 (0.38, 0.42) give the same verdict.
+export const MEL_DOUBT = { faintVel: 0.3, restrike: 0.35, repeat: 0.3, minNotes: 8 };
 
 /** The reader's notes as Make plays them, split into rows, doubtful rows marked. */
 export function melodyFromReading(r: NotesReading, bpm: number, loopS: number): MelodyReading {
@@ -103,7 +109,7 @@ export function melodyFromReading(r: NotesReading, bpm: number, loopS: number): 
       note: sparse ? "Probably another part bleeding through" : chopped ? "Probably a held pad, read as repeated notes" : irregular ? "No repeating pattern: probably a swell or bleed" : null,
     };
   }
-  return { rows, steps, bars, lead: rows.lead.notes.length > 0, tuningCents: r.tuningCents };
+  return { rows, steps, bars, lead: rows.lead.notes.length > 0, chords: rows.chords.notes.length > 0, tuningCents: r.tuningCents };
 }
 
 /** Chord names as they change, one per bar where the row's notes make one (the strip's top line). */

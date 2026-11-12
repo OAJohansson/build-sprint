@@ -188,7 +188,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const phase = ts?.phase;
   // Phase 5 drums (P7): A the original drums, B Mine's three rows, the original bass under both.
   const bassOn = family === "bass" && make.isBass;
-  const mineOn = mode === "make" && ((bassOn && make.ab === "b" && make.mineReady) || (family === "drums" && drums.ab === "b" && drums.mineAny) || (family === "melody" && melody.ab === "b" && melody.mineAny) || (family === "fx" && fx.ab === "b" && fx.mineAny));
+  const mineOn = mode === "make" && ((bassOn && make.ab === "b" && make.mineReady) || (family === "drums" && drums.ab === "b" && drums.mineAny && !drums.allOff) || (family === "melody" && melody.ab === "b" && melody.mineAny && !melody.allOff) || (family === "fx" && fx.ab === "b" && fx.mineAny));
   useEffect(() => {
     const t = tr.current;
     if (!t) return;

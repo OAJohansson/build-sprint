@@ -207,6 +207,8 @@ export function useDrums(o: DrumsOpts) {
     suggestNow: (row: DrumRow) => { if (read) void suggest(read, row, sounds[row], ticks[row]?.macros ?? null); },
     suggestedNow: perRow((r) => !!ticks[r] && ticks[r]!.for === soundId(sounds[r].preset, sounds[r].macros)),
     ab, setAb, bed, setBed, mineReady: !!mine && mine.key === mineKeyNow, mineAny: !!mine, closeness: mine?.closeness ?? null, rowCloseness: mine?.rowCloseness ?? null,
+    /** M-F3: no row is on in Mine (every row off as doubtful): B would play silence. */
+    allOff: !!read && !DRUM_ROWS.some((r) => on[r]),
     mySounds, loadSound, name: nameField, setName: (v: string) => setNames((n) => ({ ...n, [open]: v })), tags, save, canSave, savedRows,
     saved: { state: saveState.state, text: saveState.text, savedAs: lastRow && lastRow.sound === sid ? lastRow.name : null, action: action.kind },
     bpm: o.bpm,
@@ -433,9 +435,9 @@ export function DrumsCheck({ m }: { m: DrumsModel }) {
       <div className={s.abWrap}>
         <div className={s.ab} role="group" aria-label="Compare at the same loudness">
           <button aria-pressed={m.ab === "a"} onClick={() => m.setAb("a")}>A · Original drums</button>
-          <button aria-pressed={m.ab === "b"} onClick={() => m.setAb("b")} disabled={!m.mineAny} title={m.mineAny ? undefined : "Mine plays once the loop is read"}>B · Mine</button>
+          <button aria-pressed={m.ab === "b"} onClick={() => m.setAb("b")} disabled={!m.mineAny || m.allOff} title={m.allOff ? "Every row is off: press Play anyway on a row to hear Mine" : m.mineAny ? undefined : "Mine plays once the loop is read"}>B · Mine</button>
         </div>
-        <span className={s.faint}>same loudness</span>
+        <span className={s.faint}>{m.allOff ? "every row is off" : "same loudness"}</span>
       </div>
       <button className={s.ghost} aria-pressed={m.bed} onClick={() => m.setBed(!m.bed)} title="Plays the original bass under both A and B, so you judge the drums in the groove">{m.bed ? "Bass under both: on" : "Bass under both: off"}</button>
       <span className={s.drScore} title="How close this row's hit measures to the original's (its sound across its own bands, the kick's note, the hats' width): it rises as you follow this row's gold ticks. Numbers only.">

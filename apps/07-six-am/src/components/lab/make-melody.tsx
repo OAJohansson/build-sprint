@@ -54,8 +54,10 @@ export function useMelody(o: MelodyOpts) {
 
   const read = readS && readS.loopKey === loopKey ? readS : null;
   const readState: ReadState = state && state.loopKey === loopKey ? state.state : "idle";
-  const rows: MelodyRow[] = read?.d.lead ? ["chords", "lead"] : ["chords"];
-  const open: MelodyRow = rows.includes(openS) ? openS : "chords";
+  // The rows that hold notes: Chords, Lead, or both (a single line is a Lead alone, L242).
+  const rows: MelodyRow[] = read ? MELODY_ROWS.filter((r) => read.d.rows[r].notes.length > 0) : ["chords"];
+  if (!rows.length) rows.push("chords");
+  const open: MelodyRow = rows.includes(openS) ? openS : rows[0];
   const anyway = useMemo(() => (anywayS.loopKey === loopKey ? anywayS.rows : []), [anywayS, loopKey]);
   const on = useMemo(() => perRow((r) => !!read && read.d.rows[r].notes.length > 0 && (!read.d.rows[r].doubtful || anyway.includes(r))), [read, anyway]);
   const signature = (x: Record<MelodyRow, Sound>, onRows: Record<MelodyRow, boolean>) => MELODY_ROWS.map((r) => `${x[r].preset}:${POLY_KNOBS.map((k) => x[r].macros[k].toFixed(3)).join(",")}:${onRows[r] ? 1 : 0}`).join("|");
@@ -186,6 +188,8 @@ export function useMelody(o: MelodyOpts) {
     suggestNow: (row: MelodyRow) => { if (read) void suggest(read, row, sounds[row], ticks[row]?.macros ?? null); },
     suggestedNow: perRow((r) => !!ticks[r] && ticks[r]!.for === soundId(sounds[r].preset, sounds[r].macros)),
     ab, setAb, bed, setBed, mineReady: !!mine && mine.key === mineKeyNow, mineAny: !!mine, rowCloseness: mine?.rowCloseness ?? null,
+    /** M-F3: no row is on in Mine (every row off as doubtful): B would play silence. */
+    allOff: !!read && !MELODY_ROWS.some((r) => on[r]),
     mySounds, loadSound, name: nameField, setName: (v: string) => setNames((n) => ({ ...n, [open]: v })), tags, save, canSave, savedRows,
     saved: { state: saveState.state, text: saveState.text, savedAs: lastRow && lastRow.sound === sid ? lastRow.name : null, action: action.kind },
     bpm: o.bpm,
@@ -372,9 +376,10 @@ export function MelodyCheck({ m }: { m: MelodyModel }) {
       <div className={s.abWrap}>
         <div className={s.ab} role="group" aria-label="Compare at the same loudness">
           <button aria-pressed={m.ab === "a"} onClick={() => m.setAb("a")}>A · Original melody</button>
-          <button aria-pressed={m.ab === "b"} onClick={() => m.setAb("b")} disabled={!m.mineAny} title={m.mineAny ? undefined : "Mine plays once the loop is read"}>B · Mine</button>
+          <button aria-pressed={m.ab === "b"} onClick={() => m.setAb("b")} disabled={!m.mineAny || m.allOff} title={m.allOff ? "Every row is off: press Play anyway on a row to hear Mine" : m.mineAny ? undefined : "Mine plays once the loop is read"}>B · Mine</button>
         </div>
-        <span className={s.faint}>same loudness</span>
+        {/* M-F3: with every row off there is nothing to hear on B; say why next to it. */}
+        <span className={s.faint}>{m.allOff ? "every row is off" : "same loudness"}</span>
       </div>
       <button className={s.ghost} aria-pressed={m.bed} onClick={() => m.setBed(!m.bed)} title="Plays the original drums under both A and B, so you judge the chords in the groove">{m.bed ? "Drums under both: on" : "Drums under both: off"}</button>
       <span className={s.drScore} title="How close this row's notes sound to the original's (the same notes on both sides: their spectrum, envelope, room and width): it rises as you follow this row's gold ticks. Numbers only.">

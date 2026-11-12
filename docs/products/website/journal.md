@@ -88,3 +88,20 @@ Both added to the knowledge bank with quiz questions.
 Owner: "the assumption mapping is gold", and asked for the theory in the knowledge bank to quiz
 on. Expanded the entry (the 2×2, the four corners, the steps, evidence strength; Bland and
 Osterwalder) with three quiz questions.
+
+### Merged early: the notebook clash
+
+The Selvedge session asked (for the owner) to merge: I'd republished the notebook from the
+`website` branch, so a republish from `main` would have dropped the website pages. With the
+owner's yes, merged PR #53 and republished from `main`; discovery continues on
+`website-discovery`. Not a git conflict: worktrees isolate files, but the notebook is one
+published page outside git, and whoever publishes last wins. Fix proposed to the owner: publish
+only from `main`.
+
+### Riskiest assumption and targets (Claude's call, owner behind schedule)
+
+Owner asked Claude to decide and move on. Riskiest: product thinking comes across in seconds on a
+phone (carries the top job, no evidence yet); the MVP and user test must check it. Targets as
+decision lines: 3 of the next 10 interviews mention the site (0 means rethink); the link opened
+for at least half the applications; the first 20 visits set the baseline for going past the
+first screen. Next: MVP and stop line, requirements, then the design session.

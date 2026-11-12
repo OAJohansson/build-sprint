@@ -162,8 +162,8 @@ Details: `evals-runs/2026-10-28-drums-slice.md`.
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| D-R1 | minor | Flammed claps (first burst 10–13 ms before the kick) timed 8–13 ms late; Lost 21–28 alone 85 % found, 81 % labels | fixing |
-| D-R2 | minor | At 1440×741 in Drums, the A/B and score are ~15 px under the sticky save bar | fixing |
+| D-R1 | minor | Flammed claps (first burst 10–13 ms before the kick) timed 8–13 ms late; Lost 21–28 alone 85 % found, 81 % labels | fixed (eed3ce3); D-R1 to confirm on the real loop |
+| D-R2 | minor | At 1440×741 in Drums, the A/B and score are ~15 px under the sticky save bar | fixed (eed3ce3); D-R1 to confirm on the real loop |
 | D-R3 | — | 16-bar loops can't be live in 35 s (L232: bar is ≤ 8 bars; honest countdown for longer) | decided |
-| D-R4 | minor | First countdown figure 1.8–4.6 s too high | fixing |
+| D-R4 | minor | First countdown figure 1.8–4.6 s too high | fixed (eed3ce3); D-R1 to confirm on the real loop |
 | D-R5 | minor | 6–7 Mason pickup/filtered kicks per loop missed, 2 read as hats on step 15 | backlog |

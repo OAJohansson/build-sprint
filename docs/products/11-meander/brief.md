@@ -27,17 +27,23 @@ Me: curious across psychology, philosophy and history, remembers what they see m
 
 ## Riskiest assumptions
 
-*Draft; the riskiest one is decided at the gate.*
+**Riskiest (L4): value.** The MVP must test it.
 
-- **Value (my pick for riskiest):** a map makes me actually hop between connected areas and keep going for weeks, rather than being nice to look at once.
+- **Value (riskiest):** a map makes me actually hop between connected areas and keep going for weeks, rather than being nice to look at once.
 - **Feasibility:** Fable can draw an accurate, good-looking map of a field; an AI-drawn history can invent links between thinkers.
 - **Usability:** zooming between levels stays clear, and I can find my way back.
 - **Viability:** model cost per map and per zoom stays small for one person.
 
 ## Success: what good looks like
 
+*Draft for the kickoff gate.* **Main outcome:** I keep studying a field across connected areas, in small pieces, instead of going deep in one school and dropping it.
+
 | Signal | How I'll measure it | Target |
 | --- | --- | --- |
+| Hop (early sign of value) | First session, and the simulated user test: from the map, I pick a second, connected area and start it | Yes in my first session; 3 of 3 in the user test |
+| Still going after a week (value) | The app's own "where I've been" history, read on day 7 | At least 2 connected areas touched on 3+ separate days |
+| Orientation (job 1) | After 5 minutes on the map: where does existentialism sit, what came before it, what did it push against? | I can answer all three without looking |
+| Guardrail: accuracy | Spot-check 20 claims (thinkers, dates, links) against a reference (e.g. Stanford Encyclopedia of Philosophy) | 0 invented thinkers or links; at most 1 small slip |
 
 ## MVP and stop line
 

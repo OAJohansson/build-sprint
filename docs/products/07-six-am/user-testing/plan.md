@@ -479,3 +479,12 @@ Expect: it reacts, and I can hear it get closer without music theory.
 
 #### M-S8 · Keep the chords and use them
 Save chords (and lead); in the Studio they land on Chords / Pads / Lead lanes and survive a reload.
+
+#### M-S9 · Add FX to a drop (slice 3)
+Loop a drop, switch Make to FX. Expect: impact, downlifter and riser sit where they make sense
+(bar labels), presets and knobs make sense to someone who didn't know what FX were, A/B "the
+drop as is" vs with my FX; Save riser lands on the FX lane.
+
+#### M-S10 · Ask the Mentor about the row I'm on
+In Drums, Melody and FX, ask "why does this sound different?". Expect: the answer knows the open
+row and its knobs.

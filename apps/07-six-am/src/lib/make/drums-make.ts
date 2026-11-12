@@ -27,11 +27,11 @@ export type DrumsReading = { rows: Record<DrumRow, DrumRowRead>; steps: number; 
 
 const BLEED_FROM: Record<DrumRow, string> = { kick: "the bass", clap: "the chords", hats: "another part" };
 /** A hit this close (dB) above its row's gate counts as faint. */
-// shortcut: "doubtful" = at most one hit per 2 bars and every hit within 8 dB of the row's gate (GATE.db, tuned on the spike's bench); re-tune once data-evals' real-track hand check says how bleed reads.
+// shortcut: "doubtful" = every hit within 8 dB of the row's gate (GATE.db, tuned on the spike's bench) on a row of at most one hit per 2 bars or of 8+ hits, or a row with no repeating pattern; re-tune on more real breakdowns and builds.
 export const FAINT_DB = 8;
 
 /** A row needs this many hits before its pattern is judged, and this share of them on a repeat. */
-// shortcut: REPEAT_MIN and MIN_IRREGULAR picked on the fixture and bench (real rows ≥ 0.8, the build's wash well under); re-check on more real builds.
+// shortcut: REPEAT_MIN and MIN_IRREGULAR picked on the fixture and bench: real rows read 0.96–1.00, the fixture's noise build 0.44, a thin margin; re-check on real builds.
 export const MIN_IRREGULAR = 8, REPEAT_MIN = 0.5;
 
 /**

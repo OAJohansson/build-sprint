@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { dropLibSound } from "@/lib/studio-drop";
 import type { Doc } from "@/lib/timeline";
 import { DRUM_PRESET_IDS, DRUM_PRESETS, DRUM_ROWS, ROW_KNOBS, ROW_PRESETS, clampDrumMacros, drumKnobWord, drumSuggestLine, renderDrumRow } from "./drum-synth";
-import { drumsCloseness, drumsFromReading, drumsReport, foldRow, measureRows, renderDrumsMine, suggestDrum } from "./drums-make";
+import { drumsCloseness, drumsFromReading, drumsReport, foldRow, measureRows, renderDrumsMine, rowCloseness, suggestDrum } from "./drums-make";
 import { readDrums, type DrumReading } from "./drums-read";
 import { DRUM_SPECS, renderDrums } from "./layers-bench";
 import { parseNewSound, parseSoundPatch, suggestDrumName, type LibrarySound } from "./library";
@@ -22,6 +22,11 @@ describe("the drum synth", () => {
     expect(ROW_PRESETS.hats.map((id) => DRUM_PRESETS[id].name)).toEqual(["Open 909", "Closed tick", "Shaker", "Ride"]);
     for (const id of DRUM_PRESET_IDS) expect(Object.keys(clampDrumMacros(id, undefined)).sort()).toEqual([...ROW_KNOBS[DRUM_PRESETS[id].row]].sort());
     expect(drumKnobWord("kick-deep-909", "tune", 0.38)).toMatch(/^A1 · 5\d Hz$/);
+    // U5: every knob's word changes on a small drag (finer words: ms, Hz, or the value).
+    for (const id of DRUM_PRESET_IDS) for (const k of ROW_KNOBS[DRUM_PRESETS[id].row]) {
+      if (k === "tune") continue; // the note moves in semitones; its Hz shows the drag
+      expect(drumKnobWord(id, k, 0.5), `${id} ${k}`).not.toBe(drumKnobWord(id, k, 0.55));
+    }
   });
 
   it("puts every hit on its step plus its swing offset, in tempo (Z4: ≤ 5 ms)", () => {
@@ -103,6 +108,14 @@ describe("Suggest and closeness on a known loop", () => {
     }
   });
 
+  it("each row's own score rises when its knobs follow its ticks (U1, L233)", () => {
+    for (const row of DRUM_ROWS) {
+      const p = ROW_PRESETS[row][0], s = suggestDrum(targets[row]!, p);
+      const before = rowCloseness(targets[row]!, p, DRUM_PRESETS[p].macros), after = rowCloseness(targets[row]!, p, s.macros);
+      expect(after.score, row).toBeGreaterThan(before.score);
+    }
+  });
+
   it("scores the loop against itself near 100 and silence low", () => {
     const self = drumsReport(mono, mono, RATE, bpm);
     expect(drumsCloseness(self, self).score).toBeGreaterThanOrEqual(99);
@@ -127,7 +140,10 @@ describe("saving a drum row (P9)", () => {
     expect(s.macros).toEqual({ tune: 0.3, decay: 0.5, click: 1, drive: 0.2 });
     expect(s.pattern.notes[1].off).toBe(0.15);
     expect(s.name).toBe(suggestDrumName("kick-deep-909", s.macros as never, "Lost in The Loop"));
-    expect(s.name).toBe("Punchy kick, from Lost in The Loop"); // Click at full
+    // U8: the preset first, then the word of the knob turned furthest from it (Click at full).
+    expect(s.name).toBe("Deep 909 kick, clicky, from Lost in The Loop");
+    expect(suggestDrumName("kick-round-808", { tune: 0.35, decay: 0.55, click: 0.1, drive: 0.1 }, "Lost in The Loop")).toBe("Round 808 kick, from Lost in The Loop");
+    expect(s.tags).toEqual(["kick", "deep", "909", "clicky", "124 bpm", "lost in the loop"]); // tags match the name
     expect(parseNewSound({ ...raw, part: "bass" })).toBeNull();
     // A kick stays a kick: a hats preset in a patch is ignored.
     expect(parseSoundPatch({ preset: "hats-ride" }, { preset: "kick-deep-909" })).toEqual({});

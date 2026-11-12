@@ -302,7 +302,8 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const status = loading
     ? `Getting ready… ${model!.downloading ? `${pctLoaded}%` : ""}${model!.downloading && model!.etaS !== null && model!.etaS > 3 ? ` · first time only, about ${Math.round(model!.etaS)} s` : ""}`
     // LS1-N4: a loop's first passes wait at the wrap while the Deck goes back to its start.
-    : ts?.catching ? `${ts.loop?.state === "filling" ? "filling the loop…" : "catching up…"}${ts.catchLeftS ? ` ${ts.catchLeftS} s` : ""}` : "";
+    // U6 (user test 12 Nov): in Make the panel says the countdown; the header only says it's filling.
+    : ts?.catching ? `${ts.loop?.state === "filling" ? "filling the loop…" : "catching up…"}${ts.catchLeftS && !(mode === "make" && ts.loop?.state === "filling") ? ` ${ts.catchLeftS} s` : ""}` : "";
   const here = sectionAt(sections, pos.bar);
   const heardMsFn = useCallback(() => tr.current?.heardMs() ?? 0, []);
   const loopSec = loop ? sectionAt(sections, loop.from) : null;
@@ -335,8 +336,8 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
             <span className={s.clock}>{clockMs(pos.sec * 1000)}{here ? ` · in ${here.label}` : ""} <small>bar {pos.bar}</small></span>
             <span className={s.status} aria-live="polite">{status}</span>
             {loop && ts?.loop && (
-              <span className={s.loopChip}>
-                Looping {loopSec?.label ?? "section"}{loopPart} · {clockMs(ts.loop.startMs)}–{clockMs(ts.loop.endMs)}
+              <span className={s.loopChip} title={`Looping ${loopSec?.label ?? "section"}${loopPart} · ${clockMs(ts.loop.startMs)}–${clockMs(ts.loop.endMs)}`}>
+                <span className={s.loopChipText}>Looping {loopSec?.label ?? "section"}{loopPart} · {clockMs(ts.loop.startMs)}–{clockMs(ts.loop.endMs)}</span>
                 <button className={s.x} onClick={() => tr.current?.setLoop(null)} aria-label={`Stop looping ${loopSec?.label ?? "the section"}`}>×</button>
               </span>
             )}

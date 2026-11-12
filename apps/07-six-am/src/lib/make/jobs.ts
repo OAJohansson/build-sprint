@@ -11,7 +11,7 @@ import type { Suggestion } from "./match";
 import { notesForLoop } from "./pattern";
 import { synthParams, type Macros, type MakePresetId } from "./presets";
 import { renderBass } from "./render";
-import { drumsCloseness, drumsFromReading, drumsReport, measureRows, renderDrumsMine, suggestDrum, type DrumSuggestion, type DrumsCloseness, type DrumsReading, type DrumsReport, type RowSound, type RowTarget } from "./drums-make";
+import { drumsCloseness, drumsFromReading, rowCloseness, drumsReport, measureRows, renderDrumsMine, suggestDrum, type DrumSuggestion, type DrumsCloseness, type DrumsReading, type DrumsReport, type RowSound, type RowTarget } from "./drums-make";
 import type { DrumMacros, DrumPresetId, DrumRow } from "./drum-synth";
 import { readDrums } from "./drums-read";
 
@@ -21,7 +21,7 @@ export type MakeRequest =
   | { type: "suggest"; id: number; reading: PartReading; preset: MakePresetId; bpm: number; start?: Partial<Macros> }
   // Phase 5 drums (P3, P6–P8): read the looped drum part, render Mine's three rows, Suggest per row.
   | { type: "drums-read"; id: number; left: Float32Array; right: Float32Array; rate: number; bpm: number }
-  | { type: "drums-render"; id: number; reading: DrumsReading; sounds: Record<DrumRow, RowSound>; levels: Record<DrumRow, number | null>; report: DrumsReport; bpm: number; rate: number; samples: number; levelDb: number; lufs: number }
+  | { type: "drums-render"; id: number; reading: DrumsReading; sounds: Record<DrumRow, RowSound>; levels: Record<DrumRow, number | null>; report: DrumsReport; bpm: number; rate: number; samples: number; levelDb: number; lufs: number; targets?: Record<DrumRow, RowTarget | null> }
   | { type: "drums-suggest"; id: number; target: RowTarget; preset: DrumPresetId; start?: DrumMacros };
 
 export type MakeResponse =
@@ -29,7 +29,7 @@ export type MakeResponse =
   | { type: "render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; ms: number }
   | { type: "suggest"; id: number; suggestion: Suggestion; ms: number }
   | { type: "drums-read"; id: number; reading: DrumsReading; targets: Record<DrumRow, RowTarget | null>; report: DrumsReport; levelDb: number; lufs: number; ms: number }
-  | { type: "drums-render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; rowGainsDb: Record<DrumRow, number | null>; closeness: DrumsCloseness; ms: number }
+  | { type: "drums-render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; rowGainsDb: Record<DrumRow, number | null>; closeness: DrumsCloseness; rowCloseness: Record<DrumRow, { score: number; distance: number } | null>; ms: number }
   | { type: "drums-suggest"; id: number; suggestion: DrumSuggestion; ms: number }
   | { type: "error"; id: number; message: string };
 
@@ -82,7 +82,12 @@ export function runMakeJob(m: MakeRequest): { res: MakeResponse; transfer: Array
       const g = m.lufs > -70 ? gainToLevel(m.lufs, { left, right, rate: m.rate }, "lufs") : gainToLevel(m.levelDb, { left, right, rate: m.rate });
       for (let i = 0; i < m.samples; i++) { left[i] *= g.gain; right[i] *= g.gain; }
       const closeness = drumsCloseness(m.report, drumsReport(left, right, m.rate, m.bpm));
-      return { res: { type: "drums-render", id: m.id, left, right, rate: m.rate, gainDb: g.db, rowGainsDb: r.gains, closeness, ms: ms() }, transfer: [left.buffer, right.buffer] };
+      // U1: each row's own closeness, on Suggest's measure (one hit rendered per row).
+      const rowClose = Object.fromEntries((["kick", "clap", "hats"] as DrumRow[]).map((row) => {
+        const t = m.targets?.[row];
+        return [row, t ? rowCloseness(t, m.sounds[row].preset, m.sounds[row].macros) : null];
+      })) as Record<DrumRow, { score: number; distance: number } | null>;
+      return { res: { type: "drums-render", id: m.id, left, right, rate: m.rate, gainDb: g.db, rowGainsDb: r.gains, closeness, rowCloseness: rowClose, ms: ms() }, transfer: [left.buffer, right.buffer] };
     }
     if (m.type === "drums-suggest") return { res: { type: "drums-suggest", id: m.id, suggestion: suggestDrum(m.target, m.preset, { start: m.start }), ms: ms() }, transfer: [] };
     return { res: { type: "suggest", id: m.id, suggestion: suggestFor(m.reading, m.preset, m.bpm, m.start), ms: ms() }, transfer: [] };

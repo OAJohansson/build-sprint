@@ -93,25 +93,28 @@ const noteOf = (hz: number) => { const m = Math.round(69 + 12 * Math.log2(hz / 4
 const lerpExp = ([lo, hi]: [number, number], v: number) => lo * Math.pow(hi / lo, v);
 /** The kick's note in Hz at Tune `v` on this preset. */
 export const kickHz = (preset: DrumPresetId, v: number) => { const x = DRUM_PRESETS[preset].voice; return x.kind === "kick" ? lerpExp(x.hz, v) : 0; };
-const FRACTIONS: [number, string][] = [[0.5, "1/32"], [1, "1/16"], [2, "1/8"], [4, "1/4"], [8, "1/2"]];
 
-/** The word under a drum knob: what the value sounds like ("A1 · 55 Hz", "1/8", "crisp"). */
+/**
+ * The word under a drum knob: what the value sounds like, fine enough that every drag shows a change
+ * (U5, user test 12 Nov): lengths in ms, the tone in Hz, the kick's note; the other knobs a word and
+ * the value 0–100 ("snappy · 45"). The word before " · " is what the Mentor says (drumSuggestLine).
+ */
 export function drumKnobWord(preset: DrumPresetId, id: DrumKnobId, v: number, bpm = 124): string {
-  const p = DRUM_PRESETS[preset];
+  void bpm;
+  const p = DRUM_PRESETS[preset], x = p.voice;
+  const pct = Math.round(v * 100);
+  const ms = (s: number) => `${s >= 1 ? (Math.round(s * 10) / 10).toFixed(1) + " s" : `${Math.round((s * 1000) / 5) * 5} ms`}`;
+  const hz = (f: number) => (f >= 1000 ? `${(Math.round(f / 100) / 10).toFixed(1)} kHz` : `${Math.round(f)} Hz`);
   switch (id) {
-    case "tune": { const hz = kickHz(preset, v); return `${noteOf(hz)} · ${Math.round(hz)} Hz`; }
-    case "decay": {
-      if (p.row !== "kick") return v < 0.34 ? "short" : v < 0.67 ? "medium" : "long";
-      const x = p.voice as KickVoice, heard = lerpExp(x.decayS, v) * 3.5, steps = heard / secondsPer16th(bpm);
-      return FRACTIONS.reduce((a, b) => (Math.abs(Math.log2(b[0] / steps)) < Math.abs(Math.log2(a[0] / steps)) ? b : a))[1];
-    }
-    case "click": return v < 0.3 ? "soft" : v < 0.7 ? "snappy" : "hard";
-    case "drive": return v < 0.1 ? "clean" : v < 0.55 ? "warm" : "dirty";
-    case "tone": return v < 0.34 ? "dark" : v < 0.5 ? "warm" : "bright";
-    case "snap": return v < 0.3 ? "soft" : v < 0.7 ? "crisp" : "sharp";
-    case "room": return v < 0.15 ? "dry" : v < 0.5 ? "small" : "big";
-    case "length": return v < 0.3 ? "closed" : v < 0.45 ? "half-open" : "open";
-    case "width": return v < 0.3 ? "narrow" : v < 0.7 ? "wide" : "very wide";
+    case "tune": { const f = kickHz(preset, v); return `${noteOf(f)} · ${Math.round(f)} Hz`; }
+    case "decay": return ms(lerpExp(x.kind === "kick" ? x.decayS : (x as ClapVoice).decayS, v) * 3.5);
+    case "length": return `${v < 0.3 ? "closed" : v < 0.45 ? "half-open" : "open"} · ${ms(lerpExp((x as HatVoice).lenS, v) * 3.5)}`;
+    case "tone": return `${v < 0.34 ? "dark" : v < 0.5 ? "warm" : "bright"} · ${hz(isHat(x) ? lerpExp(x.hp, v) : lerpExp((x as ClapVoice).hz, v))}`;
+    case "click": return `${v < 0.3 ? "soft" : v < 0.7 ? "snappy" : "hard"} · ${pct}`;
+    case "drive": return `${v < 0.1 ? "clean" : v < 0.55 ? "warm" : "dirty"} · ${pct}`;
+    case "snap": return `${v < 0.3 ? "soft" : v < 0.7 ? "crisp" : "sharp"} · ${pct}`;
+    case "room": return `${v < 0.15 ? "dry" : v < 0.5 ? "small" : "big"} · ${pct}`;
+    case "width": return `${v < 0.3 ? "narrow" : v < 0.7 ? "wide" : "very wide"} · ${pct}`;
   }
 }
 
@@ -307,9 +310,10 @@ export function drumSuggestLine(preset: DrumPresetId, current: DrumMacros, ticks
   const moves = drumMoves(DRUM_PRESETS[preset].row, current, ticks);
   if (!moves.length) return "You're on the gold ticks. Switch A/B to judge the rest by ear.";
   const say = moves.map(({ id, up }) => {
-    const from = drumKnobWord(preset, id, current[id] ?? 0, bpm), to = drumKnobWord(preset, id, ticks[id] ?? 0, bpm);
-    const word = id === "tune" ? to.split(" · ")[0] : to;
-    return `${DRUM_KNOB_SPECS[id].name} ${up ? "up" : "down"}${to !== from ? ` to ${word}` : ""}`;
+    // The note and the decay always name their target; the others only when the word itself changes.
+    const word = (v: number) => drumKnobWord(preset, id, v, bpm).split(" · ")[0];
+    const to = word(ticks[id] ?? 0), named = id === "tune" || id === "decay" || to !== word(current[id] ?? 0);
+    return `${DRUM_KNOB_SPECS[id].name} ${up ? "up" : "down"}${named ? ` to ${to}` : ""}`;
   });
   const traits = moves.map(({ id, up }) => TRAIT[id][up ? 0 : 1]);
   return `${say.join(", ")}. The original ${noun} ${noun === "hats" ? "are" : "is"} ${traits.join(" and ")}.`;

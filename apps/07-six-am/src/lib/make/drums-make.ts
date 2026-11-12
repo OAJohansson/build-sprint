@@ -22,7 +22,8 @@ import { secondsPer16th, type MakeNote } from "./render";
 
 /** One hit as Make plays it: `t` seconds after the loop's start, `off` in 16ths, `db` vs the loop's biggest hit. */
 export type RowHit = { step: number; off: number; vel: number; t: number; db: number | null; faint: boolean };
-export type DrumRowRead = { hits: RowHit[]; doubtful: boolean; why: string | null };
+/** `why`: the full reason a row is off (Mentor, tooltip); `note`: the one short line shown in the row (U2). */
+export type DrumRowRead = { hits: RowHit[]; doubtful: boolean; why: string | null; note?: string | null };
 export type DrumsReading = { rows: Record<DrumRow, DrumRowRead>; steps: number; bars: number; gridMs: number; swingMs: number };
 
 const BLEED_FROM: Record<DrumRow, string> = { kick: "the bass", clap: "the chords", hats: "another part" };
@@ -74,6 +75,7 @@ export function drumsFromReading(r: DrumReading, bpm: number): DrumsReading {
       hits, doubtful: sparse || irregular,
       why: sparse ? `${hits.length} faint mark${hits.length === 1 ? "" : "s"}, probably ${BLEED_FROM[row]} bleeding through: off in Mine`
         : irregular ? `${hits.length} marks on no repeating pattern, probably a noise build or ${BLEED_FROM[row]} bleeding through: off in Mine` : null,
+      note: sparse ? `Probably ${BLEED_FROM[row]} bleeding through` : irregular ? "No repeating beat: probably a noise build" : null,
     };
   });
   return { rows, steps: r.steps, bars, gridMs: r.gridMs, swingMs: r.swingMs };
@@ -197,6 +199,20 @@ export function measureCandidate(preset: DrumPresetId, m: DrumMacros, t: RowTarg
     hz: row === "kick" ? lowHz(band(mono, rate, 30, 150), 0, t.endS, rate) : null,
     side: row === "hats" ? sideDb(r.left, r.right, 0, t.endS, rate) : null,
   };
+}
+
+/** How far apart a row's hit can sound before its score reaches ~37 (the distance's scale). */
+export const ROW_SCORE_SCALE = 8;
+/**
+ * U1 (user test 12 Nov, L233): one row's closeness, 0–100: how close one hit of Mine's row measures
+ * to the original row's hits, on the same measure Suggest minimises (band shape over the hit, the
+ * kick's note, the hats' width; clap and hats in their own bands), so following that row's gold
+ * ticks raises it. The pattern and the level are copied, so they aren't in it.
+ */
+export function rowCloseness(t: RowTarget, preset: DrumPresetId, m: DrumMacros, rate = 44100): { score: number; distance: number } {
+  const c = measureCandidate(preset, m, t, rate);
+  const distance = rowDistance(t, c.shape, c.hz, c.side);
+  return { score: Math.round(100 * Math.exp(-distance / ROW_SCORE_SCALE)), distance: Math.round(distance * 100) / 100 };
 }
 
 export type DrumSuggestion = { macros: DrumMacros; distance: number; presetDistance: number; renders: number };

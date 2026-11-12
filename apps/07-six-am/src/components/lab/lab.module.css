@@ -384,3 +384,15 @@
   .drPresetName { font-size: 24px !important; }
   .drKnobs { gap: 40px; margin: 2px 0 4px; }
 }
+
+/* User test 12 Nov: the off row's reason in the row (U2); "Ticks placed" as plain text (U10). */
+.drNote { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--muted); background: var(--bg); padding: 1px 8px; border-radius: 4px; white-space: nowrap; pointer-events: none; }
+.drRow[data-lit] .drNote { background: #1c1917; }
+.drPlaced { font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+/* U9 (user test 12 Nov): Play keeps one x whatever the header says. The transport has a fixed width
+   with Play first; the loop chip ellipsises; the Deck label keeps a fixed width. */
+.transport { width: min(640px, 46vw); flex: none; justify-content: flex-start; }
+.loopChip { min-width: 0; max-width: 100%; }
+.loopChipText { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.deck { min-width: 112px; }

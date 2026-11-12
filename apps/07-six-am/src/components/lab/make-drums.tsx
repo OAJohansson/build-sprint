@@ -55,7 +55,7 @@ export function useDrums(o: DrumsOpts) {
   const [anywayS, setAnyway] = useState<{ loopKey: string | null; rows: DrumRow[] }>({ loopKey: null, rows: [] });
   const [ab, setAb] = useState<"a" | "b">("a");
   const [bed, setBed] = useState(true); // P7: the original bass under both A and B
-  const [mineS, setMine] = useState<{ key: string; closeness: DrumsCloseness; gainDb: number; rowGainsDb: Record<DrumRow, number | null>; ms: number } | null>(null);
+  const [mineS, setMine] = useState<{ key: string; closeness: DrumsCloseness; rowCloseness: Record<DrumRow, { score: number; distance: number } | null>; gainDb: number; rowGainsDb: Record<DrumRow, number | null>; ms: number } | null>(null);
   const [names, setNames] = useState<Record<DrumRow, string | null>>(() => perRow(() => null));
   const [last, setLast] = useState<Record<DrumRow, { id: string; sound: string; name: string } | null>>(() => perRow(() => null));
   const [saveState, setSaveState] = useState<{ state: "idle" | "saving" | "error"; text?: string }>({ state: "idle" });
@@ -122,10 +122,10 @@ export function useDrums(o: DrumsOpts) {
     const t = setTimeout(() => {
       const levels = perRow((r) => read.targets[r]?.levelDb ?? null);
       const rowSounds: Record<DrumRow, RowSound> = perRow((r) => ({ ...sounds[r], on: on[r] }));
-      cl().drumsRender({ reading: read.d, sounds: rowSounds, levels, report: read.report, bpm: o.bpm, rate: read.rate, samples: read.samples, levelDb: read.levelDb, lufs: read.lufs }).then(({ res, stale }) => {
+      cl().drumsRender({ reading: read.d, sounds: rowSounds, levels, report: read.report, bpm: o.bpm, rate: read.rate, samples: read.samples, levelDb: read.levelDb, lufs: read.lufs, targets: read.targets }).then(({ res, stale }) => {
         if (stale || loopKeyOf(tr.current?.state.loop ?? null) !== read.loopKey) return;
         tr.current?.setMine(res, "drums");
-        setMine({ key: mineKeyNow, closeness: res.closeness, gainDb: res.gainDb, rowGainsDb: res.rowGainsDb, ms: res.ms });
+        setMine({ key: mineKeyNow, closeness: res.closeness, rowCloseness: res.rowCloseness, gainDb: res.gainDb, rowGainsDb: res.rowGainsDb, ms: res.ms });
       }, (e) => console.warn("[make] drums render failed", e));
     }, 60);
     return () => clearTimeout(t);
@@ -157,6 +157,8 @@ export function useDrums(o: DrumsOpts) {
     if (read) void suggest(read, row, snd, null);
   };
   const playAnyway = (row: DrumRow) => setAnyway({ loopKey, rows: [...anyway.filter((r) => r !== row), row] });
+  // U3: "Play anyway" is undone with "Back to off" (the reading's call again).
+  const backToOff = (row: DrumRow) => setAnyway({ loopKey, rows: anyway.filter((r) => r !== row) });
 
   // Save the open row (P9): its sound, and its hits folded to a 1-, 2- or 4-bar repeat.
   const scale = o.scale === "major" || o.scale === "minor" ? o.scale : null;
@@ -168,7 +170,7 @@ export function useDrums(o: DrumsOpts) {
   const nameField = nameRaw === null || (lastRow && lastRow.sound !== sid && nameRaw === lastRow.name) ? suggested : nameRaw;
   const nameNow = nameField.trim() || suggested;
   const action = saveAction({ sound: sid, name: nameNow }, lastRow);
-  const tags = suggestDrumTags(cur.preset, o.bpm, o.title);
+  const tags = suggestDrumTags(cur.preset, o.bpm, o.title, cur.macros);
   const savedRows = perRow((r) => !!last[r] && last[r]!.sound === soundId(sounds[r].preset, sounds[r].macros));
   const canSave = readState === "ready" && on[open] && saveState.state !== "saving" && action.kind !== "none";
   const save = async (row: DrumRow = open, nameOverride?: string) => {
@@ -186,7 +188,7 @@ export function useDrums(o: DrumsOpts) {
         : await api.addSound({
           name: nm, part: "drums", preset: snd.preset, macros: snd.macros,
           pattern: foldRow(row, read.d.rows[row].hits, read.d.steps),
-          key: o.keyName, scale, bpm: o.bpm, source: { title: o.title, url: o.url }, tags: suggestDrumTags(snd.preset, o.bpm, o.title),
+          key: o.keyName, scale, bpm: o.bpm, source: { title: o.title, url: o.url }, tags: suggestDrumTags(snd.preset, o.bpm, o.title, snd.macros),
         });
       setLast((l) => ({ ...l, [row]: { id: res.id, sound: id, name: res.name } }));
       setNames((n) => ({ ...n, [row]: res.name }));
@@ -199,10 +201,10 @@ export function useDrums(o: DrumsOpts) {
 
   const ticks = perRow((r) => (read ? ticksS[r] : null));
   return {
-    open, setOpen, sounds, setPreset, setKnob, ticks, suggesting, read, readState, readError: state?.error ?? null, on, anyway, playAnyway,
+    open, setOpen, sounds, setPreset, setKnob, ticks, suggesting, read, readState, readError: state?.error ?? null, on, anyway, playAnyway, backToOff,
     suggestNow: (row: DrumRow) => { if (read) void suggest(read, row, sounds[row], ticks[row]?.macros ?? null); },
     suggestedNow: perRow((r) => !!ticks[r] && ticks[r]!.for === soundId(sounds[r].preset, sounds[r].macros)),
-    ab, setAb, bed, setBed, mineReady: !!mine && mine.key === mineKeyNow, mineAny: !!mine, closeness: mine?.closeness ?? null,
+    ab, setAb, bed, setBed, mineReady: !!mine && mine.key === mineKeyNow, mineAny: !!mine, closeness: mine?.closeness ?? null, rowCloseness: mine?.rowCloseness ?? null,
     mySounds, loadSound, name: nameField, setName: (v: string) => setNames((n) => ({ ...n, [open]: v })), tags, save, canSave, savedRows,
     saved: { state: saveState.state, text: saveState.text, savedAs: lastRow && lastRow.sound === sid ? lastRow.name : null, action: action.kind },
     bpm: o.bpm,
@@ -211,7 +213,7 @@ export function useDrums(o: DrumsOpts) {
       readState, open, ab, bed, on, anyway, steps: read?.d.steps ?? null, gridMs: read?.d.gridMs ?? null, swingMs: read?.d.swingMs ?? null,
       rows: read ? perRow((r) => ({ hits: read.d.rows[r].hits, doubtful: read.d.rows[r].doubtful, why: read.d.rows[r].why })) : null,
       targets: read?.targets ?? null, levelDb: read?.levelDb ?? null, lufs: read?.lufs ?? null,
-      sounds, ticks: perRow((r) => ticks[r]?.macros ?? null), mine: mine ? { ready: mine.key === mineKeyNow, gainDb: mine.gainDb, rowGainsDb: mine.rowGainsDb, closeness: mine.closeness, renderMs: mine.ms } : null,
+      sounds, ticks: perRow((r) => ticks[r]?.macros ?? null), mine: mine ? { ready: mine.key === mineKeyNow, gainDb: mine.gainDb, rowGainsDb: mine.rowGainsDb, closeness: mine.closeness, rowCloseness: mine.rowCloseness, renderMs: mine.ms } : null,
       saved: perRow((r) => last[r]), mySounds: mySounds.map((x) => ({ id: x.id, name: x.name, preset: x.preset })),
     }),
   };
@@ -299,7 +301,10 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
   const row = m.open, snd = m.sounds[row], ticks = m.ticks[row]?.macros;
   const noun = drumNoun(snd.preset);
   let line: React.ReactNode;
-  if (m.suggesting === row) line = `Measuring the ${noun} against ${DRUM_PRESETS[snd.preset].name}…`;
+  const rowRead = m.read?.d.rows[row], rowOff = !!rowRead?.doubtful && !m.anyway.includes(row);
+  // U4: a row that is off gets the reason, not knob tips.
+  if (rowOff) line = <>{`Mentor: this row is off. ${(rowRead?.why ?? "").replace(/: off in Mine$/, "")}.`}<br /><span className={s.faintLine}>Mine leaves it out. Press Play anyway to hear it.</span></>;
+  else if (m.suggesting === row) line = `Measuring the ${noun} against ${DRUM_PRESETS[snd.preset].name}…`;
   else if (!m.read?.targets[row]) line = <span className={s.faintLine}>No {rowTitle(row)} hits in this loop to compare with.</span>;
   else if (!ticks) line = `Mentor: press Suggest for ${rowTitle(row)} to compare this preset with the original.`;
   else line = <>Mentor: {drumSuggestLine(snd.preset, snd.macros, ticks, noun, m.bpm)}{m.ticks[row]?.moved && drumMoves(row, snd.macros, ticks).length > 0 ? <><br /><span className={s.faintLine}>{m.ticks[row]!.moved}</span></> : null}</>;
@@ -322,10 +327,14 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
               </button>
               <div className={s.drTrack}>
                 <Pattern hits={rr?.hits ?? []} bars={bars} lit={lit} doubtful={doubtful} empty={off} />
+                {/* U2: why a row is off (or was), in the row itself. */}
+                {!off && rr?.doubtful && rr.note && <span className={s.drNote}>{rr.note}</span>}
               </div>
               <div className={s.drSlot}>
-                {doubtful && !off
-                  ? <button className={s.textBtn} title={rr?.why ?? undefined} onClick={() => m.playAnyway(r)}>Play anyway</button>
+                {!off && rr?.doubtful
+                  ? doubtful
+                    ? <button className={s.textBtn} title={rr.why ?? undefined} onClick={() => m.playAnyway(r)}>Play anyway</button>
+                    : <button className={s.textBtn} title="Leave this row out of Mine again, as the reading suggests" onClick={() => m.backToOff(r)}>Back to off</button>
                   : <>{!lit && <span className={s.drPreset}>{DRUM_PRESETS[m.sounds[r].preset].name}</span>}{m.savedRows[r] && <span className={s.drSaved}>saved</span>}</>}
               </div>
             </div>
@@ -338,7 +347,7 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
         <DrumPreset m={m} row={row} />
         <div className={s.drKnobs} data-off={off ? "" : undefined}>
           {ROW_KNOBS[row].map((id) => (
-            <Knob key={`${row}-${id}`} id={id} spec={DRUM_KNOB_SPECS[id]} wordOf={(v) => drumKnobWord(snd.preset, id, v, m.bpm)} value={snd.macros[id] ?? 0} sug={off ? undefined : ticks?.[id]}
+            <Knob key={`${row}-${id}`} id={id} spec={DRUM_KNOB_SPECS[id]} wordOf={(v) => drumKnobWord(snd.preset, id, v, m.bpm)} value={snd.macros[id] ?? 0} sug={off || rowOff ? undefined : ticks?.[id]}
               color="#f1e6d3" disabled={off} onChange={(v) => m.setKnob(row, id, v)} reset={clampDrumMacros(snd.preset, undefined)[id] ?? 0} size={short === 2 ? 64 : short === 1 ? 72 : 88} />
           ))}
         </div>
@@ -346,8 +355,11 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
           <div className={s.drSuggest}>
             <p className={s.suggest} aria-live="polite">{line}</p>
             {/* P6: local analysis by synthesis; it only moves the gold ticks. */}
-            <button className={s.ghost} onClick={() => m.suggestNow(row)} disabled={!m.read?.targets[row] || m.suggesting !== null || m.suggestedNow[row]}
-              title="Places gold ticks where the knobs come closest to the original; it never turns a knob">{m.suggesting === row ? "Suggesting…" : m.suggestedNow[row] ? "Suggested" : `Suggest for ${rowTitle(row)}`}</button>
+            {/* U10: once the ticks are placed for these knobs it is a plain note, not a greyed button. */}
+            {rowOff ? null : m.suggestedNow[row] && m.suggesting !== row
+              ? <span className={s.drPlaced} role="status">Ticks placed</span>
+              : <button className={s.ghost} onClick={() => m.suggestNow(row)} disabled={!m.read?.targets[row] || m.suggesting !== null}
+                title="Places gold ticks where the knobs come closest to the original; it never turns a knob">{m.suggesting === row ? "Suggesting…" : `Suggest for ${rowTitle(row)}`}</button>}
           </div>
         )}
       </div>
@@ -404,7 +416,7 @@ function DrumPreset({ m, row }: { m: DrumsModel; row: DrumRow }) {
   );
 }
 
-/** A/B at the same loudness, the bass under both (P7), and the closeness score (P8). */
+/** A/B at the same loudness, the bass under both (P7), and the open row's closeness (P8, U1/L233: one number, the open row's). */
 export function DrumsCheck({ m }: { m: DrumsModel }) {
   return (
     <div className={`${s.checkRow} ${s.drCheck}`}>
@@ -416,8 +428,8 @@ export function DrumsCheck({ m }: { m: DrumsModel }) {
         <span className={s.faint}>same loudness</span>
       </div>
       <button className={s.ghost} aria-pressed={m.bed} onClick={() => m.setBed(!m.bed)} title="Plays the original bass under both A and B, so you judge the drums in the groove">{m.bed ? "Bass under both: on" : "Bass under both: off"}</button>
-      <span className={s.drScore} title="How close Mine's three rows measure to the original drums: where each row's energy moves, where it hits, and the band balance. Numbers only.">
-        closeness <b>{m.closeness ? m.closeness.score : "–"}</b> / 100
+      <span className={s.drScore} title="How close this row's hit measures to the original's (its sound across its own bands, the kick's note, the hats' width): it rises as you follow this row's gold ticks. Numbers only.">
+        closeness · {DRUM_ROW_NAMES[m.open].toLowerCase()} <b>{m.rowCloseness?.[m.open]?.score ?? "–"}</b> / 100
       </span>
     </div>
   );

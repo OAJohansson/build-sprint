@@ -6,7 +6,7 @@
 import { pitchClass, type Scale } from "@/lib/synths/theory";
 import { MAKE_PRESETS, clampMacros, macroWord, type Macros, type MakePresetId } from "./presets";
 import type { MakeNote } from "./render";
-import { DRUM_PRESETS, clampDrumMacros, isDrumPreset, rowOf, type DrumMacros, type DrumPresetId, type DrumRow } from "./drum-synth";
+import { DRUM_PRESETS, ROW_KNOBS, clampDrumMacros, isDrumPreset, rowOf, type DrumKnobId, type DrumMacros, type DrumPresetId } from "./drum-synth";
 
 export const LIB_PARTS = ["bass", "drums", "other", "vocals"] as const;
 export type LibPart = (typeof LIB_PARTS)[number];
@@ -151,7 +151,7 @@ function parseDrumSound(r: Record<string, unknown>, preset: DrumPresetId): NewSo
   const source = sourceOf(r.source as Record<string, unknown> | null | undefined);
   const macros = clampDrumMacros(preset, (r.macros ?? {}) as Record<string, unknown>);
   const name = cleanName(r.name) || suggestDrumName(preset, macros, source?.title);
-  const tags = normalizeTags(Array.isArray(r.tags) ? r.tags : suggestDrumTags(preset, bpm, source?.title));
+  const tags = normalizeTags(Array.isArray(r.tags) ? r.tags : suggestDrumTags(preset, bpm, source?.title, macros));
   return { name, part: "drums", preset, macros, pattern: { bars, notes }, key, scale, bpm: Math.round(bpm * 100) / 100, source, tags };
 }
 
@@ -162,37 +162,38 @@ export function drumNoun(preset: DrumPresetId): string {
   return rowOf(preset) === "clap" ? "clap" : rowOf(preset);
 }
 
-/** A word for a drum sound from its knobs, else its preset ("Deep kick", "Crisp clap", "Open hats"). */
-export function drumWord(preset: DrumPresetId, m: DrumMacros): string {
-  const row: DrumRow = rowOf(preset);
-  if (row === "kick") {
-    if ((m.drive ?? 0) >= 0.6) return "Gritty";
-    if ((m.click ?? 0) >= 0.6) return "Punchy";
-    if ((m.decay ?? 0) >= 0.7) return "Boomy";
-    if ((m.tune ?? 0.5) <= 0.4) return "Deep";
-    return (m.decay ?? 0.5) <= 0.3 ? "Tight" : "Round";
-  }
-  if (row === "clap") {
-    if ((m.room ?? 0) >= 0.5) return "Roomy";
-    if ((m.snap ?? 0) >= 0.4 && (m.room ?? 0) < 0.35) return "Crisp";
-    return (m.tone ?? 0.5) < 0.34 ? "Dark" : preset === "clap-wide" ? "Wide" : "Short";
-  }
-  if ((m.width ?? 0) >= 0.7) return "Wide";
-  if (preset === "hats-ride") return "Ringing";
-  if (preset === "hats-shaker") return "Shaken";
-  return (m.length ?? 0.5) < 0.3 ? "Closed" : (m.length ?? 0.5) >= 0.45 ? "Open" : "Ticking";
+/** U8 (user test 12 Nov): a drum sound is named from its preset first ("Deep 909 kick"). */
+const DRUM_NAME: Record<DrumPresetId, string> = {
+  "kick-deep-909": "Deep 909 kick", "kick-punch": "Punch kick", "kick-round-808": "Round 808 kick", "kick-tight": "Tight kick",
+  "clap-wide": "Wide clap", "clap-snap": "Snap", "clap-rim": "Rim", "clap-tight-snare": "Tight snare",
+  "hats-open-909": "Open 909 hats", "hats-closed-tick": "Closed hats", "hats-shaker": "Shaker", "hats-ride": "Ride",
+};
+/** What a knob turned well up or down says about the sound. */
+const KNOB_WORD: Record<DrumKnobId, [string, string]> = {
+  tune: ["high", "low"], decay: ["long", "short"], click: ["clicky", "soft"], drive: ["gritty", "clean"], tone: ["bright", "dark"],
+  snap: ["crisp", "soft"], room: ["roomy", "dry"], length: ["long", "short"], width: ["wide", "narrow"],
+};
+/** A knob this far from the preset's own value earns a word in the name. */
+export const NAME_MOVE = 0.25;
+
+/** Then knob words: the word of the knob turned furthest from the preset's own value, if it moved far. */
+export function drumWord(preset: DrumPresetId, m: DrumMacros): string | null {
+  const home = clampDrumMacros(preset, undefined);
+  const far = ROW_KNOBS[rowOf(preset)].map((id) => ({ id, d: (m[id] ?? 0) - (home[id] ?? 0) })).sort((a, b) => Math.abs(b.d) - Math.abs(a.d))[0];
+  return far && Math.abs(far.d) >= NAME_MOVE ? KNOB_WORD[far.id][far.d > 0 ? 0 : 1] : null;
 }
 
-/** The suggested name for a drum row's sound: "Deep kick, from Lost in The Loop". */
+/** The suggested name for a drum row's sound: "Deep 909 kick, from Lost in The Loop", "Wide clap, roomy, from …". */
 export function suggestDrumName(preset: DrumPresetId, m: DrumMacros, songTitle?: string | null): string {
-  const what = `${drumWord(preset, m)} ${drumNoun(preset)}`;
+  const w = drumWord(preset, m);
+  const what = w ? `${DRUM_NAME[preset]}, ${w}` : DRUM_NAME[preset];
   const s = songTitle ? shortTitle(songTitle) : "";
   return (s ? `${what}, from ${s}` : what).slice(0, MAX_NAME);
 }
 
-/** A drum sound's tags: its noun, the preset's tags, BPM, song (no key: drums aren't in one). */
-export function suggestDrumTags(preset: DrumPresetId, bpm: number, songTitle?: string | null): string[] {
-  return normalizeTags([drumNoun(preset), ...DRUM_PRESETS[preset].tags, `${Math.round(bpm)} bpm`, songTitle ? shortTitle(songTitle) : ""]);
+/** A drum sound's tags, matching its name: its noun, the preset's tags, the knob word, BPM, song (no key). */
+export function suggestDrumTags(preset: DrumPresetId, bpm: number, songTitle?: string | null, m?: DrumMacros): string[] {
+  return normalizeTags([drumNoun(preset), ...DRUM_PRESETS[preset].tags, (m && drumWord(preset, m)) ?? "", `${Math.round(bpm)} bpm`, songTitle ? shortTitle(songTitle) : ""]);
 }
 
 /** A rename / retag / re-tune we can trust (empty object when nothing usable). */

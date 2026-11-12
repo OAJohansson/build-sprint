@@ -125,34 +125,37 @@ function goertzel(x: Float32Array, a: number, b: number, hz: number, rate: numbe
   return (s1 * s1 + s2 * s2 - c * s1 * s2) / Math.max(1, b - a);
 }
 
-// shortcut: re-strike thresholds (a mark of strength ≥ 0.15, the note's own pitch ≥ 3 dB up across it after settling) picked on the melody fixture and the chord bench; check on more real stabs.
-export const RESTRIKE = { mark: 0.15, ratio: 2, winS: 0.025, minS: 0.08 };
+// shortcut: re-strike thresholds (a mark of strength ≥ 0.15, the note's own pitch ≥ 2 dB up across it after settling, with another held note) picked on the melody fixture and the chord bench; check on more real stabs.
+export const RESTRIKE = { mark: 0.15, ratio: 1.6, winS: 0.025, minS: 0.08 };
 
 /**
  * M-F2 (melody evals): a chord struck again while it still rings (a stab into a stab, a reverb tail)
  * never lets its pitch stop, so it was read as one long note. A held note is split wherever an attack
- * mark sits inside it and its own pitch (energy at its fundamental, a narrow Goertzel) jumps there.
+ * mark sits inside it and its own pitch (energy at its fundamental, a narrow Goertzel) jumps there,
+ * together with another held note's (a chord struck again; a lone bass or drum hit in the bleed isn't).
  */
 function splitRestrikes(notes: ReadNote[], x: Float32Array, rate: number, marks: { t: number; s: number }[], fine: { t: number; s: number }[], tune: number, sps: number, loopStartSec: number) {
-  const strong = marks.filter((m) => m.s >= RESTRIKE.mark);
   const w = Math.round(RESTRIKE.winS * rate), gap = Math.round(0.004 * rate);
-  for (let i = 0; i < notes.length; i++) {
-    const n = notes[i], hz = 440 * Math.pow(2, (n.midi + tune - 69) / 12), end = n.t + n.dur;
-    for (const m of strong) {
-      if (m.t <= n.t + RESTRIKE.minS || m.t >= end - 0.05) continue;
-      const at = Math.round(m.t * rate);
-      const before = goertzel(x, at - gap - w, at - gap, hz, rate), after = goertzel(x, at + gap, at + gap + w, hz, rate);
-      if (after < RESTRIKE.ratio * before) continue;
-      // Not a swell: a re-strike comes after the note has settled or fallen, not while it still climbs.
-      const earlier = goertzel(x, at - gap - 3 * w, at - gap - 2 * w, hz, rate);
-      if (before > 1.25 * earlier) continue;
-      // Struck again here: the note ends, a new one starts (timed by the finer curve, as at the read).
-      let fb: { t: number; s: number } | null = null;
-      for (const f of fine) if (Math.abs(f.t - m.t) <= 0.02 && (!fb || f.s > fb.s)) fb = f;
-      const t = fb ? fb.t : m.t, step = Math.round((t - loopStartSec) / sps);
+  const rises = (n: ReadNote, at: number) => {
+    const hz = 440 * Math.pow(2, (n.midi + tune - 69) / 12);
+    const before = goertzel(x, at - gap - w, at - gap, hz, rate), after = goertzel(x, at + gap, at + gap + w, hz, rate);
+    // Not a swell: a re-strike comes after the note has settled or fallen, not while it still climbs.
+    return after >= RESTRIKE.ratio * before && before <= 1.25 * goertzel(x, at - gap - 3 * w, at - gap - 2 * w, hz, rate);
+  };
+  for (const m of [...marks].filter((q) => q.s >= RESTRIKE.mark).sort((a, b) => a.t - b.t)) {
+    const held = notes.filter((n) => m.t > n.t + RESTRIKE.minS && m.t < n.t + n.dur - 0.05);
+    if (!held.length) continue;
+    const at = Math.round(m.t * rate), up = held.filter((n) => rises(n, at));
+    // A chord struck again lifts several of its notes together; a bass or drum note in the bleed lifts
+    // one pitch. One note held alone may be struck again on its own.
+    if (!(up.length >= 2 || (held.length === 1 && up.length === 1))) continue;
+    let fb: { t: number; s: number } | null = null;
+    for (const f of fine) if (Math.abs(f.t - m.t) <= 0.02 && (!fb || f.s > fb.s)) fb = f;
+    const t = fb ? fb.t : m.t, step = Math.round((t - loopStartSec) / sps);
+    for (const n of up) {
+      const end = n.t + n.dur;
       n.dur = Math.max(0.03, t - n.t);
       notes.push({ t, dur: Math.max(0.03, end - t), midi: n.midi, vel: n.vel, step, offsetMs: Math.round((t - loopStartSec - step * sps) * 10000) / 10 });
-      break; // the new note is checked for its own re-strikes in turn
     }
   }
 }

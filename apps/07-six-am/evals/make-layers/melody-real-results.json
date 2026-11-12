@@ -2,31 +2,31 @@
   {
     "loop": "Lost 69–76",
     "seed": 1,
-    "pcFound": 71.9,
-    "wrong": 13.9,
+    "pcFound": 72.3,
+    "wrong": 13.7,
     "p95Ms": 5.5,
-    "notes": 209,
-    "longestNoteS": 1.3,
+    "notes": 211,
+    "longestNoteS": 1.2,
     "perPc": {
-      "G": "69 read",
-      "D": "48 read",
-      "B": "46 read",
-      "F": "39 read"
+      "G": "72 read",
+      "D": "50 read",
+      "B": "42 read",
+      "F": "40 read"
     }
   },
   {
     "loop": "Lost 69–76",
     "seed": 2,
-    "pcFound": 71.9,
-    "wrong": 13.4,
+    "pcFound": 72.3,
+    "wrong": 12.9,
     "p95Ms": 7.2,
     "notes": 209,
     "longestNoteS": 1.2,
     "perPc": {
-      "G": "70 read",
-      "D": "47 read",
-      "B": "46 read",
-      "F": "39 read"
+      "G": "72 read",
+      "D": "49 read",
+      "B": "41 read",
+      "F": "40 read"
     }
   },
   {
@@ -56,7 +56,7 @@
   {
     "loop": "pluck lead over a pad (overlap)",
     "pcFound": 100,
-    "wrong": 26.2,
+    "wrong": 28.4,
     "p95Ms": 4.9
   },
   {

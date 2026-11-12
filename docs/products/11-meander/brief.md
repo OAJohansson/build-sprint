@@ -36,7 +36,7 @@ Me: curious across psychology, philosophy and history, remembers what they see m
 
 ## Success: what good looks like
 
-*Draft for the kickoff gate.* **Main outcome:** I keep studying a field across connected areas, in small pieces, instead of going deep in one school and dropping it.
+**Main outcome (L5):** I keep studying a field across connected areas, in small pieces, instead of going deep in one school and dropping it.
 
 | Signal | How I'll measure it | Target |
 | --- | --- | --- |
@@ -46,6 +46,18 @@ Me: curious across psychology, philosophy and history, remembers what they see m
 | Guardrail: accuracy | Spot-check 20 claims (thinkers, dates, links) against a reference (e.g. Stanford Encyclopedia of Philosophy) | 0 invented thinkers or links; at most 1 small slip |
 
 ## MVP and stop line
+
+*Draft for the kickoff gate.* Appetite: one day. Tests the riskiest assumption (will I hop?).
+
+**Ships:**
+1. **The whole field:** one map of Western philosophy, Greeks to today: eras and schools, and how they connect ("built on", "pushed against"). (Job 1)
+2. **Zoom into a school:** its key questions and themes, 3–5 thinkers, what it reacted against, and 2–3 "go next" neighbours. (Jobs 2, 3)
+3. **One level deeper, a thinker:** a short summary and key ideas, plus a ready-made prompt to study it with Claude. (Job 3; keeps the modules that already work)
+4. **Where I've been:** areas I've opened are marked on the map, with dates, saved in the browser. (Job 2, and the day-7 signal)
+
+**How (provisional):** Fable writes the philosophy map once, while we build; it's checked against the accuracy guardrail and shipped as a fixed file. No live AI calls in the MVP.
+
+**Stop line, straight to the backlog:** any field beyond philosophy, generating a map live from a typed topic, deeper levels than thinker, Eastern and other traditions, the in-app study modules, sharing.
 
 ## Feature drill-down
 

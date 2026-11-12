@@ -25,3 +25,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Scaffolded** with `pnpm new meander "Meander" --mode streamlined`. Brief drafted (problem, who, jobs, alternatives, risks) for the kickoff gate, asked one question at a time.
 - **Gate Q1, moment of use (L3):** laptop at a desk, sit-down study; phone secondary.
 - **Gate Q2, riskiest assumption (L4):** value, "I'll hop". Feasibility (Fable's accuracy) becomes a guardrail. Success measures drafted around it.
+- **Gate Q3, success measures (L5):** approved as drafted. MVP cut drafted next.

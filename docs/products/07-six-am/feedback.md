@@ -207,3 +207,17 @@ Details: `evals-runs/2026-11-12-melody-slice.md`.
 | M-F4 | minor | Doubtful verdict flips between two reads of the same loop (repeat-share on its threshold) | fixed (cb2e3d4–7f282d8), re-check pending |
 | M-F5 | minor | A monophonic lead with no chords (Mason) is read into Chords; Lead row on 2 of 10 loops | fixed (cb2e3d4–7f282d8), re-check pending |
 | D-R1 | minor | Flammed claps still 9–11 ms late on Lost 21–28 (12/15 within 10 ms) | backlog (L244) |
+
+## Melody re-grade and FX first grade (data-evals, 13 Nov)
+
+Details: `evals-runs/2026-11-13-melody-fx.md`. Melody: Z7 and M-F3 now pass; Z3, M-F4, M-F5 still fail on real tracks. FX: timing, pitch, save/reload, layout pass.
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| MR-1 | major | Regression: the re-strike split makes the clean G7 stab loop "doubtful" (held pad rule) in 3 of 4 reads | owner question |
+| MR-2 | major | Mason's riff partials form 2–5-note "chords", so it never becomes Lead | owner question |
+| MR-3 | major | Z3 on the real separated part still 35–37 % (bar 70 %); the 7th found on 6 of 53 stabs | owner question |
+| FX-R1 | minor | Impact verdict flips on a borderline jump between reads | fixing |
+| FX-R2 | major | FX rows longer than ~4 bars can't be saved (parser wants 1/2/4-bar patterns) | fixing |
+| FX-R3 | minor | Lost 73–80: B about 1.0–1.1 dB quieter than A (gating vs a silent bar the riser fills) | fixing |
+| FX-R4 | polish | Drop note says "Shortened" when a block is split in two | fixing |

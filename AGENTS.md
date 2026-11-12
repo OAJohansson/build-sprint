@@ -165,14 +165,25 @@ conflicts with the clean-and-minimal principle (decision 0007), the principle wi
   - `story.md`: the interview story at wrap-up (STAR, headline, themes, assumptions vs reality,
     follow-ups); feeds the story bank page (`docs/interview-stories.md`).
 - After any change in `docs/`, run `pnpm sync` and commit it on your branch. To check how it
-  looks, `pnpm notebook --preview` (writes `.notebook/preview.html`; never publish that file).
+  looks, `pnpm notebook --preview` (writes `.notebook/preview.html`, which opens from disk, and the
+  split copy in `.notebook/preview/`, served by the `notebook-preview` launch config; never publish
+  either).
 - **After each merge to `main`** (merges are batched, about once or twice a day, to save deploys):
-  build from the merged commit (`git fetch origin && git switch --detach origin/main` in your
-  worktree), run `pnpm notebook`, then republish `.notebook/index.html` with the Artifact tool to
-  the existing private notebook, https://claude.ai/artifact/6WgAx5PMZYAzBqCg7zf25b (pass that
-  URL; never create a new one). `pnpm notebook` refuses unless the checkout is the latest `main`
-  with no uncommitted notes, and warns about notes on branches not merged yet: tell the owner
-  about any it lists.
+  republish the notebook, https://claude.ai/artifact/6WgAx5PMZYAzBqCg7zf25b (pass that URL; never
+  create a new one). It is a small page plus one data file per sub-page (decision 0030), so a
+  republish sends only what changed:
+  1. Build from the merged commit: `git fetch origin && git switch --detach origin/main` in your
+     worktree.
+  2. Read the live notebook (Artifact tool, `action: "read"` with that URL); the result names the
+     saved file holding the page.
+  3. `pnpm notebook --since <that file>`: builds `.notebook/` and lists the data files whose hash
+     differs from the live page's, also in `.notebook/publish.json`.
+  4. Read `.notebook/index.html` and each listed file, then publish with the Artifact tool:
+     `url` = the notebook, `file_path: ".notebook/index.html"`, `root: ".notebook"`, `files` = the
+     listed paths (as a map from each path to itself; a removed path maps to `null`). Files left
+     out stay on the artifact as they are.
+  `pnpm notebook` refuses unless the checkout is the latest `main` with no uncommitted notes, and
+  warns about notes on branches not merged yet: tell the owner about any it lists.
   - `kickoff.md`, `evals.md`, `decisions.md` (Streamlined and Founder): the kickoff pack, the
     agent-checkable evals and the decision log (L- and T-numbers), from `docs/operating-modes/`.
 - `docs/knowledge-bank.md` is the owner's general knowledge, separate from product-specific

@@ -185,3 +185,12 @@ Report: `user-testing/report-2026-11-12-drums.md`.
 | U9 | polish | Play button moves sideways as the header text changes | fixed (47281c0, ad2b749) |
 | U10 | polish | Greyed "Suggested" pill looks clickable | fixed (47281c0, ad2b749) |
 | U11 | polish | Lane label cut to "Claps & sn…"; each drop opens the drawer | fixed (47281c0, ad2b749) |
+
+## Drums re-check (user-tester, 12 Nov): M-S2 4, M-S4 4; U6–U11 fixed
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| N1 | major | Regression from U9: with a long title the Lab header no longer wraps; root 1,602 px wide, "Make" clipped, "Deck on" off screen | fixing |
+| N2 | minor | Clap row stays at 22–23/100 with every knob on its tick; only another preset reaches 36 | fixing |
+| N3 | minor | An off row still shows a score | fixing |
+| N4 | polish | Picking the already-chosen preset doesn't reset its knobs | fixing |

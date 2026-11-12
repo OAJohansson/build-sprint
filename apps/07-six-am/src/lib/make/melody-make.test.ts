@@ -124,6 +124,20 @@ describe("Suggest and the row's closeness (P6, Z6, L233)", () => {
   }, 30000);
 });
 
+describe("Studio drop on a default track (M-F1)", () => {
+  const mk = (preset: string) => ({ ...parseNewSound({ part: "other", preset, macros: {}, pattern: { bars: 1, notes: [{ step: 0, midi: 57, dur: 2, vel: 1 }] }, key: "A", scale: "minor", bpm: 124 })!, id: "0f8fad5b-d9cb-469f-a165-70867728950e", createdAt: "", updatedAt: "" }) as LibrarySound;
+  it("a lead or a pad dropped on the Chords lane gets its own lane and leaves the chords block alone", () => {
+    const chords = dropLibSound({ regions: [], muted: [false, false, false, false] } as unknown as Doc, mk("chords-stab"), 1, { laneId: "chords" })!;
+    expect(chords.laneId).toBe("chords");
+    const lead = dropLibSound(chords.doc, mk("lead-pluck"), 1, { laneId: "chords" })!;
+    expect(lanesOf(lead.doc).find((l) => l.id === lead.laneId)!.type).toBe("lead");
+    const pad = dropLibSound(lead.doc, mk("chords-pad"), 1, { laneId: "chords" })!;
+    expect(lanesOf(pad.doc).find((l) => l.id === pad.laneId)!.type).toBe("pads");
+    expect(pad.doc.regions.find((r) => r.id === chords.regionId)).toBeDefined();
+    expect(pad.doc.regions.filter((r) => r.start === 1)).toHaveLength(3);
+  });
+});
+
 describe("saving a melody row (P9)", () => {
   const notes = [{ step: 2, midi: 57, dur: 1, vel: 1 }, { step: 2, midi: 60, dur: 1, vel: 1 }, { step: 2, midi: 64, dur: 1, vel: 1 }, { step: 66, off: 0.1, midi: 53, dur: 1.5, vel: 0.8 }];
   const raw = (preset: string) => ({ part: "other", preset, macros: { space: 0.9 }, pattern: { bars: 8, notes }, key: "A", scale: "minor", bpm: 124, source: { title: "Lost in The Loop", url: "https://soundcloud.com/x/y" } });

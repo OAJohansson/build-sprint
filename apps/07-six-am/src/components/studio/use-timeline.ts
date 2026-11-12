@@ -14,8 +14,8 @@ import {
   toggleSolo as soloIn, withLanes, type FamilyId, type Lane, type LaneType,
 } from "@/lib/studio-lanes";
 import { dropLibSound, placeInLane } from "@/lib/studio-drop";
-import { dropLength, isDrumLoop, libLaneType, libLoopFrom, phraseStart } from "@/lib/make/lib-loop";
-import { isDrumSound, type LibrarySound } from "@/lib/make/library";
+import { dropLength, isDrumLoop, isMelodyLoop, libLaneType, libLoopFrom, phraseStart } from "@/lib/make/lib-loop";
+import { isDrumSound, isMelodySound, type LibrarySound } from "@/lib/make/library";
 import type { Sound } from "@/lib/synths/loop";
 import type { Scale } from "@/lib/synths/theory";
 import type { AudioEngine } from "./audio";
@@ -34,14 +34,14 @@ const THRESHOLD = 4;
 const HOLD_MS = 250; // press and hold a block this long and the bin appears
 
 /** U7: what a drum row's sounds are called in a sentence ("Claps and snares go on their own lane"). */
-const ROW_PLURAL: Partial<Record<LaneType, string>> = { kick: "Kicks", clap: "Claps and snares", hats: "Hats" };
+const ROW_PLURAL: Partial<Record<LaneType, string>> = { kick: "Kicks", clap: "Claps and snares", hats: "Hats", chords: "Chords", pads: "Pads", lead: "Leads" };
 
 /** An item's lane type, old lane and length in bars (a library sound's block fills a phrase). */
 export function itemInfo(item: CrateItem): { type: LaneType; track: number; bars: number; name: string; exact?: boolean } {
   if (item.kind === "loop") return { type: crateLaneType(item.loop), track: item.loop.track, bars: item.loop.bars, name: item.loop.name };
   const type = libLaneType(item.sound);
   // D-F4: a drum row from My sounds takes only its own lane type (Kick, Claps & snares, Hats).
-  return { type, track: legacyTrack(type), bars: item.sound.pattern.bars, name: item.sound.name, exact: isDrumSound(item.sound) };
+  return { type, track: legacyTrack(type), bars: item.sound.pattern.bars, name: item.sound.name, exact: isDrumSound(item.sound) || isMelodySound(item.sound) };
 }
 
 /** One open track. `initial` is the saved arrangement; Studio remounts this per track. `bpm` is the project tempo. */
@@ -207,7 +207,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
   const addSound = useCallback((x: Sound, bar: number) => {
     const lb = x.bars;
     registerSounds([x]);
-    const at = laneFor(soundLaneType(x), x.lane, soundTarget, x.source === "lib" && isDrumLoop(x));
+    const at = laneFor(soundLaneType(x), x.lane, soundTarget, x.source === "lib" && (isDrumLoop(x) || isMelodyLoop(x)));
     if (!at) return null;
     const start = Math.min(Math.max(1, Math.floor(bar)), Math.max(1, bars - lb + 1));
     const r: Region = { id: newId(), loopId: x.id, track: x.lane, lane: at.id, start, length: lb };
@@ -309,7 +309,8 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
     const lane = laneEl ? lanesOf(docRef.current).find((l) => l.id === laneEl.dataset.lane) : undefined;
     // U7 (user test 12 Nov): a drum row from My sounds over a drum lane of another type (a clap over
     // the Drums/Kick lane) gets a lane of its own type at once, instead of a silent dead drop.
-    const ownLane = !!info.exact && !!lane && !accepts(lane, info) && laneType(lane.type).family === laneType(info.type).family;
+    // M-F1: the same for a melody row over any lane that isn't its own (a lead over the Chords lane).
+    const ownLane = !!info.exact && !!lane && !accepts(lane, info);
     const isNew = !!el?.closest("[data-newlane]") || ownLane;
     if (!isNew && !(lane && accepts(lane, info))) return null;
     const ppb = ppbRef.current;

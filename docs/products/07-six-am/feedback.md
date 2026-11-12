@@ -148,12 +148,22 @@ Details: `evals-runs/2026-10-28-drums-slice.md`.
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| D-F1 | major | Kicks read 16–48 ms late on Mason Flint (timed at the low-band peak; the pitch sweep reaches 30–120 Hz late); Mine and saved kicks inherit it | fixed (f83b733), re-grade pending |
-| D-F2 | major | Offbeat open hats read as claps (strong 1–3 kHz passes the clap gates); 31–32 extra claps per loop | fixed (f83b733), re-grade pending |
-| D-F3 | major | Grid phase flips between reads (−49.6 vs +43.3 ms); saved rows land a 16th late | fixed (f83b733), re-grade pending |
-| D-F4 | major | Default Studio track: the one Drums lane takes the whole family, so a dropped clap replaced the kick block | fixed (f83b733), re-grade pending |
-| D-F5 | minor | A/B level within 1 dB on 40/45 (worst −2.37 LU); LUFS match clamped to within 0.9 dB of RMS | fixed (f83b733), re-grade pending |
-| D-F6 | minor | A noise build reads as 46 faint kicks, not marked doubtful | fixed (f83b733), re-grade pending |
-| D-F7 | minor | Kick Suggest moves an independent measure further away on 7 of 9 loops | fixed (f83b733), re-grade pending |
-| D-F8 | minor | Countdown says "5 s" about 1 s before ready | fixed (f83b733), re-grade pending |
-| D-P1 | minor | In Drums the preset, Suggest, A/B and score sit 126–138 px lower than in Bass; A/B and score below the fold at 1440×741 | fixed (f83b733), re-grade pending |
+| D-F1 | major | Kicks read 16–48 ms late on Mason Flint (timed at the low-band peak; the pitch sweep reaches 30–120 Hz late); Mine and saved kicks inherit it | fixed (f83b733), re-graded 12 Nov |
+| D-F2 | major | Offbeat open hats read as claps (strong 1–3 kHz passes the clap gates); 31–32 extra claps per loop | fixed (f83b733), re-graded 12 Nov |
+| D-F3 | major | Grid phase flips between reads (−49.6 vs +43.3 ms); saved rows land a 16th late | fixed (f83b733), re-graded 12 Nov |
+| D-F4 | major | Default Studio track: the one Drums lane takes the whole family, so a dropped clap replaced the kick block | fixed (f83b733), re-graded 12 Nov |
+| D-F5 | minor | A/B level within 1 dB on 40/45 (worst −2.37 LU); LUFS match clamped to within 0.9 dB of RMS | fixed (f83b733), re-graded 12 Nov |
+| D-F6 | minor | A noise build reads as 46 faint kicks, not marked doubtful | fixed (f83b733), re-graded 12 Nov |
+| D-F7 | minor | Kick Suggest moves an independent measure further away on 7 of 9 loops | fixed (f83b733), re-graded 12 Nov |
+| D-F8 | minor | Countdown says "5 s" about 1 s before ready | fixed (f83b733), re-graded 12 Nov |
+| D-P1 | minor | In Drums the preset, Suggest, A/B and score sit 126–138 px lower than in Bass; A/B and score below the fold at 1440×741 | fixed (f83b733), re-graded 12 Nov |
+
+## Drums re-grade (data-evals, 12 Nov): Z1, Z2, Z5–Z9 pass
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| D-R1 | minor | Flammed claps (first burst 10–13 ms before the kick) timed 8–13 ms late; Lost 21–28 alone 85 % found, 81 % labels | fixing |
+| D-R2 | minor | At 1440×741 in Drums, the A/B and score are ~15 px under the sticky save bar | fixing |
+| D-R3 | — | 16-bar loops can't be live in 35 s (L232: bar is ≤ 8 bars; honest countdown for longer) | decided |
+| D-R4 | minor | First countdown figure 1.8–4.6 s too high | fixing |
+| D-R5 | minor | 6–7 Mason pickup/filtered kicks per loop missed, 2 read as hats on step 15 | backlog |

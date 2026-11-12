@@ -9,7 +9,7 @@ import {
   loopById, moveStart, newId, registerSounds, snapBar, snapLength,
 } from "@/lib/timeline";
 import {
-  accepts, addLane as addLaneTo, crateLaneType, laneMix, laneOfRegion, lanesOf, legacyTrack, moveLane as moveLaneIn,
+  accepts, addLane as addLaneTo, crateLaneType, laneType, laneMix, laneOfRegion, lanesOf, legacyTrack, moveLane as moveLaneIn,
   removeLane as removeLaneFrom, renameLane as renameLaneIn, setPan, setVolume, soundLaneType, toggleMute as muteIn,
   toggleSolo as soloIn, withLanes, type FamilyId, type Lane, type LaneType,
 } from "@/lib/studio-lanes";
@@ -32,6 +32,9 @@ type Drag =
 
 const THRESHOLD = 4;
 const HOLD_MS = 250; // press and hold a block this long and the bin appears
+
+/** U7: what a drum row's sounds are called in a sentence ("Claps and snares go on their own lane"). */
+const ROW_PLURAL: Partial<Record<LaneType, string>> = { kick: "Kicks", clap: "Claps and snares", hats: "Hats" };
 
 /** An item's lane type, old lane and length in bars (a library sound's block fills a phrase). */
 export function itemInfo(item: CrateItem): { type: LaneType; track: number; bars: number; name: string; exact?: boolean } {
@@ -89,6 +92,9 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
   const lastMerge = useRef<string | null>(null);
   // The remove-lane note (S5-2) belongs to one doc: any other edit or undo hides it.
   const [toastFor, setToastFor] = useState<{ text: string; doc: Doc } | null>(null);
+  /** U7: a short note without Undo (a drop that couldn't land). */
+  const [dropNote, setDropNote] = useState<string | null>(null);
+  useEffect(() => { if (!dropNote) return; const h = setTimeout(() => setDropNote(null), 6000); return () => clearTimeout(h); }, [dropNote]);
   const commit = useCallback((next: Doc, merge?: string) => {
     setToastFor(null);
     const prev = docRef.current;
@@ -220,10 +226,19 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
   /** Drop a crate item on a lane (or a new lane) at a bar. A library sound lands at the phrase. */
   const dropItem = useCallback((item: CrateItem, target: { lane: string | "new"; bar: number }) => {
     if (item.kind === "lib") {
-      const r = dropLibSound(docRef.current, item.sound, target.bar, target.lane === "new" ? { newLane: true } : { laneId: target.lane });
-      if (!r) return;
+      // A drum row lands on the first lane of its own type when there is one, else a new one.
+      const info = itemInfo(item);
+      const before = lanesOf(docRef.current).length;
+      const r = dropLibSound(docRef.current, item.sound, target.bar, target.lane === "new" ? (info.exact ? {} : { newLane: true }) : { laneId: target.lane });
+      if (!r) {
+        // U7: never a silent dead drop.
+        if (info.exact) setDropNote(`${ROW_PLURAL[info.type] ?? laneType(info.type).name} go on their own lane, and this track has no room for another lane.`);
+        return;
+      }
       commit(r.doc);
-      setSelected(r.regionId);
+      const lane = lanesOf(r.doc).find((l) => l.id === r.laneId);
+      if (info.exact && lane && lanesOf(r.doc).length > before) setToastFor({ text: `${ROW_PLURAL[info.type] ?? laneType(info.type).name} go on their own lane: added "${lane.name}".`, doc: r.doc });
+      // U11: a drop from My sounds keeps the list open (no drawer); the block is still there to click.
       return;
     }
     const info = itemInfo(item);
@@ -291,8 +306,11 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
     const info = itemInfo(item);
     const el = (document.elementFromPoint(ev.clientX, ev.clientY) as HTMLElement | null);
     const laneEl = el?.closest<HTMLElement>("[data-lane]");
-    const isNew = !!el?.closest("[data-newlane]");
     const lane = laneEl ? lanesOf(docRef.current).find((l) => l.id === laneEl.dataset.lane) : undefined;
+    // U7 (user test 12 Nov): a drum row from My sounds over a drum lane of another type (a clap over
+    // the Drums/Kick lane) gets a lane of its own type at once, instead of a silent dead drop.
+    const ownLane = !!info.exact && !!lane && !accepts(lane, info) && laneType(lane.type).family === laneType(info.type).family;
+    const isNew = !!el?.closest("[data-newlane]") || ownLane;
     if (!isNew && !(lane && accepts(lane, info))) return null;
     const ppb = ppbRef.current;
     if (item.kind === "lib") {
@@ -457,7 +475,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
     preview, setPreview, group, setGroup, ghost, bin, pxPerBar, lanesRef,
     lanes, silent, laneOf, toggleMute, toggleSolo, setLaneVolume, setLanePan, renameLane, moveLane, removeLane, addLane,
     soundTarget, setSoundTarget,
-    canUndo: past.length > 0, undo, remove, toast, undoToast,
+    canUndo: past.length > 0, undo, remove, toast, undoToast, dropNote,
     crateItem, blockBody, blockGrip, ruler,
   };
 }

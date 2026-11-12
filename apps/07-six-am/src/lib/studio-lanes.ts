@@ -162,11 +162,23 @@ export const sortLanes = (lanes: Lane[]) => lanes.map((l, i) => ({ l, i })).sort
 
 const newLaneId = () => `l${Math.random().toString(36).slice(2, 8)}${Date.now().toString(36).slice(-4)}`;
 
+/** Default names for new lanes whose type name is too long for the lane header. */
+const LANE_SHORT: Partial<Record<LaneType, string>> = { clap: "Claps" };
+
+/** U11: what a lane header shows: a lane still on its type's long default name ("Claps & snares",
+ *  "Claps & snares 2", saved before the short name) shows the short one; a name the owner gave stays. */
+export function laneLabel(l: Pick<Lane, "type" | "name">): string {
+  const short = LANE_SHORT[l.type], long = laneType(l.type).name;
+  return short && (l.name === long || l.name.startsWith(`${long} `)) ? short + l.name.slice(long.length) : l.name;
+}
+
 /** A new lane of `type` at the end of its family, named after its type ("Hats", then "Hats 2").
  *  Unchanged lanes (and no new id) when the track already has MAX_LANES. */
 export function addLane(lanes: Lane[], type: LaneType, id = newLaneId()): { lanes: Lane[]; id: string | null } {
   if (lanes.length >= MAX_LANES || lanes.some((l) => l.id === id)) return { lanes, id: null };
-  const base = laneType(type).name;
+  // U11 (user test 12 Nov): a new lane's name fits its header ("Claps & snares" was cut to "Claps & sn…");
+  // the type keeps its full name in menus and the crate.
+  const base = LANE_SHORT[type] ?? laneType(type).name;
   const names = new Set(lanes.map((l) => l.name));
   let name = base;
   for (let n = 2; names.has(name); n++) name = `${base} ${n}`;

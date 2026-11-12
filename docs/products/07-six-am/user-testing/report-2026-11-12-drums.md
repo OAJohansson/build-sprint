@@ -11,3 +11,13 @@ Setup: sandbox dev server :3017 (ACCESS_CODE=test-code, in-memory), own Chrome p
 - Rows: kick 51, clap 28, hats 74 hits, gold marks; bars 17–19 empty kick (probably the track). Picking a row: preset, knobs, mentor line and Save label change; nothing moves (all y identical, 07, 08).
 - "Suggested" pill is greyed and disabled after ticks auto-placed; looks like a button that does nothing.
 Shots: 01–08.
+
+## M-S2 Get my kick close to the original: struggle
+- Kick: preset menu clear (4 presets with two-word tags, 09). Round 808 → closeness 81 → 47 and the Mentor says "Decay down, Tune up to A#1" (10). Score reacts to the kick: Tune off-tick 81→70; Decay drag 47→52.
+- But the word under a knob often doesn't change when it moves (Decay "1/2" before and after; tick also reads "1/2" while the Mentor says "Decay down"), so I can't see I moved toward the tick (12).
+- Clap and hats barely move the one score: clap knobs on the ticks 74, clap knobs at the opposite ends 73; hats tone + length toward ticks 79→80→80 (16, 17, 18). Following the Mentor's clap hint changes nothing I can see.
+- Clap on ticks: Mentor flips to "You're on the gold ticks" (good, clear).
+- A/B: A/B toggle and "Bass under both" work; the parts are silenced (`quiet=1`), so judged by eye only.
+- Name: kick name stays "Deep kick" after switching to Round 808 (10); hats name follows the Length knob ("Closed hats") but its tags still say "open · 909" (19).
+- 1440 × 741: A/B 625–664, save bar at 677: all visible (19). R2 fixed.
+Shots: 09–19.

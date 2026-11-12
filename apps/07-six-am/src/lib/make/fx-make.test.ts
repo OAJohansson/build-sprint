@@ -102,6 +102,12 @@ describe("A/B (P7)", () => {
 
 describe("saving an FX row (P9)", () => {
   const raw = (preset: string, macros = {}) => ({ part: "other", preset, macros, pattern: { bars: 2, notes: [{ step: 0, midi: 33, dur: 32, vel: 1 }] }, key: "A", scale: "minor", bpm: 124, source: { title: "Lost in The Loop", url: "https://soundcloud.com/x/y" } });
+  it("saves a long row on an 8-bar pass (FX-R2: a 4.6-bar Reverse crash)", () => {
+    const s = parseNewSound({ ...raw("fx-riser-revcrash", { rise: 0.8 }), pattern: { bars: 8, notes: [{ step: 0, midi: 33, dur: 128, vel: 1 }] } });
+    expect(s?.pattern.bars).toBe(8);
+    const back = parseLibLoop(JSON.parse(JSON.stringify(libLoopFrom({ ...s!, id: "x", createdAt: "", updatedAt: "" } as LibrarySound))));
+    expect(back?.bars).toBe(8);
+  });
   it("names it preset first and tags it as the shot does", () => {
     const s = parseNewSound(raw("fx-riser-noise"))!;
     expect(s.name).toBe("Bright noise riser, from Lost in The Loop");

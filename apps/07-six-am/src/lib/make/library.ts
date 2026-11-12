@@ -116,7 +116,8 @@ export function parseNotes(v: unknown, bars: number, max = MAX_NOTES): MakeNote[
   const out: MakeNote[] = [];
   for (const x of v) {
     const o = (x ?? {}) as Record<string, unknown>;
-    const step = num(o.step, 0, bars * 16 - 1), midi = num(o.midi, 12, 96), dur = num(o.dur, 0.25, 64), vel = num(o.vel, 0, 1);
+    // FX-R2: a note may last its whole pass (an FX event on an 8-bar pass is 128 16ths); 64 as before up to 4 bars.
+    const step = num(o.step, 0, bars * 16 - 1), midi = num(o.midi, 12, 96), dur = num(o.dur, 0.25, Math.max(64, bars * 16)), vel = num(o.vel, 0, 1);
     if (step === null || midi === null || dur === null || vel === null || !Number.isInteger(step) || !Number.isInteger(midi)) return null;
     // Phase 5: a drum hit's swing offset (16ths); bass notes never have one, so they parse as before.
     const off = num(o.off, -0.5, 0.5);

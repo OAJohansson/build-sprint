@@ -23,7 +23,11 @@ it("real-loop fixture and bench", () => {
     const union = Object.values(s.perRow).reduce((a, v) => a + v.right, 0) / Math.max(1e-9, s.labelAgree);
     pool.te += s.truthEvents; pool.on += s.onTime; pool.fe += s.foundEvents; pool.agree += Object.values(s.perRow).reduce((a, v) => a + v.right, 0); pool.union += union;
     const kickSteps = [...new Set(r.rows.kick.map((h) => h.step % 4))].sort();
-    out.push({ loop: spec.name, seed, found: pct(s.recall), extra: pct(s.extra), labels: pct(s.labelAgree), kickMedianMs: kerr.length ? Math.round(kerr[Math.floor(kerr.length / 2)]) : null, gridMs: r.gridMs, kickStepsMod4: kickSteps.join(","), claps: r.rows.clap.length, perRow: Object.fromEntries(Object.entries(s.perRow).map(([k, v]) => [k, `${v.right}/${v.truth} right, ${v.found} read`])) });
+    // D-R1: each clap against its first burst (ms), the worst one and how many sit > 10 ms off.
+    const ct = truth.filter((h) => h.row === "clap").map((h) => h.t);
+    const cerr = r.hits.filter((h) => h.row === "clap").map((h) => ct.reduce((a, t) => (Math.abs(h.t - t) < Math.abs(a) ? h.t - t : a), Infinity) * 1000).filter((d) => Math.abs(d) < 60);
+    const clapOff = cerr.filter((d) => Math.abs(d) > 10).length, clapWorst = cerr.length ? Math.round(Math.max(...cerr.map(Math.abs)) * 10) / 10 : null;
+    out.push({ loop: spec.name, seed, found: pct(s.recall), extra: pct(s.extra), labels: pct(s.labelAgree), kickMedianMs: kerr.length ? Math.round(kerr[Math.floor(kerr.length / 2)]) : null, gridMs: r.gridMs, clapOff, clapWorst, kickStepsMod4: kickSteps.join(","), claps: r.rows.clap.length, perRow: Object.fromEntries(Object.entries(s.perRow).map(([k, v]) => [k, `${v.right}/${v.truth} right, ${v.found} read`])) });
   }
   out.push({ loop: "POOLED real fixture", found: pct(pool.on / pool.te), extra: pct((pool.fe - pool.on) / pool.te), labels: pct(pool.agree / pool.union) });
   const b = renderNoiseBuild(1);

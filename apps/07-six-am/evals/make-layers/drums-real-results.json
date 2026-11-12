@@ -7,6 +7,8 @@
     "labels": 94.3,
     "kickMedianMs": 0,
     "gridMs": 21.8,
+    "clapOff": 1,
+    "clapWorst": 26.5,
     "kickStepsMod4": "0,2,3",
     "claps": 16,
     "perRow": {
@@ -19,15 +21,17 @@
     "loop": "Mason 17–24",
     "seed": 2,
     "found": 98.5,
-    "extra": 1.5,
-    "labels": 95.5,
+    "extra": 2.9,
+    "labels": 94.3,
     "kickMedianMs": 0,
     "gridMs": 21.8,
+    "clapOff": 2,
+    "clapWorst": 24.1,
     "kickStepsMod4": "0,2,3",
     "claps": 16,
     "perRow": {
       "kick": "36/37 right, 37 read",
-      "clap": "16/16 right, 16 read",
+      "clap": "15/16 right, 16 read",
       "hats": "32/32 right, 36 read"
     }
   },
@@ -39,6 +43,8 @@
     "labels": 97.6,
     "kickMedianMs": -1,
     "gridMs": 68.9,
+    "clapOff": 2,
+    "clapWorst": 27.6,
     "kickStepsMod4": "0,2,3",
     "claps": 16,
     "perRow": {
@@ -55,6 +61,8 @@
     "labels": 97.6,
     "kickMedianMs": -1,
     "gridMs": 69.1,
+    "clapOff": 0,
+    "clapWorst": 4.3,
     "kickStepsMod4": "0,2,3",
     "claps": 15,
     "perRow": {
@@ -67,15 +75,17 @@
     "loop": "Lost 21–28",
     "seed": 1,
     "found": 100,
-    "extra": 1.6,
-    "labels": 97.5,
+    "extra": 0,
+    "labels": 98.8,
     "kickMedianMs": 0,
     "gridMs": 171.8,
+    "clapOff": 0,
+    "clapWorst": 4.2,
     "kickStepsMod4": "0",
     "claps": 15,
     "perRow": {
       "kick": "32/32 right, 32 read",
-      "clap": "14/16 right, 15 read",
+      "clap": "15/16 right, 15 read",
       "hats": "32/32 right, 32 read"
     }
   },
@@ -87,6 +97,8 @@
     "labels": 97.6,
     "kickMedianMs": 0,
     "gridMs": 172,
+    "clapOff": 0,
+    "clapWorst": 4.6,
     "kickStepsMod4": "0",
     "claps": 16,
     "perRow": {
@@ -100,14 +112,16 @@
     "seed": 1,
     "found": 100,
     "extra": 0,
-    "labels": 99,
+    "labels": 100,
     "kickMedianMs": 0,
     "gridMs": 188.5,
+    "clapOff": 0,
+    "clapWorst": 4.5,
     "kickStepsMod4": "0",
-    "claps": 15,
+    "claps": 16,
     "perRow": {
       "kick": "32/32 right, 32 read",
-      "clap": "15/16 right, 15 read",
+      "clap": "16/16 right, 16 read",
       "hats": "48/48 right, 48 read"
     }
   },
@@ -119,6 +133,8 @@
     "labels": 100,
     "kickMedianMs": 0,
     "gridMs": 188.3,
+    "clapOff": 0,
+    "clapWorst": 4.3,
     "kickStepsMod4": "0",
     "claps": 16,
     "perRow": {
@@ -131,7 +147,7 @@
     "loop": "POOLED real fixture",
     "found": 98.4,
     "extra": 2.1,
-    "labels": 97.4
+    "labels": 97.6
   },
   {
     "loop": "Mason 57–64 build",
@@ -144,13 +160,13 @@
   {
     "loop": "POOLED spike bench (clean, −20, −15 dB), reader",
     "found": 99.1,
-    "extra": 2.4,
+    "extra": 2.5,
     "labels": 94.6
   },
   {
     "loop": "POOLED spike bench (clean, −20, −15 dB), as Mine plays",
     "found": 99.1,
-    "extra": 1.1,
+    "extra": 1.3,
     "labels": 95
   }
 ]

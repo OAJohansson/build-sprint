@@ -34,6 +34,15 @@ export const REAL_LABELLED: (DrumSpec & { readerGridMs: number })[] = [
     bars: bars8(() => ({ kick: [0, 4, 8, 12], clap: [0, 8], hats: [2, 6, 10, 14, [3, 0.5, 0.26], [11, 0.5, 0.26]] })) },
 ];
 
+/**
+ * D-R1 (re-grade 12 Nov): on the real Lost 21–28 the clap is flammed, its first 1–3 kHz burst 10–13 ms
+ * before the kick, and the reader timed it 8–13 ms late. This guard plays that shape (the clap −0.1 of a
+ * 16th, ≈ 12 ms, before its kick) and checks claps are timed at their first burst. The bench's sounds
+ * do NOT reproduce the real lateness (synthetic flams read on time before the fix too), so this is a
+ * guard, not a reproduction; the real check is data-evals' re-grade on the track.
+ */
+export const LOST_FLAM: DrumSpec = { ...REAL_LABELLED[2], name: "Lost 21–28, flammed clap", bars: bars8(() => ({ kick: [0, 4, 8, 12], clap: [[0, 1, -0.1], [8, 1, -0.1]], hats: [2, 6, 10, 14] })) };
+
 /** A labelled loop rendered, with the bass bled in at −20 dB as the Lab's separation leaves it. */
 export function renderLabelled(spec: DrumSpec, seed = 1, rate = 44100) {
   const { mono, truth } = renderDrums(spec, { bars: 8, rate, seed });

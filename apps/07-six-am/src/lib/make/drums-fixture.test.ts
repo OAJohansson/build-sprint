@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { dropLibSound } from "@/lib/studio-drop";
 import { lanesOf } from "@/lib/studio-lanes";
 import type { Doc } from "@/lib/timeline";
-import { REAL_LABELLED, renderLabelled, renderNoiseBuild } from "./drums-fixture";
+import { LOST_FLAM, REAL_LABELLED, renderLabelled, renderNoiseBuild } from "./drums-fixture";
 import { DRUM_PRESETS, DRUM_ROWS, ROW_PRESETS } from "./drum-synth";
 import { drumsFromReading, measureRows } from "./drums-make";
 import { readDrums } from "./drums-read";
@@ -40,6 +40,16 @@ describe("the real-loop fixture (Z1, Z2)", () => {
       expect(Math.abs(grids[0] - grids[1]), "the same grid on two reads").toBeLessThanOrEqual(3);
     });
   }
+
+  it("a flammed clap is timed at its first burst, not at the kick (D-R1)", () => {
+    let n = 0, onTime = 0;
+    for (const seed of [1, 2, 3]) {
+      const { mono, truth } = renderLabelled(LOST_FLAM, seed);
+      const claps = readDrums(mono, mono, RATE, LOST_FLAM.bpm, 0).hits.filter((h) => h.row === "clap");
+      for (const t of truth.filter((h) => h.row === "clap").map((h) => h.t)) { n++; if (claps.some((c) => Math.abs(c.t - t) <= 0.01)) onTime++; }
+    }
+    expect(onTime / n).toBeGreaterThanOrEqual(0.9);
+  });
 
   it("a noise build's patternless kicks are doubtful, off in Mine (D-F6)", () => {
     const b = renderNoiseBuild(1);

@@ -50,7 +50,11 @@ function prior(row: DrumRow | "rest" | "flat"): Float64Array {
 // D-F1 (drums-slice evals): a kick is timed from its attack at 130–500 Hz. Its pitch sweep starts up
 // there; the 30–180 Hz band only peaks 15–50 ms later on a kick that falls slowly (Mason Flint's).
 // The low band still finds and labels kicks (the NMF templates); it no longer times them.
-const ROW_BANDS: [number, number][] = [[130, 500], [700, 5600], [5600, 16000]];
+// D-R1 (re-grade 12 Nov): a clap is timed from its body at 1–2.8 kHz; at 700–5600 Hz a kick's click on
+// the same beat made the steepest rise, so a flammed clap (first burst 10–13 ms early) read late.
+const ROW_BANDS: [number, number][] = [[130, 500], [1000, 2800], [5600, 16000]];
+/** The earliest local rise at least this share of the steepest one is the attack (a clap's first burst is soft). */
+const FIRST = [0.35, 0.2, 0.35];
 /** How far before the activation's rise a row's attack may sit (frames): a kick's activation can rise 50 ms late. */
 const BACK = [20, 8, 8];
 /** The window a hit's size is read over after its attack (s): a slow kick's body peaks late. */
@@ -199,7 +203,7 @@ export function readDrums(left: Float32Array, right: Float32Array | undefined, r
       const r = (j: number) => (E(j - 1) - E(j - 1 - LAG) + E(j) - E(j - LAG) + E(j + 1) - E(j + 1 - LAG)) / 3;
       let br = 0, bf = f;
       for (let j = lo; j <= hi; j++) if (r(j) > br) { br = r(j); bf = j; }
-      for (let j = Math.max(0, bf - 12); j < bf; j++) if (r(j) >= 0.35 * br && r(j) >= r(j - 1) && r(j) >= r(j + 1)) { bf = j; break; }
+      for (let j = Math.max(0, bf - 12); j < bf; j++) if (r(j) >= FIRST[k] * br && r(j) >= r(j - 1) && r(j) >= r(j + 1)) { bf = j; break; }
       // The hit's size: the row's activation over 30 ms; its jump: against the quietest point of
       // the 40 ms before (a click, a flicker or a ringing tail jumps little).
       const c0 = Math.round(bf / S);

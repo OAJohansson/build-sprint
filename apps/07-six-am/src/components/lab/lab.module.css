@@ -369,3 +369,18 @@
   .drKnobs { gap: 48px; margin: 4px 0 6px; }
   .drSuggest, .drWait { min-height: 30px; }
 }
+
+/* D-R2 (re-grade 12 Nov): the Mentor line and Suggest keep one height (two lines) whether waiting or
+   ready, and A/B with the score stays in view at the foot of the drums column (sticky), so it never
+   sits under the save bar on a short window. Drums only; the Bass room is untouched. */
+.drSuggest, .drWait { height: 42px; min-height: 0; }
+.drSuggest .suggest { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.drCheck { position: sticky; bottom: -24px; z-index: 3; background: var(--bg); padding-bottom: 24px; margin-bottom: -24px; }
+@media (max-height: 760px) {
+  .drRow { height: 40px; }
+  .drRow[data-head] { height: 16px; }
+  .drName { height: 34px; }
+  .drTrack, .drPattern { height: 26px; }
+  .drPresetName { font-size: 24px !important; }
+  .drKnobs { gap: 40px; margin: 2px 0 4px; }
+}

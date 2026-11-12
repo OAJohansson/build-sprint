@@ -530,12 +530,18 @@ export class LabTransport {
     };
   }
 
+  /** D-R4: how far the separated parts arrive ahead of what you hear (s), as last seen while filling. */
+  private fillLeadS: number | null = null;
+
   private fillEta(l: Loop): number | null {
     if (l.state !== "filling" || !l.buf || !this.playingS) return null;
     const rate = this.live?.rate ?? 44100;
+    const posS = (this.heardMs() - l.startMs) / 1000, filledS = (l.buf.progress * l.buf.total) / rate;
+    // Filling past the playhead, out of a catch-up: the gap is the lead the next first figure uses.
+    if (!this.gate && posS > 0 && filledS > posS + 0.2 && filledS < (l.endMs - l.startMs) / 1000 - 0.2) this.fillLeadS = Math.min(10, filledS - posS);
     return loopFillEtaS({
-      loopS: (l.endMs - l.startMs) / 1000, posS: (this.heardMs() - l.startMs) / 1000, filledS: (l.buf.progress * l.buf.total) / rate,
-      catchLeftS: this.gate ? this.catchLeftS ?? 1 : null, catchS: CATCH_S,
+      loopS: (l.endMs - l.startMs) / 1000, posS, filledS,
+      catchLeftS: this.gate ? this.catchLeftS ?? 1 : null, catchS: CATCH_S, leadS: this.fillLeadS ?? undefined,
     });
   }
 

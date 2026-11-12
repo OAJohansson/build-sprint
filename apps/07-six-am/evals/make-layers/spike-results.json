@@ -3,10 +3,10 @@
   {
    "loop": "four-floor, offbeat open hats",
    "bleed": null,
-   "ms": 222,
+   "ms": 217,
    "found": 100,
    "extra": 1.6,
-   "medianMs": 1.1,
+   "medianMs": 1,
    "p95Ms": 3.2,
    "labels": 100,
    "steps": 98.8,
@@ -20,31 +20,31 @@
   {
    "loop": "four-floor, 16th hats",
    "bleed": null,
-   "ms": 262,
+   "ms": 256,
    "found": 100,
-   "extra": 0,
+   "extra": 0.8,
    "medianMs": 1.8,
    "p95Ms": 3.5,
-   "labels": 93.8,
+   "labels": 93.2,
    "steps": 93.8,
-   "swingMs": 0.3,
+   "swingMs": 0.2,
    "perRow": {
     "kick": "32/32 right, 32 read",
-    "clap": "16/16 right, 16 read",
+    "clap": "15/16 right, 16 read",
     "hats": "117/128 right, 117 read"
    }
   },
   {
    "loop": "swung 16ths (+25 ms)",
    "bleed": null,
-   "ms": 305,
+   "ms": 270,
    "found": 100,
    "extra": 0,
    "medianMs": 1.9,
    "p95Ms": 3.8,
    "labels": 100,
    "steps": 100,
-   "swingMs": 25.2,
+   "swingMs": 25.1,
    "perRow": {
     "kick": "32/32 right, 32 read",
     "clap": "16/16 right, 16 read",
@@ -54,7 +54,7 @@
   {
    "loop": "broken beat, ghost snares",
    "bleed": null,
-   "ms": 262,
+   "ms": 237,
    "found": 96.4,
    "extra": 3.6,
    "medianMs": 1.9,
@@ -71,14 +71,14 @@
   {
    "loop": "garage 2-step, swung",
    "bleed": null,
-   "ms": 212,
+   "ms": 221,
    "found": 97.5,
    "extra": 2.5,
    "medianMs": 2.2,
    "p95Ms": 4.9,
    "labels": 86.9,
    "steps": 86.1,
-   "swingMs": 17.8,
+   "swingMs": 17.1,
    "perRow": {
     "kick": "24/24 right, 24 read",
     "clap": "15/16 right, 16 read",
@@ -88,7 +88,7 @@
   {
    "loop": "hats only (breakdown)",
    "bleed": null,
-   "ms": 264,
+   "ms": 256,
    "found": 100,
    "extra": 0.8,
    "medianMs": 1.6,
@@ -105,10 +105,10 @@
   {
    "loop": "four-floor, offbeat open hats",
    "bleed": -25,
-   "ms": 278,
+   "ms": 275,
    "found": 100,
    "extra": 1.6,
-   "medianMs": 1.4,
+   "medianMs": 1.2,
    "p95Ms": 4.9,
    "labels": 88.8,
    "steps": 87.8,
@@ -122,24 +122,24 @@
   {
    "loop": "four-floor, 16th hats",
    "bleed": -25,
-   "ms": 280,
+   "ms": 289,
    "found": 100,
-   "extra": 0.8,
+   "extra": 1.6,
    "medianMs": 1.9,
    "p95Ms": 3.5,
-   "labels": 99.4,
-   "steps": 100,
+   "labels": 98.3,
+   "steps": 99.4,
    "swingMs": 0.1,
    "perRow": {
     "kick": "32/32 right, 32 read",
-    "clap": "15/16 right, 16 read",
+    "clap": "13/16 right, 15 read",
     "hats": "128/128 right, 128 read"
    }
   },
   {
    "loop": "swung 16ths (+25 ms)",
    "bleed": -25,
-   "ms": 227,
+   "ms": 219,
    "found": 99.2,
    "extra": 0.8,
    "medianMs": 2,
@@ -156,7 +156,7 @@
   {
    "loop": "broken beat, ghost snares",
    "bleed": -25,
-   "ms": 212,
+   "ms": 209,
    "found": 97.6,
    "extra": 2.4,
    "medianMs": 2,
@@ -173,14 +173,14 @@
   {
    "loop": "garage 2-step, swung",
    "bleed": -25,
-   "ms": 206,
+   "ms": 207,
    "found": 96.3,
    "extra": 5,
-   "medianMs": 2.2,
+   "medianMs": 2.1,
    "p95Ms": 4.9,
    "labels": 88.5,
    "steps": 84.5,
-   "swingMs": 17.1,
+   "swingMs": 17,
    "perRow": {
     "kick": "22/24 right, 24 read",
     "clap": "15/16 right, 15 read",
@@ -190,7 +190,7 @@
   {
    "loop": "hats only (breakdown)",
    "bleed": -25,
-   "ms": 256,
+   "ms": 246,
    "found": 100,
    "extra": 0,
    "medianMs": 1.6,
@@ -207,10 +207,10 @@
   {
    "loop": "four-floor, offbeat open hats",
    "bleed": -20,
-   "ms": 268,
+   "ms": 265,
    "found": 96.8,
    "extra": 6.3,
-   "medianMs": 1.3,
+   "medianMs": 1.1,
    "p95Ms": 4.2,
    "labels": 89.5,
    "steps": 85.9,
@@ -224,7 +224,7 @@
   {
    "loop": "four-floor, 16th hats",
    "bleed": -20,
-   "ms": 272,
+   "ms": 267,
    "found": 100,
    "extra": 0,
    "medianMs": 1.6,
@@ -241,14 +241,14 @@
   {
    "loop": "swung 16ths (+25 ms)",
    "bleed": -20,
-   "ms": 270,
+   "ms": 235,
    "found": 99.2,
    "extra": 0.8,
    "medianMs": 2,
    "p95Ms": 3.9,
    "labels": 100,
    "steps": 100,
-   "swingMs": 25,
+   "swingMs": 24.9,
    "perRow": {
     "kick": "32/32 right, 32 read",
     "clap": "16/16 right, 16 read",
@@ -258,10 +258,10 @@
   {
    "loop": "broken beat, ghost snares",
    "bleed": -20,
-   "ms": 281,
+   "ms": 220,
    "found": 98.8,
    "extra": 1.2,
-   "medianMs": 2,
+   "medianMs": 2.1,
    "p95Ms": 4.7,
    "labels": 88.1,
    "steps": 86,
@@ -275,14 +275,14 @@
   {
    "loop": "garage 2-step, swung",
    "bleed": -20,
-   "ms": 224,
+   "ms": 207,
    "found": 98.8,
    "extra": 0,
-   "medianMs": 2.1,
+   "medianMs": 1.9,
    "p95Ms": 4.9,
    "labels": 90.6,
    "steps": 89.7,
-   "swingMs": 17.8,
+   "swingMs": 17.1,
    "perRow": {
     "kick": "24/24 right, 24 read",
     "clap": "15/16 right, 15 read",
@@ -292,7 +292,7 @@
   {
    "loop": "hats only (breakdown)",
    "bleed": -20,
-   "ms": 265,
+   "ms": 260,
    "found": 100,
    "extra": 0,
    "medianMs": 1.6,
@@ -309,17 +309,17 @@
   {
    "loop": "four-floor, offbeat open hats",
    "bleed": -15,
-   "ms": 284,
+   "ms": 264,
    "found": 100,
-   "extra": 3.2,
-   "medianMs": 1.1,
-   "p95Ms": 3.1,
-   "labels": 98.7,
+   "extra": 4.8,
+   "medianMs": 1,
+   "p95Ms": 3,
+   "labels": 97.5,
    "steps": 98.8,
    "swingMs": 0,
    "perRow": {
     "kick": "31/31 right, 32 read",
-    "clap": "15/16 right, 16 read",
+    "clap": "14/16 right, 16 read",
     "hats": "32/32 right, 32 read"
    }
   },
@@ -328,22 +328,22 @@
    "bleed": -15,
    "ms": 247,
    "found": 100,
-   "extra": 0.8,
+   "extra": 0,
    "medianMs": 1.9,
    "p95Ms": 3.5,
-   "labels": 99.4,
+   "labels": 100,
    "steps": 100,
    "swingMs": 0.1,
    "perRow": {
     "kick": "32/32 right, 32 read",
-    "clap": "15/16 right, 16 read",
+    "clap": "16/16 right, 16 read",
     "hats": "128/128 right, 128 read"
    }
   },
   {
    "loop": "swung 16ths (+25 ms)",
    "bleed": -15,
-   "ms": 216,
+   "ms": 213,
    "found": 99.2,
    "extra": 0.8,
    "medianMs": 2,
@@ -360,10 +360,10 @@
   {
    "loop": "broken beat, ghost snares",
    "bleed": -15,
-   "ms": 204,
+   "ms": 203,
    "found": 98.8,
    "extra": 1.2,
-   "medianMs": 1.8,
+   "medianMs": 2,
    "p95Ms": 4.6,
    "labels": 87.2,
    "steps": 85,
@@ -377,24 +377,24 @@
   {
    "loop": "garage 2-step, swung",
    "bleed": -15,
-   "ms": 210,
+   "ms": 202,
    "found": 95,
-   "extra": 3.8,
+   "extra": 5,
    "medianMs": 1.8,
-   "p95Ms": 4.1,
+   "p95Ms": 4,
    "labels": 100,
-   "steps": 94.4,
+   "steps": 93.4,
    "swingMs": 17,
    "perRow": {
     "kick": "24/24 right, 24 read",
-    "clap": "13/16 right, 13 read",
+    "clap": "13/16 right, 14 read",
     "hats": "47/48 right, 50 read"
    }
   },
   {
    "loop": "hats only (breakdown)",
    "bleed": -15,
-   "ms": 217,
+   "ms": 212,
    "found": 99.2,
    "extra": 18.1,
    "medianMs": 1.6,
@@ -413,7 +413,7 @@
   {
    "loop": "offbeat stabs (Am7 F C G)",
    "bleed": null,
-   "ms": 141,
+   "ms": 142,
    "chords": 32,
    "truthNotes": 120,
    "read": 120,
@@ -426,7 +426,7 @@
   {
    "loop": "Chicago stabs, syncopated",
    "bleed": null,
-   "ms": 139,
+   "ms": 140,
    "chords": 40,
    "truthNotes": 150,
    "read": 120,
@@ -439,7 +439,7 @@
   {
    "loop": "held pads, 1 chord per 2 bars",
    "bleed": null,
-   "ms": 173,
+   "ms": 149,
    "chords": 4,
    "truthNotes": 15,
    "read": 12,
@@ -452,7 +452,7 @@
   {
    "loop": "slow-attack pads (150 ms)",
    "bleed": null,
-   "ms": 167,
+   "ms": 172,
    "chords": 4,
    "truthNotes": 15,
    "read": 15,
@@ -465,7 +465,7 @@
   {
    "loop": "pluck lead over a pad (overlap)",
    "bleed": null,
-   "ms": 171,
+   "ms": 169,
    "chords": 48,
    "truthNotes": 63,
    "read": 81,
@@ -478,7 +478,7 @@
   {
    "loop": "organ chords, 2-bar riff",
    "bleed": null,
-   "ms": 116,
+   "ms": 120,
    "chords": 24,
    "truthNotes": 96,
    "read": 78,
@@ -491,7 +491,7 @@
   {
    "loop": "offbeat stabs (Am7 F C G)",
    "bleed": -25,
-   "ms": 142,
+   "ms": 152,
    "chords": 32,
    "truthNotes": 120,
    "read": 121,
@@ -504,7 +504,7 @@
   {
    "loop": "Chicago stabs, syncopated",
    "bleed": -25,
-   "ms": 149,
+   "ms": 152,
    "chords": 40,
    "truthNotes": 150,
    "read": 133,
@@ -517,7 +517,7 @@
   {
    "loop": "held pads, 1 chord per 2 bars",
    "bleed": -25,
-   "ms": 153,
+   "ms": 146,
    "chords": 4,
    "truthNotes": 15,
    "read": 16,
@@ -543,7 +543,7 @@
   {
    "loop": "pluck lead over a pad (overlap)",
    "bleed": -25,
-   "ms": 194,
+   "ms": 186,
    "chords": 48,
    "truthNotes": 63,
    "read": 89,
@@ -556,7 +556,7 @@
   {
    "loop": "organ chords, 2-bar riff",
    "bleed": -25,
-   "ms": 135,
+   "ms": 134,
    "chords": 24,
    "truthNotes": 96,
    "read": 80,
@@ -569,7 +569,7 @@
   {
    "loop": "offbeat stabs (Am7 F C G)",
    "bleed": -20,
-   "ms": 141,
+   "ms": 136,
    "chords": 32,
    "truthNotes": 120,
    "read": 122,
@@ -582,7 +582,7 @@
   {
    "loop": "Chicago stabs, syncopated",
    "bleed": -20,
-   "ms": 144,
+   "ms": 145,
    "chords": 40,
    "truthNotes": 150,
    "read": 127,
@@ -595,7 +595,7 @@
   {
    "loop": "held pads, 1 chord per 2 bars",
    "bleed": -20,
-   "ms": 152,
+   "ms": 146,
    "chords": 4,
    "truthNotes": 15,
    "read": 21,
@@ -608,7 +608,7 @@
   {
    "loop": "slow-attack pads (150 ms)",
    "bleed": -20,
-   "ms": 155,
+   "ms": 151,
    "chords": 4,
    "truthNotes": 15,
    "read": 57,
@@ -621,7 +621,7 @@
   {
    "loop": "pluck lead over a pad (overlap)",
    "bleed": -20,
-   "ms": 168,
+   "ms": 167,
    "chords": 48,
    "truthNotes": 63,
    "read": 85,
@@ -634,7 +634,7 @@
   {
    "loop": "organ chords, 2-bar riff",
    "bleed": -20,
-   "ms": 130,
+   "ms": 128,
    "chords": 24,
    "truthNotes": 96,
    "read": 84,
@@ -647,7 +647,7 @@
   {
    "loop": "offbeat stabs (Am7 F C G)",
    "bleed": -15,
-   "ms": 147,
+   "ms": 138,
    "chords": 32,
    "truthNotes": 120,
    "read": 124,
@@ -660,7 +660,7 @@
   {
    "loop": "Chicago stabs, syncopated",
    "bleed": -15,
-   "ms": 153,
+   "ms": 152,
    "chords": 40,
    "truthNotes": 150,
    "read": 131,
@@ -673,7 +673,7 @@
   {
    "loop": "held pads, 1 chord per 2 bars",
    "bleed": -15,
-   "ms": 154,
+   "ms": 147,
    "chords": 4,
    "truthNotes": 15,
    "read": 22,
@@ -686,7 +686,7 @@
   {
    "loop": "slow-attack pads (150 ms)",
    "bleed": -15,
-   "ms": 157,
+   "ms": 156,
    "chords": 4,
    "truthNotes": 15,
    "read": 103,
@@ -699,7 +699,7 @@
   {
    "loop": "pluck lead over a pad (overlap)",
    "bleed": -15,
-   "ms": 174,
+   "ms": 172,
    "chords": 48,
    "truthNotes": 63,
    "read": 93,
@@ -712,7 +712,7 @@
   {
    "loop": "organ chords, 2-bar riff",
    "bleed": -15,
-   "ms": 130,
+   "ms": 129,
    "chords": 24,
    "truthNotes": 96,
    "read": 87,
@@ -728,21 +728,21 @@
    "family": "drums",
    "bleed": null,
    "found": 99.2,
-   "extra": 1.1,
-   "labels": 96.6,
+   "extra": 1.3,
+   "labels": 96.4,
    "steps": 95.7,
-   "maxMs": 305,
-   "meanMs": 255
+   "maxMs": 270,
+   "meanMs": 243
   },
   {
    "family": "drums",
    "bleed": -25,
    "found": 99,
-   "extra": 1.5,
-   "labels": 96.2,
-   "steps": 95.2,
-   "maxMs": 280,
-   "meanMs": 243
+   "extra": 1.6,
+   "labels": 96,
+   "steps": 95.1,
+   "maxMs": 289,
+   "meanMs": 241
   },
   {
    "family": "drums",
@@ -751,50 +751,50 @@
    "extra": 1,
    "labels": 91.4,
    "steps": 90.5,
-   "maxMs": 281,
-   "meanMs": 263
+   "maxMs": 267,
+   "meanMs": 242
   },
   {
    "family": "drums",
    "bleed": -15,
    "found": 98.9,
-   "extra": 5.1,
+   "extra": 5.2,
    "labels": 95.9,
-   "steps": 92.1,
-   "maxMs": 284,
-   "meanMs": 230
+   "steps": 92,
+   "maxMs": 264,
+   "meanMs": 224
   },
   {
    "family": "notes",
    "bleed": null,
    "pcFound": 91.1,
    "wrong": 4,
-   "maxMs": 173,
-   "meanMs": 151
+   "maxMs": 172,
+   "meanMs": 149
   },
   {
    "family": "notes",
    "bleed": -25,
    "pcFound": 91.9,
    "wrong": 10.3,
-   "maxMs": 194,
-   "meanMs": 155
+   "maxMs": 186,
+   "meanMs": 154
   },
   {
    "family": "notes",
    "bleed": -20,
    "pcFound": 91,
    "wrong": 16.7,
-   "maxMs": 168,
-   "meanMs": 148
+   "maxMs": 167,
+   "meanMs": 145
   },
   {
    "family": "notes",
    "bleed": -15,
    "pcFound": 91.9,
    "wrong": 24.3,
-   "maxMs": 174,
-   "meanMs": 152
+   "maxMs": 172,
+   "meanMs": 149
   }
  ]
 }

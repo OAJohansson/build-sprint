@@ -220,10 +220,14 @@ export type DrumsModel = ReturnType<typeof useDrums>;
 
 // ── The middle (Fold) ───────────────────────────────────────────────────────────────────────────
 
-/** D-P1: a short window (≤ 860 px tall, lab.module.css) gets 72 px knobs instead of 88. */
-const SHORT = "(max-height: 860px)";
-const onShort = (cb: () => void) => { const m = matchMedia(SHORT); m.addEventListener("change", cb); return () => m.removeEventListener("change", cb); };
-const useShort = () => useSyncExternalStore(onShort, () => matchMedia(SHORT).matches, () => false);
+/** D-P1, D-R2: a short window gets smaller knobs: ≤ 860 px tall 72 px, ≤ 760 px 64 px (lab.module.css tiers). */
+const SHORT = "(max-height: 860px)", SHORTER = "(max-height: 760px)";
+const onShort = (cb: () => void) => {
+  const ms = [matchMedia(SHORT), matchMedia(SHORTER)];
+  ms.forEach((m) => m.addEventListener("change", cb));
+  return () => ms.forEach((m) => m.removeEventListener("change", cb));
+};
+const useShort = () => useSyncExternalStore(onShort, () => (matchMedia(SHORTER).matches ? 2 : matchMedia(SHORT).matches ? 1 : 0), () => 0);
 
 const W = 1000; // the pattern's drawing units across (scaled to the column)
 
@@ -335,7 +339,7 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
         <div className={s.drKnobs} data-off={off ? "" : undefined}>
           {ROW_KNOBS[row].map((id) => (
             <Knob key={`${row}-${id}`} id={id} spec={DRUM_KNOB_SPECS[id]} wordOf={(v) => drumKnobWord(snd.preset, id, v, m.bpm)} value={snd.macros[id] ?? 0} sug={off ? undefined : ticks?.[id]}
-              color="#f1e6d3" disabled={off} onChange={(v) => m.setKnob(row, id, v)} reset={clampDrumMacros(snd.preset, undefined)[id] ?? 0} size={short ? 72 : 88} />
+              color="#f1e6d3" disabled={off} onChange={(v) => m.setKnob(row, id, v)} reset={clampDrumMacros(snd.preset, undefined)[id] ?? 0} size={short === 2 ? 64 : short === 1 ? 72 : 88} />
           ))}
         </div>
         {wait ? <p className={s.drWait} role="status">{wait}</p> : (
@@ -403,7 +407,7 @@ function DrumPreset({ m, row }: { m: DrumsModel; row: DrumRow }) {
 /** A/B at the same loudness, the bass under both (P7), and the closeness score (P8). */
 export function DrumsCheck({ m }: { m: DrumsModel }) {
   return (
-    <div className={s.checkRow}>
+    <div className={`${s.checkRow} ${s.drCheck}`}>
       <div className={s.abWrap}>
         <div className={s.ab} role="group" aria-label="Compare at the same loudness">
           <button aria-pressed={m.ab === "a"} onClick={() => m.setAb("a")}>A · Original drums</button>

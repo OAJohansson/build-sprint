@@ -23,3 +23,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Mode: Streamlined (L1).** Recommended because the problem was still moving (it shifted twice in the conversation), too early for a fixed Founder pack, and the creative design part is one of the owner's gates anyway. Owner: "let's try streamlined".
 - **Name: Meander (T1),** a working name for wandering between connected ideas.
 - **Scaffolded** with `pnpm new meander "Meander" --mode streamlined`. Brief drafted (problem, who, jobs, alternatives, risks) for the kickoff gate, asked one question at a time.
+- **Gate Q1, moment of use (L3):** laptop at a desk, sit-down study; phone secondary.

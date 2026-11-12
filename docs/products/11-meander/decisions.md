@@ -7,3 +7,4 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L1 | 12 Nov | Mode: Streamlined | Owner | Kickoff | Problem still moving; design stays the owner's at the gate |
 | L2 | 12 Nov | Problem: one-school deep dives with no map of the field end in boredom; variety across connected areas keeps me going | Owner (Claude drafted) | Kickoff | Default; owner can still change it at the gate |
 | T1 | 12 Nov | Working name "Meander" (slug `11-meander`) | Claude | Kickoff | Wandering between connected ideas; veto to rename |
+| L3 | 12 Nov | Main device: laptop at a desk; phone works but simpler | Owner | Kickoff gate | The whole-field view needs space; study sessions are sit-down |

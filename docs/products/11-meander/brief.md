@@ -12,7 +12,7 @@ Me: curious across psychology, philosophy and history, remembers what they see m
 
 ## Moment of use and jobs to be done
 
-*Moment: open at the gate (where, which device, how long a session).*
+**Moment:** at a desk on the laptop, in a sit-down study session, usually right before or between Claude modules. The phone works but is simpler (one area at a time); the whole-field view is a laptop job.
 
 1. When I get curious about a new field, I want to see its whole shape at a glance, so I know where my interest fits.
 2. When I've spent a while in one area and want variety, I want to see what's connected nearby, so I can switch to something fresh without losing the thread.

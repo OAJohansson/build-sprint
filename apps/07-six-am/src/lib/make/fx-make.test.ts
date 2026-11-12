@@ -108,6 +108,20 @@ describe("A/B (P7)", () => {
   });
 });
 
+describe("A/B with a silent bar the riser fills (FX-R3)", () => {
+  it("keeps B within 1 dB of A, gated or not", () => {
+    const n = Math.round(8 * barS * RATE), mix = new Float32Array(n);
+    let s = 3; for (let i = 0; i < n; i++) { s = (s * 16807) % 2147483647; mix[i] = ((s / 2147483647) * 2 - 1) * 0.1; }
+    for (let i = Math.round(6 * barS * RATE); i < Math.round(7 * barS * RATE); i++) mix[i] = 0; // a silent bar before the drop
+    const sounds = { impact: { preset: "fx-impact-big", macros: {}, on: false }, down: { preset: "fx-down-dark", macros: {}, on: false }, riser: { preset: "fx-riser-noise", macros: { rise: 0.5 }, on: true } } as const;
+    const r = renderFxMine(fxPlan(97, 8, [97, 105], home), sounds as never, { rootMidi: 33, bpm: BPM, rate: RATE, samples: n, mixRmsDb: 10 * Math.log10(0.01 / 3), blocksA: kBlocks({ left: mix, right: mix, rate: RATE }) });
+    const g = Math.pow(10, r.partsDb / 20), bl = mix.map((v, i) => v * g + r.left[i]), br = mix.map((v, i) => v * g + r.right[i]);
+    const ung = (l: Float32Array, rr: Float32Array) => { const z = kBlocks({ left: l, right: rr, rate: RATE }); return 10 * Math.log10(z.reduce((a, b) => a + b, 0) / z.length); };
+    expect(Math.abs(ung(bl, br) - ung(mix, mix))).toBeLessThanOrEqual(0.1);
+    expect(Math.abs(lufs({ left: bl, right: br, rate: RATE }) - lufs({ left: mix, right: mix, rate: RATE }))).toBeLessThanOrEqual(1);
+  });
+});
+
 describe("saving an FX row (P9)", () => {
   const raw = (preset: string, macros = {}) => ({ part: "other", preset, macros, pattern: { bars: 2, notes: [{ step: 0, midi: 33, dur: 32, vel: 1 }] }, key: "A", scale: "minor", bpm: 124, source: { title: "Lost in The Loop", url: "https://soundcloud.com/x/y" } });
   it("saves a long row on an 8-bar pass (FX-R2: a 4.6-bar Reverse crash)", () => {

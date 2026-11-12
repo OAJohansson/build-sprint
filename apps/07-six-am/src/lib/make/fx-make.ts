@@ -12,7 +12,7 @@
 // - A/B (P7): A is the drop as is (its parts, the drums when "Drums under both" is on); B is the same
 //   with Mine's FX on top, both turned down together so B is as loud as A (LUFS).
 import { fft, hann, toMono } from "./dsp";
-import { kBlocks, lufsOfBlocks } from "./level";
+import { kBlocks } from "./level";
 import { FX_ROWS, clampFxMacros, fxBars, renderFxEvent, type FxMacros, type FxPlan, type FxPresetId, type FxRow } from "./fx-synth";
 import { secondsPer16th } from "./render";
 
@@ -136,9 +136,12 @@ export function renderFxMine(plan: FxPlan, sounds: Record<FxRow, FxRowSound>, o:
     const g = rowDb > -120 && o.mixRmsDb > -120 ? Math.pow(10, Math.max(-30, Math.min(30, o.mixRmsDb - FX_UNDER_DB - rowDb)) / 20) : 1;
     for (let i = 0; i < l.length && at + i < samples; i++) { left[at + i] += l[i] * g; right[at + i] += r[i] * g; }
   }
-  // B's loudness: the drop's block energies (kept as numbers at the read) plus the FX's, block by block.
-  const A = lufsOfBlocks(o.blocksA), fb = kBlocks({ left, right, rate });
-  const B = lufsOfBlocks(o.blocksA.map((e, i) => e + (fb[i] ?? 0)));
+  // B's loudness: the drop's block energies (kept as numbers at the read) plus the FX's, block by block,
+  // over the same blocks for both and without the gates (FX-R3: the gates dropped A's silent bar, which
+  // the riser fills in B, so B came out about 1 dB quieter to the ear).
+  const fb = kBlocks({ left, right, rate });
+  const ungated = (z: number[]) => (z.length ? -0.691 + 10 * Math.log10(z.reduce((x, y) => x + y, 0) / z.length + 1e-20) : -200);
+  const A = ungated(o.blocksA), B = ungated(o.blocksA.map((e, i) => e + (fb[i] ?? 0)));
   const partsDb = A > -70 && B > -70 ? Math.round((A - B) * 100) / 100 : 0, g = Math.pow(10, partsDb / 20);
   for (let i = 0; i < samples; i++) { left[i] *= g; right[i] *= g; }
   return { left, right, rate, partsDb };

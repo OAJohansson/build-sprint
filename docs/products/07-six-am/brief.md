@@ -2,6 +2,14 @@
 
 A one-page PRD, written before any code (playbook step 1). Short answers; the success check is filled in at wrap-up.
 
+## North star (owner, 12 Nov)
+
+I started the sprint to learn to build with Claude, and house music is what motivates me most.
+The path: take tracks I love apart → learn how house is built → recreate the sounds with AI and
+save them → arrange and make my own house tracks in Six AM ("beyond what Ableton is doing") →
+become a producer → maybe later share it and charge a small fee. Every phase should move one step
+along this path; the output is always my own sounds and tracks, never copies of the originals.
+
 ## Problem
 
 I love house and techno and want to make my own tracks, but I've never produced. Real DAWs

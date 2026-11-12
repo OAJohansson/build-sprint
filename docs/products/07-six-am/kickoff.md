@@ -712,6 +712,12 @@ the final review.
 | **Vocals** | A voice: words, pitch, chops | Probably not a copy: a pitch line for a lead synth, or vocal-like chops; the words are the artist's | Rights and taste: what "my own vocal" means here |
 | **Texture / FX** | Risers, impacts, noise sweeps, atmosphere | A few generators (noise riser, downlifter, impact) timed to the section, not read note by note | Little to read from the original; mostly a sound palette |
 
+## North star (owner, 12 Nov)
+
+Take tracks apart → learn how house is built → recreate the sounds with AI and save them → arrange
+and make my own house tracks in Six AM → become a producer → maybe share it for a small fee. Make
+for every layer is the "recreate the sounds and save them" step. See `brief.md`.
+
 ## Owner's answers (27 Oct)
 
 | # | Question | Answer | Log |

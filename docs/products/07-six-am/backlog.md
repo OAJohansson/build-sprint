@@ -98,3 +98,11 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Filter knob on the transport? (removed with the lane model, L200) | The owner accepted its removal for the MVP | later |
 | Studio overwrite trims a neighbour by whole loop passes (a 1-bar overlap cut 8 bars); trim only the covered bars or show the cut | S5 re-check S5-10 | next (small) |
 | Lab note card: a horizontal leader to its dot when the card sits past the playhead, far from the dot | final polish T112 | later (small) |
+
+## Viability risks if Six AM is ever shared or charged for (owner's north star, 12 Nov)
+
+| Risk | Why it matters | What would have to change |
+| --- | --- | --- |
+| Essentia / Discogs-EffNet models are licensed for non-commercial use only | Genre and style reading (Ears) could not ship in a paid product as is | A commercial licence from the Essentia team (UPF), or a model with a commercial licence, or drop genre reading from the paid tier |
+| SoundCloud tab capture of other people's tracks | Capturing and separating someone else's track raises rights questions even when nothing is stored (rule C2 keeps originals in memory only, never stored, saved or uploaded) | Keep C2; make clear the output is the user's own sounds and tracks; check SoundCloud's terms and get legal advice before charging; consider the user's own files or licensed sources instead |
+| Stable Audio and Claude API costs per user | Free for the owner today on their own keys; a paid product pays per call | Per-user limits and pricing that covers the calls |

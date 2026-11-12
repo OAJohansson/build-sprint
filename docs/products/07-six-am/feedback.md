@@ -190,7 +190,7 @@ Report: `user-testing/report-2026-11-12-drums.md`.
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| N1 | major | Regression from U9: with a long title the Lab header no longer wraps; root 1,602 px wide, "Make" clipped, "Deck on" off screen | fixing |
-| N2 | minor | Clap row stays at 22–23/100 with every knob on its tick; only another preset reaches 36 | fixing |
-| N3 | minor | An off row still shows a score | fixing |
-| N4 | polish | Picking the already-chosen preset doesn't reset its knobs | fixing |
+| N1 | major | Regression from U9: with a long title the Lab header no longer wraps; root 1,602 px wide, "Make" clipped, "Deck on" off screen | fixed (ed9b3e1) |
+| N2 | minor | Clap row stays at 22–23/100 with every knob on its tick; only another preset reaches 36 | fixed (ed9b3e1) |
+| N3 | minor | An off row still shows a score | fixed (ed9b3e1) |
+| N4 | polish | Picking the already-chosen preset doesn't reset its knobs | fixed (ed9b3e1) |

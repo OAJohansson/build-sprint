@@ -73,6 +73,12 @@ describe("Suggest's measure (P6, honest when nothing is there)", () => {
     expect(m.impact.ticks?.tail).toBeDefined();
     expect(m.impact.ticks?.size).toBeUndefined();
   });
+  it("says where a riser lands in the track's bars, and calls a half-bar jump no riser (FX-F3)", () => {
+    const x = loop(8, [{ id: "fx-riser-noise", atBar: 6, lenBars: 2 }]);
+    expect(measureFx(x, x, RATE, BPM, plan, 8, 97).riser.heard).toMatch(/into bar 105$/);
+    const fill = loop(8, [{ id: "fx-riser-noise", atBar: 7.5, lenBars: 0.5 }]);
+    expect(measureFx(fill, fill, RATE, BPM, plan, 8, 97).riser.ticks).toBeNull();
+  });
   it("gives no ticks, and says so, where the original has no FX", () => {
     const x = loop(8, []);
     const m = measureFx(x, x, RATE, BPM, plan, 8);
@@ -102,6 +108,8 @@ describe("saving an FX row (P9)", () => {
     expect(s.tags.slice(0, 2)).toEqual(["fx", "riser"]);
     expect(s.tags).toContain("2 bars");
     expect(suggestFxName("fx-impact-subdrop", { tail: 1 }, null)).toBe("Sub drop, long");
+    // FX-F4: the tag says the length the knob shows, not the block's rounded-up pass.
+    expect(parseNewSound({ ...raw("fx-impact-subdrop", { tail: 0.6 }) })!.tags).toContain("2.6 bars");
   });
   it("lands every row on the FX lane, renders the same after a reload, and a longer rise grows the block", () => {
     for (const id of ["fx-impact-subdrop", "fx-down-dark", "fx-riser-revcrash"]) {

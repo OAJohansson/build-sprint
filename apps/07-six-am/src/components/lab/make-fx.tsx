@@ -9,7 +9,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } fro
 import type { LabTransport, LoopState } from "@/lib/lab/transport";
 import { MakeClient } from "@/lib/make/make-client";
 import type { FxMeasure } from "@/lib/make/fx-make";
-import { FX_KNOBS, FX_KNOB_SPECS, FX_NOUN, FX_PRESETS, FX_ROWS, FX_ROW_DEFAULT, FX_ROW_NAMES, clampFxMacros, fxKnobWord, fxPassBars, fxPlan, fxRowOf, fxRowPresets, rootMidiOf, type FxKnobId, type FxMacros, type FxPlan, type FxPresetId, type FxRow } from "@/lib/make/fx-synth";
+import { FX_KNOBS, FX_KNOB_SPECS, FX_NOUN, FX_PRESETS, FX_ROWS, FX_ROW_ABOUT, FX_ROW_DEFAULT, FX_ROW_NAMES, FX_TYPICAL, clampFxMacros, fxKnobWord, fxPassBars, fxPlan, fxRowOf, fxRowPresets, rootMidiOf, type FxKnobId, type FxMacros, type FxPlan, type FxPresetId, type FxRow } from "@/lib/make/fx-synth";
 import { isFxSound, saveAction, soundId, suggestFxName, suggestFxTags, type FxSound } from "@/lib/make/library";
 import { ApiError, mentorApi } from "@/lib/mentor/client";
 import { Knob } from "@/components/ui/knob";
@@ -69,7 +69,7 @@ export function useFx(o: FxOpts) {
     for (let i = 0; i < n; i++) { fxL[i] = ot.left[i] + vo.left[i]; fxR[i] = ot.right[i] + vo.right[i]; mixL[i] = fxL[i] + bs.left[i]; mixR[i] = fxR[i] + bs.right[i]; }
     setState({ loopKey: key, state: "reading" });
     const plan0 = fxPlan(o.from, o.loopBars, o.sectionStarts, perRow((r) => FX_PRESETS[FX_ROW_DEFAULT[r]].macros));
-    cl().fxRead({ fxL, fxR, mixL, mixR, drL: dr.left.slice(), drR: dr.right.slice(), rate: dr.rate, bpm: o.bpm, plan: plan0, loopBars: o.loopBars }).then((res) => {
+    cl().fxRead({ fxL, fxR, mixL, mixR, drL: dr.left.slice(), drR: dr.right.slice(), rate: dr.rate, bpm: o.bpm, plan: plan0, loopBars: o.loopBars, fromBar: o.from }).then((res) => {
       console.info(`[make] fx measured in ${res.ms} ms: ${FX_ROWS.map((r) => `${r} ${res.measures[r].ticks ? "ticks" : "none"}`).join(", ")}; drop ${res.level.bed.lufs} LUFS`);
       setReadS({ loopKey: key, measures: res.measures, level: res.level, samples: n, rate: dr.rate });
       setState({ loopKey: key, state: "ready" });
@@ -104,6 +104,8 @@ export function useFx(o: FxOpts) {
 
   // Re-picking the current preset resets its knobs (N4).
   const setPreset = (row: FxRow, p: FxPresetId) => setSounds((x) => ({ ...x, [row]: fresh(p) }));
+  /** FX-F3: a typical house-drop start for a row with nothing clear to aim at. */
+  const tryTypical = (row: FxRow) => setSounds((x) => ({ ...x, [row]: { preset: FX_TYPICAL[row].preset, macros: clampFxMacros(FX_TYPICAL[row].preset, FX_TYPICAL[row].macros) } }));
   const setKnob = (row: FxRow, id: FxKnobId, v: number) => setSounds((x) => (x[row].macros[id] === v ? x : { ...x, [row]: { ...x[row], macros: { ...x[row].macros, [id]: v } } }));
   const loadSound = (x: FxSound) => {
     const row = fxRowOf(x.preset), snd = { preset: x.preset, macros: clampFxMacros(x.preset, x.macros) };
@@ -149,7 +151,7 @@ export function useFx(o: FxOpts) {
 
   const ticks = perRow((r) => (read ? read.measures[r].ticks : null));
   return {
-    open, setOpen, sounds, setPreset, setKnob, ticks, read, readState, readError: state?.error ?? null, plan,
+    open, setOpen, sounds, setPreset, tryTypical, setKnob, ticks, read, readState, readError: state?.error ?? null, plan,
     measures: read?.measures ?? null, loopBars: o.loopBars,
     ab, setAb, bed, setBed, mineReady: !!mine && mine.key === mineKeyNow, mineAny: !!mine, partsDb: mine?.partsDb ?? 0,
     mySounds, loadSound, name: nameField, setName: (v: string) => setNames((n) => ({ ...n, [open]: v })), tags, save, canSave, savedRows,
@@ -181,9 +183,16 @@ function shapeOf(row: FxRow, place: FxPlan[FxRow] | null, bars: number) {
   const xb = (b: number) => { const i = Math.min(bars - 1, Math.max(0, Math.floor(b))); return i * (bw + gap) + (b - i) * bw; };
   if (!place) return { d: "", tx: 0, end: false };
   const x = xb(place.atBar), x1 = xb(Math.min(bars, place.atBar + place.bars) - 1e-6);
-  if (row === "impact") { const xe = xb(Math.min(bars, place.atBar + Math.min(1, place.bars)) - 1e-6); return { d: `M${x} 2 L${x + 8} 2 L${xe} ${H * 0.8} L${xe} ${H} L${x} ${H} Z`, tx: xe + 10, end: false }; }
-  if (row === "down") return { d: `M${x} 2 L${x1} ${H} L${x} ${H} Z`, tx: x1 + 10, end: false };
-  return { d: `M${x} ${H} L${x1} 2 L${x1} ${H} Z`, tx: x - 10, end: true };
+  // FX-F5: every shape is as long as its knob says (the impact's tail too); FX-F9: its label sits beside
+  // it, on the side with room, never on it.
+  const ROOM = 160; // drawing units a label needs (about 110 px on a 1440 px window)
+  const right = { tx: x1 + 10, end: false }, left = { tx: x - 10, end: true };
+  // No room either side (a shape over most of the loop): inside its empty half (above a fall's low end,
+  // above a riser's low start), which a label at mid-height doesn't touch.
+  const fallSide = x1 + ROOM <= W ? right : x >= ROOM ? left : { tx: x1 - 10, end: true };
+  if (row === "impact") return { d: `M${x} 2 L${x + 8} 2 L${x1} ${H * 0.85} L${x1} ${H} L${x} ${H} Z`, ...fallSide };
+  if (row === "down") return { d: `M${x} 2 L${x1} ${H} L${x} ${H} Z`, ...fallSide };
+  return { d: `M${x} ${H} L${x1} 2 L${x1} ${H} Z`, ...(x >= ROOM ? left : x1 + ROOM <= W ? right : { tx: x + 10, end: false }) };
 }
 
 /** One row's shape where it sits: a hit falling off, a fall, a rise; its bars written beside it (fold-fx). */
@@ -220,7 +229,9 @@ export function FxMiddle({ m, loop, from, playing, heardMs }: { m: FxModel; loop
   const row = m.open, snd = m.sounds[row], ticks = m.ticks[row] ?? undefined, meas = m.measures?.[row];
   let line: React.ReactNode;
   if (!meas) line = null;
-  else if (!meas.ticks) line = <>Mentor: {meas.heard}, so no ticks for this row.<br /><span className={s.faintLine}>Shape it by ear with A/B.</span></>;
+  // FX-F3: nothing measured still leaves something to aim for: a typical start for a house drop.
+  else if (!meas.ticks) line = <>Mentor: {meas.heard}, so no ticks. A house drop often uses {FX_TYPICAL[row].say}.{" "}
+    <button className={s.textBtn} onClick={() => m.tryTypical(row)}>Try it</button><br /><span className={s.faintLine}>Then shape it by ear with A/B.</span></>;
   else line = <>Mentor: {fxLine(snd.preset, snd.macros, meas.ticks)}<br /><span className={s.faintLine}>Heard: {meas.heard}.</span></>;
   return (
     <div className={s.drums}>
@@ -245,7 +256,8 @@ export function FxMiddle({ m, loop, from, playing, heardMs }: { m: FxModel; loop
         {loop?.state === "memory" && !off && <div className={s.drHeadBox}><Playhead heardMs={heardMs} loop={loop} bars={bars} /></div>}
       </div>
       <div className={s.drBlock}>
-        <span className={s.drLabel}>{FX_ROW_NAMES[row]}</span>
+        {/* FX-F2: what the row does, in one plain line. */}
+        <span className={s.drLabel}>{FX_ROW_NAMES[row]} · {FX_ROW_ABOUT[row]}</span>
         <FxPreset m={m} row={row} />
         <div className={s.drKnobs} data-off={off ? "" : undefined}>
           {FX_KNOBS[row].map((id) => (

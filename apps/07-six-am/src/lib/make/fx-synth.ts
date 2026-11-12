@@ -9,6 +9,17 @@ import { secondsPer16th, type Rendered } from "./render";
 export type FxRow = "impact" | "down" | "riser";
 export const FX_ROWS: FxRow[] = ["impact", "down", "riser"];
 export const FX_ROW_NAMES: Record<FxRow, string> = { impact: "Impact", down: "Downlifter", riser: "Noise riser" };
+/** FX-F2: what each row does, in one plain line (sound-check.md "FX"). */
+export const FX_ROW_ABOUT: Record<FxRow, string> = { impact: "a hit that marks the drop's first beat", down: "falls after the hit to let the energy down", riser: "builds tension into the next part" };
+/** FX-F3: a typical house-drop start for each row when nothing clear is measured. */
+export const FX_TYPICAL: Record<FxRow, { preset: FxPresetId; macros: FxMacros; say: string }> = {
+  impact: { preset: "fx-impact-subdrop", macros: { size: 0.7, tone: 0.4, tail: 0.25 }, say: "a Sub drop with a 1-bar tail" },
+  down: { preset: "fx-down-dark", macros: { drop: 0.4, tone: 0.5, length: 0.5 }, say: "a Dark fall over 2 bars" },
+  riser: { preset: "fx-riser-noise", macros: { rise: 0.5, tone: 0.7, width: 0.5 }, say: "a Bright noise riser over the last 2 bars" },
+};
+/** FX-F4: an event's length as the knob shows it ("2.6 bars"), for tags and labels. */
+export const fxLengthWord = (id: FxPresetId, m: FxMacros) => { const r = FX_PRESETS[id].row, k = r === "impact" ? "tail" : r === "down" ? "length" : "rise"; return fxKnobWord(id, k, clampFxMacros(id, m)[k] ?? 0.5).split(" · ")[0]; };
+
 /** What the save button and names call a row's sound. */
 export const FX_NOUN: Record<FxRow, string> = { impact: "impact", down: "downlifter", riser: "riser" };
 

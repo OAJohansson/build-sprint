@@ -235,9 +235,14 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
         if (info.exact) setDropNote(`${ROW_PLURAL[info.type] ?? laneType(info.type).name} go on their own lane, and this track has no room for another lane.`);
         return;
       }
+      // FX-F6: what the drop cut on its lane (a block shortened or replaced), said with Undo.
+      const lanesBefore = lanesOf(docRef.current), was = docRef.current.regions.filter((g) => laneOfRegion(g, lanesBefore)?.id === r.laneId && g.id !== r.regionId);
+      const cut = was.filter((g) => { const now = r.doc.regions.find((x) => x.id === g.id); return !now || now.start !== g.start || now.length !== g.length; });
       commit(r.doc);
       const lane = lanesOf(r.doc).find((l) => l.id === r.laneId);
+      const cutText = cut.length ? `${cut.some((g) => !r.doc.regions.some((x) => x.id === g.id)) ? "Replaced" : "Shortened"} ${[...new Set(cut.map((g) => loopById(g.loopId)?.name ?? "a block"))].join(", ")}` : "";
       if (info.exact && lane && lanesOf(r.doc).length > before) setToastFor({ text: `${ROW_PLURAL[info.type] ?? laneType(info.type).name} go on their own lane: added "${lane.name}".`, doc: r.doc });
+      else if (cutText) setToastFor({ text: `${cutText} on ${lane?.name ?? "the lane"}.`, doc: r.doc });
       // U11: a drop from My sounds keeps the list open (no drawer); the block is still there to click.
       return;
     }

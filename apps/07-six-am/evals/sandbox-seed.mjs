@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Sandbox seed (user test 12 Nov, "same setup for every grader and tester"): PUTs the maps of the two
+// Sandbox seed (user test 12 Nov, "same setup for every grader and tester"; FX-S1 adds a minimal analysis
+// per track and says whether the Mentor's key is set): PUTs the maps of the two
 // eval tracks into the sandbox dev server, so every data-evals run and user test uses the same tempo,
 // bar origin, key, bars and sections. Numbers only: no audio, nothing of the tracks themselves (C2).
 //
@@ -60,10 +61,20 @@ async function main() {
     process.exit(1);
   }
   const maps = args.maps ? JSON.parse(await (await import("node:fs/promises")).readFile(args.maps, "utf8")) : MAPS;
+  // FX-S1: the Mentor answers only with its key set on the server; say whether it is, never what it is.
+  const fs = await import("node:fs/promises");
+  const envFile = new URL("../.env.local", import.meta.url);
+  const inFile = await fs.readFile(envFile, "utf8").then((t) => /^ANTHROPIC_API_KEY=\S+/m.test(t), () => false);
+  console.log(`ANTHROPIC_API_KEY: ${process.env.ANTHROPIC_API_KEY || inFile ? "set" : "NOT set"} (${process.env.ANTHROPIC_API_KEY ? "in this shell" : inFile ? "in apps/07-six-am/.env.local" : "neither in this shell nor in .env.local: Mentor questions will fail"}; the value is never printed)`);
   for (const m of maps) {
     const r = await fetch(`${BASE}/api/maps?id=${encodeURIComponent(m.id)}`, { method: "PUT", headers: head, body: JSON.stringify({ map: m }) });
     console.log(`${r.ok ? "seeded" : `FAILED ${r.status}`}  ${m.title}: ${m.bpm} BPM, origin ${m.originSec} s, ${m.key} ${m.scale}, ${m.bars} bars, ${m.sections.length} sections`);
     if (!r.ok) { console.error(await r.text()); process.exit(1); }
+    // FX-S1: a minimal analysis too (title, uploader, tempo, key, a placeholder genre), so the Lab and
+    // the Mentor have the track's facts as they do for a real, analysed track. Demo rows: memory store only.
+    const analysis = { id: m.id, soundcloudUrl: m.id, title: m.title, uploader: m.uploader, bpm: m.bpm, bpmConfidence: 1, key: m.key, scale: m.scale, keyStrength: 1, durationMs: Math.round(m.durationSec * 1000), analysedSeconds: m.durationSec, genres: [{ style: "Electronic---House", p: 0.5 }], analysedAt: new Date().toISOString() };
+    const a = await fetch(`${BASE}/api/analyses?id=${encodeURIComponent(m.id)}`, { method: "PUT", headers: { ...head, "x-six-am-demo": "1" }, body: JSON.stringify({ analysis }) });
+    console.log(`  analysis ${a.ok ? "seeded" : `FAILED ${a.status}`} (placeholder genre: House)`);
     console.log(`  open: ${BASE}/map?id=${encodeURIComponent(m.id)}&mode=make&make=drums`);
   }
 }

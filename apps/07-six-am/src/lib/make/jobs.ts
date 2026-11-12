@@ -33,7 +33,7 @@ export type MakeRequest =
   | { type: "melody-render"; id: number; reading: MelodyReading; sounds: Record<MelodyRow, MelodyRowSound>; targets: Record<MelodyRow, MelodyTarget | null>; bpm: number; rate: number; samples: number; levelDb: number; lufs: number }
   | { type: "melody-suggest"; id: number; target: MelodyTarget; preset: MelodyPresetId; bpm: number; start?: PolyMacros }
   // Phase 5 slice 3, FX: measure the drop (its FX-carrying parts, its loudness), render Mine's FX.
-  | { type: "fx-read"; id: number; fxL: Float32Array; fxR: Float32Array; mixL: Float32Array; mixR: Float32Array; drL: Float32Array; drR: Float32Array; rate: number; bpm: number; plan: FxPlan; loopBars: number }
+  | { type: "fx-read"; id: number; fxL: Float32Array; fxR: Float32Array; mixL: Float32Array; mixR: Float32Array; drL: Float32Array; drR: Float32Array; rate: number; bpm: number; plan: FxPlan; loopBars: number; fromBar?: number }
   | { type: "fx-render"; id: number; plan: FxPlan; sounds: Record<FxRow, FxRowSound>; rootMidi: number; bpm: number; rate: number; samples: number; mixRmsDb: number; blocksA: number[] };
 
 export type MakeResponse =
@@ -126,7 +126,7 @@ export function runMakeJob(m: MakeRequest): { res: MakeResponse; transfer: Array
       return { res: { type: "melody-render", id: m.id, left, right, rate: m.rate, gainDb: g.db, rowGainsDb: r.gains, rowCloseness: rowClose, ms: ms() }, transfer: [left.buffer, right.buffer] };
     }
     if (m.type === "fx-read") {
-      const measures = measureFx(m.fxL, m.fxR, m.rate, m.bpm, m.plan, m.loopBars);
+      const measures = measureFx(m.fxL, m.fxR, m.rate, m.bpm, m.plan, m.loopBars, m.fromBar ?? 1);
       const n = m.mixL.length, bl = new Float32Array(n), br = new Float32Array(n);
       for (let i = 0; i < n; i++) { bl[i] = m.mixL[i] + m.drL[i]; br[i] = m.mixR[i] + m.drR[i]; }
       // Numbers only: the level, the loudness, and its 400 ms block energies (for B's loudness with FX on top).

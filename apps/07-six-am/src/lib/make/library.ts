@@ -6,7 +6,7 @@
 import { pitchClass, type Scale } from "@/lib/synths/theory";
 import { MAKE_PRESETS, clampMacros, macroWord, type Macros, type MakePresetId } from "./presets";
 import type { MakeNote } from "./render";
-import { FX_KNOBS, FX_NOUN, FX_PRESETS, clampFxMacros, fxPassBars, fxRowOf, isFxPreset, type FxKnobId, type FxMacros, type FxPresetId } from "./fx-synth";
+import { FX_KNOBS, FX_NOUN, FX_PRESETS, clampFxMacros, fxLengthWord, fxRowOf, isFxPreset, type FxKnobId, type FxMacros, type FxPresetId } from "./fx-synth";
 import { POLY_KNOBS, clampPolyMacros, isMelodyPreset, kindOf, melodyPreset, melodyRowOf, type MelodyPresetId, type PolyKnobId, type PolyMacros } from "./poly-synth";
 import { DRUM_PRESETS, ROW_KNOBS, clampDrumMacros, isDrumPreset, rowOf, type DrumKnobId, type DrumMacros, type DrumPresetId } from "./drum-synth";
 
@@ -220,8 +220,8 @@ export function suggestFxName(preset: FxPresetId, m: FxMacros, songTitle?: strin
   return (s ? `${base}, from ${s}` : base).slice(0, MAX_NAME);
 }
 export function suggestFxTags(preset: FxPresetId, key: string, scale: Scale, bpm: number, songTitle?: string | null, m?: FxMacros): string[] {
-  const bars = fxPassBars(preset, m ?? {});
-  return normalizeTags(["fx", FX_NOUN[fxRowOf(preset)], ...FX_PRESETS[preset].tags, (m && fxWord(preset, m)) ?? "", `${bars} bar${bars === 1 ? "" : "s"}`, `${key} ${scale}`, `${Math.round(bpm)} bpm`, songTitle ? shortTitle(songTitle) : ""]);
+  // FX-F4: the length as the knob shows it ("2.6 bars"), not the block's rounded-up pass.
+  return normalizeTags(["fx", FX_NOUN[fxRowOf(preset)], ...FX_PRESETS[preset].tags, (m && fxWord(preset, m)) ?? "", fxLengthWord(preset, m ?? {}), `${key} ${scale}`, `${Math.round(bpm)} bpm`, songTitle ? shortTitle(songTitle) : ""]);
 }
 
 /** A melody sound's name, preset first: "Stab chords", "Pluck lead", then a knob word (as drums, T132). */

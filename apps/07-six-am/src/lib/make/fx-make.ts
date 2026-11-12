@@ -46,10 +46,12 @@ const barsKnob = (bars: number) => clamp01((Math.log2(Math.max(0.5, bars)) + 1) 
 const toneKnob = (hz: number, lo: number, hi: number) => clamp01(Math.log(hz / lo) / Math.log(hi / lo));
 
 export type FxMeasure = { ticks: FxMacros | null; heard: string };
+// shortcut: the riser's margins (9 dB, a 0.7 time correlation, at least a bar) picked so a borderline climb reads "none" both times; check on real builds.
+export const RISER_MIN = { db: 9, corr: 0.7, bars: 1 };
 
 /** What the original's FX-carrying parts do where each row sits (numbers only). `plan` in loop bars. */
 // shortcut: thresholds (a 6 dB rise with a 0.6 time correlation, a 6 dB hit over the drop's steady level, a ½-octave fall) picked on our own synthetic loops; chords or vocals moving there can read as FX. Check against data-evals' real drops.
-export function measureFx(L: Float32Array, R: Float32Array, rate: number, bpm: number, plan: FxPlan, loopBars: number): Record<FxRow, FxMeasure> {
+export function measureFx(L: Float32Array, R: Float32Array, rate: number, bpm: number, plan: FxPlan, loopBars: number, fromBar = 1): Record<FxRow, FxMeasure> {
   const mono = toMono(L, R), barS = 16 * secondsPer16th(bpm), loopS = loopBars * barS;
   const out = {} as Record<FxRow, FxMeasure>;
   // Riser: the 3–12 kHz level over the bars before its end, in half-beats.
@@ -60,13 +62,15 @@ export function measureFx(L: Float32Array, R: Float32Array, rate: number, bpm: n
     let start = 0;
     for (let i = tr.length - 1; i >= 0; i--) if (dbs[i] <= lo + 3) { start = i; break; }
     const span = tr.slice(start), rising = corr(span.map((x) => x.t), span.map((x) => x.db));
-    if (tr.length >= 8 && top - lo >= 6 && rising >= 0.6 && span.length >= 3) {
-      const bars = (end - tr[start].t) / barS;
+    const bars = span.length ? (end - tr[start].t) / barS : 0;
+    // FX-F3: a riser climbs for at least a bar, clearly (9 dB, steadily); a half-bar jump is a fill or a
+    // crash, and a borderline climb flipped between reads. Margins keep the verdict the same read to read.
+    if (tr.length >= 8 && top - lo >= RISER_MIN.db && rising >= RISER_MIN.corr && bars >= RISER_MIN.bars) {
       let m = 0, s = 0;
       const a = Math.round((end - barS / 2) * rate), b = Math.round(end * rate);
       for (let i = Math.max(0, a); i < Math.min(L.length, b); i++) { const x = (L[i] + R[i]) / 2, y = (L[i] - R[i]) / 2; m += x * x; s += y * y; }
       const side = db(s) - db(m);
-      out.riser = { ticks: { rise: Math.round(barsKnob(bars) * 100) / 100, tone: Math.round(toneKnob(tr[tr.length - 1].centroid, 3500, 9000) * 100) / 100, width: Math.round(clamp01((side + 20) / 17) * 100) / 100 }, heard: `a rise over about ${Math.round(bars * 2) / 2} bars, ${Math.round(top - lo)} dB, into bar ${Math.round(end / barS) + 1} of the loop` };
+      out.riser = { ticks: { rise: Math.round(barsKnob(bars) * 100) / 100, tone: Math.round(toneKnob(tr[tr.length - 1].centroid, 3500, 9000) * 100) / 100, width: Math.round(clamp01((side + 20) / 17) * 100) / 100 }, heard: `a rise over about ${Math.round(bars * 2) / 2} bars, ${Math.round(top - lo)} dB, into bar ${fromBar + Math.round(end / barS)}` };
     } else out.riser = { ticks: null, heard: "no clear riser in the original here" };
   }
   // Impact: a jump at the hit, and how long it rings (broadband, 50 ms windows).

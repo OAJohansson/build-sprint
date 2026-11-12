@@ -1,7 +1,7 @@
 # 0024 — Publish the notebook only from main
 
 - **Date:** 2026-10-22
-- **Status:** accepted
+- **Status:** accepted (how the page is split and republished: decision 0030)
 
 ## Context
 

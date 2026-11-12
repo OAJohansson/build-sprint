@@ -1,9 +1,10 @@
-// Builds the private sprint notebook (.notebook/index.html) from docs/.
-// Publish or republish that file as a claude.ai artifact; see AGENTS.md.
+// Builds the private sprint notebook (.notebook/index.html plus .notebook/data/) from docs/.
+// Republish the page and the changed data files to the claude.ai artifact; see AGENTS.md.
 // The notebook is one page shared by every session, so it's only built for publishing from the
 // latest main with no uncommitted notes (decision 0024). `--preview` builds any branch into
-// .notebook/preview.html, for checking only.
+// .notebook/preview.html, for checking only. `--since <published index.html>` lists what changed.
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { ROOT, readProducts, readSideProjects } from "../products.mjs";
@@ -205,20 +206,76 @@ const pages = PAGES.filter((pg) => pg.generated || exists(pg.file)).map((pg) => 
   };
 });
 
+// The notebook is a small page plus one text file per product sub-page and sprint page, so a
+// republish only sends what changed (decision 0030). The page holds the menu and every file's
+// hash; it fetches a file's text when that view opens.
+const files = {}; // published path → content
+const put = (file, text) => ((files[file] = text), file);
+
 const data = {
   repo: REPO,
   total: TOTAL,
   built: new Date().toISOString().slice(0, 10),
-  products,
-  ideas: read("docs/ideas.md").replace(/^# .*\n+/, ""),
-  pages,
-  quiz: quizCards(),
+  products: products.map(({ sections: secs, ...p }) => ({
+    ...p,
+    sections: secs.map(({ text, ...s }) => ({ ...s, file: put(`data/products/${p.slug}/${s.id}.txt`, text) })),
+  })),
+  ideas: put("data/ideas.txt", read("docs/ideas.md").replace(/^# .*\n+/, "")),
+  pages: pages.map(({ text, ...pg }) => (pg.id === "quiz" ? pg : { ...pg, file: put(`data/pages/${pg.id}.txt`, text) })),
+  // One card per line, so the file reads well before publishing.
+  quiz: put("data/quiz.json", `[\n${quizCards().map((c) => JSON.stringify(c)).join(",\n")}\n]\n`),
 };
+const hash = (text) => createHash("sha256").update(text).digest("hex").slice(0, 12);
+data.files = Object.fromEntries(Object.entries(files).map(([f, t]) => [f, hash(t)]));
 
 // "<" escaped so no doc text can close the script tag early.
-const json = JSON.stringify(data).replace(/</g, "\\u003c");
-const html = read("scripts/notebook/template.html").replace("/*DATA*/null", json);
-const out = path.join(ROOT, preview ? ".notebook/preview.html" : ".notebook/index.html");
-fs.mkdirSync(path.dirname(out), { recursive: true });
-fs.writeFileSync(out, html);
-console.log(`Notebook: ${products.length} product(s) → ${path.relative(ROOT, out)}${preview ? " (preview only, don't publish)" : ""}`);
+const inline = (value) => JSON.stringify(value).replace(/</g, "\\u003c");
+const template = read("scripts/notebook/template.html");
+const page = (embedded) => template.replace("/*DATA*/null", inline(data)).replace("/*INLINE*/null", embedded ? inline(files) : "null");
+
+function writeSplit(dir) {
+  fs.rmSync(path.join(dir, "data"), { recursive: true, force: true });
+  for (const [f, text] of Object.entries(files)) {
+    fs.mkdirSync(path.dirname(path.join(dir, f)), { recursive: true });
+    fs.writeFileSync(path.join(dir, f), text);
+  }
+  fs.writeFileSync(path.join(dir, "index.html"), page(false));
+}
+
+const NB = path.join(ROOT, ".notebook");
+fs.mkdirSync(NB, { recursive: true });
+const kb = (n) => `${Math.round(n / 1024)} KB`;
+
+if (preview) {
+  // preview.html carries every file inline so it opens straight from disk; preview/ is the real
+  // split, to check through a local server (python3 -m http.server -d .notebook/preview).
+  fs.writeFileSync(path.join(NB, "preview.html"), page(true));
+  writeSplit(path.join(NB, "preview"));
+  console.log(`Notebook preview: ${products.length} product(s) → .notebook/preview.html (and the split in .notebook/preview/). Don't publish these.`);
+  process.exit(0);
+}
+
+writeSplit(NB);
+
+// What changed since the live notebook: compare with the hashes in the published page. Read the
+// artifact first (Artifact tool, action "read"), then pass the file it saved: --since <file>.
+const sinceArg = process.argv.indexOf("--since");
+const sinceFile = sinceArg > -1 ? process.argv[sinceArg + 1] : null;
+let before = null;
+if (sinceFile) {
+  const old = fs.readFileSync(path.resolve(sinceFile), "utf8").match(/const DATA = (\{.*\});\s*$/m);
+  before = old ? JSON.parse(old[1]).files ?? null : null;
+  if (!before) console.warn(`⚠ ${sinceFile} has no file hashes (an old single-file notebook?). Publishing everything.`);
+}
+const changed = Object.keys(files).filter((f) => !before || before[f] !== data.files[f]);
+const removed = before ? Object.keys(before).filter((f) => !(f in files)) : [];
+const plan = { file_path: ".notebook/index.html", root: ".notebook", files: changed, removed };
+fs.writeFileSync(path.join(NB, "publish.json"), JSON.stringify(plan, null, 2) + "\n");
+
+const size = (f) => Buffer.byteLength(files[f]);
+const pageSize = Buffer.byteLength(page(false));
+console.log(`Notebook: ${products.length} product(s), ${Object.keys(files).length} data files → .notebook/`);
+console.log(`Publish: index.html (${kb(pageSize)}) + ${changed.length} changed file(s) (${kb(changed.reduce((n, f) => n + size(f), 0))})${removed.length ? `, ${removed.length} removed` : ""}${before ? "" : " — full publish, no --since given"}`);
+for (const f of changed) console.log(`  ${f}  ${kb(size(f))}`);
+for (const f of removed) console.log(`  ${f}  (removed: pass null in the files map)`);
+console.log("Plan written to .notebook/publish.json.");

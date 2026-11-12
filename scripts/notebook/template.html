@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Build Sprint Notebook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -188,6 +189,8 @@ h2 { font: 700 20px/1.2 var(--display); margin: 0; text-wrap: balance; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
 <script>
 const DATA = /*DATA*/null;
+// The preview build carries every data file inline; the published page fetches them.
+const INLINE = /*INLINE*/null;
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const nn = (d) => String(d).padStart(2, "0");
@@ -199,6 +202,28 @@ const md = (text) => {
   const html = window.marked ? marked.parse(text) : `<pre>${esc(text)}</pre>`;
   return html.replace(/<table>/g, '<div class="tw"><table>').replace(/<\/table>/g, "</table></div>");
 };
+// Text of a data file (path from DATA), or undefined while it loads (the view re-renders when it
+// arrives), or null if it failed. "?v=<hash>" so an updated file isn't served from cache.
+const got = {};
+function need(file) {
+  if (file in got) return got[file];
+  if (INLINE && file in INLINE) return (got[file] = INLINE[file]);
+  got[file] = undefined;
+  const route = location.hash;
+  fetch(`${file}?v=${DATA.files[file]}`)
+    .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
+    .then((t) => { got[file] = t; }, () => { got[file] = null; })
+    .then(() => { if (location.hash === route) render(true); });
+}
+const waiting = (text) => (text === undefined ? `<p class="lede">Loading…</p>` : `<p class="lede">Couldn't load this page. Reload to try again.</p>`);
+const mdFile = (file) => { const t = need(file); return typeof t === "string" ? md(t) : waiting(t); };
+let quizCache;
+function QUIZ() {
+  if (quizCache) return quizCache;
+  const t = need(DATA.quiz);
+  if (typeof t === "string") { try { quizCache = JSON.parse(t); } catch { got[DATA.quiz] = null; } }
+  return quizCache;
+}
 const STATUS = { shipped: "Shipped", building: "Building", parked: "Parked", idea: "Idea" };
 const pill = (s) => `<span class="pill ${esc(s)}">${esc(STATUS[s] || s)}</span>`;
 
@@ -258,7 +283,7 @@ function overview() {
     </section>
     <section class="head"><h2>Products</h2>${rows}</section>
     ${SIDE.length ? `<section class="head"><h2>Alongside the sprint</h2><div class="list">${SIDE.map(row).join("")}</div></section>` : ""}
-    <section class="head"><h2>Problems to solve</h2><div class="prose">${md(DATA.ideas)}</div></section>
+    <section class="head"><h2>Problems to solve</h2><div class="prose">${mdFile(DATA.ideas)}</div></section>
     <div class="links">${DATA.pages.map((pg) => `<a class="btn" href="#${pg.id}">${esc(pg.label)}</a>`).join("")}<a class="btn" href="${DATA.repo}">Code on GitHub</a></div>`;
 }
 
@@ -268,7 +293,7 @@ function sprintPage(pg) {
       <div class="eyebrow">${esc(pg.eyebrow)}</div>
       <h1>${esc(pg.title)}</h1>
     </header>
-    <section class="prose${pg.id === "knowledge" ? " kb" : ""}">${md(pg.text)}</section>
+    <section class="prose${pg.id === "knowledge" ? " kb" : ""}">${mdFile(pg.file)}</section>
     <div class="links"><a class="btn" href="${esc(pg.source)}">Edit on GitHub</a></div>`;
 }
 
@@ -283,7 +308,7 @@ let progress = loadProgress();
 const inTopic = (c) => quiz.topic === "All" || c.topic === quiz.topic;
 const isDue = (c) => { const s = progress[qid(c)]; return !s || s.due <= Date.now(); };
 function buildQueue() {
-  const pool = DATA.quiz.filter(inTopic);
+  const pool = QUIZ().filter(inTopic);
   const due = quiz.practice ? pool : pool.filter(isDue);
   // seen-and-due first (oldest first), then new cards in page order
   quiz.queue = due.slice().sort((a, b) => ((progress[qid(a)]?.due ?? Infinity) - (progress[qid(b)]?.due ?? Infinity)));
@@ -292,11 +317,14 @@ function buildQueue() {
 }
 const inDays = (box) => (BOXES[box] === 0 ? "today" : BOXES[box] === 1 ? "tomorrow" : `in ${BOXES[box]} days`);
 function quizPage() {
+  if (!QUIZ()) return `
+    <header class="head"><div class="eyebrow">Active recall</div><h1>Knowledge quiz</h1></header>
+    ${waiting(got[DATA.quiz])}`;
   if (!quiz.card && !quiz.queue.length && !quiz.done) buildQueue();
-  const pool = DATA.quiz.filter(inTopic);
+  const pool = QUIZ().filter(inTopic);
   const dueCount = pool.filter(isDue).length;
   const learned = pool.filter((c) => (progress[qid(c)]?.box ?? 0) >= 3).length;
-  const topics = ["All", ...new Set(DATA.quiz.map((c) => c.topic))];
+  const topics = ["All", ...new Set(QUIZ().map((c) => c.topic))];
   const c = quiz.card;
   const box = c ? progress[qid(c)]?.box ?? 0 : 0;
   const next = Math.min(box + 1, BOXES.length - 1);
@@ -323,7 +351,7 @@ function quizPage() {
       <h1>Knowledge quiz</h1>
       <p class="lede">Questions from the <a href="#knowledge">Knowledge bank</a>. Cards you know come back after 1, 3, 7, 16, then 35 days; cards you miss come back today.</p>
     </header>
-    <div class="qstats"><span><b>${dueCount}</b> due</span><span><b>${learned}</b>/${pool.length} learned</span><span><b>${DATA.quiz.length}</b> cards</span></div>
+    <div class="qstats"><span><b>${dueCount}</b> due</span><span><b>${learned}</b>/${pool.length} learned</span><span><b>${QUIZ().length}</b> cards</span></div>
     <div class="chips" role="group" aria-label="Topic">${topics.map((t) => `<button class="chip" data-topic="${esc(t)}" aria-pressed="${t === quiz.topic}">${esc(t)}</button>`).join("")}</div>
     ${body}
     <p class="qnote">Progress is saved in this browser only. <button class="linkish" data-reset>${quiz.armedReset ? "Tap again to reset all progress" : "Reset progress"}</button></p>`;
@@ -392,7 +420,7 @@ function product(p) {
 function sectionPage(p, s) {
   return `
     <div class="crumbs"><a href="#${p.slug}">${p.side ? "" : `${nn(p.day)} `}${esc(p.title)}</a><span>/</span><span>${esc(s.label)}</span></div>
-    <section class="prose">${md(s.text)}</section>`;
+    <section class="prose">${mdFile(s.file)}</section>`;
 }
 
 function render(keepScroll) {

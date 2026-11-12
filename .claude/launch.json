@@ -158,6 +158,18 @@
         "3057"
       ],
       "port": 3057
+    },
+    {
+      "name": "notebook-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "3099",
+        "-d",
+        ".notebook/preview"
+      ],
+      "port": 3099
     }
   ]
 }

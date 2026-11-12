@@ -18,6 +18,7 @@ Details are in the notes at the bottom. Ask Claude "where are we?" for an update
 - [ ] Selvedge: put it in the Mac Dock (Chrome: the install icon in the address bar; Safari: File → Add to Dock) *(me)*
 - [ ] Fill in the keyring: paste each key into `.env.secrets.local` in the main folder (the empty lines are there; values from each app's `.env.local`) *(me)*
 - [ ] First Founder session: rebuild Six AM beyond the MVP. Plan it together once the playbook update is merged; then I write the kickoff pack and evals, owner-only checks outside the repo *(me)*
+- [ ] Website (side project): finish the brief (MVP and stop line, requirements), then the design session. Branch `website-discovery`; ask Claude to "continue the website"
 - [ ] Six AM: in the main folder, switch to `main`, pull, copy `.env.local` into `apps/07-six-am/`, then `pnpm ship 07-six-am` *(me)*
 - [ ] Six AM: the skipped checks on the live URL (`break-ui`, guidelines, simulated user test, a second device); see its backlog
 - [ ] Merge the Inkling pull request in kids-app so the new app and `/demo` go live at inkling-journal.vercel.app *(me)*

@@ -10,7 +10,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from "react";
 import type { LabTransport, LoopState } from "@/lib/lab/transport";
 import { DRUM_KNOB_SPECS, DRUM_PRESETS, DRUM_ROWS, DRUM_ROW_NAMES, ROW_KNOBS, ROW_PRESETS, clampDrumMacros, drumKnobWord, drumMoves, drumSuggestLine, type DrumMacros, type DrumPresetId, type DrumRow } from "@/lib/make/drum-synth";
-import { foldRow, type DrumsCloseness, type DrumsReading, type DrumsReport, type RowSound, type RowTarget } from "@/lib/make/drums-make";
+import { ROW_SCORE_SCALE, foldRow, type DrumsCloseness, type DrumsReading, type DrumsReport, type RowSound, type RowTarget } from "@/lib/make/drums-make";
 import { MakeClient } from "@/lib/make/make-client";
 import { drumNoun, isDrumSound, saveAction, soundId, suggestDrumName, suggestDrumTags, type DrumSound } from "@/lib/make/library";
 import { ApiError, mentorApi } from "@/lib/mentor/client";
@@ -48,7 +48,7 @@ export function useDrums(o: DrumsOpts) {
 
   const [open, setOpen] = useState<DrumRow>("kick");
   const [sounds, setSounds] = useState<Record<DrumRow, Sound>>(() => perRow((r) => fresh(HOME[r])));
-  const [ticksS, setTicks] = useState<Record<DrumRow, { for: string; macros: DrumMacros; moved: string | null } | null>>(() => perRow(() => null));
+  const [ticksS, setTicks] = useState<Record<DrumRow, { for: string; macros: DrumMacros; moved: string | null; closer?: { preset: DrumPresetId; distance: number; own: number } | null } | null>>(() => perRow(() => null));
   const [suggesting, setSuggesting] = useState<DrumRow | null>(null);
   const [readS, setReadS] = useState<Read | null>(null);
   const [state, setState] = useState<{ loopKey: string; state: ReadState; error?: string } | null>(null);
@@ -79,7 +79,9 @@ export function useDrums(o: DrumsOpts) {
       console.info(`[make] drums suggest ${row} ${snd.preset}: ${res.suggestion.renders} renders in ${res.ms} ms, distance ${res.suggestion.distance.toFixed(2)} (preset ${res.suggestion.presetDistance.toFixed(2)})`);
       const after = res.suggestion.macros;
       const moved = before ? ROW_KNOBS[row].filter((k) => Math.abs((after[k] ?? 0) - (before[k] ?? 0)) >= 0.05).map((k) => DRUM_KNOB_SPECS[k].name) : null;
-      setTicks((t) => ({ ...t, [row]: { for: soundId(snd.preset, snd.macros), macros: after, moved: moved === null ? null : moved.length ? `Ticks moved: ${moved.join(", ")}.` : "The ticks stayed where they were." } }));
+      // N2: another preset of the row that gets clearly closer at its best.
+      const closer = res.suggestion.closer ? { preset: res.suggestion.closer.preset, distance: res.suggestion.closer.distance, own: res.suggestion.distance } : null;
+      setTicks((t) => ({ ...t, [row]: { for: soundId(snd.preset, snd.macros), macros: after, closer, moved: moved === null ? null : moved.length ? `Ticks moved: ${moved.join(", ")}.` : "The ticks stayed where they were." } }));
     } catch (e) {
       console.warn("[make] drums suggest failed", e);
     } finally {
@@ -307,7 +309,13 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
   else if (m.suggesting === row) line = `Measuring the ${noun} against ${DRUM_PRESETS[snd.preset].name}…`;
   else if (!m.read?.targets[row]) line = <span className={s.faintLine}>No {rowTitle(row)} hits in this loop to compare with.</span>;
   else if (!ticks) line = `Mentor: press Suggest for ${rowTitle(row)} to compare this preset with the original.`;
-  else line = <>Mentor: {drumSuggestLine(snd.preset, snd.macros, ticks, noun, m.bpm)}{m.ticks[row]?.moved && drumMoves(row, snd.macros, ticks).length > 0 ? <><br /><span className={s.faintLine}>{m.ticks[row]!.moved}</span></> : null}</>;
+  else {
+    const closer = m.ticks[row]?.closer;
+    const score = (d: number) => Math.round(100 * Math.exp(-d / ROW_SCORE_SCALE));
+    line = <>Mentor: {drumSuggestLine(snd.preset, snd.macros, ticks, noun, m.bpm)}
+      {closer ? <><br /><span className={s.faintLine}>{DRUM_PRESETS[closer.preset].name} gets closer (about {score(closer.distance)} against {score(closer.own)} at best here).</span> <button className={s.textBtn} onClick={() => m.setPreset(row, closer.preset)}>Try {DRUM_PRESETS[closer.preset].name}</button></>
+        : m.ticks[row]?.moved && drumMoves(row, snd.macros, ticks).length > 0 ? <><br /><span className={s.faintLine}>{m.ticks[row]!.moved}</span></> : null}</>;
+  }
   return (
     <div className={s.drums}>
       <div className={s.drRows} role="group" aria-label="Drum rows">
@@ -389,10 +397,10 @@ function DrumPreset({ m, row }: { m: DrumsModel; row: DrumRow }) {
       {openMenu && (
         <div className={s.menu} role="menu" aria-label={`${DRUM_ROW_NAMES[row]} presets`}>
           {ROW_PRESETS[row].map((id) => (
-            <button key={id} role="menuitemradio" aria-checked={id === cur} className={s.menuItem} onClick={() => { setOpenMenu(false); if (id !== cur) m.setPreset(row, id); }}>
+            <button key={id} role="menuitemradio" aria-checked={id === cur} className={s.menuItem} onClick={() => { setOpenMenu(false); m.setPreset(row, id); /* N4: re-picking the current preset resets its knobs */ }}>
               <span className={s.menuCheck} aria-hidden>{id === cur ? "✓" : ""}</span>
               <span>{DRUM_PRESETS[id].name}</span>
-              <small>{DRUM_PRESETS[id].tags.join(" · ")}</small>
+              <small>{m.ticks[row]?.closer?.preset === id ? <span className={s.menuCloser}>closer · </span> : null}{DRUM_PRESETS[id].tags.join(" · ")}</small>
             </button>
           ))}
           {mine.length > 0 && (
@@ -429,7 +437,8 @@ export function DrumsCheck({ m }: { m: DrumsModel }) {
       </div>
       <button className={s.ghost} aria-pressed={m.bed} onClick={() => m.setBed(!m.bed)} title="Plays the original bass under both A and B, so you judge the drums in the groove">{m.bed ? "Bass under both: on" : "Bass under both: off"}</button>
       <span className={s.drScore} title="How close this row's hit measures to the original's (its sound across its own bands, the kick's note, the hats' width): it rises as you follow this row's gold ticks. Numbers only.">
-        closeness · {DRUM_ROW_NAMES[m.open].toLowerCase()} <b>{m.rowCloseness?.[m.open]?.score ?? "–"}</b> / 100
+        {/* N3: an off row isn't in Mine, so it has no score. */}
+        closeness · {DRUM_ROW_NAMES[m.open].toLowerCase()} <b>{m.read?.d.rows[m.open].doubtful && !m.anyway.includes(m.open) ? "–" : m.rowCloseness?.[m.open]?.score ?? "–"}</b> / 100
       </span>
     </div>
   );

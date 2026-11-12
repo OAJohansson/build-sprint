@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { dropLibSound } from "@/lib/studio-drop";
 import type { Doc } from "@/lib/timeline";
 import { DRUM_PRESET_IDS, DRUM_PRESETS, DRUM_ROWS, ROW_KNOBS, ROW_PRESETS, clampDrumMacros, drumKnobWord, drumSuggestLine, renderDrumRow } from "./drum-synth";
-import { drumsCloseness, drumsFromReading, drumsReport, foldRow, measureRows, renderDrumsMine, rowCloseness, suggestDrum } from "./drums-make";
+import { drumsCloseness, drumsFromReading, drumsReport, foldRow, measureRows, renderDrumsMine, rowCloseness, suggestDrum, suggestDrumRow } from "./drums-make";
 import { readDrums, type DrumReading } from "./drums-read";
 import { DRUM_SPECS, renderDrums } from "./layers-bench";
 import { parseNewSound, parseSoundPatch, suggestDrumName, type LibrarySound } from "./library";
@@ -115,6 +115,14 @@ describe("Suggest and closeness on a known loop", () => {
       expect(after.score, row).toBeGreaterThan(before.score);
     }
   });
+
+  it("points at a clearly closer preset of the row (N2), and not when the open one is the closest", () => {
+    const { mono: sw } = renderDrums(DRUM_SPECS[2], { bars: 8, rate: RATE, seed: 1 });
+    const d2 = drumsFromReading(readDrums(sw, sw, RATE, DRUM_SPECS[2].bpm), DRUM_SPECS[2].bpm);
+    const t2 = measureRows(sw, sw, RATE, d2).clap!;
+    expect(suggestDrumRow(t2, "clap-wide").closer?.preset).toBe("clap-tight-snare"); // a snare kit: Tight snare 2.3 against Wide clap 6.2
+    expect(suggestDrumRow(t2, "clap-tight-snare").closer).toBeNull();
+  }, 30000);
 
   it("scores the loop against itself near 100 and silence low", () => {
     const self = drumsReport(mono, mono, RATE, bpm);

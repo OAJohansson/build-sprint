@@ -396,3 +396,13 @@
 .loopChip { min-width: 0; max-width: 100%; }
 .loopChipText { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .deck { min-width: 112px; }
+
+/* N1 (drums re-check 12 Nov): the U9 fix let a long title push the header past the window (1,602 px at
+   1440). The actions block doesn't shrink (fixed widths inside, so Play keeps one x); the title takes
+   what's left and ellipsises; the transport narrows on smaller windows. */
+.actions { flex: none; }
+.title { flex: 1 1 0; min-width: 120px; }
+.transport { width: min(640px, 40vw); }
+.head { min-width: 0; }
+/* N2: the preset Suggest found clearly closer, marked in the menu. */
+.menuCloser { color: var(--gold); }

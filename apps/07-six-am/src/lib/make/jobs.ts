@@ -11,7 +11,7 @@ import type { Suggestion } from "./match";
 import { notesForLoop } from "./pattern";
 import { synthParams, type Macros, type MakePresetId } from "./presets";
 import { renderBass } from "./render";
-import { drumsCloseness, drumsFromReading, rowCloseness, drumsReport, measureRows, renderDrumsMine, suggestDrum, type DrumSuggestion, type DrumsCloseness, type DrumsReading, type DrumsReport, type RowSound, type RowTarget } from "./drums-make";
+import { drumsCloseness, drumsFromReading, rowCloseness, suggestDrumRow, drumsReport, measureRows, renderDrumsMine, type DrumSuggestion, type DrumsCloseness, type DrumsReading, type DrumsReport, type RowSound, type RowTarget } from "./drums-make";
 import type { DrumMacros, DrumPresetId, DrumRow } from "./drum-synth";
 import { readDrums } from "./drums-read";
 import { readNotes } from "./notes-read";
@@ -37,7 +37,7 @@ export type MakeResponse =
   | { type: "suggest"; id: number; suggestion: Suggestion; ms: number }
   | { type: "drums-read"; id: number; reading: DrumsReading; targets: Record<DrumRow, RowTarget | null>; report: DrumsReport; levelDb: number; lufs: number; ms: number }
   | { type: "drums-render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; rowGainsDb: Record<DrumRow, number | null>; closeness: DrumsCloseness; rowCloseness: Record<DrumRow, { score: number; distance: number } | null>; ms: number }
-  | { type: "drums-suggest"; id: number; suggestion: DrumSuggestion; ms: number }
+  | { type: "drums-suggest"; id: number; suggestion: DrumSuggestion & { closer: { preset: DrumPresetId; macros: DrumMacros; distance: number } | null }; ms: number }
   | { type: "melody-read"; id: number; reading: MelodyReading; targets: Record<MelodyRow, MelodyTarget | null>; levelDb: number; lufs: number; ms: number }
   | { type: "melody-render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; rowGainsDb: Record<MelodyRow, number | null>; rowCloseness: Record<MelodyRow, { score: number; distance: number } | null>; ms: number }
   | { type: "melody-suggest"; id: number; suggestion: MelodySuggestion; ms: number }
@@ -119,7 +119,7 @@ export function runMakeJob(m: MakeRequest): { res: MakeResponse; transfer: Array
       return { res: { type: "melody-render", id: m.id, left, right, rate: m.rate, gainDb: g.db, rowGainsDb: r.gains, rowCloseness: rowClose, ms: ms() }, transfer: [left.buffer, right.buffer] };
     }
     if (m.type === "melody-suggest") return { res: { type: "melody-suggest", id: m.id, suggestion: suggestMelody(m.target, m.preset, m.bpm, { start: m.start }), ms: ms() }, transfer: [] };
-    if (m.type === "drums-suggest") return { res: { type: "drums-suggest", id: m.id, suggestion: suggestDrum(m.target, m.preset, { start: m.start }), ms: ms() }, transfer: [] };
+    if (m.type === "drums-suggest") return { res: { type: "drums-suggest", id: m.id, suggestion: suggestDrumRow(m.target, m.preset, { start: m.start }), ms: ms() }, transfer: [] };
     return { res: { type: "suggest", id: m.id, suggestion: suggestFor(m.reading, m.preset, m.bpm, m.start), ms: ms() }, transfer: [] };
   } catch (e) {
     return { res: { type: "error", id: m.id, message: e instanceof Error ? e.message : String(e) }, transfer: [] };

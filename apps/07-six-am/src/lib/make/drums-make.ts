@@ -250,6 +250,22 @@ export function suggestDrum(t: RowTarget, preset: DrumPresetId, o: { start?: Dru
   return { macros: out, distance: dist(out), presetDistance, renders };
 }
 
+/** N2 (drums re-check): another preset of the row is clearly closer when its best is 25 % and ≥ 1.0 nearer. */
+export const CLOSER = { share: 0.75, abs: 1 };
+/**
+ * Suggest across the row's presets: the open preset's ticks, plus the row's other presets at their own
+ * best, and the one clearly closer if any (the clap that stays at 22 on its ticks while Tight snare
+ * reaches 36). Gold ticks only; the preset isn't changed.
+ */
+export function suggestDrumRow(t: RowTarget, preset: DrumPresetId, o: { start?: DrumMacros; rate?: number } = {}) {
+  const own = suggestDrum(t, preset, o);
+  const others = ROW_PRESETS_OF(preset).filter((p) => p !== preset).map((p) => ({ preset: p, ...suggestDrum(t, p, { rate: o.rate }) }));
+  const best = others.sort((a, b) => a.distance - b.distance)[0];
+  const closer = best && best.distance <= own.distance * CLOSER.share && own.distance - best.distance >= CLOSER.abs ? { preset: best.preset, macros: best.macros, distance: best.distance } : null;
+  return { ...own, renders: own.renders + others.reduce((a, x) => a + x.renders, 0), closer };
+}
+const ROW_PRESETS_OF = (p: DrumPresetId) => (Object.keys(DRUM_PRESETS) as DrumPresetId[]).filter((x) => DRUM_PRESETS[x].row === DRUM_PRESETS[p].row);
+
 /** The kick's note as the Mentor says it ("about 55 Hz"). */
 export const tuneHz = (preset: DrumPresetId, m: DrumMacros) => Math.round(kickHz(preset, m.tune ?? 0.5));
 

@@ -64,3 +64,14 @@ Today I can see the one closeness number for the current loop and "✓ saved" pe
 - Sandbox only: the dev server on :3017 (`ACCESS_CODE=test-code`, in-memory). I PUT maps for Lost in the Loop (123.02 BPM, origin 1.407 s, G major, 101 bars) and the Mason Flint remix (126.05 BPM, 0.11 s, G minor, 108 bars); the **section bounds and layer estimates are my approximations**, so "Drop 1" may start with a few kick-less bars. My own Chrome profile (a copy of the grader's, with the model cached), CDP plus Deck auto-select, so the share dialog was skipped. The Deck played aloud on the Mac; `?quiet=1` silenced the Lab's parts, so **A/B and the presets were judged by eye and score, not by ear**. Knobs were moved by real mouse drags.
 - I couldn't judge whether my drums sound close by ear, or the Studio playback of the new blocks (not played).
 - Testing system suggestion: keep a committed sandbox seed script (maps with real sections for the two eval tracks) in `evals-runs/`, so each tester and grader uses the same sections, not hand-made ones.
+
+## Re-check 12 Nov (after 47281c0, ad2b749): working notes
+
+Sandbox restarted on the new code and seeded with `apps/07-six-am/evals/sandbox-seed.mjs` (Lost now shows "Groove" for bars 41–64). Shots `r01`–.
+
+### M-S2 again
+- The score is now per open row ("closeness · kick 83", "closeness · clap & snare 23", "closeness · hats 52") and reacts: kick Round 808 49 → Decay 51 → Tune 64; clap from the far end 9 → Decay to its tick 22, on all ticks 23, Tight snare 36; hats 15 → Tone dark 38 → Length shorter 52 (r03–r09).
+- Knob words are finer now ("460 ms", "soft · 25", "bright · 2.6 kHz"), so a drag always changes the word.
+- Names follow the preset and knobs ("Round 808 kick", "Wide clap, bright"; tags match).
+- New: the clap row stays low even on its ticks (22–23 with Wide clap); only switching preset gets it to 36. Re-picking the preset that is already chosen doesn't reset its knobs.
+- U6 fixed: header says "filling the loop…" with no number; the panel counted 35 → 3 s and was ready at 41.3 s. U9 fixed: Play stays at x 471 in Listen, Make, filling and ready. U10 fixed: "Ticks placed" as plain text (r01, r02).

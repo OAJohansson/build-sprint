@@ -238,9 +238,13 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
       // FX-F6: what the drop cut on its lane (a block shortened or replaced), said with Undo.
       const lanesBefore = lanesOf(docRef.current), was = docRef.current.regions.filter((g) => laneOfRegion(g, lanesBefore)?.id === r.laneId && g.id !== r.regionId);
       const cut = was.filter((g) => { const now = r.doc.regions.find((x) => x.id === g.id); return !now || now.start !== g.start || now.length !== g.length; });
+      const beforeIds = new Set(docRef.current.regions.map((g) => g.id)); // before the commit swaps the doc
       commit(r.doc);
       const lane = lanesOf(r.doc).find((l) => l.id === r.laneId);
-      const cutText = cut.length ? `${cut.some((g) => !r.doc.regions.some((x) => x.id === g.id)) ? "Replaced" : "Shortened"} ${[...new Set(cut.map((g) => loopById(g.loopId)?.name ?? "a block"))].join(", ")}` : "";
+      // FX-R4: a block cut in two (one piece kept, a new piece of the same loop after the drop) is "Split".
+      const split = cut.some((g) => r.doc.regions.some((x) => x.id === g.id) && r.doc.regions.some((x) => !beforeIds.has(x.id) && x.id !== r.regionId && x.loopId === g.loopId));
+      const verb = split ? "Split" : cut.some((g) => !r.doc.regions.some((x) => x.id === g.id)) ? "Replaced" : "Shortened";
+      const cutText = cut.length ? `${verb} ${[...new Set(cut.map((g) => loopById(g.loopId)?.name ?? "a block"))].join(", ")}` : "";
       if (info.exact && lane && lanesOf(r.doc).length > before) setToastFor({ text: `${ROW_PLURAL[info.type] ?? laneType(info.type).name} go on their own lane: added "${lane.name}".`, doc: r.doc });
       else if (cutText) setToastFor({ text: `${cutText} on ${lane?.name ?? "the lane"}.`, doc: r.doc });
       // U11: a drop from My sounds keeps the list open (no drawer); the block is still there to click.

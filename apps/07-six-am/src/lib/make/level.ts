@@ -62,6 +62,28 @@ export function lufs(s: Stereo): number {
   return loud(gated.reduce((a, b) => a + b, 0) / Math.max(1, gated.length));
 }
 
+/** BS.1770 block energies (K-weighted mean square, 400 ms blocks, 75 % overlap): numbers only, so a
+ *  loudness can be worked out later for this signal plus another (FX on top, slice 3). */
+export function kBlocks(s: Stereo): number[] {
+  const fs = kWeighting(s.rate);
+  const L = filter(s.left, fs), R = filter(s.right, fs);
+  const n = Math.min(L.length, R.length), B = Math.round(0.4 * s.rate), step = Math.round(0.1 * s.rate);
+  const z: number[] = [];
+  const block = (a: number, b: number) => { let e = 0; for (let i = a; i < b; i++) e += L[i] * L[i] + R[i] * R[i]; return e / Math.max(1, b - a); };
+  if (n < B) z.push(block(0, n));
+  else for (let a = 0; a + B <= n; a += step) z.push(block(a, a + B));
+  return z;
+}
+/** Integrated loudness from block energies (the gates of lufs()). */
+export function lufsOfBlocks(z: number[]): number {
+  const loud = (e: number) => -0.691 + db(e);
+  const abs = z.filter((e) => loud(e) > -70);
+  if (!abs.length) return -200;
+  const rel = loud(abs.reduce((a, b) => a + b, 0) / abs.length) - 10;
+  const gated = abs.filter((e) => loud(e) > rel);
+  return loud(gated.reduce((a, b) => a + b, 0) / Math.max(1, gated.length));
+}
+
 /**
  * The gain that brings "Mine" to the original's level: dB and linear. 0 dB when either is silent;
  * capped at ±24 dB so a near-silent render can't jump in volume.

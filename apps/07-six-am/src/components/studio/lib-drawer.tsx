@@ -5,7 +5,8 @@
 // so the library and other tracks don't change. The pattern stays as saved (transposed to the
 // track's key on play, L197).
 import { ChevronDown, X } from "lucide-react";
-import { editLibLoop, isDrumLoop, isMelodyLoop, type BassLoop, type DrumLoop, type LibLoop, type MelodyLoop } from "@/lib/make/lib-loop";
+import { editLibLoop, isDrumLoop, isFxLoop, isMelodyLoop, type BassLoop, type DrumLoop, type FxLoop, type LibLoop, type MelodyLoop } from "@/lib/make/lib-loop";
+import { FX_KNOBS, FX_KNOB_SPECS, FX_PRESETS, clampFxMacros, fxKnobWord, fxRowOf, fxRowPresets, type FxPresetId } from "@/lib/make/fx-synth";
 import { POLY_KNOBS, POLY_KNOB_SPECS, clampPolyMacros, melodyPreset, melodyPresetIds, melodyRowOf, polyKnobWord, type MelodyPresetId } from "@/lib/make/poly-synth";
 import { DRUM_KNOB_SPECS, DRUM_PRESETS, ROW_KNOBS, ROW_PRESETS, clampDrumMacros, drumKnobWord, rowOf, type DrumPresetId } from "@/lib/make/drum-synth";
 import { MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, type MacroId, type MakePresetId } from "@/lib/make/presets";
@@ -15,8 +16,53 @@ import s from "./sound-drawer.module.css";
 import l from "./lanes.module.css";
 
 export function LibDrawer({ t, sound, color, onClose }: { t: Timeline; sound: LibLoop; color: string; onClose: () => void }) {
+  if (isFxLoop(sound)) return <FxDrawer t={t} sound={sound} color={color} onClose={onClose} />;
   if (isMelodyLoop(sound)) return <MelodyDrawer t={t} sound={sound} color={color} onClose={onClose} />;
   return isDrumLoop(sound) ? <DrumDrawer t={t} sound={sound} color={color} onClose={onClose} /> : <BassDrawer t={t} sound={sound} color={color} onClose={onClose} />;
+}
+
+/** Slice 3 (P9): an FX row's sound (the row's presets, its three knobs); the block keeps its place, its event plays on the track's root. */
+function FxDrawer({ t, sound, color, onClose }: { t: Timeline; sound: FxLoop; color: string; onClose: () => void }) {
+  const listening = t.previewSound?.id === sound.id;
+  const change = (next: LibLoop, merge?: string) => {
+    t.updateSound(next, merge);
+    if (listening) t.setPreviewSound(next);
+  };
+  const blocks = t.doc.regions.filter((r) => r.loopId === sound.id).length;
+  const row = fxRowOf(sound.preset), home = clampFxMacros(sound.preset, undefined);
+  return (
+    <aside className={s.drawer} style={{ ["--c" as string]: color }} aria-label={`${sound.name}, a sound from your library`}>
+      <div className={s.top}>
+        <button className={s.back} onClick={onClose}>← My sounds</button>
+        <button className={s.close} onClick={onClose} aria-label="Close the sound drawer"><X aria-hidden /></button>
+      </div>
+      <div className={s.body}>
+        <section className={s.pick}>
+          <label className={l.presetPick}>
+            <span className={l.presetLabel}>Preset</span>
+            <select value={sound.preset} onChange={(e) => change(editLibLoop(sound, { preset: e.target.value as FxPresetId }))} aria-label="Preset">
+              {fxRowPresets(row).map((id) => <option key={id} value={id}>{FX_PRESETS[id].name}</option>)}
+            </select>
+            <ChevronDown aria-hidden />
+          </label>
+          <p className={s.dim}>{FX_PRESETS[sound.preset].about}</p>
+          <p className={s.dim}>{sound.name}: plays on the track&apos;s root and tempo.</p>
+        </section>
+        <section className={s.shape} style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
+          {FX_KNOBS[row].map((id) => (
+            <Knob key={id} id={id as never} spec={FX_KNOB_SPECS[id]} wordOf={(v) => fxKnobWord(sound.preset, id, v)} value={sound.macros[id] ?? home[id] ?? 0.5} color={color} disabled={false} reset={home[id] ?? 0.5}
+              onChange={(v) => change(editLibLoop(sound, { macros: { [id]: v } }), `lib:${sound.id}:${id}`)} size={72} />
+          ))}
+        </section>
+        <section className={s.ai}>
+          <div className={s.row}>
+            <button className={s.secondary} aria-pressed={listening} onClick={() => t.setPreviewSound(listening ? null : sound)}>{listening ? "Stop" : "Listen"}</button>
+          </div>
+          <p className={s.dim}>Changes apply to {blocks === 1 ? "this block" : `all ${blocks} blocks of this sound`} in this track; your library keeps the original.</p>
+        </section>
+      </div>
+    </aside>
+  );
 }
 
 /** Slice 2 (P9): a melody row's sound (the row's four presets, six knobs), editable; the notes stay as saved, in the track's key. */

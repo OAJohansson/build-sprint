@@ -4,7 +4,7 @@
 import { drumPatternById, KITS, type KitId } from "./kits";
 import { patternById } from "./patterns";
 import { clampKnobs, PRESETS, type KnobValues, type PresetId } from "./presets";
-import { isDrumLoop, isMelodyLoop, parseLibLoop, type LibLoop } from "@/lib/make/lib-loop";
+import { isDrumLoop, isFxLoop, isMelodyLoop, parseLibLoop, type LibLoop } from "@/lib/make/lib-loop";
 
 /** Studio lane indexes, the same as timeline.ts TRACKS: Drums 0, Bass 1, Chords 2. */
 export const LANE = { drums: 0, bass: 1, chords: 2 } as const;
@@ -115,7 +115,7 @@ export function soundMeta(s: Sound): { track: number; name: string; bars: number
   if (s.source === "lib") {
     // Phase 5: a drum row's block draws as hits (the "kick" shape).
     // Phase 5: a drum row's block draws as hits (the "kick" shape), a melody row's as stabs or a pad.
-    const kind = isDrumLoop(s) ? "kick" : isMelodyLoop(s) ? (s.preset.endsWith("-pad") ? "pad" : "stab") : ({ "round-sub": "sub", "rubber-pluck": "pump", reese: "pump", "acid-line": "acid" } as const)[s.preset];
+    const kind = isDrumLoop(s) ? "kick" : isFxLoop(s) ? "pad" : isMelodyLoop(s) ? (s.preset.endsWith("-pad") ? "pad" : "stab") : ({ "round-sub": "sub", "rubber-pluck": "pump", reese: "pump", "acid-line": "acid" } as const)[s.preset];
     return { track: s.lane, name: s.name, bars: s.bars, vibe: "My sound", kind };
   }
   const kind = ({ sub: "sub", acid: "acid", reese: "pump", organ: "stab", rhodes: "stab", pad: "pad" } as const)[s.preset];

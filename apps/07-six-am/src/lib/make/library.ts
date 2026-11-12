@@ -6,6 +6,7 @@
 import { pitchClass, type Scale } from "@/lib/synths/theory";
 import { MAKE_PRESETS, clampMacros, macroWord, type Macros, type MakePresetId } from "./presets";
 import type { MakeNote } from "./render";
+import { FX_KNOBS, FX_NOUN, FX_PRESETS, clampFxMacros, fxPassBars, fxRowOf, isFxPreset, type FxKnobId, type FxMacros, type FxPresetId } from "./fx-synth";
 import { POLY_KNOBS, clampPolyMacros, isMelodyPreset, kindOf, melodyPreset, melodyRowOf, type MelodyPresetId, type PolyKnobId, type PolyMacros } from "./poly-synth";
 import { DRUM_PRESETS, ROW_KNOBS, clampDrumMacros, isDrumPreset, rowOf, type DrumKnobId, type DrumMacros, type DrumPresetId } from "./drum-synth";
 
@@ -34,12 +35,16 @@ export type DrumSound = SoundBase & { part: "drums"; preset: DrumPresetId; macro
 /** Phase 5 slice 2: a melody row (part "other"; the preset says the row: chords-… or lead-…), its
  *  notes in `key`, with a repeat of up to 16 bars. */
 export type MelodySound = Omit<SoundBase, "pattern"> & { part: "other"; preset: MelodyPresetId; macros: PolyMacros; pattern: { bars: 1 | 2 | 4 | 8 | 16; notes: MakeNote[] } };
-export type LibrarySound = BassSound | DrumSound | MelodySound;
+/** Phase 5 slice 3: one FX row (part "other"; the preset says which: fx-impact-…, fx-down-…, fx-riser-…),
+ *  one event per pass (its note carries the step it starts on and the key's root). */
+export type FxSound = Omit<SoundBase, "pattern"> & { part: "other"; preset: FxPresetId; macros: FxMacros; pattern: { bars: 1 | 2 | 4 | 8; notes: MakeNote[] } };
+export type LibrarySound = BassSound | DrumSound | MelodySound | FxSound;
 type DistOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
 export type NewSound = DistOmit<LibrarySound, "id" | "createdAt" | "updatedAt">;
-export type SoundPatch = { name?: string; tags?: string[]; preset?: MakePresetId | DrumPresetId | MelodyPresetId; macros?: Macros | DrumMacros | PolyMacros };
+export type SoundPatch = { name?: string; tags?: string[]; preset?: MakePresetId | DrumPresetId | MelodyPresetId | FxPresetId; macros?: Macros | DrumMacros | PolyMacros | FxMacros };
 export const isDrumSound = <T extends { preset: string }>(s: T): s is T & { preset: DrumPresetId } => isDrumPreset(s.preset);
-export const isBassSound = (s: LibrarySound): s is BassSound => !isDrumPreset(s.preset) && !isMelodyPreset(s.preset);
+export const isBassSound = (s: LibrarySound): s is BassSound => !isDrumPreset(s.preset) && !isMelodyPreset(s.preset) && !isFxPreset(s.preset);
+export const isFxSound = <T extends { preset: string }>(s: T): s is T & { preset: FxPresetId } => isFxPreset(s.preset);
 export const isMelodySound = <T extends { preset: string }>(s: T): s is T & { preset: MelodyPresetId } => isMelodyPreset(s.preset);
 
 export const MAX_TAGS = 12;
@@ -126,6 +131,7 @@ export function parseNewSound(raw: unknown): NewSound | null {
   const r = raw as Record<string, unknown>;
   if (isDrumPreset(r.preset)) return parseDrumSound(r, r.preset);
   if (isMelodyPreset(r.preset)) return parseMelodySound(r, r.preset);
+  if (isFxPreset(r.preset)) return parseFxSound(r, r.preset);
   if (typeof r.preset !== "string" || !(r.preset in MAKE_PRESETS)) return null;
   const preset = r.preset as MakePresetId;
   const part = LIB_PARTS.find((p) => p === r.part);
@@ -179,6 +185,43 @@ function parseMelodySound(r: Record<string, unknown>, preset: MelodyPresetId): N
   const name = cleanName(r.name) || suggestMelodyName(preset, macros, source?.title);
   const tags = normalizeTags(Array.isArray(r.tags) ? r.tags : suggestMelodyTags(preset, key, scale, bpm, source?.title, macros));
   return { name, part: "other", preset, macros, pattern: { bars, notes }, key, scale, bpm: Math.round(bpm * 100) / 100, source, tags };
+}
+
+/** An FX row's sound (slice 3): part "other", the row's preset and knobs, one event per pass. */
+function parseFxSound(r: Record<string, unknown>, preset: FxPresetId): NewSound | null {
+  const scale = r.scale === "major" || r.scale === "minor" ? r.scale : null;
+  const key = typeof r.key === "string" && pitchClass(r.key) !== null ? r.key.trim() : null;
+  const bpm = num(r.bpm, 40, 220);
+  const pat = (r.pattern ?? {}) as Record<string, unknown>;
+  const bars = ([1, 2, 4, 8] as const).find((b) => b === pat.bars) ?? null;
+  const notes = bars ? parseNotes(pat.notes, bars, 4) : null;
+  if (r.part !== "other" || !scale || !key || bpm === null || !bars || !notes) return null;
+  const source = sourceOf(r.source as Record<string, unknown> | null | undefined);
+  const macros = clampFxMacros(preset, (r.macros ?? {}) as Record<string, unknown>);
+  const name = cleanName(r.name) || suggestFxName(preset, macros, source?.title);
+  const tags = normalizeTags(Array.isArray(r.tags) ? r.tags : suggestFxTags(preset, key, scale, bpm, source?.title, macros));
+  return { name, part: "other", preset, macros, pattern: { bars, notes }, key, scale, bpm: Math.round(bpm * 100) / 100, source, tags };
+}
+
+/** FX names, preset first: "Sub drop", "Dark fall", "Bright noise riser", then a knob word (T132). */
+const FX_NAME: Record<FxPresetId, string> = {
+  "fx-impact-big": "Big hit", "fx-impact-subdrop": "Sub drop", "fx-impact-crash": "Crash hit", "fx-down-dark": "Dark fall", "fx-down-noise": "Noise fall",
+  "fx-riser-noise": "Bright noise riser", "fx-riser-revcrash": "Reverse crash", "fx-riser-synth": "Synth riser",
+};
+const FX_KNOB_WORD: Record<FxKnobId, [string, string]> = { size: ["big", "small"], tone: ["bright", "dark"], tail: ["long", "short"], drop: ["deep", "slight"], length: ["long", "short"], rise: ["long", "short"], width: ["wide", "narrow"] };
+export function fxWord(preset: FxPresetId, m: FxMacros): string | null {
+  const home = clampFxMacros(preset, undefined), full = clampFxMacros(preset, m);
+  const far = FX_KNOBS[fxRowOf(preset)].map((id) => ({ id, d: (full[id] ?? 0) - (home[id] ?? 0) })).sort((a, b) => Math.abs(b.d) - Math.abs(a.d))[0];
+  return far && Math.abs(far.d) >= NAME_MOVE ? FX_KNOB_WORD[far.id][far.d > 0 ? 0 : 1] : null;
+}
+export function suggestFxName(preset: FxPresetId, m: FxMacros, songTitle?: string | null): string {
+  const w = fxWord(preset, m), base = w ? `${FX_NAME[preset]}, ${w}` : FX_NAME[preset];
+  const s = songTitle ? shortTitle(songTitle) : "";
+  return (s ? `${base}, from ${s}` : base).slice(0, MAX_NAME);
+}
+export function suggestFxTags(preset: FxPresetId, key: string, scale: Scale, bpm: number, songTitle?: string | null, m?: FxMacros): string[] {
+  const bars = fxPassBars(preset, m ?? {});
+  return normalizeTags(["fx", FX_NOUN[fxRowOf(preset)], ...FX_PRESETS[preset].tags, (m && fxWord(preset, m)) ?? "", `${bars} bar${bars === 1 ? "" : "s"}`, `${key} ${scale}`, `${Math.round(bpm)} bpm`, songTitle ? shortTitle(songTitle) : ""]);
 }
 
 /** A melody sound's name, preset first: "Stab chords", "Pluck lead", then a knob word (as drums, T132). */
@@ -247,6 +290,13 @@ export function parseSoundPatch(raw: unknown, current: Pick<LibrarySound, "prese
   const name = cleanName(r.name);
   if (name) out.name = name;
   if (Array.isArray(r.tags)) out.tags = normalizeTags(r.tags);
+  if (isFxPreset(current.preset)) {
+    const row = fxRowOf(current.preset);
+    const preset = isFxPreset(r.preset) && fxRowOf(r.preset) === row ? r.preset : null;
+    if (preset) out.preset = preset;
+    if (r.macros && typeof r.macros === "object") out.macros = clampFxMacros(preset ?? current.preset, r.macros as Record<string, unknown>);
+    return out;
+  }
   if (isMelodyPreset(current.preset)) {
     const row = melodyRowOf(current.preset);
     const preset = isMelodyPreset(r.preset) && melodyRowOf(r.preset) === row ? r.preset : null;
@@ -271,7 +321,7 @@ export function parseSoundPatch(raw: unknown, current: Pick<LibrarySound, "prese
 // ── Saving from Make (S4 fix, S5-1) ──────────────────────────────────────────────────────────────
 
 /** A sound's identity in Make: its preset and knob values (rounded), whatever its name. */
-export const soundId = (preset: MakePresetId | DrumPresetId | MelodyPresetId, m: Macros | DrumMacros | PolyMacros) => { const v = m as Record<string, number>; return `${preset}|${Object.keys(v).sort().map((k) => Math.round(v[k] * 1000)).join(",")}`; };
+export const soundId = (preset: MakePresetId | DrumPresetId | MelodyPresetId | FxPresetId, m: Macros | DrumMacros | PolyMacros | FxMacros) => { const v = m as Record<string, number>; return `${preset}|${Object.keys(v).sort().map((k) => Math.round(v[k] * 1000)).join(",")}`; };
 
 /**
  * What "Save to library" does now, given the last sound saved (or loaded) here: nothing when it's

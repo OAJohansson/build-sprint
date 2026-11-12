@@ -144,7 +144,10 @@ const LEGACY_IDS = LEGACY_LANES.map((l) => l.id);
  * lane is `track`: any lane of the same family, and an old track's own 4 lanes also take what they
  * always took ("Top / FX" keeps taking shakers and congas).
  */
-export function accepts(lane: Lane, item: { type: LaneType; track: number }): boolean {
+export function accepts(lane: Lane, item: { type: LaneType; track: number; exact?: boolean }): boolean {
+  // Phase 5 (D-F4): a drum row made in Make goes on its own lane type only, so a clap never lands on
+  // (and overwrites) the kick's block on a shared Drums lane; with no such lane, a new one is offered.
+  if (item.exact) return lane.type === item.type;
   if (laneType(lane.type).family === laneType(item.type).family) return true;
   const i = LEGACY_IDS.indexOf(lane.id);
   return i >= 0 && i === item.track && LEGACY_LANES[i].type === lane.type;

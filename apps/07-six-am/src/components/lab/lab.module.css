@@ -353,3 +353,19 @@
 .drWait { margin: 0; min-height: 34px; display: flex; align-items: center; font-size: 13px; color: var(--ink); }
 .drScore { margin-left: auto; display: flex; align-items: baseline; gap: 8px; color: var(--muted); white-space: nowrap; font-size: 12.5px; }
 .drScore b { font: 500 22px var(--f-mono); color: var(--ink); }
+
+/* D-P1 (drums-slice evals): on a short window (a 13" laptop, 1440 × 741) the drum rows and the knob
+   block tighten so A/B and the score stay above the save bar. Every row still has one height, so
+   picking a row still moves nothing; the Bass room is untouched. */
+@media (max-height: 860px) {
+  .drRow { height: 46px; }
+  .drRow[data-head] { height: 18px; }
+  .drName { height: 40px; }
+  .drTrack, .drPattern { height: 30px; }
+  .drPreset { font-size: 18px; }
+  .drBlock { margin-top: 8px; }
+  .drPresetName { font-size: 26px !important; padding: 2px 0; }
+  .drBlock .menu { top: 36px; }
+  .drKnobs { gap: 48px; margin: 4px 0 6px; }
+  .drSuggest, .drWait { min-height: 30px; }
+}

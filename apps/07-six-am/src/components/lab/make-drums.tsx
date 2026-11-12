@@ -7,7 +7,7 @@
 // L215), at the original's loudness; A/B against the original drum part, the original bass under
 // both by default (P7). The drum part is read off the main thread from a copy that the worker zeroes
 // (C2): only numbers come back. Save saves the open row ("Save kick") to My sounds.
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from "react";
 import type { LabTransport, LoopState } from "@/lib/lab/transport";
 import { DRUM_KNOB_SPECS, DRUM_PRESETS, DRUM_ROWS, DRUM_ROW_NAMES, ROW_KNOBS, ROW_PRESETS, clampDrumMacros, drumKnobWord, drumMoves, drumSuggestLine, type DrumMacros, type DrumPresetId, type DrumRow } from "@/lib/make/drum-synth";
 import { foldRow, type DrumsCloseness, type DrumsReading, type DrumsReport, type RowSound, type RowTarget } from "@/lib/make/drums-make";
@@ -220,6 +220,11 @@ export type DrumsModel = ReturnType<typeof useDrums>;
 
 // ── The middle (Fold) ───────────────────────────────────────────────────────────────────────────
 
+/** D-P1: a short window (≤ 860 px tall, lab.module.css) gets 72 px knobs instead of 88. */
+const SHORT = "(max-height: 860px)";
+const onShort = (cb: () => void) => { const m = matchMedia(SHORT); m.addEventListener("change", cb); return () => m.removeEventListener("change", cb); };
+const useShort = () => useSyncExternalStore(onShort, () => matchMedia(SHORT).matches, () => false);
+
 const W = 1000; // the pattern's drawing units across (scaled to the column)
 
 /** One row's pattern: a block per bar, its hits as bars by velocity; doubtful rows' faint hits hollow. */
@@ -286,6 +291,7 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
   const gap = bars > 8 ? 4 : 8, bw = (W - gap * (bars - 1)) / bars;
   const wait = waitLine(m, loop, playing);
   const off = !!wait;
+  const short = useShort();
   const row = m.open, snd = m.sounds[row], ticks = m.ticks[row]?.macros;
   const noun = drumNoun(snd.preset);
   let line: React.ReactNode;
@@ -329,7 +335,7 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
         <div className={s.drKnobs} data-off={off ? "" : undefined}>
           {ROW_KNOBS[row].map((id) => (
             <Knob key={`${row}-${id}`} id={id} spec={DRUM_KNOB_SPECS[id]} wordOf={(v) => drumKnobWord(snd.preset, id, v, m.bpm)} value={snd.macros[id] ?? 0} sug={off ? undefined : ticks?.[id]}
-              color="#f1e6d3" disabled={off} onChange={(v) => m.setKnob(row, id, v)} reset={clampDrumMacros(snd.preset, undefined)[id] ?? 0} size={88} />
+              color="#f1e6d3" disabled={off} onChange={(v) => m.setKnob(row, id, v)} reset={clampDrumMacros(snd.preset, undefined)[id] ?? 0} size={short ? 72 : 88} />
           ))}
         </div>
         {wait ? <p className={s.drWait} role="status">{wait}</p> : (

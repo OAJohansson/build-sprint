@@ -191,25 +191,29 @@ export function readDrums(left: Float32Array, right: Float32Array | undefined, r
     for (let c = 1; c < cols - 1; c++) {
       if (rise[c] < 0.05 * top || rise[c] < rise[c - 1] || rise[c] < rise[c + 1]) continue;
       const f = c * S;
-      const lo = Math.max(LAG, f - BACK[k]), hi = Math.min(frames - 1, f + 10);
+      const lo = Math.max(0, f - BACK[k]), hi = Math.min(frames - 1, f + 10);
       // Rise of the row's energy, smoothed over 3 frames; the first local peak at least 0.35 of the
       // steepest one (and at most 35 ms before it) is the attack: a clap's first burst, not its tail.
-      const r = (j: number) => (j - 1 - LAG >= 0 && j + 1 < frames ? (e[j - 1] - e[j - 1 - LAG] + e[j] - e[j - LAG] + e[j + 1] - e[j + 1 - LAG]) / 3 : 0);
+      // Circular: the loop plays round, so a hit on its first frames rises against the loop's end.
+      const E = (j: number) => e[((j % frames) + frames) % frames];
+      const r = (j: number) => (E(j - 1) - E(j - 1 - LAG) + E(j) - E(j - LAG) + E(j + 1) - E(j + 1 - LAG)) / 3;
       let br = 0, bf = f;
       for (let j = lo; j <= hi; j++) if (r(j) > br) { br = r(j); bf = j; }
-      for (let j = Math.max(LAG + 2, bf - 12); j < bf; j++) if (r(j) >= 0.35 * br && r(j) >= r(j - 1) && r(j) >= r(j + 1)) { bf = j; break; }
+      for (let j = Math.max(0, bf - 12); j < bf; j++) if (r(j) >= 0.35 * br && r(j) >= r(j - 1) && r(j) >= r(j + 1)) { bf = j; break; }
       // The hit's size: the row's activation over 30 ms; its jump: against the quietest point of
       // the 40 ms before (a click, a flicker or a ringing tail jumps little).
       const c0 = Math.round(bf / S);
       let size = 0, pre = Infinity;
       for (let j = c0; j < Math.min(cols, c0 + Math.round(SIZE_S[k] / fr / S)); j++) size = Math.max(size, h[j]);
-      for (let j = Math.max(0, c0 - Math.round(0.04 / fr / S)); j < c0 - 1; j++) pre = Math.min(pre, h[j]);
+      // The loop plays round: before its first frame comes its end (a kick on the loop's first sample
+      // has its quiet stretch there, not nothing).
+      for (let j = c0 - Math.round(0.04 / fr / S); j < c0 - 1; j++) pre = Math.min(pre, h[((j % cols) + cols) % cols]);
       if (!isFinite(pre)) pre = 0;
       // The raw energy of the row's bands must jump too (an activation can shift between
       // templates without anything new sounding).
       let ePost = 0, ePre = Infinity;
       for (let j = bf; j < Math.min(frames, bf + 5); j++) ePost = Math.max(ePost, e[j]);
-      for (let j = Math.max(0, bf - 12); j < bf - 2; j++) ePre = Math.min(ePre, e[j]);
+      for (let j = bf - 12; j < bf - 2; j++) ePre = Math.min(ePre, e[((j % frames) + frames) % frames]);
       if (!isFinite(ePre)) ePre = 0;
       mine.push({ row: k, f: bf, t: ((bf - 1) * hop) / rate, size, jump: size / (pre + 1e-6 * size + 1e-12), raw: ePost / (ePre + 1e-9 * ePost + 1e-20) });
     }
@@ -336,7 +340,7 @@ export function quantise(hits: DrumHit[], sps: number, loopStartSec: number, ste
   }
   const odd: number[] = [], even: number[] = [];
   for (const h of hits) {
-    const step = Math.round((h.t - gridSec) / sps);
+    const step = Math.round((h.t - gridSec) / sps) || 0; // never −0 (a hit just before the bar line)
     if (step < 0 || step >= steps) continue;
     const offsetMs = Math.round((h.t - gridSec - step * sps) * 10000) / 10;
     const row = rows[h.row];

@@ -6,7 +6,7 @@
     "extra": 4.4,
     "labels": 94.3,
     "kickMedianMs": 0,
-    "gridMs": 11.2,
+    "gridMs": 21.8,
     "kickStepsMod4": "0,2,3",
     "claps": 16,
     "perRow": {
@@ -22,7 +22,7 @@
     "extra": 1.5,
     "labels": 95.5,
     "kickMedianMs": 0,
-    "gridMs": 11.8,
+    "gridMs": 21.8,
     "kickStepsMod4": "0,2,3",
     "claps": 16,
     "perRow": {
@@ -38,7 +38,7 @@
     "extra": 7.4,
     "labels": 97.6,
     "kickMedianMs": -1,
-    "gridMs": 58.1,
+    "gridMs": 68.9,
     "kickStepsMod4": "0,2,3",
     "claps": 16,
     "perRow": {
@@ -54,7 +54,7 @@
     "extra": 2.9,
     "labels": 97.6,
     "kickMedianMs": -1,
-    "gridMs": 58.6,
+    "gridMs": 69.1,
     "kickStepsMod4": "0,2,3",
     "claps": 15,
     "perRow": {
@@ -136,15 +136,21 @@
   {
     "loop": "Mason 57–64 build",
     "kicks": 32,
-    "kickDoubtful": false,
+    "kickDoubtful": true,
     "claps": 0,
     "clapDoubtful": false,
     "hats": 64
   },
   {
-    "loop": "POOLED spike bench (clean, −20, −15 dB)",
-    "found": 99,
-    "extra": 2.2,
-    "labels": 94.7
+    "loop": "POOLED spike bench (clean, −20, −15 dB), reader",
+    "found": 99.1,
+    "extra": 2.4,
+    "labels": 94.6
+  },
+  {
+    "loop": "POOLED spike bench (clean, −20, −15 dB), as Mine plays",
+    "found": 99.1,
+    "extra": 1.1,
+    "labels": 95
   }
 ]

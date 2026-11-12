@@ -4,7 +4,9 @@
 import fs from "node:fs";
 import { it } from "vitest";
 import { readDrums } from "@/lib/make/drums-read";
-import { drumsFromReading } from "@/lib/make/drums-make";
+import { drumsFromReading, measureRows, renderDrumsMine, suggestDrum, ROW_BAND } from "@/lib/make/drums-make";
+import { band } from "@/lib/make/closeness";
+import { ROW_PRESETS, DRUM_PRESETS, type DrumRow } from "@/lib/make/drum-synth";
 import { REAL_LABELLED, renderLabelled, renderNoiseBuild } from "@/lib/make/drums-fixture";
 import { DRUM_ROWS, drumLoops, scoreDrums } from "@/lib/make/layers-bench";
 
@@ -27,14 +29,58 @@ it("real-loop fixture and bench", () => {
   const b = renderNoiseBuild(1);
   const rb = drumsFromReading(readDrums(b.mono, b.mono, 44100, b.bpm, 0), b.bpm);
   out.push({ loop: "Mason 57–64 build", kicks: rb.rows.kick.hits.length, kickDoubtful: rb.rows.kick.doubtful, claps: rb.rows.clap.hits.length, clapDoubtful: rb.rows.clap.doubtful, hats: rb.rows.hats.hits.length });
-  const bp = { te: 0, on: 0, fe: 0, agree: 0, union: 0 };
-  for (const bleed of [null, -20, -15]) for (const loop of drumLoops(bleed)) {
-    const r = readDrums(loop.mono, undefined, loop.rate, loop.bpm, 0);
-    const s = scoreDrums(loop.truth, r.hits);
-    const agree = Object.values(s.perRow).reduce((a, v) => a + v.right, 0);
-    bp.te += s.truthEvents; bp.on += s.onTime; bp.fe += s.foundEvents; bp.agree += agree; bp.union += agree / Math.max(1e-9, s.labelAgree);
+  for (const mine of [false, true]) {
+    const bp = { te: 0, on: 0, fe: 0, agree: 0, union: 0 };
+    for (const bleed of [null, -20, -15]) for (const loop of drumLoops(bleed)) {
+      const r = readDrums(loop.mono, undefined, loop.rate, loop.bpm, 0);
+      // "As Mine plays": the doubtful rows (L225, D-F6) left out, as Make does by default.
+      const off = mine ? DRUM_ROWS.filter((row) => drumsFromReading(r, loop.bpm).rows[row].doubtful) : [];
+      const s = scoreDrums(loop.truth, r.hits.filter((h) => !off.includes(h.row)));
+      const agree = Object.values(s.perRow).reduce((a, v) => a + v.right, 0);
+      bp.te += s.truthEvents; bp.on += s.onTime; bp.fe += s.foundEvents; bp.agree += agree; bp.union += agree / Math.max(1e-9, s.labelAgree);
+    }
+    out.push({ loop: `POOLED spike bench (clean, −20, −15 dB)${mine ? ", as Mine plays" : ", reader"}`, found: pct(bp.on / bp.te), extra: pct((bp.fe - bp.on) / bp.te), labels: pct(bp.agree / bp.union) });
   }
-  out.push({ loop: "POOLED spike bench (clean, −20, −15 dB)", found: pct(bp.on / bp.te), extra: pct((bp.fe - bp.on) / bp.te), labels: pct(bp.agree / bp.union) });
   for (const o of out) console.log(JSON.stringify(o));
   fs.writeFileSync(new URL("./drums-real-results.json", import.meta.url), JSON.stringify(out, null, 2));
 }, 120000);
+
+/** The grader's independent Z6 check (D-F7): each hit's envelope in its row's low/own band, 1 ms hops
+ *  over 0–200 ms, in dB under that hit's peak; mean |difference| original vs Mine over the row's hits. */
+function envDistance(orig: Float32Array, mine: Float32Array, rate: number, times: number[], lo: number, hi: number) {
+  const a = band(orig, rate, lo, hi), b = band(mine, rate, lo, hi), W = Math.round(rate * 0.001), N = 200;
+  const env = (x: Float32Array, at: number) => { const e: number[] = []; for (let k = 0; k < N; k++) { let s = 0; for (let i = at + k * W; i < at + (k + 1) * W && i < x.length; i++) s += x[i] * x[i]; e.push(10 * Math.log10(s / W + 1e-20)); } const top = Math.max(...e); return e.map((v) => Math.max(v - top, -40)); };
+  let d = 0, n = 0;
+  for (const t of times) { const at = Math.round(t * rate); if (at < 0 || at + N * W >= a.length) continue; const ea = env(a, at), eb = env(b, at); for (let k = 0; k < N; k++) { d += Math.abs(ea[k] - eb[k]); n++; } }
+  return n ? d / n : NaN;
+}
+
+it("Suggest per row, the product's distance and the independent envelope check", () => {
+  const out: string[] = [];
+  const BANDS: Record<DrumRow, [number, number]> = { kick: [30, 120], clap: ROW_BAND.clap, hats: ROW_BAND.hats };
+  for (const spec of REAL_LABELLED) {
+    const { mono } = renderLabelled(spec, 1);
+    const d = drumsFromReading(readDrums(mono, mono, 44100, spec.bpm, 0), spec.bpm);
+    const targets = measureRows(mono, mono, 44100, d);
+    const sps = 60 / spec.bpm / 4;
+    for (const row of DRUM_ROWS) {
+      const t = targets[row];
+      if (!t) continue;
+      const preset = ROW_PRESETS[row][0];
+      const sug = suggestDrum(t, preset);
+      const mineAt = (macros: Record<string, number>) => {
+        const sounds = Object.fromEntries(DRUM_ROWS.map((r) => [r, { preset: ROW_PRESETS[r][0], macros: r === row ? macros : DRUM_PRESETS[ROW_PRESETS[r][0]].macros, on: r === row }])) as never;
+        const levels = Object.fromEntries(DRUM_ROWS.map((r) => [r, targets[r]?.levelDb ?? null])) as never;
+        const m = renderDrumsMine(d, sounds, levels, spec.bpm, 44100);
+        // Mine is rendered from the grid's step 0; turn it by the grid so hits line up with the original.
+        const k = Math.round((d.gridMs / 1000) * 44100), n = mono.length, x = new Float32Array(n);
+        for (let i = 0; i < Math.min(n, m.left.length); i++) x[(((i + k) % n) + n) % n] = (m.left[i] + m.right[i]) / 2;
+        return envDistance(mono, x, 44100, d.rows[row].hits.map((h) => h.t), ...BANDS[row]);
+      };
+      const before = mineAt(DRUM_PRESETS[preset].macros as Record<string, number>), after = mineAt(sug.macros as Record<string, number>);
+      out.push(`${spec.name} ${row}: product ${sug.presetDistance.toFixed(2)} -> ${sug.distance.toFixed(2)}; envelope ${before.toFixed(2)} -> ${after.toFixed(2)} dB ${after <= before ? "closer" : "FURTHER"}`);
+      void sps;
+    }
+  }
+  for (const o of out) console.log(o);
+}, 300000);

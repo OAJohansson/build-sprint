@@ -30,7 +30,33 @@ const BLEED_FROM: Record<DrumRow, string> = { kick: "the bass", clap: "the chord
 // shortcut: "doubtful" = at most one hit per 2 bars and every hit within 8 dB of the row's gate (GATE.db, tuned on the spike's bench); re-tune once data-evals' real-track hand check says how bleed reads.
 export const FAINT_DB = 8;
 
-/** The reader's rows as Make plays them, with the doubtful rows marked (L225). */
+/** A row needs this many hits before its pattern is judged, and this share of them on a repeat. */
+// shortcut: REPEAT_MIN and MIN_IRREGULAR picked on the fixture and bench (real rows ≥ 0.8, the build's wash well under); re-check on more real builds.
+export const MIN_IRREGULAR = 8, REPEAT_MIN = 0.5;
+
+/**
+ * The share of a row's hits that repeat: the best over 1-, 2- and 4-bar repeats, counting the hits
+ * on a position that plays in at least half of the repeats (and at least 2 of them).
+ */
+export function repeatShare(hits: Pick<RowHit, "step">[], steps: number): number {
+  if (!hits.length) return 1;
+  const on = new Set(hits.map((h) => h.step));
+  let best = 0;
+  for (const P of [16, 32, 64]) {
+    const reps = Math.floor(steps / P);
+    if (reps < 2) continue;
+    let kept = 0;
+    for (let p = 0; p < P; p++) {
+      let n = 0;
+      for (let k = 0; k < reps; k++) if (on.has(k * P + p)) n++;
+      if (n >= Math.max(2, reps / 2)) kept += n;
+    }
+    best = Math.max(best, kept / hits.length);
+  }
+  return best;
+}
+
+/** The reader's rows as Make plays them, with the doubtful rows marked (L225, D-F6). */
 export function drumsFromReading(r: DrumReading, bpm: number): DrumsReading {
   const sps = secondsPer16th(bpm), bars = Math.max(1, Math.round(r.steps / 16));
   const rows = {} as Record<DrumRow, DrumRowRead>;
@@ -39,8 +65,16 @@ export function drumsFromReading(r: DrumReading, bpm: number): DrumsReading {
       const db = h.db ?? null;
       return { step: h.step, off: Math.round((h.offsetMs / 1000 / sps) * 1000) / 1000, vel: h.vel, t: Math.round((r.gridMs / 1000 + h.step * sps + h.offsetMs / 1000) * 100000) / 100000, db, faint: db !== null && db < GATE.db[k] + FAINT_DB };
     });
-    const doubtful = hits.length > 0 && hits.length <= Math.max(1, Math.floor(bars / 2)) && hits.every((h) => h.faint);
-    rows[row] = { hits, doubtful, why: doubtful ? `${hits.length} faint mark${hits.length === 1 ? "" : "s"}, probably ${BLEED_FROM[row]} bleeding through: off in Mine` : null };
+    // L225: a few faint hits on a mostly empty row, or (spike weak spot 3) a whole row of faint hits:
+    // the bass or chords bleeding into an empty kick or clap row in a breakdown.
+    const sparse = hits.length > 0 && (hits.length <= Math.max(1, Math.floor(bars / 2)) || hits.length >= MIN_IRREGULAR) && hits.every((h) => h.faint);
+    // D-F6: a rising noise wash (a build) reads as many hits on no repeating pattern; real drums repeat.
+    const irregular = !sparse && hits.length >= MIN_IRREGULAR && r.steps >= 32 && repeatShare(hits, r.steps) < REPEAT_MIN;
+    rows[row] = {
+      hits, doubtful: sparse || irregular,
+      why: sparse ? `${hits.length} faint mark${hits.length === 1 ? "" : "s"}, probably ${BLEED_FROM[row]} bleeding through: off in Mine`
+        : irregular ? `${hits.length} marks on no repeating pattern, probably a noise build or ${BLEED_FROM[row]} bleeding through: off in Mine` : null,
+    };
   });
   return { rows, steps: r.steps, bars, gridMs: r.gridMs, swingMs: r.swingMs };
 }
@@ -56,7 +90,7 @@ export const ROW_BAND: Record<DrumRow, [number, number]> = { kick: [30, 180], cl
 
 /** Where each row's shape is measured from (Hz): a clap and hats often sit on a kick's tail (a clap
  *  on the beat in four-on-the-floor), so the kick's range would swamp their shape. */
-export const SHAPE_FROM: Record<DrumRow, number> = { kick: 0, clap: 250, hats: 2000 };
+export const SHAPE_FROM: Record<DrumRow, number> = { kick: 0, clap: 600, hats: 2000 };
 
 /** Band energies (dB re their sum) of each slice of a hit at sample `a`, slices cut at `end` s,
  *  over the bands from `fromHz` up. */

@@ -6,7 +6,7 @@
 import type { Scale } from "@/lib/synths/theory";
 import { readPart, suggestFor, type PartReading } from "./from-part";
 import { activeBars, barLevelsDb, gateNotes } from "./gate";
-import { abGain, lufs, rmsDb } from "./level";
+import { abGain, gainToLevel, lufs, rmsDb } from "./level";
 import type { Suggestion } from "./match";
 import { notesForLoop } from "./pattern";
 import { synthParams, type Macros, type MakePresetId } from "./presets";
@@ -77,7 +77,9 @@ export function runMakeJob(m: MakeRequest): { res: MakeResponse; transfer: Array
     if (m.type === "drums-render") {
       const r = renderDrumsMine(m.reading, m.sounds, m.levels, m.bpm, m.rate);
       const left = fitLoop(r.left, m.samples, m.reading.gridMs, m.rate), right = fitLoop(r.right, m.samples, m.reading.gridMs, m.rate);
-      const g = abGain({ rmsDb: m.levelDb, lufs: m.lufs }, { left, right, rate: m.rate });
+      // D-F5: drums match the original's perceived loudness (LUFS) outright. The bass's 0.9 dB leash to
+      // the RMS match (abGain) left bright, short drum sets up to 2.4 LU off. RMS only when LUFS can't read.
+      const g = m.lufs > -70 ? gainToLevel(m.lufs, { left, right, rate: m.rate }, "lufs") : gainToLevel(m.levelDb, { left, right, rate: m.rate });
       for (let i = 0; i < m.samples; i++) { left[i] *= g.gain; right[i] *= g.gain; }
       const closeness = drumsCloseness(m.report, drumsReport(left, right, m.rate, m.bpm));
       return { res: { type: "drums-render", id: m.id, left, right, rate: m.rate, gainDb: g.db, rowGainsDb: r.gains, closeness, ms: ms() }, transfer: [left.buffer, right.buffer] };

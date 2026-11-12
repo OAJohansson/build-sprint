@@ -126,7 +126,12 @@ describe("loopFillEtaS (Make waits for the loop)", () => {
   const base = { loopS: 30, catchS: 6.5, catchLeftS: null };
   it("counts down the rest of the pass when the loop is filled up to the playhead", () => {
     expect(loopFillEtaS({ ...base, posS: 12, filledS: 12 })).toBe(19);
-    expect(loopFillEtaS({ ...base, posS: -0.8, filledS: 0 })).toBe(32); // in the pre-roll
+    expect(loopFillEtaS({ ...base, posS: -0.8, filledS: 0 })).toBe(31); // in the pre-roll: the fill starts at the loop's start
+  });
+  it("counts from what's filled when the parts arrive ahead of the playhead (D-F8)", () => {
+    expect(loopFillEtaS({ ...base, posS: 12, filledS: 17 })).toBe(14);
+    expect(loopFillEtaS({ ...base, posS: 29, filledS: 30 })).toBe(1); // filled: just the read and render
+    expect(loopFillEtaS({ ...base, posS: 30, filledS: 30 })).toBe(1); // at the loop's end
   });
   it("adds a catch-up and a whole pass when there's a hole behind the playhead", () => {
     expect(loopFillEtaS({ ...base, posS: 12, filledS: 3 })).toBe(55);

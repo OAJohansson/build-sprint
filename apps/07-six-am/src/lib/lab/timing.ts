@@ -85,9 +85,15 @@ export function isCatching(gatePending: boolean, unmuteAt: number | null, now: n
  * the pre-roll); `filledS` how much of it is held. Filled up to the playhead → the rest of this pass;
  * a hole behind the playhead → the rest, a catch-up back to the start, then a whole pass.
  */
+/** From the loop in memory to Make's knobs live: the read and the first render (s). */
+export const READY_S = 0.8;
+
 export function loopFillEtaS(o: { loopS: number; posS: number; filledS: number; catchLeftS: number | null; catchS: number }): number {
   const { loopS, posS, filledS, catchLeftS, catchS } = o;
   if (catchLeftS !== null) return Math.ceil(catchLeftS + loopS);
-  const rest = Math.max(0, loopS - posS);
-  return Math.ceil(filledS >= Math.max(0, posS) - 0.5 ? rest + 0.3 : rest + catchS + loopS);
+  // D-F8 (drums-slice evals): the parts arrive ahead of what you hear, so a pass filled up to the
+  // playhead completes when its *filled* part reaches the end, plus the read and first render (~0.8 s).
+  // Timed from the playhead, the count said "5 s" when the knobs were already live.
+  if (filledS >= Math.max(0, posS) - 0.5) return Math.ceil(Math.max(0, loopS - Math.max(posS, filledS)) + READY_S);
+  return Math.ceil(Math.max(0, loopS - posS) + catchS + loopS);
 }

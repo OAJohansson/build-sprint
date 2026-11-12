@@ -3,31 +3,31 @@
   {
    "loop": "four-floor, offbeat open hats",
    "bleed": null,
-   "ms": 208,
-   "found": 98.4,
+   "ms": 222,
+   "found": 100,
    "extra": 1.6,
-   "medianMs": 0.9,
+   "medianMs": 1.1,
    "p95Ms": 3.2,
    "labels": 100,
-   "steps": 100,
+   "steps": 98.8,
    "swingMs": 0,
    "perRow": {
-    "kick": "32/32 right, 32 read",
+    "kick": "31/31 right, 32 read",
     "clap": "16/16 right, 16 read",
-    "hats": "31/32 right, 32 read"
+    "hats": "32/32 right, 32 read"
    }
   },
   {
    "loop": "four-floor, 16th hats",
    "bleed": null,
-   "ms": 246,
+   "ms": 262,
    "found": 100,
    "extra": 0,
    "medianMs": 1.8,
    "p95Ms": 3.5,
    "labels": 93.8,
    "steps": 93.8,
-   "swingMs": -0.1,
+   "swingMs": 0.3,
    "perRow": {
     "kick": "32/32 right, 32 read",
     "clap": "16/16 right, 16 read",
@@ -37,33 +37,33 @@
   {
    "loop": "swung 16ths (+25 ms)",
    "bleed": null,
-   "ms": 243,
-   "found": 99.2,
+   "ms": 305,
+   "found": 100,
    "extra": 0,
-   "medianMs": 1.5,
-   "p95Ms": 3.7,
-   "labels": 94.1,
-   "steps": 93.5,
-   "swingMs": 24.4,
+   "medianMs": 1.9,
+   "p95Ms": 3.8,
+   "labels": 100,
+   "steps": 100,
+   "swingMs": 25.2,
    "perRow": {
-    "kick": "31/32 right, 31 read",
+    "kick": "32/32 right, 32 read",
     "clap": "16/16 right, 16 read",
-    "hats": "96/96 right, 105 read"
+    "hats": "96/96 right, 96 read"
    }
   },
   {
    "loop": "broken beat, ghost snares",
    "bleed": null,
-   "ms": 226,
+   "ms": 262,
    "found": 96.4,
    "extra": 3.6,
-   "medianMs": 1.2,
-   "p95Ms": 2.8,
+   "medianMs": 1.9,
+   "p95Ms": 4.4,
    "labels": 99,
-   "steps": 96.3,
-   "swingMs": 0.5,
+   "steps": 95.5,
+   "swingMs": -1.1,
    "perRow": {
-    "kick": "25/28 right, 27 read",
+    "kick": "25/28 right, 28 read",
     "clap": "24/24 right, 24 read",
     "hats": "52/56 right, 55 read"
    }
@@ -71,65 +71,65 @@
   {
    "loop": "garage 2-step, swung",
    "bleed": null,
-   "ms": 210,
-   "found": 100,
-   "extra": 0,
-   "medianMs": 2,
-   "p95Ms": 4.8,
-   "labels": 87,
-   "steps": 87,
-   "swingMs": 17,
+   "ms": 212,
+   "found": 97.5,
+   "extra": 2.5,
+   "medianMs": 2.2,
+   "p95Ms": 4.9,
+   "labels": 86.9,
+   "steps": 86.1,
+   "swingMs": 17.8,
    "perRow": {
-    "kick": "23/23 right, 23 read",
-    "clap": "16/16 right, 16 read",
-    "hats": "48/48 right, 61 read"
+    "kick": "24/24 right, 24 read",
+    "clap": "15/16 right, 16 read",
+    "hats": "47/48 right, 61 read"
    }
   },
   {
    "loop": "hats only (breakdown)",
    "bleed": null,
-   "ms": 236,
+   "ms": 264,
    "found": 100,
-   "extra": 0,
+   "extra": 0.8,
    "medianMs": 1.6,
    "p95Ms": 3,
    "labels": 100,
-   "steps": 100,
+   "steps": 99.2,
    "swingMs": -0.5,
    "perRow": {
     "kick": "0/0 right, 0 read",
     "clap": "0/0 right, 0 read",
-    "hats": "127/127 right, 127 read"
+    "hats": "127/127 right, 128 read"
    }
   },
   {
    "loop": "four-floor, offbeat open hats",
    "bleed": -25,
-   "ms": 274,
-   "found": 98.4,
-   "extra": 0,
-   "medianMs": 1,
-   "p95Ms": 3.8,
-   "labels": 80.6,
-   "steps": 79.8,
+   "ms": 278,
+   "found": 100,
+   "extra": 1.6,
+   "medianMs": 1.4,
+   "p95Ms": 4.9,
+   "labels": 88.8,
+   "steps": 87.8,
    "swingMs": 0,
    "perRow": {
-    "kick": "31/32 right, 31 read",
-    "clap": "16/16 right, 27 read",
-    "hats": "32/32 right, 40 read"
+    "kick": "31/31 right, 32 read",
+    "clap": "16/16 right, 16 read",
+    "hats": "32/32 right, 42 read"
    }
   },
   {
    "loop": "four-floor, 16th hats",
    "bleed": -25,
-   "ms": 262,
+   "ms": 280,
    "found": 100,
    "extra": 0.8,
    "medianMs": 1.9,
    "p95Ms": 3.5,
    "labels": 99.4,
    "steps": 100,
-   "swingMs": -0.1,
+   "swingMs": 0.1,
    "perRow": {
     "kick": "32/32 right, 32 read",
     "clap": "15/16 right, 16 read",
@@ -139,16 +139,16 @@
   {
    "loop": "swung 16ths (+25 ms)",
    "bleed": -25,
-   "ms": 241,
-   "found": 98.4,
+   "ms": 227,
+   "found": 99.2,
    "extra": 0.8,
-   "medianMs": 1.4,
-   "p95Ms": 3.1,
+   "medianMs": 2,
+   "p95Ms": 3.9,
    "labels": 100,
-   "steps": 99.3,
-   "swingMs": 24,
+   "steps": 100,
+   "swingMs": 25,
    "perRow": {
-    "kick": "31/32 right, 31 read",
+    "kick": "32/32 right, 32 read",
     "clap": "16/16 right, 16 read",
     "hats": "95/96 right, 96 read"
    }
@@ -156,16 +156,16 @@
   {
    "loop": "broken beat, ghost snares",
    "bleed": -25,
-   "ms": 191,
+   "ms": 212,
    "found": 97.6,
-   "extra": 1.2,
-   "medianMs": 1.3,
-   "p95Ms": 2.9,
+   "extra": 2.4,
+   "medianMs": 2,
+   "p95Ms": 4.4,
    "labels": 94.5,
-   "steps": 93,
-   "swingMs": -0.4,
+   "steps": 92.2,
+   "swingMs": -1.1,
    "perRow": {
-    "kick": "26/28 right, 27 read",
+    "kick": "26/28 right, 28 read",
     "clap": "24/24 right, 24 read",
     "hats": "54/56 right, 61 read"
    }
@@ -173,24 +173,24 @@
   {
    "loop": "garage 2-step, swung",
    "bleed": -25,
-   "ms": 202,
-   "found": 100,
-   "extra": 2.5,
-   "medianMs": 2,
-   "p95Ms": 4.8,
-   "labels": 87,
-   "steps": 85.3,
+   "ms": 206,
+   "found": 96.3,
+   "extra": 5,
+   "medianMs": 2.2,
+   "p95Ms": 4.9,
+   "labels": 88.5,
+   "steps": 84.5,
    "swingMs": 17.1,
    "perRow": {
-    "kick": "23/23 right, 23 read",
-    "clap": "16/16 right, 16 read",
+    "kick": "22/24 right, 24 read",
+    "clap": "15/16 right, 15 read",
     "hats": "48/48 right, 63 read"
    }
   },
   {
    "loop": "hats only (breakdown)",
    "bleed": -25,
-   "ms": 260,
+   "ms": 256,
    "found": 100,
    "extra": 0,
    "medianMs": 1.6,
@@ -207,50 +207,50 @@
   {
    "loop": "four-floor, offbeat open hats",
    "bleed": -20,
-   "ms": 274,
-   "found": 98.4,
-   "extra": 7.8,
-   "medianMs": 0.9,
-   "p95Ms": 3.3,
-   "labels": 92.9,
-   "steps": 86.8,
+   "ms": 268,
+   "found": 96.8,
+   "extra": 6.3,
+   "medianMs": 1.3,
+   "p95Ms": 4.2,
+   "labels": 89.5,
+   "steps": 85.9,
    "swingMs": 0,
    "perRow": {
-    "kick": "31/32 right, 31 read",
-    "clap": "16/16 right, 17 read",
-    "hats": "32/32 right, 42 read"
+    "kick": "29/31 right, 32 read",
+    "clap": "16/16 right, 16 read",
+    "hats": "32/32 right, 44 read"
    }
   },
   {
    "loop": "four-floor, 16th hats",
    "bleed": -20,
-   "ms": 284,
+   "ms": 272,
    "found": 100,
    "extra": 0,
    "medianMs": 1.6,
-   "p95Ms": 3.1,
-   "labels": 82.4,
-   "steps": 82.4,
-   "swingMs": -0.8,
+   "p95Ms": 3,
+   "labels": 81.8,
+   "steps": 81.8,
+   "swingMs": -0.2,
    "perRow": {
     "kick": "32/32 right, 32 read",
     "clap": "16/16 right, 16 read",
-    "hats": "97/128 right, 97 read"
+    "hats": "96/128 right, 96 read"
    }
   },
   {
    "loop": "swung 16ths (+25 ms)",
    "bleed": -20,
-   "ms": 200,
-   "found": 98.4,
+   "ms": 270,
+   "found": 99.2,
    "extra": 0.8,
-   "medianMs": 1.4,
-   "p95Ms": 3.1,
+   "medianMs": 2,
+   "p95Ms": 3.9,
    "labels": 100,
-   "steps": 99.3,
-   "swingMs": 24,
+   "steps": 100,
+   "swingMs": 25,
    "perRow": {
-    "kick": "31/32 right, 31 read",
+    "kick": "32/32 right, 32 read",
     "clap": "16/16 right, 16 read",
     "hats": "95/96 right, 96 read"
    }
@@ -258,16 +258,16 @@
   {
    "loop": "broken beat, ghost snares",
    "bleed": -20,
-   "ms": 191,
+   "ms": 281,
    "found": 98.8,
-   "extra": 0,
-   "medianMs": 1.5,
-   "p95Ms": 4.6,
+   "extra": 1.2,
+   "medianMs": 2,
+   "p95Ms": 4.7,
    "labels": 88.1,
-   "steps": 86.7,
-   "swingMs": -1.8,
+   "steps": 86,
+   "swingMs": -1.1,
    "perRow": {
-    "kick": "27/28 right, 27 read",
+    "kick": "27/28 right, 28 read",
     "clap": "24/24 right, 24 read",
     "hats": "53/56 right, 65 read"
    }
@@ -275,24 +275,24 @@
   {
    "loop": "garage 2-step, swung",
    "bleed": -20,
-   "ms": 191,
-   "found": 100,
-   "extra": 1.3,
-   "medianMs": 1.9,
-   "p95Ms": 4.4,
-   "labels": 88.8,
-   "steps": 87.9,
-   "swingMs": 19.2,
+   "ms": 224,
+   "found": 98.8,
+   "extra": 0,
+   "medianMs": 2.1,
+   "p95Ms": 4.9,
+   "labels": 90.6,
+   "steps": 89.7,
+   "swingMs": 17.8,
    "perRow": {
-    "kick": "23/23 right, 24 read",
-    "clap": "16/16 right, 18 read",
+    "kick": "24/24 right, 24 read",
+    "clap": "15/16 right, 15 read",
     "hats": "48/48 right, 57 read"
    }
   },
   {
    "loop": "hats only (breakdown)",
    "bleed": -20,
-   "ms": 232,
+   "ms": 265,
    "found": 100,
    "extra": 0,
    "medianMs": 1.6,
@@ -309,31 +309,31 @@
   {
    "loop": "four-floor, offbeat open hats",
    "bleed": -15,
-   "ms": 236,
-   "found": 98.4,
-   "extra": 0,
-   "medianMs": 0.8,
-   "p95Ms": 3.2,
-   "labels": 100,
+   "ms": 284,
+   "found": 100,
+   "extra": 3.2,
+   "medianMs": 1.1,
+   "p95Ms": 3.1,
+   "labels": 98.7,
    "steps": 98.8,
    "swingMs": 0,
    "perRow": {
-    "kick": "31/32 right, 31 read",
-    "clap": "16/16 right, 16 read",
+    "kick": "31/31 right, 32 read",
+    "clap": "15/16 right, 16 read",
     "hats": "32/32 right, 32 read"
    }
   },
   {
    "loop": "four-floor, 16th hats",
    "bleed": -15,
-   "ms": 227,
+   "ms": 247,
    "found": 100,
    "extra": 0.8,
    "medianMs": 1.9,
    "p95Ms": 3.5,
    "labels": 99.4,
    "steps": 100,
-   "swingMs": -0.2,
+   "swingMs": 0.1,
    "perRow": {
     "kick": "32/32 right, 32 read",
     "clap": "15/16 right, 16 read",
@@ -343,16 +343,16 @@
   {
    "loop": "swung 16ths (+25 ms)",
    "bleed": -15,
-   "ms": 198,
-   "found": 98.4,
+   "ms": 216,
+   "found": 99.2,
    "extra": 0.8,
-   "medianMs": 1.5,
-   "p95Ms": 3.7,
+   "medianMs": 2,
+   "p95Ms": 4.2,
    "labels": 97.3,
-   "steps": 96.6,
-   "swingMs": 24,
+   "steps": 97.3,
+   "swingMs": 25,
    "perRow": {
-    "kick": "31/32 right, 31 read",
+    "kick": "32/32 right, 32 read",
     "clap": "16/16 right, 16 read",
     "hats": "95/96 right, 100 read"
    }
@@ -360,16 +360,16 @@
   {
    "loop": "broken beat, ghost snares",
    "bleed": -15,
-   "ms": 191,
+   "ms": 204,
    "found": 98.8,
-   "extra": 0,
-   "medianMs": 1.3,
-   "p95Ms": 4.4,
+   "extra": 1.2,
+   "medianMs": 1.8,
+   "p95Ms": 4.6,
    "labels": 87.2,
-   "steps": 85.7,
-   "swingMs": -0.4,
+   "steps": 85,
+   "swingMs": -1.1,
    "perRow": {
-    "kick": "27/28 right, 27 read",
+    "kick": "27/28 right, 28 read",
     "clap": "24/24 right, 24 read",
     "hats": "51/56 right, 62 read"
    }
@@ -377,35 +377,35 @@
   {
    "loop": "garage 2-step, swung",
    "bleed": -15,
-   "ms": 190,
-   "found": 100,
-   "extra": 1.3,
-   "medianMs": 1.7,
-   "p95Ms": 5.4,
+   "ms": 210,
+   "found": 95,
+   "extra": 3.8,
+   "medianMs": 1.8,
+   "p95Ms": 4.1,
    "labels": 100,
-   "steps": 98.9,
-   "swingMs": 19.1,
+   "steps": 94.4,
+   "swingMs": 17,
    "perRow": {
-    "kick": "23/23 right, 24 read",
-    "clap": "16/16 right, 16 read",
-    "hats": "48/48 right, 48 read"
+    "kick": "24/24 right, 24 read",
+    "clap": "13/16 right, 13 read",
+    "hats": "47/48 right, 50 read"
    }
   },
   {
    "loop": "hats only (breakdown)",
    "bleed": -15,
-   "ms": 197,
-   "found": 100,
-   "extra": 8.7,
+   "ms": 217,
+   "found": 99.2,
+   "extra": 18.1,
    "medianMs": 1.6,
    "p95Ms": 3,
-   "labels": 70.9,
-   "steps": 66.8,
-   "swingMs": -0.7,
+   "labels": 93.3,
+   "steps": 79.1,
+   "swingMs": -1.3,
    "perRow": {
     "kick": "0/0 right, 32 read",
-    "clap": "0/0 right, 31 read",
-    "hats": "127/127 right, 127 read"
+    "clap": "0/0 right, 0 read",
+    "hats": "126/127 right, 127 read"
    }
   }
  ],
@@ -413,7 +413,7 @@
   {
    "loop": "offbeat stabs (Am7 F C G)",
    "bleed": null,
-   "ms": 135,
+   "ms": 141,
    "chords": 32,
    "truthNotes": 120,
    "read": 120,
@@ -426,7 +426,7 @@
   {
    "loop": "Chicago stabs, syncopated",
    "bleed": null,
-   "ms": 132,
+   "ms": 139,
    "chords": 40,
    "truthNotes": 150,
    "read": 120,
@@ -439,7 +439,7 @@
   {
    "loop": "held pads, 1 chord per 2 bars",
    "bleed": null,
-   "ms": 159,
+   "ms": 173,
    "chords": 4,
    "truthNotes": 15,
    "read": 12,
@@ -452,7 +452,7 @@
   {
    "loop": "slow-attack pads (150 ms)",
    "bleed": null,
-   "ms": 157,
+   "ms": 167,
    "chords": 4,
    "truthNotes": 15,
    "read": 15,
@@ -465,7 +465,7 @@
   {
    "loop": "pluck lead over a pad (overlap)",
    "bleed": null,
-   "ms": 165,
+   "ms": 171,
    "chords": 48,
    "truthNotes": 63,
    "read": 81,
@@ -478,7 +478,7 @@
   {
    "loop": "organ chords, 2-bar riff",
    "bleed": null,
-   "ms": 111,
+   "ms": 116,
    "chords": 24,
    "truthNotes": 96,
    "read": 78,
@@ -491,7 +491,7 @@
   {
    "loop": "offbeat stabs (Am7 F C G)",
    "bleed": -25,
-   "ms": 132,
+   "ms": 142,
    "chords": 32,
    "truthNotes": 120,
    "read": 121,
@@ -504,7 +504,7 @@
   {
    "loop": "Chicago stabs, syncopated",
    "bleed": -25,
-   "ms": 137,
+   "ms": 149,
    "chords": 40,
    "truthNotes": 150,
    "read": 133,
@@ -517,7 +517,7 @@
   {
    "loop": "held pads, 1 chord per 2 bars",
    "bleed": -25,
-   "ms": 142,
+   "ms": 153,
    "chords": 4,
    "truthNotes": 15,
    "read": 16,
@@ -530,20 +530,20 @@
   {
    "loop": "slow-attack pads (150 ms)",
    "bleed": -25,
-   "ms": 147,
+   "ms": 155,
    "chords": 4,
    "truthNotes": 15,
-   "read": 21,
-   "pcFound": 41.7,
-   "exactFound": 43.8,
-   "wrong": 71.4,
-   "medianMs": 20.3,
-   "p95Ms": 20.3
+   "read": 26,
+   "pcFound": 16.7,
+   "exactFound": 16.7,
+   "wrong": 92.3,
+   "medianMs": 13.5,
+   "p95Ms": 13.5
   },
   {
    "loop": "pluck lead over a pad (overlap)",
    "bleed": -25,
-   "ms": 183,
+   "ms": 194,
    "chords": 48,
    "truthNotes": 63,
    "read": 89,
@@ -556,7 +556,7 @@
   {
    "loop": "organ chords, 2-bar riff",
    "bleed": -25,
-   "ms": 132,
+   "ms": 135,
    "chords": 24,
    "truthNotes": 96,
    "read": 80,
@@ -569,7 +569,7 @@
   {
    "loop": "offbeat stabs (Am7 F C G)",
    "bleed": -20,
-   "ms": 139,
+   "ms": 141,
    "chords": 32,
    "truthNotes": 120,
    "read": 122,
@@ -582,7 +582,7 @@
   {
    "loop": "Chicago stabs, syncopated",
    "bleed": -20,
-   "ms": 137,
+   "ms": 144,
    "chords": 40,
    "truthNotes": 150,
    "read": 127,
@@ -595,7 +595,7 @@
   {
    "loop": "held pads, 1 chord per 2 bars",
    "bleed": -20,
-   "ms": 138,
+   "ms": 152,
    "chords": 4,
    "truthNotes": 15,
    "read": 21,
@@ -608,20 +608,20 @@
   {
    "loop": "slow-attack pads (150 ms)",
    "bleed": -20,
-   "ms": 143,
+   "ms": 155,
    "chords": 4,
    "truthNotes": 15,
-   "read": 31,
-   "pcFound": 41.7,
-   "exactFound": 43.8,
-   "wrong": 80.6,
-   "medianMs": 13.5,
-   "p95Ms": 13.5
+   "read": 57,
+   "pcFound": 0,
+   "exactFound": 0,
+   "wrong": 100,
+   "medianMs": 0,
+   "p95Ms": 0
   },
   {
    "loop": "pluck lead over a pad (overlap)",
    "bleed": -20,
-   "ms": 159,
+   "ms": 168,
    "chords": 48,
    "truthNotes": 63,
    "read": 85,
@@ -634,7 +634,7 @@
   {
    "loop": "organ chords, 2-bar riff",
    "bleed": -20,
-   "ms": 119,
+   "ms": 130,
    "chords": 24,
    "truthNotes": 96,
    "read": 84,
@@ -647,7 +647,7 @@
   {
    "loop": "offbeat stabs (Am7 F C G)",
    "bleed": -15,
-   "ms": 133,
+   "ms": 147,
    "chords": 32,
    "truthNotes": 120,
    "read": 124,
@@ -660,7 +660,7 @@
   {
    "loop": "Chicago stabs, syncopated",
    "bleed": -15,
-   "ms": 143,
+   "ms": 153,
    "chords": 40,
    "truthNotes": 150,
    "read": 131,
@@ -673,7 +673,7 @@
   {
    "loop": "held pads, 1 chord per 2 bars",
    "bleed": -15,
-   "ms": 141,
+   "ms": 154,
    "chords": 4,
    "truthNotes": 15,
    "read": 22,
@@ -686,20 +686,20 @@
   {
    "loop": "slow-attack pads (150 ms)",
    "bleed": -15,
-   "ms": 148,
+   "ms": 157,
    "chords": 4,
    "truthNotes": 15,
-   "read": 61,
-   "pcFound": 0,
-   "exactFound": 0,
-   "wrong": 100,
-   "medianMs": 0,
-   "p95Ms": 0
+   "read": 103,
+   "pcFound": 8.3,
+   "exactFound": 6.3,
+   "wrong": 99,
+   "medianMs": 2.9,
+   "p95Ms": 2.9
   },
   {
    "loop": "pluck lead over a pad (overlap)",
    "bleed": -15,
-   "ms": 162,
+   "ms": 174,
    "chords": 48,
    "truthNotes": 63,
    "read": 93,
@@ -712,7 +712,7 @@
   {
    "loop": "organ chords, 2-bar riff",
    "bleed": -15,
-   "ms": 122,
+   "ms": 130,
    "chords": 24,
    "truthNotes": 96,
    "read": 87,
@@ -728,73 +728,73 @@
    "family": "drums",
    "bleed": null,
    "found": 99.2,
-   "extra": 0.7,
-   "labels": 95.4,
-   "steps": 94.9,
-   "maxMs": 246,
-   "meanMs": 228
+   "extra": 1.1,
+   "labels": 96.6,
+   "steps": 95.7,
+   "maxMs": 305,
+   "meanMs": 255
   },
   {
    "family": "drums",
    "bleed": -25,
-   "found": 99.2,
-   "extra": 0.8,
-   "labels": 94.8,
-   "steps": 94.2,
-   "maxMs": 274,
-   "meanMs": 238
+   "found": 99,
+   "extra": 1.5,
+   "labels": 96.2,
+   "steps": 95.2,
+   "maxMs": 280,
+   "meanMs": 243
   },
   {
    "family": "drums",
    "bleed": -20,
-   "found": 99.3,
-   "extra": 1.1,
-   "labels": 91.7,
+   "found": 99.2,
+   "extra": 1,
+   "labels": 91.4,
    "steps": 90.5,
-   "maxMs": 284,
-   "meanMs": 229
+   "maxMs": 281,
+   "meanMs": 263
   },
   {
    "family": "drums",
    "bleed": -15,
-   "found": 99.3,
-   "extra": 2.3,
-   "labels": 90.8,
-   "steps": 89.1,
-   "maxMs": 236,
-   "meanMs": 207
+   "found": 98.9,
+   "extra": 5.1,
+   "labels": 95.9,
+   "steps": 92.1,
+   "maxMs": 284,
+   "meanMs": 230
   },
   {
    "family": "notes",
    "bleed": null,
    "pcFound": 91.1,
    "wrong": 4,
-   "maxMs": 165,
-   "meanMs": 143
+   "maxMs": 173,
+   "meanMs": 151
   },
   {
    "family": "notes",
    "bleed": -25,
-   "pcFound": 92.5,
-   "wrong": 8.5,
-   "maxMs": 183,
-   "meanMs": 145
+   "pcFound": 91.9,
+   "wrong": 10.3,
+   "maxMs": 194,
+   "meanMs": 155
   },
   {
    "family": "notes",
    "bleed": -20,
-   "pcFound": 92.1,
-   "wrong": 10.9,
-   "maxMs": 159,
-   "meanMs": 139
+   "pcFound": 91,
+   "wrong": 16.7,
+   "maxMs": 168,
+   "meanMs": 148
   },
   {
    "family": "notes",
    "bleed": -15,
-   "pcFound": 91.7,
-   "wrong": 18.3,
-   "maxMs": 162,
-   "meanMs": 142
+   "pcFound": 91.9,
+   "wrong": 24.3,
+   "maxMs": 174,
+   "meanMs": 152
   }
  ]
 }

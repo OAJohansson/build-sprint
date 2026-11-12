@@ -14,8 +14,8 @@ import {
   toggleSolo as soloIn, withLanes, type FamilyId, type Lane, type LaneType,
 } from "@/lib/studio-lanes";
 import { dropLibSound, placeInLane } from "@/lib/studio-drop";
-import { dropLength, libLaneType, libLoopFrom, phraseStart } from "@/lib/make/lib-loop";
-import type { LibrarySound } from "@/lib/make/library";
+import { dropLength, isDrumLoop, libLaneType, libLoopFrom, phraseStart } from "@/lib/make/lib-loop";
+import { isDrumSound, type LibrarySound } from "@/lib/make/library";
 import type { Sound } from "@/lib/synths/loop";
 import type { Scale } from "@/lib/synths/theory";
 import type { AudioEngine } from "./audio";
@@ -34,10 +34,11 @@ const THRESHOLD = 4;
 const HOLD_MS = 250; // press and hold a block this long and the bin appears
 
 /** An item's lane type, old lane and length in bars (a library sound's block fills a phrase). */
-export function itemInfo(item: CrateItem): { type: LaneType; track: number; bars: number; name: string } {
+export function itemInfo(item: CrateItem): { type: LaneType; track: number; bars: number; name: string; exact?: boolean } {
   if (item.kind === "loop") return { type: crateLaneType(item.loop), track: item.loop.track, bars: item.loop.bars, name: item.loop.name };
   const type = libLaneType(item.sound);
-  return { type, track: legacyTrack(type), bars: item.sound.pattern.bars, name: item.sound.name };
+  // D-F4: a drum row from My sounds takes only its own lane type (Kick, Claps & snares, Hats).
+  return { type, track: legacyTrack(type), bars: item.sound.pattern.bars, name: item.sound.name, exact: isDrumSound(item.sound) };
 }
 
 /** One open track. `initial` is the saved arrangement; Studio remounts this per track. `bpm` is the project tempo. */
@@ -188,9 +189,9 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
 
   /** The lane an item goes on when added without a drop (Enter, the drawer): the drawer's lane when
    *  it takes it, else the first lane that does, else a new lane of its type. */
-  const laneFor = useCallback((type: LaneType, track: number, prefer?: string | null): { lanes: Lane[]; id: string; isNew: boolean } | null => {
+  const laneFor = useCallback((type: LaneType, track: number, prefer?: string | null, exact?: boolean): { lanes: Lane[]; id: string; isNew: boolean } | null => {
     const ls = lanesOf(docRef.current);
-    const hit = ls.find((l) => l.id === prefer && accepts(l, { type, track })) ?? ls.find((l) => accepts(l, { type, track }));
+    const hit = ls.find((l) => l.id === prefer && accepts(l, { type, track, exact })) ?? ls.find((l) => accepts(l, { type, track, exact }));
     if (hit) return { lanes: ls, id: hit.id, isNew: false };
     const r = addLaneTo(ls, type);
     return r.id ? { lanes: r.lanes, id: r.id, isNew: true } : null;
@@ -200,7 +201,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
   const addSound = useCallback((x: Sound, bar: number) => {
     const lb = x.bars;
     registerSounds([x]);
-    const at = laneFor(soundLaneType(x), x.lane, soundTarget);
+    const at = laneFor(soundLaneType(x), x.lane, soundTarget, x.source === "lib" && isDrumLoop(x));
     if (!at) return null;
     const start = Math.min(Math.max(1, Math.floor(bar)), Math.max(1, bars - lb + 1));
     const r: Region = { id: newId(), loopId: x.id, track: x.lane, lane: at.id, start, length: lb };
@@ -322,7 +323,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
         if (e.key === " ") { e.preventDefault(); e.stopPropagation(); hear(item); }
         else if (e.key === "Enter") {
           e.preventDefault(); e.stopPropagation();
-          const at = laneFor(info.type, info.track, null);
+          const at = laneFor(info.type, info.track, null, info.exact);
           if (!at) return;
           const bar = Math.min(Math.max(1, Math.floor(playheadRef.current)), bars - info.bars + 1);
           dropItem(item, { lane: at.isNew ? "new" : at.id, bar });

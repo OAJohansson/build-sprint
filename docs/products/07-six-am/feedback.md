@@ -167,3 +167,21 @@ Details: `evals-runs/2026-10-28-drums-slice.md`.
 | D-R3 | — | 16-bar loops can't be live in 35 s (L232: bar is ≤ 8 bars; honest countdown for longer) | decided |
 | D-R4 | minor | First countdown figure 1.8–4.6 s too high | fixed (eed3ce3); D-R1 to confirm on the real loop |
 | D-R5 | minor | 6–7 Mason pickup/filtered kicks per loop missed, 2 read as hats on step 15 | backlog |
+
+## Drums user test (user-tester, 12 Nov): M-S1 4, M-S2 3, M-S3 4, M-S4 3, M-S5 5
+
+Report: `user-testing/report-2026-11-12-drums.md`.
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| U1 | major | One closeness score barely moves for clap or hats (mostly the kick) | fixing (L233) |
+| U2 | major | An "off" row's reason only in a tooltip | fixing |
+| U3 | major | "Play anyway" can't be undone | fixing |
+| U4 | minor | Mentor gives tips for a row that is off | fixing |
+| U5 | minor | Knob words too coarse (Decay "1/2" before and after a drag) | fixing |
+| U6 | minor | Two countdowns disagree (header vs panel) | fixing |
+| U7 | minor | A clap dropped on the Drums lane does nothing, silently | fixing |
+| U8 | minor | Automatic names describe the wrong sound | fixing |
+| U9 | polish | Play button moves sideways as the header text changes | fixing |
+| U10 | polish | Greyed "Suggested" pill looks clickable | fixing |
+| U11 | polish | Lane label cut to "Claps & sn…"; each drop opens the drawer | fixing |

@@ -47,7 +47,14 @@ function prior(row: DrumRow | "rest" | "flat"): Float64Array {
 }
 
 /** Bands each row's timing is read from (Hz). */
-const ROW_BANDS: [number, number][] = [[30, 180], [700, 5600], [5600, 16000]];
+// D-F1 (drums-slice evals): a kick is timed from its attack at 130–500 Hz. Its pitch sweep starts up
+// there; the 30–180 Hz band only peaks 15–50 ms later on a kick that falls slowly (Mason Flint's).
+// The low band still finds and labels kicks (the NMF templates); it no longer times them.
+const ROW_BANDS: [number, number][] = [[130, 500], [700, 5600], [5600, 16000]];
+/** How far before the activation's rise a row's attack may sit (frames): a kick's activation can rise 50 ms late. */
+const BACK = [20, 8, 8];
+/** The window a hit's size is read over after its attack (s): a slow kick's body peaks late. */
+const SIZE_S = [0.07, 0.03, 0.03];
 
 /** Energy-weighted geometric centre frequency of a template's attack slice (Hz). */
 function centroidHz(w: Float64Array) {
@@ -184,7 +191,7 @@ export function readDrums(left: Float32Array, right: Float32Array | undefined, r
     for (let c = 1; c < cols - 1; c++) {
       if (rise[c] < 0.05 * top || rise[c] < rise[c - 1] || rise[c] < rise[c + 1]) continue;
       const f = c * S;
-      const lo = Math.max(LAG, f - 8), hi = Math.min(frames - 1, f + 10);
+      const lo = Math.max(LAG, f - BACK[k]), hi = Math.min(frames - 1, f + 10);
       // Rise of the row's energy, smoothed over 3 frames; the first local peak at least 0.35 of the
       // steepest one (and at most 35 ms before it) is the attack: a clap's first burst, not its tail.
       const r = (j: number) => (j - 1 - LAG >= 0 && j + 1 < frames ? (e[j - 1] - e[j - 1 - LAG] + e[j] - e[j - LAG] + e[j + 1] - e[j + 1 - LAG]) / 3 : 0);
@@ -195,7 +202,7 @@ export function readDrums(left: Float32Array, right: Float32Array | undefined, r
       // the 40 ms before (a click, a flicker or a ringing tail jumps little).
       const c0 = Math.round(bf / S);
       let size = 0, pre = Infinity;
-      for (let j = c0; j < Math.min(cols, c0 + Math.round(0.03 / fr / S)); j++) size = Math.max(size, h[j]);
+      for (let j = c0; j < Math.min(cols, c0 + Math.round(SIZE_S[k] / fr / S)); j++) size = Math.max(size, h[j]);
       for (let j = Math.max(0, c0 - Math.round(0.04 / fr / S)); j < c0 - 1; j++) pre = Math.min(pre, h[j]);
       if (!isFinite(pre)) pre = 0;
       // The raw energy of the row's bands must jump too (an activation can shift between
@@ -221,6 +228,14 @@ export function readDrums(left: Float32Array, right: Float32Array | undefined, r
       fl += Math.exp(lg / (k1 - k0 + 1)) / (ar / (k1 - k0 + 1)); m++;
     }
     c.flat = m ? fl / m : 0;
+    // D-F2: an open hat has real 1–3 kHz energy, but most of it sits above 5.6 kHz; a clap's body is
+    // at 1–3 kHz. The air over the body (dB) over the first 30 ms.
+    let mid = 0, air = 0;
+    for (let f = c.f; f < Math.min(frames, c.f + 10); f++) for (let b = 0; b < NB; b++) {
+      const v = V[b * frames + f] ** 2;
+      if (EDGES[b] >= 1000 && EDGES[b + 1] <= 2800) mid += v; else if (EDGES[b] >= 5600) air += v;
+    }
+    c.air = 10 * Math.log10((air + 1e-20) / (mid + 1e-20));
   }
   // What each row's hits leak into the other rows' activations (the smallest ratio seen),
   // so a hit on top of another row's hit only counts if it stands clear of that leak.
@@ -240,12 +255,14 @@ export function readDrums(left: Float32Array, right: Float32Array | undefined, r
   return { ...quantise(hits, sps, loopStartSec, steps), hits };
 }
 
-export type Cand = { row: number; f: number; t: number; size: number; jump: number; raw: number; flat?: number; db?: number; keep?: boolean; why?: string };
+export type Cand = { row: number; f: number; t: number; size: number; jump: number; raw: number; flat?: number; air?: number; db?: number; keep?: boolean; why?: string };
 
 // shortcut: fixed gates (dB under the loop's biggest hit per row, a minimum jump, a clap's minimum
 // flatness, 6 dB clear of another row's leak) picked on the synthetic bench; tune on separated
 // real tracks once the hand check exists.
-export const GATE = { db: [-12, -22, -34], jump: 2, flat: 0.24, overLeak: 2, raw: 2 };
+// D-F2: `air` = the clap's energy above 5.6 kHz over its 1–2.8 kHz body (dB): real claps read ≤ 0 on the
+// bench and the real-loop fixture, open hats read as claps ≥ +3.
+export const GATE = { db: [-12, -22, -34], jump: 2, flat: 0.24, overLeak: 2, raw: 2, air: 2 };
 
 /** Keeps candidates big enough against the loop's biggest hit, sharp, noisy (claps) and clear of other rows' leak. */
 function gate(cands: Cand[], leak: number[][], near: number): DrumHit[] {
@@ -253,7 +270,7 @@ function gate(cands: Cand[], leak: number[][], near: number): DrumHit[] {
   for (const c of cands) big = Math.max(big, c.size);
   for (const c of cands) {
     c.db = 20 * Math.log10(c.size / (big || 1));
-    c.why = c.db < GATE.db[c.row] ? "small" : c.jump < GATE.jump ? "flat jump" : c.raw < GATE.raw ? "no raw rise" : c.row === 1 && (c.flat ?? 1) < GATE.flat ? "tonal" : "";
+    c.why = c.db < GATE.db[c.row] ? "small" : c.jump < GATE.jump ? "flat jump" : c.raw < GATE.raw ? "no raw rise" : c.row === 1 && (c.flat ?? 1) < GATE.flat ? "tonal" : c.row === 1 && (c.air ?? -99) > GATE.air ? "open hat" : "";
   }
   // Leak: against a bigger hit of another row at the same moment.
   for (const c of cands) {
@@ -273,15 +290,37 @@ function gate(cands: Cand[], leak: number[][], near: number): DrumHit[] {
   return hits;
 }
 
+/** The circular mean of `ts` against `per` (s): the phase in (−per/2, per/2] and how tight they sit (0–1). */
+function phaseOf(ts: { t: number; w: number }[], per: number, from: number) {
+  let c = 0, s = 0, W = 0;
+  for (const x of ts) { const a = (2 * Math.PI * (x.t - from)) / per; c += x.w * Math.cos(a); s += x.w * Math.sin(a); W += x.w; }
+  return { ph: (Math.atan2(s, c) / (2 * Math.PI)) * per, tight: W ? Math.hypot(c, s) / W : 0 };
+}
+
+/** Kicks this tight on the beat (0–1) anchor the grid on the beat. */
+export const BEAT_TIGHT = 0.6;
+
 /**
- * Snaps hits to the 16th grid. The grid's phase comes from the even 16ths (8ths are rarely swung):
- * a circular mean of the hits' positions against the 8th-note period, weighted toward kicks and
- * claps, kept within half a 16th of the given loop start.
+ * Snaps hits to the 16th grid. D-F3 (drums-slice evals): the grid is anchored on the beat the kicks
+ * play, so step 0 is the kick on (or nearest after) the loop's bar line: a circular mean of the kicks
+ * against the beat (4 sixteenths), kept within ±2 sixteenths of the loop start. Kicks on every beat
+ * give the same grid on every read; a phase folded at ±half a 16th flipped between reads when the
+ * map's bar line sat near the fold (by 0.4–0.6 of a 16th on both real tracks), moving every row by
+ * a 16th. Without a beat in the kicks (no kicks, a broken beat) the old estimate stands: the hits
+ * against the 8th, within half a 16th of the loop start. Each hit keeps its offset from its step.
  */
 export function quantise(hits: DrumHit[], sps: number, loopStartSec: number, steps: number): Omit<DrumReading, "hits"> {
   const rows: Record<DrumRow, StepHit[]> = { kick: [], clap: [], hats: [] };
   let gridSec = loopStartSec;
-  if (hits.length) {
+  const kicks = hits.filter((h) => h.row === "kick").map((h) => ({ t: h.t, w: h.vel }));
+  const beat = kicks.length >= 4 ? phaseOf(kicks, 4 * sps, loopStartSec) : null;
+  if (beat && beat.tight >= BEAT_TIGHT) {
+    // Again on the kicks within half a 16th of that beat only: off-beat kicks (a 15th-step pickup) pull the mean.
+    const on = kicks.filter((k) => { const d = ((((k.t - loopStartSec - beat.ph) % (4 * sps)) + 6 * sps) % (4 * sps)) - 2 * sps; return Math.abs(d) <= sps / 2; });
+    const fine = on.length >= 4 ? phaseOf(on, 4 * sps, loopStartSec) : beat;
+    gridSec = loopStartSec + fine.ph;
+  }
+  else if (hits.length) {
     let c = 0, s = 0;
     const per = 2 * sps;
     for (const h of hits) {

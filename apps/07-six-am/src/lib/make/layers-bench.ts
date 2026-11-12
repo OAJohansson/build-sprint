@@ -42,19 +42,27 @@ function biquad(x: Float32Array, type: "lp" | "hp" | "bp", hz: number, q: number
 
 // ---- Drum kit (two flavours, so the reader can't overfit one sound) ----
 
-export type Kit = { kickHz: [number, number]; kickDecay: number; clap: "clap" | "snare"; clapHz: number; hatHp: number; openHat: boolean };
+export type Kit = {
+  kickHz: [number, number]; kickDecay: number; clap: "clap" | "snare"; clapHz: number; hatHp: number; openHat: boolean;
+  /** Drums-slice evals (D-F1): how slowly the kick's pitch falls (s, default 0.03); a slow fall from
+   *  high up reaches 30–120 Hz 15–50 ms after the attack, as Mason Flint's kick does. */
+  kickSweepS?: number;
+  /** D-F2: a metallic open hat (six square waves and noise, high-passed gently) with real 1–3 kHz
+   *  energy, as a 909 open hat has; `openTau` its ring (s). */
+  hatMetal?: boolean; openTau?: number;
+};
 export const KIT_909: Kit = { kickHz: [160, 48], kickDecay: 0.32, clap: "clap", clapHz: 1200, hatHp: 7000, openHat: true };
 export const KIT_DEEP: Kit = { kickHz: [120, 42], kickDecay: 0.45, clap: "snare", clapHz: 1800, hatHp: 5500, openHat: false };
 
 function hitSound(row: DrumRow, kit: Kit, rate: number, r: () => number, open = false): Float32Array {
-  const len = Math.round(rate * (row === "kick" ? kit.kickDecay + 0.1 : row === "clap" ? 0.3 : open ? 0.3 : 0.08));
+  const len = Math.round(rate * (row === "kick" ? kit.kickDecay + 0.1 : row === "clap" ? 0.3 : open ? Math.max(0.3, (kit.openTau ?? 0.09) * 5) : 0.08));
   const x = new Float32Array(len);
   if (row === "kick") {
     let ph = 0;
     const [f0, f1] = kit.kickHz;
     for (let i = 0; i < len; i++) {
       const t = i / rate;
-      ph += (2 * Math.PI * (f1 + (f0 - f1) * Math.exp(-t / 0.03))) / rate;
+      ph += (2 * Math.PI * (f1 + (f0 - f1) * Math.exp(-t / (kit.kickSweepS ?? 0.03)))) / rate;
       x[i] = Math.sin(ph) * Math.exp(-t / (kit.kickDecay / 3));
     }
     const click = new Float32Array(Math.round(rate * 0.004));
@@ -81,18 +89,29 @@ function hitSound(row: DrumRow, kit: Kit, rate: number, r: () => number, open = 
         x[i] = noise[i] * 1.4 * Math.exp(-t / 0.06) + 0.5 * Math.sin(ph) * Math.exp(-t / 0.04);
       }
     }
+  } else if (kit.hatMetal) {
+    const fs = [205.3, 304.4, 369.6, 522.7, 540, 800].map((f) => f * 3.3), ph = fs.map(() => r());
+    const n = len;
+    for (let i = 0; i < n; i++) {
+      let m = 0;
+      for (let k = 0; k < 6; k++) { ph[k] = (ph[k] + fs[k] / rate) % 1; m += ph[k] < 0.5 ? 1 : -1; }
+      x[i] = m / 6 * 0.6 + (r() * 2 - 1) * 0.5;
+    }
+    biquad(x, "hp", kit.hatHp, 0.7, rate);
+    const tau = open ? kit.openTau ?? 0.15 : 0.02;
+    for (let i = 0; i < len; i++) x[i] *= Math.exp(-i / rate / tau) * 0.9;
   } else {
     for (let i = 0; i < len; i++) x[i] = r() * 2 - 1;
     biquad(x, "hp", kit.hatHp, 0.7, rate);
     biquad(x, "hp", kit.hatHp, 0.7, rate);
-    const tau = open ? 0.09 : 0.018;
+    const tau = open ? kit.openTau ?? 0.09 : 0.018;
     for (let i = 0; i < len; i++) x[i] *= Math.exp(-i / rate / tau) * 0.9;
   }
   return x;
 }
 
 /** One bar of a drum pattern: per row, the 16th steps that play (velocity 1, or [step, vel]). */
-export type BarPattern = Partial<Record<DrumRow, (number | [number, number])[]>>;
+export type BarPattern = Partial<Record<DrumRow, (number | [number, number] | [number, number, number])[]>>;
 export type DrumSpec = { name: string; bpm: number; kit: Kit; bars: BarPattern[]; swingMs?: number; openHatSteps?: number[]; jitterMs?: number; gridOffsetMs?: number };
 
 /** Sums `src` into `dst` from sample `at` (clipped at the ends). */
@@ -115,8 +134,8 @@ export function renderDrums(spec: DrumSpec, o: { bars: number; rate: number; see
     const p = spec.bars[((bar % spec.bars.length) + spec.bars.length) % spec.bars.length];
     for (const row of DRUM_ROWS) {
       for (const s of p[row] ?? []) {
-        const [step, vel] = typeof s === "number" ? [s, 1] : s;
-        const swing = step % 2 === 1 ? (spec.swingMs ?? 0) / 1000 : 0;
+        const [step, vel, offSteps] = typeof s === "number" ? [s, 1, 0] : [s[0], s[1], s[2] ?? 0];
+        const swing = (step % 2 === 1 ? (spec.swingMs ?? 0) / 1000 : 0) + offSteps * sps;
         const jitter = ((r() * 2 - 1) * (spec.jitterMs ?? 2)) / 1000;
         const t = off + (bar * 16 + step) * sps + swing + jitter;
         const v = vel * (0.85 + 0.15 * r());

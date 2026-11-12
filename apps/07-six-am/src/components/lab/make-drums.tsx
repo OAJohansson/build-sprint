@@ -231,7 +231,7 @@ const onShort = (cb: () => void) => {
   ms.forEach((m) => m.addEventListener("change", cb));
   return () => ms.forEach((m) => m.removeEventListener("change", cb));
 };
-const useShort = () => useSyncExternalStore(onShort, () => (matchMedia(SHORTER).matches ? 2 : matchMedia(SHORT).matches ? 1 : 0), () => 0);
+export const useShort = () => useSyncExternalStore(onShort, () => (matchMedia(SHORTER).matches ? 2 : matchMedia(SHORT).matches ? 1 : 0), () => 0);
 
 const W = 1000; // the pattern's drawing units across (scaled to the column)
 
@@ -257,7 +257,7 @@ function Pattern({ hits, bars, lit, doubtful, empty }: { hits: { step: number; v
 }
 
 /** The playhead over the three rows: where the loop is now, across bar blocks with their gaps. */
-function Playhead({ heardMs, loop, bars }: { heardMs: () => number; loop: LoopState; bars: number }) {
+export function Playhead({ heardMs, loop, bars }: { heardMs: () => number; loop: LoopState; bars: number }) {
   const el = useRef<HTMLElement>(null);
   useLayoutEffect(() => {
     let raf = 0;

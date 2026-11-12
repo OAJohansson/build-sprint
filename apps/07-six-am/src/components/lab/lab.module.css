@@ -406,3 +406,11 @@
 .head { min-width: 0; }
 /* N2: the preset Suggest found clearly closer, marked in the menu. */
 .menuCloser { color: var(--gold); }
+
+/* Slice 2, melody (fold-melody): rows are 1.5 drum rows tall (a piano roll needs the height). */
+.drRow[data-tall] { height: 96px; }
+.drRow[data-tall] .drName { height: 88px; }
+.drRow[data-tall] .drTrack { height: 60px; }
+.melRoll { display: block; width: 100%; height: 60px; overflow: visible; }
+@media (max-height: 860px) { .drRow[data-tall] { height: 69px; } .drRow[data-tall] .drName { height: 61px; } .drRow[data-tall] .drTrack, .melRoll { height: 46px; } }
+@media (max-height: 760px) { .drRow[data-tall] { height: 60px; } .drRow[data-tall] .drName { height: 52px; } .drRow[data-tall] .drTrack, .melRoll { height: 40px; } }

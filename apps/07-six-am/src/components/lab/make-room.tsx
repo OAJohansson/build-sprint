@@ -29,6 +29,7 @@ import type { Scale } from "@/lib/synths/theory";
 import { Composer, Turn, useEdgeFades, type ThreadTurn } from "./mentor-thread";
 import { Knob } from "@/components/ui/knob";
 import { DrumsCheck, DrumsMiddle, DrumsSaveBar, type DrumsModel } from "./make-drums";
+import { MelodyCheck, MelodyMiddle, MelodySaveBar, type MelodyModel } from "./make-melody";
 import s from "./lab.module.css";
 
 /** Phase 5 (P1, L218): what Make makes. Vocals stay "not yet" (L217). */
@@ -147,8 +148,8 @@ export function useMake(o: MakeOpts) {
   useEffect(() => {
     if (!o.active || !reading || words) return;
     const key = `${reading.loopKey}|${preset}|${MACRO_IDS.map((id) => macros[id].toFixed(3)).join(",")}`;
-    // Phase 5: Mine is one buffer for every family; render again when the drums took it meanwhile.
-    if (key === mineKey && tr.current?.mineOwner !== "drums") return;
+    // Phase 5: Mine is one buffer for every family; render again when the drums or the melody took it meanwhile.
+    if (key === mineKey && tr.current?.mineOwner !== "drums" && tr.current?.mineOwner !== "melody") return;
     const t = setTimeout(() => {
       const t0 = performance.now();
       cl().render({ reading: reading.r, active: reading.active, preset, macros, bpm: o.bpm, rate: reading.rate, levelDb: reading.levelDb, lufs: reading.lufs, samples: reading.samples }).then(({ res, stale }) => {
@@ -219,7 +220,7 @@ export function useMake(o: MakeOpts) {
   };
 
   // Phase 5: back from the drums with a words loop on, put it back in Mine (the drums took the buffer).
-  useEffect(() => { if (o.active && words && wordsBuf.current && tr.current?.mineOwner === "drums") tr.current.setMine(wordsBuf.current); }, [o.active, words, tr]);
+  useEffect(() => { if (o.active && words && wordsBuf.current && (tr.current?.mineOwner === "drums" || tr.current?.mineOwner === "melody")) tr.current.setMine(wordsBuf.current); }, [o.active, words, tr]);
 
   const suggested = suggestName("bass", preset, macros, o.title);
   const tags = useMemo(() => (scale && o.keyName ? suggestTags("bass", preset, o.keyName, scale, o.bpm, o.title) : []), [scale, preset, o.keyName, o.bpm, o.title]);
@@ -273,6 +274,7 @@ export type MakeModel = ReturnType<typeof useMake>;
 type RoomProps = {
   m: MakeModel;
   drums: DrumsModel;
+  melody: MelodyModel;
   family: Family;
   onFamily: (f: Exclude<Family, "vocals">) => void;
   part: LabPart;
@@ -306,10 +308,12 @@ export function MakeRoom(p: RoomProps) {
   const to = loop ? Math.round(msToBar(loop.endMs, p.bpm, p.originSec)) : null;
   const where = p.section ? `${p.section.label}${from !== null && to !== null && (from !== p.section.from || to !== p.section.to) ? `, bars ${from}–${to - 1}` : ""}` : null;
   // The countdown is said once, where the knobs wait (Fold, round 3): the caption just says "filling the loop".
+  // Slice 2: the "other" part is what Make calls the melody (fold-melody: "Melody alone, Drop 1, …").
+  const partName = family === "melody" ? "Melody" : part.name;
   const caption = loop
-    ? `${part.name} alone, ${[where, `${clockMs(loop.startMs)}–${clockMs(loop.endMs)}`].filter(Boolean).join(", ")}, ${loop.state === "memory" ? "looping" : p.playing ? "filling the loop" : "the loop fills when you press Play"}`
-    : `${part.name} alone`;
-  const later = family === "melody" || family === "fx" || family === "vocals";
+    ? `${partName} alone, ${[where, `${clockMs(loop.startMs)}–${clockMs(loop.endMs)}`].filter(Boolean).join(", ")}, ${loop.state === "memory" ? "looping" : p.playing ? "filling the loop" : "the loop fills when you press Play"}`
+    : `${partName} alone`;
+  const later = family === "fx" || family === "vocals";
   return (
     <div className={s.room}>
       <section className={s.synth} aria-label={`Make ${family === "bass" ? `a ${name}` : family === "drums" ? "drums" : family}`}>
@@ -322,7 +326,15 @@ export function MakeRoom(p: RoomProps) {
           <span className={s.famTab} data-off="" aria-disabled="true" title="Vocals come later">Vocals<em>not yet</em></span>
           {!later && <span className={s.famCap} aria-live="polite" title={caption}>{caption}</span>}
         </div>
-        {later ? <LaterFamily family={family} onBass={() => p.onFamily("bass")} /> : family === "drums" ? (
+        {later ? <LaterFamily family={family} onBass={() => p.onFamily("bass")} /> : family === "melody" ? (
+          <>
+            {loop || p.melody.read
+              ? <MelodyMiddle m={p.melody} loop={loop} playing={p.playing} heardMs={p.heardMs} />
+              : <div className={s.makeEmpty}><p>Make works on a loop of the part, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
+            <div className={s.grow} />
+            <MelodyCheck m={p.melody} />
+          </>
+        ) : family === "drums" ? (
           <>
             {loop || p.drums.read
               ? <DrumsMiddle m={p.drums} loop={loop} from={from} playing={p.playing} heardMs={p.heardMs} />
@@ -345,7 +357,8 @@ export function MakeRoom(p: RoomProps) {
       </section>
       {family === "bass" && m.isBass && <SaveBar m={m} />}
       {family === "drums" && <DrumsSaveBar m={p.drums} />}
-      <MentorRail turns={p.turns} part={part} bar={p.bar} onAsk={p.onAsk} onRetry={p.onRetry} onSeek={p.onSeek} busy={p.busy} note={p.note} />
+      {family === "melody" && <MelodySaveBar m={p.melody} />}
+      <MentorRail turns={p.turns} part={part} noun={family === "melody" ? "the melody" : undefined} bar={p.bar} onAsk={p.onAsk} onRetry={p.onRetry} onSeek={p.onSeek} busy={p.busy} note={p.note} />
     </div>
   );
 }
@@ -598,7 +611,7 @@ function SaveBar({ m }: { m: MakeModel }) {
 }
 
 /** Make's Mentor rail (handoff §Make 9): the same per-track lab thread as Listen, in order, newest at the bottom. */
-function MentorRail({ turns, part, bar, onAsk, onRetry, onSeek, busy, note }: { turns: ThreadTurn[]; part: LabPart; bar: number; onAsk: (q: string, bar: number) => void; onRetry: (id: string) => void; onSeek: (bar: number) => void; busy: boolean; note: string | null }) {
+function MentorRail({ turns, part, noun: nounOverride, bar, onAsk, onRetry, onSeek, busy, note }: { turns: ThreadTurn[]; part: LabPart; noun?: string; bar: number; onAsk: (q: string, bar: number) => void; onRetry: (id: string) => void; onSeek: (bar: number) => void; busy: boolean; note: string | null }) {
   const list = useRef<HTMLDivElement>(null);
   const last = turns.at(-1);
   useEdgeFades(list, [turns.length]);
@@ -615,7 +628,7 @@ function MentorRail({ turns, part, bar, onAsk, onRetry, onSeek, busy, note }: { 
     el.addEventListener("scroll", onScroll, { passive: true });
     return () => { ro.disconnect(); el.removeEventListener("scroll", onScroll); };
   }, [turns.length]);
-  const noun = partNoun(part.id);
+  const noun = nounOverride ?? partNoun(part.id);
   return (
     <aside className={s.mentorCol} aria-label="Mentor">
       <span className={s.ctx}>Mentor, on {noun}</span>

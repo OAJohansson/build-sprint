@@ -5,7 +5,8 @@
 // so the library and other tracks don't change. The pattern stays as saved (transposed to the
 // track's key on play, L197).
 import { ChevronDown, X } from "lucide-react";
-import { editLibLoop, isDrumLoop, type BassLoop, type DrumLoop, type LibLoop } from "@/lib/make/lib-loop";
+import { editLibLoop, isDrumLoop, isMelodyLoop, type BassLoop, type DrumLoop, type LibLoop, type MelodyLoop } from "@/lib/make/lib-loop";
+import { POLY_KNOBS, POLY_KNOB_SPECS, clampPolyMacros, melodyPreset, melodyPresetIds, melodyRowOf, polyKnobWord, type MelodyPresetId } from "@/lib/make/poly-synth";
 import { DRUM_KNOB_SPECS, DRUM_PRESETS, ROW_KNOBS, ROW_PRESETS, clampDrumMacros, drumKnobWord, rowOf, type DrumPresetId } from "@/lib/make/drum-synth";
 import { MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, type MacroId, type MakePresetId } from "@/lib/make/presets";
 import { Knob } from "@/components/ui/knob";
@@ -14,7 +15,52 @@ import s from "./sound-drawer.module.css";
 import l from "./lanes.module.css";
 
 export function LibDrawer({ t, sound, color, onClose }: { t: Timeline; sound: LibLoop; color: string; onClose: () => void }) {
+  if (isMelodyLoop(sound)) return <MelodyDrawer t={t} sound={sound} color={color} onClose={onClose} />;
   return isDrumLoop(sound) ? <DrumDrawer t={t} sound={sound} color={color} onClose={onClose} /> : <BassDrawer t={t} sound={sound} color={color} onClose={onClose} />;
+}
+
+/** Slice 2 (P9): a melody row's sound (the row's four presets, six knobs), editable; the notes stay as saved, in the track's key. */
+function MelodyDrawer({ t, sound, color, onClose }: { t: Timeline; sound: MelodyLoop; color: string; onClose: () => void }) {
+  const listening = t.previewSound?.id === sound.id;
+  const change = (next: LibLoop, merge?: string) => {
+    t.updateSound(next, merge);
+    if (listening) t.setPreviewSound(next);
+  };
+  const blocks = t.doc.regions.filter((r) => r.loopId === sound.id).length;
+  const row = melodyRowOf(sound.preset), home = clampPolyMacros(sound.preset, undefined);
+  return (
+    <aside className={s.drawer} style={{ ["--c" as string]: color }} aria-label={`${sound.name}, a sound from your library`}>
+      <div className={s.top}>
+        <button className={s.back} onClick={onClose}>← My sounds</button>
+        <button className={s.close} onClick={onClose} aria-label="Close the sound drawer"><X aria-hidden /></button>
+      </div>
+      <div className={s.body}>
+        <section className={s.pick}>
+          <label className={l.presetPick}>
+            <span className={l.presetLabel}>Preset</span>
+            <select value={sound.preset} onChange={(e) => change(editLibLoop(sound, { preset: e.target.value as MelodyPresetId }))} aria-label="Preset">
+              {melodyPresetIds(row).map((id) => <option key={id} value={id}>{melodyPreset(id).name}</option>)}
+            </select>
+            <ChevronDown aria-hidden />
+          </label>
+          <p className={s.dim}>{melodyPreset(sound.preset).about}</p>
+          <p className={s.dim}>{sound.name}: saved in {sound.key} {sound.scale} at {Math.round(sound.bpm)} BPM; plays in the track&apos;s key and tempo.</p>
+        </section>
+        <section className={s.shape} style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
+          {POLY_KNOBS.map((id) => (
+            <Knob key={id} id={id as never} spec={POLY_KNOB_SPECS[id]} wordOf={(v) => polyKnobWord(sound.preset, id, v)} value={sound.macros[id] ?? home[id]} color={color} disabled={false} reset={home[id]}
+              onChange={(v) => change(editLibLoop(sound, { macros: { [id]: v } }), `lib:${sound.id}:${id}`)} size={64} />
+          ))}
+        </section>
+        <section className={s.ai}>
+          <div className={s.row}>
+            <button className={s.secondary} aria-pressed={listening} onClick={() => t.setPreviewSound(listening ? null : sound)}>{listening ? "Stop" : "Listen"}</button>
+          </div>
+          <p className={s.dim}>Changes apply to {blocks === 1 ? "this block" : `all ${blocks} blocks of this sound`} in this track; your library keeps the original.</p>
+        </section>
+      </div>
+    </aside>
+  );
 }
 
 /** Phase 5 (P9): a drum row's sound (Make's row presets and knobs), editable like a bass; the hits stay as saved. */

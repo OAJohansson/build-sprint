@@ -35,6 +35,7 @@ export class MakeClient {
   private search = new Mailbox();
   private renders = 0;
   private drumRenders = 0;
+  private melodyRenders = 0;
 
   /** Reads a copy of the part (the copy is transferred, then zeroed in the worker). */
   read(r: Omit<Extract<MakeRequest, { type: "read" }>, "id" | "type">) {
@@ -59,6 +60,17 @@ export class MakeClient {
   }
   drumsSuggest(r: Omit<Extract<MakeRequest, { type: "drums-suggest" }>, "id" | "type">) {
     return this.search.send({ type: "drums-suggest", ...r }) as Promise<Res<"drums-suggest">>;
+  }
+  /** Slice 2, melody: read a copy of the looped "other" part (transferred, then zeroed in the worker). */
+  melodyRead(r: Omit<Extract<MakeRequest, { type: "melody-read" }>, "id" | "type">) {
+    return this.main.send({ type: "melody-read", ...r }, [r.left.buffer, r.right.buffer]) as Promise<Res<"melody-read">>;
+  }
+  melodyRender(r: Omit<Extract<MakeRequest, { type: "melody-render" }>, "id" | "type">) {
+    const n = ++this.melodyRenders;
+    return (this.main.send({ type: "melody-render", ...r }) as Promise<Res<"melody-render">>).then((res) => ({ res, stale: n !== this.melodyRenders }));
+  }
+  melodySuggest(r: Omit<Extract<MakeRequest, { type: "melody-suggest" }>, "id" | "type">) {
+    return this.search.send({ type: "melody-suggest", ...r }) as Promise<Res<"melody-suggest">>;
   }
   stop() { this.main.stop(); this.search.stop(); }
 }

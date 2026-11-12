@@ -360,7 +360,7 @@ export class LabTransport {
    * Swapped in place while playing, in sync, with a 15 ms crossfade. Null removes it. Not original
    * audio: it is the owner's own render (or an AI loop).
    */
-  setMine(m: { left: Float32Array; right: Float32Array; rate: number } | null, owner: "bass" | "drums" = "bass") {
+  setMine(m: { left: Float32Array; right: Float32Array; rate: number } | null, owner: "bass" | "drums" | "melody" = "bass") {
     const live = this.live;
     if (!m || !live) { this.stopMine(); this.mine = null; this.mineOwnerS = null; return; }
     this.mineOwnerS = owner;
@@ -375,7 +375,7 @@ export class LabTransport {
 
   /** Phase 5: which Make family's sound Mine holds now (one buffer for every family). */
   get mineOwner() { return this.mine ? this.mineOwnerS : null; }
-  private mineOwnerS: "bass" | "drums" | null = null;
+  private mineOwnerS: "bass" | "drums" | "melody" | null = null;
 
   /** B on Make's A/B: Mine heard (the parts' gains are set separately with setParts). */
   setMineOn(on: boolean) {

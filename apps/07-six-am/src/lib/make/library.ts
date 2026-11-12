@@ -6,6 +6,7 @@
 import { pitchClass, type Scale } from "@/lib/synths/theory";
 import { MAKE_PRESETS, clampMacros, macroWord, type Macros, type MakePresetId } from "./presets";
 import type { MakeNote } from "./render";
+import { POLY_KNOBS, clampPolyMacros, isMelodyPreset, kindOf, melodyPreset, melodyRowOf, type MelodyPresetId, type PolyKnobId, type PolyMacros } from "./poly-synth";
 import { DRUM_PRESETS, ROW_KNOBS, clampDrumMacros, isDrumPreset, rowOf, type DrumKnobId, type DrumMacros, type DrumPresetId } from "./drum-synth";
 
 export const LIB_PARTS = ["bass", "drums", "other", "vocals"] as const;
@@ -30,17 +31,25 @@ type SoundBase = {
 /** A bass (S4) or, from Phase 5, one drum row (part "drums"; the preset says which row: kick, clap or hats). */
 export type BassSound = SoundBase & { preset: MakePresetId; macros: Macros };
 export type DrumSound = SoundBase & { part: "drums"; preset: DrumPresetId; macros: DrumMacros };
-export type LibrarySound = BassSound | DrumSound;
+/** Phase 5 slice 2: a melody row (part "other"; the preset says the row: chords-… or lead-…), its
+ *  notes in `key`, with a repeat of up to 16 bars. */
+export type MelodySound = Omit<SoundBase, "pattern"> & { part: "other"; preset: MelodyPresetId; macros: PolyMacros; pattern: { bars: 1 | 2 | 4 | 8 | 16; notes: MakeNote[] } };
+export type LibrarySound = BassSound | DrumSound | MelodySound;
 type DistOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
 export type NewSound = DistOmit<LibrarySound, "id" | "createdAt" | "updatedAt">;
-export type SoundPatch = { name?: string; tags?: string[]; preset?: MakePresetId | DrumPresetId; macros?: Macros | DrumMacros };
+export type SoundPatch = { name?: string; tags?: string[]; preset?: MakePresetId | DrumPresetId | MelodyPresetId; macros?: Macros | DrumMacros | PolyMacros };
 export const isDrumSound = <T extends { preset: string }>(s: T): s is T & { preset: DrumPresetId } => isDrumPreset(s.preset);
-export const isBassSound = (s: LibrarySound): s is BassSound => !isDrumPreset(s.preset);
+export const isBassSound = (s: LibrarySound): s is BassSound => !isDrumPreset(s.preset) && !isMelodyPreset(s.preset);
+export const isMelodySound = <T extends { preset: string }>(s: T): s is T & { preset: MelodyPresetId } => isMelodyPreset(s.preset);
 
 export const MAX_TAGS = 12;
 export const MAX_NAME = 60;
 const MAX_TAG = 32;
 const MAX_NOTES = 64;
+/** Phase 5 melody: a progression of chords over up to 16 bars holds many more notes than a bassline. */
+export const MAX_MELODY_NOTES = 512;
+/** A melody row's repeat may be 8 or 16 bars (a progression); bass and drums keep 1, 2 or 4. */
+export const MELODY_BARS = [1, 2, 4, 8, 16] as const;
 
 /**
  * Tags as stored and searched: lower case, single spaces, no surrounding punctuation, at most 32
@@ -97,8 +106,8 @@ const num = (v: unknown, lo: number, hi: number) => (typeof v === "number" && Nu
 const cleanName = (v: unknown) => (typeof v === "string" ? v.normalize("NFC").replace(/\s+/g, " ").trim().slice(0, MAX_NAME) : "");
 
 /** A loop's notes we can trust (on the 16th grid inside `bars`, MIDI 12–96), sorted, or null. */
-export function parseNotes(v: unknown, bars: number): MakeNote[] | null {
-  if (!Array.isArray(v) || v.length > MAX_NOTES) return null;
+export function parseNotes(v: unknown, bars: number, max = MAX_NOTES): MakeNote[] | null {
+  if (!Array.isArray(v) || v.length > max) return null;
   const out: MakeNote[] = [];
   for (const x of v) {
     const o = (x ?? {}) as Record<string, unknown>;
@@ -116,6 +125,7 @@ export function parseNewSound(raw: unknown): NewSound | null {
   if (!raw || typeof raw !== "object") return null;
   const r = raw as Record<string, unknown>;
   if (isDrumPreset(r.preset)) return parseDrumSound(r, r.preset);
+  if (isMelodyPreset(r.preset)) return parseMelodySound(r, r.preset);
   if (typeof r.preset !== "string" || !(r.preset in MAKE_PRESETS)) return null;
   const preset = r.preset as MakePresetId;
   const part = LIB_PARTS.find((p) => p === r.part);
@@ -153,6 +163,40 @@ function parseDrumSound(r: Record<string, unknown>, preset: DrumPresetId): NewSo
   const name = cleanName(r.name) || suggestDrumName(preset, macros, source?.title);
   const tags = normalizeTags(Array.isArray(r.tags) ? r.tags : suggestDrumTags(preset, bpm, source?.title, macros));
   return { name, part: "drums", preset, macros, pattern: { bars, notes }, key, scale, bpm: Math.round(bpm * 100) / 100, source, tags };
+}
+
+/** A melody row's sound (Phase 5 slice 2): part "other", the row's preset and six knobs, its notes. */
+function parseMelodySound(r: Record<string, unknown>, preset: MelodyPresetId): NewSound | null {
+  const scale = r.scale === "major" || r.scale === "minor" ? r.scale : null;
+  const key = typeof r.key === "string" && pitchClass(r.key) !== null ? r.key.trim() : null;
+  const bpm = num(r.bpm, 40, 220);
+  const pat = (r.pattern ?? {}) as Record<string, unknown>;
+  const bars = MELODY_BARS.find((b) => b === pat.bars) ?? null;
+  const notes = bars ? parseNotes(pat.notes, bars, MAX_MELODY_NOTES) : null;
+  if (r.part !== "other" || !scale || !key || bpm === null || !bars || !notes) return null;
+  const source = sourceOf(r.source as Record<string, unknown> | null | undefined);
+  const macros = clampPolyMacros(preset, (r.macros ?? {}) as Record<string, unknown>);
+  const name = cleanName(r.name) || suggestMelodyName(preset, macros, source?.title);
+  const tags = normalizeTags(Array.isArray(r.tags) ? r.tags : suggestMelodyTags(preset, key, scale, bpm, source?.title, macros));
+  return { name, part: "other", preset, macros, pattern: { bars, notes }, key, scale, bpm: Math.round(bpm * 100) / 100, source, tags };
+}
+
+/** A melody sound's name, preset first: "Stab chords", "Pluck lead", then a knob word (as drums, T132). */
+const MELODY_KNOB_WORD: Record<PolyKnobId, [string, string]> = { tone: ["bright", "dark"], length: ["long", "short"], attack: ["swelling", "hard"], detune: ["thick", "plain"], width: ["wide", "narrow"], space: ["roomy", "dry"] };
+export function melodyWord(preset: MelodyPresetId, m: PolyMacros): string | null {
+  const home = melodyPreset(preset).macros, full = clampPolyMacros(preset, m);
+  const far = POLY_KNOBS.map((id) => ({ id, d: full[id] - home[id] })).sort((a, b) => Math.abs(b.d) - Math.abs(a.d))[0];
+  return far && Math.abs(far.d) >= NAME_MOVE ? MELODY_KNOB_WORD[far.id][far.d > 0 ? 0 : 1] : null;
+}
+export const melodyNoun = (preset: MelodyPresetId) => (melodyRowOf(preset) === "lead" ? "lead" : kindOf(preset) === "pad" ? "pads" : "chords");
+export function suggestMelodyName(preset: MelodyPresetId, m: PolyMacros, songTitle?: string | null): string {
+  const w = melodyWord(preset, m);
+  const base = `${melodyPreset(preset).name} ${melodyNoun(preset)}`;
+  const s = songTitle ? shortTitle(songTitle) : "";
+  return (s ? `${w ? `${base}, ${w}` : base}, from ${s}` : w ? `${base}, ${w}` : base).slice(0, MAX_NAME);
+}
+export function suggestMelodyTags(preset: MelodyPresetId, key: string, scale: Scale, bpm: number, songTitle?: string | null, m?: PolyMacros): string[] {
+  return normalizeTags([melodyNoun(preset), ...melodyPreset(preset).tags, (m && melodyWord(preset, m)) ?? "", `${key} ${scale}`, `${Math.round(bpm)} bpm`, songTitle ? shortTitle(songTitle) : ""]);
 }
 
 /** What a drum row's sound is called: kick, clap, snare, rim or hats (the row's noun, by preset). */
@@ -203,6 +247,13 @@ export function parseSoundPatch(raw: unknown, current: Pick<LibrarySound, "prese
   const name = cleanName(r.name);
   if (name) out.name = name;
   if (Array.isArray(r.tags)) out.tags = normalizeTags(r.tags);
+  if (isMelodyPreset(current.preset)) {
+    const row = melodyRowOf(current.preset);
+    const preset = isMelodyPreset(r.preset) && melodyRowOf(r.preset) === row ? r.preset : null;
+    if (preset) out.preset = preset;
+    if (r.macros && typeof r.macros === "object") out.macros = clampPolyMacros(preset ?? current.preset, r.macros as Record<string, unknown>);
+    return out;
+  }
   if (isDrumPreset(current.preset)) {
     // A drum sound stays on its row (a kick stays a kick: its lane depends on it).
     const row = rowOf(current.preset);
@@ -220,7 +271,7 @@ export function parseSoundPatch(raw: unknown, current: Pick<LibrarySound, "prese
 // ── Saving from Make (S4 fix, S5-1) ──────────────────────────────────────────────────────────────
 
 /** A sound's identity in Make: its preset and knob values (rounded), whatever its name. */
-export const soundId = (preset: MakePresetId | DrumPresetId, m: Macros | DrumMacros) => { const v = m as Record<string, number>; return `${preset}|${Object.keys(v).sort().map((k) => Math.round(v[k] * 1000)).join(",")}`; };
+export const soundId = (preset: MakePresetId | DrumPresetId | MelodyPresetId, m: Macros | DrumMacros | PolyMacros) => { const v = m as Record<string, number>; return `${preset}|${Object.keys(v).sort().map((k) => Math.round(v[k] * 1000)).join(",")}`; };
 
 /**
  * What "Save to library" does now, given the last sound saved (or loaded) here: nothing when it's

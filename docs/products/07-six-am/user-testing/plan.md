@@ -468,3 +468,14 @@ and "Play anyway" brings them back.
 Switch to Bass. Expect: nothing changed.
 
 (Melody and FX scenarios added with slices 2 and 3.)
+
+#### M-S6 · Make my own chords from a loop I love (slice 2)
+Loop a drop with chords, switch Make to Melody. Expect: Chords (and Lead, if there is one) fill;
+presets Stab, Pluck, Pad, Keys make sense to a beginner; picking a row moves nothing.
+
+#### M-S7 · Get my chords close to the original
+Follow the ticks and Mentor hint, A/B with the drums under both, watch the open row's score.
+Expect: it reacts, and I can hear it get closer without music theory.
+
+#### M-S8 · Keep the chords and use them
+Save chords (and lead); in the Studio they land on Chords / Pads / Lead lanes and survive a reload.

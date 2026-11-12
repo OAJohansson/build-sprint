@@ -174,14 +174,14 @@ Report: `user-testing/report-2026-11-12-drums.md`.
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| U1 | major | One closeness score barely moves for clap or hats (mostly the kick) | fixing (L233) |
-| U2 | major | An "off" row's reason only in a tooltip | fixing |
-| U3 | major | "Play anyway" can't be undone | fixing |
-| U4 | minor | Mentor gives tips for a row that is off | fixing |
-| U5 | minor | Knob words too coarse (Decay "1/2" before and after a drag) | fixing |
-| U6 | minor | Two countdowns disagree (header vs panel) | fixing |
-| U7 | minor | A clap dropped on the Drums lane does nothing, silently | fixing |
-| U8 | minor | Automatic names describe the wrong sound | fixing |
-| U9 | polish | Play button moves sideways as the header text changes | fixing |
-| U10 | polish | Greyed "Suggested" pill looks clickable | fixing |
-| U11 | polish | Lane label cut to "Claps & sn…"; each drop opens the drawer | fixing |
+| U1 | major | One closeness score barely moves for clap or hats (mostly the kick) | fixed (47281c0, ad2b749) |
+| U2 | major | An "off" row's reason only in a tooltip | fixed (47281c0, ad2b749) |
+| U3 | major | "Play anyway" can't be undone | fixed (47281c0, ad2b749) |
+| U4 | minor | Mentor gives tips for a row that is off | fixed (47281c0, ad2b749) |
+| U5 | minor | Knob words too coarse (Decay "1/2" before and after a drag) | fixed (47281c0, ad2b749) |
+| U6 | minor | Two countdowns disagree (header vs panel) | fixed (47281c0, ad2b749) |
+| U7 | minor | A clap dropped on the Drums lane does nothing, silently | fixed (47281c0, ad2b749) |
+| U8 | minor | Automatic names describe the wrong sound | fixed (47281c0, ad2b749) |
+| U9 | polish | Play button moves sideways as the header text changes | fixed (47281c0, ad2b749) |
+| U10 | polish | Greyed "Suggested" pill looks clickable | fixed (47281c0, ad2b749) |
+| U11 | polish | Lane label cut to "Claps & sn…"; each drop opens the drawer | fixed (47281c0, ad2b749) |

@@ -97,7 +97,8 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const fxRef = useRef<FxModel | null>(null);
   const onFamily = useCallback((f: Exclude<Family, "vocals">) => {
     setFxPicked(f === "fx");
-    if (f !== "fx") setFocus(FAMILY_PART[f]);
+    // FX-F1: FX live in the "other" part: a question asked in FX is about that, not the last part heard.
+    setFocus(f === "fx" ? "other" : FAMILY_PART[f]);
     const url = new URL(location.href);
     url.searchParams.set("make", f);
     history.replaceState(null, "", url);
@@ -267,7 +268,8 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     const l = t?.state.loop ?? null;
     const loopB = l ? { from: Math.round(msToBar(l.startMs, bpm, origin)), to: Math.round(msToBar(l.endMs, bpm, origin)) } : null;
     const held = loopB && t ? t.loopPart(PART_NAMES.indexOf(focus)) : null;
-    const measure = held && loopB ? measurePart(focus, held, loopB, bpm, map.key || analysis?.key || "", map.scale || analysis?.scale || "") : null;
+    // FX-F1: in FX the answer starts from the open row (makeRow), not from a part's notes.
+    const measure = held && loopB && !(mode === "make" && family === "fx") ? measurePart(focus, held, loopB, bpm, map.key || analysis?.key || "", map.scale || analysis?.scale || "") : null;
     // LS2-M3: what the Lab heard of the focus part around the bar (levels only), drums with its bands.
     const rows = t?.levels() ?? null;
     const from = Math.max(1, bar - HEARD_WINDOW), to = Math.min(bars, bar + HEARD_WINDOW);

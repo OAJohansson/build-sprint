@@ -12,7 +12,7 @@ import { midiName, pitchClass, usesFlats } from "@/lib/synths/theory";
 import { DRUM_KNOB_SPECS, DRUM_PRESETS, DRUM_ROW_NAMES, ROW_KNOBS, drumKnobWord, isDrumPreset, rowOf, type DrumKnobId, type DrumPresetId } from "@/lib/make/drum-synth";
 import { MELODY_ROW_NAMES, POLY_KNOBS, POLY_KNOB_SPECS, isMelodyPreset, melodyPreset, melodyRowOf, polyKnobWord, type MelodyPresetId, type PolyKnobId } from "@/lib/make/poly-synth";
 import { FX_KNOBS, FX_KNOB_SPECS, FX_PRESETS, FX_ROW_NAMES, fxKnobWord, fxRowOf, isFxPreset, type FxKnobId, type FxPresetId } from "@/lib/make/fx-synth";
-import { MACRO_IDS, MACRO_SPECS, MAKE_PRESETS, clampMacros, macroGuide, macroWord, type Macros, type MakePresetId } from "@/lib/make/presets";
+import { MACRO_IDS, MACRO_SPECS, MAKE_PRESETS, clampMacros, macroWord, type Macros, type MakePresetId } from "@/lib/make/presets";
 import type { MentorAnswer } from "./answer";
 
 export const PART_LABEL: Record<PartName, string> = { drums: "Drums", bass: "Bass", other: "Other", vocals: "Vocals" };
@@ -255,7 +255,8 @@ export function labContextText(ask: LabAsk, map: TrackMap): string {
   const sec = sectionAt(sections, ask.bar);
   const head = sectionAt(sections, ask.playheadBar);
   const part = labParts(map).find((p) => p.id === ask.part);
-  const name = PART_LABEL[ask.part];
+  // FX-F8: asked from Make's Melody or FX, the "other" part is the melody (its lane name means nothing there).
+  const name = ask.part === "other" && (ask.makeRow?.family === "melody" || ask.makeRow?.family === "fx") ? "Melody" : PART_LABEL[ask.part];
   const block = part?.blocks.find((b) => ask.bar >= b.from && ask.bar < b.to);
   const runs = (part?.blocks ?? []).filter((b) => b.to - b.from >= 4).slice(0, 8).map((b) => `bars ${b.from}–${b.to - 1}${b.level === "maybe" ? " (maybe)" : ""}`);
   const heard = ask.chords.map((c, i) => ({ c, from: 1 + i * 8 })).filter((x) => x.c !== null && x.from <= map.bars);
@@ -299,9 +300,11 @@ export function labContextText(ask: LabAsk, map: TrackMap): string {
 
 /** S3: what they're making in Make, so the Mentor can talk about the knobs by name. */
 function makeLines(mk: LabMake, name: string): string[] {
-  const at = (m: Macros) => MACRO_IDS.map((id) => `${MACRO_SPECS[id].name} ${Math.round(m[id] * 100)}% (${macroWord(id, m[id])})`).join(", ");
+  // FX-F8: knob values in the words the knobs show on screen, never as percentages.
+  const at = (m: Macros) => MACRO_IDS.map((id) => `${MACRO_SPECS[id].name} ${macroWord(id, m[id])}`).join(", ");
+  const p = MAKE_PRESETS[mk.preset];
   return [
-    `[make] They are in Make, building their own ${name.toLowerCase()} on Six AM's synth beside the looped part, comparing A (the original part) and B (theirs) at the same loudness. Their preset and knobs:\n${macroGuide(mk.preset, mk.macros)}`,
+    `[make] They are in Make, building their own ${name.toLowerCase()} on Six AM's synth beside the looped part, comparing A (the original part) and B (theirs) at the same loudness. Preset ${p.name} (${p.tags.join(", ")}): ${p.about} Knobs as shown: ${at(mk.macros)}.\n${MACRO_IDS.map((id) => `- ${MACRO_SPECS[id].name}: ${MACRO_SPECS[id].explain}`).join("\n")}`,
     mk.ticks
       ? `[make] Suggest settings (local patch matching against the looped part's measurements, not your call) puts gold ticks at: ${at(mk.ticks)}. Talk about these knobs by name; you can't hear their sound either.`
       : `[make] No gold ticks yet. Talk about the knobs by name; you can't hear their sound either.`,
@@ -324,7 +327,8 @@ function makeRowLines(r: LabMakeRow): string[] {
     word = (id, v) => fxKnobWord(r.preset as FxPresetId, id as FxKnobId, v); label = (id) => FX_KNOB_SPECS[id as FxKnobId].name;
     what = "their own FX timed to the section (a hit on the drop's first beat, a fall after it, a riser into the next section), comparing A (the drop as is) and B (with their FX) at the same loudness; there's no closeness score for FX";
   } else return [];
-  const at = (m: Record<string, number>) => Object.entries(m).map(([id, v]) => `${label(id)} ${Math.round(v * 100)}% (${word(id, v)})`).join(", ");
+  // FX-F8: as the knobs show it ("Tone warm · 1.3 kHz", "Decay 175 ms"), never a percentage.
+  const at = (m: Record<string, number>) => Object.entries(m).map(([id, v]) => `${label(id)} ${word(id, v)}`).join(", ");
   return [
     `[make] They are in Make, building ${what}. The open row is ${row}: preset ${name} (${about}). Knobs: ${at(r.knobs)}.`,
     r.off ? `[make] This row is off in their sound: ${r.note ?? "the reading thinks it's bleed"}. They can press Play anyway.` : "",

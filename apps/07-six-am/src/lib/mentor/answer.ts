@@ -174,6 +174,8 @@ export type Needs = {
   trackRefs?: ReadonlyMap<string, string>;
   /** Lab (B6): the person's question, so a question about tone gets "I can't hear that" said. */
   labQuestion?: string;
+  /** Asked in Make (any family): the answer talks about the knobs; no stock "can't hear" opener (FX-F7). */
+  labInMake?: boolean;
   /** Lab (LS2-M6): the bar isn't heard yet: the loop to suggest ("bars 49–56"). */
   labUnheard?: string;
 };
@@ -320,7 +322,11 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
     if (sentences.some((x) => /\bchords?\b/i.test(x.text))) return { ok: false, problem: "Bar not heard yet: no chords. Say what the map estimates, then the loop line." };
   }
   // B6: a question about tone gets one plain line that you can't hear it (and what you can measure).
-  if (job === "lab" && needs.labQuestion && TONE_QUESTION.test(needs.labQuestion) && !sentences.some((x) => CANT_HEAR.test(x.text))) {
+  // FX-F7: in Make, the answer comes first; "I can't hear it" is at most one short mention later.
+  if (job === "lab" && needs.labInMake && sentences.length > 1 && CANT_HEAR.test(sentences[0].text)) {
+    return { ok: false, problem: `In Make, don't open with "I can't hear the sound itself": start with the answer about their knobs; mention it once, briefly, later only if it matters.` };
+  }
+  if (job === "lab" && !needs.labInMake && needs.labQuestion && TONE_QUESTION.test(needs.labQuestion) && !sentences.some((x) => CANT_HEAR.test(x.text))) {
     return { ok: false, problem: `The question is about tone or sound ("${needs.labQuestion.match(TONE_QUESTION)?.[0]}"), which you can't hear: say so in one sentence: "I can't hear the sound itself; I read measurements: pitch, timing and loudness.", then answer from what the numbers do show.` };
   }
   // Studio start: the key fit comes from code; claiming bass and chords fit over a clash is rejected.

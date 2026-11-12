@@ -21,3 +21,13 @@ Shots: 01–08.
 - Name: kick name stays "Deep kick" after switching to Round 808 (10); hats name follows the Length knob ("Closed hats") but its tags still say "open · 909" (19).
 - 1440 × 741: A/B 625–664, save bar at 677: all visible (19). R2 fixed.
 Shots: 09–19.
+
+## M-S3 Keep the drums I like and use them: pass (one dead drop)
+- Save per row: 3 saves + 2 row picks; each row shows "✓ saved" and the bar says "Saved as …" (20–22). API: 3 sounds, part drums, presets kick-deep-909 / clap-wide / hats-open-909.
+- Auto names mislead: "Tight kick" while the preset is Deep 909 (and "Tight" is another preset); "Roomy clap" from a Room knob left high.
+- Studio (1 tap): My sounds shows the 3 under "Lost in the Loop (O Deibys)" with Kick / Claps & snares / Hats (23).
+- Kick dragged onto Drums lane lands at bar 33 and opens its drawer with its knobs and "plays at the track's tempo" (25). Need "← My sounds" to get the list back (extra tap each time).
+- Clap dropped on the Drums lane: nothing happens, no message (27). While dragging, the lanes dim and a dashed "Drop here for a new Claps & snares lane" appears below the last lane (26). Dropped there: new lane, block at bar 25 (31). Hats the same (32).
+- Reload: Drums / Claps & snares / Hats lanes and all 3 blocks still there (33). Lane label truncated "Claps & sn…".
+- Studio is 124 BPM, sounds saved at 123: drawer says they play at the track's tempo (fine).
+Shots: 20–33.

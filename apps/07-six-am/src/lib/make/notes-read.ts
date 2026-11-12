@@ -117,6 +117,46 @@ export function attacks(x: Float32Array, rate: number, n = 512): { t: number; s:
   return out;
 }
 
+/** Energy at `hz` of `x` over [a, b) samples (Goertzel). */
+function goertzel(x: Float32Array, a: number, b: number, hz: number, rate: number): number {
+  const w = (2 * Math.PI * hz) / rate, c = 2 * Math.cos(w);
+  let s1 = 0, s2 = 0;
+  for (let i = Math.max(0, a); i < Math.min(x.length, b); i++) { const s0 = x[i] + c * s1 - s2; s2 = s1; s1 = s0; }
+  return (s1 * s1 + s2 * s2 - c * s1 * s2) / Math.max(1, b - a);
+}
+
+// shortcut: re-strike thresholds (a mark of strength ≥ 0.15, the note's own pitch ≥ 3 dB up across it after settling) picked on the melody fixture and the chord bench; check on more real stabs.
+export const RESTRIKE = { mark: 0.15, ratio: 2, winS: 0.025, minS: 0.08 };
+
+/**
+ * M-F2 (melody evals): a chord struck again while it still rings (a stab into a stab, a reverb tail)
+ * never lets its pitch stop, so it was read as one long note. A held note is split wherever an attack
+ * mark sits inside it and its own pitch (energy at its fundamental, a narrow Goertzel) jumps there.
+ */
+function splitRestrikes(notes: ReadNote[], x: Float32Array, rate: number, marks: { t: number; s: number }[], fine: { t: number; s: number }[], tune: number, sps: number, loopStartSec: number) {
+  const strong = marks.filter((m) => m.s >= RESTRIKE.mark);
+  const w = Math.round(RESTRIKE.winS * rate), gap = Math.round(0.004 * rate);
+  for (let i = 0; i < notes.length; i++) {
+    const n = notes[i], hz = 440 * Math.pow(2, (n.midi + tune - 69) / 12), end = n.t + n.dur;
+    for (const m of strong) {
+      if (m.t <= n.t + RESTRIKE.minS || m.t >= end - 0.05) continue;
+      const at = Math.round(m.t * rate);
+      const before = goertzel(x, at - gap - w, at - gap, hz, rate), after = goertzel(x, at + gap, at + gap + w, hz, rate);
+      if (after < RESTRIKE.ratio * before) continue;
+      // Not a swell: a re-strike comes after the note has settled or fallen, not while it still climbs.
+      const earlier = goertzel(x, at - gap - 3 * w, at - gap - 2 * w, hz, rate);
+      if (before > 1.25 * earlier) continue;
+      // Struck again here: the note ends, a new one starts (timed by the finer curve, as at the read).
+      let fb: { t: number; s: number } | null = null;
+      for (const f of fine) if (Math.abs(f.t - m.t) <= 0.02 && (!fb || f.s > fb.s)) fb = f;
+      const t = fb ? fb.t : m.t, step = Math.round((t - loopStartSec) / sps);
+      n.dur = Math.max(0.03, t - n.t);
+      notes.push({ t, dur: Math.max(0.03, end - t), midi: n.midi, vel: n.vel, step, offsetMs: Math.round((t - loopStartSec - step * sps) * 10000) / 10 });
+      break; // the new note is checked for its own re-strikes in turn
+    }
+  }
+}
+
 /**
  * Reads a looped pitched part ("other"): notes with several at once. `key` (optional) drops weak
  * out-of-key pitches. Steps are 16ths from `loopStartSec`.
@@ -162,7 +202,18 @@ export function readNotes(left: Float32Array, right: Float32Array | undefined, r
   });
   const tonic = key ? pitchClass(key.key) : null;
   const hopSec = hop / r, half = N / 2 / r;
-  const marks = attacks(x, r), fine = attacks(x, r, 256);
+  // The loop plays round: a chord struck on its first beat had no quiet stretch before it and was
+  // dropped (M-F2). Attacks are the reader's own everywhere after the first 50 ms; only that start is
+  // taken from a copy with the loop's end in front, scaled to match over the rest of the loop.
+  const pre = Math.min(x.length, Math.round(0.3 * r)), xc = new Float32Array(pre + x.length);
+  xc.set(x.subarray(x.length - pre), 0); xc.set(x, pre);
+  const withStart = (own: { t: number; s: number }[], round: { t: number; s: number }[]) => {
+    const rs = round.map((m) => ({ t: m.t - pre / r, s: m.s })).filter((m) => m.t > -0.05);
+    const top = (xs: { t: number; s: number }[]) => Math.max(1e-9, ...xs.filter((m) => m.t > 0.05).map((m) => m.s));
+    const k = top(own) / top(rs);
+    return [...rs.filter((m) => m.t <= 0.05).map((m) => ({ t: m.t, s: Math.min(1, m.s * k) })), ...own.filter((m) => m.t > 0.05)];
+  };
+  const marks = withStart(attacks(x, r), attacks(xc, r)), fine = withStart(attacks(x, r, 256), attacks(xc, r, 256));
   /** Is there an attack within the snap window of a (window-centred) time? A pitch that comes back without one is the same note. */
   const nearMark = (t: number) => marks.some((m) => m.s >= NOTE_OPT.newNoteMark && Math.abs(m.t - t) <= NOTE_OPT.snapSec + half * 0.5);
   const sps = 60 / bpm / 4;
@@ -221,6 +272,7 @@ export function readNotes(left: Float32Array, right: Float32Array | undefined, r
       f = end + 1;
     }
   }
+  splitRestrikes(notes, x, r, marks, fine, tune, sps, loopStartSec);
   notes.sort((p, q) => p.t - q.t || p.midi - q.midi);
   return { notes, tuningCents: Math.round(tune * 100) };
 }

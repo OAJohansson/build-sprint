@@ -119,7 +119,7 @@ The labels as columns on Make's grid for that read (bars 1-based; A = ambiguous)
   both" the kick flams against the bass.
 - The lateness is also saved: the saved kick has `off` 0.27–0.30 sixteenths on steps 4/8/12.
 - Repro: sandbox; open Mason (map from Phase 4); `/map?id=…&quiet=1&mode=make&make=drums`; Play;
-  `__sixamLab.setLoop(30573, 45805)` (bars 17–24); `__sixamLab.drums().rows.kick.hits.map(h => h.t)`.
+  `__sixamLab.setLoop(30574, 45807)` (bars 17–24); `__sixamLab.drums().rows.kick.hits.map(h => h.t)`.
   The values sit about 45 ms after the broadband attack, for example 0.525 s where the attack is at
   0.482 s.
 - Likely fix: time kicks from the attack (120–400 Hz, or the broadband flux) and keep the low band
@@ -253,7 +253,7 @@ Grid stability (D-F3): the same Mason 81–88 loop, read twice this run, gave gr
   its attack, close to the kick.
 - 5 of 16 claps are more than 10 ms off, which makes 11 missed clap events and 11 extra clap labels
   on the kick events. Found 85.3 % and labels 81.2 % on this loop. The pooled bars still pass.
-- Repro: Lost in the Loop; `setLoop(40551, 56159)` (bars 21–28, map origin 1.407 s, 123.02 BPM).
+- Repro: Lost in the Loop; `setLoop(40425, 56032)` (bars 21–28, map origin 1.407 s, 123.02 BPM).
   Compare `drums().rows.clap.hits.map(h => h.t)` with the 1–3 kHz attack, for example 2.104 s
   against the kick at 2.116 s.
 - Likely fix: time claps at their first burst (the earliest 1–3 kHz rise), not where it meets the

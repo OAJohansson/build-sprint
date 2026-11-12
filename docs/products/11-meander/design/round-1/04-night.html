@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>04 Night chart · Meander round 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1440px;background:#fff}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;cursor:pointer}
+.screen{width:1440px;height:900px;position:relative;overflow:hidden}
+.screen svg.links{position:absolute;inset:0;width:1440px;height:900px;pointer-events:none}
+/* ---- the direction ---- */
+
+.screen{background:#0d1326;color:#f3ead2;font:400 14px/1.45 Karla,sans-serif;--night:#0d1326;--deep:#161e3a;--cream:#f3ead2;--gold:#e9b44c;--coral:#e8806a;--mist:#8690b3}
+.wm{position:absolute;left:36px;top:24px;font:italic 500 30px/1 'Cormorant Garamond';display:flex;align-items:center;gap:8px}
+.key{position:absolute;right:36px;top:30px;display:flex;gap:22px;color:var(--mist);font-size:12px;align-items:center}
+.key i{display:inline-block;width:26px;border-top:1px solid var(--cream);vertical-align:middle;margin-right:7px;opacity:.7}
+.key i.a{border-top:1px dashed var(--coral);opacity:1}.key i.t{border-top:2px solid var(--gold);opacity:1}
+.era{position:absolute;top:84px;font:italic 400 17px/1 'Cormorant Garamond';color:var(--mist);letter-spacing:.04em}
+svg.links .built{stroke:var(--cream);stroke-width:1;opacity:.38}
+svg.links .against{stroke:var(--coral);stroke-width:1.2;stroke-dasharray:4 5;opacity:.9}
+svg.links .trail{fill:none;stroke:var(--gold);stroke-width:2.2;stroke-linejoin:round}
+svg.links .s0{fill:var(--night);stroke:var(--cream);stroke-width:1.3}
+svg.links .s1{fill:var(--gold)}
+svg.links .ring{fill:none;stroke:var(--gold);stroke-width:1.2}
+.lb{position:absolute;white-space:nowrap;font:500 17px/1.1 'Cormorant Garamond';transform:translateX(-50%);text-align:center;color:#cfd3e4}
+.lb.v{color:var(--cream);font-weight:600}
+.lb small{display:block;font:500 11px Karla;color:var(--gold);margin-top:2px}
+.lb.here{font:italic 500 26px/1 'Cormorant Garamond';color:var(--gold)}
+.drawer{position:absolute;left:0;top:520px;width:1440px;height:380px;background:var(--deep);border-top:1px solid #36406a;padding:22px 36px 0;display:grid;grid-template-columns:330px 270px 330px 1fr;grid-template-areas:"head themes thinkers next" "q against thinkers next";grid-template-rows:auto 1fr;gap:0 40px}
+.dh{grid-area:head}.d-q{grid-area:q}.d-themes{grid-area:themes}.d-against{grid-area:against}.d-thinkers{grid-area:thinkers}.d-next{grid-area:next}
+.dh .back{font-size:12px;color:var(--mist);margin-bottom:10px}
+.dh h2{font:italic 500 44px/1 'Cormorant Garamond';color:var(--gold)}
+.dh p{font-size:12px;color:var(--mist);margin:6px 0 14px}
+.drawer h3{font:700 10.5px Karla;letter-spacing:.14em;text-transform:uppercase;color:var(--mist);margin-bottom:8px}
+.d-q li{font:italic 500 19px/1.2 'Cormorant Garamond';margin-bottom:7px}
+.d-themes{padding-top:22px}.d-themes li{font-size:13.5px;line-height:1.55}
+.d-against{padding-top:14px}.d-against p{font-size:13px;color:#c9cde0}.d-against a{color:var(--coral);border-bottom:1px dashed var(--coral)}
+.d-thinkers{padding-top:22px}
+.d-thinkers .t-row{display:grid;grid-template-columns:1fr auto;gap:0 8px;padding:5px 0 6px;border-bottom:1px solid #2b355c}
+.d-thinkers b{font:600 18px/1.1 'Cormorant Garamond'}.d-thinkers i{font-style:normal;font-size:11.5px;color:var(--mist)}.d-thinkers span{grid-column:1/3;font-size:12.5px;color:#c9cde0}
+.d-next{padding-top:22px}
+.d-next li{display:grid;grid-template-columns:28px 1fr auto;gap:0 10px;padding:9px 0 10px;border-bottom:1px solid #2b355c;align-items:baseline}
+.d-next li:before{content:"";width:14px;height:14px;border-radius:50%;border:1.3px solid var(--cream);grid-row:1/3;align-self:center;justify-self:center}
+.d-next b{font:italic 500 26px/1 'Cormorant Garamond';color:var(--cream)}
+.d-next em{font-style:normal;font-size:11.5px;color:var(--mist);grid-column:3;grid-row:1}
+.d-next li.against em{color:var(--coral)}
+.d-next span{grid-column:2/4;font-size:13px;color:#c9cde0}
+
+/* ---- brand strip (about the direction, not part of the screen) ---- */
+.strip{width:1440px;height:230px;background:#fff;border-top:1px solid #111;color:#111;font:12px/1.45 ui-sans-serif,system-ui,sans-serif;display:grid;grid-template-columns:300px 250px 270px 330px 1fr;position:relative}
+.strip>div{padding:20px 22px 0;border-right:1px solid #e4e4e4;min-width:0}
+.strip>div:last-child{border-right:0}
+.strip h6{font:600 10px/1 ui-sans-serif,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8a8a8a;margin-bottom:12px}
+.strip .bs-wm{height:60px;display:flex;align-items:center;margin-bottom:8px}
+.strip .bs-pers{color:#444}
+.strip .bs-alt{color:#8a8a8a;margin-top:4px}
+.strip .bs-sw{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 8px}
+.strip .bs-sw i{display:block;height:34px;border-radius:4px;outline:1px solid rgba(0,0,0,.12);outline-offset:-1px}
+.strip .bs-sw span{display:block;font:10px/1.3 ui-monospace,Menlo,monospace;color:#555;margin-top:3px}
+.strip .bs-ty1{font-size:30px;line-height:1.05;margin-bottom:4px}
+.strip .bs-ty2{font-size:14px;line-height:1.35;margin:8px 0 4px}
+.strip .bs-tyn{font:10px/1.3 ui-monospace,Menlo,monospace;color:#777}
+.strip dl{display:grid;grid-template-columns:76px 1fr;gap:5px 8px}
+.strip dt{color:#8a8a8a}
+.strip dd{color:#111}
+.strip .bs-sig{height:70px;display:flex;align-items:center;margin-bottom:6px;overflow:hidden}
+.strip .bs-note{font-size:10px;line-height:1.35;color:#8a8a8a;margin-top:8px}
+</style></head>
+<body>
+<div class="screen"><svg class="links"><line class="built" x1="90" y1="310" x2="225" y2="235"/><line class="built" x1="225" y1="235" x2="365" y2="160"/><line class="built" x1="90" y1="310" x2="260" y2="410"/><line class="built" x1="225" y1="235" x2="480" y2="300"/><line class="against" x1="480" y1="300" x2="610" y2="205"/><line class="against" x1="610" y1="205" x2="650" y2="395"/><line class="built" x1="610" y1="205" x2="790" y2="275"/><line class="built" x1="650" y1="395" x2="790" y2="275"/><line class="built" x1="650" y1="395" x2="840" y2="445"/><line class="built" x1="790" y1="275" x2="925" y2="150"/><line class="against" x1="790" y1="275" x2="1190" y2="315"/><line class="built" x1="1065" y1="215" x2="1190" y2="315"/><line class="built" x1="650" y1="395" x2="975" y2="385"/><line class="built" x1="790" y1="275" x2="1065" y2="215"/><line class="against" x1="790" y1="275" x2="1100" y2="440"/><line class="built" x1="650" y1="395" x2="1100" y2="440"/><line class="built" x1="1190" y1="315" x2="1320" y2="410"/><line class="against" x1="1190" y1="315" x2="1335" y2="190"/><path class="trail" d="M365 160L225 235L790 275L1190 315"/><circle class="s0" cx="90" cy="310" r="5"/><g transform="translate(225 235)"><path class="s1" d="M0 -12Q2.16 -2.16 12 0Q2.16 2.16 0 12Q-2.16 2.16 -12 0Q-2.16 -2.16 0 -12Z"/></g><circle class="s0" cx="260" cy="410" r="5"/><g transform="translate(365 160)"><path class="s1" d="M0 -12Q2.16 -2.16 12 0Q2.16 2.16 0 12Q-2.16 2.16 -12 0Q-2.16 -2.16 0 -12Z"/></g><circle class="s0" cx="480" cy="300" r="5"/><circle class="s0" cx="610" cy="205" r="5"/><circle class="s0" cx="650" cy="395" r="5"/><g transform="translate(790 275)"><path class="s1" d="M0 -12Q2.16 -2.16 12 0Q2.16 2.16 0 12Q-2.16 2.16 -12 0Q-2.16 -2.16 0 -12Z"/></g><circle class="s0" cx="840" cy="445" r="5"/><circle class="s0" cx="925" cy="150" r="5"/><circle class="s0" cx="975" cy="385" r="5"/><circle class="s0" cx="1100" cy="440" r="5"/><circle class="s0" cx="1065" cy="215" r="5"/><g transform="translate(1190 315)"><circle class="ring" r="24"/><path class="s1" d="M0 -17Q3.06 -3.06 17 0Q3.06 3.06 0 17Q-3.06 3.06 -17 0Q-3.06 -3.06 0 -17Z"/></g><circle class="s0" cx="1320" cy="410" r="5"/><circle class="s0" cx="1335" cy="190" r="5"/></svg>
+<div class="wm"><svg width="22" height="22" viewBox="-12 -12 24 24"><path d="M0 -11Q1.98 -1.98 11 0Q1.98 1.98 0 11Q-1.98 1.98 -11 0Q-1.98 -1.98 0 -11Z" fill="#e9b44c"/></svg>meander</div>
+<div class="key"><span><i></i>built on</span><span><i class="a"></i>pushed against</span><span><i class="t"></i>your path: 4 of 16 lit, over 3 nights</span></div>
+<div class="era" style="left:70px">Ancient</div><div class="era" style="left:450px">Medieval</div><div class="era" style="left:600px">Early modern</div><div class="era" style="left:850px">19th century</div><div class="era" style="left:1090px">20th century to now</div><div class="lb  " style="left:90px;top:324px">Presocratics</div><div class="lb v " style="left:225px;top:249px">Classical Greek<small>lit 5 Nov</small></div><div class="lb  " style="left:260px;top:424px">Epicureanism</div><div class="lb v " style="left:365px;top:174px">Stoicism<small>lit 3 Nov</small></div><div class="lb  " style="left:480px;top:314px">Scholasticism</div><div class="lb  " style="left:610px;top:219px">Rationalism</div><div class="lb  " style="left:650px;top:409px">Empiricism</div><div class="lb v " style="left:790px;top:289px">German Idealism<small>lit 9 Nov</small></div><div class="lb  " style="left:840px;top:459px">Utilitarianism</div><div class="lb  " style="left:925px;top:164px">Marxism</div><div class="lb  " style="left:975px;top:399px">Pragmatism</div><div class="lb  " style="left:1100px;top:454px">Analytic philosophy</div><div class="lb  " style="left:1065px;top:229px">Phenomenology</div><div class="lb v here" style="left:1190px;top:347px">Existentialism<small>you are here</small></div><div class="lb  " style="left:1320px;top:424px">Absurdism</div><div class="lb  " style="left:1335px;top:204px">Post-structuralism</div>
+<div class="drawer"><div class="dh"><div class="back">← The whole sky &nbsp;·&nbsp; Esc</div><h2>Existentialism</h2><p>1840s–1960s · lit tonight, 12 Nov</p></div>
+  <section class="d-q"><h3>It asks</h3><ol><li>If nothing hands me a purpose, how do I live?</li><li>What does it mean to be free, and to answer for it?</li><li>How do I live as myself and not as the crowd expects?</li></ol></section>
+  <section class="d-themes"><h3>Themes</h3><ul><li>Freedom and responsibility</li><li>Anxiety</li><li>Authenticity and bad faith</li><li>Existence before essence</li><li>The individual against the crowd</li></ul></section>
+  <section class="d-thinkers"><h3>Thinkers</h3><ul><li class=""><div class="t-row"><b>Søren Kierkegaard</b><i>1813–1855</i><span>Truth has to be lived by one person. Faith is a leap.</span></div></li><li class=""><div class="t-row"><b>Friedrich Nietzsche</b><i>1844–1900</i><span>God is dead, so values are ours to make. A forerunner.</span></div></li><li class=""><div class="t-row"><b>Jean-Paul Sartre</b><i>1905–1980</i><span>Existence precedes essence. We are condemned to be free.</span></div></li><li class=""><div class="t-row"><b>Simone de Beauvoir</b><i>1908–1986</i><span>Freedom always has a situation. One becomes a woman.</span></div></li><li class=""><div class="t-row"><b>Albert Camus</b><i>1913–1960</i><span>The absurd, and revolt against it. He refused the label.</span></div></li></ul></section>
+  <section class="d-against"><h3>Pushed against</h3><p><a>German Idealism</a> Hegel's system, which explains everything except the person living inside it, and the rationalism that puts abstract reason before a lived life.</p></section>
+  <section class="d-next"><h3>Nearest lights</h3><ul><li class="built"><em>built on</em><b>Phenomenology</b><span>The method Sartre and Beauvoir took from Husserl and Heidegger.</span></li><li class="grew"><em>grew from it</em><b>Absurdism</b><span>Camus's answer when the search for meaning meets a silent world.</span></li><li class="against"><em>pushed back</em><b>Post-structuralism</b><span>Foucault and Derrida doubted the free, self-making subject.</span></li></ul></section></div></div>
+<aside class="strip">
+  <div><h6>04 · Wordmark</h6><div class="bs-wm"><span style="font:italic 500 40px/1 'Cormorant Garamond';color:#f3ead2;background:#0d1326;padding:10px 20px 14px 14px;display:flex;align-items:center;gap:10px"><svg width="28" height="28" viewBox="-12 -12 24 24"><path d="M0 -11Q1.98 -1.98 11 0Q1.98 1.98 0 11Q-1.98 1.98 -11 0Q-1.98 -1.98 0 -11Z" fill="#e9b44c"/></svg>meander</span></div><p class="bs-pers">A star chart you fill in yourself. Quiet, wondering, late-evening.</p><p class="bs-alt">Name: Meander, or "Nightwalk"</p><p class="bs-note">Sample content, not yet checked for accuracy (R7). Draft copy.</p></div>
+  <div><h6>Palette</h6><div class="bs-sw"><div><i style="background:#0d1326"></i><span>night<br>#0d1326</span></div><div><i style="background:#161e3a"></i><span>deep<br>#161e3a</span></div><div><i style="background:#f3ead2"></i><span>cream<br>#f3ead2</span></div><div><i style="background:#e9b44c"></i><span>gold<br>#e9b44c</span></div><div><i style="background:#e8806a"></i><span>coral<br>#e8806a</span></div><div><i style="background:#8690b3"></i><span>mist<br>#8690b3</span></div></div></div>
+  <div><h6>Type pair</h6><div class="bs-ty1" style="font-family:'Cormorant Garamond';font-style:italic;font-weight:500">Nearest lights</div><div class="bs-tyn">Cormorant Garamond 500 italic · names</div><div class="bs-ty2" style="font-family:Karla">lit 9 Nov · built on</div><div class="bs-tyn">Karla 400 · body, dates</div></div>
+  <div><h6>Voice</h6><dl><dt>First visit</dt><dd>A dark sky, sixteen faint points. Light the first one.</dd><dt>Go next</dt><dd>Nearest lights</dd><dt>Been there</dt><dd>4 of 16 lit, over 3 nights</dd></dl></div>
+  <div><h6>Signature · axis</h6><div class="bs-sig"><svg width="240" height="64" style="background:#0d1326"><path d="M25 50L95 20L160 45L215 22" fill="none" stroke="#e9b44c" stroke-width="2"/><g fill="#e9b44c"><path transform="translate(25 50)" d="M0 -9Q1.6199999999999999 -1.6199999999999999 9 0Q1.6199999999999999 1.6199999999999999 0 9Q-1.6199999999999999 1.6199999999999999 -9 0Q-1.6199999999999999 -1.6199999999999999 0 -9Z"/><path transform="translate(95 20)" d="M0 -9Q1.6199999999999999 -1.6199999999999999 9 0Q1.6199999999999999 1.6199999999999999 0 9Q-1.6199999999999999 1.6199999999999999 -9 0Q-1.6199999999999999 -1.6199999999999999 0 -9Z"/><path transform="translate(160 45)" d="M0 -9Q1.6199999999999999 -1.6199999999999999 9 0Q1.6199999999999999 1.6199999999999999 0 9Q-1.6199999999999999 1.6199999999999999 -9 0Q-1.6199999999999999 -1.6199999999999999 0 -9Z"/><path transform="translate(215 22)" d="M0 -13Q2.34 -2.34 13 0Q2.34 2.34 0 13Q-2.34 2.34 -13 0Q-2.34 -2.34 0 -13Z"/></g></svg></div><p><b>Your visits join into your own constellation.</b></p><p class="bs-pers">Axis: scattered sky with a bottom drawer, dark and quiet</p></div>
+</aside>
+</body></html>

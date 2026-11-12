@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>06 Yes, but · Meander round 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1440px;background:#fff}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;cursor:pointer}
+.screen{width:1440px;height:900px;position:relative;overflow:hidden}
+.screen svg.links{position:absolute;inset:0;width:1440px;height:900px;pointer-events:none}
+/* ---- the direction ---- */
+
+.screen{background:#fff3dc;color:#1c1a2e;font:400 13.5px/1.4 'DM Sans',sans-serif;--cream:#fff3dc;--ink:#1c1a2e;--pink:#ff4d8d;--green:#00a676;--yellow:#ffd23f;--lav:#d9d4ff}
+.wm{position:absolute;left:24px;top:20px;font:800 34px/1 'Bricolage Grotesque';letter-spacing:-.03em}
+.wm i{color:var(--pink);font-style:normal}
+.tag{position:absolute;left:190px;top:32px;font-size:13px;color:#5a5670}
+.key{position:absolute;left:520px;top:30px;display:flex;gap:16px;font:600 12px 'Bricolage Grotesque';align-items:center}
+.key b{padding:2px 9px 3px;border-radius:99px;color:#fff;background:var(--green);font-weight:600}
+.key b.n{background:var(--pink)}
+.key span{color:#5a5670;font:400 12px 'DM Sans'}
+.eh{position:absolute;top:82px;font:800 13px 'Bricolage Grotesque';text-transform:uppercase;letter-spacing:.06em}
+.col{position:absolute;top:110px;width:186px;display:flex;flex-direction:column;gap:20px}
+.c{background:#fff;border:2px solid var(--ink);border-radius:16px 16px 16px 3px;padding:9px 12px 10px;position:relative}
+.c .re{font:600 11px/1.2 'Bricolage Grotesque';color:var(--green);margin-bottom:4px}
+.c .re.n{color:var(--pink)}
+.c q{display:block;font:600 16px/1.15 'Bricolage Grotesque';letter-spacing:-.01em;quotes:none}
+.c .who{font-size:11.5px;margin-top:6px;display:flex;justify-content:space-between;gap:6px;color:#5a5670}
+.c .who b{color:var(--ink);font-weight:700}
+.c.v{background:var(--lav)}
+.c.here{background:var(--yellow);box-shadow:5px 5px 0 var(--ink)}
+.c.one{box-shadow:5px 5px 0 var(--green)}.c.one.n{box-shadow:5px 5px 0 var(--pink)}
+svg.links path{fill:none;stroke:var(--pink);stroke-width:3;stroke-dasharray:2 7;stroke-linecap:round}
+.panel{position:absolute;left:1024px;top:0;width:416px;height:900px;background:#fff;border-left:2px solid var(--ink);padding:20px 28px 0}
+.back{font-size:12px;color:#5a5670;display:flex;justify-content:space-between}
+.panel .big{font:800 31px/1.02 'Bricolage Grotesque';letter-spacing:-.03em;margin:14px 0 8px;background:var(--yellow);border:2px solid var(--ink);border-radius:20px 20px 20px 4px;padding:14px 16px 16px}
+.panel .meta{font-size:12.5px}.panel .meta b{font:800 17px 'Bricolage Grotesque'}
+.panel h3{font:800 12px 'Bricolage Grotesque';text-transform:uppercase;letter-spacing:.06em;margin:13px 0 4px}
+.d-q li{font:600 15px/1.25 'Bricolage Grotesque';margin-bottom:2px}
+.d-themes li{display:inline-block;border:1.5px solid var(--ink);border-radius:99px;padding:1px 9px 2px;margin:0 3px 4px 0;font-size:12px}
+.d-thinkers .t-row{display:flex;gap:8px;align-items:baseline;font-size:13px;padding:1px 0}
+.d-thinkers b{font-weight:700}.d-thinkers i{font-style:normal;color:#5a5670;font-size:11.5px}.d-thinkers span{display:none}
+.d-against p{font-size:12.5px}.d-against a{font-weight:700;color:var(--pink)}
+.d-next li{border:2px solid var(--ink);border-radius:14px 14px 14px 3px;padding:6px 12px 8px;margin-bottom:7px;display:grid;grid-template-columns:1fr auto;gap:0 8px;align-items:center;box-shadow:4px 4px 0 var(--green)}
+.d-next li.against{box-shadow:4px 4px 0 var(--pink)}
+.d-next b{font:800 18px/1.1 'Bricolage Grotesque';letter-spacing:-.01em}
+.d-next em{font:600 11px 'Bricolage Grotesque';font-style:normal;color:#fff;background:var(--green);border-radius:99px;padding:1px 8px 2px;grid-column:2;grid-row:1}
+.d-next li.against em{background:var(--pink)}
+.d-next span{grid-column:1/3;font-size:12px;color:#5a5670}
+
+/* ---- brand strip (about the direction, not part of the screen) ---- */
+.strip{width:1440px;height:230px;background:#fff;border-top:1px solid #111;color:#111;font:12px/1.45 ui-sans-serif,system-ui,sans-serif;display:grid;grid-template-columns:300px 250px 270px 330px 1fr;position:relative}
+.strip>div{padding:20px 22px 0;border-right:1px solid #e4e4e4;min-width:0}
+.strip>div:last-child{border-right:0}
+.strip h6{font:600 10px/1 ui-sans-serif,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8a8a8a;margin-bottom:12px}
+.strip .bs-wm{height:60px;display:flex;align-items:center;margin-bottom:8px}
+.strip .bs-pers{color:#444}
+.strip .bs-alt{color:#8a8a8a;margin-top:4px}
+.strip .bs-sw{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 8px}
+.strip .bs-sw i{display:block;height:34px;border-radius:4px;outline:1px solid rgba(0,0,0,.12);outline-offset:-1px}
+.strip .bs-sw span{display:block;font:10px/1.3 ui-monospace,Menlo,monospace;color:#555;margin-top:3px}
+.strip .bs-ty1{font-size:30px;line-height:1.05;margin-bottom:4px}
+.strip .bs-ty2{font-size:14px;line-height:1.35;margin:8px 0 4px}
+.strip .bs-tyn{font:10px/1.3 ui-monospace,Menlo,monospace;color:#777}
+.strip dl{display:grid;grid-template-columns:76px 1fr;gap:5px 8px}
+.strip dt{color:#8a8a8a}
+.strip dd{color:#111}
+.strip .bs-sig{height:70px;display:flex;align-items:center;margin-bottom:6px;overflow:hidden}
+.strip .bs-note{font-size:10px;line-height:1.35;color:#8a8a8a;margin-top:8px}
+</style></head>
+<body>
+<div class="screen"><div class="wm">yes<i>,</i> but</div><div class="tag">2,600 years of people answering each other</div>
+<div class="key"><b>yes, and</b><span>built on</span><b class="n">no, but</b><span>pushed against</span><span>· lilac: heard (4 of 16)</span></div>
+<div class="eh" style="left:28px">Ancient</div><div class="eh" style="left:226px">Medieval</div><div class="eh" style="left:424px">Early modern</div><div class="eh" style="left:622px">19th century</div><div class="eh" style="left:820px">20th century</div><div class="col" style="left:24px"><div class="c   "><div class="re" style="color:#5a5670">opens the conversation</div><q>What is everything made of?</q><div class="who"><b>Presocratics</b></div></div><div class="c v  "><div class="re ">↳ yes, and · Presocratics</div><q>Ask better questions, then define the good.</q><div class="who"><b>Classical Greek</b><span>heard 5 Nov</span></div></div><div class="c   "><div class="re ">↳ yes, and · Presocratics</div><q>Pleasure is the goal, and calm is the best pleasure.</q><div class="who"><b>Epicureanism</b></div></div><div class="c v  "><div class="re ">↳ yes, and · Classical Greek</div><q>You control your response, not events.</q><div class="who"><b>Stoicism</b><span>heard 3 Nov</span></div></div></div><div class="col" style="left:222px"><div class="c   "><div class="re ">↳ yes, and · Classical Greek</div><q>Faith and reason can be reconciled.</q><div class="who"><b>Scholasticism</b></div></div></div><div class="col" style="left:420px"><div class="c   "><div class="re n">↳ no, but · Scholasticism</div><q>Reason alone can reach certain truth.</q><div class="who"><b>Rationalism</b></div></div><div class="c   "><div class="re n">↳ no, but · Rationalism</div><q>Knowledge starts with the senses.</q><div class="who"><b>Empiricism</b></div></div><div class="c v  one n"><div class="re ">↳ yes, and · Rationalism</div><div class="re ">↳ yes, and · Empiricism</div><q>The mind shapes the world we experience.</q><div class="who"><b>German Idealism</b><span>heard 9 Nov</span></div></div></div><div class="col" style="left:618px"><div class="c   "><div class="re ">↳ yes, and · Empiricism</div><q>Right is what brings the most happiness.</q><div class="who"><b>Utilitarianism</b></div></div><div class="c   "><div class="re ">↳ yes, and · German Idealism</div><q>Material conditions shape ideas, not the reverse.</q><div class="who"><b>Marxism</b></div></div><div class="c   "><div class="re ">↳ yes, and · Empiricism</div><q>An idea is true if it works in practice.</q><div class="who"><b>Pragmatism</b></div></div></div><div class="col" style="left:816px"><div class="c   "><div class="re n">↳ no, but · German Idealism</div><div class="re ">↳ yes, and · Empiricism</div><q>Many puzzles dissolve when language is clear.</q><div class="who"><b>Analytic philosophy</b></div></div><div class="c   one "><div class="re ">↳ yes, and · German Idealism</div><q>Go back to experience as it is lived.</q><div class="who"><b>Phenomenology</b></div></div><div class="c v here "><div class="re n">↳ no, but · German Idealism</div><div class="re ">↳ yes, and · Phenomenology</div><q>No system can live your life for you.</q><div class="who"><b>Existentialism</b><span>here now</span></div></div><div class="c   one "><div class="re ">↳ yes, and · Existentialism</div><q>Life gives no meaning. Live anyway.</q><div class="who"><b>Absurdism</b></div></div><div class="c   one n"><div class="re n">↳ no, but · Existentialism</div><q>There is no fixed self or final meaning.</q><div class="who"><b>Post-structuralism</b></div></div></div>
+<div class="panel"><div class="back"><span>← The whole conversation</span><span>Esc</span></div><div class="big">“No system can live your life for you.”</div><div class="meta"><b>Existentialism</b> · 1840s–1960s · here now, 12 Nov</div>
+  <section class="d-q"><h3>What it keeps asking</h3><ol><li>If nothing hands me a purpose, how do I live?</li><li>What does it mean to be free, and to answer for it?</li><li>How do I live as myself and not as the crowd expects?</li></ol></section>
+  <section class="d-themes"><h3>Keeps coming back to</h3><ul><li>Freedom and responsibility</li><li>Anxiety</li><li>Authenticity and bad faith</li><li>Existence before essence</li><li>The individual against the crowd</li></ul></section>
+  <section class="d-thinkers"><h3>Who said it</h3><ul><li class=""><div class="t-row"><b>Søren Kierkegaard</b><i>1813–1855</i><span>Truth has to be lived by one person. Faith is a leap.</span></div></li><li class=""><div class="t-row"><b>Friedrich Nietzsche</b><i>1844–1900</i><span>God is dead, so values are ours to make. A forerunner.</span></div></li><li class=""><div class="t-row"><b>Jean-Paul Sartre</b><i>1905–1980</i><span>Existence precedes essence. We are condemned to be free.</span></div></li><li class=""><div class="t-row"><b>Simone de Beauvoir</b><i>1908–1986</i><span>Freedom always has a situation. One becomes a woman.</span></div></li><li class=""><div class="t-row"><b>Albert Camus</b><i>1913–1960</i><span>The absurd, and revolt against it. He refused the label.</span></div></li></ul></section>
+  <section class="d-against"><h3>It was saying no to</h3><p><a>German Idealism</a> Hegel's system, which explains everything except the person living inside it, and the rationalism that puts abstract reason before a lived life.</p></section>
+  <section class="d-next"><h3>Hear the other side</h3><ul><li class="built"><em>it said yes, and</em><b>Phenomenology</b><span>The method Sartre and Beauvoir took from Husserl and Heidegger.</span></li><li class="grew"><em>said yes, and</em><b>Absurdism</b><span>Camus's answer when the search for meaning meets a silent world.</span></li><li class="against"><em>said no, but</em><b>Post-structuralism</b><span>Foucault and Derrida doubted the free, self-making subject.</span></li></ul></section></div></div>
+<aside class="strip">
+  <div><h6>06 · Wordmark</h6><div class="bs-wm"><span style="font:800 46px/1 'Bricolage Grotesque';letter-spacing:-.03em;color:#1c1a2e">yes<i style="color:#ff4d8d;font-style:normal">,</i> but</span></div><p class="bs-pers">Philosophy as one long argument. Witty, bright, a bit cheeky.</p><p class="bs-alt">Name: "Yes, but" (Meander as fallback)</p><p class="bs-note">Sample content, not yet checked for accuracy (R7). Draft copy.</p></div>
+  <div><h6>Palette</h6><div class="bs-sw"><div><i style="background:#fff3dc"></i><span>cream<br>#fff3dc</span></div><div><i style="background:#1c1a2e"></i><span>ink<br>#1c1a2e</span></div><div><i style="background:#ff4d8d"></i><span>no, but<br>#ff4d8d</span></div><div><i style="background:#00a676"></i><span>yes, and<br>#00a676</span></div><div><i style="background:#ffd23f"></i><span>here<br>#ffd23f</span></div><div><i style="background:#d9d4ff"></i><span>heard<br>#d9d4ff</span></div></div></div>
+  <div><h6>Type pair</h6><div class="bs-ty1" style="font-family:'Bricolage Grotesque';font-weight:800;letter-spacing:-.03em">no, but…</div><div class="bs-tyn">Bricolage Grotesque 800/600 · claims, names</div><div class="bs-ty2" style="font-family:'DM Sans'">heard 9 Nov · here now</div><div class="bs-tyn">DM Sans 400 · body</div></div>
+  <div><h6>Voice</h6><dl><dt>First visit</dt><dd>2,600 years of people answering each other. Start with anyone.</dd><dt>Go next</dt><dd>Hear the other side</dd><dt>Been there</dt><dd>Heard 4 of 16, over 3 days</dd></dl></div>
+  <div><h6>Signature · axis</h6><div class="bs-sig"><div style="display:flex;gap:10px;align-items:center"><b style="font:600 15px 'Bricolage Grotesque';color:#fff;background:#00a676;border-radius:99px;padding:4px 14px 6px">↳ yes, and</b><b style="font:600 15px 'Bricolage Grotesque';color:#fff;background:#ff4d8d;border-radius:99px;padding:4px 14px 6px">↳ no, but</b></div></div><p><b>Each school is one claim replying "yes, and" or "no, but" to an earlier one.</b></p><p class="bs-pers">Axis: conversation thread, links as words, playful</p></div>
+</aside>
+</body></html>

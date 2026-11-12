@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en" style="color-scheme:dark"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101918">
+<title>check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1440px;height:900px;overflow:hidden;background:#101918}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+h1,h2,h3{font-weight:inherit;font-size:inherit;text-wrap:balance}
+p{text-wrap:pretty}
+.screen{width:1440px;height:900px;position:relative;overflow:hidden;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+svg.threads{position:absolute;inset:0;width:1440px;height:900px;pointer-events:none}
+svg.threads path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+#chk{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.screen{--ground:#101918;--lift:#18231f;--bone:#e9e2d4;--brass:#d3a66c;--quiet:rgba(233,226,212,.72);--faint:rgba(233,226,212,.14);
+  background:radial-gradient(1100px 820px at 34% 46%,#1f2d29 0%,#141f1d 52%,#0c1413 100%);color:var(--bone);font:400 15px/1.45 'Hanken Grotesk',sans-serif}
+.yarn ellipse,.yarn circle{fill:none;stroke:#e9e2d4;stroke-width:.9}
+svg.threads path.th{stroke:#e9e2d4;stroke-opacity:.34;stroke-width:1}
+svg.threads path.far{stroke-opacity:.2}
+svg.threads path.focus{stroke-opacity:.9;stroke-width:1.6}
+svg.threads path.focus.against{stroke-dasharray:1.5 6}
+svg.threads path.walked{stroke:#d3a66c;stroke-opacity:.95;stroke-width:1.5}
+svg.threads path.satline{stroke:#d3a66c;stroke-opacity:.9;stroke-width:1.3}
+header{position:absolute;left:44px;top:36px;display:flex;align-items:center;gap:22px}
+.wm{font:400 25px/1 Fraunces,serif;letter-spacing:-.01em;display:flex;align-items:center;gap:11px}
+.back{font-size:13.5px;color:var(--quiet);padding:9px 14px;margin:-9px 0;border-radius:99px;border:1px solid var(--faint);transition:transform 160ms cubic-bezier(.23,1,.32,1),color 160ms ease}
+.been{position:absolute;left:44px;bottom:36px;font-size:13.5px;color:var(--quiet);display:flex;align-items:center;gap:10px}
+.been i{width:8px;height:8px;border-radius:50%;background:var(--bone);box-shadow:0 0 0 2px var(--ground),0 0 0 3.5px var(--brass)}
+.n{position:absolute;width:0;height:0}
+.n .dot{position:absolute;left:0;top:0;border-radius:50%;background:var(--bone);transform:translate(-50%,-50%);transition:box-shadow 160ms ease}
+.n.v .dot{box-shadow:0 0 0 2.5px var(--ground),0 0 0 4px var(--brass)}
+.n .lb{position:absolute;visibility:hidden;white-space:nowrap;display:flex;flex-direction:column;width:max-content}
+.n .lb::before{content:"";position:absolute;inset:-9px -10px}
+.n b{font:400 15px/1.25 'Hanken Grotesk',sans-serif;color:rgba(233,226,212,.86)}
+.n.back2 b{font-size:14px;color:rgba(233,226,212,.62)}
+.n.back2 .dot{opacity:.6}
+.n.t1 b{font:400 22px/1.15 Fraunces,serif;letter-spacing:-.005em;color:var(--bone);margin-top:2px}
+.n em{font-style:normal;font-size:13.5px;line-height:1.25;color:var(--bone);letter-spacing:.005em}
+.n small{font-size:13px;line-height:1.3;color:var(--quiet);white-space:nowrap}
+.n b.wrap{max-width:170px;white-space:normal;text-wrap:balance}
+.n.t1 b.wrap{max-width:230px}
+.title{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;text-align:center;width:max-content;max-width:310px;padding:2px 4px}
+.title .here{width:14px;height:14px;border-radius:50%;background:var(--brass);box-shadow:0 0 0 7px rgba(211,166,108,.16);margin-bottom:11px}
+.title h1{font:300 48px/1.02 Fraunces,serif;letter-spacing:-.025em;font-variation-settings:'opsz' 144}
+.title p{font-size:13.5px;color:rgba(233,226,212,.84);margin-top:9px;white-space:nowrap}
+.title p button{color:var(--bone);border-bottom:1px solid rgba(233,226,212,.4);margin-left:2px;padding:2px 0;transition:border-color 160ms ease}
+.welcome{position:absolute;transform:translate(-50%,-50%);width:250px;text-align:center;font:300 27px/1.2 Fraunces,serif;letter-spacing:-.015em;font-variation-settings:'opsz' 100;padding:6px}
+.pop{position:absolute;transform:translateX(-50%);width:270px;background:var(--lift);border:1px solid var(--faint);border-radius:16px;padding:18px 22px 20px;box-shadow:0 30px 60px -24px rgba(0,0,0,.7);z-index:3}
+.pop h2{font-size:13.5px;color:var(--quiet);margin-bottom:8px}
+.pop li{font:400 18px/1.3 Fraunces,serif;padding:4px 0}
+.sat{position:absolute;transform:translate(-7px,-50%);display:flex;align-items:center;gap:10px;font:400 17px/1.2 Fraunces,serif;white-space:nowrap;padding:4px 0}
+.sat i{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--brass);background:var(--ground);flex-shrink:0}
+.card{position:absolute;left:1056px;top:50%;transform:translateY(-50%);width:340px;background:var(--lift);border:1px solid var(--faint);border-radius:22px;padding:28px 28px 24px;box-shadow:0 40px 80px -40px rgba(0,0,0,.55)}
+.card h2{font-size:13.5px;color:var(--quiet);margin-bottom:12px}
+.q li{font:300 19px/1.32 Fraunces,serif;letter-spacing:-.01em;font-variation-settings:'opsz' 60;text-wrap:balance}
+.q li+li{margin-top:12px}
+.card hr{border:0;border-top:1px solid var(--faint);margin:20px 0 16px}
+.th-list{margin:0 -12px}
+.th-list button{display:flex;justify-content:space-between;align-items:baseline;gap:12px;width:100%;padding:9px 12px;border-radius:10px;font-size:16px;transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 160ms ease}
+.th-list span{min-width:0}.th-list .yr{font-size:13px;color:var(--quiet);flex-shrink:0;white-space:nowrap}
+.card .up{font-size:13.5px;color:var(--quiet);padding:8px 12px;margin:-8px -12px 12px;border-radius:10px;display:inline-block}
+.card h2.who{font:300 36px/1.06 Fraunces,serif;letter-spacing:-.02em;font-variation-settings:'opsz' 144;color:var(--bone);margin:0}
+.card .dates{font-size:13.5px;color:var(--quiet);margin:8px 0 14px}
+.card .sum{font-size:15.5px;line-height:1.55;color:rgba(233,226,212,.88)}
+.ideas{margin:16px 0 22px}
+.ideas li{font:400 17.5px/1.3 Fraunces,serif;padding-left:22px;position:relative}
+.ideas li+li{margin-top:8px}
+.ideas li:before{content:"";position:absolute;left:0;top:.62em;width:12px;border-top:1.5px solid var(--brass)}
+.study{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:var(--brass);color:#1a1408;font:600 15.5px/1 'Hanken Grotesk',sans-serif;padding:16px 20px;border-radius:13px;transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 160ms ease}
+.study.done{background:transparent;color:var(--brass);box-shadow:inset 0 0 0 1.5px var(--brass)}
+.hint{font-size:13px;color:var(--quiet);text-align:center;margin-top:11px}
+.prompt{font-size:13px;line-height:1.5;color:var(--quiet);border-left:1.5px solid var(--faint);padding-left:12px;margin-top:14px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.others{font-size:13.5px;color:var(--quiet);margin-top:18px;padding-top:14px;border-top:1px solid var(--faint);white-space:nowrap}
+.others button{color:var(--bone);border-bottom:1px solid var(--faint)}
+button:focus-visible{outline:2px solid var(--brass);outline-offset:4px}
+button:active{transform:scale(.97)}
+.n:active{transform:none}.n:active .lb{opacity:.8}
+@media (hover:hover){.back:hover{color:var(--bone)}.th-list button:hover{background:rgba(233,226,212,.07)}.study:hover{background:#dfb57e}.study.done:hover{background:transparent}
+  .n:hover b{color:var(--bone);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}.n:hover .dot{box-shadow:0 0 0 5px rgba(233,226,212,.16)}.n.v:hover .dot{box-shadow:0 0 0 2.5px var(--ground),0 0 0 4px var(--brass),0 0 0 8px rgba(233,226,212,.14)}
+  .others button:hover,.title p button:hover{border-color:var(--bone)}}
+
+</style></head>
+<body>
+<div class="screen"><svg class="threads" aria-hidden="true"><defs><radialGradient id="lit" cx="34%" cy="28%" r="78%"><stop offset="0" stop-color="#e9e2d4" stop-opacity=".085"/><stop offset=".55" stop-color="#e9e2d4" stop-opacity=".025"/><stop offset="1" stop-color="#e9e2d4" stop-opacity="0"/></radialGradient></defs><circle cx="510" cy="456" r="410" fill="url(#lit)"/><g class="yarn"><ellipse cx="510" cy="456" rx="410" ry="369.0" transform="rotate(-18 510 456)" stroke-opacity="0.05"/><ellipse cx="510" cy="456" rx="410" ry="188.6" transform="rotate(28 510 456)" stroke-opacity="0.045"/><ellipse cx="510" cy="456" rx="410" ry="82.0" transform="rotate(-54 510 456)" stroke-opacity="0.05"/><circle cx="510" cy="456" r="410" stroke-opacity=".1"/></g><mask id="ko" maskUnits="userSpaceOnUse" x="0" y="0" width="1440" height="900"><rect width="1440" height="900" fill="#fff"/></mask><g mask="url(#ko)"><path class="th focus   " data-a="pre" data-b="cla" d="M477.9 372.9L475.5 366.8L473.2 361.0L471.1 355.4L469.0 350.0L467.0 344.8L465.0 339.7L463.1 334.8L461.3 330.0L459.5 325.3L457.7 320.8L456.0 316.3L454.3 311.9L452.6 307.7L451.0 303.5L449.4 299.3L447.9 295.3L446.3 291.3"/><path class="th   walked " data-a="cla" data-b="sto" d="M455.9 275.4L463.1 273.5L470.3 271.7L477.5 270.2L484.8 268.9L492.1 267.7L499.4 266.8L506.7 266.0L514.0 265.4L521.3 265.0L528.5 264.8L535.7 264.7L542.9 264.9L550.1 265.2L557.2 265.6L564.2 266.3L571.2 267.1L578.1 268.1L585.0 269.2L591.7 270.5L598.4 271.9L605.0 273.5L611.6 275.2L618.0 277.0L624.4 279.0"/><path class="th focus   " data-a="pre" data-b="epi" d="M441.4 529.7L437.7 533.7L434.1 537.5L430.7 541.2L427.3 544.8L424.1 548.3L420.9 551.8L417.8 555.1L414.7 558.4L411.7 561.6L408.8 564.7L406.0 567.8L403.2 570.8L400.4 573.8L397.7 576.7"/><path class="th    " data-a="cla" data-b="sch" d="M428.5 281.7L421.9 282.8L415.4 284.1L409.1 285.6L402.8 287.1L396.6 288.7L390.5 290.5L384.5 292.4L378.6 294.3L372.7 296.4L367.0 298.6L361.3 300.9L355.8 303.2L350.3 305.7L344.9 308.2L339.6 310.9L334.4 313.6L329.2 316.4L324.1 319.3L319.2 322.3L314.3 325.4L309.4 328.6L304.7 331.9L300.0 335.3L295.5 338.7"/><path class="th    far" data-a="sch" data-b="rat" d="M277.4 343.9L274.3 343.3L271.3 342.7L268.3 342.2L265.4 341.6L262.4 341.1L259.5 340.6L256.5 340.1L253.6 339.7L250.7 339.3L247.8 338.9L244.9 338.5L242.0 338.2L239.1 337.9L236.3 337.7L233.4 337.4L230.5 337.3L227.7 337.1L224.8 337.0L222.0 337.0L219.1 337.0L216.3 337.0L213.4 337.1"/><path class="th    far" data-a="rat" data-b="emp" d="M200.3 345.3L196.0 353.1L191.9 361.3L188.0 369.9L184.2 378.9L180.7 388.2L177.5 398.0L174.6 408.1L172.0 418.6L169.8 429.5L167.9 440.9L166.5 452.5L165.6 464.6L165.1 476.9L165.2 489.6L165.8 502.6L167.0 515.8L168.9 529.2L171.4 542.8L174.6 556.5L178.5 570.3L183.1 584.1L188.3 597.7L194.3 611.3L201.0 624.7L208.3 637.8L216.3 650.6"/><path class="th    far" data-a="rat" data-b="ide" d="M202.8 328.5L202.1 323.6L201.5 318.4L201.2 313.0L201.0 307.3L201.2 301.3L201.6 295.1L202.3 288.5L203.3 281.5L204.8 274.1L206.8 266.3L209.3 258.0L212.5 249.1L216.4 239.7L221.3 229.7L227.1 219.0L234.2 207.5L242.7 195.4L253.0 182.4L265.3 168.8L280.0 154.5L297.7 139.7L319.4 125.8L344.7 112.4L374.0 99.8L407.5 88.7"/><path class="th    far" data-a="emp" data-b="ide" d="M214.1 656.1L208.3 651.9L202.4 647.0L196.2 641.4L189.8 635.0L183.1 627.5L176.2 618.9L169.0 608.9L161.6 597.2L154.1 583.6L146.7 567.7L140.2 548.8L135.3 526.6L131.3 500.8L129.0 471.0L129.2 436.7L133.2 397.9L142.4 354.8L158.3 308.8L181.8 261.9L212.9 217.0L250.1 177.0L291.1 143.8L333.0 118.3L373.5 100.0L411.1 87.8"/><path class="th    far" data-a="emp" data-b="uti" d="M230.2 656.7L232.0 654.7L233.8 652.7L235.7 650.7L237.6 648.8L239.6 646.9L241.6 644.9L243.6 643.0L245.6 641.1L247.7 639.2L249.7 637.3L251.8 635.4L254.0 633.6L256.1 631.7L258.3 629.8L260.5 627.9L262.7 626.0L264.9 624.1L267.2 622.3L269.5 620.4L271.8 618.5L274.1 616.6L276.5 614.7"/><path class="th    far" data-a="ide" data-b="mar" d="M435.8 82.0L432.6 83.7L430.2 86.8L428.2 89.8L426.6 92.8L425.3 95.7L424.1 98.6L423.2 101.5L422.5 104.4L421.9 107.2L421.4 110.0L421.1 112.8L420.8 115.6L420.6 118.4L420.5 121.2L420.4 124.0L420.4 126.8L420.5 129.6L420.6 132.4L420.7 135.2L420.9 138.0L421.2 140.9L421.4 143.7L421.7 146.5"/><path class="th   walked far" data-a="ide" data-b="exi" d="M486.7 75.4L531.2 75.3L576.8 80.6L621.8 91.4L664.2 107.3L702.6 126.9L736.3 149.1L765.0 172.5L788.9 196.0L808.6 218.9L824.6 240.6L836.2 261.7L844.9 281.3L851.5 299.2L856.3 315.6L859.8 330.6L862.1 344.3L863.4 356.7L864.1 368.1L864.1 378.5L863.7 388.1L862.8 396.9L861.6 405.0L860.1 412.6L858.4 419.5L856.5 426.0"/><path class="th    far" data-a="phe" data-b="exi" d="M695.8 192.9L703.7 196.9L711.6 201.3L719.4 206.1L727.3 211.3L735.2 216.8L743.0 222.8L750.8 229.1L758.4 235.9L766.0 243.1L773.4 250.7L780.7 258.8L787.7 267.3L794.6 276.2L801.2 285.6L807.6 295.3L813.6 305.5L819.3 316.0L824.7 327.0L829.6 338.3L834.1 349.9L838.2 361.8L841.8 374.0L844.9 386.4L847.5 399.0L849.6 411.7L851.1 424.6"/><path class="th    far" data-a="emp" data-b="pra" d="M234.7 673.6L244.6 683.5L254.5 692.4L264.4 700.6L274.3 708.0L284.2 714.6L293.9 720.6L303.5 725.9L312.9 730.7L322.1 734.9L331.2 738.5L340.0 741.7L348.7 744.4L357.2 746.8L365.5 748.7L373.5 750.2L381.4 751.5L389.1 752.4L396.5 753.0L403.8 753.3L410.9 753.4L417.9 753.3L424.6 752.9L431.2 752.3L437.6 751.6L443.9 750.6"/><path class="th    far" data-a="ide" data-b="phe" d="M476.1 76.2L503.5 74.8L527.5 75.1L548.4 77.5L566.4 81.9L582.0 86.8L595.5 91.9L607.3 97.2L617.6 102.6L626.7 107.9L634.6 113.2L641.6 118.4L647.8 123.5L653.2 128.5L658.1 133.4L662.4 138.2L666.2 142.9L669.6 147.5L672.6 152.0L675.3 156.4L677.7 160.7L679.8 165.0L681.7 169.1L683.3 173.3L684.7 177.3L686.0 181.3"/><path class="th    far" data-a="ide" data-b="ana" d="M462.1 77.7L474.8 76.3L492.1 75.1L517.1 74.8L555.8 77.5L620.5 91.1L732.6 146.4L866.6 321.0L880.0 548.2L825.7 669.9L781.1 724.1L751.1 751.4L730.4 767.2L715.5 777.2L704.3 784.1L695.7 789.0L688.8 792.8L683.2 795.7L678.5 798.0L674.2 799.3L669.7 798.6L665.8 797.7L662.2 796.5L658.9 795.2"/><path class="th    far" data-a="emp" data-b="ana" d="M230.8 673.3L237.4 683.7L244.8 694.4L253.0 705.1L262.1 716.0L272.2 726.8L283.2 737.5L295.2 748.1L308.3 758.4L322.4 768.4L337.5 777.9L353.6 786.8L370.6 794.9L388.5 802.3L407.2 808.7L426.4 814.0L446.2 818.2L466.3 821.3L486.5 823.1L506.7 823.7L526.8 823.0L546.5 821.2L565.7 818.3L584.2 814.4L602.1 809.5L619.1 803.8L635.3 797.4"/><path class="th    far" data-a="exi" data-b="abs" d="M851.2 450.2L849.8 462.3L847.9 474.0L845.6 485.2L842.9 496.0L839.8 506.3L836.5 516.2L832.8 525.6L828.9 534.5L824.8 543.1L820.5 551.2L816.0 559.0L811.4 566.3L806.7 573.3L801.8 580.0L796.8 586.2L791.7 592.2L786.6 597.9L781.4 603.2L776.1 608.3L770.8 613.0L765.4 617.5L760.0 621.8L754.6 625.8L749.2 629.6L743.7 633.1"/><path class="th    far" data-a="exi" data-b="pos" d="M843.9 437.0L841.2 436.9L838.4 436.8L835.7 436.7L832.9 436.6L830.0 436.5L827.2 436.4L824.4 436.4L821.5 436.4L818.6 436.3L815.7 436.3L812.8 436.3L809.9 436.3L807.0 436.3L804.0 436.4L801.0 436.4L798.0 436.4L795.0 436.5L791.9 436.5L788.8 436.6L785.7 436.6L782.6 436.7L779.5 436.8"/></g></svg>
+<header class="solid"><div class="wm" translate="no"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#e9e2d4" stroke-width="1.1"><circle cx="12" cy="12" r="10.5"/><ellipse cx="12" cy="12" rx="10.5" ry="4.2" transform="rotate(-28 12 12)"/><ellipse cx="12" cy="12" rx="10.5" ry="7.4" transform="rotate(48 12 12)" stroke="#d3a66c"/></g></svg>Meander</div><button class="back" title="Esc" aria-keyshortcuts="Escape">Whole field</button></header>
+<main><button class="n t1  v" data-id="cla" data-x="441.8" data-y="279.7" data-r="6" data-pref="-111" data-ord="0" style="left:441.8px;top:279.7px"><i class="dot" style="width:12px;height:12px"></i><span class="lb"><em>grew from it</em><b class="">Classical Greek</b><small>visited 5&nbsp;Nov</small></span></button>
+<button class="n t1  " data-id="epi" data-x="389.8" data-y="585.2" data-r="6" data-pref="133" data-ord="0" style="left:389.8px;top:585.2px"><i class="dot" style="width:12px;height:12px"></i><span class="lb"><em>grew from it</em><b class="">Epicureanism</b></span></button>
+<button class="n   v" data-id="sto" data-x="636.9" data-y="283.3" data-r="4" data-pref="-54" data-ord="61" style="left:636.9px;top:283.3px"><i class="dot" style="width:8px;height:8px"></i><span class="lb"><b class="">Stoicism</b><small>visited 3&nbsp;Nov</small></span></button>
+<button class="n   " data-id="sch" data-x="286.5" data-y="345.9" data-r="4" data-pref="-154" data-ord="78" style="left:286.5px;top:345.9px"><i class="dot" style="width:8px;height:8px"></i><span class="lb"><b class="">Scholasticism</b></span></button>
+<button class="n  back2 " data-id="rat" data-x="204.8" data-y="337.8" data-r="3" data-pref="-159" data-ord="124" style="left:204.8px;top:337.8px"><i class="dot" style="width:6px;height:6px"></i><span class="lb"><b class="">Rationalism</b></span></button>
+<button class="n  back2 " data-id="emp" data-x="224.9" data-y="663.0" data-r="3" data-pref="144" data-ord="140" style="left:224.9px;top:663.0px"><i class="dot" style="width:6px;height:6px"></i><span class="lb"><b class="">Empiricism</b></span></button>
+<button class="n  back2 v" data-id="ide" data-x="444.9" data-y="80.3" data-r="3" data-pref="-100" data-ord="164" style="left:444.9px;top:80.3px"><i class="dot" style="width:6px;height:6px"></i><span class="lb"><b class="">German Idealism</b><small>visited 9&nbsp;Nov</small></span></button>
+<button class="n   " data-id="uti" data-x="283.6" data-y="608.9" data-r="4" data-pref="146" data-ord="91" style="left:283.6px;top:608.9px"><i class="dot" style="width:8px;height:8px"></i><span class="lb"><b class="">Utilitarianism</b></span></button>
+<button class="n  back2 " data-id="mar" data-x="422.8" data-y="155.1" data-r="3" data-pref="-106" data-ord="115" style="left:422.8px;top:155.1px"><i class="dot" style="width:6px;height:6px"></i><span class="lb"><b class="">Marxism</b></span></button>
+<button class="n  back2 " data-id="pra" data-x="456.0" data-y="748.2" data-r="3" data-pref="100" data-ord="105" style="left:456.0px;top:748.2px"><i class="dot" style="width:6px;height:6px"></i><span class="lb"><b class="">Pragmatism</b></span></button>
+<button class="n  back2 " data-id="ana" data-x="650.5" data-y="790.4" data-r="3" data-pref="67" data-ord="147" style="left:650.5px;top:790.4px"><i class="dot" style="width:6px;height:6px"></i><span class="lb"><b class="">Analytic philosophy</b></span></button>
+<button class="n  back2 " data-id="phe" data-x="687.9" data-y="189.2" data-r="3" data-pref="-56" data-ord="120" style="left:687.9px;top:189.2px"><i class="dot" style="width:6px;height:6px"></i><span class="lb"><b class="">Phenomenology</b></span></button>
+<button class="n  back2 v" data-id="exi" data-x="852.1" data-y="437.6" data-r="3" data-pref="-3" data-ord="133" style="left:852.1px;top:437.6px"><i class="dot" style="width:6px;height:6px"></i><span class="lb"><b class="">Existentialism</b><small>visited today</small></span></button>
+<button class="n  back2 " data-id="abs" data-x="732.7" data-y="639.6" data-r="3" data-pref="40" data-ord="100" style="left:732.7px;top:639.6px"><i class="dot" style="width:6px;height:6px"></i><span class="lb"><b class="">Absurdism</b></span></button>
+<button class="n   " data-id="pos" data-x="769.9" data-y="437.0" data-r="4" data-pref="-4" data-ord="85" style="left:769.9px;top:437.0px"><i class="dot" style="width:8px;height:8px"></i><span class="lb"><b class="">Post-structuralism</b></span></button><div class="title solid" style="left:510px;top:456px"><i class="here"></i><h1>Presocratics</h1><p>dates · you are here · <button aria-expanded="false">Themes</button></p></div></main>
+<aside class="card solid" aria-label="Presocratics"><h2>It asks</h2><ol class="q"><li>If nothing hands me a purpose, how do I live?</li><li>What does it mean to be free, and to answer for it?</li><li>How do I live as myself, and not as the crowd expects?</li></ol><hr><h2>Thinkers</h2><ul class="th-list"><li><button><span>Søren Kierkegaard</span><span class="yr">1813–1855</span></button></li><li><button><span>Friedrich Nietzsche</span><span class="yr">1844–1900</span></button></li><li><button><span>Jean-Paul Sartre</span><span class="yr">1905–1980</span></button></li><li><button><span>Simone de Beauvoir</span><span class="yr">1908–1986</span></button></li><li><button><span>Albert Camus</span><span class="yr">1913–1960</span></button></li></ul></aside>
+<p class="been solid"><i></i>4 of 16 visited, over 3 days</p></div>
+<script>window.WEB={"c":[510,456],"R":410,"w":1440,"h":900};</script><script>
+(function(){
+const S=document.querySelector('.screen'),W=window.WEB;if(!S||!W)return;
+function run(){
+  const sb=S.getBoundingClientRect();
+  const rectOf=e=>{const r=e.getBoundingClientRect();return{x:r.left-sb.left,y:r.top-sb.top,w:r.width,h:r.height,id:e.dataset.id||e.className}};
+  const fixed=[...S.querySelectorAll('.solid')].map(rectOf);
+  const nodes=[...S.querySelectorAll('.n')].map(e=>({e,id:e.dataset.id,lb:e.querySelector('.lb'),x:+e.dataset.x,y:+e.dataset.y,r:+e.dataset.r,pref:+e.dataset.pref,ord:+e.dataset.ord}));
+  const pts=[];S.querySelectorAll('svg.threads path.th').forEach(p=>{const n=p.getTotalLength(),w=p.classList.contains('focus')?4:1;for(let s=0;s<=n;s+=4){const q=p.getPointAtLength(s);pts.push([q.x,q.y,w,p.dataset.a+'-'+p.dataset.b])}});
+  const placed=[];
+  const hit=(a,b,pad)=>a.x<b.x+b.w+pad&&b.x<a.x+a.w+pad&&a.y<b.y+b.h+pad&&b.y<a.y+a.h+pad;
+  nodes.slice().sort((a,b)=>a.ord-b.ord).forEach(n=>{
+    const w=n.lb.offsetWidth,h=n.lb.offsetHeight;let best=null;
+    const cand=[];[9,20].forEach((gap,gi)=>[0,30,-30,60,-60,90,-90,120,-120,150,-150,180].forEach((d,i)=>cand.push([d,n.r+gap,i*2+gi*9])));
+    cand.forEach(([d,g,base])=>{const i=base/2;
+      const a=(n.pref+d)*Math.PI/180,c=Math.cos(a),s=Math.sin(a),ax=n.x+g*c,ay=n.y+g*s;
+      const x=c>.38?ax:c<-.38?ax-w:ax-w/2,y=s>.38?ay:s<-.38?ay-h:ay-h/2,R={x,y,w,h};
+      let cost=base;
+      placed.forEach(p=>{if(hit(R,p,6))cost+=1000});fixed.forEach(p=>{if(hit(R,p,8))cost+=1000});
+      nodes.forEach(m=>{if(m!==n){const nx=Math.max(x,Math.min(m.x,x+w)),ny=Math.max(y,Math.min(m.y,y+h));if(Math.hypot(nx-m.x,ny-m.y)<m.r+6)cost+=300}});
+      [[x,y],[x+w,y],[x,y+h],[x+w,y+h]].forEach(k=>{if(Math.hypot(k[0]-W.c[0],k[1]-W.c[1])>W.R-4)cost+=150});
+      if(x<8||y<8||x+w>W.w-8||y+h>W.h-8)cost+=3000;
+      for(const q of pts){if(q[0]>x-3&&q[0]<x+w+3&&q[1]>y-3&&q[1]<y+h+3)cost+=7*q[2]}
+      if(!best||cost<best.cost)best={cost,x,y,al:c>.38?'flex-start':c<-.38?'flex-end':'center',ta:c>.38?'left':c<-.38?'right':'center'}});
+    n.lb.style.left=(best.x-n.x)+'px';n.lb.style.top=(best.y-n.y)+'px';n.lb.style.alignItems=best.al;n.lb.style.textAlign=best.ta;n.lb.style.visibility='visible';
+    placed.push({x:best.x,y:best.y,w,h,id:n.id});
+  });
+  // a thread never draws through a label: labels knock out whatever passes behind them
+  const ko=S.querySelector('#ko');if(ko)placed.forEach(p=>{const r=document.createElementNS('http://www.w3.org/2000/svg','rect');r.setAttribute('x',p.x-5);r.setAttribute('y',p.y-3);r.setAttribute('width',p.w+10);r.setAttribute('height',p.h+6);r.setAttribute('rx',6);r.setAttribute('fill','#000');ko.appendChild(r)});
+  if(location.hash==='#check'){
+    const out=[];
+    placed.forEach(p=>{const t=new Set();pts.forEach(q=>{if(q[0]>p.x-1&&q[0]<p.x+p.w+1&&q[1]>p.y-1&&q[1]<p.y+p.h+1)t.add(q[3])});t.forEach(k=>out.push('THREAD '+k+' x LABEL '+p.id));
+      fixed.forEach(f=>{if(hit(p,f,0))out.push('LABEL '+p.id+' x '+f.id)});
+      if(p.x<8||p.y<8||p.x+p.w>W.w-8||p.y+p.h>W.h-8)out.push('OFFSCREEN '+p.id);
+      if([[p.x,p.y],[p.x+p.w,p.y],[p.x,p.y+p.h],[p.x+p.w,p.y+p.h]].some(k=>Math.hypot(k[0]-W.c[0],k[1]-W.c[1])>W.R+2))out.push('OUTSIDE GLOBE '+p.id);
+      nodes.forEach(m=>{if(m.id!==p.id){const nx=Math.max(p.x,Math.min(m.x,p.x+p.w)),ny=Math.max(p.y,Math.min(m.y,p.y+p.h));if(Math.hypot(nx-m.x,ny-m.y)<m.r+1)out.push('LABEL '+p.id+' x DOT '+m.id)}})});
+    for(let i=0;i<placed.length;i++)for(let j=i+1;j<placed.length;j++)if(hit(placed[i],placed[j],0))out.push('LABEL '+placed[i].id+' x LABEL '+placed[j].id);
+    fixed.forEach(f=>{const t=new Set();pts.forEach(q=>{if(q[0]>f.x&&q[0]<f.x+f.w&&q[1]>f.y&&q[1]<f.y+f.h)t.add(q[3])});t.forEach(k=>out.push('THREAD '+k+' x '+f.id))});
+    const pre=document.createElement('pre');pre.id='chk';pre.textContent='CHECK\n'+out.join('\n')+'\nEND';document.body.appendChild(pre);
+  }
+}
+(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(()=>setTimeout(run,60));
+})();</script>
+</body></html>

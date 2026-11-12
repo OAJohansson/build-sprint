@@ -65,13 +65,33 @@ Today I can see the one closeness number for the current loop and "✓ saved" pe
 - I couldn't judge whether my drums sound close by ear, or the Studio playback of the new blocks (not played).
 - Testing system suggestion: keep a committed sandbox seed script (maps with real sections for the two eval tracks) in `evals-runs/`, so each tester and grader uses the same sections, not hand-made ones.
 
-## Re-check 12 Nov (after 47281c0, ad2b749): working notes
+## Re-check 12 Nov (after 47281c0, ad2b749)
 
-Sandbox restarted on the new code and seeded with `apps/07-six-am/evals/sandbox-seed.mjs` (Lost now shows "Groove" for bars 41–64). Shots `r01`–.
+The sandbox was restarted on the new code (in-memory, `test-code`) and seeded with `apps/07-six-am/evals/sandbox-seed.mjs`. Same persona and window (1440 × 900), `?quiet=1`, drums only. Shots `r01`–`r18`.
 
-### M-S2 again
-- The score is now per open row ("closeness · kick 83", "closeness · clap & snare 23", "closeness · hats 52") and reacts: kick Round 808 49 → Decay 51 → Tune 64; clap from the far end 9 → Decay to its tick 22, on all ticks 23, Tight snare 36; hats 15 → Tone dark 38 → Length shorter 52 (r03–r09).
-- Knob words are finer now ("460 ms", "soft · 25", "bright · 2.6 kHz"), so a drag always changes the word.
-- Names follow the preset and knobs ("Round 808 kick", "Wide clap, bright"; tags match).
-- New: the clap row stays low even on its ticks (22–23 with Wide clap); only switching preset gets it to 36. Re-picking the preset that is already chosen doesn't reset its knobs.
-- U6 fixed: header says "filling the loop…" with no number; the panel counted 35 → 3 s and was ready at 41.3 s. U9 fixed: Play stays at x 471 in Listen, Make, filling and ready. U10 fixed: "Ticks placed" as plain text (r01, r02).
+| Job | Before | Now | Why |
+| --- | --- | --- | --- |
+| M-S2 Get my kick (and clap, hats) close | 3 | **4** | The score is now for the open row ("closeness · kick 83", "· clap & snare 23", "· hats 52") and it moves with each step: kick Round 808 49 → Decay 51 → Tune 64; clap from the far end 9 → Decay to its tick 22, Tight snare preset 36; hats 15 → Tone 38 → Length 52 (r03–r09). The knob words are finer ("460 ms", "bright · 2.6 kHz"), so every drag changes the word. Names follow the preset and the knobs ("Round 808 kick", "Wide clap, bright"), and the tags match |
+| M-S4 Breakdown with almost no drums | 3 | **4** | The kick row says "Kick off" with the label "Probably the bass bleeding through" on the row. The Mentor says "this row is off. 55 faint marks, probably the bass bleeding through. Mine leaves it out. Press Play anyway to hear it." "Play anyway" ↔ "Back to off" toggles cleanly (r10–r12). Ready 23.1 s after Play |
+
+Quick look at the rest:
+
+| ID | Status | Evidence |
+| --- | --- | --- |
+| U6 one countdown | **Fixed**: the header says "filling the loop…" with no number; the panel counted 35 → 3 s and was ready at 41.3 s | r01, r02 |
+| U8 names | **Fixed** (see M-S2) | r03, r06 |
+| U9 Play position | **Fixed** on Lost: Play stays at x 471 in Listen, Make, filling and ready. But see N1 | r02 |
+| U10 "Suggested" | **Fixed**: plain text "Ticks placed" | r02 |
+| U7 refused drop | **Fixed**: on a new track, a clap dropped on Drums creates a "Claps" lane, places the block there, and shows a toast "Claps and snares go on their own lane: added "Claps"." with Undo | r17, r18 |
+| U11 list after drop | **Fixed**: My sounds stays open after the drop; the new lane is called "Claps" (no truncation) | r18 |
+
+Remaining and new issues:
+
+| ID | Severity | What happened | Suggestion | Evidence |
+| --- | --- | --- | --- | --- |
+| N1 | major (regression) | On the Mason track (long title) the Lab header no longer wraps. The Lab root is 1,602 px wide in a 1,440 px window and sits scrolled 26 px left, so the left edge is cut ("All tracks", "Six AM" logo), "Make" is cut on the right and the Deck status ("Deck on") is off screen. On the first run the loop pill wrapped under Play and everything fitted | Truncate the title harder or let the loop pill wrap while keeping Play fixed; the root must not scroll sideways | r10, r11, r13-header-overflow |
+| N2 | minor | The clap row stays low even on all its gold ticks (Wide clap 22–23/100); only another preset reaches 36. A beginner reads 23 as "bad" after doing exactly what was asked | Say what 23 means on that row (e.g. "best this preset can do: try another"), or scale the score to what the presets can reach | r06, r09 |
+| N3 | minor | An off row still shows a score ("closeness · kick 6") | Show "off" instead of a number while the row is off | r10 |
+| N4 | polish | Re-picking the preset that is already chosen doesn't reset its knobs, so there's no way back to the preset's own sound | Re-picking resets, or add a "reset to preset" | r09 |
+
+Method: same as above. I made a new "Untitled track 1" in the test browser's Studio to check U7; it's sandbox data only. Not checked: M-S1, M-S3 and M-S5 in full (only the U6–U11 parts), and the 1440 × 741 layout.

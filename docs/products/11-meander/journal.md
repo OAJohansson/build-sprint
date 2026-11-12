@@ -26,3 +26,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Gate Q1, moment of use (L3):** laptop at a desk, sit-down study; phone secondary.
 - **Gate Q2, riskiest assumption (L4):** value, "I'll hop". Feasibility (Fable's accuracy) becomes a guardrail. Success measures drafted around it.
 - **Gate Q3, success measures (L5):** approved as drafted. MVP cut drafted next.
+- **Gate Q4, MVP cut (L6):** approved. Fable writes the map once at build time; live maps of any topic are the next rung. Drill-down, requirements, unit-test pick and backlog drafted.

@@ -47,7 +47,7 @@ Me: curious across psychology, philosophy and history, remembers what they see m
 
 ## MVP and stop line
 
-*Draft for the kickoff gate.* Appetite: one day. Tests the riskiest assumption (will I hop?).
+**Decided (L6).** Appetite: one day. Tests the riskiest assumption (will I hop?).
 
 **Ships:**
 1. **The whole field:** one map of Western philosophy, Greeks to today: eras and schools, and how they connect ("built on", "pushed against"). (Job 1)
@@ -63,20 +63,57 @@ Me: curious across psychology, philosophy and history, remembers what they see m
 
 The product's objects, each through four checklists: lifecycle (create, find, change, organise, remove, take out), connections, screen states (empty, working, error, full) and trust (undo, confirm, nothing lost). Claude pre-fills a call and a reason; I change what I disagree with. MVP rows become requirements; Later rows go to the backlog (playbook step 1).
 
+*Draft for the kickoff gate.* Objects (the product's vocabulary): **map** (the whole field), **school** (an area on the map), **thinker**, **link** (built on, pushed against), **visit** (where I've been).
+
 | Object | Action or state | Call | Why |
 | --- | --- | --- | --- |
+| Map | Open: the whole field on first load | MVP | Job 1 is the first thing you see |
+| Map | Find: search for a school or thinker | Later | ~20 schools fit on one screen; search pays off with more fields |
+| Map | Zoom and pan freely | No | Two fixed levels (whole field, one school) are clearer than a free canvas, and avoid a rabbit hole |
+| Map | Back to the whole field from anywhere | MVP | Never lost: Esc and a visible control |
+| Map | Change, organise or edit the map | No | The map is reference content, not my notes |
+| Map | Take out: share or download | Later | No one to share with yet |
+| School | Open: questions, themes, thinkers, reacted against, go next | MVP | Jobs 2 and 3 |
+| School | Go next: jump to a neighbour | MVP | The hop the riskiest assumption is about |
+| Thinker | Open: summary and key ideas | MVP | Job 3 |
+| Thinker | "Study with Claude": copy a ready-made prompt | MVP | Hands off to the modules that already work |
+| Thinker | Open the thinker's own works or further reading | Later | Nice, but the Claude prompt covers "go deeper" today |
+| Link | See how two schools connect (built on, pushed against) | MVP | Where existentialism sits is a question about links |
+| Link | Explain one link in a sentence | Later | Labels are enough for the first test |
+| Visit | Recorded when I open a school or thinker, with the date | MVP | Job 2 and the day-7 signal |
+| Visit | Shown on the map (visited areas marked) | MVP | "Where I've been" at a glance |
+| Visit | Clear my history | Later | Rarely needed; a browser reset does it for now |
+| Visit | Undo or remove one visit | No | Visits are a record, not a choice |
+| Screens | Empty: first visit, nothing visited yet | MVP | The map itself is the welcome; one quiet line on how to start |
+| Screens | Working or error | No | Fixed content, nothing to load or fail |
+| Screens | Full: long school or thinker names | MVP | Real names are long ("Logical positivism"); must not break the layout |
+| Screens | Phone | MVP | Works one school at a time; simpler, not broken |
+| Trust | Visits survive a reload | MVP | Otherwise the day-7 check is worthless |
+| Trust | Nothing to confirm or undo | No | Nothing destructive in the MVP |
 
 ## Requirements
 
+*Draft, from the MVP rows above.*
+
 | # | Must | Check |
 | --- | --- | --- |
+| R1 | The whole map of philosophy (eras, schools, links) fits a laptop screen on first load | At 1440×900, every school is visible without scrolling |
+| R2 | Opening a school shows its questions, themes, 3–5 thinkers, what it reacted against and 2–3 go-next neighbours | Every school in the data has all five; spot-check 3 on screen |
+| R3 | Choosing a go-next neighbour opens that school | One click from Existentialism reaches a neighbour's panel |
+| R4 | Opening a thinker shows a summary and key ideas; "Study with Claude" copies a prompt and says so | Paste the clipboard: the prompt names the thinker |
+| R5 | Opened schools and thinkers are marked as visited, with the date, and survive a reload | Open two, reload: both still marked |
+| R6 | From any level, Esc or a visible control returns to the whole map | Tested from a school and from a thinker |
+| R7 | The content passes the accuracy guardrail | 20-claim spot check: 0 invented thinkers or links |
+| R8 | On a phone, one school at a time, nothing cut off or overlapping | At 375 px wide, open a school and a thinker |
 
-**No-gos:** 
+**No-gos:** accounts or a backend, live AI calls, fields beyond philosophy, free zoom and pan, editing the map.
 
-**Rabbit holes:** 
+**Rabbit holes:** an automatic graph layout (place schools by hand in the data file instead); making the content complete (cap at about 20 schools and 60 thinkers); polishing transitions between levels before the content works.
 
 ## Unit tests
 
 The 0–3 pieces of logic that would hurt most if silently wrong, and the edges to check.
+
+*Draft.* One: **counting days and areas from the visit history** (feeds "where I've been" and the day-7 signal). Edges: empty history, two visits either side of midnight count as two days, the same school twice in a day counts once, month end.
 
 ## Success check (at wrap-up)

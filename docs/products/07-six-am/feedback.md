@@ -201,9 +201,9 @@ Details: `evals-runs/2026-11-12-melody-slice.md`.
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| M-F1 | major | Default Studio track: the Chords lane takes Lead and Pads; a dropped lead replaced the chord block (melody version of D-F4) | fixing |
-| M-F2 | major | Z3: struck stabs read as long held notes (G3 one 6.5 s note); the 7th mostly missed; 27 % pitch classes by onset on Lost 69–76 | fixing |
-| M-F3 | minor | "B · Mine" enabled when every row is off; plays silence | fixing |
-| M-F4 | minor | Doubtful verdict flips between two reads of the same loop (repeat-share on its threshold) | fixing |
-| M-F5 | minor | A monophonic lead with no chords (Mason) is read into Chords; Lead row on 2 of 10 loops | fixing (L242) |
-| D-R1 | minor | Flammed claps still 9–11 ms late on Lost 21–28 (12/15 within 10 ms) | fixing again |
+| M-F1 | major | Default Studio track: the Chords lane takes Lead and Pads; a dropped lead replaced the chord block (melody version of D-F4) | fixed (cb2e3d4–7f282d8), re-check pending |
+| M-F2 | major | Z3: struck stabs read as long held notes (G3 one 6.5 s note); the 7th mostly missed; 27 % pitch classes by onset on Lost 69–76 | fixed (cb2e3d4–7f282d8), re-check pending |
+| M-F3 | minor | "B · Mine" enabled when every row is off; plays silence | fixed (cb2e3d4–7f282d8), re-check pending |
+| M-F4 | minor | Doubtful verdict flips between two reads of the same loop (repeat-share on its threshold) | fixed (cb2e3d4–7f282d8), re-check pending |
+| M-F5 | minor | A monophonic lead with no chords (Mason) is read into Chords; Lead row on 2 of 10 loops | fixed (cb2e3d4–7f282d8), re-check pending |
+| D-R1 | minor | Flammed claps still 9–11 ms late on Lost 21–28 (12/15 within 10 ms) | backlog (L244) |

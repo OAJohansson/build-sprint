@@ -31,3 +31,13 @@ Shots: 09–19.
 - Reload: Drums / Claps & snares / Hats lanes and all 3 blocks still there (33). Lane label truncated "Claps & sn…".
 - Studio is 124 BPM, sounds saved at 123: drawer says they play at the track's tempo (fine).
 Shots: 20–33.
+
+## M-S4 A breakdown with almost no drums: struggle
+- Mason Flint remix, Breakdown (bars 57–64, 8 bars): 4 taps (Breakdown, Make, Drums, Play); ready 26.2 s after Play (34, 35).
+- Kick row reads "Kick off" with dotted faint marks and a "Play anyway" link; bar says "This row is off in Mine". Clap and hats stay on (35).
+- The why ("60 faint marks, probably the bass bleeding through: off in Mine") is only a hover tooltip on "Play anyway"; nothing on screen says why.
+- The Mentor still coaches the off kick: "Tune up to F#2, Decay down to 1/8" (35), which contradicts "off".
+- Play anyway: kick turns on, marks go solid, closeness 48 → 55 (37). No way back: the "off" state and any "turn off" control are gone.
+- Header wraps for the long title (loop pill under Play); fine at 1440.
+- Contrast: lowest measured text 3.71 (send arrow), small labels 5.56+; pre-ready knob values ~2.2:1 (dimmed on purpose), "off" 6.4, "Play anyway" 6.4.
+Shots: 34–37.

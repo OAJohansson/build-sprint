@@ -4,7 +4,7 @@ A one-page PRD, written before any code (playbook step 1). Short answers; the su
 
 ## Problem
 
-*Draft for the kickoff gate.* When I get curious about a big field like philosophy, I dive into one school and stay there for weeks, because I have no picture of the whole field to show me what's connected and where else I could go. So I go deep, get bored and drop the subject, when what keeps me going is variety: small pieces across connected areas.
+When I get curious about a big field like philosophy, I dive into one school and stay there for weeks, because I have no picture of the whole field to show me what's connected and where else I could go. So I go deep, get bored and drop the subject, when what keeps me going is variety: small pieces across connected areas.
 
 ## Who
 
@@ -63,7 +63,7 @@ Me: curious across psychology, philosophy and history, remembers what they see m
 
 The product's objects, each through four checklists: lifecycle (create, find, change, organise, remove, take out), connections, screen states (empty, working, error, full) and trust (undo, confirm, nothing lost). Claude pre-fills a call and a reason; I change what I disagree with. MVP rows become requirements; Later rows go to the backlog (playbook step 1).
 
-*Draft for the kickoff gate.* Objects (the product's vocabulary): **map** (the whole field), **school** (an area on the map), **thinker**, **link** (built on, pushed against), **visit** (where I've been).
+**Decided (L7).** Objects (the product's vocabulary): **map** (the whole field), **school** (an area on the map), **thinker**, **link** (built on, pushed against), **visit** (where I've been).
 
 | Object | Action or state | Call | Why |
 | --- | --- | --- | --- |
@@ -93,7 +93,7 @@ The product's objects, each through four checklists: lifecycle (create, find, ch
 
 ## Requirements
 
-*Draft, from the MVP rows above.*
+From the MVP rows above (L7).
 
 | # | Must | Check |
 | --- | --- | --- |
@@ -114,6 +114,6 @@ The product's objects, each through four checklists: lifecycle (create, find, ch
 
 The 0–3 pieces of logic that would hurt most if silently wrong, and the edges to check.
 
-*Draft.* One: **counting days and areas from the visit history** (feeds "where I've been" and the day-7 signal). Edges: empty history, two visits either side of midnight count as two days, the same school twice in a day counts once, month end.
+One: **counting days and areas from the visit history** (feeds "where I've been" and the day-7 signal). Edges: empty history, two visits either side of midnight count as two days, the same school twice in a day counts once, month end.
 
 ## Success check (at wrap-up)

@@ -27,3 +27,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Gate Q2, riskiest assumption (L4):** value, "I'll hop". Feasibility (Fable's accuracy) becomes a guardrail. Success measures drafted around it.
 - **Gate Q3, success measures (L5):** approved as drafted. MVP cut drafted next.
 - **Gate Q4, MVP cut (L6):** approved. Fable writes the map once at build time; live maps of any topic are the next rung. Drill-down, requirements, unit-test pick and backlog drafted.
+- **Gate Q5, feature drill-down (L7):** "All good". **Kickoff gate closed.** Asked one question per message (owner's preference) instead of one sheet; decisions L1–L7, toil T1 (name). Next: merge the empty starter and ship it, then the design pick gate.

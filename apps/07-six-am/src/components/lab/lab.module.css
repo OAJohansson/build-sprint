@@ -414,3 +414,7 @@
 .melRoll { display: block; width: 100%; height: 60px; overflow: visible; }
 @media (max-height: 860px) { .drRow[data-tall] { height: 69px; } .drRow[data-tall] .drName { height: 61px; } .drRow[data-tall] .drTrack, .melRoll { height: 46px; } }
 @media (max-height: 760px) { .drRow[data-tall] { height: 60px; } .drRow[data-tall] .drName { height: 52px; } .drRow[data-tall] .drTrack, .melRoll { height: 40px; } }
+
+/* Slice 3, FX (fold-fx): each row's bars written beside its shape, inside the strip. */
+.fxLabel { position: absolute; top: 50%; font-size: 12px; color: var(--muted); white-space: nowrap; pointer-events: none; }
+.fxLabel[data-lit] { color: var(--ink); }

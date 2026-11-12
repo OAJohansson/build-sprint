@@ -384,3 +384,4 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L240 | 2026-11-12 | FX library sounds are part "other" with fx- preset ids, one event per 1–8-bar pass, always on the FX lane; no migration | PM (engineer) | slice 3 FX | |
 | L241 | 2026-11-12 | The Mentor gets the open row (family, preset, knobs, ticks, off or FX-measure line) as ids and numbers for Drums, Melody and FX; the server checks them and writes the words; bass keeps its own context | PM (engineer) | slice 3 FX | |
 | T138 | 2026-11-12 | FX rows drum-row height, bar labels as HTML over the strip; Impact preset "Crash" ("Crash hit" in saved names) | PM (engineer) | slice 3 FX | |
+| L242 | 2026-11-12 | A melody part that is mostly one note at a time (no chords) is read as a Lead row, not Chords; Chords only when several notes sound together | PM | melody grade | |

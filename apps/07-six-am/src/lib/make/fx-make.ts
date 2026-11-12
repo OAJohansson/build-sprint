@@ -48,6 +48,7 @@ const toneKnob = (hz: number, lo: number, hi: number) => clamp01(Math.log(hz / l
 export type FxMeasure = { ticks: FxMacros | null; heard: string };
 
 /** What the original's FX-carrying parts do where each row sits (numbers only). `plan` in loop bars. */
+// shortcut: thresholds (a 6 dB rise with a 0.6 time correlation, a 6 dB hit over the drop's steady level, a ½-octave fall) picked on our own synthetic loops; chords or vocals moving there can read as FX. Check against data-evals' real drops.
 export function measureFx(L: Float32Array, R: Float32Array, rate: number, bpm: number, plan: FxPlan, loopBars: number): Record<FxRow, FxMeasure> {
   const mono = toMono(L, R), barS = 16 * secondsPer16th(bpm), loopS = loopBars * barS;
   const out = {} as Record<FxRow, FxMeasure>;

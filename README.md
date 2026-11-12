@@ -20,7 +20,7 @@ reps in going from idea to something live, plus an honest write-up of what I lea
 | 8 | **Selvedge** | My saved pieces are scattered across Instagram, Pinterest and screenshots and a moodboard takes an evening, so I can't put my style into words or find brands that match | ✅ shipped | [live](https://selvedge-sandy.vercel.app) | [write-up](docs/products/08-selvedge.md) · [code](apps/08-selvedge) |
 | 9 | **Wont** | When a new habit is fragile, one late morning or one pouch feels like failure, and the bad feeling turns one slip into a lost week | ✅ shipped | [live](https://wont-peach.vercel.app) | [write-up](docs/products/09-wont.md) · [code](apps/09-wont) |
 | 10 | **Magpie** | I taste something I love and weeks later can't remember its name or where I had it, so I can't order it again, and a trip's food memories fade | ✅ shipped | [live](https://magpie-book.vercel.app) | [write-up](docs/products/10-magpie.md) · [code](apps/10-magpie) |
-| 11 | **Meander** | I dive into one school of a big field and stay for weeks, with no picture of the whole field to show what is connected, so I get bored and drop it | 🛠️ building | — | [write-up](docs/products/11-meander.md) · [code](apps/11-meander) |
+| 11 | **Meander** | I dive into one school of a big field and stay for weeks, with no picture of the whole field to show what is connected, so I get bored and drop it | 🛠️ building | [live](https://meander-virid.vercel.app) | [write-up](docs/products/11-meander.md) · [code](apps/11-meander) |
 <!-- products:end -->
 
 _This table is generated from `docs/products/*.md`. Run `pnpm sync` after editing frontmatter._

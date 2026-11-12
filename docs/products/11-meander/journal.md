@@ -28,3 +28,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Gate Q3, success measures (L5):** approved as drafted. MVP cut drafted next.
 - **Gate Q4, MVP cut (L6):** approved. Fable writes the map once at build time; live maps of any topic are the next rung. Drill-down, requirements, unit-test pick and backlog drafted.
 - **Gate Q5, feature drill-down (L7):** "All good". **Kickoff gate closed.** Asked one question per message (owner's preference) instead of one sheet; decisions L1–L7, toil T1 (name). Next: merge the empty starter and ship it, then the design pick gate.
+- **Shipped the empty starter:** PR #97 merged on the owner's yes after 8 green checks; `pnpm ship 11-meander` created the Vercel project "meander", live at https://meander-virid.vercel.app (no env keys needed yet: no live AI in the MVP).

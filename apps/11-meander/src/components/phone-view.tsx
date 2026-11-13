@@ -60,7 +60,7 @@ export function PhoneView({ nav }: { nav: Nav }) {
                       <span>
                         <em>{n.verb}</em>
                         <b>{n.school.name}</b>
-                        {n.link.label && <small>{n.link.label}</small>}
+                        {n.reason && <small>{n.reason}</small>}
                         {v && <span className="sr-only">, visited</span>}
                       </span>
                     </button>

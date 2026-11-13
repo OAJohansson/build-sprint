@@ -6,8 +6,9 @@
 // `sources`. Fails loudly on anything the app can't resolve (unknown neighbour, theme thinker not in the school).
 import fs from "node:fs";
 
-const SRC = new URL("../../../docs/products/11-meander/content/full.json", import.meta.url);
-const OUT = new URL("../src/content/", import.meta.url);
+// CONTENT_SRC / CONTENT_OUT override the paths (for trying the converter on a fixture).
+const SRC = process.env.CONTENT_SRC ? new URL(`file://${process.env.CONTENT_SRC}`) : new URL("../../../docs/products/11-meander/content/full.json", import.meta.url);
+const OUT = process.env.CONTENT_OUT ? new URL(`file://${process.env.CONTENT_OUT.replace(/\/?$/, "/")}`) : new URL("../src/content/", import.meta.url);
 const full = JSON.parse(fs.readFileSync(SRC, "utf8"));
 const problems = [];
 
@@ -66,7 +67,7 @@ for (const s of full) {
     if (!ids.has(l.neighbour)) { problems.push(`${s.id}: link to unknown school "${l.neighbour}"`); continue; }
     const type = { built_on: "built", pushed_against: "against", built_on_then_pushed_against: "built-then-against" }[l.kind];
     if (!type) { problems.push(`${s.id} → ${l.neighbour}: unknown link kind "${l.kind}"`); continue; }
-    links.push({ from: l.neighbour, to: s.id, type, label: l.label ?? "", reason: l.reason ?? "", sources: src(l.sources), sample: false });
+    links.push({ from: l.neighbour, to: s.id, type, label: l.label ?? "", ...(l.label_from_older ? { labelFromOlder: l.label_from_older } : {}), reason: l.reason ?? "", sources: src(l.sources), sample: false });
   }
 }
 const tids = thinkers.map((t) => t.id);

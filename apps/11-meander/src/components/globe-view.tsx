@@ -219,7 +219,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
                     <em>
                       {n.near.verb}
                       {/* the link's reason, on hover or keyboard focus only (L20) */}
-                      {n.near.link.label && <span className="why">· {n.near.link.label}</span>}
+                      {n.near.reason && <span className="why">· {n.near.reason}</span>}
                     </em>
                   )}
                   <b className={n.label.length > 20 ? "wrap" : undefined}>{n.label}</b>

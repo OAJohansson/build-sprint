@@ -65,6 +65,8 @@ export type Link = {
   type: "built" | "against" | "built-then-against";
   /** A 2–4 word gloss from the research; not shown in the approved design. */
   label?: string;
+  /** The same gloss as read from the older school ("from"); when missing, `label` is used from both ends. */
+  labelFromOlder?: string;
   reason?: string;
   sources: Source[];
   sample?: boolean;
@@ -94,7 +96,15 @@ for (const l of links) {
 export const getSchool = (id: string) => schoolMap.get(id);
 export const getThinker = (id: string) => thinkerMap.get(id);
 
-export type Neighbour = { school: School; verb: string; against: boolean; link: Link };
+export type Neighbour = {
+  school: School; verb: string; against: boolean; link: Link;
+  /** The link's short reason as read from the focused school (L20). */
+  reason: string;
+};
+
+/** A link's gloss read from `focus`: the older end uses `labelFromOlder` when the writer gave one. */
+export const reasonFor = (link: Link, focus: string) =>
+  (focus === link.from ? link.labelFromOlder || link.label : link.label) ?? "";
 
 /** The verb a neighbour carries, seen from the focused school. */
 export function verbFor(link: Link, focus: string) {
@@ -113,6 +123,7 @@ export function neighbours(focus: string): Neighbour[] {
       school: schoolMap.get(l.from === focus ? l.to : l.from)!,
       verb: verbFor(l, focus),
       against: l.type !== "built",
+      reason: reasonFor(l, focus),
       link: l,
     }));
 }

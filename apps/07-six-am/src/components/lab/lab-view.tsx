@@ -24,6 +24,7 @@ import { LabNotes, type LabTurn } from "./lab-notes";
 import { MakeRoom, useMake, type Family, type MakeModel } from "./make-room";
 import { useDrums, type DrumsModel } from "./make-drums";
 import { useMelody, type MelodyModel } from "./make-melody";
+import { MELODY_ON } from "@/lib/make/melody-reader";
 import { useFx, type FxModel } from "./make-fx";
 import type { FxKnobId, FxPresetId, FxRow } from "@/lib/make/fx-synth";
 import type { MelodyPresetId, MelodyRow, PolyKnobId } from "@/lib/make/poly-synth";
@@ -36,12 +37,12 @@ declare global {
     family: () => Family; setFamily: (f: Exclude<Family, "vocals">) => void; drums: () => ReturnType<DrumsModel["debug"]> | null;
     drumsDo: { open: (row: DrumRow) => void; preset: (row: DrumRow, id: DrumPresetId) => void; knob: (row: DrumRow, id: DrumKnobId, v: number) => void; suggest: (row: DrumRow) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; playAnyway: (row: DrumRow) => void; save: (row: DrumRow, name?: string) => Promise<void> };
     compareLevels: (part: number) => ReturnType<LabTransport["compareLevels"]>; captureDrums: () => ReturnType<LabTransport["captureDrums"]>;
-    /** Slice 2 graders: the melody's state and actions (numbers only). */
-    melody: () => ReturnType<MelodyModel["debug"]> | null;
+    /** Slice 2 graders: the melody's state and actions (numbers only); unset while MELODY_ON is off (L247). */
+    melody?: () => ReturnType<MelodyModel["debug"]> | null;
     /** Slice 3 graders: the FX state and actions (numbers only). */
     fx: () => ReturnType<FxModel["debug"]> | null;
     fxDo: { open: (row: FxRow) => void; preset: (row: FxRow, id: FxPresetId) => void; knob: (row: FxRow, id: FxKnobId, v: number) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; save: (row: FxRow, name?: string) => Promise<void> };
-    melodyDo: { open: (row: MelodyRow) => void; preset: (row: MelodyRow, id: MelodyPresetId) => void; knob: (row: MelodyRow, id: PolyKnobId, v: number) => void; suggest: (row: MelodyRow) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; playAnyway: (row: MelodyRow) => void; backToOff: (row: MelodyRow) => void; save: (row: MelodyRow, name?: string) => Promise<void> } } }
+    melodyDo?: { open: (row: MelodyRow) => void; preset: (row: MelodyRow, id: MelodyPresetId) => void; knob: (row: MelodyRow, id: PolyKnobId, v: number) => void; suggest: (row: MelodyRow) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; playAnyway: (row: MelodyRow) => void; backToOff: (row: MelodyRow) => void; save: (row: MelodyRow, name?: string) => Promise<void> } } }
 }
 
 type Mode = "listen" | "make";
@@ -144,17 +145,18 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
         playAnyway: (row) => drumsRef.current?.playAnyway(row), save: async (row, name) => { await drumsRef.current?.save(row, name); },
       },
       compareLevels: (part: number) => t.compareLevels(part), captureDrums: () => t.captureDrums(),
-      melody: () => melodyRef.current?.debug() ?? null,
+      // L247: Melody is off this phase, so its grader hooks are not set.
+      ...(MELODY_ON ? { melody: () => melodyRef.current?.debug() ?? null } : {}),
       fx: () => fxRef.current?.debug() ?? null,
       fxDo: {
         open: (row) => fxRef.current?.setOpen(row), preset: (row, id) => fxRef.current?.setPreset(row, id), knob: (row, id, v) => fxRef.current?.setKnob(row, id, v),
         ab: (x) => fxRef.current?.setAb(x), bed: (on) => fxRef.current?.setBed(on), save: async (row, name) => { await fxRef.current?.save(row, name); },
       },
-      melodyDo: {
-        open: (row) => melodyRef.current?.setOpen(row), preset: (row, id) => melodyRef.current?.setPreset(row, id), knob: (row, id, v) => melodyRef.current?.setKnob(row, id, v),
-        suggest: (row) => melodyRef.current?.suggestNow(row), ab: (x) => melodyRef.current?.setAb(x), bed: (on) => melodyRef.current?.setBed(on),
-        playAnyway: (row) => melodyRef.current?.playAnyway(row), backToOff: (row) => melodyRef.current?.backToOff(row), save: async (row, name) => { await melodyRef.current?.save(row, name); },
-      } };
+      ...(MELODY_ON ? { melodyDo: {
+        open: (row: MelodyRow) => melodyRef.current?.setOpen(row), preset: (row: MelodyRow, id: MelodyPresetId) => melodyRef.current?.setPreset(row, id), knob: (row: MelodyRow, id: PolyKnobId, v: number) => melodyRef.current?.setKnob(row, id, v),
+        suggest: (row: MelodyRow) => melodyRef.current?.suggestNow(row), ab: (x: "a" | "b") => melodyRef.current?.setAb(x), bed: (on: boolean) => melodyRef.current?.setBed(on),
+        playAnyway: (row: MelodyRow) => melodyRef.current?.playAnyway(row), backToOff: (row: MelodyRow) => melodyRef.current?.backToOff(row), save: async (row: MelodyRow, name?: string) => { await melodyRef.current?.save(row, name); },
+      } } : {}) };
     return () => { cancelAnimationFrame(raf); clearTimeout(saveTimer); t.dispose(); tr.current = null; };
   }, [map, bpm, origin, bars, code, quiet]);
 
@@ -171,7 +173,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     keyName: map.key || analysis?.key || "", scale: map.scale || analysis?.scale || "",
   });
   const melody = useMelody({
-    tr, active: mode === "make" && family === "melody", loop: ts?.loop ?? null, bpm, code, title, url: map.id,
+    tr, active: MELODY_ON && mode === "make" && family === "melody", loop: ts?.loop ?? null, bpm, code, title, url: map.id,
     keyName: map.key || analysis?.key || "", scale: map.scale || analysis?.scale || "",
   });
   const loopBarsNow = ts?.loop ? { from: Math.round(msToBar(ts.loop.startMs, bpm, origin)), bars: Math.max(1, Math.round(msToBar(ts.loop.endMs, bpm, origin)) - Math.round(msToBar(ts.loop.startMs, bpm, origin))) } : null;
@@ -189,13 +191,13 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const phase = ts?.phase;
   // Phase 5 drums (P7): A the original drums, B Mine's three rows, the original bass under both.
   const bassOn = family === "bass" && make.isBass;
-  const mineOn = mode === "make" && ((bassOn && make.ab === "b" && make.mineReady) || (family === "drums" && drums.ab === "b" && drums.mineAny && !drums.allOff) || (family === "melody" && melody.ab === "b" && melody.mineAny && !melody.allOff) || (family === "fx" && fx.ab === "b" && fx.mineAny));
+  const mineOn = mode === "make" && ((bassOn && make.ab === "b" && make.mineReady) || (family === "drums" && drums.ab === "b" && drums.mineAny && !drums.allOff) || (MELODY_ON && family === "melody" && melody.ab === "b" && melody.mineAny && !melody.allOff) || (family === "fx" && fx.ab === "b" && fx.mineAny));
   useEffect(() => {
     const t = tr.current;
     if (!t) return;
     if (mode === "make" && family === "drums") t.setParts(PART_NAMES.map((id) => (!mineOn && id === "drums") || (drums.bed && id === "bass")));
     // Slice 2 (P7): A the original "other" part, B Mine's rows, the original drums under both.
-    else if (mode === "make" && family === "melody") t.setParts(PART_NAMES.map((id) => (!mineOn && id === "other") || (melody.bed && id === "drums")));
+    else if (MELODY_ON && mode === "make" && family === "melody") t.setParts(PART_NAMES.map((id) => (!mineOn && id === "other") || (melody.bed && id === "drums")));
     // Slice 3 (P7): A the drop as is (its parts, the drums when the bed is on); B the same with Mine's FX
     // on top, the parts turned down with the FX so B is as loud as A.
     else if (mode === "make" && family === "fx") t.setParts(PART_NAMES.map((id) => id !== "drums" || fx.bed), mineOn ? Math.pow(10, fx.partsDb / 20) : 1);
@@ -279,7 +281,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     const heard = part ? { part, ...(kick && hats ? { kick, hats } : {}) } : null;
     const inMake = mode === "make" && family === "bass" ? make.labMake : null;
     // Phase 5: a question asked in Drums, Melody or FX knows the open row, its preset, knobs and ticks.
-    const inRow = mode === "make" ? (family === "drums" ? drums.labRow : family === "melody" ? melody.labRow : family === "fx" ? fx.labRow : null) : null;
+    const inRow = mode === "make" ? (family === "drums" ? drums.labRow : MELODY_ON && family === "melody" ? melody.labRow : family === "fx" ? fx.labRow : null) : null;
     const heardNow: LabAsk["hear"] = mode === "make" ? { kind: "only", parts: [focus] } : hear;
     return { part: focus, hear: heardNow, bar, playheadBar: pos.bar, loop: loopB, chords, measure, heard, ...(inMake ? { make: inMake } : {}), ...(inRow ? { makeRow: inRow } : {}) };
   }, [focus, hear, pos.bar, chords, bpm, origin, bars, map.key, map.scale, analysis, mode, make.labMake, family, drums.labRow, melody.labRow, fx.labRow]);

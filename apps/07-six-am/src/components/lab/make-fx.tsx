@@ -86,7 +86,15 @@ export function useFx(o: FxOpts) {
     if (!o.active || !read || !plan || !mineKeyNow || (mineKeyNow === mineS?.key && tr.current?.mineOwner === "fx")) return;
     const t = setTimeout(() => {
       const lv = bed ? read.level.bed : read.level.noBed;
-      cl().fxRender({ plan, sounds: perRow((r) => ({ ...sounds[r], on: true })), rootMidi: rootMidiOf(o.keyName || "A"), bpm: o.bpm, rate: read.rate, samples: read.samples, mixRmsDb: lv.rmsDb, blocksA: lv.blocks }).then(({ res, stale }) => {
+      // FX-R3: a copy of exactly the parts heard under B (the drums only with the bed), so B is matched on
+      // the real sum; transferred to the worker, which zeroes it (C2).
+      const parts = [0, 1, 2, 3].map((p) => tr.current?.loopPart(p) ?? null);
+      let mixL: Float32Array | undefined, mixR: Float32Array | undefined;
+      if (parts.every((p) => p && p.left.length === read.samples)) {
+        mixL = new Float32Array(read.samples); mixR = new Float32Array(read.samples);
+        parts.forEach((p, i) => { if (i === 0 && !bed) return; for (let j = 0; j < read.samples; j++) { mixL![j] += p!.left[j]; mixR![j] += p!.right[j]; } });
+      }
+      cl().fxRender({ plan, sounds: perRow((r) => ({ ...sounds[r], on: true })), rootMidi: rootMidiOf(o.keyName || "A"), bpm: o.bpm, rate: read.rate, samples: read.samples, mixRmsDb: lv.rmsDb, blocksA: lv.blocks, mixL, mixR }).then(({ res, stale }) => {
         if (stale || loopKeyOf(tr.current?.state.loop ?? null) !== read.loopKey) return;
         tr.current?.setMine(res, "fx");
         setMine({ key: mineKeyNow, partsDb: res.partsDb, ms: res.ms });

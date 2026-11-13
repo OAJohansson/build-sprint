@@ -7,7 +7,7 @@ import { lanesOf } from "@/lib/studio-lanes";
 import type { Doc } from "@/lib/timeline";
 import { measureFx, renderFxMine } from "./fx-make";
 import { FX_KNOBS, FX_PRESET_IDS, FX_ROWS, clampFxMacros, fxKnobWord, fxPlan, fxRowPresets, renderFxEvent, renderFxRow, rootMidiOf, FX_PRESETS } from "./fx-synth";
-import { kBlocks, lufs } from "./level";
+import { kBlocks, kLoopEnergy, lufs } from "./level";
 import { editLibLoop, libLaneType, libLoopFrom, parseLibLoop, renderLibPass, type FxLoop } from "./lib-loop";
 import { parseNewSound, suggestFxName, type LibrarySound } from "./library";
 import { secondsPer16th } from "./render";
@@ -119,6 +119,24 @@ describe("A/B with a silent bar the riser fills (FX-R3)", () => {
     const ung = (l: Float32Array, rr: Float32Array) => { const z = kBlocks({ left: l, right: rr, rate: RATE }); return 10 * Math.log10(z.reduce((a, b) => a + b, 0) / z.length); };
     expect(Math.abs(ung(bl, br) - ung(mix, mix))).toBeLessThanOrEqual(0.1);
     expect(Math.abs(lufs({ left: bl, right: br, rate: RATE }) - lufs({ left: mix, right: mix, rate: RATE }))).toBeLessThanOrEqual(1);
+  });
+});
+
+describe("A/B on the real sum, a hit on the bass's note (FX-R3, round 2)", () => {
+  it("keeps B within 0.2 dB of A as heard looping, where added energies miss", () => {
+    // Lost 73–80-like: an A1 bass every beat, a silent last bar, the Big hit (its 55 Hz thump) on bar 1.
+    const n = Math.round(8 * barS * RATE), beat = barS / 4, L = new Float32Array(n), R = new Float32Array(n);
+    for (let i = 0; i < Math.round(7 * barS * RATE); i++) { const t = i / RATE, u = t % beat; L[i] = R[i] = 0.3 * Math.sin(2 * Math.PI * 55 * t + Math.PI) * Math.exp(-u / 0.2); }
+    const sounds = { impact: { preset: "fx-impact-big", macros: { size: 1 }, on: true }, down: { preset: "fx-down-dark", macros: {}, on: true }, riser: { preset: "fx-riser-noise", macros: {}, on: true } } as const;
+    const o = { rootMidi: 33, bpm: BPM, rate: RATE, samples: n, mixRmsDb: 10 * Math.log10(kLoopEnergy({ left: L, right: R, rate: RATE }) / 2), blocksA: kBlocks({ left: L, right: R, rate: RATE }) };
+    const heard = (r: { left: Float32Array; right: Float32Array; partsDb: number }) => {
+      const g = Math.pow(10, r.partsDb / 20);
+      return 10 * Math.log10(kLoopEnergy({ left: L.map((v, i) => v * g + r.left[i]), right: R.map((v, i) => v * g + r.right[i]), rate: RATE }) / kLoopEnergy({ left: L, right: R, rate: RATE }));
+    };
+    const exact = heard(renderFxMine(fxPlan(97, 8, [97, 105], home), sounds as never, { ...o, mix: { left: L.slice(), right: R.slice() } }));
+    const blocks = heard(renderFxMine(fxPlan(97, 8, [97, 105], home), sounds as never, o));
+    expect(Math.abs(exact)).toBeLessThanOrEqual(0.2);
+    console.info(`FX-R3 sim: B − A ${exact.toFixed(2)} dB on the real sum, ${blocks.toFixed(2)} dB with added energies`);
   });
 });
 

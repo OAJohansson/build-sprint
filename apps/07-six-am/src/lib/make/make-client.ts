@@ -79,7 +79,7 @@ export class MakeClient {
   }
   fxRender(r: Omit<Extract<MakeRequest, { type: "fx-render" }>, "id" | "type">) {
     const n = ++this.fxRenders;
-    return (this.main.send({ type: "fx-render", ...r }) as Promise<Res<"fx-render">>).then((res) => ({ res, stale: n !== this.fxRenders }));
+    return (this.main.send({ type: "fx-render", ...r }, r.mixL && r.mixR ? [r.mixL.buffer as ArrayBuffer, r.mixR.buffer as ArrayBuffer] : []) as Promise<Res<"fx-render">>).then((res) => ({ res, stale: n !== this.fxRenders }));
   }
   stop() { this.main.stop(); this.search.stop(); }
 }

@@ -74,6 +74,20 @@ export function kBlocks(s: Stereo): number[] {
   else for (let a = 0; a + B <= n; a += step) z.push(block(a, a + B));
   return z;
 }
+/**
+ * K-weighted mean energy of a loop as it is heard looping (FX-R3): the filters run over two passes and
+ * only the second is measured, so the loop's end flows into its start as on the speakers; no blocks, no
+ * gates, every sample counted once. What an ungated K-weighted tap over one loop reads.
+ */
+export function kLoopEnergy(s: Stereo): number {
+  const n = Math.min(s.left.length, s.right.length);
+  if (!n) return 0;
+  const fs = kWeighting(s.rate), two = (x: Float32Array) => { const y = new Float32Array(2 * n); y.set(x.subarray(0, n)); y.set(x.subarray(0, n), n); return y; };
+  const L = filter(two(s.left), fs), R = filter(two(s.right), fs);
+  let e = 0;
+  for (let i = n; i < 2 * n; i++) e += L[i] * L[i] + R[i] * R[i];
+  return e / n;
+}
 /** Integrated loudness from block energies (the gates of lufs()). */
 export function lufsOfBlocks(z: number[]): number {
   const loud = (e: number) => -0.691 + db(e);

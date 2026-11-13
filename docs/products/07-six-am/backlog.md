@@ -113,4 +113,4 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Idea | Why | When |
 | --- | --- | --- |
 | Melody / chords in Make: a note reader that gets real chord stabs right (≥ 70 % of chord notes on Lost in the Loop 69–76) | Plain DSP 35–37 %, Basic Pitch 13 % on the real separated part (13 Nov); Basic Pitch did read Mason's monophonic riff as one Lead row. Try: a chord-recognition model on the separated part, a polyphonic transcriber trained on synths, or reading chords as names (root + quality) and voicing them ourselves. Everything else (poly synth, presets, Suggest, A/B, Save to Chords/Pads/Lead) is built behind the flag | next phase |
-| Basic Pitch for leads only | It read single-note riffs well (6/6) but disposed its own tensors after the first read (fix the tf scope first) | with the above |
+| Basic Pitch for leads only | It read single-note riffs well (6/6) but disposed its own tensors after the first read (fix the tf scope first). The try is in commit bf7164c (removed after L247) | with the above |

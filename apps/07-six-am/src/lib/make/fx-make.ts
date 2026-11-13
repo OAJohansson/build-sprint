@@ -12,7 +12,7 @@
 // - A/B (P7): A is the drop as is (its parts, the drums when "Drums under both" is on); B is the same
 //   with Mine's FX on top, both turned down together so B is as loud as A (LUFS).
 import { fft, hann, toMono } from "./dsp";
-import { kBlocks } from "./level";
+import { kBlocks, kLoopEnergy } from "./level";
 import { FX_ROWS, clampFxMacros, fxBars, renderFxEvent, type FxMacros, type FxPlan, type FxPresetId, type FxRow } from "./fx-synth";
 import { secondsPer16th } from "./render";
 
@@ -121,7 +121,7 @@ export const FX_UNDER_DB = 4;
  * B's loudness from the drop's and the FX's 400 ms block energies added (FX and the mix are mostly
  * uncorrelated, so their energies add), with the LUFS gates.
  */
-export function renderFxMine(plan: FxPlan, sounds: Record<FxRow, FxRowSound>, o: { rootMidi: number; bpm: number; rate: number; samples: number; mixRmsDb: number; blocksA: number[] }) {
+export function renderFxMine(plan: FxPlan, sounds: Record<FxRow, FxRowSound>, o: { rootMidi: number; bpm: number; rate: number; samples: number; mixRmsDb: number; blocksA: number[]; mix?: { left: Float32Array; right: Float32Array } }) {
   const { rate, samples } = o, barS = 16 * secondsPer16th(o.bpm);
   const left = new Float32Array(samples), right = new Float32Array(samples);
   for (const row of FX_ROWS) {
@@ -139,9 +139,20 @@ export function renderFxMine(plan: FxPlan, sounds: Record<FxRow, FxRowSound>, o:
   // B's loudness: the drop's block energies (kept as numbers at the read) plus the FX's, block by block,
   // over the same blocks for both and without the gates (FX-R3: the gates dropped A's silent bar, which
   // the riser fills in B, so B came out about 1 dB quieter to the ear).
-  const fb = kBlocks({ left, right, rate });
-  const ungated = (z: number[]) => (z.length ? -0.691 + 10 * Math.log10(z.reduce((x, y) => x + y, 0) / z.length + 1e-20) : -200);
-  const A = ungated(o.blocksA), B = ungated(o.blocksA.map((e, i) => e + (fb[i] ?? 0)));
+  let A: number, B: number;
+  if (o.mix) {
+    // FX-R3, round 2: with the parts heard under B (a copy, in memory, zeroed by the caller), B is the
+    // actual sum, sample by sample, as it loops: a Big hit's 55 Hz thump on the bass's A1 adds or cancels
+    // with it, which energies added block by block can't see (Lost 73–80 came out ~1 dB quiet live).
+    const sum = (a: Float32Array, b: Float32Array) => { const y = new Float32Array(samples); for (let i = 0; i < samples; i++) y[i] = (a[i] ?? 0) + b[i]; return y; };
+    const bl = sum(o.mix.left, left), br = sum(o.mix.right, right);
+    A = -0.691 + db(kLoopEnergy({ left: o.mix.left, right: o.mix.right, rate })); B = -0.691 + db(kLoopEnergy({ left: bl, right: br, rate }));
+    bl.fill(0); br.fill(0); // these hold the original too (C2)
+  } else {
+    const fb = kBlocks({ left, right, rate });
+    const ungated = (z: number[]) => (z.length ? -0.691 + 10 * Math.log10(z.reduce((x, y) => x + y, 0) / z.length + 1e-20) : -200);
+    A = ungated(o.blocksA); B = ungated(o.blocksA.map((e, i) => e + (fb[i] ?? 0)));
+  }
   const partsDb = A > -70 && B > -70 ? Math.round((A - B) * 100) / 100 : 0, g = Math.pow(10, partsDb / 20);
   for (let i = 0; i < samples; i++) { left[i] *= g; right[i] *= g; }
   return { left, right, rate, partsDb };

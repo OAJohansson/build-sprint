@@ -30,6 +30,7 @@ import { Composer, Turn, useEdgeFades, type ThreadTurn } from "./mentor-thread";
 import { Knob } from "@/components/ui/knob";
 import { DrumsCheck, DrumsMiddle, DrumsSaveBar, type DrumsModel } from "./make-drums";
 import { MelodyCheck, MelodyMiddle, MelodySaveBar, type MelodyModel } from "./make-melody";
+import { MELODY_ON } from "@/lib/make/melody-reader";
 import { FxCheck, FxMiddle, FxSaveBar, type FxModel } from "./make-fx";
 import s from "./lab.module.css";
 
@@ -317,7 +318,7 @@ export function MakeRoom(p: RoomProps) {
   const caption = loop
     ? `${lead} ${[where, `${clockMs(loop.startMs)}–${clockMs(loop.endMs)}`].filter(Boolean).join(", ")}, ${loop.state === "memory" ? "looping" : p.playing ? "filling the loop" : "the loop fills when you press Play"}`
     : family === "fx" ? "Timed to the section" : `${partName} alone`;
-  const later = family === "vocals";
+  const later = family === "vocals" || (family === "melody" && !MELODY_ON); // L247: Melody comes next phase
   return (
     <div className={s.room}>
       <section className={s.synth} aria-label={`Make ${family === "bass" ? `a ${name}` : family === "drums" ? "drums" : family}`}>
@@ -369,9 +370,9 @@ export function MakeRoom(p: RoomProps) {
       </section>
       {family === "bass" && m.isBass && <SaveBar m={m} />}
       {family === "drums" && <DrumsSaveBar m={p.drums} />}
-      {family === "melody" && <MelodySaveBar m={p.melody} />}
+      {family === "melody" && MELODY_ON && <MelodySaveBar m={p.melody} />}
       {family === "fx" && <FxSaveBar m={p.fx} />}
-      <MentorRail turns={p.turns} part={part} noun={family === "melody" ? "the melody" : family === "fx" ? "the drop" : undefined} bar={p.bar} onAsk={p.onAsk} onRetry={p.onRetry} onSeek={p.onSeek} busy={p.busy} note={p.note} />
+      <MentorRail turns={p.turns} part={part} noun={family === "melody" && MELODY_ON ? "the melody" : family === "fx" ? "the drop" : undefined} bar={p.bar} onAsk={p.onAsk} onRetry={p.onRetry} onSeek={p.onSeek} busy={p.busy} note={p.note} />
     </div>
   );
 }

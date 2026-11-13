@@ -1,0 +1,67 @@
+[
+  {
+    "loop": "Lost 69–76 (fixture)",
+    "dsp": "72.3 / 2.2 / 6 ms (256 ms)",
+    "bp 0.6/0.4/6": "91.5 / 3.3 / 11 ms (8895 ms)"
+  },
+  {
+    "loop": "offbeat stabs (Am7 F C G)",
+    "dsp": "100 / 0 / 8 ms (226 ms)",
+    "bp 0.6/0.4/6": "100 / 0 / 17 ms (9951 ms)"
+  },
+  {
+    "loop": "Chicago stabs, syncopated",
+    "dsp": "100 / 0 / 8 ms (221 ms)",
+    "bp 0.6/0.4/6": "93.8 / 0.7 / 16 ms (9110 ms)"
+  },
+  {
+    "loop": "held pads, 1 chord per 2 bars",
+    "dsp": "100 / 0 / 6 ms (211 ms)",
+    "bp 0.6/0.4/6": "93.8 / 45.8 / 25 ms (8625 ms)"
+  },
+  {
+    "loop": "slow-attack pads (150 ms)",
+    "dsp": "93.8 / 11.8 / 22 ms (206 ms)",
+    "bp 0.6/0.4/6": "93.8 / 30 / 19 ms (8633 ms)"
+  },
+  {
+    "loop": "pluck lead over a pad (overlap)",
+    "dsp": "97.4 / 24.2 / 7 ms (210 ms)",
+    "bp 0.6/0.4/6": "99.5 / 33 / 15 ms (8648 ms)"
+  },
+  {
+    "loop": "organ chords, 2-bar riff",
+    "dsp": "100 / 0 / 8 ms (168 ms)",
+    "bp 0.6/0.4/6": "100 / 17.2 / 15 ms (8814 ms)"
+  },
+  {
+    "loop": "offbeat stabs (Am7 F C G) −20 dB",
+    "dsp": "100 / 0 / 8 ms (192 ms)",
+    "bp 0.6/0.4/6": "100 / 0 / 14 ms (9010 ms)"
+  },
+  {
+    "loop": "Chicago stabs, syncopated −20 dB",
+    "dsp": "95.8 / 0 / 8 ms (222 ms)",
+    "bp 0.6/0.4/6": "93.8 / 2.8 / 16 ms (8664 ms)"
+  },
+  {
+    "loop": "held pads, 1 chord per 2 bars −20 dB",
+    "dsp": "100 / 54.8 / 9 ms (202 ms)",
+    "bp 0.6/0.4/6": "93.8 / 60.6 / 25 ms (8805 ms)"
+  },
+  {
+    "loop": "slow-attack pads (150 ms) −20 dB",
+    "dsp": "16.7 / 97.6 / 13 ms (209 ms)",
+    "bp 0.6/0.4/6": "93.8 / 68.2 / 14 ms (8637 ms)"
+  },
+  {
+    "loop": "pluck lead over a pad (overlap) −20 dB",
+    "dsp": "100 / 28.2 / 19 ms (225 ms)",
+    "bp 0.6/0.4/6": "99.5 / 36 / 17 ms (8633 ms)"
+  },
+  {
+    "loop": "organ chords, 2-bar riff −20 dB",
+    "dsp": "100 / 0 / 8 ms (181 ms)",
+    "bp 0.6/0.4/6": "100 / 8.1 / 15 ms (8552 ms)"
+  }
+]

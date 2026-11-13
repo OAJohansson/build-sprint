@@ -94,7 +94,7 @@ export function useMelody(o: MelodyOpts) {
     const samples = left.length, rate = held.rate;
     cl().melodyRead({ left, right, rate, bpm: o.bpm, key: o.keyName && scale ? { key: o.keyName, scale } : undefined }).then(async (res) => {
       const n = MELODY_ROWS.map((r) => res.reading.rows[r].notes.length);
-      console.info(`[make] melody read in ${res.ms} ms: chords ${n[0]} notes, lead ${n[1]} notes, tuning ${res.reading.tuningCents} ct`);
+      console.info(`[make] melody read (${res.reader}) in ${res.ms} ms: chords ${n[0]} notes, lead ${n[1]} notes, tuning ${res.reading.tuningCents} ct`);
       if (!n.some((x) => x > 0)) { setState({ loopKey: key, state: "nonotes" }); return; }
       const r: Read = { loopKey: key, d: res.reading, targets: res.targets, levelDb: res.levelDb, lufs: res.lufs, samples, rate };
       setReadS(r);

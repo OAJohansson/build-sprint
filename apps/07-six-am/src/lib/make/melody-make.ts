@@ -45,11 +45,24 @@ export function eventsOf(notes: Pick<MelNote, "t" | "midi" | "dur" | "vel">[]): 
 }
 
 /** Splits the read notes into Chords and, when there is a separate line above them, Lead. */
+/** Semitones above a played note where its own strong partials sit (octave, 12th, 2 octaves, 17th, …). */
+const PARTIALS = new Set([12, 19, 24, 28, 31, 36]);
+/** An event's notes without those that are partials of a lower note in it (MR-2: a bright single line's
+ *  partials read as a 2–5-note "chord"). */
+function playedOf(ev: { notes: number[] }, notes: Pick<ReadNote, "midi">[]): number[] {
+  const ms = ev.notes.map((i) => notes[i].midi);
+  return ev.notes.filter((i) => !ms.some((low) => low < notes[i].midi && PARTIALS.has(notes[i].midi - low)));
+}
+
 export function splitRows(notes: ReadNote[], bars: number): { chords: ReadNote[]; lead: ReadNote[] } {
   const ev = eventsOf(notes);
-  const chordEv = ev.filter((e) => e.notes.length >= 2);
+  const chordEv = ev.filter((e) => playedOf(e, notes).length >= 2);
   // L242 (M-F5): a part that is mostly one note at a time (Mason's riff) is a Lead, not Chords.
-  if (ev.length >= LEAD_MIN && chordEv.length < MONO_CHORD_SHARE * ev.length) return { chords: [], lead: notes };
+  if (ev.length >= LEAD_MIN && chordEv.length < MONO_CHORD_SHARE * ev.length) {
+    // One line: its notes without the partials read as notes of their own.
+    const keep = new Set(ev.flatMap((e) => playedOf(e, notes)));
+    return { chords: [], lead: notes.filter((_, i) => keep.has(i)) };
+  }
   if (chordEv.length < 2) return { chords: notes, lead: [] };
   const tops = chordEv.map((e) => Math.max(...e.notes.map((i) => notes[i].midi))).sort((a, b) => a - b);
   const top = tops[Math.floor(tops.length / 2)];
@@ -88,7 +101,7 @@ export function restrikeShare(notes: Pick<MelNote, "t" | "dur" | "midi">[]): num
 
 // M-F4: the repeat test is doubtful only clearly under its old 0.4 bar (a margin), so two reads of the
 // same loop that land either side of 0.4 (0.38, 0.42) give the same verdict.
-export const MEL_DOUBT = { faintVel: 0.3, restrike: 0.35, repeat: 0.3, minNotes: 8 };
+export const MEL_DOUBT = { faintVel: 0.3, restrike: 0.35, repeat: 0.3, minNotes: 8, choppedRepeat: 0.5 };
 
 /** The reader's notes as Make plays them, split into rows, doubtful rows marked. */
 export function melodyFromReading(r: NotesReading, bpm: number, loopS: number): MelodyReading {
@@ -98,7 +111,9 @@ export function melodyFromReading(r: NotesReading, bpm: number, loopS: number): 
   for (const row of MELODY_ROWS) {
     const notes: MelNote[] = split[row].map((n) => ({ t: n.t, dur: n.dur, midi: n.midi, vel: n.vel, step: ((n.step % steps) + steps) % steps, off: Math.round((n.offsetMs / 1000 / sps) * 1000) / 1000, durSteps: Math.max(0.25, Math.round((n.dur / sps) * 100) / 100) }));
     const sparse = notes.length > 0 && notes.length <= Math.max(1, Math.floor(bars / 2)) && notes.every((n) => n.vel < MEL_DOUBT.faintVel);
-    const chopped = !sparse && notes.length >= MEL_DOUBT.minNotes && restrikeShare(notes) >= MEL_DOUBT.restrike;
+    // MR-1: stabs struck back to back on a repeating rhythm are a part, not a held pad chopped up; the
+    // "chopped" verdict is only for re-strikes with no repeating pattern behind them.
+    const chopped = !sparse && notes.length >= MEL_DOUBT.minNotes && restrikeShare(notes) >= MEL_DOUBT.restrike && (steps < 32 || noteRepeatShare(notes, steps) < MEL_DOUBT.choppedRepeat);
     // Chords repeat; a lead line often doesn't inside one loop, so the repeat test is for Chords only.
     const irregular = row === "chords" && !sparse && !chopped && notes.length >= MEL_DOUBT.minNotes && steps >= 32 && noteRepeatShare(notes, steps) < MEL_DOUBT.repeat;
     rows[row] = {

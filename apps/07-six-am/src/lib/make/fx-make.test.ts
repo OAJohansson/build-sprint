@@ -21,7 +21,7 @@ describe("FX generators", () => {
     expect(fxRowPresets("down").map((id) => FX_PRESETS[id].name)).toEqual(["Dark fall", "Noise fall"]);
     expect(fxRowPresets("riser").map((id) => FX_PRESETS[id].name)).toEqual(["Bright noise", "Reverse crash", "Synth riser"]);
     expect(FX_KNOBS).toEqual({ impact: ["size", "tone", "tail"], down: ["drop", "tone", "length"], riser: ["rise", "tone", "width"] });
-    for (const id of FX_PRESET_IDS) for (const k of FX_KNOBS[FX_PRESETS[id].row]) expect(fxKnobWord(id, k, 0.5)).not.toBe(fxKnobWord(id, k, 0.55));
+    for (const id of FX_PRESET_IDS) for (const k of FX_KNOBS[FX_PRESETS[id].row]) expect(fxKnobWord(id, k, 0.5)).not.toBe(fxKnobWord(id, k, 0.6));
   });
 
   it("times the rows to the section: the hit on the drop's first beat, the riser into the next section", () => {

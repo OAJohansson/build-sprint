@@ -169,7 +169,13 @@ describe("Lab answers never claim to hear (B6)", () => {
   });
   it("in Make the answer comes first: no stock 'I can't hear it' opener, and none required (FX-F7)", () => {
     const needs = { labQuestion: "Should my riser be brighter?", labInMake: true };
-    expect(checkAnswer("lab", answer("I can't hear the sound itself; I read measurements: pitch, timing and loudness.", "Turn Tone up to bright."), needs).ok).toBe(false);
+    // FN1: the opener is cut, not the answer: the person gets the answer minus that sentence.
+    const cut = checkAnswer("lab", answer("I can't hear the sound itself; I read measurements: pitch, timing and loudness.", "Turn Tone up to bright."), needs);
+    expect(cut.ok && cut.answer.sentences.map((x) => x.text)).toEqual(["Turn Tone up to bright."]);
+    const inOne = checkAnswer("lab", answer("I can't hear your hats themselves. Shorten Decay to 60 ms for a tighter tick.", "Gold ticks sit there."), needs);
+    expect(inOne.ok && inOne.answer.sentences.map((x) => x.text)).toEqual(["Shorten Decay to 60 ms for a tighter tick.", "Gold ticks sit there."]);
+    // Listen keeps its rule: a tone question there still needs it said.
+    expect(checkAnswer("lab", answer("I can't hear the sound itself; I read measurements: pitch, timing and loudness.", "Short A1s."), { labQuestion: "Why so rubbery?" }).ok && true).toBe(true);
     expect(checkAnswer("lab", answer("Turn Tone up to bright · 80; the original's noise sits high.", "I can't hear your riser itself, only these numbers."), needs).ok).toBe(true);
     expect(checkAnswer("lab", answer("Turn Tone up to bright · 80."), needs).ok).toBe(true);
   });
@@ -236,7 +242,7 @@ describe("S3 folds (LS2-N9, N10, N11) and Make's context", () => {
     const t = labContextText(d, map);
     expect(t).toMatch(/\[make\] They are in Make, building their own drums[^\n]*The open row is Kick: preset Deep 909/);
     expect(t).toMatch(/Tune A1 · 54 Hz/);
-    expect(t).toMatch(/Gold ticks[^\n]*Click snappy · 55/);
+    expect(t).toMatch(/Gold ticks[^\n]*Click snappy\b/);
     const off = labContextText(parseLabAsk({ ...ask, makeRow: { family: "melody", preset: "chords-pad", knobs: { tone: 0.3 }, ticks: null, off: true, note: "probably a held pad read as repeated notes" } }, BARS)!, map);
     expect(off).toMatch(/The open row is Chords: preset Pad/);
     expect(off).toMatch(/This row is off in their sound: probably a held pad/);

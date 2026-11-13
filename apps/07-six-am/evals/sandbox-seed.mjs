@@ -55,17 +55,15 @@ export const MAPS = [
 async function main() {
   const head = { "content-type": "application/json", "x-access-code": CODE };
   const probe = await fetch(`${BASE}/api/analyses`, { headers: head }).catch((e) => ({ ok: false, status: String(e) }));
-  const store = probe.ok ? (await probe.json()).store : null;
+  const status = probe.ok ? await probe.json() : null, store = status?.store ?? null;
   if (store !== "memory") {
     console.error(`Refusing: ${BASE} is not the in-memory sandbox (store: ${store ?? `unreachable, ${probe.status}`}). Start it with SUPABASE_URL= SUPABASE_SECRET_KEY= ACCESS_CODE=test-code.`);
     process.exit(1);
   }
   const maps = args.maps ? JSON.parse(await (await import("node:fs/promises")).readFile(args.maps, "utf8")) : MAPS;
-  // FX-S1: the Mentor answers only with its key set on the server; say whether it is, never what it is.
-  const fs = await import("node:fs/promises");
-  const envFile = new URL("../.env.local", import.meta.url);
-  const inFile = await fs.readFile(envFile, "utf8").then((t) => /^ANTHROPIC_API_KEY=\S+/m.test(t), () => false);
-  console.log(`ANTHROPIC_API_KEY: ${process.env.ANTHROPIC_API_KEY || inFile ? "set" : "NOT set"} (${process.env.ANTHROPIC_API_KEY ? "in this shell" : inFile ? "in apps/07-six-am/.env.local" : "neither in this shell nor in .env.local: Mentor questions will fail"}; the value is never printed)`);
+  // FX-S1, FN6: the Mentor answers only with its key set on the server: ask the server (a yes/no from the
+  // sandbox, never the value), not this shell.
+  console.log(`ANTHROPIC_API_KEY on the server: ${status?.mentorKey ? "set" : "NOT set: Mentor questions will fail; restart the server with it in its env"} (the value is never printed)`);
   for (const m of maps) {
     const r = await fetch(`${BASE}/api/maps?id=${encodeURIComponent(m.id)}`, { method: "PUT", headers: head, body: JSON.stringify({ map: m }) });
     console.log(`${r.ok ? "seeded" : `FAILED ${r.status}`}  ${m.title}: ${m.bpm} BPM, origin ${m.originSec} s, ${m.key} ${m.scale}, ${m.bars} bars, ${m.sections.length} sections`);

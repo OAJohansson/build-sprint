@@ -99,10 +99,13 @@ export const kickHz = (preset: DrumPresetId, v: number) => { const x = DRUM_PRES
  * (U5, user test 12 Nov): lengths in ms, the tone in Hz, the kick's note; the other knobs a word and
  * the value 0–100 ("snappy · 45"). The word before " · " is what the Mentor says (drumSuggestLine).
  */
+/** C4: a knob's word from a ladder of ten, one step per tenth of a turn. */
+export const ladder = (v: number, words: string[]) => words[Math.max(0, Math.min(words.length - 1, Math.floor(v * words.length)))];
+export const WIDTH_WORDS = ["centred", "narrow", "a little wide", "half wide", "wide", "wider", "very wide", "extra wide", "near full", "full width"];
+
 export function drumKnobWord(preset: DrumPresetId, id: DrumKnobId, v: number, bpm = 124): string {
   void bpm;
   const p = DRUM_PRESETS[preset], x = p.voice;
-  const pct = Math.round(v * 100);
   const ms = (s: number) => `${s >= 1 ? (Math.round(s * 10) / 10).toFixed(1) + " s" : `${Math.round((s * 1000) / 5) * 5} ms`}`;
   const hz = (f: number) => (f >= 1000 ? `${(Math.round(f / 100) / 10).toFixed(1)} kHz` : `${Math.round(f)} Hz`);
   switch (id) {
@@ -110,11 +113,12 @@ export function drumKnobWord(preset: DrumPresetId, id: DrumKnobId, v: number, bp
     case "decay": return ms(lerpExp(x.kind === "kick" ? x.decayS : (x as ClapVoice).decayS, v) * 3.5);
     case "length": return `${v < 0.3 ? "closed" : v < 0.45 ? "half-open" : "open"} · ${ms(lerpExp((x as HatVoice).lenS, v) * 3.5)}`;
     case "tone": return `${v < 0.34 ? "dark" : v < 0.5 ? "warm" : "bright"} · ${hz(isHat(x) ? lerpExp(x.hp, v) : lerpExp((x as ClapVoice).hz, v))}`;
-    case "click": return `${v < 0.3 ? "soft" : v < 0.7 ? "snappy" : "hard"} · ${pct}`;
-    case "drive": return `${v < 0.1 ? "clean" : v < 0.55 ? "warm" : "dirty"} · ${pct}`;
-    case "snap": return `${v < 0.3 ? "soft" : v < 0.7 ? "crisp" : "sharp"} · ${pct}`;
-    case "room": return `${v < 0.15 ? "dry" : v < 0.5 ? "small" : "big"} · ${pct}`;
-    case "width": return `${v < 0.3 ? "narrow" : v < 0.7 ? "wide" : "very wide"} · ${pct}`;
+    // C4: words only for the knobs with no real unit, ten steps so a small drag shows a change.
+    case "click": return ladder(v, ["no click", "faint", "soft", "gentle", "rounded", "snappy", "crisp", "sharp", "hard", "hardest"]);
+    case "drive": return ladder(v, ["clean", "barely warm", "warm", "warmer", "hot", "gritty", "crunchy", "dirty", "dirtier", "crushed"]);
+    case "snap": return ladder(v, ["soft", "gentle", "light", "firm", "crisp", "snappy", "sharp", "sharper", "cracking", "hardest"]);
+    case "room": return ladder(v, ["dry", "a touch of room", "tiny room", "small room", "medium room", "roomy", "large room", "big room", "hall", "big hall"]);
+    case "width": return ladder(v, WIDTH_WORDS);
   }
 }
 

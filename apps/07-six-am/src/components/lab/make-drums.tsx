@@ -238,29 +238,48 @@ const onShort = (cb: () => void) => {
 export const useShort = () => useSyncExternalStore(onShort, () => (matchMedia(SHORTER).matches ? 2 : matchMedia(SHORT).matches ? 1 : 0), () => 0);
 
 const W = 1000; // the pattern's drawing units across (scaled to the column)
+/** "Mentor:" lines start with a capital, whatever follows (C7). */
+export const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+/** C2: the off row's reason in two or three words, under its label. */
+export const shortWhy = (note: string) => (/bleed/i.test(note) ? "likely bleed" : /noise build|no repeating/i.test(note) ? "no steady beat" : note.split(":")[0].toLowerCase());
 
-/** One row's pattern: a block per bar, its hits as bars by velocity; doubtful rows' faint hits hollow. */
+/**
+ * C1 (critic, 13 Nov): a long loop draws as two lines of 8 bars in every row (same row height, thinner
+ * lines), so a 16-bar loop's hits keep a readable width instead of 1 px hairlines and a hat smear.
+ * `at(b)`: where bar position b (fractional) sits: its line and x in drawing units.
+ */
+export function stripGeom(bars: number, H = 38) {
+  const perLine = bars > 8 ? 8 : bars, lines = Math.ceil(bars / perLine), lgap = 4;
+  const gap = 8, bw = (W - gap * (perLine - 1)) / perLine, lh = (H - lgap * (lines - 1)) / lines;
+  const at = (b: number) => { const i = Math.min(bars - 1, Math.max(0, Math.floor(b))), line = Math.floor(i / perLine), c = i % perLine; return { line, x: c * (bw + gap) + (b - i) * bw, y: line * (lh + lgap) }; };
+  return { perLine, lines, gap, bw, lh, at };
+}
+
+/** One row's pattern: a block per bar, its hits as bars by velocity; an off row's marks drawn faint. */
 function Pattern({ hits, bars, lit, doubtful, empty }: { hits: { step: number; vel: number; faint: boolean }[]; bars: number; lit: boolean; doubtful: boolean; empty: boolean }) {
-  const H = 38, gap = bars > 8 ? 4 : 8, bw = (W - gap * (bars - 1)) / bars, sw = bw / 16;
+  const H = 38, g = stripGeom(bars, H), sw = g.bw / 16;
   return (
     <svg className={s.drPattern} viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden>
-      {Array.from({ length: bars }, (_, b) => (
-        <g key={b}>
-          <rect x={b * (bw + gap)} y={0} width={bw} height={H} fill="rgba(241,230,211,.04)" />
-          {[4, 8, 12].map((q) => <rect key={q} x={b * (bw + gap) + q * sw - 0.5} y={H * 0.25} width={1} height={H * 0.5} fill="rgba(241,230,211,.07)" />)}
-        </g>
-      ))}
+      {Array.from({ length: bars }, (_, b) => {
+        const p = g.at(b);
+        return (
+          <g key={b}>
+            <rect x={p.x} y={p.y} width={g.bw} height={g.lh} fill="rgba(241,230,211,.04)" />
+            {[4, 8, 12].map((q) => <rect key={q} x={p.x + q * sw - 0.5} y={p.y + g.lh * 0.25} width={1} height={g.lh * 0.5} fill="rgba(241,230,211,.07)" />)}
+          </g>
+        );
+      })}
       {!empty && hits.map((h) => {
-        const b = Math.floor(h.step / 16), x = b * (bw + gap) + (h.step % 16) * sw, hh = Math.max(4, H * (0.3 + 0.7 * h.vel)), ww = Math.max(1.5, sw - 1.5);
-        return doubtful && h.faint
-          ? <rect key={h.step} x={x + 1.25} y={H - hh + 0.5} width={Math.max(1, ww - 1)} height={hh - 1} fill="none" stroke="#f2b134" strokeWidth={1} strokeDasharray="2 2" vectorEffect="non-scaling-stroke" opacity={0.8} />
-          : <rect key={h.step} x={x + 0.75} y={H - hh} width={ww} height={hh} fill="#f2b134" opacity={lit ? 0.4 + 0.6 * h.vel : 0.45} />;
+        // ≥ 2 px at a 1440 px window (the strip is ~730 px for 1000 units): at least 3 units wide.
+        const p = g.at(Math.floor(h.step / 16)), x = p.x + (h.step % 16) * sw, hh = Math.max(3, g.lh * (0.3 + 0.7 * h.vel)), ww = Math.max(3, sw - 2);
+        // C3: an off row's marks are much fainter, solid, so they don't read as a real pattern.
+        return <rect key={h.step} x={x + 0.75} y={p.y + g.lh - hh} width={ww} height={hh} fill="#f2b134" opacity={doubtful ? 0.16 : lit ? 0.4 + 0.6 * h.vel : 0.45} />;
       })}
     </svg>
   );
 }
 
-/** The playhead over the three rows: where the loop is now, across bar blocks with their gaps. */
+/** The playhead over the rows: where the loop is now, across bar blocks with their gaps (one line of bars). */
 export function Playhead({ heardMs, loop, bars }: { heardMs: () => number; loop: LoopState; bars: number }) {
   const el = useRef<HTMLElement>(null);
   useLayoutEffect(() => {
@@ -282,6 +301,28 @@ export function Playhead({ heardMs, loop, bars }: { heardMs: () => number; loop:
   return <i ref={el} className={s.drHead} aria-hidden />;
 }
 
+/** C1: the playhead inside one drum strip, on the line of bars it is in (two lines on a 16-bar loop). */
+function TrackHead({ heardMs, loop, bars }: { heardMs: () => number; loop: LoopState; bars: number }) {
+  const el = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    let raf = 0;
+    const H = 38, g = stripGeom(bars, H);
+    const tick = () => {
+      const f = (heardMs() - loop.startMs) / (loop.endMs - loop.startMs);
+      const e = el.current;
+      if (e) {
+        const inside = f >= 0 && f < 1;
+        e.style.display = inside ? "" : "none";
+        if (inside) { const p = g.at(f * bars); e.style.left = `${(p.x / W) * 100}%`; e.style.top = `${(p.y / H) * 100}%`; e.style.height = `${(g.lh / H) * 100}%`; }
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [heardMs, loop.startMs, loop.endMs, bars]);
+  return <i ref={el} className={s.drTrackHead} aria-hidden />;
+}
+
 /** Until the knobs are live: what's happening and how long, said once (in the knob block). */
 function waitLine(m: DrumsModel, loop: LoopState | null, playing: boolean): string | null {
   if (m.readState === "ready") return null;
@@ -299,8 +340,7 @@ function waitLine(m: DrumsModel, loop: LoopState | null, playing: boolean): stri
 
 export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel; loop: LoopState | null; from: number | null; playing: boolean; heardMs: () => number }) {
   const bars = m.read?.d.bars ?? (loop ? Math.max(1, Math.round((loop.endMs - loop.startMs) / (60000 / m.bpm) / 4)) : 8);
-  const every = bars > 8 ? 4 : 1;
-  const gap = bars > 8 ? 4 : 8, bw = (W - gap * (bars - 1)) / bars;
+  const geo = stripGeom(bars), every = geo.perLine > 4 && geo.lines > 1 ? 4 : 1;
   const wait = waitLine(m, loop, playing);
   const off = !!wait;
   const short = useShort();
@@ -309,14 +349,15 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
   let line: React.ReactNode;
   const rowRead = m.read?.d.rows[row], rowOff = !!rowRead?.doubtful && !m.anyway.includes(row);
   // U4: a row that is off gets the reason, not knob tips.
-  if (rowOff) line = <>{`Mentor: this row is off. ${(rowRead?.why ?? "").replace(/: off in Mine$/, "")}.`}<br /><span className={s.faintLine}>Mine leaves it out. Press Play anyway to hear it.</span></>;
+  // C2: the row says "off" once (its label); the Mentor line says why, in one line.
+  if (rowOff) line = `Mentor: ${cap((rowRead?.why ?? "").replace(/: off in Mine$/, ""))}, so Mine leaves this row out.`;
   else if (m.suggesting === row) line = `Measuring the ${noun} against ${DRUM_PRESETS[snd.preset].name}…`;
   else if (!m.read?.targets[row]) line = <span className={s.faintLine}>No {rowTitle(row)} hits in this loop to compare with.</span>;
-  else if (!ticks) line = `Mentor: press Suggest for ${rowTitle(row)} to compare this preset with the original.`;
+  else if (!ticks) line = `Mentor: Press Suggest for ${rowTitle(row)} to compare this preset with the original.`;
   else {
     const closer = m.ticks[row]?.closer;
     const score = (d: number) => Math.round(100 * Math.exp(-d / ROW_SCORE_SCALE));
-    line = <>Mentor: {drumSuggestLine(snd.preset, snd.macros, ticks, noun, m.bpm)}
+    line = <>Mentor: {cap(drumSuggestLine(snd.preset, snd.macros, ticks, noun, m.bpm))}
       {closer ? <><br /><span className={s.faintLine}>{DRUM_PRESETS[closer.preset].name} gets closer (about {score(closer.distance)} against {score(closer.own)} at best here).</span> <button className={s.textBtn} onClick={() => m.setPreset(row, closer.preset)}>Try {DRUM_PRESETS[closer.preset].name}</button></>
         : m.ticks[row]?.moved && drumMoves(row, snd.macros, ticks).length > 0 ? <><br /><span className={s.faintLine}>{m.ticks[row]!.moved}</span></> : null}</>;
   }
@@ -326,7 +367,8 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
         <div className={s.drRow} data-head="">
           <span />
           <div className={s.drBars} aria-hidden>
-            {from !== null && Array.from({ length: bars }, (_, b) => b).filter((b) => b % every === 0).map((b) => <span key={b} style={{ left: `${((b * (bw + gap)) / W) * 100}%` }}>{from + b}</span>)}
+            {/* C1: on two lines, each mark names the bar on the top line and the one under it ("17 / 25"). */}
+            {from !== null && Array.from({ length: geo.perLine }, (_, b) => b).filter((b) => b % every === 0).map((b) => <span key={b} style={{ left: `${((b * (geo.bw + geo.gap)) / W) * 100}%` }}>{from + b}{geo.lines > 1 ? ` / ${from + b + geo.perLine}` : ""}</span>)}
           </div>
           <span />
         </div>
@@ -335,12 +377,13 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
           return (
             <div key={r} className={s.drRow} data-lit={lit ? "" : undefined}>
               <button className={s.drName} aria-pressed={lit} onClick={() => m.setOpen(r)}>
-                {DRUM_ROW_NAMES[r]}{doubtful && <span className={s.drOff}> off</span>}
+                <span>{DRUM_ROW_NAMES[r]}{doubtful && <span className={s.drOff}> off</span>}</span>
+                {/* C2: one short reason under the label, not over the strip. */}
+                {doubtful && !off && rr?.note && <small className={s.drWhy}>{shortWhy(rr.note)}</small>}
               </button>
               <div className={s.drTrack}>
                 <Pattern hits={rr?.hits ?? []} bars={bars} lit={lit} doubtful={doubtful} empty={off} />
-                {/* U2: why a row is off (or was), in the row itself. */}
-                {!off && rr?.doubtful && rr.note && <span className={s.drNote}>{rr.note}</span>}
+                {loop?.state === "memory" && !off && <TrackHead heardMs={heardMs} loop={loop} bars={bars} />}
               </div>
               <div className={s.drSlot}>
                 {!off && rr?.doubtful
@@ -352,7 +395,6 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
             </div>
           );
         })}
-        {loop?.state === "memory" && !off && <div className={s.drHeadBox}><Playhead heardMs={heardMs} loop={loop} bars={bars} /></div>}
       </div>
       <div className={s.drBlock}>
         <span className={s.drLabel}>{DRUM_ROW_NAMES[row]}</span>
@@ -368,8 +410,9 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
             <p className={s.suggest} aria-live="polite">{line}</p>
             {/* P6: local analysis by synthesis; it only moves the gold ticks. */}
             {/* U10: once the ticks are placed for these knobs it is a plain note, not a greyed button. */}
-            {rowOff ? null : m.suggestedNow[row] && m.suggesting !== row
-              ? <span className={s.drPlaced} role="status">Ticks placed</span>
+            {/* C5: once placed, the Mentor line already talks about the ticks: no extra "Ticks placed". */}
+            {rowOff || (m.suggestedNow[row] && m.suggesting !== row)
+              ? null
               : <button className={s.ghost} onClick={() => m.suggestNow(row)} disabled={!m.read?.targets[row] || m.suggesting !== null}
                 title="Places gold ticks where the knobs come closest to the original; it never turns a knob">{m.suggesting === row ? "Suggesting…" : `Suggest for ${rowTitle(row)}`}</button>}
           </div>
@@ -452,13 +495,12 @@ export function DrumsCheck({ m }: { m: DrumsModel }) {
 export function DrumsSaveBar({ m }: { m: DrumsModel }) {
   const row = m.open;
   const label = `Save ${drumNoun(m.sounds[row].preset)}`;
-  const off = !m.on[row] && m.readState === "ready";
   return (
     <div className={s.saveBar}>
       <label className={s.saveLabel} htmlFor="save-name">Name</label>
       <input id="save-name" name="sound-name" autoComplete="off" spellCheck={false} className={s.input} value={m.name} maxLength={60} onChange={(e) => m.setName(e.target.value)} disabled={m.readState !== "ready"} />
       <span className={s.facts} title={m.tags.join(" · ")}>{m.tags.join(" · ")}</span>
-      <span className={s.saved} role="status">{m.saved.state === "error" ? m.saved.text : off ? `This row is off in Mine` : m.saved.savedAs && m.saved.action === "none" ? `Saved as ${m.saved.savedAs}` : ""}</span>
+      <span className={s.saved} role="status">{m.saved.state === "error" ? m.saved.text : m.saved.savedAs && m.saved.action === "none" ? `Saved as ${m.saved.savedAs}` : ""}</span>
       <button className={s.gold} onClick={() => void m.save()} disabled={!m.canSave}>{m.saved.state === "saving" ? "Saving…" : label}</button>
     </div>
   );

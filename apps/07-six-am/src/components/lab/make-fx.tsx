@@ -13,7 +13,7 @@ import { FX_KNOBS, FX_KNOB_SPECS, FX_NOUN, FX_PRESETS, FX_ROWS, FX_ROW_ABOUT, FX
 import { isFxSound, saveAction, soundId, suggestFxName, suggestFxTags, type FxSound } from "@/lib/make/library";
 import { ApiError, mentorApi } from "@/lib/mentor/client";
 import { Knob } from "@/components/ui/knob";
-import { Playhead, useShort } from "./make-drums";
+import { Playhead, cap, useShort } from "./make-drums";
 import s from "./lab.module.css";
 
 const loopKeyOf = (l: LoopState | null) => (l?.state === "memory" ? `${Math.round(l.startMs)}-${Math.round(l.endMs)}` : null);
@@ -200,7 +200,8 @@ function shapeOf(row: FxRow, place: FxPlan[FxRow] | null, bars: number) {
   const fallSide = x1 + ROOM <= W ? right : x >= ROOM ? left : { tx: x1 - 10, end: true };
   if (row === "impact") return { d: `M${x} 2 L${x + 8} 2 L${x1} ${H * 0.85} L${x1} ${H} L${x} ${H} Z`, ...fallSide };
   if (row === "down") return { d: `M${x} 2 L${x1} ${H} L${x} ${H} Z`, ...fallSide };
-  return { d: `M${x} ${H} L${x1} 2 L${x1} ${H} Z`, ...(x >= ROOM ? left : x1 + ROOM <= W ? right : { tx: x + 10, end: false }) };
+  // FN2: a riser's label goes after its high end when there's room (it reads into the next section), else before it.
+  return { d: `M${x} ${H} L${x1} 2 L${x1} ${H} Z`, ...(x1 + ROOM <= W ? right : x >= ROOM ? left : { tx: x + 10, end: false }) };
 }
 
 /** One row's shape where it sits: a hit falling off, a fall, a rise; its bars written beside it (fold-fx). */
@@ -238,9 +239,9 @@ export function FxMiddle({ m, loop, from, playing, heardMs }: { m: FxModel; loop
   let line: React.ReactNode;
   if (!meas) line = null;
   // FX-F3: nothing measured still leaves something to aim for: a typical start for a house drop.
-  else if (!meas.ticks) line = <>Mentor: {meas.heard}, so no ticks. A house drop often uses {FX_TYPICAL[row].say}.{" "}
+  else if (!meas.ticks) line = <>Mentor: {cap(meas.heard)}, so no ticks. A house drop often uses {FX_TYPICAL[row].say}.{" "}
     <button className={s.textBtn} onClick={() => m.tryTypical(row)}>Try it</button><br /><span className={s.faintLine}>Then shape it by ear with A/B.</span></>;
-  else line = <>Mentor: {fxLine(snd.preset, snd.macros, meas.ticks)}<br /><span className={s.faintLine}>Heard: {meas.heard}.</span></>;
+  else line = <>Mentor: {cap(fxLine(snd.preset, snd.macros, meas.ticks))}<br /><span className={s.faintLine}>Heard: {meas.heard}.</span></>;
   return (
     <div className={s.drums}>
       <div className={s.drRows} role="group" aria-label="FX rows">
@@ -276,8 +277,7 @@ export function FxMiddle({ m, loop, from, playing, heardMs }: { m: FxModel; loop
         {wait ? <p className={s.drWait} role="status">{wait}</p> : (
           <div className={s.drSuggest}>
             <p className={s.suggest} aria-live="polite">{line}</p>
-            {/* The measure is made with the read; the ticks are placed at once (gold ticks only). */}
-            {meas?.ticks ? <span className={s.drPlaced} role="status">Ticks placed</span> : null}
+            {/* C5: the ticks are placed with the read and the Mentor line talks about them: no "Ticks placed". */}
           </div>
         )}
       </div>
@@ -354,7 +354,7 @@ export function FxSaveBar({ m }: { m: FxModel }) {
   return (
     <div className={s.saveBar}>
       <label className={s.saveLabel} htmlFor="save-name">Name</label>
-      <input id="save-name" name="sound-name" autoComplete="off" spellCheck={false} className={s.input} value={m.name} maxLength={60} onChange={(e) => m.setName(e.target.value)} disabled={m.readState !== "ready"} />
+      <input id="save-name" name="sound-name" autoComplete="off" spellCheck={false} className={`${s.input} ${s.fxName}`} value={m.name} maxLength={60} onChange={(e) => m.setName(e.target.value)} disabled={m.readState !== "ready"} />
       <span className={s.facts} title={m.tags.join(" · ")}>{m.tags.join(" · ")}</span>
       <span className={s.saved} role="status">{m.saved.state === "error" ? m.saved.text : m.saved.savedAs && m.saved.action === "none" ? `Saved as ${m.saved.savedAs}` : ""}</span>
       <button className={s.gold} onClick={() => void m.save()} disabled={!m.canSave}>{m.saved.state === "saving" ? "Saving…" : `Save ${FX_NOUN[m.open]}`}</button>

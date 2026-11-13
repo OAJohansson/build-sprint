@@ -5,6 +5,7 @@
 // Make's worker, the Studio and the tests; noise is seeded, so a sound renders the same every time.
 import { midiToHz, pitchClass } from "@/lib/synths/theory";
 import { secondsPer16th, type Rendered } from "./render";
+import { WIDTH_WORDS, ladder } from "./drum-synth";
 
 export type FxRow = "impact" | "down" | "riser";
 export const FX_ROWS: FxRow[] = ["impact", "down", "riser"];
@@ -58,7 +59,8 @@ export function clampFxMacros(id: FxPresetId, v: Partial<Record<string, unknown>
 export const fxBars = (v: number) => Math.pow(2, 4 * v - 1);
 /** Octaves the Downlifter falls: ½ … 3. */
 export const fxDropOct = (v: number) => 0.5 + 2.5 * v;
-const fmtBars = (b: number) => (b < 0.75 ? "½ bar" : b < 1.4 ? "1 bar" : `${Math.round(b * 10) / 10} bars`);
+// C4: bars to a tenth, so every small drag of a length knob shows.
+const fmtBars = (b: number) => { const r = Math.round(b * 10) / 10; return r === 1 ? "1 bar" : `${r} bars`; };
 
 export const FX_KNOB_SPECS: Record<FxKnobId, { name: string; explain: string }> = {
   size: { name: "Size", explain: "How big the hit is: a tap, up to a wall of sound with a big room." },
@@ -73,13 +75,13 @@ export const FX_KNOB_SPECS: Record<FxKnobId, { name: string; explain: string }> 
 /** The word under an FX knob, fine enough that a drag shows a change. */
 export function fxKnobWord(id: FxPresetId, k: FxKnobId, v: number): string {
   void id;
-  const pct = Math.round(v * 100);
+  // C4: a real unit where there is one (bars, octaves), else words in ten steps; never a bare number.
   switch (k) {
-    case "size": return `${v < 0.34 ? "small" : v < 0.67 ? "medium" : "big"} · ${pct}`;
-    case "tone": return `${v < 0.34 ? "dark" : v < 0.67 ? "mid" : "bright"} · ${pct}`;
-    case "tail": case "length": case "rise": { const b = fxBars(v); return `${fmtBars(b)} · ${pct}`; }
-    case "drop": { const o = fxDropOct(v); return `${o < 0.75 ? "½ octave" : o < 1.25 ? "1 octave" : `${Math.round(o * 10) / 10} octaves`} · ${pct}`; }
-    case "width": return `${v < 0.3 ? "narrow" : v < 0.7 ? "wide" : "very wide"} · ${pct}`;
+    case "size": return ladder(v, ["tiny", "small", "modest", "medium", "solid", "large", "big", "huge", "massive", "wall of sound"]);
+    case "tone": return ladder(v, ["darkest", "dark", "dusky", "warm", "soft", "clear", "bright", "brighter", "airy", "airiest"]);
+    case "tail": case "length": case "rise": return fmtBars(fxBars(v));
+    case "drop": { const o = Math.round(fxDropOct(v) * 10) / 10; return `${o} octave${o === 1 ? "" : "s"}`; }
+    case "width": return ladder(v, WIDTH_WORDS);
   }
 }
 
@@ -107,7 +109,8 @@ export function fxPlan(from: number, loopBars: number, sectionStarts: number[], 
   return {
     impact: { atBar: hit, bars: tail, label: lab(hit, hit + 1) },
     down: { atBar: hit, bars: fall, label: lab(hit, hit + fall) },
-    riser: { atBar: end - rise, bars: rise, label: lab(Math.floor(end - rise), end) },
+    // FN2: the bars the shape covers as the knob says it (a 5-bar rise into bar 57 is "bars 52–56").
+    riser: { atBar: end - rise, bars: rise, label: lab(Math.max(0, Math.round(end - rise)), end) },
   };
 }
 

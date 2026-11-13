@@ -14,7 +14,8 @@ export async function GET(request: Request) {
   const id = idOf(request);
   try {
     // store: "memory" | "supabase", so the dev-only demo filter applies only to the memory store.
-    if (!id) return Response.json({ analyses: await g.store.listAnalyses(), store: g.store.kind });
+    // FN6: the sandbox only also says whether the Mentor's key is set on this server (a yes/no, never the value).
+    if (!id) return Response.json({ analyses: await g.store.listAnalyses(), store: g.store.kind, ...(g.store.kind === "memory" ? { mentorKey: !!process.env.ANTHROPIC_API_KEY } : {}) });
     const analysis = await g.store.getAnalysis(id);
     return analysis ? Response.json({ analysis }) : Response.json({ error: "That result doesn't exist." }, { status: 404 });
   } catch (error) {

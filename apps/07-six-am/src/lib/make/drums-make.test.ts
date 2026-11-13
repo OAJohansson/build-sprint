@@ -25,7 +25,8 @@ describe("the drum synth", () => {
     // U5: every knob's word changes on a small drag (finer words: ms, Hz, or the value).
     for (const id of DRUM_PRESET_IDS) for (const k of ROW_KNOBS[DRUM_PRESETS[id].row]) {
       if (k === "tune") continue; // the note moves in semitones; its Hz shows the drag
-      expect(drumKnobWord(id, k, 0.5), `${id} ${k}`).not.toBe(drumKnobWord(id, k, 0.55));
+      expect(drumKnobWord(id, k, 0.5), `${id} ${k}`).not.toBe(drumKnobWord(id, k, 0.6));
+      expect(drumKnobWord(id, k, 0.5), `${id} ${k}`).not.toMatch(/· \d+$/); // C4: no bare number
     }
   });
 

@@ -418,3 +418,21 @@
 /* Slice 3, FX (fold-fx): each row's bars written beside its shape, inside the strip. */
 .fxLabel { position: absolute; top: 50%; font-size: 12px; color: var(--muted); white-space: nowrap; pointer-events: none; }
 .fxLabel[data-lit] { color: var(--ink); }
+
+/* Final polish (critic 13 Nov, C1–C7). C1: strips run to ~950 px (a narrower preset slot; every lane
+   keeps the same width so bars line up down the rows and under the bar numbers); the drum playhead
+   sits in each strip, on the line of bars it is in. */
+.drRow { grid-template-columns: 156px minmax(0, 1fr) 112px; gap: 14px; }
+.drHeadBox { left: calc(156px + 14px); right: calc(112px + 14px); }
+.drPreset { max-width: 112px; overflow: hidden; text-overflow: ellipsis; }
+.drTrackHead { position: absolute; width: 1.5px; background: #fff; pointer-events: none; }
+/* C2: an off row: "Kick off" and one short reason under it. */
+.drName { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 2px; line-height: 1.2; }
+.drWhy { font-size: 11.5px; color: var(--faint); }
+/* C4: the knob's value one step bigger, at ≥ 4.5:1 (Drums, FX; the Bass room is untouched). */
+.drKnobs [role="slider"] small { font-size: 11.5px; color: var(--muted); }
+/* C6: a quiet link (the "comes next" line): neutral, underlined, not gold. */
+.quietLink { background: none; border: 0; padding: 0; font: 500 12px var(--f-mono); color: var(--muted) !important; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #5a4f45; margin-left: 8px; min-height: 28px; }
+@media (hover: hover) and (pointer: fine) { .quietLink:hover { color: var(--ink) !important; } }
+/* C7: the FX name field grows with its name, up to the room there is. */
+.saveBar .fxName { flex: 0 1 auto; field-sizing: content; min-width: 340px; max-width: 440px; }

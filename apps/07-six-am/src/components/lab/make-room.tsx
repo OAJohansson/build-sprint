@@ -325,7 +325,7 @@ export function MakeRoom(p: RoomProps) {
         <div className={s.fam} role="tablist" aria-label="What to make">
           {FAMILIES.map((f) => (
             <button key={f.id} role="tab" aria-selected={family === f.id} className={s.famTab} onClick={() => p.onFamily(f.id)}>
-              <i style={{ background: f.color }} aria-hidden />{f.name}
+              <i style={{ background: f.color }} aria-hidden />{f.name}{f.id === "melody" && !MELODY_ON && <em>next</em>}
             </button>
           ))}
           <span className={s.famTab} data-off="" aria-disabled="true" title="Vocals come later">Vocals<em>not yet</em></span>
@@ -372,7 +372,7 @@ export function MakeRoom(p: RoomProps) {
       {family === "drums" && <DrumsSaveBar m={p.drums} />}
       {family === "melody" && MELODY_ON && <MelodySaveBar m={p.melody} />}
       {family === "fx" && <FxSaveBar m={p.fx} />}
-      <MentorRail turns={p.turns} part={part} noun={family === "melody" ? "the melody" : family === "fx" ? "the drop" : undefined} bar={p.bar} onAsk={p.onAsk} onRetry={p.onRetry} onSeek={p.onSeek} busy={p.busy} note={p.note} />
+      <MentorRail turns={p.turns} part={part} askOff={later} noun={family === "melody" ? "the melody" : family === "fx" ? "the drop" : undefined} bar={p.bar} onAsk={p.onAsk} onRetry={p.onRetry} onSeek={p.onSeek} busy={p.busy} note={p.note} />
     </div>
   );
 }
@@ -384,7 +384,8 @@ function LaterFamily({ family, onBass }: { family: Family; onBass: () => void })
     : family === "fx"
       ? "FX come after melody: risers, downlifters and impacts timed to the section, in key."
       : "Vocals aren't in Make yet: the words and the voice are the artist's.";
-  return <p className={s.makeQuiet}>{text} <button className={s.makeText} onClick={onBass}>Make a bass instead</button></p>;
+  // C6: a neutral link here (gold is for the one main action).
+  return <p className={s.makeQuiet}>{text} <button className={s.quietLink} onClick={onBass}>Make a bass instead</button></p>;
 }
 
 /**
@@ -625,7 +626,7 @@ function SaveBar({ m }: { m: MakeModel }) {
 }
 
 /** Make's Mentor rail (handoff §Make 9): the same per-track lab thread as Listen, in order, newest at the bottom. */
-function MentorRail({ turns, part, noun: nounOverride, bar, onAsk, onRetry, onSeek, busy, note }: { turns: ThreadTurn[]; part: LabPart; noun?: string; bar: number; onAsk: (q: string, bar: number) => void; onRetry: (id: string) => void; onSeek: (bar: number) => void; busy: boolean; note: string | null }) {
+function MentorRail({ turns, part, noun: nounOverride, askOff, bar, onAsk, onRetry, onSeek, busy, note }: { turns: ThreadTurn[]; part: LabPart; noun?: string; askOff?: boolean; bar: number; onAsk: (q: string, bar: number) => void; onRetry: (id: string) => void; onSeek: (bar: number) => void; busy: boolean; note: string | null }) {
   const list = useRef<HTMLDivElement>(null);
   const last = turns.at(-1);
   useEdgeFades(list, [turns.length]);
@@ -645,13 +646,14 @@ function MentorRail({ turns, part, noun: nounOverride, bar, onAsk, onRetry, onSe
   const noun = nounOverride ?? partNoun(part.id);
   return (
     <aside className={s.mentorCol} aria-label="Mentor">
-      <span className={s.ctx}>Mentor, on {noun}</span>
+      <span className={s.ctx}>{askOff ? "Mentor" : `Mentor, on ${noun}`}</span>
       <div className={s.list} ref={list}>
-        {turns.length === 0 && <p className={s.facts}>No questions yet. Ask about {noun}: the answer is also pinned at bar {bar} on the map.</p>}
+        {/* FN5: a tab Make doesn't build yet (Melody this phase, Vocals) has nothing to ask about here. */}
+        {turns.length === 0 && <p className={s.facts}>{askOff ? "Ask in Bass, Drums or FX, or about any part in Listen." : `No questions yet. Ask about ${noun}: the answer is also pinned at bar ${bar} on the map.`}</p>}
         {turns.map((x, i) => <Turn key={x.id} x={x} lines={6} onSeek={onSeek} onRetry={() => onRetry(x.id)} showFacts={x.facts !== turns[i + 1]?.facts} />)}
       </div>
       <div className={s.askBar}>
-        <Composer placeholder={`Ask about ${noun}…`} onAsk={(q) => onAsk(q, bar)} disabled={busy} />
+        {!askOff && <Composer placeholder={`Ask about ${noun}…`} onAsk={(q) => onAsk(q, bar)} disabled={busy} />}
         {note && <p className={s.facts}>{note}</p>}
       </div>
     </aside>

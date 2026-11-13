@@ -306,8 +306,8 @@ function makeLines(mk: LabMake, name: string): string[] {
   return [
     `[make] They are in Make, building their own ${name.toLowerCase()} on Six AM's synth beside the looped part, comparing A (the original part) and B (theirs) at the same loudness. Preset ${p.name} (${p.tags.join(", ")}): ${p.about} Knobs as shown: ${at(mk.macros)}.\n${MACRO_IDS.map((id) => `- ${MACRO_SPECS[id].name}: ${MACRO_SPECS[id].explain}`).join("\n")}`,
     mk.ticks
-      ? `[make] Suggest settings (local patch matching against the looped part's measurements, not your call) puts gold ticks at: ${at(mk.ticks)}. Talk about these knobs by name; you can't hear their sound either.`
-      : `[make] No gold ticks yet. Talk about the knobs by name; you can't hear their sound either.`,
+      ? `[make] Suggest settings (local patch matching against the looped part's measurements, not your call) puts gold ticks at: ${at(mk.ticks)}. Answer about these knobs by name, from the numbers.`
+      : `[make] No gold ticks yet. Answer about the knobs by name, from the numbers.`,
   ];
 }
 
@@ -333,7 +333,7 @@ function makeRowLines(r: LabMakeRow): string[] {
     `[make] They are in Make, building ${what}. The open row is ${row}: preset ${name} (${about}). Knobs: ${at(r.knobs)}.`,
     r.off ? `[make] This row is off in their sound: ${r.note ?? "the reading thinks it's bleed"}. They can press Play anyway.` : "",
     !r.off && r.note && r.family === "fx" ? `[make] Measured from the original at that moment (numbers, not your call): ${r.note}.` : "",
-    r.ticks ? `[make] Gold ticks (a local measure against the original, not your call) at: ${at(r.ticks)}. Talk about these knobs by name; you can't hear their sound either.` : `[make] No gold ticks for this row. Talk about the knobs by name; you can't hear their sound either.`,
+    r.ticks ? `[make] Gold ticks (a local measure against the original, not your call) at: ${at(r.ticks)}. Answer about these knobs by name, from the numbers.` : `[make] No gold ticks for this row. Answer about the knobs by name, from the numbers.`,
   ].filter(Boolean);
 }
 

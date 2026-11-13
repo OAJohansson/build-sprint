@@ -21,7 +21,10 @@ const L = links.map((l) => {
   if (pair.includes(-1)) throw new Error(`link ${l.from} → ${l.to} names a school that is not in schools.json`);
   return pair;
 });
-const TARGET = 47, MINSEP = 38;
+// Link length to aim for and the closest two schools may sit, in degrees. The design used 47 / 38 for 24 schools
+// and 37 links; at 23 schools and 57 links that crowded each school's neighbours onto one side. 60 / 42 gave the
+// fewest label collisions over all focuses (11, against 26 at 47 / 38). Override to experiment: TARGET=55 MINSEP=40.
+const TARGET = Number(process.env.TARGET ?? 60), MINSEP = Number(process.env.MINSEP ?? 42);
 function energy(P) {
   let e = 0;
   for (const [a, b] of L) { const d = ang(P[a], P[b]); e += Math.max(0, d - TARGET) ** 2 * 2.5; }

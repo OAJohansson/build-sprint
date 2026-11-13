@@ -3,7 +3,7 @@
 // The app's state: what is in focus, what is open in the card, and the visit history.
 // Both the desktop globe and the phone screen render from it; CSS shows one of them.
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { getThinker } from "@/lib/content";
+import { getSchool, getThinker } from "@/lib/content";
 import { addVisit, type Visit } from "@/lib/visits";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { GlobeView } from "./globe-view";
@@ -33,7 +33,13 @@ export function Meander() {
   const [thinker, setThinker] = useState<string | null>(null);
   const [openTheme, setOpenTheme] = useState<number | null>(null);
   const [threadOpen, setThreadOpen] = useState(false);
-  const [visits, setVisits] = useLocalStorage<Visit[]>(VISITS_KEY, NO_VISITS);
+  const [stored, setVisits] = useLocalStorage<Visit[]>(VISITS_KEY, NO_VISITS);
+  // Visits to schools or thinkers no longer in the content (ids change when the content is re-imported)
+  // stay in storage but don't count or show.
+  const visits = useMemo(
+    () => (Array.isArray(stored) ? stored : NO_VISITS).filter((v) => (v.kind === "school" ? getSchool(v.id) : getThinker(v.id))),
+    [stored],
+  );
 
   const record = useCallback(
     (kind: Visit["kind"], id: string) => setVisits((v) => addVisit(Array.isArray(v) ? v : [], kind, id)),

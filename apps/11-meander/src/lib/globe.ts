@@ -65,6 +65,19 @@ export function emptiest(vs: Vec3[]): Vec3 {
   return best;
 }
 
+// Costs, highest first (handoff "Where a label sits"). With 23 real schools the field is denser than the
+// mockups, so the steps are far apart: a label never overlaps another label, the title, the card, the header
+// or the screen edge if any other place exists; then it avoids covering a dot; then poking past the rim
+// (critic: flip it to the inner side of its dot); then sitting nearer another school's dot; then threads.
+const OVERLAP = 100000;
+const COVER_DOT = 20000;
+const RIM_COST = 8000;
+const NEARER_DOT = 2500;
+const NEARER_BRIGHT = 9000;
+// Per thread sample under a label (× 14 for a thread from the focus). Lower than the design's 7: threads behind
+// a label are knocked out anyway, and keeping each name next to its own dot matters more.
+const THREAD = 3;
+
 export type Rect = { x: number; y: number; w: number; h: number };
 export type LabelInput = {
   id: string; x: number; y: number; r: number; pref: number; ord: number; w: number; h: number;
@@ -81,44 +94,73 @@ export type ThreadPoint = [number, number, number];
 export function placeLabels(
   nodes: LabelInput[], fixed: Rect[], pts: ThreadPoint[], C: [number, number], radius: number, W: number, H: number,
 ): Record<string, LabelPlace> {
-  const placed: Rect[] = [];
   const out: Record<string, LabelPlace> = {};
   const hit = (a: Rect, b: Rect, pad: number) => a.x < b.x + b.w + pad && b.x < a.x + a.w + pad && a.y < b.y + b.h + pad && b.y < a.y + a.h + pad;
   const cand: [number, number, number][] = [];
-  [9, 20, 32].forEach((gap, gi) => [0, 30, -30, 60, -60, 90, -90, 120, -120, 150, -150, 180].forEach((d, i) => cand.push([d, gap, i * 2 + gi * 9])));
-  for (const n of nodes.slice().sort((a, b) => a.ord - b.ord)) {
+  // 64 places: 16 directions (nearest "away from the centre" first) at four distances. The design had 36
+  // (12 × 3); 23 schools with longer real names needed the extra room.
+  const dirs = [0, ...[22.5, 45, 67.5, 90, 112.5, 135, 157.5].flatMap((d) => [d, -d]), 180];
+  // The two far rings are a last resort: a name far from its dot reads as someone else's.
+  const ringCost = [0, 9, 18, 40, 1500, 3000];
+  [9, 20, 32, 46, 64, 86].forEach((gap, gi) => dirs.forEach((d, i) => cand.push([d, gap, i * 1.5 + ringCost[gi]])));
+  type Best = LabelPlace & { cost: number; ci: number };
+  const score = (n: LabelInput, ci: number, others: Rect[]): Best => {
     const { w, h } = n;
-    let best: (LabelPlace & { cost: number }) | null = null;
-    for (const [d, gap, base] of cand) {
+    const [d, gap, base] = cand[ci];
+    {
       const g = n.r + gap;
       const a = ((n.pref + d) * Math.PI) / 180, c = Math.cos(a), s = Math.sin(a), ax = n.x + g * c, ay = n.y + g * s;
       const x = c > 0.38 ? ax : c < -0.38 ? ax - w : ax - w / 2, y = s > 0.38 ? ay : s < -0.38 ? ay - h : ay - h / 2;
       const rect = { x, y, w, h };
       let cost = base;
-      for (const p of placed) if (hit(rect, p, 6)) cost += 5000;
-      for (const p of fixed) if (hit(rect, p, 8)) cost += 5000;
+      for (const p of others) if (hit(rect, p, 6)) cost += OVERLAP;
+      for (const p of fixed) if (hit(rect, p, 8)) cost += OVERLAP;
       for (const m of nodes) {
         if (m === n) continue;
         const nx = Math.max(x, Math.min(m.x, x + w)), ny = Math.max(y, Math.min(m.y, y + h));
         const dm = Math.hypot(nx - m.x, ny - m.y);
-        if (dm < m.r + 8) cost += 4500; else if (dm < g + 10) cost += 2500;
+        if (dm < m.r + 8) cost += COVER_DOT;
+        // two schools one thread away (dot radius 6) must not seem to swap names (critic (b))
+        else if (dm < g + 10) cost += n.r >= 6 && m.r >= 6 ? NEARER_BRIGHT : NEARER_DOT;
       }
-      for (const k of [[x, y], [x + w, y], [x, y + h], [x + w, y + h]]) if (Math.hypot(k[0] - C[0], k[1] - C[1]) > radius - 4) cost += 450;
-      if (x < 8 || y < 8 || x + w > W - 8 || y + h > H - 8) cost += 3000;
-      for (const q of pts) if (q[0] > x - 3 && q[0] < x + w + 3 && q[1] > y - 3 && q[1] < y + h + 3) cost += 7 * q[2];
-      if (!best || cost < best.cost) {
-        best = {
-          cost, left: x - n.x, top: y - n.y, rect,
-          align: c > 0.38 ? "flex-start" : c < -0.38 ? "flex-end" : "center",
-          text: c > 0.38 ? "left" : c < -0.38 ? "right" : "center",
-        };
-      }
+      for (const k of [[x, y], [x + w, y], [x, y + h], [x + w, y + h]]) if (Math.hypot(k[0] - C[0], k[1] - C[1]) > radius - 4) cost += RIM_COST;
+      if (x < 8 || y < 8 || x + w > W - 8 || y + h > H - 8) cost += OVERLAP;
+      for (const q of pts) if (q[0] > x - 3 && q[0] < x + w + 3 && q[1] > y - 3 && q[1] < y + h + 3) cost += THREAD * q[2];
+      return {
+        cost, ci, left: x - n.x, top: y - n.y, rect,
+        align: c > 0.38 ? "flex-start" : c < -0.38 ? "flex-end" : "center",
+        text: c > 0.38 ? "left" : c < -0.38 ? "right" : "center",
+      };
     }
-    if (best) {
-      placed.push(best.rect);
-      out[n.id] = { left: best.left, top: best.top, align: best.align, text: best.text, rect: best.rect };
+  };
+  const bestFor = (n: LabelInput, others: Rect[]): Best => {
+    let best = score(n, 0, others);
+    for (let ci = 1; ci < cand.length; ci++) {
+      const b = score(n, ci, others);
+      if (b.cost < best.cost) best = b;
     }
+    return best;
+  };
+  // Greedy first (schools one thread away, then by angle from the focus), as in the design ...
+  const order = nodes.slice().sort((a, b) => a.ord - b.ord);
+  const chosen = new Map<string, Best>();
+  for (const n of order) {
+    const b = bestFor(n, [...chosen.values()].map((c) => c.rect));
+    chosen.set(n.id, b);
   }
+  // ... then a few repair rounds: a label still in trouble moves, given where all the others ended up.
+  for (let round = 0; round < 4; round++) {
+    let moved = false;
+    for (const n of order) {
+      if (chosen.get(n.id)!.cost < NEARER_DOT) continue;
+      const others = order.filter((m) => m !== n).map((m) => chosen.get(m.id)!.rect);
+      const now = score(n, chosen.get(n.id)!.ci, others);
+      const b = bestFor(n, others);
+      if (b.cost < now.cost) { chosen.set(n.id, b); moved = true; } else chosen.set(n.id, now);
+    }
+    if (!moved) break;
+  }
+  for (const [id, b] of chosen) out[id] = { left: b.left, top: b.top, align: b.align, text: b.text, rect: b.rect };
   return out;
 }
 

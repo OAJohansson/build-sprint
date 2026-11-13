@@ -3,7 +3,7 @@
 // Desktop: the whole field as one globe turned to face the focused school (handoff "Where a school
 // sits", "Where a label sits"), with the card or the "Your thread" panel on the right.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { getSchool, getThinker, links, neighbours, positions, schools, type Neighbour } from "@/lib/content";
+import { getSchool, getThinker, hereLine, links, neighbours, positions, schools, splitName, type Neighbour } from "@/lib/content";
 import {
   FADE, FAR, R, centre, emptiest, placeLabels, project, samplePolyline, thread, vec,
   type LabelPlace, type Projected, type Rect, type ThreadPoint, type Vec3,
@@ -24,7 +24,7 @@ const facing = () => (overviewFacing ??= emptiest(Object.values(V)));
 const YARN: [number, number, number][] = [[0.9, -18, 0.05], [0.46, 28, 0.045], [0.2, -54, 0.05]];
 
 type Path = { key: string; d: string; cls: string; pts: Projected[]; focus: boolean };
-type Node = { id: string; name: string; p: Projected; r: number; near?: Neighbour; far: boolean };
+type Node = { id: string; name: string; label: string; p: Projected; r: number; near?: Neighbour; far: boolean };
 
 function useLayout(focus: string | null, hasCard: boolean) {
   return useMemo(() => {
@@ -41,14 +41,14 @@ function useLayout(focus: string | null, hasCard: boolean) {
         (p) => Math.hypot(p.x - pa.x, p.y - pa.y) > rOf(l.from) + 5 && Math.hypot(p.x - pb.x, p.y - pb.y) > rOf(l.to) + 5,
       );
       if (pts.length < 2) continue;
-      const cls = ["th", isF && "focus", isF && l.type === "against" && "against", !isF && Math.max(pa.theta, pb.theta) > FAR && "far"]
+      const cls = ["th", isF && "focus", isF && l.type === "against" && "against", isF && l.type === "built-then-against" && "mixed", !isF && Math.max(pa.theta, pb.theta) > FAR && "far"]
         .filter(Boolean).join(" ");
       paths.push({ key: `${l.from}-${l.to}`, d: "M" + pts.map((p) => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join("L"), cls, pts, focus: isF });
     }
     // Tab order (handoff): schools one thread away first, then the others nearest first.
     const nodes: Node[] = schools
       .filter((s) => s.id !== focus)
-      .map((s) => ({ id: s.id, name: s.name, p: P[s.id], r: rOf(s.id), near: near.get(s.id), far: P[s.id].theta > FAR }))
+      .map((s) => ({ id: s.id, name: s.name, label: splitName(s.name).short, p: P[s.id], r: rOf(s.id), near: near.get(s.id), far: P[s.id].theta > FAR }))
       .sort((a, b) => (a.near ? 0 : 1) - (b.near ? 0 : 1) || a.p.theta - b.p.theta);
     const threadPts: ThreadPoint[] = paths.flatMap((p) => samplePolyline(p.pts, p.focus ? 14 : 1));
     return { C, paths, nodes, threadPts };
@@ -76,6 +76,8 @@ export function GlobeView({ nav }: { nav: Nav }) {
 
   // Re-place labels when fonts arrive or the window changes (e.g. from phone width to desktop).
   const [tick, setTick] = useState(0);
+  // After a click turns the globe, a new label can land under the resting pointer; no hover look until it moves.
+  const [still, setStill] = useState(false);
   useEffect(() => {
     let alive = true;
     document.fonts?.ready.then(() => alive && setTick((t) => t + 1));
@@ -85,7 +87,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
   }, []);
 
   const key = `${focus}|${hasCard}|${showThinker ? thinker : ""}|${threadOpen}|${nav.openTheme}|${visits.length > 0}`;
-  const [placed, setPlaced] = useState<{ key: string; map: Record<string, LabelPlace>; ko: Rect[] } | null>(null);
+  const [placed, setPlaced] = useState<{ key: string; map: Record<string, LabelPlace>; ko: Rect[]; fade: { cx: number; cy: number; rx: number; ry: number } | null } | null>(null);
 
   useLayoutEffect(() => {
     const stage = stageRef.current;
@@ -105,7 +107,12 @@ export function GlobeView({ nav }: { nav: Nav }) {
     });
     const map = placeLabels(inputs, fixed, threadPts, C, R, W, H);
     const ko = Object.values(map).map((p) => p.rect).concat(satRect ? [satRect] : []);
-    setPlaced({ key, map, ko });
+    // Threads from the focus fade out inside an oval round the title (and the thinker hanging under it);
+    // the design's 186 × 86 is the minimum, a title on two lines gets a taller one.
+    const t = rectOf(titleRef.current);
+    const box = t && satRect ? { x: Math.min(t.x, satRect.x), y: t.y, w: Math.max(t.x + t.w, satRect.x + satRect.w) - Math.min(t.x, satRect.x), h: satRect.y + satRect.h - t.y } : t;
+    const fade = box ? { cx: C[0], cy: box.y + box.h / 2, rx: Math.max(FADE.rx, box.w / 2 + 40), ry: Math.max(FADE.ry, box.h / 2 + 22) } : null;
+    setPlaced({ key, map, ko, fade });
   }, [key, tick, nodes, threadPts, C]);
 
   // Move keyboard focus to what just opened, so Tab continues from there into the card.
@@ -126,7 +133,15 @@ export function GlobeView({ nav }: { nav: Nav }) {
   return (
     <div className="desk">
       {/* Clicking empty space returns to the overview; Esc and the logo do the same for keyboard users. */}
-      <div className="stage" ref={stageRef} onClick={onStageClick}>
+      <div
+        className={still ? "stage still" : "stage"}
+        ref={stageRef}
+        onClick={onStageClick}
+        onMouseMove={still ? () => setStill(false) : undefined}
+        data-cx={C[0]}
+        data-cy={C[1]}
+        data-r={R}
+      >
         <svg className="threads" aria-hidden="true">
           <defs>
             <radialGradient id="lit" cx="34%" cy="28%" r="78%">
@@ -149,8 +164,8 @@ export function GlobeView({ nav }: { nav: Nav }) {
           </g>
           <mask id="ko" maskUnits="userSpaceOnUse" x="0" y="0" width={W} height={H}>
             <rect width={W} height={H} fill="#fff" />
-            {focus && (
-              <ellipse cx={C[0]} cy={C[1] + (showThinker ? 26 : 0)} rx={FADE.rx} ry={FADE.ry + (showThinker ? 30 : 0)} fill="url(#fade)" />
+            {focus && ready?.fade && (
+              <ellipse cx={ready.fade.cx} cy={ready.fade.cy} rx={ready.fade.rx} ry={ready.fade.ry} fill="url(#fade)" />
             )}
             {ready?.ko.map((p, i) => (
               <rect key={i} x={p.x - 5} y={p.y - 3} width={p.w + 10} height={p.h + 6} rx="6" fill="#000" />
@@ -159,7 +174,6 @@ export function GlobeView({ nav }: { nav: Nav }) {
           <g mask="url(#ko)">
             {paths.map((p) => <path key={p.key} className={p.cls} d={p.d} />)}
           </g>
-          {showThinker && <path className="satline" d={`M${C[0]} ${C[1] + 64}V${C[1] + 86}`} />}
         </svg>
 
         <header ref={headerRef}>
@@ -179,7 +193,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
             const pl = ready?.map[n.id];
             const cls = ["n", n.near && "t1", n.far && "back2", v && "v"].filter(Boolean).join(" ");
             return (
-              <button key={n.id} type="button" className={cls} style={{ left: round1(n.p.x), top: round1(n.p.y) }} onClick={() => nav.openSchool(n.id)}>
+              <button key={n.id} type="button" className={cls} style={{ left: round1(n.p.x), top: round1(n.p.y) }} onClick={() => { setStill(true); nav.openSchool(n.id); }} data-id={n.id}>
                 <i className="dot" style={{ width: 2 * n.r, height: 2 * n.r }} />
                 <span
                   className={pl ? "lb placed" : "lb"}
@@ -187,7 +201,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
                   style={pl ? { left: pl.left, top: pl.top, alignItems: pl.align, textAlign: pl.text } : undefined}
                 >
                   {n.near && <em>{n.near.verb}</em>}
-                  <b className={n.name.length > 20 ? "wrap" : undefined}>{n.name}</b>
+                  <b className={n.label.length > 20 ? "wrap" : undefined}>{n.label}</b>
                   {v && <span className="sr-only">, visited</span>}
                 </span>
               </button>
@@ -196,13 +210,14 @@ export function GlobeView({ nav }: { nav: Nav }) {
           {school && (
             <div className="title" ref={titleRef} style={{ left: C[0], top: C[1] }}>
               <i className="here" aria-hidden="true" />
-              <h1 tabIndex={-1} ref={titleH1}>{school.name}</h1>
-              <p>{school.dates ? `${school.dates} · ` : ""}you are here</p>
-            </div>
-          )}
-          {showThinker && thinkerData && (
-            <div className="sat" ref={satRef} style={{ left: C[0], top: C[1] + 96 }} aria-hidden="true">
-              <i />{thinkerData.name}
+              <h1 tabIndex={-1} ref={titleH1} aria-label={school.name}>{splitName(school.name).short}</h1>
+              <p>{hereLine(school)}</p>
+              {/* The open thinker hangs under the title on a short brass thread, however tall the title is. */}
+              {showThinker && thinkerData && (
+                <div className="sat" ref={satRef} aria-hidden="true">
+                  <i />{thinkerData.name}
+                </div>
+              )}
             </div>
           )}
         </main>

@@ -7,7 +7,7 @@ import linksFile from "@/content/links.json";
 import positionsFile from "@/content/positions.json";
 
 /** Where a claim comes from: a reference URL and the section that supports it. */
-export type Source = { url: string; section?: string };
+export type Source = { url: string; section?: string; quote?: string };
 
 export type Theme = {
   name: string;
@@ -28,6 +28,13 @@ export type School = {
   thinkers: string[];
   sources: Source[];
   sample?: boolean;
+  /** Not shown in the approved card design; kept for later and for graders. */
+  dateRange?: string;
+  era?: string;
+  description?: string;
+  debatable?: string | null;
+  reactedAgainst?: { text: string; sources: Source[] } | null;
+  questionSources?: Source[][];
 };
 
 export type Thinker = {
@@ -42,6 +49,8 @@ export type Thinker = {
   ideas: string[];
   /** A hand-written study prompt; when missing, one is built from the template below. */
   prompt?: string;
+  promptSources?: Source[];
+  ideaSources?: Source[][];
   sources: Source[];
   sample?: boolean;
 };
@@ -50,7 +59,11 @@ export type Thinker = {
 export type Link = {
   from: string;
   to: string;
-  type: "built" | "against";
+  /** "built-then-against": the newer school built on the older one, then pushed against it. */
+  type: "built" | "against" | "built-then-against";
+  /** A 2–4 word gloss from the research; not shown in the approved design. */
+  label?: string;
+  reason?: string;
   sources: Source[];
   sample?: boolean;
 };
@@ -83,8 +96,10 @@ export type Neighbour = { school: School; verb: string; against: boolean; link: 
 
 /** The verb a neighbour carries, seen from the focused school. */
 export function verbFor(link: Link, focus: string) {
-  if (focus === link.to) return link.type === "built" ? "built on" : "pushed against";
-  return link.type === "built" ? "grew from it" : "pushed back";
+  const newer = focus === link.to;
+  if (link.type === "built") return newer ? "built on" : "grew from it";
+  if (link.type === "against") return newer ? "pushed against" : "pushed back";
+  return newer ? "built on, then pushed against" : "grew from it, then pushed back";
 }
 
 /** Schools one thread away from `focus`, in link order. */
@@ -94,7 +109,7 @@ export function neighbours(focus: string): Neighbour[] {
     .map((l) => ({
       school: schoolMap.get(l.from === focus ? l.to : l.from)!,
       verb: verbFor(l, focus),
-      against: l.type === "against",
+      against: l.type !== "built",
       link: l,
     }));
 }
@@ -106,3 +121,13 @@ export function studyPrompt(t: Thinker): string {
   const ideas = t.ideas.length ? ` Cover these key ideas: ${t.ideas.join("; ")}.` : "";
   return `Teach me ${t.name}${school ? ` (${school.name})` : ""} as a short Socratic module. Start with the question ${t.short} was trying to answer and who they were reacting to.${ideas} Ask me one question at a time and finish with a five-question quiz.`;
 }
+
+/** "Critical Theory (Frankfurt School)" → { short: "Critical Theory", aside: "Frankfurt School" }. The globe and
+ * the title use the short name; the aside goes into the line under the title. */
+export function splitName(name: string): { short: string; aside: string } {
+  const m = name.match(/^(.*?)\s*\(([^)]*)\)\s*$/);
+  return m ? { short: m[1], aside: m[2] } : { short: name, aside: "" };
+}
+
+/** The line under a school's title: "Frankfurt School · 1923 – present · you are here". */
+export const hereLine = (s: School) => [splitName(s.name).aside, s.dates, "you are here"].filter(Boolean).join(" · ");

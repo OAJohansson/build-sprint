@@ -3,7 +3,7 @@
 // Phone (under 1024 wide): no globe, one school at a time (handoff "Phone", T8). The school screen
 // follows phone.png; the overview, thinker and "Your thread" screens reuse the card's contents.
 import { useEffect, useMemo, useRef } from "react";
-import { getSchool, getThinker, neighbours, schools } from "@/lib/content";
+import { getSchool, getThinker, hereLine, neighbours, schools, splitName } from "@/lib/content";
 import { visitedSchools } from "@/lib/visits";
 import { SchoolSections, ThinkerSections, ThreadSections } from "./card-parts";
 import { Mark } from "./mark";
@@ -44,8 +44,8 @@ export function PhoneView({ nav }: { nav: Nav }) {
     body = (
       <>
         <i className="here" aria-hidden="true" />
-        <h1 tabIndex={-1} ref={heading}>{school.name}</h1>
-        <p className="meta">{school.dates ? `${school.dates} · ` : ""}you are here</p>
+        <h1 tabIndex={-1} ref={heading} aria-label={school.name}>{splitName(school.name).short}</h1>
+        <p className="meta">{hereLine(school)}</p>
         {near.length > 0 && (
           <>
             <h2 className="psec">One thread away</h2>

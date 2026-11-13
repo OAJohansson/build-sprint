@@ -88,3 +88,38 @@ Cost: $0. Not checked:
 - By ear.
 - Pads beyond Lost 77–84 (no clean held-pad loop on these tracks).
 - Lead-note accuracy on Mason (no labels; I judged plausibility only).
+
+## 13 Nov, FX-R3 re-measure (after 12b82e9)
+
+Same setup: my own sandbox on :3017 and Chrome. I measured the live output over one loop, the
+same way as before: a K-weighted tap (high shelf +4 dB at 1.5 kHz, high-pass 38 Hz), ungated,
+before the quiet master.
+
+| Case | A (the drop as is) | B (Mine) | B − A | Bar |
+| --- | --- | --- | --- | --- |
+| Lost 73–80, drums under both on | −8.10 | −9.11 | **−1.01 dB** | within 1 dB |
+| Lost 73–80, drums under both off | −10.96 | −11.92 | **−0.96 dB** | within 1 dB |
+| Mason 69–76, bed on (control) | −14.37 | −14.29 | +0.08 dB | within 1 dB |
+| Mason 69–76, bed off (control) | −17.39 | −17.37 | +0.02 dB | within 1 dB |
+
+**FX-R3 is at the bar, not clearly inside it.**
+- With the bed it is 0.01 dB over; without it, 0.04 dB under. Both are within the precision of my
+  ungated meter.
+- The fix barely moved the gain: partsDb is −2.50 (was −2.53).
+- So the fix hasn't changed what plays on this loop: B is still about 1 dB quieter than A. Mason
+  stays within 0.1 dB.
+- I'd grade it borderline: a pass by the numbers without the bed, a 0.01 dB miss with it. The
+  owner's A/B on this loop is the fair tie-break.
+
+**Melody off (L247): pass.**
+- The Melody tab shows "Melody comes next: Make will read the chords and the lead of the loop and
+  play them with your own synth.", with "Make a bass instead".
+- `__sixamLab.melody` is gone. No `[make] melody` console line, no "melody-read" message reached
+  the worker (0 taps), and the dev log has no melody read.
+- Minor: the Mentor panel on that tab says "Mentor, on Other" and "Ask about Other…" (T140 says
+  "the melody").
+
+**Drums Z5 spot check: pass.** On Mason 17–24, Mine − original is 0.00 LU at the home presets and
+0.00 LU with Tight + Rim + Shaker.
+
+Cost $0. Server and Chrome stopped afterwards.

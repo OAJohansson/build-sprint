@@ -372,7 +372,7 @@ export function MakeRoom(p: RoomProps) {
       {family === "drums" && <DrumsSaveBar m={p.drums} />}
       {family === "melody" && MELODY_ON && <MelodySaveBar m={p.melody} />}
       {family === "fx" && <FxSaveBar m={p.fx} />}
-      <MentorRail turns={p.turns} part={part} noun={family === "melody" && MELODY_ON ? "the melody" : family === "fx" ? "the drop" : undefined} bar={p.bar} onAsk={p.onAsk} onRetry={p.onRetry} onSeek={p.onSeek} busy={p.busy} note={p.note} />
+      <MentorRail turns={p.turns} part={part} noun={family === "melody" ? "the melody" : family === "fx" ? "the drop" : undefined} bar={p.bar} onAsk={p.onAsk} onRetry={p.onRetry} onSeek={p.onSeek} busy={p.busy} note={p.note} />
     </div>
   );
 }

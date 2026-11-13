@@ -13,3 +13,4 @@
 | Share or download the map | No one to share with yet | Later |
 | Clear my history | A browser reset does it for now | Later |
 
+| Romanticism as a school on the globe | Left out of the 23 (L17) | Later |

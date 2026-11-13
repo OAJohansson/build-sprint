@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-13c",
+  "basis": "eval-content-2026-11-13-final.md",
+  "count": 8,
+  "items": [
+    {
+      "item": "enlightenment|tagline",
+      "actions": [
+        "rewrite"
+      ]
+    },
+    {
+      "item": "critical-theory|tagline",
+      "actions": [
+        "rewrite"
+      ]
+    },
+    {
+      "item": "stoicism|tagline",
+      "actions": [
+        "rewrite"
+      ]
+    },
+    {
+      "item": "post-structuralism|tagline",
+      "actions": [
+        "rewrite"
+      ]
+    },
+    {
+      "item": "neoplatonism|tagline",
+      "actions": [
+        "recite"
+      ]
+    },
+    {
+      "item": "scholasticism|Peter Abelard|study_prompt",
+      "actions": [
+        "recite"
+      ]
+    },
+    {
+      "item": "link|aristotle->socrates-plato",
+      "actions": [
+        "rewrite"
+      ]
+    },
+    {
+      "item": "link|stoicism->aristotle",
+      "actions": [
+        "rewrite"
+      ]
+    }
+  ]
+}

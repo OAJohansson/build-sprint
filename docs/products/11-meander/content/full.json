@@ -824,7 +824,7 @@
         "neighbour_name": "Aristotle and the Peripatetics",
         "direction": "in",
         "kind": "built_on_then_pushed_against",
-        "label": "Academy student, then Forms critic",
+        "label": "Plato's Academy, then the Forms criticised",
         "reason": "Aristotle studied in Plato's Academy before founding the Lyceum. Then: Aristotle criticised Plato's theory of Forms (it cannot explain change) and opposed Platonic dualism of soul and body.",
         "sources": [
           {
@@ -840,7 +840,7 @@
             "section": "11. Living Beings"
           }
         ],
-        "revised": "2026-11-13b"
+        "revised": "2026-11-13c"
       },
       {
         "neighbour": "epicureanism",
@@ -1313,7 +1313,7 @@
         "neighbour_name": "Socrates and Plato",
         "direction": "out",
         "kind": "built_on_then_pushed_against",
-        "label": "Academy student, then Forms critic",
+        "label": "Plato's Academy, then the Forms criticised",
         "reason": "Aristotle studied in Plato's Academy before founding the Lyceum. Then: Aristotle criticised Plato's theory of Forms (it cannot explain change) and opposed Platonic dualism of soul and body.",
         "sources": [
           {
@@ -1329,7 +1329,7 @@
             "section": "11. Living Beings"
           }
         ],
-        "revised": "2026-11-13b"
+        "revised": "2026-11-13c"
       },
       {
         "neighbour": "presocratics",
@@ -1355,7 +1355,7 @@
         "neighbour_name": "Stoicism",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "non-rational soul rejected",
+        "label": "the divided soul rejected",
         "reason": "Stoic psychology rejects the Platonic-Aristotelian idea of non-rational parts of the mature soul.",
         "sources": [
           {
@@ -1363,7 +1363,7 @@
             "section": "2.9 Psychology"
           }
         ],
-        "revised": "2026-11-13b"
+        "revised": "2026-11-13c"
       },
       {
         "neighbour": "neoplatonism",
@@ -2158,7 +2158,7 @@
     "id": "stoicism",
     "name": "Stoicism",
     "tagline": {
-      "text": "Live in agreement with nature, because virtue is the only good.",
+      "text": "Virtue is the only good, and living virtuously means living in agreement with nature.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/stoicism/",
@@ -2169,7 +2169,7 @@
           "section": "4.3 Indifferents"
         }
       ],
-      "revised": "2026-11-13b"
+      "revised": "2026-11-13c"
     },
     "era": "Ancient (Hellenistic and Roman)",
     "date_range": "c. 300 BCE onward (major figures through the 2nd century CE)",
@@ -2356,7 +2356,7 @@
         "neighbour_name": "Aristotle and the Peripatetics",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "non-rational soul rejected",
+        "label": "the divided soul rejected",
         "reason": "Stoic psychology rejects the Platonic-Aristotelian idea of non-rational parts of the mature soul.",
         "sources": [
           {
@@ -2364,7 +2364,7 @@
             "section": "2.9 Psychology"
           }
         ],
-        "revised": "2026-11-13b"
+        "revised": "2026-11-13c"
       },
       {
         "neighbour": "skepticism",
@@ -3519,9 +3519,13 @@
         {
           "url": "https://plato.stanford.edu/entries/neoplatonism/",
           "section": "1. Historical Orientation: Antiquity"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/neoplatonism/",
+          "section": "2. The One"
         }
       ],
-      "revised": "2026-11-13b"
+      "revised": "2026-11-13c"
     },
     "era": "Late antiquity",
     "date_range": "roughly mid-3rd – mid-7th century CE",
@@ -5112,9 +5116,13 @@
             {
               "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
               "section": "2.5 The Twelfth-Century Parisian Schools"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/abelard/",
+              "section": "intro"
             }
           ],
-          "revised": "2026-11-13b"
+          "revised": "2026-11-13c"
         },
         "revised": "2026-11-13"
       },
@@ -7034,7 +7042,7 @@
     "id": "enlightenment",
     "name": "The Enlightenment and Kant",
     "tagline": {
-      "text": "Trust in reason and science to question authority, ending in Kant's limits of reason.",
+      "text": "Reason and science used to question authority; near its end, Kant set out reason's limits.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/enlightenment/",
@@ -7049,7 +7057,7 @@
           "section": "2.2 Kant’s Copernican revolution in philosophy"
         }
       ],
-      "revised": "2026-11-13b"
+      "revised": "2026-11-13c"
     },
     "era": "Early modern",
     "date_range": "18th century (roots in the 16th–17th-century scientific revolution; Kant's Critique 1781; ends roughly with the 1790s)",
@@ -11644,7 +11652,7 @@
     "id": "critical-theory",
     "name": "Critical Theory (Frankfurt School)",
     "tagline": {
-      "text": "Marxist social philosophy that criticises domination and aims at emancipation.",
+      "text": "Marxist social philosophy that critiques society and aims at emancipation.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/critical-theory/",
@@ -11655,7 +11663,7 @@
           "section": "1.1 Origins and Generations"
         }
       ],
-      "revised": "2026-11-13b"
+      "revised": "2026-11-13c"
     },
     "era": "20th century",
     "date_range": "1923 (Institute for Social Research founded) – present",
@@ -12205,7 +12213,7 @@
     "id": "post-structuralism",
     "name": "Post-structuralism",
     "tagline": {
-      "text": "French thought that questions stable meaning, the self-present subject and foundations.",
+      "text": "French thought that questions stable meaning, the self-present subject and certainty.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/postmodernism/",
@@ -12216,7 +12224,7 @@
           "section": "1. Precursors"
         }
       ],
-      "revised": "2026-11-13b"
+      "revised": "2026-11-13c"
     },
     "era": "20th century",
     "date_range": "1960s onward (France)",

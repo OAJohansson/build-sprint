@@ -52,3 +52,39 @@ All "BP" rows below logged `(basic-pitch)`.
 
 The same Lost 69–76 loop, cross-correlated between this run's reads, sits 29–32 ms apart. A
 30 ms Z3 tolerance is sensitive to that; this run's Basic Pitch reads aligned at 0 ms.
+
+## Part 2: Mason riff, Z9, and the FX re-measures
+
+| Check | Bar | Measured | Result |
+| --- | --- | --- | --- |
+| MR-2: Mason riff loops → one Lead row (BP, fresh worker) | one Lead row | **6/6** reads are one Lead row and no Chords: 17–24 (34, 37 notes), 41–48 (31, 30), 57–64 (38), 81–88 (38). The pitches fit my spectrogram reading of the riff: 17–24 has G4 ×19, F4 ×11; 41–48 has G4 ×21, F4 ×6, A♯4 ×3. Mason has no hand labels, so note accuracy isn't scored | **Pass** |
+| M-F4 on Mason | stable over 2 reads | 17–24 and 41–48: Lead both times, never doubtful | **Pass** |
+| Z9: 0 bytes of the original; model from our own origin | 0 | 6,578 requests. The Basic Pitch model (`/models/basic-pitch/model.json`, `group1-shard1of1.bin`), the `@spotify/basic-pitch` chunk and every tfjs chunk are **GETs from localhost:3017**; no third-party model host. Bodies go only to `PUT /api/maps` (seed) and SoundCloud's own widget telemetry. Longest numeric array 108. The worker zeroes the resampled copy and the part copy | **Pass** |
+| FX-R1: impact verdict stable (Lost 73–80) | same verdict | **3/3** reads say "no clear hit". Riser and downlifter are "none" every time | **Pass** |
+| FX-R3: FX A/B within 1 dB (Lost 73–80) | within 1 dB | Live, K-weighted, over one loop: A −8.05 vs B −9.10 (**−1.05 dB**) with the bed; A −10.92 vs B −11.91 (**−0.99 dB**) without. partsDb −2.53, as before the fix | **Fail** (borderline: 0.05 over with the bed) |
+
+## Verdict for L245
+
+| Eval | Bar | Basic Pitch (fresh worker) | DSP reader (13 Nov) |
+| --- | --- | --- | --- |
+| Z3 Lost 69–76 (G7 stabs) | ≥ 70 % found, ≤ 20 % wrong | 13.1–13.5 %, wrong 6–11 % | 35.3–36.9 %, wrong 1–4 % |
+| Z3 Lost 77–84 | same | 57.7–61.3 %, wrong 22.5–25.0 % | 77.4–79.8 %, wrong 23.5–31.4 % |
+| One-line riff → Lead (MR-2) | Lead | 6/6 | 0/6 |
+| Doubtful verdict stable | same verdict | stable (3/3 and 2/2) | flips |
+| Works on every read | yes | **no** (BP-1: first read per worker only) | yes |
+| Cold time to knobs | ≤ 35 s | 50.4 s (16-bar default loop + 10 s first model load) | 21–38 s |
+
+**Basic Pitch doesn't reach the Z3 bar on the one real chord loop.** It is worse than the DSP
+reader there: it hears the G7 stab as a G2 line, and D and B are never found. It does fix the
+one-line riff (MR-2) and the doubtful verdict's stability.
+
+By L245's rule ("if Z3 still misses the bar, ship drums and FX and move melody to the next
+phase"), **Z3 misses the bar with both readers**.
+
+Even if Basic Pitch were kept for leads, BP-1 has to be fixed first: today it only reads the first
+loop per page.
+
+Cost: $0. Not checked:
+- By ear.
+- Pads beyond Lost 77–84 (no clean held-pad loop on these tracks).
+- Lead-note accuracy on Mason (no labels; I judged plausibility only).

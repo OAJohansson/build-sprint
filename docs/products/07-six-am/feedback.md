@@ -214,9 +214,9 @@ Details: `evals-runs/2026-11-13-melody-fx.md`. Melody: Z7 and M-F3 now pass; Z3,
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| MR-1 | major | Regression: the re-strike split makes the clean G7 stab loop "doubtful" (held pad rule) in 3 of 4 reads | trying Basic Pitch (L245) |
-| MR-2 | major | Mason's riff partials form 2–5-note "chords", so it never becomes Lead | trying Basic Pitch (L245) |
-| MR-3 | major | Z3 on the real separated part still 35–37 % (bar 70 %); the 7th found on 6 of 53 stabs | trying Basic Pitch (L245) |
+| MR-1 | major | Regression: the re-strike split makes the clean G7 stab loop "doubtful" (held pad rule) in 3 of 4 reads | next phase (L247) |
+| MR-2 | major | Mason's riff partials form 2–5-note "chords", so it never becomes Lead | next phase (L247) |
+| MR-3 | major | Z3 on the real separated part still 35–37 % (bar 70 %); the 7th found on 6 of 53 stabs | next phase (L247) |
 | FX-R1 | minor | Impact verdict flips on a borderline jump between reads | fixed (04ec937–b3ceb95) |
 | FX-R2 | major | FX rows longer than ~4 bars can't be saved (parser wants 1/2/4-bar patterns) | fixed (04ec937–b3ceb95) |
 | FX-R3 | minor | Lost 73–80: B about 1.0–1.1 dB quieter than A (gating vs a silent bar the riser fills) | fixed (04ec937–b3ceb95) |

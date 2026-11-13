@@ -107,3 +107,10 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | SoundCloud tab capture of other people's tracks | Capturing and separating someone else's track raises rights questions even when nothing is stored (rule C2 keeps originals in memory only, never stored, saved or uploaded) | Keep C2; make clear the output is the user's own sounds and tracks; check SoundCloud's terms and get legal advice before charging; consider the user's own files or licensed sources instead |
 | Stable Audio and Claude API costs per user | Free for the owner today on their own keys; a paid product pays per call | Per-user limits and pricing that covers the calls |
 | Make drums: flammed claps timed a little late (3 of 15 at 11 ms on Lost 21–28) | D-R1, L244; needs a real 1–2.8 kHz envelope of the flam | later |
+
+## Melody in Make (moved out of Phase 5, L247)
+
+| Idea | Why | When |
+| --- | --- | --- |
+| Melody / chords in Make: a note reader that gets real chord stabs right (≥ 70 % of chord notes on Lost in the Loop 69–76) | Plain DSP 35–37 %, Basic Pitch 13 % on the real separated part (13 Nov); Basic Pitch did read Mason's monophonic riff as one Lead row. Try: a chord-recognition model on the separated part, a polyphonic transcriber trained on synths, or reading chords as names (root + quality) and voicing them ourselves. Everything else (poly synth, presets, Suggest, A/B, Save to Chords/Pads/Lead) is built behind the flag | next phase |
+| Basic Pitch for leads only | It read single-note riffs well (6/6) but disposed its own tensors after the first read (fix the tf scope first) | with the above |

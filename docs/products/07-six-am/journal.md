@@ -779,3 +779,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Basic Pitch in (bf7164c):** fixture 72.3 → 91.5 % found; Mason riff → Lead; clean stabs no longer doubtful; pads worse (held pads 46 % wrong). 917 KB model, lazy. 504 tests. L246, T142. One real-track grade next (time box).
 - **Basic Pitch graded on real tracks (13 Nov):** Z3 13 % on the stab loop (DSP 35–37 %), only the first read in a page used it. Per L245, **melody moves to the next phase (L247)**; Phase 5 ships Drums and FX. FX-R1 passes; FX-R3 0.05 dB over the 1 dB bar.
 - **Melody off, Basic Pitch removed, FX-R3 new fix (12b82e9).** 501 tests, production build compiles. FX-R3 to confirm live.
+- **FX-R3 live (13 Nov):** Lost 73–80 −1.01 dB (bed on), −0.96 (bed off), within the meter's precision: borderline, owner's ear decides at the final review. Melody off confirmed; drums Z5 still 0.00 LU.

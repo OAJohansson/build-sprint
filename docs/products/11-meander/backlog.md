@@ -14,3 +14,4 @@
 | Clear my history | A browser reset does it for now | Later |
 
 | Romanticism as a school on the globe | Left out of the 23 (L17) | Later |
+| Re-run the API judge on the ~195 items graded in-session (after 1 Dec, cached) | Closes the method caveat on the content evals | Later |

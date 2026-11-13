@@ -7,8 +7,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/presocratics/",
-        "section": "1. Who Were the Presocratic Philosophers?; 6. Other Eleatics",
+        "section": "1. Who Were the Presocratic Philosophers?",
         "quote": "the foundation for the development of philosophy"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/presocratics/",
+        "section": "6. Other Eleatics: Zeno and Melissus"
       }
     ],
     "label": "the questions it inherited"
@@ -21,13 +25,17 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/aristotle/",
-        "section": "1. Aristotle's Life",
+        "section": "1. Aristotle’s Life",
         "quote": "sent to Athens at about the age of seventeen to study in Plato's Academy"
       },
       {
         "url": "https://plato.stanford.edu/entries/aristotle/",
-        "section": "9. Aristotelian Teleology; 11. Living Beings",
+        "section": "9. Aristotelian Teleology",
         "quote": "criticizing Plato's theory of Forms"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/aristotle/",
+        "section": "11. Living Beings"
       }
     ],
     "label": "teacher, then target"
@@ -40,8 +48,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/aristotle/",
-        "section": "11. Living Beings (also SEP Presocratics §1)",
+        "section": "11. Living Beings",
         "quote": "he means to reject Presocratic kinds of materialism"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/presocratics/",
+        "section": "1. Who Were the Presocratic Philosophers?"
       }
     ],
     "label": "materialism it rejected"
@@ -54,8 +66,16 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/epicurus/",
-        "section": "2. Life; 3. Physical Theory (also SEP Presocratics §8)",
+        "section": "2. Life",
         "quote": "inherited this scheme from the earlier atomists, above all Democritus"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/epicurus/",
+        "section": "3. Physical Theory"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/presocratics/",
+        "section": "8. Presocratic Atomism"
       }
     ],
     "label": "the atoms it borrowed"
@@ -68,8 +88,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/epicurus/",
-        "section": "intro; 4. Psychology and Ethics",
+        "section": "intro",
         "quote": "dispensed with transcendent entities such as the Platonic Ideas or Forms"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/epicurus/",
+        "section": "4. Psychology and Ethics"
       }
     ],
     "label": "Forms it threw out"
@@ -82,8 +106,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/stoicism/",
-        "section": "1.1 The School and its History; 2.9 Psychology",
+        "section": "1.1 The School and its History",
         "quote": "a voracious reader of Socratic dialogues"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/stoicism/",
+        "section": "2.9 Psychology"
       }
     ],
     "label": "Socrates as model"
@@ -124,8 +152,16 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
-        "section": "3.1 Arcesilaus; 3.2 Carneades (also SEP Stoicism §1.1)",
+        "section": "3.1 Arcesilaus",
         "quote": "Carneades (i) engages with Stoic epistemology"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
+        "section": "3.2 Carneades"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/stoicism/",
+        "section": "1.1 The School and its History"
       }
     ],
     "label": "certainty it attacked"
@@ -152,8 +188,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/neoplatonism/",
-        "section": "intro (also SEP Plotinus §1)",
+        "section": "intro",
         "quote": "held Plato's views ... in higher esteem"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/plotinus/",
+        "section": "1. Life and Writings"
       }
     ],
     "label": "Plato as master"
@@ -194,8 +234,16 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
-        "section": "1.2 The Platonic Schools of Late Antiquity; 2.7 University Philosophy (also SEP Aquinas §1.1)",
+        "section": "1.2 The Platonic Schools of Late Antiquity",
         "quote": "enthused by the newly available Aristotelian material"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
+        "section": "2.7 University Philosophy"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/aquinas/",
+        "section": "1.1 Life"
       }
     ],
     "label": "the rediscovered Aristotle"
@@ -208,8 +256,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/neoplatonism/",
-        "section": "8. Influence (also SEP Medieval Philosophy §1.2)",
+        "section": "8. Influence",
         "quote": "Neoplatonism profoundly influenced the emergence of mainstream ... Christian theology"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
+        "section": "1.2 The Platonic Schools of Late Antiquity"
       }
     ],
     "label": "the Platonist frame"
@@ -236,8 +288,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/neoplatonism/",
-        "section": "8. Influence (also IEP Renaissance Philosophy, intro)",
+        "section": "8. Influence",
         "quote": "Neoplatonism in particular, experienced a dramatic revival in the West"
+      },
+      {
+        "url": "https://iep.utm.edu/renaissa/",
+        "section": "intro"
       }
     ],
     "label": "Plato and Plotinus revived"
@@ -250,8 +306,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/stoicism/",
-        "section": "5.3 On Renaissance and Early Modern Philosophy (also IEP Renaissance Philosophy, intro)",
+        "section": "5.3 On Renaissance and Early Modern Philosophy",
         "quote": "most important figure in the Neo-Stoic movement was Justus Lipsius"
+      },
+      {
+        "url": "https://iep.utm.edu/renaissa/",
+        "section": "intro"
       }
     ],
     "label": "Neo-Stoic revival"
@@ -278,8 +338,12 @@
     "sources": [
       {
         "url": "https://iep.utm.edu/renaissance/",
-        "section": "intro (IEP: Renaissance Skepticism; also SEP Ancient Skepticism §5.1)",
+        "section": "intro",
         "quote": "inspired by the revitalization of Ancient Greek Skepticism"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
+        "section": "5.1 Augustine: Re-Conceiving Skepticism in a Theological Framework"
       }
     ],
     "label": "Sextus rediscovered"
@@ -320,8 +384,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
-        "section": "1. Introduction; 1.2 Empiricism",
+        "section": "1. Introduction",
         "quote": "Empiricists reject this thesis"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+        "section": "1.2 Empiricism"
       }
     ],
     "label": "no innate ideas"
@@ -339,8 +407,12 @@
       },
       {
         "url": "https://iep.utm.edu/kantview/",
-        "section": "2a. Pre-Critical Thought; 2b. Dogmatic Slumber, Synthetic A Priori Knowledge, and the Copernican Shift",
+        "section": "a. Pre-Critical Thought",
         "quote": "his faith in this rationalist assumption was shaken by David Hume"
+      },
+      {
+        "url": "https://iep.utm.edu/kantview/",
+        "section": "b. Dogmatic Slumber, Synthetic A Priori Knowledge, and the Copernican Shift"
       }
     ],
     "label": "pillar, then limits"
@@ -358,8 +430,12 @@
       },
       {
         "url": "https://iep.utm.edu/kantview/",
-        "section": "1. Life; 2b. Dogmatic Slumber",
+        "section": "1. Life",
         "quote": "Kant undertook a massive project to respond to Hume"
+      },
+      {
+        "url": "https://iep.utm.edu/kantview/",
+        "section": "b. Dogmatic Slumber, Synthetic A Priori Knowledge, and the Copernican Shift"
       }
     ],
     "label": "Locke, then answering Hume"
@@ -386,8 +462,12 @@
     "sources": [
       {
         "url": "https://iep.utm.edu/germidea/",
-        "section": "intro (also SEP Hegel §1)",
+        "section": "intro",
         "quote": "transforming Kant's transcendental idealism into absolute idealism"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/hegel/",
+        "section": "1. Life, Work, and Influence"
       }
     ],
     "label": "Kant radicalised"
@@ -400,8 +480,16 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
-        "section": "1. Precursors to the Classical Approach; 2.2 Jeremy Bentham (also SEP Bentham §1)",
+        "section": "1. Precursors to the Classical Approach",
         "quote": "Bentham also benefited from Hume's work"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
+        "section": "2.2 Jeremy Bentham"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/bentham/",
+        "section": "1. Life and Writings"
       }
     ],
     "label": "Hume's idea of utility"
@@ -414,8 +502,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/bentham/",
-        "section": "1. Life and Writings (Helvétius placed in the French Enlightenment by SEP Enlightenment §1.4)",
+        "section": "1. Life and Writings",
         "quote": "discovered the utility principle ... in the writings of Hume, Helvétius and Beccaria"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/enlightenment/",
+        "section": "1.4 Science of Man and Subjectivism in the Enlightenment"
       }
     ],
     "label": "Helvétius and Beccaria"
@@ -428,8 +520,16 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/hegel/",
-        "section": "intro; 1. Life, Work, and Influence (also SEP Marx §1.2)",
+        "section": "intro",
         "quote": "later taken over by Karl Marx and \"inverted\""
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/hegel/",
+        "section": "1. Life, Work, and Influence"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/marx/",
+        "section": "1.2 Religion and Work"
       }
     ],
     "label": "Hegel turned upside down"
@@ -442,8 +542,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/existentialism/",
-        "section": "2.1 Subjective Truth (also SEP Hegel §1)",
+        "section": "2.1 Subjective Truth",
         "quote": "whose scorn was directed primarily at G.W. F. Hegel"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/hegel/",
+        "section": "1. Life, Work, and Influence"
       }
     ],
     "label": "Hegel's system rejected"
@@ -456,8 +560,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/existentialism/",
-        "section": "intro; 2.3 Being-in-the-World",
+        "section": "intro",
         "quote": "Following the core maxim of phenomenology introduced by his teacher Husserl"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/existentialism/",
+        "section": "2.3 Being-in-the-World"
       }
     ],
     "label": "the method it used"
@@ -498,8 +606,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/pragmatism/",
-        "section": "2.1 Peirce: The Pragmatic Maxim (also SEP Peirce §1)",
+        "section": "2.1 Peirce: The Pragmatic Maxim",
         "quote": "Kant's concept of a 'thing in itself'"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/peirce/",
+        "section": "1. Brief Biography"
       }
     ],
     "label": "Kant's thing-in-itself rejected"
@@ -512,7 +624,7 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/husserl/",
-        "section": "3. The transcendental turn",
+        "section": "3. The transcendental turn: Epoché, phenomenological reduction, and transcendental idealism",
         "quote": "a new epoch-making type of philosophy"
       }
     ],
@@ -526,8 +638,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/hegel/",
-        "section": "1. Life, Work, and Influence (also IEP Analytic Philosophy, intro)",
+        "section": "1. Life, Work, and Influence",
         "quote": "one of the main targets of attack by the founders"
+      },
+      {
+        "url": "https://iep.utm.edu/analytic-philosophy/",
+        "section": "intro"
       }
     ],
     "label": "the idealism it overthrew"
@@ -568,8 +684,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/vienna-circle/",
-        "section": "2.3 Overview of Doctrines; 3.2 The Analytic/Synthetic Distinction",
+        "section": "2.3 Overview of Doctrines",
         "quote": "Kant's synthetic a priori was banned"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/vienna-circle/",
+        "section": "3.2 The Analytic/Synthetic Distinction and the Relative A Priori"
       }
     ],
     "label": "Kant's a priori banned"
@@ -596,8 +716,16 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/critical-theory/",
-        "section": "intro; 1.2 Influences (also IEP Frankfurt School, intro)",
+        "section": "1.1 Origins and Generations",
         "quote": "They revised and updated Marxism"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/critical-theory/",
+        "section": "1.2 Influences"
+      },
+      {
+        "url": "https://iep.utm.edu/frankfur/",
+        "section": "intro"
       }
     ],
     "label": "its starting point"
@@ -638,8 +766,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/postmodernism/",
-        "section": "intro; 9. Habermas's Critique",
+        "section": "intro",
         "quote": "Habermas argues that postmodernism contradicts itself through self-reference"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/postmodernism/",
+        "section": "9. Habermas's Critique"
       }
     ],
     "label": "Habermas's critique"
@@ -666,8 +798,16 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/derrida/",
-        "section": "1. Life and Works; 3. Basic Argumentation (also SEP Foucault §2)",
+        "section": "1. Life and Works",
         "quote": "it aims to criticize what Husserl calls the \"principle of all principles\""
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/derrida/",
+        "section": "3. Basic Argumentation and its Implications: Time, Hearing-Oneself-Speak, the Secret, and Sovereignty"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/foucault/",
+        "section": "2. Intellectual Background"
       }
     ],
     "label": "Husserl deconstructed"
@@ -680,8 +820,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/postmodernism/",
-        "section": "intro (also SEP Foucault §2. Intellectual Background)",
+        "section": "intro",
         "quote": "including structuralist readings of Marx and Freud"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/foucault/",
+        "section": "2. Intellectual Background"
       }
     ],
     "label": "Marx read structurally"
@@ -694,8 +838,16 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/feminist-philosophy/",
-        "section": "1. What is Feminism?; 2. Feminist Scholarship (also SEP Beauvoir, intro)",
+        "section": "1. What is Feminism?",
         "quote": "the tremendous work done by Simone de Beauvoir"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/feminist-philosophy/",
+        "section": "2. Feminist Scholarship"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/beauvoir/",
+        "section": "intro"
       }
     ],
     "label": "Beauvoir's Second Sex"
@@ -708,8 +860,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/feminist-philosophy/",
-        "section": "2. Feminist Scholarship; 3. Approaches to Feminism",
+        "section": "2. Feminist Scholarship",
         "quote": "Important feminist philosophical work has emerged from all the current major philosophical traditions"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/feminist-philosophy/",
+        "section": "3. Approaches to Feminism"
       }
     ],
     "label": "analytic feminism"
@@ -750,8 +906,12 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/critical-theory/",
-        "section": "4.1.1 Gender (also SEP Feminist Philosophy §3)",
+        "section": "4.1.1 Gender",
         "quote": "the poststructuralist strand of feminist critical theory like Judith Butler"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/feminist-philosophy/",
+        "section": "3. Approaches to Feminism"
       }
     ],
     "label": "Butler's gender theory"

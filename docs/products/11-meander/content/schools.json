@@ -90,8 +90,8 @@
         "url": "https://plato.stanford.edu/entries/socrates/",
         "title": "SEP: Socrates",
         "sections": [
-          "2. The Socratic problem",
-          "2.1 Three primary sources"
+          "2. The Socratic problem: Who was Socrates really?",
+          "Xenophon (±425–±386)"
         ]
       }
     ]
@@ -126,7 +126,7 @@
         "title": "SEP: Aristotle",
         "sections": [
           "intro",
-          "1. Aristotle's Life",
+          "1. Aristotle’s Life",
           "9. Aristotelian Teleology",
           "11. Living Beings"
         ]
@@ -211,7 +211,10 @@
         "sections": [
           "1.1 The School and its History",
           "2.9 Psychology",
-          "5. Influence"
+          "5.1 On Grammatical Writers",
+          "5.2 On Christian Writers",
+          "5.3 On Renaissance and Early Modern Philosophy",
+          "5.4 On Contemporary Philosophy"
         ]
       }
     ]
@@ -251,9 +254,17 @@
         "title": "SEP: Ancient Skepticism",
         "sections": [
           "2.2 Plato",
-          "3. Academic Skepticism",
-          "4. Pyrrhonian Skepticism",
-          "5. Ancient and Modern Skepticism: Transitions"
+          "3.1 Arcesilaus",
+          "3.2 Carneades",
+          "3.3 Later Academic Skepticism",
+          "4.1 Early Figures: Pyrrho and Timon",
+          "4.2 Aenesidemus, the Ten Modes, and Appearances",
+          "4.3 Agrippa, and the Five Modes",
+          "4.4 Sextus Empiricus",
+          "5.1 Augustine: Re-Conceiving Skepticism in a Theological Framework",
+          "5.2 Skepticism About Induction",
+          "5.3 Subjectivity and Other Minds",
+          "5.4 External World Skepticism"
         ]
       }
     ]
@@ -273,8 +284,8 @@
       },
       {
         "name": "Porphyry",
-        "dates": "c. 232–305",
-        "source": "https://plato.stanford.edu/entries/medieval-philosophy/"
+        "dates": "234?–305?",
+        "source": "https://plato.stanford.edu/entries/porphyry/"
       },
       {
         "name": "Iamblichus",
@@ -390,8 +401,8 @@
       },
       {
         "name": "John Duns Scotus",
-        "dates": "1265/6–1308",
-        "source": "https://iep.utm.edu/renaissance/"
+        "dates": "1263/66–1308",
+        "source": "https://plato.stanford.edu/entries/duns-scotus/"
       },
       {
         "name": "William of Ockham",
@@ -610,7 +621,7 @@
         "sections": [
           "1. Life and works",
           "2.1 The crisis of the Enlightenment",
-          "2.2 Kant's Copernican revolution in philosophy"
+          "2.2 Kant’s Copernican revolution in philosophy"
         ]
       },
       {
@@ -618,8 +629,8 @@
         "title": "IEP: Kant, Immanuel",
         "sections": [
           "1. Life",
-          "2a. Pre-Critical Thought",
-          "2b. Dogmatic Slumber, Synthetic A Priori Knowledge, and the Copernican Shift"
+          "a. Pre-Critical Thought",
+          "b. Dogmatic Slumber, Synthetic A Priori Knowledge, and the Copernican Shift"
         ]
       }
     ]
@@ -804,7 +815,7 @@
         "title": "SEP: Albert Camus",
         "sections": [
           "intro",
-          "1. The Paradoxes of Camus's Absurdist Philosophy"
+          "1. The Paradoxes of Camus’s Absurdist Philosophy"
         ]
       }
     ]
@@ -844,7 +855,7 @@
         "title": "SEP: Pragmatism",
         "sections": [
           "1.1 The Early Years",
-          "1.2 'Neopragmatism' and Beyond",
+          "1.2 ‘Neopragmatism’ and Beyond",
           "2. The Meaning of Pragmatism",
           "2.1 Peirce: The Pragmatic Maxim",
           "2.2 James",
@@ -899,7 +910,7 @@
         "sections": [
           "intro",
           "1. Life and work",
-          "3. The transcendental turn"
+          "3. The transcendental turn: Epoché, phenomenological reduction, and transcendental idealism"
         ]
       }
     ]
@@ -944,7 +955,7 @@
         "title": "IEP: Analytic Philosophy",
         "sections": [
           "intro",
-          "2c. Frege: Influence or Instigator?"
+          "c. Frege: Influence or Instigator?"
         ]
       },
       {
@@ -1066,7 +1077,7 @@
         "sections": [
           "intro",
           "1. Life and Works",
-          "3. Basic Argumentation and its Implications"
+          "3. Basic Argumentation and its Implications: Time, Hearing-Oneself-Speak, the Secret, and Sovereignty"
         ]
       }
     ]

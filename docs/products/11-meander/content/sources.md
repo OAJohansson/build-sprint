@@ -2,7 +2,8 @@
 
 This folder has four files. Researched 13 Nov 2026; owner defaults applied as decision L17.
 - `schools.json`: 23 schools.
-- `links.json`: 57 links between them.
+- `links.json`: 56 links between them.
+- `revisions.json`: every item changed in the 13 Nov fix pass, for re-grading.
 - `full.json`: the full learner content for every school.
 - `sources.md`: this note.
 
@@ -54,11 +55,27 @@ thinkers: [{ name, dates, summary, sources,
 sources: [{ url, section }]   (school-level)
 ```
 
+## Fix pass, 13 Nov 2026 (after the independent grade)
+The grader (`docs/products/11-meander/eval-content-2026-11-13.md`) found 282 unsupported claims, 3 wrong claims, 1 unsupported link kind and 36 drifting study prompts. All 200 failing items were fixed from the corpus:
+- **Re-cited** where the corpus already said it.
+- **Rewritten** to what the cited section says.
+- **Cut** where nothing supports it.
+- **Study prompts** now cite every card section they draw on and say nothing beyond the card.
+- **The 3 wrong claims are corrected:** the Ancient Skepticism description, Erasmus and Luther, and Heidegger's Dasein.
+- **Date changes:**
+  - Sextus Empiricus: "probably 2nd or 3rd c. CE".
+  - Arcesilaus and Erasmus show both dates where the sources disagree.
+  - The Patristic range is now c. 185 – c. 525/6.
+  - German Idealism's era is now "late 18th–19th century".
+- **User-test fixes:** two Feminist themes now have thinkers attached, and one Utilitarianism theme was expanded.
+
+Every changed object carries `"revised": "2026-11-13"`. Plain-string fields have no object of their own: description, era, date_range and debatable mark the school object, and summary and dates mark the thinker object. Some school and thinker objects also list the changed fields in `revised_fields`. `revisions.json` lists every changed item id, in the grader's id format, with its actions (recite, rewrite, cut).
+
 ## Counts
 - 23 schools: 69 questions, 115 themes, 23 reacted-against lines.
 - 88 thinkers: 264 key ideas and 88 study prompts.
-- 57 links, shown 114 times in `full.json` (once from each end).
-- 784 objects in `full.json` carry `sources`, and none lacks them.
+- 56 links, shown 112 times in `full.json` (once from each end). Rationalism → Ancient Skepticism was cut in the fix pass.
+- 782 objects in `full.json` carry `sources`, and none lacks them.
 - The validator (`scratchpad/tools/validate_full.py`) checks that every source URL is in the saved corpus and every section is a real heading in that entry. It found 0 errors.
 - Every link quote has been checked as appearing word for word inside the section it cites.
 
@@ -108,11 +125,11 @@ The full content was drafted in four parallel batches. Each batch read only the 
 ## What I could not verify, and date conflicts
 - **Habermas:** "d. 2026" comes from SEP only.
 - **Plato:** born 429? (SEP Plato) or 424/3 (SEP Socrates). The card uses 429?.
-- **Sextus Empiricus:** the card says ca. 160–210 CE. SEP Sextus says only "probably 2nd or 3rd c. CE", and the summary hedges.
-- **Arcesilaus:** 316/5 (SEP Ancient Skepticism) vs 315/4 (SEP Arcesilaus).
-- **Erasmus:** c. 1466 (IEP) vs 1469 (SEP Erasmus).
+- **Sextus Empiricus:** the card now shows the source's own wording, "probably 2nd or 3rd c. CE".
+- **Arcesilaus:** the card shows both, "316/5 or 315/4–241/0 BCE" (SEP Ancient Skepticism §3.1; SEP Arcesilaus intro).
+- **Erasmus:** the card shows both, "c. 1466 or 1469–1536" (IEP Renaissance §2; SEP Erasmus intro).
 - **Founding of the Stoa:** c. 300 BCE (SEP) vs 262 BCE (IEP Chrysippus).
-- **Rousseau's 1778 and Wittgenstein's 1951** come from other SEP entries (Kant, Augustine) rather than their own.
+- **Rousseau's 1778 and Wittgenstein's 1951** are also in their own entries (SEP Rousseau §1, SEP Wittgenstein §1), and are now cited there.
 - **Thin sourcing:** the Xenophon and Zeno of Citium cards rest on the Socrates and Stoicism entries, because SEP has no entries for them yet. Petrarch rests on IEP Renaissance Philosophy alone. For Harriet Taylor Mill, SEP says her authorship is contested, and her cards say so.
 - **Unverified structure:** Kenny's and Copleston's chapter-level structure was not checked.
 
@@ -134,6 +151,7 @@ The full content was drafted in four parallel batches. Each batch read only the 
 | From → To | Kind | Why left out |
 |---|---|---|
 | Critical Theory → Analytic (logical positivism) | pushed against | SEP and IEP describe a critique of "positivism" in general and never name the Vienna Circle. |
+| Rationalism → Ancient Skepticism | pushed against | **Cut in the fix pass.** SEP Descartes §2 gives this reading only as what "some interpreters" believe, and no section states it plainly. |
 | Rationalism → Socrates and Plato | built on | SEP shows a precedent (innate knowledge in the Meno), not stated influence. |
 | Pragmatism → Scholasticism | built on | Supported only for Peirce. |
 | Utilitarianism → Epicureanism | built on | No SEP statement found. |
@@ -147,5 +165,5 @@ The full content was drafted in four parallel batches. Each batch read only the 
 
 ## Open questions for the owner
 1. Show Habermas's death date (2026, SEP only)?
-2. Where SEP entries disagree on a date (Plato, Arcesilaus, Erasmus, Sextus), keep the current choice or show a range?
+2. Plato's birth year: keep 429? on the card (the debatable note now cites both SEP readings), or show both?
 3. The Enlightenment node now has 8 links and the most crowded threads. Is that fine on the globe?

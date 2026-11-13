@@ -5,7 +5,7 @@
     "era": "Ancient",
     "date_range": "6th–5th century BCE",
     "description": "The first Greek thinkers to explain the natural world and its principles by reasoned inquiry rather than myth.",
-    "debatable": "A modern label, not a school: SEP notes the last 'Presocratics' were contemporaries of Socrates. The Sophists are folded in here (SEP covers them in the same entry, §9).",
+    "debatable": "A modern label: SEP says the term was coined in the 18th century and made current by Diels, and that the last 'Presocratics' were contemporaries of Socrates. The Sophists are folded in here (SEP covers them in the same entry, §9).",
     "thinkers": [
       {
         "name": "Thales of Miletus",
@@ -57,9 +57,9 @@
     "id": "socrates-plato",
     "name": "Socrates and Plato",
     "era": "Ancient",
-    "date_range": "late 5th–4th century BCE (Plato's Academy continues after him)",
-    "description": "Socrates' questioning method and Plato's dialogues, with the theory of Forms at their centre.",
-    "debatable": "The owner's sample had one 'Classical Greek' node; it is split here into Socrates/Plato and Aristotle because later schools attach to them differently (Neoplatonism to Plato, Scholasticism to Aristotle). SEP gives Plato's birth as 429? (Plato entry) and 424/3 (Socrates entry).",
+    "date_range": "late 5th–4th century BCE",
+    "description": "Socrates' questioning method and Plato's dialogues, including the Forms, which SEP calls the most basic distinction in Plato's thought.",
+    "debatable": "The owner's sample had one 'Classical Greek' node; it is split here into Socrates/Plato and Aristotle. SEP gives Plato's birth as 429? (Plato entry, intro) and 424/3 (Socrates entry, section 'Plato (424/3–347)').",
     "thinkers": [
       {
         "name": "Socrates",
@@ -83,7 +83,8 @@
         "title": "SEP: Plato",
         "sections": [
           "intro",
-          "4. Socrates"
+          "4. Socrates",
+          "1. Plato’s central doctrines"
         ]
       },
       {
@@ -91,7 +92,8 @@
         "title": "SEP: Socrates",
         "sections": [
           "2. The Socratic problem: Who was Socrates really?",
-          "Xenophon (±425–±386)"
+          "Xenophon (±425–±386)",
+          "Plato (424/3–347)"
         ]
       }
     ]
@@ -101,8 +103,8 @@
     "name": "Aristotle and the Peripatetics",
     "era": "Ancient",
     "date_range": "4th century BCE onward (the Lyceum)",
-    "description": "Aristotle's systematic philosophy of logic, nature, ethics and metaphysics, taught at his school, the Lyceum.",
-    "debatable": "Usually treated as one great thinker rather than a school; the Lyceum/Peripatetic school gives it school status.",
+    "description": "Aristotle's wide-ranging philosophy, from logic and metaphysics to ethics, politics and the study of plants and animals, taught at his school, the Lyceum.",
+    "debatable": "Centred on one great thinker, Aristotle; his school, the Lyceum, whose members later came to be called Peripatetics, gives it school status.",
     "thinkers": [
       {
         "name": "Aristotle",
@@ -137,7 +139,7 @@
     "id": "epicureanism",
     "name": "Epicureanism",
     "era": "Ancient (Hellenistic)",
-    "date_range": "late 4th century BCE – Roman era (Lucretius, Philodemus 1st c. BCE)",
+    "date_range": "late 4th century BCE – 1st century BCE (Lucretius, mid-90s to mid-50s BCE; Philodemus, ca. 110–ca. 30 BCE)",
     "description": "Atomist materialism joined to an ethics of tranquil pleasure and freedom from fear of death and the gods.",
     "debatable": null,
     "thinkers": [
@@ -148,7 +150,7 @@
       },
       {
         "name": "Philodemus",
-        "dates": "1st c. BCE",
+        "dates": "ca. 110–ca. 30 BCE",
         "source": "https://plato.stanford.edu/entries/epicurus/"
       },
       {
@@ -167,6 +169,20 @@
           "3. Physical Theory",
           "4. Psychology and Ethics"
         ]
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/lucretius/",
+        "title": "SEP: Lucretius",
+        "sections": [
+          "intro"
+        ]
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/philodemus/",
+        "title": "SEP: Philodemus",
+        "sections": [
+          "intro"
+        ]
       }
     ]
   },
@@ -175,7 +191,7 @@
     "name": "Stoicism",
     "era": "Ancient (Hellenistic and Roman)",
     "date_range": "c. 300 BCE – 2nd century CE",
-    "description": "A unified system of logic, physics and ethics teaching that virtue, living in agreement with a rational nature, is the only good.",
+    "description": "A system of physics, logic and ethics with interlocking parts, teaching that only virtue is good and that living virtuously means living in agreement with nature.",
     "debatable": null,
     "thinkers": [
       {
@@ -214,7 +230,10 @@
           "5.1 On Grammatical Writers",
           "5.2 On Christian Writers",
           "5.3 On Renaissance and Early Modern Philosophy",
-          "5.4 On Contemporary Philosophy"
+          "5.4 On Contemporary Philosophy",
+          "intro",
+          "4.3 Indifferents",
+          "4.2 Virtue"
         ]
       }
     ]
@@ -224,7 +243,7 @@
     "name": "Ancient Skepticism",
     "era": "Ancient (Hellenistic and Roman)",
     "date_range": "3rd century BCE – 2nd century CE",
-    "description": "Academic and Pyrrhonian skeptics who suspended judgment, arguing that no claim to knowledge is secure.",
+    "description": "Academic and Pyrrhonian skeptics who suspended judgment and kept investigating, rather than asserting how things really are.",
     "debatable": "Two movements (Academic and Pyrrhonian) under one node; SEP treats them in one entry.",
     "thinkers": [
       {
@@ -234,7 +253,7 @@
       },
       {
         "name": "Arcesilaus",
-        "dates": "316/5–241/0 BCE",
+        "dates": "316/5 or 315/4–241/0 BCE",
         "source": "https://plato.stanford.edu/entries/skepticism-ancient/"
       },
       {
@@ -244,7 +263,7 @@
       },
       {
         "name": "Sextus Empiricus",
-        "dates": "ca. 160–210 CE",
+        "dates": "probably 2nd or 3rd c. CE",
         "source": "https://plato.stanford.edu/entries/skepticism-ancient/"
       }
     ],
@@ -264,7 +283,8 @@
           "5.1 Augustine: Re-Conceiving Skepticism in a Theological Framework",
           "5.2 Skepticism About Induction",
           "5.3 Subjectivity and Other Minds",
-          "5.4 External World Skepticism"
+          "5.4 External World Skepticism",
+          "intro"
         ]
       }
     ]
@@ -273,7 +293,7 @@
     "id": "neoplatonism",
     "name": "Neoplatonism",
     "era": "Late antiquity",
-    "date_range": "mid-3rd – mid-7th century CE",
+    "date_range": "roughly mid-3rd – mid-7th century CE",
     "description": "A late-antique Platonism deriving all reality from a single first principle, the One.",
     "debatable": "The name is modern; its members called themselves simply Platonists (SEP).",
     "thinkers": [
@@ -322,9 +342,9 @@
     "id": "patristic",
     "name": "Early Christian Philosophy (Patristic)",
     "era": "Late antiquity",
-    "date_range": "c. 200–526 CE (Origen to Boethius)",
+    "date_range": "c. 185 – c. 525/6 CE (Origen's birth to Boethius's death)",
     "description": "The Church Fathers and their heirs, who used Greek philosophy, above all Platonism, to think through Christian faith.",
-    "debatable": "A period and a group of Christian authors rather than a school; SEP has no 'Patristic' entry, so it rests on the Augustine, Origen, Boethius, Pseudo-Dionysius and Medieval Philosophy entries. Boethius and Augustine are often counted as the start of medieval philosophy.",
+    "debatable": "Where this group ends and medieval philosophy begins is unsettled: by some chronologies, Augustine himself founded the medieval Latin tradition (SEP).",
     "thinkers": [
       {
         "name": "Origen",
@@ -338,7 +358,7 @@
       },
       {
         "name": "Pseudo-Dionysius the Areopagite",
-        "dates": "wrote late 5th c.",
+        "dates": "wrote late 5th or early 6th c. (between 485 and 518–28 CE)",
         "source": "https://plato.stanford.edu/entries/medieval-philosophy/"
       },
       {
@@ -363,7 +383,8 @@
         "sections": [
           "1.3.2 Greek to Latin",
           "2.1 Byzantine Philosophy (c. 450–c. 1450)",
-          "2.2 The Rule and Two Exceptions: Latin Philosophy, 800–1100"
+          "2.2 The Rule and Two Exceptions: Latin Philosophy, 800–1100",
+          "1.4 Other Philosophical Sources"
         ]
       },
       {
@@ -373,6 +394,20 @@
           "1. Historical Orientation: Antiquity",
           "8. Influence"
         ]
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/origen/",
+        "title": "SEP: Origen",
+        "sections": [
+          "intro"
+        ]
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/boethius/",
+        "title": "SEP: Anicius Manlius Severinus Boethius",
+        "sections": [
+          "intro"
+        ]
       }
     ]
   },
@@ -380,9 +415,9 @@
     "id": "scholasticism",
     "name": "Scholasticism",
     "era": "Medieval",
-    "date_range": "c. 1100–1500 (within a medieval period of roughly 500–1500)",
+    "date_range": "12th century – around 1700",
     "description": "University philosophy of the Latin Middle Ages, reconciling Aristotle's newly recovered works with Christian theology by commentary and disputation.",
-    "debatable": "A method and institution (the schools and universities) more than a doctrine; SEP's entry is 'Medieval Philosophy', of which scholasticism is the Latin university strand. Augustine and Boethius belong to the earlier medieval period.",
+    "debatable": "SEP ties it to a method: Aquinas epitomises the scholastic method of the newly founded universities. Its end date is open; SEP calls around 1700 a plausible end for medieval philosophy, and this style of university philosophy ran on for at least three centuries after the mid-1300s.",
     "thinkers": [
       {
         "name": "Anselm",
@@ -396,7 +431,7 @@
       },
       {
         "name": "Thomas Aquinas",
-        "dates": "1225–1274",
+        "dates": "c. 1225–1274",
         "source": "https://plato.stanford.edu/entries/medieval-philosophy/"
       },
       {
@@ -437,7 +472,7 @@
     "name": "Renaissance Philosophy",
     "era": "Renaissance",
     "date_range": "14th–16th century",
-    "description": "A return to classical Greek and Roman sources and to ethics and eloquence, set against scholastic logic and university learning.",
+    "description": "A return to classical Greek and Roman sources and to ethics and eloquence, with humanists setting themselves against scholastic logic and university learning.",
     "debatable": "IEP's 'Renaissance Philosophy' has humanism as one current beside Renaissance Aristotelianism, Platonism (Ficino) and revived Hellenistic schools; the node covers them all.",
     "thinkers": [
       {
@@ -447,7 +482,7 @@
       },
       {
         "name": "Lorenzo Valla",
-        "dates": "1406–1457",
+        "dates": "c. 1406–1457",
         "source": "https://iep.utm.edu/renaissa/"
       },
       {
@@ -462,7 +497,7 @@
       },
       {
         "name": "Desiderius Erasmus",
-        "dates": "c. 1466–1536",
+        "dates": "c. 1466 or 1469–1536",
         "source": "https://iep.utm.edu/renaissa/"
       }
     ],
@@ -473,7 +508,8 @@
         "sections": [
           "intro",
           "1. Aristotelianism",
-          "2. Humanism"
+          "2. Humanism",
+          "3. Platonism"
         ]
       },
       {
@@ -489,9 +525,9 @@
     "id": "rationalism",
     "name": "Rationalism",
     "era": "Early modern",
-    "date_range": "17th century (into the 18th via Wolff)",
+    "date_range": "17th–18th centuries",
     "description": "The view that reason, independent of sense experience, is a key source of knowledge and concepts, some of them innate.",
-    "debatable": "'Continental Rationalists' is a later historians' grouping (SEP), not a self-named school.",
+    "debatable": "'Continental Rationalists' is a later grouping, first applied by Kant, and SEP says such schemes should be used only with great caution.",
     "thinkers": [
       {
         "name": "René Descartes",
@@ -535,7 +571,7 @@
     "id": "empiricism",
     "name": "Empiricism",
     "era": "Early modern",
-    "date_range": "late 17th – 18th century",
+    "date_range": "17th–18th centuries",
     "description": "The view that all our concepts and knowledge come ultimately from experience, not innate ideas.",
     "debatable": "'British Empiricists' is likewise a later historians' grouping (SEP).",
     "thinkers": [
@@ -580,7 +616,7 @@
     "era": "Early modern",
     "date_range": "18th century (roots in the 16th–17th-century scientific revolution; Kant's Critique 1781; ends roughly with the 1790s)",
     "description": "A movement of confidence in reason and science to question traditional authority, ending in Kant's critical philosophy, which tested what reason itself can know.",
-    "debatable": "A period and movement, not a school; it spans rationalists, empiricists and skeptics. Kant is merged in here (decision L17); SEP's Kant entry places his Critique at the Enlightenment's end (§2.1), while IEP counts him as the first German Idealist.",
+    "debatable": "A period and movement, not a school; it spans rationalists, empiricists and skeptics. Kant is merged in here (decision L17); SEP's Kant entry places his Critique at the Enlightenment's end (§2.1), while IEP's German Idealism entry names him among that movement's most famous figures.",
     "thinkers": [
       {
         "name": "Voltaire",
@@ -632,15 +668,22 @@
           "a. Pre-Critical Thought",
           "b. Dogmatic Slumber, Synthetic A Priori Knowledge, and the Copernican Shift"
         ]
+      },
+      {
+        "url": "https://iep.utm.edu/germidea/",
+        "title": "IEP: German Idealism",
+        "sections": [
+          "intro"
+        ]
       }
     ]
   },
   {
     "id": "german-idealism",
     "name": "German Idealism",
-    "era": "19th century",
+    "era": "late 18th–19th century",
     "date_range": "1780s–1840s",
-    "description": "Fichte, Schelling and Hegel radicalised Kant into absolute idealism, building complete systems in which reality is the unfolding of mind or spirit.",
+    "description": "Fichte, Schelling and Hegel radicalised Kant into absolute idealism, building complete systems derived from a single first principle, the absolute.",
     "debatable": null,
     "thinkers": [
       {
@@ -669,7 +712,7 @@
       },
       {
         "url": "https://plato.stanford.edu/entries/hegel/",
-        "title": "SEP: Hegel",
+        "title": "SEP: Georg Wilhelm Friedrich Hegel",
         "sections": [
           "intro",
           "1. Life, Work, and Influence"
@@ -681,7 +724,7 @@
     "id": "utilitarianism",
     "name": "Utilitarianism",
     "era": "19th century",
-    "date_range": "1789 (Bentham's Principles) – late 19th century (Sidgwick); still active",
+    "date_range": "1789 (Bentham's Principles) – late 19th century (Sidgwick); refined since, often under the name consequentialism",
     "description": "The moral theory that right actions are those that produce the greatest happiness.",
     "debatable": null,
     "thinkers": [
@@ -708,7 +751,10 @@
         "sections": [
           "1. Precursors to the Classical Approach",
           "2.2 Jeremy Bentham",
-          "2.3 John Stuart Mill"
+          "2.3 John Stuart Mill",
+          "2. The Classical Approach",
+          "William Godwin",
+          "5. Conclusion"
         ]
       },
       {
@@ -717,6 +763,13 @@
         "sections": [
           "intro",
           "1. Life and Writings"
+        ]
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/sidgwick/",
+        "title": "SEP: Henry Sidgwick",
+        "sections": [
+          "intro"
         ]
       }
     ]
@@ -756,7 +809,7 @@
       },
       {
         "url": "https://plato.stanford.edu/entries/hegel/",
-        "title": "SEP: Hegel",
+        "title": "SEP: Georg Wilhelm Friedrich Hegel",
         "sections": [
           "intro",
           "1. Life, Work, and Influence"
@@ -768,9 +821,9 @@
     "id": "existentialism",
     "name": "Existentialism",
     "era": "19th–20th century",
-    "date_range": "roots in the 1840s (Kierkegaard); movement in mid-20th-century France",
+    "date_range": "roots in the 19th century (Kierkegaard, Nietzsche); movement in mid-20th-century France",
     "description": "Philosophy that starts from concrete, first-person human existence: freedom, anxiety, authenticity and the search for meaning. It includes Camus's philosophy of the absurd, though Camus rejected the existentialist label.",
-    "debatable": "Absurdism is folded in: SEP files Camus's 'absurdity' among existentialist themes (§5.1), but Camus denied being an existentialist (SEP Camus, §1). Kierkegaard and Nietzsche are forerunners, not members.",
+    "debatable": "Absurdism is folded in: SEP files Camus's 'absurdity' among existentialist themes (§5.1), but Camus denied being an existentialist (SEP Camus, §1). SEP treats Kierkegaard and Nietzsche as nineteenth-century pioneers who laid its groundwork (intro).",
     "thinkers": [
       {
         "name": "Søren Kierkegaard",
@@ -870,7 +923,7 @@
     "era": "20th century",
     "date_range": "early 20th century – present",
     "description": "The careful description of experience as it is lived from the first-person point of view, founded by Husserl.",
-    "debatable": "Both a method and a movement; it overlaps heavily with existentialism (Heidegger, Sartre and Merleau-Ponty are in both).",
+    "debatable": "Both a method and a movement. It overlaps with existentialism: Sartre's phenomenology became the foundation of his existentialism, Heidegger's Being and Time gives an existential reading of our ways of being, and Merleau-Ponty developed an embodied, existential form of phenomenology.",
     "thinkers": [
       {
         "name": "Edmund Husserl",
@@ -920,7 +973,7 @@
     "name": "Analytic Philosophy",
     "era": "20th century",
     "date_range": "c. 1900 – present",
-    "description": "Philosophy pursued through logical and linguistic analysis and clear argument, dominant in British and American universities; its logical positivist phase held that only verifiable statements are meaningful.",
+    "description": "Philosophy pursued through logical and linguistic analysis and clear argument, dominant in British and American universities; its logical positivist phase held that, apart from the truths of logic and mathematics, only statements that can be tested by experience are meaningful.",
     "debatable": "A broad tradition with several phases (IEP counts five); Logical Positivism (Vienna Circle, 1924–1936) is folded in as its third phase, as IEP treats it (decision L17). Whether Frege counts as a founder is contested (IEP §2c).",
     "thinkers": [
       {
@@ -960,7 +1013,7 @@
       },
       {
         "url": "https://plato.stanford.edu/entries/hegel/",
-        "title": "SEP: Hegel",
+        "title": "SEP: Georg Wilhelm Friedrich Hegel",
         "sections": [
           "1. Life, Work, and Influence"
         ]
@@ -1035,7 +1088,7 @@
     "era": "20th century",
     "date_range": "1960s onward (France)",
     "description": "French thought that grew out of structuralism to question stable meaning, the self-present subject and claims to foundations, through deconstruction and genealogy.",
-    "debatable": "SEP has no entry by this name; it is covered under 'Postmodernism' (which says these thinkers are often called poststructuralists) and the Derrida and Foucault entries. The two labels overlap.",
+    "debatable": "This app draws on the SEP entries on Postmodernism, Foucault and Derrida. The Postmodernism entry says its French thinkers are often called 'poststructuralists', though individually they may resist common affiliation, and the Foucault entry links him with both the structuralist and post-structuralist movements.",
     "thinkers": [
       {
         "name": "Gilles Deleuze",
@@ -1086,7 +1139,7 @@
     "id": "feminist-philosophy",
     "name": "Feminist Philosophy",
     "era": "20th–21st century",
-    "date_range": "1970s – present as an academic field (forerunners: Wollstonecraft 1792, Beauvoir 1949)",
+    "date_range": "1970s – present as an academic field (forerunners: Wollstonecraft, Beauvoir 1949)",
     "description": "Philosophy that criticises institutions and theories that have favoured men and rethinks sex, gender, knowledge and ethics.",
     "debatable": "Not a single school but a field that works within every tradition (analytic, continental, pragmatist; SEP §3).",
     "thinkers": [

@@ -3,7 +3,7 @@
     "from": "socrates-plato",
     "to": "presocratics",
     "kind": "built_on",
-    "reason": "The Presocratics' questions and answers were the foundation on which philosophy as Plato and Aristotle defined it was built; Plato's Parmenides takes on Eleatic arguments.",
+    "reason": "The Presocratics' questions and answers were the foundation on which philosophy as Plato and Aristotle defined it was built.",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/presocratics/",
@@ -15,7 +15,8 @@
         "section": "6. Other Eleatics: Zeno and Melissus"
       }
     ],
-    "label": "the questions it inherited"
+    "label": "the questions it inherited",
+    "revised": "2026-11-13"
   },
   {
     "from": "aristotle",
@@ -66,19 +67,20 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/epicurus/",
-        "section": "2. Life",
-        "quote": "inherited this scheme from the earlier atomists, above all Democritus"
+        "section": "2. Life"
       },
       {
         "url": "https://plato.stanford.edu/entries/epicurus/",
-        "section": "3. Physical Theory"
+        "section": "3. Physical Theory",
+        "quote": "inherited this scheme from the earlier atomists, above all Democritus"
       },
       {
         "url": "https://plato.stanford.edu/entries/presocratics/",
         "section": "8. Presocratic Atomism"
       }
     ],
-    "label": "the atoms it borrowed"
+    "label": "the atoms it borrowed",
+    "revised": "2026-11-13"
   },
   {
     "from": "epicureanism",
@@ -134,7 +136,7 @@
     "from": "skepticism",
     "to": "socrates-plato",
     "kind": "built_on",
-    "reason": "Socrates' commitment to examination inspired the skepticism of Plato's own Academy under Arcesilaus.",
+    "reason": "Socrates' commitment to examination as the way to find out inspired the skepticism of the Hellenistic Academy.",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
@@ -142,7 +144,8 @@
         "quote": "inspires the skepticism of the Hellenistic Academy"
       }
     ],
-    "label": "Socratic questioning"
+    "label": "Socratic questioning",
+    "revised": "2026-11-13"
   },
   {
     "from": "skepticism",
@@ -152,19 +155,20 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
-        "section": "3.1 Arcesilaus",
-        "quote": "Carneades (i) engages with Stoic epistemology"
+        "section": "3.1 Arcesilaus"
       },
       {
         "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
-        "section": "3.2 Carneades"
+        "section": "3.2 Carneades",
+        "quote": "Carneades (i) engages with Stoic epistemology"
       },
       {
         "url": "https://plato.stanford.edu/entries/stoicism/",
         "section": "1.1 The School and its History"
       }
     ],
-    "label": "certainty it attacked"
+    "label": "certainty it attacked",
+    "revised": "2026-11-13"
   },
   {
     "from": "skepticism",
@@ -202,15 +206,20 @@
     "from": "neoplatonism",
     "to": "aristotle",
     "kind": "built_on",
-    "reason": "Plotinus used passages of Aristotle's Metaphysics as starting points, and his school read commentaries on Aristotle.",
+    "reason": "Plotinus used passages of Aristotle's Metaphysics as starting points, and his sessions read commentaries on Plato and Aristotle.",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/neoplatonism/",
         "section": "1. Historical Orientation: Antiquity",
         "quote": "passages from Plato's dialogues and Aristotle's Metaphysics"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/plotinus/",
+        "section": "1. Life and Writings"
       }
     ],
-    "label": "texts it worked from"
+    "label": "texts it worked from",
+    "revised": "2026-11-13"
   },
   {
     "from": "neoplatonism",
@@ -230,23 +239,24 @@
     "from": "scholasticism",
     "to": "aristotle",
     "kind": "built_on",
-    "reason": "Thirteenth-century university philosophers were enthused by newly available Aristotle; Aquinas commented on all his main works.",
+    "reason": "Thirteenth-century university philosophers were enthused by newly available Aristotle; Aquinas worked to write commentaries on all of Aristotle's principal works.",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
-        "section": "1.2 The Platonic Schools of Late Antiquity",
-        "quote": "enthused by the newly available Aristotelian material"
+        "section": "1.2 The Platonic Schools of Late Antiquity"
       },
       {
         "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
-        "section": "2.7 University Philosophy"
+        "section": "2.7 University Philosophy",
+        "quote": "enthused by the newly available Aristotelian material"
       },
       {
         "url": "https://plato.stanford.edu/entries/aquinas/",
         "section": "1.1 Life"
       }
     ],
-    "label": "the rediscovered Aristotle"
+    "label": "the rediscovered Aristotle",
+    "revised": "2026-11-13"
   },
   {
     "from": "scholasticism",
@@ -270,7 +280,7 @@
     "from": "renaissance",
     "to": "scholasticism",
     "kind": "pushed_against",
-    "reason": "From Petrarch on, humanists condemned scholastic logic and university education and wanted a curriculum built on the classics.",
+    "reason": "Petrarch set out what became the standard critique of scholastic philosophy, and fifteenth- and early sixteenth-century humanists condemned university education and scholastic logic.",
     "sources": [
       {
         "url": "https://iep.utm.edu/renaissa/",
@@ -278,7 +288,8 @@
         "quote": "what was to become the standard critique of Scholastic philosophy"
       }
     ],
-    "label": "school logic it mocked"
+    "label": "school logic it mocked",
+    "revised": "2026-11-13"
   },
   {
     "from": "renaissance",
@@ -302,7 +313,7 @@
     "from": "renaissance",
     "to": "stoicism",
     "kind": "built_on",
-    "reason": "Renaissance thinkers renewed the study of Stoicism; Justus Lipsius led the Neo-Stoic movement.",
+    "reason": "Renaissance thinkers renewed the study of Stoicism; SEP calls Justus Lipsius the most important figure of the Neo-Stoic movement.",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/stoicism/",
@@ -314,7 +325,8 @@
         "section": "intro"
       }
     ],
-    "label": "Neo-Stoic revival"
+    "label": "Neo-Stoic revival",
+    "revised": "2026-11-13"
   },
   {
     "from": "renaissance",
@@ -360,21 +372,8 @@
         "quote": "He attacks the long-standing assumptions of the scholastic-aristotelians"
       }
     ],
-    "label": "old science overthrown"
-  },
-  {
-    "from": "rationalism",
-    "to": "skepticism",
-    "kind": "pushed_against",
-    "reason": "Descartes took the skeptical threat to knowledge seriously and set out to overcome it in the Meditations.",
-    "sources": [
-      {
-        "url": "https://plato.stanford.edu/entries/descartes/",
-        "section": "2. Philosophical Development",
-        "quote": "took the skeptical threat to knowledge quite seriously and sought to overcome it"
-      }
-    ],
-    "label": "doubt to defeat"
+    "label": "scholastic assumptions attacked",
+    "revised": "2026-11-13"
   },
   {
     "from": "empiricism",
@@ -398,7 +397,7 @@
     "from": "enlightenment",
     "to": "rationalism",
     "kind": "built_on_then_pushed_against",
-    "reason": "Descartes' rationalist system, with its method of doubt, is one of the pillars of Enlightenment thought. Then: Trained in Leibniz-Wolff rationalism, Kant lost faith in its assumption that metaphysical knowledge is possible and built the critical philosophy instead.",
+    "reason": "Descartes' rationalist system, with its method of doubt, is one of the pillars of Enlightenment thought. Then: Kant's early work was enmeshed in Leibniz-Wolff rationalism, until Hume shook his faith in its assumption that metaphysical knowledge is possible.",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/enlightenment/",
@@ -407,15 +406,16 @@
       },
       {
         "url": "https://iep.utm.edu/kantview/",
-        "section": "a. Pre-Critical Thought",
-        "quote": "his faith in this rationalist assumption was shaken by David Hume"
+        "section": "a. Pre-Critical Thought"
       },
       {
         "url": "https://iep.utm.edu/kantview/",
-        "section": "b. Dogmatic Slumber, Synthetic A Priori Knowledge, and the Copernican Shift"
+        "section": "b. Dogmatic Slumber, Synthetic A Priori Knowledge, and the Copernican Shift",
+        "quote": "his faith in this rationalist assumption was shaken by David Hume"
       }
     ],
-    "label": "pillar, then limits"
+    "label": "pillar, then limits",
+    "revised": "2026-11-13"
   },
   {
     "from": "enlightenment",
@@ -480,25 +480,30 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
-        "section": "1. Precursors to the Classical Approach",
-        "quote": "Bentham also benefited from Hume's work"
+        "section": "1. Precursors to the Classical Approach"
       },
       {
         "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
-        "section": "2.2 Jeremy Bentham"
+        "section": "2.2 Jeremy Bentham",
+        "quote": "Bentham also benefited from Hume's work"
       },
       {
         "url": "https://plato.stanford.edu/entries/bentham/",
         "section": "1. Life and Writings"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+        "section": "1.2 Empiricism"
       }
     ],
-    "label": "Hume's idea of utility"
+    "label": "Hume's idea of utility",
+    "revised": "2026-11-13"
   },
   {
     "from": "utilitarianism",
     "to": "enlightenment",
     "kind": "built_on",
-    "reason": "Bentham found the utility principle in the Enlightenment writers Helvétius and Beccaria as well as Hume.",
+    "reason": "Bentham found the utility principle in the writings of Hume, Helvétius and Beccaria; SEP places Helvétius in the radical French Enlightenment.",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/bentham/",
@@ -510,13 +515,14 @@
         "section": "1.4 Science of Man and Subjectivism in the Enlightenment"
       }
     ],
-    "label": "Helvétius and Beccaria"
+    "label": "Helvétius and Beccaria",
+    "revised": "2026-11-13"
   },
   {
     "from": "marxism",
     "to": "german-idealism",
     "kind": "built_on",
-    "reason": "Marx took over Hegel's teleological account of history and 'inverted' it into materialism, by way of the Left Hegelian Feuerbach.",
+    "reason": "Marx took over Hegel's teleological account of history and 'inverted' it into a materialist theory, appropriating many Hegelian ideas.",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/hegel/",
@@ -526,13 +532,10 @@
       {
         "url": "https://plato.stanford.edu/entries/hegel/",
         "section": "1. Life, Work, and Influence"
-      },
-      {
-        "url": "https://plato.stanford.edu/entries/marx/",
-        "section": "1.2 Religion and Work"
       }
     ],
-    "label": "Hegel turned upside down"
+    "label": "Hegel turned upside down",
+    "revised": "2026-11-13"
   },
   {
     "from": "existentialism",
@@ -560,15 +563,16 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/existentialism/",
-        "section": "intro",
-        "quote": "Following the core maxim of phenomenology introduced by his teacher Husserl"
+        "section": "intro"
       },
       {
         "url": "https://plato.stanford.edu/entries/existentialism/",
-        "section": "2.3 Being-in-the-World"
+        "section": "2.3 Being-in-the-World",
+        "quote": "Following the core maxim of phenomenology introduced by his teacher Husserl"
       }
     ],
-    "label": "the method it used"
+    "label": "the method it used",
+    "revised": "2026-11-13"
   },
   {
     "from": "pragmatism",
@@ -626,9 +630,14 @@
         "url": "https://plato.stanford.edu/entries/husserl/",
         "section": "3. The transcendental turn: Epoché, phenomenological reduction, and transcendental idealism",
         "quote": "a new epoch-making type of philosophy"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/husserl/",
+        "section": "1. Life and work"
       }
     ],
-    "label": "Descartes' first-person turn"
+    "label": "Descartes' first-person turn",
+    "revised": "2026-11-13"
   },
   {
     "from": "analytic",
@@ -646,7 +655,8 @@
         "section": "intro"
       }
     ],
-    "label": "the idealism it overthrew"
+    "label": "idealism it broke from",
+    "revised": "2026-11-13"
   },
   {
     "from": "analytic",
@@ -692,7 +702,8 @@
         "section": "3.2 The Analytic/Synthetic Distinction and the Relative A Priori"
       }
     ],
-    "label": "Kant's a priori banned"
+    "label": "synthetic a priori banned",
+    "revised": "2026-11-13"
   },
   {
     "from": "analytic",
@@ -772,9 +783,14 @@
       {
         "url": "https://plato.stanford.edu/entries/postmodernism/",
         "section": "9. Habermas's Critique"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/critical-theory/",
+        "section": "1.1 Origins and Generations"
       }
     ],
-    "label": "Habermas's critique"
+    "label": "Habermas's critique",
+    "revised": "2026-11-13"
   },
   {
     "from": "post-structuralism",
@@ -798,19 +814,20 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/derrida/",
-        "section": "1. Life and Works",
-        "quote": "it aims to criticize what Husserl calls the \"principle of all principles\""
+        "section": "1. Life and Works"
       },
       {
         "url": "https://plato.stanford.edu/entries/derrida/",
-        "section": "3. Basic Argumentation and its Implications: Time, Hearing-Oneself-Speak, the Secret, and Sovereignty"
+        "section": "3. Basic Argumentation and its Implications: Time, Hearing-Oneself-Speak, the Secret, and Sovereignty",
+        "quote": "it aims to criticize what Husserl calls the \"principle of all principles\""
       },
       {
         "url": "https://plato.stanford.edu/entries/foucault/",
         "section": "2. Intellectual Background"
       }
     ],
-    "label": "Husserl deconstructed"
+    "label": "Husserl deconstructed",
+    "revised": "2026-11-13"
   },
   {
     "from": "post-structuralism",
@@ -860,15 +877,16 @@
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/feminist-philosophy/",
-        "section": "2. Feminist Scholarship",
-        "quote": "Important feminist philosophical work has emerged from all the current major philosophical traditions"
+        "section": "2. Feminist Scholarship"
       },
       {
         "url": "https://plato.stanford.edu/entries/feminist-philosophy/",
-        "section": "3. Approaches to Feminism"
+        "section": "3. Approaches to Feminism",
+        "quote": "Important feminist philosophical work has emerged from all the current major philosophical traditions"
       }
     ],
-    "label": "analytic feminism"
+    "label": "analytic feminism",
+    "revised": "2026-11-13"
   },
   {
     "from": "feminist-philosophy",
@@ -888,7 +906,7 @@
     "from": "feminist-philosophy",
     "to": "critical-theory",
     "kind": "built_on",
-    "reason": "Third-generation critical theorists such as Fraser and Benhabib made critical theory a base for feminist theory.",
+    "reason": "Third-generation critical theorists such as Fraser and Benhabib tried to make critical theory more amenable to feminism.",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/critical-theory/",
@@ -896,13 +914,14 @@
         "quote": "attempting to make critical theory more amenable to feminism"
       }
     ],
-    "label": "feminist critical theory"
+    "label": "feminist critical theory",
+    "revised": "2026-11-13"
   },
   {
     "from": "feminist-philosophy",
     "to": "post-structuralism",
     "kind": "built_on",
-    "reason": "A poststructuralist strand of feminist theory (Judith Butler) draws on Foucault; analytic feminists draw on Foucault and Butler too.",
+    "reason": "Feminist critical theory has a poststructuralist strand (Judith Butler), and analytic feminists also draw on Foucault and Butler.",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/critical-theory/",
@@ -914,13 +933,14 @@
         "section": "3. Approaches to Feminism"
       }
     ],
-    "label": "Butler's gender theory"
+    "label": "Butler's gender theory",
+    "revised": "2026-11-13"
   },
   {
     "from": "patristic",
     "to": "neoplatonism",
     "kind": "built_on",
-    "reason": "Augustine came to Christianity through Neoplatonically minded Christians, and through him and the Greek Fathers Neoplatonism shaped Christian theology.",
+    "reason": "At Milan Augustine met Neoplatonically inclined Christians who showed him a philosophically informed Christianity; through him and the Greek Fathers, Neoplatonism shaped Christian theology.",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/augustine/",
@@ -933,7 +953,8 @@
         "quote": "Neoplatonism profoundly influenced the emergence of mainstream"
       }
     ],
-    "label": "Platonism for faith"
+    "label": "Platonism for faith",
+    "revised": "2026-11-13"
   },
   {
     "from": "patristic",
@@ -975,6 +996,7 @@
         "quote": "provided another source, and inspiration, for philosophers"
       }
     ],
-    "label": "Augustine as authority"
+    "label": "Augustine as inspiration",
+    "revised": "2026-11-13"
   }
 ]

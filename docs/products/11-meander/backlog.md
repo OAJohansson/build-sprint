@@ -15,3 +15,8 @@
 
 | Romanticism as a school on the globe | Left out of the 23 (L17) | Later |
 | Re-run the API judge on the ~195 items graded in-session (after 1 Dec, cached) | Closes the method caveat on the content evals | Later |
+| "Next on your thread": suggest 1–2 unvisited schools linked to where you've been, with a reason | User test F5; the most direct test of the hop bet | Next |
+| Era cues on the overview (time direction, faint era words) | User test F1; job 1 scored 3/5 | Next |
+| Mark 2–3 neighbours to try first on busy schools | User test F4 (Enlightenment lights 8) | Later |
+| Hover reason tag can cover a dim label behind it | Seen on the final build | Later |
+| Focus in the URL (?school=) so a school can be linked and survives reload | `// shortcut:` in meander.tsx | Later |

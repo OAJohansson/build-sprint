@@ -1,0 +1,108 @@
+// Typed loader for the field's content. All schools, thinkers, themes and links live as JSON in
+// src/content/, separate from the code, so sourced content can replace the sample without code changes.
+// Sphere positions are precomputed by `pnpm -F 11-meander positions` (scripts/embed-positions.mjs).
+import schoolsFile from "@/content/schools.json";
+import thinkersFile from "@/content/thinkers.json";
+import linksFile from "@/content/links.json";
+import positionsFile from "@/content/positions.json";
+
+/** Where a claim comes from: a reference URL and the section that supports it. */
+export type Source = { url: string; section?: string };
+
+export type Theme = {
+  name: string;
+  /** Two or three sentences (L12). Empty while the content is being written. */
+  text: string;
+  /** Ids of the thinkers this theme belongs to. */
+  thinkers: string[];
+  sources: Source[];
+};
+
+export type School = {
+  id: string;
+  name: string;
+  dates: string;
+  questions: string[];
+  themes: Theme[];
+  /** Ids into thinkers.json, in the order shown. */
+  thinkers: string[];
+  sources: Source[];
+  sample?: boolean;
+};
+
+export type Thinker = {
+  id: string;
+  name: string;
+  /** Short name for inline rows ("Beauvoir"). */
+  short: string;
+  dates: string;
+  /** The school whose card lists this thinker. */
+  school: string;
+  summary: string;
+  ideas: string[];
+  /** A hand-written study prompt; when missing, one is built from the template below. */
+  prompt?: string;
+  sources: Source[];
+  sample?: boolean;
+};
+
+/** `from` is the older school, `to` the newer one that built on it or pushed against it. */
+export type Link = {
+  from: string;
+  to: string;
+  type: "built" | "against";
+  sources: Source[];
+  sample?: boolean;
+};
+
+export type LatLon = [number, number];
+
+export const schools = schoolsFile.schools as School[];
+export const thinkers = thinkersFile.thinkers as Thinker[];
+export const links = linksFile.links as Link[];
+export const positions = positionsFile as unknown as Record<string, LatLon>;
+/** True while any part of the content is the designer's unchecked sample. */
+export const isSample = Boolean(schoolsFile.sample || thinkersFile.sample || linksFile.sample);
+
+const schoolMap = new Map(schools.map((s) => [s.id, s]));
+const thinkerMap = new Map(thinkers.map((t) => [t.id, t]));
+
+// Fail the build loudly if the data files disagree with each other.
+for (const s of schools) {
+  if (!positions[s.id]) throw new Error(`content: no position for school "${s.id}"; run pnpm -F 11-meander positions`);
+  for (const t of s.thinkers) if (!thinkerMap.has(t)) throw new Error(`content: school "${s.id}" lists unknown thinker "${t}"`);
+}
+for (const l of links) {
+  if (!schoolMap.has(l.from) || !schoolMap.has(l.to)) throw new Error(`content: link ${l.from} → ${l.to} names an unknown school`);
+}
+
+export const getSchool = (id: string) => schoolMap.get(id);
+export const getThinker = (id: string) => thinkerMap.get(id);
+
+export type Neighbour = { school: School; verb: string; against: boolean; link: Link };
+
+/** The verb a neighbour carries, seen from the focused school. */
+export function verbFor(link: Link, focus: string) {
+  if (focus === link.to) return link.type === "built" ? "built on" : "pushed against";
+  return link.type === "built" ? "grew from it" : "pushed back";
+}
+
+/** Schools one thread away from `focus`, in link order. */
+export function neighbours(focus: string): Neighbour[] {
+  return links
+    .filter((l) => l.from === focus || l.to === focus)
+    .map((l) => ({
+      school: schoolMap.get(l.from === focus ? l.to : l.from)!,
+      verb: verbFor(l, focus),
+      against: l.type === "against",
+      link: l,
+    }));
+}
+
+/** The prompt "Study with Claude" copies. Always names the thinker (R4). */
+export function studyPrompt(t: Thinker): string {
+  if (t.prompt) return t.prompt;
+  const school = schoolMap.get(t.school);
+  const ideas = t.ideas.length ? ` Cover these key ideas: ${t.ideas.join("; ")}.` : "";
+  return `Teach me ${t.name}${school ? ` (${school.name})` : ""} as a short Socratic module. Start with the question ${t.short} was trying to answer and who they were reacting to.${ideas} Ask me one question at a time and finish with a five-question quiz.`;
+}

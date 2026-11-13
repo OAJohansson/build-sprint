@@ -1,0 +1,121 @@
+{
+  "sample": true,
+  "note": "Sample content from the round-4 design (design/round-4/_src/data.mjs). Not checked against the accuracy guardrail (R7); real sourced content replaces it.",
+  "thinkers": [
+    {
+      "id": "zen",
+      "name": "Zeno of Citium",
+      "short": "Zeno",
+      "dates": "c. 334–262 BCE",
+      "school": "sto",
+      "summary": "",
+      "ideas": [],
+      "sample": true,
+      "sources": []
+    },
+    {
+      "id": "chr",
+      "name": "Chrysippus",
+      "short": "Chrysippus",
+      "dates": "c. 279–206 BCE",
+      "school": "sto",
+      "summary": "",
+      "ideas": [],
+      "sample": true,
+      "sources": []
+    },
+    {
+      "id": "sen",
+      "name": "Seneca",
+      "short": "Seneca",
+      "dates": "c. 4 BCE–65 CE",
+      "school": "sto",
+      "summary": "",
+      "ideas": [],
+      "sample": true,
+      "sources": []
+    },
+    {
+      "id": "epc",
+      "name": "Epictetus",
+      "short": "Epictetus",
+      "dates": "c. 50–135 CE",
+      "school": "sto",
+      "summary": "",
+      "ideas": [],
+      "sample": true,
+      "sources": []
+    },
+    {
+      "id": "mau",
+      "name": "Marcus Aurelius",
+      "short": "Marcus Aurelius",
+      "dates": "121–180 CE",
+      "school": "sto",
+      "summary": "",
+      "ideas": [],
+      "sample": true,
+      "sources": []
+    },
+    {
+      "id": "kie",
+      "name": "Søren Kierkegaard",
+      "short": "Kierkegaard",
+      "dates": "1813–1855",
+      "school": "exi",
+      "summary": "",
+      "ideas": [],
+      "sample": true,
+      "sources": []
+    },
+    {
+      "id": "nie",
+      "name": "Friedrich Nietzsche",
+      "short": "Nietzsche",
+      "dates": "1844–1900",
+      "school": "exi",
+      "summary": "",
+      "ideas": [],
+      "sample": true,
+      "sources": []
+    },
+    {
+      "id": "sar",
+      "name": "Jean-Paul Sartre",
+      "short": "Sartre",
+      "dates": "1905–1980",
+      "school": "exi",
+      "summary": "",
+      "ideas": [],
+      "sample": true,
+      "sources": []
+    },
+    {
+      "id": "bea",
+      "name": "Simone de Beauvoir",
+      "short": "Beauvoir",
+      "dates": "1908–1986",
+      "school": "exi",
+      "summary": "French philosopher who carried existentialist freedom into ethics and politics. In The Second Sex she argued that “woman” is a situation one is made into, not a fixed nature.",
+      "ideas": [
+        "One is not born, but becomes, a woman",
+        "An ethics of ambiguity",
+        "My freedom needs the freedom of others"
+      ],
+      "prompt": "Teach me Simone de Beauvoir as a short Socratic module. Start with what she took from existentialism and where she pushed it further, then her three key ideas: becoming a woman, the ethics of ambiguity, and why my freedom needs the freedom of others. Ask me one question at a time and finish with a five-question quiz.",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "id": "cam",
+      "name": "Albert Camus",
+      "short": "Camus",
+      "dates": "1913–1960",
+      "school": "exi",
+      "summary": "",
+      "ideas": [],
+      "sample": true,
+      "sources": []
+    }
+  ]
+}

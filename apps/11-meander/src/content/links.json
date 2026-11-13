@@ -1,0 +1,265 @@
+{
+  "sample": true,
+  "note": "Sample content from the round-4 design (design/round-4/_src/data.mjs). Not checked against the accuracy guardrail (R7); real sourced content replaces it.",
+  "links": [
+    {
+      "from": "pre",
+      "to": "cla",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "cla",
+      "to": "sto",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "pre",
+      "to": "epi",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "cla",
+      "to": "sch",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "sch",
+      "to": "rat",
+      "type": "against",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "rat",
+      "to": "emp",
+      "type": "against",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "rat",
+      "to": "ide",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "emp",
+      "to": "ide",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "emp",
+      "to": "uti",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "ide",
+      "to": "mar",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "ide",
+      "to": "exi",
+      "type": "against",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "phe",
+      "to": "exi",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "emp",
+      "to": "pra",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "ide",
+      "to": "phe",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "ide",
+      "to": "ana",
+      "type": "against",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "emp",
+      "to": "ana",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "exi",
+      "to": "abs",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "exi",
+      "to": "pos",
+      "type": "against",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "cla",
+      "to": "cyn",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "cyn",
+      "to": "sto",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "cla",
+      "to": "ske",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "sto",
+      "to": "ske",
+      "type": "against",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "ske",
+      "to": "emp",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "cla",
+      "to": "neo",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "neo",
+      "to": "sch",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "rat",
+      "to": "enl",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "emp",
+      "to": "enl",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "enl",
+      "to": "ide",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "enl",
+      "to": "rom",
+      "type": "against",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "rom",
+      "to": "exi",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "mar",
+      "to": "cri",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "ana",
+      "to": "cri",
+      "type": "against",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "exi",
+      "to": "fem",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "mar",
+      "to": "fem",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "pos",
+      "to": "fem",
+      "type": "built",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "phe",
+      "to": "str",
+      "type": "against",
+      "sample": true,
+      "sources": []
+    },
+    {
+      "from": "str",
+      "to": "pos",
+      "type": "against",
+      "sample": true,
+      "sources": []
+    }
+  ]
+}

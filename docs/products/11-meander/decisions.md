@@ -21,3 +21,4 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T6 | 12 Nov | Themes open from a "Themes" link under the title, as a popover | Claude (designer) | Design polish | Follows T2 and R2 |
 | T7 | 12 Nov | After "Study with Claude", the button reads "Copied" and the first lines of the prompt show | Claude (designer) | Design polish | R4: say it was copied and what |
 | T8 | 12 Nov | Phone has no globe: the school, "One thread away" as a list, then its questions | Claude (designer) | Design polish | R8 and L3: the whole-field view is a laptop job |
+| L10 | 13 Nov | Progress off the globe: visited schools keep only a small brass ring (no dates, no count); a quiet "Your thread" button in the top bar opens a panel with the history (dates, schools, days) | Owner | Canvas sign-off | Keeps the globe clean; the at-a-glance rings still serve the hop bet. Owner chose A without hover dates |

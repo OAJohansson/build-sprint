@@ -30,6 +30,7 @@ export type School = {
   sample?: boolean;
   /** A one-line "what this is" written for the card; when missing, the first sentence of `description`. */
   tagline?: string;
+  taglineSources?: Source[];
   /** Not shown in full; the card shows its first sentence (see `ledeOf`). */
   dateRange?: string;
   era?: string;

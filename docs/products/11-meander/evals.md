@@ -14,11 +14,11 @@ the owner's taste is judged at the gates.
 | # | Requirement | Check (fresh install, laptop 1440×900 unless noted) | Run by | Result | Evidence |
 | --- | --- | --- | --- | --- | --- |
 | R1 | The whole map fits a laptop screen on first load | Every school visible without scrolling, no label overlapping another | user-tester | | screenshot |
-| R2 | A school shows questions, themes, 3–5 thinkers, what it reacted against, 2–3 go-next neighbours; each theme opens in place with 2–3 sentences and its thinkers | Every school in the data has all of these (script); 3 schools spot-checked on screen | data-evals + user-tester | | script output, screenshots |
+| R2 | A school shows a one-line description, questions, themes, 3–5 thinkers, what it reacted against (as a "pushed against" neighbour with its reason) and every linked neighbour as go-next (T20); each theme opens in place with 2–3 sentences and its thinkers | Every school in the data has all of these (script); 3 schools spot-checked on screen | data-evals + user-tester | | script output, screenshots |
 | R3 | Choosing a neighbour opens that school | One click from Existentialism reaches a neighbour; the globe turns to face it | user-tester | | screenshot |
 | R4 | A thinker shows a summary and key ideas; "Study with Claude" copies a prompt naming the thinker and says so | Paste the clipboard: the prompt names the thinker; button reads "Copied" | user-tester | | clipboard text |
 | R5 | Opened schools and thinkers are marked as visited, with the date, and survive a reload | Open two, reload: both rings still there; "Your thread" lists them with the right dates | user-tester | | screenshot |
-| R6 | From any level, Esc, empty space or the logo return to the overview | Tested from a school, a thinker and an open theme | user-tester | | log |
+| R6 | From any level, the logo or empty space return to the overview in one click; Esc steps back one level (T20) | Tested from a school, a thinker and an open theme | user-tester | | log |
 | R7 | The content passes the accuracy guardrail | See "Content accuracy" below | data-evals | | eval report |
 | R8 | On a phone, one school at a time, nothing cut off or overlapping | 390×844: open a school and a thinker | user-tester | | screenshot |
 

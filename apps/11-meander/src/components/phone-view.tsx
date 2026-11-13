@@ -3,7 +3,7 @@
 // Phone (under 1024 wide): no globe, one school at a time (handoff "Phone", T8). The school screen
 // follows phone.png; the overview, thinker and "Your thread" screens reuse the card's contents.
 import { useEffect, useMemo, useRef } from "react";
-import { getSchool, getThinker, hereLine, neighbours, schools, splitName } from "@/lib/content";
+import { getSchool, getThinker, hereLine, ledeOf, neighbours, schools, splitName } from "@/lib/content";
 import { visitedSchools } from "@/lib/visits";
 import { SchoolSections, ThinkerSections, ThreadSections } from "./card-parts";
 import { Mark } from "./mark";
@@ -46,6 +46,7 @@ export function PhoneView({ nav }: { nav: Nav }) {
         <i className="here" aria-hidden="true" />
         <h1 tabIndex={-1} ref={heading} aria-label={school.name}>{splitName(school.name).short}</h1>
         <p className="meta">{hereLine(school)}</p>
+        {ledeOf(school) && <p className="plede">{ledeOf(school)}</p>}
         {near.length > 0 && (
           <>
             <h2 className="psec">One thread away</h2>
@@ -59,6 +60,7 @@ export function PhoneView({ nav }: { nav: Nav }) {
                       <span>
                         <em>{n.verb}</em>
                         <b>{n.school.name}</b>
+                        {n.link.label && <small>{n.link.label}</small>}
                         {v && <span className="sr-only">, visited</span>}
                       </span>
                     </button>
@@ -100,7 +102,7 @@ export function PhoneView({ nav }: { nav: Nav }) {
   return (
     <div className="phone">
       <header>
-        <button type="button" className="wm" translate="no" title="Back to all schools" onClick={nav.overview}>
+        <button type="button" className="wm" translate="no" title="Back to the whole field" aria-label="Meander, back to the whole field" onClick={nav.overview}>
           <Mark size={22} />Meander
         </button>
         {visits.length > 0 && (

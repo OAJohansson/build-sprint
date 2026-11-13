@@ -7,7 +7,7 @@
       "to": "socrates-plato",
       "type": "built",
       "label": "the questions it inherited",
-      "reason": "The Presocratics' questions and answers were the foundation on which philosophy as Plato and Aristotle defined it was built; Plato's Parmenides takes on Eleatic arguments.",
+      "reason": "The Presocratics' questions and answers were the foundation on which philosophy as Plato and Aristotle defined it was built.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/presocratics/",
@@ -137,7 +137,7 @@
       "to": "skepticism",
       "type": "built",
       "label": "Socratic questioning",
-      "reason": "Socrates' commitment to examination inspired the skepticism of Plato's own Academy under Arcesilaus.",
+      "reason": "Socrates' commitment to examination as the way to find out inspired the skepticism of the Hellenistic Academy.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
@@ -205,11 +205,15 @@
       "to": "neoplatonism",
       "type": "built",
       "label": "texts it worked from",
-      "reason": "Plotinus used passages of Aristotle's Metaphysics as starting points, and his school read commentaries on Aristotle.",
+      "reason": "Plotinus used passages of Aristotle's Metaphysics as starting points, and his sessions read commentaries on Plato and Aristotle.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/neoplatonism/",
           "section": "1. Historical Orientation: Antiquity"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/plotinus/",
+          "section": "1. Life and Writings"
         }
       ],
       "sample": false
@@ -233,7 +237,7 @@
       "to": "patristic",
       "type": "built",
       "label": "Platonism for faith",
-      "reason": "Augustine came to Christianity through Neoplatonically minded Christians, and through him and the Greek Fathers Neoplatonism shaped Christian theology.",
+      "reason": "At Milan Augustine met Neoplatonically inclined Christians who showed him a philosophically informed Christianity; through him and the Greek Fathers, Neoplatonism shaped Christian theology.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/augustine/",
@@ -279,7 +283,7 @@
       "to": "scholasticism",
       "type": "built",
       "label": "the rediscovered Aristotle",
-      "reason": "Thirteenth-century university philosophers were enthused by newly available Aristotle; Aquinas commented on all his main works.",
+      "reason": "Thirteenth-century university philosophers were enthused by newly available Aristotle; Aquinas worked to write commentaries on all of Aristotle's principal works.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
@@ -318,7 +322,7 @@
       "from": "patristic",
       "to": "scholasticism",
       "type": "built",
-      "label": "Augustine as authority",
+      "label": "Augustine as inspiration",
       "reason": "Augustine's works were read widely in the Middle Ages and gave philosophers a source and inspiration.",
       "sources": [
         {
@@ -333,7 +337,7 @@
       "to": "renaissance",
       "type": "against",
       "label": "school logic it mocked",
-      "reason": "From Petrarch on, humanists condemned scholastic logic and university education and wanted a curriculum built on the classics.",
+      "reason": "Petrarch set out what became the standard critique of scholastic philosophy, and fifteenth- and early sixteenth-century humanists condemned university education and scholastic logic.",
       "sources": [
         {
           "url": "https://iep.utm.edu/renaissa/",
@@ -365,7 +369,7 @@
       "to": "renaissance",
       "type": "built",
       "label": "Neo-Stoic revival",
-      "reason": "Renaissance thinkers renewed the study of Stoicism; Justus Lipsius led the Neo-Stoic movement.",
+      "reason": "Renaissance thinkers renewed the study of Stoicism; SEP calls Justus Lipsius the most important figure of the Neo-Stoic movement.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/stoicism/",
@@ -414,26 +418,12 @@
       "from": "scholasticism",
       "to": "rationalism",
       "type": "against",
-      "label": "old science overthrown",
+      "label": "scholastic assumptions attacked",
       "reason": "Descartes attacked the assumptions of the scholastic Aristotelians that stood in the way of the new science.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/enlightenment/",
           "section": "1.1 Rationalism and the Enlightenment"
-        }
-      ],
-      "sample": false
-    },
-    {
-      "from": "skepticism",
-      "to": "rationalism",
-      "type": "against",
-      "label": "doubt to defeat",
-      "reason": "Descartes took the skeptical threat to knowledge seriously and set out to overcome it in the Meditations.",
-      "sources": [
-        {
-          "url": "https://plato.stanford.edu/entries/descartes/",
-          "section": "2. Philosophical Development"
         }
       ],
       "sample": false
@@ -461,7 +451,7 @@
       "to": "enlightenment",
       "type": "built-then-against",
       "label": "pillar, then limits",
-      "reason": "Descartes' rationalist system, with its method of doubt, is one of the pillars of Enlightenment thought. Then: Trained in Leibniz-Wolff rationalism, Kant lost faith in its assumption that metaphysical knowledge is possible and built the critical philosophy instead.",
+      "reason": "Descartes' rationalist system, with its method of doubt, is one of the pillars of Enlightenment thought. Then: Kant's early work was enmeshed in Leibniz-Wolff rationalism, until Hume shook his faith in its assumption that metaphysical knowledge is possible.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/enlightenment/",
@@ -550,6 +540,10 @@
         {
           "url": "https://plato.stanford.edu/entries/bentham/",
           "section": "1. Life and Writings"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+          "section": "1.2 Empiricism"
         }
       ],
       "sample": false
@@ -559,7 +553,7 @@
       "to": "utilitarianism",
       "type": "built",
       "label": "Helvétius and Beccaria",
-      "reason": "Bentham found the utility principle in the Enlightenment writers Helvétius and Beccaria as well as Hume.",
+      "reason": "Bentham found the utility principle in the writings of Hume, Helvétius and Beccaria; SEP places Helvétius in the radical French Enlightenment.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/bentham/",
@@ -577,7 +571,7 @@
       "to": "marxism",
       "type": "built",
       "label": "Hegel turned upside down",
-      "reason": "Marx took over Hegel's teleological account of history and 'inverted' it into materialism, by way of the Left Hegelian Feuerbach.",
+      "reason": "Marx took over Hegel's teleological account of history and 'inverted' it into a materialist theory, appropriating many Hegelian ideas.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/hegel/",
@@ -586,10 +580,6 @@
         {
           "url": "https://plato.stanford.edu/entries/hegel/",
           "section": "1. Life, Work, and Influence"
-        },
-        {
-          "url": "https://plato.stanford.edu/entries/marx/",
-          "section": "1.2 Religion and Work"
         }
       ],
       "sample": false
@@ -686,6 +676,10 @@
         {
           "url": "https://plato.stanford.edu/entries/husserl/",
           "section": "3. The transcendental turn: Epoché, phenomenological reduction, and transcendental idealism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/husserl/",
+          "section": "1. Life and work"
         }
       ],
       "sample": false
@@ -694,7 +688,7 @@
       "from": "german-idealism",
       "to": "analytic",
       "type": "against",
-      "label": "the idealism it overthrew",
+      "label": "idealism it broke from",
       "reason": "Moore and Russell broke away from absolute idealism, and Hegel became a main target of the founders of analytic philosophy.",
       "sources": [
         {
@@ -740,7 +734,7 @@
       "from": "enlightenment",
       "to": "analytic",
       "type": "against",
-      "label": "Kant's a priori banned",
+      "label": "synthetic a priori banned",
       "reason": "Logical positivists (Vienna Circle): the Circle banned Kant's synthetic a priori as refuted by the progress of science.",
       "sources": [
         {
@@ -832,6 +826,10 @@
         {
           "url": "https://plato.stanford.edu/entries/postmodernism/",
           "section": "9. Habermas's Critique"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/critical-theory/",
+          "section": "1.1 Origins and Generations"
         }
       ],
       "sample": false
@@ -949,7 +947,7 @@
       "to": "feminist-philosophy",
       "type": "built",
       "label": "feminist critical theory",
-      "reason": "Third-generation critical theorists such as Fraser and Benhabib made critical theory a base for feminist theory.",
+      "reason": "Third-generation critical theorists such as Fraser and Benhabib tried to make critical theory more amenable to feminism.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/critical-theory/",
@@ -963,7 +961,7 @@
       "to": "feminist-philosophy",
       "type": "built",
       "label": "Butler's gender theory",
-      "reason": "A poststructuralist strand of feminist theory (Judith Butler) draws on Foucault; analytic feminists draw on Foucault and Butler too.",
+      "reason": "Feminist critical theory has a poststructuralist strand (Judith Butler), and analytic feminists also draw on Foucault and Butler.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/critical-theory/",

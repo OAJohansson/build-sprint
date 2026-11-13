@@ -144,7 +144,7 @@
       "school": "presocratics",
       "summary": "Heraclitus of Ephesus was active around 500 BCE and is said to have written a single book, likely made up mostly of short, riddling sayings. He is best known for the ideas that things are always changing, that opposites belong together, and that fire is the world's basic stuff. He hints that he was self-taught, and he is hard to fit into any school.",
       "ideas": [
-        "Some things stay the same only by changing, like a river that remains a river because new water keeps flowing.",
+        "On one leading reading, some things stay the same only by changing, like a river that remains a river because new water keeps flowing.",
         "Opposites are bound together: sea water is healthy for fish but harmful for people.",
         "One rational order, the logos, steers everything, and fire is its sign."
       ],
@@ -176,7 +176,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Heraclitus of Ephesus as a short Socratic module. Start with a philosopher of Ephesus active around 500 BCE who wrote in riddles, then his three key ideas: staying the same by changing, as a river does; the unity of opposites; the logos that steers all things, with fire as its sign. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Heraclitus of Ephesus as a short Socratic module. Start with a philosopher of Ephesus active around 500 BCE who wrote in riddles, then his three key ideas: on one leading reading, staying the same by changing, as a river does; the unity of opposites; the logos that steers everything, with fire as its sign. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/heraclitus/",
@@ -189,6 +189,18 @@
         {
           "url": "https://plato.stanford.edu/entries/heraclitus/",
           "section": "3.1 Flux"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/heraclitus/",
+          "section": "3.2 The Unity of Opposites"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/presocratics/",
+          "section": "3. Xenophanes of Colophon and Heraclitus of Ephesus"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/heraclitus/",
+          "section": "4. Cosmology"
         }
       ],
       "sources": [
@@ -298,7 +310,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Democritus as a short Socratic module. Start with a thinker from Abdera born about 460 BCE who co-founded atomism, then his three key ideas: atoms and void as all that is real; sweet and bitter by convention, and two kinds of knowing; cheerfulness as the goal of life. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Democritus as a short Socratic module. Start with a thinker from Abdera born about 460 BCE who built on the atomism begun by his teacher Leucippus, then his three key ideas: atoms and void as all that is real; sweet and bitter by convention, and two kinds of knowing; cheerfulness as the goal of life. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/democritus/",
@@ -311,6 +323,10 @@
         {
           "url": "https://plato.stanford.edu/entries/presocratics/",
           "section": "8. Presocratic Atomism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/democritus/",
+          "section": "7. Ethics"
         }
       ],
       "sources": [
@@ -335,7 +351,7 @@
       "short": "Socrates",
       "dates": "469–399 BCE",
       "school": "socrates-plato",
-      "summary": "Socrates (469–399 BCE) wrote nothing, yet he changed how philosophy itself is understood. He spent his days in the Athenian marketplace, questioning anyone who would talk about courage, justice and the state of their soul, and he refused to take money for it. Athens executed him on a charge of irreverence toward the gods.",
+      "summary": "Socrates (469–399 BCE) wrote nothing, yet he changed how philosophy itself is understood. He spent his days in the Athenian marketplace, questioning anyone who would talk about courage, love, reverence, moderation and the state of their soul, and he refused to take money for it. Athens executed him on a charge of irreverence toward the gods.",
       "ideas": [
         "Knowing that you don't know is wiser than believing you know when you don't.",
         "The health of your soul matters more than wealth, reputation or your body.",
@@ -374,6 +390,14 @@
         {
           "url": "https://iep.utm.edu/socrates/",
           "section": "i. Socratic Ignorance"
+        },
+        {
+          "url": "https://iep.utm.edu/socrates/",
+          "section": "ii. Priority of the Care of the Soul"
+        },
+        {
+          "url": "https://iep.utm.edu/socrates/",
+          "section": "ii. No One Errs Knowingly/No One Errs Willingly"
         }
       ],
       "sources": [
@@ -449,7 +473,7 @@
       "short": "Plato",
       "dates": "429?–347 BCE",
       "school": "socrates-plato",
-      "summary": "Plato (429?–347 BCE) was a high-status Athenian and one of the most influential writers in the history of philosophy. He wrote dialogues, most with Socrates as the main speaker, so it is hard to say where his teacher ends and he begins. Philosophy as a rigorous, systematic study of ethics, politics, reality and knowledge can fairly be called his invention.",
+      "summary": "Plato (429?–347 BCE) was a high-status Athenian and one of the most influential writers in the history of philosophy. He wrote dialogues in nearly all of which Socrates speaks, often as the principal speaker, so it is hard to say where his teacher ends and he begins. Philosophy as a rigorous, systematic study of ethics, politics, reality and knowledge can fairly be called his invention.",
       "ideas": [
         "Behind the many things we see is a more real realm of Forms, perfect and unchanging patterns such as Beauty itself.",
         "The soul is different from the body, and in some dialogues it recollects what it grasped of the Forms before birth.",
@@ -472,6 +496,10 @@
           {
             "url": "https://plato.stanford.edu/entries/plato/",
             "section": "10. Does Plato change his mind about politics?"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/plato/",
+            "section": "4. Socrates"
           }
         ]
       ],
@@ -488,6 +516,10 @@
         {
           "url": "https://plato.stanford.edu/entries/plato/",
           "section": "1. Plato’s central doctrines"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/plato/",
+          "section": "10. Does Plato change his mind about politics?"
         }
       ],
       "sources": [
@@ -547,6 +579,14 @@
         {
           "url": "https://plato.stanford.edu/entries/aristotle/",
           "section": "7. The Four Causal Account of Explanatory Adequacy"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/aristotle/",
+          "section": "9. Aristotelian Teleology"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/aristotle/",
+          "section": "12. Happiness and Political Association"
         }
       ],
       "sources": [
@@ -665,6 +705,14 @@
         {
           "url": "https://plato.stanford.edu/entries/alexander-aphrodisias/",
           "section": "2. Alexander as commentator and philosopher"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/alexander-aphrodisias/",
+          "section": "5. Psychology"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/alexander-aphrodisias/",
+          "section": "6. Ethics and Fate"
         }
       ],
       "sources": [
@@ -750,7 +798,7 @@
       "id": "epicureanism/philodemus",
       "name": "Philodemus",
       "short": "Philodemus",
-      "dates": "1st c. BCE",
+      "dates": "ca. 110–ca. 30 BCE",
       "school": "epicureanism",
       "summary": "Philodemus of Gadara (ca. 110–ca. 30 BCE) studied at the Epicurean school in Athens and moved to Italy, probably in the 70s BCE. He was also a poet whose verse Cicero praised. Most of his philosophy comes from papyrus rolls found in the 18th century in a villa at Herculaneum, buried by the eruption of Vesuvius in 79 CE.",
       "ideas": [
@@ -803,7 +851,7 @@
       "short": "Lucretius",
       "dates": "1st c. BCE",
       "school": "epicureanism",
-      "summary": "Titus Lucretius Carus (mid-90s to mid-50s BCE) wrote On the Nature of Things (De rerum natura), a six-book Latin poem on Epicurean physics. Almost nothing is known of his life. His poem is our fullest source for Epicurean atomism and our only Epicurean source for the atomic 'swerve'.",
+      "summary": "Titus Lucretius Carus (mid-90s to mid-50s BCE) wrote On the Nature of Things (De rerum natura), a six-book Latin poem on Epicurean physics. Little is known of his life beyond what can be inferred from the poem itself. His poem is our fullest source for Epicurean atomism and our only Epicurean source for the atomic 'swerve'.",
       "ideas": [
         "Poetry is like honey on the rim of a cup: it sweetens a teaching that only seems bitter.",
         "The soul dies with the body, so death is nothing to fear; we feel no dread about the time before we were born.",
@@ -833,7 +881,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Lucretius as a short Socratic module. Start with the Roman poet of the 1st century BCE who put Epicurus into Latin verse, then his three key ideas: poetry as honey around a healing medicine; the mortal soul and the symmetry argument about death; the atomic swerve. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Lucretius as a short Socratic module. Start with the poet (mid-90s to mid-50s BCE) whose six-book Latin poem, On the Nature of Things, sets out Epicurean physics, then his three key ideas: poetry as honey on the rim of the cup; the mortal soul, and why we need not dread death any more than the time before birth; the atomic swerve. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/lucretius/",
@@ -846,6 +894,18 @@
         {
           "url": "https://plato.stanford.edu/entries/lucretius/",
           "section": "3. Poetic format"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/lucretius/",
+          "section": "3.417–829: Thirty proofs of the mortality of soul"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/lucretius/",
+          "section": "6. Ethics"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/lucretius/",
+          "section": "2.62–332: Atomic motion and the swerve (for this section, see Fowler 2002)."
         }
       ],
       "sources": [
@@ -870,7 +930,7 @@
       "ideas": [
         "The goal of life is 'living in agreement': one consistent reason that is never at odds with itself.",
         "Philosophy has three parts, physics, logic and ethics, that form one connected whole.",
-        "Some impressions grasp the truth so clearly that they cannot be false; he called this grasp 'cognition' (katalēpsis)."
+        "Some impressions are 'cognitive': the way they arise from what they show (and, on some readings, their clarity) guarantees they are true. Assenting to one he called 'cognition' (katalēpsis)."
       ],
       "ideaSources": [
         [
@@ -896,7 +956,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Zeno of Citium as a short Socratic module. Start with the founder of the Stoa in Athens around 300 BCE, then his three key ideas: living in agreement; philosophy as one system of physics, logic and ethics; cognition, the grasp of a truth that cannot be false. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Zeno of Citium as a short Socratic module. Start with the founder of the Stoa in Athens around 300 BCE, then his three key ideas: living in agreement; philosophy as one connected whole of physics, logic and ethics; cognition, assent to an impression guaranteed to be true. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/stoicism/",
@@ -909,6 +969,22 @@
         {
           "url": "https://plato.stanford.edu/entries/stoicism/",
           "section": "1.3 Sources"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/stoicism/",
+          "section": "4.1 The Telos"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/stoicism/",
+          "section": "1.2 Systematicity"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/stoicism/",
+          "section": "3.7 Epistemology"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
+          "section": "3.1 Arcesilaus"
         }
       ],
       "sources": [
@@ -967,7 +1043,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Chrysippus of Soli as a short Socratic module. Start with the Stoa's great systematizer, who led the school from about 230 BCE, then his three key ideas: fate and assent, the cylinder analogy; the happy life is the virtuous life; a propositional logic beside Aristotle's. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Chrysippus of Soli as a short Socratic module. Start with the Stoa's foremost theorist and systematizer, who led the school from about 230 BCE, then his three key ideas: fate and assent, the cylinder analogy; the happy life is the virtuous life; a propositional logic as an alternative to Aristotle's. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://iep.utm.edu/chrysipp/",
@@ -980,6 +1056,26 @@
         {
           "url": "https://plato.stanford.edu/entries/stoicism/",
           "section": "1.3 Sources"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/stoicism/",
+          "section": "2.8 Causes and Determinism"
+        },
+        {
+          "url": "https://iep.utm.edu/chrysipp/",
+          "section": "d. Freedom and Necessity"
+        },
+        {
+          "url": "https://iep.utm.edu/chrysipp/",
+          "section": "a. Eudaimonism"
+        },
+        {
+          "url": "https://iep.utm.edu/chrysipp/",
+          "section": "Chrysippus (c. 280–207 B.C.E.)"
+        },
+        {
+          "url": "https://iep.utm.edu/chrysipp/",
+          "section": "4. Logic"
         }
       ],
       "sources": [
@@ -1008,7 +1104,7 @@
       "ideas": [
         "Philosophy is a practice of training and healing, aimed at the person making progress rather than the perfect sage.",
         "Emotions like anger are judgments; 'moderate emotion' makes as little sense as moderate madness.",
-        "He writes within Stoicism but freely, following his teachers where they lead and borrowing from other schools when it helps."
+        "He writes within Stoicism but independently: he follows the Stoic 'leaders' where they lead, not where they send him, and uses ideas from other schools when they help."
       ],
       "ideaSources": [
         [
@@ -1030,7 +1126,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Seneca as a short Socratic module. Start with the Roman Stoic and adviser to Nero, c. 1 BCE – 65 CE, then his three key ideas: philosophy as therapy for someone making progress; anger as a judgment, and no 'moderate' emotions; an independent Stoic thinking in Latin. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Seneca as a short Socratic module. Start with the Stoic from Corduba, educated in Rome, who became Nero's tutor and adviser, c. 1 BCE – 65 CE, then his three key ideas: philosophy as therapy for someone making progress; anger as a judgment, and no 'moderate' emotions; an independent Stoic who follows his leaders, not orders. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/seneca/",
@@ -1043,6 +1139,10 @@
         {
           "url": "https://plato.stanford.edu/entries/seneca/",
           "section": "2.1 Philosophy as a Practice"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/seneca/",
+          "section": "3.3 The Therapy of the Emotions"
         }
       ],
       "sources": [
@@ -1063,7 +1163,7 @@
       "short": "Epictetus",
       "dates": "died around 135 CE",
       "school": "stoicism",
-      "summary": "Epictetus was born in the 50s CE in Hierapolis and spent part of his life as a slave in Rome. After gaining his freedom he taught philosophy, was expelled from Italy along with other philosophers, and set up his own school at Nicopolis in Greece, where he taught until his death around 135. His student Arrian wrote down his teaching as the Discourses.",
+      "summary": "Epictetus was born in the 50s CE in Hierapolis and spent part of his life as the slave of Epaphroditus, an administrator at Nero's court. After gaining his freedom he lectured on his own, but was forced to leave Rome, presumably under Domitian's edict of 89 banning philosophers from Italy. He set up his own school at Nicopolis in Greece and taught there until his death around 135. The historian Arrian of Nicomedia wrote up his teaching as the Discourses.",
       "ideas": [
         "Volition (prohairesis, our power to choose) is the true self, and nothing outside can force it.",
         "Body, possessions and reputation are 'externals', neither good nor bad in themselves; what counts is how we use them.",
@@ -1080,6 +1180,10 @@
           {
             "url": "https://plato.stanford.edu/entries/epictetus/",
             "section": "4.4. Value"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/epictetus/",
+            "section": "4.3. Volition"
           }
         ],
         [
@@ -1102,6 +1206,10 @@
         {
           "url": "https://plato.stanford.edu/entries/epictetus/",
           "section": "4.4. Value"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/epictetus/",
+          "section": "4.5. Emotional adjustment"
         }
       ],
       "sources": [
@@ -1144,7 +1252,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Marcus Aurelius as a short Socratic module. Start with the Stoic Roman emperor of 161–180 CE who wrote the Meditations, then his three key ideas: only virtue is good; citizenship of the cosmic city; short sayings as daily reminders. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Marcus Aurelius as a short Socratic module. Start with the Stoic Roman emperor of 161–180 CE who wrote the Meditations, then his three key ideas: only virtue is good; citizenship of the cosmic city; short sayings as reminders. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/marcus-aurelius/",
@@ -1157,6 +1265,10 @@
         {
           "url": "https://plato.stanford.edu/entries/marcus-aurelius/",
           "section": "3. Justice: Acting for the Sake of the Cosmopolis"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/marcus-aurelius/",
+          "section": "1.1 The Character of the Meditations"
         }
       ],
       "sources": [
@@ -1177,10 +1289,10 @@
       "short": "Pyrrho",
       "dates": "365/60–275/70 BCE",
       "school": "skepticism",
-      "summary": "Pyrrho of Elis lived from around 365–360 to around 275–270 BCE and is said to have travelled with Alexander the Great to India. He wrote nothing; most of what we know comes through his follower Timon. Later Pyrrhonist skeptics took him as their inspiration, though he may not have been a skeptic in their sense.",
+      "summary": "Pyrrho of Elis lived from around 365–360 to around 275–270 BCE and is said to have travelled with Alexander the Great to India. He wrote nothing; much of what we know comes through his follower Timon. Later Pyrrhonist skeptics took him as their inspiration, though he may not have been a skeptic in their sense.",
       "ideas": [
-        "To be happy, ask three things: what are things like by nature, how should we relate to them, and what follows?",
-        "Things are indifferent, unstable and undecidable (or at least we cannot tell them apart), so we should not trust our perceptions and beliefs.",
+        "According to Timon's report, to be happy one must ask three things: what are things like by nature, how should we relate to them, and what follows?",
+        "Things are indifferent, unstable and indeterminate (or, on another reading, we cannot tell them apart), so we should not trust our perceptions and beliefs.",
         "Living without opinions leads first to speechlessness and then to tranquility."
       ],
       "ideaSources": [
@@ -1211,7 +1323,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Pyrrho as a short Socratic module. Start with a philosopher from Elis, c. 365–275 BCE, who inspired the Pyrrhonist skeptics, then his three key ideas: three questions for a happy life; things as indeterminate, and not trusting perceptions; tranquility through living without opinions. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Pyrrho as a short Socratic module. Start with a philosopher from Elis, c. 365/60–275/70 BCE, who inspired the Pyrrhonist skeptics, then his three key ideas: three questions for a happy life, as Timon reports them; things as indeterminate, and not trusting perceptions; tranquility through living without opinions. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/pyrrho/",
@@ -1224,6 +1336,10 @@
         {
           "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
           "section": "4.1 Early Figures: Pyrrho and Timon"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/pyrrho/",
+          "section": "3. The Aristocles Passage"
         }
       ],
       "sources": [
@@ -1246,11 +1362,11 @@
       "id": "skepticism/arcesilaus",
       "name": "Arcesilaus",
       "short": "Arcesilaus",
-      "dates": "316/5–241/0 BCE",
+      "dates": "316/5 or 315/4–241/0 BCE",
       "school": "skepticism",
       "summary": "Arcesilaus became head of Plato's Academy and turned it skeptical, inspired by Socrates the examiner. Like Socrates, he wrote nothing. He was a sharp critic of the Stoics' theory of knowledge, and his attacks pushed Chrysippus to reshape Stoicism.",
       "ideas": [
-        "Examine someone's view using only their own premises, as Socrates did.",
+        "Examine someone's view using their own premises, as Socrates did.",
         "Any impression could be matched by a false one that looks the same, so there is no test of truth and we should suspend judgment about everything.",
         "A skeptic can still act, guided by perception without adding belief, like walking through a door without judging 'here is the door'."
       ],
@@ -1314,8 +1430,8 @@
       "summary": "Carneades was born in Cyrene in North Africa, studied in Athens at the Academy and with the Stoic Diogenes of Babylon, and became head of the Academy. In 156/5 BCE he went to Rome on an embassy, where he is said to have argued for justice one day and against it the next. He wrote nothing, but his ideas shaped the Academy until its end.",
       "ideas": [
         "Act on the persuasive, and test important impressions harder, like poking a coiled rope in a dark room to check it isn't a snake.",
-        "Arguing for and against justice shows that its defenders lack the arguments they think they have.",
-        "He mapped every possible view about the goal of life, using the map to challenge the Stoics."
+        "On the traditional reading, arguing for and against justice was meant to show that its defenders lack the arguments they think they have.",
+        "He mapped every possible view about the goal of life, apparently using the map to challenge the Stoics."
       ],
       "ideaSources": [
         [
@@ -1372,7 +1488,7 @@
       "id": "skepticism/sextus-empiricus",
       "name": "Sextus Empiricus",
       "short": "Sextus",
-      "dates": "ca. 160–210 CE",
+      "dates": "probably 2nd or 3rd c. CE",
       "school": "skepticism",
       "summary": "Sextus Empiricus was a Pyrrhonian skeptic who probably lived in the second or third century CE; his name comes from the Empirical school of medicine. Almost nothing is known of his life. His Outlines of Pyrrhonism is the fullest account of Pyrrhonian skepticism we have.",
       "ideas": [
@@ -1417,6 +1533,14 @@
         {
           "url": "https://plato.stanford.edu/entries/sextus-empiricus/",
           "section": "3.2 What is the Skeptical ability or skill?"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/sextus-empiricus/",
+          "section": "3.3 Tranquillity"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/sextus-empiricus/",
+          "section": "3.1 What do Skeptics do, and where do they get their name?"
         }
       ],
       "sources": [
@@ -1458,6 +1582,10 @@
           {
             "url": "https://plato.stanford.edu/entries/plotinus/",
             "section": "8. Conclusion"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/plotinus/",
+            "section": "7. The First Principle of Everything: the One, or the Good"
           }
         ],
         [
@@ -1467,8 +1595,20 @@
           }
         ]
       ],
-      "prompt": "Teach me Plotinus as a short Socratic module. Start with an Egyptian-born philosopher who taught in Rome in the 3rd century CE and is seen as the founder of Neoplatonism, then his three key ideas: everything comes from the One, beyond being; reality unfolds in levels and returns to the Good through love; evil comes from turning toward matter. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Plotinus as a short Socratic module. Start with a philosopher born in Egypt who taught in Rome from 244 until his death in 270 and is usually seen as the founder of Neoplatonism, then his three key ideas: everything comes from the One, beyond being; reality unfolds in levels and returns to the Good through love; evil comes from turning toward matter. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/plotinus/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/plotinus/",
+          "section": "1. Life and Writings"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/neoplatonism/",
+          "section": "1. Historical Orientation: Antiquity"
+        },
         {
           "url": "https://plato.stanford.edu/entries/plotinus/",
           "section": "7. The First Principle of Everything: the One, or the Good"
@@ -1480,6 +1620,10 @@
         {
           "url": "https://plato.stanford.edu/entries/plotinus/",
           "section": "8. Conclusion"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/neoplatonism/",
+          "section": "5. Matter"
         }
       ],
       "sources": [
@@ -1504,7 +1648,7 @@
       "short": "Porphyry",
       "dates": "234?–305?",
       "school": "neoplatonism",
-      "summary": "Porphyry was born in Tyre in Phoenicia, studied with Longinus in Athens and then with Plotinus in Rome, whose Platonism he adopted. He edited Plotinus' Enneads and wrote the Isagoge, a short introduction to logic. He also defended vegetarianism, partly as a matter of justice toward animals.",
+      "summary": "Porphyry was born in Tyre in Phoenicia, studied with Longinus in Athens and then with Plotinus in Rome, whose Platonism he adopted. He edited Plotinus' Enneads and wrote the Isagoge, for centuries the standard introduction to logic. He also defended vegetarianism, partly as a matter of justice toward animals.",
       "ideas": [
         "Plato and Aristotle agree on the essentials, even where they differ in detail.",
         "His Isagoge sorted how we classify things (genus, species, difference, property, accident) and became the standard way into logic for centuries.",
@@ -1538,8 +1682,20 @@
           }
         ]
       ],
-      "prompt": "Teach me Porphyry as a short Socratic module. Start with a pupil of Plotinus from Tyre who edited his teacher's works in the late 3rd century CE, then his three key ideas: Plato and Aristotle agree on essentials; the Isagoge as the gateway to logic; philosophy, not ritual, saves the soul. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Porphyry as a short Socratic module. Start with a pupil of Plotinus, born in Tyre, who edited his teacher's Enneads, then his three key ideas: Plato and Aristotle agree on essentials; the Isagoge as the gateway to logic; philosophy, not ritual, saves the higher, thinking part of the soul. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/porphyry/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/porphyry/",
+          "section": "1. Life"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/porphyry/",
+          "section": "3.2.2 Ethics and Vegetarianism"
+        },
         {
           "url": "https://plato.stanford.edu/entries/porphyry/",
           "section": "3.4.3 The Harmony of Plato and Aristotle"
@@ -1551,6 +1707,10 @@
         {
           "url": "https://plato.stanford.edu/entries/porphyry/",
           "section": "3.4.4 The Isagoge, Universals and the Acquisition of Concepts"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/porphyry/",
+          "section": "3.1 Religion"
         }
       ],
       "sources": [
@@ -1613,6 +1773,14 @@
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/iamblichus/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/iamblichus/",
+          "section": "2.1 The second founder of Neoplatonism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/iamblichus/",
           "section": "6.3 Soul’s ascent and salvation; religion"
         },
         {
@@ -1621,7 +1789,7 @@
         },
         {
           "url": "https://plato.stanford.edu/entries/iamblichus/",
-          "section": "intro"
+          "section": "4.3 Iamblichus and Pythagoreanism"
         }
       ],
       "sources": [
@@ -1644,7 +1812,7 @@
       "school": "neoplatonism",
       "summary": "Proclus led the Platonic school in Athens for almost fifty years and was the most authoritative philosopher of late antiquity. He wrote commentaries on Plato, Aristotle and Euclid and systematic works across philosophy. He played a crucial role in passing Platonism on to the Middle Ages.",
       "ideas": [
-        "His Elements of Theology builds the whole system step by step from the One, as a chain of proved propositions.",
+        "His Elements of Theology sets out his metaphysics step by step, starting from the One as the ultimate cause, as a chain of proved propositions.",
         "The old Greek myths and religious revelations can be shown to agree with the philosophy of Pythagoras and Plato.",
         "The gods know future events without fixing them, because how something is known depends on the knower, not the thing known."
       ],
@@ -1672,15 +1840,15 @@
           }
         ]
       ],
-      "prompt": "Teach me Proclus as a short Socratic module. Start with the head of the Platonic school in Athens in the 5th century CE, then his three key ideas: a step-by-step system built from the One; harmony between old religions and Plato; divine foreknowledge without fixing our choices. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Proclus as a short Socratic module. Start with the head of the Platonic school in Athens (412–485), then his three key ideas: his metaphysics set out step by step from the One; harmony between old religions and Plato; divine foreknowledge without fixing our choices. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/proclus/",
-          "section": "3.1 Metaphysics and Theology"
+          "section": "intro"
         },
         {
           "url": "https://plato.stanford.edu/entries/proclus/",
-          "section": "intro"
+          "section": "3.1 Metaphysics and Theology"
         },
         {
           "url": "https://plato.stanford.edu/entries/proclus/",
@@ -1705,7 +1873,7 @@
       "ideas": [
         "Scripture has deeper meanings beneath the literal words, which allegorical reading brings out.",
         "God is not a body but bodiless mind, even when scripture calls him fire or spirit.",
-        "Souls stay free in their choices; misusing that freedom causes their fall, and he expected most souls to be purified after death."
+        "Souls stay free in their choices; misusing that freedom is what leaves a soul captive to the devil, and he expected most souls to be purified after death."
       ],
       "ideaSources": [
         [
@@ -1731,11 +1899,15 @@
           }
         ]
       ],
-      "prompt": "Teach me Origen as a short Socratic module. Start with an Alexandrian Christian scholar of the early 3rd century who laid foundations for philosophical theology, then his three key ideas: reading scripture allegorically; God as bodiless mind; free souls, their fall and purification. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Origen as a short Socratic module. Start with a Christian scholar from Alexandria (c. 185–c. 253) who laid foundations for philosophical theology, then his three key ideas: reading scripture allegorically; God as bodiless mind; free souls, captivity through misused freedom, and purification. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/origen/",
           "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/origen/",
+          "section": "1. Origen’s Life and Work"
         },
         {
           "url": "https://plato.stanford.edu/entries/origen/",
@@ -1790,8 +1962,20 @@
           }
         ]
       ],
-      "prompt": "Teach me Augustine of Hippo as a short Socratic module. Start with a North African Christian thinker of the late 4th and early 5th century and the most influential Christian thinker of antiquity, then his three key ideas: faith seeking understanding; evil as a lack of good; grace freeing the will. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Augustine of Hippo as a short Socratic module. Start with a Christian philosopher born in Roman North Africa (354–430), perhaps the greatest and most influential Christian philosopher of antiquity, then his three key ideas: faith seeking understanding; evil as a lack of good; grace freeing the will. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/augustine/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/augustine/",
+          "section": "1. Life"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/augustine/",
+          "section": "4. The Philosophical Tradition; Augustine’s Platonism"
+        },
         {
           "url": "https://plato.stanford.edu/entries/augustine/",
           "section": "5.3 Faith and Reason"
@@ -1825,7 +2009,7 @@
       "id": "patristic/pseudo-dionysius-the-areopagite",
       "name": "Pseudo-Dionysius the Areopagite",
       "short": "Pseudo-Dionysius",
-      "dates": "wrote late 5th c.",
+      "dates": "wrote late 5th or early 6th c. (between 485 and 518–28 CE)",
       "school": "patristic",
       "summary": "Pseudo-Dionysius was a Christian Neoplatonist who carried pagan Neoplatonism, especially Proclus, into a new Christian setting. He wrote under the name of Dionysius, a first-century convert of St Paul, which gave his works near-apostolic authority. Modern scholars think he most probably studied with Proclus.",
       "ideas": [
@@ -1853,8 +2037,16 @@
           }
         ]
       ],
-      "prompt": "Teach me Pseudo-Dionysius the Areopagite as a short Socratic module. Start with a Christian Neoplatonist of around 500 CE who wrote under the name of a convert of St Paul, then his three key ideas: denying every name for God; the over-names that praise God; hierarchies of angels and church. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Pseudo-Dionysius the Areopagite as a short Socratic module. Start with a Christian Neoplatonist of the late 5th or early 6th century who wrote under the name of a first-century convert of St Paul, then his three key ideas: denying every name for God; the over-names that praise God; hierarchies of angels and church. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/pseudo-dionysius-areopagite/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/pseudo-dionysius-areopagite/",
+          "section": "1. Dionysius: Persona"
+        },
         {
           "url": "https://plato.stanford.edu/entries/pseudo-dionysius-areopagite/",
           "section": "3.4 Mystical Theology"
@@ -1888,9 +2080,9 @@
       "school": "patristic",
       "summary": "Boethius was a Roman aristocrat who translated Aristotle's logic into Latin and wrote commentaries and textbooks on it. Accused of treason, he was imprisoned and probably executed in 526, and in prison he wrote The Consolation of Philosophy. He became, with Augustine and Aristotle, a basic author for the Latin Middle Ages.",
       "ideas": [
-        "Riches, status, power and pleasure are fortune's goods of little worth; true goods like virtue cannot be taken away.",
+        "Riches, status, power and pleasure are fortune's goods of little worth; the true goods are the virtues, and since he has lost none of them, his fall need not cut him off from true happiness.",
         "God lives in an eternal present and knows all times at once, so his foreknowledge does not force our choices.",
-        "Aristotle's logic, passed into Latin through his translations, became the foundation of medieval learning."
+        "His Latin translations of Aristotle's logic remained standard throughout the Middle Ages, and his commentaries were the main way logicians of the 9th–12th centuries understood Aristotle."
       ],
       "ideaSources": [
         [
@@ -1916,8 +2108,20 @@
           }
         ]
       ],
-      "prompt": "Teach me Boethius as a short Socratic module. Start with a Roman statesman and scholar of the early 6th century who wrote The Consolation of Philosophy in prison, then his three key ideas: fortune's goods versus true goods; God's eternal present and our freedom; handing Aristotle's logic to the Latin world. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Boethius as a short Socratic module. Start with a Roman aristocrat and scholar (c. 475/7–526?) who wrote The Consolation of Philosophy in prison, then his three key ideas: fortune's goods versus true goods; God's eternal present and our freedom; his Latin translations of Aristotle's logic, standard through the Middle Ages. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/boethius/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/boethius/",
+          "section": "1. Life and Works"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/boethius/",
+          "section": "8. Boethius’s Influence and Importance"
+        },
         {
           "url": "https://plato.stanford.edu/entries/boethius/",
           "section": "5. The Consolation of Philosophy: The Argument of Books I–V.2"
@@ -1927,8 +2131,8 @@
           "section": "6. Divine Prescience, Contingency and Eternity"
         },
         {
-          "url": "https://plato.stanford.edu/entries/boethius/",
-          "section": "8. Boethius’s Influence and Importance"
+          "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
+          "section": "1.3.2 Greek to Latin"
         }
       ],
       "sources": [
@@ -1979,8 +2183,12 @@
           }
         ]
       ],
-      "prompt": "Teach me Anselm as a short Socratic module. Start with the leading Christian philosopher of the 11th century, then his three key ideas: faith seeking understanding; God as that than which nothing greater can be thought; freedom as keeping a right will. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Anselm as a short Socratic module. Start with the outstanding Christian philosopher and theologian of the 11th century, then his three key ideas: faith seeking understanding; God as that than which nothing greater can be thought; freedom as keeping a right will. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/anselm/",
+          "section": "intro"
+        },
         {
           "url": "https://plato.stanford.edu/entries/anselm/",
           "section": "2.1 “Faith Seeking Understanding”: The character and purpose of Anselm’s theistic proofs"
@@ -2008,7 +2216,7 @@
       "short": "Abelard",
       "dates": "1079–1142",
       "school": "scholasticism",
-      "summary": "Peter Abelard was the leading philosopher and theologian of the twelfth century, a famous teacher, poet and musician. He is arguably the greatest logician of the Middle Ages and the first great nominalist (someone who denies that universals are real things). His affair with Héloïse and his clash with Bernard of Clairvaux over reason and religion made him famous.",
+      "summary": "Peter Abelard was the leading philosopher and theologian of the twelfth century, a famous teacher, poet and musician. He is arguably the greatest logician of the Middle Ages and the first great nominalist (someone who denies that universals are real things). His affair with Héloïse made him a tragic figure of romance, and his clash with Bernard of Clairvaux over reason and religion made him a hero of the Enlightenment.",
       "ideas": [
         "Universals are not things in the world but words; only individual things exist.",
         "Only the agent's intention decides whether an action is good or bad; deeds in themselves are morally neutral.",
@@ -2061,7 +2269,7 @@
       "id": "scholasticism/thomas-aquinas",
       "name": "Thomas Aquinas",
       "short": "Aquinas",
-      "dates": "1225–1274",
+      "dates": "c. 1225–1274",
       "school": "scholasticism",
       "summary": "Thomas Aquinas was a Dominican friar from near Aquino in Italy who studied in Paris and Cologne. He was the greatest figure in philosophy and theology of thirteenth-century Europe and epitomises the method of the new universities. He took inspiration from Aristotle and built a new system from it.",
       "ideas": [
@@ -2089,8 +2297,16 @@
           }
         ]
       ],
-      "prompt": "Teach me Thomas Aquinas as a short Socratic module. Start with a 13th-century Dominican friar and the great system-builder of the medieval universities, then his three key ideas: proving God through a first cause; reason and faith cannot truly clash; natural law as the root of morality. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Thomas Aquinas as a short Socratic module. Start with a Dominican friar (c. 1225–1274) who epitomises the method of the new universities and built a new system inspired by Aristotle, then his three key ideas: proving God through a first cause; reason and faith cannot truly clash; natural law as the root of morality. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/aquinas/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/aquinas/",
+          "section": "1.1 Life"
+        },
         {
           "url": "https://plato.stanford.edu/entries/aquinas/",
           "section": "2. God"
@@ -2122,9 +2338,9 @@
       "short": "Duns Scotus",
       "dates": "1263/66–1308",
       "school": "scholasticism",
-      "summary": "John Duns Scotus was a Scottish Franciscan who taught at Oxford and Paris and was nicknamed the Subtle Doctor. He shaped debates on religious language, universals and human freedom. He absorbed Aristotle but thought Aristotle's God left no room for divine choice.",
+      "summary": "John Duns Scotus was born in a Scottish village and became an Oxford Franciscan who was later sent to teach at Paris. His subtle thought earned him the nickname the Subtle Doctor. He shaped debates on religious language, universals and human freedom. He absorbed Aristotle but thought Aristotle's God left no room for divine choice.",
       "ideas": [
-        "Some words, like being, apply to God and creatures in the same sense; the difference is one of degree, with God infinite.",
+        "Pure perfections, like goodness, are said of God and creatures in the very same sense; the difference is one of degree, with God having them infinitely.",
         "Things share real common natures, and each individual is made itself by its thisness (haecceity).",
         "True freedom means having real alternatives at the very moment of choice."
       ],
@@ -2148,8 +2364,20 @@
           }
         ]
       ],
-      "prompt": "Teach me John Duns Scotus as a short Socratic module. Start with a Scottish Franciscan of the late 13th century known as the Subtle Doctor, then his three key ideas: words like being mean the same for God and us; common natures and thisness; freedom as real options in the moment. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me John Duns Scotus as a short Socratic module. Start with a Franciscan born in Scotland (1263/66–1308) and nicknamed the Subtle Doctor, then his three key ideas: words for pure perfections, like goodness, mean the same for God and us; common natures and thisness; freedom as real options in the moment. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/duns-scotus/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
+          "section": "2.7 University Philosophy"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/duns-scotus/",
+          "section": "1.1 The life of John Duns the Scot"
+        },
         {
           "url": "https://plato.stanford.edu/entries/duns-scotus/",
           "section": "2.3 Divine infinity and the doctrine of univocity"
@@ -2171,6 +2399,10 @@
         {
           "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
           "section": "2.7 University Philosophy"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/duns-scotus/",
+          "section": "1.1 The life of John Duns the Scot"
         }
       ],
       "sample": false
@@ -2181,7 +2413,7 @@
       "short": "Ockham",
       "dates": "c. 1287–1347",
       "school": "scholasticism",
-      "summary": "William of Ockham was an English Franciscan who worked at Oxford and London and later fled a papal investigation to the court of Ludwig of Bavaria. He is best known for nominalism and for the principle called Ockham's Razor. He also wrote on logic, natural philosophy, knowledge, ethics and politics.",
+      "summary": "William of Ockham was a Franciscan, born in the village of Ockham in Surrey, who worked at Oxford and London and later fled a papal investigation to the court of Ludwig of Bavaria. He is probably best known today for nominalism, and the principle called Ockham's Razor is named after him. He also wrote on logic, natural philosophy, knowledge, ethics and politics.",
       "ideas": [
         "Ockham's Razor: don't believe in more kinds of things than reason, experience or scripture require.",
         "There are no universal things; only universal concepts and words, applied to similar individual things.",
@@ -2207,8 +2439,20 @@
           }
         ]
       ],
-      "prompt": "Teach me William of Ockham as a short Socratic module. Start with an English Franciscan of the early 14th century famous for his Razor, then his three key ideas: Ockham's Razor; only concepts and words are universal; limits on the pope's power. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me William of Ockham as a short Socratic module. Start with a Franciscan (c. 1287–1347) after whom Ockham's Razor is named, then his three key ideas: Ockham's Razor; only concepts and words are universal; limits on the pope's power. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/ockham/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
+          "section": "2.7 University Philosophy"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/ockham/",
+          "section": "1.1 England (c. 1287–1324)"
+        },
         {
           "url": "https://plato.stanford.edu/entries/ockham/",
           "section": "4.1 Ockham’s Razor"
@@ -2230,6 +2474,10 @@
         {
           "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
           "section": "2.7 University Philosophy"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/ockham/",
+          "section": "1.1 England (c. 1287–1324)"
         }
       ],
       "sample": false
@@ -2289,7 +2537,7 @@
       "id": "renaissance/lorenzo-valla",
       "name": "Lorenzo Valla",
       "short": "Valla",
-      "dates": "1406–1457",
+      "dates": "c. 1406–1457",
       "school": "renaissance",
       "summary": "Lorenzo Valla was one of the most important humanists of his time and the author of a famous handbook of Latin style. He used his command of classical languages to criticise ideas and institutions. He exposed the Donation of Constantine as a forgery and compared Jerome's Latin Bible with the Greek New Testament.",
       "ideas": [
@@ -2325,7 +2573,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Lorenzo Valla as a short Socratic module. Start with a 15th-century Italian humanist and sharp-tongued critic, then his three key ideas: language as a tool to expose forgeries; philosophy in ordinary language; a Christian ethics of pleasure. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Lorenzo Valla as a short Socratic module. Start with a leading humanist (c. 1406–1457) and sharp-tongued critic, then his three key ideas: language as a tool to expose forgeries; philosophy in ordinary language; a Christian ethics of pleasure. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/lorenzo-valla/",
@@ -2338,6 +2586,10 @@
         {
           "url": "https://plato.stanford.edu/entries/lorenzo-valla/",
           "section": "2. Valla’s Critique of Scholastic Philosophy"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/lorenzo-valla/",
+          "section": "4. Moral Philosophy"
         }
       ],
       "sources": [
@@ -2384,8 +2636,20 @@
           }
         ]
       ],
-      "prompt": "Teach me Marsilio Ficino as a short Socratic module. Start with the 15th-century Florentine who translated Plato into Latin, then his three key ideas: the ancient theology of inspired sages; the immortal soul longing for home; love binding all things. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Marsilio Ficino as a short Socratic module. Start with the most important Platonist of the Italian Renaissance (1433–1499), who translated all of Plato into Latin, then his three key ideas: the ancient theology of inspired sages; the immortal soul longing for home; love binding all things. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/ficino/",
+          "section": "intro"
+        },
+        {
+          "url": "https://iep.utm.edu/renaissa/",
+          "section": "3. Platonism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/ficino/",
+          "section": "2.3 The Complete Works of Plato and the place of translation"
+        },
         {
           "url": "https://plato.stanford.edu/entries/ficino/",
           "section": "3.1 The “ancient theology”"
@@ -2425,7 +2689,7 @@
       "ideas": [
         "In his Oration, God tells Adam he alone can make himself what he wants; yet the goal Pico sets is to become angel-like and finally merge with God.",
         "He built a Christian Kabbalah (a reading of Jewish mystical teaching), even claiming magic and Kabbalah proved Christ's divinity.",
-        "He used the study of texts and history to attack astrology's claim to ancient wisdom and reliable prediction."
+        "He used the study of texts and history to attack astrology's claim to ancient wisdom, and restated older arguments that it cannot reliably predict."
       ],
       "ideaSources": [
         [
@@ -2451,8 +2715,16 @@
           }
         ]
       ],
-      "prompt": "Teach me Giovanni Pico della Mirandola as a short Socratic module. Start with a 15th-century prince and philosopher known for his 900 Conclusions and his Oration, then his three key ideas: what the Oration really asks of us; Christian Kabbalah; his attack on astrology. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Giovanni Pico della Mirandola as a short Socratic module. Start with a prince and philosopher (1463–1494) known for his 900 Conclusions and his Oration, then his three key ideas: what the Oration really asks of us; Christian Kabbalah; his attack on astrology's claim to ancient wisdom. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/pico-della-mirandola/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/pico-della-mirandola/",
+          "section": "2.1 Conclusions and Oration"
+        },
         {
           "url": "https://plato.stanford.edu/entries/pico-della-mirandola/",
           "section": "2.4 Oratory but not Dignity"
@@ -2463,7 +2735,7 @@
         },
         {
           "url": "https://plato.stanford.edu/entries/pico-della-mirandola/",
-          "section": "2.1 Conclusions and Oration"
+          "section": "2.5 Being and the One and Astrology"
         }
       ],
       "sources": [
@@ -2482,11 +2754,11 @@
       "id": "renaissance/desiderius-erasmus",
       "name": "Desiderius Erasmus",
       "short": "Erasmus",
-      "dates": "c. 1466–1536",
+      "dates": "c. 1466 or 1469–1536",
       "school": "renaissance",
-      "summary": "Erasmus of Rotterdam was the most important Christian humanist, combining Christian faith with classical learning. He edited the Greek New Testament and wrote The Praise of Folly. He broke with Luther over free will and favoured peace and compromise in the Reformation debates.",
+      "summary": "Erasmus of Rotterdam was the most important Christian humanist, combining Christian faith with classical learning. He edited the Greek New Testament and wrote The Praise of Folly. He favoured peace and compromise in the Reformation debates, but broke with Luther over Luther's sectarianism, and the two also clashed in a polemic over free will.",
       "ideas": [
-        "Return to the sources: read scripture and the classics in their original languages.",
+        "Return to the sources: read scripture in its original languages, Hebrew, Greek and Latin.",
         "The philosophy of Christ: learned piety and simple devotion matter more than scholastic speculation.",
         "Against Luther, the human will is very weak but, with God's grace, can still choose the path of salvation."
       ],
@@ -2514,8 +2786,12 @@
           }
         ]
       ],
-      "prompt": "Teach me Desiderius Erasmus as a short Socratic module. Start with a Dutch Christian humanist of the early 16th century, then his three key ideas: back to the original sources; the philosophy of Christ; a weak but free will, helped by grace. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Desiderius Erasmus as a short Socratic module. Start with a Dutch Christian humanist (c. 1466 or 1469–1536), then his three key ideas: back to scripture in its original languages; the philosophy of Christ; a weak but free will, helped by grace. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://iep.utm.edu/renaissa/",
+          "section": "2. Humanism"
+        },
         {
           "url": "https://plato.stanford.edu/entries/erasmus/",
           "section": "intro"
@@ -2523,10 +2799,6 @@
         {
           "url": "https://plato.stanford.edu/entries/erasmus/",
           "section": "6. Pietas and Philosophia Christi"
-        },
-        {
-          "url": "https://iep.utm.edu/renaissa/",
-          "section": "2. Humanism"
         }
       ],
       "sources": [
@@ -2547,9 +2819,9 @@
       "short": "Descartes",
       "dates": "1596–1650",
       "school": "rationalism",
-      "summary": "René Descartes was a first-rank mathematician, an important scientist and an original metaphysician. He developed algebraic geometry and pictured nature as matter obeying a few universal laws. His view of an immaterial mind linked to the brain gave rise to the modern mind–body problem.",
+      "summary": "René Descartes was a first-rank mathematician, an important scientist and an original metaphysician. He developed the techniques that made algebraic geometry possible and pictured nature as matter obeying a few universal laws. His view of an immaterial mind linked to the brain gave rise to the modern mind–body problem.",
       "ideas": [
-        "Doubt everything that can be doubted, even the senses, to find what is truly certain.",
+        "Use skeptical arguments to doubt the senses, and even reasoning, in order to find what is truly certain.",
         "Even while doubting, I cannot doubt that I exist as a thinking thing, and what I perceive very clearly and distinctly is true.",
         "Mind (whose essence is thought) and body (whose essence is extension in space) are two distinct substances."
       ],
@@ -2581,8 +2853,12 @@
           }
         ]
       ],
-      "prompt": "Teach me René Descartes as a short Socratic module. Start with a 17th-century mathematician, scientist and philosopher, then his three key ideas: doubt as the road to certainty; the thinking self and clear and distinct perception; mind and body as distinct substances. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me René Descartes as a short Socratic module. Start with a first-rank mathematician, scientist and metaphysician (1596–1650), then his three key ideas: doubting the senses, and even reasoning, to find certainty; the thinking self and clear and distinct perception; mind and body as distinct substances. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/descartes/",
+          "section": "intro"
+        },
         {
           "url": "https://plato.stanford.edu/entries/descartes/",
           "section": "3.1 How do our minds know?"
@@ -2636,8 +2912,16 @@
           }
         ]
       ],
-      "prompt": "Teach me Baruch Spinoza as a short Socratic module. Start with a 17th-century Amsterdam-born Jewish philosopher expelled from his community, then his three key ideas: one substance, God or Nature; everything is determined; freedom through understanding the passions. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Baruch Spinoza as a short Socratic module. Start with a philosopher (1632–1677) who grew up in Amsterdam's Portuguese-Jewish community and was expelled from it in 1656, then his three key ideas: one substance, God or Nature; everything is determined; freedom through understanding the passions. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/spinoza/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/spinoza/",
+          "section": "1. Biography"
+        },
         {
           "url": "https://plato.stanford.edu/entries/spinoza/",
           "section": "2.1 God or Nature"
@@ -2703,8 +2987,20 @@
           }
         ]
       ],
-      "prompt": "Teach me Gottfried Wilhelm Leibniz as a short Socratic module. Start with a polymath of the late 17th and early 18th century, then his three key ideas: the principle of sufficient reason; the best of all possible worlds; the mind as veined marble. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Gottfried Wilhelm Leibniz as a short Socratic module. Start with the thinker known as the last universal genius (1646–1716), then his three key ideas: the principle of sufficient reason; the best of all possible worlds; the mind as veined marble. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/leibniz/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/leibniz/",
+          "section": "5.1 Monads and the World of Phenomena"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/leibniz/",
+          "section": "4.4 Pre-established Harmony"
+        },
         {
           "url": "https://plato.stanford.edu/entries/leibniz/",
           "section": "3.4 Principle of Sufficient Reason (PSR)"
@@ -2716,6 +3012,14 @@
         {
           "url": "https://plato.stanford.edu/entries/leibniz/",
           "section": "7.2 Optimism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/leibniz/",
+          "section": "6.3 Innate Ideas"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+          "section": "4. The Innate Concept Thesis"
         }
       ],
       "sources": [
@@ -2740,7 +3044,7 @@
       "short": "Locke",
       "dates": "1632–1704",
       "school": "empiricism",
-      "summary": "John Locke was a British philosopher, Oxford academic and medical researcher. His Essay Concerning Human Understanding (1689) is one of the first great defences of modern empiricism and maps the limits of what we can know. In politics he argued that sovereignty lies with the people and called for religious toleration.",
+      "summary": "John Locke was a British philosopher, Oxford academic and medical researcher. His Essay Concerning Human Understanding (1689) is one of the first great defences of modern empiricism and maps the limits of what we can know. In politics he argued that sovereignty lies with the people, and in his Letter Concerning Toleration he called for the separation of Church and State.",
       "ideas": [
         "There are no innate ideas or principles; there is no good evidence for them.",
         "The mind begins as a blank slate, and all our basic ideas come from sensation and reflection.",
@@ -2770,8 +3074,12 @@
           }
         ]
       ],
-      "prompt": "Teach me John Locke as a short Socratic module. Start with a 17th-century British philosopher and political thinker, then his three key ideas: no innate ideas; the mind as a blank slate filled by experience; government by consent. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me John Locke as a short Socratic module. Start with a British philosopher, Oxford academic and medical researcher (1632–1704), then his three key ideas: no innate ideas; the mind as a blank slate filled by experience; government resting on natural rights and the consent of the people. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/locke/",
+          "section": "intro"
+        },
         {
           "url": "https://plato.stanford.edu/entries/locke/",
           "section": "2.1 Book I"
@@ -2782,7 +3090,7 @@
         },
         {
           "url": "https://plato.stanford.edu/entries/locke/",
-          "section": "intro"
+          "section": "4.5 The Social Contract Theory"
         }
       ],
       "sources": [
@@ -2802,7 +3110,7 @@
       "summary": "George Berkeley was an Irish-born philosopher and Bishop of Cloyne, and a sharp critic of Descartes, Malebranche and Locke. He is famous for idealism, the view that reality consists only of minds and their ideas. He also wrote on vision, mathematics, physics and religion, and influenced Hume and Kant.",
       "ideas": [
         "Ordinary objects are collections of ideas, and it makes no sense for them to exist unperceived.",
-        "We cannot form abstract general ideas by stripping away particular features, as Locke suggested.",
+        "We cannot form abstract general ideas by stripping away particular features, as Locke often seems to suggest.",
         "Since our sensory ideas are not caused by matter or by ourselves, they must come from another spirit: God."
       ],
       "ideaSources": [
@@ -2825,8 +3133,16 @@
           }
         ]
       ],
-      "prompt": "Teach me George Berkeley as a short Socratic module. Start with an Irish philosopher and Anglican bishop of the early 18th century, then his three key ideas: to exist is to be perceived; no abstract general ideas; God as the cause of our perceptions. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me George Berkeley as a short Socratic module. Start with an Irish-born philosopher and Bishop of Cloyne (1685–1753), then his three key ideas: ordinary objects are ideas and cannot exist unperceived; no abstract general ideas; God as the cause of our perceptions. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/berkeley/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/berkeley/",
+          "section": "1. Life and philosophical works"
+        },
         {
           "url": "https://plato.stanford.edu/entries/berkeley/",
           "section": "2.1.1 The core argument"
@@ -2861,7 +3177,7 @@
       "summary": "David Hume was a leading figure of the Scottish Enlightenment who applied the experimental method of the sciences to philosophy. He is famous for his skepticism, his naturalism and his challenges to religion. In his own time he was better known for his histories and essays.",
       "ideas": [
         "All simple ideas are fainter copies of earlier impressions (vivid perceptions and feelings).",
-        "Reason cannot justify our expectation that the future will be like the past; custom or habit drives it.",
+        "Reason cannot serve as the foundation of our expectation that the future will be like the past; custom or habit drives it.",
         "Moral judgments come from feeling: we call a trait virtuous because viewing it gives us a particular pleasure."
       ],
       "ideaSources": [
@@ -2884,8 +3200,12 @@
           }
         ]
       ],
-      "prompt": "Teach me David Hume as a short Socratic module. Start with an 18th-century Scottish philosopher and historian, then his three key ideas: ideas as copies of impressions; induction rests on habit, not reason; morality grounded in feeling. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me David Hume as a short Socratic module. Start with a leading figure of the Scottish Enlightenment (1711–1776), better known in his day for his histories and essays, then his three key ideas: ideas as copies of impressions; our expectations about the future rest on habit, not reason; morality grounded in feeling. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/hume/",
+          "section": "intro"
+        },
         {
           "url": "https://plato.stanford.edu/entries/hume/",
           "section": "2.1 Philosophy of Mind"
@@ -2943,7 +3263,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Voltaire as a short Socratic module. Start with the French writer and activist (1694–1778) who helped define the Enlightenment, then his three key ideas: no authority is above critical questioning; science should stick to what can be observed and measured; freedom of speech and thought deserves defending. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Voltaire as a short Socratic module. Start with the French writer and activist (1694–1778) who did much to define the Enlightenment, then his three key ideas: no authority, however sacred, is above questioning by critical reason; science should describe and measure what we can observe and leave out metaphysics; free speech and thought are worth defending. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/voltaire/",
@@ -2956,6 +3276,14 @@
         {
           "url": "https://plato.stanford.edu/entries/voltaire/",
           "section": "2.3 Skepticism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/voltaire/",
+          "section": "2.5 Toward Science without Metaphysics"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/voltaire/",
+          "section": "2.1 Liberty"
         }
       ],
       "sources": [
@@ -3002,7 +3330,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Jean-Jacques Rousseau as a short Socratic module. Start with the Geneva-born writer on politics and education (born 1712) who questioned his own age, then his three key ideas: people are naturally good but corrupted by society; a legitimate state follows the general will, laws from all and for all; education should follow the child's natural development. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Jean-Jacques Rousseau as a short Socratic module. Start with the Geneva-born writer on politics and education (1712–1778), often a dissenting voice within the Enlightenment, then his three key ideas: people are good by nature but corrupted by society; a legitimate state is guided by the general will, laws that come from all and apply to all; education should follow the child's natural growth rather than impose lessons by authority. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/rousseau/",
@@ -3015,6 +3343,18 @@
         {
           "url": "https://plato.stanford.edu/entries/enlightenment/",
           "section": "2.2 Ethical Theory"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/rousseau/",
+          "section": "2. Conjectural history and moral psychology"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/rousseau/",
+          "section": "3.1 The idea of the general will"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/rousseau/",
+          "section": "5. Education"
         }
       ],
       "sources": [
@@ -3041,7 +3381,7 @@
       "school": "enlightenment",
       "summary": "Denis Diderot was, with Voltaire, a leader of the French philosophes after 1750, and with d'Alembert he edited the Encyclopédie, meant to change the common way of thinking. In 1749 his writings got him jailed for three months in Vincennes prison. He did philosophy through plays, novels and art criticism as well as essays, and SEP calls him arguably the most sophisticated of the philosophes.",
       "ideas": [
-        "Knowledge should be gathered and shared as a living tool for changing minds, not as a dusty record.",
+        "Knowledge should be gathered and shared as a living engine for changing what we know, not as a dusty record.",
         "We learn about nature through experiment and observation, not by abstract reasoning alone.",
         "There is only one kind of stuff, matter, always in flux; living beings are temporary clusters of it (materialism)."
       ],
@@ -3065,7 +3405,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Denis Diderot as a short Socratic module. Start with the French editor of the Encyclopédie (1713–1784), then his three key ideas: knowledge should be shared as a tool for changing minds; we learn about nature by experiment, not abstract reasoning alone; everything is changing matter (materialism). Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Denis Diderot as a short Socratic module. Start with the co-editor of the Encyclopédie (1713–1784), arguably the most sophisticated of the French philosophes, then his three key ideas: knowledge should be shared as an engine for changing what we know; we learn about nature through experiment and observation, not abstract reasoning alone; there is only one kind of stuff, matter, always in flux (materialism). Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/diderot/",
@@ -3078,6 +3418,14 @@
         {
           "url": "https://plato.stanford.edu/entries/diderot/",
           "section": "1.2 Ascendance as Writer and Philosophe through the Encyclopédie (1750–1765)"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/diderot/",
+          "section": "2.2.2 Empiricism and experimentalism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/diderot/",
+          "section": "3. Conclusion"
         }
       ],
       "sources": [
@@ -3132,7 +3480,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Immanuel Kant as a short Socratic module. Start with the philosopher from Königsberg (1724–1804) who tested the limits of reason at the Enlightenment's end, then his three key ideas: we know things only as they appear to us, never as they are in themselves; act only on rules you could will for everyone (the categorical imperative); enlightenment means thinking for yourself. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Immanuel Kant as a short Socratic module. Start with the philosopher born in Königsberg (1724–1804) whose Critique of Pure Reason came near the Enlightenment's end, then his three key ideas: we know the world only as it appears to us, never as things are in themselves; act only on a rule you could will as a law for everyone (the categorical imperative); enlightenment means thinking for yourself. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/kant/",
@@ -3145,6 +3493,22 @@
         {
           "url": "https://plato.stanford.edu/entries/kant/",
           "section": "2.1 The crisis of the Enlightenment"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/kant/",
+          "section": "3. Transcendental idealism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/kant/",
+          "section": "2.2 Kant’s Copernican revolution in philosophy"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/kant/",
+          "section": "5.4 The categorical imperative"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/enlightenment/",
+          "section": "intro"
         }
       ],
       "sources": [
@@ -3169,7 +3533,7 @@
       "short": "Fichte",
       "dates": "1762–1814",
       "school": "german-idealism",
-      "summary": "Johann Gottlieb Fichte came from a poor family of ribbon weavers in Saxony, and reading Kant in 1790 changed his thinking. His first book appeared without his name and was hailed as Kant's own, which made him famous once the truth came out. At the University of Jena (1794–1799) he built a system he called the Wissenschaftslehre ('Doctrine of Scientific Knowledge'), grounded on the 'pure I' (the bare self).",
+      "summary": "Johann Gottlieb Fichte came from a poor family of ribbon weavers in Saxony, and reading Kant in 1790 changed his thinking. His Attempt at a Critique of All Revelation (1792) appeared without his name and was hailed as Kant's own, which made him famous once the truth came out. At the University of Jena (1794–1799) he built a system he called the Wissenschaftslehre ('Doctrine of Scientific Knowledge'), grounded on the 'pure I' (the bare self).",
       "ideas": [
         "Philosophy must start either from the free self or from things; Fichte started from freedom, since theory alone cannot settle the choice.",
         "A thing that is not an object for our consciousness makes no sense, so even Kant's 'thing in itself' is posited by the mind.",
@@ -3195,7 +3559,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Johann Gottlieb Fichte as a short Socratic module. Start with the Jena philosopher (1762–1814) who rebuilt Kant's idealism on the free self, then his three key ideas: philosophy should start from the free self; there is no thing in itself beyond consciousness; we become selves through mutual recognition. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Johann Gottlieb Fichte as a short Socratic module. Start with the philosopher from a poor Saxon family (1762–1814) who built his Wissenschaftslehre at Jena, then his three key ideas: philosophy must start from the free self or from things, and he chose freedom; even Kant's thing in itself is posited by the mind; you become a self only through mutual recognition. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/johann-fichte/",
@@ -3208,6 +3572,14 @@
         {
           "url": "https://plato.stanford.edu/entries/johann-fichte/",
           "section": "3. The Starting Point of the Jena Wissenschaftslehre"
+        },
+        {
+          "url": "https://iep.utm.edu/germidea/",
+          "section": "3. Metaphysics and Epistemology"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/johann-fichte/",
+          "section": "4.4 Philosophy of Law (Recht)"
         }
       ],
       "sources": [
@@ -3228,7 +3600,7 @@
       "short": "Schelling",
       "dates": "1775–1854",
       "school": "german-idealism",
-      "summary": "Friedrich Wilhelm Joseph von Schelling was, with Fichte and Hegel, one of the three most influential German Idealists. He changed his views so often that he has been called a philosophical Proteus, yet SEP stresses that he was a rigorous thinker. He is remembered for his philosophy of nature, his view that the thinking self is never fully transparent to itself, and his later critique of Hegel.",
+      "summary": "Friedrich Wilhelm Joseph von Schelling was, with Fichte and Hegel, one of the three most influential German Idealists. He changed his views so often that he has been called a philosophical Proteus, yet SEP stresses that he was often an impressively rigorous logical thinker. He is remembered for his philosophy of nature, his view that the thinking self is never fully transparent to itself, and his later critique of Hegel.",
       "ideas": [
         "Nature is not dead matter but a productive whole that includes us, and conscious mind grows out of it.",
         "Subject and object, mind and world, must at root be one, or knowledge could never connect them (his 'identity philosophy').",
@@ -3291,11 +3663,11 @@
       "short": "Hegel",
       "dates": "1770–1831",
       "school": "german-idealism",
-      "summary": "Georg Wilhelm Friedrich Hegel, born in Stuttgart in 1770, studied alongside Hölderlin and Schelling and became the most systematic of the German Idealists. After the Phenomenology of Spirit (1807) he went on to celebrity in Berlin, where he died in 1831. He is best known for seeing history as purposeful development, an idea Marx later turned into a materialist theory.",
+      "summary": "Georg Wilhelm Friedrich Hegel, born in Stuttgart in 1770, studied alongside Hölderlin and Schelling and became the most systematic of the German Idealists. After the Phenomenology of Spirit (1807) he went on to celebrity in Berlin, where he died in 1831. He is perhaps best known for seeing history as purposeful development, an idea Marx later turned into a materialist theory.",
       "ideas": [
         "Thought moves forward through contradiction: each way of seeing the world breaks down and gives rise to a fuller one.",
         "I become aware of myself as a subject only through mutual recognition with other subjects.",
-        "Freedom is realized in shared social life ('ethical life'): family, civil society and the state, not only in private rights or conscience."
+        "Freedom is realized in shared social life ('ethical life'), where individuals, families, civil society and the state come together; he contrasted this with abstract right and morality."
       ],
       "ideaSources": [
         [
@@ -3317,7 +3689,7 @@
           }
         ]
       ],
-      "prompt": "Teach me G. W. F. Hegel as a short Socratic module. Start with the most systematic German Idealist (1770–1831), who read history as purposeful development, then his three key ideas: thought advances as each view breaks down on its own contradictions; self-consciousness depends on mutual recognition; freedom is realized in ethical life: family, civil society and state. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me G. W. F. Hegel as a short Socratic module. Start with the most systematic German Idealist (1770–1831), perhaps best known for seeing history as purposeful development, then his three key ideas: thought moves forward as each way of seeing the world breaks down and gives rise to a fuller one; I become aware of myself as a subject only through mutual recognition; freedom is realized in ethical life, where families, civil society and the state come together. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/hegel/",
@@ -3330,6 +3702,10 @@
         {
           "url": "https://plato.stanford.edu/entries/hegel/",
           "section": "3.1.1 Phenomenology of Spirit"
+        },
+        {
+          "url": "https://iep.utm.edu/germidea/",
+          "section": "4. Moral and Political Philosophy"
         }
       ],
       "sources": [
@@ -3399,6 +3775,14 @@
         {
           "url": "https://plato.stanford.edu/entries/bentham/",
           "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
+          "section": "2.2 Jeremy Bentham"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/bentham/",
+          "section": "1. Life and Writings"
         }
       ],
       "sample": false
@@ -3439,7 +3823,7 @@
           }
         ]
       ],
-      "prompt": "Teach me John Stuart Mill as a short Socratic module. Start with the London-born philosopher (1806–1873) who refined Bentham's utilitarianism and defended liberty, then his three key ideas: some pleasures are higher in quality than others; society may limit liberty only for self-protection; the subjection of women is wrong and harmful. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me John Stuart Mill as a short Socratic module. Start with the nineteenth-century naturalist, utilitarian and liberal (1806–1873), author of On Liberty, then his three key ideas: some pleasures, such as those of the mind, are higher in quality than bodily ones; the only good reason for society to interfere with someone's liberty is self-protection; discrimination against women harms overall happiness. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/mill/",
@@ -3452,6 +3836,18 @@
         {
           "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
           "section": "2.3 John Stuart Mill"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mill/",
+          "section": "4.2 Mill’s Conception of Happiness"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mill/",
+          "section": "4.5 On Liberty and Freedom of Speech"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mill/",
+          "section": "4.4 Equality, the Sexes, and the Nineteenth Century"
         }
       ],
       "sources": [
@@ -3472,7 +3868,7 @@
       "short": "Sidgwick",
       "dates": "1838–1900",
       "school": "utilitarianism",
-      "summary": "Henry Sidgwick spent his whole career at Cambridge, and in 1869 resigned his fellowship because he could no longer in conscience affirm the Church of England's articles. His The Methods of Ethics (1874) is seen as the culmination of classical utilitarianism, and some have called it the best treatise on moral theory ever written. He also worked on economics, politics, education and psychical research.",
+      "summary": "Henry Sidgwick spent his whole career at Cambridge, and in 1869 resigned his fellowship because he could no longer in conscience affirm the Church of England's articles. His The Methods of Ethics (1874) in many ways marked the culmination of classical utilitarianism, and some have called it the best treatise on moral theory ever written. He also worked on economics, politics, education and psychical research.",
       "ideas": [
         "Everyday moral reasoning mixes three methods, egoism, intuited rules and utilitarianism, and he argued utilitarianism is the most basic.",
         "From the point of view of the universe, no one's good matters more than anyone else's.",
@@ -3506,7 +3902,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Henry Sidgwick as a short Socratic module. Start with the Cambridge moral philosopher (1838–1900) whose Methods of Ethics capped classical utilitarianism, then his three key ideas: of ethics' three methods, utilitarianism is the most basic; no one's good matters more from the point of view of the universe; reason backs both self-interest and the general good. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Henry Sidgwick as a short Socratic module. Start with the Cambridge philosopher (1838–1900) whose Methods of Ethics in many ways marked the culmination of classical utilitarianism, then his three key ideas: everyday moral reasoning mixes three methods, and utilitarianism is the most basic; from the point of view of the universe, no one's good matters more than anyone else's; reason seems to back both self-interest and the general good (the dualism of practical reason). Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/sidgwick/",
@@ -3519,6 +3915,18 @@
         {
           "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
           "section": "3. Henry Sidgwick"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/sidgwick/",
+          "section": "2.2 Reconstruction and Reconciliation"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/sidgwick/",
+          "section": "3. Epistemology and Chaos"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/sidgwick/",
+          "section": "4. Religion and Parapsychology"
         }
       ],
       "sources": [
@@ -3539,9 +3947,9 @@
       "short": "Marx",
       "dates": "1818–1883",
       "school": "marxism",
-      "summary": "Karl Marx is often seen mainly as a revolutionary, but he was trained as a philosopher, with a doctorate in ancient philosophy, and engaged closely with Hegel. His work covers human nature and alienation, a theory of history, a critique of capitalism, ideology, the state and a predicted communist future. He refused to sketch communism in detail, holding that history itself would deliver it.",
+      "summary": "Karl Marx is often seen mainly as a revolutionary, but he was trained as a philosopher, with a doctorate in ancient philosophy, and engaged closely with Hegel. His work covers human nature and alienation, a theory of history, a critique of capitalism, ideology, the state and a predicted communist future. He was famously reluctant to sketch communism in detail, holding that history itself would deliver its basic structure.",
       "ideas": [
-        "Under capitalism work is alienated: workers lose control of their products, their activity, each other and their own human nature.",
+        "Under capitalism work is alienated: workers are separated from their products, their activity, each other and their own human nature.",
         "A society's economic structure explains its politics, law and ideas, and when it holds back productive power it is overturned.",
         "Religion is the 'opium of the people', a comforting illusion that will fade once material life is freed."
       ],
@@ -3565,7 +3973,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Karl Marx as a short Socratic module. Start with the philosopher and revolutionary (1818–1883) who turned Hegel's history toward material life, then his three key ideas: work under capitalism is alienated; the economic structure shapes society and is overturned when it fetters production; religion is a comforting illusion rooted in material life. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Karl Marx as a short Socratic module. Start with the philosopher and revolutionary (1818–1883) who engaged closely with Hegel, then his three key ideas: work under capitalism is alienated, separating workers from their products, activity, each other and their nature; the economic structure shapes society and is overturned when it holds back productive power; religion is a comforting illusion that will fade once material life is freed. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/marx/",
@@ -3620,7 +4028,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Friedrich Engels as a short Socratic module. Start with Marx's lifelong collaborator (1820–1895) and a thinker in his own right, then his three key ideas: being comes before thinking, nature before mind; nature itself develops historically, as Darwin showed; the family belongs to society's material base. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Friedrich Engels as a short Socratic module. Start with Marx's lifelong collaborator (1820–1895) and a thinker in his own right, then his three key ideas: being comes before thinking, nature before mind; nature itself is historical, and he saw Darwin's work as a parallel to Marx's; family and kinship belong to society's material base. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/engels/",
@@ -3633,6 +4041,18 @@
         {
           "url": "https://plato.stanford.edu/entries/engels/",
           "section": "5.1 Production and class, base and superstructure"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/engels/",
+          "section": "3.2 As methodological principles"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/engels/",
+          "section": "4.1 The historical character of nature"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/engels/",
+          "section": "5.3 Late revisions: Women and the family"
         }
       ],
       "sources": [
@@ -3683,7 +4103,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Georg Lukács as a short Socratic module. Start with the Budapest-born philosopher (1885–1971) often called a founder of Western Marxism, then his three key ideas: capitalism turns social relations into things (reification); workers can grasp society as a whole (standpoint theory); art reflects reality through human inner experience. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Georg Lukács as a short Socratic module. Start with the Budapest-born philosopher (1885–1971) widely seen as a founder of Western Marxism, then his three key ideas: capitalism makes social relations look like relations between things (reification); workers are placed to understand society as a whole, though they must achieve it (standpoint theory); art reflects reality through human inner experience. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/lukacs/",
@@ -3696,6 +4116,14 @@
         {
           "url": "https://plato.stanford.edu/entries/lukacs/",
           "section": "3.1 Reification Theory"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/lukacs/",
+          "section": "3.2 Standpoint Theory and Revolution"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/lukacs/",
+          "section": "4.4 Aesthetics: Realism and the Work of Art as a Closed Totality"
         }
       ],
       "sources": [
@@ -3716,7 +4144,7 @@
       "short": "Kierkegaard",
       "dates": "1813–1855",
       "school": "existentialism",
-      "summary": "Søren Kierkegaard was born in Copenhagen in 1813 and wrote mostly in the 1840s, across philosophy, theology, psychology and social critique. He opposed building grand systems and is often called the 'father of existentialism', though SEP warns the label hides as much as it shows. He is usually cast as Hegel's great opponent, but recent scholars think his main target was certain Danish Hegelians.",
+      "summary": "Søren Kierkegaard was born in Copenhagen in 1813 and wrote mostly in the 1840s, across philosophy, theology, psychology and social critique. He opposed building grand systems and is often called the 'father of existentialism', though SEP warns the label hides as much as it shows. He has often been cast as Hegel's great opponent, but recent scholars think his main target was certain Danish Hegelians.",
       "ideas": [
         "A self is not something you simply have but something you must become, by holding together what is given and what is possible.",
         "Anxiety is the dizziness of freedom: being drawn to and repelled by our own possibilities.",
@@ -3775,7 +4203,7 @@
       "short": "Nietzsche",
       "dates": "1844–1900",
       "school": "existentialism",
-      "summary": "Friedrich Nietzsche was a German philosopher and cultural critic who published mostly in the 1870s and 1880s. He is famous for fierce attacks on traditional European morality and religion, often by exposing the hidden psychology behind received ideas. He also proposed new values he hoped would renew culture, and SEP's existentialism entry counts him among the movement's nineteenth-century pioneers.",
+      "summary": "Friedrich Nietzsche was a German philosopher and cultural critic who published intensively in the 1870s and 1880s. He is famous for fierce attacks on traditional European morality and religion, often by exposing the hidden psychology behind received ideas. He also proposed new values he hoped would renew culture, and SEP's existentialism entry counts him among the movement's nineteenth-century pioneers.",
       "ideas": [
         "'God is dead': belief in the Christian God has become unbelievable, so the morality built on it is set to collapse.",
         "Imagine living your life over and over forever; on one influential reading, your reaction tests how much you value your life (eternal recurrence).",
@@ -3805,7 +4233,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Friedrich Nietzsche as a short Socratic module. Start with the German philosopher and cultural critic (1844–1900) who diagnosed the death of God, then his three key ideas: 'God is dead' and the morality built on that faith will collapse; eternal recurrence as a test of how you value your life; all knowing is from a perspective. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Friedrich Nietzsche as a short Socratic module. Start with the German philosopher and cultural critic (1844–1900) famous for attacking traditional morality and religion, then his three key ideas: 'God is dead', so the morality built on that faith is set to collapse; eternal recurrence, which on one influential reading tests how much you value your life; all knowing happens from perspectives, and using many brings us closer to objectivity. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/nietzsche/",
@@ -3818,6 +4246,18 @@
         {
           "url": "https://plato.stanford.edu/entries/nietzsche/",
           "section": "2. Critique of Religion and Morality"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/nietzsche/",
+          "section": "6.3 The Eternal Recurrence of the Same"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/existentialism/",
+          "section": "5.3 Nietzsche’s Overman"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/nietzsche/",
+          "section": "6.2 Perspectivism"
         }
       ],
       "sources": [
@@ -3868,7 +4308,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Jean-Paul Sartre as a short Socratic module. Start with the philosopher, novelist and public intellectual (1905–1980) at the center of French existentialism, then his three key ideas: existence precedes essence; we are condemned to be free; bad faith is denying our freedom or our facts. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Jean-Paul Sartre as a short Socratic module. Start with the philosopher, novelist and public intellectual (1905–1980), with Beauvoir the most popular voice of French existentialism, then his three key ideas: existence precedes essence; we are condemned to be free; bad faith is self-deception, denying either our freedom or the facts of our situation. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -3881,6 +4321,18 @@
         {
           "url": "https://plato.stanford.edu/entries/sartre/",
           "section": "4.1 Negation and Freedom"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/existentialism/",
+          "section": "3. Existence Precedes Essence"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/sartre/",
+          "section": "4.2 Bad Faith and the Critique of Freudian Psychoanalysis"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/existentialism/",
+          "section": "5. Authenticity"
         }
       ],
       "sources": [
@@ -3905,7 +4357,7 @@
       "short": "Beauvoir",
       "dates": "1908–1986",
       "school": "existentialism",
-      "summary": "Simone de Beauvoir was a philosopher, novelist, feminist and activist, and one of the major figures of post-war French existentialism. She is best known for The Second Sex (1949), a founding text of feminist philosophy. She called herself an author rather than a philosopher, but scholarship has secured her place as a thinker in her own right, not merely Sartre's helper.",
+      "summary": "Simone de Beauvoir was a philosopher, novelist, feminist and activist, and one of the major figures of post-war French existentialism. She is best known for The Second Sex (1949), her trailblazing work in feminist philosophy. She called herself an author rather than a philosopher, but scholarship has secured her place as a thinker in her own right, not merely Sartre's helper.",
       "ideas": [
         "'One is not born but becomes a woman': womanhood is shaped by society, which casts woman as the Other to man.",
         "I cannot live my freedom without affirming the freedom of others; evil lies in denying freedom.",
@@ -3990,7 +4442,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Albert Camus as a short Socratic module. Start with the writer of the absurd (1913–1960) who rejected the existentialist label, then his three key ideas: the absurd is our demand for meaning meeting a silent universe; live the absurd fully aware, like Sisyphus; revolt creates solidarity. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Albert Camus as a short Socratic module. Start with the journalist, novelist and essayist (1913–1960) who denied being an existentialist, then his three key ideas: the absurd is the clash between our need for meaning and a universe that gives no answer; answer absurdity neither with suicide nor false hope, but by living fully aware, like Sisyphus; revolt against injustice creates shared values and solidarity. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/camus/",
@@ -4003,6 +4455,18 @@
         {
           "url": "https://plato.stanford.edu/entries/camus/",
           "section": "3.3 Criticism of Existentialists"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/camus/",
+          "section": "3.4 Happiness in Facing One’s Fate"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/camus/",
+          "section": "3.1 Suicide as a Response to Absurdity"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/camus/",
+          "section": "4.1 Absurdity, Rebellion, and Murder"
         }
       ],
       "sources": [
@@ -4053,7 +4517,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Charles Sanders Peirce as a short Socratic module. Start with the founder of American pragmatism (1839–1914), a scientist and logician, then his three key ideas: an idea's meaning is its practical effects (the pragmatic maxim); truth is where inquiry would finally agree; science moves from abduction to deduction to induction. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Charles Sanders Peirce as a short Socratic module. Start with the founder of American pragmatism (1839–1914), who saw logic and scientific philosophy as his true calling, then his three key ideas: an idea's meaning is the practical effects you would expect from its object (the pragmatic maxim); truth is the opinion everyone who investigates would ultimately agree on; science moves from abduction to deduction to induction. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/peirce/",
@@ -4066,6 +4530,14 @@
         {
           "url": "https://plato.stanford.edu/entries/pragmatism/",
           "section": "2.1 Peirce: The Pragmatic Maxim"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/pragmatism/",
+          "section": "3.1 Peirce on Truth and Reality"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/peirce/",
+          "section": "3. Deduction, Induction, and Abduction"
         }
       ],
       "sources": [
@@ -4086,7 +4558,7 @@
       "short": "James",
       "dates": "1842–1910",
       "school": "pragmatism",
-      "summary": "William James worked across physiology, psychology and philosophy; his Principles of Psychology (1890) gave us the 'stream of thought'. A close friend of Peirce, he developed and popularized pragmatism, notably in his 1907 lectures Pragmatism. He also wrote on religion in The Varieties of Religious Experience (1902).",
+      "summary": "William James worked across physiology, psychology and philosophy; his Principles of Psychology (1890) gave us the 'stream of thought'. A close friend of Peirce, he developed and popularized pragmatism, notably in his book Pragmatism (1907), based on lectures given in 1905–1907. He also wrote on religion in The Varieties of Religious Experience (1902).",
       "ideas": [
         "A dispute that makes no practical difference either way is idle; pragmatism is a method for settling such disputes.",
         "True ideas are those that prove good to believe and help us get into satisfactory relation with the rest of our experience.",
@@ -4112,7 +4584,7 @@
           }
         ]
       ],
-      "prompt": "Teach me William James as a short Socratic module. Start with the psychologist and philosopher (1842–1910) who popularized pragmatism, then his three key ideas: disputes with no practical difference are idle; truth is what proves good in the way of belief; we sometimes have a right to believe ahead of evidence. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me William James as a short Socratic module. Start with the psychologist and philosopher (1842–1910) who developed and popularized pragmatism, then his three key ideas: a dispute that makes no practical difference either way is idle; true ideas are those that prove good to believe; when a choice is forced and momentous and the evidence is not in, we may have a right to believe. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/james/",
@@ -4125,6 +4597,18 @@
         {
           "url": "https://plato.stanford.edu/entries/james/",
           "section": "Pragmatism (1907)"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/pragmatism/",
+          "section": "2.2 James"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/pragmatism/",
+          "section": "3.2 James on Truth"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/james/",
+          "section": "4. Essays in Popular Philosophy"
         }
       ],
       "sources": [
@@ -4149,9 +4633,9 @@
       "short": "Dewey",
       "dates": "1859–1952",
       "school": "pragmatism",
-      "summary": "John Dewey was, with Peirce and James, one of pragmatism's founders and arguably the most prominent American intellectual of the first half of the twentieth century. He wrote on ethics, logic, metaphysics, art and religion, and his ideas on education and democracy had global reach. He preferred to call his view 'cultural naturalism', set within a Darwinian picture of living beings in their environments.",
+      "summary": "John Dewey was, with Peirce and James, one of pragmatism's founders and arguably the most prominent American intellectual of the first half of the twentieth century. He wrote on ethics, logic, metaphysics, art and religion, and his ideas on education had global reach, while his writings on democracy shaped debates for decades. He preferred to call his view 'cultural naturalism', set within a Darwinian picture of living beings in their environments.",
       "ideas": [
-        "Inquiry starts from a felt problem and, through hypotheses and testing, turns an unsettled situation into a settled one.",
+        "Inquiry starts from a feeling that something is amiss and, by framing a problem, forming hypotheses and testing them, turns an unsettled situation into a settled one.",
         "Children learn best by actively working on real problems, not by passively receiving what others know.",
         "Democracy is more than voting: it is a way of living together and sharing experience."
       ],
@@ -4179,7 +4663,7 @@
           }
         ]
       ],
-      "prompt": "Teach me John Dewey as a short Socratic module. Start with the American pragmatist (1859–1952) of inquiry, education and democracy, then his three key ideas: inquiry turns an unsettled situation into a settled one; children learn by actively solving real problems; democracy is a way of life, not just a form of government. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me John Dewey as a short Socratic module. Start with the pragmatist (1859–1952), arguably the most prominent American intellectual of the first half of the twentieth century, then his three key ideas: inquiry turns an unsettled situation into a settled one; children learn best by actively working on real problems; democracy is more than voting: a way of living together and sharing experience. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/dewey/",
@@ -4192,6 +4676,14 @@
         {
           "url": "https://plato.stanford.edu/entries/dewey/",
           "section": "5.1 Experiential Learning and Teaching"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/dewey/",
+          "section": "7. Political Philosophy"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/dewey/",
+          "section": "5.3 Democracy Through Education"
         }
       ],
       "sources": [
@@ -4208,7 +4700,7 @@
       "short": "Rorty",
       "dates": "1931–2007",
       "school": "pragmatism",
-      "summary": "Richard Rorty developed a distinctive and controversial pragmatism and helped spark its revival from the 1970s, often called neopragmatism. In Philosophy and the Mirror of Nature (1979) he attacked the idea of knowledge as the mind mirroring an outside world. He drew most on Dewey, though many pragmatist scholars dispute his readings and even his right to the label.",
+      "summary": "Richard Rorty developed a distinctive and controversial pragmatism and helped spark its revival from the 1970s, often called neopragmatism. In Philosophy and the Mirror of Nature (1979) he attacked the idea of knowledge as the mind mirroring an outside world. Among the pragmatists, he drew most on Dewey, though many pragmatist scholars dispute his readings and even his right to the label.",
       "ideas": [
         "Knowledge is not the mind mirroring the world, and philosophy should drop that picture.",
         "There is little of substance to say about truth; we test vocabularies by how well they help us reach our goals.",
@@ -4238,7 +4730,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Richard Rorty as a short Socratic module. Start with the American neopragmatist (1931–2007) who attacked knowledge as a mirror of nature, then his three key ideas: knowledge is not a mirror of nature; judge vocabularies by how they serve our goals, not by truth as correspondence; the liberal ironist, for whom cruelty is the worst thing we do. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Richard Rorty as a short Socratic module. Start with the neopragmatist (1931–2007) who attacked the idea of knowledge as a mirror of nature, then his three key ideas: knowledge is not the mind mirroring the world; we test vocabularies by how well they help us reach our goals; the liberal ironist, who knows her deepest descriptions are contingent and holds that cruelty is the worst thing we do. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/rorty/",
@@ -4251,6 +4743,14 @@
         {
           "url": "https://plato.stanford.edu/entries/rorty/",
           "section": "4.2 Claim to Pragmatism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/rorty/",
+          "section": "2.2 Antirepresentationalism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/rorty/",
+          "section": "3.3 Liberalism and Irony"
         }
       ],
       "sources": [
@@ -4309,11 +4809,15 @@
           }
         ]
       ],
-      "prompt": "Teach me Edmund Husserl as a short Socratic module. Start with the Moravian-born founder of phenomenology (1859–1938), who moved from mathematics into philosophy, then his three key ideas: every experience is directed at something; bracketing the world (the epoché); the lifeworld as the ground of science. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Edmund Husserl as a short Socratic module. Start with the man described as the founding father of phenomenology (1859–1938), who trained first in mathematics and then turned to philosophy, then his three key ideas: every experience is directed at something; bracketing the world (the epoché); science growing out of the everyday lifeworld. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/husserl/",
           "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/husserl/",
+          "section": "1. Life and work"
         },
         {
           "url": "https://plato.stanford.edu/entries/phenomenology/",
@@ -4322,6 +4826,18 @@
         {
           "url": "https://plato.stanford.edu/entries/phenomenology/",
           "section": "1. What is Phenomenology?"
+        },
+        {
+          "url": "https://iep.utm.edu/phenom/",
+          "section": "b. Phenomenological Reduction"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/husserl/",
+          "section": "3. The transcendental turn: Epoché, phenomenological reduction, and transcendental idealism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/husserl/",
+          "section": "6. The lifeworld"
         }
       ],
       "sources": [
@@ -4344,7 +4860,7 @@
       "school": "phenomenology",
       "summary": "Heidegger was Husserl's assistant and later his successor at Freiburg, and his Being and Time (1927) became one of the most influential books in 20th-century European philosophy. His driving question was the meaning of being. His support for the Nazi movement is well documented and still shapes how his work is read.",
       "ideas": [
-        "Philosophy's deepest question is what it means to be, and we begin answering it by examining our own kind of existence, which he called Dasein.",
+        "His driving question was what it means to be. He approached it by examining ourselves, the beings he called Dasein, whose kind of being he called existence.",
         "We are always already in the world, and things first show up as usable equipment, like a hammer, rather than as objects we stare at.",
         "In the technological age everything, people included, tends to show up as 'stock': interchangeable resources held ready for use."
       ],
@@ -4357,6 +4873,10 @@
           {
             "url": "https://plato.stanford.edu/entries/heidegger/",
             "section": "2.1.3 Dasein"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/phenomenology/",
+            "section": "4. The History and Varieties of Phenomenology"
           }
         ],
         [
@@ -4376,11 +4896,19 @@
           }
         ]
       ],
-      "prompt": "Teach me Martin Heidegger as a short Socratic module. Start with Husserl's assistant and successor at Freiburg (1889–1976), author of Being and Time, then his three key ideas: the question of being, starting from ourselves (Dasein); being-in-the-world and things as equipment; technology turning everything into stock. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Martin Heidegger as a short Socratic module. Start with Husserl's assistant and later successor at Freiburg (1889–1976), author of Being and Time, then his three key ideas: the question of being, approached by examining ourselves (Dasein), whose kind of being he called existence; being-in-the-world and things as equipment; technology turning everything into stock. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/heidegger/",
           "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/phenomenology/",
+          "section": "4. The History and Varieties of Phenomenology"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/heidegger/",
+          "section": "3. Nazi-Era Writings"
         },
         {
           "url": "https://plato.stanford.edu/entries/heidegger/",
@@ -4389,6 +4917,14 @@
         {
           "url": "https://plato.stanford.edu/entries/heidegger/",
           "section": "2.1.1 Availableness (Readiness-to-Hand)"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/heidegger/",
+          "section": "5.2.1 The Technological Mode of Revealing"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/heidegger/",
+          "section": "1. Life and Work"
         }
       ],
       "sources": [
@@ -4543,7 +5079,7 @@
       "short": "Frege",
       "dates": "1848–1925",
       "school": "analytic",
-      "summary": "Frege was a German mathematician, logician and philosopher at the University of Jena. He essentially reinvented logic, building the first predicate calculus, and tried to show that mathematics can be derived from logic. Whether he counts as a founder of analytic philosophy or only an influence on it is debated.",
+      "summary": "Frege was a German mathematician, logician and philosopher at the University of Jena. He essentially reinvented logic, building what was in effect the first predicate calculus, and tried to show that mathematics can be derived from logic. Whether he counts as a founder of analytic philosophy or only an influence on it is debated.",
       "ideas": [
         "He built a new formal logic that could handle statements like 'every' and 'some' and set out what counts as a proof.",
         "He aimed to show that arithmetic rests on logic alone (logicism), though one axiom he added turned out to be inconsistent.",
@@ -4707,11 +5243,15 @@
           }
         ]
       ],
-      "prompt": "Teach me Ludwig Wittgenstein as a short Socratic module. Start with the Vienna-born philosopher (1889–1951) who studied with Russell at Cambridge, then his three key ideas: sentences as pictures of facts; meaning as use; philosophy as untangling language. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Ludwig Wittgenstein as a short Socratic module. Start with the Vienna-born philosopher (1889–1951) who went to Cambridge to study with Russell, then his three key ideas: sentences as pictures of facts; meaning as use; philosophy as untangling language. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/wittgenstein/",
           "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/wittgenstein/",
+          "section": "1. Biographical Sketch"
         },
         {
           "url": "https://iep.utm.edu/analytic-philosophy/",
@@ -4720,6 +5260,14 @@
         {
           "url": "https://plato.stanford.edu/entries/wittgenstein/",
           "section": "2.1 Tractatus Logico-Philosophicus"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/wittgenstein/",
+          "section": "3.3 Meaning as Use"
+        },
+        {
+          "url": "https://iep.utm.edu/analytic-philosophy/",
+          "section": "b. The Later Wittgenstein"
         }
       ],
       "sources": [
@@ -4770,11 +5318,15 @@
           }
         ]
       ],
-      "prompt": "Teach me Rudolf Carnap as a short Socratic module. Start with the German-born logical positivist (1891–1970) of the Vienna Circle, then his three key ideas: designing clearer languages; tolerance among frameworks; rejecting metaphysics. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Rudolf Carnap as a short Socratic module. Start with the logical positivist (1891–1970) and Vienna Circle member, then his three key ideas: designing clearer languages; tolerance among frameworks; excluding metaphysics as empty. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/carnap/",
           "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/vienna-circle/",
+          "section": "2.1 People"
         },
         {
           "url": "https://plato.stanford.edu/entries/carnap/",
@@ -4783,6 +5335,14 @@
         {
           "url": "https://plato.stanford.edu/entries/carnap/",
           "section": "1.3 Pluralism and Tolerance"
+        },
+        {
+          "url": "https://iep.utm.edu/analytic-philosophy/",
+          "section": "b. W. V. Quine"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/carnap/",
+          "section": "1.4 Metaphysics"
         }
       ],
       "sources": [
@@ -4803,7 +5363,7 @@
       "short": "Quine",
       "dates": "1908–2000",
       "school": "analytic",
-      "summary": "Quine was an American philosopher and logician, described in the IEP as the first American of great significance in the analytic tradition. He is best known for attacking the logical positivists' split between truths of meaning and truths of fact, as part of a view that makes no sharp break between philosophy and science.",
+      "summary": "Quine was an American philosopher and logician, described in the IEP as the first American of great significance in the analytic tradition. He is perhaps best known for arguing against logical empiricism (logical positivism), in particular its use of the split between truths of meaning and truths of fact, as part of a view that makes no sharp break between philosophy and science.",
       "ideas": [
         "There is no sharp line between truths true by meaning alone (analytic) and truths true because of facts (synthetic).",
         "Holism: our beliefs face experience as a whole network, so even logic or mathematics could in principle be revised.",
@@ -4908,11 +5468,23 @@
         },
         {
           "url": "https://plato.stanford.edu/entries/critical-theory/",
+          "section": "1.1 Origins and Generations"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/critical-theory/",
           "section": "1.3 Critical Theory versus Traditional Theory"
         },
         {
           "url": "https://plato.stanford.edu/entries/horkheimer/",
           "section": "3. “Traditional and Critical Theory”: Summation and Dissolution of the Early Program"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/horkheimer/",
+          "section": "2.1. Suffering and the Desire for Happiness"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/horkheimer/",
+          "section": "4.1 The Critique of Instrumental Reason"
         }
       ],
       "sources": [
@@ -4967,17 +5539,29 @@
         },
         {
           "url": "https://plato.stanford.edu/entries/adorno/",
+          "section": "1. Biographical Sketch"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/adorno/",
           "section": "3. Dialectic of Enlightenment"
         },
         {
           "url": "https://plato.stanford.edu/entries/adorno/",
           "section": "4.2 Culture"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/adorno/",
+          "section": "5. Negative Dialectics"
         }
       ],
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/adorno/",
           "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/adorno/",
+          "section": "1. Biographical Sketch"
         }
       ],
       "sample": false
@@ -4990,7 +5574,7 @@
       "school": "critical-theory",
       "summary": "Marcuse was a prominent Frankfurt School member who, unlike most colleagues, stayed in the United States after the war. In the 1960s he became one of the best-known social theorists in the world and was called the guru of the New Left, a title he rejected.",
       "ideas": [
-        "Advanced industrial society produces a comfortable, democratic unfreedom.",
+        "In advanced industrial society a comfortable, democratic unfreedom prevails.",
         "One-dimensional thinking no longer sees society's contradictions or demands change; critical thinking does.",
         "Beyond the basic repression any civilisation needs, society imposes surplus repression to serve domination."
       ],
@@ -5014,7 +5598,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Herbert Marcuse as a short Socratic module. Start with the Frankfurt School thinker (1898–1979) who stayed in America and inspired the New Left, then his three key ideas: comfortable unfreedom; one-dimensional thinking; surplus repression. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Herbert Marcuse as a short Socratic module. Start with the Frankfurt School thinker (1898–1979) who stayed in America and was called the guru of the New Left, a title he rejected, then his three key ideas: comfortable unfreedom; one-dimensional thinking; surplus repression. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/marcuse/",
@@ -5187,19 +5771,23 @@
           }
         ]
       ],
-      "prompt": "Teach me Michel Foucault as a short Socratic module. Start with the French historian of ideas (1926–1984) who studied madness, prisons and sexuality, then his three key ideas: genealogy; power/knowledge; discipline and normalisation. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Michel Foucault as a short Socratic module. Start with the French historian and philosopher (1926–1984) whose histories of prisons and of sexuality traced how modern knowledge and power grew up together, then his three key ideas: genealogy; power/knowledge; discipline and normalisation. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/foucault/",
           "section": "intro"
         },
         {
-          "url": "https://plato.stanford.edu/entries/postmodernism/",
-          "section": "3. Genealogy and Subjectivity"
+          "url": "https://plato.stanford.edu/entries/foucault/",
+          "section": "3.4 History of the Prison"
         },
         {
           "url": "https://plato.stanford.edu/entries/foucault/",
-          "section": "3.4 History of the Prison"
+          "section": "3.5 History of Modern Sexuality"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/postmodernism/",
+          "section": "3. Genealogy and Subjectivity"
         }
       ],
       "sources": [
@@ -5254,11 +5842,15 @@
           }
         ]
       ],
-      "prompt": "Teach me Jacques Derrida as a short Socratic module. Start with the Algerian-born French philosopher (1930–2004) who founded deconstruction, then his three key ideas: deconstructing ranked oppositions; différance; deconstruction as a pursuit of justice. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Jacques Derrida as a short Socratic module. Start with the philosopher (1930–2004), born in Algeria, who founded deconstruction, then his three key ideas: deconstructing ranked oppositions; différance; deconstruction as a pursuit of justice. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/derrida/",
           "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/derrida/",
+          "section": "1. Life and Works"
         },
         {
           "url": "https://plato.stanford.edu/entries/derrida/",
@@ -5267,6 +5859,10 @@
         {
           "url": "https://plato.stanford.edu/entries/postmodernism/",
           "section": "5. Deconstruction"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/derrida/",
+          "section": "4. Elaboration of the Basic Argumentation: The Worst and Hospitality"
         }
       ],
       "sources": [
@@ -5346,7 +5942,7 @@
       "short": "Taylor Mill",
       "dates": "1807–1858",
       "school": "feminist-philosophy",
-      "summary": "Harriet Taylor Mill worked so closely with John Stuart Mill, whom she married in 1851, that their contributions are hard to separate. How much she wrote and how much she shaped his thinking is still contested, but there is general agreement that she was the main author of 'The Enfranchisement of Women' (1851).",
+      "summary": "Harriet Taylor Mill worked so closely with John Stuart Mill, whom she married in 1851, that their contributions are hard to separate. How much she wrote and how much she shaped his thinking is still contested, but today there seems to be general agreement, though some commentators dissent, that she was the main author of 'The Enfranchisement of Women' (1851).",
       "ideas": [
         "Women deserve equality in all rights, political, civil and social, not just the vote.",
         "A woman who earns part of the family income cannot be dominated the way a wholly dependent wife can.",
@@ -5376,11 +5972,15 @@
           }
         ]
       ],
-      "prompt": "Teach me Harriet Taylor Mill as a short Socratic module. Start with the London-born writer (1807–1858) and collaborator of John Stuart Mill, then her three key ideas: equality in all rights; earning as protection against domination; her disputed role in J. S. Mill's work. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Harriet Taylor Mill as a short Socratic module. Start with John Stuart Mill's close collaborator (1807–1858), whom he married in 1851, then her three key ideas: equality in all rights; earning as protection against domination; her disputed role in J. S. Mill's work. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/harriet-mill/",
           "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/harriet-mill/",
+          "section": "1. Biographical Sketch"
         },
         {
           "url": "https://plato.stanford.edu/entries/harriet-mill/",
@@ -5389,6 +5989,10 @@
         {
           "url": "https://plato.stanford.edu/entries/harriet-mill/",
           "section": "3.3 On Liberty"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/harriet-mill/",
+          "section": "3.2 Principles of Political Economy"
         }
       ],
       "sources": [
@@ -5413,11 +6017,11 @@
       "short": "Beauvoir",
       "dates": "1908–1986",
       "school": "feminist-philosophy",
-      "summary": "Beauvoir was a philosopher, novelist, feminist and activist, and a major figure in French existentialism after the war. She is best known for The Second Sex (1949). She was long treated as a helper to Sartre's ideas rather than a thinker in her own right, a view that decades of scholarship, mostly by feminist scholars, have overturned.",
+      "summary": "Beauvoir was a philosopher, novelist, feminist and activist, and a major figure in French existentialism after the war. She is best known for The Second Sex (1949). She was often regarded as merely the 'midwife' to Sartre's existential ethics rather than a thinker in her own right, yet decades of scholarship, mostly by feminist scholars, have secured her a place in philosophy.",
       "ideas": [
         "Woman has been made the Other, while man is treated as the essential being.",
         "'One is not born but becomes a woman': a line many see as pointing to the sex-gender distinction.",
-        "Evil lies in denying freedom, our own and others', so we are responsible for each other's freedom."
+        "Evil lies in denying freedom, our own and others', and we are responsible for securing the conditions of freedom for all."
       ],
       "ideaSources": [
         [
@@ -5439,7 +6043,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Simone de Beauvoir as a short Socratic module. Start with the French existentialist and feminist (1908–1986) who wrote The Second Sex, then her three key ideas: woman as the Other; becoming a woman; freedom as shared responsibility. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Simone de Beauvoir as a short Socratic module. Start with the French existentialist and feminist (1908–1986) who wrote The Second Sex, then her three key ideas: woman as the Other; becoming a woman; evil as the denial of freedom and our responsibility for its conditions. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/beauvoir/",

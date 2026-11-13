@@ -3,7 +3,7 @@
 // The card's contents, shared by the desktop card and the phone screen: a school's sections,
 // a thinker, and the "Your thread" panel (handoff "The card", "Your thread").
 import { Fragment, useEffect, useRef, useState } from "react";
-import { getSchool, getThinker, studyPrompt, type School, type Thinker } from "@/lib/content";
+import { alsoIn, getSchool, getThinker, ledeOf, studyPrompt, type School, type Thinker } from "@/lib/content";
 import { countLine, formatDay, summarise, type Visit } from "@/lib/visits";
 import { copyText } from "@/lib/copy";
 import type { Nav } from "./meander";
@@ -30,9 +30,13 @@ export function SchoolSections({ school, nav, phone = false }: { school: School;
   const sec = phone ? "psec" : "sec";
   const sep = phone ? null : <hr />;
   const empty = !school.questions.length && !school.themes.length && !school.thinkers.length;
+  const lede = ledeOf(school);
+  // Desktop: the card opens with one line on what the school is (L20). The phone shows it under the title.
+  const ledeEl = !phone && lede ? <p className="lede">{lede}</p> : null;
   if (empty) {
     return (
       <>
+        {ledeEl}
         <h2 className={phone ? "psec" : "sec first"}>It asks</h2>
         <p className="pending">This school’s questions, themes and thinkers are still being written.</p>
       </>
@@ -40,6 +44,7 @@ export function SchoolSections({ school, nav, phone = false }: { school: School;
   }
   return (
     <>
+      {ledeEl}
       {school.questions.length > 0 && (
         <>
           <h2 className={phone ? sec : "sec first"}>It asks</h2>
@@ -149,7 +154,17 @@ export function ThinkerSections({ thinker, nav, headingRef }: { thinker: Thinker
         <button type="button" className="up" onClick={nav.backToSchool}>← {school.name}</button>
       )}
       <h2 className="who-name" tabIndex={-1} ref={headingRef}>{thinker.name}</h2>
-      <p className="dates">{thinker.dates}</p>
+      <p className="dates">
+        {thinker.dates}
+        {alsoIn(thinker).map((o) => (
+          <Fragment key={o.id}>
+            {" · also in "}
+            <span className="inline-links">
+              <button type="button" onClick={() => nav.openThinker(o.id)}>{getSchool(o.school)?.name}</button>
+            </span>
+          </Fragment>
+        ))}
+      </p>
       <p className="sum">{thinker.summary || <span className="pending">A short summary is still being written.</span>}</p>
       {thinker.ideas.length > 0 && (
         <ul className="ideas">

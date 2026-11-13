@@ -28,7 +28,9 @@ export type School = {
   thinkers: string[];
   sources: Source[];
   sample?: boolean;
-  /** Not shown in the approved card design; kept for later and for graders. */
+  /** A one-line "what this is" written for the card; when missing, the first sentence of `description`. */
+  tagline?: string;
+  /** Not shown in full; the card shows its first sentence (see `ledeOf`). */
   dateRange?: string;
   era?: string;
   description?: string;
@@ -98,8 +100,9 @@ export type Neighbour = { school: School; verb: string; against: boolean; link: 
 export function verbFor(link: Link, focus: string) {
   const newer = focus === link.to;
   if (link.type === "built") return newer ? "built on" : "grew from it";
-  if (link.type === "against") return newer ? "pushed against" : "pushed back";
-  return newer ? "built on, then pushed against" : "grew from it, then pushed back";
+  // "pushed back on it", not "pushed back": the neighbour pushed against the focus (user test F3).
+  if (link.type === "against") return newer ? "pushed against" : "pushed back on it";
+  return newer ? "built on, then pushed against" : "grew from it, then pushed back on it";
 }
 
 /** Schools one thread away from `focus`, in link order. */
@@ -131,3 +134,13 @@ export function splitName(name: string): { short: string; aside: string } {
 
 /** The line under a school's title: "Frankfurt School · 1923 – present · you are here". */
 export const hereLine = (s: School) => [splitName(s.name).aside, s.dates, "you are here"].filter(Boolean).join(" · ");
+
+/** The one line under a school's name in the card (L20): its tagline, or the first sentence of its description. */
+export function ledeOf(s: School): string {
+  if (s.tagline) return s.tagline;
+  const d = s.description ?? "";
+  return d.split(/(?<=[.!?])\s+(?=[A-Z])/)[0] ?? "";
+}
+
+/** The same thinker's card in other schools (Sartre, Beauvoir): matched by name (L20, "Also in"). */
+export const alsoIn = (t: Thinker): Thinker[] => thinkers.filter((o) => o.name === t.name && o.id !== t.id);

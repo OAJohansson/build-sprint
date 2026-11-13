@@ -23,7 +23,7 @@ const facing = () => (overviewFacing ??= emptiest(Object.values(V)));
 // The faint "yarn" rings drawn on the globe: [flattening, rotation, opacity].
 const YARN: [number, number, number][] = [[0.9, -18, 0.05], [0.46, 28, 0.045], [0.2, -54, 0.05]];
 
-type Path = { key: string; d: string; cls: string; pts: Projected[]; focus: boolean };
+type Path = { key: string; a: string; b: string; d: string; cls: string; pts: Projected[]; focus: boolean };
 type Node = { id: string; name: string; label: string; p: Projected; r: number; near?: Neighbour; far: boolean };
 
 function useLayout(focus: string | null, hasCard: boolean) {
@@ -43,7 +43,7 @@ function useLayout(focus: string | null, hasCard: boolean) {
       if (pts.length < 2) continue;
       const cls = ["th", isF && "focus", isF && l.type === "against" && "against", isF && l.type === "built-then-against" && "mixed", !isF && Math.max(pa.theta, pb.theta) > FAR && "far"]
         .filter(Boolean).join(" ");
-      paths.push({ key: `${l.from}-${l.to}`, d: "M" + pts.map((p) => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join("L"), cls, pts, focus: isF });
+      paths.push({ key: `${l.from}-${l.to}`, a: l.from, b: l.to, d: "M" + pts.map((p) => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join("L"), cls, pts, focus: isF });
     }
     // Tab order (handoff): schools one thread away first, then the others nearest first.
     const nodes: Node[] = schools
@@ -78,6 +78,15 @@ export function GlobeView({ nav }: { nav: Nav }) {
   const [tick, setTick] = useState(0);
   // After a click turns the globe, a new label can land under the resting pointer; no hover look until it moves.
   const [still, setStill] = useState(false);
+  // Overview only: hovering or focusing a school lights its own threads and its neighbours' names (L20).
+  const [hovered, setHovered] = useState<string | null>(null);
+  const hoverId = focus ? null : hovered;
+  const lit = useMemo(() => {
+    if (!hoverId) return null;
+    const ids = new Set([hoverId]);
+    for (const l of links) if (l.from === hoverId) ids.add(l.to); else if (l.to === hoverId) ids.add(l.from);
+    return ids;
+  }, [hoverId]);
   useEffect(() => {
     let alive = true;
     document.fonts?.ready.then(() => alive && setTick((t) => t + 1));
@@ -134,7 +143,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
     <div className="desk">
       {/* Clicking empty space returns to the overview; Esc and the logo do the same for keyboard users. */}
       <div
-        className={still ? "stage still" : "stage"}
+        className={["stage", still && "still", lit && "hovering"].filter(Boolean).join(" ")}
         ref={stageRef}
         onClick={onStageClick}
         onMouseMove={still ? () => setStill(false) : undefined}
@@ -172,12 +181,12 @@ export function GlobeView({ nav }: { nav: Nav }) {
             ))}
           </mask>
           <g mask="url(#ko)">
-            {paths.map((p) => <path key={p.key} className={p.cls} d={p.d} />)}
+            {paths.map((p) => <path key={p.key} className={lit && (p.a === hoverId || p.b === hoverId) ? `${p.cls} lit` : p.cls} d={p.d} />)}
           </g>
         </svg>
 
         <header ref={headerRef}>
-          <button type="button" className="wm" translate="no" title="Back to the overview" onClick={nav.overview}>
+          <button type="button" className="wm" translate="no" title="Back to the whole field" aria-label="Meander, back to the whole field" onClick={nav.overview}>
             <Mark />Meander
           </button>
           {visits.length > 0 && (
@@ -191,16 +200,28 @@ export function GlobeView({ nav }: { nav: Nav }) {
           {nodes.map((n) => {
             const v = visited.has(n.id);
             const pl = ready?.map[n.id];
-            const cls = ["n", n.near && "t1", n.far && "back2", v && "v"].filter(Boolean).join(" ");
+            const cls = ["n", n.near && "t1", n.far && "back2", v && "v", lit?.has(n.id) && "lit"].filter(Boolean).join(" ");
             return (
-              <button key={n.id} type="button" className={cls} style={{ left: round1(n.p.x), top: round1(n.p.y) }} onClick={() => { setStill(true); nav.openSchool(n.id); }} data-id={n.id}>
+              <button key={n.id} type="button" className={cls} style={{ left: round1(n.p.x), top: round1(n.p.y) }} onClick={() => { setStill(true); setHovered(null); nav.openSchool(n.id); }}
+                onMouseEnter={() => setHovered(n.id)}
+                onMouseLeave={() => setHovered((h) => (h === n.id ? null : h))}
+                onFocus={() => setHovered(n.id)}
+                onBlur={() => setHovered((h) => (h === n.id ? null : h))}
+                data-id={n.id}
+              >
                 <i className="dot" style={{ width: 2 * n.r, height: 2 * n.r }} />
                 <span
                   className={pl ? "lb placed" : "lb"}
                   ref={(el) => { if (el) labelRefs.current.set(n.id, el); else labelRefs.current.delete(n.id); }}
                   style={pl ? { left: pl.left, top: pl.top, alignItems: pl.align, textAlign: pl.text } : undefined}
                 >
-                  {n.near && <em>{n.near.verb}</em>}
+                  {n.near && (
+                    <em>
+                      {n.near.verb}
+                      {/* the link's reason, on hover or keyboard focus only (L20) */}
+                      {n.near.link.label && <span className="why">· {n.near.link.label}</span>}
+                    </em>
+                  )}
                   <b className={n.label.length > 20 ? "wrap" : undefined}>{n.label}</b>
                   {v && <span className="sr-only">, visited</span>}
                 </span>

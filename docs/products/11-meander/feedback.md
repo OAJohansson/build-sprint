@@ -11,11 +11,11 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 5 | Critic, built app | Faint banding in the dark background near the top; check on a real screen | fixed |
 | 6 | Critic, built app | Numerals in "4 schools on 4 days" render thinner than the words | fixed |
 | 7 | User test F1 (major) | Overview has no era cue; shape appears only after a click | open: hover lights a school's threads now; era cues to the gate |
-| 8 | User test F2 (major) | Link reasons, description, reacted-against text never shown | fixing |
-| 9 | User test F3 | "pushed back" vs "pushed against" ambiguous | fixing |
+| 8 | User test F2 (major) | Link reasons, description, reacted-against text never shown | fixed |
+| 9 | User test F3 | "pushed back" vs "pushed against" ambiguous | fixed |
 | 10 | User test F4 | Busy schools light 6–8 neighbours | parked, gate question |
 | 11 | User test F5 | "Your thread" suggests nothing next | parked, gate question (tests the hop bet) |
 | 12 | User test F6 | Esc steps back one level, R6 says overview | won't do: stepwise Esc kept, R6 reworded (T20) |
-| 13 | User test F7 | Thinker in two schools: no "Also in" link | fixing |
-| 14 | User test F8 | Phone targets under 44 px | fixing |
-| 15 | User test, R2 | Feminist Philosophy: 2 themes without thinkers; one Utilitarianism theme is 1 sentence | fixing (writer) |
+| 13 | User test F7 | Thinker in two schools: no "Also in" link | fixed |
+| 14 | User test F8 | Phone targets under 44 px | fixed |
+| 15 | User test, R2 | Feminist Philosophy: 2 themes without thinkers; one Utilitarianism theme is 1 sentence | fixed |

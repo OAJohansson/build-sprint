@@ -44,7 +44,7 @@ for (const s of full) {
   }
   schools.push({
     id: s.id, name: s.name, dates: shortDates(s), dateRange: s.date_range ?? "", era: s.era ?? "",
-    description: s.description ?? "", debatable: s.debatable ?? null,
+    description: s.description ?? "", ...(s.tagline ? { tagline: s.tagline } : {}), debatable: s.debatable ?? null,
     questions: (s.questions ?? []).map((q) => q.text),
     questionSources: (s.questions ?? []).map((q) => src(q.sources)),
     themes: (s.themes ?? []).map((th) => ({

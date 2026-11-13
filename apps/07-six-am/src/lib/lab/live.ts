@@ -206,8 +206,9 @@ export class LiveParts {
   }
 
   /** Which parts are heard (true = on). Short ramps, no clicks. */
-  setParts(on: boolean[]) {
-    this.gains.forEach((g, i) => g.gain.setTargetAtTime(on[i] ? 1 : 0, this.ctx.currentTime, 0.01));
+  /** `level` (linear, default 1): Make's FX A/B turns the parts down a little under Mine's FX (slice 3). */
+  setParts(on: boolean[], level = 1) {
+    this.gains.forEach((g, i) => g.gain.setTargetAtTime(on[i] ? level : 0, this.ctx.currentTime, 0.01));
   }
 
   /** Feed the Deck's reported position (from its BroadcastChannel) as it arrives. */

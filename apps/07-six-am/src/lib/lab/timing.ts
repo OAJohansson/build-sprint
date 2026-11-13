@@ -79,15 +79,26 @@ export function isCatching(gatePending: boolean, unmuteAt: number | null, now: n
   return gatePending || (unmuteAt !== null && now < unmuteAt);
 }
 
+/** From the loop in memory to Make's knobs live: the read and the first render (s). */
+export const READY_S = 0.8;
+/** How far the separated parts arrive ahead of what you hear (s), until the transport has seen it. */
+// shortcut: 3 s from the re-grade (the first figure was 1.8–4.6 s high without it); the transport replaces it with the lead it measures while filling.
+export const LEAD_S = 3;
+
 /**
- * Seconds until a filling loop is in memory (the owner's "Make never starts" bug, 27 Oct): the loop
- * fills in real time from one run. `posS` is where you hear, from the loop's start (negative in
- * the pre-roll); `filledS` how much of it is held. Filled up to the playhead → the rest of this pass;
- * a hole behind the playhead → the rest, a catch-up back to the start, then a whole pass.
+ * Seconds until Make's knobs are live on a filling loop (the owner's "Make never starts" bug, 27 Oct):
+ * the loop fills in real time from one run. `posS` is where you hear, from the loop's start (negative
+ * in the pre-roll); `filledS` how much of it is held. The parts arrive `leadS` ahead of what you hear
+ * (D-F8, D-R4), so the count is the loop's real remaining fill plus the read and first render:
+ * - filled up to the playhead: what's left to fill;
+ * - catching up: the catch-up less the lead (new parts arrive that much sooner), then what's left;
+ * - a hole behind the playhead: the rest of this pass, a catch-up less the lead, then a whole pass.
+ * `leadS` is what the transport last saw while filling, else LEAD_S.
  */
-export function loopFillEtaS(o: { loopS: number; posS: number; filledS: number; catchLeftS: number | null; catchS: number }): number {
+export function loopFillEtaS(o: { loopS: number; posS: number; filledS: number; catchLeftS: number | null; catchS: number; leadS?: number }): number {
   const { loopS, posS, filledS, catchLeftS, catchS } = o;
-  if (catchLeftS !== null) return Math.ceil(catchLeftS + loopS);
-  const rest = Math.max(0, loopS - posS);
-  return Math.ceil(filledS >= Math.max(0, posS) - 0.5 ? rest + 0.3 : rest + catchS + loopS);
+  const lead = o.leadS ?? LEAD_S;
+  if (catchLeftS !== null) return Math.ceil(Math.max(0, catchLeftS - lead) + Math.max(0, loopS - filledS) + READY_S);
+  if (filledS >= Math.max(0, posS) - 0.5) return Math.ceil(Math.max(0, loopS - Math.max(posS, filledS)) + READY_S);
+  return Math.ceil(Math.max(0, loopS - posS) + Math.max(0, catchS - lead) + loopS + READY_S);
 }

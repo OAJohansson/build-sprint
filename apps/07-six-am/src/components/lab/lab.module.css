@@ -309,3 +309,130 @@
 
 /* L209: eight knobs (with Sub and Weight) in one row at 84 px */
 .macros { gap: 8px; }
+
+/* Phase 5 (Fold, round 3 + 4; L218, L224): the family switch, then the drum rows on top with the knob
+   block anchored under them. Every row is 64 px whatever is picked, so the knob block never moves. */
+.fam { display: flex; align-items: center; gap: 22px; height: 52px; width: 100%; flex: none; border-bottom: 1px solid var(--line); margin-top: -8px; min-width: 0; }
+.famTab { display: inline-flex; align-items: center; gap: 8px; height: 100%; background: none; border: 0; padding: 0; cursor: pointer; font-size: 13px; color: var(--muted) !important; white-space: nowrap; transition: color 150ms ease-out; }
+.famTab i { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.famTab[aria-selected="true"] { color: var(--ink) !important; box-shadow: inset 0 -2px var(--ink); }
+@media (hover: hover) and (pointer: fine) { .famTab:not([data-off]):hover { color: var(--ink) !important; } }
+.famTab[data-off] { color: var(--faint) !important; cursor: default; }
+.famTab em { font-style: normal; font-size: 11px; border: 1px solid var(--edge); border-radius: 4px; padding: 1px 6px; margin-left: 4px; }
+.famCap { margin-left: auto; min-width: 0; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.root .famTab:active:not(:disabled) { transform: none; }
+.grow { flex: 1 1 0; min-height: 0; }
+
+.drums { width: 100%; display: flex; flex-direction: column; flex: none; }
+.drRows { position: relative; width: 100%; }
+.drRow { display: grid; grid-template-columns: 156px minmax(0, 1fr) 150px; gap: 20px; align-items: center; height: 64px; border-bottom: 1px solid var(--line); }
+.drRow[data-head] { height: 22px; border-bottom: 0; align-items: end; }
+.drRow[data-lit] { background: rgba(241, 230, 211, .045); box-shadow: inset 2px 0 var(--ink); }
+.drName { height: 56px; text-align: left; background: none; border: 0; padding: 0 0 0 12px; cursor: pointer; font-size: 14px; color: var(--muted) !important; white-space: nowrap; }
+.drRow[data-lit] .drName { color: var(--ink) !important; }
+.drOff { font-size: 12px; color: var(--muted); }
+.drTrack { position: relative; height: 38px; min-width: 0; }
+.drPattern { display: block; width: 100%; height: 38px; overflow: visible; }
+.drBars { position: relative; height: 18px; }
+.drBars span { position: absolute; top: 0; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.drSlot { justify-self: end; text-align: right; padding-right: 4px; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.drPreset { font: italic 400 20px var(--f-serif); color: var(--muted); white-space: nowrap; }
+.drSaved { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.drSaved::before { content: "✓ "; color: #7fbf6a; }
+.drHeadBox { position: absolute; top: 22px; bottom: 0; left: calc(156px + 20px); right: calc(150px + 20px); pointer-events: none; }
+.drHead { position: absolute; top: 8px; bottom: 8px; width: 1.5px; background: #fff; }
+.drBlock { margin-top: 22px; display: flex; flex-direction: column; align-items: flex-start; width: 100%; }
+.drLabel { font-size: 12px; color: var(--muted); }
+.drPresetName { align-self: flex-start; background: none; border: 0; padding: 4px 0; cursor: pointer; font: italic 400 30px/1 var(--f-serif) !important; white-space: nowrap; }
+.drPresetName span { font: 13px var(--f-mono); color: var(--muted); margin-left: 6px; }
+.drBlock .menu { top: 44px; }
+.drKnobs { display: flex; gap: 56px; margin: 10px 0 12px; }
+.drKnobs[data-off] [role="slider"] { opacity: .45; }
+.drSuggest { display: flex; align-items: center; gap: 16px; min-height: 34px; }
+.drSuggest .suggest { min-height: 0; }
+.drWait { margin: 0; min-height: 34px; display: flex; align-items: center; font-size: 13px; color: var(--ink); }
+.drScore { margin-left: auto; display: flex; align-items: baseline; gap: 8px; color: var(--muted); white-space: nowrap; font-size: 12.5px; }
+.drScore b { font: 500 22px var(--f-mono); color: var(--ink); }
+
+/* D-P1 (drums-slice evals): on a short window (a 13" laptop, 1440 × 741) the drum rows and the knob
+   block tighten so A/B and the score stay above the save bar. Every row still has one height, so
+   picking a row still moves nothing; the Bass room is untouched. */
+@media (max-height: 860px) {
+  .drRow { height: 46px; }
+  .drRow[data-head] { height: 18px; }
+  .drName { height: 40px; }
+  .drTrack, .drPattern { height: 30px; }
+  .drPreset { font-size: 18px; }
+  .drBlock { margin-top: 8px; }
+  .drPresetName { font-size: 26px !important; padding: 2px 0; }
+  .drBlock .menu { top: 36px; }
+  .drKnobs { gap: 48px; margin: 4px 0 6px; }
+  .drSuggest, .drWait { min-height: 30px; }
+}
+
+/* D-R2 (re-grade 12 Nov): the Mentor line and Suggest keep one height (two lines) whether waiting or
+   ready, and A/B with the score stays in view at the foot of the drums column (sticky), so it never
+   sits under the save bar on a short window. Drums only; the Bass room is untouched. */
+.drSuggest, .drWait { height: 42px; min-height: 0; }
+.drSuggest .suggest { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.drCheck { position: sticky; bottom: -24px; z-index: 3; background: var(--bg); padding-bottom: 24px; margin-bottom: -24px; }
+@media (max-height: 760px) {
+  .drRow { height: 40px; }
+  .drRow[data-head] { height: 16px; }
+  .drName { height: 34px; }
+  .drTrack, .drPattern { height: 26px; }
+  .drPresetName { font-size: 24px !important; }
+  .drKnobs { gap: 40px; margin: 2px 0 4px; }
+}
+
+/* User test 12 Nov: the off row's reason in the row (U2); "Ticks placed" as plain text (U10). */
+.drNote { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--muted); background: var(--bg); padding: 1px 8px; border-radius: 4px; white-space: nowrap; pointer-events: none; }
+.drRow[data-lit] .drNote { background: #1c1917; }
+.drPlaced { font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+/* U9 (user test 12 Nov): Play keeps one x whatever the header says. The transport has a fixed width
+   with Play first; the loop chip ellipsises; the Deck label keeps a fixed width. */
+.transport { width: min(640px, 46vw); flex: none; justify-content: flex-start; }
+.loopChip { min-width: 0; max-width: 100%; }
+.loopChipText { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.deck { min-width: 112px; }
+
+/* N1 (drums re-check 12 Nov): the U9 fix let a long title push the header past the window (1,602 px at
+   1440). The actions block doesn't shrink (fixed widths inside, so Play keeps one x); the title takes
+   what's left and ellipsises; the transport narrows on smaller windows. */
+.actions { flex: none; }
+.title { flex: 1 1 0; min-width: 120px; }
+.transport { width: min(640px, 40vw); }
+.head { min-width: 0; }
+/* N2: the preset Suggest found clearly closer, marked in the menu. */
+.menuCloser { color: var(--gold); }
+
+/* Slice 2, melody (fold-melody): rows are 1.5 drum rows tall (a piano roll needs the height). */
+.drRow[data-tall] { height: 96px; }
+.drRow[data-tall] .drName { height: 88px; }
+.drRow[data-tall] .drTrack { height: 60px; }
+.melRoll { display: block; width: 100%; height: 60px; overflow: visible; }
+@media (max-height: 860px) { .drRow[data-tall] { height: 69px; } .drRow[data-tall] .drName { height: 61px; } .drRow[data-tall] .drTrack, .melRoll { height: 46px; } }
+@media (max-height: 760px) { .drRow[data-tall] { height: 60px; } .drRow[data-tall] .drName { height: 52px; } .drRow[data-tall] .drTrack, .melRoll { height: 40px; } }
+
+/* Slice 3, FX (fold-fx): each row's bars written beside its shape, inside the strip. */
+.fxLabel { position: absolute; top: 50%; font-size: 12px; color: var(--muted); white-space: nowrap; pointer-events: none; }
+.fxLabel[data-lit] { color: var(--ink); }
+
+/* Final polish (critic 13 Nov, C1–C7). C1: strips run to ~950 px (a narrower preset slot; every lane
+   keeps the same width so bars line up down the rows and under the bar numbers); the drum playhead
+   sits in each strip, on the line of bars it is in. */
+.drRow { grid-template-columns: 156px minmax(0, 1fr) 112px; gap: 14px; }
+.drHeadBox { left: calc(156px + 14px); right: calc(112px + 14px); }
+.drPreset { max-width: 112px; overflow: hidden; text-overflow: ellipsis; }
+.drTrackHead { position: absolute; width: 1.5px; background: #fff; pointer-events: none; }
+/* C2: an off row: "Kick off" and one short reason under it. */
+.drName { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 2px; line-height: 1.2; }
+.drWhy { font-size: 11.5px; color: var(--faint); }
+/* C4: the knob's value one step bigger, at ≥ 4.5:1 (Drums, FX; the Bass room is untouched). */
+.drKnobs [role="slider"] small { font-size: 11.5px; color: var(--muted); }
+/* C6: a quiet link (the "comes next" line): neutral, underlined, not gold. */
+.quietLink { background: none; border: 0; padding: 0; font: 500 12px var(--f-mono); color: var(--muted) !important; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #5a4f45; margin-left: 8px; min-height: 28px; }
+@media (hover: hover) and (pointer: fine) { .quietLink:hover { color: var(--ink) !important; } }
+/* C7: the FX name field grows with its name, up to the room there is. */
+.saveBar .fxName { flex: 0 1 auto; field-sizing: content; min-width: 340px; max-width: 440px; }

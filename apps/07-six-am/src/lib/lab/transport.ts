@@ -12,6 +12,8 @@ import { LiveError, LiveParts, type LiveStats, type Region } from "./live";
 import { LoopBuffer } from "./loop-buffer";
 import { bandShareDb, StereoMeter } from "@/lib/make/meter";
 import { analyseLoop, band, closeness, stepEnergy, type Closeness, type LoopReport } from "@/lib/make/closeness";
+import { drumsCloseness, drumsReport, type DrumsCloseness } from "@/lib/make/drums-make";
+import { lufs, rmsDb } from "@/lib/make/level";
 import { RecentParts, faded } from "./recent";
 import { Separator } from "./separator-client";
 import { gateResume, isCatching, loopFillEtaS, loopPositionMs, msToSamples, playTimeOf, runOffset } from "./timing";
@@ -294,7 +296,7 @@ export class LabTransport {
   }
 
   /** Which parts are heard: drums, bass, other, vocals. */
-  setParts(on: boolean[]) { this.live?.setParts(on); }
+  setParts(on: boolean[], level = 1) { this.live?.setParts(on, level); }
 
   /**
    * Loops [startMs, endMs) (at most 16 bars, timing.ts loopBars), or ends the loop with null. The
@@ -358,9 +360,10 @@ export class LabTransport {
    * Swapped in place while playing, in sync, with a 15 ms crossfade. Null removes it. Not original
    * audio: it is the owner's own render (or an AI loop).
    */
-  setMine(m: { left: Float32Array; right: Float32Array; rate: number } | null) {
+  setMine(m: { left: Float32Array; right: Float32Array; rate: number } | null, owner: "bass" | "drums" | "melody" | "fx" = "bass") {
     const live = this.live;
-    if (!m || !live) { this.stopMine(); this.mine = null; return; }
+    if (!m || !live) { this.stopMine(); this.mine = null; this.mineOwnerS = null; return; }
+    this.mineOwnerS = owner;
     const loopLen = this.loopS?.audio?.[0]?.length ?? 0;
     const n = loopLen && Math.abs(m.left.length - loopLen) <= loopLen * 0.01 ? loopLen : m.left.length;
     const buf = live.ctx.createBuffer(2, n, m.rate);
@@ -369,6 +372,10 @@ export class LabTransport {
     this.mine = { buf, src: this.mine?.src ?? null, fade: this.mine?.fade ?? null };
     if (this.playingS && this.loopS?.state === "memory") this.startMine();
   }
+
+  /** Phase 5: which Make family's sound Mine holds now (one buffer for every family). */
+  get mineOwner() { return this.mine ? this.mineOwnerS : null; }
+  private mineOwnerS: "bass" | "drums" | "melody" | "fx" | null = null;
 
   /** B on Make's A/B: Mine heard (the parts' gains are set separately with setParts). */
   setMineOn(on: boolean) {
@@ -402,6 +409,23 @@ export class LabTransport {
     const kick = [band(mono, d.rate, 30, 60), band(mono, d.rate, 60, 120)].map((x) => stepEnergy(x, d.rate, bpm));
     const bass = analyseLoop(b.left, b.right, b.rate, bpm, onsets), mine = m ? analyseLoop(m.getChannelData(0), m.getChannelData(1), m.sampleRate, bpm, onsets) : null;
     return { bass, kick, mine, closeness: mine ? closeness(bass, mine) : null };
+  }
+
+  /**
+   * Graders (Phase 5, Z5): the loudness of a looped part (0 drums, 1 bass, 2 other, 3 vocals) and of
+   * Mine, RMS dB and LUFS over the whole loop, so A/B can be checked level-matched. Numbers only.
+   */
+  compareLevels(p: number): { original: { rmsDb: number; lufs: number } | null; mine: { rmsDb: number; lufs: number } | null } {
+    const o = this.loopPart(p), m = this.mine?.buf;
+    const lv = (s: { left: Float32Array; right: Float32Array; rate: number }) => ({ rmsDb: Math.round(rmsDb(s) * 100) / 100, lufs: Math.round(lufs(s) * 100) / 100 });
+    return { original: o ? lv(o) : null, mine: m ? lv({ left: m.getChannelData(0), right: m.getChannelData(1), rate: m.sampleRate }) : null };
+  }
+
+  /** Graders (Phase 5, P8): the drums closeness of Mine against the looped drum part, measured here. Numbers only. */
+  captureDrums(): DrumsCloseness | null {
+    const d = this.loopPart(0), m = this.mine?.buf;
+    if (!d || !m) return null;
+    return drumsCloseness(drumsReport(d.left, d.right, d.rate, this.o.bpm), drumsReport(m.getChannelData(0), m.getChannelData(1), m.sampleRate, this.o.bpm));
   }
 
   private mineOutput() {
@@ -506,12 +530,18 @@ export class LabTransport {
     };
   }
 
+  /** D-R4: how far the separated parts arrive ahead of what you hear (s), as last seen while filling. */
+  private fillLeadS: number | null = null;
+
   private fillEta(l: Loop): number | null {
     if (l.state !== "filling" || !l.buf || !this.playingS) return null;
     const rate = this.live?.rate ?? 44100;
+    const posS = (this.heardMs() - l.startMs) / 1000, filledS = (l.buf.progress * l.buf.total) / rate;
+    // Filling past the playhead, out of a catch-up: the gap is the lead the next first figure uses.
+    if (!this.gate && posS > 0 && filledS > posS + 0.2 && filledS < (l.endMs - l.startMs) / 1000 - 0.2) this.fillLeadS = Math.min(10, filledS - posS);
     return loopFillEtaS({
-      loopS: (l.endMs - l.startMs) / 1000, posS: (this.heardMs() - l.startMs) / 1000, filledS: (l.buf.progress * l.buf.total) / rate,
-      catchLeftS: this.gate ? this.catchLeftS ?? 1 : null, catchS: CATCH_S,
+      loopS: (l.endMs - l.startMs) / 1000, posS, filledS,
+      catchLeftS: this.gate ? this.catchLeftS ?? 1 : null, catchS: CATCH_S, leadS: this.fillLeadS ?? undefined,
     });
   }
 

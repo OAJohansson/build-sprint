@@ -5,8 +5,9 @@
 import { midiToHz } from "@/lib/synths/theory";
 import type { SynthParams } from "./presets";
 
-/** One note on the 16th grid: start step, MIDI pitch, length in 16ths, velocity 0–1. */
-export type MakeNote = { step: number; midi: number; dur: number; vel: number };
+/** One note on the 16th grid: start step, MIDI pitch, length in 16ths, velocity 0–1; `off`: a drum
+ *  hit's timing offset in 16ths (swing, Phase 5), never set on a bass note. */
+export type MakeNote = { step: number; midi: number; dur: number; vel: number; off?: number };
 
 export type Rendered = { left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number };
 

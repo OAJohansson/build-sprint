@@ -8,7 +8,7 @@
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { ChevronDown } from "lucide-react";
 import { loopById, type Region } from "@/lib/timeline";
-import { FAMILIES, LANE_TYPES, accepts, colorOf, laneType, legacyTrack, type FamilyId, type Lane, type LaneType } from "@/lib/studio-lanes";
+import { FAMILIES, LANE_TYPES, accepts, colorOf, laneLabel, laneType, legacyTrack, type FamilyId, type Lane, type LaneType } from "@/lib/studio-lanes";
 import { sectionName } from "@/lib/map/view";
 import type { Timeline } from "./use-timeline";
 import v from "./lanes.module.css";
@@ -178,7 +178,7 @@ function LaneRow({ l, t, regions, menu, setMenu, onNewSound, takes, dragging }: 
                 onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") e.currentTarget.blur(); if (e.key === "Escape") setEditing(false); }} />
             ) : (
               <button className={v.name} onDoubleClick={() => setEditing(true)} onKeyDown={(e) => { if (e.key === "F2" || e.key === "Enter") { e.preventDefault(); setEditing(true); } }}
-                title={`${l.name} · ${laneType(l.type).name} · double-click to rename`}>{l.name}</button>
+                title={`${l.name} · ${laneType(l.type).name} · double-click to rename`}>{laneLabel(l)}</button>
             )}
             <span className={v.icons}>
               {/* L200: headphones = hear only this lane (several can be on), speaker = mute; a lit one stays. */}

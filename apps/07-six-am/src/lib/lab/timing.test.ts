@@ -126,12 +126,23 @@ describe("loopFillEtaS (Make waits for the loop)", () => {
   const base = { loopS: 30, catchS: 6.5, catchLeftS: null };
   it("counts down the rest of the pass when the loop is filled up to the playhead", () => {
     expect(loopFillEtaS({ ...base, posS: 12, filledS: 12 })).toBe(19);
-    expect(loopFillEtaS({ ...base, posS: -0.8, filledS: 0 })).toBe(32); // in the pre-roll
+    expect(loopFillEtaS({ ...base, posS: -0.8, filledS: 0 })).toBe(31); // in the pre-roll: the fill starts at the loop's start
+  });
+  it("counts from what's filled when the parts arrive ahead of the playhead (D-F8)", () => {
+    expect(loopFillEtaS({ ...base, posS: 12, filledS: 17 })).toBe(14);
+    expect(loopFillEtaS({ ...base, posS: 29, filledS: 30 })).toBe(1); // filled: just the read and render
+    expect(loopFillEtaS({ ...base, posS: 30, filledS: 30 })).toBe(1); // at the loop's end
   });
   it("adds a catch-up and a whole pass when there's a hole behind the playhead", () => {
-    expect(loopFillEtaS({ ...base, posS: 12, filledS: 3 })).toBe(55);
+    expect(loopFillEtaS({ ...base, posS: 12, filledS: 3 })).toBe(53); // 18 + (6.5 − 3) + 30 + 0.8
   });
-  it("while catching up: what's left of it plus a pass", () => {
-    expect(loopFillEtaS({ ...base, posS: 0, filledS: 0, catchLeftS: 4 })).toBe(34);
+  it("while catching up: the catch-up less the lead, then the real remaining fill (D-R4)", () => {
+    expect(loopFillEtaS({ ...base, posS: 0, filledS: 0, catchLeftS: 4 })).toBe(32); // (4 − 3) + 30 + 0.8
+    expect(loopFillEtaS({ ...base, posS: 0, filledS: 10, catchLeftS: 4 })).toBe(22); // prefilled from recent parts
+    expect(loopFillEtaS({ ...base, posS: 0, filledS: 0, catchLeftS: 2, leadS: 5 })).toBe(31); // a measured lead past the catch-up
+    // The re-grade's case: 8 bars at 123 BPM (15.6 s) after a ~7 s catch-up, ready at 18.7–21.5 s (said 23).
+    const eta = loopFillEtaS({ loopS: 15.6, catchS: 6.5, posS: 0, filledS: 0, catchLeftS: 7 });
+    expect(eta).toBeGreaterThanOrEqual(19);
+    expect(eta).toBeLessThanOrEqual(21);
   });
 });

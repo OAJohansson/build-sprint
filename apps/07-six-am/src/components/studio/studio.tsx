@@ -374,7 +374,7 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
           <span>{t.toast}</span>
           <button onClick={t.undoToast}>Undo</button>
         </div>
-      ) : null}
+      ) : t.dropNote ? <div className={v.toast} role="status"><span>{t.dropNote}</span></div> : null}
       {t.bin ? (
         <div className={s.binZone}>
           <div data-bin className={cx(s.bin, t.bin.over && s.binOver)}>

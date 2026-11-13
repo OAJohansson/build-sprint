@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   FAMILIES, LANE_TYPES, accepts, crateLaneType, soundLaneType, withLanes as docWithLanes, addLane, clampDb, clampPan, colorOf, laneMix, laneOfRegion, lanesOf, legacyMix, legacyTrack,
   migrateDoc, moveLane, removeLane, renameLane, setPan, setVolume, sortLanes, toggleMute, toggleSolo, type Lane,
+  laneLabel,
 } from "./studio-lanes";
 import { parseDoc } from "./tracks";
 import { LOOPS, demoDoc, type Doc } from "./timeline";
@@ -204,5 +205,15 @@ describe("what goes on which lane (S5 UI)", () => {
       ["shaker-loop", 3, 1, 4], ["shaker-loop", 3, 9, 8], ["tribal-toms", 0, 5, 4],
     ]);
     expect(out.find((r) => r.id === "b")).toEqual(regions[1]);
+  });
+});
+
+describe("lane labels (U11, user test 12 Nov)", () => {
+  it("a new Claps & snares lane is named short, an old default name shows short, the owner's own name stays", () => {
+    expect(addLane([], "clap", "c1").lanes[0].name).toBe("Claps");
+    expect(laneLabel({ type: "clap", name: "Claps & snares" })).toBe("Claps");
+    expect(laneLabel({ type: "clap", name: "Claps & snares 2" })).toBe("Claps 2");
+    expect(laneLabel({ type: "clap", name: "Snares only" })).toBe("Snares only");
+    expect(laneLabel({ type: "hats", name: "Hats" })).toBe("Hats");
   });
 });

@@ -34,6 +34,9 @@ export class MakeClient {
   private main = new Mailbox();
   private search = new Mailbox();
   private renders = 0;
+  private drumRenders = 0;
+  private melodyRenders = 0;
+  private fxRenders = 0;
 
   /** Reads a copy of the part (the copy is transferred, then zeroed in the worker). */
   read(r: Omit<Extract<MakeRequest, { type: "read" }>, "id" | "type">) {
@@ -46,6 +49,37 @@ export class MakeClient {
   }
   suggest(r: Omit<Extract<MakeRequest, { type: "suggest" }>, "id" | "type">) {
     return this.search.send({ type: "suggest", ...r }) as Promise<Res<"suggest">>;
+  }
+  /** Phase 5 drums: read a copy of the looped drum part (transferred, then zeroed in the worker). */
+  drumsRead(r: Omit<Extract<MakeRequest, { type: "drums-read" }>, "id" | "type">) {
+    return this.main.send({ type: "drums-read", ...r }, [r.left.buffer, r.right.buffer]) as Promise<Res<"drums-read">>;
+  }
+  /** Mine's three rows; `stale` once a newer drums render was asked for. */
+  drumsRender(r: Omit<Extract<MakeRequest, { type: "drums-render" }>, "id" | "type">) {
+    const n = ++this.drumRenders;
+    return (this.main.send({ type: "drums-render", ...r }) as Promise<Res<"drums-render">>).then((res) => ({ res, stale: n !== this.drumRenders }));
+  }
+  drumsSuggest(r: Omit<Extract<MakeRequest, { type: "drums-suggest" }>, "id" | "type">) {
+    return this.search.send({ type: "drums-suggest", ...r }) as Promise<Res<"drums-suggest">>;
+  }
+  /** Slice 2, melody: read a copy of the looped "other" part (transferred, then zeroed in the worker). */
+  melodyRead(r: Omit<Extract<MakeRequest, { type: "melody-read" }>, "id" | "type">) {
+    return this.main.send({ type: "melody-read", ...r }, [r.left.buffer, r.right.buffer]) as Promise<Res<"melody-read">>;
+  }
+  melodyRender(r: Omit<Extract<MakeRequest, { type: "melody-render" }>, "id" | "type">) {
+    const n = ++this.melodyRenders;
+    return (this.main.send({ type: "melody-render", ...r }) as Promise<Res<"melody-render">>).then((res) => ({ res, stale: n !== this.melodyRenders }));
+  }
+  melodySuggest(r: Omit<Extract<MakeRequest, { type: "melody-suggest" }>, "id" | "type">) {
+    return this.search.send({ type: "melody-suggest", ...r }) as Promise<Res<"melody-suggest">>;
+  }
+  /** Slice 3, FX: measure copies of the drop's parts (transferred, then zeroed in the worker). */
+  fxRead(r: Omit<Extract<MakeRequest, { type: "fx-read" }>, "id" | "type">) {
+    return this.main.send({ type: "fx-read", ...r }, [r.fxL.buffer, r.fxR.buffer, r.mixL.buffer, r.mixR.buffer, r.drL.buffer, r.drR.buffer]) as Promise<Res<"fx-read">>;
+  }
+  fxRender(r: Omit<Extract<MakeRequest, { type: "fx-render" }>, "id" | "type">) {
+    const n = ++this.fxRenders;
+    return (this.main.send({ type: "fx-render", ...r }, r.mixL && r.mixR ? [r.mixL.buffer as ArrayBuffer, r.mixR.buffer as ArrayBuffer] : []) as Promise<Res<"fx-render">>).then((res) => ({ res, stale: n !== this.fxRenders }));
   }
   stop() { this.main.stop(); this.search.stop(); }
 }

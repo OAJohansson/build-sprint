@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#131110">
+<title>Six AM · Make for every layer · round 3 (Fold)</title>
+<style>
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 400; font-display: block; src: url(fonts/IBMPlexMono-normal-400.woff2) format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 500; font-display: block; src: url(fonts/IBMPlexMono-normal-500.woff2) format("woff2"); }
+@font-face { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; font-display: block; src: url(fonts/InstrumentSerif-italic-400.woff2) format("woff2"); }
+@font-face { font-family: "Instrument Serif"; font-style: normal; font-weight: 400; font-display: block; src: url(fonts/InstrumentSerif-normal-400.woff2) format("woff2"); }
+/* Round 3, Fold only (L224: "with the knobs fixed in place"). One direction, so the picker flips states.
+   ?v=1..7 = drums (kick) · hats · weak · wait · melody · fx · bass; ?shot=1 hides the picker. */
+:root { color-scheme: dark; --bg:#131110; --line:#2b2622; --line2:#3a322c; --ink:#f1e6d3; --mute:#aa9c88; --dim:#958a7a; --gold:#f2b134; --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace; --serif:"Instrument Serif", Georgia, serif; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--bg); color: var(--ink); font: 13px/1.5 var(--mono); -webkit-font-smoothing: antialiased; overflow: hidden; font-variant-numeric: tabular-nums; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; touch-action: manipulation; }
+button:focus-visible, input:focus-visible, [role="slider"]:focus-visible { outline: 2px solid rgba(241,230,211,.6); outline-offset: 2px; border-radius: 6px; }
+button:disabled { cursor: default; }
+.app { display: grid; grid-template-rows: 64px 96px 1fr; grid-template-columns: minmax(0, 1fr); height: 100vh; min-width: 1280px; }
+.bar { display: flex; align-items: center; gap: 28px; padding: 0 22px; border-bottom: 1px solid var(--line); }
+.logo { display: flex; align-items: center; gap: 12px; padding-right: 26px; border-right: 1px solid var(--line); height: 100%; }
+.logo i { width: 26px; height: 26px; border-radius: 50%; background: radial-gradient(circle at 50% 60%, #f2b134 0 30%, #ef5b37 31% 52%, #23b3a5 53% 70%, #221d1a 71%); }
+.logo b { font: italic 400 28px var(--serif); }
+.nav a { color: var(--mute); margin-right: 22px; text-decoration: none; padding: 20px 0; }
+.nav a.on { color: var(--ink); box-shadow: inset 0 -2px var(--gold); }
+.head { display: flex; align-items: center; gap: 28px; padding: 0 22px; border-bottom: 1px solid var(--line); }
+.back { color: var(--mute); white-space: nowrap; }
+.title { min-width: 0; flex: 1; }
+.title h1 { margin: 0; font: italic 400 28px/1.15 var(--serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.title p { margin: 4px 0 0; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.transport { display: grid; gap: 6px; justify-items: start; flex: none; }
+.tr1 { display: flex; align-items: center; gap: 12px; white-space: nowrap; }
+.play { width: 36px; height: 36px; border-radius: 50%; background: var(--ink); color: var(--bg); display: grid; place-items: center; font-weight: 600; }
+.small { color: var(--mute); font-size: 12px; }
+.loopchip { border: 1px solid #6b5426; color: var(--gold); border-radius: 6px; padding: 3px 10px; font-size: 12px; white-space: nowrap; }
+.lm { display: flex; border: 1px solid var(--line2); border-radius: 999px; padding: 3px; flex: none; }
+.lm span { padding: 6px 18px; border-radius: 999px; font: italic 20px/1 var(--serif); color: var(--mute); }
+.lm span.on { background: #2f2925; color: var(--ink); }
+.deck { color: var(--mute); white-space: nowrap; } .deck::before { content: "●"; color: #7fbf6a; margin-right: 6px; font-size: 10px; }
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 340px; min-height: 0; }
+.col { display: flex; flex-direction: column; min-height: 0; min-width: 0; padding: 0 40px; }
+.mid { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.rail { border-left: 1px solid var(--line); padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.rail h2 { margin: 0; font-weight: 400; color: var(--mute); font-size: 12px; }
+.bubble { align-self: flex-end; background: #2b2622; border-radius: 10px; padding: 8px 12px; max-width: 260px; }
+.tag { align-self: flex-end; color: var(--mute); font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
+.answer { line-height: 1.75; margin: 0; }
+.facts { color: var(--mute); font-size: 12px; margin: 0; }
+.composer { margin-top: auto; border: 1px solid var(--line2); border-radius: 8px; padding: 12px 14px; color: var(--dim); display: flex; justify-content: space-between; align-items: center; }
+.composer button { width: 28px; height: 28px; border-radius: 50%; background: #2b2622; display: grid; place-items: center; color: var(--dim); }
+/* family switch */
+.fam { display: flex; align-items: center; gap: 22px; height: 52px; border-bottom: 1px solid var(--line); flex: none; }
+.fam .f { color: var(--mute); padding: 15px 0; transition: color 150ms ease-out; }
+.fam .f:hover { color: var(--ink); }
+.fam .f.on { color: var(--ink); box-shadow: inset 0 -2px var(--ink); }
+.fam .f i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
+.fam .f.off { color: var(--dim); cursor: default; }
+.fam .f.off em { font-style: normal; font-size: 11px; border: 1px solid var(--line2); border-radius: 4px; padding: 1px 6px; margin-left: 6px; }
+.fam .cap { margin-left: auto; color: var(--mute); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+/* frame pieces */
+.preset { font: italic 30px/1 var(--serif); white-space: nowrap; padding: 4px 0; text-align: left; align-self: flex-start; }
+.preset small, .presetS small { font: 13px var(--mono); color: var(--mute); margin-left: 6px; font-style: normal; }
+.presetS { font: italic 22px/1 var(--serif); white-space: nowrap; padding: 6px 0; text-align: left; }
+.preset:hover, .presetS:hover { color: #fff; }
+.knob { display: grid; justify-items: center; gap: 2px; }
+.knob span { font-size: 13px; } .knob small { color: var(--mute); font-size: 12px; }
+.knob.sm span { font-size: 12px; } .knob.sm small { font-size: 12px; }
+.knob.off { opacity: .45; }
+.suggest { display: flex; align-items: center; gap: 16px; }
+.suggest p { margin: 0; } .suggest p span { color: var(--mute); }
+.ghost { border: 1px solid var(--line2); border-radius: 999px; padding: 0 16px; height: 34px; white-space: nowrap; transition: border-color 150ms ease-out, transform 160ms ease-out; }
+.ghost:hover { border-color: #6f665b; }
+.ghost:active, .gold:active { transform: scale(0.97); }
+.ghost.sm { height: 28px; padding: 0 12px; font-size: 12px; }
+.ghost:disabled { color: var(--dim); border-color: var(--line); }
+.check { display: flex; align-items: center; gap: 16px; height: 64px; border-top: 1px solid var(--line); flex: none; }
+.ab { display: flex; border: 1px solid var(--line2); border-radius: 999px; padding: 3px; }
+.ab button { padding: 0 16px; height: 34px; border-radius: 999px; color: var(--mute); white-space: nowrap; }
+.ab button[aria-pressed="true"] { background: #2f2925; color: var(--ink); }
+.ab button:disabled { color: #6f665b; }
+.score { margin-left: auto; display: flex; align-items: baseline; gap: 8px; color: var(--mute); white-space: nowrap; }
+.score b { font: 500 22px var(--mono); color: var(--ink); }
+.save { display: flex; align-items: center; gap: 14px; height: 76px; border-top: 1px solid var(--line); background: #171412; flex: none; margin: 0 -40px; padding: 0 40px; }
+.save input { background: var(--bg); border: 1px solid var(--line2); border-radius: 6px; color: var(--ink); font: 14px var(--mono); padding: 0 14px; height: 44px; width: 340px; min-width: 0; text-overflow: ellipsis; }
+.save .tags { color: var(--mute); font-size: 12px; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gold { background: var(--gold); color: #1a1408; border-radius: 999px; padding: 0 20px; height: 44px; font-weight: 500; white-space: nowrap; transition: transform 160ms ease-out; flex: none; }
+.gold:disabled { background: #3a322c; color: var(--dim); }
+.mute { color: var(--mute); }
+.lbl { font-size: 12px; color: var(--mute); }
+.rowname { font-size: 14px; }
+.savedmark { color: var(--mute); font-size: 12px; white-space: nowrap; }
+.savedmark::before { content: "✓ "; color: #7fbf6a; }
+.note { color: var(--ink); font-size: 12px; line-height: 1.6; }
+.note span { color: var(--mute); }
+.unsure { font-size: 11px; border: 1px dashed #6f665b; color: var(--mute); border-radius: 4px; padding: 0 6px; white-space: nowrap; }
+.textbtn { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; font-size: 12px; padding: 4px 0; }
+.wait { color: var(--ink); }
+.wait span { color: var(--mute); }
+/* picker (verbatim, PICKER.md) */
+.proto-picker { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 2147483647; display: flex; align-items: center; gap: 2px; padding: 4px; border-radius: 999px; background: rgba(10, 10, 10, 0.82); -webkit-backdrop-filter: blur(12px) saturate(1.4); backdrop-filter: blur(12px) saturate(1.4); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset, 0 8px 24px rgba(0, 0, 0, 0.24), 0 2px 6px rgba(0, 0, 0, 0.12); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; line-height: 1; -webkit-font-smoothing: antialiased; user-select: none; -webkit-user-select: none; }
+.proto-picker-highlight { position: absolute; top: 4px; left: 0; height: 28px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); will-change: transform; }
+.proto-picker[data-ready] .proto-picker-highlight { transition: transform 250ms cubic-bezier(0.23, 1, 0.32, 1), width 250ms cubic-bezier(0.23, 1, 0.32, 1); }
+@media (prefers-reduced-motion: reduce) { .proto-picker[data-ready] .proto-picker-highlight { transition: none; } .ghost, .gold, .fam .f { transition: none; } }
+.proto-picker-item { position: relative; display: flex; align-items: center; height: 28px; padding: 0 12px; border: 0; border-radius: 999px; background: transparent; color: rgba(255, 255, 255, 0.55); font: inherit; cursor: pointer; transition: color 150ms ease-out; }
+.proto-picker-item:hover { color: rgba(255, 255, 255, 0.85); }
+.proto-picker-item:active { transform: scale(0.97); }
+.proto-picker-item:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.4); outline-offset: 2px; }
+.proto-picker-item[data-active] { color: #fff; }
+.proto-picker-divider { width: 1px; height: 16px; margin: 0 4px; background: rgba(255, 255, 255, 0.12); }
+.proto-picker[data-position="top"] { bottom: auto; top: 24px; }
+body.shot .proto-picker { display: none; }
+</style></head>
+<body>
+<div id="stage"></div>
+<nav class="proto-picker" aria-label="Prototype variants">
+  <span class="proto-picker-highlight" aria-hidden="true"></span>
+  <button class="proto-picker-item" data-active aria-current="true">Kick</button>
+  <button class="proto-picker-item">Hats</button>
+  <button class="proto-picker-item">Weak read</button>
+  <button class="proto-picker-item">Waiting</button>
+  <button class="proto-picker-item">Melody</button>
+  <button class="proto-picker-item">FX</button>
+  <button class="proto-picker-item">Bass</button>
+</nav>
+<script>
+const C = { ink: "#f1e6d3", gold: "#f2b134", drums: "#f2b134", bass: "#ef5b37", other: "#23b3a5", vox: "#cdbfa8", mute: "#aa9c88" };
+const params = new URLSearchParams(location.search);
+const STATES = ["drums", "hats", "weak", "wait", "melody", "fx", "bass"];
+const STATE = params.get("s") || STATES[(parseInt(params.get("v"), 10) || 1) - 1] || "drums";
+if (params.get("shot")) document.body.classList.add("shot");
+
+// ---------- tracks ----------
+// Main: Lost in The Loop, Drop 1, bars 97–104 (8 bars). Weak: Tim Deluxe, the Breakdown, bars 57–72 (16 bars, hats only).
+const TRACKS = {
+  main: { title: "Lost in The Loop", facts: "Mason Flint · 124 BPM · key A minor", pos: "3:11 · in Drop 1", bar: "bar 99", chip: "Looping Drop 1 · 3:06–3:21 ×", sec: "Drop 1", clock: "3:06–3:21", bar0: 97, bars: 8, ph: [2, 6] },
+  weak: { title: "Tim Deluxe [Feat.] Sam Obernik - It Just Won't Do (Mason Flint Remix)", facts: "Mason Flint · 126.1 BPM · key G minor", pos: "1:58 · in Breakdown", bar: "bar 62", chip: "Looping Breakdown · 1:47–2:17 ×", sec: "Breakdown", clock: "1:47–2:17", bar0: 57, bars: 16, ph: [5, 8] },
+};
+const T = STATE === "weak" ? TRACKS.weak : TRACKS.main;
+
+// ---------- drum readings (shaped like drums-read.ts: per-step velocity, offsets in ms, swing) ----------
+const grid = (bars, f) => [...Array(bars)].map((_, b) => [...Array(16)].map((_, s) => f(b, s)));
+// Drop 1: four on the floor; a tom fill in bar 104 lands in the kick row (spike weak spot 6); clap on 2 and 4 with a roll into 105;
+// hats: open on the off-beats, closed 16ths between; the hats under the kicks were dropped as leak (weak spot 4).
+const MAIN = {
+  kick: grid(8, (b, s) => (b === 7 ? ({ 0: 1, 4: 1, 8: 1, 10: 0.55, 11: 0.5, 14: 0.6 }[s] || 0) : s % 4 === 0 ? 0.92 + ((b * 3 + s) % 5) * 0.02 : b === 3 && s === 15 ? 0.42 : 0)),
+  clap: grid(8, (b, s) => (s === 4 || s === 12 ? 0.9 : b === 7 && s > 12 ? 0.35 + (s - 12) * 0.18 : 0)),
+  hats: grid(8, (b, s) => (s % 4 === 2 ? 0.9 : s % 2 === 1 ? 0.38 + ((b + s) % 3) * 0.04 : 0)),
+};
+// Breakdown: hats only; bleed from the bass and the pads reads as a few faint kicks and claps (weak spot 3).
+const WEAK = {
+  kick: grid(16, (b, s) => ({ "2,0": 0.22, "6,8": 0.18, "11,0": 0.26 }[`${b},${s}`] || 0)),
+  clap: grid(16, (b, s) => ({ "4,12": 0.2, "9,4": 0.17 }[`${b},${s}`] || 0)),
+  hats: grid(16, (b, s) => (s % 2 === 0 ? (s % 4 === 2 ? 0.85 : 0.5) : b >= 12 ? 0.35 : 0)),
+};
+const count = (d) => d.flat().filter((v) => v > 0).length;
+const R = STATE === "weak" ? WEAK : MAIN;
+const ROWS = [
+  { id: "kick", name: "Kick", lane: "Kick", data: R.kick, preset: "Deep 909", saved: false,
+    knobs: [["Tune", 0.38, "A1 · 55 Hz", 0.3], ["Decay", 0.42, "1/8", 0.3], ["Click", 0.25, "soft", 0.55], ["Drive", 0.2, "warm", null]],
+    timing: "on the grid ±2 ms", close: 48 },
+  { id: "clap", name: "Clap & snare", lane: "Claps & snares", data: R.clap, preset: "Wide clap", saved: true,
+    knobs: [["Tone", 0.55, "bright", 0.48], ["Decay", 0.35, "short", null], ["Spread", 0.6, "3 hands", 0.7], ["Room", 0.3, "small", 0.15]],
+    timing: "3 ms early", close: 61 },
+  { id: "hats", name: "Hats", lane: "Hats", data: R.hats, preset: "Open 909", saved: false,
+    knobs: [["Tone", 0.7, "bright", null], ["Length", 0.5, "open", 0.62], ["Swing", 0.54, "+8 ms", 0.58], ["Width", 0.2, "narrow", null]],
+    timing: "off-beats 8 ms late (swing)", close: 57 },
+];
+if (STATE === "weak") { ROWS[0].unsure = ROWS[1].unsure = true; ROWS[1].saved = false; ROWS[0].close = ROWS[1].close = null; ROWS[2].close = 52; ROWS[2].timing = "on the grid ±3 ms"; ROWS[2].preset = "Closed tick"; }
+const WAIT = STATE === "wait";
+const row = ROWS[0];
+
+// ---------- drawing ----------
+function knob(name, v, word, tick, size = 84, color = C.ink, cls = "", off = false) {
+  const a0 = -135, a = a0 + 270 * v, r = size / 2 - 6, c = size / 2;
+  const pt = (d, rr = r) => [c + rr * Math.sin(d * Math.PI / 180), c - rr * Math.cos(d * Math.PI / 180)];
+  const [x0, y0] = pt(a0), [x1, y1] = pt(a), [xe, ye] = pt(135);
+  let t = "";
+  if (tick != null && !off) { const sa = a0 + 270 * tick; const [p1, q1] = pt(sa, r + 5), [p2, q2] = pt(sa, r - 5); t = `<line x1="${p1}" y1="${q1}" x2="${p2}" y2="${q2}" stroke="${C.gold}" stroke-width="2.5" stroke-linecap="round"/>`; }
+  return `<div class="knob ${cls} ${off ? "off" : ""}" role="slider" tabindex="${off ? -1 : 0}" aria-label="${name}" aria-valuetext="${word}" ${off ? 'aria-disabled="true"' : ""}><svg width="${size}" height="${size}" aria-hidden="true">
+  <path d="M${x0} ${y0} A${r} ${r} 0 1 1 ${xe} ${ye}" fill="none" stroke="rgba(241,230,211,.25)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M${x0} ${y0} A${r} ${r} 0 ${a - a0 > 180 ? 1 : 0} 1 ${x1} ${y1}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round"/>${t}</svg>
+  <span>${name}</span><small>${word}</small></div>`;
+}
+const knobsOf = (r, size, cls = "") => r.knobs.map(([n, v, w, t]) => knob(n, v, w, t, size, C.ink, cls, WAIT)).join("");
+// A step pattern; velocity = height. Unsure rows draw hollow outlines. Waiting draws empty bars only.
+// `lines` > 1 wraps the loop into lines of bars/lines bars each (loops of 16 bars stay readable).
+function pattern(data, w, h, { faint = false, gap = 6, lines = 1, unsure = false, empty = WAIT, playhead = true, lineGap = 8, from = 0 } = {}) {
+  const bars = data.length, per = Math.ceil(bars / lines), sw = (w - gap * (per - 1)) / (per * 16);
+  const lh = (h - lineGap * (lines - 1)) / lines;
+  let out = "";
+  for (let b = 0; b < bars; b++) {
+    const li = Math.floor(b / per), bx = (b % per) * (16 * sw + gap), y0 = li * (lh + lineGap);
+    out += `<rect x="${bx}" y="${y0}" width="${16 * sw}" height="${lh}" fill="rgba(241,230,211,.04)" rx="2"/>`;
+    for (let s = 4; s < 16; s += 4) out += `<rect x="${bx + s * sw - 0.5}" y="${y0 + lh * 0.25}" width="1" height="${lh * 0.5}" fill="rgba(241,230,211,.07)"/>`;
+    if (empty) continue;
+    for (let s = 0; s < 16; s++) {
+      const v = data[b][s]; if (!v) continue;
+      const x = bx + s * sw, hh = Math.max(4, lh * (0.3 + 0.7 * v)), ww = Math.max(1.5, sw - 1.5);
+      out += unsure && v < 0.3
+        ? `<rect x="${x + 1.25}" y="${y0 + lh - hh + 0.5}" width="${Math.max(1, ww - 1)}" height="${hh - 1}" fill="none" stroke="${C.drums}" stroke-width="1" stroke-dasharray="2 2" opacity=".8" rx="1"/>`
+        : `<rect x="${x + 0.75}" y="${y0 + lh - hh}" width="${ww}" height="${hh}" fill="${C.drums}" opacity="${faint ? 0.45 : 0.4 + 0.6 * v}" rx="1"/>`;
+    }
+  }
+  const pbA = T.ph[0] - from;
+  if (playhead && !empty && pbA >= 0 && pbA < bars) { const pb = pbA, ps = T.ph[1], li = Math.floor(pb / per); const px = (pb % per) * (16 * sw + gap) + ps * sw; out += `<rect x="${px}" y="${li * (lh + lineGap) - 3}" width="1.5" height="${lh + 6}" fill="#fff"/>`; }
+  return `<svg width="${w}" height="${h}" style="overflow:visible;display:block" aria-hidden="true">${out}</svg>`;
+}
+function barNumbers(w, { gap = 6, bars = T.bars, every = 1, from = 0 } = {}) {
+  const bw = (w - gap * (bars - 1)) / bars;
+  return `<div style="position:relative;height:18px;width:${w}px" aria-hidden="true">${[...Array(bars)].map((_, b) => b % every ? "" : `<span class="lbl" style="position:absolute;left:${b * (bw + gap)}px">${T.bar0 + from + b}</span>`).join("")}</div>`;
+}
+
+function wrapped(data, w, h, opts = {}) {
+  if (data.length <= 8) return barNumbers(w, { gap: opts.gap ?? 6 }) + pattern(data, w, h, opts);
+  let out = "";
+  for (let from = 0; from < data.length; from += 8) out += `<div style="margin-top:${from ? 8 : 0}px">${barNumbers(w, { gap: 6, bars: 8, from })}${pattern(data.slice(from, from + 8), w, h * 0.62, { ...opts, gap: 6, from })}</div>`;
+  return out;
+}
+// melody (spike-shaped: Am7 F C G stabs on the off-beats; a lead above; one stray note read)
+const CH = [["Am7", [57, 60, 64, 67]], ["F", [57, 60, 65]], ["C", [55, 60, 64]], ["G", [55, 59, 62]]];
+const NOTES = [];
+for (let b = 0; b < 8; b++) { const c = CH[Math.floor(b / 2)]; for (const st of [2, 6, 10, 14]) for (const n of c[1]) NOTES.push({ b, s: st, len: 1.5, n }); }
+NOTES.push({ b: 5, s: 7, len: 1, n: 66, stray: true });
+const LEAD = [[0, 0, 4, 69], [0, 6, 2, 72], [1, 0, 6, 71], [2, 8, 4, 69], [3, 0, 3, 67], [3, 4, 2, 69], [4, 0, 6, 72], [5, 8, 4, 74], [6, 0, 8, 72], [7, 8, 6, 71]].map(([b, s, len, n]) => ({ b, s, len, n }));
+function roll(notes, w, h, { color = C.other, lo = 52, hi = 77, gap = 6, dim = false } = {}) {
+  const sw = (w - gap * 7) / 128, rh = h / (hi - lo); let out = "";
+  for (let b = 0; b < 8; b++) out += `<rect x="${b * (16 * sw + gap)}" y="0" width="${16 * sw}" height="${h}" fill="rgba(241,230,211,.04)" rx="2"/>`;
+  for (const n of notes) { const x = n.b * (16 * sw + gap) + n.s * sw; out += `<rect x="${x + 0.5}" y="${h - (n.n - lo + 1) * rh + 0.5}" width="${Math.max(2, n.len * sw - 1)}" height="${Math.max(2, rh - 1)}" fill="${color}" opacity="${dim ? 0.45 : 0.9}" rx="1.5"/>`; }
+  const px = 2 * (16 * sw + gap) + 6 * sw; out += `<rect x="${px}" y="-3" width="1.5" height="${h + 6}" fill="#fff"/>`;
+  return `<svg width="${w}" height="${h}" style="overflow:visible;display:block" aria-hidden="true">${out}</svg>`;
+}
+function chordsLine(w, gap = 6) { const bw = (w - gap * 7) / 8; return `<div style="position:relative;height:18px;width:${w}px">${CH.map((c, i) => `<span class="lbl" style="position:absolute;left:${i * 2 * (bw + gap)}px;color:var(--ink)">${c[0]}</span>`).join("")}</div>`; }
+const melKnobs = [["Tone", 0.45, "warm", 0.6], ["Length", 0.2, "1/16", 0.15], ["Attack", 0.05, "hard", null], ["Detune", 0.3, "a little", null], ["Width", 0.55, "wide", 0.4], ["Space", 0.4, "room", 0.55]];
+// FX: generators timed to the section (not read note by note)
+const FX = [
+  { name: "Impact", at: 0, len: 1, shape: "hit", k: [["Size", 0.7, "big"], ["Tone", 0.4, "dark"], ["Tail", 0.6, "2 bars"]], why: "bar 97, the drop's first beat" },
+  { name: "Downlifter", at: 0, len: 2, shape: "fall", k: [["Drop", 0.5, "1 octave"], ["Tone", 0.5, "mid"], ["Length", 0.4, "2 bars"]], why: "bars 97–98, after the hit" },
+  { name: "Noise riser", at: 6, len: 2, shape: "rise", k: [["Rise", 0.6, "2 bars"], ["Tone", 0.7, "bright"], ["Width", 0.5, "wide"]], why: "bars 103–104, into bar 105" },
+];
+function fxShape(f, w, h, on, gap = 6) {
+  const bw = (w - gap * 7) / 8, x = f.at * (bw + gap), ww = f.len * bw + (f.len - 1) * gap, op = on ? 0.85 : 0.4;
+  let bg = ""; for (let b = 0; b < 8; b++) bg += `<rect x="${b * (bw + gap)}" y="0" width="${bw}" height="${h}" fill="rgba(241,230,211,.04)" rx="2"/>`;
+  const d = f.shape === "hit" ? `M${x} 2 L${x + 8} 2 L${x + ww} ${h * 0.8} L${x + ww} ${h} L${x} ${h} Z` : f.shape === "fall" ? `M${x} 2 L${x + ww} ${h} L${x} ${h} Z` : `M${x} ${h} L${x + ww} 2 L${x + ww} ${h} Z`;
+  const bars = f.len > 1 ? `bars ${97 + f.at}–${96 + f.at + f.len}` : `bar ${97 + f.at}`;
+  const tx = f.shape === "rise" ? x - 10 : x + ww + 10, anchor = f.shape === "rise" ? "end" : "start";
+  return `<svg width="${w}" height="${h}" style="display:block" aria-hidden="true">${bg}<path d="${d}" fill="${C.vox}" opacity="${op}"/><text x="${tx}" y="${h / 2 + 4}" text-anchor="${anchor}" font-size="12" font-family="IBM Plex Mono, monospace" fill="${on ? C.ink : C.mute}">${bars}</text></svg>`;
+}
+
+// ---------- the frame ----------
+const FAMS = [["bass", "Bass", C.bass], ["drums", "Drums", C.drums], ["melody", "Melody", C.other], ["fx", "FX", C.vox]];
+const famOf = { drums: "drums", hats: "drums", weak: "drums", wait: "drums", melody: "melody", fx: "fx", bass: "bass" }[STATE];
+const PART = { drums: "Drums", melody: "Melody", fx: "FX", bass: "Bass" }[famOf];
+const caption = () => famOf === "fx" ? `Timed to ${T.sec}, ${T.clock}, looping` : `${PART} alone, ${T.sec}, ${T.clock}, ${WAIT ? "filling the loop" : "looping"}`;
+function famSwitch() {
+  return `<div class="fam" role="tablist" aria-label="What to make">${FAMS.map(([id, n, c]) => `<button role="tab" class="f ${id === famOf ? "on" : ""}" aria-selected="${id === famOf}"><i style="background:${c}" aria-hidden="true"></i>${n}</button>`).join("")}
+  <span class="f off" aria-disabled="true" title="Vocals come later">Vocals<em>not yet</em></span><span class="cap" aria-live="polite">${caption()}</span></div>`;
+}
+function checkRow() {
+  const orig = { drums: "Original drums", melody: "Original melody", fx: "The drop as is", bass: "Original bass" }[famOf];
+  const bed = famOf === "drums" ? "Bass under both: on" : "Drums under both: on";
+  const sc = famOf === "fx" ? `<span class="score">no closeness score for FX</span>` : WAIT ? `<span class="score">closeness <b>–</b> / 100</span>` : `<span class="score">closeness <b>${{ drums: STATE === "weak" ? 52 : 54, melody: 41, bass: 61 }[famOf]}</b> / 100</span>`;
+  return `<div class="check"><div class="ab" role="group" aria-label="Compare at the same loudness"><button aria-pressed="true">A · ${orig}</button><button aria-pressed="false" ${WAIT ? 'disabled title="Mine plays once the loop is read"' : ""}>B · Mine</button></div><span class="lbl">same loudness</span>
+  <button class="ghost sm" aria-pressed="true">${bed}</button>${sc}</div>`;
+}
+function saveBar(label) {
+  const v = { drums: STATE === "weak" ? "Breakdown hats, from Tim Deluxe [Feat.] Sam Obernik" : STATE === "hats" ? "Off-beat hats, from Lost in The Loop" : "Deep kick, from Lost in The Loop", melody: "Offbeat stabs, from Lost in The Loop", fx: "Drop riser, from Lost in The Loop", bass: "Deep bass, from Lost in The Loop" }[famOf];
+  const t = { drums: STATE === "weak" ? "hats · closed · g minor · 126 bpm · tim deluxe" : STATE === "hats" ? "hats · open · 124 bpm · lost in the loop" : "kick · deep · short · 124 bpm · lost in the loop", melody: "chords · stab · a minor · 124 bpm · lost in the loop", fx: "fx · riser · 2 bars · a minor · 124 bpm", bass: "bass · sub · clean · a minor · 124 bpm · lost in the loop" }[famOf];
+  const l = label || { drums: STATE === "weak" || STATE === "hats" ? "Save hats" : "Save kick", melody: "Save melody", fx: "Save riser", bass: "Save to library" }[famOf];
+  return `<div class="save"><label class="lbl" for="nm">Name</label><input id="nm" name="sound-name" autocomplete="off" spellcheck="false" value="${v}" ${WAIT ? "disabled" : ""}><span class="tags">${t}</span><button class="gold" ${WAIT ? "disabled" : ""}>${l}</button></div>`;
+}
+const RAILS = {
+  drums: { h: "Mentor, on the drums", q: "Why does this kick hit so hard?", a: "I can't hear the sound itself; I read measurements. The kick lands on every beat, low (about 55 Hz) and short, with a fast drop in pitch. The hats sit on the off-beats, about 8 ms late: that's the swing.", facts: "kick ≈ 55 Hz · 4 a bar · hats +8 ms · −9 LUFS", c: "Ask about the drums…" },
+  melody: { h: "Mentor, on the melody", q: "What are these chords?", a: "I read up to four notes at a time, two bars each: A minor 7, F, C, G. They're short and land on the off-beats, between the kicks: classic house stabs.", facts: "Am7 · F · C · G · 1/16 stabs · off-beat", c: "Ask about the melody…" },
+  fx: { h: "Mentor, on the drop", q: "What happens at bar 97?", a: "The drop opens with a hit on the first beat that falls away over two bars; the last two bars build back up with noise into bar 105.", facts: "impact bar 97 · riser bars 103–104", c: "Ask about the drop…" },
+  bass: { h: "Mentor, on the bass", q: "What is the bass doing here?", a: "I can't hear the sound itself; I read measurements. The bass plays about 4 short notes a bar between A1 and E2, on the off-beats, between the kicks.", facts: "A1–E2 · notes ≈ 1/16 · 4 a bar · −11 LUFS", c: "Ask about the bass…" },
+};
+function rail() {
+  const r = RAILS[famOf];
+  if (STATE === "weak") return `<aside class="rail"><h2>Mentor, on the drums</h2><p class="answer mute">No questions yet. Ask about the drums: the answer is also pinned at bar 62 on the map.</p><div class="composer">Ask about the drums…<button aria-label="Send" disabled>↑</button></div></aside>`;
+  return `<aside class="rail"><h2>${r.h}</h2><div class="bubble">${r.q}</div><span class="tag">bar 97</span><p class="answer">${r.a}</p><p class="facts">${r.facts}</p><div class="composer">${r.c}<button aria-label="Send" disabled>↑</button></div></aside>`;
+}
+function shell(middle, { save } = {}) {
+  return `<div class="app">
+  <header class="bar"><div class="logo"><i aria-hidden="true"></i><b>Six AM</b></div><nav class="nav"><a>Studio</a><a class="on">Analyse</a></nav><button style="margin-left:auto;color:var(--mute);font-size:18px;width:32px;height:32px" aria-label="Settings">⚙</button></header>
+  <section class="head"><span class="back">← All tracks</span><div class="title"><h1 title="${T.title}">${T.title}</h1><p>${T.facts}</p></div>
+    <div class="transport"><div class="tr1"><button class="play" aria-label="Pause">❚❚</button><span>${T.pos}</span><span class="small">${T.bar}</span></div><span class="loopchip">${T.chip}</span></div>
+    <div class="lm"><span>Listen</span><span class="on">Make</span></div><span class="deck">Deck on</span></section>
+  <div class="main"><div class="col">${famSwitch()}<div class="mid">${middle}</div>${checkRow()}${save ?? saveBar()}</div>${rail()}</div></div>`;
+}
+const presetBtn = (name, small = false) => `<button class="${small ? "presetS" : "preset"}" aria-haspopup="menu">${name}<small aria-hidden="true">▾</small></button>`;
+const suggestLine = (txt, btn, ticksLine = false) => `<div class="suggest"><p>${txt}${ticksLine ? "<br><span>Gold ticks mark those.</span>" : ""}</p><button class="ghost" ${WAIT ? "disabled" : ""} title="Places gold ticks where the knobs come closest to the original; never turns a knob">${btn}</button></div>`;
+const W = 1440 - 340 - 80; // 1020
+const KICK_LINE = "Mentor: Tune down to A1, Click up. The original kick is lower and snappier.";
+
+// ---------- the bass room, exactly as today (the switch doesn't change it) ----------
+function bassMiddle() {
+  const w = W, sw = (w - 120) / 128; let notes = "";
+  const BN = [[0, 2], [0, 6], [0, 10], [0, 14]];
+  for (let b = 0; b < 8; b++) for (const [, s] of BN) notes += `<rect x="${120 + b * 16 * sw + s * sw}" y="${52 + ((b + s) % 3) * 6}" width="${sw * 1.4}" height="4" fill="${C.bass}" rx="1"/>`;
+  const strip = `<div style="margin-top:14px;border:1px solid var(--line);border-radius:8px;background:#161311;padding:10px 20px 14px"><svg width="${w - 42}" height="100" aria-hidden="true">
+    <text x="0" y="14" fill="${C.mute}" font-size="12" font-family="IBM Plex Mono">chords est.</text>${["Am", "F", "C", "G"].map((c, i) => `<text x="${120 + i * 32 * sw}" y="14" fill="${C.ink}" font-size="12" font-family="IBM Plex Mono">${c}</text>`).join("")}
+    <text x="0" y="34" fill="${C.mute}" font-size="12" font-family="IBM Plex Mono">bars</text>${[97, 99, 101, 103].map((n, i) => `<text x="${120 + i * 32 * sw}" y="34" fill="${C.mute}" font-size="12" font-family="IBM Plex Mono">${n}</text>`).join("")}
+    <text x="0" y="70" fill="${C.mute}" font-size="12" font-family="IBM Plex Mono">bass</text><rect x="120" y="44" width="${128 * sw}" height="40" fill="rgba(239,91,55,.16)" rx="2"/>${notes}<rect x="${120 + 38 * sw}" y="40" width="1.5" height="48" fill="#fff"/></svg></div>`;
+  const BK = [["Tone", 0.15, "dark", 0.25], ["Length", 0.25, "1/8", 0.18], ["Pitch drop", 0.35, "slight", null], ["Drive", 0.2, "warm", 0.4], ["Wobble", 0, "off", null], ["Width", 0, "mono", null], ["Sub", 0.2, "a little", 0.35], ["Weight", 0.85, "heavy", null]];
+  return `${strip}<div style="display:flex;align-items:center;gap:16px;margin:16px 0 4px">${presetBtn("Round sub")}<span class="lbl" style="margin-left:auto">Your sounds from this track: <u>Rubbery bass</u> · <u>Deep A sub</u></span></div>
+  <div style="display:flex;justify-content:space-between;margin:6px 0 10px">${BK.map(([n, v, wd, t]) => knob(n, v, wd, t, 84, C.bass)).join("")}</div>
+  ${suggestLine("Mentor: Length down to 1/8, Drive up. The original bass is shorter and grittier.", "Suggest settings", true)}<div style="flex:1"></div>`;
+}
+
+// ---------- Fold, round 3: rows on top, knob block anchored below ----------
+// Still framing (L224): the three rows have one fixed height whatever is picked, so the knob block
+// never moves. The open row is lit (gold pattern, faint lift, ink edge); the others are dim.
+const PW = 714, ROWH = 64;
+const FOCUS = { drums: 0, hats: 2, weak: 2, wait: 0 }[STATE] ?? 0;
+const BLEED = { kick: "3 faint marks, probably the bass bleeding through: off in Mine", clap: "2 faint marks, probably the pads bleeding through: off in Mine" };
+function rowsHead() {
+  const cols = `grid-template-columns:156px ${PW}px minmax(0,1fr)`;
+  return `<div style="display:grid;${cols};gap:20px"><span></span>${barNumbers(PW, { gap: T.bars > 8 ? 3 : 6, every: T.bars > 8 ? 4 : 1 })}<span></span></div>`;
+}
+function rowShell(i, on, name, body, slot, off = false) {
+  return `<div style="display:grid;grid-template-columns:156px ${PW}px minmax(0,1fr);gap:20px;align-items:center;height:${ROWH}px;border-bottom:1px solid var(--line);${on ? "background:rgba(241,230,211,.045);box-shadow:inset 2px 0 var(--ink)" : ""}">
+    <button class="rowname" style="text-align:left;height:${ROWH - 8}px;padding-left:12px;${on ? "" : "color:var(--mute)"}" aria-pressed="${on}"><span style="white-space:nowrap">${name}${off ? ` <span class="lbl">off</span>` : ""}</span></button>
+    <div>${body}</div><div style="justify-self:end;text-align:right;padding-right:4px">${slot}</div></div>`;
+}
+function drumRows() {
+  return ROWS.map((r, i) => {
+    const on = i === FOCUS, bleed = r.unsure;
+    // 16-bar loops stay on one line, so every row keeps one height and the knob block never moves
+    const body = pattern(r.data, PW, 38, { faint: !on, unsure: bleed, gap: T.bars > 8 ? 3 : 6, playhead: !bleed });
+    // the lit row's sound is named once, in the knob block; unlit rows name theirs here
+    const slot = bleed
+      ? `<button class="textbtn" style="padding:4px 0;white-space:nowrap" title="${BLEED[r.id]}">Play anyway</button>`
+      : `${on ? "" : `<span class="mute" style="font:italic 20px var(--serif);white-space:nowrap">${r.preset}</span>`}${r.saved ? `${on ? "" : "<br>"}<span class="savedmark">saved</span>` : ""}`;
+    return rowShell(i, on, r.name, body, slot, bleed);
+  }).join("");
+}
+const MENTOR = {
+  kick: "Mentor: Tune down to A1, Click up. The original kick is lower and snappier.",
+  hats: "Mentor: Length up a little. The original hats ring longer on the off-beats.",
+  weakhats: "Mentor: Length down, Tone down a little. The original hats are closed and soft.",
+};
+// the anchored block: preset straight above the knobs, left-aligned to them; mentor line and Suggest under
+function knobBlock({ label, preset, knobs, color = C.ink, line, btn }) {
+  return `<div style="margin-top:22px">
+    <div style="display:flex;align-items:baseline;gap:14px"><span class="lbl" style="width:auto">${label}</span></div>
+    ${presetBtn(preset)}
+    <div style="display:flex;gap:56px;margin:10px 0 12px">${knobs.map(([n, v, w, t]) => knob(n, v, w, t, 88, color, "", WAIT)).join("")}</div>
+    ${WAIT ? `<p class="wait" style="margin:0;height:34px;display:flex;align-items:center">Filling the loop… 11 s</p>` : suggestLine(line, btn)}</div>`;
+}
+function foldDrums() {
+  const r = ROWS[FOCUS];
+  const line = STATE === "weak" ? MENTOR.weakhats : r.id === "hats" ? MENTOR.hats : MENTOR.kick;
+  return `<div style="padding-top:12px">${rowsHead()}${drumRows()}</div>${knobBlock({ label: r.name, preset: r.preset, knobs: r.knobs, line, btn: `Suggest for ${r.name.toLowerCase()}` })}<div style="flex:1"></div>`;
+}
+function foldMelody() {
+  const rh = (3 * ROWH) / 2;
+  const rows = [["Chords", NOTES, "Stab", true], ["Lead", LEAD, "Pluck", false]].map(([n, nt, p, on]) => `<div style="display:grid;grid-template-columns:156px ${PW}px minmax(0,1fr);gap:20px;align-items:center;height:${rh}px;border-bottom:1px solid var(--line);${on ? "background:rgba(241,230,211,.045);box-shadow:inset 2px 0 var(--ink)" : ""}">
+    <button class="rowname" style="text-align:left;height:${rh - 8}px;padding-left:12px;${on ? "" : "color:var(--mute)"}" aria-pressed="${on}">${n}</button>${roll(nt, PW, rh - 22, { dim: !on, lo: n === "Lead" ? 64 : 52, hi: n === "Lead" ? 77 : 70 })}
+    <div style="justify-self:end;padding-right:4px">${on ? "" : `<span class="mute" style="font:italic 20px var(--serif)">${p}</span>`}</div></div>`).join("");
+  return `<div style="padding-top:12px"><div style="display:grid;grid-template-columns:156px ${PW}px minmax(0,1fr);gap:20px"><span></span>${chordsLine(PW)}<span></span></div>${rows}</div>
+    ${knobBlock({ label: "Chords", preset: "Stab", knobs: melKnobs.slice(0, 6), color: C.other, line: "Mentor: Length down to 1/16, Space up. The original stabs are short and roomy.", btn: "Suggest for chords" })}<div style="flex:1"></div>`;
+}
+const FX_PRESET = { Impact: "Big hit", Downlifter: "Dark fall", "Noise riser": "Bright noise" };
+function foldFx() {
+  const rows = FX.map((f, i) => { const on = i === 2; return rowShell(i, on, f.name, fxShape(f, PW, 38, on), on ? "" : `<span class="mute" style="font:italic 20px var(--serif);white-space:nowrap">${FX_PRESET[f.name]}</span>`); }).join("");
+  return `<div style="padding-top:12px"><div style="display:grid;grid-template-columns:156px ${PW}px minmax(0,1fr);gap:20px"><span></span>${barNumbers(PW, { bars: 8 })}<span></span></div>${rows}</div>
+    ${knobBlock({ label: "Noise riser", preset: "Bright noise", knobs: FX[2].k.map(([n, v, w]) => [n, v, w, n === "Tone" ? 0.55 : null]), color: C.vox, line: "Mentor: Tone up a little; the original noise is bright.", btn: "Suggest for riser" })}<div style="flex:1"></div>`;
+}
+const variants = [0, 1, 2, 3, 4, 5, 6].map(() => () => {
+  if (famOf === "bass") return shell(bassMiddle());
+  if (famOf === "melody") return shell(foldMelody());
+  if (famOf === "fx") return shell(foldFx());
+  return shell(foldDrums());
+});
+// picking a state reloads with ?v= so the data matches it
+// ---------- harness (PICKER.md wiring) ----------
+const stage = document.getElementById('stage');
+const picker = document.querySelector('.proto-picker');
+const highlight = picker.querySelector('.proto-picker-highlight');
+const items = [...picker.querySelectorAll('.proto-picker-item:not(.proto-picker-replay)')];
+let current = 0;
+function moveHighlight() { const el = items[current]; highlight.style.width = el.offsetWidth + 'px'; highlight.style.transform = `translateX(${el.offsetLeft}px)`; }
+function mount(i) { stage.innerHTML = ''; requestAnimationFrame(() => { stage.innerHTML = variants[i](); }); }
+function setActive(i) {
+  if (i < 0 || i >= variants.length) return;
+  if (picker.hasAttribute('data-ready') && i !== current) { const u = new URL(location); u.searchParams.set('v', i + 1); u.searchParams.delete('s'); location.href = u; return; }
+  current = i;
+  items.forEach((el, j) => { el.toggleAttribute('data-active', j === i); if (j === i) el.setAttribute('aria-current', 'true'); else el.removeAttribute('aria-current'); });
+  moveHighlight();
+  const url = new URL(location); url.searchParams.set('v', i + 1); history.replaceState(null, '', url);
+  mount(i);
+}
+items.forEach((el, i) => el.addEventListener('click', () => setActive(i)));
+window.addEventListener('resize', moveHighlight);
+document.addEventListener('keydown', (e) => {
+  if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable) return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const num = parseInt(e.key, 10);
+  if (num >= 1 && num <= variants.length) setActive(num - 1);
+  else if (e.key === 'ArrowRight') setActive((current + 1) % variants.length);
+  else if (e.key === 'ArrowLeft') setActive((current - 1 + variants.length) % variants.length);
+  else if (e.key === 'r' || e.key === 'R') mount(current);
+});
+setActive(Math.max(0, STATES.indexOf(STATE)));
+requestAnimationFrame(() => requestAnimationFrame(() => picker.setAttribute('data-ready', '')));
+</script>
+</body></html>

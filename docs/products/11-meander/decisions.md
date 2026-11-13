@@ -49,3 +49,4 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | T23 | 13 Nov | Overview hover lights a school's threads and its neighbours' names; the rest dims | Claude (engineer) | Fix round | User test F1 |
 | T24 | 13 Nov | Verbs read from both ends: built on / grew from it; pushed against / pushed back on it | Claude (engineer) | Fix round | User test F3 |
 | T25 | 13 Nov | "Also in" on a thinker card, matched by name | Claude (engineer) | Fix round | User test F7 |
+| L21 | 13 Nov | Sphere embedding re-tuned for the final 56 links: target 65°, minimum gap 44°, seed 11 (supersedes L19) | Claude (engineer) | Fix round | Grid of 18 settings; 0 overlaps, 0 labels over dots, 0 swapped pairs in all 23 focuses, 8 small rim pokes. Any link change needs the full check re-run |

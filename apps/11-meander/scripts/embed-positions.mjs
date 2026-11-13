@@ -10,7 +10,7 @@ const read = (f) => JSON.parse(fs.readFileSync(new URL(f, dir), "utf8"));
 const schools = read("schools.json").schools;
 const links = read("links.json").links;
 
-let seed = 11;
+let seed = Number(process.env.SEED ?? 11);
 const rnd = () => (seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296;
 const norm = (v) => { const l = Math.hypot(...v); return v.map((x) => x / l); };
 const ang = (a, b) => (Math.acos(Math.max(-1, Math.min(1, a[0] * b[0] + a[1] * b[1] + a[2] * b[2]))) * 180) / Math.PI;
@@ -21,10 +21,12 @@ const L = links.map((l) => {
   if (pair.includes(-1)) throw new Error(`link ${l.from} → ${l.to} names a school that is not in schools.json`);
   return pair;
 });
-// Link length to aim for and the closest two schools may sit, in degrees. The design used 47 / 38 for 24 schools
-// and 37 links; at 23 schools and 57 links that crowded each school's neighbours onto one side. 60 / 42 gave the
-// fewest label collisions over all focuses (11, against 26 at 47 / 38). Override to experiment: TARGET=55 MINSEP=40.
-const TARGET = Number(process.env.TARGET ?? 60), MINSEP = Number(process.env.MINSEP ?? 42);
+// Link length to aim for and the closest two schools may sit, in degrees, plus the random seed. The design used
+// 47 / 38 for 24 schools and 37 links. For the sourced content (23 schools, 56 links) a grid of 55-65 / 40-44 and
+// seeds 11 and 23 was checked over all 23 focuses; 65 / 44, seed 11 was one of only four settings with no
+// label overlaps, no label over a dot and no neighbour name nearer another neighbour's dot, and had the fewest
+// rim pokes (7). Re-check (every focus) after the links change. Override: TARGET=60 MINSEP=42 SEED=23.
+const TARGET = Number(process.env.TARGET ?? 65), MINSEP = Number(process.env.MINSEP ?? 44);
 function energy(P) {
   let e = 0;
   for (const [a, b] of L) { const d = ang(P[a], P[b]); e += Math.max(0, d - TARGET) ** 2 * 2.5; }

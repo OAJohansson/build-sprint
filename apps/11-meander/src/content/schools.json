@@ -787,7 +787,7 @@
       "dateRange": "c. 300 BCE onward (major figures through the 2nd century CE)",
       "era": "Ancient (Hellenistic and Roman)",
       "description": "A system of physics, logic and ethics with interlocking parts, teaching that only virtue is good and that living virtuously means living in agreement with nature.",
-      "tagline": "Live in agreement with nature, because virtue is the only good.",
+      "tagline": "Virtue is the only good, and living virtuously means living in agreement with nature.",
       "taglineSources": [
         {
           "url": "https://plato.stanford.edu/entries/stoicism/",
@@ -1253,6 +1253,10 @@
         {
           "url": "https://plato.stanford.edu/entries/neoplatonism/",
           "section": "1. Historical Orientation: Antiquity"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/neoplatonism/",
+          "section": "2. The One"
         }
       ],
       "debatable": "The name is modern; its members called themselves simply Platonists (SEP).",
@@ -2418,7 +2422,7 @@
       "dateRange": "18th century (roots in the 16th–17th-century scientific revolution; Kant's Critique 1781; ends roughly with the 1790s)",
       "era": "Early modern",
       "description": "A movement of confidence in reason and science to question traditional authority, ending in Kant's critical philosophy, which tested what reason itself can know.",
-      "tagline": "Trust in reason and science to question authority, ending in Kant's limits of reason.",
+      "tagline": "Reason and science used to question authority; near its end, Kant set out reason's limits.",
       "taglineSources": [
         {
           "url": "https://plato.stanford.edu/entries/enlightenment/",
@@ -4038,7 +4042,7 @@
       "dateRange": "1923 (Institute for Social Research founded) – present",
       "era": "20th century",
       "description": "Western Marxist social philosophy that joins philosophy with social science to criticise domination and aim at emancipation.",
-      "tagline": "Marxist social philosophy that criticises domination and aims at emancipation.",
+      "tagline": "Marxist social philosophy that critiques society and aims at emancipation.",
       "taglineSources": [
         {
           "url": "https://plato.stanford.edu/entries/critical-theory/",
@@ -4238,7 +4242,7 @@
       "dateRange": "1960s onward (France)",
       "era": "20th century",
       "description": "French thought that grew out of structuralism to question stable meaning, the self-present subject and claims to foundations, through deconstruction and genealogy.",
-      "tagline": "French thought that questions stable meaning, the self-present subject and foundations.",
+      "tagline": "French thought that questions stable meaning, the self-present subject and certainty.",
       "taglineSources": [
         {
           "url": "https://plato.stanford.edu/entries/postmodernism/",

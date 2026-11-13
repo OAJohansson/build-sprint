@@ -221,3 +221,16 @@ Details: `evals-runs/2026-11-13-melody-fx.md`. Melody: Z7 and M-F3 now pass; Z3,
 | FX-R2 | major | FX rows longer than ~4 bars can't be saved (parser wants 1/2/4-bar patterns) | fixed (04ec937–b3ceb95) |
 | FX-R3 | minor | Lost 73–80: B about 1.0–1.1 dB quieter than A (gating vs a silent bar the riser fills) | borderline: −1.01 dB bed on, −0.96 bed off (12b82e9); owner A/B at the final review |
 | FX-R4 | polish | Drop note says "Shortened" when a block is split in two | fixed (04ec937–b3ceb95) |
+
+## Final re-test (user-tester, 13 Nov): M-S9 4, M-S10 1, M-S1 4, M-S3 5, M-S5 5
+
+Report: `user-testing/report-2026-11-13-final.md`.
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| FN1 | blocker | Mentor in Make returns an error (502): the new F7 rule rejects answers that open with "I can't hear…" twice; two model calls per question, nothing back | fixing |
+| FN2 | minor | A 5-bar riser from bar 52 labelled "bars 51–56", label left of the shape | fixing |
+| FN3 | polish | Bass still shows the disabled "Suggested" pill | fixing |
+| FN4 | polish | "Ticks placed" doesn't line up with the Mentor text on the Hats row | fixing |
+| FN5 | polish | Melody tab (off) still offers "Ask about the melody" | fixing |
+| FN6 | polish | Seed script reports the key from its own shell, not the server's | fixing |

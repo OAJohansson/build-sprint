@@ -228,12 +228,12 @@ Report: `user-testing/report-2026-11-13-final.md`.
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| FN1 | blocker | Mentor in Make returns an error (502): the new F7 rule rejects answers that open with "I can't hear…" twice; two model calls per question, nothing back | fixing |
-| FN2 | minor | A 5-bar riser from bar 52 labelled "bars 51–56", label left of the shape | fixing |
-| FN3 | polish | Bass still shows the disabled "Suggested" pill | fixing |
-| FN4 | polish | "Ticks placed" doesn't line up with the Mentor text on the Hats row | fixing |
-| FN5 | polish | Melody tab (off) still offers "Ask about the melody" | fixing |
-| FN6 | polish | Seed script reports the key from its own shell, not the server's | fixing |
+| FN1 | blocker | Mentor in Make returns an error (502): the new F7 rule rejects answers that open with "I can't hear…" twice; two model calls per question, nothing back | fixed (c76da0e) |
+| FN2 | minor | A 5-bar riser from bar 52 labelled "bars 51–56", label left of the shape | fixed (c76da0e) |
+| FN3 | polish | Bass still shows the disabled "Suggested" pill | left as is (P2: Bass unchanged) |
+| FN4 | polish | "Ticks placed" doesn't line up with the Mentor text on the Hats row | fixed (c76da0e) |
+| FN5 | polish | Melody tab (off) still offers "Ask about the melody" | fixed (c76da0e) |
+| FN6 | polish | Seed script reports the key from its own shell, not the server's | fixed (c76da0e) |
 
 ## Design critic on the built room (13 Nov): 7/10 (round 2 was 8)
 
@@ -241,10 +241,10 @@ clutter 1 · hierarchy 2 · legibility 1 · feel 2 · copy 1. Legibility drop is
 
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| C1 | major | 16-bar strips: hits are 1 px hairlines, hats a smear; 170 px hole right of the lit lane's strip | fixing |
-| C2 | major | Row off said four times; overlay on the strip under the playhead | fixing |
-| C3 | minor | Off-row marks look like a real pattern, so "bleed" reads untrue | fixing |
-| C4 | minor | Bare unitless numbers after knob words ("soft · 25"), small low-contrast value text | fixing |
-| C5 | minor | "Ticks placed" floats at a different x per lane | fixing |
-| C6 | minor | Melody placeholder link is gold (reserved); Melody tab needs a "next" tag like Vocals' "not yet" | fixing |
-| C7 | polish | FX name field clips mid-word; "Mentor:" casing differs | fixing |
+| C1 | major | 16-bar strips: hits are 1 px hairlines, hats a smear; 170 px hole right of the lit lane's strip | fixed (c76da0e) |
+| C2 | major | Row off said four times; overlay on the strip under the playhead | fixed (c76da0e) |
+| C3 | minor | Off-row marks look like a real pattern, so "bleed" reads untrue | fixed (c76da0e) |
+| C4 | minor | Bare unitless numbers after knob words ("soft · 25"), small low-contrast value text | fixed (c76da0e) |
+| C5 | minor | "Ticks placed" floats at a different x per lane | fixed (c76da0e) |
+| C6 | minor | Melody placeholder link is gold (reserved); Melody tab needs a "next" tag like Vocals' "not yet" | fixed (c76da0e) |
+| C7 | polish | FX name field clips mid-word; "Mentor:" casing differs | fixed (c76da0e) |

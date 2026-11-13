@@ -1,0 +1,422 @@
+[
+  {
+    "id": "presocratics",
+    "name": "Presocratics",
+    "era": "Ancient",
+    "date_range": "6th–5th century BCE",
+    "description": "The first Greek thinkers to explain the natural world and its principles by reasoned inquiry rather than myth.",
+    "debatable": "A modern label, not a school: SEP notes the last 'Presocratics' were contemporaries of Socrates. The Sophists are folded in here (SEP covers them in the same entry, §9).",
+    "thinkers": [
+      { "name": "Thales of Miletus", "dates": "fl. early 6th c. BCE", "source": "https://plato.stanford.edu/entries/presocratics/" },
+      { "name": "Pythagoras of Samos", "dates": "fl. last quarter of the 6th c. BCE", "source": "https://plato.stanford.edu/entries/presocratics/" },
+      { "name": "Heraclitus of Ephesus", "dates": "fl. late 6th–early 5th c. BCE", "source": "https://plato.stanford.edu/entries/presocratics/" },
+      { "name": "Parmenides of Elea", "dates": "born ca. 510 BCE", "source": "https://plato.stanford.edu/entries/presocratics/" },
+      { "name": "Democritus", "dates": "born ca. 460 BCE", "source": "https://plato.stanford.edu/entries/presocratics/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/presocratics/", "title": "SEP: Presocratic Philosophy", "sections": ["intro", "1. Who Were the Presocratic Philosophers?", "8. Presocratic Atomism", "9. Diogenes of Apollonia and the Sophists"] },
+      { "url": "https://plato.stanford.edu/entries/sophists/", "title": "SEP: The Sophists", "sections": ["intro"] }
+    ]
+  },
+  {
+    "id": "socrates-plato",
+    "name": "Socrates and Plato",
+    "era": "Ancient",
+    "date_range": "late 5th–4th century BCE (Plato's Academy continues after him)",
+    "description": "Socrates' questioning method and Plato's dialogues, with the theory of Forms at their centre.",
+    "debatable": "The owner's sample had one 'Classical Greek' node; it is split here into Socrates/Plato and Aristotle because later schools attach to them differently (Neoplatonism to Plato, Scholasticism to Aristotle). SEP gives Plato's birth as 429? (Plato entry) and 424/3 (Socrates entry).",
+    "thinkers": [
+      { "name": "Socrates", "dates": "469–399 BCE", "source": "https://plato.stanford.edu/entries/socrates/" },
+      { "name": "Xenophon", "dates": "c. 425–c. 386 BCE", "source": "https://plato.stanford.edu/entries/socrates/" },
+      { "name": "Plato", "dates": "429?–347 BCE", "source": "https://plato.stanford.edu/entries/plato/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/plato/", "title": "SEP: Plato", "sections": ["intro", "4. Socrates"] },
+      { "url": "https://plato.stanford.edu/entries/socrates/", "title": "SEP: Socrates", "sections": ["2. The Socratic problem", "2.1 Three primary sources"] }
+    ]
+  },
+  {
+    "id": "aristotle",
+    "name": "Aristotle and the Peripatetics",
+    "era": "Ancient",
+    "date_range": "4th century BCE onward (the Lyceum)",
+    "description": "Aristotle's systematic philosophy of logic, nature, ethics and metaphysics, taught at his school, the Lyceum.",
+    "debatable": "Usually treated as one great thinker rather than a school; the Lyceum/Peripatetic school gives it school status.",
+    "thinkers": [
+      { "name": "Aristotle", "dates": "384–322 BCE", "source": "https://plato.stanford.edu/entries/aristotle/" },
+      { "name": "Theophrastus", "dates": "not given in the sources consulted", "source": "https://plato.stanford.edu/entries/aristotle/" },
+      { "name": "Alexander of Aphrodisias", "dates": "2nd–3rd c. CE", "source": "https://plato.stanford.edu/entries/neoplatonism/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/aristotle/", "title": "SEP: Aristotle", "sections": ["intro", "1. Aristotle's Life", "9. Aristotelian Teleology", "11. Living Beings"] }
+    ]
+  },
+  {
+    "id": "epicureanism",
+    "name": "Epicureanism",
+    "era": "Ancient (Hellenistic)",
+    "date_range": "late 4th century BCE – Roman era (Lucretius, Philodemus 1st c. BCE)",
+    "description": "Atomist materialism joined to an ethics of tranquil pleasure and freedom from fear of death and the gods.",
+    "debatable": null,
+    "thinkers": [
+      { "name": "Epicurus", "dates": "341–270 BCE", "source": "https://plato.stanford.edu/entries/epicurus/" },
+      { "name": "Philodemus", "dates": "1st c. BCE", "source": "https://plato.stanford.edu/entries/epicurus/" },
+      { "name": "Lucretius", "dates": "1st c. BCE", "source": "https://plato.stanford.edu/entries/epicurus/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/epicurus/", "title": "SEP: Epicurus", "sections": ["intro", "2. Life", "3. Physical Theory", "4. Psychology and Ethics"] }
+    ]
+  },
+  {
+    "id": "stoicism",
+    "name": "Stoicism",
+    "era": "Ancient (Hellenistic and Roman)",
+    "date_range": "c. 300 BCE – 2nd century CE",
+    "description": "A unified system of logic, physics and ethics teaching that virtue, living in agreement with a rational nature, is the only good.",
+    "debatable": null,
+    "thinkers": [
+      { "name": "Zeno of Citium", "dates": "founded the school c. 300 BCE", "source": "https://plato.stanford.edu/entries/stoicism/" },
+      { "name": "Chrysippus of Soli", "dates": "head of the school c. 230–206 BCE", "source": "https://plato.stanford.edu/entries/stoicism/" },
+      { "name": "Seneca", "dates": "c. 1 BCE – 65 CE", "source": "https://plato.stanford.edu/entries/seneca/" },
+      { "name": "Epictetus", "dates": "expelled from Rome 93 CE (birth/death not given)", "source": "https://plato.stanford.edu/entries/stoicism/" },
+      { "name": "Marcus Aurelius", "dates": "emperor 161–180 CE", "source": "https://plato.stanford.edu/entries/stoicism/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/stoicism/", "title": "SEP: Stoicism", "sections": ["1.1 The School and its History", "2.9 Psychology", "5. Influence"] }
+    ]
+  },
+  {
+    "id": "skepticism",
+    "name": "Ancient Skepticism",
+    "era": "Ancient (Hellenistic and Roman)",
+    "date_range": "3rd century BCE – 2nd century CE",
+    "description": "Academic and Pyrrhonian skeptics who suspended judgment, arguing that no claim to knowledge is secure.",
+    "debatable": "Two movements (Academic and Pyrrhonian) under one node; SEP treats them in one entry.",
+    "thinkers": [
+      { "name": "Pyrrho", "dates": "365/60–275/70 BCE", "source": "https://plato.stanford.edu/entries/skepticism-ancient/" },
+      { "name": "Arcesilaus", "dates": "316/5–241/0 BCE", "source": "https://plato.stanford.edu/entries/skepticism-ancient/" },
+      { "name": "Carneades", "dates": "214–129/8 BCE", "source": "https://plato.stanford.edu/entries/skepticism-ancient/" },
+      { "name": "Sextus Empiricus", "dates": "ca. 160–210 CE", "source": "https://plato.stanford.edu/entries/skepticism-ancient/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/skepticism-ancient/", "title": "SEP: Ancient Skepticism", "sections": ["2.2 Plato", "3. Academic Skepticism", "4. Pyrrhonian Skepticism", "5. Ancient and Modern Skepticism: Transitions"] }
+    ]
+  },
+  {
+    "id": "neoplatonism",
+    "name": "Neoplatonism",
+    "era": "Late antiquity",
+    "date_range": "mid-3rd – mid-7th century CE",
+    "description": "A late-antique Platonism deriving all reality from a single first principle, the One.",
+    "debatable": "The name is modern; its members called themselves simply Platonists (SEP).",
+    "thinkers": [
+      { "name": "Plotinus", "dates": "204/5–270", "source": "https://plato.stanford.edu/entries/neoplatonism/" },
+      { "name": "Porphyry", "dates": "c. 232–305", "source": "https://plato.stanford.edu/entries/medieval-philosophy/" },
+      { "name": "Iamblichus", "dates": "ca. 242–ca. 325", "source": "https://plato.stanford.edu/entries/iamblichus/" },
+      { "name": "Proclus", "dates": "412–485", "source": "https://plato.stanford.edu/entries/proclus/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/neoplatonism/", "title": "SEP: Neoplatonism", "sections": ["intro", "1. Historical Orientation: Antiquity", "8. Influence"] },
+      { "url": "https://plato.stanford.edu/entries/plotinus/", "title": "SEP: Plotinus", "sections": ["intro", "1. Life and Writings"] }
+    ]
+  },
+  {
+    "id": "scholasticism",
+    "name": "Scholasticism",
+    "era": "Medieval",
+    "date_range": "c. 1100–1500 (within a medieval period of roughly 500–1500)",
+    "description": "University philosophy of the Latin Middle Ages, reconciling Aristotle's newly recovered works with Christian theology by commentary and disputation.",
+    "debatable": "A method and institution (the schools and universities) more than a doctrine; SEP's entry is 'Medieval Philosophy', of which scholasticism is the Latin university strand. Augustine and Boethius belong to the earlier medieval period.",
+    "thinkers": [
+      { "name": "Anselm", "dates": "1033–1109", "source": "https://plato.stanford.edu/entries/medieval-philosophy/" },
+      { "name": "Peter Abelard", "dates": "1079–1142", "source": "https://plato.stanford.edu/entries/medieval-philosophy/" },
+      { "name": "Thomas Aquinas", "dates": "1225–1274", "source": "https://plato.stanford.edu/entries/medieval-philosophy/" },
+      { "name": "John Duns Scotus", "dates": "1265/6–1308", "source": "https://plato.stanford.edu/entries/medieval-philosophy/" },
+      { "name": "William of Ockham", "dates": "c. 1287–1347", "source": "https://plato.stanford.edu/entries/ockham/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/medieval-philosophy/", "title": "SEP: Medieval Philosophy", "sections": ["intro", "1.2 The Platonic Schools of Late Antiquity", "2.5 The Twelfth-Century Parisian Schools", "2.7 University Philosophy", "5.2 When Did Medieval Philosophy End?"] },
+      { "url": "https://plato.stanford.edu/entries/aquinas/", "title": "SEP: Thomas Aquinas", "sections": ["intro", "1.1 Life"] }
+    ]
+  },
+  {
+    "id": "renaissance-humanism",
+    "name": "Renaissance Humanism",
+    "era": "Renaissance",
+    "date_range": "14th–16th century",
+    "description": "A return to classical Greek and Roman sources and to ethics and eloquence, set against scholastic logic and university learning.",
+    "debatable": "IEP's 'Renaissance Philosophy' treats humanism as one current beside Renaissance Aristotelianism, Platonism (Ficino) and revived Hellenistic schools; this node stands for that whole period.",
+    "thinkers": [
+      { "name": "Francesco Petrarca (Petrarch)", "dates": "1304–1374", "source": "https://iep.utm.edu/renaissa/" },
+      { "name": "Lorenzo Valla", "dates": "1406–1457", "source": "https://iep.utm.edu/renaissa/" },
+      { "name": "Marsilio Ficino", "dates": "1433–1499", "source": "https://plato.stanford.edu/entries/ficino/" },
+      { "name": "Giovanni Pico della Mirandola", "dates": "1463–1494", "source": "https://plato.stanford.edu/entries/pico-della-mirandola/" },
+      { "name": "Desiderius Erasmus", "dates": "c. 1466–1536", "source": "https://iep.utm.edu/renaissa/" }
+    ],
+    "sources": [
+      { "url": "https://iep.utm.edu/renaissa/", "title": "IEP: Renaissance Philosophy", "sections": ["intro", "1. Aristotelianism", "2. Humanism"] },
+      { "url": "https://iep.utm.edu/renaissance/", "title": "IEP: Renaissance Skepticism", "sections": ["intro"] }
+    ]
+  },
+  {
+    "id": "rationalism",
+    "name": "Rationalism",
+    "era": "Early modern",
+    "date_range": "17th century (into the 18th via Wolff)",
+    "description": "The view that reason, independent of sense experience, is a key source of knowledge and concepts, some of them innate.",
+    "debatable": "'Continental Rationalists' is a later historians' grouping (SEP), not a self-named school.",
+    "thinkers": [
+      { "name": "René Descartes", "dates": "1596–1650", "source": "https://plato.stanford.edu/entries/descartes/" },
+      { "name": "Baruch Spinoza", "dates": "1632–1677", "source": "https://plato.stanford.edu/entries/medieval-philosophy/" },
+      { "name": "Gottfried Wilhelm Leibniz", "dates": "1646–1716", "source": "https://plato.stanford.edu/entries/leibniz/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/rationalism-empiricism/", "title": "SEP: Rationalism vs. Empiricism", "sections": ["1. Introduction", "1.1 Rationalism", "1.2 Empiricism", "3. The Innate Knowledge Thesis"] },
+      { "url": "https://plato.stanford.edu/entries/descartes/", "title": "SEP: René Descartes", "sections": ["intro", "1.1 Early life and education", "2. Philosophical Development"] }
+    ]
+  },
+  {
+    "id": "empiricism",
+    "name": "Empiricism",
+    "era": "Early modern",
+    "date_range": "late 17th – 18th century",
+    "description": "The view that all our concepts and knowledge come ultimately from experience, not innate ideas.",
+    "debatable": "'British Empiricists' is likewise a later historians' grouping (SEP).",
+    "thinkers": [
+      { "name": "John Locke", "dates": "1632–1704", "source": "https://plato.stanford.edu/entries/locke/" },
+      { "name": "George Berkeley", "dates": "1685–1753", "source": "https://plato.stanford.edu/entries/hegel/" },
+      { "name": "David Hume", "dates": "1711–1776", "source": "https://plato.stanford.edu/entries/hume/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/rationalism-empiricism/", "title": "SEP: Rationalism vs. Empiricism", "sections": ["1. Introduction", "1.2 Empiricism"] },
+      { "url": "https://plato.stanford.edu/entries/hume/", "title": "SEP: David Hume", "sections": ["2.1 Philosophy of Mind", "2.3 Epistemology"] }
+    ]
+  },
+  {
+    "id": "enlightenment",
+    "name": "The Enlightenment",
+    "era": "Early modern",
+    "date_range": "18th century (roots in the 16th–17th-century scientific revolution; ends roughly with the 1790s)",
+    "description": "A movement of confidence in reason and science to reform knowledge, religion and politics and to question traditional authority.",
+    "debatable": "A period and movement, not a school; it spans rationalists, empiricists and skeptics.",
+    "thinkers": [
+      { "name": "Montesquieu", "dates": "born 1689", "source": "https://plato.stanford.edu/entries/montesquieu/" },
+      { "name": "Voltaire", "dates": "1694–1778", "source": "https://plato.stanford.edu/entries/voltaire/" },
+      { "name": "Jean-Jacques Rousseau", "dates": "1712–1778", "source": "https://plato.stanford.edu/entries/kant/" },
+      { "name": "Denis Diderot", "dates": "1713–1784", "source": "https://plato.stanford.edu/entries/diderot/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/enlightenment/", "title": "SEP: Enlightenment", "sections": ["intro", "1.1 Rationalism and the Enlightenment", "1.2 Empiricism and the Enlightenment", "1.3 Skepticism in the Enlightenment", "1.4 Science of Man and Subjectivism in the Enlightenment"] }
+    ]
+  },
+  {
+    "id": "kant",
+    "name": "Kant's Critical Philosophy",
+    "era": "Early modern (late Enlightenment)",
+    "date_range": "1781 (Critique of Pure Reason) – 1804",
+    "description": "Kant's 'Copernican' turn: the mind's own forms shape experience, which limits metaphysics and grounds a morality of autonomy.",
+    "debatable": "One thinker rather than a school; IEP even counts Kant as the first German Idealist. Kept separate because both rationalism and empiricism converge on him and so many later schools react to him.",
+    "thinkers": [
+      { "name": "Immanuel Kant", "dates": "1724–1804", "source": "https://plato.stanford.edu/entries/kant/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/kant/", "title": "SEP: Immanuel Kant", "sections": ["1. Life and works", "2.1 The crisis of the Enlightenment", "2.2 Kant's Copernican revolution in philosophy"] },
+      { "url": "https://iep.utm.edu/kantview/", "title": "IEP: Kant, Immanuel", "sections": ["1. Life", "2a. Pre-Critical Thought", "2b. Dogmatic Slumber, Synthetic A Priori Knowledge, and the Copernican Shift"] }
+    ]
+  },
+  {
+    "id": "german-idealism",
+    "name": "German Idealism",
+    "era": "19th century",
+    "date_range": "1780s–1840s",
+    "description": "Fichte, Schelling and Hegel radicalised Kant into absolute idealism, building complete systems in which reality is the unfolding of mind or spirit.",
+    "debatable": null,
+    "thinkers": [
+      { "name": "Johann Gottlieb Fichte", "dates": "1762–1814", "source": "https://plato.stanford.edu/entries/hegel/" },
+      { "name": "Friedrich Wilhelm Joseph von Schelling", "dates": "1775–1854", "source": "https://plato.stanford.edu/entries/schelling/" },
+      { "name": "G. W. F. Hegel", "dates": "1770–1831", "source": "https://plato.stanford.edu/entries/hegel/" }
+    ],
+    "sources": [
+      { "url": "https://iep.utm.edu/germidea/", "title": "IEP: German Idealism", "sections": ["intro"] },
+      { "url": "https://plato.stanford.edu/entries/hegel/", "title": "SEP: Hegel", "sections": ["intro", "1. Life, Work, and Influence"] }
+    ]
+  },
+  {
+    "id": "utilitarianism",
+    "name": "Utilitarianism",
+    "era": "19th century",
+    "date_range": "1789 (Bentham's Principles) – late 19th century (Sidgwick); still active",
+    "description": "The moral theory that right actions are those that produce the greatest happiness.",
+    "debatable": null,
+    "thinkers": [
+      { "name": "Jeremy Bentham", "dates": "1748–1832", "source": "https://plato.stanford.edu/entries/bentham/" },
+      { "name": "John Stuart Mill", "dates": "1806–1873", "source": "https://plato.stanford.edu/entries/mill/" },
+      { "name": "Henry Sidgwick", "dates": "1838–1900", "source": "https://plato.stanford.edu/entries/utilitarianism-history/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/utilitarianism-history/", "title": "SEP: The History of Utilitarianism", "sections": ["1. Precursors to the Classical Approach", "2.2 Jeremy Bentham", "2.3 John Stuart Mill"] },
+      { "url": "https://plato.stanford.edu/entries/bentham/", "title": "SEP: Jeremy Bentham", "sections": ["intro", "1. Life and Writings"] }
+    ]
+  },
+  {
+    "id": "marxism",
+    "name": "Marxism",
+    "era": "19th century",
+    "date_range": "1840s onward",
+    "description": "Marx's materialist theory of history and critique of capitalism: alienation, class struggle, ideology and the case for communism.",
+    "debatable": "Also a political movement; here only the philosophical tradition.",
+    "thinkers": [
+      { "name": "Karl Marx", "dates": "1818–1883", "source": "https://plato.stanford.edu/entries/marx/" },
+      { "name": "Friedrich Engels", "dates": "1820–1895", "source": "https://plato.stanford.edu/entries/marx/" },
+      { "name": "Georg Lukács", "dates": "1885–1971", "source": "https://plato.stanford.edu/entries/lukacs/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/marx/", "title": "SEP: Karl Marx", "sections": ["intro", "1.2 Religion and Work"] },
+      { "url": "https://plato.stanford.edu/entries/hegel/", "title": "SEP: Hegel", "sections": ["intro", "1. Life, Work, and Influence"] }
+    ]
+  },
+  {
+    "id": "existentialism",
+    "name": "Existentialism",
+    "era": "19th–20th century",
+    "date_range": "roots in the 1840s (Kierkegaard); movement in mid-20th-century France",
+    "description": "Philosophy that starts from concrete, first-person human existence: freedom, anxiety, authenticity and the search for meaning.",
+    "debatable": "Absurdism is folded in: SEP files Camus's 'absurdity' among existentialist themes, though Camus himself rejected the label (SEP Camus). Kierkegaard and Nietzsche are forerunners, not members.",
+    "thinkers": [
+      { "name": "Søren Kierkegaard", "dates": "1813–1855", "source": "https://plato.stanford.edu/entries/kierkegaard/" },
+      { "name": "Friedrich Nietzsche", "dates": "1844–1900", "source": "https://plato.stanford.edu/entries/nietzsche/" },
+      { "name": "Jean-Paul Sartre", "dates": "1905–1980", "source": "https://plato.stanford.edu/entries/sartre/" },
+      { "name": "Simone de Beauvoir", "dates": "1908–1986", "source": "https://plato.stanford.edu/entries/beauvoir/" },
+      { "name": "Albert Camus", "dates": "1913–1960", "source": "https://plato.stanford.edu/entries/camus/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/existentialism/", "title": "SEP: Existentialism", "sections": ["intro", "2.1 Subjective Truth", "2.3 Being-in-the-World", "5.1 The Power of Moods", "7.1 Post-Structuralism"] },
+      { "url": "https://plato.stanford.edu/entries/camus/", "title": "SEP: Albert Camus", "sections": ["intro", "1. The Paradoxes of Camus's Absurdist Philosophy"] }
+    ]
+  },
+  {
+    "id": "pragmatism",
+    "name": "Pragmatism",
+    "era": "19th–20th century",
+    "date_range": "c. 1870 (Metaphysical Club, Harvard) – present",
+    "description": "An American philosophy that clarifies ideas by their practical consequences and treats inquiry and truth in terms of action.",
+    "debatable": null,
+    "thinkers": [
+      { "name": "Charles Sanders Peirce", "dates": "1839–1914", "source": "https://plato.stanford.edu/entries/pragmatism/" },
+      { "name": "William James", "dates": "1842–1910", "source": "https://plato.stanford.edu/entries/pragmatism/" },
+      { "name": "John Dewey", "dates": "1859–1952", "source": "https://plato.stanford.edu/entries/dewey/" },
+      { "name": "Richard Rorty", "dates": "1931–2007", "source": "https://plato.stanford.edu/entries/pragmatism/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/pragmatism/", "title": "SEP: Pragmatism", "sections": ["1.1 The Early Years", "1.2 'Neopragmatism' and Beyond", "2. The Meaning of Pragmatism", "2.1 Peirce: The Pragmatic Maxim", "2.2 James", "4. Pragmatist Epistemology"] }
+    ]
+  },
+  {
+    "id": "phenomenology",
+    "name": "Phenomenology",
+    "era": "20th century",
+    "date_range": "early 20th century – present",
+    "description": "The careful description of experience as it is lived from the first-person point of view, founded by Husserl.",
+    "debatable": "Both a method and a movement; it overlaps heavily with existentialism (Heidegger, Sartre and Merleau-Ponty are in both).",
+    "thinkers": [
+      { "name": "Edmund Husserl", "dates": "1859–1938", "source": "https://plato.stanford.edu/entries/husserl/" },
+      { "name": "Martin Heidegger", "dates": "1889–1976", "source": "https://plato.stanford.edu/entries/heidegger/" },
+      { "name": "Maurice Merleau-Ponty", "dates": "1908–1961", "source": "https://plato.stanford.edu/entries/merleau-ponty/" },
+      { "name": "Jean-Paul Sartre", "dates": "1905–1980", "source": "https://plato.stanford.edu/entries/sartre/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/phenomenology/", "title": "SEP: Phenomenology", "sections": ["intro", "1. What is Phenomenology?", "3. From Phenomena to Phenomenology", "4. The History and Varieties of Phenomenology"] },
+      { "url": "https://plato.stanford.edu/entries/husserl/", "title": "SEP: Edmund Husserl", "sections": ["intro", "1. Life and work", "3. The transcendental turn"] }
+    ]
+  },
+  {
+    "id": "analytic",
+    "name": "Analytic Philosophy",
+    "era": "20th century",
+    "date_range": "c. 1900 – present",
+    "description": "Philosophy pursued through logical and linguistic analysis and clear argument, dominant in British and American universities.",
+    "debatable": "A broad tradition with several phases (IEP counts five), and whether Frege counts as a founder is contested (IEP §2c).",
+    "thinkers": [
+      { "name": "Gottlob Frege", "dates": "1848–1925", "source": "https://plato.stanford.edu/entries/frege/" },
+      { "name": "G. E. Moore", "dates": "1873–1958", "source": "https://iep.utm.edu/germidea/" },
+      { "name": "Bertrand Russell", "dates": "1872–1970", "source": "https://plato.stanford.edu/entries/russell/" },
+      { "name": "Ludwig Wittgenstein", "dates": "1889–1951", "source": "https://plato.stanford.edu/entries/augustine/" },
+      { "name": "W. V. O. Quine", "dates": "1908–2000", "source": "https://plato.stanford.edu/entries/pragmatism/" }
+    ],
+    "sources": [
+      { "url": "https://iep.utm.edu/analytic-philosophy/", "title": "IEP: Analytic Philosophy", "sections": ["intro", "2c. Frege: Influence or Instigator?"] },
+      { "url": "https://plato.stanford.edu/entries/hegel/", "title": "SEP: Hegel", "sections": ["1. Life, Work, and Influence"] }
+    ]
+  },
+  {
+    "id": "logical-positivism",
+    "name": "Logical Positivism",
+    "era": "20th century",
+    "date_range": "1924–1936 (Vienna Circle meetings); influential to mid-century",
+    "description": "The Vienna Circle's logical empiricism: only logically or empirically verifiable statements are meaningful, so metaphysics is empty.",
+    "debatable": "IEP treats it as the third phase (c. 1930–1945) of analytic philosophy rather than a separate school; kept separate because Copleston gives it its own volume and it has distinct links.",
+    "thinkers": [
+      { "name": "Moritz Schlick", "dates": "1882–1936", "source": "https://plato.stanford.edu/entries/schlick/" },
+      { "name": "Rudolf Carnap", "dates": "1891–1970", "source": "https://plato.stanford.edu/entries/vienna-circle/" },
+      { "name": "Otto Neurath", "dates": "1882–1945", "source": "https://plato.stanford.edu/entries/vienna-circle/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/vienna-circle/", "title": "SEP: Vienna Circle", "sections": ["intro", "2.1 People", "2.3 Overview of Doctrines", "3.2 The Analytic/Synthetic Distinction and the Relative A Priori"] },
+      { "url": "https://iep.utm.edu/analytic-philosophy/", "title": "IEP: Analytic Philosophy", "sections": ["intro"] }
+    ]
+  },
+  {
+    "id": "critical-theory",
+    "name": "Critical Theory (Frankfurt School)",
+    "era": "20th century",
+    "date_range": "1923 (Institute for Social Research founded) – present",
+    "description": "Western Marxist social philosophy that joins philosophy with social science to criticise domination and aim at emancipation.",
+    "debatable": "SEP notes a narrow sense (the Frankfurt School, used here) and broader senses of 'critical theory'.",
+    "thinkers": [
+      { "name": "Max Horkheimer", "dates": "1895–1973", "source": "https://plato.stanford.edu/entries/critical-theory/" },
+      { "name": "Theodor W. Adorno", "dates": "1903–1969", "source": "https://plato.stanford.edu/entries/adorno/" },
+      { "name": "Herbert Marcuse", "dates": "1898–1979", "source": "https://plato.stanford.edu/entries/critical-theory/" },
+      { "name": "Jürgen Habermas", "dates": "1929–2026", "source": "https://plato.stanford.edu/entries/habermas/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/critical-theory/", "title": "SEP: Critical Theory (Frankfurt School)", "sections": ["intro", "1.1 Origins and Generations", "1.2 Influences", "1.3 Critical Theory versus Traditional Theory", "1.5 The Dialectic of Enlightenment", "4.1.1 Gender"] },
+      { "url": "https://iep.utm.edu/frankfur/", "title": "IEP: Frankfurt School and Critical Theory", "sections": ["intro", "1. Critical Theory: Historical and Philosophical Background"] }
+    ]
+  },
+  {
+    "id": "post-structuralism",
+    "name": "Post-structuralism",
+    "era": "20th century",
+    "date_range": "1960s onward (France)",
+    "description": "French thought that grew out of structuralism to question stable meaning, the self-present subject and claims to foundations, through deconstruction and genealogy.",
+    "debatable": "SEP has no entry by this name; it is covered under 'Postmodernism' (which says these thinkers are often called poststructuralists) and the Derrida and Foucault entries. The two labels overlap.",
+    "thinkers": [
+      { "name": "Gilles Deleuze", "dates": "1925–1995", "source": "https://plato.stanford.edu/entries/deleuze/" },
+      { "name": "Michel Foucault", "dates": "1926–1984", "source": "https://plato.stanford.edu/entries/foucault/" },
+      { "name": "Jacques Derrida", "dates": "1930–2004", "source": "https://plato.stanford.edu/entries/derrida/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/postmodernism/", "title": "SEP: Postmodernism", "sections": ["intro", "1. Precursors", "9. Habermas's Critique"] },
+      { "url": "https://plato.stanford.edu/entries/foucault/", "title": "SEP: Michel Foucault", "sections": ["intro", "2. Intellectual Background"] },
+      { "url": "https://plato.stanford.edu/entries/derrida/", "title": "SEP: Jacques Derrida", "sections": ["intro", "1. Life and Works", "3. Basic Argumentation and its Implications"] }
+    ]
+  },
+  {
+    "id": "feminist-philosophy",
+    "name": "Feminist Philosophy",
+    "era": "20th–21st century",
+    "date_range": "1970s – present as an academic field (forerunners: Wollstonecraft 1792, Beauvoir 1949)",
+    "description": "Philosophy that criticises institutions and theories that have favoured men and rethinks sex, gender, knowledge and ethics.",
+    "debatable": "Not a single school but a field that works within every tradition (analytic, continental, pragmatist; SEP §3).",
+    "thinkers": [
+      { "name": "Mary Wollstonecraft", "dates": "1759–1797", "source": "https://plato.stanford.edu/entries/wollstonecraft/" },
+      { "name": "Simone de Beauvoir", "dates": "1908–1986", "source": "https://plato.stanford.edu/entries/beauvoir/" },
+      { "name": "Judith Butler", "dates": "not given in the sources consulted", "source": "https://plato.stanford.edu/entries/critical-theory/" },
+      { "name": "Nancy Fraser", "dates": "not given in the sources consulted", "source": "https://plato.stanford.edu/entries/critical-theory/" }
+    ],
+    "sources": [
+      { "url": "https://plato.stanford.edu/entries/feminist-philosophy/", "title": "SEP: Feminist Philosophy", "sections": ["1. What is Feminism?", "2. Feminist Scholarship", "3. Approaches to Feminism"] },
+      { "url": "https://plato.stanford.edu/entries/beauvoir/", "title": "SEP: Simone de Beauvoir", "sections": ["intro"] }
+    ]
+  }
+]

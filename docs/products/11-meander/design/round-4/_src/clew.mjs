@@ -131,7 +131,7 @@ export function screen({ schools, links, detail, beauvoir, history }, focus, sta
 <header class="solid"><button class="wm" translate="no" title="Back to the whole field">${mark()}Meander</button>${nv ? `<button class="yt" aria-expanded="${state === 'thread'}"><i></i>Your thread</button>` : ''}</header>
 <main>${nodes}${title}${sat}</main>
 ${card}
-${state === 'first' ? `<p class="caption solid">${schools.length} schools, one ball of thread. Pull any end.</p>` : ''}</div>`,
+</div>`,
     web: JSON.stringify({ c: C, R, w: 1440, h: 900 }),
   };
 }

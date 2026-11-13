@@ -73,7 +73,7 @@ Three sections, in this order: "It asks" (three questions), "Themes" (one row ea
 
 ## Back to the overview
 
-There is no "Whole field" pill. Three ways back: Esc, clicking empty space on the globe, clicking the Meander logo. In the overview nothing is in focus, no card is open and the globe sits in the middle of the screen. On the very first visit a single line sits bottom left: "24 schools, one ball of thread. Pull any end."
+There is no "Whole field" pill. Three ways back: Esc, clicking empty space on the globe, clicking the Meander logo. In the overview nothing is in focus, no card is open and the globe sits in the middle of the screen. On the very first visit there is no welcome line and no "Your thread" button (decision L15): the globe alone invites.
 
 ## Interactions
 

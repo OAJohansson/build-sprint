@@ -6,7 +6,7 @@
       "from": "presocratics",
       "to": "socrates-plato",
       "type": "built",
-      "label": "the questions it inherited",
+      "label": "the first philosophical questions",
       "reason": "The Presocratics' questions and answers were the foundation on which philosophy as Plato and Aristotle defined it was built.",
       "sources": [
         {
@@ -24,7 +24,7 @@
       "from": "socrates-plato",
       "to": "aristotle",
       "type": "built-then-against",
-      "label": "teacher, then target",
+      "label": "Academy student, then Forms critic",
       "reason": "Aristotle studied in Plato's Academy before founding the Lyceum. Then: Aristotle criticised Plato's theory of Forms (it cannot explain change) and opposed Platonic dualism of soul and body.",
       "sources": [
         {
@@ -46,7 +46,7 @@
       "from": "presocratics",
       "to": "aristotle",
       "type": "against",
-      "label": "materialism it rejected",
+      "label": "early materialism rejected",
       "reason": "Aristotle saw the Presocratics as his predecessors but judged them unsuccessful, and rejected their materialist accounts of living things.",
       "sources": [
         {
@@ -64,7 +64,7 @@
       "from": "presocratics",
       "to": "epicureanism",
       "type": "built",
-      "label": "the atoms it borrowed",
+      "label": "Democritus's atoms",
       "reason": "Epicurus inherited his atomist physics from the earlier atomists, above all Democritus, and studied under a Democritean.",
       "sources": [
         {
@@ -86,7 +86,7 @@
       "from": "socrates-plato",
       "to": "epicureanism",
       "type": "against",
-      "label": "Forms it threw out",
+      "label": "Platonic Forms dropped",
       "reason": "Epicurus' materialism dispensed with Plato's transcendent Forms and denied that the soul survives death.",
       "sources": [
         {
@@ -104,7 +104,7 @@
       "from": "socrates-plato",
       "to": "stoicism",
       "type": "built",
-      "label": "Socrates as model",
+      "label": "Socratic dialogues as inspiration",
       "reason": "Zeno read Socratic dialogues and was influenced by Plato's Academy; Stoic psychology returns to Socrates' intellectualism.",
       "sources": [
         {
@@ -122,7 +122,7 @@
       "from": "aristotle",
       "to": "stoicism",
       "type": "against",
-      "label": "the divided soul rejected",
+      "label": "non-rational soul rejected",
       "reason": "Stoic psychology rejects the Platonic-Aristotelian idea of non-rational parts of the mature soul.",
       "sources": [
         {
@@ -150,7 +150,7 @@
       "from": "stoicism",
       "to": "skepticism",
       "type": "against",
-      "label": "certainty it attacked",
+      "label": "Stoic certainty attacked",
       "reason": "Academic skeptics Arcesilaus and Carneades attacked the Stoic criterion of truth and Stoic epistemology.",
       "sources": [
         {
@@ -172,7 +172,7 @@
       "from": "epicureanism",
       "to": "skepticism",
       "type": "against",
-      "label": "truth test it doubted",
+      "label": "criterion of truth doubted",
       "reason": "The Academics questioned the Epicurean claim to a criterion of truth and defended skeptical action against Epicurean critics.",
       "sources": [
         {
@@ -186,7 +186,7 @@
       "from": "socrates-plato",
       "to": "neoplatonism",
       "type": "built",
-      "label": "Plato as master",
+      "label": "Plato as highest authority",
       "reason": "The Neoplatonists called themselves Platonists and held Plato's views above all others; Plotinus took Plato as having laid the fundamentals.",
       "sources": [
         {
@@ -204,7 +204,7 @@
       "from": "aristotle",
       "to": "neoplatonism",
       "type": "built",
-      "label": "texts it worked from",
+      "label": "Aristotle's Metaphysics as starting point",
       "reason": "Plotinus used passages of Aristotle's Metaphysics as starting points, and his sessions read commentaries on Plato and Aristotle.",
       "sources": [
         {
@@ -222,7 +222,7 @@
       "from": "epicureanism",
       "to": "neoplatonism",
       "type": "against",
-      "label": "materialism it refused",
+      "label": "Epicureanism rejected outright",
       "reason": "Neoplatonists absorbed almost the whole Greek tradition except Epicureanism, which they rejected outright.",
       "sources": [
         {
@@ -236,7 +236,7 @@
       "from": "neoplatonism",
       "to": "patristic",
       "type": "built",
-      "label": "Platonism for faith",
+      "label": "Platonism for Christian faith",
       "reason": "At Milan Augustine met Neoplatonically inclined Christians who showed him a philosophically informed Christianity; through him and the Greek Fathers, Neoplatonism shaped Christian theology.",
       "sources": [
         {
@@ -254,7 +254,7 @@
       "from": "stoicism",
       "to": "patristic",
       "type": "built",
-      "label": "Stoic ethics taken up",
+      "label": "Stoic elements taken up",
       "reason": "Christian writers took up some elements of Stoicism.",
       "sources": [
         {
@@ -268,7 +268,7 @@
       "from": "skepticism",
       "to": "patristic",
       "type": "against",
-      "label": "knowledge defended",
+      "label": "knowledge defended against skeptics",
       "reason": "In Contra Academicos Augustine defended knowledge against the Academic skeptics.",
       "sources": [
         {
@@ -282,7 +282,7 @@
       "from": "aristotle",
       "to": "scholasticism",
       "type": "built",
-      "label": "the rediscovered Aristotle",
+      "label": "Aristotle rediscovered",
       "reason": "Thirteenth-century university philosophers were enthused by newly available Aristotle; Aquinas worked to write commentaries on all of Aristotle's principal works.",
       "sources": [
         {
@@ -304,7 +304,7 @@
       "from": "neoplatonism",
       "to": "scholasticism",
       "type": "built",
-      "label": "the Platonist frame",
+      "label": "Platonist frame for Aristotle",
       "reason": "Medieval Aristotelianism was transmitted in a Platonist context; via Augustine and Pseudo-Dionysius, Neoplatonism shaped Aquinas and Scotus.",
       "sources": [
         {
@@ -336,7 +336,7 @@
       "from": "scholasticism",
       "to": "renaissance",
       "type": "against",
-      "label": "school logic it mocked",
+      "label": "scholastic logic condemned",
       "reason": "Petrarch set out what became the standard critique of scholastic philosophy, and fifteenth- and early sixteenth-century humanists condemned university education and scholastic logic.",
       "sources": [
         {
@@ -386,7 +386,7 @@
       "from": "epicureanism",
       "to": "renaissance",
       "type": "built",
-      "label": "Epicurus rediscovered",
+      "label": "Epicureanism studied anew",
       "reason": "The Renaissance's renewed study of Epicureanism (with other Hellenistic schools) loosened Aristotle's hold.",
       "sources": [
         {
@@ -400,7 +400,7 @@
       "from": "skepticism",
       "to": "renaissance",
       "type": "built",
-      "label": "Sextus rediscovered",
+      "label": "ancient skepticism revived",
       "reason": "Renaissance skepticism was inspired by the revival of ancient Greek skepticism, notably the rediscovery of Sextus Empiricus (1562).",
       "sources": [
         {
@@ -432,7 +432,7 @@
       "from": "rationalism",
       "to": "empiricism",
       "type": "against",
-      "label": "no innate ideas",
+      "label": "innate knowledge rejected",
       "reason": "Empiricists reject innate knowledge; Locke spends the whole first book of his Essay arguing against it.",
       "sources": [
         {
@@ -450,7 +450,7 @@
       "from": "rationalism",
       "to": "enlightenment",
       "type": "built-then-against",
-      "label": "pillar, then limits",
+      "label": "Descartes as pillar, then Kant's limits",
       "reason": "Descartes' rationalist system, with its method of doubt, is one of the pillars of Enlightenment thought. Then: Kant's early work was enmeshed in Leibniz-Wolff rationalism, until Hume shook his faith in its assumption that metaphysical knowledge is possible.",
       "sources": [
         {
@@ -472,7 +472,7 @@
       "from": "empiricism",
       "to": "enlightenment",
       "type": "built-then-against",
-      "label": "Locke, then answering Hume",
+      "label": "Locke, then Kant's answer to Hume",
       "reason": "The rise of empiricism is characteristic of the period; Locke's Essay is a foundational Enlightenment text. Then: Hume's skepticism woke Kant from his 'dogmatic slumber'; the critical philosophy was designed as an answer to Hume.",
       "sources": [
         {
@@ -508,7 +508,7 @@
       "from": "enlightenment",
       "to": "german-idealism",
       "type": "built",
-      "label": "Kant radicalised",
+      "label": "Kant's idealism radicalised",
       "reason": "Fichte, Schelling and Hegel radicalised Kant's transcendental idealism into absolute idealism.",
       "sources": [
         {
@@ -526,7 +526,7 @@
       "from": "empiricism",
       "to": "utilitarianism",
       "type": "built",
-      "label": "Hume's idea of utility",
+      "label": "Hume on utility",
       "reason": "Hume is an early precursor; Bentham found virtue equated with utility in Hume's Treatise and borrowed the term from him.",
       "sources": [
         {
@@ -570,7 +570,7 @@
       "from": "german-idealism",
       "to": "marxism",
       "type": "built",
-      "label": "Hegel turned upside down",
+      "label": "Hegel's history inverted",
       "reason": "Marx took over Hegel's teleological account of history and 'inverted' it into a materialist theory, appropriating many Hegelian ideas.",
       "sources": [
         {
@@ -606,7 +606,7 @@
       "from": "phenomenology",
       "to": "existentialism",
       "type": "built",
-      "label": "the method it used",
+      "label": "Husserl's method applied",
       "reason": "Heidegger took up his teacher Husserl's phenomenological maxim 'to the things themselves'; Husserl is named among the movement's groundwork.",
       "sources": [
         {
@@ -652,7 +652,7 @@
       "from": "enlightenment",
       "to": "pragmatism",
       "type": "against",
-      "label": "Kant's thing-in-itself rejected",
+      "label": "Kant's thing in itself rejected",
       "reason": "Peirce used the pragmatic maxim against Kant's 'thing in itself' and judged Kant's logic shallow.",
       "sources": [
         {
@@ -688,7 +688,7 @@
       "from": "german-idealism",
       "to": "analytic",
       "type": "against",
-      "label": "idealism it broke from",
+      "label": "break with absolute idealism",
       "reason": "Moore and Russell broke away from absolute idealism, and Hegel became a main target of the founders of analytic philosophy.",
       "sources": [
         {
@@ -734,7 +734,7 @@
       "from": "enlightenment",
       "to": "analytic",
       "type": "against",
-      "label": "synthetic a priori banned",
+      "label": "Kant's synthetic a priori banned",
       "reason": "Logical positivists (Vienna Circle): the Circle banned Kant's synthetic a priori as refuted by the progress of science.",
       "sources": [
         {
@@ -752,7 +752,7 @@
       "from": "scholasticism",
       "to": "analytic",
       "type": "against",
-      "label": "the Schoolmen's a priori",
+      "label": "the Schoolmen's a priori rejected",
       "reason": "Logical positivists (Vienna Circle): the analytic/synthetic distinction was used as a weapon against the 'substantive a priori of the Schoolmen' as well as Kant.",
       "sources": [
         {
@@ -766,7 +766,7 @@
       "from": "marxism",
       "to": "critical-theory",
       "type": "built",
-      "label": "its starting point",
+      "label": "Marxism revised and updated",
       "reason": "The Frankfurt School revised and updated Marxism, taking Marx as the model of radical critique.",
       "sources": [
         {
@@ -816,7 +816,7 @@
       "from": "post-structuralism",
       "to": "critical-theory",
       "type": "against",
-      "label": "Habermas's critique",
+      "label": "Habermas's critique of postmodernism",
       "reason": "Habermas argued that postmodernism contradicts itself and sought to rehabilitate modern reason against it.",
       "sources": [
         {
@@ -960,7 +960,7 @@
       "from": "post-structuralism",
       "to": "feminist-philosophy",
       "type": "built",
-      "label": "Butler's gender theory",
+      "label": "Butler's poststructuralist feminism",
       "reason": "Feminist critical theory has a poststructuralist strand (Judith Butler), and analytic feminists also draw on Foucault and Butler.",
       "sources": [
         {

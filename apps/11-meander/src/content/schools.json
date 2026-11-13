@@ -9,6 +9,20 @@
       "dateRange": "6th–5th century BCE",
       "era": "Ancient",
       "description": "The first Greek thinkers to explain the natural world and its principles by reasoned inquiry rather than myth.",
+      "tagline": {
+        "text": "The first Greek thinkers to explain nature by reasoned inquiry instead of myth.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/presocratics/",
+            "section": "intro"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/presocratics/",
+            "section": "1. Who Were the Presocratic Philosophers?"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "A modern label: SEP says the term was coined in the 18th century and made current by Diels, and that the last 'Presocratics' were contemporaries of Socrates. The Sophists are folded in here (SEP covers them in the same entry, §9).",
       "questions": [
         "Underneath all the change I see, what is everything really made of?",
@@ -201,7 +215,25 @@
       "dates": "late 5th–4th century BCE",
       "dateRange": "late 5th–4th century BCE",
       "era": "Ancient",
-      "description": "Socrates' questioning method and Plato's dialogues, including the Forms, which SEP calls the most basic distinction in Plato's thought.",
+      "description": "Socrates' questioning method and Plato's dialogues, including the split between the many things we observe and the one Form each shares in, which SEP calls the most fundamental distinction in Plato's philosophy.",
+      "tagline": {
+        "text": "Socrates' questioning and Plato's dialogues on the Forms behind what we see.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/plato/",
+            "section": "intro"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/plato/",
+            "section": "1. Plato’s central doctrines"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/socrates/",
+            "section": "2. The Socratic problem: Who was Socrates really?"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "The owner's sample had one 'Classical Greek' node; it is split here into Socrates/Plato and Aristotle. SEP gives Plato's birth as 429? (Plato entry, intro) and 424/3 (Socrates entry, section 'Plato (424/3–347)').",
       "questions": [
         "Is a life I never stop to examine really worth living?",
@@ -304,7 +336,7 @@
         },
         {
           "name": "Who was the real Socrates?",
-          "text": "Socrates wrote nothing, so we meet him through others, mainly Plato and Xenophon, whose portraits differ a lot. Untangling the historical man from these portraits is called the Socratic problem, and it may never be solved.",
+          "text": "Socrates wrote nothing, so we meet him through others, mainly Plato, Xenophon and the comic playwright Aristophanes, whose portraits differ a lot. Untangling the historical man from these portraits is called the Socratic problem, and it may never be solved.",
           "thinkers": [
             "socrates-plato/socrates",
             "socrates-plato/xenophon",
@@ -383,6 +415,20 @@
       "dateRange": "4th century BCE onward (the Lyceum)",
       "era": "Ancient",
       "description": "Aristotle's wide-ranging philosophy, from logic and metaphysics to ethics, politics and the study of plants and animals, taught at his school, the Lyceum.",
+      "tagline": {
+        "text": "Aristotle's wide-ranging study of logic, nature, ethics and politics, at the Lyceum.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/aristotle/",
+            "section": "intro"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/aristotle/",
+            "section": "1. Aristotle’s Life"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "Centred on one great thinker, Aristotle; his school, the Lyceum, whose members later came to be called Peripatetics, gives it school status.",
       "questions": [
         "What does a human life need in order to go well?",
@@ -535,10 +581,28 @@
     {
       "id": "epicureanism",
       "name": "Epicureanism",
-      "dates": "late 4th century BCE – 1st century BCE",
-      "dateRange": "late 4th century BCE – 1st century BCE (Lucretius, mid-90s to mid-50s BCE; Philodemus, ca. 110–ca. 30 BCE)",
+      "dates": "late 4th century BCE onward",
+      "dateRange": "late 4th century BCE onward (featured thinkers to the 1st century BCE: Lucretius, mid-90s to mid-50s BCE; Philodemus, ca. 110–ca. 30 BCE)",
       "era": "Ancient (Hellenistic)",
-      "description": "Atomist materialism joined to an ethics of tranquil pleasure and freedom from fear of death and the gods.",
+      "description": "Atomist materialism joined to an ethics of tranquil pleasure, freedom from fear of death, and gods who are unconcerned with human affairs.",
+      "tagline": {
+        "text": "A world made of atoms, and a calm life of pleasure without fear of death.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/epicurus/",
+            "section": "intro"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/epicurus/",
+            "section": "3. Physical Theory"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/epicurus/",
+            "section": "4. Psychology and Ethics"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": null,
       "questions": [
         "Why should I not be afraid of death?",
@@ -731,10 +795,24 @@
     {
       "id": "stoicism",
       "name": "Stoicism",
-      "dates": "c. 300 BCE – 2nd century CE",
-      "dateRange": "c. 300 BCE – 2nd century CE",
+      "dates": "c. 300 BCE onward",
+      "dateRange": "c. 300 BCE onward (major figures through the 2nd century CE)",
       "era": "Ancient (Hellenistic and Roman)",
       "description": "A system of physics, logic and ethics with interlocking parts, teaching that only virtue is good and that living virtuously means living in agreement with nature.",
+      "tagline": {
+        "text": "Live in agreement with nature, because virtue is the only good.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/stoicism/",
+            "section": "4.2 Virtue"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/stoicism/",
+            "section": "4.3 Indifferents"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": null,
       "questions": [
         "What in my life is actually up to me?",
@@ -941,6 +1019,20 @@
       "dateRange": "3rd century BCE – 2nd century CE",
       "era": "Ancient (Hellenistic and Roman)",
       "description": "Academic and Pyrrhonian skeptics who suspended judgment and kept investigating, rather than asserting how things really are.",
+      "tagline": {
+        "text": "Suspend judgment and keep investigating, rather than claim how things really are.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
+            "section": "3.1 Arcesilaus"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
+            "section": "4.4 Sextus Empiricus"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "Two movements (Academic and Pyrrhonian) under one node; SEP treats them in one entry.",
       "questions": [
         "Can I ever be sure that the way something looks to me is true?",
@@ -1170,6 +1262,20 @@
       "dateRange": "roughly mid-3rd – mid-7th century CE",
       "era": "Late antiquity",
       "description": "A late-antique Platonism deriving all reality from a single first principle, the One.",
+      "tagline": {
+        "text": "A late Platonism that derives all of reality from one first principle, the One.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/neoplatonism/",
+            "section": "intro"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/neoplatonism/",
+            "section": "1. Historical Orientation: Antiquity"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "The name is modern; its members called themselves simply Platonists (SEP).",
       "questions": [
         "How could a whole, varied universe come from one single source?",
@@ -1225,7 +1331,7 @@
         },
         {
           "name": "Unfolding in stages",
-          "text": "Reality emerges from the One in stages, not all at once: first Intellect (pure consciousness), then Soul, then the living world. Each level then turns back toward its source, a pattern they called procession and return.",
+          "text": "Reality emerges from the One as a hierarchy of levels, eternally rather than step by step in time: first Intellect (pure consciousness), then Soul, then the living world. Each level then turns back toward its source, a pattern they called procession and return.",
           "thinkers": [
             "neoplatonism/plotinus",
             "neoplatonism/proclus"
@@ -1360,6 +1466,20 @@
       "dateRange": "c. 185 – c. 525/6 CE (Origen's birth to Boethius's death)",
       "era": "Late antiquity",
       "description": "The Church Fathers and their heirs, who used Greek philosophy, above all Platonism, to think through Christian faith.",
+      "tagline": {
+        "text": "Early Christian thinkers who used Greek philosophy, above all Platonism, for faith.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/augustine/",
+            "section": "1. Life"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/neoplatonism/",
+            "section": "8. Influence"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "Where this group ends and medieval philosophy begins is unsettled: by some chronologies, Augustine himself founded the medieval Latin tradition (SEP).",
       "questions": [
         "If God is good and made everything, where does evil come from?",
@@ -1428,7 +1548,7 @@
         },
         {
           "name": "Evil as missing goodness",
-          "text": "Evil is not a thing or substance in its own right. It is a lack or corruption of goodness, which keeps God from being its author.",
+          "text": "Evil is not a thing or substance in its own right but a lack or corruption of goodness. Everything that is real is good in its degree, because God created it.",
           "thinkers": [
             "patristic/augustine-of-hippo"
           ],
@@ -1544,10 +1664,24 @@
     {
       "id": "scholasticism",
       "name": "Scholasticism",
-      "dates": "12th century – around 1700",
-      "dateRange": "12th century – around 1700",
+      "dates": "flourishing from the 12th-century Paris schools onward, to perhaps around 1700",
+      "dateRange": "flourishing from the 12th-century Paris schools onward, to perhaps around 1700",
       "era": "Medieval",
       "description": "University philosophy of the Latin Middle Ages, reconciling Aristotle's newly recovered works with Christian theology by commentary and disputation.",
+      "tagline": {
+        "text": "Medieval university philosophy that joined Aristotle with Christian theology.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
+            "section": "2.7 University Philosophy"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/aquinas/",
+            "section": "intro"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "SEP ties it to a method: Aquinas epitomises the scholastic method of the newly founded universities. Its end date is open; SEP calls around 1700 a plausible end for medieval philosophy, and this style of university philosophy ran on for at least three centuries after the mid-1300s.",
       "questions": [
         "Can reason prove that God exists, or must I take it on faith?",
@@ -1684,7 +1818,7 @@
         }
       ],
       "reactedAgainst": {
-        "text": "It answered both those who wanted no reasoning in matters of faith and those Abelard called pseudo-dialecticians, who took reason to be the final judge of everything, even matters of faith.",
+        "text": "Abelard answered both those who wanted no reasoning in matters of faith and those he called pseudo-dialecticians, who took reason to be the final judge of everything, even matters of faith.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/abelard/",
@@ -1738,10 +1872,24 @@
     {
       "id": "renaissance",
       "name": "Renaissance Philosophy",
-      "dates": "14th–16th century",
-      "dateRange": "14th–16th century",
+      "dates": "roughly mid-14th to early 17th century",
+      "dateRange": "roughly mid-14th to early 17th century",
       "era": "Renaissance",
       "description": "A return to classical Greek and Roman sources and to ethics and eloquence, with humanists setting themselves against scholastic logic and university learning.",
+      "tagline": {
+        "text": "A return to Greek and Roman sources, ethics and eloquence, against scholastic logic.",
+        "sources": [
+          {
+            "url": "https://iep.utm.edu/renaissa/",
+            "section": "intro"
+          },
+          {
+            "url": "https://iep.utm.edu/renaissa/",
+            "section": "2. Humanism"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "IEP's 'Renaissance Philosophy' has humanism as one current beside Renaissance Aristotelianism, Platonism (Ficino) and revived Hellenistic schools; the node covers them all.",
       "questions": [
         "What good is philosophy if it doesn't help me live a better life?",
@@ -1924,6 +2072,20 @@
       "dateRange": "17th–18th centuries",
       "era": "Early modern",
       "description": "The view that reason, independent of sense experience, is a key source of knowledge and concepts, some of them innate.",
+      "tagline": {
+        "text": "Reason, not only the senses, is a key source of what we know.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+            "section": "1. Introduction"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+            "section": "1.1 Rationalism"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "'Continental Rationalists' is a later grouping, first applied by Kant, and SEP says such schemes should be used only with great caution.",
       "questions": [
         "Is there anything I can know with no room at all for doubt?",
@@ -2103,6 +2265,20 @@
       "dateRange": "17th–18th centuries",
       "era": "Early modern",
       "description": "The view that all our concepts and knowledge come ultimately from experience, not innate ideas.",
+      "tagline": {
+        "text": "All our ideas and knowledge come, in the end, from experience.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+            "section": "1. Introduction"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+            "section": "1.2 Empiricism"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "'British Empiricists' is likewise a later historians' grouping (SEP).",
       "questions": [
         "If I wasn't born with ideas, where does everything in my mind come from?",
@@ -2278,6 +2454,24 @@
       "dateRange": "18th century (roots in the 16th–17th-century scientific revolution; Kant's Critique 1781; ends roughly with the 1790s)",
       "era": "Early modern",
       "description": "A movement of confidence in reason and science to question traditional authority, ending in Kant's critical philosophy, which tested what reason itself can know.",
+      "tagline": {
+        "text": "Trust in reason and science to question authority, ending in Kant's limits of reason.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/enlightenment/",
+            "section": "intro"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/kant/",
+            "section": "2.1 The crisis of the Enlightenment"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/kant/",
+            "section": "2.2 Kant’s Copernican revolution in philosophy"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "A period and movement, not a school; it spans rationalists, empiricists and skeptics. Kant is merged in here (decision L17); SEP's Kant entry places his Critique at the Enlightenment's end (§2.1), while IEP's German Idealism entry names him among that movement's most famous figures.",
       "questions": [
         "Why should I let a church, a king or tradition tell me what to believe, if I can work it out for myself?",
@@ -2495,6 +2689,16 @@
       "dateRange": "1780s–1840s",
       "era": "late 18th–19th century",
       "description": "Fichte, Schelling and Hegel radicalised Kant into absolute idealism, building complete systems derived from a single first principle, the absolute.",
+      "tagline": {
+        "text": "Systems after Kant that derive everything from one first principle, the absolute.",
+        "sources": [
+          {
+            "url": "https://iep.utm.edu/germidea/",
+            "section": "intro"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": null,
       "questions": [
         "Is there anything out there that my mind could never, even in principle, know?",
@@ -2659,6 +2863,20 @@
       "dateRange": "1789 (Bentham's Principles) – late 19th century (Sidgwick); refined since, often under the name consequentialism",
       "era": "19th century",
       "description": "The moral theory that right actions are those that produce the greatest happiness.",
+      "tagline": {
+        "text": "The right action is the one that produces the greatest happiness.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
+            "section": "intro"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
+            "section": "2.3 John Stuart Mill"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": null,
       "questions": [
         "Is an action right or wrong simply because of what it leads to?",
@@ -2859,6 +3077,20 @@
       "dateRange": "1840s onward",
       "era": "19th century",
       "description": "Marx's materialist theory of history and critique of capitalism: alienation, class struggle, ideology and the case for communism.",
+      "tagline": {
+        "text": "A materialist theory of history and a critique of capitalism.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/marx/",
+            "section": "intro"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/marx/",
+            "section": "1.2 Religion and Work"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "Also a political movement; here only the philosophical tradition.",
       "questions": [
         "Why does my work so often feel as if it isn't really mine?",
@@ -3049,6 +3281,24 @@
       "dateRange": "roots in the 19th century (Kierkegaard, Nietzsche); movement in mid-20th-century France",
       "era": "19th–20th century",
       "description": "Philosophy that starts from concrete, first-person human existence: freedom, anxiety, authenticity and the search for meaning. It includes Camus's philosophy of the absurd, though Camus rejected the existentialist label.",
+      "tagline": {
+        "text": "Philosophy that starts from the single person who must choose how to live.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/existentialism/",
+            "section": "intro"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/existentialism/",
+            "section": "4. Freedom"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/existentialism/",
+            "section": "4.1 The Anxiety of Choice"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "Absurdism is folded in: SEP files Camus's 'absurdity' among existentialist themes (§5.1), but Camus denied being an existentialist (SEP Camus, §1). SEP treats Kierkegaard and Nietzsche as nineteenth-century pioneers who laid its groundwork (intro).",
       "questions": [
         "If nothing hands me a purpose, how do I live?",
@@ -3243,6 +3493,20 @@
       "dateRange": "c. 1870 (Metaphysical Club, Harvard) – present",
       "era": "19th–20th century",
       "description": "An American philosophy that clarifies ideas by their practical consequences and treats inquiry and truth in terms of action.",
+      "tagline": {
+        "text": "Make ideas clear by asking what practical difference they make.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/pragmatism/",
+            "section": "2. The Meaning of Pragmatism"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/pragmatism/",
+            "section": "2.1 Peirce: The Pragmatic Maxim"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": null,
       "questions": [
         "What difference would it actually make if this idea were true?",
@@ -3428,6 +3692,20 @@
       "dateRange": "early 20th century – present",
       "era": "20th century",
       "description": "The careful description of experience as it is lived from the first-person point of view, founded by Husserl.",
+      "tagline": {
+        "text": "Careful description of experience as we live it, from the first-person view.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/phenomenology/",
+            "section": "intro"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/phenomenology/",
+            "section": "1. What is Phenomenology?"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "Both a method and a movement. It overlaps with existentialism: Sartre's phenomenology became the foundation of his existentialism, Heidegger's Being and Time gives an existential reading of our ways of being, and Merleau-Ponty developed an embodied, existential form of phenomenology.",
       "questions": [
         "What is it actually like to see, remember or feel something, described from the inside?",
@@ -3620,6 +3898,16 @@
       "dateRange": "c. 1900 – present",
       "era": "20th century",
       "description": "Philosophy pursued through logical and linguistic analysis and clear argument, dominant in British and American universities; its logical positivist phase held that, apart from the truths of logic and mathematics, only statements that can be tested by experience are meaningful.",
+      "tagline": {
+        "text": "Philosophy done through logical and linguistic analysis and clear argument.",
+        "sources": [
+          {
+            "url": "https://iep.utm.edu/analytic-philosophy/",
+            "section": "intro"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "A broad tradition with several phases (IEP counts five); Logical Positivism (Vienna Circle, 1924–1936) is folded in as its third phase, as IEP treats it (decision L17). Whether Frege counts as a founder is contested (IEP §2c).",
       "questions": [
         "What exactly do my words mean, and can getting clear about that make old philosophical puzzles disappear?",
@@ -3810,6 +4098,20 @@
       "dateRange": "1923 (Institute for Social Research founded) – present",
       "era": "20th century",
       "description": "Western Marxist social philosophy that joins philosophy with social science to criticise domination and aim at emancipation.",
+      "tagline": {
+        "text": "Marxist social philosophy that criticises domination and aims at emancipation.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/critical-theory/",
+            "section": "intro"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/critical-theory/",
+            "section": "1.1 Origins and Generations"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "SEP notes a narrow sense (the Frankfurt School, used here) and broader senses of 'critical theory'.",
       "questions": [
         "Why do people accept social conditions that work against their own interests?",
@@ -3999,6 +4301,20 @@
       "dateRange": "1960s onward (France)",
       "era": "20th century",
       "description": "French thought that grew out of structuralism to question stable meaning, the self-present subject and claims to foundations, through deconstruction and genealogy.",
+      "tagline": {
+        "text": "French thought that questions stable meaning, the self-present subject and foundations.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/postmodernism/",
+            "section": "intro"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/postmodernism/",
+            "section": "1. Precursors"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "This app draws on the SEP entries on Postmodernism, Foucault and Derrida. The Postmodernism entry says its French thinkers are often called 'poststructuralists', though individually they may resist common affiliation, and the Foucault entry links him with both the structuralist and post-structuralist movements.",
       "questions": [
         "Am I really the author of my own thoughts, or am I shaped by structures I never chose?",
@@ -4186,6 +4502,20 @@
       "dateRange": "1970s – present as an academic field (forerunners: Wollstonecraft, Beauvoir 1949)",
       "era": "20th–21st century",
       "description": "Philosophy that criticises institutions and theories that have favoured men and rethinks sex, gender, knowledge and ethics.",
+      "tagline": {
+        "text": "Philosophy that challenges theories favouring men and rethinks sex and gender.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/feminist-philosophy/",
+            "section": "1. What is Feminism?"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/feminist-philosophy/",
+            "section": "3. Approaches to Feminism"
+          }
+        ],
+        "revised": "2026-11-13b"
+      },
       "debatable": "Not a single school but a field that works within every tradition (analytic, continental, pragmatist; SEP §3).",
       "questions": [
         "Why have so many institutions and ideas favoured men, and what would a just society look like?",

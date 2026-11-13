@@ -51,14 +51,15 @@
           "intro"
         ]
       }
-    ]
+    ],
+    "tagline": "The first Greek thinkers to explain nature by reasoned inquiry instead of myth."
   },
   {
     "id": "socrates-plato",
     "name": "Socrates and Plato",
     "era": "Ancient",
     "date_range": "late 5th–4th century BCE",
-    "description": "Socrates' questioning method and Plato's dialogues, including the Forms, which SEP calls the most basic distinction in Plato's thought.",
+    "description": "Socrates' questioning method and Plato's dialogues, including the split between the many things we observe and the one Form each shares in, which SEP calls the most fundamental distinction in Plato's philosophy.",
     "debatable": "The owner's sample had one 'Classical Greek' node; it is split here into Socrates/Plato and Aristotle. SEP gives Plato's birth as 429? (Plato entry, intro) and 424/3 (Socrates entry, section 'Plato (424/3–347)').",
     "thinkers": [
       {
@@ -96,7 +97,8 @@
           "Plato (424/3–347)"
         ]
       }
-    ]
+    ],
+    "tagline": "Socrates' questioning and Plato's dialogues on the Forms behind what we see."
   },
   {
     "id": "aristotle",
@@ -133,14 +135,15 @@
           "11. Living Beings"
         ]
       }
-    ]
+    ],
+    "tagline": "Aristotle's wide-ranging study of logic, nature, ethics and politics, at the Lyceum."
   },
   {
     "id": "epicureanism",
     "name": "Epicureanism",
     "era": "Ancient (Hellenistic)",
-    "date_range": "late 4th century BCE – 1st century BCE (Lucretius, mid-90s to mid-50s BCE; Philodemus, ca. 110–ca. 30 BCE)",
-    "description": "Atomist materialism joined to an ethics of tranquil pleasure and freedom from fear of death and the gods.",
+    "date_range": "late 4th century BCE onward (featured thinkers to the 1st century BCE: Lucretius, mid-90s to mid-50s BCE; Philodemus, ca. 110–ca. 30 BCE)",
+    "description": "Atomist materialism joined to an ethics of tranquil pleasure, freedom from fear of death, and gods who are unconcerned with human affairs.",
     "debatable": null,
     "thinkers": [
       {
@@ -184,13 +187,14 @@
           "intro"
         ]
       }
-    ]
+    ],
+    "tagline": "A world made of atoms, and a calm life of pleasure without fear of death."
   },
   {
     "id": "stoicism",
     "name": "Stoicism",
     "era": "Ancient (Hellenistic and Roman)",
-    "date_range": "c. 300 BCE – 2nd century CE",
+    "date_range": "c. 300 BCE onward (major figures through the 2nd century CE)",
     "description": "A system of physics, logic and ethics with interlocking parts, teaching that only virtue is good and that living virtuously means living in agreement with nature.",
     "debatable": null,
     "thinkers": [
@@ -236,7 +240,8 @@
           "4.2 Virtue"
         ]
       }
-    ]
+    ],
+    "tagline": "Live in agreement with nature, because virtue is the only good."
   },
   {
     "id": "skepticism",
@@ -287,7 +292,8 @@
           "intro"
         ]
       }
-    ]
+    ],
+    "tagline": "Suspend judgment and keep investigating, rather than claim how things really are."
   },
   {
     "id": "neoplatonism",
@@ -336,7 +342,8 @@
           "1. Life and Writings"
         ]
       }
-    ]
+    ],
+    "tagline": "A late Platonism that derives all of reality from one first principle, the One."
   },
   {
     "id": "patristic",
@@ -409,13 +416,14 @@
           "intro"
         ]
       }
-    ]
+    ],
+    "tagline": "Early Christian thinkers who used Greek philosophy, above all Platonism, for faith."
   },
   {
     "id": "scholasticism",
     "name": "Scholasticism",
     "era": "Medieval",
-    "date_range": "12th century – around 1700",
+    "date_range": "flourishing from the 12th-century Paris schools onward, to perhaps around 1700",
     "description": "University philosophy of the Latin Middle Ages, reconciling Aristotle's newly recovered works with Christian theology by commentary and disputation.",
     "debatable": "SEP ties it to a method: Aquinas epitomises the scholastic method of the newly founded universities. Its end date is open; SEP calls around 1700 a plausible end for medieval philosophy, and this style of university philosophy ran on for at least three centuries after the mid-1300s.",
     "thinkers": [
@@ -465,13 +473,14 @@
           "1.1 Life"
         ]
       }
-    ]
+    ],
+    "tagline": "Medieval university philosophy that joined Aristotle with Christian theology."
   },
   {
     "id": "renaissance",
     "name": "Renaissance Philosophy",
     "era": "Renaissance",
-    "date_range": "14th–16th century",
+    "date_range": "roughly mid-14th to early 17th century",
     "description": "A return to classical Greek and Roman sources and to ethics and eloquence, with humanists setting themselves against scholastic logic and university learning.",
     "debatable": "IEP's 'Renaissance Philosophy' has humanism as one current beside Renaissance Aristotelianism, Platonism (Ficino) and revived Hellenistic schools; the node covers them all.",
     "thinkers": [
@@ -519,7 +528,8 @@
           "intro"
         ]
       }
-    ]
+    ],
+    "tagline": "A return to Greek and Roman sources, ethics and eloquence, against scholastic logic."
   },
   {
     "id": "rationalism",
@@ -565,7 +575,8 @@
           "2. Philosophical Development"
         ]
       }
-    ]
+    ],
+    "tagline": "Reason, not only the senses, is a key source of what we know."
   },
   {
     "id": "empiricism",
@@ -608,7 +619,8 @@
           "2.3 Epistemology"
         ]
       }
-    ]
+    ],
+    "tagline": "All our ideas and knowledge come, in the end, from experience."
   },
   {
     "id": "enlightenment",
@@ -676,7 +688,8 @@
           "intro"
         ]
       }
-    ]
+    ],
+    "tagline": "Trust in reason and science to question authority, ending in Kant's limits of reason."
   },
   {
     "id": "german-idealism",
@@ -718,7 +731,8 @@
           "1. Life, Work, and Influence"
         ]
       }
-    ]
+    ],
+    "tagline": "Systems after Kant that derive everything from one first principle, the absolute."
   },
   {
     "id": "utilitarianism",
@@ -772,7 +786,8 @@
           "intro"
         ]
       }
-    ]
+    ],
+    "tagline": "The right action is the one that produces the greatest happiness."
   },
   {
     "id": "marxism",
@@ -815,7 +830,8 @@
           "1. Life, Work, and Influence"
         ]
       }
-    ]
+    ],
+    "tagline": "A materialist theory of history and a critique of capitalism."
   },
   {
     "id": "existentialism",
@@ -871,7 +887,8 @@
           "1. The Paradoxes of Camus’s Absurdist Philosophy"
         ]
       }
-    ]
+    ],
+    "tagline": "Philosophy that starts from the single person who must choose how to live."
   },
   {
     "id": "pragmatism",
@@ -915,7 +932,8 @@
           "4. Pragmatist Epistemology"
         ]
       }
-    ]
+    ],
+    "tagline": "Make ideas clear by asking what practical difference they make."
   },
   {
     "id": "phenomenology",
@@ -966,7 +984,8 @@
           "3. The transcendental turn: Epoché, phenomenological reduction, and transcendental idealism"
         ]
       }
-    ]
+    ],
+    "tagline": "Careful description of experience as we live it, from the first-person view."
   },
   {
     "id": "analytic",
@@ -1028,7 +1047,8 @@
           "3.2 The Analytic/Synthetic Distinction and the Relative A Priori"
         ]
       }
-    ]
+    ],
+    "tagline": "Philosophy done through logical and linguistic analysis and clear argument."
   },
   {
     "id": "critical-theory",
@@ -1080,7 +1100,8 @@
           "1. Critical Theory: Historical and Philosophical Background"
         ]
       }
-    ]
+    ],
+    "tagline": "Marxist social philosophy that criticises domination and aims at emancipation."
   },
   {
     "id": "post-structuralism",
@@ -1133,7 +1154,8 @@
           "3. Basic Argumentation and its Implications: Time, Hearing-Oneself-Speak, the Secret, and Sovereignty"
         ]
       }
-    ]
+    ],
+    "tagline": "French thought that questions stable meaning, the self-present subject and foundations."
   },
   {
     "id": "feminist-philosophy",
@@ -1176,6 +1198,7 @@
           "intro"
         ]
       }
-    ]
+    ],
+    "tagline": "Philosophy that challenges theories favouring men and rethinks sex and gender."
   }
 ]

@@ -2,6 +2,20 @@
   {
     "id": "presocratics",
     "name": "Presocratics",
+    "tagline": {
+      "text": "The first Greek thinkers to explain nature by reasoned inquiry instead of myth.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/presocratics/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/presocratics/",
+          "section": "1. Who Were the Presocratic Philosophers?"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "Ancient",
     "date_range": "6th–5th century BCE",
     "description": "The first Greek thinkers to explain the natural world and its principles by reasoned inquiry rather than myth.",
@@ -171,7 +185,7 @@
         "neighbour_name": "Socrates and Plato",
         "direction": "in",
         "kind": "built_on",
-        "label": "the questions it inherited",
+        "label": "the first philosophical questions",
         "reason": "The Presocratics' questions and answers were the foundation on which philosophy as Plato and Aristotle defined it was built.",
         "sources": [
           {
@@ -183,14 +197,14 @@
             "section": "6. Other Eleatics: Zeno and Melissus"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "aristotle",
         "neighbour_name": "Aristotle and the Peripatetics",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "materialism it rejected",
+        "label": "early materialism rejected",
         "reason": "Aristotle saw the Presocratics as his predecessors but judged them unsuccessful, and rejected their materialist accounts of living things.",
         "sources": [
           {
@@ -201,14 +215,15 @@
             "url": "https://plato.stanford.edu/entries/presocratics/",
             "section": "1. Who Were the Presocratic Philosophers?"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "epicureanism",
         "neighbour_name": "Epicureanism",
         "direction": "in",
         "kind": "built_on",
-        "label": "the atoms it borrowed",
+        "label": "Democritus's atoms",
         "reason": "Epicurus inherited his atomist physics from the earlier atomists, above all Democritus, and studied under a Democritean.",
         "sources": [
           {
@@ -224,7 +239,7 @@
             "section": "8. Presocratic Atomism"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       }
     ],
     "thinkers": [
@@ -493,7 +508,7 @@
           }
         ],
         "study_prompt": {
-          "text": "Teach me Parmenides of Elea as a short Socratic module. Start with a poet-philosopher from Elea in southern Italy, born around 510 BCE, then his three key ideas: the two routes: what is and what is not; what truly is cannot be born, perish or change; reason over the senses, knowledge over belief. Ask me one question at a time and finish with a five-question quiz.",
+          "text": "Teach me Parmenides of Elea as a short Socratic module. Start with a poet-philosopher from Elea in southern Italy, born around 510 BCE, then his three key ideas: the two routes, what is and what is not; what truly is cannot be born or perish, and is whole, unshaken and complete; reason over the senses, knowledge over belief. Ask me one question at a time and finish with a five-question quiz.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/presocratics/",
@@ -503,7 +518,8 @@
               "url": "https://plato.stanford.edu/entries/parmenides/",
               "section": "intro"
             }
-          ]
+          ],
+          "revised": "2026-11-13b"
         }
       },
       {
@@ -615,9 +631,27 @@
   {
     "id": "socrates-plato",
     "name": "Socrates and Plato",
+    "tagline": {
+      "text": "Socrates' questioning and Plato's dialogues on the Forms behind what we see.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/plato/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/plato/",
+          "section": "1. Plato’s central doctrines"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/socrates/",
+          "section": "2. The Socratic problem: Who was Socrates really?"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "Ancient",
     "date_range": "late 5th–4th century BCE",
-    "description": "Socrates' questioning method and Plato's dialogues, including the Forms, which SEP calls the most basic distinction in Plato's thought.",
+    "description": "Socrates' questioning method and Plato's dialogues, including the split between the many things we observe and the one Form each shares in, which SEP calls the most fundamental distinction in Plato's philosophy.",
     "debatable": "The owner's sample had one 'Classical Greek' node; it is split here into Socrates/Plato and Aristotle. SEP gives Plato's birth as 429? (Plato entry, intro) and 424/3 (Socrates entry, section 'Plato (424/3–347)').",
     "questions": [
       {
@@ -724,7 +758,7 @@
       },
       {
         "title": "Who was the real Socrates?",
-        "text": "Socrates wrote nothing, so we meet him through others, mainly Plato and Xenophon, whose portraits differ a lot. Untangling the historical man from these portraits is called the Socratic problem, and it may never be solved.",
+        "text": "Socrates wrote nothing, so we meet him through others, mainly Plato, Xenophon and the comic playwright Aristophanes, whose portraits differ a lot. Untangling the historical man from these portraits is called the Socratic problem, and it may never be solved.",
         "thinkers": [
           "Socrates",
           "Xenophon",
@@ -748,7 +782,7 @@
             "section": "intro"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       }
     ],
     "reacted_against": {
@@ -771,7 +805,7 @@
         "neighbour_name": "Presocratics",
         "direction": "out",
         "kind": "built_on",
-        "label": "the questions it inherited",
+        "label": "the first philosophical questions",
         "reason": "The Presocratics' questions and answers were the foundation on which philosophy as Plato and Aristotle defined it was built.",
         "sources": [
           {
@@ -783,14 +817,14 @@
             "section": "6. Other Eleatics: Zeno and Melissus"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "aristotle",
         "neighbour_name": "Aristotle and the Peripatetics",
         "direction": "in",
         "kind": "built_on_then_pushed_against",
-        "label": "teacher, then target",
+        "label": "Academy student, then Forms critic",
         "reason": "Aristotle studied in Plato's Academy before founding the Lyceum. Then: Aristotle criticised Plato's theory of Forms (it cannot explain change) and opposed Platonic dualism of soul and body.",
         "sources": [
           {
@@ -805,14 +839,15 @@
             "url": "https://plato.stanford.edu/entries/aristotle/",
             "section": "11. Living Beings"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "epicureanism",
         "neighbour_name": "Epicureanism",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "Forms it threw out",
+        "label": "Platonic Forms dropped",
         "reason": "Epicurus' materialism dispensed with Plato's transcendent Forms and denied that the soul survives death.",
         "sources": [
           {
@@ -823,14 +858,15 @@
             "url": "https://plato.stanford.edu/entries/epicurus/",
             "section": "4. Psychology and Ethics"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "stoicism",
         "neighbour_name": "Stoicism",
         "direction": "in",
         "kind": "built_on",
-        "label": "Socrates as model",
+        "label": "Socratic dialogues as inspiration",
         "reason": "Zeno read Socratic dialogues and was influenced by Plato's Academy; Stoic psychology returns to Socrates' intellectualism.",
         "sources": [
           {
@@ -841,7 +877,8 @@
             "url": "https://plato.stanford.edu/entries/stoicism/",
             "section": "2.9 Psychology"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "skepticism",
@@ -863,7 +900,7 @@
         "neighbour_name": "Neoplatonism",
         "direction": "in",
         "kind": "built_on",
-        "label": "Plato as master",
+        "label": "Plato as highest authority",
         "reason": "The Neoplatonists called themselves Platonists and held Plato's views above all others; Plotinus took Plato as having laid the fundamentals.",
         "sources": [
           {
@@ -874,14 +911,15 @@
             "url": "https://plato.stanford.edu/entries/plotinus/",
             "section": "1. Life and Writings"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       }
     ],
     "thinkers": [
       {
         "name": "Socrates",
         "dates": "469–399 BCE",
-        "summary": "Socrates (469–399 BCE) wrote nothing, yet he changed how philosophy itself is understood. He spent his days in the Athenian marketplace, questioning anyone who would talk about courage, love, reverence, moderation and the state of their soul, and he refused to take money for it. Athens executed him on a charge of irreverence toward the gods.",
+        "summary": "Socrates (469–399 BCE) wrote nothing, yet he is considered one of the few philosophers who changed how philosophy itself was conceived. He spent his days in the Athenian marketplace, questioning anyone who would talk about courage, love, reverence, moderation and the state of their soul, and he refused to take money for it. Athens executed him on a charge of irreverence toward the gods.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/socrates/",
@@ -947,7 +985,7 @@
           ],
           "revised": "2026-11-13"
         },
-        "revised": "2026-11-13",
+        "revised": "2026-11-13b",
         "revised_fields": [
           "summary"
         ]
@@ -1058,7 +1096,7 @@
           }
         ],
         "study_prompt": {
-          "text": "Teach me Plato as a short Socratic module. Start with the Athenian writer of dialogues, 429?–347 BCE, who turned philosophy into a systematic discipline, then his three key ideas: the Forms behind the world we see; the soul as distinct from the body, and recollection; reforming the city, from the Republic to the Laws. Ask me one question at a time and finish with a five-question quiz.",
+          "text": "Teach me Plato as a short Socratic module. Start with the Athenian writer of dialogues, 429?–347 BCE, whose conception of philosophy as a rigorous, systematic discipline can be called his invention, then his three key ideas: the Forms behind the world we see; the soul as distinct from the body, and recollection; reforming the city, from the Republic to the Laws. Ask me one question at a time and finish with a five-question quiz.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/plato/",
@@ -1077,7 +1115,7 @@
               "section": "10. Does Plato change his mind about politics?"
             }
           ],
-          "revised": "2026-11-13"
+          "revised": "2026-11-13b"
         },
         "revised": "2026-11-13",
         "revised_fields": [
@@ -1111,7 +1149,7 @@
         "section": "Plato (424/3–347)"
       }
     ],
-    "revised": "2026-11-13",
+    "revised": "2026-11-13b",
     "revised_fields": [
       "date_range",
       "description",
@@ -1121,6 +1159,20 @@
   {
     "id": "aristotle",
     "name": "Aristotle and the Peripatetics",
+    "tagline": {
+      "text": "Aristotle's wide-ranging study of logic, nature, ethics and politics, at the Lyceum.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/aristotle/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/aristotle/",
+          "section": "1. Aristotle’s Life"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "Ancient",
     "date_range": "4th century BCE onward (the Lyceum)",
     "description": "Aristotle's wide-ranging philosophy, from logic and metaphysics to ethics, politics and the study of plants and animals, taught at his school, the Lyceum.",
@@ -1261,7 +1313,7 @@
         "neighbour_name": "Socrates and Plato",
         "direction": "out",
         "kind": "built_on_then_pushed_against",
-        "label": "teacher, then target",
+        "label": "Academy student, then Forms critic",
         "reason": "Aristotle studied in Plato's Academy before founding the Lyceum. Then: Aristotle criticised Plato's theory of Forms (it cannot explain change) and opposed Platonic dualism of soul and body.",
         "sources": [
           {
@@ -1276,14 +1328,15 @@
             "url": "https://plato.stanford.edu/entries/aristotle/",
             "section": "11. Living Beings"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "presocratics",
         "neighbour_name": "Presocratics",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "materialism it rejected",
+        "label": "early materialism rejected",
         "reason": "Aristotle saw the Presocratics as his predecessors but judged them unsuccessful, and rejected their materialist accounts of living things.",
         "sources": [
           {
@@ -1294,28 +1347,30 @@
             "url": "https://plato.stanford.edu/entries/presocratics/",
             "section": "1. Who Were the Presocratic Philosophers?"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "stoicism",
         "neighbour_name": "Stoicism",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "the divided soul rejected",
+        "label": "non-rational soul rejected",
         "reason": "Stoic psychology rejects the Platonic-Aristotelian idea of non-rational parts of the mature soul.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/stoicism/",
             "section": "2.9 Psychology"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "neoplatonism",
         "neighbour_name": "Neoplatonism",
         "direction": "in",
         "kind": "built_on",
-        "label": "texts it worked from",
+        "label": "Aristotle's Metaphysics as starting point",
         "reason": "Plotinus used passages of Aristotle's Metaphysics as starting points, and his sessions read commentaries on Plato and Aristotle.",
         "sources": [
           {
@@ -1327,14 +1382,14 @@
             "section": "1. Life and Writings"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "scholasticism",
         "neighbour_name": "Scholasticism",
         "direction": "in",
         "kind": "built_on",
-        "label": "the rediscovered Aristotle",
+        "label": "Aristotle rediscovered",
         "reason": "Thirteenth-century university philosophers were enthused by newly available Aristotle; Aquinas worked to write commentaries on all of Aristotle's principal works.",
         "sources": [
           {
@@ -1350,7 +1405,7 @@
             "section": "1.1 Life"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       }
     ],
     "thinkers": [
@@ -1587,9 +1642,27 @@
   {
     "id": "epicureanism",
     "name": "Epicureanism",
+    "tagline": {
+      "text": "A world made of atoms, and a calm life of pleasure without fear of death.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/epicurus/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/epicurus/",
+          "section": "3. Physical Theory"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/epicurus/",
+          "section": "4. Psychology and Ethics"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "Ancient (Hellenistic)",
-    "date_range": "late 4th century BCE – 1st century BCE (Lucretius, mid-90s to mid-50s BCE; Philodemus, ca. 110–ca. 30 BCE)",
-    "description": "Atomist materialism joined to an ethics of tranquil pleasure and freedom from fear of death and the gods.",
+    "date_range": "late 4th century BCE onward (featured thinkers to the 1st century BCE: Lucretius, mid-90s to mid-50s BCE; Philodemus, ca. 110–ca. 30 BCE)",
+    "description": "Atomist materialism joined to an ethics of tranquil pleasure, freedom from fear of death, and gods who are unconcerned with human affairs.",
     "debatable": null,
     "questions": [
       {
@@ -1760,7 +1833,7 @@
         "neighbour_name": "Presocratics",
         "direction": "out",
         "kind": "built_on",
-        "label": "the atoms it borrowed",
+        "label": "Democritus's atoms",
         "reason": "Epicurus inherited his atomist physics from the earlier atomists, above all Democritus, and studied under a Democritean.",
         "sources": [
           {
@@ -1776,14 +1849,14 @@
             "section": "8. Presocratic Atomism"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "socrates-plato",
         "neighbour_name": "Socrates and Plato",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "Forms it threw out",
+        "label": "Platonic Forms dropped",
         "reason": "Epicurus' materialism dispensed with Plato's transcendent Forms and denied that the soul survives death.",
         "sources": [
           {
@@ -1794,49 +1867,53 @@
             "url": "https://plato.stanford.edu/entries/epicurus/",
             "section": "4. Psychology and Ethics"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "skepticism",
         "neighbour_name": "Ancient Skepticism",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "truth test it doubted",
+        "label": "criterion of truth doubted",
         "reason": "The Academics questioned the Epicurean claim to a criterion of truth and defended skeptical action against Epicurean critics.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
             "section": "3.1 Arcesilaus"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "neoplatonism",
         "neighbour_name": "Neoplatonism",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "materialism it refused",
+        "label": "Epicureanism rejected outright",
         "reason": "Neoplatonists absorbed almost the whole Greek tradition except Epicureanism, which they rejected outright.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/neoplatonism/",
             "section": "intro"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "renaissance",
         "neighbour_name": "Renaissance Philosophy",
         "direction": "in",
         "kind": "built_on",
-        "label": "Epicurus rediscovered",
+        "label": "Epicureanism studied anew",
         "reason": "The Renaissance's renewed study of Epicureanism (with other Hellenistic schools) loosened Aristotle's hold.",
         "sources": [
           {
             "url": "https://iep.utm.edu/renaissa/",
             "section": "intro"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       }
     ],
     "thinkers": [
@@ -1945,7 +2022,7 @@
           }
         ],
         "study_prompt": {
-          "text": "Teach me Philodemus as a short Socratic module. Start with an Epicurean teacher and poet in 1st-century BCE Italy whose books survived at Herculaneum, then his three key ideas: natural anger versus destructive rage; frank criticism as care for the soul; enjoying the arts without being swallowed by them. Ask me one question at a time and finish with a five-question quiz.",
+          "text": "Teach me Philodemus as a short Socratic module. Start with an Epicurean philosopher and poet (ca. 110–ca. 30 BCE) who moved to Italy and whose books survived at Herculaneum, then his three key ideas: natural anger versus destructive rage; frank criticism as care for the soul; enjoying the arts without being swallowed by them. Ask me one question at a time and finish with a five-question quiz.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/philodemus/",
@@ -1955,7 +2032,8 @@
               "url": "https://plato.stanford.edu/entries/philodemus/",
               "section": "2.2.5 Philodemus’ philosophy"
             }
-          ]
+          ],
+          "revised": "2026-11-13b"
         },
         "revised": "2026-11-13",
         "revised_fields": [
@@ -2071,7 +2149,7 @@
         "section": "intro"
       }
     ],
-    "revised": "2026-11-13",
+    "revised": "2026-11-13b",
     "revised_fields": [
       "date_range"
     ]
@@ -2079,8 +2157,22 @@
   {
     "id": "stoicism",
     "name": "Stoicism",
+    "tagline": {
+      "text": "Live in agreement with nature, because virtue is the only good.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/stoicism/",
+          "section": "4.2 Virtue"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/stoicism/",
+          "section": "4.3 Indifferents"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "Ancient (Hellenistic and Roman)",
-    "date_range": "c. 300 BCE – 2nd century CE",
+    "date_range": "c. 300 BCE onward (major figures through the 2nd century CE)",
     "description": "A system of physics, logic and ethics with interlocking parts, teaching that only virtue is good and that living virtuously means living in agreement with nature.",
     "debatable": null,
     "questions": [
@@ -2245,7 +2337,7 @@
         "neighbour_name": "Socrates and Plato",
         "direction": "out",
         "kind": "built_on",
-        "label": "Socrates as model",
+        "label": "Socratic dialogues as inspiration",
         "reason": "Zeno read Socratic dialogues and was influenced by Plato's Academy; Stoic psychology returns to Socrates' intellectualism.",
         "sources": [
           {
@@ -2256,28 +2348,30 @@
             "url": "https://plato.stanford.edu/entries/stoicism/",
             "section": "2.9 Psychology"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "aristotle",
         "neighbour_name": "Aristotle and the Peripatetics",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "the divided soul rejected",
+        "label": "non-rational soul rejected",
         "reason": "Stoic psychology rejects the Platonic-Aristotelian idea of non-rational parts of the mature soul.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/stoicism/",
             "section": "2.9 Psychology"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "skepticism",
         "neighbour_name": "Ancient Skepticism",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "certainty it attacked",
+        "label": "Stoic certainty attacked",
         "reason": "Academic skeptics Arcesilaus and Carneades attacked the Stoic criterion of truth and Stoic epistemology.",
         "sources": [
           {
@@ -2293,7 +2387,7 @@
             "section": "1.1 The School and its History"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "renaissance",
@@ -2319,14 +2413,15 @@
         "neighbour_name": "Early Christian Philosophy (Patristic)",
         "direction": "in",
         "kind": "built_on",
-        "label": "Stoic ethics taken up",
+        "label": "Stoic elements taken up",
         "reason": "Christian writers took up some elements of Stoicism.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/stoicism/",
             "section": "5.2 On Christian Writers"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       }
     ],
     "thinkers": [
@@ -2581,7 +2676,7 @@
       {
         "name": "Epictetus",
         "dates": "died around 135 CE",
-        "summary": "Epictetus was born in the 50s CE in Hierapolis and spent part of his life as the slave of Epaphroditus, an administrator at Nero's court. After gaining his freedom he lectured on his own, but was forced to leave Rome, presumably under Domitian's edict of 89 banning philosophers from Italy. He set up his own school at Nicopolis in Greece and taught there until his death around 135. The historian Arrian of Nicomedia wrote up his teaching as the Discourses.",
+        "summary": "Epictetus was born in the 50s CE in Hierapolis and spent part of his life as the slave of Epaphroditus, an administrator at Nero's court. After gaining his freedom he lectured on his own, but was forced to leave Rome, presumably under Domitian's edict of 89 banning philosophers from Italy. He set up his own school at Nicopolis in Greece and taught there until his death around 135. According to their preface, the Discourses were written up by the historian Arrian of Nicomedia, though a few scholars think Epictetus composed them himself.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/epictetus/",
@@ -2644,7 +2739,7 @@
           ],
           "revised": "2026-11-13"
         },
-        "revised": "2026-11-13",
+        "revised": "2026-11-13b",
         "revised_fields": [
           "summary"
         ]
@@ -2754,7 +2849,7 @@
         "section": "4.2 Virtue"
       }
     ],
-    "revised": "2026-11-13",
+    "revised": "2026-11-13b",
     "revised_fields": [
       "description"
     ]
@@ -2762,6 +2857,20 @@
   {
     "id": "skepticism",
     "name": "Ancient Skepticism",
+    "tagline": {
+      "text": "Suspend judgment and keep investigating, rather than claim how things really are.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
+          "section": "3.1 Arcesilaus"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
+          "section": "4.4 Sextus Empiricus"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "Ancient (Hellenistic and Roman)",
     "date_range": "3rd century BCE – 2nd century CE",
     "description": "Academic and Pyrrhonian skeptics who suspended judgment and kept investigating, rather than asserting how things really are.",
@@ -2953,7 +3062,7 @@
         "neighbour_name": "Stoicism",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "certainty it attacked",
+        "label": "Stoic certainty attacked",
         "reason": "Academic skeptics Arcesilaus and Carneades attacked the Stoic criterion of truth and Stoic epistemology.",
         "sources": [
           {
@@ -2969,28 +3078,29 @@
             "section": "1.1 The School and its History"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "epicureanism",
         "neighbour_name": "Epicureanism",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "truth test it doubted",
+        "label": "criterion of truth doubted",
         "reason": "The Academics questioned the Epicurean claim to a criterion of truth and defended skeptical action against Epicurean critics.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
             "section": "3.1 Arcesilaus"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "renaissance",
         "neighbour_name": "Renaissance Philosophy",
         "direction": "in",
         "kind": "built_on",
-        "label": "Sextus rediscovered",
+        "label": "ancient skepticism revived",
         "reason": "Renaissance skepticism was inspired by the revival of ancient Greek skepticism, notably the rediscovery of Sextus Empiricus (1562).",
         "sources": [
           {
@@ -3001,7 +3111,8 @@
             "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
             "section": "5.1 Augustine: Re-Conceiving Skepticism in a Theological Framework"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "enlightenment",
@@ -3022,14 +3133,15 @@
         "neighbour_name": "Early Christian Philosophy (Patristic)",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "knowledge defended",
+        "label": "knowledge defended against skeptics",
         "reason": "In Contra Academicos Augustine defended knowledge against the Academic skeptics.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
             "section": "5.1 Augustine: Re-Conceiving Skepticism in a Theological Framework"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       }
     ],
     "thinkers": [
@@ -3237,7 +3349,7 @@
           }
         ],
         "study_prompt": {
-          "text": "Teach me Carneades as a short Socratic module. Start with the 2nd-century BCE head of the Academy, born in Cyrene, famous for arguing both sides, then his three key ideas: the persuasive, tested in stages; arguing both sides of justice; a map of all views on life's goal. Ask me one question at a time and finish with a five-question quiz.",
+          "text": "Teach me Carneades as a short Socratic module. Start with the head of the Academy, born in Cyrene, who on an embassy to Rome is said to have argued for justice one day and against it the next, then his three key ideas: the persuasive, tested in stages; arguing both sides of justice; a map of all views on life's goal. Ask me one question at a time and finish with a five-question quiz.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/carneades/",
@@ -3251,7 +3363,8 @@
               "url": "https://plato.stanford.edu/entries/carneades/",
               "section": "3. Ethics"
             }
-          ]
+          ],
+          "revised": "2026-11-13b"
         }
       },
       {
@@ -3396,6 +3509,20 @@
   {
     "id": "neoplatonism",
     "name": "Neoplatonism",
+    "tagline": {
+      "text": "A late Platonism that derives all of reality from one first principle, the One.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/neoplatonism/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/neoplatonism/",
+          "section": "1. Historical Orientation: Antiquity"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "Late antiquity",
     "date_range": "roughly mid-3rd – mid-7th century CE",
     "description": "A late-antique Platonism deriving all reality from a single first principle, the One.",
@@ -3458,7 +3585,7 @@
       },
       {
         "title": "Unfolding in stages",
-        "text": "Reality emerges from the One in stages, not all at once: first Intellect (pure consciousness), then Soul, then the living world. Each level then turns back toward its source, a pattern they called procession and return.",
+        "text": "Reality emerges from the One as a hierarchy of levels, eternally rather than step by step in time: first Intellect (pure consciousness), then Soul, then the living world. Each level then turns back toward its source, a pattern they called procession and return.",
         "thinkers": [
           "Plotinus",
           "Proclus"
@@ -3481,7 +3608,7 @@
             "section": "3.1 Metaphysics and Theology"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "title": "Mind before matter",
@@ -3565,7 +3692,7 @@
         "neighbour_name": "Socrates and Plato",
         "direction": "out",
         "kind": "built_on",
-        "label": "Plato as master",
+        "label": "Plato as highest authority",
         "reason": "The Neoplatonists called themselves Platonists and held Plato's views above all others; Plotinus took Plato as having laid the fundamentals.",
         "sources": [
           {
@@ -3576,14 +3703,15 @@
             "url": "https://plato.stanford.edu/entries/plotinus/",
             "section": "1. Life and Writings"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "aristotle",
         "neighbour_name": "Aristotle and the Peripatetics",
         "direction": "out",
         "kind": "built_on",
-        "label": "texts it worked from",
+        "label": "Aristotle's Metaphysics as starting point",
         "reason": "Plotinus used passages of Aristotle's Metaphysics as starting points, and his sessions read commentaries on Plato and Aristotle.",
         "sources": [
           {
@@ -3595,28 +3723,29 @@
             "section": "1. Life and Writings"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "epicureanism",
         "neighbour_name": "Epicureanism",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "materialism it refused",
+        "label": "Epicureanism rejected outright",
         "reason": "Neoplatonists absorbed almost the whole Greek tradition except Epicureanism, which they rejected outright.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/neoplatonism/",
             "section": "intro"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "scholasticism",
         "neighbour_name": "Scholasticism",
         "direction": "in",
         "kind": "built_on",
-        "label": "the Platonist frame",
+        "label": "Platonist frame for Aristotle",
         "reason": "Medieval Aristotelianism was transmitted in a Platonist context; via Augustine and Pseudo-Dionysius, Neoplatonism shaped Aquinas and Scotus.",
         "sources": [
           {
@@ -3627,7 +3756,8 @@
             "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
             "section": "1.2 The Platonic Schools of Late Antiquity"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "renaissance",
@@ -3652,7 +3782,7 @@
         "neighbour_name": "Early Christian Philosophy (Patristic)",
         "direction": "in",
         "kind": "built_on",
-        "label": "Platonism for faith",
+        "label": "Platonism for Christian faith",
         "reason": "At Milan Augustine met Neoplatonically inclined Christians who showed him a philosophically informed Christianity; through him and the Greek Fathers, Neoplatonism shaped Christian theology.",
         "sources": [
           {
@@ -3664,7 +3794,7 @@
             "section": "8. Influence"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       }
     ],
     "thinkers": [
@@ -4019,6 +4149,20 @@
   {
     "id": "patristic",
     "name": "Early Christian Philosophy (Patristic)",
+    "tagline": {
+      "text": "Early Christian thinkers who used Greek philosophy, above all Platonism, for faith.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/augustine/",
+          "section": "1. Life"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/neoplatonism/",
+          "section": "8. Influence"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "Late antiquity",
     "date_range": "c. 185 – c. 525/6 CE (Origen's birth to Boethius's death)",
     "description": "The Church Fathers and their heirs, who used Greek philosophy, above all Platonism, to think through Christian faith.",
@@ -4094,7 +4238,7 @@
       },
       {
         "title": "Evil as missing goodness",
-        "text": "Evil is not a thing or substance in its own right. It is a lack or corruption of goodness, which keeps God from being its author.",
+        "text": "Evil is not a thing or substance in its own right but a lack or corruption of goodness. Everything that is real is good in its degree, because God created it.",
         "thinkers": [
           "Augustine of Hippo"
         ],
@@ -4104,7 +4248,7 @@
             "section": "7.5 Will and Evil"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "title": "Speaking of a God beyond words",
@@ -4160,7 +4304,7 @@
         "neighbour_name": "Neoplatonism",
         "direction": "out",
         "kind": "built_on",
-        "label": "Platonism for faith",
+        "label": "Platonism for Christian faith",
         "reason": "At Milan Augustine met Neoplatonically inclined Christians who showed him a philosophically informed Christianity; through him and the Greek Fathers, Neoplatonism shaped Christian theology.",
         "sources": [
           {
@@ -4172,35 +4316,37 @@
             "section": "8. Influence"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "stoicism",
         "neighbour_name": "Stoicism",
         "direction": "out",
         "kind": "built_on",
-        "label": "Stoic ethics taken up",
+        "label": "Stoic elements taken up",
         "reason": "Christian writers took up some elements of Stoicism.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/stoicism/",
             "section": "5.2 On Christian Writers"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "skepticism",
         "neighbour_name": "Ancient Skepticism",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "knowledge defended",
+        "label": "knowledge defended against skeptics",
         "reason": "In Contra Academicos Augustine defended knowledge against the Academic skeptics.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
             "section": "5.1 Augustine: Re-Conceiving Skepticism in a Theological Framework"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "scholasticism",
@@ -4459,14 +4605,14 @@
         ],
         "key_ideas": [
           {
-            "text": "Riches, status, power and pleasure are fortune's goods of little worth; the true goods are the virtues, and since he has lost none of them, his fall need not cut him off from true happiness.",
+            "text": "Riches, status, power and pleasure are fortune's goods of little worth; the true goods are the virtues and sufficiency, and since he has lost none of them, his fall need not cut him off from true happiness.",
             "sources": [
               {
                 "url": "https://plato.stanford.edu/entries/boethius/",
                 "section": "5. The Consolation of Philosophy: The Argument of Books I–V.2"
               }
             ],
-            "revised": "2026-11-13"
+            "revised": "2026-11-13b"
           },
           {
             "text": "God lives in an eternal present and knows all times at once, so his foreknowledge does not force our choices.",
@@ -4575,8 +4721,22 @@
   {
     "id": "scholasticism",
     "name": "Scholasticism",
+    "tagline": {
+      "text": "Medieval university philosophy that joined Aristotle with Christian theology.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
+          "section": "2.7 University Philosophy"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/aquinas/",
+          "section": "intro"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "Medieval",
-    "date_range": "12th century – around 1700",
+    "date_range": "flourishing from the 12th-century Paris schools onward, to perhaps around 1700",
     "description": "University philosophy of the Latin Middle Ages, reconciling Aristotle's newly recovered works with Christian theology by commentary and disputation.",
     "debatable": "SEP ties it to a method: Aquinas epitomises the scholastic method of the newly founded universities. Its end date is open; SEP calls around 1700 a plausible end for medieval philosophy, and this style of university philosophy ran on for at least three centuries after the mid-1300s.",
     "questions": [
@@ -4719,7 +4879,7 @@
       }
     ],
     "reacted_against": {
-      "text": "It answered both those who wanted no reasoning in matters of faith and those Abelard called pseudo-dialecticians, who took reason to be the final judge of everything, even matters of faith.",
+      "text": "Abelard answered both those who wanted no reasoning in matters of faith and those he called pseudo-dialecticians, who took reason to be the final judge of everything, even matters of faith.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/abelard/",
@@ -4730,7 +4890,7 @@
           "section": "2.7 University Philosophy"
         }
       ],
-      "revised": "2026-11-13"
+      "revised": "2026-11-13b"
     },
     "links": [
       {
@@ -4738,7 +4898,7 @@
         "neighbour_name": "Aristotle and the Peripatetics",
         "direction": "out",
         "kind": "built_on",
-        "label": "the rediscovered Aristotle",
+        "label": "Aristotle rediscovered",
         "reason": "Thirteenth-century university philosophers were enthused by newly available Aristotle; Aquinas worked to write commentaries on all of Aristotle's principal works.",
         "sources": [
           {
@@ -4754,14 +4914,14 @@
             "section": "1.1 Life"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "neoplatonism",
         "neighbour_name": "Neoplatonism",
         "direction": "out",
         "kind": "built_on",
-        "label": "the Platonist frame",
+        "label": "Platonist frame for Aristotle",
         "reason": "Medieval Aristotelianism was transmitted in a Platonist context; via Augustine and Pseudo-Dionysius, Neoplatonism shaped Aquinas and Scotus.",
         "sources": [
           {
@@ -4772,14 +4932,15 @@
             "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
             "section": "1.2 The Platonic Schools of Late Antiquity"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "renaissance",
         "neighbour_name": "Renaissance Philosophy",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "school logic it mocked",
+        "label": "scholastic logic condemned",
         "reason": "Petrarch set out what became the standard critique of scholastic philosophy, and fifteenth- and early sixteenth-century humanists condemned university education and scholastic logic.",
         "sources": [
           {
@@ -4787,7 +4948,7 @@
             "section": "2. Humanism"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "rationalism",
@@ -4809,14 +4970,15 @@
         "neighbour_name": "Analytic Philosophy",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "the Schoolmen's a priori",
+        "label": "the Schoolmen's a priori rejected",
         "reason": "Logical positivists (Vienna Circle): the analytic/synthetic distinction was used as a weapon against the 'substantive a priori of the Schoolmen' as well as Kant.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/vienna-circle/",
             "section": "3.2 The Analytic/Synthetic Distinction and the Relative A Priori"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "patristic",
@@ -4937,7 +5099,7 @@
           }
         ],
         "study_prompt": {
-          "text": "Teach me Peter Abelard as a short Socratic module. Start with the brilliant 12th-century Paris teacher and logician, then his three key ideas: universals are only words; intention decides moral worth; reconciling clashing authorities by analysis. Ask me one question at a time and finish with a five-question quiz.",
+          "text": "Teach me Peter Abelard as a short Socratic module. Start with the leading philosopher, theologian and logician of the twelfth century, then his three key ideas: universals are only words; intention decides moral worth; reconciling clashing authorities by analysis. Ask me one question at a time and finish with a five-question quiz.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/abelard/",
@@ -4951,7 +5113,8 @@
               "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
               "section": "2.5 The Twelfth-Century Parisian Schools"
             }
-          ]
+          ],
+          "revised": "2026-11-13b"
         },
         "revised": "2026-11-13"
       },
@@ -5216,13 +5379,27 @@
         "section": "1.1 Life"
       }
     ],
-    "revised": "2026-11-13"
+    "revised": "2026-11-13b"
   },
   {
     "id": "renaissance",
     "name": "Renaissance Philosophy",
+    "tagline": {
+      "text": "A return to Greek and Roman sources, ethics and eloquence, against scholastic logic.",
+      "sources": [
+        {
+          "url": "https://iep.utm.edu/renaissa/",
+          "section": "intro"
+        },
+        {
+          "url": "https://iep.utm.edu/renaissa/",
+          "section": "2. Humanism"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "Renaissance",
-    "date_range": "14th–16th century",
+    "date_range": "roughly mid-14th to early 17th century",
     "description": "A return to classical Greek and Roman sources and to ethics and eloquence, with humanists setting themselves against scholastic logic and university learning.",
     "debatable": "IEP's 'Renaissance Philosophy' has humanism as one current beside Renaissance Aristotelianism, Platonism (Ficino) and revived Hellenistic schools; the node covers them all.",
     "questions": [
@@ -5379,7 +5556,7 @@
         "neighbour_name": "Scholasticism",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "school logic it mocked",
+        "label": "scholastic logic condemned",
         "reason": "Petrarch set out what became the standard critique of scholastic philosophy, and fifteenth- and early sixteenth-century humanists condemned university education and scholastic logic.",
         "sources": [
           {
@@ -5387,7 +5564,7 @@
             "section": "2. Humanism"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "neoplatonism",
@@ -5431,21 +5608,22 @@
         "neighbour_name": "Epicureanism",
         "direction": "out",
         "kind": "built_on",
-        "label": "Epicurus rediscovered",
+        "label": "Epicureanism studied anew",
         "reason": "The Renaissance's renewed study of Epicureanism (with other Hellenistic schools) loosened Aristotle's hold.",
         "sources": [
           {
             "url": "https://iep.utm.edu/renaissa/",
             "section": "intro"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "skepticism",
         "neighbour_name": "Ancient Skepticism",
         "direction": "out",
         "kind": "built_on",
-        "label": "Sextus rediscovered",
+        "label": "ancient skepticism revived",
         "reason": "Renaissance skepticism was inspired by the revival of ancient Greek skepticism, notably the rediscovery of Sextus Empiricus (1562).",
         "sources": [
           {
@@ -5456,7 +5634,8 @@
             "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
             "section": "5.1 Augustine: Re-Conceiving Skepticism in a Theological Framework"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       }
     ],
     "thinkers": [
@@ -5565,7 +5744,7 @@
           }
         ],
         "study_prompt": {
-          "text": "Teach me Lorenzo Valla as a short Socratic module. Start with a leading humanist (c. 1406–1457) and sharp-tongued critic, then his three key ideas: language as a tool to expose forgeries; philosophy in ordinary language; a Christian ethics of pleasure. Ask me one question at a time and finish with a five-question quiz.",
+          "text": "Teach me Lorenzo Valla as a short Socratic module. Start with a leading humanist (c. 1406–1457) who used classical languages to criticise ideas and institutions, then his three key ideas: language as a tool to expose forgeries; philosophy in ordinary language; a Christian ethics of pleasure. Ask me one question at a time and finish with a five-question quiz.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/lorenzo-valla/",
@@ -5584,7 +5763,7 @@
               "section": "4. Moral Philosophy"
             }
           ],
-          "revised": "2026-11-13"
+          "revised": "2026-11-13b"
         },
         "revised": "2026-11-13"
       },
@@ -5790,7 +5969,7 @@
           }
         ],
         "study_prompt": {
-          "text": "Teach me Desiderius Erasmus as a short Socratic module. Start with a Dutch Christian humanist (c. 1466 or 1469–1536), then his three key ideas: back to scripture in its original languages; the philosophy of Christ; a weak but free will, helped by grace. Ask me one question at a time and finish with a five-question quiz.",
+          "text": "Teach me Desiderius Erasmus as a short Socratic module. Start with Erasmus of Rotterdam (c. 1466 or 1469–1536), a Christian humanist, then his three key ideas: back to scripture in its original languages; the philosophy of Christ; a weak but free will, helped by grace. Ask me one question at a time and finish with a five-question quiz.",
           "sources": [
             {
               "url": "https://iep.utm.edu/renaissa/",
@@ -5805,7 +5984,7 @@
               "section": "6. Pietas and Philosophia Christi"
             }
           ],
-          "revised": "2026-11-13"
+          "revised": "2026-11-13b"
         },
         "revised": "2026-11-13"
       }
@@ -5832,11 +6011,25 @@
         "section": "3. Platonism"
       }
     ],
-    "revised": "2026-11-13"
+    "revised": "2026-11-13b"
   },
   {
     "id": "rationalism",
     "name": "Rationalism",
+    "tagline": {
+      "text": "Reason, not only the senses, is a key source of what we know.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+          "section": "1. Introduction"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+          "section": "1.1 Rationalism"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "Early modern",
     "date_range": "17th–18th centuries",
     "description": "The view that reason, independent of sense experience, is a key source of knowledge and concepts, some of them innate.",
@@ -6001,7 +6194,7 @@
         "neighbour_name": "Empiricism",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "no innate ideas",
+        "label": "innate knowledge rejected",
         "reason": "Empiricists reject innate knowledge; Locke spends the whole first book of his Essay arguing against it.",
         "sources": [
           {
@@ -6012,14 +6205,15 @@
             "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
             "section": "1.2 Empiricism"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "enlightenment",
         "neighbour_name": "The Enlightenment and Kant",
         "direction": "in",
         "kind": "built_on_then_pushed_against",
-        "label": "pillar, then limits",
+        "label": "Descartes as pillar, then Kant's limits",
         "reason": "Descartes' rationalist system, with its method of doubt, is one of the pillars of Enlightenment thought. Then: Kant's early work was enmeshed in Leibniz-Wolff rationalism, until Hume shook his faith in its assumption that metaphysical knowledge is possible.",
         "sources": [
           {
@@ -6035,7 +6229,7 @@
             "section": "b. Dogmatic Slumber, Synthetic A Priori Knowledge, and the Copernican Shift"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "pragmatism",
@@ -6344,6 +6538,20 @@
   {
     "id": "empiricism",
     "name": "Empiricism",
+    "tagline": {
+      "text": "All our ideas and knowledge come, in the end, from experience.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+          "section": "1. Introduction"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+          "section": "1.2 Empiricism"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "Early modern",
     "date_range": "17th–18th centuries",
     "description": "The view that all our concepts and knowledge come ultimately from experience, not innate ideas.",
@@ -6502,7 +6710,7 @@
         "neighbour_name": "Rationalism",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "no innate ideas",
+        "label": "innate knowledge rejected",
         "reason": "Empiricists reject innate knowledge; Locke spends the whole first book of his Essay arguing against it.",
         "sources": [
           {
@@ -6513,14 +6721,15 @@
             "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
             "section": "1.2 Empiricism"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "enlightenment",
         "neighbour_name": "The Enlightenment and Kant",
         "direction": "in",
         "kind": "built_on_then_pushed_against",
-        "label": "Locke, then answering Hume",
+        "label": "Locke, then Kant's answer to Hume",
         "reason": "The rise of empiricism is characteristic of the period; Locke's Essay is a foundational Enlightenment text. Then: Hume's skepticism woke Kant from his 'dogmatic slumber'; the critical philosophy was designed as an answer to Hume.",
         "sources": [
           {
@@ -6535,14 +6744,15 @@
             "url": "https://iep.utm.edu/kantview/",
             "section": "b. Dogmatic Slumber, Synthetic A Priori Knowledge, and the Copernican Shift"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "utilitarianism",
         "neighbour_name": "Utilitarianism",
         "direction": "in",
         "kind": "built_on",
-        "label": "Hume's idea of utility",
+        "label": "Hume on utility",
         "reason": "Hume is an early precursor; Bentham found virtue equated with utility in Hume's Treatise and borrowed the term from him.",
         "sources": [
           {
@@ -6562,7 +6772,7 @@
             "section": "1.2 Empiricism"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "pragmatism",
@@ -6823,6 +7033,24 @@
   {
     "id": "enlightenment",
     "name": "The Enlightenment and Kant",
+    "tagline": {
+      "text": "Trust in reason and science to question authority, ending in Kant's limits of reason.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/enlightenment/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/kant/",
+          "section": "2.1 The crisis of the Enlightenment"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/kant/",
+          "section": "2.2 Kant’s Copernican revolution in philosophy"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "Early modern",
     "date_range": "18th century (roots in the 16th–17th-century scientific revolution; Kant's Critique 1781; ends roughly with the 1790s)",
     "description": "A movement of confidence in reason and science to question traditional authority, ending in Kant's critical philosophy, which tested what reason itself can know.",
@@ -6990,7 +7218,7 @@
         "neighbour_name": "Rationalism",
         "direction": "out",
         "kind": "built_on_then_pushed_against",
-        "label": "pillar, then limits",
+        "label": "Descartes as pillar, then Kant's limits",
         "reason": "Descartes' rationalist system, with its method of doubt, is one of the pillars of Enlightenment thought. Then: Kant's early work was enmeshed in Leibniz-Wolff rationalism, until Hume shook his faith in its assumption that metaphysical knowledge is possible.",
         "sources": [
           {
@@ -7006,14 +7234,14 @@
             "section": "b. Dogmatic Slumber, Synthetic A Priori Knowledge, and the Copernican Shift"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "empiricism",
         "neighbour_name": "Empiricism",
         "direction": "out",
         "kind": "built_on_then_pushed_against",
-        "label": "Locke, then answering Hume",
+        "label": "Locke, then Kant's answer to Hume",
         "reason": "The rise of empiricism is characteristic of the period; Locke's Essay is a foundational Enlightenment text. Then: Hume's skepticism woke Kant from his 'dogmatic slumber'; the critical philosophy was designed as an answer to Hume.",
         "sources": [
           {
@@ -7028,7 +7256,8 @@
             "url": "https://iep.utm.edu/kantview/",
             "section": "b. Dogmatic Slumber, Synthetic A Priori Knowledge, and the Copernican Shift"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "skepticism",
@@ -7049,7 +7278,7 @@
         "neighbour_name": "German Idealism",
         "direction": "in",
         "kind": "built_on",
-        "label": "Kant radicalised",
+        "label": "Kant's idealism radicalised",
         "reason": "Fichte, Schelling and Hegel radicalised Kant's transcendental idealism into absolute idealism.",
         "sources": [
           {
@@ -7060,7 +7289,8 @@
             "url": "https://plato.stanford.edu/entries/hegel/",
             "section": "1. Life, Work, and Influence"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "utilitarianism",
@@ -7086,7 +7316,7 @@
         "neighbour_name": "Pragmatism",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "Kant's thing-in-itself rejected",
+        "label": "Kant's thing in itself rejected",
         "reason": "Peirce used the pragmatic maxim against Kant's 'thing in itself' and judged Kant's logic shallow.",
         "sources": [
           {
@@ -7097,14 +7327,15 @@
             "url": "https://plato.stanford.edu/entries/peirce/",
             "section": "1. Brief Biography"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "analytic",
         "neighbour_name": "Analytic Philosophy",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "synthetic a priori banned",
+        "label": "Kant's synthetic a priori banned",
         "reason": "Logical positivists (Vienna Circle): the Circle banned Kant's synthetic a priori as refuted by the progress of science.",
         "sources": [
           {
@@ -7116,7 +7347,7 @@
             "section": "3.2 The Analytic/Synthetic Distinction and the Relative A Priori"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "critical-theory",
@@ -7499,6 +7730,16 @@
   {
     "id": "german-idealism",
     "name": "German Idealism",
+    "tagline": {
+      "text": "Systems after Kant that derive everything from one first principle, the absolute.",
+      "sources": [
+        {
+          "url": "https://iep.utm.edu/germidea/",
+          "section": "intro"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "late 18th–19th century",
     "date_range": "1780s–1840s",
     "description": "Fichte, Schelling and Hegel radicalised Kant into absolute idealism, building complete systems derived from a single first principle, the absolute.",
@@ -7648,7 +7889,7 @@
         "neighbour_name": "The Enlightenment and Kant",
         "direction": "out",
         "kind": "built_on",
-        "label": "Kant radicalised",
+        "label": "Kant's idealism radicalised",
         "reason": "Fichte, Schelling and Hegel radicalised Kant's transcendental idealism into absolute idealism.",
         "sources": [
           {
@@ -7659,14 +7900,15 @@
             "url": "https://plato.stanford.edu/entries/hegel/",
             "section": "1. Life, Work, and Influence"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "marxism",
         "neighbour_name": "Marxism",
         "direction": "in",
         "kind": "built_on",
-        "label": "Hegel turned upside down",
+        "label": "Hegel's history inverted",
         "reason": "Marx took over Hegel's teleological account of history and 'inverted' it into a materialist theory, appropriating many Hegelian ideas.",
         "sources": [
           {
@@ -7678,7 +7920,7 @@
             "section": "1. Life, Work, and Influence"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "existentialism",
@@ -7703,7 +7945,7 @@
         "neighbour_name": "Analytic Philosophy",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "idealism it broke from",
+        "label": "break with absolute idealism",
         "reason": "Moore and Russell broke away from absolute idealism, and Hegel became a main target of the founders of analytic philosophy.",
         "sources": [
           {
@@ -7715,7 +7957,7 @@
             "section": "intro"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "critical-theory",
@@ -7852,7 +8094,7 @@
           }
         ],
         "study_prompt": {
-          "text": "Teach me Friedrich Wilhelm Joseph von Schelling as a short Socratic module. Start with the German Idealist (1775–1854) of nature, art and the critique of Hegel, then his three key ideas: nature is a living, productive whole from which mind emerges; mind and world are at root the same; pure thought cannot capture real existence, against Hegel. Ask me one question at a time and finish with a five-question quiz.",
+          "text": "Teach me Friedrich Wilhelm Joseph von Schelling as a short Socratic module. Start with the German Idealist (1775–1854) remembered for his philosophy of nature, the self that is never fully transparent to itself, and his critique of Hegel, then his three key ideas: nature is a living, productive whole from which mind emerges; mind and world are at root the same; pure thought cannot capture real existence, against Hegel. Ask me one question at a time and finish with a five-question quiz.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/schelling/",
@@ -7866,7 +8108,8 @@
               "url": "https://plato.stanford.edu/entries/schelling/",
               "section": "3. Identity Philosophy"
             }
-          ]
+          ],
+          "revised": "2026-11-13b"
         },
         "revised": "2026-11-13"
       },
@@ -7958,6 +8201,20 @@
   {
     "id": "utilitarianism",
     "name": "Utilitarianism",
+    "tagline": {
+      "text": "The right action is the one that produces the greatest happiness.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
+          "section": "2.3 John Stuart Mill"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "19th century",
     "date_range": "1789 (Bentham's Principles) – late 19th century (Sidgwick); refined since, often under the name consequentialism",
     "description": "The moral theory that right actions are those that produce the greatest happiness.",
@@ -8121,7 +8378,7 @@
         "neighbour_name": "Empiricism",
         "direction": "out",
         "kind": "built_on",
-        "label": "Hume's idea of utility",
+        "label": "Hume on utility",
         "reason": "Hume is an early precursor; Bentham found virtue equated with utility in Hume's Treatise and borrowed the term from him.",
         "sources": [
           {
@@ -8141,7 +8398,7 @@
             "section": "1.2 Empiricism"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "enlightenment",
@@ -8439,6 +8696,20 @@
   {
     "id": "marxism",
     "name": "Marxism",
+    "tagline": {
+      "text": "A materialist theory of history and a critique of capitalism.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/marx/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/marx/",
+          "section": "1.2 Religion and Work"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "19th century",
     "date_range": "1840s onward",
     "description": "Marx's materialist theory of history and critique of capitalism: alienation, class struggle, ideology and the case for communism.",
@@ -8611,7 +8882,7 @@
         "neighbour_name": "German Idealism",
         "direction": "out",
         "kind": "built_on",
-        "label": "Hegel turned upside down",
+        "label": "Hegel's history inverted",
         "reason": "Marx took over Hegel's teleological account of history and 'inverted' it into a materialist theory, appropriating many Hegelian ideas.",
         "sources": [
           {
@@ -8623,14 +8894,14 @@
             "section": "1. Life, Work, and Influence"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "critical-theory",
         "neighbour_name": "Critical Theory (Frankfurt School)",
         "direction": "in",
         "kind": "built_on",
-        "label": "its starting point",
+        "label": "Marxism revised and updated",
         "reason": "The Frankfurt School revised and updated Marxism, taking Marx as the model of radical critique.",
         "sources": [
           {
@@ -8645,7 +8916,8 @@
             "url": "https://iep.utm.edu/frankfur/",
             "section": "intro"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "post-structuralism",
@@ -8898,6 +9170,24 @@
   {
     "id": "existentialism",
     "name": "Existentialism",
+    "tagline": {
+      "text": "Philosophy that starts from the single person who must choose how to live.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/existentialism/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/existentialism/",
+          "section": "4. Freedom"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/existentialism/",
+          "section": "4.1 The Anxiety of Choice"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "19th–20th century",
     "date_range": "roots in the 19th century (Kierkegaard, Nietzsche); movement in mid-20th-century France",
     "description": "Philosophy that starts from concrete, first-person human existence: freedom, anxiety, authenticity and the search for meaning. It includes Camus's philosophy of the absurd, though Camus rejected the existentialist label.",
@@ -9077,7 +9367,7 @@
         "neighbour_name": "Phenomenology",
         "direction": "out",
         "kind": "built_on",
-        "label": "the method it used",
+        "label": "Husserl's method applied",
         "reason": "Heidegger took up his teacher Husserl's phenomenological maxim 'to the things themselves'; Husserl is named among the movement's groundwork.",
         "sources": [
           {
@@ -9089,7 +9379,7 @@
             "section": "2.3 Being-in-the-World"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "post-structuralism",
@@ -9528,6 +9818,20 @@
   {
     "id": "pragmatism",
     "name": "Pragmatism",
+    "tagline": {
+      "text": "Make ideas clear by asking what practical difference they make.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/pragmatism/",
+          "section": "2. The Meaning of Pragmatism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/pragmatism/",
+          "section": "2.1 Peirce: The Pragmatic Maxim"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "19th–20th century",
     "date_range": "c. 1870 (Metaphysical Club, Harvard) – present",
     "description": "An American philosophy that clarifies ideas by their practical consequences and treats inquiry and truth in terms of action.",
@@ -9714,7 +10018,7 @@
         "neighbour_name": "The Enlightenment and Kant",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "Kant's thing-in-itself rejected",
+        "label": "Kant's thing in itself rejected",
         "reason": "Peirce used the pragmatic maxim against Kant's 'thing in itself' and judged Kant's logic shallow.",
         "sources": [
           {
@@ -9725,7 +10029,8 @@
             "url": "https://plato.stanford.edu/entries/peirce/",
             "section": "1. Brief Biography"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "analytic",
@@ -9981,7 +10286,7 @@
       {
         "name": "Richard Rorty",
         "dates": "1931–2007",
-        "summary": "Richard Rorty developed a distinctive and controversial pragmatism and helped spark its revival from the 1970s, often called neopragmatism. In Philosophy and the Mirror of Nature (1979) he attacked the idea of knowledge as the mind mirroring an outside world. Among the pragmatists, he drew most on Dewey, though many pragmatist scholars dispute his readings and even his right to the label.",
+        "summary": "Richard Rorty developed a distinctive and controversial pragmatism and helped spark its revival from the 1970s, often called neopragmatism. In Philosophy and the Mirror of Nature (1979) he attacked the idea of knowledge as the mind mirroring an outside world. He set out to combine Dewey, Hegel and Darwin, though many pragmatist scholars dispute his readings of Dewey and Peirce and even his right to the label.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/rorty/",
@@ -10055,7 +10360,7 @@
           ],
           "revised": "2026-11-13"
         },
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       }
     ],
     "sources": [
@@ -10088,6 +10393,20 @@
   {
     "id": "phenomenology",
     "name": "Phenomenology",
+    "tagline": {
+      "text": "Careful description of experience as we live it, from the first-person view.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/phenomenology/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/phenomenology/",
+          "section": "1. What is Phenomenology?"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "20th century",
     "date_range": "early 20th century – present",
     "description": "The careful description of experience as it is lived from the first-person point of view, founded by Husserl.",
@@ -10248,7 +10567,7 @@
         "neighbour_name": "Existentialism",
         "direction": "in",
         "kind": "built_on",
-        "label": "the method it used",
+        "label": "Husserl's method applied",
         "reason": "Heidegger took up his teacher Husserl's phenomenological maxim 'to the things themselves'; Husserl is named among the movement's groundwork.",
         "sources": [
           {
@@ -10260,7 +10579,7 @@
             "section": "2.3 Being-in-the-World"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "rationalism",
@@ -10604,7 +10923,7 @@
           }
         ],
         "study_prompt": {
-          "text": "Teach me Jean-Paul Sartre as a short Socratic module. Start with the French existentialist writer (1905–1980) behind Being and Nothingness, then his three key ideas: consciousness as freedom; bad faith; the look of the Other. Ask me one question at a time and finish with a five-question quiz.",
+          "text": "Teach me Jean-Paul Sartre as a short Socratic module. Start with the philosopher and writer (1905–1980) behind Being and Nothingness, then his three key ideas: consciousness as freedom; bad faith; the look of the Other. Ask me one question at a time and finish with a five-question quiz.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/sartre/",
@@ -10618,7 +10937,8 @@
               "url": "https://plato.stanford.edu/entries/phenomenology/",
               "section": "4. The History and Varieties of Phenomenology"
             }
-          ]
+          ],
+          "revised": "2026-11-13b"
         }
       }
     ],
@@ -10657,6 +10977,16 @@
   {
     "id": "analytic",
     "name": "Analytic Philosophy",
+    "tagline": {
+      "text": "Philosophy done through logical and linguistic analysis and clear argument.",
+      "sources": [
+        {
+          "url": "https://iep.utm.edu/analytic-philosophy/",
+          "section": "intro"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "20th century",
     "date_range": "c. 1900 – present",
     "description": "Philosophy pursued through logical and linguistic analysis and clear argument, dominant in British and American universities; its logical positivist phase held that, apart from the truths of logic and mathematics, only statements that can be tested by experience are meaningful.",
@@ -10815,7 +11145,7 @@
         "neighbour_name": "German Idealism",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "idealism it broke from",
+        "label": "break with absolute idealism",
         "reason": "Moore and Russell broke away from absolute idealism, and Hegel became a main target of the founders of analytic philosophy.",
         "sources": [
           {
@@ -10827,7 +11157,7 @@
             "section": "intro"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "pragmatism",
@@ -10862,7 +11192,7 @@
         "neighbour_name": "The Enlightenment and Kant",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "synthetic a priori banned",
+        "label": "Kant's synthetic a priori banned",
         "reason": "Logical positivists (Vienna Circle): the Circle banned Kant's synthetic a priori as refuted by the progress of science.",
         "sources": [
           {
@@ -10874,21 +11204,22 @@
             "section": "3.2 The Analytic/Synthetic Distinction and the Relative A Priori"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "scholasticism",
         "neighbour_name": "Scholasticism",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "the Schoolmen's a priori",
+        "label": "the Schoolmen's a priori rejected",
         "reason": "Logical positivists (Vienna Circle): the analytic/synthetic distinction was used as a weapon against the 'substantive a priori of the Schoolmen' as well as Kant.",
         "sources": [
           {
             "url": "https://plato.stanford.edu/entries/vienna-circle/",
             "section": "3.2 The Analytic/Synthetic Distinction and the Relative A Priori"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "feminist-philosophy",
@@ -11312,6 +11643,20 @@
   {
     "id": "critical-theory",
     "name": "Critical Theory (Frankfurt School)",
+    "tagline": {
+      "text": "Marxist social philosophy that criticises domination and aims at emancipation.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/critical-theory/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/critical-theory/",
+          "section": "1.1 Origins and Generations"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "20th century",
     "date_range": "1923 (Institute for Social Research founded) – present",
     "description": "Western Marxist social philosophy that joins philosophy with social science to criticise domination and aim at emancipation.",
@@ -11465,7 +11810,7 @@
         "neighbour_name": "Marxism",
         "direction": "out",
         "kind": "built_on",
-        "label": "its starting point",
+        "label": "Marxism revised and updated",
         "reason": "The Frankfurt School revised and updated Marxism, taking Marx as the model of radical critique.",
         "sources": [
           {
@@ -11480,7 +11825,8 @@
             "url": "https://iep.utm.edu/frankfur/",
             "section": "intro"
           }
-        ]
+        ],
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "german-idealism",
@@ -11515,7 +11861,7 @@
         "neighbour_name": "Post-structuralism",
         "direction": "out",
         "kind": "pushed_against",
-        "label": "Habermas's critique",
+        "label": "Habermas's critique of postmodernism",
         "reason": "Habermas argued that postmodernism contradicts itself and sought to rehabilitate modern reason against it.",
         "sources": [
           {
@@ -11531,7 +11877,7 @@
             "section": "1.1 Origins and Generations"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "feminist-philosophy",
@@ -11672,7 +12018,7 @@
           }
         ],
         "study_prompt": {
-          "text": "Teach me Theodor W. Adorno as a short Socratic module. Start with the German philosopher and music critic (1903–1969) of the Frankfurt School, then his three key ideas: the dialectic of enlightenment; the culture industry; negative dialectics and the nonidentical. Ask me one question at a time and finish with a five-question quiz.",
+          "text": "Teach me Theodor W. Adorno as a short Socratic module. Start with a leading philosopher and music critic in post-war Germany (1903–1969), co-author of Dialectic of Enlightenment, then his three key ideas: enlightenment reason helping produce a new barbarism; the culture industry; attending to what doesn't fit (the nonidentical). Ask me one question at a time and finish with a five-question quiz.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/adorno/",
@@ -11695,7 +12041,7 @@
               "section": "5. Negative Dialectics"
             }
           ],
-          "revised": "2026-11-13"
+          "revised": "2026-11-13b"
         },
         "revised": "2026-11-13"
       },
@@ -11858,6 +12204,20 @@
   {
     "id": "post-structuralism",
     "name": "Post-structuralism",
+    "tagline": {
+      "text": "French thought that questions stable meaning, the self-present subject and foundations.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/postmodernism/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/postmodernism/",
+          "section": "1. Precursors"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "20th century",
     "date_range": "1960s onward (France)",
     "description": "French thought that grew out of structuralism to question stable meaning, the self-present subject and claims to foundations, through deconstruction and genealogy.",
@@ -12010,7 +12370,7 @@
         "neighbour_name": "Critical Theory (Frankfurt School)",
         "direction": "in",
         "kind": "pushed_against",
-        "label": "Habermas's critique",
+        "label": "Habermas's critique of postmodernism",
         "reason": "Habermas argued that postmodernism contradicts itself and sought to rehabilitate modern reason against it.",
         "sources": [
           {
@@ -12026,7 +12386,7 @@
             "section": "1.1 Origins and Generations"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       },
       {
         "neighbour": "existentialism",
@@ -12088,7 +12448,7 @@
         "neighbour_name": "Feminist Philosophy",
         "direction": "in",
         "kind": "built_on",
-        "label": "Butler's gender theory",
+        "label": "Butler's poststructuralist feminism",
         "reason": "Feminist critical theory has a poststructuralist strand (Judith Butler), and analytic feminists also draw on Foucault and Butler.",
         "sources": [
           {
@@ -12100,7 +12460,7 @@
             "section": "3. Approaches to Feminism"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       }
     ],
     "thinkers": [
@@ -12148,7 +12508,7 @@
           }
         ],
         "study_prompt": {
-          "text": "Teach me Gilles Deleuze as a short Socratic module. Start with the French philosopher of difference (1925–1995) who co-wrote with Guattari, then his three key ideas: difference without negation; philosophy as creating concepts; desiring-production. Ask me one question at a time and finish with a five-question quiz.",
+          "text": "Teach me Gilles Deleuze as a short Socratic module. Start with the French philosopher (1925–1995) who wrote major books with Guattari, then his three key ideas: difference as productive, not just the negation of identity; philosophy as creating concepts; desire as a productive force in society. Ask me one question at a time and finish with a five-question quiz.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/deleuze/",
@@ -12162,7 +12522,8 @@
               "url": "https://plato.stanford.edu/entries/deleuze/",
               "section": "3.1 Difference and Repetition"
             }
-          ]
+          ],
+          "revised": "2026-11-13b"
         }
       },
       {
@@ -12349,6 +12710,20 @@
   {
     "id": "feminist-philosophy",
     "name": "Feminist Philosophy",
+    "tagline": {
+      "text": "Philosophy that challenges theories favouring men and rethinks sex and gender.",
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/feminist-philosophy/",
+          "section": "1. What is Feminism?"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/feminist-philosophy/",
+          "section": "3. Approaches to Feminism"
+        }
+      ],
+      "revised": "2026-11-13b"
+    },
     "era": "20th–21st century",
     "date_range": "1970s – present as an academic field (forerunners: Wollstonecraft, Beauvoir 1949)",
     "description": "Philosophy that criticises institutions and theories that have favoured men and rethinks sex, gender, knowledge and ethics.",
@@ -12570,7 +12945,7 @@
         "neighbour_name": "Post-structuralism",
         "direction": "out",
         "kind": "built_on",
-        "label": "Butler's gender theory",
+        "label": "Butler's poststructuralist feminism",
         "reason": "Feminist critical theory has a poststructuralist strand (Judith Butler), and analytic feminists also draw on Foucault and Butler.",
         "sources": [
           {
@@ -12582,7 +12957,7 @@
             "section": "3. Approaches to Feminism"
           }
         ],
-        "revised": "2026-11-13"
+        "revised": "2026-11-13b"
       }
     ],
     "thinkers": [

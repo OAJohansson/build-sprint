@@ -15,8 +15,8 @@
         "section": "6. Other Eleatics: Zeno and Melissus"
       }
     ],
-    "label": "the questions it inherited",
-    "revised": "2026-11-13"
+    "label": "the first philosophical questions",
+    "revised": "2026-11-13b"
   },
   {
     "from": "aristotle",
@@ -39,7 +39,8 @@
         "section": "11. Living Beings"
       }
     ],
-    "label": "teacher, then target"
+    "label": "Academy student, then Forms critic",
+    "revised": "2026-11-13b"
   },
   {
     "from": "aristotle",
@@ -57,7 +58,8 @@
         "section": "1. Who Were the Presocratic Philosophers?"
       }
     ],
-    "label": "materialism it rejected"
+    "label": "early materialism rejected",
+    "revised": "2026-11-13b"
   },
   {
     "from": "epicureanism",
@@ -79,8 +81,8 @@
         "section": "8. Presocratic Atomism"
       }
     ],
-    "label": "the atoms it borrowed",
-    "revised": "2026-11-13"
+    "label": "Democritus's atoms",
+    "revised": "2026-11-13b"
   },
   {
     "from": "epicureanism",
@@ -98,7 +100,8 @@
         "section": "4. Psychology and Ethics"
       }
     ],
-    "label": "Forms it threw out"
+    "label": "Platonic Forms dropped",
+    "revised": "2026-11-13b"
   },
   {
     "from": "stoicism",
@@ -116,7 +119,8 @@
         "section": "2.9 Psychology"
       }
     ],
-    "label": "Socrates as model"
+    "label": "Socratic dialogues as inspiration",
+    "revised": "2026-11-13b"
   },
   {
     "from": "stoicism",
@@ -130,7 +134,8 @@
         "quote": "a rejection of the Platonic-Aristotelian approach"
       }
     ],
-    "label": "the divided soul rejected"
+    "label": "non-rational soul rejected",
+    "revised": "2026-11-13b"
   },
   {
     "from": "skepticism",
@@ -167,8 +172,8 @@
         "section": "1.1 The School and its History"
       }
     ],
-    "label": "certainty it attacked",
-    "revised": "2026-11-13"
+    "label": "Stoic certainty attacked",
+    "revised": "2026-11-13b"
   },
   {
     "from": "skepticism",
@@ -182,7 +187,8 @@
         "quote": "call into question that there is a criterion of truth"
       }
     ],
-    "label": "truth test it doubted"
+    "label": "criterion of truth doubted",
+    "revised": "2026-11-13b"
   },
   {
     "from": "neoplatonism",
@@ -200,7 +206,8 @@
         "section": "1. Life and Writings"
       }
     ],
-    "label": "Plato as master"
+    "label": "Plato as highest authority",
+    "revised": "2026-11-13b"
   },
   {
     "from": "neoplatonism",
@@ -218,8 +225,8 @@
         "section": "1. Life and Writings"
       }
     ],
-    "label": "texts it worked from",
-    "revised": "2026-11-13"
+    "label": "Aristotle's Metaphysics as starting point",
+    "revised": "2026-11-13b"
   },
   {
     "from": "neoplatonism",
@@ -233,7 +240,8 @@
         "quote": "Epicureanism, which they roundly rejected"
       }
     ],
-    "label": "materialism it refused"
+    "label": "Epicureanism rejected outright",
+    "revised": "2026-11-13b"
   },
   {
     "from": "scholasticism",
@@ -255,8 +263,8 @@
         "section": "1.1 Life"
       }
     ],
-    "label": "the rediscovered Aristotle",
-    "revised": "2026-11-13"
+    "label": "Aristotle rediscovered",
+    "revised": "2026-11-13b"
   },
   {
     "from": "scholasticism",
@@ -274,7 +282,8 @@
         "section": "1.2 The Platonic Schools of Late Antiquity"
       }
     ],
-    "label": "the Platonist frame"
+    "label": "Platonist frame for Aristotle",
+    "revised": "2026-11-13b"
   },
   {
     "from": "renaissance",
@@ -288,8 +297,8 @@
         "quote": "what was to become the standard critique of Scholastic philosophy"
       }
     ],
-    "label": "school logic it mocked",
-    "revised": "2026-11-13"
+    "label": "scholastic logic condemned",
+    "revised": "2026-11-13b"
   },
   {
     "from": "renaissance",
@@ -340,7 +349,8 @@
         "quote": "renewed study of Neoplatonism, Stoicism, Epicureanism, and Skepticism"
       }
     ],
-    "label": "Epicurus rediscovered"
+    "label": "Epicureanism studied anew",
+    "revised": "2026-11-13b"
   },
   {
     "from": "renaissance",
@@ -358,7 +368,8 @@
         "section": "5.1 Augustine: Re-Conceiving Skepticism in a Theological Framework"
       }
     ],
-    "label": "Sextus rediscovered"
+    "label": "ancient skepticism revived",
+    "revised": "2026-11-13b"
   },
   {
     "from": "rationalism",
@@ -391,7 +402,8 @@
         "section": "1.2 Empiricism"
       }
     ],
-    "label": "no innate ideas"
+    "label": "innate knowledge rejected",
+    "revised": "2026-11-13b"
   },
   {
     "from": "enlightenment",
@@ -414,8 +426,8 @@
         "quote": "his faith in this rationalist assumption was shaken by David Hume"
       }
     ],
-    "label": "pillar, then limits",
-    "revised": "2026-11-13"
+    "label": "Descartes as pillar, then Kant's limits",
+    "revised": "2026-11-13b"
   },
   {
     "from": "enlightenment",
@@ -438,7 +450,8 @@
         "section": "b. Dogmatic Slumber, Synthetic A Priori Knowledge, and the Copernican Shift"
       }
     ],
-    "label": "Locke, then answering Hume"
+    "label": "Locke, then Kant's answer to Hume",
+    "revised": "2026-11-13b"
   },
   {
     "from": "enlightenment",
@@ -470,7 +483,8 @@
         "section": "1. Life, Work, and Influence"
       }
     ],
-    "label": "Kant radicalised"
+    "label": "Kant's idealism radicalised",
+    "revised": "2026-11-13b"
   },
   {
     "from": "utilitarianism",
@@ -496,8 +510,8 @@
         "section": "1.2 Empiricism"
       }
     ],
-    "label": "Hume's idea of utility",
-    "revised": "2026-11-13"
+    "label": "Hume on utility",
+    "revised": "2026-11-13b"
   },
   {
     "from": "utilitarianism",
@@ -534,8 +548,8 @@
         "section": "1. Life, Work, and Influence"
       }
     ],
-    "label": "Hegel turned upside down",
-    "revised": "2026-11-13"
+    "label": "Hegel's history inverted",
+    "revised": "2026-11-13b"
   },
   {
     "from": "existentialism",
@@ -571,8 +585,8 @@
         "quote": "Following the core maxim of phenomenology introduced by his teacher Husserl"
       }
     ],
-    "label": "the method it used",
-    "revised": "2026-11-13"
+    "label": "Husserl's method applied",
+    "revised": "2026-11-13b"
   },
   {
     "from": "pragmatism",
@@ -618,7 +632,8 @@
         "section": "1. Brief Biography"
       }
     ],
-    "label": "Kant's thing-in-itself rejected"
+    "label": "Kant's thing in itself rejected",
+    "revised": "2026-11-13b"
   },
   {
     "from": "phenomenology",
@@ -655,8 +670,8 @@
         "section": "intro"
       }
     ],
-    "label": "idealism it broke from",
-    "revised": "2026-11-13"
+    "label": "break with absolute idealism",
+    "revised": "2026-11-13b"
   },
   {
     "from": "analytic",
@@ -702,8 +717,8 @@
         "section": "3.2 The Analytic/Synthetic Distinction and the Relative A Priori"
       }
     ],
-    "label": "synthetic a priori banned",
-    "revised": "2026-11-13"
+    "label": "Kant's synthetic a priori banned",
+    "revised": "2026-11-13b"
   },
   {
     "from": "analytic",
@@ -717,7 +732,8 @@
         "quote": "a weapon not only against the substantive a priori of the Schoolmen"
       }
     ],
-    "label": "the Schoolmen's a priori"
+    "label": "the Schoolmen's a priori rejected",
+    "revised": "2026-11-13b"
   },
   {
     "from": "critical-theory",
@@ -739,7 +755,8 @@
         "section": "intro"
       }
     ],
-    "label": "its starting point"
+    "label": "Marxism revised and updated",
+    "revised": "2026-11-13b"
   },
   {
     "from": "critical-theory",
@@ -789,8 +806,8 @@
         "section": "1.1 Origins and Generations"
       }
     ],
-    "label": "Habermas's critique",
-    "revised": "2026-11-13"
+    "label": "Habermas's critique of postmodernism",
+    "revised": "2026-11-13b"
   },
   {
     "from": "post-structuralism",
@@ -933,8 +950,8 @@
         "section": "3. Approaches to Feminism"
       }
     ],
-    "label": "Butler's gender theory",
-    "revised": "2026-11-13"
+    "label": "Butler's poststructuralist feminism",
+    "revised": "2026-11-13b"
   },
   {
     "from": "patristic",
@@ -953,8 +970,8 @@
         "quote": "Neoplatonism profoundly influenced the emergence of mainstream"
       }
     ],
-    "label": "Platonism for faith",
-    "revised": "2026-11-13"
+    "label": "Platonism for Christian faith",
+    "revised": "2026-11-13b"
   },
   {
     "from": "patristic",
@@ -968,7 +985,8 @@
         "quote": "Christian writers were receptive to some elements of Stoicism"
       }
     ],
-    "label": "Stoic ethics taken up"
+    "label": "Stoic elements taken up",
+    "revised": "2026-11-13b"
   },
   {
     "from": "patristic",
@@ -982,7 +1000,8 @@
         "quote": "Augustine's defense of knowledge against the skeptics in Contra Academicos"
       }
     ],
-    "label": "knowledge defended"
+    "label": "knowledge defended against skeptics",
+    "revised": "2026-11-13b"
   },
   {
     "from": "scholasticism",

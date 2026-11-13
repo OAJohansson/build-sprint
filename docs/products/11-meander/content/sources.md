@@ -21,7 +21,7 @@ The full text of every cited entry is saved as plain text in `/private/tmp/claud
 ### schools.json
 An array of school objects:
 ```
-id, name, era, date_range, description, debatable (string | null),
+id, name, tagline (plain text copy of full.json's tagline), era, date_range, description, debatable (string | null),
 thinkers: [{ name, dates, source (url) }],
 sources: [{ url, title, sections: [heading, ...] }]
 ```
@@ -31,7 +31,7 @@ An array of link objects:
 ```
 from, to (school ids),
 kind: "built_on" | "pushed_against" | "built_on_then_pushed_against",
-label (2–4 words, shown beside the neighbour),
+label (2–6 words, shown beside the neighbour; written to read correctly from either end, with no "it"/"its"),
 reason (one line),
 sources: [{ url, section, quote? }]
 ```
@@ -43,7 +43,7 @@ The kind is read from → to. "Built on, then pushed against" is used for three 
 ### full.json
 An array with one object per school, in timeline order:
 ```
-id, name, era, date_range, description, debatable
+id, name, tagline: { text (one plain sentence, at most about 90 characters), sources }, era, date_range, description, debatable
 questions: [3 × { text, sources }]
 themes: [5 × { title, text, thinkers: [names], sources }]
 reacted_against: { text, sources }
@@ -70,6 +70,12 @@ The grader (`docs/products/11-meander/eval-content-2026-11-13.md`) found 282 uns
 - **User-test fixes:** two Feminist themes now have thinkers attached, and one Utilitarianism theme was expanded.
 
 Every changed object carries `"revised": "2026-11-13"`. Plain-string fields have no object of their own: description, era, date_range and debatable mark the school object, and summary and dates mark the thinker object. Some school and thinker objects also list the changed fields in `revised_fields`. `revisions.json` lists every changed item id, in the grader's id format, with its actions (recite, rewrite, cut).
+
+## Second pass, 13 Nov 2026 (after re-grade r2)
+- **Re-grade fixes:** the 16 unsupported claims in 14 items and the 10 study prompts that went beyond their card (`eval-content-2026-11-13-r2.md`) are fixed from the corpus. Hedges were restored, missing names added and one clause cut (Patristic theme 3).
+- **Taglines:** every school has a `tagline`, one plain sentence of at most 87 characters, with sources.
+- **Link labels:** all 56 now read correctly from either end. 34 were rewritten.
+- **Marking:** changed objects carry `"revised": "2026-11-13b"`, and `revisions-b.json` lists the item ids.
 
 ## Counts
 - 23 schools: 69 questions, 115 themes, 23 reacted-against lines.

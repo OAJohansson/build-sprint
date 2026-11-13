@@ -247,7 +247,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Parmenides of Elea as a short Socratic module. Start with a poet-philosopher from Elea in southern Italy, born around 510 BCE, then his three key ideas: the two routes: what is and what is not; what truly is cannot be born, perish or change; reason over the senses, knowledge over belief. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Parmenides of Elea as a short Socratic module. Start with a poet-philosopher from Elea in southern Italy, born around 510 BCE, then his three key ideas: the two routes, what is and what is not; what truly is cannot be born or perish, and is whole, unshaken and complete; reason over the senses, knowledge over belief. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/presocratics/",
@@ -351,7 +351,7 @@
       "short": "Socrates",
       "dates": "469–399 BCE",
       "school": "socrates-plato",
-      "summary": "Socrates (469–399 BCE) wrote nothing, yet he changed how philosophy itself is understood. He spent his days in the Athenian marketplace, questioning anyone who would talk about courage, love, reverence, moderation and the state of their soul, and he refused to take money for it. Athens executed him on a charge of irreverence toward the gods.",
+      "summary": "Socrates (469–399 BCE) wrote nothing, yet he is considered one of the few philosophers who changed how philosophy itself was conceived. He spent his days in the Athenian marketplace, questioning anyone who would talk about courage, love, reverence, moderation and the state of their soul, and he refused to take money for it. Athens executed him on a charge of irreverence toward the gods.",
       "ideas": [
         "Knowing that you don't know is wiser than believing you know when you don't.",
         "The health of your soul matters more than wealth, reputation or your body.",
@@ -503,7 +503,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Plato as a short Socratic module. Start with the Athenian writer of dialogues, 429?–347 BCE, who turned philosophy into a systematic discipline, then his three key ideas: the Forms behind the world we see; the soul as distinct from the body, and recollection; reforming the city, from the Republic to the Laws. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Plato as a short Socratic module. Start with the Athenian writer of dialogues, 429?–347 BCE, whose conception of philosophy as a rigorous, systematic discipline can be called his invention, then his three key ideas: the Forms behind the world we see; the soul as distinct from the body, and recollection; reforming the city, from the Republic to the Laws. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/plato/",
@@ -826,7 +826,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Philodemus as a short Socratic module. Start with an Epicurean teacher and poet in 1st-century BCE Italy whose books survived at Herculaneum, then his three key ideas: natural anger versus destructive rage; frank criticism as care for the soul; enjoying the arts without being swallowed by them. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Philodemus as a short Socratic module. Start with an Epicurean philosopher and poet (ca. 110–ca. 30 BCE) who moved to Italy and whose books survived at Herculaneum, then his three key ideas: natural anger versus destructive rage; frank criticism as care for the soul; enjoying the arts without being swallowed by them. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/philodemus/",
@@ -1163,7 +1163,7 @@
       "short": "Epictetus",
       "dates": "died around 135 CE",
       "school": "stoicism",
-      "summary": "Epictetus was born in the 50s CE in Hierapolis and spent part of his life as the slave of Epaphroditus, an administrator at Nero's court. After gaining his freedom he lectured on his own, but was forced to leave Rome, presumably under Domitian's edict of 89 banning philosophers from Italy. He set up his own school at Nicopolis in Greece and taught there until his death around 135. The historian Arrian of Nicomedia wrote up his teaching as the Discourses.",
+      "summary": "Epictetus was born in the 50s CE in Hierapolis and spent part of his life as the slave of Epaphroditus, an administrator at Nero's court. After gaining his freedom he lectured on his own, but was forced to leave Rome, presumably under Domitian's edict of 89 banning philosophers from Italy. He set up his own school at Nicopolis in Greece and taught there until his death around 135. According to their preface, the Discourses were written up by the historian Arrian of Nicomedia, though a few scholars think Epictetus composed them himself.",
       "ideas": [
         "Volition (prohairesis, our power to choose) is the true self, and nothing outside can force it.",
         "Body, possessions and reputation are 'externals', neither good nor bad in themselves; what counts is how we use them.",
@@ -1457,7 +1457,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Carneades as a short Socratic module. Start with the 2nd-century BCE head of the Academy, born in Cyrene, famous for arguing both sides, then his three key ideas: the persuasive, tested in stages; arguing both sides of justice; a map of all views on life's goal. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Carneades as a short Socratic module. Start with the head of the Academy, born in Cyrene, who on an embassy to Rome is said to have argued for justice one day and against it the next, then his three key ideas: the persuasive, tested in stages; arguing both sides of justice; a map of all views on life's goal. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/carneades/",
@@ -2080,7 +2080,7 @@
       "school": "patristic",
       "summary": "Boethius was a Roman aristocrat who translated Aristotle's logic into Latin and wrote commentaries and textbooks on it. Accused of treason, he was imprisoned and probably executed in 526, and in prison he wrote The Consolation of Philosophy. He became, with Augustine and Aristotle, a basic author for the Latin Middle Ages.",
       "ideas": [
-        "Riches, status, power and pleasure are fortune's goods of little worth; the true goods are the virtues, and since he has lost none of them, his fall need not cut him off from true happiness.",
+        "Riches, status, power and pleasure are fortune's goods of little worth; the true goods are the virtues and sufficiency, and since he has lost none of them, his fall need not cut him off from true happiness.",
         "God lives in an eternal present and knows all times at once, so his foreknowledge does not force our choices.",
         "His Latin translations of Aristotle's logic remained standard throughout the Middle Ages, and his commentaries were the main way logicians of the 9th–12th centuries understood Aristotle."
       ],
@@ -2242,7 +2242,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Peter Abelard as a short Socratic module. Start with the brilliant 12th-century Paris teacher and logician, then his three key ideas: universals are only words; intention decides moral worth; reconciling clashing authorities by analysis. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Peter Abelard as a short Socratic module. Start with the leading philosopher, theologian and logician of the twelfth century, then his three key ideas: universals are only words; intention decides moral worth; reconciling clashing authorities by analysis. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/abelard/",
@@ -2573,7 +2573,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Lorenzo Valla as a short Socratic module. Start with a leading humanist (c. 1406–1457) and sharp-tongued critic, then his three key ideas: language as a tool to expose forgeries; philosophy in ordinary language; a Christian ethics of pleasure. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Lorenzo Valla as a short Socratic module. Start with a leading humanist (c. 1406–1457) who used classical languages to criticise ideas and institutions, then his three key ideas: language as a tool to expose forgeries; philosophy in ordinary language; a Christian ethics of pleasure. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/lorenzo-valla/",
@@ -2786,7 +2786,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Desiderius Erasmus as a short Socratic module. Start with a Dutch Christian humanist (c. 1466 or 1469–1536), then his three key ideas: back to scripture in its original languages; the philosophy of Christ; a weak but free will, helped by grace. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Desiderius Erasmus as a short Socratic module. Start with Erasmus of Rotterdam (c. 1466 or 1469–1536), a Christian humanist, then his three key ideas: back to scripture in its original languages; the philosophy of Christ; a weak but free will, helped by grace. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://iep.utm.edu/renaissa/",
@@ -3634,7 +3634,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Friedrich Wilhelm Joseph von Schelling as a short Socratic module. Start with the German Idealist (1775–1854) of nature, art and the critique of Hegel, then his three key ideas: nature is a living, productive whole from which mind emerges; mind and world are at root the same; pure thought cannot capture real existence, against Hegel. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Friedrich Wilhelm Joseph von Schelling as a short Socratic module. Start with the German Idealist (1775–1854) remembered for his philosophy of nature, the self that is never fully transparent to itself, and his critique of Hegel, then his three key ideas: nature is a living, productive whole from which mind emerges; mind and world are at root the same; pure thought cannot capture real existence, against Hegel. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/schelling/",
@@ -4700,7 +4700,7 @@
       "short": "Rorty",
       "dates": "1931–2007",
       "school": "pragmatism",
-      "summary": "Richard Rorty developed a distinctive and controversial pragmatism and helped spark its revival from the 1970s, often called neopragmatism. In Philosophy and the Mirror of Nature (1979) he attacked the idea of knowledge as the mind mirroring an outside world. Among the pragmatists, he drew most on Dewey, though many pragmatist scholars dispute his readings and even his right to the label.",
+      "summary": "Richard Rorty developed a distinctive and controversial pragmatism and helped spark its revival from the 1970s, often called neopragmatism. In Philosophy and the Mirror of Nature (1979) he attacked the idea of knowledge as the mind mirroring an outside world. He set out to combine Dewey, Hegel and Darwin, though many pragmatist scholars dispute his readings of Dewey and Peirce and even his right to the label.",
       "ideas": [
         "Knowledge is not the mind mirroring the world, and philosophy should drop that picture.",
         "There is little of substance to say about truth; we test vocabularies by how well they help us reach our goals.",
@@ -5046,7 +5046,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Jean-Paul Sartre as a short Socratic module. Start with the French existentialist writer (1905–1980) behind Being and Nothingness, then his three key ideas: consciousness as freedom; bad faith; the look of the Other. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Jean-Paul Sartre as a short Socratic module. Start with the philosopher and writer (1905–1980) behind Being and Nothingness, then his three key ideas: consciousness as freedom; bad faith; the look of the Other. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/sartre/",
@@ -5531,7 +5531,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Theodor W. Adorno as a short Socratic module. Start with the German philosopher and music critic (1903–1969) of the Frankfurt School, then his three key ideas: the dialectic of enlightenment; the culture industry; negative dialectics and the nonidentical. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Theodor W. Adorno as a short Socratic module. Start with a leading philosopher and music critic in post-war Germany (1903–1969), co-author of Dialectic of Enlightenment, then his three key ideas: enlightenment reason helping produce a new barbarism; the culture industry; attending to what doesn't fit (the nonidentical). Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/adorno/",
@@ -5716,7 +5716,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Gilles Deleuze as a short Socratic module. Start with the French philosopher of difference (1925–1995) who co-wrote with Guattari, then his three key ideas: difference without negation; philosophy as creating concepts; desiring-production. Ask me one question at a time and finish with a five-question quiz.",
+      "prompt": "Teach me Gilles Deleuze as a short Socratic module. Start with the French philosopher (1925–1995) who wrote major books with Guattari, then his three key ideas: difference as productive, not just the negation of identity; philosophy as creating concepts; desire as a productive force in society. Ask me one question at a time and finish with a five-question quiz.",
       "promptSources": [
         {
           "url": "https://plato.stanford.edu/entries/deleuze/",

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>10 Orbit · Meander round 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1440px;background:#fff}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;cursor:pointer}
+.screen{width:1440px;height:900px;position:relative;overflow:hidden}
+.screen svg.links{position:absolute;inset:0;width:1440px;height:900px;pointer-events:none}
+/* ---- the direction ---- */
+
+.screen{background:#f6f3ec;color:#1d1a24;font:400 14px/1.45 Figtree,sans-serif;--bg:#f6f3ec;--ink:#1d1a24;--violet:#5b2a86;--lilac:#e7dcf6;--green:#2f8f46;--mint:#d5eed8}
+.wm{position:absolute;left:32px;top:24px;font:400 28px/1 'Young Serif';display:flex;align-items:center;gap:10px;color:var(--violet)}
+.back{position:absolute;left:32px;top:70px;font-size:12.5px;color:#6a6474}
+svg.links .r{fill:none;stroke:#d8d2c6;stroke-width:1.5}
+svg.links .l{stroke:var(--green);stroke-width:3}
+svg.links .l.ag{stroke:var(--violet);stroke-dasharray:3 7;stroke-linecap:round}
+svg.links .l2{stroke:#b9b2a4;stroke-width:1.5}
+.rl{position:absolute;font:500 11px Figtree;letter-spacing:.1em;text-transform:uppercase;color:#8d8697;background:var(--bg);padding:0 8px;transform:translate(-50%,-50%)}
+.me{position:absolute;left:360px;top:245px;width:280px;height:280px;border-radius:50%;background:var(--violet);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}
+.me h2{font:400 32px/1 'Young Serif'}
+.me p{font-size:13.5px;line-height:1.35;margin-top:10px;opacity:.92}
+.me small{font-size:11.5px;opacity:.75;margin-top:10px}
+.n1{position:absolute;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;background:var(--mint);border:2px solid var(--green);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px}
+.n1.ag{background:var(--lilac);border:2px dashed var(--violet)}
+.n1 em{font:700 10.5px Figtree;font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--green)}
+.n1.ag em{color:var(--violet)}
+.n1 b{font:400 17.5px/1.1 'Young Serif';margin:3px 0}
+.n1 small{font-size:11px;line-height:1.25;color:#4c4658}
+.n1.v:after{content:"✓ " attr(data-v);position:absolute;bottom:-9px;background:var(--violet);color:#fff;font-size:10.5px;padding:1px 8px;border-radius:99px}
+.n2{position:absolute;width:104px;height:104px;margin:-52px 0 0 -52px;border-radius:50%;background:#fff;border:1.5px solid #cfc8ba;display:flex;align-items:center;justify-content:center;text-align:center;font:400 13px/1.15 'Young Serif';color:#4c4658;padding:6px}
+.strip2{position:absolute;left:0;top:790px;width:1000px;height:110px;border-top:1.5px solid #d8d2c6;background:#fff}
+.strip2 h4{position:absolute;left:32px;top:10px;font:500 11px Figtree;letter-spacing:.1em;text-transform:uppercase;color:#8d8697}
+.strip2 .ln{position:absolute;left:40px;right:40px;top:60px;border-top:1.5px solid #cfc8ba}
+.d{position:absolute;top:60px;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#fff;border:1.5px solid #8d8697}
+.d.v{background:var(--violet);border-color:var(--violet)}
+.d.one{border:2.5px solid var(--green);background:var(--mint)}
+.d.here{width:20px;height:20px;margin:-10px 0 0 -10px}
+.d span{position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:10.5px;color:#4c4658}
+.d.up span{bottom:16px}.d.dn span{top:16px}
+.d.v span{color:var(--violet);font-weight:700}
+.panel{position:absolute;left:1000px;top:0;width:440px;height:900px;background:#fff;border-left:1.5px solid #d8d2c6;padding:26px 32px 0}
+.panel h3{font:500 11px Figtree;letter-spacing:.1em;text-transform:uppercase;color:#8d8697;margin:0 0 6px}
+.panel section{margin-bottom:16px}
+.d-q li{font:400 17px/1.25 'Young Serif';margin-bottom:5px}
+.d-themes li{display:inline-block;background:var(--lilac);border-radius:99px;padding:2px 10px;margin:0 4px 5px 0;font-size:12.5px}
+.d-thinkers>ul>li{border-bottom:1px solid #e6e1d6}
+.d-thinkers .t-row{display:flex;gap:8px;align-items:baseline;padding:5px 0}
+.d-thinkers b{font-weight:700}.d-thinkers i{font-style:normal;font-size:12px;color:#8d8697}.d-thinkers .t-row span{display:none}
+.d-thinkers li.open{background:#faf7ff;border:1.5px solid var(--violet);border-radius:14px;padding:6px 14px 12px;margin:4px -14px}
+.d-thinkers li.open b{font:400 19px 'Young Serif'}
+.t-open p{font-size:13px;line-height:1.4}
+.t-open ul{margin:7px 0 10px}
+.t-open li{font-size:13px;padding-left:14px;position:relative;line-height:1.4}
+.t-open li:before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--green)}
+.study{background:var(--violet);color:#fff;border-radius:99px;padding:8px 18px;font:700 13.5px Figtree}
+.t-open .hint{font-size:11.5px;color:#8d8697;margin-left:10px}
+.d-against p{font-size:13px}.d-against a{font-weight:700;color:var(--violet)}
+.d-next{display:none}
+
+/* ---- brand strip (about the direction, not part of the screen) ---- */
+.strip{width:1440px;height:230px;background:#fff;border-top:1px solid #111;color:#111;font:12px/1.45 ui-sans-serif,system-ui,sans-serif;display:grid;grid-template-columns:300px 250px 270px 330px 1fr;position:relative}
+.strip>div{padding:20px 22px 0;border-right:1px solid #e4e4e4;min-width:0}
+.strip>div:last-child{border-right:0}
+.strip h6{font:600 10px/1 ui-sans-serif,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8a8a8a;margin-bottom:12px}
+.strip .bs-wm{height:60px;display:flex;align-items:center;margin-bottom:8px}
+.strip .bs-pers{color:#444}
+.strip .bs-alt{color:#8a8a8a;margin-top:4px}
+.strip .bs-sw{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 8px}
+.strip .bs-sw i{display:block;height:34px;border-radius:4px;outline:1px solid rgba(0,0,0,.12);outline-offset:-1px}
+.strip .bs-sw span{display:block;font:10px/1.3 ui-monospace,Menlo,monospace;color:#555;margin-top:3px}
+.strip .bs-ty1{font-size:30px;line-height:1.05;margin-bottom:4px}
+.strip .bs-ty2{font-size:14px;line-height:1.35;margin:8px 0 4px}
+.strip .bs-tyn{font:10px/1.3 ui-monospace,Menlo,monospace;color:#777}
+.strip dl{display:grid;grid-template-columns:76px 1fr;gap:5px 8px}
+.strip dt{color:#8a8a8a}
+.strip dd{color:#111}
+.strip .bs-sig{height:70px;display:flex;align-items:center;margin-bottom:6px;overflow:hidden}
+.strip .bs-note{font-size:10px;line-height:1.35;color:#8a8a8a;margin-top:8px}
+</style></head>
+<body>
+<div class="screen"><svg class="links"><circle class="r" cx="500" cy="385" r="245"/><circle class="r" cx="500" cy="385" r="352"/><line class="l ag" x1="500" y1="385" x2="256" y2="364"/><line class="l " x1="500" y1="385" x2="400" y2="161"/><line class="l " x1="500" y1="385" x2="730" y2="469"/><line class="l ag" x1="500" y1="385" x2="708" y2="255"/><line class="l2" x1="256" y1="364" x2="178" y2="242"/><line class="l2" x1="256" y1="364" x2="157" y2="464"/><line class="l2" x1="256" y1="364" x2="234" y2="154"/><line class="l2" x1="256" y1="364" x2="219" y2="597"/></svg>
+<div class="wm"><svg width="30" height="30"><circle cx="15" cy="15" r="13" fill="none" stroke="#5b2a86" stroke-width="2"/><circle cx="15" cy="15" r="7.5" fill="none" stroke="#2f8f46" stroke-width="2"/><circle cx="15" cy="15" r="3" fill="#5b2a86"/></svg>meander</div>
+<div class="back">← Whole field &nbsp;·&nbsp; Esc</div>
+<div class="rl" style="left:500px;top:140px">one step away</div><div class="rl" style="left:700px;top:95px">two steps away</div>
+<div class="n2" style="left:178px;top:242px">Rationalism</div><div class="n2" style="left:157px;top:464px">Empiricism</div><div class="n2" style="left:234px;top:154px">Marxism</div><div class="n2" style="left:219px;top:597px">Analytic philosophy</div><div class="n1 ag v" data-v="9 Nov" style="left:256px;top:364px"><em>pushed against</em><b>German Idealism</b><small>Hegel's system</small></div><div class="n1  "  style="left:400px;top:161px"><em>built on</em><b>Phenomenology</b><small>the method it borrowed</small></div><div class="n1  "  style="left:730px;top:469px"><em>grew from it</em><b>Absurdism</b><small>Camus's answer</small></div><div class="n1 ag "  style="left:708px;top:255px"><em>pushed back</em><b>Post-structuralism</b><small>doubted the free subject</small></div>
+<div class="me"><h2>Existentialism</h2><p>Start from the single person who has to choose, not from a theory of everything.</p><small>1840s–1960s · here now, 12 Nov</small></div>
+<div class="strip2"><h4>The whole field · 16 schools · you've been to 4, over 3 days</h4><div class="ln"></div><div class="d up   " style="left:60px"><span>Presocratics</span></div><div class="d dn v  " style="left:118.5px"><span>Classical Greek · 5 Nov</span></div><div class="d up   " style="left:177px"><span>Epicureanism</span></div><div class="d dn v  " style="left:235.5px"><span>Stoicism · 3 Nov</span></div><div class="d up   " style="left:294px"><span>Scholasticism</span></div><div class="d dn   " style="left:352.5px"><span>Rationalism</span></div><div class="d up   " style="left:411px"><span>Empiricism</span></div><div class="d dn v  " style="left:469.5px"><span>German Idealism · 9 Nov</span></div><div class="d up   " style="left:528px"><span>Utilitarianism</span></div><div class="d dn   " style="left:586.5px"><span>Marxism</span></div><div class="d up   " style="left:645px"><span>Pragmatism</span></div><div class="d dn   " style="left:703.5px"><span>Analytic philosophy</span></div><div class="d up  one " style="left:762px"><span>Phenomenology</span></div><div class="d dn v  here" style="left:820.5px"><span>Existentialism</span></div><div class="d up  one " style="left:879px"><span>Absurdism</span></div><div class="d dn  one " style="left:937.5px"><span>Post-structuralism</span></div></div>
+<div class="panel">
+  <section class="d-q"><h3>Key questions</h3><ol><li>If nothing hands me a purpose, how do I live?</li><li>What does it mean to be free, and to answer for it?</li><li>How do I live as myself and not as the crowd expects?</li></ol></section>
+  <section class="d-themes"><h3>Themes</h3><ul><li>Freedom and responsibility</li><li>Anxiety</li><li>Authenticity and bad faith</li><li>Existence before essence</li><li>The individual against the crowd</li></ul></section>
+  <section class="d-thinkers"><h3>Thinkers</h3><ul><li class=""><div class="t-row"><b>Søren Kierkegaard</b><i>1813–1855</i><span>Truth has to be lived by one person. Faith is a leap.</span></div></li><li class=""><div class="t-row"><b>Friedrich Nietzsche</b><i>1844–1900</i><span>God is dead, so values are ours to make. A forerunner.</span></div></li><li class=""><div class="t-row"><b>Jean-Paul Sartre</b><i>1905–1980</i><span>Existence precedes essence. We are condemned to be free.</span></div></li><li class="open"><div class="t-row"><b>Simone de Beauvoir</b><i>1908–1986</i><span>Freedom always has a situation. One becomes a woman.</span></div><div class="t-open"><p>French philosopher who carried existentialist freedom into ethics and politics. In The Second Sex she argued that 'woman' is a situation one is made into, not a fixed nature.</p><ul><li>One is not born, but becomes, a woman</li><li>The ethics of ambiguity</li><li>My freedom needs the freedom of others</li></ul><button class="study">Study with Claude</button><span class="hint">copies a ready-made prompt</span></div></li><li class=""><div class="t-row"><b>Albert Camus</b><i>1913–1960</i><span>The absurd, and revolt against it. He refused the label.</span></div></li></ul></section>
+  <section class="d-against"><h3>Reacted against</h3><p><a>German Idealism</a> Hegel's system, which explains everything except the person living inside it, and the rationalism that puts abstract reason before a lived life.</p></section>
+  <section class="d-next"><h3></h3><ul><li class="built"><em>undefined</em><b>Phenomenology</b><span>The method Sartre and Beauvoir took from Husserl and Heidegger.</span></li><li class="grew"><em>undefined</em><b>Absurdism</b><span>Camus's answer when the search for meaning meets a silent world.</span></li><li class="against"><em>undefined</em><b>Post-structuralism</b><span>Foucault and Derrida doubted the free, self-making subject.</span></li></ul></section></div></div>
+<aside class="strip">
+  <div><h6>10 · Wordmark</h6><div class="bs-wm"><span style="font:400 40px/1 'Young Serif';color:#5b2a86;display:flex;align-items:center;gap:12px"><svg width="42" height="42"><circle cx="21" cy="21" r="19" fill="none" stroke="#5b2a86" stroke-width="2.5"/><circle cx="21" cy="21" r="11" fill="none" stroke="#2f8f46" stroke-width="2.5"/><circle cx="21" cy="21" r="4" fill="#5b2a86"/></svg>meander</span></div><p class="bs-pers">Wherever you are is the centre. Soft, round, encouraging.</p><p class="bs-alt">Name: Meander, or "Nearby"</p><p class="bs-note">Sample content, not yet checked for accuracy (R7). Draft copy.</p></div>
+  <div><h6>Palette</h6><div class="bs-sw"><div><i style="background:#f6f3ec"></i><span>ground<br>#f6f3ec</span></div><div><i style="background:#1d1a24"></i><span>ink<br>#1d1a24</span></div><div><i style="background:#5b2a86"></i><span>violet<br>#5b2a86</span></div><div><i style="background:#e7dcf6"></i><span>lilac<br>#e7dcf6</span></div><div><i style="background:#2f8f46"></i><span>green<br>#2f8f46</span></div><div><i style="background:#d5eed8"></i><span>mint<br>#d5eed8</span></div></div></div>
+  <div><h6>Type pair</h6><div class="bs-ty1" style="font-family:'Young Serif'">One step away</div><div class="bs-tyn">Young Serif · names</div><div class="bs-ty2" style="font-family:Figtree">here now, 12 Nov · built on</div><div class="bs-tyn">Figtree 400/700 · body</div></div>
+  <div><h6>Voice</h6><dl><dt>First visit</dt><dd>Start anywhere. Everything here is one step from something.</dd><dt>Go next</dt><dd>One step away</dd><dt>Been there</dt><dd>You've been to 4, over 3 days</dd></dl></div>
+  <div><h6>Signature · axis</h6><div class="bs-sig"><svg width="230" height="68"><circle cx="115" cy="34" r="32" fill="none" stroke="#d8d2c6" stroke-width="1.5"/><circle cx="115" cy="34" r="60" fill="none" stroke="#d8d2c6" stroke-width="1.5"/><circle cx="115" cy="34" r="14" fill="#5b2a86"/><circle cx="147" cy="34" r="8" fill="#d5eed8" stroke="#2f8f46" stroke-width="2"/><circle cx="87" cy="18" r="8" fill="#e7dcf6" stroke="#5b2a86" stroke-width="2" stroke-dasharray="3 3"/><circle cx="60" cy="52" r="6" fill="#fff" stroke="#cfc8ba" stroke-width="1.5"/></svg></div><p><b>Two rings: one step away, two steps away. The map re-centres on you.</b></p><p class="bs-pers">Axis: focus plus context (re-centring map, whole field as a strip), soft tone · seed-derived</p></div>
+</aside>
+</body></html>

@@ -98,7 +98,7 @@ From the MVP rows above (L7).
 | # | Must | Check |
 | --- | --- | --- |
 | R1 | The whole map of philosophy (eras, schools, links) fits a laptop screen on first load | At 1440×900, every school is visible without scrolling |
-| R2 | Opening a school shows its questions, themes, 3–5 thinkers, what it reacted against and 2–3 go-next neighbours | Every school in the data has all five; spot-check 3 on screen |
+| R2 | Opening a school shows its questions, themes, 3–5 thinkers, what it reacted against and 2–3 go-next neighbours; each theme opens in place with 2–3 sentences and its thinkers (L12) | Every school in the data has all of these; spot-check 3 on screen |
 | R3 | Choosing a go-next neighbour opens that school | One click from Existentialism reaches a neighbour's panel |
 | R4 | Opening a thinker shows a summary and key ideas; "Study with Claude" copies a prompt and says so | Paste the clipboard: the prompt names the thinker |
 | R5 | Opened schools and thinkers are marked as visited, with the date, and survive a reload | Open two, reload: both still marked |

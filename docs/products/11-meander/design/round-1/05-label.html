@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>05 Wall text · Meander round 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Schibsted+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1440px;background:#fff}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;cursor:pointer}
+.screen{width:1440px;height:900px;position:relative;overflow:hidden}
+.screen svg.links{position:absolute;inset:0;width:1440px;height:900px;pointer-events:none}
+/* ---- the direction ---- */
+
+.screen{background:#f4f2ed;color:#1a1a18;font:400 13.5px/1.5 'Schibsted Grotesk',sans-serif;--wall:#f4f2ed;--ink:#1a1a18;--dim:#bdb9ae;--red:#d8432a;--rule:#d9d5cb}
+.top{position:absolute;left:56px;top:34px;right:520px;display:flex;justify-content:space-between;align-items:baseline}
+.wm{font:400 26px/1 'Instrument Serif'}
+.top p{font-size:12px;color:#77736a}
+.run{position:absolute;left:56px;top:96px;width:890px;font:400 58px/1.56 'Instrument Serif';letter-spacing:-.015em;color:var(--dim)}
+.run span{position:relative;white-space:nowrap}
+.run .era{font:500 10.5px/1 'Schibsted Grotesk';letter-spacing:.12em;text-transform:uppercase;color:#77736a;vertical-align:top;position:relative;top:14px;margin-right:6px;letter-spacing:.1em}
+.run .v{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:9px;text-decoration-color:var(--ink)}
+.run .v:after,.run .rel:before{position:absolute;left:0;font:500 10.5px/1 'Schibsted Grotesk';letter-spacing:.02em;white-space:nowrap}
+.run .v:after{content:attr(data-v);bottom:-12px;color:#77736a;background:var(--wall);padding-right:5px}
+.run .rel{color:var(--ink)}
+.run .rel:before{content:attr(data-rel);top:-2px;color:var(--ink);text-transform:uppercase;letter-spacing:.1em}
+.run .rel.ag:before{color:var(--red)}
+.run .here{color:var(--red);font-style:italic}
+.run .here.v{text-decoration-color:var(--red)}
+.run .here:after{color:var(--red);left:auto;right:0;padding:0 0 0 5px}
+.label{position:absolute;left:988px;top:34px;width:400px;height:832px;background:#fff;border:1px solid var(--rule);padding:26px 30px 0}
+.label .back{font-size:11.5px;color:#77736a;display:flex;justify-content:space-between;margin-bottom:16px}
+.label h2{font:italic 400 38px/1 'Instrument Serif';color:var(--red);letter-spacing:-.01em}
+.label .meta{font-weight:700;font-size:12.5px;margin:8px 0 2px}
+.label .lede{font-size:13.5px;margin-bottom:6px}
+.label h3{font:500 10.5px/1 'Schibsted Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#77736a;margin:13px 0 5px}
+.d-q li{font:400 19px/1.2 'Instrument Serif';margin-bottom:3px}
+.d-themes li{display:inline}.d-themes li:not(:last-child):after{content:" · "}
+.d-thinkers .t-row{display:flex;gap:8px;align-items:baseline;padding:1px 0}
+.d-thinkers b{font-weight:500}.d-thinkers i{font-style:normal;color:#77736a;font-size:12px}.d-thinkers span{display:none}
+.d-against a{font-weight:700}
+.d-next ul{border-top:1px solid var(--ink)}
+.d-next li{display:grid;grid-template-columns:1fr auto;gap:0 8px;padding:6px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+.d-next b{font:400 23px/1 'Instrument Serif'}
+.d-next em{font:500 10.5px/1 'Schibsted Grotesk';font-style:normal;letter-spacing:.1em;text-transform:uppercase;grid-column:2;grid-row:1}
+.d-next li.against em{color:var(--red)}
+.d-next span{grid-column:1/3;font-size:12.5px;color:#55524a}
+
+/* ---- brand strip (about the direction, not part of the screen) ---- */
+.strip{width:1440px;height:230px;background:#fff;border-top:1px solid #111;color:#111;font:12px/1.45 ui-sans-serif,system-ui,sans-serif;display:grid;grid-template-columns:300px 250px 270px 330px 1fr;position:relative}
+.strip>div{padding:20px 22px 0;border-right:1px solid #e4e4e4;min-width:0}
+.strip>div:last-child{border-right:0}
+.strip h6{font:600 10px/1 ui-sans-serif,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8a8a8a;margin-bottom:12px}
+.strip .bs-wm{height:60px;display:flex;align-items:center;margin-bottom:8px}
+.strip .bs-pers{color:#444}
+.strip .bs-alt{color:#8a8a8a;margin-top:4px}
+.strip .bs-sw{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 8px}
+.strip .bs-sw i{display:block;height:34px;border-radius:4px;outline:1px solid rgba(0,0,0,.12);outline-offset:-1px}
+.strip .bs-sw span{display:block;font:10px/1.3 ui-monospace,Menlo,monospace;color:#555;margin-top:3px}
+.strip .bs-ty1{font-size:30px;line-height:1.05;margin-bottom:4px}
+.strip .bs-ty2{font-size:14px;line-height:1.35;margin:8px 0 4px}
+.strip .bs-tyn{font:10px/1.3 ui-monospace,Menlo,monospace;color:#777}
+.strip dl{display:grid;grid-template-columns:76px 1fr;gap:5px 8px}
+.strip dt{color:#8a8a8a}
+.strip dd{color:#111}
+.strip .bs-sig{height:70px;display:flex;align-items:center;margin-bottom:6px;overflow:hidden}
+.strip .bs-note{font-size:10px;line-height:1.35;color:#8a8a8a;margin-top:8px}
+</style></head>
+<body>
+<div class="screen"><div class="top"><div class="wm">Meander</div><p>Western philosophy in sixteen names · seen 4, over 3 days</p></div>
+<div class="run"><span style="white-space:nowrap"><i class="era">Ancient</i><span class="  "  >Presocratics</span>,</span> <span style="white-space:nowrap"><span class="v  " data-v="seen 5 Nov" >Classical Greek</span>,</span> <span style="white-space:nowrap"><span class="  "  >Epicureanism</span>,</span> <span style="white-space:nowrap"><span class="v  " data-v="seen 3 Nov" >Stoicism</span>,</span> <span style="white-space:nowrap"><i class="era">Medieval</i><span class="  "  >Scholasticism</span>,</span> <span style="white-space:nowrap"><i class="era">Early modern</i><span class="  "  >Rationalism</span>,</span> <span style="white-space:nowrap"><span class="  "  >Empiricism</span>,</span> <span style="white-space:nowrap"><span class="v rel ag " data-v="seen 9 Nov" data-rel="pushed against">German Idealism</span>,</span> <span style="white-space:nowrap"><i class="era">19th century</i><span class="  "  >Utilitarianism</span>,</span> <span style="white-space:nowrap"><span class="  "  >Marxism</span>,</span> <span style="white-space:nowrap"><span class="  "  >Pragmatism</span>,</span> <span style="white-space:nowrap"><i class="era">20th century</i><span class="  "  >Analytic philosophy</span>,</span> <span style="white-space:nowrap"><span class=" rel  "  data-rel="built on">Phenomenology</span>,</span> <span style="white-space:nowrap"><span class="v  here" data-v="you are here, 12 Nov" >Existentialism</span>,</span> <span style="white-space:nowrap"><span class=" rel  "  data-rel="grew from it">Absurdism</span>,</span> <span style="white-space:nowrap"><span class=" rel ag "  data-rel="pushed back">Post-structuralism</span>.</span></div>
+<div class="label"><div class="back"><span>← All sixteen</span><span>Esc</span></div><h2>Existentialism</h2><div class="meta">1840s–1960s. Seen today, 12 November.</div>
+  <section class="d-q"><h3>Key questions</h3><ol><li>If nothing hands me a purpose, how do I live?</li><li>What does it mean to be free, and to answer for it?</li><li>How do I live as myself and not as the crowd expects?</li></ol></section>
+  <section class="d-themes"><h3>Themes</h3><ul><li>Freedom and responsibility</li><li>Anxiety</li><li>Authenticity and bad faith</li><li>Existence before essence</li><li>The individual against the crowd</li></ul></section>
+  <section class="d-thinkers"><h3>Thinkers</h3><ul><li class=""><div class="t-row"><b>Søren Kierkegaard</b><i>1813–1855</i><span>Truth has to be lived by one person. Faith is a leap.</span></div></li><li class=""><div class="t-row"><b>Friedrich Nietzsche</b><i>1844–1900</i><span>God is dead, so values are ours to make. A forerunner.</span></div></li><li class=""><div class="t-row"><b>Jean-Paul Sartre</b><i>1905–1980</i><span>Existence precedes essence. We are condemned to be free.</span></div></li><li class=""><div class="t-row"><b>Simone de Beauvoir</b><i>1908–1986</i><span>Freedom always has a situation. One becomes a woman.</span></div></li><li class=""><div class="t-row"><b>Albert Camus</b><i>1913–1960</i><span>The absurd, and revolt against it. He refused the label.</span></div></li></ul></section>
+  <section class="d-against"><h3>Reacted against</h3><p><a>German Idealism</a> Hegel's system, which explains everything except the person living inside it, and the rationalism that puts abstract reason before a lived life.</p></section>
+  <section class="d-next"><h3>See also</h3><ul><li class="built"><em>built on</em><b>Phenomenology</b><span>The method Sartre and Beauvoir took from Husserl and Heidegger.</span></li><li class="grew"><em>grew from it</em><b>Absurdism</b><span>Camus's answer when the search for meaning meets a silent world.</span></li><li class="against"><em>pushed back</em><b>Post-structuralism</b><span>Foucault and Derrida doubted the free, self-making subject.</span></li></ul></section></div></div>
+<aside class="strip">
+  <div><h6>05 · Wordmark</h6><div class="bs-wm"><span style="font:400 44px/1 'Instrument Serif';color:#1a1a18">Meander<i style="color:#d8432a">.</i></span></div><p class="bs-pers">A gallery wall text. Still, spacious, sure of itself.</p><p class="bs-alt">Name: Meander</p><p class="bs-note">Sample content, not yet checked for accuracy (R7). Draft copy.</p></div>
+  <div><h6>Palette</h6><div class="bs-sw"><div><i style="background:#f4f2ed"></i><span>wall<br>#f4f2ed</span></div><div><i style="background:#1a1a18"></i><span>ink<br>#1a1a18</span></div><div><i style="background:#bdb9ae"></i><span>dim<br>#bdb9ae</span></div><div><i style="background:#d8432a"></i><span>here<br>#d8432a</span></div><div><i style="background:#ffffff"></i><span>label<br>#ffffff</span></div><div><i style="background:#d9d5cb"></i><span>rule<br>#d9d5cb</span></div></div></div>
+  <div><h6>Type pair</h6><div class="bs-ty1" style="font-family:'Instrument Serif'">See also</div><div class="bs-tyn">Instrument Serif · names</div><div class="bs-ty2" style="font-family:'Schibsted Grotesk'">Seen today, 12 November.</div><div class="bs-tyn">Schibsted Grotesk 400/500 · label text</div></div>
+  <div><h6>Voice</h6><dl><dt>First visit</dt><dd>Sixteen names, in order. Start with any of them.</dd><dt>Go next</dt><dd>See also</dd><dt>Been there</dt><dd>Seen 4, over 3 days</dd></dl></div>
+  <div><h6>Signature · axis</h6><div class="bs-sig"><span style="font:400 21px/1.1 'Instrument Serif';color:#bdb9ae;white-space:nowrap"><span style="color:#1a1a18">Phenomenology</span>, <i style="color:#d8432a">Existentialism</i></span></div><p><b>One sentence of names; those connected to where you are turn black.</b></p><p class="bs-pers">Axis: type as the map, no graph, lowest density</p></div>
+</aside>
+</body></html>

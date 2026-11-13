@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "positions": "node scripts/embed-positions.mjs",
+    "content": "node scripts/import-content.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

@@ -1,0 +1,1615 @@
+{
+  "date": "2026-11-13",
+  "basis": "eval-content-2026-11-13.md + user test",
+  "count": 218,
+  "items": [
+    {
+      "item": "presocratics|debatable",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Dropped 'not a school'; now says only what SEP §1 says about the label (coined 18th c., made current by Diels, last ones contemporaries of Socrates)."
+    },
+    {
+      "item": "presocratics|theme2",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Atomists: 'solid, uncuttable bodies separated by void' per SEP Presocratics §8; dropped 'tiny' and 'moving'."
+    },
+    {
+      "item": "presocratics|Heraclitus of Ephesus|key_idea1",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Added the source's hedge: SEP 3.1 gives this as one reading; the Platonic reading still has advocates."
+    },
+    {
+      "item": "presocratics|Heraclitus of Ephesus|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Kept the 'one leading reading' hedge for flux; prompt now cites every card source, incl. SEP Heraclitus §4 and SEP Presocratics §3 for logos and fire."
+    },
+    {
+      "item": "presocratics|Democritus|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Replaced 'co-founded atomism' with the card's wording (built on his teacher Leucippus's system); prompt cites all card sources incl. SEP Democritus §7."
+    },
+    {
+      "item": "socrates-plato|date_range",
+      "actions": [
+        "cut"
+      ],
+      "note": "Cut '(Plato's Academy continues after him)': no cited section mentions the Academy (graded under socrates-plato|description)."
+    },
+    {
+      "item": "socrates-plato|description",
+      "actions": [
+        "rewrite",
+        "recite",
+        "cut"
+      ],
+      "note": "Forms now cited to SEP Plato §1 ('most fundamental distinction in Plato's philosophy'); Academy claim cut from date_range."
+    },
+    {
+      "item": "socrates-plato|debatable",
+      "actions": [
+        "cut",
+        "recite"
+      ],
+      "note": "Cut the Neoplatonism/Scholasticism parenthetical (unsourced); 424/3 now cited to SEP Socrates section 'Plato (424/3–347)', 429? to SEP Plato intro."
+    },
+    {
+      "item": "socrates-plato|theme5",
+      "actions": [
+        "recite"
+      ],
+      "note": "'Socrates wrote nothing' is in SEP Socrates intro ('despite having written nothing'); added that citation."
+    },
+    {
+      "item": "socrates-plato|reacted_against",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Now matches IEP Socrates 2a: cosmology was the main focus of many (not all) Presocratics."
+    },
+    {
+      "item": "socrates-plato|Socrates|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Topic list now matches SEP Socrates §1 (courage, love, reverence, moderation, state of the soul); 'justice' dropped."
+    },
+    {
+      "item": "socrates-plato|Socrates|study_prompt",
+      "actions": [
+        "recite"
+      ],
+      "note": "Prompt now cites every card source, incl. IEP 'Priority of the Care of the Soul' and 'No One Errs Knowingly'."
+    },
+    {
+      "item": "socrates-plato|Plato|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Now matches SEP Plato §4: Socrates speaks in nearly all dialogues, often as principal speaker."
+    },
+    {
+      "item": "socrates-plato|Plato|key_idea3",
+      "actions": [
+        "recite"
+      ],
+      "note": "Added SEP Plato §4 ('Laws, which ancient testimony tells us was one of his latest works')."
+    },
+    {
+      "item": "socrates-plato|Plato|study_prompt",
+      "actions": [
+        "recite"
+      ],
+      "note": "Prompt now cites every card source, incl. SEP Plato §10 for the Republic and the Laws."
+    },
+    {
+      "item": "aristotle|description",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Dropped 'systematic'; 'wide-ranging' and the fields follow SEP Aristotle intro, the Lyceum §1."
+    },
+    {
+      "item": "aristotle|debatable",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Cut 'usually treated as'; now only what SEP §1 says (the Lyceum, members later called Peripatetics)."
+    },
+    {
+      "item": "aristotle|theme3",
+      "actions": [
+        "recite"
+      ],
+      "note": "SEP Theophrastus intro calls him Aristotle's 'close colleague and successor at the Lyceum'; added that citation."
+    },
+    {
+      "item": "aristotle|theme4",
+      "actions": [
+        "cut"
+      ],
+      "note": "Cut 'over a whole life' (not in SEP §12)."
+    },
+    {
+      "item": "aristotle|reacted_against",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Dropped 'separate'; now SEP §9 wording (theory of Forms, unable to account for change and generation)."
+    },
+    {
+      "item": "aristotle|Aristotle|study_prompt",
+      "actions": [
+        "recite"
+      ],
+      "note": "Prompt now cites every card source, incl. SEP §9 (teleology without design) and §12 (happiness, polis)."
+    },
+    {
+      "item": "aristotle|Alexander of Aphrodisias|study_prompt",
+      "actions": [
+        "recite"
+      ],
+      "note": "Prompt now cites every card source, incl. SEP §5 Psychology and §6 Ethics and Fate."
+    },
+    {
+      "item": "epicureanism|date_range",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Gave Lucretius's and Philodemus's dates as SEP gives them and cited SEP Lucretius and Philodemus intros (graded under epicureanism|description); dropped 'Roman era'."
+    },
+    {
+      "item": "epicureanism|description",
+      "actions": [
+        "recite"
+      ],
+      "note": "The graded claim sits in date_range; fixed there (see epicureanism|date_range)."
+    },
+    {
+      "item": "epicureanism|theme1",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Soul atoms cited to SEP Epicurus §4; last sentence now SEP Lucretius §6 (wrong religion the obstacle, physics the cure)."
+    },
+    {
+      "item": "epicureanism|theme4",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Passive as in SEP Epicurus §6: Epicureans were encouraged to form communities (some practices may postdate Epicurus)."
+    },
+    {
+      "item": "epicureanism|theme5",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Per SEP Lucretius §7: Lucretius and Philodemus are realists about the gods; Epicurus's own view is debated."
+    },
+    {
+      "item": "epicureanism|reacted_against",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Only fear of death and punishment is the primary cause of anxiety (SEP Epicurus intro), not the Forms."
+    },
+    {
+      "item": "epicureanism|Philodemus|dates",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Dates as in SEP Philodemus intro: ca. 110–ca. 30 BCE."
+    },
+    {
+      "item": "epicureanism|Lucretius|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "SEP Lucretius §1: little known beyond what can be inferred from his work."
+    },
+    {
+      "item": "epicureanism|Lucretius|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Prompt cites every card source incl. SEP Lucretius 3.417–829 and §6; wording now matches the card (dropped 'Roman')."
+    },
+    {
+      "item": "stoicism|description",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "'Unified' became 'interlocking' (SEP intro); 'only virtue is good' cited to §4.3; living in agreement with nature to §4.2."
+    },
+    {
+      "item": "stoicism|theme2",
+      "actions": [
+        "recite"
+      ],
+      "note": "Epictetus's credit now cited to SEP Epictetus 4.4 (externals indifferent; the good is a disposition of volition, virtue)."
+    },
+    {
+      "item": "stoicism|Zeno of Citium|key_idea3",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Guarantee now comes from how the impression arises (and, on some readings, its clarity), per SEP 3.7; the clauses' meaning is disputed."
+    },
+    {
+      "item": "stoicism|Zeno of Citium|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Prompt cites every card source (SEP Stoicism 4.1, 1.2, 3.7, Ancient Skepticism 3.1); cognition wording follows the revised key idea."
+    },
+    {
+      "item": "stoicism|Chrysippus of Soli|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Prompt cites every card source (SEP 2.8, IEP Freedom and Necessity, Eudaimonism, Logic); logic now 'an alternative to Aristotle's'."
+    },
+    {
+      "item": "stoicism|Seneca|key_idea3",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Matches SEP Seneca 2.1: goes where his leaders lead, not where they send; not anyone's disciple."
+    },
+    {
+      "item": "stoicism|Seneca|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Prompt cites every card source incl. SEP Seneca 3.3; 'Roman Stoic' replaced with the card's Corduba/Rome wording; third idea follows the revised key idea."
+    },
+    {
+      "item": "stoicism|Epictetus|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Per SEP Epictetus §1: slave of Epaphroditus at Nero's court; forced to leave Rome, presumably by Domitian's edict of 89; Arrian called a historian, not a student."
+    },
+    {
+      "item": "stoicism|Epictetus|key_idea2",
+      "actions": [
+        "recite"
+      ],
+      "note": "Body, possessions and reputation as 'externals' is in SEP Epictetus 4.3; added that citation."
+    },
+    {
+      "item": "stoicism|Epictetus|study_prompt",
+      "actions": [
+        "recite"
+      ],
+      "note": "Prompt cites every card source incl. SEP Epictetus 4.5 (correct judgments, feelings follow)."
+    },
+    {
+      "item": "stoicism|Marcus Aurelius|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Dropped 'daily' (SEP gives daily writing advice to Epictetus); prompt cites SEP 1.1 too."
+    },
+    {
+      "item": "skepticism|date_range",
+      "actions": [
+        "recite"
+      ],
+      "note": "Span 3rd c. BCE – 2nd c. CE is in SEP Ancient Skepticism intro; added to school sources (graded under skepticism|description)."
+    },
+    {
+      "item": "skepticism|description",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Replaced 'no claim to knowledge is secure' (negative dogmatism) with suspension and continued inquiry, per SEP Ancient Skepticism 4.4 and 3.1; span recited to intro."
+    },
+    {
+      "item": "skepticism|theme1",
+      "actions": [
+        "recite"
+      ],
+      "note": "Arcesilaus's suspension of judgment is in SEP Ancient Skepticism 3.1; added."
+    },
+    {
+      "item": "skepticism|theme2",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Per SEP 3.1/3.2: Academics 'call into question' a criterion; Carneades offered the persuasive."
+    },
+    {
+      "item": "skepticism|theme5",
+      "actions": [
+        "recite"
+      ],
+      "note": "Arcesilaus acting without assent, adhering to the reasonable, is in SEP 3.1; added."
+    },
+    {
+      "item": "skepticism|Pyrrho|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'Most' became 'much', as in SEP Ancient Skepticism 4.1."
+    },
+    {
+      "item": "skepticism|Pyrrho|key_idea1",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Attributed to Timon's report; SEP Pyrrho §3 notes some scholars doubt it is all Pyrrho's."
+    },
+    {
+      "item": "skepticism|Pyrrho|key_idea2",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'Undecidable' became 'indeterminate', per SEP Ancient Skepticism 4.1."
+    },
+    {
+      "item": "skepticism|Pyrrho|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Dates now c. 365/60–275/70 BCE as on the card; Timon hedge added; cites all card sources incl. SEP Pyrrho §3."
+    },
+    {
+      "item": "skepticism|Arcesilaus|dates",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Shows both SEP birth years: 316/5 (Ancient Skepticism 3.1) or 315/4 (Arcesilaus intro)."
+    },
+    {
+      "item": "skepticism|Arcesilaus|key_idea1",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Dropped 'only': SEP 3.1 says 'employing their premises'."
+    },
+    {
+      "item": "skepticism|Carneades|key_idea2",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Added the source's hedge: 'the traditional take' (SEP Ancient Skepticism 3.2)."
+    },
+    {
+      "item": "skepticism|Carneades|key_idea3",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Added 'apparently': SEP Carneades §3 says his aim 'seems to have been' to challenge the Stoics."
+    },
+    {
+      "item": "skepticism|Sextus Empiricus|dates",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "SEP Sextus §1: 'probably in the second or third century CE'."
+    },
+    {
+      "item": "skepticism|Sextus Empiricus|study_prompt",
+      "actions": [
+        "recite"
+      ],
+      "note": "Prompt cites every card source incl. SEP Sextus 3.1 (skeptics still investigating) and 3.3."
+    },
+    {
+      "item": "neoplatonism|description",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "The span claim sits in date_range; now 'roughly mid-3rd – mid-7th century CE', keeping SEP Neoplatonism intro's hedge."
+    },
+    {
+      "item": "neoplatonism|theme2",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "'Pours out' (emanation, which SEP calls misleading) now 'emerges'; cited Proclus §3.1 (remaining, procession, reversion) for Proclus."
+    },
+    {
+      "item": "neoplatonism|theme4",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Theurgy gloss now matches SEP Proclus §3.6: rites 'established by the gods themselves'."
+    },
+    {
+      "item": "neoplatonism|reacted_against",
+      "actions": [
+        "cut"
+      ],
+      "note": "Cut the unsourced gloss on Gnosticism; SEP only says Plotinus vehemently opposed it."
+    },
+    {
+      "item": "neoplatonism|Plotinus|key_idea2",
+      "actions": [
+        "recite"
+      ],
+      "note": "Cited SEP Plotinus §7, which names the first principle 'the One, or the Good'."
+    },
+    {
+      "item": "neoplatonism|Plotinus|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "'3rd century CE' now the card's Rome years 244–270; kept 'usually seen as'; sources now the union of summary and key ideas (adds Plotinus intro/§1, Neoplatonism §1 and §5)."
+    },
+    {
+      "item": "neoplatonism|Porphyry|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Cut 'short'; now 'for centuries the standard introduction to logic', as SEP Porphyry intro says."
+    },
+    {
+      "item": "neoplatonism|Porphyry|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite",
+        "cut"
+      ],
+      "note": "Cut the undated 'late 3rd century'; 'saves the soul' narrowed to the thinking part as in §3.1; sources now cover intro, §1 and §3.1."
+    },
+    {
+      "item": "neoplatonism|Iamblichus|study_prompt",
+      "actions": [
+        "recite"
+      ],
+      "note": "Added SEP Iamblichus §4.3 (Pythagorean mathematics) and §2.1 to the prompt's sources (union of the card)."
+    },
+    {
+      "item": "neoplatonism|Proclus|key_idea1",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Now 'sets out his metaphysics ... starting from the One as the ultimate cause', per SEP Proclus §3.1."
+    },
+    {
+      "item": "neoplatonism|Proclus|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Updated to the revised key idea 1; '5th century CE' replaced by the card's dates."
+    },
+    {
+      "item": "patristic|description",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Span claim sits in date_range: start now Origen's birth c. 185 (SEP Origen intro); end c. 525/6 (Medieval Philosophy §1.3.2 'c. 525', SEP Boethius intro '526?'); both cited."
+    },
+    {
+      "item": "patristic|debatable",
+      "actions": [
+        "cut",
+        "rewrite",
+        "recite"
+      ],
+      "note": "Cut the period-not-school framing and the meta claim about SEP entries; now only Medieval Philosophy §1.4: by some chronologies Augustine founded the medieval Latin tradition."
+    },
+    {
+      "item": "patristic|theme3",
+      "actions": [
+        "cut"
+      ],
+      "note": "Removed Origen (and his source) from 'Evil as missing goodness'; SEP Origen §5 does not call evil a privation."
+    },
+    {
+      "item": "patristic|Origen|key_idea3",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'Causes their fall' now 'leaves a soul captive to the devil', as SEP Origen intro says."
+    },
+    {
+      "item": "patristic|Origen|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "'Early 3rd century' replaced by the card's dates; Alexandria now sourced via §1; key idea 3 updated."
+    },
+    {
+      "item": "patristic|Augustine of Hippo|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Kept 'perhaps'; birthplace and dates from the card; added Augustine intro, §1 and §4 to sources."
+    },
+    {
+      "item": "patristic|Pseudo-Dionysius the Areopagite|dates",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Now 'late 5th or early 6th c. (between 485 and 518–28 CE)', per SEP intro and §1."
+    },
+    {
+      "item": "patristic|Pseudo-Dionysius the Areopagite|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "'Around 500 CE' now 'late 5th or early 6th century'; added SEP intro and §1 to sources."
+    },
+    {
+      "item": "patristic|Boethius|key_idea1",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Now Philosophy's argument as SEP §5 gives it: he has lost no true goods, so his fall need not cut him off from happiness."
+    },
+    {
+      "item": "patristic|Boethius|key_idea3",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'Foundation of medieval learning' replaced by SEP §8's claims: translations standard through the Middle Ages, commentaries the main tool 9th–12th c."
+    },
+    {
+      "item": "patristic|Boethius|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "'Statesman' now 'aristocrat'; 'early 6th century' replaced by the card's dates; key idea 3 updated; summary sources added."
+    },
+    {
+      "item": "scholasticism|description",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Span claim sits in date_range: now '12th century – around 1700' (Medieval Philosophy §2.5, §2.7 'at least three centuries', §5.2 'around 1700')."
+    },
+    {
+      "item": "scholasticism|debatable",
+      "actions": [
+        "cut",
+        "rewrite"
+      ],
+      "note": "Cut 'more than a doctrine', 'Latin university strand' and the Augustine/Boethius line; now Aquinas intro (scholastic method of new universities) and Medieval Philosophy §2.7/§5.2."
+    },
+    {
+      "item": "scholasticism|theme3",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'Argument from the idea of God' now just 'Anselm's ontological argument', as the cited sections name it."
+    },
+    {
+      "item": "scholasticism|reacted_against",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Replaced 'followers of Aristotle against Christian teaching' with Abelard's pseudo-dialecticians (SEP Abelard §7); cut the unsourced 'make reason and faith agree'."
+    },
+    {
+      "item": "scholasticism|Anselm|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Now 'outstanding', matching the card; added SEP Anselm intro to sources."
+    },
+    {
+      "item": "scholasticism|Peter Abelard|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Now as SEP intro says: the affair made him a tragic figure of romance, the clash with Bernard a hero of the Enlightenment."
+    },
+    {
+      "item": "scholasticism|Thomas Aquinas|dates",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Restored the source's hedge: 'c. 1225–1274' (SEP intro 'ca.', §1.1 'around the year 1225')."
+    },
+    {
+      "item": "scholasticism|Thomas Aquinas|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "'Great system-builder of the universities' now the card's wording; '13th-century' replaced by dates; added Aquinas intro and §1.1."
+    },
+    {
+      "item": "scholasticism|John Duns Scotus|summary",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "'Taught at Oxford' now 'an Oxford Franciscan later sent to teach at Paris' (Medieval Philosophy §2.7); cited SEP Scotus §1.1 for his Scottish birth and Franciscan order."
+    },
+    {
+      "item": "scholasticism|John Duns Scotus|key_idea1",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Univocity now framed with pure perfections like goodness, as SEP §2.3 does; 'being' removed."
+    },
+    {
+      "item": "scholasticism|John Duns Scotus|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "'Late 13th century' replaced by the card's dates; univocity now about pure perfections; Scotland, Franciscan and Subtle Doctor now sourced via the summary's sections."
+    },
+    {
+      "item": "scholasticism|William of Ockham|summary",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Cut 'English' (now born in Ockham, Surrey, from SEP §1.1); kept 'probably best known today for nominalism'; Razor is 'named after him'."
+    },
+    {
+      "item": "scholasticism|William of Ockham|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Cut 'English' and 'early 14th century' (now the card's dates); Franciscan now sourced via the summary's sections."
+    },
+    {
+      "item": "renaissance|description",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "The anti-scholastic stance now attributed to humanists, as IEP §2 does."
+    },
+    {
+      "item": "renaissance|debatable",
+      "actions": [
+        "recite"
+      ],
+      "note": "Cited IEP Renaissance Philosophy §3 Platonism, which names Ficino as the most important Renaissance Platonist."
+    },
+    {
+      "item": "renaissance|theme4",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Separated the two IEP §3 claims: dialogues as sacred mysteries; philosophy as a way toward union with God."
+    },
+    {
+      "item": "renaissance|Lorenzo Valla|dates",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Restored SEP's 'c.' (IEP gives 1406, consistent)."
+    },
+    {
+      "item": "renaissance|Lorenzo Valla|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Cut 'Italian' and '15th-century' (now the card's dates); added SEP Valla §4 Moral Philosophy for the ethics of pleasure."
+    },
+    {
+      "item": "renaissance|Marsilio Ficino|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Cut 'Florentine'; Plato translation now sourced via the summary's sections (SEP intro, §2.3, IEP §3)."
+    },
+    {
+      "item": "renaissance|Giovanni Pico della Mirandola|key_idea3",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Philology now aimed at astrology's ancient pedigree; prediction objections described as restated older arguments (SEP §2.5)."
+    },
+    {
+      "item": "renaissance|Giovanni Pico della Mirandola|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Added SEP Pico §2.5 and the intro to sources; '15th-century' replaced by the card's dates."
+    },
+    {
+      "item": "renaissance|Desiderius Erasmus|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Fixed 'wrong': SEP intro says he broke with Luther over Luther's sectarianism, and the two also clashed in a polemic over free will."
+    },
+    {
+      "item": "renaissance|Desiderius Erasmus|dates",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Two cited sources disagree: IEP §2 'c.1466', SEP intro '1469'; now 'c. 1466 or 1469–1536'."
+    },
+    {
+      "item": "renaissance|Desiderius Erasmus|key_idea1",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "SEP ties 'ad fontes' to the biblical languages; cut 'the classics'."
+    },
+    {
+      "item": "renaissance|Desiderius Erasmus|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Updated to the revised key idea 1 and the two-source dates (replacing 'early 16th century')."
+    },
+    {
+      "item": "rationalism|description",
+      "actions": [
+        "cut"
+      ],
+      "note": "Span claim sits in date_range: cut 'via Wolff' (not in the corpus); now '17th–18th centuries' (SEP §1.2)."
+    },
+    {
+      "item": "rationalism|debatable",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Cut 'not a self-named school'; now SEP §1.2: a grouping first applied by Kant, to be used with great caution."
+    },
+    {
+      "item": "rationalism|theme4",
+      "actions": [
+        "cut"
+      ],
+      "note": "Cut the unsourced 'like a geometry book'."
+    },
+    {
+      "item": "rationalism|René Descartes|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Now 'developed the techniques that made algebraic geometry possible', as SEP intro says."
+    },
+    {
+      "item": "rationalism|René Descartes|key_idea1",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "No 'doubt everything' method; now the skeptical arguments against the senses and even reasoning (SEP §3.1)."
+    },
+    {
+      "item": "rationalism|René Descartes|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Added SEP Descartes intro (mathematician); '17th-century' replaced by the card's dates; key idea 1 updated."
+    },
+    {
+      "item": "rationalism|Baruch Spinoza|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "'Amsterdam-born' and '17th-century' now the card's wording and dates; added SEP Spinoza intro and §1."
+    },
+    {
+      "item": "rationalism|Gottfried Wilhelm Leibniz|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "'Polymath of the late 17th and early 18th century' now the card's wording and dates; added Leibniz intro and §6.3 (veined marble)."
+    },
+    {
+      "item": "empiricism|description",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Span claim sits in date_range: 'late 17th' narrowed claim dropped; now '17th–18th centuries' (SEP §1.2)."
+    },
+    {
+      "item": "empiricism|question3",
+      "actions": [
+        "cut",
+        "rewrite",
+        "recite"
+      ],
+      "note": "Cut the Berkeley question (SEP says Berkeley fits neither camp); replaced with the Empiricism Thesis and its lesson that some things are not known at all (SEP §1.2)."
+    },
+    {
+      "item": "empiricism|theme2",
+      "actions": [
+        "recite"
+      ],
+      "note": "Cited SEP §1.2: empiricists reject the Innate Knowledge and Innate Concept theses."
+    },
+    {
+      "item": "empiricism|John Locke|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'Religious toleration' now 'separation of Church and State in his Letter Concerning Toleration', per SEP intro."
+    },
+    {
+      "item": "empiricism|John Locke|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Added SEP Locke §4.5 (explicit consent); '17th-century' replaced by the card's dates."
+    },
+    {
+      "item": "empiricism|George Berkeley|key_idea2",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Kept SEP's hedge: 'as Locke often seems to suggest'."
+    },
+    {
+      "item": "empiricism|George Berkeley|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite",
+        "cut"
+      ],
+      "note": "Cut 'Anglican' and '18th century'; 'to exist is to be perceived' now the card's wording; added Berkeley intro and §1."
+    },
+    {
+      "item": "empiricism|David Hume|key_idea2",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Now SEP §2.3's wording: reason cannot serve as the foundation."
+    },
+    {
+      "item": "empiricism|David Hume|study_prompt",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Added SEP Hume intro; '18th-century Scottish philosopher and historian' now the card's wording and dates."
+    },
+    {
+      "item": "enlightenment|debatable",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "IEP clause now says what IEP German Idealism intro says (Kant among its most famous representatives); cited that intro."
+    },
+    {
+      "item": "enlightenment|theme2",
+      "actions": [
+        "recite"
+      ],
+      "note": "Cited SEP Kant §2.1: Newton's spectacular achievements engendered widespread confidence in reason."
+    },
+    {
+      "item": "enlightenment|theme3",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Now 'political and social authority ... religious myth and obscure tradition', as SEP Enlightenment §2.1 says."
+    },
+    {
+      "item": "enlightenment|Voltaire|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Prompt now cites all card sources (adds §2.5 and §2.1) and mirrors the key ideas' wording."
+    },
+    {
+      "item": "enlightenment|Jean-Jacques Rousseau|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cites §3.1 (general will) and §5 (education) plus §1 Life for 1712–1778 (death in 1778 is in §1); dropped 'questioned his own age' for the card's 'dissenting voice'."
+    },
+    {
+      "item": "enlightenment|Denis Diderot|key_idea1",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Now 'engine for changing what we know', per SEP Diderot §1.2 ('changing, not codifying, existing knowledge')."
+    },
+    {
+      "item": "enlightenment|Denis Diderot|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cites §2.2.2 and §3 for experiment and materialism; first idea matches revised key idea 1."
+    },
+    {
+      "item": "enlightenment|Immanuel Kant|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cites §5.4 (categorical imperative) and §3; start line now uses only card facts."
+    },
+    {
+      "item": "german-idealism|era",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Era 'late 18th–19th century': IEP German Idealism intro says the movement ran from the 1780s to the 1840s."
+    },
+    {
+      "item": "german-idealism|description",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Fixes the '19th-century' framing via era; replaced 'unfolding of mind or spirit' with IEP intro's single first principle, the absolute."
+    },
+    {
+      "item": "german-idealism|Johann Gottlieb Fichte|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Names the 1792 Critique of All Revelation instead of calling it his first book."
+    },
+    {
+      "item": "german-idealism|Johann Gottlieb Fichte|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cites IEP §3 and SEP §4.4; thing-in-itself idea now matches key idea 2."
+    },
+    {
+      "item": "german-idealism|Friedrich Wilhelm Joseph von Schelling|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Keeps SEP's hedge: 'often an impressively rigorous logical thinker'."
+    },
+    {
+      "item": "german-idealism|G. W. F. Hegel|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Restored SEP's hedge 'perhaps best known'."
+    },
+    {
+      "item": "german-idealism|G. W. F. Hegel|key_idea3",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Uses IEP §4 wording: ethical life contrasted with abstract right and morality, not 'private rights or conscience'."
+    },
+    {
+      "item": "german-idealism|G. W. F. Hegel|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cites IEP §4 for ethical life; matches revised key idea 3 and the hedged summary."
+    },
+    {
+      "item": "utilitarianism|description",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cited SEP History §2 (emerged in the 19th century), its Godwin section (start dated to 1789), SEP Sidgwick intro (culmination) and §5 Conclusion; 'still active' rewritten as refinement since, often as consequentialism."
+    },
+    {
+      "item": "utilitarianism|reacted_against",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cited SEP History §2.3: Bentham and Mill attacked social traditions justified by appeals to natural order."
+    },
+    {
+      "item": "utilitarianism|Jeremy Bentham|dates",
+      "actions": [
+        "recite"
+      ],
+      "note": "1748–1832 now cited to SEP History §2.2 and SEP Bentham §1."
+    },
+    {
+      "item": "utilitarianism|John Stuart Mill|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cites §4.5 for self-protection; dropped 'London-born' and 'refined Bentham's utilitarianism' (not on the card); women idea matches key idea 3."
+    },
+    {
+      "item": "utilitarianism|Henry Sidgwick|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Restored SEP's hedge 'in many ways marked the culmination'."
+    },
+    {
+      "item": "utilitarianism|Henry Sidgwick|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cites Sidgwick §3 and §4 for the universe axiom and dualism; hedged 'in many ways' culmination."
+    },
+    {
+      "item": "marxism|theme3",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Debate now about whether exploitation must depend on the labour theory of value, per SEP Marx §3.3."
+    },
+    {
+      "item": "marxism|Karl Marx|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'Refused' softened to SEP's 'famously reluctant'."
+    },
+    {
+      "item": "marxism|Karl Marx|key_idea1",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'Lose control of' replaced by SEP §1.2's 'separated from' for all four."
+    },
+    {
+      "item": "marxism|Karl Marx|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Dropped 'turned Hegel's history toward material life' (not on card); cites all card sources."
+    },
+    {
+      "item": "marxism|Friedrich Engels|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cites §3.2, §4.1, §5.3; Darwin point reworded to match key idea 2 (a parallel, not proof)."
+    },
+    {
+      "item": "marxism|Georg Lukács|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cites §3.2 and §4.4; standpoint idea keeps the card's hedge."
+    },
+    {
+      "item": "existentialism|description",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Roots now 'in the 19th century', as SEP Existentialism intro says, not 'the 1840s'."
+    },
+    {
+      "item": "existentialism|debatable",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "No longer excludes Kierkegaard and Nietzsche; SEP intro calls them 19th-century pioneers."
+    },
+    {
+      "item": "existentialism|Søren Kierkegaard|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'Usually' changed to SEP's 'often'."
+    },
+    {
+      "item": "existentialism|Friedrich Nietzsche|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'Mostly' changed to SEP's 'intensively'."
+    },
+    {
+      "item": "existentialism|Friedrich Nietzsche|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cites §6.3, existentialism §5.3 and §6.2; recurrence keeps 'on one influential reading'."
+    },
+    {
+      "item": "existentialism|Jean-Paul Sartre|study_prompt",
+      "actions": [
+        "recite"
+      ],
+      "note": "Cites Sartre §4.2 and existentialism §5 and §3 for bad faith and existence-precedes-essence."
+    },
+    {
+      "item": "existentialism|Simone de Beauvoir|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'Founding text' changed to SEP's 'trailblazing work in feminist philosophy'."
+    },
+    {
+      "item": "existentialism|Albert Camus|study_prompt",
+      "actions": [
+        "recite"
+      ],
+      "note": "Cites Camus §4.1 (revolt and solidarity), §3.1 and §3.4."
+    },
+    {
+      "item": "pragmatism|theme5",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Second generation now shaped by Dewey and Jane Addams, per SEP Pragmatism §1.1."
+    },
+    {
+      "item": "pragmatism|Charles Sanders Peirce|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cites pragmatism §3.1 and Peirce §3; 'scientist and logician' replaced with card wording."
+    },
+    {
+      "item": "pragmatism|William James|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Pragmatism is a 1907 book drawn from 1905–1907 lectures, per SEP James."
+    },
+    {
+      "item": "pragmatism|William James|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cites pragmatism §2.2, §3.2 and James §4; right-to-believe idea keeps its conditions."
+    },
+    {
+      "item": "pragmatism|John Dewey|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Global reach now only for education; democracy writings shaped debates for decades (SEP intro)."
+    },
+    {
+      "item": "pragmatism|John Dewey|key_idea1",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Starts from a feeling something is amiss; the problem is framed during inquiry (SEP Dewey §4.3)."
+    },
+    {
+      "item": "pragmatism|John Dewey|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Cites Dewey §7 and §5.3 for democracy; idea matches key idea 3."
+    },
+    {
+      "item": "pragmatism|Richard Rorty|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Scoped to the pragmatists: SEP §4.2 calls Dewey his key figure there; he also drew on Hegel and Darwin."
+    },
+    {
+      "item": "pragmatism|Richard Rorty|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Dropped 'American' (not on card); cites §3.3 for the liberal ironist and cruelty."
+    },
+    {
+      "item": "phenomenology|debatable",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "No longer says Heidegger and Merleau-Ponty 'are in' existentialism; states only what SEP Phenomenology §4 says of each."
+    },
+    {
+      "item": "phenomenology|Edmund Husserl|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite",
+        "cut"
+      ],
+      "note": "Cut 'Moravian-born' (not on card); kept the card's 'described as'; lifeworld idea matched to key idea 3; sources = card union (adds Husserl §1 and §6)."
+    },
+    {
+      "item": "phenomenology|Martin Heidegger|key_idea1",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Fixed 'wrong' Dasein claim per SEP Heidegger §2.1.3 (Dasein is the entity we are; existence is its kind of being); 'driving question' per intro; begin-with-ourselves now cites SEP Phenomenology §4."
+    },
+    {
+      "item": "phenomenology|Martin Heidegger|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "Matched new key idea 1; sources = card union plus SEP Heidegger §1 (assistant 1919, Husserl's chair 1928) and §5.2.1 (stock)."
+    },
+    {
+      "item": "analytic|description",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Verifiability claim reworded to SEP Vienna Circle §2.3: logic and maths analytic, other statements meaningful only if empirically testable."
+    },
+    {
+      "item": "analytic|theme2",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'Russell refined it' replaced with IEP §c wording: Russell relied on Frege's work in developing Principia Mathematica."
+    },
+    {
+      "item": "analytic|Gottlob Frege|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Restored SEP Frege intro hedge 'in effect the first predicate calculus'."
+    },
+    {
+      "item": "analytic|Ludwig Wittgenstein|study_prompt",
+      "actions": [
+        "recite"
+      ],
+      "note": "Sources = card union: adds SEP Wittgenstein §1 (born 1889 in Vienna; death in 1951) and §3.3 Meaning as Use / IEP later Wittgenstein."
+    },
+    {
+      "item": "analytic|Rudolf Carnap|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite",
+        "cut"
+      ],
+      "note": "Cut 'German-born' (not on card); metaphysics idea worded as on key idea 3; sources = card union (adds Carnap §1.4, Vienna Circle §2.1, IEP Quine)."
+    },
+    {
+      "item": "analytic|W. V. O. Quine|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Restored SEP Quine intro hedge 'perhaps best known' and its object: arguments against Logical Empiricism's use of the analytic-synthetic distinction."
+    },
+    {
+      "item": "critical-theory|Max Horkheimer|study_prompt",
+      "actions": [
+        "recite"
+      ],
+      "note": "Sources = card union: adds Horkheimer §2.1 (suffering and happiness) and §4.1 (instrumental reason)."
+    },
+    {
+      "item": "critical-theory|Theodor W. Adorno|summary",
+      "actions": [
+        "recite"
+      ],
+      "note": "Co-authorship of Dialectic of Enlightenment with Horkheimer cited to SEP Adorno §1 Biographical Sketch."
+    },
+    {
+      "item": "critical-theory|Theodor W. Adorno|study_prompt",
+      "actions": [
+        "recite"
+      ],
+      "note": "Sources = card union: adds SEP Adorno §5 Negative Dialectics and §1."
+    },
+    {
+      "item": "critical-theory|Herbert Marcuse|key_idea1",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'produces' replaced with the source's 'prevails in' (SEP Marcuse §5)."
+    },
+    {
+      "item": "critical-theory|Herbert Marcuse|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'inspired the New Left' replaced with the card's 'called the guru of the New Left, a title he rejected'."
+    },
+    {
+      "item": "post-structuralism|debatable",
+      "actions": [
+        "rewrite",
+        "cut"
+      ],
+      "note": "Cut 'SEP has no entry by this name' (not in any cited text); kept only what SEP Postmodernism intro and Foucault intro say, with the source's hedge."
+    },
+    {
+      "item": "post-structuralism|Michel Foucault|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite",
+        "cut"
+      ],
+      "note": "'historian of ideas' replaced with SEP intro 'historian and philosopher'; cut 'madness' (not on card); sources = card union (adds §3.5)."
+    },
+    {
+      "item": "post-structuralism|Jacques Derrida|study_prompt",
+      "actions": [
+        "recite",
+        "cut"
+      ],
+      "note": "Cut 'French' (not on card); Algerian birth now cited via SEP Derrida §1 Life and Works; sources = card union."
+    },
+    {
+      "item": "feminist-philosophy|description",
+      "actions": [
+        "cut"
+      ],
+      "note": "The flagged claim is in date_range: dropped the 1792 date for Wollstonecraft, which no school-level source gives."
+    },
+    {
+      "item": "feminist-philosophy|Harriet Taylor Mill|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Restored SEP §3.4 hedges: 'seems to be' a general consensus, and some commentators dissent."
+    },
+    {
+      "item": "feminist-philosophy|Harriet Taylor Mill|study_prompt",
+      "actions": [
+        "recite",
+        "rewrite",
+        "cut"
+      ],
+      "note": "Cut 'London-born' (not on card); intro reworded to the card's summary; sources = card union (adds §1, §3.2)."
+    },
+    {
+      "item": "feminist-philosophy|Simone de Beauvoir|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "'overturned' replaced with SEP intro's 'secured her a place in philosophy'; 'helper' given as the source's 'midwife'."
+    },
+    {
+      "item": "feminist-philosophy|Simone de Beauvoir|key_idea3",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Two separate parts of the argument (SEP §5), no longer one inferred from the other."
+    },
+    {
+      "item": "feminist-philosophy|Simone de Beauvoir|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "Updated to match the revised key idea 3; sources = card union."
+    },
+    {
+      "item": "link|socrates-plato->presocratics",
+      "actions": [
+        "cut"
+      ],
+      "note": "cut unsupported Parmenides claim"
+    },
+    {
+      "item": "link|skepticism->socrates-plato",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "match SEP §2.2 wording; no Arcesilaus/'Plato's own'"
+    },
+    {
+      "item": "link|neoplatonism->aristotle",
+      "actions": [
+        "recite",
+        "rewrite"
+      ],
+      "note": "cite SEP Plotinus §1 for the commentaries"
+    },
+    {
+      "item": "link|scholasticism->aristotle",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "match SEP Aquinas §1.1 | quote moved to the section that contains it"
+    },
+    {
+      "item": "link|renaissance->scholasticism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "match IEP §2 wording and period"
+    },
+    {
+      "item": "link|renaissance->stoicism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "match SEP §5.3 wording"
+    },
+    {
+      "item": "link|rationalism->scholasticism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label matches SEP Enlightenment §1.1"
+    },
+    {
+      "item": "link|enlightenment->rationalism",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "match IEP Kant §2a/§2b wording | quote moved to the section that contains it"
+    },
+    {
+      "item": "link|utilitarianism->empiricism",
+      "actions": [
+        "recite"
+      ],
+      "note": "cite SEP for Hume as a British Empiricist | quote moved to the section that contains it"
+    },
+    {
+      "item": "link|utilitarianism->enlightenment",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "no unsourced claim about Beccaria"
+    },
+    {
+      "item": "link|marxism->german-idealism",
+      "actions": [
+        "cut"
+      ],
+      "note": "cut Feuerbach/Left Hegelian claim and SEP Marx citation"
+    },
+    {
+      "item": "link|phenomenology->rationalism",
+      "actions": [
+        "recite"
+      ],
+      "note": "cite SEP Husserl §1 for Cartesian Meditations"
+    },
+    {
+      "item": "link|analytic->german-idealism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label matches IEP 'broke away'"
+    },
+    {
+      "item": "link|analytic->enlightenment",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label matches SEP Vienna Circle §2.3"
+    },
+    {
+      "item": "link|critical-theory->post-structuralism",
+      "actions": [
+        "recite"
+      ],
+      "note": "cite SEP Critical Theory §1.1 for Habermas as its leading second-generation figure"
+    },
+    {
+      "item": "link|feminist-philosophy->critical-theory",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "match SEP §4.1.1"
+    },
+    {
+      "item": "link|feminist-philosophy->post-structuralism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "no 'draws on Foucault' claim for Butler"
+    },
+    {
+      "item": "link|patristic->neoplatonism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "match SEP Augustine §1"
+    },
+    {
+      "item": "link|scholasticism->patristic",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label matches SEP Medieval §2.2"
+    },
+    {
+      "item": "link|rationalism->skepticism",
+      "actions": [
+        "cut"
+      ],
+      "note": "link removed: SEP gives the reading only as 'some interpreters'; no plain source found"
+    },
+    {
+      "item": "utilitarianism|theme4",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "user test: theme expanded to three sourced sentences"
+    },
+    {
+      "item": "feminist-philosophy|theme1",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "user test: thinkers attached (Wollstonecraft, Beauvoir), sourced"
+    },
+    {
+      "item": "feminist-philosophy|theme2",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "user test: thinker attached (Beauvoir), sourced"
+    },
+    {
+      "item": "link|epicureanism->presocratics",
+      "actions": [
+        "recite"
+      ],
+      "note": "quote moved to the section that contains it"
+    },
+    {
+      "item": "link|skepticism->stoicism",
+      "actions": [
+        "recite"
+      ],
+      "note": "quote moved to the section that contains it"
+    },
+    {
+      "item": "link|existentialism->phenomenology",
+      "actions": [
+        "recite"
+      ],
+      "note": "quote moved to the section that contains it"
+    },
+    {
+      "item": "link|post-structuralism->phenomenology",
+      "actions": [
+        "recite"
+      ],
+      "note": "quote moved to the section that contains it"
+    },
+    {
+      "item": "link|feminist-philosophy->analytic",
+      "actions": [
+        "recite"
+      ],
+      "note": "quote moved to the section that contains it"
+    }
+  ]
+}

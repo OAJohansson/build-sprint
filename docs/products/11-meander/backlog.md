@@ -19,3 +19,4 @@
 | Mark 2–3 neighbours to try first on busy schools | User test F4 (Enlightenment lights 8) | Later |
 | Hover reason tag can cover a dim label behind it | Seen on the final build | Later |
 | Focus in the URL (?school=) so a school can be linked and survives reload | `// shortcut:` in meander.tsx | Later |
+| Rethink "Your thread": it records every click, so browsing counts as a visit (feedback #22) | The owner isn't sure it adds value; it also inflates the day-7 check | Later |

@@ -73,3 +73,15 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   - Wine is crowded (the Wine Folly app launched Aug 2026; Sommo has a globe with a "wine journey").
   - No product found combines connections with reasons, checkable sources, a memory of where you've been, and a hand-off to an AI tutor.
 - **Coaching.** Named competitive alternatives (Dunford). Pushed back on starting with marketing and pricing: the hop is still unproven even for the owner, so the day-7 check (about 2 Dec) comes first.
+
+## 25 Nov: the owner's own-use feedback (phase 2 starts)
+
+- **Brain dump after using the live app:**
+  - Focus is too busy.
+  - There's no way to study a whole school.
+  - The card is hard to read.
+  - No sources are visible.
+  - The content is too thin ("the value isn't there"; aim closer to a Wikipedia article).
+  - The first open leaves you asking "what do I do?"
+  - "Your thread" counts every click (parked by the owner).
+- Logged as feedback #16–22. I proposed an order, asked the owner to confirm it, and started no work.

@@ -105,6 +105,12 @@ critic's score, the tester's numbers, the guardrails, the decision log, what you
   `.env.secrets.local` first; never print or paste key values). Previews only for the owner's big
   checks, with `pnpm ship NN-slug --preview`: Founder final review; Streamlined design pick (if a
   phone is needed to judge) and final review; Learning only when asked.
+- **No paid API calls from agents without asking** (11 Meander: a grading script called the
+  Anthropic API, ~$28, and hit the account's limit). Agents and subagents work inside the Claude
+  subscription by default: grade, write and research in-session. Any script that calls a paid API
+  (Anthropic, Firecrawl or other per-call services) during the build needs the owner's yes first,
+  with an estimated cost; then use the cheapest model that passes, the Batch API, caching, and
+  only the items that changed. The live apps' own API use is not affected.
 - **Notes are only safe once committed.** Commit `docs/` changes at each step, not only at the
   end, and push the branch (branch pushes cost no deploys, decision 0016), so nothing is lost if
   a worktree is cleaned up.

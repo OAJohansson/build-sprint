@@ -20,7 +20,7 @@
   },
   "overview": [
     {
-      "text": "Existentialism is a loose family of ideas, not a tidy school. It starts from concrete, first-person life rather than a detached 'view from nowhere'. Its core claim: no fixed nature is handed to us, so we make ourselves through our choices and are responsible for who we become. Kierkegaard and Nietzsche laid the groundwork in the nineteenth century; Sartre and Beauvoir made it famous in mid-twentieth-century France.",
+      "text": "Existentialism is a loose family of ideas, not a tidy school. It starts from concrete, first-person life rather than a detached 'view from nowhere'. A central idea: no fixed nature is handed to us, so we make ourselves through our choices and are responsible for who we become. Kierkegaard and Nietzsche laid the groundwork in the nineteenth century; Sartre and Beauvoir made it famous in mid-twentieth-century France.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -34,7 +34,7 @@
       ]
     },
     {
-      "text": "It matters because it takes on questions we all meet: how to live when no rulebook tells us, how to stop drifting with the crowd, and how to face anxiety, death and meaninglessness. Its ideas spread into novels, films, theology, psychotherapy and freedom politics. And it is not a counsel of despair: a good life is possible, one where we own our choices and help others be free too.",
+      "text": "It matters because it takes on questions we all meet: how to live when no rulebook tells us, how to stop drifting with the crowd, and how to face anxiety, death and meaninglessness. Its ideas spread into novels, films, theology, psychotherapy and radical, emancipatory politics. And it is not moral nihilism: a good life is possible, one where we own our choices and help others be free too.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -142,7 +142,7 @@
       "summary": "Most of the time we drift with 'them'; authenticity means owning our life.",
       "paragraphs": [
         {
-          "text": "Existentialists criticise living by borrowed norms. Kierkegaard wrote of 'the public', Nietzsche of 'the herd', Heidegger of 'the They': we enjoy, read and judge things as 'they' do. Conforming is comforting, because doing what everyone does feels like living well, but it hides our freedom from us. Sartre and Beauvoir call this self-deception 'bad faith'. I am in bad faith when I treat myself as a fixed thing ('I am what I am'), and also when I pretend my situation does not limit my choices.",
+          "text": "Existentialists criticise living by borrowed norms. Kierkegaard wrote of 'the public', Nietzsche of 'the herd' and Heidegger of 'the They'. As Heidegger put it, we enjoy, read and judge things as 'they' do. Conforming is comforting, because doing what everyone does feels like living well, but it hides our freedom from us. Sartre and Beauvoir call this self-deception 'bad faith'. I am in bad faith when I treat myself as a fixed thing ('I am what I am'), and also when I pretend my situation does not limit my choices.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -196,6 +196,11 @@
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
+              "section": "intro",
+              "quote": "late nineteenth century Europe"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/existentialism/",
               "section": "1. Nihilism and the Crisis of Modernity"
             },
             {
@@ -231,7 +236,7 @@
       "summary": "Other people can trap us as objects, yet my freedom depends on theirs.",
       "paragraphs": [
         {
-          "text": "Sartre argued that we see ourselves through 'the look' of others, whose gaze can turn us into objects. Relationships become a power struggle, summed up in his play No Exit: 'Hell is—other people.' But there is a better way. Beauvoir's 'authentic love' nurtures the other person's freedom instead of possessing them. She and Sartre concluded that wanting my own freedom commits me to wanting it for others. In Beauvoir's words, to will oneself free is also to will others free. After the war this turned them towards fighting oppression.",
+          "text": "Sartre argued that we see ourselves through 'the look' of others, whose gaze can turn us into objects. Relationships become a power struggle, summed up in his play No Exit: 'Hell is—other people.' But there is a better way. Beauvoir's 'authentic love' nurtures the other person's freedom instead of possessing them. She and Sartre concluded that wanting my own freedom commits me to wanting it for others. In Beauvoir's words, to will oneself free is also to will others free. For Sartre, the Nazi occupation, his time as a prisoner of war and his Marxist critics then shifted the focus from the individual to the social.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -397,18 +402,24 @@
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
               "section": "5.2 Kierkegaard’s Knight of Faith"
+            },
+            {
+              "url": "https://iep.utm.edu/existent/",
+              "section": "a. Søren Kierkegaard (1813-1855) as an Existentialist Philosopher",
+              "quote": "at the last moment God intervenes and saves Isaac"
             }
           ]
         },
         {
           "title": "The Gay Science",
           "author": "Friedrich Nietzsche",
-          "year": "1882",
+          "year": "1882; expanded 1887",
           "note": "Poses the eternal-recurrence test: could you will your life again, forever?",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/nietzsche/",
-              "section": "1. Life and Works"
+              "section": "1. Life and Works",
+              "quote": "second expanded edition 1887"
             },
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -475,12 +486,17 @@
         {
           "title": "Existentialism Is a Humanism",
           "author": "Jean-Paul Sartre",
-          "year": "1945",
-          "note": "A packed 1945 Paris lecture, an accessible version of Being and Nothingness.",
+          "year": "1945 lecture, published 1946",
+          "note": "A packed Paris lecture, an accessible version of Being and Nothingness.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/sartre/",
               "section": "intro"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/sartre/",
+              "section": "A.1 Works by Sartre",
+              "quote": "L’existentialisme est un humanisme"
             }
           ]
         },
@@ -580,7 +596,7 @@
           ]
         },
         {
-          "text": "Within academic philosophy the verdicts differ. The IEP judges that the movement as a whole has had relatively little direct influence there, though Nietzsche and Heidegger remain very much alive. The SEP sees it thriving: it shaped Foucault and Derrida, theories of the self as a life story, and cognitive science's picture of the embodied mind. It made emotion, and topics like death and illness, serious subjects. And its courses remain among philosophy's most popular.",
+          "text": "Within academic philosophy the verdicts differ. The IEP judges that the movement as a whole has had relatively little direct influence there, though Nietzsche and Heidegger remain very much alive. The SEP sees it thriving: it shaped Foucault and Derrida, theories of the self as a life story, and cognitive science's picture of the embodied mind. Its focus on emotion opened a whole field of research, and it insisted philosophy deal directly with real-life topics such as sex and death. It has also shaped medicine and nursing, and its courses remain among philosophy's most popular.",
           "sources": [
             {
               "url": "https://iep.utm.edu/existent/",
@@ -617,7 +633,7 @@
     }
   ],
   "study_prompt": {
-    "text": "Teach me Existentialism as a short Socratic module. Start with what it is: a loose movement that begins from concrete human existence, rooted in Kierkegaard and Nietzsche and made famous by Sartre and Beauvoir in mid-20th-century France. Then cover its six themes: existence before essence; freedom and anxiety; authenticity and bad faith; meaning without guarantees; my freedom needs yours; faith and the leap. Note that Camus and Heidegger rejected the label. Ask me one question at a time and finish with a five-question quiz.",
+    "text": "Teach me Existentialism as a short Socratic module. Start with what it is: a loose movement that begins from concrete human existence, rooted in Kierkegaard and Nietzsche and made famous by Sartre and Beauvoir in mid-20th-century France. Then cover its six themes: existence before essence; freedom and anxiety; authenticity versus the crowd; meaning without guarantees; my freedom needs yours; faith and the leap. Note that Camus and Heidegger rejected the label. Ask me one question at a time and finish with a five-question quiz.",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -1022,5 +1038,5 @@
       }
     }
   ],
-  "word_count": 1621
+  "word_count": 1666
 }

@@ -9,6 +9,7 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Problems to solve:** add the row for this product (big fields, one-school deep dives, boredom) with status "Building: 11 Meander".
 - **Knowledge bank, design and UX:** Shneiderman's mantra "overview first, zoom and filter, then details on demand" (1996, information visualisation).
 - **Knowledge bank, customer insight / learning science:** Ausubel's advance organizer (a frame to hang new facts on); dual coding (Paivio: words plus picture beat words alone, for almost everyone); "learning styles" matching does not hold up in studies; interleaving and spacing (Robert and Elizabeth Bjork, desirable difficulties), strongest evidence in maths and category learning.
+- **Knowledge bank, product strategy (added 25 Nov, after wrap-up):** competitive alternatives: list what people would use if your product didn't exist, including "do nothing" and "ask a chatbot", not only look-alike apps (April Dunford, *Obviously Awesome*, 2019). Met in Meander's market scan.
 - **Process:** Wispr Flow dictation kept failing at kickoff; its connector only sees Scratchpad notes and Notetaker recordings, not dictation history. Workarounds: Mac dictation, Notetaker, or local Whisper.
 
 ## 12 Nov: kickoff
@@ -63,3 +64,12 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **First working version gate (13 Nov):** preview https://meander-igcr33bd9-mimirswell.vercel.app, eval report in `eval-report.md`. Owner asked to run straight through to the merge ("don't stop for me until the merge"), so the gate's open questions go with the merge ask: F5 "next on your thread" (tests the hop bet), F4 mark 2–3 neighbours to try first, era cues in the overview (job 1 scored 3/5). All three are in the backlog as the next phase's candidates.
 - **Merged and live (25 Nov):** PR #100 merged on the owner's yes, live at https://meander-virid.vercel.app; notebook republished (page + 7 files).
 - **Wrap-up (25 Nov):** success check, retro (three process changes), story, card shipped; shared pages written once: knowledge bank (Shneiderman, advance organizers and dual coding, interleaving and spacing, grading AI content against a corpus, with quiz questions), Problems to solve, learnings and the process changelog, playbook steps 1 and 3b.
+
+## 25 Nov: market scan (after wrap-up)
+
+- **Ask.** The owner wants to try launching an app for other people as a learning exercise: finding users, pricing, maybe freemium. First they want to iterate on Meander until it's worth using, and to know whether anything similar exists. They're also thinking about fields beyond philosophy, such as world history and wine.
+- **Scan** (`market-scan.md`):
+  - The closest look-alike is a free hobby site, Map of Philosophy (map.ebarakos.com). The closest commercial player is Kinnu: free, map-based pathways across many fields, 1.2M users.
+  - Wine is crowded (the Wine Folly app launched Aug 2026; Sommo has a globe with a "wine journey").
+  - No product found combines connections with reasons, checkable sources, a memory of where you've been, and a hand-off to an AI tutor.
+- **Coaching.** Named competitive alternatives (Dunford). Pushed back on starting with marketing and pricing: the hop is still unproven even for the owner, so the day-7 check (about 2 Dec) comes first.

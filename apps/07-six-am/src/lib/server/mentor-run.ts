@@ -366,7 +366,7 @@ async function askLab(store: MentorStore, body: AskBody, now: Date, tz: number):
   if (!track) input.lab = `[ears] Track: ${map.title || "untitled"} by ${map.uploader || "unknown"}, ${map.bpm} BPM, key ${map.key} ${map.scale}.\n${mapContext(map)}\n${input.lab}`;
   let result;
   try {
-    result = await askClaude(input, { labQuestion: message, labUnheard: unheardLoop(lab, map) ?? undefined, labUnheardBars: new Set(unheardBars(lab)) });
+    result = await askClaude(input, { labQuestion: message, labInMake: !!(lab.make || lab.makeRow), labUnheard: unheardLoop(lab, map) ?? undefined, labUnheardBars: new Set(unheardBars(lab)) });
   } catch (error) {
     if (error instanceof MentorError && error.costUsd > 0) {
       await store.addMessage({ threadId, role: "assistant", job: "lab", content: JSON.stringify({ error: error.kind }), sources: null, usage: error.usage, costUsd: error.costUsd, counted: false });

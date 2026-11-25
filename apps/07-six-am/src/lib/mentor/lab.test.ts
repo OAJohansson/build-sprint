@@ -167,6 +167,18 @@ describe("Lab answers never claim to hear (B6)", () => {
     expect(checkAnswer("lab", answer("I can't hear the sound itself; I read measurements: pitch, timing and loudness.", "The notes are short A1s between the kicks."), needs).ok).toBe(true);
     expect(checkAnswer("lab", answer("Short A1 notes between the kicks."), { labQuestion: "What notes does it play?" }).ok).toBe(true);
   });
+  it("in Make the answer comes first: no stock 'I can't hear it' opener, and none required (FX-F7)", () => {
+    const needs = { labQuestion: "Should my riser be brighter?", labInMake: true };
+    // FN1: the opener is cut, not the answer: the person gets the answer minus that sentence.
+    const cut = checkAnswer("lab", answer("I can't hear the sound itself; I read measurements: pitch, timing and loudness.", "Turn Tone up to bright."), needs);
+    expect(cut.ok && cut.answer.sentences.map((x) => x.text)).toEqual(["Turn Tone up to bright."]);
+    const inOne = checkAnswer("lab", answer("I can't hear your hats themselves. Shorten Decay to 60 ms for a tighter tick.", "Gold ticks sit there."), needs);
+    expect(inOne.ok && inOne.answer.sentences.map((x) => x.text)).toEqual(["Shorten Decay to 60 ms for a tighter tick.", "Gold ticks sit there."]);
+    // Listen keeps its rule: a tone question there still needs it said.
+    expect(checkAnswer("lab", answer("I can't hear the sound itself; I read measurements: pitch, timing and loudness.", "Short A1s."), { labQuestion: "Why so rubbery?" }).ok && true).toBe(true);
+    expect(checkAnswer("lab", answer("Turn Tone up to bright · 80; the original's noise sits high.", "I can't hear your riser itself, only these numbers."), needs).ok).toBe(true);
+    expect(checkAnswer("lab", answer("Turn Tone up to bright · 80."), needs).ok).toBe(true);
+  });
   it("plain words: an interval name only with a short explanation (LS2-M5)", () => {
     expect(checkAnswer("lab", answer("It jumps up a minor third on the last note.")).ok).toBe(false);
     expect(checkAnswer("lab", answer("It jumps up a minor third (three notes up) on the last note.")).ok).toBe(true);
@@ -221,6 +233,24 @@ describe("S3 folds (LS2-N9, N10, N11) and Make's context", () => {
     const t = labContextText(p, map);
     expect(t).toMatch(/\[make\] They are in Make, building their own bass/);
     expect(t).toMatch(/Rubber pluck \(short, bouncy\)/);
-    expect(t).toMatch(/gold ticks at: Tone 15%[^\n]*Length 25% \(1\/8\)/);
+    expect(t).toMatch(/gold ticks at: Tone dark[^\n]*Length 1\/8/);
+    expect(t).not.toMatch(/\d%/); // the knobs' own words, never percentages (FX-F8)
+  });
+  it("tells the Mentor the open row in Drums, Melody or FX, with its knobs in words (Phase 5)", () => {
+    const d = parseLabAsk({ ...ask, makeRow: { family: "drums", preset: "kick-deep-909", knobs: { tune: 0.38, decay: 2, pitchDrop: 1 }, ticks: { click: 0.55 }, off: false } }, BARS)!;
+    expect(d.makeRow?.knobs).toEqual({ tune: 0.38, decay: 1 }); // only the row's knobs, clamped
+    const t = labContextText(d, map);
+    expect(t).toMatch(/\[make\] They are in Make, building their own drums[^\n]*The open row is Kick: preset Deep 909/);
+    expect(t).toMatch(/Tune A1 · 54 Hz/);
+    expect(t).toMatch(/Gold ticks[^\n]*Click snappy\b/);
+    const off = labContextText(parseLabAsk({ ...ask, makeRow: { family: "melody", preset: "chords-pad", knobs: { tone: 0.3 }, ticks: null, off: true, note: "probably a held pad read as repeated notes" } }, BARS)!, map);
+    expect(off).toMatch(/The open row is Chords: preset Pad/);
+    expect(off).toMatch(/This row is off in their sound: probably a held pad/);
+    const fx = labContextText(parseLabAsk({ ...ask, makeRow: { family: "fx", preset: "fx-riser-noise", knobs: { rise: 0.5 }, ticks: null, note: "no clear riser in the original here" } }, BARS)!, map);
+    expect(fx).toMatch(/no closeness score for FX/);
+    expect(fx).toMatch(/Measured from the original at that moment[^\n]*no clear riser/);
+    // A preset from another family, or junk, gets nothing through.
+    expect(parseLabAsk({ ...ask, makeRow: { family: "fx", preset: "kick-deep-909", knobs: { tune: 0.5 } } }, BARS)!.makeRow).toBeUndefined();
+    expect(parseLabAsk({ ...ask, makeRow: { family: "drums", preset: "kick-punch", knobs: { audio: 1 } } }, BARS)!.makeRow).toBeUndefined();
   });
 });

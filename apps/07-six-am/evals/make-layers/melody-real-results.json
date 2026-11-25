@@ -1,0 +1,68 @@
+[
+  {
+    "loop": "Lost 69–76",
+    "seed": 1,
+    "pcFound": 72.3,
+    "wrong": 13.7,
+    "p95Ms": 5.5,
+    "notes": 211,
+    "longestNoteS": 1.2,
+    "perPc": {
+      "G": "72 read",
+      "D": "50 read",
+      "B": "42 read",
+      "F": "40 read"
+    }
+  },
+  {
+    "loop": "Lost 69–76",
+    "seed": 2,
+    "pcFound": 72.3,
+    "wrong": 12.9,
+    "p95Ms": 7.2,
+    "notes": 209,
+    "longestNoteS": 1.2,
+    "perPc": {
+      "G": "72 read",
+      "D": "49 read",
+      "B": "41 read",
+      "F": "40 read"
+    }
+  },
+  {
+    "loop": "offbeat stabs (Am7 F C G)",
+    "pcFound": 100,
+    "wrong": 0,
+    "p95Ms": 8
+  },
+  {
+    "loop": "Chicago stabs, syncopated",
+    "pcFound": 100,
+    "wrong": 0,
+    "p95Ms": 7.8
+  },
+  {
+    "loop": "held pads, 1 chord per 2 bars",
+    "pcFound": 93.8,
+    "wrong": 0,
+    "p95Ms": 7.1
+  },
+  {
+    "loop": "slow-attack pads (150 ms)",
+    "pcFound": 66.7,
+    "wrong": 44.4,
+    "p95Ms": 14
+  },
+  {
+    "loop": "pluck lead over a pad (overlap)",
+    "pcFound": 100,
+    "wrong": 28.4,
+    "p95Ms": 4.9
+  },
+  {
+    "loop": "organ chords, 2-bar riff",
+    "pcFound": 100,
+    "wrong": 0,
+    "p95Ms": 7.4
+  }
+]

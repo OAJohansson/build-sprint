@@ -5,8 +5,8 @@
 // drag it onto a lane that takes it.
 import { LOOPS, loopById } from "@/lib/timeline";
 import { FAMILIES, colorOf, crateLaneType, laneType } from "@/lib/studio-lanes";
-import { PART_LANE } from "@/lib/make/lib-loop";
-import type { LibrarySound } from "@/lib/make/library";
+import { libLaneType } from "@/lib/make/lib-loop";
+import { isDrumSound, type LibrarySound } from "@/lib/make/library";
 import type { Timeline } from "./use-timeline";
 import { cx } from "./lanes";
 import v from "./lanes.module.css";
@@ -29,7 +29,7 @@ export function Crate({ t, mine }: { t: Timeline; mine: MySounds }) {
   const listening = t.previewSound?.id.startsWith("listen-") ? sounds.find((x) => `listen-${x.id}` === t.previewSound!.id) : undefined;
   const loop = t.preview ? loopById(t.preview) : null;
   const deck = loop ? { name: loop.name, bars: loop.bars, color: colorOf(crateLaneType(loop)) }
-    : listening ? { name: listening.name, bars: listening.pattern.bars, color: colorOf(PART_LANE[listening.part]) } : null;
+    : listening ? { name: listening.name, bars: listening.pattern.bars, color: colorOf(libLaneType(listening)) } : null;
   return (
     <aside className={v.crate}>
       <div className={v.crateHead}>
@@ -54,10 +54,10 @@ export function Crate({ t, mine }: { t: Timeline; mine: MySounds }) {
               {bySource(sounds).map((g) => [
                 <h3 key={`h-${g.key}`} className={v.groupHead} title={g.title}>{g.label}<span className={v.tabCount}>{g.sounds.length}</span></h3>,
                 ...g.sounds.map((x) => (
-                  <div key={x.id} className={cx(v.card, v.cardMine, listening?.id === x.id && v.cardOn)} style={{ ["--c" as string]: colorOf(PART_LANE[x.part]) }} title={x.source ? `${x.name}, from ${x.source.title}` : x.name} {...t.crateItem({ kind: "lib", sound: x })}>
+                  <div key={x.id} className={cx(v.card, v.cardMine, listening?.id === x.id && v.cardOn)} style={{ ["--c" as string]: colorOf(libLaneType(x)) }} title={x.source ? `${x.name}, from ${x.source.title}` : x.name} {...t.crateItem({ kind: "lib", sound: x })}>
                     <div className={v.cardMeta}>
                       <b>{x.name}</b>
-                      <span>{laneType(PART_LANE[x.part]).name} · {x.key} {x.scale} · {Math.round(x.bpm)} BPM</span>
+                      <span>{laneType(libLaneType(x)).name}{isDrumSound(x) ? "" : ` · ${x.key} ${x.scale}`} · {Math.round(x.bpm)} BPM</span>
                     </div>
                   </div>
                 )),

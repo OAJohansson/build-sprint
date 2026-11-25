@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Six AM · Make for every layer · ten directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=block" rel="stylesheet">
+<style>
+/* Rough Discover prototypes (decision 0028). Ten directions for one Make room with a family switch.
+   ?v=1..10 picks the direction, ?f=drums|melody|fx the family, ?shot=1 hides the picker. */
+:root { color-scheme: dark; --bg:#131110; --panel:#1a1715; --line:#2b2622; --line2:#3a322c; --ink:#f1e6d3; --mute:#aa9c88; --dim:#958a7a; --gold:#f2b134; --bass:#ef5b37; --drums:#f2b134; --other:#23b3a5; --vox:#cdbfa8; --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace; --serif:"Instrument Serif", Georgia, serif; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--bg); color: var(--ink); font: 13px/1.5 var(--mono); -webkit-font-smoothing: antialiased; overflow: hidden; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+.app { display: grid; grid-template-rows: 64px 96px 1fr; height: 100vh; min-width: 1280px; }
+.bar { display: flex; align-items: center; gap: 28px; padding: 0 22px; border-bottom: 1px solid var(--line); }
+.logo { display: flex; align-items: center; gap: 12px; padding-right: 26px; border-right: 1px solid var(--line); height: 100%; }
+.logo i { width: 26px; height: 26px; border-radius: 50%; background: radial-gradient(circle at 50% 60%, #f2b134 0 30%, #ef5b37 31% 52%, #23b3a5 53% 70%, #221d1a 71%); }
+.logo b { font: italic 400 28px var(--serif); }
+.nav a { color: var(--mute); margin-right: 22px; text-decoration: none; padding: 20px 0; }
+.nav a.on { color: var(--ink); box-shadow: inset 0 -2px var(--gold); }
+.head { display: flex; align-items: center; gap: 28px; padding: 0 22px; border-bottom: 1px solid var(--line); }
+.back { color: var(--mute); white-space: nowrap; }
+.title { min-width: 0; flex: 1; }
+.title h1 { margin: 0; font: italic 400 28px/1.1 var(--serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.title p { margin: 4px 0 0; color: var(--mute); }
+.transport { display: grid; gap: 6px; justify-items: start; }
+.tr1 { display: flex; align-items: center; gap: 12px; }
+.play { width: 36px; height: 36px; border-radius: 50%; background: var(--ink); color: var(--bg); display: grid; place-items: center; font-weight: 600; }
+.small { color: var(--mute); font-size: 12px; }
+.loopchip { border: 1px solid #6b5426; color: var(--gold); border-radius: 6px; padding: 3px 10px; font-size: 12px; }
+.lm { display: flex; border: 1px solid var(--line2); border-radius: 999px; padding: 3px; }
+.lm span { padding: 6px 18px; border-radius: 999px; font: italic 20px/1 var(--serif); color: var(--mute); }
+.lm span.on { background: #2f2925; color: var(--ink); }
+.deck { color: var(--mute); white-space: nowrap; } .deck::before { content: "●"; color: #7fbf6a; margin-right: 6px; font-size: 10px; }
+.main { display: grid; grid-template-columns: 1fr 340px; min-height: 0; }
+.col { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+.colpad { padding: 0 40px; }
+.rail { border-left: 1px solid var(--line); padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.rail h4 { margin: 0; font-weight: 400; color: var(--mute); font-size: 12px; }
+.bubble { align-self: flex-end; background: #2b2622; border-radius: 10px; padding: 8px 12px; max-width: 260px; }
+.tag { align-self: flex-end; color: var(--mute); font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
+.answer { line-height: 1.75; }
+.facts { color: var(--mute); font-size: 12px; }
+.composer { margin-top: auto; border: 1px solid var(--line2); border-radius: 8px; padding: 12px 14px; color: var(--dim); display: flex; justify-content: space-between; align-items: center; }
+.composer b { width: 28px; height: 28px; border-radius: 50%; background: #2b2622; display: grid; place-items: center; font-weight: 400; color: var(--dim); }
+/* family switch: same place in every direction */
+.fam { display: flex; align-items: center; gap: 22px; height: 52px; border-bottom: 1px solid var(--line); flex: none; }
+.fam .f { color: var(--mute); padding: 15px 0; position: relative; }
+.fam .f.on { color: var(--ink); box-shadow: inset 0 -2px var(--ink); }
+.fam .f i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
+.fam .f.off { color: var(--dim); cursor: default; }
+.fam .f.off em { font-style: normal; font-size: 11px; border: 1px solid var(--line2); border-radius: 4px; padding: 1px 6px; margin-left: 6px; }
+.fam .cap { margin-left: auto; color: var(--mute); font-size: 12px; }
+/* frame pieces */
+.preset { font: italic 30px/1 var(--serif); white-space: nowrap; }
+.preset small { font: 14px var(--mono); color: var(--mute); margin-left: 6px; font-style: normal; }
+.presetS { font: italic 22px/1 var(--serif); white-space: nowrap; }
+.presetS small { font: 12px var(--mono); color: var(--mute); margin-left: 4px; font-style: normal; }
+.knobs { display: flex; justify-content: space-between; }
+.knob { display: grid; justify-items: center; gap: 2px; }
+.knob span { font-size: 13px; } .knob small { color: var(--mute); font-size: 12px; }
+.knob.sm span { font-size: 12px; } .knob.sm small { font-size: 11.5px; }
+.suggest { display: flex; align-items: center; gap: 16px; }
+.suggest p { margin: 0; flex: 1; } .suggest p span { color: var(--mute); }
+.ghost { border: 1px solid var(--line2); border-radius: 999px; padding: 0 16px; height: 34px; color: var(--ink); white-space: nowrap; }
+.ghost.sm { height: 28px; padding: 0 12px; font-size: 12px; }
+.check { display: flex; align-items: center; gap: 16px; height: 64px; border-top: 1px solid var(--line); flex: none; }
+.ab { display: flex; border: 1px solid var(--line2); border-radius: 999px; padding: 3px; }
+.ab span { padding: 0 16px; height: 34px; display: grid; place-items: center; border-radius: 999px; color: var(--mute); white-space: nowrap; }
+.ab span.on { background: #2f2925; color: var(--ink); }
+.score { margin-left: auto; display: flex; align-items: baseline; gap: 8px; color: var(--mute); white-space: nowrap; }
+.score b { font: 500 22px var(--mono); color: var(--ink); }
+.save { display: flex; align-items: center; gap: 14px; height: 76px; border-top: 1px solid var(--line); background: #171412; flex: none; margin: 0 -40px; padding: 0 40px; }
+.save input { background: var(--bg); border: 1px solid var(--line2); border-radius: 6px; color: var(--ink); font: 14px var(--mono); padding: 0 14px; height: 44px; width: 340px; }
+.save .tags { color: var(--mute); font-size: 12px; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gold { background: var(--gold); color: #1a1408; border-radius: 999px; padding: 0 20px; height: 44px; font-weight: 500; white-space: nowrap; }
+.mute { color: var(--mute); } .dimt { color: var(--dim); }
+.lbl { font-size: 12px; color: var(--mute); }
+.rowname { font-size: 14px; }
+.savedmark { color: var(--mute); font-size: 12px; white-space: nowrap; }
+.savedmark::before { content: "✓ "; color: #7fbf6a; }
+.chip { border: 1px solid var(--line2); border-radius: 6px; padding: 2px 8px; font-size: 12px; color: var(--mute); }
+.hair { height: 1px; background: var(--line); }
+/* picker (verbatim, PICKER.md) */
+.proto-picker { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 2147483647; display: flex; align-items: center; gap: 2px; padding: 4px; border-radius: 999px; background: rgba(10, 10, 10, 0.82); -webkit-backdrop-filter: blur(12px) saturate(1.4); backdrop-filter: blur(12px) saturate(1.4); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset, 0 8px 24px rgba(0, 0, 0, 0.24), 0 2px 6px rgba(0, 0, 0, 0.12); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; line-height: 1; -webkit-font-smoothing: antialiased; user-select: none; -webkit-user-select: none; }
+.proto-picker-highlight { position: absolute; top: 4px; left: 0; height: 28px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); will-change: transform; }
+.proto-picker[data-ready] .proto-picker-highlight { transition: transform 250ms cubic-bezier(0.23, 1, 0.32, 1), width 250ms cubic-bezier(0.23, 1, 0.32, 1); }
+@media (prefers-reduced-motion: reduce) { .proto-picker[data-ready] .proto-picker-highlight { transition: none; } }
+.proto-picker-item { position: relative; display: flex; align-items: center; height: 28px; padding: 0 12px; border: 0; border-radius: 999px; background: transparent; color: rgba(255, 255, 255, 0.55); font: inherit; cursor: pointer; transition: color 150ms ease-out; }
+.proto-picker-item:hover { color: rgba(255, 255, 255, 0.85); }
+.proto-picker-item:active { transform: scale(0.97); }
+.proto-picker-item:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.4); outline-offset: 2px; }
+.proto-picker-item[data-active] { color: #fff; }
+.proto-picker-divider { width: 1px; height: 16px; margin: 0 4px; background: rgba(255, 255, 255, 0.12); }
+.proto-picker[data-position="top"] { bottom: auto; top: 24px; }
+body.shot .proto-picker { display: none; }
+.famlinks { position: fixed; top: 8px; right: 380px; z-index: 10; display: flex; gap: 6px; font-size: 11px; }
+body.shot .famlinks { display: none; }
+</style></head>
+<body>
+<div id="stage"></div>
+<nav class="proto-picker" aria-label="Prototype variants">
+  <span class="proto-picker-highlight" aria-hidden="true"></span>
+  <button class="proto-picker-item" data-active aria-current="true">1 Fold</button>
+  <button class="proto-picker-item">2 Machine</button>
+  <button class="proto-picker-item">3 Tabs</button>
+  <button class="proto-picker-item">4 Strips</button>
+  <button class="proto-picker-item">5 Twin</button>
+  <button class="proto-picker-item">6 Rings</button>
+  <button class="proto-picker-item">7 Pads</button>
+  <button class="proto-picker-item">8 Bars</button>
+  <button class="proto-picker-item">9 Drawer</button>
+  <button class="proto-picker-item">10 Tracker</button>
+</nav>
+<script>
+// ---------- real-shaped data: Lost in The Loop, Mason Flint, 124 BPM, A minor, Drop 1 bars 97–104 ----------
+const BARS = 8, STEPS = 16, BAR0 = 97;
+const kick = [], clap = [], hats = [];
+for (let b = 0; b < BARS; b++) {
+  kick.push([...Array(STEPS)].map((_, s) => (s % 4 === 0 ? (b === 7 && s === 12 ? 0 : 1) : (b === 3 && s === 15 ? 0.45 : 0))));
+  clap.push([...Array(STEPS)].map((_, s) => (s === 4 || s === 12 ? 1 : b === 7 && s > 12 ? 0.4 + (s - 12) * 0.2 : 0)));
+  hats.push([...Array(STEPS)].map((_, s) => (s % 4 === 2 ? 0.95 : s % 2 === 1 ? (b % 2 ? 0.42 : 0.35) : 0)));
+}
+const ROWS = [
+  { id: "kick", name: "Kick", lane: "Kick", data: kick, preset: "Deep 909", tags: "deep · short", presets: ["Deep 909", "Punch", "Round 808", "Tight"],
+    knobs: [["Tune", 0.38, "A1 · 55 Hz", 0.30], ["Decay", 0.42, "1/8", 0.30], ["Click", 0.25, "soft", 0.55], ["Drive", 0.2, "warm", null]], hits: 31, saved: false },
+  { id: "clap", name: "Clap & snare", short: "Clap", lane: "Claps & snares", data: clap, preset: "Wide clap", tags: "clap · roomy", presets: ["Wide clap", "Snap", "Rim", "Tight snare"],
+    knobs: [["Tone", 0.55, "bright", 0.48], ["Decay", 0.35, "short", null], ["Spread", 0.6, "3 hands", 0.7], ["Room", 0.3, "small", 0.15]], hits: 19, saved: true },
+  { id: "hats", name: "Hats", lane: "Hats", data: hats, preset: "Open 909", tags: "open · bright", presets: ["Open 909", "Closed tick", "Shaker", "Ride"],
+    knobs: [["Tone", 0.7, "bright", null], ["Length", 0.5, "open", 0.62], ["Swing", 0.54, "54%", 0.58], ["Width", 0.2, "narrow", null]], hits: 96, saved: false },
+];
+const FOCUS = 0; // the kick row is in focus in every drums screen
+// melody: chord stabs, Am – F – C – G, two bars each, offbeat stabs (notes as midi)
+const CH = [["Am", [57, 60, 64]], ["F", [57, 60, 65]], ["C", [55, 60, 64]], ["G", [55, 59, 62]]];
+const NOTES = [];
+for (let b = 0; b < BARS; b++) { const c = CH[Math.floor(b / 2)]; for (const st of [2, 6, 10, 14]) for (const n of c[1]) NOTES.push({ b, s: st, len: 1.5, n }); if (b % 2 === 1) for (const n of c[1]) NOTES.push({ b, s: 15, len: 1, n: n + 0 }); }
+const LEAD = [[0, 0, 4, 69], [0, 6, 2, 72], [1, 0, 6, 71], [2, 8, 4, 69], [3, 0, 3, 67], [3, 4, 2, 69], [4, 0, 6, 72], [5, 8, 4, 74], [6, 0, 8, 72], [7, 8, 6, 71]].map(([b, s, len, n]) => ({ b, s, len, n, lead: true }));
+const NAMES = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"];
+const nn = (m) => NAMES[m % 12] + (Math.floor(m / 12) - 1);
+const FX = [
+  { name: "Impact", at: 0, len: 1, k: [["Size", 0.7, "big"], ["Tone", 0.4, "dark"], ["Tail", 0.6, "2 bars"]], why: "on the drop's first beat" },
+  { name: "Downlifter", at: 0, len: 2, k: [["Drop", 0.5, "1 octave"], ["Tone", 0.5, "mid"], ["Length", 0.4, "2 bars"]], why: "falls after the impact" },
+  { name: "Noise riser", at: 6, len: 2, k: [["Rise", 0.6, "2 bars"], ["Tone", 0.7, "bright"], ["Width", 0.5, "wide"]], why: "into bar 105, the next part" },
+];
+
+// ---------- shared drawing ----------
+const C = { ink: "#f1e6d3", gold: "#f2b134", drums: "#f2b134", bass: "#ef5b37", other: "#23b3a5", vox: "#cdbfa8", mute: "#aa9c88" };
+function knob(name, v, word, tick, size = 84, color = C.ink, cls = "") {
+  const a0 = -135, a = a0 + 270 * v, r = size / 2 - 6, c = size / 2;
+  const pt = (d, rr = r) => [c + rr * Math.sin(d * Math.PI / 180), c - rr * Math.cos(d * Math.PI / 180)];
+  const [x0, y0] = pt(a0), [x1, y1] = pt(a), [xe, ye] = pt(135);
+  let t = "";
+  if (tick != null) { const sa = a0 + 270 * tick; const [p1, q1] = pt(sa, r + 5), [p2, q2] = pt(sa, r - 5); t = `<line x1="${p1}" y1="${q1}" x2="${p2}" y2="${q2}" stroke="${C.gold}" stroke-width="2.5" stroke-linecap="round"/>`; }
+  return `<div class="knob ${cls}" role="slider" aria-label="${name}" aria-valuetext="${word}"><svg width="${size}" height="${size}" aria-hidden="true">
+  <path d="M${x0} ${y0} A${r} ${r} 0 1 1 ${xe} ${ye}" fill="none" stroke="rgba(241,230,211,.25)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M${x0} ${y0} A${r} ${r} 0 ${a - a0 > 180 ? 1 : 0} 1 ${x1} ${y1}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round"/>${t}</svg>
+  <span>${name}</span><small>${word}</small></div>`;
+}
+const knobsOf = (row, size, cls) => row.knobs.map(([n, v, w, t]) => knob(n, v, w, t, size, C.ink, cls)).join("");
+// a step pattern over the loop's bars: velocity = height; empty steps are faint marks; playhead at bar 99
+function pattern(data, w, h, { color = C.drums, faint = false, bars = BARS, from = 0, playhead = true, numbers = false, gap = 6 } = {}) {
+  const sw = (w - gap * (bars - 1)) / (bars * STEPS);
+  let out = "";
+  for (let b = 0; b < bars; b++) {
+    const bx = b * (STEPS * sw + gap);
+    out += `<rect x="${bx}" y="0" width="${STEPS * sw}" height="${h}" fill="rgba(241,230,211,.035)" rx="2"/>`;
+    for (let s = 0; s < STEPS; s++) {
+      const v = data[from + b][s], x = bx + s * sw;
+      if (s % 4 === 0 && s) out += `<rect x="${x - 0.5}" y="${h * 0.2}" width="1" height="${h * 0.6}" fill="rgba(241,230,211,.07)"/>`;
+      if (v > 0) { const hh = Math.max(3, h * (0.3 + 0.7 * v)); out += `<rect x="${x + 0.75}" y="${h - hh}" width="${Math.max(1.5, sw - 1.5)}" height="${hh}" fill="${color}" opacity="${faint ? 0.42 : 0.35 + 0.65 * v}" rx="1"/>`; }
+    }
+  }
+  if (playhead) { const px = 2 * (STEPS * sw + gap) + 6 * sw; out += `<rect x="${px}" y="-4" width="1.5" height="${h + 8}" fill="#fff"/>`; }
+  return `<svg width="${w}" height="${h}" style="overflow:visible;display:block" aria-hidden="true">${out}</svg>`;
+}
+function barNumbers(w, gap = 6, bars = BARS, from = 0) {
+  const bw = (w - gap * (bars - 1)) / bars;
+  return `<div style="position:relative;height:16px;width:${w}px">${[...Array(bars)].map((_, b) => `<span class="lbl" style="position:absolute;left:${b * (bw + gap)}px">${BAR0 + from + b}</span>`).join("")}</div>`;
+}
+function roll(notes, w, h, { color = C.other, lo = 52, hi = 76, gap = 6 } = {}) {
+  const sw = (w - gap * (BARS - 1)) / (BARS * STEPS), rows = hi - lo, rh = h / rows;
+  let out = "";
+  for (let b = 0; b < BARS; b++) out += `<rect x="${b * (STEPS * sw + gap)}" y="0" width="${STEPS * sw}" height="${h}" fill="rgba(241,230,211,.035)" rx="2"/>`;
+  for (let m = lo; m < hi; m++) if ([1, 3, 6, 8, 10].includes(m % 12)) out += `<rect x="0" y="${h - (m - lo + 1) * rh}" width="${w}" height="${rh}" fill="rgba(0,0,0,.18)"/>`;
+  for (const n of notes) { const x = n.b * (STEPS * sw + gap) + n.s * sw; out += `<rect x="${x + 0.5}" y="${h - (n.n - lo + 1) * rh + 1}" width="${Math.max(2, n.len * sw - 1)}" height="${rh - 2}" fill="${color}" opacity="${n.lead ? 0.5 : 0.9}" rx="1.5"/>`; }
+  const px = 2 * (STEPS * sw + gap) + 6 * sw; out += `<rect x="${px}" y="-4" width="1.5" height="${h + 8}" fill="#fff"/>`;
+  return `<svg width="${w}" height="${h}" style="overflow:visible;display:block" aria-hidden="true">${out}</svg>`;
+}
+function chordsLine(w, gap = 6) { const bw = (w - gap * 7) / 8; return `<div style="position:relative;height:18px;width:${w}px">${CH.map((c, i) => `<span class="lbl" style="position:absolute;left:${i * 2 * (bw + gap)}px;color:var(--ink)">${c[0]}</span>`).join("")}</div>`; }
+function fxTimeline(w, h, focusIdx = 1) {
+  const gap = 6, bw = (w - gap * 7) / 8; let out = "";
+  for (let b = 0; b < 8; b++) out += `<rect x="${b * (bw + gap)}" y="0" width="${bw}" height="${h}" fill="rgba(241,230,211,.035)" rx="2"/>`;
+  const rh = h / FX.length;
+  FX.forEach((f, i) => {
+    const x = f.at * (bw + gap), ww = f.len * bw + (f.len - 1) * gap, y = i * rh + 6, hh = rh - 12;
+    const op = i === focusIdx ? 1 : 0.5;
+    let shape;
+    if (f.name === "Impact") shape = `<path d="M${x} ${y} L${x + 10} ${y} L${x + ww} ${y + hh * 0.75} L${x + ww} ${y + hh} L${x} ${y + hh} Z" fill="${C.vox}" opacity="${op * 0.8}"/>`;
+    else if (f.name === "Downlifter") shape = `<path d="M${x} ${y} L${x + ww} ${y + hh} L${x} ${y + hh} Z" fill="${C.vox}" opacity="${op * 0.8}"/>`;
+    else shape = `<path d="M${x} ${y + hh} L${x + ww} ${y} L${x + ww} ${y + hh} Z" fill="${C.vox}" opacity="${op * 0.8}"/>`;
+    out += shape + `<text x="${x + (f.name === "Noise riser" ? -8 : ww + 10)}" y="${y + hh / 2 + 4}" fill="${i === focusIdx ? C.ink : C.mute}" font-size="12" font-family="IBM Plex Mono, monospace" text-anchor="${f.name === "Noise riser" ? "end" : "start"}">${f.name}</text>`;
+  });
+  return `<svg width="${w}" height="${h}" style="overflow:visible;display:block" aria-hidden="true">${out}</svg>`;
+}
+
+// ---------- the frame (identical for every direction) ----------
+const FAMS = [["bass", "Bass", C.bass], ["drums", "Drums", C.drums], ["other", "Melody", C.other], ["fx", "FX", C.vox]];
+const CAPTION = { drums: "Drums alone · Drop 1 · bars 97–104 · looping", other: "Melody alone · Drop 1 · bars 97–104 · looping", fx: "Timed to Drop 1 · bars 97–104 · looping" };
+function famSwitch(f) {
+  return `<div class="fam" role="tablist" aria-label="What to make">${FAMS.map(([id, n, c]) => `<button role="tab" class="f ${id === f ? "on" : ""}" aria-selected="${id === f}"><i style="background:${c}"></i>${n}</button>`).join("")}
+  <span class="f off" aria-disabled="true">Vocals<em>not yet</em></span><span class="cap">${CAPTION[f]}</span></div>`;
+}
+const BED = { drums: "Bass under both: on", other: "Drums under both: on", fx: "Drums under both: on" };
+const ORIG = { drums: "Original drums", other: "Original melody", fx: "Drop 1 as is" };
+function checkRow(f, extra = "") {
+  return `<div class="check"><div class="ab" role="group" aria-label="Compare at the same loudness"><span class="on">A · ${ORIG[f]}</span><span>B · Mine${f === "drums" ? ", 3 rows" : ""}</span></div><span class="mute" style="font-size:12px">same loudness</span>
+  <button class="ghost sm" aria-pressed="true">${BED[f]}</button>${extra}<span class="score">closeness <b>${f === "drums" ? 54 : f === "other" ? 41 : "–"}</b>${f === "fx" ? "<span style='font-size:12px'>not measured for FX</span>" : "/ 100"}</span></div>`;
+}
+function saveBar(f, label) {
+  const v = { drums: "Deep kick, from Lost in The Loop", other: "Offbeat stabs, from Lost in The Loop", fx: "Drop riser, from Lost in The Loop" }[f];
+  const t = { drums: "kick · deep · short · 124 bpm · lost in the loop", other: "chords · stab · a minor · 124 bpm · lost in the loop", fx: "fx · riser · 2 bars · a minor · 124 bpm" }[f];
+  const l = label || { drums: "Save kick", other: "Save melody", fx: "Save riser" }[f];
+  return `<div class="save"><label class="lbl" for="nm">Name</label><input id="nm" value="${v}"><span class="tags">${t}</span><button class="gold">${l}</button></div>`;
+}
+const RAIL = {
+  drums: { h: "Mentor, on the drums", q: "Why does this kick hit so hard?", a: "I can't hear the sound itself; I read measurements. The kick lands on every beat, low (about 55 Hz) and short, with a fast drop in pitch. The hats sit on the off-beats, a touch late, which is the swing.", facts: "kick ≈ 55 Hz · 4 a bar · hats +8 ms · −9 LUFS", c: "Ask about the drums…" },
+  other: { h: "Mentor, on the melody", q: "What are these chords?", a: "I read about four notes at a time, two bars each: A minor, F, C, G. They're short and land on the off-beats, between the kicks: classic house stabs.", facts: "Am · F · C · G · 1/16 stabs · off-beat", c: "Ask about the melody…" },
+  fx: { h: "Mentor, on the drop", q: "What happens at bar 97?", a: "The drop starts with a hit on the first beat that falls away over two bars; the last two bars build back up with noise into bar 105.", facts: "impact bar 97 · riser bars 103–104", c: "Ask about the drop…" },
+};
+function rail(f) { const r = RAIL[f]; return `<aside class="rail"><h4>${r.h}</h4><div class="bubble">${r.q}</div><span class="tag">bar 97</span><p class="answer" style="margin:0">${r.a}</p><p class="facts" style="margin:0">${r.facts}</p><div class="composer">${r.c}<b>↑</b></div></aside>`; }
+function shell(f, middle, { save, check } = {}) {
+  return `<div class="app">
+  <header class="bar"><div class="logo"><i></i><b>Six AM</b></div><nav class="nav"><a>Studio</a><a class="on">Analyse</a></nav><span style="margin-left:auto;color:var(--mute);font-size:18px">⚙</span></header>
+  <section class="head"><span class="back">← All tracks</span><div class="title"><h1>Lost in The Loop</h1><p>Mason Flint · 124 BPM · key A minor</p></div>
+    <div class="transport"><div class="tr1"><span class="play">❚❚</span><span>3:11 · in Drop 1</span><span class="small">bar 99</span></div><span class="loopchip">Looping Drop 1 · 3:06–3:21 ×</span></div>
+    <div class="lm"><span>Listen</span><span class="on">Make</span></div><span class="deck">Deck on</span></section>
+  <div class="main"><div class="col colpad">${famSwitch(f)}<div style="flex:1;min-height:0;display:flex;flex-direction:column">${middle}</div>${check ?? checkRow(f)}${save ?? saveBar(f)}</div>${rail(f)}</div></div>`;
+}
+const suggestLine = (txt, btn = "Suggest settings", cls = "") => `<div class="suggest ${cls}"><p>${txt}<br><span>Gold ticks mark those.</span></p><button class="ghost">${btn}</button></div>`;
+const presetBtn = (name, small = false) => small ? `<span class="presetS">${name}<small>▾</small></span>` : `<span class="preset">${name}<small>▾</small></span>`;
+const W = 1440 - 340 - 80; // column inner width (1020)
+const row = ROWS[FOCUS];
+
+// ---------- shared melody / FX frames ----------
+const melKnobs = [["Tone", 0.45, "warm", 0.6], ["Length", 0.2, "1/16", 0.15], ["Attack", 0.05, "hard", null], ["Detune", 0.3, "a little", null], ["Width", 0.55, "wide", 0.4], ["Space", 0.4, "room", 0.55]];
+function melodyStd(opts = {}) {
+  const w = W;
+  return `<div style="padding:18px 0 0">${chordsLine(w)}${roll([...NOTES, ...LEAD], w, opts.h || 150)}${barNumbers(w)}</div>
+  <div style="display:flex;align-items:center;gap:16px;margin:18px 0 6px">${presetBtn("Stab")}<span class="lbl">4 notes at once · 2 layers est.: stabs, lead (dim)</span></div>
+  <div class="knobs" style="margin:6px 0 14px">${melKnobs.map(([n, v, wd, t]) => knob(n, v, wd, t, 84, C.other)).join("")}</div>
+  ${suggestLine("Mentor: Length down to 1/16, Space up. The original stabs are short and roomy.")}<div style="height:12px"></div>`;
+}
+function fxStd(opts = {}) {
+  const w = W, f = FX[2];
+  return `<div style="padding:18px 0 0">${fxTimeline(w, opts.h || 150, 2)}${barNumbers(w)}</div>
+  <div style="display:flex;align-items:center;gap:16px;margin:18px 0 6px">${presetBtn("Noise riser")}<span class="lbl">bars 103–104 · ends on bar 105 · in A minor</span><span style="margin-left:auto" class="lbl">+ Impact · + Downlifter · + Sweep</span></div>
+  <div class="knobs" style="margin:6px 0 14px;justify-content:flex-start;gap:64px">${f.k.map(([n, v, wd]) => knob(n, v, wd, n === "Tone" ? 0.55 : null, 84, C.vox)).join("")}</div>
+  ${suggestLine("Mentor: nothing to copy note by note here; the generators sit where the drop hits and builds. Tone ticks come from the original's noise.")}<div style="height:12px"></div>`;
+}
+
+// ---------- the ten directions (middle only) ----------
+const D = [];
+
+// 1 Fold: three stacked rows; the focused row unfolds in place with its preset, knobs and Suggest
+D[0] = {
+  drums() {
+    const pw = 640;
+    const closed = (r) => `<div style="display:grid;grid-template-columns:150px ${pw}px 1fr;align-items:center;gap:20px;height:58px;border-bottom:1px solid var(--line)">
+      <span class="rowname">${r.name} <span class="mute">▸</span></span>${pattern(r.data, pw, 26, { faint: true, playhead: true })}
+      <span style="display:flex;gap:14px;align-items:center;justify-content:flex-end">${presetBtn(r.preset, true)}${r.saved ? `<span class="savedmark">saved</span>` : ""}</span></div>`;
+    const open = `<div style="border-bottom:1px solid var(--line);padding:14px 0 16px">
+      <div style="display:grid;grid-template-columns:150px ${pw}px 1fr;align-items:end;gap:20px"><span class="rowname">${row.name} <span class="mute">▾</span><br><span class="lbl">${row.hits} hits · lands on Kick</span></span><div>${barNumbers(pw)}${pattern(row.data, pw, 54)}</div>
+      <span style="justify-self:end">${presetBtn(row.preset)}</span></div>
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:20px;margin-top:14px"><span></span><div><div class="knobs" style="justify-content:flex-start;gap:56px">${knobsOf(row, 76)}</div>
+      <div style="margin-top:10px">${suggestLine("Mentor: Tune down to A1, Click up. The original kick is lower and snappier.", "Suggest for kick")}</div></div></div></div>`;
+    return `<div style="padding-top:6px">${open}${closed(ROWS[1])}${closed(ROWS[2])}</div><div style="flex:1"></div>`;
+  },
+  melody: () => {
+    const pw = 640;
+    const head = `<div style="display:grid;grid-template-columns:150px ${pw}px 1fr;align-items:end;gap:20px;padding-top:14px"><span class="rowname">Stabs <span class="mute">▾</span><br><span class="lbl">4 notes at once</span></span><div>${chordsLine(pw)}${roll(NOTES, pw, 120)}</div><span style="justify-self:end">${presetBtn("Stab")}</span></div>
+    <div style="display:grid;grid-template-columns:150px 1fr;gap:20px;margin-top:12px"><span></span><div class="knobs" style="justify-content:flex-start;gap:24px">${melKnobs.map(([n, v, wd, t]) => knob(n, v, wd, t, 68, C.other, "sm")).join("")}</div></div>`;
+    return `<div style="border-bottom:1px solid var(--line);padding-bottom:12px">${head}<div style="margin:10px 0 0 170px">${suggestLine("Mentor: Length down to 1/16, Space up.", "Suggest for stabs")}</div></div>
+    <div style="display:grid;grid-template-columns:150px ${pw}px 1fr;align-items:center;gap:20px;height:58px;border-bottom:1px solid var(--line)"><span class="rowname">Lead <span class="mute">▸</span></span>${roll(LEAD, pw, 30)}<span style="justify-self:end">${presetBtn("Pluck", true)}</span></div><div style="flex:1"></div>`;
+  },
+  fx: () => {
+    const pw = 640;
+    const r = (f, i, open) => open ? `<div style="border-bottom:1px solid var(--line);padding:14px 0"><div style="display:grid;grid-template-columns:150px ${pw}px 1fr;gap:20px;align-items:center"><span class="rowname">${f.name} <span class="mute">▾</span><br><span class="lbl">${f.why}</span></span>${fxTimeline(pw, 50, 9).replace("", "")}<span></span></div>
+      <div style="display:flex;gap:56px;margin:12px 0 0 170px">${f.k.map(([n, v, wd]) => knob(n, v, wd, n === "Tone" ? 0.55 : null, 76, C.vox)).join("")}</div></div>`
+      : `<div style="display:grid;grid-template-columns:150px ${pw}px 1fr;align-items:center;gap:20px;height:52px;border-bottom:1px solid var(--line)"><span class="rowname">${f.name} <span class="mute">▸</span></span><span class="lbl">${f.why}</span><span></span></div>`;
+    return `<div style="padding-top:6px">${r(FX[0], 0)}${r(FX[1], 1)}${r(FX[2], 2, true)}<div style="padding:12px 0">${suggestLine("Mentor: Tone up a little; the original noise is bright.", "Suggest for riser")}</div></div><div style="flex:1"></div>`;
+  },
+};
+
+// 2 Machine: one drum-machine grid on top (all three rows, whole loop); the frame below belongs to the focused row
+D[1] = {
+  drums() {
+    const pw = W - 130;
+    const r = (x, i) => `<div style="display:grid;grid-template-columns:118px ${pw}px;gap:12px;align-items:center;height:${i === FOCUS ? 50 : 34}px;${i === FOCUS ? "background:rgba(241,230,211,.05);margin:0 -10px;padding:0 10px;border-radius:6px" : ""}">
+      <span class="rowname" style="${i === FOCUS ? "" : "color:var(--mute)"}">${x.short || x.name}${x.saved ? ` <span class="savedmark" style="font-size:11px"></span>` : ""}</span>${pattern(x.data, pw, i === FOCUS ? 34 : 22, { faint: i !== FOCUS })}</div>`;
+    return `<div style="padding:16px 0 0"><div style="margin-left:130px">${barNumbers(pw)}</div>${ROWS.map(r).join("")}</div>
+    <div style="display:flex;align-items:baseline;gap:16px;margin:22px 0 8px"><span class="lbl" style="width:118px">Kick sound</span>${presetBtn(row.preset)}<span class="lbl">${row.tags}</span></div>
+    <div class="knobs" style="margin:8px 0 14px;justify-content:flex-start;gap:84px;padding-left:130px">${knobsOf(row, 84)}</div>
+    ${suggestLine("Mentor: Tune down to A1, Click up. The original kick is lower and snappier.", "Suggest for kick")}<div style="flex:1"></div>`;
+  },
+  melody: () => melodyStd(),
+  fx: () => fxStd(),
+};
+
+// 3 Tabs: Kick · Clap & snare · Hats under the family switch; the room looks like Bass for one row, the other two as thin context lines
+D[2] = {
+  drums() {
+    const pw = W;
+    const tabs = `<div style="display:flex;gap:4px;margin:14px 0 14px" role="tablist">${ROWS.map((x, i) => `<button role="tab" class="${i === FOCUS ? "" : "mute"}" style="height:32px;padding:0 14px;border-radius:6px;${i === FOCUS ? "background:#2b2622" : ""}">${x.name}${x.saved ? " <span style='color:#7fbf6a'>✓</span>" : ""}</button>`).join("")}</div>`;
+    return `${tabs}<div>${barNumbers(pw)}${pattern(ROWS[2].data, pw, 10, { faint: true, playhead: false, color: C.ink })}<div style="height:4px"></div>${pattern(ROWS[1].data, pw, 10, { faint: true, playhead: false, color: C.ink })}<div style="height:6px"></div>${pattern(row.data, pw, 60)}</div>
+    <div style="display:flex;align-items:center;gap:16px;margin:22px 0 6px">${presetBtn(row.preset)}<span class="lbl">${row.hits} hits in 8 bars · swing 54%</span></div>
+    <div class="knobs" style="margin:8px 0 16px">${knobsOf(row, 96)}</div>
+    ${suggestLine("Mentor: Tune down to A1, Click up. The original kick is lower and snappier.")}<div style="flex:1"></div>`;
+  },
+  melody: () => `<div style="display:flex;gap:4px;margin:14px 0 0"><button style="height:32px;padding:0 14px;border-radius:6px;background:#2b2622">Stabs</button><button class="mute" style="height:32px;padding:0 14px">Lead</button></div>` + melodyStd({ h: 120 }),
+  fx: () => `<div style="display:flex;gap:4px;margin:14px 0 0">${FX.map((f, i) => `<button class="${i === 2 ? "" : "mute"}" style="height:32px;padding:0 14px;border-radius:6px;${i === 2 ? "background:#2b2622" : ""}">${f.name}</button>`).join("")}</div>` + fxStd({ h: 120 }),
+};
+
+// 4 Strips: three channel strips side by side, mixer-like; each strip has it all; the focused one is lit
+D[3] = {
+  drums() {
+    const cw = (W - 32) / 3;
+    const strip = (x, i) => {
+      const on = i === FOCUS;
+      const bars4 = [0, 1, 2, 3, 4, 5, 6, 7].map((b) => `<div style="display:grid;grid-template-columns:28px 1fr;align-items:center;gap:6px"><span class="lbl" style="font-size:11px;${b === 2 ? "color:var(--ink)" : ""}">${b === 2 ? "▸" : ""}${BAR0 + b}</span>${pattern([x.data[b]], cw - 70, 12, { bars: 1, playhead: false, faint: !on })}</div>`).join("");
+      return `<section style="border:1px solid ${on ? "#5a4f45" : "var(--line)"};background:${on ? "#1a1715" : "transparent"};border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="rowname">${x.name}</span>${x.saved ? `<span class="savedmark">saved</span>` : `<span class="lbl">→ ${x.lane}</span>`}</div>
+        ${presetBtn(x.preset, true)}<div style="display:grid;gap:3px;margin:4px 0">${bars4}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;row-gap:6px;justify-items:center">${knobsOf(x, 60, "sm")}</div>
+        <button class="ghost sm" style="align-self:flex-start">Suggest for ${(x.short || x.name).toLowerCase()}</button></section>`;
+    };
+    return `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:14px 0 8px">${ROWS.map(strip).join("")}</div><p class="mute" style="margin:0 0 8px;font-size:12px">Mentor: Kick Tune down to A1, Click up; Hats Length up. Gold ticks mark those.</p><div style="flex:1"></div>`;
+  },
+  melody: () => {
+    const cw = (W - 16) / 2;
+    const s = (name, notes, preset, on) => `<section style="border:1px solid ${on ? "#5a4f45" : "var(--line)"};background:${on ? "#1a1715" : "transparent"};border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:10px"><span class="rowname">${name}</span>${presetBtn(preset, true)}${roll(notes, cw - 34, 110)}<div style="display:grid;grid-template-columns:repeat(3,1fr);justify-items:center">${melKnobs.slice(0, on ? 6 : 3).map(([n, v, wd, t]) => knob(n, v, wd, t, 56, C.other, "sm")).join("")}</div></section>`;
+    return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px 0 14px">${s("Stabs", NOTES, "Stab", true)}${s("Lead", LEAD, "Pluck", false)}</div><div style="flex:1"></div>`;
+  },
+  fx: () => {
+    const cw = (W - 32) / 3;
+    return `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px 0 14px">${FX.map((f, i) => `<section style="border:1px solid ${i === 2 ? "#5a4f45" : "var(--line)"};background:${i === 2 ? "#1a1715" : "transparent"};border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:10px"><span class="rowname">${f.name}</span><span class="lbl">${f.why}</span>${fxTimeline(cw - 34, 60, i).replace(/<text[^>]*>[^<]*<\/text>/g, "")}<div style="display:flex;justify-content:space-around">${f.k.map(([n, v, wd]) => knob(n, v, wd, null, 60, C.vox, "sm")).join("")}</div></section>`).join("")}</div><div style="flex:1"></div>`;
+  },
+};
+
+// 5 Twin: each row shows what was heard (the original's hits, with their timing off the grid) above Mine's copy; per-row closeness
+D[4] = {
+  drums() {
+    const pw = W - 210;
+    const offs = (x) => { // original hits as thin ticks, slightly off-grid (the swing kept)
+      const sw = (pw - 50 - 42) / 128; let o = "";
+      x.data.forEach((bar, b) => bar.forEach((v, s) => { if (v > 0) { const late = x.id === "hats" && s % 4 === 2 ? 0.28 : 0; const xx = b * (16 * sw + 6) + (s + late) * sw; o += `<rect x="${xx}" y="${12 - 12 * v}" width="1.5" height="${12 * v}" fill="${C.ink}" opacity=".55"/>`; } }));
+      return `<svg width="${pw - 50}" height="12" style="display:block">${o}</svg>`;
+    };
+    const r = (x, i) => {
+      const on = i === FOCUS;
+      return `<div style="display:grid;grid-template-columns:120px ${pw}px 1fr;gap:16px;align-items:center;padding:${on ? 12 : 8}px 0;border-bottom:1px solid var(--line)">
+      <span class="rowname" style="${on ? "" : "color:var(--mute)"}">${x.short || x.name}</span>
+      <div style="display:grid;gap:4px"><div style="display:flex;gap:8px;align-items:center"><span class="lbl" style="width:42px">heard</span>${offs(x)}</div><div style="display:flex;gap:8px;align-items:center"><span class="lbl" style="width:42px">mine</span>${pattern(x.data, pw - 50, on ? 26 : 14, { faint: !on, playhead: on })}</div></div>
+      <span style="text-align:right;color:var(--mute)">${[48, 61, 57][i]}</span></div>`;
+    };
+    return `<div style="padding-top:8px"><div style="display:grid;grid-template-columns:120px ${pw}px 1fr;gap:16px"><span></span><div style="margin-left:50px">${barNumbers(pw - 50)}</div><span class="lbl" style="text-align:right">close</span></div>${ROWS.map(r).join("")}</div>
+    <div style="display:flex;align-items:center;gap:16px;margin:18px 0 6px">${presetBtn(row.preset)}<span class="lbl">kick is the furthest off; start there</span></div>
+    <div class="knobs" style="margin:6px 0 12px;justify-content:flex-start;gap:84px">${knobsOf(row, 80)}</div>${suggestLine("Mentor: Tune down to A1, Click up. The original kick is lower and snappier.", "Suggest for kick")}<div style="flex:1"></div>`;
+  },
+  melody: () => {
+    const pw = W;
+    return `<div style="padding-top:16px"><div style="display:flex;gap:8px;align-items:center"><span class="lbl" style="width:50px">heard</span>${roll(NOTES.map((n) => ({ ...n })), pw - 58, 56, { color: C.ink })}</div><div style="height:6px"></div><div style="display:flex;gap:8px;align-items:center"><span class="lbl" style="width:50px">mine</span>${roll(NOTES, pw - 58, 90)}</div></div>
+    <div style="display:flex;align-items:center;gap:16px;margin:18px 0 6px">${presetBtn("Stab")}<span class="lbl">3 of 4 chords read; bar 103 unsure</span></div><div class="knobs" style="margin:6px 0 14px">${melKnobs.map(([n, v, wd, t]) => knob(n, v, wd, t, 76, C.other)).join("")}</div>${suggestLine("Mentor: Length down to 1/16, Space up.")}`;
+  },
+  fx: () => `<div style="padding-top:16px"><div style="display:flex;gap:8px;align-items:center"><span class="lbl" style="width:50px">heard</span><svg width="${W - 58}" height="40"><path d="M0 40 L0 4 L40 4 ${[...Array(60)].map((_, i) => `L${40 + i * 10} ${8 + 30 * (i / 60) + Math.sin(i) * 3}`).join(" ")} L${W - 260} 40 Z" fill="${C.ink}" opacity=".18"/><path d="M${W - 300} 40 L${W - 58} 2 L${W - 58} 40 Z" fill="${C.ink}" opacity=".18"/></svg></div><div style="height:6px"></div><div style="display:flex;gap:8px;align-items:center"><span class="lbl" style="width:50px">mine</span>${fxTimeline(W - 58, 110, 2)}</div></div>` + fxStd({ h: 0 }).replace(/<div style="padding:18px 0 0">[\s\S]*?<\/svg>[\s\S]*?<\/div><\/div>/, ""),
+};
+
+// 6 Rings: one bar at a time as three concentric rings (kick inside, hats outside); the bars that differ are marked; knobs beside
+D[5] = {
+  drums() {
+    const R = 150, cx = 170, cy = 170, rings = [[R * 0.42, ROWS[0]], [R * 0.68, ROWS[1]], [R * 0.94, ROWS[2]]];
+    let o = `<circle cx="${cx}" cy="${cy}" r="${R + 12}" fill="rgba(241,230,211,.03)"/>`;
+    rings.forEach(([r, x], ri) => {
+      const on = ri === FOCUS;
+      o += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(241,230,211,${on ? 0.18 : 0.08})" stroke-width="1"/>`;
+      for (let s = 0; s < 16; s++) { const a = (s / 16) * Math.PI * 2 - Math.PI / 2, v = x.data[2][s]; const px = cx + r * Math.cos(a), py = cy + r * Math.sin(a); o += v > 0 ? `<circle cx="${px}" cy="${py}" r="${(on ? 6 : 4) * (0.6 + 0.4 * v)}" fill="${C.drums}" opacity="${on ? 1 : 0.45}"/>` : `<circle cx="${px}" cy="${py}" r="1.5" fill="rgba(241,230,211,.2)"/>`; }
+    });
+    const ph = (6 / 16) * Math.PI * 2 - Math.PI / 2; o += `<line x1="${cx + 34 * Math.cos(ph)}" y1="${cy + 34 * Math.sin(ph)}" x2="${cx + (R + 12) * Math.cos(ph)}" y2="${cy + (R + 12) * Math.sin(ph)}" stroke="#fff" stroke-width="1.5"/>`;
+    o += `<text x="${cx}" y="${cy + 5}" text-anchor="middle" fill="${C.mute}" font-size="12" font-family="IBM Plex Mono">bar 99</text>`;
+    const bars = [...Array(8)].map((_, b) => `<button style="width:40px;height:30px;border-radius:6px;${b === 2 ? "background:#2b2622;color:var(--ink)" : "color:var(--mute)"}">${BAR0 + b}${b === 3 || b === 7 ? "<sup style='color:var(--gold)'>•</sup>" : ""}</button>`).join("");
+    return `<div style="display:grid;grid-template-columns:340px 1fr;gap:36px;padding-top:14px">
+      <div><svg width="340" height="340" aria-hidden="true">${o}</svg><div style="display:flex;gap:2px;margin-top:4px">${bars}</div><p class="lbl" style="margin:6px 0 0">• bars 100 and 104 differ (a ghost kick, a clap roll)</p></div>
+      <div style="display:flex;flex-direction:column;gap:14px;padding-top:8px">
+        <div style="display:flex;gap:8px">${ROWS.map((x, i) => `<button class="${i === FOCUS ? "" : "mute"}" style="height:30px;padding:0 12px;border-radius:6px;${i === FOCUS ? "background:#2b2622" : ""}">${x.short || x.name} <span class="lbl">${["inner", "middle", "outer"][i]}</span></button>`).join("")}</div>
+        ${presetBtn(row.preset)}<div class="knobs" style="flex-wrap:wrap;justify-content:flex-start;gap:28px 48px">${knobsOf(row, 84)}</div>
+        ${suggestLine("Mentor: Tune down to A1, Click up.", "Suggest for kick")}</div></div><div style="flex:1"></div>`;
+  },
+  melody: () => {
+    const R = 140, cx = 160, cy = 160; let o = "";
+    for (let i = 0; i < 12; i++) { const a = (i / 12) * Math.PI * 2 - Math.PI / 2, on = [9, 0, 4].includes(i); o += `<circle cx="${cx + R * Math.cos(a)}" cy="${cy + R * Math.sin(a)}" r="${on ? 16 : 13}" fill="${on ? C.other : "rgba(241,230,211,.06)"}"/><text x="${cx + R * Math.cos(a)}" y="${cy + R * Math.sin(a) + 4}" text-anchor="middle" font-size="12" fill="${on ? "#0d1f1d" : C.mute}" font-family="IBM Plex Mono">${NAMES[i]}</text>`; }
+    o += `<path d="M${[9, 0, 4].map((i) => { const a = (i / 12) * Math.PI * 2 - Math.PI / 2; return `${cx + (R - 18) * Math.cos(a)} ${cy + (R - 18) * Math.sin(a)}`; }).join(" L")} Z" fill="rgba(35,179,165,.15)" stroke="${C.other}"/><text x="${cx}" y="${cy + 8}" text-anchor="middle" font-size="26" fill="${C.ink}" font-family="Instrument Serif" font-style="italic">Am</text>`;
+    return `<div style="display:grid;grid-template-columns:340px 1fr;gap:36px;padding-top:14px"><div><svg width="320" height="320">${o}</svg><div style="display:flex;gap:6px;margin-top:6px">${CH.map((c, i) => `<button style="height:30px;padding:0 12px;border-radius:6px;${i === 0 ? "background:#2b2622" : "color:var(--mute)"}">${c[0]} <span class="lbl">${97 + i * 2}</span></button>`).join("")}</div></div>
+    <div style="display:flex;flex-direction:column;gap:14px;padding-top:8px">${presetBtn("Stab")}<div class="knobs" style="flex-wrap:wrap;justify-content:flex-start;gap:24px 40px">${melKnobs.map(([n, v, wd, t]) => knob(n, v, wd, t, 76, C.other)).join("")}</div>${suggestLine("Mentor: Length down to 1/16, Space up.")}</div></div><div style="flex:1"></div>`;
+  },
+  fx: () => {
+    const R = 140, cx = 160, cy = 160; let o = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="rgba(241,230,211,.12)"/>`;
+    const arc = (b0, b1, r, col, op) => { const a0 = (b0 / 8) * Math.PI * 2 - Math.PI / 2, a1 = (b1 / 8) * Math.PI * 2 - Math.PI / 2; return `<path d="M${cx + r * Math.cos(a0)} ${cy + r * Math.sin(a0)} A${r} ${r} 0 0 1 ${cx + r * Math.cos(a1)} ${cy + r * Math.sin(a1)}" fill="none" stroke="${col}" stroke-width="10" opacity="${op}" stroke-linecap="round"/>`; };
+    o += arc(0, 0.3, R - 20, C.vox, 0.5) + arc(0, 2, R - 44, C.vox, 0.5) + arc(6, 7.95, R - 68, C.vox, 1);
+    for (let b = 0; b < 8; b++) { const a = (b / 8) * Math.PI * 2 - Math.PI / 2; o += `<text x="${cx + (R + 14) * Math.cos(a)}" y="${cy + (R + 14) * Math.sin(a) + 4}" text-anchor="middle" font-size="11" fill="${C.mute}" font-family="IBM Plex Mono">${97 + b}</text>`; }
+    return `<div style="display:grid;grid-template-columns:340px 1fr;gap:36px;padding-top:14px"><svg width="330" height="330" style="overflow:visible">${o}</svg><div style="display:flex;flex-direction:column;gap:14px;padding-top:8px"><div style="display:flex;gap:8px">${FX.map((f, i) => `<button style="height:30px;padding:0 12px;border-radius:6px;${i === 2 ? "background:#2b2622" : "color:var(--mute)"}">${f.name}</button>`).join("")}</div>${presetBtn("Noise riser")}<div style="display:flex;gap:48px">${FX[2].k.map(([n, v, wd]) => knob(n, v, wd, n === "Tone" ? 0.55 : null, 84, C.vox)).join("")}</div>${suggestLine("Mentor: Tone up a little.")}</div></div><div style="flex:1"></div>`;
+  },
+};
+
+// 7 Pads: three big pads (press = hear the row alone and focus it), the pattern under each; the focused pad's knobs below
+D[6] = {
+  drums() {
+    const pw = (W - 32) / 3;
+    const pad = (x, i) => { const on = i === FOCUS; return `<button style="text-align:left;border-radius:10px;padding:16px;height:150px;display:flex;flex-direction:column;justify-content:space-between;background:${on ? "#2a2219" : "#1a1715"};box-shadow:inset 0 0 0 1px ${on ? "#6b5426" : "var(--line)"}">
+      <span style="display:flex;justify-content:space-between;width:100%"><span class="rowname">${x.name}</span>${x.saved ? `<span class="savedmark">saved</span>` : ""}</span>
+      <span>${presetBtn(x.preset, true)}</span><span>${pattern(x.data, pw - 32, 18, { faint: !on, playhead: on, gap: 3 })}</span></button>`; };
+    return `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px 0 6px">${ROWS.map(pad).join("")}</div><p class="lbl" style="margin:0 0 14px">Press a pad to hear that row alone · bars 97–104</p>
+    <div class="knobs" style="margin:6px 0 14px;justify-content:flex-start;gap:96px">${knobsOf(row, 96)}</div>${suggestLine("Mentor: Tune down to A1, Click up. The original kick is lower and snappier.", "Suggest for kick")}<div style="flex:1"></div>`;
+  },
+  melody: () => {
+    const pw = (W - 16) / 2;
+    return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px 0 6px">${[["Stabs", NOTES, "Stab", true], ["Lead", LEAD, "Pluck", false]].map(([n, nt, p, on]) => `<button style="text-align:left;border-radius:10px;padding:16px;height:150px;display:flex;flex-direction:column;justify-content:space-between;background:${on ? "#16211f" : "#1a1715"};box-shadow:inset 0 0 0 1px ${on ? "#23605a" : "var(--line)"}"><span class="rowname">${n}</span>${presetBtn(p, true)}${roll(nt, pw - 32, 40)}</button>`).join("")}</div><p class="lbl" style="margin:0 0 14px">Press a pad to hear that layer alone</p>
+    <div class="knobs" style="margin:6px 0 14px">${melKnobs.map(([n, v, wd, t]) => knob(n, v, wd, t, 84, C.other)).join("")}</div>${suggestLine("Mentor: Length down to 1/16, Space up.")}`;
+  },
+  fx: () => `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px 0 6px">${FX.map((f, i) => `<button style="text-align:left;border-radius:10px;padding:16px;height:150px;display:flex;flex-direction:column;justify-content:space-between;background:${i === 2 ? "#24211d" : "#1a1715"};box-shadow:inset 0 0 0 1px ${i === 2 ? "#5a4f45" : "var(--line)"}"><span class="rowname">${f.name}</span><span class="lbl">${f.why}</span></button>`).join("")}</div><p class="lbl" style="margin:0 0 14px">Press a pad to hear it once, where it sits in the drop</p><div style="display:flex;gap:96px;margin:6px 0 14px">${FX[2].k.map(([n, v, wd]) => knob(n, v, wd, n === "Tone" ? 0.55 : null, 96, C.vox)).join("")}</div>${suggestLine("Mentor: Tone up a little.")}`,
+};
+
+// 8 Bars: the loop read as its distinct bars (A ×6, B, C): big readable 16-step grids for one bar; the loop order as letters
+D[7] = {
+  drums() {
+    const cell = 34, gw = cell * 16;
+    const grid = (b) => ROWS.map((x, i) => { const on = i === FOCUS; return `<div style="display:grid;grid-template-columns:120px ${gw}px;align-items:center;gap:12px;margin-bottom:6px"><span class="rowname" style="${on ? "" : "color:var(--mute)"}">${x.short || x.name}</span><div style="display:grid;grid-template-columns:repeat(16,1fr);gap:3px">${x.data[b].map((v, s) => `<span style="height:${on ? 34 : 26}px;border-radius:4px;background:${v > 0 ? `rgba(242,177,52,${on ? 0.35 + 0.65 * v : 0.25 + 0.3 * v})` : `rgba(241,230,211,${s % 4 === 0 ? 0.07 : 0.04})`}"></span>`).join("")}</div></div>`; }).join("");
+    const seq = ["A", "A", "A", "B", "A", "A", "A", "C"];
+    return `<div style="padding-top:16px;display:flex;gap:28px;align-items:flex-start">
+      <div>${grid(0)}<div style="display:grid;grid-template-columns:120px ${gw}px;gap:12px"><span></span><div style="display:grid;grid-template-columns:repeat(4,1fr)">${[1, 2, 3, 4].map((n) => `<span class="lbl">${n}</span>`).join("")}</div></div></div>
+      <div style="display:grid;gap:8px;min-width:200px"><span class="lbl">The loop, 8 bars</span><div style="display:flex;gap:3px">${seq.map((l, i) => `<span style="width:24px;height:28px;display:grid;place-items:center;border-radius:4px;${l === "A" ? "background:#2b2622" : "box-shadow:inset 0 0 0 1px var(--line2)"};${i === 2 ? "outline:1.5px solid #fff;outline-offset:1px" : ""}">${l}</span>`).join("")}</div>
+      <div style="display:grid;gap:4px;margin-top:6px">${[["A", "×6", "the groove", true], ["B", "bar 100", "ghost kick on the last 16th"], ["C", "bar 104", "clap roll into the next part"]].map(([l, n, d, on]) => `<button style="text-align:left;display:grid;grid-template-columns:22px 1fr;gap:8px;padding:6px 8px;border-radius:6px;${on ? "background:#2b2622" : ""}"><b style="font-weight:500">${l}</b><span><span>${n}</span><br><span class="lbl">${d}</span></span></button>`).join("")}</div></div></div>
+    <div style="display:flex;align-items:center;gap:16px;margin:18px 0 6px"><span class="lbl" style="width:120px">Kick sound</span>${presetBtn(row.preset)}</div>
+    <div class="knobs" style="margin:6px 0 12px;justify-content:flex-start;gap:84px;padding-left:132px">${knobsOf(row, 80)}</div>${suggestLine("Mentor: Tune down to A1, Click up.", "Suggest for kick")}<div style="flex:1"></div>`;
+  },
+  melody: () => {
+    const cw = 120;
+    return `<div style="padding-top:16px;display:flex;gap:28px"><div style="display:flex;gap:10px">${CH.map((c, i) => `<div style="width:${cw}px;border-radius:8px;padding:12px;${i === 0 ? "background:#16211f;box-shadow:inset 0 0 0 1px #23605a" : "box-shadow:inset 0 0 0 1px var(--line)"}"><div style="font:italic 30px var(--serif)">${c[0]}</div><div class="lbl">${c[1].map(nn).join(" ")}</div><div class="lbl">bars ${97 + i * 2}–${98 + i * 2}</div></div>`).join("")}</div><div class="lbl" style="max-width:220px">The loop is 4 chords, 2 bars each, played as off-beat stabs. One rhythm, every bar.</div></div>
+    <div style="margin-top:14px">${roll(NOTES.filter((n) => n.b < 2), 600, 70)}</div>
+    <div style="display:flex;align-items:center;gap:16px;margin:16px 0 6px">${presetBtn("Stab")}</div><div class="knobs" style="margin:6px 0 12px">${melKnobs.map(([n, v, wd, t]) => knob(n, v, wd, t, 76, C.other)).join("")}</div>${suggestLine("Mentor: Length down to 1/16, Space up.")}`;
+  },
+  fx: () => fxStd(),
+};
+
+// 9 Drawer: the rows look like the Studio lanes they will land on; the focused lane's drawer opens on the right, as in the Studio
+D[8] = {
+  drums() {
+    const lw = 560;
+    const lane = (x, i) => { const on = i === FOCUS; return `<div style="display:grid;grid-template-columns:130px ${lw}px;align-items:center;gap:12px;height:${on ? 96 : 72}px;border-bottom:1px solid var(--line);${on ? "background:rgba(241,230,211,.04)" : ""}">
+      <span style="padding-left:10px"><span class="rowname">${x.lane}</span><br><span class="lbl">${x.saved ? "✓ saved" : x.preset}</span></span>${pattern(x.data, lw, on ? 46 : 28, { faint: !on, gap: 4 })}</div>`; };
+    return `<div style="display:grid;grid-template-columns:${130 + 12 + lw}px 1fr;gap:0;flex:1;min-height:0;padding-top:12px">
+      <div><div style="margin-left:142px">${barNumbers(lw, 4)}</div>${ROWS.map(lane).join("")}<p class="lbl" style="margin:12px 0 0 10px">Each row saves to its own lane in the Studio.</p></div>
+      <div style="border-left:1px solid var(--line);padding:4px 0 0 22px;display:flex;flex-direction:column;gap:12px">
+        <span class="lbl">Kick lane</span>${presetBtn(row.preset)}<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 8px;justify-items:center">${knobsOf(row, 76)}</div>
+        <p style="margin:0">Mentor: Tune down to A1, Click up.<br><span class="mute">Gold ticks mark those.</span></p><button class="ghost" style="align-self:flex-start">Suggest for kick</button></div></div>`;
+  },
+  melody: () => {
+    const lw = 560;
+    return `<div style="display:grid;grid-template-columns:${130 + 12 + lw}px 1fr;flex:1;padding-top:12px"><div>${[["Chords", NOTES, true], ["Lead", LEAD, false]].map(([n, nt, on]) => `<div style="display:grid;grid-template-columns:130px ${lw}px;gap:12px;align-items:center;height:${on ? 150 : 72}px;border-bottom:1px solid var(--line);${on ? "background:rgba(241,230,211,.04)" : ""}"><span style="padding-left:10px" class="rowname">${n}</span>${roll(nt, lw, on ? 120 : 40, { gap: 4 })}</div>`).join("")}</div>
+    <div style="border-left:1px solid var(--line);padding:4px 0 0 22px;display:flex;flex-direction:column;gap:12px"><span class="lbl">Chords lane</span>${presetBtn("Stab")}<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px 4px;justify-items:center">${melKnobs.map(([n, v, wd, t]) => knob(n, v, wd, t, 64, C.other, "sm")).join("")}</div><button class="ghost" style="align-self:flex-start">Suggest settings</button></div></div>`;
+  },
+  fx: () => {
+    const lw = 560;
+    return `<div style="display:grid;grid-template-columns:${130 + 12 + lw}px 1fr;flex:1;padding-top:12px"><div><div style="display:grid;grid-template-columns:130px ${lw}px;gap:12px;align-items:center;height:170px;border-bottom:1px solid var(--line)"><span style="padding-left:10px" class="rowname">FX</span>${fxTimeline(lw, 140, 2)}</div></div>
+    <div style="border-left:1px solid var(--line);padding:4px 0 0 22px;display:flex;flex-direction:column;gap:12px"><span class="lbl">FX lane</span>${presetBtn("Noise riser")}<div style="display:flex;gap:10px">${FX[2].k.map(([n, v, wd]) => knob(n, v, wd, n === "Tone" ? 0.55 : null, 68, C.vox, "sm")).join("")}</div><button class="ghost" style="align-self:flex-start">Suggest settings</button></div></div>`;
+  },
+};
+
+// 10 Tracker: the loop runs top to bottom, one line per 16th, three columns of hits with velocity numbers; the focused column is bright
+D[9] = {
+  drums() {
+    const lines = [];
+    for (let b = 1; b < 4; b++) for (let s = 0; s < 16; s++) lines.push([b, s]);
+    const vis = lines.slice(10, 10 + 18);
+    const cell = (x, b, s, on) => { const v = x.data[b][s]; return `<span style="color:${v > 0 ? (on ? C.drums : C.mute) : "#4a4038"}">${v > 0 ? String(Math.round(v * 127)).padStart(3, "0") : "···"}</span>`; };
+    const tbl = vis.map(([b, s]) => `<div style="display:grid;grid-template-columns:76px repeat(3,110px);height:20px;align-items:center;${b === 2 && s === 6 ? "background:rgba(255,255,255,.1)" : s % 4 === 0 ? "background:rgba(241,230,211,.03)" : ""}"><span class="lbl" style="color:${s === 0 ? C.ink : ""}">${BAR0 + b}.${String(s + 1).padStart(2, "0")}</span>${ROWS.map((x, i) => cell(x, b, s, i === FOCUS)).join("")}</div>`).join("");
+    return `<div style="display:grid;grid-template-columns:420px 1fr;gap:36px;padding-top:12px;flex:1;min-height:0">
+      <div style="font-size:13px"><div style="display:grid;grid-template-columns:76px repeat(3,110px);height:30px;align-items:center;border-bottom:1px solid var(--line)"><span class="lbl">step</span>${ROWS.map((x, i) => `<span style="${i === FOCUS ? "" : "color:var(--mute)"}">${x.short || x.name}${i === FOCUS ? " ◂" : ""}</span>`).join("")}</div>${tbl}</div>
+      <div style="display:flex;flex-direction:column;gap:14px">${presetBtn(row.preset)}<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px 8px;justify-items:center;max-width:300px">${knobsOf(row, 84)}</div><p style="margin:0">Mentor: Tune down to A1, Click up.<br><span class="mute">Gold ticks mark those.</span></p><button class="ghost" style="align-self:flex-start">Suggest for kick</button></div></div>`;
+  },
+  melody: () => {
+    const lines = []; for (let s = 0; s < 16; s++) lines.push(s);
+    const at = (b, s) => NOTES.filter((n) => n.b === b && n.s === s).map((n) => nn(n.n)).join(" ");
+    return `<div style="display:grid;grid-template-columns:420px 1fr;gap:36px;padding-top:12px"><div><div style="display:grid;grid-template-columns:76px 1fr;height:30px;align-items:center;border-bottom:1px solid var(--line)"><span class="lbl">step</span><span>Stabs ◂</span></div>${lines.map((s) => `<div style="display:grid;grid-template-columns:76px 1fr;height:20px;align-items:center;${s % 4 === 0 ? "background:rgba(241,230,211,.03)" : ""}"><span class="lbl">97.${String(s + 1).padStart(2, "0")}</span><span style="color:${at(0, s) ? C.other : "#4a4038"}">${at(0, s) || "···"}</span></div>`).join("")}</div>
+    <div style="display:flex;flex-direction:column;gap:14px">${presetBtn("Stab")}<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px 8px;justify-items:center;max-width:380px">${melKnobs.map(([n, v, wd, t]) => knob(n, v, wd, t, 76, C.other)).join("")}</div><button class="ghost" style="align-self:flex-start">Suggest settings</button></div></div>`;
+  },
+  fx: () => `<div style="display:grid;grid-template-columns:420px 1fr;gap:36px;padding-top:12px"><div><div style="display:grid;grid-template-columns:76px 1fr 1fr;height:30px;align-items:center;border-bottom:1px solid var(--line)"><span class="lbl">bar</span><span class="mute">starts</span><span class="mute">lasts</span></div>${FX.map((f, i) => `<div style="display:grid;grid-template-columns:76px 1fr 1fr;height:34px;align-items:center;${i === 2 ? "background:rgba(255,255,255,.06)" : ""}"><span class="lbl">${97 + f.at}.01</span><span style="${i === 2 ? "" : "color:var(--mute)"}">${f.name}${i === 2 ? " ◂" : ""}</span><span class="mute">${f.len} bar${f.len > 1 ? "s" : ""}</span></div>`).join("")}</div><div style="display:flex;flex-direction:column;gap:14px">${presetBtn("Noise riser")}<div style="display:flex;gap:24px">${FX[2].k.map(([n, v, wd]) => knob(n, v, wd, n === "Tone" ? 0.55 : null, 84, C.vox)).join("")}</div><button class="ghost" style="align-self:flex-start">Suggest settings</button></div></div><div style="flex:1"></div>`,
+};
+
+// ---------- harness ----------
+const params = new URLSearchParams(location.search);
+const FAM = { drums: "drums", melody: "other", fx: "fx" }[params.get("f") || "drums"] || "drums";
+if (params.get("shot")) document.body.classList.add("shot");
+const variants = D.map((d) => () => shell(FAM, FAM === "drums" ? d.drums() : FAM === "other" ? d.melody() : d.fx()));
+
+const stage = document.getElementById('stage');
+const picker = document.querySelector('.proto-picker');
+const highlight = picker.querySelector('.proto-picker-highlight');
+const items = [...picker.querySelectorAll('.proto-picker-item:not(.proto-picker-replay)')];
+const replay = picker.querySelector('.proto-picker-replay');
+let current = 0;
+function moveHighlight() { const el = items[current]; highlight.style.width = el.offsetWidth + 'px'; highlight.style.transform = `translateX(${el.offsetLeft}px)`; }
+function mount(i) { stage.innerHTML = ''; requestAnimationFrame(() => { stage.innerHTML = variants[i](); }); }
+function setActive(i) {
+  if (i < 0 || i >= variants.length) return;
+  current = i;
+  items.forEach((el, j) => { el.toggleAttribute('data-active', j === i); if (j === i) el.setAttribute('aria-current', 'true'); else el.removeAttribute('aria-current'); });
+  moveHighlight();
+  const url = new URL(location); url.searchParams.set('v', i + 1); history.replaceState(null, '', url);
+  mount(i);
+}
+items.forEach((el, i) => el.addEventListener('click', () => setActive(i)));
+replay?.addEventListener('click', () => mount(current));
+window.addEventListener('resize', moveHighlight);
+document.addEventListener('keydown', (e) => {
+  if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable) return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key === '0' ? 10 : parseInt(e.key, 10);
+  if (k >= 1 && k <= variants.length) setActive(k - 1);
+  else if (e.key === 'ArrowRight') setActive((current + 1) % variants.length);
+  else if (e.key === 'ArrowLeft') setActive((current - 1 + variants.length) % variants.length);
+  else if (e.key === 'r' || e.key === 'R') mount(current);
+});
+setActive((parseInt(params.get('v'), 10) || 1) - 1);
+requestAnimationFrame(() => requestAnimationFrame(() => picker.setAttribute('data-ready', '')));
+</script>
+</body></html>

@@ -442,3 +442,49 @@ At most 2 generations (≤ $0.48).
   the code.
 - Ears, the Mentor chat and the Studio's old tracks unbroken (guardrail).
 - Ask afterwards: "Did anything make you think Six AM kept a copy of the track?"
+
+## Phase 5: Make for every layer (28 Oct)
+
+Persona as above (beginner bedroom producer, loves house, no music theory). Sandbox only
+(`ACCESS_CODE=test-code`, in-memory store, port 3017). Score each job 1–5.
+
+#### M-S1 · Make my own drums from a loop I love (slice 1)
+Open a track's Lab, loop the drop, switch Make to Drums. Expect: the three rows fill after a
+short countdown; I can tell which row the knobs change; picking a row moves nothing else.
+
+#### M-S2 · Get my kick close to the original
+Open Kick, try presets, follow the gold ticks / Mentor hint, A/B with the bass under both, watch
+the closeness score. Expect: I can hear and see it getting closer without knowing theory.
+
+#### M-S3 · Keep the drums I like and use them
+Save kick, clap and hats; open the Studio; find them in My sounds; drop each on its lane; reload.
+Expect: each lands on its own lane and survives a reload.
+
+#### M-S4 · A breakdown with almost no drums
+Loop a hats-only part. Expect: rows that are probably bleed are clearly "off", I understand why,
+and "Play anyway" brings them back.
+
+#### M-S5 · Bass still works as before
+Switch to Bass. Expect: nothing changed.
+
+(Melody and FX scenarios added with slices 2 and 3.)
+
+#### M-S6 · Make my own chords from a loop I love (slice 2)
+Loop a drop with chords, switch Make to Melody. Expect: Chords (and Lead, if there is one) fill;
+presets Stab, Pluck, Pad, Keys make sense to a beginner; picking a row moves nothing.
+
+#### M-S7 · Get my chords close to the original
+Follow the ticks and Mentor hint, A/B with the drums under both, watch the open row's score.
+Expect: it reacts, and I can hear it get closer without music theory.
+
+#### M-S8 · Keep the chords and use them
+Save chords (and lead); in the Studio they land on Chords / Pads / Lead lanes and survive a reload.
+
+#### M-S9 · Add FX to a drop (slice 3)
+Loop a drop, switch Make to FX. Expect: impact, downlifter and riser sit where they make sense
+(bar labels), presets and knobs make sense to someone who didn't know what FX were, A/B "the
+drop as is" vs with my FX; Save riser lands on the FX lane.
+
+#### M-S10 · Ask the Mentor about the row I'm on
+In Drums, Melody and FX, ask "why does this sound different?". Expect: the answer knows the open
+row and its knobs.

@@ -28,7 +28,7 @@ const toSound = (r: Row): LibrarySound => ({
   id: r.id, name: r.name, part: r.part, preset: r.preset, macros: r.macros, pattern: r.pattern, key: r.key, scale: r.scale,
   bpm: Number(r.bpm), source: r.source_url ? { url: r.source_url, title: r.source_title ?? "" } : null, tags: r.tags ?? [],
   createdAt: r.created_at, updatedAt: r.updated_at,
-});
+}) as LibrarySound; // the row's preset says which kind of sound it is (bass, a drum row, a melody row)
 const toRow = (s: NewSound) => ({
   name: s.name, part: s.part, preset: s.preset, macros: s.macros, pattern: s.pattern, key: s.key, scale: s.scale, bpm: s.bpm,
   source_url: s.source?.url ?? null, source_title: s.source?.title ?? null, tags: s.tags,

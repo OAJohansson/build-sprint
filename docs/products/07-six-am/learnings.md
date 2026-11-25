@@ -145,3 +145,30 @@ to extremes); the owner found what needs ears ("Mine is way thinner", "no boom b
   rewrites of the kick-and-bass explanation were needed (owner: "I'm like 10 years old").
 - Vercel's 100-deploys-a-day limit blocked the preview: review on a local production build and
   keep previews for the final review only.
+
+## Phase 5: Make for every layer (27 Oct – 13 Nov)
+
+- **Grade on real tracks.** The spike passed on synthetic loops; real drums failed (late kicks,
+  open hats as claps) until a grader hand-labelled real separated loops and the engineer fixed
+  the causes (63 → 88 % labels). Melody never got there: fixtures said 72 %, the real chords 35 %.
+- **Agree the fallback before the gamble.** "Try Basic Pitch, time-boxed; else ship drums and FX"
+  made a failed model swap a non-event: one grade, then the decision was already made.
+- **A score must move with the knob.** One drums score hid clap and hats; a score per open row
+  turned the user test's 3s into 4s.
+- **Ask before stacking terms.** "What is FX even?" led to a sound check against the TR-909 and
+  sample-pack categories: two knobs changed, two presets added, nothing guessed.
+- **Style rules must not fail answers.** Rejecting Mentor answers that opened with a disclaimer
+  broke every answer; cut the sentence instead.
+
+### Retro (Phase 5)
+
+**Numbers:** kickoff 27 Oct, merged 25 Nov (PR 99), with a two-week pause and several network
+drops. Three slices planned, two shipped (drums, FX); melody built behind a flag. 501 tests.
+Graders: 5 data-evals runs, 5 user tests, 4 critic passes (8 → 7/10 built). Owner decisions: 12
+(L214–L226, L245).
+**Went well:** the canvas sign-off and the owner's sound-check question caught real problems
+before code; hand-labelled real loops made drums trustworthy; the fallback rule.
+**Went badly:** synthetic fixtures over-promised twice; the Mentor broke from a style rule; the
+Anthropic API usage limit hit mid-phase, so the Mentor fix is unverified live.
+**Change:** grade data readers on the real part before building the slice on them (process
+changelog, 13 Nov).

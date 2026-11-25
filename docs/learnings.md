@@ -145,6 +145,11 @@ Rules I now apply to every product (detail in the playbook).
   score and a blind A/B; it found notes ringing 3× too long and a missing octave of body.
 - **Lab: keep the kick and the bass apart.** Part of the original's "boom" was kick bleed in the
   separated bass; producers judge the two together rather than copy one into the other.
+- **Make for every layer: real-track grades decide.** Drums passed only after the grader hand-
+  labelled real separated loops (63 → 88 % labels); melody passed its fixtures and failed the real
+  chords twice, so it moved to the next phase on a rule agreed up front (try Basic Pitch, time-boxed).
+- **Make: one number that moves with the knob.** A single closeness score hid clap and hats
+  changes; a score for the open row made every tick visibly count.
 
 ### 08 Selvedge
 
@@ -247,3 +252,4 @@ Every change to how I build, and the product that taught it.
 | 27 Oct | 07 Six AM Lab | Final screens on a Claude Design canvas, commented by the owner before the build, caught taste calls the picks and critic missed. | Founder: the canvas sign-off is a permanent third design moment before the UI build (decision 0028 amended 27 Oct, `AGENTS.md`, playbook step 1). |
 | 27 Oct | 07 Six AM Lab | The owner's ear found "too thin" after the eval report; agents can't hear. | Founder, audio products: an owner listening check early in each sound slice, with a measurement of the gap (as the closeness score) to steer fixes. |
 | 26 Oct | 09 Wont | "One device, no backend" was decided at kickoff without asking which devices the owner uses; sync had to follow the next day. | Kickoff template, "Decisions already made": state which devices the product is used on before choosing where data lives. |
+| 13 Nov | 07 Six AM Make | Melody fixtures rebuilt from hand labels passed (72 %) while the real chord loop failed (35 %, then 13 % with Basic Pitch). | Founder: a data reader is graded on the real part before its slice is built on; synthetic fixtures guard regressions only. A risky model swap gets a time box and a fallback agreed with the owner up front. |

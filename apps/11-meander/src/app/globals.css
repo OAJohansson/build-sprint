@@ -86,6 +86,10 @@ svg.threads path.th { stroke: #e9e2d4; stroke-opacity: 0.3; stroke-width: 1; tra
 .stage.hovering .n.lit b { color: var(--bone); }
 .stage.hovering .n.lit .dot { opacity: 1; }
 svg.threads path.far { stroke-opacity: 0.15; }
+/* Focus mode (feedback #16): threads that don't touch the focus are hidden, schools at rest are faint dots. */
+svg.threads path.rest { stroke-opacity: 0; }
+.n.rest .dot, .n.rest.back2 .dot, .n.rest.v .dot { opacity: 0.32; }
+.n.rest.under { visibility: hidden; }
 svg.threads path.focus { stroke-opacity: 0.9; stroke-width: 1.6; }
 svg.threads path.focus.against { stroke-dasharray: 1.5 6; }
 /* built on, then pushed against: half solid, half dotted reads as both */

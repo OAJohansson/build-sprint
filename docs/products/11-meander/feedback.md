@@ -19,7 +19,7 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 13 | User test F7 | Thinker in two schools: no "Also in" link | fixed |
 | 14 | User test F8 | Phone targets under 44 px | fixed |
 | 15 | User test, R2 | Feminist Philosophy: 2 themes without thinkers; one Utilitarianism theme is 1 sentence | fixed |
-| 16 | Owner, own use (25 Nov) | Picking a school gets busy: every unrelated school stays labelled. Show only the school and its direct neighbours, hide the rest | open |
+| 16 | Owner, own use (25 Nov) | Picking a school gets busy: every unrelated school stays labelled. Show only the school and its direct neighbours, hide the rest | fixed (L23), on branch |
 | 17 | Owner, own use | You can study a thinker but not a whole school; is a "study this school" prompt worth having? | open |
 | 18 | Owner, own use | The school card isn't easy to read; headings look smaller than the body. Confirmed: section headings are 13.5 px grey, body 14.5–15.5 px, so the card has no clear hierarchy | open |
 | 19 | Owner, own use | No way to see where information comes from; every item needs a visible source from trusted references (the sources exist in the data, the UI doesn't show them) | open |

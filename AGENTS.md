@@ -77,6 +77,9 @@ critic's score, the tester's numbers, the guardrails, the decision log, what you
   everything the next phase needs.
 - **Fair evals:** agent bars only for what can be reached without the owner's taste. Checks that
   need the owner's taste data go into the owner's final review.
+  A data reader (a model, parser or detector) is graded on real data before a slice is built on it;
+  synthetic fixtures only guard regressions. A risky model swap gets a time box and a fallback
+  agreed with the owner first (07 Six AM, 13 Nov).
 - **Test sandbox:** for a product with a backend, graders use a separate access code and data;
   never write test data into the owner's real records.
 - **Pre-approved actions** (no need to ask, but log each in the journal): additive migrations

@@ -1041,6 +1041,20 @@ Where we met it: Folio (06): 131 by id, 0 extra by ISBN, 12 by title + author, a
 
 ### Audio
 
+#### Grade on the real thing, not a re-render
+A test fixture rebuilt from hand labels (the notes re-synthesised at the labelled times) can pass
+while the real recording fails: the re-render lacks bleed, ringing and the mix's own sound. Use
+fixtures to stop regressions, but let only a measurement on the real separated part decide.
+*Where:* Six AM's melody reader went 29 → 72 % on its fixture and stayed at 35 % on the real chord
+loop; a time-boxed switch to Basic Pitch scored 13 %, so melody moved to a later phase. *(Hamel
+Husain, "Your AI product needs evals": look at real data)*
+
+#### Polyphonic transcription is a different problem from beat tracking
+Finding when a drum hits (an onset in a band) is far easier than finding which several notes sound
+at once in a chord: harmonics overlap, held notes hide re-strikes, and the 7th sits under other
+notes' overtones. *Where:* Six AM read real drums at 95 % with plain DSP; the same approach read
+real chords at about a third. *(Benetos et al., "Automatic music transcription: an overview")*
+
 #### Schedule sound on the audio clock
 Browser timers (setTimeout, requestAnimationFrame) drift and pause; the Web Audio clock doesn't.
 Schedule each note a little ahead on `AudioContext.currentTime` and let a timer only look
@@ -1115,6 +1129,12 @@ Six AM Lab's closeness score (37 → 61) and "Suggest settings". *(Speech and mu
 analysis by synthesis)*
 
 ### Quiz
+
+**Q:** Why can a fixture rebuilt from hand labels pass while the real recording fails?
+**A:** The re-render lacks the real part's bleed, ringing and mix, so the reader meets an easier problem; only a measurement on the real part should decide.
+
+**Q:** Why did Six AM read drums well but chords poorly with the same plain-DSP approach?
+**A:** Drum hits are onsets in separate bands; chords are several notes at once whose harmonics overlap and whose re-strikes hide inside held notes.
 
 **Q:** Why does the Six AM Lab play SoundCloud in a separate window?
 **A:** `suppressLocalAudioPlayback` mutes the whole captured tab, so the player gets its own tab and the Lab plays only its separated version.

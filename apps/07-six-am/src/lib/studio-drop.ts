@@ -1,8 +1,10 @@
 // Putting blocks on the new lanes (S5, L159, T102): place a block on one lane only, and drop a
 // library sound at the phrase under the pointer, creating its lane type when the track has none.
 // Pure apart from timeline.ts's sound registry (place() reads loop lengths from it).
-import { libLoopFrom, PART_LANE, dropLength, phraseStart } from "./make/lib-loop";
+import { libLoopFrom, libLaneType, dropLength, phraseStart } from "./make/lib-loop";
 import type { LibrarySound } from "./make/library";
+import { isDrumPreset } from "./make/drum-synth";
+import { isMelodyPreset } from "./make/poly-synth";
 import { accepts, legacyTrack as legacyTrackOf, addLane, laneOfRegion, lanesOf, legacyMix, type Lane, type LaneType } from "./studio-lanes";
 import { docBars, newId, place, registerSounds, type Doc, type Region } from "./timeline";
 
@@ -32,11 +34,13 @@ export function dropLibSound(
   doc: Doc, s: LibrarySound, bar: number,
   o: { laneId?: string; type?: LaneType; soundId?: string; regionId?: string; newLane?: boolean } = {},
 ): { doc: Doc; laneId: string; regionId: string; soundId: string } | null {
-  const type = o.type ?? PART_LANE[s.part];
+  const type = o.type ?? libLaneType(s);
   const sounds = doc.sounds ?? [];
   if (sounds.length >= MAX_SOUNDS) return null;
   let lanes = lanesOf(doc);
-  let lane = lanes.find((l) => l.id === o.laneId && accepts(l, { type, track: legacyTrackOf(type) })) ?? (o.newLane ? undefined : lanes.find((l) => l.type === type));
+  // D-F4, M-F1: a drum or melody row only lands on its own lane type (a lead never replaces the chords).
+  const exact = isDrumPreset(s.preset) || isMelodyPreset(s.preset);
+  let lane = lanes.find((l) => l.id === o.laneId && accepts(l, { type, track: legacyTrackOf(type), exact })) ?? (o.newLane ? undefined : lanes.find((l) => l.type === type));
   if (!lane) {
     const added = addLane(lanes, type);
     if (!added.id) return null;

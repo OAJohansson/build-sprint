@@ -141,3 +141,110 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | # | Severity | Finding | Status |
 | --- | --- | --- | --- |
 | S5-10 | minor | A 1-bar overlap trims 8 bars off the neighbour (the overwrite rule trims by whole loop passes) | backlog |
+
+## Phase 5 drums slice, data-evals (28 Oct): Z1, Z2, Z5 fail on real tracks
+
+Details: `evals-runs/2026-10-28-drums-slice.md`.
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| D-F1 | major | Kicks read 16–48 ms late on Mason Flint (timed at the low-band peak; the pitch sweep reaches 30–120 Hz late); Mine and saved kicks inherit it | fixed (f83b733), re-graded 12 Nov |
+| D-F2 | major | Offbeat open hats read as claps (strong 1–3 kHz passes the clap gates); 31–32 extra claps per loop | fixed (f83b733), re-graded 12 Nov |
+| D-F3 | major | Grid phase flips between reads (−49.6 vs +43.3 ms); saved rows land a 16th late | fixed (f83b733), re-graded 12 Nov |
+| D-F4 | major | Default Studio track: the one Drums lane takes the whole family, so a dropped clap replaced the kick block | fixed (f83b733), re-graded 12 Nov |
+| D-F5 | minor | A/B level within 1 dB on 40/45 (worst −2.37 LU); LUFS match clamped to within 0.9 dB of RMS | fixed (f83b733), re-graded 12 Nov |
+| D-F6 | minor | A noise build reads as 46 faint kicks, not marked doubtful | fixed (f83b733), re-graded 12 Nov |
+| D-F7 | minor | Kick Suggest moves an independent measure further away on 7 of 9 loops | fixed (f83b733), re-graded 12 Nov |
+| D-F8 | minor | Countdown says "5 s" about 1 s before ready | fixed (f83b733), re-graded 12 Nov |
+| D-P1 | minor | In Drums the preset, Suggest, A/B and score sit 126–138 px lower than in Bass; A/B and score below the fold at 1440×741 | fixed (f83b733), re-graded 12 Nov |
+
+## Drums re-grade (data-evals, 12 Nov): Z1, Z2, Z5–Z9 pass
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| D-R1 | minor | Flammed claps (first burst 10–13 ms before the kick) timed 8–13 ms late; Lost 21–28 alone 85 % found, 81 % labels | fixed (eed3ce3); D-R1 to confirm on the real loop |
+| D-R2 | minor | At 1440×741 in Drums, the A/B and score are ~15 px under the sticky save bar | fixed (eed3ce3); D-R1 to confirm on the real loop |
+| D-R3 | — | 16-bar loops can't be live in 35 s (L232: bar is ≤ 8 bars; honest countdown for longer) | decided |
+| D-R4 | minor | First countdown figure 1.8–4.6 s too high | fixed (eed3ce3); D-R1 to confirm on the real loop |
+| D-R5 | minor | 6–7 Mason pickup/filtered kicks per loop missed, 2 read as hats on step 15 | backlog |
+
+## Drums user test (user-tester, 12 Nov): M-S1 4, M-S2 3, M-S3 4, M-S4 3, M-S5 5
+
+Report: `user-testing/report-2026-11-12-drums.md`.
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| U1 | major | One closeness score barely moves for clap or hats (mostly the kick) | fixed (47281c0, ad2b749) |
+| U2 | major | An "off" row's reason only in a tooltip | fixed (47281c0, ad2b749) |
+| U3 | major | "Play anyway" can't be undone | fixed (47281c0, ad2b749) |
+| U4 | minor | Mentor gives tips for a row that is off | fixed (47281c0, ad2b749) |
+| U5 | minor | Knob words too coarse (Decay "1/2" before and after a drag) | fixed (47281c0, ad2b749) |
+| U6 | minor | Two countdowns disagree (header vs panel) | fixed (47281c0, ad2b749) |
+| U7 | minor | A clap dropped on the Drums lane does nothing, silently | fixed (47281c0, ad2b749) |
+| U8 | minor | Automatic names describe the wrong sound | fixed (47281c0, ad2b749) |
+| U9 | polish | Play button moves sideways as the header text changes | fixed (47281c0, ad2b749) |
+| U10 | polish | Greyed "Suggested" pill looks clickable | fixed (47281c0, ad2b749) |
+| U11 | polish | Lane label cut to "Claps & sn…"; each drop opens the drawer | fixed (47281c0, ad2b749) |
+
+## Drums re-check (user-tester, 12 Nov): M-S2 4, M-S4 4; U6–U11 fixed
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| N1 | major | Regression from U9: with a long title the Lab header no longer wraps; root 1,602 px wide, "Make" clipped, "Deck on" off screen | fixed (ed9b3e1) |
+| N2 | minor | Clap row stays at 22–23/100 with every knob on its tick; only another preset reaches 36 | fixed (ed9b3e1) |
+| N3 | minor | An off row still shows a score | fixed (ed9b3e1) |
+| N4 | polish | Picking the already-chosen preset doesn't reset its knobs | fixed (ed9b3e1) |
+
+## Melody slice, data-evals (12 Nov): Z3 and Z7 fail; Z4–Z6, Z8, Z9, Z12 pass
+
+Details: `evals-runs/2026-11-12-melody-slice.md`.
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| M-F1 | major | Default Studio track: the Chords lane takes Lead and Pads; a dropped lead replaced the chord block (melody version of D-F4) | fixed (cb2e3d4–7f282d8), re-check pending |
+| M-F2 | major | Z3: struck stabs read as long held notes (G3 one 6.5 s note); the 7th mostly missed; 27 % pitch classes by onset on Lost 69–76 | fixed (cb2e3d4–7f282d8), re-check pending |
+| M-F3 | minor | "B · Mine" enabled when every row is off; plays silence | fixed (cb2e3d4–7f282d8), re-check pending |
+| M-F4 | minor | Doubtful verdict flips between two reads of the same loop (repeat-share on its threshold) | fixed (cb2e3d4–7f282d8), re-check pending |
+| M-F5 | minor | A monophonic lead with no chords (Mason) is read into Chords; Lead row on 2 of 10 loops | fixed (cb2e3d4–7f282d8), re-check pending |
+| D-R1 | minor | Flammed claps still 9–11 ms late on Lost 21–28 (12/15 within 10 ms) | backlog (L244) |
+
+## Melody re-grade and FX first grade (data-evals, 13 Nov)
+
+Details: `evals-runs/2026-11-13-melody-fx.md`. Melody: Z7 and M-F3 now pass; Z3, M-F4, M-F5 still fail on real tracks. FX: timing, pitch, save/reload, layout pass.
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| MR-1 | major | Regression: the re-strike split makes the clean G7 stab loop "doubtful" (held pad rule) in 3 of 4 reads | next phase (L247) |
+| MR-2 | major | Mason's riff partials form 2–5-note "chords", so it never becomes Lead | next phase (L247) |
+| MR-3 | major | Z3 on the real separated part still 35–37 % (bar 70 %); the 7th found on 6 of 53 stabs | next phase (L247) |
+| FX-R1 | minor | Impact verdict flips on a borderline jump between reads | fixed (04ec937–b3ceb95) |
+| FX-R2 | major | FX rows longer than ~4 bars can't be saved (parser wants 1/2/4-bar patterns) | fixed (04ec937–b3ceb95) |
+| FX-R3 | minor | Lost 73–80: B about 1.0–1.1 dB quieter than A (gating vs a silent bar the riser fills) | borderline: −1.01 dB bed on, −0.96 bed off (12b82e9); owner A/B at the final review |
+| FX-R4 | polish | Drop note says "Shortened" when a block is split in two | fixed (04ec937–b3ceb95) |
+
+## Final re-test (user-tester, 13 Nov): M-S9 4, M-S10 1, M-S1 4, M-S3 5, M-S5 5
+
+Report: `user-testing/report-2026-11-13-final.md`.
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| FN1 | blocker | Mentor in Make returns an error (502): the new F7 rule rejects answers that open with "I can't hear…" twice; two model calls per question, nothing back | fixed (c76da0e) |
+| FN2 | minor | A 5-bar riser from bar 52 labelled "bars 51–56", label left of the shape | fixed (c76da0e) |
+| FN3 | polish | Bass still shows the disabled "Suggested" pill | left as is (P2: Bass unchanged) |
+| FN4 | polish | "Ticks placed" doesn't line up with the Mentor text on the Hats row | fixed (c76da0e) |
+| FN5 | polish | Melody tab (off) still offers "Ask about the melody" | fixed (c76da0e) |
+| FN6 | polish | Seed script reports the key from its own shell, not the server's | fixed (c76da0e) |
+
+## Design critic on the built room (13 Nov): 7/10 (round 2 was 8)
+
+clutter 1 · hierarchy 2 · legibility 1 · feel 2 · copy 1. Legibility drop is the build meeting real 16-bar data.
+
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| C1 | major | 16-bar strips: hits are 1 px hairlines, hats a smear; 170 px hole right of the lit lane's strip | fixed (c76da0e) |
+| C2 | major | Row off said four times; overlay on the strip under the playhead | fixed (c76da0e) |
+| C3 | minor | Off-row marks look like a real pattern, so "bleed" reads untrue | fixed (c76da0e) |
+| C4 | minor | Bare unitless numbers after knob words ("soft · 25"), small low-contrast value text | fixed (c76da0e) |
+| C5 | minor | "Ticks placed" floats at a different x per lane | fixed (c76da0e) |
+| C6 | minor | Melody placeholder link is gold (reserved); Melody tab needs a "next" tag like Vocals' "not yet" | fixed (c76da0e) |
+| C7 | polish | FX name field clips mid-word; "Mentor:" casing differs | fixed (c76da0e) |

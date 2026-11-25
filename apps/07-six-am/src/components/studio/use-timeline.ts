@@ -9,13 +9,13 @@ import {
   loopById, moveStart, newId, registerSounds, snapBar, snapLength,
 } from "@/lib/timeline";
 import {
-  accepts, addLane as addLaneTo, crateLaneType, laneMix, laneOfRegion, lanesOf, legacyTrack, moveLane as moveLaneIn,
+  accepts, addLane as addLaneTo, crateLaneType, laneType, laneMix, laneOfRegion, lanesOf, legacyTrack, moveLane as moveLaneIn,
   removeLane as removeLaneFrom, renameLane as renameLaneIn, setPan, setVolume, soundLaneType, toggleMute as muteIn,
   toggleSolo as soloIn, withLanes, type FamilyId, type Lane, type LaneType,
 } from "@/lib/studio-lanes";
 import { dropLibSound, placeInLane } from "@/lib/studio-drop";
-import { PART_LANE, dropLength, libLoopFrom, phraseStart } from "@/lib/make/lib-loop";
-import type { LibrarySound } from "@/lib/make/library";
+import { dropLength, isDrumLoop, isMelodyLoop, libLaneType, libLoopFrom, phraseStart } from "@/lib/make/lib-loop";
+import { isDrumSound, isMelodySound, type LibrarySound } from "@/lib/make/library";
 import type { Sound } from "@/lib/synths/loop";
 import type { Scale } from "@/lib/synths/theory";
 import type { AudioEngine } from "./audio";
@@ -33,11 +33,15 @@ type Drag =
 const THRESHOLD = 4;
 const HOLD_MS = 250; // press and hold a block this long and the bin appears
 
+/** U7: what a drum row's sounds are called in a sentence ("Claps and snares go on their own lane"). */
+const ROW_PLURAL: Partial<Record<LaneType, string>> = { kick: "Kicks", clap: "Claps and snares", hats: "Hats", chords: "Chords", pads: "Pads", lead: "Leads" };
+
 /** An item's lane type, old lane and length in bars (a library sound's block fills a phrase). */
-export function itemInfo(item: CrateItem): { type: LaneType; track: number; bars: number; name: string } {
+export function itemInfo(item: CrateItem): { type: LaneType; track: number; bars: number; name: string; exact?: boolean } {
   if (item.kind === "loop") return { type: crateLaneType(item.loop), track: item.loop.track, bars: item.loop.bars, name: item.loop.name };
-  const type = PART_LANE[item.sound.part];
-  return { type, track: legacyTrack(type), bars: item.sound.pattern.bars, name: item.sound.name };
+  const type = libLaneType(item.sound);
+  // D-F4: a drum row from My sounds takes only its own lane type (Kick, Claps & snares, Hats).
+  return { type, track: legacyTrack(type), bars: item.sound.pattern.bars, name: item.sound.name, exact: isDrumSound(item.sound) || isMelodySound(item.sound) };
 }
 
 /** One open track. `initial` is the saved arrangement; Studio remounts this per track. `bpm` is the project tempo. */
@@ -88,6 +92,9 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
   const lastMerge = useRef<string | null>(null);
   // The remove-lane note (S5-2) belongs to one doc: any other edit or undo hides it.
   const [toastFor, setToastFor] = useState<{ text: string; doc: Doc } | null>(null);
+  /** U7: a short note without Undo (a drop that couldn't land). */
+  const [dropNote, setDropNote] = useState<string | null>(null);
+  useEffect(() => { if (!dropNote) return; const h = setTimeout(() => setDropNote(null), 6000); return () => clearTimeout(h); }, [dropNote]);
   const commit = useCallback((next: Doc, merge?: string) => {
     setToastFor(null);
     const prev = docRef.current;
@@ -188,9 +195,9 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
 
   /** The lane an item goes on when added without a drop (Enter, the drawer): the drawer's lane when
    *  it takes it, else the first lane that does, else a new lane of its type. */
-  const laneFor = useCallback((type: LaneType, track: number, prefer?: string | null): { lanes: Lane[]; id: string; isNew: boolean } | null => {
+  const laneFor = useCallback((type: LaneType, track: number, prefer?: string | null, exact?: boolean): { lanes: Lane[]; id: string; isNew: boolean } | null => {
     const ls = lanesOf(docRef.current);
-    const hit = ls.find((l) => l.id === prefer && accepts(l, { type, track })) ?? ls.find((l) => accepts(l, { type, track }));
+    const hit = ls.find((l) => l.id === prefer && accepts(l, { type, track, exact })) ?? ls.find((l) => accepts(l, { type, track, exact }));
     if (hit) return { lanes: ls, id: hit.id, isNew: false };
     const r = addLaneTo(ls, type);
     return r.id ? { lanes: r.lanes, id: r.id, isNew: true } : null;
@@ -200,7 +207,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
   const addSound = useCallback((x: Sound, bar: number) => {
     const lb = x.bars;
     registerSounds([x]);
-    const at = laneFor(soundLaneType(x), x.lane, soundTarget);
+    const at = laneFor(soundLaneType(x), x.lane, soundTarget, x.source === "lib" && (isDrumLoop(x) || isMelodyLoop(x)));
     if (!at) return null;
     const start = Math.min(Math.max(1, Math.floor(bar)), Math.max(1, bars - lb + 1));
     const r: Region = { id: newId(), loopId: x.id, track: x.lane, lane: at.id, start, length: lb };
@@ -219,10 +226,28 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
   /** Drop a crate item on a lane (or a new lane) at a bar. A library sound lands at the phrase. */
   const dropItem = useCallback((item: CrateItem, target: { lane: string | "new"; bar: number }) => {
     if (item.kind === "lib") {
-      const r = dropLibSound(docRef.current, item.sound, target.bar, target.lane === "new" ? { newLane: true } : { laneId: target.lane });
-      if (!r) return;
+      // A drum row lands on the first lane of its own type when there is one, else a new one.
+      const info = itemInfo(item);
+      const before = lanesOf(docRef.current).length;
+      const r = dropLibSound(docRef.current, item.sound, target.bar, target.lane === "new" ? (info.exact ? {} : { newLane: true }) : { laneId: target.lane });
+      if (!r) {
+        // U7: never a silent dead drop.
+        if (info.exact) setDropNote(`${ROW_PLURAL[info.type] ?? laneType(info.type).name} go on their own lane, and this track has no room for another lane.`);
+        return;
+      }
+      // FX-F6: what the drop cut on its lane (a block shortened or replaced), said with Undo.
+      const lanesBefore = lanesOf(docRef.current), was = docRef.current.regions.filter((g) => laneOfRegion(g, lanesBefore)?.id === r.laneId && g.id !== r.regionId);
+      const cut = was.filter((g) => { const now = r.doc.regions.find((x) => x.id === g.id); return !now || now.start !== g.start || now.length !== g.length; });
+      const beforeIds = new Set(docRef.current.regions.map((g) => g.id)); // before the commit swaps the doc
       commit(r.doc);
-      setSelected(r.regionId);
+      const lane = lanesOf(r.doc).find((l) => l.id === r.laneId);
+      // FX-R4: a block cut in two (one piece kept, a new piece of the same loop after the drop) is "Split".
+      const split = cut.some((g) => r.doc.regions.some((x) => x.id === g.id) && r.doc.regions.some((x) => !beforeIds.has(x.id) && x.id !== r.regionId && x.loopId === g.loopId));
+      const verb = split ? "Split" : cut.some((g) => !r.doc.regions.some((x) => x.id === g.id)) ? "Replaced" : "Shortened";
+      const cutText = cut.length ? `${verb} ${[...new Set(cut.map((g) => loopById(g.loopId)?.name ?? "a block"))].join(", ")}` : "";
+      if (info.exact && lane && lanesOf(r.doc).length > before) setToastFor({ text: `${ROW_PLURAL[info.type] ?? laneType(info.type).name} go on their own lane: added "${lane.name}".`, doc: r.doc });
+      else if (cutText) setToastFor({ text: `${cutText} on ${lane?.name ?? "the lane"}.`, doc: r.doc });
+      // U11: a drop from My sounds keeps the list open (no drawer); the block is still there to click.
       return;
     }
     const info = itemInfo(item);
@@ -290,8 +315,12 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
     const info = itemInfo(item);
     const el = (document.elementFromPoint(ev.clientX, ev.clientY) as HTMLElement | null);
     const laneEl = el?.closest<HTMLElement>("[data-lane]");
-    const isNew = !!el?.closest("[data-newlane]");
     const lane = laneEl ? lanesOf(docRef.current).find((l) => l.id === laneEl.dataset.lane) : undefined;
+    // U7 (user test 12 Nov): a drum row from My sounds over a drum lane of another type (a clap over
+    // the Drums/Kick lane) gets a lane of its own type at once, instead of a silent dead drop.
+    // M-F1: the same for a melody row over any lane that isn't its own (a lead over the Chords lane).
+    const ownLane = !!info.exact && !!lane && !accepts(lane, info);
+    const isNew = !!el?.closest("[data-newlane]") || ownLane;
     if (!isNew && !(lane && accepts(lane, info))) return null;
     const ppb = ppbRef.current;
     if (item.kind === "lib") {
@@ -307,7 +336,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
     if (item.kind === "loop") { setPreviewSound(null); setPreview((p) => (p === item.loop.id ? null : item.loop.id)); return; }
     const id = `listen-${item.sound.id}`;
     if (previewSound?.id === id) { setPreviewSound(null); return; }
-    setPreviewSound(libLoopFrom(item.sound, PART_LANE[item.sound.part], id));
+    setPreviewSound(libLoopFrom(item.sound, libLaneType(item.sound), id));
   };
 
   /** Spread onto a crate item or My sounds card: click hears it, drag drops it onto a lane that
@@ -322,7 +351,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
         if (e.key === " ") { e.preventDefault(); e.stopPropagation(); hear(item); }
         else if (e.key === "Enter") {
           e.preventDefault(); e.stopPropagation();
-          const at = laneFor(info.type, info.track, null);
+          const at = laneFor(info.type, info.track, null, info.exact);
           if (!at) return;
           const bar = Math.min(Math.max(1, Math.floor(playheadRef.current)), bars - info.bars + 1);
           dropItem(item, { lane: at.isNew ? "new" : at.id, bar });
@@ -456,7 +485,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
     preview, setPreview, group, setGroup, ghost, bin, pxPerBar, lanesRef,
     lanes, silent, laneOf, toggleMute, toggleSolo, setLaneVolume, setLanePan, renameLane, moveLane, removeLane, addLane,
     soundTarget, setSoundTarget,
-    canUndo: past.length > 0, undo, remove, toast, undoToast,
+    canUndo: past.length > 0, undo, remove, toast, undoToast, dropNote,
     crateItem, blockBody, blockGrip, ruler,
   };
 }

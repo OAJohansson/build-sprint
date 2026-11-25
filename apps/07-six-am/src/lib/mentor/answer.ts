@@ -174,6 +174,8 @@ export type Needs = {
   trackRefs?: ReadonlyMap<string, string>;
   /** Lab (B6): the person's question, so a question about tone gets "I can't hear that" said. */
   labQuestion?: string;
+  /** Asked in Make (any family): the answer talks about the knobs; no stock "can't hear" opener (FX-F7). */
+  labInMake?: boolean;
   /** Lab (LS2-M6): the bar isn't heard yet: the loop to suggest ("bars 49–56"). */
   labUnheard?: string;
 };
@@ -249,6 +251,22 @@ const isSource = (v: unknown): v is Source => typeof v === "string" && (SOURCES 
 /** Same page, ignoring a trailing slash, the fragment and http/https. */
 export const urlKey = (u: string) => u.trim().replace(/^https?:\/\//i, "").replace(/#.*$/, "").replace(/\/+$/, "").toLowerCase();
 
+/**
+ * FN1: the first sentence when it only says the Mentor can't hear the sound ("I can't hear the sound
+ * itself; I read measurements: …"), cut from the first answer line; that line goes when nothing is
+ * left of it, unless it is the only one. Returns the same array when there is nothing to cut.
+ */
+export function stripCantHearOpener(list: unknown[]): unknown[] {
+  const first = (list[0] ?? {}) as Record<string, unknown>;
+  if (typeof first.text !== "string") return list;
+  const text = first.text.trim(), m = text.match(/^.*?[.!?](?:\s+|$)/);
+  const lead = m ? m[0] : text;
+  if (!CANT_HEAR.test(lead)) return list;
+  const rest = text.slice(lead.length).trim();
+  if (rest) return [{ ...first, text: rest }, ...list.slice(1)];
+  return list.length > 1 ? list.slice(1) : list;
+}
+
 /** Validate and clean the model's answer for a job. Unknown fields are dropped. */
 export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checked {
   if (!raw || typeof raw !== "object") return { ok: false, problem: "The answer is not an object." };
@@ -258,8 +276,11 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
   const dropped: string[] = [];
 
   if (!Array.isArray(r.sentences) || r.sentences.length === 0) return { ok: false, problem: "sentences must be a non-empty array." };
+  // FN1: in Make a stock "I can't hear the sound itself" opener is style, not a wrong answer: it is cut
+  // here (the answer minus that sentence) instead of failing the whole answer.
+  const raws = job === "lab" && needs.labInMake ? stripCantHearOpener(r.sentences) : r.sentences;
   const sentences: Sentence[] = [];
-  for (const [i, s] of r.sentences.entries()) {
+  for (const [i, s] of raws.entries()) {
     const o = (s ?? {}) as Record<string, unknown>;
     const text = str(o.text);
     if (!text) return { ok: false, problem: `sentences[${i}] has no text.` };
@@ -320,7 +341,8 @@ export function checkAnswer(asked: Job, raw: unknown, needs: Needs = {}): Checke
     if (sentences.some((x) => /\bchords?\b/i.test(x.text))) return { ok: false, problem: "Bar not heard yet: no chords. Say what the map estimates, then the loop line." };
   }
   // B6: a question about tone gets one plain line that you can't hear it (and what you can measure).
-  if (job === "lab" && needs.labQuestion && TONE_QUESTION.test(needs.labQuestion) && !sentences.some((x) => CANT_HEAR.test(x.text))) {
+  // In Make there is no such rule, and an opener saying so was cut above (FX-F7, FN1).
+  if (job === "lab" && !needs.labInMake && needs.labQuestion && TONE_QUESTION.test(needs.labQuestion) && !sentences.some((x) => CANT_HEAR.test(x.text))) {
     return { ok: false, problem: `The question is about tone or sound ("${needs.labQuestion.match(TONE_QUESTION)?.[0]}"), which you can't hear: say so in one sentence: "I can't hear the sound itself; I read measurements: pitch, timing and loudness.", then answer from what the numbers do show.` };
   }
   // Studio start: the key fit comes from code; claiming bass and chords fit over a clash is rejected.

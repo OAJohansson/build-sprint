@@ -7,7 +7,11 @@ skipped checks below, on the live URL. Then song analysis, the biggest wish.
 
 | Idea | Why | Status |
 | --- | --- | --- |
-| Make for every layer (drums, other, vocals), not just bass | Owner's next wish (27 Oct) | next |
+| Make for every layer (drums, other, vocals), not just bass | Owner's next wish (27 Oct) | Phase 5 (drums, melody/chords, FX; vocals later, L217) |
+| Vocals in Make: a lead synth that follows the vocal's pitch (or vocal-like chops) | Left out of Phase 5 for rights and taste (L217); cheap once the melody slice reads notes | later |
+| Drums in Make: "make it my own" variation of the copied pattern | Phase 5 copies the pattern (L215) | later |
+| Drums in Make: a fourth "Percussion" row (rides, crashes, shakers, congas, toms) | Phase 5 reads three rows; these land in hats or kick (sound check, T124) | later |
+| Make: atmosphere / texture beds (vinyl, ambience) for the Texture lane | Not FX; left out of Phase 5 (T124) | later |
 | Match Make's sound to the original more closely, maybe with AI later: a model that tunes the preset and knobs to cut the closeness-test gap | Drums under the A/B helped, "sounds closer now but still not the same" (owner, 27 Oct): "Maybe we can use AI at a later stage to fine tune it?" | later |
 | Clean the kick out of the separated bass in the Lab (a stronger separation model, or turning the bass down on the kick hits found in the drums) | The original bass carries some kick thump, so it sounds bigger than Mine alone (owner, 27 Oct, L213). A bigger model is too slow live; the duck would also cut real notes on the beat | later |
 | Skipped checks: `break-ui` (worst-case track names, an empty track, 64 bars full), `web-design-guidelines`, then the simulated user test from `user-testing/plan.md` | Definition of done; nothing has tested the app with fresh eyes yet | next |
@@ -94,3 +98,19 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Filter knob on the transport? (removed with the lane model, L200) | The owner accepted its removal for the MVP | later |
 | Studio overwrite trims a neighbour by whole loop passes (a 1-bar overlap cut 8 bars); trim only the covered bars or show the cut | S5 re-check S5-10 | next (small) |
 | Lab note card: a horizontal leader to its dot when the card sits past the playhead, far from the dot | final polish T112 | later (small) |
+
+## Viability risks if Six AM is ever shared or charged for (owner's north star, 12 Nov)
+
+| Risk | Why it matters | What would have to change |
+| --- | --- | --- |
+| Essentia / Discogs-EffNet models are licensed for non-commercial use only | Genre and style reading (Ears) could not ship in a paid product as is | A commercial licence from the Essentia team (UPF), or a model with a commercial licence, or drop genre reading from the paid tier |
+| SoundCloud tab capture of other people's tracks | Capturing and separating someone else's track raises rights questions even when nothing is stored (rule C2 keeps originals in memory only, never stored, saved or uploaded) | Keep C2; make clear the output is the user's own sounds and tracks; check SoundCloud's terms and get legal advice before charging; consider the user's own files or licensed sources instead |
+| Stable Audio and Claude API costs per user | Free for the owner today on their own keys; a paid product pays per call | Per-user limits and pricing that covers the calls |
+| Make drums: flammed claps timed a little late (3 of 15 at 11 ms on Lost 21–28) | D-R1, L244; needs a real 1–2.8 kHz envelope of the flam | later |
+
+## Melody in Make (moved out of Phase 5, L247)
+
+| Idea | Why | When |
+| --- | --- | --- |
+| Melody / chords in Make: a note reader that gets real chord stabs right (≥ 70 % of chord notes on Lost in the Loop 69–76) | Plain DSP 35–37 %, Basic Pitch 13 % on the real separated part (13 Nov); Basic Pitch did read Mason's monophonic riff as one Lead row. Try: a chord-recognition model on the separated part, a polyphonic transcriber trained on synths, or reading chords as names (root + quality) and voicing them ourselves. Everything else (poly synth, presets, Suggest, A/B, Save to Chords/Pads/Lead) is built behind the flag | next phase |
+| Basic Pitch for leads only | It read single-note riffs well (6/6) but disposed its own tensors after the first read (fix the tf scope first). The try is in commit bf7164c (removed after L247) | with the above |

@@ -594,6 +594,10 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Follow-up fixes (T80):** M1 fixed (another preset drafts a new sound), Add never overwrites, Duplicate, Play-all end message, minors. Leftovers to the backlog.
 - **Follow-up PR 87** opened, stacked on PR 86 ("depends on #86, merge after it"); preview https://six-ocslv0aoi-mimirswell.vercel.app. "Vercel – wont" failing on both PRs is another product's project. One push sent for both PRs.
 
+## 26 Oct: Phase 3 merged
+
+- **PRs 86 (319c2e5) and 87 (9d5c16a) merged** on the owner's yes in the parent session ("lets merge 86 and 87"); checks green (87 after updating from main). Production deploy of main Ready; `/` and `/map` serve, `/api/loops/generate` refuses without the code (401). Notebook republished from `main` (version 183). Next phase (the Lab) starts in a fresh session from the card, kickoff pack, decision log, journal and backlog ("Phase 3 follow-ups"). (Folded in from `claude/07-six-am-postmerge-notes` on 25 Nov.)
+
 ## 26 Oct: Phase 4 kickoff (the Lab)
 
 - **Kickoff (L143–L149):** the owner's calls from the parent session, written into a new pack in
@@ -784,3 +788,8 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Final fixes (c76da0e):** Mentor blocker fixed in code (opener cut, not rejected; unit-tested), critic polish C1–C7, seed reports the server's key. Live Mentor check impossible: **the Anthropic API usage limit is reached until 1 Dec** (owner's account). 501 tests.
 - **Final review ready (13 Nov):** PR 99 (https://github.com/OAJohansson/build-sprint/pull/99); local production build on http://localhost:3057 with real Supabase (terminal tab). Eval report `eval-report-phase5.md`. Owner listening checks: drums close by ear, FX A/B on Lost 73–80, Mentor once the API limit allows. "Vercel – meander" fails (another product, unrelated).
 - **Merged (25 Nov):** PR 99 (91c9f24) on the owner's yes after green `checks`. Notebook republished from main (version 212). Wrap-up on `claude/07-six-am-make-layers-wrapup`: learnings and retro, knowledge bank (two Audio concepts + quiz), process change (real-data grading, time-boxed model swaps) in `AGENTS.md` and the changelog. Branches with unmerged notes listed by `pnpm notebook`: `claude/07-six-am-postmerge-notes` (26 Oct), `claude/11-meander` (25 Nov).
+
+## Phase 6: Chords in Make (25 Nov)
+
+- **Kickoff started** from the owner's call (25 Nov): chord names instead of note-by-note, and the owner in the loop (Make guesses, the owner fixes by ear on a chord grid, the Mentor explains). Branch at latest `origin/main` (PR 99, PR 103 in). Draft pack at the end of `kickoff.md`; questions to the owner one at a time.
+- **Unmerged notes branch** `claude/07-six-am-postmerge-notes`: one journal note (Phase 3 merged, 26 Oct), folded in above; the branch can go.

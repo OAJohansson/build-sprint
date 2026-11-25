@@ -117,3 +117,12 @@ The 0–3 pieces of logic that would hurt most if silently wrong, and the edges 
 One: **counting days and areas from the visit history** (feeds "where I've been" and the day-7 signal). Edges: empty history, two visits either side of midnight count as two days, the same school twice in a day counts once, month end.
 
 ## Success check (at wrap-up)
+
+| Signal | What happened |
+| --- | --- |
+| Hop (early sign of value) | Simulated user: 3 of 3, one click each from Existentialism. **The owner's own first session isn't recorded yet.** |
+| Still going after a week | Not measured yet: the owner reads "Your thread" around 2 Dec (at least 2 connected areas on 3+ days). |
+| Orientation | Simulated user answered all three Existentialism questions correctly in about 1.5 minutes, but scored "whole shape at a glance" 3/5: the overview has no sense of time until you click. |
+| Guardrail: accuracy | Raised from a 20-claim spot check to every claim (L14): 0 wrong and 0 unsupported of 855 items after four grading rounds (from 3 wrong and 282 unsupported). Caveat: ~195 items graded in-session, not by the API judge. |
+
+**Did it solve the problem?** Not proven yet. The map answers "where does this fit" well and the content can be trusted, but the riskiest bet (that it makes me hop and keep going for weeks) needs my own week of use. The tester's sharpest note points at the gap: "Your thread" shows where I've been but doesn't nudge me anywhere next, which is the next thing to build.

@@ -202,6 +202,15 @@ Rules I now apply to every product (detail in the playbook).
 - **Move a rule the model won't keep into code.** The sticker edge is drawn by the server.
 - **Open the deployed preview.** A native module crashed only on Vercel, after every grader passed.
 
+### 11 Meander
+
+- **Start from the cost, not the overview.** "I want a visual map" became "I go too deep, get bored and drop it"; the map's job is showing what's connected and where I've been.
+- **Treat AI-written content like code that needs tests.** Saved sources, a citation per item and a separate grader took 282 unsupported claims and 3 wrong ones to 0.
+- **Summaries invent things too.** Check claims against the full source text, never a summary.
+- **Ten directions at once came out dense.** Calm needs to be in the first design brief.
+- **The canvas sign-off earns its place.** Four elements were removed from the screens before any code.
+- **Layouts tuned to data are fragile.** One link removed and the overlaps came back; the layout check runs after every content change.
+
 ## Process changelog
 
 Every change to how I build, and the product that taught it.
@@ -253,3 +262,6 @@ Every change to how I build, and the product that taught it.
 | 27 Oct | 07 Six AM Lab | The owner's ear found "too thin" after the eval report; agents can't hear. | Founder, audio products: an owner listening check early in each sound slice, with a measurement of the gap (as the closeness score) to steer fixes. |
 | 26 Oct | 09 Wont | "One device, no backend" was decided at kickoff without asking which devices the owner uses; sync had to follow the next day. | Kickoff template, "Decisions already made": state which devices the product is used on before choosing where data lives. |
 | 13 Nov | 07 Six AM Make | Melody fixtures rebuilt from hand labels passed (72 %) while the real chord loop failed (35 %, then 13 % with Basic Pitch). | Founder: a data reader is graded on the real part before its slice is built on; synthetic fixtures guard regressions only. A risky model swap gets a time box and a fallback agreed with the owner up front. |
+| 25 Nov | 11 Meander | Ten design directions at once came out dense and wordy; the owner got a headache. | Playbook step 1: the first design round's brief sets density rules for "calm at first glance" (few words, large type, one focal point). |
+| 25 Nov | 11 Meander | The user tester failed R2 and R6 because the evals still said what the design had already changed. | Playbook step 1: at the canvas sign-off, reconcile `evals.md` and the brief's requirements with the approved design. |
+| 25 Nov | 11 Meander | AI-written facts: about 1 in 10 unsupported even with sources in hand; the grader then ran out the API key's usage limit halfway. | Playbook step 3b: for AI-written content, a saved source corpus, a citation on every item, an independent claim-by-claim grader, and a cost estimate plus limit check before grading runs. |

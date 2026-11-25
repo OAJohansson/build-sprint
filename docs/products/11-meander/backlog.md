@@ -12,7 +12,6 @@
 | Further reading per thinker | The Claude prompt covers going deeper today | Later |
 | Share or download the map | No one to share with yet | Later |
 | Clear my history | A browser reset does it for now | Later |
-
 | Romanticism as a school on the globe | Left out of the 23 (L17) | Later |
 | Re-run the API judge on the ~195 items graded in-session (after 1 Dec, cached) | Closes the method caveat on the content evals | Later |
 | "Next on your thread": suggest 1–2 unvisited schools linked to where you've been, with a reason | User test F5; the most direct test of the hop bet | Next |

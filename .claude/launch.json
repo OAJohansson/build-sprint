@@ -170,6 +170,18 @@
         ".notebook/preview"
       ],
       "port": 3099
+    },
+    {
+      "name": "11-meander",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "-F",
+        "11-meander",
+        "dev",
+        "--port",
+        "3011"
+      ],
+      "port": 3011
     }
   ]
 }

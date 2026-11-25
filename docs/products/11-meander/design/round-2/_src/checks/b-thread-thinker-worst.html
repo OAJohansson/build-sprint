@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f3efe6">
+<title>worst case</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1440px;height:900px;overflow:hidden;background:#f3efe6}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+h1,h2,h3{font-weight:inherit;font-size:inherit;text-wrap:balance}
+p{text-wrap:pretty}
+.screen{width:1440px;height:900px;position:relative;overflow:hidden;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+svg.threads{position:absolute;inset:0;width:1440px;height:900px;pointer-events:none}
+svg.threads path{fill:none;stroke-linecap:round}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+#chk{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.screen{--paper:#f3efe6;--ink:#1c1b18;--mid:#55514a;--far:#6b675f;--hair:#d2ccbf;--red:#b23a2a;background:var(--paper);color:var(--ink);font:400 15px/1.45 Geist,sans-serif}
+svg.threads path.th{stroke:#1c1b18;stroke-opacity:.2;stroke-width:1}
+svg.threads path.against{stroke-dasharray:1.5 4.5}
+svg.threads path.focus{stroke-opacity:.7;stroke-width:1.2}
+svg.threads path.red{stroke:var(--red);stroke-width:1.9;stroke-linejoin:round}
+header{position:absolute;left:72px;top:34px;right:72px;display:flex;align-items:center;gap:24px}
+.wm{font:400 31px/1 'Instrument Serif',serif;letter-spacing:-.01em;position:relative;padding-bottom:5px}
+.wm svg{position:absolute;left:0;bottom:-3px}
+.back{font-size:13.5px;color:var(--mid);padding:9px 14px;border-radius:99px;border:1px solid var(--hair);transition:transform 160ms cubic-bezier(.23,1,.32,1),border-color 160ms ease}
+.back kbd{font:inherit;color:var(--far);margin-left:8px}
+.been{margin-left:auto;font-size:13.5px;color:var(--mid);display:flex;align-items:center;gap:10px}
+.been svg{flex-shrink:0}
+.era{position:absolute;top:88px;font-size:12.5px;color:var(--far);letter-spacing:.01em}
+.w{position:absolute;transform:translateY(-50%);white-space:nowrap;font-family:'Instrument Serif',serif;line-height:1;letter-spacing:-.01em;padding:2px 0 3px;transition:color 160ms ease}
+.w.t1{font-size:32px}.w.t2{font-size:22.5px;color:var(--mid)}.w.t3{font-size:18px;color:var(--far)}
+.w em,.w small{position:absolute;left:0;font:400 12.5px/1.2 Geist,sans-serif;font-style:normal;letter-spacing:0;color:var(--far);white-space:nowrap}
+.w em{bottom:calc(100% + 3px)}
+.w small{top:calc(100% + 8px)}
+.w em i{font-style:normal;color:var(--red)}
+.w.wrap{white-space:normal;max-width:300px;line-height:1.02;text-wrap:balance}
+.w.t3.wrap{max-width:150px}
+.w.t2.wrap{max-width:210px}
+button.w::before{content:"";position:absolute;inset:-8px}
+h1.w{font:italic 400 68px/1 'Instrument Serif',serif;letter-spacing:-.02em;padding:0 2px 6px 0}
+.focus-note{position:absolute;left:1016px;top:460px;width:330px}
+.focus-note p{font-size:15.5px;line-height:1.45;color:var(--mid)}
+.focus-note small{display:block;font-size:12.5px;color:var(--far);margin-top:7px}
+.key{position:absolute;left:72px;top:656px;font-size:12.5px;color:var(--far);display:flex;align-items:center;gap:8px}
+.key svg:nth-of-type(2){margin-left:12px}
+.band{position:absolute;left:72px;right:72px;top:698px;bottom:0;border-top:1px solid var(--ink);padding-top:20px;display:grid;gap:0 40px}
+.band h2{font-size:12.5px;color:var(--far);margin-bottom:9px}
+.band.field{grid-template-columns:1fr 330px}
+.q{display:grid;grid-template-columns:repeat(3,1fr);gap:0 36px}
+.q li{font:400 25px/1.16 'Instrument Serif',serif;letter-spacing:-.01em;text-wrap:balance}
+.themes{font-size:13.5px;color:var(--far);margin-top:16px}
+.th-list{margin:-7px -10px 0;display:grid;grid-template-columns:1fr 1fr;gap:0 8px}
+.th-list button{display:block;width:100%;padding:8px 10px;border-radius:8px;font-size:15px;line-height:1.25;transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 160ms ease}
+.band.thinker{grid-template-columns:280px 1fr 300px 216px}
+.up{font-size:13.5px;color:var(--mid);padding:6px 10px;margin:-6px -10px 8px;border-radius:8px;display:inline-block}
+.band h2.who{font:italic 400 40px/1 'Instrument Serif',serif;letter-spacing:-.02em;text-wrap:balance;color:var(--ink);margin:0}
+.others{font-size:13px;line-height:1.7;color:var(--far);margin-top:10px}
+.others button{color:var(--mid);border-bottom:1px solid var(--hair)}
+.dates{font-size:13.5px;color:var(--far);margin-top:8px}
+.sum{font-size:16px;line-height:1.55;color:#33312c;max-width:440px}
+.ideas li{font:400 20px/1.2 'Instrument Serif',serif;padding-left:22px;position:relative}
+.ideas li+li{margin-top:8px}
+.ideas li:before{content:"";position:absolute;left:0;top:.56em;width:12px;border-top:1.8px solid var(--red)}
+.study{display:block;width:100%;text-align:center;background:var(--ink);color:var(--paper);font:500 15px/1 Geist,sans-serif;padding:16px 14px;border-radius:12px;margin-top:22px;transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 160ms ease}
+.hint{font-size:12.5px;line-height:1.4;color:var(--far);margin-top:10px;text-align:center}
+button:focus-visible{outline:2px solid var(--red);outline-offset:4px}
+button:active{transform:scale(.97)}
+button.w:active{transform:translateY(-50%) scale(.98)}
+@media (hover:hover){.others button:hover{border-color:var(--mid)}.back:hover{border-color:var(--far)}button.w:hover{color:var(--ink)}.th-list button:hover{background:rgba(28,27,24,.06)}.study:hover{background:#34322d}.up:hover{color:var(--ink)}}
+
+</style></head>
+<body>
+<div class="screen"><svg class="threads" aria-hidden="true"></svg>
+<header><div class="wm" translate="no">Meander<svg width="118" height="10" viewBox="0 0 118 10" aria-hidden="true"><path d="M1 4h92c9 0 14 1 13 4s-7 2-6-1" fill="none" stroke="#b23a2a" stroke-width="1.8" stroke-linecap="round"/></svg></div><button class="back">Whole field<kbd>Esc</kbd></button><p class="been"><svg width="30" height="8" aria-hidden="true"><path d="M1 4h28" stroke="#b23a2a" stroke-width="1.9" stroke-linecap="round"/></svg>Your thread so far: 8 of 16, over 3 days</p></header>
+<span class="era" style="left:72px">Ancient</span><span class="era" style="left:352px">Medieval</span><span class="era" style="left:520px">Early modern</span><span class="era" style="left:800px">19th century</span><span class="era" style="left:1000px">20th century</span>
+<main><button class="w t3 lb " data-id="pre" style="left:72px;top:416px"><em class="lb"><i>visited 28 Sep</i></em>Presocratics</button>
+<button class="w t3 lb wrap" data-id="cla" style="left:190px;top:296px"><em class="lb"><i>visited 5 Nov</i></em>Socrates, Plato and Aristotle</button>
+<button class="w t3 lb " data-id="epi" style="left:118px;top:552px"><em class="lb"><i>visited 28 Sep</i></em>Epicureanism</button>
+<button class="w t3 lb " data-id="sto" style="left:72px;top:180px"><em class="lb"><i>visited 3 Nov</i></em>Stoa</button>
+<button class="w t3 lb " data-id="sch" style="left:352px;top:290px"><em class="lb"><i>visited 28 Sep</i></em>Scholasticism</button>
+<button class="w t2 lb " data-id="rat" style="left:520px;top:236px"><em class="lb"><i>visited 28 Sep</i></em>Rationalism</button>
+<button class="w t2 lb " data-id="emp" style="left:520px;top:528px">Empiricism</button>
+<button class="w t1 lb " data-id="ide" style="left:548px;top:384px"><em class="lb">pushed against · <i>visited 9 Nov</i></em>Kant and German Idealism</button>
+<button class="w t3 lb " data-id="uti" style="left:790px;top:566px">Utilitarianism</button>
+<button class="w t2 lb " data-id="mar" style="left:800px;top:226px">Marxism</button>
+<button class="w t3 lb " data-id="pra" style="left:784px;top:668px">Pragmatism</button>
+<button class="w t2 lb wrap" data-id="ana" style="left:1000px;top:662px">Logical positivism and analytic philosophy</button>
+<button class="w t1 lb " data-id="phe" style="left:1040px;top:252px"><em class="lb">built on</em>Phenomenology<small class="lb">the method Sartre and Beauvoir took from Husserl</small></button>
+<h1 class="w lb" data-id="exi" style="left:980px;top:396px">Existentialism</h1>
+<button class="w t1 lb " data-id="abs" style="left:1010px;top:590px"><em class="lb">grew from it</em>Absurdism<small class="lb">Camus’s answer</small></button>
+<button class="w t1 lb wrap" data-id="pos" style="left:990px;top:152px"><em class="lb">pushed back</em>Structuralism and post-structuralism<small class="lb">doubted the free self</small></button><div class="focus-note lb"><p>Start from the single person who has to choose, not from a theory of everything.</p><small>1840s–1960s · you are here</small></div></main>
+<p class="key"><svg width="26" height="6" aria-hidden="true"><path d="M1 3h24" stroke="#1c1b18" stroke-opacity=".6"/></svg>built on<svg width="26" height="6" aria-hidden="true"><path d="M1 3h24" stroke="#1c1b18" stroke-opacity=".7" stroke-dasharray="1.5 4.5" stroke-linecap="round"/></svg>pushed against</p>
+<aside class="band thinker solid" aria-label="Thinker"><div><button class="up">← Existentialism</button><h2 class="who">Simone Lucie Ernestine Marie Bertrand de Beauvoir</h2><p class="dates">1908–1986</p><p class="others">Also here: <button>Kierkegaard</button>, <button>Nietzsche</button>, <button>Sartre</button>, <button>Camus</button></p></div><p class="sum">French philosopher who carried existentialist freedom into ethics and politics. In The Second Sex she argued that “woman” is a situation one is made into, not a fixed nature.</p><ul class="ideas"><li>One is not born, but rather becomes, a woman: the body is a situation, not a destiny</li><li>An ethics of ambiguity</li><li>My freedom needs the freedom of others</li></ul><div><button class="study">Study with Claude</button><p class="hint">Copies a prompt you can paste into Claude.</p></div></aside></div>
+<script>window.WEB={"mode":"word","links":[["pre","cla","built"],["cla","sto","built"],["pre","epi","built"],["cla","sch","built"],["sch","rat","against"],["rat","emp","against"],["rat","ide","built"],["emp","ide","built"],["emp","uti","built"],["ide","mar","built"],["ide","exi","against focus"],["phe","exi","built focus"],["emp","pra","built"],["ide","phe","built"],["ide","ana","against"],["emp","ana","built"],["exi","abs","built focus"],["exi","pos","against focus"]],"trail":["sto","cla","ide","pre","epi","sch","rat","exi"]};window.WEB.after=function(box,el,svg){
+  const ids=window.WEB.trail,b=ids.map(i=>box(el(i)));let d='';
+  b.forEach((r,i)=>{const y=r.y+r.h+1,x1=r.x-3,x2=r.x+r.w+5;
+    if(i===0)d+='M'+(x1-26)+' '+(y-9)+'C'+(x1-14)+' '+(y-9)+' '+(x1-10)+' '+y+' '+x1+' '+y;
+    else{const p=b[i-1],py=p.y+p.h+1,px=p.x+p.w+5,k=Math.max(46,Math.abs(x1-px)*.42);d+='C'+(px+k)+' '+py+' '+(x1-k)+' '+y+' '+x1+' '+y}
+    d+='L'+x2+' '+y;
+    if(i===b.length-1)d+='c16 0 26 6 24 15s-13 9-12 1'});
+  const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',d);p.setAttribute('class','red');p.dataset.a='red';p.dataset.skip=ids.join(' ');svg.appendChild(p)};</script><script>
+(function(){
+const W=window.WEB, scrEl=document.querySelector('.screen'), svg=document.querySelector('svg.threads');
+if(!W||!svg) return;
+const NS='http://www.w3.org/2000/svg';
+const el=id=>scrEl.querySelector('[data-id="'+id+'"]');
+function box(e){const s=scrEl.getBoundingClientRect(),r=e.getBoundingClientRect();return {x:r.left-s.left,y:r.top-s.top,w:r.width,h:r.height}}
+function pathFor(a,b){
+  const A=el(a),B=el(b);
+  if(W.mode==='word'){
+    const ra=box(A),rb=box(B);let L=ra,R=rb;if(ra.x>rb.x){L=rb;R=ra}
+    const gap=R.x-(L.x+L.w);
+    if(gap>24){const x1=L.x+L.w+7,y1=L.y+L.h*.56,x2=R.x-7,y2=R.y+R.h*.56,dx=(x2-x1)*.5;return 'M'+x1+' '+y1+'C'+(x1+dx)+' '+y1+' '+(x2-dx)+' '+y2+' '+x2+' '+y2}
+    let T=ra,Bm=rb;if(ra.y>rb.y){T=rb;Bm=ra}
+    // stacked words: a soft bracket down their left side
+    const x1=T.x-7,y1=T.y+T.h*.56,x2=Bm.x-7,y2=Bm.y+Bm.h*.56,k=30+(y2-y1)*.12;
+    return 'M'+x1+' '+y1+'C'+(x1-k)+' '+y1+' '+(x2-k)+' '+y2+' '+x2+' '+y2;
+  }
+  let x1=+A.dataset.x,y1=+A.dataset.y,x2=+B.dataset.x,y2=+B.dataset.y;const r1=+A.dataset.r+(W.pad||3),r2=+B.dataset.r+(W.pad||3);
+  const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),ux=dx/len,uy=dy/len;
+  const mx=(x1+x2)/2,my=(y1+y2)/2;let cx,cy;
+  const key=a+'-'+b, ov=(W.bows||{})[key];
+  if(W.mode==='sag'){const k=ov!==undefined?ov:.09;cx=mx;cy=my+len*k}
+  else{const k=ov!==undefined?ov:.13;let nx=-uy,ny=ux;const C=W.centre;if((mx+nx-C[0])**2+(my+ny-C[1])**2<(mx-nx-C[0])**2+(my-ny-C[1])**2){nx=-nx;ny=-ny}cx=mx+nx*len*k;cy=my+ny*len*k}
+  // trim at the node edges, heading towards the control point
+  const a1=Math.atan2(cy-y1,cx-x1),a2=Math.atan2(cy-y2,cx-x2);
+  x1+=Math.cos(a1)*r1;y1+=Math.sin(a1)*r1;x2+=Math.cos(a2)*r2;y2+=Math.sin(a2)*r2;
+  return 'M'+x1.toFixed(1)+' '+y1.toFixed(1)+'Q'+cx.toFixed(1)+' '+cy.toFixed(1)+' '+x2.toFixed(1)+' '+y2.toFixed(1);
+}
+function draw(){
+  svg.querySelectorAll('path.th').forEach(p=>p.remove());
+  const made=[];
+  W.links.forEach(l=>{const p=document.createElementNS(NS,'path');p.setAttribute('d',pathFor(l[0],l[1]));p.setAttribute('class','th '+l[2]);p.dataset.a=l[0];p.dataset.b=l[1];made.push(p)});
+  // quiet threads first, the important ones on top
+  made.sort((p,q)=>(/focus|walked/.test(p.getAttribute('class'))?1:0)-(/focus|walked/.test(q.getAttribute('class'))?1:0)).forEach(p=>svg.appendChild(p));
+  if(W.after) W.after(box,el,svg);
+  if(location.hash==='#check') check();
+}
+function check(){
+  const out=[];const labels=[...scrEl.querySelectorAll('.lb,.solid')].map(e=>({e,b:box(e),id:(e.closest('[data-id]')||e).dataset.id||e.className}));
+  const circs=[...scrEl.querySelectorAll('.circ')].map(e=>({id:e.dataset.id,x:+e.dataset.x,y:+e.dataset.y,r:+e.dataset.r}));
+  for(let i=0;i<circs.length;i++)for(let j=i+1;j<circs.length;j++){const a=circs[i],b=circs[j];if(Math.hypot(a.x-b.x,a.y-b.y)<a.r+b.r+6)out.push('DISC '+a.id+' x DISC '+b.id)}
+  circs.forEach(c=>labels.forEach(L=>{if(L.id===c.id)return;const b=L.b,nx=Math.max(b.x,Math.min(c.x,b.x+b.w)),ny=Math.max(b.y,Math.min(c.y,b.y+b.h));if(Math.hypot(nx-c.x,ny-c.y)<c.r+3)out.push('DISC '+c.id+' x LABEL '+L.id)}));
+  svg.querySelectorAll('path').forEach(p=>{const n=p.getTotalLength();const hit=new Set();
+    for(let s=0;s<=n;s+=3){const pt=p.getPointAtLength(s);labels.forEach(L=>{if(W.mode==='word'&&(L.id===p.dataset.a||L.id===p.dataset.b))return;if(p.dataset.skip&&p.dataset.skip.includes(L.id))return;const b=L.b,m=2;if(pt.x>b.x-m&&pt.x<b.x+b.w+m&&pt.y>b.y-m&&pt.y<b.y+b.h+m)hit.add(L.id)});circs.forEach(c=>{if(c.id===p.dataset.a||c.id===p.dataset.b)return;if(Math.hypot(pt.x-c.x,pt.y-c.y)<c.r+2)hit.add('disc '+c.id)})}
+    hit.forEach(h=>out.push('THREAD '+(p.dataset.a||p.getAttribute('class'))+'-'+(p.dataset.b||'')+' x LABEL '+h))});
+  for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++){const a=labels[i].b,b=labels[j].b;if(labels[i].e.contains(labels[j].e)||labels[j].e.contains(labels[i].e))continue;if(a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h)out.push('LABEL '+labels[i].id+' x LABEL '+labels[j].id)}
+  labels.forEach(L=>{const b=L.b;if(b.x<8||b.y<8||b.x+b.w>1432||b.y+b.h>892)out.push('OFFSCREEN '+L.id+' '+Math.round(b.x)+','+Math.round(b.y)+' '+Math.round(b.w)+'x'+Math.round(b.h))});
+  scrEl.querySelectorAll('*').forEach(e=>{if(e.scrollWidth>e.clientWidth+1&&getComputedStyle(e).overflow!=='visible'&&e.clientWidth>0)out.push('OVERFLOW '+(e.className||e.tagName))});
+  const pre=document.createElement('pre');pre.id='chk';pre.textContent='CHECK\n'+out.join('\n')+'\nEND';document.body.appendChild(pre);
+}
+(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(()=>setTimeout(draw,60));
+})();</script>
+</body></html>

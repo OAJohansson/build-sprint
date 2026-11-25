@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>01 Transit · Meander round 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;800;900&family=Overpass+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1440px;background:#fff}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;cursor:pointer}
+.screen{width:1440px;height:900px;position:relative;overflow:hidden}
+.screen svg.links{position:absolute;inset:0;width:1440px;height:900px;pointer-events:none}
+/* ---- the direction ---- */
+
+.screen{background:#f7f5ef;color:#16181d;font:14px/1.4 Overpass,sans-serif;--ink:#16181d;--paper:#f7f5ef;--red:#e23b2e;--blue:#0b5fc4;--yellow:#ffcf1a;--zone:#ece8dc}
+.top{position:absolute;left:0;top:0;width:1000px;height:64px;display:flex;align-items:center;padding:0 30px;gap:28px;border-bottom:4px solid var(--ink)}
+.wm{font-weight:900;font-size:26px;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+.wm i{width:26px;height:26px;border-radius:50%;border:6px solid var(--red);position:relative;display:block}
+.wm i:after{content:"";position:absolute;left:-10px;right:-10px;top:4px;height:6px;background:var(--ink)}
+.key{display:flex;gap:20px;font-size:12px;font-weight:600;margin-left:auto;align-items:center}
+.key span{display:flex;align-items:center;gap:7px}
+.key .l{width:30px;height:0;border-top:5px solid var(--ink)}
+.key .l.a{border-top:5px dotted var(--red)}
+.key .s{width:14px;height:14px;border-radius:50%;border:3.5px solid var(--ink);background:var(--paper)}
+.key .s.v{background:var(--blue)}
+.zone{position:absolute;top:64px;bottom:0;padding:14px 0 0 30px;font:600 11px/1.3 'Overpass Mono',monospace;letter-spacing:.04em;text-transform:uppercase}
+.zone:nth-of-type(even){background:var(--zone)}
+.zone b{display:block;font:900 30px/1 Overpass;opacity:.16;margin-bottom:2px}
+svg.links path{fill:none;stroke:var(--ink);stroke-width:7;stroke-linejoin:round;stroke-linecap:round}
+svg.links path.against{stroke:var(--red);stroke-dasharray:1 12;stroke-width:7}
+.st{position:absolute;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:5px solid var(--ink);background:var(--paper)}
+.st.v{background:var(--blue)}
+.st.here{width:34px;height:34px;margin:-17px 0 0 -17px;background:var(--yellow);border-width:6px}
+.st label{position:absolute;white-space:nowrap;font-weight:800;font-size:14px;line-height:1.15;left:50%;transform:translateX(-50%)}
+.st.t label{bottom:22px}.st.b label{top:22px}
+.st.l label{left:auto;right:26px;top:-8px;transform:none}
+.st.tl label{left:auto;right:16px;bottom:22px;transform:none}
+.st.tl label small{text-align:right}
+.st.r label{left:40px;top:-6px;transform:none;background:var(--ink);color:#fff;padding:5px 10px 3px;font-size:16px}
+.st label small{display:block;font:600 10.5px/1.3 'Overpass Mono',monospace;color:var(--blue);text-align:center}
+.st.r label small{color:var(--yellow);text-align:left}
+.foot{position:absolute;left:30px;bottom:22px;font:600 11px/1.5 'Overpass Mono',monospace;background:var(--paper);border:3px solid var(--ink);padding:8px 12px}
+.foot b{font:800 13px Overpass;display:block}
+.panel{position:absolute;left:1000px;top:0;width:440px;height:900px;background:#fff;border-left:4px solid var(--ink);display:flex;flex-direction:column}
+.ph{background:var(--ink);color:#fff;padding:14px 26px 16px}
+.ph .back{font:600 11px 'Overpass Mono',monospace;display:flex;justify-content:space-between;opacity:.75;margin-bottom:10px}
+.ph h2{font-weight:900;font-size:32px;line-height:1;letter-spacing:-.02em}
+.ph p{font:600 11px 'Overpass Mono',monospace;color:var(--yellow);margin-top:8px}
+.pb{padding:4px 26px 0;flex:1}
+.pb h3{font:600 10.5px 'Overpass Mono',monospace;letter-spacing:.08em;text-transform:uppercase;border-top:3px solid var(--ink);padding-top:6px;margin:10px 0 4px}
+.pb section:first-child h3{border-top:0}
+.d-q li{font-weight:600;font-size:14px;line-height:1.3;margin-bottom:2px}
+.d-themes ul{display:flex;flex-wrap:wrap;gap:0 6px;font-size:13px}
+.d-themes li:not(:last-child):after{content:" ·";opacity:.4}
+.d-thinkers .t-row{display:grid;grid-template-columns:1fr auto;gap:0 10px;padding:3px 0 1px;border-bottom:1px solid #ddd;font-size:12px}
+.d-thinkers b{font-weight:800;font-size:14px}
+.d-thinkers i{font:400 11px 'Overpass Mono',monospace}
+.d-thinkers span{grid-column:1/3;color:#555}
+.d-against p{font-size:12.5px}
+.d-against a{font-weight:800;border-bottom:3px dotted var(--red);margin-right:2px}
+.d-next li{display:grid;grid-template-columns:22px 1fr;gap:0 10px;padding:3px 0;font-size:12px;line-height:1.3;align-items:start}
+.d-next em{grid-row:1/4;width:18px;height:18px;border-radius:50%;border:5px solid var(--ink);font-size:0;margin-top:2px}
+.d-next li.against em{border-color:var(--red)}
+.d-next b{font-weight:900;font-size:16px;line-height:1.1}
+.d-next b:after{content:" →"}
+.d-next span{color:#555}
+.d-next li:before{content:attr(data-rel);grid-column:2;font:600 10.5px 'Overpass Mono',monospace;text-transform:uppercase;letter-spacing:.05em;color:#555}
+.d-next li.against:before{color:var(--red)}
+
+/* ---- brand strip (about the direction, not part of the screen) ---- */
+.strip{width:1440px;height:230px;background:#fff;border-top:1px solid #111;color:#111;font:12px/1.45 ui-sans-serif,system-ui,sans-serif;display:grid;grid-template-columns:300px 250px 270px 330px 1fr;position:relative}
+.strip>div{padding:20px 22px 0;border-right:1px solid #e4e4e4;min-width:0}
+.strip>div:last-child{border-right:0}
+.strip h6{font:600 10px/1 ui-sans-serif,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8a8a8a;margin-bottom:12px}
+.strip .bs-wm{height:60px;display:flex;align-items:center;margin-bottom:8px}
+.strip .bs-pers{color:#444}
+.strip .bs-alt{color:#8a8a8a;margin-top:4px}
+.strip .bs-sw{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 8px}
+.strip .bs-sw i{display:block;height:34px;border-radius:4px;outline:1px solid rgba(0,0,0,.12);outline-offset:-1px}
+.strip .bs-sw span{display:block;font:10px/1.3 ui-monospace,Menlo,monospace;color:#555;margin-top:3px}
+.strip .bs-ty1{font-size:30px;line-height:1.05;margin-bottom:4px}
+.strip .bs-ty2{font-size:14px;line-height:1.35;margin:8px 0 4px}
+.strip .bs-tyn{font:10px/1.3 ui-monospace,Menlo,monospace;color:#777}
+.strip dl{display:grid;grid-template-columns:76px 1fr;gap:5px 8px}
+.strip dt{color:#8a8a8a}
+.strip dd{color:#111}
+.strip .bs-sig{height:70px;display:flex;align-items:center;margin-bottom:6px;overflow:hidden}
+.strip .bs-note{font-size:10px;line-height:1.35;color:#8a8a8a;margin-top:8px}
+</style></head>
+<body>
+<div class="screen"><div class="zone" style="left:0px;width:345px"><b>1</b>Ancient</div><div class="zone" style="left:345px;width:105px"><b>2</b>Medieval</div><div class="zone" style="left:450px;width:240px"><b>3</b>Early modern</div><div class="zone" style="left:690px;width:310px"><b>4 · 5</b>19th and 20th century</div><div class="top"><div class="wm"><i></i>meander</div><div class="key"><span><i class="l"></i>built on</span><span><i class="l a"></i>pushed against</span><span><i class="s v"></i>been there</span><span><i class="s"></i>not yet</span></div></div>
+<svg class="links"><path class="built" d="M75 470L185 470"/><path class="built" d="M185 470L185 460L295 350"/><path class="built" d="M75 470L105 470L265 630L295 630"/><path class="built" d="M185 470L400 470"/><path class="against" d="M400 470L400 470L490 380L500 380"/><path class="against" d="M500 380L500 600"/><path class="built" d="M500 380L615 380"/><path class="built" d="M500 600L615 485L615 380"/><path class="built" d="M500 600L500 670L590 760"/><path class="built" d="M615 380L615 365L730 250"/><path class="against" d="M615 380L615 380L735 500L815 500"/><path class="built" d="M755 380L755 440L815 500"/><path class="built" d="M500 600L665 600"/><path class="built" d="M615 380L755 380"/><path class="against" d="M615 380L800 565L800 715"/><path class="built" d="M500 600L500 600L615 715L800 715"/><path class="built" d="M815 500L815 560L885 630"/><path class="against" d="M815 500L900 415L900 300"/></svg><div class="st b  " style="left:75px;top:470px"><label>Presocratics</label></div><div class="st b v " style="left:185px;top:470px"><label>Classical Greek<small>5 Nov</small></label></div><div class="st b  " style="left:295px;top:630px"><label>Epicureanism</label></div><div class="st t v " style="left:295px;top:350px"><label>Stoicism<small>3 Nov</small></label></div><div class="st b  " style="left:400px;top:470px"><label>Scholasticism</label></div><div class="st l  " style="left:500px;top:380px"><label>Rationalism</label></div><div class="st l  " style="left:500px;top:600px"><label>Empiricism</label></div><div class="st tl v " style="left:615px;top:380px"><label>German Idealism<small>9 Nov</small></label></div><div class="st b  " style="left:590px;top:760px"><label>Utilitarianism</label></div><div class="st t  " style="left:730px;top:250px"><label>Marxism</label></div><div class="st t  " style="left:665px;top:600px"><label>Pragmatism</label></div><div class="st b  " style="left:800px;top:715px"><label>Analytic philosophy</label></div><div class="st t  " style="left:755px;top:380px"><label>Phenomenology</label></div><div class="st r v here" style="left:815px;top:500px"><label>Existentialism<small>You are here · 12 Nov</small></label></div><div class="st b  " style="left:885px;top:630px"><label>Absurdism</label></div><div class="st t  " style="left:900px;top:300px"><label>Post-structuralism</label></div>
+<div class="foot"><b>Where you've been</b>4 of 16 stations · 3 days<br>Stoicism → Classical Greek → German Idealism → here</div>
+<div class="panel"><div class="ph"><div class="back"><span>← Whole map</span><span>Esc</span></div><h2>Existentialism</h2><p>Zone 5 · 1840s–1960s · 5 thinkers</p></div><div class="pb">
+  <section class="d-q"><h3>Key questions</h3><ol><li>If nothing hands me a purpose, how do I live?</li><li>What does it mean to be free, and to answer for it?</li><li>How do I live as myself and not as the crowd expects?</li></ol></section>
+  <section class="d-themes"><h3>Themes</h3><ul><li>Freedom and responsibility</li><li>Anxiety</li><li>Authenticity and bad faith</li><li>Existence before essence</li><li>The individual against the crowd</li></ul></section>
+  <section class="d-thinkers"><h3>On this platform</h3><ul><li class=""><div class="t-row"><b>Søren Kierkegaard</b><i>1813–1855</i><span>Truth has to be lived by one person. Faith is a leap.</span></div></li><li class=""><div class="t-row"><b>Friedrich Nietzsche</b><i>1844–1900</i><span>God is dead, so values are ours to make. A forerunner.</span></div></li><li class=""><div class="t-row"><b>Jean-Paul Sartre</b><i>1905–1980</i><span>Existence precedes essence. We are condemned to be free.</span></div></li><li class=""><div class="t-row"><b>Simone de Beauvoir</b><i>1908–1986</i><span>Freedom always has a situation. One becomes a woman.</span></div></li><li class=""><div class="t-row"><b>Albert Camus</b><i>1913–1960</i><span>The absurd, and revolt against it. He refused the label.</span></div></li></ul></section>
+  <section class="d-against"><h3>Pushed against</h3><p><a>German Idealism</a> Hegel's system, which explains everything except the person living inside it, and the rationalism that puts abstract reason before a lived life.</p></section>
+  <section class="d-next"><h3>Next stops</h3><ul><li class="built" data-rel="Built on · 1 stop back"><em>undefined</em><b>Phenomenology</b><span>The method Sartre and Beauvoir took from Husserl and Heidegger.</span></li><li class="grew" data-rel="Grew from here · 1 stop on"><em>undefined</em><b>Absurdism</b><span>Camus's answer when the search for meaning meets a silent world.</span></li><li class="against" data-rel="Pushed back · 1 stop on"><em>undefined</em><b>Post-structuralism</b><span>Foucault and Derrida doubted the free, self-making subject.</span></li></ul></section></div></div></div>
+<aside class="strip">
+  <div><h6>01 · Wordmark</h6><div class="bs-wm"><span style="font:900 34px Overpass;letter-spacing:-.02em;display:flex;align-items:center;gap:12px"><i style="width:34px;height:34px;border-radius:50%;border:8px solid #e23b2e;position:relative;display:block"><i style="position:absolute;left:-13px;right:-13px;top:5px;height:8px;background:#16181d"></i></i>meander</span></div><p class="bs-pers">A public line map. Crisp, confident, built to be read in two seconds.</p><p class="bs-alt">Name: Meander</p><p class="bs-note">Sample content, not yet checked for accuracy (R7). Draft copy.</p></div>
+  <div><h6>Palette</h6><div class="bs-sw"><div><i style="background:#f7f5ef"></i><span>paper<br>#f7f5ef</span></div><div><i style="background:#16181d"></i><span>ink<br>#16181d</span></div><div><i style="background:#e23b2e"></i><span>against<br>#e23b2e</span></div><div><i style="background:#0b5fc4"></i><span>been<br>#0b5fc4</span></div><div><i style="background:#ffcf1a"></i><span>here<br>#ffcf1a</span></div><div><i style="background:#ece8dc"></i><span>zone<br>#ece8dc</span></div></div></div>
+  <div><h6>Type pair</h6><div class="bs-ty1" style="font-family:Overpass;font-weight:900;letter-spacing:-.02em">Next stops</div><div class="bs-tyn">Overpass 900 · names, stations</div><div class="bs-ty2" style="font-family:'Overpass Mono';font-weight:600;font-size:12px">ZONE 5 · 1840s–1960s</div><div class="bs-tyn">Overpass Mono 600 · dates, labels</div></div>
+  <div><h6>Voice</h6><dl><dt>First visit</dt><dd>No stations visited yet. Board anywhere.</dd><dt>Go next</dt><dd>Next stops</dd><dt>Been there</dt><dd>4 of 16 stations · 3 days</dd></dl></div>
+  <div><h6>Signature · axis</h6><div class="bs-sig"><svg width="230" height="60"><path d="M10 40H80L110 15H220" fill="none" stroke="#16181d" stroke-width="7" stroke-linejoin="round"/><circle cx="30" cy="40" r="8" fill="#0b5fc4" stroke="#16181d" stroke-width="5"/><circle cx="125" cy="15" r="13" fill="#ffcf1a" stroke="#16181d" stroke-width="6"/><circle cx="200" cy="15" r="8" fill="#f7f5ef" stroke="#16181d" stroke-width="5"/></svg></div><p><b>The station dot: hollow, filled once visited, yellow where you are.</b></p><p class="bs-pers">Axis: network line map, signage tone, side board</p></div>
+</aside>
+</body></html>

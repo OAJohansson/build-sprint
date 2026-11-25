@@ -1,0 +1,578 @@
+{
+  "date": "2026-11-13b",
+  "basis": "eval-content-2026-11-13-r2.md + taglines + two-way link labels",
+  "count": 81,
+  "items": [
+    {
+      "item": "socrates-plato|description",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "match SEP Plato §1 wording"
+    },
+    {
+      "item": "socrates-plato|theme5",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "add Aristophanes"
+    },
+    {
+      "item": "socrates-plato|Socrates|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "restore hedge"
+    },
+    {
+      "item": "socrates-plato|Plato|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "restore hedge"
+    },
+    {
+      "item": "epicureanism|description",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "no end date; gods unconcerned, not feared"
+    },
+    {
+      "item": "stoicism|description",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "date range has no end date"
+    },
+    {
+      "item": "stoicism|Epictetus|summary",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "hedge on Arrian's authorship"
+    },
+    {
+      "item": "neoplatonism|theme2",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "emergence is eternal, not a process in time"
+    },
+    {
+      "item": "patristic|theme3",
+      "actions": [
+        "rewrite",
+        "recite",
+        "cut"
+      ],
+      "note": "cut 'keeps God from being its author'"
+    },
+    {
+      "item": "patristic|Boethius|key_idea1",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "add sufficiency"
+    },
+    {
+      "item": "scholasticism|description",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "start and end hedged per SEP §2.5, §5.2"
+    },
+    {
+      "item": "scholasticism|reacted_against",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "attribute to Abelard, not the whole school"
+    },
+    {
+      "item": "renaissance|description",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "IEP span"
+    },
+    {
+      "item": "pragmatism|Richard Rorty|summary",
+      "actions": [
+        "rewrite",
+        "recite"
+      ],
+      "note": "Dewey, Hegel and Darwin"
+    },
+    {
+      "item": "presocratics|Parmenides of Elea|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "prompt limited to card"
+    },
+    {
+      "item": "epicureanism|Philodemus|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "prompt limited to card"
+    },
+    {
+      "item": "skepticism|Carneades|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "prompt limited to card"
+    },
+    {
+      "item": "scholasticism|Peter Abelard|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "prompt limited to card"
+    },
+    {
+      "item": "renaissance|Lorenzo Valla|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "prompt limited to card"
+    },
+    {
+      "item": "renaissance|Desiderius Erasmus|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "prompt limited to card"
+    },
+    {
+      "item": "german-idealism|Friedrich Wilhelm Joseph von Schelling|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "prompt limited to card"
+    },
+    {
+      "item": "phenomenology|Jean-Paul Sartre|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "prompt limited to card"
+    },
+    {
+      "item": "critical-theory|Theodor W. Adorno|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "prompt limited to card"
+    },
+    {
+      "item": "post-structuralism|Gilles Deleuze|study_prompt",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "prompt limited to card"
+    },
+    {
+      "item": "presocratics|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "socrates-plato|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "aristotle|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "epicureanism|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "stoicism|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "skepticism|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "neoplatonism|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "patristic|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "scholasticism|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "renaissance|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "rationalism|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "empiricism|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "enlightenment|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "german-idealism|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "utilitarianism|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "marxism|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "existentialism|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "pragmatism|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "phenomenology|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "analytic|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "critical-theory|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "post-structuralism|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "feminist-philosophy|tagline",
+      "actions": [
+        "new"
+      ],
+      "note": "new tagline"
+    },
+    {
+      "item": "link|socrates-plato->presocratics",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|aristotle->socrates-plato",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|aristotle->presocratics",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|epicureanism->presocratics",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|epicureanism->socrates-plato",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|stoicism->socrates-plato",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|stoicism->aristotle",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|skepticism->stoicism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|skepticism->epicureanism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|neoplatonism->socrates-plato",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|neoplatonism->aristotle",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|neoplatonism->epicureanism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|scholasticism->aristotle",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|scholasticism->neoplatonism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|renaissance->scholasticism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|renaissance->epicureanism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|renaissance->skepticism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|empiricism->rationalism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|enlightenment->rationalism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|enlightenment->empiricism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|german-idealism->enlightenment",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|utilitarianism->empiricism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|marxism->german-idealism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|existentialism->phenomenology",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|pragmatism->enlightenment",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|analytic->german-idealism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|analytic->enlightenment",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|analytic->scholasticism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|critical-theory->marxism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|critical-theory->post-structuralism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|feminist-philosophy->post-structuralism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|patristic->neoplatonism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|patristic->stoicism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    },
+    {
+      "item": "link|patristic->skepticism",
+      "actions": [
+        "rewrite"
+      ],
+      "note": "label reads from both ends"
+    }
+  ]
+}

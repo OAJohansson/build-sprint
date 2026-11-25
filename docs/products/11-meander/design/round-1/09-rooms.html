@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>09 Rooms · Meander round 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;700&family=Martian+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1440px;background:#fff}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;cursor:pointer}
+.screen{width:1440px;height:900px;position:relative;overflow:hidden}
+.screen svg.links{position:absolute;inset:0;width:1440px;height:900px;pointer-events:none}
+/* ---- the direction ---- */
+
+.screen{background:#f3eee2;color:#1d2b6f;font:400 13.5px/1.4 'Familjen Grotesk',sans-serif;--paper:#f3eee2;--navy:#1d2b6f;--coral:#ff5a3c;--mint:#a9dcc6}
+.wm{position:absolute;left:30px;top:26px;font:700 30px/1 'Familjen Grotesk';letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+.wm i{width:30px;height:30px;border:4px solid var(--navy);border-right-color:transparent;display:block;position:relative}
+.wm i:after{content:"";position:absolute;right:-4px;top:-4px;width:4px;height:12px;background:var(--navy)}
+.tag{position:absolute;left:200px;top:38px;font:400 11px 'Martian Mono',monospace}
+svg.links .room{fill:var(--paper);stroke:var(--navy);stroke-width:4}
+svg.links .room.v{fill:var(--mint)}
+svg.links .room.here{fill:var(--coral)}
+svg.links .gap{stroke:var(--paper);stroke-width:7}
+svg.links .gap.v{stroke:var(--mint)}
+svg.links .arc{fill:none;stroke:var(--navy);stroke-width:1.5}
+svg.links .wall{stroke:var(--coral);stroke-width:9}
+svg.links .wall2{stroke:var(--navy);stroke-width:9;stroke-dasharray:3 5}
+.rm{position:absolute;padding:10px 9px;font:700 14.5px/1.1 'Familjen Grotesk';letter-spacing:-.01em}
+.rm u{display:block;text-decoration:none;font:600 10px 'Martian Mono',monospace;margin-bottom:5px;letter-spacing:0}
+.rm small{display:block;font:400 9.5px/1.4 'Martian Mono',monospace;margin-top:5px;letter-spacing:0}
+.rm.here{color:#fff;font-size:22px}
+.rm.here small{font-size:10.5px}
+.you{position:absolute;left:737px;top:478px;background:var(--navy);color:#fff;font:600 10px 'Martian Mono',monospace;padding:5px 8px;border-radius:99px}
+.keyb{position:absolute;left:322px;top:112px;width:220px;font:400 10.5px/1.5 'Martian Mono',monospace}
+.keyb b{font:700 15px 'Familjen Grotesk';display:block;margin-bottom:6px}
+.keyb div{display:flex;align-items:center;gap:10px;margin-bottom:5px}
+.keyb i{width:26px;flex:none;display:block}
+.book{position:absolute;left:30px;top:548px;width:360px}
+.book b{font:700 15px 'Familjen Grotesk';display:block;margin-bottom:8px}
+.book li{display:grid;grid-template-columns:70px 1fr;font:400 11px/1.9 'Martian Mono',monospace;border-bottom:1.5px solid var(--navy)}
+.book li:first-child{border-top:1.5px solid var(--navy)}
+.book p{font-size:13px;margin-top:10px}
+.panel{position:absolute;left:1014px;top:0;width:426px;height:900px;background:var(--navy);color:var(--paper);padding:22px 30px 0}
+.back{font:400 10.5px 'Martian Mono',monospace;display:flex;justify-content:space-between;opacity:.8}
+.rn{font:600 11px 'Martian Mono',monospace;color:var(--coral);margin-top:20px}
+.panel h2{font:700 38px/1 'Familjen Grotesk';letter-spacing:-.03em;margin:4px 0 4px}
+.panel .meta{font:400 10.5px 'Martian Mono',monospace;opacity:.8}
+.panel h3{font:600 10px 'Martian Mono',monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--mint);margin:14px 0 5px}
+.d-q li{font:500 16px/1.25 'Familjen Grotesk';margin-bottom:3px}
+.d-themes li{display:inline}.d-themes li:not(:last-child):after{content:" · ";opacity:.5}
+.d-thinkers .t-row{display:flex;gap:8px;align-items:baseline;padding:1px 0}
+.d-thinkers b{font-weight:700}.d-thinkers i{font:400 10px 'Martian Mono',monospace;opacity:.7}.d-thinkers span{display:none}
+.d-against a{font-weight:700;border-bottom:3px solid var(--coral)}
+.d-next li{display:grid;grid-template-columns:1fr auto;gap:0 8px;background:var(--paper);color:var(--navy);padding:7px 12px 8px;margin-bottom:6px;align-items:baseline}
+.d-next b{font:700 19px/1.1 'Familjen Grotesk';letter-spacing:-.02em}
+.d-next b:after{content:" →"}
+.d-next em{font:600 9.5px 'Martian Mono',monospace;font-style:normal;grid-column:2;grid-row:1}
+.d-next li.against em{color:var(--coral)}
+.d-next span{grid-column:1/3;font-size:12.5px;line-height:1.3}
+
+/* ---- brand strip (about the direction, not part of the screen) ---- */
+.strip{width:1440px;height:230px;background:#fff;border-top:1px solid #111;color:#111;font:12px/1.45 ui-sans-serif,system-ui,sans-serif;display:grid;grid-template-columns:300px 250px 270px 330px 1fr;position:relative}
+.strip>div{padding:20px 22px 0;border-right:1px solid #e4e4e4;min-width:0}
+.strip>div:last-child{border-right:0}
+.strip h6{font:600 10px/1 ui-sans-serif,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8a8a8a;margin-bottom:12px}
+.strip .bs-wm{height:60px;display:flex;align-items:center;margin-bottom:8px}
+.strip .bs-pers{color:#444}
+.strip .bs-alt{color:#8a8a8a;margin-top:4px}
+.strip .bs-sw{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 8px}
+.strip .bs-sw i{display:block;height:34px;border-radius:4px;outline:1px solid rgba(0,0,0,.12);outline-offset:-1px}
+.strip .bs-sw span{display:block;font:10px/1.3 ui-monospace,Menlo,monospace;color:#555;margin-top:3px}
+.strip .bs-ty1{font-size:30px;line-height:1.05;margin-bottom:4px}
+.strip .bs-ty2{font-size:14px;line-height:1.35;margin:8px 0 4px}
+.strip .bs-tyn{font:10px/1.3 ui-monospace,Menlo,monospace;color:#777}
+.strip dl{display:grid;grid-template-columns:76px 1fr;gap:5px 8px}
+.strip dt{color:#8a8a8a}
+.strip dd{color:#111}
+.strip .bs-sig{height:70px;display:flex;align-items:center;margin-bottom:6px;overflow:hidden}
+.strip .bs-note{font-size:10px;line-height:1.35;color:#8a8a8a;margin-top:8px}
+</style></head>
+<body>
+<div class="screen"><svg class="links"><rect class="room  " x="30" y="270" width="135" height="250"/><rect class="room v " x="165" y="270" width="140" height="250"/><rect class="room  " x="30" y="100" width="135" height="170"/><rect class="room v " x="165" y="100" width="140" height="170"/><rect class="room  " x="305" y="270" width="110" height="250"/><rect class="room  " x="415" y="270" width="140" height="250"/><rect class="room  " x="415" y="520" width="230" height="180"/><rect class="room v " x="555" y="270" width="170" height="250"/><rect class="room  " x="415" y="700" width="115" height="150"/><rect class="room  " x="555" y="100" width="110" height="170"/><rect class="room  " x="530" y="700" width="115" height="150"/><rect class="room  " x="645" y="520" width="220" height="180"/><rect class="room  " x="665" y="100" width="140" height="170"/><rect class="room v here" x="725" y="270" width="175" height="250"/><rect class="room  " x="900" y="270" width="90" height="250"/><rect class="room  " x="805" y="100" width="185" height="170"/><line class="gap" x1="165" y1="418" x2="165" y2="452"/><path class="arc" d="M165 418L199 418A34 34 0 0 1 165 452"/><line class="gap" x1="243.2" y1="270" x2="277.2" y2="270"/><path class="arc" d="M243.2 270L243.2 236A34 34 0 0 1 277.2 270"/><line class="gap" x1="104.80000000000001" y1="270" x2="138.8" y2="270"/><path class="arc" d="M104.80000000000001 270L104.80000000000001 236A34 34 0 0 1 138.8 270"/><line class="gap" x1="305" y1="418" x2="305" y2="452"/><path class="arc" d="M305 418L339 418A34 34 0 0 1 305 452"/><line class="wall" x1="415" y1="414" x2="415" y2="456"/><line class="wall2" x1="415" y1="414" x2="415" y2="456"/><line class="wall" x1="489.2" y1="520" x2="531.2" y2="520"/><line class="wall2" x1="489.2" y1="520" x2="531.2" y2="520"/><line class="gap" x1="555" y1="418" x2="555" y2="452"/><path class="arc" d="M555 418L589 418A34 34 0 0 1 555 452"/><line class="gap" x1="599.2" y1="520" x2="633.2" y2="520"/><path class="arc" d="M599.2 520L599.2 486A34 34 0 0 1 633.2 520"/><line class="gap" x1="476.2" y1="700" x2="510.2" y2="700"/><path class="arc" d="M476.2 700L476.2 666A34 34 0 0 1 510.2 700"/><line class="gap" x1="612.8" y1="270" x2="646.8" y2="270"/><path class="arc" d="M612.8 270L612.8 236A34 34 0 0 1 646.8 270"/><line class="wall" x1="725" y1="414" x2="725" y2="456"/><line class="wall2" x1="725" y1="414" x2="725" y2="456"/><line class="gap" x1="762.4" y1="270" x2="796.4" y2="270"/><path class="arc" d="M762.4 270L762.4 236A34 34 0 0 1 796.4 270"/><line class="gap" x1="591.2" y1="700" x2="625.2" y2="700"/><path class="arc" d="M591.2 700L591.2 666A34 34 0 0 1 625.2 700"/><line class="gap" x1="688.8" y1="270" x2="722.8" y2="270"/><path class="arc" d="M688.8 270L688.8 236A34 34 0 0 1 722.8 270"/><line class="wall" x1="678.4" y1="520" x2="720.4" y2="520"/><line class="wall2" x1="678.4" y1="520" x2="720.4" y2="520"/><line class="gap" x1="645" y1="621.8" x2="645" y2="655.8"/><path class="arc" d="M645 621.8L679 621.8A34 34 0 0 1 645 655.8"/><line class="gap" x1="900" y1="418" x2="900" y2="452"/><path class="arc" d="M900 418L934 418A34 34 0 0 1 900 452"/><line class="wall" x1="848.6" y1="270" x2="890.6" y2="270"/><line class="wall2" x1="848.6" y1="270" x2="890.6" y2="270"/></svg><div class="rm " style="left:30px;top:270px;width:135px"><u>01</u>Presocratics<small>c. 600–430 BCE</small></div><div class="rm " style="left:165px;top:270px;width:140px"><u>02</u>Classical Greek<small>lights on · 5 Nov</small></div><div class="rm " style="left:30px;top:100px;width:135px"><u>03</u>Epicureanism<small>c. 307 BCE–100s CE</small></div><div class="rm " style="left:165px;top:100px;width:140px"><u>04</u>Stoicism<small>lights on · 3 Nov</small></div><div class="rm " style="left:305px;top:270px;width:110px"><u>05</u>Scholasticism<small></small></div><div class="rm " style="left:415px;top:270px;width:140px"><u>06</u>Rationalism<small>1630s–1710s</small></div><div class="rm " style="left:415px;top:520px;width:230px"><u>07</u>Empiricism<small>1680s–1770s</small></div><div class="rm " style="left:555px;top:270px;width:170px"><u>08</u>German Idealism<small>lights on · 9 Nov</small></div><div class="rm " style="left:415px;top:700px;width:115px"><u>09</u>Utilitarianism<small></small></div><div class="rm " style="left:555px;top:100px;width:110px"><u>10</u>Marxism<small></small></div><div class="rm " style="left:530px;top:700px;width:115px"><u>11</u>Pragmatism<small></small></div><div class="rm " style="left:645px;top:520px;width:220px"><u>12</u>Analytic philosophy<small>1880s–</small></div><div class="rm " style="left:665px;top:100px;width:140px"><u>13</u>Phenomenology<small>1900–</small></div><div class="rm here" style="left:725px;top:270px;width:175px"><u>14</u>Existentialism<small>12 Nov</small></div><div class="rm " style="left:900px;top:270px;width:90px"><u>15</u>Absurdism<small></small></div><div class="rm " style="left:805px;top:100px;width:185px"><u>16</u>Post-structuralism<small>1960s–</small></div><div class="you">● you are here</div>
+<div class="wm"><i></i>meander</div><div class="tag">Western philosophy · 16 rooms · sample content</div>
+<div class="keyb"><b>Key</b><div><i style="border-top:1.5px solid #1d2b6f;height:12px;border-radius:0 12px 0 0;border-right:1.5px solid #1d2b6f"></i>door: built on</div><div><i style="height:8px;background:repeating-linear-gradient(90deg,#1d2b6f 0 3px,#ff5a3c 3px 8px)"></i>barred wall: pushed against</div><div><i style="height:14px;background:#a9dcc6;border:2px solid #1d2b6f"></i>lights on: you've been in</div><div><i style="font:600 10px 'Martian Mono'">01</i>rooms run oldest to newest</div></div>
+<div class="book"><b>Visitors' book · 4 of 16 rooms, over 3 days</b><ul><li><span>3 Nov</span><span>04 Stoicism</span></li><li><span>5 Nov</span><span>02 Classical Greek</span></li><li><span>9 Nov</span><span>08 German Idealism</span></li><li><span>12 Nov</span><span>14 Existentialism</span></li></ul><p>Three doors lead out of the room you're in.</p></div>
+<div class="panel"><div class="back"><span>← Whole floor</span><span>Esc</span></div><div class="rn">ROOM 14</div><h2>Existentialism</h2><div class="meta">1840s–1960s · you walked in today, 12 Nov</div>
+  <section class="d-q"><h3>Key questions</h3><ol><li>If nothing hands me a purpose, how do I live?</li><li>What does it mean to be free, and to answer for it?</li><li>How do I live as myself and not as the crowd expects?</li></ol></section>
+  <section class="d-themes"><h3>Themes</h3><ul><li>Freedom and responsibility</li><li>Anxiety</li><li>Authenticity and bad faith</li><li>Existence before essence</li><li>The individual against the crowd</li></ul></section>
+  <section class="d-thinkers"><h3>In this room</h3><ul><li class=""><div class="t-row"><b>Søren Kierkegaard</b><i>1813–1855</i><span>Truth has to be lived by one person. Faith is a leap.</span></div></li><li class=""><div class="t-row"><b>Friedrich Nietzsche</b><i>1844–1900</i><span>God is dead, so values are ours to make. A forerunner.</span></div></li><li class=""><div class="t-row"><b>Jean-Paul Sartre</b><i>1905–1980</i><span>Existence precedes essence. We are condemned to be free.</span></div></li><li class=""><div class="t-row"><b>Simone de Beauvoir</b><i>1908–1986</i><span>Freedom always has a situation. One becomes a woman.</span></div></li><li class=""><div class="t-row"><b>Albert Camus</b><i>1913–1960</i><span>The absurd, and revolt against it. He refused the label.</span></div></li></ul></section>
+  <section class="d-against"><h3>The wall it pushed against</h3><p><a>German Idealism</a> Hegel's system, which explains everything except the person living inside it, and the rationalism that puts abstract reason before a lived life.</p></section>
+  <section class="d-next"><h3>Doors from this room</h3><ul><li class="built"><em>ROOM 13 · BUILT ON</em><b>Phenomenology</b><span>The method Sartre and Beauvoir took from Husserl and Heidegger.</span></li><li class="grew"><em>ROOM 15 · GREW FROM IT</em><b>Absurdism</b><span>Camus's answer when the search for meaning meets a silent world.</span></li><li class="against"><em>ROOM 16 · PUSHED BACK</em><b>Post-structuralism</b><span>Foucault and Derrida doubted the free, self-making subject.</span></li></ul></section></div></div>
+<aside class="strip">
+  <div><h6>09 · Wordmark</h6><div class="bs-wm"><span style="font:700 40px/1 'Familjen Grotesk';letter-spacing:-.02em;color:#1d2b6f;display:flex;align-items:center;gap:12px"><i style="width:38px;height:38px;border:5px solid #1d2b6f;border-right-color:transparent;display:block;position:relative"><i style="position:absolute;right:-5px;top:-5px;width:5px;height:15px;background:#1d2b6f"></i></i>meander</span></div><p class="bs-pers">A museum floor plan. Friendly wayfinding in two-colour print.</p><p class="bs-alt">Name: Meander, or "Rooms"</p><p class="bs-note">Sample content, not yet checked for accuracy (R7). Draft copy.</p></div>
+  <div><h6>Palette</h6><div class="bs-sw"><div><i style="background:#f3eee2"></i><span>paper<br>#f3eee2</span></div><div><i style="background:#1d2b6f"></i><span>navy<br>#1d2b6f</span></div><div><i style="background:#ff5a3c"></i><span>coral<br>#ff5a3c</span></div><div><i style="background:#a9dcc6"></i><span>mint<br>#a9dcc6</span></div></div></div>
+  <div><h6>Type pair</h6><div class="bs-ty1" style="font-family:'Familjen Grotesk';font-weight:700;letter-spacing:-.02em">Room 14</div><div class="bs-tyn">Familjen Grotesk 700 · names</div><div class="bs-ty2" style="font-family:'Martian Mono';font-size:11px">lights on · 9 Nov</div><div class="bs-tyn">Martian Mono 400 · numbers, notes</div></div>
+  <div><h6>Voice</h6><dl><dt>First visit</dt><dd>All the lights are off. Walk into any room.</dd><dt>Go next</dt><dd>Doors from this room</dd><dt>Been there</dt><dd>Visitors' book · 4 of 16 rooms</dd></dl></div>
+  <div><h6>Signature · axis</h6><div class="bs-sig"><svg width="230" height="66"><rect x="4" y="6" width="110" height="54" fill="#a9dcc6" stroke="#1d2b6f" stroke-width="4"/><rect x="114" y="6" width="110" height="54" fill="#ff5a3c" stroke="#1d2b6f" stroke-width="4"/><line x1="114" y1="18" x2="114" y2="48" stroke="#a9dcc6" stroke-width="6"/><path d="M114 18L140 18A30 30 0 0 1 114 48" fill="none" stroke="#1d2b6f" stroke-width="1.5"/></svg></div><p><b>The door: two schools that connect share a wall with a door in it.</b></p><p class="bs-pers">Axis: floor plan (adjacency, not lines), wayfinding tone</p></div>
+</aside>
+</body></html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>03 Departures · Meander round 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1440px;background:#fff}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;cursor:pointer}
+.screen{width:1440px;height:900px;position:relative;overflow:hidden}
+.screen svg.links{position:absolute;inset:0;width:1440px;height:900px;pointer-events:none}
+/* ---- the direction ---- */
+
+.screen{background:#11120f;color:#e9e4d4;font:500 15px/1.2 'Barlow Condensed',sans-serif;--amber:#ffb224;--dim:#8d8a7c;--line:#2b2c26;--bg:#11120f;--red:#ff6a4d;--green:#9bd17a;letter-spacing:.02em}
+.top{height:66px;display:flex;align-items:center;padding:0 32px;gap:28px;border-bottom:1px solid var(--line)}
+.wm{font:700 30px/1 'Barlow Condensed';letter-spacing:.2em;text-transform:uppercase;color:var(--amber)}
+.top p{font:400 12px 'JetBrains Mono',monospace;color:var(--dim);letter-spacing:0}
+.top .r{margin-left:auto;text-align:right}
+.top .r b{color:var(--amber);font-weight:500}
+table{border-collapse:collapse;width:1376px;margin:0 32px;table-layout:fixed}
+th{font:500 11px 'JetBrains Mono',monospace;color:var(--dim);text-align:left;text-transform:uppercase;letter-spacing:.1em;padding:10px 10px 7px;border-bottom:1px solid var(--line)}
+td{padding:0 10px;height:27px;border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:16px;text-transform:uppercase}
+td.era{white-space:normal;line-height:1.5;font:500 11px 'JetBrains Mono',monospace;color:var(--dim);vertical-align:top;padding-top:8px;letter-spacing:.06em;border-right:1px solid var(--line)}
+td.dt,td.vis{font:400 12px 'JetBrains Mono',monospace;color:var(--dim);letter-spacing:0;text-transform:none}
+td.nm{font-weight:700;font-size:18px;letter-spacing:.05em}
+td.who{color:var(--dim);text-transform:none;font-weight:400}
+td.b{color:var(--green)}td.a{color:var(--red)}
+td.vis b{color:var(--amber);font-weight:500}
+tr.near td.nm{color:var(--amber)}
+tr.near td.nm:after{content:" ›"}
+tr.here td{background:var(--amber);color:#11120f;border-color:var(--amber)}
+tr.here td.dt,tr.here td.vis,tr.here td.vis b,tr.here td.who,tr.here td.b,tr.here td.a{color:#11120f}
+tr.open td{white-space:normal;height:auto;padding:0;border-bottom:2px solid var(--amber);text-transform:none}
+.open-in{display:grid;grid-template-columns:330px 300px 1fr;border-left:2px solid var(--amber);border-right:2px solid var(--amber)}
+.open-in>div{padding:14px 20px 16px;border-right:1px solid var(--line)}
+.open-in>div:last-child{border-right:0}
+.open-in h3{font:500 11px 'JetBrains Mono',monospace;color:var(--amber);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.open-in h3:not(:first-child){margin-top:14px}
+.oq li{font-size:19px;font-weight:500;line-height:1.15;margin-bottom:6px;letter-spacing:.01em}
+.oq p,.ot p{font:400 12px/1.5 'JetBrains Mono',monospace;color:#b9b4a3;letter-spacing:0}
+.ot li{display:grid;grid-template-columns:96px 1fr;font-size:17px;padding:2px 0;gap:8px;align-items:baseline}
+.ot li b{font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.ot li i{font:400 11px 'JetBrains Mono',monospace;color:var(--dim);letter-spacing:0}
+.ot li span{display:none}
+.dep{width:100%;margin:0;border-collapse:collapse}
+.dep td{height:auto;padding:7px 8px;white-space:normal;border-bottom:1px solid var(--line);text-transform:none;vertical-align:top;font-size:15px}
+.dep tr:last-child td{border-bottom:0}
+.dep .pf{width:44px;font:700 22px 'JetBrains Mono',monospace;color:var(--amber)}
+.dep .to{width:222px;font:700 21px/1 'Barlow Condensed';text-transform:uppercase;letter-spacing:.05em;color:#fff}
+.dep .to small{display:block;font:400 11px 'JetBrains Mono',monospace;letter-spacing:0;margin-top:5px;color:var(--green);text-transform:none}
+.dep .ag .to small{color:var(--red)}
+.dep .why{color:#b9b4a3;font:400 12px/1.5 'JetBrains Mono',monospace;letter-spacing:0}
+.dep .go{width:86px;text-align:right;font:500 11px 'JetBrains Mono',monospace;color:var(--amber);letter-spacing:.06em}
+.foot{position:absolute;left:32px;right:32px;bottom:12px;display:flex;justify-content:space-between;font:400 11px 'JetBrains Mono',monospace;color:var(--dim);letter-spacing:0}
+
+/* ---- brand strip (about the direction, not part of the screen) ---- */
+.strip{width:1440px;height:230px;background:#fff;border-top:1px solid #111;color:#111;font:12px/1.45 ui-sans-serif,system-ui,sans-serif;display:grid;grid-template-columns:300px 250px 270px 330px 1fr;position:relative}
+.strip>div{padding:20px 22px 0;border-right:1px solid #e4e4e4;min-width:0}
+.strip>div:last-child{border-right:0}
+.strip h6{font:600 10px/1 ui-sans-serif,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8a8a8a;margin-bottom:12px}
+.strip .bs-wm{height:60px;display:flex;align-items:center;margin-bottom:8px}
+.strip .bs-pers{color:#444}
+.strip .bs-alt{color:#8a8a8a;margin-top:4px}
+.strip .bs-sw{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 8px}
+.strip .bs-sw i{display:block;height:34px;border-radius:4px;outline:1px solid rgba(0,0,0,.12);outline-offset:-1px}
+.strip .bs-sw span{display:block;font:10px/1.3 ui-monospace,Menlo,monospace;color:#555;margin-top:3px}
+.strip .bs-ty1{font-size:30px;line-height:1.05;margin-bottom:4px}
+.strip .bs-ty2{font-size:14px;line-height:1.35;margin:8px 0 4px}
+.strip .bs-tyn{font:10px/1.3 ui-monospace,Menlo,monospace;color:#777}
+.strip dl{display:grid;grid-template-columns:76px 1fr;gap:5px 8px}
+.strip dt{color:#8a8a8a}
+.strip dd{color:#111}
+.strip .bs-sig{height:70px;display:flex;align-items:center;margin-bottom:6px;overflow:hidden}
+.strip .bs-note{font-size:10px;line-height:1.35;color:#8a8a8a;margin-top:8px}
+</style></head>
+<body>
+<div class="screen"><div class="top"><div class="wm">Meander</div><p>Western philosophy · 16 schools · 600 BCE to today</p><p class="r">Visited <b>4 of 16</b> over <b>3 days</b> · last: German Idealism, 9 Nov<br>Esc closes the open row</p></div>
+<table><colgroup><col style="width:112px"><col style="width:176px"><col style="width:230px"><col style="width:240px"><col style="width:180px"><col><col style="width:150px"></colgroup>
+<thead><tr><th>Era</th><th>Active</th><th>School</th><th>Built on</th><th>Pushed against</th><th>Thinkers</th><th>Visited</th></tr></thead><tbody><tr class=" "><td class="era" rowspan="4">Ancient</td><td class="dt">c. 600–430 BCE</td><td class="nm">Presocratics</td><td class="b">—</td><td class="a">—</td><td class="who">Thales, Heraclitus, Parmenides</td><td class="vis">·</td></tr><tr class=" "><td class="dt">c. 470–322 BCE</td><td class="nm">Classical Greek</td><td class="b">Presocratics</td><td class="a">—</td><td class="who">Socrates, Plato, Aristotle</td><td class="vis"><b>●</b> 5 Nov</td></tr><tr class=" "><td class="dt">c. 307 BCE–100s CE</td><td class="nm">Epicureanism</td><td class="b">Presocratics</td><td class="a">—</td><td class="who">Epicurus, Lucretius</td><td class="vis">·</td></tr><tr class=" "><td class="dt">c. 300 BCE–180 CE</td><td class="nm">Stoicism</td><td class="b">Classical Greek</td><td class="a">—</td><td class="who">Zeno, Epictetus, Marcus Aurelius</td><td class="vis"><b>●</b> 3 Nov</td></tr><tr class=" "><td class="era" rowspan="1">Medieval</td><td class="dt">c. 1100–1400</td><td class="nm">Scholasticism</td><td class="b">Classical Greek</td><td class="a">—</td><td class="who">Anselm, Aquinas, Ockham</td><td class="vis">·</td></tr><tr class=" "><td class="era" rowspan="3">Early modern</td><td class="dt">1630s–1710s</td><td class="nm">Rationalism</td><td class="b">—</td><td class="a">Scholasticism</td><td class="who">Descartes, Spinoza, Leibniz</td><td class="vis">·</td></tr><tr class=" "><td class="dt">1680s–1770s</td><td class="nm">Empiricism</td><td class="b">—</td><td class="a">Rationalism</td><td class="who">Locke, Berkeley, Hume</td><td class="vis">·</td></tr><tr class=" near"><td class="dt">1781–1831</td><td class="nm">German Idealism</td><td class="b">Rationalism, Empiricism</td><td class="a">—</td><td class="who">Kant, Fichte, Schelling, Hegel</td><td class="vis"><b>●</b> 9 Nov</td></tr><tr class=" "><td class="era" rowspan="3">19th century</td><td class="dt">1780s–1870s</td><td class="nm">Utilitarianism</td><td class="b">Empiricism</td><td class="a">—</td><td class="who">Bentham, Mill, Sidgwick</td><td class="vis">·</td></tr><tr class=" "><td class="dt">1840s–</td><td class="nm">Marxism</td><td class="b">German Idealism</td><td class="a">—</td><td class="who">Marx, Engels, Gramsci</td><td class="vis">·</td></tr><tr class=" "><td class="dt">1870s–</td><td class="nm">Pragmatism</td><td class="b">Empiricism</td><td class="a">—</td><td class="who">Peirce, James, Dewey</td><td class="vis">·</td></tr><tr class=" "><td class="era" rowspan="6">20th century to now</td><td class="dt">1880s–</td><td class="nm">Analytic philosophy</td><td class="b">Empiricism</td><td class="a">German Idealism</td><td class="who">Frege, Russell, Wittgenstein</td><td class="vis">·</td></tr><tr class=" near"><td class="dt">1900–</td><td class="nm">Phenomenology</td><td class="b">German Idealism</td><td class="a">—</td><td class="who">Husserl, Heidegger, Merleau-Ponty</td><td class="vis">·</td></tr><tr class="here "><td class="dt">1840s–1960s</td><td class="nm">Existentialism</td><td class="b">Phenomenology</td><td class="a">German Idealism</td><td class="who">Kierkegaard, Nietzsche, Sartre, Beauvoir, Camus</td><td class="vis"><b>Open now · 12 Nov</b></td></tr><tr class="open"><td colspan="6"><div class="open-in">
+<div class="oq"><h3>Key questions</h3><ol><li>If nothing hands me a purpose, how do I live?</li><li>What does it mean to be free, and to answer for it?</li><li>How do I live as myself and not as the crowd expects?</li></ol><h3>Themes</h3><p>Freedom and responsibility / Anxiety / Authenticity and bad faith / Existence before essence / The individual against the crowd</p></div>
+<div class="ot"><h3>Thinkers · open one to study it with Claude</h3><ul><li><b>Kierkegaard</b><i>1813–1855</i></li><li><b>Nietzsche</b><i>1844–1900</i></li><li><b>Sartre</b><i>1905–1980</i></li><li><b>Beauvoir</b><i>1908–1986</i></li><li><b>Camus</b><i>1913–1960</i></li></ul><h3>Reacted against</h3><p>Hegel's system, which explains everything except the person living inside it, and the rationalism that puts abstract reason before a lived life.</p></div>
+<div><h3>Departing from Existentialism</h3><table class="dep">
+<tr><td class="pf">1</td><td class="to">Phenomenology<small>built on</small></td><td class="why">The method Sartre and Beauvoir took from Husserl and Heidegger.</td><td class="go">BOARD ›</td></tr>
+<tr><td class="pf">2</td><td class="to">Absurdism<small>grew from it</small></td><td class="why">Camus's answer when the search for meaning meets a silent world.</td><td class="go">BOARD ›</td></tr>
+<tr class="ag"><td class="pf">3</td><td class="to">Post-structuralism<small>pushed back</small></td><td class="why">Foucault and Derrida doubted the free, self-making subject.</td><td class="go">BOARD ›</td></tr>
+<tr class="ag"><td class="pf">4</td><td class="to">German Idealism<small>what it pushed against</small></td><td class="why">Go back to the system it was arguing with. Visited 9 Nov.</td><td class="go">BOARD ›</td></tr>
+</table></div></div></td></tr><tr class=" near"><td class="dt">1940s–</td><td class="nm">Absurdism</td><td class="b">Existentialism</td><td class="a">—</td><td class="who">Camus</td><td class="vis">·</td></tr><tr class=" near"><td class="dt">1960s–</td><td class="nm">Post-structuralism</td><td class="b">—</td><td class="a">Existentialism</td><td class="who">Foucault, Derrida, Deleuze</td><td class="vis">·</td></tr></tbody></table>
+<div class="foot"><span>Amber names are one step from the open row.</span><span>Sample content</span></div></div>
+<aside class="strip">
+  <div><h6>03 · Wordmark</h6><div class="bs-wm"><span style="font:700 38px/1 'Barlow Condensed';letter-spacing:.2em;text-transform:uppercase;color:#ffb224;background:#11120f;padding:10px 6px 10px 16px">Meander</span></div><p class="bs-pers">A station departure board. Dry, exact, everything on one page.</p><p class="bs-alt">Name: Meander, or "Platform"</p><p class="bs-note">Sample content, not yet checked for accuracy (R7). Draft copy.</p></div>
+  <div><h6>Palette</h6><div class="bs-sw"><div><i style="background:#11120f"></i><span>board<br>#11120f</span></div><div><i style="background:#e9e4d4"></i><span>text<br>#e9e4d4</span></div><div><i style="background:#ffb224"></i><span>amber<br>#ffb224</span></div><div><i style="background:#9bd17a"></i><span>built<br>#9bd17a</span></div><div><i style="background:#ff6a4d"></i><span>against<br>#ff6a4d</span></div><div><i style="background:#2b2c26"></i><span>rule<br>#2b2c26</span></div></div></div>
+  <div><h6>Type pair</h6><div class="bs-ty1" style="font-family:'Barlow Condensed';font-weight:700;text-transform:uppercase;letter-spacing:.06em">Platform 2</div><div class="bs-tyn">Barlow Condensed 700 caps · names</div><div class="bs-ty2" style="font-family:'JetBrains Mono';font-size:12px">1840s–1960s · board ›</div><div class="bs-tyn">JetBrains Mono 400 · dates, notes</div></div>
+  <div><h6>Voice</h6><dl><dt>First visit</dt><dd>Nothing visited yet. All 16 are boarding.</dd><dt>Go next</dt><dd>Departing from Existentialism</dd><dt>Been there</dt><dd>Visited 4 of 16 over 3 days</dd></dl></div>
+  <div><h6>Signature · axis</h6><div class="bs-sig"><div style="background:#11120f;padding:8px 12px;display:flex;gap:12px;align-items:center;width:250px"><span style="font:700 24px 'JetBrains Mono';color:#ffb224">2</span><span style="font:700 20px 'Barlow Condensed';letter-spacing:.06em;color:#fff;text-transform:uppercase">Absurdism</span><span style="margin-left:auto;font:500 11px 'JetBrains Mono';color:#ffb224">BOARD ›</span></div></div><p><b>The lit amber row; go-next reads as numbered departures.</b></p><p class="bs-pers">Axis: a table instead of a graph, highest density, dark · seed-derived</p></div>
+</aside>
+</body></html>

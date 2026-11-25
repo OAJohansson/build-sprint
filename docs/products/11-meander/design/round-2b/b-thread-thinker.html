@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#e9ebe8">
+<title>Meander · Red thread · thinker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,500&family=Geist:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1440px;height:900px;overflow:hidden;background:#e9ebe8}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+h1,h2,h3{font-weight:inherit;font-size:inherit;text-wrap:balance}
+p{text-wrap:pretty}
+.screen{width:1440px;height:900px;position:relative;overflow:hidden;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+svg.threads{position:absolute;inset:0;width:1440px;height:900px;pointer-events:none}
+svg.threads path{fill:none;stroke-linecap:round}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+#chk{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.screen{--paper:#e9ebe8;--ink:#131a22;--mid:#3f4954;--quiet:#5c6672;--hair:#c3c8c9;--red:#c8402d;background:var(--paper);color:var(--ink);font:400 15px/1.45 Geist,sans-serif}
+svg.threads path.th{stroke:#131a22;stroke-opacity:.36;stroke-width:1.1}
+svg.threads path.against{stroke-dasharray:1.5 4.5}
+svg.threads path.focus{stroke-opacity:.8;stroke-width:1.3}
+svg.threads path.red{stroke:var(--red);stroke-width:1.2;stroke-linejoin:round}
+svg.threads path.pull{stroke:var(--red);stroke-width:2.4}
+svg.threads circle.knot{fill:var(--red)}
+header{position:absolute;left:60px;top:34px;right:60px;display:flex;align-items:center;gap:24px}
+.wm{font:italic 500 30px/1 'Bodoni Moda',serif;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+.back{font-size:13.5px;color:var(--mid);padding:9px 14px;border-radius:99px;border:1px solid var(--hair);transition:transform 160ms cubic-bezier(.23,1,.32,1),border-color 160ms ease}
+.been{margin-left:auto;font-size:13.5px;color:var(--mid)}
+.w{position:absolute;transform:translateY(-50%);white-space:nowrap;font-family:'Bodoni Moda',serif;line-height:1.05;padding:2px 0 3px;transition:color 160ms ease}
+.w.t1{font-size:28px;font-weight:500;letter-spacing:-.015em}
+.w.t2{font-size:19px;font-weight:500;color:var(--mid)}
+.w em{font:400 13px/1 Geist,sans-serif;font-style:normal;letter-spacing:0;color:var(--quiet);margin-right:10px;position:relative;top:-.2em}
+.w small{font:400 12.5px/1 Geist,sans-serif;letter-spacing:0;color:var(--quiet);margin-left:9px;position:relative;top:-.15em}
+.w.wrap{white-space:normal;max-width:300px;text-wrap:balance}.w.t2.wrap{max-width:160px}
+button.w::before{content:"";position:absolute;inset:-8px}
+h1.w{font:italic 500 70px/1 'Bodoni Moda',serif;letter-spacing:-.03em;padding:0 4px 8px 0}
+.here{position:absolute;font-size:13px;color:var(--quiet);white-space:nowrap}
+.band{position:absolute;left:60px;right:60px;top:676px;bottom:0;border-top:1px solid var(--ink);padding-top:22px}
+.q{display:grid;grid-template-columns:repeat(3,1fr);gap:0 48px}
+.q li{font:400 23px/1.22 'Bodoni Moda',serif;letter-spacing:-.01em;text-wrap:balance}
+.people{position:absolute;left:0;right:0;bottom:26px;display:grid;grid-template-columns:repeat(5,1fr);gap:0 12px;border-top:1px solid var(--hair);padding-top:8px}
+.people button{display:block;width:100%;padding:10px 0;font-size:15px;color:var(--mid);transition:transform 160ms cubic-bezier(.23,1,.32,1),color 160ms ease}
+.people button[aria-pressed=true]{color:var(--ink);font-weight:500}
+.people button[aria-pressed=true] span{border-bottom:2px solid var(--red);padding-bottom:3px}
+.who3{display:grid;grid-template-columns:repeat(3,1fr);gap:0 48px}
+.who3 h2{font:italic 500 38px/1.02 'Bodoni Moda',serif;letter-spacing:-.02em;text-wrap:balance}
+.dates{font-size:13.5px;color:var(--quiet);margin:6px 0 14px}
+.act{display:flex;align-items:center;gap:14px}
+.study{background:var(--ink);color:var(--paper);font:500 15px/1 Geist,sans-serif;padding:14px 20px;border-radius:10px;white-space:nowrap;flex-shrink:0;transition:transform 160ms cubic-bezier(.23,1,.32,1),background-color 160ms ease}
+.hint{font-size:12.5px;line-height:1.35;color:var(--quiet)}
+.sum{font-size:15.5px;line-height:1.5;color:#27303a}
+.ideas li{font:400 19px/1.22 'Bodoni Moda',serif;padding-left:20px;position:relative}
+.ideas li+li{margin-top:7px}
+.ideas li:before{content:"";position:absolute;left:0;top:.5em;width:7px;height:7px;border-radius:50%;background:var(--red)}
+button:focus-visible{outline:2px solid var(--red);outline-offset:4px}
+button:active{transform:scale(.97)}
+button.w:active{transform:translateY(-50%) scale(.98)}
+@media (hover:hover){.back:hover{border-color:var(--quiet)}button.w:hover,.people button:hover{color:var(--ink)}.study:hover{background:#27303a}}
+
+</style></head>
+<body>
+<div class="screen"><svg class="threads" aria-hidden="true"></svg>
+<header><div class="wm" translate="no"><svg width="30" height="18" viewBox="0 0 30 18" aria-hidden="true"><path d="M2 5c7 0 6 9 13 9s6-9 13-9" fill="none" stroke="#c8402d" stroke-width="1.6" stroke-linecap="round"/><circle cx="2.5" cy="5" r="2.2" fill="#c8402d"/><circle cx="15" cy="14" r="2.2" fill="#c8402d"/></svg>Meander</div><button class="back" title="Esc" aria-keyshortcuts="Escape">Whole field</button><p class="been">4 of 16 visited, over 3 days</p></header>
+<main><button class="w t2 lb " data-id="pre" style="left:44px;top:214px">Presocratics</button>
+<button class="w t2 lb " data-id="cla" style="left:196px;top:130px">Classical Greek<small>5&nbsp;Nov</small></button>
+<button class="w t2 lb " data-id="epi" style="left:44px;top:284px">Epicureanism</button>
+<button class="w t2 lb " data-id="sto" style="left:44px;top:130px">Stoicism<small>3&nbsp;Nov</small></button>
+<button class="w t2 lb " data-id="sch" style="left:192px;top:214px">Scholasticism</button>
+<button class="w t2 lb " data-id="rat" style="left:190px;top:316px">Rationalism</button>
+<button class="w t2 lb " data-id="emp" style="left:190px;top:484px">Empiricism</button>
+<button class="w t1 lb " data-id="ide" style="left:330px;top:392px"><em>pushed against</em>German Idealism<small>9&nbsp;Nov</small></button>
+<button class="w t2 lb " data-id="uti" style="left:110px;top:580px">Utilitarianism</button>
+<button class="w t2 lb " data-id="mar" style="left:420px;top:190px">Marxism</button>
+<button class="w t2 lb " data-id="pra" style="left:250px;top:640px">Pragmatism</button>
+<button class="w t2 lb " data-id="ana" style="left:440px;top:600px">Analytic philosophy</button>
+<button class="w t1 lb " data-id="phe" style="left:620px;top:244px"><em>built on</em>Phenomenology</button>
+<h1 class="w lb" data-id="exi" style="left:760px;top:392px">Existentialism</h1>
+<button class="w t1 lb " data-id="abs" style="left:1050px;top:548px"><em>grew from it</em>Absurdism</button>
+<button class="w t1 lb " data-id="pos" style="left:1040px;top:244px"><em>pushed back</em>Post-structuralism</button><p class="here lb">1840s–1960s · you are here</p></main>
+<aside class="band solid" aria-label="Thinker"><div class="who3"><div><h2>Simone de Beauvoir</h2><p class="dates">1908–1986</p><div class="act"><button class="study">Study with Claude</button><p class="hint">Copies a prompt you can paste into Claude.</p></div></div><p class="sum">French philosopher who carried existentialist freedom into ethics and politics. In The Second Sex she argued that “woman” is a situation one is made into, not a fixed nature.</p><ul class="ideas"><li>One is not born, but becomes, a woman</li><li>An ethics of ambiguity</li><li>My freedom needs the freedom of others</li></ul></div><ul class="people" aria-label="Thinkers"><li><button aria-pressed="false"><span>Søren Kierkegaard</span></button></li><li><button aria-pressed="false"><span>Friedrich Nietzsche</span></button></li><li><button aria-pressed="false"><span>Jean-Paul Sartre</span></button></li><li><button aria-pressed="true"><span>Simone de Beauvoir</span></button></li><li><button aria-pressed="false"><span>Albert Camus</span></button></li></ul></aside></div>
+<script>window.WEB={"mode":"word","routes":{"rat-emp":"b"},"links":[["pre","cla","built"],["cla","sto","built"],["pre","epi","built"],["cla","sch","built"],["sch","rat","against"],["rat","emp","against"],["rat","ide","built"],["emp","ide","built"],["emp","uti","built"],["ide","mar","built"],["ide","exi","against focus"],["phe","exi","built focus"],["emp","pra","built"],["ide","phe","built"],["ide","ana","against"],["emp","ana","built"],["exi","abs","built focus"],["exi","pos","against focus"]],"trail":["sto","cla","ide","exi"]};window.WEB.after=function(box,el,svg){
+  const NS='http://www.w3.org/2000/svg',ids=window.WEB.trail,b=ids.map(i=>box(el(i)));let d='';const knots=[];
+  b.forEach((r,i)=>{const y=r.y+r.h+1,x1=r.x-2,x2=r.x+r.w+3;
+    if(i===0)d+='M'+x1+' '+y;
+    else{const p=b[i-1],py=p.y+p.h+1,px=p.x+p.w+3,k=x1-px>20?(x1-px)*.5:34;d+='C'+(px+k)+' '+py+' '+(x1-k)+' '+y+' '+x1+' '+y}
+    knots.push([x1,y]);d+='L'+x2+' '+y});
+  const p=document.createElementNS(NS,'path');p.setAttribute('d',d);p.setAttribute('class','red');p.dataset.a='red';p.dataset.skip=ids.join(' ');svg.appendChild(p);
+  knots.forEach(k=>{const c=document.createElementNS(NS,'circle');c.setAttribute('cx',k[0]);c.setAttribute('cy',k[1]);c.setAttribute('r',3.2);c.setAttribute('class','knot');svg.appendChild(c)});
+  svg.querySelectorAll('path.focus').forEach(t=>{const other=t.dataset.a==='exi'?t.dataset.b:t.dataset.a;if(ids.includes(other))return;
+    const L=t.getTotalLength(),e=box(el('exi')),s=t.getPointAtLength(0),fromExi=s.x>e.x-12&&s.x<e.x+e.w+12&&s.y>e.y-12&&s.y<e.y+e.h+12;
+    const q=document.createElementNS(NS,'path');q.setAttribute('d',t.getAttribute('d'));q.setAttribute('class','pull');q.dataset.a=t.dataset.a;q.dataset.b=t.dataset.b;
+    const n=Math.min(34,L*.45);q.setAttribute('stroke-dasharray',fromExi?n+' '+(L+10):'0 '+(L-n)+' '+n+' 10');svg.appendChild(q)});
+  const e=box(el('exi')),h=document.querySelector('.here');if(h){h.style.left=(e.x+2)+'px';h.style.top=(e.y+e.h+14)+'px'}
+};</script><script>
+(function(){
+const W=window.WEB, scrEl=document.querySelector('.screen'), svg=document.querySelector('svg.threads');
+if(!W||!svg) return;
+const NS='http://www.w3.org/2000/svg';
+const el=id=>scrEl.querySelector('[data-id="'+id+'"]');
+function box(e){const s=scrEl.getBoundingClientRect(),r=e.getBoundingClientRect();return {x:r.left-s.left,y:r.top-s.top,w:r.width,h:r.height}}
+function y2b(T,B){return B.y-(T.y+T.h)}
+function pathFor(a,b){
+  const A=el(a),B=el(b);
+  if(W.mode==='word'){
+    const ra=box(A),rb=box(B);let L=ra,R=rb;if(ra.x>rb.x){L=rb;R=ra}
+    const gap=R.x-(L.x+L.w);
+    if(gap>24&&!(W.routes||{})[a+'-'+b]){const x1=L.x+L.w+7,y1=L.y+L.h*.56,x2=R.x-7,y2=R.y+R.h*.56,dx=(x2-x1)*.5;return 'M'+x1+' '+y1+'C'+(x1+dx)+' '+y1+' '+(x2-dx)+' '+y2+' '+x2+' '+y2}
+    let T=ra,Bm=rb;if(ra.y>rb.y){T=rb;Bm=ra}
+    const route=(W.routes||{})[a+'-'+b];
+    if(route==='b'){const x1=T.x-7,y1=T.y+T.h*.56,x2=Bm.x-7,y2=Bm.y+Bm.h*.56,k=18+(y2-y1)*.07;return 'M'+x1+' '+y1+'C'+(x1-k)+' '+y1+' '+(x2-k)+' '+y2+' '+x2+' '+y2}
+    const lo=Math.max(T.x,Bm.x),hi=Math.min(T.x+T.w,Bm.x+Bm.w),mid=typeof route==='number'?route:(lo+hi)/2;
+    const sw=Math.min(14,(y2b(T,Bm))*.12),x1=Math.min(Math.max(mid-sw,T.x+10),T.x+T.w-10),x2=Math.min(Math.max(mid+sw,Bm.x+10),Bm.x+Bm.w-10),y1=T.y+T.h+3,y2=Bm.y-3,dy=(y2-y1)*.5;
+    return 'M'+x1+' '+y1+'C'+x1+' '+(y1+dy)+' '+x2+' '+(y2-dy)+' '+x2+' '+y2;
+  }
+  let x1=+A.dataset.x,y1=+A.dataset.y,x2=+B.dataset.x,y2=+B.dataset.y;const r1=+A.dataset.r+(W.pad||3),r2=+B.dataset.r+(W.pad||3);
+  const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),ux=dx/len,uy=dy/len;
+  const mx=(x1+x2)/2,my=(y1+y2)/2;let cx,cy;
+  const key=a+'-'+b, ov=(W.bows||{})[key];
+  if(W.mode==='sag'){const k=ov!==undefined?ov:.09;cx=mx;cy=my+len*k}
+  else{const k=ov!==undefined?ov:.13;let nx=-uy,ny=ux;const C=W.centre;if((mx+nx-C[0])**2+(my+ny-C[1])**2<(mx-nx-C[0])**2+(my-ny-C[1])**2){nx=-nx;ny=-ny}cx=mx+nx*len*k;cy=my+ny*len*k}
+  // trim at the node edges, heading towards the control point
+  const a1=Math.atan2(cy-y1,cx-x1),a2=Math.atan2(cy-y2,cx-x2);
+  x1+=Math.cos(a1)*r1;y1+=Math.sin(a1)*r1;x2+=Math.cos(a2)*r2;y2+=Math.sin(a2)*r2;
+  return 'M'+x1.toFixed(1)+' '+y1.toFixed(1)+'Q'+cx.toFixed(1)+' '+cy.toFixed(1)+' '+x2.toFixed(1)+' '+y2.toFixed(1);
+}
+function draw(){
+  svg.querySelectorAll('path.th').forEach(p=>p.remove());
+  const made=[];
+  W.links.forEach(l=>{const p=document.createElementNS(NS,'path');p.setAttribute('d',pathFor(l[0],l[1]));p.setAttribute('class','th '+l[2]);p.dataset.a=l[0];p.dataset.b=l[1];made.push(p)});
+  // quiet threads first, the important ones on top
+  made.sort((p,q)=>(/focus|walked/.test(p.getAttribute('class'))?1:0)-(/focus|walked/.test(q.getAttribute('class'))?1:0)).forEach(p=>svg.appendChild(p));
+  if(W.after) W.after(box,el,svg);
+  if(location.hash==='#check') check();
+}
+function check(){
+  const out=[];const labels=[...scrEl.querySelectorAll('.lb,.solid')].map(e=>({e,b:box(e),id:(e.closest('[data-id]')||e).dataset.id||e.className}));
+  const circs=[...scrEl.querySelectorAll('.circ')].map(e=>({id:e.dataset.id,x:+e.dataset.x,y:+e.dataset.y,r:+e.dataset.r}));
+  for(let i=0;i<circs.length;i++)for(let j=i+1;j<circs.length;j++){const a=circs[i],b=circs[j];if(Math.hypot(a.x-b.x,a.y-b.y)<a.r+b.r+6)out.push('DISC '+a.id+' x DISC '+b.id)}
+  circs.forEach(c=>labels.forEach(L=>{if(L.id===c.id)return;const b=L.b,nx=Math.max(b.x,Math.min(c.x,b.x+b.w)),ny=Math.max(b.y,Math.min(c.y,b.y+b.h));if(Math.hypot(nx-c.x,ny-c.y)<c.r+3)out.push('DISC '+c.id+' x LABEL '+L.id)}));
+  svg.querySelectorAll('path').forEach(p=>{const n=p.getTotalLength();const hit=new Set();
+    for(let s=0;s<=n;s+=3){const pt=p.getPointAtLength(s);labels.forEach(L=>{if(W.mode==='word'&&(L.id===p.dataset.a||L.id===p.dataset.b))return;if(p.dataset.skip&&p.dataset.skip.includes(L.id))return;if(String(L.id).indexOf('disc')===0)return;const b=L.b,m=2;if(pt.x>b.x-m&&pt.x<b.x+b.w+m&&pt.y>b.y-m&&pt.y<b.y+b.h+m)hit.add(L.id)});circs.forEach(c=>{if(c.id===p.dataset.a||c.id===p.dataset.b)return;if(Math.hypot(pt.x-c.x,pt.y-c.y)<c.r+2)hit.add('disc '+c.id)})}
+    hit.forEach(h=>out.push('THREAD '+(p.dataset.a||p.getAttribute('class'))+'-'+(p.dataset.b||'')+' x LABEL '+h))});
+  for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++){const a=labels[i].b,b=labels[j].b;if(labels[i].e.contains(labels[j].e)||labels[j].e.contains(labels[i].e))continue;if(a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h)out.push('LABEL '+labels[i].id+' x LABEL '+labels[j].id)}
+  labels.forEach(L=>{const b=L.b;if(b.x<8||b.y<8||b.x+b.w>1432||b.y+b.h>892)out.push('OFFSCREEN '+L.id+' '+Math.round(b.x)+','+Math.round(b.y)+' '+Math.round(b.w)+'x'+Math.round(b.h))});
+  scrEl.querySelectorAll('*').forEach(e=>{if(e.scrollWidth>e.clientWidth+1&&getComputedStyle(e).overflow!=='visible'&&e.clientWidth>0)out.push('OVERFLOW '+(e.className||e.tagName))});
+  const pre=document.createElement('pre');pre.id='chk';pre.textContent='CHECK\n'+out.join('\n')+'\nEND';document.body.appendChild(pre);
+}
+(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(()=>setTimeout(draw,60));
+})();</script>
+</body></html>

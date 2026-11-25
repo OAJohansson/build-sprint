@@ -26,3 +26,4 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 20 | Owner, own use | The card is too sparse (one sentence per theme, about 5 minutes to read all). Aim for closer to a Wikipedia article on the school, still easy to navigate, from several reliable sources, all referenced | open |
 | 21 | Owner, own use | First open: "what am I supposed to do with this?" Some light guidance, keeping it simple | open |
 | 22 | Owner, own use | "Your thread" records every click, so it's unclear what value it adds; rethink it | parked (backlog, owner's call) |
+| 23 | Owner, own use | "Built on", "pushed against" and "grew from it" are unclear: does "built on" over Marxism mean Marxism built on Critical Theory? | fixed (T26), on branch |

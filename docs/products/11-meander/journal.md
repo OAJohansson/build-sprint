@@ -87,3 +87,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - Logged as feedback #16–22. I proposed an order, asked the owner to confirm it, and started no work.
 - **Order agreed** (focus mode, then the school card as one job, then the first open; "Your thread" parked). **Subscription only (L22):** the owner doesn't want to spend on the API, so grading runs in fresh subagents with a fixed rubric, a second-grader sample and a hand spot-check.
 - **Focus mode built (L23):** unrelated schools become faint dots with no label, and their threads are hidden. Checked: 0 label overlaps in all 23 focuses; faint dots that land under a label are hidden.
+- **Link words unclear (#23, T26):** the old words flipped subject depending on direction. Now the neighbour is always the subject, the name comes first and "it" is the school in the centre: "Marxism / inspired it", "Post-structuralism / provoked it", "Feminist Philosophy / grew from it".

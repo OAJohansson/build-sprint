@@ -107,13 +107,16 @@ export type Neighbour = {
 export const reasonFor = (link: Link, focus: string) =>
   (focus === link.from ? link.labelFromOlder || link.label : link.label) ?? "";
 
-/** The verb a neighbour carries, seen from the focused school. */
+/**
+ * What a neighbour did, seen from the focused school. The neighbour is always the subject and "it" is the
+ * focus, so the label reads as a sentence under the name: "Marxism / inspired it" (owner feedback #23).
+ * Older neighbours inspired or provoked the focus; newer ones grew from it or pushed back on it.
+ */
 export function verbFor(link: Link, focus: string) {
-  const newer = focus === link.to;
-  if (link.type === "built") return newer ? "built on" : "grew from it";
-  // "pushed back on it", not "pushed back": the neighbour pushed against the focus (user test F3).
-  if (link.type === "against") return newer ? "pushed against" : "pushed back on it";
-  return newer ? "built on, then pushed against" : "grew from it, then pushed back on it";
+  const newer = focus === link.to; // the neighbour is the older school
+  if (link.type === "built") return newer ? "inspired it" : "grew from it";
+  if (link.type === "against") return newer ? "provoked it" : "pushed back on it";
+  return newer ? "inspired it, then provoked it" : "grew from it, then pushed back on it";
 }
 
 /** Schools one thread away from `focus`, in link order. */

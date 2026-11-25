@@ -221,6 +221,8 @@ export function GlobeView({ nav }: { nav: Nav }) {
                   ref={(el) => { if (el) labelRefs.current.set(n.id, el); else labelRefs.current.delete(n.id); }}
                   style={pl ? { left: pl.left, top: pl.top, alignItems: pl.align, textAlign: pl.text } : undefined}
                 >
+                  {/* name first, then what it did, so it reads as a sentence: "Marxism / inspired it" (#23) */}
+                  <b className={n.label.length > 20 ? "wrap" : undefined}>{n.label}</b>
                   {n.near && (
                     <em>
                       {n.near.verb}
@@ -228,7 +230,6 @@ export function GlobeView({ nav }: { nav: Nav }) {
                       {n.near.reason && <span className="why">· {n.near.reason}</span>}
                     </em>
                   )}
-                  <b className={n.label.length > 20 ? "wrap" : undefined}>{n.label}</b>
                   {v && <span className="sr-only">, visited</span>}
                 </span>
               </button>

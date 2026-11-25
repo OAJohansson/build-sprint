@@ -58,8 +58,8 @@ export function PhoneView({ nav }: { nav: Nav }) {
                     <button type="button" className={v ? "v" : undefined} onClick={() => nav.openSchool(n.school.id)}>
                       <i aria-hidden="true" />
                       <span>
-                        <em>{n.verb}</em>
                         <b>{n.school.name}</b>
+                        <em>{n.verb}</em>
                         {n.reason && <small>{n.reason}</small>}
                         {v && <span className="sr-only">, visited</span>}
                       </span>

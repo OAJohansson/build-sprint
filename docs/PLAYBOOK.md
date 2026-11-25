@@ -150,7 +150,11 @@ hour, not a day. Names in brackets are where each practice comes from; see
   Founder they are the only stops between kickoff and the final review, plus (3) **the canvas
   sign-off** (07 Six AM Lab, decision 0028 as amended 27 Oct): the final screens go on a Claude
   Design canvas, I comment in place, open questions get quick mockup options, updated screens sit
-  beside the originals, and the UI build starts only after I approve the canvas.
+  beside the originals, and the UI build starts only after I approve the canvas. At the sign-off,
+  update `evals.md` and the brief's requirements to match the approved design, so graders don't
+  fail deliberate choices (11 Meander). The first round's brief sets density rules for "calm at
+  first glance" (few words, large type, one focal point): ten directions at once came out dense
+  and gave me a headache (11 Meander).
 - Fill in **user**, **problem** and **bet** (one line each) on the card `docs/products/NN-slug.md`.
   The bet is the smallest thing that could solve the problem by tonight. Cut everything else.
 
@@ -258,6 +262,10 @@ Deploying in the morning means the rest of the day is iterating on a live app, w
   Founder the PR, a preview link and the eval report (every agent-checkable check with pass/fail
   and evidence, run by graders, never by the builder), then I run my owner-only checks and any
   check that needs my taste data (decision 0028).
+- **AI-written content** (11 Meander): save the full text of trusted sources, give every item a
+  citation, and have a separate grader check each claim against its cited section (supported,
+  unsupported, wrong), plus a hand spot-check of 20. Estimate the cost and check the API key's
+  usage limit before a big grading run.
 - Full method: [`user-testing/README.md`](user-testing/README.md).
 
 ## 4. Wrap up (≈30 min)

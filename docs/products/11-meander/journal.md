@@ -4,7 +4,7 @@ What happened, what was decided and why. Newest last.
 
 ## To carry over
 
-For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md).
+For the shared pages (knowledge bank, problems, learnings, process changes), written once at wrap-up (AGENTS.md). **Written 25 Nov** (wrap-up commit).
 
 - **Problems to solve:** add the row for this product (big fields, one-school deep dives, boredom) with status "Building: 11 Meander".
 - **Knowledge bank, design and UX:** Shneiderman's mantra "overview first, zoom and filter, then details on demand" (1996, information visualisation).
@@ -61,3 +61,5 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Content passes every bar (round 4):** 0 wrong, 0 unsupported of 855 items; prompts 88/88; links 56/56; sourced 100%; spot-check 20/20. Caveat kept: ~195 items last graded in-session (API judge over its limit until 1 Dec); a judge re-run after 1 Dec would close it. Backlog: re-run the judge; 7 link labels longer than 4 words.
 - **Globe layout re-tuned (L21):** 0 overlaps, 0 labels over dots, 0 swapped pairs in every focus; 8 rim pokes. Date line wraps at 340 px; hovered reason paints above other labels. Final content re-imported.
 - **First working version gate (13 Nov):** preview https://meander-igcr33bd9-mimirswell.vercel.app, eval report in `eval-report.md`. Owner asked to run straight through to the merge ("don't stop for me until the merge"), so the gate's open questions go with the merge ask: F5 "next on your thread" (tests the hop bet), F4 mark 2–3 neighbours to try first, era cues in the overview (job 1 scored 3/5). All three are in the backlog as the next phase's candidates.
+- **Merged and live (25 Nov):** PR #100 merged on the owner's yes, live at https://meander-virid.vercel.app; notebook republished (page + 7 files).
+- **Wrap-up (25 Nov):** success check, retro (three process changes), story, card shipped; shared pages written once: knowledge bank (Shneiderman, advance organizers and dual coding, interleaving and spacing, grading AI content against a corpus, with quiz questions), Problems to solve, learnings and the process changelog, playbook steps 1 and 3b.

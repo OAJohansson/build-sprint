@@ -607,6 +607,12 @@ A fresh critic each round gives fresh opinions, so scores bounce (7.5, 7, 8, 8, 
 converging. Keep one reviewer and a fixed rubric for a slice, anchored to visual references.
 *Where:* Six AM Ears and Mentor design rounds.
 
+#### Overview first, zoom and filter, then details on demand
+Shneiderman's rule for information displays: show the whole thing first, let people narrow to what
+interests them, and give detail only when asked. *Why it matters:* people orient faster when they
+can see where a piece fits before reading it. *Where:* Meander (11): the whole globe of schools,
+then one school facing you, then a thinker. *(Ben Shneiderman, 1996)*
+
 ### Accessibility
 
 #### Contrast ratio
@@ -715,6 +721,21 @@ app stores before you fall for it. *Where:* Wont ("I won't" plus a wonton); Magp
 collects what it loves, picked over Tastebud because several food apps already used that name.
 *(Marty Neumeier, The Brand Gap)*
 
+#### Advance organizers and dual coding
+An advance organizer is a frame given before new material, so new facts have something to hang
+on (Ausubel). Dual coding: words plus a picture are remembered better than words alone, for almost
+everyone (Paivio). Matching teaching to a person's "learning style" (visual, auditory) does not
+improve learning in studies. *Why it matters:* design for everyone's memory, not for a type of
+learner. *Where:* Meander (11) started from "I'm a visual learner"; the map helps because of dual
+coding, not because of a style. *(David Ausubel; Allan Paivio; Pashler et al. 2008 on learning styles)*
+
+#### Interleaving and spacing
+Mixing related topics (interleaving) and coming back after a gap (spacing) feel harder than
+studying one block at a time, but people remember more later: "desirable difficulties". The
+evidence is strongest for maths and telling categories apart. *Why it matters:* variety can be
+good for learning, not only for motivation. *Where:* Meander (11): small pieces across connected
+schools instead of weeks in one. *(Robert and Elizabeth Bjork)*
+
 ### Quiz
 
 **Q:** What are the three parts of COM-B, and why check them before designing?
@@ -818,6 +839,15 @@ collects what it loves, picked over Tastebud because several food apps already u
 
 **Q:** Two screens describe the same trend in different words. What goes wrong?
 **A:** People trust the first one they read and doubt both; one fact should have one wording everywhere.
+
+**Q:** What is Shneiderman's information-seeking mantra, and how did Meander use it?
+**A:** Overview first, zoom and filter, then details on demand. Meander shows the whole globe of schools, then one school facing you, then a thinker's card.
+
+**Q:** Does matching teaching to a "visual learner" help? What does?
+**A:** No: learning-styles matching doesn't hold up in studies. Dual coding (words plus a picture) helps almost everyone, and an advance organizer gives new facts a frame.
+
+**Q:** Why can interleaving and spacing beat studying one topic in a block?
+**A:** They feel harder but strengthen long-term memory ("desirable difficulties"), with the best evidence in maths and category learning.
 
 ## Technology
 
@@ -1461,6 +1491,15 @@ stands. *Where:* Six AM Mentor E1 (L81–L82). *(Goodhart's law)*
 **Q:** When should you stop changing a prompt to pass an eval?
 **A:** When changes stop improving the method and start fitting the test cases, or scores bounce run to run; then report the result as it stands.
 
+#### Grading AI-written content against a source corpus
+To trust AI-written facts: save the full text of trusted sources, make every item cite the section
+it rests on, then have a separate grader read each claim next to its cited section and mark it
+supported, unsupported or wrong, plus a hand spot-check. Never check against a summary: summaries
+invent things too. *Why it matters:* an AI writer with the sources in hand still produced about one
+unsupported claim in ten. *Where:* Meander (11): 2,825 claims, from 3 wrong and 282 unsupported to
+0 and 0 over four rounds, about $28 of judge calls. Budget the run and check the key's usage limit
+first: ours ran out halfway.
+
 ### Quiz
 
 **Q:** Why can an AI design critic get stuck at the same score, and what fixes it?
@@ -1550,6 +1589,12 @@ stands. *Where:* Six AM Mentor E1 (L81–L82). *(Goodhart's law)*
 
 **Q:** A model ignores one rule in a third of its outputs, whatever the prompt says. What do you do?
 **A:** Stop prompting for it: do that part in deterministic code around the model and prompt only for what it does well.
+
+**Q:** How do you check AI-written facts, and why not against a summary?
+**A:** Save the full source text, cite a section per item, and have a separate grader judge each claim against the cited section (supported, unsupported, wrong), plus a hand spot-check. Summaries can invent facts themselves.
+
+**Q:** What should you check before a large AI grading run?
+**A:** The estimated cost and the API key's usage limit; Meander's grader hit the limit halfway through.
 
 ## Communication and influence
 

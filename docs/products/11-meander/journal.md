@@ -158,3 +158,7 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   - **Why it missed (my read):** every sketch replaced the globe with a standalone page of flat diagrams. What the owner likes is the globe and a side card in one view.
   - **Their ask:** keep the globe on the side as now, bring the school to life in the card area, and get 10 very different sketches from a different model (Fable 5.2).
   - **Approach:** a fresh designer subagent on Fable (subscription, no API), briefed to keep the current layout and the Clew look, with the current card as baseline. Ten sketches, each a full screen, built for calm.
+- **Round 2 (Fable designer):** ten directions, every one keeping the globe (`design/skeleton-r2/contact-sheet.png`).
+  - The designer's own strongest three: 3 the spine, 2 the knot opens, 5 index cards.
+  - **Sketch gaps:** the link words are the old ones from before T26. Heidegger was added as the sixth person, though he has no thinker card yet.
+  - Waiting on the owner's pick of three.

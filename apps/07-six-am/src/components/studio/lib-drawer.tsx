@@ -92,10 +92,10 @@ function MelodyDrawer({ t, sound, color, onClose }: { t: Timeline; sound: Melody
             </select>
             <ChevronDown aria-hidden />
           </label>
+          {/* T219, T224: the chords right under the preset, compact, so they show without scrolling at 1280 × 800 */}
+          {sound.pattern.chords?.length ? <ChordList t={t} sound={sound} change={change} /> : null}
           <p className={s.dim}>{melodyPreset(sound.preset).about}</p>
           <p className={s.dim}>{sound.name}: saved in {sound.key} {sound.scale} at {Math.round(sound.bpm)} BPM; plays in the track&apos;s key and tempo.</p>
-          {/* T219: the chords sit in the left column, which scrolls on its own (as a fourth column they ran behind Listen) */}
-          {sound.pattern.chords?.length ? <ChordList t={t} sound={sound} change={change} /> : null}
         </section>
         <section className={s.shape} style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
           {POLY_KNOBS.map((id) => (
@@ -127,8 +127,7 @@ function ChordList({ t, sound, change }: { t: Timeline; sound: MelodyLoop; chang
   const moved = semis !== 0;
   return (
     <div className={s.chordBlock} role="group" aria-label="Chords in this sound, per bar">
-      <span className={l.presetLabel}>Chords · {sound.pattern.bars} bar{sound.pattern.bars === 1 ? "" : "s"}, then it repeats</span>
-      {moved && <p className={s.dim}>Moved from {sound.key} {sound.scale} to this track&apos;s key.</p>}
+      <span className={s.chordHead}>Chords · {sound.pattern.bars} bar{sound.pattern.bars === 1 ? "" : "s"}{moved ? `, moved from ${sound.key} ${sound.scale} to this track's key` : ", then it repeats"}</span>
       <div className={s.chordList}>
         {marks.map((m, i) => {
           const shown = transposeChord(m.name, semis) ?? m.name, options = [...new Set([shown, ...inKey])];

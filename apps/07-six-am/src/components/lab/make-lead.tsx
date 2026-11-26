@@ -25,7 +25,7 @@ export function LeadPanel({ m, from }: { m: MelodyModel; from: number | null }) 
   // T219: the panel (header to move row) comes into view when a bar opens or a note is picked.
   const panelRef = useRef<HTMLElement>(null), movesRef = useRef<HTMLDivElement>(null);
   const open = v?.open ?? null, picked = v?.sel ?? null;
-  useEffect(() => { if (open !== null) reveal(panelRef.current, picked !== null ? movesRef.current : null); }, [open, picked]);
+  useEffect(() => { if (open !== null) reveal(panelRef.current, picked !== null ? movesRef.current : null, picked !== null ? "focus" : "header"); }, [open, picked]);
   if (!v || v.open === null) return null;
   const bar = from !== null ? from + v.open : v.open + 1, notes = v.notes, sel = v.sel !== null ? notes[v.sel] : null;
   const nextAt = sel ? notes.filter((x) => x.at > sel.at).reduce((a, x) => Math.min(a, x.at), 16) : 16;
@@ -55,12 +55,14 @@ export function LeadPanel({ m, from }: { m: MelodyModel; from: number | null }) 
           </div>
         ))}
       </div>
-      {/* L-1: one fixed-height row of 32 px buttons, always in place (hidden until a note is picked), so the grid never moves */}
-      <div ref={movesRef} className={c.leadMoves} data-hidden={sel ? undefined : ""} aria-hidden={sel ? undefined : true}>
-        <button onClick={() => m.stretchLead(-1)} disabled={!sel || sel.len <= 1} tabIndex={sel ? 0 : -1}>Shorter</button>
-        <button onClick={() => m.stretchLead(1)} disabled={!sel || sel.at + sel.len >= nextAt} tabIndex={sel ? 0 : -1} title={sel && sel.at + sel.len >= nextAt ? "The next note or the bar's end is in the way" : undefined}>Longer</button>
-        <button onClick={() => m.removeLead()} disabled={!sel} tabIndex={sel ? 0 : -1}>Remove</button>
-      </div>
+      {/* L-1, T225: one fixed-height row of 32 px buttons under the grid (the grid never moves), shown while a note is picked and scrolled in then */}
+      {sel && (
+        <div ref={movesRef} className={c.leadMoves}>
+          <button onClick={() => m.stretchLead(-1)} disabled={sel.len <= 1}>Shorter</button>
+          <button onClick={() => m.stretchLead(1)} disabled={sel.at + sel.len >= nextAt} title={sel.at + sel.len >= nextAt ? "The next note or the bar's end is in the way" : undefined}>Longer</button>
+          <button onClick={() => m.removeLead()}>Remove</button>
+        </div>
+      )}
     </section>
   );
 }

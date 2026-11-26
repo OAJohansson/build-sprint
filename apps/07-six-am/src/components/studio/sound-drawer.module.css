@@ -111,3 +111,9 @@
 .chordPick select { min-height: 32px; width: 100%; background: none; color: var(--ink); border: 1px solid var(--edge, #3a322c); border-radius: 4px; font: 500 13px var(--f-mono); padding: 0 4px; }
 .chordBlock { display: flex; flex-direction: column; gap: 4px; }
 .chordList { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* T224: the chord strip, compact under the preset */
+.chordHead { font: 400 11px/1.4 var(--f-mono); color: var(--muted); }
+.chordList { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin-top: 2px; }
+.chordPick small { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chordPick select { min-height: 26px; font-size: 12px; padding: 0 2px; }
+.chordBlock { gap: 2px; }

@@ -10,7 +10,8 @@
 // under them (Short hits / Held, the hits on the 16ths, tap one to move or stretch it, tap a gap to add one).
 import { useEffect, useRef } from "react";
 import { ArrowLeft, AudioWaveform, Check, Pause, Piano, Play, RotateCcw } from "lucide-react";
-import { flavour, moveHit, prettyChord } from "@/lib/make/chords-mine";
+import { flavour, moveHit, parseChord, prettyChord } from "@/lib/make/chords-mine";
+import { chordFacts, type Role } from "@/lib/mentor/chord-facts";
 import type { MelodyModel } from "./make-melody";
 import c from "./chords.module.css";
 
@@ -63,20 +64,40 @@ export function ChordTiles({ v, from, bars, onOpen }: { v: View; from: number | 
 }
 
 /**
- * Polish (T219): bring a panel into view clear of the sticky rows above and the sticky A/B bar below:
- * the whole panel (its header and action row) when it fits, else the part just acted on (`focus`).
+ * Polish (T219, T223): bring a panel into view between the bottom of the sticky rows and the top of the
+ * sticky A/B bar, scrolling its own container by hand (the browser's scrollIntoView measured from the
+ * viewport and overshot). Nothing moves when it's already in view. When the whole panel doesn't fit:
+ * on opening ("header") its header goes to the top; after a pick ("focus") the action row goes to the
+ * bottom, keeping as much of the header as fits.
  */
-export function reveal(panel: HTMLElement | null, focus?: HTMLElement | null) {
+export function reveal(panel: HTMLElement | null, focus?: HTMLElement | null, prefer: "header" | "focus" = "header") {
   if (!panel) return;
-  const rows = document.querySelector<HTMLElement>("[data-sticky-rows]"), ab = document.querySelector<HTMLElement>("[data-sticky-ab]");
-  const top = (rows?.offsetHeight ?? 140) + 8, bottom = (ab?.offsetHeight ?? 90) + 8;
   let box: HTMLElement | null = panel.parentElement;
   while (box && !(box.scrollHeight > box.clientHeight && /(auto|scroll)/.test(getComputedStyle(box).overflowY))) box = box.parentElement;
-  const room = (box?.clientHeight ?? innerHeight) - top - bottom;
-  const el = panel.offsetHeight <= room || !focus ? panel : focus;
-  el.style.scrollMarginTop = `${top}px`;
-  el.style.scrollMarginBottom = `${bottom}px`;
-  el.scrollIntoView({ block: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  if (!box) return;
+  const rows = document.querySelector<HTMLElement>("[data-sticky-rows]"), ab = document.querySelector<HTMLElement>("[data-sticky-ab]");
+  const b = box.getBoundingClientRect();
+  // where the rows stick (the container's top) and where A/B sticks (its bottom), whether stuck yet or not
+  const top = Math.max(b.top + (rows?.offsetHeight ?? 0), rows ? rows.getBoundingClientRect().bottom : b.top) + 8;
+  // A/B only covers the box when it sits inside it (in Melody the box ends at A/B's top edge, T227)
+  const bottom = b.bottom - (ab && box.contains(ab) ? ab.offsetHeight : 0) - 8;
+  const p = panel.getBoundingClientRect(), f = (focus ?? panel).getBoundingClientRect();
+  let delta = 0;
+  if (p.height <= bottom - top) delta = p.top < top ? p.top - top : p.bottom > bottom ? p.bottom - bottom : 0;
+  else if (prefer === "focus" && focus) delta = f.bottom > bottom ? Math.min(f.bottom - bottom, f.top - top) : f.top < top ? f.top - top : 0;
+  else delta = p.top - top;
+  if (Math.abs(delta) < 2) return;
+  box.scrollBy({ top: delta, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+}
+
+/** T228: a chord on another root than the bar's is told apart by its role in this song, in plain words. */
+const ROLE_MOOD: Record<Role, string> = { home: "home", away: "lifts away", pull: "pulls home", soft: "soft stand-in", borrowed: "a surprise colour", secondary: "leads on", outside: "adds tension" };
+function moodOf(n: string, barRoot: number | null, key: { key: string; scale: "major" | "minor" } | null): string {
+  const p = parseChord(n);
+  if (!p || !key || barRoot === null || p.root === barRoot) return flavour(n);
+  const f = chordFacts({ key: key.key, scale: key.scale, chord: n });
+  if (!f) return flavour(n);
+  return f.role === "secondary" && f.secondaryOf ? `leads to ${f.secondaryOf.replace(/^([A-G])b/, "$1♭").replace(/^([A-G])#/, "$1♯")}` : ROLE_MOOD[f.role];
 }
 
 /** The listening panel (K4): always open on one cell. */
@@ -85,7 +106,7 @@ export function ChordPanel({ m, from, playing, onAsk }: { m: MelodyModel; from: 
   // CS1-7, T219: when a bar opens or More opens, the panel comes into view clear of the sticky rows and A/B.
   const moreRef = useRef<HTMLDivElement>(null), panelRef = useRef<HTMLElement>(null);
   const moreOpen = !!v?.more && !v.keys, openCell = v?.open ?? -1;
-  useEffect(() => { if (openCell >= 0) reveal(panelRef.current, moreOpen ? moreRef.current : null); }, [openCell, moreOpen]);
+  useEffect(() => { if (openCell >= 0) reveal(panelRef.current, moreOpen ? moreRef.current : null, moreOpen ? "focus" : "header"); }, [openCell, moreOpen]);
   if (!v) return null;
   const cell = v.cells[v.open];
   if (!cell) return null;
@@ -98,12 +119,12 @@ export function ChordPanel({ m, from, playing, onAsk }: { m: MelodyModel; from: 
     const own = cur === n && v.ownNotes, chosen = cur === n, on = playing && v.hear === n && m.ab === "b", guess = n === cell.guess, p = prettyChord(n);
     return (
       <button key={n} className={c.choice} aria-pressed={chosen} data-playing={on ? "" : undefined} onClick={() => m.tapCard(n, playing)}
-        aria-label={`${p}${own ? ", your notes" : guess ? ", Make's guess" : ""}, ${flavour(n) || "a chord"}${chosen ? ", in Mine" : ""}. ${on ? "Pause" : "Hear it in the loop and use it"}`}>
+        aria-label={`${p}${own ? ", your notes" : guess ? ", Make's guess" : ""}, ${moodOf(n, parseChord(cell.guess)?.root ?? null, v.key) || "a chord"}${chosen ? ", in Mine" : ""}. ${on ? "Pause" : "Hear it in the loop and use it"}`}>
         <span className={c.glyph} aria-hidden>{on ? <Pause size={13} /> : <Play size={13} />}</span>
         <span className={c.choiceText}>
           <small className={c.guessTag}>{own ? "Your notes" : guess ? "Make's guess" : "\u00a0"}</small>
           <span className={c.choiceName}>{p}</span>
-          <small className={c.mood}>{flavour(n)}</small>
+          <small className={c.mood}>{moodOf(n, parseChord(cell.guess)?.root ?? null, v.key)}</small>
         </span>
         {chosen && <Check className={c.check} size={15} strokeWidth={2.5} aria-hidden />}
       </button>
@@ -197,7 +218,7 @@ function Timing({ m, t, sel }: { m: MelodyModel; t: V["timing"]; sel: number | n
   const picked = h !== null;
   useEffect(() => {
     if (!picked) return;
-    reveal(movesRef.current?.closest("section") ?? null, movesRef.current);
+    reveal(movesRef.current?.closest("section") ?? null, movesRef.current, "focus");
   }, [picked]);
   const why = (op: (typeof MOVES)[number][0]) => {
     if (!h || sel === null || moveHit(t.hits, sel, op, steps)) return undefined;

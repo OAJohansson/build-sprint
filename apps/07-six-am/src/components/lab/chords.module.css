@@ -211,3 +211,6 @@
 .leadKey, .leadGrid[data-tall] .leadKey { font-size: 11.5px; line-height: 28px; }
 .leadGrid[data-wide] .leadRow { height: 22px; }
 .leadGrid[data-wide] .leadKey { line-height: 22px; font-size: 10.5px; }
+/* T226: on a narrow half-bar tile the "?" keeps its corner and the name starts under it, so it never covers the name */
+.tile[data-half][data-unsure] .tileName { padding-right: 0; margin-top: 13px; font-size: 10px; }
+.tile[data-half] .unsure { top: 3px; right: 3px; width: 13px; height: 13px; font-size: 8.5px; }

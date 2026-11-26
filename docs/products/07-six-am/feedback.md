@@ -253,12 +253,12 @@ clutter 1 · hierarchy 2 · legibility 1 · feel 2 · copy 1. Legibility drop is
 
 | ID | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| CS1-1 | major | Chord closeness stuck at 14/100 whatever is picked | open |
-| CS1-2 | major | Real read of Lost 69–76 flags no bar unsure; the "?" never shows | open |
-| CS1-3 | major | Half-bar chord names drawn at 5 px | open |
-| CS1-4 | minor | After the fill the track plays, not Make's chords | open |
+| CS1-1 | major | Chord closeness stuck at 14/100 whatever is picked | fixed (80db130, T182): the score is half sound, half how Mine's chords match the notes per bar; moves on every pick |
+| CS1-2 | major | Real read of Lost 69–76 flags no bar unsure; the "?" never shows | fixed (80db130, T181): unsure when score < 0.9 or the loop's clear weakest, capped at a third |
+| CS1-3 | major | Half-bar chord names drawn at 5 px | fixed (80db130, T183): ≥ 11 px, breaks root / type over two lines, full name in the bar heading |
+| CS1-4 | minor | After the fill the track plays, not Make's chords | fixed (80db130, T184): A/B goes to B · Mine when the read is done |
 | CS1-5 | minor | Build loops 65–76; graders' loop is 69–76 (test plan note only) | noted |
-| CS1-6 | minor | "All N bars" checkbox small, vanishes with one bar left, stays off | open |
-| CS1-7 | minor | 1280 × 720: More chords' last row and "Fewer chords" under A/B | open |
-| CS1-8 | minor | Bass tab's chord strip (G) disagrees with Melody (G7) | open |
-| CS1-9 | polish | Edited bars look the same as Make's | open |
+| CS1-6 | minor | "All N bars" checkbox small, vanishes with one bar left, stays off | fixed (80db130, T184): twins by Make's guess or Mine's chord (stable), on again per bar, 44 px target |
+| CS1-7 | minor | 1280 × 720: More chords' last row and "Fewer chords" under A/B | fixed (80db130, T184): 4 cards a row from 1280 px; More's cards go under the tools, so Fewer stays where More was |
+| CS1-8 | minor | Bass tab's chord strip (G) disagrees with Melody (G7) | fixed (80db130, T185): the strip shows the Melody read for this loop when there is one, else 'chords est.' with an 'older estimate' tooltip |
+| CS1-9 | polish | Edited bars look the same as Make's | fixed (80db130, T183): a small teal mark on a tile you picked; tooltip names Make's read |

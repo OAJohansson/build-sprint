@@ -303,11 +303,11 @@ diminished. A chord counts right when root and family match the label.
 
 | # | Eval | Bar | Run by | Result |
 | --- | --- | --- | --- | --- |
-| H1 | Chord names read right per bar (spike gate) | ≥ 70 % of labelled bars root + family right; root alone ≥ 80 % | data-evals | |
-| H2 | Chord times read right (spike gate) | ≥ 90 % of labelled chord onsets found within 30 ms, ≤ 15 % extra | data-evals | |
-| H3 | Held chords stay held | ≥ 80 % of labelled held chords (pads) played as one chord, not re-struck | data-evals | |
-| H4 | Lead notes read (reported, not a ship gate: L249) | target ≥ 70 % of notes found (onset within 50 ms, right pitch), ≤ 20 % wrong, on ≥ 2 real riffs | data-evals | |
-| H5 | The right chord is one tap away | label among the guess + next 3 alternatives in ≥ 90 % of bars | data-evals | |
+| H1 | Chord names read right per bar (spike gate) | ≥ 70 % of labelled bars root + family right; root alone ≥ 80 % | data-evals | **Fail** (spike, 26 Nov, `evals-runs/2026-11-26-chords-spike.md`): 9 real loops, 3 tracks (Lost, Retrouvé, Dubspinna for Kiki). A (DSP) root + family **36.8 %** (14/38), root 84.1 %; B (Basic Pitch) 42.1 %, root 69.3 %. Held out (Dubspinna 73–80): A 0 % / root 50 %, B 25 % / 50 %. A drops the 7th and the minor third (G7 → G, B♭m → B♭sus2: CH-1) |
+| H2 | Chord times read right (spike gate) | ≥ 90 % of labelled chord onsets found within 30 ms, ≤ 15 % extra | data-evals | A **pass** (spike, 26 Nov, `evals-runs/2026-11-26-chords-spike.md`): 99.4 % found, 10.6 % extra (176 onsets, best shift 0 ms on every loop); held out 100 / 8.3 %. B **fail**: 70.5 % found, 23.9 % extra (misses Retrouvé's plucks, CH-4). Spike gate: neither reader passes H1 and H2 |
+| H3 | Held chords stay held | ≥ 80 % of labelled held chords (pads) played as one chord, not re-struck | data-evals | **Not gradable** (spike, 26 Nov, `evals-runs/2026-11-26-chords-spike.md`): every chord in the 10 loops is struck (decay median 179 ms); 1 held chord labelled, re-struck by A (3) and B (5). Reverse check passes: 0 struck chords read as held (A 0/193, B 0/135) |
+| H4 | Lead notes read (reported, not a ship gate: L249) | target ≥ 70 % of notes found (onset within 50 ms, right pitch), ≤ 20 % wrong, on ≥ 2 real riffs | data-evals | Reported (spike, 26 Nov, `evals-runs/2026-11-26-chords-spike.md`): Mason 17–24 and Dubspinna 105–112 (Kiki swapped). A 41.2 % found, 69.1 % wrong; **B 79.4 % found, 62.8 % wrong** (finds the Dubspinna line 15/16 but adds the stab tones). Both under the wrong-note target |
+| H5 | The right chord is one tap away | label among the guess + next 3 alternatives in ≥ 90 % of bars | data-evals | **Fail** (borderline for A) (spike, 26 Nov, `evals-runs/2026-11-26-chords-spike.md`): A 89.5 % (34/38), B 55.3 %; held out 50 % / 50 % |
 | H6 | Every played note in its chord and on time | 100 % of notes from the cell's chord; onsets ≤ 5 ms of the grid/read time | data-evals | |
 | H7 | A/B level-matched, Chords and Lead | within 1 dB (LUFS), drums under both on by default | data-evals | |
 | H8 | Suggest closer than the starting preset | measured distance drops on ≥ 3 of 5 loops per row | data-evals | |
@@ -318,7 +318,7 @@ diminished. A chord counts right when root and family match the label.
 | H13 | User test: jobs per slice ≥ 4/5 (sandbox) | ≥ 4/5 each (fix a planted wrong chord, edit a note, move a chord, save and find it in the Studio, the lead) | user-tester | |
 | H14 | Fixing is quick | a planted wrong chord fixed in ≤ 3 taps when the right one is offered (tester gets the right name as text, it can't hear) | user-tester | |
 | H15 | Design scorecard (one critic, five points) | 9/10 is a target, not a blocker | design-critic | |
-| H16 | Make comes alive quickly | chords read ≤ 3 s after the loop is in memory; knobs live ≤ 35 s on 8-bar loops (L232) | data-evals | |
+| H16 | Make comes alive quickly | chords read ≤ 3 s after the loop is in memory; knobs live ≤ 35 s on 8-bar loops (L232) | data-evals | Read time (spike, 26 Nov, `evals-runs/2026-11-26-chords-spike.md`): A **pass**, 0.37–1.43 s (38/38); B 0.60–2.22 s on 28/29, **8.87 s** on the session's first B read (model load + first compile). Knobs-live half not checked (Melody off) |
 
 Guardrails: originals never stored or sent (0); AI keys never in the bundle (0); Ears, Mentor,
 map, Studio and Make for Bass/Drums/FX unbroken; text ≥ 4.5:1. Build hygiene:

@@ -147,3 +147,10 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   - **Lesson:** sentence fixes didn't move "how lost". The structure did: the same books repeated across sections.
   - A writer cut an attribution label to save words; I restored it. Guardrail labels should be checked by script in the roll-out.
   - Next: the owner reads the final draft, then the skeleton design (L26).
+
+## 26 Nov: skeleton design starts (design-session, Discover)
+
+- **Owner:** "Yes, start design" after reading the final draft.
+- **Screen:** the school view (L26): zoom from the globe into a short skeleton, with the article below it.
+- **Brief:** set for calm, following the Meander retro: few words, large type, one focal point.
+- **Directions:** 4 seed strings drawn. 8 one-line directions written (seed-derived, far-away references, and one that sounds wrong) for the owner to react to before anything is built.

@@ -1,0 +1,51 @@
+{
+  "grader": "second independent grader (data-evals), graded only against cited sections in apps/11-meander/.corpus/existentialism/",
+  "items": [
+    {
+      "id": "apply.practices[0].practice",
+      "claims": [
+        {"claim": "Sartre's own example is a student (pupil) of his.", "verdict": "supported", "evidence": "I will refer to the case of a pupil of mine, who sought me out in the following circumstances."},
+        {"claim": "The student was torn between joining the Free French Forces in England and staying with his mother.", "verdict": "supported", "evidence": "he, at this moment, had the choice between going to England to join the Free French Forces or of staying near his mother and helping her to live."},
+        {"claim": "His mother lived only for him.", "verdict": "supported", "evidence": "He fully realised that this woman lived only for him"},
+        {"claim": "The student came to Sartre for advice.", "verdict": "supported", "evidence": "You may say that the youth did, at least, go to a professor to ask for advice."},
+        {"claim": "Choosing an adviser is already a choice.", "verdict": "supported", "evidence": "to choose an adviser is nevertheless to commit oneself by that choice."},
+        {"claim": "You more or less know what the adviser will say.", "verdict": "supported", "evidence": "you have selected that priest; and at bottom you already knew, more or less, what he would advise."},
+        {"claim": "Sartre's only reply was 'You are free, therefore choose, that is to say, invent.'", "verdict": "supported", "evidence": "in coming to me, he knew what advice I should give him, and I had but one reply to make. You are free, therefore choose, that is to say, invent."},
+        {"claim": "Question for the reader's next hard choice: why did you pick the person you are asking, and what do you already expect them to say?", "verdict": "supported", "evidence": "Bridge, not a source claim: it turns 'you have selected that priest; and at bottom you already knew, more or less, what he would advise' into a question. Faithful to the passage; the passage's point (the choice of adviser already commits you) is kept."}
+      ],
+      "attribution": "bridged-labelled",
+      "attribution_note": "'His point gives you a question for your next hard choice' clearly marks the question as an application of Sartre's point; it does not claim Sartre proposed an exercise. Sartre's own prescription ('choose, that is to say, invent') is quoted accurately."
+    },
+    {
+      "id": "apply.practices[1].practice",
+      "claims": [
+        {"claim": "Frankl was a psychiatrist.", "verdict": "supported", "evidence": "the psychiatrist and neurologist Viktor Emil Frankl (1905-1997)"},
+        {"claim": "Frankl was Austrian.", "verdict": "unsupported", "evidence": "Not stated in the cited section (no 'Austria'/'Austrian' anywhere in the file). Only 'sometimes called the \"Third Viennese School of Psychotherapy\"' hints at Vienna. Minor, and true in general knowledge, but not in the cited source."},
+        {"claim": "Frankl built a therapy around meaning.", "verdict": "supported", "evidence": "an internationally acknowledged and empirically based meaning-centered approach to psychotherapy."},
+        {"claim": "Frankl held that we discover meaning rather than make it.", "verdict": "supported", "evidence": "Frankl maintained that meaning exists for us to discover: it cannot be created or rationalized. In other words, we can discover meaning but we can't make meaning."},
+        {"claim": "We should not ask what life means, but recognise 'that it is he who is asked'.", "verdict": "supported", "evidence": "Ultimately, man should not ask what the meaning of his life is, but rather must recognize that it is he who is asked."},
+        {"claim": "The Viktor Frankl Institute of Logotherapy names three avenues to meaning.", "verdict": "supported", "evidence": "He called these the creative, experiential and attitudinal avenues to meaning-discovery. (The source attributes the three to Frankl; the text attributes the naming to the Institute, which is the page publisher. Acceptable.)"},
+        {"claim": "Avenue 1: what we give, through work or deeds.", "verdict": "supported", "evidence": "Creative actions. Giving of ourselves and contributing to life through meaningful work, deeds, or achieving meaningful goals."},
+        {"claim": "Avenue 2: what we receive, through experiences or relationships.", "verdict": "supported", "evidence": "Experiences. Receiving from life through meaningful experiences or relationships."},
+        {"claim": "Avenue 3: the stance we take, especially to suffering we cannot avoid.", "verdict": "supported", "evidence": "Attitudes. Adopting the right attitude to situations, especially those of unavoidable suffering."},
+        {"claim": "Logotherapists ask questions rather than hand out meanings.", "verdict": "drift", "evidence": "'Socratic dialogue is a conversational method frequently used by logotherapists. Specific questions are aimed to raise into consciousness...' and 'they are not offered specific meanings.' The source says 'frequently used', not that questioning is what logotherapists do in place of everything else; slight overgeneralisation. The 'rather than hand out meanings' half is well supported."},
+        {"claim": "So ask yourself those three this week.", "verdict": "drift", "evidence": "Bridge. The source describes therapist-guided Socratic dialogue ('clients are guided'; 'the therapist or physician must refrain from imposing...'), not self-questioning, and the three avenues are given as ways of connecting with meaning, not as questions. 'Those three' assumes questions the text never writes out. Signalled with 'so', but the step from guided dialogue to a solo weekly exercise is the text's own move."},
+        {"claim": "A 2015 meta-analysis found large effects of meaning therapies on meaning in life.", "verdict": "supported", "evidence": "Vos J, Craig M, Cooper M ... 2015 ... Meaning therapies (n = 6 studies) showed large effects on positive meaning in life immediately postintervention (d = 0.65) and at follow-up (d = 0.57)"},
+        {"claim": "The meta-analysis warned the studies were few and low in quality.", "verdict": "supported", "evidence": "Despite the small number and low quality of studies, some existential therapies appear beneficial for certain populations."}
+      ],
+      "attribution": "bridged-labelled",
+      "attribution_note": "Borderline. 'so ask yourself' marks the exercise as the text's application, and it does not say Frankl or the Institute prescribe it. Two risks: (1) it turns a therapist-led method into a solo self-help step without saying so; (2) putting the meta-analysis straight after the exercise lets a reader think the exercise has evidence behind it. The trials were structured 'meaning therapies', largely 'with physically ill patients' (Conclusion), not a self-questioning exercise. Suggest the engineer add a short line saying the evidence is for guided therapy, not this exercise."
+    },
+    {
+      "id": "apply.practices[2].idea",
+      "claims": [
+        {"claim": "For Nietzsche, living well means radical acceptance.", "verdict": "drift", "evidence": "'The key to living with style is, for Nietzsche, a radical acceptance of one's existence and the world as it is.' The source says 'living with style' (the Overman's self-creation, to 'give style' to life), not 'living well'. That turns an aesthetic and elitist ideal into general wellbeing advice."},
+        {"claim": "This means saying yes to your whole life.", "verdict": "drift", "evidence": "'The Overman is a \"yes-sayer\" who affirms every aspect of his life.' The source gives this to the Overman, and the same section says 'only \"the highest types\" can manifest this kind of freedom' and 'Only a very few people can be free'. The text applies it to 'you' and leaves the elitism out."},
+        {"claim": "Including its strengths and weaknesses.", "verdict": "supported", "evidence": "embracing all our strengths and weaknesses"},
+        {"claim": "Including its blessings and curses.", "verdict": "supported", "evidence": "all the blessed and cursed events that have been and will be"},
+        {"claim": "The yes-saying comes out of amor fati.", "verdict": "supported", "evidence": "'But overflowing with amor fati (love of one's fate), the Overman welcomes this possibility'. The source links amor fati to welcoming eternal recurrence, which is the yes-saying attitude; the causal 'out of' is a fair reading."},
+        {"claim": "Amor fati means a love of one's fate.", "verdict": "supported", "evidence": "amor fati (love of one's fate)"}
+      ]
+    }
+  ]
+}

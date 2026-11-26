@@ -1,6 +1,6 @@
 # Existentialism: content pilot
 
-> For review only: the text, not the design. Every claim was graded against the cited source. About 1666 words, plus the thinkers (unchanged).
+> For review only: the text, not the design. Every claim was graded against the cited source. About 2252 words, plus the thinkers (unchanged).
 
 *Philosophy that starts from the single person who must choose how to live. <sup>[1][2][3]</sup>*
 
@@ -98,6 +98,42 @@ Existentialism reached far beyond philosophy: into films by Bergman and Godard, 
 
 Within academic philosophy the verdicts differ. The IEP judges that the movement as a whole has had relatively little direct influence there, though Nietzsche and Heidegger remain very much alive. The SEP sees it thriving: it shaped Foucault and Derrida, theories of the self as a life story, and cognitive science's picture of the embodied mind. Its focus on emotion opened a whole field of research, and it insisted philosophy deal directly with real-life topics such as sex and death. It has also shaped medicine and nursing, and its courses remain among philosophy's most popular. <sup>[42][46][47][48][49][50][51]</sup>
 
+## Apply it to your life
+
+Existentialists reject the detached 'view from nowhere' and start from a person engaged in life: Kierkegaard wanted 'a truth which is true for me', lived and felt rather than just known. Their ideas also shaped a movement of existential psychotherapy, including Viktor Frankl's logotherapy. <sup>[4][22][25]</sup>
+
+### Notice who you chose to ask
+
+*From: Jean-Paul Sartre, Existentialism is a Humanism*
+
+For existentialists, no moral absolute, divine will or natural law can guide or justify our choice. We alone are responsible, and realising that often brings anxiety. As Sartre put it, 'there are no excuses behind us nor justifications before us'. <sup>[2]</sup>
+
+**Try this.** Sartre's own example is a student torn between joining the Free French Forces in England and staying with his mother, who lived only for him. The student came to Sartre for advice. But choosing an adviser, Sartre said, is already a choice: you more or less know what they will say. His only reply was 'You are free, therefore choose, that is to say, invent.' One way to use his point: before your next hard choice, ask yourself why you picked the person you are asking, and what you already expect them to say. <sup>[52]</sup>
+
+Themes: Freedom and anxiety, Existence before essence
+
+### Ask what this moment asks of you
+
+*From: Viktor Frankl, logotherapy*
+
+For Sartre and Beauvoir, no fixed meaning is handed to us. Beauvoir said existence is not absurd but ambiguous: 'its meaning is never fixed'. A 2015 meta-analysis of existential therapies found large effects of meaning therapies on meaning in life, with particular support for structured programmes that discussed meaning directly with physically ill patients, though the studies were few and low in quality. That is evidence for therapy, not for reflecting alone. <sup>[12][53][54]</sup>
+
+**Try this.** Frankl, a psychiatrist, held that we discover meaning rather than make it. He turned the usual question round: we should not ask what life means, but recognise 'that it is he who is asked'. The Viktor Frankl Institute of Logotherapy names three avenues to meaning: what we give, through work or deeds; what we receive, through experiences or relationships; and the stance we take, especially to suffering we cannot avoid. In therapy, logotherapists often use Socratic questions and guide clients towards meanings they find themselves. One way to borrow that on your own: this week, ask yourself what you gave, what you received, and what stance you took towards something you could not change. <sup>[55][56][57][58][59][60]</sup>
+
+Themes: Meaning without guarantees
+
+### Would you live it all again?
+
+*From: Friedrich Nietzsche, The Gay Science §341*
+
+For Nietzsche, the key to living with style is radical acceptance: saying yes to your whole life, its strengths and weaknesses, its blessings and curses, out of amor fati, a love of one's fate. He also thought only 'the highest types' have that kind of freedom. <sup>[14]</sup>
+
+**Try this.** Imagine a demon tells you that you must live this life again, 'innumerable times', with nothing new in it. Would you curse the demon, or answer that you never heard anything more divine? If the thought took hold of you, Nietzsche wrote, it would transform you, or perhaps crush you, and the question 'Dost thou want this once more, and also for innumerable times?' would lie as the heaviest burden on everything you do. One influential reading treats it as a test of whether your life has been good. He meant your life as a whole, in every detail. If that feels too big, one way in (our adaptation, not his): ask it of a single day first. <sup>[61][62]</sup>
+
+Themes: Authenticity versus the crowd, Meaning without guarantees
+
+> This is for reflection, not therapy. If anxiety or low mood feels heavy, please talk to a GP or a mental health professional.
+
 ## Study this school
 
 > Teach me Existentialism as a short Socratic module. Start with what it is: a loose movement that begins from concrete human existence, rooted in Kierkegaard and Nietzsche and made famous by Sartre and Beauvoir in mid-20th-century France. Then cover its six themes: existence before essence; freedom and anxiety; authenticity versus the crowd; meaning without guarantees; my freedom needs yours; faith and the leap. Note that Camus and Heidegger rejected the label. Ask me one question at a time and finish with a five-question quiz. <sup>[1][10][3][8][5][6][13][7][31]</sup>
@@ -155,3 +191,14 @@ Within academic philosophy the verdicts differ. The IEP judges that the movement
 49. Stanford Encyclopedia of Philosophy, "existentialism", section "7.3 Philosophy of Mind and Cognitive Science". https://plato.stanford.edu/entries/existentialism/
 50. Stanford Encyclopedia of Philosophy, "existentialism", section "7.6 Philosophy of Health and Illness". https://plato.stanford.edu/entries/existentialism/
 51. Stanford Encyclopedia of Philosophy, "existentialism", section "7.7 A New Generation". https://plato.stanford.edu/entries/existentialism/
+52. www.marxists.org, "sartre.htm", section "Existentialism Is a Humanism". https://www.marxists.org/reference/archive/sartre/works/exist/sartre.htm
+53. PubMed, "25045907", section "Results". https://pubmed.ncbi.nlm.nih.gov/25045907/
+54. PubMed, "25045907", section "Conclusion". https://pubmed.ncbi.nlm.nih.gov/25045907/
+55. www.viktorfrankl.org, "logotherapy.html", section "What is Logotherapy / Existential Analysis?". https://www.viktorfrankl.org/logotherapy.html
+56. www.viktorfranklinstitute.org, "about logotherapy", section "Meaning". https://www.viktorfranklinstitute.org/about-logotherapy/
+57. www.viktorfranklinstitute.org, "about logotherapy", section "Life has ultimate meaning (meaning of life).". https://www.viktorfranklinstitute.org/about-logotherapy/
+58. www.viktorfranklinstitute.org, "about logotherapy", section "Three avenues to discovering meaning". https://www.viktorfranklinstitute.org/about-logotherapy/
+59. www.viktorfrankl.org, "logotherapy.html", section "Socratic dialogue / Modification of attitudes". https://www.viktorfrankl.org/logotherapy.html
+60. www.viktorfrankl.org, "logotherapy.html", section "Will to Meaning". https://www.viktorfrankl.org/logotherapy.html
+61. Project Gutenberg, "52881", section "Book Fourth, 341. The Heaviest Burden". https://www.gutenberg.org/ebooks/52881
+62. Stanford Encyclopedia of Philosophy, "nietzsche", section "6.3 The Eternal Recurrence of the Same". https://plato.stanford.edu/entries/nietzsche/

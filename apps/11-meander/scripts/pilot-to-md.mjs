@@ -8,7 +8,7 @@ const dir = new URL("../../../docs/products/11-meander/content/pilot/", import.m
 const d = JSON.parse(fs.readFileSync(new URL(`${id}.json`, dir), "utf8"));
 
 const notes = [], keyOf = new Map();
-const host = (u) => (u.includes("plato.stanford.edu") ? "Stanford Encyclopedia of Philosophy" : u.includes("iep.utm.edu") ? "Internet Encyclopedia of Philosophy" : u.includes("openstax") ? "OpenStax, Introduction to Philosophy" : new URL(u).hostname);
+const host = (u) => (u.includes("plato.stanford.edu") ? "Stanford Encyclopedia of Philosophy" : u.includes("iep.utm.edu") ? "Internet Encyclopedia of Philosophy" : u.includes("openstax") ? "OpenStax, Introduction to Philosophy" : u.includes("theschooloflife.com") ? "The School of Life" : u.includes("gutenberg.org") ? "Project Gutenberg" : u.includes("pubmed") || u.includes("ncbi.nlm.nih.gov") ? "PubMed" : new URL(u).hostname);
 const entry = (u) => decodeURIComponent(u.replace(/\/$/, "").split("/").pop()).replace(/-/g, " ");
 const cite = (sources = []) =>
   sources
@@ -36,6 +36,14 @@ for (const s of d.sections) {
   out.push(`## ${s.title}`, "");
   if (s.paragraphs) out.push(...s.paragraphs.map(para).flatMap((x) => [x, ""]));
   if (s.works) out.push(...s.works.map((w) => `- **${w.title}** (${w.author}, ${w.year}): ${w.note} <sup>${cite(w.sources)}</sup>`), "");
+}
+if (d.apply) {
+  out.push("## Apply it to your life", "", para(d.apply.intro), "");
+  for (const p of d.apply.practices) {
+    out.push(`### ${p.title}`, "", `*From: ${p.from}*`, "", para(p.idea), "", `**Try this.** ${para(p.practice)}`, "");
+    if (p.themes?.length) out.push(`Themes: ${p.themes.join(", ")}`, "");
+  }
+  if (d.apply.note) out.push(`> ${d.apply.note.text}`, "");
 }
 out.push("## Study this school", "", `> ${para(d.study_prompt)}`, "");
 out.push("## Sources", "");

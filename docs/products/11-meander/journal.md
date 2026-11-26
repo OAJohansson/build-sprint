@@ -103,3 +103,10 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   - Existential therapy has evidence behind it: Vos, Craig & Cooper (2015) is a meta-analysis of existential therapies, which found the clearest effects for meaning-centred ones.
   - Practice named: *philosophy as a way of life* (Pierre Hadot), the tradition of asking exactly this question.
 - **Open (owner's call):** how to source the apply section. Roll-out to the other 22 schools waits until the pilot includes it.
+- **Apply section written and graded (L25):**
+  - Three practices: Sartre's student and the adviser, Frankl's "what does this moment ask of you", and Nietzsche's "would you live it all again?".
+  - Sources: Sartre's lecture, *Gay Science* §341, the Vienna and US Frankl institutes, and the Vos 2015 meta-analysis.
+  - The School of Life is paywalled, so it isn't cited.
+  - Graded over three rounds: from 1 unsupported and 1 misattributed down to 18 of 18 supported. See `eval-pilot/README.md`.
+  - I made the round-3 wording fixes myself, so a grader re-checked them.
+  - Next: the owner reads the section.

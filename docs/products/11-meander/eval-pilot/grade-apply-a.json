@@ -1,0 +1,316 @@
+{
+ "grader": "data-evals, independent",
+ "scope": "existentialism.json apply only, graded only against cited sections",
+ "em_dashes": 0,
+ "items": [
+  {
+   "id": "apply.intro",
+   "claims": [
+    {
+     "claim": "Existentialists reject the detached 'view from nowhere'",
+     "verdict": "supported",
+     "evidence": "SEP §2: \"Existentialism offers a thoroughgoing rejection of this view\" (the \"view from nowhere\")"
+    },
+    {
+     "claim": "They start from a person engaged in life",
+     "verdict": "supported",
+     "evidence": "SEP §2: \"a philosophy that begins from the standpoint of the engagé, of the individual who is engaged in life\""
+    },
+    {
+     "claim": "Kierkegaard wanted 'a truth which is true for me'",
+     "verdict": "supported",
+     "evidence": "SEP §2.1: subjective truth is \"the highest truth attainable\"... \"it discloses 'a truth which is true for me'\""
+    },
+    {
+     "claim": "That truth is lived and felt rather than just known",
+     "verdict": "supported",
+     "evidence": "SEP §2.1: \"to live this truth\"... \"an ineffable truth that is felt rather than known\""
+    },
+    {
+     "claim": "Their ideas shaped a movement of existential psychotherapy",
+     "verdict": "supported",
+     "evidence": "IEP a.: \"a more explicit taking up of existentialist themes is found in the broad 'existentialist psychotherapy' movement\""
+    },
+    {
+     "claim": "including Viktor Frankl's logotherapy",
+     "verdict": "supported",
+     "evidence": "IEP a.: \"the Austrian Frankl, who invented the method of logotherapy\""
+    }
+   ]
+  },
+  {
+   "id": "apply.practices[0].idea",
+   "claims": [
+    {
+     "claim": "For Sartre, no moral absolute, divine will or natural law can choose for us",
+     "verdict": "drift",
+     "evidence": "SEP §4: \"There is no moral absolute, divine will, or natural law that can provide guidance or justify our actions.\" Source says 'provide guidance or justify', not 'choose for us', and states it of existentialism generally (only the closing quote is Sartre's)."
+    },
+    {
+     "claim": "We alone are responsible",
+     "verdict": "supported",
+     "evidence": "SEP §4: \"we realize that we alone are responsible for our choices and the projects we undertake\""
+    },
+    {
+     "claim": "This brings anxiety",
+     "verdict": "drift",
+     "evidence": "SEP §4: \"the awareness is often accompanied by anxiety\". 'often accompanied' sharpened to 'brings'."
+    },
+    {
+     "claim": "'there are no excuses behind us nor justifications before us'",
+     "verdict": "supported",
+     "evidence": "SEP §4: \"condemned to be free because 'there are no excuses behind us nor justifications before us' (Sartre 1946)\""
+    }
+   ],
+   "fix": "'For Sartre, no moral absolute, divine will or natural law can guide or justify our choice. We alone are responsible, and realising that often brings anxiety: ...'"
+  },
+  {
+   "id": "apply.practices[0].practice",
+   "claims": [
+    {
+     "claim": "Sartre's own example is a student",
+     "verdict": "supported",
+     "evidence": "EH: \"I will refer to the case of a pupil of mine, who sought me out\""
+    },
+    {
+     "claim": "torn between joining the Free French Forces in England and staying with his mother",
+     "verdict": "supported",
+     "evidence": "EH: \"the choice between going to England to join the Free French Forces or of staying near his mother and helping her to live\""
+    },
+    {
+     "claim": "his mother lived only for him",
+     "verdict": "supported",
+     "evidence": "EH: \"He fully realised that this woman lived only for him\""
+    },
+    {
+     "claim": "The student came to Sartre for advice",
+     "verdict": "supported",
+     "evidence": "EH: \"the youth did, at least, go to a professor to ask for advice\"; \"in coming to me\""
+    },
+    {
+     "claim": "Choosing an adviser is already a choice",
+     "verdict": "supported",
+     "evidence": "EH: \"to choose an adviser is nevertheless to commit oneself by that choice\""
+    },
+    {
+     "claim": "you more or less know what they will say",
+     "verdict": "supported",
+     "evidence": "EH: \"at bottom you already knew, more or less, what he would advise\""
+    },
+    {
+     "claim": "His only reply was 'You are free, therefore choose, that is to say, invent.'",
+     "verdict": "supported",
+     "evidence": "EH: \"I had but one reply to make. You are free, therefore choose, that is to say, invent.\""
+    },
+    {
+     "claim": "(application) His point gives you a question: why did you pick the person you are asking, and what do you already expect them to say?",
+     "verdict": "supported",
+     "evidence": "Faithful to EH: \"Had this young man chosen a priest of the resistance, or one of the collaboration, he would have decided beforehand the kind of advice he was to receive.\" Framed as derived from his point, not as Sartre's exercise."
+    }
+   ],
+   "attribution": {
+    "verdict": "bridged-labelled",
+    "evidence": "'His point gives you a question' marks the question as drawn from Sartre's argument; Sartre poses no exercise. Label is adequate but soft; 'One way to use his point:' would be unambiguous."
+   }
+  },
+  {
+   "id": "apply.practices[1].idea",
+   "claims": [
+    {
+     "claim": "Existentialists deny that a meaning is handed to us",
+     "verdict": "drift",
+     "evidence": "SEP §5.5 is about Sartre and Beauvoir only: \"My projects have meaning and value because I chose these projects, but the meaning is contingent\". Generalised to all existentialists; the cited section does not say 'existentialists deny'."
+    },
+    {
+     "claim": "Beauvoir said existence is not absurd but ambiguous",
+     "verdict": "supported",
+     "evidence": "SEP §5.5: \"The notion of ambiguity must not be confused with that of absurdity\""
+    },
+    {
+     "claim": "'its meaning is never fixed'",
+     "verdict": "supported",
+     "evidence": "SEP §5.5: \"to say that it is ambiguous is to assert that its meaning is never fixed\""
+    }
+   ],
+   "fix": "'Sartre and Beauvoir deny that a meaning is handed to us: our projects mean something because we chose them. Beauvoir said ...'"
+  },
+  {
+   "id": "apply.practices[1].practice",
+   "claims": [
+    {
+     "claim": "Frankl was a psychiatrist",
+     "verdict": "supported",
+     "evidence": "VFI Vienna: \"the psychiatrist and neurologist Viktor Emil Frankl\""
+    },
+    {
+     "claim": "Frankl was Austrian",
+     "verdict": "unsupported",
+     "evidence": "Not in any section cited for this item (VFI 'What is Logotherapy' gives no nationality; 'Viennese School' is about the school). Only IEP a. says 'the Austrian Frankl', cited in the intro, not here."
+    },
+    {
+     "claim": "He built a therapy around meaning",
+     "verdict": "supported",
+     "evidence": "VFI: \"an internationally acknowledged and empirically based meaning-centered approach to psychotherapy\""
+    },
+    {
+     "claim": "He held that we discover meaning rather than make it",
+     "verdict": "supported",
+     "evidence": "VFIL Meaning: \"we can discover meaning but we can't make meaning\""
+    },
+    {
+     "claim": "We should not ask what life means, but recognise 'that it is he who is asked'",
+     "verdict": "supported",
+     "evidence": "VFIL: \"man should not ask what the meaning of his life is, but rather must recognize that it is he who is asked\""
+    },
+    {
+     "claim": "The Viktor Frankl Institute of Logotherapy names three avenues to meaning",
+     "verdict": "supported",
+     "evidence": "VFIL: \"He called these the creative, experiential and attitudinal avenues to meaning-discovery.\""
+    },
+    {
+     "claim": "what we give, through work or deeds",
+     "verdict": "supported",
+     "evidence": "VFIL: \"Giving of ourselves and contributing to life through meaningful work, deeds\""
+    },
+    {
+     "claim": "what we receive, through experiences or relationships",
+     "verdict": "supported",
+     "evidence": "VFIL: \"Receiving from life through meaningful experiences or relationships\""
+    },
+    {
+     "claim": "the stance we take, especially to suffering we cannot avoid",
+     "verdict": "supported",
+     "evidence": "VFIL: \"Adopting the right attitude to situations, especially those of unavoidable suffering\""
+    },
+    {
+     "claim": "Logotherapists ask questions rather than hand out meanings",
+     "verdict": "supported",
+     "evidence": "VFI: \"Socratic dialogue is a conversational method frequently used by logotherapists\"; \"they are not offered specific meanings\""
+    },
+    {
+     "claim": "so ask yourself those three this week",
+     "verdict": "drift",
+     "evidence": "VFI describes therapist-guided Socratic dialogue: \"clients are guided and assisted\"; \"Specific questions are aimed to raise into consciousness...\". 'so' presents a self-administered weekly exercise as following from that clinical method. Also 'those three' are avenues, not questions; no questions are given."
+    },
+    {
+     "claim": "A 2015 meta-analysis found large effects of meaning therapies on meaning in life",
+     "verdict": "supported",
+     "evidence": "Vos 2015 Results: \"Meaning therapies (n = 6 studies) showed large effects on positive meaning in life\""
+    },
+    {
+     "claim": "but warned the studies were few and low in quality",
+     "verdict": "supported",
+     "evidence": "Vos 2015 Conclusion: \"Despite the small number and low quality of studies\""
+    },
+    {
+     "claim": "(implied) this evidence bears on the reader doing the exercise",
+     "verdict": "drift",
+     "evidence": "Vos 2015 Conclusion: \"some existential therapies appear beneficial for certain populations. We found particular support for structured interventions ... with physically ill patients.\" The population limit is dropped, and the result (therapy RCTs) sits next to a self-reflection prompt."
+    }
+   ],
+   "attribution": {
+    "verdict": "misattributed",
+    "evidence": "Borderline. No application marker: 'Logotherapists ask questions ..., so ask yourself those three this week' plus the card's from: 'Viktor Frankl, logotherapy' reads as a logotherapy exercise. The sources propose therapist-led Socratic dialogue, not self-questioning on the three avenues."
+   },
+   "fix": "Drop 'Austrian' (or cite IEP a.). Replace the bridge with: 'Logotherapists use questions rather than handing out meanings. One way to borrow that on your own: this week, ask yourself what you gave, what you received, and how you met what you could not change.' Add 'mostly with physically ill patients' to the meta-analysis line, or move that line out of the practice."
+  },
+  {
+   "id": "apply.practices[2].idea",
+   "claims": [
+    {
+     "claim": "For Nietzsche, living well means radical acceptance",
+     "verdict": "drift",
+     "evidence": "SEP §5.3: \"The key to living with style is, for Nietzsche, a radical acceptance\". 'living with style' became 'living well'; the section also says it is only for \"the highest types\" (\"Only a very few people can be free\"), which 'living well' universalises."
+    },
+    {
+     "claim": "saying yes to your whole life",
+     "verdict": "supported",
+     "evidence": "SEP §5.3: \"The Overman is a 'yes-sayer' who affirms every aspect of his life\""
+    },
+    {
+     "claim": "its strengths and weaknesses, its blessings and curses",
+     "verdict": "supported",
+     "evidence": "SEP §5.3: \"embracing all our strengths and weaknesses and all the blessed and cursed events\""
+    },
+    {
+     "claim": "out of amor fati, a love of one's fate",
+     "verdict": "supported",
+     "evidence": "SEP §5.3: \"overflowing with amor fati (love of one's fate), the Overman welcomes this possibility\""
+    }
+   ],
+   "fix": "'For Nietzsche, the key to living with style is radical acceptance: ...'"
+  },
+  {
+   "id": "apply.practices[2].practice",
+   "claims": [
+    {
+     "claim": "Nietzsche made it a thought experiment",
+     "verdict": "supported",
+     "evidence": "GS 341: \"What if a demon crept after thee...\"; SEP Nietzsche §6.3: \"presented in hypothetical terms (GS 341)\""
+    },
+    {
+     "claim": "Imagine a demon tells you that you must live this life again, 'innumerable times', with nothing new in it",
+     "verdict": "supported",
+     "evidence": "GS 341: \"thou must live it once more, and also innumerable times; and there will be nothing new in it\""
+    },
+    {
+     "claim": "Would you curse the demon, or answer that you never heard anything more divine?",
+     "verdict": "supported",
+     "evidence": "GS 341: \"curse the demon that so spake? Or ... 'Thou art a God, and never did I hear aught more divine!'\""
+    },
+    {
+     "claim": "The question 'Dost thou want this once more?' would, he wrote, lie as the heaviest burden on everything you do",
+     "verdict": "drift",
+     "evidence": "GS 341: \"If that thought acquired power over thee ... the question with regard to all and everything: 'Dost thou want this once more...?' would lie as the heaviest burden upon thy activity!\" The 'If that thought acquired power over thee' condition is dropped, so it reads as unconditional."
+    },
+    {
+     "claim": "One influential reading treats it as a practical test",
+     "verdict": "supported",
+     "evidence": "SEP Nietzsche §6.3: \"an influential line of readings has argued ... a practical thought experiment designed to test whether one's life has been good\""
+    },
+    {
+     "claim": "how you react shows how much you value your life",
+     "verdict": "supported",
+     "evidence": "SEP §6.3: \"one's emotional reaction to the prospect reveals something about how valuable one's life has been\""
+    },
+    {
+     "claim": "He meant it for 'all and everything'",
+     "verdict": "supported",
+     "evidence": "GS 341: \"the question with regard to all and everything\""
+    },
+    {
+     "claim": "(application) so try it on a single day",
+     "verdict": "supported",
+     "evidence": "Openly a narrowing ('He meant it for all and everything, so try it on a single day'), not claimed as Nietzsche's. Note: SEP §6.3 says the sameness constraint is meant to block self-assessment that 'elided any events' and to judge 'our life as a whole'; a one-day trial runs against that purpose."
+    }
+   ],
+   "attribution": {
+    "verdict": "bridged-labelled",
+    "evidence": "The contrast with 'all and everything' makes clear the single-day version is the text's adaptation. Optional: say why ('a smaller start') and that the real test is the whole life."
+   },
+   "fix": "'If the thought took hold of you, he wrote, the question ... would lie as the heaviest burden on everything you do.' Optional: 'He meant it for all and everything; a smaller way in is to start with one day.'"
+  },
+  {
+   "id": "apply.note",
+   "claims": [
+    {
+     "claim": "This is for reflection, not therapy",
+     "verdict": "rule check: pass",
+     "evidence": "Says it directly in the first sentence."
+    },
+    {
+     "claim": "If anxiety or low mood feels heavy, please talk to a GP or a mental health professional",
+     "verdict": "rule check: pass (not alarmist)",
+     "evidence": "Calm, conditional signpost; no crisis language, no diagnosis. Minor tension: practice[1] cites therapy efficacy data just before this disclaimer."
+    }
+   ]
+  }
+ ],
+ "totals": {
+  "supported": 39,
+  "drift": 7,
+  "unsupported": 1,
+  "wrong": 0,
+  "misattributed": 1
+ }
+}

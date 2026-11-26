@@ -200,7 +200,7 @@
       "summary": "Your choices shape who you become, within real limits.",
       "paragraphs": [
         {
-          "text": "Sartre called it 'the first principle of existentialism': existence precedes essence. Your 'essence' would be a fixed nature that decides who you are; existentialists say we are not born with one. A person first 'turns up' and only afterwards defines himself, through choices made as life unfolds. How free are we, then? Early Sartre called our freedom 'absolute'. Later, he and others such as Beauvoir stressed that our circumstances, such as our body and our time and place, limit it. But we can still question those limits, give them meaning and decide what to do with them. A strong craving, for example, does not force me to act on it.",
+          "text": "Sartre called it 'the first principle of existentialism': existence precedes essence. Your 'essence' would be a fixed nature that decides who you are; existentialists say we are not born with one. A person first 'turns up' and only afterwards defines himself, through choices made as life unfolds. How free are we, then? Early Sartre called our freedom 'absolute'. Later, he and others such as Beauvoir stressed that our social and historical situation limits it. But we can still question those limits, give them meaning and decide what to do with them. A strong craving, for example, does not force me to act on it.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -488,7 +488,7 @@
           ]
         },
         {
-          "text": "But there is a better way. Beauvoir's 'authentic love' nurtures the other person's freedom instead of possessing them. Why does my freedom need yours? We see ourselves through each other's eyes, so my freedom is bound up with yours. That is why we must help free each other, so that each of us can create ourselves. As Sartre put it, in wanting freedom 'we discover that it depends entirely on the freedom of others'.",
+          "text": "But there is a better way. Beauvoir's 'authentic love' nurtures the other person's freedom instead of possessing them. Why does my freedom need yours? If freedom is the core of what I am, it is the core of others too, so my freedom is bound up with yours. That is why we must help free each other, so that each of us can create ourselves. As Sartre put it, in wanting freedom 'we discover that it depends entirely on the freedom of others'.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -694,7 +694,7 @@
           "title": "The Myth of Sisyphus",
           "author": "Albert Camus",
           "year": "1942",
-          "note": "An essay on the absurd. It ends with Sisyphus, condemned in myth to roll a rock up a mountain forever. Facing that fate fully aware makes it his own, which is why Camus says 'One must imagine Sisyphus happy'.",
+          "note": "An essay on the absurd. It ends with Sisyphus, condemned in myth to roll a rock up a mountain forever. Facing that fate fully aware makes it his own. That is part of why Camus says 'One must imagine Sisyphus happy'.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/camus/",
@@ -850,7 +850,7 @@
           ],
           "items": [
             "It can be obscure: German critics called it abstract, even mystical, Heidegger above all.",
-            "It paid too little attention to social and political structures. Sartre later agreed that his early idea of 'absolute' freedom left these out.",
+            "It paid too little attention to social and political structures. Sartre later agreed that his early idea of 'absolute' freedom left out the social and historical conditions that limit it.",
             "Heidegger is notorious for his involvement with the Nazis in the 1930s.",
             "Nietzsche's ideal is openly elitist and anti-democratic: he thought only a very few people could be free."
           ]
@@ -1398,7 +1398,7 @@
             "go to England and join the Free French Forces, to avenge his brother, killed in the German offensive of 1940, or",
             "stay with his mother, who lived only for him."
           ],
-          "after": "But choosing an adviser, Sartre said, is already a choice: you more or less know what they will say. His only reply was 'You are free, therefore choose, that is to say, invent.' One way to use his point: before your next hard choice, ask yourself why you picked the person you are asking, and what you already expect them to say. Either way, the choice stays yours."
+          "after": "But choosing an adviser, Sartre said, is already a choice: you more or less know what they will say. His only reply was 'You are free, therefore choose, that is to say, invent.' One way to use his point: before your next hard choice, ask yourself why you picked the person you are asking, and what you already expect them to say. Whatever they say, the choice stays yours."
         },
         "themes": [
           "Freedom and anxiety",
@@ -1531,5 +1531,5 @@
       "sources": []
     }
   },
-  "word_count": 2011
+  "word_count": 2024
 }

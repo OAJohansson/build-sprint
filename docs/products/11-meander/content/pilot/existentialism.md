@@ -1,6 +1,6 @@
 # Existentialism: content pilot
 
-> For review only: the text, not the design. Every claim was graded against the cited source. About 2011 words, plus the thinkers (unchanged).
+> For review only: the text, not the design. Every claim was graded against the cited source. About 2024 words, plus the thinkers (unchanged).
 
 *Philosophy that starts from the single person who must choose how to live. <sup>[1][2][3]</sup>*
 
@@ -26,7 +26,7 @@ It rejects fixed moral rules, but it does not say that morality is empty. A good
 
 *Your choices shape who you become, within real limits.*
 
-Sartre called it 'the first principle of existentialism': existence precedes essence. Your 'essence' would be a fixed nature that decides who you are; existentialists say we are not born with one. A person first 'turns up' and only afterwards defines himself, through choices made as life unfolds. How free are we, then? Early Sartre called our freedom 'absolute'. Later, he and others such as Beauvoir stressed that our circumstances, such as our body and our time and place, limit it. But we can still question those limits, give them meaning and decide what to do with them. A strong craving, for example, does not force me to act on it. <sup>[19][1][20]</sup>
+Sartre called it 'the first principle of existentialism': existence precedes essence. Your 'essence' would be a fixed nature that decides who you are; existentialists say we are not born with one. A person first 'turns up' and only afterwards defines himself, through choices made as life unfolds. How free are we, then? Early Sartre called our freedom 'absolute'. Later, he and others such as Beauvoir stressed that our social and historical situation limits it. But we can still question those limits, give them meaning and decide what to do with them. A strong craving, for example, does not force me to act on it. <sup>[19][1][20]</sup>
 
 ### Freedom and anxiety
 
@@ -68,7 +68,7 @@ As nineteenth-century Europe grew less religious and more scientific, the old pi
 
 Sartre and Beauvoir argued that we see ourselves through 'the look' of others, and that their gaze can turn us into objects. Sartre's example: you are peeping through a keyhole, lost in the scene. Suddenly you hear footsteps, and you feel shame as you see yourself as an object in someone else's eyes. Sartre's play No Exit sums this up in its famous line that hell is other people. <sup>[30][31]</sup>
 
-But there is a better way. Beauvoir's 'authentic love' nurtures the other person's freedom instead of possessing them. Why does my freedom need yours? We see ourselves through each other's eyes, so my freedom is bound up with yours. That is why we must help free each other, so that each of us can create ourselves. As Sartre put it, in wanting freedom 'we discover that it depends entirely on the freedom of others'. <sup>[30][16]</sup>
+But there is a better way. Beauvoir's 'authentic love' nurtures the other person's freedom instead of possessing them. Why does my freedom need yours? If freedom is the core of what I am, it is the core of others too, so my freedom is bound up with yours. That is why we must help free each other, so that each of us can create ourselves. As Sartre put it, in wanting freedom 'we discover that it depends entirely on the freedom of others'. <sup>[30][16]</sup>
 
 ### Faith and the leap
 
@@ -89,7 +89,7 @@ In mid-twentieth-century France, the movement's backdrop was the Second World Wa
 - 1843 · **Fear and Trembling** (Søren Kierkegaard): The story of Abraham and the 'leap' of faith. <sup>[6][14]</sup>
 - 1882 · **The Gay Science** (Friedrich Nietzsche): Also translated as The Joyful Wisdom. Home of 'God is dead' and of the test of living your life again, forever. <sup>[34][35][25][23]</sup>
 - 1927 · **Being and Time** (Martin Heidegger): How we lose ourselves in 'the They', and how anxiety can call us back. <sup>[36][24]</sup>
-- 1942 · **The Myth of Sisyphus** (Albert Camus): An essay on the absurd. It ends with Sisyphus, condemned in myth to roll a rock up a mountain forever. Facing that fate fully aware makes it his own, which is why Camus says 'One must imagine Sisyphus happy'. <sup>[37][28][10]</sup>
+- 1942 · **The Myth of Sisyphus** (Albert Camus): An essay on the absurd. It ends with Sisyphus, condemned in myth to roll a rock up a mountain forever. Facing that fate fully aware makes it his own. That is part of why Camus says 'One must imagine Sisyphus happy'. <sup>[37][28][10]</sup>
 - 1943 · **Being and Nothingness** (Jean-Paul Sartre): The groundwork of the movement in France: freedom, bad faith and 'the look'. <sup>[38][39][40][31]</sup>
 - 1945 · **Existentialism Is a Humanism** (Jean-Paul Sartre): A packed Paris lecture, an accessible version of his ideas. Part of what he meant by 'humanism': we have no lawmaker but ourselves. <sup>[8][41]</sup>
 - 1949 · **The Second Sex** (Simone de Beauvoir): How society casts woman as 'the Other': defined only in relation to men, who count as the essential ones. <sup>[42][43][38]</sup>
@@ -99,7 +99,7 @@ In mid-twentieth-century France, the movement's backdrop was the Second World Wa
 Two common criticisms, and two troubling facts about its thinkers: <sup>[44][20][11][23]</sup>
 
 - It can be obscure: German critics called it abstract, even mystical, Heidegger above all.
-- It paid too little attention to social and political structures. Sartre later agreed that his early idea of 'absolute' freedom left these out.
+- It paid too little attention to social and political structures. Sartre later agreed that his early idea of 'absolute' freedom left out the social and historical conditions that limit it.
 - Heidegger is notorious for his involvement with the Nazis in the 1930s.
 - Nietzsche's ideal is openly elitist and anti-democratic: he thought only a very few people could be free.
 
@@ -126,7 +126,7 @@ Sartre put it starkly: 'there are no excuses behind us nor justifications before
 - go to England and join the Free French Forces, to avenge his brother, killed in the German offensive of 1940, or
 - stay with his mother, who lived only for him.
 
-But choosing an adviser, Sartre said, is already a choice: you more or less know what they will say. His only reply was 'You are free, therefore choose, that is to say, invent.' One way to use his point: before your next hard choice, ask yourself why you picked the person you are asking, and what you already expect them to say. Either way, the choice stays yours.
+But choosing an adviser, Sartre said, is already a choice: you more or less know what they will say. His only reply was 'You are free, therefore choose, that is to say, invent.' One way to use his point: before your next hard choice, ask yourself why you picked the person you are asking, and what you already expect them to say. Whatever they say, the choice stays yours.
 
 Themes: Freedom and anxiety, Existence before essence
 

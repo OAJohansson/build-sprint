@@ -1,0 +1,609 @@
+{
+  "decision": "T27d",
+  "grader": "data-evals",
+  "corpus": "apps/11-meander/.corpus/existentialism/",
+  "quotes_checked": "all cited quotes in the 16 items found verbatim in their cited sections (0 misses)",
+  "items": [
+    {
+      "id": "overview.1",
+      "claims": [
+        {
+          "claim": "Its ideas began to come together in the nineteenth century",
+          "verdict": "supported",
+          "evidence": "SEP existentialism §1: \"it was not until the nineteenth century that the ideas began to coalesce into a bona fide intellectual movement\""
+        },
+        {
+          "claim": "with Kierkegaard and Nietzsche",
+          "verdict": "supported",
+          "evidence": "SEP existentialism intro: \"laid much earlier in the nineteenth century by pioneers like Søren Kierkegaard and Friedrich Nietzsche\""
+        },
+        {
+          "claim": "Kierkegaard, from Denmark",
+          "verdict": "supported",
+          "evidence": "SEP Kierkegaard §1: \"He spent most of his life in and around the Danish capital\""
+        },
+        {
+          "claim": "Nietzsche was a German philosopher",
+          "verdict": "supported",
+          "evidence": "SEP Nietzsche intro: \"was a German philosopher and cultural critic\""
+        },
+        {
+          "claim": "The movement took off in mid-twentieth-century France",
+          "verdict": "supported",
+          "evidence": "SEP existentialism intro: \"exploded on the scene in mid-twentieth-century France\""
+        },
+        {
+          "claim": "Sartre and Beauvoir made it famous",
+          "verdict": "supported",
+          "evidence": "SEP existentialism intro: \"the most popular voices of this movement were French, most notably Jean-Paul Sartre and Simone de Beauvoir\""
+        },
+        {
+          "claim": "Sartre and Beauvoir: French philosophers and novelists",
+          "verdict": "supported",
+          "evidence": "SEP Sartre intro: \"highly influential works of literature ... like Nausea (1938)\"; SEP Beauvoir intro: \"was a philosopher, novelist\""
+        }
+      ]
+    },
+    {
+      "id": "overview.2",
+      "claims": [
+        {
+          "claim": "Of the major figures, only Sartre and Beauvoir called themselves existentialists",
+          "verdict": "supported",
+          "evidence": "SEP existentialism intro: \"the major contributors are anything but systematic ... and of these, only Sartre and Beauvoir explicitly self-identified as 'existentialists.'\""
+        },
+        {
+          "claim": "Camus, a French novelist",
+          "verdict": "supported",
+          "evidence": "IEP f: \"Albert Camus was a French intellectual, writer\"; SEP Camus intro: \"novelist and author of short stories\""
+        },
+        {
+          "claim": "Camus rejected the label",
+          "verdict": "supported",
+          "evidence": "IEP f: \"'Non, je ne suis pas existentialist' is the title of a famous interview\""
+        },
+        {
+          "claim": "Heidegger, a German philosopher, rejected the label",
+          "verdict": "supported",
+          "evidence": "IEP c: \"repudiates any possible connection of his philosophy with the existentialism of Sartre\"; SEP intro: \"twentieth-century German philosophers like Edmund Husserl, Martin Heidegger\""
+        },
+        {
+          "claim": "both are still counted in the tradition",
+          "verdict": "supported",
+          "evidence": "IEP c: \"Heidegger can be classified as an existentialist thinker\"; SEP Camus §1: \"This essay belongs squarely in the philosophical tradition of existentialism\""
+        },
+        {
+          "claim": "Existentialists can be religious or not",
+          "verdict": "supported",
+          "evidence": "SEP intro: \"one finds secular and religious existentialists\""
+        },
+        {
+          "claim": "Kierkegaard, a Christian",
+          "verdict": "supported",
+          "evidence": "SEP §5.2: \"As a religious existentialist, Kierkegaard contends that this is what is required to enter the sphere of faith and become a Christian\""
+        },
+        {
+          "claim": "Nietzsche and Sartre not religious",
+          "verdict": "supported",
+          "evidence": "IEP 'b. Anxiety and Authenticity': \"the existence of a transcendent deity is not relevant to (or is positively detrimental to) such decisions (a view broadly shared by Nietzsche and Sartre)\""
+        }
+      ]
+    },
+    {
+      "id": "themes.0.p0",
+      "claims": [
+        {
+          "claim": "Sartre called it 'the first principle of existentialism': existence precedes essence",
+          "verdict": "supported",
+          "evidence": "SEP §3: \"This is, according to Sartre, 'the first principle of existentialism'\"; \"'existence precedes essence'\""
+        },
+        {
+          "claim": "'essence' = a fixed nature that decides who you are; we are not born with one",
+          "verdict": "supported",
+          "evidence": "SEP §3: \"there is no pre-given or essential nature that determines us\""
+        },
+        {
+          "claim": "A person first 'turns up' and only afterwards defines himself, through choices as life unfolds",
+          "verdict": "supported",
+          "evidence": "SEP §3: \"man exists, turns up, appears on the scene, and, only afterwards, defines himself\"; \"through the situated choices we make as our lives unfold\""
+        },
+        {
+          "claim": "Early Sartre called our freedom 'absolute'",
+          "verdict": "supported",
+          "evidence": "SEP §4.2: \"In Being and Nothingness, Sartre forwards an account of 'radical' or 'absolute' freedom\""
+        },
+        {
+          "claim": "Later, he stressed that circumstances limit it",
+          "verdict": "supported",
+          "evidence": "SEP §4.2: \"his views changed ... It failed to engage the social, historical, and material conditions that invariably limit and constrain our freedom\""
+        },
+        {
+          "claim": "others such as Beauvoir stressed the same",
+          "verdict": "supported",
+          "evidence": "SEP §4.2: \"Sartre's Marxist inspired conception of situated or mediated freedom is one that had already been forwarded and developed by Beauvoir\""
+        },
+        {
+          "claim": "the limits the later view stressed include 'our body and our time and place'",
+          "verdict": "drift",
+          "evidence": "§4.2 (the cited section for the later shift) names \"the social, historical, and material conditions\" / \"the sociohistorical situation\"; the body comes from §3, where \"our embodiment and spatiality\" is facticity the existentialist never denied, not part of Sartre's later correction. Minor: 'material' loosely covers it."
+        },
+        {
+          "claim": "we can still question those limits, give them meaning and decide what to do with them",
+          "verdict": "supported",
+          "evidence": "SEP §3: \"I have the freedom to question them and give them meaning\"; \"calling it into question, interpreting it in different ways, and making decisions about how to deal with it\""
+        },
+        {
+          "claim": "A strong craving does not force me to act on it",
+          "verdict": "supported",
+          "evidence": "SEP §3: \"If I am compelled by a strong desire for sex, alcohol, or cigarettes, for instance, I do not out of necessity have to act on these desires\""
+        }
+      ],
+      "fix": "Optional, minor: 'stressed that our social and historical situation limits it' (matches §4.2), or keep 'our body' but cite it as facticity from §3 rather than as the later shift."
+    },
+    {
+      "id": "themes.3.p0",
+      "claims": [
+        {
+          "claim": "As 19th-c. Europe grew less religious and more scientific, the old picture that gave life moral direction began to collapse",
+          "verdict": "supported",
+          "evidence": "SEP §1: \"an increasingly secular and scientific worldview was emerging and the traditional religious framework that gave pre-modern life a sense of moral orientation and cohesion was beginning to collapse\""
+        },
+        {
+          "claim": "leaving nihilism: the shocking sense that existence has no overall reason or purpose",
+          "verdict": "supported",
+          "evidence": "SEP §1: \"the shocking recognition that there is no overarching reason, order, or purpose to our existence\""
+        },
+        {
+          "claim": "Nietzsche summed up the crisis as 'God is dead'",
+          "verdict": "supported",
+          "evidence": "SEP Nietzsche §2: \"the famous, aggressive and paradoxical pronouncement that 'God is dead'\"; SEP existentialism §1: \"Nietzsche was the most influential and prophetic in diagnosing ... the crisis\""
+        },
+        {
+          "claim": "He did not mainly mean that there is no God",
+          "verdict": "supported",
+          "evidence": "SEP Nietzsche §2: \"The idea is not so much that atheism is true\""
+        },
+        {
+          "claim": "He meant belief in the Christian God had become unbelievable, so the morality built on it would collapse",
+          "verdict": "supported",
+          "evidence": "SEP Nietzsche §2: \"because 'the belief in the Christian God has become unbelievable', everything that was 'built upon this faith' ... including 'the whole of our European morality', is destined for 'collapse'\""
+        },
+        {
+          "claim": "His answer: create your own values",
+          "verdict": "supported",
+          "evidence": "SEP §5.3: \"the self-directed power to create their own meanings and values against the backdrop of God's death\""
+        },
+        {
+          "claim": "Camus called our situation 'the absurd', the clash between 'wild longing for clarity' and 'the unreasonable silence of the world'",
+          "verdict": "supported",
+          "evidence": "SEP Camus §3.3: \"an inevitable divorce between human consciousness, with its 'wild longing for clarity' (MS, 21) and the 'unreasonable silence of the world'\"; IEP f same"
+        },
+        {
+          "claim": "He asked whether life is worth living or suicide is the answer",
+          "verdict": "supported",
+          "evidence": "SEP Camus §3.1: \"Deciding whether or not life is worth living is to answer the fundamental question in philosophy\""
+        },
+        {
+          "claim": "He said it is worth living: reject suicide and false hope, live fully aware",
+          "verdict": "supported",
+          "evidence": "SEP Camus §3.4: \"Full consciousness, avoiding false solutions such as religion, refusing to submit ... This is how a life without ultimate meaning can be made worth living\"; IEP Camus c: \"In the end, Camus rejects suicide\""
+        },
+        {
+          "claim": "Beauvoir disagreed with calling life absurd",
+          "verdict": "supported",
+          "evidence": "SEP §5.5: \"The notion of ambiguity must not be confused with that of absurdity\" (Beauvoir, Ethics of Ambiguity)"
+        },
+        {
+          "claim": "calling it absurd would mean it can never have a meaning",
+          "verdict": "supported",
+          "evidence": "SEP §5.5: \"To declare that existence is absurd is to deny that it can ever be given a meaning\" ('have' for 'be given' is a light paraphrase; the next sentence restores the making)"
+        },
+        {
+          "claim": "Its meaning is never fixed, so we keep making it",
+          "verdict": "supported",
+          "evidence": "SEP §5.5: \"to say that it is ambiguous is to assert that its meaning is never fixed\"; \"always in the process of making or constituting themselves\""
+        }
+      ]
+    },
+    {
+      "id": "themes.4.p1",
+      "claims": [
+        {
+          "claim": "Beauvoir's 'authentic love' nurtures the other's freedom instead of possessing them",
+          "verdict": "supported",
+          "evidence": "SEP §6.1: \"'authentic love' ... a relationship where we acknowledge and nurture the other's freedom ... resisting the temptations ... to see the Other as an object or thing to be manipulated and possessed\""
+        },
+        {
+          "claim": "There is a better way (than the struggle to possess)",
+          "verdict": "supported",
+          "evidence": "SEP §6.1: \"But the struggle to objectify and possess the Other ... is a manifestation of inauthentic being-for-others. There is an authentic counterpart.\""
+        },
+        {
+          "claim": "We see ourselves through each other's eyes",
+          "verdict": "supported",
+          "evidence": "SEP §6.1: \"I understand or see myself in the way that I do through 'the look' (le regard) of the Other\""
+        },
+        {
+          "claim": "my freedom is bound up with yours",
+          "verdict": "supported",
+          "evidence": "SEP §6: \"My freedom, then, is not free-floating; it is invariably bound up in the freedom of others\""
+        },
+        {
+          "claim": "the first is the reason for the second ('We see ourselves through each other's eyes, SO my freedom is bound up with yours')",
+          "verdict": "unsupported",
+          "evidence": "No cited section draws this link. In §6.1 the look is the ground of conflict: \"the look has the power to strip away my freedom and turn me into an object. Human relations, on this account, are best understood as a form of conflict\". §6 grounds the interdependence in recognition instead: \"When I acknowledge that freedom is my essence, I must also acknowledge that it is the essence of others\""
+        },
+        {
+          "claim": "That is why we must help free each other, so each of us can create ourselves",
+          "verdict": "supported",
+          "evidence": "SEP §6.1: \"we have a shared obligation to liberate or free each other so that we can create ourselves\"; §6: \"the obligation to help others realize their own freedom so that I can realize mine\""
+        },
+        {
+          "claim": "Sartre: in wanting freedom 'we discover that it depends entirely on the freedom of others'",
+          "verdict": "supported",
+          "evidence": "SEP §6: \"And in wanting freedom we discover that it depends entirely on the freedom of others\""
+        }
+      ],
+      "fix": "Drop the invented 'so': e.g. 'If freedom is the core of what I am, it is the core of others too, so my freedom is bound up with yours.' (§6), or keep the look but say it makes freedom a struggle, not why freedoms depend on each other."
+    },
+    {
+      "id": "themes.5.p0",
+      "claims": [
+        {
+          "claim": "Kierkegaard prized 'a truth which is true for me'",
+          "verdict": "supported",
+          "evidence": "SEP §2.1: \"it discloses 'a truth which is true for me'\""
+        },
+        {
+          "claim": "lived and felt rather than proved",
+          "verdict": "supported",
+          "evidence": "SEP §2.1: \"subjective truth cannot be reasoned about or explained logically\"; \"It is an ineffable truth that is felt rather than known\""
+        },
+        {
+          "claim": "In Fear and Trembling he retells the Bible story of Abraham",
+          "verdict": "supported",
+          "evidence": "IEP a: \"Fear and Trembling retells the story of the attempted sacrifice of Isaac by his father Abraham\""
+        },
+        {
+          "claim": "God tells Abraham to kill his son Isaac",
+          "verdict": "supported",
+          "evidence": "SEP §5.2: \"when God demands that he break this commandment and kill Isaac\""
+        },
+        {
+          "claim": "Abraham is ready to do it",
+          "verdict": "supported",
+          "evidence": "SEP §5.2: \"In his willingness to suspend his moral duty\"; IEP a: \"Abraham obeys\""
+        },
+        {
+          "claim": "which is disturbing",
+          "verdict": "supported",
+          "evidence": "Evaluative gloss matching the sources' framing: SEP §5.2 \"accept the terrible fact\", \"fraught with despair\", \"appears 'insane'\"; IEP a: \"shouldn't Abraham refuse to execute God's vicious plan?\""
+        },
+        {
+          "claim": "as a father, he has a moral duty to protect his son",
+          "verdict": "supported",
+          "evidence": "SEP §5.2: \"As a father, Abraham has a moral duty to love and protect his son\""
+        },
+        {
+          "claim": "At the last moment God intervenes and saves Isaac",
+          "verdict": "supported",
+          "evidence": "IEP a: \"at the last moment God intervenes and saves Isaac\""
+        }
+      ]
+    },
+    {
+      "id": "themes.5.p1",
+      "claims": [
+        {
+          "claim": "For a person of faith, a personal truth can count for more than ordinary morality",
+          "verdict": "supported",
+          "evidence": "SEP §5.2: \"the subjective truth of the individual is higher than the universal truths of morality\"; \"he is confronted with a personal truth that is higher than the universal\""
+        },
+        {
+          "claim": "even when reason cannot make sense of it",
+          "verdict": "supported",
+          "evidence": "SEP §5.2: \"a willingness to commit to a truth that is fundamentally irrational and absurd. How, for example, can one make rational sense of God's command\""
+        },
+        {
+          "claim": "Committing to it is a 'leap'",
+          "verdict": "supported",
+          "evidence": "SEP §5.2: \"In committing himself to this truth, Abraham becomes a 'knight of faith' by 'leaping' (springer) into a paradox\""
+        },
+        {
+          "claim": "a choice no argument can justify",
+          "verdict": "supported",
+          "evidence": "SEP §5.2: \"fundamentally irrational\"; \"he 'cannot make himself understood to anyone'\""
+        },
+        {
+          "claim": "which cuts you off from what everyone else thinks right",
+          "verdict": "supported",
+          "evidence": "SEP §5.2: \"it cuts us off from the comforting truths of the public and its blanket conceptions of right and wrong\""
+        },
+        {
+          "claim": "The obvious worry: what if someone excused violence as a command of God?",
+          "verdict": "supported",
+          "evidence": "IEP a: \"The story naturally raises many problems. Is not such a subjectivist model of truth and religion plainly dangerous? What if someone was to support his acts of violence as a command of God?\""
+        }
+      ]
+    },
+    {
+      "id": "origins.w3",
+      "claims": [
+        {
+          "claim": "The Myth of Sisyphus is an essay on the absurd",
+          "verdict": "supported",
+          "evidence": "SEP Camus §3 / §3.4 (absurd reasoning throughout); IEP f: \"Camus is known for his conception of the absurd\""
+        },
+        {
+          "claim": "It ends with Sisyphus",
+          "verdict": "supported",
+          "evidence": "SEP Camus §3.4: \"And then he concludes with the story of Sisyphus\""
+        },
+        {
+          "claim": "condemned in myth to roll a rock up a mountain forever",
+          "verdict": "supported",
+          "evidence": "IEP f: \"condemned by the Gods to ceaselessly roll a rock to the top of a mountain\""
+        },
+        {
+          "claim": "Facing that fate fully aware makes it his own",
+          "verdict": "supported",
+          "evidence": "SEP Camus §3.4: \"living fully aware of the bitterness of our being and consciously facing our fate\"; \"By becoming conscious of it, Camus is saying, he takes ownership of it\"; \"His fate belongs to him\""
+        },
+        {
+          "claim": "which is why Camus says 'One must imagine Sisyphus happy' (ownership is THE reason)",
+          "verdict": "drift",
+          "evidence": "Ownership is one link the source makes (\"All Sisyphus's silent joy is contained therein. His fate belongs to him\"), but the line itself is set up by a different reason: \"The struggle itself toward the heights is enough to fill a man's heart. One must imagine Sisyphus happy\"; §3.4 also ties happiness to accepting limits (\"Happiness and the absurd are two sons of the same earth\") and IEP f to scorn (\"fate and absurdity have been overcome by a joyful contempt\"). 'which is why' turns one of several reasons into the single cause."
+        },
+        {
+          "claim": "quote 'One must imagine Sisyphus happy'",
+          "verdict": "supported",
+          "evidence": "SEP Camus §3.4 verbatim: \"One must imagine Sisyphus happy\" (MS, 123)"
+        }
+      ],
+      "fix": "Soften the causal link: 'Facing that fate fully aware makes it his own: \"The struggle itself toward the heights is enough to fill a man's heart. One must imagine Sisyphus happy.\"' or 'part of why Camus says…'."
+    },
+    {
+      "id": "origins.w5",
+      "claims": [
+        {
+          "claim": "A packed Paris lecture",
+          "verdict": "supported",
+          "evidence": "SEP Sartre intro: \"Many thousands of Parisians packed into his public lecture, Existentialism is a Humanism, towards the end of 1945\""
+        },
+        {
+          "claim": "an accessible version of his ideas",
+          "verdict": "supported",
+          "evidence": "SEP Sartre intro: \"That lecture offered an accessible version of his difficult treatise\""
+        },
+        {
+          "claim": "Part of what he meant by 'humanism': we have no lawmaker but ourselves",
+          "verdict": "supported",
+          "evidence": "Primary: \"This is humanism, because we remind man that there is no legislator but himself ... also because we show that ...\" ('Part of' correctly reflects the second 'also because')"
+        }
+      ]
+    },
+    {
+      "id": "criticisms.p0",
+      "claims": [
+        {
+          "claim": "Framing: two common criticisms and two troubling facts about its thinkers",
+          "verdict": "supported",
+          "evidence": "Items 1-2 are criticisms in IEP 'b. Philosophy' (\"was criticised for\", \"taken to task for\"); items 3-4 are facts about Heidegger and Nietzsche; 'troubling' is an evaluative label"
+        },
+        {
+          "claim": "German critics called it abstract, even mystical, Heidegger above all",
+          "verdict": "supported",
+          "evidence": "IEP b. Philosophy: \"In Germany, existentialism (and especially Heidegger) was criticised for being obscure, abstract or even mystical in nature\""
+        },
+        {
+          "claim": "It paid too little attention to social and political structures",
+          "verdict": "supported",
+          "evidence": "IEP b. Philosophy: \"taken to task for paying insufficient attention to social and political structures or values, with dangerous results\""
+        },
+        {
+          "claim": "Sartre later agreed that his early idea of 'absolute' freedom left these [social and political structures] out",
+          "verdict": "drift",
+          "evidence": "SEP §4.2: \"an account of 'radical' or 'absolute' freedom ... It failed to engage the social, historical, and material conditions that invariably limit and constrain our freedom\". Sartre's self-correction is about the conditions that limit freedom, not 'political structures'; 'these' now equates his concession with the IEP criticism. The pre-T27d wording ('left out the social conditions that limit our choices') was closer."
+        },
+        {
+          "claim": "Heidegger is notorious for his involvement with the Nazis in the 1930s",
+          "verdict": "supported",
+          "evidence": "IEP c: \"He remains notorious for his involvement with National Socialism in the 1930s\""
+        },
+        {
+          "claim": "Nietzsche's ideal is openly elitist and anti-democratic",
+          "verdict": "supported",
+          "evidence": "SEP §5.3: \"his account of authenticity is unapologetically elitist and anti-democratic\""
+        },
+        {
+          "claim": "he thought only a very few people could be free",
+          "verdict": "supported",
+          "evidence": "SEP §5.3: \"'Only a very few people can be free,' writes Nietzsche\""
+        }
+      ],
+      "fix": "'Sartre later agreed that his early idea of \"absolute\" freedom left out the social and historical conditions that limit it.'"
+    },
+    {
+      "id": "legacy.p0",
+      "claims": [
+        {
+          "claim": "The Second Sex became a founding text of second-wave feminism",
+          "verdict": "supported",
+          "evidence": "IEP e: \"a founding text of Second Wave Feminism\""
+        },
+        {
+          "claim": "second-wave = the women's movement of the 1960s and 1970s",
+          "verdict": "supported",
+          "evidence": "IEP e: \"the feminist movement from the early 60's to the 70's\""
+        },
+        {
+          "claim": "its stress on freedom and self-creation informed the liberation politics of MLK and Malcolm X",
+          "verdict": "supported",
+          "evidence": "SEP intro: \"Its emphasis on freedom and the struggle for self-creation informed the radical and emancipatory politics of Martin Luther King Jr. and Malcolm X\""
+        },
+        {
+          "claim": "it made emotions a serious subject of study",
+          "verdict": "supported",
+          "evidence": "IEP b. Philosophy: \"the philosophical importance that the existentialists placed upon emotion has been influential, legitimising a whole domain of philosophical research\""
+        },
+        {
+          "claim": "insisted philosophy deal directly with real-life topics such as sex and death",
+          "verdict": "supported",
+          "evidence": "IEP b. Philosophy: \"insisted philosophy could and should deal very directly with 'real world' topics such as sex, death or crime\""
+        }
+      ]
+    },
+    {
+      "id": "apply.intro",
+      "claims": [
+        {
+          "claim": "Existentialist ideas shaped existential psychotherapy",
+          "verdict": "supported",
+          "evidence": "IEP a. The Arts and Psychology: \"a more explicit taking up of existentialist themes is found in the broad 'existentialist psychotherapy' movement\""
+        },
+        {
+          "claim": "which aims to help people with questions such as meaning and the fear of death",
+          "verdict": "supported",
+          "evidence": "Vos 2015 Objective: \"draw on themes from existential philosophy to help clients address such issues in their lives as meaning and death anxiety\""
+        },
+        {
+          "claim": "Frankl's views differed from the existentialists' (on meaning)",
+          "verdict": "supported",
+          "evidence": "VFIL Meaning: \"we can discover meaning but we can't make meaning\" vs SEP §5.5: \"My projects have meaning and value because I chose these projects\""
+        },
+        {
+          "claim": "Frankl took up these questions",
+          "verdict": "supported",
+          "evidence": "IEP a: lists \"the Austrian Frankl, who invented the method of logotherapy\" among key figures of existentialist psychotherapy"
+        },
+        {
+          "claim": "Frankl, Austrian psychiatrist, created logotherapy",
+          "verdict": "supported",
+          "evidence": "IEP a: \"the Austrian Frankl, who invented the method of logotherapy\"; VFI: \"the psychiatrist and neurologist Viktor Emil Frankl\""
+        },
+        {
+          "claim": "logotherapy is a therapy built around finding meaning",
+          "verdict": "supported",
+          "evidence": "VFI: \"meaning-centered approach to psychotherapy\"; \"the search for a meaning in life is identified as the primary motivational force\""
+        }
+      ]
+    },
+    {
+      "id": "apply.practices.0.practice",
+      "claims": [
+        {
+          "claim": "Sartre's own example is a student of his who came to him for advice",
+          "verdict": "supported",
+          "evidence": "Primary: \"the case of a pupil of mine, who sought me out\"; \"in coming to me\""
+        },
+        {
+          "claim": "in wartime France",
+          "verdict": "supported",
+          "evidence": "Primary: \"killed in the German offensive of 1940\", father \"inclined to be a 'collaborator'\", \"join the Free French Forces\""
+        },
+        {
+          "claim": "He could go to England and join the Free French Forces",
+          "verdict": "supported",
+          "evidence": "Primary: \"the choice between going to England to join the Free French Forces or of staying near his mother\""
+        },
+        {
+          "claim": "to avenge his brother, killed in the German offensive of 1940",
+          "verdict": "supported",
+          "evidence": "Primary: \"his elder brother had been killed in the German offensive of 1940 and this young man ... burned to avenge him\""
+        },
+        {
+          "claim": "or stay with his mother, who lived only for him",
+          "verdict": "supported",
+          "evidence": "Primary: \"He fully realised that this woman lived only for him\""
+        },
+        {
+          "claim": "choosing an adviser is already a choice: you more or less know what they will say",
+          "verdict": "supported",
+          "evidence": "Primary: \"at bottom you already knew, more or less, what he would advise. In other words, to choose an adviser is nevertheless to commit oneself by that choice\""
+        },
+        {
+          "claim": "His only reply was 'You are free, therefore choose, that is to say, invent.'",
+          "verdict": "supported",
+          "evidence": "Primary: \"I had but one reply to make. You are free, therefore choose, that is to say, invent.\" (verbatim)"
+        },
+        {
+          "claim": "Label 'One way to use his point:' marks the exercise as our application",
+          "verdict": "supported",
+          "evidence": "Present in 'after' as it stands: \"One way to use his point: before your next hard choice, ask yourself why you picked the person ...\""
+        },
+        {
+          "claim": "Exercise: ask why you picked this adviser and what you expect them to say",
+          "verdict": "supported",
+          "evidence": "Labelled application, directly built on Primary: \"if you seek counsel ... you have selected that priest; and at bottom you already knew\""
+        },
+        {
+          "claim": "Either way, the choice stays yours",
+          "verdict": "supported",
+          "evidence": "Primary: \"No rule of general morality can show you what you ought to do ... it is I myself, in every case, who have to interpret the signs\". Sits inside the labelled application. Nit: 'Either way' has no clear referent (whatever they say?)."
+        }
+      ],
+      "fix": "Optional nit: 'Whatever they say, the choice stays yours.'"
+    },
+    {
+      "id": "apply.practices.1.idea",
+      "claims": [
+        {
+          "claim": "Sartre and Beauvoir say we make meaning through our choices",
+          "verdict": "supported",
+          "evidence": "SEP §5.5 (Sartre and Beauvoir): \"My projects have meaning and value because I chose these projects\""
+        },
+        {
+          "claim": "Frankl held the opposite: we discover meaning, and cannot make it",
+          "verdict": "supported",
+          "evidence": "VFIL Meaning: \"Frankl maintained that meaning exists for us to discover: it cannot be created ... we can discover meaning but we can't make meaning\""
+        },
+        {
+          "claim": "A 2015 review found meaning-focused therapy strengthened people's sense of meaning",
+          "verdict": "supported",
+          "evidence": "Vos 2015 Results: \"Meaning therapies (n = 6 studies) showed large effects on positive meaning in life\""
+        },
+        {
+          "claim": "Its studies were few and low in quality",
+          "verdict": "supported",
+          "evidence": "Vos 2015 Conclusion: \"Despite the small number and low quality of studies\"; Results: \"(n = 6 studies)\""
+        },
+        {
+          "claim": "they tested therapy, not reflecting alone",
+          "verdict": "supported",
+          "evidence": "Vos 2015 Results: \"Twenty-one eligible randomized controlled trials of existential therapy\""
+        },
+        {
+          "claim": "The review is not offered as evidence for the self-exercise",
+          "verdict": "supported",
+          "evidence": "The caveat says it tested therapy, not reflecting alone, and the practice is labelled \"One way to borrow that on your own:\"; no efficacy claim is made for the exercise"
+        }
+      ]
+    },
+    {
+      "id": "apply.practices.2.from",
+      "claims": [
+        {
+          "claim": "from-line: Friedrich Nietzsche, The Gay Science",
+          "verdict": "supported",
+          "evidence": "Corpus: \"The Joyful Wisdom (La Gaya Scienza)\" = The Gay Science; practice still cites \"Book Fourth, 341. The Heaviest Burden\". Practice text keeps the label \"one way in (our adaptation, not his)\""
+        }
+      ]
+    },
+    {
+      "id": "apply.note",
+      "claims": [
+        {
+          "claim": "This is for reflection, not therapy; if anxiety or low mood feels heavy, talk to a doctor or mental health professional",
+          "verdict": "supported",
+          "evidence": "Safety copy, not a factual claim about the sources; no source needed. 'doctor' is fine for an international reader"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "supported": 98,
+    "drift": 3,
+    "unsupported": 1,
+    "wrong": 0
+  }
+}

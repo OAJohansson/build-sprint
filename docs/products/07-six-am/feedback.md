@@ -293,12 +293,12 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | ID | Severity | Finding | Status |
 | --- | --- | --- | --- |
 | L-1 | major | Selecting a lead note collapses the grid | fixed (d91c6ea, T207): Shorter / Longer / Remove a fixed 32 px row, always in place; the grid keeps its height |
-| L-2 | major | Lost 69–76 lead not off | fixed (d91c6ea, T208): Phase 5's DSP verdict (faint line, another part leaking) switches the Basic Pitch line off again; needs a live re-check on Lost 69–76 |
+| L-2 | major | Lost 69–76 lead not off | re-check at ae7ab3e: still on (T208 didn't fire); fixed again (cc140dd, T212): second guard, a line mostly the chords' top voice is off ("Mostly the chords' top notes"); needs a live re-check on Lost 69–76 and Mason 17–24 |
 | L-3 | minor | Lead cells too small; same-pitch notes merge | fixed (d91c6ea, T207): cells 20 px tall; a note's first 16th has a divider |
 | L-4 | minor | Lead closeness ignores note fixes | fixed (d91c6ea, T209): lead closeness counts its notes (pitch and onset) against the read line |
 | W-1 | major | "Why it fits" fallback uses numerals and theory words; A♯ for B♭ | fixed (d91c6ea, T205): two plain sentences, no numerals or theory words; notes spelled by the chord (B♭); marker "Six AM's own answer (the Mentor is offline)"; [theory] lines ask the model for the same style |
 | ST-1 | major | Studio drawer names chords in the track's key, not Make's | fixed (d91c6ea, T206, L264): each bar "C7 · was G7", line "Moved from G major to this track's key" |
-| S2-3b | minor | Hits 24 px, slots 26 × 30 | fixed (d91c6ea, T210): strip 38 px, hits 32 px tall, slots ≥ 24 × 38 |
+| S2-3b | minor | Hits 24 px, slots 26 × 30 | re-check: hits 30 px (the strip's border); fixed (cc140dd, T212): strip 40 px, hits 32 px |
 | S2-4b | minor | Arrow keys move one step, focus drops | fixed (d91c6ea, T210): hits keep a stable key, so focus stays while arrow keys move them |
 | CS1-12b | polish | "Fsus4" clipped in half-bar tiles | fixed (d91c6ea, T210): half-bar names shrink to 10 px and read "Fs4"; full name in the heading and aria-label |
 | N-1 | polish | Timing move buttons under A/B at 720 px | fixed (d91c6ea, T210): picking a hit scrolls the moves into view above A/B |

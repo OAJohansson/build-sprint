@@ -332,8 +332,8 @@ export function useMelody(o: MelodyOpts) {
   /** The switch is locked on while the open bar holds a note outside the key (it could not be shown otherwise). */
   const outsideLocked = leadOpen !== null && outsideIn(leadGridOf(leadOpen));
   const outside = outsideS || outsideLocked;
-  const leadAllMidis = lead ? [...lead.notes.map((n) => n.midi), ...Object.values(leadPlayGrids).flat().map((n) => n.midi)] : [];
-  const rowsNow = leadRows(leadAllMidis, keyPcsList, outside);
+  // Polish: the grid opens on about an octave around the open bar's own notes (the line's median when empty).
+  const rowsNow = leadRows(leadOpen !== null ? leadGridOf(leadOpen).map((n) => n.midi) : [], lead ? lead.notes.map((n) => n.midi) : [], keyPcsList, outside);
   const playBar = (bar: number) => { const t = tr.current; if (!t || !o.loop || t.playing) return; t.seek(o.loop.startMs + bar * 16 * sps * 1000); t.play(); };
   const openLead = (bar: number) => {
     if (!lead || bar < 0 || bar >= leadBars || !loopKey) return;
@@ -505,7 +505,8 @@ export function useMelody(o: MelodyOpts) {
   const leadTiming = useMemo(() => (lead && leadMineNotes ? timingMatch(lead.notes, leadMineNotes, sps * 0.55) : null), [lead, leadMineNotes, sps]);
   const leadNotesScore = leadPitch === null ? null : leadTiming === null ? leadPitch : Math.round(((leadPitch + leadTiming) / 2) * 10) / 10;
   // One decimal on the chords and lead rows, so a one-bar change shows.
-  const half = (x: { score: number; distance: number } | null, notes: number | null, extra: Record<string, number | null>) => (x && notes !== null ? { ...x, score: Math.round(((x.score + notes) / 2) * 10) / 10, sound: x.score, notes, ...extra } : x);
+  // Polish: whole numbers on screen (small changes may not show).
+  const half = (x: { score: number; distance: number } | null, notes: number | null, extra: Record<string, number | null>) => (x && notes !== null ? { ...x, score: Math.round((x.score + notes) / 2), sound: x.score, notes, ...extra } : x);
   const rowCloseness = soundClose ? { ...soundClose, chords: half(soundClose.chords, notesScore, { pitch: pitchScore, timing: timingScore }), lead: half(soundClose.lead, leadNotesScore, { pitch: leadPitch, timing: leadTiming }) } : null;
   /** Graders (slice 1): Make's chords as the screen shows them and as Mine plays them; names and numbers only. */
   const chordsDebug = () => {
@@ -627,9 +628,10 @@ export function MelodyMiddle({ m, loop, playing, heardMs, from, onAsk }: { m: Me
   else if (!ticks) line = `Mentor: press Suggest for ${MELODY_ROW_NAMES[row].toLowerCase()} to compare this preset with the original.`;
   else line = <>Mentor: {polySuggestLine(snd.preset, snd.macros, ticks, nounOf(snd.preset))}{m.ticks[row]?.moved && polyMoves(snd.macros, ticks).length > 0 ? <><br /><span className={s.faintLine}>{m.ticks[row]!.moved}</span></> : null}</>;
   return (
-    <div className={s.drums}>
+    // T219: room under the last row, so it clears the sticky A/B bar when scrolled to the end
+    <div className={s.drums} style={{ paddingBottom: 24 }}>
       {/* S2-7: the rows stay in view while the panel under them scrolls on a short window */}
-      <div className={s.drRows} style={{ position: "sticky", top: 0, zIndex: 4, background: "var(--bg)" }} role="group" aria-label="Melody rows">
+      <div className={s.drRows} data-sticky-rows="" style={{ position: "sticky", top: 0, zIndex: 4, background: "var(--bg)" }} role="group" aria-label="Melody rows">
         {m.rows.map((r) => {
           const x = m.read?.d.rows[r], lit = r === row, doubtful = !!x?.doubtful && !m.anyway.includes(r);
           // Slice 1 (K4): the Chords row is a tile per bar once the chords are read.
@@ -746,7 +748,7 @@ function MelodyPreset({ m, row }: { m: MelodyModel; row: MelodyRow }) {
 export function MelodyCheck({ m }: { m: MelodyModel }) {
   const off = !!m.read?.d.rows[m.open].doubtful && !m.anyway.includes(m.open);
   return (
-    <div className={`${s.checkRow} ${s.drCheck}`}>
+    <div className={`${s.checkRow} ${s.drCheck}`} data-sticky-ab="">
       <div className={s.abWrap}>
         <div className={s.ab} role="group" aria-label="Compare at the same loudness">
           <button aria-pressed={m.ab === "a"} onClick={() => m.setAb("a")}>A · Original melody</button>

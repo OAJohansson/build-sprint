@@ -22,6 +22,12 @@ const barLabel = (cell: Cell, from: number | null) => {
   return cell.steps < 16 && cell.startStep % 16 !== 0 ? `${n}½` : `${n}`;
 };
 
+/** Polish (reverses CS1-12b): a half-bar name in full ("F♯sus4"), allowed to break between its root and its type. */
+function TileName({ name }: { name: string }) {
+  const p = prettyChord(name), r = /^[A-G][♭♯]?/.exec(p)?.[0] ?? p;
+  return <>{r}<wbr />{p.slice(r.length)}</>;
+}
+
 /** A cell's chord times: stabs as short marks, a held chord as one long bar (16ths across the cell). */
 function Hits({ hits, steps, beats = true }: { hits: Cell["hits"]; steps: number; beats?: boolean }) {
   const W = steps * 10;
@@ -45,9 +51,9 @@ export function ChordTiles({ v, from, bars, onOpen }: { v: View; from: number | 
             data-half={half ? "" : undefined} data-edited={x.edited ? "" : undefined} aria-expanded={v.open === x.i} onClick={() => onOpen(x.i)}
             title={x.edited ? `Your pick (Make heard ${prettyChord(x.guess)})` : undefined}
             aria-label={`Bar ${barLabel(x, from)}: ${x.name ? prettyChord(x.name) : "no chord"}${x.unsure ? ", Make isn't sure" : ""}${x.edited ? `, your pick (Make heard ${prettyChord(x.guess)})` : ""}. Change chord`}>
-            <span className={c.tileName}>{x.name ? (half ? prettyChord(x.name).replace(/sus([24])$/, "s$1") : prettyChord(x.name)) : "–"}</span>
+            <span className={c.tileName}>{x.name ? (half ? <TileName name={x.name} /> : prettyChord(x.name)) : "–"}</span>
             {x.unsure && <span className={c.unsure} title="Make isn't sure of this bar" aria-hidden>?</span>}
-            {x.edited && <span className={c.edited} aria-hidden />}
+            {x.edited && <span className={c.edited} title="your pick" aria-hidden />}
             <span className={c.tileFoot}><Hits hits={x.hits} steps={x.steps} beats={!half} /><small>{barLabel(x, from)}</small></span>
           </button>
         );
@@ -56,17 +62,30 @@ export function ChordTiles({ v, from, bars, onOpen }: { v: View; from: number | 
   );
 }
 
+/**
+ * Polish (T219): bring a panel into view clear of the sticky rows above and the sticky A/B bar below:
+ * the whole panel (its header and action row) when it fits, else the part just acted on (`focus`).
+ */
+export function reveal(panel: HTMLElement | null, focus?: HTMLElement | null) {
+  if (!panel) return;
+  const rows = document.querySelector<HTMLElement>("[data-sticky-rows]"), ab = document.querySelector<HTMLElement>("[data-sticky-ab]");
+  const top = (rows?.offsetHeight ?? 140) + 8, bottom = (ab?.offsetHeight ?? 90) + 8;
+  let box: HTMLElement | null = panel.parentElement;
+  while (box && !(box.scrollHeight > box.clientHeight && /(auto|scroll)/.test(getComputedStyle(box).overflowY))) box = box.parentElement;
+  const room = (box?.clientHeight ?? innerHeight) - top - bottom;
+  const el = panel.offsetHeight <= room || !focus ? panel : focus;
+  el.style.scrollMarginTop = `${top}px`;
+  el.style.scrollMarginBottom = `${bottom}px`;
+  el.scrollIntoView({ block: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+}
+
 /** The listening panel (K4): always open on one cell. */
 export function ChordPanel({ m, from, playing, onAsk }: { m: MelodyModel; from: number | null; playing: boolean; onAsk?: (q: string, bar: number) => void }) {
   const v = m.chords;
-  // CS1-7: when More opens, its cards scroll into view above the sticky A/B bar.
-  const moreRef = useRef<HTMLDivElement>(null);
-  const moreOpen = !!v?.more && !v.keys;
-  useEffect(() => {
-    if (!moreOpen) return;
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    moreRef.current?.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
-  }, [moreOpen]);
+  // CS1-7, T219: when a bar opens or More opens, the panel comes into view clear of the sticky rows and A/B.
+  const moreRef = useRef<HTMLDivElement>(null), panelRef = useRef<HTMLElement>(null);
+  const moreOpen = !!v?.more && !v.keys, openCell = v?.open ?? -1;
+  useEffect(() => { if (openCell >= 0) reveal(panelRef.current, moreOpen ? moreRef.current : null); }, [openCell, moreOpen]);
   if (!v) return null;
   const cell = v.cells[v.open];
   if (!cell) return null;
@@ -76,15 +95,15 @@ export function ChordPanel({ m, from, playing, onAsk }: { m: MelodyModel; from: 
   const trackOn = playing && v.hear === "orig" && m.ab === "a";
   const card = (n: string) => {
     // S2-8: the same name with the owner's own notes isn't this card's chord: say so, no ✓.
-    const own = cur === n && v.ownNotes, chosen = cur === n && !own, on = playing && v.hear === n && m.ab === "b", guess = n === cell.guess, p = prettyChord(n);
+    const own = cur === n && v.ownNotes, chosen = cur === n, on = playing && v.hear === n && m.ab === "b", guess = n === cell.guess, p = prettyChord(n);
     return (
       <button key={n} className={c.choice} aria-pressed={chosen} data-playing={on ? "" : undefined} onClick={() => m.tapCard(n, playing)}
-        aria-label={`${p}${guess ? ", Make's guess" : ""}, ${flavour(n) || "a chord"}${chosen ? ", in Mine" : own ? `, Mine plays your notes (≈ ${p})` : ""}. ${on ? "Pause" : "Hear it in the loop and use it"}`}>
+        aria-label={`${p}${own ? ", your notes" : guess ? ", Make's guess" : ""}, ${flavour(n) || "a chord"}${chosen ? ", in Mine" : ""}. ${on ? "Pause" : "Hear it in the loop and use it"}`}>
         <span className={c.glyph} aria-hidden>{on ? <Pause size={13} /> : <Play size={13} />}</span>
         <span className={c.choiceText}>
-          <small className={c.guessTag}>{guess ? "Make's guess" : "\u00a0"}</small>
+          <small className={c.guessTag}>{own ? "Your notes" : guess ? "Make's guess" : "\u00a0"}</small>
           <span className={c.choiceName}>{p}</span>
-          <small className={c.mood}>{own ? `your notes (≈ ${p})` : flavour(n)}</small>
+          <small className={c.mood}>{flavour(n)}</small>
         </span>
         {chosen && <Check className={c.check} size={15} strokeWidth={2.5} aria-hidden />}
       </button>
@@ -93,12 +112,12 @@ export function ChordPanel({ m, from, playing, onAsk }: { m: MelodyModel; from: 
   const n = v.twins + 1, twinP = v.twinName ? prettyChord(v.twinName) : "";
   const allBox = v.twins > 0 && cur ? (
     <label className={c.all} title={`Every bar Make heard as ${twinP}, or playing ${prettyChord(cur)} in Mine, changes with this one`}>
-      <input type="checkbox" checked={v.all} onChange={(e) => m.setAll(e.target.checked)} /> {n === 2 ? `Both ${twinP} bars` : `All ${n} ${twinP} bars`}
+      <input type="checkbox" checked={v.all} onChange={(e) => m.setAll(e.target.checked)} /> {n === 2 ? `Both bars Make heard as ${twinP}` : `All ${n} bars Make heard as ${twinP}`}
     </label>
   ) : null;
   if (v.keys) return <KeysPanel m={m} v={v} where={where} allBox={allBox} />;
   return (
-    <section className={c.panel} aria-label={`Bar ${where}: pick the chord that sounds like the track`}>
+    <section ref={panelRef} className={c.panel} aria-label={`Bar ${where}: pick the chord that sounds like the track`}>
       <div className={c.head}>
         <span className={c.where}>Bar {where}{cur && <> · <b className={c.curName}>{prettyChord(cur)}</b></>}</span>
         <b className={c.ask}>Which one sounds like the track?</b>
@@ -178,7 +197,7 @@ function Timing({ m, t, sel }: { m: MelodyModel; t: V["timing"]; sel: number | n
   const picked = h !== null;
   useEffect(() => {
     if (!picked) return;
-    movesRef.current?.scrollIntoView({ block: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    reveal(movesRef.current?.closest("section") ?? null, movesRef.current);
   }, [picked]);
   const why = (op: (typeof MOVES)[number][0]) => {
     if (!h || sel === null || moveHit(t.hits, sel, op, steps)) return undefined;
@@ -221,7 +240,7 @@ function Timing({ m, t, sel }: { m: MelodyModel; t: V["timing"]; sel: number | n
         <div className={c.beats} style={{ gridTemplateColumns: `repeat(${beats.length}, 1fr)` }} aria-hidden>{beats.map((b) => <span key={b}>{b}</span>)}</div>
       </div>
       {h && sel !== null && (
-        <span ref={movesRef} className={c.moves} style={{ scrollMarginBottom: 120 }}>
+        <span ref={movesRef} className={c.moves}>
           {MOVES.map(([op, label]) => { const no = why(op); return <button key={op} onClick={() => m.hitOp(op)} disabled={!!no} title={no}>{label}</button>; })}
         </span>
       )}
@@ -237,12 +256,14 @@ function KeysPanel({ m, v, where, allBox }: { m: MelodyModel; v: V; where: strin
     return () => removeEventListener("keydown", esc);
   }, [m]);
   const [dlo, dhi] = deskRange(v.notes), [plo, phi] = phoneRange(v.notes);
+  const panelRef = useRef<HTMLElement>(null);
+  useEffect(() => { reveal(panelRef.current); }, [v.open]);
   return (
-    <section className={c.panel} aria-label={`Bar ${where} on the keys`}>
+    <section ref={panelRef} className={c.panel} aria-label={`Bar ${where} on the keys`}>
       <div className={c.head}>
         <button className={c.icon} onClick={() => m.setPiano(false)} aria-label="Back to the chords" title="Back"><ArrowLeft size={16} /></button>
         <span className={c.where}>Bar {where}</span>
-        <b className={c.title} title={v.exact ? undefined : "Your notes; the closest chord name"}>{cur ? `${v.exact ? "" : "≈ "}${prettyChord(cur)}` : "–"}</b>
+        <b className={c.title} title={v.ownNotes ? "Your notes; the closest chord name" : undefined}>{cur ? `· ${prettyChord(cur)}${v.ownNotes ? ", your notes" : ""}` : "–"}</b>
         {v.resetAny && <button className={c.reset} onClick={() => m.resetCell()} aria-label={v.resetCount > 1 ? `Reset all ${v.resetCount} bars to Make's chords and times` : `Reset to Make's ${prettyChord(cell.guess)}`} title={v.resetCount > 1 ? `Back to Make's chords and times in all ${v.resetCount} bars` : `Back to Make's ${prettyChord(cell.guess)}`}><RotateCcw size={14} aria-hidden /> {v.resetCount > 1 ? `Reset ${v.resetCount} bars` : "Reset"}</button>}
         <span className={c.grow} />
         {allBox}

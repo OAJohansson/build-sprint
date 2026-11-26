@@ -5,7 +5,8 @@
 // for the rest (locked on while the bar holds one). Tap a cell = place a note there (it replaces what
 // sounds on that 16th); tap a note = pick it, then Shorter / Longer / Remove. ↺ Reset after an edit;
 // × goes back to the chords. The read is weak (H4), so this grid is where the line gets fixed.
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { reveal } from "./make-chords";
 import { RotateCcw, X } from "lucide-react";
 import type { MelodyModel } from "./make-melody";
 import c from "./chords.module.css";
@@ -21,11 +22,15 @@ export function LeadPanel({ m, from }: { m: MelodyModel; from: number | null }) 
     addEventListener("keydown", esc);
     return () => removeEventListener("keydown", esc);
   }, [m]);
+  // T219: the panel (header to move row) comes into view when a bar opens or a note is picked.
+  const panelRef = useRef<HTMLElement>(null), movesRef = useRef<HTMLDivElement>(null);
+  const open = v?.open ?? null, picked = v?.sel ?? null;
+  useEffect(() => { if (open !== null) reveal(panelRef.current, picked !== null ? movesRef.current : null); }, [open, picked]);
   if (!v || v.open === null) return null;
   const bar = from !== null ? from + v.open : v.open + 1, notes = v.notes, sel = v.sel !== null ? notes[v.sel] : null;
   const nextAt = sel ? notes.filter((x) => x.at > sel.at).reduce((a, x) => Math.min(a, x.at), 16) : 16;
   return (
-    <section className={`${c.panel} ${c.leadPanel}`} aria-label={`Lead, bar ${bar}: place one note at a time`}>
+    <section ref={panelRef} className={`${c.panel} ${c.leadPanel}`} aria-label={`Lead, bar ${bar}: place one note at a time`}>
       <div className={c.leadHead}>
         <span className={c.where}>Lead · bar {bar}</span>
         {v.edited && <button className={c.reset} onClick={() => m.resetLead()} aria-label="Reset to Make's line" title="Back to Make's line"><RotateCcw size={14} aria-hidden /> Reset</button>}
@@ -35,7 +40,7 @@ export function LeadPanel({ m, from }: { m: MelodyModel; from: number | null }) 
         </label>
         <button className={c.icon} onClick={() => m.closeLead()} aria-label="Close the lead" title="Close"><X size={16} /></button>
       </div>
-      <div className={c.leadGrid} data-tall={v.rows.length <= 8 ? "" : undefined} role="group" aria-label={`The lead in bar ${bar}`}>
+      <div className={c.leadGrid} data-wide={v.rows.length > 12 ? "" : undefined} role="group" aria-label={`The lead in bar ${bar}`}>
         {v.rows.map((midi) => (
           <div key={midi} className={c.leadRow} data-black={isBlack(midi) ? "" : undefined} data-out={v.keyPcs && !v.keyPcs.includes(((midi % 12) + 12) % 12) ? "" : undefined}>
             <span className={c.leadKey}>{noteName(midi, v.flats)}</span>
@@ -51,7 +56,7 @@ export function LeadPanel({ m, from }: { m: MelodyModel; from: number | null }) 
         ))}
       </div>
       {/* L-1: one fixed-height row of 32 px buttons, always in place (hidden until a note is picked), so the grid never moves */}
-      <div className={c.leadMoves} data-hidden={sel ? undefined : ""} aria-hidden={sel ? undefined : true}>
+      <div ref={movesRef} className={c.leadMoves} data-hidden={sel ? undefined : ""} aria-hidden={sel ? undefined : true}>
         <button onClick={() => m.stretchLead(-1)} disabled={!sel || sel.len <= 1} tabIndex={sel ? 0 : -1}>Shorter</button>
         <button onClick={() => m.stretchLead(1)} disabled={!sel || sel.at + sel.len >= nextAt} tabIndex={sel ? 0 : -1} title={sel && sel.at + sel.len >= nextAt ? "The next note or the bar's end is in the way" : undefined}>Longer</button>
         <button onClick={() => m.removeLead()} disabled={!sel} tabIndex={sel ? 0 : -1}>Remove</button>

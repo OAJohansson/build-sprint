@@ -195,3 +195,19 @@
 .tile[data-half] .tileName { font-size: max(10px, min(11px, calc(100cqi / 4.2))); letter-spacing: -0.05em; }
 /* S2-3b (re-check): the strip's 1 px border took 2 px off the hits; 40 px makes them 32 */
 .sixteenths { height: 40px; }
+
+/* ── Polish round before the review (T219–T222) ─────────────────────────────────────────────────── */
+/* half-bar names in full, shrunk to fit, onto two lines if needed (reverses CS1-12b) */
+.tile[data-half] .tileName { white-space: normal; overflow-wrap: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: max(10px, min(11px, calc(100cqi / 4.4))); letter-spacing: -0.03em; line-height: 1.1; }
+.tiles[data-many] .tile[data-half] .tileName { -webkit-line-clamp: 2; }
+/* the playhead runs behind the tiles' names */
+.tiles { position: relative; z-index: 1; }
+.tileName, .tileFoot small { position: relative; z-index: 1; }
+/* cards: names on one baseline, the mood in a fixed two-line slot */
+.mood { min-height: calc(2 * 1.3em); }
+.choice { align-items: center; }
+/* the lead grid: about an octave, rows 28 px, labels 11.5 px */
+.leadRow, .leadGrid[data-tall] .leadRow { height: 28px; }
+.leadKey, .leadGrid[data-tall] .leadKey { font-size: 11.5px; line-height: 28px; }
+.leadGrid[data-wide] .leadRow { height: 22px; }
+.leadGrid[data-wide] .leadKey { line-height: 22px; font-size: 10.5px; }

@@ -94,8 +94,9 @@ function MelodyDrawer({ t, sound, color, onClose }: { t: Timeline; sound: Melody
           </label>
           <p className={s.dim}>{melodyPreset(sound.preset).about}</p>
           <p className={s.dim}>{sound.name}: saved in {sound.key} {sound.scale} at {Math.round(sound.bpm)} BPM; plays in the track&apos;s key and tempo.</p>
+          {/* T219: the chords sit in the left column, which scrolls on its own (as a fourth column they ran behind Listen) */}
+          {sound.pattern.chords?.length ? <ChordList t={t} sound={sound} change={change} /> : null}
         </section>
-        {sound.pattern.chords?.length ? <ChordList t={t} sound={sound} change={change} /> : null}
         <section className={s.shape} style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
           {POLY_KNOBS.map((id) => (
             <Knob key={id} id={id as never} spec={POLY_KNOB_SPECS[id]} wordOf={(v) => polyKnobWord(sound.preset, id, v)} value={sound.macros[id] ?? home[id]} color={color} disabled={false} reset={home[id]}
@@ -125,7 +126,7 @@ function ChordList({ t, sound, change }: { t: Timeline; sound: MelodyLoop; chang
   // ST-1 (L264): a sound dropped in another key plays moved to it; each bar says what it plays now and what Make named it.
   const moved = semis !== 0;
   return (
-    <section className={s.pick} aria-label="Chords in this sound, per bar">
+    <div className={s.chordBlock} role="group" aria-label="Chords in this sound, per bar">
       <span className={l.presetLabel}>Chords · {sound.pattern.bars} bar{sound.pattern.bars === 1 ? "" : "s"}, then it repeats</span>
       {moved && <p className={s.dim}>Moved from {sound.key} {sound.scale} to this track&apos;s key.</p>}
       <div className={s.chordList}>
@@ -144,7 +145,7 @@ function ChordList({ t, sound, change }: { t: Timeline; sound: MelodyLoop; chang
           );
         })}
       </div>
-    </section>
+    </div>
   );
 }
 

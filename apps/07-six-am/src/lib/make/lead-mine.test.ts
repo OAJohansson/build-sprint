@@ -61,13 +61,25 @@ describe("saved lead", () => {
 });
 
 describe("leadRows", () => {
-  it("shows the key's notes over the line (7 at least), or every note with the switch", () => {
-    const cMajor = [0, 2, 4, 5, 7, 9, 11];
-    expect(leadRows([67, 72], cMajor, false)).toEqual([74, 72, 71, 69, 67, 65, 64]);
-    expect(leadRows([67, 72], cMajor, false).length).toBeGreaterThanOrEqual(7);
-    expect(leadRows([67, 72], cMajor, false).every((m) => cMajor.includes(m % 12))).toBe(true);
-    expect(leadRows([67, 68], cMajor, false)).toContain(68); // an outside note in the line keeps its row
-    expect(leadRows([67, 72], cMajor, true).length).toBeGreaterThanOrEqual(12);
+  const cMajor = [0, 2, 4, 5, 7, 9, 11];
+  it("opens on about an octave of the key centred on the bar's own notes, not the whole line", () => {
+    const rows = leadRows([65, 67], [65, 67, 89, 91], cMajor, false);
+    expect(rows.length).toBeLessThanOrEqual(9);
+    expect(rows).toContain(65);
+    expect(rows).toContain(67);
+    expect(rows.every((m) => m >= 59 && m <= 74)).toBe(true);
+    expect(rows.every((m) => cMajor.includes(m % 12))).toBe(true);
+  });
+  it("an empty bar centres on the line; a note at the edge gets one more row past it", () => {
+    expect(leadRows([], [72, 72, 74], cMajor, false)).toContain(72);
+    const r = leadRows([60, 79], [], cMajor, false);
+    expect(Math.max(...r)).toBe(81);
+    expect(Math.min(...r)).toBe(59);
+  });
+  it("an outside note keeps its row; the switch shows every note over the same span", () => {
+    expect(leadRows([67, 68], [], cMajor, false)).toContain(68);
+    const all = leadRows([65, 67], [], cMajor, true);
+    expect(all.length).toBe(Math.max(...all) - Math.min(...all) + 1);
   });
 });
 

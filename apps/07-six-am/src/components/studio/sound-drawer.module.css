@@ -109,3 +109,5 @@
 .chordPick { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .chordPick small { font: 400 10.5px var(--f-mono); color: var(--muted); }
 .chordPick select { min-height: 32px; width: 100%; background: none; color: var(--ink); border: 1px solid var(--edge, #3a322c); border-radius: 4px; font: 500 13px var(--f-mono); padding: 0 4px; }
+.chordBlock { display: flex; flex-direction: column; gap: 4px; }
+.chordList { grid-template-columns: repeat(3, minmax(0, 1fr)); }

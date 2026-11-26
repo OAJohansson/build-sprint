@@ -74,16 +74,25 @@ export function gridsFromSaved(notes: { step: number; midi: number; dur: number;
   return out;
 }
 
-/** The grid's rows, high to low: the key's notes over the line's range (at least 7), or every note (at least 12) with the switch on. */
-export function leadRows(midis: number[], keyPcs: number[] | null, outside: boolean): number[] {
-  const lo0 = midis.length ? Math.min(...midis) : 67, hi0 = midis.length ? Math.max(...midis) : 74;
-  const ok = (m: number) => outside || !keyPcs || keyPcs.includes(((m % 12) + 12) % 12);
-  let lo = lo0, hi = hi0;
-  const count = () => { let c = 0; for (let m = lo; m <= hi; m++) if (ok(m)) c++; return c; };
-  const want = outside || !keyPcs ? 12 : 7;
-  while (count() < want) { if (hi - hi0 <= lo0 - lo) hi++; else lo--; }
+/**
+ * The grid's rows, high to low (polish round): about one octave of the key's notes (8 rows) centred on
+ * the open bar's own notes (the line's median when the bar is empty), widened only to hold every note of
+ * the bar plus one more row past a note at the edge; with "Notes outside the key", every note over the same span.
+ */
+export function leadRows(barMidis: number[], lineMidis: number[], keyPcs: number[] | null, outside: boolean): number[] {
+  const med = (v: number[]) => [...v].sort((a, b) => a - b)[v.length >> 1];
+  // the middle of the bar's own notes (so a wide bar stays in view), else the line's median
+  const center = barMidis.length ? Math.round((Math.min(...barMidis) + Math.max(...barMidis)) / 2) : lineMidis.length ? med(lineMidis) : 67;
+  const inKey = (m: number) => !keyPcs || keyPcs.includes(((m % 12) + 12) % 12);
+  // the key's 8 notes nearest the centre (ties go up)
+  const near = Array.from({ length: 25 }, (_, k) => center - 12 + k).filter(inKey).sort((a, b) => Math.abs(a - center) - Math.abs(b - center) || b - a).slice(0, keyPcs ? 8 : 13);
+  let lo = Math.min(...near), hi = Math.max(...near);
+  if (barMidis.length) { lo = Math.min(lo, ...barMidis); hi = Math.max(hi, ...barMidis); }
+  const step = (m: number, d: 1 | -1) => { let x = m + d; while (!inKey(x)) x += d; return x; };
+  if (barMidis.includes(lo)) lo = step(lo, -1);
+  if (barMidis.includes(hi)) hi = step(hi, 1);
   const rows: number[] = [];
-  for (let m = hi; m >= lo; m--) if (ok(m) || midis.includes(m)) rows.push(m);
+  for (let m = hi; m >= lo; m--) if (outside || inKey(m) || barMidis.includes(m)) rows.push(m);
   return rows;
 }
 

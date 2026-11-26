@@ -27,3 +27,5 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 21 | Owner, own use | First open: "what am I supposed to do with this?" Some light guidance, keeping it simple | open |
 | 22 | Owner, own use | "Your thread" records every click, so it's unclear what value it adds; rethink it | parked (backlog, owner's call) |
 | 23 | Owner, own use | "Built on", "pushed against" and "grew from it" are unclear: does "built on" over Marxism mean Marxism built on Critical Theory? | fixed (T26), on branch |
+| 24 | Owner, pilot review (26 Nov) | The Existentialism pilot gives a good overview. It's missing the part they care about most: how to apply the ideas to your own life, School of Life style, grounded in real sources rather than invented advice | open, sourcing question to the owner |
+| 25 | Owner, pilot review | Footnote numbers piling up at the end of paragraphs look messy. Keep every reference, but show them lightly (for example, one small mark that reveals the sources on hover or tap) | open, goes into the card design |

@@ -92,3 +92,14 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 
 - **Pilot written:** 1,621 words of school text. It draws on 11 sources: 7 SEP, 3 IEP and the OpenStax open textbook. Britannica blocked automated fetching, so it was skipped. The writer's self-check passed. Three graders are now running in parallel: two split the 28 items between them, and a second grader re-checks a random 8.
 - **Pilot graded (subscription only):** round 1 checked 141 claims: 0 wrong, 0 unsupported and 4 drifting items, which the writer fixed. Round 2 checked the 10 changed items: 51/51 supported. The second grader agreed on 7 of 8 sampled items (it was more lenient on one), and my hand spot-check held 6/6. The readable review page is `content/pilot/existentialism.md`. Next: the owner reads it and decides whether to roll it out to the other 22 schools.
+
+## 26 Nov: the owner reviews the pilot
+
+- **Verdict:** "much better", with a real overview of the school. Two asks:
+  - **Apply it to your life (#24).** This is the part the owner finds most interesting, and it has to be grounded, not "AI slop". They named the School of Life as the model.
+  - **Lighter references (#25).** Keep every source, but replace the strings of footnote numbers with something quieter. This goes into the card design.
+- **Source check:**
+  - The School of Life has essays on Sartre, Camus, Heidegger, "Kierkegaard on Love" and "Existentialism and Dating".
+  - Existential therapy has evidence behind it: Vos, Craig & Cooper (2015) is a meta-analysis of existential therapies, which found the clearest effects for meaning-centred ones.
+  - Practice named: *philosophy as a way of life* (Pierre Hadot), the tradition of asking exactly this question.
+- **Open (owner's call):** how to source the apply section. Roll-out to the other 22 schools waits until the pilot includes it.

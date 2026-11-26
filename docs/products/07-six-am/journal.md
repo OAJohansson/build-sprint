@@ -4,6 +4,12 @@ What happened, what was decided and why. Newest last.
 
 ## To carry over
 
+### Phase 6 (Chords in Make): for `docs/knowledge-bank.md` at wrap-up
+
+- **Design, Choosing a design without domain knowledge** (owner, 26 Nov): borrow it. Look at what tools for the same user do (beginner music tools: GarageBand chord strips, Hookpad, Scaler, Captain Chords; pro DAWs: piano roll), then score the options on what the user needs (easy now, teaches, room to grow, transfers to real tools, covers the system's known weak spot). Where we met it: the Phase 6 chord-grid pick. Quiz: "Two ways to make a design call in a domain you don't know?"
+- **Customer insight / music, Diatonic chords and the chord palette:** the seven chords built from a key's notes (I, ii, iii, IV, V, vi, vii°) all "fit" the song; beginner tools show them as buttons. Where we met it: Palette direction. Quiz: "Why does a palette of the key's chords always sound right?"
+
+
 ### Lab (Phase 4): for `docs/knowledge-bank.md`, Technology, at the Lab wrap-up (owner via parent session, 26 Oct)
 
 **Written at the Lab wrap-up (27 Oct)** on `claude/07-six-am-lab-wrapup`: knowledge bank (Audio, with quizzes), decision 0028 amended (canvas sign-off) with `AGENTS.md` and the playbook, learnings and retro, cost as a share of the plan, and the Phase 5 kickoff draft ("Make for every layer", in `kickoff.md`).
@@ -808,3 +814,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Ten chord directions (designer, 26 Nov):** Cells, Swap, Roll, Ladder, Mentor, Palette, Keyboard, Clips, Chart, Ear, each in the Fold room with knobs, A/B, closeness and Save in place, on real loops (Lost 69–76, Dubspinna 57–64); contact sheet `design/chords-directions.html`, shots `design/chords/`, live `/dev/chords-directions`. T150–T153. Owner picks 3 next.
 - **Contact sheet published privately** (https://claude.ai/artifact/CSEx1Uu2iySE4bKJJruAjw): ten directions (Cells, Swap, Roll, Ladder, Mentor, Palette, Keyboard, Clips, Chart, Ear). Owner picks 3. Unseen-loop check still running.
 - **Unseen-loop check (89dc6db, `evals-runs/2026-11-26-chords-unseen.md`):** reader A passes H1/H2 on 4 unseen loops (root + family 88 %, root 92 %, onsets 100 / 10.9 %); narrow: one pad loop carries the type number (without it 72.7 / 81.8 %), the held-out loop is 0/4 on a fresh separation. Per L259 no owner stop. Slice 1 must fix U-1 (held pads re-struck 22–60 times; H3, now gradable on Kolter 61–68 and Dubspinna 161–168), U-2 (Fm misread), CH-7 (lead taken as root).
+- **Design pick, part 1 (L260):** the owner asked for help ("I don't know music theory"); PM explained the screen, how other tools do it and a scoring framework. Owner picked **6 Palette, 7 Keyboard, 10 Ear**. Designer develops them, then one critic scores; owner picks the final one.

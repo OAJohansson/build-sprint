@@ -268,3 +268,19 @@
   .clipBar { flex-wrap: wrap; gap: 6px 12px; }
   .clipBar .faintText { display: none; }
 }
+/* round 1: on a short window (800 px) the knob block tightens, as Fold's drum rows do (D-P1), so A/B
+   and the score stay above the save bar while a bar is open. */
+@media (max-height: 820px) and (min-width: 701px) {
+  .knobs { zoom: .8; margin: 2px 0 0 !important; }
+  .block { margin-top: 2px; }
+  .middle { padding-top: 8px; }
+}
+@media (max-height: 820px) and (min-width: 701px) {
+  .cell { height: 54px; padding-top: 6px; gap: 4px; }
+  .bars8 { padding-top: 5px; padding-bottom: 5px; }
+  .row[style] { height: 46px !important; }
+  .barNums .bars8 { padding-bottom: 2px; }
+}
+/* break-ui (round 1): a 16-bar loop's two lines of cells are shorter, and the name leaves room for the bar number */
+.row[data-many] .cell { height: 44px; padding-top: 5px; gap: 2px; }
+.row[data-many] .cellName { padding-right: 24px; font-size: 14px; }

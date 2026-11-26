@@ -797,3 +797,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Q2 (L249): lead in**, as a fourth slice regardless of the spike; the spike picks its reader. Appetite now four slices, two to three nights.
 - **Q3 (L250): owner said "pick for me"**: Lost in the Loop, Kiki's "What's a Girl to Do" remix, Retrouvé "Music Is the Answer", Mason Flint riff; two fallbacks.
 - **Q4 (L251): copy the track's rhythm** (stab times read from the part, pads held).
+- **Q5 (L252): stop and ask** if the reader misses its bars after the spike (PM had recommended shipping the grid with typical progressions). **Pack final (L253):** K1–K12, evals H1–H16 in `evals.md`. Next: the spike (engineer builds, data-evals grades on real tracks).

@@ -782,8 +782,8 @@ first, as for the Lab: read the drums and "other" of 2 tracks and measure agains
 
 # Kickoff pack: Six AM Chords in Make (Phase 6, Founder v2)
 
-**Status: draft (25 Nov).** Written by the Phase 6 PM from the owner's call of 25 Nov; the open
-questions below go to the owner one at a time before the pack is final.
+**Status: final (26 Nov).** Written by the Phase 6 PM from the owner's call of 25 Nov; the owner
+answered the questions one at a time on 26 Nov (L248–L252). The draft text is kept for context.
 
 **Mode:** founder (v2)
 **Appetite:** a spike (one build round and one real-track grade, time-boxed) and four slices,
@@ -858,9 +858,13 @@ In the browser only (C2): no server-side model.
   Fatima Yamaha chord loop and lead line), Retrouvé "Music Is the Answer", and Mason Flint's riff
   (Phase 5's lead loop). If a picked track has no clear chords or lead in its separated part,
   data-evals swaps in Dubspinna's "What's a Girl to Do" remix or Knober "Realize" and says why.
-- **Winner:** the one with more bars right; if neither reaches the bar, the fallback (question 5).
+- **Winner:** the one with more bars right on H1/H2. If neither reaches the bars, the build
+  stops and the PM brings the numbers to the owner (L252); no slice is built on a reader that
+  failed its real-track grade.
+- **Lead:** the same round reads the lead on Mason Flint's riff and Kiki's lead (DSP vs Basic
+  Pitch fixed); the better one is used (L249: lead is in either way).
 
-## Proposed slices (one branch, one PR)
+## Slices (one branch, one PR; each built, user-tested, graded and fixed before the next)
 
 1. **Make guesses:** the chord reader on the looped part, one chord per bar shown as names, played
    on the poly synth in a standard voicing at the read stab times; A/B, Suggest, score, Save as
@@ -885,6 +889,7 @@ In the browser only (C2): no server-side model.
 | 2 | Lead lines in this phase? | Yes, a fourth slice, even if the reading is weak (fixed by hand on the note grid) | L249 |
 | 3 | Which tracks to grade on? | "Pick for me": Lost in the Loop, Kiki's "What's a Girl to Do" remix, Retrouvé "Music Is the Answer", Mason Flint (riff), from the tracks already used in Six AM | L250 |
 | 4 | Copy the rhythm or a standard one? | Copy the track's rhythm: chords at the read stab times, held when the part holds (pads); editable afterwards | L251 |
+| 5 | If the reader misses the bar after its time box? | Stop and ask me: the build pauses after the spike and the PM brings the numbers (PM had recommended shipping the grid with the key's usual progressions as the guess) | L252 |
 
 ## Questions for the owner (draft)
 
@@ -902,6 +907,23 @@ In the browser only (C2): no server-side model.
 5. **If the reader misses the bar after its time box?** Recommendation: ship the grid anyway with
    the key's usual house progressions as the guess (no reading), so the owner still recreates the
    chords by ear, and keep reading in the backlog.
+
+## Requirements (Phase 6)
+
+| # | Requirement |
+| --- | --- |
+| K1 | Make's Melody tab is on (`MELODY_ON`); Bass, Drums and FX work exactly as in PR 99. |
+| K2 | Chord reader: the looped "other" part is read into one chord name per bar (two when it clearly changes mid-bar): root + type (major, minor, 7, maj7, m7, sus), in the browser, numbers only. |
+| K3 | Make plays each chord in a standard voicing near the original's register on the poly synth (Stab, Pluck, Pad, Keys), at the times read from the part; a chord the part holds is held (L251). |
+| K4 | Chord grid: one cell per bar with the chord's name; tapping a cell plays and offers the next 2–3 guesses and the key's other chords; picking one updates Mine at once (L248). |
+| K5 | Note editing: a chord opens on a small piano grid where single notes switch on or off; the edited chord keeps its notes and shows its closest name (L248). |
+| K6 | Timing editable: a chord's start and length can be moved on the 16th grid. |
+| K7 | Lead row: a one-note line above the chords, read note by note, played on the Lead presets, fixable on the same note grid, saved to the Lead lane (L249). |
+| K8 | Suggest (gold ticks only), A/B at matched loudness with the original drums under both, and the open row's closeness score, as built in Phase 5, for Chords and Lead. |
+| K9 | Save keeps the fixed chords, notes and times; in the Studio a sound lands on Chords, Pads or Lead, renders the same, and is editable in the lane's drawer. |
+| K10 | The Mentor explains the open chord in plain words: what it is, its place in the key (for example "the V of C, it pulls home") and why it fits; the theory facts come from code, the model writes the words. |
+| K11 | Rights rule C2 unchanged: the original stays in memory only, never stored, exported, uploaded or sent to any API. |
+| K12 | Saved bass, drum, FX and Phase 5 melody sounds render sample for sample as before. |
 
 ## Things to keep
 

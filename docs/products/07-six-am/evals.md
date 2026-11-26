@@ -283,3 +283,43 @@ Basic Pitch grade (`evals-runs/2026-11-13-melody-basic-pitch.md`): Z3 misses the
 ### Build hygiene
 
 `pnpm -F 07-six-am lint`, `test`, `build` pass; `checks` green on the PR.
+
+# Evals: Six AM Chords in Make (Phase 6)
+
+From the Phase 6 kickoff (26 Nov, L248–L253), part 1 (agent-checkable). Graders: `data-evals`,
+`user-tester`, `design-critic`; never the builder. Test sandbox only (`ACCESS_CODE=test-code`,
+in-memory store). Owner-only checks (by ear: do my chords and lead sound like the track; is the
+grid easy to fix by ear; one live Mentor answer) are in the owner's final review.
+
+**Real data first (Phase 5 retro):** H1–H4 are graded on parts separated live in the browser from
+real tracks (L250: Lost in the Loop, Kiki's "What's a Girl to Do" remix, Retrouvé "Music Is the
+Answer", Mason Flint), labelled by data-evals from the spectrogram (the Phase 5 method, 95–100 %
+on struck chords). At least 6 loops from at least 3 tracks, one held out from tuning. Synthetic
+loops only guard regressions. **Spike gate:** H1 and H2 must pass before slice 1 is built; if they
+don't after the time box, stop and ask the owner (L252).
+
+Chord "type family" for H1: major (incl. 6, maj7, add9), minor (incl. m7, m9), dominant 7, sus,
+diminished. A chord counts right when root and family match the label.
+
+| # | Eval | Bar | Run by | Result |
+| --- | --- | --- | --- | --- |
+| H1 | Chord names read right per bar (spike gate) | ≥ 70 % of labelled bars root + family right; root alone ≥ 80 % | data-evals | |
+| H2 | Chord times read right (spike gate) | ≥ 90 % of labelled chord onsets found within 30 ms, ≤ 15 % extra | data-evals | |
+| H3 | Held chords stay held | ≥ 80 % of labelled held chords (pads) played as one chord, not re-struck | data-evals | |
+| H4 | Lead notes read (reported, not a ship gate: L249) | target ≥ 70 % of notes found (onset within 50 ms, right pitch), ≤ 20 % wrong, on ≥ 2 real riffs | data-evals | |
+| H5 | The right chord is one tap away | label among the guess + next 3 alternatives in ≥ 90 % of bars | data-evals | |
+| H6 | Every played note in its chord and on time | 100 % of notes from the cell's chord; onsets ≤ 5 ms of the grid/read time | data-evals | |
+| H7 | A/B level-matched, Chords and Lead | within 1 dB (LUFS), drums under both on by default | data-evals | |
+| H8 | Suggest closer than the starting preset | measured distance drops on ≥ 3 of 5 loops per row | data-evals | |
+| H9 | Edits survive: chord picks, note edits and moved times saved, dropped on Chords / Pads / Lead and reloaded | 5 of 5, rendering identical before and after | data-evals | |
+| H10 | Nothing else broke | Bass, Drums, FX and Phase 5 melody sounds render sample for sample (golden hashes); Phase 5 Z7/Z8 still pass | data-evals | |
+| H11 | Zero bytes of the original stored or uploaded | 0 (storage, network, code read) | data-evals | |
+| H12 | Mentor's theory facts right | the chord's name, key and role (numeral, in or out of key) the server gives the model are right on 20 chord/key pairs incl. borrowed chords; unit-tested, no paid calls | data-evals | |
+| H13 | User test: jobs per slice ≥ 4/5 (sandbox) | ≥ 4/5 each (fix a planted wrong chord, edit a note, move a chord, save and find it in the Studio, the lead) | user-tester | |
+| H14 | Fixing is quick | a planted wrong chord fixed in ≤ 3 taps when the right one is offered (tester gets the right name as text, it can't hear) | user-tester | |
+| H15 | Design scorecard (one critic, five points) | 9/10 is a target, not a blocker | design-critic | |
+| H16 | Make comes alive quickly | chords read ≤ 3 s after the loop is in memory; knobs live ≤ 35 s on 8-bar loops (L232) | data-evals | |
+
+Guardrails: originals never stored or sent (0); AI keys never in the bundle (0); Ears, Mentor,
+map, Studio and Make for Bass/Drums/FX unbroken; text ≥ 4.5:1. Build hygiene:
+`pnpm -F 07-six-am lint`, `test`, `build` pass; `checks` green on the PR.

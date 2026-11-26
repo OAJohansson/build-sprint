@@ -49,7 +49,7 @@ export function eventsOf(notes: Pick<MelNote, "t" | "midi" | "dur" | "vel">[]): 
 const PARTIALS = new Set([12, 19, 24, 28, 31, 36]);
 /** An event's notes without those that are partials of a lower note in it (MR-2: a bright single line's
  *  partials read as a 2–5-note "chord"). */
-function playedOf(ev: { notes: number[] }, notes: Pick<ReadNote, "midi">[]): number[] {
+export function playedOf(ev: { notes: number[] }, notes: Pick<ReadNote, "midi">[]): number[] {
   const ms = ev.notes.map((i) => notes[i].midi);
   return ev.notes.filter((i) => !ms.some((low) => low < notes[i].midi && PARTIALS.has(notes[i].midi - low)));
 }

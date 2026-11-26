@@ -89,7 +89,7 @@ const add = (a: number[], b: number[], k = 1) => a.map((x, i) => x + k * b[i]);
 const zeros = () => new Array(12).fill(0) as number[];
 
 /** Per-16th harmony of a loop: chroma, the low notes' chroma, and the energy, each a list of `steps` vectors. */
-export type StepHarmony = { chroma: number[][]; bass: number[][]; energy: number[] };
+export type StepHarmony = { chroma: number[][]; bass: number[][]; energy: number[]; struck?: number[] };
 
 /**
  * A loop that repeats every 1, 2 or 4 bars: each bar blended with the mean of its repeats, so one

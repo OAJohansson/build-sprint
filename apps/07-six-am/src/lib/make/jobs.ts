@@ -51,7 +51,7 @@ export type MakeResponse =
   | { type: "drums-render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; rowGainsDb: Record<DrumRow, number | null>; closeness: DrumsCloseness; rowCloseness: Record<DrumRow, { score: number; distance: number } | null>; ms: number }
   | { type: "drums-suggest"; id: number; suggestion: DrumSuggestion & { closer: { preset: DrumPresetId; macros: DrumMacros; distance: number } | null }; ms: number }
   | { type: "melody-read"; id: number; reading: MelodyReading; targets: Record<MelodyRow, MelodyTarget | null>; levelDb: number; lufs: number; reader: "dsp" | "basic-pitch"; ms: number }
-  | { type: "chords-read"; id: number; chords: ChordsReading; lead: { from: "row" | "top-line"; notes: MelNote[] }; melody: MelodyReading; levelDb: number; lufs: number; reader: ChordsReader; ms: number }
+  | { type: "chords-read"; id: number; chords: ChordsReading; lead: { from: "row" | "top-line"; notes: MelNote[] }; melody: MelodyReading; targets: Record<MelodyRow, MelodyTarget | null>; levelDb: number; lufs: number; reader: ChordsReader; ms: number }
   | { type: "melody-render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; rowGainsDb: Record<MelodyRow, number | null>; rowCloseness: Record<MelodyRow, { score: number; distance: number } | null>; ms: number }
   | { type: "melody-suggest"; id: number; suggestion: MelodySuggestion; ms: number }
   | { type: "fx-read"; id: number; measures: Record<FxRow, FxMeasure>; level: { bed: { rmsDb: number; lufs: number; blocks: number[] }; noBed: { rmsDb: number; lufs: number; blocks: number[] } }; ms: number }
@@ -89,8 +89,11 @@ function finishChordsRead(m: Extract<MakeRequest, { type: "chords-read" }>, t0: 
   const levelDb = rmsDb(m), loud = lufs(m), loopS = m.left.length / m.rate;
   const chords = m.reader === "basic-pitch" ? chordsFromNotes(notes.notes, m.bpm, loopS, m.key, "basic-pitch", notes.tuningCents) : readChords(m.left, m.right, m.rate, m.bpm, m.key);
   const lead = leadLine(melodyFromReading(notes, m.bpm, loopS));
+  // Slice 1 (K8): Suggest's and closeness's targets, measured on the original at the read chords' times
+  // (the Lead row only when the melody split found a line of its own, not the chords' top line).
+  const targets = measureMelody(m.left, m.right, m.rate, chordsMelodyReading(chords, lead.from === "row" ? lead.notes : []));
   m.left.fill(0); m.right.fill(0); // the copy of the original is dropped here (C2)
-  return { res: { type: "chords-read", id: m.id, chords, lead, melody: chordsMelodyReading(chords, lead.notes), levelDb, lufs: loud, reader: m.reader, ms: Math.round(performance.now() - t0) }, transfer: [] };
+  return { res: { type: "chords-read", id: m.id, chords, lead, melody: chordsMelodyReading(chords, lead.notes), targets, levelDb, lufs: loud, reader: m.reader, ms: Math.round(performance.now() - t0) }, transfer: [] };
 }
 
 /**

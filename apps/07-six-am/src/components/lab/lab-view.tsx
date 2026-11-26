@@ -46,10 +46,17 @@ declare global {
     fxDo: { open: (row: FxRow) => void; preset: (row: FxRow, id: FxPresetId) => void; knob: (row: FxRow, id: FxKnobId, v: number) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; save: (row: FxRow, name?: string) => Promise<void> };
     /** Phase 6 spike graders: read the looped "other" part (in memory) with chord reader A ("dsp") or B ("basic-pitch"); numbers and names only. Null before the loop is in memory. */
     chordsRead: (reader?: ChordsReader) => Promise<(ChordsReport & { loop: { startMs: number; endMs: number }; levelDb: number; lufs: number }) | null>;
+    /** Phase 6 slice 1 graders: Make's chords as shown and played (cells, guesses, cards, picks, played events with their notes); names and numbers only. */
+    makeChords?: () => ReturnType<MelodyModel["chordsDebug"]> | null;
+    /** Phase 6 slice 1 graders: the listening panel's actions, as a tap would do them (open a cell, pick a card, the Track button, the switches). */
+    chordsDo?: { open: (cell: number) => void; pick: (name: string, opts?: { all?: boolean; cell?: number; hear?: boolean }) => boolean; track: () => void; all: (on: boolean) => void; more: (on: boolean) => void };
+    /** Dev/grader only (H14): Make's guess on the bar numbered `bar` (as on its tile) becomes `name`, as if misread. */
+    plantChord?: (bar: number, name: string, opts?: { unsure?: boolean }) => { cell: number; barNo: number; was: string; planted: string } | null;
     melodyDo?: { open: (row: MelodyRow) => void; preset: (row: MelodyRow, id: MelodyPresetId) => void; knob: (row: MelodyRow, id: PolyKnobId, v: number) => void; suggest: (row: MelodyRow) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; playAnyway: (row: MelodyRow) => void; backToOff: (row: MelodyRow) => void; save: (row: MelodyRow, name?: string) => Promise<void> } } }
 }
 
 type Mode = "listen" | "make";
+const plantOn = () => { if (process.env.NODE_ENV !== "production") return true; try { return new URLSearchParams(location.search).get("plant") === "1"; } catch { return false; } };
 /** Where you were in this track, for a reload (LS1-8): a position only, per tab. */
 const POS_KEY = (id: string) => `07-six-am:lab-pos:${id}`;
 /** Phase 5: the Make family a focus part belongs to (the switch sets the focus; FX has no part of its own). */
@@ -167,7 +174,17 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       },
       compareLevels: (part: number) => t.compareLevels(part), captureDrums: () => t.captureDrums(),
       // L247: Melody is off this phase, so its grader hooks are not set.
-      ...(MELODY_ON ? { melody: () => melodyRef.current?.debug() ?? null } : {}),
+      ...(MELODY_ON ? {
+        melody: () => melodyRef.current?.debug() ?? null,
+        makeChords: () => melodyRef.current?.chordsDebug() ?? null,
+        chordsDo: {
+          open: (cell: number) => melodyRef.current?.openChord(cell), pick: (name: string, opts?: { all?: boolean; cell?: number; hear?: boolean }) => melodyRef.current?.pickChord(name, opts) ?? false,
+          track: () => melodyRef.current?.tapTrack(tr.current?.playing ?? false), all: (on: boolean) => melodyRef.current?.setAll(on), more: (on: boolean) => melodyRef.current?.setMore(on),
+        },
+      } : {}),
+      // H14: dev builds, or a production build opened with ?plant=1 (graders run production on :3017). It only
+      // changes Make's guess in memory, never saved data.
+      ...(MELODY_ON && plantOn() ? { plantChord: (bar: number, name: string, opts?: { unsure?: boolean }) => melodyRef.current?.plantChord(bar, name, opts) ?? null } : {}),
       fx: () => fxRef.current?.debug() ?? null,
       chordsRead,
       fxDo: {
@@ -194,11 +211,11 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     tr, active: mode === "make" && family === "drums", loop: ts?.loop ?? null, bpm, code, title, url: map.id,
     keyName: map.key || analysis?.key || "", scale: map.scale || analysis?.scale || "",
   });
+  const loopBarsNow = ts?.loop ? { from: Math.round(msToBar(ts.loop.startMs, bpm, origin)), bars: Math.max(1, Math.round(msToBar(ts.loop.endMs, bpm, origin)) - Math.round(msToBar(ts.loop.startMs, bpm, origin))) } : null;
   const melody = useMelody({
     tr, active: MELODY_ON && mode === "make" && family === "melody", loop: ts?.loop ?? null, bpm, code, title, url: map.id,
-    keyName: map.key || analysis?.key || "", scale: map.scale || analysis?.scale || "",
+    keyName: map.key || analysis?.key || "", scale: map.scale || analysis?.scale || "", fromBar: loopBarsNow?.from ?? null,
   });
-  const loopBarsNow = ts?.loop ? { from: Math.round(msToBar(ts.loop.startMs, bpm, origin)), bars: Math.max(1, Math.round(msToBar(ts.loop.endMs, bpm, origin)) - Math.round(msToBar(ts.loop.startMs, bpm, origin))) } : null;
   const sectionStarts = useMemo(() => sections.map((x) => x.from), [sections]);
   const fx = useFx({
     tr, active: mode === "make" && family === "fx", loop: ts?.loop ?? null, bpm, code, title, url: map.id,

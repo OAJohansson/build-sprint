@@ -2,7 +2,9 @@
 // One flag: off, the Melody tab shows the quiet "comes next" line, no melody read runs and no melody grader
 // hooks are set. The code (DSP reader, poly synth, rows, Suggest, save) stays for the next phase; the poly
 // synth also plays any melody block already saved to a Studio. The Basic Pitch try (L245) is in commit bf7164c.
-export const MELODY_ON = false;
+// Phase 6 slice 1 (K1): on again. The Melody tab reads the chords with reader A (chords-read.ts), not
+// this note reader; Bass, Drums and FX are untouched by the flag.
+export const MELODY_ON = true;
 
 // Phase 6 spike: which note reader the Melody tab's read uses. "dsp": notes-read.ts; "basic-pitch":
 // Spotify's Basic Pitch in the worker (notes-bp.ts, BP-1 fixed), DSP only if the model can't load. The

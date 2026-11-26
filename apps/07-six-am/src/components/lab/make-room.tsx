@@ -342,7 +342,7 @@ export function MakeRoom(p: RoomProps) {
         ) : family === "melody" ? (
           <>
             {loop || p.melody.read
-              ? <MelodyMiddle m={p.melody} loop={loop} playing={p.playing} heardMs={p.heardMs} />
+              ? <MelodyMiddle m={p.melody} loop={loop} playing={p.playing} heardMs={p.heardMs} from={from} />
               : <div className={s.makeEmpty}><p>Make works on a loop of the part, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
             <div className={s.grow} />
             <MelodyCheck m={p.melody} />

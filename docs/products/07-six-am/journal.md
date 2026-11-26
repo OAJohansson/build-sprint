@@ -796,3 +796,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Q1 (L248): both** chord names and single-note editing, now ("recreate a song in the studio, then add my own touch"). PM had recommended names only. Adds about a slice of work.
 - **Q2 (L249): lead in**, as a fourth slice regardless of the spike; the spike picks its reader. Appetite now four slices, two to three nights.
 - **Q3 (L250): owner said "pick for me"**: Lost in the Loop, Kiki's "What's a Girl to Do" remix, Retrouvé "Music Is the Answer", Mason Flint riff; two fallbacks.
+- **Q4 (L251): copy the track's rhythm** (stab times read from the part, pads held).

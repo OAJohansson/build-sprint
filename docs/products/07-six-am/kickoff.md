@@ -884,6 +884,7 @@ In the browser only (C2): no server-side model.
 | 1 | Chord names only, or names and notes? | Both now: names per bar with alternatives, and single-note editing inside a chord, because the goal is to recreate a song and then add my own touch (PM had recommended names only, notes in Phase 7) | L248 |
 | 2 | Lead lines in this phase? | Yes, a fourth slice, even if the reading is weak (fixed by hand on the note grid) | L249 |
 | 3 | Which tracks to grade on? | "Pick for me": Lost in the Loop, Kiki's "What's a Girl to Do" remix, Retrouvé "Music Is the Answer", Mason Flint (riff), from the tracks already used in Six AM | L250 |
+| 4 | Copy the rhythm or a standard one? | Copy the track's rhythm: chords at the read stab times, held when the part holds (pads); editable afterwards | L251 |
 
 ## Questions for the owner (draft)
 

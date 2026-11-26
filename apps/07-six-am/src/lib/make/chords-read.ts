@@ -2,8 +2,9 @@
 // Two readers give the same output (ChordsReading), so data-evals can grade them side by side:
 //
 // - A, "dsp" (readChords): a chroma vector (energy per pitch class, 100 Hz–2 kHz) per 16th, summed per
-//   bar, with the lowest strong note of each frame counted again for the root; matched against chord
-//   templates (major, minor, 7, maj7, m7, sus2, sus4, dim), a little in favour of the track's key;
+//   bar, with the lowest strong note of each frame counted again for the root and the notes that rise
+//   at a strike counted again (L256); named in two steps, a triad (maj, m, sus2, sus4, dim) first,
+//   then a 7th (7, maj7, m7) only if it stands out (L256, rankChords), a little in favour of the key;
 //   a loop that repeats every 1, 2 or 4 bars is blended with its repeats and a short smoothing keeps
 //   a 3–4 chord loop a loop. A bar gets two chords only when its halves clearly differ. Chord times
 //   are the onset reader's (notes-read.ts loopAttacks, ~25 ms in Phase 5) where the pitched band rises.
@@ -31,7 +32,6 @@ export const CHORD_TYPES: Record<ChordType, { iv: readonly number[]; suffix: str
   sus4: { iv: [0, 5, 7], suffix: "sus4" },
   dim: { iv: [0, 3, 6], suffix: "dim" },
 };
-const TYPES = Object.keys(CHORD_TYPES) as ChordType[];
 
 export type ChordGuess = { name: string; root: number; type: ChordType; score: number };
 /** One cell of the chord grid: a bar, or half a bar when the chord clearly changes inside it. `name` "" = no chord heard. */
@@ -42,8 +42,14 @@ export type ChordsReader = "dsp" | "basic-pitch";
 export type ChordsReading = { reader: ChordsReader; bpm: number; steps: number; bars: number; register: number; tuningCents: number; cells: ChordCell[]; events: ChordEvent[] };
 type Key = { key: string; scale: Scale };
 
-// shortcut: weights (root 0.15, out of key 0.02 per tone, change 0.05, loop blend 0.5, split margin 0.1, silent −30 dB) picked by reasoning and the synthetic guards, not on real parts; tune on the spike's real-track grade.
-export const CHORD_OPT = { rootW: 0.15, keyW: 0.02, changeCost: 0.05, loopBlend: 0.5, loopSim: 0.9, splitMargin: 0.1, silentDb: -30, alternatives: 6 };
+// shortcut: weights (root 0.15, out of key 0.02 per triad tone, change 0.05, loop blend 0.5, split margin 0.1, half energy −20 dB, silent −30 dB; L256: 3rd gate 0.3, sus 0.04, 7th 0.2 of the triad and 2× the noise, 7th +0.005 / −0.03, struck ×2) picked by reasoning and modelled fixtures (chords-fixture.ts), not fitted on real parts; re-grade on the real loops (data-evals) before trusting them.
+export const CHORD_OPT = {
+  rootW: 0.15, keyW: 0.02, changeCost: 0.05, loopBlend: 0.5, loopSim: 0.9, splitMargin: 0.1, splitEnergy: 0.01, silentDb: -30, alternatives: 6,
+  // L256 (CH-1): the type is chosen in two steps, a triad first, then a 7th only when it stands out.
+  thirdGate: 0.3, susW: 0.04, sevenRel: 0.2, sevenNoise: 2, sevenEdge: 0.03, sevenUp: 0.005,
+  // L256 (CH-2): a step with a strike counts this much more than sustained bleed (1 = twice).
+  struckW: 2,
+};
 
 export const chordName = (root: number, type: ChordType) => PITCHES[((root % 12) + 12) % 12] + CHORD_TYPES[type].suffix;
 const mod12 = (n: number) => ((n % 12) + 12) % 12;
@@ -57,24 +63,52 @@ function keyPcs(key?: Key): Set<number> | null {
   return pcs;
 }
 
+const TRIADS: ChordType[] = ["maj", "min", "sus2", "sus4", "dim"];
+const median = (v: number[]) => { const q = [...v].sort((x, y) => x - y); return q.length ? q[q.length >> 1] : 0; };
+
 /**
- * Every chord ranked for a chroma vector (12 numbers, C first): the cosine to the chord's template,
- * plus the share of the low notes on its root (`bass`), less a little per tone outside the key.
+ * Every chord ranked for a chroma vector (12 numbers, C first), in two steps (L256, CH-1):
+ *
+ * 1. Triads (maj, m, sus2, sus4, dim) by cosine to their 3-note template, plus the share of the low
+ *    notes on the root (`bass`), less a little per triad tone outside the key. So a 4-note chord can't
+ *    take the root from the triad inside it (CH-2: Fm read as D♭maj7) and a quiet 4th tone doesn't
+ *    lose to cosine's bias for smaller templates (CH-1: G7 read as G).
+ * 2. Colour, per root: a sus chord ranks under that root's major or minor whenever a 3rd is clearly
+ *    there (a loud 9th made B♭m read B♭sus2), and a little under them anyway; a 7th (♭7 on a major
+ *    or minor triad, 7 on a major) ranks above its triad only when it stands out: at least a quarter
+ *    of the triad's mean, twice the median of the other non-chord tones, and above the other 7th.
+ *    Otherwise it ranks just under. The out-of-key penalty never counts the 7th (a V7 in a minor key,
+ *    a G7 on a G-major map).
  */
 export function rankChords(chroma: number[], bass?: number[], key?: Key): ChordGuess[] {
   const norm = Math.hypot(...chroma);
   if (!(norm > 0)) return [];
   const bSum = bass ? bass.reduce((a, b) => a + b, 0) : 0;
   const inKey = keyPcs(key);
+  const O = CHORD_OPT;
   const out: ChordGuess[] = [];
+  const push = (root: number, type: ChordType, score: number) => out.push({ name: chordName(root, type), root, type, score: Math.round(score * 1000) / 1000 });
   for (let root = 0; root < 12; root++) {
-    for (const type of TYPES) {
-      const tones = CHORD_TYPES[type].iv.map((i) => mod12(root + i));
-      const cos = tones.reduce((a, t) => a + chroma[t], 0) / (norm * Math.sqrt(tones.length));
-      const rootShare = bSum > 0 ? bass![root] / bSum : 0;
-      const out_ = inKey ? tones.filter((t) => !inKey.has(t)).length : 0;
-      const score = cos + CHORD_OPT.rootW * rootShare - CHORD_OPT.keyW * out_;
-      out.push({ name: chordName(root, type), root, type, score: Math.round(score * 1000) / 1000 });
+    const c = (i: number) => chroma[mod12(root + i)];
+    const rootShare = bSum > 0 ? bass![root] / bSum : 0;
+    const tri = {} as Record<ChordType, number>;
+    for (const type of TRIADS) {
+      const iv = CHORD_TYPES[type].iv;
+      const cos3 = iv.reduce((a, i) => a + c(i), 0) / (norm * Math.sqrt(iv.length));
+      const outKey = inKey ? iv.filter((i) => !inKey.has(mod12(root + i))).length : 0;
+      tri[type] = cos3 + O.rootW * rootShare - O.keyW * outKey;
+    }
+    const third = Math.max(c(3), c(4)), ref = (c(0) + c(7)) / 2, best3 = Math.max(tri.maj, tri.min);
+    for (const sus of ["sus2", "sus4"] as const) tri[sus] = third >= O.thirdGate * ref ? Math.min(tri[sus] - O.susW, best3 - O.sevenEdge) : tri[sus] - O.susW;
+    for (const type of TRIADS) push(root, type, tri[type]);
+    for (const [base, sevenths] of [["maj", [[10, "7"], [11, "maj7"]]], ["min", [[10, "m7"]]]] as const) {
+      const iv = CHORD_TYPES[base].iv, mean = iv.reduce((a, i) => a + c(i), 0) / iv.length;
+      const others = [1, 2, 3, 4, 5, 6, 8, 9].filter((i) => !(iv as readonly number[]).includes(i)).map(c);
+      const floor = median(others);
+      for (const [ext, type] of sevenths) {
+        const s = c(ext), clear = s >= O.sevenRel * mean && s >= O.sevenNoise * floor && s >= c(ext === 10 ? 11 : 10);
+        push(root, type, tri[base] + (clear ? O.sevenUp : -O.sevenEdge));
+      }
     }
   }
   return out.sort((a, b) => b.score - a.score);
@@ -147,21 +181,28 @@ export function smoothChords(ranked: ChordGuess[][]): (ChordGuess | null)[] {
  */
 export function cellsFromHarmony(h: StepHarmony, key?: Key): ChordCell[] {
   const steps = h.energy.length, bars = Math.max(1, Math.round(steps / 16));
+  // L256 (CH-2): at a strike, the notes that rose (this step's chroma less the one two steps before,
+  // as a ~186 ms frame already hears an attack a step early) count again, `struckW` times. A pad or
+  // bleed that sounds under the stabs never rises, so it can't take the root from them. Bass weighs
+  // struck steps the same way. No strikes (a pad loop): unchanged.
+  const st = (s: number) => Math.min(1, h.struck?.[s] ?? 0);
+  const chromaW = h.chroma.map((v, s) => { const k = st(s); if (!k) return v; const p = h.chroma[(s - 2 + steps) % steps]; return v.map((x, i) => x + CHORD_OPT.struckW * k * Math.max(0, x - p[i])); });
+  const bassW = h.bass.map((v, s) => { const k = st(s); return k ? v.map((x) => x * (1 + CHORD_OPT.struckW * k)) : v; });
   const sum = (a: number, b: number, f: (s: number) => number[]) => { let v = zeros(); for (let s = a; s < Math.min(b, steps); s++) v = add(v, f(s)); return v; };
   const energyOf = (a: number, b: number) => { let e = 0; for (let s = a; s < Math.min(b, steps); s++) e += h.energy[s]; return e; };
   const barE = Array.from({ length: bars }, (_, b) => energyOf(b * 16, b * 16 + 16));
   const loud = Math.max(1e-20, ...barE);
   const silent = (e: number) => 10 * Math.log10(e / loud + 1e-20) < CHORD_OPT.silentDb;
-  const barChroma = loopBlend(Array.from({ length: bars }, (_, b) => sum(b * 16, b * 16 + 16, (s) => h.chroma[s])));
-  const barBass = Array.from({ length: bars }, (_, b) => sum(b * 16, b * 16 + 16, (s) => h.bass[s]));
+  const barChroma = loopBlend(Array.from({ length: bars }, (_, b) => sum(b * 16, b * 16 + 16, (s) => chromaW[s])));
+  const barBass = Array.from({ length: bars }, (_, b) => sum(b * 16, b * 16 + 16, (s) => bassW[s]));
   type Raw = { bar: number; startStep: number; steps: number; ranked: ChordGuess[] };
   const raw: Raw[] = [];
   for (let b = 0; b < bars; b++) {
     if (silent(barE[b])) { raw.push({ bar: b, startStep: b * 16, steps: 16, ranked: [] }); continue; }
     const whole = rankChords(barChroma[b], barBass[b], key);
-    const halves = [0, 8].map((o) => ({ o, e: energyOf(b * 16 + o, b * 16 + o + 8), r: rankChords(sum(b * 16 + o, b * 16 + o + 8, (s) => h.chroma[s]), sum(b * 16 + o, b * 16 + o + 8, (s) => h.bass[s]), key) }));
+    const halves = [0, 8].map((o) => ({ o, e: energyOf(b * 16 + o, b * 16 + o + 8), r: rankChords(sum(b * 16 + o, b * 16 + o + 8, (s) => chromaW[s]), sum(b * 16 + o, b * 16 + o + 8, (s) => bassW[s]), key) }));
     const top = whole[0]?.name;
-    const differs = halves.every((x) => x.r.length && x.e >= 0.2 * barE[b]) && halves[0].r[0].name !== halves[1].r[0].name &&
+    const differs = halves.every((x) => x.r.length && x.e >= CHORD_OPT.splitEnergy * barE[b]) && halves[0].r[0].name !== halves[1].r[0].name &&
       halves.some((x) => x.r[0].name !== top && x.r[0].score - (x.r.find((g) => g.name === top)?.score ?? 0) >= CHORD_OPT.splitMargin);
     if (differs) for (const x of halves) raw.push({ bar: b, startStep: b * 16 + x.o, steps: 8, ranked: x.r });
     else raw.push({ bar: b, startStep: b * 16, steps: 16, ranked: whole });
@@ -310,8 +351,12 @@ export function readChords(left: Float32Array, right: Float32Array | undefined, 
   const sps = 60 / bpm / 4, steps = Math.max(1, Math.floor(x.length / r / sps + 0.01)), bars = Math.max(1, Math.round(steps / 16));
   if (x.length < r * 0.5) return { reader: "dsp", bpm, steps, bars, register: 60, tuningCents: 0, cells: [], events: [] };
   const h = harmonyOf(x, r, bpm);
-  const cells = cellsFromHarmony(h, key);
-  const events = eventsFromOnsets(chordOnsets(x, r), cells, bpm, steps);
+  const onsets = chordOnsets(x, r);
+  // The strikes per 16th (L256): the step an onset falls in, at its strength, weighs the notes it starts.
+  const struck = new Array(h.energy.length).fill(0);
+  for (const o of onsets) { const s = Math.floor(Math.max(0, o.t) / sps) % struck.length; struck[s] = Math.max(struck[s], o.vel); }
+  const cells = cellsFromHarmony({ ...h, struck }, key);
+  const events = eventsFromOnsets(onsets, cells, bpm, steps);
   if (x !== mono) x.fill(0);
   if (mono !== left) mono.fill(0); // the copies of the original go here (C2)
   return { reader: "dsp", bpm, steps, bars, register: h.register, tuningCents: h.tuningCents, cells, events };

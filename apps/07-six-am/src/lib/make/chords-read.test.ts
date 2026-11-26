@@ -6,6 +6,7 @@ import { CHORD_TYPES, cellsFromHarmony, chordNotes, chordsFromNotes, eventsFromO
 import type { MelodyReading } from "./melody-make";
 import type { ReadNote } from "./notes-read";
 import { LOST_69_76, renderLost6976 } from "./melody-fixture";
+import { CHORD_FIXTURES, scoreCells } from "./chords-fixture";
 
 const chromaOf = (pcs: number[], w: number[] = pcs.map(() => 1)) => { const c = new Array(12).fill(0); pcs.forEach((p, i) => (c[p % 12] += w[i])); return c; };
 const top = (pcs: number[], bass?: number[], key?: { key: string; scale: "major" | "minor" }) => rankChords(chromaOf(pcs), bass ? chromaOf(bass) : undefined, key)[0].name;
@@ -41,11 +42,62 @@ describe("chord templates", () => {
   });
 });
 
+describe("chord type (L256, modelled on the spike's real loops; the held-out loop is not here)", () => {
+  const read = (name: string) => { const f = CHORD_FIXTURES.find((x) => x.name === name)!; return { f, cells: cellsFromHarmony(f.harmony, f.key) }; };
+
+  it("hears a quiet 7th (CH-1: Lost's G7 stab read as G)", () => {
+    const { cells } = read("lost-69-76");
+    expect(cells.slice(0, 7).map((c) => c.name)).toEqual(new Array(7).fill("G7"));
+    expect(cells[0].alternatives[0].name).toBe("G");
+  });
+
+  it("keeps minor minor under a loud 9th (CH-1: Dubspinna's B♭m read as B♭sus2)", () => {
+    const { cells } = read("dub-57-64");
+    expect([2, 3, 6].map((b) => cells.find((c) => c.bar === b)!.name)).toEqual(["Bbm", "Bbm", "Bbm"]);
+    expect(cells[0].name).toBe("C#");
+  });
+
+  it("lets the stabs, not a pad under them, name the root (CH-2: Retrouvé's Fm)", () => {
+    const { cells } = read("ret-57-64");
+    expect(cells.slice(3, 7).map((c) => c.name)).toEqual(["Fm", "Fm", "Fm", "Fm"]);
+  });
+
+  it("splits a bar where a stab gives way to a quieter pad (CH-5: Lost 49–56, D7 then Gm)", () => {
+    const { cells } = read("lost-49-56");
+    expect(cells.filter((c) => c.bar === 2).map((c) => [c.name, c.steps])).toEqual([["D7", 8], ["Gm", 8]]);
+  });
+
+  it("holds its level on all the modelled loops (root + family, root, top 4)", () => {
+    let fam = 0, famN = 0, root = 0, n = 0, top4 = 0;
+    for (const f of CHORD_FIXTURES) {
+      const s = scoreCells(cellsFromHarmony(f.harmony, f.key), f.labels);
+      fam += s.family * s.famN; famN += s.famN; root += s.root * s.n; n += s.n; top4 += s.top4 * s.famN;
+    }
+    expect(fam / famN).toBeGreaterThanOrEqual(0.9);
+    expect(root / n).toBeGreaterThanOrEqual(0.9);
+    expect(top4 / famN).toBeGreaterThanOrEqual(0.9);
+  });
+
+  it("doesn't add a 7th for a faint bleed, nor a sus over a clear 3rd", () => {
+    expect(top([0, 4, 7, 10], undefined, undefined)).toBe("C7");
+    expect(rankChords(chromaOf([0, 4, 7, 10], [1, 0.8, 0.9, 0.12]))[0].name).toBe("C");
+    expect(rankChords(chromaOf([10, 1, 5, 0], [1, 0.35, 0.9, 0.8]), chromaOf([10]))[0].name).toBe("Bbm");
+    expect(rankChords(chromaOf([10, 5, 0], [1, 0.9, 0.8]), chromaOf([10]))[0].name).toBe("Bbsus2");
+  });
+
+  it("reads a pad loop (no strikes) as before", () => {
+    const chroma = Array.from({ length: 32 }, (_, s) => chromaOf(s < 16 ? [9, 0, 4] : [5, 9, 0]));
+    const h: StepHarmony = { chroma, bass: chroma.map(() => new Array(12).fill(0)), energy: chroma.map(() => 1) };
+    expect(cellsFromHarmony(h).map((c) => c.name)).toEqual(["Am", "F"]);
+    expect(cellsFromHarmony({ ...h, struck: new Array(32).fill(0) }).map((c) => c.name)).toEqual(["Am", "F"]);
+  });
+});
+
 describe("loop and smoothing", () => {
   it("keeps a 4-chord loop a loop when one bar is noisy", () => {
     const prog = [[9, 0, 4], [5, 9, 0], [0, 4, 7], [7, 11, 2]];
     const bars = [0, 1, 2, 3, 4, 5, 6, 7].map((b) => chromaOf(prog[b % 4]));
-    bars[6] = chromaOf([0, 4, 7, 9], [1, 0.6, 1, 0.5]); // bar 7: C with an A bleeding in (alone it reads Am7)
+    bars[6] = chromaOf([0, 4, 7, 9], [0.9, 0.9, 0.75, 1]); // bar 7: C with a loud A bleeding in (alone it reads Am7)
     expect(rankChords(bars[6])[0].name).toBe("Am7");
     const blended = loopBlend(bars);
     expect(rankChords(blended[6])[0].name).toBe("C");

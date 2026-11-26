@@ -7,7 +7,8 @@
 //   then a 7th (7, maj7, m7) only if it stands out (L256, rankChords), a little in favour of the key;
 //   a loop that repeats every 1, 2 or 4 bars is blended with its repeats and a short smoothing keeps
 //   a 3–4 chord loop a loop. A bar gets two chords only when its halves clearly differ. Chord times
-//   are the onset reader's (notes-read.ts loopAttacks, ~25 ms in Phase 5) where the pitched band rises.
+//   are the onset reader's (notes-read.ts loopAttacks, ~25 ms in Phase 5) where the pitched band rises
+//   with a strike's shape (U-1: a pumped or tremolo pad is one held chord, not a strike per beat).
 // - B, "basic-pitch" (chordsFromNotes): Basic Pitch's notes (notes-bp.ts) folded into the same chroma
 //   and templates, with the notes' onsets as chord times.
 //
@@ -42,11 +43,15 @@ export type ChordsReader = "dsp" | "basic-pitch";
 export type ChordsReading = { reader: ChordsReader; bpm: number; steps: number; bars: number; register: number; tuningCents: number; cells: ChordCell[]; events: ChordEvent[] };
 type Key = { key: string; scale: Scale };
 
-// shortcut: weights (root 0.15, out of key 0.02 per triad tone, change 0.05, loop blend 0.5, split margin 0.1, half energy −20 dB, silent −30 dB; L256: 3rd gate 0.3, sus 0.04, 7th 0.2 of the triad and 2× the noise, 7th +0.005 / −0.03, struck ×2) picked by reasoning and modelled fixtures (chords-fixture.ts), not fitted on real parts; re-grade on the real loops (data-evals) before trusting them.
+// shortcut: weights (root 0.15, out of key 0.02 per triad tone, change 0.05, loop blend 0.5, split margin 0.1, half energy −20 dB, silent −30 dB; L256: 3rd gate 0.3, sus 0.04, 7th 0.2 of the triad and 2× the noise, 7th +0.005 / −0.03, struck ×2; U-2/CH-7: sus/dim margin 0.05 over another root's triad, dim −0.04, a strike counts only with 2+ pitch classes rising) picked by reasoning and modelled fixtures (chords-fixture.ts), not fitted on real parts; re-grade on the real loops (data-evals) before trusting them.
 export const CHORD_OPT = {
   rootW: 0.15, keyW: 0.02, changeCost: 0.05, loopBlend: 0.5, loopSim: 0.9, splitMargin: 0.1, splitEnergy: 0.01, silentDb: -30, alternatives: 6,
   // L256 (CH-1): the type is chosen in two steps, a triad first, then a 7th only when it stands out.
   thirdGate: 0.3, susW: 0.04, sevenRel: 0.2, sevenNoise: 2, sevenEdge: 0.03, sevenUp: 0.005,
+  // U-2, CH-7: a sus or dim must beat a major/minor triad on another root sharing two of its notes by this much; dim, like sus, a little under anyway.
+  rareMargin: 0.05, dimW: 0.04,
+  // CH-7: a strike counts extra only when at least this many pitch classes rise together (a chord, not a lead note).
+  struckPcs: 2,
   // L256 (CH-2): a step with a strike counts this much more than sustained bleed (1 = twice).
   struckW: 2,
 };
@@ -88,6 +93,7 @@ export function rankChords(chroma: number[], bass?: number[], key?: Key): ChordG
   const O = CHORD_OPT;
   const out: ChordGuess[] = [];
   const push = (root: number, type: ChordType, score: number) => out.push({ name: chordName(root, type), root, type, score: Math.round(score * 1000) / 1000 });
+  const triads: Record<ChordType, number>[] = [];
   for (let root = 0; root < 12; root++) {
     const c = (i: number) => chroma[mod12(root + i)];
     const rootShare = bSum > 0 ? bass![root] / bSum : 0;
@@ -100,6 +106,29 @@ export function rankChords(chroma: number[], bass?: number[], key?: Key): ChordG
     }
     const third = Math.max(c(3), c(4)), ref = (c(0) + c(7)) / 2, best3 = Math.max(tri.maj, tri.min);
     for (const sus of ["sus2", "sus4"] as const) tri[sus] = third >= O.thirdGate * ref ? Math.min(tri[sus] - O.susW, best3 - O.sevenEdge) : tri[sus] - O.susW;
+    tri.dim -= O.dimW; // a diminished triad is as rare in house as a sus (CH-7)
+    triads[root] = tri;
+  }
+  // U-2, CH-7: a sus or dim names the notes only when no major or minor triad on another root explains
+  // two of its three notes about as well: a minor chord's added 9th next to the root a half bar before
+  // read Fm as B♭sus2, and a lead note a minor 3rd under the root read B♭m as Gdim. Within `rareMargin`
+  // of such a triad, it ranks just under it (still an alternative).
+  for (let root = 0; root < 12; root++) {
+    const tri = triads[root];
+    for (const type of ["sus2", "sus4", "dim"] as const) {
+      const pcs = CHORD_TYPES[type].iv.map((i) => mod12(root + i));
+      let rival = -Infinity;
+      for (let r2 = 0; r2 < 12; r2++) for (const t2 of ["maj", "min"] as const) {
+        if (r2 === root) continue;
+        const shared = CHORD_TYPES[t2].iv.filter((i) => pcs.includes(mod12(r2 + i))).length;
+        if (shared >= 2) rival = Math.max(rival, triads[r2][t2]);
+      }
+      if (tri[type] < rival + O.rareMargin) tri[type] = Math.min(tri[type], rival - O.sevenEdge);
+    }
+  }
+  for (let root = 0; root < 12; root++) {
+    const c = (i: number) => chroma[mod12(root + i)];
+    const tri = triads[root];
     for (const type of TRIADS) push(root, type, tri[type]);
     for (const [base, sevenths] of [["maj", [[10, "7"], [11, "maj7"]]], ["min", [[10, "m7"]]]] as const) {
       const iv = CHORD_TYPES[base].iv, mean = iv.reduce((a, i) => a + c(i), 0) / iv.length;
@@ -185,8 +214,13 @@ export function cellsFromHarmony(h: StepHarmony, key?: Key): ChordCell[] {
   // as a ~186 ms frame already hears an attack a step early) count again, `struckW` times. A pad or
   // bleed that sounds under the stabs never rises, so it can't take the root from them. Bass weighs
   // struck steps the same way. No strikes (a pad loop): unchanged.
-  const st = (s: number) => Math.min(1, h.struck?.[s] ?? 0);
-  const chromaW = h.chroma.map((v, s) => { const k = st(s); if (!k) return v; const p = h.chroma[(s - 2 + steps) % steps]; return v.map((x, i) => x + CHORD_OPT.struckW * k * Math.max(0, x - p[i])); });
+  // CH-7: only a chord's strike counts extra, where at least two pitch classes rise together (each by a
+  // quarter of the biggest rise); a lead's single note struck over a held chord doesn't, so a brief high
+  // note can't outweigh the chord it sits on.
+  const rise = h.chroma.map((v, s) => { const p = h.chroma[(s - 2 + steps) % steps]; return v.map((x, i) => Math.max(0, x - p[i])); });
+  const chordStrike = (s: number) => { const top = Math.max(...rise[s]); return top > 0 && rise[s].filter((d) => d >= 0.25 * top).length >= CHORD_OPT.struckPcs; };
+  const st = (s: number) => (chordStrike(s) ? Math.min(1, h.struck?.[s] ?? 0) : 0);
+  const chromaW = h.chroma.map((v, s) => { const k = st(s); return k ? v.map((x, i) => x + CHORD_OPT.struckW * k * rise[s][i]) : v; });
   const bassW = h.bass.map((v, s) => { const k = st(s); return k ? v.map((x) => x * (1 + CHORD_OPT.struckW * k)) : v; });
   const sum = (a: number, b: number, f: (s: number) => number[]) => { let v = zeros(); for (let s = a; s < Math.min(b, steps); s++) v = add(v, f(s)); return v; };
   const energyOf = (a: number, b: number) => { let e = 0; for (let s = a; s < Math.min(b, steps); s++) e += h.energy[s]; return e; };
@@ -266,6 +300,26 @@ const NF = NOTE_FFT; // the note reader's frame: at ~11 kHz, 186 ms, 5.4 Hz bins
 const LO_MIDI = 43, HI_MIDI = 96, FLOOR_DB = -42;
 // shortcut: onset filter (mark ≥ 0.15, pitched band 100–1200 Hz up ≥ 3 dB, within 30 dB of the loudest, sounds until 12 dB down) picked by reasoning; check against the real stab labels.
 export const ONSET_OPT = { mark: 0.15, riseDb: 3, floorDb: -30, decayDb: 12, bandLo: 100, bandHi: 1200 };
+// shortcut: strike test (U-1: 400–3000 Hz on 23 ms frames; ≥ 6 dB in 20 ms, or ≥ 3 dB in 20 ms that is ≥ 70 % of the whole rise; dips up to 250 ms bridged) picked on modelled pumped pads, tremolo and stabs (chords-fixture.ts), not fitted on real parts; re-grade H2/H3 on real loops (data-evals) before trusting it.
+export const STRIKE_OPT = { bandLo: 400, bandHi: 3000, fft: 256, steepDb: 6, minDb: 3, share: 0.7, riseS: 0.02, lookS: 0.1, bridgeS: 0.25 };
+
+/**
+ * The attack shape of a rise in the part's pitched band (U-1, H3): `steep`, the most it climbs in 20 ms
+ * around `t`; `share`, that as a part of the whole climb from the lowest point since the previous
+ * candidate (at most 100 ms back) to the peak just after. A struck chord, even one struck again while it
+ * rings, gets most of its rise in a few ms; a sidechain pump climbs back over 100–300 ms and a tremolo or
+ * LFO swells as slowly as it fades, so their 20 ms share stays small.
+ */
+export function attackShape(at: (t: number) => number, t: number, prevT: number) {
+  const O = STRIKE_OPT, d = 0.0029;
+  let steep = -Infinity, post = -Infinity, low = Infinity;
+  for (let c = -O.riseS; c <= 0.03 + 1e-9; c += d) steep = Math.max(steep, at(t + c) - at(t + c - O.riseS));
+  for (let c = 0; c <= 0.07 + 1e-9; c += d) post = Math.max(post, at(t + c));
+  for (let c = Math.max(-O.lookS, prevT - t + 0.01); c <= 1e-9; c += d) low = Math.min(low, at(t + c));
+  const whole = post - (Number.isFinite(low) ? low : at(t));
+  return { steep, share: steep / Math.max(0.5, whole) };
+}
+export const isStrike = (a: { steep: number; share: number }) => a.steep >= STRIKE_OPT.steepDb || (a.steep >= STRIKE_OPT.minDb && a.share >= STRIKE_OPT.share);
 
 /**
  * Harmony per 16th of a looped part (the loop read round, so the first bar's window sees the last).
@@ -300,8 +354,11 @@ export function harmonyOf(x: Float32Array, r: number, bpm: number): StepHarmony 
     if (!ps.length) continue;
     let top = 0;
     for (const p of ps) { chroma[s][mod12(p.midi)] += Math.sqrt(p.amp); energy[s] += p.amp * p.amp; top = Math.max(top, p.amp); }
-    // The root: the lowest strong note in the frame, counted again.
-    const low = ps.filter((p) => p.amp >= 0.3 * top).sort((p, q) => p.midi - q.midi)[0];
+    // The root: the lowest strong note in the frame, counted again. CH-7: when the only strong note is a
+    // lead on top of quieter notes still sounding (a tenth of it or more), the lowest of those is the low note.
+    const strong = ps.filter((p) => p.amp >= 0.3 * top).sort((p, q) => p.midi - q.midi);
+    const under = strong.length === 1 ? ps.filter((p) => p.midi < strong[0].midi && p.amp >= 0.1 * top).sort((p, q) => p.midi - q.midi) : [];
+    const low = under[0] ?? strong[0];
     if (low) { const v = Math.sqrt(low.amp); bass[s][mod12(low.midi)] += v; regW += v; regS += v * low.midi; }
   }
   // The register: the low note (a chord's bottom) plus half a closed voicing's span, so voiceChord puts
@@ -309,7 +366,23 @@ export function harmonyOf(x: Float32Array, r: number, bpm: number): StepHarmony 
   return { chroma, bass, energy, register: regW ? Math.round(regS / regW + 5.5) : 60, tuningCents: Math.round(tune * 100) };
 }
 
-/** Onsets of a looped part where its pitched band rises (the attack reader's marks, timed by its finer curve). */
+/** A band's level (dB) of a looped part on `n`-point frames, smoothed over ±2 hops, read round at any time. */
+function bandLevel(x: Float32Array, r: number, n: number, hop: number, lo: number, hi: number) {
+  const { frames, bins, p } = powerSpec(x, n, hop);
+  const kLo = Math.ceil((lo * n) / r), kHi = Math.floor((hi * n) / r);
+  const env = new Float64Array(frames);
+  for (let f = 0; f < frames; f++) { let e = 0; for (let k = kLo; k <= kHi; k++) e += p[f * bins + k]; env[f] = 10 * Math.log10(e + 1e-20); }
+  const sm = new Float64Array(frames), W = 2, wrap = (f: number) => ((f % frames) + frames) % frames;
+  for (let f = 0; f < frames; f++) { let s = 0; for (let j = f - W; j <= f + W; j++) s += env[wrap(j)]; sm[f] = s / (2 * W + 1); }
+  return { frames, sm, at: (t: number) => (frames ? sm[wrap(Math.round((t * r) / hop))] : -200) };
+}
+
+/**
+ * Onsets of a looped part where its pitched band rises (the attack reader's marks, timed by its finer
+ * curve), kept only where the rise has a strike's shape (U-1, attackShape): a pad under a sidechain pump,
+ * a tremolo or an LFO is one sounding chord, not a strike on every beat. An onset sounds until the band
+ * falls 12 dB; a dip that comes back within 250 ms without a strike (the pump's) doesn't end it.
+ */
 export function chordOnsets(x: Float32Array, r: number): Onset[] {
   const { marks, fine } = loopAttacks(x, r);
   const n = 512, hop = Math.max(1, Math.round(r * 0.0029));
@@ -324,23 +397,38 @@ export function chordOnsets(x: Float32Array, r: number): Onset[] {
   const fr = (t: number) => Math.max(0, Math.min(frames - 1, Math.round((t * r) / hop)));
   const maxIn = (a: number, b: number) => { let m = -Infinity; for (let f = fr(a); f <= fr(b); f++) m = Math.max(m, sm[f]); return m; };
   const minIn = (a: number, b: number) => { let m = Infinity; for (let f = fr(a); f <= fr(b); f++) m = Math.min(m, sm[f]); return m; };
-  const out: Onset[] = [];
+  const cands: { t: number; s: number; after: number }[] = [];
+  const loopEnd = x.length / r;
   for (const m of marks) {
     if (m.s < ONSET_OPT.mark) continue;
     const after = maxIn(m.t + 0.005, m.t + 0.06);
     // At the loop's start the 50 ms before it are the loop's end (it plays round).
-    const loopEnd = x.length / r;
     const before = m.t > 0.05 ? minIn(m.t - 0.05, m.t - 0.003) : Math.min(minIn(loopEnd - (0.05 - m.t), loopEnd), m.t > 0.006 ? minIn(0, m.t - 0.003) : Infinity);
     if (after - before < ONSET_OPT.riseDb || after < peak + ONSET_OPT.floorDb) continue;
     let fb: { t: number; s: number } | null = null;
     for (const q of fine) if (Math.abs(q.t - m.t) <= 0.02 && (!fb || q.s > fb.s)) fb = q;
-    const t = fb ? fb.t : m.t;
-    // Sounds until the band falls 12 dB under its level just after the onset.
-    let f = fr(t + 0.06);
-    while (f < frames - 1 && sm[f] > after - ONSET_OPT.decayDb) f++;
-    out.push({ t, vel: Math.min(1, 0.4 + 0.6 * m.s), end: (f * hop) / r });
+    cands.push({ t: fb ? fb.t : m.t, s: m.s, after });
   }
-  return out;
+  cands.sort((a, b) => a.t - b.t);
+  // U-1: the strike test, on its own finer band level (23 ms frames, above the kick's body).
+  const lv = bandLevel(x, r, STRIKE_OPT.fft, hop, STRIKE_OPT.bandLo, STRIKE_OPT.bandHi);
+  const kept = cands.filter((c, i) => isStrike(attackShape(lv.at, c.t, i ? cands[i - 1].t : cands.length > 1 ? cands[cands.length - 1].t - loopEnd : -Infinity)));
+  const bridge = Math.round((STRIKE_OPT.bridgeS * r) / hop);
+  return kept.map((c, i) => {
+    // Sounds until the band falls 12 dB under its level just after the onset; a dip that climbs back
+    // within 250 ms with no strike in it (a sidechain pump) doesn't end it (U-1).
+    const nextF = i + 1 < kept.length ? fr(kept[i + 1].t) - 3 : frames - 1, thr = c.after - ONSET_OPT.decayDb;
+    let f = fr(c.t + 0.06);
+    for (;;) {
+      while (f < frames - 1 && sm[f] > thr) f++;
+      if (f >= frames - 1) break;
+      let g = f + 1;
+      while (g < Math.min(frames - 1, f + bridge, nextF) && sm[g] <= thr) g++;
+      if (g < Math.min(frames - 1, f + bridge, nextF) && sm[g] > thr) { f = g; continue; }
+      break;
+    }
+    return { t: c.t, vel: Math.min(1, 0.4 + 0.6 * c.s), end: (f * hop) / r };
+  });
 }
 
 /** Reader A: chord names per bar of a looped mono-or-stereo "other" part, with their times (numbers only). */

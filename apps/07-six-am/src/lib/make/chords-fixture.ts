@@ -5,6 +5,7 @@
 // stabs, a pad change mid-bar), not measured. Regression guards only: the reader is graded on the real
 // separated parts by data-evals. The held-out loop (Dubspinna 73–80) is not here and must never be.
 import type { ChordType, ChordCell, StepHarmony } from "./chords-read";
+import { KIT_909, VOICES, renderDrums, renderNotes, withBleed, type TruthNote } from "./layers-bench";
 
 /** A sounding tone: MIDI, amplitude at its steps (linear, as the note reader's), and the steps it sounds on (with a decay after a strike). */
 type Tone = { midi: number; amp: number };
@@ -21,7 +22,8 @@ function rng(seed: number) { let s = seed >>> 0; return () => ((s = (s * 1664525
 
 /**
  * Per-16th harmony as harmonyOf makes it: each step's sounding tones add √amp to their pitch class,
- * amp² to the energy, and the lowest tone within 0.3 of the step's loudest adds √amp to the bass;
+ * amp² to the energy, and the lowest tone within 0.3 of the step's loudest adds √amp to the bass (or,
+ * when that is one lead note over quieter ones, the lowest tone within 0.1, CH-7);
  * `struck` is 1 on a step with a strike. Plus a noise floor on every pitch class.
  */
 function build(bars: number, hits: Hit[], pads: Pad[], seed: number, noise = 0.03): StepHarmony {
@@ -40,7 +42,9 @@ function build(bars: number, hits: Hit[], pads: Pad[], seed: number, noise = 0.0
     const c = new Array(12).fill(0).map(() => noise * rand()), b = new Array(12).fill(0);
     let e = 0, top = 0;
     for (const t of at[s]) { c[t.midi % 12] += Math.sqrt(t.amp); e += t.amp * t.amp; top = Math.max(top, t.amp); }
-    const low = at[s].filter((t) => t.amp >= 0.3 * top).sort((p, q) => p.midi - q.midi)[0];
+    const strong = at[s].filter((t) => t.amp >= 0.3 * top).sort((p, q) => p.midi - q.midi);
+    const under = strong.length === 1 ? at[s].filter((t) => t.midi < strong[0].midi && t.amp >= 0.1 * top).sort((p, q) => p.midi - q.midi) : [];
+    const low = under[0] ?? strong[0];
     if (low) b[low.midi % 12] += Math.sqrt(low.amp);
     chroma.push(c); bass.push(b); energy.push(e + 1e-6);
   }
@@ -151,7 +155,41 @@ function dub105112(): ChordFixture {
   return { name: "dub-105-112", bars: 8, key: { key: "G#", scale: "major" }, harmony: build(8, hits, [], 105112), labels };
 }
 
-export const CHORD_FIXTURES: ChordFixture[] = [lost6976(), lost7784(), lost4956(), ret5764(), dub5764(), dub141148(), dub105112()];
+/**
+ * U-2 (unseen-loop grade, 26 Nov), modelled on its failure note only and transposed (no labels or times
+ * of that loop): minor stabs with a loud added 9th, changing every half bar, over a pad's quiet 4th
+ * note. Cm(add9) (C E♭ G + D) | Gm(add9) (G B♭ D + A), a pad's E♭ under both; in B♭ major. The 9th plus
+ * the other half's root make a sus2 on another root (C D G = Csus2 over Gm) and the pad's note a maj7
+ * (E♭ G B♭ D = E♭maj7): the shapes that read F minor as B♭sus2 and C♯maj7 there.
+ */
+function minorNinths(): ChordFixture {
+  // The Gm's B♭ voiced quiet (as B♭m's D♭ in CH-1), the 9th loud, the Cm ringing into the Gm half.
+  const CM9 = T([60, 63, 67, 62], [1, 0.7, 0.8, 0.55]), GM9 = T([67, 70, 74, 69], [0.9, 0.3, 0.8, 0.65]);
+  const hits: Hit[] = [];
+  for (let b = 0; b < 8; b++) { for (const s of [0, 3, 6]) hits.push({ step: bar(b, s), tones: CM9, ring: 3, decay: 0.65 }); for (const s of [9, 12]) hits.push({ step: bar(b, s), tones: GM9, ring: 1, decay: 0.5 }); }
+  const pads: Pad[] = [{ from: 0, to: bar(8), tones: T([51, 63], [0.12, 0.08]) }];
+  const labels: Label[] = [];
+  for (let b = 0; b < 8; b++) labels.push({ startStep: bar(b), steps: 8, root: 0, type: "min" }, { startStep: bar(b, 8), steps: 8, root: 7, type: "min" });
+  return { name: "minor-ninths", bars: 8, key: { key: "A#", scale: "major" }, harmony: build(8, hits, pads, 2002), labels };
+}
+
+/**
+ * CH-7 / U-3 (spike re-grade), modelled on its failure note and transposed: a held minor chord with a
+ * one-note lead on top that sits a minor 3rd under the root's octave (here Cm, C E♭ G, with a lead A
+ * struck high and short, as loud as the chord at its strike): A C E♭ reads as Adim. Cm on every bar.
+ */
+function leadOverMinor(): ChordFixture {
+  const CM = T([48, 51, 55, 60], [1, 0.6, 0.8, 0.5]);
+  const hits: Hit[] = [];
+  for (let b = 0; b < 8; b++) {
+    for (const s of [0, 6, 10]) hits.push({ step: bar(b, s), tones: CM, ring: 2, decay: 0.55 });
+    for (const s of [2, 4, 8, 12]) hits.push({ step: bar(b, s), tones: T([81, 69], [0.9, 0.5]), ring: 1, decay: 0.45 });
+  }
+  const labels: Label[] = Array.from({ length: 8 }, (_, b) => ({ startStep: bar(b), steps: 16, root: 0, type: "min" as const }));
+  return { name: "lead-over-minor", bars: 8, key: { key: "A#", scale: "major" }, harmony: build(8, hits, [], 7307), labels };
+}
+
+export const CHORD_FIXTURES: ChordFixture[] = [lost6976(), lost7784(), lost4956(), ret5764(), dub5764(), dub141148(), dub105112(), minorNinths(), leadOverMinor()];
 
 /**
  * The spike grade's scoring on cells (evals-runs/2026-11-26-chords-spike.md): per labelled cell, each
@@ -177,4 +215,57 @@ export function scoreCells(cells: ChordCell[], labels: Label[]) {
     if (l.type !== "?") { fam += f; top4 += t4; famN++; }
   }
   return { family: famN ? fam / famN : 1, root: labels.length ? root / labels.length : 1, top4: famN ? top4 / famN : 1, famN, n: labels.length };
+}
+
+// ── Audio fixtures for chord times (U-1, unseen-loop grade 26 Nov): held pads under a sidechain pump ──
+// Rendered with Six AM's own additive voices (layers-bench.ts), the levels the engineer's model of a
+// house pad (a 12 dB duck on every kick, recovering over ~200 ms; or a 16th-rate tremolo) and of stabs
+// under the same pump. Not measured on any track (C2): regression guards for chordOnsets only. The
+// unseen loops' labels (Kolter, Dubspinna 161–168, 33–40) are not here and must never be.
+
+export type TimesFixture = { name: string; bpm: number; rate: number; mono: Float32Array; strikes: number[]; changes: number };
+
+const FM = [53, 56, 60], DBMAJ = [49, 53, 56, 61], EBMAJ = [51, 55, 58, 63], CM = [48, 51, 55, 60];
+
+/** The sidechain gain: on every beat it falls `duckDb` in 3 ms and climbs back, linear in dB, over `releaseS`; plus an optional tremolo. */
+function pumped(x: Float32Array, rate: number, bpm: number, o: { duckDb: number; releaseS: number; tremHz?: number; tremDb?: number }) {
+  const beat = 60 / bpm;
+  for (let i = 0; i < x.length; i++) {
+    const t = i / rate, ph = t % beat;
+    let db = ph < 0.003 ? -o.duckDb * (ph / 0.003) : -o.duckDb * Math.max(0, 1 - (ph - 0.003) / o.releaseS);
+    if (o.tremHz && o.tremDb) db += -o.tremDb * 0.5 * (1 - Math.cos(2 * Math.PI * o.tremHz * t));
+    x[i] *= Math.pow(10, db / 20);
+  }
+  return x;
+}
+
+/** A held pad, one chord per 2 bars (Fm, D♭, E♭, Cm), pumped by the kick, with the kick bled in at −18 dB. */
+export function pumpedPadLoop(o: { duckDb?: number; releaseS?: number; tremHz?: number; tremDb?: number; seed?: number } = {}, rate = 22050): TimesFixture {
+  const bpm = 124, sps = 60 / bpm / 4, bars = 8, n = Math.round(bars * 16 * sps * rate);
+  const notes: TruthNote[] = [];
+  [FM, DBMAJ, EBMAJ, CM].forEach((ch, k) => { for (const midi of ch) notes.push({ t: k * 32 * sps, dur: 32 * sps - 0.01, midi, vel: 0.9 }); });
+  const part = pumped(renderNotes(notes, VOICES.pad, n, rate, 0.12), rate, bpm, { duckDb: o.duckDb ?? 12, releaseS: o.releaseS ?? 0.2, tremHz: o.tremHz, tremDb: o.tremDb });
+  const kick = renderDrums({ name: "kick", bpm, kit: KIT_909, bars: [{ kick: [0, 4, 8, 12] }] }, { bars, rate, seed: o.seed ?? 7 }).mono;
+  return { name: `pad, duck ${o.duckDb ?? 12} dB${o.tremHz ? `, tremolo ${o.tremHz} Hz` : ""}`, bpm, rate, mono: withBleed(part, [kick], -18, o.seed ?? 7), strikes: [0, 1, 2, 3].map((k) => k * 32 * sps), changes: 4 };
+}
+
+/** Fm stabs on the off-beats and a 16th push, over a quiet Fm pad, both under the same pump, kick bled in: every stab is a strike. */
+export function pumpedStabLoop(rate = 22050): TimesFixture {
+  const bpm = 124, sps = 60 / bpm / 4, bars = 4, n = Math.round(bars * 16 * sps * rate);
+  const stabs: TruthNote[] = [], strikes: number[] = [];
+  for (let b = 0; b < bars; b++) for (const s of [2, 6, 10, 13, 14]) { const t = (b * 16 + s) * sps; strikes.push(t); for (const midi of [65, 68, 72]) stabs.push({ t, dur: sps * 0.8, midi, vel: 1 }); }
+  const pad: TruthNote[] = FM.map((midi) => ({ t: 0, dur: bars * 16 * sps, midi, vel: 0.25 }));
+  const part = renderNotes(stabs, VOICES.stab, n, rate, 0.15);
+  const under = renderNotes(pad, VOICES.pad, n, rate, 0.12);
+  for (let i = 0; i < n; i++) part[i] += under[i];
+  pumped(part, rate, bpm, { duckDb: 10, releaseS: 0.18 });
+  const kick = renderDrums({ name: "kick", bpm, kit: KIT_909, bars: [{ kick: [0, 4, 8, 12] }] }, { bars, rate, seed: 11 }).mono;
+  return { name: "stabs under the pump", bpm, rate, mono: withBleed(part, [kick], -18, 11), strikes, changes: 1 };
+}
+
+/** H2's scoring on times: share of strikes with an event within 30 ms, and the share of events with no strike near. */
+export function scoreTimes(strikes: number[], events: { t: number }[], tolS = 0.03) {
+  const found = strikes.filter((s) => events.some((e) => Math.abs(e.t - s) <= tolS)).length;
+  const extra = events.filter((e) => !strikes.some((s) => Math.abs(e.t - s) <= tolS)).length;
+  return { found: strikes.length ? found / strikes.length : 1, extra: events.length ? extra / events.length : 0, events: events.length };
 }

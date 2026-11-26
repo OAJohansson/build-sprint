@@ -2,11 +2,12 @@
 // on small synthetic chroma and notes. Not a grade: the readers are graded on real separated parts by
 // data-evals (evals.md H1–H4), never on these.
 import { describe, expect, it } from "vitest";
-import { CHORD_TYPES, cellsFromHarmony, chordNotes, chordsFromNotes, eventsFromOnsets, leadLine, loopBlend, rankChords, readChords, smoothChords, voiceChord, type ChordCell, type ChordsReading, type StepHarmony } from "./chords-read";
+import { CHORD_TYPES, cellsFromHarmony, chordNotes, chordsFromNotes, eventsFromOnsets, harmonyOf, leadLine, loopBlend, rankChords, readChords, smoothChords, voiceChord, type ChordCell, type ChordsReading, type StepHarmony } from "./chords-read";
 import type { MelodyReading } from "./melody-make";
 import type { ReadNote } from "./notes-read";
 import { LOST_69_76, renderLost6976 } from "./melody-fixture";
-import { CHORD_FIXTURES, scoreCells } from "./chords-fixture";
+import { CHORD_FIXTURES, pumpedPadLoop, pumpedStabLoop, scoreCells, scoreTimes } from "./chords-fixture";
+import { renderNotes, VOICES } from "./layers-bench";
 
 const chromaOf = (pcs: number[], w: number[] = pcs.map(() => 1)) => { const c = new Array(12).fill(0); pcs.forEach((p, i) => (c[p % 12] += w[i])); return c; };
 const top = (pcs: number[], bass?: number[], key?: { key: string; scale: "major" | "minor" }) => rankChords(chromaOf(pcs), bass ? chromaOf(bass) : undefined, key)[0].name;
@@ -90,6 +91,64 @@ describe("chord type (L256, modelled on the spike's real loops; the held-out loo
     const h: StepHarmony = { chroma, bass: chroma.map(() => new Array(12).fill(0)), energy: chroma.map(() => 1) };
     expect(cellsFromHarmony(h).map((c) => c.name)).toEqual(["Am", "F"]);
     expect(cellsFromHarmony({ ...h, struck: new Array(32).fill(0) }).map((c) => c.name)).toEqual(["Am", "F"]);
+  });
+});
+
+describe("chord names, unseen-loop faults (U-2, CH-7; modelled and transposed, the unseen loops are not here)", () => {
+  const read = (name: string) => { const f = CHORD_FIXTURES.find((x) => x.name === name)!; return cellsFromHarmony(f.harmony, f.key); };
+
+  it("keeps a minor chord with a loud 9th minor, not sus2 on the root a half bar before (U-2)", () => {
+    // F A♭ C with a loud G and the B♭ of the half before: was B♭sus2 (B♭ C F).
+    const r = rankChords(chromaOf([5, 8, 0, 7, 10], [1, 0.45, 0.9, 0.5, 0.6]), chromaOf([5, 10], [0.5, 0.5]), { key: "G#", scale: "major" });
+    expect(r[0].name).toBe("Fm");
+    expect(r.slice(1, 8).map((g) => g.name)).toContain("Bbsus2");
+    const cells = read("minor-ninths");
+    expect(cells.map((c) => c.name)).toEqual(new Array(8).fill(["Cm", "Gm"]).flat());
+  });
+
+  it("still names a real sus when no major or minor triad explains its notes", () => {
+    expect(top([5, 7, 0], [5])).toBe("Fsus2");
+    expect(top([7, 0, 2], [7])).toBe("Gsus4");
+  });
+
+  it("doesn't let a lead note a minor 3rd under the root turn a minor chord into dim (CH-7)", () => {
+    expect(read("lead-over-minor").map((c) => c.name)).toEqual(new Array(8).fill("Cm"));
+  });
+
+  it("takes the low note from the chord under a loud lead, not the lead (CH-7)", () => {
+    const rate = 11025, bpm = 124, n = Math.round(rate * 4 * 60 / bpm);
+    const chord = renderNotes([48, 51, 55].map((midi) => ({ t: 0, dur: 2, midi, vel: 0.3 })), VOICES.organ, n, rate, 0.12);
+    const lead = renderNotes([0.25, 0.75, 1.25, 1.75].map((t) => ({ t, dur: 0.2, midi: 81, vel: 1 })), VOICES.pluck, n, rate, 0.15);
+    const h = harmonyOf(chord.map((v, i) => v + lead[i]), rate, bpm);
+    const bass = h.bass.reduce((a, v) => a.map((x, i) => x + v[i]), new Array(12).fill(0));
+    expect(bass[0]).toBeGreaterThan(bass[9]);
+  });
+});
+
+describe("chord times on held pads (U-1, H3; modelled pumps and tremolo, regression only)", () => {
+  const read = (f: ReturnType<typeof pumpedPadLoop>) => readChords(f.mono, undefined, f.rate, f.bpm);
+
+  it("plays a pad under a sidechain pump as one held chord per chord, not a strike per beat", () => {
+    for (const f of [pumpedPadLoop(), pumpedPadLoop({ duckDb: 8, releaseS: 0.1 }), pumpedPadLoop({ duckDb: 18, releaseS: 0.3 })]) {
+      const r = read(f);
+      expect(r.events.length, f.name).toBeLessThanOrEqual(f.changes + 1);
+      expect(r.events.every((e) => e.held && !e.struck), f.name).toBe(true);
+      expect(r.cells.map((c) => c.name)).toEqual(["Fm", "Fm", "C#", "C#", "Eb", "Eb", "Cm", "Cm"]);
+    }
+  });
+
+  it("doesn't strike on a tremolo's swells (was 39 and 134 strikes)", () => {
+    expect(read(pumpedPadLoop({ duckDb: 0, tremHz: (124 / 60) * 2, tremDb: 12 })).events.length).toBeLessThanOrEqual(5);
+    const fast = read(pumpedPadLoop({ duckDb: 0, tremHz: (124 / 60) * 4, tremDb: 8 }));
+    expect(fast.events.filter((e) => e.struck).length).toBeLessThanOrEqual(4);
+  });
+
+  it("still finds stabs under the same pump (H2: ≥ 90 % within 30 ms, ≤ 15 % extra)", () => {
+    const f = pumpedStabLoop(), r = readChords(f.mono, undefined, f.rate, f.bpm);
+    const s = scoreTimes(f.strikes, r.events);
+    expect(s.found).toBeGreaterThanOrEqual(0.9);
+    expect(s.extra).toBeLessThanOrEqual(0.15);
+    expect(r.events.every((e) => e.struck)).toBe(true);
   });
 });
 
@@ -178,6 +237,10 @@ describe("readers on synthetic parts (regression only)", () => {
     const names = r.cells.slice(0, 6).map((c) => c.name);
     expect(names.filter((x) => x === "G7").length).toBeGreaterThanOrEqual(5);
     expect(r.events.length).toBeGreaterThan(20);
+    // H2 on the re-rendered ringing stabs (U-1 must not cost the struck chords): 89 % before the strike test, 87 % after.
+    const s = scoreTimes(LOST_69_76.chords.map((c) => c[0] / 1000), r.events.filter((e) => !LOST_69_76.ambiguous.some((a) => Math.abs(a[0] / 1000 - e.t) <= 0.03)));
+    expect(s.found).toBeGreaterThanOrEqual(0.85);
+    expect(s.extra).toBeLessThanOrEqual(0.15);
   });
 
   it("lead: the Lead row when there is one, else the top line", () => {

@@ -95,3 +95,19 @@ name ("G#") instead of its usual name (A♭). The key name is already normalised
 not for the spelling.
 
 Cost $0. The copy was removed and the server stopped.
+
+## Re-check after the TH-3 fix (97f459f, 7cf8c56)
+
+Same method: a detached copy at 7cf8c56, a production build on :3037, sandbox only, live separation.
+
+| Check | Expected | Measured | Result |
+| --- | --- | --- | --- |
+| **TH-3**, Dubspinna 57–64 `chordFacts()` | B♭m, D♭, E♭; key "A♭ major" | Every bar: **D♭maj7, E♭sus2, B♭m, D♭, E♭m, Gdim, E♭dim**, `facts.key` "A♭ major". Tones in flats (B♭ D♭ F, D♭ F A♭, E♭ G♭ B♭). Picks: F♭ (from "E" or "Fb") = **F♭ A♭ C♭** (TH-2 fixed live), G♭ = G♭ B♭ D♭ | **Fixed** |
+| Offline answer | "B♭m…" | "B♭m is a minor chord, darker and softer. It steps away from home (A♭)…"; **no ♯ in any Dubspinna answer** | **Fixed** |
+| Header | "key A♭ major" | "key A♭ major" | Pass |
+| Piano and lead-grid names | flats | Dubspinna piano: 0 sharps (D♭3, E♭3, G♭3, A♭3, B♭3…); lead grid: 0 sharps (A♭4, E♭4, D♭4, B♭3…) | Pass |
+| Lost (G major), Mason (G minor) spot check | still right | Lost: header "key G major"; piano and lead in sharps (F♯, C♯…), as G major should be; G7 = I7, stepping stone to C. Mason: header "key G minor"; piano and lead in flats; Em = vi borrowed (TH-1 holds); D7 = V7; E (major) = ♯VI, outside | Pass |
+| **H12**, the 36-pair set again | right on 20 pairs incl. borrowed | **36 distinct pairs** (61 reads; the read bars differ a little from the last run: E♭dim, E♭m, Fmaj7 and E are new, Gmaj7 and A♭sus2 weren't read). **Numeral, inKey, borrowed and role right 36/36**. **Spelling right 35/36**: E♭dim's fifth reads **A**, where letter-by-letter it is B𝄫 (TH-4, minor: a reader name, rare). `[theory]` in `labFacts` 61/61. Offline answers 61/61 plain: no numerals or banned words, no ♯ in a flat key | **Pass** (35/36 fully right; spelling quirk on one dim chord) |
+| **H10** tests | green | **603/603** (61 files), including `bass-golden` | Pass |
+
+Cost $0. The copy was removed and the server stopped.

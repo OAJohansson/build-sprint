@@ -19,6 +19,8 @@ export type Song = {
   leadOff?: string; // the reason the Lead row is off in Mine
   preset: string; leadPreset: string; closeness: number; leadCloseness: number;
   save: string; tags: string;
+  /** The Mentor's first answer and its facts line (fixtures other than Lost and Dubspinna). */
+  mentor?: { answer: string; facts: string };
 };
 
 const stab4: Step[] = [3, 7, 11, 15].map((at) => ({ at, len: 1 }));
@@ -118,7 +120,9 @@ export const voiceNames = (notes: number[], flats: boolean) => notes.map((n) => 
 const WN = ["F♯m7", "D♭maj7", "C♯sus4", "B♭m7", "F♯m7", "D♭maj7", "G♯sus2", "E♭7"];
 export const WORST: Song = {
   ...LOST, id: "lost", title: "Música de Ritual (Ricardo Villalobos Extended Unreleased Dub) [Remastered]", artist: "Ricardo Villalobos & Max Loderbauer",
-  from: 113, bars: Array.from({ length: 16 }, (_, i) => ({ read: WN[i % 8], hits: i % 4 === 3 ? [{ at: 0, len: 16 }] : stab4, alts: [{ name: "D♭maj7", score: 0.9 }, { name: "F♯sus4", score: 0.8 }, { name: "C♯m7", score: 0.7 }] })),
+  from: 113, bars: Array.from({ length: 16 }, (_, i) => ({ read: WN[i % 8], doubt: i % 8 === 2, hits: i % 4 === 3 ? [{ at: 0, len: 16 }] : stab4, alts: [{ name: "D♭maj7", score: 0.9 }, { name: "F♯sus4", score: 0.8 }, { name: "C♯m7", score: 0.7 }] })),
   keyChords: ["F♯", "G♯m", "A♯m", "B", "C♯", "D♯m", "E♯dim"], keyShort: "F♯ major", key: "key F♯ major",
   save: "Long held stabs with a lot of room, from Música de Ritual (Ricardo Villalobos Extended", flats: false,
+  clock: "4:31–5:02", section: "Breakdown", tags: "chords · stab · f♯ major · 123 bpm · música de ritual",
+  mentor: { answer: "Sixteen bars, a new chord every bar: F♯m7, D♭maj7, C♯sus4, B♭m7 and on, then the same eight again. Every fourth bar is held. Make isn't sure of bars 115 and 123.", facts: "8 chords × 2 · stabs, every 4th bar held · 16 bars" },
 };

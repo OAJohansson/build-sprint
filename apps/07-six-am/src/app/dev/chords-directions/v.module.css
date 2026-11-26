@@ -284,3 +284,5 @@
 /* break-ui (round 1): a 16-bar loop's two lines of cells are shorter, and the name leaves room for the bar number */
 .row[data-many] .cell { height: 44px; padding-top: 5px; gap: 2px; }
 .row[data-many] .cellName { padding-right: 24px; font-size: 14px; }
+/* the sticky A/B (built Melody) only on desktop; on a phone it would cover a third of the screen */
+@media (max-width: 700px) { .check { position: static !important; margin-bottom: 0 !important; padding-bottom: 0 !important; } }

@@ -66,7 +66,7 @@ export function Shell({ song, children, block, rail, row = "chords", closeness }
           <div className={cx(s.transport, v.transport)}>
             <button className={s.play} aria-label="Pause">❚❚</button>
             <span className={cx(s.clock, v.deskOnly)}>2:17 · in {song.section} <small>bar {song.from + 1}</small></span>
-            <span className={s.loopChip}><span className={s.loopChipText}>Looping bars {song.from}–{song.from + 7}</span><button className={s.x} aria-label="Stop looping">×</button></span>
+            <span className={s.loopChip}><span className={s.loopChipText}>Looping bars {song.from}–{song.from + song.bars.length - 1}</span><button className={s.x} aria-label="Stop looping">×</button></span>
           </div>
           <div className={cx(s.switch, v.deskOnly)} role="group" aria-label="Mode">
             <button aria-pressed="false">Listen</button>
@@ -87,7 +87,7 @@ export function Shell({ song, children, block, rail, row = "chords", closeness }
           <div className={v.middle}>{children}</div>
           <div className={s.grow} />
           {block ?? <KnobBlock song={song} row={row} />}
-          <div className={cx(s.checkRow, v.check)}>
+          <div className={cx(s.checkRow, s.drCheck, v.check)}>
             <div className={s.abWrap}>
               <div className={s.ab} role="group" aria-label="Compare at the same loudness">
                 <button aria-pressed="false">A · Original melody</button>
@@ -102,7 +102,7 @@ export function Shell({ song, children, block, rail, row = "chords", closeness }
         <div className={cx(s.saveBar, v.save)}>
           <label className={cx(s.saveLabel, v.deskOnly)} htmlFor="save-name">Name</label>
           <input id="save-name" name="sound-name" autoComplete="off" spellCheck={false} className={s.input} defaultValue={row === "lead" ? `Fatima hook, from What's a Girl to Do` : song.save} />
-          <span className={cx(s.facts, v.deskOnly)}>{song.tags}</span>
+          <span className={cx(s.facts, v.deskOnly)}>{row === "lead" ? song.tags.replace(/^chords · \w+/, `lead · ${song.leadPreset.toLowerCase()}`) : song.tags}</span>
           <button className={s.gold}>{row === "lead" ? "Save lead" : "Save chords"}</button>
         </div>
         <aside className={v.rail} aria-label="Mentor">{rail ?? <MentorThread song={song} />}</aside>
@@ -148,10 +148,10 @@ function MentorThread({ song }: { song: Song }) {
             <p className={s.bubble}>What are these chords?</p>
             <span className={s.barTag}>bar {song.from}</span>
           </div>
-          <p className={s.answer}>{song.id === "lost"
+          <p className={s.answer}>{song.mentor ? song.mentor.answer : song.id === "lost"
             ? "One chord the whole loop: G, struck just before each beat. Make reads plain G; the original may be G7 (an F on top). Tap a bar and try G7 to hear the difference."
             : "Three chords: D♭, E♭, then B♭ minor held for two bars. In A♭ major that's IV, V, ii: it climbs and then settles in the minor. Two bars Make wasn't sure of are marked."}</p>
-          <p className={s.facts}>{song.id === "lost" ? "G · 4 stabs a bar · just before the beat" : "D♭ · E♭ · B♭m · plucks · 8 bars"}</p>
+          <p className={s.facts}>{song.mentor ? song.mentor.facts : song.id === "lost" ? "G · 4 stabs a bar · just before the beat" : "D♭ · E♭ · B♭m · plucks · 8 bars"}</p>
         </div>
       </div>
       <div className={s.askBar}>

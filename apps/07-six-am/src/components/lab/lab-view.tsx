@@ -25,6 +25,8 @@ import { MakeRoom, useMake, type Family, type MakeModel } from "./make-room";
 import { useDrums, type DrumsModel } from "./make-drums";
 import { useMelody, type MelodyModel } from "./make-melody";
 import { MELODY_ON } from "@/lib/make/melody-reader";
+import { MakeClient } from "@/lib/make/make-client";
+import { chordsReport, type ChordsReader, type ChordsReport } from "@/lib/make/chords-read";
 import { useFx, type FxModel } from "./make-fx";
 import type { FxKnobId, FxPresetId, FxRow } from "@/lib/make/fx-synth";
 import type { MelodyPresetId, MelodyRow, PolyKnobId } from "@/lib/make/poly-synth";
@@ -42,6 +44,8 @@ declare global {
     /** Slice 3 graders: the FX state and actions (numbers only). */
     fx: () => ReturnType<FxModel["debug"]> | null;
     fxDo: { open: (row: FxRow) => void; preset: (row: FxRow, id: FxPresetId) => void; knob: (row: FxRow, id: FxKnobId, v: number) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; save: (row: FxRow, name?: string) => Promise<void> };
+    /** Phase 6 spike graders: read the looped "other" part (in memory) with chord reader A ("dsp") or B ("basic-pitch"); numbers and names only. Null before the loop is in memory. */
+    chordsRead: (reader?: ChordsReader) => Promise<(ChordsReport & { loop: { startMs: number; endMs: number }; levelDb: number; lufs: number }) | null>;
     melodyDo?: { open: (row: MelodyRow) => void; preset: (row: MelodyRow, id: MelodyPresetId) => void; knob: (row: MelodyRow, id: PolyKnobId, v: number) => void; suggest: (row: MelodyRow) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; playAnyway: (row: MelodyRow) => void; backToOff: (row: MelodyRow) => void; save: (row: MelodyRow, name?: string) => Promise<void> } } }
 }
 
@@ -96,6 +100,12 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const drumsRef = useRef<DrumsModel | null>(null);
   const melodyRef = useRef<MelodyModel | null>(null);
   const fxRef = useRef<FxModel | null>(null);
+  // Phase 6 spike: the track's key for the chord readers' key bias (grader hook only).
+  const keyRef = useRef<{ key: string; scale: "major" | "minor" } | undefined>(undefined);
+  useEffect(() => {
+    const k = map.key || analysis?.key || "", sc = map.scale || analysis?.scale || "";
+    keyRef.current = k && (sc === "major" || sc === "minor") ? { key: k, scale: sc } : undefined;
+  });
   const onFamily = useCallback((f: Exclude<Family, "vocals">) => {
     setFxPicked(f === "fx");
     // FX-F1: FX live in the "other" part: a question asked in FX is about that, not the last part heard.
@@ -137,6 +147,17 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
+    // Phase 6 spike: the chord readers' own worker, made on a grader's first call only (shortcut: a
+    // grader-only hook with its own two workers; slice 1 moves the read into Make's Melody tab).
+    let spike: MakeClient | null = null;
+    const chordsRead = async (reader: ChordsReader = "dsp") => {
+      const held = t.loopPart(2);
+      if (!held) return null;
+      // C2: copies of the in-memory loop go to the worker, which zeroes them; only numbers come back.
+      const res = await (spike ??= new MakeClient()).chordsRead({ left: held.left.slice(), right: held.right.slice(), rate: held.rate, bpm, key: keyRef.current, reader });
+      console.info(`[make] chords read (${res.reader}) in ${res.ms} ms: ${res.chords.cells.map((c) => c.name || "-").join(" ")}, ${res.chords.events.length} chords, lead ${res.lead.notes.length} notes (${res.lead.from})`);
+      return { ...chordsReport(res.chords, res.lead, res.ms), loop: { startMs: held.startMs, endMs: held.endMs }, levelDb: Math.round(res.levelDb * 100) / 100, lufs: Math.round(res.lufs * 100) / 100 };
+    };
     window.__sixamLab = { state: () => tr.current?.state ?? null, heardMs: () => t.heardMs(), bar: () => msToBar(t.heardMs(), bpm, origin), hear: () => hearRef.current, levels: () => t.partLevels(), barLevels: () => t.levels(), mineLevel: () => t.mineLevel(), make: () => makeRef.current?.debug() ?? null, setLoop: (startMs: number, endMs: number) => t.setLoop({ startMs, endMs }), weight: () => t.weight(), capture: (onsets: number[]) => t.capture(onsets),
       family: () => familyRef.current, setFamily: (f) => onFamilyRef.current(f), drums: () => drumsRef.current?.debug() ?? null,
       drumsDo: {
@@ -148,6 +169,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       // L247: Melody is off this phase, so its grader hooks are not set.
       ...(MELODY_ON ? { melody: () => melodyRef.current?.debug() ?? null } : {}),
       fx: () => fxRef.current?.debug() ?? null,
+      chordsRead,
       fxDo: {
         open: (row) => fxRef.current?.setOpen(row), preset: (row, id) => fxRef.current?.setPreset(row, id), knob: (row, id, v) => fxRef.current?.setKnob(row, id, v),
         ab: (x) => fxRef.current?.setAb(x), bed: (on) => fxRef.current?.setBed(on), save: async (row, name) => { await fxRef.current?.save(row, name); },
@@ -157,7 +179,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
         suggest: (row: MelodyRow) => melodyRef.current?.suggestNow(row), ab: (x: "a" | "b") => melodyRef.current?.setAb(x), bed: (on: boolean) => melodyRef.current?.setBed(on),
         playAnyway: (row: MelodyRow) => melodyRef.current?.playAnyway(row), backToOff: (row: MelodyRow) => melodyRef.current?.backToOff(row), save: async (row: MelodyRow, name?: string) => { await melodyRef.current?.save(row, name); },
       } } : {}) };
-    return () => { cancelAnimationFrame(raf); clearTimeout(saveTimer); t.dispose(); tr.current = null; };
+    return () => { cancelAnimationFrame(raf); clearTimeout(saveTimer); spike?.stop(); t.dispose(); tr.current = null; };
   }, [map, bpm, origin, bars, code, quiet]);
 
   // S3 Make: the same transport, the same loop; Make's own state survives the switch (T87).

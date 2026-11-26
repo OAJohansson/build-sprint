@@ -3,3 +3,9 @@
 // hooks are set. The code (DSP reader, poly synth, rows, Suggest, save) stays for the next phase; the poly
 // synth also plays any melody block already saved to a Studio. The Basic Pitch try (L245) is in commit bf7164c.
 export const MELODY_ON = false;
+
+// Phase 6 spike: which note reader the Melody tab's read uses. "dsp": notes-read.ts; "basic-pitch":
+// Spotify's Basic Pitch in the worker (notes-bp.ts, BP-1 fixed), DSP only if the model can't load. The
+// chord readers A and B are picked per call by the grader hook (window.__sixamLab.chordsRead), not here;
+// the spike's grade picks the winner for slice 1.
+export const MELODY_READER: "dsp" | "basic-pitch" = "dsp";

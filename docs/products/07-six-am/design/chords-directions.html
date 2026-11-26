@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chords in Make, ten directions</title>
+<style>
+:root { color-scheme: dark; }
+body { margin: 0; background: #131110; color: #f1e6d3; font: 14px/1.5 ui-monospace, "IBM Plex Mono", Menlo, monospace; }
+main { max-width: 1240px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { font: italic 400 32px/1.1 Georgia, serif; margin: 0 0 8px; }
+p.lede { color: #aa9c88; margin: 0 0 24px; max-width: 780px; }
+a { color: #f2b134; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
+@media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+figure { margin: 0; }
+img { display: block; width: 100%; height: auto; border: 1px solid #2c2622; border-radius: 6px; }
+.mini { display: grid; grid-template-columns: 3fr 1fr; gap: 8px; margin-top: 8px; align-items: start; }
+.mini a { text-decoration: none; color: #aa9c88; font-size: 12px; }
+.mini .ph img { max-height: 190px; width: auto; }
+.mini span { display: block; padding-top: 2px; }
+figcaption { display: flex; gap: 12px; padding-top: 10px; }
+figcaption b { flex: none; width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid #f2b134; color: #f2b134; border-radius: 50%; font-weight: 500; }
+figcaption strong { display: block; font-weight: 500; color: #f1e6d3; }
+figcaption span { color: #aa9c88; }
+figcaption em { font-style: normal; color: #958a7c; }
+.st { margin: 6px 0 0 40px; font-size: 12px; color: #958a7c; }
+</style></head>
+<body><main>
+<h1>Six AM · Chords in Make, ten directions</h1>
+<p class="lede">Make → Melody (Phase 6, decision 0028). Same room as Phase 5's Fold: family switch, rows on top, the knob block fixed under them, A/B with the drums under both, the open row's closeness, Save and the Mentor in their places. The directions differ in how the chord grid looks, where the chord picker opens and how note editing appears. Real loops: Lost in The Loop bars 69–76 (one G chord struck just before each beat; Make reads G, G7 is its first alternative) and Dubspinna's What's a Girl to Do bars 57–64 (D♭ – E♭ – B♭m plucks with a lead; Make misreads two bars as sus2). Big image: the direction's key state. Below it: the default reading and the phone. Rough prototypes, nothing plays. Live at <code>/dev/chords-directions?v=N</code> (<code>&amp;s=key</code> for the key state). Pick three. The worst case (a 16-bar loop, long names, long title) is in <a href="chords/01-cells-worst-16bars.png">chords/01-cells-worst-16bars.png</a>.</p>
+<div class="grid">
+  <figure>
+    <a href="chords/01-cells-key.png"><img src="chords/01-cells-key.png" alt="Direction 1, Cells, key state" loading="lazy" width="1280" height="800"></a>
+    <figcaption><b>1</b><span><strong>Cells</strong>Phase 5's Fold rows, one cell per bar (name over its stabs). Tap a cell: a small popover under it with Make's guesses and the key's chords; "Edit notes and times" turns the same popover into the note grid.</span></figcaption>
+    <div class="mini">
+      <a href="chords/01-cells-main.png"><img src="chords/01-cells-main.png" alt="Cells, default reading" loading="lazy" width="1280" height="800"><span>Default reading</span></a>
+      <a href="chords/01-cells-phone.png" class="ph"><img src="chords/01-cells-phone.png" alt="Cells, phone" loading="lazy" width="390" height="844"><span>Phone, 390 px</span></a>
+    </div>
+    <p class="st">Shown: Lost 69–76, picker open on bar 71; Lead off (doubtful)</p>
+  </figure>
+  <figure>
+    <a href="chords/02-swap-key.png"><img src="chords/02-swap-key.png" alt="Direction 2, Swap, key state" loading="lazy" width="1280" height="800"></a>
+    <figcaption><b>2</b><span><strong>Swap</strong>The rows never change. Tapping a bar swaps the knob block for that bar's editor in the same place: guesses on the left, the note grid with its 16ths on the right. Done brings the knobs back.</span></figcaption>
+    <div class="mini">
+      <a href="chords/02-swap-main.png"><img src="chords/02-swap-main.png" alt="Swap, default reading" loading="lazy" width="1280" height="800"><span>Default reading</span></a>
+      <a href="chords/02-swap-phone.png" class="ph"><img src="chords/02-swap-phone.png" alt="Swap, phone" loading="lazy" width="390" height="844"><span>Phone, 390 px</span></a>
+    </div>
+    <p class="st">Shown: Dubspinna 57–64, bar 59 open on the note grid; Lead row</p>
+  </figure>
+  <figure>
+    <a href="chords/03-roll-key.png"><img src="chords/03-roll-key.png" alt="Direction 3, Roll, key state" loading="lazy" width="1280" height="800"></a>
+    <figcaption><b>3</b><span><strong>Roll</strong>The chords are always a piano roll with the name on top of each bar. Notes switch on and off right in the roll, no opening step; the name is a small menu. An edited bar shows "≈ B♭m yours".</span></figcaption>
+    <div class="mini">
+      <a href="chords/03-roll-main.png"><img src="chords/03-roll-main.png" alt="Roll, default reading" loading="lazy" width="1280" height="800"><span>Default reading</span></a>
+      <a href="chords/03-roll-phone.png" class="ph"><img src="chords/03-roll-phone.png" alt="Roll, phone" loading="lazy" width="390" height="844"><span>Phone, 390 px</span></a>
+    </div>
+    <p class="st">Shown: Dubspinna, bar 60 edited by hand (closest name); Lead row</p>
+  </figure>
+  <figure>
+    <a href="chords/04-ladder-key.png"><img src="chords/04-ladder-key.png" alt="Direction 4, Ladder, key state" loading="lazy" width="1280" height="800"></a>
+    <figcaption><b>4</b><span><strong>Ladder</strong>Nothing opens. Each bar shows what plays now and Make's next two guesses under it, one tap away; "more…" adds the key. A one-chord loop gets "G7 in all 8 bars" after the first pick. <em>(seed 1)</em></span></figcaption>
+    <div class="mini">
+      <a href="chords/04-ladder-main.png"><img src="chords/04-ladder-main.png" alt="Ladder, default reading" loading="lazy" width="1280" height="800"><span>Default reading</span></a>
+      <a href="chords/04-ladder-phone.png" class="ph"><img src="chords/04-ladder-phone.png" alt="Ladder, phone" loading="lazy" width="390" height="844"><span>Phone, 390 px</span></a>
+    </div>
+    <p class="st">Shown: Lost 69–76, bar 71 switched to G7; Lead off</p>
+  </figure>
+  <figure>
+    <a href="chords/05-mentor-key.png"><img src="chords/05-mentor-key.png" alt="Direction 5, Mentor, key state" loading="lazy" width="1280" height="800"></a>
+    <figcaption><b>5</b><span><strong>Mentor</strong>Tapping a bar turns the Mentor rail into that bar's choice: each guess with one plain line on how it sounds and where it sits in the key (K10). Notes open in the rail.</span></figcaption>
+    <div class="mini">
+      <a href="chords/05-mentor-main.png"><img src="chords/05-mentor-main.png" alt="Mentor, default reading" loading="lazy" width="1280" height="800"><span>Default reading</span></a>
+      <a href="chords/05-mentor-phone.png" class="ph"><img src="chords/05-mentor-phone.png" alt="Mentor, phone" loading="lazy" width="390" height="844"><span>Phone, 390 px</span></a>
+    </div>
+    <p class="st">Shown: Lost 69–76, bar 71 on G7 with the why</p>
+  </figure>
+  <figure>
+    <a href="chords/06-palette-key.png"><img src="chords/06-palette-key.png" alt="Direction 6, Palette, key state" loading="lazy" width="1280" height="800"></a>
+    <figcaption><b>6</b><span><strong>Palette</strong>The key's seven chords sit under the rows all the time, numbered I–vii. Select a bar (shift-tap for several), the palette marks Make's guesses, tap a chord to paint it in. <em>(seed 2)</em></span></figcaption>
+    <div class="mini">
+      <a href="chords/06-palette-main.png"><img src="chords/06-palette-main.png" alt="Palette, default reading" loading="lazy" width="1280" height="800"><span>Default reading</span></a>
+      <a href="chords/06-palette-phone.png" class="ph"><img src="chords/06-palette-phone.png" alt="Palette, phone" loading="lazy" width="390" height="844"><span>Phone, 390 px</span></a>
+    </div>
+    <p class="st">Shown: Dubspinna, bars 59–60 selected; Lead row</p>
+  </figure>
+  <figure>
+    <a href="chords/07-keyboard-key.png"><img src="chords/07-keyboard-key.png" alt="Direction 7, Keyboard, key state" loading="lazy" width="1280" height="800"></a>
+    <figcaption><b>7</b><span><strong>Keyboard</strong>A real piano keyboard under the rows shows the selected bar's notes lit; tap a key to add or take one away, the name follows. A strip of 16ths under the keys moves the hits; guesses beside it.</span></figcaption>
+    <div class="mini">
+      <a href="chords/07-keyboard-main.png"><img src="chords/07-keyboard-main.png" alt="Keyboard, default reading" loading="lazy" width="1280" height="800"><span>Default reading</span></a>
+      <a href="chords/07-keyboard-phone.png" class="ph"><img src="chords/07-keyboard-phone.png" alt="Keyboard, phone" loading="lazy" width="390" height="844"><span>Phone, 390 px</span></a>
+    </div>
+    <p class="st">Shown: Lost, bar 71: F added by hand, now G7 "from your notes"</p>
+  </figure>
+  <figure>
+    <a href="chords/08-clips-key.png"><img src="chords/08-clips-key.png" alt="Direction 8, Clips, key state" loading="lazy" width="1280" height="800"></a>
+    <figcaption><b>8</b><span><strong>Clips</strong>Chords as clips on one 16th-grid lane, like a DAW: two bars of B♭m are one clip. Select one: white handles move its start and end by 16ths, a bar above names it (menu), its start and length. <em>(seed 3)</em></span></figcaption>
+    <div class="mini">
+      <a href="chords/08-clips-main.png"><img src="chords/08-clips-main.png" alt="Clips, default reading" loading="lazy" width="1280" height="800"><span>Default reading</span></a>
+      <a href="chords/08-clips-phone.png" class="ph"><img src="chords/08-clips-phone.png" alt="Clips, phone" loading="lazy" width="390" height="844"><span>Phone, 390 px</span></a>
+    </div>
+    <p class="st">Shown: Dubspinna, E♭ moved a 16th early, chord menu open</p>
+  </figure>
+  <figure>
+    <a href="chords/09-chart-key.png"><img src="chords/09-chart-key.png" alt="Direction 9, Chart, key state" loading="lazy" width="1280" height="800"></a>
+    <figcaption><b>9</b><span><strong>Chart</strong>The loop as a musician's chord chart: four bars a line, symbols in the serif, the hits as marks, the lead as a thin line on top. Tap a bar and Make's other guesses appear pencilled above it. <em>(seed 4 + far away)</em></span></figcaption>
+    <div class="mini">
+      <a href="chords/09-chart-main.png"><img src="chords/09-chart-main.png" alt="Chart, default reading" loading="lazy" width="1280" height="800"><span>Default reading</span></a>
+      <a href="chords/09-chart-phone.png" class="ph"><img src="chords/09-chart-phone.png" alt="Chart, phone" loading="lazy" width="390" height="844"><span>Phone, 390 px</span></a>
+    </div>
+    <p class="st">Shown: Dubspinna, bar 58 tapped, guesses pencilled</p>
+  </figure>
+  <figure>
+    <a href="chords/10-ear-key.png"><img src="chords/10-ear-key.png" alt="Direction 10, Ear, key state" loading="lazy" width="1280" height="800"></a>
+    <figcaption><b>10</b><span><strong>Ear</strong>Pick by ear, not by name. Bars Make is unsure of are underlined. Tap one: a listening strip shows each guess with how close it measures to the original bar; play one, "Use this" keeps it. <em>(far away, sounds wrong)</em></span></figcaption>
+    <div class="mini">
+      <a href="chords/10-ear-main.png"><img src="chords/10-ear-main.png" alt="Ear, default reading" loading="lazy" width="1280" height="800"><span>Default reading</span></a>
+      <a href="chords/10-ear-phone.png" class="ph"><img src="chords/10-ear-phone.png" alt="Ear, phone" loading="lazy" width="390" height="844"><span>Phone, 390 px</span></a>
+    </div>
+    <p class="st">Shown: Lost, bar 71 (unsure): hearing G7, 95 close</p>
+  </figure>
+</div>
+</main></body></html>

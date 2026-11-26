@@ -162,3 +162,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   - The designer's own strongest three: 3 the spine, 2 the knot opens, 5 index cards.
   - **Sketch gaps:** the link words are the old ones from before T26. Heidegger was added as the sixth person, though he has no thinker card yet.
   - Waiting on the owner's pick of three.
+- **Owner pick (L27): the knot opens.** "Bang on… really nice and tidy"; the full-globe versions look too messy. Next: 3 versions of how the knot opens × 3 ways to present the information beside it.

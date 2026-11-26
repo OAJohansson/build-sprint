@@ -854,7 +854,10 @@ In the browser only (C2): no server-side model.
   notes folded into chord names the same way. A fair re-test of Phase 5's 13 %.
 - **Truth:** Lost 69–76 and 77–84 (Phase 5 labels, as chord names), plus 3–4 more loops from at
   least 2 more tracks, labelled by data-evals from the spectrogram with the method validated in
-  Phase 5 (95–100 % on struck chords). See question 3.
+  Phase 5 (95–100 % on struck chords). Tracks (L250): Kiki's "What's a Girl to Do" remix (the
+  Fatima Yamaha chord loop and lead line), Retrouvé "Music Is the Answer", and Mason Flint's riff
+  (Phase 5's lead loop). If a picked track has no clear chords or lead in its separated part,
+  data-evals swaps in Dubspinna's "What's a Girl to Do" remix or Knober "Realize" and says why.
 - **Winner:** the one with more bars right; if neither reaches the bar, the fallback (question 5).
 
 ## Proposed slices (one branch, one PR)
@@ -880,6 +883,7 @@ In the browser only (C2): no server-side model.
 | --- | --- | --- | --- |
 | 1 | Chord names only, or names and notes? | Both now: names per bar with alternatives, and single-note editing inside a chord, because the goal is to recreate a song and then add my own touch (PM had recommended names only, notes in Phase 7) | L248 |
 | 2 | Lead lines in this phase? | Yes, a fourth slice, even if the reading is weak (fixed by hand on the note grid) | L249 |
+| 3 | Which tracks to grade on? | "Pick for me": Lost in the Loop, Kiki's "What's a Girl to Do" remix, Retrouvé "Music Is the Answer", Mason Flint (riff), from the tracks already used in Six AM | L250 |
 
 ## Questions for the owner (draft)
 

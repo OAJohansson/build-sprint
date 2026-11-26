@@ -104,3 +104,8 @@
   .body { grid-template-columns: 280px minmax(0, 1fr) 300px; }
   .body section { padding: 16px 18px; }
 }
+/* K9 (Phase 6): a chords sound's names per bar in the library drawer, each a picker */
+.chordList { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 6px; }
+.chordPick { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.chordPick small { font: 400 10.5px var(--f-mono); color: var(--muted); }
+.chordPick select { min-height: 32px; width: 100%; background: none; color: var(--ink); border: 1px solid var(--edge, #3a322c); border-radius: 4px; font: 500 13px var(--f-mono); padding: 0 4px; }

@@ -6,7 +6,8 @@
 // buffer over the block. Pure, unit tested (lib-loop.test.ts).
 import { legacyTrack, type LaneType } from "@/lib/studio-lanes";
 import { inScale, pitchClass, type Scale } from "@/lib/synths/theory";
-import { MAX_MELODY_NOTES, MELODY_BARS, parseNotes, type LibPart, type LibrarySound } from "./library";
+import { MAX_MELODY_NOTES, MELODY_BARS, parseChordMarks, parseNotes, type LibPart, type LibrarySound } from "./library";
+import type { ChordMark } from "./chords-mine";
 import { clampFxMacros, fxPassBars, fxRowOf, isFxPreset, renderFxRow, FX_PRESETS, type FxMacros, type FxPresetId } from "./fx-synth";
 import { clampPolyMacros, isMelodyPreset, kindOf, melodyPreset, melodyRowOf, renderPolyRow, type MelodyPresetId, type PolyMacros } from "./poly-synth";
 import { clampDrumMacros, isDrumPreset, renderDrumRow, rowOf, DRUM_PRESETS, type DrumMacros, type DrumPresetId, type DrumRow } from "./drum-synth";
@@ -37,7 +38,7 @@ export type BassLoop = LibLoopBase & { preset: MakePresetId; macros: Macros };
 export type DrumLoop = LibLoopBase & { preset: DrumPresetId; macros: DrumMacros };
 /** Phase 5 slice 2: one melody row (Chords or Lead) with the poly synth's knobs; its notes are in
  *  `key` (moved to the track's key on play, as a bass); a pass of up to 16 bars (a progression). */
-export type MelodyLoop = Omit<LibLoopBase, "bars" | "pattern"> & { bars: 1 | 2 | 4 | 8 | 16; pattern: { bars: 1 | 2 | 4 | 8 | 16; notes: MakeNote[] }; preset: MelodyPresetId; macros: PolyMacros };
+export type MelodyLoop = Omit<LibLoopBase, "bars" | "pattern"> & { bars: 1 | 2 | 4 | 8 | 16; pattern: { bars: 1 | 2 | 4 | 8 | 16; notes: MakeNote[]; chords?: ChordMark[] }; preset: MelodyPresetId; macros: PolyMacros };
 /** Slice 3: one FX row, one event per pass, on the track's root; always on an FX lane. */
 export type FxLoop = Omit<LibLoopBase, "bars" | "pattern"> & { bars: 1 | 2 | 4 | 8; pattern: { bars: 1 | 2 | 4 | 8; notes: MakeNote[] }; preset: FxPresetId; macros: FxMacros };
 export type LibLoop = BassLoop | DrumLoop | MelodyLoop | FxLoop;
@@ -62,7 +63,7 @@ const newId = () => `s${Math.random().toString(36).slice(2, 8)}${Date.now().toSt
 export function libLoopFrom(s: LibrarySound, type: LaneType = libLaneType(s), id = newId()): LibLoop {
   return {
     id, source: "lib", name: s.name, bars: s.pattern.bars, type, lane: legacyTrack(type), libId: s.id,
-    preset: s.preset, macros: { ...s.macros }, pattern: { bars: s.pattern.bars, notes: s.pattern.notes.map((n) => ({ ...n })) },
+    preset: s.preset, macros: { ...s.macros }, pattern: { bars: s.pattern.bars, notes: s.pattern.notes.map((n) => ({ ...n })), ...("chords" in s.pattern && s.pattern.chords ? { chords: s.pattern.chords.map((c) => ({ ...c })) } : {}) },
     key: s.key, scale: s.scale, bpm: s.bpm,
   } as LibLoop;
 }
@@ -113,6 +114,9 @@ export function transposeSemis(from: { key: string; scale: Scale }, to: { key: s
 export function notesInKey(l: Pick<LibLoop, "pattern" | "key" | "scale">, key: string, scale: Scale): MakeNote[] {
   const semis = transposeSemis(l, { key, scale });
   const tonic = pitchClass(key) ?? 9;
+  // K9 (Phase 6): a chords sound saved with its chord names keeps every note (a G7's F, a borrowed
+  // chord): it moves with the key and is never snapped. Older sounds snap as before (K12).
+  if ("chords" in l.pattern && l.pattern.chords?.length) return l.pattern.notes.map((n) => ({ ...n, midi: n.midi + semis }));
   return l.pattern.notes.map((n) => {
     const m = n.midi + semis;
     return { ...n, midi: inScale(m, tonic, scale) ? m : snapToKey(m, tonic, scale) };
@@ -243,10 +247,11 @@ function parseMelodyLoop(o: Record<string, unknown>, pat: Record<string, unknown
   return {
     id: o.id as string, source: "lib", name: typeof o.name === "string" && o.name.trim() ? o.name.trim().slice(0, 60) : melodyPreset(preset).name,
     bars, type, lane: legacyTrack(type), libId: typeof o.libId === "string" && o.libId.length <= 40 ? o.libId : null,
-    preset, macros: clampPolyMacros(preset, (o.macros ?? {}) as Record<string, unknown>), pattern: { bars, notes },
+    preset, macros: clampPolyMacros(preset, (o.macros ?? {}) as Record<string, unknown>), pattern: { bars, notes, ...(chordsOf(pat.chords, bars)) },
     key: o.key.trim(), scale: o.scale, bpm: o.bpm,
   };
 }
+const chordsOf = (v: unknown, bars: number) => { const c = parseChordMarks(v, bars); return c ? { chords: c } : {}; };
 
 /** A stored FX block sound (slice 3): a known FX preset, knobs clamped, one event on a 1–8-bar pass. */
 function parseFxLoop(o: Record<string, unknown>, pat: Record<string, unknown>): FxLoop | null {

@@ -441,6 +441,14 @@ export function useMelody(o: MelodyOpts) {
     mySounds, loadSound, name: nameField, setName: (v: string) => setNames((n) => ({ ...n, [open]: v })), tags, save, canSave, savedRows,
     saved: { state: saveState.state, text: saveState.text, savedAs: lastRow && lastRow.sound === sid ? lastRow.name : null, action: action.kind },
     bpm: o.bpm,
+    /** K10: the open chord for a Mentor question (names and MIDI only): Mine's name, the owner's own notes, the chords around it, and its bar. */
+    labChord: open === "chords" && guess && mineChords && mineChords.cells[openCell]?.name ? {
+      name: mineChords.cells[openCell].name,
+      ...(edits[openCell]?.notes ? { notes: edits[openCell].notes } : {}),
+      // The loop goes round: the first bar's chord before is the last one's.
+      prev: mineChords.cells[(openCell - 1 + mineChords.cells.length) % mineChords.cells.length]?.name || null, next: mineChords.cells[(openCell + 1) % mineChords.cells.length]?.name || null,
+      barNo: (o.fromBar ?? 1) + guess.cells[openCell].bar,
+    } : null,
     /** What the Lab Mentor gets with a question asked in Melody: the open row (numbers and ids). */
     labRow: { family: "melody" as const, preset: sounds[open].preset as string, knobs: sounds[open].macros as Record<string, number>, ticks: (ticks[open]?.macros ?? null) as Record<string, number> | null, off: !!read?.d.rows[open].doubtful && !anyway.includes(open), note: read?.d.rows[open].why ?? null },
     /** Graders (slice 2): what Make's melody holds now, numbers only. */
@@ -495,7 +503,7 @@ function waitLine(m: MelodyModel, loop: LoopState | null, playing: boolean): str
 /** What the Mentor calls a row's sound ("stabs", "pads", "keys", "plucks", "lead"). */
 const nounOf = (id: MelodyPresetId) => (melodyRowOf(id) === "lead" ? "lead" : ({ stab: "stabs", pluck: "plucks", pad: "pads", keys: "keys" } as const)[kindOf(id)]);
 
-export function MelodyMiddle({ m, loop, playing, heardMs, from }: { m: MelodyModel; loop: LoopState | null; playing: boolean; heardMs: () => number; from: number | null }) {
+export function MelodyMiddle({ m, loop, playing, heardMs, from, onAsk }: { m: MelodyModel; loop: LoopState | null; playing: boolean; heardMs: () => number; from: number | null; onAsk?: (q: string, bar: number) => void }) {
   const steps = m.read?.d.steps ?? (loop ? Math.max(16, Math.round((loop.endMs - loop.startMs) / (60000 / m.bpm / 4))) : 128);
   const bars = Math.max(1, Math.round(steps / 16));
   const wait = waitLine(m, loop, playing), off = !!wait, short = useShort();
@@ -542,7 +550,7 @@ export function MelodyMiddle({ m, loop, playing, heardMs, from }: { m: MelodyMod
         })}
         {loop?.state === "memory" && !off && bars <= 8 && <div className={s.drHeadBox} style={{ top: 0 }}><Playhead heardMs={heardMs} loop={loop} bars={bars} /></div>}
       </div>
-      {!off && <ChordPanel m={m} from={from} playing={playing} />}
+      {!off && <ChordPanel m={m} from={from} playing={playing} onAsk={onAsk} />}
       <div className={s.drBlock}>
         <span className={s.drLabel}>{MELODY_ROW_NAMES[row]}</span>
         <MelodyPreset m={m} row={row} />

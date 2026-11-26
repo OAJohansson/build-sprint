@@ -191,7 +191,7 @@ function parseMelodySound(r: Record<string, unknown>, preset: MelodyPresetId): N
 }
 
 /** Phase 6 slice 1: the chord names saved with a chords row (K8), each over a stretch of the repeat; anything else is dropped. */
-function parseChordMarks(raw: unknown, bars: number): ChordMark[] | null {
+export function parseChordMarks(raw: unknown, bars: number): ChordMark[] | null {
   if (!Array.isArray(raw) || !raw.length || raw.length > bars * 2) return null;
   const out: ChordMark[] = [];
   for (const x of raw) {

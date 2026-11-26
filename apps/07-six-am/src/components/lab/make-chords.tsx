@@ -57,7 +57,7 @@ export function ChordTiles({ v, from, bars, onOpen }: { v: View; from: number | 
 }
 
 /** The listening panel (K4): always open on one cell. */
-export function ChordPanel({ m, from, playing }: { m: MelodyModel; from: number | null; playing: boolean }) {
+export function ChordPanel({ m, from, playing, onAsk }: { m: MelodyModel; from: number | null; playing: boolean; onAsk?: (q: string, bar: number) => void }) {
   const v = m.chords;
   // CS1-7: when More opens, its cards scroll into view above the sticky A/B bar.
   const moreRef = useRef<HTMLDivElement>(null);
@@ -121,6 +121,10 @@ export function ChordPanel({ m, from, playing }: { m: MelodyModel; from: number 
           </button>
         )}
         <button className={c.chip} onClick={() => m.setPiano(true)} aria-label="Build the chord on a piano"><Piano size={15} aria-hidden /> Piano</button>
+        {/* K10: the Mentor explains the open chord (the theory facts come from code, the Mentor writes the words). */}
+        {onAsk && cur && m.labChord && (
+          <button className={c.chip} onClick={() => onAsk(`Why does ${prettyChord(cur)} fit here?`, m.labChord!.barNo)} aria-label={`Ask the Mentor why ${prettyChord(cur)} fits in bar ${where}`}>Why it fits</button>
+        )}
       </div>
       {extra.length > 0 && <div ref={moreRef} className={`${c.choices} ${c.extra}`} role="group" aria-label="More chords in this song's key">{extra.map(card)}</div>}
     </section>

@@ -16,7 +16,8 @@ import { LabTransport, type TransportState } from "@/lib/lab/transport";
 import { clockMs, labParts, labSections, sectionAt, type LabSection } from "@/lib/lab/view";
 import type { TrackMap } from "@/lib/map/types";
 import { ApiError, mentorApi, money } from "@/lib/mentor/client";
-import { HEARD_WINDOW, knowsLine, PART_LABEL, type LabAsk } from "@/lib/mentor/lab";
+import { HEARD_WINDOW, chordLines, knowsLine, labContextText, PART_LABEL, type LabAsk } from "@/lib/mentor/lab";
+import { chordFacts, chordFactsPlain } from "@/lib/mentor/chord-facts";
 import { HATS_ROW, KICK_ROW, referenceDb } from "@/lib/lab/activity";
 import { measurePart } from "@/lib/lab/measure";
 import { HearChip, Lanes, heardParts, type Hear } from "./lanes";
@@ -54,6 +55,8 @@ declare global {
       piano: (on: boolean) => void; toggleNote: (midi: number) => { notes: number[]; name: string | null; exact: boolean } | null;
       hit: (op: "select" | "add" | "earlier" | "later" | "shorter" | "longer" | "remove", at?: number) => boolean; preset: (p: "held" | "short") => void; reset: () => void };
     /** Dev/grader only (H14): Make's guess on the bar numbered `bar` (as on its tile) becomes `name`, as if misread. */
+    /** Phase 6 slice 3 graders (H12): the open chord's theory facts and the exact Lab-facts block the server puts in the prompt for a question at its bar (no model call). */
+    chordFacts?: () => { bar: number; chord: LabAsk["chord"]; facts: ReturnType<typeof chordFacts>; theory: string[]; labFacts: string; offline: string | null } | null;
     plantChord?: (bar: number, name: string, opts?: { unsure?: boolean }) => { cell: number; barNo: number; was: string; planted: string } | null;
     melodyDo?: { open: (row: MelodyRow) => void; preset: (row: MelodyRow, id: MelodyPresetId) => void; knob: (row: MelodyRow, id: PolyKnobId, v: number) => void; suggest: (row: MelodyRow) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; playAnyway: (row: MelodyRow) => void; backToOff: (row: MelodyRow) => void; save: (row: MelodyRow, name?: string) => Promise<void> } } }
 }
@@ -109,6 +112,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const makeRef = useRef<MakeModel | null>(null);
   const drumsRef = useRef<DrumsModel | null>(null);
   const melodyRef = useRef<MelodyModel | null>(null);
+  const labAskRef = useRef<((bar: number) => LabAsk) | null>(null);
   const fxRef = useRef<FxModel | null>(null);
   // Phase 6 spike: the track's key for the chord readers' key bias (grader hook only).
   const keyRef = useRef<{ key: string; scale: "major" | "minor" } | undefined>(undefined);
@@ -180,6 +184,13 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       ...(MELODY_ON ? {
         melody: () => melodyRef.current?.debug() ?? null,
         makeChords: () => melodyRef.current?.chordsDebug() ?? null,
+        chordFacts: () => {
+          const lc = melodyRef.current?.labChord, ask = lc ? labAskRef.current?.(lc.barNo) : null;
+          if (!lc || !ask?.chord) return null;
+          const ks = { key: map.key || "", scale: map.scale || "" };
+          const facts = ks.scale === "major" || ks.scale === "minor" ? chordFacts({ key: ks.key, scale: ks.scale, chord: ask.chord.name, notes: ask.chord.notes, prev: ask.chord.prev, next: ask.chord.next }) : null;
+          return { bar: lc.barNo, chord: ask.chord, facts, theory: chordLines(ask.chord, ks, lc.barNo), labFacts: labContextText(ask, map), offline: facts ? chordFactsPlain(facts) : null };
+        },
         chordsDo: {
           open: (cell: number) => melodyRef.current?.openChord(cell), pick: (name: string, opts?: { all?: boolean; cell?: number; hear?: boolean }) => melodyRef.current?.pickChord(name, opts) ?? false,
           track: () => melodyRef.current?.tapTrack(tr.current?.playing ?? false), all: (on: boolean) => melodyRef.current?.setAll(on), more: (on: boolean) => melodyRef.current?.setMore(on),
@@ -328,9 +339,14 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     // Phase 5: a question asked in Drums, Melody or FX knows the open row, its preset, knobs and ticks.
     const inRow = mode === "make" ? (family === "drums" ? drums.labRow : MELODY_ON && family === "melody" ? melody.labRow : family === "fx" ? fx.labRow : null) : null;
     const heardNow: LabAsk["hear"] = mode === "make" ? { kind: "only", parts: [focus] } : hear;
-    return { part: focus, hear: heardNow, bar, playheadBar: pos.bar, loop: loopB, chords, measure, heard, ...(inMake ? { make: inMake } : {}), ...(inRow ? { makeRow: inRow } : {}) };
-  }, [focus, hear, pos.bar, chords, bpm, origin, bars, map.key, map.scale, analysis, mode, make.labMake, family, drums.labRow, melody.labRow, fx.labRow]);
+    // K10: with a bar open in Make's Chords, its chord goes with the question (names and MIDI only, C2).
+    const lc = mode === "make" && MELODY_ON && family === "melody" ? melody.labChord : null;
+    const inChord = lc ? { name: lc.name, ...(lc.notes ? { notes: lc.notes } : {}), prev: lc.prev, next: lc.next } : null;
+    return { part: focus, hear: heardNow, bar, playheadBar: pos.bar, loop: loopB, chords, measure, heard, ...(inMake ? { make: inMake } : {}), ...(inRow ? { makeRow: inRow } : {}), ...(inChord ? { chord: inChord } : {}) };
+  }, [focus, hear, pos.bar, chords, bpm, origin, bars, map.key, map.scale, analysis, mode, make.labMake, family, drums.labRow, melody.labRow, melody.labChord, fx.labRow]);
 
+  const keyScale = useMemo(() => ({ key: map.key || analysis?.key || "", scale: map.scale || analysis?.scale || "" }), [map.key, map.scale, analysis?.key, analysis?.scale]);
+  useEffect(() => { labAskRef.current = labAsk; });
   const send = useCallback(async (id: string, q: string, bar: number, lab: LabAsk) => {
     try {
       const r = await mentorApi(code).ask({ job: "lab", track: analysis, message: q, lab });
@@ -340,9 +356,15 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       setUsageNote(r.usage.warning ? `${r.usage.questionsToday} questions today, about ${money(r.usage.todayUsd)} so far (estimate).` : null);
     } catch (e) {
       const msg = e instanceof ApiError ? e.message : "The Mentor couldn't be reached. Try again.";
+      // K10 offline: a chord question still gets Six AM's own facts in plain words (code, no model) when the Mentor can't answer.
+      const f = lab.chord && (keyScale.scale === "major" || keyScale.scale === "minor") ? chordFacts({ key: keyScale.key, scale: keyScale.scale, chord: lab.chord.name, notes: lab.chord.notes, prev: lab.chord.prev, next: lab.chord.next }) : null;
+      if (f) {
+        setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, error: undefined, answer: { sentences: [{ text: chordFactsPlain(f), source: "general" }], tellMore: false }, facts: `From Six AM's key facts; the Mentor couldn't answer (${msg.replace(/\.$/, "")})` } : x)));
+        return;
+      }
       setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, error: msg } : x)));
     }
-  }, [code, analysis]);
+  }, [code, analysis, keyScale]);
   const pending = useRef(new Map<string, LabAsk>());
   const onAsk = useCallback((q: string, bar: number) => {
     const id = `pending-${Date.now()}`;

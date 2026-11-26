@@ -288,3 +288,33 @@ export function editsFromSaved(cells: ChordCell[], saved: ChordMark[], bars: num
 /** Slice 1's name-only restore. */
 export const picksFromSaved = (cells: ChordCell[], saved: ChordMark[], bars: number): Record<number, string> =>
   Object.fromEntries(Object.entries(editsFromSaved(cells, saved, bars)).filter(([, e]) => e.name).map(([k, e]) => [k, e.name!]));
+
+// ── K9: the Studio drawer ──────────────────────────────────────────────────────────────────────
+
+/** A chord name moved by `semis` semitones (the Studio plays a sound in the track's key). */
+export function transposeChord(name: string, semis: number): string | null {
+  const p = parseChord(name);
+  return p ? PITCHES[mod12(p.root + semis)] + SUFFIX_OF[p.type] : null;
+}
+
+type PatNote = { step: number; midi: number; dur: number; vel: number; off?: number };
+/**
+ * A saved pattern with one mark's chord changed by name (the Studio drawer, K9): the mark's notes are
+ * replaced by the new chord in its standard voicing (`voice`, chords-read's voiceChord) at the same
+ * times, lengths and strengths, around the same pitch; the mark loses any own notes. Null when the name
+ * isn't a chord Make plays.
+ */
+export function revoiceMark<P extends { bars: number; notes: PatNote[]; chords?: ChordMark[] }>(pat: P, i: number, name: string, voice: (root: number, type: ChordType, register: number) => number[]): P | null {
+  const m = pat.chords?.[i], p = parseChord(name);
+  if (!m || !p) return null;
+  const inside = (n: PatNote) => n.step >= m.step && n.step < m.step + m.steps;
+  const old = pat.notes.filter(inside);
+  const register = old.length ? Math.round(old.reduce((a, n) => a + n.midi, 0) / old.length) : 60;
+  const times = new Map<string, Omit<PatNote, "midi">>();
+  for (const n of old) times.set(`${n.step}|${n.off ?? 0}|${n.dur}|${n.vel}`, { step: n.step, dur: n.dur, vel: n.vel, ...(n.off ? { off: n.off } : {}) });
+  const midis = voice(p.root, p.type, register);
+  const fresh = [...times.values()].flatMap((t) => midis.map((midi) => ({ ...t, midi })));
+  const notes = [...pat.notes.filter((n) => !inside(n)), ...fresh].sort((a, b) => a.step - b.step || a.midi - b.midi);
+  const chords = pat.chords!.map((x, k) => (k === i ? { step: x.step, steps: x.steps, name: p.name, ...(x.hits ? { hits: x.hits } : {}) } : x));
+  return { ...pat, notes, chords };
+}

@@ -136,3 +136,10 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   - 2,109 words and 13 people named.
   - The newcomer still felt lost (3 of 5).
   - The repeats now come from the structure: the timeline, key works and themes cover the same books. A structural pass comes next.
+- **Research brief** (`research-learning.md`), on overviews before details:
+  - **Advance organisers** help modestly (d ≈ 0.2–0.66), and most for newcomers.
+  - **Pre-training and signalling** are well supported: name the main parts first, then show where you are in the structure.
+  - **Concept maps:** building one beats studying one (about 0.75 vs about 0.4).
+  - **Showing size or progress:** evidence is thin and mixed. A big number up front could put people off, so test it.
+  - **Timelines for adults:** untested.
+  - Next: the owner picks the MVP cut for the school skeleton.

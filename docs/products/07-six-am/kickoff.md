@@ -786,8 +786,8 @@ first, as for the Lab: read the drums and "other" of 2 tracks and measure agains
 questions below go to the owner one at a time before the pack is final.
 
 **Mode:** founder (v2)
-**Appetite:** a spike (one build round and one real-track grade, time-boxed) and three slices,
-about two nights in all (PM). Phase 5 planned one night and took two sittings plus a network stop.
+**Appetite:** a spike (one build round and one real-track grade, time-boxed) and four slices,
+about two to three nights in all (PM, after L248 and L249). Phase 5 planned one night and took two sittings plus a network stop.
 Owner moments: the questions below, the design picks (3 of ~10, then 1 of 3), the canvas sign-off,
 the final review.
 **Evals:** a "Chords in Make" part of `evals.md`, written from this pack once the questions are closed.
@@ -869,13 +869,17 @@ In the browser only (C2): no server-side model.
    its closest name, and saves and plays the same in the Studio.
 3. **Why it fits:** the Mentor explains a chord in the key (plain words: "G7 is the V of C, it
    pulls home"), and the saved chords open in the Studio's Chords / Pads lane drawer.
-   (Lead, if question 2 says so, is a fourth slice.)
+4. **Lead (L249):** a one-note line above the chords (riff, hook, arp) read note by note (the
+   spike picks the reader: Basic Pitch fixed or DSP), played on the poly synth's Lead row,
+   fixable on the same piano grid, saved to the Lead lane. In whether the reading is weak or not;
+   the owner fixes what's wrong.
 
 ## Owner's answers
 
 | # | Question | Answer | Log |
 | --- | --- | --- | --- |
 | 1 | Chord names only, or names and notes? | Both now: names per bar with alternatives, and single-note editing inside a chord, because the goal is to recreate a song and then add my own touch (PM had recommended names only, notes in Phase 7) | L248 |
+| 2 | Lead lines in this phase? | Yes, a fourth slice, even if the reading is weak (fixed by hand on the note grid) | L249 |
 
 ## Questions for the owner (draft)
 

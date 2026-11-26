@@ -794,3 +794,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - **Kickoff started** from the owner's call (25 Nov): chord names instead of note-by-note, and the owner in the loop (Make guesses, the owner fixes by ear on a chord grid, the Mentor explains). Branch at latest `origin/main` (PR 99, PR 103 in). Draft pack at the end of `kickoff.md`; questions to the owner one at a time.
 - **Unmerged notes branch** `claude/07-six-am-postmerge-notes`: one journal note (Phase 3 merged, 26 Oct), folded in above; the branch can go.
 - **Q1 (L248): both** chord names and single-note editing, now ("recreate a song in the studio, then add my own touch"). PM had recommended names only. Adds about a slice of work.
+- **Q2 (L249): lead in**, as a fourth slice regardless of the spike; the spike picks its reader. Appetite now four slices, two to three nights.

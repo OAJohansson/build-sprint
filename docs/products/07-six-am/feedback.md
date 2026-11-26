@@ -303,3 +303,9 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | CS1-12b | polish | "Fsus4" clipped in half-bar tiles | fixed (d91c6ea, T210): half-bar names shrink to 10 px and read "Fs4"; full name in the heading and aria-label |
 | N-1 | polish | Timing move buttons under A/B at 720 px | fixed (d91c6ea, T210): picking a hit scrolls the moves into view above A/B |
 | N-2 | polish | Loop label "first 16 bars" for 8 bars | fixed (d91c6ea, T210): the label counts the loop's bars ("first 8 bars"); it was a fixed "16" |
+
+### Phase 6 slices 1–2 app-behaviour grade (26 Nov, `evals-runs/2026-11-26-chords-slices1-2.md`)
+
+| ID | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| S-1 | major | Two stabs in one 16th merge on save (Lost 69–76 bar 8: 124 of 128 notes, 30 chords saved where Make played 31); H9 partial | fixed (008cf37, T211): double hits merge in Mine; the save keeps the repeat only when lossless, else the whole loop as played; tested |

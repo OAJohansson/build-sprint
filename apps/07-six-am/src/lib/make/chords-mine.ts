@@ -32,30 +32,62 @@ const FLAVOUR: Record<ChordType, string> = {
 };
 export const flavour = (name: string) => { const p = parseChord(name); return p ? FLAVOUR[p.type] : ""; };
 
-// shortcut: the "?" rule is reasoned on the modelled fixtures (chords-fixture.ts), not real loops: a rival on
-// another root within 0.035, the smoothing having overruled a higher-scoring chord, or a bar 12 % weaker than
-// its own twins. Re-check against data-evals' real-loop labels (H5) once slice 1 is graded.
-export const UNSURE = { rootMargin: 0.035, weakShare: 0.88 };
+// shortcut (CS1-2, T181): the "?" rule is set from one real read (Lost 69–76: its weakest cell, Csus2 at 0.87,
+// went unflagged under T173) and the modelled fixtures, not fitted on graded labels: a cell scoring under 0.9,
+// the loop's lowest cell when 0.05 under the median, a rival on another root within 0.035, the smoothing
+// having overruled a higher-scoring chord, or a cell 12 % weaker than its twins; at most a third of the cells
+// (the lowest-scoring first). Re-check against data-evals' real-loop labels once more loops are read.
+export const UNSURE = { lowScore: 0.9, lowestMargin: 0.05, rootMargin: 0.035, weakShare: 0.88, share: 1 / 3 };
 
 /**
  * Which cells Make isn't sure of. Not the 7th's margin: the reader sets a 7th +0.005 or −0.03 from its
- * triad by rule (L257), so that gap says nothing. Unsure when a chord on another root nearly ties, when
- * the loop smoothing kept a chord over a higher-scoring one, or when the cell reads much weaker than the
- * other cells with its name (a different chord, or a fill, hiding in the loop).
+ * triad by rule (L257), so that gap says nothing. Unsure when the cell's own score is low, when it is
+ * clearly the loop's weakest, when a chord on another root nearly ties, when the loop smoothing kept a
+ * chord over a higher-scoring one, or when it reads much weaker than the other cells with its name.
+ * Capped at a third of the cells so "?" still points somewhere.
  */
 export function unsureCells(cells: ChordCell[]): boolean[] {
   const byName = new Map<string, number[]>();
   for (const c of cells) if (c.name) byName.set(c.name, [...(byName.get(c.name) ?? []), c.score]);
   const med = (v: number[]) => [...v].sort((a, b) => a - b)[v.length >> 1];
-  return cells.map((c) => {
+  const named = cells.filter((c) => c.name && c.root !== null);
+  const allMed = named.length ? med(named.map((c) => c.score)) : 0;
+  const lowest = named.length ? Math.min(...named.map((c) => c.score)) : 0;
+  const flag = cells.map((c) => {
     if (!c.name || c.root === null) return false;
     const rival = c.alternatives.find((a) => a.root !== c.root);
     const overruled = c.alternatives.some((a) => a.score > c.score + 1e-9);
     const close = !!rival && c.score - rival.score < UNSURE.rootMargin;
     const twins = byName.get(c.name) ?? [];
     const weak = twins.length >= 3 && c.score < UNSURE.weakShare * med(twins);
-    return overruled || close || weak;
+    const low = c.score < UNSURE.lowScore;
+    const weakest = named.length >= 3 && c.score === lowest && c.score < allMed - UNSURE.lowestMargin;
+    return overruled || close || weak || low || weakest;
   });
+  const cap = Math.max(1, Math.round(cells.length * UNSURE.share));
+  const keep = new Set(cells.map((c, i) => ({ i, score: c.score })).filter((x) => flag[x.i]).sort((a, b) => a.score - b.score).slice(0, cap).map((x) => x.i));
+  return cells.map((_, i) => keep.has(i));
+}
+
+/** The pitch classes a chord name plays. */
+export const chordPcs = (name: string): number[] => { const p = parseChord(name); return p ? TEMPLATES[p.type].map((i) => mod12(p.root + i)) : []; };
+const TEMPLATES: Record<ChordType, number[]> = { maj: [0, 4, 7], min: [0, 3, 7], "7": [0, 4, 7, 10], maj7: [0, 4, 7, 11], m7: [0, 3, 7, 10], sus2: [0, 2, 7], sus4: [0, 5, 7], dim: [0, 3, 6] };
+
+/**
+ * CS1-1: how well Mine's chords match the notes the part plays, 0–100: per cell, the cosine between the
+ * part's pitch classes there and the chord's own notes, averaged weighted by how much the cell sounds.
+ * Null when there is nothing to compare.
+ */
+export function notesMatch(cellChroma: number[][], names: string[]): number | null {
+  let sum = 0, w = 0;
+  cellChroma.forEach((ch, i) => {
+    const pcs = chordPcs(names[i] ?? ""), tot = ch.reduce((a, b) => a + b, 0);
+    if (!pcs.length || tot <= 0) return;
+    const norm = Math.hypot(...ch), dot = pcs.reduce((a, p) => a + ch[p], 0);
+    sum += tot * (dot / (norm * Math.sqrt(pcs.length)));
+    w += tot;
+  });
+  return w > 0 ? Math.round((sum / w) * 100) : null;
 }
 
 /** The cards for a cell: Make's guess and its next 3 alternatives (H5 measures the same four). */

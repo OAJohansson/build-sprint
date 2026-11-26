@@ -59,3 +59,20 @@
 /* the Chords row grows with its tiles (two lines on a 16-bar loop) */
 .chordRow { height: auto !important; min-height: 76px; }
 .chordTrack { min-width: 0; }
+
+/* ── Slice 1 user-test fixes (CS1) ───────────────────────────────────────────────────────────── */
+/* CS1-3: a name is never under 11 px; a narrow (half-bar) tile breaks it between root and type, two lines at most */
+.tileName { font-size: max(11px, min(16px, calc(100cqi / 4.4))); white-space: normal; overflow-wrap: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.tile[data-unsure] .tileName { font-size: max(11px, min(16px, calc((100cqi - 17px) / 4.4))); }
+.tile[data-half] { padding-left: 6px; padding-right: 6px; gap: 2px; }
+.tile[data-half] .tileName { line-height: 1.05; }
+.curName { font: 500 13px var(--f-mono); color: var(--ink); }
+/* CS1-9: a bar you picked carries a small teal mark top-left (Make's own reads have none) */
+.edited { position: absolute; top: 0; left: 8px; width: 14px; height: 3px; border-radius: 0 0 2px 2px; background: #23b3a5; }
+/* CS1-6: the "All" switch is a 44 px target */
+.all { min-height: 44px; padding-right: 8px; }
+/* CS1-7: four cards a row on a laptop and up; More's cards sit under the tools in a tighter row */
+@media (min-width: 1280px) { .choices { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.extra .choice { height: 52px; }
+.extra .guessTag { display: none; }
+@media (max-width: 700px) { .choices { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

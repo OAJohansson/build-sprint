@@ -11,7 +11,7 @@ import type { LabTransport, LoopState } from "@/lib/lab/transport";
 import { MakeClient } from "@/lib/make/make-client";
 import { foldMelodyRow, type MelNote, type MelodyReading, type MelodyRowSound, type MelodyTarget } from "@/lib/make/melody-make";
 import { chordsMelodyReading, voiceChord, type ChordCell, type ChordsReading } from "@/lib/make/chords-read";
-import { cardsFor, foldChordNames, keyChords, normalChord, parseChord, picksFromSaved, unsureCells, withPicks } from "@/lib/make/chords-mine";
+import { cardsFor, foldChordNames, keyChords, normalChord, notesMatch, parseChord, picksFromSaved, unsureCells, withPicks } from "@/lib/make/chords-mine";
 import { isMelodySound, melodyNoun, saveAction, soundId, suggestMelodyName, suggestMelodyTags, type MelodySound } from "@/lib/make/library";
 import { MELODY_ROWS, MELODY_ROW_NAMES, POLY_KNOBS, POLY_KNOB_SPECS, ROW_DEFAULT, clampPolyMacros, kindOf, melodyPreset, melodyPresetIds, melodyRowOf, polyKnobWord, polyMoves, polySuggestLine, presetId, type MelodyPresetId, type MelodyRow, type PolyMacros } from "@/lib/make/poly-synth";
 import type { Scale } from "@/lib/synths/theory";
@@ -25,7 +25,7 @@ import s from "./lab.module.css";
 const loopKeyOf = (l: LoopState | null) => (l?.state === "memory" ? `${Math.round(l.startMs)}-${Math.round(l.endMs)}` : null);
 type ReadState = "idle" | "reading" | "ready" | "nonotes" | "error";
 /** Phase 6 slice 1: what reader A gave for this loop (the chords, and a lead line when the melody split found one). */
-type ReadRaw = { loopKey: string; chords: ChordsReading; lead: MelNote[]; targets: Record<MelodyRow, MelodyTarget | null>; levelDb: number; lufs: number; samples: number; rate: number; ms: number };
+type ReadRaw = { loopKey: string; chords: ChordsReading; lead: MelNote[]; targets: Record<MelodyRow, MelodyTarget | null>; cellChroma: number[][]; levelDb: number; lufs: number; samples: number; rate: number; ms: number };
 type Read = ReadRaw & { d: MelodyReading };
 /** Slice 1: the Lead row stays off until its own slice (K7): read note by note it is rough (H4), and it can't be edited yet. */
 const LEAD_WHY = "The lead, read note by note, is rough for now (fixing it by hand comes later): off in Mine";
@@ -142,10 +142,11 @@ export function useMelody(o: MelodyOpts) {
       const lead = res.lead.from === "row" ? res.lead.notes : [];
       console.info(`[make] chords read in ${res.ms} ms: ${res.chords.cells.map((c) => c.name || "-").join(" ")}, ${res.chords.events.length} chords, lead ${lead.length} notes`);
       if (!res.chords.events.length) { setState({ loopKey: key, state: "nonotes" }); return; }
-      const r: ReadRaw = { loopKey: key, chords: res.chords, lead, targets: res.targets, levelDb: res.levelDb, lufs: res.lufs, samples, rate, ms: res.ms };
+      const r: ReadRaw = { loopKey: key, chords: res.chords, lead, targets: res.targets, cellChroma: res.cellChroma, levelDb: res.levelDb, lufs: res.lufs, samples, rate, ms: res.ms };
       setReadS(r);
       setPicks({ loopKey: key, picks: {} });
-      setOpenCell(null); setHear(null); setMore(false);
+      setOpenCell(null); setHear(null); setMore(false); setAll(true);
+      setAb("b"); // CS1-4: once the loop is read, Make's chords are what you hear first
       setState({ loopKey: key, state: "ready" });
       for (const row of MELODY_ROWS) if (r.targets[row]) await suggest(r, row, soundsRef.current[row], null);
     }, (e) => setState({ loopKey: key, state: "error", error: `Make couldn't read the chords: ${e instanceof Error ? e.message : String(e)}` }));
@@ -250,9 +251,19 @@ export function useMelody(o: MelodyOpts) {
   const cellStartMs = (i: number) => (o.loop ? o.loop.startMs + (guess?.cells[i]?.startStep ?? 0) * sps * 1000 : 0);
   /** From the start of the open cell's bar, playing (a tap hears the chord in the loop at once). */
   const playFrom = (i: number) => { const t = tr.current; if (!t || !o.loop) return; t.seek(cellStartMs(i)); if (!t.playing) t.play(); };
-  const openChord = (i: number) => { if (!guess || i < 0 || i >= guess.cells.length) return; setOpenCell({ loopKey, cell: i }); setHear(null); setMore(false); };
-  /** The cells a pick changes: the open one, and with "All" every cell that holds the same chord in Mine now. */
-  const twinsOf = (i: number) => (mineChords ? mineChords.cells.map((_, k) => k).filter((k) => k !== i && !!mineChords.cells[i]?.name && mineChords.cells[k].name === mineChords.cells[i].name) : []);
+  // CS1-6: "All" is on again each time a bar opens (L262's default).
+  const openChord = (i: number) => { if (!guess || i < 0 || i >= guess.cells.length) return; setOpenCell({ loopKey, cell: i }); setHear(null); setMore(false); setAll(true); };
+  /**
+   * The cells a pick changes with "All" (CS1-6): every other cell Make heard as the same chord, or that
+   * holds the same chord in Mine now. Stable through picks, so the switch never vanishes while twins exist.
+   */
+  const twinsOf = (i: number) => {
+    if (!mineChords || !guess || !guess.cells[i]?.name) return [];
+    const g = guess.cells[i].name, cur = mineChords.cells[i].name;
+    return guess.cells.map((_, k) => k).filter((k) => k !== i && !!guess.cells[k].name && (guess.cells[k].name === g || mineChords.cells[k].name === cur));
+  };
+  /** The switch's chord name: Mine's chord when every twin plays it too, else what Make heard. */
+  const twinName = (i: number) => { const t = twinsOf(i), cur = mineChords?.cells[i]?.name ?? ""; return t.every((k) => mineChords?.cells[k].name === cur) ? cur : guess?.cells[i]?.name ?? cur; };
   const pickChord = (name: string, opts: { all?: boolean; cell?: number; hear?: boolean } = {}) => {
     const n = normalChord(name), i = opts.cell ?? openCell;
     if (!n || !guess || !loopKey) return false;
@@ -283,15 +294,21 @@ export function useMelody(o: MelodyOpts) {
       edited: picks[i] !== undefined, cards: cardsFor(g), score: g.score,
       hits: mineChords.events.filter((e) => e.cell === i).map((e) => { const at = Math.max(0, e.t / sps - g.startStep); return { at, len: Math.max(0.25, Math.min(g.steps - at, e.dur / sps)) }; }),
     })),
-    open: openCell, twins: twinsOf(openCell).length, all, more, hear, keyChords: keyList,
+    open: openCell, twins: twinsOf(openCell).length, twinName: twinName(openCell), all, more, hear, keyChords: keyList,
   } : null;
+  // CS1-1: the chords' closeness follows Mine's chord names: half the sound (Phase 5's measure, knobs and
+  // preset), half how well Mine's chords match the notes the part plays per cell (recomputed on every pick).
+  const notesScore = useMemo(() => (raw && mineChords ? notesMatch(raw.cellChroma, mineChords.cells.map((c) => c.name)) : null), [raw, mineChords]);
+  const soundClose = mine?.rowCloseness ?? null;
+  const rowCloseness = soundClose ? { ...soundClose, chords: soundClose.chords && notesScore !== null ? { ...soundClose.chords, score: Math.round((soundClose.chords.score + notesScore) / 2), sound: soundClose.chords.score, notes: notesScore } : soundClose.chords } : null;
   /** Graders (slice 1): Make's chords as the screen shows them and as Mine plays them; names and numbers only. */
   const chordsDebug = () => {
     if (!guess || !mineChords || !raw) return { readState, cells: null };
     const from = o.fromBar ?? null;
     return {
       readState, reader: raw.chords.reader, readMs: raw.ms, bpm: o.bpm, bars: guess.bars, steps: guess.steps, register: guess.register, fromBar: from,
-      open: openCell, openBar: from !== null ? from + guess.cells[openCell].bar : null, all, more, hear, ab, twins: twinsOf(openCell).length, keyChords: keyList,
+      open: openCell, openBar: from !== null ? from + guess.cells[openCell].bar : null, all, more, hear, ab, twins: twinsOf(openCell).length, twinName: twinName(openCell), keyChords: keyList,
+      closeness: { score: rowCloseness?.chords?.score ?? null, sound: soundClose?.chords?.score ?? null, notes: notesScore },
       cells: guess.cells.map((g, i) => ({
         cell: i, bar: g.bar + 1, barNo: from !== null ? from + g.bar : null, half: g.steps < 16 ? (g.startStep % 16 === 0 ? 1 : 2) : null, startStep: g.startStep, steps: g.steps,
         guess: g.name, name: mineChords.cells[i].name, edited: picks[i] !== undefined, planted: plants[i]?.name ?? null, unsure: !!unsure[i] && picks[i] === undefined,
@@ -321,7 +338,7 @@ export function useMelody(o: MelodyOpts) {
     open, setOpen, rows, sounds, setPreset, setKnob, ticks, suggesting, read, readState, readError: state?.error ?? null, on, anyway, playAnyway, backToOff,
     suggestNow: (row: MelodyRow) => { if (read) void suggest(read, row, sounds[row], ticks[row]?.macros ?? null); },
     suggestedNow: perRow((r) => !!ticks[r] && ticks[r]!.for === soundId(sounds[r].preset, sounds[r].macros)),
-    ab, setAb, bed, setBed, mineReady: !!mine && mine.key === mineKeyNow, mineAny: !!mine, rowCloseness: mine?.rowCloseness ?? null,
+    ab, setAb, bed, setBed, mineReady: !!mine && mine.key === mineKeyNow, mineAny: !!mine, rowCloseness,
     /** M-F3: no row is on in Mine (every row off as doubtful): B would play silence. */
     allOff: !!read && !MELODY_ROWS.some((r) => on[r]),
     mySounds, loadSound, name: nameField, setName: (v: string) => setNames((n) => ({ ...n, [open]: v })), tags, save, canSave, savedRows,
@@ -517,7 +534,9 @@ export function MelodyCheck({ m }: { m: MelodyModel }) {
         <span className={s.faint}>{m.allOff ? "every row is off" : "same loudness"}</span>
       </div>
       <button className={s.ghost} aria-pressed={m.bed} onClick={() => m.setBed(!m.bed)} title="Plays the original drums under both A and B, so you judge the chords in the groove">{m.bed ? "Drums under both: on" : "Drums under both: off"}</button>
-      <span className={s.drScore} title="How close this row's notes sound to the original's (the same notes on both sides: their spectrum, envelope, room and width): it rises as you follow this row's gold ticks. Numbers only.">
+      <span className={s.drScore} title={m.open === "chords"
+        ? "Half how close the sound is to the original's (spectrum, envelope, room and width: follow the gold ticks), half how well Mine's chords match the notes the track plays in each bar (it moves as you pick chords). Numbers only."
+        : "How close this row's notes sound to the original's (the same notes on both sides: their spectrum, envelope, room and width): it rises as you follow this row's gold ticks. Numbers only."}>
         closeness · {MELODY_ROW_NAMES[m.open].toLowerCase()} <b>{off ? "–" : m.rowCloseness?.[m.open]?.score ?? "–"}</b> / 100
       </span>
     </div>

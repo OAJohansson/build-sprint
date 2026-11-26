@@ -17,7 +17,8 @@ import { readDrums } from "./drums-read";
 import { readNotes, type NotesReading } from "./notes-read";
 import { readNotesBP } from "./notes-bp";
 import { MELODY_READER } from "./melody-reader";
-import { chordsFromNotes, chordsMelodyReading, leadLine, readChords, type ChordsReader, type ChordsReading } from "./chords-read";
+import { chordsFromNotes, chordsMelodyReading, harmonyOf, leadLine, readChords, type ChordsReader, type ChordsReading } from "./chords-read";
+import { decimate, toMono } from "./dsp";
 import type { GraphModel } from "@tensorflow/tfjs";
 import type { MelNote } from "./melody-make";
 import { measureMelody, melodyFromReading, melodyRowCloseness, renderMelodyMine, suggestMelody, type MelodyReading, type MelodyRowSound, type MelodySuggestion, type MelodyTarget } from "./melody-make";
@@ -51,7 +52,7 @@ export type MakeResponse =
   | { type: "drums-render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; rowGainsDb: Record<DrumRow, number | null>; closeness: DrumsCloseness; rowCloseness: Record<DrumRow, { score: number; distance: number } | null>; ms: number }
   | { type: "drums-suggest"; id: number; suggestion: DrumSuggestion & { closer: { preset: DrumPresetId; macros: DrumMacros; distance: number } | null }; ms: number }
   | { type: "melody-read"; id: number; reading: MelodyReading; targets: Record<MelodyRow, MelodyTarget | null>; levelDb: number; lufs: number; reader: "dsp" | "basic-pitch"; ms: number }
-  | { type: "chords-read"; id: number; chords: ChordsReading; lead: { from: "row" | "top-line"; notes: MelNote[] }; melody: MelodyReading; targets: Record<MelodyRow, MelodyTarget | null>; levelDb: number; lufs: number; reader: ChordsReader; ms: number }
+  | { type: "chords-read"; id: number; chords: ChordsReading; lead: { from: "row" | "top-line"; notes: MelNote[] }; melody: MelodyReading; targets: Record<MelodyRow, MelodyTarget | null>; cellChroma: number[][]; levelDb: number; lufs: number; reader: ChordsReader; ms: number }
   | { type: "melody-render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; rowGainsDb: Record<MelodyRow, number | null>; rowCloseness: Record<MelodyRow, { score: number; distance: number } | null>; ms: number }
   | { type: "melody-suggest"; id: number; suggestion: MelodySuggestion; ms: number }
   | { type: "fx-read"; id: number; measures: Record<FxRow, FxMeasure>; level: { bed: { rmsDb: number; lufs: number; blocks: number[] }; noBed: { rmsDb: number; lufs: number; blocks: number[] } }; ms: number }
@@ -92,8 +93,26 @@ function finishChordsRead(m: Extract<MakeRequest, { type: "chords-read" }>, t0: 
   // Slice 1 (K8): Suggest's and closeness's targets, measured on the original at the read chords' times
   // (the Lead row only when the melody split found a line of its own, not the chords' top line).
   const targets = measureMelody(m.left, m.right, m.rate, chordsMelodyReading(chords, lead.from === "row" ? lead.notes : []));
+  const cellChroma = cellChromaOf(m, chords);
   m.left.fill(0); m.right.fill(0); // the copy of the original is dropped here (C2)
-  return { res: { type: "chords-read", id: m.id, chords, lead, melody: chordsMelodyReading(chords, lead.notes), targets, levelDb, lufs: loud, reader: m.reader, ms: Math.round(performance.now() - t0) }, transfer: [] };
+  return { res: { type: "chords-read", id: m.id, chords, lead, melody: chordsMelodyReading(chords, lead.notes), targets, cellChroma, levelDb, lufs: loud, reader: m.reader, ms: Math.round(performance.now() - t0) }, transfer: [] };
+}
+
+/**
+ * CS1-1: how much of each pitch class the part plays in each chord cell (12 numbers per cell, the
+ * reader's own per-16th chroma summed over the cell), so the chords closeness can follow Mine's chord
+ * names. Numbers only (C2); the mono and decimated copies are zeroed here.
+ */
+function cellChromaOf(m: { left: Float32Array; right: Float32Array; rate: number; bpm: number }, c: ChordsReading): number[][] {
+  const mono = toMono(m.left, m.right), dec = Math.max(1, Math.round(m.rate / 11025)), x = decimate(mono, dec);
+  if (x.length < (m.rate / dec) * 0.5 || !c.cells.length) { x.fill(0); mono.fill(0); return c.cells.map(() => new Array(12).fill(0)); }
+  const h = harmonyOf(x, m.rate / dec, m.bpm);
+  x.fill(0); if (mono !== m.left) mono.fill(0);
+  return c.cells.map((cell) => {
+    const out = new Array(12).fill(0);
+    for (let s = cell.startStep; s < cell.startStep + cell.steps && s < h.chroma.length; s++) for (let k = 0; k < 12; k++) out[k] += h.chroma[s][k];
+    return out.map((v) => Math.round(v * 1000) / 1000);
+  });
 }
 
 /**

@@ -45,8 +45,10 @@ export type Chords = ReturnType<typeof useChords>;
 
 // ── The room ─────────────────────────────────────────────────────────────────────────────────────
 
-export function Shell({ song, children, block, rail, row = "chords", closeness }: {
+export function Shell({ song, children, block, rail, row = "chords", closeness, sticky = true }: {
   song: Song; children: ReactNode; block?: ReactNode; rail?: ReactNode; row?: "chords" | "lead"; closeness?: number;
+  /** A/B sticky at the column foot (round 2); round 3 lets the room scroll instead. */
+  sticky?: boolean;
 }) {
   const score = closeness ?? (row === "lead" ? song.leadCloseness : song.closeness);
   return (
@@ -87,7 +89,7 @@ export function Shell({ song, children, block, rail, row = "chords", closeness }
           <div className={v.middle}>{children}</div>
           <div className={s.grow} />
           {block ?? <KnobBlock song={song} row={row} />}
-          <div className={cx(s.checkRow, s.drCheck, v.check)}>
+          <div className={cx(s.checkRow, sticky && s.drCheck, v.check)}>
             <div className={s.abWrap}>
               <div className={s.ab} role="group" aria-label="Compare at the same loudness">
                 <button aria-pressed="false">A · Original melody</button>

@@ -269,3 +269,28 @@ export function scoreTimes(strikes: number[], events: { t: number }[], tolS = 0.
   const extra = events.filter((e) => !strikes.some((s) => Math.abs(e.t - s) <= tolS)).length;
   return { found: strikes.length ? found / strikes.length : 1, extra: events.length ? extra / events.length : 0, events: events.length };
 }
+
+/**
+ * N-1 / H3 (slice 1 reader grade, 26 Nov), modelled on its failure notes only: a soft pad (150 ms
+ * attack) whose chords change on bar lines and on a half bar, under a 10 dB pump and a slow 4 dB swell,
+ * kick bled in. Each chord is one held span; Mine must start it at the change, not at a later swell.
+ */
+export function softPadLoop(rate = 22050): TimesFixture & { spans: [number, number][] } {
+  const bpm = 125, sps = 60 / bpm / 4, bars = 8, n = Math.round(bars * 16 * sps * rate);
+  const prog: [number, number, number[]][] = [[0, 24, FM], [24, 40, DBMAJ], [40, 64, EBMAJ], [64, 96, CM], [96, 128, FM]];
+  const notes: TruthNote[] = [];
+  for (const [a, b, ch] of prog) for (const midi of ch) notes.push({ t: a * sps, dur: (b - a) * sps - 0.01, midi, vel: 0.7 });
+  const part = pumped(renderNotes(notes, VOICES.slowPad, n, rate, 0.12), rate, bpm, { duckDb: 10, releaseS: 0.2, tremHz: 0.5, tremDb: 4 });
+  const kick = renderDrums({ name: "kick", bpm, kit: KIT_909, bars: [{ kick: [0, 4, 8, 12] }] }, { bars, rate, seed: 13 }).mono;
+  const spans = prog.map(([a, b]) => [a * sps, b * sps] as [number, number]);
+  return { name: "soft pad, half-bar change", bpm, rate, mono: withBleed(part, [kick], -18, 13), strikes: spans.map((s) => s[0]), changes: prog.length, spans };
+}
+
+/** H3's scoring: a span passes when one held event starts within 80 ms of its start, lasts ≥ 80 % of it, and no other event starts inside it. */
+export function scoreHeld(spans: [number, number][], events: { t: number; dur: number; held: boolean }[], tol = 0.08) {
+  const ok = spans.filter(([a, b]) => {
+    const start = events.find((e) => e.held && Math.abs(e.t - a) <= tol && e.dur >= 0.8 * (b - a));
+    return !!start && !events.some((e) => e !== start && e.t > a + tol && e.t < b - tol);
+  }).length;
+  return spans.length ? ok / spans.length : 1;
+}

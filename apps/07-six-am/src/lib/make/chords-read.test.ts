@@ -6,7 +6,7 @@ import { CHORD_TYPES, cellsFromHarmony, chordNotes, chordsFromNotes, eventsFromO
 import type { MelodyReading } from "./melody-make";
 import type { ReadNote } from "./notes-read";
 import { LOST_69_76, renderLost6976 } from "./melody-fixture";
-import { CHORD_FIXTURES, pumpedPadLoop, pumpedStabLoop, scoreCells, scoreTimes } from "./chords-fixture";
+import { CHORD_FIXTURES, pumpedPadLoop, pumpedStabLoop, scoreCells, scoreHeld, scoreTimes, softPadLoop } from "./chords-fixture";
 import { renderNotes, VOICES } from "./layers-bench";
 
 const chromaOf = (pcs: number[], w: number[] = pcs.map(() => 1)) => { const c = new Array(12).fill(0); pcs.forEach((p, i) => (c[p % 12] += w[i])); return c; };
@@ -106,6 +106,15 @@ describe("chord names, unseen-loop faults (U-2, CH-7; modelled and transposed, t
     expect(cells.map((c) => c.name)).toEqual(new Array(8).fill(["Cm", "Gm"]).flat());
   });
 
+  it("splits a bar that reads as a sus blended from two halves' minor chords (U-2: B♭m then Fm read Fsus4)", () => {
+    const chromaOf2 = (m: Record<number, number>) => { const v = new Array(12).fill(0); for (const k in m) v[+k] = m[k]; return v; };
+    const A = chromaOf2({ 10: 1, 1: 0.35, 5: 0.9, 0: 0.3 }), B = chromaOf2({ 5: 1, 8: 0.35, 0: 0.9, 10: 0.3 });
+    expect(rankChords(A.map((x, i) => x + B[i]))[0].type).toMatch(/sus/);
+    const chroma = [...new Array(8).fill(A), ...new Array(8).fill(B)];
+    const h: StepHarmony = { chroma, bass: chroma.map(() => new Array(12).fill(0)), energy: chroma.map(() => 1) };
+    expect(cellsFromHarmony(h).map((c) => [c.name, c.steps])).toEqual([["Bbm", 8], ["Fm", 8]]);
+  });
+
   it("still names a real sus when no major or minor triad explains its notes", () => {
     expect(top([5, 7, 0], [5])).toBe("Fsus2");
     expect(top([7, 0, 2], [7])).toBe("Gsus4");
@@ -135,6 +144,20 @@ describe("chord times on held pads (U-1, H3; modelled pumps and tremolo, regress
       expect(r.events.every((e) => e.held && !e.struck), f.name).toBe(true);
       expect(r.cells.map((c) => c.name)).toEqual(["Fm", "Fm", "C#", "C#", "Eb", "Eb", "Cm", "Cm"]);
     }
+  });
+
+  const spans = (bpm: number) => [0, 1, 2, 3].map((k) => [k * 32 * (15 / bpm), (k + 1) * 32 * (15 / bpm)] as [number, number]);
+
+  it("holds every chord of a pumped or tremolo pad from its change to the next (H3 scoring, per cell)", () => {
+    for (const f of [pumpedPadLoop(), pumpedPadLoop({ duckDb: 18, releaseS: 0.3 }), pumpedPadLoop({ duckDb: 0, tremHz: (124 / 60) * 4, tremDb: 8 }), pumpedPadLoop({ duckDb: 0, tremHz: (124 / 60) * 2, tremDb: 12 })]) {
+      expect(scoreHeld(spans(f.bpm), read(f).events), f.name).toBe(1);
+    }
+  });
+
+  it("starts a soft pad's chord at its change, also on a half bar, not at a later swell (N-1)", () => {
+    const f = softPadLoop(), r = read(f);
+    expect(scoreHeld(f.spans, r.events)).toBe(1);
+    for (const [a] of f.spans) expect(r.events.some((e) => e.held && Math.abs(e.t - a) <= 0.08), `change at ${a}`).toBe(true);
   });
 
   it("doesn't strike on a tremolo's swells (was 39 and 134 strikes)", () => {
@@ -194,6 +217,11 @@ describe("chord times (L251)", () => {
   it("holds a pad over two bars of the same chord as one chord, and starts a new one where it changes", () => {
     const ev = eventsFromOnsets([], cells(["Am", "Am", "F", "F"]), bpm, 64);
     expect(ev.map((e) => [e.step, e.held, Math.round(e.dur / sps)])).toEqual([[0, true, 32], [32, true, 32]]);
+  });
+
+  it("starts a chord again when it comes back after another one, even if the part never fell silent", () => {
+    const ev = eventsFromOnsets([{ t: 0, vel: 1, end: 48 * sps }], cells(["Am", "F", "Am"]), bpm, 48);
+    expect(ev.map((e) => [e.step, e.cell])).toEqual([[0, 0], [16, 1], [32, 2]]);
   });
 
   it("gives a silent bar no chord", () => {

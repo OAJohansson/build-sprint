@@ -236,8 +236,12 @@ export function cellsFromHarmony(h: StepHarmony, key?: Key): ChordCell[] {
     const whole = rankChords(barChroma[b], barBass[b], key);
     const halves = [0, 8].map((o) => ({ o, e: energyOf(b * 16 + o, b * 16 + o + 8), r: rankChords(sum(b * 16 + o, b * 16 + o + 8, (s) => chromaW[s]), sum(b * 16 + o, b * 16 + o + 8, (s) => bassW[s]), key) }));
     const top = whole[0]?.name;
+    // U-2: a bar that reads as a sus (or dim) while its halves read two different major/minor chords is
+    // those two chords blended (B♭m then Fm made B♭ C F), so it splits without the margin.
+    const rare = (t?: ChordType) => t === "sus2" || t === "sus4" || t === "dim";
+    const blend = rare(whole[0]?.type) && halves.every((x) => x.r.length && !rare(x.r[0].type) && x.r[0].score > (x.r.find((g) => g.name === top)?.score ?? 0));
     const differs = halves.every((x) => x.r.length && x.e >= CHORD_OPT.splitEnergy * barE[b]) && halves[0].r[0].name !== halves[1].r[0].name &&
-      halves.some((x) => x.r[0].name !== top && x.r[0].score - (x.r.find((g) => g.name === top)?.score ?? 0) >= CHORD_OPT.splitMargin);
+      (blend || halves.some((x) => x.r[0].name !== top && x.r[0].score - (x.r.find((g) => g.name === top)?.score ?? 0) >= CHORD_OPT.splitMargin));
     if (differs) for (const x of halves) raw.push({ bar: b, startStep: b * 16 + x.o, steps: 8, ranked: x.r });
     else raw.push({ bar: b, startStep: b * 16, steps: 16, ranked: whole });
   }
@@ -253,7 +257,7 @@ export function cellsFromHarmony(h: StepHarmony, key?: Key): ChordCell[] {
 }
 
 /** An onset as a chord reader found it: when, how strong (0–1), and until when the part sounds it. */
-export type Onset = { t: number; vel: number; end: number };
+export type Onset = { t: number; vel: number; end: number; steep?: number };
 
 /**
  * Chord events from onsets and cells (L251): every onset starts the chord of the cell it falls in (a
@@ -262,8 +266,10 @@ export type Onset = { t: number; vel: number; end: number };
  * stays one chord, H3). An event lasts until the part stops sounding it, the next event, the end of
  * its cell when the next cell's chord differs, or the loop's end; it is held when that is 1.5 beats or more.
  */
-export function eventsFromOnsets(onsets: Onset[], cells: ChordCell[], bpm: number, steps: number): ChordEvent[] {
+export function eventsFromOnsets(onsets: Onset[], cells: ChordCell[], bpm: number, steps: number, held?: boolean[]): ChordEvent[] {
   const sps = 60 / bpm / 4, loopS = steps * sps;
+  // H3, N-1: in a held cell (heldCells) only a clear strike starts a chord; swells and pumps don't.
+  const heldCell = (k: number) => !!held?.[k];
   const cellAt = (t: number) => { const s = t / sps + 0.5; let k = -1; cells.forEach((c, i) => { if (s >= c.startStep && s < c.startStep + c.steps) k = i; }); return k; };
   const evs: { t: number; vel: number; end: number; cell: number; struck: boolean }[] = [];
   for (const o of [...onsets].sort((a, b) => a.t - b.t)) {
@@ -271,13 +277,19 @@ export function eventsFromOnsets(onsets: Onset[], cells: ChordCell[], bpm: numbe
     if (o.t < -0.012 || o.t >= loopS) continue;
     const t = Math.max(0, o.t), k = cellAt(t);
     if (k < 0 || !cells[k].name) continue;
+    if (heldCell(k) && !((o.steep ?? Infinity) >= HELD_OPT.keepDb)) continue;
     evs.push({ t, vel: o.vel, end: o.end, cell: k, struck: true });
   }
+  // Same chord without a break: every cell from `a` to `b` carries the name (a held chord spans them).
+  const sameRun = (a: number, b: number) => { for (let j = a; j <= b; j++) if (cells[j].name !== cells[b].name) return false; return true; };
   cells.forEach((c, i) => {
-    if (!c.name || evs.some((e) => e.struck && e.cell === i)) return;
+    if (!c.name) return;
     const t0 = c.startStep * sps, cellEnd = (c.startStep + c.steps) * sps;
-    const sounding = evs.find((e) => e.t < t0 && e.end >= t0 - 0.05 && cells[e.cell].name === c.name);
-    if (sounding) { if (!sounding.struck) sounding.end = Math.max(sounding.end, cellEnd); return; }
+    // A held cell gets its chord at its line (N-1: a soft pad's change, not a later swell), unless a
+    // strike already starts it; a struck cell only when it has no onset of its own (as before).
+    if (heldCell(i) ? evs.some((e) => e.cell === i && e.t <= t0 + 0.5 * sps) : evs.some((e) => e.struck && e.cell === i)) return;
+    const sounding = evs.find((e) => e.t < t0 && e.end >= t0 - 0.05 && e.cell < i && sameRun(e.cell, i) && !evs.some((q) => q.t > e.t && q.t < t0));
+    if (sounding) { if (!sounding.struck || heldCell(i)) sounding.end = Math.max(sounding.end, cellEnd); return; }
     evs.push({ t: t0, vel: 0.8, end: cellEnd, cell: i, struck: false });
   });
   evs.sort((a, b) => a.t - b.t);
@@ -287,8 +299,32 @@ export function eventsFromOnsets(onsets: Onset[], cells: ChordCell[], bpm: numbe
     const changesAfter = !!cells[e.cell + 1] && cells[e.cell + 1].name !== cells[e.cell].name;
     const stop = Math.min(next, loopS, Math.max(e.end, e.t + 0.03), changesAfter ? Math.max(cellEnd, e.t + 0.03) : Infinity);
     const dur = Math.max(0.03, stop - e.t), step = Math.round(e.t / sps);
-    const held = dur >= 6 * sps;
+    const held = dur >= 6 * sps || (heldCell(e.cell) && !e.struck);
     return { t: Math.round(e.t * 10000) / 10000, dur: Math.round(dur * 10000) / 10000, step: step % steps, off: Math.round((e.t / sps - step) * 1000) / 1000, cell: e.cell, struck: e.struck && !held, held, vel: Math.round(e.vel * 100) / 100 };
+  });
+}
+
+// shortcut: held cell (H3, N-1: the part's 400–3000 Hz level over the cell: lower quartile ≥ −15 dB and median ≥ −9 dB of its 95th percentile, and at most one strike of ≥ 6 dB in 20 ms per half bar; inside it only a ≥ 9 dB strike starts a new event) picked on modelled pads, tremolo, pumped and ringing stabs (chords-fixture.ts); re-grade H2/H3 on real loops before trusting it.
+export const HELD_OPT = { lowDb: -15, midDb: -9, countDb: 6, perSteps: 8, keepDb: 9 };
+
+/**
+ * Which cells the part holds (H3, N-1), decided per cell, not per onset: the part keeps sounding
+ * through the cell (its level never falls far: a pump's dips and a swell's troughs are short or
+ * shallow, a stab's decay is not) and at most one clear strike per half bar lands in it (a ringing
+ * stab struck again and again sounds on too, but is struck every beat). A held cell plays as one held
+ * chord from its line; only clear strikes inside it start a new event.
+ */
+export function heldCells(cells: ChordCell[], onsets: Onset[], at: (t: number) => number, bpm: number): boolean[] {
+  const sps = 60 / bpm / 4, O = HELD_OPT;
+  return cells.map((c) => {
+    if (!c.name) return false;
+    const t0 = c.startStep * sps, t1 = (c.startStep + c.steps) * sps, v: number[] = [];
+    for (let t = t0; t < t1; t += 0.0029) v.push(at(t));
+    if (v.length < 8) return false;
+    v.sort((a, b) => a - b);
+    const q = (p: number) => v[Math.floor(p * (v.length - 1))], top = q(0.95);
+    const clear = onsets.filter((o) => o.t >= t0 - 0.5 * sps && o.t < t1 - 0.5 * sps && (o.steep ?? Infinity) >= O.countDb).length;
+    return q(0.25) >= top + O.lowDb && q(0.5) >= top + O.midDb && clear <= Math.max(1, Math.floor(c.steps / O.perSteps));
   });
 }
 
@@ -367,7 +403,7 @@ export function harmonyOf(x: Float32Array, r: number, bpm: number): StepHarmony 
 }
 
 /** A band's level (dB) of a looped part on `n`-point frames, smoothed over ±2 hops, read round at any time. */
-function bandLevel(x: Float32Array, r: number, n: number, hop: number, lo: number, hi: number) {
+export function bandLevel(x: Float32Array, r: number, n: number, hop: number, lo: number, hi: number) {
   const { frames, bins, p } = powerSpec(x, n, hop);
   const kLo = Math.ceil((lo * n) / r), kHi = Math.floor((hi * n) / r);
   const env = new Float64Array(frames);
@@ -412,7 +448,7 @@ export function chordOnsets(x: Float32Array, r: number): Onset[] {
   cands.sort((a, b) => a.t - b.t);
   // U-1: the strike test, on its own finer band level (23 ms frames, above the kick's body).
   const lv = bandLevel(x, r, STRIKE_OPT.fft, hop, STRIKE_OPT.bandLo, STRIKE_OPT.bandHi);
-  const kept = cands.filter((c, i) => isStrike(attackShape(lv.at, c.t, i ? cands[i - 1].t : cands.length > 1 ? cands[cands.length - 1].t - loopEnd : -Infinity)));
+  const kept = cands.map((c, i) => ({ ...c, shape: attackShape(lv.at, c.t, i ? cands[i - 1].t : cands.length > 1 ? cands[cands.length - 1].t - loopEnd : -Infinity) })).filter((c) => isStrike(c.shape));
   const bridge = Math.round((STRIKE_OPT.bridgeS * r) / hop);
   return kept.map((c, i) => {
     // Sounds until the band falls 12 dB under its level just after the onset; a dip that climbs back
@@ -427,7 +463,7 @@ export function chordOnsets(x: Float32Array, r: number): Onset[] {
       if (g < Math.min(frames - 1, f + bridge, nextF) && sm[g] > thr) { f = g; continue; }
       break;
     }
-    return { t: c.t, vel: Math.min(1, 0.4 + 0.6 * c.s), end: (f * hop) / r };
+    return { t: c.t, vel: Math.min(1, 0.4 + 0.6 * c.s), end: (f * hop) / r, steep: Math.round(c.shape.steep * 10) / 10 };
   });
 }
 
@@ -444,7 +480,9 @@ export function readChords(left: Float32Array, right: Float32Array | undefined, 
   const struck = new Array(h.energy.length).fill(0);
   for (const o of onsets) { const s = Math.floor(Math.max(0, o.t) / sps) % struck.length; struck[s] = Math.max(struck[s], o.vel); }
   const cells = cellsFromHarmony({ ...h, struck }, key);
-  const events = eventsFromOnsets(onsets, cells, bpm, steps);
+  const hop = Math.max(1, Math.round(r * 0.0029));
+  const lv = bandLevel(x, r, STRIKE_OPT.fft, hop, STRIKE_OPT.bandLo, STRIKE_OPT.bandHi);
+  const events = eventsFromOnsets(onsets, cells, bpm, steps, heldCells(cells, onsets, lv.at, bpm));
   if (x !== mono) x.fill(0);
   if (mono !== left) mono.fill(0); // the copies of the original go here (C2)
   return { reader: "dsp", bpm, steps, bars, register: h.register, tuningCents: h.tuningCents, cells, events };

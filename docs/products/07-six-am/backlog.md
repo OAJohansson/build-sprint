@@ -116,3 +116,4 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | Basic Pitch for leads only | It read single-note riffs well (6/6) but disposed its own tensors after the first read (fix the tf scope first). The try is in commit bf7164c (removed after L247) | with the above |
 - Chord reader: U-2 (Fm stabs read B♭sus2 / C♯maj7), false 7ths on triads, CH-7 Gdim on the held-out loop, held pads re-struck on swells (H3 64 % after round 2). Next idea: decide the chord per held span, not per onset (26 Nov).
 - Graders: a `?loop=69-76` parameter or a seed `--loop` option, so testers don't need `setLoop` (26 Nov).
+- Lead guard: the chords' own notes share reads 0.13 live on Lost (expected ≥ 0.6 on its fixture); find why before trusting it on a chord-voice line above C3 (26 Nov).

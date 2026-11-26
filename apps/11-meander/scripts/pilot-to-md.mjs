@@ -19,7 +19,8 @@ const cite = (sources = []) =>
     })
     .filter((v, i, a) => a.indexOf(v) === i)
     .join("");
-const para = (p) => `${p.text} <sup>${cite(p.sources)}</sup>`;
+// An item may carry `items`: a bullet list that follows its lead-in text.
+const para = (p) => `${p.text} <sup>${cite(p.sources)}</sup>${p.items?.length ? "\n\n" + p.items.map((i) => `- ${i}`).join("\n") : ""}`;
 
 const out = [];
 out.push(`# ${d.name}: content pilot`, "");
@@ -45,7 +46,7 @@ if (d.apply) {
   }
   if (d.apply.note) out.push(`> ${d.apply.note.text}`, "");
 }
-out.push("## Study this school", "", `> ${para(d.study_prompt)}`, "");
+out.push("## Study this school", "", para(d.study_prompt).split("\n").map((l) => (l ? `> ${l}` : ">")).join("\n"), "");
 out.push("## Sources", "");
 notes.forEach((s, i) => out.push(`${i + 1}. ${host(s.url)}, "${entry(s.url)}", section "${s.section}". ${s.url}`));
 out.push("");

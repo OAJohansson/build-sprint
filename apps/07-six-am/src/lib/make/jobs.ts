@@ -17,7 +17,7 @@ import { readDrums } from "./drums-read";
 import { readNotes, type NotesReading } from "./notes-read";
 import { readNotesBP } from "./notes-bp";
 import { MELODY_READER } from "./melody-reader";
-import { CHORD_TOP, chordTopShare } from "./lead-mine";
+import { CHORD_TOP, chordToneShare, tooLowForLead } from "./lead-mine";
 import { chordPcs } from "./chords-mine";
 import { chordNotes, chordsFromNotes, chordsMelodyReading, harmonyOf, leadLine, readChords, type ChordsReader, type ChordsReading } from "./chords-read";
 import { decimate, toMono } from "./dsp";
@@ -123,14 +123,16 @@ function finishLeadRead(m: Extract<MakeRequest, { type: "lead-read" }>, t0: numb
   // (Mason's riff in the spike) doesn't count against Basic Pitch's line.
   const dsp = reader === "basic-pitch" ? melodyFromReading(readNotes(m.left, m.right, m.rate, m.bpm, m.key, 0), m.bpm, loopS).rows.lead : row;
   const dspDoubt = !!dsp && dsp.notes.length > 0 && dsp.doubtful;
-  // L-2 (T212): the second guard, on its own: a "lead" that is mostly the chords' top voice (tones of the read
-  // chord, struck together with the rest of the stab) is off. Lost 69–76 needs it: neither reader's split
-  // finds a Lead row there, so Phase 5's verdict never runs.
-  const topShare = chordTopShare(mono, notes.notes, m.chords, chordPcs);
+  // L-2 (T212, T213): the second guard, on its own: a "lead" that is mostly the chords' own notes (tones of the
+  // read chord, struck together with another tone of it, above or below) is off; so is a line that sits under C3.
+  // Lost 69–76 needs it: neither reader's split finds a Lead row there, so Phase 5's verdict never runs, and
+  // Basic Pitch's line there is the stab's bottom G2.
+  const topShare = chordToneShare(mono, notes.notes, m.chords, chordPcs);
   const chordTop = mono.length >= CHORD_TOP.minNotes && topShare >= CHORD_TOP.share;
-  const doubtful = line.from === "top-line" || !!row?.doubtful || dspDoubt || chordTop;
+  const low = !chordTop && tooLowForLead(mono);
+  const doubtful = line.from === "top-line" || !!row?.doubtful || dspDoubt || chordTop || low;
   const why = line.from === "top-line" ? "No line of its own was found: these are the chords' top notes, off in Mine" : row?.doubtful ? row.why : dspDoubt ? dsp!.why
-    : chordTop ? `Mostly the chords' top notes (${Math.round(topShare * 100)} % of them), off in Mine` : null;
+    : chordTop ? `Mostly the chords' own notes (${Math.round(topShare * 100)} % of them), off in Mine` : low ? "Too low for a lead: mostly under C3, where the chords and bass are, off in Mine" : null;
   const d: MelodyReading = { rows: { chords: { notes: chordNotes(m.chords), doubtful: false, why: null, note: null }, lead: { notes: mono, doubtful, why, note: null } }, steps: m.chords.steps, bars: m.chords.bars, lead: mono.length > 0, chords: true, tuningCents: notes.tuningCents };
   const target = mono.length ? measureMelody(m.left, m.right, m.rate, d).lead : null;
   m.left.fill(0); m.right.fill(0); // the copy of the original is dropped here (C2)

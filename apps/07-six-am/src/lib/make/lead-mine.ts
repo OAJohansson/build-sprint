@@ -99,18 +99,19 @@ export function leadNoteMatch(read: Pick<MelNote, "t" | "midi">[], mine: Pick<Me
   return p + r > 0 ? Math.round(((2 * p * r) / (p + r)) * 1000) / 10 : 0;
 }
 
-// shortcut (L-2, T212): 60 %, 40 ms and "a lower note of another pitch class" set on synthetic fixtures (the Lost
-// re-render 72 %; a Mason-like riff alone 0 %, over stabs between its notes 19 %), not on real labels.
-export const CHORD_TOP = { share: 0.6, minNotes: 4, tol: 0.04 };
+// shortcut (L-2, T212, T213): 60 %, 40 ms, "another tone of the chord struck with it" and the C3 floor set on
+// synthetic fixtures and one live read (Lost 69–76: Basic Pitch's line is the stab's bottom G2), not on labels.
+export const CHORD_TOP = { share: 0.6, minNotes: 4, tol: 0.04, lowMedian: 48 };
 
 /**
- * L-2: how much of a "lead" is really the chords' top voice: the share of its notes that are a tone of
- * the chord read in their cell, start while that chord sounds, and are struck together with a lower
- * note of another pitch class (the rest of the stab). A riff over chords plays chord tones too, but on
- * its own; so only notes struck as part of a stack count. Phase 5's verdict needs the reader to find a
- * Lead row, which neither does on Lost 69–76's re-render, so this guard stands on its own.
+ * L-2: how much of a "lead" is really the chords' own notes: the share of its notes that are a tone of
+ * the chord read in their cell, start while that chord sounds, and are struck together (within 40 ms)
+ * with another tone of that chord of another pitch class, above or below (T213: Basic Pitch's line on
+ * Lost 69–76 is the stab's bottom G2). A riff over chords plays chord tones too, but on its own; only
+ * notes struck as part of the chord count. Phase 5's verdict needs a Lead row the DSP split finds, which
+ * it doesn't on Lost, so this guard stands on its own.
  */
-export function chordTopShare(
+export function chordToneShare(
   lead: { t: number; midi: number }[], all: { t: number; midi: number }[],
   chords: { bpm: number; cells: { startStep: number; steps: number; name: string }[]; events: { t: number; dur: number; cell: number }[] },
   tonesOf: (name: string) => number[],
@@ -120,9 +121,17 @@ export function chordTopShare(
   let n = 0;
   for (const x of lead) {
     const s = x.t / sps + 0.5, ci = chords.cells.findIndex((c) => s >= c.startStep && s < c.startStep + c.steps), cell = chords.cells[ci];
-    if (!cell?.name || !tonesOf(cell.name).includes(pc(x.midi))) continue;
+    const tones = cell?.name ? tonesOf(cell.name) : [];
+    if (!tones.includes(pc(x.midi))) continue;
     if (!chords.events.some((e) => e.cell === ci && x.t >= e.t - CHORD_TOP.tol && x.t <= e.t + e.dur)) continue;
-    if (all.some((o) => Math.abs(o.t - x.t) <= CHORD_TOP.tol && o.midi < x.midi && pc(o.midi) !== pc(x.midi))) n++;
+    if (all.some((o) => Math.abs(o.t - x.t) <= CHORD_TOP.tol && pc(o.midi) !== pc(x.midi) && tones.includes(pc(o.midi)))) n++;
   }
   return n / lead.length;
 }
+
+/** T213: a line whose median note is under C3 sits where chords and bass live, not a lead. */
+export const tooLowForLead = (lead: { midi: number }[]) => {
+  if (lead.length < CHORD_TOP.minNotes) return false;
+  const v = lead.map((n) => n.midi).sort((a, b) => a - b);
+  return v[v.length >> 1] < CHORD_TOP.lowMedian;
+};

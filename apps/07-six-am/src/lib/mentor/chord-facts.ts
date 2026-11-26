@@ -71,10 +71,13 @@ function keyPcs(tonic: number, scale: Scale): Set<number> {
 }
 
 /** The numeral for a chord on `iv` semitones above the tonic: case from its quality, ♭/♯ when its root isn't a scale note. */
-function numeralOf(iv: number, type: ChordType, scale: Scale): { numeral: string; degree: number | null } {
+function numeralOf(iv: number, type: ChordType, scale: Scale): { numeral: string; degree: number | null; idx: number } {
   const steps = scale === "major" ? [0, 2, 4, 5, 7, 9, 11] : [0, 2, 3, 5, 7, 8, 10];
   let degree = steps.indexOf(iv), acc = "";
-  if (degree < 0 && scale === "minor" && iv === 11) { degree = 6; if (type !== "dim") acc = "♯"; }
+  const lowerQ = type === "min" || type === "m7" || type === "dim";
+  // TH-1: in minor the raised 6th and 7th (melodic / harmonic minor) come before a flattened neighbour:
+  // Em in G minor is vi (from G major), B° in C minor vii°; a major chord there keeps its ♯ (♯VI, ♯VII), so it can't read as the VI / VII.
+  if (degree < 0 && scale === "minor" && (iv === 9 || iv === 11)) { degree = iv === 9 ? 5 : 6; if (!lowerQ) acc = "♯"; }
   if (degree < 0) {
     const flatOf = steps.indexOf(iv + 1);
     if (flatOf >= 0) { degree = flatOf; acc = "♭"; } else { degree = steps.indexOf(iv - 1); acc = "♯"; }
@@ -82,7 +85,7 @@ function numeralOf(iv: number, type: ChordType, scale: Scale): { numeral: string
   const lower = type === "min" || type === "m7" || type === "dim";
   const base = lower ? ROMAN[degree].toLowerCase() : ROMAN[degree];
   const suffix = type === "7" || type === "m7" ? "7" : type === "maj7" ? "maj7" : type === "dim" ? "°" : type === "sus2" || type === "sus4" ? type : "";
-  return { numeral: acc + base + suffix, degree: acc ? null : degree + 1 };
+  return { numeral: acc + base + suffix, degree: acc ? null : degree + 1, idx: degree };
 }
 
 function roleOf(degree: number | null, type: ChordType, scale: Scale, inKey: boolean, borrowed: boolean, secondary: boolean): Role {
@@ -120,9 +123,13 @@ export function chordFacts(o: { key: string; scale: Scale; chord: string; notes?
     const d = steps.indexOf(tIv);
     if (d > 0 && triad[d] !== "dim") secondaryOf = nm(target) + triad[d];
   }
-  const iv = mod12(c.root - tonic), { numeral, degree } = numeralOf(iv, c.type, o.scale);
+  const iv = mod12(c.root - tonic), { numeral, degree, idx } = numeralOf(iv, c.type, o.scale);
   // A chord off the scale is spelled the way its numeral reads (♭VII in C is B♭, not A♯).
-  const cn = numeral.startsWith("♭") ? FLAT : numeral.startsWith("♯") ? SHARP : names, cname = (pc: number) => cn[mod12(pc)];
+  const cn = numeral.startsWith("♭") ? FLAT : numeral.startsWith("♯") ? SHARP : names, cname0 = (pc: number) => cn[mod12(pc)];
+  // TH-2: the root takes the numeral's letter (the key's letter plus the degree): ♭VI in A♭ is F♭, so its notes stack in thirds (F♭ A♭ C♭).
+  const keyLetter = o.key.trim()[0]?.toUpperCase() ?? "C", li = LETTERS.indexOf(keyLetter);
+  const rootByLetter = li >= 0 ? (() => { const l = (li + idx) % 7, d = ((c.root - NATURAL[l] + 18) % 12) - 6; return d === 0 ? LETTERS[l] : d === 1 ? `${LETTERS[l]}♯` : d === -1 ? `${LETTERS[l]}♭` : null; })() : null;
+  const cname = (pc: number) => (mod12(pc) === mod12(c.root) && rootByLetter ? rootByLetter : cname0(pc));
   const role = roleOf(degree, c.type, o.scale, inKey, borrowed, !!secondaryOf);
   const keyName = `${nm(tonic)} ${o.scale}`;
   const spelled = cname(c.root) + SUFFIX[c.type];

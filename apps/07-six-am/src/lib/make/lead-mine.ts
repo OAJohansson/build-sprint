@@ -4,8 +4,8 @@
 // unit-tested (lead-mine.test.ts).
 import type { MelNote } from "./melody-make";
 
-/** A lead note in a bar: its 16th (0–15), length in 16ths, pitch (MIDI). */
-export type LeadNote = { at: number; len: number; midi: number };
+/** A lead note in a bar: its 16th (0–15), length in 16ths, pitch (MIDI); a read or saved note also keeps how far off the 16th it sits and its strength (LD-1). */
+export type LeadNote = { at: number; len: number; midi: number; off?: number; vel?: number };
 
 /** A bar of the read line on the grid: each note on its nearest 16th, as long as it sounds (at least one 16th), cut where the next one starts; one note per 16th. */
 export function gridOf(notes: MelNote[], bar: number): LeadNote[] {
@@ -14,9 +14,14 @@ export function gridOf(notes: MelNote[], bar: number): LeadNote[] {
     const pos = Math.round(n.step + n.off) - bar * 16;
     if (pos < 0 || pos > 15) continue;
     const prev = out[out.length - 1];
-    if (prev && prev.at === pos) { if (n.midi > prev.midi) prev.midi = n.midi; continue; }
+    if (prev && prev.at === pos) {
+      // one note per 16th: the higher one, with its own offset and strength
+      if (n.midi > prev.midi) { const off = Math.round((n.step + n.off - bar * 16 - pos) * 1000) / 1000; prev.midi = n.midi; prev.vel = n.vel; if (off) prev.off = off; else delete prev.off; }
+      continue;
+    }
     if (prev && prev.at + prev.len > pos) prev.len = pos - prev.at;
-    out.push({ at: pos, len: Math.max(1, Math.min(16 - pos, Math.round(n.durSteps))), midi: n.midi });
+    const off = Math.round((n.step + n.off - bar * 16 - pos) * 1000) / 1000;
+    out.push({ at: pos, len: Math.max(1, Math.min(16 - pos, Math.round(n.durSteps))), midi: n.midi, ...(off ? { off } : {}), vel: n.vel });
   }
   return out;
 }
@@ -51,18 +56,20 @@ export function leadNotesOf(read: MelNote[], grids: Record<number, LeadNote[]>, 
     for (const x of ns) {
       const step = +b * 16 + x.at;
       if (step >= steps) continue;
-      out.push({ t: Math.round(step * sps * 10000) / 10000, dur: Math.round(x.len * sps * 10000) / 10000, midi: x.midi, vel: 0.8, step, off: 0, durSteps: x.len });
+      const off = x.off ?? 0;
+      out.push({ t: Math.round(Math.max(0, step + off) * sps * 10000) / 10000, dur: Math.round(x.len * sps * 10000) / 10000, midi: x.midi, vel: x.vel ?? 0.8, step, off, durSteps: x.len });
     }
   }
   return out.sort((a, b) => a.t - b.t);
 }
 
 /** Grids for every bar of the loop from a saved lead pattern (`bars` repeat), by place in the repeat (H9). */
-export function gridsFromSaved(notes: { step: number; midi: number; dur: number }[], bars: number, loopBars: number): Record<number, LeadNote[]> {
+export function gridsFromSaved(notes: { step: number; midi: number; dur: number; vel?: number; off?: number }[], bars: number, loopBars: number): Record<number, LeadNote[]> {
   const out: Record<number, LeadNote[]> = {};
   for (let b = 0; b < loopBars; b++) {
     const rb = b % bars;
-    out[b] = notes.filter((n) => Math.floor(n.step / 16) === rb).map((n) => ({ at: n.step % 16, len: Math.max(1, Math.min(16 - (n.step % 16), Math.round(n.dur))), midi: n.midi })).sort((x, y) => x.at - y.at);
+    // LD-1: every saved note as saved (its offset, length and strength), so the loaded lead plays what was saved.
+    out[b] = notes.filter((n) => Math.floor(n.step / 16) === rb).map((n) => ({ at: n.step % 16, len: n.dur, midi: n.midi, ...(n.off ? { off: n.off } : {}), ...(n.vel !== undefined ? { vel: n.vel } : {}) })).sort((x, y) => x.at - y.at);
   }
   return out;
 }

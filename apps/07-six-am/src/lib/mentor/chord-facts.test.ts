@@ -35,6 +35,9 @@ describe("chord facts (H12)", () => {
     ["Ab", "major", "Bbm", ["B♭m", "ii", true, "away", null, null]],
     ["F#", "minor", "C#7", ["C♯7", "V7", true, "pull", null, null]],
     ["C", "minor", "Db", ["D♭", "♭II", false, "outside", null, null]],
+    // TH-1: the raised 6th in minor reads vi (borrowed from the major), not ♭vii
+    ["G", "minor", "Em", ["Em", "vi", false, "borrowed", "G major", null]],
+    ["C", "minor", "Bdim", ["Bdim", "vii°", true, "pull", null, null]],
   ] as const)("%s %s: %s", (key, scale, chord, want) => {
     expect(row(key, scale, chord)).toEqual(want);
   });
@@ -57,6 +60,13 @@ describe("chord facts (H12)", () => {
     expect(f("C", "major", "Gm").tones.map((t) => t.name)).toEqual(["G", "B♭", "D"]);
     expect(f("A", "major", "Dm").tones.map((t) => t.name)).toEqual(["D", "F", "A"]);
     expect(f("F#", "minor", "C#7").tones.map((t) => t.name)).toEqual(["C♯", "E♯", "G♯", "B"]);
+  });
+
+  it("spells a chord by its numeral's letter: ♭VI in A♭ is F♭ A♭ C♭ (TH-2)", () => {
+    const x = f("Ab", "major", "E");
+    expect([x.chord, x.numeral]).toEqual(["F♭", "♭VI"]);
+    expect(x.tones.map((t) => t.name)).toEqual(["F♭", "A♭", "C♭"]);
+    expect(f("C", "major", "A#").chord).toBe("B♭");
   });
 
   it("refuses what it can't read", () => {

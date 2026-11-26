@@ -57,7 +57,7 @@ export type MakeResponse =
   | { type: "drums-suggest"; id: number; suggestion: DrumSuggestion & { closer: { preset: DrumPresetId; macros: DrumMacros; distance: number } | null }; ms: number }
   | { type: "melody-read"; id: number; reading: MelodyReading; targets: Record<MelodyRow, MelodyTarget | null>; levelDb: number; lufs: number; reader: "dsp" | "basic-pitch"; ms: number }
   | { type: "chords-read"; id: number; chords: ChordsReading; lead: { from: "row" | "top-line"; notes: MelNote[] }; melody: MelodyReading; targets: Record<MelodyRow, MelodyTarget | null>; cellChroma: number[][]; levelDb: number; lufs: number; reader: ChordsReader; ms: number }
-  | { type: "lead-read"; id: number; notes: MelNote[]; from: "row" | "top-line"; doubtful: boolean; why: string | null; chordTop: number; target: MelodyTarget | null; reader: "dsp" | "basic-pitch"; ms: number }
+  | { type: "lead-read"; id: number; notes: MelNote[]; from: "row" | "top-line"; doubtful: boolean; why: string | null; chordTop: number; guards: { topLine: boolean; phase5: boolean; phase5Why: string | null; chordTone: boolean; chordToneShare: number; low: boolean; medianMidi: number | null; notes: number }; target: MelodyTarget | null; reader: "dsp" | "basic-pitch"; ms: number }
   | { type: "melody-render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; rowGainsDb: Record<MelodyRow, number | null>; rowCloseness: Record<MelodyRow, { score: number; distance: number } | null>; ms: number }
   | { type: "melody-suggest"; id: number; suggestion: MelodySuggestion; ms: number }
   | { type: "fx-read"; id: number; measures: Record<FxRow, FxMeasure>; level: { bed: { rmsDb: number; lufs: number; blocks: number[] }; noBed: { rmsDb: number; lufs: number; blocks: number[] } }; ms: number }
@@ -117,12 +117,8 @@ function finishLeadRead(m: Extract<MakeRequest, { type: "lead-read" }>, t0: numb
   for (const n of line.notes) { const k = Math.round(n.step + n.off); const o = byStep.get(k); if (!o || n.midi > o.midi) byStep.set(k, n); }
   const mono = [...byStep.values()].sort((a, b) => a.t - b.t);
   const row = line.from === "row" ? mel.rows.lead : null;
-  // L-2: Phase 5's verdict, from the DSP reader its thresholds were set on (a faint line, mostly another
-  // part leaking in, as on Lost 69–76), still switches the line off; Basic Pitch hears the same leak as
-  // louder, more numerous notes, so its own verdict alone misses it. A DSP read with no lead row of its own
-  // (Mason's riff in the spike) doesn't count against Basic Pitch's line.
-  const dsp = reader === "basic-pitch" ? melodyFromReading(readNotes(m.left, m.right, m.rate, m.bpm, m.key, 0), m.bpm, loopS).rows.lead : row;
-  const dspDoubt = !!dsp && dsp.notes.length > 0 && dsp.doubtful;
+  // LD-2 (T216): T208's extra DSP read is gone. It never fired on Lost (no DSP Lead row there) and it is a
+  // second reader's verdict on the same separation, the likeliest source of a riff flipping off between reloads.
   // L-2 (T212, T213): the second guard, on its own: a "lead" that is mostly the chords' own notes (tones of the
   // read chord, struck together with another tone of it, above or below) is off; so is a line that sits under C3.
   // Lost 69–76 needs it: neither reader's split finds a Lead row there, so Phase 5's verdict never runs, and
@@ -130,13 +126,19 @@ function finishLeadRead(m: Extract<MakeRequest, { type: "lead-read" }>, t0: numb
   const topShare = chordToneShare(mono, notes.notes, m.chords, chordPcs);
   const chordTop = mono.length >= CHORD_TOP.minNotes && topShare >= CHORD_TOP.share;
   const low = !chordTop && tooLowForLead(mono);
-  const doubtful = line.from === "top-line" || !!row?.doubtful || dspDoubt || chordTop || low;
-  const why = line.from === "top-line" ? "No line of its own was found: these are the chords' top notes, off in Mine" : row?.doubtful ? row.why : dspDoubt ? dsp!.why
+  // LD-2 (T216): a top line alone no longer switches the lead off. On a riff the top line IS the line, and
+  // whether the split finds it as a row of its own changed with the separation (a riff with pad leaking in
+  // went from "row" to "top-line"); the chord-tone and low-line guards decide (Lost stays off: 83 %).
+  const doubtful = !!row?.doubtful || chordTop || low;
+  // LD-2: every guard, so a live check shows which one switched a line off.
+  const v = mono.map((n) => n.midi).sort((x, y) => x - y);
+  const guards = { topLine: line.from === "top-line", phase5: !!row?.doubtful, phase5Why: row?.doubtful ? row.why : null, chordTone: chordTop, chordToneShare: Math.round(topShare * 100) / 100, low, medianMidi: v.length ? v[v.length >> 1] : null, notes: mono.length };
+  const why = row?.doubtful ? row.why
     : chordTop ? `Mostly the chords' own notes (${Math.round(topShare * 100)} % of them), off in Mine` : low ? "Too low for a lead: mostly under C3, where the chords and bass are, off in Mine" : null;
   const d: MelodyReading = { rows: { chords: { notes: chordNotes(m.chords), doubtful: false, why: null, note: null }, lead: { notes: mono, doubtful, why, note: null } }, steps: m.chords.steps, bars: m.chords.bars, lead: mono.length > 0, chords: true, tuningCents: notes.tuningCents };
   const target = mono.length ? measureMelody(m.left, m.right, m.rate, d).lead : null;
   m.left.fill(0); m.right.fill(0); // the copy of the original is dropped here (C2)
-  return { res: { type: "lead-read", id: m.id, notes: mono, from: line.from, doubtful, why, chordTop: Math.round(topShare * 100) / 100, target, reader, ms: Math.round(performance.now() - t0) }, transfer: [] };
+  return { res: { type: "lead-read", id: m.id, notes: mono, from: line.from, doubtful, why, chordTop: Math.round(topShare * 100) / 100, guards, target, reader, ms: Math.round(performance.now() - t0) }, transfer: [] };
 }
 
 /**

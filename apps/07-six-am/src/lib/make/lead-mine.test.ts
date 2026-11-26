@@ -1,6 +1,7 @@
 // Slice 4 (K7): the lead's times on the grid (decision 0011: time logic gets a test).
 import { describe, expect, it } from "vitest";
-import type { MelNote } from "./melody-make";
+import { foldMelodyRow, type MelNote } from "./melody-make";
+import { asPatternNotes, exactPattern } from "./chords-mine";
 import { chordToneShare, tooLowForLead, gridOf, gridsFromSaved, leadNoteMatch, leadNotesOf, leadRows, placeNote, stretchNote } from "./lead-mine";
 
 // 120 BPM: a 16th is 0.125 s.
@@ -9,11 +10,11 @@ const n = (step: number, off: number, durSteps: number, midi: number): MelNote =
 describe("gridOf", () => {
   it("puts each note on its nearest 16th of its bar, cut where the next starts, one per 16th (the highest)", () => {
     const read = [n(16, 0.4, 3, 67), n(18, -0.1, 1, 65), n(18, 0, 1, 72), n(31, 0.2, 4, 70)];
-    expect(gridOf(read, 1)).toEqual([{ at: 0, len: 2, midi: 67 }, { at: 2, len: 1, midi: 72 }, { at: 15, len: 1, midi: 70 }]);
+    expect(gridOf(read, 1)).toEqual([{ at: 0, len: 2, midi: 67, off: 0.4, vel: 1 }, { at: 2, len: 1, midi: 72, vel: 1 }, { at: 15, len: 1, midi: 70, off: 0.2, vel: 1 }]);
     expect(gridOf(read, 0)).toEqual([]);
   });
   it("a note just before a bar line belongs to the next bar", () => {
-    expect(gridOf([n(15, 0.6, 1, 60)], 1)).toEqual([{ at: 0, len: 1, midi: 60 }]);
+    expect(gridOf([n(15, 0.6, 1, 60)], 1)).toEqual([{ at: 0, len: 1, midi: 60, off: -0.4, vel: 1 }]);
   });
 });
 
@@ -50,6 +51,12 @@ describe("saved lead", () => {
     const g = gridsFromSaved([{ step: 2, midi: 67, dur: 2 }, { step: 20, midi: 65, dur: 1 }], 2, 4);
     expect(g[2]).toEqual([{ at: 2, len: 2, midi: 67 }]);
     expect(g[3]).toEqual([{ at: 4, len: 1, midi: 65 }]);
+  });
+  it("LD-1: saved == loaded, offsets, lengths and strengths kept", () => {
+    const read = [n(1, 0.1, 2.37, 67), n(5, -0.3, 1, 65), n(17, 0.2, 3, 67), n(22, 0, 1.5, 68)].map((x, i) => ({ ...x, vel: [0.63, 0.8, 0.55, 0.9][i] }));
+    const saved = exactPattern(read, 32, foldMelodyRow);
+    const loaded = leadNotesOf(read, gridsFromSaved(saved.notes, saved.bars, 2), 120, 32);
+    expect(asPatternNotes(loaded)).toEqual(asPatternNotes(read));
   });
 });
 

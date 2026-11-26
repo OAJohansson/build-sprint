@@ -285,3 +285,21 @@ Re-check of CS1 (26 Nov): CS1-3, 4, 6, 8, 9 fixed; CS1-1 partly (G and G7 score 
 | S2-7 | polish | Chord row scrolls out of view at 720 px | fixed (661a574, T204): the rows (chord tiles, lead) are sticky at the top of the room |
 | S2-8 | polish | "G, in Mine" while Mine plays G + A | fixed (661a574, T204): a card with the same name as your own notes reads "your notes (≈ G)", no ✓ |
 | S2-9 | minor | At 390 px the Lab has no narrow layout, the chords panel can't be reached (pre-existing Lab limit; backlog) | noted |
+
+### Phase 6 slices 3–4 user test (26 Nov, `user-testing/report-2026-11-26-chords-slices3-4.md`)
+
+S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened below).
+
+| ID | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| L-1 | major | Selecting a lead note collapses the grid | open |
+| L-2 | major | Lost 69–76 lead not off | open |
+| L-3 | minor | Lead cells too small; same-pitch notes merge | open |
+| L-4 | minor | Lead closeness ignores note fixes | open |
+| W-1 | major | "Why it fits" fallback uses numerals and theory words; A♯ for B♭ | open |
+| ST-1 | major | Studio drawer names chords in the track's key, not Make's | open (L264) |
+| S2-3b | minor | Hits 24 px, slots 26 × 30 | open |
+| S2-4b | minor | Arrow keys move one step, focus drops | open |
+| CS1-12b | polish | "Fsus4" clipped in half-bar tiles | open |
+| N-1 | polish | Timing move buttons under A/B at 720 px | open |
+| N-2 | polish | Loop label "first 16 bars" for 8 bars | open |

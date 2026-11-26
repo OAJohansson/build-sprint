@@ -10,8 +10,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } fro
 import type { LabTransport, LoopState } from "@/lib/lab/transport";
 import { MakeClient } from "@/lib/make/make-client";
 import { foldMelodyRow, type MelNote, type MelodyReading, type MelodyRowSound, type MelodyTarget } from "@/lib/make/melody-make";
-import { chordsMelodyReading, voiceChord, type ChordCell, type ChordsReading } from "@/lib/make/chords-read";
-import { cardsFor, foldChordNames, keyChords, normalChord, notesMatch, parseChord, picksFromSaved, unsureCells, withPicks } from "@/lib/make/chords-mine";
+import { rankChords, voiceChord, type ChordCell, type ChordsReading } from "@/lib/make/chords-read";
+import { addHit, cardsFor, chordPcs, editsFromSaved, foldChordNames, heldHits, hitsOf, keyChords, moveHit, normalChord, notesMatch, parseChord, sameHits, shortHits, unsureCells, withEdits, type CellEdit, type Edits, type Hit } from "@/lib/make/chords-mine";
 import { isMelodySound, melodyNoun, saveAction, soundId, suggestMelodyName, suggestMelodyTags, type MelodySound } from "@/lib/make/library";
 import { MELODY_ROWS, MELODY_ROW_NAMES, POLY_KNOBS, POLY_KNOB_SPECS, ROW_DEFAULT, clampPolyMacros, kindOf, melodyPreset, melodyPresetIds, melodyRowOf, polyKnobWord, polyMoves, polySuggestLine, presetId, type MelodyPresetId, type MelodyRow, type PolyMacros } from "@/lib/make/poly-synth";
 import type { Scale } from "@/lib/synths/theory";
@@ -35,6 +35,32 @@ const perRow = <T,>(f: (r: MelodyRow) => T) => Object.fromEntries(MELODY_ROWS.ma
 const TEAL = "#23b3a5";
 
 export type MelodyOpts = { tr: RefObject<LabTransport | null>; active: boolean; loop: LoopState | null; bpm: number; keyName: string; scale: string; code: string; title: string; url: string; fromBar?: number | null };
+/** Slice 2 (K5): the closest chord name for the owner's own notes (the reader's ranking, in the key), and whether they are exactly that chord. */
+function closestChord(notes: number[], key?: { key: string; scale: Scale }): { name: string; exact: boolean } | null {
+  if (!notes.length) return null;
+  const chroma = new Array(12).fill(0), bass = new Array(12).fill(0);
+  for (const n of notes) chroma[((n % 12) + 12) % 12] = 1;
+  bass[((Math.min(...notes) % 12) + 12) % 12] = 1;
+  const best = rankChords(chroma, bass, key)[0];
+  if (!best) return null;
+  const pcs = new Set(notes.map((n) => ((n % 12) + 12) % 12)), tpl = chordPcs(best.name);
+  return { name: best.name, exact: tpl.length === pcs.size && tpl.every((p) => pcs.has(p)) };
+}
+/** What a cell plays in Mine: the owner's own notes, else the chord in its standard voicing (K3, K5). */
+const cellNotes = (c: ChordsReading, edits: Edits, i: number): number[] => {
+  const own = edits[i]?.notes, x = c.cells[i];
+  return own?.length ? own : x?.root !== null && x?.root !== undefined && x.type ? voiceChord(x.root, x.type, c.register) : [];
+};
+/** Mine's chords as notes on the 16th grid, the way melody-make.ts plays them. */
+function mineNotesOf(c: ChordsReading, edits: Edits): MelNote[] {
+  const sps = 60 / c.bpm / 4, out: MelNote[] = [];
+  for (const e of c.events) {
+    if (!c.cells[e.cell]?.name) continue;
+    for (const midi of cellNotes(c, edits, e.cell)) out.push({ t: e.t, dur: e.dur, midi, vel: e.vel, step: e.step, off: e.off, durSteps: Math.max(0.25, Math.round((e.dur / sps) * 100) / 100) });
+  }
+  return out;
+}
+
 /** A planted chord (graders, H14): Make's guess replaced on one cell, as if the reader had misread it. */
 type Plant = { name: string; unsure: boolean };
 
@@ -53,7 +79,10 @@ export function useMelody(o: MelodyOpts) {
   const [suggesting, setSuggesting] = useState<MelodyRow | null>(null);
   const [readS, setReadS] = useState<ReadRaw | null>(null);
   // Slice 1 (K4): the names picked per cell (Mine), the planted guesses (graders), the open cell and the panel's switches.
-  const [picksS, setPicks] = useState<{ loopKey: string | null; picks: Record<number, string> }>({ loopKey: null, picks: {} });
+  const [editsS, setEdits] = useState<{ loopKey: string | null; edits: Edits }>({ loopKey: null, edits: {} });
+  // Slice 2 (K5, K6): the open cell on the piano, and the hit picked on its timing strip.
+  const [keys, setKeys] = useState(false);
+  const [sel, setSel] = useState<number | null>(null);
   const [plantsS, setPlants] = useState<{ loopKey: string | null; cells: Record<number, Plant> }>({ loopKey: null, cells: {} });
   const [openCellS, setOpenCell] = useState<{ loopKey: string | null; cell: number } | null>(null);
   const [all, setAll] = useState(true); // "All N X bars", on by default (L262)
@@ -70,7 +99,7 @@ export function useMelody(o: MelodyOpts) {
   const [mySounds, setMySounds] = useState<MelodySound[]>([]);
 
   const raw = readS && readS.loopKey === loopKey ? readS : null;
-  const picks = useMemo(() => (picksS.loopKey === loopKey ? picksS.picks : {}), [picksS, loopKey]);
+  const edits = useMemo(() => (editsS.loopKey === loopKey ? editsS.edits : {}), [editsS, loopKey]);
   const plants = useMemo(() => (plantsS.loopKey === loopKey ? plantsS.cells : {}), [plantsS, loopKey]);
   // Make's guess per cell (with any planted misread), which of them are unsure, then Mine's chords with the picks.
   const guess = useMemo<ChordsReading | null>(() => {
@@ -88,13 +117,14 @@ export function useMelody(o: MelodyOpts) {
     const u = unsureCells(raw!.chords.cells);
     return u.map((x, i) => (plants[i] ? plants[i].unsure : x));
   }, [guess, raw, plants]);
-  const mineChords = useMemo(() => (guess ? withPicks(guess, picks) : null), [guess, picks]);
+  const mineChords = useMemo(() => (guess ? withEdits(guess, edits) : null), [guess, edits]);
   const read = useMemo<Read | null>(() => {
     if (!raw || !mineChords) return null;
-    const d = chordsMelodyReading(mineChords, raw.lead);
+    const chordNotes = mineNotesOf(mineChords, edits), row = (notes: MelNote[]) => ({ notes, doubtful: false, why: null, note: null });
+    const d: MelodyReading = { rows: { chords: row(chordNotes), lead: row(raw.lead) }, steps: mineChords.steps, bars: mineChords.bars, lead: raw.lead.length > 0, chords: chordNotes.length > 0, tuningCents: mineChords.tuningCents };
     d.rows.lead = { ...d.rows.lead, doubtful: raw.lead.length > 0, why: raw.lead.length ? LEAD_WHY : null, note: raw.lead.length ? "Lead editing comes later" : null };
     return { ...raw, d };
-  }, [raw, mineChords]);
+  }, [raw, mineChords, edits]);
   const firstUnsure = Math.max(0, unsure.findIndex(Boolean));
   const openCell = openCellS && openCellS.loopKey === loopKey && guess && openCellS.cell < guess.cells.length ? openCellS.cell : firstUnsure;
   const hear = hearS && hearS.cell === openCell ? hearS.what : null;
@@ -106,7 +136,8 @@ export function useMelody(o: MelodyOpts) {
   const anyway = useMemo(() => (anywayS.loopKey === loopKey ? anywayS.rows : []), [anywayS, loopKey]);
   const on = useMemo(() => perRow((r) => !!read && read.d.rows[r].notes.length > 0 && (!read.d.rows[r].doubtful || anyway.includes(r))), [read, anyway]);
   const signature = (x: Record<MelodyRow, Sound>, onRows: Record<MelodyRow, boolean>) => MELODY_ROWS.map((r) => `${x[r].preset}:${POLY_KNOBS.map((k) => x[r].macros[k].toFixed(3)).join(",")}:${onRows[r] ? 1 : 0}`).join("|");
-  const mineKeyNow = read ? `${read.loopKey}|${signature(sounds, on)}|${mineChords?.cells.map((c) => c.name).join(",")}` : null;
+  const editSig = `${mineChords?.cells.map((c) => c.name).join(",") ?? ""}|${JSON.stringify(edits)}`;
+  const mineKeyNow = read ? `${read.loopKey}|${signature(sounds, on)}|${editSig}` : null;
   const mine = mineS && read && mineS.key.startsWith(`${read.loopKey}|`) ? mineS : null;
 
   const suggest = useCallback(async (r: { targets: Record<MelodyRow, MelodyTarget | null> }, row: MelodyRow, snd: Sound, before: PolyMacros | null) => {
@@ -144,8 +175,8 @@ export function useMelody(o: MelodyOpts) {
       if (!res.chords.events.length) { setState({ loopKey: key, state: "nonotes" }); return; }
       const r: ReadRaw = { loopKey: key, chords: res.chords, lead, targets: res.targets, cellChroma: res.cellChroma, levelDb: res.levelDb, lufs: res.lufs, samples, rate, ms: res.ms };
       setReadS(r);
-      setPicks({ loopKey: key, picks: {} });
-      setOpenCell(null); setHear(null); setMore(false); setAll(true);
+      setEdits({ loopKey: key, edits: {} });
+      setOpenCell(null); setHear(null); setMore(false); setAll(true); setKeys(false); setSel(null);
       setAb("b"); // CS1-4: once the loop is read, Make's chords are what you hear first
       setState({ loopKey: key, state: "ready" });
       for (const row of MELODY_ROWS) if (r.targets[row]) await suggest(r, row, soundsRef.current[row], null);
@@ -190,10 +221,10 @@ export function useMelody(o: MelodyOpts) {
     // K8: a saved chords sound brings its chord names back onto this loop's bars (by place in the repeat).
     let sig = "";
     if (row === "chords" && guess && loopKey && x.pattern.chords?.length) {
-      const back = picksFromSaved(guess.cells, x.pattern.chords, x.pattern.bars);
-      setPicks({ loopKey, picks: back });
-      sig = withPicks(guess, back).cells.map((c) => c.name).join(",");
-    } else if (row === "chords") sig = namesSig;
+      const back = editsFromSaved(guess.cells, x.pattern.chords, x.pattern.bars);
+      setEdits({ loopKey, edits: back });
+      sig = `${withEdits(guess, back).cells.map((c) => c.name).join(",")}|${JSON.stringify(back)}`;
+    } else if (row === "chords") sig = editSig;
     setSounds((s0) => ({ ...s0, [row]: snd }));
     setNames((n) => ({ ...n, [row]: x.name }));
     setLast((l) => ({ ...l, [row]: { id: x.id, sound: soundId(snd.preset, snd.macros) + (row === "chords" ? `|${sig}` : ""), name: x.name } }));
@@ -206,8 +237,7 @@ export function useMelody(o: MelodyOpts) {
 
   // Save the open row (P9): its sound, and its notes folded to a 1–16-bar repeat, in the track's key.
   // K8: the chords row's identity includes its chord names, so changing a chord makes a new save.
-  const namesSig = mineChords?.cells.map((c) => c.name).join(",") ?? "";
-  const sidOf = (r: MelodyRow) => soundId(sounds[r].preset, sounds[r].macros) + (r === "chords" ? `|${namesSig}` : "");
+  const sidOf = (r: MelodyRow) => soundId(sounds[r].preset, sounds[r].macros) + (r === "chords" ? `|${editSig}` : "");
   const cur = sounds[open], sid = sidOf(open);
   const suggested = suggestMelodyName(cur.preset, cur.macros, o.title);
   const lastRow = last[open], nameRaw = names[open];
@@ -220,7 +250,7 @@ export function useMelody(o: MelodyOpts) {
   // The saved loop; a chords row carries its chord names too (K8), folded to the same repeat as its notes.
   const patternOf = (row: MelodyRow) => {
     const f = foldMelodyRow(read!.d.rows[row].notes, read!.d.steps);
-    return row === "chords" && mineChords ? { ...f, chords: foldChordNames(mineChords.cells, f.bars) } : f;
+    return row === "chords" && mineChords ? { ...f, chords: foldChordNames(mineChords.cells, f.bars, edits) } : f;
   };
   const save = async (row: MelodyRow = open, nameOverride?: string) => {
     if (!read || !scale || !o.keyName) return;
@@ -252,30 +282,89 @@ export function useMelody(o: MelodyOpts) {
   /** From the start of the open cell's bar, playing (a tap hears the chord in the loop at once). */
   const playFrom = (i: number) => { const t = tr.current; if (!t || !o.loop) return; t.seek(cellStartMs(i)); if (!t.playing) t.play(); };
   // CS1-6: "All" is on again each time a bar opens (L262's default).
-  const openChord = (i: number) => { if (!guess || i < 0 || i >= guess.cells.length) return; setOpenCell({ loopKey, cell: i }); setHear(null); setMore(false); setAll(true); };
+  const openChord = (i: number) => { if (!guess || i < 0 || i >= guess.cells.length) return; setOpenCell({ loopKey, cell: i }); setHear(null); setMore(false); setAll(true); setKeys(false); setSel(null); };
   /**
-   * The cells a pick changes with "All" (CS1-6): every other cell Make heard as the same chord, or that
-   * holds the same chord in Mine now. Stable through picks, so the switch never vanishes while twins exist.
+   * The cells an edit changes with "All" (CS1-6, CS1-10, CS1-11): every other cell Make heard as the same
+   * chord (its read name), whatever it plays in Mine now, so a pick never reaches a bar Make heard differently
+   * and the count is the open bar's own group. Stable through edits, so the switch never vanishes.
    */
   const twinsOf = (i: number) => {
-    if (!mineChords || !guess || !guess.cells[i]?.name) return [];
-    const g = guess.cells[i].name, cur = mineChords.cells[i].name;
-    return guess.cells.map((_, k) => k).filter((k) => k !== i && !!guess.cells[k].name && (guess.cells[k].name === g || mineChords.cells[k].name === cur));
+    if (!guess || !guess.cells[i]?.name) return [];
+    const g = guess.cells[i].name;
+    return guess.cells.map((_, k) => k).filter((k) => k !== i && guess.cells[k].name === g);
   };
-  /** The switch's chord name: Mine's chord when every twin plays it too, else what Make heard. */
-  const twinName = (i: number) => { const t = twinsOf(i), cur = mineChords?.cells[i]?.name ?? ""; return t.every((k) => mineChords?.cells[k].name === cur) ? cur : guess?.cells[i]?.name ?? cur; };
+  /** The switch's chord name: what Make heard in the group. */
+  const twinName = (i: number) => guess?.cells[i]?.name ?? "";
   const pickChord = (name: string, opts: { all?: boolean; cell?: number; hear?: boolean } = {}) => {
     const n = normalChord(name), i = opts.cell ?? openCell;
     if (!n || !guess || !loopKey) return false;
     const cells = [i, ...((opts.all ?? all) ? twinsOf(i) : [])];
-    setPicks((p) => {
-      const next = { ...(p.loopKey === loopKey ? p.picks : {}) };
-      for (const k of cells) { if (guess.cells[k]?.name === n) delete next[k]; else next[k] = n; }
-      return { loopKey, picks: next };
-    });
+    // A card replaces the cell's own notes (the chord's standard voicing again); its own hits stay.
+    // "Make's guess" gives each cell back its own guess (CS1-10).
+    const restore = guess.cells[i]?.name === n;
+    editCells(cells, (e, k) => ({ ...e, name: restore || guess.cells[k]?.name === n ? undefined : n, notes: undefined }));
     if (opts.hear !== false) { setHear({ cell: i, what: n }); setAb("b"); playFrom(i); }
     return true;
   };
+  // ── Slice 2 (K5, K6): the piano and the timing strip ──
+  /** Edits some cells; an edit left with nothing in it is dropped (the cell is Make's again). */
+  function editCells(cells: number[], f: (e: CellEdit, k: number) => CellEdit) {
+    if (!loopKey) return;
+    setEdits((p) => {
+      const next: Edits = { ...(p.loopKey === loopKey ? p.edits : {}) };
+      for (const k of cells) {
+        const e = f(next[k] ?? {}, k), clean: CellEdit = {};
+        if (e.name) clean.name = e.name;
+        if (e.notes?.length) clean.notes = e.notes;
+        if (e.hits) clean.hits = e.hits;
+        if (Object.keys(clean).length) next[k] = clean; else delete next[k];
+      }
+      return { loopKey, edits: next };
+    });
+  }
+  /** An edit is heard at once: B, and from the bar's start when paused (while playing, the loop runs on and Mine swaps in place). */
+  const hearEdit = () => { const t = tr.current; if (t && !t.playing) playFrom(openCell); };
+  const keyOf = o.keyName && scale ? { key: o.keyName, scale } : undefined;
+  const notesNow = (i: number) => (mineChords ? cellNotes(mineChords, edits, i) : []);
+  /** A key on the piano: the note in or out of the open cell's chord (with "All", its twins get the same notes). Never the last note. */
+  const toggleNote = (midi: number) => {
+    if (!guess || !mineChords || !Number.isInteger(midi) || midi < 24 || midi > 108) return null;
+    const cur = notesNow(openCell), notes = cur.includes(midi) ? cur.filter((m) => m !== midi) : [...cur, midi].sort((a, b) => a - b);
+    if (!notes.length) return null;
+    const near = closestChord(notes, keyOf);
+    const voiced = near ? parseChord(near.name) : null;
+    // Back to the plain voicing of a chord: keep only its name (a card's state), not the notes.
+    const plain = near && voiced && near.exact && voiceChord(voiced.root, voiced.type, mineChords.register).join() === notes.join();
+    editCells([openCell, ...(all ? twinsOf(openCell) : [])], (e, k) => ({ ...e, name: near && guess.cells[k]?.name !== near.name ? near.name : undefined, notes: plain ? undefined : notes }));
+    setHear({ cell: openCell, what: near?.name ?? "" }); setAb("b"); hearEdit();
+    return { notes, name: near?.name ?? null, exact: !!near?.exact };
+  };
+  /** The open cell's hits on the strip: its own, else the read ones. */
+  const hitsNow = (i: number) => (edits[i]?.hits ?? (mineChords ? hitsOf(mineChords, i) : []));
+  const stepsOf = (i: number) => guess?.cells[i]?.steps ?? 16;
+  /** New hits for the open cell (and, with "All", every twin of the same length). */
+  const setCellHits = (hits: Hit[]) => {
+    const st = stepsOf(openCell);
+    editCells([openCell, ...(all ? twinsOf(openCell).filter((k) => stepsOf(k) === st) : [])], (e) => ({ ...e, hits }));
+    setAb("b"); hearEdit();
+  };
+  const presetHits = (p: "short" | "held") => { if (!mineChords) return; setCellHits(p === "held" ? heldHits(stepsOf(openCell)) : shortHits(withEdits(guess!, {}), openCell)); setSel(null); };
+  /** A tap on the strip, or a move on the picked hit. Returns false when it doesn't fit. */
+  const hitOp = (op: "select" | "add" | "earlier" | "later" | "shorter" | "longer" | "remove", at?: number) => {
+    const hs = hitsNow(openCell), st = stepsOf(openCell);
+    if (op === "select") { setSel(at === undefined || at === sel || !hs[at] ? null : at); return true; }
+    if (op === "add") { const nx = at === undefined ? null : addHit(hs, at, st); if (!nx) return false; setCellHits(nx); setSel(null); return true; }
+    if (sel === null) return false;
+    const nx = moveHit(hs, sel, op, st);
+    if (!nx) return false;
+    setCellHits(nx);
+    setSel(op === "remove" ? null : nx.findIndex((h) => h.at === (op === "earlier" ? hs[sel].at - 1 : op === "later" ? hs[sel].at + 1 : hs[sel].at)));
+    return true;
+  };
+  /** ↺ Reset: the open cell back to Make's chord and times. */
+  const resetCell = () => { editCells([openCell], () => ({})); setSel(null); };
+  const setPiano = (on: boolean) => { setKeys(on); setSel(null); setMore(false); };
+
   /** A card: hear it in the loop and use it (L262); tapping the one that is playing pauses. */
   const tapCard = (name: string, playing: boolean) => {
     if (playing && hear === name && ab === "b") { tr.current?.pause(); return; }
@@ -288,17 +377,24 @@ export function useMelody(o: MelodyOpts) {
     setHear({ cell: openCell, what: "orig" }); setAb("a"); playFrom(openCell);
   };
   const keyList = useMemo(() => keyChords(o.keyName, scale), [o.keyName, scale]);
+  const openHits = hitsNow(openCell);
+  const shortNow = guess ? shortHits(withEdits(guess, {}), openCell) : [];
+  const ownNotes = edits[openCell]?.notes;
+  const nearOwn = ownNotes ? closestChord(ownNotes, keyOf) : null;
   const chordsView = guess && mineChords ? {
     cells: guess.cells.map((g, i) => ({
-      i, bar: g.bar, startStep: g.startStep, steps: g.steps, guess: g.name, name: mineChords.cells[i].name, unsure: !!unsure[i] && picks[i] === undefined,
-      edited: picks[i] !== undefined, cards: cardsFor(g), score: g.score,
+      i, bar: g.bar, startStep: g.startStep, steps: g.steps, guess: g.name, name: mineChords.cells[i].name, unsure: !!unsure[i] && edits[i] === undefined,
+      edited: edits[i] !== undefined, cards: cardsFor(g), score: g.score,
       hits: mineChords.events.filter((e) => e.cell === i).map((e) => { const at = Math.max(0, e.t / sps - g.startStep); return { at, len: Math.max(0.25, Math.min(g.steps - at, e.dur / sps)) }; }),
     })),
     open: openCell, twins: twinsOf(openCell).length, twinName: twinName(openCell), all, more, hear, keyChords: keyList,
+    keys, sel, notes: notesNow(openCell), ownNotes: !!ownNotes, exact: nearOwn ? nearOwn.exact : true,
+    timing: { hits: openHits, own: !!edits[openCell]?.hits, steps: stepsOf(openCell), preset: sameHits(openHits, heldHits(stepsOf(openCell))) ? "held" as const : sameHits(openHits, shortNow) ? "short" as const : null },
+    flats: /b|♭/.test(o.keyName) || (scale === "minor" && /^[CDFG]$/.test(o.keyName)) || o.keyName === "F",
   } : null;
   // CS1-1: the chords' closeness follows Mine's chord names: half the sound (Phase 5's measure, knobs and
   // preset), half how well Mine's chords match the notes the part plays per cell (recomputed on every pick).
-  const notesScore = useMemo(() => (raw && mineChords ? notesMatch(raw.cellChroma, mineChords.cells.map((c) => c.name)) : null), [raw, mineChords]);
+  const notesScore = useMemo(() => (raw && mineChords ? notesMatch(raw.cellChroma, mineChords.cells.map((_, i) => cellNotes(mineChords, edits, i).map((m) => ((m % 12) + 12) % 12))) : null), [raw, mineChords, edits]);
   const soundClose = mine?.rowCloseness ?? null;
   const rowCloseness = soundClose ? { ...soundClose, chords: soundClose.chords && notesScore !== null ? { ...soundClose.chords, score: Math.round((soundClose.chords.score + notesScore) / 2), sound: soundClose.chords.score, notes: notesScore } : soundClose.chords } : null;
   /** Graders (slice 1): Make's chords as the screen shows them and as Mine plays them; names and numbers only. */
@@ -307,16 +403,16 @@ export function useMelody(o: MelodyOpts) {
     const from = o.fromBar ?? null;
     return {
       readState, reader: raw.chords.reader, readMs: raw.ms, bpm: o.bpm, bars: guess.bars, steps: guess.steps, register: guess.register, fromBar: from,
-      open: openCell, openBar: from !== null ? from + guess.cells[openCell].bar : null, all, more, hear, ab, twins: twinsOf(openCell).length, twinName: twinName(openCell), keyChords: keyList,
+      open: openCell, openBar: from !== null ? from + guess.cells[openCell].bar : null, all, more, hear, ab, keys, sel, timing: chordsView?.timing ?? null, twins: twinsOf(openCell).length, twinName: twinName(openCell), keyChords: keyList,
       closeness: { score: rowCloseness?.chords?.score ?? null, sound: soundClose?.chords?.score ?? null, notes: notesScore },
       cells: guess.cells.map((g, i) => ({
         cell: i, bar: g.bar + 1, barNo: from !== null ? from + g.bar : null, half: g.steps < 16 ? (g.startStep % 16 === 0 ? 1 : 2) : null, startStep: g.startStep, steps: g.steps,
-        guess: g.name, name: mineChords.cells[i].name, edited: picks[i] !== undefined, planted: plants[i]?.name ?? null, unsure: !!unsure[i] && picks[i] === undefined,
+        guess: g.name, name: mineChords.cells[i].name, edited: edits[i] !== undefined, edit: edits[i] ?? null, notes: cellNotes(mineChords, edits, i), hits: hitsNow(i), planted: plants[i]?.name ?? null, unsure: !!unsure[i] && edits[i] === undefined,
         score: Math.round(g.score * 1000) / 1000, cards: cardsFor(g), alternatives: g.alternatives.map((a) => ({ name: a.name, score: Math.round(a.score * 1000) / 1000 })),
       })),
       played: mineChords.events.map((e) => {
         const c = mineChords.cells[e.cell];
-        return { tMs: Math.round(e.t * 10000) / 10, durMs: Math.round(e.dur * 10000) / 10, step: e.step, off: e.off, cell: e.cell, chord: c?.name ?? "", held: e.held, struck: e.struck, vel: e.vel, notes: c?.root !== null && c?.type ? voiceChord(c.root, c.type, mineChords.register) : [] };
+        return { tMs: Math.round(e.t * 10000) / 10, durMs: Math.round(e.dur * 10000) / 10, step: e.step, off: e.off, cell: e.cell, chord: c?.name ?? "", held: e.held, struck: e.struck, vel: e.vel, notes: cellNotes(mineChords, edits, e.cell) };
       }),
     };
   };
@@ -328,13 +424,14 @@ export function useMelody(o: MelodyOpts) {
     if (i < 0) return null;
     const was = raw!.chords.cells[i].name;
     setPlants((p) => ({ loopKey, cells: { ...(p.loopKey === loopKey ? p.cells : {}), [i]: { name: n, unsure: !!opts.unsure } } }));
-    setPicks((p) => { const next = { ...(p.loopKey === loopKey ? p.picks : {}) }; delete next[i]; return { loopKey, picks: next }; });
+    setEdits((p) => { const next = { ...(p.loopKey === loopKey ? p.edits : {}) }; delete next[i]; return { loopKey, edits: next }; });
     return { cell: i, barNo, was, planted: n };
   };
 
   const ticks = perRow((r) => (read ? ticksS[r] : null));
   return {
     chords: chordsView, openChord, pickChord, tapCard, tapTrack, setAll, setMore, chordsDebug, plantChord,
+    setPiano, toggleNote, hitOp, presetHits, resetCell,
     open, setOpen, rows, sounds, setPreset, setKnob, ticks, suggesting, read, readState, readError: state?.error ?? null, on, anyway, playAnyway, backToOff,
     suggestNow: (row: MelodyRow) => { if (read) void suggest(read, row, sounds[row], ticks[row]?.macros ?? null); },
     suggestedNow: perRow((r) => !!ticks[r] && ticks[r]!.for === soundId(sounds[r].preset, sounds[r].macros)),

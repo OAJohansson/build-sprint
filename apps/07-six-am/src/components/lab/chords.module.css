@@ -76,3 +76,59 @@
 .extra .choice { height: 52px; }
 .extra .guessTag { display: none; }
 @media (max-width: 700px) { .choices { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ── Slice 2: the piano and the timing strip (design round 5: keys, timing) ─────────────────────── */
+.icon { width: 30px; height: 30px; flex: none; display: grid; place-items: center; padding: 0; border: 1px solid transparent; border-radius: 6px; background: none; color: var(--muted) !important; cursor: pointer; }
+@media (hover: hover) and (pointer: fine) { .icon:hover { color: var(--ink) !important; border-color: var(--edge); } }
+.title { font: 500 20px var(--f-mono); white-space: nowrap; color: var(--ink); }
+.reset { display: inline-flex; align-items: center; gap: 5px; min-height: 28px; padding: 0 10px; border: 1px solid var(--edge); border-radius: 99px; background: none; cursor: pointer; font: 500 12px var(--f-mono); color: var(--muted) !important; }
+@media (hover: hover) and (pointer: fine) { .reset:hover { color: var(--ink) !important; border-color: var(--muted); } }
+/* keys: unlit keys warm grey-brown, lit notes carry the light; names under the keys */
+.keysWrap { display: flex; flex-direction: column; gap: 4px; }
+.keys { position: relative; display: flex; height: 46px; }
+.white { flex: 1; border: 1px solid #1a1715; border-radius: 0 0 4px 4px; background: #4d443d; cursor: pointer; padding: 0; }
+.white[data-on] { background: #23b3a5; }
+.black { position: absolute; top: 0; height: 58%; transform: translateX(-50%); z-index: 2; border: 1px solid #0d0b0a; border-radius: 0 0 3px 3px; background: #1d1916; cursor: pointer; padding: 0; }
+.black[data-on] { background: #1a9c8f; }
+@media (hover: hover) and (pointer: fine) { .white:hover:not([data-on]) { background: #5a5048; } .black:hover:not([data-on]) { background: #2b2622; } }
+.keyNames { position: relative; height: 16px; font-size: 11px; color: var(--faint); }
+.keyNames span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
+.keyNames span[data-on] { color: var(--ink); font-weight: 500; }
+.phoneKeys { display: none; }
+/* timing */
+.timing { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.label { flex: none; font-size: 11.5px; color: var(--muted); margin-top: 6px; }
+.presets { display: flex; border: 1px solid var(--edge); border-radius: 99px; padding: 2px; flex: none; }
+.presets button { background: none; border: 0; border-radius: 99px; padding: 3px 12px; min-height: 26px; cursor: pointer; font-size: 12px; color: var(--muted) !important; white-space: nowrap; }
+.presets button[aria-pressed="true"] { background: #2b2622; color: var(--ink) !important; }
+.strip16 { display: flex; flex-direction: column; gap: 2px; flex: 0 1 340px; min-width: 240px; }
+.sixteenths { position: relative; height: 26px; display: grid; border: 1px solid var(--line); border-radius: 3px; }
+.sixteenths > i { border-left: 1px solid rgba(241, 230, 211, .06); }
+.sixteenths > i[data-beat] { border-left-color: rgba(241, 230, 211, .18); }
+.sixteenths > i:first-child { border-left: 0; }
+.empty { position: absolute; top: 0; bottom: 0; border: 0; padding: 0; background: none; cursor: pointer; }
+@media (hover: hover) and (pointer: fine) { .empty:hover { background: rgba(241, 230, 211, .06); } }
+.hit { position: absolute; top: 3px; bottom: 3px; border: 0; padding: 0; border-radius: 2px; background: #23b3a5; opacity: .75; cursor: pointer; min-width: 4px; }
+.hit[data-sel] { opacity: 1; box-shadow: 0 0 0 2px var(--ink); }
+.beats { display: grid; font-size: 10.5px; color: var(--faint); }
+.beats span { padding-left: 3px; }
+.moves { display: inline-flex; gap: 6px; flex-wrap: wrap; flex-basis: 100%; }
+.moves button { min-height: 28px; padding: 0 10px; border: 1px solid var(--edge); border-radius: 99px; background: none; cursor: pointer; font: 500 11.5px var(--f-mono); }
+@media (max-width: 700px) {
+  .deskKeys { display: none; }
+  .phoneKeys { display: flex; }
+  .strip16 { flex: 1 1 100%; }
+  .moves button { min-height: 44px; }
+}
+
+/* ── Slice 1 re-check (CS1-12, CS1-13, CS1-7) ───────────────────────────────────────────────────── */
+/* CS1-12: one line always; a half-bar tile's name is 11 px with tighter tracking, and its hits carry no beat marks */
+.tileName { white-space: nowrap; display: block; -webkit-line-clamp: unset; overflow: hidden; text-overflow: clip; }
+.tile[data-half] .tileName { font-size: 11px; letter-spacing: -0.04em; line-height: 1.2; }
+.tile[data-half][data-unsure] .tileName { padding-right: 14px; }
+/* CS1-13: the mood may take two lines (4 cards a row at 1280); the card grows to fit */
+.mood { white-space: normal; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; text-overflow: clip; }
+.choice { height: auto; min-height: 72px; padding-top: 6px; padding-bottom: 6px; }
+/* CS1-7: More's cards stop clear of the sticky A/B bar when scrolled into view */
+.extra { scroll-margin-bottom: 120px; }
+.extra .choice { min-height: 52px; height: auto; }

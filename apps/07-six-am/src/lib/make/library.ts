@@ -8,7 +8,7 @@ import { MAKE_PRESETS, clampMacros, macroWord, type Macros, type MakePresetId } 
 import type { MakeNote } from "./render";
 import { FX_KNOBS, FX_NOUN, FX_PRESETS, clampFxMacros, fxLengthWord, fxRowOf, isFxPreset, type FxKnobId, type FxMacros, type FxPresetId } from "./fx-synth";
 import { POLY_KNOBS, clampPolyMacros, isMelodyPreset, kindOf, melodyPreset, melodyRowOf, type MelodyPresetId, type PolyKnobId, type PolyMacros } from "./poly-synth";
-import { normalChord, type ChordMark } from "./chords-mine";
+import { normalChord, type ChordMark, type Hit } from "./chords-mine";
 import { DRUM_PRESETS, ROW_KNOBS, clampDrumMacros, isDrumPreset, rowOf, type DrumKnobId, type DrumMacros, type DrumPresetId } from "./drum-synth";
 
 export const LIB_PARTS = ["bass", "drums", "other", "vocals"] as const;
@@ -198,7 +198,25 @@ function parseChordMarks(raw: unknown, bars: number): ChordMark[] | null {
     const o = (x ?? {}) as Record<string, unknown>;
     const step = num(o.step, 0, bars * 16 - 1), steps = num(o.steps, 1, bars * 16), name = typeof o.name === "string" ? normalChord(o.name.slice(0, 12)) : null;
     if (step === null || steps === null || !Number.isInteger(step) || !Number.isInteger(steps) || !name) return null;
-    out.push({ step, steps, name });
+    const mark: ChordMark = { step, steps, name };
+    // Slice 2 (H9): the owner's own notes (MIDI, up to 8) and hits (16ths inside the mark, up to 32), when edited.
+    if (o.notes !== undefined) {
+      if (!Array.isArray(o.notes) || !o.notes.length || o.notes.length > 8) return null;
+      const notes = o.notes.map((x) => num(x, 24, 108));
+      if (notes.some((x) => x === null || !Number.isInteger(x))) return null;
+      mark.notes = [...new Set(notes as number[])].sort((a, b) => a - b);
+    }
+    if (o.hits !== undefined) {
+      if (!Array.isArray(o.hits) || o.hits.length > 32) return null;
+      const hits: Hit[] = [];
+      for (const h of o.hits) {
+        const x = (h ?? {}) as Record<string, unknown>, at = num(x.at, 0, steps - 1), len = num(x.len, 0.25, steps), off = x.off === undefined ? 0 : num(x.off, -0.5, 0.5);
+        if (at === null || len === null || off === null || !Number.isInteger(at)) return null;
+        hits.push(off ? { at, len: Math.round(len * 100) / 100, off: Math.round(off * 100) / 100 } : { at, len: Math.round(len * 100) / 100 });
+      }
+      mark.hits = hits.sort((a, b) => a.at - b.at);
+    }
+    out.push(mark);
   }
   return out.sort((a, b) => a.step - b.step);
 }

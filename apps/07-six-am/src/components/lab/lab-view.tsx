@@ -49,7 +49,10 @@ declare global {
     /** Phase 6 slice 1 graders: Make's chords as shown and played (cells, guesses, cards, picks, played events with their notes); names and numbers only. */
     makeChords?: () => ReturnType<MelodyModel["chordsDebug"]> | null;
     /** Phase 6 slice 1 graders: the listening panel's actions, as a tap would do them (open a cell, pick a card, the Track button, the switches). */
-    chordsDo?: { open: (cell: number) => void; pick: (name: string, opts?: { all?: boolean; cell?: number; hear?: boolean }) => boolean; track: () => void; all: (on: boolean) => void; more: (on: boolean) => void };
+    chordsDo?: { open: (cell: number) => void; pick: (name: string, opts?: { all?: boolean; cell?: number; hear?: boolean }) => boolean; track: () => void; all: (on: boolean) => void; more: (on: boolean) => void;
+      /** Slice 2 (K5, K6): the open cell on the keys; a note in or out; the timing strip (select a hit by index, add one on a 16th, move the selected one); the presets; ↺ Reset. */
+      piano: (on: boolean) => void; toggleNote: (midi: number) => { notes: number[]; name: string | null; exact: boolean } | null;
+      hit: (op: "select" | "add" | "earlier" | "later" | "shorter" | "longer" | "remove", at?: number) => boolean; preset: (p: "held" | "short") => void; reset: () => void };
     /** Dev/grader only (H14): Make's guess on the bar numbered `bar` (as on its tile) becomes `name`, as if misread. */
     plantChord?: (bar: number, name: string, opts?: { unsure?: boolean }) => { cell: number; barNo: number; was: string; planted: string } | null;
     melodyDo?: { open: (row: MelodyRow) => void; preset: (row: MelodyRow, id: MelodyPresetId) => void; knob: (row: MelodyRow, id: PolyKnobId, v: number) => void; suggest: (row: MelodyRow) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; playAnyway: (row: MelodyRow) => void; backToOff: (row: MelodyRow) => void; save: (row: MelodyRow, name?: string) => Promise<void> } } }
@@ -180,6 +183,9 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
         chordsDo: {
           open: (cell: number) => melodyRef.current?.openChord(cell), pick: (name: string, opts?: { all?: boolean; cell?: number; hear?: boolean }) => melodyRef.current?.pickChord(name, opts) ?? false,
           track: () => melodyRef.current?.tapTrack(tr.current?.playing ?? false), all: (on: boolean) => melodyRef.current?.setAll(on), more: (on: boolean) => melodyRef.current?.setMore(on),
+          piano: (on: boolean) => melodyRef.current?.setPiano(on), toggleNote: (midi: number) => melodyRef.current?.toggleNote(midi) ?? null,
+          hit: (op: "select" | "add" | "earlier" | "later" | "shorter" | "longer" | "remove", at?: number) => melodyRef.current?.hitOp(op, at) ?? false,
+          preset: (p: "held" | "short") => melodyRef.current?.presetHits(p), reset: () => melodyRef.current?.resetCell(),
         },
       } : {}),
       // H14: dev builds, or a production build opened with ?plant=1 (graders run production on :3017). It only

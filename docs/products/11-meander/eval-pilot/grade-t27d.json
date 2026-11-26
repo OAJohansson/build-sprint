@@ -605,5 +605,72 @@
     "drift": 3,
     "unsupported": 1,
     "wrong": 0
+  },
+  "round2": {
+    "scope": "Re-grade of the 5 sentences edited after round 1 (4 findings + 'Either way' nit); same cited sections, same rubric; all cited quotes in these items verbatim (0 misses)",
+    "items": [
+      {
+        "id": "themes.4.p1",
+        "claims": [
+          {
+            "claim": "If freedom is the core of what I am, it is the core of others too, so my freedom is bound up with yours",
+            "verdict": "supported",
+            "evidence": "SEP §6 Ethics: \"When I acknowledge that freedom is my essence, I must also acknowledge that it is the essence of others ... My freedom, then, is not free-floating; it is invariably bound up in the freedom of others\" (the causal 'so' now follows the source's own reasoning)"
+          }
+        ],
+        "nit": "The §6.1 'the look' quote is still in sources but no longer backs any sentence; the line it relies on ('When I acknowledge that freedom is my essence…') is in the cited §6 but not quoted. Optional: swap the quotes for traceability."
+      },
+      {
+        "id": "origins.w3",
+        "claims": [
+          {
+            "claim": "Facing that fate fully aware makes it his own. That is part of why Camus says 'One must imagine Sisyphus happy'",
+            "verdict": "supported",
+            "evidence": "SEP Camus §3.4: \"By becoming conscious of it, Camus is saying, he takes ownership of it\"; \"All Sisyphus's silent joy is contained therein. His fate belongs to him\". 'part of why' leaves room for the struggle and scorn reasons"
+          }
+        ]
+      },
+      {
+        "id": "criticisms.p0.item2",
+        "claims": [
+          {
+            "claim": "Sartre later agreed that his early idea of 'absolute' freedom left out the social and historical conditions that limit it",
+            "verdict": "supported",
+            "evidence": "SEP §4.2: \"an account of 'radical' or 'absolute' freedom ... his views changed ... It failed to engage the social, historical, and material conditions that invariably limit and constrain our freedom\""
+          }
+        ]
+      },
+      {
+        "id": "themes.0.p0",
+        "claims": [
+          {
+            "claim": "Later, he and others such as Beauvoir stressed that our social and historical situation limits it",
+            "verdict": "supported",
+            "evidence": "SEP §4.2: \"our choices and actions are always mediated by the world, by the sociohistorical situation we've been thrown into\"; \"conception of situated or mediated freedom ... had already been forwarded and developed by Beauvoir\""
+          },
+          {
+            "claim": "But we can still question those limits, give them meaning and decide what to do with them (now referring to the social-historical limits)",
+            "verdict": "supported",
+            "evidence": "SEP §3: facticity includes \"the socio-historical context we find ourselves in\"; \"surpass our facticity by calling it into question, interpreting it in different ways, and making decisions about how to deal with it\""
+          }
+        ]
+      },
+      {
+        "id": "apply.practices.0.practice.after",
+        "claims": [
+          {
+            "claim": "Whatever they say, the choice stays yours (inside the 'One way to use his point:' label)",
+            "verdict": "supported",
+            "evidence": "Primary: \"No rule of general morality can show you what you ought to do ... it is I myself, in every case, who have to interpret the signs\"; label still present"
+          }
+        ]
+      }
+    ],
+    "totals": {
+      "supported": 6,
+      "drift": 0,
+      "unsupported": 0,
+      "wrong": 0
+    }
   }
 }

@@ -143,3 +143,7 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   - **Showing size or progress:** evidence is thin and mixed. A big number up front could put people off, so test it.
   - **Timelines for adults:** untested.
   - Next: the owner picks the MVP cut for the school skeleton.
+- **Readability done (T27):** four passes, from 2,573 to about 2,020 words and from about 32 to 11 people named. The newcomer's "how lost" score went from 3 to 2. Every changed claim is re-graded, with 0 wrong or unsupported left. See the table in `eval-pilot/README.md`.
+  - **Lesson:** sentence fixes didn't move "how lost". The structure did: the same books repeated across sections.
+  - A writer cut an attribution label to save words; I restored it. Guardrail labels should be checked by script in the roll-out.
+  - Next: the owner reads the final draft, then the skeleton design (L26).

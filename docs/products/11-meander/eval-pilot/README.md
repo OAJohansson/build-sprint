@@ -32,3 +32,18 @@ There are three practices, about 550 words, built on 5 new sources: Sartre's lec
 - Hand spot-check: 6 of 6 quotes found word for word in the saved sources, and the three questions map onto the institute's three avenues.
 - Known soft point: the Frankl card cites a meta-analysis that pools "meaning therapies" and doesn't name logotherapy. The text doesn't claim it does.
 - Dropped: the School of Life (its essays are behind a membership paywall, so there is nothing to cite) and a fourth practice (no readable source proposes one).
+
+## Readability passes (26 Nov, T27)
+
+A beginner style rule: explain every term at its first use or cut it, one idea per sentence, and bullets for lists. Four writer passes, each checked by fresh graders (facts) and a fresh "newcomer" reader who has never studied philosophy.
+
+| Pass | Words | People named | Newcomer: how lost (1–5) | Claims graded | Drift | Unsupported | Wrong |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| T27, explain terms | 2,573 | ~32 | 3 | 237 | 9 | 0 | 0 |
+| T27b, cut before explaining | 2,109 | 13 | 3 | 186 | 6 | 0 | 0 |
+| T27c, structure (each work once) | 1,972 | 12 | 2 | 187 | 6 | 1 | 0 |
+| T27d, six blockers | 2,024 | 11 | not re-read | 102 + 6 | 3 → 0 | 1 → 0 | 0 |
+
+- Lesson: the first two passes fixed sentences, but "how lost" didn't move until the structure changed. The same books turned up in three sections, so the fix was to describe each work once.
+- I made the last round of wording fixes myself, so the grader re-checked them (6 of 6 supported).
+- I restored the attribution label ("One way to use his point:") after the writer cut it to save words.

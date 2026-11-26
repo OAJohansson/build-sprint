@@ -309,3 +309,12 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | ID | Severity | Finding | Status |
 | --- | --- | --- | --- |
 | S-1 | major | Two stabs in one 16th merge on save (Lost 69–76 bar 8: 124 of 128 notes, 30 chords saved where Make played 31); H9 partial | fixed (008cf37, T211): double hits merge in Mine; the save keeps the repeat only when lossless, else the whole loop as played; tested |
+
+### Phase 6 final data-evals pass (26 Nov, `evals-runs/2026-11-26-chords-final.md`)
+
+| ID | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| LD-1 | major | Loading a saved lead into Make sets every note's offset to 0 and marks all 8 bars edited (H9 lead partial) | fixed (61974fd, T214): grids keep offset, length and strength; a loaded lead is its own layer, not "edited"; test saved == loaded |
+| LD-2 | minor | Mason's lead on at first read, off after reload 4/4 | fixed (61974fd, T216): cause found headlessly in the top-line path (the split stops finding the riff as its own row when pad leaks in); a top line alone no longer switches the lead off; T208's DSP read removed; every guard in `makeLead().guards`; needs a live re-check |
+| TH-1 | minor | Em in G minor read ♭vii, should be vi | fixed (61974fd, T215): raised 6th and 7th first in minor; Em in G minor = vi, borrowed from G major |
+| TH-2 | polish | ♭VI in A♭ spelled E G♯ B | fixed (61974fd, T215): roots spelled by the numeral's letter: F♭ A♭ C♭ |

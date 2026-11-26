@@ -11,6 +11,8 @@ import type { LabTransport, LoopState } from "@/lib/lab/transport";
 import { MakeClient } from "@/lib/make/make-client";
 import { foldMelodyRow, type MelNote, type MelodyReading, type MelodyRowSound, type MelodyTarget } from "@/lib/make/melody-make";
 import { rankChords, voiceChord, type ChordCell, type ChordsReading } from "@/lib/make/chords-read";
+import { gridOf, gridsFromSaved, leadNotesOf, leadRows, placeNote, stretchNote, type LeadNote } from "@/lib/make/lead-mine";
+import { scalePitchClasses, pitchClass } from "@/lib/synths/theory";
 import { addHit, cardsFor, chordPcs, editsFromSaved, foldChordNames, heldHits, hitsOf, keyChords, moveHit, normalChord, notesMatch, parseChord, sameHits, shortHits, unsureCells, withEdits, type CellEdit, type Edits, type Hit } from "@/lib/make/chords-mine";
 import { isMelodySound, melodyNoun, saveAction, soundId, suggestMelodyName, suggestMelodyTags, type MelodySound } from "@/lib/make/library";
 import { MELODY_ROWS, MELODY_ROW_NAMES, POLY_KNOBS, POLY_KNOB_SPECS, ROW_DEFAULT, clampPolyMacros, kindOf, melodyPreset, melodyPresetIds, melodyRowOf, polyKnobWord, polyMoves, polySuggestLine, presetId, type MelodyPresetId, type MelodyRow, type PolyMacros } from "@/lib/make/poly-synth";
@@ -19,6 +21,7 @@ import { ApiError, mentorApi } from "@/lib/mentor/client";
 import { Knob } from "@/components/ui/knob";
 import { Playhead, useShort } from "./make-drums";
 import { ChordPanel, ChordTiles } from "./make-chords";
+import { LeadBars, LeadPanel } from "./make-lead";
 import ch from "./chords.module.css";
 import s from "./lab.module.css";
 
@@ -28,7 +31,8 @@ type ReadState = "idle" | "reading" | "ready" | "nonotes" | "error";
 type ReadRaw = { loopKey: string; chords: ChordsReading; lead: MelNote[]; targets: Record<MelodyRow, MelodyTarget | null>; cellChroma: number[][]; levelDb: number; lufs: number; samples: number; rate: number; ms: number };
 type Read = ReadRaw & { d: MelodyReading };
 /** Slice 1: the Lead row stays off until its own slice (K7): read note by note it is rough (H4), and it can't be edited yet. */
-const LEAD_WHY = "The lead, read note by note, is rough for now (fixing it by hand comes later): off in Mine";
+/** Slice 4 (K7): the lead as Basic Pitch read it (a second read after the chords; the first one in a session loads the model). */
+type LeadRead = { loopKey: string; notes: MelNote[]; from: "row" | "top-line"; doubtful: boolean; why: string | null; target: MelodyTarget | null; reader: "dsp" | "basic-pitch"; ms: number };
 type Sound = { preset: MelodyPresetId; macros: Required<PolyMacros> };
 const fresh = (p: MelodyPresetId): Sound => ({ preset: p, macros: clampPolyMacros(p, undefined) });
 const perRow = <T,>(f: (r: MelodyRow) => T) => Object.fromEntries(MELODY_ROWS.map((r) => [r, f(r)])) as Record<MelodyRow, T>;
@@ -82,6 +86,13 @@ export function useMelody(o: MelodyOpts) {
   const [editsS, setEdits] = useState<{ loopKey: string | null; edits: Edits }>({ loopKey: null, edits: {} });
   // Slice 2 (K5, K6): the open cell on the piano, and the hit picked on its timing strip.
   const [keys, setKeys] = useState(false);
+  // Slice 4 (K7): the lead read, the owner's grids per bar (and planted misreads for graders), the open lead bar and its picked note, the outside switch.
+  const [leadS, setLeadS] = useState<(LeadRead & { state: "ready" } ) | { loopKey: string; state: "reading" | "error"; error?: string } | null>(null);
+  const [leadGridsS, setLeadGrids] = useState<{ loopKey: string | null; grids: Record<number, LeadNote[]> }>({ loopKey: null, grids: {} });
+  const [leadPlantsS, setLeadPlants] = useState<{ loopKey: string | null; grids: Record<number, LeadNote[]> }>({ loopKey: null, grids: {} });
+  const [leadOpenS, setLeadOpen] = useState<{ loopKey: string | null; bar: number } | null>(null);
+  const [leadSel, setLeadSel] = useState<number | null>(null);
+  const [outsideS, setOutside] = useState(false);
   const [sel, setSel] = useState<number | null>(null);
   const [plantsS, setPlants] = useState<{ loopKey: string | null; cells: Record<number, Plant> }>({ loopKey: null, cells: {} });
   const [openCellS, setOpenCell] = useState<{ loopKey: string | null; cell: number } | null>(null);
@@ -118,13 +129,22 @@ export function useMelody(o: MelodyOpts) {
     return u.map((x, i) => (plants[i] ? plants[i].unsure : x));
   }, [guess, raw, plants]);
   const mineChords = useMemo(() => (guess ? withEdits(guess, edits) : null), [guess, edits]);
+  const lead = leadS && leadS.loopKey === loopKey && leadS.state === "ready" ? leadS : null;
+  const leadState = leadS && leadS.loopKey === loopKey ? leadS.state : null;
+  const leadGrids = useMemo(() => (leadGridsS.loopKey === loopKey ? leadGridsS.grids : {}), [leadGridsS, loopKey]);
+  const leadPlants = useMemo(() => (leadPlantsS.loopKey === loopKey ? leadPlantsS.grids : {}), [leadPlantsS, loopKey]);
+  /** Every bar that plays a grid: planted misreads (graders) under the owner's own grids. */
+  const leadPlayGrids = useMemo(() => ({ ...leadPlants, ...leadGrids }), [leadPlants, leadGrids]);
   const read = useMemo<Read | null>(() => {
     if (!raw || !mineChords) return null;
     const chordNotes = mineNotesOf(mineChords, edits), row = (notes: MelNote[]) => ({ notes, doubtful: false, why: null, note: null });
-    const d: MelodyReading = { rows: { chords: row(chordNotes), lead: row(raw.lead) }, steps: mineChords.steps, bars: mineChords.bars, lead: raw.lead.length > 0, chords: chordNotes.length > 0, tuningCents: mineChords.tuningCents };
-    d.rows.lead = { ...d.rows.lead, doubtful: raw.lead.length > 0, why: raw.lead.length ? LEAD_WHY : null, note: raw.lead.length ? "Lead editing comes later" : null };
-    return { ...raw, d };
-  }, [raw, mineChords, edits]);
+    const leadNotes = lead ? leadNotesOf(lead.notes, leadPlayGrids, mineChords.bpm, mineChords.steps) : [];
+    const d: MelodyReading = { rows: { chords: row(chordNotes), lead: row(leadNotes) }, steps: mineChords.steps, bars: mineChords.bars, lead: leadNotes.length > 0, chords: chordNotes.length > 0, tuningCents: mineChords.tuningCents };
+    // K7: a doubtful lead stays off in Mine with "Play anyway", as Phase 5; once the owner edits a bar it is theirs, so it plays.
+    const touched = Object.keys(leadGrids).length > 0;
+    if (lead) d.rows.lead = { ...d.rows.lead, doubtful: lead.doubtful && !touched, why: lead.doubtful && !touched ? lead.why : null, note: lead.doubtful && !touched ? "Probably not a line of its own" : null };
+    return { ...raw, targets: { ...raw.targets, lead: lead?.target ?? null }, d };
+  }, [raw, mineChords, edits, lead, leadPlayGrids, leadGrids]);
   const firstUnsure = Math.max(0, unsure.findIndex(Boolean));
   const openCell = openCellS && openCellS.loopKey === loopKey && guess && openCellS.cell < guess.cells.length ? openCellS.cell : firstUnsure;
   const hear = hearS && hearS.cell === openCell ? hearS.what : null;
@@ -137,7 +157,8 @@ export function useMelody(o: MelodyOpts) {
   const on = useMemo(() => perRow((r) => !!read && read.d.rows[r].notes.length > 0 && (!read.d.rows[r].doubtful || anyway.includes(r))), [read, anyway]);
   const signature = (x: Record<MelodyRow, Sound>, onRows: Record<MelodyRow, boolean>) => MELODY_ROWS.map((r) => `${x[r].preset}:${POLY_KNOBS.map((k) => x[r].macros[k].toFixed(3)).join(",")}:${onRows[r] ? 1 : 0}`).join("|");
   const editSig = `${mineChords?.cells.map((c) => c.name).join(",") ?? ""}|${JSON.stringify(edits)}`;
-  const mineKeyNow = read ? `${read.loopKey}|${signature(sounds, on)}|${editSig}` : null;
+  const leadSig = `${lead ? lead.notes.length : -1}|${JSON.stringify(leadPlayGrids)}`;
+  const mineKeyNow = read ? `${read.loopKey}|${signature(sounds, on)}|${editSig}|${leadSig}` : null;
   const mine = mineS && read && mineS.key.startsWith(`${read.loopKey}|`) ? mineS : null;
 
   const suggest = useCallback(async (r: { targets: Record<MelodyRow, MelodyTarget | null> }, row: MelodyRow, snd: Sound, before: PolyMacros | null) => {
@@ -167,20 +188,29 @@ export function useMelody(o: MelodyOpts) {
     setState({ loopKey: key, state: "reading" });
     setTicks(perRow(() => null));
     const left = held.left.slice(), right = held.right.slice();
+    // K7: a second copy for the lead read (Basic Pitch), sent once the chords are in; zeroed in the worker too (C2).
+    const leadL = held.left.slice(), leadR = held.right.slice();
     const samples = left.length, rate = held.rate;
     // Slice 1 (K2): reader A ("dsp") names the chords per bar; the worker zeroes its copy (C2).
     cl().chordsRead({ left, right, rate, bpm: o.bpm, key: o.keyName && scale ? { key: o.keyName, scale } : undefined, reader: "dsp" }).then(async (res) => {
-      const lead = res.lead.from === "row" ? res.lead.notes : [];
-      console.info(`[make] chords read in ${res.ms} ms: ${res.chords.cells.map((c) => c.name || "-").join(" ")}, ${res.chords.events.length} chords, lead ${lead.length} notes`);
-      if (!res.chords.events.length) { setState({ loopKey: key, state: "nonotes" }); return; }
-      const r: ReadRaw = { loopKey: key, chords: res.chords, lead, targets: res.targets, cellChroma: res.cellChroma, levelDb: res.levelDb, lufs: res.lufs, samples, rate, ms: res.ms };
+      console.info(`[make] chords read in ${res.ms} ms: ${res.chords.cells.map((c) => c.name || "-").join(" ")}, ${res.chords.events.length} chords`);
+      if (!res.chords.events.length) { leadL.fill(0); leadR.fill(0); setState({ loopKey: key, state: "nonotes" }); return; }
+      const r: ReadRaw = { loopKey: key, chords: res.chords, lead: [], targets: res.targets, cellChroma: res.cellChroma, levelDb: res.levelDb, lufs: res.lufs, samples, rate, ms: res.ms };
       setReadS(r);
       setEdits({ loopKey: key, edits: {} });
       setOpenCell(null); setHear(null); setMore(false); setAll(true); setKeys(false); setSel(null);
       setAb("b"); // CS1-4: once the loop is read, Make's chords are what you hear first
       setState({ loopKey: key, state: "ready" });
-      for (const row of MELODY_ROWS) if (r.targets[row]) await suggest(r, row, soundsRef.current[row], null);
-    }, (e) => setState({ loopKey: key, state: "error", error: `Make couldn't read the chords: ${e instanceof Error ? e.message : String(e)}` }));
+      setLeadS({ loopKey: key, state: "reading" }); setLeadGrids({ loopKey: key, grids: {} }); setLeadPlants({ loopKey: key, grids: {} }); setLeadOpen(null); setLeadSel(null);
+      const leadP = cl().leadRead({ left: leadL, right: leadR, rate, bpm: o.bpm, key: o.keyName && scale ? { key: o.keyName, scale } : undefined, chords: res.chords }).then((lr) => {
+        console.info(`[make] lead read (${lr.reader}) in ${lr.ms} ms: ${lr.notes.length} notes, from ${lr.from}${lr.doubtful ? ", doubtful" : ""}`);
+        setLeadS({ loopKey: key, state: "ready", notes: lr.notes, from: lr.from, doubtful: lr.doubtful, why: lr.why, target: lr.target, reader: lr.reader, ms: lr.ms });
+        return lr.target;
+      }, (e) => { setLeadS({ loopKey: key, state: "error", error: e instanceof Error ? e.message : String(e) }); return null; });
+      if (r.targets.chords) await suggest(r, "chords", soundsRef.current.chords, null);
+      const lt = await leadP;
+      if (lt) await suggest({ targets: { ...r.targets, lead: lt } }, "lead", soundsRef.current.lead, null);
+    }, (e) => { leadL.fill(0); leadR.fill(0); setState({ loopKey: key, state: "error", error: `Make couldn't read the chords: ${e instanceof Error ? e.message : String(e)}` }); });
   }, [o.bpm, o.keyName, scale, tr, suggest]);
   useEffect(() => {
     if (!o.active || !loopKey || readFor === loopKey) return;
@@ -225,9 +255,16 @@ export function useMelody(o: MelodyOpts) {
       setEdits({ loopKey, edits: back });
       sig = `${withEdits(guess, back).cells.map((c) => c.name).join(",")}|${JSON.stringify(back)}`;
     } else if (row === "chords") sig = editSig;
+    // H9 (K7): a saved lead brings its notes back onto every bar of the loop as the owner's grids.
+    let leadGridSig = JSON.stringify(leadGrids);
+    if (row === "lead" && loopKey && guess && x.pattern.notes.length) {
+      const g = gridsFromSaved(x.pattern.notes, x.pattern.bars, guess.bars);
+      setLeadGrids({ loopKey, grids: g });
+      leadGridSig = JSON.stringify(g);
+    }
     setSounds((s0) => ({ ...s0, [row]: snd }));
     setNames((n) => ({ ...n, [row]: x.name }));
-    setLast((l) => ({ ...l, [row]: { id: x.id, sound: soundId(snd.preset, snd.macros) + (row === "chords" ? `|${sig}` : ""), name: x.name } }));
+    setLast((l) => ({ ...l, [row]: { id: x.id, sound: soundId(snd.preset, snd.macros) + (row === "chords" ? `|${sig}` : `|${leadGridSig}`), name: x.name } }));
     setTicks((t) => ({ ...t, [row]: null }));
     setOpen(row);
     if (read) void suggest(read, row, snd, null);
@@ -237,7 +274,7 @@ export function useMelody(o: MelodyOpts) {
 
   // Save the open row (P9): its sound, and its notes folded to a 1–16-bar repeat, in the track's key.
   // K8: the chords row's identity includes its chord names, so changing a chord makes a new save.
-  const sidOf = (r: MelodyRow) => soundId(sounds[r].preset, sounds[r].macros) + (r === "chords" ? `|${editSig}` : "");
+  const sidOf = (r: MelodyRow) => soundId(sounds[r].preset, sounds[r].macros) + (r === "chords" ? `|${editSig}` : `|${JSON.stringify(leadGrids)}`);
   const cur = sounds[open], sid = sidOf(open);
   const suggested = suggestMelodyName(cur.preset, cur.macros, o.title);
   const lastRow = last[open], nameRaw = names[open];
@@ -282,7 +319,57 @@ export function useMelody(o: MelodyOpts) {
   /** From the start of the open cell's bar, playing (a tap hears the chord in the loop at once). */
   const playFrom = (i: number) => { const t = tr.current; if (!t || !o.loop) return; t.seek(cellStartMs(i)); if (!t.playing) t.play(); };
   // CS1-6: "All" is on again each time a bar opens (L262's default).
-  const openChord = (i: number) => { if (!guess || i < 0 || i >= guess.cells.length) return; setOpenCell({ loopKey, cell: i }); setHear(null); setMore(false); setAll(true); setKeys(false); setSel(null); };
+  const openChord = (i: number) => { if (!guess || i < 0 || i >= guess.cells.length) return; setOpenCell({ loopKey, cell: i }); setHear(null); setMore(false); setAll(true); setKeys(false); setSel(null); setLeadOpen(null); setOpen("chords"); };
+
+  // ── Slice 4 (K7): the Lead row's note grid ──
+  const keyPcsList = useMemo(() => { const t = pitchClass(o.keyName); return t !== null && scale ? scalePitchClasses(t, scale) : null; }, [o.keyName, scale]);
+  const leadBars = guess?.bars ?? 0;
+  const leadOpen = leadOpenS && leadOpenS.loopKey === loopKey && leadOpenS.bar < leadBars ? leadOpenS.bar : null;
+  const leadGridOf = (b: number): LeadNote[] => leadPlayGrids[b] ?? (lead ? gridOf(lead.notes, b) : []);
+  const outsideIn = (ns: LeadNote[]) => !!keyPcsList && ns.some((n) => !keyPcsList.includes(((n.midi % 12) + 12) % 12));
+  /** The switch is locked on while the open bar holds a note outside the key (it could not be shown otherwise). */
+  const outsideLocked = leadOpen !== null && outsideIn(leadGridOf(leadOpen));
+  const outside = outsideS || outsideLocked;
+  const leadAllMidis = lead ? [...lead.notes.map((n) => n.midi), ...Object.values(leadPlayGrids).flat().map((n) => n.midi)] : [];
+  const rowsNow = leadRows(leadAllMidis, keyPcsList, outside);
+  const playBar = (bar: number) => { const t = tr.current; if (!t || !o.loop || t.playing) return; t.seek(o.loop.startMs + bar * 16 * sps * 1000); t.play(); };
+  const openLead = (bar: number) => {
+    if (!lead || bar < 0 || bar >= leadBars || !loopKey) return;
+    setLeadOpen({ loopKey, bar }); setLeadSel(null); setOpen("lead"); setOutside(false); setKeys(false); setMore(false);
+  };
+  const closeLead = () => { setLeadOpen(null); setLeadSel(null); setOpen("chords"); };
+  const setLeadGrid = (bar: number, ns: LeadNote[]) => { if (loopKey) setLeadGrids((p) => ({ loopKey, grids: { ...(p.loopKey === loopKey ? p.grids : {}), [bar]: ns } })); setAb("b"); playBar(bar); };
+  /** A tap on the grid: select the note there, or place a new one (it replaces whatever sounds on that 16th). */
+  const placeLead = (midi: number, at: number) => {
+    if (leadOpen === null || !Number.isInteger(midi) || midi < 24 || midi > 108 || !Number.isInteger(at) || at < 0 || at > 15) return false;
+    const r = placeNote(leadGridOf(leadOpen), midi, at);
+    if (r.placed) setLeadGrid(leadOpen, r.notes);
+    setLeadSel(r.placed || r.sel !== leadSel ? r.sel : null);
+    return true;
+  };
+  const stretchLead = (d: 1 | -1) => { if (leadOpen === null || leadSel === null) return false; const nx = stretchNote(leadGridOf(leadOpen), leadSel, d); if (!nx) return false; setLeadGrid(leadOpen, nx); return true; };
+  const removeLead = () => { if (leadOpen === null || leadSel === null) return false; setLeadGrid(leadOpen, leadGridOf(leadOpen).filter((_, k) => k !== leadSel)); setLeadSel(null); return true; };
+  const resetLead = () => { if (leadOpen === null || !loopKey) return; setLeadGrids((p) => { const g = { ...(p.loopKey === loopKey ? p.grids : {}) }; delete g[leadOpen]; return { loopKey, grids: g }; }); setLeadSel(null); };
+  /** Graders: a planted misread note in the read lead (bar numbered as on the tiles, 16th, MIDI); in memory only. */
+  const plantLeadNote = (barNo: number, at: number, midi: number) => {
+    const bar = barNo - (o.fromBar ?? 0);
+    if (!lead || !loopKey || bar < 0 || bar >= leadBars || !Number.isInteger(at) || at < 0 || at > 15 || !Number.isInteger(midi)) return null;
+    const base = leadPlants[bar] ?? gridOf(lead.notes, bar), r = placeNote(base, midi, at);
+    setLeadPlants((p) => ({ loopKey, grids: { ...(p.loopKey === loopKey ? p.grids : {}), [bar]: r.notes } }));
+    return { bar: barNo, notes: r.notes };
+  };
+  const leadView = lead ? {
+    open: leadOpen, sel: leadSel, outside, outsideLocked, rows: rowsNow, keyPcs: keyPcsList, flats: /b|♭/.test(o.keyName) || (scale === "minor" && /^[CDFG]$/.test(o.keyName)) || o.keyName === "F",
+    notes: leadOpen !== null ? leadGridOf(leadOpen) : [], edited: leadOpen !== null && !!leadGrids[leadOpen],
+    bars: Array.from({ length: leadBars }, (_, b) => ({ bar: b, edited: !!leadGrids[b] })),
+  } : null;
+  const leadDebug = () => ({
+    state: leadState, reader: lead?.reader ?? null, readMs: lead?.ms ?? null, from: lead?.from ?? null, doubtful: lead?.doubtful ?? null, why: lead?.why ?? null,
+    off: !on.lead, open: leadOpen, openBar: leadOpen !== null ? (o.fromBar ?? 1) + leadOpen : null, sel: leadSel, outside, outsideLocked, rows: rowsNow,
+    bars: Array.from({ length: leadBars }, (_, b) => ({ bar: b + 1, barNo: (o.fromBar ?? 1) + b, edited: !!leadGrids[b], planted: !!leadPlants[b], notes: leadGridOf(b) })),
+    notes: read?.d.rows.lead.notes.map((n) => ({ tMs: Math.round(n.t * 10000) / 10, durMs: Math.round(n.dur * 10000) / 10, midi: n.midi, step: n.step, off: n.off })) ?? [],
+    closeness: rowCloseness?.lead ?? null,
+  });
   /**
    * The cells an edit changes with "All" (CS1-6, CS1-10, CS1-11): every other cell Make heard as the same
    * chord (its read name), whatever it plays in Mine now, so a pick never reaches a bar Make heard differently
@@ -432,6 +519,7 @@ export function useMelody(o: MelodyOpts) {
   return {
     chords: chordsView, openChord, pickChord, tapCard, tapTrack, setAll, setMore, chordsDebug, plantChord,
     setPiano, toggleNote, hitOp, presetHits, resetCell,
+    lead: leadView, leadState, openLead, closeLead, placeLead, selectLead: (k: number | null) => setLeadSel(k), stretchLead, removeLead, resetLead, setOutside, leadDebug, plantLeadNote,
     open, setOpen, rows, sounds, setPreset, setKnob, ticks, suggesting, read, readState, readError: state?.error ?? null, on, anyway, playAnyway, backToOff,
     suggestNow: (row: MelodyRow) => { if (read) void suggest(read, row, sounds[row], ticks[row]?.macros ?? null); },
     suggestedNow: perRow((r) => !!ticks[r] && ticks[r]!.for === soundId(sounds[r].preset, sounds[r].macros)),
@@ -537,6 +625,8 @@ export function MelodyMiddle({ m, loop, playing, heardMs, from, onAsk }: { m: Me
               <div className={s.drTrack}>
                 <Roll notes={x?.notes ?? []} steps={steps} bars={bars} lit={lit} doubtful={doubtful} empty={off} />
                 {!off && x?.doubtful && x.note && <span className={s.drNote}>{x.note}</span>}
+                {/* K7: a lead that plays opens bar by bar on the note grid */}
+                {r === "lead" && !off && !doubtful && <LeadBars m={m} from={from} />}
               </div>
               <div className={s.drSlot}>
                 {!off && x?.doubtful
@@ -550,7 +640,8 @@ export function MelodyMiddle({ m, loop, playing, heardMs, from, onAsk }: { m: Me
         })}
         {loop?.state === "memory" && !off && bars <= 8 && <div className={s.drHeadBox} style={{ top: 0 }}><Playhead heardMs={heardMs} loop={loop} bars={bars} /></div>}
       </div>
-      {!off && <ChordPanel m={m} from={from} playing={playing} onAsk={onAsk} />}
+      {!off && (m.lead?.open !== null && m.lead?.open !== undefined ? <LeadPanel m={m} from={from} /> : <ChordPanel m={m} from={from} playing={playing} onAsk={onAsk} />)}
+      {!off && m.leadState === "reading" && <p className={s.drWait} role="status" style={{ height: "auto", marginTop: 6 }}>Reading the lead… the first time takes a few seconds.</p>}
       <div className={s.drBlock}>
         <span className={s.drLabel}>{MELODY_ROW_NAMES[row]}</span>
         <MelodyPreset m={m} row={row} />

@@ -20,11 +20,11 @@ let model: Promise<GraphModel> | null = null;
 const loadModel = () => (model ??= import("@tensorflow/tfjs").then((tf) => tf.loadGraphModel(BP_MODEL_URL)).catch((e) => { model = null; throw e; }));
 
 let bpQueue: Promise<unknown> = Promise.resolve();
-const usesBP = (m: MakeRequest) => (m.type === "chords-read" && m.reader === "basic-pitch") || m.type === "melody-read";
+const usesBP = (m: MakeRequest) => (m.type === "chords-read" && m.reader === "basic-pitch") || m.type === "melody-read" || m.type === "lead-read";
 
 const reply = ({ res, transfer }: { res: MakeResponse; transfer: ArrayBuffer[] }) => {
   // Which reader ran, so a grader can see every read used the model (BP-1). Numbers only.
-  if (res.type === "chords-read" || res.type === "melody-read") console.info(`[make] ${res.type === "chords-read" ? "chords" : "melody"} read (${res.reader}) in ${res.ms} ms`);
+  if (res.type === "chords-read" || res.type === "melody-read" || res.type === "lead-read") console.info(`[make] ${res.type.replace("-read", "")} read (${res.reader}) in ${res.ms} ms`);
   (self as unknown as DedicatedWorkerGlobalScope).postMessage(res, transfer);
 };
 

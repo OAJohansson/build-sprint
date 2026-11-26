@@ -57,6 +57,12 @@ declare global {
     /** Dev/grader only (H14): Make's guess on the bar numbered `bar` (as on its tile) becomes `name`, as if misread. */
     /** Phase 6 slice 3 graders (H12): the open chord's theory facts and the exact Lab-facts block the server puts in the prompt for a question at its bar (no model call). */
     chordFacts?: () => { bar: number; chord: LabAsk["chord"]; facts: ReturnType<typeof chordFacts>; theory: string[]; labFacts: string; offline: string | null } | null;
+    /** Phase 6 slice 4 (K7): the lead as read and as Mine plays it (reader, doubtful/off, per-bar grids, played notes, closeness). */
+    makeLead?: () => ReturnType<MelodyModel["leadDebug"]> | null;
+    /** K7: the lead grid's actions. open/close a bar (index in the loop, 0-based), place a note (MIDI, 16th 0–15), select one (index), shorter/longer/remove the selected, reset the bar, the outside switch. */
+    leadDo?: { open: (bar: number) => void; close: () => void; place: (midi: number, at: number) => boolean; select: (k: number | null) => void; shorter: () => boolean; longer: () => boolean; remove: () => boolean; reset: () => void; outside: (on: boolean) => void };
+    /** Dev/grader only: a planted misread note in the read lead, on the bar numbered `bar` (as on the tiles), at 16th `at`. */
+    plantLeadNote?: (bar: number, at: number, midi: number) => { bar: number; notes: { at: number; len: number; midi: number }[] } | null;
     plantChord?: (bar: number, name: string, opts?: { unsure?: boolean }) => { cell: number; barNo: number; was: string; planted: string } | null;
     melodyDo?: { open: (row: MelodyRow) => void; preset: (row: MelodyRow, id: MelodyPresetId) => void; knob: (row: MelodyRow, id: PolyKnobId, v: number) => void; suggest: (row: MelodyRow) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; playAnyway: (row: MelodyRow) => void; backToOff: (row: MelodyRow) => void; save: (row: MelodyRow, name?: string) => Promise<void> } } }
 }
@@ -184,6 +190,13 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       ...(MELODY_ON ? {
         melody: () => melodyRef.current?.debug() ?? null,
         makeChords: () => melodyRef.current?.chordsDebug() ?? null,
+        makeLead: () => melodyRef.current?.leadDebug() ?? null,
+        leadDo: {
+          open: (bar: number) => melodyRef.current?.openLead(bar), close: () => melodyRef.current?.closeLead(),
+          place: (midi: number, at: number) => melodyRef.current?.placeLead(midi, at) ?? false, select: (k: number | null) => melodyRef.current?.selectLead(k),
+          shorter: () => melodyRef.current?.stretchLead(-1) ?? false, longer: () => melodyRef.current?.stretchLead(1) ?? false, remove: () => melodyRef.current?.removeLead() ?? false,
+          reset: () => melodyRef.current?.resetLead(), outside: (on: boolean) => melodyRef.current?.setOutside(on),
+        },
         chordFacts: () => {
           const lc = melodyRef.current?.labChord, ask = lc ? labAskRef.current?.(lc.barNo) : null;
           if (!lc || !ask?.chord) return null;
@@ -201,7 +214,10 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       } : {}),
       // H14: dev builds, or a production build opened with ?plant=1 (graders run production on :3017). It only
       // changes Make's guess in memory, never saved data.
-      ...(MELODY_ON && plantOn() ? { plantChord: (bar: number, name: string, opts?: { unsure?: boolean }) => melodyRef.current?.plantChord(bar, name, opts) ?? null } : {}),
+      ...(MELODY_ON && plantOn() ? {
+        plantChord: (bar: number, name: string, opts?: { unsure?: boolean }) => melodyRef.current?.plantChord(bar, name, opts) ?? null,
+        plantLeadNote: (bar: number, at: number, midi: number) => melodyRef.current?.plantLeadNote(bar, at, midi) ?? null,
+      } : {}),
       fx: () => fxRef.current?.debug() ?? null,
       chordsRead,
       fxDo: {

@@ -132,3 +132,35 @@
 /* CS1-7: More's cards stop clear of the sticky A/B bar when scrolled into view */
 .extra { scroll-margin-bottom: 120px; }
 .extra .choice { min-height: 52px; height: auto; }
+
+/* ── Slice 4: the lead grid (design round 5, state "lead") ─────────────────────────────────────── */
+.leadPanel { gap: 8px; }
+.leadHead { display: flex; align-items: center; gap: 8px 12px; min-height: 32px; flex-wrap: wrap; }
+.quietSwitch { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted); cursor: pointer; min-height: 32px; }
+.quietSwitch input { accent-color: #23b3a5; margin: 0; }
+.leadGrid { display: flex; flex-direction: column; max-width: 600px; width: 100%; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.leadRow { display: grid; grid-template-columns: 44px minmax(0, 1fr); height: 12px; }
+.leadGrid[data-tall] .leadRow { height: 18px; }
+.leadRow[data-black] { background: rgba(0, 0, 0, .2); }
+.leadKey { font-size: 9px; line-height: 12px; color: var(--faint); text-align: right; padding-right: 6px; }
+.leadGrid[data-tall] .leadKey { font-size: 10.5px; line-height: 18px; }
+.leadRow[data-out] .leadKey { font-style: italic; }
+.leadCells { display: grid; grid-template-columns: repeat(16, 1fr); }
+.leadCells button { border: 0; border-left: 1px solid rgba(241, 230, 211, .05); padding: 0; background: none; cursor: pointer; transition: background-color 120ms ease-out; }
+.leadCells button[data-beat] { border-left-color: rgba(241, 230, 211, .14); }
+.leadCells button[data-on] { background: #23b3a5; }
+.leadCells button[data-sel] { background: var(--ink); }
+@media (hover: hover) and (pointer: fine) { .leadCells button:hover:not([data-on]) { background: rgba(241, 230, 211, .12); } }
+@media (prefers-reduced-motion: reduce) { .leadCells button { transition: none; } }
+.leadBars { position: absolute; inset: 0; display: grid; gap: 4px; }
+.leadBars button { border: 1px solid transparent; border-radius: 3px; background: none; cursor: pointer; padding: 0; }
+.leadBars button[aria-pressed="true"] { border-color: var(--muted); }
+.leadBars button[data-edited] { box-shadow: inset 0 3px 0 -1px #23b3a5; }
+@media (hover: hover) and (pointer: fine) { .leadBars button:hover { border-color: var(--edge); } }
+@media (max-width: 700px) {
+  /* build note: on a phone the × sits at the right edge; the switch drops to its own line */
+  .leadHead .icon { order: 2; margin-left: auto; }
+  .leadHead .quietSwitch { order: 3; flex-basis: 100%; }
+  .leadRow { height: 16px; }
+  .leadGrid { max-width: none; }
+}

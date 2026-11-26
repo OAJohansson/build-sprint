@@ -77,6 +77,10 @@ export class MakeClient {
   chordsRead(r: Omit<Extract<MakeRequest, { type: "chords-read" }>, "id" | "type">) {
     return this.main.send({ type: "chords-read", ...r }, [r.left.buffer, r.right.buffer]) as Promise<Res<"chords-read">>;
   }
+  /** Phase 6 slice 4 (K7): read the lead of a copy of the looped "other" part (transferred, then zeroed in the worker). */
+  leadRead(r: Omit<Extract<MakeRequest, { type: "lead-read" }>, "id" | "type">) {
+    return this.main.send({ type: "lead-read", ...r }, [r.left.buffer, r.right.buffer]) as Promise<Res<"lead-read">>;
+  }
   /** Slice 3, FX: measure copies of the drop's parts (transferred, then zeroed in the worker). */
   fxRead(r: Omit<Extract<MakeRequest, { type: "fx-read" }>, "id" | "type">) {
     return this.main.send({ type: "fx-read", ...r }, [r.fxL.buffer, r.fxR.buffer, r.mixL.buffer, r.mixR.buffer, r.drL.buffer, r.drR.buffer]) as Promise<Res<"fx-read">>;

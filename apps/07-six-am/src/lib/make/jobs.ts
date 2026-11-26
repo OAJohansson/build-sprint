@@ -17,7 +17,7 @@ import { readDrums } from "./drums-read";
 import { readNotes, type NotesReading } from "./notes-read";
 import { readNotesBP } from "./notes-bp";
 import { MELODY_READER } from "./melody-reader";
-import { chordsFromNotes, chordsMelodyReading, harmonyOf, leadLine, readChords, type ChordsReader, type ChordsReading } from "./chords-read";
+import { chordNotes, chordsFromNotes, chordsMelodyReading, harmonyOf, leadLine, readChords, type ChordsReader, type ChordsReading } from "./chords-read";
 import { decimate, toMono } from "./dsp";
 import type { GraphModel } from "@tensorflow/tfjs";
 import type { MelNote } from "./melody-make";
@@ -40,6 +40,8 @@ export type MakeRequest =
   | { type: "melody-suggest"; id: number; target: MelodyTarget; preset: MelodyPresetId; bpm: number; start?: PolyMacros }
   // Phase 6 spike: read the looped "other" part into chord names per bar (and a lead line) with reader A or B.
   | { type: "chords-read"; id: number; left: Float32Array; right: Float32Array; rate: number; bpm: number; key?: { key: string; scale: Scale }; reader: ChordsReader }
+  // Phase 6 slice 4 (K7): the lead line of the looped "other" part, note by note (Basic Pitch, DSP if it can't load), measured against the read chords.
+  | { type: "lead-read"; id: number; left: Float32Array; right: Float32Array; rate: number; bpm: number; key?: { key: string; scale: Scale }; chords: ChordsReading }
   // Phase 5 slice 3, FX: measure the drop (its FX-carrying parts, its loudness), render Mine's FX.
   | { type: "fx-read"; id: number; fxL: Float32Array; fxR: Float32Array; mixL: Float32Array; mixR: Float32Array; drL: Float32Array; drR: Float32Array; rate: number; bpm: number; plan: FxPlan; loopBars: number; fromBar?: number }
   | { type: "fx-render"; id: number; plan: FxPlan; sounds: Record<FxRow, FxRowSound>; rootMidi: number; bpm: number; rate: number; samples: number; mixRmsDb: number; blocksA: number[]; mixL?: Float32Array; mixR?: Float32Array };
@@ -53,6 +55,7 @@ export type MakeResponse =
   | { type: "drums-suggest"; id: number; suggestion: DrumSuggestion & { closer: { preset: DrumPresetId; macros: DrumMacros; distance: number } | null }; ms: number }
   | { type: "melody-read"; id: number; reading: MelodyReading; targets: Record<MelodyRow, MelodyTarget | null>; levelDb: number; lufs: number; reader: "dsp" | "basic-pitch"; ms: number }
   | { type: "chords-read"; id: number; chords: ChordsReading; lead: { from: "row" | "top-line"; notes: MelNote[] }; melody: MelodyReading; targets: Record<MelodyRow, MelodyTarget | null>; cellChroma: number[][]; levelDb: number; lufs: number; reader: ChordsReader; ms: number }
+  | { type: "lead-read"; id: number; notes: MelNote[]; from: "row" | "top-line"; doubtful: boolean; why: string | null; target: MelodyTarget | null; reader: "dsp" | "basic-pitch"; ms: number }
   | { type: "melody-render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; rowGainsDb: Record<MelodyRow, number | null>; rowCloseness: Record<MelodyRow, { score: number; distance: number } | null>; ms: number }
   | { type: "melody-suggest"; id: number; suggestion: MelodySuggestion; ms: number }
   | { type: "fx-read"; id: number; measures: Record<FxRow, FxMeasure>; level: { bed: { rmsDb: number; lufs: number; blocks: number[] }; noBed: { rmsDb: number; lufs: number; blocks: number[] } }; ms: number }
@@ -99,6 +102,28 @@ function finishChordsRead(m: Extract<MakeRequest, { type: "chords-read" }>, t0: 
 }
 
 /**
+ * K7: the lead from a note reading: the melody split's Lead row when it finds one (its own doubtful
+ * verdict), else the top line of the notes (doubtful: probably the chords' tops, not a line of its own);
+ * one note per 16th (the highest), measured against the original for Suggest and closeness; then the
+ * copy is zeroed (C2).
+ */
+function finishLeadRead(m: Extract<MakeRequest, { type: "lead-read" }>, t0: number, notes: NotesReading, reader: "dsp" | "basic-pitch"): { res: MakeResponse; transfer: ArrayBuffer[] } {
+  const loopS = m.left.length / m.rate;
+  const mel = melodyFromReading(notes, m.bpm, loopS), line = leadLine(mel);
+  // shortcut: one note per 16th, the highest (the lead is the top line); stab tones on 16ths the lead leaves free stay in (the spike's 63–75 % wrong), fixed by hand on the grid; a smarter filter needs real labels.
+  const byStep = new Map<number, MelNote>();
+  for (const n of line.notes) { const k = Math.round(n.step + n.off); const o = byStep.get(k); if (!o || n.midi > o.midi) byStep.set(k, n); }
+  const mono = [...byStep.values()].sort((a, b) => a.t - b.t);
+  const row = line.from === "row" ? mel.rows.lead : null;
+  const doubtful = line.from === "top-line" || !!row?.doubtful;
+  const why = line.from === "top-line" ? "No line of its own was found: these are the chords' top notes, off in Mine" : row?.why ?? null;
+  const d: MelodyReading = { rows: { chords: { notes: chordNotes(m.chords), doubtful: false, why: null, note: null }, lead: { notes: mono, doubtful, why, note: null } }, steps: m.chords.steps, bars: m.chords.bars, lead: mono.length > 0, chords: true, tuningCents: notes.tuningCents };
+  const target = mono.length ? measureMelody(m.left, m.right, m.rate, d).lead : null;
+  m.left.fill(0); m.right.fill(0); // the copy of the original is dropped here (C2)
+  return { res: { type: "lead-read", id: m.id, notes: mono, from: line.from, doubtful, why, target, reader, ms: Math.round(performance.now() - t0) }, transfer: [] };
+}
+
+/**
  * CS1-1: how much of each pitch class the part plays in each chord cell (12 numbers per cell, the
  * reader's own per-16th chroma summed over the cell), so the chords closeness can follow Mine's chord
  * names. Numbers only (C2); the mono and decimated copies are zeroed here.
@@ -123,6 +148,18 @@ function cellChromaOf(m: { left: Float32Array; right: Float32Array; rate: number
  */
 export async function runMakeJobAsync(m: MakeRequest, loadModel: () => Promise<GraphModel>): Promise<{ res: MakeResponse; transfer: ArrayBuffer[] }> {
   const t0 = performance.now();
+  if (m.type === "lead-read") {
+    // K7: Basic Pitch for the lead (the spike: 66.7 % found on Mason as DSP, 93.8 % vs 12.5 % on Dubspinna's line); DSP if the model can't load.
+    let notes: NotesReading, reader: "dsp" | "basic-pitch" = "basic-pitch";
+    try { notes = await readNotesBP(m.left, m.right, m.rate, m.bpm, await loadModel(), m.key, 0); } catch (e) {
+      console.warn("[make] Basic Pitch failed for the lead, reading with the DSP reader", e);
+      try { notes = readNotes(m.left, m.right, m.rate, m.bpm, m.key, 0); reader = "dsp"; } catch (e2) {
+        m.left.fill(0); m.right.fill(0);
+        return { res: { type: "error", id: m.id, message: e2 instanceof Error ? e2.message : String(e2) }, transfer: [] };
+      }
+    }
+    return finishLeadRead(m, t0, notes, reader);
+  }
   if (m.type === "chords-read" && m.reader === "basic-pitch") {
     try {
       return finishChordsRead(m, t0, await readNotesBP(m.left, m.right, m.rate, m.bpm, await loadModel(), m.key, 0));
@@ -187,6 +224,8 @@ export function runMakeJob(m: MakeRequest): { res: MakeResponse; transfer: Array
       return { res: { type: "drums-render", id: m.id, left, right, rate: m.rate, gainDb: g.db, rowGainsDb: r.gains, closeness, rowCloseness: rowClose, ms: ms() }, transfer: [left.buffer, right.buffer] };
     }
     if (m.type === "melody-read") return finishMelodyRead(m, readNotes(m.left, m.right, m.rate, m.bpm, m.key, 0), t0);
+    // Without the model (unit tests): the DSP note reader.
+    if (m.type === "lead-read") return finishLeadRead(m, t0, readNotes(m.left, m.right, m.rate, m.bpm, m.key, 0), "dsp");
     if (m.type === "chords-read") {
       if (m.reader !== "dsp") throw new Error("Basic Pitch reads in the worker only (runMakeJobAsync)");
       return finishChordsRead(m, t0, readNotes(m.left, m.right, m.rate, m.bpm, m.key, 0));

@@ -29,3 +29,5 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 23 | Owner, own use | "Built on", "pushed against" and "grew from it" are unclear: does "built on" over Marxism mean Marxism built on Critical Theory? | fixed (T26), on branch |
 | 24 | Owner, pilot review (26 Nov) | The Existentialism pilot gives a good overview. It's missing the part they care about most: how to apply the ideas to your own life, School of Life style, grounded in real sources rather than invented advice | open, sourcing question to the owner |
 | 25 | Owner, pilot review | Footnote numbers piling up at the end of paragraphs look messy. Keep every reference, but show them lightly (for example, one small mark that reveals the sources on hover or tap) | open, goes into the card design |
+| 26 | Owner, pilot review (26 Nov) | The text assumes prior reading: terms like "the view from nowhere" are name-dropped without explanation. Write for someone new to philosophy: explain every term at its first use | fixing (T27) |
+| 27 | Owner, pilot review | Some sentences list several things and feel dense; use bullet lists for those, and make the whole draft lighter to read | fixing (T27) |

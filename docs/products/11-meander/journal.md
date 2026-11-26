@@ -110,3 +110,13 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   - Graded over three rounds: from 1 unsupported and 1 misattributed down to 18 of 18 supported. See `eval-pilot/README.md`.
   - I made the round-3 wording fixes myself, so a grader re-checked them.
   - Next: the owner reads the section.
+
+## 26 Nov: readability pass
+
+- **Owner:** "a good first MVP for what I want this product to do", but at times they felt lost. Two problems:
+  - Terms are name-dropped without explanation ("the detached view from nowhere"), so a reader new to philosophy can't follow (#26).
+  - Long lists sit inside sentences, such as Frankl's three avenues (#27).
+- **Decided (T27):** a beginner style rule for all school content, applied to the whole pilot. Then two checks:
+  - A fresh "newcomer" reader flags any term still unexplained.
+  - Graders check that the rewrite didn't change any facts.
+- Practice named: *plain language* and the *curse of knowledge* (Heath brothers, *Made to Stick*). Once you know a term, it's hard to notice that others don't.

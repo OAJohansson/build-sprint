@@ -248,3 +248,17 @@ clutter 1 · hierarchy 2 · legibility 1 · feel 2 · copy 1. Legibility drop is
 | C5 | minor | "Ticks placed" floats at a different x per lane | fixed (c76da0e) |
 | C6 | minor | Melody placeholder link is gold (reserved); Melody tab needs a "next" tag like Vocals' "not yet" | fixed (c76da0e) |
 | C7 | polish | FX name field clips mid-word; "Mentor:" casing differs | fixed (c76da0e) |
+
+### Phase 6 slice 1 user test (26 Nov, `user-testing/report-2026-11-26-chords-slice1.md`)
+
+| ID | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| CS1-1 | major | Chord closeness stuck at 14/100 whatever is picked | open |
+| CS1-2 | major | Real read of Lost 69–76 flags no bar unsure; the "?" never shows | open |
+| CS1-3 | major | Half-bar chord names drawn at 5 px | open |
+| CS1-4 | minor | After the fill the track plays, not Make's chords | open |
+| CS1-5 | minor | Build loops 65–76; graders' loop is 69–76 (test plan note only) | noted |
+| CS1-6 | minor | "All N bars" checkbox small, vanishes with one bar left, stays off | open |
+| CS1-7 | minor | 1280 × 720: More chords' last row and "Fewer chords" under A/B | open |
+| CS1-8 | minor | Bass tab's chord strip (G) disagrees with Melody (G7) | open |
+| CS1-9 | polish | Edited bars look the same as Make's | open |

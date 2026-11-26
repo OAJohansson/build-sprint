@@ -262,3 +262,12 @@ clutter 1 · hierarchy 2 · legibility 1 · feel 2 · copy 1. Legibility drop is
 | CS1-7 | minor | 1280 × 720: More chords' last row and "Fewer chords" under A/B | fixed (80db130, T184): 4 cards a row from 1280 px; More's cards go under the tools, so Fewer stays where More was |
 | CS1-8 | minor | Bass tab's chord strip (G) disagrees with Melody (G7) | fixed (80db130, T185): the strip shows the Melody read for this loop when there is one, else 'chords est.' with an 'older estimate' tooltip |
 | CS1-9 | polish | Edited bars look the same as Make's | fixed (80db130, T183): a small teal mark on a tile you picked; tooltip names Make's read |
+
+Re-check of CS1 (26 Nov): CS1-3, 4, 6, 8, 9 fixed; CS1-1 partly (G and G7 score the same, sound half never moves); CS1-7 partly (More's last row still under A/B at 720 px); CS1-2 accepted on the 65–76 and 77–84 reads (today's 69–76 read has no weak cell; PM call). H14 3 taps, job 4/5.
+
+| ID | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| CS1-10 | major | "All N bars" groups by the current name, so a pick can overwrite a bar Make heard differently (bar 76 Gm7 lost) | open |
+| CS1-11 | minor | After a single-bar edit the box names a group the open bar isn't in | open |
+| CS1-12 | polish | Half-bar names wrap ("D / sus4") and get clipped by beat marks | open |
+| CS1-13 | polish | Card mood lines truncate at 4 per row on 1280 | open |

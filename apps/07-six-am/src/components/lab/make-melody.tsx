@@ -11,7 +11,7 @@ import type { LabTransport, LoopState } from "@/lib/lab/transport";
 import { MakeClient } from "@/lib/make/make-client";
 import { foldMelodyRow, type MelNote, type MelodyReading, type MelodyRowSound, type MelodyTarget } from "@/lib/make/melody-make";
 import { rankChords, voiceChord, type ChordCell, type ChordsReading } from "@/lib/make/chords-read";
-import { gridOf, gridsFromSaved, leadNotesOf, leadRows, placeNote, stretchNote, type LeadNote } from "@/lib/make/lead-mine";
+import { gridOf, gridsFromSaved, leadNoteMatch, leadNotesOf, leadRows, placeNote, stretchNote, type LeadNote } from "@/lib/make/lead-mine";
 import { scalePitchClasses, pitchClass } from "@/lib/synths/theory";
 import { moveHitTo, timingMatch, addHit, cardsFor, chordPcs, editsFromSaved, foldChordNames, heldHits, hitsOf, keyChords, moveHit, normalChord, notesMatch, parseChord, sameHits, shortHits, unsureCells, withEdits, type CellEdit, type Edits, type Hit } from "@/lib/make/chords-mine";
 import { isMelodySound, melodyNoun, saveAction, soundId, suggestMelodyName, suggestMelodyTags, type MelodySound } from "@/lib/make/library";
@@ -496,8 +496,15 @@ export function useMelody(o: MelodyOpts) {
   const timingScore = useMemo(() => (raw && mineChords ? timingMatch(raw.chords.events, mineChords.events, Math.min(0.04, sps / 2)) : null), [raw, mineChords, sps]);
   const notesScore = pitchScore === null ? null : timingScore === null ? pitchScore : Math.round(((pitchScore + timingScore) / 2) * 10) / 10;
   const soundClose = mine?.rowCloseness ?? null;
-  // One decimal on the chords row, so a one-bar change shows.
-  const rowCloseness = soundClose ? { ...soundClose, chords: soundClose.chords && notesScore !== null ? { ...soundClose.chords, score: Math.round(((soundClose.chords.score + notesScore) / 2) * 10) / 10, sound: soundClose.chords.score, notes: notesScore, pitch: pitchScore, timing: timingScore } : soundClose.chords } : null;
+  // L-4: the lead's notes half: its notes against the read line (pitch and onset), and onsets alone, as the chords' half;
+  // within just over half a 16th, so a bar put on the grid (onsets on the 16ths) still matches the line it came from.
+  const leadMineNotes = read?.d.rows.lead.notes;
+  const leadPitch = useMemo(() => (lead && leadMineNotes ? leadNoteMatch(lead.notes, leadMineNotes, sps * 0.55) : null), [lead, leadMineNotes, sps]);
+  const leadTiming = useMemo(() => (lead && leadMineNotes ? timingMatch(lead.notes, leadMineNotes, sps * 0.55) : null), [lead, leadMineNotes, sps]);
+  const leadNotesScore = leadPitch === null ? null : leadTiming === null ? leadPitch : Math.round(((leadPitch + leadTiming) / 2) * 10) / 10;
+  // One decimal on the chords and lead rows, so a one-bar change shows.
+  const half = (x: { score: number; distance: number } | null, notes: number | null, extra: Record<string, number | null>) => (x && notes !== null ? { ...x, score: Math.round(((x.score + notes) / 2) * 10) / 10, sound: x.score, notes, ...extra } : x);
+  const rowCloseness = soundClose ? { ...soundClose, chords: half(soundClose.chords, notesScore, { pitch: pitchScore, timing: timingScore }), lead: half(soundClose.lead, leadNotesScore, { pitch: leadPitch, timing: leadTiming }) } : null;
   /** Graders (slice 1): Make's chords as the screen shows them and as Mine plays them; names and numbers only. */
   const chordsDebug = () => {
     if (!guess || !mineChords || !raw) return { readState, cells: null };

@@ -45,7 +45,7 @@ export function ChordTiles({ v, from, bars, onOpen }: { v: View; from: number | 
             data-half={half ? "" : undefined} data-edited={x.edited ? "" : undefined} aria-expanded={v.open === x.i} onClick={() => onOpen(x.i)}
             title={x.edited ? `Your pick (Make heard ${prettyChord(x.guess)})` : undefined}
             aria-label={`Bar ${barLabel(x, from)}: ${x.name ? prettyChord(x.name) : "no chord"}${x.unsure ? ", Make isn't sure" : ""}${x.edited ? `, your pick (Make heard ${prettyChord(x.guess)})` : ""}. Change chord`}>
-            <span className={c.tileName}>{x.name ? prettyChord(x.name) : "–"}</span>
+            <span className={c.tileName}>{x.name ? (half ? prettyChord(x.name).replace(/sus([24])$/, "s$1") : prettyChord(x.name)) : "–"}</span>
             {x.unsure && <span className={c.unsure} title="Make isn't sure of this bar" aria-hidden>?</span>}
             {x.edited && <span className={c.edited} aria-hidden />}
             <span className={c.tileFoot}><Hits hits={x.hits} steps={x.steps} beats={!half} /><small>{barLabel(x, from)}</small></span>
@@ -173,6 +173,13 @@ function Timing({ m, t, sel }: { m: MelodyModel; t: V["timing"]; sel: number | n
   const drag = useRef<{ k: number; moved: boolean } | null>(null);
   const stepAt = (x: number) => { const r = strip.current?.getBoundingClientRect(); return r ? Math.max(0, Math.min(steps - 1, Math.floor(((x - r.left) / r.width) * steps))) : null; };
   const h = sel !== null ? t.hits[sel] : null;
+  // N-1: on a short window, the moves come into view when a hit is picked.
+  const movesRef = useRef<HTMLSpanElement>(null);
+  const picked = h !== null;
+  useEffect(() => {
+    if (!picked) return;
+    movesRef.current?.scrollIntoView({ block: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }, [picked]);
   const why = (op: (typeof MOVES)[number][0]) => {
     if (!h || sel === null || moveHit(t.hits, sel, op, steps)) return undefined;
     return op === "longer" ? "No room: the hits after it already reach the bar's end" : op === "earlier" ? "Already at the bar's start, or the hit before is in the way"
@@ -192,7 +199,8 @@ function Timing({ m, t, sel }: { m: MelodyModel; t: V["timing"]; sel: number | n
             <button key={`e${st}`} className={c.empty} style={{ left: `${(st / steps) * 100}%`, width: `${100 / steps}%` }} aria-label={`Add a hit on 16th ${st + 1}`} onClick={() => m.hitOp("add", st)} />
           ))}
           {t.hits.map((x, k) => (
-            <button key={`h${k}-${x.at}`} className={c.hit} data-sel={sel === k ? "" : undefined} style={{ left: `${((x.at + (x.off ?? 0)) / steps) * 100}%`, width: `${(Math.min(x.len, steps - x.at) / steps) * 100}%` }}
+            // S2-4b: a stable key, so the hit keeps focus while arrow keys move it
+            <button key={`h${k}`} className={c.hit} data-sel={sel === k ? "" : undefined} style={{ left: `${((x.at + (x.off ?? 0)) / steps) * 100}%`, width: `${(Math.min(x.len, steps - x.at) / steps) * 100}%` }}
               aria-pressed={sel === k} aria-label={`Hit on 16th ${x.at + 1}, ${Math.round(x.len * 100) / 100} sixteenths long. Drag, or arrow keys to move`}
               // S2-4: drag along the 16ths (pointer events); a press without a move selects it.
               onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); drag.current = { k, moved: false }; if (sel !== k) m.hitOp("select", k); }}
@@ -213,7 +221,7 @@ function Timing({ m, t, sel }: { m: MelodyModel; t: V["timing"]; sel: number | n
         <div className={c.beats} style={{ gridTemplateColumns: `repeat(${beats.length}, 1fr)` }} aria-hidden>{beats.map((b) => <span key={b}>{b}</span>)}</div>
       </div>
       {h && sel !== null && (
-        <span className={c.moves}>
+        <span ref={movesRef} className={c.moves} style={{ scrollMarginBottom: 120 }}>
           {MOVES.map(([op, label]) => { const no = why(op); return <button key={op} onClick={() => m.hitOp(op)} disabled={!!no} title={no}>{label}</button>; })}
         </span>
       )}

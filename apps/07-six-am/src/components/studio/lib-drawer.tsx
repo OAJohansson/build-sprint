@@ -122,16 +122,19 @@ function ChordList({ t, sound, change }: { t: Timeline; sound: MelodyLoop; chang
   const inKey = keyChords(t.key, t.scale);
   const marks = sound.pattern.chords ?? [];
   const bar = (step: number) => `${Math.floor(step / 16) + 1}${step % 16 ? "½" : ""}`;
+  // ST-1 (L264): a sound dropped in another key plays moved to it; each bar says what it plays now and what Make named it.
+  const moved = semis !== 0;
   return (
     <section className={s.pick} aria-label="Chords in this sound, per bar">
       <span className={l.presetLabel}>Chords · {sound.pattern.bars} bar{sound.pattern.bars === 1 ? "" : "s"}, then it repeats</span>
+      {moved && <p className={s.dim}>Moved from {sound.key} {sound.scale} to this track&apos;s key.</p>}
       <div className={s.chordList}>
         {marks.map((m, i) => {
           const shown = transposeChord(m.name, semis) ?? m.name, options = [...new Set([shown, ...inKey])];
           return (
             <label key={m.step} className={s.chordPick} title={m.notes ? "Your own notes; picking a name replaces them" : undefined}>
-              <small>{bar(m.step)}</small>
-              <select value={shown} aria-label={`Bar ${bar(m.step)} chord`} onChange={(e) => {
+              <small>{bar(m.step)}{moved && <> · was {prettyChord(m.name)}</>}</small>
+              <select value={shown} aria-label={`Bar ${bar(m.step)} chord${moved ? `, was ${prettyChord(m.name)} in Make` : ""}`} onChange={(e) => {
                 const back = transposeChord(e.target.value, -semis), pat = back ? revoiceMark(sound.pattern, i, back, voiceChord) : null;
                 if (pat) change({ ...sound, pattern: pat });
               }}>

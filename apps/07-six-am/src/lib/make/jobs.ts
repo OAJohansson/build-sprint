@@ -115,8 +115,14 @@ function finishLeadRead(m: Extract<MakeRequest, { type: "lead-read" }>, t0: numb
   for (const n of line.notes) { const k = Math.round(n.step + n.off); const o = byStep.get(k); if (!o || n.midi > o.midi) byStep.set(k, n); }
   const mono = [...byStep.values()].sort((a, b) => a.t - b.t);
   const row = line.from === "row" ? mel.rows.lead : null;
-  const doubtful = line.from === "top-line" || !!row?.doubtful;
-  const why = line.from === "top-line" ? "No line of its own was found: these are the chords' top notes, off in Mine" : row?.why ?? null;
+  // L-2: Phase 5's verdict, from the DSP reader its thresholds were set on (a faint line, mostly another
+  // part leaking in, as on Lost 69–76), still switches the line off; Basic Pitch hears the same leak as
+  // louder, more numerous notes, so its own verdict alone misses it. A DSP read with no lead row of its own
+  // (Mason's riff in the spike) doesn't count against Basic Pitch's line.
+  const dsp = reader === "basic-pitch" ? melodyFromReading(readNotes(m.left, m.right, m.rate, m.bpm, m.key, 0), m.bpm, loopS).rows.lead : row;
+  const dspDoubt = !!dsp && dsp.notes.length > 0 && dsp.doubtful;
+  const doubtful = line.from === "top-line" || !!row?.doubtful || dspDoubt;
+  const why = line.from === "top-line" ? "No line of its own was found: these are the chords' top notes, off in Mine" : row?.doubtful ? row.why : dspDoubt ? dsp!.why : null;
   const d: MelodyReading = { rows: { chords: { notes: chordNotes(m.chords), doubtful: false, why: null, note: null }, lead: { notes: mono, doubtful, why, note: null } }, steps: m.chords.steps, bars: m.chords.bars, lead: mono.length > 0, chords: true, tuningCents: notes.tuningCents };
   const target = mono.length ? measureMelody(m.left, m.right, m.rate, d).lead : null;
   m.left.fill(0); m.right.fill(0); // the copy of the original is dropped here (C2)

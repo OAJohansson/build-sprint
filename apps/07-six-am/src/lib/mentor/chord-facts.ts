@@ -14,6 +14,18 @@ const FLAT = ["C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A", "B�
 const IV: Record<ChordType, number[]> = { maj: [0, 4, 7], min: [0, 3, 7], "7": [0, 4, 7, 10], maj7: [0, 4, 7, 11], m7: [0, 3, 7, 10], sus2: [0, 2, 7], sus4: [0, 5, 7], dim: [0, 3, 6] };
 const SUFFIX: Record<ChordType, string> = { maj: "", min: "m", "7": "7", maj7: "maj7", m7: "m7", sus2: "sus2", sus4: "sus4", dim: "dim" };
 const TONE_ROLE: Record<number, string> = { 0: "root", 2: "second", 3: "third", 4: "third", 5: "fourth", 6: "fifth", 7: "fifth", 10: "seventh", 11: "seventh" };
+const LETTERS = ["C", "D", "E", "F", "G", "A", "B"], NATURAL = [0, 2, 4, 5, 7, 9, 11];
+/** Letter steps from the root for each interval: a 3rd is two letters up, a 7th six (so G minor's third is B♭, never A♯). */
+const LETTER_STEP: Record<number, number> = { 0: 0, 2: 1, 3: 2, 4: 2, 5: 3, 6: 4, 7: 4, 10: 6, 11: 6 };
+/** A note named from a root's spelling and an interval: the right letter, then ♯ / ♭ (𝄪 / 𝄫 avoided: falls back to the plain name). */
+function spellFrom(root: string, iv: number, fallback: string): string {
+  const li = LETTERS.indexOf(root[0]);
+  if (li < 0 || LETTER_STEP[iv] === undefined) return fallback;
+  const rootPc = mod12(NATURAL[li] + (root.includes("♯") ? 1 : root.includes("♭") ? -1 : 0));
+  const l = (li + LETTER_STEP[iv]) % 7, want = mod12(rootPc + iv);
+  const d = ((want - NATURAL[l] + 18) % 12) - 6;
+  return d === 0 ? LETTERS[l] : d === 1 ? `${LETTERS[l]}♯` : d === -1 ? `${LETTERS[l]}♭` : fallback;
+}
 const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII"];
 const ORDINAL = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"];
 const QUALITY_WORDS: Record<ChordType, string> = {
@@ -117,7 +129,7 @@ export function chordFacts(o: { key: string; scale: Scale; chord: string; notes?
   const roleWords = role === "borrowed" ? `borrowed from ${nm(tonic)} ${other} (the same key in its ${other === "minor" ? "darker" : "brighter"} mood), for colour`
     : role === "secondary" ? `a stepping stone: the V (fifth chord) of ${secondaryOf}, so it pulls toward ${secondaryOf}, not home` : ROLE_WORDS[role];
   const numeralWords = degree ? `${numeral} = the ${ORDINAL[degree - 1]} chord of ${keyName}` : `${numeral} = built on a note outside ${keyName}`;
-  const tones = IV[c.type].map((i) => ({ name: cname(c.root + i), role: TONE_ROLE[i] ?? "note", inKey: inKeyPcs.has(mod12(c.root + i)) }));
+  const tones = IV[c.type].map((i) => ({ name: spellFrom(cname(c.root), i, cname(c.root + i)), role: TONE_ROLE[i] ?? "note", inKey: inKeyPcs.has(mod12(c.root + i)) }));
   let yourNotes: ChordFacts["yourNotes"] = null;
   if (o.notes?.length) {
     const own = [...new Set(o.notes.map(mod12))];
@@ -147,13 +159,28 @@ export function chordFactsLines(f: ChordFacts, bar: number): string[] {
     `[theory] Its notes: ${f.tones.map((t) => `${t.name} (${t.role}${t.inKey ? "" : ", outside the key"})`).join(", ")}.`,
     ...(f.yourNotes ? [`[theory] They built it on the piano themselves: ${f.yourNotes.names.join(" ")}${f.yourNotes.added.length ? `; added ${f.yourNotes.added.join(", ")}` : ""}${f.yourNotes.missing.length ? `; left out ${f.yourNotes.missing.join(", ")}` : ""}. The name ${f.chord} is the closest one.`] : []),
     ...(f.prev || f.next ? [`[theory] In the loop: ${[f.prev ? n(f.prev, "before") : "", f.next ? n(f.next, "after") : ""].filter(Boolean).join("; ")}.`] : []),
-    `[theory] Explain the open chord when the question is about it (or asks why it fits): what it is, its place in the key, and why it fits, from these lines only, in 2–3 short sentences labelled general. Every theory word gets a short plain gloss in the same sentence (for example "the V, the key's fifth chord"); no other theory words.`,
+    `[theory] Explain the open chord when the question is about it (or asks why it fits), from these lines only, in two short plain sentences labelled general: what it feels like and what it does, then where it pulls next (for example "G7 is G with an added F, which makes it restless. It wants to move on to C."). No numerals (V7, ii) and not the words borrowed, stepping stone or tonic; at most one other theory word, glossed in the same sentence.`,
   ];
 }
 
-/** The offline answer (no model): the same facts in two plain sentences, written by code. */
+/**
+ * The offline answer (no model, W-1): two short plain sentences, what the chord feels like and what it
+ * does, then where it pulls next. No numerals, no "borrowed", "stepping stone" or "tonic".
+ */
 export function chordFactsPlain(f: ChordFacts): string {
-  const place = f.degree ? `the ${f.numeral} of ${f.key} (its ${ORDINAL[f.degree - 1]} chord)` : `the ${f.numeral} (outside ${f.key})`;
-  const next = f.next ? ` Next comes ${f.next.chord}: ${f.next.move}, sharing ${f.next.shared} note${f.next.shared === 1 ? "" : "s"}.` : "";
-  return `${f.chord} is ${place}: ${f.roleWords}.${f.inKey ? " All its notes are in the key." : ` ${f.outside.join(" and ")} ${f.outside.length === 1 ? "is" : "are"} outside the key.`}${next}`;
+  const t = f.tones, root = t[0]?.name ?? f.chord, triad = root + (f.quality === "min" || f.quality === "m7" ? "m" : "");
+  const home = `${f.key.split(" ")[0]}${f.key.endsWith("minor") ? "m" : ""}`;
+  const feel: Record<ChordType, string> = { maj: "bright and plain", min: "darker and softer", "7": "restless", maj7: "dreamy and warm", m7: "soft and smooth", sus2: "open, floating", sus4: "open, as if waiting", dim: "tense" };
+  const what = f.quality === "7" || f.quality === "maj7" || f.quality === "m7" ? `${f.chord} is ${triad} with an added ${t[3]?.name}, which makes it ${feel[f.quality]}.`
+    : f.quality === "sus4" || f.quality === "sus2" ? `${f.chord} is ${root} with ${t[1]?.name} in place of its middle note, which makes it sound ${feel[f.quality]}.`
+      : `${f.chord} is a ${f.quality === "maj" ? "major" : f.quality === "min" ? "minor" : "diminished"} chord, ${feel[f.quality]}.`;
+  const next = f.next && f.next.chord !== f.chord ? f.next.chord : null;
+  const where = f.role === "home" ? `It's home in this key: the loop rests here${next ? ` before moving on to ${next}` : ""}.`
+    : f.role === "pull" ? `It wants to move on to ${home}, the home chord.`
+      : f.role === "secondary" ? `It wants to move on to ${f.secondaryOf}.`
+        : f.role === "soft" ? `It sits close to home (${home}) with a different mood${next ? `, then moves on to ${next}` : ""}.`
+          : f.role === "away" ? `It steps away from home (${home})${next ? ` and leads on to ${next}` : " and sets up the way back"}.`
+            : f.role === "borrowed" ? `It brings a surprise colour from the ${f.borrowed?.endsWith("minor") ? "darker" : "brighter"} side of ${home.replace(/m$/, "")}${next ? ` before ${next}` : ""}.`
+              : `Its ${f.outside.join(" and ")} ${f.outside.length === 1 ? "is" : "are"} outside the key, so it adds tension${next ? ` before ${next}` : ""}.`;
+  return `${what} ${where}`;
 }

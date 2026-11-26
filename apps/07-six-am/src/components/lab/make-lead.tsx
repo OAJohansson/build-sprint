@@ -42,20 +42,20 @@ export function LeadPanel({ m, from }: { m: MelodyModel; from: number | null }) 
             <div className={c.leadCells}>
               {Array.from({ length: 16 }, (_, st) => {
                 const k = notes.findIndex((n) => n.midi === midi && st >= n.at && st < n.at + n.len);
-                return <button key={st} data-beat={st % 4 === 0 ? "" : undefined} data-on={k >= 0 ? "" : undefined} data-sel={k >= 0 && k === v.sel ? "" : undefined}
+                // L-3: a note's first 16th carries a divider, so two notes of the same pitch side by side don't merge.
+                return <button key={st} data-beat={st % 4 === 0 ? "" : undefined} data-on={k >= 0 ? "" : undefined} data-start={k >= 0 && notes[k].at === st ? "" : undefined} data-sel={k >= 0 && k === v.sel ? "" : undefined}
                   aria-label={`${noteName(midi, v.flats)}, 16th ${st + 1}${k >= 0 ? ", on" : ""}`} onClick={() => m.placeLead(midi, st)} />;
               })}
             </div>
           </div>
         ))}
       </div>
-      {sel && (
-        <div className={c.moves}>
-          <button onClick={() => m.stretchLead(-1)} disabled={sel.len <= 1}>Shorter</button>
-          <button onClick={() => m.stretchLead(1)} disabled={sel.at + sel.len >= nextAt}>Longer</button>
-          <button onClick={() => m.removeLead()}>Remove</button>
-        </div>
-      )}
+      {/* L-1: one fixed-height row of 32 px buttons, always in place (hidden until a note is picked), so the grid never moves */}
+      <div className={c.leadMoves} data-hidden={sel ? undefined : ""} aria-hidden={sel ? undefined : true}>
+        <button onClick={() => m.stretchLead(-1)} disabled={!sel || sel.len <= 1} tabIndex={sel ? 0 : -1}>Shorter</button>
+        <button onClick={() => m.stretchLead(1)} disabled={!sel || sel.at + sel.len >= nextAt} tabIndex={sel ? 0 : -1} title={sel && sel.at + sel.len >= nextAt ? "The next note or the bar's end is in the way" : undefined}>Longer</button>
+        <button onClick={() => m.removeLead()} disabled={!sel} tabIndex={sel ? 0 : -1}>Remove</button>
+      </div>
     </section>
   );
 }

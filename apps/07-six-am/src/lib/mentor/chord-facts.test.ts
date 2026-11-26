@@ -53,6 +53,12 @@ describe("chord facts (H12)", () => {
     expect(x.prev).toMatchObject({ chord: "Dm", numeral: "ii", shared: 2 });
   });
 
+  it("spells notes by the chord: G minor's third is B♭, a C♯7's third E♯", () => {
+    expect(f("C", "major", "Gm").tones.map((t) => t.name)).toEqual(["G", "B♭", "D"]);
+    expect(f("A", "major", "Dm").tones.map((t) => t.name)).toEqual(["D", "F", "A"]);
+    expect(f("F#", "minor", "C#7").tones.map((t) => t.name)).toEqual(["C♯", "E♯", "G♯", "B"]);
+  });
+
   it("refuses what it can't read", () => {
     expect(chordFacts({ key: "H", scale: "major", chord: "C" })).toBeNull();
     expect(chordFacts({ key: "C", scale: "major", chord: "Cadd9" })).toBeNull();
@@ -63,6 +69,12 @@ describe("chord facts (H12)", () => {
     const lines = chordFactsLines(x, 71).join("\n");
     expect(lines).toContain("V7 = the fifth chord of C major");
     expect(lines).toContain("pulls home");
-    expect(chordFactsPlain(x)).toBe("G7 is the V7 of C major (its fifth chord): pulls home: tension that wants to resolve to the home chord. All its notes are in the key. Next comes C: its root drops a fifth (up a fourth): the strongest pull, it sounds like arriving, sharing 1 note.");
+    expect(chordFactsPlain(x)).toBe("G7 is G with an added F, which makes it restless. It wants to move on to C, the home chord.");
+    // W-1: no numerals or theory words in the plain answer
+    for (const [k, sc, ch] of [["G", "major", "G7"], ["C", "major", "Bb"], ["A", "minor", "D"], ["C", "minor", "Db"], ["C", "major", "Gsus4"]] as const) {
+      expect(chordFactsPlain(f(k, sc, ch))).not.toMatch(/\b(I|II|III|IV|V|VI|VII|i|ii|iii|iv|v|vi|vii)\d?\b|borrowed|stepping stone|tonic/);
+    }
+    expect(chordFactsPlain(f("G", "major", "G7"))).toBe("G7 is G with an added F, which makes it restless. It wants to move on to C.");
+    expect(chordFactsPlain(f("C", "major", "Gsus4"))).toBe("Gsus4 is G with C in place of its middle note, which makes it sound open, as if waiting. It wants to move on to C, the home chord.");
   });
 });

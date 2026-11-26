@@ -177,3 +177,19 @@
 @media (max-width: 700px) { .strip16 { min-width: 0; } }
 /* S2-7: the rows (chord tiles, lead) stay in view while the panel scrolls on a short window */
 .stickyRows { position: sticky; top: 0; z-index: 4; background: var(--bg); }
+
+/* ── Slices 3–4 user test (L-1, L-3, S2-3b, CS1-12b) ────────────────────────────────────────────── */
+/* L-1: the grid keeps its height; the moves are one fixed 32 px row under it */
+.leadGrid { flex: none; }
+.leadMoves { display: flex; gap: 6px; height: 32px; flex: none; }
+.leadMoves button { height: 32px; padding: 0 12px; border: 1px solid var(--edge); border-radius: 99px; background: none; cursor: pointer; font: 500 11.5px var(--f-mono); }
+.leadMoves button:disabled { color: var(--faint) !important; cursor: default; }
+.leadMoves[data-hidden] { visibility: hidden; }
+/* L-3: cells at least 20 px tall; a note's first 16th has a divider */
+.leadRow, .leadGrid[data-tall] .leadRow { height: 20px; }
+.leadKey, .leadGrid[data-tall] .leadKey { font-size: 10.5px; line-height: 20px; }
+.leadCells button[data-on][data-start] { box-shadow: inset 2px 0 0 var(--bg); }
+/* S2-3b: hits 32 px tall (the strip 38 px), slots 24 × 38 */
+.sixteenths { height: 38px; }
+/* CS1-12b: half-bar names shrink to fit, down to 10 px (sus shortened to "s" there) */
+.tile[data-half] .tileName { font-size: max(10px, min(11px, calc(100cqi / 4.2))); letter-spacing: -0.05em; }

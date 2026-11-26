@@ -79,3 +79,22 @@ export function leadRows(midis: number[], keyPcs: number[] | null, outside: bool
   for (let m = hi; m >= lo; m--) if (ok(m) || midis.includes(m)) rows.push(m);
   return rows;
 }
+
+/**
+ * L-4: how well Mine's lead matches the read line, 0–100: an F-score of notes that start within `tol`
+ * seconds of a read note of the same pitch class (each read note once). A planted wrong note lowers it,
+ * fixing it brings it back. Null with nothing to compare.
+ */
+export function leadNoteMatch(read: Pick<MelNote, "t" | "midi">[], mine: Pick<MelNote, "t" | "midi">[], tol: number): number | null {
+  if (!read.length && !mine.length) return null;
+  if (!read.length || !mine.length) return 0;
+  const used = new Set<number>(), pc = (m: number) => ((m % 12) + 12) % 12;
+  let hit = 0;
+  for (const x of [...mine].sort((a, b) => a.t - b.t)) {
+    let best = -1, d = Infinity;
+    read.forEach((r, i) => { const e = Math.abs(r.t - x.t); if (!used.has(i) && e <= tol && e < d && pc(r.midi) === pc(x.midi)) { d = e; best = i; } });
+    if (best >= 0) { used.add(best); hit++; }
+  }
+  const p = hit / mine.length, r = hit / read.length;
+  return p + r > 0 ? Math.round(((2 * p * r) / (p + r)) * 1000) / 10 : 0;
+}

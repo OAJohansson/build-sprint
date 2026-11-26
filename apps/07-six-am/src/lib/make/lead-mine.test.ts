@@ -1,7 +1,7 @@
 // Slice 4 (K7): the lead's times on the grid (decision 0011: time logic gets a test).
 import { describe, expect, it } from "vitest";
 import type { MelNote } from "./melody-make";
-import { gridOf, gridsFromSaved, leadNotesOf, leadRows, placeNote, stretchNote } from "./lead-mine";
+import { gridOf, gridsFromSaved, leadNoteMatch, leadNotesOf, leadRows, placeNote, stretchNote } from "./lead-mine";
 
 // 120 BPM: a 16th is 0.125 s.
 const n = (step: number, off: number, durSteps: number, midi: number): MelNote => ({ t: (step + off) * 0.125, dur: durSteps * 0.125, midi, vel: 1, step, off, durSteps });
@@ -61,5 +61,16 @@ describe("leadRows", () => {
     expect(leadRows([67, 72], cMajor, false).every((m) => cMajor.includes(m % 12))).toBe(true);
     expect(leadRows([67, 68], cMajor, false)).toContain(68); // an outside note in the line keeps its row
     expect(leadRows([67, 72], cMajor, true).length).toBeGreaterThanOrEqual(12);
+  });
+});
+
+describe("leadNoteMatch (L-4)", () => {
+  it("counts a note only when it starts on time with the right pitch", () => {
+    const read = [{ t: 0, midi: 67 }, { t: 0.5, midi: 65 }, { t: 1, midi: 67 }, { t: 1.5, midi: 69 }];
+    expect(leadNoteMatch(read, read, 0.06)).toBe(100);
+    expect(leadNoteMatch(read, [read[0], read[1], { t: 1, midi: 69 }, read[3]], 0.06)).toBe(75); // a wrong pitch
+    expect(leadNoteMatch(read, [read[0], read[1], { t: 1, midi: 79 }, read[3]], 0.06)).toBe(100); // an octave up still counts
+    expect(leadNoteMatch(read, [read[0], read[1], { t: 1.2, midi: 67 }, read[3]], 0.06)).toBe(75); // late
+    expect(leadNoteMatch([], [], 0.06)).toBeNull();
   });
 });

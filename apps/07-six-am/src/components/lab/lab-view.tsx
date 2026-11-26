@@ -375,7 +375,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       // K10 offline: a chord question still gets Six AM's own facts in plain words (code, no model) when the Mentor can't answer.
       const f = lab.chord && (keyScale.scale === "major" || keyScale.scale === "minor") ? chordFacts({ key: keyScale.key, scale: keyScale.scale, chord: lab.chord.name, notes: lab.chord.notes, prev: lab.chord.prev, next: lab.chord.next }) : null;
       if (f) {
-        setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, error: undefined, answer: { sentences: [{ text: chordFactsPlain(f), source: "general" }], tellMore: false }, facts: `From Six AM's key facts; the Mentor couldn't answer (${msg.replace(/\.$/, "")})` } : x)));
+        setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, error: undefined, answer: { sentences: [{ text: chordFactsPlain(f), source: "general" }], tellMore: false }, facts: "Six AM's own answer (the Mentor is offline)" } : x)));
         return;
       }
       setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, error: msg } : x)));
@@ -437,7 +437,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const loopSec = loop ? sectionAt(sections, loop.from) : null;
   // A long section loops 16 bars of it (L161): say which (LS1-2).
   const loopPart = loop && loopSec && loop.to - loop.from < loopSec.to - loopSec.from
-    ? (loop.from === loopSec.from ? ", first 16 bars" : `, bars ${loop.from}–${loop.to - 1}`) : "";
+    ? (loop.from === loopSec.from ? `, first ${loop.to - loop.from} bars` : `, bars ${loop.from}–${loop.to - 1}`) : "";
   const deckText = ready ? "Deck on" : starting ? "Deck opening…" : ts?.deckOpen ? "Deck open" : "Deck off";
   const closedLine = ts?.phase === "stopped" && ts.deckClosed ? "Deck closed. Press Play to open it again." : null;
 

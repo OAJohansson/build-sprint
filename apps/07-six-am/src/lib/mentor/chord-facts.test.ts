@@ -69,6 +69,18 @@ describe("chord facts (H12)", () => {
     expect(f("C", "major", "A#").chord).toBe("B♭");
   });
 
+  it("TH-3: a key stored in sharps is spelled by its conventional name (G# major is A♭ major)", () => {
+    expect(f("G#", "major", "Bbm").chord).toBe("B♭m");
+    expect(f("G#", "major", "C#").chord).toBe("D♭");
+    expect(f("G#", "major", "Eb").chord).toBe("E♭");
+    expect(f("G#", "major", "Bbm").key).toBe("A♭ major");
+    const x = f("G#", "major", "E");
+    expect([x.chord, x.numeral, ...x.tones.map((t) => t.name)]).toEqual(["F♭", "♭VI", "F♭", "A♭", "C♭"]);
+    // minor: the same convention as the Lab's label (usesFlats): D# minor is written E♭ minor
+    expect(f("D#", "minor", "D#m").key).toBe("E♭ minor");
+    expect(f("D#", "minor", "A#m").chord).toBe("B♭m");
+  });
+
   it("refuses what it can't read", () => {
     expect(chordFacts({ key: "H", scale: "major", chord: "C" })).toBeNull();
     expect(chordFacts({ key: "C", scale: "major", chord: "Cadd9" })).toBeNull();

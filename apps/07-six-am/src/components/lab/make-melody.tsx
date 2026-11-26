@@ -13,7 +13,7 @@ import type { MakeResponse } from "@/lib/make/jobs";
 import { foldMelodyRow, type MelNote, type MelodyReading, type MelodyRowSound, type MelodyTarget } from "@/lib/make/melody-make";
 import { rankChords, voiceChord, type ChordCell, type ChordsReading } from "@/lib/make/chords-read";
 import { gridOf, gridsFromSaved, leadNoteMatch, leadNotesOf, leadRows, placeNote, stretchNote, type LeadNote } from "@/lib/make/lead-mine";
-import { scalePitchClasses, pitchClass } from "@/lib/synths/theory";
+import { scalePitchClasses, pitchClass, usesFlats } from "@/lib/synths/theory";
 import { chordEventNotes, exactPattern, moveHitTo, timingMatch, addHit, cardsFor, chordPcs, editsFromSaved, foldChordNames, heldHits, hitsOf, keyChords, moveHit, normalChord, notesMatch, parseChord, sameHits, shortHits, unsureCells, withEdits, type CellEdit, type Edits, type Hit } from "@/lib/make/chords-mine";
 import { isMelodySound, melodyNoun, saveAction, soundId, suggestMelodyName, suggestMelodyTags, type MelodySound } from "@/lib/make/library";
 import { MELODY_ROWS, MELODY_ROW_NAMES, POLY_KNOBS, POLY_KNOB_SPECS, ROW_DEFAULT, clampPolyMacros, kindOf, melodyPreset, melodyPresetIds, melodyRowOf, polyKnobWord, polyMoves, polySuggestLine, presetId, type MelodyPresetId, type MelodyRow, type PolyMacros } from "@/lib/make/poly-synth";
@@ -321,6 +321,8 @@ export function useMelody(o: MelodyOpts) {
   // CS1-6: "All" is on again each time a bar opens (L262's default).
   const openChord = (i: number) => { if (!guess || i < 0 || i >= guess.cells.length) return; setOpenCell({ loopKey, cell: i }); setHear(null); setMore(false); setAll(true); setKeys(false); setSel(null); setLeadOpen(null); setOpen("chords"); };
 
+  // TH-3: note names follow the key's conventional spelling (usesFlats), whatever the stored key string.
+  const keyFlatsNow = (() => { const pc = pitchClass(o.keyName); return pc !== null && !!scale && usesFlats(pc, scale); })();
   // ── Slice 4 (K7): the Lead row's note grid ──
   const keyPcsList = useMemo(() => { const t = pitchClass(o.keyName); return t !== null && scale ? scalePitchClasses(t, scale) : null; }, [o.keyName, scale]);
   const leadBars = guess?.bars ?? 0;
@@ -359,7 +361,7 @@ export function useMelody(o: MelodyOpts) {
     return { bar: barNo, notes: r.notes };
   };
   const leadView = lead ? {
-    open: leadOpen, sel: leadSel, outside, outsideLocked, rows: rowsNow, keyPcs: keyPcsList, flats: /b|♭/.test(o.keyName) || (scale === "minor" && /^[CDFG]$/.test(o.keyName)) || o.keyName === "F",
+    open: leadOpen, sel: leadSel, outside, outsideLocked, rows: rowsNow, keyPcs: keyPcsList, flats: keyFlatsNow,
     notes: leadOpen !== null ? leadGridOf(leadOpen) : [], edited: leadOpen !== null && !!leadGrids[leadOpen],
     bars: Array.from({ length: leadBars }, (_, b) => ({ bar: b, edited: !!leadGrids[b] })),
   } : null;
@@ -487,7 +489,7 @@ export function useMelody(o: MelodyOpts) {
     // S2-1: what ↺ Reset covers: the open bar, or its group with "All".
     resetCount: all ? twinsOf(openCell).length + 1 : 1, resetAny: [openCell, ...(all ? twinsOf(openCell) : [])].some((k) => edits[k] !== undefined),
     timing: { hits: openHits, own: !!edits[openCell]?.hits, steps: stepsOf(openCell), preset: sameHits(openHits, heldHits(stepsOf(openCell))) ? "held" as const : sameHits(openHits, shortNow) ? "short" as const : null },
-    flats: /b|♭/.test(o.keyName) || (scale === "minor" && /^[CDFG]$/.test(o.keyName)) || o.keyName === "F",
+    flats: keyFlatsNow,
   } : null;
   // CS1-1: the chords' closeness follows Mine's chord names: half the sound (Phase 5's measure, knobs and
   // preset), half how well Mine's chords match the notes the part plays per cell (recomputed on every pick).

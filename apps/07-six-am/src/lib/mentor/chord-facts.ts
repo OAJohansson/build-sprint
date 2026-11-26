@@ -6,7 +6,7 @@
 // Pure; names and numbers only (C2). Unit-tested (chord-facts.test.ts).
 import { parseChord } from "@/lib/make/chords-mine";
 import type { ChordType } from "@/lib/make/chords-read";
-import { pitchClass, scalePitchClasses, usesFlats, type Scale } from "@/lib/synths/theory";
+import { conventionalKey, pitchClass, scalePitchClasses, usesFlats, type Scale } from "@/lib/synths/theory";
 
 const mod12 = (n: number) => ((n % 12) + 12) % 12;
 const SHARP = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"];
@@ -127,7 +127,8 @@ export function chordFacts(o: { key: string; scale: Scale; chord: string; notes?
   // A chord off the scale is spelled the way its numeral reads (♭VII in C is B♭, not A♯).
   const cn = numeral.startsWith("♭") ? FLAT : numeral.startsWith("♯") ? SHARP : names, cname0 = (pc: number) => cn[mod12(pc)];
   // TH-2: the root takes the numeral's letter (the key's letter plus the degree): ♭VI in A♭ is F♭, so its notes stack in thirds (F♭ A♭ C♭).
-  const keyLetter = o.key.trim()[0]?.toUpperCase() ?? "C", li = LETTERS.indexOf(keyLetter);
+  // TH-3: the letter of the key's conventional name ("G#" major is A♭), never the stored spelling.
+  const keyLetter = (conventionalKey(o.key, o.scale) ?? o.key.trim())[0]?.toUpperCase() ?? "C", li = LETTERS.indexOf(keyLetter);
   const rootByLetter = li >= 0 ? (() => { const l = (li + idx) % 7, d = ((c.root - NATURAL[l] + 18) % 12) - 6; return d === 0 ? LETTERS[l] : d === 1 ? `${LETTERS[l]}♯` : d === -1 ? `${LETTERS[l]}♭` : null; })() : null;
   const cname = (pc: number) => (mod12(pc) === mod12(c.root) && rootByLetter ? rootByLetter : cname0(pc));
   const role = roleOf(degree, c.type, o.scale, inKey, borrowed, !!secondaryOf);

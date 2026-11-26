@@ -18,6 +18,7 @@ import type { TrackMap } from "@/lib/map/types";
 import { ApiError, mentorApi, money } from "@/lib/mentor/client";
 import { HEARD_WINDOW, chordLines, knowsLine, labContextText, PART_LABEL, type LabAsk } from "@/lib/mentor/lab";
 import { chordFacts, chordFactsPlain } from "@/lib/mentor/chord-facts";
+import { conventionalKey } from "@/lib/synths/theory";
 import { HATS_ROW, KICK_ROW, referenceDb } from "@/lib/lab/activity";
 import { measurePart } from "@/lib/lab/measure";
 import { HearChip, Lanes, heardParts, type Hear } from "./lanes";
@@ -419,7 +420,10 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
 
   const focusTurns = turns.filter((x) => x.part === focus);
   const artist = analysis?.uploader || map.uploader;
-  const key = map.key || analysis?.key ? `${map.key || analysis!.key} ${map.scale || analysis!.scale}` : "";
+  // TH-3: the key's conventional name ("G#" major shows as A♭ major), the same one the chord facts spell from.
+  const rawKey = map.key || analysis?.key || "", rawScale = map.scale || analysis?.scale || "";
+  const convKey = rawScale === "major" || rawScale === "minor" ? conventionalKey(rawKey, rawScale) : null;
+  const key = rawKey ? `${(convKey ?? rawKey).replace(/^([A-G])b/, "$1♭").replace(/^([A-G])#/, "$1♯")} ${rawScale}` : "";
   const bpmText = `${Math.round(bpm * 10) / 10}`;
   const facts = [`${bpmText} BPM`, key ? `key ${key}` : ""].filter(Boolean).join(" · ");
   const ready = ts?.phase === "ready";

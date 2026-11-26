@@ -240,3 +240,93 @@ new page take 1.0–2.2 s (the model is in the HTTP cache), repeat reads 0.6–1
 
 Cost: $0 (no Mentor, no Stable Audio; keys empty in the sandbox). Time: the 4 maps 3.5–7.6 min each
 (one play), 18–21 s to fill each 8-bar loop, then 0.4–2.2 s per read (8.9 s for the first B read).
+
+## Re-grade after fix round (L256), reader A only
+
+Build 7831547 (fix commits 529092e, 5a6fb35, 7831547; L257 triad-first type with a separate 7th
+test, sus demoted when a 3rd is present, L258 strike-weighted chroma, T148 looser half-bar gate).
+I graded only and changed no product code.
+
+**Setup.** Same as above: a fresh sandbox on :3017 (in-memory store, keys empty, no paid calls),
+re-seeded with `sandbox-seed.mjs` plus the Retrouvé and Dubspinna maps from this spike's own
+measured values (tempo, origin, key, bars), a fresh Chrome profile with Deck auto-select, and every
+loop **re-separated live**. Two `chordsRead("dsp")` per loop; both gave identical cells and events on
+all 10 loops. The labels are the fixture block above, unchanged and read back from this file. The
+copies are new, so H2 again searches a best shift within ±40 ms; it came out at 0 ms on 9 loops and
++8 ms on Retrouvé 113–120. No spectrogram was kept this time; the reads' numbers were deleted after
+scoring (C2).
+
+**The 9 pooled loops are not independent of the fix.** The builder tuned on fixtures modelled on
+their labels. Only Dubspinna 73–80 (held out, 4 typed bars) tests whether the fix generalises.
+
+### Before and after, per loop (reader A)
+
+| Loop | H1 root + family, spike → now | H1 root | H5 | H2 found / extra | H16 wall ms |
+| --- | --- | --- | --- | --- | --- |
+| Lost 69–76 | 0 → **100 %** (7) | 100 → 100 % | 100 → 100 % | 96.4 / 3.3 → 96.4 / 3.3 % | 687, 430 → 462, 420 |
+| Lost 77–84 | 80 → **100 %** (5) | 80 → 100 % | 100 → 100 % | 100 / 8.0 → 100 / 14.8 % | 645, 424 → 432, 381 |
+| Lost 49–56 | 60 → 70 % (5) | 80 → **70 %** | 80 → **60 %** | 100 / 7.1 → 100 / 18.2 % | 631, 398 → 393, 411 |
+| Retrouvé 57–64 | 25 → 62.5 % (4) | 25 → 62.5 % | 50 → 50 % | 100 / 23.7 → 100 / 25.0 % | 694, 455 → 477, 443 |
+| Retrouvé 89–96 | – (names ambiguous) | – | – | 100 / 11.1 → 100 / 13.0 % | 716, 517 → 542, 501 |
+| Retrouvé 113–120 | – (root only) | 100 → 100 % | – | 100 / 18.6 → 94.1 / 17.2 % (+8 ms) | 759, 616 → 546, 569 |
+| Dubspinna 57–64 | 60 → 70 % (5) | 80 → **70 %** | 100 → 100 % | 100 / 7.5 → 100 / 3.9 % | 668, 425 → 439, 416 |
+| Dubspinna 141–148 | 25 → **87.5 %** (8) | 100 → **90 %** | 100 → 100 % | 100 / 0 → 100 / 5.6 % | 833, 607 → 611, 574 |
+| Dubspinna 105–112 | 25 → 50 % (4) | 75 → 75 % | 75 → **100 %** | 100 / 9.1 → 100 / 9.1 % | 745, 543 → 542, 553 |
+| **Dubspinna 73–80 (held out)** | 0 → **25 %** (4) | 50 → **50 %** | 50 → 50 % | 100 / 8.3 → 100 / 12.2 % | 767, 537 → 542, 535 |
+
+### Pooled
+
+| Eval | Bar | Spike (A) | After fix (A) | Held out, spike → now | Result now |
+| --- | --- | --- | --- | --- | --- |
+| H1 root + family | ≥ 70 % | 36.8 % (14/38) | **80.3 %** (30.5/38) | 0 → 25 % (1/4) | pass pooled, **fail held out** |
+| H1 root alone | ≥ 80 % | 84.1 % (37/44) | **85.2 %** (37.5/44) | 50 → 50 % (2/4) | pass pooled, **fail held out** |
+| H2 onsets | ≥ 90 % found, ≤ 15 % extra | 99.4 / 10.6 % | **98.9 / 11.8 %** (174/176; 46/390); at 0 ms 98.3 / 12.6 % | 100 / 8.3 → 100 / 12.2 % | pass |
+| H5 one tap away | ≥ 90 % | 89.5 % (34/38) | **89.5 %** (34/38) | 50 → 50 % | fail (just under) |
+| H16 read time | ≤ 3 s | 0.37–1.43 s | **0.38–0.61 s** (20/20) | 0.54 s | pass |
+
+All 10 loops: root + family 75.0 % (31.5/42), root 82.3 %, H5 85.7 %, H2 99.0 / 11.8 %.
+
+**Verdict.** On the 9 pooled loops, reader A now passes the spike gate: H1 80.3 % root + family with
+85.2 % root, and H2 98.9 % found with 11.8 % extra. **On the held-out loop it does not:** 1 of 4 bars
+right on type, 2 of 4 on root (H2 holds at 100 / 12.2 %). The gain is in-sample on loops the fixtures
+were built from, and the one independent loop barely moved (0 → 25 %), so the evidence that it
+generalises is weak. Four held-out cells are too few to fail the reader on their own. My reading:
+H2 passes cleanly, and H1 passes only on the tuning loops. Whether that clears the gate is the
+owner's call under L252; a second held-out loop with chords would settle it.
+
+### What got better
+
+- **The 7th is back:** Lost 69–76 reads G7 on 7/7 bars (was G). Lost 49–56 bar 2 still reads D7.
+- **Minor kept over sus2:** Dubspinna B♭m now reads B♭m on 8 of 13 B♭m cells (was 3), counting the
+  held-out loop. 2 B♭sus2 readings remain (was 7).
+- **Retrouvé's F minor stabs:** Fm on 2 of 4 bars (was 1).
+- **Speed:** reads take 0.38–0.61 s.
+
+### What got worse or is new
+
+- **A lead note now takes the root over B♭m (new, CH-7):** **Gdim** (G B♭ D♭ = the lead's G over B♭m)
+  on 8 cells across Dubspinna 57–64, 105–112 and 73–80, was 1. It is the miss on 105–112 bar 4a and
+  on held-out 73–80 bars 4a and 8a. Likely cause: L258's strike weighting
+  counts the lead's struck G (and its "bass" ×3) as the step's low note, so the lead wins the root.
+  Repro: Dubspinna, `setLoop(139331, 154691)`, `chordsRead("dsp")`, cells for bars 4 and 8.
+- **False 7ths on triads: 4 cells.**
+  - Lost 77–84 bar 1: Gm → Gm7. The family is right, but the voicing adds an F.
+  - Dubspinna 57–64 bar 1 and 141–148 bar 8b: D♭ → C♯maj7. The family is right, but the voicing adds a C.
+  - Retrouvé 57–64 bar 7: Fm → Cm7, wrong root.
+
+  23 of 104 cells now carry a 7th type.
+- **Roots lost that were right before:**
+  - Lost 49–56 bar 1: Cm → Gm (was Csus2 with the right root).
+  - Dubspinna 141–148 bar 1b: E♭ → B♭sus4 (same notes as E♭sus2, which it read before, but the root moved).
+  - Dubspinna 57–64 bar 1: half of it is now C♯maj7 and half an E♭dim.
+- **Dubspinna's E♭ was not read as E♭7:** bar 5b reads E♭, which is right.
+- **Real sus chords:** none was labelled, so none could be lost. The sus readings on Retrouvé 89–96
+  and 113–120 (B♭sus2 and Fsus4, where the part plays F G B♭ C) are still there.
+- **H2 extra rose a little:** 10.6 → 11.8 % pooled. Lost 49–56 went 7.1 → 18.2 % and Lost 77–84
+  8.0 → 14.8 %. Chord times come from the unchanged onset reader, but an event is only kept in a cell
+  that has a chord name, and some names changed. A new separation copy also moves things slightly.
+  Still inside the bar.
+
+Cost: $0. Time: 17.6–20.2 s to fill each loop, 0.38–0.61 s per read.
+
+Not checked: B (not asked), H3 and H4 (unchanged scope), by ear.

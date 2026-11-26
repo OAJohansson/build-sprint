@@ -271,3 +271,17 @@ Re-check of CS1 (26 Nov): CS1-3, 4, 6, 8, 9 fixed; CS1-1 partly (G and G7 score 
 | CS1-11 | minor | After a single-bar edit the box names a group the open bar isn't in | fixed (4ae77d0, T189): the count and name are the open bar's group (bars sharing its Make's guess) |
 | CS1-12 | polish | Half-bar names wrap ("D / sus4") and get clipped by beat marks | fixed (4ae77d0, T191): one line, 11 px with tighter tracking on half-bar tiles, no beat marks there |
 | CS1-13 | polish | Card mood lines truncate at 4 per row on 1280 | fixed (4ae77d0, T191): moods wrap to two lines; cards grow to fit |
+
+### Phase 6 slice 2 user test (26 Nov, `user-testing/report-2026-11-26-chords-slice2.md`)
+
+| ID | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| S2-1 | major | Group edits but single-bar Reset; ≈ 19 taps back to Make's | open |
+| S2-2 | major | Closeness ignores timing | open |
+| S2-3 | minor | Timing targets too small | open |
+| S2-4 | minor | No drag or arrow keys on hits | open |
+| S2-5 | minor | "Longer" disabled without a reason | open |
+| S2-6 | minor | Your sounds below the preset menu's fold | open |
+| S2-7 | polish | Chord row scrolls out of view at 720 px | open |
+| S2-8 | polish | "G, in Mine" while Mine plays G + A | open |
+| S2-9 | minor | At 390 px the Lab has no narrow layout, the chords panel can't be reached (pre-existing Lab limit; backlog) | noted |

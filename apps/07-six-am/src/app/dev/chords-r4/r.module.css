@@ -1,0 +1,211 @@
+/* Chords round 2 (dev only): Ear with the keys. Tokens from the Lab root. */
+
+.idle { margin: 0; padding: 12px 0 0 88px; font-size: 12px; color: var(--muted); }
+.panel { width: 100%; margin-top: 8px; padding: 10px 0 0 88px; display: flex; flex-direction: column; gap: 10px; }
+.head { display: flex; align-items: center; gap: 12px; min-height: 32px; min-width: 0; }
+.where { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.ask { font: italic 400 22px/1.1 var(--f-serif); white-space: nowrap; }
+.title { font: 500 20px var(--f-mono); white-space: nowrap; }
+.title small { font: 400 12px var(--f-mono); color: var(--muted); margin-left: 8px; }
+.hintText { font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.grow { flex: 1; }
+.link { background: none; border: 0; padding: 0; min-height: 28px; font: 500 12px var(--f-mono); color: var(--muted) !important; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #5a4f45; white-space: nowrap; }
+@media (hover: hover) and (pointer: fine) { .link:hover { color: var(--ink) !important; } }
+.faint { font-size: 11.5px; color: var(--faint); }
+.foot { margin: 0; display: flex; align-items: center; gap: 8px 22px; flex-wrap: wrap; }
+.check { display: inline-flex; align-items: center; gap: 8px; min-height: 28px; font-size: 12px; color: var(--ink); cursor: pointer; }
+.check input { accent-color: var(--teal); width: 15px; height: 15px; margin: 0; }
+.unsure { text-decoration: underline dashed var(--muted); text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+
+/* listening cards: one style; only the playing card lights */
+.cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.card { display: grid; grid-template-columns: 36px minmax(0, 1fr) 84px; align-items: center; gap: 10px; min-height: 64px; padding: 8px 10px 8px 8px; border: 1px solid var(--edge); border-radius: 6px; }
+.card[data-playing] { border-color: var(--ink); background: rgba(241, 230, 211, .05); }
+.play { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--edge); background: none; display: grid; place-items: center; padding: 0; font-size: 10px; cursor: pointer; }
+.card[data-playing] .play { background: var(--ink); color: var(--bg) !important; border-color: var(--ink); }
+.cardText { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cardText b { font: 500 16px var(--f-mono); white-space: nowrap; }
+.cardText small { font-size: 11px; color: var(--muted); line-height: 1.35; overflow-wrap: anywhere; }
+.slot { display: flex; justify-content: flex-end; }
+.use { width: 84px; height: 30px; padding: 0; font: 500 12px var(--f-mono); background: none; color: var(--ink) !important; border: 1px solid var(--muted); border-radius: 99px; cursor: pointer; white-space: nowrap; }
+@media (hover: hover) and (pointer: fine) { .use:hover { background: #2b2622; } }
+.tag { font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+/* keys: unlit keys warm grey-brown, lit notes carry the light; names under the keys */
+.keysWrap { display: flex; flex-direction: column; gap: 4px; }
+.keys { position: relative; display: flex; height: 54px; }
+.white { flex: 1; border: 1px solid #1a1715; border-radius: 0 0 4px 4px; background: #4d443d; cursor: pointer; padding: 0; }
+.white[data-on] { background: var(--teal); }
+.black { position: absolute; top: 0; height: 58%; transform: translateX(-50%); z-index: 2; border: 1px solid #0d0b0a; border-radius: 0 0 3px 3px; background: #1d1916; cursor: pointer; padding: 0; }
+.black[data-on] { background: #1a9c8f; }
+@media (hover: hover) and (pointer: fine) { .white:hover:not([data-on]) { background: #5a5048; } .black:hover:not([data-on]) { background: #2b2622; } }
+.keyNames { position: relative; height: 16px; font-size: 11px; color: var(--faint); }
+.keyNames span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
+.keyNames span[data-on] { color: var(--ink); font-weight: 500; }
+.phoneKeys { display: none; }
+.sentence { margin: 0; font-size: 12.5px; line-height: 1.5; }
+
+/* timing */
+.timing { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.label { width: 104px; flex: none; font-size: 11.5px; color: var(--muted); }
+.sixteenths { position: relative; flex: 0 1 420px; min-width: 240px; height: 26px; display: grid; grid-template-columns: repeat(16, 1fr); border: 1px solid var(--line); border-radius: 3px; }
+.sixteenths > i { border-left: 1px solid rgba(241, 230, 211, .06); }
+.sixteenths > i[data-beat] { border-left-color: rgba(241, 230, 211, .18); }
+.sixteenths > i:first-child { border-left: 0; }
+.empty { position: absolute; top: 0; bottom: 0; width: calc(100% / 16); border: 0; padding: 0; background: none; cursor: pointer; }
+@media (hover: hover) and (pointer: fine) { .empty:hover { background: rgba(241, 230, 211, .06); } }
+.hit { position: absolute; top: 3px; bottom: 3px; border: 0; padding: 0; border-radius: 2px; background: var(--teal); opacity: .75; cursor: pointer; }
+.hit[data-sel] { opacity: 1; box-shadow: 0 0 0 2px var(--ink); }
+.moves { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.moves button { min-height: 28px; padding: 0 10px; border: 1px solid var(--edge); border-radius: 99px; background: none; cursor: pointer; font: 500 11.5px var(--f-mono); }
+.moves button:disabled { color: var(--faint) !important; cursor: default; }
+
+/* lead */
+.leadLine { position: relative; padding: 6px 8px 6px 0; min-width: 0; }
+.leadHits { position: absolute; inset: 6px 8px 6px 0; display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+.leadHits button { border: 1px solid transparent; border-radius: 3px; background: none; cursor: pointer; padding: 0; }
+.leadHits button[aria-pressed="true"] { border-color: var(--muted); }
+@media (hover: hover) and (pointer: fine) { .leadHits button:hover { border-color: var(--edge); } }
+.leadGrid { display: flex; flex-direction: column; max-width: 560px; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.leadRow { display: grid; grid-template-columns: 44px minmax(0, 1fr); height: 11px; }
+.leadRow[data-black] { background: rgba(0, 0, 0, .2); }
+.leadKey { font-size: 8.5px; line-height: 11px; color: var(--faint); text-align: right; padding-right: 6px; }
+.leadCells { display: grid; grid-template-columns: repeat(16, 1fr); }
+.leadCells button { border: 0; border-left: 1px solid rgba(241, 230, 211, .05); padding: 0; background: none; cursor: pointer; }
+.leadCells button[data-beat] { border-left-color: rgba(241, 230, 211, .14); }
+.leadCells button[data-on] { background: var(--teal); }
+.leadCells button[data-sel] { background: var(--ink); }
+
+@media (max-width: 700px) {
+  .idle, .panel { padding-left: 0; }
+  .head { flex-wrap: wrap; }
+  .ask { white-space: normal; font-size: 20px; }
+  .cards { grid-template-columns: 1fr 1fr; }
+  .card { grid-template-columns: 36px minmax(0, 1fr); }
+  .slot { grid-column: 1 / -1; justify-content: flex-start; }
+  .phoneKeys { display: flex; }
+  .label { width: 100%; }
+  .sixteenths { flex: 1 1 100%; }
+  .hintText { display: none; }
+}
+/* round-2 fixes after the first screenshots */
+.card { grid-template-columns: 36px minmax(0, 1fr); grid-template-rows: auto auto; row-gap: 6px; min-height: 0; padding: 8px 10px; align-items: start; }
+.cardText small { overflow-wrap: normal; }
+.slot { grid-column: 2; justify-content: flex-end; min-height: 28px; align-items: center; }
+.use { height: 28px; }
+.keys { height: 46px; }
+.panel { gap: 8px; }
+.legend { position: absolute; right: 8px; top: 6px; margin: 0; font-size: 11px; color: var(--muted); }
+@media (max-width: 700px) { .legend { position: static; padding: 0 0 6px; } .slot { grid-column: 1 / -1; } }
+.head .sentence { font-size: 12px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.label { width: auto; }
+.sixteenths { flex: 0 1 340px; }
+.leadBody { display: flex; gap: 20px; align-items: flex-start; }
+.leadGrid { flex: 0 1 520px; }
+.leadRow { height: 9px; }
+.leadKey { font-size: 8px; line-height: 9px; }
+.leadSide { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.leadSide .moves { flex-direction: column; align-items: flex-start; }
+@media (max-width: 700px) { .leadBody { flex-direction: column; } .leadSide .moves { flex-direction: row; } .leadRow { height: 12px; } .head .sentence { white-space: normal; } }
+@media (max-width: 700px) { .leadGrid { flex: none; width: 100%; } }
+
+/* ── Round 3 polish ─────────────────────────────────────────────────────────────────────────── */
+/* tiles: the name gets the whole width and is never cut; the bar number sits small in the corner */
+.tiles { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; padding: 8px 8px 8px 0; min-width: 0; }
+.tile { container-type: inline-size; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; min-width: 0; height: 60px; padding: 7px 8px 6px; background: rgba(241, 230, 211, .035); border: 1px solid transparent; border-radius: 4px; text-align: left; cursor: pointer; }
+.tile[data-unsure] { border: 1px dashed var(--muted); }
+.tile[aria-expanded="true"] { border-style: solid; border-color: var(--ink); background: rgba(241, 230, 211, .07); }
+@media (hover: hover) and (pointer: fine) { .tile:hover { background: rgba(241, 230, 211, .06); } }
+.tileName { font: 500 min(16px, calc(100cqi / 4.4)) var(--f-mono); color: var(--ink); white-space: nowrap; line-height: 1.1; }
+.tileFoot { display: flex; align-items: flex-end; gap: 6px; min-width: 0; }
+.tileFoot svg { flex: 1; min-width: 0; }
+.tileFoot small { flex: none; font-size: 10px; line-height: 1; color: var(--faint); font-variant-numeric: tabular-nums; }
+.tiles[data-many] .tile { height: 46px; gap: 3px; padding-top: 5px; }
+
+/* one band for the bar's panel, the same height in every state, so the knob block never moves */
+.band { width: 100%; height: 216px; flex: none; }
+.band .panel { margin-top: 6px; }
+.band .idle { padding-top: 14px; }
+
+/* cards: shorter; "Make's guess" on a fixed spot top right; "Use this" pinned to the bottom */
+.card { display: flex; flex-direction: column; justify-content: space-between; gap: 6px; min-height: 0; height: 74px; padding: 7px 8px 7px 8px; }
+.cardTop { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.cardTop b { font: 500 15px var(--f-mono); white-space: nowrap; }
+.cardTop .play { width: 26px; height: 26px; font-size: 9px; flex: none; }
+.guess { margin-left: auto; font-size: 10.5px; color: var(--muted); white-space: nowrap; }
+.cardFoot { display: flex; align-items: flex-end; gap: 8px; min-width: 0; }
+.cardFoot small { flex: 1; min-width: 0; font-size: 11px; color: var(--muted); line-height: 1.3; }
+.cardFoot .use { flex: none; width: 76px; height: 26px; margin: 0; }
+.cardFoot .tag { flex: none; width: 76px; text-align: right; line-height: 26px; }
+
+/* presets */
+.presets { display: flex; border: 1px solid var(--edge); border-radius: 99px; padding: 2px; flex: none; }
+.presets button { background: none; border: 0; border-radius: 99px; padding: 3px 12px; min-height: 26px; cursor: pointer; font-size: 12px; color: var(--muted) !important; white-space: nowrap; }
+.presets button[aria-pressed="true"] { background: #2b2622; color: var(--ink) !important; }
+.strip { display: flex; flex-direction: column; gap: 2px; flex: 0 1 340px; min-width: 240px; }
+.strip .sixteenths { flex: none; width: 100%; min-width: 0; }
+.beats { display: grid; grid-template-columns: repeat(4, 1fr); font-size: 10.5px; color: var(--faint); }
+.beats span { padding-left: 3px; }
+.timing { align-items: flex-start; }
+.timing > .label, .timing > .presets, .timing > .moves, .timing > .faint { margin-top: 1px; }
+.undo { margin: -2px 0 0; min-height: 28px; display: flex; align-items: center; }
+
+/* lead: the key's notes, rows twice as tall; one row of buttons under the grid */
+.leadGrid[data-tall] .leadRow { height: 17px; }
+.leadGrid[data-tall] .leadKey { font-size: 10.5px; line-height: 17px; }
+.leadGrid { flex: none; max-width: 600px; width: 100%; }
+.leadFoot { display: flex; align-items: center; gap: 8px 16px; flex-wrap: wrap; max-width: 600px; }
+.quietSwitch { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted); cursor: pointer; min-height: 28px; }
+.quietSwitch input { accent-color: var(--teal); margin: 0; }
+
+@media (max-width: 700px) {
+  .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .tile { height: 56px; }
+  .band { height: auto; min-height: 216px; }
+  .card { height: auto; min-height: 74px; }
+  .strip { flex: 1 1 100%; }
+}
+/* the band fits the tallest state (keys + timing with a hit picked); every state keeps this height */
+.band { height: 258px; }
+@media (max-width: 700px) { .band { height: auto; min-height: 0; } }
+
+/* ── Round 4: explains itself by its shapes; words live in aria-labels and tooltips ─────────────── */
+.tile { position: relative; }
+.tile[data-unsure] { border: 1px solid transparent; }
+.unsureMark { position: absolute; top: 5px; right: 6px; width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center; font: 600 10.5px var(--f-mono); color: var(--bg); background: var(--muted); }
+.icon { width: 30px; height: 30px; flex: none; display: grid; place-items: center; padding: 0; border: 1px solid transparent; border-radius: 6px; background: none; color: var(--muted) !important; cursor: pointer; }
+@media (hover: hover) and (pointer: fine) { .icon:hover { color: var(--ink) !important; border-color: var(--edge); } }
+.head .where { font-size: 13px; color: var(--ink); }
+
+/* the strip: the track as a reference button, then the choices (tap = hear + use) */
+.strip4 { display: flex; align-items: stretch; gap: 14px; min-width: 0; }
+.track { flex: none; display: inline-flex; align-items: center; gap: 8px; height: 56px; padding: 0 16px 0 14px; border: 0; border-radius: 99px; background: #2b2622; color: var(--ink) !important; font: 500 13px var(--f-mono); cursor: pointer; }
+.track[data-playing] { background: var(--ink); color: var(--bg) !important; }
+.choices { flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
+.choice { position: relative; height: 56px; display: flex; align-items: center; padding: 0 14px; border: 1px solid var(--edge); border-radius: 8px; background: none; cursor: pointer; text-align: left; min-width: 0; }
+.choiceName { font: 500 18px var(--f-mono); white-space: nowrap; }
+.choice[aria-pressed="true"] { border-color: var(--teal); background: var(--teal-dim); }
+.check { position: absolute; right: 9px; bottom: 9px; color: var(--teal); }
+.guessDot { position: absolute; top: 9px; right: 10px; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.choice[data-playing] { box-shadow: inset 0 -2px var(--ink); }
+@media (hover: hover) and (pointer: fine) { .choice:hover:not([aria-pressed="true"]) { border-color: var(--muted); } .track:hover:not([data-playing]) { background: #352f2a; } }
+
+/* tools: small buttons, no links */
+.tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 0 12px; border: 1px solid var(--edge); border-radius: 99px; background: none; cursor: pointer; font: 500 12px var(--f-mono); color: var(--muted) !important; white-space: nowrap; }
+.chip[aria-pressed="true"] { color: var(--ink) !important; border-color: var(--teal); background: var(--teal-dim); }
+@media (hover: hover) and (pointer: fine) { .chip:hover { color: var(--ink) !important; } }
+
+/* lead cells read as tappable */
+.leadCells button { transition: background-color 120ms ease-out; }
+@media (hover: hover) and (pointer: fine) { .leadCells button:hover:not([data-on]) { background: rgba(241, 230, 211, .12); } }
+.leadCells button:active:not([data-on]) { background: rgba(241, 230, 211, .2); }
+@media (prefers-reduced-motion: reduce) { .leadCells button { transition: none; } }
+
+@media (max-width: 700px) {
+  .strip4 { flex-direction: column; gap: 8px; }
+  .track { height: 44px; align-self: flex-start; }
+  .choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* break-ui: the "?" sits in the tile's foot beside the bar number, so it never covers a long name */
+.unsureMark { position: static; flex: none; width: 14px; height: 14px; font-size: 9.5px; }

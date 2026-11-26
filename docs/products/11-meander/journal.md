@@ -120,3 +120,19 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   - A fresh "newcomer" reader flags any term still unexplained.
   - Graders check that the rewrite didn't change any facts.
 - Practice named: *plain language* and the *curse of knowledge* (Heath brothers, *Made to Stick*). Once you know a term, it's hard to notice that others don't.
+
+## 26 Nov: the skeleton idea (#28)
+
+- **Owner:** inside a school, show visually how big it is. All three kinds of "big" matter:
+  - how much there is to learn (ideas, questions, time);
+  - how far it reaches (when and where);
+  - how much room is inside it (thinkers, and how far apart they stand).
+- In the owner's words, the product is "a framework for learning": before you study any subject, you get a skeleton of it, then you connect new details back to it. They want research-backed learning theory to guide this, then an MVP cut. "Get it right from the beginning", but with scope kept small.
+- **Coaching:**
+  - This is a sharper statement of the product than "a map of philosophy". It also says what would make the hop worth it.
+  - I pushed back on a mind map inside a school: most idea-to-idea links would be invented, with no source behind them.
+  - Next: a research brief, then one question at a time.
+- **Content, second pass:**
+  - 2,109 words and 13 people named.
+  - The newcomer still felt lost (3 of 5).
+  - The repeats now come from the structure: the timeline, key works and themes cover the same books. A structural pass comes next.

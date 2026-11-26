@@ -20,7 +20,7 @@
   },
   "overview": [
     {
-      "text": "Existentialism is a loose family of ideas, not a tidy school. It starts from life as a person lives it, not from a detached viewpoint. Its central idea is that we are not born with a fixed nature. We make ourselves through our choices, and we are responsible for who we become. Two nineteenth-century thinkers laid the groundwork: Kierkegaard, from Denmark, and Nietzsche, a German philosopher. In mid-twentieth-century France, Sartre and Beauvoir made it famous.",
+      "text": "Existentialism is a loose family of ideas, not a tidy school. It starts from life as a person lives it, not from a detached viewpoint. One of its core ideas is that we make ourselves through our choices, and we are responsible for who we become. Two nineteenth-century thinkers laid the groundwork: Søren Kierkegaard, from Denmark, and the German philosopher Friedrich Nietzsche. It became famous in mid-twentieth-century France through Jean-Paul Sartre and Simone de Beauvoir, two French philosophers who also wrote novels.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -45,21 +45,26 @@
           "url": "https://plato.stanford.edu/entries/nietzsche/",
           "section": "intro",
           "quote": "was a German philosopher and cultural critic"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/sartre/",
+          "section": "intro",
+          "quote": "highly influential works of literature"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/beauvoir/",
+          "section": "intro",
+          "quote": "was a philosopher, novelist"
         }
       ]
     },
     {
-      "text": "It rejects fixed moral rules, but it does not say that morality is empty. A good life is possible: one where we own our choices and help others be free too. Above all, it takes on questions we all meet:",
+      "text": "It rejects fixed moral rules, but it does not say that morality is empty. A good life is still possible: one where we own our choices and help others be free too.",
       "sources": [
         {
           "url": "https://plato.stanford.edu/entries/existentialism/",
           "section": "intro"
         }
-      ],
-      "items": [
-        "How do I live when no rulebook tells me how?",
-        "How do I stop drifting along with the crowd?",
-        "How do I face anxiety, death and a sense that life is meaningless?"
       ]
     }
   ],
@@ -107,10 +112,10 @@
   "themes": [
     {
       "title": "Existence before essence",
-      "summary": "We are not born with a fixed nature. We make ourselves through what we choose.",
+      "summary": "Your choices shape who you become, within real limits.",
       "paragraphs": [
         {
-          "text": "Sartre called it 'the first principle of existentialism': existence precedes essence. Your 'essence' would be a fixed nature that decides who you are. Existentialists say there is none. A person first 'turns up' and only afterwards defines himself, through choices made as life unfolds. Sartre adapted the idea from Heidegger, a German philosopher. Hard facts still limit us, such as our body and the time and place we live in. Existentialists call these facts our 'facticity'. But we can question them, give them meaning and decide what to do with them. This power to rise above the facts is called 'transcendence'.",
+          "text": "Sartre called it 'the first principle of existentialism': existence precedes essence. Your 'essence' would be a fixed nature that decides who you are. Existentialists say we are not born with one. A person first 'turns up' and only afterwards defines himself, through choices made as life unfolds. Sartre adapted the idea from the German philosopher Martin Heidegger. Hard facts still limit us, such as our body and the time and place we live in. But we can question those facts, give them meaning and decide what to do with them. A strong craving, for example, does not force me to act on it.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -126,6 +131,11 @@
               "url": "https://plato.stanford.edu/entries/existentialism/",
               "section": "intro",
               "quote": "twentieth-century German philosophers like Edmund Husserl, Martin Heidegger, and Karl Jaspers"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/existentialism/",
+              "section": "3. Existence Precedes Essence",
+              "quote": "I do not out of necessity have to act on these desires"
             }
           ]
         }
@@ -136,16 +146,11 @@
     },
     {
       "title": "Freedom and anxiety",
-      "summary": "Being free means I alone answer for my choices, and that feels dizzying.",
+      "summary": "No one else can make your choices for you, and that can feel dizzying.",
       "paragraphs": [
         {
-          "text": "If nothing fixed decides who we are, then we are free. We are also responsible for what we make of ourselves. Take Sartre's example of a coward. Childhood or genes did not make him that way; he 'makes himself a coward' by his decisions. Seeing this brings anxiety. No god and no absolute moral rule can choose for us or excuse us. In Sartre's words, there are 'no excuses behind us nor justifications before us'. Kierkegaard called anxiety 'the dizziness of freedom'. Existentialists ask us to face this feeling, not run from it. It can shake us out of our comfortable routines.",
+          "text": "This makes us free, and responsible for what we make of ourselves. Take Sartre's example of a coward. Childhood or genes did not make him that way; he 'makes himself a coward' by his decisions. No god and no absolute moral rule can choose for us or excuse us. Realising this brings anxiety. Kierkegaard called anxiety 'the dizziness of freedom'. Existentialists ask us to face this feeling, not run from it. It can shake us out of our comfortable routines.",
           "sources": [
-            {
-              "url": "https://plato.stanford.edu/entries/existentialism/",
-              "section": "4. Freedom",
-              "quote": "there are no excuses behind us nor justifications before us"
-            },
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
               "section": "4.1 The Anxiety of Choice"
@@ -158,6 +163,11 @@
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
               "section": "5.1 The Power of Moods"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/existentialism/",
+              "section": "4. Freedom",
+              "quote": "makes himself a coward"
             }
           ]
         }
@@ -169,10 +179,10 @@
     },
     {
       "title": "Authenticity versus the crowd",
-      "summary": "Most of the time we just do what everyone else does. Being authentic means living our own life.",
+      "summary": "Going along with everyone feels comforting, but it lets us dodge our own choices.",
       "paragraphs": [
         {
-          "text": "Being authentic means being true to yourself. Existentialists criticise living by rules and expectations we pick up from others. As Heidegger put it, we enjoy, read and judge things as 'they' do. Doing what everyone does is comforting, because it feels like living well. But it hides our freedom from us. Sartre and Beauvoir call this self-deception 'bad faith'. I am in bad faith when I treat myself as a fixed thing: 'I am what I am'. I am also in bad faith when I pretend my situation puts no limits on my choices. Several thinkers had a name for the crowd we drift with:",
+          "text": "Being authentic means being true to yourself. Existentialists criticise our habit of living by the rules and expectations of everyone around us. Heidegger's name for this crowd was 'the They'. We enjoy, read and judge things as 'they' do. It feels like living well, but it hides our freedom from us. So we are deceiving ourselves. Sartre and Beauvoir call this self-deception 'bad faith'. It comes in two forms:",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -193,9 +203,8 @@
             }
           ],
           "items": [
-            "Kierkegaard: 'the public'",
-            "Nietzsche: 'the herd'",
-            "Heidegger: 'the They'"
+            "Treating yourself as a fixed thing: 'I am what I am', and nothing can change me.",
+            "Pretending you have no limits, as if your past and your situation did not constrain your choices."
           ]
         },
         {
@@ -216,13 +225,23 @@
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
               "section": "5.5 Self-Recovery in Sartre and Beauvoir"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/existentialism/",
+              "section": "5.4 Heidegger’s Resolute Dasein",
+              "quote": "hold [myself] free for the possibility of taking it back"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/existentialism/",
+              "section": "5.3 Nietzsche’s Overman",
+              "quote": "create their own meanings and values"
             }
           ],
           "items": [
-            "Kierkegaard: a passionate commitment that pulls a scattered life together.",
-            "Nietzsche: saying yes to your whole life, even to living it again forever.",
-            "Heidegger: 'resoluteness', a focused grip on your chosen path that stays open to letting it go.",
-            "Sartre and Beauvoir: seeing your unsettled situation clearly, accepting it, and taking responsibility for what you do."
+            "Kierkegaard: a passionate commitment that unifies a scattered life.",
+            "Nietzsche: creating your own values and saying yes to your whole life.",
+            "Heidegger: a firm commitment you stay free to give up.",
+            "Sartre and Beauvoir: facing your unsettled situation clearly and taking responsibility for what you do."
           ]
         }
       ],
@@ -238,7 +257,7 @@
       "summary": "Without God or a built-in purpose, meaning has to be made, not found.",
       "paragraphs": [
         {
-          "text": "As nineteenth-century Europe became less religious and more scientific, the old religious picture that gave life moral direction began to collapse. Nietzsche diagnosed the result: nihilism, the shocking sense that our existence has no overall reason or purpose. His image for this loss was 'the death of God'. The French novelist Albert Camus called our situation 'the absurd'. It is the clash between our 'wild longing for clarity' and 'the unreasonable silence of the world'. Yet this need not end in despair. For Camus, the absurd calls for action, not suicide. Beauvoir held that existence is not absurd but ambiguous: its meaning is never fixed, so we keep making it.",
+          "text": "As nineteenth-century Europe became less religious and more scientific, the old religious picture that gave life moral direction began to collapse. Nietzsche diagnosed the result: nihilism, the shocking sense that our existence has no overall reason or purpose. His image for this loss was 'the death of God'. The French novelist Albert Camus called our situation 'the absurd'. It is the clash between our 'wild longing for clarity' and 'the unreasonable silence of the world'. Camus asked whether such a life is worth living. His answer was yes: the absurd calls for action, not suicide. Beauvoir insisted that existence is not absurd but 'ambiguous'. Calling it absurd, she said, denies that it can ever be given a meaning. Calling it ambiguous says 'its meaning is never fixed', so we keep making it.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -277,6 +296,16 @@
               "url": "https://plato.stanford.edu/entries/camus/",
               "section": "intro",
               "quote": "novelist and author of short stories"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/camus/",
+              "section": "3.1 Suicide as a Response to Absurdity",
+              "quote": "Deciding whether or not life is worth living"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/existentialism/",
+              "section": "5.5 Self-Recovery in Sartre and Beauvoir",
+              "quote": "To declare that existence is absurd is to deny that it can ever be given a meaning"
             }
           ]
         }
@@ -292,7 +321,7 @@
       "summary": "Other people can trap us as objects, yet my freedom depends on theirs.",
       "paragraphs": [
         {
-          "text": "Sartre and Beauvoir argued that we see ourselves through 'the look' of others. Their gaze can turn us into objects. Relationships then become a power struggle. Sartre's play No Exit sums this up in its famous line that hell is other people. But there is a better way. Beauvoir's 'authentic love' nurtures the other person's freedom instead of possessing them. She and Sartre concluded that wanting my own freedom commits me to wanting it for others. In Beauvoir's words, to will oneself free is also to will others free. Later, Sartre shifted his focus from the single person to society. Three things pushed him:",
+          "text": "Sartre and Beauvoir argued that we see ourselves through 'the look' of others. Their gaze can turn us into objects. Relationships then become a power struggle. Sartre's play No Exit sums this up in its famous line that hell is other people. But there is a better way. Beauvoir's 'authentic love' nurtures the other person's freedom instead of possessing them. Why does my freedom need yours? If I value my own freedom, I must also want it for others. As Sartre put it, in wanting freedom 'we discover that it depends entirely on the freedom of others'.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -301,22 +330,9 @@
             },
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
-              "section": "6. Ethics"
-            },
-            {
-              "url": "https://iep.utm.edu/existent/",
-              "section": "e. Simone de Beauvoir (1908-1986) as an Existentialist Philosopher",
-              "quote": "To will oneself free is also to will others free"
-            },
-            {
-              "url": "https://plato.stanford.edu/entries/existentialism/",
-              "section": "6.3 The Ethics of Engagement"
+              "section": "6. Ethics",
+              "quote": "depends entirely on the freedom of others"
             }
-          ],
-          "items": [
-            "the Nazi occupation of France",
-            "his own time as a prisoner of war",
-            "attacks on his ideas from Marxist critics"
           ]
         }
       ],
@@ -330,7 +346,7 @@
       "summary": "For religious existentialists, faith is a personal commitment reason can't justify.",
       "paragraphs": [
         {
-          "text": "Existentialism is not only atheist. Kierkegaard was a Christian. He prized 'a truth which is true for me', lived and felt rather than proved. His book Fear and Trembling retells the Bible story in which God tells Abraham to sacrifice his son Isaac. Abraham becomes a 'knight of faith': someone who commits to a truth that reason cannot make sense of. He 'leaps' into a paradox, alone with a choice no one else understands. The Jewish thinker Martin Buber stressed meeting another person as a 'You', a whole person. The opposite is treating them as an 'It', a thing to use. Nietzsche and Sartre, by contrast, saw God as irrelevant or even harmful to our deepest choices.",
+          "text": "Existentialism is not only atheist. Kierkegaard was a Christian. He prized 'a truth which is true for me', lived and felt rather than proved. His book Fear and Trembling retells the Bible story in which God tells Abraham to sacrifice his son Isaac. Here is the paradox. As a father, Abraham has a moral duty to protect his son. God's command asks him to break that duty. By committing to God's command, Abraham becomes a 'knight of faith': someone who puts a personal truth above ordinary morality, a truth reason cannot make sense of. Nietzsche and Sartre, by contrast, saw God as irrelevant or even harmful to our deepest choices.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -346,10 +362,6 @@
               "section": "5.2 Kierkegaard’s Knight of Faith"
             },
             {
-              "url": "https://plato.stanford.edu/entries/existentialism/",
-              "section": "6.2 The Ethics of Recognition"
-            },
-            {
               "url": "https://iep.utm.edu/existent/",
               "section": "b. Anxiety and Authenticity"
             },
@@ -357,6 +369,11 @@
               "url": "https://iep.utm.edu/existent/",
               "section": "a. Søren Kierkegaard (1813-1855) as an Existentialist Philosopher",
               "quote": "Fear and Trembling retells the story of the attempted sacrifice of Isaac by his father Abraham"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/existentialism/",
+              "section": "5.2 Kierkegaard’s Knight of Faith",
+              "quote": "he is confronted with a personal truth that is higher than the universal"
             }
           ]
         }
@@ -374,7 +391,7 @@
       "title": "Where it came from",
       "paragraphs": [
         {
-          "text": "Early hints of this outlook go back to ancient philosophy and to later writers on death and the meaning of life. But the ideas became a movement only in the nineteenth century. Religion's hold was fading, and industry and bureaucracy made society feel impersonal. Early voices included:",
+          "text": "Existentialism became a movement in the nineteenth century, as industry and bureaucracy made society feel impersonal. Early voices included:",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -397,52 +414,50 @@
               "url": "https://plato.stanford.edu/entries/existentialism/",
               "section": "intro",
               "quote": "the Russian novelists Leo Tolstoy and Fyodor Dostoevsky"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/existentialism/",
+              "section": "4.1 The Anxiety of Choice",
+              "quote": "everything a person does was thought to be determined by causal laws"
             }
           ],
           "items": [
-            "Kierkegaard, who attacked the philosopher Hegel's system of all reality for leaving out the single living person.",
+            "Kierkegaard, who attacked detached philosophy for leaving out the single living person.",
             "Nietzsche, who foresaw the coming nihilism.",
-            "The Russian novelist Dostoevsky, whose 'underground man' refuses to be reduced to 'a piano key' in a world run by fixed laws."
+            "The Russian novelist Fyodor Dostoevsky. His 'underground man' refuses to be reduced to 'a piano key' by the view that laws of cause and effect decide everything a person does."
           ]
         },
         {
-          "text": "In the twentieth century, German thinkers such as Husserl, Jaspers and Heidegger laid more groundwork. They gave the movement its roots in phenomenology: the study of how we experience the world from our own point of view. Heidegger's book Being and Time (1927) shaped Sartre and Beauvoir. The movement then exploded in France in the middle of the century. Sartre's Being and Nothingness appeared in 1943, the year the French thinker Gabriel Marcel coined the word 'existentialism'. Its backdrop was:",
+          "text": "In mid-twentieth-century France, its backdrop was the Second World War, the Nazi death camps and the atomic bombings of Hiroshima and Nagasaki. Three dates mark its rise:",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
               "section": "intro"
             },
             {
-              "url": "https://plato.stanford.edu/entries/existentialism/",
-              "section": "2.3 Being-in-the-World"
-            },
-            {
               "url": "https://plato.stanford.edu/entries/heidegger/",
-              "section": "intro"
+              "section": "intro",
+              "quote": "Simone de Beauvoir’s feminism"
             },
             {
               "url": "https://plato.stanford.edu/entries/sartre/",
-              "section": "intro"
+              "section": "intro",
+              "quote": "Existentialism is a Humanism, towards the end of 1945"
             },
             {
-              "url": "https://openstax.org/books/introduction-philosophy/pages/12-3-continental-philosophys-challenge-to-enlightenment-theories",
-              "section": "Existentialism",
-              "quote": "Existentialism’s phenomenological roots"
-            },
-            {
-              "url": "https://openstax.org/books/introduction-philosophy/pages/12-3-continental-philosophys-challenge-to-enlightenment-theories",
-              "section": "Phenomenology",
-              "quote": "the study of how an individual encounters the world through first-person experience"
+              "url": "https://plato.stanford.edu/entries/beauvoir/",
+              "section": "intro",
+              "quote": "The Second Sex (1949)"
             }
           ],
           "items": [
-            "the Second World War",
-            "the Nazi death camps",
-            "the atomic bombings of Hiroshima and Nagasaki"
+            "1927: Heidegger's Being and Time, which shaped Sartre and Beauvoir.",
+            "1943: Sartre's Being and Nothingness. The word 'existentialism' is first used.",
+            "1945 to 1949: Sartre's lecture Existentialism Is a Humanism and Beauvoir's The Second Sex."
           ]
         },
         {
-          "text": "Who counts as an existentialist is disputed. The word names no single set of beliefs. Most thinkers grouped under it never used it, or rejected it. Only Sartre and Beauvoir openly claimed it. In 1947 Heidegger rejected any link between his thought and Sartre's existentialism. Yet both encyclopedias we draw on, Stanford's and the Internet Encyclopedia of Philosophy, still count him as a key figure. Camus gave a 1945 interview titled, in English, 'No, I am not an existentialist'. Even so, the Stanford encyclopedia places his essay The Myth of Sisyphus squarely in the tradition.",
+          "text": "The label 'existentialist' is itself disputed. Of the major figures, only Sartre and Beauvoir openly claimed it. Heidegger and Camus both rejected it. Even so, scholars still place both within the tradition. Some argue the label does more harm than good, because it lumps very different ideas together.",
           "sources": [
             {
               "url": "https://iep.utm.edu/existent/",
@@ -466,6 +481,21 @@
               "url": "https://plato.stanford.edu/entries/camus/",
               "section": "1. The Paradoxes of Camus’s Absurdist Philosophy",
               "quote": "This essay belongs squarely in the philosophical tradition of existentialism"
+            },
+            {
+              "url": "https://iep.utm.edu/existent/",
+              "section": "c. Martin Heidegger (1889-1976) as an Existentialist Philosopher",
+              "quote": "repudiates any possible connection of his philosophy with the existentialism of Sartre"
+            },
+            {
+              "url": "https://iep.utm.edu/existent/",
+              "section": "f. Albert Camus (1913-1960) as an Existentialist Philosopher",
+              "quote": "Non, je ne suis pas existentialist"
+            },
+            {
+              "url": "https://iep.utm.edu/existent/",
+              "section": "intro",
+              "quote": "does more harm than good"
             }
           ]
         }
@@ -500,7 +530,7 @@
           "title": "The Gay Science",
           "author": "Friedrich Nietzsche",
           "year": "1882; expanded 1887",
-          "note": "Also published in English as The Joyful Wisdom. Poses a famous test: would you live your life again, forever?",
+          "note": "Poses a famous test: would you live your life again, forever?",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/nietzsche/",
@@ -510,11 +540,6 @@
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
               "section": "5.3 Nietzsche’s Overman"
-            },
-            {
-              "url": "https://www.gutenberg.org/ebooks/52881",
-              "section": "Front matter",
-              "quote": "THE JOYFUL WISDOM"
             }
           ]
         },
@@ -542,7 +567,7 @@
           "title": "The Myth of Sisyphus",
           "author": "Albert Camus",
           "year": "1942",
-          "note": "Asks whether life is worth living. Its image is Sisyphus, pushing his rock up a mountain, again and again, forever.",
+          "note": "Its image is Sisyphus, pushing his rock up a mountain, again and again, forever.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/camus/",
@@ -563,7 +588,7 @@
           "title": "Being and Nothingness",
           "author": "Jean-Paul Sartre",
           "year": "1943",
-          "note": "The movement's defining book, on our absolute freedom, bad faith and 'the look' of others.",
+          "note": "One of the movement's defining books, alongside Beauvoir's work of the period, on our absolute freedom, bad faith and 'the look' of others.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/sartre/",
@@ -581,6 +606,11 @@
               "url": "https://plato.stanford.edu/entries/existentialism/",
               "section": "4.2 Mediated Freedom",
               "quote": "an account of “radical” or “absolute” freedom"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/sartre/",
+              "section": "4.1 Negation and Freedom",
+              "quote": "along with works from de Beauvoir from this period"
             }
           ]
         },
@@ -588,7 +618,7 @@
           "title": "Existentialism Is a Humanism",
           "author": "Jean-Paul Sartre",
           "year": "1945 lecture, published 1946",
-          "note": "A packed Paris lecture, an accessible version of Being and Nothingness.",
+          "note": "A packed Paris lecture, an accessible version of Being and Nothingness. In it Sartre argued that our actions define our humanity.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/sartre/",
@@ -598,6 +628,11 @@
               "url": "https://plato.stanford.edu/entries/sartre/",
               "section": "A.1 Works by Sartre",
               "quote": "L’existentialisme est un humanisme"
+            },
+            {
+              "url": "https://iep.utm.edu/existent/",
+              "section": "c. Martin Heidegger (1889-1976) as an Existentialist Philosopher",
+              "quote": "it is a man’s actions which define his humanity"
             }
           ]
         },
@@ -605,7 +640,7 @@
           "title": "The Second Sex",
           "author": "Simone de Beauvoir",
           "year": "1949",
-          "note": "How women are cast as man's 'Other', and man as the essential being. A founding text of second-wave feminism, the women's movement of the 1960s and 1970s.",
+          "note": "Argues that women are made to live relative to men, as 'the Other'. A founding text of second-wave feminism, the women's movement of the 1960s and 1970s.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/beauvoir/",
@@ -624,6 +659,11 @@
               "url": "https://iep.utm.edu/existent/",
               "section": "e. Simone de Beauvoir (1908-1986) as an Existentialist Philosopher",
               "quote": "the feminist movement from the early 60’s to the 70’s"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/beauvoir/",
+              "section": "7. The Second Sex: Woman As Other",
+              "quote": "a woman comes to live an existence relative to men"
             }
           ]
         }
@@ -634,7 +674,7 @@
       "title": "Main criticisms",
       "paragraphs": [
         {
-          "text": "In Germany, critics such as Adorno called existentialism obscure, abstract and even mystical, Heidegger above all. Many other philosophers agreed. After Marxist criticism in the 1940s and 1950s, Sartre himself decided his early idea of 'radical' freedom, made by choice alone, was too abstract. It ignored the social conditions that limit real choices. The French philosopher Merleau-Ponty objected that no one is free apart from other people and history. Later French thinkers faulted Sartre for neglecting language and the impersonal structures that shape meaning.",
+          "text": "Some criticisms target its ideas:",
           "sources": [
             {
               "url": "https://iep.utm.edu/existent/",
@@ -646,25 +686,22 @@
             },
             {
               "url": "https://iep.utm.edu/existent/",
-              "section": "e. Simone de Beauvoir (1908-1986) as an Existentialist Philosopher"
-            },
-            {
-              "url": "https://openstax.org/books/introduction-philosophy/pages/12-3-continental-philosophys-challenge-to-enlightenment-theories",
-              "section": "Phenomenology and Reality",
-              "quote": "French thinker Maurice Merleau-Ponty"
+              "section": "e. Simone de Beauvoir (1908-1986) as an Existentialist Philosopher",
+              "quote": "One cannot assume freedom in isolation from the freedom of others"
             }
+          ],
+          "items": [
+            "German critics called it obscure, abstract, even mystical, Heidegger above all.",
+            "Sartre's early idea of freedom ignored the social conditions that limit real choices. Sartre himself later agreed.",
+            "Others objected that no one is free apart from other people and history."
           ]
         },
         {
-          "text": "Other criticisms are moral and political. Critics said existentialists neglected social and political structures, with dangerous results. Heidegger is notorious for his involvement with the Nazis in the 1930s. Nietzsche's ideal of the self-creating individual is openly elitist and anti-democratic. The Nazis exploited his work, a use the Internet Encyclopedia calls 'utterly misdirected'. Camus accused Kierkegaard, Jaspers and Heidegger of escaping into 'forced hope'. He meant turning to God, or something beyond this life, to escape the absurd. Some argue the label does more harm than good, lumping very different ideas together.",
+          "text": "Others are moral and political:",
           "sources": [
             {
               "url": "https://iep.utm.edu/existent/",
               "section": "b. Philosophy"
-            },
-            {
-              "url": "https://iep.utm.edu/existent/",
-              "section": "c. Martin Heidegger (1889-1976) as an Existentialist Philosopher"
             },
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -672,25 +709,31 @@
               "quote": "unapologetically elitist and anti-democratic"
             },
             {
-              "url": "https://iep.utm.edu/existent/",
-              "section": "b. Friedrich Nietzsche (1844-1900) as an Existentialist Philosopher",
-              "quote": "utterly misdirected"
-            },
-            {
               "url": "https://plato.stanford.edu/entries/camus/",
               "section": "3.3 Criticism of Existentialists",
               "quote": "That forced hope is religious in all of them"
             },
             {
-              "url": "https://iep.utm.edu/existent/",
-              "section": "intro",
-              "quote": "does more harm than good"
-            },
-            {
               "url": "https://plato.stanford.edu/entries/camus/",
               "section": "3.3 Criticism of Existentialists",
               "quote": "by seeking to appeal to something beyond the limits of the human condition"
+            },
+            {
+              "url": "https://iep.utm.edu/existent/",
+              "section": "c. Martin Heidegger (1889-1976) as an Existentialist Philosopher",
+              "quote": "He remains notorious for his involvement with National Socialism in the 1930s"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/existentialism/",
+              "section": "5.3 Nietzsche’s Overman",
+              "quote": "Only a very few people can be free"
             }
+          ],
+          "items": [
+            "It neglected social and political structures, with dangerous results.",
+            "Heidegger is notorious for his involvement with the Nazis in the 1930s.",
+            "Nietzsche's ideal is openly elitist and anti-democratic: he thought only a few strong people could be free.",
+            "Camus said Kierkegaard, Heidegger and others escaped into 'forced hope'. He meant turning to God, or to something beyond the limits of the human condition, to escape the absurd."
           ]
         }
       ]
@@ -700,7 +743,7 @@
       "title": "Why it still matters",
       "paragraphs": [
         {
-          "text": "Existentialism reached far beyond philosophy, into:",
+          "text": "Existentialism reached far beyond philosophy:",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -711,66 +754,54 @@
               "section": "a. The Arts and Psychology"
             },
             {
+              "url": "https://iep.utm.edu/existent/",
+              "section": "a. The Arts and Psychology",
+              "quote": "Sartre and Camus were both prominent novelists and playwrights"
+            },
+            {
+              "url": "https://iep.utm.edu/existent/",
+              "section": "e. Simone de Beauvoir (1908-1986) as an Existentialist Philosopher",
+              "quote": "the feminist movement from the early 60’s to the 70’s"
+            },
+            {
               "url": "https://plato.stanford.edu/entries/existentialism/",
-              "section": "7.4 Critical Phenomenology"
+              "section": "7.6 Philosophy of Health and Illness",
+              "quote": "from narrative medicine to nursing"
             }
           ],
           "items": [
-            "films by Ingmar Bergman and Jean-Luc Godard",
-            "theatre, above all the plays of Beckett",
-            "painting, from Edvard Munch to Edward Hopper",
-            "the politics of Martin Luther King Jr. and Malcolm X",
-            "the writing of Richard Wright and Ralph Ellison",
-            "feminism, through Beauvoir",
-            "the book Black Skin, White Masks by Fanon, on colonised Black people",
-            "psychotherapy, in the work of Viktor Frankl, Rollo May and Irvin Yalom"
+            "Its ideas spread into films, novels, plays and paintings.",
+            "Its stress on freedom and self-creation shaped the politics of Martin Luther King Jr. and Malcolm X.",
+            "Through Beauvoir's The Second Sex, it helped shape feminism.",
+            "It shaped psychotherapy, and more recently medicine and nursing."
           ]
         },
         {
-          "text": "Among philosophers, verdicts differ. The Internet Encyclopedia finds the movement as a whole has had relatively little direct influence there. Yet Nietzsche and Heidegger remain very much alive. It adds that the movement made emotion a serious subject of research. The movement also insisted that philosophy deal directly with real-life topics such as sex and death. The Stanford encyclopedia sees the movement thriving, and its courses are among philosophy's most popular. In its view, the movement has shaped:",
+          "text": "Within philosophy, it left its mark too:",
           "sources": [
             {
               "url": "https://iep.utm.edu/existent/",
               "section": "b. Philosophy",
-              "quote": "existentialism has had relatively little direct influence within philosophy"
+              "quote": "legitimising a whole domain of philosophical research"
             },
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
-              "section": "7. Contemporary Relevance"
-            },
-            {
-              "url": "https://plato.stanford.edu/entries/existentialism/",
-              "section": "7.1 Post-Structuralism"
-            },
-            {
-              "url": "https://plato.stanford.edu/entries/existentialism/",
-              "section": "7.2 Narrative and Hermeneutic Philosophy"
-            },
-            {
-              "url": "https://plato.stanford.edu/entries/existentialism/",
-              "section": "7.3 Philosophy of Mind and Cognitive Science"
-            },
-            {
-              "url": "https://plato.stanford.edu/entries/existentialism/",
-              "section": "7.6 Philosophy of Health and Illness"
-            },
-            {
-              "url": "https://plato.stanford.edu/entries/existentialism/",
-              "section": "7.7 A New Generation"
+              "section": "7.7 A New Generation",
+              "quote": "Existentialist-themed courses are often among the most popular"
             }
           ],
           "items": [
-            "later French thinkers such as Foucault and Derrida",
-            "theories of the self as a life story",
-            "the science of the mind, which now sees the mind as rooted in the body",
-            "medicine and nursing"
+            "It made emotion a serious subject of study.",
+            "It insisted that philosophy deal directly with real life, such as sex and death.",
+            "Nietzsche and Heidegger are still widely studied.",
+            "Its courses are often among philosophy's most popular."
           ]
         }
       ]
     }
   ],
   "study_prompt": {
-    "text": "Teach me Existentialism as a short Socratic module: ask me one question at a time, and finish with a five-question quiz. Start with what it is: a loose movement that begins from real, lived human life. It is rooted in Kierkegaard and Nietzsche and was made famous by Sartre and Beauvoir in mid-20th-century France. Note that Camus and Heidegger rejected the label. Then cover its six themes:",
+    "text": "Please be my tutor and teach me Existentialism. I am new to philosophy, so explain each term the first time you use it. Ask me one question at a time, and finish with a five-question quiz. Start with what it is: a loose movement that begins from lived human life, made famous by Sartre and Beauvoir. Then cover its six themes:",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -799,14 +830,6 @@
       {
         "url": "https://plato.stanford.edu/entries/existentialism/",
         "section": "5.2 Kierkegaard’s Knight of Faith"
-      },
-      {
-        "url": "https://plato.stanford.edu/entries/camus/",
-        "section": "1. The Paradoxes of Camus’s Absurdist Philosophy"
-      },
-      {
-        "url": "https://iep.utm.edu/existent/",
-        "section": "c. Martin Heidegger (1889-1976) as an Existentialist Philosopher"
       }
     ],
     "items": [
@@ -1185,18 +1208,8 @@
   ],
   "apply": {
     "intro": {
-      "text": "Existentialists do not look at life from a cool distance. They start from a person caught up in living. Kierkegaard wanted 'a truth which is true for me', lived and felt rather than just known. Their ideas also shaped existential psychotherapy, which helps people with questions such as meaning and the fear of death. One example is logotherapy, a therapy built around finding meaning, invented by the Austrian psychiatrist Viktor Frankl.",
+      "text": "Existentialist ideas shaped existential psychotherapy, which helps people with questions such as meaning and the fear of death. One example is logotherapy, a therapy built around finding meaning. It was created by the Austrian psychiatrist Viktor Frankl.",
       "sources": [
-        {
-          "url": "https://plato.stanford.edu/entries/existentialism/",
-          "section": "2. Engagement vs. Detachment",
-          "quote": "the individual who is engaged in life"
-        },
-        {
-          "url": "https://plato.stanford.edu/entries/existentialism/",
-          "section": "2.1 Subjective Truth",
-          "quote": "a truth which is true for me"
-        },
         {
           "url": "https://iep.utm.edu/existent/",
           "section": "a. The Arts and Psychology",
@@ -1218,7 +1231,7 @@
       {
         "title": "Notice who you chose to ask",
         "idea": {
-          "text": "For existentialists, no god and no absolute moral law can guide our choices or justify them. We alone are responsible, and realising that often brings anxiety. As Sartre put it, 'there are no excuses behind us nor justifications before us'.",
+          "text": "As we saw, no god or moral law can choose for us. Sartre put it starkly: 'there are no excuses behind us nor justifications before us'.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -1229,7 +1242,7 @@
         },
         "from": "Jean-Paul Sartre, Existentialism is a Humanism",
         "practice": {
-          "text": "Sartre's own example is a student of his in wartime France. The student's brother had been killed in the German attack of 1940. He could go to England and fight with the Free French Forces. Or he could stay with his mother, who lived only for him. He came to Sartre for advice. But choosing an adviser, Sartre said, is already a choice: you more or less know what they will say. His only reply was 'You are free, therefore choose, that is to say, invent.' One way to use his point: before your next hard choice, ask yourself why you picked the person you are asking, and what you already expect them to say.",
+          "text": "Sartre's own example is a student of his in wartime France. He could go to England and fight with the Free French Forces. Or he could stay with his mother, who lived only for him. He came to Sartre for advice. But choosing an adviser, Sartre said, is already a choice: you more or less know what they will say. His only reply was 'You are free, therefore choose, that is to say, invent.' One way to use his point: before your next hard choice, ask yourself why you picked the person you are asking, and what you already expect them to say.",
           "sources": [
             {
               "url": "https://www.marxists.org/reference/archive/sartre/works/exist/sartre.htm",
@@ -1256,13 +1269,8 @@
       {
         "title": "Ask what this moment asks of you",
         "idea": {
-          "text": "For Sartre and Beauvoir, no fixed meaning is handed to us. Beauvoir said existence is not absurd but ambiguous: 'its meaning is never fixed'. A 2015 review pooled the results of 15 trials of existential therapies. Meaning-focused therapies had large effects on people's sense of meaning. It found most support for structured programmes that discussed meaning directly with physically ill patients. But the studies were few and low in quality. That is evidence for therapy, not for reflecting alone.",
+          "text": "On meaning, Frankl disagrees with Sartre and Beauvoir. They hold that we make meaning through our choices. Frankl holds that meaning exists for us to discover, and that we cannot make it. A 2015 review of existential therapy trials found that meaning-focused therapy strengthened people's sense of meaning, but the studies were few and low in quality, and they tested therapy, not reflecting alone.",
           "sources": [
-            {
-              "url": "https://plato.stanford.edu/entries/existentialism/",
-              "section": "5.5 Self-Recovery in Sartre and Beauvoir",
-              "quote": "its meaning is never fixed"
-            },
             {
               "url": "https://pubmed.ncbi.nlm.nih.gov/25045907/",
               "section": "Results",
@@ -1271,38 +1279,33 @@
             {
               "url": "https://pubmed.ncbi.nlm.nih.gov/25045907/",
               "section": "Conclusion",
-              "quote": "We found particular support for structured interventions"
+              "quote": "Despite the small number and low quality of studies"
             },
             {
-              "url": "https://pubmed.ncbi.nlm.nih.gov/25045907/",
-              "section": "Conclusion",
-              "quote": "Despite the small number and low quality of studies"
+              "url": "https://plato.stanford.edu/entries/existentialism/",
+              "section": "5.5 Self-Recovery in Sartre and Beauvoir",
+              "quote": "My projects have meaning and value because I chose these projects"
+            },
+            {
+              "url": "https://www.viktorfranklinstitute.org/about-logotherapy/",
+              "section": "Meaning",
+              "quote": "we can discover meaning but we can’t make meaning"
             },
             {
               "url": "https://pubmed.ncbi.nlm.nih.gov/25045907/",
               "section": "Results",
-              "quote": "15 studies with unique data were included"
+              "quote": "Twenty-one eligible randomized controlled trials of existential therapy were found"
             }
           ]
         },
         "from": "Viktor Frankl, logotherapy",
         "practice": {
-          "text": "Frankl held that we discover meaning rather than make it. He turned the usual question round: we should not ask what life means, but recognise 'that it is he who is asked'. In therapy, logotherapists often use Socratic dialogue: guiding a person by asking questions. They help clients find meanings for themselves. The Viktor Frankl Institute of Logotherapy names three avenues to meaning. One way to borrow that on your own: this week, ask yourself how each avenue showed up for you.",
+          "text": "Frankl also turned the usual question round. We should not ask what life means, he said: 'each man is questioned by life'. We answer by taking responsibility for our own life. Logotherapists often guide people by asking questions, so that they find meanings for themselves. Frankl named three avenues to meaning. One way to borrow that on your own: this week, ask yourself how each avenue showed up for you.",
           "sources": [
-            {
-              "url": "https://www.viktorfrankl.org/logotherapy.html",
-              "section": "What is Logotherapy / Existential Analysis?",
-              "quote": "the psychiatrist and neurologist Viktor Emil Frankl"
-            },
-            {
-              "url": "https://www.viktorfranklinstitute.org/about-logotherapy/",
-              "section": "Meaning",
-              "quote": "Frankl maintained that meaning exists for us to discover"
-            },
             {
               "url": "https://www.viktorfranklinstitute.org/about-logotherapy/",
               "section": "Life has ultimate meaning (meaning of life).",
-              "quote": "it is he who is asked"
+              "quote": "each man is questioned by life"
             },
             {
               "url": "https://www.viktorfranklinstitute.org/about-logotherapy/",
@@ -1320,9 +1323,9 @@
               "quote": "they are guided and assisted in the realization of those meaning possibilities they have detected themselves"
             },
             {
-              "url": "https://www.viktorfrankl.org/logotherapy.html",
-              "section": "Socratic dialogue / Modification of attitudes",
-              "quote": "this technique of guiding by questioning was introduced by Socrates"
+              "url": "https://www.viktorfranklinstitute.org/about-logotherapy/",
+              "section": "Life has ultimate meaning (meaning of life).",
+              "quote": "he can only answer to life by answering for his own life"
             }
           ],
           "items": [
@@ -1338,7 +1341,7 @@
       {
         "title": "Would you live it all again?",
         "idea": {
-          "text": "For Nietzsche, the key to giving your life its own style is radical acceptance. That means saying yes to your whole life, the good and the bad. He called this attitude amor fati: love of one's fate. He also thought only 'the highest types' have that kind of freedom.",
+          "text": "As we saw, Nietzsche's ideal was saying yes to your whole life, the good and the bad. He called this attitude amor fati: love of one's fate. He thought only 'the highest types' could truly live this way. You do not have to share his elitism to try his question.",
           "sources": [
             {
               "url": "https://plato.stanford.edu/entries/existentialism/",
@@ -1354,12 +1357,17 @@
               "url": "https://plato.stanford.edu/entries/existentialism/",
               "section": "5.3 Nietzsche’s Overman",
               "quote": "amor fati (love of one’s fate)"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/existentialism/",
+              "section": "5.3 Nietzsche’s Overman",
+              "quote": "unapologetically elitist and anti-democratic"
             }
           ]
         },
         "from": "Friedrich Nietzsche, The Gay Science §341",
         "practice": {
-          "text": "Imagine a demon tells you that you must live this life again, 'innumerable times', with nothing new in it. Would you curse the demon? Or would you answer that you never heard anything more divine? If the thought took hold of you, Nietzsche wrote, it would transform you, or perhaps crush you. The question 'Dost thou want this once more, and also for innumerable times?' would lie as the heaviest burden on everything you do. One influential reading treats it as a test of whether your life has been good. He meant your life as a whole, in every detail. If that feels too big, one way in (our adaptation, not his): ask it of a single day first.",
+          "text": "Imagine a demon tells you that you must live this life again, 'innumerable times', with nothing new in it. Would you curse the demon? Or would you answer that you never heard anything more divine? If the thought took hold of you, Nietzsche wrote, it would transform you, or perhaps crush you. One influential reading treats it as a test of whether your life has been good, as a whole and in every detail. If that feels too big, one way in (our adaptation, not his): ask it of a single day first.",
           "sources": [
             {
               "url": "https://www.gutenberg.org/ebooks/52881",
@@ -1370,6 +1378,11 @@
               "url": "https://plato.stanford.edu/entries/nietzsche/",
               "section": "6.3 The Eternal Recurrence of the Same",
               "quote": "a practical thought experiment designed to test whether one’s life has been good"
+            },
+            {
+              "url": "https://www.gutenberg.org/ebooks/52881",
+              "section": "Book Fourth, 341. The Heaviest Burden",
+              "quote": "every pain and every joy and every thought and every sigh"
             }
           ]
         },
@@ -1384,5 +1397,5 @@
       "sources": []
     }
   },
-  "word_count": 2573
+  "word_count": 2109
 }

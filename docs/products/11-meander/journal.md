@@ -154,3 +154,7 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Screen:** the school view (L26): zoom from the globe into a short skeleton, with the article below it.
 - **Brief:** set for calm, following the Meander retro: few words, large type, one focal point.
 - **Directions:** 4 seed strings drawn. 8 one-line directions written (seed-derived, far-away references, and one that sounds wrong) for the owner to react to before anything is built.
+- **Round 1 rejected:** the owner said "I kind of hate all of them". The current app is nicer than any of the eight.
+  - **Why it missed (my read):** every sketch replaced the globe with a standalone page of flat diagrams. What the owner likes is the globe and a side card in one view.
+  - **Their ask:** keep the globe on the side as now, bring the school to life in the card area, and get 10 very different sketches from a different model (Fable 5.2).
+  - **Approach:** a fresh designer subagent on Fable (subscription, no API), briefed to keep the current layout and the Clew look, with the current card as baseline. Ten sketches, each a full screen, built for calm.

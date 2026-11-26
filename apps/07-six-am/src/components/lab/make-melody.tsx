@@ -13,7 +13,7 @@ import { foldMelodyRow, type MelNote, type MelodyReading, type MelodyRowSound, t
 import { rankChords, voiceChord, type ChordCell, type ChordsReading } from "@/lib/make/chords-read";
 import { gridOf, gridsFromSaved, leadNoteMatch, leadNotesOf, leadRows, placeNote, stretchNote, type LeadNote } from "@/lib/make/lead-mine";
 import { scalePitchClasses, pitchClass } from "@/lib/synths/theory";
-import { moveHitTo, timingMatch, addHit, cardsFor, chordPcs, editsFromSaved, foldChordNames, heldHits, hitsOf, keyChords, moveHit, normalChord, notesMatch, parseChord, sameHits, shortHits, unsureCells, withEdits, type CellEdit, type Edits, type Hit } from "@/lib/make/chords-mine";
+import { chordEventNotes, exactPattern, moveHitTo, timingMatch, addHit, cardsFor, chordPcs, editsFromSaved, foldChordNames, heldHits, hitsOf, keyChords, moveHit, normalChord, notesMatch, parseChord, sameHits, shortHits, unsureCells, withEdits, type CellEdit, type Edits, type Hit } from "@/lib/make/chords-mine";
 import { isMelodySound, melodyNoun, saveAction, soundId, suggestMelodyName, suggestMelodyTags, type MelodySound } from "@/lib/make/library";
 import { MELODY_ROWS, MELODY_ROW_NAMES, POLY_KNOBS, POLY_KNOB_SPECS, ROW_DEFAULT, clampPolyMacros, kindOf, melodyPreset, melodyPresetIds, melodyRowOf, polyKnobWord, polyMoves, polySuggestLine, presetId, type MelodyPresetId, type MelodyRow, type PolyMacros } from "@/lib/make/poly-synth";
 import type { Scale } from "@/lib/synths/theory";
@@ -55,15 +55,8 @@ const cellNotes = (c: ChordsReading, edits: Edits, i: number): number[] => {
   const own = edits[i]?.notes, x = c.cells[i];
   return own?.length ? own : x?.root !== null && x?.root !== undefined && x.type ? voiceChord(x.root, x.type, c.register) : [];
 };
-/** Mine's chords as notes on the 16th grid, the way melody-make.ts plays them. */
-function mineNotesOf(c: ChordsReading, edits: Edits): MelNote[] {
-  const sps = 60 / c.bpm / 4, out: MelNote[] = [];
-  for (const e of c.events) {
-    if (!c.cells[e.cell]?.name) continue;
-    for (const midi of cellNotes(c, edits, e.cell)) out.push({ t: e.t, dur: e.dur, midi, vel: e.vel, step: e.step, off: e.off, durSteps: Math.max(0.25, Math.round((e.dur / sps) * 100) / 100) });
-  }
-  return out;
-}
+/** Mine's chords as notes on the 16th grid, the way melody-make.ts plays them (chords-mine.ts, so the save is tested against it). */
+const mineNotesOf = (c: ChordsReading, edits: Edits): MelNote[] => chordEventNotes(c, edits, voiceChord);
 
 /** A planted chord (graders, H14): Make's guess replaced on one cell, as if the reader had misread it. */
 type Plant = { name: string; unsure: boolean };
@@ -286,7 +279,8 @@ export function useMelody(o: MelodyOpts) {
   const canSave = readState === "ready" && on[open] && !!scale && !!o.keyName && saveState.state !== "saving" && action.kind !== "none";
   // The saved loop; a chords row carries its chord names too (K8), folded to the same repeat as its notes.
   const patternOf = (row: MelodyRow) => {
-    const f = foldMelodyRow(read!.d.rows[row].notes, read!.d.steps);
+    // S-1: exactly what Make plays (the repeat only when it loses nothing).
+    const f = exactPattern(read!.d.rows[row].notes, read!.d.steps, foldMelodyRow);
     return row === "chords" && mineChords ? { ...f, chords: foldChordNames(mineChords.cells, f.bars, edits) } : f;
   };
   const save = async (row: MelodyRow = open, nameOverride?: string) => {

@@ -177,8 +177,64 @@ export function withEdits(c: ChordsReading, edits: Edits): ChordsReading {
     }
   });
   events.sort((a, b) => a.t - b.t);
-  return { ...c, cells, events };
+  return { ...c, cells, events: mergeDoubles(c, events) };
 }
+
+/**
+ * S-1: two hits of the same cell that start within one 16th are one hit read twice (Lost 69–76 bar 8:
+ * 14,588 and 14,623 ms); Mine plays one, from the earlier start to the later end, at the louder strength.
+ * On the 16th grid two such hits would share a step, and a saved pattern can't hold both.
+ */
+function mergeDoubles(c: ChordsReading, events: ChordEvent[]): ChordEvent[] {
+  const sps = 60 / c.bpm / 4, out: ChordEvent[] = [];
+  for (const e of events) {
+    const p = out[out.length - 1];
+    if (p && p.cell === e.cell && e.t - p.t < sps - 1e-6) {
+      out[out.length - 1] = eventAt(c, p.t, Math.max(p.t + p.dur, e.t + e.dur) - p.t, p.cell, p.struck, Math.max(p.vel, e.vel));
+      continue;
+    }
+    out.push(e);
+  }
+  return out;
+}
+type MelNoteLike = { t: number; dur: number; midi: number; vel: number; step: number; off: number; durSteps: number };
+/** What each chord event plays (K3, K5): the cell's own piano notes, else its chord in the standard voicing (`voice`, chords-read's voiceChord). */
+export function chordEventNotes(c: ChordsReading, edits: Edits, voice: (root: number, type: ChordType, register: number) => number[]): MelNoteLike[] {
+  const sps = 60 / c.bpm / 4, out: MelNoteLike[] = [];
+  for (const e of c.events) {
+    const x = c.cells[e.cell];
+    if (!x?.name) continue;
+    const own = edits[e.cell]?.notes;
+    const midis = own?.length ? own : x.root !== null && x.type ? voice(x.root, x.type, c.register) : [];
+    for (const midi of midis) out.push({ t: e.t, dur: e.dur, midi, vel: e.vel, step: e.step, off: e.off, durSteps: Math.max(0.25, Math.round((e.dur / sps) * 100) / 100) });
+  }
+  return out;
+}
+
+/** Notes as a saved pattern holds them, rounded as foldMelodyRow rounds them. */
+export function asPatternNotes(notes: Pick<MelNoteLike, "step" | "midi" | "durSteps" | "vel" | "off">[]): PatNote[] {
+  const r2 = (x: number) => Math.round(x * 100) / 100;
+  return notes.map((n) => ({ step: n.step, midi: n.midi, dur: Math.min(64, Math.max(0.25, r2(n.durSteps))), vel: r2(n.vel), ...(Math.abs(n.off) >= 0.005 ? { off: r2(Math.max(-0.5, Math.min(0.5, n.off))) } : {}) }))
+    .sort((a, b) => a.step - b.step || a.midi - b.midi || (a.off ?? 0) - (b.off ?? 0));
+}
+const noteKey = (n: PatNote) => `${n.step}|${n.midi}|${n.dur}|${n.vel}|${n.off ?? 0}`;
+
+/**
+ * S-1: the pattern to save is exactly what Make plays. The shortest repeat (foldMelodyRow, `fold`) is kept
+ * only when playing it round the loop gives back every note as played; otherwise the whole loop is saved
+ * as it is (1, 2, 4, 8 or 16 bars, up to 512 notes). A loop of another length keeps the fold.
+ */
+export function exactPattern<B extends number>(notes: MelNoteLike[], steps: number, fold: (n: MelNoteLike[], steps: number) => { bars: B; notes: PatNote[] }): { bars: B; notes: PatNote[] } {
+  const f = fold(notes, steps), P = f.bars * 16, reps = Math.max(1, Math.floor(steps / P));
+  const played = asPatternNotes(notes).map(noteKey).sort();
+  const back = Array.from({ length: reps }, (_, r) => f.notes.map((n) => noteKey({ ...n, step: n.step + r * P }))).flat().sort();
+  if (played.length === back.length && played.every((k, i) => k === back[i])) return f;
+  const bars = steps / 16;
+  // shortcut: a loop that isn't 1, 2, 4, 8 or 16 whole bars (or holds over 512 notes) keeps the lossy fold; real loops are whole bars.
+  if ([1, 2, 4, 8, 16].includes(bars) && notes.length <= 512) return { bars: bars as B, notes: asPatternNotes(notes) };
+  return f;
+}
+
 /** withEdits with names only (slice 1's picks). */
 export const withPicks = (c: ChordsReading, picks: Record<number, string>) => withEdits(c, Object.fromEntries(Object.entries(picks).map(([k, n]) => [k, { name: n }])));
 

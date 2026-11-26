@@ -1,8 +1,9 @@
 // Slice 1: the times of Mine's chords once the owner picks a name (withPicks cuts a held chord where the
 // next cell now differs). Time logic only (decision 0011); the names and cards aren't unit tested.
 import { describe, expect, it } from "vitest";
-import type { ChordCell, ChordsReading } from "./chords-read";
-import { moveHitTo, timingMatch, addHit, editsFromSaved, foldChordNames, hitsOf, moveHit, picksFromSaved, shortHits, withEdits, withPicks } from "./chords-mine";
+import { voiceChord, type ChordCell, type ChordsReading } from "./chords-read";
+import { foldMelodyRow } from "./melody-make";
+import { asPatternNotes, chordEventNotes, exactPattern, moveHitTo, timingMatch, addHit, editsFromSaved, foldChordNames, hitsOf, moveHit, picksFromSaved, shortHits, withEdits, withPicks } from "./chords-mine";
 
 const cell = (bar: number, name: string, root: number): ChordCell => ({ bar, startStep: bar * 16, steps: 16, name, root, type: "maj", score: 1, alternatives: [] });
 // 120 BPM: a 16th is 0.125 s, a bar 2 s. Two bars of G held as one pad from 0 s to 4 s.
@@ -111,5 +112,34 @@ describe("S2: drag and timing score", () => {
     expect(timingMatch(read, [0, 0.5, 1].map((t) => ({ t })), 0.04)).toBe(85.7);
     expect(timingMatch(read, [{ t: 0 }], 0.04)).toBe(40);
     expect(timingMatch([], [], 0.04)).toBeNull();
+  });
+});
+
+// S-1 (H9): what Make plays is exactly what gets saved.
+describe("save = played", () => {
+  const ev = (t: number, cell: number) => ({ t, dur: 0.2, step: Math.round(t / 0.125), off: Math.round((t / 0.125 - Math.round(t / 0.125)) * 1000) / 1000, cell, struck: true, held: false, vel: 0.9 });
+  // 120 BPM, 2 bars of G; bar 2 has a stab read twice 35 ms apart in one 16th (as Lost 69–76 bar 8).
+  const twice = (): ChordsReading => ({ ...pad(), events: [0, 0.5, 1, 1.5].map((t) => ev(t, 0)).concat([2, 2.5, 3, 3.5, 3.535].map((t) => ev(t, 1))) });
+  const unpack = (p: { bars: number; notes: { step: number; midi: number; dur: number; vel: number; off?: number }[] }, steps: number) =>
+    Array.from({ length: steps / (p.bars * 16) }, (_, r) => p.notes.map((n) => ({ ...n, step: n.step + r * p.bars * 16 }))).flat().sort((a, b) => a.step - b.step || a.midi - b.midi);
+
+  it("merges two hits of one chord inside one 16th: the earlier start, the later end", () => {
+    const r = withEdits(twice(), {});
+    expect(r.events).toHaveLength(8);
+    expect(r.events[7]).toMatchObject({ t: 3.5, dur: 0.235, cell: 1 });
+  });
+  it("saves exactly the played notes (no note lost to the fold)", () => {
+    const played = chordEventNotes(withEdits(twice(), {}), {}, voiceChord);
+    const saved = exactPattern(played, 32, foldMelodyRow);
+    expect(unpack(saved, 32)).toEqual(asPatternNotes(played));
+  });
+  it("keeps the short repeat when it loses nothing, and the whole loop when it would", () => {
+    const same: ChordsReading = { ...pad(), events: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5].map((t) => ev(t, t < 2 ? 0 : 1)) };
+    const p1 = exactPattern(chordEventNotes(withEdits(same, {}), {}, voiceChord), 32, foldMelodyRow);
+    expect(p1.bars).toBe(1);
+    const diff: ChordsReading = { ...pad(), events: [0, 0.5, 1, 1.5, 2, 2.75, 3, 3.5].map((t) => ev(t, t < 2 ? 0 : 1)) };
+    const played = chordEventNotes(withEdits(diff, {}), {}, voiceChord), p2 = exactPattern(played, 32, foldMelodyRow);
+    expect(p2.bars).toBe(2);
+    expect(unpack(p2, 32)).toEqual(asPatternNotes(played));
   });
 });

@@ -209,3 +209,45 @@
 }
 /* break-ui: the "?" sits in the tile's foot beside the bar number, so it never covers a long name */
 .unsureMark { position: static; flex: none; width: 14px; height: 14px; font-size: 9.5px; }
+
+/* ── Round 5: labels that name things are back ─────────────────────────────────────────────── */
+.unsureMark { position: absolute; top: 5px; right: 5px; width: 15px; height: 15px; font-size: 9.5px; }
+.tile:has(.unsureMark) .tileName { padding-right: 15px; }
+.choice { height: 64px; gap: 10px; padding: 0 12px 0 10px; align-items: center; }
+.glyph { flex: none; width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--edge); display: grid; place-items: center; color: var(--ink); }
+.choice[data-playing] .glyph { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.choice[data-playing] { box-shadow: none; }
+.choiceText { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.choiceText .choiceName { font-size: 17px; }
+.choiceText small { font-size: 11px; color: var(--muted); line-height: 1.25; }
+.guessTag { position: absolute; top: 6px; right: 9px; font-size: 10px; color: var(--muted); white-space: nowrap; }
+.choices { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.track { height: 64px; }
+.check { right: 9px; bottom: 8px; }
+.reset { display: inline-flex; align-items: center; gap: 5px; min-height: 28px; padding: 0 10px; border: 1px solid var(--edge); border-radius: 99px; background: none; cursor: pointer; font: 500 12px var(--f-mono); color: var(--muted) !important; }
+@media (hover: hover) and (pointer: fine) { .reset:hover { color: var(--ink) !important; border-color: var(--muted); } }
+.check2 { display: inline-flex; align-items: center; gap: 8px; min-height: 30px; font-size: 12.5px; color: var(--ink); cursor: pointer; }
+.check2 input { accent-color: var(--teal); width: 16px; height: 16px; margin: 0; }
+/* the band fits the panel that is shown (listening is short, piano and lead are taller) */
+.band { height: auto; min-height: 0; }
+@media (max-width: 700px) {
+  .choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ask { font-size: 19px; }
+}
+/* break-ui (phone): the "?" corner never covers the name, nor "Make's guess" or the ✓ the card's words */
+.tile[data-unsure] { border: 1px solid transparent; }
+.tile[aria-expanded="true"][data-unsure] { border-color: var(--ink); }
+.tile[data-unsure] .tileName { padding-right: 0; display: block; max-width: calc(100% - 15px); font-size: min(16px, calc((100cqi - 15px) / 4.4)); }
+.choiceText { padding-right: 16px; }
+.choiceText .guessTag { position: absolute; top: 6px; right: 9px; }
+@media (max-width: 700px) {
+  .choice { height: auto; min-height: 64px; padding-top: 8px; padding-bottom: 8px; }
+  .choiceText .guessTag { position: static; order: -1; margin-bottom: 1px; }
+}
+/* break-ui, second pass: the "?" sits on the tile's corner edge, so the name keeps its full width;
+   "Make's guess" is a line above the name (top-right it covered long names like C♯sus4) */
+.tile[data-unsure] .tileName { max-width: none; font-size: min(16px, calc(100cqi / 4.4)); }
+.unsureMark { top: -6px; right: -6px; width: 16px; height: 16px; box-shadow: 0 0 0 2px var(--bg); z-index: 1; }
+.tiles { padding-top: 10px; }
+.choiceText .guessTag { position: static; margin-bottom: 1px; }
+.choice { height: 72px; }

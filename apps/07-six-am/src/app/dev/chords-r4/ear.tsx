@@ -1,11 +1,12 @@
 "use client";
 
+// Round 5 (in r4): labels that say what things are are back, sentences on how to operate stay out.
 // Round 4 · Ear, simplified until it explains itself (owner on the canvas: a screen that needs "tap a bar
 // to…" isn't intuitive enough). The panel is never empty: the first bar Make isn't sure of is open (else
 // bar 1). Cards work like a GarageBand chord strip: tap = hear it in the loop and use it; tap another to
 // change your mind. The track is a reference button, not a choice. Words moved to aria-labels/tooltips.
 import { useEffect, useState } from "react";
-import { ArrowLeft, AudioWaveform, Check, Keyboard, Pause, Play, RotateCcw, X } from "lucide-react";
+import { ArrowLeft, AudioWaveform, Check, Pause, Piano, Play, RotateCcw, X } from "lucide-react";
 import { DUB, LOST, WORST, voicing, type Song } from "../chords-directions/data";
 import { Hits, LeadRoll, Shell, cx, s, useChords } from "../chords-directions/shared";
 import v from "../chords-directions/v.module.css";
@@ -39,14 +40,15 @@ export function Ear({ st }: { st: St }) {
   const [leadSel, setLeadSel] = useState<number | null>(st === "lead" ? 1 : null);
   useEffect(() => {
     if (!open) return;
-    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(null); };
+    const esc = (e: KeyboardEvent) => { if (e.key !== "Escape") return; if (open.kind === "lead") setOpen({ kind: "chord", bar: firstBar(song) }); else setKeys(false); };
     addEventListener("keydown", esc);
     return () => removeEventListener("keydown", esc);
-  }, [open]);
+  }, [open, song]);
 
-  const close = () => { setOpen(null); setKeys(false); setHear(null); setMore(false); setHit(null); };
+  // The chord panel is always open; the lead's × goes back to it.
+  const close = () => { setOpen({ kind: "chord", bar: firstBar(song) }); setKeys(false); setHear(null); setMore(false); setHit(null); };
   const openBar = (kind: "chord" | "lead", bar: number) => {
-    if (open && open.kind === kind && open.bar === bar) return close();
+    if (open && open.kind === kind && open.bar === bar) return kind === "lead" ? close() : undefined;
     setOpen({ kind, bar }); setKeys(false); setHear(null); setMore(false); setHit(null); setLeadSel(null);
   };
   const unsure = (i: number) => !!song.bars[i].doubt && !ch.isEdited(i);
@@ -58,10 +60,11 @@ export function Ear({ st }: { st: St }) {
         <span className={v.rowName}>Chords</span>
         <div className={r.tiles} data-many={song.bars.length > 8 ? "" : undefined}>
           {song.bars.map((_, i) => (
-            <button key={i} className={r.tile} aria-expanded={open?.kind === "chord" && open.bar === i}
+            <button key={i} className={r.tile} data-unsure={unsure(i) ? "" : undefined} aria-expanded={open?.kind === "chord" && open.bar === i}
               aria-label={`Bar ${song.from + i}: ${ch.nameOf(i)}${unsure(i) ? ", Make isn't sure" : ""}. Change chord`} onClick={() => openBar("chord", i)}>
               <span className={r.tileName}>{ch.nameOf(i)}</span>
-              <span className={r.tileFoot}><Hits hits={ch.hits[i]} />{unsure(i) && <span className={r.unsureMark} title="Make isn't sure of this bar" aria-hidden>?</span>}<small>{song.from + i}</small></span>
+              {unsure(i) && <span className={r.unsureMark} title="Make isn't sure of this bar" aria-hidden>?</span>}
+              <span className={r.tileFoot}><Hits hits={ch.hits[i]} /><small>{song.from + i}</small></span>
             </button>
           ))}
         </div>
@@ -73,7 +76,7 @@ export function Ear({ st }: { st: St }) {
             onNotes={(ns) => setLead((l) => l.map((x, b) => (b === open.bar ? ns : x)))}
             onReset={() => { setLead((l) => l.map((x, b) => (b === open.bar ? (song.lead ?? []).filter((n) => n.bar === b).map(({ at, len, midi }) => ({ at, len, midi })) : x))); setLeadSel(null); }} onClose={close} />
         ) : (
-          <ChordPanel song={song} ch={ch} i={open.bar} keys={keys} setKeys={setKeys} hear={hear} setHear={setHear} all={all} setAll={setAll} more={more} setMore={setMore} hit={hit} setHit={setHit} onClose={close} />
+          <ChordPanel song={song} ch={ch} i={open.bar} keys={keys} setKeys={setKeys} hear={hear} setHear={setHear} all={all} setAll={setAll} more={more} setMore={setMore} hit={hit} setHit={setHit} />
         )}
       </div>
     </Shell>
@@ -111,9 +114,9 @@ function IconBtn({ label, onClick, children, tip }: { label: string; onClick: ()
   return <button className={r.icon} onClick={onClick} aria-label={label} title={tip ?? label}>{children}</button>;
 }
 
-function ChordPanel({ song, ch, i, keys, setKeys, hear, setHear, all, setAll, more, setMore, hit, setHit, onClose }: {
+function ChordPanel({ song, ch, i, keys, setKeys, hear, setHear, all, setAll, more, setMore, hit, setHit }: {
   song: Song; ch: Ch; i: number; keys: boolean; setKeys: (b: boolean) => void; hear: string | null; setHear: (n: string | null) => void;
-  all: boolean; setAll: (b: boolean) => void; more: boolean; setMore: (b: boolean) => void; hit: number | null; setHit: (k: number | null) => void; onClose: () => void;
+  all: boolean; setAll: (b: boolean) => void; more: boolean; setMore: (b: boolean) => void; hit: number | null; setHit: (k: number | null) => void;
 }) {
   const b = song.bars[i], cur = ch.nameOf(i), notes = ch.notesOf(i), hits = ch.hits[i];
   const twins = song.bars.map((_, k) => k).filter((k) => k !== i && song.bars[k].read === b.read);
@@ -126,10 +129,14 @@ function ChordPanel({ song, ch, i, keys, setKeys, hear, setHear, all, setAll, mo
     const chosen = cur === n && !fromNotes, playing = hear === n, guess = n === b.read;
     return (
       <button key={n} className={r.choice} aria-pressed={chosen} data-playing={playing ? "" : undefined} onClick={() => choose(n)}
-        aria-label={`${n}${guess ? ", Make's guess" : ""}, ${flavour(n) || "a chord"}${chosen ? ", in Mine" : ""}. Hear it in the loop and use it`} title={guess ? "Make's guess" : undefined}>
-        <span className={r.choiceName}>{n}</span>
-        {guess && <i className={r.guessDot} aria-hidden />}
-        {chosen && <Check className={r.check} size={14} strokeWidth={2.5} aria-hidden />}
+        aria-label={`${n}${guess ? ", Make's guess" : ""}, ${flavour(n) || "a chord"}${chosen ? ", in Mine" : ""}. Hear it in the loop and use it`}>
+        <span className={r.glyph} aria-hidden>{playing ? <Pause size={13} /> : <Play size={13} />}</span>
+        <span className={r.choiceText}>
+          {guess && <small className={r.guessTag}>Make&apos;s guess</small>}
+          <span className={r.choiceName}>{n}</span>
+          <small>{flavour(n)}</small>
+        </span>
+        {chosen && <Check className={r.check} size={15} strokeWidth={2.5} aria-hidden />}
       </button>
     );
   };
@@ -137,10 +144,8 @@ function ChordPanel({ song, ch, i, keys, setKeys, hear, setHear, all, setAll, mo
     <div className={r.head}>
       {keys && <IconBtn label="Back to the chords" tip="Back" onClick={() => { setKeys(false); setHit(null); }}><ArrowLeft size={16} /></IconBtn>}
       <span className={r.where}>Bar {song.from + i}</span>
-      {keys && <b className={r.title}>{cur}</b>}
-      {keys && (fromNotes || ch.isEdited(i)) && <IconBtn label={`Back to Make's ${b.read}`} onClick={() => { ch.reset(i); setHit(null); }}><RotateCcw size={15} /></IconBtn>}
-      <span className={r.grow} />
-      <IconBtn label="Close" onClick={onClose}><X size={16} /></IconBtn>
+      {keys ? <b className={r.title}>{cur}</b> : <b className={r.ask}>Which one sounds like the track?</b>}
+      {keys && (fromNotes || ch.isEdited(i)) && <button className={r.reset} onClick={() => { ch.reset(i); setHit(null); }} aria-label={`Reset to Make's ${b.read}`} title={`Back to Make's ${b.read}`}><RotateCcw size={14} aria-hidden /> Reset</button>}
     </div>
   );
   if (keys) {
@@ -167,10 +172,10 @@ function ChordPanel({ song, ch, i, keys, setKeys, hear, setHear, all, setAll, mo
         <div className={r.choices} role="group" aria-label="Chords to try">{[...cands, ...extra].map(card)}</div>
       </div>
       <div className={r.tools}>
-        {twins.length > 0 && <button className={r.chip} aria-pressed={all} onClick={() => setAll(!all)} aria-label={`Change all ${twins.length + 1} ${b.read} bars together`} title={`All ${twins.length + 1} bars Make heard as ${b.read}`}>All {twins.length + 1} bars</button>}
+        {twins.length > 0 && <label className={r.check2} title={`Every bar Make heard as ${b.read} changes with this one`}><input type="checkbox" checked={all} onChange={(e) => setAll(e.target.checked)} /> {twins.length === 1 ? `Both ${b.read} bars` : `All ${twins.length + 1} ${b.read} bars`}</label>}
         <span className={r.grow} />
-        <button className={r.chip} aria-expanded={more} onClick={() => setMore(!more)} aria-label={more ? "Fewer chords" : "More chords that fit this song"}>{more ? "Less" : "More"}</button>
-        <button className={r.chip} onClick={() => setKeys(true)} aria-label="Build the chord on the keys"><Keyboard size={15} aria-hidden /> Keys</button>
+        <button className={r.chip} aria-expanded={more} onClick={() => setMore(!more)} aria-label={more ? "Fewer chords" : "More chords that fit this song"}>{more ? "Fewer chords" : "More chords"}</button>
+        <button className={r.chip} onClick={() => setKeys(true)} aria-label="Build the chord on a piano"><Piano size={15} aria-hidden /> Piano</button>
       </div>
     </section>
   );
@@ -193,9 +198,9 @@ function LeadPanel({ song, bar, notes, sel, onSel, onNotes, onReset, onClose }: 
     <section className={cx(r.panel, r.leadPanel)} aria-label={`Lead, bar ${song.from + bar}: place one note at a time`}>
       <div className={r.head}>
         <span className={r.where}>Lead · bar {song.from + bar}</span>
-        {edited && <IconBtn label="Back to Make's line" onClick={onReset}><RotateCcw size={15} /></IconBtn>}
+        {edited && <button className={r.reset} onClick={onReset} aria-label="Reset to Make's line" title="Back to Make's line"><RotateCcw size={14} aria-hidden /> Reset</button>}
         <span className={r.grow} />
-        <label className={r.quietSwitch} title="Show every note, not only the song's key"><input type="checkbox" checked={allNotes} onChange={(e) => setAllNotes(e.target.checked)} disabled={outside} /> All notes</label>
+        <label className={r.quietSwitch} title="Show the notes that aren't in the song's key too"><input type="checkbox" checked={allNotes} onChange={(e) => setAllNotes(e.target.checked)} disabled={outside} /> Notes outside the key</label>
         <IconBtn label="Close" onClick={onClose}><X size={16} /></IconBtn>
       </div>
       <LeadGrid notes={notes} rows={rows} flats={song.flats} sel={sel} onSel={onSel} onNotes={onNotes} tall={!allNotes} />

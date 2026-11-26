@@ -31,3 +31,4 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 25 | Owner, pilot review | Footnote numbers piling up at the end of paragraphs look messy. Keep every reference, but show them lightly (for example, one small mark that reveals the sources on hover or tap) | open, goes into the card design |
 | 26 | Owner, pilot review (26 Nov) | The text assumes prior reading: terms like "the view from nowhere" are name-dropped without explanation. Write for someone new to philosophy: explain every term at its first use | fixing (T27) |
 | 27 | Owner, pilot review | Some sentences list several things and feel dense; use bullet lists for those, and make the whole draft lighter to read | fixing (T27) |
+| 28 | Owner idea (26 Nov) | Inside a school, show its key ideas visually as well, so you get a sense of how big it is and what themes and questions it holds. A mind map or a dashboard? Are six themes too few? | open, discussing; folds into the card design |

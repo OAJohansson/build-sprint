@@ -276,12 +276,12 @@ Re-check of CS1 (26 Nov): CS1-3, 4, 6, 8, 9 fixed; CS1-1 partly (G and G7 score 
 
 | ID | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| S2-1 | major | Group edits but single-bar Reset; ≈ 19 taps back to Make's | open |
-| S2-2 | major | Closeness ignores timing | open |
-| S2-3 | minor | Timing targets too small | open |
-| S2-4 | minor | No drag or arrow keys on hits | open |
-| S2-5 | minor | "Longer" disabled without a reason | open |
-| S2-6 | minor | Your sounds below the preset menu's fold | open |
-| S2-7 | polish | Chord row scrolls out of view at 720 px | open |
-| S2-8 | polish | "G, in Mine" while Mine plays G + A | open |
+| S2-1 | major | Group edits but single-bar Reset; ≈ 19 taps back to Make's | fixed (661a574, T201): with All ticked the button reads "↺ Reset N bars" and resets the group's notes and times; "Make's guess" restores times too |
+| S2-2 | major | Closeness ignores timing | fixed (661a574, T202): the notes half is half pitch match, half an onset F-score against the read events; the chords score shows one decimal |
+| S2-3 | minor | Timing targets too small | fixed (661a574, T203): strip 32 px, 16th slots ≥ 24 px wide on desktop, presets and moves 32 px |
+| S2-4 | minor | No drag or arrow keys on hits | fixed (661a574, T203): drag a hit along the 16ths (pointer events); ← / → move the selected hit |
+| S2-5 | minor | "Longer" disabled without a reason | fixed (661a574, T203): Longer pushes the hits after it; a disabled move says why in its title |
+| S2-6 | minor | Your sounds below the preset menu's fold | fixed (661a574, T204): Your sounds first in the preset menu when there are any |
+| S2-7 | polish | Chord row scrolls out of view at 720 px | fixed (661a574, T204): the rows (chord tiles, lead) are sticky at the top of the room |
+| S2-8 | polish | "G, in Mine" while Mine plays G + A | fixed (661a574, T204): a card with the same name as your own notes reads "your notes (≈ G)", no ✓ |
 | S2-9 | minor | At 390 px the Lab has no narrow layout, the chords panel can't be reached (pre-existing Lab limit; backlog) | noted |

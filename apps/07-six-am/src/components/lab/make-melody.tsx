@@ -32,7 +32,7 @@ type ReadRaw = { loopKey: string; chords: ChordsReading; lead: MelNote[]; target
 type Read = ReadRaw & { d: MelodyReading };
 /** Slice 1: the Lead row stays off until its own slice (K7): read note by note it is rough (H4), and it can't be edited yet. */
 /** Slice 4 (K7): the lead as Basic Pitch read it (a second read after the chords; the first one in a session loads the model). */
-type LeadRead = { loopKey: string; notes: MelNote[]; from: "row" | "top-line"; doubtful: boolean; why: string | null; target: MelodyTarget | null; reader: "dsp" | "basic-pitch"; ms: number };
+type LeadRead = { loopKey: string; notes: MelNote[]; from: "row" | "top-line"; doubtful: boolean; why: string | null; chordTop: number; target: MelodyTarget | null; reader: "dsp" | "basic-pitch"; ms: number };
 type Sound = { preset: MelodyPresetId; macros: Required<PolyMacros> };
 const fresh = (p: MelodyPresetId): Sound => ({ preset: p, macros: clampPolyMacros(p, undefined) });
 const perRow = <T,>(f: (r: MelodyRow) => T) => Object.fromEntries(MELODY_ROWS.map((r) => [r, f(r)])) as Record<MelodyRow, T>;
@@ -197,7 +197,7 @@ export function useMelody(o: MelodyOpts) {
       setLeadS({ loopKey: key, state: "reading" }); setLeadGrids({ loopKey: key, grids: {} }); setLeadPlants({ loopKey: key, grids: {} }); setLeadOpen(null); setLeadSel(null);
       const leadP = cl().leadRead({ left: leadL, right: leadR, rate, bpm: o.bpm, key: o.keyName && scale ? { key: o.keyName, scale } : undefined, chords: res.chords }).then((lr) => {
         console.info(`[make] lead read (${lr.reader}) in ${lr.ms} ms: ${lr.notes.length} notes, from ${lr.from}${lr.doubtful ? ", doubtful" : ""}`);
-        setLeadS({ loopKey: key, state: "ready", notes: lr.notes, from: lr.from, doubtful: lr.doubtful, why: lr.why, target: lr.target, reader: lr.reader, ms: lr.ms });
+        setLeadS({ loopKey: key, state: "ready", notes: lr.notes, from: lr.from, doubtful: lr.doubtful, why: lr.why, chordTop: lr.chordTop, target: lr.target, reader: lr.reader, ms: lr.ms });
         return lr.target;
       }, (e) => { setLeadS({ loopKey: key, state: "error", error: e instanceof Error ? e.message : String(e) }); return null; });
       if (r.targets.chords) await suggest(r, "chords", soundsRef.current.chords, null);
@@ -358,7 +358,7 @@ export function useMelody(o: MelodyOpts) {
     bars: Array.from({ length: leadBars }, (_, b) => ({ bar: b, edited: !!leadGrids[b] })),
   } : null;
   const leadDebug = () => ({
-    state: leadState, reader: lead?.reader ?? null, readMs: lead?.ms ?? null, from: lead?.from ?? null, doubtful: lead?.doubtful ?? null, why: lead?.why ?? null,
+    state: leadState, reader: lead?.reader ?? null, readMs: lead?.ms ?? null, from: lead?.from ?? null, doubtful: lead?.doubtful ?? null, why: lead?.why ?? null, chordTop: lead?.chordTop ?? null,
     off: !on.lead, open: leadOpen, openBar: leadOpen !== null ? (o.fromBar ?? 1) + leadOpen : null, sel: leadSel, outside, outsideLocked, rows: rowsNow,
     bars: Array.from({ length: leadBars }, (_, b) => ({ bar: b + 1, barNo: (o.fromBar ?? 1) + b, edited: !!leadGrids[b], planted: !!leadPlants[b], notes: leadGridOf(b) })),
     notes: read?.d.rows.lead.notes.map((n) => ({ tMs: Math.round(n.t * 10000) / 10, durMs: Math.round(n.dur * 10000) / 10, midi: n.midi, step: n.step, off: n.off })) ?? [],

@@ -193,3 +193,5 @@
 .sixteenths { height: 38px; }
 /* CS1-12b: half-bar names shrink to fit, down to 10 px (sus shortened to "s" there) */
 .tile[data-half] .tileName { font-size: max(10px, min(11px, calc(100cqi / 4.2))); letter-spacing: -0.05em; }
+/* S2-3b (re-check): the strip's 1 px border took 2 px off the hits; 40 px makes them 32 */
+.sixteenths { height: 40px; }

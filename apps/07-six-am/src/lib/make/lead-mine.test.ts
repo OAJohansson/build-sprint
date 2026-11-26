@@ -1,7 +1,7 @@
 // Slice 4 (K7): the lead's times on the grid (decision 0011: time logic gets a test).
 import { describe, expect, it } from "vitest";
 import type { MelNote } from "./melody-make";
-import { gridOf, gridsFromSaved, leadNoteMatch, leadNotesOf, leadRows, placeNote, stretchNote } from "./lead-mine";
+import { chordTopShare, gridOf, gridsFromSaved, leadNoteMatch, leadNotesOf, leadRows, placeNote, stretchNote } from "./lead-mine";
 
 // 120 BPM: a 16th is 0.125 s.
 const n = (step: number, off: number, durSteps: number, midi: number): MelNote => ({ t: (step + off) * 0.125, dur: durSteps * 0.125, midi, vel: 1, step, off, durSteps });
@@ -72,5 +72,28 @@ describe("leadNoteMatch (L-4)", () => {
     expect(leadNoteMatch(read, [read[0], read[1], { t: 1, midi: 79 }, read[3]], 0.06)).toBe(100); // an octave up still counts
     expect(leadNoteMatch(read, [read[0], read[1], { t: 1.2, midi: 67 }, read[3]], 0.06)).toBe(75); // late
     expect(leadNoteMatch([], [], 0.06)).toBeNull();
+  });
+});
+
+describe("chordTopShare (L-2)", () => {
+  // 120 BPM, one bar of G7 stabbed on each beat (G3 B3 D4 F4), 0.2 s each.
+  const chords = { bpm: 120, cells: [{ startStep: 0, steps: 16, name: "G7" }], events: [0, 0.5, 1, 1.5].map((t) => ({ t, dur: 0.2, cell: 0 })) };
+  const tones = (n: string) => (n === "G7" ? [7, 11, 2, 5] : []);
+  const stabs = [0, 0.5, 1, 1.5].flatMap((t) => [55, 59, 62, 65].map((midi) => ({ t, midi })));
+  it("a line that is the stabs' top notes counts in full", () => {
+    expect(chordTopShare([0, 0.5, 1, 1.5].map((t) => ({ t, midi: 65 })), stabs, chords, tones)).toBe(1);
+  });
+  it("a riff alone counts nothing, even on chord tones read from itself", () => {
+    const riff = [0, 0.5, 1, 1.5].map((t, i) => ({ t, midi: i % 2 ? 65 : 67 }));
+    expect(chordTopShare(riff, riff, chords, tones)).toBe(0);
+  });
+  it("a riff between the stabs counts nothing; an octave double doesn't make a stack", () => {
+    const riff = [0.25, 0.75, 1.25, 1.75].map((t) => ({ t, midi: 67 }));
+    expect(chordTopShare(riff, [...stabs, ...riff], chords, tones)).toBe(0);
+    const oct = [0, 0.5].map((t) => ({ t, midi: 67 }));
+    expect(chordTopShare(oct, [...oct, ...oct.map((x) => ({ ...x, midi: 55 }))], { ...chords, events: chords.events }, tones)).toBe(0);
+  });
+  it("is 0 for an empty line", () => {
+    expect(chordTopShare([], stabs, chords, tones)).toBe(0);
   });
 });

@@ -81,6 +81,46 @@ Studio (from 18 Oct):
   (`Electronic---Deep House`), "capture" or "record" (sounds like copying), quantise, sidechain,
   MIDI, LFO, DAW. Name concepts the club way: "brightness" (soft/warm vs hard/bright), "energy".
 
+## Phase 6 update: chords and lead in Make (26 Nov)
+
+Same person, a month further on. What is new for this phase (kickoff Phase 6, L248, L249, L261,
+L262):
+
+- **Goal:** "where I can recreate a song using the 6AM app", then add their own touch (L248).
+  The test track is one they already know well, Lost in the Loop; its build (bars 69–76) is a
+  short chord stab repeated every bar.
+- **Music:** still no music theory. Plays a little piano by ear and by sight of the keys: can find
+  a note they hear and press three keys together, but can't name what they played or say why it
+  works *(from the PM's task brief; the pack only says "no music training")*. Knows chord names
+  the way they know a key label: "G7" is a word on a screen, not a sound in their head.
+- **Ear first:** judges every chord by hearing it next to the track, never by reading. Can tell
+  "that sounds wrong" or "that one, that's it" when two versions play one after the other; can't
+  tell a 7th from a plain chord by name. Will tap and listen rather than read anything.
+- **Reads almost nothing:** after the canvas sign-off they said "if we're using text, it's not
+  intuitive enough" (L262). Expects the screen to be clear from buttons, sound and the keyboard
+  alone; a hint sentence is a sign the design failed, not help.
+- **Moment of use (Make, Melody):** an evening at the laptop in desktop Chrome with headphones,
+  20–40 minutes, a loop of a track they love already playing in the Lab. They want Make's guess
+  to sound right first, then fix the bars that don't, then try one note of their own, save it and
+  hear it in the Studio.
+- **Jobs (Phase 6, ranked):**
+  1. "When Make plays chords for my loop, I want to hear which bar sounds off, so I know where to
+     fix."
+  2. "When a bar sounds wrong, I want to try a few versions next to the track and keep the one
+     that matches, in a couple of taps, so I can recreate the song without theory."
+  3. "When it matches, I want to change a note or two on the keys, or when it plays, so it
+     becomes mine."
+  4. "When I like it, I want to know in plain words why that chord fits, and find it in the
+     Studio, so I learn something and can build my track."
+  5. "When the track has a riff on top, I want that too, fixed the same way."
+- **New frustrations:** a chord picker that needs theory (numerals, "dominant", "sus", "voicing",
+  "inversion", "diatonic"); not knowing which of several chord cards is playing; fixing the same
+  chord in eight bars one by one; a saved chord that sounds different in the Studio; edits lost
+  after a reload.
+- **Words:** use chord names only as labels (G, G7, B♭m), "the track", "mine", "keys", "notes",
+  "plays", "short hit", "held", "sounds like", "fits". Confusing: root, quality, 7th, numeral,
+  V/I, voicing, inversion, diatonic, borrowed chord, quantise, MIDI, velocity.
+
 ---
 
 # Persona 2: Robin, a new user with no brief who loves dance music on SoundCloud

@@ -20,3 +20,5 @@
 | Hover reason tag can cover a dim label behind it | Seen on the final build | Later |
 | Focus in the URL (?school=) so a school can be linked and survives reload | `// shortcut:` in meander.tsx | Later |
 | Rethink "Your thread": it records every click, so browsing counts as a visit (feedback #22) | The owner isn't sure it adds value; it also inflates the day-7 check | Later |
+| "Place it" check: after a section, ask which big idea it belongs to (the learner builds the skeleton). The strongest evidence in research-learning.md; the next slice after the skeleton (L26) | Later |
+| Other kinds of size in the skeleton: how far apart the thinkers stand (a themes × thinkers grid), reach into other fields, progress. Progress meters need a test first (the evidence is mixed) | Later |

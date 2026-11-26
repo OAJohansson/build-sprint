@@ -864,9 +864,18 @@ In the browser only (C2): no server-side model.
    built in Phase 5. `MELODY_ON` back on.
 2. **You fix it by ear:** the correction grid: tap a bar's chord, hear the 2–3 next-best guesses
    and the key's other chords, pick one; Mine and the score update; Save keeps the fixed chords.
+   Open a chord to switch single notes on or off on a small piano grid (L248), so a chord can
+   match the track exactly or get the owner's own touch; an edited chord keeps its notes, shows
+   its closest name, and saves and plays the same in the Studio.
 3. **Why it fits:** the Mentor explains a chord in the key (plain words: "G7 is the V of C, it
    pulls home"), and the saved chords open in the Studio's Chords / Pads lane drawer.
    (Lead, if question 2 says so, is a fourth slice.)
+
+## Owner's answers
+
+| # | Question | Answer | Log |
+| --- | --- | --- | --- |
+| 1 | Chord names only, or names and notes? | Both now: names per bar with alternatives, and single-note editing inside a chord, because the goal is to recreate a song and then add my own touch (PM had recommended names only, notes in Phase 7) | L248 |
 
 ## Questions for the owner (draft)
 

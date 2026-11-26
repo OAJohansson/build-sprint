@@ -72,6 +72,15 @@ function pitchesOf(peaks: Peak[]): [number, number][] {
 }
 
 /**
+ * One frame's fundamentals (MIDI as a float, strength) from its 2048-point magnitude spectrum at `rate`
+ * (the greedy estimate with harmonic cancellation above). For the chord reader's chroma (Phase 6).
+ */
+export function framePitches(mag: Float64Array, rate: number, floor: number): [number, number][] {
+  return pitchesOf(peaksOf(mag, rate, floor));
+}
+export const NOTE_FFT = N;
+
+/**
  * Attacks: peaks of a fine onset curve (2.9 ms hops, a 46 ms window to decide, 23 ms to time), the summed rise of log energy in 12 bands between
  * 150 Hz and 4 kHz (bands, not bins, so partials beating inside a held note don't look like
  * attacks), above a local median. Times (s) and strengths (0–1 of the loudest).

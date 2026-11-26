@@ -18,7 +18,7 @@ import { PITCHES } from "@/lib/lab/chords";
 import { pitchClass, scalePitchClasses, type Scale } from "@/lib/synths/theory";
 import { decimate, fft, hann, powerSpec, toMono } from "./dsp";
 import { eventsOf, playedOf, type MelNote, type MelodyReading } from "./melody-make";
-import { loopAttacks, type ReadNote } from "./notes-read";
+import { NOTE_FFT, framePitches, loopAttacks, type ReadNote } from "./notes-read";
 
 export type ChordType = "maj" | "min" | "7" | "maj7" | "m7" | "sus2" | "sus4" | "dim";
 export const CHORD_TYPES: Record<ChordType, { iv: readonly number[]; suffix: string }> = {
@@ -219,56 +219,52 @@ export function eventsFromOnsets(onsets: Onset[], cells: ChordCell[], bpm: numbe
 
 // ── Reader A: DSP chroma ───────────────────────────────────────────────────────────────────────
 
-const N = 4096; // at ~11 kHz: 372 ms, 2.7 Hz bins (a semitone at 100 Hz is 6 Hz)
-const LO_HZ = 100, HI_HZ = 2000, BASS_HI_HZ = 400;
+const NF = NOTE_FFT; // the note reader's frame: at ~11 kHz, 186 ms, 5.4 Hz bins
+// Fundamentals from G2 (98 Hz, under it is the bass's bleed) up; the estimate looks up to ~1.4 kHz and
+// uses harmonics up to ~2 kHz and beyond. −42 dB floor as the note reader.
+const LO_MIDI = 43, HI_MIDI = 96, FLOOR_DB = -42;
 // shortcut: onset filter (mark ≥ 0.15, pitched band 100–1200 Hz up ≥ 3 dB, within 30 dB of the loudest, sounds until 12 dB down) picked by reasoning; check against the real stab labels.
 export const ONSET_OPT = { mark: 0.15, riseDb: 3, floorDb: -30, decayDb: 12, bandLo: 100, bandHi: 1200 };
 
-/** Harmony per 16th of a looped part (the loop read round, so the first bar's window sees the last). */
+/**
+ * Harmony per 16th of a looped part (the loop read round, so the first bar's window sees the last).
+ * Chroma from each frame's fundamentals, not its raw peaks: a stab's own harmonics (the 3rd, 5th and
+ * 7th partials land on other note names) are cancelled by the note reader's greedy estimate
+ * (framePitches, notes-read.ts), so a C over a G bass doesn't read as G7.
+ */
 export function harmonyOf(x: Float32Array, r: number, bpm: number): StepHarmony & { register: number; tuningCents: number } {
   const sps = 60 / bpm / 4, steps = Math.max(1, Math.floor(x.length / r / sps + 0.01));
   const hop = Math.round(r * 0.0232), frames = Math.floor(x.length / hop);
-  const w = hann(N), re = new Float64Array(N), im = new Float64Array(N);
-  const kLo = Math.ceil((LO_HZ * N) / r), kHi = Math.min(N / 2 - 1, Math.floor((HI_HZ * N) / r));
-  const peaks: { f: number; midi: number; amp: number }[] = [];
+  const w = hann(NF), re = new Float64Array(NF), im = new Float64Array(NF);
+  const mags: Float64Array[] = [];
   let loud = 0;
-  const frameMags: Float64Array[] = [];
   for (let f = 0; f < frames; f++) {
-    const at = f * hop - N / 2;
-    for (let i = 0; i < N; i++) { const j = ((at + i) % x.length + x.length) % x.length; re[i] = x[j] * w[i]; im[i] = 0; }
+    const at = f * hop - NF / 2;
+    for (let i = 0; i < NF; i++) { const j = ((at + i) % x.length + x.length) % x.length; re[i] = x[j] * w[i]; im[i] = 0; }
     fft(re, im);
-    const m = new Float64Array(kHi + 2);
-    for (let k = kLo - 1; k <= kHi + 1; k++) { m[k] = Math.hypot(re[k], im[k]); if (m[k] > loud) loud = m[k]; }
-    frameMags.push(m);
+    const m = new Float64Array(NF / 2 + 1);
+    for (let k = 0; k <= NF / 2; k++) { m[k] = Math.hypot(re[k], im[k]); if (m[k] > loud) loud = m[k]; }
+    mags.push(m);
   }
-  const floor = loud * Math.pow(10, -50 / 20);
-  for (let f = 0; f < frames; f++) {
-    const m = frameMags[f];
-    for (let k = kLo; k <= kHi; k++) {
-      if (m[k] < floor || m[k] <= m[k - 1] || m[k] < m[k + 1]) continue;
-      const a = Math.log(m[k - 1] + 1e-12), b = Math.log(m[k] + 1e-12), c = Math.log(m[k + 1] + 1e-12), d = a - 2 * b + c;
-      const off = d < 0 ? (0.5 * (a - c)) / d : 0;
-      peaks.push({ f, midi: 69 + 12 * Math.log2(((k + off) * r) / N / 440), amp: Math.exp(b - 0.25 * (a - c) * off) });
-    }
-  }
-  // Tuning: the median offset of the strong peaks from equal temperament.
-  const strong = peaks.filter((p) => p.amp > loud * 0.05).map((p) => p.midi - Math.round(p.midi)).sort((a, b) => a - b);
-  const tune = strong.length ? strong[strong.length >> 1] : 0;
+  const floor = loud * Math.pow(10, FLOOR_DB / 20);
+  const per = mags.map((m) => framePitches(m, r, floor));
+  // Tuning: the median offset of the fundamentals from equal temperament.
+  const devs = per.flat().map(([m]) => m - Math.round(m)).sort((p, q) => p - q);
+  const tune = devs.length ? devs[devs.length >> 1] : 0;
   const chroma = Array.from({ length: steps }, zeros), bass = Array.from({ length: steps }, zeros), energy = new Array(steps).fill(0);
-  const byFrame: { midi: number; amp: number }[][] = Array.from({ length: frames }, () => []);
-  for (const p of peaks) byFrame[p.f].push(p);
   let regW = 0, regS = 0;
   for (let f = 0; f < frames; f++) {
-    const s = Math.floor((f * hop) / r / sps) % steps, ps = byFrame[f];
+    const s = Math.floor((f * hop) / r / sps) % steps;
+    const ps = per[f].map(([m, a]) => ({ midi: Math.round(m - tune), amp: a })).filter((p) => p.midi >= LO_MIDI && p.midi <= HI_MIDI);
     if (!ps.length) continue;
     let top = 0;
-    for (const p of ps) { const v = Math.sqrt(p.amp); chroma[s][mod12(Math.round(p.midi - tune))] += v; energy[s] += p.amp * p.amp; top = Math.max(top, p.amp); }
-    // The root: the lowest strong note in the frame (its fundamental, under 400 Hz), counted again.
-    const low = ps.filter((p) => p.amp >= 0.3 * top && 440 * Math.pow(2, (p.midi - 69) / 12) < BASS_HI_HZ).sort((a, b) => a.midi - b.midi)[0];
-    if (low) { const v = Math.sqrt(low.amp); bass[s][mod12(Math.round(low.midi - tune))] += v; regW += v; regS += v * low.midi; }
+    for (const p of ps) { chroma[s][mod12(p.midi)] += Math.sqrt(p.amp); energy[s] += p.amp * p.amp; top = Math.max(top, p.amp); }
+    // The root: the lowest strong note in the frame, counted again.
+    const low = ps.filter((p) => p.amp >= 0.3 * top).sort((p, q) => p.midi - q.midi)[0];
+    if (low) { const v = Math.sqrt(low.amp); bass[s][mod12(low.midi)] += v; regW += v; regS += v * low.midi; }
   }
-  // The register: the low note (a chord's bottom; all peaks would count the harmonics too) plus half a
-  // closed voicing's span, so voiceChord puts the voicing's root about where the original's is.
+  // The register: the low note (a chord's bottom) plus half a closed voicing's span, so voiceChord puts
+  // the voicing's root about where the original's is.
   return { chroma, bass, energy, register: regW ? Math.round(regS / regW + 5.5) : 60, tuningCents: Math.round(tune * 100) };
 }
 

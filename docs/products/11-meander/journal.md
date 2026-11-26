@@ -163,3 +163,6 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   - **Sketch gaps:** the link words are the old ones from before T26. Heidegger was added as the sixth person, though he has no thinker card yet.
   - Waiting on the owner's pick of three.
 - **Owner pick (L27): the knot opens.** "Bang on… really nice and tidy"; the full-globe versions look too messy. Next: 3 versions of how the knot opens × 3 ways to present the information beside it.
+- **Round 3:** 3 knot forms (A) and 3 side panels (B), built by the Fable designer.
+  - Critic: A3 clew 8, A2 7, A1 radial 5; B1 one big line 7, B2 tag 4, B3 route 4. It recommends A3 with B1 (`design/skeleton-r3/critic.md`).
+  - Tension: the critic marks A1 down for its neighbour labels and radial reading order, but A1 is closest to what the owner called "bang on". The pick is the owner's.

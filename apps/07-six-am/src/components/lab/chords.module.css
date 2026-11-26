@@ -164,3 +164,16 @@
   .leadRow { height: 16px; }
   .leadGrid { max-width: none; }
 }
+
+/* ── Slice 2 user test (S2-3, S2-7) ─────────────────────────────────────────────────────────────── */
+/* S2-3: the strip is 32 px tall and each 16th at least 24 px wide; presets and moves 32 px tall */
+.sixteenths { height: 32px; }
+.strip16 { flex: 0 1 420px; min-width: 384px; }
+.hit { touch-action: none; cursor: grab; }
+.hit:active { cursor: grabbing; }
+.presets button { min-height: 32px; }
+.moves button { min-height: 32px; }
+.moves button:disabled { color: var(--faint) !important; cursor: default; }
+@media (max-width: 700px) { .strip16 { min-width: 0; } }
+/* S2-7: the rows (chord tiles, lead) stay in view while the panel scrolls on a short window */
+.stickyRows { position: sticky; top: 0; z-index: 4; background: var(--bg); }

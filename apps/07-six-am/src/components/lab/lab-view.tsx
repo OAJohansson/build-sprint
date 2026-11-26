@@ -53,7 +53,7 @@ declare global {
     chordsDo?: { open: (cell: number) => void; pick: (name: string, opts?: { all?: boolean; cell?: number; hear?: boolean }) => boolean; track: () => void; all: (on: boolean) => void; more: (on: boolean) => void;
       /** Slice 2 (K5, K6): the open cell on the keys; a note in or out; the timing strip (select a hit by index, add one on a 16th, move the selected one); the presets; ↺ Reset. */
       piano: (on: boolean) => void; toggleNote: (midi: number) => { notes: number[]; name: string | null; exact: boolean } | null;
-      hit: (op: "select" | "add" | "earlier" | "later" | "shorter" | "longer" | "remove", at?: number) => boolean; preset: (p: "held" | "short") => void; reset: () => void };
+      hit: (op: "select" | "add" | "earlier" | "later" | "shorter" | "longer" | "remove" | "to", at?: number) => boolean; preset: (p: "held" | "short") => void; reset: () => void };
     /** Dev/grader only (H14): Make's guess on the bar numbered `bar` (as on its tile) becomes `name`, as if misread. */
     /** Phase 6 slice 3 graders (H12): the open chord's theory facts and the exact Lab-facts block the server puts in the prompt for a question at its bar (no model call). */
     chordFacts?: () => { bar: number; chord: LabAsk["chord"]; facts: ReturnType<typeof chordFacts>; theory: string[]; labFacts: string; offline: string | null } | null;
@@ -208,7 +208,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
           open: (cell: number) => melodyRef.current?.openChord(cell), pick: (name: string, opts?: { all?: boolean; cell?: number; hear?: boolean }) => melodyRef.current?.pickChord(name, opts) ?? false,
           track: () => melodyRef.current?.tapTrack(tr.current?.playing ?? false), all: (on: boolean) => melodyRef.current?.setAll(on), more: (on: boolean) => melodyRef.current?.setMore(on),
           piano: (on: boolean) => melodyRef.current?.setPiano(on), toggleNote: (midi: number) => melodyRef.current?.toggleNote(midi) ?? null,
-          hit: (op: "select" | "add" | "earlier" | "later" | "shorter" | "longer" | "remove", at?: number) => melodyRef.current?.hitOp(op, at) ?? false,
+          hit: (op: "select" | "add" | "earlier" | "later" | "shorter" | "longer" | "remove" | "to", at?: number) => melodyRef.current?.hitOp(op, at) ?? false,
           preset: (p: "held" | "short") => melodyRef.current?.presetHits(p), reset: () => melodyRef.current?.resetCell(),
         },
       } : {}),

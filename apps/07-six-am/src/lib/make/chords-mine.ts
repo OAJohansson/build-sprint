@@ -213,16 +213,59 @@ export const sameHits = (a: Hit[], b: Hit[]) => a.length === b.length && a.every
 export const hitFits = (hits: Hit[], at: number, len: number, steps: number, skip = -1) =>
   at >= 0 && at + len <= steps + 1e-6 && hits.every((x, k) => k === skip || at + len <= x.at + 1e-6 || at >= x.at + x.len - 1e-6);
 
-/** One timing move on a cell's hits (K6). Returns the new hits, or null when it doesn't fit. */
+/**
+ * One timing move on a cell's hits (K6). "longer" pushes the hits after it later when they're in the way
+ * (S2-5), as long as the last still fits in the bar. Returns the new hits, or null when it doesn't fit.
+ */
 export function moveHit(hits: Hit[], k: number, op: "earlier" | "later" | "shorter" | "longer" | "remove", steps: number): Hit[] | null {
   const h = hits[k];
   if (!h) return null;
   if (op === "remove") return hits.filter((_, j) => j !== k);
-  const nx = op === "earlier" ? { ...h, at: h.at - 1 } : op === "later" ? { ...h, at: h.at + 1 } : op === "shorter" ? { ...h, len: h.len - 1 } : { ...h, len: h.len + 1 };
+  if (op === "longer") {
+    const sorted = hits.map((x, j) => ({ ...x, j })).sort((a, b) => a.at - b.at);
+    const out = sorted.map((x) => ({ ...x }));
+    const me = out.find((x) => x.j === k)!;
+    me.len += 1;
+    let end = me.at + me.len;
+    for (const x of out) {
+      if (x.at <= me.at || x.j === k) continue;
+      if (x.at < end - 1e-6) x.at = Math.ceil(end - 1e-6);
+      end = Math.max(end, x.at + x.len);
+    }
+    if (out.some((x) => x.at + x.len > steps + 1e-6)) return null;
+    return out.map(({ j: _j, ...x }) => { void _j; return x; }).sort((a, b) => a.at - b.at);
+  }
+  const nx = op === "earlier" ? { ...h, at: h.at - 1 } : op === "later" ? { ...h, at: h.at + 1 } : { ...h, len: h.len - 1 };
   if (nx.len < 1 - 1e-6 && op === "shorter") return null;
   if (!hitFits(hits, nx.at, nx.len, steps, k)) return null;
   return hits.map((x, j) => (j === k ? nx : x)).sort((a, b) => a.at - b.at);
 }
+/** S2-4: the hit `k` dragged to 16th `at` (its length and offset kept), or null when it doesn't fit there. */
+export function moveHitTo(hits: Hit[], k: number, at: number, steps: number): Hit[] | null {
+  const h = hits[k];
+  if (!h || !Number.isInteger(at) || !hitFits(hits, at, h.len, steps, k)) return null;
+  return hits.map((x, j) => (j === k ? { ...x, at } : x)).sort((a, b) => a.at - b.at);
+}
+
+/**
+ * S2-2: how well Mine's chord times match the read ones, 0–100: an F-score of onsets (a Mine onset
+ * within `tol` seconds of a read onset counts, each read onset once). Moving, adding or removing a hit,
+ * or Held for Short hits, moves it. Null with nothing to compare.
+ */
+export function timingMatch(read: { t: number }[], mine: { t: number }[], tol: number): number | null {
+  if (!read.length && !mine.length) return null;
+  if (!read.length || !mine.length) return 0;
+  const used = new Set<number>();
+  let hit = 0;
+  for (const m of [...mine].sort((a, b) => a.t - b.t)) {
+    let best = -1, d = Infinity;
+    read.forEach((r, i) => { const x = Math.abs(r.t - m.t); if (!used.has(i) && x <= tol && x < d) { d = x; best = i; } });
+    if (best >= 0) { used.add(best); hit++; }
+  }
+  const p = hit / mine.length, r = hit / read.length;
+  return p + r > 0 ? Math.round(((2 * p * r) / (p + r)) * 1000) / 10 : 0;
+}
+
 /** A new one-16th hit on an empty 16th. */
 export function addHit(hits: Hit[], at: number, steps: number): Hit[] | null {
   return hitFits(hits, at, 1, steps) ? [...hits, { at, len: 1 }].sort((a, b) => a.at - b.at) : null;

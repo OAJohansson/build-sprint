@@ -75,15 +75,16 @@ export function ChordPanel({ m, from, playing, onAsk }: { m: MelodyModel; from: 
   const extra = v.more ? v.keyChords.filter((n) => !list.includes(n)) : [];
   const trackOn = playing && v.hear === "orig" && m.ab === "a";
   const card = (n: string) => {
-    const chosen = cur === n, on = playing && v.hear === n && m.ab === "b", guess = n === cell.guess, p = prettyChord(n);
+    // S2-8: the same name with the owner's own notes isn't this card's chord: say so, no ✓.
+    const own = cur === n && v.ownNotes, chosen = cur === n && !own, on = playing && v.hear === n && m.ab === "b", guess = n === cell.guess, p = prettyChord(n);
     return (
       <button key={n} className={c.choice} aria-pressed={chosen} data-playing={on ? "" : undefined} onClick={() => m.tapCard(n, playing)}
-        aria-label={`${p}${guess ? ", Make's guess" : ""}, ${flavour(n) || "a chord"}${chosen ? ", in Mine" : ""}. ${on ? "Pause" : "Hear it in the loop and use it"}`}>
+        aria-label={`${p}${guess ? ", Make's guess" : ""}, ${flavour(n) || "a chord"}${chosen ? ", in Mine" : own ? `, Mine plays your notes (≈ ${p})` : ""}. ${on ? "Pause" : "Hear it in the loop and use it"}`}>
         <span className={c.glyph} aria-hidden>{on ? <Pause size={13} /> : <Play size={13} />}</span>
         <span className={c.choiceText}>
           <small className={c.guessTag}>{guess ? "Make's guess" : "\u00a0"}</small>
           <span className={c.choiceName}>{p}</span>
-          <small className={c.mood}>{flavour(n)}</small>
+          <small className={c.mood}>{own ? `your notes (≈ ${p})` : flavour(n)}</small>
         </span>
         {chosen && <Check className={c.check} size={15} strokeWidth={2.5} aria-hidden />}
       </button>
@@ -168,6 +169,15 @@ const MOVES = [["earlier", "Earlier"], ["later", "Later"], ["shorter", "Shorter"
 function Timing({ m, t, sel }: { m: MelodyModel; t: V["timing"]; sel: number | null }) {
   const steps = t.steps, at = (st: number) => t.hits.findIndex((x) => st >= x.at && st < x.at + x.len);
   const beats = Array.from({ length: Math.max(1, Math.round(steps / 4)) }, (_, b) => b + 1);
+  const strip = useRef<HTMLDivElement>(null);
+  const drag = useRef<{ k: number; moved: boolean } | null>(null);
+  const stepAt = (x: number) => { const r = strip.current?.getBoundingClientRect(); return r ? Math.max(0, Math.min(steps - 1, Math.floor(((x - r.left) / r.width) * steps))) : null; };
+  const h = sel !== null ? t.hits[sel] : null;
+  const why = (op: (typeof MOVES)[number][0]) => {
+    if (!h || sel === null || moveHit(t.hits, sel, op, steps)) return undefined;
+    return op === "longer" ? "No room: the hits after it already reach the bar's end" : op === "earlier" ? "Already at the bar's start, or the hit before is in the way"
+      : op === "later" ? "The bar ends here, or the next hit is in the way" : op === "shorter" ? "Already one 16th long" : undefined;
+  };
   return (
     <div className={c.timing}>
       <span className={c.label}>When it plays</span>
@@ -176,21 +186,35 @@ function Timing({ m, t, sel }: { m: MelodyModel; t: V["timing"]; sel: number | n
         <button aria-pressed={t.preset === "held"} onClick={() => m.presetHits("held")}>Held</button>
       </div>
       <div className={c.strip16}>
-        <div className={c.sixteenths} style={{ gridTemplateColumns: `repeat(${steps}, 1fr)` }} role="group" aria-label="When it plays, in 16ths">
+        <div ref={strip} className={c.sixteenths} style={{ gridTemplateColumns: `repeat(${steps}, 1fr)` }} role="group" aria-label="When it plays, in 16ths">
           {Array.from({ length: steps }, (_, st) => <i key={st} data-beat={st % 4 === 0 ? "" : undefined} />)}
           {Array.from({ length: steps }, (_, st) => at(st) < 0 && (
             <button key={`e${st}`} className={c.empty} style={{ left: `${(st / steps) * 100}%`, width: `${100 / steps}%` }} aria-label={`Add a hit on 16th ${st + 1}`} onClick={() => m.hitOp("add", st)} />
           ))}
           {t.hits.map((x, k) => (
             <button key={`h${k}-${x.at}`} className={c.hit} data-sel={sel === k ? "" : undefined} style={{ left: `${((x.at + (x.off ?? 0)) / steps) * 100}%`, width: `${(Math.min(x.len, steps - x.at) / steps) * 100}%` }}
-              aria-pressed={sel === k} aria-label={`Hit on 16th ${x.at + 1}, ${Math.round(x.len * 100) / 100} sixteenths long`} onClick={() => m.hitOp("select", k)} />
+              aria-pressed={sel === k} aria-label={`Hit on 16th ${x.at + 1}, ${Math.round(x.len * 100) / 100} sixteenths long. Drag, or arrow keys to move`}
+              // S2-4: drag along the 16ths (pointer events); a press without a move selects it.
+              onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); drag.current = { k, moved: false }; if (sel !== k) m.hitOp("select", k); }}
+              onPointerMove={(e) => {
+                const d = drag.current;
+                if (!d || d.k !== k || sel !== k) return; // moves once the selection has landed
+                const st = stepAt(e.clientX);
+                if (st !== null && st !== x.at && m.hitOp("to", st)) d.moved = true;
+              }}
+              onPointerUp={() => { drag.current = null; }}
+              onKeyDown={(e) => {
+                if (sel !== k || (e.key !== "ArrowLeft" && e.key !== "ArrowRight")) return;
+                e.preventDefault();
+                m.hitOp(e.key === "ArrowLeft" ? "earlier" : "later");
+              }} />
           ))}
         </div>
         <div className={c.beats} style={{ gridTemplateColumns: `repeat(${beats.length}, 1fr)` }} aria-hidden>{beats.map((b) => <span key={b}>{b}</span>)}</div>
       </div>
-      {sel !== null && t.hits[sel] && (
+      {h && sel !== null && (
         <span className={c.moves}>
-          {MOVES.map(([op, label]) => <button key={op} onClick={() => m.hitOp(op)} disabled={!moveHit(t.hits, sel, op, steps)}>{label}</button>)}
+          {MOVES.map(([op, label]) => { const no = why(op); return <button key={op} onClick={() => m.hitOp(op)} disabled={!!no} title={no}>{label}</button>; })}
         </span>
       )}
     </div>
@@ -211,7 +235,7 @@ function KeysPanel({ m, v, where, allBox }: { m: MelodyModel; v: V; where: strin
         <button className={c.icon} onClick={() => m.setPiano(false)} aria-label="Back to the chords" title="Back"><ArrowLeft size={16} /></button>
         <span className={c.where}>Bar {where}</span>
         <b className={c.title} title={v.exact ? undefined : "Your notes; the closest chord name"}>{cur ? `${v.exact ? "" : "≈ "}${prettyChord(cur)}` : "–"}</b>
-        {cell.edited && <button className={c.reset} onClick={() => m.resetCell()} aria-label={`Reset to Make's ${prettyChord(cell.guess)}`} title={`Back to Make's ${prettyChord(cell.guess)}`}><RotateCcw size={14} aria-hidden /> Reset</button>}
+        {v.resetAny && <button className={c.reset} onClick={() => m.resetCell()} aria-label={v.resetCount > 1 ? `Reset all ${v.resetCount} bars to Make's chords and times` : `Reset to Make's ${prettyChord(cell.guess)}`} title={v.resetCount > 1 ? `Back to Make's chords and times in all ${v.resetCount} bars` : `Back to Make's ${prettyChord(cell.guess)}`}><RotateCcw size={14} aria-hidden /> {v.resetCount > 1 ? `Reset ${v.resetCount} bars` : "Reset"}</button>}
         <span className={c.grow} />
         {allBox}
       </div>

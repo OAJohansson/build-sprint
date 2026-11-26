@@ -2,7 +2,7 @@
 // next cell now differs). Time logic only (decision 0011); the names and cards aren't unit tested.
 import { describe, expect, it } from "vitest";
 import type { ChordCell, ChordsReading } from "./chords-read";
-import { addHit, editsFromSaved, foldChordNames, hitsOf, moveHit, picksFromSaved, shortHits, withEdits, withPicks } from "./chords-mine";
+import { moveHitTo, timingMatch, addHit, editsFromSaved, foldChordNames, hitsOf, moveHit, picksFromSaved, shortHits, withEdits, withPicks } from "./chords-mine";
 
 const cell = (bar: number, name: string, root: number): ChordCell => ({ bar, startStep: bar * 16, steps: 16, name, root, type: "maj", score: 1, alternatives: [] });
 // 120 BPM: a 16th is 0.125 s, a bar 2 s. Two bars of G held as one pad from 0 s to 4 s.
@@ -80,7 +80,8 @@ describe("timing moves", () => {
   it("refuses at the edges: before the bar, past its end, into a neighbour, under one 16th", () => {
     expect(moveHit(hs, 0, "earlier", 16)).toBeNull();
     expect(moveHit([{ at: 15, len: 1 }], 0, "later", 16)).toBeNull();
-    expect(moveHit([{ at: 0, len: 4 }, { at: 4, len: 1 }], 0, "longer", 16)).toBeNull();
+    expect(moveHit([{ at: 0, len: 4 }, { at: 4, len: 1 }], 0, "longer", 16)).toEqual([{ at: 0, len: 5 }, { at: 5, len: 1 }]); // S2-5: pushes the next later
+    expect(moveHit([{ at: 0, len: 15 }, { at: 15, len: 1 }], 0, "longer", 16)).toBeNull(); // no room left in the bar
     expect(moveHit(hs, 1, "shorter", 16)).toBeNull();
     expect(addHit(hs, 1, 16)).toBeNull();
     expect(addHit(hs, 8, 16)).toEqual([...hs, { at: 8, len: 1 }]);
@@ -95,5 +96,20 @@ describe("saved edits", () => {
     expect(marks).toEqual([{ step: 0, steps: 16, name: "G" }, { step: 16, steps: 16, name: "C", notes: [60, 64, 67, 71], hits: [{ at: 0, len: 16 }] }]);
     const back = editsFromSaved([cell(0, "G", 7), cell(1, "G", 7)], marks, 2);
     expect(back).toEqual({ 1: { name: "C", notes: [60, 64, 67, 71], hits: [{ at: 0, len: 16 }] } });
+  });
+});
+
+describe("S2: drag and timing score", () => {
+  it("drags a hit to another 16th when there is room", () => {
+    expect(moveHitTo([{ at: 0, len: 1 }, { at: 4, len: 1 }], 0, 8, 16)).toEqual([{ at: 4, len: 1 }, { at: 8, len: 1 }]);
+    expect(moveHitTo([{ at: 0, len: 1 }, { at: 4, len: 1 }], 0, 4, 16)).toBeNull();
+  });
+  it("scores onsets: all on time 100, one moved off, one missing, held for four", () => {
+    const read = [0, 0.5, 1, 1.5].map((t) => ({ t }));
+    expect(timingMatch(read, read, 0.04)).toBe(100);
+    expect(timingMatch(read, [0, 0.5, 1, 1.625].map((t) => ({ t })), 0.04)).toBe(75);
+    expect(timingMatch(read, [0, 0.5, 1].map((t) => ({ t })), 0.04)).toBe(85.7);
+    expect(timingMatch(read, [{ t: 0 }], 0.04)).toBe(40);
+    expect(timingMatch([], [], 0.04)).toBeNull();
   });
 });

@@ -6,7 +6,7 @@
 // the rows' read notes with the poly synth, at the original's loudness; A/B against the original
 // "other" part with the original drums under both by default (P7). The part is read off the main
 // thread from a copy the worker zeroes (C2). Save saves the open row ("Save chords").
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import type { LabTransport, LoopState } from "@/lib/lab/transport";
 import { MakeClient } from "@/lib/make/make-client";
 import type { MakeResponse } from "@/lib/make/jobs";
@@ -627,37 +627,9 @@ export function MelodyMiddle({ m, loop, playing, heardMs, from, onAsk }: { m: Me
   else if (!m.read?.targets[row]) line = <span className={s.faintLine}>Not enough clear notes in this row to compare with.</span>;
   else if (!ticks) line = `Mentor: press Suggest for ${MELODY_ROW_NAMES[row].toLowerCase()} to compare this preset with the original.`;
   else line = <>Mentor: {polySuggestLine(snd.preset, snd.macros, ticks, nounOf(snd.preset))}{m.ticks[row]?.moved && polyMoves(snd.macros, ticks).length > 0 ? <><br /><span className={s.faintLine}>{m.ticks[row]!.moved}</span></> : null}</>;
-  // T227: the knob block shows whole or not at all in the default view (scrolled to the top): if it would
-  // show cut, start the room scrolled so it's whole, as long as the panel's header stays clear of the sticky
-  // rows; else push the block just below the edge, so a scroll brings it in whole. Recomputed when the panel
-  // changes or the window resizes, and only while the room is at its default (top) position.
-  const rootRef = useRef<HTMLDivElement>(null), blockRef = useRef<HTMLDivElement>(null);
-  const [push, setPush] = useState(0);
-  const pushRef = useRef(0);
-  const layoutKey = `${m.read?.loopKey ?? ""}|${m.chords?.open}|${m.chords?.keys}|${m.chords?.more}|${m.lead?.open}|${m.lead?.sel !== null}|${off}`;
-  useLayoutEffect(() => {
-    const fit = () => {
-      const blk = blockRef.current, root = rootRef.current, box = root?.closest<HTMLElement>("[data-melody-scroll]");
-      if (!blk || !root || !box || box.scrollTop > 4) return;
-      const b = box.getBoundingClientRect(), r = blk.getBoundingClientRect();
-      const top = r.top - pushRef.current, bottom = r.bottom - pushRef.current;
-      let next = 0;
-      if (bottom > b.bottom + 1 && top < b.bottom) {
-        const rows = root.querySelector<HTMLElement>("[data-sticky-rows]"), head = root.querySelector<HTMLElement>("section");
-        const room = head ? head.getBoundingClientRect().top - (b.top + (rows?.offsetHeight ?? 0) + 8) : 0;
-        const need = bottom - b.bottom;
-        if (need <= room) box.scrollTop = need;
-        else next = Math.ceil(b.bottom - top) + 1;
-      }
-      if (Math.abs(next - pushRef.current) > 1) { pushRef.current = next; setPush(next); }
-    };
-    fit();
-    addEventListener("resize", fit);
-    return () => removeEventListener("resize", fit);
-  }, [layoutKey]);
   return (
     // T219: room under the last row, so it clears the sticky A/B bar when scrolled to the end
-    <div ref={rootRef} className={s.drums} style={{ paddingBottom: 24 }}>
+    <div className={s.drums} style={{ paddingBottom: 24 }}>
       {/* S2-7: the rows stay in view while the panel under them scrolls on a short window */}
       <div className={s.drRows} data-sticky-rows="" style={{ position: "sticky", top: 0, zIndex: 4, background: "var(--bg)" }} role="group" aria-label="Melody rows">
         {m.rows.map((r) => {
@@ -696,8 +668,7 @@ export function MelodyMiddle({ m, loop, playing, heardMs, from, onAsk }: { m: Me
       </div>
       {!off && (m.lead?.open !== null && m.lead?.open !== undefined ? <LeadPanel m={m} from={from} /> : <ChordPanel m={m} from={from} playing={playing} onAsk={onAsk} />)}
       {!off && m.leadState === "reading" && <p className={s.drWait} role="status" style={{ height: "auto", marginTop: 6 }}>Reading the lead… the first time takes a few seconds.</p>}
-      {push > 0 && <div aria-hidden style={{ height: push, flex: "none" }} />}
-      <div ref={blockRef} className={s.drBlock}>
+      <div className={s.drBlock}>
         <span className={s.drLabel}>{MELODY_ROW_NAMES[row]}</span>
         <MelodyPreset m={m} row={row} />
         <div className={s.drKnobs} data-off={off ? "" : undefined} style={{ gap: short ? 24 : 40 }}>

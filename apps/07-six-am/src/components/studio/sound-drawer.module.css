@@ -117,3 +117,6 @@
 .chordPick small { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .chordPick select { min-height: 26px; font-size: 12px; padding: 0 2px; }
 .chordBlock { gap: 2px; }
+/* T230: labels never truncate; "was G7" sits on its own line under the picker */
+.chordPick small { white-space: normal; overflow: visible; text-overflow: clip; }
+.was { font: 400 10px/1.3 var(--f-mono); color: var(--muted); overflow-wrap: anywhere; }

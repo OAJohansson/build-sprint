@@ -133,13 +133,15 @@ function ChordList({ t, sound, change }: { t: Timeline; sound: MelodyLoop; chang
           const shown = transposeChord(m.name, semis) ?? m.name, options = [...new Set([shown, ...inKey])];
           return (
             <label key={m.step} className={s.chordPick} title={m.notes ? "Your own notes; picking a name replaces them" : undefined}>
-              <small>{bar(m.step)}{moved && <> · was {prettyChord(m.name)}</>}</small>
+              <small>{bar(m.step)}</small>
               <select value={shown} aria-label={`Bar ${bar(m.step)} chord${moved ? `, was ${prettyChord(m.name)} in Make` : ""}`} onChange={(e) => {
                 const back = transposeChord(e.target.value, -semis), pat = back ? revoiceMark(sound.pattern, i, back, voiceChord) : null;
                 if (pat) change({ ...sound, pattern: pat });
               }}>
                 {options.map((n) => <option key={n} value={n}>{prettyChord(n)}{m.notes && n === shown ? " (your notes)" : ""}</option>)}
               </select>
+              {/* T230: Make's name on its own small line under the picker, never cut */}
+              {moved && <small className={s.was}>was {prettyChord(m.name)}</small>}
             </label>
           );
         })}

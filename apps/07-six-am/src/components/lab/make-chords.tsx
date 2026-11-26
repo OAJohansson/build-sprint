@@ -64,30 +64,17 @@ export function ChordTiles({ v, from, bars, onOpen }: { v: View; from: number | 
 }
 
 /**
- * Polish (T219, T223): bring a panel into view between the bottom of the sticky rows and the top of the
- * sticky A/B bar, scrolling its own container by hand (the browser's scrollIntoView measured from the
- * viewport and overshot). Nothing moves when it's already in view. When the whole panel doesn't fit:
- * on opening ("header") its header goes to the top; after a pick ("focus") the action row goes to the
- * bottom, keeping as much of the header as fits.
+ * T229 (replaces T219/T223's hand-rolled scroll): bring `el` into view the standard way. Its scroll
+ * margins are the sticky rows' height and the sticky A/B bar's height (each plus 8 px), read when it is
+ * called, then scrollIntoView({ block: "nearest" }): nothing moves when it is already in view. Called on
+ * a panel's header when the panel opens, and on the action row after a pick.
  */
-export function reveal(panel: HTMLElement | null, focus?: HTMLElement | null, prefer: "header" | "focus" = "header") {
-  if (!panel) return;
-  let box: HTMLElement | null = panel.parentElement;
-  while (box && !(box.scrollHeight > box.clientHeight && /(auto|scroll)/.test(getComputedStyle(box).overflowY))) box = box.parentElement;
-  if (!box) return;
+export function reveal(el: HTMLElement | null) {
+  if (!el) return;
   const rows = document.querySelector<HTMLElement>("[data-sticky-rows]"), ab = document.querySelector<HTMLElement>("[data-sticky-ab]");
-  const b = box.getBoundingClientRect();
-  // where the rows stick (the container's top) and where A/B sticks (its bottom), whether stuck yet or not
-  const top = Math.max(b.top + (rows?.offsetHeight ?? 0), rows ? rows.getBoundingClientRect().bottom : b.top) + 8;
-  // A/B only covers the box when it sits inside it (in Melody the box ends at A/B's top edge, T227)
-  const bottom = b.bottom - (ab && box.contains(ab) ? ab.offsetHeight : 0) - 8;
-  const p = panel.getBoundingClientRect(), f = (focus ?? panel).getBoundingClientRect();
-  let delta = 0;
-  if (p.height <= bottom - top) delta = p.top < top ? p.top - top : p.bottom > bottom ? p.bottom - bottom : 0;
-  else if (prefer === "focus" && focus) delta = f.bottom > bottom ? Math.min(f.bottom - bottom, f.top - top) : f.top < top ? f.top - top : 0;
-  else delta = p.top - top;
-  if (Math.abs(delta) < 2) return;
-  box.scrollBy({ top: delta, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  el.style.scrollMarginTop = `${(rows?.offsetHeight ?? 0) + 8}px`;
+  el.style.scrollMarginBottom = `${(ab?.offsetHeight ?? 0) + 8}px`;
+  el.scrollIntoView({ block: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
 }
 
 /** T228: a chord on another root than the bar's is told apart by its role in this song, in plain words. */
@@ -104,9 +91,10 @@ function moodOf(n: string, barRoot: number | null, key: { key: string; scale: "m
 export function ChordPanel({ m, from, playing, onAsk }: { m: MelodyModel; from: number | null; playing: boolean; onAsk?: (q: string, bar: number) => void }) {
   const v = m.chords;
   // CS1-7, T219: when a bar opens or More opens, the panel comes into view clear of the sticky rows and A/B.
-  const moreRef = useRef<HTMLDivElement>(null), panelRef = useRef<HTMLElement>(null);
+  const headRef = useRef<HTMLDivElement>(null);
   const moreOpen = !!v?.more && !v.keys, openCell = v?.open ?? -1;
-  useEffect(() => { if (openCell >= 0) reveal(panelRef.current, moreOpen ? moreRef.current : null, moreOpen ? "focus" : "header"); }, [openCell, moreOpen]);
+  // T229: the panel's header comes into view when a bar or More opens
+  useEffect(() => { if (openCell >= 0) reveal(headRef.current); }, [openCell, moreOpen]);
   if (!v) return null;
   const cell = v.cells[v.open];
   if (!cell) return null;
@@ -138,8 +126,8 @@ export function ChordPanel({ m, from, playing, onAsk }: { m: MelodyModel; from: 
   ) : null;
   if (v.keys) return <KeysPanel m={m} v={v} where={where} allBox={allBox} />;
   return (
-    <section ref={panelRef} className={c.panel} aria-label={`Bar ${where}: pick the chord that sounds like the track`}>
-      <div className={c.head}>
+    <section className={c.panel} aria-label={`Bar ${where}: pick the chord that sounds like the track`}>
+      <div ref={headRef} className={c.head}>
         <span className={c.where}>Bar {where}{cur && <> · <b className={c.curName}>{prettyChord(cur)}</b></>}</span>
         <b className={c.ask}>Which one sounds like the track?</b>
       </div>
@@ -167,7 +155,7 @@ export function ChordPanel({ m, from, playing, onAsk }: { m: MelodyModel; from: 
           <button className={c.chip} onClick={() => onAsk(`Why does ${prettyChord(cur)} fit here?`, m.labChord!.barNo)} aria-label={`Ask the Mentor why ${prettyChord(cur)} fits in bar ${where}`}>Why it fits</button>
         )}
       </div>
-      {extra.length > 0 && <div ref={moreRef} className={`${c.choices} ${c.extra}`} role="group" aria-label="More chords in this song's key">{extra.map(card)}</div>}
+      {extra.length > 0 && <div className={`${c.choices} ${c.extra}`} role="group" aria-label="More chords in this song's key">{extra.map(card)}</div>}
     </section>
   );
 }
@@ -218,7 +206,7 @@ function Timing({ m, t, sel }: { m: MelodyModel; t: V["timing"]; sel: number | n
   const picked = h !== null;
   useEffect(() => {
     if (!picked) return;
-    reveal(movesRef.current?.closest("section") ?? null, movesRef.current, "focus");
+    reveal(movesRef.current);
   }, [picked]);
   const why = (op: (typeof MOVES)[number][0]) => {
     if (!h || sel === null || moveHit(t.hits, sel, op, steps)) return undefined;
@@ -277,11 +265,11 @@ function KeysPanel({ m, v, where, allBox }: { m: MelodyModel; v: V; where: strin
     return () => removeEventListener("keydown", esc);
   }, [m]);
   const [dlo, dhi] = deskRange(v.notes), [plo, phi] = phoneRange(v.notes);
-  const panelRef = useRef<HTMLElement>(null);
-  useEffect(() => { reveal(panelRef.current); }, [v.open]);
+  const headRef = useRef<HTMLDivElement>(null);
+  useEffect(() => { reveal(headRef.current); }, [v.open]);
   return (
-    <section ref={panelRef} className={c.panel} aria-label={`Bar ${where} on the keys`}>
-      <div className={c.head}>
+    <section className={c.panel} aria-label={`Bar ${where} on the keys`}>
+      <div ref={headRef} className={c.head}>
         <button className={c.icon} onClick={() => m.setPiano(false)} aria-label="Back to the chords" title="Back"><ArrowLeft size={16} /></button>
         <span className={c.where}>Bar {where}</span>
         <b className={c.title} title={v.ownNotes ? "Your notes; the closest chord name" : undefined}>{cur ? `· ${prettyChord(cur)}${v.ownNotes ? ", your notes" : ""}` : "–"}</b>

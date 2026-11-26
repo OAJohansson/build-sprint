@@ -342,12 +342,10 @@ export function MakeRoom(p: RoomProps) {
           </>
         ) : family === "melody" ? (
           <>
-            {/* T227: Melody's middle scrolls on its own and ends at A/B's top edge, so nothing scrolls under A/B */}
-            <div data-melody-scroll="" style={{ flex: "1 1 0", minHeight: 0, width: "100%", overflowY: "auto", overscrollBehavior: "contain" }}>
-              {loop || p.melody.read
-                ? <MelodyMiddle m={p.melody} loop={loop} playing={p.playing} heardMs={p.heardMs} from={from} onAsk={p.onAsk} />
-                : <div className={s.makeEmpty}><p>Make works on a loop of the part, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
-            </div>
+            {loop || p.melody.read
+              ? <MelodyMiddle m={p.melody} loop={loop} playing={p.playing} heardMs={p.heardMs} from={from} onAsk={p.onAsk} />
+              : <div className={s.makeEmpty}><p>Make works on a loop of the part, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
+            <div className={s.grow} />
             <MelodyCheck m={p.melody} />
           </>
         ) : family === "drums" ? (

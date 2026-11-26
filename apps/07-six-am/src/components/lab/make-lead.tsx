@@ -23,15 +23,17 @@ export function LeadPanel({ m, from }: { m: MelodyModel; from: number | null }) 
     return () => removeEventListener("keydown", esc);
   }, [m]);
   // T219: the panel (header to move row) comes into view when a bar opens or a note is picked.
-  const panelRef = useRef<HTMLElement>(null), movesRef = useRef<HTMLDivElement>(null);
+  const headRef = useRef<HTMLDivElement>(null), movesRef = useRef<HTMLDivElement>(null);
   const open = v?.open ?? null, picked = v?.sel ?? null;
-  useEffect(() => { if (open !== null) reveal(panelRef.current, picked !== null ? movesRef.current : null, picked !== null ? "focus" : "header"); }, [open, picked]);
+  // T229: the header when a lead bar opens, the move row after a pick
+  useEffect(() => { if (open !== null) reveal(headRef.current); }, [open]);
+  useEffect(() => { if (picked !== null) reveal(movesRef.current); }, [picked]);
   if (!v || v.open === null) return null;
   const bar = from !== null ? from + v.open : v.open + 1, notes = v.notes, sel = v.sel !== null ? notes[v.sel] : null;
   const nextAt = sel ? notes.filter((x) => x.at > sel.at).reduce((a, x) => Math.min(a, x.at), 16) : 16;
   return (
-    <section ref={panelRef} className={`${c.panel} ${c.leadPanel}`} aria-label={`Lead, bar ${bar}: place one note at a time`}>
-      <div className={c.leadHead}>
+    <section className={`${c.panel} ${c.leadPanel}`} aria-label={`Lead, bar ${bar}: place one note at a time`}>
+      <div ref={headRef} className={c.leadHead}>
         <span className={c.where}>Lead · bar {bar}</span>
         {v.edited && <button className={c.reset} onClick={() => m.resetLead()} aria-label="Reset to Make's line" title="Back to Make's line"><RotateCcw size={14} aria-hidden /> Reset</button>}
         <span className={c.grow} />

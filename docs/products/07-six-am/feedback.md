@@ -293,7 +293,7 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | ID | Severity | Finding | Status |
 | --- | --- | --- | --- |
 | L-1 | major | Selecting a lead note collapses the grid | fixed (d91c6ea, T207): Shorter / Longer / Remove a fixed 32 px row, always in place; the grid keeps its height |
-| L-2 | major | Lost 69–76 lead not off | re-check at ae7ab3e: still on (T208 didn't fire); fixed again (cc140dd, T212): second guard, a line mostly the chords' top voice is off ("Mostly the chords' top notes"); needs a live re-check on Lost 69–76 and Mason 17–24 |
+| L-2 | major | Lost 69–76 lead not off | re-checks at ae7ab3e and cc140dd: still on (the live line is the stab's bottom G2, chordTop 0.06–0.16); fixed again (f0408c0, T213): any voice of the chord counts, and a line under C3 is off; needs a live re-check |
 | L-3 | minor | Lead cells too small; same-pitch notes merge | fixed (d91c6ea, T207): cells 20 px tall; a note's first 16th has a divider |
 | L-4 | minor | Lead closeness ignores note fixes | fixed (d91c6ea, T209): lead closeness counts its notes (pitch and onset) against the read line |
 | W-1 | major | "Why it fits" fallback uses numerals and theory words; A♯ for B♭ | fixed (d91c6ea, T205): two plain sentences, no numerals or theory words; notes spelled by the chord (B♭); marker "Six AM's own answer (the Mentor is offline)"; [theory] lines ask the model for the same style |

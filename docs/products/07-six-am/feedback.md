@@ -253,13 +253,13 @@ clutter 1 · hierarchy 2 · legibility 1 · feel 2 · copy 1. Legibility drop is
 
 | ID | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| CS1-1 | major | Chord closeness stuck at 14/100 whatever is picked | fixed (80db130, T182): the score is half sound, half how Mine's chords match the notes per bar; moves on every pick |
+| CS1-1 | major | Chord closeness stuck at 14/100 whatever is picked | fixed (80db130 T182; 4ae77d0 T190): the notes half is now an F-score (what the track plays that Mine covers × what Mine plays that the track has), so G7 98 vs G 86 and one bar changed moves it (97.4 → 95.8) on the Lost re-render; the sound half moves only with preset and knobs, by design |
 | CS1-2 | major | Real read of Lost 69–76 flags no bar unsure; the "?" never shows | fixed (80db130, T181): unsure when score < 0.9 or the loop's clear weakest, capped at a third |
 | CS1-3 | major | Half-bar chord names drawn at 5 px | fixed (80db130, T183): ≥ 11 px, breaks root / type over two lines, full name in the bar heading |
 | CS1-4 | minor | After the fill the track plays, not Make's chords | fixed (80db130, T184): A/B goes to B · Mine when the read is done |
 | CS1-5 | minor | Build loops 65–76; graders' loop is 69–76 (test plan note only) | noted |
 | CS1-6 | minor | "All N bars" checkbox small, vanishes with one bar left, stays off | fixed (80db130, T184): twins by Make's guess or Mine's chord (stable), on again per bar, 44 px target |
-| CS1-7 | minor | 1280 × 720: More chords' last row and "Fewer chords" under A/B | fixed (80db130, T184): 4 cards a row from 1280 px; More's cards go under the tools, so Fewer stays where More was |
+| CS1-7 | minor | 1280 × 720: More chords' last row and "Fewer chords" under A/B | fixed (80db130 T184; 4ae77d0 T191): More's cards scroll into view clear of the A/B bar when it opens |
 | CS1-8 | minor | Bass tab's chord strip (G) disagrees with Melody (G7) | fixed (80db130, T185): the strip shows the Melody read for this loop when there is one, else 'chords est.' with an 'older estimate' tooltip |
 | CS1-9 | polish | Edited bars look the same as Make's | fixed (80db130, T183): a small teal mark on a tile you picked; tooltip names Make's read |
 
@@ -267,7 +267,7 @@ Re-check of CS1 (26 Nov): CS1-3, 4, 6, 8, 9 fixed; CS1-1 partly (G and G7 score 
 
 | ID | Severity | Finding | Status |
 | --- | --- | --- | --- |
-| CS1-10 | major | "All N bars" groups by the current name, so a pick can overwrite a bar Make heard differently (bar 76 Gm7 lost) | open |
-| CS1-11 | minor | After a single-bar edit the box names a group the open bar isn't in | open |
-| CS1-12 | polish | Half-bar names wrap ("D / sus4") and get clipped by beat marks | open |
-| CS1-13 | polish | Card mood lines truncate at 4 per row on 1280 | open |
+| CS1-10 | major | "All N bars" groups by the current name, so a pick can overwrite a bar Make heard differently (bar 76 Gm7 lost) | fixed (4ae77d0, T189): bars grouped by Make's guess; "Make's guess" gives each bar back its own guess |
+| CS1-11 | minor | After a single-bar edit the box names a group the open bar isn't in | fixed (4ae77d0, T189): the count and name are the open bar's group (bars sharing its Make's guess) |
+| CS1-12 | polish | Half-bar names wrap ("D / sus4") and get clipped by beat marks | fixed (4ae77d0, T191): one line, 11 px with tighter tracking on half-bar tiles, no beat marks there |
+| CS1-13 | polish | Card mood lines truncate at 4 per row on 1280 | fixed (4ae77d0, T191): moods wrap to two lines; cards grow to fit |

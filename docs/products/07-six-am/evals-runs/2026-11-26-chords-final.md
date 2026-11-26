@@ -73,3 +73,25 @@ read takes 1.1–1.4 s (Basic Pitch).
 - H9 lead beyond Mason.
 
 Cost: $0. Time: two builds of about 1.5 min each; loops filled in about 20 s each.
+
+## Re-check after LD/TH fixes (61974fd, d4dfe6b)
+
+Same method: a detached copy at d4dfe6b, a production build on :3037, sandbox only
+(`SIXAM_MEMORY_STORE=1`, keys empty), live separation, my own Chrome.
+
+| Check | Expected | Measured | Result |
+| --- | --- | --- | --- |
+| **LD-1** loaded lead keeps its timing (Mason 17–24, 2 runs) | `notes[].off` = saved; loaded bars `edited: false`, `loaded: true` | I placed a note on bar 8 (run 1) and bar 1 (run 2), saved, reloaded, refilled and loaded from the menu. **Loaded notes = saved pattern: 33/33 and 30/30** (step, pitch, offset to 0.01). The same notes as Mine's lead before the save, 2/2. All 8 bars `edited: false, loaded: true`; the lead is on after loading | **Fixed** |
+| **LD-2** Mason lead stays on over 4 reloads | on 4/4 | **On 4/4** (28, 28, 28 and 31 notes). Guards each time: `topLine false, phase5 false, chordTone false (share 0), low false, medianMidi 67` | **Fixed** |
+| Lost 69–76 lead | off | **Off**: "Too low for a lead…". Guards: `topLine false, phase5 false, chordTone false (share 0.09), low true, medianMidi 43`, 33 notes | Pass |
+| **TH-1** Em in G minor | vi, borrowed | `chordFacts()` on Mason: **vi**, borrowed from G major, role borrowed, E G B, outside E and B | **Fixed** |
+| **TH-2** ♭VI in A♭ | F♭ A♭ C♭ | Only when the key is spelled "Ab": `chordFacts({ key: "Ab", … "Fb" })` gives **F♭: F♭ A♭ C♭**. On the real Dubspinna map, whose key is stored as **"G#"** (as Listen-and-map writes it), the in-app `chordFacts()` still gives **E: E G♯ B** for both "E" and "Fb" | **Not fixed in the app** |
+| **TH-3 (new regression)** sharps for a "G#" key | B♭ not A♯ | On the Dubspinna map (key "G#", shown as "A♭ major"), every chord is now spelled with sharps:<br>- B♭m → **A♯m (A♯ C♯ E♯)**<br>- D♭ → **C♯ (C♯ E♯ G♯)**<br>- D♭maj7 → **C♯maj7 … B♯**<br>- E♭m → **D♯m**<br>- G♭ → **F♯**<br>The offline answers say "A♯m is a minor chord…" and "C♯ with an added B♯". At ec050a9 the same map gave B♭m, D♭, E♭ and G♭. Lost (G) and Mason (G minor) are unaffected | **Fail** |
+| **H10** test suite | green | **602/602** (61 files), including `bass-golden` | Pass |
+
+**TH-3 repro:** Dubspinna 57–64 in Melody, open any bar, then `__sixamLab.chordFacts()`. Facts and
+`offline` are spelled in sharps under "A♭ major". The fix most likely spells by the key's written
+name ("G#") instead of its usual name (A♭). The key name is already normalised for the label but
+not for the spelling.
+
+Cost $0. The copy was removed and the server stopped.

@@ -50,7 +50,7 @@ review, not here.
 | H15 | Design scorecard | 9 target | round 5 prototype 9/10; built screen: see the critic's line below | see below |
 | H16 | Comes alive quickly | read ≤ 3 s; knobs ≤ 35 s | chords 0.4–1.0 s, lead 1.1–1.4 s; knobs ~21 s on 8 bars | pass |
 
-**Critic, built screen:** _pending_.
+**Critic, built screen:** 7/10 first build, 8/10 after polish (clutter 1 · hierarchy 2 · legibility 1 · feel 2 · copy 2); later clipping fixes checked by the tester, not re-scored.
 
 ## Guardrails
 

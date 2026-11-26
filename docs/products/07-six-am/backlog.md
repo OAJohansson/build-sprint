@@ -118,3 +118,5 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 - Graders: a `?loop=69-76` parameter or a seed `--loop` option, so testers don't need `setLoop` (26 Nov).
 - Lead guard: the chords' own notes share reads 0.13 live on Lost (expected ≥ 0.6 on its fixture); find why before trusting it on a chord-voice line above C3 (26 Nov).
 - Theory spelling TH-4: E♭dim's fifth spelled A, should be B𝄫 (rare, a diminished chord the reader names) (26 Nov).
+- Layout at 1280 × 720: selecting a lead note scrolls the lead header under the sticky rows (grid + move row don't fit); Bass on Mason starts with A/B half under the save bar (Phase 5 layout, scroll fixes it) (26 Nov).
+- Design polish after Phase 6: mood lines wrap at 1280, half-bar names ~10 px, playhead over chord names, knob row cut by normal scroll at 1440 × 900 (critic 8/10) (26 Nov).

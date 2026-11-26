@@ -271,6 +271,7 @@ export function useMelody(o: MelodyOpts) {
     pickChord(name);
   };
   /** The Track button: this bar of the original (A), from its start; again to stop. */
+  // shortcut: it plays on through the loop after the bar instead of stopping at its end; add a bar-long stop if testers find it confusing.
   const tapTrack = (playing: boolean) => {
     if (playing && hear === "orig" && ab === "a") { tr.current?.pause(); setHear(null); return; }
     setHear({ cell: openCell, what: "orig" }); setAb("a"); playFrom(openCell);

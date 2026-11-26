@@ -19,8 +19,11 @@ const cite = (sources = []) =>
     })
     .filter((v, i, a) => a.indexOf(v) === i)
     .join("");
-// An item may carry `items`: a bullet list that follows its lead-in text.
-const para = (p) => `${p.text} <sup>${cite(p.sources)}</sup>${p.items?.length ? "\n\n" + p.items.map((i) => `- ${i}`).join("\n") : ""}`;
+// An item may carry `items`: a bullet list that follows its lead-in text, and `after`: text that follows the list.
+const para = (p) =>
+  `${p.text} <sup>${cite(p.sources)}</sup>` +
+  (p.items?.length ? "\n\n" + p.items.map((i) => `- ${i}`).join("\n") : "") +
+  (p.after ? `\n\n${p.after}` : "");
 
 const out = [];
 out.push(`# ${d.name}: content pilot`, "");
@@ -31,12 +34,13 @@ out.push("## It asks", "", ...d.questions.map((q, i) => `${i + 1}. ${para(q)}`),
 out.push("## Themes", "");
 for (const t of d.themes) {
   out.push(`### ${t.title}`, "", `*${t.summary}*`, "", ...t.paragraphs.map(para).flatMap((x) => [x, ""]));
-  if (t.thinkers?.length) out.push(`Thinkers: ${t.thinkers.join(", ")}`, "");
+  // t.thinkers stays in the data (the app links themes to thinkers) but is not rendered: it only repeated names.
 }
 for (const s of d.sections) {
   out.push(`## ${s.title}`, "");
   if (s.paragraphs) out.push(...s.paragraphs.map(para).flatMap((x) => [x, ""]));
-  if (s.works) out.push(...s.works.map((w) => `- **${w.title}** (${w.author}, ${w.year}): ${w.note} <sup>${cite(w.sources)}</sup>`), "");
+  // Works: one chronological list, each work described once (year · title (author): one plain line).
+  if (s.works) out.push(...s.works.map((w) => `- ${w.year} · **${w.title}** (${w.author}): ${w.note} <sup>${cite(w.sources)}</sup>`), "");
 }
 if (d.apply) {
   out.push("## Apply it to your life", "", para(d.apply.intro), "");

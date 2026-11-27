@@ -1065,6 +1065,8 @@ word and one plain line.
 | R6 | Studio rebuild: the original's sections laid out on the timeline from its map as empty slots (no starter sounds, L269), each section fillable per lane from the library; per section, a clear hint of which parts the original has there and which are still to fill (as R3b). |
 | R7 | Compare: one switch plays the original from the bar you're at through the Deck (commands only), and back to Mine (L270); if the Deck isn't open, the switch says how to open it. |
 | R8 | Listen's "Other" reads "Melody & FX". |
+| R8b | The rebuild replaces the Phase 3 "Start a track from this" draft as the map's way into the Studio (L273). |
+| R8c | A dev hook `window.__sixamMake` exposes the picked sound, each row's pattern and the play position for graders (L273). |
 | R9 | Saved sounds from Phases 4–6 render sample for sample as before; old 3-row drum sounds open in the new rows unchanged (Hats → Closed hat). |
 | R10 | Rights rule C2 unchanged: the original stays in memory only, never stored, exported, uploaded or sent to any API. |
 

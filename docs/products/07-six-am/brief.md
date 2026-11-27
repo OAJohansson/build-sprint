@@ -679,3 +679,273 @@ From the pack:
 
 Filled 24 Oct (Founder run; eval report, Mentor sections). The riskiest assumption (a profile from a few playlists plus use makes the Mentor more "me" than a plain chat) was reported, not graded: the simulated side-by-side said "more me for listen next; about the same for the genre", and the profile is still locked for the owner (15/20 tracks), so it is untested with the owner's real taste. Evals: E1 genre 7/10 (bar 8, fail), E2 honesty pass (ear-training times 5/5 from Ears), E3 listen next real and named (links now checked), E4–E6 pass, E7 p90 ~10 s, E8 cost to the cent, E9 nothing lost in another browser, E10 every job ≥ 4/5 after the owner's simplification; design critic 6/10 (target 9). The owner rejected the first Mentor as "too much going on" and the simplified one shipped. Whether
 held (were the Mentor's genre calls and listen-next noticeably more "me" than a generic chat?).
+
+## Rebuild the song (Phase 7, 27 Nov, Founder v2)
+
+Written by `discovery` from the Phase 7 kickoff pack (the last section of
+[`kickoff.md`](kickoff.md), source of truth), the "Rebuild the song (Phase 7)" part of
+[`evals.md`](evals.md), [`research-sounds.md`](research-sounds.md), decisions L265–L270 in
+[`decisions.md`](decisions.md) and feedback OR6-1..5. Phases 1–6 are shipped and this builds on
+Make (Bass, Drums, Melody, FX), the Studio, the map and the Deck. Anything the pack leaves open is
+marked *(assumed: why)*.
+
+### Problem
+
+The owner can remake one looped part at a time, but there is no path from "I remade the bassline
+of the drop" to "I rebuilt the whole song", and the parts they make don't sound like a kit worth
+building with: four starting sounds per row, knobs that change little, drums that never get close
+because every high sound lands on one Hats row and wrong hits can't be removed (OR6-2, OR6-3).
+In Make you can't click back to a spot; you have to listen through (OR6-5).
+
+The goal (owner, L265): not a copy that sounds like the record, but "recognisably the same song,
+and I built every part of it", to learn how good songs are built and then make my own. Six AM
+should still have the parts of a good production kit.
+
+### Who
+
+- **The owner** only, a month on from Phase 6: no theory, ear first, a beginner producer who
+  learns by remaking tracks they love. Phase 7 update in
+  [`user-testing/persona.md`](user-testing/persona.md), persona 1.
+- Robin (persona 2) is not a user of this phase *(assumed: the pack names only the owner's goal;
+  Make and the Studio have no new-user jobs)*.
+
+### Moment of use and jobs to be done
+
+At the laptop in desktop Chrome with headphones, over several evenings of 30–60 minutes: one
+track they love has been taken apart in Listen and the map, some parts are already remade in Make,
+and now they want the whole song back, built by them.
+
+1. When I pick a starting sound, I want **many sounds that really differ** (20 per row, spread by
+   feel) and knobs that change the sound clearly, so I can get close to the track by ear. (Slice 1,
+   R1, R2)
+2. When Make's drums don't sound like the track, I want to **fix them by ear**: rows for the
+   sounds the track really has, a hit added or removed with a tap, a row muted or soloed, and to
+   be told plainly which rows are still mine to fill. (Slice 2, R3, R3b, R4)
+3. When I want to hear a spot again, I want to **click there on the loop** and have it play from
+   there, in every Make tab. (Slice 2, R5)
+4. When I've remade some parts, I want **the original's sections laid out** in the Studio, each
+   showing what the original has there, so I can fill the whole song with my own saved parts.
+   (Slice 3, R6)
+5. When I've filled a section, I want **one switch to hear the original at the same bar**, and
+   back, so I hear where mine differs. (Slice 4, R7)
+
+Out of this phase: arranging and exporting an own track (the old Phase 7 plan, a later phase);
+loading your own sample packs (backlog, L266).
+
+### Today's alternatives
+
+| Alternative | Good | Annoying / why not |
+| --- | --- | --- |
+| Make today: 4 synth presets per row, 3 drum rows | Already in Six AM, on the track's loop | Four is too few, knobs change little, high sounds pile onto Hats, wrong hits can't be removed (L265, OR6-3) |
+| The Studio's two CC0 kits (909-, 808-style, 4 sounds each) | Real recorded hits, clean licences | Eight sounds total; no open hat, shaker or ride |
+| The Phase 3 map → Studio draft | Tempo, key, length and section markers in one tap | Fills lanes with generic starter sounds, so it isn't "every part mine" (L269) |
+| The SoundCloud tab next to the Studio | The real original | Finding the same bar by hand; no switch at the same moment |
+| A DAW with bought sample packs (Ableton, Splice) | Thousands of sounds | The cockpit the owner closed; packs can't be shipped in a web app (`research-sounds.md` #1) |
+
+**Why switch:** the song's own sections are the frame, the parts are the owner's, the sounds are a
+real kit with clean licences, and the original is one switch away at the same bar.
+
+### Riskiest assumptions
+
+From the pack, in its order:
+
+1. **Sounds:** a bigger, better set of starting sounds (route from `research-sounds.md`) gets
+   drums and bass "recognisably the same" by ear, where four synth presets didn't. Tested by the
+   owner at the final review; agents check range (W2, W4) and licences (W3).
+2. **Rebuild (riskiest an agent can test):** with the original's sections laid out and a one-tap
+   switch to the original at the same bar, a beginner can fill a whole song with their own saved
+   parts and hear where it differs. Tested by the slice 3 and 4 user tests and the owner.
+3. **Reading more drum rows:** open hats can be told from closed in the separated drums (W5, graded
+   on real loops before slice 2 builds on it). Shaker and Ride start empty (L268). If the open-hat
+   reader fails, Open hat starts empty too *(assumed: the pack's own fallback for assumption 3)*.
+
+### Success: what good looks like
+
+Outcome: the owner rebuilds one loved track section by section from their own saved parts, can
+switch to the original at any bar, and says "recognisably the same song, and I built every part of
+it". Signals (bars from [`evals.md`](evals.md), Phase 7 part):
+
+| Signal | How measured | Target |
+| --- | --- | --- |
+| 20 per row (W1) | count, family, feel word, one line | 7 × 20; every variety-map family ≥ 1 |
+| Breadth (W2) | brightness (spectral centroid) and length (−20 dB decay) per pair | no pair within 10 % on both; each row spans ≥ 3× in both |
+| Licences (W3) | `public/kits/LICENSES.md` vs every shipped file | 100 % CC0 / CC BY with source, author, licence; CC BY credited in the app; 0 unknown |
+| Knobs audible (W4) | each knob end to end, 5 sounds per row | brightness ≥ 2×, length ≥ 2×, level ≥ 6 dB, pitch ≥ 5 semitones |
+| Open-hat reader (W5) | real separated loops, ≥ 4 loops / ≥ 3 tracks, 1 held out | ≥ 85 % open hats labelled open, ≤ 15 % closed labelled open, onsets ≤ 10 ms |
+| Fix by ear (W6) | 5 edited loops | saved = played 5 / 5; mute / solo never saved as deleted hits |
+| Empty rows unmissable (W7) | user test | every open row named without help, 5 / 5 |
+| Click to jump (W8) | per family | play starts within one 16th of the click, 5 / 5 |
+| Rebuild layout (W9) | sections vs map | starts = map's bars 100 %; 0 starter blocks; every section shows the original's parts |
+| Compare (W10) | Deck position vs bar start | within 150 ms, 5 / 5; back to Mine at the same bar; clear message when the Deck is closed |
+| Old sounds (W11) | Phase 4–6 saved sounds | sample for sample; Hats opens as Closed hat; suite green |
+| Kit loads fast (W12) | first tap on a warm page | ≤ 300 ms; Make's drums ready no later than before |
+| Jobs and feel (W14, W15) | user test per slice; one design critic | every job ≥ 4 / 5; design 9/10 a target, not a blocker |
+| Listen label (W16) | Listen | "Other" reads "Melody & FX" |
+
+Owner-only (final review, by ear): are drums and bass now "recognisably the same"; does the range
+feel broad; does the rebuilt song feel like mine.
+
+**Guardrails:** zero bytes of the original stored or uploaded (W13, C2, R10); AI keys never in the
+bundle; Ears, Mentor, map, Studio and Make (Bass, Drums, Melody, FX) unbroken; text ≥ 4.5:1. Build
+hygiene: `pnpm -F 07-six-am lint`, `test`, `build` pass; `checks` green on the PR.
+
+### MVP and stop line
+
+Four slices, one branch, one PR; each built, user-tested, graded and fixed before the next.
+
+1. **More starting sounds:** 20 per row for Kick, Claps & snares, Closed hat, Open hat, Shaker /
+   percussion, Ride and Bass, spread over the variety map's families and the three dials (short ↔
+   long, dark ↔ bright, clean ↔ dirty), no near-duplicates, each with a family, a feel word and one
+   plain line. Drums from a hand-picked CC0 kit (Freesound, Sonic Pi); bass a richer synth with
+   more presets plus a few credited CC BY sampled basses (L266, L267). Knobs that change the sound
+   audibly. Licence recorded per file. (R1, R2)
+2. **Fix drums by ear:** six rows; Make reads Kick, Claps, Closed and Open hat; Shaker and Ride
+   start empty and say so; the loop shows how many rows are open until filled or dismissed. Tap a
+   step to add or remove a hit; mute and solo per row; Suggest, A/B, closeness and Save work on the
+   edited pattern. Click a spot on the loop's bars to play from there in Bass, Drums, Melody and FX.
+   (R3, R3b, R4, R5)
+3. **Lay out the song:** in the Studio, the original's sections from its map laid out bar for bar
+   as empty slots (no starter sounds, L269), each fillable per lane from the library, each showing
+   which parts the original has there and which are still to fill. (R6)
+4. **Compare with the original:** one Mine / Original switch plays the original from the bar you're
+   at through the Deck (commands only) and back; if the Deck isn't open, the switch says how to open
+   it (L270). (R7)
+
+Folded in: Listen's "Other" reads "Melody & FX" (R8, toil, a T-number). Old saved sounds unchanged,
+old 3-row drums open with Hats as Closed hat (R9). C2 unchanged (R10).
+
+**Stop line:** loading your own sample packs (backlog, L266); reading Shaker and Ride from the track
+(only after a reader passes a real-track grade, L268); arranging and exporting an own track (a later
+phase); new Mentor features; phone layout; anything past R1–R10 → [`backlog.md`](backlog.md).
+
+**First to cut if time runs short** *(assumed: the pack gives no cut order; these touch the
+riskiest assumption least)*: solo (keep mute), then the one-line descriptions beyond the family and
+feel word, then click-to-jump in FX (keep Bass, Drums, Melody). Never cut: the 20 per row (owner,
+L267), the "yours to fill" signal (owner's condition, L268), the compare switch.
+
+### Feature drill-down
+
+Objects (the phase's vocabulary): **starting sound** (one of the 20 in a row, sampled or synth),
+**drum row** (Kick, Claps & snares, Closed hat, Open hat, Shaker / percussion, Ride), **hit** (one
+step in a row's pattern), **sound kit / licence record** (the shipped files and a line per file in
+`LICENSES.md`), **song section slot** (one section of the original × one lane in the rebuild),
+**compare switch** (Mine / Original). Calls stay inside the pack; extras are Later.
+
+**Starting sound**
+
+| Checklist | Row | Call | Reason |
+| --- | --- | --- | --- |
+| Lifecycle | Pick: choose one of 20 in the open row, a preview on tap | MVP | R1, W12 (≤ 300 ms) |
+| Lifecycle | Find: grouped or labelled by family and feel word, so 20 stays quick | MVP | L267 variety map *(assumed: how they're laid out is the designer's; the labels are the pack's)* |
+| Lifecycle | Change: knobs move a measured feature clearly end to end | MVP | R2, W4 |
+| Lifecycle | Save: saved with the part as today; the saved part remembers which starting sound and knobs | MVP | R4 "what plays is what is saved" |
+| Lifecycle | Favourite, rename or hide a starting sound | Later | Not in the pack |
+| Lifecycle | Add your own samples | Later | Route C, backlog (L266) |
+| Connections | Belongs to one row (or Bass); Suggest may pick among the 20 as it picks among presets today | MVP | R4 says Suggest keeps working *(assumed: Suggest searches the new set; smallest change to its job)* |
+| Connections | Old Phase 4–6 sounds keep their old presets and render sample for sample | MVP | R9, W11 |
+| Screen states | Loading the kit (first tap), playing a preview, the row's picked sound | MVP | W12 |
+| Screen states | Long feel words and one-line descriptions | MVP | `break-ui` |
+| Trust | Each sound has a family, a feel word and one plain line, no jargon | MVP | R1 |
+| Trust | CC BY sounds credited in the app | MVP | W3 *(assumed: a credits list reachable from Make is enough, `research-sounds.md` #2)* |
+
+**Drum row**
+
+| Checklist | Row | Call | Reason |
+| --- | --- | --- | --- |
+| Lifecycle | Create: six rows on every drums loop | MVP | R3 |
+| Lifecycle | Fill: Make reads Kick, Claps, Closed and Open hat; Shaker and Ride start empty | MVP | R3, L268 |
+| Lifecycle | Fill an empty row by ear (tap hits in) | MVP | R3b, R4 |
+| Lifecycle | Dismiss an empty row ("this track has none") so it stops counting as open | MVP | R3b "fills or dismisses" |
+| Lifecycle | Mute and solo per row, never saved as deleted hits | MVP | R4, W6 |
+| Lifecycle | Make reads Shaker and Ride | Later | Only after a reader passes a real-track grade (L268) |
+| Lifecycle | Add or remove rows beyond the six | No | Past the pack's six rows |
+| Connections | Old 3-row sounds open with Hats as Closed hat, other new rows empty | MVP | R9, W11 |
+| Connections | Saved drums land in the Studio library and lanes as today | MVP | R4 *(assumed: the three new rows join the existing drum lanes; see the PM's gap list on lanes)* |
+| Screen states | Filled by Make, empty "yours to fill", filled by you, dismissed, muted, soloed; the loop's "N rows to fill by ear" | MVP | R3b, W7 |
+| Screen states | Open-hat reader failed (W5): Open hat empty like Shaker and Ride | MVP | Riskiest assumption 3's fallback |
+| Trust | An empty row says so in plain words, so a thin loop always explains itself | MVP | R3b, owner's condition (L268) |
+
+**Hit**
+
+| Checklist | Row | Call | Reason |
+| --- | --- | --- | --- |
+| Lifecycle | Add or remove with a tap on a step | MVP | R4 |
+| Lifecycle | Undo the last add or remove | Later | Not in the pack; a second tap undoes it *(assumed)* |
+| Lifecycle | Velocity, nudging off the 16th grid, per-hit sound | No | Past the stop line; jargon for this owner |
+| Connections | Closeness and A/B update on the edited pattern | MVP | R4 |
+| Connections | Saved pattern = played pattern | MVP | R4, W6 |
+| Screen states | A step on, off, playing now; a hit Make read vs one you added | MVP | Fix by ear needs to see which is which *(assumed: smallest cue, the designer's call)* |
+| Trust | What you hear is what is saved, after a reload too | MVP | W6 |
+
+**Sound kit / licence record**
+
+| Checklist | Row | Call | Reason |
+| --- | --- | --- | --- |
+| Lifecycle | Create: one line per shipped file in `public/kits/LICENSES.md` (source page, author, licence) | MVP | R1, W3 |
+| Lifecycle | Only CC0 or CC BY; nothing of unknown or non-redistributable licence ships | MVP | R1, W3, `research-sounds.md` #1, #5 |
+| Lifecycle | Replace a weak sound later | Later | Picks are tuned by ear at the owner's review |
+| Connections | Starting sounds point at their file; the Studio's two existing kits keep their records | MVP | W3 |
+| Screen states | Credits list in the app for CC BY sounds | MVP | W3 |
+| Trust | No "royalty-free" pack files, no unlicensed 909/808 banks | MVP | `research-sounds.md` #1, #5 |
+
+**Song section slot**
+
+| Checklist | Row | Call | Reason |
+| --- | --- | --- | --- |
+| Lifecycle | Create: open a rebuild for a mapped track; the original's sections laid out bar for bar, every slot empty | MVP | R6, L269, W9 |
+| Lifecycle | Tempo, key and length from the map, as the Phase 3 draft | MVP | *(assumed: the pack says "bar for bar"; the draft already takes these from the map)* |
+| Lifecycle | Fill: drop a saved part from the library onto a section's lane; it repeats to fill the section and stops at its end | MVP | R6 *(assumed: how a shorter part fills a longer section isn't set; repeat-and-trim is the smallest)* |
+| Lifecycle | Change or empty a slot; reload and come back another evening | MVP | R6; the Studio already saves tracks |
+| Lifecycle | One rebuild per track, reopened from the Studio's track list | MVP | *(assumed: smallest model; more versions later)* |
+| Lifecycle | Copy a filled section to another section of the same kind (drop → drop) | Later | Not in the pack; useful once it works |
+| Lifecycle | Starter sounds in empty slots | No | L269 |
+| Connections | Map sections and layers → slots and hints; library → slot; slot → the Studio's timeline | MVP | R6 |
+| Screen states | All empty (new rebuild), partly filled, all filled; a section where the original has nothing on that lane; a track with no map (says to map it first) | MVP | R6 "which are still to fill" *(assumed: no map = no rebuild)* |
+| Screen states | Empty library (nothing saved yet): says to make a part in Make first | MVP | Library drawer exists; smallest honest empty state *(assumed)* |
+| Trust | The hint says what the original has (estimates from the map, labelled as such); every block is the owner's | MVP | R6, L265 |
+
+**Compare switch**
+
+| Checklist | Row | Call | Reason |
+| --- | --- | --- | --- |
+| Lifecycle | Flip to Original: the Studio pauses, the Deck seeks the original to the same bar and plays | MVP | R7, L270, W10 |
+| Lifecycle | Flip back to Mine at the same bar | MVP | R7, W10 |
+| Lifecycle | Whole section: click its start first, then flip | MVP | L270 |
+| Lifecycle | Loop a section on both sides, A/B level matching | Later | Not in the pack; the Deck plays SoundCloud's level |
+| Connections | The rebuild's bar → the original's time from the map's origin and tempo → the Deck (commands only) | MVP | R7, C2, `deck-protocol.ts` |
+| Screen states | Deck open and ready, Deck closed (says how to open it), seeking, playing Original, playing Mine | MVP | R7, W10 |
+| Trust | Only play / pause / seek and positions cross; the original is never stored or sent | MVP | R10, W13 |
+
+### Requirements
+
+R1–R10 as in the kickoff pack; each is checked by the eval named here.
+
+| # | Must | Check |
+| --- | --- | --- |
+| R1 | 20 per row over the variety map, no near-duplicates, one line each, licences per file | W1, W2, W3 (data-evals) |
+| R2 | Knobs change the sound audibly | W4 (data-evals) |
+| R3 | Six rows; Make reads Kick, Claps, Closed and Open hat; Shaker and Ride empty | W5 (data-evals), W14 |
+| R3b | Empty rows unmissable, "N rows to fill by ear" | W7 (user-tester), W15 (critic) |
+| R4 | Add / remove, mute / solo; Suggest, A/B, closeness, Save on the edited pattern | W6 (data-evals), W14 |
+| R5 | Click to jump in Bass, Drums, Melody, FX | W8 (data-evals), W14 |
+| R6 | Rebuild: sections as empty slots, per-lane fill, hint per section | W9 (data-evals), W14 |
+| R7 | Mine / Original at the same bar through the Deck; message when closed | W10 (data-evals), W14 |
+| R8 | "Other" reads "Melody & FX" | W16 (user-tester) |
+| R9 | Old sounds sample for sample; Hats → Closed hat | W11 (data-evals) |
+| R10 | C2 unchanged | W13 (data-evals) |
+
+**Things to keep:** clean and minimal (decision 0007), still framing, no per-keystroke motion;
+graders use the sandbox (`ACCESS_CODE=test-code`), never the owner's data; no paid API calls by
+agents without the owner's yes; the carried owner check (one live Mentor answer in Make after the
+limit resets on 1 Dec).
+
+### Unit tests
+
+The pack lists none for this phase. Phase 7 adds no date or streak logic *(assumed: the bar →
+original-time conversion for compare is the one piece of time logic; it already exists for the
+map and Deck, so extend its test with section starts and the last bar if it changes)*.
+
+### Success check (at wrap-up)
+
+To fill at wrap-up: did the riskiest assumption hold (could the owner fill a whole song with their
+own parts and hear where it differs at the same bar; are drums and bass "recognisably the same")?

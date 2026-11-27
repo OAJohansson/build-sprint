@@ -2,7 +2,7 @@
 
 Use they/them. The owner is the user (owner, 18 Oct; again for Ears, 23 Oct): the persona
 describes them, so the simulated test checks the owner's own jobs. Updated for Ears v1 on 23 Oct;
-the Studio detail from 18 Oct is kept below.
+the Studio detail from 18 Oct is kept below; phase updates (Phase 6, Phase 7) at the end.
 
 ## Who
 
@@ -120,6 +120,28 @@ L262):
 - **Words:** use chord names only as labels (G, G7, B♭m), "the track", "mine", "keys", "notes",
   "plays", "short hit", "held", "sounds like", "fits". Confusing: root, quality, 7th, numeral,
   V/I, voicing, inversion, diatonic, borrowed chord, quantise, MIDI, velocity.
+
+## Phase 7 update: rebuild the song (27 Nov)
+
+Same person, still no theory and ear first. What changes (kickoff Phase 7, L265, L268):
+
+- **Goal, restated:** "recognisably the same song, and I built every part of it", not a copy that
+  sounds like the record; then make my own (L265; the long-term aim is to become a house producer).
+- **Moment of use:** no longer one loop in one evening. A rebuild of one loved track runs over
+  several evenings of 30–60 minutes: remake a part in Make, save it, drop it into the song's
+  section in the Studio, flip to the original at that bar, go back and fix. Comes back days later
+  expecting the half-filled song as they left it.
+- **Ear first, but empty must explain itself:** still reads almost nothing (L262), with one
+  exception the owner asked for: a row or section that is empty on purpose must say so plainly, so
+  a thin loop never sounds "nothing like the original" without a reason (L268).
+- **New frustrations:** four sounds that all sound alike; knobs that barely change anything; a hat
+  row full of hits the original doesn't have and no way to remove them; listening through a loop
+  to get back to one spot; not knowing what the original has in the section they're filling;
+  generic starter sounds in "my" song.
+- **Words:** use section names as the map says them (intro, drop, build, breakdown, outro), "my
+  version", "the original", "fill", "empty", "sounds like", "dusty", "punchy", "long", "bright";
+  drum names by sound (kick, clap, hat, open hat, shaker, ride). Confusing: one-shot, sample
+  licence terms, spectral, decay, transient, envelope, ADSR.
 
 ---
 

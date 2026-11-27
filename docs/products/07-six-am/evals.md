@@ -335,9 +335,10 @@ final review. A reader is graded on real separated loops before a slice is built
 | # | Eval | Bar | Run by | Result |
 | --- | --- | --- | --- | --- |
 | W1 | 20 starting sounds per row (Kick, Claps & snares, Closed hat, Open hat, Shaker / percussion, Ride, Bass), each with a family, a feel word and one line | 7 × 20; every family in the variety map has ≥ 1 | data-evals | |
-| W2 | Breadth: no near-duplicates in a row | no pair within 10 % on both brightness (spectral centroid) and length (−20 dB decay); each row spans ≥ 3× in brightness and length | data-evals | |
+| W2 | Breadth: no near-duplicates in a row | no pair within 10 % on both brightness (spectral centroid) and length (−20 dB decay); each row spans ≥ 3× in brightness and length. Bass presets measured on a fixed render: one C2 note, a 1/4-note gate, default knobs (L273) | data-evals | |
 | W3 | Licences: every shipped sample is CC0 or CC BY, with its source page, author and licence in `public/kits/LICENSES.md`; CC BY sounds credited in the app | 100 %; 0 files of unknown or non-redistributable licence | data-evals | |
-| W4 | Knobs change the sound audibly: each knob, end to end, moves its feature | brightness ≥ 2×, length ≥ 2×, level ≥ 6 dB, pitch ≥ 5 semitones (per knob's job), on 5 sounds per row | data-evals | |
+| W4 | Knobs change the sound audibly: each knob, end to end, moves its feature | brightness ≥ 2×, length ≥ 2×, level ≥ 6 dB, pitch ≥ 5 semitones (per knob's job), on 5 sounds per row; sampled drum rows get Pitch, Length, Tone, Drive (L273) | data-evals | |
+| W5b | Closed hat stops collecting other high sounds (OR6-3's cause) | on real loops with a shaker or ride, ≤ 20 % of Closed-hat hits are shaker / ride hits (labelled from the spectrogram); if it fails, accepted knowingly and the empty rows' message says Make may have put some on Closed hat (L273) | data-evals | |
 | W5 | Open-hat reader on real loops: open hats told from closed | ≥ 85 % of open hats labelled open, ≤ 15 % of closed labelled open, onsets within 10 ms; ≥ 4 real loops from ≥ 3 tracks, 1 held out | data-evals | |
 | W6 | Fix by ear: add, remove, mute, solo; what plays is what is saved | 5 / 5 edited loops: saved pattern = played pattern; mute and solo never saved as deleted hits | data-evals | |
 | W7 | Empty rows unmissable (R3b): Shaker and Ride say they're yours to fill; the loop shows how many rows are open | user-tester names every open row without help in 5 / 5 tries | user-tester | |
@@ -345,7 +346,7 @@ final review. A reader is graded on real separated loops before a slice is built
 | W9 | Rebuild layout: the original's sections from its map, empty slots, hint per section | section starts = the map's bars, 100 %; 0 starter blocks; every section shows the original's parts | data-evals | |
 | W10 | Compare: Original plays from the bar you're at through the Deck | Deck position within 150 ms of the bar's start, 5 / 5; back to Mine at the same bar; clear message when the Deck is closed | data-evals | |
 | W11 | Old sounds unchanged: Phase 4–6 saved sounds render sample for sample; old 3-row drum sounds open with Hats as Closed hat | 100 %; full test suite green | data-evals | |
-| W12 | Sample kit loads fast | a sound plays ≤ 300 ms after its first tap on a warm page; Make's drums ready no later than Phase 6 (Z12) | data-evals | |
+| W12 | Sample kit loads fast | a sound plays ≤ 300 ms after its first tap on a warm page; Make's drums ready no later than Phase 5's Z12 numbers (8-bar loop ≤ 21.5 s) | data-evals | |
 | W13 | Zero bytes of the original stored or uploaded | 0 (storage, network, code read) | data-evals | |
 | W14 | User test: jobs per slice ≥ 4 / 5 (sandbox) | ≥ 4 / 5 each | user-tester | |
 | W15 | Design scorecard (one critic, five points) | 9/10 is a target, not a blocker | design-critic | |

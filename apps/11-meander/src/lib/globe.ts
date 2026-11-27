@@ -9,9 +9,10 @@ export type Projected = { x: number; y: number; theta: number; out: number };
 const D = Math.PI / 180;
 export const GAMMA = 0.48;
 export const RIM = 0.93;
-/** Globe radius and centre on the 1440 × 900 stage (handoff "Size"). */
-export const R = 410;
-export const centre = (hasCard: boolean): [number, number] => [hasCard ? 500 : 720, 456];
+/** Globe radius and centre on the 1440 × 900 stage (handoff "Size"). Phase 4 (L56): 398 and 468 (was 410 and 456), so the
+ * sphere's top clears the header. */
+export const R = 398;
+export const centre = (hasCard: boolean): [number, number] => [hasCard ? 500 : 720, 468];
 /** Threads from the focus fade out inside this oval round the title. */
 export const FADE = { rx: 186, ry: 86 };
 /** More than this many degrees from the focus = far side. */
@@ -97,6 +98,8 @@ export type ThreadPoint = [number, number, number];
  */
 export function placeLabels(
   nodes: LabelInput[], fixed: Rect[], pts: ThreadPoint[], C: [number, number], radius: number, W: number, H: number,
+  /** Dense fields (music, L56): only the nearest rings, so a name stays next to its own dot. */
+  maxRing = 6,
 ): Record<string, LabelPlace> {
   const out: Record<string, LabelPlace> = {};
   const hit = (a: Rect, b: Rect, pad: number) => a.x < b.x + b.w + pad && b.x < a.x + a.w + pad && a.y < b.y + b.h + pad && b.y < a.y + a.h + pad;
@@ -106,7 +109,7 @@ export function placeLabels(
   const dirs = [0, ...[22.5, 45, 67.5, 90, 112.5, 135, 157.5].flatMap((d) => [d, -d]), 180];
   // The two far rings are a last resort: a name far from its dot reads as someone else's.
   const ringCost = [0, 9, 18, 40, 1500, 3000];
-  [9, 20, 32, 46, 64, 86].forEach((gap, gi) => dirs.forEach((d, i) => cand.push([d, gap, i * 1.5 + ringCost[gi]])));
+  [9, 20, 32, 46, 64, 86].slice(0, maxRing).forEach((gap, gi) => dirs.forEach((d, i) => cand.push([d, gap, i * 1.5 + ringCost[gi]])));
   type Best = LabelPlace & { cost: number; ci: number };
   const score = (n: LabelInput, ci: number, others: Rect[]): Best => {
     const { w, h } = n;

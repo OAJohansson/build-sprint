@@ -227,6 +227,13 @@ export type Field = {
   positions: Record<string, LatLon>;
   /** True while any part of the content is an unchecked sample. */
   isSample: boolean;
+  /** Many neighbours per focus (music): labels stay on the nearest rings, threads stop short of the title block, an
+   * open artist dims the neighbours (L56). */
+  dense: boolean;
+  /** Music: the six families the phone's list is grouped under (F7), in this order. */
+  families: { id: string; name: string }[];
+  /** A school's name wherever it is listed: music uses the short name ("EDM", not "EDM (2010s boom)"); philosophy keeps its full name. */
+  nameOf: (s: School) => string;
   /** The timeline: its eras, each school's years, and the year ticks under the axis. */
   eras: Era[];
   spans: Record<string, RawSpan>;
@@ -254,10 +261,21 @@ export type Field = {
 };
 
 type Raw = {
-  id: FieldId; words: Words; eras: Era[]; ticks: number[];
+  id: FieldId; words: Words; eras: Era[]; ticks: number[]; dense?: boolean; livingAfter?: number; shortNames?: boolean;
+  families?: { id: string; name: string }[];
   schools: { sample?: boolean; schools: unknown }; thinkers: { sample?: boolean; thinkers: unknown }; links: { sample?: boolean; links: unknown };
   positions: unknown; places: unknown; spans: { eras: unknown };
 };
+
+/** Music (L56): a genre still alive today draws a short solid start and then the faint tail the Eastern traditions
+ * use, so thirty bars running to the present don't make a wall. */
+// shortcut: the solid part is a fixed `after` years from the start, a display choice, not a sourced classical period; source a "peak" span per genre if the timeline should show one.
+function livingTails(spans: Record<string, RawSpan>, after?: number): Record<string, RawSpan> {
+  if (!after) return spans;
+  const year = new Date().getFullYear();
+  return Object.fromEntries(Object.entries(spans).map(([id, s]) =>
+    [id, s.to === "present" && s.from + after < year ? { ...s, to: s.from + after, living: true } : s]));
+}
 
 function makeField(raw: Raw): Field {
   const schools = raw.schools.schools as School[];
@@ -295,8 +313,11 @@ function makeField(raw: Raw): Field {
     links,
     positions,
     isSample: Boolean(raw.schools.sample || raw.thinkers.sample || raw.links.sample),
+    dense: !!raw.dense,
+    families: raw.families ?? [],
+    nameOf: (s) => (raw.shortNames ? splitName(s.name).short : s.name),
     eras: raw.eras,
-    spans: raw.spans.eras as Record<string, RawSpan>,
+    spans: livingTails(raw.spans.eras as Record<string, RawSpan>, raw.livingAfter),
     ticks: raw.ticks,
     getSchool: (id) => schoolMap.get(id),
     getThinker: (id) => thinkerMap.get(id),
@@ -341,7 +362,11 @@ const FIELDS: Record<FieldId, Field> = {
     schools: pSchools, thinkers: pThinkers, links: pLinks, positions: pPositions, places: pPlaces, spans: pEras,
   }),
   music: makeField({
-    id: "music", words: MUSIC_WORDS, eras: MUSIC_ERAS, ticks: [1900, 1920, 1940, 1960, 1970, 1980, 1990, 2000, 2010, 2020],
+    id: "music", words: MUSIC_WORDS, eras: MUSIC_ERAS, dense: true, livingAfter: 10, shortNames: true,
+    families: [
+      { id: "roots", name: "Roots" }, { id: "rock", name: "Rock" }, { id: "soul", name: "Soul, R&B and dance" },
+      { id: "caribbean-latin-african", name: "Caribbean, Latin and African" }, { id: "hiphop", name: "Hip-hop" }, { id: "electronic", name: "Electronic" },
+    ], ticks: [1900, 1920, 1940, 1960, 1970, 1980, 1990, 2000, 2010, 2020],
     schools: mSchools, thinkers: mThinkers, links: mLinks, positions: mPositions, places: mPlaces, spans: mEras,
   }),
 };

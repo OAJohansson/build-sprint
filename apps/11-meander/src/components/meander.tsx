@@ -2,7 +2,7 @@
 
 // The app's state: what is in focus, what is open in the card, and the visit history.
 // Both the desktop globe and the phone screen render from it; CSS shows one of them.
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getField, isFieldId, type Field, type FieldId } from "@/lib/content";
 import { addVisit, type Visit } from "@/lib/visits";
 import { forField, seeIdea, stateOf, storageKeys, touchSchool, type Progress, type SchoolState } from "@/lib/progress";
@@ -145,13 +145,18 @@ export function Meander() {
     else setInside(false);
   }, [pick]);
 
+  // F6: each field remembers the school last open in it, for this visit (in memory), and reopens it on the way back.
+  const lastOpen = useRef<Partial<Record<FieldId, string | null>>>({});
   const showField = useCallback(
     (id: FieldId) => {
       if (id === field.id) return;
+      lastOpen.current[field.id] = focus;
       overview();
       setStoredField(id);
+      const back = lastOpen.current[id];
+      if (back && getField(id).getSchool(back)) setFocus(back);
     },
-    [field.id, overview, setStoredField],
+    [field.id, focus, overview, setStoredField],
   );
 
   const nav: Nav = useMemo(

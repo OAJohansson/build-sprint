@@ -21,8 +21,12 @@ const X0 = 70;
 const X1_FULL = 1370, X1_CARD = 950;
 const TOP = 150, BOTTOM = 800;
 const GAP = 12;
+/** Room kept left of a name for its link word on hover ("grew out of it"), so it never runs off the stage. */
+const VERB_ROOM = 120;
 
-type Side = "after" | "before" | "on";
+/** One rule (L56): the name ends just left of the start dot; where there is no room, it starts just right of the dot,
+ * knocked out over its own bar. Never at the bar's far end. */
+type Side = "before" | "start";
 
 export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolean; tick: number }) {
   const { focus, states, field } = nav;
@@ -48,21 +52,18 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
     [rows, scale],
   );
 
-  // Each name sits after its bar when it fits, else before it, else on the bar (a span that covers nearly everything).
+  // Each name sits before its start dot, or just after it where there's no room.
   const labelRefs = useRef(new Map<string, HTMLSpanElement>());
   const [sides, setSides] = useState<{ key: string; map: Record<string, Side> } | null>(null);
   const key = `${field.id}|${x1}|${tick}`;
   useLayoutEffect(() => {
     const map: Record<string, Side> = {};
-    const right = hasCard ? 995 : 1415;
     rows.forEach((r, i) => {
-      const w = labelRefs.current.get(r.item.id)?.scrollWidth ?? 0; // full width, even when capped on the bar
-      const g = geo[i];
-      // a living tradition's name sits after its solid part, over the faint tail (knocked out behind the text)
-      map[r.item.id] = g.xe + GAP + w <= right ? "after" : g.xs - GAP - w >= 24 ? "before" : "on";
+      const w = labelRefs.current.get(r.item.id)?.querySelector(".nm")?.scrollWidth ?? 0;
+      map[r.item.id] = geo[i].xs - GAP - w - VERB_ROOM >= 24 ? "before" : "start";
     });
     setSides({ key, map });
-  }, [key, rows, geo, hasCard]);
+  }, [key, rows, geo]);
   const placed = sides?.key === key ? sides.map : null;
 
   // The current school: the one under the pointer or keyboard, else the open one.
@@ -74,6 +75,8 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
     [cur, index, links],
   );
   const lit = new Set(curLinks.flatMap((l) => [l.from, l.to]));
+  /** Each linked row's link word, read with that row as the subject and the current one as "it". */
+  const verbOf = new Map(cur ? curLinks.map((l) => [l.from === cur ? l.to : l.from, field.verbFor(l, cur)] as const) : []);
 
   /** A link drawn from the older school, at the moment the newer one starts (or its end, if it was over by then). */
   const curve = (from: string, to: string) => {
@@ -154,17 +157,16 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
                 {g.xt != null && g.xt > g.xe && <i className="tail" style={{ left: g.xe, width: g.xt - g.xe }} />}
                 <i className="mk" style={{ left: g.xs }} />
                 <span
-                  className={["tl-lb", side, g.xt != null && "knock", placed && "placed"].filter(Boolean).join(" ")}
+                  className={["tl-lb", side, placed && "placed"].filter(Boolean).join(" ")}
                   ref={(el) => { if (el) labelRefs.current.set(id, el); else labelRefs.current.delete(id); }}
-                  style={{
-                    left: side === "after" ? g.xe + GAP : side === "before" ? g.xs - GAP : g.xs + 16,
-                    // on the bar: never past the axis's end; the button's label keeps the full name
-                    maxWidth: side === "on" ? Math.max(80, x1 - g.xs - 24) : undefined,
-                  }}
-                  title={side === "on" ? s.name : undefined}
+                  style={{ left: side === "before" ? g.xs - GAP : g.xs + GAP, maxWidth: side === "start" ? Math.max(80, x1 - g.xs - 24) : undefined }}
                 >
-                  {splitName(s.name).short}
-                  {traditionOf(s) && <small className="tag">{traditionOf(s)}</small>}
+                  <span className="nm">
+                    {splitName(s.name).short}
+                    {traditionOf(s) && <small className="tag">{traditionOf(s)}</small>}
+                  </span>
+                  {/* F1: how a linked row relates to the current one, in the globe's words, so a later genre can't read as a parent */}
+                  {verbOf.get(id) && <small className="tl-vb">{verbOf.get(id)}</small>}
                 </span>
               </button>
             </li>

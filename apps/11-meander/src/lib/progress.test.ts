@@ -20,9 +20,9 @@ describe("progress per school", () => {
   it("empty history: nothing started, everything to go", () => {
     const t = threadProgress({}, SCHOOLS);
     expect(t).toEqual({ explored: 0, started: 0, toGo: 4, rows: [] });
-    expect(begunLine(t)).toBe("0 of 4 schools begun");
+    expect(begunLine(t)).toBe("0 of 4 schools started");
     expect(detailLine(t)).toBe("");
-    expect(begunLine(threadProgress(withHistory({}, []), []))).toBe("0 of 0 schools begun");
+    expect(begunLine(threadProgress(withHistory({}, []), []))).toBe("0 of 0 schools started");
   });
 
   it("opening starts a school; opening every idea explores it (normal case)", () => {
@@ -37,8 +37,8 @@ describe("progress per school", () => {
     expect(stateOf(p.sto, SCHOOLS[0].ideas)).toBe("explored");
     const t = threadProgress(p, SCHOOLS);
     expect(t.rows.map((r) => [r.id, r.state, r.seen, r.total])).toEqual([["sto", "explored", 2, 2], ["exi", "started", 0, 3]]);
-    expect(begunLine(t)).toBe("2 of 4 schools begun");
-    expect(detailLine(t)).toBe("1 with all ideas seen · 1 started");
+    expect(begunLine(t)).toBe("2 of 4 schools started");
+    expect(detailLine(t)).toBe("1 with all ideas seen");
     expect(stateLabel("explored")).toBe("all ideas seen");
     expect(stateLabel("new")).toBe("");
   });
@@ -79,15 +79,15 @@ describe("progress per school", () => {
     p = withHistory(seeIdea({}, "sto", "Virtue"), visits);
     expect(p.sto).toEqual({ at: new Date(2026, 10, 27, 10, 0).toISOString(), ideas: ["Virtue"] });
     const t = threadProgress(p, SCHOOLS);
-    expect(begunLine(t)).toBe("2 of 4 schools begun");
-    expect(detailLine(t)).toBe("2 started");
+    expect(begunLine(t)).toBe("2 of 4 schools started");
+    expect(detailLine(t)).toBe("");
   });
 
   it("all explored", () => {
     let p: Progress = {};
     for (const s of SCHOOLS.slice(0, 3)) for (const i of s.ideas) p = seeIdea(p, s.id, i);
     const t = threadProgress(p, SCHOOLS.slice(0, 3));
-    expect(begunLine(t)).toBe("3 of 3 schools begun");
+    expect(begunLine(t)).toBe("3 of 3 schools started");
     expect(detailLine(t)).toBe("3 with all ideas seen");
   });
 });

@@ -24,7 +24,7 @@ function ListenFact({ school }: { school: School }) {
   if (!r) return null;
   return (
     <div className="fx ls">
-      <dt>Start with</dt>
+      <dt>Listen</dt>
       <dd><ListenLink r={r} /></dd>
     </div>
   );

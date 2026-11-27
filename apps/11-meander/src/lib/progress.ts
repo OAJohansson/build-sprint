@@ -65,15 +65,15 @@ export function threadProgress(p: Progress, schools: { id: string; ideas: string
 /** What a reader sees for a state (F1, user test 27 Nov): "explored" overclaimed, so it reads "all ideas seen". */
 export const stateLabel = (st: SchoolState | undefined, allSeen = "all ideas seen") => (st === "explored" ? allSeen : st === "started" ? "started" : "");
 
-/** "5 of 27 schools begun": a count, not a scorecard (F1). */
+/** "5 of 27 schools started": a count, not a scorecard (F1). One word for the state (F9, L56): "started". */
 export function begunLine(t: Pick<ThreadProgress, "explored" | "started" | "toGo">, one = "school", many = "schools"): string {
   const begun = t.explored + t.started, total = begun + t.toGo;
-  return `${begun} of ${total} ${total === 1 ? one : many} begun`;
+  return `${begun} of ${total} ${total === 1 ? one : many} started`;
 }
 
-/** The quiet second line: "2 with all ideas seen · 3 started"; empty when nothing is begun. */
+/** The quiet second line: "2 with all ideas seen"; empty when none is. The started count is the line above (F9). */
 export function detailLine(t: Pick<ThreadProgress, "explored" | "started">, allSeen = "all ideas seen"): string {
-  return [t.explored && `${t.explored} with ${allSeen}`, t.started && `${t.started} started`].filter(Boolean).join(" · ");
+  return t.explored ? `${t.explored} with ${allSeen}` : "";
 }
 
 // ---------- progress per field (phase 4) ----------

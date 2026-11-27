@@ -275,7 +275,7 @@ export function ThinkerSections({ thinker, nav, headingRef }: { thinker: Thinker
   return (
     <>
       {school && (
-        <button type="button" className="up" onClick={nav.backToSchool}>← {school.name}</button>
+        <button type="button" className="up" onClick={nav.backToSchool}>← {nav.field.nameOf(school)}</button>
       )}
       <h2 className="who-name" tabIndex={-1} ref={headingRef}>{thinker.name}</h2>
       <p className="dates">
@@ -284,7 +284,7 @@ export function ThinkerSections({ thinker, nav, headingRef }: { thinker: Thinker
           <Fragment key={o.id}>
             {" · also in "}
             <span className="inline-links">
-              <button type="button" onClick={() => nav.openThinker(o.id)}>{getSchool(o.school)?.name}</button>
+              <button type="button" onClick={() => nav.openThinker(o.id)}>{(() => { const os = getSchool(o.school); return os ? nav.field.nameOf(os) : ""; })()}</button>
             </span>
           </Fragment>
         ))}
@@ -340,7 +340,7 @@ export function ThreadSections({ nav, headingRef }: { nav: Nav; headingRef?: Rea
       {detail && <p className="tsub">{detail}</p>}
       {next.picks.length > 0 && (
         <>
-          <h3 className="tkick">{next.mode === "next" ? "Next from here" : t.rows.length ? "Not begun yet" : "Start at the beginning"}</h3>
+          <h3 className="tkick">{next.mode === "next" ? "Next from here" : t.rows.length ? "Not started yet" : "Start at the beginning"}</h3>
           <ul className="nextl">
             {next.picks.map((p) => {
               const s = getSchool(p.id);
@@ -354,7 +354,7 @@ export function ThreadSections({ nav, headingRef }: { nav: Nav; headingRef?: Rea
                   <button type="button" onClick={() => nav.openSchool(p.id)}>
                     <i aria-hidden="true" />
                     <span>
-                      <b>{s.name}</b>
+                      <b>{nav.field.nameOf(s)}</b>
                       <small>{verb ? [verb, why].filter(Boolean).join(" · ") : metaLine(s)}</small>
                     </span>
                   </button>
@@ -368,7 +368,7 @@ export function ThreadSections({ nav, headingRef }: { nav: Nav; headingRef?: Rea
         <p className="pending">{words.threadEmpty}</p>
       ) : (
         <>
-          <h3 className="tkick">Begun</h3>
+          <h3 className="tkick">Started</h3>
           <ul className="prog">
             {t.rows.map((r) => {
               const s = getSchool(r.id);
@@ -377,7 +377,7 @@ export function ThreadSections({ nav, headingRef }: { nav: Nav; headingRef?: Rea
                 <li key={r.id}>
                   <button type="button" onClick={() => nav.openSchool(r.id)}>
                     <i className={r.state} aria-hidden="true" />
-                    <span className="nm">{s.name}<span className="sr-only">, {stateLabel(r.state, words.allSeen)}</span></span>
+                    <span className="nm">{nav.field.nameOf(s)}<span className="sr-only">, {stateLabel(r.state, words.allSeen)}</span></span>
                     {r.total > 0 && <span className="ct">{r.seen} of {r.total} {r.total === 1 ? words.idea : words.ideas}</span>}
                   </button>
                 </li>

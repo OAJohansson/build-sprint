@@ -127,7 +127,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
   }, []);
 
   const key = `${field.id}|${focus}|${hasCard}|${showThinker ? thinker : ""}|${threadOpen}|${nav.openTheme}`;
-  const [placed, setPlaced] = useState<{ key: string; map: Record<string, LabelPlace>; ko: Rect[]; fade: { cx: number; cy: number; rx: number; ry: number } | null; under: Set<string> } | null>(null);
+  const [placed, setPlaced] = useState<{ key: string; map: Record<string, LabelPlace>; ko: Rect[]; fade: { cx: number; cy: number; rx: number; ry: number } | null; under: Set<string>; clear: Rect | null } | null>(null);
 
   useLayoutEffect(() => {
     const stage = stageRef.current;
@@ -164,7 +164,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
       // ties keep the content's order, as in the design's runtime
       return { id: n.id, x: n.p.x, y: n.p.y, r: n.r, pref: n.p.out, ord: (n.near ? 0 : Math.round(n.p.theta)) + ORDER[n.id] * 1e-4, w: el ? inkWidth(el, k) : 0, h: el?.offsetHeight ?? 0 };
     });
-    const map = placeLabels(inputs, fixed, threadPts, C, R, W, H);
+    const map = placeLabels(inputs, fixed, threadPts, C, R, W, H, field.dense ? 4 : 6);
     // A wrapped name's box is wider than its lines; shift the box so the lines sit where the placer put them.
     for (const [id, pl] of Object.entries(map)) {
       const extra = boxW[id] - pl.rect.w;
@@ -192,8 +192,10 @@ export function GlobeView({ nav }: { nav: Nav }) {
         }
       }
     }
-    setPlaced({ key, map, ko: ko.concat(titleLines), fade, under });
-  }, [key, tick, nodes, threadPts, C, ORDER]);
+    // Dense fields (music, L56): threads from the focus stop short of the whole title block, not only its text lines.
+    const clear = field.dense && focus && box ? { x: box.x - 18, y: box.y - 14, w: box.w + 36, h: box.h + 28 } : null;
+    setPlaced({ key, map, ko: ko.concat(titleLines), fade, under, clear });
+  }, [key, tick, nodes, threadPts, C, ORDER, field.dense, focus]);
 
   // Move keyboard focus to what just opened, so Tab continues from there into the card.
   const first = useRef(true);
@@ -224,6 +226,11 @@ export function GlobeView({ nav }: { nav: Nav }) {
   }, [inside, pick, focus, school]); // eslint-disable-line react-hooks/exhaustive-deps -- the view only picks where focus lands
 
   const ready = placed?.key === key ? placed : null;
+  const whyNode = (() => {
+    const n = focus && hovered ? nodes.find((m) => m.id === hovered && m.near) : undefined;
+    const text = n?.near ? n.near.link.reason || n.near.reason : "";
+    return n && text ? { label: n.label, text } : null;
+  })();
 
   const onStageClick = (e: React.MouseEvent) => {
     if (inside) return;
@@ -235,7 +242,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
     <div className="desk">
       {/* Clicking empty space returns to the overview; Esc and the logo do the same for keyboard users. */}
       <div
-        className={["stage", timeline && "tl", still && "still", lit && "hovering", inside && school && "inside", inside && pick !== null && "has-pick"].filter(Boolean).join(" ")}
+        className={["stage", timeline && "tl", still && "still", lit && "hovering", field.dense && showThinker && "sat-open", inside && school && "inside", inside && pick !== null && "has-pick"].filter(Boolean).join(" ")}
         ref={stageRef}
         onClick={onStageClick}
         onMouseMove={still ? () => setStill(false) : undefined}
@@ -270,6 +277,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
             {focus && ready?.fade && (
               <ellipse cx={ready.fade.cx} cy={ready.fade.cy} rx={ready.fade.rx} ry={ready.fade.ry} fill="url(#fade)" />
             )}
+            {ready?.clear && <rect x={ready.clear.x} y={ready.clear.y} width={ready.clear.w} height={ready.clear.h} rx="22" fill="#000" />}
             {ready?.ko.map((p, i) => (
               <rect key={i} x={p.x - 5} y={p.y - 3} width={p.w + 10} height={p.h + 6} rx="6" fill="#000" />
             ))}
@@ -303,13 +311,8 @@ export function GlobeView({ nav }: { nav: Nav }) {
                 >
                   {/* name first, then what it did, so it reads as a sentence: "Marxism / inspired it" (#23) */}
                   <b className={n.label.length > 20 ? "wrap" : undefined}>{n.label}</b>
-                  {n.near && (
-                    <em>
-                      {n.near.verb}
-                      {/* the link's reason, on hover or keyboard focus only (L20) */}
-                      {n.near.reason && <span className="why">· {n.near.reason}</span>}
-                    </em>
-                  )}
+                  {n.near && <em>{n.near.verb}</em>}
+                  {n.near && (n.near.link.reason || n.near.reason) && <span className="sr-only">: {n.near.link.reason || n.near.reason}</span>}
                   {v && <span className="sr-only">, {stateLabel(st, words.allSeen)}</span>}
                 </span>
               </button>
@@ -359,6 +362,12 @@ export function GlobeView({ nav }: { nav: Nav }) {
           </div>
         )}
         <p className="sr-only" aria-live="polite">{said}</p>
+        {/* F2 (L56): a hovered or focused neighbour's full reason, one quiet line under the globe, clear of every label */}
+        {whyNode && !inside && !timeline && (
+          <p className="why-line" style={{ left: C[0] }} aria-hidden="true">
+            <b>{whyNode.label}</b> {whyNode.text}
+          </p>
+        )}
 
         {threadOpen ? (
           <aside className="card" id="thread-panel" aria-label="Your thread" ref={cardRef}>

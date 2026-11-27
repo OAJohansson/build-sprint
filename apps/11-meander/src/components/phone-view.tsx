@@ -2,7 +2,7 @@
 
 // Phone (under 1024 wide): no globe, one school at a time (handoff "Phone", T8). The school screen
 // follows phone.png; the overview, thinker and "Your thread" screens reuse the card's contents.
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ledeOf, splitName, traditionOf } from "@/lib/content";
 import { timelineRows } from "@/lib/timeline";
 import { SchoolSections, StepInside, ThinkerSections, ThreadSections } from "./card-parts";
@@ -24,6 +24,9 @@ export function PhoneView({ nav }: { nav: Nav }) {
   const school = focus ? getSchool(focus) : undefined;
   const thinkerData = focus && thinker ? getThinker(thinker) : undefined;
   const heading = useRef<HTMLHeadingElement>(null);
+  const { nameOf } = field;
+  // Phone card (L56): the first three neighbours, then "N more"; opening another school folds them again.
+  const [moreFor, setMoreFor] = useState<string | null>(null);
 
   // A new screen starts at the top, with keyboard focus on its heading.
   const first = useRef(true);
@@ -51,7 +54,8 @@ export function PhoneView({ nav }: { nav: Nav }) {
   } else if (school && inside) {
     body = <PhoneSkeleton key={school.id} school={school} nav={nav} headingRef={heading} />;
   } else if (school) {
-    const near = neighbours(school.id);
+    const all = neighbours(school.id);
+    const near = moreFor === school.id ? all : all.slice(0, 3);
     body = (
       <>
         <i className="here" aria-hidden="true" />
@@ -70,7 +74,7 @@ export function PhoneView({ nav }: { nav: Nav }) {
                     <button type="button" className={v} onClick={() => nav.openSchool(n.school.id)}>
                       <i aria-hidden="true" />
                       <span>
-                        <b>{n.school.name}</b>
+                        <b>{nameOf(n.school)}</b>
                         <em>{n.verb}</em>
                         {n.reason && <small>{n.reason}</small>}
                         {v && <span className="sr-only">, {label(n.school.id)}</span>}
@@ -80,6 +84,11 @@ export function PhoneView({ nav }: { nav: Nav }) {
                 );
               })}
             </ul>
+            {all.length > near.length && (
+              <button type="button" className="nmore" onClick={() => setMoreFor(school.id)}>
+                {all.length - near.length} more
+              </button>
+            )}
           </>
         )}
         <SchoolSections school={school} nav={nav} phone />
@@ -105,10 +114,43 @@ export function PhoneView({ nav }: { nav: Nav }) {
                       <button type="button" className={v} onClick={() => nav.openSchool(s.id)}>
                         <i aria-hidden="true" />
                         <span>
-                          <b>{s.name}</b>
+                          <b>{nameOf(s)}</b>
                           <small>{[traditionOf(s), whenOf(s)].filter(Boolean).join(" · ")}</small>
                           {v && <span className="sr-only">, {label(s.id)}</span>}
                         </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          );
+        })}
+      </>
+    );
+  } else if (field.families.length) {
+    // Music's list (F7, L56): grouped by family under thin headings, earliest first in each, with the thread panel's
+    // small state markers instead of a column of big dots.
+    const order = new Map(timelineRows(schools, undefined, field.spans, field.eras).map((r, i) => [r.item.id, i]));
+    const byTime = (a: { id: string }, b: { id: string }) => (order.get(a.id) ?? 1e9) - (order.get(b.id) ?? 1e9);
+    body = (
+      <>
+        <h1 tabIndex={-1} ref={heading} className="sr-only">{words.listTitle}</h1>
+        {field.families.map((fam) => {
+          const inFam = schools.filter((s) => s.family === fam.id).sort(byTime);
+          if (!inFam.length) return null;
+          return (
+            <section key={fam.id} className="fam" aria-label={fam.name}>
+              <h2 className="famh">{fam.name}</h2>
+              <ul className="prog famlist">
+                {inFam.map((s) => {
+                  const st = states.get(s.id);
+                  return (
+                    <li key={s.id}>
+                      <button type="button" onClick={() => nav.openSchool(s.id)}>
+                        <i className={st === "new" || !st ? "new" : st} aria-hidden="true" />
+                        <span className="nm">{nameOf(s)}{st && st !== "new" && <span className="sr-only">, {label(s.id)}</span>}</span>
+                        <span className="ct">{whenOf(s)}</span>
                       </button>
                     </li>
                   );
@@ -133,7 +175,7 @@ export function PhoneView({ nav }: { nav: Nav }) {
                 <button type="button" className={v} onClick={() => nav.openSchool(s.id)}>
                   <i aria-hidden="true" />
                   <span>
-                    <b>{s.name}</b>
+                    <b>{nameOf(s)}</b>
                     {traditionOf(s) && <small className="ptag">{traditionOf(s)}</small>}
                     {v && <span className="sr-only">, {label(s.id)}</span>}
                   </span>

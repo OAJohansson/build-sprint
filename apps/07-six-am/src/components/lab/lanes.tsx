@@ -61,6 +61,8 @@ type LanesProps = {
   dimmed: boolean;
   /** Drawn inside the focus lane: the Mentor's dots, "+ Ask" and the open card (S2). */
   overlay?: ReactNode;
+  /** L295 (U7-21): the song's rebuild, a quiet link at the end of the section ruler. */
+  rebuildHref?: string;
 };
 
 export const Lanes = memo(function Lanes(p: LanesProps) {
@@ -110,6 +112,7 @@ export const Lanes = memo(function Lanes(p: LanesProps) {
           </button>
         ))}
         {ticks.map((b) => <span key={b} className={s.num} style={{ left: pct(b) }}>{b}</span>)}
+        {p.rebuildHref ? <a className={s.rulerRebuild} href={p.rebuildHref} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>Rebuild this song →</a> : null}
         <i className={`${s.playhead} ${s.playheadTop}`} data-catching={p.catching ? "" : undefined} style={{ left: "var(--ph, 0%)" }} />
       </div>
       <div className={s.lhChord}>Chords <small>est.</small></div>

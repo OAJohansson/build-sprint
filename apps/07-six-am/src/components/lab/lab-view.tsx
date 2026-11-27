@@ -9,7 +9,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Logo } from "@/components/studio/logo";
 import { SettingsLink, ViewsNav } from "@/components/views-nav";
-import { RebuildLink } from "@/components/studio/rebuild-link";
+import { RebuildLink, rebuildHref } from "@/components/studio/rebuild-link";
 import type { EarsAnalysis } from "@/lib/ears/results";
 import { LiveError, PART_NAMES, type PartName } from "@/lib/lab/live";
 import { barToMs, loopBars, msToBar } from "@/lib/lab/timing";
@@ -553,7 +553,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
         <ViewsNav current="analyse" />
         {/* R8b (L273d): the map's one way into the Studio, replacing "Start a track from this". In the
             app bar, not beside Listen / Make: there it took ~150 px from the title at 1280. */}
-        <div className={s.appRight}><RebuildLink mapId={map.id} className={s.textBtn} /><SettingsLink /></div>
+        <div className={s.appRight}><RebuildLink mapId={map.id} className={`${s.ghost} ${s.rebuildBtn}`} /><SettingsLink /></div>
       </header>
       <div className={s.head}>
         <a className={s.back} href="/analyse">← All tracks</a>
@@ -594,7 +594,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
         <div ref={grid} style={{ display: "contents" }}>
           <Lanes bars={bars} sections={sections} parts={parts} chords={chords} levels={levels} hear={hear} focus={focus}
             onOnly={onOnly} onMute={onMute} onSeek={onSeek} bar={pos.bar} loop={loop} onLoop={onLoop}
-            catching={!!ts?.catching} dimmed={!ready}
+            catching={!!ts?.catching} dimmed={!ready} rebuildHref={rebuildHref(map.id)}
             overlay={(
               <LabNotes bars={bars} turns={focusTurns} partName={PART_LABEL[focus]} playheadBar={pos.bar}
                 openBar={openBar} setOpenBar={setOpenBar} asking={asking} setAsking={setAsking}

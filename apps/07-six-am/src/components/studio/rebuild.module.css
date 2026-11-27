@@ -29,7 +29,7 @@
 .l1 { display: flex; gap: 7px; align-items: baseline; min-width: 0; }
 .sn { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; position: relative; z-index: 3; }
 .range { flex: none; font-size: 11.5px; color: var(--mute); font-variant-numeric: tabular-nums; position: relative; z-index: 3; }
-.count { font-size: 11.5px; color: var(--mute); white-space: nowrap; position: relative; z-index: 3; min-height: 1.45em; }
+.count { font-size: 11.5px; color: var(--mute); white-space: pre; position: relative; z-index: 3; min-height: 1.45em; }
 .gold { color: var(--gold); }
 .muted { color: var(--mute); }
 
@@ -52,17 +52,19 @@
 .h { border-color: var(--goldLine); color: var(--gold); background: #1e1912; }
 .l, .v { border-color: rgba(241,230,211,.13); color: var(--dim); }
 .e { color: var(--dim); background: transparent; }
+/* U7-22: a measured lane the original doesn't have here: a dimmed cell, no words (tooltip + label say it) */
+.n { color: var(--dim); background: rgba(0,0,0,.32); }
 .f { border-style: solid; border-color: transparent; }
 .slot[aria-expanded="true"] { box-shadow: 0 0 0 2px var(--ink) !important; }
 .plus { visibility: hidden; color: var(--mute); }
 @media (hover: hover) and (pointer: fine) {
-  .e:hover { border-color: rgba(241,230,211,.22); }
-  .e:hover .plus { visibility: visible; }
+  .e:hover, .n:hover { border-color: rgba(241,230,211,.22); }
+  .e:hover .plus, .n:hover .plus { visibility: visible; }
   .h:hover, .l:hover, .v:hover, .f:hover { filter: brightness(1.2); }
 }
 .slot:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
-.e:focus-visible { border-color: rgba(241,230,211,.22); }
-.e:focus-visible .plus, .slot[aria-expanded="true"] .plus { visibility: visible; }
+.e:focus-visible, .n:focus-visible { border-color: rgba(241,230,211,.22); }
+.e:focus-visible .plus, .n:focus-visible .plus, .slot[aria-expanded="true"] .plus { visibility: visible; }
 /* Labels sit above the playhead, so the line never runs through words */
 .tx { position: relative; z-index: 3; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .ph { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: rgba(255,255,255,.5); pointer-events: none; z-index: 2; border-radius: 1px; }
@@ -88,11 +90,14 @@
 .partStatic { cursor: default; }
 .part > i { width: 3px; align-self: stretch; border-radius: 2px; flex: none; }
 .pn { min-width: 0; display: flex; flex-direction: column; }
-.pn b { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* U7-25: a part's name wraps (two lines at most) rather than being cut; the full name is its tooltip */
+.pn b { font-weight: 500; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.inSlot { color: var(--ink); overflow-wrap: anywhere; }
 .pn small { color: var(--mute); font-size: 11.5px; }
 .part[aria-pressed="true"] { border-color: var(--gold); background: rgba(242,177,52,.08); }
 button.part:active { transform: scale(.97); }
 button.part:focus-visible, .link:focus-visible, .x:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 @media (hover: hover) and (pointer: fine) { button.part:hover { border-color: var(--dim); } }
 .link { align-self: flex-start; border: 0; background: none; padding: 0; color: var(--ink); font: 400 11.5px var(--f-mono); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.nowrap { white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) { .part { transition: none; } }

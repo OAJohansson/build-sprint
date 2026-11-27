@@ -22,6 +22,12 @@ import r from "./rebuild.module.css";
 
 /** What a lane's parts are called in "No saved … yet". */
 const NOUN: Record<string, string> = { kick: "kicks", claps: "claps", hats: "hats", perc: "percussion", bass: "bass", chords: "chords", pads: "pads", lead: "leads", fx: "FX", vocals: "vocals" };
+/** The Make tab that makes a lane's parts (Lab: ?mode=make&make=…; Bass is Make's first tab). */
+const MAKE_TAB: Record<string, [string, string | null]> = {
+  kick: ["Drums", "drums"], claps: ["Drums", "drums"], hats: ["Drums", "drums"], perc: ["Drums", "drums"],
+  bass: ["Bass", null], chords: ["Melody", "melody"], pads: ["Melody", "melody"], lead: ["Melody", "melody"], fx: ["FX", "fx"],
+};
+const makeHref = (mapId: string, lane: string) => `/map?id=${encodeURIComponent(mapId)}&mode=make${MAKE_TAB[lane]?.[1] ? `&make=${MAKE_TAB[lane][1]}` : ""}`;
 /** A section is never narrower than the longest name a map gives ("Breakdown 2") and "2 to fill". */
 const MIN_W = 114;
 const RIGHT_PAD = 24;
@@ -201,12 +207,16 @@ export function RebuildView({ t, mine }: { t: Timeline; mine: MySounds }) {
 function SectionHead({ s, n, hinted, x, w, onSeek }: { s: RebuildSection; n: number; hinted: boolean; x: number; w: number; onSeek: () => void }) {
   const range = `${s.start}–${s.start + s.bars - 1}`;
   const roomy = s.name.length * 8.4 + range.length * 6.9 + 40 <= w;
-  // Narrow: "2 to fill" or nothing, never a bare number (critic 3b).
-  const count = !hinted ? "" : `${n} to fill`;
+  // One phrase everywhere (L295): "N to fill", "nothing left to fill" (shortened to "none left" when
+  // narrow); never a bare number. A section without measured parts shows no count.
+  const count = !hinted ? "" : n ? `${n} to fill` : fits("nothing left to fill", w, 11.5, 17) ? "nothing left to fill" : "none left";
+  const shown = count && fits(count, w, 11.5, 17) ? count : "";
+  // U7-23: the bar range on every header that fits it: beside the name, else beside the count.
+  const range2 = !roomy && fits(`${shown}${shown ? "  " : ""}${range}`, w, 11.5, 17);
   return (
     <button className={r.sech} style={{ left: x, width: w }} onClick={onSeek} title={`${s.name}, bars ${range}. Play from bar ${s.start}`}>
       <span className={r.l1}><span className={r.sn}>{s.name}</span>{roomy ? <span className={r.range}>{range}</span> : null}</span>
-      <span className={cx(r.count, n > 0 && r.gold)}>{count && fits(count, w, 11.5, 17) ? count : ""}</span>
+      <span className={r.count}><span className={n > 0 ? r.gold : undefined}>{shown}</span>{range2 ? <span className={r.range}>{shown ? "  " : ""}{range}</span> : null}</span>
     </button>
   );
 }
@@ -214,19 +224,20 @@ function SectionHead({ s, n, hinted, x, w, onSeek }: { s: RebuildSection; n: num
 function Slot({ doc, i, s, lane, x, w, open, onPick }: { doc: Doc; i: number; s: RebuildSection; lane: string; x: number; w: number; open: boolean; onPick: () => void }) {
   const L = rebuildLane(lane)!, hint = slotHint(s, lane), st = slotState(doc, i, lane);
   const px = w - 6;
-  let kind: "f" | "h" | "v" | "l" | "e", text = "", short: string[] = [];
+  let kind: "f" | "h" | "v" | "l" | "n" | "e", text = "", short: string[] = [];
   if (st.state === "filled") { kind = "f"; text = doc.sounds?.find((y) => y.id === st.region.loopId)?.name ?? "A saved part"; }
   else if (st.state === "left") { kind = "l"; text = "left empty"; short = ["left"]; }
   else if (hint === "has") { kind = "h"; text = `has ${L.name.toLowerCase()}`; short = [L.name.toLowerCase()]; }
   else if (hint === "vocals") { kind = "v"; text = "has vocals · not yet"; short = ["vocals · not yet", "not yet"]; }
-  else kind = "e";
+  else kind = hint === "none" ? "n" : "e";
   // Shorter words for narrow slots before cutting (a labelled slot is never left blank).
   const label = !text ? "" : kind === "f" || fits(text, px) ? text : short.find((y) => fits(y, px)) ?? short.at(-1) ?? text;
-  const what = text || (hint === "none" ? `the original has no ${L.name.toLowerCase()} here; add a part` : "empty, add a part");
+  const none = `The original has no ${L.name.toLowerCase()} here`;
+  const what = text || (hint === "none" ? `${none.toLowerCase()}; add a part` : "empty, add a part");
   const color = colorOf(L.type);
   return (
     <button
-      className={cx(r.slot, r[kind])} aria-expanded={open} aria-label={`${s.name}, ${L.name}: ${what}`} title={text || "Add a part"} onClick={onPick}
+      className={cx(r.slot, r[kind])} aria-expanded={open} aria-label={`${s.name}, ${L.name}: ${what}`} title={text || (hint === "none" ? `${none}. Add a part` : "Add a part")} onClick={onPick}
       style={{ left: x + 3, width: w - 6, ...(kind === "f" ? { background: `color-mix(in srgb, ${color} 28%, #1a1715)`, boxShadow: `inset 3px 0 ${color}` } : {}) }}
     >
       {label ? <span className={r.tx}>{label}</span> : <span className={r.plus} aria-hidden>+</span>}
@@ -265,6 +276,9 @@ function SlotPanel({ doc, pick, sounds, loading, onClose, onFill, onEmpty, onLea
   const s = doc.rebuild!.sections[pick.i], L = rebuildLane(pick.lane)!, hint = slotHint(s, pick.lane), st = slotState(doc, pick.i, pick.lane);
   const parts = sounds.filter((p) => partFits(p, pick.lane));
   const inSlot = st.state === "filled" ? doc.sounds?.find((y) => y.id === st.region.loopId) : undefined;
+  // L295: say so when the list mixes chords and pads (one family, both fit).
+  const types = new Set(parts.map((p) => libLaneType(p)));
+  const harmonyMix = types.has("chords") && types.has("pads");
   const noun = L.name.toLowerCase();
   const sentence = hint === "vocals" ? "The original has vocals here. Six AM can’t make vocals yet."
     : hint === "has" ? `The original has ${noun} here.`
@@ -277,13 +291,17 @@ function SlotPanel({ doc, pick, sounds, loading, onClose, onFill, onEmpty, onLea
       <div className={r.ph1}><span className={r.hd}>{s.name} · {L.name}</span><button className={r.x} onClick={onClose} aria-label="Close">✕</button></div>
       <span className={r.lbl}>Bars {s.start}–{s.start + s.bars - 1}. A part repeats to the section&rsquo;s end.</span>
       <span className={hint === "has" && st.state === "empty" ? r.gold : r.muted}>{sentence}</span>
+      {inSlot ? <span className={r.lbl}>In this slot: <span className={r.inSlot}>{inSlot.name}</span></span> : null}
+      {harmonyMix ? <span className={r.lbl}>{pick.lane === "pads" ? "Pads and chords fit here." : "Chords and pads fit here."}</span> : null}
       {pick.lane === "vocals" ? null
         : loading ? <span className={r.lbl}>Loading your saved parts…</span>
         : parts.length ? (
           <div className={r.lib}>
             {parts.map((p) => <PartItem key={p.id} p={p} on={inSlot?.source === "lib" && inSlot.libId === p.id} onClick={() => onFill(p)} />)}
           </div>
-        ) : <p className={r.lbl}>No saved {NOUN[pick.lane] ?? noun} yet. Make one in Make, then save it.</p>}
+        ) : (
+          <p className={r.lbl}>No saved {NOUN[pick.lane] ?? noun} yet. <a className={cx(r.link, r.nowrap)} href={makeHref(doc.rebuild!.mapId, pick.lane)}>Build one in Make → {MAKE_TAB[pick.lane]?.[0] ?? "Bass"}</a></p>
+        )}
       {st.state === "filled" ? <button className={r.link} onClick={onEmpty}>Empty this slot</button>
         : st.state === "left" ? <span className={r.lbl} role="status">Left empty · <button className={r.link} onClick={() => onLeave(false)}>Undo</button></span>
         : hint === "has" ? <button className={r.link} onClick={() => onLeave(true)}>Leave empty</button> : null}

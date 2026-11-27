@@ -525,7 +525,7 @@
       "to": "hip-hop",
       "type": "built",
       "label": "hip-hop draws on soul",
-      "reason": "The Hip-hop infobox lists soul among the genre's stylistic origins.",
+      "reason": "Soul is one of the styles hip-hop grew out of.",
       "sources": [
         {
           "url": "https://en.wikipedia.org/wiki/Hip-hop",
@@ -571,7 +571,7 @@
       "to": "disco",
       "type": "built",
       "label": "disco drew on funk",
-      "reason": "The Funk article says disco owed a great deal to funk, and the Disco infobox lists funk among its origins.",
+      "reason": "Disco owed a great deal to funk, which is one of its roots.",
       "sources": [
         {
           "url": "https://en.wikipedia.org/wiki/Funk",
@@ -675,7 +675,7 @@
       "to": "hip-hop",
       "type": "built-then-against",
       "label": "hip-hop sprang from disco",
-      "reason": "Early Bronx DJs built hip-hop mainly from disco and funk records, and Chic's 'Good Times' became the basis of 'Rapper's Delight'. The Hip-hop article says much of the young genre's early spirit was a rebellion against disco, the music it came from.",
+      "reason": "Early Bronx DJs built hip-hop mainly from disco and funk records, and Chic's 'Good Times' became the basis of 'Rapper's Delight'. Much of young hip-hop's early spirit was a rebellion against disco, the music it came from.",
       "sources": [
         {
           "url": "https://en.wikipedia.org/wiki/Hip-hop",
@@ -833,7 +833,7 @@
       "to": "hip-hop",
       "type": "built",
       "label": "toasting over versions",
-      "reason": "The hip-hop article calls dub, with its vocal-free 'versions' of records, the strongest artistic precedent for hip-hop.",
+      "reason": "Dub, with its vocal-free 'versions' of records, is called the strongest artistic precedent for hip-hop.",
       "sources": [
         {
           "url": "https://en.wikipedia.org/wiki/Hip-hop",
@@ -851,7 +851,7 @@
       "to": "ambient-music",
       "type": "built",
       "label": "dub presaged ambient",
-      "reason": "The ambient article names Jamaican dub among the styles that presaged ambient music, and the dub article lists ambient among the genres dub influenced.",
+      "reason": "Jamaican dub was one of the styles that came before ambient and pointed the way; ambient is among the genres dub influenced.",
       "sources": [
         {
           "url": "https://en.wikipedia.org/wiki/Ambient_music",
@@ -987,7 +987,7 @@
       "to": "electro-music",
       "type": "built",
       "label": "techno-pop into electro",
-      "reason": "Electro emerged as a fusion of funk and boogie with German and Japanese techno-pop, and lists synth-pop among its origins.",
+      "reason": "Electro grew from funk and boogie mixed with German and Japanese techno-pop, with synth-pop among its roots.",
       "sources": [
         {
           "url": "https://en.wikipedia.org/wiki/Electro_(music)",
@@ -1067,7 +1067,7 @@
       "to": "house-music",
       "type": "built",
       "label": "electro in the mix",
-      "reason": "House's infobox lists electro among its origins, and early Chicago DJs played electro funk by Afrika Bambaataa and Arthur Baker.",
+      "reason": "Electro is one of house's roots: early Chicago DJs played electro funk by Afrika Bambaataa and Arthur Baker.",
       "sources": [
         {
           "url": "https://en.wikipedia.org/wiki/House_music",

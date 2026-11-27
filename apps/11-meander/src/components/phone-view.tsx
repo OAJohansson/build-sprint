@@ -84,10 +84,12 @@ export function PhoneView({ nav }: { nav: Nav }) {
                 );
               })}
             </ul>
-            {all.length > near.length && (
-              <button type="button" className="nmore" onClick={() => setMoreFor(school.id)}>
-                {all.length - near.length} more
-              </button>
+            {all.length > 3 && (
+              moreFor === school.id ? (
+                <button type="button" className="nmore" onClick={() => setMoreFor(null)}>Fewer</button>
+              ) : (
+                <button type="button" className="nmore" onClick={() => setMoreFor(school.id)}>{all.length - near.length} more</button>
+              )
             )}
           </>
         )}

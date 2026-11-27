@@ -19,10 +19,14 @@ function ThinkerLinks({ ids, nav }: { ids: string[]; nav: Nav }) {
       {ids.map((id, i) => {
         const t = nav.field.getThinker(id);
         if (!t) return null;
+        // the dot stays with the name before it, so a wrapped list never starts a line with "·"
         return (
           <Fragment key={id}>
-            {i > 0 && " · "}
-            <button type="button" onClick={() => nav.openThinker(id)}>{t.short}</button>
+            {i > 0 && " "}
+            <span className="il">
+              <button type="button" onClick={() => nav.openThinker(id)}>{t.short}</button>
+              {i < ids.length - 1 && " ·"}
+            </span>
           </Fragment>
         );
       })}

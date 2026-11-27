@@ -54,17 +54,19 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
 
   // Each name sits before its start dot, or just after it where there's no room.
   const labelRefs = useRef(new Map<string, HTMLSpanElement>());
-  const [sides, setSides] = useState<{ key: string; map: Record<string, Side> } | null>(null);
+  const [sides, setSides] = useState<{ key: string; map: Record<string, Side>; w: Record<string, number> } | null>(null);
   const key = `${field.id}|${x1}|${tick}`;
   useLayoutEffect(() => {
-    const map: Record<string, Side> = {};
+    const map: Record<string, Side> = {}, widths: Record<string, number> = {};
     rows.forEach((r, i) => {
       const w = labelRefs.current.get(r.item.id)?.querySelector(".nm")?.scrollWidth ?? 0;
+      widths[r.item.id] = w;
       map[r.item.id] = geo[i].xs - GAP - w - VERB_ROOM >= 24 ? "before" : "start";
     });
-    setSides({ key, map });
+    setSides({ key, map, w: widths });
   }, [key, rows, geo]);
   const placed = sides?.key === key ? sides.map : null;
+  const widths = sides?.key === key ? sides.w : null;
 
   // The current school: the one under the pointer or keyboard, else the open one.
   const [hovered, setHovered] = useState<string | null>(null);
@@ -134,7 +136,12 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
         {rows.map((r, i) => {
           const s = r.item, g = geo[i], id = s.id;
           const st = states.get(id);
-          const side = placed?.[id] ?? "after";
+          const side = placed?.[id] ?? "before";
+          // The bar never runs under its own name (round 4): a name right of the dot pushes the visible bar (or tail) on to
+          // just past its end, and a name left of the dot cuts the faint roots line short of it.
+          const lw = widths?.[id] ?? 0;
+          const from = side === "start" && widths ? g.xs + GAP + lw + 8 : g.xs;
+          const rootsEnd = side === "before" && widths ? g.xs - GAP - lw - 8 : g.xs;
           const cls = ["tb", st === "started" && "v", st === "explored" && "v xp", id === cur && "cur", lit.has(id) && "lit", r.span.open && "open"].filter(Boolean).join(" ");
           const when = whenOf(s);
           return (
@@ -152,9 +159,9 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
                 onFocus={() => setHovered(id)}
                 onBlur={() => setHovered((h) => (h === id ? null : h))}
               >
-                {g.xr != null && <i className="roots" style={{ left: g.xr, width: g.xs - g.xr }} />}
-                <i className="bar" style={{ left: g.xs, width: g.xe - g.xs }} />
-                {g.xt != null && g.xt > g.xe && <i className="tail" style={{ left: g.xe, width: g.xt - g.xe }} />}
+                {g.xr != null && rootsEnd > g.xr && <i className="roots" style={{ left: g.xr, width: rootsEnd - g.xr }} />}
+                {g.xe > from && <i className="bar" style={{ left: from, width: g.xe - from }} />}
+                {g.xt != null && g.xt > Math.max(g.xe, from) && <i className="tail" style={{ left: Math.max(g.xe, from), width: g.xt - Math.max(g.xe, from) }} />}
                 <i className="mk" style={{ left: g.xs }} />
                 <span
                   className={["tl-lb", side, placed && "placed"].filter(Boolean).join(" ")}

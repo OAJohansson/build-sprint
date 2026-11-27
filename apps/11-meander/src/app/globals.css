@@ -151,7 +151,7 @@ svg.threads path.focus.mixed { stroke-dasharray: 9 4 1.5 4; }
 .n.t1 b { font: 400 22px/1.15 var(--serif); letter-spacing: -0.005em; color: var(--bone); margin-top: 2px; }
 .n em { margin-top: 3px; position: relative; white-space: nowrap; font-style: normal; font-size: 13.5px; line-height: 1.25; color: var(--bone); letter-spacing: 0.005em; }
 /* a neighbour's link reason, beside its verb on hover or keyboard focus (L20) */
-.why-line { position: absolute; bottom: 10px; transform: translateX(-50%); text-shadow: 0 0 4px var(--ground), 0 0 8px var(--ground); width: max-content; max-width: 620px; text-align: center; text-wrap: balance; font-size: 13.5px; line-height: 1.4; color: var(--quiet); pointer-events: none; }
+.why-line { position: absolute; bottom: 8px; transform: translateX(-50%); text-shadow: 0 0 4px var(--ground), 0 0 8px var(--ground); width: max-content; max-width: 620px; text-align: center; text-wrap: balance; font-size: 14.5px; line-height: 1.4; color: rgba(233, 226, 212, 0.86); pointer-events: none; }
 .why-line b { font-weight: 400; color: var(--bone); margin-right: 4px; }
 /* an artist or thinker open (dense fields, L56): the neighbours step back so the open one reads */
 .stage.sat-open .n.t1 { opacity: 0.3; }
@@ -247,8 +247,11 @@ svg.threads path.focus.mixed { stroke-dasharray: 9 4 1.5 4; }
   .stage:not(.still) .n:hover .dot { box-shadow: 0 0 0 5px rgba(233, 226, 212, 0.16); }
   .stage:not(.still) .n.v:hover .dot { box-shadow: 0 0 0 2.5px var(--ground), 0 0 0 4px var(--brass), 0 0 0 8px rgba(233, 226, 212, 0.14); }
   .inline-links button:hover { border-color: var(--bone); }
-  .near button:hover b, .field-list button:hover b { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; }
 }
+/* round 4: the phone's neighbour and school rows get no hover underline; after a tap it stuck on the row under the
+   finger and read as a link state nothing else has */
+.phone header .fi:first-child .dotsep { display: none; }
+.il { white-space: nowrap; }
 
 /* ---------- phone (390 wide): no globe, one school at a time */
 .phone {
@@ -547,7 +550,7 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 .tb .tl-lb { visibility: hidden; transform: translateY(-50%); white-space: nowrap; text-shadow: 0 0 4px var(--ground), 0 0 8px var(--ground); font: 400 14.5px/1.25 var(--sans); color: rgba(233, 226, 212, 0.8); padding: 3px 0; transition: color 160ms ease, opacity 160ms ease; }
 .tb .tl-lb.placed { visibility: visible; }
 .tb .tl-lb.before { transform: translate(-100%, -50%); }
-.tb .tl-lb.start { background: #15201e; padding: 3px 8px; border-radius: 6px; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: baseline; }
+.tb .tl-lb.start { overflow: hidden; text-overflow: ellipsis; display: flex; align-items: baseline; }
 .tb .tl-lb.before { display: flex; flex-direction: row-reverse; align-items: baseline; }
 .tb .tl-lb .nm { display: inline-block; }
 /* the link word beside a linked row's name (F1): quiet, on the side away from the bar */

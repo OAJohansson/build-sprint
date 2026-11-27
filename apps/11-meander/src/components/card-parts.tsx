@@ -80,7 +80,8 @@ export function SchoolSections({ school, nav, phone = false }: { school: School;
               return (
                 <li key={t.name} className={open ? "open" : undefined}>
                   <button type="button" aria-expanded={open} aria-controls={panelId} onClick={() => nav.toggleTheme(i)}>
-                    {t.name}
+                    <span className="no" aria-hidden="true">{i + 1}</span>
+                    <span>{t.name}</span>
                   </button>
                   {open && (
                     <div id={panelId}>

@@ -27,3 +27,5 @@
 | Further reading per school: the sources we already have, labelled "start here" and "go deeper" (#39) | Replaces the lost Claude prompt; in-app quiz ("Place it") does the active part | Next |
 | A second knowledge field: a music globe (genres, house inside), switched from the menu (#40) | Tests whether the skeleton method travels beyond philosophy; sources are less canonical than SEP | Later (own phase) |
 | Product strategy: who else would want this, and would they pay? Positioning and the riskiest assumption before building for others (#40) | Owner wants to start thinking about value | Later (own session) |
+| Timeline mode: switch between the globe and a timeline that shows where it all started (#41) | Answers "where did it start?"; the era-cues item (F1) is the small version | Next |
+| Non-Western philosophy: Buddhist, Hindu and other traditions (#42) | Owner's priority after the first batch of feedback; needs its own sources and a decision on how links cross traditions | Next (own phase) |

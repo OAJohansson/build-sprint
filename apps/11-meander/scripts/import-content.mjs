@@ -1,7 +1,8 @@
 // Imports the researched, sourced content into the app's schema. Re-runnable: edit the source, not the output.
 //   pnpm -F 11-meander content
 // Reads  docs/products/11-meander/content/full.json   (schema: sources.md in that folder)
-// Writes src/content/schools.json, thinkers.json, links.json  (then run `pnpm -F 11-meander positions`
+// Also reads docs/products/11-meander/content/schools.json for the entries' titles (Further reading, #39).
+// Writes src/content/schools.json, thinkers.json, links.json, titles.json  (then run `pnpm -F 11-meander positions`
 // if schools or links changed). Every school, theme, question, thinker, key idea, prompt and link keeps its
 // `sources`. Fails loudly on anything the app can't resolve (unknown neighbour, theme thinker not in the school).
 import fs from "node:fs";
@@ -70,6 +71,25 @@ for (const s of full) {
     links.push({ from: l.neighbour, to: s.id, type, label: l.label ?? "", ...(l.label_from_older ? { labelFromOlder: l.label_from_older } : {}), reason: l.reason ?? "", sources: src(l.sources), sample: false });
   }
 }
+// Titles for Further reading (#39): url -> the entry's title. From the research's source list ("SEP: Plato"), else
+// the name of the thinker the entry is about (its slug shares a word with the name), else a few by hand; the app
+// tidies the URL's slug for anything left.
+const TITLE_BY_HAND = { "https://iep.utm.edu/phenom/": "Phenomenology" };
+const titles = { ...TITLE_BY_HAND };
+const tidyTitle = (t) => t.replace(/^(SEP|IEP):\s*/, "").replace(/^([^,]+), ([^,]+)$/, "$2 $1").trim();
+try {
+  const research = JSON.parse(fs.readFileSync(new URL("../../../docs/products/11-meander/content/schools.json", import.meta.url), "utf8"));
+  for (const s of research) for (const x of s.sources ?? []) if (x.title && !titles[x.url]) titles[x.url] = tidyTitle(x.title);
+} catch { console.warn("import-content: no research schools.json, titles come from thinkers and slugs only"); }
+const words = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().split(/[^a-z]+/).filter((w) => w.length >= 4);
+for (const t of thinkers) {
+  for (const url of new Set([...t.sources, ...t.ideaSources.flat(), ...(t.promptSources ?? [])].map((x) => x.url))) {
+    if (titles[url]) continue;
+    const slugWords = words(url.replace(/\/$/, "").split("/").pop());
+    const nameWords = words(t.name);
+    if (slugWords.some((a) => nameWords.some((b) => a.startsWith(b) || b.startsWith(a)))) titles[url] = t.name.replace(/\s*\(.*?\)\s*/g, " ").trim();
+  }
+}
 const tids = thinkers.map((t) => t.id);
 for (const id of tids) if (tids.indexOf(id) !== tids.lastIndexOf(id)) problems.push(`duplicate thinker id ${id}`);
 if (problems.length) { console.error("import-content: cannot import\n  " + problems.join("\n  ")); process.exit(1); }
@@ -79,6 +99,7 @@ const write = (file, key, items) => fs.writeFileSync(new URL(file, OUT), JSON.st
 write("schools.json", "schools", schools);
 write("thinkers.json", "thinkers", thinkers);
 write("links.json", "links", links);
+fs.writeFileSync(new URL("titles.json", OUT), JSON.stringify({ note, titles: Object.fromEntries(Object.entries(titles).sort()) }, null, 2) + "\n");
 const unsourced = [...schools, ...thinkers, ...links, ...schools.flatMap((s) => s.themes)].filter((x) => !x.sources.length).length;
 console.log(`content: ${schools.length} schools, ${thinkers.length} thinkers, ${links.length} links; ${unsourced} items without sources`);
 console.log("now run: pnpm -F 11-meander positions (if schools or links changed)");

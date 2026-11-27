@@ -8,9 +8,9 @@ import {
   FADE, FAR, R, centre, emptiest, placeLabels, project, samplePolyline, thread, vec,
   type LabelPlace, type Projected, type Rect, type ThreadPoint, type Vec3,
 } from "@/lib/globe";
-import { visitedSchools } from "@/lib/visits";
 import { SchoolSections, ThinkerSections, ThreadSections } from "./card-parts";
 import { Mark } from "./mark";
+import { MenuBar } from "./menu-bar";
 import { FirstPage, Knot } from "./skeleton";
 import type { Nav } from "./meander";
 
@@ -71,11 +71,10 @@ function useLayout(focus: string | null, hasCard: boolean) {
 }
 
 export function GlobeView({ nav }: { nav: Nav }) {
-  const { focus, thinker, threadOpen, visits, inside, pick } = nav;
+  const { focus, thinker, threadOpen, inside, pick, states } = nav;
   const hasCard = !!focus || threadOpen;
   const showThinker = !!focus && !!thinker && !threadOpen;
   const { C, paths, nodes, threadPts } = useLayout(focus, hasCard);
-  const visited = useMemo(() => visitedSchools(visits), [visits]);
   const school = focus ? getSchool(focus) : undefined;
   const thinkerData = thinker ? getThinker(thinker) : undefined;
 
@@ -111,7 +110,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
     return () => { alive = false; window.removeEventListener("resize", onResize); };
   }, []);
 
-  const key = `${focus}|${hasCard}|${showThinker ? thinker : ""}|${threadOpen}|${nav.openTheme}|${visits.length > 0}`;
+  const key = `${focus}|${hasCard}|${showThinker ? thinker : ""}|${threadOpen}|${nav.openTheme}`;
   const [placed, setPlaced] = useState<{ key: string; map: Record<string, LabelPlace>; ko: Rect[]; fade: { cx: number; cy: number; rx: number; ry: number } | null; under: Set<string> } | null>(null);
 
   useLayoutEffect(() => {
@@ -266,9 +265,10 @@ export function GlobeView({ nav }: { nav: Nav }) {
 
         <main inert={inside}>
           {nodes.map((n) => {
-            const v = visited.has(n.id);
+            const st = states.get(n.id);
+            const v = st === "started" || st === "explored";
             const pl = ready?.map[n.id];
-            const cls = ["n", n.near && "t1", n.far && "back2", n.rest && "rest", ready?.under.has(n.id) && "under", v && "v", lit?.has(n.id) && "lit"].filter(Boolean).join(" ");
+            const cls = ["n", n.near && "t1", n.far && "back2", n.rest && "rest", ready?.under.has(n.id) && "under", v && "v", st === "explored" && "xp", lit?.has(n.id) && "lit"].filter(Boolean).join(" ");
             return (
               <button key={n.id} type="button" className={cls} style={{ left: round1(n.p.x), top: round1(n.p.y) }} onClick={() => { setStill(true); setHovered(null); nav.openSchool(n.id); }}
                 onMouseEnter={() => setHovered(n.id)}
@@ -276,7 +276,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
                 onFocus={() => setHovered(n.id)}
                 onBlur={() => setHovered((h) => (h === n.id ? null : h))}
                 data-id={n.id}
-                aria-label={n.rest ? `${n.name}${v ? ", visited" : ""}` : undefined}
+                aria-label={n.rest ? `${n.name}${v ? `, ${st}` : ""}` : undefined}
               >
                 <i className="dot" style={{ width: 2 * n.r, height: 2 * n.r }} />
                 <span
@@ -293,7 +293,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
                       {n.near.reason && <span className="why">· {n.near.reason}</span>}
                     </em>
                   )}
-                  {v && <span className="sr-only">, visited</span>}
+                  {v && <span className="sr-only">, {st}</span>}
                 </span>
               </button>
             );
@@ -326,11 +326,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
           <button type="button" className="wm" translate="no" title="Back to the whole field" aria-label="Meander, back to the whole field" onClick={nav.overview}>
             <Mark />Meander
           </button>
-          {visits.length > 0 && (
-            <button type="button" className="yt" aria-expanded={threadOpen} aria-controls="thread-panel" onClick={nav.toggleThread}>
-              <i />Your thread
-            </button>
-          )}
+          <MenuBar nav={nav} />
         </header>
 
         {school && !showThinker && school.themes.length > 0 && (
@@ -346,7 +342,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
 
         {threadOpen ? (
           <aside className="card" id="thread-panel" aria-label="Your thread" ref={cardRef}>
-            <ThreadSections visits={visits} nav={nav} headingRef={threadH} />
+            <ThreadSections nav={nav} headingRef={threadH} />
           </aside>
         ) : showThinker && thinkerData ? (
           <aside className="card" key={`t-${thinker}`} aria-label={thinkerData.name} ref={cardRef}>

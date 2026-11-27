@@ -1,10 +1,11 @@
 "use client";
 
 // The card's contents, shared by the desktop card and the phone screen: a school's sections,
-// a thinker, and the "Your thread" panel (handoff "The card", "Your thread").
+// a thinker, the "Your thread" panel (handoff "The card", "Your thread"; progress #37) and Further reading (#39).
 import { Fragment, useEffect, useRef, useState } from "react";
-import { alsoIn, getSchool, getThinker, ledeOf, studyPrompt, type School, type Thinker } from "@/lib/content";
-import { countLine, formatDay, summarise, type Visit } from "@/lib/visits";
+import { alsoIn, getSchool, getThinker, ledeOf, schools, studyPrompt, type School, type Thinker } from "@/lib/content";
+import { progressLine, threadProgress } from "@/lib/progress";
+import { furtherReading, type Reading } from "@/lib/reading";
 import { copyText } from "@/lib/copy";
 import type { Nav } from "./meander";
 
@@ -39,6 +40,58 @@ export function StepInside({ school, nav }: { school: School; nav: Nav }) {
   );
 }
 
+const arrow = (
+  <svg className="ext" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true">
+    <path d="M3.5 8.5l5-5M4.5 3.5h4v4" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+/** One entry: its title as a link to the encyclopedia (a new tab), the publisher in small text under it. */
+export function ReadingLink({ r }: { r: Reading }) {
+  return (
+    <>
+      <a className="rdl" href={r.url} target="_blank" rel="noopener">
+        {r.title}{arrow}<span className="sr-only"> (opens in a new tab)</span>
+      </a>
+      <small className="pub">{r.publisher}</small>
+    </>
+  );
+}
+
+/** "Start here" and "Go deeper" as labelled lines, for the card's list and the skeleton's facts. */
+export function ReadingRows({ school }: { school: School }) {
+  const [start, ...deeper] = furtherReading(school);
+  if (!start) return null;
+  return (
+    <>
+      <div className="fx rd">
+        <dt>Start here</dt>
+        <dd><ReadingLink r={start} /></dd>
+      </div>
+      {deeper.length > 0 && (
+        <div className="fx rd">
+          <dt>Go deeper</dt>
+          <dd>{deeper.map((r) => <span key={r.url} className="rdi"><ReadingLink r={r} /></span>)}</dd>
+        </div>
+      )}
+    </>
+  );
+}
+
+/** The card's last section (#39): the entries the school's content cites most. */
+function FurtherReading({ school, phone }: { school: School; phone: boolean }) {
+  if (!furtherReading(school).length) return null;
+  return (
+    <>
+      {!phone && <hr />}
+      <h2 className={phone ? "psec" : "sec"}>Further reading</h2>
+      <dl className="rdlist">
+        <ReadingRows school={school} />
+      </dl>
+    </>
+  );
+}
+
 export function SchoolSections({ school, nav, phone = false }: { school: School; nav: Nav; phone?: boolean }) {
   const sec = phone ? "psec" : "sec";
   const sep = phone ? null : <hr />;
@@ -54,6 +107,7 @@ export function SchoolSections({ school, nav, phone = false }: { school: School;
         {ledeEl}
         <h2 className={phone ? "psec" : "sec first"}>It asks</h2>
         <p className="pending">This school’s questions, themes and thinkers are still being written.</p>
+        <FurtherReading school={school} phone={phone} />
       </>
     );
   }
@@ -116,6 +170,7 @@ export function SchoolSections({ school, nav, phone = false }: { school: School;
           </ul>
         </>
       )}
+      <FurtherReading school={school} phone={phone} />
     </>
   );
 }
@@ -196,37 +251,39 @@ export function ThinkerSections({ thinker, nav, headingRef }: { thinker: Thinker
   );
 }
 
-export function ThreadSections({ visits, nav, headingRef }: { visits: Visit[]; nav: Nav; headingRef?: React.Ref<HTMLHeadingElement> }) {
-  const s = summarise(visits);
+const IDEAS = schools.map((s) => ({ id: s.id, ideas: s.themes.map((t) => t.name) }));
+
+/** Your thread (#37): how far through the field you are, then the schools you've begun, most recent first. */
+export function ThreadSections({ nav, headingRef }: { nav: Nav; headingRef?: React.Ref<HTMLHeadingElement> }) {
+  const t = threadProgress(nav.progress, IDEAS);
   return (
     <>
       <button type="button" className="x" onClick={nav.closeThread}>Close</button>
       <h2 className="sec" tabIndex={-1} ref={headingRef}>Your thread</h2>
-      <p className="big">{countLine(s)}</p>
-      {s.since && <p className="since">since {formatDay(s.since)}</p>}
-      <ol className="hist">
-        {s.rows.map((row) => (
-          <li key={row.day}>
-            <time dateTime={row.day}>{formatDay(row.day)}{row.isToday ? " · today" : ""}</time>
-            <div>
-              {row.items.map((it) => {
-                const name = it.kind === "school" ? getSchool(it.id)?.name : getThinker(it.id)?.name;
-                if (!name) return null; // content changed since the visit; skip it quietly
-                return (
-                  <button
-                    key={it.kind + it.id}
-                    type="button"
-                    className={it.kind === "thinker" ? "p" : undefined}
-                    onClick={() => (it.kind === "school" ? nav.openSchool(it.id) : nav.openThinker(it.id))}
-                  >
-                    {name}
-                  </button>
-                );
-              })}
-            </div>
-          </li>
-        ))}
-      </ol>
+      <p className="tsum">{progressLine(t)}</p>
+      {t.rows.length === 0 ? (
+        <p className="pending">Open a school to start it. Open every one of its ideas to explore it.</p>
+      ) : (
+        <ul className="prog">
+          {t.rows.map((r) => {
+            const s = getSchool(r.id);
+            if (!s) return null;
+            return (
+              <li key={r.id}>
+                <button type="button" onClick={() => nav.openSchool(r.id)}>
+                  <i className={r.state} aria-hidden="true" />
+                  <span className="nm">{s.name}<span className="sr-only">, {r.state}</span></span>
+                  {r.total > 0 && <span className="ct">{r.seen} of {r.total} {r.total === 1 ? "idea" : "ideas"}</span>}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      <p className="legend" aria-hidden="true">
+        <span><i className="started" />started</span>
+        <span><i className="explored" />explored, every idea opened</span>
+      </p>
     </>
   );
 }

@@ -6,6 +6,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { andList, schoolFacts, splitName, surnames, themeSummary, type School } from "@/lib/content";
 import { EDGE, knotStrands, sideTransform } from "@/lib/knot";
+import { ReadingRows } from "./card-parts";
 import type { Nav } from "./meander";
 
 const H = 900;
@@ -113,16 +114,16 @@ export function FirstPage({ school, nav, headingRef }: { school: School; nav: Na
           <h2 className="d name" tabIndex={-1} ref={headingRef} aria-label={school.name}>{short}</h2>
           <i className="rule" aria-hidden="true" />
           {q && <p className={`d it ${askClass(q)}`}>{q}</p>}
-          {facts.length > 0 && (
-            <dl className="fx2">
-              {facts.map((f) => (
-                <div key={f.label} className="fx">
-                  <dt>{f.label}</dt>
-                  <dd>{f.value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
+          <dl className="fx2">
+            {facts.map((f) => (
+              <div key={f.label} className="fx">
+                <dt>{f.label}</dt>
+                <dd>{f.value}</dd>
+              </div>
+            ))}
+            {/* Further reading (#39) as two more labelled lines */}
+            <ReadingRows school={school} />
+          </dl>
           {HAS_ARTICLE && <a className="lnk" href="#read"><u>Read it</u></a>}
         </div>
       </div>
@@ -156,16 +157,15 @@ export function PhoneSkeleton({ school, nav, headingRef }: { school: School; nav
       <h1 tabIndex={-1} ref={headingRef} aria-label={school.name}>{short}</h1>
       <i className="rule" aria-hidden="true" />
       {q && <p className="d it ask">{q}</p>}
-      {facts.length > 0 && (
-        <dl className="fx2">
-          {facts.map((f) => (
-            <div key={f.label} className="fx">
-              <dt>{f.label}</dt>
-              <dd>{f.value}</dd>
-            </div>
-          ))}
-        </dl>
-      )}
+      <dl className="fx2">
+        {facts.map((f) => (
+          <div key={f.label} className="fx">
+            <dt>{f.label}</dt>
+            <dd>{f.value}</dd>
+          </div>
+        ))}
+        <ReadingRows school={school} />
+      </dl>
       <h2 className="psec">{school.themes.length} big ideas</h2>
       <ol className="pideas">
         {school.themes.map((t, i) => {

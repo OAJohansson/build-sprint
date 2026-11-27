@@ -209,3 +209,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 **Budget guard:** the weekly limit was at 35% at the start. I stop new work and report if it reaches 70%. The full articles for the other schools are not in this phase, as agreed (a heavy job, done in batches later).
 
 **Not now:** the music globe and the paid-product strategy (#40). Both get a session of their own.
+- **Slices 1–2 built:** further reading (L34), the menu bar (L35) and Your thread as progress (L36). 14 tests (7 new for the progress logic), lint and build are green. Screenshots are in `design/phase3/`. Open question for the owner: with every school explored, the whole globe turns brass. Is that a reward, or too loud?

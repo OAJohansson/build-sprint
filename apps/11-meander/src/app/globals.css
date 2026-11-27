@@ -107,17 +107,26 @@ svg.threads path.focus.mixed { stroke-dasharray: 9 4 1.5 4; }
   border-radius: 10px;
   transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
-.yt {
+/* the menu bar (#38): quiet text buttons; the current view is marked with a brass underline */
+.menu { display: flex; align-items: center; }
+.views { display: flex; align-items: center; gap: 2px; }
+.mi {
   font-size: 14px;
   color: var(--quiet);
-  padding: 9px 12px;
+  padding: 9px 10px;
   margin: -9px 0;
   border-radius: 10px;
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 7px;
+  white-space: nowrap;
   transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), color 160ms ease, background-color 160ms ease;
 }
+.mi[aria-pressed="true"] { color: var(--bone); text-decoration: underline; text-decoration-color: rgba(211, 166, 108, 0.7); text-decoration-thickness: 1px; text-underline-offset: 6px; }
+.mi.soon { color: rgba(233, 226, 212, 0.45); cursor: default; }
+.mi.soon:active { transform: none; }
+.mi.soon small { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brass); opacity: 0.75; }
+.menu .sep { width: 1px; height: 14px; background: var(--faint); margin: 0 10px; }
 .yt i { width: 8px; height: 8px; border-radius: 50%; background: var(--bone); box-shadow: 0 0 0 2px var(--ground), 0 0 0 3.5px var(--brass); }
 .yt[aria-expanded="true"] { color: var(--bone); background: rgba(233, 226, 212, 0.08); }
 
@@ -132,6 +141,9 @@ svg.threads path.focus.mixed { stroke-dasharray: 9 4 1.5 4; }
 .n .dot::after { content: ""; position: absolute; inset: -8px; border-radius: 50%; }
 .n.v .dot { background: rgba(233, 226, 212, 0.8); box-shadow: 0 0 0 2.5px var(--ground), 0 0 0 4px var(--brass); }
 .n.t1.v .dot { background: var(--bone); }
+/* explored (#37): filled brass; started keeps the brass ring */
+.n.xp .dot, .n.t1.xp .dot { background: var(--brass); box-shadow: 0 0 0 2.5px var(--brass); }
+.stage:not(.still) .n.xp:hover .dot { box-shadow: 0 0 0 2.5px var(--brass), 0 0 0 7px rgba(233, 226, 212, 0.14); }
 .n .lb { position: absolute; left: 0; top: 0; visibility: hidden; white-space: nowrap; display: flex; flex-direction: column; width: max-content; text-align: left; }
 .n .lb.placed { visibility: visible; }
 .n .lb::before { content: ""; position: absolute; inset: -9px -10px; }
@@ -245,8 +257,10 @@ svg.threads path.focus.mixed { stroke-dasharray: 9 4 1.5 4; }
 }
 .phone header { display: flex; align-items: center; justify-content: space-between; height: 48px; }
 .phone .wm { font-size: 22px; gap: 9px; }
-.phone .ytp { font-size: 14px; color: var(--quiet); padding: 12px 4px; min-height: 44px; }
-.phone .ytp[aria-expanded="true"] { color: var(--bone); }
+.phone .menu { margin: 2px -10px 0; min-height: 44px; flex-wrap: wrap; }
+.phone .mi { margin: 0; padding: 0 10px; min-height: 44px; }
+.phone .menu .sep { display: none; }
+.phone .menu .yt { margin-left: auto; }
 .phone .here { width: 13px; height: 13px; box-shadow: 0 0 0 6px rgba(211, 166, 108, 0.16); margin: 30px 0 14px 6px; }
 .phone h1 { font: 300 42px/1.02 var(--serif); letter-spacing: -0.025em; font-variation-settings: "opsz" 144; overflow-wrap: anywhere; }
 .phone .meta { font-size: 14px; color: rgba(233, 226, 212, 0.84); margin-top: 8px; }
@@ -267,8 +281,10 @@ svg.threads path.focus.mixed { stroke-dasharray: 9 4 1.5 4; }
 .near, .field-list { position: relative; margin-left: 6px; }
 .near button, .field-list button { display: grid; grid-template-columns: 13px 1fr; gap: 0 18px; align-items: center; width: 100%; padding: 9px 0; min-height: 64px; text-align: left; }
 .field-list button { min-height: 48px; }
+.phone main > .field-list { margin-top: 18px; }
 .near i, .field-list i { width: 13px; height: 13px; border-radius: 50%; background: var(--bone); box-shadow: 0 0 0 4px #15201e; }
 .near .v i, .field-list .v i { box-shadow: 0 0 0 2.5px #15201e, 0 0 0 4px var(--brass); }
+.near .xp i, .field-list .xp i { background: var(--brass); box-shadow: 0 0 0 4px #15201e; }
 .near em { display: block; font-style: normal; font-size: 14px; line-height: 1.2; color: var(--bone); margin-top: 3px; }
 .near b { display: block; font: 400 18px/1.2 var(--serif); margin-top: 2px; overflow-wrap: anywhere; }
 .field-list b { display: block; font: 400 20px/1.2 var(--serif); }
@@ -397,6 +413,47 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 .pnote::before { content: ""; display: block; width: 32px; border-top: 1px solid var(--brass); opacity: 0.7; margin: 0 0 12px; }
 .pnote p { font-size: 19px; line-height: 1.35; color: var(--bone); }
 
+/* ---------- Your thread as progress (#37) */
+.tsum { font-size: 15px; color: rgba(233, 226, 212, 0.86); margin: -2px 0 14px; }
+.prog li { border-top: 1px solid var(--faint); }
+.prog li:last-child { border-bottom: 1px solid var(--faint); }
+.prog button { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; column-gap: 12px; align-items: baseline; width: 100%; padding: 10px 0; text-align: left; }
+.prog button:active { transform: none; opacity: 0.8; }
+.prog i, .legend i { width: 9px; height: 9px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--brass); }
+.prog i { align-self: start; margin-top: 6px; }
+.phone .prog i { margin-top: 7.5px; }
+.prog i.explored, .legend i.explored { background: var(--brass); }
+.prog .nm { font: 400 16px/1.3 var(--serif); overflow-wrap: anywhere; }
+.prog .ct { font-size: 13px; color: var(--quiet); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 14px; font-size: 13px; color: var(--quiet); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.phone .prog button { min-height: 48px; }
+.phone .prog .nm { font-size: 18px; }
+
+/* ---------- Further reading (#39): "Start here" and "Go deeper" as labelled lines */
+.rdlist { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 14px; row-gap: 12px; margin: 0; }
+.rdlist dt { font-size: 13px; color: var(--quiet); padding-top: 2px; white-space: nowrap; }
+.rdlist dd { margin: 0; }
+.rdl { font-size: 15px; line-height: 1.35; color: var(--bone); text-decoration: underline; text-decoration-color: rgba(233, 226, 212, 0.3); text-decoration-thickness: 1px; text-underline-offset: 4px; border-radius: 4px; transition: text-decoration-color 160ms ease; }
+.rdl:active { opacity: 0.8; }
+.rdl:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+.rdl .ext { display: inline-block; margin-left: 5px; color: var(--brass); vertical-align: 0; }
+.pub { display: block; font-size: 13px; line-height: 1.35; color: var(--quiet); margin-top: 2px; }
+.rdi { display: block; }
+.rdi + .rdi { margin-top: 10px; }
+.fx2 .rdl { font-size: 14.5px; }
+.fx2 .pub { font-size: 12.5px; }
+.fx2 .rd dt { white-space: nowrap; }
+.phone .rdl { display: inline-block; padding: 10px 0; margin: -10px 0; font-size: 16px; }
+.phone .rdlist dt { font-size: 14px; padding-top: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  .mi:not(.soon):hover { color: var(--bone); }
+  .prog button:hover .nm { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: rgba(233, 226, 212, 0.5); }
+  .rdl:hover { text-decoration-color: var(--bone); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+/* the phone's Close sits level with the "Your thread" heading, with a 44px target */
+.phone .pcard > .x { top: -9px; right: -10px; min-height: 44px; display: flex; align-items: center; }

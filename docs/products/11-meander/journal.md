@@ -218,3 +218,9 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **User-test fixes (L42):** F1, F3, F4, F5 and F7 are fixed. 27 tests, lint and build green; label checks still 0 across 28 views. Next: PR, a preview deploy, and the owner's review.
 - **Phase 3 ready for review:** PR #106 and preview https://meander-q4q3ds7g0-mimirswell.vercel.app (it may ask for the owner's Vercel sign-in). Merge waits for the owner's yes.
 - **Owner review of phase 3 (27 Nov):** "a good first MVP". Follow-ups logged as #43–#47 (globe grouping, Your thread's own place and redesign, timeline hover, a proper menu). Merge approved; a planning session comes next.
+
+## Phase 4 planning (27 Nov)
+
+- **Owner's vision:** Meander is a way to wander through any field: an overview of everything, then follow your curiosity, skip what doesn't land and go deeper where it does. Philosophy is the first map, not the product. To be worth paying for, it needs a library of fields (music first; then architecture, fashion, political science, the history of ideas) and learning features (quizzes, spaced repetition, a Socratic AI that asks about what you just read), all strong on references.
+- **Coaching:** the plan rested on one untested guess, "people will pay if there's enough of it". Practice: Teresa Torres's opportunity solution tree (outcome first, then the problems in the way, then the features). We split it into two bets: breadth (does the format travel to other fields?) and depth (do the learning features make it worth paying for?).
+- **Decision L43:** phase 4 tests the format with music as the second map. Open next: the scope of the music map, its visual form (globe, family tree or something else), how sound comes in, and the sources.

@@ -33,3 +33,9 @@
 | Your thread in its own place, with a card redesign and new wording (#44) | Out of the view switch | Next phase |
 | Timeline hover links: calmer or different (#45) | They look messy | Next phase |
 | A proper menu (#46) | Room for fields, settings, about | Next phase |
+
+## From the phase 4 planning (27 Nov)
+
+- More fields after music: architecture, fashion, political science (capitalism and others next to Marxism), the history of ideas.
+- Learning depth: quizzes, spaced repetition, a Socratic AI that asks follow-up questions about what you just read (needs a cost-per-user estimate first).
+- Willingness to pay: put the product in front of real people with a pricing page or a waitlist.

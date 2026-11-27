@@ -912,3 +912,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Slice 4 data-evals (2a9f5af): W10 pass (Original starts 7–12 ms after the bar, 5/5; errMs judged the fair measure), W13, W11, W9, D7-17 fix pass. PM calls L297–L298. Final polish round sent (critic CR4-1, U7-23, U7-25..29, D7-19..21). Owner said "keep going".
 - Final polish done (6ec8f77, T263). Next: a short data-evals regression (W10, W11, W13), merge main, PR, preview, eval report, final review.
 - PR #109 opened; preview https://six-bqjzreiwf-mimirswell.vercel.app (preview deploy, pre-approved); eval report `eval-report-phase7.md`. Waiting for the final regression and CI, then the owner's final review.
+- Final regression on 6ec8f77 (5672d25): W10, W11, W13, W6 spot pass; D7-20 fixed; D7-21 didn't recur. Ready for the owner's final review.

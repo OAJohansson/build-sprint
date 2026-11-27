@@ -29,3 +29,14 @@ Gaps:
 6. "begun", "started", "Begun" for one state; phone Genres list is the timeline again with big dots.
 
 Keep: the serif header; the Start with rows.
+
+## Round 3 (27 Nov): 8/10
+Scorecard: clutter 1/2 · hierarchy 2/2 · legibility 1/2 · feel 2/2 · copy 2/2
+
+Reads as: "one calm product with two fields; the timeline, thread panel and phone lists now look finished, and the only screen still fighting its content is the globe's neighbour view."
+
+Gaps: (1) focus view: neighbours bunched by real globe position, label side has no rule → even angles on a ring; (2) overview labels 40–80px from dots, two sizes → fixed offset and side, one size; (3) the hover reason line is small and far from the eye; (4) leftovers: the globe-title "step inside", leading dots, a stray underline, timeline label chips; (5) the brass Study with Claude button is the loudest thing.
+
+Keep: the timeline hover state; the phone Genres list.
+
+**PM calls (L58):** fix 3 and the leftovers in 4 except the globe-title "step inside"; leave 1, 2, 5 and that "step inside" for the owner, because they change the approved globe and card design (A1, canvas sign-off). Rounds stop here: the score rose one point per round and the remaining gaps are owner calls.

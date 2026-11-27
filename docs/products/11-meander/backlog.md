@@ -39,3 +39,12 @@
 - More fields after music: architecture, fashion, political science (capitalism and others next to Marxism), the history of ideas.
 - Learning depth: quizzes, spaced repetition, a Socratic AI that asks follow-up questions about what you just read (needs a cost-per-user estimate first).
 - Willingness to pay: put the product in front of real people with a pricing page or a waitlist.
+
+## From the phase 4 music test (27 Nov)
+
+- **Your trail:** the chain of genres opened, in order, each with its link word and one record, as a listening path you can save or share (user test's biggest idea).
+- **Real playback:** direct links or a playlist (Spotify / Apple Music) for a thread instead of a YouTube search; the tester's top "would pay for".
+- **Sub-genres under house** (deep, acid, Chicago, French) and other big genres: a level below the genre.
+- **Direct record links** for the 3 landmark records per genre.
+- **Women in the electronic cards:** the corpus names none for house, electro, trance or EDM; fetch more sources.
+- **Wrong-belief checks** in user-test scenarios (tester's process suggestion).

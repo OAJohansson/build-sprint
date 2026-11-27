@@ -940,15 +940,14 @@ borderline); one live Mentor answer in Make (after 1 Dec).
 
 # Kickoff pack: Six AM Rebuild the song (Phase 7, Founder v2)
 
-**Status: draft (27 Nov).** Written by the Phase 7 PM from the owner's Phase 6 review (L265,
-OR6-1..5, `backlog.md` "For Phase 7"). The questions below go to the owner one at a time; answers
-land in the table and in `decisions.md`.
+**Status: final (27 Nov).** Written by the Phase 7 PM from the owner's Phase 6 review (L265,
+OR6-1..5, `backlog.md` "For Phase 7"); the owner answered the questions one at a time on 27 Nov
+(L266–L270). The draft questions are kept for context.
 
 **Mode:** founder (v2)
 **Appetite:** four slices, about three nights (PM). Owner moments: the kickoff questions, the
 design picks (3 of ~10, then 1 of 3), the canvas sign-off, the final review.
-**Evals:** a "Rebuild the song" part of `evals.md`, written from this pack once the questions are
-closed.
+**Evals:** the "Rebuild the song (Phase 7)" part of `evals.md`.
 
 ## The goal (owner, 27 Nov, L265)
 
@@ -1010,7 +1009,7 @@ because every high sound lands on one Hats row and wrong hits can't be removed.
 
 Small, folded in: Listen's "Other" becomes "Melody & FX" (OR6-1, toil, logged as a T-number).
 
-## Questions for the owner (draft, one at a time)
+## Questions for the owner (draft, answered below)
 
 1. **Where should the new sounds come from?** (Research brief: `research-sounds.md`.)
    Recommendation: a hand-picked free (CC0) sample kit for drums, about 12 sounds per row, plus a
@@ -1034,8 +1033,9 @@ Small, folded in: Listen's "Other" becomes "Melody & FX" (OR6-1, toil, logged as
 | 2 | How many starting sounds? | 20 per row (every drum row and bass), picked for breadth: cover a lot of variety, not 20 versions of one sound (PM had recommended 12 drums / 16 bass). The variety map below guides the picks | L267 |
 | 3 | Should Make read the new drum rows? | The middle way: Make reads open hats; shaker and ride start empty for you to fill by ear (switched on later only if a reader passes a real-track grade). **Design must make it very clear** which rows are still yours to fill, so an empty row never makes the loop sound "nothing like the original" without saying why | L268 |
 | 4 | Rebuild: sections only, or the map's draft with starter sounds? | Sections only: the original's sections laid out as empty slots, each showing which parts the original has there; no generic starter sounds, so every block is the owner's own (PM's recommendation) | L269 |
+| 5 | Compare: same bar, or the whole section? | Same bar: the switch plays the original from the bar you're at, through the Deck (commands only), and back to Mine (PM's recommendation) | L270 |
 
-## Variety map for the 20 sounds per row (L267, draft)
+## Variety map for the 20 sounds per row (L267)
 
 Each row's 20 are spread over **families** (kinds of sound, 2–4 each) and three **dials**:
 short ↔ long, dark ↔ bright, clean ↔ dirty. No two sounds in a row may be near-duplicates
@@ -1052,7 +1052,7 @@ word and one plain line.
 | Ride | 909 ride · acoustic ride · ride bell · crash / splash · sizzle |
 | Bass (synth, with a few samples) | clean sub · rubber pluck · Reese · acid · organ bass (90s house) · FM bass · round analog · Detroit square · filtered saw · wobble · stab bass · electric bass (sampled) · upright / contrabass (sampled) |
 
-## Requirements (Phase 7, draft)
+## Requirements (Phase 7)
 
 | # | Requirement |
 | --- | --- |
@@ -1063,7 +1063,7 @@ word and one plain line.
 | R4 | Fix by ear: tap a step to add or remove a hit; mute and solo per row; Suggest, A/B, closeness and Save keep working on the edited pattern; what plays is what is saved. |
 | R5 | Click to jump: clicking a spot on the loop's bars plays from there, in Bass, Drums, Melody and FX. |
 | R6 | Studio rebuild: the original's sections laid out on the timeline from its map as empty slots (no starter sounds, L269), each section fillable per lane from the library; per section, a clear hint of which parts the original has there and which are still to fill (as R3b). |
-| R7 | Compare: one switch plays the original from the same bar through the Deck (commands only), and back to Mine. |
+| R7 | Compare: one switch plays the original from the bar you're at through the Deck (commands only), and back to Mine (L270); if the Deck isn't open, the switch says how to open it. |
 | R8 | Listen's "Other" reads "Melody & FX". |
 | R9 | Saved sounds from Phases 4–6 render sample for sample as before; old 3-row drum sounds open in the new rows unchanged (Hats → Closed hat). |
 | R10 | Rights rule C2 unchanged: the original stays in memory only, never stored, exported, uploaded or sent to any API. |

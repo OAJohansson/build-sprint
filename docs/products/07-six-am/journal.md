@@ -879,3 +879,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Critic round 3: 8/10 (hierarchy and copy up). Six fixable gaps sent back to the designer as round 3b before the canvas.
 - Critic round 3b: 9/10; leftovers go to the build (backlog). Canvas sign-off published: https://claude.ai/artifact/8Ygt985YZbU4fdSdpiN7fP (8 screens: Make choose, fix, empty row; Studio rebuild empty, filled, Deck closed; 1280 choose; worst-case rebuild). Waiting for the owner's comments and approval before the UI build (L163, decision 0028 as amended 27 Oct).
 - Owner approved the canvas as is (L279) and went to the gym; build starts with slice 1 (sounds).
+- Slice 1 built (f8b4323..339654b): 20 sampled sounds per drum row on the shelf, 20 bass sounds (13 new synth presets, 3 sampled basses), audible knobs, Suggest over the 20, credits, dev hook; 618 tests pass. Logged L280–L281, T240–T246. Next: user-tester and data-evals on slice 1.

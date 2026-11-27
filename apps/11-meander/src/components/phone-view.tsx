@@ -5,7 +5,7 @@
 import { useEffect, useRef } from "react";
 import { ledeOf, splitName, traditionOf } from "@/lib/content";
 import { timelineRows } from "@/lib/timeline";
-import { ListenLink, SchoolSections, StepInside, ThinkerSections, ThreadSections } from "./card-parts";
+import { SchoolSections, StepInside, ThinkerSections, ThreadSections } from "./card-parts";
 import { PhoneSkeleton } from "./skeleton";
 import { Mark } from "./mark";
 import { FieldSwitch, MenuBar } from "./menu-bar";
@@ -58,15 +58,6 @@ export function PhoneView({ nav }: { nav: Nav }) {
         <h1 tabIndex={-1} ref={heading} aria-label={school.name}>{splitName(school.name).short}</h1>
         <p className="meta">{hereLine(school)}</p>
         {ledeOf(school) && <p className="plede">{ledeOf(school)}</p>}
-        {/* Music: the recordings under the lede, before the way inside (L48) */}
-        {!!school.recordings?.length && (
-          <section className="listen" aria-label="Listen">
-            <h2 className="psec">Listen</h2>
-            <ul className="lsl">
-              {school.recordings.map((r) => <li key={`${r.artist}-${r.title}`}><ListenLink r={r} /></li>)}
-            </ul>
-          </section>
-        )}
         {school.themes.length > 0 && <StepInside school={school} nav={nav} />}
         {near.length > 0 && (
           <>

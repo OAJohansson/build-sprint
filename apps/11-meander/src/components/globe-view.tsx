@@ -10,7 +10,7 @@ import {
 } from "@/lib/globe";
 import { SchoolSections, ThinkerSections, ThreadSections } from "./card-parts";
 import { Mark } from "./mark";
-import { MenuBar } from "./menu-bar";
+import { FieldSwitch, MenuBar } from "./menu-bar";
 import { TimelineView } from "./timeline-view";
 import { FirstPage, Knot } from "./skeleton";
 import { stateLabel } from "@/lib/progress";
@@ -345,6 +345,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
           <button type="button" className="wm" translate="no" title="Back to the whole field" aria-label="Meander, back to the whole field" onClick={nav.overview}>
             <Mark />Meander
           </button>
+          <FieldSwitch nav={nav} />
           <MenuBar nav={nav} />
         </header>
 

@@ -9,7 +9,7 @@ const hanken = Hanken_Grotesk({ variable: "--font-hanken", subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Meander",
-  description: "The whole of Western philosophy on one globe: see where a school sits, what it built on, and where to go next.",
+  description: "Wander through whole fields of knowledge: philosophy and music, as a map of connected ideas.",
 };
 
 // Phone baseline (mobile-native skill): content can sit under the notch (padded with

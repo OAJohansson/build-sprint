@@ -61,10 +61,11 @@ export function ReadingLink({ r }: { r: Reading }) {
   );
 }
 
-/** A recording to hear (L48): its title in the body face, then artist and year as meta, opening a search in a new tab. */
+/** A recording to hear (L48): its title in the body face, then artist, year and where the link goes as meta, opening a
+ * search in a new tab. The artist view leaves the artist out (`meta={false}`): it is the page's own name. */
 export function ListenLink({ r, artist, meta = true }: { r: Recording; artist?: string; meta?: boolean }) {
   const who = artist ?? r.artist ?? "";
-  const line = [meta && who, r.year, r.kind === "album" && "album"].filter(Boolean).join(" · ");
+  const line = [meta && who, r.year, r.kind === "album" && "album", "YouTube search"].filter(Boolean).join(" · ");
   return (
     <a className="lsn" href={listenUrl(r, who)} target="_blank" rel="noopener noreferrer">
       <span className="lt">{r.title}{arrow}</span>
@@ -74,12 +75,13 @@ export function ListenLink({ r, artist, meta = true }: { r: Recording; artist?: 
   );
 }
 
-/** The genre's landmark recordings: the card's first section for music (it's the main job, "hear it"). */
-function Listen({ school, phone }: { school: School; phone: boolean }) {
+/** The genre's landmark recordings ("hear it", L48), right after what to listen for. */
+function StartWith({ school, phone }: { school: School; phone: boolean }) {
   if (!school.recordings?.length) return null;
   return (
-    <section className="listen" aria-label="Listen">
-      <h2 className={phone ? "psec" : "sec first"}>Listen</h2>
+    <section className="listen" aria-label="Start with">
+      {!phone && <hr />}
+      <h2 className={phone ? "psec" : "sec"}>Start with</h2>
       <ul className="lsl">
         {school.recordings.map((r) => <li key={`${r.artist}-${r.title}`}><ListenLink r={r} /></li>)}
       </ul>
@@ -137,8 +139,8 @@ export function SchoolSections({ school, nav, phone = false, titled = false }: {
     </>
   ) : null;
   const ledeEl = !phone && (lede || titleEl) ? <>{titleEl}{lede && <p className="lede">{lede}</p>}</> : null;
-  // Music: the recordings come right after the tagline (the phone shows them under its own lede).
-  const listenEl = phone ? null : <Listen school={school} phone={false} />;
+  // Music: the recordings come after what to listen for (philosophy has none, so nothing renders there).
+  const listenEl = <StartWith school={school} phone={phone} />;
   // Desktop: the card's way into the skeleton, under the lede (the phone puts it under its own lede).
   const enterEl = !phone && school.themes.length > 0 ? <StepInside school={school} nav={nav} /> : null;
   // F7 (phone): a theme opened near the bottom grows below the fold; bring it into view.
@@ -150,9 +152,9 @@ export function SchoolSections({ school, nav, phone = false, titled = false }: {
     return (
       <>
         {ledeEl}
-        {listenEl}
         <h2 className={phone ? "psec" : "sec first"}>{words.questions}</h2>
         <p className="pending">{words.pending}</p>
+        {listenEl}
         <FurtherReading school={school} phone={phone} />
       </>
     );
@@ -160,7 +162,6 @@ export function SchoolSections({ school, nav, phone = false, titled = false }: {
   return (
     <>
       {ledeEl}
-      {listenEl}
       {enterEl}
       {school.questions.length > 0 && (
         <>
@@ -170,6 +171,7 @@ export function SchoolSections({ school, nav, phone = false, titled = false }: {
           </ol>
         </>
       )}
+      {listenEl}
       {school.themes.length > 0 && (
         <>
           {sep}
@@ -294,7 +296,10 @@ export function ThinkerSections({ thinker, nav, headingRef }: { thinker: Thinker
       )}
       {/* Music: the artist's one recording, as one line (L48) */}
       {thinker.recording && (
-        <p className="alsn"><span className="lk">Listen</span><ListenLink r={thinker.recording} artist={thinker.name} meta={false} /></p>
+        <section className="alsn" aria-label="Start with">
+          <h3>Start with</h3>
+          <ListenLink r={thinker.recording} artist={thinker.name} meta={false} />
+        </section>
       )}
       <Study key={thinker.id} thinker={thinker} field={nav.field} />
       {others.length > 0 && (

@@ -1,18 +1,19 @@
 "use client";
 
-// The menu bar (#38): the field switch (phase 4), the view switch and Your thread. Quiet text buttons; the current
-// field and view are marked. The phone has no globe, so its first view is the list of schools.
+// The menu bar (#38): the view switch and Your thread. Quiet text buttons; the current view is marked. The field
+// switch (phase 4) sits beside the wordmark instead (FieldSwitch). The phone has no globe, so its first view is the list of schools.
 import { FIELD_IDS, getField } from "@/lib/content";
 import type { Nav, View } from "./meander";
 
-/** "Philosophy · Music": which map you are in. On the phone it sits in the header, beside the wordmark. */
+/** "Meander · Philosophy · Music": which map you are in, set in the wordmark's serif so it reads as a place, not a
+ * view tab. The active field is bone, the other dimmed; no underline (that marks the view). */
 export function FieldSwitch({ nav }: { nav: Nav }) {
   return (
     <div className="fields" role="group" aria-label="Field">
-      {FIELD_IDS.map((id, i) => (
+      {FIELD_IDS.map((id) => (
         <span key={id} className="fi">
-          {i > 0 && <span className="dotsep" aria-hidden="true">·</span>}
-          <button type="button" className="mi" aria-pressed={nav.field.id === id} onClick={() => nav.showField(id)}>
+          <span className="dotsep" aria-hidden="true">·</span>
+          <button type="button" className="fd" aria-pressed={nav.field.id === id} onClick={() => nav.showField(id)}>
             {getField(id).words.field}
           </button>
         </span>
@@ -29,12 +30,6 @@ export function MenuBar({ nav, phone = false }: { nav: Nav; phone?: boolean }) {
   };
   return (
     <nav className="menu" aria-label="Menu">
-      {!phone && (
-        <>
-          <FieldSwitch nav={nav} />
-          <i className="sep" aria-hidden="true" />
-        </>
-      )}
       <div className="views" role="group" aria-label="View">
         <button type="button" className="mi" aria-pressed={nav.view === "globe"} onClick={go("globe")}>{phone ? nav.field.words.listMenu : "Globe"}</button>
         <button type="button" className="mi" aria-pressed={nav.view === "timeline"} onClick={go("timeline")}>Timeline</button>

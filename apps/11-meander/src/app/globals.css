@@ -123,9 +123,6 @@ svg.threads path.focus.mixed { stroke-dasharray: 9 4 1.5 4; }
   transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), color 160ms ease, background-color 160ms ease;
 }
 .mi[aria-pressed="true"] { color: var(--bone); text-decoration: underline; text-decoration-color: rgba(211, 166, 108, 0.7); text-decoration-thickness: 1px; text-underline-offset: 6px; }
-.mi.soon { color: rgba(233, 226, 212, 0.45); cursor: default; }
-.mi.soon:active { transform: none; }
-.mi.soon small { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brass); opacity: 0.75; }
 .menu .sep { width: 1px; height: 14px; background: var(--faint); margin: 0 10px; }
 .yt i { width: 8px; height: 8px; border-radius: 50%; background: var(--bone); box-shadow: 0 0 0 2px var(--ground), 0 0 0 3.5px var(--brass); }
 .yt[aria-expanded="true"] { color: var(--bone); background: rgba(233, 226, 212, 0.08); }
@@ -447,10 +444,65 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 .phone .rdl { display: inline-block; padding: 10px 0; margin: -10px 0; font-size: 16px; }
 .phone .rdlist dt { font-size: 14px; padding-top: 3px; }
 @media (hover: hover) and (pointer: fine) {
-  .mi:not(.soon):hover { color: var(--bone); }
+  .mi:hover { color: var(--bone); }
   .prog button:hover .nm { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: rgba(233, 226, 212, 0.5); }
   .rdl:hover { text-decoration-color: var(--bone); }
 }
+
+/* ---------- the timeline (#41): the same schools in time; still, quiet bone, brass only for the current one */
+.timeline { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity 200ms ease, visibility 0s 200ms; }
+.stage.tl .timeline { opacity: 1; visibility: visible; transition: opacity 240ms ease, visibility 0s; }
+.stage.tl .globe { opacity: 0; visibility: hidden; transition: opacity 200ms ease, visibility 0s 200ms; }
+.globe { transition: transform 560ms var(--ease-move), opacity 240ms ease, visibility 0s; }
+.stage.tl.inside .timeline { opacity: 0; visibility: hidden; transition: opacity 200ms ease, visibility 0s 200ms; }
+.stage.tl.inside .globe { opacity: 0; }
+.tl-svg { position: absolute; inset: 0; width: 1440px; height: 900px; pointer-events: none; overflow: visible; }
+.tl-svg .band { fill: rgba(233, 226, 212, 0.022); }
+.tl-svg .div { stroke: var(--faint); stroke-width: 1; }
+.tl-svg .axis { stroke: rgba(233, 226, 212, 0.3); stroke-width: 1; }
+.tl-svg .lk { fill: none; stroke: var(--bone); stroke-opacity: 0.55; stroke-width: 1.1; stroke-linecap: round; }
+.tl-svg .lk.against { stroke-dasharray: 1.5 6; }
+.tl-svg .lk.mixed { stroke-dasharray: 9 4 1.5 4; }
+.tl-eras li { position: absolute; font-size: 12px; line-height: 1.3; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brass); opacity: 0.75; }
+.tl-ticks li { position: absolute; transform: translateX(-50%); font-size: 13px; color: var(--quiet); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.tb { position: absolute; left: 0; width: 0; height: 0; padding: 0; }
+.tb:active { transform: none; }
+.tb:focus-visible { outline: none; }
+.tb > i, .tb .tl-lb { position: absolute; top: 0; }
+.tb .bar { height: 3px; margin-top: -1.5px; border-radius: 2px; background: rgba(233, 226, 212, 0.42); transition: background-color 160ms ease, opacity 160ms ease; }
+/* a span with no end ("from 335 BCE") fades out instead of stopping */
+.tb.open .bar { background: linear-gradient(90deg, rgba(233, 226, 212, 0.42) 60%, rgba(233, 226, 212, 0)); }
+/* roots named in the span ("roots in the 1840s"): a faint lead-in */
+.tb .roots { height: 0; border-top: 1px dashed rgba(233, 226, 212, 0.28); }
+/* a taller invisible strip over the bar, so a thin bar is easy to hit */
+.tb .bar::after { content: ""; position: absolute; inset: -11px 0; }
+.tb .mk { width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: var(--bone); }
+.tb.v .mk { width: 8px; height: 8px; margin: -4px 0 0 -4px; background: rgba(233, 226, 212, 0.85); box-shadow: 0 0 0 2px var(--ground), 0 0 0 3.5px var(--brass); }
+.tb.xp .mk { background: var(--brass); box-shadow: 0 0 0 2px var(--brass); }
+.tb .tl-lb { visibility: hidden; transform: translateY(-50%); white-space: nowrap; text-shadow: 0 0 4px var(--ground), 0 0 8px var(--ground); font: 400 14.5px/1.25 var(--sans); color: rgba(233, 226, 212, 0.8); padding: 3px 0; transition: color 160ms ease, opacity 160ms ease; }
+.tb .tl-lb.placed { visibility: visible; }
+.tb .tl-lb.before { transform: translate(-100%, -50%); }
+.tb .tl-lb.on { background: #15201e; padding: 3px 8px; border-radius: 6px; overflow: hidden; text-overflow: ellipsis; }
+.tb:focus-visible .tl-lb { outline: 2px solid var(--brass); outline-offset: 3px; border-radius: 4px; }
+/* hover, focus or an open school: its links light, everything else steps back */
+.timeline.has-cur .tb:not(.cur):not(.lit) .bar, .timeline.has-cur .tb:not(.cur):not(.lit) .mk, .timeline.has-cur .tb:not(.cur):not(.lit) .roots { opacity: 0.4; }
+.timeline.has-cur .tb:not(.cur):not(.lit) .tl-lb { opacity: 0.5; }
+.timeline .tb.lit .tl-lb { color: var(--bone); }
+.timeline .tb.cur .bar { background: var(--brass); }
+.timeline .tb.cur.open .bar { background: linear-gradient(90deg, var(--brass) 60%, rgba(211, 166, 108, 0)); }
+.timeline .tb.cur .tl-lb { color: var(--bone); }
+.timeline .tb.cur:not(.v) .mk { background: var(--brass); }
+
+/* the card on the timeline carries the school's name (there is no title on the globe) */
+.ctitle { font: 300 32px/1.08 var(--serif); letter-spacing: -0.02em; font-variation-settings: "opsz" 96; overflow-wrap: break-word; }
+.cmeta { font-size: 13px; color: var(--quiet); margin: 6px 0 14px; }
+
+/* phone: the timeline as one column, era by era */
+.tlp { margin-top: 4px; }
+.tlp::before { content: ""; position: absolute; left: 6px; top: 24px; bottom: 24px; border-left: 1px solid var(--faint); }
+.tlp small { display: block; font-size: 13.5px; line-height: 1.3; color: var(--quiet); margin-top: 3px; }
+.tlp button { min-height: 60px; }
+.phone .tl-era:first-child .psec { margin-top: 22px; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }

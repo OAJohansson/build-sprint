@@ -2,19 +2,19 @@
 
 // The menu bar (#38): the view switch (Globe now, Timeline next) and Your thread. Quiet text buttons; the
 // current view is marked. The phone has no globe, so its first view is the list of schools.
-import type { Nav } from "./meander";
+import type { Nav, View } from "./meander";
 
 export function MenuBar({ nav, phone = false }: { nav: Nav; phone?: boolean }) {
-  // Back to the current view's home: the globe (out of Your thread and the skeleton), or the phone's list.
-  const onView = phone ? nav.overview : () => { nav.closeThread(); nav.stepOut(); };
+  // Desktop: switch the view and keep the open school. Phone: one screen at a time, so go to that view's list.
+  const go = (v: View) => () => {
+    if (phone) nav.overview();
+    nav.showView(v);
+  };
   return (
     <nav className="menu" aria-label="Menu">
       <div className="views" role="group" aria-label="View">
-        <button type="button" className="mi" aria-pressed="true" onClick={onView}>{phone ? "Schools" : "Globe"}</button>
-        {/* shortcut: Timeline is not built yet, so it is a disabled placeholder; wire it to the timeline view in the next slice. */}
-        <button type="button" className="mi soon" aria-disabled="true" title="Timeline is coming soon">
-          Timeline<small>soon</small>
-        </button>
+        <button type="button" className="mi" aria-pressed={nav.view === "globe"} onClick={go("globe")}>{phone ? "Schools" : "Globe"}</button>
+        <button type="button" className="mi" aria-pressed={nav.view === "timeline"} onClick={go("timeline")}>Timeline</button>
       </div>
       <i className="sep" aria-hidden="true" />
       <button

@@ -3,7 +3,7 @@
 // The card's contents, shared by the desktop card and the phone screen: a school's sections,
 // a thinker, the "Your thread" panel (handoff "The card", "Your thread"; progress #37) and Further reading (#39).
 import { Fragment, useEffect, useRef, useState } from "react";
-import { alsoIn, getSchool, getThinker, ledeOf, schools, studyPrompt, type School, type Thinker } from "@/lib/content";
+import { alsoIn, getSchool, getThinker, ledeOf, schools, splitName, studyPrompt, whenOf, type School, type Thinker } from "@/lib/content";
 import { progressLine, threadProgress } from "@/lib/progress";
 import { furtherReading, type Reading } from "@/lib/reading";
 import { copyText } from "@/lib/copy";
@@ -92,13 +92,21 @@ function FurtherReading({ school, phone }: { school: School; phone: boolean }) {
   );
 }
 
-export function SchoolSections({ school, nav, phone = false }: { school: School; nav: Nav; phone?: boolean }) {
+export function SchoolSections({ school, nav, phone = false, titled = false }: { school: School; nav: Nav; phone?: boolean; titled?: boolean }) {
   const sec = phone ? "psec" : "sec";
   const sep = phone ? null : <hr />;
   const empty = !school.questions.length && !school.themes.length && !school.thinkers.length;
   const lede = ledeOf(school);
   // Desktop: the card opens with one line on what the school is (L20). The phone shows it under the title.
-  const ledeEl = !phone && lede ? <p className="lede">{lede}</p> : null;
+  // On the timeline there is no title on the globe, so the card carries the school's name (#41).
+  const { short, aside } = splitName(school.name);
+  const titleEl = titled ? (
+    <>
+      <h2 className="ctitle" aria-label={school.name}>{short}</h2>
+      <p className="cmeta">{[aside, whenOf(school)].filter(Boolean).join(" · ")}</p>
+    </>
+  ) : null;
+  const ledeEl = !phone && (lede || titleEl) ? <>{titleEl}{lede && <p className="lede">{lede}</p>}</> : null;
   // Desktop: the card's way into the skeleton, under the lede (the phone puts it under its own lede).
   const enterEl = !phone && school.themes.length > 0 ? <StepInside school={school} nav={nav} /> : null;
   if (empty) {

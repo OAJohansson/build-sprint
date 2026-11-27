@@ -10,7 +10,13 @@ import { useLocalStorage } from "@/lib/use-local-storage";
 import { GlobeView } from "./globe-view";
 import { PhoneView } from "./phone-view";
 
+export type View = "globe" | "timeline";
+
 export type Nav = {
+  /** The overview: the globe, or the schools laid out in time (#41). */
+  view: View;
+  /** Switch view: Your thread and the skeleton close; the open school stays open. */
+  showView: (v: View) => void;
   focus: string | null;
   thinker: string | null;
   openTheme: number | null;
@@ -55,6 +61,8 @@ export function Meander() {
   const [threadOpen, setThreadOpen] = useState(false);
   const [inside, setInside] = useState(false);
   const [pick, setPick] = useState<number | null>(null);
+  // shortcut: the view lives in React state like the focus, so a reload returns to the globe; move both to the URL together.
+  const [view, setView] = useState<View>("globe");
   const [stored, setVisits] = useLocalStorage<Visit[]>(VISITS_KEY, NO_VISITS);
   // Visits to schools or thinkers no longer in the content (ids change when the content is re-imported)
   // stay in storage but don't count or show.
@@ -134,6 +142,8 @@ export function Meander() {
 
   const nav: Nav = useMemo(
     () => ({
+      view,
+      showView: (v) => { setView(v); setThreadOpen(false); setInside(false); setPick(null); },
       focus,
       thinker,
       openTheme,
@@ -156,7 +166,7 @@ export function Meander() {
       stepOut: () => { setPick(null); setInside(false); },
       togglePick: (i) => { if (pick !== i) see(i); setPick(pick === i ? null : i); },
     }),
-    [focus, thinker, openTheme, threadOpen, inside, pick, visits, progress, states, openSchool, openThinker, overview, stepBack, see],
+    [view, focus, thinker, openTheme, threadOpen, inside, pick, visits, progress, states, openSchool, openThinker, overview, stepBack, see],
   );
 
   // Esc closes the innermost thing: Your thread, then a picked idea, then the skeleton, then an open theme,

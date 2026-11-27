@@ -210,3 +210,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 
 **Not now:** the music globe and the paid-product strategy (#40). Both get a session of their own.
 - **Slices 1–2 built:** further reading (L34), the menu bar (L35) and Your thread as progress (L36). 14 tests (7 new for the progress logic), lint and build are green. Screenshots are in `design/phase3/`. Open question for the owner: with every school explored, the whole globe turns brass. Is that a reward, or too loud?
+- **Slice 3 built: the timeline (L37).** 20 tests, lint and build are green. Screenshots are in `design/phase3/timeline-*`. The modern end is dense at 27 rows; hovering helps.

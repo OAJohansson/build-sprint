@@ -3,7 +3,8 @@
 // Phone (under 1024 wide): no globe, one school at a time (handoff "Phone", T8). The school screen
 // follows phone.png; the overview, thinker and "Your thread" screens reuse the card's contents.
 import { useEffect, useRef } from "react";
-import { getSchool, getThinker, hereLine, ledeOf, neighbours, schools, splitName } from "@/lib/content";
+import { getSchool, getThinker, hereLine, ledeOf, neighbours, schools, splitName, whenOf } from "@/lib/content";
+import { ERAS, timelineRows } from "@/lib/timeline";
 import { SchoolSections, StepInside, ThinkerSections, ThreadSections } from "./card-parts";
 import { PhoneSkeleton } from "./skeleton";
 import { Mark } from "./mark";
@@ -29,7 +30,7 @@ export function PhoneView({ nav }: { nav: Nav }) {
     if (!el || !el.getClientRects().length) return; // desktop is showing
     window.scrollTo(0, 0);
     el.focus({ preventScroll: true });
-  }, [focus, thinker, threadOpen, inside]);
+  }, [focus, thinker, threadOpen, inside, nav.view]);
 
   let body: React.ReactNode;
   if (threadOpen) {
@@ -79,6 +80,40 @@ export function PhoneView({ nav }: { nav: Nav }) {
           </>
         )}
         <SchoolSections school={school} nav={nav} phone />
+      </>
+    );
+  } else if (nav.view === "timeline") {
+    // The phone's timeline (#41): era headings, and under each the schools in order with their span.
+    const rows = timelineRows(schools);
+    body = (
+      <>
+        <h1 tabIndex={-1} ref={heading} className="sr-only">The schools in time, earliest first</h1>
+        {ERAS.map((e, i) => {
+          const inEra = rows.filter((r) => r.era === i);
+          if (!inEra.length) return null;
+          return (
+            <section key={e.name} className="tl-era" aria-label={e.name}>
+              <h2 className="psec">{e.name}</h2>
+              <ul className="field-list tlp">
+                {inEra.map(({ item: s }) => {
+                  const v = mark(s.id);
+                  return (
+                    <li key={s.id}>
+                      <button type="button" className={v} onClick={() => nav.openSchool(s.id)}>
+                        <i aria-hidden="true" />
+                        <span>
+                          <b>{s.name}</b>
+                          <small>{whenOf(s)}</small>
+                          {v && <span className="sr-only">, {states.get(s.id)}</span>}
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          );
+        })}
       </>
     );
   } else {

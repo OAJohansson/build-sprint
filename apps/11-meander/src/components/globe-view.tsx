@@ -11,6 +11,7 @@ import {
 import { SchoolSections, ThinkerSections, ThreadSections } from "./card-parts";
 import { Mark } from "./mark";
 import { MenuBar } from "./menu-bar";
+import { TimelineView } from "./timeline-view";
 import { FirstPage, Knot } from "./skeleton";
 import type { Nav } from "./meander";
 
@@ -71,7 +72,8 @@ function useLayout(focus: string | null, hasCard: boolean) {
 }
 
 export function GlobeView({ nav }: { nav: Nav }) {
-  const { focus, thinker, threadOpen, inside, pick, states } = nav;
+  const { focus, thinker, threadOpen, inside, pick, states, view } = nav;
+  const timeline = view === "timeline";
   const hasCard = !!focus || threadOpen;
   const showThinker = !!focus && !!thinker && !threadOpen;
   const { C, paths, nodes, threadPts } = useLayout(focus, hasCard);
@@ -183,9 +185,10 @@ export function GlobeView({ nav }: { nav: Nav }) {
   const first = useRef(true);
   useEffect(() => {
     if (first.current) { first.current = false; return; }
-    const el = threadOpen ? threadH.current : showThinker ? thinkerH.current : focus ? titleH1.current : null;
+    // On the timeline the clicked bar keeps keyboard focus, so arrow keys carry on along the bars.
+    const el = threadOpen ? threadH.current : showThinker ? thinkerH.current : focus && !timeline ? titleH1.current : null;
     if (el && el.getClientRects().length) el.focus({ preventScroll: true });
-  }, [focus, showThinker, thinker, threadOpen]);
+  }, [focus, showThinker, thinker, threadOpen]); // eslint-disable-line react-hooks/exhaustive-deps -- runs on what opened, not on a view switch
 
   // Stepping inside and back: keyboard focus follows (the list of ideas in, so Tab reaches idea 1 next, the "step inside" button out, the idea
   // just closed when its Back button had focus), and the live region says where you are.
@@ -202,9 +205,9 @@ export function GlobeView({ nav }: { nav: Nav }) {
     if (!stage || !stage.getClientRects().length || !school || prev.focus !== focus) return;
     const ideaBtn = (i: number) => stage.querySelectorAll<HTMLButtonElement>(".idea > button")[i];
     if (inside && !prev.inside) stage.querySelector<HTMLElement>(".ideas-k")?.focus({ preventScroll: true });
-    else if (!inside && prev.inside) enterRef.current?.focus({ preventScroll: true });
+    else if (!inside && prev.inside) (timeline ? stage.querySelector<HTMLElement>(`.tb[data-id="${focus}"]`) : enterRef.current)?.focus({ preventScroll: true });
     else if (inside && pick === null && prev.pick !== null && !document.activeElement?.closest(".idea")) ideaBtn(prev.pick)?.focus({ preventScroll: true });
-  }, [inside, pick, focus, school]);
+  }, [inside, pick, focus, school]); // eslint-disable-line react-hooks/exhaustive-deps -- the view only picks where focus lands
 
   const ready = placed?.key === key ? placed : null;
 
@@ -218,7 +221,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
     <div className="desk">
       {/* Clicking empty space returns to the overview; Esc and the logo do the same for keyboard users. */}
       <div
-        className={["stage", still && "still", lit && "hovering", inside && school && "inside", inside && pick !== null && "has-pick"].filter(Boolean).join(" ")}
+        className={["stage", timeline && "tl", still && "still", lit && "hovering", inside && school && "inside", inside && pick !== null && "has-pick"].filter(Boolean).join(" ")}
         ref={stageRef}
         onClick={onStageClick}
         onMouseMove={still ? () => setStill(false) : undefined}
@@ -263,7 +266,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
         </svg>
 
 
-        <main inert={inside}>
+        <main inert={inside || timeline}>
           {nodes.map((n) => {
             const st = states.get(n.id);
             const v = st === "started" || st === "explored";
@@ -322,6 +325,8 @@ export function GlobeView({ nav }: { nav: Nav }) {
         </main>
         </div>
 
+        <TimelineView nav={nav} hasCard={hasCard} tick={tick} />
+
         <header ref={headerRef}>
           <button type="button" className="wm" translate="no" title="Back to the whole field" aria-label="Meander, back to the whole field" onClick={nav.overview}>
             <Mark />Meander
@@ -350,7 +355,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
           </aside>
         ) : school ? (
           <aside className="card" key={`s-${focus}`} aria-label={school.name} ref={cardRef} inert={inside}>
-            <SchoolSections school={school} nav={nav} />
+            <SchoolSections school={school} nav={nav} titled={timeline} />
           </aside>
         ) : null}
       </div>

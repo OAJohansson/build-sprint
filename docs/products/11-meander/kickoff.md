@@ -1,87 +1,115 @@
-# Kickoff pack: Meander
+# Kickoff pack: Meander, phase 4 (Music, the second map)
 
-The owner's kickoff for a product (decision 0026). In Founder mode the owner writes it alone and
-the PM session builds from it; in Streamlined mode Claude drafts it and the owner decides it at
-the kickoff gate. It is today's brief, plus what a squad needs to work without asking: the feel,
-what to avoid, the appetite and the mode. Short answers; a line is better than a paragraph.
+Written by the PM session on 27 Nov 2026 from the owner's planning session (L43). The owner
+handed over every call for this phase, including the design picks, and reviews only the final
+output (L44).
 
-**Mode:** streamlined
-**Appetite:** [e.g. one day; a fixed time, the scope gets cut to fit]
-**Evals:** `evals.md` (agent-checkable part) · owner-only checks kept outside the repo
+**Mode:** founder (for phase 4 only; L44)
+**Appetite:** one working session (a few hours while the owner is away); scope gets cut to fit
+**Evals:** `evals.md`, section "Phase 4: Music"
 
 ## Problem
 
-Who has it, when, and what it costs them today. No features.
+Meander's promise is a map you can wander through, whatever the field. Today it covers only
+philosophy, so we don't know whether the format is a philosophy app or a way to learn any field.
+Every later field (architecture, fashion, political science) and any paid product depends on
+that answer.
 
 ## Who
 
-One specific person, not a market. Their context, what "worth it" means to them.
+The same person as before (Sam, `user-testing/persona.md`), now curious about music: listens a
+lot, loves house and electronic music, knows genres by feel but not where they come from or how
+they connect.
 
 ## Moment of use and jobs to be done
 
-When, where and in what state they open it. Top 3 jobs, ranked:
+**Moment:** laptop, a free hour, headphones nearby.
 
-1. When …, I want …, so I can …
-2.
-3.
+1. When I get curious about music history, I want to see the whole family of popular genres at a
+   glance, so I know where the music I love fits.
+2. When I'm in one genre, I want to see where it came from and what grew out of it, so I can
+   follow a thread (disco → house → techno) instead of staying put.
+3. When I open a genre, I want a short sourced summary, what to listen for, its key artists and
+   a few landmark recordings I can play straight away, so I can hear it, not only read about it.
 
 ## Today's alternatives
 
-How they solve it now, what's good and annoying about that, and why they'd switch.
+- Wikipedia genre pages: thorough, but text-first and one genre at a time.
+- Ishkur's Guide to Electronic Music: a loved map with sound, but electronic only and dated.
+- Streaming playlists: sound, but no history or connections.
 
 ## Riskiest assumptions
 
-Value, usability, feasibility, viability. Mark the riskiest; the MVP must test it.
+**Riskiest (value and feasibility): the Meander format travels.** A field built from genres,
+artists and recordings fits the same overview → card → deeper pattern and still feels like
+wandering, with sourced links that hold up to a grader.
+
+- Feasibility: the open sources for music (no SEP equivalent) are good enough to grade claims
+  against.
+- Usability: one app with two fields stays clear; you always know which map you're in.
 
 ## Success: what good looks like
 
-One outcome for the user, 2–3 signals and how to measure each, and one guardrail. The checkable
-versions go in `evals.md`.
+**Outcome:** a newcomer can wander the music map the way they wander philosophy: see the whole,
+follow a thread three genres deep, and hear each one.
+
+| Signal | Measure | Bar |
+| --- | --- | --- |
+| Format travels | The same views (globe, card, timeline, Your thread) work for music with no music-only screens | yes |
+| Thread followed | Simulated user test: from House, find where it came from and two genres it led to | 3 of 3 runs |
+| Hear it | Every genre has playable landmark recordings, one click each | 100% |
+| Guardrail: accuracy | Grader on every claim against the saved sources | 0 wrong, 0 invented links |
 
 ## MVP and stop line
 
-What ships inside the appetite. Everything past the line goes to `backlog.md`.
+**Ships:**
+1. A music field: about 30 genres of popular music from 1900 to today, weighted towards
+   electronic and dance (house included), with sourced links ("grew out of", "reacted against").
+2. Each genre card: tagline, what to listen for, hallmarks, key artists, landmark recordings,
+   further reading, neighbours.
+3. Field switcher: Philosophy · Music, with the same globe, timeline and Your thread per field.
+4. Progress kept per field.
+
+**Stop line (to the backlog):** other fields, articles, quizzes, spaced repetition, the Socratic
+AI, embedded audio players, pricing.
 
 ## Requirements
 
-Each a user-visible behaviour with a check. Every row becomes a pass/fail check in `evals.md`.
-
 | # | Must | Check |
 | --- | --- | --- |
-| R1 | | |
+| M1 | The music map shows every genre on first load, no overlaps | label checks across all views, screenshot |
+| M2 | Every genre has tagline, 3 listen-for lines, 5 hallmarks, 3–5 artists, 3 landmark recordings, neighbours, sources | script over the content |
+| M3 | Landmark recordings open a search for that recording in one click | click test |
+| M4 | Switching fields keeps each field's view and progress apart | user-tester |
+| M5 | The music content passes the accuracy guardrail | data-evals report |
+| M6 | Philosophy works exactly as before | existing tests, spot check |
 
-**No-gos:**
+**No-gos:** hosting or embedding copyrighted audio; quotes of lyrics; paid API calls.
 
-**Rabbit holes:**
+**Rabbit holes:** sub-sub-genres (deep house vs tech house), chart data, regional scenes beyond
+one line, any audio playback inside the app.
 
 ## Feel references
 
-2–3 real references for how it should feel (apps, objects, places, covers, photos), each with the
-one quality to take from it. A feel is evoked, not drawn.
+- The existing Meander globe and canvas sign-off (approved 27 Nov): same look, same calm.
+- Ishkur's Guide: the joy of hearing a genre the moment you find it.
+- A record shop's crate dividers: families you can see at a glance.
 
-- [reference] — [what to take from it]
-
-**Visual references (optional, decision 0028):** 2–3 screenshots to design toward ("like Claude's
-chat panel"), as image paths. Leave empty to let the squad be creative.
-
-**The feel in one sentence:** (this is what the design critic judges against)
+**The feel in one sentence:** the same quiet, brass-and-bone map, now with music you can follow
+by ear.
 
 ## Things to avoid
 
-The not-list: looks, patterns, words and behaviours this product must not have (e.g. "no
-gradients", "no streak guilt", "never ask for an account").
-
--
+- Music-only screens or a different visual language for music.
+- Streaming-app look (album-art grids, play buttons everywhere).
+- Genre snobbery or "best of" rankings.
 
 ## Decisions already made
 
-Learning decisions the owner has settled up front (stack, data source, a model, where data lives),
-so the squad doesn't reopen them. Say which devices it's used on (phone, laptop, both) before
-choosing where data lives: "local only" breaks the day it's opened on a second device (09 Wont). Anything not here and not toil goes in the decision log with a
-reason.
-
--
+- Same app, same stack, content as JSON in `src/content/`, progress in localStorage (L44–L49).
+- Laptop first; phone works with one genre at a time, as for philosophy.
 
 ## Unit tests
 
-The 0–3 pieces of logic that would hurt most if silently wrong, and the edges to check.
+- Progress and "Next from here" kept per field (a genre id never counts towards philosophy).
+- Timeline placement for music years (1900–today).

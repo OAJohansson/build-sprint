@@ -3,6 +3,7 @@ import { BARS, LOOPS, MAX_BARS, MIN_BARS, TRACKS, loopById, type Doc, type Marke
 import { MAX_BPM, MIN_BPM } from "./tempo";
 import { parseSound, soundMeta, type Sound } from "./synths/loop";
 import { LEGACY_LANES, legacyTrack, parseLanes, type Lane } from "./studio-lanes";
+import { parseRebuild } from "./rebuild";
 
 export type TrackSummary = { id: string; name: string; updatedAt: string };
 export type Track = TrackSummary & { doc: Doc };
@@ -22,7 +23,7 @@ const KEYS = new Set(["C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G
  */
 export function parseDoc(v: unknown): Doc | null {
   if (!v || typeof v !== "object") return null;
-  const d = v as { regions?: unknown; muted?: unknown; bars?: unknown; bpm?: unknown; key?: unknown; markers?: unknown; sounds?: unknown; analysisId?: unknown; soloed?: unknown; lanes?: unknown };
+  const d = v as { regions?: unknown; muted?: unknown; bars?: unknown; bpm?: unknown; key?: unknown; markers?: unknown; sounds?: unknown; analysisId?: unknown; soloed?: unknown; lanes?: unknown; rebuild?: unknown };
   const extra: Omit<Doc, "regions" | "muted"> = {};
   if (d.bars !== undefined) {
     if (!Number.isInteger(d.bars) || (d.bars as number) < MIN_BARS || (d.bars as number) > MAX_BARS) return null;
@@ -76,6 +77,12 @@ export function parseDoc(v: unknown): Doc | null {
     if (!lanes) return null;
     extra.lanes = lanes;
   }
+  // Phase 7: a rebuild's sections must cover the track's bars exactly.
+  if (d.rebuild !== undefined) {
+    const rebuild = parseRebuild(d.rebuild, total);
+    if (!rebuild) return null;
+    extra.rebuild = rebuild;
+  }
   const laneTrack = new Map<string, number>(
     (extra.lanes ?? (LEGACY_LANES as Pick<Lane, "id" | "type">[])).map((l) => [l.id, legacyTrack(l.type)]),
   );
@@ -88,7 +95,9 @@ export function parseDoc(v: unknown): Doc | null {
     if (!loop) return null;
     const { start, length } = r;
     if (r.track !== loop.track || !Number.isInteger(start) || !Number.isInteger(length)) return null;
-    if ((start as number) < 1 || (length as number) < loop.bars || (length as number) % loop.bars !== 0) return null;
+    // A rebuild's block fills its section and stops at its end, so its last pass may be cut short.
+    const whole = extra.rebuild ? (length as number) >= 1 : (length as number) >= loop.bars && (length as number) % loop.bars === 0;
+    if ((start as number) < 1 || !whole) return null;
     if ((start as number) + (length as number) - 1 > total) return null;
     if (r.lane !== undefined && (typeof r.lane !== "string" || !laneTrack.has(r.lane))) return null;
     regions.push({ id: r.id, loopId: r.loopId, track: loop.track, start: start as number, length: length as number, ...(r.lane !== undefined ? { lane: r.lane as string } : {}) });

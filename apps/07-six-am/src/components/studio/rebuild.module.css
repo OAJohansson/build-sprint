@@ -1,0 +1,98 @@
+/* Rebuild the song (Phase 7 slice 3): the approved p7-final "3 Rebuild" grid. Still framing: no
+   motion beyond the press feedback; the playhead is the only thing that moves. */
+.root {
+  --line2: #3a322c; --dim: #958a7a; --mute: #aa9c88; --goldLine: rgba(242,177,52,.55);
+  grid-row: 2 / 4; grid-column: 1; min-height: 0; display: grid; grid-template-rows: 36px minmax(0, 1fr);
+  font: 400 13px/1.45 var(--f-mono), monospace;
+}
+
+/* One strip under the top bar, always 36 px (slice 4's Deck message uses it too) */
+.strip { display: flex; gap: 24px; align-items: center; height: 36px; padding: 0 20px; white-space: nowrap; overflow: hidden; border-bottom: 1px solid var(--line); background: var(--panel); font-size: 12.5px; color: var(--mute); min-width: 0; }
+.strip > span { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.strip b { color: var(--ink); font-weight: 500; }
+.stripNone { background: none; border-bottom-color: transparent; }
+
+.body { display: grid; grid-template-columns: minmax(0, 1fr) var(--side); min-height: 0; }
+.arrWrap { position: relative; min-width: 0; min-height: 0; display: flex; }
+.arr { flex: 1; min-width: 0; min-height: 0; display: flex; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; padding-bottom: 10px; }
+.arrin { position: relative; flex: none; display: grid; grid-template-rows: auto minmax(0, 1fr); min-width: 0; }
+
+.head { display: grid; grid-template-columns: var(--lw) minmax(0, 1fr); border-bottom: 1px solid var(--line2); height: 56px; }
+.corner { position: sticky; left: 0; z-index: 5; background: var(--bg); }
+.tl { position: relative; min-width: 0; }
+.sech {
+  position: absolute; top: 0; bottom: 0; padding: 9px 8px 8px 9px; border: 0; border-left: 1px solid var(--line2); background: none; color: var(--ink);
+  overflow: hidden; text-align: left; display: flex; flex-direction: column; gap: 2px; min-width: 0; cursor: pointer; font: inherit;
+}
+.sech:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+@media (hover: hover) and (pointer: fine) { .sech:hover .sn { text-decoration: underline; text-underline-offset: 3px; } }
+.l1 { display: flex; gap: 7px; align-items: baseline; min-width: 0; }
+.sn { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; position: relative; z-index: 3; }
+.range { flex: none; font-size: 11.5px; color: var(--mute); font-variant-numeric: tabular-nums; position: relative; z-index: 3; }
+.count { font-size: 11.5px; color: var(--mute); white-space: nowrap; position: relative; z-index: 3; min-height: 1.45em; }
+.gold { color: var(--gold); }
+.muted { color: var(--mute); }
+
+.lanes { display: grid; min-height: 0; }
+.lane { display: grid; grid-template-columns: var(--lw) minmax(0, 1fr); border-bottom: 1px solid var(--line); min-height: 0; }
+.lname { position: sticky; left: 0; z-index: 5; display: flex; align-items: center; gap: 8px; padding: 0 10px 0 20px; font-size: 14px; background: var(--bg); }
+.lname > span { flex: 1; white-space: nowrap; }
+.lname::before { content: ""; position: absolute; left: 0; top: 7px; bottom: 7px; width: 3px; border-radius: 0 2px 2px 0; background: var(--c); }
+.mbtn { height: 24px; padding: 0 6px; border-radius: 4px; color: var(--mute); font: 400 12px var(--f-mono); display: grid; place-items: center; border: 1px solid transparent; background: none; cursor: pointer; flex: none; }
+.mbtn[aria-pressed="true"] { background: #3a322c; color: var(--ink); }
+.mbtn:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+@media (hover: hover) and (pointer: fine) { .mbtn:hover { border-color: var(--line2); color: var(--ink); } }
+.secline { position: absolute; top: 0; bottom: 0; border-left: 1px solid var(--line); }
+
+/* Slots: f filled · h the original has it, to fill · v vocals in the original · l left empty · e blank */
+.slot {
+  position: absolute; top: 6px; bottom: 6px; border-radius: 5px; display: flex; align-items: center; padding: 0 9px; min-width: 0; overflow: hidden;
+  font: 400 13px var(--f-mono); white-space: nowrap; background: var(--bg); color: var(--ink); border: 1px dashed transparent; cursor: pointer; text-align: left;
+}
+.h { border-color: var(--goldLine); color: var(--gold); background: #1e1912; }
+.l, .v { border-color: rgba(241,230,211,.13); color: var(--dim); }
+.e { color: var(--dim); background: transparent; }
+.f { border-style: solid; border-color: transparent; }
+.slot[aria-expanded="true"] { box-shadow: 0 0 0 2px var(--ink) !important; }
+.plus { visibility: hidden; color: var(--mute); }
+@media (hover: hover) and (pointer: fine) {
+  .e:hover { border-color: rgba(241,230,211,.22); }
+  .e:hover .plus { visibility: visible; }
+  .h:hover, .l:hover, .v:hover, .f:hover { filter: brightness(1.2); }
+}
+.slot:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.e:focus-visible { border-color: rgba(241,230,211,.22); }
+.e:focus-visible .plus, .slot[aria-expanded="true"] .plus { visibility: visible; }
+/* Labels sit above the playhead, so the line never runs through words */
+.tx { position: relative; z-index: 3; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.ph { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: rgba(255,255,255,.5); pointer-events: none; z-index: 2; border-radius: 1px; }
+
+/* Scroll cue at the side panel's edge (critic 3b): a fade, and a button that scrolls on */
+.cueR {
+  position: absolute; top: 0; right: 0; bottom: 10px; width: 44px; z-index: 6; border: 0; cursor: pointer; color: var(--ink);
+  background: linear-gradient(to right, rgba(19,17,16,0), var(--bg) 70%); display: flex; align-items: flex-start; justify-content: flex-end; padding: 14px 8px 0 0; font: 500 20px var(--f-mono);
+}
+.cueR:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+.cueL { position: absolute; top: 0; bottom: 10px; left: var(--lw); width: 24px; z-index: 6; pointer-events: none; background: linear-gradient(to left, rgba(19,17,16,0), rgba(19,17,16,.9)); }
+
+/* The side panel: my saved parts, or the picked slot */
+.side { border-left: 1px solid var(--line); background: var(--panel); min-height: 0; overflow: auto; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+.panel { display: flex; flex-direction: column; gap: 10px; outline: none; }
+.ph1 { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.hd { font-size: 14px; }
+.ph1 .hd { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.x { border: 0; background: none; color: var(--mute); font-size: 12px; cursor: pointer; padding: 4px; }
+.lbl { font-size: 11.5px; color: var(--mute); margin: 0; }
+.lib { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.part { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 6px; border: 1px solid var(--line); background: none; color: var(--ink); text-align: left; min-width: 0; font: inherit; cursor: pointer; transition: transform 140ms cubic-bezier(.23,1,.32,1); }
+.partStatic { cursor: default; }
+.part > i { width: 3px; align-self: stretch; border-radius: 2px; flex: none; }
+.pn { min-width: 0; display: flex; flex-direction: column; }
+.pn b { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pn small { color: var(--mute); font-size: 11.5px; }
+.part[aria-pressed="true"] { border-color: var(--gold); background: rgba(242,177,52,.08); }
+button.part:active { transform: scale(.97); }
+button.part:focus-visible, .link:focus-visible, .x:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) { button.part:hover { border-color: var(--dim); } }
+.link { align-self: flex-start; border: 0; background: none; padding: 0; color: var(--ink); font: 400 11.5px var(--f-mono); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .part { transition: none; } }

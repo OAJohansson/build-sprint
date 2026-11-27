@@ -333,7 +333,7 @@ export function SoundDrawer({ t, lane, sound, color, onClose, onNewSound }: {
           {lane === 1 ? (
             <>
               <button className={s.link} onClick={generate} disabled={!fromTrack || ai.is === "waiting"}>Generate a bass loop like this track</button>
-              {!fromTrack ? <p className={s.dim}>Start a track from a map first: the loop copies that track&apos;s tempo and key.</p>
+              {!fromTrack ? <p className={s.dim}>Open a song&apos;s rebuild first: the loop copies that song&apos;s tempo and key.</p>
                 : ai.is === "waiting" ? <p className={s.dim} role="status">Making a 4-bar loop at {t.doc.bpm} BPM in {t.doc.key!.key} {t.doc.key!.scale}. This takes 5–30 seconds.</p>
                 : ai.is === "error" ? <p className={s.err} role="alert">{ai.text}</p>
                 : ai.is === "limit" ? <p className={s.dim} role="status">{ai.text}</p>

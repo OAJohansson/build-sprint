@@ -1,0 +1,281 @@
+"use client";
+
+// Rebuild the song (Phase 7 slice 3, approved design p7-final "3 Rebuild"): lane names once on the
+// left, the original's sections as columns sized by their bars, one slot per section × lane. Pick a
+// slot, then a part you saved in Make; it repeats to the section's end. Gold "has kick" = the
+// original has it there and it's still yours to fill; blank = it doesn't (measured lanes) or no hint
+// (lanes the map can't measure). The strip under the top bar is reserved (slice 4's Deck message).
+// The rules live in @/lib/rebuild; edits go through the timeline (undo, autosave, playback).
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { libLaneType } from "@/lib/make/lib-loop";
+import type { LibrarySound } from "@/lib/make/library";
+import {
+  REBUILD_LANES, emptySlot, fillSlot, leaveSlot, partFits, rebuildLane, sectionIndexAt, slotHint, slotState, toFill,
+  type Hint, type RebuildSection,
+} from "@/lib/rebuild";
+import { colorOf } from "@/lib/studio-lanes";
+import type { Doc } from "@/lib/timeline";
+import type { MySounds } from "./crate";
+import type { Timeline } from "./use-timeline";
+import { cx } from "./lanes";
+import r from "./rebuild.module.css";
+
+/** What a lane's parts are called in "No saved … yet". */
+const NOUN: Record<string, string> = { kick: "kicks", claps: "claps", hats: "hats", perc: "percussion", bass: "bass", chords: "chords", pads: "pads", lead: "leads", fx: "FX", vocals: "vocals" };
+/** A section is never narrower than a short name ("Breakdown") and "2 to fill". */
+const MIN_W = 104;
+const RIGHT_PAD = 24;
+
+type Pick = { i: number; lane: string } | null;
+type Hook = {
+  mapId: string; bars: number; bpm: number | undefined;
+  sections: { name: string; start: number; bars: number; has: string[]; toFill: number }[];
+  slots: { section: number; sectionName: string; lane: string; hint: Hint; state: "empty" | "filled" | "left"; part: string | null; partName: string | null; start: number | null; length: number | null }[];
+  counts: { toFill: number; filled: number; left: number };
+  picked: { section: number; lane: string } | null;
+  playhead: number;
+};
+declare global { interface Window { __sixamRebuild?: Hook } }
+
+const lw = (w: number) => (w < 1360 ? 170 : 180);
+const sideW = (w: number) => (w < 1360 ? 276 : 300);
+const fits = (txt: string, px: number, size = 13, pad = 22) => txt.length * size * 0.6 + pad <= px;
+const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
+
+export function RebuildView({ t, mine }: { t: Timeline; mine: MySounds }) {
+  const doc = t.doc, rb = doc.rebuild!;
+  const [pick, setPick] = useState<Pick>(null);
+  const scroller = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+  const [winW, setWinW] = useState(1440);
+  const [edge, setEdge] = useState({ left: false, right: false });
+
+  // The grid's width decides bar widths; it scrolls sideways when the minimum widths don't fit.
+  useLayoutEffect(() => {
+    const el = scroller.current;
+    if (!el) return;
+    const measure = () => { setWidth(el.clientWidth); setWinW(window.innerWidth); };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  const LW = lw(winW);
+  const lay = useMemo(() => {
+    const room = Math.max(200, width - LW - RIGHT_PAD), bars = doc.bars ?? 64, ppb = room / bars;
+    const ws = rb.sections.map((s) => Math.max(s.bars * ppb, MIN_W));
+    const at = ws.map((w, i) => ({ x: ws.slice(0, i).reduce((a, v) => a + v, 0), w }));
+    return { at, total: Math.max(ws.reduce((a, v) => a + v, 0), room) };
+  }, [width, LW, rb.sections, doc.bars]);
+  const barX = (bar: number) => {
+    const i = sectionIndexAt(rb, bar), s = rb.sections[i], o = lay.at[i];
+    return o.x + Math.min(1, Math.max(0, (bar - s.start) / s.bars)) * o.w;
+  };
+
+  // The scroll cue: a fade and a button at the side panel's edge while more of the song is to the right.
+  const onScroll = () => {
+    const el = scroller.current;
+    if (!el) return;
+    const left = el.scrollLeft > 2, right = el.scrollLeft + el.clientWidth < el.scrollWidth - 2;
+    setEdge((e) => (e.left === left && e.right === right ? e : { left, right }));
+  };
+  useEffect(onScroll, [lay]);
+  // While playing, keep the playhead in view.
+  const phX = LW + barX(t.playhead);
+  useEffect(() => {
+    const el = scroller.current;
+    if (!el || !t.playing || el.scrollWidth <= el.clientWidth) return;
+    if (phX < el.scrollLeft + LW || phX > el.scrollLeft + el.clientWidth - 40) el.scrollTo({ left: Math.max(0, phX - LW - 40) });
+  }, [phX, t.playing, LW]);
+
+  // Esc closes the slot panel.
+  useEffect(() => {
+    if (!pick) return;
+    const on = (e: KeyboardEvent) => { if (e.key === "Escape") setPick(null); };
+    addEventListener("keydown", on);
+    return () => removeEventListener("keydown", on);
+  }, [pick]);
+
+  const sounds = useMemo(() => (mine.is === "ready" ? mine.sounds : []), [mine]);
+  const fill = (i: number, lane: string, part: LibrarySound) => t.edit((d: Doc) => fillSlot(d, i, lane, part));
+
+  // Dev hook for graders (W9, R7-S6/S7): sections, every slot's hint and state, the counts.
+  useEffect(() => {
+    const slots: Hook["slots"] = [];
+    rb.sections.forEach((s, i) => REBUILD_LANES.forEach((l) => {
+      const st = slotState(doc, i, l.id);
+      const x = st.state === "filled" ? doc.sounds?.find((y) => y.id === st.region.loopId) : undefined;
+      slots.push({
+        section: i, sectionName: s.name, lane: l.id, hint: slotHint(s, l.id), state: st.state,
+        part: x?.source === "lib" ? x.libId : null, partName: x?.name ?? null,
+        start: st.state === "filled" ? st.region.start : null, length: st.state === "filled" ? st.region.length : null,
+      });
+    }));
+    window.__sixamRebuild = {
+      mapId: rb.mapId, bars: doc.bars ?? 64, bpm: doc.bpm,
+      sections: rb.sections.map((s, i) => ({ name: s.name, start: s.start, bars: s.bars, has: s.has, toFill: toFill(doc, i).length })),
+      slots,
+      counts: { toFill: rb.sections.reduce((n, _s, i) => n + toFill(doc, i).length, 0), filled: slots.filter((x) => x.state === "filled").length, left: slots.filter((x) => x.state === "left").length },
+      picked: pick ? { section: pick.i, lane: pick.lane } : null,
+      playhead: t.playhead,
+    };
+  }, [doc, rb, pick, t.playhead]);
+
+  const empty = doc.regions.length === 0 && !(rb.left ?? []).length;
+  const tight = winW < 1360;
+
+  return (
+    <div className={r.root} style={{ "--lw": `${LW}px`, "--side": `${sideW(winW)}px` } as React.CSSProperties}>
+      {/* Always 36 px, so nothing moves when slice 4's Deck message uses it. */}
+      <div className={cx(r.strip, !empty && r.stripNone)} role={empty ? "note" : undefined}>
+        {empty ? (
+          <span><b>The original&rsquo;s {plural(rb.sections.length, "section")}, bar for bar.</b> Every slot starts empty: pick one, then a part you saved in Make. Gold &ldquo;has kick&rdquo; shows what the original has there.</span>
+        ) : null}
+      </div>
+      <div className={r.body}>
+        <div className={r.arrWrap}>
+          <div className={r.arr} ref={scroller} onScroll={onScroll}>
+            <div className={r.arrin} style={{ width: LW + lay.total + RIGHT_PAD }}>
+              <div className={r.head}>
+                <span className={r.corner} />
+                <div className={r.tl}>
+                  {rb.sections.map((s, i) => <SectionHead key={i} s={s} n={toFill(doc, i).length} hinted={REBUILD_LANES.some((l) => slotHint(s, l.id) === "has")} x={lay.at[i].x} w={lay.at[i].w} onSeek={() => t.jumpTo(s.start)} />)}
+                </div>
+              </div>
+              <div className={r.lanes} style={{ gridTemplateRows: `repeat(${REBUILD_LANES.length}, minmax(${tight ? 38 : 42}px, 1fr))` }}>
+                {REBUILD_LANES.map((l) => {
+                  const lane = t.lanes.find((x) => x.id === l.id);
+                  return (
+                    <div key={l.id} className={r.lane}>
+                      <div className={r.lname} style={{ "--c": colorOf(l.type) } as React.CSSProperties}>
+                        <span>{l.name}</span>
+                        {lane ? <button className={r.mbtn} aria-pressed={lane.muted} aria-label={`Mute ${l.name}`} title="Mute this lane" onClick={() => t.toggleMute(lane.id)}>Mute</button> : null}
+                      </div>
+                      <div className={r.tl}>
+                        {rb.sections.map((s, i) => <i key={i} className={r.secline} style={{ left: lay.at[i].x }} />)}
+                        {rb.sections.map((s, i) => (
+                          <Slot key={i} doc={doc} i={i} s={s} lane={l.id} x={lay.at[i].x} w={lay.at[i].w}
+                            open={pick?.i === i && pick.lane === l.id} onPick={() => setPick(pick?.i === i && pick.lane === l.id ? null : { i, lane: l.id })} />
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <span className={r.ph} style={{ left: phX }} aria-hidden />
+            </div>
+          </div>
+          {edge.right ? (
+            <button className={r.cueR} onClick={() => scroller.current?.scrollBy({ left: scroller.current.clientWidth * 0.7, behavior: "smooth" })} aria-label="Scroll to the later sections">
+              <span aria-hidden>›</span>
+            </button>
+          ) : null}
+          {edge.left ? <span className={r.cueL} aria-hidden /> : null}
+        </div>
+        <aside className={r.side} aria-label={pick ? "Fill this slot" : "My saved parts"}>
+          {pick ? (
+            <SlotPanel doc={doc} pick={pick} sounds={sounds} loading={mine.is === "loading"} onClose={() => setPick(null)}
+              onFill={(p) => fill(pick.i, pick.lane, p)}
+              onEmpty={() => t.edit((d) => emptySlot(d, pick.i, pick.lane))}
+              onLeave={(on) => t.edit((d) => leaveSlot(d, pick.i, pick.lane, on))} />
+          ) : (
+            <AllParts sounds={sounds} mine={mine} />
+          )}
+        </aside>
+      </div>
+    </div>
+  );
+}
+
+function SectionHead({ s, n, hinted, x, w, onSeek }: { s: RebuildSection; n: number; hinted: boolean; x: number; w: number; onSeek: () => void }) {
+  const range = `${s.start}–${s.start + s.bars - 1}`;
+  const roomy = s.name.length * 8.4 + range.length * 6.9 + 40 <= w;
+  // Narrow: "2 to fill" or nothing, never a bare number (critic 3b).
+  const count = !hinted ? "" : n ? `${n} to fill` : "all filled";
+  return (
+    <button className={r.sech} style={{ left: x, width: w }} onClick={onSeek} title={`${s.name}, bars ${range}. Play from bar ${s.start}`}>
+      <span className={r.l1}><span className={r.sn}>{s.name}</span>{roomy ? <span className={r.range}>{range}</span> : null}</span>
+      <span className={cx(r.count, n > 0 && r.gold)}>{count && fits(count, w, 11.5, 17) ? count : ""}</span>
+    </button>
+  );
+}
+
+function Slot({ doc, i, s, lane, x, w, open, onPick }: { doc: Doc; i: number; s: RebuildSection; lane: string; x: number; w: number; open: boolean; onPick: () => void }) {
+  const L = rebuildLane(lane)!, hint = slotHint(s, lane), st = slotState(doc, i, lane);
+  const px = w - 6;
+  let kind: "f" | "h" | "v" | "l" | "e", text = "", short: string[] = [];
+  if (st.state === "filled") { kind = "f"; text = doc.sounds?.find((y) => y.id === st.region.loopId)?.name ?? "A saved part"; }
+  else if (st.state === "left") { kind = "l"; text = "left empty"; short = ["left"]; }
+  else if (hint === "has") { kind = "h"; text = `has ${L.name.toLowerCase()}`; short = [L.name.toLowerCase()]; }
+  else if (hint === "vocals") { kind = "v"; text = "has vocals · not yet"; short = ["vocals · not yet", "not yet"]; }
+  else kind = "e";
+  // Shorter words for narrow slots before cutting (a labelled slot is never left blank).
+  const label = !text ? "" : kind === "f" || fits(text, px) ? text : short.find((y) => fits(y, px)) ?? short.at(-1) ?? text;
+  const what = text || (hint === "none" ? `the original has no ${L.name.toLowerCase()} here; add a part` : "empty, add a part");
+  const color = colorOf(L.type);
+  return (
+    <button
+      className={cx(r.slot, r[kind])} aria-expanded={open} aria-label={`${s.name}, ${L.name}: ${what}`} title={text || "Add a part"} onClick={onPick}
+      style={{ left: x + 3, width: w - 6, ...(kind === "f" ? { background: `color-mix(in srgb, ${color} 28%, #1a1715)`, boxShadow: `inset 3px 0 ${color}` } : {}) }}
+    >
+      {label ? <span className={r.tx}>{label}</span> : <span className={r.plus} aria-hidden>+</span>}
+    </button>
+  );
+}
+
+function PartItem({ p, onClick, on }: { p: LibrarySound; onClick?: () => void; on?: boolean }) {
+  const type = libLaneType(p), lane = REBUILD_LANES.find((l) => l.type === type);
+  const inner = (
+    <>
+      <i style={{ background: colorOf(type) }} />
+      <span className={r.pn}><b title={p.name}>{p.name}</b><small>{lane?.name ?? type} · {plural(p.pattern.bars, "bar")}</small></span>
+    </>
+  );
+  return onClick ? <button className={r.part} onClick={onClick} aria-pressed={!!on}>{inner}</button> : <div className={cx(r.part, r.partStatic)}>{inner}</div>;
+}
+
+function AllParts({ sounds, mine }: { sounds: LibrarySound[]; mine: MySounds }) {
+  return (
+    <>
+      <span className={r.hd}>My saved parts</span>
+      <span className={r.lbl}>Pick a slot, then a part to fill it.</span>
+      {mine.is === "loading" ? <span className={r.lbl}>Loading your saved parts…</span>
+        : mine.is === "error" ? <span className={r.lbl}>Your saved parts didn&rsquo;t load. Reload the page to try again.</span>
+        : !sounds.length ? <span className={r.lbl}>Nothing saved yet. Make a part in Make, then save it.</span>
+        : <div className={r.lib}>{sounds.map((p) => <PartItem key={p.id} p={p} />)}</div>}
+    </>
+  );
+}
+
+function SlotPanel({ doc, pick, sounds, loading, onClose, onFill, onEmpty, onLeave }: {
+  doc: Doc; pick: { i: number; lane: string }; sounds: LibrarySound[]; loading: boolean;
+  onClose: () => void; onFill: (p: LibrarySound) => void; onEmpty: () => void; onLeave: (on: boolean) => void;
+}) {
+  const s = doc.rebuild!.sections[pick.i], L = rebuildLane(pick.lane)!, hint = slotHint(s, pick.lane), st = slotState(doc, pick.i, pick.lane);
+  const parts = sounds.filter((p) => partFits(p, pick.lane));
+  const inSlot = st.state === "filled" ? doc.sounds?.find((y) => y.id === st.region.loopId) : undefined;
+  const noun = L.name.toLowerCase();
+  const sentence = hint === "vocals" ? "The original has vocals here. Six AM can’t make vocals yet."
+    : hint === "has" ? `The original has ${noun} here.`
+    : hint === "none" ? `The original has no ${noun} here.`
+    : `No hint: Six AM can’t hear ${noun} in the original yet.`;
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => { ref.current?.focus(); }, [pick.i, pick.lane]);
+  return (
+    <div className={r.panel} ref={ref} tabIndex={-1}>
+      <div className={r.ph1}><span className={r.hd}>{s.name} · {L.name}</span><button className={r.x} onClick={onClose} aria-label="Close">✕</button></div>
+      <span className={r.lbl}>Bars {s.start}–{s.start + s.bars - 1}. A part repeats to the section&rsquo;s end.</span>
+      <span className={hint === "has" && st.state === "empty" ? r.gold : r.muted}>{sentence}</span>
+      {pick.lane === "vocals" ? null
+        : loading ? <span className={r.lbl}>Loading your saved parts…</span>
+        : parts.length ? (
+          <div className={r.lib}>
+            {parts.map((p) => <PartItem key={p.id} p={p} on={inSlot?.source === "lib" && inSlot.libId === p.id} onClick={() => onFill(p)} />)}
+          </div>
+        ) : <p className={r.lbl}>No saved {NOUN[pick.lane] ?? noun} yet. Make one in Make, then save it.</p>}
+      {st.state === "filled" ? <button className={r.link} onClick={onEmpty}>Empty this slot</button>
+        : st.state === "left" ? <span className={r.lbl} role="status">Left empty · <button className={r.link} onClick={() => onLeave(false)}>Undo</button></span>
+        : hint === "has" ? <button className={r.link} onClick={() => onLeave(true)}>Leave empty</button> : null}
+    </div>
+  );
+}

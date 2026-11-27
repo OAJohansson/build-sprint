@@ -329,3 +329,11 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | OR6-3 | major | Phase 5 owner check "drums close by ear": not close with any preset. Hats play hits the original doesn't have. Cause: three synth rows (909-style voices, not samples); every high sound (shakers, percussion, bleed) lands on Hats; no way to remove a hit or mute a row unless Make flagged it | open: options to the owner (fix-by-ear pattern editing, more rows, a real one-shot sample kit) |
 | OR6-4 | good | Phase 5 owner check, FX A/B: the FX sound quite similar to the original drops | pass (owner's ear) |
 | OR6-5 | major | In Make (Bass, Drums, Melody, FX) you can't click on the timeline to jump back to a spot; you have to listen through. The Studio has this | open: Phase 7 |
+| U7-1 | major | Slice 1 user test: shelf hides 1–5 sounds per row at 1440 (all 3 sampled basses) and ~half at 1280 × 720, no cue | open: slice 1 fix |
+| U7-2 | minor | Sound description cut with "…" for 43 of 60 drum sounds | open: slice 1 fix |
+| U7-3 | minor | Drum knob values in Hz / dB / ms / st | open: slice 1 fix |
+| U7-4 | minor | Mentor knob tips read contradictory ("Length down to longer") | open: slice 1 fix |
+| U7-5 | minor | Sticky A/B covers the "Try X" tip and half of Suggest at 1440 | open: slice 1 fix |
+| U7-6 | polish | "Shaker-like" family in Closed hat; sounds named like their family | open: slice 1 fix |
+| U7-7 | polish | Bass lines name the source (tonejs-instruments) | open: slice 1 fix |
+

@@ -348,4 +348,16 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | D7-10 | minor | Wobble < 2× on organ-click, fm-glass, filtered-saw | pass on the eval's measure (L284); owner listens at the final review |
 | U7-8 | polish | Sound chips 22 px tall (under 24 px) and the last line brushes A/B at 1280 × 720 | open: shelf round |
 | U7-9 | polish | Description still cut at 1280 where it shares a row with the knobs | open: shelf round |
+| CR2-1 | major | Critic, built slice 2 6/10: steps too thin on 8-bar loops (show 4 bars at a time while fixing) | open: slice 2 fix |
+| CR2-2 | major | Critic: sound strip cut by the sticky A/B row (one bottom bar as designed) | open: slice 2 fix |
+| CR2-3 | minor | Critic: "in Drop 2 · bar 77" vs "Looping Build, bars 76–83"; "— / 100" on ear rows; note wraps; save bar repeats itself; done-state wording | open: slice 2 fix |
+| U7-10 | major | Drum steps too thin to tap (4.6 / 3.3 px) | open: slice 2 fix |
+| U7-11 | major | Edits gone after reload; loading a saved row doesn't restore its hits | open: slice 2 fix |
+| U7-12 | minor | A row Make read nothing on has no line and isn't counted | open: slice 2 fix |
+| U7-13 | major | Drums ruler jump 2–3 sixteenths late | open: slice 2 fix |
+| U7-14 | minor | No repeat-bar for offbeat patterns | open: slice 2 fix |
+| U7-15 | minor | Bass jump only on a thin strip, few bar labels | open: slice 2 fix |
+| U7-16 | minor | Save per row only | open: slice 2 fix |
+| U7-17 | polish | Old synth drum knobs show A1 / ms | open: slice 2 fix |
+| U7-18 | polish | Zero-state wording | open: slice 2 fix |
 

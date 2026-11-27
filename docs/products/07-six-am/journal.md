@@ -860,3 +860,10 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Honest answer to "is this realistic?": sounding like the record, no; rebuilding the song's skeleton by ear, yes. The owner restated the goal as "recognisably the same song, and I built every part of it", and wants a good production kit (L265).
 - Phase 7 inputs are in `backlog.md` under "For Phase 7": many more starting sounds (research licences first: presets, a CC0 sample kit, own packs), rebuild the song in the Studio, fix drums by ear plus more rows, click to jump in Make, and "Other" → "Melody & FX". The old Phase 7 plan (arrange and export an own track) comes after the rebuild.
 - The owner said yes to the merge in chat; PR 104 merged after green checks.
+
+## Phase 7 kickoff: Rebuild the song (27 Nov)
+
+- New session, worktree `07-six-am-phase7-00338d`, branch `claude/07-six-am-phase7-00338d` from `main` at 0b30aae. Founder v2; the PM read the card, kickoff, L265, the "For Phase 7" backlog, the Phase 6 review and OR6-1..5.
+- **Research first** (owner's priority 1, many more sounds): a research agent (web search only, no paid tools) checked licences and sources; the brief is `research-sounds.md`, evidence strength first. Headline: royalty-free packs forbid shipping raw files in an app; CC0 / CC BY allow it even if Six AM is sold; the popular 909/808 banks have no licence; a drum-hit recording belongs to whoever recorded it (CJEU Pelham).
+- **Kickoff calls, one at a time:** sounds route = CC0 kit for drums + richer bass synth with a few CC BY sampled basses, own packs later (L266); 20 sounds per row picked for breadth, with a variety map (L267, owner raised it from the PM's 12/16 and asked for variety); new rows: Make reads open hats, Shaker and Ride start empty, and the design must make the rows still to fill unmissable (L268, the owner asked for the pros and cons first); the rebuild starts with sections only (L269); compare plays the original from the same bar through the Deck (L270).
+- Kickoff pack final in `kickoff.md` (4 slices: sounds, fix drums by ear + click to jump, lay out the song, compare); evals W1–W16 in `evals.md`.

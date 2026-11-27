@@ -324,11 +324,11 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 
 | ID | Severity | What happened | Status |
 | --- | --- | --- | --- |
-| OR6-1 | minor | Listen shows Drums, Bass, Other, Vocals; Make shows Bass, Drums, Melody, FX, Vocals ("not yet"). "Other" doesn't say it becomes Melody and FX | open: rename to "Melody & FX" proposed, owner to decide |
-| OR6-2 | major | Owner's goal is break down → remake each part → save → rebuild the whole song in the Studio. Make works one looped section at a time and the Studio has no guided rebuild of the original's sections | open: proposed as Phase 7's first job (rebuild the song, then make it yours) |
-| OR6-3 | major | Phase 5 owner check "drums close by ear": not close with any preset. Hats play hits the original doesn't have. Cause: three synth rows (909-style voices, not samples); every high sound (shakers, percussion, bleed) lands on Hats; no way to remove a hit or mute a row unless Make flagged it | open: options to the owner (fix-by-ear pattern editing, more rows, a real one-shot sample kit) |
+| OR6-1 | minor | Listen shows Drums, Bass, Other, Vocals; Make shows Bass, Drums, Melody, FX, Vocals ("not yet"). "Other" doesn't say it becomes Melody and FX | fixed: \"Melody & FX\" (Phase 7, W16) |
+| OR6-2 | major | Owner's goal is break down → remake each part → save → rebuild the whole song in the Studio. Make works one looped section at a time and the Studio has no guided rebuild of the original's sections | built in Phase 7 (rebuild + compare); owner's final review |
+| OR6-3 | major | Phase 5 owner check "drums close by ear": not close with any preset. Hats play hits the original doesn't have. Cause: three synth rows (909-style voices, not samples); every high sound (shakers, percussion, bleed) lands on Hats; no way to remove a hit or mute a row unless Make flagged it | Phase 7: 120-sound kit, six rows, fix by ear; owner's ear at the final review |
 | OR6-4 | good | Phase 5 owner check, FX A/B: the FX sound quite similar to the original drops | pass (owner's ear) |
-| OR6-5 | major | In Make (Bass, Drums, Melody, FX) you can't click on the timeline to jump back to a spot; you have to listen through. The Studio has this | open: Phase 7 |
+| OR6-5 | major | In Make (Bass, Drums, Melody, FX) you can't click on the timeline to jump back to a spot; you have to listen through. The Studio has this | fixed (Phase 7, W8) |
 | U7-1 | major | Slice 1 user test: shelf hides 1–5 sounds per row at 1440 (all 3 sampled basses) and ~half at 1280 × 720, no cue | fixed (51764e2, re-check) |
 | U7-2 | minor | Sound description cut with "…" for 43 of 60 drum sounds | fixed (c7e4ef5) |
 | U7-3 | minor | Drum knob values in Hz / dB / ms / st | fixed |

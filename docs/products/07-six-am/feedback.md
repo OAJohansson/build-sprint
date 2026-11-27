@@ -366,5 +366,12 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | D7-14 | check | W5b needs the owner's ear | open: final review |
 | D7-15 | polish | Hat onsets a median 18 ms early vs the grader's attack | backlog |
 | D7-16 | note | Separation not deterministic between captures (5 vs 9 open hats on one loop) | known (Phase 4 Demucs) |
-| U7-19 | minor | After a reload a hit that's new in the re-read shows as "you took out" | fixed in a19debe; re-check with slice 3 |
+| U7-19 | minor | After a reload a hit that's new in the re-read shows as "you took out" | fixed (re-checked) |
 | U7-20 | polish | Page buttons "76 | 80" don't read as pages; reason cut at 1440 with the shelf open | fixed (a19debe) |
+| CR3-1 | minor | Critic slice 3 9/10: count wording ("0 to fill" vs "all filled"); pads offered in Chords unexplained; "Make one in Make" dead end; bar ranges missing on columns that fit | open: slice 3 polish |
+| U7-21 | minor | "Rebuild this song" link hard to find (critic agrees) | open: slice 3 polish |
+| U7-22 | minor | Measured-empty vs unmeasured vs empty slots look the same | open: slice 3 polish |
+| U7-23 | polish | Bar ranges drop on narrow sections | open: slice 3 polish |
+| U7-24 | polish | Empty strip band after the first fill | open: slice 4 (the strip's Mine / Original line) |
+| U7-25 | polish | Part names cut | open: slice 3 polish |
+

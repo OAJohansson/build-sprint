@@ -1012,8 +1012,9 @@ Small, folded in: Listen's "Other" becomes "Melody & FX" (OR6-1, toil, logged as
 
 ## Questions for the owner (draft, one at a time)
 
-1. **Where should the new sounds come from?** (Research brief first.) Recommendation: see
-   `research-sounds.md`.
+1. **Where should the new sounds come from?** (Research brief: `research-sounds.md`.)
+   Recommendation: a hand-picked free (CC0) sample kit for drums, about 12 sounds per row, plus a
+   richer bass synth with more presets and a few credited sampled basses; your own packs later.
 2. **How many starting sounds is enough?** Recommendation: about 12 per drum row and 16 for bass,
    grouped by feel (deep, punchy, dusty…), with a preview on tap, so choosing stays quick.
 3. **Should Make try to read the new drum rows (open hat, shaker, ride) from the track, or start

@@ -888,3 +888,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - User-tester re-check (51764e2): both jobs 4/5 at both sizes, W14 met; U7-1, U7-3, U7-5 fixed; U7-2/4/6/7 partly; new polish U7-8/9; bass A/B below the fold at 720 judged acceptable (one scroll). Leftovers added to the engineer's shelf round.
 - Shelf round done (c7e4ef5, T248). Critic and data-evals re-checking. Slice 2 starts in parallel with a fresh engineer (different job: rows, editing, click to jump; the open-hat reader is graded on real loops before the UI relies on it).
 - Critic on the rebuilt shelf: 9/10; small leftovers (incl. checking the 'closer' hint is stable) folded into the slice 2 engineer's round.
+- Data-evals second re-grade (54a9045): W2, W4, W11 pass; W4's Wobble on the eval's own brightness measure, accepted openly with an owner listen as guard (L284). Slice 1 done: W1–W4, W11–W14 pass; built shelf 9/10.

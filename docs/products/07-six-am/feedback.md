@@ -344,8 +344,8 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | D7-6 | toil | "Suggest for hats" / "closeness · hats" on the Closed hat row | open: slice 1 fix |
 | D7-7 | risk | tonejs-instruments' recordings' origin not stated | accepted (L283), viability risk |
 | D7-8 | check | W12 timings were on localhost; re-check first taps on the preview | open: final review |
-| D7-9 | minor | Regression: Tone on Pure sine moves brightness 1.87× (was 2.12×) after the Weight change | open: slice 1 fix |
-| D7-10 | minor | Wobble < 2× on organ-click, fm-glass, filtered-saw | open: slice 1 fix |
+| D7-9 | minor | Regression: Tone on Pure sine moves brightness 1.87× (was 2.12×) after the Weight change | fixed (2.52×) |
+| D7-10 | minor | Wobble < 2× on organ-click, fm-glass, filtered-saw | pass on the eval's measure (L284); owner listens at the final review |
 | U7-8 | polish | Sound chips 22 px tall (under 24 px) and the last line brushes A/B at 1280 × 720 | open: shelf round |
 | U7-9 | polish | Description still cut at 1280 where it shares a row with the knobs | open: shelf round |
 

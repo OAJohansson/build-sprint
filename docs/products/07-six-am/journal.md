@@ -905,3 +905,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Slice 3 user test: entry 3, see sections 4, fill 5, come back 5 (W14 met); U7-19 fixed. Polish: entry link findability, measured-empty slots, bar ranges, names.
 - Slice 3 data-evals (c3329a3): W9, W11, W13 pass, W6 regression pass; D7-17 (edits after a reload follow a new reading) → L294; D7-18 hints on a real map at the final review. Slice 3 polish calls L295. Polish round sent to the slice 3 engineer.
 - Slice 3 polish done (72e06b8, 0465af1, T260). Slice 4 (compare with the original) starts with the same engineer; slice 3 polish is re-checked together with slice 4's grading.
+- Slice 4 built (cfbc6ae): Mine / Original switch through the Deck, Deck-closed state, strip summary, bar ↔ ms on the map's exact grid; 652 tests. The landing measure includes play before the Deck's first report, so W10 can't be judged yet: engineer adds a report on seek landing first.

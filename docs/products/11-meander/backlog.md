@@ -34,6 +34,10 @@
 | Timeline hover links: calmer or different (#45) | They look messy | Next phase |
 | A proper menu (#46) | Room for fields, settings, about | Next phase |
 
+## Coverage check for philosophy (feedback 49)
+
+- Run the coverage check (M8) on the 27 philosophy schools: an independent grader compares the list with outside references (SEP and IEP tables of contents, a standard survey such as Copleston or the Routledge Encyclopedia's top-level entries, and university introduction syllabi). It lists any major school missing, ranked, for the owner to pick from.
+
 ## From the phase 4 planning (27 Nov)
 
 - More fields after music: architecture, fashion, political science (capitalism and others next to Marxism), the history of ideas.

@@ -488,3 +488,122 @@ drop as is" vs with my FX; Save riser lands on the FX lane.
 #### M-S10 · Ask the Mentor about the row I'm on
 In Drums, Melody and FX, ask "why does this sound different?". Expect: the answer knows the open
 row and its knobs.
+
+## Phase 6: Chords in Make (26 Nov)
+
+Persona: the owner, Phase 6 update in [`persona.md`](persona.md) (no theory, plays a little
+piano, ear first, reads almost nothing). Bars are copied from the Phase 6 part of
+[`../evals.md`](../evals.md): **H13** every job per slice ≥ 4/5 and **H14** a planted wrong chord
+fixed in ≤ 3 taps when the right one is offered. Where `evals.md` gives no time or tap bar, the
+tester reports the number without a pass/fail. Requirements are K1–K12 in the kickoff pack.
+
+### How to run the app for testing
+
+- **Sandbox only, never the owner's real data:**
+  `SUPABASE_URL= SUPABASE_SECRET_KEY= ACCESS_CODE=test-code pnpm -F 07-six-am exec next dev -p 3017`,
+  then `node apps/07-six-am/evals/sandbox-seed.mjs` (it refuses unless the store is the in-memory
+  sandbox). Type `test-code` once. The seed puts Lost in the Loop's map in (G major, 123.02 BPM,
+  bars 69–76 in the build).
+- Desktop Chrome, 1440 × 900, plus one pass at 1280 × 800 and one at a short window (≤ 820 px
+  high: A/B must stay above the save bar with a bar open, T157). Phone is out of scope.
+- **Getting the loop into memory:** the Lab separates the track live from the SoundCloud tab
+  (C2: the original is never stored). Use Chrome launched with the tab auto-select flags, as in
+  Phase 3–5, or batch one **[owner's hands]** ask for the tab-share click. The report says which.
+- **The agent can't hear.** It reads what plays from the page: the cell names, which card is
+  lit, the events' notes and times (`window.__sixamLab.chordsRead`, T147), Mine's state and the
+  score. Whether a chord *sounds* like the track is the owner's final review. For H14 the tester
+  gets the right chord's name as text (evals.md H14).
+- **Planted wrong chord (H14):** the PM gives the tester one bar whose cell is set to a known
+  wrong chord with the right one among its offered versions (a dev-only plant or a known misread,
+  e.g. G where the label is G7; the PM picks the method and says it in the run notes).
+- **No instruction text (L262):** the UI has almost no hints by design. In every scenario the
+  tester works without help and records each **stuck point**: where they stopped, what they
+  looked at or tried, how long until they moved on, and whether they got there without a hint.
+  A hint from the PM ends the "without a hint" count for that task.
+- **Mentor:** the Mentor's API key has hit its limit until 1 Dec and agents make no paid calls,
+  so scenario C6-S3 checks the path and the theory facts sent to the model (H12, unit-tested), not
+  a live answer. One live answer stays in the owner's final review.
+- Network log kept for every scenario (H11: nothing of the original stored or uploaded).
+
+### Numbers to report in every scenario
+
+| Number | How |
+| --- | --- |
+| Taps | every click from the scenario's start to its success state; H14's count starts with the tap on the wrong bar and ends when Mine holds the right chord |
+| Time to first sound | from entering Make → Melody (or opening the bar) to the first chord playing, in seconds |
+| Understood without a hint | yes / no per task, with the stuck points |
+| Job score | 1–5 (H13: ≥ 4) |
+
+### Scenarios (one block per slice)
+
+#### C6-S1 · Make guesses (slice 1)
+- **Moment:** an evening, the Lab open on Lost in the Loop, wanting to hear Make's chords before
+  fixing anything.
+- **Task:** "Let me hear what Make thinks the chords are, and where it isn't sure." Open Lost in
+  the Loop, loop bars 69–76, go to Make → Melody, play Make's chords on the synth, find the bar
+  Make isn't sure of.
+- **Success:** the Melody tab is there and Bass, Drums and FX still work (K1); one chord name per
+  bar (K2), played on the poly synth at the read times, stabs short and a held chord held (K3);
+  the unsure bar is found from its "?" alone (L262). A/B, Suggest and the open row's score work as
+  in Phase 5 (K8). Report the taps, time to first sound and how the unsure bar was found. Job
+  score ≥ 4/5 (H13).
+
+#### C6-S2 · Fix by ear (slice 2)
+- **Moment:** straight after C6-S1, one bar sounds wrong next to the track.
+- **Task:** "This bar doesn't sound like the track. Make it match, in every bar like it. Then make
+  one chord my own on the keys, and make it play a bit later." Tap the planted wrong bar, play the
+  track's bar beside the versions, tap the one that matches (the right name is given as text),
+  keep it for all same bars, open "build it on the keys" and switch one note on or off, then move
+  a chord's start or length.
+- **Success:** H14: the planted wrong chord fixed in **≤ 3 taps** when the right one is offered.
+  Tapping a version plays it and puts it in Mine at once (K4, L262); "All N bars" changes every
+  same bar (on by default, L262); the edited chord keeps its notes and shows its closest name
+  (K5); the moved chord starts and lasts where it was put on the 16th grid (K6); the score updates.
+  Report taps per sub-task (fix, all bars, note edit, move), and where they got stuck without a
+  hint (which card is playing; how to get back to Make's chord; where timing lives). Job score
+  ≥ 4/5 for each of "fix a planted wrong chord", "edit a note" and "move a chord" (H13).
+
+#### C6-S3 · Why it fits, and into the Studio (slice 3)
+- **Moment:** the chords sound right; curious why, and wanting to build a track with them.
+- **Task:** "Why does this chord work here?" Ask the Mentor about the open chord. Then "keep these
+  and use them": Save, open the Studio, find the chords on the Chords / Pads lane, open its drawer,
+  reload.
+- **Success:** the Mentor path opens from the open chord and sends the right name, key and role
+  (H12; live answer in the owner's review, see above) (K10). The saved sound lands on Chords (or
+  Pads), plays the same chords, notes and times as in Make, is editable in the lane's drawer, and
+  survives a reload (K9; H9 is data-evals'). Saved Bass, Drums and FX sounds unchanged (K12).
+  Report taps from Save to hearing it in the Studio. Job score ≥ 4/5 for "save and find it in the
+  Studio" (H13).
+
+#### C6-S4 · Lead (slice 4)
+- **Moment:** a loop with a riff on top (Mason Flint 17–24 or the Dubspinna lead, as data-evals
+  graded); the reading may be weak (L249).
+- **Task:** "There's a riff on top. Get that too." Open the Lead row, find a lead note that's
+  wrong (the right one given as text), fix it on the keys, play it with the chords, save the lead.
+- **Success:** a one-note line above the chords plays on a Lead preset; one note fixed on the
+  same keyboard; Save lands it on the Lead lane, never replacing Chords (K7, K9). Report taps for
+  the note fix and for the save, and stuck points. Job score ≥ 4/5 for "the lead" (H13).
+
+No "time passes" scenario: Phase 6 adds no date or time logic. Reload survival is inside C6-S3.
+
+### Edge passes (inside the scenarios)
+
+- A 16-bar loop: cells wrap into two lines of 8 (T153); the unsure "?" still findable.
+- A loop with no clear chords (a breakdown): what Make shows, and whether the tester understands
+  it without text.
+- Undo after "All N bars": can they get one bar back to what it was?
+- Switching Melody → Bass → Melody keeps the fixes in Mine.
+
+### Value questions
+
+- **Riskiest assumption (the ear):** in C6-S2, could someone with no training pick the right
+  version from the cards in a few taps? The agent can only test the taps and whether the screen
+  made it clear; the owner's ear decides at the final review.
+- Did building a chord on the keys feel like their own touch, or like a puzzle?
+- Which screen moment needed words that weren't there (L262 bet: none)?
+
+### Trust checks
+
+- Network and storage: no audio of the original stored, uploaded or sent (K11, H11).
+- What was saved matches what was in Mine, bar by bar (names, notes, times) after a reload.
+- Ask afterwards: "Did anything make you think Six AM kept a copy of the track?"

@@ -63,6 +63,15 @@ export function usesFlats(tonic: number, scale: Scale): boolean {
 }
 
 /** 33 → "A1" (MIDI octave numbering, C4 = 60), spelled for the key. */
+/**
+ * TH-3: a key's conventional name, however it was stored ("G#" major → "Ab", "A#" minor → "Bb"), by the
+ * usesFlats convention (flat keys: F B♭ E♭ A♭ D♭ G♭ major, D G C F B♭ E♭ minor). ASCII; null if unreadable.
+ */
+export function conventionalKey(key: string, scale: Scale): string | null {
+  const pc = pitchClass(key);
+  return pc === null ? null : (usesFlats(pc, scale) ? FLATS : SHARPS)[mod(pc, 12)];
+}
+
 export function midiName(midi: number, flats = false): string {
   return `${(flats ? FLATS : SHARPS)[mod(midi, 12)]}${Math.floor(midi / 12) - 1}`;
 }

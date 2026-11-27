@@ -148,6 +148,12 @@ Rules I now apply to every product (detail in the playbook).
 - **Make for every layer: real-track grades decide.** Drums passed only after the grader hand-
   labelled real separated loops (63 → 88 % labels); melody passed its fixtures and failed the real
   chords twice, so it moved to the next phase on a rule agreed up front (try Basic Pitch, time-boxed).
+- **Chords: the machine guesses, the ear decides.** Make names the chords (82 % right on real loops)
+  and the owner fixes a wrong one in 2–3 taps; held pads stayed at 64 %, so a "Held" button became
+  the hand fix instead of another reader round.
+- **Say what "close" means.** At the final review the owner found the drums nowhere near the record;
+  the honest answer was that sounding the same isn't reachable, and the goal became "recognisably
+  the same song, and I built every part of it" (L265).
 - **Make: one number that moves with the knob.** A single closeness score hid clap and hats
   changes; a score for the open row made every tick visibly count.
 

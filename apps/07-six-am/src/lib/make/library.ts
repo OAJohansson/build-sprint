@@ -8,6 +8,7 @@ import { MAKE_PRESETS, clampMacros, macroWord, type Macros, type MakePresetId } 
 import type { MakeNote } from "./render";
 import { FX_KNOBS, FX_NOUN, FX_PRESETS, clampFxMacros, fxLengthWord, fxRowOf, isFxPreset, type FxKnobId, type FxMacros, type FxPresetId } from "./fx-synth";
 import { POLY_KNOBS, clampPolyMacros, isMelodyPreset, kindOf, melodyPreset, melodyRowOf, type MelodyPresetId, type PolyKnobId, type PolyMacros } from "./poly-synth";
+import { normalChord, type ChordMark, type Hit } from "./chords-mine";
 import { DRUM_PRESETS, ROW_KNOBS, clampDrumMacros, isDrumPreset, rowOf, type DrumKnobId, type DrumMacros, type DrumPresetId } from "./drum-synth";
 
 export const LIB_PARTS = ["bass", "drums", "other", "vocals"] as const;
@@ -34,7 +35,7 @@ export type BassSound = SoundBase & { preset: MakePresetId; macros: Macros };
 export type DrumSound = SoundBase & { part: "drums"; preset: DrumPresetId; macros: DrumMacros };
 /** Phase 5 slice 2: a melody row (part "other"; the preset says the row: chords-… or lead-…), its
  *  notes in `key`, with a repeat of up to 16 bars. */
-export type MelodySound = Omit<SoundBase, "pattern"> & { part: "other"; preset: MelodyPresetId; macros: PolyMacros; pattern: { bars: 1 | 2 | 4 | 8 | 16; notes: MakeNote[] } };
+export type MelodySound = Omit<SoundBase, "pattern"> & { part: "other"; preset: MelodyPresetId; macros: PolyMacros; pattern: { bars: 1 | 2 | 4 | 8 | 16; notes: MakeNote[]; chords?: ChordMark[] } };
 /** Phase 5 slice 3: one FX row (part "other"; the preset says which: fx-impact-…, fx-down-…, fx-riser-…),
  *  one event per pass (its note carries the step it starts on and the key's root). */
 export type FxSound = Omit<SoundBase, "pattern"> & { part: "other"; preset: FxPresetId; macros: FxMacros; pattern: { bars: 1 | 2 | 4 | 8; notes: MakeNote[] } };
@@ -185,7 +186,39 @@ function parseMelodySound(r: Record<string, unknown>, preset: MelodyPresetId): N
   const macros = clampPolyMacros(preset, (r.macros ?? {}) as Record<string, unknown>);
   const name = cleanName(r.name) || suggestMelodyName(preset, macros, source?.title);
   const tags = normalizeTags(Array.isArray(r.tags) ? r.tags : suggestMelodyTags(preset, key, scale, bpm, source?.title, macros));
-  return { name, part: "other", preset, macros, pattern: { bars, notes }, key, scale, bpm: Math.round(bpm * 100) / 100, source, tags };
+  const chords = parseChordMarks(pat.chords, bars);
+  return { name, part: "other", preset, macros, pattern: chords ? { bars, notes, chords } : { bars, notes }, key, scale, bpm: Math.round(bpm * 100) / 100, source, tags };
+}
+
+/** Phase 6 slice 1: the chord names saved with a chords row (K8), each over a stretch of the repeat; anything else is dropped. */
+export function parseChordMarks(raw: unknown, bars: number): ChordMark[] | null {
+  if (!Array.isArray(raw) || !raw.length || raw.length > bars * 2) return null;
+  const out: ChordMark[] = [];
+  for (const x of raw) {
+    const o = (x ?? {}) as Record<string, unknown>;
+    const step = num(o.step, 0, bars * 16 - 1), steps = num(o.steps, 1, bars * 16), name = typeof o.name === "string" ? normalChord(o.name.slice(0, 12)) : null;
+    if (step === null || steps === null || !Number.isInteger(step) || !Number.isInteger(steps) || !name) return null;
+    const mark: ChordMark = { step, steps, name };
+    // Slice 2 (H9): the owner's own notes (MIDI, up to 8) and hits (16ths inside the mark, up to 32), when edited.
+    if (o.notes !== undefined) {
+      if (!Array.isArray(o.notes) || !o.notes.length || o.notes.length > 8) return null;
+      const notes = o.notes.map((x) => num(x, 24, 108));
+      if (notes.some((x) => x === null || !Number.isInteger(x))) return null;
+      mark.notes = [...new Set(notes as number[])].sort((a, b) => a - b);
+    }
+    if (o.hits !== undefined) {
+      if (!Array.isArray(o.hits) || o.hits.length > 32) return null;
+      const hits: Hit[] = [];
+      for (const h of o.hits) {
+        const x = (h ?? {}) as Record<string, unknown>, at = num(x.at, 0, steps - 1), len = num(x.len, 0.25, steps), off = x.off === undefined ? 0 : num(x.off, -0.5, 0.5);
+        if (at === null || len === null || off === null || !Number.isInteger(at)) return null;
+        hits.push(off ? { at, len: Math.round(len * 100) / 100, off: Math.round(off * 100) / 100 } : { at, len: Math.round(len * 100) / 100 });
+      }
+      mark.hits = hits.sort((a, b) => a.at - b.at);
+    }
+    out.push(mark);
+  }
+  return out.sort((a, b) => a.step - b.step);
 }
 
 /** An FX row's sound (slice 3): part "other", the row's preset and knobs, one event per pass. */

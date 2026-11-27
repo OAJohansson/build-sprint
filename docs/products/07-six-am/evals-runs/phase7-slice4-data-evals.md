@@ -156,3 +156,30 @@ No new fetch or storage calls.
 - No paid API calls.
 - Browser session about 40 min, with 11 switches.
 - Unit suite 30 s; cross-version checks under 10 s each.
+
+## Final regression (6ec8f77), 27 Nov 2026
+
+**What I ran.**
+- **Code:** a795dc5, which has the same app code as 6ec8f77 (the later commits are docs and a
+  merge of main).
+- **Server:** a detached copy on :3027 (sandbox), seeded as before.
+- **Browser:** my own Chrome with a real SoundCloud Deck popup, the same 8 ms widget poll in the
+  Deck, the BroadcastChannel logger and the network logger.
+- **Cleanup:** the profile and the grading copy are deleted.
+
+| Eval | Measured | Result |
+| --- | --- | --- |
+| **W10** | **Switches:** Mine → Original from a paused playhead, then 4 section-header clicks on Original (Groove at its left edge → bar 33; mid-section Drop 2 → bar 49, Drop 3 → bar 82, Breakdown → bar 62). Each header click plays from the start of the bar under the pointer. **Start position on 5/5:** my poll's first playing position equals the target to the ms. The product's `errMs` is 0 on 5/5; `errFirstPlayMs` reads 136–212 ms (report lag, as before). On the 4 header clicks the target is the clicked bar's start (0 ms off). **Steady-play check:** 3 more mid-section header clicks (Drop 1 → bar 25, Build → bar 67, Outro → bar 104). Steady playback lines up 22–78 ms *before* the landing time: the audio runs from the target and begins a few tens of ms after the landing report. **Back to Mine:** Studio bar 63.314 vs the Deck's 63.330 (within 0.02 bar), and the Studio plays. **Studio Pause on Original** pauses the Deck: "The original is paused at bar 64". **Deck on another song (D7-20 fixed):** the strip says "The Deck is playing another song. **Play this one**". Clicking it re-points the Deck to this song and Original becomes ready | **Pass** |
+| **W11** | `pnpm -F 07-six-am test` **652/652**; my 88 old-sound renders are **88/88 identical** to the Phase 6 base; `parseDoc` on my 2,000 random non-rebuild docs is **2,000/2,000 identical** | **Pass** |
+| **W13** | **Deck channel** (rebuild page): `seek{cmd, kind, ms}` ×10 (39 B), `pause` ×2 (28 B), and `state{url, title, pos, playing, durationMs[, landed]}` ×544 (≤ 276 B). No arrays, 0 binary. **Network:** 433 requests, 21 bodies, **0 binary** (`PUT /api/tracks` 2.2 KB, `PUT /api/maps` 7.1 KB with the 101-bar level array, `POST /api/sounds` ≤ 3.6 KB, SoundCloud telemetry). **Storage:** the code, the last track id and one drum edit key of 573 B (steps only). IndexedDB and OPFS are empty; Cache Storage holds only the separation model | **Pass** |
+| **W6 spot** | **Lost 77–84:** kick −1/+1, clap +1/−1, hat +1/−1, perc +4, then mute hat and solo clap. **Saved = played on 4/4 rows** (offsets ≤ 0.6 ms). Rows saved while muted or soloed out kept every hit | **Pass** |
+
+**Changes since the slice 4 grade:**
+- **D7-19:** the message now reads "Playing the original from here, bar N". Section headers play
+  from the start of the clicked bar. A Mine → Original switch still uses the exact playhead (17.154
+  → 293 ms after the bar line), which now matches the wording.
+- **D7-20:** fixed.
+- **D7-21:** didn't recur. The first switch landed with `errMs` 0 and no delay; the player was
+  already warm from opening the Deck.
+
+**Not checked:** the Lab's new `?loop=` parameter (not in this run's evals); other browsers.

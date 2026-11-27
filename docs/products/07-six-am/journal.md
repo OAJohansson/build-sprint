@@ -890,3 +890,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Critic on the rebuilt shelf: 9/10; small leftovers (incl. checking the 'closer' hint is stable) folded into the slice 2 engineer's round.
 - Data-evals second re-grade (54a9045): W2, W4, W11 pass; W4's Wobble on the eval's own brightness measure, accepted openly with an owner listen as guard (L284). Slice 1 done: W1–W4, W11–W14 pass; built shelf 9/10.
 - Slice 2 built (1f49245..0a63c04): six rows, open-hat reader (synthetic only, flag READ_OPEN_HATS), rows-to-fill, fix by ear with mute/solo, click to jump in all four tabs, "Melody & FX"; 633 tests pass. Logged L285–L286, T249–T254. Known: steps ~7 px wide at 8 bars; shelf below the sticky A/B (scroll). Graders next, the open-hat reader on real loops first.
+- Critic on built slice 2: 6/10 (steps too thin on 8-bar loops, strip cut by the sticky A/B). Fix round waits for the user test and data-evals.

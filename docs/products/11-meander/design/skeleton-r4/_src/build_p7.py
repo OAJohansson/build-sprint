@@ -58,13 +58,15 @@ svg.ov .sp{stroke-opacity:.72;stroke-width:1.3}
 .facts{margin-top:24px;font-size:14.5px;line-height:1.6;text-wrap:balance}
 .mid .lnk{margin-top:10px}
 .picked .kick{font-size:14.5px}
-.picked .sum{font-size:30px;line-height:1.22;color:var(--bone);max-width:440px;margin-top:16px}
-.picked .sum.long{font-size:22px;line-height:1.3}
+.picked h2{font-size:40px;line-height:1.08;letter-spacing:-.012em;margin-top:14px;max-width:440px;overflow-wrap:break-word}
+.picked .rule{margin:22px 0 20px}
+.picked .sum{font-size:22px;line-height:1.3;color:var(--bone);max-width:410px}
+.picked .sum.long{font-size:19px}
 .picked .with{margin-top:20px;font-size:14.5px;text-wrap:balance}
 .picked .row{display:flex;flex-wrap:wrap;justify-content:center;gap:0 26px;margin-top:10px}
 .picked .mid .lnk{margin-top:0}
 .lnk.back{color:rgba(233,226,212,.82)}
 """, '<div class="veil"></div>', f"""<section class="info" aria-label="Existentialism">
 <div class="school"><div class="mid"><h1 class="d" data-f="name" tabindex="-1"></h1><i class="rule"></i><p class="ask d it" data-f="q" data-long="70"></p><p class="quiet facts"><span data-f="size"></span><br><span data-f="when"></span></p>{READ}</div></div>
-<div class="picked"><div class="mid"><p class="kick" data-p="n"></p><p class="sum d it" data-p="summary" data-plong="100"></p><p class="quiet with" data-p="who"></p><p class="row">{PART}{BACK}</p></div></div>
+<div class="picked"><div class="mid"><p class="kick" data-p="n"></p><h2 class="d" data-p="title"></h2><i class="rule"></i><p class="sum d it" data-p="summary" data-plong="100"></p><p class="quiet with" data-p="who"></p><p class="row">{PART}{BACK}</p></div></div>
 </section>""")

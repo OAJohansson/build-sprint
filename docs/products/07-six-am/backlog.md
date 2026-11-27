@@ -126,3 +126,4 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 - **Rebuild the song in the Studio** (OR6-2): the original's sections laid out to fill with your saved parts, switch to the original to compare.
 - **Fix drums by ear** (OR6-3): tap a hit to remove or add it, mute any row; more drum rows (open hat, shaker/percussion, ride) so high sounds stop piling onto Hats.
 - **Listen's "Other" → "Melody & FX"** (OR6-1).
+- **Click to jump in Make** (OR6-5): in Bass, Drums, Melody and FX, click a spot on the loop's bars to play from there, like the Studio's timeline.

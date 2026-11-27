@@ -21,8 +21,8 @@
    ]
   },
   "era": "Ancient and classical (India)",
-  "date_range": "c. 5th century BCE (the Buddha) – 8th century CE (Indian Madhyamaka and Yogācāra)",
-  "description": "A tradition of argument that grew from the Buddha's teaching on how to end suffering. Later Indian thinkers built theories of the self, the mind and reality on it. The two great later schools are Madhyamaka, the 'Middle Way', and Yogācāra, 'yoga practice'.",
+  "date_range": "from c. 5th century BCE (the Buddha); in India to about the 11th century CE (late Yogācāra); living today",
+  "description": "A tradition of argument that grew from the Buddha's teaching on how to end suffering. Later Indian thinkers built theories of the self, the mind and reality on it. The two main schools of Mahāyāna ('Great Vehicle') Buddhism in India were Madhyamaka, the 'Middle Way', and Yogācāra, 'yoga practice'.",
   "debatable": "Whether the Buddha himself was a philosopher is disputed. SEP presents him as the later Buddhist tradition understood him. This node covers only the Indian roots; Buddhism in Tibet, China and Japan is left out.",
   "questions": [
    {
@@ -87,7 +87,7 @@
    },
    {
     "title": "No lasting self",
-    "text": "The Buddha taught non-self (anātman): there is no lasting 'I' behind our experiences. A person is a changing bundle of five kinds of physical and mental elements, the skandhas. None of them lasts, so none of them can be a self. Our sense of 'I' and 'mine' is the ignorance that causes suffering.",
+    "text": "The Buddha taught non-self (anātman), at least as the later tradition read him. None of the parts that make up a person is a lasting 'I'. A person is a changing bundle of five kinds of physical and mental elements, the skandhas. None of them lasts, so none of them can be a self. Our sense of 'I' and 'mine' is the ignorance that causes suffering.",
     "thinkers": [
      "The Buddha"
     ],
@@ -165,7 +165,7 @@
    }
   ],
   "reacted_against": {
-   "text": "The ritual religion of the Brahmin priests, built on sacrifices set out in the Vedas, the ancient sacred texts. Many wandering seekers, the Buddha among them, also denied that the Vedas have the final word on the world.",
+   "text": "The ritual religion of the Brahmin priests, built on sacrifices set out in the Vedas, the ancient sacred texts. The late Vedic Upaniṣads shared this dissatisfaction with ritual. Many wandering seekers, the Buddha among them, also denied that the Vedas have the final word on the world.",
    "sources": [
     {
      "url": "https://plato.stanford.edu/entries/buddha/",
@@ -179,8 +179,8 @@
     "neighbour_name": "Vedānta",
     "direction": "out",
     "kind": "pushed_against",
-    "label": "the lasting self denied",
-    "reason": "Buddhists rejected the Upaniṣads' unchanging self and the Vedas' authority; the Vedānta thinker Śaṅkara later rejected Buddhist idealism and emptiness.",
+    "label": "a lasting self, denied and defended",
+    "reason": "Buddhists rejected the unchanging self of the Upaniṣads (late Vedic texts) and the Vedas' authority. The Vedānta thinker Śaṅkara replied by rejecting Buddhist idealism and emptiness.",
     "sources": [
      {
       "url": "https://iep.utm.edu/upanisad/",
@@ -191,6 +191,11 @@
       "url": "https://plato.stanford.edu/entries/buddha/",
       "section": "1. Buddha as Philosopher",
       "quote": "rejected the authority of the Vedas"
+     },
+     {
+      "url": "https://plato.stanford.edu/entries/buddha/",
+      "section": "1. Buddha as Philosopher",
+      "quote": "a stratum of (comparatively late) texts, the Upaniṣads"
      },
      {
       "url": "https://plato.stanford.edu/entries/shankara/",
@@ -209,7 +214,7 @@
    {
     "name": "The Buddha",
     "dates": "fl. c. 450 BCE (dates disputed)",
-    "summary": "The Buddha is the founder of Buddhism; tradition calls him Gautama. 'Buddha' is a title meaning 'awakened'. He was born into the wealthy Śākya clan, near today's border between India and Nepal. He left home to seek an end to suffering, reached enlightenment and taught for 45 years. His dates are disputed; many scholars now think he died around 405 BCE.",
+    "summary": "The Buddha is the founder of Buddhism; tradition calls him Gautama. 'Buddha' is a title meaning 'awakened'. He was born into the wealthy Śākya clan, near today's border between India and Nepal. The story is that he left home to seek an end to suffering. He reached enlightenment and taught for 45 years. His dates are disputed; many scholars now think he died around 405 BCE.",
     "sources": [
      {
       "url": "https://plato.stanford.edu/entries/buddha/",
@@ -235,7 +240,7 @@
       ]
      },
      {
-      "text": "There is no lasting self: a person is a changing bundle of physical and mental elements.",
+      "text": "A person is a changing bundle of physical and mental elements, and no part is a lasting self (the later tradition's reading).",
       "sources": [
        {
         "url": "https://plato.stanford.edu/entries/buddha/",
@@ -254,7 +259,7 @@
      }
     ],
     "study_prompt": {
-     "text": "Teach me the Buddha as a short Socratic module. Start with the founder of Buddhism, a man of the Śākya clan who flourished around 450 BCE and whose title means 'awakened', then the three key ideas: suffering has causes, so removing them ends it; there is no lasting self; a middle path between eternal persons and being wiped out at death. Ask me one question at a time and finish with a five-question quiz.",
+     "text": "Teach me the Buddha as a short Socratic module. Start with the founder of Buddhism, a man of the Śākya clan who flourished around 450 BCE and whose title means 'awakened', then the three key ideas: suffering has causes, so removing them ends it; no part of a person is a lasting self, as the later tradition read him; a middle path between eternal persons and being wiped out at death. Ask me one question at a time and finish with a five-question quiz.",
      "sources": [
       {
        "url": "https://plato.stanford.edu/entries/buddha/",
@@ -343,7 +348,7 @@
    {
     "name": "Asaṅga",
     "dates": "c. 4th–5th century CE",
-    "summary": "Asaṅga and his (half-)brother Vasubandhu are credited with making Yogācāra a distinct school. Tradition says some of his works came from his teacher, Maitreya. Which works are really his is still debated.",
+    "summary": "Asaṅga and his (half-)brother Vasubandhu are credited with making Yogācāra a distinct school. Tradition says some of his works came from his teacher Maitreya, whom it identifies with the future Buddha. Which works are really his is still debated.",
     "sources": [
      {
       "url": "https://plato.stanford.edu/entries/yogacara/",
@@ -356,16 +361,20 @@
     ],
     "key_ideas": [
      {
-      "text": "His Compendium of Abhidharma explains the dharmas, the basic mental and physical building blocks of reality, from a Yogācāra view.",
+      "text": "His Compendium of Abhidharma explains the dharmas, the basic mental and physical building blocks of reality, from a Yogācāra view. Abhidharma is early Buddhism's careful, technical account of experience.",
       "sources": [
        {
         "url": "https://plato.stanford.edu/entries/yogacara/",
         "section": "1.2 The main textual sources and figures of Yogācāra philosophy"
+       },
+       {
+        "url": "https://plato.stanford.edu/entries/abhidharma/",
+        "section": "intro"
        }
       ]
      },
      {
-      "text": "His Summary of the Great Vehicle is an influential overview of Yogācāra theory and practice.",
+      "text": "His Summary of the Great Vehicle (Mahāyāna) is an influential overview of Yogācāra theory and practice.",
       "sources": [
        {
         "url": "https://plato.stanford.edu/entries/yogacara/",
@@ -404,7 +413,7 @@
    {
     "name": "Vasubandhu",
     "dates": "c. 4th–5th century CE",
-    "summary": "Vasubandhu was Asaṅga's (half-)brother and a co-founder of Yogācāra. His most famous book, the Treasury of Abhidharma, is not a Yogācāra work. It is a manual of earlier Buddhist theory. His Twenty Verses and Thirty Verses are core Yogācāra texts.",
+    "summary": "Vasubandhu was Asaṅga's (half-)brother and a co-founder of Yogācāra. His most famous book, the Treasury of Abhidharma, is not a Yogācāra work. It is a manual of Abhidharma, the earlier, technical Buddhist theory of experience. His Twenty Verses and Thirty Verses are core Yogācāra texts.",
     "sources": [
      {
       "url": "https://plato.stanford.edu/entries/yogacara/",
@@ -413,6 +422,10 @@
      {
       "url": "https://plato.stanford.edu/entries/yogacara/",
       "section": "1.2 The main textual sources and figures of Yogācāra philosophy"
+     },
+     {
+      "url": "https://plato.stanford.edu/entries/abhidharma/",
+      "section": "intro"
      }
     ],
     "key_ideas": [
@@ -468,6 +481,10 @@
    }
   ],
   "sources": [
+   {
+    "url": "https://plato.stanford.edu/entries/abhidharma/",
+    "section": "intro"
+   },
    {
     "url": "https://plato.stanford.edu/entries/buddha/",
     "section": "intro"
@@ -564,9 +581,9 @@
    ]
   },
   "era": "Ancient to medieval (India)",
-  "date_range": "Upaniṣads c. 700–300 BCE; Vedānta school from Śaṅkara (8th century CE) to Rāmānuja (11th–12th century CE); living today",
+  "date_range": "Upaniṣads c. 700–300 BCE; Brahma Sūtra c. 200 BCE–200 CE; Śaṅkara (8th century CE) to Rāmānuja (11th–12th century CE); living today",
   "description": "A Hindu school that reads the Upaniṣads, ancient sacred texts, as one consistent philosophy. Its thinkers ask how the self relates to brahman, ultimate reality. Śaṅkara says they are one and the same. Rāmānuja says the self is real, but part of brahman.",
-  "debatable": "IEP calls Vedānta only 'nominally' a school: it labels any attempt at a consistent reading of the Upaniṣads. The Upaniṣads are centuries older than the school itself. The dualist branch of the later thinker Madhva (c. 1200 CE) is mentioned but has no card.",
+  "debatable": "IEP calls Vedānta only 'nominally' a school: it labels any attempt at a consistent reading of the Upaniṣads. The Upaniṣads are centuries older than the school itself. The 'dualist' branch of the later thinker Madhva (c. 1200 CE), for whom God and the self are not the same, has no card.",
   "questions": [
    {
     "text": "Is my deepest self the same as the reality behind everything?",
@@ -625,7 +642,7 @@
    },
    {
     "title": "Self and ultimate reality",
-    "text": "Brahman means ultimate reality. Some Upaniṣad teachers, such as Śāṇḍilya and Yājñavalkya, say the self is brahman. Others, such as Uddālaka, never use the word. Whether self and brahman are fully identical, or the self is one aspect of brahman, became Vedānta's central debate.",
+    "text": "Brahman means ultimate reality. Some Upaniṣad teachers, such as Śāṇḍilya and Yājñavalkya, say the self is brahman. Others, such as Uddālaka, never use the word. Are self and brahman fully identical, or is the self one aspect of brahman? Indian thinkers kept arguing over this, Vedānta most of all.",
     "thinkers": [
      "Yājñavalkya",
      "Uddālaka Āruṇi"
@@ -639,7 +656,7 @@
    },
    {
     "title": "Karma, rebirth and release",
-    "text": "Karma first meant ritual action. In the Upaniṣads it grows into a law of moral cause and effect: you become good by good action. Later Upaniṣads name saṃsāra, the endless cycle of birth, death and rebirth. They also name mokṣa, release from that cycle, which Vedānta makes the goal.",
+    "text": "Karma first meant ritual action. In the Upaniṣads it starts to stretch beyond ritual, toward moral cause and effect: you become good by good action. Later Upaniṣads name saṃsāra, the endless cycle of birth, death and rebirth. They also name mokṣa, release from that cycle, which Vedānta makes the goal.",
     "thinkers": [
      "Yājñavalkya"
     ],
@@ -706,7 +723,7 @@
    }
   ],
   "reacted_against": {
-   "text": "Ritual and sacrifice as life's highest aim: Vedānta puts knowledge and release first. Its early guide, the Brahma Sūtra, also argued against the dualism of the rival Sāṃkhya school.",
+   "text": "Ritual and sacrifice as life's highest aim: Vedānta puts knowledge and release first. Its early guide, the Brahma Sūtra, is a short explanation of the Upaniṣads' philosophy. It argued against the dualism of the rival Sāṃkhya school, which Śaṅkara also faulted for teaching many separate selves.",
    "sources": [
     {
      "url": "https://iep.utm.edu/upanisad/",
@@ -720,8 +737,8 @@
     "neighbour_name": "Buddhist Philosophy",
     "direction": "in",
     "kind": "pushed_against",
-    "label": "the lasting self denied",
-    "reason": "Buddhists rejected the Upaniṣads' unchanging self and the Vedas' authority; the Vedānta thinker Śaṅkara later rejected Buddhist idealism and emptiness.",
+    "label": "a lasting self, denied and defended",
+    "reason": "Buddhists rejected the unchanging self of the Upaniṣads (late Vedic texts) and the Vedas' authority. The Vedānta thinker Śaṅkara replied by rejecting Buddhist idealism and emptiness.",
     "sources": [
      {
       "url": "https://iep.utm.edu/upanisad/",
@@ -732,6 +749,11 @@
       "url": "https://plato.stanford.edu/entries/buddha/",
       "section": "1. Buddha as Philosopher",
       "quote": "rejected the authority of the Vedas"
+     },
+     {
+      "url": "https://plato.stanford.edu/entries/buddha/",
+      "section": "1. Buddha as Philosopher",
+      "quote": "a stratum of (comparatively late) texts, the Upaniṣads"
      },
      {
       "url": "https://plato.stanford.edu/entries/shankara/",
@@ -785,7 +807,7 @@
       ]
      },
      {
-      "text": "'You are that' (tat tvam asi): the self in you is the same as in all living beings.",
+      "text": "'You are that' (tat tvam asi): the self works in you the same way as in all living beings.",
       "sources": [
        {
         "url": "https://iep.utm.edu/upanisad/",
@@ -795,7 +817,7 @@
      }
     ],
     "study_prompt": {
-     "text": "Teach me Uddālaka Āruṇi as a short Socratic module. Start with the brahmin teacher of the early Upaniṣads who instructs his son Śvetaketu in the Chāndogya Upaniṣad, then the three key ideas: things grow out of one original being, as pots from clay; the self is an unseen essence, like salt in water; 'you are that': the same self is in all living beings. Ask me one question at a time and finish with a five-question quiz.",
+     "text": "Teach me Uddālaka Āruṇi as a short Socratic module. Start with the brahmin teacher of the early Upaniṣads who instructs his son Śvetaketu in the Chāndogya Upaniṣad, then the three key ideas: things grow out of one original being, as pots from clay; the self is an unseen essence, like salt in water; 'you are that': the self works the same way in all living beings. Ask me one question at a time and finish with a five-question quiz.",
      "sources": [
       {
        "url": "https://iep.utm.edu/upanisad/",
@@ -872,7 +894,7 @@
    {
     "name": "Śaṅkara",
     "dates": "8th century CE (exact dates disputed)",
-    "summary": "Śaṅkara is the most authoritative philosopher of Advaita Vedānta. He flourished in the eighth century CE, though scholars dispute the exact dates. He saw himself as one teacher in a long line, a systematiser rather than a founder. He wrote the earliest surviving complete commentaries on the Brahma Sūtra, the Bhagavad Gītā and ten main Upaniṣads.",
+    "summary": "Śaṅkara is the most authoritative philosopher of Advaita Vedānta. He flourished in the eighth century CE, though scholars dispute the exact dates. He saw himself as one teacher in a long line, a systematiser rather than a founder. He wrote the earliest surviving complete commentaries on three core texts. They are the Brahma Sūtra, an early explanation of the Upaniṣads, and the Bhagavad Gītā, which some schools count as an Upaniṣad. The third is ten main Upaniṣads.",
     "sources": [
      {
       "url": "https://plato.stanford.edu/entries/shankara/",
@@ -881,6 +903,14 @@
      {
       "url": "https://plato.stanford.edu/entries/shankara/",
       "section": "1. Life and Works"
+     },
+     {
+      "url": "https://iep.utm.edu/upanisad/",
+      "section": "8. The Upaniṣads and Vedānta"
+     },
+     {
+      "url": "https://plato.stanford.edu/entries/buddha/",
+      "section": "1. Buddha as Philosopher"
      }
     ],
     "key_ideas": [
@@ -1123,7 +1153,7 @@
   "era": "Ancient (classical China)",
   "date_range": "6th–3rd century BCE (Confucius, trad. 551–479 BCE, to Xunzi, died after 238 BCE)",
   "description": "The tradition that grew from Confucius's teaching in ancient China. It holds that ritual, family duty and study shape people into good 'gentlemen'. Rulers should lead by moral example, not force. Mencius and Xunzi later disagreed over whether human nature is good.",
-  "debatable": "SEP avoids the word 'Confucian' because it is not well defined. The Chinese word usually translated 'Confucian', Ru, is older than Confucius and meant experts in ritual and music. Later Neo-Confucianism (Song period, 960–1279) is left out here.",
+  "debatable": "SEP avoids the word 'Confucian' because it is not well defined. The Chinese word usually translated 'Confucian', Ru, is older than Confucius and meant experts in ritual and music. SEP also stresses that what Confucius himself taught is still debated; this node follows the Analects. In 18th-century Europe, reports from Catholic Jesuit missionaries in China made him a sage of reason for Enlightenment writers. IEP counts that image among the myths that remade Confucius. Later Neo-Confucianism (Song period, 960–1279) is left out here.",
   "questions": [
    {
     "text": "Is human nature good, or do we have to be shaped into goodness?",
@@ -1210,7 +1240,7 @@
    },
    {
     "title": "Family first",
-    "text": "Filial piety (xiao) means respect and care for parents and elders. Confucius made it 'the root of a person'. Someone who is filial at home, he thought, rarely turns against superiors. He even said fathers and sons should cover up for each other.",
+    "text": "Filial piety (xiao) means respect and care for parents and elders. The Analects calls it 'the root of a person'. Confucius's disciple Youzi adds that someone filial at home rarely turns against superiors. A ruler boasted of a son who reported his father for stealing a sheep. Confucius replied that among his people, fathers and sons cover for each other.",
     "thinkers": [
      "Confucius"
     ],
@@ -1218,6 +1248,10 @@
      {
       "url": "https://plato.stanford.edu/entries/confucius/",
       "section": "5. The Family and the State"
+     },
+     {
+      "url": "https://plato.stanford.edu/entries/confucius/",
+      "section": "4. Virtues and Character Formation"
      },
      {
       "url": "https://plato.stanford.edu/entries/mencius/",
@@ -1309,26 +1343,6 @@
       "quote": "several passages seem to clearly be directed at him"
      }
     ]
-   },
-   {
-    "neighbour": "enlightenment",
-    "neighbour_name": "The Enlightenment and Kant",
-    "direction": "in",
-    "kind": "built_on",
-    "label": "Confucius as a sage of reason",
-    "reason": "From Jesuit reports, 18th-century European writers such as the philosopher Leibniz praised Confucius's ethics as reasoned and free of Church dogma.",
-    "sources": [
-     {
-      "url": "https://plato.stanford.edu/entries/confucius/",
-      "section": "1. Confucius as Chinese Philosopher and Symbol of Traditional Culture",
-      "quote": "Enlightenment writers celebrated the moral philosophy of Confucius"
-     },
-     {
-      "url": "https://iep.utm.edu/confuci/",
-      "section": "7. The Confucius of Myth",
-      "quote": "Leibniz or Wolff recognized in him an Enlightenment sage"
-     }
-    ]
    }
   ],
   "thinkers": [
@@ -1357,8 +1371,12 @@
       ]
      },
      {
-      "text": "Respect for parents and elders, filial piety, is the root of good character.",
+      "text": "Filial piety means real respect for parents, not just feeding them; it underpins good character and loyalty.",
       "sources": [
+       {
+        "url": "https://plato.stanford.edu/entries/mencius/",
+        "section": "1. Life and Confucian Background"
+       },
        {
         "url": "https://plato.stanford.edu/entries/confucius/",
         "section": "5. The Family and the State"
@@ -1376,7 +1394,7 @@
      }
     ],
     "study_prompt": {
-     "text": "Teach me Confucius as a short Socratic module. Start with 'Master Kong', traditionally dated 551–479 BCE, born in Zou and an office-holder in the state of Lu, then the three key ideas: ritual and music reshape desires; filial piety is the root of good character; learning and reflecting need each other. Ask me one question at a time and finish with a five-question quiz.",
+     "text": "Teach me Confucius as a short Socratic module. Start with 'Master Kong', traditionally dated 551–479 BCE, born in Zou and an office-holder in the state of Lu, then the three key ideas: ritual and music reshape desires; filial piety, real respect for parents, underpins good character and loyalty; learning and reflecting need each other. Ask me one question at a time and finish with a five-question quiz.",
      "sources": [
       {
        "url": "https://plato.stanford.edu/entries/confucius/",
@@ -1404,7 +1422,7 @@
    {
     "name": "Mencius",
     "dates": "4th century BCE (372–289 BCE?)",
-    "summary": "Mencius is a Latin form of Mengzi, 'Master Meng'. He was born about a century after Confucius died, in the state of Zou. He travelled to persuade rulers to govern by benevolence, not brute force, and held office in the state of Qi. He is called the 'Second Sage', second only to Confucius.",
+    "summary": "Mencius is a Latin form of Mengzi, 'Master Meng'. He was born about a century after Confucius died, reportedly in the state of Zou. He travelled to persuade rulers to govern by benevolence, not brute force, and held office in the state of Qi. He is called the 'Second Sage', second only to Confucius.",
     "sources": [
      {
       "url": "https://plato.stanford.edu/entries/mencius/",
@@ -1512,11 +1530,19 @@
       ]
      },
      {
-      "text": "We cannot know Heaven, but we can know the Way; the sages marked it with rituals, like signposts.",
+      "text": "Heaven (tian) is the higher power behind the course of things; the Way (dao) is the right way to live. We cannot know Heaven, but we can know the Way, which the sages marked with rituals like signposts.",
       "sources": [
        {
         "url": "https://plato.stanford.edu/entries/xunzi/",
         "section": "4. The Source of the Rituals: Heaven (tian 天) and the Way (dao 道)"
+       },
+       {
+        "url": "https://plato.stanford.edu/entries/mencius/",
+        "section": "1. Life and Confucian Background"
+       },
+       {
+        "url": "https://iep.utm.edu/xunzi/",
+        "section": "2. The Way and Heaven"
        }
       ]
      }
@@ -1549,6 +1575,10 @@
    }
   ],
   "sources": [
+   {
+    "url": "https://iep.utm.edu/xunzi/",
+    "section": "2. The Way and Heaven"
+   },
    {
     "url": "https://plato.stanford.edu/entries/confucius/",
     "section": "intro"
@@ -1641,9 +1671,9 @@
    ]
   },
   "era": "Ancient (classical China)",
-  "date_range": "5th–3rd century BCE (the Laozi and Zhuangzi texts); revived as 'Neo-Daoism' from the 3rd century CE",
-  "description": "A Chinese tradition built around the Dao, the 'Way' of nature. Its two classic books, the Laozi (also called the Daodejing) and the Zhuangzi, praise effortless action and naturalness. They doubt that human-made labels of good and bad make life better.",
-  "debatable": "The name 'Daoist school' was coined by a historian in the 2nd century BCE, after its classic books were written. 'Daoism' also names a later religion in which Laozi is a god; this node covers the philosophy. Some modern scholars think Laozi never existed.",
+  "date_range": "5th–3rd century BCE (the Laozi and Zhuangzi texts); revived as 'Neo-Daoism' from the 3rd century CE; living today as a religion",
+  "description": "A Chinese tradition built around the Dao, the 'Way' of nature. Its two classic books, the Laozi (also called the Daodejing) and the Zhuangzi, praise wu-wei (effortless action) and naturalness. They doubt that human-made labels of good and bad make life better.",
+  "debatable": "The name 'Daoist school' was coined by a historian in the 2nd century BCE, after its classic books were written. 'Daoism' also names a later religion in which Laozi is a god. This node covers the philosophy. SEP and IEP stress that the two are deeply intertwined, and Daoists themselves rarely split them. Some modern scholars think Laozi never existed.",
   "questions": [
    {
     "text": "What if trying harder is the problem, not the answer?",
@@ -1705,7 +1735,7 @@
    },
    {
     "title": "Effortless action",
-    "text": "Wu-wei is often translated 'non-action', but IEP says scholars generally agree that is wrong. It means acting naturally, without forcing or tampering. Zhuangzi tells of Ding the Butcher, who carves oxen so skilfully that he works by spirit, not by eye.",
+    "text": "Wu-wei (effortless action) is often translated 'non-action', but IEP says scholars generally agree that is wrong. It means acting naturally, without forcing or tampering. Zhuangzi tells of Ding the Butcher, who carves oxen so skilfully that he works by spirit, not by eye.",
     "thinkers": [
      "Laozi",
      "Zhuangzi"
@@ -1745,7 +1775,7 @@
    },
    {
     "title": "Against human-made labels",
-    "text": "The Daodejing says human distinctions, in law, morals and beauty, create our troubles rather than solve them. Daoists saw Confucians as trying to carve people into polished sculptures. Daoists would rather stay like natural, unhewn wood.",
+    "text": "The Daodejing says human distinctions, in law, morals and beauty, create our troubles rather than solve them. IEP sums up the contrast with an image. Daoists want to stay like natural, unhewn wood; Confucians want to be carved and polished. Chapters 8–10 of the Zhuangzi make this criticism openly.",
     "thinkers": [
      "Laozi",
      "Zhuangzi"
@@ -1759,7 +1789,7 @@
    },
    {
     "title": "Many points of view",
-    "text": "Zhuangzi's book is full of short, funny parables. Many ask whether one point of view is really better than another. A giant bird, Peng, and the little birds who laugh at it see the world differently. Zhuangzi admits we cannot be sure that what we fear, such as death, is bad.",
+    "text": "Zhuangzi's book is full of short, funny parables. Many ask whether our own point of view is the only one. Little birds laugh at the giant bird Peng, but their narrow view cannot take in his vast one. Zhuangzi admits we cannot be sure that what we fear, such as death, is bad. Whether he was a relativist, holding all views equal, is debated: SEP says yes, IEP doubts it.",
     "thinkers": [
      "Zhuangzi"
     ],
@@ -1767,6 +1797,10 @@
      {
       "url": "https://plato.stanford.edu/entries/zhuangzi/",
       "section": "intro"
+     },
+     {
+      "url": "https://iep.utm.edu/zhuangzi/",
+      "section": "a. Chapter 1: Xiao Yao You (Wandering Beyond)"
      },
      {
       "url": "https://iep.utm.edu/zhuangzi/",
@@ -1850,7 +1884,7 @@
       ]
      },
      {
-      "text": "The sage acts effortlessly, like a newborn, without plans or society's structures.",
+      "text": "The sage practises wu-wei (effortless action), moving like a newborn, without plans or society's structures.",
       "sources": [
        {
         "url": "https://iep.utm.edu/daoism/",
@@ -1924,7 +1958,7 @@
       ]
      },
      {
-      "text": "He doubted that Mencius's 'sprouts' of virtue could even be told apart from weeds.",
+      "text": "He doubts that 'sprouts' (inborn starts) of virtue can be told apart from weeds. SEP reads the line as aimed at Mencius.",
       "sources": [
        {
         "url": "https://plato.stanford.edu/entries/mencius/",
@@ -1934,7 +1968,7 @@
      }
     ],
     "study_prompt": {
-     "text": "Teach me Zhuangzi as a short Socratic module. Start with 'Master Zhuang', the late fourth-century BCE thinker whom SEP calls the pivotal figure of classical Daoism, then the three key ideas: wander beyond your usual roles and values; we cannot be sure what is really good or bad for us; Mencius's sprouts of virtue cannot be told apart from weeds. Ask me one question at a time and finish with a five-question quiz.",
+     "text": "Teach me Zhuangzi as a short Socratic module. Start with 'Master Zhuang', the late fourth-century BCE thinker whom SEP calls the pivotal figure of classical Daoism, then the three key ideas: wander beyond your usual roles and values; we cannot be sure what is really good or bad for us; his doubt that Mencius's sprouts of virtue can be told apart from weeds. Ask me one question at a time and finish with a five-question quiz.",
      "sources": [
       {
        "url": "https://plato.stanford.edu/entries/zhuangzi/",
@@ -1988,16 +2022,24 @@
       ]
      },
      {
-      "text": "He gave 'principle' (li) its first extended philosophical treatment.",
+      "text": "Later writers credit him with the first extended treatment of 'principle' (li): the basic patterns governing the universe. This li is a different Chinese word from the Confucian li of ritual.",
       "sources": [
        {
         "url": "https://plato.stanford.edu/entries/laozi/",
         "section": "4. Commentaries"
+       },
+       {
+        "url": "https://plato.stanford.edu/entries/daoism/",
+        "section": "intro"
+       },
+       {
+        "url": "https://plato.stanford.edu/entries/xunzi/",
+        "section": "3. Modes of Moral Self-Cultivation: Ritual (li 禮) and Music (yue 樂)"
        }
       ]
      },
      {
-      "text": "Non-action means freedom from the dictates of desire, both in self-cultivation and in government.",
+      "text": "Wu-wei (effortless action) means freedom from the dictates of desire, both in self-cultivation and in government.",
       "sources": [
        {
         "url": "https://plato.stanford.edu/entries/laozi/",
@@ -2007,7 +2049,7 @@
      }
     ],
     "study_prompt": {
-     "text": "Teach me Wang Bi as a short Socratic module. Start with the third-century leader of 'Learning in the Profound' whose version of the Laozi became the standard text, then the three key ideas: the Laozi is about the Dao as the source of being; the first extended treatment of 'principle'; non-action as freedom from the dictates of desire. Ask me one question at a time and finish with a five-question quiz.",
+     "text": "Teach me Wang Bi as a short Socratic module. Start with the third-century leader of 'Learning in the Profound' whose version of the Laozi became the standard text, then the three key ideas: the Laozi is about the Dao as the source of being; what later writers praised as the first extended treatment of principle; wu-wei as freedom from the dictates of desire. Ask me one question at a time and finish with a five-question quiz.",
      "sources": [
       {
        "url": "https://plato.stanford.edu/entries/laozi/",

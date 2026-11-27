@@ -594,7 +594,7 @@
       "India",
       "Nepal"
     ],
-    "span": "5th century BCE – 8th century CE (in India)",
+    "span": "5th century BCE – 11th century CE in India; living today",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/buddha/",
@@ -612,9 +612,19 @@
         "quote": "probably mainly in southern India"
       },
       {
-        "url": "https://plato.stanford.edu/entries/madhyamaka/",
+        "url": "https://plato.stanford.edu/entries/yogacara/",
+        "section": "1.2 The main textual sources and figures of Yogācāra philosophy",
+        "quote": "Jñānaśrīmitra (c. 11th century CE)"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/nagarjuna/",
         "section": "intro",
-        "quote": "the Madhyamaka school in India from the fifth through the eighth centuries"
+        "quote": "the official philosophical position of Tibetan Buddhism"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/nagarjuna/",
+        "section": "intro",
+        "quote": "up to the present day"
       }
     ]
   },
@@ -655,7 +665,7 @@
     "places": [
       "China (Shandong)"
     ],
-    "span": "6th–3rd century BCE",
+    "span": "6th–3rd century BCE (classical period); still influential today",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/confucius/",
@@ -676,6 +686,16 @@
         "url": "https://plato.stanford.edu/entries/xunzi/",
         "section": "intro",
         "quote": "(third century BCE) was a Confucian philosopher"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/mencius/",
+        "section": "5. Later Influence and Interpretations",
+        "quote": "continue to have an immense influence, even today"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/mencius/",
+        "section": "5. Later Influence and Interpretations",
+        "quote": "the movement known as New Confucianism"
       }
     ]
   },
@@ -683,7 +703,7 @@
     "places": [
       "China"
     ],
-    "span": "5th–3rd century BCE",
+    "span": "5th–3rd century BCE; Neo-Daoism from the 3rd century CE; living today as a religion",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/laozi/",
@@ -699,6 +719,21 @@
         "url": "https://iep.utm.edu/daoism/",
         "section": "2. Classical Sources for Our Understanding of Daoism",
         "quote": "the Daodejing or Laozi (3rd Cn. B.C.E.) and the Zhuangzi (4th-3rd Cn. B.C.E.)"
+      },
+      {
+        "url": "https://iep.utm.edu/daoism/",
+        "section": "11. Neo-Daoism",
+        "quote": "The resurgence of Daoism after the Han dynasty is often known as Neo-Daoism"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/laozi/",
+        "section": "4. Commentaries",
+        "quote": "Wang Bi (226–249) was one of the acknowledged leaders"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/laozi/",
+        "section": "1. The Laozi Story",
+        "quote": "Today, Laozi’s “birthday” is celebrated in many parts of Asia"
       }
     ]
   }

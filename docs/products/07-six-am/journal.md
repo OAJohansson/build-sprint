@@ -908,3 +908,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Slice 4 built (cfbc6ae): Mine / Original switch through the Deck, Deck-closed state, strip summary, bar ↔ ms on the map's exact grid; 652 tests. The landing measure includes play before the Deck's first report, so W10 can't be judged yet: engineer adds a report on seek landing first.
 - Slice 4 landing report (6b0950f, T262): builder measures 0–15 ms landing, 10/10 at both sizes. Graders on slices 3 polish + 4.
 - Critic on slice 4 + slice 3 polish: 9/10; small removals and copy, waiting for the other graders.
+- Slice 4 user test: compare 5, Deck closed 5, whole section 5, way in 4 (W14 met). Small findings U7-26..29 for the final polish round.

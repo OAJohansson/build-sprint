@@ -372,8 +372,13 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | U7-21 | minor | "Rebuild this song" link hard to find (critic agrees) | fixed (0465af1) |
 | U7-22 | minor | Measured-empty vs unmeasured vs empty slots look the same | fixed (0465af1) |
 | U7-23 | polish | Bar ranges drop on narrow sections | fixed (0465af1) |
-| U7-24 | polish | Empty strip band after the first fill | open: slice 4 (the strip's Mine / Original line) |
+| U7-24 | polish | Empty strip band after the first fill | fixed (6b0950f) |
 | U7-25 | polish | Part names cut | fixed (0465af1) |
 | D7-17 | minor | After a reload, untouched steps follow the new reading, so an edited loop can play hits the owner never heard (kick 27 → 30) | fixed (72e06b8); re-check with slice 4 |
 | D7-18 | check | Rebuild hints only graded on the seed's idealised curves; check on a real map | open: final review |
+| CR4-1 | minor | Critic slice 4 9/10: measured-empty cells read as black blocks; ruler "Rebuild this song →" reads as an outro note; transport nudges with the bar label width; "Playing the original" too dim; Deck says "for the Lab"; strip "key G" | open: final polish |
+| U7-26 | minor | Studio Play shows ▶ while the original plays | open: final polish |
+| U7-27 | minor | Empty-lane Make link doesn't carry the section's bars | open: final polish |
+| U7-28 | polish | Ruler link hides Outro's bar number | open: final polish (link removed, CR4-1) |
+| U7-29 | polish | No way to start the rebuild from an arbitrary bar | open: final polish |
 

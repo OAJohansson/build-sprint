@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "positions": "node scripts/embed-positions.mjs",
-    "content": "node scripts/import-content.mjs"
+    "content": "node scripts/import-content.mjs",
+    "places": "node scripts/import-places.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

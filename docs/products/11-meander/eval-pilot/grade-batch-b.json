@@ -1,0 +1,189 @@
+[
+  {
+    "item": "origins.p0",
+    "claims": [
+      {"claim": "Hints of an 'existential attitude' go back to the Stoics, Augustine, Montaigne and Pascal.", "verdict": "supported", "evidence": "sep-existentialism.txt [1. Nihilism...]: 'early glimpses of ... the \"existential attitude\"' in Stoic, Augustine, Montaigne, Pascal"},
+      {"claim": "The ideas became a movement only in the nineteenth century.", "verdict": "supported", "evidence": "sep-existentialism.txt [1. Nihilism...]: 'not until the nineteenth century ... coalesce into a bona fide intellectual movement'"},
+      {"claim": "This happened as a secular, scientific world view replaced the religious frame that gave life direction.", "verdict": "supported", "evidence": "sep-existentialism.txt [1. Nihilism...]: 'secular and scientific worldview ... traditional religious framework ... beginning to collapse'"},
+      {"claim": "Industry and bureaucracy made society feel impersonal.", "verdict": "supported", "evidence": "sep-existentialism.txt [1. Nihilism...]: 'mechanized working conditions and bureaucratic ... increasingly impersonal and alienating social order'"},
+      {"claim": "Kierkegaard attacked Hegel's grand system for leaving out the single existing person.", "verdict": "supported", "evidence": "sep-existentialism.txt [2.1 Subjective Truth]: Hegel's system 'covers over ... concerns of the existing individual'"},
+      {"claim": "Nietzsche diagnosed the coming nihilism.", "verdict": "supported", "evidence": "sep-existentialism.txt [1. Nihilism...]: Nietzsche 'most influential and prophetic in diagnosing and conceptualizing the crisis'"},
+      {"claim": "Dostoevsky's 'underground man' rebels against being reduced to 'a piano key'.", "verdict": "supported", "evidence": "sep-existentialism.txt [4.1 The Anxiety of Choice]: underground man rebels; view 'reduces the human being to ... \"a piano key\"'"}
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "origins.p1",
+    "claims": [
+      {"claim": "In the twentieth century German thinkers such as Husserl, Jaspers and Heidegger laid more groundwork.", "verdict": "supported", "evidence": "sep-existentialism.txt [intro]: groundwork laid by 'twentieth-century German philosophers like Edmund Husserl, Martin Heidegger, and Karl Jaspers'"},
+      {"claim": "Phenomenology, the careful description of everyday experience, gave the movement its roots.", "verdict": "supported", "evidence": "openstax [Existentialism]: 'Existentialism's phenomenological roots'; sep-existentialism [2.3]: 'describe how things are given ... in our average everyday lives'"},
+      {"claim": "Heidegger's Being and Time (1927) shaped Sartre and Beauvoir.", "verdict": "supported", "evidence": "sep-heidegger.txt [intro]: 'Being and Time (1927) ... profoundly influenced ... Sartre's existentialism, Simone de Beauvoir's feminism'"},
+      {"claim": "The movement exploded in mid-century France against the backdrop of WWII, the death camps and the atomic bomb.", "verdict": "supported", "evidence": "sep-existentialism.txt [intro]: 'exploded on the scene in mid-twentieth-century France ... Second World War, the Nazi death camps'"},
+      {"claim": "Sartre's Being and Nothingness appeared in 1943.", "verdict": "supported", "evidence": "sep-sartre.txt [intro]: 'his difficult treatise, Being and Nothingness (1943)'"},
+      {"claim": "Gabriel Marcel coined the word 'existentialism' in 1943.", "verdict": "supported", "evidence": "sep-existentialism.txt [intro]: 'The word, first introduced by Marcel in 1943'"}
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "origins.p2",
+    "claims": [
+      {"claim": "Who counts as an existentialist is disputed.", "verdict": "supported", "evidence": "iep-existentialism.txt [intro]: 'catch-all term ... a case to be made that the term ... does more harm than good'"},
+      {"claim": "The term names no single doctrine.", "verdict": "supported", "evidence": "sep-existentialism.txt [intro]: 'not a reference to a coherent system ... no unifying doctrine'"},
+      {"claim": "Most thinkers grouped under it never used it or rejected it.", "verdict": "supported", "evidence": "iep-existentialism.txt [intro]: 'most ... either never used, or actively disavowed, the term'"},
+      {"claim": "Only Sartre and Beauvoir openly claimed it.", "verdict": "supported", "evidence": "sep-existentialism.txt [intro]: 'only Sartre and Beauvoir explicitly self-identified as \"existentialists\"'", "note": "IEP intro also quotes Sartre: 'Existentialism? I don't know what that is.' Not a contradiction, but a curious learner may notice."},
+      {"claim": "Heidegger repudiated Sartre's existentialism in his 'Letter on Humanism' (1947).", "verdict": "supported", "evidence": "iep-existentialism.txt [c. Heidegger]: 'Letter on Humanism' published 1947; 'repudiates any possible connection ... with the existentialism of Sartre'"},
+      {"claim": "Both encyclopedias still count Heidegger among its key figures.", "verdict": "supported", "evidence": "iep [c. Heidegger]: 'Heidegger can be classified as an existentialist thinker'; sep-existentialism [intro]: Heidegger among groundwork 'pioneers'", "note": "SEP's cited intro frames him as a groundwork pioneer rather than a member; 'key figures' is a fair paraphrase."},
+      {"claim": "Camus gave a 1945 interview titled, in English, 'No, I am not an existentialist'.", "verdict": "supported", "evidence": "iep-existentialism.txt [f. Camus]: '\"Non, je ne suis pas existentialist\" is the title of a famous interview ... 1945'"},
+      {"claim": "The SEP places The Myth of Sisyphus squarely in the existentialist tradition.", "verdict": "supported", "evidence": "sep-camus.txt [1. The Paradoxes...]: 'This essay belongs squarely in the philosophical tradition of existentialism'"}
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "key-works.w0",
+    "claims": [
+      {"claim": "Fear and Trembling is by Soren Kierkegaard.", "verdict": "supported", "evidence": "sep-existentialism.txt [5.2]: 'In Fear and Trembling, Kierkegaard draws on ... Abraham'"},
+      {"claim": "It was published in 1843.", "verdict": "supported", "evidence": "sep-kierkegaard.txt [1. Life and Works]: 'Fear and Trembling (1843)'"},
+      {"claim": "It uses Abraham's near-sacrifice of Isaac to ask what faith demands beyond ethics.", "verdict": "supported", "evidence": "sep-existentialism.txt [5.2]: God demands he 'kill Isaac'; 'personal truth that is higher than the universal'", "note": "The source frames it as Abraham's willingness/decision; it never says the sacrifice was not carried out. 'Near-' is the standard description and harmless."}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "key-works.w1",
+    "claims": [
+      {"claim": "The Gay Science is by Friedrich Nietzsche.", "verdict": "supported", "evidence": "sep-nietzsche.txt [1. Life and Works]: 'The Gay Science (1882, second expanded edition 1887)'"},
+      {"claim": "It was published in 1882.", "verdict": "supported", "evidence": "sep-nietzsche.txt [1. Life and Works]: 'The Gay Science (1882 ...)'", "note": "Learner flag: SEP existentialism 5.3 cites the eternal-recurrence passage as '1887 [1974], §341' (the expanded edition). A learner may see 1882 vs 1887 without explanation."},
+      {"claim": "It poses the eternal-recurrence test: could you will your life again, forever?", "verdict": "supported", "evidence": "sep-existentialism.txt [5.3]: 'In The Gay Science ... \"doctrine of eternal recurrence\" ... live the same life ... for eternity'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "key-works.w2",
+    "claims": [
+      {"claim": "Being and Time is by Martin Heidegger, 1927.", "verdict": "supported", "evidence": "sep-heidegger.txt [intro]: 'His magnum opus, Being and Time (1927)'"},
+      {"claim": "It treats human existence as being-in-the-world.", "verdict": "supported", "evidence": "sep-existentialism.txt [2.3]: 'In Being and Time, Heidegger ... existence or \"being-in-the-world\"'"},
+      {"claim": "Human existence is lost in 'the They' until anxiety calls it back.", "verdict": "supported", "evidence": "sep-existentialism.txt [5.4]: anxiety 'momentarily \"snatches one back\" from the tranquilizing routines of \"the They\"'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "key-works.w3",
+    "claims": [
+      {"claim": "The Myth of Sisyphus is by Albert Camus.", "verdict": "supported", "evidence": "sep-camus.txt [intro]: Camus's question 'which launches The Myth of Sisyphus'"},
+      {"claim": "It was published in 1942.", "verdict": "supported", "evidence": "sep-camus.txt [3. Suicide...]: 'released The Stranger in June 1942 and The Myth of Sisyphus in October'"},
+      {"claim": "It asks whether life is worth living.", "verdict": "supported", "evidence": "sep-camus.txt [intro]: 'only one really serious philosophical question, and that is suicide'", "note": "'Worth living' wording appears verbatim only in iep-existentialism [f. Camus] (not cited); the suicide question clearly entails it."},
+      {"claim": "It does so through Sisyphus forever pushing his rock.", "verdict": "supported", "evidence": "sep-camus.txt [intro]: 'Sisyphus endlessly pushing his rock up the mountain'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "key-works.w4",
+    "claims": [
+      {"claim": "Being and Nothingness is by Jean-Paul Sartre, 1943.", "verdict": "supported", "evidence": "sep-sartre.txt [4.1 Negation and Freedom]: 'Being and Nothingness (1943) remains the defining treatise'"},
+      {"claim": "It is the movement's defining treatise.", "verdict": "supported", "evidence": "sep-sartre.txt [4.1]: 'the defining treatise of the existentialist \"movement\"'", "note": "SEP adds 'along with works from de Beauvoir'; acceptable compression."},
+      {"claim": "It covers radical freedom.", "verdict": "supported", "evidence": "sep-sartre.txt [4.1]: 'this quite radical philosophy of freedom'"},
+      {"claim": "It covers bad faith.", "verdict": "supported", "evidence": "sep-sartre.txt [4.2]: 'the chapter on bad faith in Being and Nothingness'"},
+      {"claim": "It covers the look.", "verdict": "supported", "evidence": "sep-sartre.txt [4.3]: 'his writings on the Look of the Other'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "key-works.w5",
+    "claims": [
+      {"claim": "Existentialism Is a Humanism is by Jean-Paul Sartre.", "verdict": "supported", "evidence": "sep-sartre.txt [intro]: 'his public lecture, Existentialism is a Humanism'"},
+      {"claim": "Its year is 1945; it was a 1945 Paris lecture.", "verdict": "supported", "evidence": "sep-sartre.txt [intro]: 'Many thousands of Parisians packed into ... towards the end of 1945'", "note": "Learner flag: the same SEP entry ([1. Life and Works]) dates the written text 'completing Existentialism is a Humanism (1946)'. The note says 'lecture', which explains 1945, so not a fail."},
+      {"claim": "The lecture was packed.", "verdict": "supported", "evidence": "sep-sartre.txt [intro]: 'Many thousands of Parisians packed into his public lecture'"},
+      {"claim": "It is an accessible version of Being and Nothingness.", "verdict": "supported", "evidence": "sep-sartre.txt [intro]: 'offered an accessible version of his difficult treatise, Being and Nothingness'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "key-works.w6",
+    "claims": [
+      {"claim": "The Second Sex is by Simone de Beauvoir, 1949.", "verdict": "supported", "evidence": "iep-existentialism.txt [e. Beauvoir]: 'In 1949 Le Deuxième Sexe is published in France'"},
+      {"claim": "It shows how women are made man's 'Other'.", "verdict": "supported", "evidence": "iep-existentialism.txt [e. Beauvoir]: 'tradition has always thought of woman as the other of man'"},
+      {"claim": "It is a founding text of second-wave feminism.", "verdict": "supported", "evidence": "iep-existentialism.txt [e. Beauvoir]: 'later a founding text of Second Wave Feminism'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "criticisms.p0",
+    "claims": [
+      {"claim": "In Germany, Adorno's The Jargon of Authenticity called existentialism, and Heidegger above all, obscure, abstract and even mystical.", "verdict": "supported", "evidence": "iep-existentialism.txt [b. Philosophy]: '(and especially Heidegger) ... obscure, abstract or even mystical ... especially by Adorno'"},
+      {"claim": "Many analytic philosophers agreed.", "verdict": "supported", "evidence": "iep-existentialism.txt [b. Philosophy]: 'The criticism was echoed by many in the analytic tradition'"},
+      {"claim": "After Marxist criticism in the 1940s and 1950s, Sartre decided his early radical freedom was too abstract.", "verdict": "supported", "evidence": "sep-existentialism.txt [4.2 Mediated Freedom]: 'in the wake of Marxist criticism in the 1940s and 1950s ... far too abstract'"},
+      {"claim": "It ignored the social conditions that limit real choices.", "verdict": "supported", "evidence": "sep-existentialism.txt [4.2]: 'failed to engage the social, historical, and material conditions that ... limit'"},
+      {"claim": "Merleau-Ponty objected that no one is free in isolation from others and history.", "verdict": "supported", "evidence": "iep-existentialism.txt [e. Beauvoir]: 'One cannot assume freedom in isolation from the freedom of others ... historical context'"},
+      {"claim": "Later, French structuralists faulted Sartre for neglecting language and impersonal structures of meaning.", "verdict": "supported", "evidence": "iep-existentialism.txt [b. Philosophy]: 'insufficient attention to the nature of language and to impersonal structures of meaning'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "criticisms.p1",
+    "claims": [
+      {"claim": "Existentialists were accused of neglecting social and political structures, with dangerous results.", "verdict": "supported", "evidence": "iep-existentialism.txt [b. Philosophy]: 'insufficient attention to social and political structures or values, with dangerous results'"},
+      {"claim": "Heidegger remains notorious for his involvement with National Socialism.", "verdict": "supported", "evidence": "iep-existentialism.txt [c. Heidegger]: 'remains notorious for his involvement with National Socialism in the 1930s'"},
+      {"claim": "Nietzsche's ideal of the self-creating individual is openly elitist and anti-democratic.", "verdict": "supported", "evidence": "sep-existentialism.txt [5.3]: 'his account of authenticity is unapologetically elitist and anti-democratic'", "note": "SEP states this descriptively, not as a criticism; placing it under 'criticisms' is a mild framing choice, acceptable."},
+      {"claim": "Nazi ideologues exploited his work, in a way the IEP calls 'utterly misdirected'.", "verdict": "supported", "evidence": "iep-existentialism.txt [b. Nietzsche]: 'exploitation of his teaching by the Nazi ideologues ... although utterly misdirected'", "note": "IEP adds it 'arguably had its source in Nietzsche's own \"aristocratic radicalism\"'; omission is not misleading."},
+      {"claim": "Camus accused Kierkegaard, Jaspers and Heidegger of escaping into 'forced hope'.", "verdict": "supported", "evidence": "sep-camus.txt [3.3]: against 'Shestov, Kierkegaard, Jaspers, and Heidegger ... That forced hope is religious in all of them'"},
+      {"claim": "Some argue the label does more harm than good, lumping very different ideas together.", "verdict": "supported", "evidence": "iep-existentialism.txt [intro]: 'conflate together significantly different ideas – does more harm than good'"}
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "legacy.p0",
+    "claims": [
+      {"claim": "Existentialism reached into films by Bergman and Godard.", "verdict": "supported", "evidence": "sep-existentialism.txt [intro]: 'films by Ingmar Bergman ... Jean-Luc Godard'"},
+      {"claim": "It reached the theatre of the absurd and Beckett.", "verdict": "supported", "evidence": "iep-existentialism.txt [a. The Arts and Psychology]: 'the theatre of the absurd and most obviously Beckett were influenced'"},
+      {"claim": "It reached painting from Munch to Hopper.", "verdict": "supported", "evidence": "sep-existentialism.txt [intro]: 'paintings of Edvard Munch ... and Edward Hopper'"},
+      {"claim": "Its stress on freedom fed the politics of Martin Luther King Jr. and Malcolm X.", "verdict": "supported", "evidence": "sep-existentialism.txt [intro]: 'emphasis on freedom ... informed the ... politics of Martin Luther King Jr. and Malcolm X'"},
+      {"claim": "It fed the writing of Richard Wright and Ralph Ellison.", "verdict": "supported", "evidence": "sep-existentialism.txt [intro]: 'writings of Black intellectuals such as Ralph Ellison, Richard Wright'"},
+      {"claim": "Beauvoir laid foundations for second-wave feminism.", "verdict": "supported", "evidence": "sep-existentialism.txt [7.4]: 'laying the conceptual foundations for second wave feminism'"},
+      {"claim": "Fanon's Black Skin, White Masks drew on Beauvoir, Sartre and Merleau-Ponty.", "verdict": "supported", "evidence": "sep-existentialism.txt [7.4]: 'Together with Sartre and Merleau-Ponty, her ideas would inform Franz Fanon's Black Skin'"},
+      {"claim": "It inspired existential psychotherapy, from Viktor Frankl to Rollo May and Irvin Yalom.", "verdict": "supported", "evidence": "sep-existentialism.txt [intro]: 'existential approaches to psychotherapy ... Rollo May, Viktor Frankl, and Irvin Yalom'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "legacy.p1",
+    "claims": [
+      {"claim": "The IEP judges the movement as a whole has had relatively little direct influence in academic philosophy.", "verdict": "supported", "evidence": "iep-existentialism.txt [b. Philosophy]: 'existentialism has had relatively little direct influence within philosophy'"},
+      {"claim": "Nietzsche and Heidegger remain very much alive there.", "verdict": "supported", "evidence": "iep-existentialism.txt [b. Philosophy]: 'Nietzsche and Heidegger in particular are very much \"live\" topics'"},
+      {"claim": "The SEP sees it thriving.", "verdict": "supported", "evidence": "sep-existentialism.txt [7. Contemporary Relevance]: 'the movement continues to thrive in the academy today'"},
+      {"claim": "It shaped Foucault and Derrida.", "verdict": "supported", "evidence": "sep-existentialism.txt [7.1]: Nietzsche and Heidegger 'decisive influences' on Derrida and Foucault"},
+      {"claim": "It shaped theories of the self as a life story.", "verdict": "supported", "evidence": "sep-existentialism.txt [7.2]: 'informed key developments in narrative ... philosophy ... grasp our lives in a narrative'"},
+      {"claim": "It shaped cognitive science's picture of the embodied mind.", "verdict": "supported", "evidence": "sep-existentialism.txt [7.3]: 'replaced the picture of the disembodied mind with ... embodied self'"},
+      {"claim": "It made emotion a serious subject.", "verdict": "supported", "evidence": "iep-existentialism.txt [b. Philosophy]: importance placed on emotion, 'legitimising a whole domain of philosophical research'"},
+      {"claim": "It made topics like death and illness serious subjects.", "verdict": "drift", "evidence": "iep [b. Philosophy]: philosophy 'should deal very directly with \"real world\" topics such as sex, death or crime'; sep [7.6] on health professions", "note": "Overstated: the sources say existentialism made philosophy treat death directly rather than abstractly, not that it made death a serious subject (death was a central philosophical topic long before). 'Illness' comes from SEP 7.6, which is about influence on clinical and allied health practice, not philosophy taking up illness."},
+      {"claim": "Its courses remain among philosophy's most popular.", "verdict": "supported", "evidence": "sep-existentialism.txt [7.7]: 'Existentialist-themed courses are often among the most popular in the philosophy curriculum'"}
+    ],
+    "quote_ok": true,
+    "item_verdict": "fail",
+    "fix_hint": "Replace 'It made emotion, and topics like death and illness, serious subjects' with something like 'It gave emotion a place in serious research, and insisted philosophy deal directly with real-life topics like death; its first-person view of illness has also shaped medicine and nursing.'"
+  },
+  {
+    "item": "study_prompt",
+    "claims": [
+      {"claim": "Existentialism is a loose movement that begins from concrete human existence.", "verdict": "supported", "evidence": "sep-existentialism.txt [intro]: 'not ... a coherent system'; 'begins in medias res, amidst our own situated, first-person experience'"},
+      {"claim": "It is rooted in Kierkegaard and Nietzsche.", "verdict": "supported", "evidence": "sep-existentialism.txt [intro]: 'groundwork ... laid much earlier ... by pioneers like Søren Kierkegaard and Friedrich Nietzsche'"},
+      {"claim": "It was made famous by Sartre and Beauvoir in mid-20th-century France.", "verdict": "supported", "evidence": "sep-existentialism.txt [intro]: 'most popular voices of this movement were French, most notably ... Sartre and ... Beauvoir'"},
+      {"claim": "The six themes named are the pilot's six themes.", "verdict": "supported", "evidence": "pilot themes[]: existence before essence; freedom and anxiety; authenticity...; meaning without guarantees; my freedom needs yours; faith and the leap", "note": "Prompt says 'authenticity and bad faith' where the theme is titled 'Authenticity versus the crowd'; the theme body covers bad faith, so coverage holds. Consider matching the title."},
+      {"claim": "Camus rejected the existentialist label.", "verdict": "supported", "evidence": "sep-camus.txt [1. The Paradoxes...]: 'Camus denied being an existentialist'"},
+      {"claim": "Heidegger rejected the existentialist label.", "verdict": "supported", "evidence": "iep-existentialism.txt [c. Heidegger]: 'given Heidegger's own repudiation of existentialism'", "note": "Heidegger is not in the pilot's thinkers list but is covered in origins, key works and criticisms, so naming him stays within the pilot."}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  }
+]

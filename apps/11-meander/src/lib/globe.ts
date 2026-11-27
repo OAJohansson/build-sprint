@@ -67,11 +67,15 @@ export function emptiest(vs: Vec3[]): Vec3 {
 
 // Costs, highest first (handoff "Where a label sits"). With 23 real schools the field is denser than the
 // mockups, so the steps are far apart: a label never overlaps another label, the title, the card, the header
-// or the screen edge if any other place exists; then it avoids covering a dot; then poking past the rim
-// (critic: flip it to the inner side of its dot); then sitting nearer another school's dot; then threads.
+// or the screen edge if any other place exists; then it avoids covering a dot; then poking past the rim. The
+// rim is near-hard (#31): its cost is charged once and sits above any sum of the soft costs below (sitting
+// nearer another school's dot, a far ring, threads), so a label goes outside only when every place inside
+// overlaps something or covers a dot. A name sitting further from its own dot is the accepted price.
 const OVERLAP = 100000;
-const COVER_DOT = 20000;
-const RIM_COST = 8000;
+const COVER_DOT = 60000;
+const RIM_COST = 30000;
+/** Per px past the rim, so a label that has to go outside goes out as little as possible. */
+const RIM_PX = 20;
 const NEARER_DOT = 2500;
 const NEARER_BRIGHT = 9000;
 // Per thread sample under a label (× 14 for a thread from the focus). Lower than the design's 7: threads behind
@@ -123,7 +127,8 @@ export function placeLabels(
         // two schools one thread away (dot radius 6) must not seem to swap names (critic (b))
         else if (dm < g + 10) cost += n.r >= 6 && m.r >= 6 ? NEARER_BRIGHT : NEARER_DOT;
       }
-      for (const k of [[x, y], [x + w, y], [x, y + h], [x + w, y + h]]) if (Math.hypot(k[0] - C[0], k[1] - C[1]) > radius - 4) cost += RIM_COST;
+      const past = Math.max(...[[x, y], [x + w, y], [x, y + h], [x + w, y + h]].map((k) => Math.hypot(k[0] - C[0], k[1] - C[1]))) - (radius - 4);
+      if (past > 0) cost += RIM_COST + RIM_PX * past;
       if (x < 8 || y < 8 || x + w > W - 8 || y + h > H - 8) cost += OVERLAP;
       for (const q of pts) if (q[0] > x - 3 && q[0] < x + w + 3 && q[1] > y - 3 && q[1] < y + h + 3) cost += THREAD * q[2];
       return {

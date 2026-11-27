@@ -1,0 +1,552 @@
+[
+  {
+    "school": "presocratics",
+    "claim": "place: Turkey (Ionia)",
+    "verdict": "supported",
+    "note": "SEP presocratics: 'Thales of Miletus (a city in Ionia, on the west coast of what is now Turkey)'. Quote verbatim."
+  },
+  {
+    "school": "presocratics",
+    "claim": "place: Italy",
+    "verdict": "supported",
+    "note": "SEP: Parmenides 'born ca. 510 BCE in the Greek colony of Elea in southern Italy'; page also puts Pythagoras in Croton, southern Italy."
+  },
+  {
+    "school": "presocratics",
+    "claim": "span start: 6th century BCE",
+    "verdict": "supported",
+    "note": "Intro: 'The Presocratics were 6th and 5th century BCE Greek thinkers' (verbatim once superscript spacing is ignored)."
+  },
+  {
+    "school": "presocratics",
+    "claim": "span end: 5th century BCE",
+    "verdict": "supported",
+    "note": "Same intro sentence."
+  },
+  {
+    "school": "socrates-plato",
+    "claim": "place: Athens",
+    "verdict": "supported",
+    "note": "Socrates tried by 'the Athenian democracy'; Plato's Academy in Athens (Aristotle entry). Both verbatim."
+  },
+  {
+    "school": "socrates-plato",
+    "claim": "span start: 469 BCE",
+    "verdict": "drift",
+    "note": "469 is Socrates' birth year ('in his lifetime (469–399 B.C.E.)'), used as the school's start. Fine for a school named after two men, but it reads as 'philosophy began in 469'.",
+    "fix": "Label it as lifetimes, e.g. 'WHEN: 469–347 BCE (lives of Socrates and Plato)', or use 'late 5th–mid 4th century BCE'; same two quotes support either."
+  },
+  {
+    "school": "socrates-plato",
+    "claim": "span end: 347 BCE",
+    "verdict": "supported",
+    "note": "Plato entry: 'Plato (429?–347 B.C.E.)'. Death of the second of the two named men is a fair end for this school-as-two-people."
+  },
+  {
+    "school": "aristotle",
+    "claim": "place: Athens",
+    "verdict": "supported",
+    "note": "SEP Aristotle: 'In Athens, Aristotle set up his own school ... the Lyceum'."
+  },
+  {
+    "school": "aristotle",
+    "claim": "span start: 335 BCE",
+    "verdict": "supported",
+    "note": "'before returning to Athens for the second and final time, in 335. In Athens, Aristotle set up his own school' - founding of the Lyceum."
+  },
+  {
+    "school": "aristotle",
+    "claim": "span end: 322 BCE",
+    "verdict": "drift",
+    "note": "322 is Aristotle's death (intro '384–322'); he had already left Athens in 323. The school is 'Aristotle and the Peripatetics', and the page says 'Those affiliated with Aristotle's school later came to be called Peripatetics' - the school outlived him. MISLEADING: one man's tenure stands in for a whole school.",
+    "fix": "'WHEN: from 335 BCE (Lyceum founded)' and, if an end is wanted, say 'Aristotle taught there until 323 BCE' (same section: 'After thirteen years in Athens, Aristotle once again found cause to retire from the city, in 323'). An end date for the Peripatetic school needs another source."
+  },
+  {
+    "school": "epicureanism",
+    "claim": "place: Athens",
+    "verdict": "supported",
+    "note": "SEP Epicurus: 'In Athens, he purchased the property that became known as the “Garden” (later used as a name for his school itself)'."
+  },
+  {
+    "school": "epicureanism",
+    "claim": "place: Italy",
+    "verdict": "supported",
+    "note": "SEP Philodemus: 'moved to Italy, probably in the 70s BCE ... may have lived in the Greek town of Naples'; Epicurus entry adds the Herculaneum library and Lucretius."
+  },
+  {
+    "school": "epicureanism",
+    "claim": "span start: 307/6 BCE",
+    "verdict": "supported",
+    "note": "'returning again to Athens in 307/06 ... purchased the property ... and began to develop his own school in earnest'."
+  },
+  {
+    "school": "epicureanism",
+    "claim": "span end: c. 30 BCE",
+    "verdict": "drift",
+    "note": "c. 30 BCE is Philodemus' death date ('ca. 110–ca. 30 BCE'). Nothing in the sources says the school ended then. MISLEADING: one man's death closes a tradition; a newcomer will read 'Epicureanism ended in 30 BCE'.",
+    "fix": "'WHEN: 307/6 BCE onward (still active in the 1st century BCE with Philodemus and Lucretius)'. Epicurus entry: 'More or less contemporary with Philodemus is Lucretius (first century B.C.E.)'. A real end date needs another source."
+  },
+  {
+    "school": "stoicism",
+    "claim": "place: Athens",
+    "verdict": "supported",
+    "note": "Intro: name from 'the porch (stoa poikilê) in the Agora at Athens ... where the first generation of Stoic philosophers congregated and lectured'."
+  },
+  {
+    "school": "stoicism",
+    "claim": "place: Rome",
+    "verdict": "drift",
+    "note": "Rome is right per the page, but the cited quote is about Cicero, whom the same sentence calls 'never identifying as a Stoic himself', and 'popularize it at Rome' means philosophy in general. (Quote verbatim; the page has a space before the comma after 'Cicero'.)",
+    "fix": "Cite 'Stoicism became particularly fashionable in the Roman period', or 'Epictetus, a former slave, was expelled from Rome by Domitian along with other philosophers in 93 CE' (same section)."
+  },
+  {
+    "school": "stoicism",
+    "claim": "span start: c. 300 BCE",
+    "verdict": "supported",
+    "note": "'The Stoic school was founded around 300 BCE by Zeno of Citium'."
+  },
+  {
+    "school": "stoicism",
+    "claim": "span end: 180 CE",
+    "verdict": "drift",
+    "note": "180 CE is the end of Marcus Aurelius' reign. The very next sentences name Hierocles, also 2nd century CE, and 'this remarkable span of time during which the Stoic school operated'; the intro says it 'enjoyed continued popularity in the Roman period and beyond'. MISLEADING: one emperor's reign ends a school.",
+    "fix": "'WHEN: c. 300 BCE–2nd century CE' (Hierocles: 'Also active in the second century CE'), or 'c. 300 BCE–Roman imperial era'."
+  },
+  {
+    "school": "skepticism",
+    "claim": "place: Athens",
+    "verdict": "supported",
+    "note": "The Academy was in Athens: 'In Athens, and as head of the Academy, he [Philo] stays relatively close to Carneades'. Arcesilaus and Carneades worked there too."
+  },
+  {
+    "school": "skepticism",
+    "claim": "place: Rome",
+    "verdict": "unsupported",
+    "note": "The only Rome quote is about Philo of Larissa moving to Rome, where 'he develops a markedly different position'; the page says just before it that 'With Philo, the skeptical era of Plato's Academy comes to an end'. So the quote ties Rome to the end of skepticism, not to its growth. No cited text puts the Pyrrhonists in Rome.",
+    "fix": "Replace with 'Greece (Athens, Elis)': the same page names 'Pyrrho of Elis'. Or keep only 'Athens'."
+  },
+  {
+    "school": "skepticism",
+    "claim": "span start: 3rd century BCE",
+    "verdict": "supported",
+    "note": "Intro: 'The Academic and Pyrrhonian skeptical movements begin roughly in the third century BCE'."
+  },
+  {
+    "school": "skepticism",
+    "claim": "span end: 2nd century CE",
+    "verdict": "supported",
+    "note": "Same sentence: 'and end with Sextus Empiricus in the second century CE'."
+  },
+  {
+    "school": "neoplatonism",
+    "claim": "place: Egypt",
+    "verdict": "drift",
+    "note": "Egypt is right, but the quotes are Plotinus' birthplace ('Egyptian-born') and where he studied before founding the school ('moved from Alexandria to Rome'). The page does name Alexandria as a later centre, but that line isn't cited.",
+    "fix": "Cite 'Hellenic philosophy and the teaching of its attendant disciplines went on in Alexandria and Constantinople until the end of the 6th century' (same section)."
+  },
+  {
+    "school": "neoplatonism",
+    "claim": "place: Italy",
+    "verdict": "supported",
+    "note": "'Plotinus moved from Alexandria to Rome and founded a school of philosophy there'."
+  },
+  {
+    "school": "neoplatonism",
+    "claim": "place: Greece",
+    "verdict": "supported",
+    "note": "'The most vigorous group of Neoplatonists, living in Athens' (Athens shown as the country)."
+  },
+  {
+    "school": "neoplatonism",
+    "claim": "span start: mid-3rd century CE",
+    "verdict": "supported",
+    "note": "Intro: 'the middle of the 3rd to the middle of the 7th century' (verbatim once superscript spacing is ignored)."
+  },
+  {
+    "school": "neoplatonism",
+    "claim": "span end: mid-7th century CE",
+    "verdict": "supported",
+    "note": "Same intro sentence ('roughly from the time of the Roman Imperial Crisis to the Arab conquest')."
+  },
+  {
+    "school": "patristic",
+    "claim": "place: Egypt",
+    "verdict": "supported",
+    "note": "SEP Origen: 'a native of Alexandria'; he worked there until 216. Note: the same section says he then 'took up residence' in Caesarea (Palestine) and finished major works there; that centre is missing from the list."
+  },
+  {
+    "school": "patristic",
+    "claim": "place: Algeria (Roman Africa)",
+    "verdict": "drift",
+    "note": "The cited quote is only Augustine's birthplace ('born in Thagaste ... modern Souk Ahras in Algeria'). The country is right for his work too, but that isn't in the cited text.",
+    "fix": "Cite the same section: 'ordained a priest in the diocese of the maritime city of Hippo Regius (modern Annaba/Bône in Algeria). About five years later (ca. 396) he succeeded the local bishop'."
+  },
+  {
+    "school": "patristic",
+    "claim": "place: Italy",
+    "verdict": "supported",
+    "note": "Augustine in Milan ('In 383 he moved to Milan'; baptised there) and Boethius' family in Rome ('keep up their traditions in Rome'). Both quotes are loose but true for Italy."
+  },
+  {
+    "school": "patristic",
+    "claim": "span start: c. 185 CE",
+    "verdict": "drift",
+    "note": "c. 185 is Origen's birth year ('Origen (c. 185–c. 253)'), not when anything started. No cited quote dates the start of Christian philosophy.",
+    "fix": "'WHEN: 3rd–6th century CE (Origen to Boethius)'; Origen was active in Alexandria until he 'left Alexandria in 216'. An earlier start needs another source."
+  },
+  {
+    "school": "patristic",
+    "claim": "span end: c. 526 CE",
+    "verdict": "drift",
+    "note": "526 is Boethius' death ('died: 526? C.E.'). The Boethius entry calls him an intermediary 'between ancient philosophy and the Latin Middle Ages', not the end of a patristic school. So the span runs from one man's birth to another's death.",
+    "fix": "As above: '3rd–6th century CE', or '... to Boethius (d. 526)' so it reads as a person, not the end of a tradition."
+  },
+  {
+    "school": "scholasticism",
+    "claim": "place: France",
+    "verdict": "supported",
+    "note": "SEP medieval: 'Paris became the centre of philosophy in Latin Europe in the twelfth century'. Paris for France is fair here."
+  },
+  {
+    "school": "scholasticism",
+    "claim": "place: England",
+    "verdict": "supported",
+    "note": "'at much the same time a university developed at Oxford'."
+  },
+  {
+    "school": "scholasticism",
+    "claim": "span start: 12th century",
+    "verdict": "supported",
+    "note": "Twelfth-century Parisian schools ('Paris became the centre ... in the twelfth century')."
+  },
+  {
+    "school": "scholasticism",
+    "claim": "span end: c. 1700",
+    "verdict": "drift",
+    "note": "The quote is about when *medieval philosophy* ended and is hedged ('Many different answers might be given ... a plausible (and to many people surprising) one is: around about 1700'). The same section has better support: university philosophy carried on until the late 17th century, and Iberian 'baroque scholasticism' in the 16th–17th. MISLEADING by omission: the late phase that justifies c. 1700 was centred in Spain, which isn't listed.",
+    "fix": "Cite 'University philosophy continued in its established patterns ... until late in the seventeenth century', and add 'Spain' to places from 'In the Iberian peninsula, the sixteenth and seventeenth centuries were the period in which philosophical theology, studied in the established university manner, flourished (see entry on the School of Salamanca)'."
+  },
+  {
+    "school": "renaissance",
+    "claim": "place: Italy",
+    "verdict": "supported",
+    "note": "IEP Renaissance Philosophy: 'Platonism was brought to Italy by ... Plethon ... during the Council of Florence in 1439'; the page is full of Italian humanists (Petrarca, Bruni, Ficino)."
+  },
+  {
+    "school": "renaissance",
+    "claim": "place: France",
+    "verdict": "drift",
+    "note": "France is right, but the cited quote (IEP Renaissance Skepticism) is about Charron's book, judged by a later scholar as the most influential 'in French philosophy during the first half of the seventeenth century'. That is the very end of the period and about one book's later influence.",
+    "fix": "Cite IEP Renaissance Skepticism: 'Academic skepticism had a major impact in mid-sixteenth century France through the pedagogical reforms proposed by Petrus Ramus (1515-1572)', or the Montaigne section."
+  },
+  {
+    "school": "renaissance",
+    "claim": "span start: mid-14th century",
+    "verdict": "supported",
+    "note": "IEP intro: 'the period that extends roughly from the middle of the fourteenth century to the beginning of the seventeen century'."
+  },
+  {
+    "school": "renaissance",
+    "claim": "span end: early 17th century",
+    "verdict": "supported",
+    "note": "Same IEP intro sentence."
+  },
+  {
+    "school": "rationalism",
+    "claim": "place: France",
+    "verdict": "drift",
+    "note": "The cited quote is only Descartes' birthplace (La Haye, Touraine). The second quote says he left France for the Netherlands, 'returning to France only infrequently', which works against France as his working base.",
+    "fix": "Cite a French rationalist who worked in France, e.g. SEP Malebranche: 'The French Cartesian Nicolas Malebranche' / 'born in Paris ... and died, also in Paris'."
+  },
+  {
+    "school": "rationalism",
+    "claim": "place: Netherlands",
+    "verdict": "supported",
+    "note": "'He moved to the Dutch Netherlands, returning to France only infrequently'. Spinoza was also born in Amsterdam (SEP Spinoza)."
+  },
+  {
+    "school": "rationalism",
+    "claim": "span start: 17th century",
+    "verdict": "supported",
+    "note": "SEP rationalism-empiricism: rationalists and empiricists belong to 'the Early Modern Period of the seventeenth and eighteenth centuries leading up to Kant'. The sentence covers both camps, though the listed section is 1.2 Empiricism."
+  },
+  {
+    "school": "rationalism",
+    "claim": "span end: 18th century",
+    "verdict": "supported",
+    "note": "Same sentence. MISLEADING by omission: the same page names 'Descartes, Spinoza, and Leibniz' as the Continental Rationalists, and Leibniz's Germany isn't listed.",
+    "fix": "Add 'Germany': SEP Leibniz, 'the rest of his life was essentially spent in Hanover and its environs' (and 'the German-speaking lands')."
+  },
+  {
+    "school": "empiricism",
+    "claim": "place: Britain",
+    "verdict": "supported",
+    "note": "'Locke, Hume, and Reid, who are the British Empiricists'."
+  },
+  {
+    "school": "empiricism",
+    "claim": "span start: 17th century",
+    "verdict": "supported",
+    "note": "'the Early Modern Period of the seventeenth and eighteenth centuries leading up to Kant'."
+  },
+  {
+    "school": "empiricism",
+    "claim": "span end: 18th century",
+    "verdict": "supported",
+    "note": "Same sentence."
+  },
+  {
+    "school": "enlightenment",
+    "claim": "place: France",
+    "verdict": "supported",
+    "note": "'The heart of the eighteenth century Enlightenment is ... prominent French thinkers of the mid-decades of the eighteenth century'."
+  },
+  {
+    "school": "enlightenment",
+    "claim": "place: Scotland",
+    "verdict": "supported",
+    "note": "'There is a renowned Scottish Enlightenment'."
+  },
+  {
+    "school": "enlightenment",
+    "claim": "place: Germany",
+    "verdict": "supported",
+    "note": "'a German Enlightenment ( die Aufklärung' - key figures include Kant, which fits the school name 'The Enlightenment and Kant'."
+  },
+  {
+    "school": "enlightenment",
+    "claim": "span: 18th century (start and end)",
+    "verdict": "supported",
+    "note": "'The heart of the eighteenth century Enlightenment'."
+  },
+  {
+    "school": "german-idealism",
+    "claim": "place: Germany",
+    "verdict": "supported",
+    "note": "IEP: 'a movement in German philosophy'."
+  },
+  {
+    "school": "german-idealism",
+    "claim": "span start: 1780s",
+    "verdict": "supported",
+    "note": "IEP: 'began in the 1780s'."
+  },
+  {
+    "school": "german-idealism",
+    "claim": "span end: 1840s",
+    "verdict": "supported",
+    "note": "IEP: 'and lasted until the 1840s'."
+  },
+  {
+    "school": "utilitarianism",
+    "claim": "place: Britain",
+    "verdict": "supported",
+    "note": "'Sidgwick was also a British philosopher ... Bentham and Mill'; the precursors are 'the British Moralists'."
+  },
+  {
+    "school": "utilitarianism",
+    "claim": "span start: 1789",
+    "verdict": "supported",
+    "note": "Bentham's Introduction to the Principles of Morals and Legislation, 1789. The page says 'the first systematic account of utilitarianism was developed by Jeremy Bentham' (precursors go back further, which it also notes)."
+  },
+  {
+    "school": "utilitarianism",
+    "claim": "span end: 1874",
+    "verdict": "wrong",
+    "note": "1874 is The Methods of Ethics, which 'marked the culmination of the classical utilitarian tradition', so it ends the classical phase, not utilitarianism. The cited SEP history has a later section '4. Ideal Utilitarianism' and mentions 'contemporary utilitarians such as Peter Singer'. The Sidgwick entry says his work 'continues to exert a powerful influence'. A newcomer reading 'WHEN: 1789–1874' will think the school is dead.",
+    "fix": "'WHEN: 1789–present (classical phase 1789–1874)', citing 'contemporary utilitarians such as Peter Singer' from the same SEP history entry."
+  },
+  {
+    "school": "marxism",
+    "claim": "place: Germany",
+    "verdict": "drift",
+    "note": "The quote 'which existed in the Germany of his day' describes the feudal, religiously discriminatory Germany that Marx criticised; it doesn't say Marxism developed there. The SEP Marx entry has no biography section, so it never names Paris, Brussels or London as where he worked. Not fixable from this source.",
+    "fix": "Cite 'In The German Ideology manuscripts, Marx and Engels contrast their new materialist method with the idealism that had characterised previous German thought'. To add Britain/London, use a source with Marx's biography."
+  },
+  {
+    "school": "marxism",
+    "claim": "span start: 1840s",
+    "verdict": "supported",
+    "note": "'On The Jewish Question' (1843); The German Ideology 1845–46 (same entry)."
+  },
+  {
+    "school": "marxism",
+    "claim": "span end: onward (ongoing)",
+    "verdict": "unsupported",
+    "note": "No cited quote says Marxism continues. The page supports it but the line isn't cited.",
+    "fix": "Cite 'his philosophically most influential recent exponent, G.A. Cohen (Cohen 1978 [2001], 1988)' from section 2."
+  },
+  {
+    "school": "existentialism",
+    "claim": "place: Denmark",
+    "verdict": "supported",
+    "note": "Kierkegaard 'spent most of his life in and around the Danish capital'. Note: the existentialism entry calls him one of the 'pioneers' who laid the groundwork, not part of the movement itself."
+  },
+  {
+    "school": "existentialism",
+    "claim": "place: Germany",
+    "verdict": "supported",
+    "note": "'twentieth-century German philosophers like Edmund Husserl, Martin Heidegger, and Karl Jaspers' (also groundwork)."
+  },
+  {
+    "school": "existentialism",
+    "claim": "place: France",
+    "verdict": "supported",
+    "note": "'an intellectual movement that exploded on the scene in mid-twentieth-century France'."
+  },
+  {
+    "school": "existentialism",
+    "claim": "span start: 1843",
+    "verdict": "drift",
+    "note": "1843 is the publication of Kierkegaard's Either/Or. The existentialism entry says the movement is mid-20th-century and that the 19th century gave only 'conceptual groundwork'. A precursor's book is used as the movement's start. (Quote verbatim; the page has a space before the comma after 'Either/Or'.)",
+    "fix": "'WHEN: mid-20th century (roots in the 1840s)', from the existentialism intro plus Either/Or 1843."
+  },
+  {
+    "school": "existentialism",
+    "claim": "span end: 1949",
+    "verdict": "wrong",
+    "note": "1949 is The Second Sex, a feminist work. The same Beauvoir sentence says her 'contributions to existentialism ... can be found across her work, from ... (1943) to ... The Coming of Age (1970)', so the cited source contradicts a 1949 end. MISLEADING: one book closes a movement.",
+    "fix": "'WHEN: mid-20th century (roots in the 1840s)', or '1840s–1970' if a hard end is wanted, using the Beauvoir quote (The Coming of Age, 1970)."
+  },
+  {
+    "school": "pragmatism",
+    "claim": "place: United States",
+    "verdict": "supported",
+    "note": "'Pragmatism originated in the United States around 1870'."
+  },
+  {
+    "school": "pragmatism",
+    "claim": "span start: c. 1870",
+    "verdict": "supported",
+    "note": "Same sentence."
+  },
+  {
+    "school": "pragmatism",
+    "claim": "span end: present",
+    "verdict": "supported",
+    "note": "'and now presents a growing third alternative ... worldwide'."
+  },
+  {
+    "school": "phenomenology",
+    "claim": "place: Austria",
+    "verdict": "supported",
+    "note": "'In the 1930s phenomenology migrated from Austrian and then German philosophy into French philosophy'."
+  },
+  {
+    "school": "phenomenology",
+    "claim": "place: Germany",
+    "verdict": "supported",
+    "note": "Same quote; Göttingen 'became one of the most important centers for philosophy in Germany' (SEP Husserl)."
+  },
+  {
+    "school": "phenomenology",
+    "claim": "place: France",
+    "verdict": "supported",
+    "note": "Same migration quote."
+  },
+  {
+    "school": "phenomenology",
+    "claim": "span start: 1900",
+    "verdict": "supported",
+    "note": "'Phenomenology as we know it was launched by Edmund Husserl in his Logical Investigations (1900–01)'."
+  },
+  {
+    "school": "phenomenology",
+    "claim": "span end: present",
+    "verdict": "supported",
+    "note": "'Phenomenological issues of intentionality, consciousness, qualia, and first-person perspective have been prominent in recent philosophy of mind'. That's slightly indirect (it's about the issues, not the school), but fair."
+  },
+  {
+    "school": "analytic",
+    "claim": "place: United Kingdom",
+    "verdict": "supported",
+    "note": "IEP: 'most notably Great Britain and the United States'. Great Britain shown as United Kingdom is fine. Minor: the same intro says 'Many would also include Gottlob Frege', so the German/Austrian roots are left out; acceptable for 'mainly developed'."
+  },
+  {
+    "school": "analytic",
+    "claim": "place: United States",
+    "verdict": "supported",
+    "note": "Same sentence."
+  },
+  {
+    "school": "analytic",
+    "claim": "span start: c. 1900",
+    "verdict": "supported",
+    "note": "'It originated around the turn of the twentieth century as G. E. Moore and Bertrand Russell broke away'."
+  },
+  {
+    "school": "analytic",
+    "claim": "span end: present",
+    "verdict": "supported",
+    "note": "'has dominated academic philosophy ... since the early twentieth century'."
+  },
+  {
+    "school": "critical-theory",
+    "claim": "place: Germany",
+    "verdict": "supported",
+    "note": "IEP: 'originally located at the Institute for Social Research ... at the Goethe University in Frankfurt, Germany'."
+  },
+  {
+    "school": "critical-theory",
+    "claim": "place: United States",
+    "verdict": "supported",
+    "note": "'the Institute was moved to the United States where it found hospitality at Columbia University'."
+  },
+  {
+    "school": "critical-theory",
+    "claim": "span start: 1923",
+    "verdict": "supported",
+    "note": "'The Institute was founded in 1923 thanks to a donation by Felix Weil'."
+  },
+  {
+    "school": "critical-theory",
+    "claim": "span end: present",
+    "verdict": "supported",
+    "note": "'is a philosophical and sociological movement spread across many universities around the world' (present tense)."
+  },
+  {
+    "school": "post-structuralism",
+    "claim": "place: France",
+    "verdict": "supported",
+    "note": "SEP postmodernism: the French 'work with concepts developed during the structuralist revolution in Paris ... For this reason they are often called \"poststructuralists.\"'"
+  },
+  {
+    "school": "post-structuralism",
+    "claim": "span start: 1960s",
+    "verdict": "supported",
+    "note": "Derrida's 1967 'annus mirabilis' (three books, 'deconstruction' coined in passing); postmodernism entry adds May 1968 as a watershed. The 1950s–early 60s quote is about structuralism, so on its own it would only support 'after the early 1960s'."
+  },
+  {
+    "school": "post-structuralism",
+    "claim": "span end: onward (ongoing)",
+    "verdict": "unsupported",
+    "note": "No cited quote says the movement continues, or says when it faded.",
+    "fix": "Either drop the open end ('WHEN: from the 1960s'), or cite a line saying it is still active; none was found in the two cited pages."
+  },
+  {
+    "school": "feminist-philosophy",
+    "claim": "place: Europe",
+    "verdict": "drift",
+    "note": "The quote is about where the English *word* feminism comes from ('rooted in the mobilization for women's suffrage in Europe and the United States during the late nineteenth and early twentieth century'), not where feminist philosophy developed. 'Europe' is also a continent, while the other schools list countries.",
+    "fix": "The SEP entry gives no place for 1970s feminist philosophy. Either find a source (e.g. on the US/UK/French academic origins) or show 'WHERE: the term grew from suffrage movements in Europe and the US'."
+  },
+  {
+    "school": "feminist-philosophy",
+    "claim": "place: United States",
+    "verdict": "drift",
+    "note": "Same suffrage quote; it doesn't place 1970s feminist *philosophy*.",
+    "fix": "Same as Europe."
+  },
+  {
+    "school": "feminist-philosophy",
+    "claim": "span start: 1970s",
+    "verdict": "supported",
+    "note": "'Contemporary feminist philosophical scholarship emerged in the 1970s'."
+  },
+  {
+    "school": "feminist-philosophy",
+    "claim": "span end: present",
+    "verdict": "supported",
+    "note": "'Contemporary feminist philosophical scholarship' (still current)."
+  }
+]

@@ -14,6 +14,10 @@ export type Nav = {
   thinker: string | null;
   openTheme: number | null;
   threadOpen: boolean;
+  /** Stepped inside the focused school: the skeleton (knot and first page) instead of the globe and card. */
+  inside: boolean;
+  /** The idea picked in the skeleton, by theme index. */
+  pick: number | null;
   visits: Visit[];
   openSchool: (id: string) => void;
   openThinker: (id: string) => void;
@@ -22,6 +26,12 @@ export type Nav = {
   toggleTheme: (i: number) => void;
   toggleThread: () => void;
   closeThread: () => void;
+  stepInside: () => void;
+  /** One level back out of the skeleton: an open idea first, then the skeleton itself. */
+  stepBack: () => void;
+  /** Straight out of the skeleton, whatever is picked (the phone's Back link). */
+  stepOut: () => void;
+  togglePick: (i: number) => void;
 };
 
 const NO_VISITS: Visit[] = [];
@@ -33,6 +43,8 @@ export function Meander() {
   const [thinker, setThinker] = useState<string | null>(null);
   const [openTheme, setOpenTheme] = useState<number | null>(null);
   const [threadOpen, setThreadOpen] = useState(false);
+  const [inside, setInside] = useState(false);
+  const [pick, setPick] = useState<number | null>(null);
   const [stored, setVisits] = useLocalStorage<Visit[]>(VISITS_KEY, NO_VISITS);
   // Visits to schools or thinkers no longer in the content (ids change when the content is re-imported)
   // stay in storage but don't count or show.
@@ -52,6 +64,8 @@ export function Meander() {
       setThinker(null);
       setOpenTheme(null);
       setThreadOpen(false);
+      setInside(false);
+      setPick(null);
       record("school", id);
     },
     [record],
@@ -68,6 +82,8 @@ export function Meander() {
       }
       setThinker(id);
       setThreadOpen(false);
+      setInside(false);
+      setPick(null);
       record("thinker", id);
     },
     [focus, record],
@@ -78,7 +94,14 @@ export function Meander() {
     setThinker(null);
     setOpenTheme(null);
     setThreadOpen(false);
+    setInside(false);
+    setPick(null);
   }, []);
+
+  const stepBack = useCallback(() => {
+    if (pick !== null) setPick(null);
+    else setInside(false);
+  }, [pick]);
 
   const nav: Nav = useMemo(
     () => ({
@@ -86,23 +109,32 @@ export function Meander() {
       thinker,
       openTheme,
       threadOpen,
+      inside,
+      pick,
       visits,
       openSchool,
       openThinker,
       overview,
       backToSchool: () => setThinker(null),
       toggleTheme: (i) => setOpenTheme((o) => (o === i ? null : i)),
-      toggleThread: () => setThreadOpen((o) => !o),
+      // Your thread opens on the globe, so it steps out of the skeleton first.
+      toggleThread: () => { setInside(false); setPick(null); setThreadOpen((o) => !o); },
       closeThread: () => setThreadOpen(false),
+      stepInside: () => { if (focus && !thinker) { setThreadOpen(false); setPick(null); setInside(true); } },
+      stepBack,
+      stepOut: () => { setPick(null); setInside(false); },
+      togglePick: (i) => setPick((p) => (p === i ? null : i)),
     }),
-    [focus, thinker, openTheme, threadOpen, visits, openSchool, openThinker, overview],
+    [focus, thinker, openTheme, threadOpen, inside, pick, visits, openSchool, openThinker, overview, stepBack],
   );
 
-  // Esc closes the innermost thing: Your thread, then an open theme, then the thinker, then the focus.
+  // Esc closes the innermost thing: Your thread, then a picked idea, then the skeleton, then an open theme,
+  // then the thinker, then the focus.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape" || e.defaultPrevented) return;
       if (threadOpen) setThreadOpen(false);
+      else if (inside) stepBack();
       else if (openTheme !== null && !thinker) setOpenTheme(null);
       else if (thinker) setThinker(null);
       else if (focus) overview();
@@ -111,7 +143,7 @@ export function Meander() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [threadOpen, openTheme, thinker, focus, overview]);
+  }, [threadOpen, inside, stepBack, openTheme, thinker, focus, overview]);
 
   return (
     <>

@@ -1,0 +1,537 @@
+{
+  "decision": "T27b",
+  "batch": 2,
+  "scope": "rewrite-t27b.json changed entries 17-32 (key-works.w3 to study_prompt), graded against current content/pilot/existentialism.json and the cited corpus sections only",
+  "quotes_checked": "all 43 source quotes in these 16 items are verbatim in their cited section (script check, exact string match)",
+  "items": [
+    {
+      "id": "key-works.w3",
+      "claims": [
+        {
+          "claim": "The Myth of Sisyphus, Albert Camus, 1942",
+          "verdict": "supported",
+          "evidence": "SEP Camus §3: 'the publisher ... released The Stranger in June 1942 and The Myth of Sisyphus in October.'"
+        },
+        {
+          "claim": "Its image is Sisyphus, pushing his rock up a mountain, again and again, forever",
+          "verdict": "supported",
+          "evidence": "SEP Camus intro: 'a striking image of the human fate: Sisyphus endlessly pushing his rock up the mountain only to see it roll back down'; §1: 'best captured in an image ... of Sisyphus straining to push his rock up the mountain ... in an endless cycle.' Quote 'Sisyphus straining to push his rock up the mountain' verbatim in §1."
+        }
+      ]
+    },
+    {
+      "id": "key-works.w4",
+      "claims": [
+        {
+          "claim": "Being and Nothingness, Jean-Paul Sartre, 1943",
+          "verdict": "supported",
+          "evidence": "SEP Sartre §4.1: 'Being and Nothingness (1943) remains the defining treatise ...'"
+        },
+        {
+          "claim": "One of the movement's defining books, alongside Beauvoir's work of the period",
+          "verdict": "supported",
+          "evidence": "SEP Sartre §4.1: 'remains the defining treatise of the existentialist “movement”, along with works from de Beauvoir from this period'. Quote verbatim. ('One of the defining' is a slight softening of 'the defining', not a change of meaning.)"
+        },
+        {
+          "claim": "on our absolute freedom",
+          "verdict": "supported",
+          "evidence": "SEP Existentialism §4.2: 'In Being and Nothingness, Sartre forwards an account of “radical” or “absolute” freedom'. Quote verbatim."
+        },
+        {
+          "claim": "on bad faith",
+          "verdict": "supported",
+          "evidence": "SEP Sartre §4.2: 'Sartre’s account of bad faith (mauvaise foi) is of major interest' ... 'the chapter on bad faith in Being and Nothingness'."
+        },
+        {
+          "claim": "on 'the look' of others",
+          "verdict": "supported",
+          "evidence": "SEP Sartre §4.3: 'In Being and Nothingness ... his descriptions of being subject to the look of another'."
+        }
+      ]
+    },
+    {
+      "id": "key-works.w5",
+      "claims": [
+        {
+          "claim": "Existentialism Is a Humanism, Sartre, 1945 lecture, published 1946",
+          "verdict": "supported",
+          "evidence": "SEP Sartre intro: 'his public lecture, Existentialism is a Humanism, towards the end of 1945'; A.1: '1946a [2007], L’existentialisme est un humanisme ... Paris: Nagel.' Quote verbatim."
+        },
+        {
+          "claim": "A packed Paris lecture",
+          "verdict": "supported",
+          "evidence": "SEP Sartre intro: 'Many thousands of Parisians packed into his public lecture'."
+        },
+        {
+          "claim": "an accessible version of Being and Nothingness",
+          "verdict": "supported",
+          "evidence": "SEP Sartre intro: 'That lecture offered an accessible version of his difficult treatise, Being and Nothingness (1943)'."
+        },
+        {
+          "claim": "In it Sartre argued that our actions define our humanity",
+          "verdict": "supported",
+          "evidence": "IEP Existentialism §c: 'he defended the priority of action and the position that it is a man’s actions which define his humanity.' Quote verbatim."
+        }
+      ]
+    },
+    {
+      "id": "key-works.w6",
+      "claims": [
+        {
+          "claim": "The Second Sex, Simone de Beauvoir, 1949",
+          "verdict": "supported",
+          "evidence": "SEP Beauvoir §1: 'The Second Sex (1949) became one of the most important feminist texts'; IEP §e: 'In 1949 Le Deuxième Sexe is published in France.'"
+        },
+        {
+          "claim": "Argues that women are made to live relative to men",
+          "verdict": "supported",
+          "evidence": "SEP Beauvoir §7: 'to become a woman is to be made and to make oneself an object for men. The detriment of such self-making ... is that a woman comes to live an existence relative to men.' Quote verbatim. (Drops the 'make oneself' / complicity half, but 'positions and traps women in the role of the Other' in the same section supports 'made to'.)"
+        },
+        {
+          "claim": "as 'the Other'",
+          "verdict": "supported",
+          "evidence": "SEP Beauvoir §7: 'the claim central to the book: woman is the Other, man is the essential being.' Quote verbatim."
+        },
+        {
+          "claim": "A founding text of second-wave feminism",
+          "verdict": "supported",
+          "evidence": "IEP §e: 'later a founding text of Second Wave Feminism'."
+        },
+        {
+          "claim": "gloss: second-wave feminism = the women's movement of the 1960s and 1970s",
+          "verdict": "supported",
+          "evidence": "IEP §e: '(the feminist movement from the early 60’s to the 70’s ...)'. Quote verbatim."
+        }
+      ]
+    },
+    {
+      "id": "criticisms.p0",
+      "claims": [
+        {
+          "claim": "Some criticisms target its ideas (framing)",
+          "verdict": "supported",
+          "evidence": "IEP §b lists intellectual criticisms ('criticised for being obscure, abstract or even mystical'); SEP §4.2 'Marxist criticism'."
+        },
+        {
+          "claim": "German critics called it obscure, abstract, even mystical, Heidegger above all",
+          "verdict": "supported",
+          "evidence": "IEP §b: 'In Germany, existentialism (and especially Heidegger) was criticised for being obscure, abstract or even mystical in nature.'"
+        },
+        {
+          "claim": "Sartre's early idea of freedom ignored the social conditions that limit real choices",
+          "verdict": "supported",
+          "evidence": "SEP §4.2: 'in the wake of Marxist criticism ... It failed to engage the social, historical, and material conditions that invariably limit and constrain our freedom.'"
+        },
+        {
+          "claim": "Sartre himself later agreed",
+          "verdict": "supported",
+          "evidence": "SEP §4.2: 'his views changed; he realized that this early account was far too abstract, interiorized ...'"
+        },
+        {
+          "claim": "Others objected that no one is free apart from other people and history",
+          "verdict": "supported",
+          "evidence": "IEP §e: 'Merleau-Ponty heavily criticizes the Sartrean stand ... One cannot assume freedom in isolation from the freedom of others ... Moreover action takes place within a certain historical context.' Quote verbatim."
+        }
+      ]
+    },
+    {
+      "id": "criticisms.p1",
+      "claims": [
+        {
+          "claim": "It neglected social and political structures, with dangerous results (as a criticism)",
+          "verdict": "supported",
+          "evidence": "IEP §b: 'Heidegger and the existentialist were also taken to task for paying insufficient attention to social and political structures or values, with dangerous results.' Framed as a criticism by the lead-in."
+        },
+        {
+          "claim": "Heidegger is notorious for his involvement with the Nazis in the 1930s",
+          "verdict": "supported",
+          "evidence": "IEP §c: 'He remains notorious for his involvement with National Socialism in the 1930s.' Quote verbatim."
+        },
+        {
+          "claim": "Nietzsche's ideal is openly elitist and anti-democratic",
+          "verdict": "supported",
+          "evidence": "SEP §5.3: 'his account of authenticity is unapologetically elitist and anti-democratic.' Quote verbatim."
+        },
+        {
+          "claim": "he thought only a few strong people could be free",
+          "verdict": "supported",
+          "evidence": "SEP §5.3: '“Only a very few people can be free,” writes Nietzsche, “It is a prerogative of the strong”'. Quote verbatim."
+        },
+        {
+          "claim": "Camus said Kierkegaard, Heidegger and others escaped into 'forced hope'",
+          "verdict": "supported",
+          "evidence": "SEP Camus §3.3: 'written against existentialists such as Shestov, Kierkegaard, Jaspers, and Heidegger ... he rejects what he sees as their ultimate escapism ... “That forced hope is religious in all of them”'. Quote verbatim."
+        },
+        {
+          "claim": "He meant turning to God, or to something beyond the limits of the human condition",
+          "verdict": "supported",
+          "evidence": "SEP Camus §3.3: 'each existentialist writer betrayed his initial insight by seeking to appeal to something beyond the limits of the human condition, by turning to the transcendent'; 'Kierkegaard ... making it an attribute of a God who he then embraces.' Quote verbatim."
+        },
+        {
+          "claim": "to escape the absurd",
+          "verdict": "supported",
+          "evidence": "SEP Camus §3.3: 'they all somehow testify to the absurdity of the human condition. But he rejects what he sees as their ultimate escapism'."
+        }
+      ]
+    },
+    {
+      "id": "legacy.p0",
+      "claims": [
+        {
+          "claim": "Existentialism reached far beyond philosophy",
+          "verdict": "supported",
+          "evidence": "SEP intro: 'how it stretched far beyond the literary and academic worlds'."
+        },
+        {
+          "claim": "Its ideas spread into films, novels, plays and paintings",
+          "verdict": "supported",
+          "evidence": "SEP intro: 'Its ideas are captured in films ... Its moods are expressed in the paintings'; 'the plays, short stories, and novels'; IEP §a: 'Sartre and Camus were both prominent novelists and playwrights' (verbatim)."
+        },
+        {
+          "claim": "Its stress on freedom and self-creation shaped the politics of Martin Luther King Jr. and Malcolm X",
+          "verdict": "supported",
+          "evidence": "SEP intro: 'Its emphasis on freedom and the struggle for self-creation informed the radical and emancipatory politics of Martin Luther King Jr. and Malcolm X'."
+        },
+        {
+          "claim": "Through Beauvoir's The Second Sex, it helped shape feminism",
+          "verdict": "supported",
+          "evidence": "IEP §e: 'a founding text of Second Wave Feminism (the feminist movement from the early 60’s to the 70’s ...)'. Quote verbatim."
+        },
+        {
+          "claim": "It shaped psychotherapy",
+          "verdict": "supported",
+          "evidence": "SEP intro: 'a profound impact in the development of humanistic and existential approaches to psychotherapy'; IEP §a: 'the broad ‘existentialist psychotherapy’ movement'."
+        },
+        {
+          "claim": "and more recently medicine and nursing",
+          "verdict": "supported",
+          "evidence": "SEP §7.6: 'in recent years we have seen its influence emerge in a range of different areas, from narrative medicine to nursing'. Quote verbatim."
+        }
+      ]
+    },
+    {
+      "id": "legacy.p1",
+      "claims": [
+        {
+          "claim": "Within philosophy, it left its mark too",
+          "verdict": "supported",
+          "evidence": "IEP §b: 'there are some less direct influences that remain important.' (Same paragraph opens 'relatively little direct influence within philosophy'; 'left its mark' stays within 'less direct influences'.)"
+        },
+        {
+          "claim": "It made emotion a serious subject of study",
+          "verdict": "supported",
+          "evidence": "IEP §b: 'the philosophical importance that the existentialists placed upon emotion has been influential, legitimising a whole domain of philosophical research'. Quote verbatim."
+        },
+        {
+          "claim": "It insisted that philosophy deal directly with real life, such as sex and death",
+          "verdict": "supported",
+          "evidence": "IEP §b: 'insisted philosophy could and should deal very directly with ‘real world’ topics such as sex, death or crime'."
+        },
+        {
+          "claim": "Nietzsche and Heidegger are still widely studied",
+          "verdict": "supported",
+          "evidence": "IEP §b: 'Nietzsche and Heidegger in particular are very much ‘live’ topics in philosophy, even in the 21st century.'"
+        },
+        {
+          "claim": "Its courses are often among philosophy's most popular",
+          "verdict": "supported",
+          "evidence": "SEP §7.7: 'Existentialist-themed courses are often among the most popular in the philosophy curriculum'. Quote verbatim."
+        }
+      ]
+    },
+    {
+      "id": "apply.intro",
+      "claims": [
+        {
+          "claim": "Existentialist ideas shaped existential psychotherapy",
+          "verdict": "supported",
+          "evidence": "IEP §a: 'a more explicit taking up of existentialist themes is found in the broad ‘existentialist psychotherapy’ movement.'"
+        },
+        {
+          "claim": "which helps people with questions such as meaning and the fear of death (gloss: death anxiety)",
+          "verdict": "supported",
+          "evidence": "Vos 2015 Objective: 'draw on themes from existential philosophy to help clients address such issues in their lives as meaning and death anxiety'. Quote verbatim."
+        },
+        {
+          "claim": "logotherapy, a therapy built around finding meaning",
+          "verdict": "supported",
+          "evidence": "VFI: 'an internationally acknowledged and empirically based meaning-centered approach to psychotherapy'. Quote verbatim."
+        },
+        {
+          "claim": "created by the Austrian psychiatrist Viktor Frankl",
+          "verdict": "supported",
+          "evidence": "IEP §a: 'the Austrian Frankl, who invented the method of logotherapy' (verbatim); VFI same section: 'the psychiatrist and neurologist Viktor Emil Frankl (1905-1997) laid down the foundations'."
+        }
+      ]
+    },
+    {
+      "id": "apply.practices.0.idea",
+      "claims": [
+        {
+          "claim": "As we saw, no god or moral law can choose for us",
+          "verdict": "supported",
+          "evidence": "SEP §4: 'There is no moral absolute, divine will, or natural law that can provide guidance or justify our actions.' ('choose for us' paraphrases 'provide guidance'; 'As we saw' is a cross-reference, not graded.)"
+        },
+        {
+          "claim": "Sartre put it starkly: 'there are no excuses behind us nor justifications before us'",
+          "verdict": "supported",
+          "evidence": "SEP §4: 'condemned to be free because “there are no excuses behind us nor justifications before us” (Sartre 1946 ...)'. Quote verbatim."
+        }
+      ]
+    },
+    {
+      "id": "apply.practices.0.practice",
+      "claims": [
+        {
+          "claim": "Sartre's own example is a student of his in wartime France",
+          "verdict": "supported",
+          "evidence": "Sartre lecture: 'the case of a pupil of mine ... his elder brother had been killed in the German offensive of 1940'."
+        },
+        {
+          "claim": "He could go to England and fight with the Free French Forces, or stay with his mother",
+          "verdict": "supported",
+          "evidence": "Sartre lecture: 'the choice between going to England to join the Free French Forces or of staying near his mother'. Quote verbatim."
+        },
+        {
+          "claim": "his mother lived only for him",
+          "verdict": "supported",
+          "evidence": "Sartre lecture: 'He fully realised that this woman lived only for him'."
+        },
+        {
+          "claim": "He came to Sartre for advice",
+          "verdict": "supported",
+          "evidence": "Sartre lecture: 'a pupil of mine, who sought me out'; 'the youth did, at least, go to a professor to ask for advice'."
+        },
+        {
+          "claim": "Choosing an adviser, Sartre said, is already a choice",
+          "verdict": "supported",
+          "evidence": "Sartre lecture: 'to choose an adviser is nevertheless to commit oneself by that choice.' Quote verbatim."
+        },
+        {
+          "claim": "you more or less know what they will say",
+          "verdict": "supported",
+          "evidence": "Sartre lecture: 'at bottom you already knew, more or less, what he would advise'; 'in coming to me, he knew what advice I should give him'."
+        },
+        {
+          "claim": "His only reply was 'You are free, therefore choose, that is to say, invent.'",
+          "verdict": "supported",
+          "evidence": "Sartre lecture: 'I had but one reply to make. You are free, therefore choose, that is to say, invent.' Quote verbatim."
+        },
+        {
+          "claim": "Label: 'One way to use his point:' marks the exercise as our application",
+          "verdict": "supported",
+          "evidence": "Label present; exercise (ask why you picked this adviser and what you expect) follows directly from the adviser passage and is not attributed to Sartre."
+        }
+      ]
+    },
+    {
+      "id": "apply.practices.1.idea",
+      "claims": [
+        {
+          "claim": "On meaning, Frankl disagrees with Sartre and Beauvoir",
+          "verdict": "drift",
+          "evidence": "No cited source has Frankl addressing Sartre or Beauvoir. The contrast is ours, built by setting SEP §5.5 ('My projects have meaning and value because I chose these projects', verbatim) beside VFIL Meaning ('we can discover meaning but we can’t make meaning', verbatim). The views do conflict, but 'disagrees' reads as Frankl taking a position against them. That sharpens a juxtaposition into a reported stance."
+        },
+        {
+          "claim": "They hold that we make meaning through our choices",
+          "verdict": "supported",
+          "evidence": "SEP §5.5: 'My projects have meaning and value because I chose these projects, but the meaning is contingent'. Quote verbatim."
+        },
+        {
+          "claim": "Frankl holds that meaning exists for us to discover, and that we cannot make it",
+          "verdict": "supported",
+          "evidence": "VFIL Meaning: 'Frankl maintained that meaning exists for us to discover: it cannot be created or rationalized. In other words, we can discover meaning but we can’t make meaning.' Quote verbatim."
+        },
+        {
+          "claim": "A 2015 review of existential therapy trials",
+          "verdict": "supported",
+          "evidence": "Vos 2015 Results: 'Twenty-one eligible randomized controlled trials of existential therapy were found'. Quote verbatim."
+        },
+        {
+          "claim": "found that meaning-focused therapy strengthened people's sense of meaning",
+          "verdict": "supported",
+          "evidence": "Vos Results: 'Meaning therapies (n = 6 studies) showed large effects on positive meaning in life immediately postintervention (d = 0.65) and at follow-up (d = 0.57)'. Quote verbatim. Not attributed to logotherapy specifically, which is correct."
+        },
+        {
+          "claim": "but the studies were few and low in quality",
+          "verdict": "supported",
+          "evidence": "Vos Conclusion: 'Despite the small number and low quality of studies'. Quote verbatim."
+        },
+        {
+          "claim": "and they tested therapy, not reflecting alone",
+          "verdict": "supported",
+          "evidence": "Vos Method/Results: all included studies are RCTs of existential therapy; nothing on self-guided reflection. The line correctly stops the review from being read as evidence for the self-exercise."
+        }
+      ],
+      "fix": "Replace 'Frankl disagrees with Sartre and Beauvoir' with 'Frankl's view differs from Sartre's and Beauvoir's'."
+    },
+    {
+      "id": "apply.practices.1.practice",
+      "claims": [
+        {
+          "claim": "Frankl turned the usual question round: we should not ask what life means",
+          "verdict": "supported",
+          "evidence": "VFIL: 'Ultimately, man should not ask what the meaning of his life is, but rather must recognize that it is he who is asked.'"
+        },
+        {
+          "claim": "'each man is questioned by life'",
+          "verdict": "supported",
+          "evidence": "VFIL: 'In a word, each man is questioned by life'. Quote verbatim."
+        },
+        {
+          "claim": "We answer by taking responsibility for our own life",
+          "verdict": "supported",
+          "evidence": "VFIL: 'he can only answer to life by answering for his own life; to life he can only respond by being responsible.' Quote verbatim."
+        },
+        {
+          "claim": "Logotherapists often guide people by asking questions",
+          "verdict": "supported",
+          "evidence": "VFI Socratic dialogue: 'Socratic dialogue is a conversational method frequently used by logotherapists ... this technique of guiding by questioning'. Quote verbatim."
+        },
+        {
+          "claim": "so that they find meanings for themselves",
+          "verdict": "supported",
+          "evidence": "VFI Will to Meaning: 'they are not offered specific meanings. Rather, they are guided and assisted in the realization of those meaning possibilities they have detected themselves.' Quote verbatim."
+        },
+        {
+          "claim": "Frankl named three avenues to meaning",
+          "verdict": "supported",
+          "evidence": "VFIL: 'He called these the creative, experiential and attitudinal avenues to meaning-discovery.' Quote verbatim."
+        },
+        {
+          "claim": "Avenue 1: what you gave, through work or deeds",
+          "verdict": "supported",
+          "evidence": "VFIL: 'Creative actions. Giving of ourselves and contributing to life through meaningful work, deeds, or achieving meaningful goals.'"
+        },
+        {
+          "claim": "Avenue 2: what you received, through experiences or relationships",
+          "verdict": "supported",
+          "evidence": "VFIL: 'Experiences. Receiving from life through meaningful experiences or relationships.'"
+        },
+        {
+          "claim": "Avenue 3: the stance you took, especially towards suffering you could not avoid",
+          "verdict": "supported",
+          "evidence": "VFIL: 'through the stance we take toward situations'; 'Attitudes. Adopting the right attitude to situations, especially those of unavoidable suffering.'"
+        },
+        {
+          "claim": "Label: 'One way to borrow that on your own:' marks the weekly self-check as our application",
+          "verdict": "supported",
+          "evidence": "Label present; the exercise is not presented as Frankl's method or as tested. VFI describes these as therapist-guided, and the label keeps the self-use as ours."
+        }
+      ]
+    },
+    {
+      "id": "apply.practices.2.idea",
+      "claims": [
+        {
+          "claim": "As we saw, Nietzsche's ideal was saying yes to your whole life, the good and the bad",
+          "verdict": "supported",
+          "evidence": "SEP §5.3: 'a radical acceptance of one’s existence ... embracing all our strengths and weaknesses and all the blessed and cursed events'; 'The Overman is a “yes-sayer” who affirms every aspect of his life'. Quote verbatim."
+        },
+        {
+          "claim": "He called this attitude amor fati: love of one's fate",
+          "verdict": "drift",
+          "evidence": "SEP §5.3 only says 'overflowing with amor fati (love of one’s fate), the Overman welcomes this possibility' (verbatim). The gloss is right, but the cited section never says Nietzsche himself named the attitude. The corpus does have it (Joyful Wisdom §276 'For the New Year'; SEP Nietzsche §3.2.2), but those are not cited here."
+        },
+        {
+          "claim": "He thought only 'the highest types' could truly live this way",
+          "verdict": "supported",
+          "evidence": "SEP §5.3: 'For Nietzsche, only “the highest types” can manifest this kind of freedom and capacity for self-overcoming.' Quote verbatim."
+        },
+        {
+          "claim": "You do not have to share his elitism to try his question",
+          "verdict": "supported",
+          "evidence": "SEP §5.3: 'his account of authenticity is unapologetically elitist and anti-democratic' (verbatim). The 'you do not have to' part is our framing, and it is fair."
+        }
+      ],
+      "fix": "Add a source for the naming: cite Joyful Wisdom 'Book Fourth, 276. For the New Year' (or SEP Nietzsche 3.2.2 Affirmation). Or reword to 'This attitude is called amor fati: love of one's fate.'"
+    },
+    {
+      "id": "apply.practices.2.practice",
+      "claims": [
+        {
+          "claim": "A demon tells you that you must live this life again, 'innumerable times'",
+          "verdict": "supported",
+          "evidence": "GS §341: 'thou must live it once more, and also innumerable times'."
+        },
+        {
+          "claim": "with nothing new in it",
+          "verdict": "supported",
+          "evidence": "GS §341: 'there will be nothing new in it, but every pain and every joy and every thought and every sigh'. Quote verbatim."
+        },
+        {
+          "claim": "Would you curse the demon?",
+          "verdict": "supported",
+          "evidence": "GS §341: 'Wouldst thou not throw thyself down and gnash thy teeth, and curse the demon that so spake?'"
+        },
+        {
+          "claim": "Or would you answer that you never heard anything more divine?",
+          "verdict": "supported",
+          "evidence": "GS §341: '“Thou art a God, and never did I hear aught more divine!”'"
+        },
+        {
+          "claim": "If the thought took hold of you, Nietzsche wrote, it would transform you, or perhaps crush you",
+          "verdict": "supported",
+          "evidence": "GS §341: 'If that thought acquired power over thee, as thou art, it would transform thee, and perhaps crush thee'. Quote verbatim."
+        },
+        {
+          "claim": "One influential reading treats it as a test of whether your life has been good",
+          "verdict": "supported",
+          "evidence": "SEP Nietzsche §6.3: 'an influential line of readings has argued ... a practical thought experiment designed to test whether one’s life has been good.' Quote verbatim. Correctly hedged as one reading."
+        },
+        {
+          "claim": "as a whole and in every detail",
+          "verdict": "supported",
+          "evidence": "SEP Nietzsche §6.3: 'direct an evaluative judgment onto our life as a whole'; 'the life I imagine to recur must be the same in every detail'."
+        },
+        {
+          "claim": "Label: 'one way in (our adaptation, not his)': ask it of a single day first",
+          "verdict": "supported",
+          "evidence": "Label present and explicit; the single-day version is not attributed to Nietzsche."
+        }
+      ]
+    },
+    {
+      "id": "study_prompt",
+      "claims": [
+        {
+          "claim": "Tutor instructions (explain terms, one question at a time, five-question quiz)",
+          "verdict": "supported",
+          "evidence": "Instructions, not factual claims; nothing to source."
+        },
+        {
+          "claim": "Existentialism is a loose movement",
+          "verdict": "supported",
+          "evidence": "SEP intro: 'certainly not a reference to a coherent system or philosophical school'; 'there is no unifying doctrine'."
+        },
+        {
+          "claim": "that begins from lived human life",
+          "verdict": "supported",
+          "evidence": "SEP intro: 'existentialism generally begins in medias res, amidst our own situated, first-person experience.'"
+        },
+        {
+          "claim": "made famous by Sartre and Beauvoir",
+          "verdict": "supported",
+          "evidence": "SEP intro: 'the most popular voices of this movement were French, most notably Jean-Paul Sartre and Simone de Beauvoir'."
+        },
+        {
+          "claim": "Then cover its six themes",
+          "verdict": "drift",
+          "evidence": "The six listed themes are the app's own grouping. Each maps to a cited section (§3 existence precedes essence, §4.1 anxiety of choice, §5 authenticity and the 'they', §1 nihilism, §6 ethics, §5.2 the leap). But SEP intro lists its own six 'overlapping ideas' (Nihilism, Engagement vs. Detachment, Existence Precedes Essence, Freedom, Authenticity, Ethics), and that set has no faith theme. 'Its six themes' presents our selection as the movement's canonical set. Minor."
+        },
+        {
+          "claim": "Theme labels: existence before essence / freedom and anxiety / authenticity versus the crowd / meaning without guarantees / my freedom needs yours / faith and the leap",
+          "verdict": "supported",
+          "evidence": "SEP §3 'existence precedes essence'; §4.1 'anxiety discloses this predicament'; §5 'we tend to get pulled along by the crowd'; §1 'no overarching reason, order, or purpose to our existence'; intro Ethics 'act in such a way as to help others realize their freedom' (§6 opens on the same theme); §5.2 Abraham 'leaping (springer) into a paradox'."
+        }
+      ],
+      "fix": "Change 'Then cover its six themes:' to 'Then cover these six themes:'."
+    }
+  ],
+  "totals": {
+    "supported": 85,
+    "drift": 3,
+    "unsupported": 0,
+    "wrong": 0
+  }
+}

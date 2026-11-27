@@ -26,6 +26,19 @@ function ThinkerLinks({ ids, nav }: { ids: string[]; nav: Nav }) {
   );
 }
 
+/** "Step inside · 5 big ideas": opens the school's skeleton (L26). */
+export function StepInside({ school, nav }: { school: School; nav: Nav }) {
+  return (
+    <button type="button" className="enter-card" onClick={nav.stepInside}>
+      <span className="u">Step inside</span>
+      <span className="cnt">{school.themes.length} big ideas</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M3 8h9.5M8.5 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </button>
+  );
+}
+
 export function SchoolSections({ school, nav, phone = false }: { school: School; nav: Nav; phone?: boolean }) {
   const sec = phone ? "psec" : "sec";
   const sep = phone ? null : <hr />;
@@ -33,6 +46,8 @@ export function SchoolSections({ school, nav, phone = false }: { school: School;
   const lede = ledeOf(school);
   // Desktop: the card opens with one line on what the school is (L20). The phone shows it under the title.
   const ledeEl = !phone && lede ? <p className="lede">{lede}</p> : null;
+  // Desktop: the card's way into the skeleton, under the lede (the phone puts it under its own lede).
+  const enterEl = !phone && school.themes.length > 0 ? <StepInside school={school} nav={nav} /> : null;
   if (empty) {
     return (
       <>
@@ -45,6 +60,7 @@ export function SchoolSections({ school, nav, phone = false }: { school: School;
   return (
     <>
       {ledeEl}
+      {enterEl}
       {school.questions.length > 0 && (
         <>
           <h2 className={phone ? sec : "sec first"}>It asks</h2>
@@ -64,7 +80,8 @@ export function SchoolSections({ school, nav, phone = false }: { school: School;
               return (
                 <li key={t.name} className={open ? "open" : undefined}>
                   <button type="button" aria-expanded={open} aria-controls={panelId} onClick={() => nav.toggleTheme(i)}>
-                    {t.name}
+                    <span className="no" aria-hidden="true">{i + 1}</span>
+                    <span>{t.name}</span>
                   </button>
                   {open && (
                     <div id={panelId}>

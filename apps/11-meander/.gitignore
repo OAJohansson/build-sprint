@@ -5,3 +5,6 @@ next-env.d.ts
 *.tsbuildinfo
 .env*.local
 .vercel
+
+# full-text source copies for grading; never commit (copyright, public repo)
+.corpus/

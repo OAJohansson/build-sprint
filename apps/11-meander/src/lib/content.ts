@@ -5,6 +5,7 @@ import schoolsFile from "@/content/schools.json";
 import thinkersFile from "@/content/thinkers.json";
 import linksFile from "@/content/links.json";
 import positionsFile from "@/content/positions.json";
+import placesJson from "@/content/places.json";
 
 /** Where a claim comes from: a reference URL and the section that supports it. */
 export type Source = { url: string; section?: string; quote?: string };
@@ -107,13 +108,16 @@ export type Neighbour = {
 export const reasonFor = (link: Link, focus: string) =>
   (focus === link.from ? link.labelFromOlder || link.label : link.label) ?? "";
 
-/** The verb a neighbour carries, seen from the focused school. */
+/**
+ * What a neighbour did, seen from the focused school. The neighbour is always the subject and "it" is the
+ * focus, so the label reads as a sentence under the name: "Marxism / inspired it" (owner feedback #23).
+ * Older neighbours inspired or provoked the focus; newer ones grew from it or pushed back on it.
+ */
 export function verbFor(link: Link, focus: string) {
-  const newer = focus === link.to;
-  if (link.type === "built") return newer ? "built on" : "grew from it";
-  // "pushed back on it", not "pushed back": the neighbour pushed against the focus (user test F3).
-  if (link.type === "against") return newer ? "pushed against" : "pushed back on it";
-  return newer ? "built on, then pushed against" : "grew from it, then pushed back on it";
+  const newer = focus === link.to; // the neighbour is the older school
+  if (link.type === "built") return newer ? "inspired it" : "grew from it";
+  if (link.type === "against") return newer ? "provoked it" : "pushed back on it";
+  return newer ? "inspired it, then provoked it" : "grew from it, then pushed back on it";
 }
 
 /** Schools one thread away from `focus`, in link order. */
@@ -145,7 +149,7 @@ export function splitName(name: string): { short: string; aside: string } {
 }
 
 /** The line under a school's title: "Frankfurt School · 1923 – present · you are here". */
-export const hereLine = (s: School) => [splitName(s.name).aside, s.dates, "you are here"].filter(Boolean).join(" · ");
+export const hereLine = (s: School) => [splitName(s.name).aside, whenOf(s), "you are here"].filter(Boolean).join(" · ");
 
 /** The one line under a school's name in the card (L20): its tagline, or the first sentence of its description. */
 export function ledeOf(s: School): string {
@@ -156,3 +160,46 @@ export function ledeOf(s: School): string {
 
 /** The same thinker's card in other schools (Sartre, Beauvoir): matched by name (L20, "Also in"). */
 export const alsoIn = (t: Thinker): Thinker[] => thinkers.filter((o) => o.name === t.name && o.id !== t.id);
+
+// ---------- the school skeleton (L26–L33) ----------
+
+/** Where and when a school happened, sourced separately (docs/products/11-meander/content/places.json, copied in by
+ * `pnpm -F 11-meander places`). Empty until that file lands; every fact that needs it is hidden until then. */
+export type PlaceFacts = { places?: string[]; span?: string | null };
+const placesFile = placesJson as Record<string, PlaceFacts>;
+
+/** When a school happened: the sourced short span ("1843–1949") when there is one, else its dates. */
+export const whenOf = (s: School) => placesFile[s.id]?.span || s.dates;
+
+/** A sentence ends at . ! or ? followed by a space and a capital, opening quote or bracket. */
+const SENTENCE_END = /(?<=[.!?])\s+(?=['"‘“(]?[A-Z])/;
+export const firstSentence = (text: string) => text.trim().split(SENTENCE_END)[0] ?? "";
+
+/** "Kierkegaard, Sartre and Beauvoir". */
+export const andList = (xs: string[]) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
+
+/** Thinkers' short names ("Kierkegaard"), skipping ids the content no longer has. */
+export const surnames = (ids: string[]) => ids.map((id) => thinkerMap.get(id)?.short).filter((s): s is string => !!s);
+
+export type Fact = { label: string; value: string };
+
+/** The first page's labelled lines (L32): When / Where / Inside, each only when we have data for it. */
+export function schoolFacts(s: School): Fact[] {
+  const p = placesFile[s.id];
+  const when = whenOf(s);
+  const where = p?.places?.filter(Boolean).join(", ");
+  // shortcut: no key-works list in the content yet, so Inside never shows " · K key works"; add it from a works count per school when one is sourced.
+  const inside = [
+    s.themes.length && `${s.themes.length} idea${s.themes.length === 1 ? "" : "s"}`,
+    s.thinkers.length && `${s.thinkers.length} thinker${s.thinkers.length === 1 ? "" : "s"}`,
+  ].filter(Boolean).join(" · ");
+  return [
+    when && { label: "When", value: when },
+    where && { label: "Where", value: where },
+    inside && { label: "Inside", value: inside },
+  ].filter((f): f is Fact => !!f);
+}
+
+/** A theme's short summary for the skeleton's picked state. */
+// shortcut: themes have no short summary yet, so this is the first sentence of `text`; write a `summary` per theme and use it here.
+export const themeSummary = (t: Theme) => firstSentence(t.text);

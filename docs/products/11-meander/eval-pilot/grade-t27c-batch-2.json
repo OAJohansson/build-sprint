@@ -1,0 +1,545 @@
+{
+  "scope": "rewrite-t27c.json changed entries 19-35 (17 items, origins.w0 to study_prompt), graded against current content/pilot/existentialism.json. All 50 quotes in these items checked verbatim against the corpus: all present, each in its cited section.",
+  "items": [
+    {
+      "id": "origins.w0 (was key-works)",
+      "claims": [
+        {
+          "claim": "Fear and Trembling is by Kierkegaard, 1843",
+          "verdict": "supported",
+          "evidence": "SEP Kierkegaard 1. Life and Works: 'Fear and Trembling (1843), Repetition (1843)'"
+        },
+        {
+          "claim": "It tells the story of Abraham",
+          "verdict": "supported",
+          "evidence": "SEP Existentialism 5.2: 'In Fear and Trembling, Kierkegaard draws on the biblical figure of Abraham'"
+        },
+        {
+          "claim": "It is about the 'leap' of faith",
+          "verdict": "supported",
+          "evidence": "SEP Existentialism 5.2: 'Abraham becomes a “knight of faith” by “leaping” (springer) into a paradox' (quote verbatim)"
+        }
+      ]
+    },
+    {
+      "id": "origins.w1 (was key-works)",
+      "claims": [
+        {
+          "claim": "The Gay Science is by Nietzsche, 1882",
+          "verdict": "supported",
+          "evidence": "SEP Nietzsche 1: 'The Gay Science (1882, second expanded edition 1887)' (verbatim)"
+        },
+        {
+          "claim": "Also translated as The Joyful Wisdom",
+          "verdict": "supported",
+          "evidence": "Gutenberg front matter: 'THE JOYFUL WISDOM' / '(\"LA GAYA SCIENZA\")' (verbatim)"
+        },
+        {
+          "claim": "It is home of 'God is dead'",
+          "verdict": "supported",
+          "evidence": "SEP Nietzsche 2: 'the famous, aggressive and paradoxical pronouncement that “God is dead” (GS 108, 125, 343)' (verbatim)"
+        },
+        {
+          "claim": "It contains the test of living your life again, forever",
+          "verdict": "supported",
+          "evidence": "SEP Existentialism 5.3: 'In The Gay Science, Nietzsche captures this attitude with a famous thought experiment called the “doctrine of eternal recurrence.” Here, he asks if we have the audacity to live the same life ... over and over for eternity' (verbatim)"
+        }
+      ]
+    },
+    {
+      "id": "origins.w2 (was key-works)",
+      "claims": [
+        {
+          "claim": "Being and Time is by Heidegger, 1927",
+          "verdict": "supported",
+          "evidence": "SEP Heidegger intro: 'His magnum opus, Being and Time (1927)' (verbatim)"
+        },
+        {
+          "claim": "We lose ourselves in 'the They'",
+          "verdict": "supported",
+          "evidence": "SEP Existentialism 5.4: 'in our everyday lives we invariably conform (or “fall prey”) to the norms and values of the public world ... where we are not our own selves'"
+        },
+        {
+          "claim": "Anxiety can call us back",
+          "verdict": "supported",
+          "evidence": "SEP Existentialism 5.4: 'anxiety ... momentarily “snatches one back” from the tranquilizing routines of “the They,”' (verbatim)"
+        }
+      ]
+    },
+    {
+      "id": "origins.w3 (was key-works)",
+      "claims": [
+        {
+          "claim": "The Myth of Sisyphus is by Camus, 1942",
+          "verdict": "supported",
+          "evidence": "SEP Camus 3: 'released The Stranger in June 1942 and The Myth of Sisyphus in October' (verbatim)"
+        },
+        {
+          "claim": "It is an essay on the absurd",
+          "verdict": "supported",
+          "evidence": "SEP Camus 3: 'a planned triptych on the Absurd: a novel ... a philosophical essay, eventually titled The Myth of Sisyphus'"
+        },
+        {
+          "claim": "It ends with Sisyphus",
+          "verdict": "supported",
+          "evidence": "SEP Camus 3.4: 'And then he concludes with the story of Sisyphus' (verbatim)"
+        },
+        {
+          "claim": "Sisyphus is condemned in myth to roll a rock up a mountain forever",
+          "verdict": "supported",
+          "evidence": "IEP f.: 'condemned by the Gods to ceaselessly roll a rock to the top of a mountain' (verbatim)"
+        },
+        {
+          "claim": "'One must imagine Sisyphus happy'",
+          "verdict": "supported",
+          "evidence": "SEP Camus 3.4: 'One must imagine Sisyphus happy” (MS, 123)' (verbatim)"
+        }
+      ]
+    },
+    {
+      "id": "origins.w4 (was key-works)",
+      "claims": [
+        {
+          "claim": "Being and Nothingness is by Sartre, 1943",
+          "verdict": "supported",
+          "evidence": "IEP e.: 'In 1943 Being and Nothingness, the groundwork of the Existentialist movement in France was published' (verbatim); SEP Sartre 4.1: 'Being and Nothingness (1943)'"
+        },
+        {
+          "claim": "It is the groundwork of the movement in France",
+          "verdict": "supported",
+          "evidence": "Same IEP line"
+        },
+        {
+          "claim": "Its themes include freedom",
+          "verdict": "supported",
+          "evidence": "SEP Sartre 4.1 Negation and Freedom: 'Sartre provides a series of arguments for the necessary freedom of “human reality”'"
+        },
+        {
+          "claim": "Its themes include bad faith",
+          "verdict": "supported",
+          "evidence": "SEP Sartre 4.2: 'Sartre’s account of bad faith (mauvaise foi) is of major interest'"
+        },
+        {
+          "claim": "Its themes include 'the look'",
+          "verdict": "supported",
+          "evidence": "SEP Sartre 4.3: 'his writings on the Look of the Other'"
+        }
+      ]
+    },
+    {
+      "id": "origins.w5 (was key-works)",
+      "claims": [
+        {
+          "claim": "Existentialism Is a Humanism is by Sartre, 1945",
+          "verdict": "supported",
+          "evidence": "SEP Sartre intro: 'his public lecture, Existentialism is a Humanism, towards the end of 1945'"
+        },
+        {
+          "claim": "It was a packed Paris lecture",
+          "verdict": "supported",
+          "evidence": "SEP Sartre intro: 'Many thousands of Parisians packed into his public lecture' (verbatim)"
+        },
+        {
+          "claim": "It was an accessible version of his ideas",
+          "verdict": "supported",
+          "evidence": "SEP Sartre intro: 'That lecture offered an accessible version of his difficult treatise, Being and Nothingness' (verbatim; 'his ideas' is a fair gloss)"
+        },
+        {
+          "claim": "By 'humanism' he meant that we have no lawmaker but ourselves",
+          "verdict": "drift",
+          "evidence": "Primary: 'This is humanism, because we remind man that there is no legislator but himself ... also because we show that ... always by seeking, beyond himself, an aim ... that man can realize himself as truly human.' Sartre gives two reasons; the note presents one as the whole meaning (quote verbatim)"
+        }
+      ],
+      "fix": "Write \"Part of what he meant by 'humanism': we have no lawmaker but ourselves.\""
+    },
+    {
+      "id": "origins.w6 (was key-works)",
+      "claims": [
+        {
+          "claim": "The Second Sex is by Beauvoir, 1949",
+          "verdict": "supported",
+          "evidence": "SEP Beauvoir 1: 'The Second Sex (1949) became one of the most important feminist texts'"
+        },
+        {
+          "claim": "Society casts woman as 'the Other'",
+          "verdict": "supported",
+          "evidence": "SEP Beauvoir 7: 'woman is the Other, man is the essential being' (verbatim); IEP e.: 'tradition has always thought of woman as the other of man'"
+        },
+        {
+          "claim": "Woman is defined only in relation to men",
+          "verdict": "supported",
+          "evidence": "IEP e.: 'woman defines herself only through him. “She determines and differentiates herself in relation to man, and he does not in relation to her”' (verbatim)"
+        },
+        {
+          "claim": "Men count as the essential ones",
+          "verdict": "supported",
+          "evidence": "SEP Beauvoir 7: 'man is the essential being'"
+        }
+      ]
+    },
+    {
+      "id": "criticisms.p0+p1 (merged)",
+      "claims": [
+        {
+          "claim": "Lead: these are four common criticisms",
+          "verdict": "drift",
+          "evidence": "Only two are reported as criticisms in the sources: IEP b. 'criticised for being obscure, abstract or even mystical' and 'taken to task for paying insufficient attention to social and political structures'. Heidegger's Nazism (IEP c. 'He remains notorious for his involvement with National Socialism in the 1930s') and Nietzsche's elitism (SEP 5.3 'unapologetically elitist and anti-democratic') are given as facts about two thinkers, not as criticisms commonly made of existentialism"
+        },
+        {
+          "claim": "It can be obscure; German critics called it abstract, even mystical",
+          "verdict": "supported",
+          "evidence": "IEP b.: 'In Germany, existentialism (and especially Heidegger) was criticised for being obscure, abstract or even mystical in nature' (verbatim)"
+        },
+        {
+          "claim": "Heidegger above all",
+          "verdict": "supported",
+          "evidence": "IEP b.: '(and especially Heidegger)'"
+        },
+        {
+          "claim": "It paid too little attention to social and political structures",
+          "verdict": "supported",
+          "evidence": "IEP b.: 'paying insufficient attention to social and political structures or values, with dangerous results' (verbatim)"
+        },
+        {
+          "claim": "Sartre later agreed that his early idea of 'absolute' freedom left out the social conditions that limit our choices",
+          "verdict": "supported",
+          "evidence": "SEP 4.2: 'an account of “radical” or “absolute” freedom' ... 'in the wake of Marxist criticism ... his views changed ... It failed to engage the social, historical, and material conditions that invariably limit and constrain our freedom' (both verbatim)"
+        },
+        {
+          "claim": "Heidegger is notorious for his involvement with the Nazis in the 1930s",
+          "verdict": "supported",
+          "evidence": "IEP c.: 'He remains notorious for his involvement with National Socialism in the 1930s' (verbatim)"
+        },
+        {
+          "claim": "Nietzsche's ideal is openly elitist and anti-democratic",
+          "verdict": "supported",
+          "evidence": "SEP 5.3: 'his account of authenticity is unapologetically elitist and anti-democratic' (verbatim)"
+        },
+        {
+          "claim": "He thought only a very few people could be free",
+          "verdict": "supported",
+          "evidence": "SEP 5.3: '“Only a very few people can be free,” writes Nietzsche' (verbatim)"
+        }
+      ],
+      "fix": "Change the lead to \"Two common criticisms, and two troubling facts about its thinkers:\" (or a neutral 'Four reasons for caution:')"
+    },
+    {
+      "id": "legacy.p0+p1 (merged)",
+      "claims": [
+        {
+          "claim": "Lead: where it left its mark",
+          "verdict": "supported",
+          "evidence": "Framing line; each mark below is sourced"
+        },
+        {
+          "claim": "The Second Sex became a founding text of second-wave feminism",
+          "verdict": "supported",
+          "evidence": "IEP e.: 'later a founding text of Second Wave Feminism' (verbatim)"
+        },
+        {
+          "claim": "Second-wave feminism was the women's movement of the 1960s and 1970s",
+          "verdict": "supported",
+          "evidence": "IEP e.: '(the feminist movement from the early 60’s to the 70’s' (verbatim)"
+        },
+        {
+          "claim": "Its stress on freedom and on the struggle to create yourself informed the liberation politics of King and Malcolm X",
+          "verdict": "supported",
+          "evidence": "SEP intro: 'Its emphasis on freedom and the struggle for self-creation informed the radical and emancipatory politics of Martin Luther King Jr. and Malcolm X' (verbatim)"
+        },
+        {
+          "claim": "It made emotions serious subjects of study",
+          "verdict": "supported",
+          "evidence": "IEP b.: 'the philosophical importance that the existentialists placed upon emotion has been influential, legitimising a whole domain of philosophical research' (verbatim)"
+        },
+        {
+          "claim": "It made real-life topics such as sex and death serious subjects of study",
+          "verdict": "drift",
+          "evidence": "IEP b.: 'existentialism was a philosophy that insisted philosophy could and should deal very directly with ‘real world’ topics such as sex, death or crime, topics that had most frequently been approached abstractly'. The source says they were already studied, only abstractly; 'made them serious subjects' overstates"
+        }
+      ],
+      "fix": "Write \"Philosophy: it made emotions a serious subject of study, and insisted philosophy deal directly with real-life topics such as sex and death.\""
+    },
+    {
+      "id": "apply.intro",
+      "claims": [
+        {
+          "claim": "Existentialist ideas shaped existential psychotherapy",
+          "verdict": "supported",
+          "evidence": "Vos 2015 Objective: 'existential therapies: a family of psychological interventions that draw on themes from existential philosophy'"
+        },
+        {
+          "claim": "Existential psychotherapy helps people with questions such as meaning and the fear of death",
+          "verdict": "drift",
+          "evidence": "Vos Objective: 'to help clients address such issues in their lives as meaning and death anxiety' (verbatim). The source gives the aim; 'helps' states it as an effect, which the same review finds only for some types ('some existential therapies appear beneficial')"
+        },
+        {
+          "claim": "Frankl's views differed from the existentialists'",
+          "verdict": "unsupported",
+          "evidence": "None of the three cited sources (IEP a., Vos Objective, VFI Vienna) says this; IEP a. lists 'the Austrian Frankl, who invented the method of logotherapy' among the key figures of existential psychology. The contrast is only supported by sources cited in practices.1 (VFIL Meaning, SEP 5.5). Framing is 'differed', not 'argued against': passes the framing check"
+        },
+        {
+          "claim": "Frankl took up these questions",
+          "verdict": "supported",
+          "evidence": "IEP a.: lists Frankl among 'Key figures here' in existentialism's influence on psychology"
+        },
+        {
+          "claim": "Frankl was an Austrian psychiatrist",
+          "verdict": "supported",
+          "evidence": "IEP a.: 'the Austrian Frankl' (verbatim); VFI Vienna: 'the psychiatrist and neurologist Viktor Emil Frankl (1905-1997)'"
+        },
+        {
+          "claim": "Frankl created logotherapy",
+          "verdict": "supported",
+          "evidence": "IEP a.: 'the Austrian Frankl, who invented the method of logotherapy' (verbatim)"
+        },
+        {
+          "claim": "Logotherapy is a therapy built around finding meaning",
+          "verdict": "supported",
+          "evidence": "VFI Vienna: 'meaning-centered approach to psychotherapy' (verbatim)"
+        }
+      ],
+      "fix": "Write 'which aims to help people with...', and add the VFIL Meaning quote ('we can discover meaning but we can’t make meaning') and SEP 5.5 quote to the intro's sources so 'views differed' is backed where it is said"
+    },
+    {
+      "id": "apply.practices.0.idea",
+      "claims": [
+        {
+          "claim": "Sartre said 'there are no excuses behind us nor justifications before us'",
+          "verdict": "supported",
+          "evidence": "SEP 4.: 'because “there are no excuses behind us nor justifications before us” (Sartre 1946 [2001, 296])' (verbatim)"
+        }
+      ]
+    },
+    {
+      "id": "apply.practices.0.practice",
+      "claims": [
+        {
+          "claim": "Sartre's example is a student of his who came to him for advice",
+          "verdict": "supported",
+          "evidence": "Primary: 'the case of a pupil of mine, who sought me out' ... 'in coming to me, he knew what advice I should give him'"
+        },
+        {
+          "claim": "The setting is wartime France",
+          "verdict": "supported",
+          "evidence": "Primary: 'his elder brother had been killed in the German offensive of 1940' ... 'going to England to join the Free French Forces'"
+        },
+        {
+          "claim": "Option: go to England and join the Free French Forces",
+          "verdict": "supported",
+          "evidence": "Primary: 'the choice between going to England to join the Free French Forces or of staying near his mother' (verbatim)"
+        },
+        {
+          "claim": "Motive: to avenge his brother, killed in the German offensive of 1940",
+          "verdict": "supported",
+          "evidence": "Primary: 'his elder brother had been killed in the German offensive of 1940 and this young man ... burned to avenge him' (verbatim)"
+        },
+        {
+          "claim": "Option: stay with his mother, who lived only for him",
+          "verdict": "supported",
+          "evidence": "Primary: 'staying near his mother and helping her to live. He fully realised that this woman lived only for him' (verbatim)"
+        },
+        {
+          "claim": "Sartre said choosing an adviser is already a choice",
+          "verdict": "supported",
+          "evidence": "Primary: 'to choose an adviser is nevertheless to commit oneself by that choice' (verbatim)"
+        },
+        {
+          "claim": "You more or less know what the adviser will say",
+          "verdict": "supported",
+          "evidence": "Primary: 'at bottom you already knew, more or less, what he would advise'"
+        },
+        {
+          "claim": "His only reply was 'You are free, therefore choose, that is to say, invent.'",
+          "verdict": "supported",
+          "evidence": "Primary: 'I had but one reply to make. You are free, therefore choose, that is to say, invent.' (verbatim)"
+        },
+        {
+          "claim": "Label: 'One way to use his point:' marks the exercise as our application",
+          "verdict": "supported",
+          "evidence": "Label present in 'after' before the exercise; the exercise is not attributed to Sartre"
+        }
+      ]
+    },
+    {
+      "id": "apply.practices.1.idea",
+      "claims": [
+        {
+          "claim": "Sartre and Beauvoir hold that we make meaning through our choices",
+          "verdict": "supported",
+          "evidence": "SEP 5.5: 'My projects have meaning and value because I chose these projects' (verbatim)"
+        },
+        {
+          "claim": "Frankl holds that meaning exists for us to discover and that we cannot make it",
+          "verdict": "supported",
+          "evidence": "VFIL Meaning: 'Frankl maintained that meaning exists for us to discover ... we can discover meaning but we can’t make meaning' (verbatim)"
+        },
+        {
+          "claim": "Framed as differing, not arguing against Sartre",
+          "verdict": "supported",
+          "evidence": "Two parallel \"holds that\" sentences; no claim that Frankl argued against Sartre"
+        },
+        {
+          "claim": "A 2015 review of therapy trials",
+          "verdict": "supported",
+          "evidence": "Vos header: 'Journal of Consulting and Clinical Psychology, 2015'; Results: 'Twenty-one eligible randomized controlled trials of existential therapy were found' (verbatim)"
+        },
+        {
+          "claim": "Meaning-focused therapy strengthened people's sense of meaning",
+          "verdict": "supported",
+          "evidence": "Vos Results: 'Meaning therapies (n = 6 studies) showed large effects on positive meaning in life' (verbatim)"
+        },
+        {
+          "claim": "Its few studies were low in quality",
+          "verdict": "supported",
+          "evidence": "Vos Conclusion: 'Despite the small number and low quality of studies' (verbatim; said of the review's studies overall, which include the 6 meaning-therapy studies)"
+        },
+        {
+          "claim": "It tested therapy, not reflecting alone",
+          "verdict": "supported",
+          "evidence": "Vos Results: 'randomized controlled trials of existential therapy'; Conclusion: 'structured interventions incorporating psychoeducation, exercises'. The review is explicitly not offered as evidence for the self-exercise: passes"
+        }
+      ]
+    },
+    {
+      "id": "apply.practices.1.practice",
+      "claims": [
+        {
+          "claim": "Frankl said we should not ask what life means",
+          "verdict": "supported",
+          "evidence": "VFIL: 'man should not ask what the meaning of his life is, but rather must recognize that it is he who is asked'"
+        },
+        {
+          "claim": "'each man is questioned by life'",
+          "verdict": "supported",
+          "evidence": "VFIL: 'In a word, each man is questioned by life' (verbatim)"
+        },
+        {
+          "claim": "We answer by taking responsibility for our own life",
+          "verdict": "supported",
+          "evidence": "VFIL: 'he can only answer to life by answering for his own life; to life he can only respond by being responsible' (verbatim)"
+        },
+        {
+          "claim": "Frankl named three avenues to meaning",
+          "verdict": "supported",
+          "evidence": "VFIL: 'He called these the creative, experiential and attitudinal avenues to meaning-discovery' (verbatim)"
+        },
+        {
+          "claim": "Avenue: what you gave, through work or deeds",
+          "verdict": "supported",
+          "evidence": "VFIL: 'Creative actions. Giving of ourselves and contributing to life through meaningful work, deeds'"
+        },
+        {
+          "claim": "Avenue: what you received, through experiences or relationships",
+          "verdict": "supported",
+          "evidence": "VFIL: 'Experiences. Receiving from life through meaningful experiences or relationships'"
+        },
+        {
+          "claim": "Avenue: the stance you took, especially towards suffering you could not avoid",
+          "verdict": "supported",
+          "evidence": "VFIL: 'Attitudes. Adopting the right attitude to situations, especially those of unavoidable suffering'"
+        },
+        {
+          "claim": "Label: 'One way to borrow that on your own:' marks the weekly exercise as our application",
+          "verdict": "supported",
+          "evidence": "Label present; exercise not attributed to Frankl and no evidence claim attached"
+        }
+      ]
+    },
+    {
+      "id": "apply.practices.2.from",
+      "claims": [
+        {
+          "claim": "Source is The Gay Science, section 341",
+          "verdict": "supported",
+          "evidence": "Gutenberg: '[Book Fourth, 341. The Heaviest Burden]' holds the demon passage; SEP 5.3 cites '(1887 [1974], §341)'"
+        }
+      ]
+    },
+    {
+      "id": "apply.practices.2.idea",
+      "claims": [
+        {
+          "claim": "Nietzsche called the attitude amor fati",
+          "verdict": "supported",
+          "evidence": "Gutenberg 276: '_Amor fati_: let that henceforth be my love!' (verbatim)"
+        },
+        {
+          "claim": "Amor fati means love of one's fate",
+          "verdict": "supported",
+          "evidence": "SEP 5.3: 'amor fati (love of one’s fate)' (verbatim)"
+        },
+        {
+          "claim": "The attitude is saying yes to your whole life, the good and the bad",
+          "verdict": "supported",
+          "evidence": "SEP 5.3: 'a radical acceptance of one’s existence ... all the blessed and cursed events'; 'The Overman is a “yes-sayer” who affirms every aspect of his life'"
+        },
+        {
+          "claim": "Nietzsche held an elitist view",
+          "verdict": "supported",
+          "evidence": "SEP 5.3: 'unapologetically elitist and anti-democratic' (verbatim)"
+        },
+        {
+          "claim": "You need not share his elitism to try his question",
+          "verdict": "supported",
+          "evidence": "Our framing, not a source claim; it does not attribute anything new to Nietzsche"
+        }
+      ]
+    },
+    {
+      "id": "study_prompt",
+      "claims": [
+        {
+          "claim": "Existentialism is a loose movement",
+          "verdict": "supported",
+          "evidence": "SEP intro: 'certainly not a reference to a coherent system or philosophical school'"
+        },
+        {
+          "claim": "It begins from lived human life",
+          "verdict": "supported",
+          "evidence": "SEP intro: 'existentialism generally begins in medias res, amidst our own situated, first-person experience'"
+        },
+        {
+          "claim": "It was made famous by Sartre and Beauvoir",
+          "verdict": "supported",
+          "evidence": "SEP intro: 'the most popular voices of this movement were French, most notably Jean-Paul Sartre and Simone de Beauvoir'"
+        },
+        {
+          "claim": "Theme: existence before essence",
+          "verdict": "supported",
+          "evidence": "SEP 3: 'the pithy adage, “existence precedes essence”'"
+        },
+        {
+          "claim": "Theme: freedom and anxiety",
+          "verdict": "supported",
+          "evidence": "SEP 4.1 The Anxiety of Choice (section title and content)"
+        },
+        {
+          "claim": "Theme: authenticity versus the crowd",
+          "verdict": "supported",
+          "evidence": "SEP 5: 'we tend to get pulled along by the crowd, doing what “they” do'"
+        },
+        {
+          "claim": "Theme: meaning without guarantees",
+          "verdict": "supported",
+          "evidence": "SEP 1 / intro: 'the loss of a transcendent moral framework and ... meaninglessness'"
+        },
+        {
+          "claim": "Theme: my freedom needs yours",
+          "verdict": "supported",
+          "evidence": "SEP 6: 'My freedom, then, is not free-floating; it is invariably bound up in the freedom of others'"
+        },
+        {
+          "claim": "Theme: faith and the leap",
+          "verdict": "supported",
+          "evidence": "SEP 5.2: 'Abraham becomes a “knight of faith” by “leaping” (springer) into a paradox'"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "supported": 84,
+    "drift": 4,
+    "unsupported": 1,
+    "wrong": 0
+  }
+}

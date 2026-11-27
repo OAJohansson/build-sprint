@@ -1,0 +1,155 @@
+[
+  {
+    "school": "socrates-plato",
+    "claim": "span start: late 5th century BCE",
+    "verdict": "supported",
+    "note": "Changed from 469. Socrates' lifetime '469–399 B.C.E.', ending with his trial in 399, puts his philosophical activity in the late 5th century. No longer a birth date."
+  },
+  {
+    "school": "socrates-plato",
+    "claim": "span end: mid 4th century BCE",
+    "verdict": "supported",
+    "note": "Plato '(429?–347 B.C.E.)'. Unchanged in substance."
+  },
+  {
+    "school": "aristotle",
+    "claim": "span end: (none, now 'from 335 BCE')",
+    "verdict": "supported",
+    "note": "The 322 death date is gone and no end is shown. 'From 335' makes no claim about an end, and the page agrees the school continued ('Those affiliated with Aristotle's school later came to be called Peripatetics')."
+  },
+  {
+    "school": "epicureanism",
+    "claim": "span end: 'onward'",
+    "verdict": "drift",
+    "note": "New quote is verbatim: 'More or less contemporary with Philodemus is Lucretius (first century B.C.E.)'. It shows the school was still going about 250 years after 307/6. But a bare 'onward' reads to a newcomer as 'still a living school', which none of the cited text says. The round-1 fix had a parenthetical; it was dropped.",
+    "fix": "'WHEN: 307/6 BCE–1st century BCE and later', or 'from 307/6 BCE (still active in the 1st century BCE)'."
+  },
+  {
+    "school": "stoicism",
+    "claim": "place: Rome",
+    "verdict": "supported",
+    "note": "Now cited: 'Stoicism became particularly fashionable in the Roman period.' and 'Epictetus ... was expelled from Rome by Domitian along with other philosophers in 93 CE'. Both verbatim."
+  },
+  {
+    "school": "stoicism",
+    "claim": "span end: 2nd century CE",
+    "verdict": "supported",
+    "note": "'Also active in the second century CE was the Stoic philosopher Hierocles'. The intro's 'and beyond' makes this a cautious end, which is fine."
+  },
+  {
+    "school": "skepticism",
+    "claim": "place: Greece (Athens, Elis)",
+    "verdict": "supported",
+    "note": "Replaces Rome. Athens is backed by the Academy quote. Elis rests on 'Pyrrho of Elis was also a powerful advocate of such a position', which is an epithet (where he was from), not a statement that skepticism developed there. That's acceptable because the claim is the country, Greece, and Athens carries it.",
+    "fix": "Optional: drop '(Elis)' if only well-attested centres should be named."
+  },
+  {
+    "school": "neoplatonism",
+    "claim": "place: Egypt",
+    "verdict": "supported",
+    "note": "Now cited: 'went on in Alexandria and Constantinople until the end of the 6th century'. Note: the same line names Constantinople, which isn't listed; that's a minor omission."
+  },
+  {
+    "school": "patristic",
+    "claim": "place: Algeria (Roman Africa)",
+    "verdict": "supported",
+    "note": "Now cited: 'ordained a priest in the diocese of the maritime city of Hippo Regius (modern Annaba/Bône in Algeria)'. Verbatim."
+  },
+  {
+    "school": "patristic",
+    "claim": "span start: 3rd century CE",
+    "verdict": "supported",
+    "note": "Origen was active in Alexandria until 'Origen left Alexandria in 216'; '(c. 185–c. 253)'. No longer a birth date."
+  },
+  {
+    "school": "patristic",
+    "claim": "span end: 6th century CE",
+    "verdict": "supported",
+    "note": "Boethius 'died: 526? C.E.'. A century is a fair end. The Boethius entry frames him as a bridge to the Latin Middle Ages, so the end is soft but not misleading."
+  },
+  {
+    "school": "scholasticism",
+    "claim": "span end: late 17th century",
+    "verdict": "supported",
+    "note": "The two fragments 'University philosophy continued in its established patterns' and 'until late in the seventeenth century' come from one sentence (the middle, 'with some important changes ... in Protestant countries', is left out). Spliced, but the meaning isn't changed.",
+    "fix": "Optional: quote the whole sentence instead of two fragments."
+  },
+  {
+    "school": "scholasticism",
+    "claim": "place: Spain (new)",
+    "verdict": "drift",
+    "note": "Spain is right per the page, but the cited quote is cut off before its verb: 'In the Iberian peninsula, the sixteenth and seventeenth centuries were the period in which philosophical theology'. On its own it claims nothing. The full sentence continues 'studied in the established university manner, flourished (see entry on the School of Salamanca)', which is the part that supports the claim.",
+    "fix": "Extend the quote to '... the period in which philosophical theology, studied in the established university manner, flourished'. Optionally add 'The tradition is continuous with the earlier Parisian one' from the next sentence."
+  },
+  {
+    "school": "renaissance",
+    "claim": "place: France",
+    "verdict": "supported",
+    "note": "Now cited: 'Academic skepticism had a major impact in mid-sixteenth century France through the pedagogical reforms proposed by Petrus Ramus'. This is inside the period, and Ramus is a philosopher."
+  },
+  {
+    "school": "rationalism",
+    "claim": "place: France",
+    "verdict": "supported",
+    "note": "Now rests on Malebranche: 'born in Paris on August 6, 1638' and 'died, also in Paris, on October 13, 1715'. Those are life dates, but together they show he lived and worked in Paris. A clearer quote is on the same page.",
+    "fix": "Optional: add 'The French Cartesian Nicolas Malebranche', so the quote shows he belongs to the rationalist tradition and not just a birthplace."
+  },
+  {
+    "school": "rationalism",
+    "claim": "place: Germany (new)",
+    "verdict": "drift",
+    "note": "Rests only on 'Leibniz was born in Leipzig on July 1, 1646'. That is a birthplace, the same pattern graded drift for Descartes and Augustine in round 1. It doesn't show that rationalism developed in Germany, and the page doesn't say Leipzig is in Germany (a reader would know). The claim is true per the same page, which says he spent his working life in Hanover.",
+    "fix": "Cite SEP Leibniz instead: 'the rest of his life was essentially spent in Hanover and its environs' (verbatim on the page), optionally with 'the German-speaking lands'."
+  },
+  {
+    "school": "rationalism",
+    "claim": "place: Netherlands",
+    "verdict": "supported",
+    "note": "Still 'He moved to the Dutch Netherlands, returning to France only infrequently'. Unchanged; re-checked because the source list changed."
+  },
+  {
+    "school": "utilitarianism",
+    "claim": "span end: present",
+    "verdict": "supported",
+    "note": "Was 1874 (wrong). Now cites 'contemporary utilitarians such as Peter Singer' (verbatim, in the SEP history entry, section 1). It supports a living tradition."
+  },
+  {
+    "school": "marxism",
+    "claim": "place: Germany",
+    "verdict": "drift",
+    "note": "New quote is verbatim: 'In The German Ideology manuscripts, Marx and Engels contrast their new materialist method with the idealism that had characterised previous German thought'. I suggested it in round 1 as the best line in this source, but graded strictly it shows Marxism grew out of German *thought*, not that it developed in Germany. Germany as a place is still not stated.",
+    "fix": "Needs a source with Marx's biography; the SEP Marx entry has none, and I couldn't fetch an IEP Marx entry (iep.utm.edu/marx/ and /karl-marx/ both returned 404). Until then, either keep it as soft drift or reword the row to 'grew out of German philosophy'."
+  },
+  {
+    "school": "marxism",
+    "claim": "span end: present",
+    "verdict": "supported",
+    "note": "Now cites 'his philosophically most influential recent exponent, G.A. Cohen' (Cohen 1978, 1988). It supports the tradition continuing into recent decades; 'present' goes slightly beyond that, but fairly."
+  },
+  {
+    "school": "existentialism",
+    "claim": "span start: 1840s",
+    "verdict": "drift",
+    "note": "Still Either/Or (1843). The existentialism entry says the movement 'exploded on the scene in mid-twentieth-century France' and that 19th-century figures laid the 'conceptual groundwork'. A bare '1840s' start makes the precursor the start of the movement.",
+    "fix": "'WHEN: mid-20th century (roots in the 1840s)'. IEP Existentialism adds that Sartre's 'most clearly existentialist' writings 'date from ... primarily the 1930s and 1940s'."
+  },
+  {
+    "school": "existentialism",
+    "claim": "span end: 1970",
+    "verdict": "drift",
+    "note": "Was 1949 (wrong). Now 'her politicization of old age in The Coming of Age (1970)'. The quote is verbatim and no longer contradicted, but it's the date of one book, not a stated end of the movement. I offered '1840s–1970' in round 1 only as the fallback if a hard end was wanted; graded strictly it's still one work closing a movement.",
+    "fix": "'WHEN: mid-20th century (roots in the 1840s)', with no hard end. If an end is required, say 'Beauvoir's existentialist work runs to 1970' so it reads as a person."
+  },
+  {
+    "school": "post-structuralism",
+    "claim": "span end: (none, now 'from the 1960s')",
+    "verdict": "supported",
+    "note": "The 'onward' is gone. 'From the 1960s' claims only a start, which Derrida's 1967 'annus mirabilis' supports."
+  },
+  {
+    "school": "feminist-philosophy",
+    "claim": "places: null",
+    "verdict": "supported",
+    "note": "Places removed; the app hides the WHERE row, so nothing is shown and nothing is claimed. Span quote is unchanged and verbatim."
+  }
+]

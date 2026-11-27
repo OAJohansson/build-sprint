@@ -1,0 +1,64 @@
+[
+  {"item": "tagline", "claims": [
+    {"claim": "Existentialism is a philosophy that starts from the single (first-person) individual", "verdict": "supported", "evidence": "SEP existentialism [intro] 'existentialism generally begins in medias res, amidst our own situated, first-person experience'"},
+    {"claim": "That individual must choose how to live", "verdict": "supported", "evidence": "SEP [4. Freedom] 'it is up to the individual to make his, her, or their own identity through choices and actions'; [4.1] 'I alone am answerable to whatever options I choose'"}
+  ], "quote_ok": true, "item_verdict": "pass"},
+  {"item": "overview.0", "claims": [
+    {"claim": "Existentialism is a loose family of ideas, not a tidy school", "verdict": "supported", "evidence": "SEP [intro] 'certainly not a reference to a coherent system or philosophical school'; 'a set of overlapping ideas that bind the movement together'"},
+    {"claim": "It starts from concrete first-person life rather than a detached 'view from nowhere'", "verdict": "supported", "evidence": "SEP [2. Engagement vs. Detachment] rejects the 'God's eye view' or 'view from nowhere'; 'a careful analysis of first-person experience, of the concrete, flesh and blood particulars of everyday life'"},
+    {"claim": "Core claim: no fixed nature is given, so we make ourselves through choices", "verdict": "supported", "evidence": "SEP [intro] Existence Precedes Essence: 'our essence is not given in advance ... burdened with the task of creating ourselves through our choices and actions'"},
+    {"claim": "We are responsible for who we become", "verdict": "supported", "evidence": "SEP [intro] Freedom: 'we are free and responsible for who we are and what we do'"},
+    {"claim": "Kierkegaard and Nietzsche laid the groundwork in the nineteenth century", "verdict": "supported", "evidence": "SEP [intro] 'the conceptual groundwork of the movement was laid much earlier in the nineteenth century by pioneers like Søren Kierkegaard and Friedrich Nietzsche'"},
+    {"claim": "Sartre and Beauvoir made it famous in mid-twentieth-century France", "verdict": "supported", "evidence": "SEP [intro] movement 'exploded on the scene in mid-twentieth-century France'; 'the most popular voices of this movement were French, most notably Jean-Paul Sartre and Simone de Beauvoir'"}
+  ], "quote_ok": true, "item_verdict": "pass"},
+  {"item": "themes.0.p0", "claims": [
+    {"claim": "Sartre called existence precedes essence 'the first principle of existentialism'", "verdict": "supported", "evidence": "SEP [3. Existence Precedes Essence] 'This is, according to Sartre, “the first principle of existentialism”'"},
+    {"claim": "He adapted the idea from Heidegger", "verdict": "supported", "evidence": "SEP [3] 'initially introduced early on in Heidegger’s Being and Time ... Sartre will later repackage this line'"},
+    {"claim": "No built-in human nature decides who we are", "verdict": "supported", "evidence": "SEP [3] 'there is no pre-given or essential nature that determines us'"},
+    {"claim": "A person first 'turns up' and only afterwards defines himself, through choices as life unfolds", "verdict": "supported", "evidence": "SEP [3] 'man exists, turns up, appears on the scene, and, only afterwards, defines himself'; 'situated choices we make as our lives unfold'"},
+    {"claim": "Facts like body, desires and historical setting limit us; existentialists call this 'facticity'", "verdict": "supported", "evidence": "SEP [3] 'our givenness (or “facticity”) ... our embodiment and spatiality, our creaturely appetites and desires, and the socio-historical context'"},
+    {"claim": "We can question those facts, give them meaning and decide what to do with them; that power is 'transcendence'", "verdict": "supported", "evidence": "SEP [3] 'capacity to rise above or “transcend” these facts'; 'surpass our facticity by calling it into question, interpreting it ..., and making decisions about how to deal with it'"}
+  ], "quote_ok": true, "item_verdict": "pass"},
+  {"item": "themes.2.p1", "claims": [
+    {"claim": "What authenticity looks like varies across thinkers", "verdict": "supported", "evidence": "SEP sections 5.2-5.5 give distinct accounts per thinker"},
+    {"claim": "For Kierkegaard it is a passionate commitment that pulls a scattered life together", "verdict": "supported", "evidence": "SEP [5.2] 'a passionate, “personality defining” ... decision or commitment that binds together and unifies the fragmented and disjointed moments of our life'; life otherwise 'scattered and disjointed'"},
+    {"claim": "For Nietzsche it is saying yes to one's whole life, even to living it again forever", "verdict": "supported", "evidence": "SEP [5.3] 'The Overman is a “yes-sayer” who affirms every aspect of his life'; eternal recurrence: 'live the same life ... over and over for eternity'"},
+    {"claim": "For Heidegger it is 'resoluteness', a focused grip on one's possibilities that stays open to letting them go", "verdict": "supported", "evidence": "SEP [5.4] 'resoluteness ... giving life a sense of cohesion and focus'; 'I must also be willing to let go or give up on them'"},
+    {"claim": "For Sartre and Beauvoir it is clear-eyed acceptance of our unstable situation and responsibility for what we do", "verdict": "supported", "evidence": "SEP [5.5] 'a clear-eyed awareness and acceptance of the instability and ambiguity of the human condition ... to take responsibility'; 'to be concerned with what I do'"}
+  ], "quote_ok": true, "item_verdict": "pass"},
+  {"item": "themes.5.p0", "claims": [
+    {"claim": "Existentialism is not only atheist", "verdict": "supported", "evidence": "SEP [intro] 'one finds secular and religious existentialists'"},
+    {"claim": "Kierkegaard was a Christian", "verdict": "supported", "evidence": "SEP [5.2] 'As a religious existentialist, Kierkegaard contends that this is what is required to enter the sphere of faith and become a Christian'", "note": "Entailed rather than stated outright; acceptable."},
+    {"claim": "Kierkegaard prized 'a truth which is true for me', lived and felt rather than proved", "verdict": "supported", "evidence": "SEP [2.1] 'it discloses “a truth which is true for me”'; 'cannot be reasoned about or explained logically'; 'felt rather than known'"},
+    {"claim": "In Fear and Trembling, God tells Abraham to sacrifice his son Isaac", "verdict": "supported", "evidence": "SEP [5.2] 'In Fear and Trembling ... when God demands that he break this commandment and kill Isaac'"},
+    {"claim": "Abraham becomes a 'knight of faith' by leaping into a paradox reason cannot explain", "verdict": "supported", "evidence": "SEP [5.2] 'Abraham becomes a “knight of faith” by “leaping” (springer) into a paradox'; 'a truth that is fundamentally irrational and absurd'"},
+    {"claim": "He is alone with a choice no one else understands", "verdict": "supported", "evidence": "SEP [5.2] 'accompanied by anxiety and loneliness'; 'a path that no one else may understand'; 'cannot make himself understood to anyone'"},
+    {"claim": "The Jewish existentialist Martin Buber stressed meeting another person as a 'You', not an 'It'", "verdict": "supported", "evidence": "SEP [6.2] 'The Jewish existentialist Martin Buber ... I-It ... we become vulnerable to the other, not as an “it” but as a “you”'"},
+    {"claim": "Nietzsche and Sartre saw God as irrelevant or harmful to our deepest choices", "verdict": "supported", "evidence": "IEP [b. Anxiety and Authenticity] 'the existence of a transcendent deity is not relevant to (or is positively detrimental to) such decisions (a view broadly shared by Nietzsche and Sartre)'"}
+  ], "quote_ok": true, "item_verdict": "pass"},
+  {"item": "origins.p2", "claims": [
+    {"claim": "Who counts as an existentialist is disputed", "verdict": "supported", "evidence": "IEP [intro] term is a 'catch-all'; IEP [f. Camus] 'every attempt to classify him a rather risky operation'; IEP [c. Heidegger] poses whether he can be classed as existentialist"},
+    {"claim": "The term names no single doctrine", "verdict": "supported", "evidence": "SEP [intro] 'there is no unifying doctrine'"},
+    {"claim": "Most thinkers grouped under it never used it or rejected it", "verdict": "supported", "evidence": "IEP [intro] 'most of the philosophers conventionally grouped under this heading either never used, or actively disavowed, the term'"},
+    {"claim": "Only Sartre and Beauvoir openly claimed it", "verdict": "supported", "evidence": "SEP [intro] 'only Sartre and Beauvoir explicitly self-identified as “existentialists”'"},
+    {"claim": "Heidegger repudiated Sartre's existentialism in his 'Letter on Humanism' (1947)", "verdict": "supported", "evidence": "IEP [c. Heidegger] 'in 1947 is published in a book form with the title ‘Letter on Humanism’. There he repudiates any possible connection of his philosophy with the existentialism of Sartre'"},
+    {"claim": "Both encyclopedias still count Heidegger among its key figures", "verdict": "supported", "evidence": "IEP [c. Heidegger] 'Heidegger can be classified as an existentialist thinker'; SEP [intro] lists Heidegger among those who laid the movement's conceptual groundwork", "note": "SEP support is from the cited intro (groundwork list); 'key figures' is a fair paraphrase, borderline on SEP's side."},
+    {"claim": "Camus gave a 1945 interview titled, in English, 'No, I am not an existentialist'", "verdict": "supported", "evidence": "IEP [f. Camus] '“Non, je ne suis pas existentialist” is the title of a famous interview ... 15 of November, 1945'"},
+    {"claim": "The SEP places his Myth of Sisyphus squarely in the existentialist tradition", "verdict": "supported", "evidence": "SEP Camus [1.] 'This essay belongs squarely in the philosophical tradition of existentialism but Camus denied being an existentialist'"}
+  ], "quote_ok": true, "item_verdict": "pass"},
+  {"item": "key-works.w4", "claims": [
+    {"claim": "Being and Nothingness is by Jean-Paul Sartre, 1943", "verdict": "supported", "evidence": "SEP Sartre [4.1] 'Being and Nothingness (1943)'"},
+    {"claim": "It is the movement's defining treatise", "verdict": "supported", "evidence": "SEP Sartre [4.1] 'remains the defining treatise of the existentialist “movement”, along with works from de Beauvoir'", "note": "Source adds 'along with works from de Beauvoir'; dropping it is a minor simplification, not drift."},
+    {"claim": "It covers radical freedom", "verdict": "supported", "evidence": "SEP Sartre [4.1] 'this quite radical philosophy of freedom'; 'radical human freedom'"},
+    {"claim": "It covers bad faith", "verdict": "supported", "evidence": "SEP Sartre [4.2] 'the chapter on bad faith in Being and Nothingness'"},
+    {"claim": "It covers the look", "verdict": "supported", "evidence": "SEP Sartre [4.3] 'In Being and Nothingness ... his descriptions of being subject to the look of another'"}
+  ], "quote_ok": true, "item_verdict": "pass"},
+  {"item": "criticisms.p1", "claims": [
+    {"claim": "Existentialists were accused of neglecting social and political structures, with dangerous results", "verdict": "supported", "evidence": "IEP [b. Philosophy] 'Heidegger and the existentialist were also taken to task for paying insufficient attention to social and political structures or values, with dangerous results'"},
+    {"claim": "Heidegger remains notorious for his involvement with National Socialism", "verdict": "supported", "evidence": "IEP [c. Heidegger] 'He remains notorious for his involvement with National Socialism in the 1930s'"},
+    {"claim": "Nietzsche's ideal of the self-creating individual is openly elitist and anti-democratic", "verdict": "supported", "evidence": "SEP [5.3] Overman as figure of 'self-creation'; 'his account of authenticity is unapologetically elitist and anti-democratic'"},
+    {"claim": "Nazi ideologues exploited his work, in a way the IEP calls 'utterly misdirected'", "verdict": "supported", "evidence": "IEP [b. Nietzsche] 'The exploitation of his teaching by the Nazi ideologues ..., although utterly misdirected'"},
+    {"claim": "Camus accused Kierkegaard, Jaspers and Heidegger of escaping into 'forced hope'", "verdict": "supported", "evidence": "SEP Camus [3.3] Myth of Sisyphus 'written against existentialists such as Shestov, Kierkegaard, Jaspers, and Heidegger'; 'he rejects what he sees as their ultimate escapism'; 'That forced hope is religious in all of them'"},
+    {"claim": "Some argue the label does more harm than good, lumping very different ideas together", "verdict": "supported", "evidence": "IEP [intro] 'the term – insofar as it leads us to ignore what is distinctive ... and to conflate together significantly different ideas – does more harm than good'"}
+  ], "quote_ok": true, "item_verdict": "pass"}
+]

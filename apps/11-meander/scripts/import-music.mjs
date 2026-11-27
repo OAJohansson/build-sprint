@@ -20,7 +20,7 @@ const full = JSON.parse(fs.readFileSync(SRC, "utf8"));
 if (!Array.isArray(full)) { console.error("import-music: the source must be a list of genres"); process.exit(1); }
 
 const problems = [], warnings = [];
-const FAMILIES = new Set(["roots", "rock", "soul", "caribbean-latin-african", "hiphop", "electronic"]);
+const FAMILIES = new Set(["roots", "pop", "rock", "soul", "caribbean-latin", "african", "hiphop", "electronic"]);
 const KIND = { grew_out_of: "built", reacted_against: "against", fused_with: "fused" };
 // Years read from a range by hand, where parseSpan reads it wrong: { "<genre-id>": { from, to } }.
 const SPAN_BY_HAND = {};

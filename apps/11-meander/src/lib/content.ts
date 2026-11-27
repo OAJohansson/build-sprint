@@ -46,7 +46,7 @@ export type School = {
   tradition?: string;
   /** "Indian · Hindu", "Chinese": the tag shown with an Eastern school (F4). */
   traditionTag?: string;
-  /** Music: one of six families the globe clusters by. */
+  /** Music: one of eight families the globe clusters by. */
   family?: string;
   /** A one-line "what this is" written for the card; when missing, the first sentence of `description`. */
   tagline?: string;
@@ -230,7 +230,7 @@ export type Field = {
   /** Many neighbours per focus (music): labels stay on the nearest rings, threads stop short of the title block, an
    * open artist dims the neighbours (L56). */
   dense: boolean;
-  /** Music: the six families the phone's list is grouped under (F7), in this order. */
+  /** Music: the eight families the phone's list is grouped under (F7), in this order. */
   families: { id: string; name: string }[];
   /** A school's name wherever it is listed: music uses the short name ("EDM", not "EDM (2010s boom)"); philosophy keeps its full name. */
   nameOf: (s: School) => string;
@@ -364,8 +364,9 @@ const FIELDS: Record<FieldId, Field> = {
   music: makeField({
     id: "music", words: MUSIC_WORDS, eras: MUSIC_ERAS, dense: true, livingAfter: 10, shortNames: true,
     families: [
-      { id: "roots", name: "Roots" }, { id: "rock", name: "Rock" }, { id: "soul", name: "Soul, R&B and dance" },
-      { id: "caribbean-latin-african", name: "Caribbean, Latin and African" }, { id: "hiphop", name: "Hip-hop" }, { id: "electronic", name: "Electronic" },
+      { id: "roots", name: "Roots" }, { id: "pop", name: "Pop" }, { id: "rock", name: "Rock" }, { id: "soul", name: "Soul, R&B and dance" },
+      { id: "caribbean-latin", name: "Caribbean and Latin" }, { id: "african", name: "African" }, { id: "hiphop", name: "Hip-hop" },
+      { id: "electronic", name: "Electronic" },
     ], ticks: [1900, 1920, 1940, 1960, 1970, 1980, 1990, 2000, 2010, 2020],
     schools: mSchools, thinkers: mThinkers, links: mLinks, positions: mPositions, places: mPlaces, spans: mEras,
   }),

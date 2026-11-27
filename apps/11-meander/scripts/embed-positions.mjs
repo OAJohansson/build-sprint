@@ -59,7 +59,7 @@ if (!process.env.FRESH && fixed.every(Boolean)) {
 }
 // A tradition other than the default (the Eastern schools, #42) reads as its own region: its schools are pulled
 // within COHESION degrees of each other, on top of the link and spacing terms. Music clusters every genre by its
-// `family` (roots, rock, soul, caribbean-latin-african, hiphop, electronic) the same way.
+// `family` (roots, pop, rock, soul, caribbean-latin, african, hiphop, electronic) the same way.
 const tradition = schools.map((s) => s.family ?? s.tradition ?? null);
 const COHESION = Number(process.env.COHESION ?? DEFAULTS.cohesion);
 const baseEnergy = energy;

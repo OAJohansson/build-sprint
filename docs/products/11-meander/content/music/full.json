@@ -9138,7 +9138,7 @@
  {
   "id": "reggae",
   "name": "Reggae (with ska)",
-  "family": "caribbean-latin-african",
+  "family": "caribbean-latin",
   "tagline": {
    "text": "Jamaica's slow, bass-heavy groove, with the guitar chopping on the offbeat.",
    "sources": [
@@ -9768,7 +9768,7 @@
  {
   "id": "dub-music",
   "name": "Dub",
-  "family": "caribbean-latin-african",
+  "family": "caribbean-latin",
   "tagline": {
    "text": "Reggae taken apart at the mixing desk: drum and bass, drenched in echo.",
    "sources": [
@@ -10375,7 +10375,7 @@
  {
   "id": "salsa-music",
   "name": "Salsa",
-  "family": "caribbean-latin-african",
+  "family": "caribbean-latin",
   "tagline": {
    "text": "Fast Latin dance music from New York, built on Cuban son and the clave rhythm.",
    "sources": [
@@ -10929,7 +10929,7 @@
  {
   "id": "bossa-nova",
   "name": "Bossa nova",
-  "family": "caribbean-latin-african",
+  "family": "caribbean-latin",
   "tagline": {
    "text": "A hushed, swaying samba for nylon-string guitar and soft voice, born in Rio.",
    "sources": [
@@ -11500,8 +11500,8 @@
  },
  {
   "id": "afrobeat",
-  "name": "Afrobeat",
-  "family": "caribbean-latin-african",
+  "name": "Afrobeat (Fela Kuti era)",
+  "family": "african",
   "tagline": {
    "text": "Long, chanted Nigerian grooves of highlife, funk and jazz, with a political edge.",
    "sources": [
@@ -12100,7 +12100,7 @@
  {
   "id": "reggaeton",
   "name": "Reggaeton",
-  "family": "caribbean-latin-african",
+  "family": "caribbean-latin",
   "tagline": {
    "text": "Spanish-language dance music riding the dembow beat, from Panama to Puerto Rico.",
    "sources": [

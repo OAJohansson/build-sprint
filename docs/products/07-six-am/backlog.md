@@ -129,3 +129,4 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 - **Click to jump in Make** (OR6-5): in Bass, Drums, Melody and FX, click a spot on the loop's bars to play from there, like the Studio's timeline.
 - **Load your own sample packs** (L266): pick a folder in Chrome, sounds kept in the browser only (IndexedDB / OPFS), never uploaded; once the CC0 kit runs out (`research-sounds.md`, route C).
 - Build-time design fixes from the critic's round 3b (9/10): worst-case rebuild grid ends at the side panel with a scroll cue; "Breakdown" fits; narrow counts read "2 to fill" or nothing; Ride's "Your turn" line clear of the shelf at 1280; blank-cell hover / focus outline (27 Nov).
+- Viability risk (L283): tonejs-instruments' sampled basses are CC BY 3.0 but its README doesn't say where the recordings came from; check before charging, or swap for basses recorded by a known author.

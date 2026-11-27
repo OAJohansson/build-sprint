@@ -881,3 +881,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Owner approved the canvas as is (L279) and went to the gym; build starts with slice 1 (sounds).
 - Slice 1 built (f8b4323..339654b): 20 sampled sounds per drum row on the shelf, 20 bass sounds (13 new synth presets, 3 sampled basses), audible knobs, Suggest over the 20, credits, dev hook; 618 tests pass. Logged L280–L281, T240–T246. Next: user-tester and data-evals on slice 1.
 - Slice 1 user test: find 4 (3 at 1280), shape 4; U7-1 major (shelf hides sounds without a cue), U7-2..7 minor/polish (`user-testing/report-2026-11-27-p7-slice1.md`). Waiting for data-evals before the fix round.
+- Slice 1 data-evals (cb941cc): W1, W2, W3, W11, W12, W13 pass; W4 fails on bass Drive / Sub / Weight / Wobble (D7-1) and Pitch drop on 7 presets (D7-2). PM set the bass knob bars (L282) and accepted D7-3/4/5/7 knowingly (L283). Fix round sent to the engineer: U7-1..7, D7-1, D7-2, D7-6.

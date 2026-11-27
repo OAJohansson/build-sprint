@@ -15,3 +15,7 @@ One `design-critic`, screenshots only, fixed five-point scorecard (clutter, hier
 **PM note:** the critic flagged the closeness score, the name field and the looping chip as "not asked for"; they are the live Make room's (Phase 5–6) and stay. "Sound credits" stays (L272).
 
 Full per-direction gaps are in the session transcript; the numbered gaps above are the ones the next round fixes.
+
+## Round 3 (final hybrid, 285e28e): 8/10
+
+Scorecard: clutter 1 · hierarchy 2 · legibility 1 · feel 2 · copy 2. Closed: every round-2 gap except the per-lane "M" and the playhead over labels. Open (sent to the designer as round 3b): narrow sections in the worst case, four kinds of empty with no key ("none here" boxes, "has vocals" lost "not yet"), single-letter M / S, cramped row sub-labels at 1280, the broken playhead line, and the Deck strip pushing the grid down.

@@ -1030,6 +1030,7 @@ Small, folded in: Listen's "Other" becomes "Melody & FX" (OR6-1, toil, logged as
 
 | # | Question | Answer | Log |
 | --- | --- | --- | --- |
+| 1 | Where do the new sounds come from? | A hand-picked free (CC0) sample kit for drums, a richer bass synth with more presets plus a few credited sampled basses; own packs later (PM's recommendation, `research-sounds.md`) | L266 |
 
 ## Requirements (Phase 7, draft)
 

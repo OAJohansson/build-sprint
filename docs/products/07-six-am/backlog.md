@@ -127,3 +127,4 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 - **Fix drums by ear** (OR6-3): tap a hit to remove or add it, mute any row; more drum rows (open hat, shaker/percussion, ride) so high sounds stop piling onto Hats.
 - **Listen's "Other" → "Melody & FX"** (OR6-1).
 - **Click to jump in Make** (OR6-5): in Bass, Drums, Melody and FX, click a spot on the loop's bars to play from there, like the Studio's timeline.
+- **Load your own sample packs** (L266): pick a folder in Chrome, sounds kept in the browser only (IndexedDB / OPFS), never uploaded; once the CC0 kit runs out (`research-sounds.md`, route C).

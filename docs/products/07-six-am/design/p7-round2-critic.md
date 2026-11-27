@@ -19,3 +19,7 @@ Full per-direction gaps are in the session transcript; the numbered gaps above a
 ## Round 3 (final hybrid, 285e28e): 8/10
 
 Scorecard: clutter 1 · hierarchy 2 · legibility 1 · feel 2 · copy 2. Closed: every round-2 gap except the per-lane "M" and the playhead over labels. Open (sent to the designer as round 3b): narrow sections in the worst case, four kinds of empty with no key ("none here" boxes, "has vocals" lost "not yet"), single-letter M / S, cramped row sub-labels at 1280, the broken playhead line, and the Deck strip pushing the grid down.
+
+## Round 3b (16e2c44): 9/10
+
+Scorecard: clutter 2 · hierarchy 2 · legibility 1 · feel 2 · copy 2. All round-3 gaps closed or mostly closed. Left for the build (critic: no further design round): the worst-case rebuild grid runs under the right panel with no scroll cue; "Breakdow…" and bare "2" / "0" counts on narrow sections; the Ride "Your turn" line crowds the shelf at 1280; blank cells' hover / focus outline to check in the build; the reserved strip is an empty band when it has nothing to say.

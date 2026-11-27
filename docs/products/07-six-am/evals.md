@@ -349,5 +349,5 @@ final review. A reader is graded on real separated loops before a slice is built
 | W12 | Sample kit loads fast | a sound plays ≤ 300 ms after its first tap on a warm page; Make's drums ready no later than Phase 5's Z12 numbers (8-bar loop ≤ 21.5 s) | data-evals | |
 | W13 | Zero bytes of the original stored or uploaded | 0 (storage, network, code read) | data-evals | |
 | W14 | User test: jobs per slice ≥ 4 / 5 (sandbox) | ≥ 4 / 5 each | user-tester | |
-| W15 | Design scorecard (one critic, five points) | 9/10 is a target, not a blocker | design-critic | Round 2 (27 Nov): Shelf 6, Side list 6, Table 5; round 3 (final hybrid): 8 (`design/p7-round2-critic.md`) |
+| W15 | Design scorecard (one critic, five points) | 9/10 is a target, not a blocker | design-critic | Round 2 (27 Nov): Shelf 6, Side list 6, Table 5; round 3 (final hybrid): 8; round 3b: **9** (`design/p7-round2-critic.md`) |
 | W16 | Listen's "Other" reads "Melody & FX" | yes | user-tester | |

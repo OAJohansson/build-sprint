@@ -877,3 +877,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Owner picked the hybrid: Shelf for Make, Side list's grid for the Studio rebuild (L278). Next: designer round 3 (the final), the same critic re-scores, then the canvas sign-off.
 - Designer round 3, the final hybrid (285e28e): `design/p7-final.html`, prototype `design/p7-final/prototype.html`; logged T239. Critic re-scoring.
 - Critic round 3: 8/10 (hierarchy and copy up). Six fixable gaps sent back to the designer as round 3b before the canvas.
+- Critic round 3b: 9/10; leftovers go to the build (backlog). Canvas sign-off published: https://claude.ai/artifact/8Ygt985YZbU4fdSdpiN7fP (8 screens: Make choose, fix, empty row; Studio rebuild empty, filled, Deck closed; 1280 choose; worst-case rebuild). Waiting for the owner's comments and approval before the UI build (L163, decision 0028 as amended 27 Oct).

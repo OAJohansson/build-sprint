@@ -77,3 +77,13 @@ Same app, port 3011 in the worktree. Fresh storage, then switch to Music. Laptop
 - Would you open the music map again next week? What for?
 - Did it feel like the same product as the philosophy map, or like a different app?
 - Is anything missing that would make you pay for this?
+
+### Phase 4 coverage re-check (L59, 28 Nov)
+
+Same persona, laptop 1440×900, then phone 390×844. Test only the 16 added genres; wrong-belief checks on each.
+
+- **M-S5 Find the big ones:** "Where is pop? Where is indie?" Bar: both found in under 30 seconds from the music globe, and the tester can say what pop grew out of.
+- **M-S6 Reggaeton's roots:** from Reggaeton, find where it came from. Bar: reaches Dancehall and then Reggae, and doesn't believe reggaeton came straight from hip-hop alone.
+- **M-S7 Techno's ancestors:** from Techno, name two older genres it grew out of and hear one. Bar: names at least two of Krautrock, Hi-NRG, Industrial, Synth-pop; one click to a record.
+- **M-S8 Afrobeat vs Afrobeats:** open both. Bar: can say in one sentence how they differ and which came first.
+- **Coverage gut check:** "Is any big genre you'd expect still missing?" (answer recorded as is; feeds M8).

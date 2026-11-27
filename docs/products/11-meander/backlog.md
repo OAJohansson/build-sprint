@@ -38,6 +38,14 @@
 
 - Run the coverage check (M8) on the 27 philosophy schools: an independent grader compares the list with outside references (SEP and IEP tables of contents, a standard survey such as Copleston or the Routledge Encyclopedia's top-level entries, and university introduction syllabi). It lists any major school missing, ranked, for the owner to pick from.
 
+## From the coverage re-check (28 Nov)
+
+- **More genres (L59 backlog, plus the tester's gut check):** regional Mexican, cumbia and Latin pop, filmi / Bollywood, J-pop, drill, psychedelic and progressive rock, ragtime, swing, Eurodance, trip hop. Run M8 again before adding.
+- **Find a genre:** a search on the globe that also says "not on the map yet" (re-test F5).
+- **Side links lighter:** show minor fusions (grime with indie, K-pop with techno) fainter or folded into "N more" (F3).
+- **Reason next to the neighbour:** move the hover reason from the bottom edge to beside the hovered neighbour (F4).
+- **Sub-genres under house:** deep, acid, tech house (tester asked again).
+
 ## From the phase 4 planning (27 Nov)
 
 - More fields after music: architecture, fashion, political science (capitalism and others next to Marxism), the history of ideas.

@@ -51,5 +51,5 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 45 | Owner, phase 3 review | Likes the timeline: it helps place the schools. Unsure about the hover links: they look messy | open, next phase |
 | 46 | Owner, phase 3 review | Still wants a proper menu (beyond the three items in the bar) | open, next phase |
 | 47 | Owner, phase 3 review | "A good first MVP"; needs a proper sit-down test of the whole thing, then a planning session for the next phase | noted |
-| 48 | Owner, phase 4 review (27 Nov) | Pop and indie are missing from the music map; "what else have we forgotten?" Root cause: the genre list (L45) was picked by the PM and never checked against an outside reference; every eval graded the cards, none graded the list | open, coverage audit before merge |
+| 48 | Owner, phase 4 review (27 Nov) | Pop and indie are missing from the music map; "what else have we forgotten?" Root cause: the genre list (L45) was picked by the PM and never checked against an outside reference; every eval graded the cards, none graded the list | fixed: audit against 7 outside references, 16 genres added (L59), new eval M8; re-test passed |
 | 49 | Owner, phase 4 review (27 Nov) | Check philosophy the same way: did we miss any big schools, do we cover all the main ones? Same independent coverage check against outside references (M8) | open, next philosophy phase |

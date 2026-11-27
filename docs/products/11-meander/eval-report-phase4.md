@@ -6,7 +6,30 @@
 
 **Does the Meander format work beyond philosophy?** Yes, on the evidence below. The same views (globe, card, first page, timeline, Your thread) carry 33 genres with no music-only screens. A simulated house fan followed every thread asked of them. The tester said: "Clearly the same app… music actually feels more natural because I can listen."
 
-## Agent-checkable checks
+## Coverage fix (28 Nov, after the owner's review)
+
+The owner found pop and indie missing. No eval had checked the genre list itself, only the cards on it (feedback 48). What changed:
+
+| Check | Result |
+| --- | --- |
+| **M8 (new): coverage** | An independent grader checked the list against AllMusic, Wikipedia's genre lists, Starr and Waterman's *American Popular Music*, Luminate 2024 and IFPI 2022. Its whole "must add" tier is added, plus indie rock and the electronic and African genres that give orphaned genres their parents: **16 genres, 49 in all, in eight families** (L59). What's still left out is listed in the backlog, each with a reason. |
+| M1 labels | 50 music views, 363 labels: 0 past the rim, 0 overlaps, 0 over fixed elements, 0 over dots. Philosophy 28 views, all 0. Knot check ok for every genre. |
+| M2 content bar | 0 validator errors on 49 genres. Known gaps: afrobeat has 2 records; hardcore has 3 artists, because two had no record credited to them. |
+| M5 accuracy | Round 1 on the new genres: 874 claims, 6 wrong, 104 drift, 28 unsupported. Round 2 re-graded 529 claims: 2 wrong (Spiral Scratch called an album), fixed along with every drift item. 0 invented links: all 84 new links come from quoted sources, and 3 weak ones were dropped (T42, journal). |
+| User re-test (M-S5 to M-S8) | All bars met. Pop found in ~6 s and indie in ~4 s. Reggaeton traced to dancehall and reggae. Four of techno's roots named. Afrobeat and Afrobeats told apart. One wrong belief came from a backwards label (fixed, T43); the other came from neighbours sharing a line on the globe (F1, see below). |
+| Build hygiene | 34 tests, lint and build pass. |
+
+**Calls I made:**
+- **L59:** which 16 genres to add.
+- **L60:** allegations on artist cards are proportionate. A card includes a conviction, or an allegation of violence, abuse or hate speech, with its outcome. It leaves out minor offences and anything done by the people around the artist.
+- **T42:** Afrobeat is renamed "Afrobeat (Fela Kuti era)".
+- **T43:** two link labels are reworded.
+
+**For your review:**
+- The re-test's main finding (F1) is the same as L58's first open item. Neighbours that sit on one line read as a chain, for example Afrobeat → Soul → Funk. Even-angle rings would fix it, but they change the globe you signed off, so it's still your call, now with evidence.
+- The tester's gut check named classical (out of scope by design), drill, cumbia, J-pop or Bollywood, and tech house. They are in the backlog.
+
+## Agent-checkable checks (first build, 33 genres)
 
 | # | Check | Result | Evidence |
 | --- | --- | --- | --- |

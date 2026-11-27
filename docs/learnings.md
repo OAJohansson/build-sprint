@@ -216,6 +216,9 @@ Rules I now apply to every product (detail in the playbook).
 - **Ten directions at once came out dense.** Calm needs to be in the first design brief.
 - **The canvas sign-off earns its place.** Four elements were removed from the screens before any code.
 - **Layouts tuned to data are fragile.** One link removed and the overlaps came back; the layout check runs after every content change.
+- **Structure beats sentence fixes for beginners.** Three rewrites of sentences barely moved "how lost"; bullets, cutting repeats and explaining terms at first use did (phase 2).
+- **A screenshot critic can't judge motion.** The owner's pick (the zooming knot) beat the critic's tidier still; clickable prototypes ended the guessing.
+- **Grade every new fact type, even small ones.** Places and dates looked simple, yet 21 of 88 claims were off, including a "1949" that was really a feminist book's date.
 
 ## Process changelog
 

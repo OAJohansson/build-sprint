@@ -1031,12 +1031,30 @@ Small, folded in: Listen's "Other" becomes "Melody & FX" (OR6-1, toil, logged as
 | # | Question | Answer | Log |
 | --- | --- | --- | --- |
 | 1 | Where do the new sounds come from? | A hand-picked free (CC0) sample kit for drums, a richer bass synth with more presets plus a few credited sampled basses; own packs later (PM's recommendation, `research-sounds.md`) | L266 |
+| 2 | How many starting sounds? | 20 per row (every drum row and bass), picked for breadth: cover a lot of variety, not 20 versions of one sound (PM had recommended 12 drums / 16 bass). The variety map below guides the picks | L267 |
+
+## Variety map for the 20 sounds per row (L267, draft)
+
+Each row's 20 are spread over **families** (kinds of sound, 2–4 each) and three **dials**:
+short ↔ long, dark ↔ bright, clean ↔ dirty. No two sounds in a row may be near-duplicates
+(measured: brightness and length both within a small margin). Each sound has a family, a feel
+word and one plain line.
+
+| Row | Families to cover |
+| --- | --- |
+| Kick | 909 punchy · 808 long boom · soft round deep-house · tight short techno · hard / distorted · acoustic (live drum) · lo-fi dusty · sub-heavy · clicky top |
+| Claps & snares | 909 clap · 808 clap · big layered clap · snap · rim · tight snare · roomy snare · acoustic snare · lo-fi snare · brush |
+| Closed hat | 909 · 808 · acoustic · tiny tick · dusty lo-fi · sizzly bright · shaker-like |
+| Open hat | 909 open · 808 open · short open · long sizzle · acoustic · lo-fi |
+| Shaker / percussion | shakers · tambourine · congas / bongos · cowbell · clave / woodblock · toms · claps-and-hands |
+| Ride | 909 ride · acoustic ride · ride bell · crash / splash · sizzle |
+| Bass (synth, with a few samples) | clean sub · rubber pluck · Reese · acid · organ bass (90s house) · FM bass · round analog · Detroit square · filtered saw · wobble · stab bass · electric bass (sampled) · upright / contrabass (sampled) |
 
 ## Requirements (Phase 7, draft)
 
 | # | Requirement |
 | --- | --- |
-| R1 | Many more starting sounds for bass and every drum row (route and count from questions 1–2), each with a plain one-line description; licences recorded per file; nothing that can't be redistributed in a web app is shipped. |
+| R1 | 20 starting sounds for bass and every drum row, spread over the variety map's families and dials, no near-duplicates (L266, L267), each with a plain one-line description; licences recorded per file; nothing that can't be redistributed in a web app is shipped. |
 | R2 | Knobs change the sound audibly: each knob's range moves a measured feature (brightness, length, level, pitch) clearly between its ends. |
 | R3 | Drum rows: Kick, Claps & snares, Closed hat, Open hat, Shaker / percussion, Ride; reading per question 3. |
 | R4 | Fix by ear: tap a step to add or remove a hit; mute and solo per row; Suggest, A/B, closeness and Save keep working on the edited pattern; what plays is what is saved. |

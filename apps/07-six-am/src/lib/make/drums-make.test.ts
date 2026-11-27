@@ -4,7 +4,7 @@
 import { describe, expect, it } from "vitest";
 import { dropLibSound } from "@/lib/studio-drop";
 import type { Doc } from "@/lib/timeline";
-import { DRUM_PRESET_IDS, DRUM_PRESETS, DRUM_ROWS, ROW_KNOBS, ROW_PRESETS, SYNTH_TO_KIT_ROW, clampDrumMacros, drumKnobWord, drumSuggestLine, renderDrumRow } from "./drum-synth";
+import { DRUM_PRESET_IDS, DRUM_PRESETS, DRUM_ROWS, ROW_KNOBS, ROW_PRESETS, SYNTH_TO_KIT_ROW, clampDrumMacros, drumKnobWord, makeRowOf, drumSuggestLine, renderDrumRow } from "./drum-synth";
 import { MAKE_ROWS, drumsCloseness, drumsFromReading, drumsReport, foldRow, measureRows, renderDrumsMine, rowCloseness, splitOpenHats, suggestDrum, suggestDrumRow } from "./drums-make";
 import { classifyHats } from "./hats-split";
 import { readDrums, type DrumReading } from "./drums-read";
@@ -145,6 +145,11 @@ describe("Suggest and closeness on a known loop", () => {
 });
 
 describe("open hats move to their own row (Phase 7 slice 2, L268)", () => {
+  it("old 3-row saved sounds open on Make's six rows, Hats on Closed hat (R9)", () => {
+    expect(["kick-deep-909", "clap-rim", "hats-closed-tick", "hats-ride", "hats-shaker"].map((id) => makeRowOf(id as never))).toEqual(["kick", "clap", "hat", "hat", "hat"]);
+    expect(["ohat-909-open", "perc-egg-shaker", "ride-ride-22", "hat-909-closed"].map((id) => makeRowOf(id as never))).toEqual(["ohat", "perc", "ride", "hat"]);
+  });
+
   it("splits the reader's hats into Closed hat and Open hat, and keeps them all on Closed hat when the reader is off", () => {
     const spec = { ...DRUM_SPECS[0], name: "8th hats, offbeat open", bars: [{ kick: [0, 4, 8, 12], clap: [4, 12], hats: [0, 2, 4, 6, 8, 10, 12, 14] }], openHatSteps: [2, 6, 10, 14] };
     const { mono } = renderDrums(spec, { bars: 4, rate: RATE, seed: 3 });

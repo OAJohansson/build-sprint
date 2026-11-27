@@ -529,8 +529,8 @@ export function DrumsLegend() {
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 /** R3b, L273b: why the rows below the line start empty, in the words of the rows still open. */
-function whyEmpty(open: Row[]): string {
-  if (!open.length) return "Yours, by ear.";
+function whyEmpty(open: Row[], left: Row[]): string {
+  if (!open.length) return left.length ? `Yours, by ear; ${left.map((r) => rowName(r)).join(" and ")} left empty on purpose.` : "Yours, by ear.";
   const names = open.map((r) => EAR_WORDS[r]!.plural).join(" or ");
   const rows = open.length === 1 ? `so ${rowName(open[0])} starts empty` : "so these rows start empty";
   return `Six AM can’t hear ${names} yet, ${rows} and the loop sounds thinner than the original. Some may be on Closed hat.`;
@@ -602,8 +602,9 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs, onJump }: { m: Dr
         <span />
         {heardRowsList.flatMap(rowView)}
         <div className={s.divide} data-done={o.length ? undefined : ""} role="status">
-          {o.length ? <span className={s.count}>{plural(o.length, "row", "rows")} to fill by ear</span> : <span className={s.count} data-done="">Every row has its hits</span>}
-          <span className={s.lbl}>{whyEmpty(o)}</span>
+          {/* T238, L277: the count reads "0 rows to fill" once every row is filled or left empty on purpose. */}
+          <span className={s.count} data-done={o.length ? undefined : ""}>{plural(o.length, "row", "rows")} to fill by ear</span>
+          <span className={s.lbl}>{whyEmpty(o, m.earRows.filter((r) => m.earState[r] === "left"))}</span>
         </div>
         {m.earRows.flatMap(rowView)}
       </div>

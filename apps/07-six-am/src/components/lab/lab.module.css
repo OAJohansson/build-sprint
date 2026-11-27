@@ -581,7 +581,7 @@
    percussion and Ride, striped while empty, with "Your turn …" under them. The bar ruler on top plays
    from the 16th you click. Rows keep one height whatever is open, so tapping moves nothing. */
 .dr2 { --rowH: 40px; display: grid; grid-template-columns: 180px minmax(0, 1fr) 96px; column-gap: 14px; row-gap: 6px; width: 100%; padding-top: 4px; }
-.dr2[data-fill] { --rowH: 56px; row-gap: 10px; }
+.dr2[data-fill] { --rowH: 48px; row-gap: 8px; }
 .dr2 > [data-head] { grid-column: 1; align-self: end; padding-left: 10px; }
 .rname { grid-column: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px; min-width: 0; height: var(--rowH); padding: 0 10px; border: 0; border-radius: 6px; background: none; text-align: left; cursor: pointer; color: var(--ink) !important; font-size: 13px; }
 .rname span { line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -658,8 +658,10 @@
 @media (max-height: 760px) {
   .dr2 { --rowH: 28px; row-gap: 3px; padding-top: 0; }
   .dr2[data-fill] { --rowH: 38px; row-gap: 6px; }
-  .rname { flex-direction: row; align-items: baseline; gap: 8px; }
+  .rname { gap: 0; font-size: 12px; }
+  .rname span, .rname small { line-height: 1.15; }
   .rname small { font-size: 10.5px; }
+  .drSound { display: block; }
   .rLine { height: 18px; }
   .divide { padding-top: 5px; margin-top: 2px; }
   .under { font-size: 11.5px; }

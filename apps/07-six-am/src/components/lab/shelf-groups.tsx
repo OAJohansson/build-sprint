@@ -17,21 +17,26 @@ export function feelShown(feel: string | null, name: string, family: string): st
   return words(feel).some((w) => said.has(w)) ? null : feel;
 }
 
-/** Splits the families into two columns in order, at the family boundary that best balances their sounds. */
+/**
+ * Splits the families into two columns in order, at the family boundary that best balances them:
+ * by lines first (each family is one line, a long one two), then by sound count (critic, slice 1
+ * shelf round: by family count alone left one column with far more sounds).
+ */
 function split(fams: ShelfFamily[]): [ShelfFamily[], ShelfFamily[]] {
-  // Critic (slice 1 shelf round): balance by sound count, not family count.
-  const rows = fams.map((f) => Math.max(1, f.items.length));
-  const total = rows.reduce((a, b) => a + b, 0);
-  let best = 1, bestCost = Infinity, acc = 0;
+  // Names only (compact): a line holds about five sounds.
+  const lines = fams.map((f) => Math.max(1, Math.ceil(f.items.length / 5)));
+  const sounds = fams.map((f) => f.items.length);
+  const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
+  let best = 1, bestCost = Infinity;
   for (let k = 1; k < fams.length; k++) {
-    acc += rows[k - 1];
-    const cost = Math.max(acc, total - acc) + (acc < total - acc ? 0.1 : 0); // a tie keeps the longer column on the left
+    const la = sum(lines.slice(0, k)), lb = sum(lines.slice(k)), sa = sum(sounds.slice(0, k)), sb = sum(sounds.slice(k));
+    const cost = Math.max(la, lb) + 0.05 * Math.abs(sa - sb) + (la < lb ? 0.01 : 0); // a tie keeps the longer column on the left
     if (cost < bestCost) { bestCost = cost; best = k; }
   }
   return [fams.slice(0, best), fams.slice(best)];
 }
 
-/** `compact` (a window ≤ 760 px tall): feel words go to each sound's tooltip, so every family keeps one line. */
+/** `compact` (every Make shelf since the slice 1 shelf round, critic): names only, the feel word in each sound's tooltip, so every family keeps one line. */
 export function ShelfGroups({ label, families, compact = false }: { label: string; families: ShelfFamily[]; compact?: boolean }) {
   const cols = families.length > 1 ? split(families) : [families];
   return (

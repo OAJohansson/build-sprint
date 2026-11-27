@@ -3,9 +3,11 @@
 // The school skeleton (L26–L33, design P7): step inside a school and its knot opens into one thread per idea
 // (left), beside the school's first page (right). Picking an idea turns its thread brass and the first page
 // shows that idea. The phone gets the same content as one column (PhoneSkeleton).
-import { useLayoutEffect, useRef, useState } from "react";
-import { andList, schoolFacts, splitName, surnames, themeSummary, type School } from "@/lib/content";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { reveal } from "@/lib/reveal";
+import { andList, schoolFacts, splitName, surnames, themeSummary, traditionOf, type School } from "@/lib/content";
 import { EDGE, knotStrands, sideTransform } from "@/lib/knot";
+import { ReadingRows } from "./card-parts";
 import type { Nav } from "./meander";
 
 const H = 900;
@@ -110,19 +112,20 @@ export function FirstPage({ school, nav, headingRef }: { school: School; nav: Na
     <section className="info" aria-label={school.name}>
       <div className="school" inert={picked}>
         <div className="mid">
+          {traditionOf(school) && <p className="trad">{traditionOf(school)}</p>}
           <h2 className="d name" tabIndex={-1} ref={headingRef} aria-label={school.name}>{short}</h2>
           <i className="rule" aria-hidden="true" />
           {q && <p className={`d it ${askClass(q)}`}>{q}</p>}
-          {facts.length > 0 && (
-            <dl className="fx2">
-              {facts.map((f) => (
-                <div key={f.label} className="fx">
-                  <dt>{f.label}</dt>
-                  <dd>{f.value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
+          <dl className="fx2">
+            {facts.map((f) => (
+              <div key={f.label} className="fx">
+                <dt>{f.label}</dt>
+                <dd>{f.value}</dd>
+              </div>
+            ))}
+            {/* Further reading (#39) as two more labelled lines */}
+            <ReadingRows school={school} />
+          </dl>
           {HAS_ARTICLE && <a className="lnk" href="#read"><u>Read it</u></a>}
         </div>
       </div>
@@ -150,24 +153,29 @@ export function PhoneSkeleton({ school, nav, headingRef }: { school: School; nav
   const short = splitName(school.name).short;
   const q = school.questions[0];
   const facts = schoolFacts(school);
+  // F7: an idea opened near the bottom grows below the fold; bring the whole of it into view.
+  const listRef = useRef<HTMLOListElement>(null);
+  useEffect(() => {
+    if (nav.pick !== null) reveal(listRef.current?.children[nav.pick] ?? null);
+  }, [nav.pick]);
   return (
     <section className="pskel" aria-label={school.name}>
       <button type="button" className="up" onClick={nav.stepOut}>← Back to {short}</button>
+      {traditionOf(school) && <p className="trad">{traditionOf(school)}</p>}
       <h1 tabIndex={-1} ref={headingRef} aria-label={school.name}>{short}</h1>
       <i className="rule" aria-hidden="true" />
       {q && <p className="d it ask">{q}</p>}
-      {facts.length > 0 && (
-        <dl className="fx2">
-          {facts.map((f) => (
-            <div key={f.label} className="fx">
-              <dt>{f.label}</dt>
-              <dd>{f.value}</dd>
-            </div>
-          ))}
-        </dl>
-      )}
+      <dl className="fx2">
+        {facts.map((f) => (
+          <div key={f.label} className="fx">
+            <dt>{f.label}</dt>
+            <dd>{f.value}</dd>
+          </div>
+        ))}
+        <ReadingRows school={school} />
+      </dl>
       <h2 className="psec">{school.themes.length} big ideas</h2>
-      <ol className="pideas">
+      <ol className="pideas" ref={listRef}>
         {school.themes.map((t, i) => {
           const open = nav.pick === i;
           const id = `pidea-${school.id}-${i}`;

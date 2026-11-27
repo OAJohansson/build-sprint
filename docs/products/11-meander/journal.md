@@ -189,3 +189,32 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Owner tried the skeleton (27 Nov): "It's good".** Feedback #34–#40: the card's type hierarchy (headings smaller than the body, lists with no markers, inconsistent sizes); rethink Your thread as progress (in progress / done after reading all articles; quizzes later); a menu bar; further reading vs the lost Claude prompt; and a bigger idea: a music globe and, one day, a paid public product. All logged in feedback.md and the backlog.
 - **Owner (27 Nov):** go in the proposed order: card type fix, then merge and end the phase; Your thread and the menu in a fresh session. New ideas logged: a timeline mode (#41) and non-Western philosophy (#42), the latter after this batch.
 - **Card type fixed (T34)** for #34–#36, desktop and phone, with screenshots `design/skeleton-build/card-type-*.png`. Lint, test and build are green.
+
+## Phase 3 (27 Nov): run on my own while the owner is away
+
+**Ops:** PR #105 merged on the owner's yes, and the notebook was republished from main (version 216). New branch `claude/11-meander-phase3`, cut from origin/main.
+
+**The owner's brief:** work through the feedback without stopping, make the calls, and report the decisions at the end. So this phase runs like Founder mode. I make the product calls inside the owner's stated direction and log each one as an L-number; merging still waits for the owner's yes.
+
+**Plan, in order.** One branch and one PR, with a preview link at the end.
+1. **Further reading per school (#39).** Show the sources we already have, labelled "Start here" (the encyclopedia overview) and "Go deeper" (the others). No new content.
+2. **Menu bar, and Your thread as progress (#37, #38).**
+   - A small top menu: Globe, Timeline, Your thread.
+   - Progress per school: not started, then in progress (opened the school or stepped inside), then explored (opened every idea).
+   - "Done" (read all the articles) waits for the articles. Until then "explored" is the top state, marked as a shortcut.
+3. **Timeline mode (#41).** A second view of the same schools, laid out by their sourced spans from earliest to latest, so "where did it start?" has an answer. Clicking a school opens it, as on the globe.
+4. **Eastern philosophy, first batch (#42).** Four traditions written in the same sourced way as the others: Buddhist philosophy, Vedānta (Hindu), Confucianism, Daoism. Each gets a writer, a grader and fixes, and only real, sourced links to the existing schools. They go onto the globe and the timeline.
+5. **Close out.** A user test on the whole batch, fixes, a PR, a preview deploy, then the owner's review.
+
+**Budget guard:** the weekly limit was at 35% at the start. I stop new work and report if it reaches 70%. The full articles for the other schools are not in this phase, as agreed (a heavy job, done in batches later).
+
+**Not now:** the music globe and the paid-product strategy (#40). Both get a session of their own.
+- **Slices 1–2 built:** further reading (L34), the menu bar (L35) and Your thread as progress (L36). 14 tests (7 new for the progress logic), lint and build are green. Screenshots are in `design/phase3/`. Open question for the owner: with every school explored, the whole globe turns brass. Is that a reward, or too loud?
+- **Slice 3 built: the timeline (L37).** 20 tests, lint and build are green. Screenshots are in `design/phase3/timeline-*`. The modern end is dense at 27 rows; hovering helps.
+- **Eastern schools graded:** 279 claims; 254 supported, 21 drift, 1 unsupported, 1 wrong; plus 12 newcomer and 15 fairness flags. L38: cut the Enlightenment → Confucianism link (the sources describe praise and projection, not building on) and mention the reception in Confucianism's debatable line instead. L39: the living traditions (Buddhism, Confucianism, Daoism) don't end their spans as if they died. Fixes are with the writer; then a re-grade.
+- **Eastern re-grade (round 2):** all 23 round-1 items are now supported. I fixed the last 4 claims myself (the Xunzi Heaven gloss, Wang Bi's li gloss, Zhuangzi's relativism sentence, 'Catholic' cut) and 2 flags (Sāṃkhya dualism glossed; Śaṅkara's three texts named in one plain sentence), each from the grader's sourced fix.
+- **Eastern schools in the app (L40):** 27 schools, 58 links, 21 tests, lint and build green, 0 label problems across 28 views. Screenshots are in `design/phase3/eastern-*`. Known: one label sits 70px from its dot in the Analytic Philosophy view; the Yogācāra reading title has no diacritics.
+- **User test (27 Nov):** the timeline is the best view (job 1 scored 4/5). Majors: Your thread shows done but not next (F1); Eastern schools are isolated (F2, kept as is: L41); Vedānta dates overflow (F3). The fixes are with the engineer.
+- **User-test fixes (L42):** F1, F3, F4, F5 and F7 are fixed. 27 tests, lint and build green; label checks still 0 across 28 views. Next: PR, a preview deploy, and the owner's review.
+- **Phase 3 ready for review:** PR #106 and preview https://meander-q4q3ds7g0-mimirswell.vercel.app (it may ask for the owner's Vercel sign-in). Merge waits for the owner's yes.
+- **Owner review of phase 3 (27 Nov):** "a good first MVP". Follow-ups logged as #43–#47 (globe grouping, Your thread's own place and redesign, timeline hover, a proper menu). Merge approved; a planning session comes next.

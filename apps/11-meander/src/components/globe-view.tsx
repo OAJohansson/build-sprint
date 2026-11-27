@@ -3,15 +3,17 @@
 // Desktop: the whole field as one globe turned to face the focused school (handoff "Where a school
 // sits", "Where a label sits"), with the card or the "Your thread" panel on the right.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { getSchool, getThinker, links, neighbours, positions, schools, splitName, themeSummary, whenOf, type Neighbour } from "@/lib/content";
+import { getSchool, getThinker, links, metaLine, neighbours, positions, schools, splitName, themeSummary, type Neighbour } from "@/lib/content";
 import {
   FADE, FAR, R, centre, emptiest, placeLabels, project, samplePolyline, thread, vec,
   type LabelPlace, type Projected, type Rect, type ThreadPoint, type Vec3,
 } from "@/lib/globe";
-import { visitedSchools } from "@/lib/visits";
 import { SchoolSections, ThinkerSections, ThreadSections } from "./card-parts";
 import { Mark } from "./mark";
+import { MenuBar } from "./menu-bar";
+import { TimelineView } from "./timeline-view";
 import { FirstPage, Knot } from "./skeleton";
+import { stateLabel } from "@/lib/progress";
 import type { Nav } from "./meander";
 
 const W = 1440, H = 900;
@@ -71,11 +73,11 @@ function useLayout(focus: string | null, hasCard: boolean) {
 }
 
 export function GlobeView({ nav }: { nav: Nav }) {
-  const { focus, thinker, threadOpen, visits, inside, pick } = nav;
+  const { focus, thinker, threadOpen, inside, pick, states, view } = nav;
+  const timeline = view === "timeline";
   const hasCard = !!focus || threadOpen;
   const showThinker = !!focus && !!thinker && !threadOpen;
   const { C, paths, nodes, threadPts } = useLayout(focus, hasCard);
-  const visited = useMemo(() => visitedSchools(visits), [visits]);
   const school = focus ? getSchool(focus) : undefined;
   const thinkerData = thinker ? getThinker(thinker) : undefined;
 
@@ -111,7 +113,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
     return () => { alive = false; window.removeEventListener("resize", onResize); };
   }, []);
 
-  const key = `${focus}|${hasCard}|${showThinker ? thinker : ""}|${threadOpen}|${nav.openTheme}|${visits.length > 0}`;
+  const key = `${focus}|${hasCard}|${showThinker ? thinker : ""}|${threadOpen}|${nav.openTheme}`;
   const [placed, setPlaced] = useState<{ key: string; map: Record<string, LabelPlace>; ko: Rect[]; fade: { cx: number; cy: number; rx: number; ry: number } | null; under: Set<string> } | null>(null);
 
   useLayoutEffect(() => {
@@ -184,9 +186,10 @@ export function GlobeView({ nav }: { nav: Nav }) {
   const first = useRef(true);
   useEffect(() => {
     if (first.current) { first.current = false; return; }
-    const el = threadOpen ? threadH.current : showThinker ? thinkerH.current : focus ? titleH1.current : null;
+    // On the timeline the clicked bar keeps keyboard focus, so arrow keys carry on along the bars.
+    const el = threadOpen ? threadH.current : showThinker ? thinkerH.current : focus && !timeline ? titleH1.current : null;
     if (el && el.getClientRects().length) el.focus({ preventScroll: true });
-  }, [focus, showThinker, thinker, threadOpen]);
+  }, [focus, showThinker, thinker, threadOpen]); // eslint-disable-line react-hooks/exhaustive-deps -- runs on what opened, not on a view switch
 
   // Stepping inside and back: keyboard focus follows (the list of ideas in, so Tab reaches idea 1 next, the "step inside" button out, the idea
   // just closed when its Back button had focus), and the live region says where you are.
@@ -203,9 +206,9 @@ export function GlobeView({ nav }: { nav: Nav }) {
     if (!stage || !stage.getClientRects().length || !school || prev.focus !== focus) return;
     const ideaBtn = (i: number) => stage.querySelectorAll<HTMLButtonElement>(".idea > button")[i];
     if (inside && !prev.inside) stage.querySelector<HTMLElement>(".ideas-k")?.focus({ preventScroll: true });
-    else if (!inside && prev.inside) enterRef.current?.focus({ preventScroll: true });
+    else if (!inside && prev.inside) (timeline ? stage.querySelector<HTMLElement>(`.tb[data-id="${focus}"]`) : enterRef.current)?.focus({ preventScroll: true });
     else if (inside && pick === null && prev.pick !== null && !document.activeElement?.closest(".idea")) ideaBtn(prev.pick)?.focus({ preventScroll: true });
-  }, [inside, pick, focus, school]);
+  }, [inside, pick, focus, school]); // eslint-disable-line react-hooks/exhaustive-deps -- the view only picks where focus lands
 
   const ready = placed?.key === key ? placed : null;
 
@@ -219,7 +222,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
     <div className="desk">
       {/* Clicking empty space returns to the overview; Esc and the logo do the same for keyboard users. */}
       <div
-        className={["stage", still && "still", lit && "hovering", inside && school && "inside", inside && pick !== null && "has-pick"].filter(Boolean).join(" ")}
+        className={["stage", timeline && "tl", still && "still", lit && "hovering", inside && school && "inside", inside && pick !== null && "has-pick"].filter(Boolean).join(" ")}
         ref={stageRef}
         onClick={onStageClick}
         onMouseMove={still ? () => setStill(false) : undefined}
@@ -264,11 +267,12 @@ export function GlobeView({ nav }: { nav: Nav }) {
         </svg>
 
 
-        <main inert={inside}>
+        <main inert={inside || timeline}>
           {nodes.map((n) => {
-            const v = visited.has(n.id);
+            const st = states.get(n.id);
+            const v = st === "started" || st === "explored";
             const pl = ready?.map[n.id];
-            const cls = ["n", n.near && "t1", n.far && "back2", n.rest && "rest", ready?.under.has(n.id) && "under", v && "v", lit?.has(n.id) && "lit"].filter(Boolean).join(" ");
+            const cls = ["n", n.near && "t1", n.far && "back2", n.rest && "rest", ready?.under.has(n.id) && "under", v && "v", st === "explored" && "xp", lit?.has(n.id) && "lit"].filter(Boolean).join(" ");
             return (
               <button key={n.id} type="button" className={cls} style={{ left: round1(n.p.x), top: round1(n.p.y) }} onClick={() => { setStill(true); setHovered(null); nav.openSchool(n.id); }}
                 onMouseEnter={() => setHovered(n.id)}
@@ -276,7 +280,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
                 onFocus={() => setHovered(n.id)}
                 onBlur={() => setHovered((h) => (h === n.id ? null : h))}
                 data-id={n.id}
-                aria-label={n.rest ? `${n.name}${v ? ", visited" : ""}` : undefined}
+                aria-label={n.rest ? `${n.name}${v ? `, ${stateLabel(st)}` : ""}` : undefined}
               >
                 <i className="dot" style={{ width: 2 * n.r, height: 2 * n.r }} />
                 <span
@@ -293,7 +297,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
                       {n.near.reason && <span className="why">· {n.near.reason}</span>}
                     </em>
                   )}
-                  {v && <span className="sr-only">, visited</span>}
+                  {v && <span className="sr-only">, {stateLabel(st)}</span>}
                 </span>
               </button>
             );
@@ -304,7 +308,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
               <i className="here" aria-hidden="true" />
               <h1 tabIndex={-1} ref={titleH1} aria-label={school.name}>{splitName(school.name).short}</h1>
               <p>
-                {[splitName(school.name).aside, whenOf(school)].filter(Boolean).join(" · ")}
+                {metaLine(school)}
                 {!showThinker && school.themes.length > 0 ? (
                   <> · <button type="button" className="enter" ref={enterRef} onClick={(e) => { e.stopPropagation(); nav.stepInside(); }}>step inside</button></>
                 ) : (
@@ -322,15 +326,13 @@ export function GlobeView({ nav }: { nav: Nav }) {
         </main>
         </div>
 
+        <TimelineView nav={nav} hasCard={hasCard} tick={tick} />
+
         <header ref={headerRef}>
           <button type="button" className="wm" translate="no" title="Back to the whole field" aria-label="Meander, back to the whole field" onClick={nav.overview}>
             <Mark />Meander
           </button>
-          {visits.length > 0 && (
-            <button type="button" className="yt" aria-expanded={threadOpen} aria-controls="thread-panel" onClick={nav.toggleThread}>
-              <i />Your thread
-            </button>
-          )}
+          <MenuBar nav={nav} />
         </header>
 
         {school && !showThinker && school.themes.length > 0 && (
@@ -346,7 +348,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
 
         {threadOpen ? (
           <aside className="card" id="thread-panel" aria-label="Your thread" ref={cardRef}>
-            <ThreadSections visits={visits} nav={nav} headingRef={threadH} />
+            <ThreadSections nav={nav} headingRef={threadH} />
           </aside>
         ) : showThinker && thinkerData ? (
           <aside className="card" key={`t-${thinker}`} aria-label={thinkerData.name} ref={cardRef}>
@@ -354,7 +356,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
           </aside>
         ) : school ? (
           <aside className="card" key={`s-${focus}`} aria-label={school.name} ref={cardRef} inert={inside}>
-            <SchoolSections school={school} nav={nav} />
+            <SchoolSections school={school} nav={nav} titled={timeline} />
           </aside>
         ) : null}
       </div>

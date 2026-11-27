@@ -29,6 +29,10 @@ export type School = {
   thinkers: string[];
   sources: Source[];
   sample?: boolean;
+  /** "eastern" for the Eastern schools (#42); missing for the Western ones. */
+  tradition?: string;
+  /** "Indian · Hindu", "Chinese": the tag shown with an Eastern school (F4). */
+  traditionTag?: string;
   /** A one-line "what this is" written for the card; when missing, the first sentence of `description`. */
   tagline?: string;
   taglineSources?: Source[];
@@ -148,8 +152,10 @@ export function splitName(name: string): { short: string; aside: string } {
   return m ? { short: m[1], aside: m[2] } : { short: name, aside: "" };
 }
 
-/** The line under a school's title: "Frankfurt School · 1923 – present · you are here". */
-export const hereLine = (s: School) => [splitName(s.name).aside, whenOf(s), "you are here"].filter(Boolean).join(" · ");
+/** The line under a school's title: "Frankfurt School · 1923 – present · you are here" ("Indian · …" for an Eastern school). */
+export const hereLine = (s: School) => [metaLine(s), "you are here"].filter(Boolean).join(" · ");
+/** "Indian · 5th century BCE – …": the tradition (Eastern schools only), the name's aside and when. */
+export const metaLine = (s: School) => [traditionOf(s), splitName(s.name).aside, whenOf(s)].filter(Boolean).join(" · ");
 
 /** The one line under a school's name in the card (L20): its tagline, or the first sentence of its description. */
 export function ledeOf(s: School): string {
@@ -167,6 +173,10 @@ export const alsoIn = (t: Thinker): Thinker[] => thinkers.filter((o) => o.name =
  * `pnpm -F 11-meander places`). Empty until that file lands; every fact that needs it is hidden until then. */
 export type PlaceFacts = { places?: string[]; span?: string | null };
 const placesFile = placesJson as Record<string, PlaceFacts>;
+
+/** The quiet tradition tag for the Eastern schools (#42, F4): "Indian · Hindu", "Chinese". Set in the content import;
+ * Western schools have none, since the field was all Western until now. */
+export const traditionOf = (s: School): string => s.traditionTag ?? "";
 
 /** When a school happened: the sourced short span ("1843–1949") when there is one, else its dates. */
 export const whenOf = (s: School) => placesFile[s.id]?.span || s.dates;

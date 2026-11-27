@@ -4611,6 +4611,1026 @@
         }
       ],
       "sample": false
+    },
+    {
+      "id": "buddhist-philosophy",
+      "name": "Buddhist Philosophy",
+      "dates": "from c. 5th century BCE",
+      "tradition": "eastern",
+      "traditionTag": "Indian · Buddhist",
+      "dateRange": "from c. 5th century BCE (the Buddha); in India to about the 11th century CE (late Yogācāra); living today",
+      "era": "Ancient and classical (India)",
+      "description": "A tradition of argument that grew from the Buddha's teaching on how to end suffering. Later Indian thinkers built theories of the self, the mind and reality on it. The two main schools of Mahāyāna ('Great Vehicle') Buddhism in India were Madhyamaka, the 'Middle Way', and Yogācāra, 'yoga practice'.",
+      "tagline": "Suffering has causes, and seeing there is no lasting self can end it.",
+      "taglineSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "1. Buddha as Philosopher"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "2. Core Teachings"
+        }
+      ],
+      "debatable": "Whether the Buddha himself was a philosopher is disputed. SEP presents him as the later Buddhist tradition understood him. This node covers only the Indian roots; Buddhism in Tibet, China and Japan is left out.",
+      "questions": [
+        "If there is no lasting 'I', who is it that suffers, and who is reborn?",
+        "Why do I keep clinging to things that cannot last?",
+        "Do things exist on their own, or only in relation to other things and to my mind?"
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/buddha/",
+            "section": "3. Non-Self"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/buddha/",
+            "section": "2. Core Teachings"
+          },
+          {
+            "url": "https://iep.utm.edu/buddha/",
+            "section": "b. The Four Noble Truths or Realities"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/nagarjuna/",
+            "section": "2. Emptiness and svabhāva"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/yogacara/",
+            "section": "1.1 The names of the tradition"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Four truths about suffering",
+          "text": "The Buddha's core teaching is usually summed up in four truths. 'Suffering' here means more than pain. It is the frustration that comes from everything being impermanent. IEP notes the four are also 'realities' to practise, not a creed to believe.",
+          "thinkers": [
+            "buddhist-philosophy/the-buddha"
+          ],
+          "sources": [
+            {
+              "url": "https://plato.stanford.edu/entries/buddha/",
+              "section": "2. Core Teachings"
+            },
+            {
+              "url": "https://iep.utm.edu/buddha/",
+              "section": "b. The Four Noble Truths or Realities"
+            }
+          ]
+        },
+        {
+          "name": "No lasting self",
+          "text": "The Buddha taught non-self (anātman), at least as the later tradition read him. None of the parts that make up a person is a lasting 'I'. A person is a changing bundle of five kinds of physical and mental elements, the skandhas. None of them lasts, so none of them can be a self. Our sense of 'I' and 'mine' is the ignorance that causes suffering.",
+          "thinkers": [
+            "buddhist-philosophy/the-buddha"
+          ],
+          "sources": [
+            {
+              "url": "https://plato.stanford.edu/entries/buddha/",
+              "section": "1. Buddha as Philosopher"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/buddha/",
+              "section": "3. Non-Self"
+            }
+          ]
+        },
+        {
+          "name": "The middle path",
+          "text": "The Buddha called his teaching a 'middle path' between two extremes. One extreme says persons are eternal. The other says they are wiped out at death. Both assume a real 'I'. Drop that, and the question of its fate never arises. Nāgārjuna's school, Madhyamaka, takes its name from this middle way.",
+          "thinkers": [
+            "buddhist-philosophy/the-buddha",
+            "buddhist-philosophy/nagarjuna"
+          ],
+          "sources": [
+            {
+              "url": "https://plato.stanford.edu/entries/buddha/",
+              "section": "2. Core Teachings"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/madhyamaka/",
+              "section": "intro"
+            }
+          ]
+        },
+        {
+          "name": "Emptiness",
+          "text": "Nāgārjuna taught that all things are 'empty' (śūnyatā). Empty of what? Of svabhāva: an existence of their own, independent of everything else. Things exist only by depending on other things, all the way down. Critics called this nihilism, the view that nothing exists. Nāgārjuna denied it.",
+          "thinkers": [
+            "buddhist-philosophy/nagarjuna"
+          ],
+          "sources": [
+            {
+              "url": "https://plato.stanford.edu/entries/nagarjuna/",
+              "section": "2. Emptiness and svabhāva"
+            },
+            {
+              "url": "https://iep.utm.edu/b-madhya/",
+              "section": "c. Ethics and the Charge of Nihilism"
+            }
+          ]
+        },
+        {
+          "name": "Mind only",
+          "text": "The Yogācāra school put the mind first. Its signature teaching is 'mind only' (cittamātra): the world we perceive depends on being cognised by a mind. It also mapped eight kinds of consciousness, including a hidden 'store consciousness' that keeps the seeds of past actions. Scholars still debate how far this is idealism, the view that mind comes before matter.",
+          "thinkers": [
+            "buddhist-philosophy/asanga",
+            "buddhist-philosophy/vasubandhu"
+          ],
+          "sources": [
+            {
+              "url": "https://plato.stanford.edu/entries/yogacara/",
+              "section": "intro"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/yogacara/",
+              "section": "1.1 The names of the tradition"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/yogacara/",
+              "section": "2.2 The store or substratum consciousness and its functions"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/yogacara/",
+              "section": "3.1 The idealism debate"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": {
+        "text": "The ritual religion of the Brahmin priests, built on sacrifices set out in the Vedas, the ancient sacred texts. The late Vedic Upaniṣads shared this dissatisfaction with ritual. Many wandering seekers, the Buddha among them, also denied that the Vedas have the final word on the world.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/buddha/",
+            "section": "1. Buddha as Philosopher"
+          }
+        ]
+      },
+      "thinkers": [
+        "buddhist-philosophy/the-buddha",
+        "buddhist-philosophy/nagarjuna",
+        "buddhist-philosophy/asanga",
+        "buddhist-philosophy/vasubandhu"
+      ],
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/abhidharma/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "1. Buddha as Philosopher"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "2. Core Teachings"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "3. Non-Self"
+        },
+        {
+          "url": "https://iep.utm.edu/buddha/",
+          "section": "a. Dates"
+        },
+        {
+          "url": "https://iep.utm.edu/buddha/",
+          "section": "b. The Four Noble Truths or Realities"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/nagarjuna/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/nagarjuna/",
+          "section": "1. Life and works"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/nagarjuna/",
+          "section": "2. Emptiness and svabhāva"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/madhyamaka/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/madhyamaka/",
+          "section": "1. Issues in the Madhyamaka school"
+        },
+        {
+          "url": "https://iep.utm.edu/b-madhya/",
+          "section": "c. Ethics and the Charge of Nihilism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "1.1 The names of the tradition"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "1.2 The main textual sources and figures of Yogācāra philosophy"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "2.2 The store or substratum consciousness and its functions"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "3.1 The idealism debate"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "3.4 Idealism in Vasubandhu’s Twenty Verses"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "vedanta",
+      "name": "Vedānta",
+      "dates": "Upaniṣads c. 700–300 BCE",
+      "tradition": "eastern",
+      "traditionTag": "Indian · Hindu",
+      "dateRange": "Upaniṣads c. 700–300 BCE; Brahma Sūtra c. 200 BCE–200 CE; Śaṅkara (8th century CE) to Rāmānuja (11th–12th century CE); living today",
+      "era": "Ancient to medieval (India)",
+      "description": "A Hindu school that reads the Upaniṣads, ancient sacred texts, as one consistent philosophy. Its thinkers ask how the self relates to brahman, ultimate reality. Śaṅkara says they are one and the same. Rāmānuja says the self is real, but part of brahman.",
+      "tagline": "Hindu philosophy that reads the Upaniṣads as one teaching on self and ultimate reality.",
+      "taglineSources": [
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "8. The Upaniṣads and Vedānta"
+        },
+        {
+          "url": "https://iep.utm.edu/advaita/",
+          "section": "intro"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "a. Background"
+        }
+      ],
+      "debatable": "IEP calls Vedānta only 'nominally' a school: it labels any attempt at a consistent reading of the Upaniṣads. The Upaniṣads are centuries older than the school itself. The 'dualist' branch of the later thinker Madhva (c. 1200 CE), for whom God and the self are not the same, has no card.",
+      "questions": [
+        "Is my deepest self the same as the reality behind everything?",
+        "If reality is one, why do I see so many separate things?",
+        "Could knowing who I really am free me from suffering and rebirth?"
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://iep.utm.edu/upanisad/",
+            "section": "4. Ātman and Brahman"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/shankara/",
+            "section": "intro"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/shankara/",
+            "section": "2.3 Two-Tiered Reality"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/shankara/",
+            "section": "3.4 Superimposition: The Fundamental Problem of Ignorance"
+          },
+          {
+            "url": "https://iep.utm.edu/upanisad/",
+            "section": "5. Karma, Saṃsāra, and Mokṣa"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "What is the self?",
+          "text": "The Upaniṣads are ancient Indian texts, composed between about 700 and 300 BCE. One of their great topics is the self, ātman. Uddālaka teaches his son that the self is an unseen essence in all living things, like salt dissolved in water. Yājñavalkya describes it as consciousness: the 'inner controller' behind all sensing and thinking.",
+          "thinkers": [
+            "vedanta/uddalaka-aruni",
+            "vedanta/yajnavalkya"
+          ],
+          "sources": [
+            {
+              "url": "https://iep.utm.edu/upanisad/",
+              "section": "intro"
+            },
+            {
+              "url": "https://iep.utm.edu/upanisad/",
+              "section": "3. The Self"
+            }
+          ]
+        },
+        {
+          "name": "Self and ultimate reality",
+          "text": "Brahman means ultimate reality. Some Upaniṣad teachers, such as Śāṇḍilya and Yājñavalkya, say the self is brahman. Others, such as Uddālaka, never use the word. Are self and brahman fully identical, or is the self one aspect of brahman? Indian thinkers kept arguing over this, Vedānta most of all.",
+          "thinkers": [
+            "vedanta/yajnavalkya",
+            "vedanta/uddalaka-aruni"
+          ],
+          "sources": [
+            {
+              "url": "https://iep.utm.edu/upanisad/",
+              "section": "4. Ātman and Brahman"
+            }
+          ]
+        },
+        {
+          "name": "Karma, rebirth and release",
+          "text": "Karma first meant ritual action. In the Upaniṣads it starts to stretch beyond ritual, toward moral cause and effect: you become good by good action. Later Upaniṣads name saṃsāra, the endless cycle of birth, death and rebirth. They also name mokṣa, release from that cycle, which Vedānta makes the goal.",
+          "thinkers": [
+            "vedanta/yajnavalkya"
+          ],
+          "sources": [
+            {
+              "url": "https://iep.utm.edu/upanisad/",
+              "section": "5. Karma, Saṃsāra, and Mokṣa"
+            },
+            {
+              "url": "https://iep.utm.edu/upanisad/",
+              "section": "8. The Upaniṣads and Vedānta"
+            }
+          ]
+        },
+        {
+          "name": "One without a second",
+          "text": "Advaita means 'non-dual'. Śaṅkara taught that the self is pure consciousness and identical with brahman. The many things we see are real only at the everyday level. At the ultimate level there is only brahman, as a rope mistaken for a snake was always only a rope.",
+          "thinkers": [
+            "vedanta/sankara"
+          ],
+          "sources": [
+            {
+              "url": "https://plato.stanford.edu/entries/shankara/",
+              "section": "intro"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/shankara/",
+              "section": "2.3 Two-Tiered Reality"
+            },
+            {
+              "url": "https://iep.utm.edu/advaita/",
+              "section": "intro"
+            }
+          ]
+        },
+        {
+          "name": "A self within God",
+          "text": "Rāmānuja's branch is called Viśiṣṭādvaita, 'qualified non-dualism'. For him brahman is a personal God: Vishnu, united with his consort Śrī. Individual selves are real and distinct. They belong to brahman as a body belongs to its soul. Devotion to God, bhakti, is the way to know brahman.",
+          "thinkers": [
+            "vedanta/ramanuja"
+          ],
+          "sources": [
+            {
+              "url": "https://iep.utm.edu/ramanuja/",
+              "section": "intro"
+            },
+            {
+              "url": "https://iep.utm.edu/ramanuja/",
+              "section": "a. Background"
+            },
+            {
+              "url": "https://iep.utm.edu/ramanuja/",
+              "section": "iii. Brahman and Ātman"
+            },
+            {
+              "url": "https://iep.utm.edu/ramanuja/",
+              "section": "3. Rāmānuja’s Theism"
+            },
+            {
+              "url": "https://iep.utm.edu/ramanuja/",
+              "section": "c. Bhakti"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": {
+        "text": "Ritual and sacrifice as life's highest aim: Vedānta puts knowledge and release first. Its early guide, the Brahma Sūtra, is a short explanation of the Upaniṣads' philosophy. It argued against the dualism of the rival Sāṃkhya school, which held the self apart from nature, which Śaṅkara also faulted for teaching many separate selves.",
+        "sources": [
+          {
+            "url": "https://iep.utm.edu/upanisad/",
+            "section": "8. The Upaniṣads and Vedānta"
+          },
+          {
+            "url": "https://iep.utm.edu/upanisad/",
+            "section": "4. Ātman and Brahman"
+          }
+        ]
+      },
+      "thinkers": [
+        "vedanta/uddalaka-aruni",
+        "vedanta/yajnavalkya",
+        "vedanta/sankara",
+        "vedanta/ramanuja"
+      ],
+      "sources": [
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "intro"
+        },
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "a. Main Upaniṣads"
+        },
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "3. The Self"
+        },
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "4. Ātman and Brahman"
+        },
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "5. Karma, Saṃsāra, and Mokṣa"
+        },
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "8. The Upaniṣads and Vedānta"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/shankara/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/shankara/",
+          "section": "1. Life and Works"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/shankara/",
+          "section": "2.3 Two-Tiered Reality"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/shankara/",
+          "section": "3.4 Superimposition: The Fundamental Problem of Ignorance"
+        },
+        {
+          "url": "https://iep.utm.edu/advaita/",
+          "section": "intro"
+        },
+        {
+          "url": "https://iep.utm.edu/advaita/",
+          "section": "1. History of Advaita Vedānta"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "intro"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "1. Rāmānuja’s Life and Works"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "a. Background"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "iii. Brahman and Ātman"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "3. Rāmānuja’s Theism"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "4. Rāmānuja’s Soteriology"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "c. Bhakti"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "confucianism",
+      "name": "Confucianism",
+      "dates": "6th–3rd century BCE",
+      "tradition": "eastern",
+      "traditionTag": "Chinese",
+      "dateRange": "6th–3rd century BCE (Confucius, trad. 551–479 BCE, to Xunzi, died after 238 BCE)",
+      "era": "Ancient (classical China)",
+      "description": "The tradition that grew from Confucius's teaching in ancient China. It holds that ritual, family duty and study shape people into good 'gentlemen'. Rulers should lead by moral example, not force. Mencius and Xunzi later disagreed over whether human nature is good.",
+      "tagline": "Become good through ritual, family duty and study, and govern by example, not force.",
+      "taglineSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/confucius/",
+          "section": "3. Ritual Psychology and Social Values"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/confucius/",
+          "section": "5. The Family and the State"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "1. Life and Confucian Background"
+        }
+      ],
+      "debatable": "SEP avoids the word 'Confucian' because it is not well defined. The Chinese word usually translated 'Confucian', Ru, is older than Confucius and meant experts in ritual and music. SEP also stresses that what Confucius himself taught is still debated; this node follows the Analects. In 18th-century Europe, reports from Jesuit missionaries in China made him a sage of reason for Enlightenment writers. IEP counts that image among the myths that remade Confucius. Later Neo-Confucianism (Song period, 960–1279) is left out here.",
+      "questions": [
+        "Is human nature good, or do we have to be shaped into goodness?",
+        "Can bowing, mourning and other rituals really make me a better person?",
+        "Should a leader guide people by example rather than by punishment?"
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/mencius/",
+            "section": "3. The Goodness of Human Nature"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/xunzi/",
+            "section": "2. Human Nature (xing 性)"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/confucius/",
+            "section": "3. Ritual Psychology and Social Values"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/xunzi/",
+            "section": "3. Modes of Moral Self-Cultivation: Ritual (li 禮) and Music (yue 樂)"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/mencius/",
+            "section": "1. Life and Confucian Background"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Ritual shapes the heart",
+          "text": "Ritual (li) first meant ceremonies, such as offerings to ancestors. Over time it came to cover etiquette and ethics in general. Confucius taught that performing ritual and music well reshapes your feelings. It limits greedy desires and prepares the ground for good character.",
+          "thinkers": [
+            "confucianism/confucius",
+            "confucianism/xunzi"
+          ],
+          "sources": [
+            {
+              "url": "https://plato.stanford.edu/entries/mencius/",
+              "section": "1. Life and Confucian Background"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/confucius/",
+              "section": "3. Ritual Psychology and Social Values"
+            }
+          ]
+        },
+        {
+          "name": "The virtues of a gentleman",
+          "text": "The 'gentleman' (junzi) is the ideal person of the Analects, an early text of dialogues and stories about Confucius. By the Han period (202 BCE–220 CE), five of his virtues counted as a complete set:",
+          "thinkers": [
+            "confucianism/confucius"
+          ],
+          "sources": [
+            {
+              "url": "https://plato.stanford.edu/entries/confucius/",
+              "section": "intro"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/confucius/",
+              "section": "1. Confucius as Chinese Philosopher and Symbol of Traditional Culture"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/confucius/",
+              "section": "4. Virtues and Character Formation"
+            }
+          ]
+        },
+        {
+          "name": "Family first",
+          "text": "Filial piety (xiao) means respect and care for parents and elders. The Analects calls it 'the root of a person'. Confucius's disciple Youzi adds that someone filial at home rarely turns against superiors. A ruler boasted of a son who reported his father for stealing a sheep. Confucius replied that among his people, fathers and sons cover for each other.",
+          "thinkers": [
+            "confucianism/confucius"
+          ],
+          "sources": [
+            {
+              "url": "https://plato.stanford.edu/entries/confucius/",
+              "section": "5. The Family and the State"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/confucius/",
+              "section": "4. Virtues and Character Formation"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/mencius/",
+              "section": "1. Life and Confucian Background"
+            }
+          ]
+        },
+        {
+          "name": "Governing by example",
+          "text": "Confucius thought rule by harsh rules and punishments makes people evasive and shameless. A ruler should guide people by ethical example instead, and use force only as a last resort. Mencius said that conquering the world through war is like 'climbing a tree in search of a fish'.",
+          "thinkers": [
+            "confucianism/confucius",
+            "confucianism/mencius"
+          ],
+          "sources": [
+            {
+              "url": "https://plato.stanford.edu/entries/mencius/",
+              "section": "1. Life and Confucian Background"
+            }
+          ]
+        },
+        {
+          "name": "Is human nature good?",
+          "text": "Mencius said human nature is good. Everyone has 'sprouts' of virtue, such as compassion, that grow with care. Xunzi said human nature is bad: following inborn desires leads to fighting and theft. For him goodness comes from 'artifice', the habits we build through ritual and teachers. Both agreed that anyone can become good.",
+          "thinkers": [
+            "confucianism/mencius",
+            "confucianism/xunzi"
+          ],
+          "sources": [
+            {
+              "url": "https://plato.stanford.edu/entries/mencius/",
+              "section": "2. The Virtues and Their Cultivation"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/mencius/",
+              "section": "3. The Goodness of Human Nature"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/xunzi/",
+              "section": "2. Human Nature (xing 性)"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": {
+        "text": "Rule by force and strict punishment in a war-torn age. Also the Mohists, followers of Mozi, who called Confucian rituals wasteful and demanded equal care for everyone.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/mencius/",
+            "section": "1. Life and Confucian Background"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/mencius/",
+            "section": "4. Mencius and His Philosophical Opponents"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/xunzi/",
+            "section": "3. Modes of Moral Self-Cultivation: Ritual (li 禮) and Music (yue 樂)"
+          }
+        ]
+      },
+      "thinkers": [
+        "confucianism/confucius",
+        "confucianism/mencius",
+        "confucianism/xunzi"
+      ],
+      "sources": [
+        {
+          "url": "https://iep.utm.edu/xunzi/",
+          "section": "2. The Way and Heaven"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/confucius/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/confucius/",
+          "section": "1. Confucius as Chinese Philosopher and Symbol of Traditional Culture"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/confucius/",
+          "section": "2. Sources for Confucius’s Life and Thought"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/confucius/",
+          "section": "3. Ritual Psychology and Social Values"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/confucius/",
+          "section": "4. Virtues and Character Formation"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/confucius/",
+          "section": "5. The Family and the State"
+        },
+        {
+          "url": "https://iep.utm.edu/confuci/",
+          "section": "7. The Confucius of Myth"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "1. Life and Confucian Background"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "2. The Virtues and Their Cultivation"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "3. The Goodness of Human Nature"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "4. Mencius and His Philosophical Opponents"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/xunzi/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/xunzi/",
+          "section": "1. Xunzi and Xunzi"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/xunzi/",
+          "section": "2. Human Nature (xing 性)"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/xunzi/",
+          "section": "3. Modes of Moral Self-Cultivation: Ritual (li 禮) and Music (yue 樂)"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/xunzi/",
+          "section": "4. The Source of the Rituals: Heaven (tian 天) and the Way (dao 道)"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "daoism",
+      "name": "Daoism",
+      "dates": "5th–3rd century BCE",
+      "tradition": "eastern",
+      "traditionTag": "Chinese",
+      "dateRange": "5th–3rd century BCE (the Laozi and Zhuangzi texts); revived as 'Neo-Daoism' from the 3rd century CE; living today as a religion",
+      "era": "Ancient (classical China)",
+      "description": "A Chinese tradition built around the Dao, the 'Way' of nature. Its two classic books, the Laozi (also called the Daodejing) and the Zhuangzi, praise wu-wei (effortless action) and naturalness. They doubt that human-made labels of good and bad make life better.",
+      "tagline": "Follow the Way of nature: act without forcing, and see past human-made labels.",
+      "taglineSources": [
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "intro"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "5. Fundamental Concepts in the Daodejing"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "8. Daoism and Confucianism"
+        }
+      ],
+      "debatable": "The name 'Daoist school' was coined by a historian in the 2nd century BCE, after its classic books were written. 'Daoism' also names a later religion in which Laozi is a god. This node covers the philosophy. SEP and IEP stress that the two are deeply intertwined, and Daoists themselves rarely split them. Some modern scholars think Laozi never existed.",
+      "questions": [
+        "What if trying harder is the problem, not the answer?",
+        "Do words like 'good' and 'bad' show how things are, or only how I see them?",
+        "Could I live more freely by stepping outside the roles society hands me?"
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://iep.utm.edu/daoism/",
+            "section": "5. Fundamental Concepts in the Daodejing"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/laozi/",
+            "section": "7. Naturalness and Nonaction"
+          }
+        ],
+        [
+          {
+            "url": "https://iep.utm.edu/daoism/",
+            "section": "8. Daoism and Confucianism"
+          },
+          {
+            "url": "https://iep.utm.edu/zhuangzi/",
+            "section": "b. Chapter 2: Qi Wu Lun (Discussion on Smoothing Things Out)"
+          }
+        ],
+        [
+          {
+            "url": "https://iep.utm.edu/zhuangzi/",
+            "section": "a. Chapter 1: Xiao Yao You (Wandering Beyond)"
+          },
+          {
+            "url": "https://iep.utm.edu/daoism/",
+            "section": "7. Basic Concepts in the Zhuangzi"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "The Way",
+          "text": "Dao means a road or way. In Daoism it names the process of reality itself: how things come together while always changing. The Daodejing says we cannot fathom the Dao, because no name we give it can capture it.",
+          "thinkers": [
+            "daoism/laozi"
+          ],
+          "sources": [
+            {
+              "url": "https://iep.utm.edu/daoism/",
+              "section": "5. Fundamental Concepts in the Daodejing"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/laozi/",
+              "section": "6. Dao and Virtue"
+            }
+          ]
+        },
+        {
+          "name": "Effortless action",
+          "text": "Wu-wei (effortless action) is often translated 'non-action', but IEP says scholars generally agree that is wrong. It means acting naturally, without forcing or tampering. Zhuangzi tells of Ding the Butcher, who carves oxen so skilfully that he works by spirit, not by eye.",
+          "thinkers": [
+            "daoism/laozi",
+            "daoism/zhuangzi"
+          ],
+          "sources": [
+            {
+              "url": "https://iep.utm.edu/daoism/",
+              "section": "5. Fundamental Concepts in the Daodejing"
+            },
+            {
+              "url": "https://iep.utm.edu/daoism/",
+              "section": "7. Basic Concepts in the Zhuangzi"
+            }
+          ]
+        },
+        {
+          "name": "Naturalness",
+          "text": "Ziran, literally 'self so', means naturalness or spontaneity. The Laozi says the Dao is not modelled on anything else. People should act in tune with the ways of nature. The sage is plain, like uncarved wood, and free of desires that society creates.",
+          "thinkers": [
+            "daoism/laozi",
+            "daoism/wang-bi"
+          ],
+          "sources": [
+            {
+              "url": "https://plato.stanford.edu/entries/laozi/",
+              "section": "7. Naturalness and Nonaction"
+            },
+            {
+              "url": "https://iep.utm.edu/daoism/",
+              "section": "5. Fundamental Concepts in the Daodejing"
+            },
+            {
+              "url": "https://plato.stanford.edu/entries/laozi/",
+              "section": "4. Commentaries"
+            }
+          ]
+        },
+        {
+          "name": "Against human-made labels",
+          "text": "The Daodejing says human distinctions, in law, morals and beauty, create our troubles rather than solve them. IEP sums up the contrast with an image. Daoists want to stay like natural, unhewn wood; Confucians want to be carved and polished. Chapters 8–10 of the Zhuangzi make this criticism openly.",
+          "thinkers": [
+            "daoism/laozi",
+            "daoism/zhuangzi"
+          ],
+          "sources": [
+            {
+              "url": "https://iep.utm.edu/daoism/",
+              "section": "8. Daoism and Confucianism"
+            }
+          ]
+        },
+        {
+          "name": "Many points of view",
+          "text": "Zhuangzi's book is full of short, funny parables. Many ask whether our own point of view is the only one. Little birds laugh at the giant bird Peng, but their narrow view cannot take in his vast one. Zhuangzi admits we cannot be sure that what we fear, such as death, is bad. Whether he was a relativist is debated. SEP calls him one, tying it to how words are used; IEP rejects the radical version, in which all views are equal.",
+          "thinkers": [
+            "daoism/zhuangzi"
+          ],
+          "sources": [
+            {
+              "url": "https://plato.stanford.edu/entries/zhuangzi/",
+              "section": "intro"
+            },
+            {
+              "url": "https://iep.utm.edu/zhuangzi/",
+              "section": "a. Chapter 1: Xiao Yao You (Wandering Beyond)"
+            },
+            {
+              "url": "https://iep.utm.edu/zhuangzi/",
+              "section": "b. Chapter 2: Qi Wu Lun (Discussion on Smoothing Things Out)"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": {
+        "text": "The Confucian and Mohist debate about the right human way of life, with its moral training and fixed distinctions. Daoists looked instead to the natural Way.",
+        "sources": [
+          {
+            "url": "https://plato.stanford.edu/entries/daoism/",
+            "section": "intro"
+          },
+          {
+            "url": "https://iep.utm.edu/daoism/",
+            "section": "8. Daoism and Confucianism"
+          }
+        ]
+      },
+      "thinkers": [
+        "daoism/laozi",
+        "daoism/zhuangzi",
+        "daoism/wang-bi"
+      ],
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/daoism/",
+          "section": "intro"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "intro"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "1. What is Daoism?"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "2. Classical Sources for Our Understanding of Daoism"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "4. The Daodejing"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "5. Fundamental Concepts in the Daodejing"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "6. The Zhuangzi"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "7. Basic Concepts in the Zhuangzi"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "8. Daoism and Confucianism"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "11. Neo-Daoism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/laozi/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/laozi/",
+          "section": "1. The Laozi Story"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/laozi/",
+          "section": "2. Date and Authorship of the Laozi"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/laozi/",
+          "section": "4. Commentaries"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/laozi/",
+          "section": "6. Dao and Virtue"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/laozi/",
+          "section": "7. Naturalness and Nonaction"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/zhuangzi/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/zhuangzi/",
+          "section": "1. Zhuangzi’s Life and Times"
+        },
+        {
+          "url": "https://iep.utm.edu/zhuangzi/",
+          "section": "a. Chapter 1: Xiao Yao You (Wandering Beyond)"
+        },
+        {
+          "url": "https://iep.utm.edu/zhuangzi/",
+          "section": "b. Chapter 2: Qi Wu Lun (Discussion on Smoothing Things Out)"
+        }
+      ],
+      "sample": false
     }
   ]
 }

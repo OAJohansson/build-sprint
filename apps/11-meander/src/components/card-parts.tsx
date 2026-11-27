@@ -1,11 +1,15 @@
 "use client";
 
 // The card's contents, shared by the desktop card and the phone screen: a school's sections,
-// a thinker, and the "Your thread" panel (handoff "The card", "Your thread").
+// a thinker, the "Your thread" panel (handoff "The card", "Your thread"; progress #37) and Further reading (#39).
 import { Fragment, useEffect, useRef, useState } from "react";
-import { alsoIn, getSchool, getThinker, ledeOf, studyPrompt, type School, type Thinker } from "@/lib/content";
-import { countLine, formatDay, summarise, type Visit } from "@/lib/visits";
+import { alsoIn, getSchool, getThinker, ledeOf, links, metaLine, reasonFor, schools, splitName, studyPrompt, verbFor, type School, type Thinker } from "@/lib/content";
+import { begunLine, detailLine, stateLabel, threadProgress } from "@/lib/progress";
+import { nextFromHere } from "@/lib/next";
+import { timelineRows } from "@/lib/timeline";
+import { furtherReading, type Reading } from "@/lib/reading";
 import { copyText } from "@/lib/copy";
+import { reveal } from "@/lib/reveal";
 import type { Nav } from "./meander";
 
 /** "Kierkegaard · Sartre" as inline links that open the thinker. */
@@ -39,21 +43,87 @@ export function StepInside({ school, nav }: { school: School; nav: Nav }) {
   );
 }
 
-export function SchoolSections({ school, nav, phone = false }: { school: School; nav: Nav; phone?: boolean }) {
+const arrow = (
+  <svg className="ext" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true">
+    <path d="M3.5 8.5l5-5M4.5 3.5h4v4" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+/** One entry: its title as a link to the encyclopedia (a new tab), the publisher in small text under it. */
+export function ReadingLink({ r }: { r: Reading }) {
+  return (
+    <>
+      <a className="rdl" href={r.url} target="_blank" rel="noopener">
+        {r.title}{arrow}<span className="sr-only"> (opens in a new tab)</span>
+      </a>
+      <small className="pub">{r.publisher}</small>
+    </>
+  );
+}
+
+/** "Start here" and "Go deeper" as labelled lines, for the card's list and the skeleton's facts. */
+export function ReadingRows({ school }: { school: School }) {
+  const [start, ...deeper] = furtherReading(school);
+  if (!start) return null;
+  return (
+    <>
+      <div className="fx rd">
+        <dt>Start here</dt>
+        <dd><ReadingLink r={start} /></dd>
+      </div>
+      {deeper.length > 0 && (
+        <div className="fx rd">
+          <dt>Go deeper</dt>
+          <dd>{deeper.map((r) => <span key={r.url} className="rdi"><ReadingLink r={r} /></span>)}</dd>
+        </div>
+      )}
+    </>
+  );
+}
+
+/** The card's last section (#39): the entries the school's content cites most. */
+function FurtherReading({ school, phone }: { school: School; phone: boolean }) {
+  if (!furtherReading(school).length) return null;
+  return (
+    <>
+      {!phone && <hr />}
+      <h2 className={phone ? "psec" : "sec"}>Further reading</h2>
+      <dl className="rdlist">
+        <ReadingRows school={school} />
+      </dl>
+    </>
+  );
+}
+
+export function SchoolSections({ school, nav, phone = false, titled = false }: { school: School; nav: Nav; phone?: boolean; titled?: boolean }) {
   const sec = phone ? "psec" : "sec";
   const sep = phone ? null : <hr />;
   const empty = !school.questions.length && !school.themes.length && !school.thinkers.length;
   const lede = ledeOf(school);
   // Desktop: the card opens with one line on what the school is (L20). The phone shows it under the title.
-  const ledeEl = !phone && lede ? <p className="lede">{lede}</p> : null;
+  // On the timeline there is no title on the globe, so the card carries the school's name (#41).
+  const { short } = splitName(school.name);
+  const titleEl = titled ? (
+    <>
+      <h2 className="ctitle" aria-label={school.name}>{short}</h2>
+      <p className="cmeta">{metaLine(school)}</p>
+    </>
+  ) : null;
+  const ledeEl = !phone && (lede || titleEl) ? <>{titleEl}{lede && <p className="lede">{lede}</p>}</> : null;
   // Desktop: the card's way into the skeleton, under the lede (the phone puts it under its own lede).
   const enterEl = !phone && school.themes.length > 0 ? <StepInside school={school} nav={nav} /> : null;
+  // F7 (phone): a theme opened near the bottom grows below the fold; bring it into view.
+  const themesRef = useRef<HTMLUListElement>(null);
+  useEffect(() => {
+    if (phone && nav.openTheme !== null) reveal(themesRef.current?.children[nav.openTheme] ?? null);
+  }, [phone, nav.openTheme]);
   if (empty) {
     return (
       <>
         {ledeEl}
         <h2 className={phone ? "psec" : "sec first"}>It asks</h2>
         <p className="pending">This school’s questions, themes and thinkers are still being written.</p>
+        <FurtherReading school={school} phone={phone} />
       </>
     );
   }
@@ -73,7 +143,7 @@ export function SchoolSections({ school, nav, phone = false }: { school: School;
         <>
           {sep}
           <h2 className={sec}>Themes</h2>
-          <ul className="tm">
+          <ul className="tm" ref={themesRef}>
             {school.themes.map((t, i) => {
               const open = nav.openTheme === i;
               const panelId = `theme-${school.id}-${i}${phone ? "-p" : ""}`;
@@ -108,7 +178,8 @@ export function SchoolSections({ school, nav, phone = false }: { school: School;
                 <li key={id}>
                   <button type="button" onClick={() => nav.openThinker(id)}>
                     <span>{t.name}</span>
-                    <span className="yr">{t.dates}</span>
+                    {/* long dates wrap under the name (F3) */}
+                    <span className={t.dates.length > 18 ? "yr long" : "yr"}>{t.dates}</span>
                   </button>
                 </li>
               );
@@ -116,6 +187,7 @@ export function SchoolSections({ school, nav, phone = false }: { school: School;
           </ul>
         </>
       )}
+      <FurtherReading school={school} phone={phone} />
     </>
   );
 }
@@ -196,37 +268,76 @@ export function ThinkerSections({ thinker, nav, headingRef }: { thinker: Thinker
   );
 }
 
-export function ThreadSections({ visits, nav, headingRef }: { visits: Visit[]; nav: Nav; headingRef?: React.Ref<HTMLHeadingElement> }) {
-  const s = summarise(visits);
+const IDEAS = schools.map((s) => ({ id: s.id, ideas: s.themes.map((t) => t.name) }));
+/** Every school, earliest on the timeline first (schools the timeline doesn't know go last, in content order). */
+const EARLIEST = (() => {
+  const t = timelineRows(schools).map((r) => r.item.id);
+  return [...t, ...schools.map((s) => s.id).filter((id) => !t.includes(id))];
+})();
+
+/** Your thread (#37, F1): where to go next, how far you are, then the schools you've begun, most recent first. */
+export function ThreadSections({ nav, headingRef }: { nav: Nav; headingRef?: React.Ref<HTMLHeadingElement> }) {
+  const t = threadProgress(nav.progress, IDEAS);
+  const next = nextFromHere(t.rows.map((r) => r.id), links, EARLIEST);
+  const detail = detailLine(t);
   return (
     <>
       <button type="button" className="x" onClick={nav.closeThread}>Close</button>
       <h2 className="sec" tabIndex={-1} ref={headingRef}>Your thread</h2>
-      <p className="big">{countLine(s)}</p>
-      {s.since && <p className="since">since {formatDay(s.since)}</p>}
-      <ol className="hist">
-        {s.rows.map((row) => (
-          <li key={row.day}>
-            <time dateTime={row.day}>{formatDay(row.day)}{row.isToday ? " · today" : ""}</time>
-            <div>
-              {row.items.map((it) => {
-                const name = it.kind === "school" ? getSchool(it.id)?.name : getThinker(it.id)?.name;
-                if (!name) return null; // content changed since the visit; skip it quietly
-                return (
-                  <button
-                    key={it.kind + it.id}
-                    type="button"
-                    className={it.kind === "thinker" ? "p" : undefined}
-                    onClick={() => (it.kind === "school" ? nav.openSchool(it.id) : nav.openThinker(it.id))}
-                  >
-                    {name}
+      <p className="tsum">{begunLine(t)}</p>
+      {detail && <p className="tsub">{detail}</p>}
+      {next.picks.length > 0 && (
+        <>
+          <h3 className="tkick">{next.mode === "next" ? "Next from here" : t.rows.length ? "Not begun yet" : "Start at the beginning"}</h3>
+          <ul className="nextl">
+            {next.picks.map((p) => {
+              const s = getSchool(p.id);
+              const via = p.via ? getSchool(p.via) : undefined;
+              if (!s) return null;
+              // "inspired Existentialism · Husserl's method applied": the link read from the begun school
+              const verb = p.link && via ? verbFor(p.link, via.id).replace(/\bit\b/g, splitName(via.name).short) : "";
+              const why = p.link && via ? reasonFor(p.link, via.id) : "";
+              return (
+                <li key={p.id}>
+                  <button type="button" onClick={() => nav.openSchool(p.id)}>
+                    <i aria-hidden="true" />
+                    <span>
+                      <b>{s.name}</b>
+                      <small>{verb ? [verb, why].filter(Boolean).join(" · ") : metaLine(s)}</small>
+                    </span>
                   </button>
-                );
-              })}
-            </div>
-          </li>
-        ))}
-      </ol>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      )}
+      {t.rows.length === 0 ? (
+        <p className="pending">Open a school to begin it. Open every one of its ideas and it shows as all ideas seen.</p>
+      ) : (
+        <>
+          <h3 className="tkick">Begun</h3>
+          <ul className="prog">
+            {t.rows.map((r) => {
+              const s = getSchool(r.id);
+              if (!s) return null;
+              return (
+                <li key={r.id}>
+                  <button type="button" onClick={() => nav.openSchool(r.id)}>
+                    <i className={r.state} aria-hidden="true" />
+                    <span className="nm">{s.name}<span className="sr-only">, {stateLabel(r.state)}</span></span>
+                    {r.total > 0 && <span className="ct">{r.seen} of {r.total} {r.total === 1 ? "idea" : "ideas"}</span>}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          <p className="legend" aria-hidden="true">
+            <span><i className="started" />started</span>
+            <span><i className="explored" />all ideas seen</span>
+          </p>
+        </>
+      )}
     </>
   );
 }

@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#131110">
+<title>Six AM · Rebuild the song · round 2 (Shelf, Side list, Table)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=block" rel="stylesheet">
+<style>
+/* Phase 7, design round 2 (decision 0028). The owner's three of ten (L276): 2 Shelf, 4 Side list, 10 Table.
+   URL: ?v=2|4|10 direction · ?m=1 choose a kick · m=2 fix by ear · m=r an empty row (Ride) · m=3 rebuild · m=e rebuild, nothing filled yet
+   · &deck=0 (or m=d) the Deck isn't open · &credits=1 sound credits open · &data=worst long names, 8 sections · &shot=1 hides the picker.
+   Real kit: the 120 sounds of apps/07-six-am/src/lib/make/kit-p7.ts (names from their ids). Nothing plays; taps change what's on screen. */
+:root { color-scheme: dark; --bg:#131110; --panel:#1a1715; --line:#2b2622; --line2:#3a322c; --ink:#f1e6d3; --mute:#aa9c88; --dim:#958a7a; --gold:#f2b134; --goldDim:rgba(242,177,52,.13); --goldLine:rgba(242,177,52,.55); --bass:#ef5b37; --drums:#f2b134; --teal:#23b3a5; --lead:#7d95e0; --vox:#e08fae; --fx:#a6c35a; --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace; --serif:"Instrument Serif", Georgia, serif; --ease-out:cubic-bezier(.23,1,.32,1); }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--bg); color: var(--ink); font: 13px/1.45 var(--mono); -webkit-font-smoothing: antialiased; overflow: hidden; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; text-align: inherit; }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid rgba(241,230,211,.6); outline-offset: 2px; }
+.link { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(241,230,211,.35); white-space: nowrap; }
+@media (hover:hover) and (pointer:fine) { .link:hover { text-decoration-color: currentColor; color: var(--ink); } }
+.app { display: grid; grid-template-rows: 52px auto minmax(0,1fr); grid-template-columns: minmax(0,1fr); height: 100vh; }
+.app.studio { grid-template-rows: 56px auto minmax(0,1fr); }
+/* app bar */
+.bar { display: flex; align-items: center; gap: 24px; padding: 0 20px; border-bottom: 1px solid var(--line); min-width: 0; }
+.logo { display: flex; align-items: center; gap: 10px; padding-right: 22px; border-right: 1px solid var(--line); height: 100%; flex: none; }
+.logo i { width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 50% 60%, #f2b134 0 30%, #ef5b37 31% 52%, #23b3a5 53% 70%, #221d1a 71%); }
+.logo b { font: italic 400 26px var(--serif); }
+.nav { display: flex; gap: 20px; flex: none; }
+.nav a { color: var(--mute); text-decoration: none; padding: 16px 0; }
+.nav a.on { color: var(--ink); box-shadow: inset 0 -2px var(--gold); }
+.gear { margin-left: auto; color: var(--mute); font-size: 16px; }
+/* track head (Make) */
+.head { display: flex; align-items: center; gap: 22px; padding: 9px 20px; border-bottom: 1px solid var(--line); min-width: 0; }
+.back { color: var(--mute); white-space: nowrap; flex: none; }
+.title { min-width: 0; flex: 1; }
+.title h1 { margin: 0; font: italic 400 25px/1.1 var(--serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.title p { margin: 2px 0 0; color: var(--mute); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tr { display: flex; align-items: center; gap: 12px; flex: none; }
+.play { width: 34px; height: 34px; border-radius: 50%; background: var(--ink); color: var(--bg); display: grid; place-items: center; font-size: 11px; flex: none; transition: transform 140ms var(--ease-out); }
+.play:active, .gold:active, .ghost:active { transform: scale(.97); }
+.small { color: var(--mute); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.loopchip { border: 1px solid #6b5426; color: var(--gold); border-radius: 6px; padding: 3px 10px; font-size: 12px; white-space: nowrap; }
+.lm { display: flex; border: 1px solid var(--line2); border-radius: 999px; padding: 3px; flex: none; }
+.lm span { padding: 5px 16px; border-radius: 999px; font: italic 19px/1 var(--serif); color: var(--mute); }
+.lm span.on { background: #2f2925; color: var(--ink); }
+.deck { color: var(--mute); white-space: nowrap; flex: none; } .deck::before { content: "●"; color: #7fbf6a; margin-right: 6px; font-size: 10px; }
+/* room */
+.room { display: grid; grid-template-columns: minmax(0,1fr); min-height: 0; }
+.room.rail { grid-template-columns: minmax(0,1fr) 340px; }
+.col { display: flex; flex-direction: column; min-height: 0; min-width: 0; padding: 0 28px; overflow: hidden; }
+.side { border-left: 1px solid var(--line); background: var(--panel); min-height: 0; display: flex; flex-direction: column; }
+.fam { display: flex; align-items: center; gap: 20px; height: 44px; border-bottom: 1px solid var(--line); flex: none; }
+.fam .f { color: var(--mute); padding: 12px 0; white-space: nowrap; }
+.fam .f.on { color: var(--ink); box-shadow: inset 0 -2px var(--ink); }
+.fam .f i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; vertical-align: 1px; }
+.grow { flex: 1; min-height: 6px; }
+.foot { display: flex; align-items: center; gap: 14px; height: 58px; border-top: 1px solid var(--line); flex: none; margin: 0 -28px; padding: 0 28px; background: #171412; }
+.ab { display: flex; border: 1px solid var(--line2); border-radius: 999px; padding: 3px; flex: none; }
+.ab span { padding: 0 13px; height: 30px; display: grid; place-items: center; border-radius: 999px; color: var(--mute); white-space: nowrap; font-size: 12px; }
+.ab span.on { background: #2f2925; color: var(--ink); }
+.foot input { background: var(--bg); border: 1px solid var(--line2); border-radius: 6px; color: var(--ink); font: 13px var(--mono); padding: 0 12px; height: 38px; flex: 1; min-width: 120px; max-width: 340px; text-overflow: ellipsis; }
+.close { color: var(--mute); white-space: nowrap; font-size: 12px; font-variant-numeric: tabular-nums; } .close b { color: var(--ink); font-weight: 500; font-size: 15px; }
+.gold { background: var(--gold); color: #1a1408; border-radius: 999px; padding: 0 18px; height: 38px; font-weight: 500; white-space: nowrap; flex: none; margin-left: auto; transition: transform 140ms var(--ease-out); }
+.ghost { border: 1px solid var(--line2); border-radius: 999px; padding: 0 14px; height: 30px; color: var(--ink); white-space: nowrap; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; flex: none; transition: transform 140ms var(--ease-out); }
+@media (hover:hover) and (pointer:fine) { .ghost:hover { border-color: var(--dim); } }
+.lbl { font-size: 11.5px; color: var(--mute); }
+.mute { color: var(--mute); } .dim { color: var(--dim); } .yours { color: var(--gold); }
+.serif { font: italic 400 24px/1.1 var(--serif); }
+.clamp2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ell { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+/* knobs */
+.knobs { display: flex; gap: 22px; align-items: flex-start; flex: none; }
+.knob { display: grid; justify-items: center; gap: 1px; } .knob span { font-size: 12px; } .knob small { color: var(--mute); font-size: 11.5px; }
+/* step rows */
+.ruler { position: relative; }
+.ruler .cells { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 6px; height: 22px; }
+.ruler .rb { display: grid; grid-template-columns: repeat(16, minmax(0,1fr)); border-bottom: 1px solid var(--line2); min-width: 0; }
+.ruler .rb button { font-size: 11px; color: var(--dim); padding: 0 0 3px 2px; font-variant-numeric: tabular-nums; white-space: nowrap; height: 22px; display: flex; align-items: flex-end; }
+@media (hover:hover) and (pointer:fine) { .ruler .rb button:hover { box-shadow: inset 0 -3px var(--mute); color: var(--ink); } }
+.ruler .ph { top: 0; bottom: 0; }
+.steps { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 6px; }
+.barb { display: grid; grid-template-columns: repeat(16, minmax(0,1fr)); gap: 2px; min-width: 0; }
+.st { border-radius: 2px; background: rgba(241,230,211,.05); min-height: 8px; position: relative; }
+.st.b { background: rgba(241,230,211,.09); }
+.st.r { background: var(--drums); }
+.st.a { background: var(--ink); }
+.st.x { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(242,177,52,.75); }
+@media (hover:hover) and (pointer:fine) { .st:hover { box-shadow: inset 0 0 0 1px rgba(241,230,211,.6); } }
+.muted .st.r, .muted .st.a { opacity: .3; }
+.ph { position: absolute; top: -3px; bottom: -3px; width: 2px; background: #fff; pointer-events: none; border-radius: 1px; }
+.legend { display: flex; gap: 14px; font-size: 11px; color: var(--mute); white-space: nowrap; }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.mbtn { width: 26px; height: 22px; border-radius: 4px; color: var(--dim); font-size: 11px; display: grid; place-items: center; border: 1px solid transparent; flex: none; }
+.mbtn[aria-pressed="true"] { background: #3a322c; color: var(--ink); }
+@media (hover:hover) and (pointer:fine) { .mbtn:hover { border-color: var(--line2); color: var(--ink); } }
+.hatch { background-image: repeating-linear-gradient(135deg, rgba(242,177,52,.09) 0 6px, transparent 6px 12px); border-radius: 3px; }
+.over { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.over span { background: var(--bg); padding: 1px 10px; border-radius: 4px; color: var(--gold); font-size: 12px; white-space: nowrap; }
+.count { display: inline-flex; align-items: center; gap: 8px; color: var(--gold); white-space: nowrap; font-size: 12.5px; }
+.count::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex: none; }
+.count.done { color: var(--mute); } .count.done::before { background: #7fbf6a; }
+/* sound items */
+.snd { display: flex; flex-direction: column; gap: 0; padding: 5px 9px; border-radius: 6px; border: 1px solid transparent; min-width: 0; text-align: left; }
+.snd b { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12.5px; }
+.snd small { color: var(--mute); font-size: 11.5px; }
+.snd[aria-pressed="true"] { border-color: var(--gold); background: var(--goldDim); }
+@media (hover:hover) and (pointer:fine) { .snd:hover { border-color: var(--line2); } .snd[aria-pressed="true"]:hover { border-color: var(--gold); } }
+.playing::before { content: "▶ "; color: var(--gold); font-size: 9px; }
+.famh { font-size: 11px; color: var(--dim); padding: 0 9px; }
+.pop { position: fixed; z-index: 50; background: #221d1a; border: 1px solid var(--line2); border-radius: 10px; box-shadow: 0 14px 40px rgba(0,0,0,.55); padding: 14px; overscroll-behavior: contain; }
+/* studio */
+.stbar { display: flex; align-items: center; gap: 18px; padding: 0 18px; border-bottom: 1px solid var(--line); min-width: 0; }
+.stbar .tname { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.mo { display: flex; border: 1px solid var(--line2); border-radius: 999px; padding: 3px; flex: none; }
+.mo button { padding: 0 14px; height: 30px; border-radius: 999px; color: var(--mute); white-space: nowrap; }
+.mo button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.mo button[aria-disabled="true"] { color: var(--dim); cursor: not-allowed; }
+.monote { font-size: 12px; color: var(--mute); white-space: nowrap; }
+.monote.warn { color: var(--gold); }
+.monote button { text-decoration: underline; text-underline-offset: 3px; color: var(--ink); }
+.note { padding: 9px 18px; border-bottom: 1px solid var(--line); color: var(--mute); font-size: 12px; background: var(--panel); }
+.note b { color: var(--ink); font-weight: 500; }
+.tl { position: relative; min-width: 0; }
+.slot { position: absolute; top: 4px; bottom: 4px; border-radius: 5px; display: flex; align-items: center; padding: 0 8px; gap: 6px; min-width: 0; overflow: hidden; font-size: 11.5px; white-space: nowrap; }
+.slot.e { border: 1px dashed rgba(241,230,211,.14); color: var(--dim); }
+.slot.h { border: 1px dashed var(--goldLine); color: var(--gold); background: rgba(242,177,52,.05); }
+.slot.l { border: 1px dashed rgba(241,230,211,.14); color: var(--dim); }
+.slot.f { color: var(--ink); }
+.slot[aria-expanded="true"], .card-slot[aria-expanded="true"] { box-shadow: 0 0 0 2px var(--ink); }
+@media (hover:hover) and (pointer:fine) { .slot.e:hover, .slot.h:hover, .slot.l:hover { background: rgba(241,230,211,.06); } }
+.slot span { overflow: hidden; text-overflow: ellipsis; }
+.secband { position: absolute; top: 0; bottom: 0; border-left: 1px solid var(--line2); }
+.ph2 { position: absolute; top: 0; bottom: 0; width: 2px; background: #fff; pointer-events: none; z-index: 3; }
+.lib { display: flex; flex-direction: column; gap: 4px; }
+.part { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 6px; border: 1px solid var(--line); text-align: left; min-width: 0; }
+.part i { width: 3px; align-self: stretch; border-radius: 2px; flex: none; }
+.part div { min-width: 0; } .part b { font-weight: 500; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .part small { color: var(--mute); font-size: 11px; }
+@media (hover:hover) and (pointer:fine) { .part:hover { border-color: var(--dim); } }
+.card { container-type: inline-size; }
+@container (max-width: 132px) { .cs-txt { display: none; } }
+.snd, .part, .mbtn { transition: transform 140ms var(--ease-out); }
+.snd:active, .part:active, .mbtn:active { transform: scale(.97); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* tables (direction 10) */
+table { border-collapse: collapse; }
+th { font-weight: 400; text-align: left; }
+.dial { display: inline-block; width: 64px; height: 4px; border-radius: 2px; background: var(--line2); vertical-align: middle; position: relative; }
+.dial i { position: absolute; top: -3px; width: 6px; height: 10px; border-radius: 2px; background: var(--mute); margin-left: -3px; }
+tr[aria-selected="true"] .dial i { background: var(--gold); }
+/* picker (verbatim, PICKER.md) */
+.proto-picker { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 2147483647; display: flex; align-items: center; gap: 2px; padding: 4px; border-radius: 999px; background: rgba(10, 10, 10, 0.82); -webkit-backdrop-filter: blur(12px) saturate(1.4); backdrop-filter: blur(12px) saturate(1.4); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset, 0 8px 24px rgba(0, 0, 0, 0.24), 0 2px 6px rgba(0, 0, 0, 0.12); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; line-height: 1; -webkit-font-smoothing: antialiased; user-select: none; -webkit-user-select: none; }
+.proto-picker-highlight { position: absolute; top: 4px; left: 0; height: 28px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); will-change: transform; }
+.proto-picker[data-ready] .proto-picker-highlight { transition: transform 250ms cubic-bezier(0.23, 1, 0.32, 1), width 250ms cubic-bezier(0.23, 1, 0.32, 1); }
+@media (prefers-reduced-motion: reduce) { .proto-picker[data-ready] .proto-picker-highlight { transition: none; } .play, .gold, .ghost, .snd, .part, .mbtn { transition: none; } }
+.proto-picker-item { position: relative; display: flex; align-items: center; height: 28px; padding: 0 12px; border: 0; border-radius: 999px; background: transparent; color: rgba(255, 255, 255, 0.55); font: inherit; cursor: pointer; transition: color 150ms ease-out; }
+.proto-picker-item:hover { color: rgba(255, 255, 255, 0.85); }
+.proto-picker-item:active { transform: scale(0.97); }
+.proto-picker-item:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.4); outline-offset: 2px; }
+.proto-picker-item[data-active] { color: #fff; }
+.proto-picker[data-position="top"] { bottom: auto; top: 24px; }
+.moments { position: fixed; top: 64px; right: 12px; z-index: 2147483646; display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgba(10,10,10,.82); font: 12px -apple-system, sans-serif; }
+.moments button { padding: 5px 10px; border-radius: 999px; color: rgba(255,255,255,.55); }
+.moments button[data-active] { background: rgba(255,255,255,.12); color: #fff; }
+body.shot .proto-picker, body.shot .moments { display: none; }
+@media (max-height: 800px) { .shelfg .snd small { display: none; } .foot { height: 52px; } .head { padding: 5px 20px; } .title h1 { font-size: 22px; } .fam { height: 40px; } .snd { padding: 3px 8px; } }
+</style></head>
+<body>
+<div id="stage"></div>
+<div class="moments" aria-label="Moment">
+  <button data-m="1">1 Choose a kick</button><button data-m="2">2 Fix by ear</button><button data-m="r">Empty row</button><button data-m="3">3 Rebuild</button><button data-m="e">Rebuild, empty</button><button data-m="d">Deck closed</button>
+</div>
+<nav class="proto-picker" aria-label="Prototype variants" data-position="top">
+  <span class="proto-picker-highlight" aria-hidden="true"></span>
+</nav>
+<script>
+// ───────── the real kit: apps/07-six-am/src/lib/make/kit-p7.ts (id, family, feel, dirty, brightness Hz, length s, one plain line) ─────────
+const KIT_RAW = [["kick-909-classic","909 punchy","punchy",0,378,0.157,"The classic house kick: a short thump with a bright snap on top (909-style, sampled from a Roland JD-Xi)."],
+["kick-909-round","909 punchy","round",0,141,0.271,"A 909-style kick with more low body and a softer top than the classic one."],
+["kick-909-tight","tight short techno","tight",0,239,0.086,"A very short 909-style kick that gets out of the way fast: good for quick techno patterns."],
+["kick-808-boom","808 long boom","boomy",0,66,0.443,"The 808 kick: a deep sine boom that rings for over a second (sampled from a Roland TR-08)."],
+["kick-808-rusty","808 long boom","growly",0,79,0.633,"A long 808-style boom with a slightly rough edge; it fills the low end on its own."],
+["kick-subby","sub-heavy","soft",0,105,0.191,"A soft, rounded kick that is mostly low end, with no sharp click on top."],
+["kick-soft-bright","soft round deep-house","warm",0,612,0.449,"A gentle, warm kick with a light, airy top: sits under a deep-house groove without pushing."],
+["kick-house-bounce","soft round deep-house","bouncy",0,246,0.223,"A classic house kick: round, short and bouncy."],
+["kick-techno-dry","tight short techno","dry",0,706,0.218,"A dry, tight techno kick with a firm knock in the mids."],
+["kick-techno-amp","tight short techno","thick",0,159,0.336,"A thick techno kick played through a bass amp: low, solid and a little rough."],
+["kick-gabber","hard / distorted","brutal",1,1483,0.565,"A heavily distorted gabber kick: a buzzing, square-ish thump for hard styles."],
+["kick-909-distorted","hard / distorted","crunchy",1,2352,0.204,"A 909-style kick pushed into distortion: short, crunchy and loud."],
+["kick-hardstyle","hard / distorted","huge",1,2029,0.756,"A long hardstyle kick: a punchy hit that turns into a pitched, distorted tail."],
+["kick-acoustic-hard","acoustic (live drum)","live",0,438,0.339,"A real bass drum hit hard with the pedal: a woody thud with some room around it."],
+["kick-acoustic-short","acoustic (live drum)","damped",0,509,0.089,"A short, damped acoustic kick: the quick thud of a close-miked drum kit."],
+["kick-jazz","acoustic (live drum)","open",0,571,0.387,"A jazz kick drum left to ring: soft beater, open shell, a little room."],
+["kick-lofi-fat","lo-fi dusty","dusty",1,280,0.149,"A fat, dull kick with the top rolled off, like a hit sampled from an old record."],
+["kick-lofi-gritty","lo-fi dusty","gritty",1,1592,0.259,"A gritty lo-fi kick with crunch in the mids: hip-hop and lo-fi house."],
+["kick-sub-boom","sub-heavy","deep",0,73,1.091,"Almost pure sub: a long, low boom you feel more than hear."],
+["kick-click-top","clicky top","clicky",0,1786,0.157,"A short kick with a strong click on top that cuts through a busy mix."],
+["clap-909-clap","909 clap","classic",0,3408,0.323,"The house clap: a burst of hand-clap noise with a short tail (909-style, sampled from a Roland JD-Xi)."],
+["clap-909-snare","tight snare","snappy",0,5585,0.122,"A dry 909-style snare: a sharp crack of noise with a short tone underneath."],
+["clap-808-clap","808 clap","soft",0,2752,0.201,"An 808-style clap: softer and darker than the 909 one, with a gentle tail."],
+["clap-808-clap-airy","808 clap","airy",0,5324,0.157,"The 808 clap from a Roland TR-08: a few quick slaps and a long, airy hiss."],
+["clap-808-snare","tight snare","tiny",0,5722,0.052,"The 808 snare from a Roland TR-08: a tiny, tight snap with a high tone. Very short."],
+["clap-big-clap","big layered clap","wide",0,3580,0.24,"A big, layered clap with a fat body: for drops and big moments."],
+["clap-combo-clap","big layered clap","layered",0,5308,0.193,"A clap layered with a snare: brighter and thicker than a single clap."],
+["clap-finger-snap","snap","crisp",0,5839,0.033,"A real finger snap: tiny, crisp and dry."],
+["clap-rimshot","rim","woody",0,3732,0.04,"A closed rimshot: the stick hits the rim for a short, woody tock."],
+["clap-rim-knock","rim","knocky",0,1436,0.055,"A darker, lower rim knock from a Ludwig snare drum: clicky and dry."],
+["clap-synth-snare","tight snare","thumpy",0,1276,0.15,"A low synth snare from an old Roland System-100: more thump than crack."],
+["clap-sp12-snare","lo-fi snare","grainy",1,1284,0.551,"A 12-bit snare from an E-mu SP-12 sampler: dark, grainy and long."],
+["clap-room-snare","roomy snare","roomy",0,4052,0.183,"A processed snare with room sound around it: big, but not too long."],
+["clap-dub-snare","roomy snare","huge",0,6929,0.228,"A huge, bright snare with a long tail and a low tone under it."],
+["clap-acoustic-snare","acoustic snare","natural",0,4339,0.133,"A real snare drum, close-miked: the crack of the head plus the rattle of the wires."],
+["clap-side-stick","acoustic snare","clicky",0,4074,0.091,"A side stick on a real snare: the soft click used in ballads and bossa nova."],
+["clap-lofi-snare","lo-fi snare","muffled",1,2109,0.246,"A muffled lo-fi snare: dark and soft, as if it came off an old tape."],
+["clap-8bit-snare","lo-fi snare","fizzy",1,7739,0.125,"A bright 8-bit noise snare, like an old game console."],
+["clap-distorted-snare","lo-fi snare","trashy",1,4739,0.314,"A distorted lo-fi snare: crunchy, trashy and loud."],
+["clap-brush-rim","brush","brushy",0,3130,0.15,"A brush hit on a snare and its rim: a soft swish with a knock in it."],
+["hat-909-closed","909","crisp",0,7369,0.035,"The 909 closed hat: a short, metallic tss (909-style, sampled from a Roland JD-Xi)."],
+["hat-909-closed-loose","909","loose",0,8206,0.072,"A slightly longer 909-style closed hat with more ring."],
+["hat-808-closed","808","thin",0,11145,0.063,"The 808 closed hat from a Roland TR-08: thin, bright and very short."],
+["hat-808-closed-ring","808","metallic",0,8594,0.153,"An 808-style closed hat with a longer metallic ring."],
+["hat-acoustic-closed","acoustic","natural",0,8277,0.119,"A real hi-hat played closed with a stick: natural and woody."],
+["hat-pedal","acoustic","soft",0,9208,0.239,"A real hi-hat closed with the foot pedal: the soft chick between the beats."],
+["hat-acoustic-tight","acoustic","tight",0,9863,0.113,"A tight real closed hat with a quick, dry decay."],
+["hat-kit-closed","acoustic","short",0,9204,0.059,"A short closed hat from a sampled drum kit."],
+["hat-tick","tiny tick","tiny",0,1148,0.016,"Barely a hat: a tiny, dark electronic tick for subtle rhythm."],
+["hat-noise-tick","tiny tick","clipped",0,5778,0.025,"A very short burst of noise, almost a click: good for fast 16ths."],
+["hat-lofi-closed","dusty lo-fi","dusty",1,4108,0.094,"A dull, dusty closed hat with the top rolled off."],
+["hat-karaoke","dusty lo-fi","cheap",1,5138,0.074,"A closed hat from a karaoke machine, distorted: cheap and charming."],
+["hat-8bit-closed","dusty lo-fi","fizzy",1,12473,0.121,"A soft 8-bit noise hat, like an old game console."],
+["hat-lofi-gritty","dusty lo-fi","gritty",1,5933,0.05,"A short, gritty lo-fi closed hat."],
+["hat-bright-closed","sizzly bright","airy",0,13187,0.068,"A very bright, airy closed hat for a shiny top end."],
+["hat-sizzle-closed","sizzly bright","sizzly",0,10445,0.154,"A 14-inch closed hat with a long sizzle."],
+["hat-long-closed","sizzly bright","ringing",0,9950,0.337,"A closed hat that rings a little longer: halfway to an open hat."],
+["hat-modular","sizzly bright","synthetic",0,9873,0.095,"A hat made on a modular synth: clean, bright noise."],
+["hat-shaker-hat","shaker-like","breathy",0,12584,0.232,"A soft burst of high noise, half hat and half shaker."],
+["hat-swell-hat","shaker-like","brushed",0,8866,0.175,"A soft hat that fades in slowly, like a shaker stroke."],
+["ohat-909-open","909 open","classic",0,8162,0.267,"The 909 open hat: the offbeat tsss of house music (909-style, sampled from a Roland JD-Xi)."],
+["ohat-909-open-mini","909 open","clipped",0,8599,0.099,"A tiny 909-ish open hat, cut short: a quick ts on the offbeat."],
+["ohat-808-open","808 open","shimmery",0,9660,0.539,"The 808 open hat from a Roland TR-08: thin and shimmery with a medium tail."],
+["ohat-808-open-long","808 open","ringing",0,7439,0.922,"A long 808-style open hat that rings for almost a second."],
+["ohat-soft-open","short open","soft",0,5325,0.318,"A soft, darker electronic open hat with a short tail."],
+["ohat-short-open","short open","tight",0,8059,0.13,"A short electronic open hat: a quick tss that doesn't hang around."],
+["ohat-gated-open","short open","bright",0,10599,0.221,"A bright open hat cut off by a gate: crisp start, sudden stop."],
+["ohat-plain-open","short open","plain",0,8042,0.428,"A plain electronic open hat with a medium tail."],
+["ohat-dark-open","short open","dark",0,3856,0.251,"A dark, trashy open hat with a short wash."],
+["ohat-foot-open","long sizzle","washy",0,5645,1.748,"A real hi-hat opened with the foot: a long, washy sizzle."],
+["ohat-open-soft","long sizzle","gentle",0,9368,0.958,"A real open hat played softly: a quiet, long sizzle."],
+["ohat-open-loud","long sizzle","splashy",0,9867,0.644,"A real open hat played loud: bright and splashy."],
+["ohat-open-close","acoustic","chick",0,6796,0.267,"A real hi-hat opened and closed again: tss-chick."],
+["ohat-loose","acoustic","loose",0,9580,0.289,"A real hi-hat played half-open: a loose, rattly hit."],
+["ohat-jazz-open","acoustic","airy",0,10474,0.394,"An open hat from a jazz kit: light and airy."],
+["ohat-live-open","acoustic","bright",0,11288,0.932,"A bright open hat from a live kit with a long ring."],
+["ohat-keyboard-open","lo-fi","cheesy",0,7012,0.329,"An open hat from a cheap Yamaha home keyboard: thin and a bit cheesy."],
+["ohat-po12-open","lo-fi","crunchy",1,6817,0.207,"An open hat from a Pocket Operator PO-12: small, crunchy and lo-fi."],
+["ohat-dx-open","lo-fi","vintage",1,6333,0.152,"A short open hat in the grainy style of an 80s sample drum machine."],
+["ohat-cr78-open","lo-fi","dark",0,3587,0.355,"A dark, soft open hat in the style of the Roland CR-78 rhythm box from the late 70s."],
+["perc-shaker-short","shakers","tight",0,7144,0.074,"A single short shaker stroke: the classic 16th-note chk."],
+["perc-seed-shaker","shakers","earthy",0,5595,0.107,"A seed shaker: a soft, earthy rattle."],
+["perc-egg-shaker","shakers","smooth",0,8572,0.348,"An egg shaker thrown once: a longer, smooth shhk."],
+["perc-808-maracas","shakers","tiny",0,10397,0.037,"The 808 maracas from a Roland TR-08: a tiny, bright tick of noise."],
+["perc-tambourine","tambourine","jingly",0,8987,0.204,"A tambourine hit: bright jingles that ring for a moment."],
+["perc-jingle-hit","tambourine","sharp",0,9811,0.106,"A headless tambourine shaken once: just the jingles, sharp and short."],
+["perc-808-conga-low","congas / bongos","round",0,342,0.238,"The 808 low conga from a Roland TR-08: a round, pitched boop."],
+["perc-808-conga-high","congas / bongos","poppy",0,687,0.125,"The 808 high conga from a Roland TR-08: a higher, poppy bip."],
+["perc-bongo","congas / bongos","slappy",0,1777,0.042,"A real bongo slap: short, high and woody."],
+["perc-808-cowbell","cowbell","retro",0,2418,0.132,"The famous 808 cowbell from a Roland TR-08: two clashing tones, instantly 80s."],
+["perc-cowbell","cowbell","clanky",0,3742,0.242,"A real cowbell hit with a stick: clanky and bright."],
+["perc-agogo","cowbell","bell-like",0,1073,0.249,"An electronic agogo bell: a soft, pitched ding."],
+["perc-808-clave","clave / woodblock","ringing",0,2882,0.268,"An 808-style clave: a clear, ringing tock."],
+["perc-clave","clave / woodblock","dry",0,3608,0.068,"A pair of real claves: a dry, sharp click."],
+["perc-woodblock","clave / woodblock","hollow",0,1987,0.062,"A real wood block: a hollow tok."],
+["perc-808-tom-low","toms","deep",0,181,0.295,"The 808 low tom from a Roland TR-08: a deep, pitched boom."],
+["perc-808-tom-long","toms","ringing",0,224,0.683,"An 808-style tom with a long, low ring."],
+["perc-acoustic-tom","toms","live",0,1427,0.362,"A real high tom hit hard: punchy, with a ringing shell."],
+["perc-hand-clap-room","claps-and-hands","roomy",0,4707,0.111,"One real hand clap recorded in a bathroom: natural, with a little echo."],
+["perc-hand-clap","claps-and-hands","dry",0,4997,0.054,"One real hand clap, close and dry."],
+["ride-keyboard-ride","909 ride","glassy",0,6008,0.482,"A drum-machine ride from a Yamaha PSS-560 keyboard. Stands in for a 909 ride (no free 909 ride recording was found)."],
+["ride-keyboard-cymbal","909 ride","tiny",0,7296,0.093,"A tiny electronic cymbal from a cheap Yamaha keyboard: a short tsh. Stands in for a 909 ride."],
+["ride-tape-ride","909 ride","dusty",1,7958,0.148,"A short drum-machine ride run through tape: dusty and compact. Stands in for a 909 ride."],
+["ride-synth-cymbal","909 ride","hissy",0,10593,0.745,"A synthesized cymbal: bright, clean noise with a medium tail. Stands in for a 909 ride."],
+["ride-ride-22","acoustic ride","warm",0,4384,1.601,"A real 22-inch ride: a warm ting with a long, low wash."],
+["ride-ride-live","acoustic ride","clear",0,6231,0.922,"A real ride cymbal from a live kit: a clear stick ting with a medium wash."],
+["ride-ride-bright","acoustic ride","bright",0,11153,1.135,"A bright, cutting ride with a long ring."],
+["ride-dr220-bell","ride bell","pingy",0,9056,0.287,"The ride-bell (cup) sound of a Boss DR-220E drum machine: a bright electronic ping."],
+["ride-ride-bell-20","ride bell","clear",0,3708,1.513,"The bell of a real 20-inch ride: a clear, pitched ping that rings."],
+["ride-ride-bell-short","ride bell","short",0,7326,0.197,"A short ride-bell hit: a bright ding without much wash."],
+["ride-crash-bell","ride bell","dark",0,3103,0.733,"The bell of a crash cymbal: a dark, gong-ish dong."],
+["ride-909-crash","crash / splash","noisy",0,7162,0.71,"A 909-style crash: a burst of metallic noise to start a new section."],
+["ride-analog-cymbal","crash / splash","hissy",0,6364,2.541,"An analog drum-machine cymbal in the 808 style: a long, hissy wash."],
+["ride-808-cymbal","crash / splash","shimmery",0,8641,1.095,"The 808 cymbal from a Roland TR-08: a long, shimmering wash."],
+["ride-splash-dark","crash / splash","dark",0,5226,0.456,"A small, dark splash cymbal: a quick, dark tssh."],
+["ride-crash-18","crash / splash","big",0,6127,1.5,"A real 18-inch crash: a big wash to mark a new section."],
+["ride-splash","crash / splash","splashy",0,7259,1.175,"A real splash cymbal hit hard: short and bright."],
+["ride-sizzle-ride","sizzle","buzzy",0,7730,0.874,"A sizzle ride (with rivets) hit near the bell: a ting plus a buzzy hiss."],
+["ride-china","sizzle","trashy",1,4409,1.332,"A china cymbal: a trashy, gong-like crash."],
+["ride-china-trash","sizzle","raw",1,5546,0.807,"A trashy china cymbal: harsh and raw, for heavy accents."]];
+
+const ROW_NAMES = { kick: "Kick", clap: "Claps & snares", hat: "Closed hat", ohat: "Open hat", perc: "Shaker / percussion", ride: "Ride" };
+const FAMILIES = {"kick":["909 punchy","808 long boom","soft round deep-house","tight short techno","hard / distorted","acoustic (live drum)","lo-fi dusty","sub-heavy","clicky top"],"clap":["909 clap","808 clap","big layered clap","snap","rim","tight snare","roomy snare","acoustic snare","lo-fi snare","brush"],"hat":["909","808","acoustic","tiny tick","dusty lo-fi","sizzly bright","shaker-like"],"ohat":["909 open","808 open","short open","long sizzle","acoustic","lo-fi"],"perc":["shakers","tambourine","congas / bongos","cowbell","clave / woodblock","toms","claps-and-hands"],"ride":["909 ride","acoustic ride","ride bell","crash / splash","sizzle"]};
+const FIX = { lofi: "lo-fi", "8bit": "8-bit", po12: "PO-12", dx: "DX", cr78: "CR-78", sp12: "SP-12", dr220: "DR-220" };
+const cap1 = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+const KIT = KIT_RAW.map(([id, fam, feel, dirty, hz, len, about]) => { const row = id.split("-")[0]; return { id, row, fam, feel, dirty: !!dirty, hz, len, about, name: cap1(id.slice(row.length + 1).split("-").map((w) => FIX[w] ?? w).join(" ")), standIn: fam === "909 ride" }; });
+const famLabel = (f) => (f === "909 ride" ? "909 ride (stand-ins)" : cap1(f));
+const SOUNDS = {}; for (const r of Object.keys(ROW_NAMES)) SOUNDS[r] = FAMILIES[r].flatMap((f) => KIT.filter((s) => s.row === r && s.fam === f));
+const BYID = Object.fromEntries(KIT.map((s) => [s.id, s]));
+// dials, per row, on a log scale (the measured brightness and length, T236)
+const DIAL = {}; for (const r in SOUNDS) { const h = SOUNDS[r].map((s) => Math.log(s.hz)), l = SOUNDS[r].map((s) => Math.log(s.len)); DIAL[r] = { h0: Math.min(...h), h1: Math.max(...h), l0: Math.min(...l), l1: Math.max(...l) }; }
+const bright = (s) => { const d = DIAL[s.row]; return (Math.log(s.hz) - d.h0) / (d.h1 - d.h0); };
+const longness = (s) => { const d = DIAL[s.row]; return (Math.log(s.len) - d.l0) / (d.l1 - d.l0); };
+
+// ───────── demo data: "Hold On (Club Mix)", Nora Vale · 124 BPM · A minor ─────────
+const params = new URLSearchParams(location.search);
+const WORST = params.get("data") === "worst";
+const TRACK = WORST ? { title: "Hold On To Your Love (Dennis Ferrer's Unreleased Dub, 2009 Remaster)", artist: "Kerri Chandler & Jerome Sydenham", bpm: 124, key: "A minor", short: "Hold On To Your Love (Dennis Ferrer's Unreleased Dub)" } : { title: "Hold On (Club Mix)", artist: "Nora Vale", bpm: 124, key: "A minor", short: "Hold On" };
+const LOOP = { from: 33, sec: "Drop 1" };
+const ROWS = [
+  { id: "kick", read: true, noun: "kick" }, { id: "clap", read: true, noun: "clap" }, { id: "hat", read: true, noun: "closed hat" },
+  { id: "ohat", read: true, noun: "open hat" }, { id: "perc", read: false, noun: "shaker", listen: "a shaker" }, { id: "ride", read: false, noun: "ride", listen: "a ride" },
+].map((r) => ({ ...r, name: ROW_NAMES[r.id] }));
+const ROWOF = Object.fromEntries(ROWS.map((r) => [r.id, r]));
+const START = { kick: "kick-909-round", clap: "clap-909-clap", hat: "hat-909-closed", ohat: "ohat-909-open", perc: "perc-egg-shaker", ride: "ride-ride-22" };
+// 64 steps (4 bars of 16): "r" Make heard it, "a" you added, "x" a heard hit you took out
+function initPat(m) {
+  const p = Object.fromEntries(ROWS.map((r) => [r.id, {}]));
+  for (let b = 0; b < 4; b++) {
+    for (const s of [0, 4, 8, 12]) p.kick[b * 16 + s] = "r";
+    for (const s of [4, 12]) p.clap[b * 16 + s] = "r";
+    for (const s of [0, 4, 8, 12]) p.hat[b * 16 + s] = "r";
+    for (const s of [1, 5, 9, 13, 3, 7, 11, 15]) if (b % 2 || s % 4 === 3) p.hat[b * 16 + s] = "r";
+    for (const s of [2, 6, 10, 14]) p.ohat[b * 16 + s] = "r";
+  }
+  p.kick[62] = "a"; p.clap[44] = "x"; p.clap[63] = "a"; p.hat[17] = "x"; p.hat[49] = "x";
+  if (m === "2" || m === "r") for (let b = 0; b < 4; b++) for (const s of [2, 6, 10, 14, 15]) if (b < 3 || s !== 15) p.perc[b * 16 + s] = "a";
+  return p;
+}
+// studio: the original's sections from its map; kick, hats, bass, chords and vocals are the measured layers (L273a)
+const SECS = WORST ? [
+  { n: "Intro", a: 1, b: 16, has: ["kick", "hats"] }, { n: "Build", a: 17, b: 24, has: ["kick", "hats", "chords"] }, { n: "Fill", a: 25, b: 28, has: ["hats"] },
+  { n: "Drop 1", a: 29, b: 60, has: ["kick", "hats", "bass", "chords", "vocals"] }, { n: "Breakdown (with the vocal)", a: 61, b: 76, has: ["chords", "vocals"] },
+  { n: "Build 2", a: 77, b: 84, has: ["kick", "chords"] }, { n: "Drop 2", a: 85, b: 116, has: ["kick", "hats", "bass", "chords", "vocals"] }, { n: "Outro", a: 117, b: 128, has: ["kick"] },
+] : [
+  { n: "Intro", a: 1, b: 16, has: ["kick", "hats"] }, { n: "Build", a: 17, b: 32, has: ["kick", "hats", "bass", "chords"] },
+  { n: "Drop 1", a: 33, b: 64, has: ["kick", "hats", "bass", "chords", "vocals"] }, { n: "Breakdown", a: 65, b: 80, has: ["chords", "vocals"] },
+  { n: "Drop 2", a: 81, b: 96, has: ["kick", "hats", "bass", "chords", "vocals"] },
+];
+const BARS = SECS[SECS.length - 1].b;
+const LANES = [
+  { id: "kick", n: "Kick", c: "var(--drums)", m: true }, { id: "claps", n: "Claps", c: "var(--drums)" }, { id: "hats", n: "Hats", c: "var(--drums)", m: true },
+  { id: "perc", n: "Percussion", c: "var(--drums)" }, { id: "bass", n: "Bass", c: "var(--bass)", m: true }, { id: "chords", n: "Chords", c: "var(--teal)", m: true },
+  { id: "pads", n: "Pads", c: "var(--teal)" }, { id: "lead", n: "Lead", c: "var(--lead)" }, { id: "fx", n: "FX", c: "var(--fx)" }, { id: "vocals", n: "Vocals", c: "var(--vox)", m: true },
+];
+const LANEOF = Object.fromEntries(LANES.map((l) => [l.id, l]));
+const LIB = [
+  { lane: "kick", name: "909 round kick", bars: 1 }, { lane: "kick", name: "House bounce kick", bars: 1 }, { lane: "claps", name: "909 clap on 2 and 4", bars: 1 },
+  { lane: "hats", name: "Offbeat hats", bars: 2 }, { lane: "hats", name: "Open hats and ride", bars: 4 }, { lane: "perc", name: "Egg shaker 16ths", bars: 4 },
+  { lane: "bass", name: "Rubber sub", bars: 4 }, { lane: "bass", name: "Drop bassline", bars: 8 }, { lane: "chords", name: "Am stabs", bars: 8 }, { lane: "fx", name: "Noise riser", bars: 4 },
+];
+if (WORST) LIB.push({ lane: "chords", name: "Breakdown chords, the long airy version from the second try", bars: 16 }, { lane: "chords", name: "Am", bars: 1 }, { lane: "kick", name: "Kick from the Breakdown of Hold On To Your Love, second try, warmer", bars: 1 }, { lane: "bass", name: "Sub", bars: 1 });
+const FILL_3 = WORST ? { "Build:kick": "Kick from the Breakdown of Hold On To Your Love, second try, warmer", "Drop 1:kick": "909 round kick", "Drop 1:bass": "Sub", "Drop 1:hats": "Offbeat hats", "Drop 1:claps": "909 clap on 2 and 4", "Intro:kick": "909 round kick", "Fill:hats": "Open hats and ride" }
+  : { "Intro:kick": "909 round kick", "Build:kick": "909 round kick", "Drop 1:kick": "909 round kick", "Drop 1:claps": "909 clap on 2 and 4", "Drop 1:hats": "Offbeat hats", "Drop 1:perc": "Egg shaker 16ths", "Drop 1:bass": "Rubber sub" };
+const SECOF = Object.fromEntries(SECS.map((s) => [s.n, s]));
+const hasHint = (sec, lane) => LANEOF[lane].m && sec.has.includes(lane);
+
+// ───────── state ─────────
+if (params.get("shot")) document.body.classList.add("shot");
+let M = params.get("m") || "1";
+if (params.get("deck") === "0") M = "d";
+const S = {};
+function reset() {
+  const studio = ["3", "e", "d"].includes(M);
+  Object.assign(S, {
+    pat: initPat(M), open: M === "2" ? "perc" : M === "r" ? "ride" : "kick",
+    pick: { ...START, kick: M === "1" ? "kick-house-bounce" : START.kick }, preview: M === "1" ? "kick-house-bounce" : M === "r" ? "ride-ride-22" : null,
+    mute: {}, solo: {}, dismissed: {}, play: 21, knobs: { pitch: .5, length: M === "1" ? .3 : .55, tone: .62, drive: .18 },
+    shelf: M !== "2", sort: "kind", credits: !!params.get("credits"),
+    fill: M === "e" ? {} : { ...FILL_3 }, left: {}, pop: studio && M !== "e" ? "Drop 1:chords" : null, mo: "mine", deck: M !== "d", bar: M === "e" ? 1 : 41, sec: M === "e" ? "Intro" : "Drop 1",
+  });
+}
+reset();
+const touched = (id) => Object.values(S.pat[id]).some((v) => v === "a");
+const openRows = () => ROWS.filter((r) => !r.read && !S.dismissed[r.id] && !touched(r.id));
+const rowState = (r) => (r.read ? "heard" : touched(r.id) ? "yours" : S.dismissed[r.id] ? "left" : "open");
+const hitCount = (id) => Object.values(S.pat[id]).filter((v) => v === "r" || v === "a").length;
+const secAt = (bar) => SECS.find((s) => bar >= s.a && bar <= s.b);
+const pct = (bar) => ((bar - 1) / BARS) * 100;
+// a section's width in px on a timeline this wide: narrow ones drop words they can't fit (break-ui, worst case)
+const secPx = (s, w) => ((s.b - s.a + 1) / BARS) * w;
+const toFill = (sec) => LANES.filter((l) => hasHint(sec, l.id) && l.id !== "vocals" && !S.fill[`${sec.n}:${l.id}`] && !S.left[`${sec.n}:${l.id}`]);
+const totalToFill = () => SECS.reduce((n, s) => n + toFill(s).length, 0);
+// slot state: f filled · h the original has it, to fill · v vocals in the original · l left empty · e empty, no hint
+const slotState = (sec, lane) => { const k = `${sec.n}:${lane}`; return S.fill[k] ? "f" : S.left[k] ? "l" : hasHint(sec, lane) ? (lane === "vocals" ? "v" : "h") : "e"; };
+
+// ───────── shared drawing ─────────
+const tight = () => innerHeight < 800;
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+const KW = { pitch: (v) => (v < .35 ? "low" : v > .65 ? "high" : "as is"), length: (v) => (v < .35 ? "short" : v > .65 ? "long" : "medium"), tone: (v) => (v < .35 ? "dark" : v > .65 ? "bright" : "warm"), drive: (v) => (v < .35 ? "clean" : v > .65 ? "dirty" : "warm") };
+function knob(id, v, size) {
+  if (tight()) size = Math.round(size * 0.8);
+  const name = cap1(id), word = KW[id](v), a0 = -135, a = a0 + 270 * v, r = size / 2 - 5, c = size / 2;
+  const pt = (d) => [c + r * Math.sin(d * Math.PI / 180), c - r * Math.cos(d * Math.PI / 180)];
+  const [x0, y0] = pt(a0), [x1, y1] = pt(a), [xe, ye] = pt(135);
+  return `<button class="knob" data-act="knob" data-k="${id}" aria-label="${name}: ${word}. Click to turn"><svg width="${size}" height="${size}" aria-hidden="true">
+  <path d="M${x0} ${y0} A${r} ${r} 0 1 1 ${xe} ${ye}" fill="none" stroke="rgba(241,230,211,.22)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M${x0} ${y0} A${r} ${r} 0 ${a - a0 > 180 ? 1 : 0} 1 ${x1} ${y1}" fill="none" stroke="var(--drums)" stroke-width="3" stroke-linecap="round"/></svg>
+  <span>${name}</span><small>${word}</small></button>`;
+}
+const knobs = (size = 52, gap) => `<div class="knobs" ${gap ? `style="gap:${gap}px"` : ""}>${["pitch", "length", "tone", "drive"].map((k) => knob(k, S.knobs[k], size)).join("")}</div>`;
+const phLine = () => { const b = Math.floor(S.play / 16), s = S.play % 16; return `<span class="ph" style="left:calc(${b} * (100% - 18px) / 4 + ${b * 6}px + ${s / 16} * (100% - 18px) / 4)"></span>`; };
+function steps(id, h) {
+  if (tight()) h = Math.max(14, Math.round(h * 0.72));
+  const p = S.pat[id], row = ROWOF[id]; let bars = "";
+  for (let b = 0; b < 4; b++) {
+    let cells = "";
+    for (let s = 0; s < 16; s++) {
+      const i = b * 16 + s, v = p[i];
+      cells += `<button class="st ${s % 4 === 0 ? "b" : ""} ${v || ""}" data-act="step" data-row="${id}" data-i="${i}" aria-label="${row.name}, bar ${LOOP.from + b}, step ${s + 1}: ${v === "r" ? "Make heard a hit" : v === "a" ? "your hit" : v === "x" ? "a heard hit you took out" : "empty"}" aria-pressed="${v === "r" || v === "a"}"></button>`;
+    }
+    bars += `<div class="barb">${cells}</div>`;
+  }
+  return `<div class="steps ${S.mute[id] ? "muted" : ""}" style="height:${h}px">${bars}${phLine()}</div>`;
+}
+// the loop's bars: click any spot to play from there (R5)
+const ruler = () => `<div class="ruler" title="Click a spot to play from there"><div class="cells">${[0, 1, 2, 3].map((b) => `<div class="rb">${Array.from({ length: 16 }, (_, k) => `<button data-act="jump" data-i="${b * 16 + k}" aria-label="Play from bar ${LOOP.from + b}${k ? `, step ${k + 1}` : ""}">${k ? "" : LOOP.from + b}</button>`).join("")}</div>`).join("")}</div>${phLine()}</div>`;
+const legend = () => `<div class="legend"><span><i style="background:var(--drums)"></i>Make heard</span><span><i style="background:var(--ink)"></i>you added</span><span><i style="box-shadow:inset 0 0 0 1.5px rgba(242,177,52,.75)"></i>you took out</span></div>`;
+const yourTurn = (r) => `Your turn: listen for ${r.listen} and tap it in`;
+const WHY = "Make can’t hear shakers or rides yet, so these rows start empty and the loop sounds thinner than the original. Some of their hits may have landed on Closed hat.";
+const ms = (id) => `<button class="mbtn" data-act="mute" data-row="${id}" aria-pressed="${!!S.mute[id]}" aria-label="Mute ${ROWOF[id].name}" title="Mute">M</button><button class="mbtn" data-act="solo" data-row="${id}" aria-pressed="${!!S.solo[id]}" aria-label="Solo ${ROWOF[id].name}" title="Solo">S</button>`;
+const leave = (id) => `<button class="lbl link" data-act="dismiss" data-row="${id}">Leave empty</button>`;
+const undo = (id) => `<button class="lbl link" data-act="undismiss" data-row="${id}">Undo</button>`;
+const countLine = () => { const o = openRows(); return o.length ? `<span class="count" role="status">${plural(o.length, "row", "rows")} to fill by ear${o.length === 1 ? `: ${o[0].name}` : ""}</span>` : `<span class="count done" role="status">Every row has its hits</span>`; };
+const cur = () => BYID[S.pick[S.open]];
+const sndBody = (x, line) => `<b class="${S.preview === x.id ? "playing" : ""}">${esc(x.name)}${line === "inline" ? ` <span class="mute" style="font-weight:400">· ${esc(x.feel)}</span>` : ""}</b>${line === "inline" ? "" : `<small class="ell">${esc(x.feel)}</small>`}`;
+const sndBtn = (x, extra = "", body) => `<button class="snd" data-act="snd" data-id="${x.id}" aria-pressed="${S.pick[S.open] === x.id}" title="${esc(x.about)}" ${extra}>${body ?? sndBody(x)}</button>`;
+const creditsLink = (txt = "Sound credits") => `<button class="lbl link" data-act="credits" aria-expanded="${S.credits}" id="creditsBtn">${txt}</button>`;
+function creditsPop() {
+  if (!S.credits) return "";
+  return `<div class="pop" id="cpop" role="dialog" aria-label="Sound credits" style="width:420px">
+  <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:8px"><b style="font-weight:500">Sound credits</b><button class="lbl" data-act="credits" aria-label="Close">✕</button></div>
+  <p style="margin:0 0 10px;line-height:1.6"><span class="mute">Drums:</span> 120 recordings from Freesound and Sonic Pi, all CC0, free to use with no credit needed. Thanks to the people who recorded them.</p>
+  <p style="margin:0 0 10px;line-height:1.6"><span class="mute">Bass:</span> the sampled electric and upright basses are CC BY 3.0 (tonejs-instruments), so each one is credited in the full list.</p>
+  <button class="lbl link" data-act="noop">Every file, its source and licence</button></div>`;
+}
+function appbar() {
+  return `<header class="bar"><div class="logo"><i></i><b translate="no">Six AM</b></div><nav class="nav"><a href="#" >Studio</a><a href="#" class="on" aria-current="page">Analyse</a></nav><span class="gear" aria-hidden="true">⚙</span></header>`;
+}
+function trackHead() {
+  return `<div class="head"><span class="back">← All tracks</span><div class="title"><h1 title="${esc(TRACK.artist)} – ${esc(TRACK.title)}">${esc(TRACK.artist)} – ${esc(TRACK.title)}</h1><p>${esc(TRACK.artist)} · ${TRACK.bpm} BPM · key ${TRACK.key}</p></div>
+  <div class="tr"><button class="play" aria-label="Pause">❚❚</button><span class="small">bar ${LOOP.from + Math.floor(S.play / 16)} · in ${LOOP.sec}</span><span class="loopchip">Looping bars 33–36 ×</span></div>
+  <div class="lm"><span>Listen</span><span class="on">Make</span></div><span class="deck">Deck on</span></div>`;
+}
+const famTabs = () => `<div class="fam" role="tablist" aria-label="What to make">${[["Bass", "var(--bass)"], ["Drums", "var(--drums)"], ["Melody", "var(--teal)"], ["FX", "var(--fx)"]].map(([n, c]) => `<button class="f ${n === "Drums" ? "on" : ""}" role="tab" aria-selected="${n === "Drums"}"><i style="background:${c}"></i>${n}</button>`).join("")}<span class="f" style="color:var(--dim);cursor:default" title="Vocals come later">Vocals <em style="font-style:normal;font-size:11px">not yet</em></span></div>`;
+function foot() {
+  const r = ROWOF[S.open], x = cur();
+  return `<div class="foot"><div class="ab" role="group" aria-label="Compare"><span>A · Original drums</span><span class="on">B · Mine</span></div><span class="close">closeness <b>${M === "1" ? 64 : 71}</b> / 100</span>
+  <input aria-label="Name for the saved sound" name="sound-name" autocomplete="off" spellcheck="false" value="${esc(x.name)}${x.name.toLowerCase().includes(r.noun.split(" ").pop()) ? "" : " " + r.noun}, from ${esc(TRACK.short)}"><button class="gold">Save ${r.noun}</button></div>`;
+}
+const makeRoom = (inner, side) => `<div class="app">${appbar()}${trackHead()}<div class="room ${side ? "rail" : ""}"><section class="col">${famTabs()}${inner}</section>${side ? `<aside class="side" aria-label="Sounds">${side}</aside>` : ""}</div></div>`;
+// studio
+function moSwitch() {
+  const note = !S.deck ? `<span class="monote warn" role="status">The Deck isn’t open. <button data-act="deck">Open the Deck</button> to hear the original here</span>`
+    : S.mo === "orig" ? `<span class="monote" role="status">The original from bar ${S.bar}, in the Deck</span>` : "";
+  return `<div class="mo" role="group" aria-label="Hear mine or the original"><button data-act="mo" data-v="mine" aria-pressed="${S.mo === "mine"}">Mine</button><button data-act="mo" data-v="orig" aria-pressed="${S.mo === "orig"}" ${!S.deck ? 'aria-disabled="true"' : ""}>Original</button></div>${note}`;
+}
+function studioBar() {
+  return `<header class="stbar"><div class="logo"><i></i><b translate="no">Six AM</b></div><nav class="nav"><a href="#" class="on" aria-current="page">Studio</a><a href="#">Analyse</a></nav>
+  <span class="tname" title="${esc(TRACK.short)}, rebuilt">${esc(TRACK.short)}, rebuilt</span><span class="small">${TRACK.bpm} BPM · Am</span>
+  <span style="margin-left:auto;display:flex;align-items:center;gap:12px;flex:none"><button class="play" style="background:var(--gold)" aria-label="Play">▶</button><span class="small">bar ${S.bar} · ${esc(secAt(S.bar).n)}</span>${moSwitch()}</span></header>`;
+}
+const emptyNote = () => M === "e" ? `<div class="note" role="note"><b>The original’s ${SECS.length} sections, bar for bar, from its map.</b> Every slot starts empty: fill each with a part you saved in Make. Gold marks where the original has kick, hats, bass, chords or vocals; the other lanes have no hint.</div>` : "<div></div>";
+const partBtn = (p) => `<button class="part" data-act="${S.pop ? "fill" : "noop"}" data-part="${esc(p.name)}"><i style="background:${LANEOF[p.lane].c}"></i><div><b title="${esc(p.name)}">${esc(p.name)}</b><small>${LANEOF[p.lane].n} · ${plural(p.bars, "bar", "bars")}</small></div></button>`;
+function slotDetail() {
+  // what a picked slot says: the hint (measured layers only), the saved parts for its lane, Leave empty
+  if (!S.pop) return `<div style="display:flex;flex-direction:column;gap:8px;min-height:0"><span>My saved parts</span><span class="lbl">Pick a slot, then a part to fill it</span><div class="lib">${LIB.map(partBtn).join("")}</div></div>`;
+  const [sn, lane] = S.pop.split(":"), sec = SECOF[sn], L = LANEOF[lane], st = slotState(sec, lane), parts = LIB.filter((p) => p.lane === lane);
+  const hint = lane === "vocals" ? "The original has vocals here. Make can’t make vocals yet." : hasHint(sec, lane) ? `The original has ${L.n.toLowerCase()} here.` : L.m ? `The original has no ${L.n.toLowerCase()} here.` : `No hint: Six AM doesn’t measure ${L.n.toLowerCase()} yet.`;
+  return `<div style="display:flex;flex-direction:column;gap:8px;min-height:0">
+  <div style="display:flex;justify-content:space-between;gap:8px"><b style="font-weight:500" class="ell">${esc(sn)} · ${L.n}</b><button class="lbl" data-act="closepop" aria-label="Close">✕</button></div>
+  <span class="lbl">Bars ${sec.a}–${sec.b}. A part repeats to the section’s end.</span>
+  <span class="${st === "h" ? "yours" : "mute"}" style="font-size:12px">${hint}</span>
+  <div class="lib" style="margin-top:4px">${lane === "vocals" ? "" : parts.length ? parts.map(partBtn).join("") : `<p class="lbl" style="margin:0">No saved ${L.n.toLowerCase()} yet. Make one in Make, then save it.</p>`}</div>
+  ${st === "h" ? `<button class="lbl link" data-act="leaveslot" style="align-self:flex-start">Leave empty</button>` : st === "l" ? `<span class="lbl">Left empty. ${`<button class="link" data-act="unleaveslot">Undo</button>`}</span>` : st === "f" ? `<button class="lbl link" data-act="clear" style="align-self:flex-start">Empty this slot</button>` : ""}</div>`;
+}
+const slotText = (st, key, short) => st === "f" ? esc(S.fill[key]) : st === "h" ? (short ? "to fill" : "in the original · to fill") : st === "v" ? (short ? "not yet" : "in the original · not yet") : st === "l" ? "left empty" : "";
+const fillBg = (L) => `background:color-mix(in srgb, ${L.c} 28%, #1a1715);`;
+
+// ───────── the three directions ─────────
+const D = [];
+
+// 2 · Shelf — the sounds on an open shelf under the rows; rows to fill by ear grouped below a line; the Studio as section cards.
+D.push({ n: 2, slug: "shelf", name: "Shelf", m: {
+  make: () => makeRoom(`${rowsShelf(M === "2" ? 44 : 24)}<div class="grow"></div>${S.shelf ? shelf() : shelfLine()}${foot()}`),
+  studio: () => `<div class="app studio">${studioBar()}${emptyNote()}<div style="display:grid;grid-template-columns:minmax(0,1fr) ${innerWidth < 1360 ? 256 : 280}px;min-height:0">${board()}<aside class="side" style="padding:16px;overflow:auto">${slotDetail()}</aside></div></div>`,
+}});
+function rowsShelf(h) {
+  const heard = ROWS.filter((r) => r.read), mine = ROWS.filter((r) => !r.read), o = openRows();
+  const grid = "display:grid;grid-template-columns:190px minmax(0,1fr) 60px;column-gap:12px;align-items:center";
+  const row = (r) => { const st = rowState(r);
+    return `<div style="${grid};padding:3px 0"><button data-act="row" data-row="${r.id}" style="display:flex;flex-direction:column;min-width:0;${S.open === r.id ? "" : "color:var(--mute)"}"><span class="ell" style="${S.open === r.id ? "text-decoration:underline;text-underline-offset:4px" : ""}">${r.name}</span></button>
+    <div class="${st === "open" ? "hatch" : ""}">${steps(r.id, h)}</div><span style="display:flex;gap:2px">${ms(r.id)}</span></div>
+    ${r.read ? "" : `<div style="${grid};margin:-1px 0 5px"><span></span><span style="font-size:12px" class="${st === "open" ? "yours" : "mute"}">${st === "open" ? `${yourTurn(r)} · ${leave(r.id)}` : st === "left" ? `Left empty, so the loop has no ${r.noun} · ${undo(r.id)}` : `You tapped in ${plural(hitCount(r.id), "hit", "hits")}`}</span></div>`}`; };
+  return `<div style="padding-top:10px"><div style="${grid};align-items:end"><span class="lbl">Make heard these</span>${ruler()}<span></span></div>${heard.map(row).join("")}
+  <div style="margin-top:8px;padding-top:8px;border-top:1px dashed ${o.length ? "var(--goldLine)" : "var(--line2)"};display:flex;gap:10px;align-items:baseline;min-width:0">${countLine()}<span class="lbl ell" title="${WHY}">${o.length ? "Make can’t hear shakers or rides yet. Some of their hits may have landed on Closed hat." : "Yours, by ear"}</span></div>
+  ${mine.map(row).join("")}<div style="padding:4px 0 0 202px">${legend()}</div></div>`;
+}
+function shelf() {
+  const r = ROWOF[S.open], x = cur(), fams = FAMILIES[S.open];
+  const per = 3, cols = (f) => Math.ceil(SOUNDS[S.open].filter((s) => s.fam === f).length / per);
+  return `<div style="border-top:1px solid var(--line);padding:10px 0 10px;min-height:0;display:flex;flex-direction:column">
+  <div style="display:flex;align-items:center;gap:22px;margin-bottom:8px;min-width:0"><div style="display:flex;flex-direction:column;flex:none"><span class="lbl">${r.name} · 20 sounds</span>${creditsLink()}</div>
+  <div style="min-width:0;flex:1"><span class="serif" style="font-size:22px">${esc(x.name)}</span> <span class="lbl">${esc(famLabel(x.fam))} · ${esc(x.feel)}</span><div class="lbl clamp2" style="color:var(--ink);opacity:.8">${esc(x.about)}</div></div>
+  ${knobs(42, 16)}<button class="lbl link" data-act="shelf" aria-expanded="true" style="align-self:flex-start">Hide sounds</button></div>
+  <div class="shelfg" style="display:grid;grid-template-columns:${fams.map((f) => `minmax(0,${cols(f)}fr)`).join(" ")};gap:4px;border:1px solid var(--line);border-radius:8px;padding:6px 4px;min-height:0;overflow:auto">
+  ${fams.map((f) => `<div style="min-width:0"><div class="famh clamp2" style="height:30px;display:flex;align-items:flex-end;${f === "909 ride" ? "color:var(--mute)" : ""}" title="${esc(famLabel(f))}">${esc(famLabel(f))}</div><div style="display:grid;grid-template-columns:repeat(${cols(f)},minmax(0,1fr));grid-template-rows:repeat(${Math.min(per, SOUNDS[S.open].filter((s) => s.fam === f).length)},auto);grid-auto-flow:column">${SOUNDS[S.open].filter((s) => s.fam === f).map((s) => sndBtn(s)).join("")}</div></div>`).join("")}</div></div>`;
+}
+function shelfLine() {
+  const r = ROWOF[S.open], x = cur();
+  return `<div style="display:flex;align-items:center;gap:22px;padding:10px 0;border-top:1px solid var(--line);min-width:0"><span class="lbl" style="flex:none">${r.name}</span><span class="serif" style="flex:none">${esc(x.name)}</span><span class="lbl ell" style="flex:1">${esc(x.about)}</span>${knobs(46)}<button class="ghost" data-act="shelf" aria-expanded="false">Show 20 sounds</button></div>`;
+}
+function board() {
+  return `<div style="display:flex;flex-direction:column;min-width:0;min-height:0">${M === "e" ? "" : `<p class="lbl" style="margin:0;padding:10px 14px 0"><span class="yours">Gold “to fill”</span>: the original has this part here. Only kick, hats, bass, chords and vocals are measured.</p>`}<div style="display:flex;gap:6px;padding:10px 14px 14px;min-width:0;overflow:auto">${SECS.map((s) => { const n = toFill(s).length, here = S.bar >= s.a && S.bar <= s.b;
+    return `<section class="card" aria-label="${esc(s.n)}" style="flex:${s.b - s.a + 1} 1 0;min-width:112px;display:flex;flex-direction:column;gap:4px;border:1px solid ${here ? "var(--mute)" : "var(--line)"};border-radius:8px;padding:10px;position:relative">
+    <button data-act="seek" data-bar="${s.a}" style="text-align:left;display:flex;gap:8px;align-items:baseline;min-width:0" title="Play from bar ${s.a}"><span class="ell" style="font-size:15px">${esc(s.n)}</span><span class="lbl" style="flex:none;font-variant-numeric:tabular-nums">${s.a}–${s.b}</span></button>
+    <span class="lbl" style="margin-bottom:6px;white-space:nowrap">${n ? `<span class="yours">${n} to fill</span>` : "0 to fill"}</span>
+    ${LANES.map((l) => { const st = slotState(s, l.id), key = `${s.n}:${l.id}`;
+      return `<button class="card-slot" data-act="slot" data-key="${key}" aria-expanded="${S.pop === key}" aria-label="${esc(s.n)}, ${l.n}: ${slotText(st, key) || "empty"}" style="display:flex;align-items:center;gap:8px;height:${tight() ? 25 : 28}px;padding:0 8px;border-radius:5px;min-width:0;${st === "f" ? fillBg(l) : st === "h" ? "border:1px dashed var(--goldLine)" : "border:1px dashed var(--line)"}"><i style="width:3px;height:14px;background:${l.c};border-radius:2px;flex:none"></i><span class="ell" style="flex:none;max-width:100%;color:${st === "e" || st === "l" ? "var(--dim)" : "var(--ink)"}">${l.n}</span><span class="ell cs-txt" style="margin-left:auto;font-size:11px;color:${st === "h" ? "var(--gold)" : "var(--mute)"}" title="${st === "f" ? esc(S.fill[key]) : ""}">${slotText(st, key, true)}</span></button>`; }).join("")}</section>`; }).join("")}</div></div>`;
+}
+
+// 4 · Side list — the right rail is the sound list with one plain line each; one banner for open rows; the Studio heads each section with what the original has.
+D.push({ n: 4, slug: "side-list", name: "Side list", m: {
+  make: () => makeRoom(`${banner()}${rowsSide(M === "2" ? 44 : 26)}<div class="grow"></div>${pickedBlock()}${foot()}`, sideList()),
+  studio: () => `<div class="app studio">${studioBar()}${emptyNote()}<div style="display:grid;grid-template-columns:250px minmax(0,1fr);min-height:0"><aside class="side" style="border-left:0;border-right:1px solid var(--line);padding:14px;overflow:auto">${slotDetail()}</aside><div style="display:flex;flex-direction:column;min-height:0;overflow:auto">${lanesMatrix()}</div></div></div>`,
+}});
+function banner() {
+  const o = openRows();
+  if (!o.length) return `<div style="padding:12px 0 2px">${countLine()}</div>`;
+  return `<div role="status" style="display:flex;align-items:baseline;gap:14px;margin-top:12px;padding:10px 14px;border-radius:8px;background:var(--goldDim)"><span class="count" style="flex:none">${plural(o.length, "row", "rows")} to fill by ear</span><span style="min-width:0;line-height:1.5">${o.length === 1 ? `Make can’t hear ${o[0].noun}s yet, so ${o[0].name} starts empty and the loop sounds thinner than the original.` : WHY}</span></div>`;
+}
+function rowsSide(h) {
+  return `<div style="display:grid;grid-template-columns:200px minmax(0,1fr) 58px;column-gap:12px;row-gap:6px;align-items:center;padding-top:10px"><span></span>${ruler()}<span></span>
+  ${ROWS.map((r) => { const st = rowState(r), on = S.open === r.id;
+    return `<button data-act="row" data-row="${r.id}" aria-pressed="${on}" style="display:flex;flex-direction:column;gap:0;padding:3px 8px;border-radius:5px;min-width:0;${on ? "background:rgba(241,230,211,.07)" : ""}"><span class="ell">${r.name}</span><small class="ell ${st === "open" ? "yours" : "dim"}" style="font-size:11px">${st === "heard" ? esc(BYID[S.pick[r.id]].name) : st === "open" ? "to fill by ear" : st === "left" ? "left empty" : `${esc(BYID[S.pick[r.id]].name)} · by ear`}</small></button>
+    <div style="position:relative" class="${st === "open" ? "hatch" : ""}">${steps(r.id, h)}${st === "open" ? `<div class="over"><span>${yourTurn(r)} · <span style="pointer-events:auto">${leave(r.id)}</span></span></div>` : st === "left" ? `<div class="over"><span class="mute" style="color:var(--mute)">Left empty · <span style="pointer-events:auto">${undo(r.id)}</span></span></div>` : ""}</div><span style="display:flex;gap:2px">${ms(r.id)}</span>`; }).join("")}<span></span><div style="padding-top:4px">${legend()}</div><span></span></div>`;
+}
+function pickedBlock() {
+  const x = cur();
+  return `<div style="display:flex;align-items:center;gap:24px;padding:10px 0;border-top:1px solid var(--line);min-width:0"><div style="min-width:0;flex:1"><span class="lbl">${ROWOF[S.open].name}</span> <span class="serif" style="margin-left:6px">${esc(x.name)}</span><div class="lbl ell" title="${esc(x.about)}">${esc(x.about)}</div></div>${knobs(48)}</div>`;
+}
+function sideList() {
+  const xs = SOUNDS[S.open];
+  return `<div style="padding:14px 14px 10px;border-bottom:1px solid var(--line)"><div style="display:flex;justify-content:space-between;gap:8px"><span>${ROWOF[S.open].name} sounds</span><span class="lbl">20</span></div><span class="lbl">Tap one: it plays in the loop</span></div>
+  <div style="overflow:auto;padding:4px 8px 12px;flex:1;min-height:0;overscroll-behavior:contain">${FAMILIES[S.open].map((f) => `<div class="famh" style="padding:12px 9px 3px">${esc(famLabel(f))}</div>${xs.filter((x) => x.fam === f).map((x) => sndBtn(x, 'style="width:100%;gap:1px"', `<b class="${S.preview === x.id ? "playing" : ""}">${esc(x.name)} <span class="mute" style="font-weight:400">· ${esc(x.feel)}</span></b><small class="clamp2" style="line-height:1.4">${esc(x.about)}</small>`)).join("")}`).join("")}</div>
+  <div style="padding:9px 14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:8px"><span class="lbl">Drums are all CC0</span>${creditsLink()}</div>`;
+}
+function lanesMatrix() {
+  // one header per section: its name, bars and what the original has there (● yours, ○ to fill, – left empty); lanes below
+  const laneW = 140, meas = ["kick", "hats", "bass", "chords", "vocals"], hh = 46 + Math.max(...SECS.map((x) => x.has.length)) * 15, laneH = tight() ? 31 : 36;
+  const head = `<div style="display:grid;grid-template-columns:${laneW}px minmax(0,1fr);border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:4"><div class="lbl" style="padding:8px 14px;line-height:1.5">The original has<br><span class="dim">○ to fill<br>● yours<br>· not yet</span></div>
+  <div class="tl" style="height:${hh}px">${SECS.map((s) => { const n = toFill(s).length, nar = secPx(s, innerWidth - 390) < 84; return `<button data-act="seek" data-bar="${s.a}" title="${esc(s.n)}, bars ${s.a}–${s.b}. Play from bar ${s.a}" style="position:absolute;left:${pct(s.a)}%;width:${pct(s.b + 1) - pct(s.a)}%;top:0;bottom:0;padding:7px 8px;border-left:1px solid var(--line2);overflow:hidden;text-align:left;display:flex;flex-direction:column;justify-content:flex-start"><span style="display:flex;gap:6px;align-items:baseline;min-width:0"><span class="ell">${esc(s.n)}</span>${nar ? "" : `<span class="lbl" style="flex:none">${s.a}–${s.b}</span>`}</span><span class="lbl" style="display:block;white-space:nowrap">${n ? `<span class="yours">${n}${nar ? "" : " to fill"}</span>` : nar ? "0" : "0 to fill"}</span>
+  ${s.has.map((h) => { const k = `${s.n}:${h}`, f = S.fill[k], l = S.left[k]; return `<span style="display:block;font-size:11px;line-height:15px;white-space:nowrap;color:${f ? "var(--ink)" : l || h === "vocals" ? "var(--dim)" : "var(--gold)"}">${f ? "●" : l ? "–" : h === "vocals" ? "·" : "○"}${nar ? "" : " " + h}</span>`; }).join("")}</button>`; }).join("")}<span class="ph2" style="left:${pct(S.bar)}%"></span></div></div>`;
+  const rows = LANES.map((l) => `<div style="display:grid;grid-template-columns:${laneW}px minmax(0,1fr);border-bottom:1px solid var(--line);height:${laneH}px">
+    <div style="display:flex;align-items:center;gap:8px;padding:0 10px 0 14px;box-shadow:inset 3px 0 ${l.c}"><span style="flex:1;white-space:nowrap">${l.n}</span><span class="mbtn" aria-hidden="true">M</span></div>
+    <div class="tl">${SECS.map((s) => `<span class="secband" style="left:${pct(s.a)}%;width:${pct(s.b + 1) - pct(s.a)}%;border-left-color:var(--line)"></span>`).join("")}
+    ${SECS.map((s) => { const st = slotState(s, l.id), key = `${s.n}:${l.id}`, L = l; return `<button class="slot ${st}" data-act="slot" data-key="${key}" aria-expanded="${S.pop === key}" aria-label="${esc(s.n)}, ${l.n}: ${slotText(st, key) || "empty"}" title="${st === "f" ? esc(S.fill[key]) : ""}" style="left:calc(${pct(s.a)}% + 3px);width:calc(${pct(s.b + 1) - pct(s.a)}% - 6px);${st === "f" ? fillBg(L) + `box-shadow:inset 3px 0 ${L.c};` : ""}${st === "v" ? "border-color:rgba(224,143,174,.35);color:var(--dim);background:none;" : ""}"><span>${secPx(s, innerWidth - 390) < 84 ? "" : slotText(st, key, true) || (S.pop === key ? "" : "+")}</span></button>`; }).join("")}
+    <span class="ph2" style="left:${pct(S.bar)}%"></span></div></div>`).join("");
+  return head + rows;
+}
+
+// 10 · Table — plain rows and columns: a State column per drum row, the 20 sounds as a sortable table with their dials; the Studio as a song strip plus a section inspector.
+D.push({ n: 10, slug: "table", name: "Table", m: {
+  make: () => makeRoom(`${rowsTable(M === "2" ? 44 : 22)}${M === "2" ? `<div class="grow"></div>${tableLine()}` : soundTable()}${foot()}`),
+  studio: () => `<div class="app studio">${studioBar()}${emptyNote()}<div style="display:flex;flex-direction:column;min-height:0">${songStrip()}${inspector()}</div></div>`,
+}});
+function rowsTable(h) {
+  return `<div style="display:grid;grid-template-columns:170px 260px minmax(0,1fr) 58px;column-gap:12px;row-gap:5px;align-items:center;padding-top:10px"><span class="lbl">Row</span><span class="lbl">State</span>${ruler()}<span></span>
+  ${ROWS.map((r) => { const st = rowState(r), on = S.open === r.id;
+    return `<button data-act="row" data-row="${r.id}" aria-pressed="${on}" class="ell" style="padding:3px 6px;border-radius:4px;${on ? "background:rgba(241,230,211,.08)" : ""}">${r.name}</button>
+    <span style="font-size:12px;white-space:nowrap" class="${st === "open" ? "yours" : "mute"}">${st === "open" ? `Empty: yours to fill · ${leave(r.id)}` : st === "left" ? `Left empty · ${undo(r.id)}` : `${plural(hitCount(r.id), "hit", "hits")} · ${st === "heard" ? "Make heard them" : "you tapped them in"}`}</span>
+    <div style="position:relative" class="${st === "open" ? "hatch" : ""}">${steps(r.id, h)}${st === "open" ? `<div class="over"><span>listen for ${r.listen} and tap it in</span></div>` : ""}</div><span style="display:flex;gap:2px">${ms(r.id)}</span>`; }).join("")}</div>
+  <div style="display:flex;gap:16px;align-items:baseline;padding:7px 0 0 0;min-width:0">${countLine()}<span class="lbl ell" title="${WHY}">${openRows().length ? "Make can’t hear shakers or rides yet; some of their hits may have landed on Closed hat." : ""}</span><span style="margin-left:auto">${legend()}</span></div>`;
+}
+function soundTable() {
+  const keyf = { kind: (s) => FAMILIES[s.row].indexOf(s.fam), sound: (s) => s.name, long: (s) => s.len, bright: (s) => s.hz }[S.sort];
+  const xs = [...SOUNDS[S.open]].sort((a, b) => (keyf(a) < keyf(b) ? -1 : keyf(a) > keyf(b) ? 1 : 0));
+  const dial = (v) => `<span class="dial" aria-hidden="true"><i style="left:${(v * 100).toFixed(1)}%"></i></span>`;
+  const th = (k, label, w) => `<th scope="col" style="${w ? `width:${w}px;` : ""}padding:5px 8px" aria-sort="${S.sort === k ? "ascending" : "none"}"><button data-act="sort" data-k="${k}" class="lbl" style="white-space:nowrap;${S.sort === k ? "color:var(--ink)" : ""}">${label}${S.sort === k ? " ↓" : ""}</button></th>`;
+  const x = cur();
+  return `<div style="display:grid;grid-template-columns:minmax(0,1fr) 250px;grid-template-rows:minmax(0,1fr);gap:22px;flex:1;min-height:0;border-top:1px solid var(--line);margin-top:10px"><div style="overflow:auto;min-height:0;overscroll-behavior:contain"><table style="width:100%;table-layout:fixed;font-size:12px"><caption class="sr">The 20 ${ROWOF[S.open].name} sounds</caption><thead style="position:sticky;top:0;background:var(--bg);z-index:1"><tr>${th("sound", "Sound", 150)}${th("kind", "Kind", 170)}<th scope="col" class="lbl" style="width:84px">Feel</th>${th("long", "short ↔ long", 104)}${th("bright", "dark ↔ bright", 112)}<th scope="col" class="lbl" style="padding-left:8px">What it is</th></tr></thead><tbody>
+  ${xs.map((s) => { const on = S.pick[S.open] === s.id; return `<tr aria-selected="${on}" style="${on ? "background:var(--goldDim)" : ""};border-top:1px solid var(--line)"><td style="padding:0"><button data-act="snd" data-id="${s.id}" aria-pressed="${on}" class="ell ${S.preview === s.id ? "playing" : ""}" style="padding:${tight() ? 3 : 5}px 8px;width:100%;display:block">${esc(s.name)}</button></td><td class="mute ell" style="padding:0 8px">${esc(famLabel(s.fam))}</td><td class="ell">${esc(s.feel)}</td><td style="padding:0 8px">${dial(longness(s))}</td><td style="padding:0 8px">${dial(bright(s))}</td><td class="mute ell" style="padding:0 8px" title="${esc(s.about)}">${esc(s.about)}</td></tr>`; }).join("")}</tbody></table></div>
+  <div style="display:flex;flex-direction:column;gap:10px;padding-top:10px;min-width:0;min-height:0;overflow:hidden"><span class="serif">${esc(x.name)}</span><span class="lbl">${esc(famLabel(x.fam))} · ${esc(x.feel)}</span><span class="lbl clamp2" style="color:var(--ink);opacity:.8;-webkit-line-clamp:3">${esc(x.about)}</span>
+  <div class="knobs" style="gap:14px">${["pitch", "length", "tone", "drive"].map((k) => knob(k, S.knobs[k], 44)).join("")}</div><span style="margin-top:auto;padding-bottom:8px">${creditsLink()}</span></div></div>`;
+}
+function tableLine() {
+  const r = ROWOF[S.open], x = cur();
+  return `<div style="display:flex;align-items:center;gap:22px;padding:10px 0;border-top:1px solid var(--line);min-width:0"><span class="lbl" style="flex:none">${r.name}</span><span class="serif" style="flex:none">${esc(x.name)}</span><span class="lbl ell" style="flex:1">${esc(x.about)}</span>${knobs(46)}<button class="ghost" data-act="noop">All 20 sounds</button></div>`;
+}
+function songStrip() {
+  const meas = ["kick", "hats", "bass", "chords", "vocals"];
+  return `<div style="padding:12px 18px 10px;border-bottom:1px solid var(--line)"><div class="tl" style="height:${tight() ? 66 : 74}px">${SECS.map((s) => { const on = S.sec === s.n, n = toFill(s).length, nar = secPx(s, innerWidth - 36) < 110;
+    return `<button data-act="sec" data-sec="${esc(s.n)}" aria-pressed="${on}" title="${esc(s.n)}, bars ${s.a}–${s.b}" style="position:absolute;left:${pct(s.a)}%;width:calc(${pct(s.b + 1) - pct(s.a)}% - 4px);top:0;bottom:0;border-radius:6px;padding:7px 9px;text-align:left;border:1px solid ${on ? "var(--ink)" : "var(--line)"};background:${on ? "rgba(241,230,211,.06)" : "none"};overflow:hidden"><span style="display:flex;gap:6px;align-items:baseline;min-width:0"><span class="ell">${esc(s.n)}</span>${nar ? "" : `<span class="lbl" style="flex:none">${s.a}–${s.b}</span>`}</span>
+    <span style="display:flex;gap:3px;margin-top:8px" aria-hidden="true">${meas.map((h) => { const k = `${s.n}:${h}`, L = LANEOF[h]; return `<i style="flex:1;height:8px;border-radius:2px;${s.has.includes(h) ? (S.fill[k] ? `background:${L.c}` : S.left[k] || h === "vocals" ? `box-shadow:inset 0 0 0 1px var(--line2)` : `box-shadow:inset 0 0 0 1px ${L.c}`) : "background:var(--line)"}"></i>`; }).join("")}</span>
+    <span class="lbl" style="display:block;margin-top:6px;white-space:nowrap">${n ? `<span class="yours">${n}${nar ? "" : " to fill"}</span>` : nar ? "0" : "0 to fill"}</span></button>`; }).join("")}<span class="ph2" style="left:${pct(S.bar)}%"></span></div>
+  <div class="lbl" style="margin-top:7px">Small bars, left to right: kick, hats, bass, chords, vocals. Outline: the original has it, yours to fill. Filled: yours. Dark: not in the original.</div></div>`;
+}
+function inspector() {
+  const s = SECOF[S.sec];
+  const row = (l) => { const st = slotState(s, l.id), key = `${s.n}:${l.id}`;
+    const orig = l.id === "vocals" && hasHint(s, l.id) ? `<span class="mute">has vocals (Make can’t yet)</span>` : hasHint(s, l.id) ? `<span class="yours">has ${l.n.toLowerCase()}</span>` : l.m ? `<span class="dim">none here</span>` : "";
+    const yours = st === "f" ? `<button class="ghost" data-act="slot" data-key="${key}" aria-expanded="${S.pop === key}" style="${fillBg(l)}border-color:transparent;max-width:100%"><span class="ell">${esc(S.fill[key])}</span></button>`
+      : st === "l" ? `<span class="lbl">left empty · <button class="link" data-act="unleave" data-key="${key}">Undo</button></span>`
+      : st === "v" ? "" : `<button class="ghost" data-act="slot" data-key="${key}" aria-expanded="${S.pop === key}" style="border-style:dashed;${st === "h" ? "border-color:var(--goldLine);color:var(--gold)" : "color:var(--dim)"}">${st === "h" ? "Fill…" : "Add…"}</button>${st === "h" ? ` <button class="lbl link" data-act="leave" data-key="${key}" style="margin-left:10px">Leave empty</button>` : ""}`;
+    return `<tr style="border-top:1px solid var(--line);height:${tight() ? 32 : 36}px"><th scope="row" style="width:130px;box-shadow:inset 3px 0 ${l.c};padding-left:12px;font-weight:400">${l.n}</th><td style="width:240px;font-size:12px">${orig}</td><td>${yours}</td></tr>`; };
+  return `<div style="display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;padding:12px 18px;min-height:0;overflow:auto"><div style="min-width:0"><div style="display:flex;align-items:baseline;gap:14px;margin-bottom:8px;min-width:0"><span class="serif ell" style="font-size:28px">${esc(s.n)}</span><span class="lbl" style="flex:none">bars ${s.a}–${s.b} · ${toFill(s).length ? `<span class="yours">${toFill(s).length} to fill</span>` : "0 to fill"}</span></div>
+  <table style="width:100%;table-layout:fixed"><caption class="sr">${esc(s.n)}: what the original has and what is yours, per lane</caption><thead><tr class="lbl"><th scope="col" style="padding:0 0 4px 12px;width:130px">Lane</th><th scope="col" style="width:240px">The original</th><th scope="col">Yours</th></tr></thead><tbody>${LANES.map(row).join("")}</tbody></table>
+  <p class="lbl" style="margin:8px 0 0">The original column is blank where Six AM doesn’t measure the part yet.</p></div>
+  <aside style="min-height:0">${slotDetail()}</aside></div>`;
+}
+
+// ───────── render + events ─────────
+const stage = document.getElementById("stage");
+let V = 0;
+function render() {
+  const d = D[V], studio = ["3", "e", "d"].includes(M);
+  stage.innerHTML = (studio ? d.m.studio() : d.m.make()) + (studio ? "" : creditsPop());
+  const pop = document.getElementById("cpop"), btn = document.getElementById("creditsBtn");
+  if (pop && btn) { const r = btn.getBoundingClientRect(); const w = pop.offsetWidth, h = pop.offsetHeight; pop.style.left = Math.min(Math.max(8, r.left), innerWidth - w - 8) + "px"; pop.style.top = (r.top - h - 8 > 8 ? r.top - h - 8 : r.bottom + 8) + "px"; }
+  document.querySelectorAll(".moments button").forEach((b) => b.toggleAttribute("data-active", b.dataset.m === M));
+}
+stage.addEventListener("click", (e) => {
+  const t = e.target.closest("[data-act]"); if (!t) return;
+  const a = t.dataset.act, row = t.dataset.row;
+  if (a === "step") { const p = S.pat[row], i = +t.dataset.i, v = p[i]; if (v === "r") p[i] = "x"; else if (v === "x") p[i] = "r"; else if (v === "a") delete p[i]; else p[i] = "a"; }
+  else if (a === "row") { S.open = row; S.preview = null; }
+  else if (a === "snd") { S.pick[S.open] = t.dataset.id; S.preview = t.dataset.id; }
+  else if (a === "shelf") S.shelf = !S.shelf;
+  else if (a === "credits") S.credits = !S.credits;
+  else if (a === "sort") S.sort = t.dataset.k;
+  else if (a === "mute") S.mute[row] = !S.mute[row];
+  else if (a === "solo") S.solo[row] = !S.solo[row];
+  else if (a === "dismiss") S.dismissed[row] = true;
+  else if (a === "undismiss") delete S.dismissed[row];
+  else if (a === "jump") S.play = +t.dataset.i;
+  else if (a === "knob") { const k = t.dataset.k; S.knobs[k] = +((S.knobs[k] + 0.2) % 1.05).toFixed(2); }
+  else if (a === "slot") { S.pop = S.pop === t.dataset.key ? null : t.dataset.key; }
+  else if (a === "fill") { if (S.pop) { S.fill[S.pop] = t.dataset.part; delete S.left[S.pop]; S.pop = null; } }
+  else if (a === "clear") { delete S.fill[S.pop]; S.pop = null; }
+  else if (a === "leaveslot") { S.left[S.pop] = true; }
+  else if (a === "unleaveslot") { delete S.left[S.pop]; }
+  else if (a === "leave") { S.left[t.dataset.key] = true; }
+  else if (a === "unleave") { delete S.left[t.dataset.key]; }
+  else if (a === "closepop") S.pop = null;
+  else if (a === "mo") { if (S.deck) S.mo = t.dataset.v; }
+  else if (a === "deck") S.deck = true;
+  else if (a === "seek") S.bar = +t.dataset.bar;
+  else if (a === "sec") { S.sec = t.dataset.sec; S.pop = null; }
+  else return;
+  render();
+});
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && (S.pop || S.credits)) { S.pop = null; S.credits = false; render(); } });
+
+// picker
+const picker = document.querySelector(".proto-picker"), hl = picker.querySelector(".proto-picker-highlight");
+D.forEach((d, i) => { const b = document.createElement("button"); b.className = "proto-picker-item"; b.textContent = `${d.n} ${d.name}`; b.onclick = () => setActive(i); picker.appendChild(b); });
+const items = [...picker.querySelectorAll(".proto-picker-item")];
+function moveHighlight() { const el = items[V]; hl.style.width = el.offsetWidth + "px"; hl.style.transform = `translateX(${el.offsetLeft}px)`; }
+function setActive(i) {
+  if (i < 0 || i >= D.length) return;
+  V = i; reset();
+  items.forEach((el, j) => { el.toggleAttribute("data-active", j === i); if (j === i) el.setAttribute("aria-current", "true"); else el.removeAttribute("aria-current"); });
+  moveHighlight();
+  const url = new URL(location); url.searchParams.set("v", D[i].n); url.searchParams.set("m", M); url.searchParams.delete("deck"); history.replaceState(null, "", url);
+  render();
+}
+document.querySelectorAll(".moments button").forEach((b) => b.onclick = () => { M = b.dataset.m; setActive(V); });
+addEventListener("resize", () => { moveHighlight(); render(); });
+document.addEventListener("keydown", (e) => {
+  if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable) return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = parseInt(e.key, 10);
+  if (k >= 1 && k <= D.length) setActive(k - 1);
+  else if (e.key === "ArrowRight") setActive((V + 1) % D.length);
+  else if (e.key === "ArrowLeft") setActive((V - 1 + D.length) % D.length);
+});
+setActive(Math.max(0, D.findIndex((d) => d.n === (parseInt(params.get("v"), 10) || 2))));
+requestAnimationFrame(() => requestAnimationFrame(() => picker.setAttribute("data-ready", "")));
+</script>
+</body></html>

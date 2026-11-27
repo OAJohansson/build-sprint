@@ -895,3 +895,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Slice 2 data-evals (fd657ed, f14d1f8): W8, W11, W13 pass; W5 fails (open-hat reader 44 % / 31 %, retune won't pass) → reader off (L287); W6 fails 4/5 (D7-11 rename bug); W5b → owner's ear. PM calls L287–L289 (reader off, edits persist per loop, 4 bars at a time while fixing). Fix round sent to the slice 2 engineer.
 - Slice 2 fix round done (cd2b28f, T255): reader off, 4 bars at a time, one bottom bar, edits kept per loop, save-per-loop bug fixed, copy bar, bass jump, copy. Steps still 11.9 / 9.4 px with the Mentor rail: PM folds the rail while fixing (L290).
 - L290 built (0d5a9d5, T256): steps 17.2 / 14.7 px while fixing. Re-check by all three graders.
+- Critic re-score slice 2: 8/10. Leftovers wait for the user test and data-evals re-checks.

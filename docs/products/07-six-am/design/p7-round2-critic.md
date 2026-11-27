@@ -35,3 +35,7 @@ Clutter 2 · hierarchy 2 · legibility 2 · feel 2 · copy 1. Left (small, folde
 ## Built slice 2 (0a63c04): 6/10
 
 Clutter 1 · hierarchy 2 · legibility 1 · feel 1 · copy 1. Gaps: steps ~7 px (1440) / ~5 px (1280) on 8-bar loops — show 4 bars at a time while fixing (the approved ~17 px); the sound strip cut by the sticky A/B row (one bottom bar as designed); section label contradicts the loop chip ("in Drop 2" vs "Looping Build, bars 76–83"); "— / 100" closeness on ear rows; empty-row note wraps; save bar says the same thing three times; done state wording.
+
+## Built slice 2 after fixes (0d5a9d5): 8/10
+
+Clutter 1 · hierarchy 2 · legibility 2 · feel 2 · copy 1. Left: page buttons "76 80" need to read as pages; the three-row empty sentence is cut; rail back with the shelf open (steps 12 / 9 px); header repeats the bars; "Copy bar" line shifts rows; disabled Save gives no reason; Bass at 1280 keeps the tag line and hides knob values.

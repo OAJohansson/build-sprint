@@ -348,22 +348,23 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | D7-10 | minor | Wobble < 2× on organ-click, fm-glass, filtered-saw | pass on the eval's measure (L284); owner listens at the final review |
 | U7-8 | polish | Sound chips 22 px tall (under 24 px) and the last line brushes A/B at 1280 × 720 | open: shelf round |
 | U7-9 | polish | Description still cut at 1280 where it shares a row with the knobs | open: shelf round |
-| CR2-1 | major | Critic, built slice 2 6/10: steps too thin on 8-bar loops (show 4 bars at a time while fixing) | open: slice 2 fix |
-| CR2-2 | major | Critic: sound strip cut by the sticky A/B row (one bottom bar as designed) | open: slice 2 fix |
+| CR2-1 | major | Critic, built slice 2 6/10: steps too thin on 8-bar loops (show 4 bars at a time while fixing) | fixed (L289, L290) |
+| CR2-2 | major | Critic: sound strip cut by the sticky A/B row (one bottom bar as designed) | fixed |
 | CR2-3 | minor | Critic: "in Drop 2 · bar 77" vs "Looping Build, bars 76–83"; "— / 100" on ear rows; note wraps; save bar repeats itself; done-state wording | open: slice 2 fix |
-| U7-10 | major | Drum steps too thin to tap (4.6 / 3.3 px) | open: slice 2 fix |
-| U7-11 | major | Edits gone after reload; loading a saved row doesn't restore its hits | open: slice 2 fix |
-| U7-12 | minor | A row Make read nothing on has no line and isn't counted | open: slice 2 fix |
-| U7-13 | major | Drums ruler jump 2–3 sixteenths late | open: slice 2 fix |
-| U7-14 | minor | No repeat-bar for offbeat patterns | open: slice 2 fix |
-| U7-15 | minor | Bass jump only on a thin strip, few bar labels | open: slice 2 fix |
-| U7-16 | minor | Save per row only | open: slice 2 fix |
-| U7-17 | polish | Old synth drum knobs show A1 / ms | open: slice 2 fix |
-| U7-18 | polish | Zero-state wording | open: slice 2 fix |
+| U7-10 | major | Drum steps too thin to tap (4.6 / 3.3 px) | fixed |
+| U7-11 | major | Edits gone after reload; loading a saved row doesn't restore its hits | fixed |
+| U7-12 | minor | A row Make read nothing on has no line and isn't counted | fixed |
+| U7-13 | major | Drums ruler jump 2–3 sixteenths late | fixed |
+| U7-14 | minor | No repeat-bar for offbeat patterns | fixed |
+| U7-15 | minor | Bass jump only on a thin strip, few bar labels | mostly fixed (Bass labels sparse) |
+| U7-16 | minor | Save per row only | backlog |
+| U7-17 | polish | Old synth drum knobs show A1 / ms | fixed |
+| U7-18 | polish | Zero-state wording | fixed |
 | D7-11 | major | W6 fail: saving a row on a second loop can rename the first loop's saved sound (`last[row]` not cleared on loop change); 3 of 25 saves | open: slice 2 fix |
 | D7-12 | major | W5 fail: open-hat reader 44 % / 31 %; retuning won't pass | decided: reader off (L287) |
 | D7-13 | minor | Clap / snare bodies land on Closed hat (0–83 % of the row per loop) | accepted for now: fixable by ear; backlog |
 | D7-14 | check | W5b needs the owner's ear | open: final review |
 | D7-15 | polish | Hat onsets a median 18 ms early vs the grader's attack | backlog |
 | D7-16 | note | Separation not deterministic between captures (5 vs 9 open hats on one loop) | known (Phase 4 Demucs) |
-
+| U7-19 | minor | After a reload a hit that's new in the re-read shows as "you took out" | open: slice 2 polish |
+| U7-20 | polish | Page buttons "76 | 80" don't read as pages; reason cut at 1440 with the shelf open | open: slice 2 polish |

@@ -25,3 +25,7 @@ Simulated (user-tester agent), sandbox :3037, code 0a63c04, desktop Chrome at 14
 | U7-18 | polish | zero-state wording awkward |
 
 Testing-system note: each tester needs its own scratch folder and CDP port.
+
+## Re-check after the fix rounds (0d5a9d5)
+
+W7 5/5; W14 met: rows to fill 5, add/remove 4, mute 4, jump 4. Fixed: U7-10 (17.2 / 14.7 px steps, 40/40 jitter hits), U7-11, U7-12, U7-13 (0 ms off), U7-14 (32 taps → 5), U7-17, U7-18; U7-15 mostly (Bass bar labels sparse); U7-16 open (save per row, backlog). New: U7-19 (a hit that's new in a re-read shows as "you took out"), U7-20 (page labels "76 | 80"; reason cut at 1440 with the shelf open).

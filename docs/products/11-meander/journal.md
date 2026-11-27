@@ -180,3 +180,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Canvas #33:** the facts block feels clustered. Three options are on the canvas: three numbers, labelled lines (my pick), two groups. Files: `design/skeleton-r4/P7-F*`.
 - **L31:** the owner picked line B. It's built into P7 (`_src/build_p7.py`) and the prototype is reshot.
 - **L32:** the owner picked facts 2. It's built into P7, and the worst case wraps cleanly.
+- **L33: canvas signed off.** The owner asked how much the build will cost against their weekly limit. Usage now: 33% of the weekly limit, 9% of the Fable limit. Finding: all 23 schools already have sourced questions, taglines, 5 themes with thinkers, and dates, so the skeleton can be built with no new writing. Only the places and the key-works count are missing. The full articles for 22 schools are the heavy part.

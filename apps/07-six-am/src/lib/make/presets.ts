@@ -105,6 +105,7 @@ export const BASS_SAMPLE_FILES: Record<string, string> = Object.fromEntries([
   ...["E1", "As1", "E2", "As2", "E3"].map((n) => [`bass-eb-${n}`, `/kits/bass/electric/${n}.m4a`]),
   ...["G1", "C2", "E2", "A2", "E3"].map((n) => [`bass-cb-${n}`, `/kits/bass/upright/${n}.m4a`]),
 ]);
+// shortcut: five recordings per sampled bass, a tritone or less apart and pitched by playback speed (up to ±3 semitones, so the timbre shifts a little), each cut to 2 s (a held note longer than that fades out); add the in-between notes from tonejs-instruments if a line sounds uneven or notes run short.
 const EB = [["E1", 28], ["As1", 34], ["E2", 40], ["As2", 46], ["E3", 52]].map(([n, midi]) => ({ id: `bass-eb-${n}`, midi: midi as number }));
 const CB = [["G1", 31], ["C2", 36], ["E2", 40], ["A2", 45], ["E3", 52]].map(([n, midi]) => ({ id: `bass-cb-${n}`, midi: midi as number }));
 

@@ -15,7 +15,7 @@ export const KIT_HOME: Record<KitKnobId, number> = { pitch: 0.5, length: 0.6, to
 export const LENGTH_AS_IS = 0.6;
 
 /** T237: the kit is peak-normalised, so hats would sit as loud as kicks; each row starts at its own level. */
-// shortcut: per-row levels by reasoning about a house mix (kick loudest, hats ~8 dB under), not measured; Make level-matches each row to the original anyway, so only the Studio and rows with nothing to match use them.
+// shortcut: per-row levels by reasoning about a house mix (kick loudest, hats ~8 dB under), not measured (Make level-matches each row to the original anyway, so only previews use them); measure against the crate's drum loops if a sampled row sounds too loud or quiet on its own.
 export const KIT_ROW_GAIN_DB: Record<P7Row, number> = { kick: -2, clap: -5, hat: -9, ohat: -9, perc: -7, ride: -11 };
 
 export const isKitSound = (v: unknown): v is string => typeof v === "string" && !!p7SoundById(v);

@@ -884,3 +884,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Slice 1 data-evals (cb941cc): W1, W2, W3, W11, W12, W13 pass; W4 fails on bass Drive / Sub / Weight / Wobble (D7-1) and Pitch drop on 7 presets (D7-2). PM set the bass knob bars (L282) and accepted D7-3/4/5/7 knowingly (L283). Fix round sent to the engineer: U7-1..7, D7-1, D7-2, D7-6.
 - Slice 1 fix round done (51764e2, T247). Re-grade sent to data-evals (W4, W2, W11), user-tester (U7-1..7) and the critic (the shelf changed from columns to chip lines).
 - Critic on the built shelf: 5/10 (grouping lost in the chip lines). Engineer asked for two-column families with a fixed label column (critic's fix).
+- Data-evals re-grade (e5cd9bd): W2, W11 pass; W4 124/128 (D7-9 regression on Pure sine's Tone, D7-10 Wobble on three presets); added to the engineer's current round.

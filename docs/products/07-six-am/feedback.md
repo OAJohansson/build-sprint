@@ -336,12 +336,14 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | U7-5 | minor | Sticky A/B covers the "Try X" tip and half of Suggest at 1440 | open: slice 1 fix |
 | U7-6 | polish | "Shaker-like" family in Closed hat; sounds named like their family | open: slice 1 fix |
 | U7-7 | polish | Bass lines name the source (tonejs-instruments) | open: slice 1 fix |
-| D7-1 | major | W4 fail: bass Drive, Sub, Weight, Wobble move their feature too little (bars in L282) | open: slice 1 fix (new presets) |
-| D7-2 | minor | Pitch drop reaches only 4.0–4.5 st on 7 presets | open: slice 1 fix |
+| D7-1 | major | W4 fail: bass Drive, Sub, Weight, Wobble move their feature too little (bars in L282) | mostly fixed (51764e2): 124/128; D7-9, D7-10 left |
+| D7-2 | minor | Pitch drop reaches only 4.0–4.5 st on 7 presets | fixed (6.7–8.1 st) |
 | D7-3 | minor | Round sub's Tone barely moves (Phase 4 preset, golden hash) | accepted (L282) |
 | D7-4 | polish | Shortest closed hats can't get 2× longer | accepted (L283) |
 | D7-5 | polish | Drive adds little on saturated recordings | accepted (L283) |
 | D7-6 | toil | "Suggest for hats" / "closeness · hats" on the Closed hat row | open: slice 1 fix |
 | D7-7 | risk | tonejs-instruments' recordings' origin not stated | accepted (L283), viability risk |
 | D7-8 | check | W12 timings were on localhost; re-check first taps on the preview | open: final review |
+| D7-9 | minor | Regression: Tone on Pure sine moves brightness 1.87× (was 2.12×) after the Weight change | open: slice 1 fix |
+| D7-10 | minor | Wobble < 2× on organ-click, fm-glass, filtered-saw | open: slice 1 fix |
 

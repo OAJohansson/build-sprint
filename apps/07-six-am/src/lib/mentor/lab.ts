@@ -17,12 +17,13 @@ import type { MentorAnswer } from "./answer";
 import { chordFacts, chordFactsLines } from "./chord-facts";
 import { normalChord } from "@/lib/make/chords-mine";
 
-export const PART_LABEL: Record<PartName, string> = { drums: "Drums", bass: "Bass", other: "Other", vocals: "Vocals" };
+// Phase 7 (R8, OR6-1): the "other" part is named for what Make makes of it, Melody and FX.
+export const PART_LABEL: Record<PartName, string> = { drums: "Drums", bass: "Bass", other: "Melody & FX", vocals: "Vocals" };
 
-/** A part in a sentence (LS2-N11): "the bass", "the drums", but "Other" (a lane's name, not a thing). */
-export const partNoun = (p: PartName) => (p === "other" ? "Other" : `the ${p}`);
-/** "What's the bass doing here?", "What are the vocals doing here?", "What's Other doing here?" */
-export const whatDoing = (p: PartName) => `What${p === "drums" || p === "vocals" ? " are" : "'s"} ${partNoun(p)} doing here?`;
+/** A part in a sentence (LS2-N11): "the bass", "the drums", "the melody and FX" (R8). */
+export const partNoun = (p: PartName) => (p === "other" ? "the melody and FX" : `the ${p}`);
+/** "What's the bass doing here?", "What are the vocals doing here?", "What are the melody and FX doing here?" */
+export const whatDoing = (p: PartName) => `What${p === "drums" || p === "vocals" || p === "other" ? " are" : "'s"} ${partNoun(p)} doing here?`;
 
 /** What you hear (L177): everything, only some parts, or everything without some. */
 export type LabHear = { kind: "all" } | { kind: "only"; parts: PartName[] } | { kind: "mute"; parts: PartName[] };

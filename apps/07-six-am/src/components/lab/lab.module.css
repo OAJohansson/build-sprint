@@ -574,3 +574,94 @@
 }
 /* A short window: each row is one line (its sound is named in the shelf head when open, and in the row's tooltip). */
 @media (max-height: 760px) { .drSound { display: none; } }
+
+/* Phase 7 slice 2 (design p7-final ?m=2 / ?m=r; R3, R3b, R4, R5): six drum rows in one grid, row names
+   once on the left, a step per 16th to tap, Mute and Solo in words on the right. The heard rows first
+   under "Six AM heard these", then a dashed line with the count of rows to fill by ear, then Shaker /
+   percussion and Ride, striped while empty, with "Your turn …" under them. The bar ruler on top plays
+   from the 16th you click. Rows keep one height whatever is open, so tapping moves nothing. */
+.dr2 { --rowH: 40px; display: grid; grid-template-columns: 180px minmax(0, 1fr) 96px; column-gap: 14px; row-gap: 6px; width: 100%; padding-top: 4px; }
+.dr2[data-fill] { --rowH: 56px; row-gap: 10px; }
+.dr2 > [data-head] { grid-column: 1; align-self: end; padding-left: 10px; }
+.rname { grid-column: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px; min-width: 0; height: var(--rowH); padding: 0 10px; border: 0; border-radius: 6px; background: none; text-align: left; cursor: pointer; color: var(--ink) !important; font-size: 13px; }
+.rname span { line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rname small { color: #c2b49e; font-size: 11.5px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rname[aria-pressed="true"] { background: rgba(241, 230, 211, .08); }
+@media (hover: hover) and (pointer: fine) { .rname[aria-pressed="false"]:hover { background: rgba(241, 230, 211, .04); } }
+.rname .drSaved { font-size: 11px; }
+.stCell { grid-column: 2; position: relative; height: var(--rowH); min-width: 0; border-radius: 3px; }
+.stCell[data-open] { background-image: repeating-linear-gradient(135deg, rgba(242, 177, 52, .09) 0 6px, transparent 6px 12px); }
+.steps { position: relative; display: grid; row-gap: 4px; height: 100%; }
+.stLine { display: grid; column-gap: 6px; min-height: 0; }
+.steps[data-dense] .stLine { column-gap: 4px; }
+.stBar { display: grid; grid-template-columns: repeat(16, minmax(0, 1fr)); column-gap: 2px; min-width: 0; }
+.steps[data-dense] .stBar { column-gap: 1px; }
+.st { display: block; min-width: 0; min-height: 6px; padding: 0; border: 0; border-radius: 2px; background: rgba(241, 230, 211, .05); cursor: pointer; }
+.st[data-beat] { background: rgba(241, 230, 211, .09); }
+.st[data-k="read"] { background: var(--gold); }
+.st[data-k="added"] { background: var(--ink); }
+.st[data-k="removed"] { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(242, 177, 52, .75); }
+.st:disabled { cursor: default; }
+@media (hover: hover) and (pointer: fine) { .st:not(:disabled):hover { box-shadow: inset 0 0 0 1px rgba(241, 230, 211, .6); } }
+.st:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.root .st:active:not(:disabled) { transform: none; }
+.steps[data-muted] .st[data-k="read"], .steps[data-muted] .st[data-k="added"] { opacity: .3; }
+.stHead { position: absolute; width: 2px; margin-left: -1px; background: #fff; border-radius: 1px; pointer-events: none; }
+.drRuler { grid-column: 2; position: relative; display: grid; row-gap: 2px; min-width: 0; }
+.rLine { display: grid; column-gap: 6px; height: 22px; }
+.drRuler[data-dense] .rLine { column-gap: 4px; }
+.drRuler[data-lines="2"] .rLine { height: 16px; }
+.rb { display: grid; grid-template-columns: repeat(16, minmax(0, 1fr)); border-bottom: 1px solid var(--edge); min-width: 0; }
+.rb button { display: flex; align-items: flex-end; height: 100%; min-width: 0; padding: 0 0 3px 2px; border: 0; background: none; font: 11px var(--f-mono); color: var(--faint) !important; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: visible; cursor: pointer; }
+.rb button:disabled { cursor: default; }
+@media (hover: hover) and (pointer: fine) { .rb button:not(:disabled):hover { box-shadow: inset 0 -3px var(--muted); color: var(--ink) !important; } }
+.root .rb button:active:not(:disabled) { transform: none; }
+.drRuler .stHead { top: 0 !important; height: 100% !important; }
+.ms { grid-column: 3; display: flex; gap: 2px; align-self: center; justify-self: end; }
+.mbtn { height: 24px; padding: 0 6px; border-radius: 4px; border: 1px solid transparent; background: none; font: 12px var(--f-mono); color: var(--muted) !important; cursor: pointer; }
+.mbtn[aria-pressed="true"] { background: var(--edge); color: var(--ink) !important; }
+@media (hover: hover) and (pointer: fine) { .mbtn:hover { border-color: var(--edge); color: var(--ink) !important; } }
+.underCell { grid-column: 2; margin-top: -2px; }
+.under { font-size: 12px; color: var(--muted); display: flex; align-items: baseline; gap: 6px; white-space: nowrap; min-width: 0; }
+.under > span { overflow: hidden; text-overflow: ellipsis; }
+.under[data-yours] { color: var(--gold); }
+.under .textBtn { min-height: 0; padding: 0; color: inherit !important; }
+.divide { grid-column: 1 / -1; display: flex; gap: 12px; align-items: baseline; min-width: 0; margin-top: 4px; padding: 8px 10px 2px; border-top: 1px dashed rgba(242, 177, 52, .55); }
+.divide[data-done] { border-top-color: var(--edge); }
+.divide .lbl { line-height: 1.5; min-width: 0; }
+.count { display: inline-flex; align-items: center; gap: 8px; flex: none; font-size: 12.5px; color: var(--gold); white-space: nowrap; }
+.count::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex: none; }
+.count[data-done] { color: var(--muted); }
+.count[data-done]::before { background: #7fbf6a; }
+.legend { display: inline-flex; gap: 14px; font-size: 11px; color: var(--muted); white-space: nowrap; }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.legend i[data-k="read"] { background: var(--gold); }
+.legend i[data-k="added"] { background: var(--ink); }
+.legend i[data-k="removed"] { box-shadow: inset 0 0 0 1.5px rgba(242, 177, 52, .75); }
+/* The shelf sits clear of the last row's "Your turn" line (critic round 3b, 1280). */
+.dr2 + .shelf { margin-top: 14px; }
+/* R5: the FX and melody bar numbers and the bass strip's are buttons; the strip under them takes a click anywhere. */
+.jumpBars { cursor: pointer; }
+.jumpBars button, .jumpTrack .lsNum { position: absolute; top: 0; padding: 0; border: 0; background: none; font: 12px var(--f-mono); color: var(--muted) !important; font-variant-numeric: tabular-nums; cursor: pointer; }
+.jumpTrack { cursor: pointer; }
+.jumpTrack .lsNum { font-size: 10px; color: var(--faint) !important; line-height: 18px; padding-left: 4px; }
+.jumpBars button:disabled, .jumpTrack .lsNum:disabled { cursor: default; }
+@media (hover: hover) and (pointer: fine) { .jumpBars button:not(:disabled):hover, .jumpTrack .lsNum:not(:disabled):hover { color: var(--ink) !important; } }
+.jumpBars { pointer-events: auto; }
+/* Family labels one step brighter (critic, slice 1 shelf round). */
+.grp h3 { color: var(--muted); }
+@media (max-height: 860px) {
+  .dr2 { --rowH: 34px; row-gap: 4px; }
+  .dr2[data-fill] { --rowH: 46px; row-gap: 8px; }
+  .rname small { font-size: 11px; }
+}
+@media (max-height: 760px) {
+  .dr2 { --rowH: 28px; row-gap: 3px; padding-top: 0; }
+  .dr2[data-fill] { --rowH: 38px; row-gap: 6px; }
+  .rname { flex-direction: row; align-items: baseline; gap: 8px; }
+  .rname small { font-size: 10.5px; }
+  .rLine { height: 18px; }
+  .divide { padding-top: 5px; margin-top: 2px; }
+  .under { font-size: 11.5px; }
+  .dr2 + .shelf { margin-top: 10px; }
+}

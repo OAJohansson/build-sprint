@@ -20,7 +20,7 @@ import { MELODY_ROWS, MELODY_ROW_NAMES, POLY_KNOBS, POLY_KNOB_SPECS, ROW_DEFAULT
 import type { Scale } from "@/lib/synths/theory";
 import { ApiError, mentorApi } from "@/lib/mentor/client";
 import { Knob } from "@/components/ui/knob";
-import { Playhead, useShort } from "./make-drums";
+import { JumpBars, Playhead, useShort } from "./make-drums";
 import { ChordPanel, ChordTiles } from "./make-chords";
 import { LeadBars, LeadPanel } from "./make-lead";
 import ch from "./chords.module.css";
@@ -615,7 +615,7 @@ function waitLine(m: MelodyModel, loop: LoopState | null, playing: boolean): str
 /** What the Mentor calls a row's sound ("stabs", "pads", "keys", "plucks", "lead"). */
 const nounOf = (id: MelodyPresetId) => (melodyRowOf(id) === "lead" ? "lead" : ({ stab: "stabs", pluck: "plucks", pad: "pads", keys: "keys" } as const)[kindOf(id)]);
 
-export function MelodyMiddle({ m, loop, playing, heardMs, from, onAsk }: { m: MelodyModel; loop: LoopState | null; playing: boolean; heardMs: () => number; from: number | null; onAsk?: (q: string, bar: number) => void }) {
+export function MelodyMiddle({ m, loop, playing, heardMs, from, onAsk, onJump }: { m: MelodyModel; loop: LoopState | null; playing: boolean; heardMs: () => number; from: number | null; onAsk?: (q: string, bar: number) => void; onJump: (ms: number) => void }) {
   const steps = m.read?.d.steps ?? (loop ? Math.max(16, Math.round((loop.endMs - loop.startMs) / (60000 / m.bpm / 4))) : 128);
   const bars = Math.max(1, Math.round(steps / 16));
   const wait = waitLine(m, loop, playing), off = !!wait, short = useShort();
@@ -632,6 +632,12 @@ export function MelodyMiddle({ m, loop, playing, heardMs, from, onAsk }: { m: Me
     <div className={s.drums} style={{ paddingBottom: 24 }}>
       {/* S2-7: the rows stay in view while the panel under them scrolls on a short window */}
       <div className={s.drRows} data-sticky-rows="" style={{ position: "sticky", top: 0, zIndex: 4, background: "var(--bg)" }} role="group" aria-label="Melody rows">
+        {/* R5 (OR6-5): the loop's bars, click a spot to play from there. */}
+        <div className={s.drRow} data-head="">
+          <span />
+          <JumpBars loop={loop?.state === "memory" ? loop : null} bars={bars} from={from} every={bars > 8 ? 4 : 1} onJump={onJump} />
+          <span />
+        </div>
         {m.rows.map((r) => {
           const x = m.read?.d.rows[r], lit = r === row, doubtful = !!x?.doubtful && !m.anyway.includes(r);
           // Slice 1 (K4): the Chords row is a tile per bar once the chords are read.
@@ -664,7 +670,7 @@ export function MelodyMiddle({ m, loop, playing, heardMs, from, onAsk }: { m: Me
             </div>
           );
         })}
-        {loop?.state === "memory" && !off && bars <= 8 && <div className={s.drHeadBox} style={{ top: 0 }}><Playhead heardMs={heardMs} loop={loop} bars={bars} /></div>}
+        {loop?.state === "memory" && !off && bars <= 8 && <div className={s.drHeadBox}><Playhead heardMs={heardMs} loop={loop} bars={bars} /></div>}
       </div>
       {!off && (m.lead?.open !== null && m.lead?.open !== undefined ? <LeadPanel m={m} from={from} /> : <ChordPanel m={m} from={from} playing={playing} onAsk={onAsk} />)}
       {!off && m.leadState === "reading" && <p className={s.drWait} role="status" style={{ height: "auto", marginTop: 6 }}>Reading the lead… the first time takes a few seconds.</p>}

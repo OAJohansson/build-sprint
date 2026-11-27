@@ -32,7 +32,7 @@ import { noteName, partNoun, type LabMake } from "@/lib/mentor/lab";
 import type { Scale } from "@/lib/synths/theory";
 import { Composer, Turn, useEdgeFades, type ThreadTurn } from "./mentor-thread";
 import { Knob } from "@/components/ui/knob";
-import { DrumsCheck, DrumsMiddle, DrumsSaveBar, useShort, type DrumsModel } from "./make-drums";
+import { DrumsCheck, DrumsLegend, DrumsMiddle, DrumsSaveBar, useShort, type DrumsModel } from "./make-drums";
 import { MelodyCheck, MelodyMiddle, MelodySaveBar, type MelodyModel } from "./make-melody";
 import { prettyChord } from "@/lib/make/chords-mine";
 import { MELODY_ON } from "@/lib/make/melody-reader";
@@ -320,6 +320,8 @@ type RoomProps = {
   onAsk: (q: string, bar: number) => void;
   onRetry: (id: string) => void;
   onSeek: (bar: number) => void;
+  /** R5: play from a spot of the loop (track ms), from a click on a bar ruler. */
+  onJump: (ms: number) => void;
   onLoopHere: () => void;
   /** S3-4: from Drums, Other or Vocals in Make, focus the bass. */
   onBass: () => void;
@@ -352,12 +354,13 @@ export function MakeRoom(p: RoomProps) {
             </button>
           ))}
           <span className={s.famTab} data-off="" aria-disabled="true" title="Vocals come later">Vocals<em>not yet</em></span>
-          {!later && <span className={s.famCap} aria-live="polite" title={caption}>{caption}</span>}
+          {/* Slice 2 (T239): in Drums, the hit legend sits on the tab line once the rows are read; the caption stays in the tooltip. */}
+          {!later && (family === "drums" && p.drums.readState === "ready" ? <span className={s.famCap} title={caption}><DrumsLegend /></span> : <span className={s.famCap} aria-live="polite" title={caption}>{caption}</span>)}
         </div>
         {later ? <LaterFamily family={family} onBass={() => p.onFamily("bass")} /> : family === "fx" ? (
           <>
             {loop || p.fx.read
-              ? <FxMiddle m={p.fx} loop={loop} from={from} playing={p.playing} heardMs={p.heardMs} />
+              ? <FxMiddle m={p.fx} loop={loop} from={from} playing={p.playing} heardMs={p.heardMs} onJump={p.onJump} />
               : <div className={s.makeEmpty}><p>Make times FX to a loop of the song, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
             <div className={s.grow} />
             <FxCheck m={p.fx} />
@@ -365,7 +368,7 @@ export function MakeRoom(p: RoomProps) {
         ) : family === "melody" ? (
           <>
             {loop || p.melody.read
-              ? <MelodyMiddle m={p.melody} loop={loop} playing={p.playing} heardMs={p.heardMs} from={from} onAsk={p.onAsk} />
+              ? <MelodyMiddle m={p.melody} loop={loop} playing={p.playing} heardMs={p.heardMs} from={from} onAsk={p.onAsk} onJump={p.onJump} />
               : <div className={s.makeEmpty}><p>Make works on a loop of the part, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
             <div className={s.grow} />
             <MelodyCheck m={p.melody} />
@@ -373,7 +376,7 @@ export function MakeRoom(p: RoomProps) {
         ) : family === "drums" ? (
           <>
             {loop || p.drums.read
-              ? <DrumsMiddle m={p.drums} loop={loop} from={from} playing={p.playing} heardMs={p.heardMs} />
+              ? <DrumsMiddle m={p.drums} loop={loop} from={from} playing={p.playing} heardMs={p.heardMs} onJump={p.onJump} />
               : <div className={s.makeEmpty}><p>Make works on a loop of the part, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
             <div className={s.grow} />
             <DrumsCheck m={p.drums} />
@@ -381,7 +384,7 @@ export function MakeRoom(p: RoomProps) {
         ) : (
           <>
             {loop && from !== null && to !== null
-              ? <LoopStrip part={part} from={from} to={to} chords={p.chords} loopChords={loopChordsOf(p.melody, from)} levels={p.levels} heardMs={p.heardMs} bpm={p.bpm} originSec={p.originSec} notes={m.isBass ? m.loopNotes : null} steps={m.loopSteps} />
+              ? <LoopStrip part={part} from={from} to={to} chords={p.chords} loopChords={loopChordsOf(p.melody, from)} levels={p.levels} heardMs={p.heardMs} bpm={p.bpm} originSec={p.originSec} notes={m.isBass ? m.loopNotes : null} steps={m.loopSteps} loop={loop} onJump={p.onJump} />
               : <div className={s.makeEmpty}><p>Make works on a loop of the part, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
             {!m.isBass ? (
               <p className={s.makeQuiet}>Make is bass-only for now. <button className={s.makeText} onClick={p.onBass}>Make a bass instead</button></p>
@@ -583,7 +586,6 @@ const cap1 = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
  */
 function BassShelf({ m, playing, partName }: { m: MakeModel; playing: boolean; partName: string }) {
   const p = MAKE_PRESETS[m.preset];
-  const short = useShort();
   return (
     <section className={s.shelf} aria-label="Bass sounds">
       <div className={s.shelfHead}>
@@ -598,7 +600,7 @@ function BassShelf({ m, playing, partName }: { m: MakeModel; playing: boolean; p
       </div>
       <p className={s.shelfAbout} title={m.words ? undefined : p.about}>{m.words ? "A loop Stable Audio made from your words; pick a sound below to go back." : p.about}</p>
       {m.shelf && (
-        <ShelfGroups compact={short === 2} label="Bass sounds" families={BASS_FAMILIES.map((f) => ({
+        <ShelfGroups compact label="Bass sounds" families={BASS_FAMILIES.map((f) => ({
           label: cap1(f),
           items: MAKE_PRESET_IDS.filter((id) => MAKE_PRESETS[id].family === f).map((id) => ({ id, name: MAKE_PRESETS[id].name, feel: MAKE_PRESETS[id].feel, about: MAKE_PRESETS[id].about, pressed: !m.words && m.preset === id, onPick: () => m.pick(id, playing) })),
         }))} />
@@ -617,7 +619,7 @@ function loopChordsOf(m: MelodyModel, from: number): { at: number; name: string 
   return out.length ? out : null;
 }
 
-function LoopStrip({ part, from, to, chords, loopChords, levels, heardMs, bpm, originSec, notes, steps }: { part: LabPart; from: number; to: number; chords: (string | null)[]; loopChords: { at: number; name: string }[] | null; levels: (number | null)[][] | null; heardMs: () => number; bpm: number; originSec: number; notes: MakeNote[] | null; steps: number | null }) {
+function LoopStrip({ part, from, to, chords, loopChords, levels, heardMs, bpm, originSec, notes, steps, loop, onJump }: { part: LabPart; from: number; to: number; chords: (string | null)[]; loopChords: { at: number; name: string }[] | null; levels: (number | null)[][] | null; heardMs: () => number; bpm: number; originSec: number; notes: MakeNote[] | null; steps: number | null; loop: LoopState | null; onJump: (ms: number) => void }) {
   const head = useRef<HTMLElement>(null);
   const len = to - from;
   useLayoutEffect(() => {
@@ -650,9 +652,15 @@ function LoopStrip({ part, from, to, chords, loopChords, levels, heardMs, bpm, o
           : <><span className={s.lsLabel} title="The older 8-bar estimate; open Melody for Make's chord read of this loop">chords est.</span>
             <div className={s.lsTrack}>{cells.map((x) => <span key={x.at} className={s.lsChord} style={{ left: pct(Math.max(from, x.at)) }}>{x.c || "–"}</span>)}</div></>}
       </div>
+      {/* R5 (OR6-5): the bar ruler plays from the spot you click (the loop's own span, start to end). */}
       <div className={s.lsRow} data-kind="bars">
         <span className={s.lsLabel}>bars</span>
-        <div className={s.lsTrack}>{Array.from({ length: Math.ceil(len / step) }, (_, i) => from + i * step).map((b) => <span key={b} className={s.lsNum} style={{ left: pct(b) }}>{b}</span>)}</div>
+        <div className={`${s.lsTrack} ${s.jumpTrack}`} title={loop ? "Click a spot to play from there" : undefined}
+          onClick={loop ? (e) => { if ((e.target as HTMLElement).closest("button")) return; const r = e.currentTarget.getBoundingClientRect(); onJump(loop.startMs + Math.max(0, Math.min(0.9999, (e.clientX - r.left) / r.width)) * (loop.endMs - loop.startMs)); } : undefined}>
+          {Array.from({ length: Math.ceil(len / step) }, (_, i) => from + i * step).map((b) => (
+            <button key={b} type="button" className={s.lsNum} disabled={!loop} style={{ left: pct(b) }} aria-label={`Play from bar ${b}`} onClick={() => { if (loop) onJump(loop.startMs + ((b - from) / len) * (loop.endMs - loop.startMs)); }}>{b}</button>
+          ))}
+        </div>
       </div>
       {rows.map((row) => (
         <div key={row.label} className={s.lsRow}>

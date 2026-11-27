@@ -192,11 +192,11 @@ describe("Lab answers never claim to hear (B6)", () => {
 describe("S3 folds (LS2-N9, N10, N11) and Make's context", () => {
   it("names parts the way a person says them", () => {
     expect(partNoun("bass")).toBe("the bass");
-    expect(partNoun("other")).toBe("Other");
+    expect(partNoun("other")).toBe("the melody and FX");
     expect(whatDoing("vocals")).toBe("What are the vocals doing here?");
     expect(whatDoing("drums")).toBe("What are the drums doing here?");
     expect(whatDoing("bass")).toBe("What's the bass doing here?");
-    expect(whatDoing("other")).toBe("What's Other doing here?");
+    expect(whatDoing("other")).toBe("What are the melody and FX doing here?");
   });
   it("finds the bars an answer names, and the unheard bars near a question", () => {
     expect(barsNamed("From bar 97 the line rests; bars 99–101 and bars 9 to 10.")).toEqual([97, 99, 100, 101, 9, 10]);

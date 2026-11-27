@@ -13,7 +13,7 @@ import { FX_KNOBS, FX_KNOB_SPECS, FX_NOUN, FX_PRESETS, FX_ROWS, FX_ROW_ABOUT, FX
 import { isFxSound, saveAction, soundId, suggestFxName, suggestFxTags, type FxSound } from "@/lib/make/library";
 import { ApiError, mentorApi } from "@/lib/mentor/client";
 import { Knob } from "@/components/ui/knob";
-import { Playhead, cap, useShort } from "./make-drums";
+import { JumpBars, Playhead, cap, useShort } from "./make-drums";
 import s from "./lab.module.css";
 
 const loopKeyOf = (l: LoopState | null) => (l?.state === "memory" ? `${Math.round(l.startMs)}-${Math.round(l.endMs)}` : null);
@@ -231,9 +231,9 @@ function waitLine(m: FxModel, loop: LoopState | null, playing: boolean): string 
   return m.readError ?? "Press Play.";
 }
 
-export function FxMiddle({ m, loop, from, playing, heardMs }: { m: FxModel; loop: LoopState | null; from: number | null; playing: boolean; heardMs: () => number }) {
+export function FxMiddle({ m, loop, from, playing, heardMs, onJump }: { m: FxModel; loop: LoopState | null; from: number | null; playing: boolean; heardMs: () => number; onJump: (ms: number) => void }) {
   const bars = m.loopBars ?? 8;
-  const gap = bars > 8 ? 4 : 8, bw = (W - gap * (bars - 1)) / bars, every = bars > 8 ? 4 : 1;
+  const every = bars > 8 ? 4 : 1;
   const wait = waitLine(m, loop, playing), off = !!wait, short = useShort();
   const row = m.open, snd = m.sounds[row], ticks = m.ticks[row] ?? undefined, meas = m.measures?.[row];
   let line: React.ReactNode;
@@ -247,9 +247,8 @@ export function FxMiddle({ m, loop, from, playing, heardMs }: { m: FxModel; loop
       <div className={s.drRows} role="group" aria-label="FX rows">
         <div className={s.drRow} data-head="">
           <span />
-          <div className={s.drBars} aria-hidden>
-            {from !== null && Array.from({ length: bars }, (_, b) => b).filter((b) => b % every === 0).map((b) => <span key={b} style={{ left: `${((b * (bw + gap)) / W) * 100}%` }}>{from + b}</span>)}
-          </div>
+          {/* R5 (OR6-5): click a spot on the bars to play from there. */}
+          <JumpBars loop={loop?.state === "memory" ? loop : null} bars={bars} from={from} every={every} onJump={onJump} />
           <span />
         </div>
         {FX_ROWS.map((r) => {

@@ -6,7 +6,7 @@
 // buffer over the block. Pure, unit tested (lib-loop.test.ts).
 import { legacyTrack, type LaneType } from "@/lib/studio-lanes";
 import { inScale, pitchClass, type Scale } from "@/lib/synths/theory";
-import { MAX_MELODY_NOTES, MELODY_BARS, parseChordMarks, parseNotes, type LibPart, type LibrarySound } from "./library";
+import { DRUM_BARS, MAX_DRUM_NOTES, MAX_MELODY_NOTES, MELODY_BARS, parseChordMarks, parseNotes, type DrumBars, type LibPart, type LibrarySound } from "./library";
 import type { ChordMark } from "./chords-mine";
 import { clampFxMacros, fxPassBars, fxRowOf, isFxPreset, renderFxRow, FX_PRESETS, type FxMacros, type FxPresetId } from "./fx-synth";
 import { clampPolyMacros, isMelodyPreset, kindOf, melodyPreset, melodyRowOf, renderPolyRow, type MelodyPresetId, type PolyMacros } from "./poly-synth";
@@ -35,7 +35,7 @@ type LibLoopBase = {
 };
 export type BassLoop = LibLoopBase & { preset: MakePresetId; macros: Macros };
 /** Phase 5: one drum row (kick, clap & snare or hats) with its own knobs; plays at the track's tempo, in no key. */
-export type DrumLoop = LibLoopBase & { preset: DrumSoundId; macros: DrumMacros };
+export type DrumLoop = Omit<LibLoopBase, "bars" | "pattern"> & { bars: DrumBars; pattern: { bars: DrumBars; notes: MakeNote[] }; preset: DrumSoundId; macros: DrumMacros };
 /** Phase 5 slice 2: one melody row (Chords or Lead) with the poly synth's knobs; its notes are in
  *  `key` (moved to the track's key on play, as a bass); a pass of up to 16 bars (a progression). */
 export type MelodyLoop = Omit<LibLoopBase, "bars" | "pattern"> & { bars: 1 | 2 | 4 | 8 | 16; pattern: { bars: 1 | 2 | 4 | 8 | 16; notes: MakeNote[]; chords?: ChordMark[] }; preset: MelodyPresetId; macros: PolyMacros };
@@ -219,8 +219,9 @@ export function parseLibLoop(v: unknown): LibLoop | null {
   const pat = (o.pattern ?? {}) as Record<string, unknown>;
   if (melody) return parseMelodyLoop(o, pat);
   if (fx) return parseFxLoop(o, pat);
-  const bars = pat.bars === 1 || pat.bars === 2 || pat.bars === 4 ? pat.bars : null;
-  const notes = bars ? parseNotes(pat.notes, bars) : null;
+  // Phase 7 slice 2: a drum row may repeat over 8 or 16 bars (what played in Make, W6); a bass keeps 1, 2 or 4.
+  const bars = (drum ? DRUM_BARS.find((b) => b === pat.bars) : pat.bars === 1 || pat.bars === 2 || pat.bars === 4 ? pat.bars : undefined) ?? null;
+  const notes = bars ? parseNotes(pat.notes, bars, drum ? MAX_DRUM_NOTES : undefined) : null;
   if (!bars || !notes || (o.bars !== undefined && o.bars !== bars)) return null;
   if (typeof o.key !== "string" || pitchClass(o.key) === null || (o.scale !== "major" && o.scale !== "minor")) return null;
   if (typeof o.bpm !== "number" || !Number.isFinite(o.bpm) || o.bpm < 40 || o.bpm > 220) return null;
@@ -237,8 +238,8 @@ export function parseLibLoop(v: unknown): LibLoop | null {
   const preset = o.preset as MakePresetId;
   return {
     id: o.id, source: "lib", name: typeof o.name === "string" && o.name.trim() ? o.name.trim().slice(0, 60) : MAKE_PRESETS[preset].name,
-    bars, type, lane: legacyTrack(type), libId: typeof o.libId === "string" && o.libId.length <= 40 ? o.libId : null,
-    preset, macros: clampMacros(preset, (o.macros ?? {}) as Partial<Macros>), pattern: { bars, notes },
+    bars: bars as 1 | 2 | 4, type, lane: legacyTrack(type), libId: typeof o.libId === "string" && o.libId.length <= 40 ? o.libId : null,
+    preset, macros: clampMacros(preset, (o.macros ?? {}) as Partial<Macros>), pattern: { bars: bars as 1 | 2 | 4, notes },
     key: o.key.trim(), scale: o.scale, bpm: o.bpm,
   };
 }

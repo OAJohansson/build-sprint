@@ -7,7 +7,7 @@ import { layerBlocks, viewSections, type Block, type ViewSection } from "@/lib/m
 import type { TrackMap } from "@/lib/map/types";
 
 export const PART_COLORS: Record<PartName, string> = { drums: "#f2b134", bass: "#ef5b37", other: "#23b3a5", vocals: "#cdbfa8" };
-const NAMES: Record<PartName, string> = { drums: "Drums", bass: "Bass", other: "Other", vocals: "Vocals" };
+const NAMES: Record<PartName, string> = { drums: "Drums", bass: "Bass", other: "Melody & FX", vocals: "Vocals" };
 
 export type LabSub = { name: string; blocks: Block[] };
 /** One part lane: its clips when it has no sub-layers, else one row per estimated sub-layer. */

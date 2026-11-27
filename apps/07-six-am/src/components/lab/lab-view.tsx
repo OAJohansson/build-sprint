@@ -24,7 +24,9 @@ import { measurePart } from "@/lib/lab/measure";
 import { HearChip, Lanes, heardParts, type Hear } from "./lanes";
 import { LabNotes, type LabTurn } from "./lab-notes";
 import { MakeRoom, useMake, type Family, type MakeModel } from "./make-room";
-import { useDrums, type DrumsModel } from "./make-drums";
+import { asMakeRow, useDrums, type DrumsModel } from "./make-drums";
+import { MAKE_ROWS, type MakeRow } from "@/lib/make/drums-make";
+import type { HitKind } from "@/lib/make/drum-edit";
 import { useMelody, type MelodyModel } from "./make-melody";
 import { MELODY_ON } from "@/lib/make/melody-reader";
 import { MakeClient } from "@/lib/make/make-client";
@@ -39,14 +41,30 @@ import s from "./lab.module.css";
 /** Phase 7 (R8c, L273f): what Make plays, for graders: the picked sound per row, each row's pattern, the play position (names and numbers only). */
 export type SixamMakeHook = {
   family: () => Family;
-  picked: () => { drums: ReturnType<DrumsModel["debug"]>["picked"] | null; bass: { id: MakePresetId; name: string; family: string; feel: string; loaded: boolean; macros: Record<string, number> } | null; open: DrumRow | null };
-  patterns: () => { steps: number | null; bars: number | null; drums: Record<DrumRow, { step: number; off: number; vel: number }[]> | null; doubtful: Record<DrumRow, boolean> | null; on: Record<DrumRow, boolean> | null; bass: { bars: number; notes: { step: number; midi: number; dur: number; vel: number }[] } | null };
-  position: () => { ms: number; bar: number; playing: boolean; ab: { drums: "a" | "b"; bass: "a" | "b" }; loop: { startMs: number; endMs: number; state: string } | null; loopFraction: number | null; step: number | null };
+  picked: () => { drums: ReturnType<DrumsModel["debug"]>["picked"] | null; bass: { id: MakePresetId; name: string; family: string; feel: string; loaded: boolean; macros: Record<string, number> } | null; open: MakeRow | null };
+  /** Phase 7 slice 2: the six rows as played (read and added hits; `hits` is what plays and saves). */
+  patterns: () => { steps: number | null; bars: number | null; drums: Record<MakeRow, { step: number; off: number; vel: number; kind: HitKind }[]> | null; doubtful: Record<MakeRow, boolean> | null; on: Record<MakeRow, boolean> | null; bass: { bars: number; notes: { step: number; midi: number; dur: number; vel: number }[] } | null };
+  /** `step`: the drum grid's 16th now (the grid's step 0 sits gridMs after the loop's start); `jump`: the last click-to-jump (R5, W8). */
+  position: () => { ms: number; bar: number; playing: boolean; ab: { drums: "a" | "b"; bass: "a" | "b" }; loop: { startMs: number; endMs: number; state: string } | null; loopFraction: number | null; step: number | null;
+    /** `startErrMs`: where play started against the clicked spot (ms; heard 150 ms after the click, less those 150 ms). */
+    jump: { targetMs: number; family: string; at: number; startErrMs: number | null } | null };
+  /** Slice 2 (R3, R3b, R4): each row's marks (read / added / removed), mute, solo, heard, its fill-by-ear state; the rows still open; the hats reader (W5). */
+  rows: () => { rows: ReturnType<DrumsModel["debug"]>["rows"]; openRows: MakeRow[]; earRows: MakeRow[]; openHatsRead: boolean; hats: ReturnType<DrumsModel["debug"]>["hats"]; wouldSave: ReturnType<DrumsModel["debug"]>["wouldSave"] } | null;
+  /** As a tap on a step (bar `step` / 16), a Mute or Solo button, "Leave empty" / "Undo", a row name. */
+  tapStep: (row: MakeRow | "hats", step: number) => void;
+  mute: (row: MakeRow | "hats") => void;
+  solo: (row: MakeRow | "hats") => void;
+  leaveEmpty: (row: MakeRow | "hats", on: boolean) => void;
+  open: (row: MakeRow | "hats") => void;
+  /** As a click on the loop's ruler: plays from `ms` (track time), as Make's bar ruler does. */
+  jump: (ms: number) => void;
+  /** L272's flag, for graders: read the loop again with Open hat read (true) or left to fill by ear (false). */
+  readOpenHats: (on: boolean) => void;
   /** The last tap on a shelf: which sound, and ms from the tap until it played (null until it has). */
   taps: () => { drums: { id: string; heardMs: number | null } | null; bass: { id: string; heardMs: number | null } | null };
   /** As a tap: pick a sound on a row ("bass" for the bass), turn a knob, show or hide the shelf. */
-  pick: (row: DrumRow | "bass", id: string) => void;
-  knob: (row: DrumRow | "bass", id: string, v: number) => void;
+  pick: (row: MakeRow | "hats" | "bass", id: string) => void;
+  knob: (row: MakeRow | "hats" | "bass", id: string, v: number) => void;
   shelf: (on: boolean) => void;
 };
 
@@ -54,7 +72,7 @@ declare global {
   interface Window { __sixamMake?: SixamMakeHook; __sixamLab?: { state: () => TransportState | null; heardMs: () => number; bar: () => number; hear: () => Hear; levels: () => number[]; barLevels: () => (number | null)[][]; mineLevel: () => number; make: () => ReturnType<MakeModel["debug"]> | null; setLoop: (startMs: number, endMs: number) => void; weight: () => ReturnType<LabTransport["weight"]>; capture: (onsets: number[]) => ReturnType<LabTransport["capture"]>;
     /** Phase 5 graders: the Make family, the drums' state and actions, A/B levels and the drums closeness (numbers only). */
     family: () => Family; setFamily: (f: Exclude<Family, "vocals">) => void; drums: () => ReturnType<DrumsModel["debug"]> | null;
-    drumsDo: { open: (row: DrumRow) => void; preset: (row: DrumRow, id: DrumSoundId) => void; knob: (row: DrumRow, id: DrumKnobId, v: number) => void; suggest: (row: DrumRow) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; playAnyway: (row: DrumRow) => void; save: (row: DrumRow, name?: string) => Promise<void> };
+    drumsDo: { open: (row: MakeRow | DrumRow) => void; preset: (row: MakeRow | DrumRow, id: DrumSoundId) => void; knob: (row: MakeRow | DrumRow, id: DrumKnobId, v: number) => void; suggest: (row: MakeRow | DrumRow) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; playAnyway: (row: MakeRow | DrumRow) => void; save: (row: MakeRow | DrumRow, name?: string) => Promise<void> };
     compareLevels: (part: number) => ReturnType<LabTransport["compareLevels"]>; captureDrums: () => ReturnType<LabTransport["captureDrums"]>;
     /** Slice 2 graders: the melody's state and actions (numbers only); unset while MELODY_ON is off (L247). */
     melody?: () => ReturnType<MelodyModel["debug"]> | null;
@@ -133,6 +151,9 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   useEffect(() => { hearRef.current = hear; }, [hear]);
   const makeRef = useRef<MakeModel | null>(null);
   const drumsRef = useRef<DrumsModel | null>(null);
+  // R5 (W8): the last click-to-jump in Make, for the dev hook.
+  const jumpRef = useRef<{ targetMs: number; family: string; at: number; startErrMs: number | null } | null>(null);
+  const onJumpRef = useRef<(ms: number) => void>(() => {});
   const melodyRef = useRef<MelodyModel | null>(null);
   const labAskRef = useRef<((bar: number) => LabAsk) | null>(null);
   const fxRef = useRef<FxModel | null>(null);
@@ -197,9 +218,9 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     window.__sixamLab = { state: () => tr.current?.state ?? null, heardMs: () => t.heardMs(), bar: () => msToBar(t.heardMs(), bpm, origin), hear: () => hearRef.current, levels: () => t.partLevels(), barLevels: () => t.levels(), mineLevel: () => t.mineLevel(), make: () => makeRef.current?.debug() ?? null, setLoop: (startMs: number, endMs: number) => t.setLoop({ startMs, endMs }), weight: () => t.weight(), capture: (onsets: number[]) => t.capture(onsets),
       family: () => familyRef.current, setFamily: (f) => onFamilyRef.current(f), drums: () => drumsRef.current?.debug() ?? null,
       drumsDo: {
-        open: (row) => drumsRef.current?.setOpen(row), preset: (row, id) => drumsRef.current?.setPreset(row, id), knob: (row, id, v) => drumsRef.current?.setKnob(row, id, v),
-        suggest: (row) => drumsRef.current?.suggestNow(row), ab: (x) => drumsRef.current?.setAb(x), bed: (on) => drumsRef.current?.setBed(on),
-        playAnyway: (row) => drumsRef.current?.playAnyway(row), save: async (row, name) => { await drumsRef.current?.save(row, name); },
+        open: (row) => drumsRef.current?.setOpen(asMakeRow(row)), preset: (row, id) => drumsRef.current?.setPreset(asMakeRow(row), id), knob: (row, id, v) => drumsRef.current?.setKnob(asMakeRow(row), id, v),
+        suggest: (row) => drumsRef.current?.suggestNow(asMakeRow(row)), ab: (x) => drumsRef.current?.setAb(x), bed: (on) => drumsRef.current?.setBed(on),
+        playAnyway: (row) => drumsRef.current?.playAnyway(asMakeRow(row)), save: async (row, name) => { await drumsRef.current?.save(asMakeRow(row), name); },
       },
       compareLevels: (part: number) => t.compareLevels(part), captureDrums: () => t.captureDrums(),
       // L247: Melody is off this phase, so its grader hooks are not set.
@@ -258,16 +279,19 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
         const rows = d?.rows ?? null;
         return {
           steps: d?.steps ?? null, bars: d?.steps ? Math.round(d.steps / 16) : null,
-          drums: rows ? { kick: rows.kick.hits.map((h) => ({ step: h.step, off: h.off, vel: h.vel })), clap: rows.clap.hits.map((h) => ({ step: h.step, off: h.off, vel: h.vel })), hats: rows.hats.hits.map((h) => ({ step: h.step, off: h.off, vel: h.vel })) } : null,
-          doubtful: rows ? { kick: rows.kick.doubtful, clap: rows.clap.doubtful, hats: rows.hats.doubtful } : null,
+          drums: rows ? Object.fromEntries(MAKE_ROWS.map((r) => [r, rows[r].hits.map((h) => ({ step: h.step, off: h.off, vel: h.vel, kind: h.kind }))])) as Record<MakeRow, { step: number; off: number; vel: number; kind: HitKind }[]> : null,
+          doubtful: rows ? Object.fromEntries(MAKE_ROWS.map((r) => [r, rows[r].doubtful])) as Record<MakeRow, boolean> : null,
           on: d?.on ?? null,
           bass: b?.pattern ? { bars: b.pattern.bars, notes: b.pattern.notes.map((n) => ({ step: n.step, midi: n.midi, dur: n.dur, vel: n.vel })) } : null,
         };
       },
       position: () => {
-        const ms = t.heardMs(), l = loopNow(), steps = drumsRef.current?.debug().steps ?? null;
+        const ms = t.heardMs(), l = loopNow(), dd = drumsRef.current?.debug(), steps = dd?.steps ?? null, gridMs = dd?.gridMs ?? 0;
         const f = l ? (ms - l.startMs) / (l.endMs - l.startMs) : null, inside = f !== null && f >= 0 && f < 1;
-        return { ms: Math.round(ms), bar: Math.round(msToBar(ms, bpm, origin) * 1000) / 1000, playing: !!tr.current?.state.playing, ab: { drums: drumsRef.current?.ab ?? "a", bass: makeRef.current?.ab ?? "a" }, loop: l, loopFraction: inside ? Math.round(f! * 10000) / 10000 : null, step: inside && steps ? Math.floor(f! * steps) : null };
+        const spsMs = 60000 / bpm / 4, j = jumpRef.current;
+        return { ms: Math.round(ms), bar: Math.round(msToBar(ms, bpm, origin) * 1000) / 1000, playing: !!tr.current?.state.playing, ab: { drums: drumsRef.current?.ab ?? "a", bass: makeRef.current?.ab ?? "a" }, loop: l, loopFraction: inside ? Math.round(f! * 10000) / 10000 : null,
+          step: inside && steps ? ((Math.floor((ms - l!.startMs - gridMs) / spsMs) % steps) + steps) % steps : null,
+          jump: j ? { targetMs: Math.round(j.targetMs), family: j.family, at: j.at, startErrMs: j.startErrMs === null ? null : Math.round(j.startErrMs) } : null };
       },
       taps: () => {
         const d = drumsRef.current?.debug().tap ?? null, b = makeRef.current?.debug().tap ?? null;
@@ -275,9 +299,20 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       },
       pick: (row, id) => {
         const playing = !!tr.current?.state.playing;
-        if (row === "bass") makeRef.current?.pick(id as MakePresetId, playing); else drumsRef.current?.pick(row, id as DrumSoundId, playing);
+        if (row === "bass") makeRef.current?.pick(id as MakePresetId, playing); else drumsRef.current?.pick(asMakeRow(row), id as DrumSoundId, playing);
       },
-      knob: (row, id, v) => { if (row === "bass") makeRef.current?.setMacro(id as MacroId, v); else drumsRef.current?.setKnob(row, id as DrumKnobId, v); },
+      knob: (row, id, v) => { if (row === "bass") makeRef.current?.setMacro(id as MacroId, v); else drumsRef.current?.setKnob(asMakeRow(row), id as DrumKnobId, v); },
+      rows: () => {
+        const d = drumsRef.current?.debug();
+        return d ? { rows: d.rows, openRows: d.openRows, earRows: d.earRows, openHatsRead: d.openHatsRead, hats: d.hats, wouldSave: d.wouldSave } : null;
+      },
+      tapStep: (row, step) => drumsRef.current?.tapStep(asMakeRow(row), step),
+      mute: (row) => drumsRef.current?.toggleMute(asMakeRow(row)),
+      solo: (row) => drumsRef.current?.toggleSolo(asMakeRow(row)),
+      leaveEmpty: (row, on) => drumsRef.current?.leaveEmpty(asMakeRow(row), on),
+      open: (row) => drumsRef.current?.setOpen(asMakeRow(row)),
+      jump: (ms) => onJumpRef.current(ms),
+      readOpenHats: (on) => drumsRef.current?.setReadOpen(on),
       shelf: (on) => { drumsRef.current?.setShelf(on); makeRef.current?.setShelf(on); },
     };
     return () => { cancelAnimationFrame(raf); clearTimeout(saveTimer); spike?.stop(); t.dispose(); tr.current = null; };
@@ -365,6 +400,17 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     });
   }, []);
   const onSeek = useCallback((bar: number) => { tr.current?.seek(barToMs(bar, bpm, origin)); }, [bpm, origin]);
+  /** R5 (OR6-5): a click on Make's bar ruler plays from that spot (in the loop at once; starts playing if paused). */
+  const onJump = useCallback((ms: number) => {
+    const t = tr.current;
+    if (!t) return;
+    t.seek(ms);
+    if (t.state.phase === "ready" && !t.playing) t.play();
+    const j = { targetMs: ms, family: familyRef.current, at: Date.now(), startErrMs: null as number | null };
+    jumpRef.current = j;
+    setTimeout(() => { if (jumpRef.current === j && tr.current?.playing) j.startErrMs = tr.current.heardMs() - 150 - ms; }, 150);
+  }, []);
+  useEffect(() => { onJumpRef.current = onJump; }, [onJump]);
 
   const loop = ts?.loop ? { from: Math.round(msToBar(ts.loop.startMs, bpm, origin)), to: Math.round(msToBar(ts.loop.endMs, bpm, origin)) } : null;
   const onLoop = useCallback((x: LabSection) => {
@@ -553,7 +599,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       ) : (
         <MakeRoom m={make} drums={drums} melody={melody} fx={fx} family={family} onFamily={onFamily} part={parts.find((x) => x.id === focus)!} loop={ts?.loop ?? null} section={loopSec ?? here} bpm={bpm} originSec={origin}
           chords={chords} levels={levels} heardMs={heardMsFn} status={status} ready={ready} playing={!!ts?.playing}
-          bar={pos.bar} turns={focusTurns} onAsk={onAsk} onRetry={onRetry} onSeek={onSeek} onLoopHere={loopHere} onBass={() => setFocus("bass")}
+          bar={pos.bar} turns={focusTurns} onAsk={onAsk} onRetry={onRetry} onSeek={onSeek} onJump={onJump} onLoopHere={loopHere} onBass={() => setFocus("bass")}
           busy={focusTurns.some((x) => !x.answer && !x.error)} note={usageNote} />
       )}
     </div>

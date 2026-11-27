@@ -11,8 +11,9 @@ import type { Suggestion } from "./match";
 import { notesForLoop } from "./pattern";
 import { synthParams, type Macros, type MakePresetId } from "./presets";
 import { renderBass } from "./render";
-import { drumsCloseness, drumsFromReading, rowCloseness, suggestDrumRow, drumsReport, measureRows, renderDrumsMine, type DrumSuggestion, type DrumsCloseness, type DrumsReading, type DrumsReport, type RowSound, type RowTarget } from "./drums-make";
-import type { DrumMacros, DrumRow, DrumSoundId } from "./drum-synth";
+import { MAKE_ROWS, drumsCloseness, drumsFromReading, rowCloseness, splitOpenHats, suggestDrumRow, drumsReport, measureRows, renderDrumsMine, type DrumSuggestion, type DrumsCloseness, type DrumsReading, type DrumsReport, type MakeRow, type RowSound, type RowTarget } from "./drums-make";
+import type { DrumMacros, DrumSoundId } from "./drum-synth";
+import { classifyHats } from "./hats-split";
 import { setKitSample, type KitSample } from "./kit-samples";
 import { readDrums } from "./drums-read";
 import { readNotes, type NotesReading } from "./notes-read";
@@ -37,8 +38,8 @@ export type MakeRequest = (
   | { type: "render"; id: number; reading: PartReading; active?: boolean[] | null; preset: MakePresetId; macros: Macros; bpm: number; rate: number; levelDb: number; lufs?: number | null; samples: number }
   | { type: "suggest"; id: number; reading: PartReading; preset: MakePresetId; bpm: number; start?: Partial<Macros> }
   // Phase 5 drums (P3, P6–P8): read the looped drum part, render Mine's three rows, Suggest per row.
-  | { type: "drums-read"; id: number; left: Float32Array; right: Float32Array; rate: number; bpm: number }
-  | { type: "drums-render"; id: number; reading: DrumsReading; sounds: Record<DrumRow, RowSound>; levels: Record<DrumRow, number | null>; report: DrumsReport; bpm: number; rate: number; samples: number; levelDb: number; lufs: number; targets?: Record<DrumRow, RowTarget | null> }
+  | { type: "drums-read"; id: number; left: Float32Array; right: Float32Array; rate: number; bpm: number; openHats?: boolean }
+  | { type: "drums-render"; id: number; reading: DrumsReading; sounds: Record<MakeRow, RowSound>; levels: Record<MakeRow, number | null>; report: DrumsReport; bpm: number; rate: number; samples: number; levelDb: number; lufs: number; targets?: Record<MakeRow, RowTarget | null> }
   | { type: "drums-suggest"; id: number; target: RowTarget; preset: DrumSoundId; start?: DrumMacros; candidates?: DrumSoundId[] }
   // Phase 5 slice 2, melody: read the looped "other" part, render Mine's rows, Suggest per row.
   | { type: "melody-read"; id: number; left: Float32Array; right: Float32Array; rate: number; bpm: number; key?: { key: string; scale: Scale } }
@@ -56,8 +57,8 @@ export type MakeResponse =
   | { type: "read"; id: number; reading: PartReading | null; levelDb: number; lufs: number; active: boolean[]; ms: number }
   | { type: "render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; ms: number }
   | { type: "suggest"; id: number; suggestion: Suggestion; ms: number }
-  | { type: "drums-read"; id: number; reading: DrumsReading; targets: Record<DrumRow, RowTarget | null>; report: DrumsReport; levelDb: number; lufs: number; ms: number }
-  | { type: "drums-render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; rowGainsDb: Record<DrumRow, number | null>; closeness: DrumsCloseness; rowCloseness: Record<DrumRow, { score: number; distance: number } | null>; ms: number }
+  | { type: "drums-read"; id: number; reading: DrumsReading; targets: Record<MakeRow, RowTarget | null>; report: DrumsReport; levelDb: number; lufs: number; ms: number }
+  | { type: "drums-render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; rowGainsDb: Record<MakeRow, number | null>; closeness: DrumsCloseness; rowCloseness: Record<MakeRow, { score: number; distance: number } | null>; ms: number }
   | { type: "drums-suggest"; id: number; suggestion: DrumSuggestion & { closer: { preset: DrumSoundId; macros: DrumMacros; distance: number } | null }; ms: number }
   | { type: "melody-read"; id: number; reading: MelodyReading; targets: Record<MelodyRow, MelodyTarget | null>; levelDb: number; lufs: number; reader: "dsp" | "basic-pitch"; ms: number }
   | { type: "chords-read"; id: number; chords: ChordsReading; lead: { from: "row" | "top-line"; notes: MelNote[] }; melody: MelodyReading; targets: Record<MelodyRow, MelodyTarget | null>; cellChroma: number[][]; levelDb: number; lufs: number; reader: ChordsReader; ms: number }
@@ -226,7 +227,9 @@ export function runMakeJob(m: MakeRequest): { res: MakeResponse; transfer: Array
     }
     if (m.type === "drums-read") {
       const levelDb = rmsDb(m), loud = lufs(m);
-      const reading = drumsFromReading(readDrums(m.left, m.right, m.rate, m.bpm, 0), m.bpm);
+      // Phase 7 slice 2 (L268): the hats that ring open move to Open hat (measured on the same in-memory copy).
+      const base = drumsFromReading(readDrums(m.left, m.right, m.rate, m.bpm, 0), m.bpm);
+      const reading = splitOpenHats(base, classifyHats(toMono(m.left, m.right), m.rate, base.rows.hat.hits.map((h) => h.t)), m.openHats ?? true);
       const targets = measureRows(m.left, m.right, m.rate, reading);
       const report = drumsReport(m.left, m.right, m.rate, m.bpm);
       m.left.fill(0); m.right.fill(0); // the copy of the original is dropped here (C2, L161)
@@ -241,10 +244,10 @@ export function runMakeJob(m: MakeRequest): { res: MakeResponse; transfer: Array
       for (let i = 0; i < m.samples; i++) { left[i] *= g.gain; right[i] *= g.gain; }
       const closeness = drumsCloseness(m.report, drumsReport(left, right, m.rate, m.bpm));
       // U1: each row's own closeness, on Suggest's measure (one hit rendered per row).
-      const rowClose = Object.fromEntries((["kick", "clap", "hats"] as DrumRow[]).map((row) => {
+      const rowClose = Object.fromEntries(MAKE_ROWS.map((row) => {
         const t = m.targets?.[row];
         return [row, t ? rowCloseness(t, m.sounds[row].preset, m.sounds[row].macros) : null];
-      })) as Record<DrumRow, { score: number; distance: number } | null>;
+      })) as Record<MakeRow, { score: number; distance: number } | null>;
       return { res: { type: "drums-render", id: m.id, left, right, rate: m.rate, gainDb: g.db, rowGainsDb: r.gains, closeness, rowCloseness: rowClose, ms: ms() }, transfer: [left.buffer, right.buffer] };
     }
     if (m.type === "melody-read") return finishMelodyRead(m, readNotes(m.left, m.right, m.rate, m.bpm, m.key, 0), t0);

@@ -4,8 +4,9 @@
 import { describe, expect, it } from "vitest";
 import { dropLibSound } from "@/lib/studio-drop";
 import type { Doc } from "@/lib/timeline";
-import { DRUM_PRESET_IDS, DRUM_PRESETS, DRUM_ROWS, ROW_KNOBS, ROW_PRESETS, clampDrumMacros, drumKnobWord, drumSuggestLine, renderDrumRow } from "./drum-synth";
-import { drumsCloseness, drumsFromReading, drumsReport, foldRow, measureRows, renderDrumsMine, rowCloseness, suggestDrum, suggestDrumRow } from "./drums-make";
+import { DRUM_PRESET_IDS, DRUM_PRESETS, DRUM_ROWS, ROW_KNOBS, ROW_PRESETS, SYNTH_TO_KIT_ROW, clampDrumMacros, drumKnobWord, drumSuggestLine, renderDrumRow } from "./drum-synth";
+import { MAKE_ROWS, drumsCloseness, drumsFromReading, drumsReport, foldRow, measureRows, renderDrumsMine, rowCloseness, splitOpenHats, suggestDrum, suggestDrumRow } from "./drums-make";
+import { classifyHats } from "./hats-split";
 import { readDrums, type DrumReading } from "./drums-read";
 import { DRUM_SPECS, renderDrums } from "./layers-bench";
 import { parseNewSound, parseSoundPatch, suggestDrumName, type LibrarySound } from "./library";
@@ -82,7 +83,7 @@ describe("rows as Make plays them", () => {
     const four = Array.from({ length: 32 }, (_, i) => ({ step: i * 4, off: 0, vel: 1 }));
     expect(foldRow("kick", four, 128)).toEqual({ bars: 1, notes: [0, 4, 8, 12].map((step) => ({ step, midi: 36, dur: 1, vel: 1 })) });
     const twoBar = [0, 4, 8, 12, 16, 20, 24, 28, 30].flatMap((s) => [0, 32, 64, 96].map((r) => ({ step: r + s, off: s % 2 ? 0 : 0.12, vel: 0.8 })));
-    const f = foldRow("hats", twoBar, 128);
+    const f = foldRow("hat", twoBar, 128);
     expect(f.bars).toBe(2);
     expect(f.notes.map((n) => n.step)).toEqual([0, 4, 8, 12, 16, 20, 24, 28, 30]);
     expect(f.notes[0].off).toBe(0.12);
@@ -94,7 +95,9 @@ describe("Suggest and closeness on a known loop", () => {
   const { mono } = renderDrums(DRUM_SPECS[0], { bars: 4, rate: RATE, seed: 7 });
   const bpm = DRUM_SPECS[0].bpm;
   const d = drumsFromReading(readDrums(mono, mono, RATE, bpm), bpm);
-  const targets = measureRows(mono, mono, RATE, d);
+  const byKit = measureRows(mono, mono, RATE, d);
+  // Phase 7: Make reads into the kit's rows; the old synth rows map on (Hats → Closed hat).
+  const targets = Object.fromEntries(DRUM_ROWS.map((r) => [r, byKit[SYNTH_TO_KIT_ROW[r]]])) as Record<(typeof DRUM_ROWS)[number], (typeof byKit)["kick"]>;
 
   it("measures every row of a full beat", () => {
     for (const row of DRUM_ROWS) expect(targets[row]?.n).toBeGreaterThanOrEqual(3);
@@ -133,11 +136,34 @@ describe("Suggest and closeness on a known loop", () => {
   });
 
   it("Mine plays every row at the original row's level", () => {
-    const sounds = Object.fromEntries(DRUM_ROWS.map((r) => [r, { preset: ROW_PRESETS[r][0], macros: DRUM_PRESETS[ROW_PRESETS[r][0]].macros, on: true }])) as never;
-    const levels = Object.fromEntries(DRUM_ROWS.map((r) => [r, targets[r]!.levelDb])) as never;
+    const sounds = Object.fromEntries(MAKE_ROWS.map((r) => { const o = DRUM_ROWS.find((x) => SYNTH_TO_KIT_ROW[x] === r); return [r, o ? { preset: ROW_PRESETS[o][0], macros: DRUM_PRESETS[ROW_PRESETS[o][0]].macros, on: true } : { preset: "kick-punch", macros: {}, on: false }]; })) as never;
+    const levels = Object.fromEntries(MAKE_ROWS.map((r) => [r, byKit[r]?.levelDb ?? null])) as never;
     const m = renderDrumsMine(d, sounds, levels, bpm, RATE);
     const score = drumsCloseness(drumsReport(mono, mono, RATE, bpm), drumsReport(m.left, m.right, RATE, bpm)).score;
     expect(score).toBeGreaterThan(50);
+  });
+});
+
+describe("open hats move to their own row (Phase 7 slice 2, L268)", () => {
+  it("splits the reader's hats into Closed hat and Open hat, and keeps them all on Closed hat when the reader is off", () => {
+    const spec = { ...DRUM_SPECS[0], name: "8th hats, offbeat open", bars: [{ kick: [0, 4, 8, 12], clap: [4, 12], hats: [0, 2, 4, 6, 8, 10, 12, 14] }], openHatSteps: [2, 6, 10, 14] };
+    const { mono } = renderDrums(spec, { bars: 4, rate: RATE, seed: 3 });
+    const d = drumsFromReading(readDrums(mono, mono, RATE, spec.bpm), spec.bpm);
+    expect(d.rows.ohat.hits).toHaveLength(0);
+    expect(d.rows.perc.hits).toHaveLength(0);
+    expect(d.rows.ride.hits).toHaveLength(0);
+    const all = d.rows.hat.hits.map((h) => h.step);
+    const f = classifyHats(mono, RATE, d.rows.hat.hits.map((h) => h.t));
+    const split = splitOpenHats(d, f);
+    const open = split.rows.ohat.hits.map((h) => h.step % 16), closed = split.rows.hat.hits.map((h) => h.step % 16);
+    expect(open.length).toBeGreaterThan(0);
+    expect(open.every((s) => [2, 6, 10, 14].includes(s))).toBe(true);
+    expect(closed.every((s) => s % 4 === 0)).toBe(true);
+    expect([...split.rows.ohat.hits, ...split.rows.hat.hits].map((h) => h.step).sort((a, b) => a - b)).toEqual(all);
+    const off = splitOpenHats(d, f, false);
+    expect(off.rows.ohat.hits).toHaveLength(0);
+    expect(off.rows.hat.hits.map((h) => h.step)).toEqual(all);
+    expect(off.openRead).toBe(false);
   });
 });
 

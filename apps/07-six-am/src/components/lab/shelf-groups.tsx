@@ -17,10 +17,10 @@ export function feelShown(feel: string | null, name: string, family: string): st
   return words(feel).some((w) => said.has(w)) ? null : feel;
 }
 
-/** Splits the families into two columns in order, at the family boundary that best balances their rows. */
+/** Splits the families into two columns in order, at the family boundary that best balances their sounds. */
 function split(fams: ShelfFamily[]): [ShelfFamily[], ShelfFamily[]] {
-  // A family's rows: one line holds about four sounds (columns size to their families).
-  const rows = fams.map((f) => Math.max(1, Math.ceil(f.items.length / 4)));
+  // Critic (slice 1 shelf round): balance by sound count, not family count.
+  const rows = fams.map((f) => Math.max(1, f.items.length));
   const total = rows.reduce((a, b) => a + b, 0);
   let best = 1, bestCost = Infinity, acc = 0;
   for (let k = 1; k < fams.length; k++) {

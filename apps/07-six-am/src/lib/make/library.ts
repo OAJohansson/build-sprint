@@ -34,7 +34,12 @@ type SoundBase = {
 /** A bass (S4) or, from Phase 5, one drum row (part "drums"; the preset says which row: kick, clap or hats). */
 export type BassSound = SoundBase & { preset: MakePresetId; macros: Macros };
 /** Phase 7: `preset` may also be a sampled kit sound's id ("kick-909-round", kit-p7.ts). */
-export type DrumSound = SoundBase & { part: "drums"; preset: DrumSoundId; macros: DrumMacros };
+export type DrumSound = Omit<SoundBase, "pattern"> & { part: "drums"; preset: DrumSoundId; macros: DrumMacros; pattern: { bars: DrumBars; notes: MakeNote[] } };
+/** Phase 7 slice 2 (R4, W6): a drum row saves exactly what it plays, so its repeat may be the whole 8- or 16-bar loop. */
+export type DrumBars = 1 | 2 | 4 | 8 | 16;
+export const DRUM_BARS = [1, 2, 4, 8, 16] as const;
+/** A 16-bar row of 16ths. */
+export const MAX_DRUM_NOTES = 256;
 /** Phase 5 slice 2: a melody row (part "other"; the preset says the row: chords-… or lead-…), its
  *  notes in `key`, with a repeat of up to 16 bars. */
 export type MelodySound = Omit<SoundBase, "pattern"> & { part: "other"; preset: MelodyPresetId; macros: PolyMacros; pattern: { bars: 1 | 2 | 4 | 8 | 16; notes: MakeNote[]; chords?: ChordMark[] } };
@@ -166,8 +171,8 @@ function parseDrumSound(r: Record<string, unknown>, preset: DrumSoundId): NewSou
   const key = typeof r.key === "string" && pitchClass(r.key) !== null ? r.key.trim() : null;
   const bpm = num(r.bpm, 40, 220);
   const pat = (r.pattern ?? {}) as Record<string, unknown>;
-  const bars = pat.bars === 1 || pat.bars === 2 || pat.bars === 4 ? pat.bars : null;
-  const notes = bars ? parseNotes(pat.notes, bars) : null;
+  const bars = DRUM_BARS.find((b) => b === pat.bars) ?? null;
+  const notes = bars ? parseNotes(pat.notes, bars, MAX_DRUM_NOTES) : null;
   if (r.part !== "drums" || !scale || !key || bpm === null || !bars || !notes) return null;
   const source = sourceOf(r.source as Record<string, unknown> | null | undefined);
   const macros = clampDrumMacros(preset, (r.macros ?? {}) as Record<string, unknown>);

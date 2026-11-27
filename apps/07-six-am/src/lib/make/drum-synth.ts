@@ -77,10 +77,12 @@ export const isDrumSoundId = (v: unknown): v is DrumSoundId => isDrumPreset(v) |
 export const isKitId = (v: unknown): v is KitSoundId => !isDrumPreset(v) && isKitSound(v);
 /** The kit's row of a sampled sound (kick, clap, hat, ohat, perc, ride). */
 export const kitRowOf = (id: KitSoundId): P7Row => kitSound(id).row;
-/** Make's reading row a sound plays on: the kit's closed hat, open hat, shaker and ride play on Hats until slice 2 gives them rows. */
-// shortcut: Make reads three rows (kick, clap, hats), so every high kit sound maps to Hats; slice 2 widens Make to the kit's six rows (T236).
+/** The Phase 5 row family a kit row belongs to (the drum reader's three, and the old synth presets'): every high kit row is a kind of hats. */
 export const KIT_TO_ROW: Record<P7Row, DrumRow> = { kick: "kick", clap: "clap", hat: "hats", ohat: "hats", perc: "hats", ride: "hats" };
 export const rowOf = (id: DrumSoundId): DrumRow => (isDrumPreset(id) ? DRUM_PRESETS[id].row : KIT_TO_ROW[kitRowOf(id)]);
+/** Phase 7 slice 2 (R3, R9): Make's six rows are the kit's; an old synth sound opens on its row, Hats on Closed hat. */
+export const SYNTH_TO_KIT_ROW: Record<DrumRow, P7Row> = { kick: "kick", clap: "clap", hats: "hat" };
+export const makeRowOf = (id: DrumSoundId): P7Row => (isDrumPreset(id) ? SYNTH_TO_KIT_ROW[DRUM_PRESETS[id].row] : kitRowOf(id));
 /** The Studio lane a drum sound drops on (L272): kick, clap, hats; the kit's shaker / percussion on Percussion, its open hat and ride on Hats. */
 export type DrumLaneRow = "kick" | "clap" | "hats" | "perc";
 export const laneRowOf = (id: DrumSoundId): DrumLaneRow => (isDrumPreset(id) ? DRUM_PRESETS[id].row : kitRowOf(id) === "perc" ? "perc" : KIT_TO_ROW[kitRowOf(id)]);

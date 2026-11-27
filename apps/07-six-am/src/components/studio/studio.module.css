@@ -253,3 +253,6 @@
 .mo button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 .mo button[aria-disabled="true"] { color: #958a7a; opacity: .45; cursor: not-allowed; text-decoration: line-through; text-decoration-color: rgba(149,138,122,.7); }
 .mo button:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+/* A rebuild's name stays readable beside Mine / Original (≥ 160 px at 1280); a long section name is cut */
+.trackTitleWide { min-width: 160px; }
+.secName { display: inline-block; max-width: 12ch; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }

@@ -163,6 +163,36 @@ export class Player {
   }
 
   /**
+   * Slice 4 (W10): seek to `ms` and play, then return the first position the widget gives once it
+   * plays near the target, polled every ~15 ms (seekAndPlay polls every 100 ms). `order`: "play-seek"
+   * (play, then seek: what seekAndPlay does) or "seek-play" (pause, seek, wait for it, then play).
+   * `leadMs` seeks that much ahead, for the widget's seek latency.
+   */
+  async seekLand(ms: number, o: { order?: "play-seek" | "seek-play"; leadMs?: number; timeoutMs?: number } = {}): Promise<number> {
+    const target = Math.max(0, ms + (o.leadMs ?? 0)), timeoutMs = o.timeoutMs ?? 8000;
+    const near = (pos: number) => Math.abs(pos - ms) < 2500;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      if (o.order === "seek-play") {
+        this.pause();
+        this.w.seekTo(target);
+        const t0 = performance.now();
+        while (performance.now() - t0 < 1500 && !near(await this.position().catch(() => -1e9))) await sleep(15);
+        this.play();
+      } else {
+        if (!this.playing) this.play();
+        this.w.seekTo(target);
+      }
+      const started = performance.now();
+      while (performance.now() - started < timeoutMs / 2) {
+        await sleep(15);
+        const [pos, paused] = await Promise.all([this.position().catch(() => -1e9), this.isPaused().catch(() => true)]);
+        if (!paused && near(pos)) { this.playing = true; this.positionMs = pos; return pos; }
+      }
+    }
+    throw new LoadError("unavailable", "The player didn't start playing at that spot.");
+  }
+
+  /**
    * Every track of the loaded set with full details. The widget only returns details for the
    * first ~20 tracks (later ones are stubs with id and policy, no title); skipping to a stub
    * makes the widget fetch it, after which getSounds() includes it. Volume is 0 and the player is

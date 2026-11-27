@@ -11,7 +11,14 @@ import { originalMsAt, rebuildBarAt, type Grid, type Rebuild } from "@/lib/rebui
 import type { Timeline } from "./use-timeline";
 
 export type CompareMode = "mine" | "orig";
-export type LastSwitch = { targetBar: number; targetMs: number; sentAt: number; deckMsAfter: number | null; errMs: number | null; reportAfterMs: number | null };
+/** W10: one switch to Original. deckMsAfter / errMs come from the Deck's landing report (the
+ *  position the player gave the moment the seek landed); errFirstPlayMs is the older measure (the
+ *  first regular "playing" report, which includes up to ~100 ms of play). */
+export type LastSwitch = {
+  targetBar: number; targetMs: number; sentAt: number;
+  deckMsAfter: number | null; errMs: number | null; reportAfterMs: number | null;
+  errFirstPlayMs: number | null; firstPlayAfterMs: number | null;
+};
 export type Compare = {
   on: true;
   mode: CompareMode;
@@ -67,11 +74,18 @@ export function useCompare(t: Timeline, rb: Rebuild | undefined, code: string): 
       if (modeRef.current === "orig" || pendingSwitch.current) setState(s);
       setOpen(true);
       const p = pendingSwitch.current;
-      // W10: the Deck's first report once it plays after a switch, against the bar's start.
-      // A report from before the seek landed (still near the old spot) doesn't count.
-      if (p && s.playing && performance.now() - p.sentAt > 150 && Math.abs(s.pos - p.targetMs) < 3000) {
-        const done = { ...p, deckMsAfter: s.pos, errMs: Math.round(s.pos - p.targetMs), reportAfterMs: Math.round(performance.now() - p.sentAt) };
-        pendingSwitch.current = null;
+      if (!p) return;
+      const after = Math.round(performance.now() - p.sentAt);
+      if (s.landed !== undefined) {
+        // W10: the landing report answering this switch's seek.
+        if (s.landed !== p.targetMs) return;
+        const done = { ...p, deckMsAfter: s.pos, errMs: Math.round(s.pos - p.targetMs), reportAfterMs: after };
+        pendingSwitch.current = done.errFirstPlayMs === null ? done : null;
+        setLastSwitch(done);
+      } else if (p.errFirstPlayMs === null && s.playing && after > 150 && Math.abs(s.pos - p.targetMs) < 3000) {
+        // The older measure: the first regular report once it plays (a report from before the seek doesn't count).
+        const done = { ...p, errFirstPlayMs: Math.round(s.pos - p.targetMs), firstPlayAfterMs: after };
+        pendingSwitch.current = done.errMs === null ? done : null;
         setLastSwitch(done);
       }
     });
@@ -101,8 +115,10 @@ export function useCompare(t: Timeline, rb: Rebuild | undefined, code: string): 
     if (!grid || !remote.current) return;
     const targetMs = originalMsAt(bar, grid, bars);
     remote.current.seek(targetMs);
-    const sw: LastSwitch = { targetBar: Math.round(bar * 1000) / 1000, targetMs, sentAt: performance.now(), deckMsAfter: null, errMs: null, reportAfterMs: null };
+    const sw: LastSwitch = { targetBar: Math.round(bar * 1000) / 1000, targetMs, sentAt: performance.now(), deckMsAfter: null, errMs: null, reportAfterMs: null, errFirstPlayMs: null, firstPlayAfterMs: null };
     pendingSwitch.current = sw;
+    // A Deck that never answers (an older Deck page) stops being waited for after 10 s.
+    setTimeout(() => { if (pendingSwitch.current?.sentAt === sw.sentAt) pendingSwitch.current = null; }, 10_000);
     setLastSwitch(sw);
     setFromBar(Math.floor(bar));
   }, [grid, bars]);

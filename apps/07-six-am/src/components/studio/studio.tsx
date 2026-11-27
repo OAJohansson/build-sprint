@@ -358,7 +358,7 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
         <ViewsNav current="studio" />
         <div className={s.trackBox}>
           <input
-            className={s.trackTitle}
+            className={cx(s.trackTitle, rb && s.trackTitleWide)}
             value={name}
             // F3: a long draft name is capped and ends in an ellipsis; the full name is the tooltip.
             size={Math.min(Math.max(8, name.length + 1), 40)}
@@ -397,9 +397,11 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
           <button className={cx(s.tb, s.play)} onClick={() => t.setPlaying(!t.playing)} aria-label={t.playing ? "Pause" : "Play"}>{t.playing ? Icon.pause : Icon.play}</button>
           {/* L200: one 13 px line; a track without its own key plays synths in A minor (the crate's key). */}
           <div className={v.facts} aria-live="off">
-            bar <b>{t.bar}.{t.beat}</b>{rb ? <> · {rb.sections[sectionIndexAt(rb, t.playhead)].name}</> : null} · <span title={bpm === DEFAULT_BPM ? undefined : `Set from Analyse; the Studio's default is ${DEFAULT_BPM}`}>{formatBpm(bpm)} bpm</span> · {track.doc.key
+            {/* A rebuild shows bar and section here; its tempo and key sit in the strip (room for the
+                track name beside Mine / Original at 1280). */}
+            bar <b>{t.bar}.{t.beat}</b>{rb ? <> · <span className={s.secName}>{rb.sections[sectionIndexAt(rb, t.playhead)].name}</span></> : <> · <span title={bpm === DEFAULT_BPM ? undefined : `Set from Analyse; the Studio's default is ${DEFAULT_BPM}`}>{formatBpm(bpm)} bpm</span> · {track.doc.key
               ? <span>{track.doc.key.key}{track.doc.key.scale === "minor" ? "m" : ""}</span>
-              : <span title="No key set: synths play in A minor, the crate's key">Am</span>}
+              : <span title="No key set: synths play in A minor, the crate's key">Am</span>}</>}
           </div>
           {cmp.on ? (
             <div className={s.mo} role="group" aria-label="Hear mine or the original">

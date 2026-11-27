@@ -153,7 +153,8 @@ export function RebuildView({ t, mine, cmp }: { t: Timeline; mine: MySounds; cmp
     const n = rb.sections.reduce((a, _s, i) => a + toFill(doc, i).length, 0);
     const filled = rb.sections.reduce((a, s, i) => a + REBUILD_LANES.filter((l) => slotState(doc, i, l.id).state === "filled").length, 0);
     const left = (rb.left ?? []).length;
-    return [n ? `${n} to fill` : "nothing left to fill", `${filled} filled`, ...(left ? [`${left} left empty`] : [])].join(" · ");
+    const key = doc.key ? `${doc.key.key}${doc.key.scale === "minor" ? "m" : ""}` : "Am";
+    return [n ? `${n} to fill` : "nothing left to fill", `${filled} filled`, ...(left ? [`${left} left empty`] : []), `${doc.bpm ?? ""} bpm · ${key}`].join(" · ");
   })();
   const bar = Math.floor(t.playhead);
   const tight = winW < 1360;
@@ -162,7 +163,8 @@ export function RebuildView({ t, mine, cmp }: { t: Timeline; mine: MySounds; cmp
     <div className={r.root} style={{ "--lw": `${LW}px`, "--side": `${sideW(winW)}px` } as React.CSSProperties}>
       {/* Always 36 px: the controls above and below never move. */}
       <div className={r.strip}>
-        {empty ? (
+        {/* At 1280 the long note and the Deck's message don't both fit: the summary stands in. */}
+        {empty && !(cmp.on && (!cmp.ready || cmp.mode === "orig")) ? (
           <span><b>The original&rsquo;s {plural(rb.sections.length, "section")}, bar for bar.</b> Every slot starts empty: pick one, then a part you saved in Make. Gold &ldquo;has kick&rdquo; shows what the original has there.</span>
         ) : <span>{sum}</span>}
         {!cmp.on ? null : !cmp.ready ? (

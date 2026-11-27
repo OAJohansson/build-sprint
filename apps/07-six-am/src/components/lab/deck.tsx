@@ -9,6 +9,14 @@ import { Player, widgetSrc } from "@/lib/ears/widget";
 
 const box: React.CSSProperties = { margin: 0, padding: 14, minHeight: "100dvh", boxSizing: "border-box", background: "#131110", color: "#aa9c88", fontFamily: "var(--f-mono), ui-monospace, monospace", fontSize: 12, lineHeight: 1.6 };
 
+/** Seek tuning from the Deck's own URL (timing checks only): ?order=seek-play|play-seek&lead=<ms>. */
+function tuning() {
+  const q = typeof location !== "undefined" ? new URLSearchParams(location.search) : new URLSearchParams();
+  const order = q.get("order") === "seek-play" ? "seek-play" as const : q.get("order") === "play-seek" ? "play-seek" as const : undefined;
+  const lead = Number(q.get("lead"));
+  return { order, leadMs: Number.isFinite(lead) && Math.abs(lead) <= 1000 ? lead : undefined };
+}
+
 export function Deck({ url }: { url: string }) {
   const frame = useRef<HTMLIFrameElement>(null);
   const [status, setStatus] = useState("Loading the player…");
@@ -22,13 +30,16 @@ export function Deck({ url }: { url: string }) {
       const title = (await p.currentSound().catch(() => null))?.title ?? "";
       const durationMs = await p.duration().catch(() => 0);
       setStatus(title || "Ready");
+      const tune = tuning();
       stop = serveDeck({
         url,
         read: async () => ({ pos: await p.position(), playing: p.playing, title, durationMs }),
         onCmd: (c) => {
           if (c.cmd === "play") p.play();
           else if (c.cmd === "pause") p.pause();
-          else p.seekAndPlay(c.ms).catch(() => {});
+          // W10: the landing position goes back at once (deck-protocol). ?order= and ?lead= (ms) are
+          // for timing checks only; the default is what measured best.
+          else return p.seekLand(c.ms, { order: tune.order, leadMs: tune.leadMs });
         },
       });
     }).catch((e) => setStatus(String(e?.message ?? e)));

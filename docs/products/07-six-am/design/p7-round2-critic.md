@@ -43,3 +43,7 @@ Clutter 1 · hierarchy 2 · legibility 2 · feel 2 · copy 1. Left: page buttons
 ## Built slice 3 (0c2f2ff): 9/10
 
 Clutter 2 · hierarchy 2 · legibility 2 · feel 2 · copy 1. Left (copy, no design round): one count phrase everywhere ("0 to fill" vs "all filled" over a left-empty slot); say "chords and pads fit here" where pads are offered; "Build one in Make → Melody" as a link; bar ranges on every column that fits them; the "Rebuild this song" entry link easy to miss (next to Listen / Make or outlined button); worst case loses proportions (acceptable).
+
+## Built slice 4 + slice 3 polish (6b0950f): 9/10
+
+Clutter 1 · hierarchy 2 · legibility 2 · feel 2 · copy 2. Left: the "original has nothing here" cells read as black blocks (a fourth empty kind; conflicts with the user test's U7-22 ask — PM: make them a faint tint, not black); the ruler's second "Rebuild this song →" reads as a note about the outro (remove); transport nudges as the bar label changes width; "Playing the original…" too dim; Deck window says "for the Lab"; strip "15 to fill · 123 bpm · key G". Bar ranges on Build / Outro still missing at 1440.

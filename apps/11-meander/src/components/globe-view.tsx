@@ -3,7 +3,7 @@
 // Desktop: the whole field as one globe turned to face the focused school (handoff "Where a school
 // sits", "Where a label sits"), with the card or the "Your thread" panel on the right.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { getSchool, getThinker, links, neighbours, positions, schools, splitName, themeSummary, whenOf, type Neighbour } from "@/lib/content";
+import { getSchool, getThinker, links, metaLine, neighbours, positions, schools, splitName, themeSummary, type Neighbour } from "@/lib/content";
 import {
   FADE, FAR, R, centre, emptiest, placeLabels, project, samplePolyline, thread, vec,
   type LabelPlace, type Projected, type Rect, type ThreadPoint, type Vec3,
@@ -307,7 +307,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
               <i className="here" aria-hidden="true" />
               <h1 tabIndex={-1} ref={titleH1} aria-label={school.name}>{splitName(school.name).short}</h1>
               <p>
-                {[splitName(school.name).aside, whenOf(school)].filter(Boolean).join(" · ")}
+                {metaLine(school)}
                 {!showThinker && school.themes.length > 0 ? (
                   <> · <button type="button" className="enter" ref={enterRef} onClick={(e) => { e.stopPropagation(); nav.stepInside(); }}>step inside</button></>
                 ) : (

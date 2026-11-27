@@ -973,6 +973,71 @@
         }
       ],
       "sample": false
+    },
+    {
+      "from": "vedanta",
+      "to": "buddhist-philosophy",
+      "type": "against",
+      "label": "a lasting self, denied and defended",
+      "reason": "Buddhists rejected the unchanging self of the Upaniṣads (late Vedic texts) and the Vedas' authority. The Vedānta thinker Śaṅkara replied by rejecting Buddhist idealism and emptiness.",
+      "sources": [
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "4. Ātman and Brahman",
+          "quote": "The Buddhists explicitly rejected any notion of an indivisible and unchanging self"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "1. Buddha as Philosopher",
+          "quote": "rejected the authority of the Vedas"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "1. Buddha as Philosopher",
+          "quote": "a stratum of (comparatively late) texts, the Upaniṣads"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/shankara/",
+          "section": "2. Metaphysics",
+          "quote": "rejects Buddhist Yogācāra idealism"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/shankara/",
+          "section": "2.1 Existence, Reality, and Causation",
+          "quote": "construes as the Madhyamika Buddhist, to be counter-intuitively nihilistic"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "confucianism",
+      "to": "daoism",
+      "type": "against",
+      "label": "Confucian moral training challenged",
+      "reason": "Daoism grew as a critical alternative to Confucius's followers, rejecting their human-made distinctions; Zhuangzi took aim at Mencius.",
+      "sources": [
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "8. Daoism and Confucianism",
+          "quote": "an alternative and critical tradition divergent from that of Confucius and his followers"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/daoism/",
+          "section": "intro",
+          "quote": "Daoism’s foil was contemporary: the Confucian-Mohist (Ru-Mo) dialectic"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/zhuangzi/",
+          "section": "intro",
+          "quote": "Zhuangzi’s foils were credulous and dogmatic Confucian humanists"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "5. Later Influence and Interpretations",
+          "quote": "several passages seem to clearly be directed at him"
+        }
+      ],
+      "sample": false
     }
   ]
 }

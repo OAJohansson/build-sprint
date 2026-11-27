@@ -6,6 +6,7 @@ const TABLE: Record<string, RawSpan> = {
   sto: { from: -300, to: 200 },
   uti: { from: 1789, to: "present" },
   exi: { from: 1940, to: 1970, roots: 1840 },
+  ved: { from: -700, to: 1200, living: true },
   bad: { from: 1900, to: 1800 },
 };
 
@@ -18,7 +19,7 @@ describe("timeline years", () => {
 
   it("maps each era onto its share of the axis (normal case)", () => {
     const { scale, bands } = makeScale(0, 1000);
-    expect(scale(-600)).toBe(0);
+    expect(scale(-700)).toBe(0);
     expect(scale(500)).toBeCloseTo(260);
     expect(scale(1350)).toBeCloseTo(400);
     expect(scale(2026)).toBeCloseTo(1000);
@@ -30,7 +31,7 @@ describe("timeline years", () => {
     const { scale } = makeScale(0, 1000);
     expect(scale(-1)).toBeLessThan(scale(1));
     expect(scale(1) - scale(-1)).toBeLessThan(1);
-    const years = [-600, -300, -1, 1, 300, 499, 500, 1349, 1350, 1779, 1780, 1899, 1900, 2026];
+    const years = [-700, -600, -300, -1, 1, 300, 499, 500, 1349, 1350, 1779, 1780, 1899, 1900, 2026];
     const xs = years.map(scale);
     for (let i = 1; i < xs.length; i++) expect(xs[i]).toBeGreaterThanOrEqual(xs[i - 1]);
     expect(yearLabel(-500)).toBe("500 BCE");
@@ -62,6 +63,15 @@ describe("timeline years", () => {
     vi.setSystemTime(new Date(2027, 0, 1, 0, 0, 1)); // just past midnight on New Year
     expect(spanOf("uti", undefined, TABLE)?.to).toBe(2027);
     expect(makeScale(0, 1000).scale(2027)).toBeCloseTo(1000);
+  });
+
+  it("a living tradition: solid classical period, then a tail to the present; it starts before the Western ones", () => {
+    expect(spanOf("ved", undefined, TABLE)).toMatchObject({ from: -700, to: 1200, tail: 2026, present: false });
+    expect(spanOf("uti", undefined, TABLE)?.tail).toBeUndefined();
+    const rows = timelineRows([{ id: "pre" }, { id: "ved" }], undefined, TABLE);
+    expect(rows[0].item.id).toBe("ved");
+    expect(rows[0].era).toBe(0);
+    expect(makeScale(0, 1000).scale(-700)).toBe(0); // the axis starts at the earliest start
   });
 
   it("missing or broken entries are left off, not crashed on", () => {

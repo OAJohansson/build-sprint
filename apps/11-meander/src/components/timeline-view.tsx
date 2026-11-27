@@ -4,17 +4,14 @@
 // one row each so nothing overlaps. Hover or focus shows a school's links as quiet bone curves (L31: brass only for
 // the current one); a click opens the school's card, as on the globe.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { links, schools, splitName, whenOf } from "@/lib/content";
+import { links, schools, splitName, traditionOf, whenOf } from "@/lib/content";
 import { makeScale, RAW, timelineRows, yearLabel, type RawSpan } from "@/lib/timeline";
 
-// Dev only (break-ui): ?timeline=worst adds the four coming schools, each spanning nearly everything, and a very long name.
-const WORST: Record<string, RawSpan> = {
-  "buddhist-philosophy": { from: -500, to: "present" }, vedanta: { from: -200, to: "present" },
-  confucianism: { from: -500, to: "present" }, daoism: { from: -400, to: "present" },
-};
+// Dev only (break-ui): ?timeline=worst adds a school spanning nearly everything and gives one school a very long name.
+const WORST: Record<string, RawSpan> = { "worst-everything": { from: -600, to: "present" } };
 const worstSchools = () => [
   ...schools.map((s) => (s.id === "feminist-philosophy" ? { ...s, name: "The Very Long School of Post-Analytic Neo-Pragmatist Phenomenological Hermeneutics (Second Wave)" } : s)),
-  ...Object.keys(WORST).map((id) => ({ ...schools[0], id, name: id.replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase()), dates: "c. 500 BCE–present" })),
+  { ...schools[0], id: "worst-everything", name: "Perennial Philosophy Across Every Tradition", dates: "c. 600 BCE–present" },
 ];
 import type { Nav } from "./meander";
 
@@ -42,7 +39,7 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
   const geo = useMemo(
     () => rows.map((r) => {
       const xs = scale(r.span.from), xe = Math.max(scale(r.span.to), xs + 3);
-      return { xs, xe, xr: r.span.roots != null ? scale(r.span.roots) : null };
+      return { xs, xe, xr: r.span.roots != null ? scale(r.span.roots) : null, xt: r.span.tail != null ? scale(r.span.tail) : null };
     }),
     [rows, scale],
   );
@@ -57,6 +54,7 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
     rows.forEach((r, i) => {
       const w = labelRefs.current.get(r.item.id)?.scrollWidth ?? 0; // full width, even when capped on the bar
       const g = geo[i];
+      // a living tradition's name sits after its solid part, over the faint tail (knocked out behind the text)
       map[r.item.id] = g.xe + GAP + w <= right ? "after" : g.xs - GAP - w >= 24 ? "before" : "on";
     });
     setSides({ key, map });
@@ -77,7 +75,7 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
   const curve = (from: string, to: string) => {
     const a = index.get(from)!, b = index.get(to)!;
     const ga = geo[a], gb = geo[b];
-    const xA = Math.min(Math.max(gb.xs, ga.xs), ga.xe), yA = y(a);
+    const xA = Math.min(Math.max(gb.xs, ga.xs), ga.xt ?? ga.xe), yA = y(a);
     const xB = gb.xs, yB = y(b);
     // one soft bow out to the left, so a link between schools that start close together still reads as a thread
     const bow = 14 + Math.abs(yB - yA) * 0.18;
@@ -149,9 +147,10 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
               >
                 {g.xr != null && <i className="roots" style={{ left: g.xr, width: g.xs - g.xr }} />}
                 <i className="bar" style={{ left: g.xs, width: g.xe - g.xs }} />
+                {g.xt != null && g.xt > g.xe && <i className="tail" style={{ left: g.xe, width: g.xt - g.xe }} />}
                 <i className="mk" style={{ left: g.xs }} />
                 <span
-                  className={["tl-lb", side, placed && "placed"].filter(Boolean).join(" ")}
+                  className={["tl-lb", side, g.xt != null && "knock", placed && "placed"].filter(Boolean).join(" ")}
                   ref={(el) => { if (el) labelRefs.current.set(id, el); else labelRefs.current.delete(id); }}
                   style={{
                     left: side === "after" ? g.xe + GAP : side === "before" ? g.xs - GAP : g.xs + 16,
@@ -161,6 +160,7 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
                   title={side === "on" ? s.name : undefined}
                 >
                   {splitName(s.name).short}
+                  {traditionOf(s) && <small className="tag">{traditionOf(s)}</small>}
                 </span>
               </button>
             </li>

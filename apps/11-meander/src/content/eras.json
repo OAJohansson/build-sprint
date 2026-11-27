@@ -96,6 +96,26 @@
     "feminist-philosophy": {
       "from": 1970,
       "to": "present"
+    },
+    "buddhist-philosophy": {
+      "from": -500,
+      "to": 1100,
+      "living": true
+    },
+    "vedanta": {
+      "from": -700,
+      "to": 1200,
+      "living": true
+    },
+    "confucianism": {
+      "from": -600,
+      "to": -200,
+      "living": true
+    },
+    "daoism": {
+      "from": -500,
+      "to": -200,
+      "living": true
     }
   }
 }

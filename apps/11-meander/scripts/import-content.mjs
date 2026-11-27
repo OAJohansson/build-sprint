@@ -1,6 +1,6 @@
 // Imports the researched, sourced content into the app's schema. Re-runnable: edit the source, not the output.
 //   pnpm -F 11-meander content
-// Reads  docs/products/11-meander/content/full.json   (schema: sources.md in that folder)
+// Reads  docs/products/11-meander/content/full.json   (schema: sources.md in that folder), then full-eastern.json
 // Also reads docs/products/11-meander/content/schools.json for the entries' titles (Further reading, #39).
 // Writes src/content/schools.json, thinkers.json, links.json, titles.json  (then run `pnpm -F 11-meander positions`
 // if schools or links changed). Every school, theme, question, thinker, key idea, prompt and link keeps its
@@ -10,7 +10,13 @@ import fs from "node:fs";
 // CONTENT_SRC / CONTENT_OUT override the paths (for trying the converter on a fixture).
 const SRC = process.env.CONTENT_SRC ? new URL(`file://${process.env.CONTENT_SRC}`) : new URL("../../../docs/products/11-meander/content/full.json", import.meta.url);
 const OUT = process.env.CONTENT_OUT ? new URL(`file://${process.env.CONTENT_OUT.replace(/\/?$/, "/")}`) : new URL("../src/content/", import.meta.url);
-const full = JSON.parse(fs.readFileSync(SRC, "utf8"));
+// The Eastern schools (#42) live in their own file next to full.json, same schema plus "tradition": "eastern", so a
+// wording fix in either is just a re-run. Skipped when the file is missing or CONTENT_SRC points at a fixture.
+const EAST = new URL("../../../docs/products/11-meander/content/full-eastern.json", import.meta.url);
+const full = [
+  ...JSON.parse(fs.readFileSync(SRC, "utf8")),
+  ...(!process.env.CONTENT_SRC && fs.existsSync(EAST) ? JSON.parse(fs.readFileSync(EAST, "utf8")) : []),
+];
 const problems = [];
 
 const slug = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\(.*?\)/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -24,6 +30,8 @@ const SHORT = {
   "Marcus Aurelius": "Marcus Aurelius", "Pseudo-Dionysius the Areopagite": "Pseudo-Dionysius",
   "William of Ockham": "Ockham", "John Duns Scotus": "Duns Scotus", "Francesco Petrarca (Petrarch)": "Petrarch",
   "Giovanni Pico della Mirandola": "Pico", "Harriet Taylor Mill": "Taylor Mill",
+  // Chinese names put the family name first, so the last word is wrong; Uddālaka is the name he is known by.
+  "Wang Bi": "Wang Bi", "The Buddha": "the Buddha", "Uddālaka Āruṇi": "Uddālaka",
 };
 const shortName = (name) => SHORT[name] ?? name.replace(/\s*\(.*?\)\s*/g, " ").trim().split(/\s+/).pop();
 // A short date for the line under the title: date_range without its asides in brackets and up to the first ";",
@@ -45,7 +53,7 @@ for (const s of full) {
     });
   }
   schools.push({
-    id: s.id, name: s.name, dates: shortDates(s), dateRange: s.date_range ?? "", era: s.era ?? "",
+    id: s.id, name: s.name, dates: shortDates(s), ...(s.tradition ? { tradition: s.tradition } : {}), dateRange: s.date_range ?? "", era: s.era ?? "",
     description: s.description ?? "", ...(s.tagline ? (typeof s.tagline === "string" ? { tagline: s.tagline } : { tagline: s.tagline.text, taglineSources: src(s.tagline.sources) }) : {}),debatable: s.debatable ?? null,
     questions: (s.questions ?? []).map((q) => q.text),
     questionSources: (s.questions ?? []).map((q) => src(q.sources)),

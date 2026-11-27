@@ -152,5 +152,30 @@
   "feminist-philosophy": {
     "places": [],
     "span": "1970s–present"
+  },
+  "buddhist-philosophy": {
+    "places": [
+      "India",
+      "Nepal"
+    ],
+    "span": "5th century BCE – 11th century CE in India; living today"
+  },
+  "vedanta": {
+    "places": [
+      "India"
+    ],
+    "span": "c. 700 BCE (early Upaniṣads) – 12th century CE, and living today"
+  },
+  "confucianism": {
+    "places": [
+      "China (Shandong)"
+    ],
+    "span": "6th–3rd century BCE (classical period); still influential today"
+  },
+  "daoism": {
+    "places": [
+      "China"
+    ],
+    "span": "5th–3rd century BCE; Neo-Daoism from the 3rd century CE; living today as a religion"
   }
 }

@@ -5,17 +5,19 @@ import erasFile from "@/content/eras.json";
 
 export type Era = { name: string; short: string; from: number; share: number };
 
-/** Eras in order. Each runs from its `from` to the next era's `from` (the last one to the present). */
+/** Eras in order. Each runs from its `from` to the next era's `from` (the last one to the present). The axis starts at
+ * 700 BCE, the earliest sourced start (Vedānta's early Upaniṣads, #42). */
 export const ERAS: Era[] = [
-  { name: "Ancient", short: "Ancient", from: -600, share: 0.26 },
+  { name: "Ancient", short: "Ancient", from: -700, share: 0.26 },
   { name: "Medieval", short: "Medieval", from: 500, share: 0.14 },
   { name: "Renaissance and early modern", short: "Early modern", from: 1350, share: 0.2 },
   { name: "Modern", short: "Modern", from: 1780, share: 0.18 },
   { name: "Contemporary", short: "Contemporary", from: 1900, share: 0.22 },
 ];
 
-export type RawSpan = { from: number; to: number | "present"; roots?: number; open?: boolean };
-export type Span = { from: number; to: number; roots?: number; open: boolean; present: boolean };
+export type RawSpan = { from: number; to: number | "present"; roots?: number; open?: boolean; living?: boolean };
+/** `to` is where the solid bar ends; a living tradition (`tail`) carries on faintly to the present. */
+export type Span = { from: number; to: number; roots?: number; open: boolean; present: boolean; tail?: number };
 
 export const RAW = (erasFile as { eras: Record<string, RawSpan> }).eras;
 
@@ -27,7 +29,9 @@ export function spanOf(id: string, now: Date = new Date(), table: Record<string,
   const present = r.to === "present";
   const to = present ? year : (r.to as number);
   if (typeof to !== "number" || to < r.from) return null;
-  return { from: r.from, to: Math.min(to, year), roots: r.roots, open: !!r.open, present };
+  const span: Span = { from: r.from, to: Math.min(to, year), roots: r.roots, open: !!r.open, present };
+  if (r.living && !present) span.tail = year;
+  return span;
 }
 
 /** The era a year falls in (a boundary year belongs to the later era); years before the first era count as the first. */

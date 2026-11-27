@@ -472,6 +472,10 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 .tb .bar { height: 3px; margin-top: -1.5px; border-radius: 2px; background: rgba(233, 226, 212, 0.42); transition: background-color 160ms ease, opacity 160ms ease; }
 /* a span with no end ("from 335 BCE") fades out instead of stopping */
 .tb.open .bar { background: linear-gradient(90deg, rgba(233, 226, 212, 0.42) 60%, rgba(233, 226, 212, 0)); }
+/* a living tradition after its classical period: a faint tail on to the present */
+.tb .tail { height: 1.5px; margin-top: -0.75px; background: linear-gradient(90deg, rgba(233, 226, 212, 0.3), rgba(233, 226, 212, 0.1)); transition: opacity 160ms ease; }
+.timeline.has-cur .tb:not(.cur):not(.lit) .tail { opacity: 0.4; }
+.timeline .tb.cur .tail { background: linear-gradient(90deg, rgba(211, 166, 108, 0.6), rgba(211, 166, 108, 0.2)); }
 /* roots named in the span ("roots in the 1840s"): a faint lead-in */
 .tb .roots { height: 0; border-top: 1px dashed rgba(233, 226, 212, 0.28); }
 /* a taller invisible strip over the bar, so a thin bar is easy to hit */
@@ -482,6 +486,7 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 .tb .tl-lb { visibility: hidden; transform: translateY(-50%); white-space: nowrap; text-shadow: 0 0 4px var(--ground), 0 0 8px var(--ground); font: 400 14.5px/1.25 var(--sans); color: rgba(233, 226, 212, 0.8); padding: 3px 0; transition: color 160ms ease, opacity 160ms ease; }
 .tb .tl-lb.placed { visibility: visible; }
 .tb .tl-lb.before { transform: translate(-100%, -50%); }
+.tb .tl-lb.knock { background: #15201e; padding: 3px 8px; margin-left: -8px; border-radius: 6px; }
 .tb .tl-lb.on { background: #15201e; padding: 3px 8px; border-radius: 6px; overflow: hidden; text-overflow: ellipsis; }
 .tb:focus-visible .tl-lb { outline: 2px solid var(--brass); outline-offset: 3px; border-radius: 4px; }
 /* hover, focus or an open school: its links light, everything else steps back */
@@ -496,6 +501,12 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 /* the card on the timeline carries the school's name (there is no title on the globe) */
 .ctitle { font: 300 32px/1.08 var(--serif); letter-spacing: -0.02em; font-variation-settings: "opsz" 96; overflow-wrap: break-word; }
 .cmeta { font-size: 13px; color: var(--quiet); margin: 6px 0 14px; }
+
+/* the tradition over an Eastern school's name on the first page (#42): one quiet small-caps line */
+.trad { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass); opacity: 0.8; margin-bottom: 14px; }
+.pskel .trad { margin: 14px 0 -4px; }
+/* the timeline's tradition tag after an Eastern school's name */
+.tl-lb .tag { margin-left: 8px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--quiet); opacity: 0.8; }
 
 /* phone: the timeline as one column, era by era */
 .tlp { margin-top: 4px; }

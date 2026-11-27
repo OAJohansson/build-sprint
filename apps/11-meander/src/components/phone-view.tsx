@@ -3,7 +3,7 @@
 // Phone (under 1024 wide): no globe, one school at a time (handoff "Phone", T8). The school screen
 // follows phone.png; the overview, thinker and "Your thread" screens reuse the card's contents.
 import { useEffect, useRef } from "react";
-import { getSchool, getThinker, hereLine, ledeOf, neighbours, schools, splitName, whenOf } from "@/lib/content";
+import { getSchool, getThinker, hereLine, ledeOf, neighbours, schools, splitName, traditionOf, whenOf } from "@/lib/content";
 import { ERAS, timelineRows } from "@/lib/timeline";
 import { SchoolSections, StepInside, ThinkerSections, ThreadSections } from "./card-parts";
 import { PhoneSkeleton } from "./skeleton";
@@ -103,7 +103,7 @@ export function PhoneView({ nav }: { nav: Nav }) {
                         <i aria-hidden="true" />
                         <span>
                           <b>{s.name}</b>
-                          <small>{whenOf(s)}</small>
+                          <small>{[traditionOf(s), whenOf(s)].filter(Boolean).join(" · ")}</small>
                           {v && <span className="sr-only">, {states.get(s.id)}</span>}
                         </span>
                       </button>

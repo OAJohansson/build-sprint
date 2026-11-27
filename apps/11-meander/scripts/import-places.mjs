@@ -11,7 +11,8 @@ const OUT = new URL("../src/content/places.json", import.meta.url);
 // shortcut: these years are read by hand from each school's sourced `span` (places.json), not sourced separately; replace them with sourced start and end years if the timeline needs to be exact.
 // from / to are years, BCE negative. to: "present" is resolved to the current year in the app. roots: an earlier lead-in
 // the span names ("roots in the 1840s"), drawn faint. open: the span gives no end ("from 335 BCE", "and later"), so the
-// bar fades out instead of stopping. A school missing here is left off the timeline, not an error.
+// bar fades out instead of stopping. living: a tradition still alive today; from–to is its classical period (solid)
+// and a faint tail runs on to the present. A school missing here is left off the timeline, not an error.
 const ERAS = {
   presocratics: { from: -600, to: -400 }, //          6th–5th century BCE
   "socrates-plato": { from: -430, to: -350 }, //      late 5th–mid 4th century BCE
@@ -36,6 +37,11 @@ const ERAS = {
   "critical-theory": { from: 1923, to: "present" }, // 1923–present
   "post-structuralism": { from: 1960, to: "present", open: true }, // from the 1960s
   "feminist-philosophy": { from: 1970, to: "present" }, // 1970s–present
+  // The Eastern schools (#42): classical period solid, then living today.
+  "buddhist-philosophy": { from: -500, to: 1100, living: true }, // 5th century BCE – 11th century CE in India; living today
+  vedanta: { from: -700, to: 1200, living: true }, //  c. 700 BCE (early Upaniṣads) – 12th century CE, and living today
+  confucianism: { from: -600, to: -200, living: true }, // 6th–3rd century BCE (classical period); still influential today
+  daoism: { from: -500, to: -200, living: true }, //   5th–3rd century BCE; Neo-Daoism from the 3rd century CE; living today as a religion
 };
 const ERAS_OUT = new URL("../src/content/eras.json", import.meta.url);
 {

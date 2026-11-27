@@ -4,7 +4,7 @@
 // (left), beside the school's first page (right). Picking an idea turns its thread brass and the first page
 // shows that idea. The phone gets the same content as one column (PhoneSkeleton).
 import { useLayoutEffect, useRef, useState } from "react";
-import { andList, schoolFacts, splitName, surnames, themeSummary, type School } from "@/lib/content";
+import { andList, schoolFacts, splitName, surnames, themeSummary, traditionOf, type School } from "@/lib/content";
 import { EDGE, knotStrands, sideTransform } from "@/lib/knot";
 import { ReadingRows } from "./card-parts";
 import type { Nav } from "./meander";
@@ -111,6 +111,7 @@ export function FirstPage({ school, nav, headingRef }: { school: School; nav: Na
     <section className="info" aria-label={school.name}>
       <div className="school" inert={picked}>
         <div className="mid">
+          {traditionOf(school) && <p className="trad">{traditionOf(school)} philosophy</p>}
           <h2 className="d name" tabIndex={-1} ref={headingRef} aria-label={school.name}>{short}</h2>
           <i className="rule" aria-hidden="true" />
           {q && <p className={`d it ${askClass(q)}`}>{q}</p>}
@@ -154,6 +155,7 @@ export function PhoneSkeleton({ school, nav, headingRef }: { school: School; nav
   return (
     <section className="pskel" aria-label={school.name}>
       <button type="button" className="up" onClick={nav.stepOut}>← Back to {short}</button>
+      {traditionOf(school) && <p className="trad">{traditionOf(school)} philosophy</p>}
       <h1 tabIndex={-1} ref={headingRef} aria-label={school.name}>{short}</h1>
       <i className="rule" aria-hidden="true" />
       {q && <p className="d it ask">{q}</p>}

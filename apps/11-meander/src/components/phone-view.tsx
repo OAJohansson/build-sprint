@@ -5,12 +5,13 @@
 import { useEffect, useMemo, useRef } from "react";
 import { getSchool, getThinker, hereLine, ledeOf, neighbours, schools, splitName } from "@/lib/content";
 import { visitedSchools } from "@/lib/visits";
-import { SchoolSections, ThinkerSections, ThreadSections } from "./card-parts";
+import { SchoolSections, StepInside, ThinkerSections, ThreadSections } from "./card-parts";
+import { PhoneSkeleton } from "./skeleton";
 import { Mark } from "./mark";
 import type { Nav } from "./meander";
 
 export function PhoneView({ nav }: { nav: Nav }) {
-  const { focus, thinker, threadOpen, visits } = nav;
+  const { focus, thinker, threadOpen, visits, inside } = nav;
   const visited = useMemo(() => visitedSchools(visits), [visits]);
   const school = focus ? getSchool(focus) : undefined;
   const thinkerData = focus && thinker ? getThinker(thinker) : undefined;
@@ -24,7 +25,7 @@ export function PhoneView({ nav }: { nav: Nav }) {
     if (!el || !el.getClientRects().length) return; // desktop is showing
     window.scrollTo(0, 0);
     el.focus({ preventScroll: true });
-  }, [focus, thinker, threadOpen]);
+  }, [focus, thinker, threadOpen, inside]);
 
   let body: React.ReactNode;
   if (threadOpen) {
@@ -39,6 +40,8 @@ export function PhoneView({ nav }: { nav: Nav }) {
         <ThinkerSections thinker={thinkerData} nav={nav} headingRef={heading} />
       </section>
     );
+  } else if (school && inside) {
+    body = <PhoneSkeleton key={school.id} school={school} nav={nav} headingRef={heading} />;
   } else if (school) {
     const near = neighbours(school.id);
     body = (
@@ -47,6 +50,7 @@ export function PhoneView({ nav }: { nav: Nav }) {
         <h1 tabIndex={-1} ref={heading} aria-label={school.name}>{splitName(school.name).short}</h1>
         <p className="meta">{hereLine(school)}</p>
         {ledeOf(school) && <p className="plede">{ledeOf(school)}</p>}
+        {school.themes.length > 0 && <StepInside school={school} nav={nav} />}
         {near.length > 0 && (
           <>
             <h2 className="psec">One thread away</h2>

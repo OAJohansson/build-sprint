@@ -3,7 +3,8 @@ import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 
 // Fraunces with its optical-size axis: the focused school is set at opsz 144 (handoff "Type").
-const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"], axes: ["opsz"] });
+// Italic too: the skeleton sets its big question and idea summaries in Fraunces italic (P7).
+const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"], axes: ["opsz"], style: ["normal", "italic"] });
 const hanken = Hanken_Grotesk({ variable: "--font-hanken", subsets: ["latin"] });
 
 export const metadata: Metadata = {

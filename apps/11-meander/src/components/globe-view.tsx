@@ -3,7 +3,7 @@
 // Desktop: the whole field as one globe turned to face the focused school (handoff "Where a school
 // sits", "Where a label sits"), with the card or the "Your thread" panel on the right.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { getSchool, getThinker, hereLine, links, neighbours, positions, schools, splitName, type Neighbour } from "@/lib/content";
+import { getSchool, getThinker, links, neighbours, positions, schools, splitName, themeSummary, whenOf, type Neighbour } from "@/lib/content";
 import {
   FADE, FAR, R, centre, emptiest, placeLabels, project, samplePolyline, thread, vec,
   type LabelPlace, type Projected, type Rect, type ThreadPoint, type Vec3,
@@ -11,6 +11,7 @@ import {
 import { visitedSchools } from "@/lib/visits";
 import { SchoolSections, ThinkerSections, ThreadSections } from "./card-parts";
 import { Mark } from "./mark";
+import { FirstPage, Knot } from "./skeleton";
 import type { Nav } from "./meander";
 
 const W = 1440, H = 900;
@@ -22,6 +23,19 @@ let overviewFacing: Vec3 | null = null;
 const facing = () => (overviewFacing ??= emptiest(Object.values(V)));
 // The faint "yarn" rings drawn on the globe: [flattening, rotation, opacity].
 const YARN: [number, number, number][] = [[0.9, -18, 0.05], [0.46, 28, 0.045], [0.2, -54, 0.05]];
+
+/** A label's width as drawn. A wrapped name (b.wrap) is narrower than its box, which is as wide as its max-width,
+ * so it is measured line by line; other labels are as wide as their box. */
+function inkWidth(el: HTMLElement, k: number): number {
+  const b = el.querySelector("b");
+  if (!b?.classList.contains("wrap")) return el.offsetWidth;
+  const range = document.createRange();
+  range.selectNodeContents(b);
+  let w = range.getBoundingClientRect().width / k;
+  const verb = el.querySelector("em")?.firstChild; // the verb only; its reason is hidden until hover
+  if (verb) { range.selectNodeContents(verb); w = Math.max(w, range.getBoundingClientRect().width / k); }
+  return Math.ceil(w);
+}
 
 type Path = { key: string; a: string; b: string; d: string; cls: string; pts: Projected[]; focus: boolean };
 // rest: a school with no thread to the focus. Focus mode shows it as a faint dot with no label (feedback #16).
@@ -57,7 +71,7 @@ function useLayout(focus: string | null, hasCard: boolean) {
 }
 
 export function GlobeView({ nav }: { nav: Nav }) {
-  const { focus, thinker, threadOpen, visits } = nav;
+  const { focus, thinker, threadOpen, visits, inside, pick } = nav;
   const hasCard = !!focus || threadOpen;
   const showThinker = !!focus && !!thinker && !threadOpen;
   const { C, paths, nodes, threadPts } = useLayout(focus, hasCard);
@@ -74,6 +88,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
   const thinkerH = useRef<HTMLHeadingElement>(null);
   const threadH = useRef<HTMLHeadingElement>(null);
   const labelRefs = useRef(new Map<string, HTMLSpanElement>());
+  const enterRef = useRef<HTMLButtonElement>(null);
 
   // Re-place labels when fonts arrive or the window changes (e.g. from phone width to desktop).
   const [tick, setTick] = useState(0);
@@ -102,6 +117,8 @@ export function GlobeView({ nav }: { nav: Nav }) {
   useLayoutEffect(() => {
     const stage = stageRef.current;
     if (!stage || stage.getClientRects().length === 0) return; // hidden at phone width
+    // Inside a school the globe is zoomed and hidden; its labels keep their places for the way back out.
+    if (stage.classList.contains("inside")) return;
     const s = stage.getBoundingClientRect(), k = s.width / W;
     const rectOf = (el: Element | null): Rect | null => {
       if (!el) return null;
@@ -109,14 +126,35 @@ export function GlobeView({ nav }: { nav: Nav }) {
       return { x: (r.left - s.left) / k, y: (r.top - s.top) / k, w: r.width / k, h: r.height / k };
     };
     const satRect = rectOf(satRef.current);
-    const fixed = [rectOf(headerRef.current), rectOf(titleRef.current), satRect, rectOf(cardRef.current)].filter((r): r is Rect => !!r);
+    // The title as drawn: its box is as wide as its max-width when the date line wraps, which kept names away
+    // from empty space and pushed one past the rim (#31).
+    const titleInk = (() => {
+      const el = titleRef.current;
+      if (!el) return null;
+      const range = document.createRange();
+      const rs = [...el.querySelectorAll(":scope > .here, :scope > h1, :scope > p")].map((c) => {
+        if (c.tagName === "I") return c.getBoundingClientRect();
+        range.selectNodeContents(c);
+        return range.getBoundingClientRect();
+      });
+      const l = Math.min(...rs.map((r) => r.left)), t = Math.min(...rs.map((r) => r.top));
+      return { x: (l - s.left) / k, y: (t - s.top) / k, w: (Math.max(...rs.map((r) => r.right)) - l) / k, h: (Math.max(...rs.map((r) => r.bottom)) - t) / k };
+    })();
+    const fixed = [rectOf(headerRef.current), titleInk, satRect, rectOf(cardRef.current)].filter((r): r is Rect => !!r);
     // Schools at rest get no label, so they take no space from the neighbours' labels.
+    const boxW: Record<string, number> = {};
     const inputs = nodes.filter((n) => !n.rest).map((n) => {
       const el = labelRefs.current.get(n.id);
+      boxW[n.id] = el?.offsetWidth ?? 0;
       // ties keep the content's order, as in the design's runtime
-      return { id: n.id, x: n.p.x, y: n.p.y, r: n.r, pref: n.p.out, ord: (n.near ? 0 : Math.round(n.p.theta)) + ORDER[n.id] * 1e-4, w: el?.offsetWidth ?? 0, h: el?.offsetHeight ?? 0 };
+      return { id: n.id, x: n.p.x, y: n.p.y, r: n.r, pref: n.p.out, ord: (n.near ? 0 : Math.round(n.p.theta)) + ORDER[n.id] * 1e-4, w: el ? inkWidth(el, k) : 0, h: el?.offsetHeight ?? 0 };
     });
     const map = placeLabels(inputs, fixed, threadPts, C, R, W, H);
+    // A wrapped name's box is wider than its lines; shift the box so the lines sit where the placer put them.
+    for (const [id, pl] of Object.entries(map)) {
+      const extra = boxW[id] - pl.rect.w;
+      if (extra > 0.5) pl.left -= pl.text === "right" ? extra : pl.text === "center" ? extra / 2 : 0;
+    }
     const ko = Object.values(map).map((p) => p.rect).concat(satRect ? [satRect] : []);
     // Threads from the focus fade out inside an oval round the title (and the thinker hanging under it);
     // the design's 186 × 86 is the minimum, a title on two lines gets a taller one.
@@ -137,9 +175,29 @@ export function GlobeView({ nav }: { nav: Nav }) {
     if (el && el.getClientRects().length) el.focus({ preventScroll: true });
   }, [focus, showThinker, thinker, threadOpen]);
 
+  // Stepping inside and back: keyboard focus follows (the list of ideas in, so Tab reaches idea 1 next, the "step inside" button out, the idea
+  // just closed when its Back button had focus), and the live region says where you are.
+  const said = inside && school
+    ? pick !== null && school.themes[pick]
+      ? `Idea ${pick + 1} of ${school.themes.length}: ${school.themes[pick].name}. ${themeSummary(school.themes[pick])}`
+      : `Inside ${splitName(school.name).short}: ${school.themes.length} ideas`
+    : "";
+  const was = useRef({ inside, pick, focus });
+  useEffect(() => {
+    const prev = was.current;
+    was.current = { inside, pick, focus };
+    const stage = stageRef.current;
+    if (!stage || !stage.getClientRects().length || !school || prev.focus !== focus) return;
+    const ideaBtn = (i: number) => stage.querySelectorAll<HTMLButtonElement>(".idea > button")[i];
+    if (inside && !prev.inside) stage.querySelector<HTMLElement>(".ideas-k")?.focus({ preventScroll: true });
+    else if (!inside && prev.inside) enterRef.current?.focus({ preventScroll: true });
+    else if (inside && pick === null && prev.pick !== null && !document.activeElement?.closest(".idea")) ideaBtn(prev.pick)?.focus({ preventScroll: true });
+  }, [inside, pick, focus, school]);
+
   const ready = placed?.key === key ? placed : null;
 
   const onStageClick = (e: React.MouseEvent) => {
+    if (inside) return;
     if ((e.target as Element).closest("button, .card, .title, .sat")) return;
     if (focus || threadOpen) nav.overview();
   };
@@ -148,7 +206,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
     <div className="desk">
       {/* Clicking empty space returns to the overview; Esc and the logo do the same for keyboard users. */}
       <div
-        className={["stage", still && "still", lit && "hovering"].filter(Boolean).join(" ")}
+        className={["stage", still && "still", lit && "hovering", inside && school && "inside", inside && pick !== null && "has-pick"].filter(Boolean).join(" ")}
         ref={stageRef}
         onClick={onStageClick}
         onMouseMove={still ? () => setStill(false) : undefined}
@@ -156,6 +214,8 @@ export function GlobeView({ nav }: { nav: Nav }) {
         data-cy={C[1]}
         data-r={R}
       >
+        {/* The globe zooms into the focused school when you step inside (P7: about 560 ms). */}
+        <div className="globe">
         <svg className="threads" aria-hidden="true">
           <defs>
             <radialGradient id="lit" cx="34%" cy="28%" r="78%">
@@ -190,18 +250,8 @@ export function GlobeView({ nav }: { nav: Nav }) {
           </g>
         </svg>
 
-        <header ref={headerRef}>
-          <button type="button" className="wm" translate="no" title="Back to the whole field" aria-label="Meander, back to the whole field" onClick={nav.overview}>
-            <Mark />Meander
-          </button>
-          {visits.length > 0 && (
-            <button type="button" className="yt" aria-expanded={threadOpen} aria-controls="thread-panel" onClick={nav.toggleThread}>
-              <i />Your thread
-            </button>
-          )}
-        </header>
 
-        <main>
+        <main inert={inside}>
           {nodes.map((n) => {
             const v = visited.has(n.id);
             const pl = ready?.map[n.id];
@@ -236,10 +286,18 @@ export function GlobeView({ nav }: { nav: Nav }) {
             );
           })}
           {school && (
-            <div className="title" ref={titleRef} style={{ left: C[0], top: C[1] }}>
+            // The whole title steps inside on a click; keyboard users get the "step inside" button under it.
+            <div className={showThinker || !school.themes.length ? "title" : "title can-enter"} ref={titleRef} style={{ left: C[0], top: C[1] }} onClick={showThinker ? undefined : nav.stepInside}>
               <i className="here" aria-hidden="true" />
               <h1 tabIndex={-1} ref={titleH1} aria-label={school.name}>{splitName(school.name).short}</h1>
-              <p>{hereLine(school)}</p>
+              <p>
+                {[splitName(school.name).aside, whenOf(school)].filter(Boolean).join(" · ")}
+                {!showThinker && school.themes.length > 0 ? (
+                  <> · <button type="button" className="enter" ref={enterRef} onClick={(e) => { e.stopPropagation(); nav.stepInside(); }}>step inside</button></>
+                ) : (
+                  " · you are here"
+                )}
+              </p>
               {/* The open thinker hangs under the title on a short brass thread, however tall the title is. */}
               {showThinker && thinkerData && (
                 <div className="sat" ref={satRef} aria-hidden="true">
@@ -249,6 +307,29 @@ export function GlobeView({ nav }: { nav: Nav }) {
             </div>
           )}
         </main>
+        </div>
+
+        <header ref={headerRef}>
+          <button type="button" className="wm" translate="no" title="Back to the whole field" aria-label="Meander, back to the whole field" onClick={nav.overview}>
+            <Mark />Meander
+          </button>
+          {visits.length > 0 && (
+            <button type="button" className="yt" aria-expanded={threadOpen} aria-controls="thread-panel" onClick={nav.toggleThread}>
+              <i />Your thread
+            </button>
+          )}
+        </header>
+
+        {school && !showThinker && school.themes.length > 0 && (
+          <div className="skel" inert={!inside}>
+            {/* the globe's lines dim to nothing behind the knot and the first page */}
+            <div className="pool" aria-hidden="true" />
+            <div className="veil" aria-hidden="true" />
+            <Knot key={school.id} school={school} nav={nav} tick={tick} />
+            <FirstPage key={`p-${school.id}`} school={school} nav={nav} />
+          </div>
+        )}
+        <p className="sr-only" aria-live="polite">{said}</p>
 
         {threadOpen ? (
           <aside className="card" id="thread-panel" aria-label="Your thread" ref={cardRef}>
@@ -259,7 +340,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
             <ThinkerSections thinker={thinkerData} nav={nav} headingRef={thinkerH} />
           </aside>
         ) : school ? (
-          <aside className="card" key={`s-${focus}`} aria-label={school.name} ref={cardRef}>
+          <aside className="card" key={`s-${focus}`} aria-label={school.name} ref={cardRef} inert={inside}>
             <SchoolSections school={school} nav={nav} />
           </aside>
         ) : null}

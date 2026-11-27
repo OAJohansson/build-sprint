@@ -883,3 +883,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Slice 1 user test: find 4 (3 at 1280), shape 4; U7-1 major (shelf hides sounds without a cue), U7-2..7 minor/polish (`user-testing/report-2026-11-27-p7-slice1.md`). Waiting for data-evals before the fix round.
 - Slice 1 data-evals (cb941cc): W1, W2, W3, W11, W12, W13 pass; W4 fails on bass Drive / Sub / Weight / Wobble (D7-1) and Pitch drop on 7 presets (D7-2). PM set the bass knob bars (L282) and accepted D7-3/4/5/7 knowingly (L283). Fix round sent to the engineer: U7-1..7, D7-1, D7-2, D7-6.
 - Slice 1 fix round done (51764e2, T247). Re-grade sent to data-evals (W4, W2, W11), user-tester (U7-1..7) and the critic (the shelf changed from columns to chip lines).
+- Critic on the built shelf: 5/10 (grouping lost in the chip lines). Engineer asked for two-column families with a fixed label column (critic's fix).

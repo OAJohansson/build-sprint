@@ -23,3 +23,7 @@ Scorecard: clutter 1 · hierarchy 2 · legibility 1 · feel 2 · copy 2. Closed:
 ## Round 3b (16e2c44): 9/10
 
 Scorecard: clutter 2 · hierarchy 2 · legibility 1 · feel 2 · copy 2. All round-3 gaps closed or mostly closed. Left for the build (critic: no further design round): the worst-case rebuild grid runs under the right panel with no scroll cue; "Breakdow…" and bare "2" / "0" counts on narrow sections; the Ride "Your turn" line crowds the shelf at 1280; blank cells' hover / focus outline to check in the build; the reserved strip is an empty band when it has nothing to say.
+
+## Built shelf, slice 1 fix round (51764e2): 5/10
+
+The wrapped chip lines fit all 20 sounds but lost the grouping (families start mid-line, label and names blur, repeated feel words, "closer" twice, dense at 1280). Critic's fix: a fixed family label column with sounds to its right, families in two columns; 8 px before the first chip; hide repeated feel words; ≥ 22 px pitch and ≥ 11 px labels at 1280; "closer" once. Sent to the engineer.

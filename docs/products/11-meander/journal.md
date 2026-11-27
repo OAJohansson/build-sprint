@@ -216,3 +216,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Eastern schools in the app (L40):** 27 schools, 58 links, 21 tests, lint and build green, 0 label problems across 28 views. Screenshots are in `design/phase3/eastern-*`. Known: one label sits 70px from its dot in the Analytic Philosophy view; the Yogācāra reading title has no diacritics.
 - **User test (27 Nov):** the timeline is the best view (job 1 scored 4/5). Majors: Your thread shows done but not next (F1); Eastern schools are isolated (F2, kept as is: L41); Vedānta dates overflow (F3). The fixes are with the engineer.
 - **User-test fixes (L42):** F1, F3, F4, F5 and F7 are fixed. 27 tests, lint and build green; label checks still 0 across 28 views. Next: PR, a preview deploy, and the owner's review.
+- **Phase 3 ready for review:** PR #106 and preview https://meander-q4q3ds7g0-mimirswell.vercel.app (it may ask for the owner's Vercel sign-in). Merge waits for the owner's yes.

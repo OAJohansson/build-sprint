@@ -9,6 +9,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Logo } from "@/components/studio/logo";
 import { SettingsLink, ViewsNav } from "@/components/views-nav";
+import { RebuildLink } from "@/components/studio/rebuild-link";
 import type { EarsAnalysis } from "@/lib/ears/results";
 import { LiveError, PART_NAMES, type PartName } from "@/lib/lab/live";
 import { barToMs, loopBars, msToBar } from "@/lib/lab/timing";
@@ -550,7 +551,9 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       <header className={s.appBar}>
         <div className={s.logo}><Logo className={s.mark} />Six AM</div>
         <ViewsNav current="analyse" />
-        <div className={s.appRight}><SettingsLink /></div>
+        {/* R8b (L273d): the map's one way into the Studio, replacing "Start a track from this". In the
+            app bar, not beside Listen / Make: there it took ~150 px from the title at 1280. */}
+        <div className={s.appRight}><RebuildLink mapId={map.id} className={s.textBtn} /><SettingsLink /></div>
       </header>
       <div className={s.head}>
         <a className={s.back} href="/analyse">← All tracks</a>

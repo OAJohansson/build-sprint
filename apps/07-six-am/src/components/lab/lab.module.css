@@ -16,7 +16,7 @@
 .appBar { height: 64px; flex: none; display: flex; align-items: center; gap: 28px; padding: 0 24px; background: var(--panel); border-bottom: 1px solid var(--line); }
 .logo { font: italic 400 30px var(--f-serif); display: flex; align-items: center; gap: 12px; flex: none; }
 .mark { width: 30px; height: 30px; flex: none; }
-.appRight { margin-left: auto; }
+.appRight { margin-left: auto; display: flex; align-items: center; gap: 20px; }
 
 .head { flex: none; display: flex; align-items: center; gap: 24px; padding: 12px 24px; min-width: 0; border-bottom: 1px solid var(--line); }
 .back { flex: none; color: var(--muted); text-decoration: none; font-size: 12px; }

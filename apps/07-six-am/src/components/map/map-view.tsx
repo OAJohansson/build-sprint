@@ -140,7 +140,7 @@ export function MapView({ id, auto, quiet = false }: { id: string; auto: boolean
 
 /**
  * A track without a map yet (most reversible, S1): the Phase 3 full-track listen fills the map in
- * live; once it is saved the Lab opens on it. "Start a track from this", "Explain the structure",
+ * live; once it is saved the Lab opens on it (its header has "Rebuild this song", L273d). "Explain the structure",
  * the section reference player and the layer legend were removed with the Lab (S1).
  */
 function MapScreen({ map, analysis, live, problem, canListen, onListen, onStop }: {

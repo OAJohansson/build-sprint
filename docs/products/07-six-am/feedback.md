@@ -319,3 +319,11 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | TH-1 | minor | Em in G minor read ♭vii, should be vi | fixed (61974fd, T215): raised 6th and 7th first in minor; Em in G minor = vi, borrowed from G major |
 | TH-2 | polish | ♭VI in A♭ spelled E G♯ B | fixed (61974fd, T215): roots spelled by the numeral's letter: F♭ A♭ C♭ |
 | TH-3 | major | Live re-check: on a key stored as "G#" (Dubspinna) every chord spelled in sharps (B♭m read A♯m, D♭ C♯), a regression from T215; TH-2 only fixed for "Ab" | fixed (97f459f, T218): one shared normaliser (`conventionalKey`) before any spelling; G# major = A♭ major, D# minor = E♭ minor; the Lab header and the note names agree; tested |
+
+## Owner final review, Phase 6 (27 Nov)
+
+| ID | Severity | What happened | Status |
+| --- | --- | --- | --- |
+| OR6-1 | minor | Listen shows Drums, Bass, Other, Vocals; Make shows Bass, Drums, Melody, FX, Vocals ("not yet"). "Other" doesn't say it becomes Melody and FX | open: rename to "Melody & FX" proposed, owner to decide |
+| OR6-2 | major | Owner's goal is break down → remake each part → save → rebuild the whole song in the Studio. Make works one looped section at a time and the Studio has no guided rebuild of the original's sections | open: proposed as Phase 7's first job (rebuild the song, then make it yours) |
+| OR6-3 | major | Phase 5 owner check "drums close by ear": not close with any preset. Hats play hits the original doesn't have. Cause: three synth rows (909-style voices, not samples); every high sound (shakers, percussion, bleed) lands on Hats; no way to remove a hit or mute a row unless Make flagged it | open: options to the owner (fix-by-ear pattern editing, more rows, a real one-shot sample kit) |

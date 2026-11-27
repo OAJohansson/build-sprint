@@ -164,7 +164,20 @@ export function GlobeView({ nav }: { nav: Nav }) {
     // A faint dot at rest that lands under a neighbour's label or the title is left out.
     const covers = ko.concat(t ? [t] : []);
     const under = new Set(nodes.filter((n) => n.rest && covers.some((r) => n.p.x > r.x - 8 && n.p.x < r.x + r.w + 8 && n.p.y > r.y - 8 && n.p.y < r.y + r.h + 8)).map((n) => n.id));
-    setPlaced({ key, map, ko, fade, under });
+    // The oval fades threads round the title, but a wide or wrapped date line reaches past it; every line of the
+    // title is knocked out too, at its measured width, so no thread crosses its text.
+    const titleLines: Rect[] = [];
+    const tEl = titleRef.current;
+    if (tEl) {
+      const range = document.createRange();
+      for (const el of tEl.querySelectorAll(":scope > h1, :scope > p")) {
+        range.selectNodeContents(el);
+        for (const r of range.getClientRects()) {
+          if (r.width > 1) titleLines.push({ x: (r.left - s.left) / k, y: (r.top - s.top) / k, w: r.width / k, h: r.height / k });
+        }
+      }
+    }
+    setPlaced({ key, map, ko: ko.concat(titleLines), fade, under });
   }, [key, tick, nodes, threadPts, C]);
 
   // Move keyboard focus to what just opened, so Tab continues from there into the card.

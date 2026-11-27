@@ -374,4 +374,6 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | U7-23 | polish | Bar ranges drop on narrow sections | open: slice 3 polish |
 | U7-24 | polish | Empty strip band after the first fill | open: slice 4 (the strip's Mine / Original line) |
 | U7-25 | polish | Part names cut | open: slice 3 polish |
+| D7-17 | minor | After a reload, untouched steps follow the new reading, so an edited loop can play hits the owner never heard (kick 27 → 30) | open: L294 |
+| D7-18 | check | Rebuild hints only graded on the seed's idealised curves; check on a real map | open: final review |
 

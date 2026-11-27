@@ -14,3 +14,18 @@ Gaps, most important first:
 6. Globe and timeline look empty with 4 sample genres. → Wait for the real content.
 
 Keep: the record row itself (no art, no play buttons); the skeleton's facts row.
+
+## Round 2 (27 Nov, real content, 33 genres): 7/10
+Scorecard: clutter 1/2 · hierarchy 2/2 · legibility 1/2 · feel 2/2 · copy 1/2
+
+Reads as: "the same calm star-map, now convincingly a second field of one product, with a quiet and honest 'Start with' list; but real content (33 genres, 8 neighbours) has turned the map and the neighbour view into a tangle the 4-genre sample was hiding."
+
+Gaps:
+1. Focus view: 8 neighbours bunched, lines through labels, dots far from names; an open artist lands on a neighbour.
+2. Full globe: the electronic cluster is a hairball; labels float; two label sizes; sphere top under the header.
+3. Skeleton: "Start with" sits above "Start here".
+4. Phone card: 8 neighbours push Listen for and Start with two screens down; "EDM (2010s boom)" vs "EDM".
+5. Timeline: three label rules; 30 full-width bars make a wall.
+6. "begun", "started", "Begun" for one state; phone Genres list is the timeline again with big dots.
+
+Keep: the serif header; the Start with rows.

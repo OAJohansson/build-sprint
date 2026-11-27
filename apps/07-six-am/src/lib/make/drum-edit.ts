@@ -94,3 +94,36 @@ export function copyBar(read: RowHit[], e: RowEdits, bar: number, loopSteps: num
 export function savedOnLoop<T extends { loopKey: string | null }>(rec: T | null, loopKey: string | null): T | null {
   return rec && rec.loopKey === loopKey ? rec : null;
 }
+
+// ── Slice 3 polish (L294, D7-17) ────────────────────────────────────────────────────────────────
+
+/** How a row's fixes by ear are kept: the owner's taps and, since L294, the steps the row played. */
+export type StoredRow = { edits?: Partial<RowEdits>; played?: number[] };
+
+/**
+ * L294: an edited row comes back exactly as left. With its played steps stored, the row's baseline is
+ * the reading the owner tapped on (played − added + removed), so it plays the stored steps exactly and
+ * its marks are the owner's own taps, whatever a new reading hears. A baseline step the new reading
+ * still hears keeps that hit's timing; one it doesn't is placed on its step at the row's usual
+ * loudness. Older shapes: taps only (a19debe) sit on the new reading (base null); played only (v1)
+ * becomes the difference from the new reading. A row never touched follows the new reading.
+ */
+export function restoreRow(read: RowHit[], stored: StoredRow | undefined, loopSteps: number, o: { gridMs: number; sps: number }): { base: RowHit[] | null; edits: RowEdits } {
+  if (!stored) return { base: null, edits: NO_EDITS };
+  const ok = (s: unknown): s is number => Number.isInteger(s) && (s as number) >= 0 && (s as number) < loopSteps;
+  const uniq = (xs: unknown[] | undefined) => [...new Set((xs ?? []).filter(ok))].sort((a, b) => a - b);
+  const has = (hits: Pick<RowHit, "step">[], s: number) => hits.some((h) => h.step === s);
+  if (stored.played) {
+    const played = uniq(stored.played);
+    if (!stored.edits) return { base: null, edits: editsFor(read, played, loopSteps) };
+    const added = uniq(stored.edits.added).filter((s) => played.includes(s));
+    const removed = uniq(stored.edits.removed).filter((s) => !played.includes(s));
+    const baseSteps = [...new Set([...played.filter((s) => !added.includes(s)), ...removed])].sort((a, b) => a - b);
+    const vel = addedVel(read);
+    const base = baseSteps.map((step) => read.find((h) => h.step === step) ?? { step, off: 0, vel, t: Math.round((o.gridMs / 1000 + step * o.sps) * 100000) / 100000, db: null, faint: false });
+    return { base, edits: { added, removed } };
+  }
+  const e = stored.edits ?? {};
+  // An added step the re-read now hears is just heard; a taken-out step it no longer hears is gone.
+  return { base: null, edits: { added: uniq(e.added).filter((s) => !has(read, s)), removed: uniq(e.removed).filter((s) => has(read, s)) } };
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { NO_EDITS, copyBar, editsFor, heardRows, playedHits, savedOnLoop, stepKinds, toggleStep, unfoldSteps } from "./drum-edit";
+import { NO_EDITS, copyBar, editsFor, heardRows, playedHits, restoreRow, savedOnLoop, stepKinds, toggleStep, unfoldSteps } from "./drum-edit";
 import { foldRow, type RowHit } from "./drums-make";
 
 const sps = 60 / 124 / 4;
@@ -116,5 +116,45 @@ describe("slice 2 fix round", () => {
     expect(savedOnLoop(rec, "100-200")).toBe(rec);
     expect(savedOnLoop(rec, "300-400")).toBeNull();
     expect(savedOnLoop(null, "100-200")).toBeNull();
+  });
+});
+
+describe("L294: an edited row comes back exactly as left (restoreRow)", () => {
+  const o = { gridMs: 10, sps };
+  // The owner took out the kick on 4 and added one on 6; the row played these steps.
+  const taps = { added: [6], removed: [4] };
+  const stepsLeft = playedHits(kicks, taps, o).map((h) => h.step);
+  it("plays the stored steps exactly on a new reading that hears more, marks only the owner's taps", () => {
+    const reread = [...kicks, hit(2, 0.5), hit(10, 0.5)]; // the new capture hears two extra kicks
+    const r = restoreRow(reread, { edits: taps, played: stepsLeft }, 128, o);
+    expect(playedHits(r.base!, r.edits, o).map((h) => h.step)).toEqual(stepsLeft);
+    expect(r.edits).toEqual(taps);
+    const k = stepKinds(r.base!, r.edits);
+    expect([k.get(2), k.get(4), k.get(6), k.get(10)]).toEqual([undefined, "removed", "added", undefined]);
+  });
+  it("and on one that hears less: a missing baseline hit is placed on its step at the row's loudness", () => {
+    const reread = kicks.filter((h) => h.step !== 8);
+    const r = restoreRow(reread, { edits: taps, played: stepsLeft }, 128, o);
+    expect(playedHits(r.base!, r.edits, o).map((h) => h.step)).toEqual(stepsLeft);
+    expect(r.base!.find((h) => h.step === 8)).toMatchObject({ off: 0, vel: 0.8 });
+    expect(r.base!.find((h) => h.step === 0)).toBe(reread[0]); // a hit still heard keeps the reading's timing
+  });
+  it("a row left as read (taps undone) still plays its stored steps", () => {
+    const reread = [...kicks, hit(2)];
+    const r = restoreRow(reread, { edits: NO_EDITS, played: kicks.map((h) => h.step) }, 128, o);
+    expect(playedHits(r.base!, r.edits, o).map((h) => h.step)).toEqual(kicks.map((h) => h.step));
+    expect(r.edits).toEqual(NO_EDITS);
+  });
+  it("reads the older shapes: taps only follow the new reading; played only becomes the difference", () => {
+    const reread = [...kicks, hit(6)];
+    expect(restoreRow(reread, { edits: taps }, 128, o)).toEqual({ base: null, edits: { added: [], removed: [4] } });
+    const v1 = restoreRow(reread, { played: stepsLeft }, 128, o);
+    expect(v1.base).toBeNull();
+    expect(playedHits(reread, v1.edits, o).map((h) => h.step)).toEqual(stepsLeft);
+  });
+  it("a row never touched, and steps outside the loop, are ignored", () => {
+    expect(restoreRow(kicks, undefined, 128, o)).toEqual({ base: null, edits: NO_EDITS });
+    const r = restoreRow(kicks, { edits: { added: [6, 999] }, played: [...stepsLeft, -1, 500] }, 128, o);
+    expect(playedHits(r.base!, r.edits, o).map((h) => h.step)).toEqual(stepsLeft);
   });
 });

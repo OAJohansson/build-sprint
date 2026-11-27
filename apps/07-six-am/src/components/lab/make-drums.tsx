@@ -18,8 +18,8 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from "react";
 import type { LabTransport, LoopState } from "@/lib/lab/transport";
 import { clampDrumMacros, drumKnobDetail, drumKnobShown, drumKnobSpec, drumMoves, drumSoundAbout, drumSoundName, drumSuggestLine, isDrumPreset, isKitId, knobsOf, makeRowOf, type DrumMacros, type DrumSoundId } from "@/lib/make/drum-synth";
-import { EAR_ROWS, MAKE_ROWS, READ_OPEN_HATS, ROW_SCORE_SCALE, foldRow, rowCandidates, type DrumsCloseness, type DrumsReading, type DrumsReport, type MakeRow, type RowSound, type RowTarget } from "@/lib/make/drums-make";
-import { NO_EDITS, copyBar, editCount, editsFor, heardRows, playedHits, savedOnLoop, stepKinds, toggleStep, unfoldSteps, type HitKind, type RowEdits } from "@/lib/make/drum-edit";
+import { EAR_ROWS, MAKE_ROWS, READ_OPEN_HATS, ROW_SCORE_SCALE, foldRow, rowCandidates, type DrumsCloseness, type DrumsReading, type DrumsReport, type MakeRow, type RowHit, type RowSound, type RowTarget } from "@/lib/make/drums-make";
+import { NO_EDITS, copyBar, editCount, editsFor, heardRows, playedHits, restoreRow, savedOnLoop, stepKinds, toggleStep, unfoldSteps, type HitKind, type RowEdits, type StoredRow } from "@/lib/make/drum-edit";
 import { MakeClient } from "@/lib/make/make-client";
 import { P7_FAMILIES, P7_ROW_NAMES, p7SoundById, p7Sounds } from "@/lib/make/kit-p7";
 import { hasKitSample } from "@/lib/make/kit-samples";
@@ -66,10 +66,13 @@ export type EarState = "open" | "left" | "yours";
 /** Stable empties (the same object every render, so memos keyed on them hold). */
 const NO_ROWS: Row[] = [];
 const NO_ROW_EDITS: Record<Row, RowEdits> = perRow(() => NO_EDITS);
+const NO_BASE: Partial<Record<Row, RowHit[]>> = {};
 
 /** L288: where a loop's fixes by ear are kept in this browser (steps only, no audio, C2). */
 const editsKey = (url: string, loopKey: string) => `sixam.drums.edits.v1|${url}|${loopKey}`;
-/** U7-19: the owner's own taps per row (added, taken out), so a hit that is new in a re-read shows as heard. `played` is the v1 shape, still read. */
+/** The owner's own taps per row (U7-19) and, since L294 (D7-17), each edited row's played steps, so
+ *  the row comes back exactly as left (restoreRow). Older shapes still read: taps only (a19debe),
+ *  played only (v1). */
 type StoredEdits = { edits?: Partial<Record<Row, RowEdits>>; played?: Partial<Record<Row, number[]>>; left: Row[]; mute: Row[] };
 function loadEdits(url: string, loopKey: string): StoredEdits | null {
   try { const v = JSON.parse(localStorage.getItem(editsKey(url, loopKey)) ?? "null"); return v && typeof v === "object" && (v.edits || v.played) ? v as StoredEdits : null; } catch { return null; }
@@ -119,6 +122,8 @@ export function useDrums(o: DrumsOpts) {
   const [shelf, setShelf] = useState(true);
   // Slice 2 (R4): the owner's edits per row, the rows left empty on purpose (L277), both per loop; mute and solo per row.
   const [editsS, setEdits] = useState<{ loopKey: string | null; rows: Record<Row, RowEdits> }>({ loopKey: null, rows: perRow(() => NO_EDITS) });
+  // L294: per row, the reading the owner's taps sit on when it differs from this one (a restored row).
+  const [baseS, setBase] = useState<{ loopKey: string | null; rows: Partial<Record<Row, RowHit[]>> }>({ loopKey: null, rows: {} });
   const [leftS, setLeft] = useState<{ loopKey: string | null; rows: Row[] }>({ loopKey: null, rows: [] });
   const [mute, setMute] = useState<Record<Row, boolean>>(() => perRow(() => false));
   const [solo, setSolo] = useState<Record<Row, boolean>>(() => perRow(() => false));
@@ -135,11 +140,14 @@ export function useDrums(o: DrumsOpts) {
   const readState: ReadState = state && state.loopKey === loopKey ? state.state : "idle";
   const anyway = anywayS.loopKey === loopKey ? anywayS.rows : NO_ROWS;
   const edits = editsS.loopKey === loopKey ? editsS.rows : NO_ROW_EDITS;
+  const base = baseS.loopKey === loopKey ? baseS.rows : NO_BASE;
   const left = leftS.loopKey === loopKey ? leftS.rows : NO_ROWS;
   const sps = secondsPer16th(o.bpm);
   // What each row plays (and saves): read hits minus taken out, plus added (R4, W6).
-  const played = useMemo(() => (read ? perRow((r) => playedHits(read.d.rows[r].hits, edits[r], { gridMs: read.d.gridMs, sps })) : null), [read, edits, sps]);
-  const kinds = useMemo(() => (read ? perRow((r) => stepKinds(read.d.rows[r].hits, edits[r])) : null), [read, edits]);
+  const played = useMemo(() => (read ? perRow((r) => playedHits(base[r] ?? read.d.rows[r].hits, edits[r], { gridMs: read.d.gridMs, sps })) : null), [read, base, edits, sps]);
+  const kinds = useMemo(() => (read ? perRow((r) => stepKinds(base[r] ?? read.d.rows[r].hits, edits[r])) : null), [read, base, edits]);
+  /** The hits a row's taps sit on: the restored baseline (L294), else this reading. */
+  const hitsOf = (r: Row) => (read ? base[r] ?? read.d.rows[r].hits : []);
   // A row Mine can play: it has hits and isn't off as doubtful (bleed, L225); then mute and solo choose what is heard.
   const on = useMemo(() => perRow((r) => !!read && !!played && played[r].length > 0 && (!read.d.rows[r].doubtful || anyway.includes(r))), [read, played, anyway]);
   const heard = useMemo(() => heardRows(MAKE_ROWS, mute, solo), [mute, solo]);
@@ -250,25 +258,30 @@ export function useDrums(o: DrumsOpts) {
     const v = loadEdits(o.url, read.loopKey);
     const t = setTimeout(() => {
       if (v) {
-        setEdits({ loopKey: read.loopKey, rows: perRow((r) => {
-          const e = v.edits?.[r], hits = read.d.rows[r].hits, has = (x: number) => hits.some((h) => h.step === x);
-          // An added step the re-read now hears is just heard; a taken-out step it no longer hears is gone.
-          if (e) return { added: (e.added ?? []).filter((x) => x >= 0 && x < read.d.steps && !has(x)), removed: (e.removed ?? []).filter(has) };
-          return v.played?.[r] ? editsFor(hits, v.played[r]!, read.d.steps) : NO_EDITS;
-        }) });
+        // L294: an edited row plays its stored steps exactly; rows never touched follow this reading.
+        const back = perRow((r) => {
+          const row: StoredRow | undefined = v.edits?.[r] || v.played?.[r] ? { edits: v.edits?.[r], played: v.played?.[r] } : undefined;
+          return restoreRow(read.d.rows[r].hits, row, read.d.steps, { gridMs: read.d.gridMs, sps });
+        });
+        setEdits({ loopKey: read.loopKey, rows: perRow((r) => back[r].edits) });
+        setBase({ loopKey: read.loopKey, rows: Object.fromEntries(MAKE_ROWS.filter((r) => back[r].base).map((r) => [r, back[r].base!])) });
         setLeft({ loopKey: read.loopKey, rows: (v.left ?? []).filter((r) => MAKE_ROWS.includes(r)) });
       }
       setMute(perRow((r) => (v?.mute ?? []).includes(r)));
       setRestored(read.loopKey);
     }, 0);
     return () => clearTimeout(t);
+    // sps follows the tempo, fixed for a track; the restore runs once per reading.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [read, o.url, restored]);
   useEffect(() => {
     if (!read || !played || !o.url || restored !== read.loopKey) return;
-    const rows = MAKE_ROWS.filter((r) => editCount(edits[r]) > 0);
+    // L294: a row the owner edited (or that came back on its own baseline) keeps its taps and its played steps.
+    const rows = MAKE_ROWS.filter((r) => editCount(edits[r]) > 0 || !!base[r]);
     const muted = MAKE_ROWS.filter((r) => mute[r]);
-    storeEdits(o.url, read.loopKey, rows.length || left.length || muted.length ? { edits: Object.fromEntries(rows.map((r) => [r, edits[r]])), left, mute: muted } : null);
-  }, [read, played, edits, left, mute, o.url, restored]);
+    storeEdits(o.url, read.loopKey, rows.length || left.length || muted.length
+      ? { edits: Object.fromEntries(rows.map((r) => [r, edits[r]])), played: Object.fromEntries(rows.map((r) => [r, played[r].map((h) => h.step)])), left, mute: muted } : null);
+  }, [read, played, edits, base, left, mute, o.url, restored]);
 
   const setPreset = (row: Row, p: DrumSoundId) => {
     const next = fresh(p);
@@ -298,6 +311,8 @@ export function useDrums(o: DrumsOpts) {
     if (read) {
       steps = unfoldSteps(x.pattern, read.d.steps);
       const e = editsFor(read.d.rows[row].hits, steps, read.d.steps);
+      // A saved row loaded here sits on this reading again.
+      setBase((b) => { const rows = { ...(b.loopKey === loopKey ? b.rows : {}) }; delete rows[row]; return { loopKey, rows }; });
       setEdits((cur) => ({ loopKey, rows: { ...(cur.loopKey === loopKey ? cur.rows : perRow(() => NO_EDITS)), [row]: e } }));
       if (left.includes(row)) setLeft({ loopKey, rows: left.filter((r) => r !== row) });
     }
@@ -315,7 +330,7 @@ export function useDrums(o: DrumsOpts) {
     if (!read) return;
     setEdits((e) => {
       const cur = e.loopKey === loopKey ? e.rows : perRow(() => NO_EDITS);
-      return { loopKey, rows: { ...cur, [row]: toggleStep(cur[row], read.d.rows[row].hits, step, read.d.steps) } };
+      return { loopKey, rows: { ...cur, [row]: toggleStep(cur[row], hitsOf(row), step, read.d.steps) } };
     });
     setTapBar((t) => ({ ...t, [row]: Math.floor(step / 16) }));
     // Editing holds the 4 bars in view (the page doesn't turn under the pointer).
@@ -331,7 +346,7 @@ export function useDrums(o: DrumsOpts) {
     if (!read) return;
     setEdits((e) => {
       const cur = e.loopKey === loopKey ? e.rows : perRow(() => NO_EDITS);
-      return { loopKey, rows: { ...cur, [row]: copyBar(read.d.rows[row].hits, cur[row], bar, read.d.steps, { gridMs: read.d.gridMs, sps }) } };
+      return { loopKey, rows: { ...cur, [row]: copyBar(hitsOf(row), cur[row], bar, read.d.steps, { gridMs: read.d.gridMs, sps }) } };
     });
     setAb("b");
   };

@@ -537,7 +537,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const heardMsFn = useCallback(() => tr.current?.heardMs() ?? 0, []);
   const loopSec = loop ? sectionAt(sections, loop.from) : null;
   // A long section loops 16 bars of it (L161): say which (LS1-2).
-  // CR2-3: a loop over two sections is named by its bars only, so the header never contradicts the chip.
+  // CR2-3: a loop over two sections is named by its bars only; while looping the clock says only the bar (the chip names the loop).
   const loopSpans = !!loop && !!loopSec && loop.to > loopSec.to;
   const loopName = loopSpans && loop ? `bars ${loop.from}–${loop.to - 1}` : loopSec?.label ?? "section";
   const loopPart = !loopSpans && loop && loopSec && loop.to - loop.from < loopSec.to - loopSec.from
@@ -565,7 +565,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
           <div className={s.transport}>
             <button className={s.play} onClick={onPlay} disabled={starting} aria-label={ts?.playing ? "Pause" : "Play"}>{ts?.playing ? "❚❚" : "▶"}</button>
             {mode === "listen" && <HearChip hear={hear} parts={parts} onClear={() => setHear({ kind: "all" })} />}
-            <span className={s.clock}>{clockMs(pos.sec * 1000)}{loopSpans && ts?.loop ? ` · in ${loopName}` : here ? ` · in ${here.label}` : ""} <small>bar {pos.bar}</small></span>
+            <span className={s.clock}>{clockMs(pos.sec * 1000)}{ts?.loop ? " ·" : here ? ` · in ${here.label}` : ""} <small>bar {pos.bar}</small></span>
             <span className={s.status} aria-live="polite">{status}</span>
             {loop && ts?.loop && (
               <span className={s.loopChip} title={`Looping ${loopName}${loopPart} · ${clockMs(ts.loop.startMs)}–${clockMs(ts.loop.endMs)}`}>

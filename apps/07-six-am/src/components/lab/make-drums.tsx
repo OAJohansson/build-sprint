@@ -69,9 +69,10 @@ const NO_ROW_EDITS: Record<Row, RowEdits> = perRow(() => NO_EDITS);
 
 /** L288: where a loop's fixes by ear are kept in this browser (steps only, no audio, C2). */
 const editsKey = (url: string, loopKey: string) => `sixam.drums.edits.v1|${url}|${loopKey}`;
-type StoredEdits = { played: Partial<Record<Row, number[]>>; left: Row[]; mute: Row[] };
+/** U7-19: the owner's own taps per row (added, taken out), so a hit that is new in a re-read shows as heard. `played` is the v1 shape, still read. */
+type StoredEdits = { edits?: Partial<Record<Row, RowEdits>>; played?: Partial<Record<Row, number[]>>; left: Row[]; mute: Row[] };
 function loadEdits(url: string, loopKey: string): StoredEdits | null {
-  try { const v = JSON.parse(localStorage.getItem(editsKey(url, loopKey)) ?? "null"); return v && typeof v === "object" && v.played ? v as StoredEdits : null; } catch { return null; }
+  try { const v = JSON.parse(localStorage.getItem(editsKey(url, loopKey)) ?? "null"); return v && typeof v === "object" && (v.edits || v.played) ? v as StoredEdits : null; } catch { return null; }
 }
 function storeEdits(url: string, loopKey: string, v: StoredEdits | null) {
   try { if (v) localStorage.setItem(editsKey(url, loopKey), JSON.stringify(v)); else localStorage.removeItem(editsKey(url, loopKey)); } catch { /* private mode or full: the fixes just aren't kept */ }
@@ -249,7 +250,12 @@ export function useDrums(o: DrumsOpts) {
     const v = loadEdits(o.url, read.loopKey);
     const t = setTimeout(() => {
       if (v) {
-        setEdits({ loopKey: read.loopKey, rows: perRow((r) => (v.played[r] ? editsFor(read.d.rows[r].hits, v.played[r]!, read.d.steps) : NO_EDITS)) });
+        setEdits({ loopKey: read.loopKey, rows: perRow((r) => {
+          const e = v.edits?.[r], hits = read.d.rows[r].hits, has = (x: number) => hits.some((h) => h.step === x);
+          // An added step the re-read now hears is just heard; a taken-out step it no longer hears is gone.
+          if (e) return { added: (e.added ?? []).filter((x) => x >= 0 && x < read.d.steps && !has(x)), removed: (e.removed ?? []).filter(has) };
+          return v.played?.[r] ? editsFor(hits, v.played[r]!, read.d.steps) : NO_EDITS;
+        }) });
         setLeft({ loopKey: read.loopKey, rows: (v.left ?? []).filter((r) => MAKE_ROWS.includes(r)) });
       }
       setMute(perRow((r) => (v?.mute ?? []).includes(r)));
@@ -261,7 +267,7 @@ export function useDrums(o: DrumsOpts) {
     if (!read || !played || !o.url || restored !== read.loopKey) return;
     const rows = MAKE_ROWS.filter((r) => editCount(edits[r]) > 0);
     const muted = MAKE_ROWS.filter((r) => mute[r]);
-    storeEdits(o.url, read.loopKey, rows.length || left.length || muted.length ? { played: Object.fromEntries(rows.map((r) => [r, played[r].map((h) => h.step)])), left, mute: muted } : null);
+    storeEdits(o.url, read.loopKey, rows.length || left.length || muted.length ? { edits: Object.fromEntries(rows.map((r) => [r, edits[r]])), left, mute: muted } : null);
   }, [read, played, edits, left, mute, o.url, restored]);
 
   const setPreset = (row: Row, p: DrumSoundId) => {
@@ -349,6 +355,8 @@ export function useDrums(o: DrumsOpts) {
   const tags = suggestDrumTags(cur.preset, o.bpm, o.title, cur.macros);
   const savedRows = perRow((r) => sameSaved(r));
   const canSave = readState === "ready" && on[open] && saveState.state !== "saving" && action.kind !== "none";
+  /** Polish round: why Save is resting, in a few words (null when it can save, or once saved). */
+  const saveWhy = readState !== "ready" ? null : !played || !played[open].length ? `nothing to save: ${rowName(open)} is empty` : !on[open] ? `nothing to save: ${rowName(open)} is off` : null;
   const save = async (row: Row = open, nameOverride?: string) => {
     if (!read || !scale || !o.keyName || !played) return;
     const snd = sounds[row], id = soundId(snd.preset, snd.macros);
@@ -383,7 +391,7 @@ export function useDrums(o: DrumsOpts) {
     ab, setAb, bed, setBed, mineReady: !!mine && mine.key === mineKeyNow, mineAny: !!mine, closeness: mine?.closeness ?? null, rowCloseness: mine?.rowCloseness ?? null,
     /** M-F3: no row is heard in Mine (every row off, muted or left out by solo): B would play silence. */
     allOff: !!read && !MAKE_ROWS.some((r) => plays[r]),
-    mySounds, loadSound, name: nameField, setName: (v: string) => setNames((n) => ({ ...n, [open]: v })), tags, save, canSave, savedRows,
+    mySounds, loadSound, saveWhy, name: nameField, setName: (v: string) => setNames((n) => ({ ...n, [open]: v })), tags, save, canSave, savedRows,
     saved: { state: saveState.state, text: saveState.text, savedAs: lastRow && sameSaved(open) ? lastRow.name : null, action: action.kind },
     bpm: o.bpm,
     // Slice 2: the step grid, the rows to fill by ear, mute and solo.
@@ -582,16 +590,16 @@ function Ruler({ steps, page, from, onJump, disabled, children }: { steps: numbe
   );
 }
 
-/** L289: which 4 bars are shown; the pressed one is held (press it again to follow the playhead). */
+/** L289 (polish round): which 4 bars are shown, as pages: "‹ 76–79 ›". The arrows hold a page; the range, pressed while held, follows the playhead again. */
 function PageSwitch({ pages, page, pinned, from, onPage }: { pages: number; page: number; pinned: boolean; from: number; onPage: (p: number | null) => void }) {
   if (pages <= 1) return <span />;
+  const a = from + page * PAGE_BARS, b = a + PAGE_BARS - 1;
   return (
     <span className={s.pages} role="group" aria-label="Bars shown">
-      {Array.from({ length: pages }, (_, p) => (
-        <button key={p} type="button" className={s.mbtn} aria-pressed={p === page} data-held={pinned && p === page ? "" : undefined}
-          title={pinned && p === page ? "Held here: press again to follow the playhead" : `Show bars ${from + p * PAGE_BARS}–${from + p * PAGE_BARS + PAGE_BARS - 1}`}
-          onClick={() => onPage(pinned && p === page ? null : p)}>{from + p * PAGE_BARS}</button>
-      ))}
+      <button type="button" className={s.pgArrow} disabled={page === 0} onClick={() => onPage(page - 1)} aria-label={`Show bars ${a - PAGE_BARS}–${a - 1}`}>‹</button>
+      <button type="button" className={s.pgRange} data-held={pinned ? "" : undefined} onClick={() => onPage(pinned ? null : page)}
+        title={pinned ? "Held on these bars: press to follow the playhead again" : "Following the playhead: press to hold these bars"}>{a}–{b}</button>
+      <button type="button" className={s.pgArrow} disabled={page >= pages - 1} onClick={() => onPage(page + 1)} aria-label={`Show bars ${b + 1}–${b + PAGE_BARS}`}>›</button>
     </span>
   );
 }
@@ -656,10 +664,6 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs, onJump }: { m: Dr
   const rowView = (r: Row) => {
     const rr = m.read?.d.rows[r], lit = r === row, doubtful = !!rr?.doubtful && !m.anyway.includes(r), st = m.earState[r];
     const quiet = m.mute[r] || (anySolo && !m.solo[r]);
-    // U7-14: the open row can copy the bar last tapped (or the first shown) to every bar.
-    const cb = m.tapBar[r] ?? page * PAGE_BARS;
-    const copy = lit && !off && !!m.played && steps > 16 && m.played[r].some((h) => Math.floor(h.step / 16) === cb)
-      ? <button type="button" className={s.textBtn} onClick={() => m.copyBarTo(r, cb)} title="Every bar of this row plays what this bar plays now (a second tap on a step still undoes)">Copy bar {fromBar + cb} to every bar</button> : null;
     const head = off ? null
       : st === "open" ? <><span>Your turn: listen for {EAR_WORDS[r].listen} and tap it in</span> · <button type="button" className={s.textBtn} onClick={() => m.leaveEmpty(r, true)}>Leave empty</button></>
       : st === "left" ? <><span>Left empty, so the loop has no {EAR_WORDS[r].noun}</span> · <button type="button" className={s.textBtn} onClick={() => m.leaveEmpty(r, false)}>Undo</button></>
@@ -667,7 +671,7 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs, onJump }: { m: Dr
         ? <><span>{rr.note ?? "Probably bleed"}: off in Mine</span> · <button type="button" className={s.textBtn} title={rr.why ?? undefined} onClick={() => m.playAnyway(r)}>Play anyway</button></>
         : <><span>Playing a row Six AM doubted</span> · <button type="button" className={s.textBtn} title="Leave this row out of Mine again, as the reading suggests" onClick={() => m.backToOff(r)}>Back to off</button></>)
       : null;
-    const under = head || copy ? <div className={s.under} data-yours={st === "open" ? "" : undefined}>{head}{head && copy ? " · " : null}{copy}</div> : null;
+    const under = head ? <div className={s.under} data-yours={st === "open" ? "" : undefined}>{head}</div> : null;
     return [
       <button key={`${r}-n`} type="button" className={s.rname} aria-pressed={lit} onClick={() => m.setOpen(r)} title={`${rowName(r)}: ${drumSoundName(m.sounds[r].preset)}`}>
         <span>{rowName(r)}{doubtful && <span className={s.drOff}> off</span>}</span>
@@ -703,7 +707,12 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs, onJump }: { m: Dr
         </div>
         {m.earRows.flatMap(rowView)}
       </div>
-      <Shelf m={m} row={row} playing={playing} off={off} rowOff={rowOff} />
+      <Shelf m={m} row={row} playing={playing} off={off} rowOff={rowOff} copy={(() => {
+        // U7-14 (polish round): "Copy bar N to every bar" sits in the sound strip, so the rows never shift.
+        const cb = m.tapBar[row] ?? page * PAGE_BARS;
+        return !off && !!m.played && steps > 16 && m.played[row].some((h) => Math.floor(h.step / 16) === cb)
+          ? <button type="button" className={s.textBtn} onClick={() => m.copyBarTo(row, cb)} title="Every bar of this row plays what this bar plays now (a second tap on a step still undoes)">Copy bar {fromBar + cb} to every bar</button> : null;
+      })()} />
       {wait ? <p className={s.drWait} role="status">{wait}</p> : (
         <div className={s.drSuggest}>
           <p className={s.suggest} aria-live="polite">{line}</p>
@@ -730,7 +739,7 @@ const famLabel = (f: string) => (f === "909 ride" ? "909 ride (stand-ins)" : f.c
  * when stopped). "Hide sounds" folds the shelf to its head. The row's saved sounds from this track
  * sit at the end.
  */
-function Shelf({ m, row, playing, off, rowOff }: { m: DrumsModel; row: Row; playing: boolean; off: boolean; rowOff: boolean }) {
+function Shelf({ m, row, playing, off, rowOff, copy }: { m: DrumsModel; row: Row; playing: boolean; off: boolean; rowOff: boolean; copy: React.ReactNode }) {
   const short = useShort();
   const snd = m.sounds[row], ticks = m.ticks[row]?.macros, kit = p7SoundById(snd.preset);
   const closerTip = m.ticks[row]?.closer ?? null;
@@ -753,6 +762,7 @@ function Shelf({ m, row, playing, off, rowOff }: { m: DrumsModel; row: Row; play
           {closerTip && (
             <span className={s.shelfCloser} data-gap="" title={`About ${score(closerTip.distance)} against ${score(closerTip.own)} for this sound at its best`}>{drumSoundName(closerTip.preset)} is closer · <button className={s.textBtn} onClick={() => m.pick(row, closerTip.preset, playing)}>Try {drumSoundName(closerTip.preset)}</button></span>
           )}
+          {copy && <span className={s.shelfCloser}>{copy}</span>}
         </div>
         <div className={s.drKnobs} data-off={off ? "" : undefined}>
           {knobsOf(snd.preset).map((id) => (
@@ -803,7 +813,7 @@ export function DrumsSaveBar({ m }: { m: DrumsModel }) {
         {!m.read?.targets[row] ? <>no closeness score for {EAR_WORDS[row].noun}</> : <>closeness <b>{offRow ? "–" : m.rowCloseness?.[row]?.score ?? "–"}</b> / 100</>}
       </span>
       <input id="save-name" name="sound-name" aria-label="Name for the saved sound" autoComplete="off" spellCheck={false} className={s.input} value={m.name} maxLength={60} onChange={(e) => m.setName(e.target.value)} disabled={m.readState !== "ready"} title={m.tags.join(" · ")} />
-      {m.saved.state === "error" && <span className={s.saved} role="status">{m.saved.text}</span>}
+      {(m.saved.state === "error" || (!m.canSave && m.saveWhy)) && <span className={s.saved} role="status">{m.saved.state === "error" ? m.saved.text : m.saveWhy}</span>}
       <button className={s.gold} onClick={() => void m.save()} disabled={!m.canSave}>{m.saved.state === "saving" ? "Saving…" : done ? "Saved" : `Save ${noun}`}</button>
     </div>
   );

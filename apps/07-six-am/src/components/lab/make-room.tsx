@@ -344,11 +344,11 @@ export function MakeRoom(p: RoomProps) {
     ? `${lead} ${[where, `${clockMs(loop.startMs)}–${clockMs(loop.endMs)}`].filter(Boolean).join(", ")}, ${loop.state === "memory" ? "looping" : p.playing ? "filling the loop" : "the loop fills when you press Play"}`
     : family === "fx" ? "Timed to the section" : `${partName} alone`;
   const later = family === "vocals" || (family === "melody" && !MELODY_ON); // L247: Melody comes next phase
-  // L290: in Drums, while the shelf is folded (fixing by ear), the Mentor rail folds to an "Ask the
-  // Mentor" button so the steps get its width; one tap reopens it, and it reopens when the shelf does.
-  const [rail, setRail] = useState({ shelf: p.drums.shelf, open: false });
-  if (rail.shelf !== p.drums.shelf) setRail({ shelf: p.drums.shelf, open: false });
-  const railFolded = family === "drums" && !p.drums.shelf && !rail.open;
+  // L290 (polish round): in Drums the Mentor rail folds to an "Ask the Mentor" button so the steps get
+  // its width, shelf open or not; one tap opens it, and it folds again when you come back to Drums.
+  const [rail, setRail] = useState({ family, open: false });
+  if (rail.family !== family) setRail({ family, open: false });
+  const railFolded = family === "drums" && !rail.open;
   return (
     <div className={s.room} data-rail={railFolded ? "folded" : undefined}>
       <section className={s.synth} aria-label={`Make ${family === "bass" ? `a ${name}` : family === "drums" ? "drums" : family}`}>
@@ -360,7 +360,7 @@ export function MakeRoom(p: RoomProps) {
           ))}
           <span className={s.famTab} data-off="" aria-disabled="true" title="Vocals come later">Vocals<em>not yet</em></span>
           {/* Slice 2 (T239): in Drums, the hit legend sits on the tab line once the rows are read; the caption stays in the tooltip. */}
-          {railFolded && <button type="button" className={`${s.ghost} ${s.askMentor}`} onClick={() => setRail({ shelf: p.drums.shelf, open: true })}>Ask the Mentor</button>}
+          {railFolded && <button type="button" className={`${s.ghost} ${s.askMentor}`} onClick={() => setRail({ family, open: true })}>Ask the Mentor</button>}
           {!later && (family === "drums" && p.drums.readState === "ready" ? <span className={s.famCap} title={caption}><DrumsLegend /></span> : <span className={s.famCap} aria-live="polite" title={caption}>{caption}</span>)}
         </div>
         {later ? <LaterFamily family={family} onBass={() => p.onFamily("bass")} /> : family === "fx" ? (
@@ -399,7 +399,7 @@ export function MakeRoom(p: RoomProps) {
           </>
         )}
       </section>
-      {family === "bass" && m.isBass && <SaveBar m={m} />}
+      {family === "bass" && m.isBass && <SaveBar m={m} partName={part.name.toLowerCase()} />}
       {family === "drums" && <DrumsSaveBar m={p.drums} />}
       {family === "melody" && MELODY_ON && <MelodySaveBar m={p.melody} />}
       {family === "fx" && <FxSaveBar m={p.fx} />}
@@ -497,20 +497,16 @@ function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: 
         {/* Suggest settings (L157, T85): local patch matching; it only moves the gold ticks. */}
         <button className={s.ghost} onClick={m.suggestAgain} disabled={off || m.suggesting || m.suggestedNow} aria-describedby="suggest-hint">{m.suggesting ? "Suggesting…" : m.suggestedNow ? "Suggested" : "Suggest settings"}</button>
         <span id="suggest-hint" hidden>Places gold ticks where the knobs come closest to the original; it never turns a knob</span>
+        {/* Polish round: A/B is in the one bottom bar (as Drums); the original drums under both sits here. */}
+        {!blind && <button className={s.ghost} aria-pressed={m.drums} onClick={() => m.setDrums(!m.drums)} title="Plays the original drums under both A and B, so you judge the bass beside the kick">{m.drums ? "Drums under both: on" : "Drums under both: off"}</button>}
       </div>
-      {/* Phase 7: with the shelf above the knobs, A/B stays in view at the foot of the column (sticky, as in Drums) when the window is tall enough to hold everything; on a short one it follows Suggest, so nothing sits under it. */}
-      <div className={`${s.checkRow} ${s.bassCheck}`}>
-        {blind ? <BlindAB m={m} partName={part.name.toLowerCase()} /> : (
-        <div className={s.abWrap}>
-          <div className={s.ab} role="group" aria-label="Compare at the same loudness">
-            <button aria-pressed={m.ab === "a"} onClick={() => m.setAb("a")}>A · Original {part.name.toLowerCase()}</button>
-            <button aria-pressed={m.ab === "b"} onClick={() => m.setAb("b")} disabled={!m.mineReady} title={m.mineReady ? undefined : "Mine plays once the loop is read"}>B · Mine</button>
-          </div>
-          <span className={s.faint}>same loudness</span>
+      {/* The owner's blind A/B test (?blind=1) keeps its own row; the plain A/B is in the bottom bar. */}
+      {blind && (
+        <div className={`${s.checkRow} ${s.bassCheck}`}>
+          <BlindAB m={m} partName={part.name.toLowerCase()} />
+          <button className={s.ghost} aria-pressed={m.drums} onClick={() => m.setDrums(!m.drums)} title="Plays the original drums under both A and B, so you judge the bass beside the kick">{m.drums ? "Drums under both: on" : "Drums under both: off"}</button>
         </div>
-        )}
-        <button className={s.ghost} aria-pressed={m.drums} onClick={() => m.setDrums(!m.drums)} title="Plays the original drums under both A and B, so you judge the bass beside the kick">{m.drums ? "Drums under both: on" : "Drums under both: off"}</button>
-      </div>
+      )}
     </>
   );
 }
@@ -647,8 +643,8 @@ function LoopStrip({ part, from, to, chords, loopChords, levels, heardMs, bpm, o
     ? part.subs.map((x, i) => ({ label: `${x.name}`, ...blocksFromActivity(bandActivity(levels?.[i === 0 ? KICK_ROW : HATS_ROW], own), x.blocks) }))
     : [{ label: part.name.toLowerCase(), ...laneBlocks(own, part.blocks) }];
   const cells = chords.map((c, i) => ({ c, at: 1 + i * 8 })).filter((x) => x.at + 8 > from && x.at < to && x.c !== null);
-  // U7-15: every bar labelled (every other one past 16 bars).
-  const step = len > 16 ? 2 : 1;
+  // U7-15: every bar labelled.
+  const step = 1;
   // R5 (U7-15): a click on the bars or on the notes plays from that spot (the loop's own span).
   const jumpAt = loop ? (e: React.MouseEvent<HTMLDivElement>) => { if ((e.target as HTMLElement).closest("button")) return; const r = e.currentTarget.getBoundingClientRect(); onJump(loop.startMs + Math.max(0, Math.min(0.9999, (e.clientX - r.left) / r.width)) * (loop.endMs - loop.startMs)); } : undefined;
   return (
@@ -691,16 +687,21 @@ function LoopStrip({ part, from, to, chords, loopChords, levels, heardMs, bpm, o
   );
 }
 
-function SaveBar({ m }: { m: MakeModel }) {
+/** Polish round: the bass's one bottom bar, as Drums': A/B at the same loudness, the name, Save ("Saved" once saved). */
+function SaveBar({ m, partName }: { m: MakeModel; partName: string }) {
   // Saved once: the button rests until the sound changes (a change is a new sound to save).
   const can = m.readState === "ready" && !m.words && m.saved.state !== "saving" && m.saved.action !== "none";
+  const done = !!m.saved.savedAs && m.saved.action === "none";
+  const why = m.saved.state === "error" ? m.saved.text : m.words ? "A loop from words can't be saved yet" : m.readState !== "ready" ? "nothing to save until the loop is read" : "";
   return (
-    <div className={s.saveBar}>
-      <label className={s.saveLabel} htmlFor="save-name">Name</label>
-      <input id="save-name" name="sound-name" autoComplete="off" className={s.input} value={m.name} maxLength={60} onChange={(e) => m.setName(e.target.value)} disabled={!!m.words} />
-      <span className={s.facts} title={m.tags.join(" · ")}>{m.tags.join(" · ")}</span>
-      <span className={s.saved} role="status">{m.saved.state === "error" ? m.saved.text : m.words ? "A loop from words can't be saved yet" : m.saved.savedAs && m.saved.action === "none" ? `Saved as ${m.saved.savedAs}` : ""}</span>
-      <button className={s.gold} onClick={() => void m.save()} disabled={!can}>{m.saved.state === "saving" ? "Saving…" : "Save to library"}</button>
+    <div className={`${s.saveBar} ${s.drBar}`}>
+      <div className={s.ab} role="group" aria-label="Compare at the same loudness">
+        <button aria-pressed={m.ab === "a"} onClick={() => m.setAb("a")} title="The original, at the same loudness as Mine">A · Original {partName}</button>
+        <button aria-pressed={m.ab === "b"} onClick={() => m.setAb("b")} disabled={!m.mineReady} title={m.mineReady ? "Mine, at the same loudness as the original" : "Mine plays once the loop is read"}>B · Mine</button>
+      </div>
+      <input id="save-name" name="sound-name" aria-label="Name for the saved sound" autoComplete="off" className={s.input} value={m.name} maxLength={60} onChange={(e) => m.setName(e.target.value)} disabled={!!m.words} title={m.tags.join(" · ")} />
+      {why && <span className={s.saved} role="status">{why}</span>}
+      <button className={s.gold} onClick={() => void m.save()} disabled={!can}>{m.saved.state === "saving" ? "Saving…" : done ? "Saved" : "Save to library"}</button>
     </div>
   );
 }

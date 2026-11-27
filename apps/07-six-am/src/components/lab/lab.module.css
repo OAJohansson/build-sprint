@@ -715,3 +715,16 @@
 .askMentor { padding: 4px 12px; }
 .fam > .askMentor { margin-left: 16px; order: 2; }
 .fam > .askMentor ~ .famCap { order: 1; }
+/* Polish round: pages read as pages ("‹ 76–79 ›"); the reason under the line wraps, never cut; Melody / FX bar numbers are ≥ 24 px buttons. */
+.pages { align-items: center; gap: 0; }
+.pgArrow, .pgRange { height: 24px; border: 1px solid transparent; border-radius: 4px; background: none; font: 12px var(--f-mono); color: var(--muted) !important; cursor: pointer; font-variant-numeric: tabular-nums; }
+.pgArrow { width: 20px; padding: 0; font-size: 15px; }
+.pgArrow:disabled { opacity: .35; cursor: default; }
+.pgRange { padding: 0 4px; white-space: nowrap; }
+.pgRange[data-held] { background: var(--edge); color: var(--ink) !important; }
+@media (hover: hover) and (pointer: fine) { .pgArrow:not(:disabled):hover, .pgRange:hover { border-color: var(--edge); color: var(--ink) !important; } }
+.dr2 { grid-template-columns: 164px minmax(0, 1fr) 96px; }
+.divide .lbl { white-space: normal; overflow: visible; }
+.jumpBars button { min-width: 24px; min-height: 24px; top: -4px; padding: 0 4px; text-align: left; border-radius: 4px; }
+@media (hover: hover) and (pointer: fine) { .jumpBars button:not(:disabled):hover { background: rgba(241, 230, 211, .08); } }
+.drBar .saved { flex: 0 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

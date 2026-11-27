@@ -4,7 +4,8 @@
 // left, the original's sections as columns sized by their bars, one slot per section × lane. Pick a
 // slot, then a part you saved in Make; it repeats to the section's end. Gold "has kick" = the
 // original has it there and it's still yours to fill; blank = it doesn't (measured lanes) or no hint
-// (lanes the map can't measure). The strip under the top bar is reserved (slice 4's Deck message).
+// (lanes the map can't measure). The strip under the top bar (always 36 px) says what the empty
+// rebuild is, or sums it up, and on the right whether the original can play (slice 4, the Deck).
 // The rules live in @/lib/rebuild; edits go through the timeline (undo, autosave, playback).
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { libLaneType } from "@/lib/make/lib-loop";
@@ -17,6 +18,7 @@ import { colorOf } from "@/lib/studio-lanes";
 import type { Doc } from "@/lib/timeline";
 import type { MySounds } from "./crate";
 import type { Timeline } from "./use-timeline";
+import type { CompareHook, MaybeCompare } from "./use-compare";
 import { cx } from "./lanes";
 import r from "./rebuild.module.css";
 
@@ -40,6 +42,8 @@ type Hook = {
   counts: { toFill: number; filled: number; left: number };
   picked: { section: number; lane: string } | null;
   playhead: number;
+  /** Slice 4 (W10): Mine / Original, what the Deck reports, and the last switch's landing. */
+  compare: CompareHook | null;
 };
 declare global { interface Window { __sixamRebuild?: Hook } }
 
@@ -48,7 +52,7 @@ const sideW = (w: number) => (w < 1360 ? 276 : 300);
 const fits = (txt: string, px: number, size = 13, pad = 22) => txt.length * size * 0.6 + pad <= px;
 const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 
-export function RebuildView({ t, mine }: { t: Timeline; mine: MySounds }) {
+export function RebuildView({ t, mine, cmp }: { t: Timeline; mine: MySounds; cmp: MaybeCompare }) {
   const doc = t.doc, rb = doc.rebuild!;
   const [pick, setPick] = useState<Pick>(null);
   const scroller = useRef<HTMLDivElement>(null);
@@ -135,18 +139,36 @@ export function RebuildView({ t, mine }: { t: Timeline; mine: MySounds }) {
       counts: { toFill: rb.sections.reduce((n, _s, i) => n + toFill(doc, i).length, 0), filled: slots.filter((x) => x.state === "filled").length, left: slots.filter((x) => x.state === "left").length },
       picked: pick ? { section: pick.i, lane: pick.lane } : null,
       playhead: t.playhead,
+      compare: cmp.on ? {
+        mode: cmp.mode, ready: cmp.ready, lastSwitch: cmp.lastSwitch,
+        // Read live: the Deck's freshest report, not the last render's.
+        get deck() { const d = cmp.deck.last(); return { open: cmp.deck.open, url: d?.url ?? null, posMs: d ? Math.round(d.pos) : null, playing: !!d?.playing }; },
+      } : null,
     };
-  }, [doc, rb, pick, t.playhead]);
+  }, [doc, rb, pick, t.playhead, cmp]);
 
   const empty = doc.regions.length === 0 && !(rb.left ?? []).length;
+  // U7-24: the strip never sits empty: what's still to fill, filled and left empty.
+  const sum = (() => {
+    const n = rb.sections.reduce((a, _s, i) => a + toFill(doc, i).length, 0);
+    const filled = rb.sections.reduce((a, s, i) => a + REBUILD_LANES.filter((l) => slotState(doc, i, l.id).state === "filled").length, 0);
+    const left = (rb.left ?? []).length;
+    return [n ? `${n} to fill` : "nothing left to fill", `${filled} filled`, ...(left ? [`${left} left empty`] : [])].join(" · ");
+  })();
+  const bar = Math.floor(t.playhead);
   const tight = winW < 1360;
 
   return (
     <div className={r.root} style={{ "--lw": `${LW}px`, "--side": `${sideW(winW)}px` } as React.CSSProperties}>
-      {/* Always 36 px, so nothing moves when slice 4's Deck message uses it. */}
-      <div className={cx(r.strip, !empty && r.stripNone)} role={empty ? "note" : undefined}>
+      {/* Always 36 px: the controls above and below never move. */}
+      <div className={r.strip}>
         {empty ? (
           <span><b>The original&rsquo;s {plural(rb.sections.length, "section")}, bar for bar.</b> Every slot starts empty: pick one, then a part you saved in Make. Gold &ldquo;has kick&rdquo; shows what the original has there.</span>
+        ) : <span>{sum}</span>}
+        {!cmp.on ? null : !cmp.ready ? (
+          <span className={r.warn} role="status">Original is off: the Deck isn&rsquo;t open. <button onClick={cmp.openDeck}>Open the Deck</button> to hear the original from bar {bar}.</span>
+        ) : cmp.mode === "orig" ? (
+          <span className={cx(r.warn, r.playingOrig)} role="status">Playing the original from bar {cmp.fromBar ?? bar}, in the Deck</span>
         ) : null}
       </div>
       <div className={r.body}>
@@ -156,7 +178,7 @@ export function RebuildView({ t, mine }: { t: Timeline; mine: MySounds }) {
               <div className={r.head}>
                 <span className={r.corner} />
                 <div className={r.tl}>
-                  {rb.sections.map((s, i) => <SectionHead key={i} s={s} n={toFill(doc, i).length} hinted={REBUILD_LANES.some((l) => slotHint(s, l.id) === "has")} x={lay.at[i].x} w={lay.at[i].w} onSeek={() => t.jumpTo(s.start)} />)}
+                  {rb.sections.map((s, i) => <SectionHead key={i} s={s} n={toFill(doc, i).length} hinted={REBUILD_LANES.some((l) => slotHint(s, l.id) === "has")} x={lay.at[i].x} w={lay.at[i].w} onSeek={() => (cmp.on ? cmp.seek(s.start) : t.jumpTo(s.start))} />)}
                 </div>
               </div>
               <div className={r.lanes} style={{ gridTemplateRows: `repeat(${REBUILD_LANES.length}, minmax(${tight ? 38 : 42}px, 1fr))` }}>

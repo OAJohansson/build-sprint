@@ -12,12 +12,16 @@ import { LAYERS, type LayerName, type TrackMap } from "@/lib/map/types";
 import { legacyMix, legacyTrack, sortLanes, type Lane, type LaneType } from "@/lib/studio-lanes";
 import { clampBpm } from "@/lib/tempo";
 import { MAX_BARS, MIN_BARS, newId, type Doc, type Region } from "@/lib/timeline";
+import { barToMs, msToBar } from "@/lib/lab/timing";
 
 /** One section of the original, on the Studio's bars (1-based, `bars` long). `has` = the measured
  *  layers the map shows there (estimates from the full mix). */
 export type RebuildSection = { name: string; start: number; bars: number; has: LayerName[] };
-/** What makes a Studio track a rebuild. `left` = slots the owner chose to leave empty ("i:laneId"). */
-export type Rebuild = { mapId: string; sections: RebuildSection[]; left?: string[] };
+/** The original's bar grid (slice 4, L270): its exact tempo and first downbeat, to find a bar in it. */
+export type Grid = { bpm: number; originSec: number };
+/** What makes a Studio track a rebuild. `left` = slots the owner chose to leave empty ("i:laneId");
+ *  `grid` = the map's bar grid (slice 4; rebuilds made before it fetch the map instead). */
+export type Rebuild = { mapId: string; sections: RebuildSection[]; left?: string[]; grid?: Grid };
 
 /** The rebuild's lanes, in the approved design's order; `layer` = the map layer that gives the hint. */
 export const REBUILD_LANES: { id: string; type: LaneType; name: string; layer?: LayerName }[] = [
@@ -68,7 +72,7 @@ function layersIn(map: Pick<TrackMap, "layers">, from: number, to: number): Laye
 }
 
 /** A new rebuild: the map's tempo, key and length, its sections, ten lanes, no blocks (L269). */
-export function rebuildDoc(map: Pick<TrackMap, "id" | "bpm" | "key" | "scale" | "bars" | "sections" | "energy" | "layers">): Doc {
+export function rebuildDoc(map: Pick<TrackMap, "id" | "bpm" | "key" | "scale" | "bars" | "sections" | "energy" | "layers" | "originSec">): Doc {
   // shortcut: a song longer than MAX_BARS (512) is cut to 512 bars; raise MAX_BARS if one is.
   const bars = Math.min(MAX_BARS, Math.max(MIN_BARS, Math.round(map.bars)));
   const sections = rebuildSections(map, bars);
@@ -77,7 +81,7 @@ export function rebuildDoc(map: Pick<TrackMap, "id" | "bpm" | "key" | "scale" | 
   const doc: Doc = { regions: [], muted: legacyMix(lanes).muted, bars, bpm: clampBpm(map.bpm), lanes, analysisId: map.id };
   if (map.key && (map.scale === "major" || map.scale === "minor")) doc.key = { key: map.key, scale: map.scale };
   doc.markers = sections.slice(0, 64).map((s) => ({ bar: s.start, label: s.name.slice(0, 24) }));
-  doc.rebuild = { mapId: map.id, sections, left: [] };
+  doc.rebuild = { mapId: map.id, sections, left: [], grid: { bpm: map.bpm, originSec: map.originSec } };
   return doc;
 }
 
@@ -197,6 +201,11 @@ export function parseRebuild(v: unknown, total: number): Rebuild | null {
   }
   if (next - 1 !== total) return null;
   const out: Rebuild = { mapId: o.mapId, sections };
+  if (o.grid !== undefined) {
+    const g = o.grid as Record<string, unknown> | null;
+    if (!g || typeof g.bpm !== "number" || !(g.bpm >= 30 && g.bpm <= 300) || typeof g.originSec !== "number" || !(g.originSec >= 0 && g.originSec <= 3600)) return null;
+    out.grid = { bpm: g.bpm, originSec: g.originSec };
+  }
   if (o.left !== undefined) {
     if (!Array.isArray(o.left) || o.left.length > 640 || !o.left.every((k) => typeof k === "string" && LEFT.test(k))) return null;
     out.left = [...new Set(o.left as string[])];
@@ -213,4 +222,19 @@ export function rebuildTrackId(mapId: string): string {
     return h.toString(16).padStart(8, "0");
   }).join("");
   return `${words.slice(0, 8)}-${words.slice(8, 12)}-5${words.slice(13, 16)}-a${words.slice(17, 20)}-${words.slice(20, 32)}`;
+}
+
+// ── Compare with the original (slice 4, R7, L270) ───────────────────────────────────────────────
+
+/** Where a rebuild bar (1-based, fractional) starts in the original, in ms, on the map's own grid.
+ *  Bars outside the song are held to it: before bar 1 → bar 1; past the end → the last bar's start. */
+export function originalMsAt(bar: number, grid: Grid, bars: number): number {
+  const b = Number.isFinite(bar) ? Math.min(Math.max(bar, 1), Math.max(1, bars)) : 1;
+  return Math.round(barToMs(b, grid.bpm, grid.originSec));
+}
+
+/** The rebuild bar (1-based, fractional) at a position of the original, in ms: inside 1…the last bar. */
+export function rebuildBarAt(ms: number, grid: Grid, bars: number): number {
+  const b = Number.isFinite(ms) ? msToBar(ms, grid.bpm, grid.originSec) : 1;
+  return Math.min(Math.max(b, 1), Math.max(1, bars) + 1 - 1e-6);
 }

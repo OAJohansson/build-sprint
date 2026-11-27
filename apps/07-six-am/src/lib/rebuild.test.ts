@@ -8,14 +8,14 @@ import type { LibrarySound } from "@/lib/make/library";
 import { clampPolyMacros } from "@/lib/make/poly-synth";
 import { clampDrumMacros } from "@/lib/make/drum-synth";
 import type { TrackMap } from "@/lib/map/types";
-import { emptySlot, fillSlot, leaveSlot, parseRebuild, partFits, rebuildDoc, rebuildSections, rebuildTrackId, sectionIndexAt, slotHint, slotState, toFill } from "./rebuild";
+import { emptySlot, fillSlot, leaveSlot, originalMsAt, parseRebuild, partFits, rebuildBarAt, rebuildDoc, rebuildSections, rebuildTrackId, sectionIndexAt, slotHint, slotState, toFill } from "./rebuild";
 
 // 48 bars: intro 1–8 (kick, hats), drop 9–24 (kick, hats, bass, chords, vocals), breakdown 25–32
 // (chords, vocals; no kick), drop 33–48 (kick, hats, bass, chords).
 const N = 48;
 const on = (...spans: [number, number][]) => Array.from({ length: N }, (_, i) => (spans.some(([a, b]) => i + 1 >= a && i + 1 <= b) ? 0.9 : 0.05));
-const MAP: Pick<TrackMap, "id" | "bpm" | "key" | "scale" | "bars" | "sections" | "energy" | "layers"> = {
-  id: "https://soundcloud.com/test/rebuild-fixture", bpm: 123.02, key: "G", scale: "major", bars: N,
+const MAP: Pick<TrackMap, "id" | "bpm" | "key" | "scale" | "bars" | "sections" | "energy" | "layers" | "originSec"> = {
+  id: "https://soundcloud.com/test/rebuild-fixture", bpm: 123.02, originSec: 1.407, key: "G", scale: "major", bars: N,
   energy: Array(N).fill(0.6),
   sections: [
     { label: "intro", startBar: 0, endBar: 8, startSec: 0, endSec: 0 },
@@ -173,5 +173,32 @@ describe("parseDoc stays backwards compatible", () => {
   it("rejects a region past a track's own length", () => {
     const doc = { regions: [{ id: "a", loopId: "four-to-the-floor", track: 0, start: 15, length: 4 }], muted: [false, false, false, false], bars: 16 };
     expect(parseDoc(doc)).toBeNull();
+  });
+});
+
+describe("compare with the original: bar ↔ ms on the map's grid (slice 4, W10)", () => {
+  const grid = { bpm: 123.02, originSec: 1.407 }, bars = 101;
+  const barMs = (4 * 60 / 123.02) * 1000;
+  it("bar 1 is the first downbeat; a mid-song bar and the last bar sit on the map's own tempo", () => {
+    expect(originalMsAt(1, grid, bars)).toBe(1407);
+    expect(originalMsAt(41, grid, bars)).toBe(Math.round(1407 + 40 * barMs));
+    expect(originalMsAt(101, grid, bars)).toBe(Math.round(1407 + 100 * barMs));
+    expect(originalMsAt(21.5, grid, bars)).toBe(Math.round(1407 + 20.5 * barMs));
+  });
+  it("a bar past the end (or before bar 1) is held to the song", () => {
+    expect(originalMsAt(140, grid, bars)).toBe(originalMsAt(101, grid, bars));
+    expect(originalMsAt(0, grid, bars)).toBe(1407);
+    expect(originalMsAt(Number.NaN, grid, bars)).toBe(1407);
+  });
+  it("and back: the Deck's position gives the same bar, held inside the song", () => {
+    for (const b of [1, 17, 41.25, 101]) expect(rebuildBarAt(originalMsAt(b, grid, bars), grid, bars)).toBeCloseTo(b, 3);
+    expect(rebuildBarAt(0, grid, bars)).toBe(1); // the intro before the first downbeat
+    expect(rebuildBarAt(10_000_000, grid, bars)).toBeLessThan(102);
+  });
+  it("a new rebuild keeps the map's exact grid, and saved docs keep it", () => {
+    const d = rebuildDoc({ ...MAP, originSec: 0.4 });
+    expect(d.rebuild!.grid).toEqual({ bpm: 123.02, originSec: 0.4 });
+    expect(parseDoc(JSON.parse(JSON.stringify(d)))!.rebuild!.grid).toEqual({ bpm: 123.02, originSec: 0.4 });
+    expect(parseRebuild({ ...d.rebuild, grid: { bpm: 0, originSec: 0 } }, 48)).toBeNull();
   });
 });

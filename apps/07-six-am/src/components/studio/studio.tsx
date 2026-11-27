@@ -26,6 +26,7 @@ import { SoundDrawer } from "./sound-drawer";
 import { LibDrawer } from "./lib-drawer";
 import { Library } from "./library";
 import { RebuildView } from "./rebuild-view";
+import { useCompare } from "./use-compare";
 import { Logo } from "./logo";
 import { Notice, Unlock } from "./unlock";
 import s from "./studio.module.css";
@@ -295,6 +296,8 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
   /** Phase 7: a rebuild opens its arrangement grid instead of the lanes and the crate. */
   const rb = track.doc.rebuild;
   const [code] = useAccessCode();
+  // Slice 4 (R7, L270): Mine / Original on a rebuild, through the Deck window (commands only).
+  const cmp = useCompare(t, rb, code);
   useEffect(() => { t.engine().then((e) => e.setAccessCode(code)); }, [t, code]);
   // My sounds (L158, L200): the library, newest first, for the crate's first tab.
   const [mine, setMine] = useState<MySounds>({ is: "loading" });
@@ -398,11 +401,18 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
               ? <span>{track.doc.key.key}{track.doc.key.scale === "minor" ? "m" : ""}</span>
               : <span title="No key set: synths play in A minor, the crate's key">Am</span>}
           </div>
+          {cmp.on ? (
+            <div className={s.mo} role="group" aria-label="Hear mine or the original">
+              <button aria-pressed={cmp.mode === "mine"} onClick={cmp.toMine}>Mine</button>
+              <button aria-pressed={cmp.mode === "orig"} aria-disabled={!cmp.ready || undefined} onClick={cmp.toOriginal}
+                title={cmp.ready ? `Hear the original from bar ${t.bar}, in the Deck` : "Open the Deck to hear the original"}>Original</button>
+            </div>
+          ) : null}
           <button className={s.undo} onClick={t.undo} disabled={!t.canUndo} aria-label="Undo">{Icon.undo} <span className={s.undoWord}>Undo</span></button>
         </div>
         <SettingsLink />
       </header>
-      {rb ? <RebuildView t={t} mine={mine} /> : <>
+      {rb ? <RebuildView t={t} mine={mine} cmp={cmp} /> : <>
       <LanesView t={t} onNewSound={(l) => { t.setSelected(null); t.setSoundTarget(l.id); setAddLane([0, 1, 2, 2, 3, 3, 3][FAMILIES.findIndex((f) => f.id === familyId(l.type))]); }} />
       {selSound?.source === "lib" ? (
         <LibDrawer key={selSound.id} t={t} sound={selSound} color={colorOf(selSound.type)} onClose={closeDrawer} />

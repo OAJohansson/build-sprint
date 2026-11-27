@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { NO_EDITS, heardRows, playedHits, stepKinds, toggleStep } from "./drum-edit";
+import { NO_EDITS, copyBar, editsFor, heardRows, playedHits, savedOnLoop, stepKinds, toggleStep, unfoldSteps } from "./drum-edit";
 import { foldRow, type RowHit } from "./drums-make";
 
 const sps = 60 / 124 / 4;
@@ -82,5 +82,39 @@ describe("what plays is what is saved (W6)", () => {
     expect(foldRow("ride", [], 64)).toEqual({ bars: 1, notes: [] });
     const three = Array.from({ length: 12 }, (_, i) => hit(i * 4));
     expect(foldRow("kick", [...three, hit(41)], 48).bars).toBe(1);
+  });
+});
+
+describe("slice 2 fix round", () => {
+  it("rebuilds a row's edits from its steps, against a reading that differs a little (L288)", () => {
+    const steps = [0, 6, 8, 12];
+    const e = editsFor(kicks.slice(0, 4), steps, 128);
+    expect(e).toEqual({ added: [6], removed: [4] });
+    expect(playedHits(kicks.slice(0, 4), e, { gridMs: 0, sps }).map((h) => h.step)).toEqual(steps);
+    // A step outside the loop is dropped.
+    expect(editsFor([], [3, 200], 64)).toEqual({ added: [3], removed: [] });
+  });
+
+  it("a saved 1-bar row unfolds over an 8-bar loop", () => {
+    expect(unfoldSteps({ bars: 1, notes: [{ step: 0 }, { step: 8 }] }, 48)).toEqual([0, 8, 16, 24, 32, 40]);
+    expect(unfoldSteps({ bars: 4, notes: [] }, 128)).toEqual([]);
+  });
+
+  it("copies one bar to every bar (U7-14), and a bar outside the loop does nothing", () => {
+    const shaker = toggleStep(toggleStep(NO_EDITS, [], 2, 64), [], 7, 64);
+    const all = copyBar([], shaker, 0, 64, { gridMs: 0, sps });
+    expect(playedHits([], all, { gridMs: 0, sps }).map((h) => h.step)).toEqual([2, 7, 18, 23, 34, 39, 50, 55]);
+    expect(copyBar([], shaker, 9, 64, { gridMs: 0, sps })).toBe(shaker);
+    // A read row: bar 1's missing kick is filled in every bar.
+    const e = toggleStep(NO_EDITS, kicks, 4, 128);
+    const c = copyBar(kicks, e, 0, 128, { gridMs: 0, sps });
+    expect(playedHits(kicks, c, { gridMs: 0, sps }).filter((h) => h.step % 16 === 4)).toHaveLength(0);
+  });
+
+  it("a save on one loop is not this loop's (D7-11): Save on a new loop adds, never renames", () => {
+    const rec = { id: "a", sound: "kick-x|1", name: "Kick from A", steps: "0.4", loopKey: "100-200" };
+    expect(savedOnLoop(rec, "100-200")).toBe(rec);
+    expect(savedOnLoop(rec, "300-400")).toBeNull();
+    expect(savedOnLoop(null, "100-200")).toBeNull();
   });
 });

@@ -666,3 +666,46 @@
   .under { font-size: 11.5px; }
   .dr2 + .shelf { margin-top: 10px; }
 }
+
+/* Slice 2 fix round (L289, CR2-1, CR2-2, CR2-3, U7-10, U7-13): 4 bars at a time, every 16th a cell
+   with no dead gaps (the drawn block is inset in its cell; a bar break is drawn inside the bar's
+   first cell), a ruler whose bar numbers are real buttons, and one bottom bar. */
+.steps { display: grid; column-gap: 0; row-gap: 0; }
+.st { position: relative; background: none !important; box-shadow: none !important; border-radius: 0; min-height: 0; height: 100%; }
+.st::before { content: ""; position: absolute; inset: 0 1px; border-radius: 2px; background: rgba(241, 230, 211, .05); }
+.st[data-bar]::before { left: 6px; }
+.st[data-beat]::before { background: rgba(241, 230, 211, .09); }
+.st[data-k="read"]::before { background: var(--gold); }
+.st[data-k="added"]::before { background: var(--ink); }
+.st[data-k="removed"]::before { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(242, 177, 52, .75); }
+@media (hover: hover) and (pointer: fine) { .st:not(:disabled):hover::before { box-shadow: inset 0 0 0 1px rgba(241, 230, 211, .6); } }
+.steps[data-muted] .st[data-k="read"]::before, .steps[data-muted] .st[data-k="added"]::before { opacity: .3; }
+.steps[data-muted] .st[data-k] { opacity: 1; }
+.steps > .stHead { top: -3px; bottom: -3px; height: auto; }
+.drRuler { position: relative; display: block; height: 24px; border-bottom: 1px solid var(--edge); cursor: pointer; }
+.rbar { position: absolute; top: 0; min-width: 28px; height: 24px; padding: 0 6px 0 4px; border: 0; border-radius: 4px; background: none; font: 11.5px var(--f-mono); color: var(--muted) !important; font-variant-numeric: tabular-nums; text-align: left; cursor: pointer; }
+.rbar:disabled { cursor: default; color: var(--faint) !important; }
+@media (hover: hover) and (pointer: fine) { .rbar:not(:disabled):hover { background: rgba(241, 230, 211, .08); color: var(--ink) !important; } }
+.root .rbar:active:not(:disabled) { transform: none; }
+.rtick { position: absolute; bottom: 0; width: 1px; height: 8px; background: var(--edge); }
+.drRuler > .stHead { top: 0; height: 100%; }
+.pages { grid-column: 3; display: flex; gap: 2px; align-self: end; justify-self: end; }
+.pages .mbtn { min-width: 30px; }
+.pages .mbtn[aria-pressed="true"]:not([data-held]) { background: none; border-color: var(--edge); }
+/* CR2-3: the reason stays on one line (its full text in the tooltip). */
+.divide .lbl { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.drSuggest .ghost[aria-pressed] { margin-left: auto; }
+/* CR2-2: one bottom bar in Drums: A/B, closeness, name, Save. */
+.drBar { gap: 16px; }
+.drBar .ab { flex: none; }
+.drBar .drScore { margin-left: 0; flex: none; }
+.drBar .input { flex: 1 1 260px; max-width: 360px; margin-left: auto; }
+@media (max-height: 760px) {
+  .drRuler { height: 22px; }
+  .rbar { height: 22px; }
+}
+/* L289: as much width as the room gives to the steps (the Mentor rail stays, T245). */
+.dr2 { grid-template-columns: 164px minmax(0, 1fr) 88px; column-gap: 10px; }
+.ms .mbtn { padding: 0 4px; }
+@media (max-width: 1360px) { .divide .lbl { white-space: normal; } }
+.rname { font-size: 12.5px; }

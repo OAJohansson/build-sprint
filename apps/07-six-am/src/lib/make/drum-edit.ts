@@ -56,3 +56,41 @@ export function heardRows<R extends string>(rows: readonly R[], mute: Partial<Re
   const anySolo = rows.some((r) => solo[r]);
   return Object.fromEntries(rows.map((r) => [r, anySolo ? !!solo[r] : !mute[r]])) as Record<R, boolean>;
 }
+
+// ── Slice 2 fix round (L288, U7-11, U7-14, D7-11) ───────────────────────────────────────────────
+
+/**
+ * The edits that make a row play exactly `steps` on top of what was read: kept apart from the reading
+ * so a fix by ear survives a reload (the reading itself may differ a little between captures, D7-16)
+ * and a saved row loaded onto a loop plays its own hits.
+ */
+export function editsFor(read: Pick<RowHit, "step">[], steps: number[], loopSteps: number): RowEdits {
+  const want = new Set(steps.filter((s) => Number.isInteger(s) && s >= 0 && s < loopSteps));
+  const have = new Set(read.map((h) => h.step));
+  return { added: [...want].filter((s) => !have.has(s)).sort((a, b) => a - b), removed: [...have].filter((s) => !want.has(s)).sort((a, b) => a - b) };
+}
+
+/** A saved pattern's steps over a loop of `loopSteps` 16ths (its repeat played round to the end). */
+export function unfoldSteps(p: { bars: number; notes: { step: number }[] }, loopSteps: number): number[] {
+  const P = Math.max(16, p.bars * 16), out: number[] = [];
+  for (let a = 0; a < loopSteps; a += P) for (const n of p.notes) if (a + n.step < loopSteps) out.push(a + n.step);
+  return [...new Set(out)].sort((a, b) => a - b);
+}
+
+/** U7-14: every bar of the row plays what bar `bar` (0-based) plays now. */
+export function copyBar(read: RowHit[], e: RowEdits, bar: number, loopSteps: number, o: { gridMs: number; sps: number }): RowEdits {
+  const bars = Math.floor(loopSteps / 16);
+  if (bar < 0 || bar >= bars) return e;
+  const inBar = playedHits(read, e, o).map((h) => h.step).filter((s) => s >= bar * 16 && s < bar * 16 + 16).map((s) => s - bar * 16);
+  const steps: number[] = [];
+  for (let b = 0; b * 16 < loopSteps; b++) for (const s of inBar) steps.push(b * 16 + s);
+  return editsFor(read, steps, loopSteps);
+}
+
+/**
+ * D7-11 (W6): the last save of a row counts only on the loop it was made on, so Save on a new loop
+ * adds a new sound and never renames the one saved from the earlier loop.
+ */
+export function savedOnLoop<T extends { loopKey: string | null }>(rec: T | null, loopKey: string | null): T | null {
+  return rec && rec.loopKey === loopKey ? rec : null;
+}

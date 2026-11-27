@@ -136,12 +136,24 @@ export const kickHz = (preset: DrumSoundId, v: number) => { if (!isDrumPreset(pr
 /** U7-3: the number behind a drum knob's word, for its tooltip only (a sampled sound's, or a synth word's part after " · "). */
 export function drumKnobDetail(preset: DrumSoundId, id: DrumKnobId, v: number): string {
   if (!isDrumPreset(preset) || id === "pitch") return kitKnobValue(id as KitKnobId, v);
+  // U7-17: a synth kick's note and a decay show their number only here (the knob says a word).
+  if (id === "tune" || id === "decay") return drumKnobWord(preset, id, v);
   const w = drumKnobWord(preset, id, v).split(" · ");
   return w.length > 1 ? w.slice(1).join(" · ") : "";
 }
 /** C4: a knob's word from a ladder of ten, one step per tenth of a turn. */
 export const ladder = (v: number, words: string[]) => words[Math.max(0, Math.min(words.length - 1, Math.floor(v * words.length)))];
 export const WIDTH_WORDS = ["centred", "narrow", "a little wide", "half wide", "wide", "wider", "very wide", "extra wide", "near full", "full width"];
+
+/**
+ * U7-17: the word under a knob on screen: words only, as the sampled sounds' (an old synth kick's note
+ * and a decay's length go to the tooltip, drumKnobDetail). The Mentor's line still names them.
+ */
+export function drumKnobShown(preset: DrumSoundId, id: DrumKnobId, v: number, bpm = 124): string {
+  if (isDrumPreset(preset) && id === "tune") return ladder(v, ["very deep", "deep", "low", "lowish", "middle", "mid-high", "high", "higher", "very high", "highest"]);
+  if (isDrumPreset(preset) && id === "decay") return ladder(v, ["very short", "short", "shortish", "tight", "medium", "medium-long", "longish", "long", "very long", "longest"]);
+  return drumKnobWord(preset, id, v, bpm).split(" · ")[0];
+}
 
 export function drumKnobWord(preset: DrumSoundId, id: DrumKnobId, v: number, bpm = 124): string {
   void bpm;

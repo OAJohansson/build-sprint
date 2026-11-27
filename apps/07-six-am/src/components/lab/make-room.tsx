@@ -32,7 +32,7 @@ import { noteName, partNoun, type LabMake } from "@/lib/mentor/lab";
 import type { Scale } from "@/lib/synths/theory";
 import { Composer, Turn, useEdgeFades, type ThreadTurn } from "./mentor-thread";
 import { Knob } from "@/components/ui/knob";
-import { DrumsCheck, DrumsLegend, DrumsMiddle, DrumsSaveBar, useShort, type DrumsModel } from "./make-drums";
+import { DrumsLegend, DrumsMiddle, DrumsSaveBar, useShort, type DrumsModel } from "./make-drums";
 import { MelodyCheck, MelodyMiddle, MelodySaveBar, type MelodyModel } from "./make-melody";
 import { prettyChord } from "@/lib/make/chords-mine";
 import { MELODY_ON } from "@/lib/make/melody-reader";
@@ -378,8 +378,7 @@ export function MakeRoom(p: RoomProps) {
             {loop || p.drums.read
               ? <DrumsMiddle m={p.drums} loop={loop} from={from} playing={p.playing} heardMs={p.heardMs} onJump={p.onJump} />
               : <div className={s.makeEmpty}><p>Make works on a loop of the part, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
-            <div className={s.grow} />
-            <DrumsCheck m={p.drums} />
+            {/* CR2-2: A/B and closeness are in the one bottom bar (DrumsSaveBar). */}
           </>
         ) : (
           <>
@@ -642,7 +641,10 @@ function LoopStrip({ part, from, to, chords, loopChords, levels, heardMs, bpm, o
     ? part.subs.map((x, i) => ({ label: `${x.name}`, ...blocksFromActivity(bandActivity(levels?.[i === 0 ? KICK_ROW : HATS_ROW], own), x.blocks) }))
     : [{ label: part.name.toLowerCase(), ...laneBlocks(own, part.blocks) }];
   const cells = chords.map((c, i) => ({ c, at: 1 + i * 8 })).filter((x) => x.at + 8 > from && x.at < to && x.c !== null);
-  const step = len > 32 ? 8 : 4;
+  // U7-15: every bar labelled (every other one past 16 bars).
+  const step = len > 16 ? 2 : 1;
+  // R5 (U7-15): a click on the bars or on the notes plays from that spot (the loop's own span).
+  const jumpAt = loop ? (e: React.MouseEvent<HTMLDivElement>) => { if ((e.target as HTMLElement).closest("button")) return; const r = e.currentTarget.getBoundingClientRect(); onJump(loop.startMs + Math.max(0, Math.min(0.9999, (e.clientX - r.left) / r.width)) * (loop.endMs - loop.startMs)); } : undefined;
   return (
     <div className={s.loopStrip} aria-label={`${part.name} alone, bars ${from} to ${to - 1}`}>
       <div className={s.lsRow} data-kind="chords">
@@ -655,8 +657,7 @@ function LoopStrip({ part, from, to, chords, loopChords, levels, heardMs, bpm, o
       {/* R5 (OR6-5): the bar ruler plays from the spot you click (the loop's own span, start to end). */}
       <div className={s.lsRow} data-kind="bars">
         <span className={s.lsLabel}>bars</span>
-        <div className={`${s.lsTrack} ${s.jumpTrack}`} title={loop ? "Click a spot to play from there" : undefined}
-          onClick={loop ? (e) => { if ((e.target as HTMLElement).closest("button")) return; const r = e.currentTarget.getBoundingClientRect(); onJump(loop.startMs + Math.max(0, Math.min(0.9999, (e.clientX - r.left) / r.width)) * (loop.endMs - loop.startMs)); } : undefined}>
+        <div className={`${s.lsTrack} ${s.jumpTrack}`} title={loop ? "Click a spot to play from there" : undefined} onClick={jumpAt}>
           {Array.from({ length: Math.ceil(len / step) }, (_, i) => from + i * step).map((b) => (
             <button key={b} type="button" className={s.lsNum} disabled={!loop} style={{ left: pct(b) }} aria-label={`Play from bar ${b}`} onClick={() => { if (loop) onJump(loop.startMs + ((b - from) / len) * (loop.endMs - loop.startMs)); }}>{b}</button>
           ))}
@@ -665,7 +666,7 @@ function LoopStrip({ part, from, to, chords, loopChords, levels, heardMs, bpm, o
       {rows.map((row) => (
         <div key={row.label} className={s.lsRow}>
           <span className={s.lsLabel}>{row.label}</span>
-          <div className={s.lsTrack}>
+          <div className={`${s.lsTrack} ${loop ? s.jumpTrack : ""}`} onClick={jumpAt} title={loop ? "Click a spot to play from there" : undefined}>
             {clip(row.heard).map((x) => <span key={`h${x.from}`} className={s.lsClip} data-under={notes?.length ? "" : undefined} style={{ left: pct(x.from), width: w(x.from, x.to), background: part.color }} />)}
             {/* S3-5: the notes Make read from the loop (what Mine plays), by pitch. */}
             {notes && steps && notes.length > 0 && !part.subs.length && (() => {

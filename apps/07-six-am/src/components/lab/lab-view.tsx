@@ -44,7 +44,7 @@ export type SixamMakeHook = {
   picked: () => { drums: ReturnType<DrumsModel["debug"]>["picked"] | null; bass: { id: MakePresetId; name: string; family: string; feel: string; loaded: boolean; macros: Record<string, number> } | null; open: MakeRow | null };
   /** Phase 7 slice 2: the six rows as played (read and added hits; `hits` is what plays and saves). */
   patterns: () => { steps: number | null; bars: number | null; drums: Record<MakeRow, { step: number; off: number; vel: number; kind: HitKind }[]> | null; doubtful: Record<MakeRow, boolean> | null; on: Record<MakeRow, boolean> | null; bass: { bars: number; notes: { step: number; midi: number; dur: number; vel: number }[] } | null };
-  /** `step`: the drum grid's 16th now (the grid's step 0 sits gridMs after the loop's start); `jump`: the last click-to-jump (R5, W8). */
+  /** `step`: the 16th of the loop now, by the track's bars (the ruler's); `jump`: the last click-to-jump (R5, W8). */
   position: () => { ms: number; bar: number; playing: boolean; ab: { drums: "a" | "b"; bass: "a" | "b" }; loop: { startMs: number; endMs: number; state: string } | null; loopFraction: number | null; step: number | null;
     /** `startErrMs`: where play started against the clicked spot (ms; heard 150 ms after the click, less those 150 ms). */
     jump: { targetMs: number; family: string; at: number; startErrMs: number | null } | null };
@@ -286,11 +286,12 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
         };
       },
       position: () => {
-        const ms = t.heardMs(), l = loopNow(), dd = drumsRef.current?.debug(), steps = dd?.steps ?? null, gridMs = dd?.gridMs ?? 0;
+        const ms = t.heardMs(), l = loopNow(), dd = drumsRef.current?.debug(), steps = dd?.steps ?? null;
         const f = l ? (ms - l.startMs) / (l.endMs - l.startMs) : null, inside = f !== null && f >= 0 && f < 1;
         const spsMs = 60000 / bpm / 4, j = jumpRef.current;
         return { ms: Math.round(ms), bar: Math.round(msToBar(ms, bpm, origin) * 1000) / 1000, playing: !!tr.current?.state.playing, ab: { drums: drumsRef.current?.ab ?? "a", bass: makeRef.current?.ab ?? "a" }, loop: l, loopFraction: inside ? Math.round(f! * 10000) / 10000 : null,
-          step: inside && steps ? ((Math.floor((ms - l!.startMs - gridMs) / spsMs) % steps) + steps) % steps : null,
+          // U7-13: by the track's bars, as the ruler numbers them (the reader's grid offset is dd.gridMs).
+          step: inside && steps ? Math.min(steps - 1, Math.floor((ms - l!.startMs) / spsMs)) : null,
           jump: j ? { targetMs: Math.round(j.targetMs), family: j.family, at: j.at, startErrMs: j.startErrMs === null ? null : Math.round(j.startErrMs) } : null };
       },
       taps: () => {
@@ -536,7 +537,10 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const heardMsFn = useCallback(() => tr.current?.heardMs() ?? 0, []);
   const loopSec = loop ? sectionAt(sections, loop.from) : null;
   // A long section loops 16 bars of it (L161): say which (LS1-2).
-  const loopPart = loop && loopSec && loop.to - loop.from < loopSec.to - loopSec.from
+  // CR2-3: a loop over two sections is named by its bars only, so the header never contradicts the chip.
+  const loopSpans = !!loop && !!loopSec && loop.to > loopSec.to;
+  const loopName = loopSpans && loop ? `bars ${loop.from}–${loop.to - 1}` : loopSec?.label ?? "section";
+  const loopPart = !loopSpans && loop && loopSec && loop.to - loop.from < loopSec.to - loopSec.from
     ? (loop.from === loopSec.from ? `, first ${loop.to - loop.from} bars` : `, bars ${loop.from}–${loop.to - 1}`) : "";
   const deckText = ready ? "Deck on" : starting ? "Deck opening…" : ts?.deckOpen ? "Deck open" : "Deck off";
   const closedLine = ts?.phase === "stopped" && ts.deckClosed ? "Deck closed. Press Play to open it again." : null;
@@ -561,11 +565,11 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
           <div className={s.transport}>
             <button className={s.play} onClick={onPlay} disabled={starting} aria-label={ts?.playing ? "Pause" : "Play"}>{ts?.playing ? "❚❚" : "▶"}</button>
             {mode === "listen" && <HearChip hear={hear} parts={parts} onClear={() => setHear({ kind: "all" })} />}
-            <span className={s.clock}>{clockMs(pos.sec * 1000)}{here ? ` · in ${here.label}` : ""} <small>bar {pos.bar}</small></span>
+            <span className={s.clock}>{clockMs(pos.sec * 1000)}{loopSpans && ts?.loop ? ` · in ${loopName}` : here ? ` · in ${here.label}` : ""} <small>bar {pos.bar}</small></span>
             <span className={s.status} aria-live="polite">{status}</span>
             {loop && ts?.loop && (
-              <span className={s.loopChip} title={`Looping ${loopSec?.label ?? "section"}${loopPart} · ${clockMs(ts.loop.startMs)}–${clockMs(ts.loop.endMs)}`}>
-                <span className={s.loopChipText}>Looping {loopSec?.label ?? "section"}{loopPart} · {clockMs(ts.loop.startMs)}–{clockMs(ts.loop.endMs)}</span>
+              <span className={s.loopChip} title={`Looping ${loopName}${loopPart} · ${clockMs(ts.loop.startMs)}–${clockMs(ts.loop.endMs)}`}>
+                <span className={s.loopChipText}>Looping {loopName}{loopPart} · {clockMs(ts.loop.startMs)}–{clockMs(ts.loop.endMs)}</span>
                 <button className={s.x} onClick={() => tr.current?.setLoop(null)} aria-label={`Stop looping ${loopSec?.label ?? "the section"}`}>×</button>
               </span>
             )}
@@ -597,7 +601,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
             )} />
         </div>
       ) : (
-        <MakeRoom m={make} drums={drums} melody={melody} fx={fx} family={family} onFamily={onFamily} part={parts.find((x) => x.id === focus)!} loop={ts?.loop ?? null} section={loopSec ?? here} bpm={bpm} originSec={origin}
+        <MakeRoom m={make} drums={drums} melody={melody} fx={fx} family={family} onFamily={onFamily} part={parts.find((x) => x.id === focus)!} loop={ts?.loop ?? null} section={loopSpans ? null : loopSec ?? here} bpm={bpm} originSec={origin}
           chords={chords} levels={levels} heardMs={heardMsFn} status={status} ready={ready} playing={!!ts?.playing}
           bar={pos.bar} turns={focusTurns} onAsk={onAsk} onRetry={onRetry} onSeek={onSeek} onJump={onJump} onLoopHere={loopHere} onBass={() => setFocus("bass")}
           busy={focusTurns.some((x) => !x.answer && !x.error)} note={usageNote} />

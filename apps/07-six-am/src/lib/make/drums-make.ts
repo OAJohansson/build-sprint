@@ -40,8 +40,9 @@ export const EAR_ROWS: MakeRow[] = ["perc", "ride"];
 /**
  * L268, L272: Make reads Open hat from the loop. The PM flips this to false if the open-hat reader
  * fails its real-loop grade (W5): Open hat then starts empty, below the line, like Shaker and Ride.
+ * L287: W5 failed on real loops (open read open 44 %, closed read open 31 %), so it is off.
  */
-export const READ_OPEN_HATS = true;
+export const READ_OPEN_HATS = false;
 export type DrumsReading = { rows: Record<MakeRow, DrumRowRead>; steps: number; bars: number; gridMs: number; swingMs: number; hats?: HatFeature[]; openRead?: boolean };
 
 const BLEED_FROM: Record<DrumRow, string> = { kick: "the bass", clap: "the chords", hats: "another part" };

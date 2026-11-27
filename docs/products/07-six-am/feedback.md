@@ -329,11 +329,11 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | OR6-3 | major | Phase 5 owner check "drums close by ear": not close with any preset. Hats play hits the original doesn't have. Cause: three synth rows (909-style voices, not samples); every high sound (shakers, percussion, bleed) lands on Hats; no way to remove a hit or mute a row unless Make flagged it | open: options to the owner (fix-by-ear pattern editing, more rows, a real one-shot sample kit) |
 | OR6-4 | good | Phase 5 owner check, FX A/B: the FX sound quite similar to the original drops | pass (owner's ear) |
 | OR6-5 | major | In Make (Bass, Drums, Melody, FX) you can't click on the timeline to jump back to a spot; you have to listen through. The Studio has this | open: Phase 7 |
-| U7-1 | major | Slice 1 user test: shelf hides 1–5 sounds per row at 1440 (all 3 sampled basses) and ~half at 1280 × 720, no cue | open: slice 1 fix |
+| U7-1 | major | Slice 1 user test: shelf hides 1–5 sounds per row at 1440 (all 3 sampled basses) and ~half at 1280 × 720, no cue | fixed (51764e2, re-check) |
 | U7-2 | minor | Sound description cut with "…" for 43 of 60 drum sounds | open: slice 1 fix |
-| U7-3 | minor | Drum knob values in Hz / dB / ms / st | open: slice 1 fix |
+| U7-3 | minor | Drum knob values in Hz / dB / ms / st | fixed |
 | U7-4 | minor | Mentor knob tips read contradictory ("Length down to longer") | open: slice 1 fix |
-| U7-5 | minor | Sticky A/B covers the "Try X" tip and half of Suggest at 1440 | open: slice 1 fix |
+| U7-5 | minor | Sticky A/B covers the "Try X" tip and half of Suggest at 1440 | fixed (drums); bass hint half under A/B at 1440 → in the shelf round |
 | U7-6 | polish | "Shaker-like" family in Closed hat; sounds named like their family | open: slice 1 fix |
 | U7-7 | polish | Bass lines name the source (tonejs-instruments) | open: slice 1 fix |
 | D7-1 | major | W4 fail: bass Drive, Sub, Weight, Wobble move their feature too little (bars in L282) | mostly fixed (51764e2): 124/128; D7-9, D7-10 left |
@@ -346,4 +346,6 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | D7-8 | check | W12 timings were on localhost; re-check first taps on the preview | open: final review |
 | D7-9 | minor | Regression: Tone on Pure sine moves brightness 1.87× (was 2.12×) after the Weight change | open: slice 1 fix |
 | D7-10 | minor | Wobble < 2× on organ-click, fm-glass, filtered-saw | open: slice 1 fix |
+| U7-8 | polish | Sound chips 22 px tall (under 24 px) and the last line brushes A/B at 1280 × 720 | open: shelf round |
+| U7-9 | polish | Description still cut at 1280 where it shares a row with the knobs | open: shelf round |
 

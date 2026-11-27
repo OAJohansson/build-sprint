@@ -885,3 +885,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Slice 1 fix round done (51764e2, T247). Re-grade sent to data-evals (W4, W2, W11), user-tester (U7-1..7) and the critic (the shelf changed from columns to chip lines).
 - Critic on the built shelf: 5/10 (grouping lost in the chip lines). Engineer asked for two-column families with a fixed label column (critic's fix).
 - Data-evals re-grade (e5cd9bd): W2, W11 pass; W4 124/128 (D7-9 regression on Pure sine's Tone, D7-10 Wobble on three presets); added to the engineer's current round.
+- User-tester re-check (51764e2): both jobs 4/5 at both sizes, W14 met; U7-1, U7-3, U7-5 fixed; U7-2/4/6/7 partly; new polish U7-8/9; bass A/B below the fold at 720 judged acceptable (one scroll). Leftovers added to the engineer's shelf round.

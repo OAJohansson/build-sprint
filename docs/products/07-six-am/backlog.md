@@ -120,3 +120,9 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 - Theory spelling TH-4: E♭dim's fifth spelled A, should be B𝄫 (rare, a diminished chord the reader names) (26 Nov).
 - Layout at 1280 × 720: selecting a lead note scrolls the lead header under the sticky rows (grid + move row don't fit); Bass on Mason starts with A/B half under the save bar (Phase 5 layout, scroll fixes it) (26 Nov).
 - Design polish after Phase 6: mood lines wrap at 1280, half-bar names ~10 px, playhead over chord names, knob row cut by normal scroll at 1440 × 900 (critic 8/10) (26 Nov).
+
+## For Phase 7 (owner, 27 Nov, L265)
+- **Many more starting sounds** for bass and drums (owner: "four is too few; tweaking the knobs doesn't make much difference"). Three routes to weigh at kickoff: more synth presets plus a richer engine (cheap, same family of sound); a free-to-use one-shot sample kit (CC0, licence checked) for drums and sampled basses; and loading your own sample packs, kept in the browser. Research the licences first.
+- **Rebuild the song in the Studio** (OR6-2): the original's sections laid out to fill with your saved parts, switch to the original to compare.
+- **Fix drums by ear** (OR6-3): tap a hit to remove or add it, mute any row; more drum rows (open hat, shaker/percussion, ride) so high sounds stop piling onto Hats.
+- **Listen's "Other" → "Melody & FX"** (OR6-1).

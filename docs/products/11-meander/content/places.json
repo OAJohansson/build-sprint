@@ -588,5 +588,118 @@
         "quote": "Contemporary feminist philosophical scholarship emerged in the 1970s"
       }
     ]
+  },
+  "buddhist-philosophy": {
+    "places": [
+      "India",
+      "Nepal"
+    ],
+    "span": "5th century BCE – 8th century CE (in India)",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/buddha/",
+        "section": "1. Buddha as Philosopher",
+        "quote": "in the area of the present border between India and Nepal"
+      },
+      {
+        "url": "https://iep.utm.edu/buddha/",
+        "section": "a. Dates",
+        "quote": "locate the Buddha’s life one hundred years earlier, around the fifth century B.C.E."
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/nagarjuna/",
+        "section": "1. Life and works",
+        "quote": "probably mainly in southern India"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/madhyamaka/",
+        "section": "intro",
+        "quote": "the Madhyamaka school in India from the fifth through the eighth centuries"
+      }
+    ]
+  },
+  "vedanta": {
+    "places": [
+      "India"
+    ],
+    "span": "c. 700 BCE (early Upaniṣads) – 12th century CE, and living today",
+    "sources": [
+      {
+        "url": "https://iep.utm.edu/upanisad/",
+        "section": "intro",
+        "quote": "ancient texts from India that were composed orally in Sanskrit"
+      },
+      {
+        "url": "https://iep.utm.edu/upanisad/",
+        "section": "intro",
+        "quote": "between about 700 B.C.E. and 300 B.C.E."
+      },
+      {
+        "url": "https://iep.utm.edu/ramanuja/",
+        "section": "1. Rāmānuja’s Life and Works",
+        "quote": "recent scholarship places his life between 1077 to 1157 C.E."
+      },
+      {
+        "url": "https://iep.utm.edu/ramanuja/",
+        "section": "1. Rāmānuja’s Life and Works",
+        "quote": "He was born in the Southern, Tamil speaking region of India"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/shankara/",
+        "section": "1. Life and Works",
+        "quote": "continue to flourish today in the living Advaita Vedānta tradition"
+      }
+    ]
+  },
+  "confucianism": {
+    "places": [
+      "China (Shandong)"
+    ],
+    "span": "6th–3rd century BCE",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/confucius/",
+        "section": "2. Sources for Confucius’s Life and Thought",
+        "quote": "Confucius was born in the domain of Zou, in modern Shandong Province"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/confucius/",
+        "section": "intro",
+        "quote": "Confucius (trad. 551–479 BCE)"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/mencius/",
+        "section": "1. Life and Confucian Background",
+        "quote": "born in the state of Zou, in what is now Shandong Province"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/xunzi/",
+        "section": "intro",
+        "quote": "(third century BCE) was a Confucian philosopher"
+      }
+    ]
+  },
+  "daoism": {
+    "places": [
+      "China"
+    ],
+    "span": "5th–3rd century BCE",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/laozi/",
+        "section": "intro",
+        "quote": "one of the three main currents of traditional Chinese thought"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/laozi/",
+        "section": "2. Date and Authorship of the Laozi",
+        "quote": "committed to writing probably from the second half of the fifth century B.C.E."
+      },
+      {
+        "url": "https://iep.utm.edu/daoism/",
+        "section": "2. Classical Sources for Our Understanding of Daoism",
+        "quote": "the Daodejing or Laozi (3rd Cn. B.C.E.) and the Zhuangzi (4th-3rd Cn. B.C.E.)"
+      }
+    ]
   }
 }

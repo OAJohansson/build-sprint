@@ -22,8 +22,8 @@ import r from "./rebuild.module.css";
 
 /** What a lane's parts are called in "No saved … yet". */
 const NOUN: Record<string, string> = { kick: "kicks", claps: "claps", hats: "hats", perc: "percussion", bass: "bass", chords: "chords", pads: "pads", lead: "leads", fx: "FX", vocals: "vocals" };
-/** A section is never narrower than a short name ("Breakdown") and "2 to fill". */
-const MIN_W = 104;
+/** A section is never narrower than the longest name a map gives ("Breakdown 2") and "2 to fill". */
+const MIN_W = 114;
 const RIGHT_PAD = 24;
 
 type Pick = { i: number; lane: string } | null;
@@ -62,11 +62,22 @@ export function RebuildView({ t, mine }: { t: Timeline; mine: MySounds }) {
   }, []);
   const LW = lw(winW);
   const lay = useMemo(() => {
-    const room = Math.max(200, width - LW - RIGHT_PAD), bars = doc.bars ?? 64, ppb = room / bars;
-    const ws = rb.sections.map((s) => Math.max(s.bars * ppb, MIN_W));
+    const room = Math.max(200, width - LW - RIGHT_PAD);
+    // Bar for bar, except that a short section gets MIN_W and the others share what's left; when
+    // even that doesn't fit, the grid scrolls sideways.
+    const short = new Set<number>();
+    let ppb = 0;
+    for (let k = 0; k <= rb.sections.length; k++) {
+      const rest = rb.sections.reduce((n, s, i) => (short.has(i) ? n : n + s.bars), 0);
+      ppb = rest ? Math.max(0, room - short.size * MIN_W) / rest : 0;
+      const more = rb.sections.findIndex((s, i) => !short.has(i) && s.bars * ppb < MIN_W);
+      if (more < 0) break;
+      short.add(more);
+    }
+    const ws = rb.sections.map((s, i) => (short.has(i) ? MIN_W : Math.max(s.bars * ppb, MIN_W)));
     const at = ws.map((w, i) => ({ x: ws.slice(0, i).reduce((a, v) => a + v, 0), w }));
     return { at, total: Math.max(ws.reduce((a, v) => a + v, 0), room) };
-  }, [width, LW, rb.sections, doc.bars]);
+  }, [width, LW, rb.sections]);
   const barX = (bar: number) => {
     const i = sectionIndexAt(rb, bar), s = rb.sections[i], o = lay.at[i];
     return o.x + Math.min(1, Math.max(0, (bar - s.start) / s.bars)) * o.w;
@@ -166,7 +177,7 @@ export function RebuildView({ t, mine }: { t: Timeline; mine: MySounds }) {
             </div>
           </div>
           {edge.right ? (
-            <button className={r.cueR} onClick={() => scroller.current?.scrollBy({ left: scroller.current.clientWidth * 0.7, behavior: "smooth" })} aria-label="Scroll to the later sections">
+            <button className={r.cueR} onClick={() => scroller.current?.scrollBy({ left: scroller.current.clientWidth * 0.7, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })} aria-label="Scroll to the later sections">
               <span aria-hidden>›</span>
             </button>
           ) : null}
@@ -191,7 +202,7 @@ function SectionHead({ s, n, hinted, x, w, onSeek }: { s: RebuildSection; n: num
   const range = `${s.start}–${s.start + s.bars - 1}`;
   const roomy = s.name.length * 8.4 + range.length * 6.9 + 40 <= w;
   // Narrow: "2 to fill" or nothing, never a bare number (critic 3b).
-  const count = !hinted ? "" : n ? `${n} to fill` : "all filled";
+  const count = !hinted ? "" : `${n} to fill`;
   return (
     <button className={r.sech} style={{ left: x, width: w }} onClick={onSeek} title={`${s.name}, bars ${range}. Play from bar ${s.start}`}>
       <span className={r.l1}><span className={r.sn}>{s.name}</span>{roomy ? <span className={r.range}>{range}</span> : null}</span>

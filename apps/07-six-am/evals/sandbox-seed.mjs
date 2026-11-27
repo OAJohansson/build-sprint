@@ -115,13 +115,14 @@ async function main() {
     const r = await fetch(`${BASE}/api/maps?id=${encodeURIComponent(m.id)}`, { method: "PUT", headers: head, body: JSON.stringify({ map: m }) });
     console.log(`${r.ok ? "seeded" : `FAILED ${r.status}`}  ${m.title}: ${m.bpm} BPM, origin ${m.originSec} s, ${m.key} ${m.scale}, ${m.bars} bars, ${m.sections.length} sections`);
     if (!r.ok) { console.error(await r.text()); process.exit(1); }
+    console.log(`  rebuild: ${BASE}/?rebuild=${encodeURIComponent(m.id)}`);
+    if (m.id.includes("/six-am-sandbox/")) continue; // layout only: no analysis, so it never shows in Analyse
     // FX-S1: a minimal analysis too (title, uploader, tempo, key, a placeholder genre), so the Lab and
     // the Mentor have the track's facts as they do for a real, analysed track. Demo rows: memory store only.
     const analysis = { id: m.id, soundcloudUrl: m.id, title: m.title, uploader: m.uploader, bpm: m.bpm, bpmConfidence: 1, key: m.key, scale: m.scale, keyStrength: 1, durationMs: Math.round(m.durationSec * 1000), analysedSeconds: m.durationSec, genres: [{ style: "Electronic---House", p: 0.5 }], analysedAt: new Date().toISOString() };
     const a = await fetch(`${BASE}/api/analyses?id=${encodeURIComponent(m.id)}`, { method: "PUT", headers: { ...head, "x-six-am-demo": "1" }, body: JSON.stringify({ analysis }) });
     console.log(`  analysis ${a.ok ? "seeded" : `FAILED ${a.status}`} (placeholder genre: House)`);
     console.log(`  open: ${BASE}/map?id=${encodeURIComponent(m.id)}&mode=make&make=drums`);
-    console.log(`  rebuild: ${BASE}/?rebuild=${encodeURIComponent(m.id)}`);
   }
   if (process.argv.includes("--no-parts")) return;
   // Saved parts, once: a part whose name is already in the library is skipped.

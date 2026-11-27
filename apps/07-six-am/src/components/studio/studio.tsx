@@ -82,6 +82,16 @@ export function Studio() {
     }
   }, [client]);
 
+  // Slice 3 (R7-S7): a change made just before the tab is hidden or closed is sent at once, not
+  // after the 0.7 s wait (a rebuild filled and closed straight away came back without its last fill).
+  useEffect(() => {
+    const now = () => { if (document.visibilityState === "hidden" && pending.current) void flush(); };
+    const hide = () => { if (pending.current) void flush(); };
+    document.addEventListener("visibilitychange", now);
+    addEventListener("pagehide", hide);
+    return () => { document.removeEventListener("visibilitychange", now); removeEventListener("pagehide", hide); };
+  }, [flush]);
+
   const queue = useCallback((name: string, doc: Doc) => {
     if (!track) return;
     pending.current = { id: track.id, name, doc };

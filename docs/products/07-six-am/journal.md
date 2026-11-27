@@ -6,6 +6,8 @@ What happened, what was decided and why. Newest last.
 
 ### Phase 6 (Chords in Make): for `docs/knowledge-bank.md` at wrap-up
 
+**Written at the Phase 6 wrap-up (27 Nov):** knowledge bank (Design principles, Audio, quizzes) and two Six AM bullets in `docs/learnings.md`.
+
 - **Design, Choosing a design without domain knowledge** (owner, 26 Nov): borrow it. Look at what tools for the same user do (beginner music tools: GarageBand chord strips, Hookpad, Scaler, Captain Chords; pro DAWs: piano roll), then score the options on what the user needs (easy now, teaches, room to grow, transfers to real tools, covers the system's known weak spot). Where we met it: the Phase 6 chord-grid pick. Quiz: "Two ways to make a design call in a domain you don't know?"
 - **Customer insight / music, Diatonic chords and the chord palette:** the seven chords built from a key's notes (I, ii, iii, IV, V, vi, vii°) all "fit" the song; beginner tools show them as buttons. Where we met it: Palette direction. Quiz: "Why does a palette of the key's chords always sound right?"
 

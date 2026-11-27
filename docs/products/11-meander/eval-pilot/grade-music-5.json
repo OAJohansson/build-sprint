@@ -1,0 +1,1009 @@
+{
+  "batch": "5",
+  "family": "pop / rock",
+  "counts": {
+    "claims": 288,
+    "supported": 251,
+    "drift": 26,
+    "unsupported": 9,
+    "wrong": 2,
+    "newcomer": 6,
+    "fairness": 4
+  },
+  "extra_flags": {
+    "recording_not_own": 1,
+    "year_missing": 2,
+    "recording_kind_wrong": 2,
+    "corpus_date_conflict": 1,
+    "citation_only_fixes": 7,
+    "ranking": 1
+  },
+  "claim_counting": "288 claims across 5 genres: tagline, place, date_range, description, debatable, each listen_for (3), each hallmark (5), each link's label and reason (2 per link; 5, 5, 6, 6 and 12 links), each artist's dates, summary, 2 contributions, recording and study prompt (6 per artist; 4, 4, 5, 5, 5 artists), and each of the 3 landmark recordings. reacted_against counted for indie-rock and post-punk (both supported); null for the other three. Seven 'unsupported' items are citation-only: the fact is true in an uncited section of the same article (Sinatra/Dorsey, Page/Oklahoma, Houston/Newark, Spears/Mississippi, Siouxsie 2002, PiL 1992, plus the indie debatable).",
+  "study_prompts": "All 23 prompts were checked by machine: each is exactly the fixed opening + the artist's summary and contributions word for word + the 'Start with <recording> (<year>)' close, so none goes beyond the card. They inherit the card's errors, so regenerate after fixes for Irving Berlin (recording), Bing Crosby (year 1942), Michael Jackson (c2), Whitney Houston (summary), Bikini Kill (c2 and the year-less recording) and Siouxsie and the Banshees (c1).",
+  "content_rules": {
+    "own_recording": "22 of 23 artist recordings are credited to the artist and named in their own article. Exception: Irving Berlin's 'Alexander's Ragtime Band' is his composition; no 1911 recording by him is in the corpus.",
+    "rankings": "Cards avoid the source's 'best-selling of all time', 'greatest', Rolling Stone and Guinness ranks throughout (Thriller, Madonna, Houston, Spears, BTS, Blackpink, Slanted and Enchanted, Entertainment!, Is This It). One residual chart superlative: Houston c2 'a record at the time'.",
+    "hedges": "Kept well: Michael Jackson allegations (accused 1993, settled 1994, acquitted 2005 on other charges, 2019 documentary 'made further allegations'), 'considered the first K-pop idol group', 'one of the first idol boy bands', 'probably mocks', 'is described as highly influential', 'often called the Queen of K-pop'. Dropped: 'partly shaped' (pop hallmark5), 'generally predates' (trad-pop description), 'less completely' (trad-pop hallmark3).",
+    "link_reasons": "All 34 link reasons are plain statements about the music, with no judgement words; failing ones are listed above for drift only."
+  },
+  "items": [
+    {
+      "id": "traditional-pop.description",
+      "claim": "...came before rock and roll took over in the mid-1950s... In the swing era and after, crooners carried these songs to the top of the charts.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Traditional_pop#intro",
+        "Traditional_pop#Mid-1940s to mid-1950s: height of popularity"
+      ],
+      "note": "Source hedges 'generally predates'; nothing cited says crooners took the songs 'to the top of the charts' (the section says the swing era 'made stars of' singers).",
+      "fix": {
+        "text": "Traditional pop is the Western popular music that generally came before rock and roll and pop in the mid-1950s. Its songs were written by Broadway, Tin Pan Alley and Hollywood songwriters, and many became 'standards': songs so widely known that many artists recorded them. The swing era made stars of singers such as Bing Crosby, Frank Sinatra and Patti Page.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+            "section": "Origins"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+            "section": "Mid-1940s to mid-1950s: height of popularity"
+          }
+        ]
+      }
+    },
+    {
+      "id": "traditional-pop.date_range",
+      "claim": "1920s – 1950s (Tin Pan Alley from about 1885)",
+      "verdict": "supported",
+      "flags": [
+        "fairness"
+      ],
+      "cited": [
+        "Traditional_pop#Infobox",
+        "Traditional_pop#Origins"
+      ],
+      "note": "Range is sourced, but it reads as a closed era; the cited 'Advent of rock and roll' section describes successful standards albums from 1983 on (Ronstadt with Nelson Riddle, Rod Stewart, Willie Nelson). Post-punk's card notes its revivals; this one should too.",
+      "fix": {
+        "text": "1920s – 1950s (Tin Pan Alley from about 1885; standards revivals since the 1980s)",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+            "section": "Origins"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+            "section": "Advent of rock and roll"
+          }
+        ]
+      }
+    },
+    {
+      "id": "traditional-pop.hallmark1",
+      "claim": "Tin Pan Alley began around 1885, when music publishers crowded into one Manhattan district, later West 28th Street.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Tin_Pan_Alley#intro"
+      ],
+      "note": "Source says the name 'originally' referred to West 28th Street; 'later' reverses it.",
+      "fix": {
+        "text": "Tin Pan Alley is usually dated from about 1885, when music publishers set up shop in one Manhattan district, originally a stretch of West 28th Street. Families bought sheet music to play new songs at home, and 'song pluggers' at the piano demonstrated new tunes to push sales. The name probably mocks the din of many cheap pianos playing at once, and Irving Berlin was among the writers who frequented it.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+            "section": "New York City before Tin Pan Alley"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+            "section": "In its prime"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+            "section": "Origin of the name"
+          }
+        ]
+      }
+    },
+    {
+      "id": "traditional-pop.hallmark3",
+      "claim": "...in the 1910s and 1920s jazz and blues styles. Sources note a strong African American influence from ragtime, blues and jazz.",
+      "verdict": "drift",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "Tin_Pan_Alley#In its prime"
+      ],
+      "note": "'strong' is not in the source (it says 'a vernacular African-American impact'), and the source's hedge that jazz and blues were taken up 'less completely' is dropped. 'Cakewalk' is unglossed.",
+      "fix": {
+        "text": "Tin Pan Alley started with melodramatic ballads and comic novelty songs, then took up the cakewalk (a strutting dance rhythm) and ragtime, and in the 1910s and 1920s published songs in the new jazz and blues styles, though less completely, since its songs had to suit amateur singers. Writers note an African American influence from ragtime, the blues and jazz. Berlin's 'Alexander's Ragtime Band' (1911) revived the ragtime craze.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+            "section": "In its prime"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Irving_Berlin",
+            "section": "\"Alexander's Ragtime Band\" (1911)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "traditional-pop.link1.label",
+      "claim": "the parent of pop",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Pop_music#Infobox",
+        "Pop_music#Stylistic evolution"
+      ],
+      "note": "Pop's infobox lists two stylistic origins, traditional pop and rock and roll; 'the parent' is stronger than the source.",
+      "fix": {
+        "text": "a parent of pop",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Pop_music",
+            "section": "Infobox"
+          }
+        ]
+      }
+    },
+    {
+      "id": "traditional-pop.link2.reason",
+      "claim": "Many swing-era band singers went on to work as solo pop singers, carrying jazz phrasing into traditional pop.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Jazz#Post-war jazz"
+      ],
+      "note": "The section says big-band vocalists became solo pop singers; 'carrying jazz phrasing' is not in any cited section.",
+      "fix": {
+        "text": "After the swing era, singers from the big bands, such as Frank Sinatra and Peggy Lee, went on to be marketed as solo pop singers.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Jazz",
+            "section": "Post-war jazz"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Jazz",
+            "section": "Infobox"
+          }
+        ]
+      }
+    },
+    {
+      "id": "traditional-pop.link4.reason",
+      "claim": "Rock inherited part of its song tradition from Tin Pan Alley pop, even as it replaced it on the charts.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Rock_music#Characteristics"
+      ],
+      "note": "Source says rock lyrics inherited themes from the Tin Pan Alley pop tradition; 'song tradition' is broader.",
+      "fix": {
+        "text": "Rock lyrics took some of their themes from the Tin Pan Alley pop tradition, even as rock and roll pushed traditional pop aside in the 1950s.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Rock_music",
+            "section": "Characteristics"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+            "section": "Advent of rock and roll"
+          }
+        ]
+      }
+    },
+    {
+      "id": "traditional-pop.artist.Irving Berlin.recording",
+      "claim": "{title: Alexander's Ragtime Band, year: 1911, kind: song}",
+      "verdict": "drift",
+      "flags": [
+        "fairness"
+      ],
+      "cited": [
+        "Irving_Berlin#\"Alexander's Ragtime Band\" (1911)"
+      ],
+      "note": "Own-recording rule: Berlin wrote it but the source credits no 1911 recording to him: Emma Carus introduced it, and the hits were by Bessie Smith, Louis Armstrong, Crosby and Boswell and others. The study prompt then asks what to 'listen for' in a 1911 Berlin recording that the card cannot point to.",
+      "fix": {
+        "text": "Keep the title but mark it as his song, not his record: {title: \"Alexander's Ragtime Band\", year: 1911, kind: \"song (composition)\", note: \"introduced by Emma Carus; later hits for Bessie Smith (1927) and Louis Armstrong (1937)\"}, and regenerate the study prompt to say 'a recording of'.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Irving_Berlin",
+            "section": "\"Alexander's Ragtime Band\" (1911)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "traditional-pop.artist.Bing Crosby.recording",
+      "claim": "White Christmas (1941)",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Bing_Crosby#White Christmas",
+        "Irving_Berlin#\"White Christmas\" (1942)"
+      ],
+      "note": "1941 is when Crosby first sang it on a radio broadcast; his record charted on 3 October 1942 and the song was introduced in the 1942 film Holiday Inn. The recording's year should be 1942.",
+      "fix": {
+        "text": "{artist: Bing Crosby, title: \"White Christmas\", year: 1942, kind: song}",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Bing_Crosby",
+            "section": "White Christmas"
+          }
+        ]
+      }
+    },
+    {
+      "id": "traditional-pop.recording1",
+      "claim": "White Christmas (1941)",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Bing_Crosby#White Christmas",
+        "Irving_Berlin#\"White Christmas\" (1942)"
+      ],
+      "note": "1941 is when Crosby first sang it on a radio broadcast; his record charted on 3 October 1942 and the song was introduced in the 1942 film Holiday Inn. The recording's year should be 1942.",
+      "fix": {
+        "text": "{artist: Bing Crosby, title: \"White Christmas\", year: 1942, kind: song}",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Bing_Crosby",
+            "section": "White Christmas"
+          }
+        ]
+      }
+    },
+    {
+      "id": "traditional-pop.artist.Frank Sinatra.summary",
+      "claim": "...began in the swing era with the Harry James and Tommy Dorsey bands...",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Frank_Sinatra#intro",
+        "Frank_Sinatra#Onset of Sinatramania"
+      ],
+      "note": "Cited sections name only the Harry James band. True in the uncited 'Tommy Dorsey band' section: add it.",
+      "fix": {
+        "text": "(text unchanged) add source Frank_Sinatra#Tommy Dorsey band",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Frank_Sinatra",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Frank_Sinatra",
+            "section": "Tommy Dorsey band"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Frank_Sinatra",
+            "section": "Onset of Sinatramania"
+          }
+        ]
+      }
+    },
+    {
+      "id": "traditional-pop.artist.Patti Page.summary",
+      "claim": "An American singer from Oklahoma...",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Patti_Page#intro"
+      ],
+      "note": "Only the intro is cited and it doesn't say where she was from (it mentions the Oklahoma Music Hall of Fame). 'Born in Oklahoma' is in the Style section: add it.",
+      "fix": {
+        "text": "(text unchanged) add source Patti_Page#Style",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Patti_Page",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Patti_Page",
+            "section": "Style"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pop-music.hallmark4",
+      "claim": "From the 1980s a handful of singers became stars around the world; the pop article names Whitney Houston, Michael Jackson and Madonna among them.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Pop_music#International spread and crosspollination"
+      ],
+      "note": "Source says 'late 20th century', not 'from the 1980s'.",
+      "fix": {
+        "text": "In the late 20th century a handful of pop singers became global superstars; the pop article names Whitney Houston, Michael Jackson, Madonna, George Michael and Prince. Houston brought a gospel-trained voice into chart pop.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Pop_music",
+            "section": "International spread and crosspollination"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Whitney_Houston",
+            "section": "Influences"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pop-music.hallmark5",
+      "claim": "Around 2000 the Swedish 'Cheiron sound' shaped teen pop for Britney Spears and boy bands.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Pop_music#21st century"
+      ],
+      "note": "Hedge dropped: the source says the Y2K pop era was 'partly shaped' by the Cheiron sound.",
+      "fix": {
+        "text": "Around 2000 the Swedish 'Cheiron sound' partly shaped the pop of Britney Spears, the Backstreet Boys and NSYNC. Her 2007 album Blackout mixed EDM, R&B and hip-hop, and by 2010 dance-influenced pop ruled the charts, with clubs rather than radio setting trends.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Pop_music",
+            "section": "21st century"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pop-music.link1.label",
+      "claim": "the parent of pop",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Pop_music#Infobox"
+      ],
+      "note": "Same as on the traditional-pop card: the infobox gives two origins.",
+      "fix": {
+        "text": "a parent of pop",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Pop_music",
+            "section": "Infobox"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pop-music.artist.Michael Jackson.c2",
+      "claim": "He made dance part of pop performance, popularising street moves such as the moonwalk...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Michael_Jackson#intro",
+        "Michael_Jackson#Dance"
+      ],
+      "note": "'Made dance part of pop performance' implies a first the source doesn't claim; it says he 'transformed visual performance' and popularised street moves.",
+      "fix": {
+        "text": "He transformed visual performance in pop, popularising street moves such as the moonwalk, which he debuted on television in 1983 while singing 'Billie Jean'.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Michael_Jackson",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Michael_Jackson",
+            "section": "Thriller, Motown 25: Yesterday, Today, Forever and Pepsi incident (1981–1984)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pop-music.artist.Whitney Houston.summary",
+      "claim": "An American singer and actress from Newark, New Jersey, known as 'the Voice' for her gospel-rooted singing and crossover appeal.",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Whitney_Houston#intro"
+      ],
+      "note": "Newark isn't in the cited intro (it's in the Infobox and Early life). The intro gives the nickname and, separately, says she was known for her gospel style and crossover appeal; 'known as the Voice for' joins the two.",
+      "fix": {
+        "text": "An American singer and actress from Newark, New Jersey, commonly called 'the Voice' and known for her gospel singing style and crossover appeal. She broke gender and racial barriers in pop and film.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Whitney_Houston",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Whitney_Houston",
+            "section": "Early life and family"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pop-music.artist.Whitney Houston.c2",
+      "claim": "...topped the US chart for 14 weeks, a record at the time.",
+      "verdict": "supported",
+      "flags": [
+        "fairness"
+      ],
+      "cited": [
+        "Whitney_Houston#1992–1994: The Bodyguard"
+      ],
+      "note": "Sourced, but 'a record at the time' is a chart superlative; under the no-rankings rule keep the plain fact.",
+      "fix": {
+        "text": "Her version of Dolly Parton's 'I Will Always Love You', from The Bodyguard (1992), topped the US chart for 14 weeks.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Whitney_Houston",
+            "section": "1992–1994: The Bodyguard"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pop-music.artist.Britney Spears.summary",
+      "claim": "An American singer from Mississippi...",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Britney_Spears#intro",
+        "Britney_Spears#Musical style"
+      ],
+      "note": "Neither cited section gives her birthplace; McComb, Mississippi is in the Infobox and early-life section: add it.",
+      "fix": {
+        "text": "(text unchanged) add source Britney_Spears#1981–1997: Early life, family, and career beginnings",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Britney_Spears",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Britney_Spears",
+            "section": "1981–1997: Early life, family, and career beginnings"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Britney_Spears",
+            "section": "Musical style"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pop-music.recording3",
+      "claim": "The Weeknd - Blinding Lights (year: null, song)",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Pop_music#21st century"
+      ],
+      "note": "Year missing: the cited section says only 'in the 2020s'. Synth-pop#21st-century revival says it peaked at number one in early 2020; its release year isn't in the corpus. The cited sections frame it entirely by all-time rankings, so don't add those.",
+      "fix": {
+        "text": "{artist: The Weeknd, title: \"Blinding Lights\", year: 2020, kind: song} with the year sourced as its chart peak ('peaked at number one in 29 countries ... in early 2020'), or fetch The Weeknd's article for the release year.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Synth-pop",
+            "section": "21st-century revival (2000s–present)"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Pop_music",
+            "section": "21st century"
+          }
+        ]
+      }
+    },
+    {
+      "id": "k-pop.place",
+      "claim": "Seoul, South Korea, then Japan, the rest of Asia and the world",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "K-pop#intro",
+        "K-pop#Infobox",
+        "Seo_Taiji_and_Boys#Infobox"
+      ],
+      "note": "The genre's origin is 'South Korea'; 'Seoul' comes only from one band's infobox.",
+      "fix": {
+        "text": "South Korea, then Japan, the rest of Asia and the world",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "Infobox"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "k-pop.description",
+      "claim": "Today the name mostly means the music of idol groups and solo stars made by entertainment companies, who put as much weight on dance, styling and video as on the song... the 'Korean Wave' carried it around the world.",
+      "verdict": "drift",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "K-pop#intro"
+      ],
+      "note": "Source: 'teen idol acts, chiefly girl groups and boy bands, who emphasize visual appeal and performance'. 'Solo stars' and 'as much weight ... as on the song' go beyond it. 'Korean Wave' is used without a gloss.",
+      "fix": {
+        "text": "K-pop grew in South Korea in the 1990s as a youth subculture, with Korean musicians drawing on Western dance music, hip-hop, R&B and rock. Today the name mostly means the music of teen idol acts, chiefly girl groups and boy bands, who emphasise visual appeal and performance. It is known for its melodies and its blend of styles, and in the 2010s social media and the Korean Wave (the global spread of South Korean pop culture) carried it around the world.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "k-pop.listen_for2",
+      "claim": "English phrases mixed into Korean lyrics, especially in hooks and titles.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "K-pop#Use of English phrases"
+      ],
+      "note": "Source covers lyrics, song titles and artist names; 'especially in hooks' is not stated.",
+      "fix": {
+        "text": "English phrases mixed into Korean lyrics, song titles and group names.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "Use of English phrases"
+          }
+        ]
+      }
+    },
+    {
+      "id": "k-pop.listen_for3",
+      "claim": "Choruses built to match a 'point' dance move...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "K-pop#Dance",
+        "K-pop#Hybrid genre and transnational values"
+      ],
+      "note": "Reverses the source: the point dance is choreography that matches the lyrics, not choruses built around a move.",
+      "fix": {
+        "text": "A 'point' dance: a short, hooky, repeated move tied to the song's lyrics, kept simple enough for fans to copy.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "Dance"
+          }
+        ]
+      }
+    },
+    {
+      "id": "k-pop.hallmark1",
+      "claim": "...a new jack swing-inspired mix of rap verses, pop choruses and new dance moves...",
+      "verdict": "supported",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "Seo_Taiji_and_Boys#1992: \"I Know\""
+      ],
+      "note": "'New jack swing' is unglossed for a beginner (also in Seo Taiji and Boys c1).",
+      "fix": {
+        "text": "...a mix of new jack swing (late-1980s R&B with hip-hop beats), rap verses, pop choruses and new dance moves... (gloss is general knowledge; drop it if a sourced gloss is required)",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Seo_Taiji_and_Boys",
+            "section": "1992: \"I Know\""
+          }
+        ]
+      }
+    },
+    {
+      "id": "k-pop.hallmark2",
+      "claim": "Lee Soo-man of SM Entertainment built the idol system...",
+      "verdict": "drift",
+      "flags": [
+        "fairness"
+      ],
+      "cited": [
+        "K-pop#intro",
+        "K-pop#Trainee system",
+        "K-pop#1990s: Development of modern K-pop"
+      ],
+      "note": "The cited Trainee system section says Lee 'popularized the trainee business model from the Japanese idol industry', and the 1990s section says agencies adopted 'an idol business model used in J-pop'. 'Built' credits Korea alone.",
+      "fix": {
+        "text": "The band's success with teenagers turned the industry toward teen pop. Lee Soo-man of SM Entertainment developed the Korean idol system, adapting a trainee model from Japan's idol industry: young recruits train for years in singing, dancing, languages and media skills before a debut. H.O.T. (1996) was one of the first idol boy bands.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "Trainee system"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "1990s: Development of modern K-pop"
+          }
+        ]
+      }
+    },
+    {
+      "id": "k-pop.link2.reason",
+      "claim": "...and many idol groups, BTS among them, kept hip-hop at their base.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "BTS#Musical style"
+      ],
+      "note": "Only BTS is sourced as keeping hip-hop as their base; 'many idol groups' isn't.",
+      "fix": {
+        "text": "Seo Taiji and Boys brought rap into Korean pop, and later groups such as BTS kept hip-hop as their musical base.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Seo_Taiji_and_Boys",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/BTS",
+            "section": "Musical style"
+          }
+        ]
+      }
+    },
+    {
+      "id": "k-pop.link5.reason",
+      "claim": "K-pop draws heavily on R&B and other African American styles...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "K-pop#Hybrid genre and transnational values"
+      ],
+      "note": "'heavily' is not in the cited sections, which describe a mix of Western sounds and African-American influences.",
+      "fix": {
+        "text": "K-pop mixes R&B and other African American influences with Western dance music and hip-hop.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "Hybrid genre and transnational values"
+          }
+        ]
+      }
+    },
+    {
+      "id": "indie-rock.debatable",
+      "claim": "...in the US the two were long treated as the same thing...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Indie_rock#Etymology and characteristics",
+        "Indie_rock#Mainstream–underground split: 1990s"
+      ],
+      "note": "'Long synonymous with alternative rock as a whole in the U.S.' is in Alternative_rock#Indie rock, which isn't cited for this field. Text is fine; add the source.",
+      "fix": {
+        "text": "(text unchanged) add source Alternative_rock#Indie rock",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Alternative_rock",
+            "section": "Indie rock"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Indie_rock",
+            "section": "Mainstream–underground split: 1990s"
+          }
+        ]
+      }
+    },
+    {
+      "id": "indie-rock.listen_for3",
+      "claim": "Odd song shapes, feedback and offbeat, often sarcastic lyrics rather than polished radio hooks.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Pavement_(band)#Musical style and influences",
+        "Sonic_Youth#intro"
+      ],
+      "note": "These are Pavement's traits presented as the genre's, and 'rather than polished radio hooks' is in neither section (the genre article says indie spans a wide range of styles).",
+      "fix": {
+        "text": "In bands like Pavement, 'fractured' song structures, squalls of feedback and humorous, often sarcastic lyrics.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Pavement_(band)",
+            "section": "Musical style and influences"
+          }
+        ]
+      }
+    },
+    {
+      "id": "indie-rock.hallmark2",
+      "claim": "...college radio played jangle pop bands like R.E.M. and the Smiths...",
+      "verdict": "supported",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "Indie_rock#Origins"
+      ],
+      "note": "'Jangle pop' is unglossed (the card uses 'jangly' in listen_for1 but never explains it).",
+      "fix": {
+        "text": "...college radio played jangle pop (bright, chiming guitar pop) bands like R.E.M. and the Smiths... (the 'jangly ... guitars' description is supported by Indie_rock#Dunedin sound)",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Indie_rock",
+            "section": "Origins"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Indie_rock",
+            "section": "Dunedin sound"
+          }
+        ]
+      }
+    },
+    {
+      "id": "indie-rock.artist.Buzzcocks.recording",
+      "claim": "Spiral Scratch (1977, kind: album)",
+      "verdict": "wrong",
+      "flags": [],
+      "cited": [
+        "Buzzcocks#Early years",
+        "Indie_rock#Early UK DIY movement"
+      ],
+      "note": "The corpus calls it a 'four-track EP' every time. Also a date conflict in the corpus: Indie_rock gives 29 January 1977, while Buzzcocks#Early years says it was recorded and released 'by the end of the year' (1976). Keep 1977 and cite the dated source.",
+      "fix": {
+        "text": "{artist: Buzzcocks, title: \"Spiral Scratch\", year: 1977, kind: \"EP\"}",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Indie_rock",
+            "section": "Early UK DIY movement"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Buzzcocks",
+            "section": "Early years"
+          }
+        ]
+      }
+    },
+    {
+      "id": "indie-rock.recording1",
+      "claim": "Spiral Scratch (1977, kind: album)",
+      "verdict": "wrong",
+      "flags": [],
+      "cited": [
+        "Buzzcocks#Early years",
+        "Indie_rock#Early UK DIY movement"
+      ],
+      "note": "The corpus calls it a 'four-track EP' every time. Also a date conflict in the corpus: Indie_rock gives 29 January 1977, while Buzzcocks#Early years says it was recorded and released 'by the end of the year' (1976). Keep 1977 and cite the dated source.",
+      "fix": {
+        "text": "{artist: Buzzcocks, title: \"Spiral Scratch\", year: 1977, kind: \"EP\"}",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Indie_rock",
+            "section": "Early UK DIY movement"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Buzzcocks",
+            "section": "Early years"
+          }
+        ]
+      }
+    },
+    {
+      "id": "indie-rock.artist.Bikini Kill.c2",
+      "claim": "Their records came out on the indie label Kill Rock Stars...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Bikini_Kill#1990 – 1997: Formation and career"
+      ],
+      "note": "The source says only the Bikini Kill EP came out on Kill Rock Stars.",
+      "fix": {
+        "text": "Their first EP came out on the indie label Kill Rock Stars, produced by Ian MacKaye, and Joan Jett produced their single 'New Radio'/'Rebel Girl'.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Bikini_Kill",
+            "section": "1990 – 1997: Formation and career"
+          }
+        ]
+      }
+    },
+    {
+      "id": "indie-rock.artist.Bikini Kill.recording",
+      "claim": "Rebel Girl (year: null, song)",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Bikini_Kill#1990 – 1997: Formation and career",
+        "Bikini_Kill#1998 – 2016: Post-breakup"
+      ],
+      "note": "No year: the corpus places the Jett-produced single after the 1993 UK tour and gathers the singles as 'recorded between 1993 and 1995', but gives no date. The study prompt prints it without a year.",
+      "fix": {
+        "text": "Either keep \"Rebel Girl\" with year left blank and the prompt saying 'a mid-1990s single', or use the dated debut album: {title: \"Pussy Whipped\", year: 1993, kind: album}.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Bikini_Kill",
+            "section": "1990 – 1997: Formation and career"
+          }
+        ]
+      }
+    },
+    {
+      "id": "post-punk.description",
+      "claim": "...krautrock... Its lighter, poppier cousin, new wave, took the same post-punk moment to the charts and, through MTV, to America.",
+      "verdict": "drift",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "New_wave_music#intro",
+        "New_wave_music#1970s: Origins and breakthrough"
+      ],
+      "note": "New wave emerged in the mid-to-late 1970s alongside punk (the terms were first used interchangeably), so it didn't take 'the same post-punk moment' anywhere. 'Krautrock' and 'dub' are unglossed.",
+      "fix": {
+        "text": "Post-punk grew in the late 1970s, mainly in Britain, as bands kept punk's do-it-yourself energy but dropped its raw simplicity for a more experimental approach. They borrowed from dub (reggae remixed with heavy echo and bass), funk, disco, krautrock (experimental German rock), electronics and avant-garde art, and from writers such as J. G. Ballard and William S. Burroughs. Its lighter, more pop-oriented relative, new wave, grew up alongside it, reached the charts from 1979 and, through MTV, spread across America.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Post-punk",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Post-punk",
+            "section": "Influences"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Krautrock",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/New_wave_music",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/New_wave_music",
+            "section": "1970s: Origins and breakthrough"
+          }
+        ]
+      }
+    },
+    {
+      "id": "post-punk.hallmark3",
+      "claim": "Producers treated the studio as an instrument.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Joy_Division#Sound",
+        "Post-punk#United Kingdom"
+      ],
+      "note": "The cited sections speak of 'unorthodox studio production techniques'; 'studio as instrument' appears only in Disco#Post-punk, about PiL's Metal Box.",
+      "fix": {
+        "text": "Producers such as Martin Hannett, Steve Lillywhite and Dennis Bovell devised unorthodox studio techniques. Hannett gave Joy Division an eerie sense of space, with Peter Hook's bass carrying the melody and the guitar leaving gaps, on records for Manchester's independent Factory label.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Post-punk",
+            "section": "United Kingdom"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Joy_Division",
+            "section": "Sound"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Joy_Division",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "post-punk.hallmark5",
+      "claim": "Sire Records pushed the name to sell CBGB acts like Blondie...",
+      "verdict": "unsupported",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "New_wave_music#1970s: Origins and breakthrough",
+        "Blondie_(band)#intro"
+      ],
+      "note": "The source says Sire's Seymour Stein ran 'Don't Call It Punk' for Sire's own CBGB acts; nothing in the corpus says Blondie was one of them. 'CBGB' is unglossed.",
+      "fix": {
+        "text": "New wave took a lighter, more melodic route, with hooks, quirky humour and synths. Sire Records' Seymour Stein pushed the name to sell his acts from CBGB, the New York punk club; Blondie, from the same scene, had 'Heart of Glass', the first new wave single to reach number one in the US, and MTV spread new wave across America from 1981.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/New_wave_music",
+            "section": "1970s: Origins and breakthrough"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/New_wave_music",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Blondie_(band)",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "post-punk.artist.Siouxsie and the Banshees.dates",
+      "claim": "active 1976–1996, 2002",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Siouxsie_and_the_Banshees#intro",
+        "Siouxsie_and_the_Banshees#Musical style"
+      ],
+      "note": "Cited intro says only that they disbanded in 1996; the 2002 reunion is in the Infobox and 'Post-disbandment' section: add it.",
+      "fix": {
+        "text": "(text unchanged) add source Siouxsie_and_the_Banshees#Infobox",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Siouxsie_and_the_Banshees",
+            "section": "Infobox"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Siouxsie_and_the_Banshees",
+            "section": "Post-disbandment (2000s–present)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "post-punk.artist.Siouxsie and the Banshees.c1",
+      "claim": "Their debut The Scream (1978) set out a post-punk sound full of daring rhythmic and sonic experiment, with lyrics about madness, childhood and escaping suburbia.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Siouxsie_and_the_Banshees#intro",
+        "Siouxsie_and_the_Banshees#Musical style"
+      ],
+      "note": "The 'post-punk discord' quote describes the early line-up rather than The Scream in particular, and Severin's themes are for the first two albums.",
+      "fix": {
+        "text": "With guitarist John McKay and drummer Kenny Morris they made 'a form of post-punk discord full of daring rhythmic and sonic experimentation'; their debut The Scream (1978) was widely acclaimed, and the lyrics of their first two albums dealt with madness, childhood and escaping suburbia.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Siouxsie_and_the_Banshees",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Siouxsie_and_the_Banshees",
+            "section": "Musical style"
+          }
+        ]
+      }
+    },
+    {
+      "id": "post-punk.artist.Public Image Ltd.dates",
+      "claim": "active 1978–1992, 2009–today",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Public_Image_Ltd#intro"
+      ],
+      "note": "The cited intro mentions 'a late 1990s hiatus', not 1992; 1992 is in the Infobox and 'Musical style and legacy': add them.",
+      "fix": {
+        "text": "(text unchanged) add source Public_Image_Ltd#Infobox",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Public_Image_Ltd",
+            "section": "Infobox"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Public_Image_Ltd",
+            "section": "Musical style and legacy"
+          }
+        ]
+      }
+    }
+  ]
+}

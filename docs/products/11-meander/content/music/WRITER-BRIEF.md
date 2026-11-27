@@ -34,6 +34,19 @@ Every item carries `sources: [{url, section}]` naming the exact section(s) that 
 - study_prompt: a ready-to-paste prompt asking Claude for a short listening module on the artist,
   drawing only on the card's own facts; cite the sections it draws on.
 
+## Rules learned from the first grades (L55, T41)
+- An artist's own recording must be one they are credited on and that their own article names as
+  notable. If the genre's landmark recording is by another act (a producer's record, a song they
+  wrote), keep `artist` as the genre's artist and add `by: "<the credited act>"`.
+- No rankings, even quoted ones ("greatest", "best-selling of all time").
+- If a genre began somewhere other than where its listed artists come from, include a pioneer from
+  the origin when the corpus names one.
+- Allegations against an artist stay in only as cautiously worded as the source.
+- Link reasons are plain statements about the music, never "the X article says…".
+- Keep every hedge; a study prompt may use only the card's own facts.
+- Several new genres sit next to older ones with similar names (Afrobeat vs Afrobeats, synth-pop vs
+  Hi-NRG, UK garage vs grime): the tagline must make the difference clear to a newcomer.
+
 ## Shape (one object per genre; write a JSON array to the file you were given)
 id (from genres.json), name, family (from genres.json), tagline: {text (one plain sentence, ≤ 90
 characters), sources}, date_range, place: {text, sources}, description (2–3 sentences),

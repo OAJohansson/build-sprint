@@ -3273,7 +3273,7 @@
     {
       "id": "reggae",
       "name": "Reggae (with ska)",
-      "family": "caribbean-latin-african",
+      "family": "caribbean-latin",
       "dates": "late 1950s – today",
       "dateRange": "late 1950s (ska) – today",
       "description": "Reggae grew out of ska and rocksteady in late-1960s Jamaica, mixing local mento and Rastafarian drumming with American R&B and jazz. It slowed the tempo, let the bass lead, and put short, choppy chords on the offbeat. From the 1970s its sound and its messages of faith and social criticism spread worldwide.",
@@ -3538,7 +3538,7 @@
     {
       "id": "dub-music",
       "name": "Dub",
-      "family": "caribbean-latin-african",
+      "family": "caribbean-latin",
       "dates": "late 1960s – today",
       "dateRange": "late 1960s – today",
       "description": "Dub is reggae remixed: engineers took existing recordings, pulled out most of the vocals, pushed the drums and bass forward and soaked what was left in delay and reverb. It began with instrumental 'versions' cut for Kingston sound systems and had become its own subgenre by 1973. Its idea of the mixing desk as an instrument fed into post-punk, hip-hop, house, techno, jungle and dubstep.",
@@ -3787,7 +3787,7 @@
     {
       "id": "salsa-music",
       "name": "Salsa",
-      "family": "caribbean-latin-african",
+      "family": "caribbean-latin",
       "dates": "1960s – today",
       "dateRange": "1960s – today",
       "description": "Salsa is Caribbean dance music mostly built on Cuban son montuno, with elements of mambo, cha-cha-chá, bolero, rumba, jazz, R&B and Puerto Rican bomba and plena. It took its name and shape in New York in the 1960s and 1970s, where Fania Records gathered Cuban, Puerto Rican and Dominican musicians. From there it spread across Latin America and to Africa.",
@@ -4032,7 +4032,7 @@
     {
       "id": "bossa-nova",
       "name": "Bossa nova",
-      "family": "caribbean-latin-african",
+      "family": "caribbean-latin",
       "dates": "late 1950s – today",
       "dateRange": "late 1950s – today",
       "description": "Bossa nova ('new trend') is a relaxed style of samba from late-1950s Rio de Janeiro, in which João Gilberto's guitar distilled a samba band's drumming into a gentle, syncopated pattern. Jobim's rich harmonies and Vinicius de Moraes's lyrics completed the sound, sung softly and close to speech. The 1964 album Getz/Gilberto, a major contributor to its already growing popularity abroad, turned it into a craze in the US and beyond.",
@@ -4297,8 +4297,8 @@
     },
     {
       "id": "afrobeat",
-      "name": "Afrobeat",
-      "family": "caribbean-latin-african",
+      "name": "Afrobeat (Fela Kuti era)",
+      "family": "african",
       "dates": "late 1960s – today",
       "dateRange": "late 1960s – today",
       "description": "Afrobeat fuses Yoruba music and Ghanaian highlife with American funk, jazz and soul, built from chanted vocals, interlocking rhythms and heavy percussion. Fela Kuti developed it in late-1960s Nigeria with drummer Tony Allen, and used its long, hypnotic songs to attack corruption and military rule. It is not the same as Afrobeats, the 21st-century West African pop sound.",
@@ -4516,7 +4516,7 @@
     {
       "id": "reggaeton",
       "name": "Reggaeton",
-      "family": "caribbean-latin-african",
+      "family": "caribbean-latin",
       "dates": "late 1980s – today",
       "dateRange": "late 1980s – today",
       "description": "Reggaeton grew from the Spanish-language reggae of Panama, which traces back to Afro-Caribbean workers who came to build the canal, and took shape in Puerto Rico's 'underground' scene of the early 1990s; the name, coined in Puerto Rico, became prominent in the early 2000s. It mixes Jamaican dancehall with hip-hop, rapped or sung in Spanish over the dembow rhythm. Daddy Yankee's 'Gasolina' (2004) opened the door worldwide, and it is now one of the most popular genres in the Spanish-speaking Caribbean.",
@@ -7547,6 +7547,4152 @@
         {
           "url": "https://en.wikipedia.org/wiki/Electronic_dance_music",
           "section": "Criticism of over-commercialization"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "traditional-pop",
+      "name": "Traditional pop (with Tin Pan Alley)",
+      "family": "pop",
+      "dates": "1920s – 1950s",
+      "dateRange": "1920s – 1950s",
+      "description": "Traditional pop is the Western popular music that generally came before rock and roll and pop in the mid-1950s, built on songs by Broadway, Hollywood and Tin Pan Alley songwriters; Tin Pan Alley's publishers go back to about 1885. Many of the songs became 'standards', so widely known that many artists recorded them, and the swing era made stars of singers such as Bing Crosby, Frank Sinatra and Patti Page. Since the 1980s, rock and pop stars such as Linda Ronstadt have revived the standards on hit albums.",
+      "debatable": "Where it starts and stops is fuzzy: Tin Pan Alley is usually dated from about 1885, but some end it with the Depression in the 1930s and others with rock and roll in the 1950s.",
+      "tagline": "The songwriters' and crooners' pop of the Great American Songbook, before rock and roll.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+          "section": "Origins"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Bing_Crosby",
+          "section": "Success as a solo singer"
+        }
+      ],
+      "questions": [
+        "A singer out front, with lush string sections and full orchestral arrangements behind the voice.",
+        "Close, conversational microphone singing (crooning) instead of belting to the back row.",
+        "Simple, direct words and melodies written to be sung by anyone, from a star to an amateur at the piano."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+            "section": "Mid-1940s to mid-1950s: height of popularity"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+            "section": "Infobox"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Bing_Crosby",
+            "section": "Success as a solo singer"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Bing_Crosby",
+            "section": "Singing style and vocal characteristics"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Irving_Berlin",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Irving_Berlin",
+            "section": "Music styles"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+            "section": "In its prime"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Songs as sheet music",
+          "text": "Tin Pan Alley is usually dated from about 1885, when music publishers set up shop in one Manhattan district, originally a stretch of West 28th Street. Families bought sheet music to play new songs at home, and 'song pluggers' at the piano demonstrated new tunes to push sales. The name probably mocks the din of many cheap pianos playing at once, and Irving Berlin was among the writers who frequented it.",
+          "thinkers": [
+            "traditional-pop/irving-berlin"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+              "section": "Origin of the name"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+              "section": "In its prime"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+              "section": "New York City before Tin Pan Alley"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Irving_Berlin",
+              "section": "\"Alexander's Ragtime Band\" (1911)"
+            }
+          ]
+        },
+        {
+          "name": "Writers behind the songs",
+          "text": "The music was built by professional songwriters for Broadway, Hollywood and the publishers. Irving Berlin, who arrived from Russia as a child, wrote around 1,500 songs in plain, everyday language, and many Jewish immigrants worked as publishers and songwriters on Tin Pan Alley.",
+          "thinkers": [
+            "traditional-pop/irving-berlin"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+              "section": "Origins"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+              "section": "In its prime"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Irving_Berlin",
+              "section": "intro"
+            }
+          ]
+        },
+        {
+          "name": "Ragtime, jazz and blues",
+          "text": "Tin Pan Alley started with melodramatic ballads and comic novelty songs, then took up the cakewalk (a strutting dance rhythm) and ragtime, and in the 1910s and 1920s published songs in the new jazz and blues styles, though less completely, since its songs had to suit amateur singers. Writers note an African American influence from ragtime, the blues and jazz. Berlin's 'Alexander's Ragtime Band' (1911) revived the ragtime craze.",
+          "thinkers": [
+            "traditional-pop/irving-berlin"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+              "section": "In its prime"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Irving_Berlin",
+              "section": "\"Alexander's Ragtime Band\" (1911)"
+            }
+          ]
+        },
+        {
+          "name": "The microphone voice",
+          "text": "Recording microphones let singers drop the loud vaudeville style. Bing Crosby sang with an intimate, conversational ease that earned the name 'crooner' and influenced many male singers after him, Frank Sinatra among them.",
+          "thinkers": [
+            "traditional-pop/bing-crosby",
+            "traditional-pop/frank-sinatra"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Bing_Crosby",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Bing_Crosby",
+              "section": "Success as a solo singer"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Bing_Crosby",
+              "section": "Singing style and vocal characteristics"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Frank_Sinatra",
+              "section": "Vocal and musical style"
+            }
+          ]
+        },
+        {
+          "name": "Strings and the album",
+          "text": "From the mid-1940s, string sections, orchestral arrangements and more focus on the vocal defined the sound. In the 1950s the long-playing record let Sinatra and arranger Nelson Riddle build whole moody albums around one theme, while Patti Page leaned her hits toward country.",
+          "thinkers": [
+            "traditional-pop/frank-sinatra",
+            "traditional-pop/patti-page"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+              "section": "Mid-1940s to mid-1950s: height of popularity"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Frank_Sinatra",
+              "section": "Renewed success with Riddle"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Frank_Sinatra",
+              "section": "Vocal and musical style"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Patti_Page",
+              "section": "Style"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": null,
+      "thinkers": [
+        "traditional-pop/irving-berlin",
+        "traditional-pop/bing-crosby",
+        "traditional-pop/frank-sinatra",
+        "traditional-pop/patti-page"
+      ],
+      "recordings": [
+        {
+          "artist": "Bing Crosby",
+          "title": "White Christmas",
+          "year": 1942,
+          "kind": "song"
+        },
+        {
+          "artist": "Patti Page",
+          "title": "Tennessee Waltz",
+          "year": 1950,
+          "kind": "song"
+        },
+        {
+          "artist": "Frank Sinatra",
+          "title": "In the Wee Small Hours",
+          "year": 1955,
+          "kind": "album"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Bing_Crosby",
+            "section": "White Christmas"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Patti_Page",
+            "section": "intro"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Frank_Sinatra",
+            "section": "intro"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+          "title": "Traditional pop"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+          "title": "Tin Pan Alley"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Bing_Crosby",
+          "title": "Bing Crosby"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+          "section": "Origins"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+          "section": "Mid-1940s to mid-1950s: height of popularity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+          "section": "Advent of rock and roll"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+          "section": "In its prime"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "pop-music",
+      "name": "Pop music",
+      "family": "pop",
+      "dates": "mid-1950s – today",
+      "dateRange": "mid-1950s – today",
+      "description": "Pop took its modern form in the US and UK in the mid-1950s; at first the word covered rock and roll and the youth styles it inspired. From the late 1960s pop came to mean the more commercial, accessible side of popular music: songs of about three minutes with a hook-filled chorus and a beat you can dance to. It keeps borrowing from other styles, from rock and country to hip-hop and dance music.",
+      "debatable": "Pop is hard to pin down: some define it by sound, others simply as whatever becomes popular, and it is often set against rock as 'singles for teenagers' versus 'albums for adults'.",
+      "tagline": "Short, catchy, chorus-led songs made to reach everyone, from the 1950s to now.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "Characteristics"
+        }
+      ],
+      "questions": [
+        "A verse that builds to a chorus designed to stick in your ear through simple repetition.",
+        "Short songs, usually two and a half to three and a half minutes, with a clear, steady beat you can dance to.",
+        "Polished studio production, from 1960s echo and strings to 1980s synthesizers and today's electronic dance beats."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Pop_music",
+            "section": "Characteristics"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Pop_music",
+            "section": "Characteristics"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Pop_music",
+            "section": "intro"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Pop_music",
+            "section": "Technology and media"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Pop_music",
+            "section": "Stylistic evolution"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Pop_music",
+            "section": "21st century"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Out of rock and roll",
+          "text": "In the mid-1950s 'pop music' was a British name for rock and roll and the youth styles around it, and early pop also drew on traditional pop. Only from about 1967 did pop and rock start to mean different things.",
+          "thinkers": [],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Pop_music",
+              "section": "Definitions and etymology"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Pop_music",
+              "section": "Stylistic evolution"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Pop_music",
+              "section": "intro"
+            }
+          ]
+        },
+        {
+          "name": "Built in the studio",
+          "text": "Pop leans on recording and production more than live playing. Better microphones, the 45 rpm single, multi-track recording and later digital sampling all changed how it was made, and 1960s producers such as Phil Spector built huge echoing sounds.",
+          "thinkers": [],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Pop_music",
+              "section": "Technology and media"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Pop_music",
+              "section": "Stylistic evolution"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Pop_music",
+              "section": "Characteristics"
+            }
+          ]
+        },
+        {
+          "name": "Made for the screen",
+          "text": "Television made pop stars need a visual presence, and in the early 1980s MTV favoured artists with strong visual appeal. Michael Jackson's 'Thriller' video helped break racial barriers on the channel, and Madonna used the music video to shape her songs and her image.",
+          "thinkers": [
+            "pop-music/michael-jackson",
+            "pop-music/madonna"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Pop_music",
+              "section": "Technology and media"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Michael_Jackson",
+              "section": "Music videos and choreography"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Madonna",
+              "section": "Music videos and performances"
+            }
+          ]
+        },
+        {
+          "name": "Global superstars",
+          "text": "In the late 20th century a handful of pop singers became global superstars, among them Whitney Houston, Michael Jackson, Madonna, George Michael and Prince. Houston brought a gospel-trained voice into chart pop.",
+          "thinkers": [
+            "pop-music/whitney-houston",
+            "pop-music/michael-jackson",
+            "pop-music/madonna"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Pop_music",
+              "section": "International spread and crosspollination"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Whitney_Houston",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Whitney_Houston",
+              "section": "Influences"
+            }
+          ]
+        },
+        {
+          "name": "Club beats take over",
+          "text": "Around 2000 the Swedish 'Cheiron sound' partly shaped the pop of Britney Spears, the Backstreet Boys and NSYNC. Her 2007 album Blackout mixed EDM, R&B and hip-hop, and by 2010 dance-influenced pop ruled the charts, with clubs rather than radio setting trends.",
+          "thinkers": [
+            "pop-music/britney-spears"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Pop_music",
+              "section": "21st century"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Pop_music",
+              "section": "Stylistic evolution"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": null,
+      "thinkers": [
+        "pop-music/michael-jackson",
+        "pop-music/madonna",
+        "pop-music/whitney-houston",
+        "pop-music/britney-spears"
+      ],
+      "recordings": [
+        {
+          "artist": "Michael Jackson",
+          "title": "Thriller",
+          "year": 1982,
+          "kind": "album"
+        },
+        {
+          "artist": "Whitney Houston",
+          "title": "I Will Always Love You",
+          "year": 1992,
+          "kind": "song"
+        },
+        {
+          "artist": "The Weeknd",
+          "title": "Blinding Lights",
+          "year": 2020,
+          "kind": "song"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Michael_Jackson",
+            "section": "intro"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Whitney_Houston",
+            "section": "intro"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Pop_music",
+            "section": "21st century"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Synth-pop",
+            "section": "21st-century revival (2000s–present)"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "title": "Pop music"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Michael_Jackson",
+          "title": "Michael Jackson"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Madonna",
+          "title": "Madonna"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "Definitions and etymology"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "Technology and media"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "Stylistic evolution"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "21st century"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "k-pop",
+      "name": "K-pop",
+      "family": "pop",
+      "dates": "early 1990s – today",
+      "dateRange": "early 1990s – today",
+      "description": "K-pop grew in South Korea in the 1990s as a youth subculture, with Korean musicians drawing on Western dance music, hip-hop, R&B and rock. Today the name mostly means the music of teen idol acts, chiefly girl groups and boy bands, who emphasise visual appeal and performance. It is known for its melodies and its blend of styles, and in the 2010s social media and the Korean Wave (the global spread of South Korean pop culture) carried it around the world.",
+      "debatable": "How Korean K-pop really is gets argued over, as more songs are written by Western songwriters, sung in English and aimed at a global audience; some call it a new 'transnational' culture.",
+      "tagline": "South Korea's idol pop: hybrid songs, sharp group dances and bold visuals.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "Audiovisual content"
+        }
+      ],
+      "questions": [
+        "Several styles in one song, often pop, hip-hop, R&B and electronic music, with rap verses next to big sung choruses.",
+        "English phrases mixed into Korean lyrics, song titles and group names.",
+        "A 'point' dance: a short, hooky, repeated move in the choreography, tied to the song's lyrics."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "Audiovisual content"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Seo_Taiji_and_Boys",
+            "section": "1992: \"I Know\""
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "Use of English phrases"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "Dance"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "Hybrid genre and transnational values"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Rap dance arrives",
+          "text": "In 1992 Seo Taiji and Boys debuted with 'I Know', a mix of new jack swing beats (which combine hip-hop and soul), rap verses, pop choruses and new dance moves that scored lowest with the TV jury but became a huge hit. Their fusion of hip-hop, techno and rock is often traced as K-pop's starting point.",
+          "thinkers": [
+            "k-pop/seo-taiji-and-boys"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/K-pop",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/K-pop",
+              "section": "1990s: Development of modern K-pop"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Seo_Taiji_and_Boys",
+              "section": "1992: \"I Know\""
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Seo_Taiji_and_Boys",
+              "section": "Impact and legacy"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+              "section": "Electro-soul"
+            }
+          ]
+        },
+        {
+          "name": "The idol system",
+          "text": "The band's success with teenagers turned the industry toward teen pop. Lee Soo-man of SM Entertainment developed the Korean idol system, adapting a trainee model from Japan's idol industry: young recruits train for years in singing, dancing, languages and media skills before a debut. H.O.T. (1996) was one of the first idol boy bands.",
+          "thinkers": [
+            "k-pop/h-o-t"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/K-pop",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/K-pop",
+              "section": "1990s: Development of modern K-pop"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/K-pop",
+              "section": "Idol trainee"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/K-pop",
+              "section": "Trainee system"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/H.O.T.",
+              "section": "intro"
+            }
+          ]
+        },
+        {
+          "name": "Dance as the core",
+          "text": "Dance is central: members swap places in quick, synchronised 'formation changes', and routines centre on a repeated 'point' move tied to the lyrics. Seo Taiji and Boys were the first to make dance, including breakdancing, the main feature of a performance.",
+          "thinkers": [
+            "k-pop/seo-taiji-and-boys"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/K-pop",
+              "section": "Dance"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Seo_Taiji_and_Boys",
+              "section": "Impact and legacy"
+            }
+          ]
+        },
+        {
+          "name": "The Korean Wave",
+          "text": "By the early 2000s BoA and TVXQ were successful in Japan, and H.O.T. had already found fans in China and Taiwan. In the 2010s the Korean Wave and social media made acts like BTS and Blackpink international stars.",
+          "thinkers": [
+            "k-pop/boa",
+            "k-pop/h-o-t",
+            "k-pop/bts",
+            "k-pop/blackpink"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/K-pop",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/BoA",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/H.O.T.",
+              "section": "intro"
+            }
+          ]
+        },
+        {
+          "name": "Control and its costs",
+          "text": "K-pop is known for tight management, and four companies dominate it: SM, YG, JYP and Hybe. The training system and the industry's commercialism and treatment of artists are often criticised, though the 2020s have brought more artist autonomy.",
+          "thinkers": [],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/K-pop",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/K-pop",
+              "section": "Idol trainee"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/K-pop",
+              "section": "Working conditions"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": null,
+      "thinkers": [
+        "k-pop/seo-taiji-and-boys",
+        "k-pop/h-o-t",
+        "k-pop/boa",
+        "k-pop/bts",
+        "k-pop/blackpink"
+      ],
+      "recordings": [
+        {
+          "artist": "Seo Taiji and Boys",
+          "title": "I Know",
+          "year": 1992,
+          "kind": "song"
+        },
+        {
+          "artist": "H.O.T.",
+          "title": "Candy",
+          "year": 1996,
+          "kind": "song"
+        },
+        {
+          "artist": "Blackpink",
+          "title": "Ddu-Du Ddu-Du",
+          "year": 2018,
+          "kind": "song"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "1990s: Development of modern K-pop"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/K-pop",
+            "section": "1990s: Development of modern K-pop"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Blackpink",
+            "section": "intro"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "title": "K-pop"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Seo_Taiji_and_Boys",
+          "title": "Seo Taiji and Boys"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/H.O.T.",
+          "title": "H.O.T."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "Audiovisual content"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "Hybrid genre and transnational values"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "Dance"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "1990s: Development of modern K-pop"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "indie-rock",
+      "name": "Indie rock",
+      "family": "rock",
+      "dates": "early 1980s – today",
+      "dateRange": "early 1980s – today",
+      "description": "Indie rock grew in the UK, the US and New Zealand in the early-to-mid 1980s, out of punk's do-it-yourself idea that anyone could make and release a record. The name first meant rock put out on small, low-budget independent labels; by the 1990s it described the sound such bands made. It covers a wide range, tied together more by an attitude of independence from mainstream tastes than by one sound.",
+      "debatable": "Its edge with alternative rock is blurry: in the US the two were long treated as the same thing, and after Nirvana's breakthrough 'indie' turned from a label status into a style, even a marketing tag.",
+      "tagline": "Guitar rock with a do-it-yourself spirit, first named for its small independent labels.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Etymology and characteristics"
+        }
+      ],
+      "questions": [
+        "Jangly or noisy guitars, often in small guitar-band line-ups, drawing on punk and 1960s pop and rock.",
+        "Rough, low-budget 'lo-fi' recording that makes the do-it-yourself approach part of the sound.",
+        "In bands like Pavement, 'fractured' song structures, squalls of feedback and humorous, often sarcastic lyrics."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Indie_rock",
+            "section": "Etymology and characteristics"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Indie_rock",
+            "section": "Origins"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Indie_rock",
+            "section": "Mainstream–underground split: 1990s"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Pavement_(band)",
+            "section": "Musical style and influences"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Pavement_(band)",
+            "section": "Musical style and influences"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Make your own record",
+          "text": "On 29 January 1977 Manchester's Buzzcocks put out the four-track Spiral Scratch EP on their own label, a moment the BBC calls pivotal for indie. Its sleeve showed how the record was made, and a wave of bands started pressing and distributing their own records.",
+          "thinkers": [
+            "indie-rock/buzzcocks"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Indie_rock",
+              "section": "Early UK DIY movement"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Indie_rock",
+              "section": "Late 1970s"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Buzzcocks",
+              "section": "Early years"
+            }
+          ]
+        },
+        {
+          "name": "From Dunedin to college radio",
+          "text": "New Zealand's Dunedin sound, from bands on Flying Nun Records such as the Chills and the Clean, shaped indie's sound. In the US, college radio played jangle pop bands (named for their jangly guitars) like R.E.M. and the Smiths, and 'college rock' was later renamed 'indie'.",
+          "thinkers": [],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Indie_rock",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Indie_rock",
+              "section": "Dunedin sound"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Indie_rock",
+              "section": "Origins"
+            }
+          ]
+        },
+        {
+          "name": "The underground solidifies",
+          "text": "In the mid-1980s the NME's C86 cassette gathered Britain's indie scene, and in the US Sonic Youth's underground success helped define the genre. Sonic Youth came out of New York's experimental no wave scene and pushed noise and strange guitar tunings into rock.",
+          "thinkers": [
+            "indie-rock/sonic-youth"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Indie_rock",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Indie_rock",
+              "section": "Development"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Sonic_Youth",
+              "section": "intro"
+            }
+          ]
+        },
+        {
+          "name": "Women at the front",
+          "text": "Indie rock has more women artists than earlier rock styles, most visibly in feminist riot grrrl bands such as Bikini Kill. The band urged women to come to the front at shows, though women running indie labels stayed rare.",
+          "thinkers": [
+            "indie-rock/bikini-kill"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Indie_rock",
+              "section": "Etymology and characteristics"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Bikini_Kill",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Bikini_Kill",
+              "section": "1990 – 1997: Formation and career"
+            }
+          ]
+        },
+        {
+          "name": "Split, then revival",
+          "text": "After grunge broke into the mainstream, indie split into radio-friendly bands and experimental ones; Pavement's lo-fi Slanted and Enchanted (1992) came to stand for the underground side. In 2001 the Strokes' Is This It brought indie back into the mainstream through the garage rock and post-punk revival.",
+          "thinkers": [
+            "indie-rock/pavement",
+            "indie-rock/the-strokes"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Indie_rock",
+              "section": "Mainstream–underground split: 1990s"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Indie_rock",
+              "section": "Post-punk and garage rock revival"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Indie_rock",
+              "section": "intro"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": {
+        "text": "In the 1990s indie rock defined itself against alternative rock once it went mainstream after Nirvana: it was made by artists who could not or would not cross over, and who were wary of alternative rock's 'macho' style.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Alternative_rock",
+            "section": "Indie rock"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Indie_rock",
+            "section": "Mainstream–underground split: 1990s"
+          }
+        ]
+      },
+      "thinkers": [
+        "indie-rock/buzzcocks",
+        "indie-rock/sonic-youth",
+        "indie-rock/pavement",
+        "indie-rock/bikini-kill",
+        "indie-rock/the-strokes"
+      ],
+      "recordings": [
+        {
+          "artist": "Buzzcocks",
+          "title": "Spiral Scratch EP",
+          "year": 1977,
+          "kind": "album"
+        },
+        {
+          "artist": "Pavement",
+          "title": "Slanted and Enchanted",
+          "year": 1992,
+          "kind": "album"
+        },
+        {
+          "artist": "The Strokes",
+          "title": "Is This It",
+          "year": 2001,
+          "kind": "album"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Indie_rock",
+            "section": "Early UK DIY movement"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Buzzcocks",
+            "section": "Early years"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Indie_rock",
+            "section": "Mainstream–underground split: 1990s"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Indie_rock",
+            "section": "Post-punk and garage rock revival"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "title": "Indie rock"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Buzzcocks",
+          "title": "Buzzcocks"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pavement_(band)",
+          "title": "Pavement (band)"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Alternative_rock",
+          "section": "Indie rock"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Etymology and characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Late 1970s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Early UK DIY movement"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Dunedin sound"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Origins"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Development"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Mainstream–underground split: 1990s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Post-punk and garage rock revival"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "post-punk",
+      "name": "Post-punk (with new wave)",
+      "family": "rock",
+      "dates": "late 1970s – mid-1980s",
+      "dateRange": "late 1970s – mid-1980s",
+      "description": "Post-punk grew in the late 1970s, mainly in Britain, as bands kept punk's do-it-yourself energy but dropped its raw simplicity for a more experimental approach. They borrowed from dub (reggae remixed by stripping and reworking existing recordings), funk, disco, krautrock (experimental German rock), electronics and avant-garde art, and from writers such as J. G. Ballard and William S. Burroughs. Its lighter, more pop-oriented relative, new wave, grew up alongside it, reached the charts from late 1978 and spread across America through MTV; both have had revivals since the 2000s.",
+      "debatable": "The label has no agreed definition: it names both a sound and a period (roughly 1978–84), several defining bands existed before punk broke, and 'post-punk' and 'new wave' were at first used interchangeably.",
+      "tagline": "Punk's experimental aftermath: melodic bass, angular guitars, dub and art-school ideas.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Influences"
+        }
+      ],
+      "questions": [
+        "Melodic basslines that carry the tune, leaving the guitars free to add angular stabs and atmosphere.",
+        "Dub-style space and echo, funk and disco rhythms, and steady, insistent drumming.",
+        "Spoken or detached vocals; in new wave, choppy guitars, synthesizers and a quirky, jittery pop feel."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Post-punk",
+            "section": "Characteristics"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Joy_Division",
+            "section": "Sound"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Post-punk",
+            "section": "Influences"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Post-punk",
+            "section": "Characteristics"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Post-punk",
+            "section": "United Kingdom"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Post-punk",
+            "section": "Characteristics"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/New_wave_music",
+            "section": "Etymology and characteristics"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Punk, broken open",
+          "text": "By late 1977 some British bands felt punk had become a formula and a parody of itself. Siouxsie and the Banshees, Wire and the Slits began experimenting, and in 1978 John Lydon left the Sex Pistols to form Public Image Ltd, seeking an 'anti-rock' project.",
+          "thinkers": [
+            "post-punk/siouxsie-and-the-banshees",
+            "post-punk/public-image-ltd"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Post-punk",
+              "section": "Background"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Post-punk",
+              "section": "United Kingdom"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Public_Image_Ltd",
+              "section": "intro"
+            }
+          ]
+        },
+        {
+          "name": "Dub, funk and disco",
+          "text": "Post-punk swapped rock-and-roll riffs for non-rock styles. PiL built an abrasive, bass-heavy sound from dub, noise and disco, while Leeds art students Gang of Four played a stripped-down mix of punk, funk and dub with political lyrics.",
+          "thinkers": [
+            "post-punk/public-image-ltd",
+            "post-punk/gang-of-four"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Post-punk",
+              "section": "Influences"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Post-punk",
+              "section": "United Kingdom"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Public_Image_Ltd",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Gang_of_Four_(band)",
+              "section": "intro"
+            }
+          ]
+        },
+        {
+          "name": "Space in the studio",
+          "text": "Producers such as Martin Hannett, Steve Lillywhite and Dennis Bovell devised unorthodox studio techniques. Hannett gave Joy Division an eerie sense of space, with Peter Hook's bass carrying the melody and the guitar leaving gaps, on records for Manchester's independent Factory label.",
+          "thinkers": [
+            "post-punk/joy-division"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Joy_Division",
+              "section": "Sound"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Joy_Division",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Post-punk",
+              "section": "United Kingdom"
+            }
+          ]
+        },
+        {
+          "name": "Into the dark",
+          "text": "By 1979 gothic rock grew out of the scene, pioneered by bands with darker subject matter such as Siouxsie and the Banshees and Joy Division. Bleak, deindustrialising cities in Britain, and the industrial landscapes around the New York and Ohio scenes, shaped much of this mood.",
+          "thinkers": [
+            "post-punk/siouxsie-and-the-banshees",
+            "post-punk/joy-division"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Post-punk",
+              "section": "United Kingdom"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Post-punk",
+              "section": "Influences"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Siouxsie_and_the_Banshees",
+              "section": "Musical style"
+            }
+          ]
+        },
+        {
+          "name": "New wave's pop side",
+          "text": "New wave took a lighter, more melodic route, with hooks, quirky humour and synths. Sire Records' Seymour Stein pushed the name to sell his acts from CBGB, the New York punk club; Blondie, from the same scene, had 'Heart of Glass', the first new wave single to reach number one in the US, and MTV spread new wave across America from 1981.",
+          "thinkers": [
+            "post-punk/blondie"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/New_wave_music",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/New_wave_music",
+              "section": "Etymology and characteristics"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/New_wave_music",
+              "section": "1970s: Origins and breakthrough"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Blondie_(band)",
+              "section": "intro"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": {
+        "text": "Post-punk bands took punk's energy and DIY spirit but rejected what punk had become by 1977: a commercial formula of raw, simple, three-chord rock.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Post-punk",
+            "section": "Definition"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Post-punk",
+            "section": "Background"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Post-punk",
+            "section": "Influences"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Punk_rock",
+            "section": "Post-punk"
+          }
+        ]
+      },
+      "thinkers": [
+        "post-punk/siouxsie-and-the-banshees",
+        "post-punk/joy-division",
+        "post-punk/public-image-ltd",
+        "post-punk/gang-of-four",
+        "post-punk/blondie"
+      ],
+      "recordings": [
+        {
+          "artist": "Various artists (prod. Brian Eno)",
+          "title": "No New York",
+          "year": 1978,
+          "kind": "album"
+        },
+        {
+          "artist": "Public Image Ltd",
+          "title": "Metal Box",
+          "year": 1979,
+          "kind": "album"
+        },
+        {
+          "artist": "Blondie",
+          "title": "Heart of Glass",
+          "year": 1979,
+          "kind": "song"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Post-punk",
+            "section": "United States"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Public_Image_Ltd",
+            "section": "intro"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/New_wave_music",
+            "section": "1970s: Origins and breakthrough"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "title": "Post-punk"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/New_wave_music",
+          "title": "New wave music"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Joy_Division",
+          "title": "Joy Division"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dub_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Definition"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Influences"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Background"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "United Kingdom"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "United States"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/New_wave_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/New_wave_music",
+          "section": "Etymology and characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/New_wave_music",
+          "section": "1970s: Origins and breakthrough"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "krautrock",
+      "name": "Krautrock",
+      "family": "rock",
+      "dates": "late 1960s – today",
+      "dateRange": "late 1960s – today",
+      "description": "Krautrock is a broad family of experimental rock that grew in West Germany in the late 1960s and early 1970s. Bands mixed psychedelic rock, avant-garde composition and early electronic music, and swapped rock's blues roots and verse-chorus songs for hypnotic rhythms, long improvisations and tape experiments. The scene helped shape ambient music and techno and fed into post-punk; newer bands still play in its style.",
+      "debatable": "The name itself: 'krautrock' was popularised by the British music press as a mocking umbrella label, many of the musicians disliked it, and some preferred 'kosmische Musik' (cosmic music).",
+      "tagline": "West Germany's hypnotic experimental rock, built on long grooves and early synths.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "Characteristics"
+        }
+      ],
+      "questions": [
+        "The motorik beat: a steady, kick-drum-heavy 4/4 pulse that feels like it is always rolling forward.",
+        "Long stretches of repetition, drone and texture instead of verses and choruses.",
+        "Early synthesizers and tape tricks (musique concrète: music built from recorded sounds that are cut, spliced and reshaped)."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Krautrock",
+            "section": "Characteristics"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Neu!",
+            "section": "Musical style"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Krautrock",
+            "section": "Characteristics"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Krautrock",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Krautrock",
+            "section": "Characteristics"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "A break with the past",
+          "text": "Krautrock grew partly out of the 1968 student protests. Young West Germans wanted a popular music of their own, free of the country's Nazi past, of American dominance and of conservative German entertainment such as schlager pop.",
+          "thinkers": [],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Krautrock",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Krautrock",
+              "section": "History"
+            }
+          ]
+        },
+        {
+          "name": "The motorik beat",
+          "text": "A common thread is the motorik beat, a pulsing, kick-drum-heavy 4/4 groove. Neu!'s Klaus Dinger and Can's Jaki Liebezeit are credited with pioneering it; Can used it in 'Mother Sky', Neu! probably first on their debut album, and Kraftwerk in 'Autobahn'.",
+          "thinkers": [
+            "krautrock/neu",
+            "krautrock/can",
+            "krautrock/kraftwerk"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Krautrock",
+              "section": "Characteristics"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Neu!",
+              "section": "Musical style"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Neu!",
+              "section": "1971–1975: Main career"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Can_(band)",
+              "section": "intro"
+            }
+          ]
+        },
+        {
+          "name": "Avant-garde schooling",
+          "text": "Some players came from serious music and jazz rather than rock. Can's Holger Czukay and Irmin Schmidt had studied with the composer Karlheinz Stockhausen, and the scene also drew on minimalists, free jazz and Miles Davis's In a Silent Way.",
+          "thinkers": [
+            "krautrock/can"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Krautrock",
+              "section": "History"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Can_(band)",
+              "section": "1960s"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Can_(band)",
+              "section": "Style"
+            }
+          ]
+        },
+        {
+          "name": "Cut, splice, collage",
+          "text": "Tape was an instrument. Can edited long improvisations into albums, Faust built The Faust Tapes from spliced private recordings, and Neu! filled half of Neu! 2 with sped-up and slowed-down versions of their own single, one of the earliest remixes.",
+          "thinkers": [
+            "krautrock/can",
+            "krautrock/faust",
+            "krautrock/neu"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Can_(band)",
+              "section": "Improvisation, recording and live shows"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Can_(band)",
+              "section": "1971–1973"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Faust_(band)",
+              "section": "1970–1975"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Neu!",
+              "section": "1971–1975: Main career"
+            }
+          ]
+        },
+        {
+          "name": "Towards the machines",
+          "text": "A more electronic strand, often called kosmische Musik, used synthesizers for spacey, often instrumental soundscapes. Kraftwerk began in the krautrock scene and moved to synthesizers, drum machines and vocoders, and the wider scene led directly to the Düsseldorf and Berlin schools of electronic music.",
+          "thinkers": [
+            "krautrock/kraftwerk"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Krautrock",
+              "section": "Kosmische Musik"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Krautrock",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Kraftwerk",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Kraftwerk",
+              "section": "Formation and early years (1970–1973)"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": null,
+      "thinkers": [
+        "krautrock/can",
+        "krautrock/neu",
+        "krautrock/faust",
+        "krautrock/kraftwerk"
+      ],
+      "recordings": [
+        {
+          "artist": "Can",
+          "title": "Tago Mago",
+          "year": 1971,
+          "kind": "album"
+        },
+        {
+          "artist": "Faust",
+          "title": "Krautrock",
+          "year": null,
+          "kind": "song"
+        },
+        {
+          "artist": "Neu!",
+          "title": "Neu! '75",
+          "year": 1975,
+          "kind": "album"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Can_(band)",
+            "section": "1971–1973"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Krautrock",
+            "section": "Etymology"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Punk_rock",
+            "section": "Around the world"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Neu!",
+            "section": "1971–1975: Main career"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "title": "Krautrock"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Can_(band)",
+          "title": "Can (band)"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Neu!",
+          "title": "Neu!"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "Etymology"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "History"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "Legacy and influence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "Kosmische Musik"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "dancehall",
+      "name": "Dancehall",
+      "family": "caribbean-latin",
+      "dates": "late 1970s – today",
+      "dateRange": "late 1970s – today",
+      "description": "Dancehall is Jamaican popular music that began in the late 1970s as a sparer offshoot of roots reggae, named after the dance halls where sound systems played. It grew among working-class people in inner-city Kingston, with deejays toasting (chanting and talking rhythmically) in Jamaican Patois over instrumentals called riddims. In the mid-1980s it went digital and faster, and from the 2000s it reached the global pop charts.",
+      "debatable": "Whether it is reggae at all: dancehall's gold chains and gritty lyrics were far from roots reggae, and purists argued over whether it should count as an extension of reggae.",
+      "tagline": "Kingston's sound-system music: deejays chanting in Patois over shared riddims.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "Origination from the DJ scene"
+        }
+      ],
+      "questions": [
+        "A deejay toasting (half chanting, half talking) in Jamaican Patois rather than standard English.",
+        "A riddim: one instrumental track that many different singers voice, so you may hear the same beat under several songs.",
+        "Sparse, digital rhythms from electronic keyboards and drum machines, faster than 1970s roots reggae."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Dancehall",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Dancehall",
+            "section": "Early developments - Early 1970s"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Dancehall",
+            "section": "1980s–1990s (The Naming)"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Dancehall",
+            "section": "Riddims"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Dancehall",
+            "section": "Musical characteristics"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Dancehall",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Dancehall",
+            "section": "Musical characteristics"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Sound systems, not radio",
+          "text": "Conservative Jamaican radio would not play the music, so it spread through sound systems: huge mobile speaker rigs set up in open-air venues in Kingston's inner city. Sound-system operators, deejays and selectors became performers in their own right, and Yellowman learned his craft at sound-system dances.",
+          "thinkers": [
+            "dancehall/yellowman"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Dancehall",
+              "section": "Early developments - Early 1970s"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Dancehall",
+              "section": "Origination from the DJ scene"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Yellowman",
+              "section": "Career"
+            }
+          ]
+        },
+        {
+          "name": "A new generation of deejays",
+          "text": "In the early 1980s a new wave of deejays took over from the older toasters. Yellowman became the first Jamaican deejay signed to a major American label, and women deejays such as Lady G and Sister Nancy emerged, with Lady Saw following later in the decade.",
+          "thinkers": [
+            "dancehall/yellowman",
+            "dancehall/lady-saw"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Dancehall",
+              "section": "1980s–1990s (The Naming)"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Lady_Saw",
+              "section": "Early life"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Lady_Saw",
+              "section": "1987–1995: Lover Girl"
+            }
+          ]
+        },
+        {
+          "name": "Going digital",
+          "text": "In 1985 Wayne Smith's 'Under Me Sleng Teng', produced by King Jammy, used a rhythm from a digital keyboard and was reused on over 200 records. Digital riddims became the norm; Shabba Ranks's 'Dem Bow' riddim later became the backbone of reggaeton.",
+          "thinkers": [
+            "dancehall/shabba-ranks"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Dancehall",
+              "section": "1980s–1990s (The Naming)"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Dancehall",
+              "section": "Musical characteristics"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+              "section": "Career"
+            }
+          ]
+        },
+        {
+          "name": "Slackness and controversy",
+          "text": "Many hits dealt frankly with sex, a style called slackness; Lady Saw's shows were banned in parts of Jamaica while equally lewd male shows were not. The genre has also been criticised for violent and anti-gay lyrics, which in some cases led to cancelled concerts and to campaigns such as Stop Murder Music; many artists have since apologised.",
+          "thinkers": [
+            "dancehall/yellowman",
+            "dancehall/lady-saw",
+            "dancehall/shabba-ranks"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Dancehall",
+              "section": "1980s–1990s (The Naming)"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Dancehall",
+              "section": "Anti-gay lyrics"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Lady_Saw",
+              "section": "Style"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+              "section": "Controversy"
+            }
+          ]
+        },
+        {
+          "name": "From Kingston to the charts",
+          "text": "Shabba Ranks won back-to-back Grammy awards in the early 1990s, and Sean Paul's 'Get Busy' (2003) became the first dancehall single to top the US Billboard Hot 100. In the 2010s dancehall-flavoured hits by Rihanna and Drake carried its rhythms further.",
+          "thinkers": [
+            "dancehall/shabba-ranks",
+            "dancehall/sean-paul"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Dancehall",
+              "section": "1980s–1990s (The Naming)"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Dancehall",
+              "section": "2000s"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Dancehall",
+              "section": "Modern era: 2010—2019"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": null,
+      "thinkers": [
+        "dancehall/yellowman",
+        "dancehall/lady-saw",
+        "dancehall/shabba-ranks",
+        "dancehall/sean-paul"
+      ],
+      "recordings": [
+        {
+          "artist": "Wayne Smith (prod. King Jammy)",
+          "title": "(Under Me) Sleng Teng",
+          "year": 1985,
+          "kind": "song"
+        },
+        {
+          "artist": "Shabba Ranks",
+          "title": "As Raw as Ever",
+          "year": 1991,
+          "kind": "album"
+        },
+        {
+          "artist": "Sean Paul",
+          "title": "Get Busy",
+          "year": 2003,
+          "kind": "song"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Dancehall",
+            "section": "1980s–1990s (The Naming)"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Dancehall",
+            "section": "1980s–1990s (The Naming)"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+            "section": "Career"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Dancehall",
+            "section": "2000s"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "title": "Dancehall"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Yellowman",
+          "title": "Yellowman"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Lady_Saw",
+          "title": "Lady Saw"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "Early developments - Early 1970s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "Origination from the DJ scene"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "1980s–1990s (The Naming)"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "2000s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "Musical characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "Riddims"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "Anti-gay lyrics"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "son-cubano",
+      "name": "Son cubano (with mambo)",
+      "family": "caribbean-latin",
+      "dates": "late 19th century – today",
+      "dateRange": "late 19th century – today",
+      "description": "Son cubano is a Cuban music and dance that grew in the eastern highlands in the late 19th century, blending a Spanish-derived guitar, the tres, and song style with clave rhythm, call and response and percussion of Bantu origin. It reached Havana around 1909, was first recorded in 1917 and became Cuba's most popular genre, growing from small groups into sextets, septets and conjuntos. Mambo grew out of the danzón using son's repeating figures, and son is considered the foundation of salsa.",
+      "debatable": "Where it began: historically most musicologists pointed to rural eastern Cuba, but versions of son appeared across rural Cuba by the 1890s, Peter Manuel argues much of its structure came from the Havana contradanza, and the old 'Ma Teodora' origin story is generally considered apocryphal.",
+      "tagline": "Cuba's Spanish-African song behind salsa; mambo grew from the danzón with son's figures.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Mambo_(music)",
+          "section": "intro"
+        }
+      ],
+      "questions": [
+        "The tres (a small Cuban guitar) playing a guajeo, a short repeating figure (ostinato) that recurs across many son songs.",
+        "The clave, a five-note rhythmic 'key' pattern that the whole song is built around, plus bongos and maracas.",
+        "Call and response: a lead singer improvising against a repeated chorus, especially in the closing montuno section."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "Instrumentation"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Arsenio_Rodr%C3%ADguez",
+            "section": "Early life"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Arsenio_Rodr%C3%ADguez",
+            "section": "Clave-based structure and offbeat emphasis"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "Etymology and cognates"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "Early 20th century"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Spanish and Bantu roots",
+          "text": "Son mixes Spanish elements (the vocal style, verse metre and the tres, derived from the Spanish guitar) with clave, call and response and percussion rooted in Bantu traditions. Its early forms, like changüí and nengón, were made by eastern peasants, many of Bantu origin.",
+          "thinkers": [],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Son_cubano",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Son_cubano",
+              "section": "Origins"
+            }
+          ]
+        },
+        {
+          "name": "Coming to Havana",
+          "text": "Around 1909 son reached Havana, where formerly enslaved people and rural migrants met and rumba traditions mixed. The first documented son recording was made in 1917, and in 1918 María Teresa Vera sang lead and played clave for the Sexteto Habanero Godínez.",
+          "thinkers": [
+            "son-cubano/maria-teresa-vera"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Son_cubano",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Son_cubano",
+              "section": "Early 20th century"
+            }
+          ]
+        },
+        {
+          "name": "The sextet era",
+          "text": "In the 1920s the sextet of guitar, tres, bongos, claves, maracas and double bass became the classic format, and trumpets soon made septets. Radio from 1922 helped turn son into perhaps Cuba's most popular music, Vera led the Sexteto Occidente, and the Trío Matamoros carried son across Latin America.",
+          "thinkers": [
+            "son-cubano/maria-teresa-vera",
+            "son-cubano/trio-matamoros"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Son_cubano",
+              "section": "1920s"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Son_cubano",
+              "section": "Trío Matamoros"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Mar%C3%ADa_Teresa_Vera",
+              "section": "Career"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Trio_Matamoros",
+              "section": "intro"
+            }
+          ]
+        },
+        {
+          "name": "Arsenio's conjunto",
+          "text": "In 1940 Arsenio Rodríguez formed one of the first conjuntos, adding more trumpets, piano and conga drums to the son line-up, though others had tried these elements before. His layered guajeos and clave-tight son montuno became the template for salsa.",
+          "thinkers": [
+            "son-cubano/arsenio-rodriguez"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Son_cubano",
+              "section": "1940s"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Arsenio_Rodr%C3%ADguez",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Arsenio_Rodr%C3%ADguez",
+              "section": "Expansion of the son conjunto"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Arsenio_Rodr%C3%ADguez",
+              "section": "Layered guajeos"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Arsenio_Rodr%C3%ADguez",
+              "section": "Rise to fame"
+            }
+          ]
+        },
+        {
+          "name": "Mambo and after",
+          "text": "Mambo began in the late 1930s with Arcaño y sus Maravillas, whose López brothers named a final improvised section of the danzón, built on son's guajeos, a 'mambo'. Pérez Prado made it a brass-heavy big-band craze from Mexico City; later son lived on in salsa, timba and the Buena Vista Social Club revival.",
+          "thinkers": [
+            "son-cubano/perez-prado"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Mambo_(music)",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Mambo_(music)",
+              "section": "Origins in Cuba"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Mambo_(music)",
+              "section": "1940-1952: \"Brass\" Mambo in Mexico City"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Son_cubano",
+              "section": "Current state of the son"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": null,
+      "thinkers": [
+        "son-cubano/maria-teresa-vera",
+        "son-cubano/trio-matamoros",
+        "son-cubano/arsenio-rodriguez",
+        "son-cubano/perez-prado"
+      ],
+      "recordings": [
+        {
+          "artist": "Rita Montaner",
+          "title": "El Manicero",
+          "year": 1928,
+          "kind": "song"
+        },
+        {
+          "artist": "Pérez Prado",
+          "title": "Mambo No. 5",
+          "year": 1950,
+          "kind": "song"
+        },
+        {
+          "artist": "Buena Vista Social Club",
+          "title": "Buena Vista Social Club",
+          "year": null,
+          "kind": "album"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "1920s"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Mambo_(music)",
+            "section": "1940-1952: \"Brass\" Mambo in Mexico City"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "Current state of the son"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "title": "Son cubano"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Mambo_(music)",
+          "title": "Mambo (music)"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Arsenio_Rodr%C3%ADguez",
+          "title": "Arsenio Rodríguez"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "section": "Origins"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "section": "Son de Ma Teodora"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "section": "Early 20th century"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "section": "1920s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "section": "Trío Matamoros"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "section": "1940s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "section": "Current state of the son"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "section": "Instrumentation"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Mambo_(music)",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Mambo_(music)",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Mambo_(music)",
+          "section": "Origins in Cuba"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Mambo_(music)",
+          "section": "1940-1952: \"Brass\" Mambo in Mexico City"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "samba",
+      "name": "Samba",
+      "family": "caribbean-latin",
+      "dates": "late 19th century – today",
+      "dateRange": "late 19th century – today",
+      "description": "Samba is a broad name for Brazilian rhythms that grew in Afro-Brazilian communities of Bahia in the late 19th and early 20th centuries, with roots in West African traditions. In Rio de Janeiro it became a song genre with 'Pelo Telefone' (1917), and in the late 1920s the sambistas of the Estácio neighbourhood gave it the faster, drum-heavy, syncopated form that is today synonymous with samba. Once criminalised, it became a symbol of Brazil and branched into bossa nova, pagode and many other styles.",
+      "debatable": "Its first record: 'Pelo Telefone' is often called the first samba, but some scholars note earlier songs labelled samba, its rhythm and instruments were closer to maxixe, and Donga's sole authorship was soon contested by some of his contemporaries.",
+      "tagline": "Brazil's Afro-Brazilian drum-and-chorus music, born in Bahia and remade in Rio.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "section": "intro"
+        }
+      ],
+      "questions": [
+        "A batucada (samba's percussion groove) in a two-beat (2/4) feel, with the deep surdo drum marking the pulse under pandeiro, tamborim and cuíca.",
+        "A sung chorus that returns between verses; Estácio-style sambas are organised in a first and a second part.",
+        "Classical guitar and the cavaquinho (a small four-string guitar) filling in the harmony around the drums."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "Samba do Estácio, the genesis of urban samba"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "Samba do Estácio, the genesis of urban samba"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "intro"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Little Africa in Rio",
+          "text": "After abolition, many Black Bahians moved to Rio and formed a community called 'Little Africa'. Bahian women known as the Tias Baianas hosted religious and musical gatherings; at Tia Ciata's house musicians such as Donga, Pixinguinha and João da Baiana played together.",
+          "thinkers": [
+            "samba/donga"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Samba",
+              "section": "Beginnings in a Bahian terreiro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Donga_(musician)",
+              "section": "Life and career"
+            }
+          ]
+        },
+        {
+          "name": "Pelo Telefone",
+          "text": "In 1916 Donga registered 'Pelo Telefone' as a 'carnival samba', and Baiano's recording was a huge hit at the 1917 Carnival. It marked the official start of samba as a song genre, though its 'first' status and its authorship are both disputed.",
+          "thinkers": [
+            "samba/donga"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Samba",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Samba",
+              "section": "Beginnings in a Bahian terreiro"
+            }
+          ]
+        },
+        {
+          "name": "The Estácio sound",
+          "text": "In the late 1920s sambistas from Rio's Estácio neighbourhood, Ismael Silva among them, made samba faster and more syncopated for street parades, with the surdo driving it. To avoid police harassment they organised samba schools; Cartola helped found Mangueira in 1928.",
+          "thinkers": [
+            "samba/cartola"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Samba",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Samba",
+              "section": "Samba do Estácio, the genesis of urban samba"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Cartola",
+              "section": "intro"
+            }
+          ]
+        },
+        {
+          "name": "Radio and record stars",
+          "text": "In the 1930s radio made samba national. Noel Rosa, from middle-class Vila Isabel, helped make Estácio samba respectable, and Carmen Miranda was the first artist to promote samba abroad. White performers were favoured, while poor Black sambistas were often left as suppliers of songs.",
+          "thinkers": [
+            "samba/noel-rosa",
+            "samba/carmen-miranda"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Samba",
+              "section": "Radio era and popularization of samba"
+            }
+          ]
+        },
+        {
+          "name": "From crime to heritage",
+          "text": "Early samba was criminalised: gatherings were broken up and instruments destroyed, an attitude rooted in racism, classism and religious intolerance. By the 1960s traditional samba was being championed as 'resistance music' at places like Cartola and Dona Zica's bar Zicartola, and in 2007 Carioca samba was declared Brazilian cultural heritage.",
+          "thinkers": [
+            "samba/cartola"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Samba",
+              "section": "Criminalization"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Samba",
+              "section": "Traditional samba as \"resistance music\""
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Samba",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Samba",
+              "section": "Samba in the 21st century"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": null,
+      "thinkers": [
+        "samba/donga",
+        "samba/carmen-miranda",
+        "samba/cartola",
+        "samba/noel-rosa"
+      ],
+      "recordings": [
+        {
+          "artist": "Donga",
+          "by": "Baiano",
+          "title": "Pelo Telefone",
+          "year": 1917,
+          "kind": "song"
+        },
+        {
+          "artist": "Ary Barroso",
+          "by": "Francisco Alves",
+          "title": "Aquarela do Brasil",
+          "year": 1939,
+          "kind": "song"
+        },
+        {
+          "artist": "Assis Valente",
+          "by": "Anjos do Inferno",
+          "title": "Brasil Pandeiro",
+          "year": 1941,
+          "kind": "song"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "Beginnings in a Bahian terreiro"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "New sub-genres of samba"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "New sub-genres of samba"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "title": "Samba"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Cartola",
+          "title": "Cartola"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Carmen_Miranda",
+          "title": "Carmen Miranda"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "section": "Etymology and definition"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "section": "Criminalization"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "section": "Beginnings in a Bahian terreiro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "section": "Samba do Estácio, the genesis of urban samba"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "section": "Radio era and popularization of samba"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "section": "New sub-genres of samba"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "section": "Traditional samba as \"resistance music\""
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "section": "Samba in the 21st century"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "highlife",
+      "name": "Highlife",
+      "family": "african",
+      "dates": "late 19th century – today",
+      "dateRange": "late 19th century – today",
+      "description": "Highlife is Ghanaian music that grew in the coastal towns of the Gold Coast in the 19th century, through colonial rule and trade. It lays Western jazz melodies and instruments over local African rhythms, led by jazzy horns and two-finger-picked guitars. It spread across West Africa, became Igbo highlife in 1960s Nigeria, and lives on in gospel highlife and a newer synth-driven sound.",
+      "debatable": "When it began: its roots are dated to the 1870s Gold Coast, but the name 'highlife' only appeared in the early 1920s, and Jacob Asare's 1928 recordings are credited as the first in the genre.",
+      "tagline": "Ghana's guitar-and-horn dance music, a root of both Afrobeat and afrobeats.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Highlife",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Highlife",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "intro"
+        }
+      ],
+      "questions": [
+        "Jazzy horns and guitars leading the band over local African rhythms.",
+        "Two-finger guitar picking, which highlife guitarists built from the dagomba style borrowed from Liberian Kru sailors.",
+        "A bell pattern that Cubans call the clave; it is indigenous to Ghana and used in highlife."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Highlife",
+            "section": "intro"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Highlife",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Highlife",
+            "section": "Dance and guitar band highlife"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Highlife",
+            "section": "History"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Palm-wine roots",
+          "text": "One root was palm-wine music, played at port bars for sailors and dock workers on portable instruments brought by traders. Inland it became a more African 'native blues' with 12/8 cross-rhythms.",
+          "thinkers": [],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Highlife",
+              "section": "Palm wine music"
+            }
+          ]
+        },
+        {
+          "name": "Brass bands and konkoma",
+          "text": "Local musicians in colonial military brass bands mixed marching music with local polyrhythms, creating the dance styles adaha and, on cheaper instruments, konkoma.",
+          "thinkers": [],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Highlife",
+              "section": "Brass-band highlife"
+            }
+          ]
+        },
+        {
+          "name": "Music of the high life",
+          "text": "In the 1920s dance orchestras played orchestrated local songs at exclusive clubs; people outside, who could not afford the fee and evening dress, called it 'the highlife'. In 1928 Jacob Asare's Kumasi Trio recorded 'Yaa Amponsah', widely seen as the earliest guitar-band highlife.",
+          "thinkers": [],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Highlife",
+              "section": "Dance and guitar band highlife"
+            }
+          ]
+        },
+        {
+          "name": "Dance bands and guitar bands",
+          "text": "From the 1940s highlife split into guitar bands, at first mostly rural, which E.K. Nyame's Akan Trio helped popularise, and urban dance bands like E. T. Mensah's Tempos, a band Guy Warren also played in. Warren is credited with introducing highlife to the United States.",
+          "thinkers": [
+            "highlife/e-t-mensah",
+            "highlife/guy-warren"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Highlife",
+              "section": "Dance and guitar band highlife"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Highlife",
+              "section": "1950s"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Guy_Warren",
+              "section": "Biography"
+            }
+          ]
+        },
+        {
+          "name": "Igbo highlife in Nigeria",
+          "text": "After the Second World War highlife took hold among Nigeria's Igbo people, and Igbo highlife became Nigeria's most popular music in the 1960s. Rex Lawson's Majors Band and Victor Uwaifo, whose 'Joromi' won Africa's first gold disc, were leading names.",
+          "thinkers": [
+            "highlife/rex-lawson",
+            "highlife/victor-uwaifo"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Highlife",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Rex_Lawson",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Rex_Lawson",
+              "section": "Musical career"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Victor_Uwaifo",
+              "section": "intro"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": null,
+      "thinkers": [
+        "highlife/e-t-mensah",
+        "highlife/guy-warren",
+        "highlife/rex-lawson",
+        "highlife/victor-uwaifo"
+      ],
+      "recordings": [
+        {
+          "artist": "Jacob Asare and the Kumasi Trio",
+          "title": "Yaa Amponsah",
+          "year": 1928,
+          "kind": "song"
+        },
+        {
+          "artist": "E. T. Mensah and the Tempos",
+          "title": "Ghana Freedom",
+          "year": null,
+          "kind": "song"
+        },
+        {
+          "artist": "Victor Uwaifo",
+          "title": "Joromi",
+          "year": 1965,
+          "kind": "song"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Highlife",
+            "section": "Dance and guitar band highlife"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/E._T._Mensah",
+            "section": "The Tempos and later career"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Victor_Uwaifo",
+            "section": "intro"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Highlife",
+          "title": "Highlife"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/E._T._Mensah",
+          "title": "E. T. Mensah"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Rex_Lawson",
+          "title": "Rex Lawson"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Highlife",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Highlife",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Highlife",
+          "section": "History"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Highlife",
+          "section": "Palm wine music"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Highlife",
+          "section": "Brass-band highlife"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Highlife",
+          "section": "Dance and guitar band highlife"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Highlife",
+          "section": "Burger highlife"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Highlife",
+          "section": "Gospel highlife"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Highlife",
+          "section": "1950s"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "afrobeats",
+      "name": "Afrobeats",
+      "family": "african",
+      "dates": "2000s – today",
+      "dateRange": "2000s – today",
+      "description": "Afrobeats is less a single style than an umbrella name for the pop music flowing out of Nigeria and Ghana and their diaspora, gathering hiplife, highlife, jùjú, azonto and more. It took shape in the 2000s and 2010s in Lagos, Accra and London, where the name was coined to make the mix easier for British listeners to find. Since the late 2010s it has won wide global attention: its Spotify streams grew 550% between 2017 and 2022.",
+      "debatable": "The label itself is argued over: Fela Kuti's children and several artists, Burna Boy among them, prefer 'Afropop', 'Afro-fusion' or 'Nigerian pop', and some call 'afrobeats' a marketing category that hides local styles.",
+      "tagline": "Today's West African pop umbrella; not Fela Kuti's 1960s–70s Afrobeat, which has no 's'.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Characteristics"
+        }
+      ],
+      "questions": [
+        "A driving drum pattern that leads the song, often a 3–2 or 2–3 rhythm called a clave over a normal 4/4 beat, echoing traditional West African drums.",
+        "A tempo and momentum close to house music, though the average has slowed from about 119 to 114 beats per minute in the last decade.",
+        "Nigerian or Ghanaian accented English mixed with pidgin, slang and local languages such as Yoruba."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Afrobeats",
+            "section": "Characteristics"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Afrobeats",
+            "section": "Mid-2010s"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Afrobeats",
+            "section": "Characteristics"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Afrobeats",
+            "section": "2020s"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Afrobeats",
+            "section": "Characteristics"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Wizkid",
+            "section": "Legacy"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Not Afrobeat",
+          "text": "Afrobeat is Fela Kuti's 1960s–70s style of big bands, long solos and jazzy rhythms, often political. Afrobeats takes some influence from it but is a looser blend of many West African and diaspora sounds, and usually steers clear of politics. Burna Boy and Wizkid have both sampled Fela.",
+          "thinkers": [
+            "afrobeats/burna-boy",
+            "afrobeats/wizkid"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Afrobeats",
+              "section": "Characteristics"
+            }
+          ]
+        },
+        {
+          "name": "Named in London",
+          "text": "London DJ Abrantee is credited with adding the 's' to package the sound for British dance floors. His Choice FM show from 2011 and DJ Edu's on BBC Radio 1Xtra gave African records a UK platform, and in 2020 the UK's Official Charts Company announced an official afrobeats chart.",
+          "thinkers": [],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Afrobeats",
+              "section": "Name"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Afrobeats",
+              "section": "Beginnings"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Afrobeats",
+              "section": "2020s"
+            }
+          ]
+        },
+        {
+          "name": "Dance crazes",
+          "text": "Dances helped the music travel. Fuse ODG brought Ghana's Azonto to London, and Davido promoted 'Skelewu' with an instructional video that fans copied in their own uploads.",
+          "thinkers": [
+            "afrobeats/fuse-odg",
+            "afrobeats/davido"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Afrobeats",
+              "section": "Azonto and dance crazes"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Afrobeats",
+              "section": "Azonto"
+            }
+          ]
+        },
+        {
+          "name": "'One Dance' and after",
+          "text": "Drake's 2016 'One Dance' with Wizkid and Kyla became Spotify's most streamed song and is credited with pushing afrobeats into the worldwide mainstream. Wizkid then signed a record deal with RCA, and big labels began investing in afrobeats artists.",
+          "thinkers": [
+            "afrobeats/wizkid"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Afrobeats",
+              "section": "Mid-2010s"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Afrobeats",
+              "section": "Late-2010s"
+            }
+          ]
+        },
+        {
+          "name": "An R&B-infused 2020s sound",
+          "text": "In the early 2020s new artists such as Tems, Rema and Ayra Starr brought an R&B-infused, sometimes trap-tinged sound. 'Essence' by Wizkid and Tems reached the US top ten, and women such as Tems and Ayra Starr broke streaming records.",
+          "thinkers": [
+            "afrobeats/tems",
+            "afrobeats/wizkid"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Afrobeats",
+              "section": "2020s"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": null,
+      "thinkers": [
+        "afrobeats/wizkid",
+        "afrobeats/davido",
+        "afrobeats/burna-boy",
+        "afrobeats/tems",
+        "afrobeats/fuse-odg"
+      ],
+      "recordings": [
+        {
+          "artist": "Drake featuring Wizkid and Kyla",
+          "title": "One Dance",
+          "year": 2016,
+          "kind": "song"
+        },
+        {
+          "artist": "Davido",
+          "title": "Fall",
+          "year": 2017,
+          "kind": "song"
+        },
+        {
+          "artist": "Wizkid featuring Tems",
+          "title": "Essence",
+          "year": 2020,
+          "kind": "song"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Afrobeats",
+            "section": "Mid-2010s"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Davido",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Davido",
+            "section": "2017–2018: \"If\", \"Fall\", \"Fia\" and \"Assurance\""
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Afrobeats",
+            "section": "2020s"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Tems",
+            "section": "2018–2021: Career beginnings and extended plays"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Wizkid",
+            "section": "intro"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "title": "Afrobeats"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeat",
+          "title": "Afrobeat"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Wizkid",
+          "title": "Wizkid"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Name"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Beginnings"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Mid-2010s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "2020s"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "amapiano",
+      "name": "Amapiano (with kwaito)",
+      "family": "african",
+      "dates": "late 1980s – today",
+      "dateRange": "late 1980s (kwaito) – today",
+      "description": "Amapiano is South African house music built on piano melodies, deep house, soul and jazz, and a wide, percussive 'log drum' bassline. It grew in the Gauteng townships in the mid-2010s and became popular across Africa and beyond in the early 2020s. Its roots go back to kwaito, the slow township house music that emerged in Soweto around the end of apartheid.",
+      "debatable": "Amapiano has no single founder: some place its start in Pretoria because it resembles bacardi house, others in the Johannesburg townships, and the electronic log drum is older than amapiano, possibly first developed by the kwaito pioneer M'du.",
+      "tagline": "Piano-led South African house hybrid with a wide, percussive log-drum bass; kwaito-rooted.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Amapiano",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Amapiano",
+          "section": "Description"
+        }
+      ],
+      "questions": [
+        "The log drum: a deep, wide, percussive bass sound, an electronic take on the West African log drum.",
+        "Piano melodies over deep-house grooves ('amapiano' comes from the isiZulu word for 'pianos').",
+        "Vocals in many of South Africa's languages, from isiZulu and Sesotho to English and Afrikaans."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Amapiano",
+            "section": "Description"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Amapiano",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Amapiano",
+            "section": "Description"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Amapiano",
+            "section": "Origins"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Kwaito: slow township house",
+          "text": "Kwaito emerged in Soweto in the late 1980s and 1990s: house slowed down, with deep synth bass, catchy loops and samples of South African music, hip-hop and disco. It needed no formal training or costly instruments, so young people in under-funded townships could make it.",
+          "thinkers": [],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Kwaito",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Kwaito",
+              "section": "History"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Kwaito",
+              "section": "Characteristics"
+            }
+          ]
+        },
+        {
+          "name": "Music of new freedom",
+          "text": "Kwaito is called the sound of the generation that came of age after apartheid, and anti-apartheid chants turned up in its lyrics. Arthur Mafokate's 'Kaffir' spoke about the freedoms that followed 1994.",
+          "thinkers": [
+            "amapiano/arthur-mafokate"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Kwaito",
+              "section": "History"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Kwaito",
+              "section": "Political and social impact"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Arthur_Mafokate",
+              "section": "First Kwaito hit"
+            }
+          ]
+        },
+        {
+          "name": "Women in a male scene",
+          "text": "Kwaito was largely run by men, and its lyrics often objectified women. Brenda Fassie took up the style in the 1990s, and the group Boom Shaka became a voice for young women.",
+          "thinkers": [
+            "amapiano/brenda-fassie"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Kwaito",
+              "section": "Women in kwaito"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Kwaito",
+              "section": "Criticism"
+            }
+          ]
+        },
+        {
+          "name": "The log drum arrives",
+          "text": "Amapiano blends kwaito, deep house, gqom, jazz and soul, and made the log drum, a wide percussive bassline, one of its most popular elements. Kabza de Small credits a producer he calls MDU with figuring out the log-drum sound, though the electronic log drum may be older than amapiano.",
+          "thinkers": [
+            "amapiano/kabza-de-small"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Amapiano",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Amapiano",
+              "section": "Description"
+            }
+          ]
+        },
+        {
+          "name": "Pianos go global",
+          "text": "Amapiano spread across Africa from 2019, got its own awards in 2021 and its own Beatport charts in 2022. Tyla's 'Water', a blend with afrobeats, went viral in 2023 and charted around the world.",
+          "thinkers": [
+            "amapiano/tyla"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Amapiano",
+              "section": "Popularity"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Tyla",
+              "section": "2023–2024: International breakthrough with \"Water\" and Tyla"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": null,
+      "thinkers": [
+        "amapiano/arthur-mafokate",
+        "amapiano/brenda-fassie",
+        "amapiano/kabza-de-small",
+        "amapiano/tyla"
+      ],
+      "recordings": [
+        {
+          "artist": "Arthur Mafokate",
+          "title": "Kaffir",
+          "year": 1995,
+          "kind": "song"
+        },
+        {
+          "artist": "Kabza De Small",
+          "title": "Umshove",
+          "year": 2018,
+          "kind": "song"
+        },
+        {
+          "artist": "Tyla",
+          "title": "Water",
+          "year": 2023,
+          "kind": "song"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Arthur_Mafokate",
+            "section": "First Kwaito hit"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Kabza_de_Small",
+            "section": "intro"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Amapiano",
+            "section": "Popularity"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Amapiano",
+          "title": "Amapiano"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Kwaito",
+          "title": "Kwaito"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Tyla",
+          "title": "Tyla"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Amapiano",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Amapiano",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Amapiano",
+          "section": "Origins"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Amapiano",
+          "section": "Description"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Amapiano",
+          "section": "Popularity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Kwaito",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Kwaito",
+          "section": "History"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "hi-nrg",
+      "name": "Hi-NRG (with Italo disco)",
+      "family": "electronic",
+      "dates": "late 1970s – today",
+      "dateRange": "late 1970s – today",
+      "description": "Hi-NRG ('high energy') is uptempo disco or electronic dance music, with a fast beat, pumping octave basslines and big, dramatic vocals. It grew out of late-1970s disco and became mainstream in the US gay club scene in the early 1980s before crossing into the UK charts. Italo disco, which grew in Italy from post-disco, synth-pop and hi-NRG itself, was usually sung in English.",
+      "debatable": "Listeners disagree whether hi-NRG is more rock than disco and whether it lacks funk, and the word was used both for any fast disco and for one narrower 1980s style; Italo disco's name is tied to the German label ZYX's marketing, but it is unclear whether ZYX actually coined it.",
+      "tagline": "Fast, camp disco built on pulsing octave basslines, a gay club sound of the early 1980s.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "History"
+        }
+      ],
+      "questions": [
+        "An octave-jumping synth bassline, often in fast repeating sixteenth notes, as in Donna Summer's 'I Feel Love'.",
+        "A four-on-the-floor kick (a bass drum on every beat), staccato hi-hats and loud claps at 120–140 beats per minute.",
+        "Big, reverb-soaked vocals and lyrics that are often camp, tongue-in-cheek and full of double meanings."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+            "section": "Characteristics"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+            "section": "Characteristics"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+            "section": "Characteristics"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "'I Feel Love' starts it",
+          "text": "Donna Summer said 'I Feel Love' (1977) was a hit because of its 'high-energy vibe', and the phrase stuck to fast electronic disco; it is called the first hi-NRG song. Patrick Cowley's long remix of it became a collector's item.",
+          "thinkers": [
+            "hi-nrg/patrick-cowley"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+              "section": "Terminology"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+              "section": "History"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Patrick_Cowley",
+              "section": "Musical career"
+            }
+          ]
+        },
+        {
+          "name": "Gay club soundtrack",
+          "text": "In the early 1980s hi-NRG became mainstream in the US gay community. One theatrical strand, with diva personas and drag performers such as Sylvester and Divine, had a large cult following among San Francisco's Black and white gay men. Cowley's 'Menergy' was a frank celebration of the gay club scene.",
+          "thinkers": [
+            "hi-nrg/patrick-cowley"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+              "section": "History"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+              "section": "Characteristics"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Patrick_Cowley",
+              "section": "Musical career"
+            }
+          ]
+        },
+        {
+          "name": "Slamming, not swinging",
+          "text": "London DJ Ian Levine defined hi-NRG as melodic, straightforward dance music that is not too funky. Producers such as Bobby Orlando built it from dense synths, rolling bass and cowbells.",
+          "thinkers": [
+            "hi-nrg/bobby-orlando"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+              "section": "Terminology"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Bobby_Orlando",
+              "section": "Music career"
+            }
+          ]
+        },
+        {
+          "name": "British chart era",
+          "text": "A UK hi-NRG chart began in 1983, and Hazell Dean's 'Searchin'' crossed into the pop charts. Stock Aitken Waterman then took the sound to number one with Dead or Alive and Bananarama.",
+          "thinkers": [
+            "hi-nrg/hazell-dean"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+              "section": "Commercial success"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Stock_Aitken_Waterman",
+              "section": "Formation and early hits: Divine, Hazell Dean, Dead or Alive (1984–1985)"
+            }
+          ]
+        },
+        {
+          "name": "Italo disco",
+          "text": "In Italy, post-disco and synth-pop turned into Italo disco: drum machines, catchy melodies, vocoders and accented English lyrics about love, robots and space. Only a few Italo disco singles reached the UK charts, among them Sabrina's 'Boys', a top-five hit.",
+          "thinkers": [
+            "hi-nrg/sabrina-salerno"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Italo_disco",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Italo_disco",
+              "section": "Origins"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": null,
+      "thinkers": [
+        "hi-nrg/patrick-cowley",
+        "hi-nrg/bobby-orlando",
+        "hi-nrg/hazell-dean",
+        "hi-nrg/sabrina-salerno"
+      ],
+      "recordings": [
+        {
+          "artist": "Hazell Dean",
+          "title": "Searchin' (I Gotta Find a Man)",
+          "year": 1983,
+          "kind": "song"
+        },
+        {
+          "artist": "Dead or Alive",
+          "title": "You Spin Me Round (Like a Record)",
+          "year": 1985,
+          "kind": "song"
+        },
+        {
+          "artist": "Bananarama",
+          "title": "Venus",
+          "year": 1986,
+          "kind": "song"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Hazell_Dean",
+            "section": "Mainstream success"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+            "section": "Commercial success"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+            "section": "Commercial success"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "title": "Hi-NRG"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Italo_disco",
+          "title": "Italo disco"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Patrick_Cowley",
+          "title": "Patrick Cowley"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "Terminology"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "History"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "Commercial success"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Italo_disco",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Italo_disco",
+          "section": "Origins"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "industrial-music",
+      "name": "Industrial (with EBM)",
+      "family": "electronic",
+      "dates": "mid-1970s – today",
+      "dateRange": "mid-1970s – today",
+      "description": "Industrial music is experimental music that emerged in the mid-to-late 1970s, inspired by industrial society and built from tape loops, noise, sound collage and early electronics. The term was coined in 1976 by Monte Cazazza and adopted by Throbbing Gristle, whose confrontational style shaped the scene; after they split in 1981 it branched into many 'post-industrial' styles, among them electronic body music (EBM), which put industrial sounds on a danceable beat. By the 1990s acts such as Nine Inch Nails had brought its sounds to the mainstream.",
+      "debatable": "By the 1990s the label had stretched so far that journalist James Greer called it 'the kind of meaningless catch-all term that new wave once was', and Trent Reznor of Nine Inch Nails, the act described as largely responsible for bringing industrial to a mass audience, has never referred to his own work as industrial.",
+      "tagline": "Noise and tape-loop music about machine-age society, later made danceable as EBM.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Industrial_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "section": "intro"
+        }
+      ],
+      "questions": [
+        "Tape edits, distorted loops, stark percussion and treated vocals, often from homemade instruments.",
+        "In EBM, a programmed four-on-the-floor or rock beat (a kick on every beat, or kick and snare) under repetitive sequenced basslines.",
+        "In EBM, samples of hammer blows, machines and alarms create a 'factory ambiance', alongside clips of political speeches and science-fiction films."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Industrial_music",
+            "section": "Characteristics"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+            "section": "Characteristics"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+            "section": "Characteristics"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Industrial Music for Industrial People",
+          "text": "The phrase was coined in 1976 by Monte Cazazza and became the slogan of Throbbing Gristle's label, Industrial Records. The first wave was Throbbing Gristle, Cabaret Voltaire from Sheffield and Boyd Rice in the US, and their work spread into mail art, performance and installations.",
+          "thinkers": [
+            "industrial-music/throbbing-gristle",
+            "industrial-music/cabaret-voltaire"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Industrial_music",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Industrial_music",
+              "section": "Origins: 1970s–1980s"
+            }
+          ]
+        },
+        {
+          "name": "Anti-music",
+          "text": "Throbbing Gristle rejected rock's structures and called industrial 'anti-music'. Shows could be deliberately provocative, using taboo imagery and even turning bright lights on the audience.",
+          "thinkers": [
+            "industrial-music/throbbing-gristle",
+            "industrial-music/cosey-fanni-tutti"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Industrial_music",
+              "section": "Characteristics"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Throbbing_Gristle",
+              "section": "First era: 1976–1981"
+            }
+          ]
+        },
+        {
+          "name": "Metal on metal",
+          "text": "In Germany, Einstürzende Neubauten played metal percussion, jackhammers and bones, and groups like Test Dept made music from metal crashing against metal.",
+          "thinkers": [],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Industrial_music",
+              "section": "Origins: 1970s–1980s"
+            }
+          ]
+        },
+        {
+          "name": "Body music",
+          "text": "In the early 1980s German and Belgian acts such as DAF and Front 242 blended industrial sounds and electronic punk with danceable rhythms and repeating sequencer lines (short note patterns played automatically by a machine). Front 242 called it electronic body music, a phrase Kraftwerk had used years before.",
+          "thinkers": [
+            "industrial-music/front-242"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+              "section": "intro"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+              "section": "Etymology"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+              "section": "1981–1987"
+            }
+          ]
+        },
+        {
+          "name": "Into the mainstream",
+          "text": "Chicago's Wax Trax! label spread the post-industrial sound, and in the 1990s industrial found a big audience among suburban and rural youth. Nine Inch Nails had several platinum records, including The Downward Spiral.",
+          "thinkers": [
+            "industrial-music/nine-inch-nails",
+            "industrial-music/front-242"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Industrial_music",
+              "section": "Post-industrial"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Industrial_music",
+              "section": "Mainstream success"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": null,
+      "thinkers": [
+        "industrial-music/throbbing-gristle",
+        "industrial-music/cosey-fanni-tutti",
+        "industrial-music/cabaret-voltaire",
+        "industrial-music/front-242",
+        "industrial-music/nine-inch-nails"
+      ],
+      "recordings": [
+        {
+          "artist": "The Normal",
+          "title": "Warm Leatherette",
+          "year": 1978,
+          "kind": "song"
+        },
+        {
+          "artist": "Front 242",
+          "title": "Headhunter",
+          "year": 1988,
+          "kind": "song"
+        },
+        {
+          "artist": "Nine Inch Nails",
+          "title": "The Downward Spiral",
+          "year": 1994,
+          "kind": "album"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+            "section": "Precursors"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Front_242",
+            "section": "Rising popularity"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Industrial_music",
+            "section": "Mainstream success"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Industrial_music",
+          "title": "Industrial music"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "title": "Electronic body music"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Throbbing_Gristle",
+          "title": "Throbbing Gristle"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Industrial_music",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Industrial_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Industrial_music",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Industrial_music",
+          "section": "Origins: 1970s–1980s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Industrial_music",
+          "section": "Mainstream success"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Nine_Inch_Nails",
+          "section": "Musical style"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "hardcore-electronic-dance-music-genre",
+      "name": "Hardcore (techno)",
+      "family": "electronic",
+      "dates": "late 1980s – today",
+      "dateRange": "late 1980s – today",
+      "description": "Hardcore, or hardcore techno, is electronic dance music at 160 to 200 beats per minute or faster, built on a distorted, buzzing ('sawtooth') kick drum. It grew in Belgium, the Netherlands and Germany at the turn of the 1990s, from industrial music, EBM, new beat and acid house, and in Rotterdam it became gabber. The scene grew fast again at the end of the 2010s, when Thunderdome 2019 drew almost 40,000 people.",
+      "debatable": "'Hardcore' has meant many things: harder punk, harder hip-hop, and in early-1990s England a fast breakbeat rave sound that led to jungle, quite separate from the continental hardcore techno described here.",
+      "tagline": "Techno pushed to 160–200 bpm with a distorted kick, from Rotterdam, Frankfurt and Belgium.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "section": "Infobox"
+        }
+      ],
+      "questions": [
+        "A distorted, buzzing kick drum, pushed hard with saturation (deliberate overdriving), and intense synthesized bass.",
+        "Very fast tempos, from 160–180 beats per minute in older styles to 200 and beyond since about 2015.",
+        "Sharp synth 'stabs' (short, punchy synth hits), such as the 'Mentasm' sound popularised by Belgian producers, and aggressive vocals."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+            "section": "intro"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+            "section": "2010s"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+            "section": "1990s"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Angerfist",
+            "section": "intro"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "Industrial roots",
+          "text": "Hardcore is rooted in 1970s and early-1980s industrial music by groups such as Throbbing Gristle and Cabaret Voltaire. In the 1980s Belgium's EBM, hardened by new beat and acid house, set the stage, and the genre's beginnings are traced to the late-1980s Belgian new beat scene.",
+          "thinkers": [],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+              "section": "Early 1970s to early 1980s"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+              "section": "1980s"
+            }
+          ]
+        },
+        {
+          "name": "Frankfurt's first track",
+          "text": "Marc Trauner's 'We Have Arrived' (1990), as Mescalinum United, is often regarded as the first hardcore techno track. Belgian producers of the early 1990s popularised the synth stabs that became part of the sound.",
+          "thinkers": [
+            "hardcore-electronic-dance-music-genre/marc-trauner"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+              "section": "1990s"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Marc_Trauner",
+              "section": "\"We Have Arrived\""
+            }
+          ]
+        },
+        {
+          "name": "Rotterdam gabber",
+          "text": "In Rotterdam, Paul Elstak and Rob Fabrie popularised a speedier style with saturated basslines, soon called gabber, and its happier, more commercial form, happy hardcore. From 1993 ID&T's Thunderdome compilations and parties drew thousands of young people into the gabber movement.",
+          "thinkers": [],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+              "section": "1990s"
+            }
+          ]
+        },
+        {
+          "name": "Across borders",
+          "text": "In 1991 New York DJ Lenny Dee launched Industrial Strength Records, the first dedicated hardcore label, and its first release was 'We Have Arrived'. In France, Liza 'N' Eliaz and Laurent Hô pioneered a scene that later became frenchcore.",
+          "thinkers": [
+            "hardcore-electronic-dance-music-genre/liza-n-eliaz",
+            "hardcore-electronic-dance-music-genre/marc-trauner"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+              "section": "1990s"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Lenny_Dee_(DJ)",
+              "section": "Industrial Strength Records"
+            }
+          ]
+        },
+        {
+          "name": "Faster still",
+          "text": "In the early 2010s hardcore grew internationally, with artists such as Angerfist gaining popularity quickly. Around 2015 the scene shifted towards faster frenchcore and uptempo styles above 200 beats per minute, and Thunderdome 2019 drew almost 40,000 people.",
+          "thinkers": [
+            "hardcore-electronic-dance-music-genre/angerfist"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+              "section": "2010s"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": null,
+      "thinkers": [
+        "hardcore-electronic-dance-music-genre/marc-trauner",
+        "hardcore-electronic-dance-music-genre/liza-n-eliaz",
+        "hardcore-electronic-dance-music-genre/angerfist"
+      ],
+      "recordings": [
+        {
+          "artist": "Mescalinum United",
+          "title": "We Have Arrived",
+          "year": 1990,
+          "kind": "song"
+        },
+        {
+          "artist": "Together",
+          "title": "Hardcore Uproar",
+          "year": 1990,
+          "kind": "song"
+        },
+        {
+          "artist": "Various artists (ID&T)",
+          "title": "Thunderdome",
+          "year": 1993,
+          "kind": "album"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+            "section": "1990s"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+            "section": "1990s"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+            "section": "1990s"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "title": "Hardcore (electronic dance music genre)"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Marc_Trauner",
+          "title": "Marc Trauner"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Liza_'N'_Eliaz",
+          "title": "Liza 'N' Eliaz"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "section": "Early 1970s to early 1980s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "section": "1980s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "section": "1990s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "section": "2010s"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "grime-music",
+      "name": "Grime",
+      "family": "electronic",
+      "dates": "early 2000s – today",
+      "dateRange": "early 2000s – today",
+      "description": "Grime is electronic dance music that emerged in East London in the early 2000s, growing out of UK garage with influences from jungle, dancehall and hip-hop. Its fast, choppy beats around 140 beats per minute and cold, jagged electronic sounds leave space for MCs, whose lyrics often paint gritty pictures of city life. It grew on pirate radio and DVDs, broke through with Dizzee Rascal in 2003, faded, then returned to the charts in the mid-2010s.",
+      "debatable": "Nobody agrees on the first grime record: Pay As U Go's 'Know We', So Solid Crew's 'Dilemma', Wiley's 'Eskimo' and Dizzee Rascal's 'Crime' are all named, and grime is often compared with hip hop though usually held to be distinct.",
+      "tagline": "East London MC (rapper) music: UK garage made dark and jagged, about 140 beats a minute.",
+      "taglineSources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "Musical style"
+        }
+      ],
+      "questions": [
+        "Choppy, syncopated beats at around 140 beats per minute, built in 8- or 16-bar cycles; in the early '8-bar' style the beat switches every eight bars.",
+        "Cold, futuristic synths and deep, guttural sub-bass, sometimes with video-game-style sounds.",
+        "An MC up front over the beat, and clashes between MCs, generally considered an important part of grime culture."
+      ],
+      "questionSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Grime_music",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Grime_music",
+            "section": "8-bar"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Grime_music",
+            "section": "Musical style"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Grime_music",
+            "section": "Eskibeat"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Grime_music",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Grime_music",
+            "section": "Origins"
+          }
+        ]
+      ],
+      "themes": [
+        {
+          "name": "From dark garage",
+          "text": "In the late 1990s a darker, more instrumental strand of UK garage left space for MCs. Wiley called his cold, sparse version 'eskibeat', and journalists later called the gritty, bass-heavy sound 'grime'.",
+          "thinkers": [
+            "grime-music/wiley"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Grime_music",
+              "section": "Origins"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Grime_music",
+              "section": "Eskibeat"
+            }
+          ]
+        },
+        {
+          "name": "Pirate radio and DVDs",
+          "text": "Grime spread through pirate stations such as Rinse FM, then through DVD series like Lord of the Mics, the TV channel Channel U and phones sharing tracks by Bluetooth. Clashes between MCs became central to the culture.",
+          "thinkers": [
+            "grime-music/wiley"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Grime_music",
+              "section": "Origins"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Grime_music",
+              "section": "Development"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Wiley_(musician)",
+              "section": "2004–2007: Treddin' on Thin Ice, Da 2nd Phaze and Playtime Is Over"
+            }
+          ]
+        },
+        {
+          "name": "Youth making music for youth",
+          "text": "Many MCs were teenagers: Dizzee Rascal had his first hit at 16, and his Boy in da Corner won the 2003 Mercury Prize. Lady Sovereign was signed to Def Jam by Jay-Z and appeared on the Late Show with David Letterman.",
+          "thinkers": [
+            "grime-music/dizzee-rascal",
+            "grime-music/lady-sovereign"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Grime_music",
+              "section": "Origins"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Grime_music",
+              "section": "Development"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Grime_music",
+              "section": "International growth"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Lady_Sovereign",
+              "section": "intro"
+            }
+          ]
+        },
+        {
+          "name": "Decline and comeback",
+          "text": "By the late 2000s grime struggled for exposure and many MCs turned to pop, while online platforms such as SB.TV and GRM Daily gave artists an outlet without traditional media. In 2014 an MC-led revival began, with Skepta's 'That's Not Me' among the hits.",
+          "thinkers": [
+            "grime-music/skepta",
+            "grime-music/wiley"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Grime_music",
+              "section": "Decline"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Grime_music",
+              "section": "Revival"
+            }
+          ]
+        },
+        {
+          "name": "Number one",
+          "text": "Skepta's Konnichiwa won the 2016 Mercury Prize, and Stormzy's Gang Signs & Prayer became the first grime album to top the UK chart in 2017. In 2019 Stormzy headlined Glastonbury.",
+          "thinkers": [
+            "grime-music/skepta",
+            "grime-music/stormzy"
+          ],
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Grime_music",
+              "section": "Revival"
+            },
+            {
+              "url": "https://en.wikipedia.org/wiki/Grime_music",
+              "section": "Post-revival period"
+            }
+          ]
+        }
+      ],
+      "reactedAgainst": null,
+      "thinkers": [
+        "grime-music/wiley",
+        "grime-music/dizzee-rascal",
+        "grime-music/skepta",
+        "grime-music/stormzy",
+        "grime-music/lady-sovereign"
+      ],
+      "recordings": [
+        {
+          "artist": "Wiley",
+          "title": "Eskimo",
+          "year": 2002,
+          "kind": "song"
+        },
+        {
+          "artist": "Dizzee Rascal",
+          "title": "Boy in da Corner",
+          "year": 2003,
+          "kind": "album"
+        },
+        {
+          "artist": "Stormzy",
+          "title": "Gang Signs & Prayer",
+          "year": 2017,
+          "kind": "album"
+        }
+      ],
+      "recordingSources": [
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Grime_music",
+            "section": "Origins"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Grime_music",
+            "section": "Development"
+          }
+        ],
+        [
+          {
+            "url": "https://en.wikipedia.org/wiki/Grime_music",
+            "section": "Revival"
+          }
+        ]
+      ],
+      "reading": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "title": "Grime music"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Wiley_(musician)",
+          "title": "Wiley (musician)"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dizzee_Rascal",
+          "title": "Dizzee Rascal"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "Origins"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "Development"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "Revival"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "Musical style"
         }
       ],
       "sample": false

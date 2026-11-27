@@ -196,5 +196,101 @@
       "United States, led by DJs from Europe and North America"
     ],
     "span": "late 2000s – today"
+  },
+  "traditional-pop": {
+    "places": [
+      "United States: New York's Tin Pan Alley and Broadway, and Hollywood"
+    ],
+    "span": "1920s – 1950s"
+  },
+  "pop-music": {
+    "places": [
+      "United States and Britain, then the whole world"
+    ],
+    "span": "mid-1950s – today"
+  },
+  "k-pop": {
+    "places": [
+      "South Korea, then Japan, the rest of Asia and the world"
+    ],
+    "span": "early 1990s – today"
+  },
+  "indie-rock": {
+    "places": [
+      "United Kingdom, United States and New Zealand"
+    ],
+    "span": "early 1980s – today"
+  },
+  "post-punk": {
+    "places": [
+      "United Kingdom, with New York and Ohio; new wave in the US and UK"
+    ],
+    "span": "late 1970s – mid-1980s"
+  },
+  "krautrock": {
+    "places": [
+      "West Germany: Cologne, Düsseldorf, Hamburg and Berlin"
+    ],
+    "span": "late 1960s – today"
+  },
+  "dancehall": {
+    "places": [
+      "Kingston, Jamaica, then the Jamaican diaspora and the world"
+    ],
+    "span": "late 1970s – today"
+  },
+  "son-cubano": {
+    "places": [
+      "The highlands of eastern Cuba, then Havana; mambo in Havana, Mexico City and New York"
+    ],
+    "span": "late 19th century – today"
+  },
+  "samba": {
+    "places": [
+      "Afro-Brazilian communities of Bahia, then Rio de Janeiro"
+    ],
+    "span": "late 19th century – today"
+  },
+  "highlife": {
+    "places": [
+      "The coastal cities of the Gold Coast (today's Ghana), then Nigeria and West Africa"
+    ],
+    "span": "late 19th century – today"
+  },
+  "afrobeats": {
+    "places": [
+      "Lagos, Accra and London: Nigeria, Ghana and the UK's African diaspora"
+    ],
+    "span": "2000s – today"
+  },
+  "amapiano": {
+    "places": [
+      "The townships of Gauteng, South Africa: Soweto for kwaito; Johannesburg or Pretoria, it's disputed, for amapiano"
+    ],
+    "span": "late 1980s (kwaito) – today"
+  },
+  "hi-nrg": {
+    "places": [
+      "UK and US clubs (London, New York, San Francisco, Montreal); Italo disco in Italy"
+    ],
+    "span": "late 1970s – today"
+  },
+  "industrial-music": {
+    "places": [
+      "The UK (Hull, Sheffield, London), the US and Germany; EBM in West Germany, Belgium and the Netherlands"
+    ],
+    "span": "mid-1970s – today"
+  },
+  "hardcore-electronic-dance-music-genre": {
+    "places": [
+      "Rotterdam in the Netherlands, Belgium and Frankfurt in Germany"
+    ],
+    "span": "late 1980s – today"
+  },
+  "grime-music": {
+    "places": [
+      "East London, spreading to Birmingham and other British cities"
+    ],
+    "span": "early 2000s – today"
   }
 }

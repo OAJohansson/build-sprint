@@ -132,6 +132,70 @@
     "electronic-dance-music": {
       "from": 2007,
       "to": "present"
+    },
+    "traditional-pop": {
+      "from": 1920,
+      "to": 1959
+    },
+    "pop-music": {
+      "from": 1954,
+      "to": "present"
+    },
+    "k-pop": {
+      "from": 1990,
+      "to": "present"
+    },
+    "indie-rock": {
+      "from": 1980,
+      "to": "present"
+    },
+    "post-punk": {
+      "from": 1977,
+      "to": 1986
+    },
+    "krautrock": {
+      "from": 1967,
+      "to": "present"
+    },
+    "dancehall": {
+      "from": 1977,
+      "to": "present"
+    },
+    "son-cubano": {
+      "from": 1900,
+      "to": "present"
+    },
+    "samba": {
+      "from": 1900,
+      "to": "present"
+    },
+    "highlife": {
+      "from": 1900,
+      "to": "present"
+    },
+    "afrobeats": {
+      "from": 2000,
+      "to": "present"
+    },
+    "amapiano": {
+      "from": 1987,
+      "to": "present"
+    },
+    "hi-nrg": {
+      "from": 1977,
+      "to": "present"
+    },
+    "industrial-music": {
+      "from": 1974,
+      "to": "present"
+    },
+    "hardcore-electronic-dance-music-genre": {
+      "from": 1987,
+      "to": "present"
+    },
+    "grime-music": {
+      "from": 2000,
+      "to": "present"
     }
   }
 }

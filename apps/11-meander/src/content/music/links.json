@@ -1309,6 +1309,1604 @@
         }
       ],
       "sample": false
+    },
+    {
+      "from": "traditional-pop",
+      "to": "pop-music",
+      "type": "built",
+      "label": "a parent of pop",
+      "reason": "Early pop music drew on traditional pop, and rock and roll pushed the older style aside in the 1950s.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "Stylistic evolution"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+          "section": "Advent of rock and roll"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "jazz",
+      "to": "traditional-pop",
+      "type": "built",
+      "label": "swing-era singers",
+      "reason": "After the swing era, singers from the big bands, such as Frank Sinatra and Peggy Lee, went on to be marketed as solo pop singers.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Jazz",
+          "section": "Post-war jazz"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Jazz",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+          "section": "Mid-1940s to mid-1950s: height of popularity"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "blues",
+      "to": "traditional-pop",
+      "type": "fused",
+      "label": "Tin Pan Alley blues",
+      "reason": "In the 1910s and 1920s Tin Pan Alley published pop songs and dance numbers in the newly popular blues and jazz styles.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Blues",
+          "section": "Pre-war blues"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Tin_Pan_Alley",
+          "section": "In its prime"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "traditional-pop",
+      "to": "rock-music",
+      "type": "built",
+      "label": "Tin Pan Alley's songcraft",
+      "reason": "Rock lyrics took some of their themes from the Tin Pan Alley pop tradition, even as rock and roll pushed traditional pop aside in the 1950s.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Rock_music",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+          "section": "Advent of rock and roll"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "traditional-pop",
+      "to": "country-music",
+      "type": "fused",
+      "label": "Nashville's pop polish",
+      "reason": "In the late 1950s Nashville country borrowed heavily from traditional pop sounds to hold back rock and roll.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+          "section": "Advent of rock and roll"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Patti_Page",
+          "section": "Style"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "rock-and-roll",
+      "to": "pop-music",
+      "type": "built",
+      "label": "rock and roll's offspring",
+      "reason": "In the 1950s and 1960s 'pop' meant rock and roll and the youth styles it influenced, before the two words split.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "Definitions and etymology"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "pop-music",
+      "to": "contemporary-r-b",
+      "type": "fused",
+      "label": "pop meets R&B",
+      "reason": "Contemporary R&B blends rhythm and blues with pop, soul, funk and disco.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Contemporary_R%26B",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "pop-music",
+      "to": "synth-pop",
+      "type": "built",
+      "label": "pop on synthesizers",
+      "reason": "Synth-pop took pop songs and built them on synthesizers, part of pop's 1980s turn to electronic sounds.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Synth-pop",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pop_music",
+          "section": "Stylistic evolution"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "pop-music",
+      "to": "k-pop",
+      "type": "built",
+      "label": "Korea's take on pop",
+      "reason": "K-pop grew in South Korea under heavy influence from American pop music.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "hip-hop",
+      "to": "k-pop",
+      "type": "fused",
+      "label": "rap dance roots",
+      "reason": "Seo Taiji and Boys brought rap into Korean pop, and later groups such as BTS kept hip-hop as their musical base.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Seo_Taiji_and_Boys",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/BTS",
+          "section": "Musical style"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "techno",
+      "to": "k-pop",
+      "type": "fused",
+      "label": "techno in the mix",
+      "reason": "K-pop's 'rap dance' beginnings fused hip-hop with techno and rock.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "intro"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "rock-music",
+      "to": "k-pop",
+      "type": "fused",
+      "label": "rock in the mix",
+      "reason": "Rock was one of the Western styles, along with hip-hop and techno, that early K-pop fused together.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "intro"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "contemporary-r-b",
+      "to": "k-pop",
+      "type": "fused",
+      "label": "R&B-shaped pop",
+      "reason": "K-pop mixes R&B and other African American influences with Western dance music and hip-hop.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/K-pop",
+          "section": "Hybrid genre and transnational values"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "synth-pop",
+      "to": "k-pop",
+      "type": "fused",
+      "label": "synthesizer-led idol pop",
+      "reason": "In synth-pop's 21st-century revival, much Korean pop, especially girl groups such as Girls' Generation and Wonder Girls, came to be dominated by synth-pop.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Synth-pop",
+          "section": "21st-century revival (2000s–present)"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "rock-music",
+      "to": "indie-rock",
+      "type": "built",
+      "label": "a branch of rock",
+      "reason": "Indie rock is a subgenre of rock, first named for rock bands on independent labels.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Etymology and characteristics"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "punk-rock",
+      "to": "indie-rock",
+      "type": "built",
+      "label": "punk's do-it-yourself idea",
+      "reason": "Punk's do-it-yourself ethic, which said anyone could form a band and put out a record, gave indie rock its start.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Etymology and characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Late 1970s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Early UK DIY movement"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "post-punk",
+      "to": "indie-rock",
+      "type": "built",
+      "label": "post-punk's indie labels",
+      "reason": "Post-punk bands on independent labels such as Rough Trade and Factory were a foundational influence on indie rock.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Late 1970s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "alternative-rock",
+      "to": "indie-rock",
+      "type": "built-then-against",
+      "label": "began as alternative rock",
+      "reason": "Indie rock first described a style of alternative rock tied to small, low-budget independent labels. Indie rock took shape as a rejection of alternative rock's move into the mainstream in the 1990s.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Etymology and characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Alternative_rock",
+          "section": "Indie rock"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Indie_rock",
+          "section": "Mainstream–underground split: 1990s"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "indie-rock",
+      "to": "grime-music",
+      "type": "fused",
+      "label": "grindie crossover",
+      "reason": "Grindie was a fusion of grime with indie rock.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "Decline"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "punk-rock",
+      "to": "post-punk",
+      "type": "built-then-against",
+      "label": "grew from punk",
+      "reason": "Post-punk came straight out of punk in the late 1970s, and many of its musicians were inspired by punk shows such as the Sex Pistols' 1976 Manchester gigs. Post-punk rejected punk's raw, simple conventions once punk became a commercial formula.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Punk_rock",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Background"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Punk_rock",
+          "section": "Post-punk"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Definition"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Background"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "krautrock",
+      "to": "post-punk",
+      "type": "built",
+      "label": "krautrock's open forms",
+      "reason": "Many post-punk bands named krautrock groups such as Can, Neu! and Faust as key inspirations, and Kraftwerk shaped post-punk production.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Influences"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "dub-music",
+      "to": "post-punk",
+      "type": "fused",
+      "label": "dub's echo and bass",
+      "reason": "Post-punk bands such as PiL and the Slits took up dub's production techniques and heavy bass.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Influences"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "United Kingdom"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Public_Image_Ltd",
+          "section": "intro"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "reggae",
+      "to": "post-punk",
+      "type": "fused",
+      "label": "reggae's rhythms",
+      "reason": "Reggae was one of the non-rock styles post-punk embraced; PiL's Jah Wobble called it a natural influence.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Influences"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "United Kingdom"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "funk",
+      "to": "post-punk",
+      "type": "fused",
+      "label": "funk-driven punk",
+      "reason": "Post-punk bands such as Gang of Four mixed funk rhythms into punk, and Talking Heads added funk and Afrobeat.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Influences"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Gang_of_Four_(band)",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "United States"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "disco",
+      "to": "post-punk",
+      "type": "fused",
+      "label": "open to disco",
+      "reason": "Post-punk was open to disco's beats, and PiL's first album drew on disco as well as dub and noise.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Disco",
+          "section": "Post-punk"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Disco",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Public_Image_Ltd",
+          "section": "intro"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "jazz",
+      "to": "post-punk",
+      "type": "fused",
+      "label": "free jazz edges",
+      "reason": "Avant-garde and free jazz stood out among post-punk's influences, and the Pop Group mixed free jazz with dub reggae.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Influences"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Jazz",
+          "section": "Punk jazz and jazzcore"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "heavy-metal-music",
+      "to": "post-punk",
+      "type": "fused",
+      "label": "darkness from early metal",
+      "reason": "Post-punk absorbed darker, heavier elements from early heavy metal, especially Black Sabbath.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Influences"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "post-punk",
+      "to": "alternative-rock",
+      "type": "built",
+      "label": "seeds of alternative rock",
+      "reason": "Post-punk acts that were fixtures on US college radio, such as R.E.M., became early examples of alternative rock, and Siouxsie and the Banshees were among the first alternative bands.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "Mid-1980s – 1990s: Decline"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Punk_rock",
+          "section": "Post-punk"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Alternative_rock",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Siouxsie_and_the_Banshees",
+          "section": "Musical style"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "post-punk",
+      "to": "synth-pop",
+      "type": "built",
+      "label": "post-punk goes electronic",
+      "reason": "In the post-punk era, acts such as Gary Numan, the Human League and Depeche Mode pioneered synth-pop as part of the new wave.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Synth-pop",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Post-punk",
+          "section": "UK scene and commercial ambitions"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/New_wave_music",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "rock-music",
+      "to": "krautrock",
+      "type": "built",
+      "label": "rock, made experimental",
+      "reason": "Krautrock is a branch of experimental rock that drew on British and American acts like the Velvet Underground and Pink Floyd while moving away from rock's blues roots.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "History"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "funk",
+      "to": "krautrock",
+      "type": "fused",
+      "label": "funk rhythm in the mix",
+      "reason": "Krautrock bands folded funk rhythms into their sound, and James Brown was a noted influence; Can's sound has been described as psychedelic funk.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "History"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "Characteristics"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "jazz",
+      "to": "krautrock",
+      "type": "fused",
+      "label": "jazz improvisation absorbed",
+      "reason": "Krautrock borrowed jazz improvisation, from free jazz to Miles Davis's late-1960s fusion records.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "History"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "krautrock",
+      "to": "synth-pop",
+      "type": "built",
+      "label": "Kraftwerk's road to synth-pop",
+      "reason": "Synth-pop drew on krautrock, especially Kraftwerk's electronic pop.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Synth-pop",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Synth-pop",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Kraftwerk",
+          "section": "Influence and legacy"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "krautrock",
+      "to": "ambient-music",
+      "type": "built",
+      "label": "kosmische roots of ambient",
+      "reason": "Krautrock's spacey, drone-based side helped lay the ground for ambient music.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Ambient_music",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "Kosmische Musik"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "Characteristics"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "krautrock",
+      "to": "techno",
+      "type": "built",
+      "label": "German machines, Detroit techno",
+      "reason": "Krautrock helped shape techno, and Detroit's first techno producers fused Kraftwerk's repetitive melodies with funk.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Krautrock",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Techno",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Kraftwerk",
+          "section": "Influence and legacy"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "krautrock",
+      "to": "industrial-music",
+      "type": "built",
+      "label": "krautrock behind industrial",
+      "reason": "Germany's krautrock scene, Kraftwerk included, is counted among the forerunners of industrial music and EBM.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Industrial_music",
+          "section": "1910s–1960s: Forerunners"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "section": "Precursors"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "reggae",
+      "to": "dancehall",
+      "type": "built",
+      "label": "reggae, stripped back",
+      "reason": "Dancehall began as a sparer version of reggae, with deejays toasting over rhythm tracks taken from 1960s and 1970s reggae songs.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "Early developments - Early 1970s"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "dub-music",
+      "to": "dancehall",
+      "type": "built",
+      "label": "dub's riddims underneath",
+      "reason": "Dub is one of dancehall's roots: early deejays toasted over bass-and-drum 'dub' rhythm tracks taken from 1960s and 1970s reggae songs.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "Early developments - Early 1970s"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "dancehall",
+      "to": "reggaeton",
+      "type": "built",
+      "label": "dancehall becomes reggaeton",
+      "reason": "Reggaeton evolved from dancehall, and the faster, simpler digital beat of late-1980s dancehall shaped Reggae en Español.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Reggaeton",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dancehall",
+          "section": "1980s–1990s (The Naming)"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hip-hop",
+          "section": "World hip-hop music"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+          "section": "Career"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "dancehall",
+      "to": "drum-and-bass",
+      "type": "built",
+      "label": "dancehall feeds jungle",
+      "reason": "Dancehall was a key influence on drum and bass, and jungle tracks sampled its vocals.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Drum_and_bass",
+          "section": "Genres influenced by drum and bass"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Jungle_music",
+          "section": "intro"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "dancehall",
+      "to": "grime-music",
+      "type": "fused",
+      "label": "dancehall rhythms in grime",
+      "reason": "Grime draws on dancehall alongside jungle and hip-hop, reworking some of its rhythms.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "Origins"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "dancehall",
+      "to": "afrobeats",
+      "type": "fused",
+      "label": "dancehall in afrobeats",
+      "reason": "Afrobeats mixes in dancehall along with hip-hop, house and soca.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "son-cubano",
+      "to": "salsa-music",
+      "type": "built",
+      "label": "son, the base of salsa",
+      "reason": "Most salsa is built mainly on son montuno and son cubano. Its origins are disputed (the first self-named salsa band formed in Cuba in 1955), and it took off in New York in the 1960s and 1970s, played largely by Puerto Rican, Cuban and Dominican musicians.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "section": "Current state of the son"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Salsa_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Mambo_(music)",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Son_cubano",
+          "section": "1940s"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "son-cubano",
+      "to": "funk",
+      "type": "built",
+      "label": "son's singing bass lines",
+      "reason": "Arsenio Rodríguez's son conjunto gave the bass its own melodic riff (tumbao), an idea later called critical to Motown, rock and funk.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Mambo_(music)",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Arsenio_Rodr%C3%ADguez",
+          "section": "Clave-based structure and offbeat emphasis"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "samba",
+      "to": "bossa-nova",
+      "type": "built",
+      "label": "samba, made cool",
+      "reason": "Bossa nova began in the late 1950s as a relaxed, non-dancing style of samba, at first called 'modern samba'.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Bossa_nova",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Jazz",
+          "section": "Afro-Brazilian jazz"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "section": "Bossa nova, the new revolution in samba"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "jazz",
+      "to": "samba",
+      "type": "fused",
+      "label": "jazz tones in samba",
+      "reason": "Post-war samba-canção sometimes took on cool-jazz tones, and jazz-samba adapted street samba into jazz.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Samba",
+          "section": "Samba-canção hegemony and influences of foreign music"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Jazz",
+          "section": "Afro-Brazilian jazz"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "samba",
+      "to": "disco",
+      "type": "fused",
+      "label": "samba rhythms on the disco floor",
+      "reason": "Disco borrowed Latin rhythms, samba among them.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Disco",
+          "section": "Musical characteristics"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "jazz",
+      "to": "highlife",
+      "type": "fused",
+      "label": "jazz melodies, African metres",
+      "reason": "Highlife lays Western jazz melodies and horns over several local African rhythms.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Highlife",
+          "section": "intro"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "highlife",
+      "to": "afrobeat",
+      "type": "built",
+      "label": "highlife into Afrobeat",
+      "reason": "Afrobeat grew from a mix of genres, highlife among them.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeat",
+          "section": "History"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Highlife",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "highlife",
+      "to": "afrobeats",
+      "type": "built",
+      "label": "highlife under afrobeats",
+      "reason": "Modern afrobeats grew from West African genres including highlife.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "afrobeat",
+      "to": "afrobeats",
+      "type": "built",
+      "label": "afrobeat laid the groundwork",
+      "reason": "Fela Kuti and Tony Allen's afrobeat is credited with laying the groundwork, though afrobeats is a looser, less political pop blend.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeat",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "hip-hop",
+      "to": "afrobeats",
+      "type": "fused",
+      "label": "hip-hop gets West African",
+      "reason": "Early groups such as Trybesmen and Plantashun Boiz fused American hip-hop and R&B with local melodies, and hip-hop is one of the styles afrobeats blends.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Beginnings"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "house-music",
+      "to": "afrobeats",
+      "type": "fused",
+      "label": "house tempo, clave beat",
+      "reason": "Afrobeats shares house music's momentum and tempo, and some 2020s songs fuse the two as 'afro-house'.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "2020s"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "trap-music",
+      "to": "afrobeats",
+      "type": "fused",
+      "label": "trap-tinged 2020s afrobeats",
+      "reason": "Some early-2020s afrobeats carries trap influence in its beats.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "2020s"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "contemporary-r-b",
+      "to": "afrobeats",
+      "type": "fused",
+      "label": "R&B-infused afrobeats",
+      "reason": "R&B runs through afrobeats from its start, and the early-2020s sound of Tems and Rema is defined by it.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "2020s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Beginnings"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "afrobeats",
+      "to": "amapiano",
+      "type": "fused",
+      "label": "afrobeats meets amapiano",
+      "reason": "Afropiano blends Nigerian afrobeats with South Africa's amapiano and became one of afrobeats' most popular forms in the early 2020s.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Amapiano",
+          "section": "Afropiano"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Afrobeats",
+          "section": "Afropiano"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "house-music",
+      "to": "amapiano",
+      "type": "built",
+      "label": "South Africa's house offshoot",
+      "reason": "Amapiano is one of South Africa's offshoots of house, built on deep house and kwaito, itself a slowed-down township house.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Amapiano",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/House_music",
+          "section": "2020s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Kwaito",
+          "section": "intro"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "jazz",
+      "to": "amapiano",
+      "type": "fused",
+      "label": "jazz mixed in",
+      "reason": "Amapiano blends in jazz, and kwaito already had a jazz strand, kwai-jazz, developed by Don Laka.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Amapiano",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Kwaito",
+          "section": "Kwai-jazz"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "soul-music",
+      "to": "amapiano",
+      "type": "fused",
+      "label": "soulful piano house",
+      "reason": "Soul is one of the styles amapiano is a hybrid of, and its 'private school' strand uses live guitar, sax and violin.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Amapiano",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Amapiano",
+          "section": "Private school piano"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "hip-hop",
+      "to": "amapiano",
+      "type": "fused",
+      "label": "kwaito meets rap",
+      "reason": "Kwaito drew on hip-hop, and TKZee's 'guz' sound and later skhanda rap put rap-style vocals over kwaito beats.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Kwaito",
+          "section": "Guz"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hip-hop",
+          "section": "World hip-hop music"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Kwaito",
+          "section": "Skhanda Rap"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "disco",
+      "to": "amapiano",
+      "type": "fused",
+      "label": "disco samples in kwaito",
+      "reason": "Kwaito producers often sampled disco, alongside South African music and hip-hop.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Kwaito",
+          "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Kwaito",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "disco",
+      "to": "hi-nrg",
+      "type": "built",
+      "label": "disco sped up",
+      "reason": "Hi-NRG is uptempo disco, and the name came from Donna Summer describing the 'high energy' of 'I Feel Love'.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Disco",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "Terminology"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "synth-pop",
+      "to": "hi-nrg",
+      "type": "built",
+      "label": "synth-pop meets disco",
+      "reason": "Italo disco grew out of post-disco dance music and synth-pop, and hi-NRG's octave basslines may be traced back to synth-pop.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Italo_disco",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Synth-pop",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "Characteristics"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "hi-nrg",
+      "to": "house-music",
+      "type": "built",
+      "label": "high energy into house",
+      "reason": "The hi-NRG sound influenced house, and one strand already drew on early Chicago house.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "History"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/House_music",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "Characteristics"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "hi-nrg",
+      "to": "techno",
+      "type": "built",
+      "label": "hi-NRG feeds techno",
+      "reason": "The hi-NRG sound influenced techno, and Italo disco and Euro disco were popular at the Detroit high-school parties techno came from.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "History"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Techno",
+          "section": "Proto-techno"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Techno",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "hi-nrg",
+      "to": "trance-music",
+      "type": "built",
+      "label": "hi-NRG into nu-NRG trance",
+      "reason": "In the 1990s a form of trance, nu-NRG, grew out of hi-NRG.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "Commercial success"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "synth-pop",
+      "to": "industrial-music",
+      "type": "built",
+      "label": "synth-pop into EBM",
+      "reason": "The synth-pop of The Human League and Fad Gadget is among the influences on EBM.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "section": "Precursors"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "punk-rock",
+      "to": "industrial-music",
+      "type": "built",
+      "label": "punk gets electronic",
+      "reason": "EBM grew out of both punk and industrial cultures, as an electronic kind of punk mixed with industrial sounds.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "section": "Characteristics"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "rock-music",
+      "to": "industrial-music",
+      "type": "built",
+      "label": "rock, avant-garde, electronics",
+      "reason": "Industrial's roots include rock alongside the avant-garde and early electronic music, though it rejected rock's conventions.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Industrial_music",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Industrial_music",
+          "section": "Characteristics"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "disco",
+      "to": "industrial-music",
+      "type": "fused",
+      "label": "disco beats in EBM",
+      "reason": "EBM sets its sequenced basslines over programmed disco rhythms, often the steady 4/4 disco beat.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "section": "Characteristics"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "heavy-metal-music",
+      "to": "industrial-music",
+      "type": "fused",
+      "label": "EBM meets thrash metal",
+      "reason": "North American bands combined EBM bass sequences with the roughness of hardcore punk and thrash metal, a mix close to industrial metal.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "section": "1988–1993"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "industrial-music",
+      "to": "techno",
+      "type": "built",
+      "label": "EBM feeds techno",
+      "reason": "Techno draws on electronic body music and Belgian new beat, and later European techno producers took up EBM again.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Techno",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Techno",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+          "section": "Revival"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "industrial-music",
+      "to": "trance-music",
+      "type": "built",
+      "label": "EBM to Frankfurt trance",
+      "reason": "Trance emerged from the techno and EBM scene in Frankfurt, Germany.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Trance_music",
+          "section": "intro"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "industrial-music",
+      "to": "hardcore-electronic-dance-music-genre",
+      "type": "built",
+      "label": "industrial roots of hardcore",
+      "reason": "Hardcore techno is rooted in 1970s and early-1980s industrial music, and EBM is among its origins.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "section": "Early 1970s to early 1980s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "techno",
+      "to": "hardcore-electronic-dance-music-genre",
+      "type": "built",
+      "label": "techno, harder and faster",
+      "reason": "Hardcore is a form of techno; around 1993 it left its Detroit techno influences behind and was simply called hardcore.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "section": "1990s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Techno",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "house-music",
+      "to": "hardcore-electronic-dance-music-genre",
+      "type": "built",
+      "label": "acid house hardens it",
+      "reason": "Under the influence of acid house and Belgian new beat, EBM grew harder, setting the stage for hardcore.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "section": "1980s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "hardcore-electronic-dance-music-genre",
+      "to": "trance-music",
+      "type": "built",
+      "label": "hardcore into trance",
+      "reason": "Trance drew on hardcore techno among its sources, alongside house, techno and acid house.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Trance_music",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "uk-garage",
+      "to": "grime-music",
+      "type": "built",
+      "label": "darker garage becomes grime",
+      "reason": "Grime developed out of UK garage, as its darker, instrumental strand left space for MCs and garage moved away from house.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/UK_garage",
+          "section": "2002: 2-step, dubstep and grime"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "Origins"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "drum-and-bass",
+      "to": "grime-music",
+      "type": "built",
+      "label": "jungle drums, garage MCs",
+      "reason": "Grime took the thumping drums of drum and bass and jungle, and Dizzee Rascal started out as a drum and bass DJ.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "Origins"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Drum_and_bass",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dizzee_Rascal",
+          "section": "2000–2003: Early career"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "hip-hop",
+      "to": "grime-music",
+      "type": "fused",
+      "label": "cousin of hip hop",
+      "reason": "Grime draws on hip-hop and is often compared with it, though it is usually held to be distinct because its roots are in garage and jungle.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hip-hop",
+          "section": "Infobox"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "from": "grime-music",
+      "to": "dubstep",
+      "type": "fused",
+      "label": "shared London roots",
+      "reason": "Dubstep incorporates elements of grime, and dubstep's rise in the late 2000s made it harder for grime to get noticed.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Dubstep",
+          "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dubstep",
+          "section": "Infobox"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Grime_music",
+          "section": "Decline"
+        }
+      ],
+      "sample": false
     }
   ]
 }

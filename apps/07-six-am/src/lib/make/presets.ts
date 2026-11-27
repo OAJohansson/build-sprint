@@ -68,6 +68,8 @@ export type SynthParams = {
   driveMakeup?: number;
   /** The wobble swings the cutoff up and down round Tone (not only down). */
   wobbleBipolar?: boolean;
+  /** The wobble closes the filter from Tone's cutoff down towards the note (D7-10). */
+  wobbleToNote?: boolean;
 };
 
 export type MacroSpec = { id: MacroId; name: string; explain: string };
@@ -103,7 +105,7 @@ export type MakePreset = {
 };
 
 /** The variety map's bass families (kickoff.md, L267), in the shelf's order. */
-export const BASS_FAMILIES = ["clean sub", "rubber pluck", "Reese", "acid", "organ bass (90s house)", "FM bass", "round analog", "Detroit square", "filtered saw", "wobble", "stab bass", "electric bass (sampled)", "upright bass (sampled)"] as const;
+export const BASS_FAMILIES = ["clean sub", "rubber pluck", "Reese", "acid", "organ bass (90s house)", "FM bass", "round analog", "Detroit square", "filtered saw", "wobble", "stab bass", "real electric bass", "real upright bass"] as const;
 export type BassFamily = (typeof BASS_FAMILIES)[number];
 
 /** The sampled basses' recordings (tonejs-instruments, CC BY 3.0; public/kits/LICENSES.md): id → file. */
@@ -123,16 +125,16 @@ const NEW_PRESETS: Record<NewId, MakePreset> = {
   "sine-sub": {
     id: "sine-sub", name: "Pure sine", part: "bass", family: "clean sub", feel: "pure", tags: ["sub", "sine"],
     about: "A plain sine wave: the cleanest, deepest sub. Tone adds a little buzz on top so small speakers hear it.",
-    macros: M(0.1, 0.45, 0, 0, 0, 0, 0, 0.4),
+    macros: M(0.1, 0.45, 0, 0, 0, 0, 0, 0.15),
     base: { wave: "sine", voices: 1, detuneCents: 0, resonance: 0.7, filterEnvOct: 0, filterDecayS: 0.1, attackS: 0.004, releaseS: 0.06, gainDb: -7, toneDrive: 1, wobbleBipolar: true },
-    tone: [60, 4000], maxDropSemis: 9, maxStereoCents: 8, maxWobbleOct: 8,
+    tone: [60, 4000], maxDropSemis: 9, maxStereoCents: 8, maxWobbleOct: 10,
   },
   "rubber-drop": {
     id: "rubber-drop", name: "Rubber drop", part: "bass", family: "rubber pluck", feel: "boingy", tags: ["short", "boingy"],
     about: "A triangle that starts high and drops onto its note and dies away fast: a rubbery 'doong'.",
     macros: M(0.35, 0.25, 0.75, 0.15, 0, 0, 0.3, 0.5),
-    base: { wave: "triangle", voices: 1, detuneCents: 0, resonance: 1, filterEnvOct: 1.5, filterDecayS: 0.05, attackS: 0.002, releaseS: 0.03, gainDb: -8, decayS: 0.25, toneDrive: 1 },
-    tone: [60, 3000], maxDropSemis: 9, maxStereoCents: 15, maxWobbleOct: 5,
+    base: { wave: "triangle", voices: 1, detuneCents: 0, resonance: 1, filterEnvOct: 1.5, filterDecayS: 0.05, attackS: 0.002, releaseS: 0.03, gainDb: -8, decayS: 0.25, toneDrive: 1.4, wobbleBipolar: true },
+    tone: [60, 5000], maxDropSemis: 9, maxStereoCents: 15, maxWobbleOct: 8,
   },
   "reese-wide": {
     id: "reese-wide", name: "Wide Reese", part: "bass", family: "Reese", feel: "wide", tags: ["wide", "bright"],
@@ -212,21 +214,21 @@ const NEW_PRESETS: Record<NewId, MakePreset> = {
     tone: [100, 2500], maxDropSemis: 9, maxStereoCents: 15, maxWobbleOct: 5,
   },
   "electric-finger": {
-    id: "electric-finger", name: "Fingered", part: "bass", family: "electric bass (sampled)", feel: "warm", tags: ["electric", "sampled"],
+    id: "electric-finger", name: "Fingered", part: "bass", family: "real electric bass", feel: "warm", tags: ["electric", "real"],
     about: "A real electric bass, played with the fingers: round and warm.",
     macros: M(0.45, 0.4, 0, 0, 0, 0, 0, 0.2),
     base: { wave: "sample", voices: 1, detuneCents: 0, resonance: 0.7, filterEnvOct: 0, filterDecayS: 0.1, attackS: 0.002, releaseS: 0.06, gainDb: -2, samples: EB },
     tone: [80, 9000], maxDropSemis: 9, maxStereoCents: 10, maxWobbleOct: 5,
   },
   "electric-bright": {
-    id: "electric-bright", name: "Picked", part: "bass", family: "electric bass (sampled)", feel: "bright", tags: ["electric", "bright"],
+    id: "electric-bright", name: "Picked", part: "bass", family: "real electric bass", feel: "bright", tags: ["electric", "bright"],
     about: "A real electric bass with its top open and a little drive: a picked, funky edge.",
     macros: M(0.85, 0.35, 0, 0.35, 0, 0, 0, 0),
     base: { wave: "sample", voices: 1, detuneCents: 0, resonance: 1.2, filterEnvOct: 0.8, filterDecayS: 0.05, attackS: 0.001, releaseS: 0.04, gainDb: -3, samples: EB },
     tone: [60, 12000], maxDropSemis: 9, maxStereoCents: 10, maxWobbleOct: 5,
   },
   upright: {
-    id: "upright", name: "Double bass", part: "bass", family: "upright bass (sampled)", feel: "woody", tags: ["upright", "sampled"],
+    id: "upright", name: "Double bass", part: "bass", family: "real upright bass", feel: "woody", tags: ["upright", "real"],
     about: "A real double bass, plucked: woody and deep, for jazzy deep house.",
     macros: M(0.6, 0.55, 0, 0, 0, 0, 0, 0.2),
     base: { wave: "sample", voices: 1, detuneCents: 0, resonance: 0.7, filterEnvOct: 0, filterDecayS: 0.1, attackS: 0.003, releaseS: 0.08, gainDb: -1, samples: CB },
@@ -304,6 +306,7 @@ export function synthParams(preset: MakePresetId, m: Macros): SynthParams {
   // D7-1 (L282): wider Sub, Weight and Drive on the 16 new presets; the Phase 4 four render exactly as before (golden hashes).
   if (!PHASE4_PRESET_IDS.includes(preset)) { extra.subLevel = P7_KNOBS.subLevel; extra.weightLevel = P7_KNOBS.weightLevel; extra.driveMakeup = P7_KNOBS.driveMakeup; }
   if (b.wobbleBipolar) extra.wobbleBipolar = true;
+  else if (!PHASE4_PRESET_IDS.includes(preset)) extra.wobbleToNote = true;
   return {
     ...extra,
     wave: p.base.wave,

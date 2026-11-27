@@ -104,7 +104,12 @@ export function renderBass(notes: MakeNote[], p: SynthParams, o: { bpm: number; 
     if ((i & 15) === 0) {
       let fc = p.cutoffHz * Math.pow(2, p.filterEnvOct * Math.exp(-tn / Math.max(1e-3, p.filterDecayS)));
       // Phase 7 (D7-1): on the new presets the wobble swings both ways round the cutoff, so a dark sound opens up too.
-      if (wobbleHz > 0) fc *= Math.pow(2, p.wobbleOct * 0.5 * (Math.sin(2 * Math.PI * wobbleHz * t) - (p.wobbleBipolar ? 0 : 1)));
+      if (wobbleHz > 0 && p.wobbleToNote) {
+        // D7-10: on the new presets the wobble closes the filter from Tone's cutoff down towards the note
+        // itself (1.5× its pitch), wherever Tone sits, so it always sweeps through the note's harmonics.
+        const lo = Math.min(fc, f0 * 1.5), x = Math.min(1, p.wobbleOct / 5) * 0.5 * (1 - Math.sin(2 * Math.PI * wobbleHz * t));
+        fc *= Math.pow(lo / fc, x);
+      } else if (wobbleHz > 0) fc *= Math.pow(2, p.wobbleOct * 0.5 * (Math.sin(2 * Math.PI * wobbleHz * t) - (p.wobbleBipolar ? 0 : 1)));
       fc = Math.min(rate * 0.45, Math.max(20, fc));
       const g = Math.tan((Math.PI * fc) / rate);
       a1 = 1 / (1 + g * (g + k)); a2 = g * a1; a3 = g * a2;

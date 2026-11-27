@@ -541,3 +541,36 @@
 .shelfCloser[data-gap] { margin-top: 1px; }
 .creditsBox .creditsPop { right: auto; }
 .shelfWhere[data-end] .creditsPop { left: auto; right: 0; }
+
+/* Critic on the built shelf (5/10): families in two columns, each family one row with its label in a
+   fixed column on the left and its sounds to the right, so position carries the grouping. 8 px
+   between a label and its first sound; every line at least 22 px. */
+.groups { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 24px; padding: 4px 8px; flex-wrap: nowrap; }
+.gcolumn { display: grid; grid-template-columns: max-content minmax(0, 1fr); align-content: start; min-width: 0; }
+.grp { display: contents; }
+.grp h3 { font-size: 11px; line-height: 24px; padding: 0 8px 0 0; margin: 0; white-space: nowrap; }
+.gcol { display: flex; flex-wrap: wrap; align-items: center; column-gap: 2px; min-width: 0; }
+.snd { min-height: 24px; padding: 0 6px; align-items: center; }
+.snd b, .snd small { line-height: 20px; }
+@media (max-height: 760px) {
+  .groups { padding: 2px 6px; }
+  .snd { padding: 0 5px; }
+}
+
+/* Height for 24 px sound lines: a slimmer shelf top, and on a short window slimmer drum rows. */
+@media (min-height: 861px) { .shelf { margin-top: 6px; padding-top: 6px; } .synth { gap: 10px; } }
+@media (max-height: 760px) {
+  .drRow { height: 33px; }
+  .drName { height: 31px; }
+  .drTrack, .drPattern { height: 22px; }
+}
+/* Columns sized to their families (a long family keeps one line when the other column is narrow). */
+.groups { grid-template-columns: auto auto; justify-content: space-between; }
+@media (max-height: 760px) {
+  .drRow { height: 29px; }
+  .drName { height: 28px; }
+  .drName span { line-height: 1.15; }
+  .drTrack, .drPattern { height: 20px; }
+}
+/* A short window: each row is one line (its sound is named in the shelf head when open, and in the row's tooltip). */
+@media (max-height: 760px) { .drSound { display: none; } }

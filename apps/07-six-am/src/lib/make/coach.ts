@@ -1,21 +1,11 @@
 // The Mentor's line under Make's knobs (S3, handoff §Make 6, T85): which knobs to move towards the
 // gold ticks ("Suggest settings", local patch matching) and what the original measures that way.
 // Local and free: no model call; the words come from the measured difference only. Pure, tested.
-import { MACRO_IDS, MACRO_SPECS, macroWord, type MacroId, type Macros } from "./presets";
+import { MACRO_IDS, MACRO_SPECS, type MacroId, type Macros } from "./presets";
 
 /** A tick this close to the knob counts as reached. */
 export const TICK_REACHED = 0.08;
 
-const MORE: Record<MacroId, [string, string]> = {
-  tone: ["a darker tone", "a brighter tone"],
-  length: ["shorter notes", "longer notes"],
-  pitchDrop: ["less pitch drop", "more pitch drop"],
-  drive: ["a cleaner sound", "more clipping"],
-  wobble: ["a steadier filter", "more filter movement"],
-  width: ["a narrower sound", "a wider sound"],
-  sub: ["less sub", "more sub"],
-  weight: ["a lighter body", "more body"],
-};
 
 /** The knobs furthest from their ticks (at most `n`), biggest move first. */
 export function movesTo(current: Macros, ticks: Macros, n = 2): { id: MacroId; up: boolean; by: number }[] {
@@ -25,19 +15,21 @@ export function movesTo(current: Macros, ticks: Macros, n = 2): { id: MacroId; u
     .slice(0, n);
 }
 
+/** U7-4: what each move makes the sound, said as the target ("shorter", "more pitch drop"). */
+const TARGET: Record<MacroId, [string, string]> = {
+  tone: ["darker", "brighter"], length: ["shorter", "longer"], pitchDrop: ["less pitch drop", "more pitch drop"],
+  drive: ["cleaner", "dirtier"], wobble: ["steadier", "more wobble"], width: ["narrower", "wider"], sub: ["less sub", "more sub"], weight: ["lighter", "heavier"],
+};
+
 /**
- * "Length down to 1/8, Pitch drop up. The original bass measures shorter notes and more pitch drop." A
- * move names the word it lands on when the word changes ("down to 1/8"), else just the way.
+ * U7-4 (slice 1 user test): the tip says the target, never a knob word that can read backwards
+ * ("Length down to 1/16"): "Make it shorter (Length) and more pitch drop (Pitch drop), like the original bass."
  */
 export function suggestLine(current: Macros, ticks: Macros, partName = "bass"): string {
   const moves = movesTo(current, ticks);
   if (!moves.length) return `You're on the gold ticks. Switch A/B to judge the rest by ear.`;
-  const say = moves.map(({ id, up }) => {
-    const from = macroWord(id, current[id]), to = macroWord(id, ticks[id]);
-    return `${MACRO_SPECS[id].name} ${up ? "up" : "down"}${to !== from ? ` to ${to}` : ""}`;
-  });
-  const traits = moves.map(({ id, up }) => MORE[id][up ? 1 : 0]);
-  return `${say.join(", ")}. The original ${partName} measures ${traits.join(" and ")}.`;
+  const say = moves.map(({ id, up, by }) => `${by < 0.2 ? "a bit " : ""}${TARGET[id][up ? 1 : 0]} (${MACRO_SPECS[id].name})`);
+  return `Make it ${say.join(" and ")}, like the original ${partName}.`;
 }
 
 /** After "Suggest settings" (S3-2): which ticks moved, briefly. */

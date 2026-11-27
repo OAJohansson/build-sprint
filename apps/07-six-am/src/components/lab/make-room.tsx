@@ -26,6 +26,7 @@ import { BASS_FAMILIES, MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, type MacroId, 
 import { hasKitSample } from "@/lib/make/kit-samples";
 import { bassSampleIds, loadSamples, previewBass } from "@/lib/make/kit-load";
 import { SoundCredits } from "./sound-credits";
+import { ShelfGroups } from "./shelf-groups";
 import { ApiError, mentorApi } from "@/lib/mentor/client";
 import { noteName, partNoun, type LabMake } from "@/lib/mentor/lab";
 import type { Scale } from "@/lib/synths/theory";
@@ -471,7 +472,8 @@ function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: 
   if (wait) line = <span className={s.faintLine}>The knobs and B · Mine come alive once the loop is in memory.</span>;
   else if (m.words) line = <>Mine is a loop Stable Audio made from your words and the track&apos;s tempo and key.<br /><span className={s.faintLine}>The knobs work on presets. Pick one to go back.</span></>;
   else if (!m.ticks) line = <>{m.suggesting ? `Measuring the bass against ${MAKE_PRESETS[m.preset].name}…` : "Mentor: press Suggest settings to compare this preset with the bass."}</>;
-  else line = <>Mentor: {suggestLine(m.macros, m.ticks)}{(moves.length > 0 || m.moved) && <><br /><span className={s.faintLine}>{m.moved ?? "Gold ticks mark those."}</span></>}</>;
+  // U7-4 / A/B clearance: one line, the ticks note inline.
+  else line = <>Mentor: {suggestLine(m.macros, m.ticks)}{(moves.length > 0 || m.moved) && <> <span className={s.faintLine}>{m.moved ?? "Gold ticks mark those."}</span></>}</>;
   return (
     <>
       {/* Phase 7: the shelf of 20 starting sounds heads the controls; its name opens Your sounds and words. */}
@@ -581,6 +583,7 @@ const cap1 = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
  */
 function BassShelf({ m, playing, partName }: { m: MakeModel; playing: boolean; partName: string }) {
   const p = MAKE_PRESETS[m.preset];
+  const short = useShort();
   return (
     <section className={s.shelf} aria-label="Bass sounds">
       <div className={s.shelfHead}>
@@ -593,26 +596,12 @@ function BassShelf({ m, playing, partName }: { m: MakeModel; playing: boolean; p
         </div>
         <button className={s.textBtn} aria-expanded={m.shelf} onClick={() => m.setShelf(!m.shelf)}>{m.shelf ? "Hide sounds" : `Show ${MAKE_PRESET_IDS.length} sounds`}</button>
       </div>
-      <p className={s.shelfAbout}>{m.words ? "A loop Stable Audio made from your words; pick a sound below to go back." : p.about}</p>
+      <p className={s.shelfAbout} title={m.words ? undefined : p.about}>{m.words ? "A loop Stable Audio made from your words; pick a sound below to go back." : p.about}</p>
       {m.shelf && (
-        <div className={s.groups} role="group" aria-label="Bass sounds">
-          {BASS_FAMILIES.map((f) => {
-            const xs = MAKE_PRESET_IDS.filter((id) => MAKE_PRESETS[id].family === f);
-            return (
-              <div key={f} className={s.grp}>
-                <h3>{cap1(f)}</h3>
-                <div className={s.gcol}>
-                  {xs.map((id) => (
-                    <button key={id} className={s.snd} aria-pressed={!m.words && m.preset === id} title={MAKE_PRESETS[id].about} onClick={() => m.pick(id, playing)}>
-                      <b>{MAKE_PRESETS[id].name}</b>
-                      <small>{MAKE_PRESETS[id].feel}</small>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <ShelfGroups compact={short === 2} label="Bass sounds" families={BASS_FAMILIES.map((f) => ({
+          label: cap1(f),
+          items: MAKE_PRESET_IDS.filter((id) => MAKE_PRESETS[id].family === f).map((id) => ({ id, name: MAKE_PRESETS[id].name, feel: MAKE_PRESETS[id].feel, about: MAKE_PRESETS[id].about, pressed: !m.words && m.preset === id, onPick: () => m.pick(id, playing) })),
+        }))} />
       )}
     </section>
   );

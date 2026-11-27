@@ -23,6 +23,7 @@ import { drumNoun, isDrumSound, saveAction, soundId, suggestDrumName, suggestDru
 import { ApiError, mentorApi } from "@/lib/mentor/client";
 import { Knob } from "@/components/ui/knob";
 import { SoundCredits } from "./sound-credits";
+import { ShelfGroups } from "./shelf-groups";
 import s from "./lab.module.css";
 
 const loopKeyOf = (l: LoopState | null) => (l?.state === "memory" ? `${Math.round(l.startMs)}-${Math.round(l.endMs)}` : null);
@@ -422,7 +423,7 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
           const rr = m.read?.d.rows[r], lit = r === row, doubtful = !!rr?.doubtful && !m.anyway.includes(r);
           return (
             <div key={r} className={s.drRow} data-lit={lit ? "" : undefined}>
-              <button className={s.drName} aria-pressed={lit} onClick={() => m.setOpen(r)}>
+              <button className={s.drName} aria-pressed={lit} onClick={() => m.setOpen(r)} title={`${shelfRowName(r)}: ${drumSoundName(m.sounds[r].preset)}`}>
                 <span>{shelfRowName(r)}{doubtful && <span className={s.drOff}> off</span>}</span>
                 {/* C2: one short reason under the label, not over the strip; else the row's sound (L278). */}
                 {doubtful && !off && rr?.note ? <small className={s.drWhy}>{shortWhy(rr.note)}</small> : <small className={s.drSound}>{drumSoundName(m.sounds[r].preset)}</small>}
@@ -469,10 +470,10 @@ const famLabel = (f: string) => (f === "909 ride" ? "909 ride (stand-ins)" : f.c
 function Shelf({ m, row, playing, off, rowOff }: { m: DrumsModel; row: DrumRow; playing: boolean; off: boolean; rowOff: boolean }) {
   const short = useShort();
   const snd = m.sounds[row], ticks = m.ticks[row]?.macros, kit = p7SoundById(snd.preset);
-  const kitRow = KIT_ROW_FOR[row], closerTip = m.ticks[row]?.closer ?? null, closer = closerTip?.preset ?? null;
+  const kitRow = KIT_ROW_FOR[row], closerTip = m.ticks[row]?.closer ?? null;
   const score = (d: number) => Math.round(100 * Math.exp(-d / ROW_SCORE_SCALE));
   const mine = m.mySounds.filter((x) => rowOf(x.preset) === row);
-  const knobSize = short === 2 ? 40 : short === 1 ? 54 : 60, tight = short === 2;
+  const knobSize = short === 2 ? 34 : short === 1 ? 54 : 60, tight = short === 2;
   return (
     <section className={s.shelf} aria-label={`${shelfRowName(row)} sounds`}>
       <div className={s.shelfHead}>
@@ -489,7 +490,6 @@ function Shelf({ m, row, playing, off, rowOff }: { m: DrumsModel; row: DrumRow; 
           {closerTip && (
             <span className={s.shelfCloser} data-gap="" title={`About ${score(closerTip.distance)} against ${score(closerTip.own)} for this sound at its best`}>{drumSoundName(closerTip.preset)} is closer · <button className={s.textBtn} onClick={() => m.pick(row, closerTip.preset, playing)}>Try {drumSoundName(closerTip.preset)}</button></span>
           )}
-          {tight && <span className={s.shelfAboutIn}>{drumSoundAbout(snd.preset)}</span>}
         </div>
         <div className={s.drKnobs} data-off={off ? "" : undefined}>
           {knobsOf(snd.preset).map((id) => (
@@ -503,39 +503,15 @@ function Shelf({ m, row, playing, off, rowOff }: { m: DrumsModel; row: DrumRow; 
         </div>
       </div>
       {/* U7-2: the plain line has the shelf's full width, so it is never cut. */}
-      {!tight && <p className={s.shelfAbout}>{drumSoundAbout(snd.preset)}</p>}
+      <p className={s.shelfAbout}>{drumSoundAbout(snd.preset)}</p>
       {m.shelf && (
-        <div className={s.groups} role="group" aria-label={`${shelfRowName(row)} sounds`}>
-          {P7_FAMILIES[kitRow].map((f) => {
-            const xs = p7Sounds(kitRow).filter((x) => x.family === f);
-            return (
-              <div key={f} className={s.grp}>
-                <h3>{famLabel(f)}</h3>
-                <div className={s.gcol}>
-                  {xs.map((x) => (
-                    <button key={x.id} className={s.snd} aria-pressed={snd.preset === x.id} title={x.about} onClick={() => m.pick(row, x.id as DrumSoundId, playing)}>
-                      <b>{x.name}</b>
-                      <small>{x.feel}{closer === x.id && <span className={s.menuCloser}> · closer</span>}</small>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-          {mine.length > 0 && (
-            <div className={s.grp}>
-              <h3>Your sounds</h3>
-              <div className={s.gcol}>
-                {mine.map((x) => (
-                  <button key={x.id} className={s.snd} title={`${x.name}: ${drumSoundName(x.preset)}${isDrumPreset(x.preset) ? " (synth)" : ""}`} onClick={() => m.loadSound(x)}>
-                    <b className={s.sndMine}>{x.name}</b>
-                    <small>{drumSoundName(x.preset)}</small>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+        <ShelfGroups compact={tight} label={`${shelfRowName(row)} sounds`} families={[
+          ...P7_FAMILIES[kitRow].map((f) => ({
+            label: famLabel(f),
+            items: p7Sounds(kitRow).filter((x) => x.family === f).map((x) => ({ id: x.id, name: x.name, feel: x.feel, about: x.about, pressed: snd.preset === x.id, onPick: () => m.pick(row, x.id as DrumSoundId, playing) })),
+          })),
+          ...(mine.length ? [{ label: "Your sounds", items: mine.map((x) => ({ id: x.id, name: x.name, feel: drumSoundName(x.preset), mine: true, about: `${x.name}: ${drumSoundName(x.preset)}${isDrumPreset(x.preset) ? " (synth)" : ""}`, onPick: () => m.loadSound(x) })) }] : []),
+        ]} />
       )}
     </section>
   );

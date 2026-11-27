@@ -900,3 +900,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Slice 2 data-evals re-grade (71aa3f4): W6, W8, W11, W13 pass; D7-11 fixed; W5 recorded fail with the agreed fallback (L287). Slice 2 done apart from a polish round (critic 8/10 leftovers, U7-19, U7-20). Slice 3 starts with a fresh engineer (Studio files; the polish round stays in Make files).
 - Slice 2 polish done (a19debe, T257); the edit-store change (U7-19) gets a W6 and user re-check alongside slice 3's grading.
 - Slice 3 built (81232f1..c09aad7): rebuild route, arrangement grid, hints, fill / leave empty, reserved strip, seed maps and parts, dev hook; 643 tests pass. Logged L291–L293, T258. The Lab's "Rebuild this song" button is wired next (it was in Make-polish files).
+- Rebuild link wired in the Lab top bar (0c2f2ff, T259). Slice 3 graders start (plus the U7-19 edit-store re-check).

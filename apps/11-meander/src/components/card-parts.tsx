@@ -65,9 +65,10 @@ export function ReadingLink({ r }: { r: Reading }) {
  * search in a new tab. The artist view leaves the artist out (`meta={false}`): it is the page's own name. */
 export function ListenLink({ r, artist, meta = true }: { r: Recording; artist?: string; meta?: boolean }) {
   const who = artist ?? r.artist ?? "";
-  const line = [meta && who, r.year, r.kind === "album" && "album", "YouTube search"].filter(Boolean).join(" · ");
+  // A record credited to another act (the artist's group, or a break a DJ made famous) names that act and is searched by it.
+  const line = [meta && who, r.by && `by ${r.by}`, r.year, r.kind === "album" && "album", "YouTube search"].filter(Boolean).join(" · ");
   return (
-    <a className="lsn" href={listenUrl(r, who)} target="_blank" rel="noopener noreferrer">
+    <a className="lsn" href={listenUrl(r, r.by ?? who)} target="_blank" rel="noopener noreferrer">
       <span className="lt">{r.title}{arrow}</span>
       {line && <small className="lm">{line}</small>}
       <span className="sr-only"> (search on YouTube, opens in a new tab)</span>

@@ -1,18 +1,134 @@
 {
-  "disco": [
-    20.9,
-    -176.7
+  "blues": [
+    11,
+    175.6
   ],
-  "house": [
-    80.6,
-    -159.2
+  "jazz": [
+    -22.7,
+    171.3
+  ],
+  "gospel-music": [
+    5.9,
+    -149.2
+  ],
+  "country-music": [
+    40.7,
+    -160.4
+  ],
+  "american-folk-music-revival": [
+    37,
+    152.2
+  ],
+  "rock-and-roll": [
+    2.3,
+    139.1
+  ],
+  "rock-music": [
+    61.1,
+    111.1
+  ],
+  "heavy-metal-music": [
+    1.5,
+    81.5
+  ],
+  "punk-rock": [
+    35.4,
+    72.5
+  ],
+  "alternative-rock": [
+    24.1,
+    111.3
+  ],
+  "rhythm-and-blues": [
+    -31.5,
+    -149.7
+  ],
+  "soul-music": [
+    -18.2,
+    -81.9
+  ],
+  "funk": [
+    -47.1,
+    -106.4
+  ],
+  "disco": [
+    16.2,
+    -96.7
+  ],
+  "contemporary-r-b": [
+    -11.4,
+    -117.7
+  ],
+  "reggae": [
+    -32,
+    94.8
+  ],
+  "dub-music": [
+    -36.9,
+    51.1
+  ],
+  "salsa-music": [
+    -39.7,
+    134.8
+  ],
+  "bossa-nova": [
+    -65.9,
+    87.7
+  ],
+  "afrobeat": [
+    -78.4,
+    -52
+  ],
+  "reggaeton": [
+    -63.5,
+    179.7
+  ],
+  "hip-hop": [
+    -41.5,
+    -48
+  ],
+  "trap-music": [
+    -47.5,
+    3.6
+  ],
+  "synth-pop": [
+    44,
+    -14.9
+  ],
+  "electro-music": [
+    10,
+    -59.4
+  ],
+  "ambient-music": [
+    -11.5,
+    -0.9
+  ],
+  "house-music": [
+    69,
+    -14.9
   ],
   "techno": [
-    43.8,
-    43.6
+    20.8,
+    -33.7
   ],
-  "electro": [
-    34.6,
-    116
+  "trance-music": [
+    -8.1,
+    -31.2
+  ],
+  "drum-and-bass": [
+    8.5,
+    25.4
+  ],
+  "uk-garage": [
+    44.1,
+    -60.9
+  ],
+  "dubstep": [
+    40.7,
+    26.4
+  ],
+  "electronic-dance-music": [
+    16.4,
+    -3
   ]
 }

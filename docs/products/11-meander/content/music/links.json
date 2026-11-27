@@ -1,0 +1,1063 @@
+[
+ {
+  "from": "blues",
+  "to": "jazz",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Jazz",
+    "section": "intro",
+    "quote": "combining earlier brass band marches, French quadrilles, biguine, ragtime and blues"
+   }
+  ]
+ },
+ {
+  "from": "blues",
+  "to": "rhythm-and-blues",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Rhythm_and_blues",
+    "section": "Precursors",
+    "quote": "helped shape rhythm and blues by blending jazz, blues, and urban influences"
+   }
+  ]
+ },
+ {
+  "from": "jazz",
+  "to": "rhythm-and-blues",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Rhythm_and_blues",
+    "section": "Precursors",
+    "quote": "helped shape rhythm and blues by blending jazz, blues, and urban influences"
+   }
+  ]
+ },
+ {
+  "from": "gospel-music",
+  "to": "rhythm-and-blues",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Rhythm_and_blues",
+    "section": "Etymology, definitions and description",
+    "quote": "because of R&B's stronger gospel influences"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Rhythm_and_blues",
+    "section": "Infobox",
+    "quote": "spirituals, gospel, boogie-woogie"
+   }
+  ]
+ },
+ {
+  "from": "rhythm-and-blues",
+  "to": "rock-and-roll",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Rock_and_roll",
+    "section": "Origins",
+    "quote": "The immediate roots of rock and roll lay in the rhythm and blues"
+   }
+  ]
+ },
+ {
+  "from": "blues",
+  "to": "rock-and-roll",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Rock_and_roll",
+    "section": "Origins",
+    "quote": "Country boogie and Chicago electric blues supplied many of the elements"
+   }
+  ]
+ },
+ {
+  "from": "country-music",
+  "to": "rock-and-roll",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Rock_and_roll",
+    "section": "Origins",
+    "quote": "in combination with either boogie-woogie and shouting gospel or with country music"
+   }
+  ]
+ },
+ {
+  "from": "gospel-music",
+  "to": "rock-and-roll",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Rock_and_roll",
+    "section": "Origins",
+    "quote": "in combination with either boogie-woogie and shouting gospel or with country music"
+   }
+  ]
+ },
+ {
+  "from": "gospel-music",
+  "to": "soul-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Soul_music",
+    "section": "intro",
+    "quote": "with its roots in African-American gospel music and rhythm and blues"
+   }
+  ]
+ },
+ {
+  "from": "rhythm-and-blues",
+  "to": "soul-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Soul_music",
+    "section": "intro",
+    "quote": "with its roots in African-American gospel music and rhythm and blues"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Soul_music",
+    "section": "Origins",
+    "quote": "the result of the urbanization and commercialization of rhythm and blues"
+   }
+  ]
+ },
+ {
+  "from": "soul-music",
+  "to": "funk",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Funk",
+    "section": "Vocals and lyrics",
+    "quote": "As funk emerged from soul"
+   }
+  ]
+ },
+ {
+  "from": "rhythm-and-blues",
+  "to": "funk",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Funk",
+    "section": "History",
+    "quote": "funk might be placed in the lineage of rhythm and blues, jazz, and soul"
+   }
+  ]
+ },
+ {
+  "from": "jazz",
+  "to": "funk",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Funk",
+    "section": "History",
+    "quote": "funk might be placed in the lineage of rhythm and blues, jazz, and soul"
+   }
+  ]
+ },
+ {
+  "from": "funk",
+  "to": "disco",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Funk",
+    "section": "1970s",
+    "quote": "Disco music owed a great deal to funk."
+   }
+  ]
+ },
+ {
+  "from": "soul-music",
+  "to": "disco",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Soul_music",
+    "section": "1970s and 1980s",
+    "quote": "are a link between soul and the later disco style"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Disco",
+    "section": "Infobox",
+    "quote": "stylistic origins: Philadelphia soul, funk, psychedelic soul"
+   }
+  ]
+ },
+ {
+  "from": "disco",
+  "to": "house-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/House_music",
+    "section": "Influences and precursors",
+    "quote": "One of the main influences of house was disco"
+   }
+  ]
+ },
+ {
+  "from": "disco",
+  "to": "hip-hop",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Hip-hop",
+    "section": "Breaking",
+    "quote": "Even though disco birthed hip-hop"
+   }
+  ]
+ },
+ {
+  "from": "disco",
+  "to": "hip-hop",
+  "kind": "reacted_against",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Hip-hop",
+    "section": "Breaking",
+    "quote": "much of the genre's early spirit was a rebellion against its parent"
+   }
+  ]
+ },
+ {
+  "from": "funk",
+  "to": "hip-hop",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Hip-hop",
+    "section": "Historical background",
+    "quote": "its primary sources were disco and funk records"
+   }
+  ]
+ },
+ {
+  "from": "dub-music",
+  "to": "hip-hop",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Hip-hop",
+    "section": "Historical background",
+    "quote": "it is the strongest artistic precedent for hip-hop"
+   }
+  ]
+ },
+ {
+  "from": "soul-music",
+  "to": "hip-hop",
+  "kind": "grew_out_of",
+  "strength": "infobox only",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Hip-hop",
+    "section": "Infobox",
+    "quote": "R&B, soul, dub"
+   }
+  ]
+ },
+ {
+  "from": "rock-and-roll",
+  "to": "rock-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Rock_music",
+    "section": "Rock and roll",
+    "quote": "The foundations of rock music are in rock and roll"
+   }
+  ]
+ },
+ {
+  "from": "blues",
+  "to": "rock-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Rock_music",
+    "section": "Characteristics",
+    "quote": "the verse–refrain structure derived from blues and folk music"
+   }
+  ]
+ },
+ {
+  "from": "country-music",
+  "to": "rock-music",
+  "kind": "grew_out_of",
+  "strength": "infobox only",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Rock_music",
+    "section": "Infobox",
+    "quote": "folk, country, rhythm and blues"
+   }
+  ]
+ },
+ {
+  "from": "american-folk-music-revival",
+  "to": "rock-music",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/American_folk_music_revival",
+    "section": "Rock subsumes folk",
+    "quote": "folk-tinged music played with a rock-band line-up"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Rock_music",
+    "section": "Folk rock",
+    "quote": "the scene that had developed out of the American folk music revival"
+   }
+  ]
+ },
+ {
+  "from": "rock-music",
+  "to": "heavy-metal-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Heavy_metal_music",
+    "section": "intro",
+    "quote": "is a genre of rock music that developed in the late 1960s"
+   }
+  ]
+ },
+ {
+  "from": "rock-and-roll",
+  "to": "punk-rock",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Punk_rock",
+    "section": "intro",
+    "quote": "Rooted in 1950s rock and roll and 1960s garage rock"
+   }
+  ]
+ },
+ {
+  "from": "rock-music",
+  "to": "punk-rock",
+  "kind": "reacted_against",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Punk_rock",
+    "section": "intro",
+    "quote": "punk bands rejected the overproduction and corporate nature of mainstream arena rock"
+   }
+  ]
+ },
+ {
+  "from": "punk-rock",
+  "to": "alternative-rock",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Alternative_rock",
+    "section": "Characteristics",
+    "quote": "underground music that has emerged in the wake of punk rock"
+   }
+  ]
+ },
+ {
+  "from": "heavy-metal-music",
+  "to": "alternative-rock",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Heavy_metal_music",
+    "section": "1990s and early 2000s subgenres and fusions",
+    "quote": "credited for making a \"place for heavy metal in alternative rock\""
+   }
+  ]
+ },
+ {
+  "from": "rhythm-and-blues",
+  "to": "reggae",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Reggae",
+    "section": "Precursors",
+    "quote": "developing from this mix of American R&B, and mento"
+   }
+  ]
+ },
+ {
+  "from": "jazz",
+  "to": "reggae",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Reggae",
+    "section": "Precursors",
+    "quote": "as well as American jazz and rhythm and blues"
+   }
+  ]
+ },
+ {
+  "from": "reggae",
+  "to": "dub-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Dub_music",
+    "section": "intro",
+    "quote": "Dub is a musical style that grew out of reggae"
+   }
+  ]
+ },
+ {
+  "from": "reggae",
+  "to": "reggaeton",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Reggaeton",
+    "section": "United States",
+    "quote": "Reggaeton, which evolved from dancehall and reggae"
+   }
+  ]
+ },
+ {
+  "from": "hip-hop",
+  "to": "reggaeton",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Reggaeton",
+    "section": "1980s–2000s: Emergence",
+    "quote": "DJ Playero and DJ Nelson were inspired by hip hop and dancehall"
+   }
+  ]
+ },
+ {
+  "from": "jazz",
+  "to": "bossa-nova",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Bossa_nova",
+    "section": "intro",
+    "quote": "bossa nova was influenced by jazz, both in the harmonies used"
+   }
+  ]
+ },
+ {
+  "from": "jazz",
+  "to": "salsa-music",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Salsa_music",
+    "section": "intro",
+    "quote": "with elements of cha-cha-chá, bolero, rumba, mambo, jazz, R&B"
+   }
+  ]
+ },
+ {
+  "from": "rhythm-and-blues",
+  "to": "salsa-music",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Salsa_music",
+    "section": "intro",
+    "quote": "with elements of cha-cha-chá, bolero, rumba, mambo, jazz, R&B"
+   }
+  ]
+ },
+ {
+  "from": "funk",
+  "to": "afrobeat",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Funk",
+    "section": "1970s",
+    "quote": "it melded with African singing and rhythms to form Afrobeat"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Afrobeat",
+    "section": "intro",
+    "quote": "with American funk, jazz, and soul influences"
+   }
+  ]
+ },
+ {
+  "from": "jazz",
+  "to": "afrobeat",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Afrobeat",
+    "section": "intro",
+    "quote": "with American funk, jazz, and soul influences"
+   }
+  ]
+ },
+ {
+  "from": "soul-music",
+  "to": "afrobeat",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Afrobeat",
+    "section": "intro",
+    "quote": "with American funk, jazz, and soul influences"
+   }
+  ]
+ },
+ {
+  "from": "hip-hop",
+  "to": "trap-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Trap_music",
+    "section": "intro",
+    "quote": "is a subgenre of hip-hop music that originated in the Southern United States"
+   }
+  ]
+ },
+ {
+  "from": "disco",
+  "to": "synth-pop",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Synth-pop",
+    "section": "Characteristics",
+    "quote": "drawing on the critically derided forms such as disco and glam rock"
+   }
+  ]
+ },
+ {
+  "from": "punk-rock",
+  "to": "synth-pop",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Synth-pop",
+    "section": "Characteristics",
+    "quote": "synth-pop in part arose from punk rock"
+   }
+  ]
+ },
+ {
+  "from": "synth-pop",
+  "to": "electro-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+    "section": "History",
+    "quote": "combined with German and Japanese technopop"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+    "section": "Infobox",
+    "quote": "Electronic, synth-pop, funk"
+   }
+  ]
+ },
+ {
+  "from": "funk",
+  "to": "electro-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+    "section": "History",
+    "quote": "Electro eventually emerged as a fusion of different styles, including funk"
+   }
+  ]
+ },
+ {
+  "from": "hip-hop",
+  "to": "electro-music",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+    "section": "Definition and characteristics",
+    "quote": "Although primarily instrumental, early electro utilized rap."
+   }
+  ]
+ },
+ {
+  "from": "electro-music",
+  "to": "techno",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Techno",
+    "section": "United Kingdom",
+    "quote": "came to the music through electro and hip hop"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Techno",
+    "section": "Infobox",
+    "quote": "House, electro, synth-pop"
+   }
+  ]
+ },
+ {
+  "from": "synth-pop",
+  "to": "techno",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Synth-pop",
+    "section": "intro",
+    "quote": "directly influencing subsequent genres (including house music and Detroit techno)"
+   }
+  ]
+ },
+ {
+  "from": "synth-pop",
+  "to": "house-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Synth-pop",
+    "section": "intro",
+    "quote": "directly influencing subsequent genres (including house music and Detroit techno)"
+   }
+  ]
+ },
+ {
+  "from": "electro-music",
+  "to": "house-music",
+  "kind": "grew_out_of",
+  "strength": "infobox only",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/House_music",
+    "section": "Infobox",
+    "quote": "hi-NRG, electro, post-disco"
+   }
+  ]
+ },
+ {
+  "from": "house-music",
+  "to": "techno",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Techno",
+    "section": "intro",
+    "quote": "a style that emerged in 1990 and based on Chicago house"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Techno",
+    "section": "Detroit",
+    "quote": "The Detroit producers were closely connected to the Chicago house scene"
+   }
+  ]
+ },
+ {
+  "from": "disco",
+  "to": "techno",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Techno",
+    "section": "Characteristics",
+    "quote": "the basic disco-type pattern was used as a foundation"
+   }
+  ]
+ },
+ {
+  "from": "techno",
+  "to": "trance-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Trance_music",
+    "section": "intro",
+    "quote": "emerged from the techno and EBM scene in Frankfurt, Germany"
+   }
+  ]
+ },
+ {
+  "from": "house-music",
+  "to": "trance-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Trance_music",
+    "section": "intro",
+    "quote": "incorporates influences from other musical styles such as techno, house"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Trance_music",
+    "section": "Infobox",
+    "quote": "House, techno, acid house"
+   }
+  ]
+ },
+ {
+  "from": "ambient-music",
+  "to": "trance-music",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Trance_music",
+    "section": "intro",
+    "quote": "chill-out, classical music, tech house, ambient and film scores"
+   }
+  ]
+ },
+ {
+  "from": "dub-music",
+  "to": "ambient-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Ambient_music",
+    "section": "intro",
+    "quote": "minimal music, Jamaican dub music and German electronic music"
+   }
+  ]
+ },
+ {
+  "from": "ambient-music",
+  "to": "techno",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Ambient_music",
+    "section": "Ambient techno",
+    "quote": "the use of ambient atmospheres with the rhythmic and melodic elements of techno"
+   }
+  ]
+ },
+ {
+  "from": "ambient-music",
+  "to": "house-music",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Ambient_music",
+    "section": "Ambient house",
+    "quote": "acid house featuring ambient music elements and atmospheres"
+   }
+  ]
+ },
+ {
+  "from": "dub-music",
+  "to": "drum-and-bass",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Dub_music",
+    "section": "intro",
+    "quote": "Dub was a basis for the genres of jungle and drum and bass"
+   }
+  ]
+ },
+ {
+  "from": "reggae",
+  "to": "drum-and-bass",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Jungle_music",
+    "section": "Origins",
+    "quote": "jungle is a raved-up, digitised offshoot of Jamaican reggae"
+   }
+  ]
+ },
+ {
+  "from": "hip-hop",
+  "to": "drum-and-bass",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Drum_and_bass",
+    "section": "intro",
+    "quote": "drum and bass drew on elements of reggae, dub, hip-hop"
+   }
+  ]
+ },
+ {
+  "from": "techno",
+  "to": "drum-and-bass",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Drum_and_bass",
+    "section": "intro",
+    "quote": "has been influenced by hip-hop, house, ambient music, techno, jazz"
+   }
+  ]
+ },
+ {
+  "from": "house-music",
+  "to": "uk-garage",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/UK_garage",
+    "section": "Origins",
+    "quote": "from a blend of New York garage house, jungle"
+   }
+  ]
+ },
+ {
+  "from": "drum-and-bass",
+  "to": "uk-garage",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/UK_garage",
+    "section": "Origins",
+    "quote": "from a blend of New York garage house, jungle"
+   }
+  ]
+ },
+ {
+  "from": "contemporary-r-b",
+  "to": "uk-garage",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/UK_garage",
+    "section": "1998–2001: 2-step garage and UK chart success",
+    "quote": "further funky elements like contemporary R&B-styled vocals"
+   }
+  ]
+ },
+ {
+  "from": "uk-garage",
+  "to": "dubstep",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Dubstep",
+    "section": "Characteristics",
+    "quote": "Dubstep's early roots are in the more experimental releases of UK garage producers"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Electronic_dance_music",
+    "section": "Dubstep",
+    "quote": "The style emerged as an offshoot of UK garage"
+   }
+  ]
+ },
+ {
+  "from": "drum-and-bass",
+  "to": "dubstep",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Dubstep",
+    "section": "Characteristics",
+    "quote": "seeking to incorporate elements of drum and bass into the 2-step garage sound"
+   }
+  ]
+ },
+ {
+  "from": "dub-music",
+  "to": "dubstep",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Dub_music",
+    "section": "intro",
+    "quote": "as well as a major influence on dubstep"
+   }
+  ]
+ },
+ {
+  "from": "dubstep",
+  "to": "electronic-dance-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Dubstep",
+    "section": "2011: Brostep and American developments",
+    "quote": "dubstep gained significant traction in the US market"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Electronic_dance_music",
+    "section": "United States",
+    "quote": "Dubstep producer Skrillex popularized a harsher sound dubbed"
+   }
+  ]
+ },
+ {
+  "from": "house-music",
+  "to": "electronic-dance-music",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Electronic_dance_music",
+    "section": "Terminology",
+    "quote": "possibly somewhere between electro and progressive house"
+   }
+  ]
+ },
+ {
+  "from": "trap-music",
+  "to": "electronic-dance-music",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Electronic_dance_music",
+    "section": "EDM trap music",
+    "quote": "also from the original off-shoot of Southern hip-hop"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Trap_music",
+    "section": "Infobox",
+    "quote": "Country trap, EDM trap"
+   }
+  ]
+ },
+ {
+  "from": "rhythm-and-blues",
+  "to": "contemporary-r-b",
+  "kind": "grew_out_of",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Contemporary_R%26B",
+    "section": "intro",
+    "quote": "combines rhythm and blues with elements of pop, disco, funk, soul, jazz"
+   }
+  ]
+ },
+ {
+  "from": "soul-music",
+  "to": "contemporary-r-b",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Contemporary_R%26B",
+    "section": "intro",
+    "quote": "combines rhythm and blues with elements of pop, disco, funk, soul, jazz"
+   }
+  ]
+ },
+ {
+  "from": "funk",
+  "to": "contemporary-r-b",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Contemporary_R%26B",
+    "section": "intro",
+    "quote": "combines rhythm and blues with elements of pop, disco, funk, soul, jazz"
+   }
+  ]
+ },
+ {
+  "from": "disco",
+  "to": "contemporary-r-b",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Contemporary_R%26B",
+    "section": "intro",
+    "quote": "combines rhythm and blues with elements of pop, disco, funk, soul, jazz"
+   }
+  ]
+ },
+ {
+  "from": "hip-hop",
+  "to": "contemporary-r-b",
+  "kind": "fused_with",
+  "strength": "stated in prose",
+  "sources": [
+   {
+    "url": "https://en.wikipedia.org/wiki/Contemporary_R%26B",
+    "section": "Precursors",
+    "quote": "This combination of R&B style and hip hop rhythms was termed"
+   }
+  ]
+ }
+]

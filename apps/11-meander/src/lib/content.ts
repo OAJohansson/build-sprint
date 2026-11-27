@@ -21,7 +21,7 @@ import { ERAS, MUSIC_ERAS, type Era, type RawSpan } from "./timeline";
 export type Source = { url: string; section?: string; quote?: string };
 
 /** A landmark recording (L48): a click opens a search for it, nothing is hosted or embedded. */
-export type Recording = { artist?: string; title: string; year: number | null; kind: "song" | "album" };
+export type Recording = { artist?: string; by?: string; title: string; year: number | null; kind: "song" | "album" };
 
 export type Theme = {
   name: string;

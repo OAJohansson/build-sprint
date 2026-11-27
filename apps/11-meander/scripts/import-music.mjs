@@ -28,7 +28,7 @@ const SPAN_BY_HAND = {};
 const slug = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\(.*?\)/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const src = (list) => (list ?? []).map((s) => ({ url: s.url, ...(s.section ? { section: s.section } : {}), ...(s.quote ? { quote: s.quote } : {}) }));
 const text = (x) => (typeof x === "string" ? x : x?.text ?? "");
-const recording = (r) => ({ ...(r.artist ? { artist: r.artist } : {}), title: r.title, year: Number(r.year) || null, kind: r.kind === "album" ? "album" : "song" });
+const recording = (r) => ({ ...(r.artist ? { artist: r.artist } : {}), ...(r.by ? { by: r.by } : {}), title: r.title, year: Number(r.year) || null, kind: r.kind === "album" ? "album" : "song" });
 
 const schools = [], thinkers = [], links = [], places = {}, eras = {};
 const ids = new Set(full.map((g) => g.id));
@@ -80,7 +80,10 @@ for (const g of full) {
     sources: src(g.sources), sample,
   });
   places[g.id] = { places: g.place ? [text(g.place)].filter(Boolean) : [], span: dateRange || null };
-  const span = SPAN_BY_HAND[g.id] ?? parseSpan(dateRange);
+  const parsed = SPAN_BY_HAND[g.id] ?? parseSpan(dateRange);
+  // shortcut: the music axis starts in 1900, so a genre that began earlier (blues in the 1860s, jazz and gospel in the
+  // late 19th century) starts at the axis edge; its card keeps the real range. Draw a lead-in if the axis ever starts earlier.
+  const span = parsed && parsed.from < 1900 ? { ...parsed, from: 1900 } : parsed;
   if (span) eras[g.id] = span;
   else warnings.push(`${g.id}: no years in "${dateRange}", so it is left off the timeline (add it to SPAN_BY_HAND)`);
 

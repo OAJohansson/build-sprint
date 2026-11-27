@@ -1,26 +1,200 @@
 {
+  "blues": {
+    "places": [
+      "African-American communities of the Deep South, especially the Mississippi Delta"
+    ],
+    "span": "1860s – today"
+  },
+  "jazz": {
+    "places": [
+      "African-American communities of New Orleans, Louisiana"
+    ],
+    "span": "late 19th century – today"
+  },
+  "gospel-music": {
+    "places": [
+      "Black churches of the Southern United States, then Chicago"
+    ],
+    "span": "late 19th century – today"
+  },
+  "country-music": {
+    "places": [
+      "The American South and the Appalachian Mountains, with Nashville as its radio home"
+    ],
+    "span": "1920s – today"
+  },
+  "american-folk-music-revival": {
+    "places": [
+      "New York City, above all Greenwich Village, plus San Francisco's North Beach and college towns"
+    ],
+    "span": "1940s – late 1960s"
+  },
+  "rock-and-roll": {
+    "places": [
+      "United States: the Black music of the South and northern cities, recorded in places like Memphis and Chicago"
+    ],
+    "span": "late 1940s – mid-1960s"
+  },
+  "rock-music": {
+    "places": [
+      "United States and United Kingdom"
+    ],
+    "span": "late 1950s – today"
+  },
+  "heavy-metal-music": {
+    "places": [
+      "United Kingdom (notably Birmingham) and the United States"
+    ],
+    "span": "late 1960s – today"
+  },
+  "punk-rock": {
+    "places": [
+      "The United States (above all New York's CBGB scene), the United Kingdom (London) and Australia (Brisbane and Sydney)."
+    ],
+    "span": "mid-1970s – today"
+  },
+  "alternative-rock": {
+    "places": [
+      "The United States and the United Kingdom, in college towns and indie scenes such as Athens, Georgia, Minneapolis, Boston, Manchester and Seattle."
+    ],
+    "span": "late 1970s – today"
+  },
+  "rhythm-and-blues": {
+    "places": [
+      "African American communities in the United States: its roots in the Deep South, its markets in cities like Chicago, Detroit, New York and Los Angeles, and a key rhythmic thread from New Orleans."
+    ],
+    "span": "1940s – today"
+  },
+  "soul-music": {
+    "places": [
+      "African-American communities across the United States, with key scenes around labels in Detroit (Motown), Memphis (Stax) and Philadelphia."
+    ],
+    "span": "late 1950s – today"
+  },
+  "funk": {
+    "places": [
+      "African-American communities in the United States, with deep roots in New Orleans rhythm and blues."
+    ],
+    "span": "mid-1960s – today"
+  },
   "disco": {
     "places": [
-      "New York City and Philadelphia, United States"
+      "Urban nightlife in New York City (especially Brooklyn), Philadelphia and Baltimore, in venues popular with African American, Latino American and Italian American crowds."
     ],
-    "span": "Early 1970s – early 1980s"
+    "span": "late 1960s – today"
   },
-  "house": {
+  "contemporary-r-b": {
     "places": [
-      "Chicago, United States"
+      "North America, created by African-American musicians."
     ],
-    "span": "Early 1980s–present"
+    "span": "late 1970s – today"
+  },
+  "reggae": {
+    "places": [
+      "Jamaica, especially Kingston; ska took shape in Jamaican studios in the late 1950s"
+    ],
+    "span": "late 1950s (ska) – today"
+  },
+  "dub-music": {
+    "places": [
+      "Jamaica, in Kingston's studios and sound systems"
+    ],
+    "span": "late 1960s – today"
+  },
+  "salsa-music": {
+    "places": [
+      "New York City, among Cuban, Puerto Rican and Dominican musicians"
+    ],
+    "span": "1960s – today"
+  },
+  "bossa-nova": {
+    "places": [
+      "The South Zone of Rio de Janeiro, Brazil, with the Copacabana clubs of Beco das Garrafas as its cradle"
+    ],
+    "span": "late 1950s – today"
+  },
+  "afrobeat": {
+    "places": [
+      "Lagos, Nigeria, where Fela Kuti's club the Afrika Shrine was its home"
+    ],
+    "span": "late 1960s – today"
+  },
+  "reggaeton": {
+    "places": [
+      "Panama in the late 1980s, then Puerto Rico and Miami from the early 1990s"
+    ],
+    "span": "late 1980s – today"
+  },
+  "hip-hop": {
+    "places": [
+      "The Bronx, New York City, in a multi-ethnic working-class community of African American, Latin American and Caribbean residents."
+    ],
+    "span": "early 1970s – today"
+  },
+  "trap-music": {
+    "places": [
+      "Atlanta, Georgia, and the wider Southern United States"
+    ],
+    "span": "1990s – today"
+  },
+  "synth-pop": {
+    "places": [
+      "Germany, Japan and the United Kingdom; it became a distinct genre in Japan and the UK"
+    ],
+    "span": "late 1970s – today"
+  },
+  "electro-music": {
+    "places": [
+      "New York City (the Bronx), Detroit and Tokyo"
+    ],
+    "span": "early 1980s – today"
+  },
+  "ambient-music": {
+    "places": [
+      "Japan and the United Kingdom, with roots in France and Germany"
+    ],
+    "span": "1960s–70s – today"
+  },
+  "house-music": {
+    "places": [
+      "Chicago, Illinois, then New York, London, Ibiza and the world"
+    ],
+    "span": "early 1980s – today"
   },
   "techno": {
     "places": [
-      "Detroit, United States"
+      "Detroit, Michigan, with a second home in Germany (Frankfurt, then Berlin)"
     ],
-    "span": "Mid-1980s–present"
+    "span": "mid-1980s – today"
   },
-  "electro": {
+  "trance-music": {
     "places": [
-      "New York City and Los Angeles, United States"
+      "Frankfurt, Germany, then across Western Europe"
     ],
-    "span": "Early 1980s–present"
+    "span": "late 1980s – today"
+  },
+  "drum-and-bass": {
+    "places": [
+      "United Kingdom, especially London and Bristol"
+    ],
+    "span": "early 1990s – today"
+  },
+  "uk-garage": {
+    "places": [
+      "London, England, then clubs across the UK"
+    ],
+    "span": "early 1990s – today"
+  },
+  "dubstep": {
+    "places": [
+      "South London (Croydon and Brixton), England"
+    ],
+    "span": "early 2000s – today"
+  },
+  "electronic-dance-music": {
+    "places": [
+      "United States, led by DJs from Europe and North America"
+    ],
+    "span": "late 2000s – today"
   }
 }

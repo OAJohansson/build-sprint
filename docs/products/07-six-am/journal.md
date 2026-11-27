@@ -901,3 +901,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Slice 2 polish done (a19debe, T257); the edit-store change (U7-19) gets a W6 and user re-check alongside slice 3's grading.
 - Slice 3 built (81232f1..c09aad7): rebuild route, arrangement grid, hints, fill / leave empty, reserved strip, seed maps and parts, dev hook; 643 tests pass. Logged L291–L293, T258. The Lab's "Rebuild this song" button is wired next (it was in Make-polish files).
 - Rebuild link wired in the Lab top bar (0c2f2ff, T259). Slice 3 graders start (plus the U7-19 edit-store re-check).
+- Critic on built slice 3: 9/10; copy leftovers wait for the other two graders.

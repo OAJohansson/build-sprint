@@ -39,3 +39,7 @@ Clutter 1 · hierarchy 2 · legibility 1 · feel 1 · copy 1. Gaps: steps ~7 px 
 ## Built slice 2 after fixes (0d5a9d5): 8/10
 
 Clutter 1 · hierarchy 2 · legibility 2 · feel 2 · copy 1. Left: page buttons "76 80" need to read as pages; the three-row empty sentence is cut; rail back with the shelf open (steps 12 / 9 px); header repeats the bars; "Copy bar" line shifts rows; disabled Save gives no reason; Bass at 1280 keeps the tag line and hides knob values.
+
+## Built slice 3 (0c2f2ff): 9/10
+
+Clutter 2 · hierarchy 2 · legibility 2 · feel 2 · copy 1. Left (copy, no design round): one count phrase everywhere ("0 to fill" vs "all filled" over a left-empty slot); say "chords and pads fit here" where pads are offered; "Build one in Make → Melody" as a link; bar ranges on every column that fits them; the "Rebuild this song" entry link easy to miss (next to Listen / Make or outlined button); worst case loses proportions (acceptable).

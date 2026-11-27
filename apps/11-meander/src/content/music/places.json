@@ -1,0 +1,26 @@
+{
+  "disco": {
+    "places": [
+      "New York City and Philadelphia, United States"
+    ],
+    "span": "Early 1970s – early 1980s"
+  },
+  "house": {
+    "places": [
+      "Chicago, United States"
+    ],
+    "span": "Early 1980s–present"
+  },
+  "techno": {
+    "places": [
+      "Detroit, United States"
+    ],
+    "span": "Mid-1980s–present"
+  },
+  "electro": {
+    "places": [
+      "New York City and Los Angeles, United States"
+    ],
+    "span": "Early 1980s–present"
+  }
+}

@@ -4,12 +4,12 @@
 // one row each so nothing overlaps. Hover or focus shows a school's links as quiet bone curves (L31: brass only for
 // the current one); a click opens the school's card, as on the globe.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { links, schools, splitName, traditionOf, whenOf } from "@/lib/content";
-import { makeScale, RAW, timelineRows, yearLabel, type RawSpan } from "@/lib/timeline";
+import { splitName, traditionOf, type School } from "@/lib/content";
+import { makeScale, timelineRows, yearLabel, type RawSpan } from "@/lib/timeline";
 
 // Dev only (break-ui): ?timeline=worst adds a school spanning nearly everything and gives one school a very long name.
 const WORST: Record<string, RawSpan> = { "worst-everything": { from: -600, to: "present" } };
-const worstSchools = () => [
+const worstSchools = (schools: School[]) => [
   ...schools.map((s) => (s.id === "feminist-philosophy" ? { ...s, name: "The Very Long School of Post-Analytic Neo-Pragmatist Phenomenological Hermeneutics (Second Wave)" } : s)),
   { ...schools[0], id: "worst-everything", name: "Perennial Philosophy Across Every Tradition", dates: "c. 600 BCE–present" },
 ];
@@ -20,21 +20,24 @@ const X0 = 70;
 /** The axis ends at the stage's right edge, or before the card when one is open. */
 const X1_FULL = 1370, X1_CARD = 950;
 const TOP = 150, BOTTOM = 800;
-const TICKS = [-500, 1, 500, 1000, 1500, 1800, 1900, 2000];
 const GAP = 12;
 
 type Side = "after" | "before" | "on";
 
 export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolean; tick: number }) {
-  const { focus, states } = nav;
+  const { focus, states, field } = nav;
+  const { links, schools, whenOf, words, spans, eras, ticks: TICKS } = field;
   const x1 = hasCard ? X1_CARD : X1_FULL;
   const [worst, setWorst] = useState(false);
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- read the dev-only flag after hydration
     if (process.env.NODE_ENV !== "production" && new URLSearchParams(location.search).get("timeline") === "worst") setWorst(true);
   }, []);
-  const rows = useMemo(() => (worst ? timelineRows(worstSchools(), undefined, { ...RAW, ...WORST }) : timelineRows(schools)), [worst]);
-  const { scale, bands, end } = useMemo(() => makeScale(X0, x1), [x1]);
+  const rows = useMemo(
+    () => (worst ? timelineRows(worstSchools(schools), undefined, { ...spans, ...WORST }, eras) : timelineRows(schools, undefined, spans, eras)),
+    [worst, schools, spans, eras],
+  );
+  const { scale, bands, end } = useMemo(() => makeScale(X0, x1, undefined, eras), [x1, eras]);
   const rowH = Math.min(30, (BOTTOM - TOP) / Math.max(1, rows.length));
   const y = (i: number) => TOP + rowH * (i + 0.5);
   const geo = useMemo(
@@ -48,7 +51,7 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
   // Each name sits after its bar when it fits, else before it, else on the bar (a span that covers nearly everything).
   const labelRefs = useRef(new Map<string, HTMLSpanElement>());
   const [sides, setSides] = useState<{ key: string; map: Record<string, Side> } | null>(null);
-  const key = `${x1}|${tick}`;
+  const key = `${field.id}|${x1}|${tick}`;
   useLayoutEffect(() => {
     const map: Record<string, Side> = {};
     const right = hasCard ? 995 : 1415;
@@ -68,7 +71,7 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
   const index = useMemo(() => new Map(rows.map((r, i) => [r.item.id, i])), [rows]);
   const curLinks = useMemo(
     () => (cur ? links.filter((l) => (l.from === cur || l.to === cur) && index.has(l.from) && index.has(l.to)) : []),
-    [cur, index],
+    [cur, index, links],
   );
   const lit = new Set(curLinks.flatMap((l) => [l.from, l.to]));
 
@@ -98,7 +101,7 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
 
   return (
     <div className={["timeline", cur && "has-cur"].filter(Boolean).join(" ")} inert={nav.view !== "timeline" || nav.inside}>
-      <h1 className="sr-only">The schools in time, earliest first</h1>
+      <h1 className="sr-only">{words.timelineTitle}</h1>
       <svg className="tl-svg" aria-hidden="true">
         {bands.map((b, i) => (
           <g key={b.name}>
@@ -111,7 +114,7 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
           <line key={t} x1={scale(t)} x2={scale(t)} y1={BOTTOM + 10} y2={BOTTOM + 16} className="axis" />
         ))}
         {curLinks.map((l) => (
-          <path key={`${l.from}-${l.to}`} className={l.type === "built" ? "lk" : l.type === "against" ? "lk against" : "lk mixed"} d={curve(l.from, l.to)} />
+          <path key={`${l.from}-${l.to}`} className={l.type === "built" || l.type === "fused" ? "lk" : l.type === "against" ? "lk against" : "lk mixed"} d={curve(l.from, l.to)} />
         ))}
       </svg>
       <ol className="tl-eras" aria-hidden="true">
@@ -124,7 +127,7 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
           <li key={t} style={{ left: scale(t), top: BOTTOM + 22 }}>{yearLabel(t)}</li>
         ))}
       </ol>
-      <ol className="tl-rows" onKeyDown={onKeyDown} aria-label="Schools, earliest first">
+      <ol className="tl-rows" onKeyDown={onKeyDown} aria-label={words.timelineList}>
         {rows.map((r, i) => {
           const s = r.item, g = geo[i], id = s.id;
           const st = states.get(id);
@@ -138,7 +141,7 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
                 className={cls}
                 style={{ top: y(i) }}
                 data-id={id}
-                aria-label={`${s.name}, ${when}${stateLabel(st) ? `, ${stateLabel(st)}` : ""}`}
+                aria-label={`${s.name}, ${when}${stateLabel(st) ? `, ${stateLabel(st, words.allSeen)}` : ""}`}
                 aria-current={id === focus ? "true" : undefined}
                 onClick={(e) => { e.stopPropagation(); nav.openSchool(id); }}
                 onMouseEnter={() => setHovered(id)}

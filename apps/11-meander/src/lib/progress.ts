@@ -63,15 +63,40 @@ export function threadProgress(p: Progress, schools: { id: string; ideas: string
 }
 
 /** What a reader sees for a state (F1, user test 27 Nov): "explored" overclaimed, so it reads "all ideas seen". */
-export const stateLabel = (st: SchoolState | undefined) => (st === "explored" ? "all ideas seen" : st === "started" ? "started" : "");
+export const stateLabel = (st: SchoolState | undefined, allSeen = "all ideas seen") => (st === "explored" ? allSeen : st === "started" ? "started" : "");
 
 /** "5 of 27 schools begun": a count, not a scorecard (F1). */
-export function begunLine(t: Pick<ThreadProgress, "explored" | "started" | "toGo">): string {
+export function begunLine(t: Pick<ThreadProgress, "explored" | "started" | "toGo">, one = "school", many = "schools"): string {
   const begun = t.explored + t.started, total = begun + t.toGo;
-  return `${begun} of ${total} ${total === 1 ? "school" : "schools"} begun`;
+  return `${begun} of ${total} ${total === 1 ? one : many} begun`;
 }
 
 /** The quiet second line: "2 with all ideas seen · 3 started"; empty when nothing is begun. */
-export function detailLine(t: Pick<ThreadProgress, "explored" | "started">): string {
-  return [t.explored && `${t.explored} with all ideas seen`, t.started && `${t.started} started`].filter(Boolean).join(" · ");
+export function detailLine(t: Pick<ThreadProgress, "explored" | "started">, allSeen = "all ideas seen"): string {
+  return [t.explored && `${t.explored} with ${allSeen}`, t.started && `${t.started} started`].filter(Boolean).join(" · ");
+}
+
+// ---------- progress per field (phase 4) ----------
+
+/** Where a field's history and progress live. Philosophy keeps the keys it had before music existed, so the owner's
+ * real progress carries over untouched; every other field gets its own pair. */
+export function storageKeys(field: string): { visits: string; progress: string } {
+  if (field === "philosophy") return { visits: "11-meander:visits", progress: "11-meander:progress" };
+  return { visits: `11-meander:${field}:visits`, progress: `11-meander:${field}:progress` };
+}
+
+/** One field's progress from what is stored under its keys: visits to schools or thinkers the field doesn't have (ids
+ * change on a re-import, or a value written by mistake) don't count, and only the field's own schools keep progress.
+ * Schools opened before progress existed count as started (withHistory). */
+export function forField(
+  stored: { visits: unknown; progress: unknown },
+  has: { school: (id: string) => boolean; thinker: (id: string) => boolean },
+): { visits: Visit[]; progress: Progress } {
+  const visits = (Array.isArray(stored.visits) ? (stored.visits as Visit[]) : []).filter((v) =>
+    v && (v.kind === "school" ? has.school(v.id) : v.kind === "thinker" ? has.thinker(v.id) : false),
+  );
+  const p = stored.progress && typeof stored.progress === "object" && !Array.isArray(stored.progress) ? (stored.progress as Progress) : {};
+  const own: Progress = {};
+  for (const [id, e] of Object.entries(p)) if (has.school(id) && e && typeof e.at === "string") own[id] = { at: e.at, ideas: Array.isArray(e.ideas) ? e.ideas : [] };
+  return { visits, progress: withHistory(own, visits) };
 }

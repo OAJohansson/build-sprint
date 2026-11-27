@@ -457,6 +457,39 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 .fx2 .rd dt { white-space: nowrap; }
 .phone .rdl { display: inline-block; padding: 10px 0; margin: -10px 0; font-size: 16px; }
 .phone .rdlist dt { font-size: 14px; padding-top: 3px; }
+/* ---------- the field switch (phase 4): "Philosophy · Music", the same quiet text buttons as the views */
+.fields { display: flex; align-items: center; }
+.fields .fi { display: flex; align-items: center; }
+.dotsep { color: var(--faint); font-size: 14px; margin: 0 1px; user-select: none; }
+.phone header .fields { margin-right: -10px; }
+.phone header .fields .mi { margin: 0; padding: 0 10px; min-height: 44px; }
+
+/* ---------- Listen (L48): landmark recordings, each opening a search in a new tab; music only */
+.listen { margin-bottom: 18px; }
+.lsl li + li { margin-top: 10px; }
+.lsn { display: inline-block; border-radius: 4px; }
+.lsn .lt { font-size: 15px; line-height: 1.35; color: var(--bone); text-decoration: underline; text-decoration-color: rgba(233, 226, 212, 0.3); text-decoration-thickness: 1px; text-underline-offset: 4px; transition: text-decoration-color 160ms ease; }
+.lsn .ext { display: inline-block; margin-left: 5px; color: var(--brass); vertical-align: 0; }
+.lsn .lm { display: block; font-size: 13px; line-height: 1.35; color: var(--quiet); margin-top: 2px; }
+.lsn:active { opacity: 0.8; }
+.lsn:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+.card .listen + .enter-card { border-top: 1px solid var(--faint); padding-top: 14px; margin-top: 0; border-radius: 0 0 12px 12px; }
+.alsn { display: flex; align-items: baseline; gap: 12px; margin: -6px 0 20px; }
+.alsn .lm { display: inline; margin-left: 8px; }
+.alsn .lk { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brass); opacity: 0.8; }
+.fx2 .lsn .lt { font-size: 14.5px; }
+.fx2 .lsn .lm { font-size: 12.5px; }
+.phone .listen { margin: 0; }
+.phone .lsl li + li { margin-top: 4px; }
+.phone .lsn { display: block; padding: 8px 0; min-height: 44px; }
+.phone .lsn .lt { font-size: 16px; }
+.phone .fx2 .lsn { display: inline-block; min-height: 0; padding: 10px 0; margin: -10px 0; }
+.phone .alsn { margin: -4px 0 18px; }
+.phone .alsn .lsn { padding: 10px 0; margin: -10px 0; }
+@media (hover: hover) and (pointer: fine) {
+  .lsn:hover .lt { text-decoration-color: var(--bone); }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .mi:hover { color: var(--bone); }
   .nextl button:hover b, .prog button:hover .nm { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: rgba(233, 226, 212, 0.5); }

@@ -1,13 +1,13 @@
 // Copies the sourced places and spans into the app (L32's When / Where lines). Re-runnable.
 //   pnpm -F 11-meander places
 // Reads  docs/products/11-meander/content/places.json  ({ "<school-id>": { places: [..], span: "1843–1949" | null, sources: [..] } })
-// Writes src/content/places.json with only what the app shows ({ places, span }). With no source file it writes {},
+// Writes src/content/philosophy/places.json with only what the app shows ({ places, span }). With no source file it writes {},
 // and the first page shows When from the school's dates and no Where line.
-// Also writes src/content/eras.json: numeric years per school for the timeline (#41), from the hand-read table below.
+// Also writes src/content/philosophy/eras.json: numeric years per school for the timeline (#41), from the hand-read table below.
 import fs from "node:fs";
 
 const SRC = new URL("../../../docs/products/11-meander/content/places.json", import.meta.url);
-const OUT = new URL("../src/content/places.json", import.meta.url);
+const OUT = new URL("../src/content/philosophy/places.json", import.meta.url);
 // shortcut: these years are read by hand from each school's sourced `span` (places.json), not sourced separately; replace them with sourced start and end years if the timeline needs to be exact.
 // from / to are years, BCE negative. to: "present" is resolved to the current year in the app. roots: an earlier lead-in
 // the span names ("roots in the 1840s"), drawn faint. open: the span gives no end ("from 335 BCE", "and later"), so the
@@ -43,7 +43,7 @@ const ERAS = {
   confucianism: { from: -600, to: -200, living: true }, // 6th–3rd century BCE (classical period); still influential today
   daoism: { from: -500, to: -200, living: true }, //   5th–3rd century BCE; Neo-Daoism from the 3rd century CE; living today as a religion
 };
-const ERAS_OUT = new URL("../src/content/eras.json", import.meta.url);
+const ERAS_OUT = new URL("../src/content/philosophy/eras.json", import.meta.url);
 {
   const out = {}, bad = [];
   for (const [id, e] of Object.entries(ERAS)) {
@@ -56,7 +56,7 @@ const ERAS_OUT = new URL("../src/content/eras.json", import.meta.url);
   console.log(`import-places: ${Object.keys(out).length} school spans for the timeline`);
 }
 
-const schools = new Set(JSON.parse(fs.readFileSync(new URL("../src/content/schools.json", import.meta.url), "utf8")).schools.map((s) => s.id));
+const schools = new Set(JSON.parse(fs.readFileSync(new URL("../src/content/philosophy/schools.json", import.meta.url), "utf8")).schools.map((s) => s.id));
 
 if (!fs.existsSync(SRC)) {
   fs.writeFileSync(OUT, "{}\n");

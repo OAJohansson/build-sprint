@@ -1,11 +1,14 @@
 // Finds a fixed place on a unit sphere for every school, so linked schools sit close together and all
 // schools spread evenly (lifted from the design's _src/embed.mjs). Re-run after adding a school or a link:
-//   pnpm -F 11-meander positions
-// Reads src/content/schools.json and links.json, writes src/content/positions.json ([latitude, longitude]).
+//   pnpm -F 11-meander positions            (philosophy)
+//   pnpm -F 11-meander positions music      (or FIELD=music)
+// Reads src/content/<field>/schools.json and links.json, writes src/content/<field>/positions.json ([latitude, longitude]).
 // Deterministic: the same schools and links in the same order always give the same positions.
 import fs from "node:fs";
 
-const dir = new URL("../src/content/", import.meta.url);
+const FIELD = process.argv[2] ?? process.env.FIELD ?? "philosophy";
+if (!/^[a-z-]+$/.test(FIELD)) throw new Error(`positions: bad field "${FIELD}"`);
+const dir = new URL(`../src/content/${FIELD}/`, import.meta.url);
 const read = (f) => JSON.parse(fs.readFileSync(new URL(f, dir), "utf8"));
 const schools = read("schools.json").schools;
 const links = read("links.json").links;
@@ -29,7 +32,9 @@ const L = links.map((l) => {
 // 27 Nov (#42, four Eastern schools added): 27 schools don't fit at 44°, so MINSEP is 42; with ANCHOR 1 and
 // COHESION 50 the 23 kept schools moved 18° on average and every focus re-checked clean (0 past the rim, 0 overlaps,
 // 0 over dots, 0 threads through the title), and each Eastern school's nearest neighbour is another Eastern one.
-const TARGET = Number(process.env.TARGET ?? 65), MINSEP = Number(process.env.MINSEP ?? 42);
+// Music (phase 4): its own defaults, so tuning it never touches philosophy's.
+const DEFAULTS = { philosophy: { target: 65, minsep: 42, cohesion: 50 }, music: { target: 60, minsep: 38, cohesion: 55 } }[FIELD] ?? { target: 65, minsep: 42, cohesion: 50 };
+const TARGET = Number(process.env.TARGET ?? DEFAULTS.target), MINSEP = Number(process.env.MINSEP ?? DEFAULTS.minsep);
 let energy = function (P) {
   let e = 0;
   for (const [a, b] of L) { const d = ang(P[a], P[b]); e += Math.max(0, d - TARGET) ** 2 * 2.5; }
@@ -49,13 +54,14 @@ const free = ids.map((_, i) => i);
 const ANCHOR = Number(process.env.ANCHOR ?? 1);
 // Nothing new to place: keep the checked layout as it is (a content re-import must not move the globe).
 if (!process.env.FRESH && fixed.every(Boolean)) {
-  console.log(`positions.json: all ${ids.length} schools already placed; unchanged (FRESH=1 to re-embed)`);
+  console.log(`${FIELD}/positions.json: all ${ids.length} placed; unchanged (FRESH=1 to re-embed)`);
   process.exit(0);
 }
 // A tradition other than the default (the Eastern schools, #42) reads as its own region: its schools are pulled
-// within COHESION degrees of each other, on top of the link and spacing terms.
-const tradition = schools.map((s) => s.tradition ?? null);
-const COHESION = Number(process.env.COHESION ?? 50);
+// within COHESION degrees of each other, on top of the link and spacing terms. Music clusters every genre by its
+// `family` (roots, rock, soul, caribbean-latin-african, hiphop, electronic) the same way.
+const tradition = schools.map((s) => s.family ?? s.tradition ?? null);
+const COHESION = Number(process.env.COHESION ?? DEFAULTS.cohesion);
 const baseEnergy = energy;
 energy = (P) => {
   let e = baseEnergy(P);
@@ -90,4 +96,4 @@ ids.forEach((id, i) => {
 fs.writeFileSync(new URL("positions.json", dir), JSON.stringify(out, null, 2) + "\n");
 const longest = Math.max(...L.map(([a, b]) => ang(best[a], best[b])));
 const closest = Math.min(...best.flatMap((p, i) => best.slice(i + 1).map((q) => ang(p, q))));
-console.log(`positions.json: ${ids.length} schools, ${L.length} links, longest link ${longest.toFixed(1)}°, closest pair ${closest.toFixed(1)}°`);
+console.log(`${FIELD}/positions.json: ${ids.length} schools, ${L.length} links, longest link ${longest.toFixed(1)}°, closest pair ${closest.toFixed(1)}°`);

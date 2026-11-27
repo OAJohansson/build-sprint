@@ -1,0 +1,622 @@
+{
+ "batch": "r2",
+ "scope": "Round 2 re-grade of full-r2.json (33 genres): (1) every id in grade-1..4 re-read fresh; (2) every artist recording; (3) every study prompt, script-checked against its own card; (4) new reggaeton artist El General in full. Description/debatable are graded against the genre-level sources list, as in round 1.",
+ "counts": {
+  "claims": 434,
+  "supported": 418,
+  "drift": 9,
+  "unsupported": 7,
+  "wrong": 0,
+  "newcomer": 3,
+  "fairness": 0,
+  "other_flags": {
+   "human-check-2026": 5,
+   "year-missing": 6,
+   "corpus-date-conflict": 3,
+   "recording-not-own": 1,
+   "credit-format": 2,
+   "composition-not-named-recording": 3,
+   "co-credit": 1,
+   "removed": 1
+  }
+ },
+ "items": [
+  {
+   "id": "jazz.artist.Miles Davis.c2",
+   "claim": "Kind of Blue (1959), planned around Bill Evans's piano style by two players who knew George Russell's ideas about modes",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Miles Davis 1957–1963",
+   "note": "The round-1 fix reads as if Davis and Evans did the planning. The section says only, passively, that 'the music had been planned around Evans's piano style' and, separately, that both knew Russell's modal ideas.",
+   "fix": {
+    "text": "Kind of Blue (1959), whose music was planned around Bill Evans's piano style, is what some consider his greatest album; both Davis and Evans knew George Russell's ideas about modal jazz.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Miles_Davis",
+      "section": "1957–1963: Collaborations with Gil Evans and Kind of Blue"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.debatable",
+   "claim": "one writer calls it 'a construct' for many related musics, and Duke Ellington called his own work American Music rather than jazz",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "Jazz Infobox; intro; Improvisation (genre sources)",
+   "note": "Now accurate to the corpus, but neither fact is in a cited section: Gabbard's 'jazz is a construct' is in Jazz 'Etymology and definition'; Ellington's 'American Music, rather than jazz' is in 'The influence of Duke Ellington'. Improvisation only says jazz is 'considered difficult to define'. Text can stay; add the two sources.",
+   "fix": {
+    "text": "Jazz is famously hard to define: one writer calls it 'a construct' for many related musics, and Duke Ellington called his own work American Music rather than jazz.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Jazz",
+      "section": "Etymology and definition"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Jazz",
+      "section": "The influence of Duke Ellington"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Jazz",
+      "section": "Improvisation"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.debatable",
+   "claim": "Thomas Dorsey is often credited with creating it, though he more accurately spread a movement",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "Gospel music Infobox; intro; Gospel goes to mainstream (genre sources)",
+   "note": "17th century, 1874 and 1930 are now supported. The Dorsey clause is still uncited: it comes from Thomas A. Dorsey intro ('often credited with creating it, Dorsey more accurately spawned a movement that popularized gospel blues'), which the card's sources don't include.",
+   "fix": {
+    "text": "There is no clean founding date: its roots are traced to the early 17th century, the term 'gospel song' first appeared in print in 1874, and 1930 is said to be the year traditional Black gospel began; Thomas Dorsey is often credited with creating it, though he more accurately started a movement that popularised gospel blues.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Gospel_music",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Gospel_music",
+      "section": "Gospel goes to mainstream"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Thomas_A._Dorsey",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "country-music.debatable",
+   "claim": "it is now largely linked with white Americans, which has been put down to record labels segregating the music industry from the 1920s",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "Country music Infobox; intro; Origins (genre sources)",
+   "note": "Wording now matches the corpus but the only source is 'Race in modern country music' ('attributed to the efforts to segregate the music industry by record labels, beginning in the 1920s'), which is not among the card's sources. Add it.",
+   "fix": {
+    "text": "Its roots are both African and European, yet it is now largely linked with white Americans, which has been put down to record labels segregating the music industry from the 1920s.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Country_music",
+      "section": "Race in modern country music"
+     }
+    ]
+   }
+  },
+  {
+   "id": "country-music.artist.Dolly Parton.dates",
+   "claim": "1946–2026",
+   "verdict": "supported",
+   "flags": [
+    "human-check-2026"
+   ],
+   "cited": "Dolly Parton intro; Infobox",
+   "note": "Corpus gives death 25 August 2026. Supported by the corpus; still needs a live-source check before publish (after the grader's knowledge).",
+   "fix": null
+  },
+  {
+   "id": "american-folk-music-revival.artist.Pete Seeger.summary",
+   "claim": "Pete Seeger was a New York singer, banjo player and activist",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "Folk revival Major figures; Pete Seeger intro",
+   "note": "Banjo is now supported (Major figures: How to Play the Five-String Banjo). 'New York' is not in either cited section; it is only in Pete Seeger Infobox (birth place New York City), which isn't cited. Add the Infobox source.",
+   "fix": {
+    "text": "Pete Seeger was a New York-born singer, banjo player and activist, a fixture of 1940s radio and a member of The Weavers, who became a leading protest singer in the 1960s.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Pete_Seeger",
+      "section": "Infobox"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Pete_Seeger",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/American_folk_music_revival",
+      "section": "Major figures"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-music.debatable",
+   "claim": "some dictionaries treat the terms as the same",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "Rock music Infobox; intro; Characteristics (genre sources)",
+   "note": "The blanket-term half is in Characteristics. The dictionaries half is still only in Rock and roll 'Etymology' ('defined as such in some dictionaries'), which the card doesn't cite. Text fine; add the source.",
+   "fix": {
+    "text": "Where rock and roll ends and rock begins is blurry: some dictionaries treat the terms as the same, and in recent years 'rock' has even been used as a blanket term for pop, soul and hip-hop.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Rock_and_roll",
+      "section": "Etymology"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Rock_music",
+      "section": "Characteristics"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-music.listen_for3",
+   "claim": "though blues rock and psychedelic bands often stretched them into long improvised jams",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Rock music intro; Blues rock",
+   "note": "Blues rock section: 'Blues rock bands often emulated jazz, playing long, involved improvisations'. It says nothing of psychedelic bands doing so (only that Cream and Hendrix moved into psychedelia). Drop 'psychedelic'.",
+   "fix": {
+    "text": "Mostly verse-chorus songs, though blues rock bands often stretched them into long, jazz-like improvisations.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Rock_music",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Rock_music",
+      "section": "Blues rock"
+     }
+    ]
+   }
+  },
+  {
+   "id": "punk-rock.debatable",
+   "claim": "it grew up in several places at once ... Brisbane, where the Saints' Ed Kuepper said they'd been doing this sort of thing for years before hearing the Ramones",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "Punk rock Infobox; intro; Outlook; Musical and lyrical elements; New York City; United Kingdom (genre sources)",
+   "note": "The garage-band naming and the four scenes are in the intro. The Kuepper recollection is accurate but only in Punk rock 'Australia', which the card doesn't cite.",
+   "fix": {
+    "text": "The name came before the sound, since critics first used 'punk rock' for 1960s garage bands; and it grew up in several places at once: New York, Ohio, London and Brisbane, where the Saints' Ed Kuepper said they'd been doing this sort of thing for years before hearing the Ramones.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Punk_rock",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Punk_rock",
+      "section": "Australia"
+     }
+    ]
+   }
+  },
+  {
+   "id": "punk-rock.hallmark5",
+   "claim": "The male American punk look ... harked back to 1950s greasers, later with ripped jeans and Doc Martens",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Punk rock Visual and other elements",
+   "note": "Minor: the section says 'in addition to the T-shirt and leather jackets they wore ripped jeans and boots, typically Doc Martens'. It doesn't say these came later.",
+   "fix": {
+    "text": "A look to shock: The male American punk look of T-shirt, motorcycle jacket and jeans harked back to 1950s greasers, worn with ripped jeans and boots, typically Doc Martens. Women in punk tore up rock's old female roles, from Siouxsie Sioux's bondage gear to Patti Smith's androgyny.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Punk_rock",
+      "section": "Visual and other elements"
+     }
+    ]
+   }
+  },
+  {
+   "id": "soul-music.debatable",
+   "claim": "AllMusic's Bruce Eder called Sam Cooke 'the inventor of soul music'",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "Soul music Infobox; intro; Origins; 1960s (genre sources)",
+   "note": "Ray Charles (Origins) and Guralnick (1960s) are supported. The Eder quote is still only in Sam Cooke 'Legacy', which the card doesn't cite.",
+   "fix": {
+    "text": "Who started soul is argued over: Ray Charles is often cited as popularising it, AllMusic's Bruce Eder called Sam Cooke 'the inventor of soul music', and Peter Guralnick dates its start to Solomon Burke's 1961 'Just Out of Reach'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Soul_music",
+      "section": "Origins"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Soul_music",
+      "section": "1960s"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Sam_Cooke",
+      "section": "Legacy"
+     }
+    ]
+   }
+  },
+  {
+   "id": "disco.debatable",
+   "claim": "stayed popular in Italy and much of Europe through the 1980s",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Disco intro",
+   "note": "The 'every decade' stretch is fixed, but the intro says disco 'remained popular in Italy and some European countries throughout the 1980s'. 'Much of Europe' is stronger than 'some European countries'.",
+   "fix": {
+    "text": "Whether disco 'died' is debatable: it fell sharply in the US after Disco Demolition Night in July 1979, but stayed popular in Italy and some other European countries through the 1980s and has had several revivals since the 1990s.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Disco",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "disco.artist.Larry Levan.recording",
+   "claim": "Don't Make Me Wait, by Peech Boys, year null",
+   "verdict": "supported",
+   "flags": [
+    "year-missing"
+   ],
+   "cited": "Larry Levan Musical career",
+   "note": "Now credited to the Peech Boys, which Levan formed, was part of and produced, so the credit is fair. No release year anywhere in the corpus, so the card and prompt carry no year; check the study prompt reads well without one.",
+   "fix": null
+  },
+  {
+   "id": "hip-hop.artist.DJ Kool Herc.recording",
+   "claim": "Apache, by Incredible Bongo Band, year null",
+   "verdict": "supported",
+   "flags": [
+    "year-missing"
+   ],
+   "cited": "DJ Kool Herc Influence on artists",
+   "note": "Now credited to The Incredible Bongo Band, so the listener finds the right record. The corpus gives only 1975 as when Herc began using its break, not a release year, so year stays empty (correctly not invented).",
+   "fix": null
+  },
+  {
+   "id": "salsa-music.artist.Willie Colón.dates",
+   "claim": "1950–2026",
+   "verdict": "supported",
+   "flags": [
+    "human-check-2026"
+   ],
+   "cited": "Willie Colón intro",
+   "note": "Corpus: 'April 28, 1950 – February 21, 2026'. Supported by the corpus; a 2026 death needs a live-source check before publish.",
+   "fix": null
+  },
+  {
+   "id": "salsa-music.artist.Johnny Pacheco.recording",
+   "claim": "Pacheco y su Charanga, year null",
+   "verdict": "supported",
+   "flags": [
+    "year-missing"
+   ],
+   "cited": "Johnny Pacheco Pacheco Y Su Charanga",
+   "note": "Now his own debut album, named with its 100,000 sales. The corpus says the band formed in 1960 but gives no album year, so null is right; a year would need a source.",
+   "fix": null
+  },
+  {
+   "id": "bossa-nova.artist.Antônio Carlos Jobim.recording",
+   "claim": "Águas de Março, by Elis Regina and Tom Jobim, year null",
+   "verdict": "supported",
+   "flags": [
+    "year-missing"
+   ],
+   "cited": "Antônio Carlos Jobim Collaboration with Elis Regina c. 1974–1982",
+   "note": "Supported: the section names 'Aguas de março' as the work that shows Regina and Jobim's duet. No year for that recording (Career dates the song itself 1972; the pair met in 1974), so null is correct. Optional: cite Career and say the song dates from 1972.",
+   "fix": null
+  },
+  {
+   "id": "house-music.description",
+   "claim": "DJs ... began reworking disco records, adding drum machines, to give them a more mechanical beat. From there it spread to New York, London and Ibiza",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "House music intro; Characteristics; Influences and precursors; 1980s; UK (genre sources)",
+   "note": "'Harder' is gone (fixed). Two small issues remain: (1) the drum-machine part is hedged in the source ('The constant bass drum in house music may have arisen from DJs experimenting with adding drum machines'), but the card states it as fact; (2) Ibiza is only in House music 'Ibiza' and Infobox, neither cited.",
+   "fix": {
+    "text": "House is electronic dance music built on a steady kick drum on every beat, usually at about 120–130 beats per minute. It grew in Chicago in the early-to-mid 1980s, when DJs from the city's queer Black underground clubs began reworking disco records to give them a more mechanical beat; the steady kick may have come from DJs adding drum machines under the records they played. From there it spread to New York, London and Ibiza and became a worldwide sound.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/House_music",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/House_music",
+      "section": "Influences and precursors"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/House_music",
+      "section": "Ibiza"
+     }
+    ]
+   }
+  },
+  {
+   "id": "techno.artist.Juan Atkins.dates+summary",
+   "claim": "1962–2026 ... He died in Mexico City in October 2026",
+   "verdict": "supported",
+   "flags": [
+    "human-check-2026"
+   ],
+   "cited": "Juan Atkins intro; Death and legacy",
+   "note": "Corpus gives death 31 October 2026, under a month before this grade. Supported by the corpus; check against a live source before publish.",
+   "fix": null
+  },
+  {
+   "id": "techno.rec3",
+   "claim": "Derrick May, Strings of Life, 1987",
+   "verdict": "supported",
+   "flags": [
+    "corpus-date-conflict"
+   ],
+   "cited": "Techno Detroit",
+   "note": "Techno Detroit says 1987 (and that it helped win London over in 1987). Derrick May Career puts it 'a year later' than Nude Photo (1987), i.e. 1988. Card follows the cited section; leave for a human.",
+   "fix": null
+  },
+  {
+   "id": "electro-music.artist.Afrika Bambaataa.dates+summary",
+   "claim": "1957–2026 ... some have argued that his impact will be overshadowed by them",
+   "verdict": "supported",
+   "flags": [
+    "human-check-2026"
+   ],
+   "cited": "Afrika Bambaataa intro; Legacy",
+   "note": "Allegation wording now matches the source ('others have argued that it will eventually be overshadowed'), so the fairness flag is cleared. Death (9 April 2026) is in the corpus; still check against a live source before publish.",
+   "fix": null
+  },
+  {
+   "id": "ambient-music.artist.Erik Satie.recording",
+   "claim": "Gymnopédies (1888), kind: song",
+   "verdict": "supported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": "Erik Satie Music",
+   "note": "Title and year supported. 'kind: song' is still wrong for a set of three piano pieces; the schema only has song/album, so the UI label will mislead a beginner unless it shows 'piece'. c2 now glosses it, which helps.",
+   "fix": null
+  },
+  {
+   "id": "ambient-music.rec1",
+   "claim": "Brian Eno, Ambient 1: Music for Airports, 1978",
+   "verdict": "supported",
+   "flags": [
+    "corpus-date-conflict"
+   ],
+   "cited": "Ambient music intro",
+   "note": "Ambient intro says 1978; Brian Eno 'Music for Airports' says released February 1979. Card follows the cited section; a human should pick one.",
+   "fix": null
+  },
+  {
+   "id": "trance-music.rec3",
+   "claim": "Robert Miles, Children, 1995",
+   "verdict": "supported",
+   "flags": [
+    "corpus-date-conflict"
+   ],
+   "cited": "Robert Miles intro; Breakthrough; Trance music Subgenres",
+   "note": "Now 1995, matching Robert Miles intro ('1995 composition'). Trance Subgenres, also cited, still says 'composed Children in 1996', and Breakthrough says written in 1994. Drop the Subgenres citation or leave for a human.",
+   "fix": null
+  },
+  {
+   "id": "dubstep.artist.Digital Mystikz.dates",
+   "claim": "active from 2004; DMZ night from 2005",
+   "verdict": "supported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": "Digital Mystikz intro; DMZ",
+   "note": "DMZ 'starting in March 2005' is in DMZ; 2004 is only implied by John Peel's 2004 top-50 list. The field still holds a phrase where every other artist has a date range, so it reads oddly; '2004–today' (or 'from 2004') would match the others.",
+   "fix": null
+  },
+  {
+   "id": "dubstep.artist.Digital Mystikz.recording",
+   "claim": "Anti War Dub, year null",
+   "verdict": "supported",
+   "flags": [
+    "year-missing"
+   ],
+   "cited": "Digital Mystikz intro",
+   "note": "Title supported ('Their song \"Anti War Dub\" appeared in the 2006 film Children of Men'). No release year in the corpus, so null is right; don't backfill 2006 (that's the film).",
+   "fix": null
+  },
+  {
+   "id": "dubstep.artist.Mary Anne Hobbs.recording",
+   "claim": "Warrior Dubz (2006), album",
+   "verdict": "supported",
+   "flags": [
+    "recording-not-own"
+   ],
+   "cited": "Mary Anne Hobbs Discography",
+   "note": "Supported, and a curated compilation is a fair pick for a DJ, but it is other producers' tracks; the study prompt should call it a compilation she put together.",
+   "fix": null
+  },
+  {
+   "id": "electronic-dance-music.artist.Skrillex.recording",
+   "claim": "Scary Monsters and Nice Sprites (2010), kind: album",
+   "verdict": "drift",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": "Skrillex intro",
+   "note": "Unchanged from round 1: the card's own c1 and Dubstep '2009–2014' call it an EP. The schema has only song/album, so either add 'ep' or have the prompt say 'EP'.",
+   "fix": null
+  },
+  {
+   "id": "trap-music.artist.Lex Luger.recording",
+   "claim": "title 'Hard in the Paint (Waka Flocka Flame)', 2010, no by",
+   "verdict": "supported",
+   "flags": [
+    "credit-format"
+   ],
+   "cited": "Lex Luger 2009–2013: rise to fame",
+   "note": "Title and year supported, and a producer's breakout beat is a fair pick. But the rapper's name is in the title string, not in `by`, so the prompt prints 'Hard in the Paint (Waka Flocka Flame) (2010)' and a search for that title fails. Use the `by` field like the other cards.",
+   "fix": {
+    "text": "title: 'Hard in the Paint', by: 'Waka Flocka Flame', year: 2010",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Lex_Luger_(music_producer)",
+      "section": "2009–2013: rise to fame"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dub-music.artist.Mad Professor.recording",
+   "claim": "title 'No Protection (Massive Attack v Mad Professor)', 1995",
+   "verdict": "supported",
+   "flags": [
+    "credit-format"
+   ],
+   "cited": "Mad Professor Remixes",
+   "note": "Supported (his dub version of Massive Attack's Protection). The joint credit is in the title string; the corpus title is just 'No Protection'. Move the credit to `by`.",
+   "fix": {
+    "text": "title: 'No Protection', by: 'Massive Attack v Mad Professor', year: 1995",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Mad_Professor",
+      "section": "Remixes"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.artist.Louis Armstrong.recording",
+   "claim": "Hello, Dolly!, year null",
+   "verdict": "supported",
+   "flags": [
+    "year-missing"
+   ],
+   "cited": "Louis Armstrong intro; Film, television, and radio",
+   "note": "Title supported, but the year is left empty though the corpus gives it: 'In 1964 ... Armstrong recorded his biggest-selling record, \"Hello, Dolly!\"' ('A jazz ambassador'; also 'Hits and later career', 'Selected works: Hello, Dolly! (1964)'). The prompt builds around it with no year.",
+   "fix": {
+    "text": "year: 1964 (add source Louis_Armstrong#A jazz ambassador)",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Louis_Armstrong",
+      "section": "A jazz ambassador"
+     }
+    ]
+   }
+  },
+  {
+   "id": "american-folk-music-revival.artist.Pete Seeger.recording",
+   "claim": "Where Have All the Flowers Gone?, year null",
+   "verdict": "supported",
+   "flags": [
+    "composition-not-named-recording"
+   ],
+   "cited": "Pete Seeger intro",
+   "note": "The intro names it among his best-known songs (co-written with Joe Hickerson) but names only other acts' hit recordings (Kingston Trio 1962, Dietrich 1962, Johnny Rivers 1965), not a Seeger recording. Fine as a song he wrote; the prompt should say 'his song' so a listener isn't sent hunting for a specific Seeger record the corpus doesn't name.",
+   "fix": null
+  },
+  {
+   "id": "gospel-music.artist.Thomas A. Dorsey.recording",
+   "claim": "Take My Hand, Precious Lord, year null",
+   "verdict": "supported",
+   "flags": [
+    "composition-not-named-recording"
+   ],
+   "cited": "Thomas A. Dorsey intro; Legacy",
+   "note": "Named as one of his most famous compositions; no Dorsey recording of it is named. Same note as Seeger: fine as his song, frame it as a composition.",
+   "fix": null
+  },
+  {
+   "id": "bossa-nova.artist.Vinicius de Moraes.recording",
+   "claim": "Samba da Benção, year null",
+   "verdict": "supported",
+   "flags": [
+    "composition-not-named-recording"
+   ],
+   "cited": "Vinicius de Moraes Bossa nova",
+   "note": "The corpus calls it 'His song' and says it was on the soundtrack of A Man and a Woman (1966); it names no Vinicius recording. Frame as his song (he was the lyricist), and the 1966 soundtrack could give a year if wanted.",
+   "fix": null
+  },
+  {
+   "id": "salsa-music.artist.Rubén Blades.recording",
+   "claim": "Pedro Navaja, 1978, no by",
+   "verdict": "supported",
+   "flags": [
+    "co-credit"
+   ],
+   "cited": "Rubén Blades 1970s–1980s",
+   "note": "Supported: it is the most famous song on Siembra (1978), which the section calls 'The Colón and Blades album'. Optional `by: 'Willie Colón and Rubén Blades'` so the record is found as credited.",
+   "fix": null
+  },
+  {
+   "id": "jazz.artist.Charlie Parker.study_prompt",
+   "claim": "many of his pieces, like 'Now's the Time', use the 12-bar blues",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "card (c2, recording)",
+   "note": "Beyond the card: the card says many of his pieces use the 12-bar blues and separately picks 'Now's the Time', but never says that tune is a 12-bar blues (true in Charlie Parker 'Artistry', not on the card). Either add it to c2 or drop 'like \\'Now\\'s the Time\\''.",
+   "fix": {
+    "text": "...he often wrote new melodies over existing tunes' chords; many of his pieces use the 12-bar blues.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Charlie_Parker",
+      "section": "Artistry"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.artist.Sister Rosetta Tharpe.study_prompt",
+   "claim": "'This Train' was her 1939 hit",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "card (summary, c2, recording)",
+   "note": "Small step beyond the card: the card gives 'This Train' (1939) only as the recording, not as a hit (her intro does say '1939 hit'). Low severity.",
+   "fix": {
+    "text": "...'This Train' (1939) is the recording to start with; 'Strange Things Happening Every Day' was the first gospel record to cross over, reaching No. 2 on Billboard's 'race records' chart in 1945.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Sister_Rosetta_Tharpe",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "country-music.artist.Dolly Parton.study_prompt",
+   "claim": "'I Will Always Love You' went to No. 1 on the country chart in 1974",
+   "verdict": "drift",
+   "flags": [
+    "human-check-2026"
+   ],
+   "cited": "card (summary, c1, recording)",
+   "note": "Beyond the card: the card has the song only as the 1974 recording; the No. 1 is in Dolly Parton '1967–1975' but not on the card. Either add it to a contribution or drop it. Dates 1946–2026 still need the live check.",
+   "fix": {
+    "text": "...her mid-1970s turn toward pop paid off with Here You Come Again (1977), her first million-seller.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Dolly_Parton",
+      "section": "1967–1975: Country music success"
+     }
+    ]
+   }
+  },
+  {
+   "id": "reggaeton.artist.DJ Playero.c2",
+   "claim": "(artist removed)",
+   "verdict": "supported",
+   "flags": [
+    "removed"
+   ],
+   "cited": "n/a",
+   "note": "DJ Playero is no longer on the reggaeton card (replaced by El General), so the round-1 date conflict no longer applies.",
+   "fix": null
+  }
+ ]
+}

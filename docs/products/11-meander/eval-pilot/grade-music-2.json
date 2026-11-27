@@ -1,0 +1,723 @@
+{
+ "batch": "2",
+ "grader_note": "Graded against the saved corpus only (index.json → corpus/*.txt), cited sections first; where a claim is true elsewhere in the corpus but not in the cited section it is marked unsupported with the right section in the fix. Study prompts checked mechanically: 30 of 31 are built only from the card's summary, contributions and recording; DJ Kool Herc's adds a note. No death or end date in 2026 appears anywhere in batch 2. Related 2026 dates in the corpus for a human to check: Afrika Bambaataa death 2026-04-09 (named in the Herc card, no date shown), P-Funk's 'Billy Bass' Nelson death 2026-01-26 (not named on the card), and Chic's 'today' end date rests on 'As of 2026, Rodgers and Chic continue to perform'.",
+ "counts": {
+  "claims": 376,
+  "supported": 349,
+  "drift": 20,
+  "unsupported": 7,
+  "wrong": 0,
+  "newcomer": 10,
+  "fairness": 3
+ },
+ "items": [
+  {
+   "id": "punk-rock.debatable",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Punk_rock#intro",
+    "Punk_rock#Australia"
+   ],
+   "claim": "where it began is disputed between New York's Ramones, London's Sex Pistols and Brisbane's Saints, who said they had been doing the same thing for years.",
+   "note": "The corpus never frames a three-way dispute. Punk_rock#Australia has the Saints' Ed Kuepper saying the first Ramones album depressed him because 'we'd been doing this sort of stuff for years', and that they 'discovered that musicians were exploring similar paths in other parts of the world'. The intro also names Ohio (Cleveland) scenes alongside New York. 'Disputed between' those three is the writer's framing.",
+   "fix": {
+    "text": "The name came before the sound, since critics first used 'punk rock' for 1960s garage bands; and it grew up in several places at once: New York, Ohio, London and Brisbane, where the Saints' Ed Kuepper said they'd 'been doing this sort of stuff for years' before hearing the Ramones.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Punk_rock",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Punk_rock",
+      "section": "Australia"
+     }
+    ]
+   }
+  },
+  {
+   "id": "punk-rock.description",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Punk_rock#intro"
+   ],
+   "claim": "By 1977 it had spread worldwide and splintered into post-punk, new wave and hardcore.",
+   "note": "Punk_rock intro: by 1977 it had spread worldwide; post-punk, new wave and art punk came 'during the late 1970s', and hardcore only 'by the early 1980s'. The sentence compresses the timeline and puts hardcore in 1977.",
+   "fix": {
+    "text": "By 1977 it had spread worldwide; in the late 1970s it branched into post-punk and new wave, and in the early 1980s into hardcore.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Punk_rock",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "punk-rock.hallmark5",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Punk_rock#Visual and other elements"
+   ],
+   "claim": "Leather jackets, ripped jeans and boots drew on 1950s greasers",
+   "note": "Source ties the greaser look (T-shirt, motorcycle jacket, jeans) to 'male American musicians' and also to 1960s British rockers; ripped jeans and Doc Martens are added separately, not tied to greasers. Minor stretch.",
+   "fix": {
+    "text": "The male American punk look of T-shirt, motorcycle jacket and jeans harked back to 1950s greasers, later with ripped jeans and Doc Martens; women in punk tore up rock's old female roles, from Siouxsie Sioux's bondage gear to Patti Smith's androgyny.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Punk_rock",
+      "section": "Visual and other elements"
+     }
+    ]
+   }
+  },
+  {
+   "id": "punk-rock.listen_for1",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Punk_rock#Musical and lyrical elements",
+    "Punk_rock#New York City"
+   ],
+   "claim": "Very short songs at fast tempos, often counted in with a shouted '1–2–3–4!'.",
+   "note": "The shouted count-in is reported only for the Ramones (Dee Dee Ramone 'at the start of every song', New York City). 'Often' generalises one band's trait to the genre.",
+   "fix": {
+    "text": "Very short songs at fast tempos; the Ramones counted in every one with a shouted '1–2–3–4!'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Punk_rock",
+      "section": "Musical and lyrical elements"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Punk_rock",
+      "section": "New York City"
+     }
+    ]
+   }
+  },
+  {
+   "id": "punk-rock.listen_for2",
+   "verdict": "drift",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Punk_rock#Musical and lyrical elements"
+   ],
+   "claim": "Heavily distorted power chords forming a 'buzzsaw drone', with few or no guitar solos.",
+   "note": "Source: 'Complicated guitar solos were considered self-indulgent, although basic guitar breaks were common.' 'Few or no solos' drops the 'basic guitar breaks were common' half. Also: 'power chords' and 'barre chords' are unglossed for a beginner.",
+   "fix": {
+    "text": "Heavily distorted power chords (simple two- or three-note chords) forming a 'buzzsaw drone'; long, complicated solos were out, though short basic guitar breaks were common.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Punk_rock",
+      "section": "Musical and lyrical elements"
+     }
+    ]
+   }
+  },
+  {
+   "id": "alternative-rock.description",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Alternative_rock#intro"
+   ],
+   "claim": "In 1991 Nirvana's breakthrough carried it into the mainstream, and grunge, Britpop and indie rock followed.",
+   "note": "Alternative_rock intro puts Nirvana's breakthrough and the grunge and Britpop movements together as what carried it into the mainstream; grunge was Nirvana's own scene (Seattle Sound, late 1980s) and indie rock is named among the 1980s styles. 'Followed' gets the order wrong.",
+   "fix": {
+    "text": "In the 1990s Nirvana's breakthrough and the grunge and Britpop movements carried it into the mainstream.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Alternative_rock",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "alternative-rock.hallmark2",
+   "verdict": "supported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Alternative_rock#Characteristics",
+    "Alternative_rock#United States in 1980s"
+   ],
+   "claim": "R.E.M.'s Murmur (1983) was an early success that inspired a wave of jangle pop.",
+   "note": "Supported. 'Jangle pop' is unglossed; the card never says what it sounds like (R.E.M.#intro gives Buck's arpeggiated 'jangle' guitar).",
+   "fix": {
+    "text": "R.E.M.'s Murmur (1983) was an early success that inspired a wave of jangle pop, built on bright, ringing picked guitar.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Alternative_rock",
+      "section": "United States in 1980s"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/R.E.M.",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "alternative-rock.listen_for2",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Pixies_(band)#intro",
+    "Pixies_(band)#Music",
+    "Nirvana_(band)#intro"
+   ],
+   "claim": "Sudden shifts from quiet verses to loud, heavy choruses.",
+   "note": "Cited sections describe this for the Pixies and Nirvana only; the Alternative_rock article says there is 'no set musical style'. As a genre-wide 'listen for' it overgeneralises two bands.",
+   "fix": {
+    "text": "In bands like the Pixies and Nirvana, sudden shifts from quiet verses to loud, heavy choruses.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Pixies_(band)",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Nirvana_(band)",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "alternative-rock.listen_for3",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Alternative_rock#Characteristics"
+   ],
+   "claim": "Lyrics about social concerns and personal struggles rather than party anthems.",
+   "note": "Source: lyrics 'tend to address topics of social concern, such as drug use, depression, suicide, and environmentalism', 'more often than in other rock styles'. 'Rather than party anthems' is an invented contrast.",
+   "fix": {
+    "text": "Lyrics that, more often than in other rock, take on social concerns such as drug use, depression and the environment.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Alternative_rock",
+      "section": "Characteristics"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rhythm-and-blues.artist.Fats Domino.recording",
+   "verdict": "unsupported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Fats_Domino#Recordings for Imperial Records (1949–1962)",
+    "Fats_Domino#intro"
+   ],
+   "claim": "The Fat Man (year missing); study prompt says '(year not given)'",
+   "note": "Year left empty though the corpus gives it: Fats_Domino#Influence and legacy, 'His million-selling debut single, \"The Fat Man\" (1949)'. '(year not given)' in the study prompt reads as broken to a newcomer.",
+   "fix": {
+    "text": "The Fat Man (1949, song); study prompt: Start with \"The Fat Man\" (1949).",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Fats_Domino",
+      "section": "Influence and legacy"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rhythm-and-blues.listen_for2",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Rhythm_and_blues#Etymology, definitions and description",
+    "Rhythm_and_blues#intro"
+   ],
+   "claim": "A honking saxophone over piano, guitar, bass and drums in a small band.",
+   "note": "Source lists the typical band (piano, one or two guitars, bass, drums, one or more saxophones, sometimes backing vocals) but never says 'honking'. The added adjective is the writer's.",
+   "fix": {
+    "text": "A saxophone alongside piano, one or two guitars, bass and drums, sometimes with backing singers.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Rhythm_and_blues",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rhythm-and-blues.recording1",
+   "verdict": "unsupported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Rock_and_roll#Cover versions"
+   ],
+   "claim": "Wynonie Harris - Good Rocking Tonight (1948, song)",
+   "note": "Cited section gives only Roy Brown's 1947 original and does not date Harris's version; the 1948 date is in Rhythm_and_blues#Late 1940s, which is not cited. It is also a cover of Roy Brown's record, which the card doesn't say; a newcomer will think Harris wrote it.",
+   "fix": {
+    "text": "Wynonie Harris - Good Rockin' Tonight (1948, song), his remake of Roy Brown's 1947 original; cite Rhythm_and_blues#Late 1940s: 'In 1948, Wynonie Harris's remake of Brown's 1947 recording \"Good Rockin' Tonight\" reached number two on the charts'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Rhythm_and_blues",
+      "section": "Late 1940s"
+     }
+    ]
+   }
+  },
+  {
+   "id": "soul-music.artist.Ray Charles.recording",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Ray_Charles#1952–1959: Atlantic Records"
+   ],
+   "claim": "What'd I Say (1959, song)",
+   "note": "The cited sentence gives no year; 1959 can only be read from the section heading '1952–1959' or the same-named album in Ray_Charles#Studio albums ('What'd I Say (1959)'). Probably right, but the song's year isn't stated.",
+   "fix": {
+    "text": "What'd I Say (1959, song), citing Ray_Charles#Studio albums ('What'd I Say (1959)') alongside the Atlantic section; or list the 1959 album What'd I Say.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Ray_Charles",
+      "section": "Studio albums"
+     }
+    ]
+   }
+  },
+  {
+   "id": "soul-music.debatable",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Soul_music#Infobox",
+    "Soul_music#intro",
+    "Soul_music#Origins",
+    "Soul_music#1960s"
+   ],
+   "claim": "Sam Cooke is called its inventor by one critic",
+   "note": "The cited Soul_music sections only say Cooke and Jackie Wilson 'are often acknowledged as soul forefathers'. The 'inventor of soul music' line is AllMusic's Bruce Eder in Sam_Cooke#Legacy, which the card doesn't cite. The Ray Charles and Guralnick parts are supported (Origins, 1960s). True elsewhere in the corpus, so this is a citation fix.",
+   "fix": {
+    "text": "Who started soul is argued over: Ray Charles is often cited as popularising it, AllMusic's Bruce Eder called Sam Cooke 'the inventor of soul music', and Peter Guralnick dates its start to Solomon Burke's 1961 'Just Out of Reach'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Soul_music",
+      "section": "Origins"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Soul_music",
+      "section": "1960s"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Sam_Cooke",
+      "section": "Legacy"
+     }
+    ]
+   }
+  },
+  {
+   "id": "soul-music.hallmark5",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Soul_music#1960s",
+    "Soul_music#Philadelphia",
+    "Soul_music#1970s and 1980s"
+   ],
+   "claim": "Philadelphia soul's lush strings and horns became a bridge towards disco.",
+   "note": "Soul_music#Philadelphia gives the lush string and horn arrangements but says nothing about disco; the cited 1970s section names the Detroit Emeralds as the link to disco. The Philly-soul-to-disco tie is in Disco#Infobox ('stylistic origins: Philadelphia soul'), not cited.",
+   "fix": {
+    "text": "Philadelphia soul brought lush string and horn arrangements, and it is listed among disco's roots.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Soul_music",
+      "section": "Philadelphia"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Disco",
+      "section": "Infobox"
+     }
+    ]
+   }
+  },
+  {
+   "id": "soul-music.listen_for2",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Soul_music#intro"
+   ],
+   "claim": "A tense, straining lead voice that stretches and improvises around the melody.",
+   "note": "Source: 'an especially tense vocal sound, and occasional improvisational additions, twirls, and auxiliary sounds'. 'Straining' and 'stretches around the melody' make it stronger, and 'occasional' is dropped.",
+   "fix": {
+    "text": "An especially tense lead voice, with occasional improvised twirls and extra sounds.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Soul_music",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "funk.artist.James Brown.recording",
+   "verdict": "unsupported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "James_Brown#intro",
+    "James_Brown#1970–1974: Godfather of Soul"
+   ],
+   "claim": "Get Up (I Feel Like Being a) Sex Machine (year missing); study prompt says '(year not given)'",
+   "note": "Year left empty though the corpus has it: Funk#James Brown, '\"Get Up (I Feel Like Being a) Sex Machine\" (1970)'. '(year not given)' in the study prompt reads as broken.",
+   "fix": {
+    "text": "Get Up (I Feel Like Being a) Sex Machine (1970, song); study prompt: Start with \"Get Up (I Feel Like Being a) Sex Machine\" (1970).",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Funk",
+      "section": "James Brown"
+     }
+    ]
+   }
+  },
+  {
+   "id": "funk.hallmark2",
+   "verdict": "supported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Funk#Rhythm and tempo"
+   ],
+   "claim": "...which left space to divide each beat into sixteenth notes.",
+   "note": "Supported. 'Sixteenth notes' is unglossed for a beginner.",
+   "fix": {
+    "text": "...which left room to split each beat into four quick pulses (sixteenth notes).",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Funk",
+      "section": "Rhythm and tempo"
+     }
+    ]
+   }
+  },
+  {
+   "id": "disco.artist.Giorgio Moroder.c1",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Giorgio_Moroder#1969–1983: Contribution to electronic music",
+    "Techno#Proto-techno"
+   ],
+   "claim": "...From Here to Eternity (1977), which techno writers list among that genre's precursors.",
+   "note": "Techno#Proto-techno names Moroder among the 'progressive' disco acts popular in the Detroit high-school scene, and names 'I Feel Love' as a blueprint; it never mentions From Here to Eternity. The album-level claim is unsupported.",
+   "fix": {
+    "text": "He first used a Moog synthesizer in 1972 and went on to the synth-driven album From Here to Eternity (1977); techno writers name him among the 'progressive' disco acts played in the Detroit scene techno came from.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Giorgio_Moroder",
+      "section": "1969–1983: Contribution to electronic music"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Techno",
+      "section": "Proto-techno"
+     }
+    ]
+   }
+  },
+  {
+   "id": "disco.artist.Larry Levan.recording",
+   "verdict": "unsupported",
+   "flags": [
+    "fairness",
+    "newcomer"
+   ],
+   "cited": [
+    "Larry_Levan#Musical career"
+   ],
+   "claim": "Don't Make Me Wait (year missing), offered as Levan's own recording; study prompt says '(year not given)'",
+   "note": "NOT THE ARTIST'S OWN RECORD (flag for human): the record is 'Don't Make Me Wait' by the Peech Boys, which Levan formed, played in and produced (Larry_Levan#Musical career). The card shows it as if it were a Larry Levan record without crediting the band. No year anywhere in the corpus, so the prompt shows '(year not given)'.",
+   "fix": {
+    "text": "recording: Peech Boys, \"Don't Make Me Wait\" (song, produced by Levan, who formed and played in the group); study prompt: Start with the Peech Boys' \"Don't Make Me Wait\", which Levan produced. Leave the year out instead of printing '(year not given)'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Larry_Levan",
+      "section": "Musical career"
+     }
+    ]
+   }
+  },
+  {
+   "id": "disco.debatable",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Disco#intro"
+   ],
+   "claim": "...and has had a revival in every decade since.",
+   "note": "Disco intro: 'The style has had several revivals since the 1990s' and 'A revival has been underway since the early 2010s'. 'Every decade since' 1979 is stronger: nothing is claimed for the 1980s in the US.",
+   "fix": {
+    "text": "Whether disco 'died' is debatable: it fell sharply in the US after Disco Demolition Night in July 1979, but stayed popular in Italy and much of Europe through the 1980s and has had several revivals since the 1990s.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Disco",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "disco.hallmark2",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Disco#Production",
+    "Disco#intro",
+    "Chic_(band)#Influences and awards"
+   ],
+   "claim": "...so producers mattered as much as performers.",
+   "note": "Disco#Production says arrangers, producers and mixing engineers shaped the sound and 'helped to develop the disco sound'; it doesn't compare them with performers. The 'as much as' ranking is the writer's.",
+   "fix": {
+    "text": "Arrangers, conductors, producers and mixing engineers shaped the result with multitrack recording and effects, and helped create the 'disco sound' itself.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Disco",
+      "section": "Production"
+     }
+    ]
+   }
+  },
+  {
+   "id": "disco.hallmark5",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Disco#Eroticism and sexual liberation",
+    "Disco#Nightclubs",
+    "Larry_Levan#Musical career"
+   ],
+   "claim": "At the Paradise Garage, Larry Levan's crowd grew into a mix of Black, Latino and punk dancers.",
+   "note": "Larry_Levan#Musical career: owner Michael Brody aimed at 'an upscale white gay clientele', but the venue 'initially drew an improbable mix of streetwise Blacks, Latinos, and punks after a disastrous opening night'. The mix came at the start, by accident, not as something the crowd 'grew into'.",
+   "fix": {
+    "text": "The Paradise Garage, meant for an upscale white gay crowd, instead drew an unlikely mix of Black, Latino and punk dancers from its first nights, and Larry Levan played to them for a decade.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Larry_Levan",
+      "section": "Musical career"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Larry_Levan",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "contemporary-r-b.artist.Teddy Riley.recording",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Teddy_Riley#Career"
+   ],
+   "claim": "No Diggity (1996, song), offered as Teddy Riley's recording",
+   "note": "NOT THE ARTIST'S OWN-NAME RECORD (flag for human): Teddy_Riley#Career credits 'No Diggity' (featuring Dr. Dre and Queen Pen) to 'his group, Blackstreet'. Title and year are supported, and Riley founded the group, but the card should credit Blackstreet so the listener finds the right record.",
+   "fix": {
+    "text": "recording: Blackstreet (Riley's group), \"No Diggity\" (1996, song, featuring Dr. Dre and Queen Pen); study prompt: Start with Blackstreet's \"No Diggity\" (1996).",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Teddy_Riley",
+      "section": "Career"
+     }
+    ]
+   }
+  },
+  {
+   "id": "contemporary-r-b.hallmark5",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Contemporary_R%26B#2000s",
+    "Contemporary_R%26B#2010s"
+   ],
+   "claim": "In the 2010s electronic, EDM and trap sounds pushed the genre into electro-R&B.",
+   "note": "Contemporary_R&B#2010s: electronic, machine-made sounds made electro-R&B, and some hits were EDM-oriented; trap is tied to Latin R&B ('Latin R&B gained ground as artists began mixing trap with the genre'), not to electro-R&B.",
+   "fix": {
+    "text": "In the 2010s more electronic, machine-made sounds, some EDM-oriented, turned it into electro-R&B, while Latin R&B mixed in trap.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Contemporary_R%26B",
+      "section": "2010s"
+     }
+    ]
+   }
+  },
+  {
+   "id": "contemporary-r-b.tagline",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Contemporary_R%26B#intro"
+   ],
+   "claim": "Smooth, polished R&B singing over electronic and hip-hop beats, from the 1980s on.",
+   "note": "The card's own date_range is 'late 1970s – today', and Contemporary_R&B#Infobox gives 'Late 1970s and early 1980s' (intro: 'originating ... in the 1970s'). 'From the 1980s on' contradicts the date on the same card.",
+   "fix": {
+    "text": "Smooth, polished R&B singing over electronic and hip-hop beats, from the end of the disco era on.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Contemporary_R%26B",
+      "section": "Infobox"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Contemporary_R%26B",
+      "section": "Precursors"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hip-hop.artist.DJ Kool Herc.recording",
+   "verdict": "supported",
+   "flags": [
+    "fairness",
+    "newcomer"
+   ],
+   "cited": [
+    "DJ_Kool_Herc#Influence on artists"
+   ],
+   "claim": "Apache (year missing), offered as Herc's 'Start with' recording",
+   "note": "NOT THE ARTIST'S OWN RECORD (flag for human): 'Apache' is The Incredible Bongo Band's record; Herc only played its break, from 1975 (DJ_Kool_Herc#Influence on artists), and he never made commercial recordings in hip-hop's earliest years (intro). The study prompt explains this in a note, but the card field itself shows it as his recording, with '(year not given)'. The corpus has no year for the Bongo Band original.",
+   "fix": {
+    "text": "recording: The Incredible Bongo Band, \"Apache\" (song; the break Herc played from 1975). Drop '(year not given)' or say 'played by Herc from 1975'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/DJ_Kool_Herc",
+      "section": "Influence on artists"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/DJ_Kool_Herc",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hip-hop.artist.DJ Kool Herc.study_prompt",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "card facts"
+   ],
+   "claim": "Note: 'Apache' is the Incredible Bongo Band record whose break Herc began playing in 1975 and turned into a b-boy favourite; Herc made no commercial records in hip-hop's earliest years.",
+   "note": "The prompt must use only the card's own facts. The note adds three facts that aren't on the card: 1975, 'b-boy favourite' and 'no commercial records'. All are true in the corpus (DJ_Kool_Herc#Influence on artists, #intro), but the prompt goes beyond the card. It is the only one of the 31 prompts that does.",
+   "fix": {
+    "text": "Put the facts on the card instead (recording: The Incredible Bongo Band, 'Apache', the break Herc played from 1975; plus a contribution line saying he made no commercial records early on), then build the prompt from the card as for every other artist.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/DJ_Kool_Herc",
+      "section": "Influence on artists"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/DJ_Kool_Herc",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hip-hop.artist.Public Enemy.c1",
+   "verdict": "supported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Public_Enemy#Legacy"
+   ],
+   "claim": "...brought in free jazz, hard funk and even musique concrète...",
+   "note": "Supported (Erlewine quote). 'Musique concrète' is unglossed jargon for a curious beginner.",
+   "fix": {
+    "text": "...brought in free jazz, hard funk and even musique concrète (music built from recorded everyday sounds)...",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Public_Enemy",
+      "section": "Legacy"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hip-hop.hallmark4",
+   "verdict": "drift",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Hip-hop#Diversification of styles"
+   ],
+   "claim": "Breakbeats no longer needed a DJ and two turntables; Grandmaster Flash's 'Wheels of Steel' was built entirely from samples.",
+   "note": "Hip-hop#Diversification of styles does say the single 'consists entirely of sampled tracks', but Grandmaster_Flash#1980s calls it 'a 7-minute solo showcase of Grandmaster Flash's virtuosic turntable skills' cut from other records. Placing it right after 'no longer needed a DJ and two turntables' tells a newcomer it was made on a sampler, which is the opposite of what it shows.",
+   "fix": {
+    "text": "In the 1980s samplers and drum machines like the Roland TR-808 became affordable and beloved hip-hop tools. Grandmaster Flash's 'Wheels of Steel' (1981) showed the turntable side: a seven-minute collage cut live from other records.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Hip-hop",
+      "section": "Diversification of styles"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Grandmaster_Flash",
+      "section": "1980s"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hip-hop.hallmark5",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Hip-hop#Diversification of styles",
+    "Hip-hop#Innovation and artistry"
+   ],
+   "claim": "...strong themes of Afrocentrism and political militancy, voiced by acts like Public Enemy and Queen Latifah.",
+   "note": "Hip-hop#Innovation and artistry lists the notable golden-age artists (Public Enemy, KRS-One, Boogie Down Productions, Eric B. & Rakim, ...) without Queen Latifah; she is named separately as 'one of the most notable female rappers'. Tying her to 'political militancy' isn't sourced (her own card says she rapped about issues Black women face).",
+   "fix": {
+    "text": "Golden-age hip-hop, from 1986 to the mid-1990s, carried strong themes of Afrocentrism and political militancy, voiced by acts like Public Enemy and KRS-One; Queen Latifah's 1989 debut made her one of its most notable female rappers.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Hip-hop",
+      "section": "Innovation and artistry"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hip-hop.recording1",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Hip-hop#First commercial recordings"
+   ],
+   "claim": "The Sugarhill Gang - Rapper's Delight (1979, song)",
+   "note": "The cited section names the track but gives no year. 1979 is in Hip-hop#Usage ('by the time The Sugarhill Gang recorded \"Rapper's Delight\" in 1979') and Chic_(band)#Influences and awards, neither cited. Right fact, wrong citation.",
+   "fix": {
+    "text": "Keep 'The Sugarhill Gang - Rapper's Delight (1979, song)' and add the source Hip-hop#Usage.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Hip-hop",
+      "section": "Usage"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Chic_(band)",
+      "section": "Influences and awards"
+     }
+    ]
+   }
+  }
+ ]
+}

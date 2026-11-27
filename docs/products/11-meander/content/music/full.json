@@ -857,7 +857,7 @@
     ],
     "recording": {
      "title": "Hello, Dolly!",
-     "year": null,
+     "year": 1964,
      "kind": "song",
      "sources": [
       {
@@ -867,6 +867,10 @@
       {
        "url": "https://en.wikipedia.org/wiki/Louis_Armstrong",
        "section": "Film, television, and radio"
+      },
+      {
+       "url": "https://en.wikipedia.org/wiki/Louis_Armstrong",
+       "section": "A jazz ambassador"
       }
      ]
     },
@@ -993,7 +997,7 @@
      ]
     },
     "study_prompt": {
-     "text": "Make me a short listening module (about 20 minutes) on Charlie Parker (1920–1955). Use only these facts: He was nicknamed 'Bird' and played alto saxophone; he was a leading figure in bebop, known for fast tempos, dazzling technique and new harmonic ideas; he often wrote new melodies over existing tunes' chords; many of his pieces, like 'Now's the Time', use the 12-bar blues. Build it around \"Now's the Time\" (1945): what to listen for, two or three questions to think about while it plays, and one thing to compare it with from the same era. Don't add facts beyond these.",
+     "text": "Make me a short listening module (about 20 minutes) on Charlie Parker (1920–1955). Use only these facts: He was nicknamed 'Bird' and played alto saxophone; he was a leading figure in bebop, known for fast tempos, dazzling technique and new harmonic ideas; he often wrote new melodies over existing tunes' chords; many of his pieces use the 12-bar blues. Build it around \"Now's the Time\" (1945): what to listen for, two or three questions to think about while it plays, and one thing to compare it with from the same era. Don't add facts beyond these.",
      "sources": [
       {
        "url": "https://en.wikipedia.org/wiki/Charlie_Parker",
@@ -1031,7 +1035,7 @@
       ]
      },
      {
-      "text": "Kind of Blue (1959), planned around Bill Evans's piano style by two players who knew George Russell's ideas about modes, is what some consider his greatest album.",
+      "text": "Kind of Blue (1959), whose music was planned around Bill Evans's piano style, is what some consider his greatest album; both Davis and Evans knew George Russell's ideas about modal jazz.",
       "sources": [
        {
         "url": "https://en.wikipedia.org/wiki/Miles_Davis",
@@ -1130,6 +1134,14 @@
    {
     "url": "https://en.wikipedia.org/wiki/Jazz",
     "section": "Improvisation"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Jazz",
+    "section": "Etymology and definition"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Jazz",
+    "section": "The influence of Duke Ellington"
    }
   ]
  },
@@ -1169,7 +1181,7 @@
    ]
   },
   "description": "Gospel is Christian music led by powerful voices and close harmonies, sung in call and response over clapping and stomping. Black gospel grew from spirituals and hymns in the South, took modern shape in 1930s Chicago, and flowed into soul, rhythm and blues and rock and roll.",
-  "debatable": "There is no clean founding date: its roots are traced to the early 17th century, the term 'gospel song' first appeared in print in 1874, and 1930 is said to be the year traditional Black gospel began; Thomas Dorsey is often credited with creating it, though he more accurately spread a movement.",
+  "debatable": "There is no clean founding date: its roots are traced to the early 17th century, the term 'gospel song' first appeared in print in 1874, and 1930 is said to be the year traditional Black gospel began; Thomas Dorsey is often credited with creating it, though he more accurately started a movement that popularised gospel blues.",
   "listen_for": [
    {
     "text": "Call and response between a lead singer and the choir or congregation.",
@@ -1504,7 +1516,7 @@
      ]
     },
     "study_prompt": {
-     "text": "Make me a short listening module (about 20 minutes) on Sister Rosetta Tharpe (1915–1973). Use only these facts: She was a singer and electric guitarist who became the first great recording star of gospel, later called 'the Godmother of Rock and Roll'; she mixed spiritual lyrics with electric guitar; she helped pioneer pop-gospel from 1938, taking sacred songs into nightclubs and concert halls; 'This Train' was her 1939 hit; 'Strange Things Happening Every Day' was the first gospel record to cross over to Billboard's 'race records' chart, in 1945. Build it around \"This Train\" (1939): what to listen for, two or three questions to think about while it plays, and one thing to compare it with from the same era. Don't add facts beyond these.",
+     "text": "Make me a short listening module (about 20 minutes) on Sister Rosetta Tharpe (1915–1973). Use only these facts: She was a singer and electric guitarist who became the first great recording star of gospel, later called 'the Godmother of Rock and Roll'; she mixed spiritual lyrics with electric guitar; she helped pioneer pop-gospel from 1938, taking sacred songs into nightclubs and concert halls; 'Strange Things Happening Every Day' was the first gospel record to cross over to Billboard's 'race records' chart, in 1945. Build it around \"This Train\" (1939): what to listen for, two or three questions to think about while it plays, and one thing to compare it with from the same era. Don't add facts beyond these.",
      "sources": [
       {
        "url": "https://en.wikipedia.org/wiki/Sister_Rosetta_Tharpe",
@@ -1637,6 +1649,10 @@
    {
     "url": "https://en.wikipedia.org/wiki/Gospel_music",
     "section": "Gospel goes to mainstream"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Thomas_A._Dorsey",
+    "section": "intro"
    }
   ]
  },
@@ -2073,7 +2089,7 @@
      ]
     },
     "study_prompt": {
-     "text": "Make me a short listening module (about 20 minutes) on Dolly Parton (1946–2026). Use only these facts: She was the 'Queen of Country', an East Tennessee singer-songwriter who wrote more than 3,000 songs; she logged 25 No. 1 country singles, tied for the most by a woman, and a record 44 Top 10 country albums; her mid-1970s turn toward pop paid off with Here You Come Again (1977), her first million-seller; 'I Will Always Love You' went to No. 1 on the country chart in 1974. Build it around \"I Will Always Love You\" (1974): what to listen for, two or three questions to think about while it plays, and one thing to compare it with from the same era. Don't add facts beyond these.",
+     "text": "Make me a short listening module (about 20 minutes) on Dolly Parton (1946–2026). Use only these facts: She was the 'Queen of Country', an East Tennessee singer-songwriter who wrote more than 3,000 songs; she logged 25 No. 1 country singles, tied for the most by a woman, and a record 44 Top 10 country albums; her mid-1970s turn toward pop paid off with Here You Come Again (1977), her first million-seller. Build it around \"I Will Always Love You\" (1974): what to listen for, two or three questions to think about while it plays, and one thing to compare it with from the same era. Don't add facts beyond these.",
      "sources": [
       {
        "url": "https://en.wikipedia.org/wiki/Dolly_Parton",
@@ -2155,6 +2171,10 @@
    {
     "url": "https://en.wikipedia.org/wiki/Country_music",
     "section": "Origins"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Country_music",
+    "section": "Race in modern country music"
    }
   ]
  },
@@ -2386,7 +2406,7 @@
    {
     "name": "Pete Seeger",
     "dates": "1919–2014",
-    "summary": "Pete Seeger was a New York singer, banjo player and activist, a fixture of 1940s radio and a member of The Weavers, who became a leading protest singer in the 1960s.",
+    "summary": "Pete Seeger was a New York-born singer, banjo player and activist, a fixture of 1940s radio and a member of The Weavers, who became a leading protest singer in the 1960s.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/American_folk_music_revival",
@@ -2395,6 +2415,10 @@
      {
       "url": "https://en.wikipedia.org/wiki/Pete_Seeger",
       "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Pete_Seeger",
+      "section": "Infobox"
      }
     ],
     "contributions": [
@@ -3246,7 +3270,7 @@
     ]
    },
    {
-    "text": "Mostly verse-chorus songs, though blues rock and psychedelic bands often stretched them into long improvised jams.",
+    "text": "Mostly verse-chorus songs, though blues rock bands often stretched them into long, jazz-like improvisations.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Rock_music",
@@ -3733,6 +3757,10 @@
    {
     "url": "https://en.wikipedia.org/wiki/Rock_music",
     "section": "Characteristics"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Rock_and_roll",
+    "section": "Etymology"
    }
   ]
  },
@@ -4451,7 +4479,7 @@
    },
    {
     "title": "A look to shock",
-    "text": "The male American punk look of T-shirt, motorcycle jacket and jeans harked back to 1950s greasers, later with ripped jeans and Doc Martens. Women in punk tore up rock's old female roles, from Siouxsie Sioux's bondage gear to Patti Smith's androgyny.",
+    "text": "The male American punk look of T-shirt, motorcycle jacket and jeans harked back to 1950s greasers, worn with ripped jeans and boots, typically Doc Martens. Women in punk tore up rock's old female roles, from Siouxsie Sioux's bondage gear to Patti Smith's androgyny.",
     "artists": [
      "Patti Smith"
     ],
@@ -4960,6 +4988,10 @@
    {
     "url": "https://en.wikipedia.org/wiki/Punk_rock",
     "section": "United Kingdom"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Punk_rock",
+    "section": "Australia"
    }
   ]
  },
@@ -7023,6 +7055,10 @@
    {
     "url": "https://en.wikipedia.org/wiki/Soul_music",
     "section": "1960s"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/Sam_Cooke",
+    "section": "Legacy"
    }
   ]
  },
@@ -7767,7 +7803,7 @@
    ]
   },
   "description": "Disco is dance music that grew out of American city nightlife in the late 1960s, mixing the sounds of venues loved by African American, Latino American and Italian American crowds. Producers working behind the scenes built big, layered records, and DJs learned to mix them into one unbroken night on the dance floor. It filled clubs across the US by the late 1970s, took a sharp backlash in 1979, and lived on in Europe and in the house, techno and hip-hop it helped start.",
-  "debatable": "Whether disco 'died' is debatable: it fell sharply in the US after Disco Demolition Night in July 1979, but stayed popular in Italy and much of Europe through the 1980s and has had several revivals since the 1990s.",
+  "debatable": "Whether disco 'died' is debatable: it fell sharply in the US after Disco Demolition Night in July 1979, but stayed popular in Italy and some other European countries through the 1980s and has had several revivals since the 1990s.",
   "listen_for": [
    {
     "text": "A kick drum on every beat (four-on-the-floor), with an open, hissing hi-hat landing between the kicks.",
@@ -10215,7 +10251,7 @@
      }
     ],
     "recording": {
-     "title": "No Protection (Massive Attack v Mad Professor)",
+     "title": "No Protection",
      "year": 1995,
      "kind": "album",
      "sources": [
@@ -10223,10 +10259,11 @@
        "url": "https://en.wikipedia.org/wiki/Mad_Professor",
        "section": "Remixes"
       }
-     ]
+     ],
+     "by": "Massive Attack v Mad Professor"
     },
     "study_prompt": {
-     "text": "Teach me Mad Professor as a short listening module, using only these facts. Who: Neil Fraser, a Guyana-born British dub producer, engineer and remixer, nicknamed for his boyhood fascination with electronics. In 1979 he opened his Ariwa studio in the living room of his London home. What they added to dub: His Dub Me Crazy album series won the support of BBC DJ John Peel, who regularly played it. He has remixed acts well outside reggae, turning Massive Attack's album Protection into the electronic dub album No Protection (1995). Recording to study: No Protection (Massive Attack v Mad Professor) (1995). Ask me one question at a time about what I hear and finish with a three-question quiz.",
+     "text": "Teach me Mad Professor as a short listening module, using only these facts. Who: Neil Fraser, a Guyana-born British dub producer, engineer and remixer, nicknamed for his boyhood fascination with electronics. In 1979 he opened his Ariwa studio in the living room of his London home. What they added to dub: His Dub Me Crazy album series won the support of BBC DJ John Peel, who regularly played it. He has remixed acts well outside reggae, turning Massive Attack's album Protection into the electronic dub album No Protection (1995). Recording to study: No Protection (by Massive Attack v Mad Professor) (1995). Ask me one question at a time about what I hear and finish with a three-question quiz.",
      "sources": [
       {
        "url": "https://en.wikipedia.org/wiki/Mad_Professor",
@@ -13738,7 +13775,7 @@
      }
     ],
     "recording": {
-     "title": "Hard in the Paint (Waka Flocka Flame)",
+     "title": "Hard in the Paint",
      "year": 2010,
      "kind": "song",
      "sources": [
@@ -13746,10 +13783,11 @@
        "url": "https://en.wikipedia.org/wiki/Lex_Luger_(music_producer)",
        "section": "2009–2013: rise to fame"
       }
-     ]
+     ],
+     "by": "Waka Flocka Flame"
     },
     "study_prompt": {
-     "text": "Teach me Lex Luger as a short listening module, using only these facts. Who: Lexus Lewis, an American record producer who co-founded the 808 Mafia production team with Southside. The trap article says he is often credited with popularising the modern trap sound. What they added to trap: Working in FL Studio, he found he could make ten beats a day and built his career by sending beats to rappers over Myspace, which is how he met Waka Flocka Flame. His sound pairs hard-hitting 808 kicks, crisp snares and frantic synths with bombastic, spooky orchestration, and he produced more than 200 songs in 2010 and 2011. Recording to study: Hard in the Paint (Waka Flocka Flame) (2010). Ask me one question at a time about what I hear and finish with a three-question quiz.",
+     "text": "Teach me Lex Luger as a short listening module, using only these facts. Who: Lexus Lewis, an American record producer who co-founded the 808 Mafia production team with Southside. The trap article says he is often credited with popularising the modern trap sound. What they added to trap: Working in FL Studio, he found he could make ten beats a day and built his career by sending beats to rappers over Myspace, which is how he met Waka Flocka Flame. His sound pairs hard-hitting 808 kicks, crisp snares and frantic synths with bombastic, spooky orchestration, and he produced more than 200 songs in 2010 and 2011. Recording to study: Hard in the Paint (by Waka Flocka Flame) (2010). Ask me one question at a time about what I hear and finish with a three-question quiz.",
      "sources": [
       {
        "url": "https://en.wikipedia.org/wiki/Lex_Luger_(music_producer)",
@@ -15690,7 +15728,7 @@
     }
    ]
   },
-  "description": "House is electronic dance music built on a steady kick drum on every beat, usually at about 120–130 beats per minute. It grew in Chicago in the early-to-mid 1980s, when DJs from the city's queer Black underground clubs began reworking disco records, adding drum machines, to give them a more mechanical beat. From there it spread to New York, London and Ibiza and became a worldwide sound.",
+  "description": "House is electronic dance music built on a steady kick drum on every beat, usually at about 120–130 beats per minute. It grew in Chicago in the early-to-mid 1980s, when DJs from the city's queer Black underground clubs began reworking disco records to give them a more mechanical beat; the steady kick may have come from DJs adding drum machines under the records they played. From there it spread to New York, London and Ibiza and became a worldwide sound.",
   "debatable": "Nobody agrees where the name came from (the Warehouse club where Frankie Knuckles played, a South Side bar sign, a record-shop bin label or music made at home are all offered), and 'On and On' (1984) is only sometimes called the first house record.",
   "listen_for": [
    {
@@ -16410,6 +16448,10 @@
    {
     "url": "https://en.wikipedia.org/wiki/House_music",
     "section": "UK: Acid house, rave culture and the Second Summer of Love"
+   },
+   {
+    "url": "https://en.wikipedia.org/wiki/House_music",
+    "section": "Ibiza"
    }
   ]
  },

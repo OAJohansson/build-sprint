@@ -1,0 +1,1229 @@
+{
+  "batch": "4",
+  "family": "electronic",
+  "counts": {
+    "claims": 484,
+    "supported": 438,
+    "drift": 34,
+    "unsupported": 12,
+    "wrong": 0,
+    "newcomer": 14,
+    "fairness": 2
+  },
+  "extra_flags": {
+    "death_2026_human_check": 2,
+    "recording_not_own": 3,
+    "recording_title_not_in_corpus": 1,
+    "year_missing": 4,
+    "corpus_date_conflict": 2
+  },
+  "claim_counting": "484 claims across 9 genres: tagline, place, date_range, description, debatable, each listen_for, each hallmark, each link's label and reason (2 per link), each artist's dates, summary, 2 contributions, recording and study prompt, and each landmark recording. reacted_against is null for all 9. Unsupported means the cited sections don't say it; four place-of-birth claims are true in uncited Infobox or Early life sections and only need a citation added.",
+  "study_prompts": "All 44 study prompts were checked by machine against the card: each one is the artist's summary plus contributions word for word, with the fixed opening and closing lines, so none goes beyond the card's facts. They do repeat the facts, so every fix above to a summary, contribution or recording also needs the prompt regenerated (Ron Hardy, Jeff Mills, Afrika Bambaataa, Paul van Dyk, Digital Mystikz in particular). Two print a literal '(None)'.",
+  "allegations_fairness": {
+    "Derrick May": "Worded as cautiously as the source: 'accused ... by several women', 'which he denies'. Pass.",
+    "Afrika Bambaataa": "Less cautious than the source. The card says the allegations 'now weigh heavily on his legacy' as fact; the source gives that only as what 'others have argued' or 'said'. Fix given."
+  },
+  "items": [
+    {
+      "id": "house-music.description",
+      "claim": "...DJs from the city's queer Black underground clubs began reworking disco records with drum machines to give them a harder, more mechanical pulse.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "House_music#intro",
+        "House_music#Influences and precursors"
+      ],
+      "note": "Source: DJs altered disco songs 'to give them a more mechanical beat'. 'Harder' is added.",
+      "fix": {
+        "text": "It grew in Chicago in the early-to-mid 1980s, when DJs from the city's queer Black underground clubs began reworking disco records, adding drum machines, to give them a more mechanical beat.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "Influences and precursors"
+          }
+        ]
+      }
+    },
+    {
+      "id": "house-music.link.electronic-dance-music.reason",
+      "claim": "...and house acts like Swedish House Mafia led it.",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Electronic_dance_music#Terminology",
+        "House_music#2010s"
+      ],
+      "note": "House_music#2010s only says SHM 'showed that house could still produce chart-topping hits'. The claim is true elsewhere in the corpus (Swedish_House_Mafia#intro: 'setting the tone for the EDM boom of the early 2010s, more than any other act') but that section is not cited.",
+      "fix": {
+        "text": "The 2010s US 'EDM' sound was described as somewhere between electro and progressive house, and the Swedish house trio Swedish House Mafia is credited with setting the tone for the early-2010s EDM boom.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electronic_dance_music",
+            "section": "Terminology"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Swedish_House_Mafia",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "house-music.artist.Ron Hardy.recording",
+      "claim": "Donnie (1986, song)",
+      "verdict": "drift",
+      "flags": [
+        "recording-not-own"
+      ],
+      "cited": [
+        "Ron_Hardy#Early career"
+      ],
+      "note": "The corpus says Chip E. and Hardy 'mixed \"Donnie\" by The It (featuring Chip E., Larry Heard, Robert Owens, and Harri Dennis)'. It is The It's record, which Hardy co-mixed; the card presents it as Hardy's own recording, and the study prompt says 'Start with \"Donnie\"' on the same basis.",
+      "fix": {
+        "text": "'Donnie' by The It (1986), which Hardy mixed with Chip E. (Hardy's first studio work); no record released under Hardy's own name is titled in the corpus.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Ron_Hardy",
+            "section": "Early career"
+          }
+        ]
+      }
+    },
+    {
+      "id": "house-music.artist.Jesse Saunders.summary",
+      "claim": "A South Side Chicago DJ and producer...",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Jesse_Saunders#intro"
+      ],
+      "note": "The intro doesn't say South Side. It's true in an uncited section (Early years: 'born and raised on the south side of Chicago').",
+      "fix": {
+        "text": "Add the source Jesse_Saunders#Early years ('Saunders was born and raised on the south side of Chicago').",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Jesse_Saunders",
+            "section": "Early years"
+          }
+        ]
+      }
+    },
+    {
+      "id": "house-music.artist.Phuture.c2",
+      "claim": "Their gloomy, hypnotic tracks often ran past ten minutes...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Phuture#History and background"
+      ],
+      "note": "Source: 'Their sound is gloomy and monotonous in nature'. 'Hypnotic' turns a neutral or negative word into praise.",
+      "fix": {
+        "text": "Their gloomy, monotonous tracks often ran past ten minutes on 12-inch vinyl and are now considered classics of acid and Chicago house.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Phuture",
+            "section": "History and background"
+          }
+        ]
+      }
+    },
+    {
+      "id": "techno.listen2",
+      "claim": "Syncopated, polyrhythmic drum programming (patterns that push against the main pulse), which gives Detroit techno its funk.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Techno#Characteristics"
+      ],
+      "note": "Hedge dropped. Source: 'Some of the drum programming ... made use of syncopation and polyrhythm, yet in many cases the basic disco-type pattern was used as a foundation, with polyrhythmic elaborations added'.",
+      "fix": {
+        "text": "In Detroit techno, a basic disco beat often carries extra syncopated, polyrhythmic drum parts (patterns that push against the main pulse); that funkiness sets the Detroit strain apart.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Characteristics"
+          }
+        ]
+      }
+    },
+    {
+      "id": "techno.artist.Juan Atkins.dates+summary",
+      "claim": "1962–2026 ... He died in Mexico City in October 2026.",
+      "verdict": "supported",
+      "flags": [
+        "death-2026-human-check"
+      ],
+      "cited": [
+        "Juan_Atkins#intro",
+        "Juan_Atkins#Death and legacy"
+      ],
+      "note": "The corpus says he died on 31 October 2026, aged 64, found unresponsive in a Mexico City hotel room before a show at YuYu Cine Club. The source supports it, but this is a recent death, so a human should check it against a live source before publishing."
+    },
+    {
+      "id": "techno.artist.Derrick May.summary",
+      "claim": "A Detroit electronic musician ... In 2020 several women accused him of sexual assault, which he denies.",
+      "verdict": "drift",
+      "flags": [
+        "allegation-wording-checked"
+      ],
+      "cited": [
+        "Derrick_May_(musician)#intro",
+        "Derrick_May_(musician)#Sexual assault allegations"
+      ],
+      "note": "Place: the intro says he is 'from Belleville, Michigan', not Detroit (minor). The allegation is worded as cautiously as the source ('was accused ... by several women'; 'May denies all allegations'), so it passes on fairness. The card leaves out 'dating back to the early 2000s', which is fine.",
+      "fix": {
+        "text": "An electronic musician from Belleville, Michigan, also known as Mayday and Rhythim Is Rhythim, credited with pioneering techno alongside Atkins and Saunderson. In November 2020 several women accused him of sexual assault, which he denies.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Derrick_May_(musician)",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Derrick_May_(musician)",
+            "section": "Sexual assault allegations"
+          }
+        ]
+      }
+    },
+    {
+      "id": "techno.artist.Kevin Saunderson.summary",
+      "claim": "A Brooklyn-born DJ and producer...",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Kevin_Saunderson#intro"
+      ],
+      "note": "The intro says 'Born in New York'. Brooklyn is only in the uncited Early life section.",
+      "fix": {
+        "text": "Add the source Kevin_Saunderson#Early life ('born on September 5, 1964, in Brooklyn, New York'), or write 'New York-born'.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Kevin_Saunderson",
+            "section": "Early life"
+          }
+        ]
+      }
+    },
+    {
+      "id": "techno.artist.Jeff Mills.recording",
+      "claim": "Tokyo Liquid Room DJ mix (1996, album)",
+      "verdict": "unsupported",
+      "flags": [
+        "recording-title-not-in-corpus"
+      ],
+      "cited": [
+        "Jeff_Mills#Music style"
+      ],
+      "note": "The corpus only describes the record: 'In 1996 a DJ mixtape of Jeff Mills Djing in Tokyo's Liquid Rooms was released'. No title is given; 'Tokyo Liquid Room DJ mix' was made up from that description. The study prompt repeats it as a title.",
+      "fix": {
+        "text": "Where Light Ends (2013, album), 'inspired by the Japanese astronaut Mamoru Mohri and his first trip to space'. If the mix has to stay, call it 'a 1996 DJ mix recorded at Tokyo's Liquid Room (title not given)'.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Jeff_Mills",
+            "section": "Solo work and independent labels"
+          }
+        ]
+      }
+    },
+    {
+      "id": "techno.rec3",
+      "claim": "Derrick May - Strings of Life (1987, song)",
+      "verdict": "supported",
+      "flags": [
+        "corpus-date-conflict"
+      ],
+      "cited": [
+        "Techno#Detroit"
+      ],
+      "note": "Techno#Detroit and House_music both give 1987. Derrick_May_(musician)#Career puts it 'a year later' than 1987's 'Nude Photo', so 1988. Kept as supported on the cited section; a human may want to check it."
+    },
+    {
+      "id": "electro-music.listen3",
+      "claim": "Voices run through a vocoder or talkbox...",
+      "verdict": "supported",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "Electro_(music)#intro"
+      ],
+      "note": "'Vocoder' and 'talkbox' are not glossed for a beginner.",
+      "fix": {
+        "text": "Voices run through a vocoder or talkbox (devices that make a voice sound robotic or make an instrument 'talk'), robotic chants and science-fiction synth effects.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "Definition and characteristics"
+          }
+        ]
+      }
+    },
+    {
+      "id": "electro-music.hallmark1",
+      "claim": "...'Planet Rock', produced by Arthur Baker, rebuilt melodies from Kraftwerk's 'Trans-Europe Express' and 'Numbers' over TR-808 beats...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Electro_(music)#History",
+        "Kraftwerk#Influence and legacy"
+      ],
+      "note": "Afrika_Bambaataa#Career: a synth hook from 'Trans-Europe Express' and electronic drum patterns from 'Numbers'. 'Numbers' gave the track drum patterns, not melodies.",
+      "fix": {
+        "text": "In 1982 Afrika Bambaataa's 'Planet Rock', produced by Arthur Baker, rebuilt the synth hook of Kraftwerk's 'Trans-Europe Express' and drum patterns from their 'Numbers' over TR-808 beats and became a turning point for the genre.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Afrika_Bambaataa",
+            "section": "Career"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "History"
+          }
+        ]
+      }
+    },
+    {
+      "id": "electro-music.hallmark3",
+      "claim": "...part of an Afrofuturist streak.",
+      "verdict": "supported",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "Electro_(music)#Definition and characteristics"
+      ],
+      "note": "'Afrofuturist' is not glossed.",
+      "fix": {
+        "text": "...part of an Afrofuturist streak (Black artists imagining the future through technology).",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Cybotron_(American_band)",
+            "section": "Relation to techno"
+          }
+        ]
+      }
+    },
+    {
+      "id": "electro-music.link.funk.reason",
+      "claim": "...and electro emerged as a fusion led by funk.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Electro_(music)#History"
+      ],
+      "note": "Source: 'a fusion of different styles, including funk, boogie combined with German and Japanese technopop'. The source doesn't say funk 'led' it.",
+      "fix": {
+        "text": "As disco faded, funk acts like Zapp experimented with talk boxes and heavier beats, and electro emerged as a fusion of funk and boogie with German and Japanese technopop.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "History"
+          }
+        ]
+      }
+    },
+    {
+      "id": "electro-music.artist.Afrika Bambaataa.dates+summary",
+      "claim": "1957–2026 ... Multiple child sexual abuse allegations led him to leave that role in 2016, and they now weigh heavily on his legacy.",
+      "verdict": "drift",
+      "flags": [
+        "fairness",
+        "death-2026-human-check"
+      ],
+      "cited": [
+        "Afrika_Bambaataa#intro",
+        "Afrika_Bambaataa#Legacy"
+      ],
+      "note": "Allegation wording is less cautious than the source. The source keeps the view that the allegations overshadow his legacy as other people's opinion: 'others have argued that it will eventually be overshadowed by the sexual abuse allegations'; AP: 'others have said that his impact was overshadowed'; Hip Hop Alliance: 'legacy is complex'. The card's 'they now weigh heavily on his legacy' states that view as fact. The first half matches the source ('due to multiple allegations'). The death date (9 April 2026) comes from the corpus intro; a human should check it.",
+      "fix": {
+        "text": "In May 2016 he left that role due to multiple allegations of child sexual abuse, and some have argued that his impact will be overshadowed by them.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Afrika_Bambaataa",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Afrika_Bambaataa",
+            "section": "Legacy"
+          }
+        ]
+      }
+    },
+    {
+      "id": "electro-music.artist.Arthur Baker.summary",
+      "claim": "A Boston-born record producer and DJ...",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Arthur_Baker_(producer)#intro"
+      ],
+      "note": "The intro doesn't say Boston. It's true in uncited Infobox and Early career.",
+      "fix": {
+        "text": "Add the source Arthur_Baker_(producer)#Early career ('Arthur Baker was born in Boston, Massachusetts').",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Arthur_Baker_(producer)",
+            "section": "Early career"
+          }
+        ]
+      }
+    },
+    {
+      "id": "electro-music.artist.Arthur Baker.recording",
+      "claim": "Walking on Sunshine (Rocker's Revenge) (1982, song)",
+      "verdict": "supported",
+      "flags": [
+        "recording-not-own"
+      ],
+      "cited": [
+        "Arthur_Baker_(producer)#Remixer/producer"
+      ],
+      "note": "The title and year are in the corpus, but it is Rocker's Revenge's single ('he produced the single \"Walking on Sunshine\" by Rocker's Revenge featuring Donny Calvin'). Baker produced it; it isn't his own release.",
+      "fix": {
+        "text": "Happy Days (1981, song), his first successful single, 'which he released under the name North End'.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Arthur_Baker_(producer)",
+            "section": "Remixer/producer"
+          }
+        ]
+      }
+    },
+    {
+      "id": "electro-music.artist.Cybotron.c1",
+      "claim": "Tracks like 'Alleys of Your Mind', 'Cosmic Cars', 'Clear' and 'Techno City' are considered early landmarks in electronic music history.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Cybotron_(American_band)#intro"
+      ],
+      "note": "Source: 'considered early works in electronic music history'. 'Landmarks' is stronger.",
+      "fix": {
+        "text": "Tracks like 'Alleys of Your Mind', 'Cosmic Cars', 'Clear' and 'Techno City' are considered early works in electronic music history.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Cybotron_(American_band)",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ambient-music.listen2",
+      "claim": "Layers of synth texture, sometimes with nature sounds like birdsong, waves or rain.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Ambient_music#intro",
+        "Ambient_music#1960s"
+      ],
+      "note": "The cited sections name birdsong and ocean noise. 'Rain' comes from Eno's metaphor in an uncited section, not a sound in the music.",
+      "fix": {
+        "text": "Layers of synth texture, sometimes with nature sounds like birdsong or ocean waves.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Ambient_music",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Ambient_music",
+            "section": "1960s"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ambient-music.hallmark2",
+      "claim": "...German bands such as Tangerine Dream and Kraftwerk laid groundwork.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Ambient_music#1970s"
+      ],
+      "note": "Source: Stylus says Berlin school musicians were 'laying the groundwork'. Kraftwerk and Tangerine Dream are listed only as German bands making ambient-style music at the time, and Kraftwerk is not Berlin school.",
+      "fix": {
+        "text": "...and German bands such as Tangerine Dream and Kraftwerk were making ambient-style music at the same time.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Ambient_music",
+            "section": "1970s"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ambient-music.link.trance-music.reason",
+      "claim": "Trance borrows from ambient, chill-out and film scores, most clearly in its long, beatless breakdowns.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Trance_music#intro"
+      ],
+      "note": "The intro lists ambient among trance's influences and separately describes beatless breakdowns. 'Most clearly in' joins the two, and the source doesn't.",
+      "fix": {
+        "text": "Trance incorporates influences from ambient, chill-out and film scores, and its breakdowns drop the beats to leave melody or atmosphere standing alone.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Trance_music",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ambient-music.artist.Erik Satie.c2",
+      "claim": "...and he is seen as an influence on minimalism and on John Cage.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Erik_Satie#Music"
+      ],
+      "note": "Hedge dropped. Source: 'regarded by some writers as an influence on minimalism'.",
+      "fix": {
+        "text": "His Gymnopédies and Gnossiennes use simple melodies, repetition and unusual harmonies; some writers see him as an influence on minimalism, and John Cage's music shows his influence.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Erik_Satie",
+            "section": "Music"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ambient-music.artist.Erik Satie.recording",
+      "claim": "Gymnopédies (1888, song)",
+      "verdict": "drift",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "Erik_Satie#Music"
+      ],
+      "note": "The Gymnopédies are a set of three piano pieces, not a song. 'Song' will mislead a beginner.",
+      "fix": {
+        "text": "Gymnopédies (1888, set of three piano pieces).",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Erik_Satie",
+            "section": "Music"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ambient-music.artist.Brian Eno.c1",
+      "claim": "Discreet Music (1975) came from hearing a record too quietly while ill in bed...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Brian_Eno#Another Green World and Discreet Music  (1975–1976)"
+      ],
+      "note": "Source: he was 'recuperating at home following a traffic accident' and was 'too weak to get up'. That's an injury, not an illness.",
+      "fix": {
+        "text": "Discreet Music (1975) came from hearing a record too quietly while recovering from a traffic accident, which taught him to hear music as part of a room's ambience, like light or rain.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Brian_Eno",
+            "section": "Another Green World and Discreet Music  (1975–1976)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ambient-music.artist.Aphex Twin.c1",
+      "claim": "...has been called a watershed in ambient music for fusing lush soundscapes with beats and bass.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Aphex_Twin#1992–1994: Selected Ambient Works and early success"
+      ],
+      "note": "Two critics are merged into one: Bush called it a 'watershed'; Blashill (Rolling Stone) praised 'fusing lush soundscapes with oceanic beats and bass lines'. The card makes the fusion the reason for the 'watershed' label.",
+      "fix": {
+        "text": "His debut album Selected Ambient Works 85–92, built from teenage recordings, has been called a watershed in ambient music, and Rolling Stone said it fused lush soundscapes with beats and bass lines.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Aphex_Twin",
+            "section": "1992–1994: Selected Ambient Works and early success"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ambient-music.artist.Aphex Twin.c2",
+      "claim": "Selected Ambient Works Volume II (1994) went further into beatless sound ... though it divided fans at first.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Aphex_Twin#1992–1994: Selected Ambient Works and early success"
+      ],
+      "note": "Source: 'explored a more ambient sound' (it doesn't say beatless) and 'Aphex aficionados remain divided'. The split is still current, not 'at first'.",
+      "fix": {
+        "text": "Selected Ambient Works Volume II (1994) explored a more ambient sound, inspired by lucid dreams and his synaesthesia; it reached number 11 in the UK, but critics were cool and fans remain divided.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Aphex_Twin",
+            "section": "1992–1994: Selected Ambient Works and early success"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ambient-music.rec1",
+      "claim": "Brian Eno - Ambient 1: Music for Airports (1978, album)",
+      "verdict": "supported",
+      "flags": [
+        "corpus-date-conflict"
+      ],
+      "cited": [
+        "Ambient_music#intro"
+      ],
+      "note": "Ambient_music#intro says 1978. Brian_Eno#Music for Airports says it was released in February 1979. The description's 1978 has the same conflict."
+    },
+    {
+      "id": "trance-music.listen3",
+      "claim": "A four-on-the-floor kick that sits back to leave room for the bassline, with snare rolls rising into each peak.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Trance_music#Production"
+      ],
+      "note": "Source: 'in recent years major transitions, builds or climaxes are often foreshadowed by lengthy snare rolls'. 'Each peak' drops both 'in recent years' and 'often'.",
+      "fix": {
+        "text": "A four-on-the-floor kick that sits back to leave room for the bassline; in more recent trance, long snare rolls often build into the big transitions.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Trance_music",
+            "section": "Production"
+          }
+        ]
+      }
+    },
+    {
+      "id": "trance-music.hallmark5",
+      "claim": "...and trance reached its commercial peak around the turn of the millennium.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Trance_music#History"
+      ],
+      "note": "Hedge dropped. Source: 'Trance was arguably at its commercial peak in the second part of 1990s and early 2000s'.",
+      "fix": {
+        "text": "...and trance was arguably at its commercial peak in the late 1990s and early 2000s.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Trance_music",
+            "section": "History"
+          }
+        ]
+      }
+    },
+    {
+      "id": "trance-music.link.ambient-music.reason",
+      "claim": "Trance borrows from ambient, chill-out and film scores, most clearly in its long, beatless breakdowns.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Trance_music#intro"
+      ],
+      "note": "Same link object as ambient-music.link.trance-music. 'Most clearly in' joins two separate statements.",
+      "fix": {
+        "text": "Trance incorporates influences from ambient, chill-out and film scores, and its breakdowns drop the beats to leave melody or atmosphere standing alone.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Trance_music",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "trance-music.artist.Paul van Dyk.summary",
+      "claim": "...and became a leading trance artist from the early 1990s.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Paul_van_Dyk#intro",
+        "Paul_van_Dyk#Early life and musical beginning"
+      ],
+      "note": "Source: 'A trance producer starting in the early 1990s'. Trance_music#History says 'Early on, Paul van Dyk had been relatively sidelined on the scene'. 'Leading' from the early 1990s overstates it.",
+      "fix": {
+        "text": "A German DJ and producer who grew up in East Berlin listening to Western radio, made trance from the early 1990s, and was voted DJ Mag's world No. 1 DJ in 2005 and 2006.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Paul_van_Dyk",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Paul_van_Dyk",
+            "section": "Early life and musical beginning"
+          }
+        ]
+      }
+    },
+    {
+      "id": "trance-music.artist.Paul van Dyk.recording",
+      "claim": "For an Angel (None, song)",
+      "verdict": "unsupported",
+      "flags": [
+        "newcomer",
+        "year-missing"
+      ],
+      "cited": [
+        "Paul_van_Dyk#intro"
+      ],
+      "note": "No year is in the corpus (only a 1998 remix is dated), so the card and the study prompt print '(None)'.",
+      "fix": {
+        "text": "Reflections (2003, album), the first album nominated in the new Best Dance/Electronic Album Grammy category.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Paul_van_Dyk",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "trance-music.artist.Paul van Dyk.study",
+      "claim": "...Start with \"For an Angel\" (None): tell me what to listen for...",
+      "verdict": "drift",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [],
+      "note": "The prompt stays within the card's facts, but the missing year prints as the literal '(None)'. It's fixed once the recording is fixed.",
+      "fix": {
+        "text": "Regenerate the prompt from the fixed recording: 'Start with \"Reflections\" (2003): ...'",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Paul_van_Dyk",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "trance-music.artist.Robert Miles.summary",
+      "claim": "An Italian producer, composer and DJ, born in Switzerland...",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Robert_Miles#intro"
+      ],
+      "note": "The intro doesn't say where he was born. It's true in uncited Early life ('born Roberto Concina in Fleurier, Switzerland, to Italian parents').",
+      "fix": {
+        "text": "Add the source Robert_Miles#Early life.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Robert_Miles",
+            "section": "Early life"
+          }
+        ]
+      }
+    },
+    {
+      "id": "trance-music.rec1",
+      "claim": "Various artists (MFS Records) - Tranceformed From Beyond (None, album)",
+      "verdict": "drift",
+      "flags": [
+        "newcomer",
+        "year-missing"
+      ],
+      "cited": [
+        "Trance_music#History"
+      ],
+      "note": "The title and 'perhaps the first ever trance compilation' are in the corpus, but there's no year, so the card shows '(None)'. A beginner also gets a label compilation rather than a record by an artist.",
+      "fix": {
+        "text": "The KLF - What Time Is Love? (Pure Trance) (1988, song): 'released in the UK in 1988'.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Trance_music",
+            "section": "History"
+          }
+        ]
+      }
+    },
+    {
+      "id": "trance-music.rec2",
+      "claim": "Humate - Love Stimulation (None, song)",
+      "verdict": "drift",
+      "flags": [
+        "newcomer",
+        "year-missing"
+      ],
+      "cited": [
+        "Trance_music#History"
+      ],
+      "note": "The corpus gives no year for the original; the famous version is Paul van Dyk's 1993 remix.",
+      "fix": {
+        "text": "Humate - Love Stimulation (Paul van Dyk remix) (1993, song).",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Paul_van_Dyk",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Paul_van_Dyk",
+            "section": "Early life and musical beginning"
+          }
+        ]
+      }
+    },
+    {
+      "id": "trance-music.rec3",
+      "claim": "Robert Miles - Children (1996, song)",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Trance_music#Subgenres"
+      ],
+      "note": "The cited section says 'composed Children in 1996', but Robert_Miles#intro calls it his '1995 composition', and Breakthrough says it was written in 1994 and officially released in 1995. The card contradicts its own artist summary ('1995 composition').",
+      "fix": {
+        "text": "Robert Miles - Children (1995, song).",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Robert_Miles",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Robert_Miles",
+            "section": "1994–1997: Breakthrough and Dreamland"
+          }
+        ]
+      }
+    },
+    {
+      "id": "drum-and-bass.listen3",
+      "claim": "...the beats crash back in, heavier, often with an MC hyping the crowd.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Drum_and_bass#Drop",
+        "Drum_and_bass#DJ performance"
+      ],
+      "note": "Source: 'Although this practice has declined in popularity, DJs are often accompanied by one or more MCs'. The card drops the decline.",
+      "fix": {
+        "text": "The 'drop': after a build and a breakdown the beats crash back in, more complex and with a heavier bassline, sometimes with an MC hyping the crowd.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Drum_and_bass",
+            "section": "Drop"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Drum_and_bass",
+            "section": "DJ performance"
+          }
+        ]
+      }
+    },
+    {
+      "id": "drum-and-bass.hallmark1",
+      "claim": "...with ragga vocals and MC chants on top.",
+      "verdict": "supported",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "Drum_and_bass#Influences"
+      ],
+      "note": "'Ragga' is not glossed.",
+      "fix": {
+        "text": "...with ragga vocals (Jamaican dancehall-style chanting) and MC chants on top.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Jungle_music",
+            "section": "Ragga jungle"
+          }
+        ]
+      }
+    },
+    {
+      "id": "drum-and-bass.hallmark5",
+      "claim": "In Bristol, Roni Size's Reprazent took the music on stage...",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Drum_and_bass#Late 1990s: Expansion and subgenres",
+        "Roni_Size#Musical style",
+        "Drum_and_bass#2010s – 2020s: Digital era and resurgence"
+      ],
+      "note": "None of the cited sections place Reprazent in Bristol. It's true in uncited Roni_Size#Early life ('grew up in the Bristol suburb of St. Andrews').",
+      "fix": {
+        "text": "Add the source Roni_Size#Early life.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Roni_Size",
+            "section": "Early life"
+          }
+        ]
+      }
+    },
+    {
+      "id": "drum-and-bass.artist.Goldie.c1",
+      "claim": "His 1992 track 'Terminator', released as Metalheads, was a pivotal darkcore record known for its use of pitch shifting.",
+      "verdict": "supported",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "Goldie#Music"
+      ],
+      "note": "'Darkcore' is not glossed.",
+      "fix": {
+        "text": "...a pivotal darkcore record (the dark, sinister strand of early-1990s hardcore) known for its use of pitch shifting.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Jungle_music",
+            "section": "Origins"
+          }
+        ]
+      }
+    },
+    {
+      "id": "drum-and-bass.artist.Roni Size.summary",
+      "claim": "A Bristol DJ and producer...",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Roni_Size#intro"
+      ],
+      "note": "The intro says 'English DJ'. Bristol is only in uncited Infobox and Early life.",
+      "fix": {
+        "text": "Add the source Roni_Size#Early life.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Roni_Size",
+            "section": "Early life"
+          }
+        ]
+      }
+    },
+    {
+      "id": "uk-garage.description",
+      "claim": "Its 2-step form ruled the UK charts around 1999–2001 before feeding grime and dubstep.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "UK_garage#1998–2001: 2-step garage and UK chart success"
+      ],
+      "note": "Source: 'making UK garage and 2-step a stable fixture on the UK charts for the next couple of years'. 'Ruled' is stronger.",
+      "fix": {
+        "text": "Its 2-step form became a fixture of the UK charts around 1999–2001 before feeding grime and dubstep.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/UK_garage",
+            "section": "1998–2001: 2-step garage and UK chart success"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/UK_garage",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "uk-garage.debatable",
+      "claim": "It began as American garage house sped up by London DJs; only as British producers made their own tracks ... did they start calling it 'UK garage'.",
+      "verdict": "supported",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "UK_garage#1994–1997: Speed garage"
+      ],
+      "note": "Accurate, but this is a settled fact presented as a debate. Nothing here is contested in the corpus, so a beginner gets no real debate. One the corpus does support: whether speed garage broke through with DJ EZ's 1994 tempo change or with Armand van Helden's 1997 remix, which is only 'sometimes credited'.",
+      "fix": {
+        "text": "Speed garage's breakthrough has more than one claimed moment: DJ EZ playing Todd Edwards at 130 bpm in 1994, or Armand van Helden's 1997 'Spin Spin Sugar' remix, which is 'sometimes credited with breaking speed garage into the mainstream'.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/UK_garage",
+            "section": "1994–1997: Speed garage"
+          }
+        ]
+      }
+    },
+    {
+      "id": "uk-garage.hallmark5",
+      "claim": "The MC, rooted in the Jamaican tradition of toasting...",
+      "verdict": "supported",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "UK_garage#Role of MCs"
+      ],
+      "note": "'Toasting' is not glossed.",
+      "fix": {
+        "text": "The MC, rooted in the Jamaican dancehall tradition of 'toasting' (talking or chanting over a record to work up the crowd), became central to garage.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/UK_garage",
+            "section": "Role of MCs"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Dubstep",
+            "section": "Cultural elements"
+          }
+        ]
+      }
+    },
+    {
+      "id": "uk-garage.artist.Artful Dodger.summary",
+      "claim": "A Southampton garage duo...",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Artful_Dodger_(duo)#intro"
+      ],
+      "note": "The intro doesn't say Southampton. Only the uncited Infobox has it ('origin: Southampton, England').",
+      "fix": {
+        "text": "Add the source Artful_Dodger_(duo)#Infobox.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Artful_Dodger_(duo)",
+            "section": "Infobox"
+          }
+        ]
+      }
+    },
+    {
+      "id": "uk-garage.artist.Craig David.summary",
+      "claim": "A Southampton singer...",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Craig_David#intro"
+      ],
+      "note": "The intro says 'English singer'. Southampton is only in uncited Early life.",
+      "fix": {
+        "text": "Add the source Craig_David#Early life ('David was born in Southampton, Hampshire').",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Craig_David",
+            "section": "Early life"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dubstep.listen1",
+      "claim": "A half-time feel: a clap or snare on the third beat of each bar, so a fast 140 bpm track feels slow and heavy.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Dubstep#Rhythm"
+      ],
+      "note": "The source gives the snare on the third beat and the 140 bpm, but it never says 'half-time' or 'feels slow and heavy'. What it does say is that tracks are 'so empty' that listeners 'fill in the double time' themselves.",
+      "fix": {
+        "text": "A clap or snare usually on the third beat of each bar at about 140 bpm, with tracks so empty that, as Kode9 put it, you 'almost fill in the double time yourself'.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Dubstep",
+            "section": "Rhythm"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dubstep.hallmark2",
+      "claim": "Digital Mystikz (Mala and Coki) brought reggae and dub values and jungle's bass weight...",
+      "verdict": "drift",
+      "flags": [
+        "fairness"
+      ],
+      "cited": [
+        "Dubstep#2002–2005: Evolution",
+        "Digital_Mystikz#DMZ"
+      ],
+      "note": "Miscredit. The source credits Digital Mystikz 'along with labelmates and collaborators Loefah and MC Sgt Pokes' with bringing 'sound system thinking, dub values, and appreciation of jungle bass weight'. The card gives it to the duo alone.",
+      "fix": {
+        "text": "Digital Mystikz (Mala and Coki), with Loefah and MC Sgt Pokes, brought sound-system thinking, dub values and jungle's bass weight, and DMZ fliers told dancers to 'come meditate on bass weight'.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Dubstep",
+            "section": "2002–2005: Evolution"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Digital_Mystikz",
+            "section": "DMZ"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dubstep.hallmark5",
+      "claim": "Many UK pioneers, Skream among them, later moved on to house and techno.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Dubstep#2014–present: Decline in mainstream popularity"
+      ],
+      "note": "Source: 'Pioneers of dubstep such as Skream and Loefah moved away'. Skream went to house and techno; Loefah went to UK bass. 'Many' and 'house and techno' generalise from one case.",
+      "fix": {
+        "text": "Some UK pioneers moved on: Skream to house and techno, Loefah to UK bass.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Dubstep",
+            "section": "2014–present: Decline in mainstream popularity"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dubstep.artist.Digital Mystikz.dates",
+      "claim": "South London duo; DMZ night since 2005",
+      "verdict": "supported",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "Digital_Mystikz#DMZ"
+      ],
+      "note": "The text is true, but it isn't a date. The dates field holds a description, and it will look odd beside the other artists' dates.",
+      "fix": {
+        "text": "DMZ night since 2005 (Coki born 1980)",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Digital_Mystikz",
+            "section": "DMZ"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Digital_Mystikz",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dubstep.artist.Digital Mystikz.recording",
+      "claim": "Anti War Dub (None, song)",
+      "verdict": "drift",
+      "flags": [
+        "newcomer",
+        "year-missing"
+      ],
+      "cited": [
+        "Digital_Mystikz#intro"
+      ],
+      "note": "The title is in the corpus, but there's no year, so the card and study prompt print '(None)'. Dubstep#Rhythm calls it 'Mala's \"Anti-War Dub\"', so it's one member's track, and the intro still says 'Their song'.",
+      "fix": {
+        "text": "Anti War Dub (song; used in the 2006 film Children of Men). Show it without a release year.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Digital_Mystikz",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dubstep.artist.Digital Mystikz.study",
+      "claim": "...Start with \"Anti War Dub\" (None): ...",
+      "verdict": "drift",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [],
+      "note": "The prompt stays within the card's facts, but '(None)' prints literally.",
+      "fix": {
+        "text": "Regenerate the prompt without the year: 'Start with \"Anti War Dub\": ...'",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Digital_Mystikz",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dubstep.artist.Mary Anne Hobbs.recording",
+      "claim": "Warrior Dubz (2006, album)",
+      "verdict": "supported",
+      "flags": [
+        "recording-not-own"
+      ],
+      "cited": [
+        "Mary_Anne_Hobbs#Discography"
+      ],
+      "note": "The title is in the corpus, but it's a compilation of other producers' tracks that she curated, not her own record. It's reasonable for a DJ, but the listening module should call it a compilation.",
+      "fix": {
+        "text": "Warrior Dubz (2006, compilation she curated).",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Mary_Anne_Hobbs",
+            "section": "Discography"
+          }
+        ]
+      }
+    },
+    {
+      "id": "electronic-dance-music.link.house-music.reason",
+      "claim": "...and house acts like Swedish House Mafia led it.",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Electronic_dance_music#Terminology",
+        "House_music#2010s"
+      ],
+      "note": "Same link object as house-music.link.electronic-dance-music: true in Swedish_House_Mafia#intro, which isn't cited.",
+      "fix": {
+        "text": "The 2010s US 'EDM' sound was described as somewhere between electro and progressive house, and the Swedish house trio Swedish House Mafia is credited with setting the tone for the early-2010s EDM boom.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electronic_dance_music",
+            "section": "Terminology"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Swedish_House_Mafia",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "electronic-dance-music.artist.David Guetta.c2",
+      "claim": "His run of collaborations ... helped carry dance music onto American radio.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Electronic_dance_music#United States"
+      ],
+      "note": "The section says that from 2009 Guetta 'began to regularly achieve crossover hits via collaborations'. It credits Timberlake's 'SexyBack' with bringing EDM sounds to top 40 radio, not Guetta.",
+      "fix": {
+        "text": "From 2009 he regularly scored crossover hits through collaborations with pop and hip-hop acts such as Akon, The Black Eyed Peas and Sia.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electronic_dance_music",
+            "section": "United States"
+          }
+        ]
+      }
+    },
+    {
+      "id": "electronic-dance-music.artist.Skrillex.recording",
+      "claim": "Scary Monsters and Nice Sprites (2010, album)",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Skrillex#intro"
+      ],
+      "note": "The card's own c1 and Dubstep#2009–2014 call it an EP; the kind says 'album'.",
+      "fix": {
+        "text": "Scary Monsters and Nice Sprites (2010, EP).",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Dubstep",
+            "section": "2009–2014: Mainstream popularity and Brostep"
+          }
+        ]
+      }
+    }
+  ]
+}

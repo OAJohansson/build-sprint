@@ -31,7 +31,7 @@ import { noteName, partNoun, type LabMake } from "@/lib/mentor/lab";
 import type { Scale } from "@/lib/synths/theory";
 import { Composer, Turn, useEdgeFades, type ThreadTurn } from "./mentor-thread";
 import { Knob } from "@/components/ui/knob";
-import { DrumsCheck, DrumsMiddle, DrumsSaveBar, type DrumsModel } from "./make-drums";
+import { DrumsCheck, DrumsMiddle, DrumsSaveBar, useShort, type DrumsModel } from "./make-drums";
 import { MelodyCheck, MelodyMiddle, MelodySaveBar, type MelodyModel } from "./make-melody";
 import { prettyChord } from "@/lib/make/chords-mine";
 import { MELODY_ON } from "@/lib/make/melody-reader";
@@ -461,6 +461,8 @@ function BlindAB({ m, partName }: { m: MakeModel; partName: string }) {
 }
 
 function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: LabPart; loop: LoopState | null; ready: boolean; playing: boolean }) {
+  // Phase 7: the shelf takes room, so the knobs get smaller on a short window (as the drums' do).
+  const short = useShort();
   const [blind] = useState(blindOn);
   const off = !!m.words || m.readState !== "ready";
   const wait = waitLine(m, loop, ready, playing);
@@ -472,11 +474,12 @@ function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: 
   else line = <>Mentor: {suggestLine(m.macros, m.ticks)}{(moves.length > 0 || m.moved) && <><br /><span className={s.faintLine}>{m.moved ?? "Gold ticks mark those."}</span></>}</>;
   return (
     <>
-      <PresetHead m={m} partName={part.name.toLowerCase()} />
+      {/* Phase 7: the shelf of 20 starting sounds heads the controls; its name opens Your sounds and words. */}
+      <BassShelf m={m} playing={playing} partName={part.name.toLowerCase()} />
       <div className={s.macros} data-off={off ? "" : undefined}>
         {wait && <p className={s.makeWait} role="status">{wait}</p>}
         {MACRO_IDS.map((id) => (
-          <Knob key={id} id={id} value={m.macros[id]} sug={m.ticks?.[id]} color={part.color} disabled={off} onChange={(v) => m.setMacro(id, v)} reset={MAKE_PRESETS[m.preset].macros[id]} size={84} />
+          <Knob key={id} id={id} value={m.macros[id]} sug={m.ticks?.[id]} color={part.color} disabled={off} onChange={(v) => m.setMacro(id, v)} reset={MAKE_PRESETS[m.preset].macros[id]} size={short === 2 ? 60 : short === 1 ? 70 : 84} />
         ))}
       </div>
       <div className={s.suggestRow}>
@@ -485,8 +488,8 @@ function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: 
         <button className={s.ghost} onClick={m.suggestAgain} disabled={off || m.suggesting || m.suggestedNow} aria-describedby="suggest-hint">{m.suggesting ? "Suggesting…" : m.suggestedNow ? "Suggested" : "Suggest settings"}</button>
         <span id="suggest-hint" hidden>Places gold ticks where the knobs come closest to the original; it never turns a knob</span>
       </div>
-      <BassShelf m={m} playing={playing} />
-      <div className={s.checkRow}>
+      {/* Phase 7: with the shelf above the knobs, A/B stays in view at the foot of the column (sticky, as in Drums). */}
+      <div className={`${s.checkRow} ${s.drCheck}`}>
         {blind ? <BlindAB m={m} partName={part.name.toLowerCase()} /> : (
         <div className={s.abWrap}>
           <div className={s.ab} role="group" aria-label="Compare at the same loudness">
@@ -503,7 +506,7 @@ function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: 
 }
 
 /** The preset name opens a menu of tagged starting points; describing one in words is its last item (T85). */
-function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
+function PresetHead({ m, partName, meta }: { m: MakeModel; partName: string; meta?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [menuMax, setMenuMax] = useState<number | undefined>(undefined);
   const [asking, setAsking] = useState(false);
@@ -528,7 +531,8 @@ function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
           setMenuMax(col ? Math.max(180, Math.round(col.bottom - e.currentTarget.getBoundingClientRect().bottom - 16)) : undefined);
           setOpen(!open);
         }}
-          aria-label={`Preset: ${current}. Change preset`}>{current} <span aria-hidden>▾</span></button>
+          aria-label={`Sound: ${current}. Your sounds, or describe one in words`}>{current} <span aria-hidden>▾</span></button>
+        {meta}
       </div>
       {open && (
         <div className={s.menu} role="menu" aria-label="Presets" style={{ maxHeight: menuMax }}>
@@ -575,8 +579,10 @@ const cap1 = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
  * map's families, a feel word each; the sound now (name, family · feel, one plain line) above them; a tap
  * plays it in the loop (B · Mine), or one note alone when the loop is stopped. "Hide sounds" folds it.
  */
-function BassShelf({ m, playing }: { m: MakeModel; playing: boolean }) {
+function BassShelf({ m, playing, partName }: { m: MakeModel; playing: boolean; partName: string }) {
   const p = MAKE_PRESETS[m.preset];
+  // A short window (≤ 760 px) lays the families out in one row, so the knobs and A/B stay in view.
+  const rows = useShort() === 2 ? 1 : 2;
   return (
     <section className={s.shelf} aria-label="Bass sounds">
       <div className={s.shelfHead}>
@@ -585,8 +591,7 @@ function BassShelf({ m, playing }: { m: MakeModel; playing: boolean }) {
           <SoundCredits />
         </div>
         <div className={s.shelfNow}>
-          <span className={s.shelfName}>{m.words ? "From your words" : p.name}</span>{" "}
-          {!m.words && <span className={s.lbl}>{cap1(p.family)} · {p.feel}</span>}
+          <PresetHead m={m} partName={partName} meta={!m.words && <span className={s.lbl}>{cap1(p.family)} · {p.feel}</span>} />
           <span className={s.shelfAbout} title={p.about}>{m.words ? "A loop Stable Audio made from your words; pick a sound below to go back." : p.about}</span>
         </div>
         <button className={s.textBtn} aria-expanded={m.shelf} onClick={() => m.setShelf(!m.shelf)}>{m.shelf ? "Hide sounds" : `Show ${MAKE_PRESET_IDS.length} sounds`}</button>
@@ -598,7 +603,7 @@ function BassShelf({ m, playing }: { m: MakeModel; playing: boolean }) {
             return (
               <div key={f} className={s.grp}>
                 <h3>{cap1(f)}</h3>
-                <div className={s.gcol} style={{ gridTemplateRows: `repeat(${Math.min(2, xs.length)}, auto)` }}>
+                <div className={s.gcol} style={{ gridTemplateRows: `repeat(${Math.min(rows, xs.length)}, auto)` }}>
                   {xs.map((id) => (
                     <button key={id} className={s.snd} aria-pressed={!m.words && m.preset === id} title={MAKE_PRESETS[id].about} onClick={() => m.pick(id, playing)}>
                       <b>{MAKE_PRESETS[id].name}</b>

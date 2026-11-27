@@ -499,7 +499,8 @@ function Shelf({ m, row, playing, off, rowOff }: { m: DrumsModel; row: DrumRow; 
             return (
               <div key={f} className={s.grp}>
                 <h3>{famLabel(f)}</h3>
-                <div className={s.gcol} style={{ gridTemplateRows: `repeat(${Math.min(3, xs.length)}, auto)` }}>
+                {/* A short window (≤ 760 px) lays each family out in two rows, so the shelf stays above A/B. */}
+                <div className={s.gcol} style={{ gridTemplateRows: `repeat(${Math.min(short === 2 ? 2 : 3, xs.length)}, auto)` }}>
                   {xs.map((x) => (
                     <button key={x.id} className={s.snd} aria-pressed={snd.preset === x.id} title={x.about} onClick={() => m.pick(row, x.id as DrumSoundId, playing)}>
                       <b>{x.name}</b>
@@ -513,7 +514,7 @@ function Shelf({ m, row, playing, off, rowOff }: { m: DrumsModel; row: DrumRow; 
           {mine.length > 0 && (
             <div className={s.grp}>
               <h3>Your sounds</h3>
-              <div className={s.gcol} style={{ gridTemplateRows: `repeat(${Math.min(3, mine.length)}, auto)` }}>
+              <div className={s.gcol} style={{ gridTemplateRows: `repeat(${Math.min(short === 2 ? 2 : 3, mine.length)}, auto)` }}>
                 {mine.map((x) => (
                   <button key={x.id} className={s.snd} title={`${x.name}: ${drumSoundName(x.preset)}${isDrumPreset(x.preset) ? " (synth)" : ""}`} onClick={() => m.loadSound(x)}>
                     <b className={s.sndMine}>{x.name}</b>

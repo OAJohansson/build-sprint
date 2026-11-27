@@ -351,7 +351,8 @@ export function drumSuggestLine(preset: DrumSoundId, current: DrumMacros, ticks:
   if (!moves.length) return "You're on the gold ticks. Switch A/B to judge the rest by ear.";
   const say = moves.map(({ id, up }) => {
     // The note and the decay always name their target; the others only when the word itself changes.
-    const word = (v: number) => drumKnobWord(preset, id, v, bpm).split(" · ")[0];
+    // A sampled sound's Pitch names its semitones ("Pitch up to +3 st"), not just "higher".
+    const word = (v: number) => { const w = drumKnobWord(preset, id, v, bpm).split(" · "); return id === "pitch" ? w[w.length - 1] : w[0]; };
     const to = word(ticks[id] ?? 0), named = id === "tune" || id === "decay" || id === "pitch" || to !== word(current[id] ?? 0);
     return `${drumKnobSpec(preset, id).name} ${up ? "up" : "down"}${named ? ` to ${to}` : ""}`;
   });

@@ -478,3 +478,15 @@
 .creditsPop a { color: var(--ink); }
 .creditsTop { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
 .creditsTop b { font-weight: 500; }
+/* The bass shelf's head holds the sound's name (its menu: your sounds, words), family · feel, one line. */
+.shelfNow .preset { width: auto; flex: 1 1 100%; gap: 4px; }
+.shelfNow .presetName { font-size: 24px !important; }
+.shelfNow .presetRow { align-items: baseline; gap: 10px; }
+.shelf .gcol + .gcol { margin-top: 0; }
+@media (max-height: 760px) {
+  .shelf { margin-top: 4px; padding-top: 4px; }
+  .shelfHead { margin-bottom: 4px; gap: 16px; }
+  .shelfName, .shelfNow .presetName { font-size: 20px !important; }
+  .grp h3 { padding-bottom: 1px; }
+  .groups { padding: 3px 4px; }
+}

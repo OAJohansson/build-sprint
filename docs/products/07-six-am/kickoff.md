@@ -1032,6 +1032,7 @@ Small, folded in: Listen's "Other" becomes "Melody & FX" (OR6-1, toil, logged as
 | --- | --- | --- | --- |
 | 1 | Where do the new sounds come from? | A hand-picked free (CC0) sample kit for drums, a richer bass synth with more presets plus a few credited sampled basses; own packs later (PM's recommendation, `research-sounds.md`) | L266 |
 | 2 | How many starting sounds? | 20 per row (every drum row and bass), picked for breadth: cover a lot of variety, not 20 versions of one sound (PM had recommended 12 drums / 16 bass). The variety map below guides the picks | L267 |
+| 3 | Should Make read the new drum rows? | The middle way: Make reads open hats; shaker and ride start empty for you to fill by ear (switched on later only if a reader passes a real-track grade). **Design must make it very clear** which rows are still yours to fill, so an empty row never makes the loop sound "nothing like the original" without saying why | L268 |
 
 ## Variety map for the 20 sounds per row (L267, draft)
 
@@ -1056,7 +1057,8 @@ word and one plain line.
 | --- | --- |
 | R1 | 20 starting sounds for bass and every drum row, spread over the variety map's families and dials, no near-duplicates (L266, L267), each with a plain one-line description; licences recorded per file; nothing that can't be redistributed in a web app is shipped. |
 | R2 | Knobs change the sound audibly: each knob's range moves a measured feature (brightness, length, level, pitch) clearly between its ends. |
-| R3 | Drum rows: Kick, Claps & snares, Closed hat, Open hat, Shaker / percussion, Ride; reading per question 3. |
+| R3 | Drum rows: Kick, Claps & snares, Closed hat, Open hat, Shaker / percussion, Ride. Make reads Kick, Claps, Closed and Open hat; Shaker and Ride start empty (L268). |
+| R3b | Empty rows are unmissable (L268): each row Make didn't fill says so in plain words ("Your turn: listen for a shaker and tap it in"), and the loop as a whole shows what's still open ("2 rows to fill by ear") until the owner fills or dismisses them, so a thin-sounding loop always explains itself. Checked in the design critic's pass and the user test. |
 | R4 | Fix by ear: tap a step to add or remove a hit; mute and solo per row; Suggest, A/B, closeness and Save keep working on the edited pattern; what plays is what is saved. |
 | R5 | Click to jump: clicking a spot on the loop's bars plays from there, in Bass, Drums, Melody and FX. |
 | R6 | Studio rebuild: the original's sections laid out on the timeline from its map, each section fillable per lane from the library; per section, a hint of which parts the original has. |

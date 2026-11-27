@@ -12,7 +12,8 @@ import { notesForLoop } from "./pattern";
 import { synthParams, type Macros, type MakePresetId } from "./presets";
 import { renderBass } from "./render";
 import { drumsCloseness, drumsFromReading, rowCloseness, suggestDrumRow, drumsReport, measureRows, renderDrumsMine, type DrumSuggestion, type DrumsCloseness, type DrumsReading, type DrumsReport, type RowSound, type RowTarget } from "./drums-make";
-import type { DrumMacros, DrumPresetId, DrumRow } from "./drum-synth";
+import type { DrumMacros, DrumRow, DrumSoundId } from "./drum-synth";
+import { setKitSample, type KitSample } from "./kit-samples";
 import { readDrums } from "./drums-read";
 import { readNotes, type NotesReading } from "./notes-read";
 import { readNotesBP } from "./notes-bp";
@@ -28,14 +29,17 @@ import type { MelodyPresetId, MelodyRow, PolyMacros } from "./poly-synth";
 import { measureFx, renderFxMine, type FxMeasure, type FxRowSound } from "./fx-make";
 import type { FxPlan, FxRow } from "./fx-synth";
 
-export type MakeRequest =
+/** Phase 7: decoded recordings a job's sampled sounds play from, by id; the worker keeps them for later jobs. */
+type WithSamples = { kit?: Record<string, KitSample> };
+
+export type MakeRequest = (
   | { type: "read"; id: number; left: Float32Array; right: Float32Array; rate: number; bpm: number; key: string; scale: Scale }
   | { type: "render"; id: number; reading: PartReading; active?: boolean[] | null; preset: MakePresetId; macros: Macros; bpm: number; rate: number; levelDb: number; lufs?: number | null; samples: number }
   | { type: "suggest"; id: number; reading: PartReading; preset: MakePresetId; bpm: number; start?: Partial<Macros> }
   // Phase 5 drums (P3, P6–P8): read the looped drum part, render Mine's three rows, Suggest per row.
   | { type: "drums-read"; id: number; left: Float32Array; right: Float32Array; rate: number; bpm: number }
   | { type: "drums-render"; id: number; reading: DrumsReading; sounds: Record<DrumRow, RowSound>; levels: Record<DrumRow, number | null>; report: DrumsReport; bpm: number; rate: number; samples: number; levelDb: number; lufs: number; targets?: Record<DrumRow, RowTarget | null> }
-  | { type: "drums-suggest"; id: number; target: RowTarget; preset: DrumPresetId; start?: DrumMacros }
+  | { type: "drums-suggest"; id: number; target: RowTarget; preset: DrumSoundId; start?: DrumMacros; candidates?: DrumSoundId[] }
   // Phase 5 slice 2, melody: read the looped "other" part, render Mine's rows, Suggest per row.
   | { type: "melody-read"; id: number; left: Float32Array; right: Float32Array; rate: number; bpm: number; key?: { key: string; scale: Scale } }
   | { type: "melody-render"; id: number; reading: MelodyReading; sounds: Record<MelodyRow, MelodyRowSound>; targets: Record<MelodyRow, MelodyTarget | null>; bpm: number; rate: number; samples: number; levelDb: number; lufs: number }
@@ -46,7 +50,7 @@ export type MakeRequest =
   | { type: "lead-read"; id: number; left: Float32Array; right: Float32Array; rate: number; bpm: number; key?: { key: string; scale: Scale }; chords: ChordsReading }
   // Phase 5 slice 3, FX: measure the drop (its FX-carrying parts, its loudness), render Mine's FX.
   | { type: "fx-read"; id: number; fxL: Float32Array; fxR: Float32Array; mixL: Float32Array; mixR: Float32Array; drL: Float32Array; drR: Float32Array; rate: number; bpm: number; plan: FxPlan; loopBars: number; fromBar?: number }
-  | { type: "fx-render"; id: number; plan: FxPlan; sounds: Record<FxRow, FxRowSound>; rootMidi: number; bpm: number; rate: number; samples: number; mixRmsDb: number; blocksA: number[]; mixL?: Float32Array; mixR?: Float32Array };
+  | { type: "fx-render"; id: number; plan: FxPlan; sounds: Record<FxRow, FxRowSound>; rootMidi: number; bpm: number; rate: number; samples: number; mixRmsDb: number; blocksA: number[]; mixL?: Float32Array; mixR?: Float32Array }) & WithSamples;
 
 export type MakeResponse =
   | { type: "read"; id: number; reading: PartReading | null; levelDb: number; lufs: number; active: boolean[]; ms: number }
@@ -54,7 +58,7 @@ export type MakeResponse =
   | { type: "suggest"; id: number; suggestion: Suggestion; ms: number }
   | { type: "drums-read"; id: number; reading: DrumsReading; targets: Record<DrumRow, RowTarget | null>; report: DrumsReport; levelDb: number; lufs: number; ms: number }
   | { type: "drums-render"; id: number; left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; rate: number; gainDb: number; rowGainsDb: Record<DrumRow, number | null>; closeness: DrumsCloseness; rowCloseness: Record<DrumRow, { score: number; distance: number } | null>; ms: number }
-  | { type: "drums-suggest"; id: number; suggestion: DrumSuggestion & { closer: { preset: DrumPresetId; macros: DrumMacros; distance: number } | null }; ms: number }
+  | { type: "drums-suggest"; id: number; suggestion: DrumSuggestion & { closer: { preset: DrumSoundId; macros: DrumMacros; distance: number } | null }; ms: number }
   | { type: "melody-read"; id: number; reading: MelodyReading; targets: Record<MelodyRow, MelodyTarget | null>; levelDb: number; lufs: number; reader: "dsp" | "basic-pitch"; ms: number }
   | { type: "chords-read"; id: number; chords: ChordsReading; lead: { from: "row" | "top-line"; notes: MelNote[] }; melody: MelodyReading; targets: Record<MelodyRow, MelodyTarget | null>; cellChroma: number[][]; levelDb: number; lufs: number; reader: ChordsReader; ms: number }
   | { type: "lead-read"; id: number; notes: MelNote[]; from: "row" | "top-line"; doubtful: boolean; why: string | null; chordTop: number; guards: { topLine: boolean; phase5: boolean; phase5Why: string | null; chordTone: boolean; chordToneShare: number; low: boolean; medianMidi: number | null; notes: number }; target: MelodyTarget | null; reader: "dsp" | "basic-pitch"; ms: number }
@@ -200,6 +204,8 @@ export async function runMakeJobAsync(m: MakeRequest, loadModel: () => Promise<G
 
 export function runMakeJob(m: MakeRequest): { res: MakeResponse; transfer: ArrayBuffer[] } {
   const t0 = performance.now();
+  // Phase 7: keep the recordings this job brought (the page sends each one once per worker).
+  if (m.kit) for (const [id, x] of Object.entries(m.kit)) setKitSample(id, x.data, x.rate);
   const ms = () => Math.round(performance.now() - t0);
   try {
     if (m.type === "read") {
@@ -277,7 +283,7 @@ export function runMakeJob(m: MakeRequest): { res: MakeResponse; transfer: Array
       return { res: { type: "fx-render", id: m.id, left, right, rate: m.rate, partsDb: r.partsDb, ms: ms() }, transfer: [left.buffer, right.buffer] };
     }
     if (m.type === "melody-suggest") return { res: { type: "melody-suggest", id: m.id, suggestion: suggestMelody(m.target, m.preset, m.bpm, { start: m.start }), ms: ms() }, transfer: [] };
-    if (m.type === "drums-suggest") return { res: { type: "drums-suggest", id: m.id, suggestion: suggestDrumRow(m.target, m.preset, { start: m.start }), ms: ms() }, transfer: [] };
+    if (m.type === "drums-suggest") return { res: { type: "drums-suggest", id: m.id, suggestion: suggestDrumRow(m.target, m.preset, { start: m.start, candidates: m.candidates }), ms: ms() }, transfer: [] };
     return { res: { type: "suggest", id: m.id, suggestion: suggestFor(m.reading, m.preset, m.bpm, m.start), ms: ms() }, transfer: [] };
   } catch (e) {
     return { res: { type: "error", id: m.id, message: e instanceof Error ? e.message : String(e) }, transfer: [] };

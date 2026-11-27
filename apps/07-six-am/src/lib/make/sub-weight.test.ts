@@ -6,7 +6,7 @@ import { parseLibLoop } from "./lib-loop";
 import { rmsDb } from "./level";
 import { bandShareDb } from "./meter";
 import { pitchHz } from "./pattern";
-import { MAKE_PRESETS, MAKE_PRESET_IDS, clampMacros, macroWord, synthParams, type SynthParams } from "./presets";
+import { MAKE_PRESETS, PHASE4_PRESET_IDS as MAKE_PRESET_IDS, clampMacros, macroWord, synthParams, type SynthParams } from "./presets";
 import { renderBass, secondsPer16th, type MakeNote } from "./render";
 
 const RATE = 22050;

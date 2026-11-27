@@ -7,24 +7,37 @@
 // L215), at the original's loudness; A/B against the original drum part, the original bass under
 // both by default (P7). The drum part is read off the main thread from a copy that the worker zeroes
 // (C2): only numbers come back. Save saves the open row ("Save kick") to My sounds.
+// Phase 7 slice 1 (L266, L267, L272, L278, R1, R2): each row starts from 20 sampled sounds on a shelf
+// under the rows (family groups, a feel word each; a tap plays it in the loop, or alone when the loop
+// is stopped), the picked sound's name and plain line above, its four knobs (Pitch, Length, Tone,
+// Drive) beside it, and the sound credits one click away. A saved synth sound still opens as it was.
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from "react";
 import type { LabTransport, LoopState } from "@/lib/lab/transport";
-import { DRUM_KNOB_SPECS, DRUM_PRESETS, DRUM_ROWS, DRUM_ROW_NAMES, ROW_KNOBS, ROW_PRESETS, clampDrumMacros, drumKnobWord, drumMoves, drumSuggestLine, type DrumMacros, type DrumPresetId, type DrumRow } from "@/lib/make/drum-synth";
-import { ROW_SCORE_SCALE, foldRow, type DrumsCloseness, type DrumsReading, type DrumsReport, type RowSound, type RowTarget } from "@/lib/make/drums-make";
+import { DRUM_ROWS, DRUM_ROW_NAMES, clampDrumMacros, drumKnobSpec, drumKnobWord, drumMoves, drumSoundAbout, drumSoundName, drumSuggestLine, isDrumPreset, isKitId, knobsOf, rowOf, type DrumMacros, type DrumRow, type DrumSoundId } from "@/lib/make/drum-synth";
+import { KIT_ROW_FOR, ROW_SCORE_SCALE, foldRow, rowCandidates, type DrumsCloseness, type DrumsReading, type DrumsReport, type RowSound, type RowTarget } from "@/lib/make/drums-make";
 import { MakeClient } from "@/lib/make/make-client";
+import { P7_FAMILIES, P7_ROW_NAMES, p7SoundById, p7Sounds } from "@/lib/make/kit-p7";
+import { hasKitSample } from "@/lib/make/kit-samples";
+import { loadSample, loadSamples, previewDrum } from "@/lib/make/kit-load";
 import { drumNoun, isDrumSound, saveAction, soundId, suggestDrumName, suggestDrumTags, type DrumSound } from "@/lib/make/library";
 import { ApiError, mentorApi } from "@/lib/mentor/client";
 import { Knob } from "@/components/ui/knob";
+import { SoundCredits } from "./sound-credits";
 import s from "./lab.module.css";
 
 const loopKeyOf = (l: LoopState | null) => (l?.state === "memory" ? `${Math.round(l.startMs)}-${Math.round(l.endMs)}` : null);
 type ReadState = "idle" | "reading" | "ready" | "nohits" | "error";
 type Read = { loopKey: string; d: DrumsReading; targets: Record<DrumRow, RowTarget | null>; report: DrumsReport; levelDb: number; lufs: number; samples: number; rate: number };
-type Sound = { preset: DrumPresetId; macros: DrumMacros };
-const HOME: Record<DrumRow, DrumPresetId> = { kick: "kick-deep-909", clap: "clap-wide", hats: "hats-open-909" };
-const fresh = (p: DrumPresetId): Sound => ({ preset: p, macros: clampDrumMacros(p, undefined) });
+type Sound = { preset: DrumSoundId; macros: DrumMacros };
+/** Phase 7 (design, L278): each row starts on a sampled sound that suits house (a round kick, the 909 clap, the 909 closed hat). */
+const HOME: Record<DrumRow, DrumSoundId> = { kick: "kick-house-bounce", clap: "clap-909-clap", hats: "hat-909-closed" };
+const fresh = (p: DrumSoundId): Sound => ({ preset: p, macros: clampDrumMacros(p, undefined) });
 const perRow = <T,>(f: (r: DrumRow) => T) => Object.fromEntries(DRUM_ROWS.map((r) => [r, f(r)])) as Record<DrumRow, T>;
 const rowTitle = (r: DrumRow) => DRUM_ROW_NAMES[r].toLowerCase();
+/** Phase 7: what a row is called next to its starting sounds (the kit's words: the Hats row plays the closed hats). */
+const shelfRowName = (r: DrumRow) => P7_ROW_NAMES[KIT_ROW_FOR[r]];
+/** The recordings a set of sounds plays from (synth presets have none). */
+const kitIdsOf = (xs: Sound[]) => xs.map((x) => x.preset).filter(isKitId);
 
 export type DrumsOpts = {
   tr: RefObject<LabTransport | null>;
@@ -48,7 +61,7 @@ export function useDrums(o: DrumsOpts) {
 
   const [open, setOpen] = useState<DrumRow>("kick");
   const [sounds, setSounds] = useState<Record<DrumRow, Sound>>(() => perRow((r) => fresh(HOME[r])));
-  const [ticksS, setTicks] = useState<Record<DrumRow, { for: string; macros: DrumMacros; moved: string | null; closer?: { preset: DrumPresetId; distance: number; own: number } | null } | null>>(() => perRow(() => null));
+  const [ticksS, setTicks] = useState<Record<DrumRow, { for: string; macros: DrumMacros; moved: string | null; closer?: { preset: DrumSoundId; distance: number; own: number } | null } | null>>(() => perRow(() => null));
   const [suggesting, setSuggesting] = useState<DrumRow | null>(null);
   const [readS, setReadS] = useState<Read | null>(null);
   const [state, setState] = useState<{ loopKey: string; state: ReadState; error?: string } | null>(null);
@@ -60,12 +73,18 @@ export function useDrums(o: DrumsOpts) {
   const [last, setLast] = useState<Record<DrumRow, { id: string; sound: string; name: string } | null>>(() => perRow(() => null));
   const [saveState, setSaveState] = useState<{ state: "idle" | "saving" | "error"; text?: string }>({ state: "idle" });
   const [mySounds, setMySounds] = useState<DrumSound[]>([]);
+  // Phase 7: bumped when recordings finish loading, so Mine renders again with them; and the last tap (W12, for the dev hook).
+  const [samplesV, setSamplesV] = useState(0);
+  const [tap, setTap] = useState<{ id: string; at: number; heardMs: number | null } | null>(null);
+  const [shelf, setShelf] = useState(true);
 
   const read = readS && readS.loopKey === loopKey ? readS : null;
   const readState: ReadState = state && state.loopKey === loopKey ? state.state : "idle";
   const anyway = useMemo(() => (anywayS.loopKey === loopKey ? anywayS.rows : []), [anywayS, loopKey]);
   const on = useMemo(() => perRow((r) => !!read && read.d.rows[r].hits.length > 0 && (!read.d.rows[r].doubtful || anyway.includes(r))), [read, anyway]);
-  const signature = (x: Record<DrumRow, Sound>, onRows: Record<DrumRow, boolean>) => DRUM_ROWS.map((r) => `${x[r].preset}:${ROW_KNOBS[DRUM_PRESETS[x[r].preset].row].map((k) => (x[r].macros[k] ?? 0).toFixed(3)).join(",")}:${onRows[r] ? 1 : 0}`).join("|");
+  // A row whose recording hasn't loaded yet isn't in the signature as ready, so Mine renders again once it is.
+  const signature = (x: Record<DrumRow, Sound>, onRows: Record<DrumRow, boolean>) => DRUM_ROWS.map((r) => `${x[r].preset}:${knobsOf(x[r].preset).map((k) => (x[r].macros[k] ?? 0).toFixed(3)).join(",")}:${onRows[r] ? 1 : 0}:${isKitId(x[r].preset) && !hasKitSample(x[r].preset) ? "wait" : "ok"}`).join("|");
+  void samplesV; // a re-render after a load recomputes the signature
   const mineKeyNow = read ? `${read.loopKey}|${signature(sounds, on)}` : null;
   const mine = mineS && read && mineS.key.startsWith(`${read.loopKey}|`) ? mineS : null;
 
@@ -75,10 +94,13 @@ export function useDrums(o: DrumsOpts) {
     if (!target) return;
     setSuggesting(row);
     try {
-      const res = await cl().drumsSuggest({ target, preset: snd.preset, start: before ? snd.macros : undefined });
+      // L272: Suggest searches the row's 20 starting sounds, so their recordings load first (once).
+      const candidates = rowCandidates(row);
+      await loadSamples([...candidates, ...kitIdsOf([snd])]);
+      const res = await cl().drumsSuggest({ target, preset: snd.preset, start: before ? snd.macros : undefined, candidates }, [...candidates, ...kitIdsOf([snd])]);
       console.info(`[make] drums suggest ${row} ${snd.preset}: ${res.suggestion.renders} renders in ${res.ms} ms, distance ${res.suggestion.distance.toFixed(2)} (preset ${res.suggestion.presetDistance.toFixed(2)})`);
       const after = res.suggestion.macros;
-      const moved = before ? ROW_KNOBS[row].filter((k) => Math.abs((after[k] ?? 0) - (before[k] ?? 0)) >= 0.05).map((k) => DRUM_KNOB_SPECS[k].name) : null;
+      const moved = before ? knobsOf(snd.preset).filter((k) => Math.abs((after[k] ?? 0) - (before[k] ?? 0)) >= 0.05).map((k) => drumKnobSpec(snd.preset, k).name) : null;
       // N2: another preset of the row that gets clearly closer at its best.
       const closer = res.suggestion.closer ? { preset: res.suggestion.closer.preset, distance: res.suggestion.closer.distance, own: res.suggestion.distance } : null;
       setTicks((t) => ({ ...t, [row]: { for: soundId(snd.preset, snd.macros), macros: after, closer, moved: moved === null ? null : moved.length ? `Ticks moved: ${moved.join(", ")}.` : "The ticks stayed where they were." } }));
@@ -121,17 +143,29 @@ export function useDrums(o: DrumsOpts) {
   useEffect(() => {
     // Mine is one buffer for every family: render again when the bass's sound took it meanwhile.
     if (!o.active || !read || !mineKeyNow || (mineKeyNow === mineS?.key && tr.current?.mineOwner === "drums")) return;
+    // Phase 7: load a row's recording first (its first tap); Mine renders once it is in.
+    const need = kitIdsOf(DRUM_ROWS.filter((r) => on[r]).map((r) => sounds[r])).filter((id) => !hasKitSample(id));
+    if (need.length) { void loadSamples(need).then(() => setSamplesV((v) => v + 1)); return; }
     const t = setTimeout(() => {
       const levels = perRow((r) => read.targets[r]?.levelDb ?? null);
       const rowSounds: Record<DrumRow, RowSound> = perRow((r) => ({ ...sounds[r], on: on[r] }));
-      cl().drumsRender({ reading: read.d, sounds: rowSounds, levels, report: read.report, bpm: o.bpm, rate: read.rate, samples: read.samples, levelDb: read.levelDb, lufs: read.lufs, targets: read.targets }).then(({ res, stale }) => {
+      cl().drumsRender({ reading: read.d, sounds: rowSounds, levels, report: read.report, bpm: o.bpm, rate: read.rate, samples: read.samples, levelDb: read.levelDb, lufs: read.lufs, targets: read.targets }, kitIdsOf(DRUM_ROWS.map((r) => sounds[r]))).then(({ res, stale }) => {
         if (stale || loopKeyOf(tr.current?.state.loop ?? null) !== read.loopKey) return;
         tr.current?.setMine(res, "drums");
+        // W12: when the tapped sound first plays in Mine (ms after the tap), for the dev hook.
+        setTap((x) => (x && x.heardMs === null && DRUM_ROWS.some((r) => sounds[r].preset === x.id) ? { ...x, heardMs: Math.round(performance.now() - x.at) } : x));
         setMine({ key: mineKeyNow, closeness: res.closeness, rowCloseness: res.rowCloseness, gainDb: res.gainDb, rowGainsDb: res.rowGainsDb, ms: res.ms });
       }, (e) => console.warn("[make] drums render failed", e));
     }, 60);
     return () => clearTimeout(t);
   }, [o.active, read, mineKeyNow, mineS?.key, sounds, on, o.bpm, tr]);
+
+  // Phase 7 (W12): the rows' current recordings load as soon as Drums opens, before the loop is read.
+  useEffect(() => {
+    if (!o.active) return;
+    const need = kitIdsOf(DRUM_ROWS.map((r) => soundsRef.current[r])).filter((id) => !hasKitSample(id));
+    if (need.length) void loadSamples(need).then(() => setSamplesV((v) => v + 1));
+  }, [o.active]);
 
   // This track's drum sounds in the library (numbers only), for each row's preset menu.
   useEffect(() => {
@@ -141,15 +175,25 @@ export function useDrums(o: DrumsOpts) {
     return () => { live = false; };
   }, [o.code, o.url]);
 
-  const setPreset = (row: DrumRow, p: DrumPresetId) => {
+  const setPreset = (row: DrumRow, p: DrumSoundId) => {
     const next = fresh(p);
     setSounds((x) => ({ ...x, [row]: next }));
     setTicks((t) => ({ ...t, [row]: null }));
     if (read) void suggest(read, row, next, null);
   };
   const setKnob = (row: DrumRow, id: keyof DrumMacros, v: number) => setSounds((x) => (x[row].macros[id] === v ? x : { ...x, [row]: { ...x[row], macros: { ...x[row].macros, [id]: v } } }));
+  /**
+   * A tap on the shelf (Phase 7): the row plays this sound, in the loop (B · Mine) when it plays, or
+   * one hit on its own when it's stopped; its recording loads on the first tap.
+   */
+  const pick = (row: DrumRow, id: DrumSoundId, playing: boolean) => {
+    setTap({ id, at: performance.now(), heardMs: null });
+    if (sounds[row].preset !== id) setPreset(row, id);
+    if (playing && read) { setAb("b"); void loadSample(id).then(() => setSamplesV((v) => v + 1)); }
+    else void previewDrum(id, clampDrumMacros(id, undefined)).then(() => setTap((x) => (x && x.id === id && x.heardMs === null ? { ...x, heardMs: Math.round(performance.now() - x.at) } : x)));
+  };
   const loadSound = (x: DrumSound) => {
-    const row = DRUM_PRESETS[x.preset].row;
+    const row = rowOf(x.preset);
     const snd = { preset: x.preset, macros: clampDrumMacros(x.preset, x.macros) };
     setSounds((s0) => ({ ...s0, [row]: snd }));
     setNames((n) => ({ ...n, [row]: x.name }));
@@ -203,7 +247,7 @@ export function useDrums(o: DrumsOpts) {
 
   const ticks = perRow((r) => (read ? ticksS[r] : null));
   return {
-    open, setOpen, sounds, setPreset, setKnob, ticks, suggesting, read, readState, readError: state?.error ?? null, on, anyway, playAnyway, backToOff,
+    open, setOpen, sounds, setPreset, pick, shelf, setShelf, setKnob, ticks, suggesting, read, readState, readError: state?.error ?? null, on, anyway, playAnyway, backToOff,
     suggestNow: (row: DrumRow) => { if (read) void suggest(read, row, sounds[row], ticks[row]?.macros ?? null); },
     suggestedNow: perRow((r) => !!ticks[r] && ticks[r]!.for === soundId(sounds[r].preset, sounds[r].macros)),
     ab, setAb, bed, setBed, mineReady: !!mine && mine.key === mineKeyNow, mineAny: !!mine, closeness: mine?.closeness ?? null, rowCloseness: mine?.rowCloseness ?? null,
@@ -221,6 +265,9 @@ export function useDrums(o: DrumsOpts) {
       targets: read?.targets ?? null, levelDb: read?.levelDb ?? null, lufs: read?.lufs ?? null,
       sounds, ticks: perRow((r) => ticks[r]?.macros ?? null), mine: mine ? { ready: mine.key === mineKeyNow, gainDb: mine.gainDb, rowGainsDb: mine.rowGainsDb, closeness: mine.closeness, rowCloseness: mine.rowCloseness, renderMs: mine.ms } : null,
       saved: perRow((r) => last[r]), mySounds: mySounds.map((x) => ({ id: x.id, name: x.name, preset: x.preset })),
+      // Phase 7: the picked sound per row with its family and feel, and the last tap's time to sound (W12).
+      picked: perRow((r) => ({ id: sounds[r].preset, name: drumSoundName(sounds[r].preset), family: p7SoundById(sounds[r].preset)?.family ?? "synth", feel: p7SoundById(sounds[r].preset)?.feel ?? null, loaded: !isKitId(sounds[r].preset) || hasKitSample(sounds[r].preset), macros: sounds[r].macros })),
+      tap,
     }),
   };
 }
@@ -343,7 +390,6 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
   const geo = stripGeom(bars), every = geo.perLine > 4 && geo.lines > 1 ? 4 : 1;
   const wait = waitLine(m, loop, playing);
   const off = !!wait;
-  const short = useShort();
   const row = m.open, snd = m.sounds[row], ticks = m.ticks[row]?.macros;
   const noun = drumNoun(snd.preset);
   let line: React.ReactNode;
@@ -351,15 +397,15 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
   // U4: a row that is off gets the reason, not knob tips.
   // C2: the row says "off" once (its label); the Mentor line says why, in one line.
   if (rowOff) line = `Mentor: ${cap((rowRead?.why ?? "").replace(/: off in Mine$/, ""))}, so Mine leaves this row out.`;
-  else if (m.suggesting === row) line = `Measuring the ${noun} against ${DRUM_PRESETS[snd.preset].name}…`;
+  else if (m.suggesting === row) line = `Measuring the ${noun} against the row's 20 sounds…`;
   else if (!m.read?.targets[row]) line = <span className={s.faintLine}>No {rowTitle(row)} hits in this loop to compare with.</span>;
-  else if (!ticks) line = `Mentor: Press Suggest for ${rowTitle(row)} to compare this preset with the original.`;
+  else if (!ticks) line = `Mentor: Press Suggest for ${rowTitle(row)} to compare this sound with the original.`;
   else {
     const closer = m.ticks[row]?.closer;
     const score = (d: number) => Math.round(100 * Math.exp(-d / ROW_SCORE_SCALE));
     line = <>Mentor: {cap(drumSuggestLine(snd.preset, snd.macros, ticks, noun, m.bpm))}
-      {closer ? <><br /><span className={s.faintLine}>{DRUM_PRESETS[closer.preset].name} gets closer (about {score(closer.distance)} against {score(closer.own)} at best here).</span> <button className={s.textBtn} onClick={() => m.setPreset(row, closer.preset)}>Try {DRUM_PRESETS[closer.preset].name}</button></>
-        : m.ticks[row]?.moved && drumMoves(row, snd.macros, ticks).length > 0 ? <><br /><span className={s.faintLine}>{m.ticks[row]!.moved}</span></> : null}</>;
+      {closer ? <><br /><span className={s.faintLine}>{drumSoundName(closer.preset)} gets closer (about {score(closer.distance)} against {score(closer.own)} at best here).</span> <button className={s.textBtn} onClick={() => m.pick(row, closer.preset, playing)}>Try {drumSoundName(closer.preset)}</button></>
+        : m.ticks[row]?.moved && drumMoves(knobsOf(snd.preset), snd.macros, ticks).length > 0 ? <><br /><span className={s.faintLine}>{m.ticks[row]!.moved}</span></> : null}</>;
   }
   return (
     <div className={s.drums}>
@@ -377,9 +423,9 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
           return (
             <div key={r} className={s.drRow} data-lit={lit ? "" : undefined}>
               <button className={s.drName} aria-pressed={lit} onClick={() => m.setOpen(r)}>
-                <span>{DRUM_ROW_NAMES[r]}{doubtful && <span className={s.drOff}> off</span>}</span>
-                {/* C2: one short reason under the label, not over the strip. */}
-                {doubtful && !off && rr?.note && <small className={s.drWhy}>{shortWhy(rr.note)}</small>}
+                <span>{shelfRowName(r)}{doubtful && <span className={s.drOff}> off</span>}</span>
+                {/* C2: one short reason under the label, not over the strip; else the row's sound (L278). */}
+                {doubtful && !off && rr?.note ? <small className={s.drWhy}>{shortWhy(rr.note)}</small> : <small className={s.drSound}>{drumSoundName(m.sounds[r].preset)}</small>}
               </button>
               <div className={s.drTrack}>
                 <Pattern hits={rr?.hits ?? []} bars={bars} lit={lit} doubtful={doubtful} empty={off} />
@@ -390,86 +436,99 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
                   ? doubtful
                     ? <button className={s.textBtn} title={rr.why ?? undefined} onClick={() => m.playAnyway(r)}>Play anyway</button>
                     : <button className={s.textBtn} title="Leave this row out of Mine again, as the reading suggests" onClick={() => m.backToOff(r)}>Back to off</button>
-                  : <>{!lit && <span className={s.drPreset}>{DRUM_PRESETS[m.sounds[r].preset].name}</span>}{m.savedRows[r] && <span className={s.drSaved}>saved</span>}</>}
+                  : m.savedRows[r] && <span className={s.drSaved}>saved</span>}
               </div>
             </div>
           );
         })}
       </div>
-      <div className={s.drBlock}>
-        <span className={s.drLabel}>{DRUM_ROW_NAMES[row]}</span>
-        <DrumPreset m={m} row={row} />
-        <div className={s.drKnobs} data-off={off ? "" : undefined}>
-          {ROW_KNOBS[row].map((id) => (
-            <Knob key={`${row}-${id}`} id={id} spec={DRUM_KNOB_SPECS[id]} wordOf={(v) => drumKnobWord(snd.preset, id, v, m.bpm)} value={snd.macros[id] ?? 0} sug={off || rowOff ? undefined : ticks?.[id]}
-              color="#f1e6d3" disabled={off} onChange={(v) => m.setKnob(row, id, v)} reset={clampDrumMacros(snd.preset, undefined)[id] ?? 0} size={short === 2 ? 64 : short === 1 ? 72 : 88} />
-          ))}
-        </div>
-        {wait ? <p className={s.drWait} role="status">{wait}</p> : (
-          <div className={s.drSuggest}>
-            <p className={s.suggest} aria-live="polite">{line}</p>
-            {/* P6: local analysis by synthesis; it only moves the gold ticks. */}
-            {/* U10: once the ticks are placed for these knobs it is a plain note, not a greyed button. */}
-            {/* C5: once placed, the Mentor line already talks about the ticks: no extra "Ticks placed". */}
-            {rowOff || (m.suggestedNow[row] && m.suggesting !== row)
-              ? null
-              : <button className={s.ghost} onClick={() => m.suggestNow(row)} disabled={!m.read?.targets[row] || m.suggesting !== null}
-                title="Places gold ticks where the knobs come closest to the original; it never turns a knob">{m.suggesting === row ? "Suggesting…" : `Suggest for ${rowTitle(row)}`}</button>}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-/** The open row's preset: its name opens a menu of the row's presets and the row's saved sounds. */
-function DrumPreset({ m, row }: { m: DrumsModel; row: DrumRow }) {
-  const [openMenu, setOpenMenu] = useState(false);
-  const box = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!openMenu) return;
-    const away = (e: PointerEvent) => { if (!box.current?.contains(e.target as Node)) setOpenMenu(false); };
-    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpenMenu(false); };
-    document.addEventListener("pointerdown", away);
-    document.addEventListener("keydown", esc);
-    return () => { document.removeEventListener("pointerdown", away); document.removeEventListener("keydown", esc); };
-  }, [openMenu]);
-  const cur = m.sounds[row].preset;
-  const mine = m.mySounds.filter((x) => DRUM_PRESETS[x.preset].row === row);
-  return (
-    <div className={s.preset} ref={box}>
-      <button className={s.drPresetName} aria-haspopup="menu" aria-expanded={openMenu} onClick={() => setOpenMenu(!openMenu)} aria-label={`Preset: ${DRUM_PRESETS[cur].name}. Change preset`}>
-        {DRUM_PRESETS[cur].name} <span aria-hidden>▾</span>
-      </button>
-      {openMenu && (
-        <div className={s.menu} role="menu" aria-label={`${DRUM_ROW_NAMES[row]} presets`}>
-          {ROW_PRESETS[row].map((id) => (
-            <button key={id} role="menuitemradio" aria-checked={id === cur} className={s.menuItem} onClick={() => { setOpenMenu(false); m.setPreset(row, id); /* N4: re-picking the current preset resets its knobs */ }}>
-              <span className={s.menuCheck} aria-hidden>{id === cur ? "✓" : ""}</span>
-              <span>{DRUM_PRESETS[id].name}</span>
-              <small>{m.ticks[row]?.closer?.preset === id ? <span className={s.menuCloser}>closer · </span> : null}{DRUM_PRESETS[id].tags.join(" · ")}</small>
-            </button>
-          ))}
-          {mine.length > 0 && (
-            <>
-              <i className={s.menuRule} aria-hidden />
-              <span className={s.menuHead}>Your sounds</span>
-              <div className={s.menuSounds} role="group" aria-label="Your sounds from this track">
-                {mine.map((x) => (
-                  <button key={x.id} role="menuitem" className={s.menuItem} onClick={() => { setOpenMenu(false); m.loadSound(x); }}>
-                    <span className={s.menuCheck} aria-hidden />
-                    <span className={s.menuName}>{x.name}</span>
-                    <small>{DRUM_PRESETS[x.preset].name}</small>
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
+      <Shelf m={m} row={row} playing={playing} off={off} rowOff={rowOff} />
+      {wait ? <p className={s.drWait} role="status">{wait}</p> : (
+        <div className={s.drSuggest}>
+          <p className={s.suggest} aria-live="polite">{line}</p>
+          {/* P6: local analysis by synthesis; it only moves the gold ticks. */}
+          {/* U10: once the ticks are placed for these knobs it is a plain note, not a greyed button. */}
+          {rowOff || (m.suggestedNow[row] && m.suggesting !== row)
+            ? null
+            : <button className={s.ghost} onClick={() => m.suggestNow(row)} disabled={!m.read?.targets[row] || m.suggesting !== null}
+              title="Places gold ticks where the knobs come closest to the original, and names a starting sound that gets clearly closer; it never turns a knob">{m.suggesting === row ? "Suggesting…" : `Suggest for ${rowTitle(row)}`}</button>}
         </div>
       )}
     </div>
   );
 }
+
+const famLabel = (f: string) => (f === "909 ride" ? "909 ride (stand-ins)" : f.charAt(0).toUpperCase() + f.slice(1));
+
+/**
+ * Phase 7 (design p7-final, L278): the open row's sound and its 20 starting sounds. The head says
+ * which sound plays (name, family · feel, one plain line) beside its knobs; under it the sounds in
+ * their families, a feel word each; a tap plays one (in the loop, or alone when stopped). "Hide
+ * sounds" folds the shelf to its head. The row's saved sounds from this track sit at the end.
+ */
+function Shelf({ m, row, playing, off, rowOff }: { m: DrumsModel; row: DrumRow; playing: boolean; off: boolean; rowOff: boolean }) {
+  const short = useShort();
+  const snd = m.sounds[row], ticks = m.ticks[row]?.macros, kit = p7SoundById(snd.preset);
+  const kitRow = KIT_ROW_FOR[row], closer = m.ticks[row]?.closer?.preset ?? null;
+  const mine = m.mySounds.filter((x) => rowOf(x.preset) === row);
+  const knobSize = short === 2 ? 48 : short === 1 ? 54 : 60;
+  return (
+    <section className={s.shelf} aria-label={`${shelfRowName(row)} sounds`}>
+      <div className={s.shelfHead}>
+        <div className={s.shelfWhere}>
+          <span className={s.lbl}>{shelfRowName(row)} · 20 sounds</span>
+          <SoundCredits />
+        </div>
+        <div className={s.shelfNow}>
+          <span className={s.shelfName}>{drumSoundName(snd.preset)}</span>{" "}
+          <span className={s.lbl}>{kit ? `${famLabel(kit.family)} · ${kit.feel}` : "Six AM's drum synth (from an earlier saved sound)"}</span>
+          <span className={s.shelfAbout} title={drumSoundAbout(snd.preset)}>{drumSoundAbout(snd.preset)}</span>
+        </div>
+        <div className={s.drKnobs} data-off={off ? "" : undefined}>
+          {knobsOf(snd.preset).map((id) => (
+            <Knob key={`${row}-${snd.preset}-${id}`} id={id} spec={drumKnobSpec(snd.preset, id)} wordOf={(v) => drumKnobWord(snd.preset, id, v, m.bpm)} value={snd.macros[id] ?? 0} sug={off || rowOff ? undefined : ticks?.[id]}
+              color="#f2b134" disabled={off} onChange={(v) => m.setKnob(row, id, v)} reset={clampDrumMacros(snd.preset, undefined)[id] ?? 0} size={knobSize} />
+          ))}
+        </div>
+        <button className={s.textBtn} aria-expanded={m.shelf} onClick={() => m.setShelf(!m.shelf)}>{m.shelf ? "Hide sounds" : "Show 20 sounds"}</button>
+      </div>
+      {m.shelf && (
+        <div className={s.groups} role="group" aria-label={`${shelfRowName(row)} sounds`}>
+          {P7_FAMILIES[kitRow].map((f) => {
+            const xs = p7Sounds(kitRow).filter((x) => x.family === f);
+            return (
+              <div key={f} className={s.grp}>
+                <h3>{famLabel(f)}</h3>
+                <div className={s.gcol} style={{ gridTemplateRows: `repeat(${Math.min(3, xs.length)}, auto)` }}>
+                  {xs.map((x) => (
+                    <button key={x.id} className={s.snd} aria-pressed={snd.preset === x.id} title={x.about} onClick={() => m.pick(row, x.id as DrumSoundId, playing)}>
+                      <b>{x.name}</b>
+                      <small>{x.feel}{closer === x.id && <span className={s.menuCloser}> · closer</span>}</small>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+          {mine.length > 0 && (
+            <div className={s.grp}>
+              <h3>Your sounds</h3>
+              <div className={s.gcol} style={{ gridTemplateRows: `repeat(${Math.min(3, mine.length)}, auto)` }}>
+                {mine.map((x) => (
+                  <button key={x.id} className={s.snd} title={`${x.name}: ${drumSoundName(x.preset)}${isDrumPreset(x.preset) ? " (synth)" : ""}`} onClick={() => m.loadSound(x)}>
+                    <b className={s.sndMine}>{x.name}</b>
+                    <small>{drumSoundName(x.preset)}</small>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </section>
+  );
+}
+
 
 /** A/B at the same loudness, the bass under both (P7), and the open row's closeness (P8, U1/L233: one number, the open row's). */
 export function DrumsCheck({ m }: { m: DrumsModel }) {

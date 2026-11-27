@@ -14,7 +14,9 @@
 // - Save (P9): a row folded to its 1-, 2- or 4-bar repeat for the library.
 import { band, correlation, stepEnergy } from "./closeness";
 import { dB, fft, hann, toMono } from "./dsp";
-import { DRUM_PRESETS, DRUM_ROWS, ROW_KNOBS, ROW_MIDI, clampDrumMacros, kickHz, renderDrumHits, type DrumKnobId, type DrumMacros, type DrumPresetId, type DrumRow } from "./drum-synth";
+import { hasKitSample } from "./kit-samples";
+import { DRUM_PRESETS, DRUM_ROWS, ROW_MIDI, ROW_PRESETS, clampDrumMacros, isDrumPreset, kickHz, knobsOf, renderDrumHits, rowOf, type DrumKnobId, type DrumMacros, type DrumRow, type DrumSoundId } from "./drum-synth";
+import { p7Sounds, type P7Row } from "./kit-p7";
 import { GATE, type DrumReading } from "./drums-read";
 import { secondsPer16th, type MakeNote } from "./render";
 
@@ -191,9 +193,9 @@ export function rowDistance(t: RowTarget, shape: number[], hz: number | null, si
 }
 
 /** One hit of a candidate sound, measured as the original's hits are. */
-export function measureCandidate(preset: DrumPresetId, m: DrumMacros, t: RowTarget, rate = 44100) {
+export function measureCandidate(preset: DrumSoundId, m: DrumMacros, t: RowTarget, rate = 44100) {
   const r = renderDrumHits(preset, m, [{ t: 0, vel: 1 }, { t: t.endS, vel: 0 }], { lenS: t.endS + 0.01, rate, wrap: false });
-  const mono = toMono(r.left, r.right), row = DRUM_PRESETS[preset].row;
+  const mono = toMono(r.left, r.right), row = rowOf(preset);
   return {
     shape: hitShape(mono, 0, t.endS, rate, SHAPE_FROM[row]),
     hz: row === "kick" ? lowHz(band(mono, rate, 30, 150), 0, t.endS, rate) : null,
@@ -209,7 +211,7 @@ export const ROW_SCORE_SCALE = 8;
  * kick's note, the hats' width; clap and hats in their own bands), so following that row's gold
  * ticks raises it. The pattern and the level are copied, so they aren't in it.
  */
-export function rowCloseness(t: RowTarget, preset: DrumPresetId, m: DrumMacros, rate = 44100): { score: number; distance: number } {
+export function rowCloseness(t: RowTarget, preset: DrumSoundId, m: DrumMacros, rate = 44100): { score: number; distance: number } {
   const c = measureCandidate(preset, m, t, rate);
   const distance = rowDistance(t, c.shape, c.hz, c.side);
   return { score: Math.round(100 * Math.exp(-distance / ROW_SCORE_SCALE)), distance: Math.round(distance * 100) / 100 };
@@ -223,16 +225,17 @@ export const DRUM_PRIOR = 2;
  * Knob values for `preset` whose hit measures closest to the row's target ("Suggest for kick"):
  * a coarse sweep of each knob, then a finer one round the best, from the preset's own (or `start`).
  */
-export function suggestDrum(t: RowTarget, preset: DrumPresetId, o: { start?: DrumMacros; rate?: number } = {}): DrumSuggestion {
-  const ids = ROW_KNOBS[DRUM_PRESETS[preset].row], home = clampDrumMacros(preset, undefined);
+export function suggestDrum(t: RowTarget, preset: DrumSoundId, o: { start?: DrumMacros; rate?: number } = {}): DrumSuggestion {
+  const ids = knobsOf(preset), home = clampDrumMacros(preset, undefined);
   let renders = 0;
   const dist = (m: DrumMacros) => { renders++; const c = measureCandidate(preset, m, t, o.rate); return rowDistance(t, c.shape, c.hz, c.side); };
   const prior = (m: DrumMacros) => DRUM_PRIOR * ids.reduce((a, id) => a + ((m[id] ?? 0) - (home[id] ?? 0)) ** 2, 0);
   const presetDistance = dist(home);
   let best = clampDrumMacros(preset, { ...home, ...o.start });
   let bestCost = (o.start ? dist(best) : presetDistance) + prior(best);
-  // The kick's note first: it is what the ear hears most, and the shape is measured on that note.
-  const order: DrumKnobId[] = ids.includes("tune") ? ["tune", ...ids.filter((x) => x !== "tune")] : ids;
+  // The kick's note first (a sampled sound's Pitch): it is what the ear hears most, and the shape is measured on that note.
+  const first = ids.includes("tune") ? "tune" : ids.includes("pitch") ? "pitch" : null;
+  const order: DrumKnobId[] = first ? [first, ...ids.filter((x) => x !== first)] : ids;
   for (const grid of [[0, 0.2, 0.4, 0.6, 0.8, 1], [-0.1, -0.05, 0.05, 0.1]]) {
     for (const id of order) {
       const base = best[id] ?? 0;
@@ -252,22 +255,39 @@ export function suggestDrum(t: RowTarget, preset: DrumPresetId, o: { start?: Dru
 
 /** N2 (drums re-check): another preset of the row is clearly closer when its best is 25 % and ≥ 1.0 nearer. */
 export const CLOSER = { share: 0.75, abs: 1 };
+/** Phase 7 (L272): the kit row whose 20 sounds Suggest searches for each of Make's rows. */
+export const KIT_ROW_FOR: Record<DrumRow, P7Row> = { kick: "kick", clap: "clap", hats: "hat" };
+/** The 20 starting sounds Suggest searches for a Make row. */
+export const rowCandidates = (row: DrumRow): DrumSoundId[] => p7Sounds(KIT_ROW_FOR[row]).map((x) => x.id as DrumSoundId);
+/** How many of the row's sounds get a full knob search after the quick pass at their home settings. */
+export const SEARCH_TOP = 3;
+
 /**
- * Suggest across the row's presets: the open preset's ticks, plus the row's other presets at their own
- * best, and the one clearly closer if any (the clap that stays at 22 on its ticks while Tight snare
- * reaches 36). Gold ticks only; the preset isn't changed.
+ * Suggest across the row's starting sounds (L272): the open sound's ticks, plus the row's 20 sounds,
+ * each measured once as it starts and the closest few searched in full, and the one clearly closer
+ * if any (the clap that stays at 22 on its ticks while another reaches 36). Gold ticks only; the
+ * sound isn't changed. A sound whose sample isn't loaded measures as silence and is never picked.
  */
-export function suggestDrumRow(t: RowTarget, preset: DrumPresetId, o: { start?: DrumMacros; rate?: number } = {}) {
+export function suggestDrumRow(t: RowTarget, preset: DrumSoundId, o: { start?: DrumMacros; rate?: number; candidates?: DrumSoundId[] } = {}) {
   const own = suggestDrum(t, preset, o);
-  const others = ROW_PRESETS_OF(preset).filter((p) => p !== preset).map((p) => ({ preset: p, ...suggestDrum(t, p, { rate: o.rate }) }));
+  // A saved synth sound (Phases 5–6) is also compared with its row's other synth presets, as before.
+  const synth = isDrumPreset(preset) ? ROW_PRESETS[DRUM_PRESETS[preset].row] : [];
+  const pool = [...new Set([...(o.candidates ?? rowCandidates(rowOf(preset))), ...synth])].filter((p) => p !== preset && (isDrumPreset(p) || hasKitSample(p)));
+  let renders = own.renders;
+  const quick = pool.map((p) => {
+    renders++;
+    const c = measureCandidate(p, clampDrumMacros(p, undefined), t, o.rate);
+    return { p, d: rowDistance(t, c.shape, c.hz, c.side) };
+  }).filter((x) => Number.isFinite(x.d)).sort((a, b) => a.d - b.d).slice(0, SEARCH_TOP);
+  const others = quick.map((x) => ({ preset: x.p, ...suggestDrum(t, x.p, { rate: o.rate }) }));
+  renders += others.reduce((a, x) => a + x.renders, 0);
   const best = others.sort((a, b) => a.distance - b.distance)[0];
   const closer = best && best.distance <= own.distance * CLOSER.share && own.distance - best.distance >= CLOSER.abs ? { preset: best.preset, macros: best.macros, distance: best.distance } : null;
-  return { ...own, renders: own.renders + others.reduce((a, x) => a + x.renders, 0), closer };
+  return { ...own, renders, closer };
 }
-const ROW_PRESETS_OF = (p: DrumPresetId) => (Object.keys(DRUM_PRESETS) as DrumPresetId[]).filter((x) => DRUM_PRESETS[x].row === DRUM_PRESETS[p].row);
 
 /** The kick's note as the Mentor says it ("about 55 Hz"). */
-export const tuneHz = (preset: DrumPresetId, m: DrumMacros) => Math.round(kickHz(preset, m.tune ?? 0.5));
+export const tuneHz = (preset: DrumSoundId, m: DrumMacros) => Math.round(kickHz(preset, m.tune ?? 0.5));
 
 // ── Closeness (P8) ──────────────────────────────────────────────────────────────────────────────
 
@@ -319,7 +339,7 @@ export function drumsCloseness(orig: DrumsReport, mine: DrumsReport): DrumsClose
 
 // ── Mine over the loop ──────────────────────────────────────────────────────────────────────────
 
-export type RowSound = { preset: DrumPresetId; macros: DrumMacros; on: boolean };
+export type RowSound = { preset: DrumSoundId; macros: DrumMacros; on: boolean };
 
 /**
  * Mine's three rows over one pass of the loop (`steps` 16ths from the grid's step 0), each row at the

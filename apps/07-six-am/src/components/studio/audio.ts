@@ -14,7 +14,9 @@ import type { KitId } from "@/lib/synths/kits";
 import type { Sound } from "@/lib/synths/loop";
 import { buildSoundIndex, previewSoundHits, type SoundHit } from "@/lib/synths/schedule";
 import type { Scale } from "@/lib/synths/theory";
-import { levelled, libLevelDb, passSignature, renderLibPass, type LibLoop } from "@/lib/make/lib-loop";
+import { levelled, libLevelDb, libLoopSampleIds, passSignature, renderLibPass, type LibLoop } from "@/lib/make/lib-loop";
+import { hasKitSample } from "@/lib/make/kit-samples";
+import { loadSamples } from "@/lib/make/kit-load";
 import { laneMix, laneOfRegion, lanesOf, type Lane } from "@/lib/studio-lanes";
 import { LaneMixer } from "@/lib/studio-mixer";
 
@@ -544,6 +546,9 @@ export class AudioEngine {
     const sig = passSignature(x, track);
     const have = this.libPasses.get(x.id);
     if (have?.sig === sig) return have.buf;
+    // Phase 7: a sampled sound waits for its recordings (loaded once, then this pass renders on the next hit).
+    const ids = libLoopSampleIds(x);
+    if (ids.some((id) => !hasKitSample(id))) { void loadSamples(ids); return null; }
     const r = levelled(renderLibPass(x, track, Tone.getContext().sampleRate), libLevelDb(x));
     const buf = Tone.ToneAudioBuffer.fromArray([r.left, r.right]);
     this.libPasses.set(x.id, { sig, buf });

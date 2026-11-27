@@ -6,7 +6,7 @@ import { featureDistance } from "./features";
 import { lufs, matchGain, rmsDb } from "./level";
 import { featuresOf, suggestMacros } from "./match";
 import { notesForLoop, pitchHz } from "./pattern";
-import { MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, clampMacros, lengthSteps, macroGuide, macroWord, synthParams, wobblePerBeat, type Macros, type MakePresetId } from "./presets";
+import { MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, PHASE4_PRESET_IDS, isSampledBass, clampMacros, lengthSteps, macroGuide, macroWord, synthParams, wobblePerBeat, type Macros, type MakePresetId } from "./presets";
 import { renderBass, secondsPer16th, type MakeNote } from "./render";
 
 const RATE = 22050;
@@ -14,7 +14,8 @@ const KEYS = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
 
 describe("presets and macros", () => {
   it("has the four bass presets, tagged, each with the six macros", () => {
-    expect(MAKE_PRESET_IDS.map((id) => MAKE_PRESETS[id].name)).toEqual(["Round sub", "Rubber pluck", "Reese", "Acid line"]);
+    expect(PHASE4_PRESET_IDS.map((id) => MAKE_PRESETS[id].name)).toEqual(["Round sub", "Rubber pluck", "Reese", "Acid line"]);
+    expect(MAKE_PRESET_IDS).toHaveLength(20); // Phase 7 (L267)
     for (const id of MAKE_PRESET_IDS) {
       expect(MAKE_PRESETS[id].tags.length).toBeGreaterThan(0);
       expect(Object.keys(MAKE_PRESETS[id].macros).sort()).toEqual([...MACRO_IDS].sort());
@@ -55,7 +56,8 @@ describe("Mine: in key and on tempo (Y4)", () => {
     }
   });
   it("each preset starts its notes within 5 ms of their 16th, at 124 and 97 BPM", () => {
-    for (const bpm of [124, 97]) for (const id of MAKE_PRESET_IDS) {
+    // Sampled basses play recordings the tests don't load; the synth presets are checked.
+    for (const bpm of [124, 97]) for (const id of MAKE_PRESET_IDS.filter((x) => !isSampledBass(x))) {
       const notes: MakeNote[] = [0, 6, 16, 22, 33, 50].map((step) => ({ step, midi: 33, dur: 2, vel: 0.9 }));
       const r = renderBass(notes, synthParams(id, { ...MAKE_PRESETS[id].macros, length: 0.2, pitchDrop: 0 }), { bpm, steps: 64, rate: RATE });
       const sps = secondsPer16th(bpm);
@@ -84,7 +86,7 @@ describe("Suggest settings: patch matching (Y10's pure half)", () => {
   // The target keeps each preset's own Sub and Weight (L209), so the six original knobs are what's recovered.
   const tgt = (id: MakePresetId): Macros => ({ ...target, sub: MAKE_PRESETS[id].macros.sub, weight: MAKE_PRESETS[id].macros.weight });
 
-  it.each(MAKE_PRESET_IDS)("lands much closer than the preset's own settings on a render of %s", (id) => {
+  it.each(MAKE_PRESET_IDS.filter((x) => !isSampledBass(x)))("lands much closer than the preset's own settings on a render of %s", (id) => {
     const f = featuresOf(id, tgt(id), notes, 124, 32);
     const s = suggestMacros(f, id, notes, 124, 32);
     expect(s.distance).toBeLessThan(s.presetDistance / 5);

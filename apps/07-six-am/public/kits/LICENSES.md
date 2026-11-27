@@ -1,6 +1,6 @@
-# Drum kit samples: sources and licences
+# Kit samples: sources and licences
 
-Every file here is released under **Creative Commons Zero (CC0 1.0, public domain dedication)**,
+Every drum file here is released under **Creative Commons Zero (CC0 1.0, public domain dedication)**,
 <https://creativecommons.org/publicdomain/zero/1.0/>. The licence was checked on each sound's own
 Freesound page (25 Oct 2026 for the 909 and 808 kits, 27 Nov 2026 for the Phase 7 kit). CC0 needs no
 attribution; the authors are credited anyway.
@@ -195,3 +195,29 @@ Roland or anyone else; the person who recorded each hit released it as CC0.
 | `p7/ride/sizzle-ride.mp3` | [Zildjian Transitional Stamp Sizzle Ride Cymbal Bell Hit.wav (46446)](https://freesound.org/people/pjcohen/sounds/46446/) | pjcohen | CC0 1.0 |
 | `p7/ride/china.mp3` | [china.wav (45100)](https://freesound.org/people/Matias.Reccius/sounds/45100/) | Matias.Reccius | CC0 1.0 |
 | `p7/ride/china-trash.mp3` | [China Trash Cymbal (545240)](https://freesound.org/people/Sassaby/sounds/545240/) | Sassaby | CC0 1.0 |
+
+## Sampled basses (`/kits/bass/`), from tonejs-instruments: **CC BY 3.0, credit required**
+
+Added 27 Nov 2026 (Phase 7 slice 1, L266, L271). The electric bass and contrabass recordings of
+**tonejs-instruments** by **Nicholas Brosowsky** (<https://github.com/nbrosowsky/tonejs-instruments>),
+whose README licenses the samples under **Creative Commons Attribution 3.0**
+(<https://creativecommons.org/licenses/by/3.0/>; the code is MIT). Checked on 27 Nov 2026.
+**Changes made** (CC BY allows them, and asks that they be said): leading silence trimmed, cut to the
+first 2.0 s with a 2 ms fade-in and a 150 ms fade-out, peak-normalised to -1 dBFS, mono, re-encoded as
+AAC 96 kbps (`.m4a`). The credit is shown in the app (Make, "Sound credits" beside the starting sounds).
+
+| File | Original | Instrument, note | Author | Licence |
+| --- | --- | --- | --- | --- |
+| `bass/electric/E1.m4a` | `samples/bass-electric/E1.mp3` | electric bass, E1 | Nicholas Brosowsky (tonejs-instruments) | CC BY 3.0 |
+| `bass/electric/As1.m4a` | `samples/bass-electric/As1.mp3` | electric bass, A♯1 | Nicholas Brosowsky (tonejs-instruments) | CC BY 3.0 |
+| `bass/electric/E2.m4a` | `samples/bass-electric/E2.mp3` | electric bass, E2 | Nicholas Brosowsky (tonejs-instruments) | CC BY 3.0 |
+| `bass/electric/As2.m4a` | `samples/bass-electric/As2.mp3` | electric bass, A♯2 | Nicholas Brosowsky (tonejs-instruments) | CC BY 3.0 |
+| `bass/electric/E3.m4a` | `samples/bass-electric/E3.mp3` | electric bass, E3 | Nicholas Brosowsky (tonejs-instruments) | CC BY 3.0 |
+| `bass/upright/G1.m4a` | `samples/contrabass/G1.mp3` | contrabass, G1 | Nicholas Brosowsky (tonejs-instruments) | CC BY 3.0 |
+| `bass/upright/C2.m4a` | `samples/contrabass/C2.mp3` | contrabass, C2 | Nicholas Brosowsky (tonejs-instruments) | CC BY 3.0 |
+| `bass/upright/E2.m4a` | `samples/contrabass/E2.mp3` | contrabass, E2 | Nicholas Brosowsky (tonejs-instruments) | CC BY 3.0 |
+| `bass/upright/A2.m4a` | `samples/contrabass/A2.mp3` | contrabass, A2 | Nicholas Brosowsky (tonejs-instruments) | CC BY 3.0 |
+| `bass/upright/E3.m4a` | `samples/contrabass/E3.mp3` | contrabass, E3 | Nicholas Brosowsky (tonejs-instruments) | CC BY 3.0 |
+
+Used by the presets "Electric bass", "Electric bright" (electric) and "Upright" (contrabass) in
+`src/lib/make/presets.ts`.

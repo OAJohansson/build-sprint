@@ -436,3 +436,45 @@
 @media (hover: hover) and (pointer: fine) { .quietLink:hover { color: var(--ink) !important; } }
 /* C7: the FX name field grows with its name, up to the room there is. */
 .saveBar .fxName { flex: 0 1 auto; field-sizing: content; min-width: 340px; max-width: 440px; }
+
+/* Phase 7 slice 1 (design p7-final, L278): the shelf of starting sounds under the drum rows (and the
+   bass's). Head: where (row · 20 sounds, credits), the sound now (serif name, family · feel, one line),
+   its knobs, Hide / Show. Under it the sounds in their families, side by side, scrolling sideways. */
+.lbl { font-size: 11.5px; color: var(--muted); }
+.drSound { font-size: 11.5px; color: var(--muted); max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.drRow[data-lit] .drSound { color: var(--ink); opacity: .8; }
+.shelf { width: 100%; display: flex; flex-direction: column; min-width: 0; border-top: 1px solid var(--line); margin-top: 14px; padding-top: 10px; flex: none; }
+.shelfHead { display: flex; align-items: center; gap: 22px; min-width: 0; margin-bottom: 8px; }
+.shelfWhere { display: flex; flex-direction: column; align-items: flex-start; flex: none; gap: 2px; }
+.shelfNow { min-width: 0; flex: 1; display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; }
+.shelfName { font: italic 400 24px/1.1 var(--f-serif); white-space: nowrap; }
+.shelfAbout { flex-basis: 100%; font-size: 11.5px; color: var(--ink); opacity: .8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; margin-top: 2px; }
+.shelf .drKnobs { gap: 18px; margin: 0; flex: none; }
+.shelfHead > .textBtn { align-self: flex-start; flex: none; }
+.groups { display: flex; gap: 4px; border: 1px solid var(--line); border-radius: 8px; padding: 6px 4px; overflow-x: auto; overscroll-behavior: contain; }
+.grp { flex: 1 1 auto; min-width: max-content; }
+.grp h3 { margin: 0; font-size: 11px; line-height: 1.3; font-weight: 400; color: var(--faint); padding: 1px 9px 3px; white-space: nowrap; }
+.gcol { display: grid; grid-auto-flow: column; grid-auto-columns: max-content; }
+.snd { display: flex; flex-direction: column; align-items: flex-start; padding: 4px 9px; border-radius: 6px; border: 1px solid transparent; background: none; text-align: left; white-space: nowrap; cursor: pointer; }
+.snd b { font-weight: 500; font-size: 12.5px; line-height: 1.3; }
+.snd small { color: var(--muted); font-size: 11.5px; line-height: 1.3; }
+.snd[aria-pressed="true"] { border-color: var(--gold); background: rgba(242, 177, 52, .13); }
+.sndMine { max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+@media (hover: hover) and (pointer: fine) { .snd[aria-pressed="false"]:hover, .snd:not([aria-pressed]):hover { background: rgba(241, 230, 211, .05); } }
+.shelf + .drSuggest, .shelf + .drWait { margin-top: 6px; }
+@media (max-height: 860px) {
+  .shelf { margin-top: 8px; padding-top: 6px; }
+  .shelfHead { margin-bottom: 6px; }
+  .shelfName { font-size: 21px; }
+  .snd { padding: 2px 8px; }
+  .snd b { font-size: 12px; line-height: 1.2; }
+  .snd small { font-size: 11px; line-height: 1.15; }
+  .groups { padding: 4px; }
+}
+/* Sound credits: a link that opens a small popover above the shelf. */
+.creditsBox { position: relative; }
+.creditsPop { position: absolute; left: 0; bottom: calc(100% + 8px); z-index: 30; width: 420px; background: #221d1a; border: 1px solid var(--edge); border-radius: 10px; box-shadow: 0 14px 40px rgba(0,0,0,.55); padding: 14px; font-size: 12px; line-height: 1.6; white-space: normal; }
+.creditsPop p { margin: 0 0 10px; }
+.creditsPop a { color: var(--ink); }
+.creditsTop { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+.creditsTop b { font-weight: 500; }

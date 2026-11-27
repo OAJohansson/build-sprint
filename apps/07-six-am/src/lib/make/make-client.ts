@@ -2,6 +2,7 @@
 // never holds up the re-render after a knob turn. Each call returns a promise; a newer render makes
 // an older one's result stale (the caller checks `latest`).
 import type { MakeRequest, MakeResponse } from "./jobs";
+import { getKitSample, type KitSample } from "./kit-samples";
 
 type Req = MakeRequest extends infer R ? (R extends MakeRequest ? Omit<R, "id"> : never) : never;
 type Res<T extends MakeRequest["type"]> = Extract<MakeResponse, { type: T }>;
@@ -10,6 +11,20 @@ class Mailbox {
   private worker = new Worker(new URL("./make.worker.ts", import.meta.url), { type: "module" });
   private waits = new Map<number, { resolve: (m: MakeResponse) => void; reject: (e: Error) => void }>();
   private next = 1;
+  /** Phase 7: the recordings this worker already holds (sent once, then named by id). */
+  private sent = new Set<string>();
+  /** The loaded recordings among `ids` this worker doesn't have yet (copied, not transferred: the page keeps playing them). */
+  kit(ids: Iterable<string> = []): Record<string, KitSample> | undefined {
+    let out: Record<string, KitSample> | undefined;
+    for (const id of ids) {
+      if (this.sent.has(id)) continue;
+      const x = getKitSample(id);
+      if (!x) continue;
+      (out ??= {})[id] = x;
+      this.sent.add(id);
+    }
+    return out;
+  }
   constructor() {
     this.worker.onmessage = (e: MessageEvent<MakeResponse>) => {
       const m = e.data, w = this.waits.get(m.id);
@@ -43,24 +58,24 @@ export class MakeClient {
     return this.main.send({ type: "read", ...r }, [r.left.buffer, r.right.buffer]) as Promise<Res<"read">>;
   }
   /** Renders Mine; `stale()` is true once a newer render was asked for. */
-  render(r: Omit<Extract<MakeRequest, { type: "render" }>, "id" | "type">) {
+  render(r: Omit<Extract<MakeRequest, { type: "render" }>, "id" | "type">, kitIds: string[] = []) {
     const n = ++this.renders;
-    return (this.main.send({ type: "render", ...r }) as Promise<Res<"render">>).then((res) => ({ res, stale: n !== this.renders }));
+    return (this.main.send({ type: "render", ...r, kit: this.main.kit(kitIds) }) as Promise<Res<"render">>).then((res) => ({ res, stale: n !== this.renders }));
   }
-  suggest(r: Omit<Extract<MakeRequest, { type: "suggest" }>, "id" | "type">) {
-    return this.search.send({ type: "suggest", ...r }) as Promise<Res<"suggest">>;
+  suggest(r: Omit<Extract<MakeRequest, { type: "suggest" }>, "id" | "type">, kitIds: string[] = []) {
+    return this.search.send({ type: "suggest", ...r, kit: this.search.kit(kitIds) }) as Promise<Res<"suggest">>;
   }
   /** Phase 5 drums: read a copy of the looped drum part (transferred, then zeroed in the worker). */
   drumsRead(r: Omit<Extract<MakeRequest, { type: "drums-read" }>, "id" | "type">) {
     return this.main.send({ type: "drums-read", ...r }, [r.left.buffer, r.right.buffer]) as Promise<Res<"drums-read">>;
   }
   /** Mine's three rows; `stale` once a newer drums render was asked for. */
-  drumsRender(r: Omit<Extract<MakeRequest, { type: "drums-render" }>, "id" | "type">) {
+  drumsRender(r: Omit<Extract<MakeRequest, { type: "drums-render" }>, "id" | "type">, kitIds: string[] = []) {
     const n = ++this.drumRenders;
-    return (this.main.send({ type: "drums-render", ...r }) as Promise<Res<"drums-render">>).then((res) => ({ res, stale: n !== this.drumRenders }));
+    return (this.main.send({ type: "drums-render", ...r, kit: this.main.kit(kitIds) }) as Promise<Res<"drums-render">>).then((res) => ({ res, stale: n !== this.drumRenders }));
   }
-  drumsSuggest(r: Omit<Extract<MakeRequest, { type: "drums-suggest" }>, "id" | "type">) {
-    return this.search.send({ type: "drums-suggest", ...r }) as Promise<Res<"drums-suggest">>;
+  drumsSuggest(r: Omit<Extract<MakeRequest, { type: "drums-suggest" }>, "id" | "type">, kitIds: string[] = []) {
+    return this.search.send({ type: "drums-suggest", ...r, kit: this.search.kit(kitIds) }) as Promise<Res<"drums-suggest">>;
   }
   /** Slice 2, melody: read a copy of the looped "other" part (transferred, then zeroed in the worker). */
   melodyRead(r: Omit<Extract<MakeRequest, { type: "melody-read" }>, "id" | "type">) {

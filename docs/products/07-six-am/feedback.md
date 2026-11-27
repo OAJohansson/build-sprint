@@ -381,4 +381,7 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | U7-27 | minor | Empty-lane Make link doesn't carry the section's bars | open: final polish |
 | U7-28 | polish | Ruler link hides Outro's bar number | open: final polish (link removed, CR4-1) |
 | U7-29 | polish | No way to start the rebuild from an arbitrary bar | open: final polish |
+| D7-19 | minor | Original plays from the exact playhead, message says "from bar N" | decided L297; open: final polish (wording) |
+| D7-20 | minor | A Deck on another song shows "the Deck isn't open" | open: final polish |
+| D7-21 | polish | First switch of a session starts ~1 s late while the player buffers | accepted (L298); preload if cheap |
 

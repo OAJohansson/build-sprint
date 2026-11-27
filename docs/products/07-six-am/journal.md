@@ -909,3 +909,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Slice 4 landing report (6b0950f, T262): builder measures 0–15 ms landing, 10/10 at both sizes. Graders on slices 3 polish + 4.
 - Critic on slice 4 + slice 3 polish: 9/10; small removals and copy, waiting for the other graders.
 - Slice 4 user test: compare 5, Deck closed 5, whole section 5, way in 4 (W14 met). Small findings U7-26..29 for the final polish round.
+- Slice 4 data-evals (2a9f5af): W10 pass (Original starts 7–12 ms after the bar, 5/5; errMs judged the fair measure), W13, W11, W9, D7-17 fix pass. PM calls L297–L298. Final polish round sent (critic CR4-1, U7-23, U7-25..29, D7-19..21). Owner said "keep going".

@@ -366,5 +366,5 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | D7-14 | check | W5b needs the owner's ear | open: final review |
 | D7-15 | polish | Hat onsets a median 18 ms early vs the grader's attack | backlog |
 | D7-16 | note | Separation not deterministic between captures (5 vs 9 open hats on one loop) | known (Phase 4 Demucs) |
-| U7-19 | minor | After a reload a hit that's new in the re-read shows as "you took out" | open: slice 2 polish |
-| U7-20 | polish | Page buttons "76 | 80" don't read as pages; reason cut at 1440 with the shelf open | open: slice 2 polish |
+| U7-19 | minor | After a reload a hit that's new in the re-read shows as "you took out" | fixed in a19debe; re-check with slice 3 |
+| U7-20 | polish | Page buttons "76 | 80" don't read as pages; reason cut at 1440 with the shelf open | fixed (a19debe) |

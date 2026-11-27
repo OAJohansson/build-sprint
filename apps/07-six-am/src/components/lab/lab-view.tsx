@@ -32,14 +32,29 @@ import { chordsReport, type ChordsReader, type ChordsReport } from "@/lib/make/c
 import { useFx, type FxModel } from "./make-fx";
 import type { FxKnobId, FxPresetId, FxRow } from "@/lib/make/fx-synth";
 import type { MelodyPresetId, MelodyRow, PolyKnobId } from "@/lib/make/poly-synth";
-import type { DrumKnobId, DrumPresetId, DrumRow } from "@/lib/make/drum-synth";
+import type { DrumKnobId, DrumRow, DrumSoundId } from "@/lib/make/drum-synth";
+import type { MacroId, MakePresetId } from "@/lib/make/presets";
 import s from "./lab.module.css";
 
+/** Phase 7 (R8c, L273f): what Make plays, for graders: the picked sound per row, each row's pattern, the play position (names and numbers only). */
+export type SixamMakeHook = {
+  family: () => Family;
+  picked: () => { drums: ReturnType<DrumsModel["debug"]>["picked"] | null; bass: { id: MakePresetId; name: string; family: string; feel: string; loaded: boolean; macros: Record<string, number> } | null; open: DrumRow | null };
+  patterns: () => { steps: number | null; bars: number | null; drums: Record<DrumRow, { step: number; off: number; vel: number }[]> | null; doubtful: Record<DrumRow, boolean> | null; on: Record<DrumRow, boolean> | null; bass: { bars: number; notes: { step: number; midi: number; dur: number; vel: number }[] } | null };
+  position: () => { ms: number; bar: number; playing: boolean; ab: { drums: "a" | "b"; bass: "a" | "b" }; loop: { startMs: number; endMs: number; state: string } | null; loopFraction: number | null; step: number | null };
+  /** The last tap on a shelf: which sound, and ms from the tap until it played (null until it has). */
+  taps: () => { drums: { id: string; heardMs: number | null } | null; bass: { id: string; heardMs: number | null } | null };
+  /** As a tap: pick a sound on a row ("bass" for the bass), turn a knob, show or hide the shelf. */
+  pick: (row: DrumRow | "bass", id: string) => void;
+  knob: (row: DrumRow | "bass", id: string, v: number) => void;
+  shelf: (on: boolean) => void;
+};
+
 declare global {
-  interface Window { __sixamLab?: { state: () => TransportState | null; heardMs: () => number; bar: () => number; hear: () => Hear; levels: () => number[]; barLevels: () => (number | null)[][]; mineLevel: () => number; make: () => ReturnType<MakeModel["debug"]> | null; setLoop: (startMs: number, endMs: number) => void; weight: () => ReturnType<LabTransport["weight"]>; capture: (onsets: number[]) => ReturnType<LabTransport["capture"]>;
+  interface Window { __sixamMake?: SixamMakeHook; __sixamLab?: { state: () => TransportState | null; heardMs: () => number; bar: () => number; hear: () => Hear; levels: () => number[]; barLevels: () => (number | null)[][]; mineLevel: () => number; make: () => ReturnType<MakeModel["debug"]> | null; setLoop: (startMs: number, endMs: number) => void; weight: () => ReturnType<LabTransport["weight"]>; capture: (onsets: number[]) => ReturnType<LabTransport["capture"]>;
     /** Phase 5 graders: the Make family, the drums' state and actions, A/B levels and the drums closeness (numbers only). */
     family: () => Family; setFamily: (f: Exclude<Family, "vocals">) => void; drums: () => ReturnType<DrumsModel["debug"]> | null;
-    drumsDo: { open: (row: DrumRow) => void; preset: (row: DrumRow, id: DrumPresetId) => void; knob: (row: DrumRow, id: DrumKnobId, v: number) => void; suggest: (row: DrumRow) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; playAnyway: (row: DrumRow) => void; save: (row: DrumRow, name?: string) => Promise<void> };
+    drumsDo: { open: (row: DrumRow) => void; preset: (row: DrumRow, id: DrumSoundId) => void; knob: (row: DrumRow, id: DrumKnobId, v: number) => void; suggest: (row: DrumRow) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; playAnyway: (row: DrumRow) => void; save: (row: DrumRow, name?: string) => Promise<void> };
     compareLevels: (part: number) => ReturnType<LabTransport["compareLevels"]>; captureDrums: () => ReturnType<LabTransport["captureDrums"]>;
     /** Slice 2 graders: the melody's state and actions (numbers only); unset while MELODY_ON is off (L247). */
     melody?: () => ReturnType<MelodyModel["debug"]> | null;
@@ -230,6 +245,41 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
         suggest: (row: MelodyRow) => melodyRef.current?.suggestNow(row), ab: (x: "a" | "b") => melodyRef.current?.setAb(x), bed: (on: boolean) => melodyRef.current?.setBed(on),
         playAnyway: (row: MelodyRow) => melodyRef.current?.playAnyway(row), backToOff: (row: MelodyRow) => melodyRef.current?.backToOff(row), save: async (row: MelodyRow, name?: string) => { await melodyRef.current?.save(row, name); },
       } } : {}) };
+    // Phase 7 (R8c): Make's own grader hook.
+    const loopNow = () => { const l = tr.current?.state.loop; return l ? { startMs: l.startMs, endMs: l.endMs, state: l.state } : null; };
+    window.__sixamMake = {
+      family: () => familyRef.current,
+      picked: () => {
+        const d = drumsRef.current?.debug(), b = makeRef.current?.debug();
+        return { drums: d?.picked ?? null, open: d?.open ?? null, bass: b ? { id: b.preset, name: b.name, family: b.family, feel: b.feel, loaded: b.loaded, macros: b.macros } : null };
+      },
+      patterns: () => {
+        const d = drumsRef.current?.debug(), b = makeRef.current?.debug();
+        const rows = d?.rows ?? null;
+        return {
+          steps: d?.steps ?? null, bars: d?.steps ? Math.round(d.steps / 16) : null,
+          drums: rows ? { kick: rows.kick.hits.map((h) => ({ step: h.step, off: h.off, vel: h.vel })), clap: rows.clap.hits.map((h) => ({ step: h.step, off: h.off, vel: h.vel })), hats: rows.hats.hits.map((h) => ({ step: h.step, off: h.off, vel: h.vel })) } : null,
+          doubtful: rows ? { kick: rows.kick.doubtful, clap: rows.clap.doubtful, hats: rows.hats.doubtful } : null,
+          on: d?.on ?? null,
+          bass: b?.pattern ? { bars: b.pattern.bars, notes: b.pattern.notes.map((n) => ({ step: n.step, midi: n.midi, dur: n.dur, vel: n.vel })) } : null,
+        };
+      },
+      position: () => {
+        const ms = t.heardMs(), l = loopNow(), steps = drumsRef.current?.debug().steps ?? null;
+        const f = l ? (ms - l.startMs) / (l.endMs - l.startMs) : null, inside = f !== null && f >= 0 && f < 1;
+        return { ms: Math.round(ms), bar: Math.round(msToBar(ms, bpm, origin) * 1000) / 1000, playing: !!tr.current?.state.playing, ab: { drums: drumsRef.current?.ab ?? "a", bass: makeRef.current?.ab ?? "a" }, loop: l, loopFraction: inside ? Math.round(f! * 10000) / 10000 : null, step: inside && steps ? Math.floor(f! * steps) : null };
+      },
+      taps: () => {
+        const d = drumsRef.current?.debug().tap ?? null, b = makeRef.current?.debug().tap ?? null;
+        return { drums: d ? { id: d.id, heardMs: d.heardMs } : null, bass: b ? { id: b.id, heardMs: b.heardMs } : null };
+      },
+      pick: (row, id) => {
+        const playing = !!tr.current?.state.playing;
+        if (row === "bass") makeRef.current?.pick(id as MakePresetId, playing); else drumsRef.current?.pick(row, id as DrumSoundId, playing);
+      },
+      knob: (row, id, v) => { if (row === "bass") makeRef.current?.setMacro(id as MacroId, v); else drumsRef.current?.setKnob(row, id as DrumKnobId, v); },
+      shelf: (on) => { drumsRef.current?.setShelf(on); makeRef.current?.setShelf(on); },
+    };
     return () => { cancelAnimationFrame(raf); clearTimeout(saveTimer); spike?.stop(); t.dispose(); tr.current = null; };
   }, [map, bpm, origin, bars, code, quiet]);
 

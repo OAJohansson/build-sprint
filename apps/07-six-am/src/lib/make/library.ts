@@ -9,7 +9,7 @@ import type { MakeNote } from "./render";
 import { FX_KNOBS, FX_NOUN, FX_PRESETS, clampFxMacros, fxLengthWord, fxRowOf, isFxPreset, type FxKnobId, type FxMacros, type FxPresetId } from "./fx-synth";
 import { POLY_KNOBS, clampPolyMacros, isMelodyPreset, kindOf, melodyPreset, melodyRowOf, type MelodyPresetId, type PolyKnobId, type PolyMacros } from "./poly-synth";
 import { normalChord, type ChordMark, type Hit } from "./chords-mine";
-import { DRUM_PRESETS, clampDrumMacros, drumSoundName, drumSoundTags, isDrumPreset, isDrumSoundId, kitRowOf, knobsOf, laneRowOf, rowOf, type DrumKnobId, type DrumMacros, type DrumPresetId, type DrumSoundId } from "./drum-synth";
+import { clampDrumMacros, drumSoundName, drumSoundTags, isDrumPreset, isDrumSoundId, kitRowOf, knobsOf, laneRowOf, rowOf, type DrumKnobId, type DrumMacros, type DrumPresetId, type DrumSoundId } from "./drum-synth";
 import { kitSound } from "./kit-drum";
 
 export const LIB_PARTS = ["bass", "drums", "other", "vocals"] as const;

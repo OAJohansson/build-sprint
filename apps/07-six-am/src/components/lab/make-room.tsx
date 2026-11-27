@@ -22,7 +22,10 @@ import { notesForLoop } from "@/lib/make/pattern";
 import { gateNotes } from "@/lib/make/gate";
 import { MakeClient } from "@/lib/make/make-client";
 import { isBassSound, saveAction, soundId, suggestName, suggestTags, type BassSound } from "@/lib/make/library";
-import { MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, type MacroId, type Macros, type MakePresetId } from "@/lib/make/presets";
+import { BASS_FAMILIES, MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, type MacroId, type Macros, type MakePresetId } from "@/lib/make/presets";
+import { hasKitSample } from "@/lib/make/kit-samples";
+import { bassSampleIds, loadSamples, previewBass } from "@/lib/make/kit-load";
+import { SoundCredits } from "./sound-credits";
 import { ApiError, mentorApi } from "@/lib/mentor/client";
 import { noteName, partNoun, type LabMake } from "@/lib/mentor/lab";
 import type { Scale } from "@/lib/synths/theory";
@@ -91,6 +94,10 @@ export function useMake(o: MakeOpts) {
   const [ticksFor, setTicksFor] = useState<string | null>(null);
   const [moved, setMoved] = useState<string | null>(null);
   const renderMs = useRef<number | null>(null);
+  // Phase 7: bumped when a sampled bass's recordings arrive; the shelf's state; the last tap (W12, dev hook).
+  const [samplesV, setSamplesV] = useState(0);
+  const [shelf, setShelf] = useState(true);
+  const [tap, setTap] = useState<{ id: MakePresetId; at: number; heardMs: number | null } | null>(null);
   const wordsBuf = useRef<{ left: Float32Array; right: Float32Array; rate: number } | null>(null);
   const isBass = o.focus === "bass";
   const loopKey = loopKeyOf(o.loop);
@@ -110,7 +117,9 @@ export function useMake(o: MakeOpts) {
     setSuggesting(true);
     const t0 = performance.now();
     try {
-      const res = await cl().suggest({ reading: r.r, preset: p, bpm: o.bpm, start });
+      // Phase 7: a sampled bass's recordings load first and go to the search worker once.
+      await loadSamples(bassSampleIds(p));
+      const res = await cl().suggest({ reading: r.r, preset: p, bpm: o.bpm, start }, bassSampleIds(p));
       console.info(`[make] suggest ${p}: ${res.suggestion.renders} renders in ${res.ms} ms (${Math.round(performance.now() - t0)} ms round trip), distance ${res.suggestion.distance.toFixed(2)} (preset ${res.suggestion.presetDistance.toFixed(2)})`);
       setTicks(res.suggestion.macros);
       setTicksFor(soundId(p, start ?? MAKE_PRESETS[p].macros));
@@ -150,20 +159,25 @@ export function useMake(o: MakeOpts) {
   // Mine: re-render on every knob or preset change (debounced), and swap it in, in sync.
   useEffect(() => {
     if (!o.active || !reading || words) return;
+    void samplesV;
     const key = `${reading.loopKey}|${preset}|${MACRO_IDS.map((id) => macros[id].toFixed(3)).join(",")}`;
     // Phase 5: Mine is one buffer for every family; render again when another family took it meanwhile.
     if (key === mineKey && (tr.current?.mineOwner ?? "bass") === "bass") return;
+    // Phase 7: a sampled bass renders once its recordings are in (the first pick loads them).
+    const need = bassSampleIds(preset).filter((id) => !hasKitSample(id));
+    if (need.length) { void loadSamples(need).then(() => setSamplesV((v) => v + 1)); return; }
     const t = setTimeout(() => {
       const t0 = performance.now();
-      cl().render({ reading: reading.r, active: reading.active, preset, macros, bpm: o.bpm, rate: reading.rate, levelDb: reading.levelDb, lufs: reading.lufs, samples: reading.samples }).then(({ res, stale }) => {
+      cl().render({ reading: reading.r, active: reading.active, preset, macros, bpm: o.bpm, rate: reading.rate, levelDb: reading.levelDb, lufs: reading.lufs, samples: reading.samples }, bassSampleIds(preset)).then(({ res, stale }) => {
         if (stale || loopKeyOf(tr.current?.state.loop ?? null) !== reading.loopKey) return;
         renderMs.current = Math.round(performance.now() - t0);
         tr.current?.setMine(res);
         setMineKey(key);
+        setTap((x) => (x && x.id === preset && x.heardMs === null ? { ...x, heardMs: Math.round(performance.now() - x.at) } : x));
       }, (e) => console.warn("[make] render failed", e));
     }, 60);
     return () => clearTimeout(t);
-  }, [o.active, reading, preset, macros, words, mineKey, o.bpm, tr]);
+  }, [o.active, reading, preset, macros, words, mineKey, o.bpm, tr, samplesV]);
 
   const setPreset = useCallback((p: MakePresetId) => {
     setWords(null);
@@ -190,6 +204,13 @@ export function useMake(o: MakeOpts) {
     setTicks(null);
     setMoved(null);
     if (reading) void suggest(reading, x.preset);
+  };
+  /** Phase 7: a tap on the bass shelf: plays it in the loop (B · Mine) when the loop plays, else one note on its own. */
+  const pick = (p: MakePresetId, playing: boolean) => {
+    setTap({ id: p, at: performance.now(), heardMs: null });
+    if (words || p !== preset) setPreset(p);
+    if (playing && reading) setAb("b");
+    else void previewBass(p).then(() => setTap((x) => (x && x.id === p && x.heardMs === null ? { ...x, heardMs: Math.round(performance.now() - x.at) } : x)));
   };
   const setMacro = useCallback((id: MacroId, v: number) => setMacros((m) => (m[id] === v ? m : { ...m, [id]: v })), []);
 
@@ -260,7 +281,7 @@ export function useMake(o: MakeOpts) {
   const loopNotes = useMemo(() => (reading ? gateNotes(notesForLoop(reading.r.pattern, reading.r.loopSteps).map((n, i, all) => ({ ...n, dur: Math.min(n.dur, reading.r.pattern.notes.find((x) => x.step === n.step % (reading.r.pattern.bars * 16))?.dur ?? n.dur, (all[i + 1]?.step ?? reading.r.loopSteps) - n.step) })), reading.active) : null), [reading]);
 
   return {
-    isBass, preset, setPreset, macros, setMacro, ticks, ab, setAb, drums, setDrums, reading, readState, readError, suggesting,
+    isBass, preset, setPreset, pick, shelf, setShelf, macros, setMacro, ticks, ab, setAb, drums, setDrums, reading, readState, readError, suggesting,
     suggestAgain: () => { if (reading) void suggest(reading, preset, macros, ticks); },
     /** The ticks were worked out from exactly these knobs: nothing new to suggest (S3-2). */
     suggestedNow: !!ticks && ticksFor === sound, moved,
@@ -269,7 +290,7 @@ export function useMake(o: MakeOpts) {
     name: nameField, setName, tags, save, saved,
     /** What the Lab Mentor gets with a question asked in Make. */
     labMake: (isBass && !words ? { preset, macros, ticks } : null) as LabMake | null,
-    debug: () => ({ preset, macros, ticks, ab, readState, mineKey, renderMs: renderMs.current, active: reading?.active ?? null, sounds: sounds.map((x) => x.name), words: words?.text ?? null, pattern: reading?.r.pattern ?? null, levelDb: reading?.levelDb ?? null, features: reading?.r.features ?? null, saved }),
+    debug: () => ({ preset, name: MAKE_PRESETS[preset].name, family: MAKE_PRESETS[preset].family, feel: MAKE_PRESETS[preset].feel, loaded: bassSampleIds(preset).every(hasKitSample), tap, macros, ticks, ab, readState, mineKey, renderMs: renderMs.current, active: reading?.active ?? null, sounds: sounds.map((x) => x.name), words: words?.text ?? null, pattern: reading?.r.pattern ?? null, levelDb: reading?.levelDb ?? null, features: reading?.r.features ?? null, saved }),
   };
 }
 export type MakeModel = ReturnType<typeof useMake>;
@@ -464,6 +485,7 @@ function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: 
         <button className={s.ghost} onClick={m.suggestAgain} disabled={off || m.suggesting || m.suggestedNow} aria-describedby="suggest-hint">{m.suggesting ? "Suggesting…" : m.suggestedNow ? "Suggested" : "Suggest settings"}</button>
         <span id="suggest-hint" hidden>Places gold ticks where the knobs come closest to the original; it never turns a knob</span>
       </div>
+      <BassShelf m={m} playing={playing} />
       <div className={s.checkRow}>
         {blind ? <BlindAB m={m} partName={part.name.toLowerCase()} /> : (
         <div className={s.abWrap}>
@@ -510,18 +532,10 @@ function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
       </div>
       {open && (
         <div className={s.menu} role="menu" aria-label="Presets" style={{ maxHeight: menuMax }}>
-          {MAKE_PRESET_IDS.map((id) => (
-            <button key={id} role="menuitemradio" aria-checked={!m.words && id === m.preset} className={s.menuItem}
-              onClick={() => { setOpen(false); setAsking(false); if (m.words || id !== m.preset) m.setPreset(id); }}>
-              <span className={s.menuCheck} aria-hidden>{!m.words && id === m.preset ? "✓" : ""}</span>
-              <span>{MAKE_PRESETS[id].name}</span>
-              <small>{MAKE_PRESETS[id].tags.join(" · ")}</small>
-            </button>
-          ))}
+          {/* Phase 7: the 20 starting sounds are on the shelf under the knobs; this menu keeps your saved sounds and words. */}
           {/* T110 (S5-2, F3): every sound saved from this track, newest first; one click loads it. */}
           {m.sounds.length > 0 && (
             <>
-              <i className={s.menuRule} aria-hidden />
               <span className={s.menuHead}>Your sounds</span>
               <div className={s.menuSounds} role="group" aria-label="Your sounds from this track">
                 {m.sounds.map((x) => (
@@ -534,7 +548,7 @@ function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
               </div>
             </>
           )}
-          <i className={s.menuRule} aria-hidden />
+          {m.sounds.length > 0 && <i className={s.menuRule} aria-hidden />}
           <button role="menuitem" className={s.menuItem} disabled={!canWords} onClick={() => { setOpen(false); setAsking(true); }}>
             <span className={s.menuCheck} aria-hidden>{m.words ? "✓" : ""}</span>
             <span>Describe a {partName} in words…</span>
@@ -551,6 +565,53 @@ function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
         </form>
       )}
     </div>
+  );
+}
+
+const cap1 = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+
+/**
+ * Phase 7 (design p7-final, "same shelf pattern as drums"): the bass's 20 starting sounds in the variety
+ * map's families, a feel word each; the sound now (name, family · feel, one plain line) above them; a tap
+ * plays it in the loop (B · Mine), or one note alone when the loop is stopped. "Hide sounds" folds it.
+ */
+function BassShelf({ m, playing }: { m: MakeModel; playing: boolean }) {
+  const p = MAKE_PRESETS[m.preset];
+  return (
+    <section className={s.shelf} aria-label="Bass sounds">
+      <div className={s.shelfHead}>
+        <div className={s.shelfWhere}>
+          <span className={s.lbl}>Bass · {MAKE_PRESET_IDS.length} sounds</span>
+          <SoundCredits />
+        </div>
+        <div className={s.shelfNow}>
+          <span className={s.shelfName}>{m.words ? "From your words" : p.name}</span>{" "}
+          {!m.words && <span className={s.lbl}>{cap1(p.family)} · {p.feel}</span>}
+          <span className={s.shelfAbout} title={p.about}>{m.words ? "A loop Stable Audio made from your words; pick a sound below to go back." : p.about}</span>
+        </div>
+        <button className={s.textBtn} aria-expanded={m.shelf} onClick={() => m.setShelf(!m.shelf)}>{m.shelf ? "Hide sounds" : `Show ${MAKE_PRESET_IDS.length} sounds`}</button>
+      </div>
+      {m.shelf && (
+        <div className={s.groups} role="group" aria-label="Bass sounds">
+          {BASS_FAMILIES.map((f) => {
+            const xs = MAKE_PRESET_IDS.filter((id) => MAKE_PRESETS[id].family === f);
+            return (
+              <div key={f} className={s.grp}>
+                <h3>{cap1(f)}</h3>
+                <div className={s.gcol} style={{ gridTemplateRows: `repeat(${Math.min(2, xs.length)}, auto)` }}>
+                  {xs.map((id) => (
+                    <button key={id} className={s.snd} aria-pressed={!m.words && m.preset === id} title={MAKE_PRESETS[id].about} onClick={() => m.pick(id, playing)}>
+                      <b>{MAKE_PRESETS[id].name}</b>
+                      <small>{MAKE_PRESETS[id].feel}</small>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </section>
   );
 }
 

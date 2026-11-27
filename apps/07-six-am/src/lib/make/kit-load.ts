@@ -3,7 +3,8 @@
 // from the app's own /kits folder, decode it to mono at 44.1 kHz, drop the leading silence below
 // −60 dB and keep it in kit-samples.ts. Plus a one-shot preview for a tap when the loop isn't playing.
 import { p7SoundById } from "./kit-p7";
-import { BASS_SAMPLE_FILES } from "./presets";
+import { BASS_SAMPLE_FILES, MAKE_PRESETS, synthParams, type Macros, type MakePresetId } from "./presets";
+import { renderBass } from "./render";
 import { hasKitSample, setKitSample, trimLead } from "./kit-samples";
 import { renderDrumHits, type DrumMacros, type DrumSoundId } from "./drum-synth";
 
@@ -54,6 +55,28 @@ export async function previewDrum(id: DrumSoundId, macros: DrumMacros, gain = 0.
   const buf = ctx.createBuffer(2, end, rate);
   buf.copyToChannel(r.left.subarray(0, end), 0);
   buf.copyToChannel(r.right.subarray(0, end), 1);
+  try { playing?.stop(); } catch { /* already ended */ }
+  const src = ctx.createBufferSource(), g = ctx.createGain();
+  g.gain.value = gain;
+  src.buffer = buf;
+  src.connect(g).connect(ctx.destination);
+  src.start();
+  playing = src;
+}
+
+/** The recordings a bass preset plays from (none for the synth presets). */
+export const bassSampleIds = (id: MakePresetId): string[] => MAKE_PRESETS[id].base.samples?.map((x) => x.id) ?? [];
+
+/** One bass note (A1, a quarter note) of a preset at its own knobs, on its own: a tap on the bass shelf while the loop is stopped. */
+export async function previewBass(id: MakePresetId, macros?: Macros, gain = 0.6): Promise<void> {
+  if (!(await loadSamples(bassSampleIds(id)))) return;
+  ctx ??= new AudioContext({ latencyHint: "interactive" });
+  if (ctx.state === "suspended") await ctx.resume().catch(() => {});
+  const rate = ctx.sampleRate;
+  const r = renderBass([{ step: 0, midi: 33, dur: 4, vel: 0.9 }], synthParams(id, macros ?? MAKE_PRESETS[id].macros), { bpm: 124, steps: 8, rate });
+  const buf = ctx.createBuffer(2, r.left.length, rate);
+  buf.copyToChannel(r.left, 0);
+  buf.copyToChannel(r.right, 1);
   try { playing?.stop(); } catch { /* already ended */ }
   const src = ctx.createBufferSource(), g = ctx.createGain();
   g.gain.value = gain;

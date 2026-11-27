@@ -53,3 +53,28 @@ What building this product taught me.
 1. The first design round's brief sets density rules for "calm at first glance" (playbook step 1).
 2. At the canvas sign-off, reconcile `evals.md` and the brief's requirements with the approved design (playbook step 1).
 3. For AI-written content: a saved source corpus, a citation on every item, an independent claim-by-claim grader, and a cost estimate plus API-limit check before grading runs (playbook step 3b).
+
+## Retro, phases 2–3 (27 Nov 2026)
+
+**What happened:** the Existentialism pilot article (with an apply section and a beginner rewrite), research on learning, the school skeleton (four design rounds and a canvas sign-off), then, with the owner away, the timeline, Your thread as progress, further reading and the first four Eastern schools. The owner's verdict: "a good first MVP".
+
+**What worked**
+- Research before design: the advance-organiser and pre-training evidence shaped the skeleton and kept it small.
+- Clickable prototypes: once the owner could click, decisions came fast ("none speak to me" → P6 → P7 in one round).
+- The canvas threads: four comments, three of them resolved with three quick options each, in minutes.
+- The grader loop on every new fact type: places, spans and the Eastern schools all came back with real errors that were fixed before anyone saw them.
+
+**What didn't**
+- The first design round replaced the globe the owner loved with flat pages: "I kind of hate all of them". Start from what the owner already likes.
+- Critic scores on stills pointed the wrong way (A3 over A1).
+- Running on my own let the globe and Your thread grow busy. The owner wants a planning session before more features.
+
+**Try next time**
+- Bring the owner's current favourite into round 1 of the design as the baseline to beat.
+- Give critics prototypes, not stills, when the design moves.
+- When running autonomously, add one "does it still feel calm?" check after each slice, not only at the end.
+
+**Growth**
+- **A:** a phase run on my own (with the owner's brief, a budget guard and every call logged) delivered four slices and a graded content batch for about 4% of a week.
+- **B:** product calls as decisions with reasons (L34–L42) made the review quick, and left the owner free to redirect (#43–#46).
+- **C:** stable re-layout (spring anchors instead of freezing) and placing labels by their visible text.

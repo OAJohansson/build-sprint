@@ -29,7 +29,9 @@ const MAKE_TAB: Record<string, [string, string | null]> = {
   kick: ["Drums", "drums"], claps: ["Drums", "drums"], hats: ["Drums", "drums"], perc: ["Drums", "drums"],
   bass: ["Bass", null], chords: ["Melody", "melody"], pads: ["Melody", "melody"], lead: ["Melody", "melody"], fx: ["FX", "fx"],
 };
-const makeHref = (mapId: string, lane: string) => `/map?id=${encodeURIComponent(mapId)}&mode=make${MAKE_TAB[lane]?.[1] ? `&make=${MAKE_TAB[lane][1]}` : ""}`;
+/** U7-27: Make opens looping the section's first 8 bars (the whole section when shorter). */
+const makeHref = (mapId: string, lane: string, sec: RebuildSection) =>
+  `/map?id=${encodeURIComponent(mapId)}&mode=make${MAKE_TAB[lane]?.[1] ? `&make=${MAKE_TAB[lane][1]}` : ""}&loop=${sec.start}-${sec.start + Math.min(8, sec.bars)}`;
 /** A section is never narrower than the longest name a map gives ("Breakdown 2") and "2 to fill". */
 const MIN_W = 114;
 const RIGHT_PAD = 24;
@@ -148,13 +150,11 @@ export function RebuildView({ t, mine, cmp }: { t: Timeline; mine: MySounds; cmp
   }, [doc, rb, pick, t.playhead, cmp]);
 
   const empty = doc.regions.length === 0 && !(rb.left ?? []).length;
-  // U7-24: the strip never sits empty: what's still to fill, filled and left empty.
+  // U7-24: the strip never sits empty: what's still to fill, the tempo and the key.
   const sum = (() => {
     const n = rb.sections.reduce((a, _s, i) => a + toFill(doc, i).length, 0);
-    const filled = rb.sections.reduce((a, s, i) => a + REBUILD_LANES.filter((l) => slotState(doc, i, l.id).state === "filled").length, 0);
-    const left = (rb.left ?? []).length;
     const key = doc.key ? `${doc.key.key}${doc.key.scale === "minor" ? "m" : ""}` : "Am";
-    return [n ? `${n} to fill` : "nothing left to fill", `${filled} filled`, ...(left ? [`${left} left empty`] : []), `${doc.bpm ?? ""} bpm · ${key}`].join(" · ");
+    return [n ? `${n} to fill` : "nothing left to fill", `${doc.bpm ?? ""} bpm`, `key ${key}`].join(" · ");
   })();
   const bar = Math.floor(t.playhead);
   const tight = winW < 1360;
@@ -167,10 +167,12 @@ export function RebuildView({ t, mine, cmp }: { t: Timeline; mine: MySounds; cmp
         {empty && !(cmp.on && (!cmp.ready || cmp.mode === "orig")) ? (
           <span><b>The original&rsquo;s {plural(rb.sections.length, "section")}, bar for bar.</b> Every slot starts empty: pick one, then a part you saved in Make. Gold &ldquo;has kick&rdquo; shows what the original has there.</span>
         ) : <span>{sum}</span>}
-        {!cmp.on ? null : !cmp.ready ? (
+        {!cmp.on ? null : !cmp.ready && cmp.otherSong ? (
+          <span className={r.warn} role="status">The Deck is playing another song. <button onClick={cmp.openDeck}>Play this one</button></span>
+        ) : !cmp.ready ? (
           <span className={r.warn} role="status">Original is off: the Deck isn&rsquo;t open. <button onClick={cmp.openDeck}>Open the Deck</button> to hear the original from bar {bar}.</span>
         ) : cmp.mode === "orig" ? (
-          <span className={cx(r.warn, r.playingOrig)} role="status">Playing the original from bar {cmp.fromBar ?? bar}, in the Deck</span>
+          <span className={cx(r.warn, r.playingOrig)} role="status">{cmp.deck.playing ? `Playing the original from here, bar ${cmp.fromBar ?? bar}` : `The original is paused at bar ${bar}`}</span>
         ) : null}
       </div>
       <div className={r.body}>
@@ -180,7 +182,7 @@ export function RebuildView({ t, mine, cmp }: { t: Timeline; mine: MySounds; cmp
               <div className={r.head}>
                 <span className={r.corner} />
                 <div className={r.tl}>
-                  {rb.sections.map((s, i) => <SectionHead key={i} s={s} n={toFill(doc, i).length} hinted={REBUILD_LANES.some((l) => slotHint(s, l.id) === "has")} x={lay.at[i].x} w={lay.at[i].w} onSeek={() => (cmp.on ? cmp.seek(s.start) : t.jumpTo(s.start))} />)}
+                  {rb.sections.map((s, i) => <SectionHead key={i} s={s} n={toFill(doc, i).length} hinted={REBUILD_LANES.some((l) => slotHint(s, l.id) === "has")} x={lay.at[i].x} w={lay.at[i].w} onSeek={(b) => { if (cmp.on) cmp.play(b); else { t.jumpTo(b); t.setPlaying(true); } }} />)}
                 </div>
               </div>
               <div className={r.lanes} style={{ gridTemplateRows: `repeat(${REBUILD_LANES.length}, minmax(${tight ? 38 : 42}px, 1fr))` }}>
@@ -228,9 +230,16 @@ export function RebuildView({ t, mine, cmp }: { t: Timeline; mine: MySounds; cmp
   );
 }
 
-function SectionHead({ s, n, hinted, x, w, onSeek }: { s: RebuildSection; n: number; hinted: boolean; x: number; w: number; onSeek: () => void }) {
+function SectionHead({ s, n, hinted, x, w, onSeek }: { s: RebuildSection; n: number; hinted: boolean; x: number; w: number; onSeek: (bar: number) => void }) {
   const range = `${s.start}–${s.start + s.bars - 1}`;
-  const roomy = s.name.length * 8.4 + range.length * 6.9 + 40 <= w;
+  // name (14 px mono) + 7 px gap + range (11.5 px mono) + padding 17 + border.
+  const roomy = s.name.length * 8.4 + 7 + range.length * 6.9 + 19 <= w;
+  // U7-29: a click plays from the bar under the pointer (keyboard: the section's first bar).
+  const at = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (e.detail === 0) return s.start;
+    const box = e.currentTarget.getBoundingClientRect();
+    return s.start + Math.min(s.bars - 1, Math.max(0, Math.floor(((e.clientX - box.left) / box.width) * s.bars)));
+  };
   // One phrase everywhere (L295): "N to fill", "nothing left to fill" (shortened to "none left" when
   // narrow); never a bare number. A section without measured parts shows no count.
   const count = !hinted ? "" : n ? `${n} to fill` : fits("nothing left to fill", w, 11.5, 17) ? "nothing left to fill" : "none left";
@@ -238,7 +247,7 @@ function SectionHead({ s, n, hinted, x, w, onSeek }: { s: RebuildSection; n: num
   // U7-23: the bar range on every header that fits it: beside the name, else beside the count.
   const range2 = !roomy && fits(`${shown}${shown ? "  " : ""}${range}`, w, 11.5, 17);
   return (
-    <button className={r.sech} style={{ left: x, width: w }} onClick={onSeek} title={`${s.name}, bars ${range}. Play from bar ${s.start}`}>
+    <button className={r.sech} style={{ left: x, width: w }} onClick={(e) => onSeek(at(e))} title={`${s.name}, bars ${range}. Click a spot to play from that bar`}>
       <span className={r.l1}><span className={r.sn}>{s.name}</span>{roomy ? <span className={r.range}>{range}</span> : null}</span>
       <span className={r.count}><span className={n > 0 ? r.gold : undefined}>{shown}</span>{range2 ? <span className={r.range}>{shown ? "  " : ""}{range}</span> : null}</span>
     </button>
@@ -255,7 +264,9 @@ function Slot({ doc, i, s, lane, x, w, open, onPick }: { doc: Doc; i: number; s:
   else if (hint === "vocals") { kind = "v"; text = "has vocals · not yet"; short = ["vocals · not yet", "not yet"]; }
   else kind = hint === "none" ? "n" : "e";
   // Shorter words for narrow slots before cutting (a labelled slot is never left blank).
-  const label = !text ? "" : kind === "f" || fits(text, px) ? text : short.find((y) => fits(y, px)) ?? short.at(-1) ?? text;
+  // U7-25: a part's name that doesn't fit gives its first words (before a comma) when those fit; the full name stays in the tooltip.
+  if (kind === "f" && text.includes(",")) short = [text.split(",")[0].trim()];
+  const label = !text ? "" : fits(text, px) ? text : short.find((y) => fits(y, px)) ?? (kind === "f" ? text : short.at(-1) ?? text);
   const none = `The original has no ${L.name.toLowerCase()} here`;
   const what = text || (hint === "none" ? `${none.toLowerCase()}; add a part` : "empty, add a part");
   const color = colorOf(L.type);
@@ -324,7 +335,7 @@ function SlotPanel({ doc, pick, sounds, loading, onClose, onFill, onEmpty, onLea
             {parts.map((p) => <PartItem key={p.id} p={p} on={inSlot?.source === "lib" && inSlot.libId === p.id} onClick={() => onFill(p)} />)}
           </div>
         ) : (
-          <p className={r.lbl}>No saved {NOUN[pick.lane] ?? noun} yet. <a className={cx(r.link, r.nowrap)} href={makeHref(doc.rebuild!.mapId, pick.lane)}>Build one in Make → {MAKE_TAB[pick.lane]?.[0] ?? "Bass"}</a></p>
+          <p className={r.lbl}>No saved {NOUN[pick.lane] ?? noun} yet. <a className={cx(r.link, r.nowrap)} href={makeHref(doc.rebuild!.mapId, pick.lane, s)}>Build one in Make → {MAKE_TAB[pick.lane]?.[0] ?? "Bass"}</a></p>
         )}
       {st.state === "filled" ? <button className={r.link} onClick={onEmpty}>Empty this slot</button>
         : st.state === "left" ? <span className={r.lbl} role="status">Left empty · <button className={r.link} onClick={() => onLeave(false)}>Undo</button></span>

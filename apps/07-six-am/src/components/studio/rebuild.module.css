@@ -14,7 +14,7 @@
 .warn { margin-left: auto; flex: none; color: var(--gold); }
 .warn button { border: 0; background: none; padding: 0; font: inherit; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .warn button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-.playingOrig { color: var(--mute); }
+.playingOrig { color: var(--ink); }
 
 .body { display: grid; grid-template-columns: minmax(0, 1fr) var(--side); min-height: 0; }
 .arrWrap { position: relative; min-width: 0; min-height: 0; display: flex; }
@@ -57,7 +57,7 @@
 .l, .v { border-color: rgba(241,230,211,.13); color: var(--dim); }
 .e { color: var(--dim); background: transparent; }
 /* U7-22: a measured lane the original doesn't have here: a dimmed cell, no words (tooltip + label say it) */
-.n { color: var(--dim); background: rgba(0,0,0,.32); }
+.n { color: var(--dim); background: rgba(0,0,0,.14); }
 .f { border-style: solid; border-color: transparent; }
 .slot[aria-expanded="true"] { box-shadow: 0 0 0 2px var(--ink) !important; }
 .plus { visibility: hidden; color: var(--mute); }

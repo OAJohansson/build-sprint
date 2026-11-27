@@ -9,10 +9,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Logo } from "@/components/studio/logo";
 import { SettingsLink, ViewsNav } from "@/components/views-nav";
-import { RebuildLink, rebuildHref } from "@/components/studio/rebuild-link";
+import { RebuildLink } from "@/components/studio/rebuild-link";
 import type { EarsAnalysis } from "@/lib/ears/results";
 import { LiveError, PART_NAMES, type PartName } from "@/lib/lab/live";
-import { barToMs, loopBars, msToBar } from "@/lib/lab/timing";
+import { LOOP_CAP_BARS, barToMs, loopBars, msToBar } from "@/lib/lab/timing";
 import { LabTransport, type TransportState } from "@/lib/lab/transport";
 import { clockMs, labParts, labSections, sectionAt, type LabSection } from "@/lib/lab/view";
 import type { TrackMap } from "@/lib/map/types";
@@ -192,6 +192,12 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     });
     tr.current = t;
     try { const saved = Number(sessionStorage.getItem(POS_KEY(map.id))); if (saved > 0) t.seek(saved); } catch { /* storage blocked */ }
+    // U7-27: a rebuild's "Build one in Make → …" sends ?loop=<from>-<to> (bars, `to` exclusive): that loop, at most 16 bars.
+    const lq = new URLSearchParams(location.search).get("loop")?.match(/^(\d{1,3})-(\d{1,3})$/);
+    if (lq) {
+      const from = Math.max(1, Number(lq[1])), to = Math.min(bars + 1, Number(lq[2]), from + LOOP_CAP_BARS);
+      if (to > from) { t.seek(barToMs(from, bpm, origin)); t.setLoop({ startMs: barToMs(from, bpm, origin), endMs: barToMs(to, bpm, origin) }); }
+    }
     let raf = 0, lastSec = -1, lastBar = -1;
     const frame = () => {
       const ms = t.heardMs();
@@ -594,7 +600,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
         <div ref={grid} style={{ display: "contents" }}>
           <Lanes bars={bars} sections={sections} parts={parts} chords={chords} levels={levels} hear={hear} focus={focus}
             onOnly={onOnly} onMute={onMute} onSeek={onSeek} bar={pos.bar} loop={loop} onLoop={onLoop}
-            catching={!!ts?.catching} dimmed={!ready} rebuildHref={rebuildHref(map.id)}
+            catching={!!ts?.catching} dimmed={!ready}
             overlay={(
               <LabNotes bars={bars} turns={focusTurns} partName={PART_LABEL[focus]} playheadBar={pos.bar}
                 openBar={openBar} setOpenBar={setOpenBar} asking={asking} setAsking={setAsking}

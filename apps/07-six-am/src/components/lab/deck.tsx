@@ -46,10 +46,10 @@ export function Deck({ url }: { url: string }) {
     return () => { on = false; stop(); };
   }, [url]);
 
-  if (!url) return <main style={box}>This window plays a track for the Lab. Open a track in Analyse, then press Play there.</main>;
+  if (!url) return <main style={box}>This window plays a song for Six AM. Open a track in Analyse, then press Play there.</main>;
   return (
     <main style={box}>
-      <p style={{ margin: "0 0 10px" }}><span style={{ color: "#f1e6d3" }}>Six AM Deck</span> · {status}<br />Keep this window open: it plays the song for the Lab, where you hear the parts.</p>
+      <p style={{ margin: "0 0 10px" }}><span style={{ color: "#f1e6d3" }}>Six AM Deck</span> · {status}<br />Keep this window open: it plays the song for Six AM.</p>
       <iframe ref={frame} title="SoundCloud player" src={widgetSrc(url)} width="100%" height="120" allow="autoplay" style={{ border: 0 }} />
     </main>
   );

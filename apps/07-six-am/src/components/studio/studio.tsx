@@ -298,6 +298,8 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
   const [code] = useAccessCode();
   // Slice 4 (R7, L270): Mine / Original on a rebuild, through the Deck window (commands only).
   const cmp = useCompare(t, rb, code);
+  const orig = cmp.on && cmp.mode === "orig";
+  const sounding = orig ? cmp.deck.playing : t.playing;
   useEffect(() => { t.engine().then((e) => e.setAccessCode(code)); }, [t, code]);
   // My sounds (L158, L200): the library, newest first, for the crate's first tab.
   const [mine, setMine] = useState<MySounds>({ is: "loading" });
@@ -393,10 +395,11 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
           ) : null}
         </div>
         <div className={s.transport}>
-          <button className={s.tb} onClick={() => t.jumpTo(1)} aria-label="Back to start">{Icon.start}</button>
-          <button className={cx(s.tb, s.play)} onClick={() => t.setPlaying(!t.playing)} aria-label={t.playing ? "Pause" : "Play"}>{t.playing ? Icon.pause : Icon.play}</button>
+          {/* U7-26: on Original the transport drives the Deck (❚❚ pauses it, ▶ plays it on). */}
+          <button className={s.tb} onClick={() => (orig ? cmp.seek(1) : t.jumpTo(1))} aria-label="Back to start">{Icon.start}</button>
+          <button className={cx(s.tb, s.play)} onClick={() => (orig ? cmp.toggleOriginal() : t.setPlaying(!t.playing))} aria-label={sounding ? "Pause" : "Play"}>{sounding ? Icon.pause : Icon.play}</button>
           {/* L200: one 13 px line; a track without its own key plays synths in A minor (the crate's key). */}
-          <div className={v.facts} aria-live="off">
+          <div className={cx(v.facts, rb && s.factsFixed)} aria-live="off">
             {/* A rebuild shows bar and section here; its tempo and key sit in the strip (room for the
                 track name beside Mine / Original at 1280). */}
             bar <b>{t.bar}.{t.beat}</b>{rb ? <> · <span className={s.secName}>{rb.sections[sectionIndexAt(rb, t.playhead)].name}</span></> : <> · <span title={bpm === DEFAULT_BPM ? undefined : `Set from Analyse; the Studio's default is ${DEFAULT_BPM}`}>{formatBpm(bpm)} bpm</span> · {track.doc.key
@@ -407,7 +410,7 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
             <div className={s.mo} role="group" aria-label="Hear mine or the original">
               <button aria-pressed={cmp.mode === "mine"} onClick={cmp.toMine}>Mine</button>
               <button aria-pressed={cmp.mode === "orig"} aria-disabled={!cmp.ready || undefined} onClick={cmp.toOriginal}
-                title={cmp.ready ? `Hear the original from bar ${t.bar}, in the Deck` : "Open the Deck to hear the original"}>Original</button>
+                title={cmp.ready ? `Hear the original from here, bar ${t.bar}, in the Deck` : cmp.otherSong ? "The Deck is playing another song" : "Open the Deck to hear the original"}>Original</button>
             </div>
           ) : null}
           <button className={s.undo} onClick={t.undo} disabled={!t.canUndo} aria-label="Undo">{Icon.undo} <span className={s.undoWord}>Undo</span></button>

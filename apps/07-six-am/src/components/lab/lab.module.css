@@ -66,9 +66,6 @@
 .ruler { position: relative; background: var(--panel); border-bottom: 1px solid var(--line); cursor: pointer; overflow: hidden; }
 .sec { position: absolute; top: 0; height: 24px; padding: 0 8px; font: 400 11.5px/24px var(--f-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; background: none; border: 0; cursor: pointer; }
 .sec[aria-pressed="true"] { color: var(--gold) !important; }
-/* L295: the song's rebuild, quiet, at the end of the section ruler (over the last ticks) */
-.rulerRebuild { position: absolute; right: 0; bottom: 0; padding: 2px 10px 3px 18px; font-size: 11px; color: var(--muted) !important; text-decoration: none; white-space: nowrap; background: linear-gradient(to right, transparent, var(--panel) 14px); z-index: 3; }
-.rulerRebuild:hover, .rulerRebuild:focus-visible { color: var(--ink) !important; text-decoration: underline; text-underline-offset: 3px; }
 .rebuildBtn { color: var(--ink) !important; text-decoration: none; display: inline-flex; align-items: center; }
 .rebuildBtn:hover { border-color: var(--muted); }
 .num { position: absolute; bottom: 3px; padding-left: 5px; font-size: 10.5px; color: var(--muted); pointer-events: none; font-variant-numeric: tabular-nums; }

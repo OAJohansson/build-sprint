@@ -256,3 +256,5 @@
 /* A rebuild's name stays readable beside Mine / Original (≥ 160 px at 1280); a long section name is cut */
 .trackTitleWide { min-width: 160px; }
 .secName { display: inline-block; max-width: 12ch; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
+/* L298: the rebuild's bar label keeps one width ("bar 113.4 · Breakdown 2"), so the transport never moves */
+.factsFixed { width: 25ch; overflow: hidden; }

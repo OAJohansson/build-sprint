@@ -5,7 +5,7 @@
 // same bar on the map's grid and plays. Mine: the Deck pauses and the Studio plays from the bar the
 // Deck reached. Only commands and numbers cross the Deck channel, never audio (C2, W13).
 import { useCallback, useEffect, useRef, useState } from "react";
-import { DeckRemote, type DeckState } from "@/lib/lab/deck-protocol";
+import { DECK_CHANNEL, DECK_GONE_MS, DeckRemote, type DeckState } from "@/lib/lab/deck-protocol";
 import { mentorApi } from "@/lib/mentor/client";
 import { originalMsAt, rebuildBarAt, type Grid, type Rebuild } from "@/lib/rebuild";
 import type { Timeline } from "./use-timeline";
@@ -32,6 +32,12 @@ export type Compare = {
   toMine: () => void;
   /** Move to a bar: on Original the Deck seeks there; on Mine the Studio's playhead moves. */
   seek: (bar: number) => void;
+  /** U7-29: play from a bar: on Original the Deck plays there; on Mine the Studio does. */
+  play: (bar: number) => void;
+  /** U7-26: the Studio's Play / Pause while on Original drives the Deck. */
+  toggleOriginal: () => void;
+  /** D7-20: a Deck is open, but on another song. */
+  otherSong: boolean;
   openDeck: () => void;
 };
 export type MaybeCompare = Compare | { on: false };
@@ -65,6 +71,23 @@ export function useCompare(t: Timeline, rb: Rebuild | undefined, code: string): 
   const modeRef = useRef<CompareMode>("mine");
   useEffect(() => { modeRef.current = mode; }, [mode]);
 
+  // D7-20: a Deck reporting another song's url (DeckRemote ignores those) is noticed here, numbers only.
+  const [otherAt, setOtherAt] = useState(0);
+  useEffect(() => {
+    if (!mapId) return;
+    const ch = new BroadcastChannel(DECK_CHANNEL);
+    let last = 0;
+    ch.onmessage = (e: MessageEvent<{ kind?: string; url?: string }>) => {
+      if (e.data?.kind !== "state" || !e.data.url || e.data.url === mapId) return;
+      const now = performance.now();
+      if (now - last > 500) { last = now; setOtherAt(now); }
+    };
+    return () => ch.close();
+  }, [mapId]);
+  const [nowTick, setNowTick] = useState(0);
+  useEffect(() => { const h = setInterval(() => setNowTick(performance.now()), CHECK_MS); return () => clearInterval(h); }, []);
+  const otherSong = otherAt > 0 && nowTick - otherAt < DECK_GONE_MS;
+
   useEffect(() => {
     if (!mapId) return;
     // Reports from a Deck playing another song are ignored (DeckRemote filters by url).
@@ -95,6 +118,9 @@ export function useCompare(t: Timeline, rb: Rebuild | undefined, code: string): 
   }, [mapId]);
 
   const ready = open && !!grid;
+  // D7-21 (L298, accepted): the first switch may buffer ~1 s. A paused "cue" (seekTo before any play)
+  // left the SoundCloud widget stuck (it reported playing, never played, and the next seek didn't
+  // land), so there's no preload.
   // While Original plays, the playhead follows the Deck's reported position.
   const { jumpTo, setPlaying, playing } = t;
   useEffect(() => {
@@ -147,11 +173,24 @@ export function useCompare(t: Timeline, rb: Rebuild | undefined, code: string): 
     jumpTo(bar);
   }, [mode, ready, sendSeek, jumpTo]);
 
+  const play = useCallback((bar: number) => {
+    if (mode === "orig" && ready) { sendSeek(bar); jumpTo(bar); return; }
+    jumpTo(bar);
+    setPlaying(true);
+  }, [mode, ready, sendSeek, jumpTo, setPlaying]);
+
+  const toggleOriginal = useCallback(() => {
+    if (mode !== "orig") return;
+    const d = lastRef.current;
+    if (d?.playing) remote.current?.pause();
+    else sendSeek(d && grid ? rebuildBarAt(d.pos, grid, bars) : t.playhead);
+  }, [mode, grid, bars, t.playhead, sendSeek]);
+
   const openDeck = useCallback(() => { if (mapId) remote.current?.openWindow(mapId); }, [mapId]);
 
   if (!mapId) return { on: false };
   return {
-    on: true, mode, ready, lastSwitch, fromBar,
+    on: true, mode, ready, lastSwitch, fromBar, otherSong, play, toggleOriginal,
     // posMs: the last report React saw (live on Original); the dev hook reads the freshest below.
     deck: { open, url: state?.url ?? null, posMs: state ? Math.round(state.pos) : null, playing: !!state?.playing, last: () => lastRef.current },
     toOriginal, toMine, seek, openDeck,

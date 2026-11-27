@@ -368,12 +368,12 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | D7-16 | note | Separation not deterministic between captures (5 vs 9 open hats on one loop) | known (Phase 4 Demucs) |
 | U7-19 | minor | After a reload a hit that's new in the re-read shows as "you took out" | fixed (re-checked) |
 | U7-20 | polish | Page buttons "76 | 80" don't read as pages; reason cut at 1440 with the shelf open | fixed (a19debe) |
-| CR3-1 | minor | Critic slice 3 9/10: count wording ("0 to fill" vs "all filled"); pads offered in Chords unexplained; "Make one in Make" dead end; bar ranges missing on columns that fit | open: slice 3 polish |
-| U7-21 | minor | "Rebuild this song" link hard to find (critic agrees) | open: slice 3 polish |
-| U7-22 | minor | Measured-empty vs unmeasured vs empty slots look the same | open: slice 3 polish |
-| U7-23 | polish | Bar ranges drop on narrow sections | open: slice 3 polish |
+| CR3-1 | minor | Critic slice 3 9/10: count wording ("0 to fill" vs "all filled"); pads offered in Chords unexplained; "Make one in Make" dead end; bar ranges missing on columns that fit | fixed (0465af1) |
+| U7-21 | minor | "Rebuild this song" link hard to find (critic agrees) | fixed (0465af1) |
+| U7-22 | minor | Measured-empty vs unmeasured vs empty slots look the same | fixed (0465af1) |
+| U7-23 | polish | Bar ranges drop on narrow sections | fixed (0465af1) |
 | U7-24 | polish | Empty strip band after the first fill | open: slice 4 (the strip's Mine / Original line) |
-| U7-25 | polish | Part names cut | open: slice 3 polish |
-| D7-17 | minor | After a reload, untouched steps follow the new reading, so an edited loop can play hits the owner never heard (kick 27 → 30) | open: L294 |
+| U7-25 | polish | Part names cut | fixed (0465af1) |
+| D7-17 | minor | After a reload, untouched steps follow the new reading, so an edited loop can play hits the owner never heard (kick 27 → 30) | fixed (72e06b8); re-check with slice 4 |
 | D7-18 | check | Rebuild hints only graded on the seed's idealised curves; check on a real map | open: final review |
 

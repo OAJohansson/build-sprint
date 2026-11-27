@@ -229,3 +229,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 
 - **Owner hand-off:** "take full responsibility for all the decisions from here on and build out the music", then review the final output. Logged as L44. Kickoff pack and Phase 4 evals written; L45–L49 set scope, sources, map shape, sound and the content model.
 - **Budget at start:** 5-hour window 85% (reset in 18 min), weekly 42%. Guard: stop new work at 70% weekly.
+- **Started in parallel:** a research agent builds the Wikipedia corpus (genre and artist articles, infobox origins) and the genre skeleton with sourced links; the engineer makes the app multi-field (field switcher, per-field progress, Listen rows, music timeline and globe, importer) against a 4-genre sample. L50: no ten-direction design round; the critic scores the built screens.

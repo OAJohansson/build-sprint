@@ -130,3 +130,5 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 - **Load your own sample packs** (L266): pick a folder in Chrome, sounds kept in the browser only (IndexedDB / OPFS), never uploaded; once the CC0 kit runs out (`research-sounds.md`, route C).
 - Build-time design fixes from the critic's round 3b (9/10): worst-case rebuild grid ends at the side panel with a scroll cue; "Breakdown" fits; narrow counts read "2 to fill" or nothing; Ride's "Your turn" line clear of the shelf at 1280; blank-cell hover / focus outline (27 Nov).
 - Viability risk (L283): tonejs-instruments' sampled basses are CC BY 3.0 but its README doesn't say where the recordings came from; check before charging, or swap for basses recorded by a known author.
+- Drum reader: clap / snare bodies land on Closed hat (D7-13, 0–83 % of the row per loop); open-vs-closed hats need more than energy gates (D7-12: 44 % / 31 %; try a small classifier on labelled real hits); hat onsets ~18 ms early (D7-15) (27 Nov).
+- "Save drums" for all edited rows at once (U7-16); today Save is per row because each row lands on its own Studio lane (27 Nov).

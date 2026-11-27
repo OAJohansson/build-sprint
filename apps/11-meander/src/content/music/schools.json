@@ -402,6 +402,14 @@
         {
           "url": "https://en.wikipedia.org/wiki/Jazz",
           "section": "Improvisation"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Jazz",
+          "section": "Etymology and definition"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Jazz",
+          "section": "The influence of Duke Ellington"
         }
       ],
       "sample": false
@@ -413,7 +421,7 @@
       "dates": "late 19th century – today",
       "dateRange": "late 19th century – today",
       "description": "Gospel is Christian music led by powerful voices and close harmonies, sung in call and response over clapping and stomping. Black gospel grew from spirituals and hymns in the South, took modern shape in 1930s Chicago, and flowed into soul, rhythm and blues and rock and roll.",
-      "debatable": "There is no clean founding date: its roots are traced to the early 17th century, the term 'gospel song' first appeared in print in 1874, and 1930 is said to be the year traditional Black gospel began; Thomas Dorsey is often credited with creating it, though he more accurately spread a movement.",
+      "debatable": "There is no clean founding date: its roots are traced to the early 17th century, the term 'gospel song' first appeared in print in 1874, and 1930 is said to be the year traditional Black gospel began; Thomas Dorsey is often credited with creating it, though he more accurately started a movement that popularised gospel blues.",
       "tagline": "Christian music of strong voices and harmonies, rooted in Black churches of the South.",
       "taglineSources": [
         {
@@ -600,6 +608,10 @@
         {
           "url": "https://en.wikipedia.org/wiki/Gospel_music",
           "section": "Gospel goes to mainstream"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Thomas_A._Dorsey",
+          "section": "intro"
         }
       ],
       "sample": false
@@ -805,6 +817,10 @@
         {
           "url": "https://en.wikipedia.org/wiki/Country_music",
           "section": "Origins"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Country_music",
+          "section": "Race in modern country music"
         }
       ],
       "sample": false
@@ -1248,7 +1264,7 @@
       "questions": [
         "A loud electric guitar at the centre, backed by bass and a drum kit.",
         "A steady 4/4 beat with the snare cracking on beats two and four.",
-        "Mostly verse-chorus songs, though blues rock and psychedelic bands often stretched them into long improvised jams."
+        "Mostly verse-chorus songs, though blues rock bands often stretched them into long, jazz-like improvisations."
       ],
       "questionSources": [
         [
@@ -1412,6 +1428,10 @@
         {
           "url": "https://en.wikipedia.org/wiki/Rock_music",
           "section": "Characteristics"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Rock_and_roll",
+          "section": "Etymology"
         }
       ],
       "sample": false
@@ -1742,7 +1762,7 @@
         },
         {
           "name": "A look to shock",
-          "text": "The male American punk look of T-shirt, motorcycle jacket and jeans harked back to 1950s greasers, later with ripped jeans and Doc Martens. Women in punk tore up rock's old female roles, from Siouxsie Sioux's bondage gear to Patti Smith's androgyny.",
+          "text": "The male American punk look of T-shirt, motorcycle jacket and jeans harked back to 1950s greasers, worn with ripped jeans and boots, typically Doc Martens. Women in punk tore up rock's old female roles, from Siouxsie Sioux's bondage gear to Patti Smith's androgyny.",
           "thinkers": [
             "punk-rock/patti-smith"
           ],
@@ -1851,6 +1871,10 @@
         {
           "url": "https://en.wikipedia.org/wiki/Punk_rock",
           "section": "United Kingdom"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Punk_rock",
+          "section": "Australia"
         }
       ],
       "sample": false
@@ -2554,6 +2578,10 @@
         {
           "url": "https://en.wikipedia.org/wiki/Soul_music",
           "section": "1960s"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Sam_Cooke",
+          "section": "Legacy"
         }
       ],
       "sample": false
@@ -2785,7 +2813,7 @@
       "dates": "late 1960s – today",
       "dateRange": "late 1960s – today",
       "description": "Disco is dance music that grew out of American city nightlife in the late 1960s, mixing the sounds of venues loved by African American, Latino American and Italian American crowds. Producers working behind the scenes built big, layered records, and DJs learned to mix them into one unbroken night on the dance floor. It filled clubs across the US by the late 1970s, took a sharp backlash in 1979, and lived on in Europe and in the house, techno and hip-hop it helped start.",
-      "debatable": "Whether disco 'died' is debatable: it fell sharply in the US after Disco Demolition Night in July 1979, but stayed popular in Italy and much of Europe through the 1980s and has had several revivals since the 1990s.",
+      "debatable": "Whether disco 'died' is debatable: it fell sharply in the US after Disco Demolition Night in July 1979, but stayed popular in Italy and some other European countries through the 1980s and has had several revivals since the 1990s.",
       "tagline": "Lush, string-soaked dance music built on a steady kick drum in 1970s clubs.",
       "taglineSources": [
         {
@@ -5886,7 +5914,7 @@
       "family": "electronic",
       "dates": "early 1980s – today",
       "dateRange": "early 1980s – today",
-      "description": "House is electronic dance music built on a steady kick drum on every beat, usually at about 120–130 beats per minute. It grew in Chicago in the early-to-mid 1980s, when DJs from the city's queer Black underground clubs began reworking disco records, adding drum machines, to give them a more mechanical beat. From there it spread to New York, London and Ibiza and became a worldwide sound.",
+      "description": "House is electronic dance music built on a steady kick drum on every beat, usually at about 120–130 beats per minute. It grew in Chicago in the early-to-mid 1980s, when DJs from the city's queer Black underground clubs began reworking disco records to give them a more mechanical beat; the steady kick may have come from DJs adding drum machines under the records they played. From there it spread to New York, London and Ibiza and became a worldwide sound.",
       "debatable": "Nobody agrees where the name came from (the Warehouse club where Frankie Knuckles played, a South Side bar sign, a record-shop bin label or music made at home are all offered), and 'On and On' (1984) is only sometimes called the first house record.",
       "tagline": "Chicago's drum-machine dance music, born in Black, Latino and gay clubs.",
       "taglineSources": [
@@ -6114,6 +6142,10 @@
         {
           "url": "https://en.wikipedia.org/wiki/House_music",
           "section": "UK: Acid house, rave culture and the Second Summer of Love"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/House_music",
+          "section": "Ibiza"
         }
       ],
       "sample": false

@@ -301,7 +301,7 @@
       "recording": {
         "artist": "Louis Armstrong",
         "title": "Hello, Dolly!",
-        "year": null,
+        "year": 1964,
         "kind": "song"
       },
       "recordingSources": [
@@ -312,6 +312,10 @@
         {
           "url": "https://en.wikipedia.org/wiki/Louis_Armstrong",
           "section": "Film, television, and radio"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Louis_Armstrong",
+          "section": "A jazz ambassador"
         }
       ],
       "sources": [
@@ -411,7 +415,7 @@
           }
         ]
       ],
-      "prompt": "Make me a short listening module (about 20 minutes) on Charlie Parker (1920–1955). Use only these facts: He was nicknamed 'Bird' and played alto saxophone; he was a leading figure in bebop, known for fast tempos, dazzling technique and new harmonic ideas; he often wrote new melodies over existing tunes' chords; many of his pieces, like 'Now's the Time', use the 12-bar blues. Build it around \"Now's the Time\" (1945): what to listen for, two or three questions to think about while it plays, and one thing to compare it with from the same era. Don't add facts beyond these.",
+      "prompt": "Make me a short listening module (about 20 minutes) on Charlie Parker (1920–1955). Use only these facts: He was nicknamed 'Bird' and played alto saxophone; he was a leading figure in bebop, known for fast tempos, dazzling technique and new harmonic ideas; he often wrote new melodies over existing tunes' chords; many of his pieces use the 12-bar blues. Build it around \"Now's the Time\" (1945): what to listen for, two or three questions to think about while it plays, and one thing to compare it with from the same era. Don't add facts beyond these.",
       "promptSources": [
         {
           "url": "https://en.wikipedia.org/wiki/Charlie_Parker",
@@ -459,7 +463,7 @@
       "summary": "Miles Davis was a trumpeter and bandleader who stood at the front of one jazz change after another, from bebop and cool jazz to modal jazz and fusion.",
       "ideas": [
         "After playing in Charlie Parker's quintet, he recorded the Birth of the Cool sessions, key to cool jazz.",
-        "Kind of Blue (1959), planned around Bill Evans's piano style by two players who knew George Russell's ideas about modes, is what some consider his greatest album."
+        "Kind of Blue (1959), whose music was planned around Bill Evans's piano style, is what some consider his greatest album; both Davis and Evans knew George Russell's ideas about modal jazz."
       ],
       "ideaSources": [
         [
@@ -655,7 +659,7 @@
           }
         ]
       ],
-      "prompt": "Make me a short listening module (about 20 minutes) on Sister Rosetta Tharpe (1915–1973). Use only these facts: She was a singer and electric guitarist who became the first great recording star of gospel, later called 'the Godmother of Rock and Roll'; she mixed spiritual lyrics with electric guitar; she helped pioneer pop-gospel from 1938, taking sacred songs into nightclubs and concert halls; 'This Train' was her 1939 hit; 'Strange Things Happening Every Day' was the first gospel record to cross over to Billboard's 'race records' chart, in 1945. Build it around \"This Train\" (1939): what to listen for, two or three questions to think about while it plays, and one thing to compare it with from the same era. Don't add facts beyond these.",
+      "prompt": "Make me a short listening module (about 20 minutes) on Sister Rosetta Tharpe (1915–1973). Use only these facts: She was a singer and electric guitarist who became the first great recording star of gospel, later called 'the Godmother of Rock and Roll'; she mixed spiritual lyrics with electric guitar; she helped pioneer pop-gospel from 1938, taking sacred songs into nightclubs and concert halls; 'Strange Things Happening Every Day' was the first gospel record to cross over to Billboard's 'race records' chart, in 1945. Build it around \"This Train\" (1939): what to listen for, two or three questions to think about while it plays, and one thing to compare it with from the same era. Don't add facts beyond these.",
       "promptSources": [
         {
           "url": "https://en.wikipedia.org/wiki/Sister_Rosetta_Tharpe",
@@ -963,7 +967,7 @@
           }
         ]
       ],
-      "prompt": "Make me a short listening module (about 20 minutes) on Dolly Parton (1946–2026). Use only these facts: She was the 'Queen of Country', an East Tennessee singer-songwriter who wrote more than 3,000 songs; she logged 25 No. 1 country singles, tied for the most by a woman, and a record 44 Top 10 country albums; her mid-1970s turn toward pop paid off with Here You Come Again (1977), her first million-seller; 'I Will Always Love You' went to No. 1 on the country chart in 1974. Build it around \"I Will Always Love You\" (1974): what to listen for, two or three questions to think about while it plays, and one thing to compare it with from the same era. Don't add facts beyond these.",
+      "prompt": "Make me a short listening module (about 20 minutes) on Dolly Parton (1946–2026). Use only these facts: She was the 'Queen of Country', an East Tennessee singer-songwriter who wrote more than 3,000 songs; she logged 25 No. 1 country singles, tied for the most by a woman, and a record 44 Top 10 country albums; her mid-1970s turn toward pop paid off with Here You Come Again (1977), her first million-seller. Build it around \"I Will Always Love You\" (1974): what to listen for, two or three questions to think about while it plays, and one thing to compare it with from the same era. Don't add facts beyond these.",
       "promptSources": [
         {
           "url": "https://en.wikipedia.org/wiki/Dolly_Parton",
@@ -1068,7 +1072,7 @@
       "short": "Pete Seeger",
       "dates": "1919–2014",
       "school": "american-folk-music-revival",
-      "summary": "Pete Seeger was a New York singer, banjo player and activist, a fixture of 1940s radio and a member of The Weavers, who became a leading protest singer in the 1960s.",
+      "summary": "Pete Seeger was a New York-born singer, banjo player and activist, a fixture of 1940s radio and a member of The Weavers, who became a leading protest singer in the 1960s.",
       "ideas": [
         "With the Weavers he topped the charts for 13 weeks in 1950 with Lead Belly's 'Goodnight, Irene', before the group was blacklisted.",
         "He helped popularise 'We Shall Overcome', the anthem of the civil rights movement."
@@ -1114,6 +1118,10 @@
         {
           "url": "https://en.wikipedia.org/wiki/Pete_Seeger",
           "section": "intro"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pete_Seeger",
+          "section": "Infobox"
         }
       ],
       "sample": false
@@ -4697,7 +4705,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Mad Professor as a short listening module, using only these facts. Who: Neil Fraser, a Guyana-born British dub producer, engineer and remixer, nicknamed for his boyhood fascination with electronics. In 1979 he opened his Ariwa studio in the living room of his London home. What they added to dub: His Dub Me Crazy album series won the support of BBC DJ John Peel, who regularly played it. He has remixed acts well outside reggae, turning Massive Attack's album Protection into the electronic dub album No Protection (1995). Recording to study: No Protection (Massive Attack v Mad Professor) (1995). Ask me one question at a time about what I hear and finish with a three-question quiz.",
+      "prompt": "Teach me Mad Professor as a short listening module, using only these facts. Who: Neil Fraser, a Guyana-born British dub producer, engineer and remixer, nicknamed for his boyhood fascination with electronics. In 1979 he opened his Ariwa studio in the living room of his London home. What they added to dub: His Dub Me Crazy album series won the support of BBC DJ John Peel, who regularly played it. He has remixed acts well outside reggae, turning Massive Attack's album Protection into the electronic dub album No Protection (1995). Recording to study: No Protection (by Massive Attack v Mad Professor) (1995). Ask me one question at a time about what I hear and finish with a three-question quiz.",
       "promptSources": [
         {
           "url": "https://en.wikipedia.org/wiki/Mad_Professor",
@@ -4718,7 +4726,8 @@
       ],
       "recording": {
         "artist": "Mad Professor",
-        "title": "No Protection (Massive Attack v Mad Professor)",
+        "by": "Massive Attack v Mad Professor",
+        "title": "No Protection",
         "year": 1995,
         "kind": "album"
       },
@@ -6307,7 +6316,7 @@
           }
         ]
       ],
-      "prompt": "Teach me Lex Luger as a short listening module, using only these facts. Who: Lexus Lewis, an American record producer who co-founded the 808 Mafia production team with Southside. The trap article says he is often credited with popularising the modern trap sound. What they added to trap: Working in FL Studio, he found he could make ten beats a day and built his career by sending beats to rappers over Myspace, which is how he met Waka Flocka Flame. His sound pairs hard-hitting 808 kicks, crisp snares and frantic synths with bombastic, spooky orchestration, and he produced more than 200 songs in 2010 and 2011. Recording to study: Hard in the Paint (Waka Flocka Flame) (2010). Ask me one question at a time about what I hear and finish with a three-question quiz.",
+      "prompt": "Teach me Lex Luger as a short listening module, using only these facts. Who: Lexus Lewis, an American record producer who co-founded the 808 Mafia production team with Southside. The trap article says he is often credited with popularising the modern trap sound. What they added to trap: Working in FL Studio, he found he could make ten beats a day and built his career by sending beats to rappers over Myspace, which is how he met Waka Flocka Flame. His sound pairs hard-hitting 808 kicks, crisp snares and frantic synths with bombastic, spooky orchestration, and he produced more than 200 songs in 2010 and 2011. Recording to study: Hard in the Paint (by Waka Flocka Flame) (2010). Ask me one question at a time about what I hear and finish with a three-question quiz.",
       "promptSources": [
         {
           "url": "https://en.wikipedia.org/wiki/Lex_Luger_(music_producer)",
@@ -6336,7 +6345,8 @@
       ],
       "recording": {
         "artist": "Lex Luger",
-        "title": "Hard in the Paint (Waka Flocka Flame)",
+        "by": "Waka Flocka Flame",
+        "title": "Hard in the Paint",
         "year": 2010,
         "kind": "song"
       },

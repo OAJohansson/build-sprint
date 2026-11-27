@@ -189,3 +189,23 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Owner tried the skeleton (27 Nov): "It's good".** Feedback #34–#40: the card's type hierarchy (headings smaller than the body, lists with no markers, inconsistent sizes); rethink Your thread as progress (in progress / done after reading all articles; quizzes later); a menu bar; further reading vs the lost Claude prompt; and a bigger idea: a music globe and, one day, a paid public product. All logged in feedback.md and the backlog.
 - **Owner (27 Nov):** go in the proposed order: card type fix, then merge and end the phase; Your thread and the menu in a fresh session. New ideas logged: a timeline mode (#41) and non-Western philosophy (#42), the latter after this batch.
 - **Card type fixed (T34)** for #34–#36, desktop and phone, with screenshots `design/skeleton-build/card-type-*.png`. Lint, test and build are green.
+
+## Phase 3 (27 Nov): run on my own while the owner is away
+
+**Ops:** PR #105 merged on the owner's yes, and the notebook was republished from main (version 216). New branch `claude/11-meander-phase3`, cut from origin/main.
+
+**The owner's brief:** work through the feedback without stopping, make the calls, and report the decisions at the end. So this phase runs like Founder mode. I make the product calls inside the owner's stated direction and log each one as an L-number; merging still waits for the owner's yes.
+
+**Plan, in order.** One branch and one PR, with a preview link at the end.
+1. **Further reading per school (#39).** Show the sources we already have, labelled "Start here" (the encyclopedia overview) and "Go deeper" (the others). No new content.
+2. **Menu bar, and Your thread as progress (#37, #38).**
+   - A small top menu: Globe, Timeline, Your thread.
+   - Progress per school: not started, then in progress (opened the school or stepped inside), then explored (opened every idea).
+   - "Done" (read all the articles) waits for the articles. Until then "explored" is the top state, marked as a shortcut.
+3. **Timeline mode (#41).** A second view of the same schools, laid out by their sourced spans from earliest to latest, so "where did it start?" has an answer. Clicking a school opens it, as on the globe.
+4. **Eastern philosophy, first batch (#42).** Four traditions written in the same sourced way as the others: Buddhist philosophy, Vedānta (Hindu), Confucianism, Daoism. Each gets a writer, a grader and fixes, and only real, sourced links to the existing schools. They go onto the globe and the timeline.
+5. **Close out.** A user test on the whole batch, fixes, a PR, a preview deploy, then the owner's review.
+
+**Budget guard:** the weekly limit was at 35% at the start. I stop new work and report if it reaches 70%. The full articles for the other schools are not in this phase, as agreed (a heavy job, done in batches later).
+
+**Not now:** the music globe and the paid-product strategy (#40). Both get a session of their own.

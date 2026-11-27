@@ -178,3 +178,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Canvas #31:** the owner wants every globe label inside the rim. The live app has this too: the rim rule is weaker than the rule that keeps a name next to its dot. It goes into the build: make the rim rule near-hard, then check all 23 views and show before and after.
 - **Canvas #32:** the threads pull the eye. Three line options are on the canvas next to the originals: A hairline brass, B quiet bone (brass only on the picked thread, my pick), C stitched. Files: `design/skeleton-r4/P7-L*`.
 - **Canvas #33:** the facts block feels clustered. Three options are on the canvas: three numbers, labelled lines (my pick), two groups. Files: `design/skeleton-r4/P7-F*`.
+- **L31:** the owner picked line B. It's built into P7 (`_src/build_p7.py`) and the prototype is reshot.

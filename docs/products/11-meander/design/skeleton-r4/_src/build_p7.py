@@ -35,8 +35,10 @@ ns['page']('P7-first-page-mirrored', 'P7 first page, mirrored',
 .veil{left:640px;top:0;width:800px;height:900px;background:linear-gradient(90deg,rgba(15,24,23,0) 0%,rgba(15,24,23,.95) 32%,rgba(15,24,23,.95) 100%)}
 /* knot: plain dot, no halo; all threads equal until one is picked */
 .knot{width:11px;height:11px;box-shadow:none}
-svg.ov .sp{stroke-opacity:.72;stroke-width:1.3}
-.screen[data-state="3"] svg.ov .sp:not(.on){stroke-opacity:.38}
+/* lines B, quiet bone (#32): brass only on the picked thread */
+svg.ov .sp{stroke:var(--bone);stroke-opacity:.22;stroke-width:1}
+.screen[data-state="3"] svg.ov .sp:not(.on){stroke-opacity:.12}
+.screen[data-state="3"] svg.ov .sp.on{stroke:var(--brass);stroke-width:1.6;stroke-opacity:1}
 .screen[data-state="3"] svg.ov .bead:not(.on){opacity:.65}
 /* labels: one alignment everywhere (left), numeral hangs in its own column */
 .idea{max-width:238px}

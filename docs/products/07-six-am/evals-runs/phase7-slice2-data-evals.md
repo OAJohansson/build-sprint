@@ -223,3 +223,31 @@ so it is coarser than the start log.
 - No paid API calls.
 - Browser session about 75 min: 11 loops captured for W5, 5 edited loops for W6, 22 jumps.
 - Unit suite 30 s; hashing 3 s.
+
+## Re-grade after the slice 2 fix rounds (code 0d5a9d5), 27 Nov 2026
+
+**What I ran.** The code is 43d5a7a, with the same app code as 0d5a9d5.
+- **Server:** a detached copy in my scratchpad, as a dev server on :3027 (sandbox, empty keys),
+  seeded with 4 maps.
+- **Browser:** my own Chrome over CDP with Deck auto-select, and a network logger on every page,
+  popup and worker.
+- **Captured:** numbers only. "drums-render" messages (what Mine plays) and
+  `AudioBufferSourceNode.start` calls. No audio was captured this round.
+- **Cleanup:** the profile and the grading copy are deleted.
+
+**W5** stays a recorded fail with the agreed fallback: L287 turned `READ_OPEN_HATS` off, so Open
+hat now starts as a row to fill by ear.
+
+| Eval | Re-grade measured | Result |
+| --- | --- | --- |
+| **W6** | **5 edited loops:** Lost 77–84, Lost 21–28, Mason 81–88, Retrouvé 57–64, Retrouvé 89–96. Each got the same edits as before: kick −1/+1, clap +1/−1, closed hat +1/−1, Shaker / percussion +4. Open hat is now an empty row to fill by ear. **Saved = played on 20/20 rows:** same steps, offsets within 0.6 ms (rounding to 0.01 of a 16th), as an 8-bar exact repeat. **Mute and solo:** 10/10 rows saved while muted or soloed out kept every hit. **Same row on two loops (D7-11):** each loop's Shaker / percussion had the identical step list 2·6·10·14 and the same sound, and each was saved as a new sound. 20 `POST /api/sounds`, **0 `PATCH`**; every clap keeps its own loop's timing. **Edits kept after a reload:** on Retrouvé 89–96, all 6 rows' steps were identical after a reload, a new Deck capture and a re-read, and Mine's render matched them. **Saved row loaded onto a loop:** loading Retrouvé 57–64's saved clap (26 hits) from "Your sounds" onto Retrouvé 89–96 set the row's hits to the saved pattern exactly, and Mine rendered them (sound `clap-909-clap` as saved) | **Pass** |
+| **W8** | **Real clicks:** Drums bar-number buttons 89, 90, 91 and 3 ruler clicks; Bass notes area, 5 clicks; Melody and FX bar buttons, 5 each. **21/21** start every part at exactly the clicked target (offset error ≤ 0.5 ms), 20 ms after the click. **Bars follow the track:** each bar button's target equals the track's bar start from the map (origin + (bar − 1) × bar length, 0 ms). Drums ruler clicks snap to the track's 16ths (≤ 0.004 of a 16th). Bass notes-area targets are within a pixel of the clicked spot (4–20 ms; it doesn't snap). **One extra source start**, 13.9 s off, came about 10 ms before a Melody jump. It is Mine restarting after the family switch, and the jump's 5 starts that followed were all at the target; 4 repeat clicks after a wait each started 5/5 at 0 ms | **Pass** |
+| **W11** | `pnpm -F 07-six-am test` **637/637**; `bass-golden.test.ts` unchanged since slice 1. My 88 old-sound renders are **88/88 identical** to the Phase 6 base. Saved Phase 5-style `hats-closed-tick` and `hats-open-909` open on the Closed hat row ("Closed hat · Closed tick · saved", "Closed hat · Open 909 · saved") with their own Tone, Length and Width | **Pass** |
+| **W13** | **Network:** 923 requests, 44 with a body, **0 binary**. `PUT /api/maps` ≤ 11.1 KB (longest array 192: per-bar levels); `POST /api/sounds` ≤ 6.8 KB with no numeric arrays (step patterns); SoundCloud widget telemetry; WebSockets only Next's dev HMR. **localStorage:** the access code, plus 5 `sixam.drums.edits.v1\|<track>\|<loop ms>` keys of 348–628 bytes. Each holds `played` (per row, integer steps 0–127), `left` and `mute` only. IndexedDB and OPFS are empty; Cache Storage holds only the separation model | **Pass** (0) |
+
+**Findings:** D7-11 is fixed. Nothing new failed. Not checked this round:
+- **Mute persisting across a reload.** The loops ended unmuted, so the `mute` field was empty when
+  I reloaded.
+- **Bass bar buttons.** I clicked only the Bass notes area, which this round asked for.
+
+**Cost and time:** no paid API calls; browser session about 30 min; unit suite 30 s; hashing 3 s.

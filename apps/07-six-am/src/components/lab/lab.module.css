@@ -709,3 +709,9 @@
 .ms .mbtn { padding: 0 4px; }
 @media (max-width: 1360px) { .divide .lbl { white-space: normal; } }
 .rname { font-size: 12.5px; }
+/* L290: the Mentor rail folded while fixing drums by ear: the room is one column, the button on the tab line. */
+.room[data-rail="folded"] { grid-template-columns: minmax(0, 1fr); }
+.room[data-rail="folded"] .saveBar { border-right: 0; }
+.askMentor { padding: 4px 12px; }
+.fam > .askMentor { margin-left: 16px; order: 2; }
+.fam > .askMentor ~ .famCap { order: 1; }

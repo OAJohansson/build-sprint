@@ -344,8 +344,13 @@ export function MakeRoom(p: RoomProps) {
     ? `${lead} ${[where, `${clockMs(loop.startMs)}–${clockMs(loop.endMs)}`].filter(Boolean).join(", ")}, ${loop.state === "memory" ? "looping" : p.playing ? "filling the loop" : "the loop fills when you press Play"}`
     : family === "fx" ? "Timed to the section" : `${partName} alone`;
   const later = family === "vocals" || (family === "melody" && !MELODY_ON); // L247: Melody comes next phase
+  // L290: in Drums, while the shelf is folded (fixing by ear), the Mentor rail folds to an "Ask the
+  // Mentor" button so the steps get its width; one tap reopens it, and it reopens when the shelf does.
+  const [rail, setRail] = useState({ shelf: p.drums.shelf, open: false });
+  if (rail.shelf !== p.drums.shelf) setRail({ shelf: p.drums.shelf, open: false });
+  const railFolded = family === "drums" && !p.drums.shelf && !rail.open;
   return (
-    <div className={s.room}>
+    <div className={s.room} data-rail={railFolded ? "folded" : undefined}>
       <section className={s.synth} aria-label={`Make ${family === "bass" ? `a ${name}` : family === "drums" ? "drums" : family}`}>
         <div className={s.fam} role="tablist" aria-label="What to make">
           {FAMILIES.map((f) => (
@@ -355,6 +360,7 @@ export function MakeRoom(p: RoomProps) {
           ))}
           <span className={s.famTab} data-off="" aria-disabled="true" title="Vocals come later">Vocals<em>not yet</em></span>
           {/* Slice 2 (T239): in Drums, the hit legend sits on the tab line once the rows are read; the caption stays in the tooltip. */}
+          {railFolded && <button type="button" className={`${s.ghost} ${s.askMentor}`} onClick={() => setRail({ shelf: p.drums.shelf, open: true })}>Ask the Mentor</button>}
           {!later && (family === "drums" && p.drums.readState === "ready" ? <span className={s.famCap} title={caption}><DrumsLegend /></span> : <span className={s.famCap} aria-live="polite" title={caption}>{caption}</span>)}
         </div>
         {later ? <LaterFamily family={family} onBass={() => p.onFamily("bass")} /> : family === "fx" ? (
@@ -397,7 +403,7 @@ export function MakeRoom(p: RoomProps) {
       {family === "drums" && <DrumsSaveBar m={p.drums} />}
       {family === "melody" && MELODY_ON && <MelodySaveBar m={p.melody} />}
       {family === "fx" && <FxSaveBar m={p.fx} />}
-      <MentorRail turns={p.turns} part={part} askOff={later} noun={family === "melody" ? "the melody" : family === "fx" ? "the drop" : undefined} bar={p.bar} onAsk={p.onAsk} onRetry={p.onRetry} onSeek={p.onSeek} busy={p.busy} note={p.note} />
+      {!railFolded && <MentorRail turns={p.turns} part={part} askOff={later} noun={family === "melody" ? "the melody" : family === "fx" ? "the drop" : undefined} bar={p.bar} onAsk={p.onAsk} onRetry={p.onRetry} onSeek={p.onSeek} busy={p.busy} note={p.note} />}
     </div>
   );
 }

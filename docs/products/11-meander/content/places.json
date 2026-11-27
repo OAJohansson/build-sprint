@@ -27,7 +27,7 @@
     "places": [
       "Athens"
     ],
-    "span": "469–347 BCE",
+    "span": "late 5th–mid 4th century BCE",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/socrates/",
@@ -55,7 +55,7 @@
     "places": [
       "Athens"
     ],
-    "span": "335–322 BCE",
+    "span": "from 335 BCE",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/aristotle/",
@@ -66,11 +66,6 @@
         "url": "https://plato.stanford.edu/entries/aristotle/",
         "section": "1. Aristotle’s Life",
         "quote": "before returning to Athens for the second and final time, in 335"
-      },
-      {
-        "url": "https://plato.stanford.edu/entries/aristotle/",
-        "section": "intro",
-        "quote": "Aristotle (384–322 B.C.E.) numbers among the greatest philosophers of all time"
       }
     ]
   },
@@ -79,7 +74,7 @@
       "Athens",
       "Italy"
     ],
-    "span": "307/6 BCE–c. 30 BCE",
+    "span": "307/6 BCE–1st century BCE and later",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/epicurus/",
@@ -97,9 +92,9 @@
         "quote": "In Athens, he purchased the property that became known as the “Garden”"
       },
       {
-        "url": "https://plato.stanford.edu/entries/philodemus/",
-        "section": "intro",
-        "quote": "Philodemus of Gadara (ca. 110–ca. 30 BCE) was an Epicurean philosopher"
+        "url": "https://plato.stanford.edu/entries/epicurus/",
+        "section": "1. Sources",
+        "quote": "More or less contemporary with Philodemus is Lucretius (first century B.C.E.)"
       }
     ]
   },
@@ -108,7 +103,7 @@
       "Athens",
       "Rome"
     ],
-    "span": "c. 300 BCE–180 CE",
+    "span": "c. 300 BCE–2nd century CE",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/stoicism/",
@@ -123,19 +118,23 @@
       {
         "url": "https://plato.stanford.edu/entries/stoicism/",
         "section": "1.1 The School and its History",
-        "quote": "Cicero, who studied philosophy in Athens and endeavored to popularize it at Rome"
+        "quote": "Stoicism became particularly fashionable in the Roman period."
       },
       {
         "url": "https://plato.stanford.edu/entries/stoicism/",
         "section": "1.1 The School and its History",
-        "quote": "Marcus Aurelius, Roman Emperor from 161–180 CE"
+        "quote": "Epictetus, a former slave, was expelled from Rome by Domitian along with other philosophers in 93 CE"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/stoicism/",
+        "section": "1.1 The School and its History",
+        "quote": "Also active in the second century CE was the Stoic philosopher Hierocles"
       }
     ]
   },
   "skepticism": {
     "places": [
-      "Athens",
-      "Rome"
+      "Greece (Athens, Elis)"
     ],
     "span": "3rd century BCE–2nd century CE",
     "sources": [
@@ -146,13 +145,13 @@
       },
       {
         "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
-        "section": "3.3 Later Academic Skepticism",
-        "quote": "Moving to Rome later in his career, he develops a markedly different position."
+        "section": "intro",
+        "quote": "begin roughly in the third century BCE, and end with Sextus Empiricus in the second century CE"
       },
       {
         "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
-        "section": "intro",
-        "quote": "begin roughly in the third century BCE, and end with Sextus Empiricus in the second century CE"
+        "section": "4.1 Early Figures: Pyrrho and Timon",
+        "quote": "Pyrrho of Elis was also a powerful advocate of such a position."
       }
     ]
   },
@@ -183,6 +182,11 @@
         "url": "https://plato.stanford.edu/entries/neoplatonism/",
         "section": "intro",
         "quote": "i.e., the middle of the 3rd to the middle of the 7th century"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/neoplatonism/",
+        "section": "1. Historical Orientation: Antiquity",
+        "quote": "went on in Alexandria and Constantinople until the end of the 6th century"
       }
     ]
   },
@@ -192,7 +196,7 @@
       "Algeria (Roman Africa)",
       "Italy"
     ],
-    "span": "c. 185–c. 526 CE",
+    "span": "3rd–6th century CE",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/origen/",
@@ -223,15 +227,26 @@
         "url": "https://plato.stanford.edu/entries/boethius/",
         "section": "intro",
         "quote": "(born: circa 475–7 C.E., died: 526? C.E.)"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/augustine/",
+        "section": "1. Life",
+        "quote": "ordained a priest in the diocese of the maritime city of Hippo Regius (modern Annaba/Bône in Algeria)"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/origen/",
+        "section": "1. Origen’s Life and Work",
+        "quote": "when Origen left Alexandria in 216 to escape the ferocity of the Emperor Caracalla"
       }
     ]
   },
   "scholasticism": {
     "places": [
       "France",
-      "England"
+      "England",
+      "Spain"
     ],
-    "span": "12th century–c. 1700",
+    "span": "12th century–late 17th century",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
@@ -246,7 +261,17 @@
       {
         "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
         "section": "5.2 When Did Medieval Philosophy End?",
-        "quote": "a plausible (and to many people surprising) one is: around about 1700"
+        "quote": "University philosophy continued in its established patterns"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
+        "section": "5.2 When Did Medieval Philosophy End?",
+        "quote": "until late in the seventeenth century"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
+        "section": "5.2 When Did Medieval Philosophy End?",
+        "quote": "In the Iberian peninsula, the sixteenth and seventeenth centuries were the period in which philosophical theology, studied in the established university manner, flourished"
       }
     ]
   },
@@ -263,29 +288,25 @@
         "quote": "Platonism was brought to Italy by the Byzantine scholar George Gemistos Plethon"
       },
       {
-        "url": "https://iep.utm.edu/renaissance/",
-        "section": "6. Renaissance Skepticism Post-1562",
-        "quote": "the single most influential book in French philosophy during the first half of the seventeenth century"
-      },
-      {
         "url": "https://iep.utm.edu/renaissa/",
         "section": "intro",
         "quote": "the period that extends roughly from the middle of the fourteenth century to the beginning of the seventeen century"
+      },
+      {
+        "url": "https://iep.utm.edu/renaissance/",
+        "section": "c. Skepticism and Anti-Skepticism in Pedagogical Reforms",
+        "quote": "Academic skepticism had a major impact in mid-sixteenth century France through the pedagogical reforms proposed by Petrus Ramus"
       }
     ]
   },
   "rationalism": {
     "places": [
       "France",
-      "Netherlands"
+      "Netherlands",
+      "Germany"
     ],
     "span": "17th–18th centuries",
     "sources": [
-      {
-        "url": "https://plato.stanford.edu/entries/descartes/",
-        "section": "1.1 Early life and education",
-        "quote": "in La Haye, in the Touraine region of France"
-      },
       {
         "url": "https://plato.stanford.edu/entries/descartes/",
         "section": "1.2 First results, a new mission, and method",
@@ -295,6 +316,21 @@
         "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
         "section": "1.2 Empiricism",
         "quote": "the Early Modern Period of the seventeenth and eighteenth centuries leading up to Kant"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/malebranche/",
+        "section": "1. Life and Works",
+        "quote": "Malebranche was born in Paris on August 6, 1638"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/malebranche/",
+        "section": "1. Life and Works",
+        "quote": "and died, also in Paris, on October 13, 1715"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/leibniz/",
+        "section": "1. Life",
+        "quote": "the rest of his life was essentially spent in Hanover and its environs"
       }
     ]
   },
@@ -368,7 +404,7 @@
     "places": [
       "Britain"
     ],
-    "span": "1789–1874",
+    "span": "1789–present",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
@@ -381,32 +417,25 @@
         "quote": "Jeremy Bentham’s An Introduction to the Principles of Morals and Legislation in 1789"
       },
       {
-        "url": "https://plato.stanford.edu/entries/sidgwick/",
-        "section": "intro",
-        "quote": "The Methods of Ethics was first published in 1874"
-      },
-      {
-        "url": "https://plato.stanford.edu/entries/sidgwick/",
-        "section": "intro",
-        "quote": "marked the culmination of the classical utilitarian tradition"
+        "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
+        "section": "1. Precursors to the Classical Approach",
+        "quote": "contemporary utilitarians such as Peter Singer"
       }
     ]
   },
   "marxism": {
-    "places": [
-      "Germany"
-    ],
-    "span": "1840s onward",
+    "places": null,
+    "span": "1840s–present",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/marx/",
         "section": "1.4 Alienation and Politics",
-        "quote": "which existed in the Germany of his day"
+        "quote": "In the text “On The Jewish Question” (1843) Marx begins to make clear the distance"
       },
       {
         "url": "https://plato.stanford.edu/entries/marx/",
-        "section": "1.4 Alienation and Politics",
-        "quote": "In the text “On The Jewish Question” (1843) Marx begins to make clear the distance"
+        "section": "2.1 Sources",
+        "quote": "his philosophically most influential recent exponent, G.A. Cohen"
       }
     ]
   },
@@ -416,7 +445,7 @@
       "Germany",
       "France"
     ],
-    "span": "1843–1949",
+    "span": "mid-20th century (roots in the 1840s)",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/kierkegaard/",
@@ -437,11 +466,6 @@
         "url": "https://plato.stanford.edu/entries/kierkegaard/",
         "section": "1. Life and Works",
         "quote": "Either/Or, began almost as soon as he arrived in Berlin, and it was published in 1843"
-      },
-      {
-        "url": "https://plato.stanford.edu/entries/beauvoir/",
-        "section": "intro",
-        "quote": "her trailblazing work in feminist philosophy, The Second Sex (1949)"
       }
     ]
   },
@@ -540,7 +564,7 @@
     "places": [
       "France"
     ],
-    "span": "1960s onward",
+    "span": "from the 1960s",
     "sources": [
       {
         "url": "https://plato.stanford.edu/entries/postmodernism/",
@@ -555,17 +579,9 @@
     ]
   },
   "feminist-philosophy": {
-    "places": [
-      "Europe",
-      "United States"
-    ],
+    "places": null,
     "span": "1970s–present",
     "sources": [
-      {
-        "url": "https://plato.stanford.edu/entries/feminist-philosophy/",
-        "section": "1. What is Feminism?",
-        "quote": "the mobilization for women’s suffrage in Europe and the United States during the late nineteenth and early twentieth century"
-      },
       {
         "url": "https://plato.stanford.edu/entries/feminist-philosophy/",
         "section": "2. Feminist Scholarship",

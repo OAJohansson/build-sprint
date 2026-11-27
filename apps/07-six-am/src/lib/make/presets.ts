@@ -62,6 +62,12 @@ export type SynthParams = {
   /** Overtones Tone adds to a clean wave (0–1), and the Tone knob's value they follow. */
   toneDrive?: number;
   toneV?: number;
+  /** Phase 7 knob ranges (D7-1, L282), new presets only: Sub's and Weight's extra level at full (it grows with the knob's cube, on top of the Phase 4 level), and how much louder full Drive gets (× 1 + this). */
+  subLevel?: number;
+  weightLevel?: number;
+  driveMakeup?: number;
+  /** The wobble swings the cutoff up and down round Tone (not only down). */
+  wobbleBipolar?: boolean;
 };
 
 export type MacroSpec = { id: MacroId; name: string; explain: string };
@@ -89,7 +95,7 @@ export type MakePreset = {
   macros: Macros;
   /** The preset's ranges the macros move through. */
   base: { wave: Wave; voices: number; detuneCents: number; resonance: number; filterEnvOct: number; filterDecayS: number; attackS: number; releaseS: number; gainDb: number;
-    decayS?: number; fm?: SynthParams["fm"]; organ?: number[]; samples?: { id: string; midi: number }[]; toneDrive?: number };
+    decayS?: number; fm?: SynthParams["fm"]; organ?: number[]; samples?: { id: string; midi: number }[]; toneDrive?: number; wobbleBipolar?: boolean };
   tone: [number, number]; // cutoff Hz at Tone 0 and 1
   maxDropSemis: number;
   maxStereoCents: number;
@@ -118,113 +124,113 @@ const NEW_PRESETS: Record<NewId, MakePreset> = {
     id: "sine-sub", name: "Pure sine", part: "bass", family: "clean sub", feel: "pure", tags: ["sub", "sine"],
     about: "A plain sine wave: the cleanest, deepest sub. Tone adds a little buzz on top so small speakers hear it.",
     macros: M(0.1, 0.45, 0, 0, 0, 0, 0, 0.4),
-    base: { wave: "sine", voices: 1, detuneCents: 0, resonance: 0.7, filterEnvOct: 0, filterDecayS: 0.1, attackS: 0.004, releaseS: 0.06, gainDb: -7, toneDrive: 1 },
-    tone: [60, 4000], maxDropSemis: 12, maxStereoCents: 8, maxWobbleOct: 1.5,
+    base: { wave: "sine", voices: 1, detuneCents: 0, resonance: 0.7, filterEnvOct: 0, filterDecayS: 0.1, attackS: 0.004, releaseS: 0.06, gainDb: -7, toneDrive: 1, wobbleBipolar: true },
+    tone: [60, 4000], maxDropSemis: 9, maxStereoCents: 8, maxWobbleOct: 8,
   },
   "rubber-drop": {
     id: "rubber-drop", name: "Rubber drop", part: "bass", family: "rubber pluck", feel: "boingy", tags: ["short", "boingy"],
     about: "A triangle that starts high and drops onto its note and dies away fast: a rubbery 'doong'.",
     macros: M(0.35, 0.25, 0.75, 0.15, 0, 0, 0.3, 0.5),
     base: { wave: "triangle", voices: 1, detuneCents: 0, resonance: 1, filterEnvOct: 1.5, filterDecayS: 0.05, attackS: 0.002, releaseS: 0.03, gainDb: -8, decayS: 0.25, toneDrive: 1 },
-    tone: [60, 3000], maxDropSemis: 12, maxStereoCents: 15, maxWobbleOct: 1.5,
+    tone: [60, 3000], maxDropSemis: 9, maxStereoCents: 15, maxWobbleOct: 5,
   },
   "reese-wide": {
     id: "reese-wide", name: "Wide Reese", part: "bass", family: "Reese", feel: "wide", tags: ["wide", "bright"],
     about: "Five detuned sawtooths spread wide, brighter than the plain Reese: a big, rolling drum-and-bass growl.",
     macros: M(0.45, 0.7, 0, 0.2, 0, 0.8, 0.35, 0.3),
     base: { wave: "saw", voices: 5, detuneCents: 28, resonance: 0.9, filterEnvOct: 0.3, filterDecayS: 0.5, attackS: 0.01, releaseS: 0.15, gainDb: -15 },
-    tone: [200, 6000], maxDropSemis: 5, maxStereoCents: 30, maxWobbleOct: 2,
+    tone: [200, 6000], maxDropSemis: 9, maxStereoCents: 30, maxWobbleOct: 5,
   },
   "acid-scream": {
     id: "acid-scream", name: "Acid scream", part: "bass", family: "acid", feel: "screaming", tags: ["acid", "dirty"],
     about: "The 303-style line pushed hard: a sharper filter peak and drive, so every note squeals.",
     macros: M(0.45, 0.35, 0, 0.55, 0, 0, 0.2, 0.4),
     base: { wave: "saw", voices: 1, detuneCents: 0, resonance: 16, filterEnvOct: 3.5, filterDecayS: 0.12, attackS: 0.002, releaseS: 0.02, gainDb: -16 },
-    tone: [150, 4000], maxDropSemis: 5, maxStereoCents: 12, maxWobbleOct: 2,
+    tone: [150, 4000], maxDropSemis: 9, maxStereoCents: 12, maxWobbleOct: 5,
   },
   "organ-house": {
     id: "organ-house", name: "House organ", part: "bass", family: "organ bass (90s house)", feel: "hollow", tags: ["organ", "90s"],
     about: "The 90s house organ bass (think Robin S, 'Show Me Love'): a few sine drawbars stacked, short and hollow.",
     macros: M(0.75, 0.3, 0, 0.1, 0, 0, 0.1, 0.3),
     base: { wave: "organ", voices: 1, detuneCents: 0, resonance: 0.8, filterEnvOct: 0.6, filterDecayS: 0.06, attackS: 0.003, releaseS: 0.03, gainDb: -6, organ: [1, 0.8, 0.5, 0.35, 0, 0.2], decayS: 0.35, toneDrive: 0.4 },
-    tone: [60, 6000], maxDropSemis: 7, maxStereoCents: 10, maxWobbleOct: 1.5,
+    tone: [60, 6000], maxDropSemis: 9, maxStereoCents: 10, maxWobbleOct: 5,
   },
   "organ-click": {
     id: "organ-click", name: "Click organ", part: "bass", family: "organ bass (90s house)", feel: "clicky", tags: ["organ", "click"],
     about: "An organ bass with a bright click on each note (the upper drawbars) that fades into a round body.",
     macros: M(1, 0.5, 0.1, 0.2, 0, 0, 0.2, 0.2),
     base: { wave: "organ", voices: 1, detuneCents: 0, resonance: 0.8, filterEnvOct: 2.2, filterDecayS: 0.02, attackS: 0.001, releaseS: 0.04, gainDb: -6, organ: [1, 0.3, 0.6, 0.2, 0.4, 0.3, 0, 0.3], toneDrive: 0.3 },
-    tone: [70, 8000], maxDropSemis: 7, maxStereoCents: 10, maxWobbleOct: 1.5,
+    tone: [70, 8000], maxDropSemis: 9, maxStereoCents: 10, maxWobbleOct: 5,
   },
   "fm-glass": {
     id: "fm-glass", name: "FM glass", part: "bass", family: "FM bass", feel: "glassy", tags: ["fm", "bright"],
     about: "A DX7-style FM bass: one sine bends another, so each note starts with a glassy, metallic bite that quickly softens.",
     macros: M(0.7, 0.4, 0, 0.1, 0, 0, 0.3, 0.2),
     base: { wave: "fm", voices: 1, detuneCents: 0, resonance: 0.8, filterEnvOct: 0, filterDecayS: 0.1, attackS: 0.002, releaseS: 0.05, gainDb: -7, fm: { ratio: 1, index: 5, decayS: 0.08, sustain: 0.6 }, decayS: 0.5, toneDrive: 0.5 },
-    tone: [60, 9000], maxDropSemis: 7, maxStereoCents: 12, maxWobbleOct: 1.5,
+    tone: [60, 9000], maxDropSemis: 9, maxStereoCents: 12, maxWobbleOct: 5,
   },
   "fm-wood": {
     id: "fm-wood", name: "FM wood", part: "bass", family: "FM bass", feel: "woody", tags: ["fm", "plucky"],
     about: "A softer FM bass, the modulator an octave up: a woody, slap-like pluck that dies away.",
     macros: M(0.6, 0.2, 0.15, 0.05, 0, 0, 0.2, 0.4),
     base: { wave: "fm", voices: 1, detuneCents: 0, resonance: 0.8, filterEnvOct: 0, filterDecayS: 0.1, attackS: 0.002, releaseS: 0.04, gainDb: -7, fm: { ratio: 2, index: 2.5, decayS: 0.05, sustain: 0.1 }, decayS: 0.16, toneDrive: 0.5 },
-    tone: [60, 5000], maxDropSemis: 7, maxStereoCents: 12, maxWobbleOct: 1.5,
+    tone: [60, 5000], maxDropSemis: 9, maxStereoCents: 12, maxWobbleOct: 5,
   },
   "analog-round": {
-    id: "analog-round", name: "Round analog", part: "bass", family: "round analog", feel: "warm", tags: ["analog", "warm"],
+    id: "analog-round", name: "Warm Moog", part: "bass", family: "round analog", feel: "warm", tags: ["analog", "warm"],
     about: "A Moog-style sawtooth through a soft low-pass that opens a little on each note: warm and round.",
     macros: M(0.3, 0.55, 0.1, 0.25, 0, 0, 0.3, 0.5),
     base: { wave: "saw", voices: 2, detuneCents: 5, resonance: 1.4, filterEnvOct: 1, filterDecayS: 0.15, attackS: 0.004, releaseS: 0.08, gainDb: -12 },
-    tone: [100, 2500], maxDropSemis: 7, maxStereoCents: 15, maxWobbleOct: 1.5,
+    tone: [100, 2500], maxDropSemis: 9, maxStereoCents: 15, maxWobbleOct: 5,
   },
   "detroit-square": {
-    id: "detroit-square", name: "Detroit square", part: "bass", family: "Detroit square", feel: "hollow", tags: ["square", "detroit"],
+    id: "detroit-square", name: "Square blip", part: "bass", family: "Detroit square", feel: "hollow", tags: ["square", "detroit"],
     about: "A square wave with a quick filter blip on each note: the hollow, punchy bass of Detroit techno and early house.",
     macros: M(0.4, 0.3, 0, 0.15, 0, 0, 0.15, 0.4),
     base: { wave: "square", voices: 1, detuneCents: 0, resonance: 2.5, filterEnvOct: 2, filterDecayS: 0.07, attackS: 0.002, releaseS: 0.03, gainDb: -13 },
-    tone: [150, 4500], maxDropSemis: 5, maxStereoCents: 12, maxWobbleOct: 2,
+    tone: [150, 4500], maxDropSemis: 9, maxStereoCents: 12, maxWobbleOct: 5,
   },
   "filtered-saw": {
-    id: "filtered-saw", name: "Filtered saw", part: "bass", family: "filtered saw", feel: "buzzy", tags: ["saw", "buzzy"],
+    id: "filtered-saw", name: "Open saw", part: "bass", family: "filtered saw", feel: "buzzy", tags: ["saw", "buzzy"],
     about: "A bright sawtooth with the filter mostly open: buzzy and full, for a bass that cuts through.",
     macros: M(0.65, 0.65, 0, 0.2, 0, 0.15, 0.3, 0.3),
     base: { wave: "saw", voices: 1, detuneCents: 0, resonance: 1.1, filterEnvOct: 0.4, filterDecayS: 0.3, attackS: 0.003, releaseS: 0.06, gainDb: -14 },
-    tone: [200, 9000], maxDropSemis: 5, maxStereoCents: 15, maxWobbleOct: 2,
+    tone: [200, 9000], maxDropSemis: 9, maxStereoCents: 15, maxWobbleOct: 5,
   },
   "wobble-bass": {
-    id: "wobble-bass", name: "Wobble", part: "bass", family: "wobble", feel: "wobbly", tags: ["wobble", "moving"],
+    id: "wobble-bass", name: "Wub", part: "bass", family: "wobble", feel: "wobbly", tags: ["wobble", "moving"],
     about: "Two detuned sawtooths whose filter swings in time with the beat: a 'wub' on every note (the Wobble knob sets the speed).",
     macros: M(0.4, 0.75, 0, 0.3, 0.45, 0.2, 0.3, 0.3),
     base: { wave: "saw", voices: 2, detuneCents: 9, resonance: 3, filterEnvOct: 0, filterDecayS: 0.1, attackS: 0.005, releaseS: 0.08, gainDb: -14 },
-    tone: [150, 5000], maxDropSemis: 5, maxStereoCents: 20, maxWobbleOct: 3,
+    tone: [150, 5000], maxDropSemis: 9, maxStereoCents: 20, maxWobbleOct: 5,
   },
   "stab-bass": {
-    id: "stab-bass", name: "Stab", part: "bass", family: "stab bass", feel: "punchy", tags: ["stab", "short"],
+    id: "stab-bass", name: "Punchy stab", part: "bass", family: "stab bass", feel: "punchy", tags: ["stab", "short"],
     about: "A short, bright stab: the filter snaps open and shut and the note is gone, leaving room for the kick.",
     macros: M(0.25, 0.15, 0.1, 0.3, 0, 0.1, 0.2, 0.5),
     base: { wave: "saw", voices: 2, detuneCents: 7, resonance: 2, filterEnvOct: 4, filterDecayS: 0.03, attackS: 0.001, releaseS: 0.015, gainDb: -12, decayS: 0.12 },
-    tone: [100, 2500], maxDropSemis: 7, maxStereoCents: 15, maxWobbleOct: 1.5,
+    tone: [100, 2500], maxDropSemis: 9, maxStereoCents: 15, maxWobbleOct: 5,
   },
   "electric-finger": {
-    id: "electric-finger", name: "Electric bass", part: "bass", family: "electric bass (sampled)", feel: "fingered", tags: ["electric", "sampled"],
-    about: "A real electric bass played with the fingers (recorded, from tonejs-instruments): round and warm.",
+    id: "electric-finger", name: "Fingered", part: "bass", family: "electric bass (sampled)", feel: "warm", tags: ["electric", "sampled"],
+    about: "A real electric bass, played with the fingers: round and warm.",
     macros: M(0.45, 0.4, 0, 0, 0, 0, 0, 0.2),
     base: { wave: "sample", voices: 1, detuneCents: 0, resonance: 0.7, filterEnvOct: 0, filterDecayS: 0.1, attackS: 0.002, releaseS: 0.06, gainDb: -2, samples: EB },
-    tone: [80, 9000], maxDropSemis: 7, maxStereoCents: 10, maxWobbleOct: 1.5,
+    tone: [80, 9000], maxDropSemis: 9, maxStereoCents: 10, maxWobbleOct: 5,
   },
   "electric-bright": {
-    id: "electric-bright", name: "Electric bright", part: "bass", family: "electric bass (sampled)", feel: "bright", tags: ["electric", "bright"],
-    about: "The same electric bass with its top open and a little drive: a picked, funky edge.",
+    id: "electric-bright", name: "Picked", part: "bass", family: "electric bass (sampled)", feel: "bright", tags: ["electric", "bright"],
+    about: "A real electric bass with its top open and a little drive: a picked, funky edge.",
     macros: M(0.85, 0.35, 0, 0.35, 0, 0, 0, 0),
     base: { wave: "sample", voices: 1, detuneCents: 0, resonance: 1.2, filterEnvOct: 0.8, filterDecayS: 0.05, attackS: 0.001, releaseS: 0.04, gainDb: -3, samples: EB },
-    tone: [60, 12000], maxDropSemis: 7, maxStereoCents: 10, maxWobbleOct: 1.5,
+    tone: [60, 12000], maxDropSemis: 9, maxStereoCents: 10, maxWobbleOct: 5,
   },
   upright: {
-    id: "upright", name: "Upright", part: "bass", family: "upright bass (sampled)", feel: "woody", tags: ["upright", "sampled"],
-    about: "A real double bass (contrabass, recorded, from tonejs-instruments): woody and deep, for jazzy, deep house.",
-    macros: M(0.5, 0.55, 0, 0, 0, 0, 0, 0.2),
+    id: "upright", name: "Double bass", part: "bass", family: "upright bass (sampled)", feel: "woody", tags: ["upright", "sampled"],
+    about: "A real double bass, plucked: woody and deep, for jazzy deep house.",
+    macros: M(0.6, 0.55, 0, 0, 0, 0, 0, 0.2),
     base: { wave: "sample", voices: 1, detuneCents: 0, resonance: 0.7, filterEnvOct: 0, filterDecayS: 0.1, attackS: 0.003, releaseS: 0.08, gainDb: -1, samples: CB },
-    tone: [60, 7000], maxDropSemis: 7, maxStereoCents: 10, maxWobbleOct: 1.5,
+    tone: [60, 7000], maxDropSemis: 9, maxStereoCents: 10, maxWobbleOct: 5,
   },
 };
 
@@ -260,6 +266,8 @@ export const MAKE_PRESETS: Record<MakePresetId, MakePreset> = {
   ...NEW_PRESETS,
 };
 export const MAKE_PRESET_IDS = Object.keys(MAKE_PRESETS) as MakePresetId[];
+/** Phase 7 knob ranges for the new presets (D7-1, L282). */
+export const P7_KNOBS = { subLevel: 2.6, weightLevel: 45, driveMakeup: 1.5 };
 /** The four Phase 4 presets: their sound is guarded sample for sample (bass-golden.test.ts, R9). */
 export const PHASE4_PRESET_IDS: MakePresetId[] = ["round-sub", "rubber-pluck", "reese", "acid-line"];
 /** Presets that play recordings (they need their samples loaded before they sound). */
@@ -293,6 +301,9 @@ export function synthParams(preset: MakePresetId, m: Macros): SynthParams {
   if (b.organ) extra.organ = b.organ;
   if (b.samples) extra.samples = b.samples;
   if (b.toneDrive) { extra.toneDrive = b.toneDrive; extra.toneV = m.tone; }
+  // D7-1 (L282): wider Sub, Weight and Drive on the 16 new presets; the Phase 4 four render exactly as before (golden hashes).
+  if (!PHASE4_PRESET_IDS.includes(preset)) { extra.subLevel = P7_KNOBS.subLevel; extra.weightLevel = P7_KNOBS.weightLevel; extra.driveMakeup = P7_KNOBS.driveMakeup; }
+  if (b.wobbleBipolar) extra.wobbleBipolar = true;
   return {
     ...extra,
     wave: p.base.wave,

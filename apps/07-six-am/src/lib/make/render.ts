@@ -70,7 +70,10 @@ export function renderBass(notes: MakeNote[], p: SynthParams, o: { bpm: number; 
   let a1 = 0, a2 = 0, a3 = 0;
   let ni = -1, env = 0, env0 = 0;
   // L209 Sub and Weight (both 0 = the sound as before, untouched).
-  const sub = (p.sub ?? 0) * SUB_LEVEL, weight = (p.weight ?? 0) * WEIGHT_LEVEL;
+  // Phase 7 (D7-1): the new presets bring their own Sub and Weight levels; Phase 4's keep the constants.
+  // On those, the extra grows with the knob's cube, so the starting settings sound as before and the top of the range goes much further.
+  const sub = p.subLevel ? (p.sub ?? 0) * (SUB_LEVEL + p.subLevel * (p.sub ?? 0) ** 2) : (p.sub ?? 0) * SUB_LEVEL;
+  const weight = p.weightLevel ? (p.weight ?? 0) * (WEIGHT_LEVEL + p.weightLevel * (p.weight ?? 0) ** 2) : (p.weight ?? 0) * WEIGHT_LEVEL;
   const wc = Math.exp((-2 * Math.PI * WEIGHT_LP_HZ) / rate);
   const wa = [0, 0], wb = [0, 0], wh = [0, 0], wx = [0, 0], wh2 = [0, 0], wx2 = [0, 0];
   const hc = Math.exp((-2 * Math.PI * WEIGHT_HP_HZ) / rate);
@@ -100,7 +103,8 @@ export function renderBass(notes: MakeNote[], p: SynthParams, o: { bpm: number; 
     }
     if ((i & 15) === 0) {
       let fc = p.cutoffHz * Math.pow(2, p.filterEnvOct * Math.exp(-tn / Math.max(1e-3, p.filterDecayS)));
-      if (wobbleHz > 0) fc *= Math.pow(2, p.wobbleOct * 0.5 * (Math.sin(2 * Math.PI * wobbleHz * t) - 1));
+      // Phase 7 (D7-1): on the new presets the wobble swings both ways round the cutoff, so a dark sound opens up too.
+      if (wobbleHz > 0) fc *= Math.pow(2, p.wobbleOct * 0.5 * (Math.sin(2 * Math.PI * wobbleHz * t) - (p.wobbleBipolar ? 0 : 1)));
       fc = Math.min(rate * 0.45, Math.max(20, fc));
       const g = Math.tan((Math.PI * fc) / rate);
       a1 = 1 / (1 + g * (g + k)); a2 = g * a1; a3 = g * a2;
@@ -143,6 +147,8 @@ export function renderBass(notes: MakeNote[], p: SynthParams, o: { bpm: number; 
       const v3 = x - ic2[s], v1 = a1 * ic1[s] + a2 * v3, v2 = ic2[s] + a2 * ic1[s] + a3 * v3;
       ic1[s] = 2 * v1 - ic1[s]; ic2[s] = 2 * v2 - ic2[s];
       let y = p.drive > 0 ? Math.tanh(v2 * env * dg) / dNorm : v2 * env;
+      // Phase 7 (D7-1): on the new presets Drive also gets louder, as a driven amp does.
+      if (p.driveMakeup) y *= 1 + p.driveMakeup * p.drive;
       if (weight > 0) {
         // Weight (closeness test, 27 Oct): the original basses carry their body at the octave above the
         // note (≈ 100 Hz for G1), not at the odd harmonics. A rectified copy of the voice makes that

@@ -6,7 +6,7 @@
 // A pass wraps round (a tail at the end sounds at the start), as the loop does.
 import type { DrumRow } from "./drums-read";
 import { secondsPer16th, type Rendered } from "./render";
-import { KIT_KNOBS, KIT_KNOB_SPECS, clampKitMacros, isKitSound, kitKnobWord, kitSound, renderKitHits, type KitKnobId } from "./kit-drum";
+import { KIT_KNOBS, KIT_KNOB_SPECS, clampKitMacros, isKitSound, kitKnobValue, kitKnobWord, kitSound, renderKitHits, type KitKnobId } from "./kit-drum";
 import { P7_ROW_NAMES, type P7Row } from "./kit-p7";
 
 export type { DrumRow };
@@ -131,6 +131,12 @@ export const kickHz = (preset: DrumSoundId, v: number) => { if (!isDrumPreset(pr
  * (U5, user test 12 Nov): lengths in ms, the tone in Hz, the kick's note; the other knobs a word and
  * the value 0–100 ("snappy · 45"). The word before " · " is what the Mentor says (drumSuggestLine).
  */
+/** U7-3: the number behind a drum knob's word, for its tooltip only (a sampled sound's, or a synth word's part after " · "). */
+export function drumKnobDetail(preset: DrumSoundId, id: DrumKnobId, v: number): string {
+  if (!isDrumPreset(preset) || id === "pitch") return kitKnobValue(id as KitKnobId, v);
+  const w = drumKnobWord(preset, id, v).split(" · ");
+  return w.length > 1 ? w.slice(1).join(" · ") : "";
+}
 /** C4: a knob's word from a ladder of ten, one step per tenth of a turn. */
 export const ladder = (v: number, words: string[]) => words[Math.max(0, Math.min(words.length - 1, Math.floor(v * words.length)))];
 export const WIDTH_WORDS = ["centred", "narrow", "a little wide", "half wide", "wide", "wider", "very wide", "extra wide", "near full", "full width"];
@@ -349,6 +355,11 @@ export function drumMoves(ids: DrumKnobId[], current: DrumMacros, ticks: DrumMac
 export function drumSuggestLine(preset: DrumSoundId, current: DrumMacros, ticks: DrumMacros, noun: string, bpm = 124): string {
   const moves = drumMoves(knobsOf(preset), current, ticks);
   if (!moves.length) return "You're on the gold ticks. Switch A/B to judge the rest by ear.";
+  if (!isDrumPreset(preset)) {
+    // U7-4: a sampled sound's tip says the target, never a knob word that can read backwards ("Length down to longer").
+    const say = moves.map(({ id, up, by }) => `${by < 0.2 ? "a bit " : by > 0.5 ? "much " : ""}${TRAIT[id][up ? 0 : 1]} (${drumKnobSpec(preset, id).name})`);
+    return `make it ${say.join(" and ")}, like the original ${noun}; the gold ticks show where.`;
+  }
   const say = moves.map(({ id, up }) => {
     // The note and the decay always name their target; the others only when the word itself changes.
     // A sampled sound's Pitch names its semitones ("Pitch up to +3 st"), not just "higher".

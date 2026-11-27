@@ -11,9 +11,11 @@ import s from "./knob.module.css";
 /** A 96 px knob (handoff §Make 5): 270° track at 25% white, value arc in the part's colour, a dot at
  *  zero, a gold tick at the suggestion. Drag up/down (Shift for fine), arrows, Page keys, Home/End;
  *  double-click goes back to the preset's value. */
-export function Knob({ id, value, sug, color, disabled, onChange, reset, size = 96, spec: own, wordOf }: { id: MacroId | DrumKnobId; value: number; sug?: number; color: string; disabled: boolean; onChange: (v: number) => void; reset: number; size?: number;
+export function Knob({ id, value, sug, color, disabled, onChange, reset, size = 96, spec: own, wordOf, detailOf }: { id: MacroId | DrumKnobId; value: number; sug?: number; color: string; disabled: boolean; onChange: (v: number) => void; reset: number; size?: number;
   /** Phase 5: a drum knob brings its own name, explanation and words (drum-synth.ts). */
-  spec?: { name: string; explain: string }; wordOf?: (v: number) => string }) {
+  spec?: { name: string; explain: string }; wordOf?: (v: number) => string;
+  /** Phase 7 (U7-3): the number behind the word, shown only in the tooltip. */
+  detailOf?: (v: number) => string }) {
   const spec = own ?? MACRO_SPECS[id as MacroId];
   const say = wordOf ?? ((v: number) => macroWord(id as MacroId, v));
   const drag = useRef<{ y: number; v: number } | null>(null);
@@ -25,7 +27,7 @@ export function Knob({ id, value, sug, color, disabled, onChange, reset, size = 
   const word = say(value);
   return (
     <div className={s.knob} role="slider" tabIndex={disabled ? -1 : 0} aria-label={spec.name} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(value * 100)}
-      aria-valuetext={`${word}${sug !== undefined ? `, suggestion ${say(sug)}` : ""}`} aria-disabled={disabled || undefined} title={spec.explain}
+      aria-valuetext={`${word}${sug !== undefined ? `, suggestion ${say(sug)}` : ""}`} aria-disabled={disabled || undefined} title={detailOf && detailOf(value) ? `${spec.explain} Now: ${detailOf(value)}.` : spec.explain}
       onPointerDown={(e) => { if (disabled || e.button !== 0) return; e.currentTarget.setPointerCapture(e.pointerId); drag.current = { y: e.clientY, v: value }; }}
       onPointerMove={(e) => { const d = drag.current; if (!d) return; set(d.v + (d.y - e.clientY) / (e.shiftKey ? 720 : 180)); }}
       onPointerUp={() => { drag.current = null; }} onPointerCancel={() => { drag.current = null; }}

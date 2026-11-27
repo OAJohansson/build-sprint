@@ -47,16 +47,35 @@ export const KIT_KNOB_SPECS: Record<KitKnobId, { name: string; explain: string }
   drive: { name: "Drive", explain: "Soft clipping: warmer and louder, then gritty and crushed." },
 };
 
-/** The word under a sampled drum's knob: what it does now, in plain words and units. */
+/** The word under a sampled drum's knob (U7-3): what it does now, in plain words only. */
 export function kitKnobWord(id: KitKnobId, v: number): string {
   switch (id) {
-    case "pitch": { const st = kitSemis(v); return Math.abs(st) < 0.3 ? "as is" : `${st < 0 ? "lower" : "higher"} · ${st > 0 ? "+" : "−"}${Math.abs(Math.round(st))} st`; }
+    case "pitch": {
+      const st = kitSemis(v), a = Math.abs(st), up = st > 0;
+      return a < 0.3 ? "as is" : a < 2.5 ? `a touch ${up ? "higher" : "lower"}` : a < 6.5 ? (up ? "higher" : "lower") : a < 11.5 ? `much ${up ? "higher" : "lower"}` : `an octave ${up ? "up" : "down"}`;
+    }
     case "length": {
       const f = kitFadeS(v), lift = kitLiftDb(v);
-      return f !== null ? `${v < 0.3 ? "short" : "shorter"} · ${ms(f * 2.3)}` : lift !== null ? `${lift < 12 ? "longer" : "long"} · tail +${Math.round(lift)} dB` : "as recorded";
+      if (f !== null) return v < 0.15 ? "very short" : v < 0.35 ? "short" : "a bit shorter";
+      if (lift !== null) return lift < 8 ? "a bit longer" : lift < 16 ? "longer" : "much longer";
+      return "as recorded";
     }
-    case "tone": { const f = kitFilter(v); return !f ? "as is" : f.type === "lp" ? `darker · ${hz(f.hz)}` : `brighter · ${hz(f.hz)}`; }
+    case "tone": {
+      const f = kitFilter(v);
+      if (!f) return "as is";
+      return f.type === "lp" ? (f.hz < 500 ? "very dark" : f.hz < 3000 ? "darker" : "a bit darker") : (f.hz < 80 ? "a bit brighter" : f.hz < 500 ? "brighter" : "very bright");
+    }
     case "drive": return ladder(v, ["clean", "barely warm", "warm", "warmer", "hot", "gritty", "crunchy", "dirty", "dirtier", "crushed"]);
+  }
+}
+
+/** The number behind a sampled drum knob's word, for its tooltip (U7-3): semitones, the fade, the filter. */
+export function kitKnobValue(id: KitKnobId, v: number): string {
+  switch (id) {
+    case "pitch": { const st = Math.round(kitSemis(v)); return st === 0 ? "0 semitones" : `${st > 0 ? "+" : "−"}${Math.abs(st)} semitones`; }
+    case "length": { const f = kitFadeS(v), lift = kitLiftDb(v); return f !== null ? `fades out in about ${ms(f * 2.3)}` : lift !== null ? `tail lifted ${Math.round(lift)} dB` : "the hit as recorded"; }
+    case "tone": { const f = kitFilter(v); return !f ? "no filter" : f.type === "lp" ? `low-pass at ${hz(f.hz)}` : `high-pass at ${hz(f.hz)}`; }
+    case "drive": return `${Math.round(v * 100)} %`;
   }
 }
 

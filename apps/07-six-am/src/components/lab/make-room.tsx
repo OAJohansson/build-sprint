@@ -479,7 +479,7 @@ function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: 
       <div className={s.macros} data-off={off ? "" : undefined}>
         {wait && <p className={s.makeWait} role="status">{wait}</p>}
         {MACRO_IDS.map((id) => (
-          <Knob key={id} id={id} value={m.macros[id]} sug={m.ticks?.[id]} color={part.color} disabled={off} onChange={(v) => m.setMacro(id, v)} reset={MAKE_PRESETS[m.preset].macros[id]} size={short === 2 ? 60 : short === 1 ? 70 : 84} />
+          <Knob key={id} id={id} value={m.macros[id]} sug={m.ticks?.[id]} color={part.color} disabled={off} onChange={(v) => m.setMacro(id, v)} reset={MAKE_PRESETS[m.preset].macros[id]} size={short === 2 ? 56 : short === 1 ? 64 : 72} />
         ))}
       </div>
       <div className={s.suggestRow}>
@@ -488,8 +488,8 @@ function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: 
         <button className={s.ghost} onClick={m.suggestAgain} disabled={off || m.suggesting || m.suggestedNow} aria-describedby="suggest-hint">{m.suggesting ? "Suggesting…" : m.suggestedNow ? "Suggested" : "Suggest settings"}</button>
         <span id="suggest-hint" hidden>Places gold ticks where the knobs come closest to the original; it never turns a knob</span>
       </div>
-      {/* Phase 7: with the shelf above the knobs, A/B stays in view at the foot of the column (sticky, as in Drums). */}
-      <div className={`${s.checkRow} ${s.drCheck}`}>
+      {/* Phase 7: with the shelf above the knobs, A/B stays in view at the foot of the column (sticky, as in Drums) when the window is tall enough to hold everything; on a short one it follows Suggest, so nothing sits under it. */}
+      <div className={`${s.checkRow} ${s.bassCheck}`}>
         {blind ? <BlindAB m={m} partName={part.name.toLowerCase()} /> : (
         <div className={s.abWrap}>
           <div className={s.ab} role="group" aria-label="Compare at the same loudness">
@@ -581,8 +581,6 @@ const cap1 = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
  */
 function BassShelf({ m, playing, partName }: { m: MakeModel; playing: boolean; partName: string }) {
   const p = MAKE_PRESETS[m.preset];
-  // A short window (≤ 760 px) lays the families out in one row, so the knobs and A/B stay in view.
-  const rows = useShort() === 2 ? 1 : 2;
   return (
     <section className={s.shelf} aria-label="Bass sounds">
       <div className={s.shelfHead}>
@@ -592,10 +590,10 @@ function BassShelf({ m, playing, partName }: { m: MakeModel; playing: boolean; p
         </div>
         <div className={s.shelfNow}>
           <PresetHead m={m} partName={partName} meta={!m.words && <span className={s.lbl}>{cap1(p.family)} · {p.feel}</span>} />
-          <span className={s.shelfAbout} title={p.about}>{m.words ? "A loop Stable Audio made from your words; pick a sound below to go back." : p.about}</span>
         </div>
         <button className={s.textBtn} aria-expanded={m.shelf} onClick={() => m.setShelf(!m.shelf)}>{m.shelf ? "Hide sounds" : `Show ${MAKE_PRESET_IDS.length} sounds`}</button>
       </div>
+      <p className={s.shelfAbout}>{m.words ? "A loop Stable Audio made from your words; pick a sound below to go back." : p.about}</p>
       {m.shelf && (
         <div className={s.groups} role="group" aria-label="Bass sounds">
           {BASS_FAMILIES.map((f) => {
@@ -603,7 +601,7 @@ function BassShelf({ m, playing, partName }: { m: MakeModel; playing: boolean; p
             return (
               <div key={f} className={s.grp}>
                 <h3>{cap1(f)}</h3>
-                <div className={s.gcol} style={{ gridTemplateRows: `repeat(${Math.min(rows, xs.length)}, auto)` }}>
+                <div className={s.gcol}>
                   {xs.map((id) => (
                     <button key={id} className={s.snd} aria-pressed={!m.words && m.preset === id} title={MAKE_PRESETS[id].about} onClick={() => m.pick(id, playing)}>
                       <b>{MAKE_PRESETS[id].name}</b>

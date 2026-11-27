@@ -8,7 +8,7 @@ import { ChevronDown, X } from "lucide-react";
 import { editLibLoop, isDrumLoop, isFxLoop, isMelodyLoop, type BassLoop, type DrumLoop, type FxLoop, type LibLoop, type MelodyLoop } from "@/lib/make/lib-loop";
 import { FX_KNOBS, FX_KNOB_SPECS, FX_PRESETS, clampFxMacros, fxKnobWord, fxRowOf, fxRowPresets, type FxPresetId } from "@/lib/make/fx-synth";
 import { POLY_KNOBS, POLY_KNOB_SPECS, clampPolyMacros, melodyPreset, melodyPresetIds, melodyRowOf, polyKnobWord, type MelodyPresetId } from "@/lib/make/poly-synth";
-import { DRUM_PRESETS, ROW_PRESETS, clampDrumMacros, drumKnobSpec, drumKnobWord, drumSoundAbout, isDrumPreset, kitRowOf, knobsOf, laneRowOf, type DrumSoundId } from "@/lib/make/drum-synth";
+import { DRUM_PRESETS, ROW_PRESETS, clampDrumMacros, drumKnobDetail, drumKnobSpec, drumKnobWord, drumSoundAbout, isDrumPreset, kitRowOf, knobsOf, laneRowOf, type DrumSoundId } from "@/lib/make/drum-synth";
 import { p7Sounds, type P7Row } from "@/lib/make/kit-p7";
 import { MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, type MacroId, type MakePresetId } from "@/lib/make/presets";
 import { Knob } from "@/components/ui/knob";
@@ -184,7 +184,7 @@ function DrumDrawer({ t, sound, color, onClose }: { t: Timeline; sound: DrumLoop
         </section>
         <section className={s.shape} style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
           {knobsOf(sound.preset).map((id) => (
-            <Knob key={id} id={id} spec={drumKnobSpec(sound.preset, id)} wordOf={(v) => drumKnobWord(sound.preset, id, v, sound.bpm)} value={sound.macros[id] ?? 0} color={color} disabled={false} reset={home[id] ?? 0}
+            <Knob key={id} id={id} spec={drumKnobSpec(sound.preset, id)} wordOf={(v) => drumKnobWord(sound.preset, id, v, sound.bpm).split(" · ")[0]} detailOf={(v) => drumKnobDetail(sound.preset, id, v)} value={sound.macros[id] ?? 0} color={color} disabled={false} reset={home[id] ?? 0}
               onChange={(v) => change(editLibLoop(sound, { macros: { [id]: v } }), `lib:${sound.id}:${id}`)} size={72} />
           ))}
         </section>

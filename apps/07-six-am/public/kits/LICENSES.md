@@ -219,5 +219,5 @@ AAC 96 kbps (`.m4a`). The credit is shown in the app (Make, "Sound credits" besi
 | `bass/upright/A2.m4a` | `samples/contrabass/A2.mp3` | contrabass, A2 | Nicholas Brosowsky (tonejs-instruments) | CC BY 3.0 |
 | `bass/upright/E3.m4a` | `samples/contrabass/E3.mp3` | contrabass, E3 | Nicholas Brosowsky (tonejs-instruments) | CC BY 3.0 |
 
-Used by the presets "Electric bass", "Electric bright" (electric) and "Upright" (contrabass) in
+Used by the presets "Fingered", "Picked" (electric) and "Double bass" (contrabass) in
 `src/lib/make/presets.ts`.

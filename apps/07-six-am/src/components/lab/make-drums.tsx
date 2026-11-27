@@ -13,7 +13,7 @@
 // Drive) beside it, and the sound credits one click away. A saved synth sound still opens as it was.
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type RefObject } from "react";
 import type { LabTransport, LoopState } from "@/lib/lab/transport";
-import { DRUM_ROWS, DRUM_ROW_NAMES, clampDrumMacros, drumKnobSpec, drumKnobWord, drumMoves, drumSoundAbout, drumSoundName, drumSuggestLine, isDrumPreset, isKitId, knobsOf, rowOf, type DrumMacros, type DrumRow, type DrumSoundId } from "@/lib/make/drum-synth";
+import { DRUM_ROWS, clampDrumMacros, drumKnobDetail, drumKnobSpec, drumKnobWord, drumMoves, drumSoundAbout, drumSoundName, drumSuggestLine, isDrumPreset, isKitId, knobsOf, rowOf, type DrumMacros, type DrumRow, type DrumSoundId } from "@/lib/make/drum-synth";
 import { KIT_ROW_FOR, ROW_SCORE_SCALE, foldRow, rowCandidates, type DrumsCloseness, type DrumsReading, type DrumsReport, type RowSound, type RowTarget } from "@/lib/make/drums-make";
 import { MakeClient } from "@/lib/make/make-client";
 import { P7_FAMILIES, P7_ROW_NAMES, p7SoundById, p7Sounds } from "@/lib/make/kit-p7";
@@ -33,9 +33,10 @@ type Sound = { preset: DrumSoundId; macros: DrumMacros };
 const HOME: Record<DrumRow, DrumSoundId> = { kick: "kick-house-bounce", clap: "clap-909-clap", hats: "hat-909-closed" };
 const fresh = (p: DrumSoundId): Sound => ({ preset: p, macros: clampDrumMacros(p, undefined) });
 const perRow = <T,>(f: (r: DrumRow) => T) => Object.fromEntries(DRUM_ROWS.map((r) => [r, f(r)])) as Record<DrumRow, T>;
-const rowTitle = (r: DrumRow) => DRUM_ROW_NAMES[r].toLowerCase();
 /** Phase 7: what a row is called next to its starting sounds (the kit's words: the Hats row plays the closed hats). */
 const shelfRowName = (r: DrumRow) => P7_ROW_NAMES[KIT_ROW_FOR[r]];
+/** D7-6: the row in a sentence, in the shelf's words ("Suggest for closed hat"). */
+const rowTitle = (r: DrumRow) => shelfRowName(r).toLowerCase();
 /** The recordings a set of sounds plays from (synth presets have none). */
 const kitIdsOf = (xs: Sound[]) => xs.map((x) => x.preset).filter(isKitId);
 
@@ -402,10 +403,9 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs }: { m: DrumsModel
   else if (!ticks) line = `Mentor: Press Suggest for ${rowTitle(row)} to compare this sound with the original.`;
   else {
     const closer = m.ticks[row]?.closer;
-    const score = (d: number) => Math.round(100 * Math.exp(-d / ROW_SCORE_SCALE));
     line = <>Mentor: {cap(drumSuggestLine(snd.preset, snd.macros, ticks, noun, m.bpm))}
-      {closer ? <><br /><span className={s.faintLine}>{drumSoundName(closer.preset)} gets closer (about {score(closer.distance)} against {score(closer.own)} at best here).</span> <button className={s.textBtn} onClick={() => m.pick(row, closer.preset, playing)}>Try {drumSoundName(closer.preset)}</button></>
-        : m.ticks[row]?.moved && drumMoves(knobsOf(snd.preset), snd.macros, ticks).length > 0 ? <><br /><span className={s.faintLine}>{m.ticks[row]!.moved}</span></> : null}</>;
+      {/* U7-5: a clearly closer sound is offered on the shelf, under the sound's name (Shelf). */}
+      {!closer && m.ticks[row]?.moved && drumMoves(knobsOf(snd.preset), snd.macros, ticks).length > 0 ? <><br /><span className={s.faintLine}>{m.ticks[row]!.moved}</span></> : null}</>;
   }
   return (
     <div className={s.drums}>
@@ -469,29 +469,41 @@ const famLabel = (f: string) => (f === "909 ride" ? "909 ride (stand-ins)" : f.c
 function Shelf({ m, row, playing, off, rowOff }: { m: DrumsModel; row: DrumRow; playing: boolean; off: boolean; rowOff: boolean }) {
   const short = useShort();
   const snd = m.sounds[row], ticks = m.ticks[row]?.macros, kit = p7SoundById(snd.preset);
-  const kitRow = KIT_ROW_FOR[row], closer = m.ticks[row]?.closer?.preset ?? null;
+  const kitRow = KIT_ROW_FOR[row], closerTip = m.ticks[row]?.closer ?? null, closer = closerTip?.preset ?? null;
+  const score = (d: number) => Math.round(100 * Math.exp(-d / ROW_SCORE_SCALE));
   const mine = m.mySounds.filter((x) => rowOf(x.preset) === row);
-  const knobSize = short === 2 ? 48 : short === 1 ? 54 : 60;
+  const knobSize = short === 2 ? 40 : short === 1 ? 54 : 60, tight = short === 2;
   return (
     <section className={s.shelf} aria-label={`${shelfRowName(row)} sounds`}>
       <div className={s.shelfHead}>
-        <div className={s.shelfWhere}>
-          <span className={s.lbl}>{shelfRowName(row)} · 20 sounds</span>
-          <SoundCredits />
-        </div>
+        {/* On a short window (≤ 760 px) the row is already lit above: its count goes, credits move right, and the plain line sits under the name. */}
+        {!tight && (
+          <div className={s.shelfWhere}>
+            <span className={s.lbl}>{shelfRowName(row)} · 20 sounds</span>
+            <SoundCredits />
+          </div>
+        )}
         <div className={s.shelfNow}>
           <span className={s.shelfName}>{drumSoundName(snd.preset)}</span>{" "}
           <span className={s.lbl}>{kit ? `${famLabel(kit.family)} · ${kit.feel}` : "Six AM's drum synth (from an earlier saved sound)"}</span>
-          <span className={s.shelfAbout} title={drumSoundAbout(snd.preset)}>{drumSoundAbout(snd.preset)}</span>
+          {closerTip && (
+            <span className={s.shelfCloser} data-gap="" title={`About ${score(closerTip.distance)} against ${score(closerTip.own)} for this sound at its best`}>{drumSoundName(closerTip.preset)} is closer · <button className={s.textBtn} onClick={() => m.pick(row, closerTip.preset, playing)}>Try {drumSoundName(closerTip.preset)}</button></span>
+          )}
+          {tight && <span className={s.shelfAboutIn}>{drumSoundAbout(snd.preset)}</span>}
         </div>
         <div className={s.drKnobs} data-off={off ? "" : undefined}>
           {knobsOf(snd.preset).map((id) => (
-            <Knob key={`${row}-${snd.preset}-${id}`} id={id} spec={drumKnobSpec(snd.preset, id)} wordOf={(v) => drumKnobWord(snd.preset, id, v, m.bpm)} value={snd.macros[id] ?? 0} sug={off || rowOff ? undefined : ticks?.[id]}
+            <Knob key={`${row}-${snd.preset}-${id}`} id={id} spec={drumKnobSpec(snd.preset, id)} wordOf={(v) => drumKnobWord(snd.preset, id, v, m.bpm).split(" · ")[0]} detailOf={(v) => drumKnobDetail(snd.preset, id, v)} value={snd.macros[id] ?? 0} sug={off || rowOff ? undefined : ticks?.[id]}
               color="#f2b134" disabled={off} onChange={(v) => m.setKnob(row, id, v)} reset={clampDrumMacros(snd.preset, undefined)[id] ?? 0} size={knobSize} />
           ))}
         </div>
-        <button className={s.textBtn} aria-expanded={m.shelf} onClick={() => m.setShelf(!m.shelf)}>{m.shelf ? "Hide sounds" : "Show 20 sounds"}</button>
+        <div className={s.shelfWhere} data-end="">
+          <button className={s.textBtn} aria-expanded={m.shelf} onClick={() => m.setShelf(!m.shelf)}>{m.shelf ? "Hide sounds" : "Show 20 sounds"}</button>
+          {tight && <SoundCredits />}
+        </div>
       </div>
+      {/* U7-2: the plain line has the shelf's full width, so it is never cut. */}
+      {!tight && <p className={s.shelfAbout}>{drumSoundAbout(snd.preset)}</p>}
       {m.shelf && (
         <div className={s.groups} role="group" aria-label={`${shelfRowName(row)} sounds`}>
           {P7_FAMILIES[kitRow].map((f) => {
@@ -499,8 +511,7 @@ function Shelf({ m, row, playing, off, rowOff }: { m: DrumsModel; row: DrumRow; 
             return (
               <div key={f} className={s.grp}>
                 <h3>{famLabel(f)}</h3>
-                {/* A short window (≤ 760 px) lays each family out in two rows, so the shelf stays above A/B. */}
-                <div className={s.gcol} style={{ gridTemplateRows: `repeat(${Math.min(short === 2 ? 2 : 3, xs.length)}, auto)` }}>
+                <div className={s.gcol}>
                   {xs.map((x) => (
                     <button key={x.id} className={s.snd} aria-pressed={snd.preset === x.id} title={x.about} onClick={() => m.pick(row, x.id as DrumSoundId, playing)}>
                       <b>{x.name}</b>
@@ -514,7 +525,7 @@ function Shelf({ m, row, playing, off, rowOff }: { m: DrumsModel; row: DrumRow; 
           {mine.length > 0 && (
             <div className={s.grp}>
               <h3>Your sounds</h3>
-              <div className={s.gcol} style={{ gridTemplateRows: `repeat(${Math.min(short === 2 ? 2 : 3, mine.length)}, auto)` }}>
+              <div className={s.gcol}>
                 {mine.map((x) => (
                   <button key={x.id} className={s.snd} title={`${x.name}: ${drumSoundName(x.preset)}${isDrumPreset(x.preset) ? " (synth)" : ""}`} onClick={() => m.loadSound(x)}>
                     <b className={s.sndMine}>{x.name}</b>
@@ -545,7 +556,7 @@ export function DrumsCheck({ m }: { m: DrumsModel }) {
       <button className={s.ghost} aria-pressed={m.bed} onClick={() => m.setBed(!m.bed)} title="Plays the original bass under both A and B, so you judge the drums in the groove">{m.bed ? "Bass under both: on" : "Bass under both: off"}</button>
       <span className={s.drScore} title="How close this row's hit measures to the original's (its sound across its own bands, the kick's note, the hats' width): it rises as you follow this row's gold ticks. Numbers only.">
         {/* N3: an off row isn't in Mine, so it has no score. */}
-        closeness · {DRUM_ROW_NAMES[m.open].toLowerCase()} <b>{m.read?.d.rows[m.open].doubtful && !m.anyway.includes(m.open) ? "–" : m.rowCloseness?.[m.open]?.score ?? "–"}</b> / 100
+        closeness · {rowTitle(m.open)} <b>{m.read?.d.rows[m.open].doubtful && !m.anyway.includes(m.open) ? "–" : m.rowCloseness?.[m.open]?.score ?? "–"}</b> / 100
       </span>
     </div>
   );

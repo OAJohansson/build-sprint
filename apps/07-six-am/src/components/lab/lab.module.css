@@ -490,3 +490,54 @@
   .grp h3 { padding-bottom: 1px; }
   .groups { padding: 3px 4px; }
 }
+
+/* Slice 1 fix round (U7-1, U7-2, U7-5): every starting sound in view, no sideways scroll. The families
+   wrap onto as many lines as they need; the plain line gets the shelf's full width under its head; a
+   short window (≤ 760 px) puts each family's label and sounds on one line, name and feel side by side. */
+.groups { flex-wrap: wrap; overflow: visible; gap: 4px 16px; padding: 6px 8px; }
+.grp { flex: 0 0 auto; min-width: 0; }
+.gcol { display: flex; flex-wrap: wrap; }
+.shelf > .shelfAbout { margin: 0 0 8px; white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.45; }
+.shelfHead { margin-bottom: 4px; }
+@media (max-height: 860px) {
+  .shelf > .shelfAbout { margin-bottom: 6px; }
+}
+/* Each family is one unit on a line (its label, then its sounds, name and feel side by side); the
+   families wrap onto as many lines as they need. */
+.groups { align-items: baseline; }
+.grp { display: flex; align-items: baseline; }
+.gcol { display: flex; }
+.grp h3 { padding: 0 6px 0 0; }
+/* The closer sound Suggest found, under the sound's name (U7-5: never under the A/B row). */
+.shelfCloser { flex-basis: 100%; font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+.snd { flex-direction: row; align-items: baseline; gap: 5px; padding: 2px 7px; }
+/* The shelf takes room under the rows: rows, gaps and the loop strip a little tighter on every window. */
+@media (min-height: 861px) {
+  .drRow { height: 52px; }
+  .drName { height: 46px; }
+  .synth { gap: 14px; }
+  .loopStrip { flex: 1 1 96px; min-height: 96px; }
+}
+@media (max-height: 760px) {
+  .groups { gap: 0 10px; padding: 4px 4px; }
+  .snd { padding: 1px 4px; gap: 4px; }
+  .shelf > .shelfAbout { margin-bottom: 4px; }
+  .synth { gap: 8px; }
+  .loopStrip { flex: 1 1 72px; min-height: 72px; }
+  .drRow { height: 36px; }
+  .drName { height: 34px; }
+  .drTrack, .drPattern { height: 24px; }
+  .drRow[data-head] { height: 14px; }
+  .groups { row-gap: 0; }
+  .grp h3 { font-size: 10.5px; }
+  .shelf .drKnobs [role="slider"] { gap: 1px; padding: 2px; }
+  .drSuggest, .drWait { height: auto; min-height: 20px; }
+}
+@media (min-height: 761px) {
+  .bassCheck { position: sticky; bottom: -24px; z-index: 3; background: var(--bg); padding-bottom: 24px; margin-bottom: -24px; }
+}
+.shelfWhere[data-end] { align-self: flex-start; align-items: flex-end; }
+.shelfAboutIn { flex-basis: 100%; font-size: 11.5px; line-height: 1.35; color: var(--ink); opacity: .8; margin-top: 2px; }
+.shelfCloser[data-gap] { margin-top: 1px; }
+.creditsBox .creditsPop { right: auto; }
+.shelfWhere[data-end] .creditsPop { left: auto; right: 0; }

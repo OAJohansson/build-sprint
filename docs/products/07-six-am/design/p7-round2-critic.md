@@ -27,3 +27,7 @@ Scorecard: clutter 2 · hierarchy 2 · legibility 1 · feel 2 · copy 2. All rou
 ## Built shelf, slice 1 fix round (51764e2): 5/10
 
 The wrapped chip lines fit all 20 sounds but lost the grouping (families start mid-line, label and names blur, repeated feel words, "closer" twice, dense at 1280). Critic's fix: a fixed family label column with sounds to its right, families in two columns; 8 px before the first chip; hide repeated feel words; ≥ 22 px pitch and ≥ 11 px labels at 1280; "closer" once. Sent to the engineer.
+
+## Built shelf after the critic's fix (c7e4ef5): 9/10
+
+Clutter 2 · hierarchy 2 · legibility 2 · feel 2 · copy 1. Left (small, folded into slice 2): the "closer" hint named different sounds on two loads; patchy feel words at 1440 (use the 1280 treatment); balance columns by sound count; brighter family labels; bass knobs and Mentor line clear of the bottom bar at 1280.

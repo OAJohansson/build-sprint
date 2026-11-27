@@ -215,7 +215,10 @@ svg.ov .sp{stroke:var(--bone);stroke-opacity:.22;stroke-width:1}
 .rule{width:44px;border-top:1px solid var(--brass);opacity:.7;margin:26px 0 24px}
 .ask{font-size:26px;line-height:1.24;color:var(--bone);max-width:410px}
 .ask.long{font-size:21px}
-.facts{margin-top:24px;font-size:14.5px;line-height:1.6;text-wrap:balance}
+/* facts 2, labelled lines (#33) */
+.fx2{display:grid;grid-template-columns:auto minmax(0,auto);column-gap:18px;row-gap:10px;margin:30px 0 8px;text-align:left;font-size:14.5px;max-width:100%}
+.fx2 dt{color:var(--brass);opacity:.8;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding-top:2px;text-align:right}
+.fx2 dd{margin:0;color:rgba(233,226,212,.82);text-wrap:balance}
 .mid .lnk{margin-top:10px}
 .picked .kick{font-size:14.5px}
 .picked h2{font-size:40px;line-height:1.08;letter-spacing:-.012em;margin-top:14px;max-width:440px;overflow-wrap:break-word}
@@ -256,7 +259,7 @@ svg.ov .sp{stroke:var(--bone);stroke-opacity:.22;stroke-width:1}
 <div class="knotwrap"><svg class="ov" aria-hidden="true"></svg><i class="knot" style="left:486px;top:458px"></i></div>
 <header class="solid"><button class="wm" translate="no" title="Back to the whole field"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#e9e2d4" stroke-width="1.1"><circle cx="12" cy="12" r="10.5"/><ellipse cx="12" cy="12" rx="10.5" ry="4.2" transform="rotate(-28 12 12)"/><ellipse cx="12" cy="12" rx="10.5" ry="7.4" transform="rotate(48 12 12)" stroke="#d3a66c"/></g></svg>Meander</button><button class="yt" aria-expanded="false"><i></i>Your thread</button></header>
 <section class="info" aria-label="Existentialism">
-<div class="school"><div class="mid"><h1 class="d" data-f="name" tabindex="-1"></h1><i class="rule"></i><p class="ask d it" data-f="q" data-long="70"></p><p class="quiet facts"><span data-f="size"></span><br><span data-f="when"></span></p><a class="lnk" href="#read" data-read><u data-f="read"></u></a></div></div>
+<div class="school"><div class="mid"><h1 class="d" data-f="name" tabindex="-1"></h1><i class="rule"></i><p class="ask d it" data-f="q" data-long="70"></p><dl class="fx2"><dt>When</dt><dd data-f="span"></dd><dt>Where</dt><dd data-f="places"></dd><dt>Inside</dt><dd data-f="inside"></dd></dl><a class="lnk" href="#read" data-read><u data-f="read"></u></a></div></div>
 <div class="picked"><div class="mid"><p class="kick" data-p="n"></p><h2 class="d" data-p="title"></h2><i class="rule"></i><p class="sum d it" data-p="summary" data-plong="100"></p><p class="quiet with" data-p="who"></p><p class="row"><a class="lnk" href="#read" data-read><u>Read this part</u></a><button class="lnk back" data-back><u data-f="back"></u></button></p></div></div>
 </section>
 <p class="say" aria-hidden="true"></p><p class="sr" aria-live="polite"></p>
@@ -277,7 +280,7 @@ const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const F={name:D.name,q:D.q,tagline:D.tagline,span:D.span,places:D.places.join(', '),
   when:D.span+' · '+D.places.join(', '),read:'Read it · about '+D.mins+' minute'+(D.mins===1?'':'s'),
   people:names(D.people),withpeople:'With '+names(D.people),
-  size:cap(pl(n,'idea'))+', '+pl(D.people.length,'thinker')+', '+pl(D.works,'key work'),back:'Back to '+D.name};
+  size:cap(pl(n,'idea'))+', '+pl(D.people.length,'thinker')+', '+pl(D.works,'key work'),back:'Back to '+D.name,inside:n+' ideas · '+D.people.length+' thinkers · '+D.works+' key works'};
 S.style.setProperty('--dx',(cx-500)+'px');S.style.setProperty('--dy',(cy-456)+'px');
 S.style.setProperty('--cx',cx+'px');S.style.setProperty('--cy',cy+'px');
 KW.style.transformOrigin=cx+'px '+cy+'px';

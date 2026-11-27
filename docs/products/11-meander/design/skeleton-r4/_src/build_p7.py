@@ -17,6 +17,8 @@ rep('JS', "const a=(-90+i*360/n)*Math.PI/180,c=Math.cos(a),s=Math.sin(a);",
 rep('JS', "x1=cx+R*c,y1=cy+R*s,k=(i%2?1:-1)*.1*(R-r0);", "x1=cx+Ri*c,y1=cy+Ri*s,k=pick_('k',(i%2?1:-1)*.1)*(Ri-r0);")
 rep('JS', "el.style.left=(cx+(R+g)*c).toFixed(1)+'px';el.style.top=(cy+(R+g)*s).toFixed(1)+'px';",
     "el.style.left=(cx+(Ri+g)*c).toFixed(1)+'px';el.style.top=(cy+(Ri+g)*s).toFixed(1)+'px';")
+# facts 2, labelled lines (#33)
+rep('JS', "back:'Back to '+D.name};", "back:'Back to '+D.name,inside:n+' ideas · '+D.people.length+' thinkers · '+D.works+' key works'};")
 # nothing looks picked at the start: no 'first' styling, equal beads
 rep('JS', "r:i?3.5:4.5", "r:3.5")
 rep('JS', "'sp'+(i?'':' first')", "'sp'")
@@ -57,7 +59,10 @@ svg.ov .sp{stroke:var(--bone);stroke-opacity:.22;stroke-width:1}
 .rule{width:44px;border-top:1px solid var(--brass);opacity:.7;margin:26px 0 24px}
 .ask{font-size:26px;line-height:1.24;color:var(--bone);max-width:410px}
 .ask.long{font-size:21px}
-.facts{margin-top:24px;font-size:14.5px;line-height:1.6;text-wrap:balance}
+/* facts 2, labelled lines (#33) */
+.fx2{display:grid;grid-template-columns:auto minmax(0,auto);column-gap:18px;row-gap:10px;margin:30px 0 8px;text-align:left;font-size:14.5px;max-width:100%}
+.fx2 dt{color:var(--brass);opacity:.8;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding-top:2px;text-align:right}
+.fx2 dd{margin:0;color:rgba(233,226,212,.82);text-wrap:balance}
 .mid .lnk{margin-top:10px}
 .picked .kick{font-size:14.5px}
 .picked h2{font-size:40px;line-height:1.08;letter-spacing:-.012em;margin-top:14px;max-width:440px;overflow-wrap:break-word}
@@ -69,6 +74,6 @@ svg.ov .sp{stroke:var(--bone);stroke-opacity:.22;stroke-width:1}
 .picked .mid .lnk{margin-top:0}
 .lnk.back{color:rgba(233,226,212,.82)}
 """, '<div class="veil"></div>', f"""<section class="info" aria-label="Existentialism">
-<div class="school"><div class="mid"><h1 class="d" data-f="name" tabindex="-1"></h1><i class="rule"></i><p class="ask d it" data-f="q" data-long="70"></p><p class="quiet facts"><span data-f="size"></span><br><span data-f="when"></span></p>{READ}</div></div>
+<div class="school"><div class="mid"><h1 class="d" data-f="name" tabindex="-1"></h1><i class="rule"></i><p class="ask d it" data-f="q" data-long="70"></p><dl class="fx2"><dt>When</dt><dd data-f="span"></dd><dt>Where</dt><dd data-f="places"></dd><dt>Inside</dt><dd data-f="inside"></dd></dl>{READ}</div></div>
 <div class="picked"><div class="mid"><p class="kick" data-p="n"></p><h2 class="d" data-p="title"></h2><i class="rule"></i><p class="sum d it" data-p="summary" data-plong="100"></p><p class="quiet with" data-p="who"></p><p class="row">{PART}{BACK}</p></div></div>
 </section>""")

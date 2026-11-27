@@ -179,3 +179,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Canvas #32:** the threads pull the eye. Three line options are on the canvas next to the originals: A hairline brass, B quiet bone (brass only on the picked thread, my pick), C stitched. Files: `design/skeleton-r4/P7-L*`.
 - **Canvas #33:** the facts block feels clustered. Three options are on the canvas: three numbers, labelled lines (my pick), two groups. Files: `design/skeleton-r4/P7-F*`.
 - **L31:** the owner picked line B. It's built into P7 (`_src/build_p7.py`) and the prototype is reshot.
+- **L32:** the owner picked facts 2. It's built into P7, and the worst case wraps cleanly.

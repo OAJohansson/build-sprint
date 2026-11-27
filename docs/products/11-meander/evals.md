@@ -79,6 +79,7 @@ unless noted.
 | M5 | Music content accuracy: every claim graded against the saved sources | data-evals | 0 wrong, 0 invented links, ≤ 2% unsupported after fixes | | |
 | M6 | Philosophy unchanged: all existing tests pass; 3 schools spot-checked | PM + user-tester | yes | | |
 | M7 | Phone 390×844: open a genre, play a recording, switch field | user-tester | nothing cut off, targets ≥ 44 px | | |
+| M8 | Coverage: the field's list checked against at least three outside references by a grader that didn't build it (feedback 48) | independent grader | no "must add" item missing, or each one logged as a decision | | |
 
 **User test (job 2, the thread):** from House, say where it came from and name two genres it led
 to, then open one of them. Bar: 3 of 3 runs, under 2 minutes each.

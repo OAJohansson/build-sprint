@@ -217,3 +217,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **User test (27 Nov):** the timeline is the best view (job 1 scored 4/5). Majors: Your thread shows done but not next (F1); Eastern schools are isolated (F2, kept as is: L41); Vedānta dates overflow (F3). The fixes are with the engineer.
 - **User-test fixes (L42):** F1, F3, F4, F5 and F7 are fixed. 27 tests, lint and build green; label checks still 0 across 28 views. Next: PR, a preview deploy, and the owner's review.
 - **Phase 3 ready for review:** PR #106 and preview https://meander-q4q3ds7g0-mimirswell.vercel.app (it may ask for the owner's Vercel sign-in). Merge waits for the owner's yes.
+- **Owner review of phase 3 (27 Nov):** "a good first MVP". Follow-ups logged as #43–#47 (globe grouping, Your thread's own place and redesign, timeline hover, a proper menu). Merge approved; a planning session comes next.

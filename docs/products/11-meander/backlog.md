@@ -29,3 +29,7 @@
 | Product strategy: who else would want this, and would they pay? Positioning and the riskiest assumption before building for others (#40) | Owner wants to start thinking about value | Later (own session) |
 | Timeline mode: switch between the globe and a timeline that shows where it all started (#41) | Answers "where did it start?"; the era-cues item (F1) is the small version | Next |
 | Non-Western philosophy: Buddhist, Hindu and other traditions (#42) | Owner's priority after the first batch of feedback; needs its own sources and a decision on how links cross traditions | Next (own phase) |
+| Globe grouped by tradition or era, so East/West and ancient/modern read at a glance (#43) | Design exploration; risk of more clutter | Next phase |
+| Your thread in its own place, with a card redesign and new wording (#44) | Out of the view switch | Next phase |
+| Timeline hover links: calmer or different (#45) | They look messy | Next phase |
+| A proper menu (#46) | Room for fields, settings, about | Next phase |

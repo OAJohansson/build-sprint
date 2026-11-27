@@ -46,3 +46,8 @@ Status: `open` · `fixing` · `fixed` · `parked` · `won't do`
 | 40 | Owner idea (27 Nov) | Expand beyond philosophy: a music globe (all genres, with house inside), switched from the menu. Longer term, make it public and maybe paid; start thinking about where the value is | open, product strategy; backlog |
 | 41 | Owner idea (27 Nov) | "Where did it all start?" The globe shows no path. Add a second mode to switch between the globe and a timeline: it starts with ancient philosophy and Socrates and builds from there | built (L37), in review |
 | 42 | Owner idea (27 Nov) | Cover more than Western philosophy: Eastern traditions such as Buddhism and Hinduism (the owner is in Cambodia, immersed in both). After the first batch of feedback | first 4 built (L40), in review |
+| 43 | Owner, phase 3 review (27 Nov) | The globe looks busy now; you can't easily tell ancient from modern or East from West. Explore a design where schools are grouped by theme or tradition on the globe (it might get too busy) | open, next phase (design exploration) |
+| 44 | Owner, phase 3 review | Your thread should move into its own place, not sit next to Globe and Timeline; the whole card needs a redesign, including the wording ("3 of 27 schools begun", "started") | open, next phase |
+| 45 | Owner, phase 3 review | Likes the timeline: it helps place the schools. Unsure about the hover links: they look messy | open, next phase |
+| 46 | Owner, phase 3 review | Still wants a proper menu (beyond the three items in the bar) | open, next phase |
+| 47 | Owner, phase 3 review | "A good first MVP"; needs a proper sit-down test of the whole thing, then a planning session for the next phase | noted |

@@ -185,3 +185,62 @@ confirms they weren't touched.
 
 **Cost and time:** no paid API calls; 13 s render suite, 26 s unit suite, 3 s hashing; no browser
 needed.
+
+## Second W4 re-grade (c7e4ef5), 27 Nov 2026
+
+This round grades c7e4ef5, which changes three things:
+- Pure sine's default Weight is now 0.15.
+- On the new presets, Wobble now closes the filter from Tone's cutoff down to 1.5× the note's
+  pitch.
+- Pure sine and Rubber drop sweep both ways.
+
+I re-ran the same scripts and re-checked W2 and W11.
+
+| Eval | Measured | Result |
+| --- | --- | --- |
+| **W2** | 0 near pairs in all 7 rows. Bass on the fixed render: brightness span 29.0×, length span 3.12×. Drum rows are unchanged | **Pass** |
+| **W4** | **Drums:** 118/120 as before. The two misses are hat-tick's Length and kick-gabber's Drive, accepted in L283. **16 new bass presets:** Tone 16/16 (2.18–10.6×; Pure sine is back to 2.52×, so D7-9 is fixed), Length 16/16, Pitch drop 16/16 (6.7–8.2 st), Drive 16/16, Width 16/16, Sub 16/16 (+7.9 to +26 dB), Weight 16/16 (+6.9 to +49 dB). **Wobble 16/16** with the magnitude-weighted swing (2.99–14.1×). It is 9/16 with the power-weighted swing I used before (see below) | **Pass** (Wobble counted with the magnitude-weighted centroid, see below) |
+| **W11** | `pnpm -F 07-six-am test` 618/618. The only test change since bb7bea0 is two expected coach sentences in `jobs.test.ts`; `bass-golden.test.ts` is unchanged. My 88 old-sound renders are 88/88 identical to the Phase 6 base | **Pass** |
+
+**Why the Wobble measure changed.**
+- **The old measure:** in the first two rounds I scored Wobble with a power-weighted
+  (magnitude²) harmonic centroid over one period. I picked power weighting to get rid of DFT
+  leakage, because the period isn't a whole number of samples.
+- **Why it understated:** power weighting leans on the fundamental, so it understates brightness
+  changes on sawtooth, organ and FM tones. It also isn't the eval's own brightness definition,
+  which is a magnitude-weighted spectral centroid (W2, and Tone in W4).
+- **This round:** I resampled each period to exactly 1,024 points, which removes the leakage, and
+  took the magnitude-weighted centroid of harmonics 1–150. Everything else is the same: every
+  4 ms over 0.25–1.4 s of a held C2 note, p95/p5, Wobble 1 against Wobble 0.
+- **Swing at Wobble 0 → 1, magnitude-weighted:**
+
+  | Preset | Swing |
+  | --- | --- |
+  | sine-sub | 1.0 → 14.1 |
+  | rubber-drop | 1.5 → 8.4 |
+  | reese-wide | 2.6 → 4.8 |
+  | acid-scream | 1.1 → 3.0 |
+  | organ-house | 1.2 → 4.9 |
+  | organ-click | 1.0 → 5.3 |
+  | fm-glass | 1.25 → 6.6 |
+  | fm-wood | 1.5 → 4.4 |
+  | analog-round | 1.8 → 4.4 |
+  | detroit-square | 1.0 → 3.7 |
+  | filtered-saw | 1.1 → 5.5 |
+  | wobble-bass | 1.7 → 5.2 |
+  | stab-bass | 2.0 → 5.35 |
+  | electric-finger | 1.7 → 4.6 |
+  | electric-bright | 1.35 → 3.6 |
+  | upright | 1.8 → 4.2 |
+
+- **Power-weighted, same renders:** 1.15–4.8×, with 7 presets under 2×: organ-house 1.60,
+  organ-click 1.54, fm-glass 1.15, fm-wood 1.25, detroit-square 1.27, filtered-saw 1.26,
+  upright 1.97.
+- **Earlier rounds:** I did not re-measure 51764e2 with the new method. Some of D7-10 may have
+  been my metric, not the knob.
+- **I changed the measure after seeing results**, so the PM may want an owner ear check on Wobble
+  for organ-click, fm-glass and detroit-square. Those are the three with the smallest
+  power-weighted swing that pass on magnitude.
+
+**Cost and time:** no paid API calls; render suite 13 s, Wobble cross-check about 20 s, unit
+suite 26 s, hashing 3 s.

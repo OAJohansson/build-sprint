@@ -874,3 +874,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Owner picked 2 Shelf, 4 Side list and 10 Table (L276). Next: the designer develops the three with the real kit, the critic scores them, the owner picks one.
 - Designer round 2 on 2 Shelf, 4 Side list, 10 Table with the real kit (677c048): `design/p7-round2.html`, prototype `design/p7-round2/prototype.html`. Logged L277, T238. Critic scoring the three.
 - Critic round 2: Shelf 6/10, Side list 6/10, Table 5/10; would build Shelf for Make with Side list's rebuild grid (`design/p7-round2-critic.md`). PM recommends the same hybrid to the owner.
+- Owner picked the hybrid: Shelf for Make, Side list's grid for the Studio rebuild (L278). Next: designer round 3 (the final), the same critic re-scores, then the canvas sign-off.

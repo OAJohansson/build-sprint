@@ -360,7 +360,7 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | U7-16 | minor | Save per row only | backlog |
 | U7-17 | polish | Old synth drum knobs show A1 / ms | fixed |
 | U7-18 | polish | Zero-state wording | fixed |
-| D7-11 | major | W6 fail: saving a row on a second loop can rename the first loop's saved sound (`last[row]` not cleared on loop change); 3 of 25 saves | open: slice 2 fix |
+| D7-11 | major | W6 fail: saving a row on a second loop can rename the first loop's saved sound (`last[row]` not cleared on loop change); 3 of 25 saves | fixed (71aa3f4) |
 | D7-12 | major | W5 fail: open-hat reader 44 % / 31 %; retuning won't pass | decided: reader off (L287) |
 | D7-13 | minor | Clap / snare bodies land on Closed hat (0–83 % of the row per loop) | accepted for now: fixable by ear; backlog |
 | D7-14 | check | W5b needs the owner's ear | open: final review |

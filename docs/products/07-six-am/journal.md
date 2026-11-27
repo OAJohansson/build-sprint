@@ -897,3 +897,4 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - L290 built (0d5a9d5, T256): steps 17.2 / 14.7 px while fixing. Re-check by all three graders.
 - Critic re-score slice 2: 8/10. Leftovers wait for the user test and data-evals re-checks.
 - Slice 2 user re-check: W7 5/5, W14 met (all jobs ≥ 4). New U7-19, U7-20 go into the polish round with the critic's leftovers.
+- Slice 2 data-evals re-grade (71aa3f4): W6, W8, W11, W13 pass; D7-11 fixed; W5 recorded fail with the agreed fallback (L287). Slice 2 done apart from a polish round (critic 8/10 leftovers, U7-19, U7-20). Slice 3 starts with a fresh engineer (Studio files; the polish round stays in Make files).

@@ -330,27 +330,27 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | OR6-4 | good | Phase 5 owner check, FX A/B: the FX sound quite similar to the original drops | pass (owner's ear) |
 | OR6-5 | major | In Make (Bass, Drums, Melody, FX) you can't click on the timeline to jump back to a spot; you have to listen through. The Studio has this | open: Phase 7 |
 | U7-1 | major | Slice 1 user test: shelf hides 1–5 sounds per row at 1440 (all 3 sampled basses) and ~half at 1280 × 720, no cue | fixed (51764e2, re-check) |
-| U7-2 | minor | Sound description cut with "…" for 43 of 60 drum sounds | open: slice 1 fix |
+| U7-2 | minor | Sound description cut with "…" for 43 of 60 drum sounds | fixed (c7e4ef5) |
 | U7-3 | minor | Drum knob values in Hz / dB / ms / st | fixed |
-| U7-4 | minor | Mentor knob tips read contradictory ("Length down to longer") | open: slice 1 fix |
+| U7-4 | minor | Mentor knob tips read contradictory ("Length down to longer") | fixed (c7e4ef5) |
 | U7-5 | minor | Sticky A/B covers the "Try X" tip and half of Suggest at 1440 | fixed (drums); bass hint half under A/B at 1440 → in the shelf round |
-| U7-6 | polish | "Shaker-like" family in Closed hat; sounds named like their family | open: slice 1 fix |
-| U7-7 | polish | Bass lines name the source (tonejs-instruments) | open: slice 1 fix |
+| U7-6 | polish | "Shaker-like" family in Closed hat; sounds named like their family | fixed (51764e2) |
+| U7-7 | polish | Bass lines name the source (tonejs-instruments) | fixed (c7e4ef5) |
 | D7-1 | major | W4 fail: bass Drive, Sub, Weight, Wobble move their feature too little (bars in L282) | mostly fixed (51764e2): 124/128; D7-9, D7-10 left |
 | D7-2 | minor | Pitch drop reaches only 4.0–4.5 st on 7 presets | fixed (6.7–8.1 st) |
 | D7-3 | minor | Round sub's Tone barely moves (Phase 4 preset, golden hash) | accepted (L282) |
 | D7-4 | polish | Shortest closed hats can't get 2× longer | accepted (L283) |
 | D7-5 | polish | Drive adds little on saturated recordings | accepted (L283) |
-| D7-6 | toil | "Suggest for hats" / "closeness · hats" on the Closed hat row | open: slice 1 fix |
+| D7-6 | toil | "Suggest for hats" / "closeness · hats" on the Closed hat row | fixed (51764e2) |
 | D7-7 | risk | tonejs-instruments' recordings' origin not stated | accepted (L283), viability risk |
 | D7-8 | check | W12 timings were on localhost; re-check first taps on the preview | open: final review |
 | D7-9 | minor | Regression: Tone on Pure sine moves brightness 1.87× (was 2.12×) after the Weight change | fixed (2.52×) |
 | D7-10 | minor | Wobble < 2× on organ-click, fm-glass, filtered-saw | pass on the eval's measure (L284); owner listens at the final review |
-| U7-8 | polish | Sound chips 22 px tall (under 24 px) and the last line brushes A/B at 1280 × 720 | open: shelf round |
-| U7-9 | polish | Description still cut at 1280 where it shares a row with the knobs | open: shelf round |
+| U7-8 | polish | Sound chips 22 px tall (under 24 px) and the last line brushes A/B at 1280 × 720 | fixed (c7e4ef5) |
+| U7-9 | polish | Description still cut at 1280 where it shares a row with the knobs | fixed (c7e4ef5) |
 | CR2-1 | major | Critic, built slice 2 6/10: steps too thin on 8-bar loops (show 4 bars at a time while fixing) | fixed (L289, L290) |
 | CR2-2 | major | Critic: sound strip cut by the sticky A/B row (one bottom bar as designed) | fixed |
-| CR2-3 | minor | Critic: "in Drop 2 · bar 77" vs "Looping Build, bars 76–83"; "— / 100" on ear rows; note wraps; save bar repeats itself; done-state wording | open: slice 2 fix |
+| CR2-3 | minor | Critic: "in Drop 2 · bar 77" vs "Looping Build, bars 76–83"; "— / 100" on ear rows; note wraps; save bar repeats itself; done-state wording | fixed (cd2b28f, a19debe) |
 | U7-10 | major | Drum steps too thin to tap (4.6 / 3.3 px) | fixed |
 | U7-11 | major | Edits gone after reload; loading a saved row doesn't restore its hits | fixed |
 | U7-12 | minor | A row Make read nothing on has no line and isn't counted | fixed |

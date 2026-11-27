@@ -1,0 +1,719 @@
+{
+ "batch": 1,
+ "graded": "current text and bullets in content/pilot/existentialism.json for the first 16 ids of rewrite-t27.json",
+ "quote_check": "all 31 source quotes found verbatim in their cited sections",
+ "items": [
+  {
+   "id": "overview.0",
+   "claims": [
+    {
+     "claim": "Existentialism is a loose family of ideas, not a tidy school.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'certainly not a reference to a coherent system or philosophical school' ... 'a set of overlapping ideas that bind the movement together'"
+    },
+    {
+     "claim": "It starts from life as a person lives it, not from a detached viewpoint.",
+     "verdict": "supported",
+     "evidence": "SEP 2: 'we cannot look down on the human condition from a detached, third-person perspective' ... 'begins from the standpoint of the engagé'"
+    },
+    {
+     "claim": "Its central idea is that we are not born with a fixed nature.",
+     "verdict": "drift",
+     "evidence": "SEP intro lists five 'overlapping ideas' (Nihilism, Engagement, Existence Precedes Essence, Freedom, Authenticity, Ethics) and says 'there is no unifying doctrine'. No cited section ranks existence-precedes-essence as THE central idea; calling it central contradicts the 'no unifying doctrine' line the same paragraph relies on."
+    },
+    {
+     "claim": "We make ourselves through our choices.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'burdened with the task of creating ourselves through our choices and actions'"
+    },
+    {
+     "claim": "We are responsible for who we become.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'we are free and responsible for who we are and what we do'"
+    },
+    {
+     "claim": "Two nineteenth-century thinkers laid the groundwork: Kierkegaard and Nietzsche.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'the conceptual groundwork of the movement was laid much earlier in the nineteenth century by pioneers like Søren Kierkegaard and Friedrich Nietzsche'. Note: 'pioneers like' gives examples; 'Two' reads as exhaustive, acceptable since source names no other 19th-century pioneer."
+    },
+    {
+     "claim": "Kierkegaard was from Denmark.",
+     "verdict": "supported",
+     "evidence": "SEP Kierkegaard 1: 'born ... in Copenhagen ... He spent most of his life in and around the Danish capital'"
+    },
+    {
+     "claim": "Nietzsche was a German philosopher.",
+     "verdict": "supported",
+     "evidence": "SEP Nietzsche intro: 'was a German philosopher and cultural critic'"
+    },
+    {
+     "claim": "In mid-twentieth-century France, Sartre and Beauvoir made it famous.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'exploded on the scene in mid-twentieth-century France' ... 'the most popular voices of this movement were French, most notably Jean-Paul Sartre and Simone de Beauvoir'"
+    }
+   ],
+   "fix": "Replace 'Its central idea is that' with 'One of its core ideas is that' (SEP intro: overlapping ideas, no unifying doctrine)."
+  },
+  {
+   "id": "overview.1",
+   "claims": [
+    {
+     "claim": "It rejects fixed moral rules.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'they reject the idea of moral absolutes and universalizing judgments about right conduct'"
+    },
+    {
+     "claim": "It does not say that morality is empty.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'existentialism should not be dismissed for promoting moral nihilism'"
+    },
+    {
+     "claim": "A good life is possible: one where we own our choices and help others be free too.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'a moral or praiseworthy life is possible. It is one where we acknowledge and own up to our freedom, take full responsibility for our choices, and act in such a way as to help others realize their freedom.'"
+    },
+    {
+     "claim": "Above all, it takes on questions we all meet.",
+     "verdict": "drift",
+     "evidence": "Cited SEP intro gives no ranking; it names 'the anxiety-provoking givens of death, freedom, and meaninglessness' that a generation 'was forced to confront', but nothing says these questions come 'above all' (e.g. above its ethics, just stated). Minor sharpening."
+    },
+    {
+     "claim": "Question: How do I live when no rulebook tells me how?",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'reject the idea of moral absolutes and universalizing judgments about right conduct'"
+    },
+    {
+     "claim": "Question: How do I stop drifting along with the crowd?",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'critical of our ingrained tendency to conform to the norms and expectations of the public world'"
+    },
+    {
+     "claim": "Question: How do I face anxiety, death and a sense that life is meaningless?",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'confront the human condition and the anxiety-provoking givens of death, freedom, and meaninglessness'"
+    }
+   ],
+   "fix": "Drop 'Above all,': 'It also takes on questions we all meet:'."
+  },
+  {
+   "id": "themes.0.summary",
+   "claims": [
+    {
+     "claim": "We are not born with a fixed nature.",
+     "verdict": "supported",
+     "evidence": "SEP 3 (theme source): 'there is no pre-given or essential nature that determines us'; SEP intro: 'not as a substance or thing with some pre-given nature'"
+    },
+    {
+     "claim": "We make ourselves through what we choose.",
+     "verdict": "supported",
+     "evidence": "SEP 3: 'we are always in the process of making or defining ourselves through the situated choices we make'"
+    }
+   ]
+  },
+  {
+   "id": "themes.0.p0",
+   "claims": [
+    {
+     "claim": "Sartre called 'existence precedes essence' the first principle of existentialism.",
+     "verdict": "supported",
+     "evidence": "SEP 3: 'Sartre will later repackage this line with the pithy adage, “existence precedes essence” ... This is, according to Sartre, “the first principle of existentialism,”'"
+    },
+    {
+     "claim": "Gloss: 'essence' would be a fixed nature that decides who you are.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'some pre-given nature (or “essence”)'; SEP 3: 'pre-given or essential nature that determines us'"
+    },
+    {
+     "claim": "Existentialists say there is no such essence.",
+     "verdict": "supported",
+     "evidence": "SEP 3: 'there is no pre-given or essential nature that determines us'"
+    },
+    {
+     "claim": "A person first 'turns up' and only afterwards defines himself.",
+     "verdict": "supported",
+     "evidence": "SEP 3: 'man exists, turns up, appears on the scene, and, only afterwards, defines himself'"
+    },
+    {
+     "claim": "...through choices made as life unfolds.",
+     "verdict": "supported",
+     "evidence": "SEP 3: 'through the situated choices we make as our lives unfold'"
+    },
+    {
+     "claim": "Sartre adapted the idea from Heidegger.",
+     "verdict": "supported",
+     "evidence": "SEP 3: 'initially introduced early on in Heidegger’s Being and Time ... Sartre will later repackage this line'"
+    },
+    {
+     "claim": "Heidegger was a German philosopher.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'twentieth-century German philosophers like Edmund Husserl, Martin Heidegger, and Karl Jaspers'"
+    },
+    {
+     "claim": "Hard facts still limit us, such as our body and the time and place we live in.",
+     "verdict": "supported",
+     "evidence": "SEP 3: 'determinate aspects or “facts” about our situation that limit and constrain us ... our embodiment and spatiality ... and the socio-historical context we find ourselves in'"
+    },
+    {
+     "claim": "Gloss: existentialists call these facts our 'facticity'.",
+     "verdict": "supported",
+     "evidence": "SEP 3: 'This is our givenness (or “facticity”)'"
+    },
+    {
+     "claim": "We can question them, give them meaning and decide what to do with them.",
+     "verdict": "supported",
+     "evidence": "SEP 3: 'surpass our facticity by calling it into question, interpreting it in different ways, and making decisions about how to deal with it in the future'"
+    },
+    {
+     "claim": "Gloss: this power to rise above the facts is called 'transcendence'.",
+     "verdict": "supported",
+     "evidence": "SEP 3: 'we have the capacity to rise above or “transcend” these facts' ... 'tension between “facticity” and “transcendence”'"
+    }
+   ]
+  },
+  {
+   "id": "themes.1.p0",
+   "claims": [
+    {
+     "claim": "If nothing fixed decides who we are, then we are free.",
+     "verdict": "supported",
+     "evidence": "SEP 4: 'Recognizing that there is no pre-given essence that determines existence ... it is up to the individual to make ... their own identity'"
+    },
+    {
+     "claim": "We are also responsible for what we make of ourselves.",
+     "verdict": "supported",
+     "evidence": "SEP 4: 'can be held responsible for their actions' ... 'we alone are responsible for our choices and the projects we undertake'"
+    },
+    {
+     "claim": "Sartre's coward: childhood or genes did not make him that way; he 'makes himself a coward' by his decisions.",
+     "verdict": "supported",
+     "evidence": "SEP 4: 'the coward ... is not the way he is because of an unstable childhood or a particular genetic makeup. The coward “makes himself a coward” by means of his decisions'"
+    },
+    {
+     "claim": "Seeing this brings anxiety.",
+     "verdict": "supported",
+     "evidence": "SEP 4: 'the awareness is often accompanied by anxiety because we realize that we alone are responsible'"
+    },
+    {
+     "claim": "No god and no absolute moral rule can choose for us or excuse us.",
+     "verdict": "supported",
+     "evidence": "SEP 4: 'There is no moral absolute, divine will, or natural law that can provide guidance or justify our actions.'"
+    },
+    {
+     "claim": "Sartre: 'no excuses behind us nor justifications before us'.",
+     "verdict": "supported",
+     "evidence": "SEP 4: '“there are no excuses behind us nor justifications before us” (Sartre 1946 [2001, 296])' - verbatim"
+    },
+    {
+     "claim": "Kierkegaard called anxiety 'the dizziness of freedom'.",
+     "verdict": "supported",
+     "evidence": "SEP Kierkegaard 2: 'Haufniensis, who says that anxiety is the dizziness of freedom'. Note: the source attributes it to his pseudonym Vigilius Haufniensis; acceptable for beginners, meaning unchanged."
+    },
+    {
+     "claim": "Existentialists ask us to face this feeling, not run from it.",
+     "verdict": "supported",
+     "evidence": "SEP 5.1: 'Instead of turning away from this basic anxiety, the existentialist asks us to turn toward and face it'"
+    },
+    {
+     "claim": "It can shake us out of our comfortable routines.",
+     "verdict": "supported",
+     "evidence": "SEP 5.1: 'uncanny affects that have the power to shake us out of our complacency'"
+    }
+   ]
+  },
+  {
+   "id": "themes.2.summary",
+   "claims": [
+    {
+     "claim": "Most of the time we just do what everyone else does.",
+     "verdict": "supported",
+     "evidence": "SEP 5: 'we tend to get pulled along by the crowd, doing what “they” do'"
+    },
+    {
+     "claim": "Being authentic means living our own life.",
+     "verdict": "supported",
+     "evidence": "SEP 5: 'Rather than living our own lives, we tend to get pulled along by the crowd'; SEP intro: 'authentic or true to ourselves'"
+    }
+   ]
+  },
+  {
+   "id": "themes.2.p0",
+   "claims": [
+    {
+     "claim": "Gloss: being authentic means being true to yourself.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'prevents us from being authentic or true to ourselves' - quote verbatim"
+    },
+    {
+     "claim": "Existentialists criticise living by rules and expectations we pick up from others.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'critical of our ingrained tendency to conform to the norms and expectations of the public world'"
+    },
+    {
+     "claim": "Heidegger: we enjoy, read and judge things as 'they' do.",
+     "verdict": "supported",
+     "evidence": "SEP 5: '“We take pleasure and enjoy ourselves as they take pleasure. We read, see, and judge about literature and art as they see and judge”'"
+    },
+    {
+     "claim": "Doing what everyone does is comforting, because it feels like living well.",
+     "verdict": "supported",
+     "evidence": "SEP 5: 'Living this way can be comforting, creating the illusion that we are living well because we are doing what everyone else does.'"
+    },
+    {
+     "claim": "But it hides our freedom from us.",
+     "verdict": "supported",
+     "evidence": "SEP 5: 'we are unwilling or unable to face up to the freedom and contingency of our condition'; '“tranquilizing” ... because it covers over the anxiety of own freedom and finitude'"
+    },
+    {
+     "claim": "Sartre and Beauvoir call this self-deception 'bad faith'.",
+     "verdict": "supported",
+     "evidence": "SEP 5: 'Sartre and Beauvoir refer to inauthenticity in terms of “bad faith” (mauvaise foi)'"
+    },
+    {
+     "claim": "I am in bad faith when I treat myself as a fixed thing: 'I am what I am'.",
+     "verdict": "supported",
+     "evidence": "SEP 5.5: 'the most common ... form of bad faith is when I over-identify with my facticity, as if I were a fully realized object or thing ... that “I am what I am”'"
+    },
+    {
+     "claim": "I am also in bad faith when I pretend my situation puts no limits on my choices.",
+     "verdict": "supported",
+     "evidence": "SEP 5: 'I am also in bad faith when I over-identify with freedom and deny ... the fact that my choices are limited and constrained by my situation.'"
+    },
+    {
+     "claim": "Kierkegaard's name for the crowd: 'the public'.",
+     "verdict": "supported",
+     "evidence": "SEP 1: 'In their conceptions of “the public” (Kierkegaard), “the herd” (Nietzsche), and “the They” (Heidegger)'"
+    },
+    {
+     "claim": "Nietzsche's name for the crowd: 'the herd'.",
+     "verdict": "supported",
+     "evidence": "SEP 1: same line"
+    },
+    {
+     "claim": "Heidegger's name for the crowd: 'the They'.",
+     "verdict": "supported",
+     "evidence": "SEP 1: same line"
+    }
+   ]
+  },
+  {
+   "id": "themes.2.p1",
+   "claims": [
+    {
+     "claim": "What authenticity looks like varies by thinker.",
+     "verdict": "supported",
+     "evidence": "SEP 5.2-5.5 give separate accounts per thinker"
+    },
+    {
+     "claim": "Kierkegaard: a passionate commitment that pulls a scattered life together.",
+     "verdict": "supported",
+     "evidence": "SEP 5.2: 'a passionate, “personality defining” ... decision or commitment that binds together and unifies the fragmented and disjointed moments of our life into a focused and coherent whole'"
+    },
+    {
+     "claim": "Nietzsche: saying yes to your whole life, even to living it again forever.",
+     "verdict": "supported",
+     "evidence": "SEP 5.3: 'The Overman is a “yes-sayer” who affirms every aspect of his life' ... eternal recurrence: 'live the same life we are living now over and over for eternity'"
+    },
+    {
+     "claim": "Heidegger: 'resoluteness', a focused grip on your chosen path that stays open to letting it go.",
+     "verdict": "supported",
+     "evidence": "SEP 5.4: '“resoluteness” ... “pull [myself] together,” giving life a sense of cohesion and focus ... I must also be willing to let go or give up on them depending on the circumstances'"
+    },
+    {
+     "claim": "Sartre and Beauvoir: seeing your unsettled situation clearly, accepting it, and taking responsibility for what you do.",
+     "verdict": "supported",
+     "evidence": "SEP 5.5: 'a clear-eyed awareness and acceptance of the instability and ambiguity of the human condition ... a willingness to act ... and to take responsibility'"
+    }
+   ]
+  },
+  {
+   "id": "themes.3.p0",
+   "claims": [
+    {
+     "claim": "Nineteenth-century Europe became less religious and more scientific.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'late nineteenth century Europe as the pre-modern religious worldview was replaced with one that was increasingly secular and scientific' (quote verbatim)"
+    },
+    {
+     "claim": "The old religious picture that gave life moral direction began to collapse.",
+     "verdict": "supported",
+     "evidence": "SEP 1: 'the traditional religious framework that gave pre-modern life a sense of moral orientation and cohesion was beginning to collapse'"
+    },
+    {
+     "claim": "Nietzsche diagnosed the result: nihilism.",
+     "verdict": "supported",
+     "evidence": "SEP 1: 'Nietzsche was the most influential and prophetic in diagnosing and conceptualizing the crisis'"
+    },
+    {
+     "claim": "Gloss: nihilism is the shocking sense that our existence has no overall reason or purpose.",
+     "verdict": "supported",
+     "evidence": "SEP 1: 'The condition of nihilism involves the shocking recognition that there is no overarching reason, order, or purpose to our existence'"
+    },
+    {
+     "claim": "His image for this loss was 'the death of God'.",
+     "verdict": "supported",
+     "evidence": "SEP 1: 'With the death of God and the loss of moral absolutes, we are exposed to existence ... (Nietzsche 1887 [1974], §55)'"
+    },
+    {
+     "claim": "Albert Camus was a French novelist.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'compatriots such as Albert Camus'; SEP Camus intro: 'novelist and author of short stories' (both verbatim)"
+    },
+    {
+     "claim": "Camus called our situation 'the absurd'.",
+     "verdict": "supported",
+     "evidence": "IEP f: 'Philosophically, Camus is known for his conception of the absurd.'"
+    },
+    {
+     "claim": "The absurd is the clash between our 'wild longing for clarity' and 'the unreasonable silence of the world'.",
+     "verdict": "supported",
+     "evidence": "SEP Camus 3.3: 'an inevitable divorce between human consciousness, with its “wild longing for clarity” (MS, 21) and the “unreasonable silence of the world” (MS, 28)'"
+    },
+    {
+     "claim": "This need not end in despair.",
+     "verdict": "supported",
+     "evidence": "IEP f: 'the acceptance of the absurd does not lead to nihilism ... or to inertia, but rather to their opposite'; IEP Camus c: 'the task of living should not merely be accepted, it must be embraced'"
+    },
+    {
+     "claim": "For Camus, the absurd calls for action, not suicide.",
+     "verdict": "supported",
+     "evidence": "IEP f: 'to action and participation'; IEP Camus c: 'In the end, Camus rejects suicide' (verbatim)"
+    },
+    {
+     "claim": "Beauvoir held that existence is not absurd but ambiguous: its meaning is never fixed, so we keep making it.",
+     "verdict": "supported",
+     "evidence": "SEP 5.5: 'The notion of ambiguity must not be confused with that of absurdity ... to say that it is ambiguous is to assert that its meaning is never fixed'; 'My projects have meaning and value because I chose these projects, but the meaning is contingent'. Note: placed right after Camus, a reader may take it as a rebuttal of Camus; the source does not link the two, and Beauvoir's 'absurd' (no meaning can ever be given) is not Camus's (a clash). Not counted as drift."
+    }
+   ]
+  },
+  {
+   "id": "themes.4.p0",
+   "claims": [
+    {
+     "claim": "Sartre and Beauvoir argued that we see ourselves through 'the look' of others.",
+     "verdict": "supported",
+     "evidence": "SEP 6.1: 'Sartre and Beauvoir argue that ... I understand or see myself in the way that I do through “the look” (le regard) of the Other'"
+    },
+    {
+     "claim": "Their gaze can turn us into objects.",
+     "verdict": "supported",
+     "evidence": "SEP 6.1: 'the look has the power to strip away my freedom and turn me into an object'"
+    },
+    {
+     "claim": "Relationships then become a power struggle.",
+     "verdict": "supported",
+     "evidence": "SEP 6.1: 'Human relations, on this account, are best understood as a form of conflict, a dyadic power struggle'"
+    },
+    {
+     "claim": "Sartre's play No Exit sums this up in its famous line that hell is other people.",
+     "verdict": "supported",
+     "evidence": "SEP 6.1: 'Sartre’s famous claim in his play Huis Clos (No Exit) that “Hell is—other people”' (quote verbatim)"
+    },
+    {
+     "claim": "But there is a better way.",
+     "verdict": "supported",
+     "evidence": "SEP 6.1: 'There is an authentic counterpart.'"
+    },
+    {
+     "claim": "Beauvoir's 'authentic love' nurtures the other person's freedom instead of possessing them.",
+     "verdict": "supported",
+     "evidence": "SEP 6.1: '“authentic love” ... a relationship where we acknowledge and nurture the other’s freedom ... resisting ... to see the Other as an object or thing to be manipulated and possessed'"
+    },
+    {
+     "claim": "She and Sartre concluded that wanting my own freedom commits me to wanting it for others.",
+     "verdict": "supported",
+     "evidence": "SEP 6: Sartre: 'I am obliged to want others to have freedom at the same time that I want my own freedom'; IEP e: Beauvoir 'To will oneself free is also to will others free'"
+    },
+    {
+     "claim": "In Beauvoir's words, to will oneself free is also to will others free.",
+     "verdict": "supported",
+     "evidence": "IEP e: '“To will oneself free is also to will others free” (Beauvoir 1976:73)' (verbatim)"
+    },
+    {
+     "claim": "Later, Sartre shifted his focus from the single person to society.",
+     "verdict": "supported",
+     "evidence": "SEP 6.3: 'compelled Sartre to shift his focus from the individual to the social. Following the war...'"
+    },
+    {
+     "claim": "Pushed by the Nazi occupation of France.",
+     "verdict": "supported",
+     "evidence": "SEP 6.3: 'The Nazi occupation of France, his own experience as a prisoner of war, and the attacks on his philosophy from influential Marxist critics, compelled Sartre'"
+    },
+    {
+     "claim": "Pushed by his own time as a prisoner of war.",
+     "verdict": "supported",
+     "evidence": "SEP 6.3: same line"
+    },
+    {
+     "claim": "Pushed by attacks on his ideas from Marxist critics.",
+     "verdict": "supported",
+     "evidence": "SEP 6.3: same line"
+    }
+   ]
+  },
+  {
+   "id": "themes.5.p0",
+   "claims": [
+    {
+     "claim": "Existentialism is not only atheist.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'one finds secular and religious existentialists'"
+    },
+    {
+     "claim": "Kierkegaard was a Christian.",
+     "verdict": "supported",
+     "evidence": "SEP 5.2: 'As a religious existentialist, Kierkegaard contends that this is what is required to enter the sphere of faith and become a Christian'; IEP a: 'religious writer'"
+    },
+    {
+     "claim": "He prized 'a truth which is true for me'.",
+     "verdict": "supported",
+     "evidence": "SEP 2.1: 'it discloses “a truth which is true for me”' (verbatim)"
+    },
+    {
+     "claim": "That truth is lived and felt rather than proved.",
+     "verdict": "supported",
+     "evidence": "SEP 2.1: 'subjective truth cannot be reasoned about or explained logically' ... 'It is an ineffable truth that is felt rather than known'; IEP a: 'This cannot be argued, it can only be lived.'"
+    },
+    {
+     "claim": "Fear and Trembling retells the Bible story in which God tells Abraham to sacrifice his son Isaac.",
+     "verdict": "supported",
+     "evidence": "IEP a: 'Fear and Trembling retells the story of the attempted sacrifice of Isaac by his father Abraham. God tells Abraham that in order to prove his faith he has to sacrifice his only son.'; SEP 5.2: 'the biblical figure of Abraham'"
+    },
+    {
+     "claim": "Gloss: a 'knight of faith' is someone who commits to a truth that reason cannot make sense of.",
+     "verdict": "drift",
+     "evidence": "SEP 5.2: 'he is confronted with a personal truth that is higher than the universal. In committing himself to this truth, Abraham becomes a “knight of faith” by “leaping” into a paradox, one where the truth of “the singular individual is higher than the universal”'. The gloss keeps the irrationality but drops the defining point: a personal truth that overrides the universal moral duty (to protect his son). For a beginner it now reads as 'believing something irrational', not 'putting a personal truth above morality'."
+    },
+    {
+     "claim": "He 'leaps' into a paradox.",
+     "verdict": "supported",
+     "evidence": "SEP 5.2: 'by “leaping” (springer) into a paradox'"
+    },
+    {
+     "claim": "He is alone with a choice no one else understands.",
+     "verdict": "supported",
+     "evidence": "SEP 5.2: 'anxiety and loneliness because the leap individualizes us ... a path that no one else may understand ... he “cannot make himself understood to anyone.”'"
+    },
+    {
+     "claim": "The Jewish thinker Martin Buber stressed meeting another person as a 'You', a whole person.",
+     "verdict": "supported",
+     "evidence": "SEP 6.2: 'The Jewish existentialist Martin Buber ... the “I-You” (Ich-Du) relation ... the Other is revealed to me as a whole person'"
+    },
+    {
+     "claim": "Gloss: the opposite is treating them as an 'It', a thing to use.",
+     "verdict": "supported",
+     "evidence": "SEP 6.2: 'the “I-It” (Ich-Es) relation, where the other is encountered as a thing (or “it”) to be manipulated and controlled for one’s own use'"
+    },
+    {
+     "claim": "Nietzsche and Sartre saw God as irrelevant or even harmful to our deepest choices.",
+     "verdict": "supported",
+     "evidence": "IEP b: 'the existence of a transcendent deity is not relevant to (or is positively detrimental to) such decisions (a view broadly shared by Nietzsche and Sartre)'"
+    }
+   ],
+   "fix": "Gloss the knight of faith as 'someone who puts a personal truth above ordinary morality, a truth reason cannot make sense of' (SEP 5.2: 'a personal truth that is higher than the universal')."
+  },
+  {
+   "id": "origins.p0",
+   "claims": [
+    {
+     "claim": "Early hints of this outlook go back to ancient philosophy.",
+     "verdict": "supported",
+     "evidence": "SEP 1: 'early glimpses of ... the “existential attitude” ... in the Stoic and Epicurean philosophies of antiquity'"
+    },
+    {
+     "claim": "...and to later writers on death and the meaning of life.",
+     "verdict": "supported",
+     "evidence": "SEP 1: 'the intimate reflections on death and the meaning of life in Michel de Montaigne’s Essays'"
+    },
+    {
+     "claim": "The ideas became a movement only in the nineteenth century.",
+     "verdict": "supported",
+     "evidence": "SEP 1: 'it was not until the nineteenth century that the ideas began to coalesce into a bona fide intellectual movement'"
+    },
+    {
+     "claim": "Religion's hold was fading.",
+     "verdict": "supported",
+     "evidence": "SEP 1: 'an increasingly secular and scientific worldview was emerging and the traditional religious framework ... was beginning to collapse'"
+    },
+    {
+     "claim": "Industry and bureaucracy made society feel impersonal.",
+     "verdict": "supported",
+     "evidence": "SEP 1: 'Industrial Revolution ... mechanized working conditions and bureaucratic forms of administration, an increasingly impersonal and alienating social order was established'"
+    },
+    {
+     "claim": "Kierkegaard attacked Hegel's system of all reality for leaving out the single living person.",
+     "verdict": "supported",
+     "evidence": "SEP 2.1: 'Hegel ... build a metaphysical system that would provide complete knowledge of reality ... Hegel’s system invariably covers over the deeply personal project of being human and the specific needs and concerns of the existing individual'"
+    },
+    {
+     "claim": "Nietzsche foresaw the coming nihilism.",
+     "verdict": "supported",
+     "evidence": "SEP 1: 'Nietzsche was the most influential and prophetic in diagnosing and conceptualizing the crisis'"
+    },
+    {
+     "claim": "Dostoevsky was a Russian novelist.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'the Russian novelists Leo Tolstoy and Fyodor Dostoevsky' (verbatim)"
+    },
+    {
+     "claim": "Dostoevsky was an early voice of the movement.",
+     "verdict": "supported",
+     "evidence": "IEP 'a. The Arts and Psychology': 'Novelists such as Dostoevsky ... were often cited by mid-century existentialists as important precedents, right along with Kierkegaard and Nietzsche'"
+    },
+    {
+     "claim": "His 'underground man' refuses to be reduced to 'a piano key' in a world run by fixed laws.",
+     "verdict": "drift",
+     "evidence": "SEP 4.1: 'rebels against an increasingly scientized, rational, and mechanistic picture of human behavior promoted by Russian social reformers in the 1860s, where everything a person does was thought to be determined by causal laws. For the underground man, this view reduces the human being to ... “a piano key”'. The source says he rebels against a VIEW that causal laws determine human behaviour; the text states as fact that the world is run by fixed laws, which flips the point (his revolt affirms that we are not so determined). Quote 'a piano key' is verbatim."
+    }
+   ],
+   "fix": "'...whose \"underground man\" refuses to be reduced to \"a piano key\" by a view that causal laws decide everything a person does.'"
+  },
+  {
+   "id": "origins.p1",
+   "claims": [
+    {
+     "claim": "In the twentieth century, German thinkers such as Husserl, Jaspers and Heidegger laid more groundwork.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'groundwork ... laid ... by ... twentieth-century German philosophers like Edmund Husserl, Martin Heidegger, and Karl Jaspers'"
+    },
+    {
+     "claim": "They (Husserl, Jaspers and Heidegger) gave the movement its roots in phenomenology.",
+     "verdict": "drift",
+     "evidence": "OpenStax Existentialism: 'Existentialism’s phenomenological roots' (verbatim, names no one); SEP 2.3 ties phenomenology to Heidegger and 'his teacher Husserl'. No cited section links Jaspers to phenomenology, so 'They' over-extends the claim to all three."
+    },
+    {
+     "claim": "Gloss: phenomenology is the study of how we experience the world from our own point of view.",
+     "verdict": "supported",
+     "evidence": "OpenStax Phenomenology: 'the study of how an individual encounters the world through first-person experience' (verbatim)"
+    },
+    {
+     "claim": "Heidegger's Being and Time (1927) shaped Sartre and Beauvoir.",
+     "verdict": "supported",
+     "evidence": "SEP Heidegger intro: 'His magnum opus, Being and Time (1927) ... profoundly influenced ... Jean-Paul Sartre’s existentialism, Simone de Beauvoir’s feminism'"
+    },
+    {
+     "claim": "The movement then exploded in France in the middle of the century.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'an intellectual movement that exploded on the scene in mid-twentieth-century France'"
+    },
+    {
+     "claim": "Sartre's Being and Nothingness appeared in 1943.",
+     "verdict": "supported",
+     "evidence": "SEP Sartre intro: 'Being and Nothingness (1943)'"
+    },
+    {
+     "claim": "1943 was the year the French thinker Gabriel Marcel coined the word 'existentialism'.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'The word, first introduced by Marcel in 1943'; 'compatriots such as Albert Camus, Gabriel Marcel' (French)"
+    },
+    {
+     "claim": "Backdrop: the Second World War.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'emerged against the backdrop of the Second World War, the Nazi death camps, and the atomic bombings of Hiroshima and Nagasaki'"
+    },
+    {
+     "claim": "Backdrop: the Nazi death camps.",
+     "verdict": "supported",
+     "evidence": "SEP intro: same line"
+    },
+    {
+     "claim": "Backdrop: the atomic bombings of Hiroshima and Nagasaki.",
+     "verdict": "supported",
+     "evidence": "SEP intro: same line"
+    }
+   ],
+   "fix": "'Husserl and Heidegger gave the movement its roots in phenomenology' (or 'Through Husserl and Heidegger, the movement took root in phenomenology')."
+  },
+  {
+   "id": "origins.p2",
+   "claims": [
+    {
+     "claim": "Who counts as an existentialist is disputed.",
+     "verdict": "supported",
+     "evidence": "IEP intro: 'there is a case to be made that the term ... does more harm than good'; IEP c: 'Is it possible, given Heidegger’s own repudiation of existentialism, still to characterise Heidegger’s philosophy as “existentialist”?'"
+    },
+    {
+     "claim": "The word names no single set of beliefs.",
+     "verdict": "supported",
+     "evidence": "SEP intro: 'there is no unifying doctrine'; IEP intro: 'a catch-all term'"
+    },
+    {
+     "claim": "Most thinkers grouped under it never used it, or rejected it.",
+     "verdict": "supported",
+     "evidence": "IEP intro: 'most of the philosophers conventionally grouped under this heading either never used, or actively disavowed, the term “existentialist”'"
+    },
+    {
+     "claim": "Only Sartre and Beauvoir openly claimed it.",
+     "verdict": "drift",
+     "evidence": "SEP intro: 'the major contributors ... of these, only Sartre and Beauvoir explicitly self-identified as “existentialists.”' The source limits this to the major contributors, and the same intro names 'the self-proclaimed “American existentialist,” Norman Mailer'. Dropping 'major' makes it false as stated."
+    },
+    {
+     "claim": "In 1947 Heidegger rejected any link between his thought and Sartre's existentialism.",
+     "verdict": "supported",
+     "evidence": "IEP c: 'a letter to Beaufret which in 1947 is published in a book form with the title “Letter on Humanism”. There he repudiates any possible connection of his philosophy with the existentialism of Sartre.'"
+    },
+    {
+     "claim": "Both the Stanford encyclopedia and the IEP still count Heidegger as a key figure.",
+     "verdict": "supported",
+     "evidence": "IEP c: 'Heidegger can be classified as an existentialist thinker despite all his differences from Sartre' (verbatim); IEP intro: 'six philosophers who are arguably its central figures'; SEP intro names Heidegger among those who laid the movement's 'conceptual groundwork'"
+    },
+    {
+     "claim": "Camus gave a 1945 interview titled, in English, 'No, I am not an existentialist'.",
+     "verdict": "supported",
+     "evidence": "IEP f: '“Non, je ne suis pas existentialist” is the title of a famous interview that he gave for the magazine Les Nouvelles Littéraires on the 15 of November, 1945'"
+    },
+    {
+     "claim": "The Stanford encyclopedia places The Myth of Sisyphus squarely in the existentialist tradition.",
+     "verdict": "supported",
+     "evidence": "SEP Camus 1: 'This essay belongs squarely in the philosophical tradition of existentialism but Camus denied being an existentialist' (verbatim)"
+    }
+   ],
+   "fix": "'Of the major figures, only Sartre and Beauvoir openly claimed it.'"
+  },
+  {
+   "id": "key-works.w0",
+   "claims": [
+    {
+     "claim": "Fear and Trembling (Kierkegaard) dates from 1843.",
+     "verdict": "supported",
+     "evidence": "SEP Kierkegaard 1: 'Fear and Trembling (1843)'"
+    },
+    {
+     "claim": "It retells the story of Abraham and Isaac.",
+     "verdict": "supported",
+     "evidence": "IEP a: 'Fear and Trembling retells the story of the attempted sacrifice of Isaac by his father Abraham'"
+    },
+    {
+     "claim": "It asks what faith can demand beyond ordinary morality.",
+     "verdict": "supported",
+     "evidence": "SEP 5.2: 'As a father, Abraham has a moral duty to love and protect his son, but when God demands that he break this commandment ... he is confronted with a personal truth that is higher than the universal'; IEP a: 'According to our moral beliefs, shouldn’t Abraham refuse to execute God’s vicious plan?'"
+    }
+   ]
+  },
+  {
+   "id": "key-works.w1",
+   "claims": [
+    {
+     "claim": "The Gay Science dates from 1882, expanded 1887.",
+     "verdict": "supported",
+     "evidence": "SEP Nietzsche 1: 'The Gay Science (1882, second expanded edition 1887)' (verbatim)"
+    },
+    {
+     "claim": "It was also published in English as The Joyful Wisdom.",
+     "verdict": "supported",
+     "evidence": "Gutenberg front matter: 'THE JOYFUL WISDOM (\"LA GAYA SCIENZA\") TRANSLATED BY THOMAS COMMON' (verbatim; identity with The Gay Science via the 'La Gaya Scienza' subtitle)"
+    },
+    {
+     "claim": "It poses a famous test: would you live your life again, forever?",
+     "verdict": "supported",
+     "evidence": "SEP 5.3: 'In The Gay Science, Nietzsche captures this attitude with a famous thought experiment called the “doctrine of eternal recurrence.” Here, he asks if we have the audacity to live the same life we are living now over and over for eternity.'"
+    }
+   ]
+  }
+ ],
+ "totals": {
+  "supported": 118,
+  "drift": 6,
+  "unsupported": 0,
+  "wrong": 0
+ }
+}

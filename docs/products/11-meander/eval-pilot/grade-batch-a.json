@@ -1,0 +1,156 @@
+[
+  {
+    "item": "tagline",
+    "claims": [
+      {"claim": "Existentialism starts from the single, concrete person (first-person standpoint).", "verdict": "supported", "evidence": "sep-existentialism intro: 'begins in medias res, amidst our own situated, first-person experience'"},
+      {"claim": "That person must choose how to live / make their own life through choices.", "verdict": "supported", "evidence": "sep-existentialism 4. Freedom: 'up to the individual to make ... own identity through choices and actions'; 4.1 'capacity to choose and create our own lives'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "overview.0",
+    "claims": [
+      {"claim": "Existentialism is a loose family of ideas, not a tidy school.", "verdict": "supported", "evidence": "sep-existentialism intro: 'certainly not a reference to a coherent system or philosophical school'; 'set of overlapping ideas'"},
+      {"claim": "It starts from concrete, first-person life rather than a detached 'view from nowhere'.", "verdict": "supported", "evidence": "sep-existentialism 2. Engagement vs. Detachment: rejects 'view from nowhere'; 'careful analysis of first-person experience'"},
+      {"claim": "Its core claim is that no fixed nature is handed to us, so we make ourselves through choices and are responsible for who we become.", "verdict": "drift", "evidence": "sep-existentialism intro: 'there is no unifying doctrine ... a set of overlapping ideas'; Existence Precedes Essence and Freedom are two of five", "note": "The content of the idea is supported by the intro (essence 'not given in advance', 'free and responsible for who we are'), but calling it 'its core claim' right after 'not a tidy school' overstates it. The source names it one of several overlapping ideas and notes that some existentialists reject radical freedom."},
+      {"claim": "Kierkegaard and Nietzsche laid the groundwork in the nineteenth century.", "verdict": "supported", "evidence": "sep-existentialism intro: 'groundwork ... laid much earlier in the nineteenth century by pioneers like Søren Kierkegaard and Friedrich Nietzsche'"},
+      {"claim": "Sartre and Beauvoir made it famous in mid-twentieth-century France.", "verdict": "supported", "evidence": "sep-existentialism intro: 'exploded on the scene in mid-twentieth-century France'; 'most popular voices ... Sartre and Simone de Beauvoir'"}
+    ],
+    "quote_ok": true,
+    "item_verdict": "fail",
+    "fix_hint": "Replace 'Its core claim:' with 'A central idea:' or 'One idea runs through most of it:'."
+  },
+  {
+    "item": "overview.1",
+    "claims": [
+      {"claim": "It takes on how to live when no rulebook (moral absolutes) tells us.", "verdict": "supported", "evidence": "sep-existentialism intro, Nihilism: 'loss of a transcendent moral framework'; Ethics: 'reject the idea of moral absolutes'"},
+      {"claim": "It takes on how to stop drifting with the crowd.", "verdict": "supported", "evidence": "sep-existentialism intro, Authenticity: 'critical of our ingrained tendency to conform to the norms'"},
+      {"claim": "It takes on how to face anxiety, death and meaninglessness, questions we all meet.", "verdict": "supported", "evidence": "sep-existentialism intro: 'confront the human condition and the anxiety-provoking givens of death, freedom, and meaninglessness'"},
+      {"claim": "Its ideas spread into novels, films, theology, psychotherapy and freedom politics.", "verdict": "supported", "evidence": "sep-existentialism intro: films (Bergman...), theology (Barth, Tillich, Buber), psychotherapy, 'radical and emancipatory politics'", "note": "'freedom politics' is a loose rendering of 'radical and emancipatory politics' (King, Malcolm X); acceptable but vague."},
+      {"claim": "It is not a counsel of despair.", "verdict": "drift", "evidence": "sep-existentialism intro, Ethics: 'should not be dismissed for promoting moral nihilism'", "note": "The source rebuts moral nihilism, not despair. These are different charges; the cited text says nothing about despair."},
+      {"claim": "A good life is possible, one where we own our choices and help others be free.", "verdict": "supported", "evidence": "sep-existentialism intro, Ethics: 'a moral or praiseworthy life is possible ... help others realize their freedom'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "fail",
+    "fix_hint": "Say 'And it is not moral nihilism: a good life is possible...' to match the source."
+  },
+  {
+    "item": "questions.0",
+    "claims": [
+      {"claim": "Existentialism poses the question of how to live when nothing gives existence a purpose.", "verdict": "supported", "evidence": "sep-existentialism 1: 'no overarching reason, order, or purpose to our existence'; sep-camus 1: 'key questions about how to live'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "questions.1",
+    "claims": [
+      {"claim": "Existentialism asks whether we live our own lives or just do what everyone else does.", "verdict": "supported", "evidence": "sep-existentialism 5. Authenticity: 'Rather than living our own lives, we tend to get pulled along by the crowd'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "questions.2",
+    "claims": [
+      {"claim": "Existentialism asks how to respond to the anxiety that comes with freedom of choice.", "verdict": "supported", "evidence": "sep-existentialism 4.1: anxiety reveals 'a dizzying array of options'; 5.1: 'asks us to turn toward and face it'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "themes.0.p0",
+    "claims": [
+      {"claim": "Sartre called existence precedes essence 'the first principle of existentialism'.", "verdict": "supported", "evidence": "sep-existentialism 3: 'This is, according to Sartre, \"the first principle of existentialism\"'"},
+      {"claim": "Sartre adapted the idea from Heidegger.", "verdict": "supported", "evidence": "sep-existentialism 3: introduced in Being and Time; 'Sartre will later repackage this line'"},
+      {"claim": "No built-in human nature decides who we are.", "verdict": "supported", "evidence": "sep-existentialism 3: 'no pre-given or essential nature that determines us'"},
+      {"claim": "A person first 'turns up' and only afterwards defines himself, through choices made as life unfolds.", "verdict": "supported", "evidence": "sep-existentialism 3: 'man exists, turns up, appears on the scene, and, only afterwards, defines himself'"},
+      {"claim": "Hard facts (body, desires, historical setting) limit us; existentialists call this 'facticity'.", "verdict": "supported", "evidence": "sep-existentialism 3: 'givenness (or \"facticity\") ... embodiment ... appetites and desires ... socio-historical context'"},
+      {"claim": "We can question those facts, give them meaning and decide what to do with them; that power is 'transcendence'.", "verdict": "supported", "evidence": "sep-existentialism 3: 'calling it into question, interpreting it ... making decisions'; 'facticity and transcendence'"}
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "themes.1.p0",
+    "claims": [
+      {"claim": "If nothing fixed decides who we are, we are free and responsible for what we make of ourselves.", "verdict": "supported", "evidence": "sep-existentialism 4: 'no pre-given essence ... up to the individual to make ... own identity'; 'held responsible'"},
+      {"claim": "Sartre's coward is not made so by childhood or genes; he 'makes himself a coward' by his decisions.", "verdict": "supported", "evidence": "sep-existentialism 4: 'not ... because of an unstable childhood or a particular genetic makeup'"},
+      {"claim": "Seeing this brings anxiety, because no divine will or moral absolute can choose for us or excuse us.", "verdict": "supported", "evidence": "sep-existentialism 4: 'accompanied by anxiety ... no moral absolute, divine will ... can provide guidance or justify'"},
+      {"claim": "There are 'no excuses behind us nor justifications before us'.", "verdict": "supported", "evidence": "sep-existentialism 4: Sartre 1946 quote, verbatim"},
+      {"claim": "Kierkegaard called anxiety 'the dizziness of freedom'.", "verdict": "supported", "evidence": "sep-kierkegaard 2: 'anxiety is the dizziness of freedom' (CA 61)"},
+      {"claim": "Existentialists ask us to face anxiety, as a mood that can shake us awake.", "verdict": "supported", "evidence": "sep-existentialism 5.1: 'power to shake us out of our complacency'; 'turn toward and face it'"}
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "themes.2.p0",
+    "claims": [
+      {"claim": "Existentialists criticise living by borrowed norms.", "verdict": "supported", "evidence": "sep-existentialism 5: 'critique of mass society and our tendency to conform to the levelled-down norms'"},
+      {"claim": "Kierkegaard wrote of 'the public', Nietzsche of 'the herd', Heidegger of 'the They'.", "verdict": "supported", "evidence": "sep-existentialism 1: '\"the public\" (Kierkegaard), \"the herd\" (Nietzsche), and \"the They\" (Heidegger)'"},
+      {"claim": "We enjoy, read and judge things as 'they' do.", "verdict": "supported", "evidence": "sep-existentialism 5: Heidegger, 'We take pleasure ... We read, see, and judge ... as they see and judge'", "note": "This is Heidegger's description; placed after the three-thinker list it reads as shared, which is acceptable."},
+      {"claim": "Conforming is comforting, because doing what everyone does feels like living well.", "verdict": "supported", "evidence": "sep-existentialism 5: 'can be comforting, creating the illusion that we are living well'"},
+      {"claim": "Conformity hides our freedom from us.", "verdict": "supported", "evidence": "sep-existentialism 5: 'unwilling or unable to face up to the freedom'; 'covers over the anxiety of own freedom'"},
+      {"claim": "Sartre and Beauvoir call this self-deception 'bad faith'.", "verdict": "supported", "evidence": "sep-existentialism 5: 'Sartre and Beauvoir refer to inauthenticity in terms of \"bad faith\"'"},
+      {"claim": "I am in bad faith when I treat myself as a fixed thing ('I am what I am').", "verdict": "supported", "evidence": "sep-existentialism 5.5: 'over-identify with my facticity, as if I were ... a thing ... \"I am what I am\"'"},
+      {"claim": "I am also in bad faith when I pretend my situation does not limit my choices.", "verdict": "supported", "evidence": "sep-existentialism 5: 'over-identify with freedom and deny ... my choices are limited and constrained'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "themes.2.p1",
+    "claims": [
+      {"claim": "For Kierkegaard authenticity is a passionate commitment that pulls a scattered life together.", "verdict": "supported", "evidence": "sep-existentialism 5.2: 'passionate ... commitment that binds together ... fragmented ... moments'"},
+      {"claim": "For Nietzsche it is saying yes to one's whole life, even to living it again forever.", "verdict": "supported", "evidence": "sep-existentialism 5.3: 'a \"yes-sayer\" who affirms every aspect of his life'; eternal recurrence"},
+      {"claim": "For Heidegger it is 'resoluteness', a focused grip on one's possibilities that stays open to letting them go.", "verdict": "supported", "evidence": "sep-existentialism 5.4: 'cohesion and focus'; 'willing to let go or give up on them'"},
+      {"claim": "For Sartre and Beauvoir it is clear-eyed acceptance of our unstable situation and responsibility for what we do.", "verdict": "supported", "evidence": "sep-existentialism 5.5: 'clear-eyed awareness and acceptance of the instability ... take responsibility'"}
+    ],
+    "quote_ok": null,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "themes.3.p0",
+    "claims": [
+      {"claim": "As nineteenth-century Europe grew secular and scientific, the religious frame that gave life moral direction began to collapse.", "verdict": "supported", "evidence": "sep-existentialism 1: 'increasingly secular and scientific worldview ... traditional religious framework ... beginning to collapse'", "note": "Section 1 does not say 'Europe' (the uncited intro does). Trivial."},
+      {"claim": "Nietzsche diagnosed the result, nihilism, with his image of the death of God.", "verdict": "supported", "evidence": "sep-existentialism 1: 'Nietzsche was the most influential ... in diagnosing ... With the death of God'"},
+      {"claim": "Camus named the clash between our 'wild longing for clarity' and 'the unreasonable silence of the world' the absurd.", "verdict": "supported", "evidence": "sep-camus 3.3: 'divorce between human consciousness, with its \"wild longing for clarity\" and the \"unreasonable silence\"'"},
+      {"claim": "This need not end in despair; for Camus the absurd calls for action, not suicide.", "verdict": "supported", "evidence": "iep-existentialism f: 'does not lead to nihilism ... but ... to action and participation'; iep-camus c: 'Camus rejects suicide'"},
+      {"claim": "Beauvoir held that existence is not absurd but ambiguous: its meaning is never fixed.", "verdict": "supported", "evidence": "sep-existentialism 5.5: 'to say that it is ambiguous is to assert that its meaning is never fixed'"},
+      {"claim": "So we keep making meaning.", "verdict": "supported", "evidence": "sep-existentialism 5.5: 'My projects have meaning and value because I chose these projects'"}
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "themes.4.p0",
+    "claims": [
+      {"claim": "Sartre argued that we see ourselves through 'the look' of others, whose gaze can turn us into objects.", "verdict": "supported", "evidence": "sep-existentialism 6.1: 'through \"the look\" ... power to strip away my freedom and turn me into an object'"},
+      {"claim": "Relationships become a power struggle, summed up in No Exit: 'Hell is—other people.'", "verdict": "supported", "evidence": "sep-existentialism 6.1: 'a dyadic power struggle ... Huis Clos (No Exit) ... \"Hell is—other people\"'"},
+      {"claim": "Beauvoir's 'authentic love' nurtures the other person's freedom instead of possessing them.", "verdict": "supported", "evidence": "sep-existentialism 6.1: 'acknowledge and nurture the other's freedom ... resisting ... to be manipulated and possessed'"},
+      {"claim": "She and Sartre concluded that wanting my own freedom commits me to wanting it for others.", "verdict": "supported", "evidence": "sep-existentialism 6: Sartre, 'I am obliged to want others to have freedom at the same time'"},
+      {"claim": "In Beauvoir's words, to will oneself free is also to will others free.", "verdict": "supported", "evidence": "iep-existentialism e: '\"To will oneself free is also to will others free\" (Beauvoir 1976:73)'"},
+      {"claim": "After the war this (the freedom-for-others idea) turned them towards fighting oppression.", "verdict": "drift", "evidence": "sep-existentialism 6.3: 'The Nazi occupation ..., his own experience as a prisoner of war, and the attacks ... from ... Marxist critics, compelled Sartre to shift'", "note": "The source gives other causes for the postwar turn (occupation, POW experience, Marxist critics) and only says existentialists then 'made the connection' to others' freedom. Saying 'this turned them' makes the idea the cause."}
+    ],
+    "quote_ok": true,
+    "item_verdict": "fail",
+    "fix_hint": "E.g. 'After the war, shaped by the occupation, they carried this into a fight against oppression.' (Don't make the idea the cause.)"
+  },
+  {
+    "item": "themes.5.p0",
+    "claims": [
+      {"claim": "Existentialism is not only atheist.", "verdict": "supported", "evidence": "sep-existentialism intro: 'one finds secular and religious existentialists'"},
+      {"claim": "Kierkegaard was a Christian.", "verdict": "supported", "evidence": "sep-existentialism 5.2: 'As a religious existentialist ... required to ... become a Christian'"},
+      {"claim": "Kierkegaard prized 'a truth which is true for me', lived and felt rather than proved.", "verdict": "supported", "evidence": "sep-existentialism 2.1: 'a truth which is true for me'; 'felt rather than known'; 'cannot be reasoned about'"},
+      {"claim": "In Fear and Trembling, Abraham is told by God to sacrifice his son Isaac.", "verdict": "supported", "evidence": "sep-existentialism 5.2: 'when God demands that he ... kill Isaac'"},
+      {"claim": "Abraham becomes a 'knight of faith' by leaping into a paradox reason cannot explain.", "verdict": "supported", "evidence": "sep-existentialism 5.2: 'becomes a \"knight of faith\" by \"leaping\" ... into a paradox'; 'fundamentally irrational'"},
+      {"claim": "He is alone with a choice no one else understands.", "verdict": "supported", "evidence": "sep-existentialism 5.2: 'the leap individualizes us'; 'cannot make himself understood to anyone'"},
+      {"claim": "The Jewish existentialist Martin Buber stressed meeting another person as a 'You', not an 'It'.", "verdict": "supported", "evidence": "sep-existentialism 6.2: 'The Jewish existentialist Martin Buber ... not as an \"it\" but as a \"you\"'"},
+      {"claim": "Nietzsche and Sartre saw God as irrelevant or harmful to our deepest choices.", "verdict": "supported", "evidence": "iep-existentialism b: 'transcendent deity is not relevant to (or is positively detrimental to) such decisions (... Nietzsche and Sartre)'"}
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  }
+]

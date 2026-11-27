@@ -1,0 +1,384 @@
+{
+  "grader": "data-evals, round 2",
+  "graded": "docs/products/11-meander/content/pilot/existentialism.json apply.practices[0..2].idea/practice",
+  "items": [
+    {
+      "id": "practices[0].idea",
+      "quote_check": "1/1 quote verbatim in sep-existentialism.txt §4",
+      "claims": [
+        {
+          "claim": "For existentialists, no moral absolute, divine will or natural law can guide or justify our choice",
+          "verdict": "supported",
+          "evidence": "SEP existentialism §4 Freedom: \"There is no moral absolute, divine will, or natural law that can provide guidance or justify our actions.\""
+        },
+        {
+          "claim": "We alone are responsible",
+          "verdict": "supported",
+          "evidence": "SEP existentialism §4 Freedom: \"we realize that we alone are responsible for our choices and the projects we undertake\""
+        },
+        {
+          "claim": "Realising that often brings anxiety",
+          "verdict": "supported",
+          "evidence": "SEP existentialism §4 Freedom: \"the awareness is often accompanied by anxiety because we realize that we alone are responsible\" (source ties anxiety to awareness of freedom; equivalent)"
+        },
+        {
+          "claim": "Sartre: 'there are no excuses behind us nor justifications before us'",
+          "verdict": "supported",
+          "evidence": "SEP existentialism §4 Freedom: \"condemned to be free because 'there are no excuses behind us nor justifications before us' (Sartre 1946 [2001, 296])\""
+        }
+      ]
+    },
+    {
+      "id": "practices[0].practice",
+      "quote_check": "2/2 quotes verbatim in primary-sartre-existentialism-humanism.txt",
+      "attribution": {
+        "verdict": "bridged-labelled",
+        "evidence": "Exercise introduced with \"One way to use his point:\"; grounded in \"you have selected that priest; and at bottom you already knew, more or less, what he would advise.\" Sartre proposes no exercise; the text does not claim he does."
+      },
+      "claims": [
+        {
+          "claim": "Sartre's own example is a student",
+          "verdict": "supported",
+          "evidence": "\"the case of a pupil of mine, who sought me out\""
+        },
+        {
+          "claim": "Torn between joining the Free French Forces in England and staying with his mother",
+          "verdict": "supported",
+          "evidence": "\"the choice between going to England to join the Free French Forces or of staying near his mother and helping her to live\""
+        },
+        {
+          "claim": "His mother lived only for him",
+          "verdict": "supported",
+          "evidence": "\"He fully realised that this woman lived only for him\""
+        },
+        {
+          "claim": "The student came to Sartre for advice",
+          "verdict": "supported",
+          "evidence": "\"the youth did, at least, go to a professor to ask for advice\"; \"in coming to me\""
+        },
+        {
+          "claim": "Choosing an adviser, Sartre said, is already a choice",
+          "verdict": "supported",
+          "evidence": "\"to choose an adviser is nevertheless to commit oneself by that choice\""
+        },
+        {
+          "claim": "You more or less know what they will say",
+          "verdict": "supported",
+          "evidence": "\"at bottom you already knew, more or less, what he would advise\"; \"he knew what advice I should give him\""
+        },
+        {
+          "claim": "His only reply was 'You are free, therefore choose, that is to say, invent.'",
+          "verdict": "supported",
+          "evidence": "\"I had but one reply to make. You are free, therefore choose, that is to say, invent.\""
+        },
+        {
+          "claim": "Application: before a hard choice, ask why you picked this adviser and what you expect them to say",
+          "verdict": "supported",
+          "evidence": "Labelled bridge; consistent with \"you have selected that priest ... he would have decided beforehand the kind of advice he was to receive\""
+        }
+      ]
+    },
+    {
+      "id": "practices[1].idea",
+      "quote_check": "4/4 quotes verbatim (sep-existentialism.txt §5.5; research-vos-2015 Results, Conclusion x2)",
+      "claims": [
+        {
+          "claim": "For Sartre and Beauvoir, no fixed meaning is handed to us",
+          "verdict": "supported",
+          "evidence": "SEP §5.5: \"My projects have meaning and value because I chose these projects, but the meaning is contingent; it is never enduring or stable.\""
+        },
+        {
+          "claim": "Beauvoir said existence is not absurd but ambiguous",
+          "verdict": "supported",
+          "evidence": "SEP §5.5: \"The notion of ambiguity must not be confused with that of absurdity ... to say that it is ambiguous is to assert that its meaning is never fixed\""
+        },
+        {
+          "claim": "'its meaning is never fixed'",
+          "verdict": "supported",
+          "evidence": "SEP §5.5, verbatim"
+        },
+        {
+          "claim": "A 2015 meta-analysis found large effects of meaning therapies on meaning in life",
+          "verdict": "supported",
+          "evidence": "Vos 2015 Results: \"Meaning therapies (n = 6 studies) showed large effects on positive meaning in life immediately postintervention (d = 0.65)\""
+        },
+        {
+          "claim": "With particular support for structured ones [meaning therapies] with physically ill patients",
+          "verdict": "drift",
+          "evidence": "Vos 2015 Conclusion: \"We found particular support for structured interventions incorporating psychoeducation, exercises, and discussing meaning in life directly and positively with physically ill patients.\" The source says 'structured interventions' across existential therapies, not 'structured meaning therapies'; 'ones' narrows the referent to meaning therapies and drops what made them structured. Minor."
+        },
+        {
+          "claim": "The studies were few and low in quality",
+          "verdict": "supported",
+          "evidence": "Vos 2015 Conclusion: \"Despite the small number and low quality of studies\""
+        },
+        {
+          "claim": "That is evidence for therapy, not for reflecting alone",
+          "verdict": "supported",
+          "evidence": "Vos 2015 Results/Conclusion describe RCTs of therapies and 'structured interventions'; nothing on self-guided reflection. Correct caveat."
+        }
+      ]
+    },
+    {
+      "id": "practices[1].practice",
+      "quote_check": "6/6 quotes verbatim (therapy-vfi-vienna-logotherapy.txt x3, therapy-vfil-about-logotherapy.txt x3)",
+      "attribution": {
+        "verdict": "bridged-labelled",
+        "evidence": "\"In therapy, logotherapists often use Socratic questions ...\" then \"One way to borrow that on your own:\" clearly separates the clinical method from the self-exercise. Sources propose no self-exercise."
+      },
+      "claims": [
+        {
+          "claim": "Frankl was a psychiatrist",
+          "verdict": "supported",
+          "evidence": "VFI 'What is Logotherapy': \"the psychiatrist and neurologist Viktor Emil Frankl\""
+        },
+        {
+          "claim": "Frankl held that we discover meaning rather than make it",
+          "verdict": "supported",
+          "evidence": "VFIL 'Meaning': \"we can discover meaning but we can't make meaning\""
+        },
+        {
+          "claim": "We should not ask what life means, but recognise 'that it is he who is asked'",
+          "verdict": "supported",
+          "evidence": "VFIL 'Life has ultimate meaning': \"man should not ask what the meaning of his life is, but rather must recognize that it is he who is asked\""
+        },
+        {
+          "claim": "The Viktor Frankl Institute of Logotherapy names three avenues to meaning",
+          "verdict": "supported",
+          "evidence": "VFIL 'Three avenues': \"He called these the creative, experiential and attitudinal avenues to meaning-discovery.\" (institute reports Frankl's scheme)"
+        },
+        {
+          "claim": "What we give, through work or deeds",
+          "verdict": "supported",
+          "evidence": "\"Creative actions. Giving of ourselves and contributing to life through meaningful work, deeds, or achieving meaningful goals.\""
+        },
+        {
+          "claim": "What we receive, through experiences or relationships",
+          "verdict": "supported",
+          "evidence": "\"Experiences. Receiving from life through meaningful experiences or relationships.\""
+        },
+        {
+          "claim": "The stance we take, especially to suffering we cannot avoid",
+          "verdict": "supported",
+          "evidence": "\"Attitudes. Adopting the right attitude to situations, especially those of unavoidable suffering.\""
+        },
+        {
+          "claim": "In therapy, logotherapists often use Socratic questions",
+          "verdict": "supported",
+          "evidence": "VFI 'Socratic dialogue': \"Socratic dialogue is a conversational method frequently used by logotherapists. Specific questions are aimed to raise into consciousness ...\""
+        },
+        {
+          "claim": "They guide clients towards meanings they find themselves",
+          "verdict": "supported",
+          "evidence": "VFI 'Will to Meaning': \"they are not offered specific meanings. Rather, they are guided and assisted in the realization of those meaning possibilities they have detected themselves.\""
+        },
+        {
+          "claim": "Application: this week ask what you gave, received, and what stance you took to something you could not change",
+          "verdict": "supported",
+          "evidence": "Labelled bridge mapping 1:1 onto the three avenues in VFIL"
+        }
+      ]
+    },
+    {
+      "id": "practices[2].idea",
+      "quote_check": "2/2 quotes verbatim in sep-existentialism.txt §5.3",
+      "claims": [
+        {
+          "claim": "For Nietzsche, the key to living with style is radical acceptance",
+          "verdict": "supported",
+          "evidence": "SEP §5.3: \"The key to living with style is, for Nietzsche, a radical acceptance of one's existence and the world as it is\""
+        },
+        {
+          "claim": "Saying yes to your whole life, its strengths and weaknesses, its blessings and curses",
+          "verdict": "supported",
+          "evidence": "SEP §5.3: \"embracing all our strengths and weaknesses and all the blessed and cursed events\"; \"a 'yes-sayer' who affirms every aspect of his life\""
+        },
+        {
+          "claim": "Out of amor fati, a love of one's fate",
+          "verdict": "supported",
+          "evidence": "SEP §5.3: \"overflowing with amor fati (love of one's fate), the Overman welcomes this possibility\" (source attaches amor fati to the Overman's welcoming of recurrence, which is the acceptance; acceptable)"
+        },
+        {
+          "claim": "He thought only 'the highest types' could manage it [radical acceptance]",
+          "verdict": "drift",
+          "evidence": "SEP §5.3: \"not everyone has the inborn power to rebel against tradition and creatively express their unique style of living. For Nietzsche, only 'the highest types' can manifest this kind of freedom and capacity for self-overcoming.\" The source's referent is freedom/self-overcoming/creative style; the text re-points 'it' to radical acceptance specifically. Close but sharpened."
+        }
+      ]
+    },
+    {
+      "id": "practices[2].practice",
+      "quote_check": "2/2 quotes verbatim (primary-nietzsche-joyful-wisdom.txt §341; sep-nietzsche.txt §6.3)",
+      "attribution": {
+        "verdict": "bridged-labelled (weak)",
+        "evidence": "The demon thought experiment is Nietzsche's own, addressed to the reader (\"What if a demon crept after thee ...\") so posing it is 'proposed'. The single-day version is the app's adaptation, signalled only by \"A smaller start:\" with no 'one way to use' framing as in the other two cards; together with the card title 'Would you live this day again?' and from: 'The Gay Science §341', a reader could take the day version as Nietzsche's. Not misattributed, but the weakest label of the three."
+      },
+      "claims": [
+        {
+          "claim": "A demon tells you you must live this life again, 'innumerable times', with nothing new in it",
+          "verdict": "supported",
+          "evidence": "GS 341: \"thou must live it once more, and also innumerable times; and there will be nothing new in it\""
+        },
+        {
+          "claim": "Would you curse the demon, or answer that you never heard anything more divine?",
+          "verdict": "supported",
+          "evidence": "GS 341: \"curse the demon that so spake? Or hast thou once experienced a tremendous moment in which thou wouldst answer him: 'Thou art a God, and never did I hear aught more divine!'\" (drops the 'tremendous moment' condition; acceptable simplification)"
+        },
+        {
+          "claim": "If the thought took hold of you it would transform you, or perhaps crush you",
+          "verdict": "supported",
+          "evidence": "GS 341: \"If that thought acquired power over thee, as thou art, it would transform thee, and perhaps crush thee\""
+        },
+        {
+          "claim": "The question 'Dost thou want this once more?' would lie as the heaviest burden on everything you do",
+          "verdict": "drift",
+          "evidence": "GS 341: \"the question with regard to all and everything: 'Dost thou want this once more, and also for innumerable times?' would lie as the heaviest burden upon thy activity!\" The in-text quotation is truncated and re-punctuated without an ellipsis, dropping 'and also for innumerable times', the eternity element; paraphrase of the rest is fine."
+        },
+        {
+          "claim": "One influential reading treats it as a test of whether your life has been good",
+          "verdict": "supported",
+          "evidence": "SEP Nietzsche §6.3: \"an influential line of readings has argued that the thought ... was ... a practical thought experiment designed to test whether one's life has been good\" (the text omits the Loeb cosmological pushback; acceptable given 'one reading')"
+        },
+        {
+          "claim": "A smaller start: try it on a single day",
+          "verdict": "drift",
+          "evidence": "Not in either cited section. SEP §6.3 stresses the opposite scope: \"if the question is about the value of our life overall\", \"direct an evaluative judgment onto our life as a whole\", and sameness \"in every detail\" to block elisions. Presenting a one-day version as a 'smaller start' on the same test reframes it; acceptable only as a clearly labelled adaptation."
+        }
+      ]
+    }
+  ],
+  "evidence_risk": "practices[1].idea: the Vos 2015 meta-analysis is explicitly caveated ('evidence for therapy, not for reflecting alone'), so it is not presented as support for the self-exercise. Residual risk: the card's from-line is 'Viktor Frankl, logotherapy' but the abstract never names logotherapy (it pools 'meaning therapies', n=6); a reader may take the effect sizes as evidence for logotherapy specifically. No other evidence claims in the graded items.",
+  "quotes": "17/17 `quote` fields found verbatim, each exactly once, and every cited section label exists in its source file.",
+  "totals": {
+    "supported": 35,
+    "drift": 4,
+    "unsupported": 0,
+    "wrong": 0,
+    "misattributed": 0
+  },
+  "round3": {
+    "grader": "data-evals, round 3 (re-grade of edited items only)",
+    "items": [
+      {
+        "id": "practices[1].idea",
+        "quote_check": "4/4 quotes verbatim",
+        "claims": [
+          {
+            "claim": "For Sartre and Beauvoir, no fixed meaning is handed to us",
+            "verdict": "supported",
+            "evidence": "SEP §5.5: \"My projects have meaning and value because I chose these projects, but the meaning is contingent; it is never enduring or stable.\""
+          },
+          {
+            "claim": "Beauvoir said existence is not absurd but ambiguous",
+            "verdict": "supported",
+            "evidence": "SEP §5.5: \"The notion of ambiguity must not be confused with that of absurdity ... to say that it is ambiguous is to assert that its meaning is never fixed\""
+          },
+          {
+            "claim": "'its meaning is never fixed'",
+            "verdict": "supported",
+            "evidence": "SEP §5.5, verbatim"
+          },
+          {
+            "claim": "A 2015 meta-analysis of existential therapies found large effects of meaning therapies on meaning in life",
+            "verdict": "supported",
+            "evidence": "Vos 2015 Results: \"Meaning therapies (n = 6 studies) showed large effects on positive meaning in life immediately postintervention (d = 0.65)\"; Conclusion: \"some existential therapies appear beneficial\" (scope 'of existential therapies' also in the title/Objective)"
+          },
+          {
+            "claim": "With particular support for structured programmes that discussed meaning directly with physically ill patients",
+            "verdict": "supported",
+            "evidence": "Vos 2015 Conclusion: \"We found particular support for structured interventions incorporating psychoeducation, exercises, and discussing meaning in life directly and positively with physically ill patients.\" Round-2 drift fixed: no longer narrowed to meaning therapies. It omits 'psychoeducation, exercises', which is acceptable."
+          },
+          {
+            "claim": "The studies were few and low in quality",
+            "verdict": "supported",
+            "evidence": "Vos 2015 Conclusion: \"Despite the small number and low quality of studies\""
+          },
+          {
+            "claim": "That is evidence for therapy, not for reflecting alone",
+            "verdict": "supported",
+            "evidence": "Vos 2015 Results/Conclusion describe RCTs of therapies and 'structured interventions'; nothing on self-guided reflection. Correct caveat."
+          }
+        ]
+      },
+      {
+        "id": "practices[2].idea",
+        "quote_check": "2/2 quotes verbatim",
+        "claims": [
+          {
+            "claim": "For Nietzsche, the key to living with style is radical acceptance",
+            "verdict": "supported",
+            "evidence": "SEP §5.3: \"The key to living with style is, for Nietzsche, a radical acceptance of one's existence and the world as it is\""
+          },
+          {
+            "claim": "Saying yes to your whole life, its strengths and weaknesses, its blessings and curses",
+            "verdict": "supported",
+            "evidence": "SEP §5.3: \"embracing all our strengths and weaknesses and all the blessed and cursed events\"; \"a 'yes-sayer' who affirms every aspect of his life\""
+          },
+          {
+            "claim": "Out of amor fati, a love of one's fate",
+            "verdict": "supported",
+            "evidence": "SEP §5.3: \"overflowing with amor fati (love of one's fate), the Overman welcomes this possibility\" (source attaches amor fati to the Overman's welcoming of recurrence, which is the acceptance; acceptable)"
+          },
+          {
+            "claim": "He also thought only 'the highest types' have that kind of freedom",
+            "verdict": "supported",
+            "evidence": "SEP existentialism §5.3: \"For Nietzsche, only 'the highest types' can manifest this kind of freedom and capacity for self-overcoming.\" Round-2 drift fixed: the referent is now freedom, as in the source. Minor style note: the preceding sentence names no freedom, so 'that kind of freedom' has a loose antecedent; not a fidelity issue."
+          }
+        ]
+      },
+      {
+        "id": "practices[2].practice",
+        "quote_check": "2/2 quotes verbatim; the in-text quotation 'Dost thou want this once more, and also for innumerable times?' is now verbatim from GS 341",
+        "title": "Would you live it all again?",
+        "attribution": {
+          "verdict": "bridged-labelled",
+          "evidence": "The demon thought experiment is Nietzsche's own (GS 341, addressed to the reader). The day version is now explicitly marked \"one way in (our adaptation, not his)\", and the title 'Would you live it all again?' matches the whole-life scope. Round-2 'weak' qualifier removed."
+        },
+        "claims": [
+          {
+            "claim": "A demon tells you you must live this life again, 'innumerable times', with nothing new in it",
+            "verdict": "supported",
+            "evidence": "GS 341: \"thou must live it once more, and also innumerable times; and there will be nothing new in it\""
+          },
+          {
+            "claim": "Would you curse the demon, or answer that you never heard anything more divine?",
+            "verdict": "supported",
+            "evidence": "GS 341: \"curse the demon that so spake? Or hast thou once experienced a tremendous moment in which thou wouldst answer him: 'Thou art a God, and never did I hear aught more divine!'\" (drops the 'tremendous moment' condition; acceptable simplification)"
+          },
+          {
+            "claim": "If the thought took hold of you it would transform you, or perhaps crush you",
+            "verdict": "supported",
+            "evidence": "GS 341: \"If that thought acquired power over thee, as thou art, it would transform thee, and perhaps crush thee\""
+          },
+          {
+            "claim": "The question 'Dost thou want this once more, and also for innumerable times?' would lie as the heaviest burden on everything you do",
+            "verdict": "supported",
+            "evidence": "GS 341: \"the question with regard to all and everything: 'Dost thou want this once more, and also for innumerable times?' would lie as the heaviest burden upon thy activity!\" Quotation now verbatim."
+          },
+          {
+            "claim": "One influential reading treats it as a test of whether your life has been good",
+            "verdict": "supported",
+            "evidence": "SEP Nietzsche §6.3: \"an influential line of readings has argued that the thought ... was ... a practical thought experiment designed to test whether one's life has been good\" (the text omits the Loeb cosmological pushback; acceptable given 'one reading')"
+          },
+          {
+            "claim": "He meant your life as a whole, in every detail",
+            "verdict": "supported",
+            "evidence": "GS 341: \"This life, as thou livest it at present, and hast lived it ... every pain and every joy and every thought and every sigh, and all the unspeakably small and great in thy life must come to thee again\"; SEP Nietzsche §6.3: \"the value of our life overall\", \"the same in every detail\""
+          },
+          {
+            "claim": "One way in (our adaptation, not his): ask it of a single day first",
+            "verdict": "supported",
+            "evidence": "Explicitly labelled as an adaptation, set against the whole-life scope stated just before it. Consistent with SEP §6.3's emphasis on 'our life as a whole' because the text no longer presents the day as the same test."
+          }
+        ]
+      }
+    ],
+    "evidence_risk": "Unchanged from round 2: the meta-analysis caveat stays; the card's from-line is 'Viktor Frankl, logotherapy' but the abstract does not name logotherapy.",
+    "totals": {
+      "supported": 18,
+      "drift": 0,
+      "unsupported": 0,
+      "wrong": 0,
+      "misattributed": 0
+    }
+  }
+}

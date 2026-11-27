@@ -1,0 +1,740 @@
+{
+  "presocratics": {
+    "places": [
+      "Turkey (Ionia)",
+      "Italy"
+    ],
+    "span": "6th–5th century BCE",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/presocratics/",
+        "section": "2. The Milesians",
+        "quote": "Thales of Miletus (a city in Ionia, on the west coast of what is now Turkey)"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/presocratics/",
+        "section": "4. Parmenides of Elea",
+        "quote": "born ca. 510 BCE in the Greek colony of Elea in southern Italy"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/presocratics/",
+        "section": "intro",
+        "quote": "The Presocratics were 6th and 5th century BCE Greek thinkers"
+      }
+    ]
+  },
+  "socrates-plato": {
+    "places": [
+      "Athens"
+    ],
+    "span": "late 5th–mid 4th century BCE",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/socrates/",
+        "section": "intro",
+        "quote": "his trial and death at the hands of the Athenian democracy"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/aristotle/",
+        "section": "1. Aristotle’s Life",
+        "quote": "Aristotle was sent to Athens at about the age of seventeen to study in Plato’s Academy"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/socrates/",
+        "section": "intro",
+        "quote": "The philosopher Socrates remains, as he was in his lifetime (469–399 B.C.E.)"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/plato/",
+        "section": "intro",
+        "quote": "Plato (429?–347 B.C.E.) is, by any reckoning, one of the most dazzling writers"
+      }
+    ]
+  },
+  "aristotle": {
+    "places": [
+      "Athens"
+    ],
+    "span": "from 335 BCE",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/aristotle/",
+        "section": "1. Aristotle’s Life",
+        "quote": "In Athens, Aristotle set up his own school in a public exercise area dedicated to the god Apollo Lykeios"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/aristotle/",
+        "section": "1. Aristotle’s Life",
+        "quote": "before returning to Athens for the second and final time, in 335"
+      }
+    ]
+  },
+  "epicureanism": {
+    "places": [
+      "Athens",
+      "Italy"
+    ],
+    "span": "307/6 BCE–1st century BCE and later",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/epicurus/",
+        "section": "2. Life",
+        "quote": "returning again to Athens in 307/06, where he remained until his death in 270"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/philodemus/",
+        "section": "intro",
+        "quote": "moved to Italy, probably in the 70s BCE"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/epicurus/",
+        "section": "2. Life",
+        "quote": "In Athens, he purchased the property that became known as the “Garden”"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/epicurus/",
+        "section": "1. Sources",
+        "quote": "More or less contemporary with Philodemus is Lucretius (first century B.C.E.)"
+      }
+    ]
+  },
+  "stoicism": {
+    "places": [
+      "Athens",
+      "Rome"
+    ],
+    "span": "c. 300 BCE–2nd century CE",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/stoicism/",
+        "section": "1.1 The School and its History",
+        "quote": "The Stoic school was founded around 300 BCE by Zeno of Citium"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/stoicism/",
+        "section": "intro",
+        "quote": "where the first generation of Stoic philosophers congregated and lectured"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/stoicism/",
+        "section": "1.1 The School and its History",
+        "quote": "Stoicism became particularly fashionable in the Roman period."
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/stoicism/",
+        "section": "1.1 The School and its History",
+        "quote": "Epictetus, a former slave, was expelled from Rome by Domitian along with other philosophers in 93 CE"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/stoicism/",
+        "section": "1.1 The School and its History",
+        "quote": "Also active in the second century CE was the Stoic philosopher Hierocles"
+      }
+    ]
+  },
+  "skepticism": {
+    "places": [
+      "Greece (Athens, Elis)"
+    ],
+    "span": "3rd century BCE–2nd century CE",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
+        "section": "3.3 Later Academic Skepticism",
+        "quote": "In Athens, and as head of the Academy, he stays relatively close to Carneades."
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
+        "section": "intro",
+        "quote": "begin roughly in the third century BCE, and end with Sextus Empiricus in the second century CE"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/skepticism-ancient/",
+        "section": "4.1 Early Figures: Pyrrho and Timon",
+        "quote": "Pyrrho of Elis was also a powerful advocate of such a position."
+      }
+    ]
+  },
+  "neoplatonism": {
+    "places": [
+      "Egypt",
+      "Italy",
+      "Greece"
+    ],
+    "span": "mid-3rd–mid-7th century CE",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/neoplatonism/",
+        "section": "1. Historical Orientation: Antiquity",
+        "quote": "the Egyptian-born Plotinus (204/5–270) is commonly regarded as the founder of Neoplatonism"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/neoplatonism/",
+        "section": "1. Historical Orientation: Antiquity",
+        "quote": "Plotinus moved from Alexandria to Rome and founded a school of philosophy there"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/neoplatonism/",
+        "section": "1. Historical Orientation: Antiquity",
+        "quote": "The most vigorous group of Neoplatonists, living in Athens and still adhering to the old rituals"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/neoplatonism/",
+        "section": "intro",
+        "quote": "i.e., the middle of the 3rd to the middle of the 7th century"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/neoplatonism/",
+        "section": "1. Historical Orientation: Antiquity",
+        "quote": "went on in Alexandria and Constantinople until the end of the 6th century"
+      }
+    ]
+  },
+  "patristic": {
+    "places": [
+      "Egypt",
+      "Algeria (Roman Africa)",
+      "Italy"
+    ],
+    "span": "3rd–6th century CE",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/origen/",
+        "section": "1. Origen’s Life and Work",
+        "quote": "a native of Alexandria"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/augustine/",
+        "section": "1. Life",
+        "quote": "He was born in Thagaste in Roman Africa (modern Souk Ahras in Algeria)"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/augustine/",
+        "section": "1. Life",
+        "quote": "In 383 he moved to Milan, then the capital of the western half of the Empire"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/boethius/",
+        "section": "1. Life",
+        "quote": "keep up their traditions in Rome, while he wielded power in Ravenna"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/origen/",
+        "section": "intro",
+        "quote": "Origen (c. 185–c. 253) was a Christian exegete and theologian"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/boethius/",
+        "section": "intro",
+        "quote": "(born: circa 475–7 C.E., died: 526? C.E.)"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/augustine/",
+        "section": "1. Life",
+        "quote": "ordained a priest in the diocese of the maritime city of Hippo Regius (modern Annaba/Bône in Algeria)"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/origen/",
+        "section": "1. Origen’s Life and Work",
+        "quote": "when Origen left Alexandria in 216 to escape the ferocity of the Emperor Caracalla"
+      }
+    ]
+  },
+  "scholasticism": {
+    "places": [
+      "France",
+      "England",
+      "Spain"
+    ],
+    "span": "12th century–late 17th century",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
+        "section": "2.5 The Twelfth-Century Parisian Schools",
+        "quote": "Paris became the centre of philosophy in Latin Europe in the twelfth century"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
+        "section": "2.7 University Philosophy",
+        "quote": "By about 1200, the Paris schools had become a university, and at much the same time a university developed at Oxford."
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
+        "section": "5.2 When Did Medieval Philosophy End?",
+        "quote": "University philosophy continued in its established patterns"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
+        "section": "5.2 When Did Medieval Philosophy End?",
+        "quote": "until late in the seventeenth century"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/medieval-philosophy/",
+        "section": "5.2 When Did Medieval Philosophy End?",
+        "quote": "In the Iberian peninsula, the sixteenth and seventeenth centuries were the period in which philosophical theology, studied in the established university manner, flourished"
+      }
+    ]
+  },
+  "renaissance": {
+    "places": [
+      "Italy",
+      "France"
+    ],
+    "span": "mid-14th–early 17th century",
+    "sources": [
+      {
+        "url": "https://iep.utm.edu/renaissa/",
+        "section": "3. Platonism",
+        "quote": "Platonism was brought to Italy by the Byzantine scholar George Gemistos Plethon"
+      },
+      {
+        "url": "https://iep.utm.edu/renaissa/",
+        "section": "intro",
+        "quote": "the period that extends roughly from the middle of the fourteenth century to the beginning of the seventeen century"
+      },
+      {
+        "url": "https://iep.utm.edu/renaissance/",
+        "section": "c. Skepticism and Anti-Skepticism in Pedagogical Reforms",
+        "quote": "Academic skepticism had a major impact in mid-sixteenth century France through the pedagogical reforms proposed by Petrus Ramus"
+      }
+    ]
+  },
+  "rationalism": {
+    "places": [
+      "France",
+      "Netherlands",
+      "Germany"
+    ],
+    "span": "17th–18th centuries",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/descartes/",
+        "section": "1.2 First results, a new mission, and method",
+        "quote": "He moved to the Dutch Netherlands, returning to France only infrequently"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+        "section": "1.2 Empiricism",
+        "quote": "the Early Modern Period of the seventeenth and eighteenth centuries leading up to Kant"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/malebranche/",
+        "section": "1. Life and Works",
+        "quote": "Malebranche was born in Paris on August 6, 1638"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/malebranche/",
+        "section": "1. Life and Works",
+        "quote": "and died, also in Paris, on October 13, 1715"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/leibniz/",
+        "section": "1. Life",
+        "quote": "the rest of his life was essentially spent in Hanover and its environs"
+      }
+    ]
+  },
+  "empiricism": {
+    "places": [
+      "Britain"
+    ],
+    "span": "17th–18th centuries",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+        "section": "1.2 Empiricism",
+        "quote": "Locke, Hume, and Reid, who are the British Empiricists"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/hume/",
+        "section": "1. Life and Works",
+        "quote": "David Hume was born in Edinburgh"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/rationalism-empiricism/",
+        "section": "1.2 Empiricism",
+        "quote": "the Early Modern Period of the seventeenth and eighteenth centuries leading up to Kant"
+      }
+    ]
+  },
+  "enlightenment": {
+    "places": [
+      "France",
+      "Scotland",
+      "Germany"
+    ],
+    "span": "18th century",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/enlightenment/",
+        "section": "intro",
+        "quote": "prominent French thinkers of the mid-decades of the eighteenth century"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/enlightenment/",
+        "section": "intro",
+        "quote": "There is a renowned Scottish Enlightenment"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/enlightenment/",
+        "section": "intro",
+        "quote": "a German Enlightenment ( die Aufklärung"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/enlightenment/",
+        "section": "intro",
+        "quote": "The heart of the eighteenth century Enlightenment"
+      }
+    ]
+  },
+  "german-idealism": {
+    "places": [
+      "Germany"
+    ],
+    "span": "1780s–1840s",
+    "sources": [
+      {
+        "url": "https://iep.utm.edu/germidea/",
+        "section": "intro",
+        "quote": "a movement in German philosophy that began in the 1780s and lasted until the 1840s"
+      }
+    ]
+  },
+  "utilitarianism": {
+    "places": [
+      "Britain"
+    ],
+    "span": "1789–present",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
+        "section": "2. The Classical Approach",
+        "quote": "Sidgwick was also a British philosopher, and his views developed out of and in response to those of Bentham and Mill."
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
+        "section": "2. The Classical Approach",
+        "quote": "Jeremy Bentham’s An Introduction to the Principles of Morals and Legislation in 1789"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/utilitarianism-history/",
+        "section": "1. Precursors to the Classical Approach",
+        "quote": "contemporary utilitarians such as Peter Singer"
+      }
+    ]
+  },
+  "marxism": {
+    "places": null,
+    "span": "1840s–present",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/marx/",
+        "section": "1.4 Alienation and Politics",
+        "quote": "In the text “On The Jewish Question” (1843) Marx begins to make clear the distance"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/marx/",
+        "section": "2.1 Sources",
+        "quote": "his philosophically most influential recent exponent, G.A. Cohen"
+      }
+    ]
+  },
+  "existentialism": {
+    "places": [
+      "Denmark",
+      "Germany",
+      "France"
+    ],
+    "span": "mid-20th century (roots in the 1840s)",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/kierkegaard/",
+        "section": "1. Life and Works",
+        "quote": "He spent most of his life in and around the Danish capital"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/existentialism/",
+        "section": "intro",
+        "quote": "twentieth-century German philosophers like Edmund Husserl, Martin Heidegger, and Karl Jaspers"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/existentialism/",
+        "section": "intro",
+        "quote": "exploded on the scene in mid-twentieth-century France"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/kierkegaard/",
+        "section": "1. Life and Works",
+        "quote": "Either/Or, began almost as soon as he arrived in Berlin, and it was published in 1843"
+      }
+    ]
+  },
+  "pragmatism": {
+    "places": [
+      "United States"
+    ],
+    "span": "c. 1870–present",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/pragmatism/",
+        "section": "1.1 The Early Years",
+        "quote": "Pragmatism originated in the United States around 1870, and now presents a growing third alternative"
+      }
+    ]
+  },
+  "phenomenology": {
+    "places": [
+      "Austria",
+      "Germany",
+      "France"
+    ],
+    "span": "1900–present",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/phenomenology/",
+        "section": "4. The History and Varieties of Phenomenology",
+        "quote": "In the 1930s phenomenology migrated from Austrian and then German philosophy into French philosophy."
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/husserl/",
+        "section": "1. Life and work",
+        "quote": "the university quickly became one of the most important centers for philosophy in Germany"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/phenomenology/",
+        "section": "3. From Phenomena to Phenomenology",
+        "quote": "Phenomenology as we know it was launched by Edmund Husserl in his Logical Investigations (1900–01)."
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/phenomenology/",
+        "section": "intro",
+        "quote": "have been prominent in recent philosophy of mind"
+      }
+    ]
+  },
+  "analytic": {
+    "places": [
+      "United Kingdom",
+      "United States"
+    ],
+    "span": "c. 1900–present",
+    "sources": [
+      {
+        "url": "https://iep.utm.edu/analytic-philosophy/",
+        "section": "intro",
+        "quote": "has dominated academic philosophy in various regions, most notably Great Britain and the United States, since the early twentieth century"
+      },
+      {
+        "url": "https://iep.utm.edu/analytic-philosophy/",
+        "section": "intro",
+        "quote": "It originated around the turn of the twentieth century as G. E. Moore and Bertrand Russell broke away"
+      }
+    ]
+  },
+  "critical-theory": {
+    "places": [
+      "Germany",
+      "United States"
+    ],
+    "span": "1923–present",
+    "sources": [
+      {
+        "url": "https://iep.utm.edu/frankfur/",
+        "section": "intro",
+        "quote": "the Goethe University in Frankfurt, Germany"
+      },
+      {
+        "url": "https://iep.utm.edu/frankfur/",
+        "section": "intro",
+        "quote": "the Institute was moved to the United States where it found hospitality at Columbia University"
+      },
+      {
+        "url": "https://iep.utm.edu/frankfur/",
+        "section": "intro",
+        "quote": "The Institute was founded in 1923 thanks to a donation by Felix Weil"
+      },
+      {
+        "url": "https://iep.utm.edu/frankfur/",
+        "section": "intro",
+        "quote": "a philosophical and sociological movement spread across many universities around the world"
+      }
+    ]
+  },
+  "post-structuralism": {
+    "places": [
+      "France"
+    ],
+    "span": "from the 1960s",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/postmodernism/",
+        "section": "intro",
+        "quote": "The French, for example, work with concepts developed during the structuralist revolution in Paris in the 1950s and early 1960s"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/derrida/",
+        "section": "1. Life and Works",
+        "quote": "In 1967 (at the age of thirty-seven), Derrida has his “annus mirabilis,” publishing"
+      }
+    ]
+  },
+  "feminist-philosophy": {
+    "places": null,
+    "span": "1970s–present",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/feminist-philosophy/",
+        "section": "2. Feminist Scholarship",
+        "quote": "Contemporary feminist philosophical scholarship emerged in the 1970s"
+      }
+    ]
+  },
+  "buddhist-philosophy": {
+    "places": [
+      "India",
+      "Nepal"
+    ],
+    "span": "5th century BCE – 11th century CE in India; living today",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/buddha/",
+        "section": "1. Buddha as Philosopher",
+        "quote": "in the area of the present border between India and Nepal"
+      },
+      {
+        "url": "https://iep.utm.edu/buddha/",
+        "section": "a. Dates",
+        "quote": "locate the Buddha’s life one hundred years earlier, around the fifth century B.C.E."
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/nagarjuna/",
+        "section": "1. Life and works",
+        "quote": "probably mainly in southern India"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/yogacara/",
+        "section": "1.2 The main textual sources and figures of Yogācāra philosophy",
+        "quote": "Jñānaśrīmitra (c. 11th century CE)"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/nagarjuna/",
+        "section": "intro",
+        "quote": "the official philosophical position of Tibetan Buddhism"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/nagarjuna/",
+        "section": "intro",
+        "quote": "up to the present day"
+      }
+    ]
+  },
+  "vedanta": {
+    "places": [
+      "India"
+    ],
+    "span": "c. 700 BCE (early Upaniṣads) – 12th century CE, and living today",
+    "sources": [
+      {
+        "url": "https://iep.utm.edu/upanisad/",
+        "section": "intro",
+        "quote": "ancient texts from India that were composed orally in Sanskrit"
+      },
+      {
+        "url": "https://iep.utm.edu/upanisad/",
+        "section": "intro",
+        "quote": "between about 700 B.C.E. and 300 B.C.E."
+      },
+      {
+        "url": "https://iep.utm.edu/ramanuja/",
+        "section": "1. Rāmānuja’s Life and Works",
+        "quote": "recent scholarship places his life between 1077 to 1157 C.E."
+      },
+      {
+        "url": "https://iep.utm.edu/ramanuja/",
+        "section": "1. Rāmānuja’s Life and Works",
+        "quote": "He was born in the Southern, Tamil speaking region of India"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/shankara/",
+        "section": "1. Life and Works",
+        "quote": "continue to flourish today in the living Advaita Vedānta tradition"
+      }
+    ]
+  },
+  "confucianism": {
+    "places": [
+      "China (Shandong)"
+    ],
+    "span": "6th–3rd century BCE (classical period); still influential today",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/confucius/",
+        "section": "2. Sources for Confucius’s Life and Thought",
+        "quote": "Confucius was born in the domain of Zou, in modern Shandong Province"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/confucius/",
+        "section": "intro",
+        "quote": "Confucius (trad. 551–479 BCE)"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/mencius/",
+        "section": "1. Life and Confucian Background",
+        "quote": "born in the state of Zou, in what is now Shandong Province"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/xunzi/",
+        "section": "intro",
+        "quote": "(third century BCE) was a Confucian philosopher"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/mencius/",
+        "section": "5. Later Influence and Interpretations",
+        "quote": "continue to have an immense influence, even today"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/mencius/",
+        "section": "5. Later Influence and Interpretations",
+        "quote": "the movement known as New Confucianism"
+      }
+    ]
+  },
+  "daoism": {
+    "places": [
+      "China"
+    ],
+    "span": "5th–3rd century BCE; Neo-Daoism from the 3rd century CE; living today as a religion",
+    "sources": [
+      {
+        "url": "https://plato.stanford.edu/entries/laozi/",
+        "section": "intro",
+        "quote": "one of the three main currents of traditional Chinese thought"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/laozi/",
+        "section": "2. Date and Authorship of the Laozi",
+        "quote": "committed to writing probably from the second half of the fifth century B.C.E."
+      },
+      {
+        "url": "https://iep.utm.edu/daoism/",
+        "section": "2. Classical Sources for Our Understanding of Daoism",
+        "quote": "the Daodejing or Laozi (3rd Cn. B.C.E.) and the Zhuangzi (4th-3rd Cn. B.C.E.)"
+      },
+      {
+        "url": "https://iep.utm.edu/daoism/",
+        "section": "11. Neo-Daoism",
+        "quote": "The resurgence of Daoism after the Han dynasty is often known as Neo-Daoism"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/laozi/",
+        "section": "4. Commentaries",
+        "quote": "Wang Bi (226–249) was one of the acknowledged leaders"
+      },
+      {
+        "url": "https://plato.stanford.edu/entries/laozi/",
+        "section": "1. The Laozi Story",
+        "quote": "Today, Laozi’s “birthday” is celebrated in many parts of Asia"
+      }
+    ]
+  }
+}

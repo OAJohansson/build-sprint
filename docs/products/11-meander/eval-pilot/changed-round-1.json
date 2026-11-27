@@ -1,0 +1,12 @@
+[
+  { "id": "overview.0", "change": "rewrite", "note": "'Its core claim' -> 'A central idea' (SEP intro: no unifying doctrine)." },
+  { "id": "overview.1", "change": "rewrite", "note": "'not a counsel of despair' -> 'not moral nihilism'; 'freedom politics' -> 'radical, emancipatory politics'." },
+  { "id": "themes.4.p0", "change": "rewrite", "note": "Invented cause dropped; now states SEP 6.3's causes for Sartre's shift (occupation, prisoner of war, Marxist critics)." },
+  { "id": "legacy.p1", "change": "rewrite", "note": "Emotion opened a field of research; philosophy should deal directly with sex and death (IEP b); influence on medicine and nursing (SEP 7.6)." },
+  { "id": "themes.3.p0", "change": "recite", "note": "Added SEP intro source with quote 'late nineteenth century Europe'." },
+  { "id": "themes.2.p0", "change": "rewrite", "note": "The 'enjoy, read and judge' line is now attributed to Heidegger alone." },
+  { "id": "key-works.w1", "change": "rewrite", "note": "Year is now '1882; expanded 1887', with a quote from SEP Nietzsche." },
+  { "id": "key-works.w5", "change": "rewrite+recite", "note": "Year is now '1945 lecture, published 1946'; added SEP Sartre 'A.1 Works by Sartre' (1946a edition)." },
+  { "id": "key-works.w0", "change": "recite", "note": "Kept 'near-sacrifice'; added IEP Kierkegaard source: God intervenes and saves Isaac." },
+  { "id": "study_prompt", "change": "rewrite", "note": "Theme list now uses the pilot's exact titles ('authenticity versus the crowd')." }
+]

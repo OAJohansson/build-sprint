@@ -1,7 +1,8 @@
 // Imports the researched, sourced content into the app's schema. Re-runnable: edit the source, not the output.
 //   pnpm -F 11-meander content
-// Reads  docs/products/11-meander/content/full.json   (schema: sources.md in that folder)
-// Writes src/content/schools.json, thinkers.json, links.json  (then run `pnpm -F 11-meander positions`
+// Reads  docs/products/11-meander/content/full.json   (schema: sources.md in that folder), then full-eastern.json
+// Also reads docs/products/11-meander/content/schools.json for the entries' titles (Further reading, #39).
+// Writes src/content/schools.json, thinkers.json, links.json, titles.json  (then run `pnpm -F 11-meander positions`
 // if schools or links changed). Every school, theme, question, thinker, key idea, prompt and link keeps its
 // `sources`. Fails loudly on anything the app can't resolve (unknown neighbour, theme thinker not in the school).
 import fs from "node:fs";
@@ -9,7 +10,13 @@ import fs from "node:fs";
 // CONTENT_SRC / CONTENT_OUT override the paths (for trying the converter on a fixture).
 const SRC = process.env.CONTENT_SRC ? new URL(`file://${process.env.CONTENT_SRC}`) : new URL("../../../docs/products/11-meander/content/full.json", import.meta.url);
 const OUT = process.env.CONTENT_OUT ? new URL(`file://${process.env.CONTENT_OUT.replace(/\/?$/, "/")}`) : new URL("../src/content/", import.meta.url);
-const full = JSON.parse(fs.readFileSync(SRC, "utf8"));
+// The Eastern schools (#42) live in their own file next to full.json, same schema plus "tradition": "eastern", so a
+// wording fix in either is just a re-run. Skipped when the file is missing or CONTENT_SRC points at a fixture.
+const EAST = new URL("../../../docs/products/11-meander/content/full-eastern.json", import.meta.url);
+const full = [
+  ...JSON.parse(fs.readFileSync(SRC, "utf8")),
+  ...(!process.env.CONTENT_SRC && fs.existsSync(EAST) ? JSON.parse(fs.readFileSync(EAST, "utf8")) : []),
+];
 const problems = [];
 
 const slug = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\(.*?\)/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -23,11 +30,23 @@ const SHORT = {
   "Marcus Aurelius": "Marcus Aurelius", "Pseudo-Dionysius the Areopagite": "Pseudo-Dionysius",
   "William of Ockham": "Ockham", "John Duns Scotus": "Duns Scotus", "Francesco Petrarca (Petrarch)": "Petrarch",
   "Giovanni Pico della Mirandola": "Pico", "Harriet Taylor Mill": "Taylor Mill",
+  // Chinese names put the family name first, so the last word is wrong; Uddālaka is the name he is known by.
+  "Wang Bi": "Wang Bi", "The Buddha": "the Buddha", "Uddālaka Āruṇi": "Uddālaka",
 };
 const shortName = (name) => SHORT[name] ?? name.replace(/\s*\(.*?\)\s*/g, " ").trim().split(/\s+/).pop();
 // A short date for the line under the title: date_range without its asides in brackets and up to the first ";",
 // unless the source gives `short_dates`.
 const shortDates = (s) => (s.short_dates ?? (s.date_range ?? "").replace(/\s*\([^)]*\)/g, "").split(";")[0]).trim();
+
+// The quiet tradition tag on the Eastern schools (#42, F4): where they are from, and for the Indian ones the religion a
+// reader might search for ("Hinduism", "Buddhism"), since "Vedānta" alone is jargon.
+// shortcut: set here by hand, not sourced in the content; move it into full-eastern.json as a sourced field when the content is next revised.
+const TRADITION_TAG = {
+  "buddhist-philosophy": "Indian · Buddhist",
+  vedanta: "Indian · Hindu",
+  confucianism: "Chinese",
+  daoism: "Chinese",
+};
 
 const schools = [], thinkers = [], links = [];
 const ids = new Set(full.map((s) => s.id));
@@ -44,7 +63,8 @@ for (const s of full) {
     });
   }
   schools.push({
-    id: s.id, name: s.name, dates: shortDates(s), dateRange: s.date_range ?? "", era: s.era ?? "",
+    id: s.id, name: s.name, dates: shortDates(s), ...(s.tradition ? { tradition: s.tradition } : {}),
+    ...(TRADITION_TAG[s.id] ? { traditionTag: TRADITION_TAG[s.id] } : {}), dateRange: s.date_range ?? "", era: s.era ?? "",
     description: s.description ?? "", ...(s.tagline ? (typeof s.tagline === "string" ? { tagline: s.tagline } : { tagline: s.tagline.text, taglineSources: src(s.tagline.sources) }) : {}),debatable: s.debatable ?? null,
     questions: (s.questions ?? []).map((q) => q.text),
     questionSources: (s.questions ?? []).map((q) => src(q.sources)),
@@ -70,6 +90,25 @@ for (const s of full) {
     links.push({ from: l.neighbour, to: s.id, type, label: l.label ?? "", ...(l.label_from_older ? { labelFromOlder: l.label_from_older } : {}), reason: l.reason ?? "", sources: src(l.sources), sample: false });
   }
 }
+// Titles for Further reading (#39): url -> the entry's title. From the research's source list ("SEP: Plato"), else
+// the name of the thinker the entry is about (its slug shares a word with the name), else a few by hand; the app
+// tidies the URL's slug for anything left.
+const TITLE_BY_HAND = { "https://iep.utm.edu/phenom/": "Phenomenology" };
+const titles = { ...TITLE_BY_HAND };
+const tidyTitle = (t) => t.replace(/^(SEP|IEP):\s*/, "").replace(/^([^,]+), ([^,]+)$/, "$2 $1").trim();
+try {
+  const research = JSON.parse(fs.readFileSync(new URL("../../../docs/products/11-meander/content/schools.json", import.meta.url), "utf8"));
+  for (const s of research) for (const x of s.sources ?? []) if (x.title && !titles[x.url]) titles[x.url] = tidyTitle(x.title);
+} catch { console.warn("import-content: no research schools.json, titles come from thinkers and slugs only"); }
+const words = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().split(/[^a-z]+/).filter((w) => w.length >= 4);
+for (const t of thinkers) {
+  for (const url of new Set([...t.sources, ...t.ideaSources.flat(), ...(t.promptSources ?? [])].map((x) => x.url))) {
+    if (titles[url]) continue;
+    const slugWords = words(url.replace(/\/$/, "").split("/").pop());
+    const nameWords = words(t.name);
+    if (slugWords.some((a) => nameWords.some((b) => a.startsWith(b) || b.startsWith(a)))) titles[url] = t.name.replace(/\s*\(.*?\)\s*/g, " ").trim();
+  }
+}
 const tids = thinkers.map((t) => t.id);
 for (const id of tids) if (tids.indexOf(id) !== tids.lastIndexOf(id)) problems.push(`duplicate thinker id ${id}`);
 if (problems.length) { console.error("import-content: cannot import\n  " + problems.join("\n  ")); process.exit(1); }
@@ -79,6 +118,7 @@ const write = (file, key, items) => fs.writeFileSync(new URL(file, OUT), JSON.st
 write("schools.json", "schools", schools);
 write("thinkers.json", "thinkers", thinkers);
 write("links.json", "links", links);
+fs.writeFileSync(new URL("titles.json", OUT), JSON.stringify({ note, titles: Object.fromEntries(Object.entries(titles).sort()) }, null, 2) + "\n");
 const unsourced = [...schools, ...thinkers, ...links, ...schools.flatMap((s) => s.themes)].filter((x) => !x.sources.length).length;
 console.log(`content: ${schools.length} schools, ${thinkers.length} thinkers, ${links.length} links; ${unsourced} items without sources`);
 console.log("now run: pnpm -F 11-meander positions (if schools or links changed)");

@@ -1,0 +1,181 @@
+{
+  "presocratics": {
+    "places": [
+      "Turkey (Ionia)",
+      "Italy"
+    ],
+    "span": "6th–5th century BCE"
+  },
+  "socrates-plato": {
+    "places": [
+      "Athens"
+    ],
+    "span": "late 5th–mid 4th century BCE"
+  },
+  "aristotle": {
+    "places": [
+      "Athens"
+    ],
+    "span": "from 335 BCE"
+  },
+  "epicureanism": {
+    "places": [
+      "Athens",
+      "Italy"
+    ],
+    "span": "307/6 BCE–1st century BCE and later"
+  },
+  "stoicism": {
+    "places": [
+      "Athens",
+      "Rome"
+    ],
+    "span": "c. 300 BCE–2nd century CE"
+  },
+  "skepticism": {
+    "places": [
+      "Greece (Athens, Elis)"
+    ],
+    "span": "3rd century BCE–2nd century CE"
+  },
+  "neoplatonism": {
+    "places": [
+      "Egypt",
+      "Italy",
+      "Greece"
+    ],
+    "span": "mid-3rd–mid-7th century CE"
+  },
+  "patristic": {
+    "places": [
+      "Egypt",
+      "Algeria (Roman Africa)",
+      "Italy"
+    ],
+    "span": "3rd–6th century CE"
+  },
+  "scholasticism": {
+    "places": [
+      "France",
+      "England",
+      "Spain"
+    ],
+    "span": "12th century–late 17th century"
+  },
+  "renaissance": {
+    "places": [
+      "Italy",
+      "France"
+    ],
+    "span": "mid-14th–early 17th century"
+  },
+  "rationalism": {
+    "places": [
+      "France",
+      "Netherlands",
+      "Germany"
+    ],
+    "span": "17th–18th centuries"
+  },
+  "empiricism": {
+    "places": [
+      "Britain"
+    ],
+    "span": "17th–18th centuries"
+  },
+  "enlightenment": {
+    "places": [
+      "France",
+      "Scotland",
+      "Germany"
+    ],
+    "span": "18th century"
+  },
+  "german-idealism": {
+    "places": [
+      "Germany"
+    ],
+    "span": "1780s–1840s"
+  },
+  "utilitarianism": {
+    "places": [
+      "Britain"
+    ],
+    "span": "1789–present"
+  },
+  "marxism": {
+    "places": [],
+    "span": "1840s–present"
+  },
+  "existentialism": {
+    "places": [
+      "Denmark",
+      "Germany",
+      "France"
+    ],
+    "span": "mid-20th century (roots in the 1840s)"
+  },
+  "pragmatism": {
+    "places": [
+      "United States"
+    ],
+    "span": "c. 1870–present"
+  },
+  "phenomenology": {
+    "places": [
+      "Austria",
+      "Germany",
+      "France"
+    ],
+    "span": "1900–present"
+  },
+  "analytic": {
+    "places": [
+      "United Kingdom",
+      "United States"
+    ],
+    "span": "c. 1900–present"
+  },
+  "critical-theory": {
+    "places": [
+      "Germany",
+      "United States"
+    ],
+    "span": "1923–present"
+  },
+  "post-structuralism": {
+    "places": [
+      "France"
+    ],
+    "span": "from the 1960s"
+  },
+  "feminist-philosophy": {
+    "places": [],
+    "span": "1970s–present"
+  },
+  "buddhist-philosophy": {
+    "places": [
+      "India",
+      "Nepal"
+    ],
+    "span": "5th century BCE – 11th century CE in India; living today"
+  },
+  "vedanta": {
+    "places": [
+      "India"
+    ],
+    "span": "c. 700 BCE (early Upaniṣads) – 12th century CE, and living today"
+  },
+  "confucianism": {
+    "places": [
+      "China (Shandong)"
+    ],
+    "span": "6th–3rd century BCE (classical period); still influential today"
+  },
+  "daoism": {
+    "places": [
+      "China"
+    ],
+    "span": "5th–3rd century BCE; Neo-Daoism from the 3rd century CE; living today as a religion"
+  }
+}

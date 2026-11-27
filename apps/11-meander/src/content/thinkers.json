@@ -6069,6 +6069,960 @@
         }
       ],
       "sample": false
+    },
+    {
+      "id": "buddhist-philosophy/the-buddha",
+      "name": "The Buddha",
+      "short": "the Buddha",
+      "dates": "fl. c. 450 BCE (dates disputed)",
+      "school": "buddhist-philosophy",
+      "summary": "The Buddha is the founder of Buddhism; tradition calls him Gautama. 'Buddha' is a title meaning 'awakened'. He was born into the wealthy Śākya clan, near today's border between India and Nepal. The story is that he left home to seek an end to suffering. He reached enlightenment and taught for 45 years. His dates are disputed; many scholars now think he died around 405 BCE.",
+      "ideas": [
+        "Suffering has causes, so removing the causes ends the suffering.",
+        "A person is a changing bundle of physical and mental elements, and no part is a lasting self (the later tradition's reading).",
+        "His teaching is a middle path between saying persons are eternal and saying they are wiped out at death."
+      ],
+      "ideaSources": [
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/buddha/",
+            "section": "2. Core Teachings"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/buddha/",
+            "section": "3. Non-Self"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/buddha/",
+            "section": "2. Core Teachings"
+          }
+        ]
+      ],
+      "prompt": "Teach me the Buddha as a short Socratic module. Start with the founder of Buddhism, a man of the Śākya clan who flourished around 450 BCE and whose title means 'awakened', then the three key ideas: suffering has causes, so removing them ends it; no part of a person is a lasting self, as the later tradition read him; a middle path between eternal persons and being wiped out at death. Ask me one question at a time and finish with a five-question quiz.",
+      "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "1. Buddha as Philosopher"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "2. Core Teachings"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "3. Non-Self"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "1. Buddha as Philosopher"
+        },
+        {
+          "url": "https://iep.utm.edu/buddha/",
+          "section": "a. Dates"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "buddhist-philosophy/nagarjuna",
+      "name": "Nāgārjuna",
+      "short": "Nāgārjuna",
+      "dates": "c. 150–250 CE",
+      "school": "buddhist-philosophy",
+      "summary": "Nāgārjuna was a Buddhist monk who lived some time between 150 and 250 CE, probably mainly in southern India. Little is known of his life. SEP calls him the most important Buddhist philosopher after the Buddha himself. His main work, the Fundamental Wisdom of the Middle Way, has 450 short verses.",
+      "ideas": [
+        "All things are empty of svabhāva: none exists on its own, independent of everything else.",
+        "There is no bottom layer of reality on which everything else rests.",
+        "Emptiness is not nothingness: only because things depend on each other can suffering arise and end."
+      ],
+      "ideaSources": [
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/nagarjuna/",
+            "section": "2. Emptiness and svabhāva"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/nagarjuna/",
+            "section": "2. Emptiness and svabhāva"
+          }
+        ],
+        [
+          {
+            "url": "https://iep.utm.edu/b-madhya/",
+            "section": "c. Ethics and the Charge of Nihilism"
+          }
+        ]
+      ],
+      "prompt": "Teach me Nāgārjuna as a short Socratic module. Start with the Buddhist monk of around 150–250 CE, probably from southern India, whom SEP calls the most important Buddhist philosopher after the Buddha, then the three key ideas: all things are empty of an existence of their own; there is no bottom layer of reality; emptiness is not nothingness, since only dependent things can arise and end. Ask me one question at a time and finish with a five-question quiz.",
+      "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/nagarjuna/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/nagarjuna/",
+          "section": "1. Life and works"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/nagarjuna/",
+          "section": "2. Emptiness and svabhāva"
+        },
+        {
+          "url": "https://iep.utm.edu/b-madhya/",
+          "section": "c. Ethics and the Charge of Nihilism"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/nagarjuna/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/nagarjuna/",
+          "section": "1. Life and works"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "buddhist-philosophy/asanga",
+      "name": "Asaṅga",
+      "short": "Asaṅga",
+      "dates": "c. 4th–5th century CE",
+      "school": "buddhist-philosophy",
+      "summary": "Asaṅga and his (half-)brother Vasubandhu are credited with making Yogācāra a distinct school. Tradition says some of his works came from his teacher Maitreya, whom it identifies with the future Buddha. Which works are really his is still debated.",
+      "ideas": [
+        "His Compendium of Abhidharma explains the dharmas, the basic mental and physical building blocks of reality, from a Yogācāra view. Abhidharma is early Buddhism's careful, technical account of experience.",
+        "His Summary of the Great Vehicle (Mahāyāna) is an influential overview of Yogācāra theory and practice.",
+        "He and Vasubandhu set out and defended the key ideas of the Yogācāra scriptures in a sustained way."
+      ],
+      "ideaSources": [
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/yogacara/",
+            "section": "1.2 The main textual sources and figures of Yogācāra philosophy"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/abhidharma/",
+            "section": "intro"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/yogacara/",
+            "section": "1.2 The main textual sources and figures of Yogācāra philosophy"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/yogacara/",
+            "section": "intro"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/yogacara/",
+            "section": "1.2 The main textual sources and figures of Yogācāra philosophy"
+          }
+        ]
+      ],
+      "prompt": "Teach me Asaṅga as a short Socratic module. Start with the 4th–5th-century Indian thinker who, with his brother Vasubandhu, made Yogācāra a distinct school, then the three key ideas: the Compendium of Abhidharma on the building blocks of reality; the Summary of the Great Vehicle on Yogācāra theory and practice; setting out and defending the key ideas of the Yogācāra scriptures. Ask me one question at a time and finish with a five-question quiz.",
+      "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "1.2 The main textual sources and figures of Yogācāra philosophy"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "1.2 The main textual sources and figures of Yogācāra philosophy"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "buddhist-philosophy/vasubandhu",
+      "name": "Vasubandhu",
+      "short": "Vasubandhu",
+      "dates": "c. 4th–5th century CE",
+      "school": "buddhist-philosophy",
+      "summary": "Vasubandhu was Asaṅga's (half-)brother and a co-founder of Yogācāra. His most famous book, the Treasury of Abhidharma, is not a Yogācāra work. It is a manual of Abhidharma, the earlier, technical Buddhist theory of experience. His Twenty Verses and Thirty Verses are core Yogācāra texts.",
+      "ideas": [
+        "His Twenty Verses defends the 'mind only' teaching against realists, who say objects exist outside the mind.",
+        "No theory of objects built from atoms fits how we actually perceive the world.",
+        "The Buddha taught that outside objects exist only as a conventional teaching, not as ultimate truth."
+      ],
+      "ideaSources": [
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/yogacara/",
+            "section": "1.2 The main textual sources and figures of Yogācāra philosophy"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/yogacara/",
+            "section": "3.4 Idealism in Vasubandhu’s Twenty Verses"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/yogacara/",
+            "section": "3.4 Idealism in Vasubandhu’s Twenty Verses"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/yogacara/",
+            "section": "3.4 Idealism in Vasubandhu’s Twenty Verses"
+          }
+        ]
+      ],
+      "prompt": "Teach me Vasubandhu as a short Socratic module. Start with Asaṅga's brother, a 4th–5th-century co-founder of Yogācāra who also wrote a famous manual of earlier Buddhist theory, then the three key ideas: defending 'mind only' against realists; no atom-based theory of objects fits perception; the Buddha taught outside objects only as a conventional teaching. Ask me one question at a time and finish with a five-question quiz.",
+      "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "1.2 The main textual sources and figures of Yogācāra philosophy"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "3.4 Idealism in Vasubandhu’s Twenty Verses"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/yogacara/",
+          "section": "1.2 The main textual sources and figures of Yogācāra philosophy"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/abhidharma/",
+          "section": "intro"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "vedanta/uddalaka-aruni",
+      "name": "Uddālaka Āruṇi",
+      "short": "Uddālaka",
+      "dates": "teacher in the early Upaniṣads (texts c. 700–500 BCE)",
+      "school": "vedanta",
+      "summary": "Uddālaka Āruṇi is a brahmin (priestly) teacher in the early Upaniṣads. His best-known lesson, to his son Śvetaketu, is in the Chāndogya Upaniṣad. He was Yājñavalkya's senior colleague and, by some accounts, his teacher. Śaṅkara later read his phrase 'you are that' as saying the self is brahman.",
+      "ideas": [
+        "Things are not made from nothing: they grow out of one original being, as clay pots come from clay.",
+        "The self is an unseen essence spread through the body, like salt dissolved in water.",
+        "'You are that' (tat tvam asi): the self works in you the same way as in all living beings."
+      ],
+      "ideaSources": [
+        [
+          {
+            "url": "https://iep.utm.edu/upanisad/",
+            "section": "3. The Self"
+          }
+        ],
+        [
+          {
+            "url": "https://iep.utm.edu/upanisad/",
+            "section": "3. The Self"
+          }
+        ],
+        [
+          {
+            "url": "https://iep.utm.edu/upanisad/",
+            "section": "3. The Self"
+          }
+        ]
+      ],
+      "prompt": "Teach me Uddālaka Āruṇi as a short Socratic module. Start with the brahmin teacher of the early Upaniṣads who instructs his son Śvetaketu in the Chāndogya Upaniṣad, then the three key ideas: things grow out of one original being, as pots from clay; the self is an unseen essence, like salt in water; 'you are that': the self works the same way in all living beings. Ask me one question at a time and finish with a five-question quiz.",
+      "promptSources": [
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "a. Main Upaniṣads"
+        },
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "3. The Self"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "a. Main Upaniṣads"
+        },
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "3. The Self"
+        },
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "4. Ātman and Brahman"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "vedanta/yajnavalkya",
+      "name": "Yājñavalkya",
+      "short": "Yājñavalkya",
+      "dates": "teacher in the early Upaniṣads (texts c. 700–500 BCE)",
+      "school": "vedanta",
+      "summary": "Yājñavalkya is the most prominent teacher in the Bṛhadāraṇyaka Upaniṣad, one of the oldest Upaniṣads. He debates other teachers, including Uddālaka, and instructs King Janaka. He describes the self as consciousness rather than as a life-giving essence.",
+      "ideas": [
+        "The self is the 'inner controller' (antaryāmin), present in all sensing and thinking yet distinct from them.",
+        "The self can never be an object of thought, so ordinary language cannot describe it.",
+        "A person becomes good by good action and bad by bad action."
+      ],
+      "ideaSources": [
+        [
+          {
+            "url": "https://iep.utm.edu/upanisad/",
+            "section": "3. The Self"
+          }
+        ],
+        [
+          {
+            "url": "https://iep.utm.edu/upanisad/",
+            "section": "3. The Self"
+          }
+        ],
+        [
+          {
+            "url": "https://iep.utm.edu/upanisad/",
+            "section": "5. Karma, Saṃsāra, and Mokṣa"
+          }
+        ]
+      ],
+      "prompt": "Teach me Yājñavalkya as a short Socratic module. Start with the most prominent teacher of the Bṛhadāraṇyaka Upaniṣad, who debates Uddālaka and teaches King Janaka, then the three key ideas: the self is the inner controller of sensing and thinking; the self can never be an object of thought or words; you become good by good action and bad by bad action. Ask me one question at a time and finish with a five-question quiz.",
+      "promptSources": [
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "a. Main Upaniṣads"
+        },
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "3. The Self"
+        },
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "5. Karma, Saṃsāra, and Mokṣa"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "a. Main Upaniṣads"
+        },
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "3. The Self"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "vedanta/sankara",
+      "name": "Śaṅkara",
+      "short": "Śaṅkara",
+      "dates": "8th century CE (exact dates disputed)",
+      "school": "vedanta",
+      "summary": "Śaṅkara is the most authoritative philosopher of Advaita Vedānta. He flourished in the eighth century CE, though scholars dispute the exact dates. He saw himself as one teacher in a long line, a systematiser rather than a founder. He wrote the earliest surviving complete commentaries on the Brahma Sūtra, the Bhagavad Gītā and ten main Upaniṣads.",
+      "ideas": [
+        "Your true self is pure consciousness, one and the same as brahman.",
+        "Reality has two tiers: the everyday world, and the ultimate reality of brahman alone.",
+        "Ignorance makes us mistake the mind and body for the self; only knowing the self as brahman frees us."
+      ],
+      "ideaSources": [
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/shankara/",
+            "section": "intro"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/shankara/",
+            "section": "2.3 Two-Tiered Reality"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/shankara/",
+            "section": "3.4 Superimposition: The Fundamental Problem of Ignorance"
+          }
+        ]
+      ],
+      "prompt": "Teach me Śaṅkara as a short Socratic module. Start with the eighth-century systematiser of Advaita Vedānta, who wrote the earliest surviving complete commentaries on its core texts, then the three key ideas: the true self is pure consciousness, identical with brahman; reality has an everyday tier and an ultimate tier; ignorance makes us mistake mind and body for the self, and self-knowledge frees us. Ask me one question at a time and finish with a five-question quiz.",
+      "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/shankara/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/shankara/",
+          "section": "1. Life and Works"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/shankara/",
+          "section": "2.3 Two-Tiered Reality"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/shankara/",
+          "section": "3.4 Superimposition: The Fundamental Problem of Ignorance"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/shankara/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/shankara/",
+          "section": "1. Life and Works"
+        },
+        {
+          "url": "https://iep.utm.edu/upanisad/",
+          "section": "8. The Upaniṣads and Vedānta"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/buddha/",
+          "section": "1. Buddha as Philosopher"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "vedanta/ramanuja",
+      "name": "Rāmānuja",
+      "short": "Rāmānuja",
+      "dates": "1017–1137 CE (traditional) or 1077–1157 CE (recent scholarship)",
+      "school": "vedanta",
+      "summary": "Rāmānuja was an eleventh-century philosopher from the Tamil-speaking south of India. He is the chief thinker of Viśiṣṭādvaita, one of Vedānta's three main forms. IEP calls him the first Indian philosopher to read the Vedas systematically as teaching a personal God.",
+      "ideas": [
+        "Persons, qualities and objects are all real, yet all are united in brahman.",
+        "Brahman is the self of all, standing to us as a soul stands to its body.",
+        "Devotion (bhakti) is itself a kind of knowing, a direct seeing of brahman; theory alone does not free us."
+      ],
+      "ideaSources": [
+        [
+          {
+            "url": "https://iep.utm.edu/ramanuja/",
+            "section": "intro"
+          },
+          {
+            "url": "https://iep.utm.edu/ramanuja/",
+            "section": "a. Background"
+          }
+        ],
+        [
+          {
+            "url": "https://iep.utm.edu/ramanuja/",
+            "section": "iii. Brahman and Ātman"
+          }
+        ],
+        [
+          {
+            "url": "https://iep.utm.edu/ramanuja/",
+            "section": "4. Rāmānuja’s Soteriology"
+          },
+          {
+            "url": "https://iep.utm.edu/ramanuja/",
+            "section": "c. Bhakti"
+          }
+        ]
+      ],
+      "prompt": "Teach me Rāmānuja as a short Socratic module. Start with the South Indian philosopher of qualified non-dualism, the first to give the Vedas a systematic reading centred on a personal God, then the three key ideas: persons and things are real yet united in brahman; brahman stands to us as a soul to its body; devotion is itself a direct way of knowing brahman. Ask me one question at a time and finish with a five-question quiz.",
+      "promptSources": [
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "intro"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "1. Rāmānuja’s Life and Works"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "a. Background"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "iii. Brahman and Ātman"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "4. Rāmānuja’s Soteriology"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "c. Bhakti"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "intro"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "1. Rāmānuja’s Life and Works"
+        },
+        {
+          "url": "https://iep.utm.edu/ramanuja/",
+          "section": "8. Conclusion: Rāmānuja’s Place in the History of Indian Philosophy"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "confucianism/confucius",
+      "name": "Confucius",
+      "short": "Confucius",
+      "dates": "trad. 551–479 BCE",
+      "school": "confucianism",
+      "summary": "Confucius is a Latin form of Kongfuzi, 'Master Kong'. Tradition dates his life to 551–479 BCE. He was born in Zou, in today's Shandong Province, and held offices in the state of Lu. SEP calls him arguably the most significant thinker in East Asian history.",
+      "ideas": [
+        "Performing ritual and music well reshapes desires and starts moral growth.",
+        "Filial piety means real respect for parents, not just feeding them; it underpins good character and loyalty.",
+        "Learning and reflecting need each other: learning without reflecting leaves you lost."
+      ],
+      "ideaSources": [
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/confucius/",
+            "section": "3. Ritual Psychology and Social Values"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/mencius/",
+            "section": "1. Life and Confucian Background"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/confucius/",
+            "section": "5. The Family and the State"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/mencius/",
+            "section": "1. Life and Confucian Background"
+          }
+        ]
+      ],
+      "prompt": "Teach me Confucius as a short Socratic module. Start with 'Master Kong', traditionally dated 551–479 BCE, born in Zou and an office-holder in the state of Lu, then the three key ideas: ritual and music reshape desires; filial piety, real respect for parents, underpins good character and loyalty; learning and reflecting need each other. Ask me one question at a time and finish with a five-question quiz.",
+      "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/confucius/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/confucius/",
+          "section": "2. Sources for Confucius’s Life and Thought"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/confucius/",
+          "section": "3. Ritual Psychology and Social Values"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/confucius/",
+          "section": "5. The Family and the State"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "1. Life and Confucian Background"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/confucius/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/confucius/",
+          "section": "2. Sources for Confucius’s Life and Thought"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "confucianism/mencius",
+      "name": "Mencius",
+      "short": "Mencius",
+      "dates": "4th century BCE (372–289 BCE?)",
+      "school": "confucianism",
+      "summary": "Mencius is a Latin form of Mengzi, 'Master Meng'. He was born about a century after Confucius died, reportedly in the state of Zou. He travelled to persuade rulers to govern by benevolence, not brute force, and held office in the state of Qi. He is called the 'Second Sage', second only to Confucius.",
+      "ideas": [
+        "Human nature is good: we all have 'sprouts' of benevolence, righteousness, wisdom and propriety.",
+        "His thought experiment of a child at a well aims to show that we are not purely selfish.",
+        "Caring for everyone equally, as the Mohists demand, goes against our nature, since we love our relatives more."
+      ],
+      "ideaSources": [
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/mencius/",
+            "section": "2. The Virtues and Their Cultivation"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/mencius/",
+            "section": "3. The Goodness of Human Nature"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/mencius/",
+            "section": "4. Mencius and His Philosophical Opponents"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/mencius/",
+            "section": "4. Mencius and His Philosophical Opponents"
+          }
+        ]
+      ],
+      "prompt": "Teach me Mencius as a short Socratic module. Start with 'Master Meng', the 4th-century BCE 'Second Sage' who urged rulers to govern by benevolence, then the three key ideas: human nature is good, with sprouts of virtue; the child at the well shows we are not purely selfish; equal care for all goes against our nature. Ask me one question at a time and finish with a five-question quiz.",
+      "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "1. Life and Confucian Background"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "2. The Virtues and Their Cultivation"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "3. The Goodness of Human Nature"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "4. Mencius and His Philosophical Opponents"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "1. Life and Confucian Background"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/xunzi/",
+          "section": "2. Human Nature (xing 性)"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "confucianism/xunzi",
+      "name": "Xunzi",
+      "short": "Xunzi",
+      "dates": "c. 310 – after 238 BCE",
+      "school": "confucianism",
+      "summary": "Xunzi means 'Master Xun'; his name was Xun Kuang. He was probably born around 310 BCE and died some time after 238 BCE. For most of imperial Chinese history he was seen as a Confucian who went astray by rejecting Mencius. Only in recent decades has he been widely ranked among China's greatest thinkers.",
+      "ideas": [
+        "Human nature is bad; what is good in us is 'artifice', built by our own effort.",
+        "Rituals and music, handed down by the ancient sages, train our emotions and hold society together.",
+        "For Xunzi, Heaven (tian) is much like Nature: it acts as it always does and never steps into human affairs. The Way (dao) is the right way to live, which the sages marked with rituals like signposts."
+      ],
+      "ideaSources": [
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/xunzi/",
+            "section": "2. Human Nature (xing 性)"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/xunzi/",
+            "section": "3. Modes of Moral Self-Cultivation: Ritual (li 禮) and Music (yue 樂)"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/xunzi/",
+            "section": "4. The Source of the Rituals: Heaven (tian 天) and the Way (dao 道)"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/mencius/",
+            "section": "1. Life and Confucian Background"
+          },
+          {
+            "url": "https://iep.utm.edu/xunzi/",
+            "section": "2. The Way and Heaven"
+          }
+        ]
+      ],
+      "prompt": "Teach me Xunzi as a short Socratic module. Start with 'Master Xun', the 3rd-century BCE Confucian long seen as having gone astray by rejecting Mencius, then the three key ideas: human nature is bad and goodness is artifice; rituals and music train emotions and order society; we cannot know Heaven, but rituals mark the Way. Ask me one question at a time and finish with a five-question quiz.",
+      "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/xunzi/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/xunzi/",
+          "section": "1. Xunzi and Xunzi"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/xunzi/",
+          "section": "2. Human Nature (xing 性)"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/xunzi/",
+          "section": "3. Modes of Moral Self-Cultivation: Ritual (li 禮) and Music (yue 樂)"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/xunzi/",
+          "section": "4. The Source of the Rituals: Heaven (tian 天) and the Way (dao 道)"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/xunzi/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/xunzi/",
+          "section": "1. Xunzi and Xunzi"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "daoism/laozi",
+      "name": "Laozi",
+      "short": "Laozi",
+      "dates": "traditionally 6th century BCE; possibly legendary",
+      "school": "daoism",
+      "summary": "Laozi means 'Old Master'. Chinese sources say he flourished in the sixth century BCE, as an older contemporary of Confucius. Some modern scholars think he is entirely legendary. The book named after him, the Laozi or Daodejing, was probably compiled from sayings over several centuries.",
+      "ideas": [
+        "No name we give the Dao can capture it.",
+        "The sage practises wu-wei (effortless action), moving like a newborn, without plans or society's structures.",
+        "The best ruler stays in the background; when his work is done, the people say they are content."
+      ],
+      "ideaSources": [
+        [
+          {
+            "url": "https://iep.utm.edu/daoism/",
+            "section": "5. Fundamental Concepts in the Daodejing"
+          }
+        ],
+        [
+          {
+            "url": "https://iep.utm.edu/daoism/",
+            "section": "5. Fundamental Concepts in the Daodejing"
+          }
+        ],
+        [
+          {
+            "url": "https://iep.utm.edu/daoism/",
+            "section": "5. Fundamental Concepts in the Daodejing"
+          }
+        ]
+      ],
+      "prompt": "Teach me Laozi as a short Socratic module. Start with the 'Old Master', traditionally of the sixth century BCE and possibly legendary, after whom the Daodejing is named, then the three key ideas: no name can capture the Dao; the sage acts effortlessly, like a newborn; the best ruler stays in the background. Ask me one question at a time and finish with a five-question quiz.",
+      "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/laozi/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/laozi/",
+          "section": "1. The Laozi Story"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "5. Fundamental Concepts in the Daodejing"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/laozi/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/laozi/",
+          "section": "1. The Laozi Story"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/laozi/",
+          "section": "2. Date and Authorship of the Laozi"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "daoism/zhuangzi",
+      "name": "Zhuangzi",
+      "short": "Zhuangzi",
+      "dates": "late 4th century BCE (IEP: c. 370–300 BCE)",
+      "school": "daoism",
+      "summary": "Zhuangzi means 'Master Zhuang'; his personal name was Zhou. He flourished in the late fourth century BCE, around the time of Mencius. SEP calls him the pivotal figure of classical philosophical Daoism. The book Zhuangzi mixes his writing with others'. Chapters 1–7, the 'inner chapters', are most often ascribed to him.",
+      "ideas": [
+        "'Wandering beyond': step past your usual roles and values to see things more fully.",
+        "We cannot be certain that what seems good for us, or bad, really is.",
+        "He doubts that 'sprouts' (inborn starts) of virtue can be told apart from weeds. SEP reads the line as aimed at Mencius."
+      ],
+      "ideaSources": [
+        [
+          {
+            "url": "https://iep.utm.edu/zhuangzi/",
+            "section": "a. Chapter 1: Xiao Yao You (Wandering Beyond)"
+          }
+        ],
+        [
+          {
+            "url": "https://iep.utm.edu/zhuangzi/",
+            "section": "b. Chapter 2: Qi Wu Lun (Discussion on Smoothing Things Out)"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/mencius/",
+            "section": "5. Later Influence and Interpretations"
+          }
+        ]
+      ],
+      "prompt": "Teach me Zhuangzi as a short Socratic module. Start with 'Master Zhuang', the late fourth-century BCE thinker whom SEP calls the pivotal figure of classical Daoism, then the three key ideas: wander beyond your usual roles and values; we cannot be sure what is really good or bad for us; his doubt that Mencius's sprouts of virtue can be told apart from weeds. Ask me one question at a time and finish with a five-question quiz.",
+      "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/zhuangzi/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/zhuangzi/",
+          "section": "1. Zhuangzi’s Life and Times"
+        },
+        {
+          "url": "https://iep.utm.edu/zhuangzi/",
+          "section": "a. Chapter 1: Xiao Yao You (Wandering Beyond)"
+        },
+        {
+          "url": "https://iep.utm.edu/zhuangzi/",
+          "section": "b. Chapter 2: Qi Wu Lun (Discussion on Smoothing Things Out)"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/mencius/",
+          "section": "5. Later Influence and Interpretations"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/zhuangzi/",
+          "section": "intro"
+        },
+        {
+          "url": "https://plato.stanford.edu/entries/zhuangzi/",
+          "section": "1. Zhuangzi’s Life and Times"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "6. The Zhuangzi"
+        }
+      ],
+      "sample": false
+    },
+    {
+      "id": "daoism/wang-bi",
+      "name": "Wang Bi",
+      "short": "Wang Bi",
+      "dates": "226–249 CE",
+      "school": "daoism",
+      "summary": "Wang Bi was a leader of 'Learning in the Profound' (Xuanxue), a movement sometimes called Neo-Daoism. Despite his short life, he became a brilliant interpreter of the Laozi. His version of the Laozi became the standard text for almost 2,000 years. IEP notes that he was not himself a Daoist.",
+      "ideas": [
+        "The Laozi is about the Dao as the source of being, not about long life or immortals.",
+        "Later writers credit him with the first extended treatment of 'principle' (li): literally the veins in jade, the inner pattern that makes each thing what it is. This li is a different Chinese word from the Confucian li of ritual.",
+        "Wu-wei (effortless action) means freedom from the dictates of desire, both in self-cultivation and in government."
+      ],
+      "ideaSources": [
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/laozi/",
+            "section": "4. Commentaries"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/laozi/",
+            "section": "4. Commentaries"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/daoism/",
+            "section": "intro"
+          },
+          {
+            "url": "https://plato.stanford.edu/entries/xunzi/",
+            "section": "3. Modes of Moral Self-Cultivation: Ritual (li 禮) and Music (yue 樂)"
+          }
+        ],
+        [
+          {
+            "url": "https://plato.stanford.edu/entries/laozi/",
+            "section": "4. Commentaries"
+          }
+        ]
+      ],
+      "prompt": "Teach me Wang Bi as a short Socratic module. Start with the third-century leader of 'Learning in the Profound' whose version of the Laozi became the standard text, then the three key ideas: the Laozi is about the Dao as the source of being; what later writers praised as the first extended treatment of principle; wu-wei as freedom from the dictates of desire. Ask me one question at a time and finish with a five-question quiz.",
+      "promptSources": [
+        {
+          "url": "https://plato.stanford.edu/entries/laozi/",
+          "section": "4. Commentaries"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "4. The Daodejing"
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://plato.stanford.edu/entries/laozi/",
+          "section": "4. Commentaries"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "4. The Daodejing"
+        },
+        {
+          "url": "https://iep.utm.edu/daoism/",
+          "section": "11. Neo-Daoism"
+        }
+      ],
+      "sample": false
     }
   ]
 }

@@ -1,0 +1,2144 @@
+[
+  {
+    "school": "buddhist-philosophy",
+    "item": "era",
+    "claim": "Ancient and classical (India)",
+    "verdict": "supported",
+    "note": "Buddha fl. c. 450 BCE (SEP intro); Indian Madhyamaka/Yogācāra into the classical period."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "date_range",
+    "claim": "starts c. 5th century BCE (the Buddha)",
+    "verdict": "supported",
+    "note": "SEP intro 'fl. circa 450 BCE'; IEP a. Dates 'around the fifth century B.C.E.'"
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "date_range",
+    "claim": "ends 8th century CE (Indian Madhyamaka and Yogācāra)",
+    "verdict": "drift",
+    "note": "The 8th-century end comes from SEP Madhyamaka intro, which limits the *article's* scope ('This article will deal only with the Madhyamaka school in India from the fifth through the eighth centuries'). It is not an end date for the tradition. SEP Yogācāra §1.2 names Indian Yogācāra thinkers of the 11th century (Jñānaśrīmitra, Ratnakīrti). A newcomer reads the end as the date Indian Buddhist philosophy stopped.",
+    "fix": "'c. 5th century BCE (the Buddha) – 11th century CE (late Indian Yogācāra)', citing SEP Yogācāra §1.2 ('Jñānaśrīmitra (c. 11th century CE)'), or 'from c. 5th century BCE; still a living tradition'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "description",
+    "claim": "A tradition of argument that grew from the Buddha's teaching on how to end suffering",
+    "verdict": "supported",
+    "note": "SEP Buddha intro: teachings 'concern the quest for liberation from suffering' and 'formed the basis of a philosophical tradition'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "description",
+    "claim": "Later Indian thinkers built theories of the self, the mind and reality on it",
+    "verdict": "supported",
+    "note": "SEP intro: 'developed and defended a variety of sophisticated theories in metaphysics and epistemology'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "description",
+    "claim": "The two great later schools are Madhyamaka ('Middle Way') and Yogācāra ('yoga practice')",
+    "verdict": "drift",
+    "note": "SEP Madhyamaka intro and SEP Yogācāra intro say they are the two principal schools *of Mahāyāna Buddhism* in India, not of Buddhist philosophy as a whole (the Abhidharma schools are left out). Glosses are fine: SEP Yogācāra §1.1 'ācāra... means practice'; yoga 'presumably refers to meditation'.",
+    "fix": "'The two main schools of Mahāyāna ('Great Vehicle') Buddhism in India were Madhyamaka, the 'Middle Way', and Yogācāra, 'yoga practice'.'"
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "debatable",
+    "claim": "Whether the Buddha himself was a philosopher is disputed",
+    "verdict": "supported",
+    "note": "SEP §1: 'To so treat him is controversial'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "debatable",
+    "claim": "SEP presents him as the later Buddhist tradition understood him",
+    "verdict": "supported",
+    "note": "SEP §1: 'We will be treating the Buddha's thought as it was understood within the later philosophical tradition'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "debatable",
+    "claim": "This node covers only the Indian roots; Tibet, China, Japan left out",
+    "verdict": "supported",
+    "note": "Scope statement, consistent with SEP Nāgārjuna intro and SEP Yogācāra intro on spread to Tibet, China, Japan."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "tagline",
+    "claim": "Suffering has causes",
+    "verdict": "supported",
+    "note": "SEP §2 truth (2): 'there are causes and conditions for the arising of suffering'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "tagline",
+    "claim": "seeing there is no lasting self can end it",
+    "verdict": "supported",
+    "note": "SEP §2: escape lies in 'realization of the truth about sentient existence... suffering, impermanence and non-self'; 'cessation of suffering is attained by extirpating all sense of an \"I\"'. 'Seeing' simplifies a realization SEP says 'is not easily achieved', acceptable for a tagline."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "q0",
+    "claim": "If there is no lasting 'I', who suffers and who is reborn?",
+    "verdict": "supported",
+    "note": "SEP §3 poses exactly this puzzle ('how could the being in the next life be the same person')."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "q1",
+    "claim": "Why do I keep clinging to things that cannot last?",
+    "verdict": "supported",
+    "note": "SEP §2 appropriation and attachment; IEP b. craving (taṇhā)."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "q2",
+    "claim": "Do things exist on their own, or only in relation to other things and to my mind?",
+    "verdict": "supported",
+    "note": "SEP Nāgārjuna §2 (svabhāva, dependence) and SEP Yogācāra §1.1 (world depends on being cognised)."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme0",
+    "claim": "Core teaching usually summed up in four truths",
+    "verdict": "supported",
+    "note": "SEP §2 'usually summarized using the device of the Four Nobles' Truths'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme0",
+    "claim": "items: suffering; it has causes; it can stop; a path stops it",
+    "verdict": "supported",
+    "note": "SEP §2 lists (1)-(4) and explains (2) as causes and conditions."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme0",
+    "claim": "'Suffering' means more than pain: the frustration that comes from everything being impermanent",
+    "verdict": "supported",
+    "note": "SEP §2: 'not mere pain but existential suffering, the sort of frustration, alienation and despair that arise out of our experience of transitoriness'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme0",
+    "claim": "IEP: the four are also 'realities' to practise, not a creed",
+    "verdict": "supported",
+    "note": "IEP b.: 'sacca means both truth and reality'; 'gives the wrong impression of being... a creed'; 'four types of practice'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme1",
+    "claim": "The Buddha taught non-self (anātman): there is no lasting 'I' behind our experiences",
+    "verdict": "drift",
+    "note": "SEP §1 says Albahari 'correctly' points out that the Buddha 'never categorically denies the existence of a self that transcends what is empirically given'; denying it outright is how the *later tradition* read him. 'Behind our experiences' is exactly the transcendent self that is in dispute. The debatable line covers the method but the theme states the contested reading as settled.",
+    "fix": "'As the later tradition read him, the Buddha taught non-self (anātman): none of the parts that make up a person is a lasting 'I'.'"
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme1",
+    "claim": "A person is a changing bundle of five kinds of physical and mental elements, the skandhas",
+    "verdict": "supported",
+    "note": "SEP §1 'the five skandhas or psychophysical elements'; §3 argument from impermanence."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme1",
+    "claim": "None of them lasts, so none can be a self",
+    "verdict": "supported",
+    "note": "SEP §3 argument from impermanence, premises 1-2."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme1",
+    "claim": "Our sense of 'I' and 'mine' is the ignorance that causes suffering",
+    "verdict": "supported",
+    "note": "SEP §1: ignorance 'consists in: the conceit that there is an \"I\" and a \"mine\"'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme2",
+    "claim": "The Buddha called his teaching a 'middle path' between two extremes",
+    "verdict": "supported",
+    "note": "SEP §2."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme2",
+    "claim": "One extreme says persons are eternal; the other says they are wiped out at death",
+    "verdict": "supported",
+    "note": "SEP §2 eternalism and annihilationism ('usually understood to mean at death')."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme2",
+    "claim": "Both assume a real 'I'; drop that and the question never arises",
+    "verdict": "supported",
+    "note": "SEP §2: 'both share the presupposition that there is an \"I\"'; 'simply does not arise'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme2",
+    "claim": "Madhyamaka takes its name from this middle way",
+    "verdict": "supported",
+    "note": "SEP Madhyamaka intro: 'The name of the school is a reference to the claim... that it is a middle path'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme3",
+    "claim": "Nāgārjuna taught that all things are empty (śūnyatā) of svabhāva, an existence of their own",
+    "verdict": "supported",
+    "note": "SEP Nāgārjuna §2: svabhāva as substance, 'independent of anything else'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme3",
+    "claim": "Things exist only by depending on other things, all the way down",
+    "verdict": "supported",
+    "note": "SEP Nāgārjuna §2: 'there is no such end-point and denies the existence of an ontological foundation'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme3",
+    "claim": "Critics called this nihilism; Nāgārjuna denied it",
+    "verdict": "supported",
+    "note": "SEP Nāgārjuna §2 (accusation and Mādhyamika reply); IEP c. (MMK 24.20 rejoinder)."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme4",
+    "claim": "Yogācāra's signature teaching is 'mind only' (cittamātra): the perceived world depends on being cognised by a mind",
+    "verdict": "supported",
+    "note": "SEP Yogācāra §1.1, near verbatim."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme4",
+    "claim": "Mapped eight kinds of consciousness, including a hidden store consciousness keeping seeds of past actions",
+    "verdict": "supported",
+    "note": "SEP Yogācāra intro (eightfold classification); §2.2 seeds retained in the ālayavijñāna, 'subliminal'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "theme4",
+    "claim": "Scholars still debate how far this is idealism",
+    "verdict": "supported",
+    "note": "SEP Yogācāra §3.1 'hotly debated doctrine'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "reacted_against",
+    "claim": "The ritual religion of the Brahmin priests, built on sacrifices set out in the Vedas",
+    "verdict": "supported",
+    "note": "SEP §1: practices 'consisted largely in the rituals and sacrifices prescribed in the Vedas'; 'Brahmin ritualism'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "reacted_against",
+    "claim": "Many wandering seekers, the Buddha among them, denied the Vedas have the final word",
+    "verdict": "supported",
+    "note": "SEP §1, near verbatim ('rejected the authority of the Vedas as definitive pronouncements')."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "link:vedanta",
+    "claim": "Buddhists rejected the Upaniṣads' unchanging self",
+    "verdict": "supported",
+    "note": "IEP Upaniṣads §4 quote verbatim. IEP hedges the chronology ('seem to have been a catalyst for or been developed alongside'), which the reason does not claim."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "link:vedanta",
+    "claim": "...and the Vedas' authority",
+    "verdict": "supported",
+    "note": "SEP Buddha §1 quote verbatim."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "link:vedanta",
+    "claim": "Śaṅkara later rejected Buddhist idealism and emptiness",
+    "verdict": "supported",
+    "note": "SEP Śaṅkara §2 and §2.1 quotes verbatim."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "link:vedanta",
+    "claim": "kind pushed_against (Buddhist → Vedānta)",
+    "verdict": "supported",
+    "note": "Real and fits for the Buddhist rejection of the Upaniṣadic self. But half the reason (Śaṅkara vs Buddhism) runs Vedānta → Buddhist; the kind only shows one direction.",
+    "fix": "Keep pushed_against; reword the reason so the second clause reads as a reply: '...; Śaṅkara later pushed back, rejecting Buddhist idealism and emptiness.'"
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "link:vedanta",
+    "claim": "label 'the lasting self denied' reads correctly from either end",
+    "verdict": "drift",
+    "note": "From the Vedānta card the label reads as if Vedānta denied the self, which is the opposite of its position. It fails the read-from-either-end rule in sources.md.",
+    "fix": "'a lasting self, denied and defended' or 'quarrel over a lasting self'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:The Buddha.dates",
+    "claim": "fl. c. 450 BCE (dates disputed)",
+    "verdict": "supported",
+    "note": "SEP intro; IEP a. Dates."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:The Buddha.summary",
+    "claim": "founder of Buddhism; tradition calls him Gautama",
+    "verdict": "supported",
+    "note": "SEP §1 'traditionally called Gautama, who is identified by modern scholars as the founder of Buddhism'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:The Buddha.summary",
+    "claim": "'Buddha' is a title meaning 'awakened'",
+    "verdict": "supported",
+    "note": "SEP §1."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:The Buddha.summary",
+    "claim": "born into the wealthy Śākya clan near today's India-Nepal border",
+    "verdict": "supported",
+    "note": "SEP §1."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:The Buddha.summary",
+    "claim": "He left home to seek an end to suffering, reached enlightenment and taught for 45 years",
+    "verdict": "drift",
+    "note": "SEP §1 frames the leaving as a story ('The story is that in early adulthood he abandoned...'). The card states it as fact. 45 years is fine.",
+    "fix": "'The story is that he left home to seek an end to suffering. He reached enlightenment and taught for 45 years.'"
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:The Buddha.summary",
+    "claim": "many scholars now think he died around 405 BCE",
+    "verdict": "supported",
+    "note": "SEP §1 verbatim sense; IEP a. lists c. 404 etc."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:The Buddha.ki0",
+    "claim": "Suffering has causes, so removing the causes ends it",
+    "verdict": "supported",
+    "note": "SEP §2 (3)."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:The Buddha.ki1",
+    "claim": "No lasting self: a person is a changing bundle of physical and mental elements",
+    "verdict": "supported",
+    "note": "SEP §3. Same interpretive caveat as theme1, but as a key idea read through the tradition it is acceptable."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:The Buddha.ki2",
+    "claim": "Middle path between eternal persons and being wiped out at death",
+    "verdict": "supported",
+    "note": "SEP §2."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:The Buddha.prompt",
+    "claim": "all prompt claims",
+    "verdict": "supported",
+    "note": "Draws only on the card (Śākya, c. 450, 'awakened', three key ideas)."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Nāgārjuna.dates",
+    "claim": "c. 150–250 CE",
+    "verdict": "supported",
+    "note": "SEP intro and §1."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Nāgārjuna.summary",
+    "claim": "Buddhist monk, some time between 150 and 250 CE, probably mainly in southern India",
+    "verdict": "supported",
+    "note": "SEP §1 verbatim."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Nāgārjuna.summary",
+    "claim": "Little is known of his life",
+    "verdict": "supported",
+    "note": "SEP §1 'very little can be said precisely'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Nāgārjuna.summary",
+    "claim": "SEP calls him the most important Buddhist philosopher after the Buddha",
+    "verdict": "supported",
+    "note": "SEP intro: 'There is unanimous agreement that...'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Nāgārjuna.summary",
+    "claim": "Main work, the Fundamental Wisdom of the Middle Way, has 450 short verses",
+    "verdict": "supported",
+    "note": "SEP §1 'In its 450 stanzas'; 'most important of Nāgārjuna's works'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Nāgārjuna.ki0",
+    "claim": "All things are empty of svabhāva",
+    "verdict": "supported",
+    "note": "SEP §2."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Nāgārjuna.ki1",
+    "claim": "No bottom layer of reality",
+    "verdict": "supported",
+    "note": "SEP §2 'no such end-point'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Nāgārjuna.ki2",
+    "claim": "Emptiness is not nothingness: only because things depend on each other can suffering arise and end",
+    "verdict": "supported",
+    "note": "IEP c. (MMK 24.20)."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Nāgārjuna.prompt",
+    "claim": "all prompt claims",
+    "verdict": "supported",
+    "note": "Card only."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Asaṅga.dates",
+    "claim": "c. 4th–5th century CE",
+    "verdict": "supported",
+    "note": "SEP Yogācāra intro."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Asaṅga.summary",
+    "claim": "With his (half-)brother Vasubandhu credited with making Yogācāra a distinct school",
+    "verdict": "supported",
+    "note": "SEP Yogācāra intro ('(half-)brothers') and §1.2 ('should be credited with the development of Yogācāra as a distinctive philosophical school')."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Asaṅga.summary",
+    "claim": "Tradition says some of his works came from his teacher, Maitreya",
+    "verdict": "supported",
+    "note": "SEP §1.2. (SEP adds that tradition identifies Maitreya with the future Buddha; omitting it is fine.)"
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Asaṅga.summary",
+    "claim": "Which works are really his is still debated",
+    "verdict": "supported",
+    "note": "SEP §1.2 'their authenticity is still subject to scholarly debate'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Asaṅga.ki0",
+    "claim": "Compendium of Abhidharma explains the dharmas, basic building blocks, from a Yogācāra view",
+    "verdict": "supported",
+    "note": "SEP §1.2."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Asaṅga.ki1",
+    "claim": "Summary of the Great Vehicle is an influential overview of Yogācāra theory and practice",
+    "verdict": "supported",
+    "note": "SEP §1.2."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Asaṅga.ki2",
+    "claim": "He and Vasubandhu set out and defended the key ideas of the Yogācāra scriptures in a sustained way",
+    "verdict": "supported",
+    "note": "SEP intro 'sustained explanation and defence of the school's key ideas introduced in the Yogācāra sūtra literature'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Asaṅga.prompt",
+    "claim": "all prompt claims",
+    "verdict": "supported",
+    "note": "Card only ('Indian' is supported by 'originated in India')."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Vasubandhu.dates",
+    "claim": "c. 4th–5th century CE",
+    "verdict": "supported",
+    "note": "SEP Yogācāra intro."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Vasubandhu.summary",
+    "claim": "Asaṅga's (half-)brother and co-founder of Yogācāra",
+    "verdict": "supported",
+    "note": "SEP intro."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Vasubandhu.summary",
+    "claim": "Most famous book, Treasury of Abhidharma, is not a Yogācāra work but a manual of earlier Buddhist theory",
+    "verdict": "supported",
+    "note": "SEP §1.2 ('arguably, most famous'; 'not a Yogācāra treatise, but an Abhidharma manual'). 'Arguably' dropped, minor."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Vasubandhu.summary",
+    "claim": "Twenty Verses and Thirty Verses are core Yogācāra texts",
+    "verdict": "supported",
+    "note": "SEP §1.2."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Vasubandhu.ki0",
+    "claim": "Twenty Verses defends 'mind only' against realists",
+    "verdict": "supported",
+    "note": "SEP §1.2, §3.4."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Vasubandhu.ki1",
+    "claim": "No theory of objects built from atoms fits how we perceive",
+    "verdict": "supported",
+    "note": "SEP §3.4 (his argument)."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Vasubandhu.ki2",
+    "claim": "The Buddha taught outside objects only as a conventional teaching",
+    "verdict": "supported",
+    "note": "SEP §3.4 'According to Vasubandhu's reply, the Buddha taught it only as a conventional doctrine'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "thinker:Vasubandhu.prompt",
+    "claim": "all prompt claims",
+    "verdict": "supported",
+    "note": "Card only."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "places.places",
+    "claim": "India, Nepal",
+    "verdict": "supported",
+    "note": "SEP Buddha §1 quote verbatim: born 'in the area of the present border between India and Nepal'; Nāgārjuna 'probably mainly in southern India'. Nepal rests only on the birthplace; acceptable."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "places.span",
+    "claim": "5th century BCE – 8th century CE (in India)",
+    "verdict": "drift",
+    "note": "Start is fine (IEP a. Dates quote verbatim). End uses SEP Madhyamaka's article-scope sentence ('This article will deal only with... from the fifth through the eighth centuries'), which a newcomer reads as the end of the school. SEP Yogācāra §1.2 has 11th-century Indian Yogācāras.",
+    "fix": "'5th century BCE – 11th century CE (in India)', citing SEP Yogācāra §1.2 'Jñānaśrīmitra (c. 11th century CE)'; or 'from the 5th century BCE'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "places.quotes",
+    "claim": "all 4 quotes on the page in the cited section",
+    "verdict": "supported",
+    "note": "Checked verbatim against the saved corpus."
+  },
+  {
+    "school": "vedanta",
+    "item": "era",
+    "claim": "Ancient to medieval (India)",
+    "verdict": "supported",
+    "note": "Upaniṣads 700–300 BCE to Rāmānuja 11th–12th c."
+  },
+  {
+    "school": "vedanta",
+    "item": "date_range",
+    "claim": "Upaniṣads c. 700–300 BCE",
+    "verdict": "supported",
+    "note": "IEP Upaniṣads intro."
+  },
+  {
+    "school": "vedanta",
+    "item": "date_range",
+    "claim": "Vedānta school from Śaṅkara (8th century CE)",
+    "verdict": "wrong",
+    "note": "Contradicted. SEP Śaṅkara §1: 'Śaṅkara was a systematizer of Advaita Vedānta, not a founder'; IEP Advaita intro: 'the origins of this school predate Śaṅkara'; Gauḍapāda is 6th century. The node's own Śaṅkara card says 'a systematiser rather than a founder'.",
+    "fix": "'Upaniṣads c. 700–300 BCE; Brahma Sūtra c. 200 BCE–200 CE; Śaṅkara (8th century CE) to Rāmānuja (11th–12th century CE); living today' (IEP Upaniṣads §8 for the Brahma Sūtra dates)."
+  },
+  {
+    "school": "vedanta",
+    "item": "date_range",
+    "claim": "to Rāmānuja (11th–12th century CE); living today",
+    "verdict": "supported",
+    "note": "IEP Rāmānuja §1; SEP Śaṅkara §1 'continue to flourish today in the living Advaita Vedānta tradition'."
+  },
+  {
+    "school": "vedanta",
+    "item": "description",
+    "claim": "A Hindu school that reads the Upaniṣads as one consistent philosophy",
+    "verdict": "supported",
+    "note": "IEP Upaniṣads §8 'first philosophical school to attempt to present the Upaniṣads as holding a unified philosophical position'; IEP Rāmānuja intro 'Orthodox Hindu philosophical school'."
+  },
+  {
+    "school": "vedanta",
+    "item": "description",
+    "claim": "Its thinkers ask how the self relates to brahman, ultimate reality",
+    "verdict": "supported",
+    "note": "IEP Rāmānuja §1 'perennial questions of Vedānta'."
+  },
+  {
+    "school": "vedanta",
+    "item": "description",
+    "claim": "Śaṅkara says they are one and the same",
+    "verdict": "supported",
+    "note": "IEP Upaniṣads §8."
+  },
+  {
+    "school": "vedanta",
+    "item": "description",
+    "claim": "Rāmānuja says the self is real, but part of brahman",
+    "verdict": "supported",
+    "note": "IEP Upaniṣads §8 'an aspect of brahman'."
+  },
+  {
+    "school": "vedanta",
+    "item": "debatable",
+    "claim": "IEP calls Vedānta only 'nominally' a school: a label for any attempt at a consistent reading of the Upaniṣads",
+    "verdict": "supported",
+    "note": "IEP Advaita intro (also of the Brahma Sūtra)."
+  },
+  {
+    "school": "vedanta",
+    "item": "debatable",
+    "claim": "The Upaniṣads are centuries older than the school",
+    "verdict": "supported",
+    "note": "IEP Upaniṣads §8."
+  },
+  {
+    "school": "vedanta",
+    "item": "debatable",
+    "claim": "Madhva's dualist branch (c. 1200 CE) mentioned but no card",
+    "verdict": "supported",
+    "note": "IEP Upaniṣads §8 'Madhva (c. 1200 C.E.)'."
+  },
+  {
+    "school": "vedanta",
+    "item": "tagline",
+    "claim": "Hindu philosophy that reads the Upaniṣads as one teaching on self and ultimate reality",
+    "verdict": "supported",
+    "note": "IEP Upaniṣads §8; IEP Advaita intro."
+  },
+  {
+    "school": "vedanta",
+    "item": "q0",
+    "claim": "Is my deepest self the same as the reality behind everything?",
+    "verdict": "supported",
+    "note": "IEP Upaniṣads §4; SEP Śaṅkara intro."
+  },
+  {
+    "school": "vedanta",
+    "item": "q1",
+    "claim": "If reality is one, why do I see so many separate things?",
+    "verdict": "supported",
+    "note": "SEP Śaṅkara §2.3."
+  },
+  {
+    "school": "vedanta",
+    "item": "q2",
+    "claim": "Could knowing who I really am free me from suffering and rebirth?",
+    "verdict": "supported",
+    "note": "SEP Śaṅkara §3.4 ('frees one from the beginningless karmic cycle of death, rebirth, and suffering')."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme0",
+    "claim": "Upaniṣads composed c. 700–300 BCE; one great topic is the self (ātman)",
+    "verdict": "supported",
+    "note": "IEP intro and §3."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme0",
+    "claim": "Uddālaka teaches his son the self is an unseen essence in all living things, like salt in water",
+    "verdict": "supported",
+    "note": "IEP §3."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme0",
+    "claim": "Yājñavalkya describes it as consciousness, the 'inner controller' behind all sensing and thinking",
+    "verdict": "supported",
+    "note": "IEP §3."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme1",
+    "claim": "Brahman means ultimate reality",
+    "verdict": "supported",
+    "note": "IEP intro."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme1",
+    "claim": "Śāṇḍilya and Yājñavalkya say the self is brahman; Uddālaka never uses the word",
+    "verdict": "supported",
+    "note": "IEP §4."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme1",
+    "claim": "Whether self and brahman are fully identical, or the self is one aspect of brahman, became Vedānta's central debate",
+    "verdict": "drift",
+    "note": "IEP §4 is softer: such debates 'have continued throughout the Indian philosophical tradition, and are particularly characteristic of the Vedānta darśana'. 'Central debate' upgrades 'particularly characteristic'.",
+    "fix": "'Indian thinkers kept arguing over this, Vedānta most of all.'"
+  },
+  {
+    "school": "vedanta",
+    "item": "theme2",
+    "claim": "Karma first meant ritual action",
+    "verdict": "supported",
+    "note": "IEP §5."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme2",
+    "claim": "In the Upaniṣads it grows into a law of moral cause and effect",
+    "verdict": "drift",
+    "note": "IEP §5 hedges: 'The Upaniṣads do not offer any explicit theory of karma, but do contain a number of teachings that seem to extend the notion... to more general understandings of moral retribution'. 'Grows into a law' drops the hedge.",
+    "fix": "'In the Upaniṣads it starts to stretch beyond ritual, toward moral cause and effect: you become good by good action.'"
+  },
+  {
+    "school": "vedanta",
+    "item": "theme2",
+    "claim": "you become good by good action",
+    "verdict": "supported",
+    "note": "IEP §5 (Yājñavalkya, BU 3.2.13)."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme2",
+    "claim": "Later Upaniṣads name saṃsāra and mokṣa",
+    "verdict": "supported",
+    "note": "IEP §5 (Kaṭha, Śvetāśvatara; SU 6.16)."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme2",
+    "claim": "Vedānta makes mokṣa the goal",
+    "verdict": "supported",
+    "note": "IEP §8 (Brahma Sūtra: 'mokṣa is the ultimate goal'; Upaniṣads 'for the sake of achieving mokṣa')."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme3",
+    "claim": "Advaita means 'non-dual'",
+    "verdict": "supported",
+    "note": "IEP Advaita intro ('often translated as \"non-dualism\" though it literally means \"non-secondness\"')."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme3",
+    "claim": "Śaṅkara taught the self is pure consciousness and identical with brahman",
+    "verdict": "supported",
+    "note": "SEP Śaṅkara intro."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme3",
+    "claim": "The many things we see are real only at the everyday level; at the ultimate level only brahman",
+    "verdict": "supported",
+    "note": "SEP §2.3."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme3",
+    "claim": "rope mistaken for a snake was always only a rope",
+    "verdict": "supported",
+    "note": "SEP §2.3."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme4",
+    "claim": "Rāmānuja's branch is Viśiṣṭādvaita, 'qualified non-dualism'",
+    "verdict": "supported",
+    "note": "IEP Rāmānuja a. Background."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme4",
+    "claim": "Brahman is a personal God: Vishnu, united with his consort Śrī",
+    "verdict": "supported",
+    "note": "IEP §3 Theism."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme4",
+    "claim": "Individual selves are real and distinct; they belong to brahman as a body to its soul",
+    "verdict": "supported",
+    "note": "IEP intro; iii. Brahman and Ātman."
+  },
+  {
+    "school": "vedanta",
+    "item": "theme4",
+    "claim": "Devotion (bhakti) is the way to know brahman",
+    "verdict": "supported",
+    "note": "IEP §4 (bhakti yoga as the remedy) and c. Bhakti."
+  },
+  {
+    "school": "vedanta",
+    "item": "reacted_against",
+    "claim": "Ritual and sacrifice as life's highest aim: Vedānta puts knowledge and release first",
+    "verdict": "supported",
+    "note": "IEP §8: Brahma Sūtra 'maintains that mokṣa is the ultimate goal as opposed to action or sacrifice'."
+  },
+  {
+    "school": "vedanta",
+    "item": "reacted_against",
+    "claim": "The Brahma Sūtra argued against the dualism of the rival Sāṃkhya school",
+    "verdict": "supported",
+    "note": "IEP §8."
+  },
+  {
+    "school": "vedanta",
+    "item": "link:buddhist-philosophy",
+    "claim": "(same link as on the Buddhist card)",
+    "verdict": "supported",
+    "note": "See buddhist-philosophy link items; label problem is worst on this end."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Uddālaka Āruṇi.dates",
+    "claim": "teacher in the early Upaniṣads (texts c. 700–500 BCE)",
+    "verdict": "supported",
+    "note": "IEP a. Main Upaniṣads: Chāndogya in first period, 700–500 BCE."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Uddālaka Āruṇi.summary",
+    "claim": "a brahmin (priestly) teacher in the early Upaniṣads; lesson to his son Śvetaketu in the Chāndogya",
+    "verdict": "supported",
+    "note": "IEP §3."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Uddālaka Āruṇi.summary",
+    "claim": "Yājñavalkya's senior colleague and, by some accounts, his teacher",
+    "verdict": "supported",
+    "note": "IEP §3."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Uddālaka Āruṇi.summary",
+    "claim": "Śaṅkara later read 'you are that' as saying the self is brahman",
+    "verdict": "supported",
+    "note": "IEP §4."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Uddālaka Āruṇi.ki0",
+    "claim": "Things grow out of one original being, as clay pots come from clay",
+    "verdict": "supported",
+    "note": "IEP §3."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Uddālaka Āruṇi.ki1",
+    "claim": "The self is an unseen essence spread through the body, like salt in water",
+    "verdict": "supported",
+    "note": "IEP §3."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Uddālaka Āruṇi.ki2",
+    "claim": "'You are that': the self in you is the same as in all living beings",
+    "verdict": "drift",
+    "note": "IEP §3 says the self 'operates the same way in him as it does in all living beings', and reads Uddālaka as 'organic'. IEP §4 warns that reading tat tvam asi as identity is Śaṅkara's later interpretation. 'Is the same as' leans toward that identity reading.",
+    "fix": "''You are that' (tat tvam asi): the self works in you the same way as in all living beings.' Apply the same fix in the prompt."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Uddālaka Āruṇi.prompt",
+    "claim": "'the same self is in all living beings'",
+    "verdict": "drift",
+    "note": "Same as ki2.",
+    "fix": "'the self works the same way in all living beings'."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Yājñavalkya.dates",
+    "claim": "teacher in the early Upaniṣads (texts c. 700–500 BCE)",
+    "verdict": "supported",
+    "note": "IEP a. (BU in first period)."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Yājñavalkya.summary",
+    "claim": "most prominent teacher in the Bṛhadāraṇyaka, one of the oldest Upaniṣads",
+    "verdict": "supported",
+    "note": "IEP §3; a."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Yājñavalkya.summary",
+    "claim": "debates other teachers including Uddālaka; instructs King Janaka",
+    "verdict": "supported",
+    "note": "IEP §3."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Yājñavalkya.summary",
+    "claim": "describes the self as consciousness rather than a life-giving essence",
+    "verdict": "supported",
+    "note": "IEP §3."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Yājñavalkya.ki0",
+    "claim": "The self is the inner controller, present in all sensing and thinking yet distinct",
+    "verdict": "supported",
+    "note": "IEP §3."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Yājñavalkya.ki1",
+    "claim": "The self can never be an object of thought, so ordinary language cannot describe it",
+    "verdict": "supported",
+    "note": "IEP §3."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Yājñavalkya.ki2",
+    "claim": "A person becomes good by good action and bad by bad action",
+    "verdict": "supported",
+    "note": "IEP §5."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Yājñavalkya.prompt",
+    "claim": "all prompt claims",
+    "verdict": "supported",
+    "note": "Card only."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Śaṅkara.dates",
+    "claim": "8th century CE (exact dates disputed)",
+    "verdict": "supported",
+    "note": "SEP intro and §1."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Śaṅkara.summary",
+    "claim": "most authoritative philosopher of Advaita Vedānta",
+    "verdict": "supported",
+    "note": "SEP intro."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Śaṅkara.summary",
+    "claim": "saw himself as one in a long line; systematiser not founder",
+    "verdict": "supported",
+    "note": "SEP §1."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Śaṅkara.summary",
+    "claim": "earliest surviving complete commentaries on the Brahma Sūtra, Gītā and ten main Upaniṣads",
+    "verdict": "supported",
+    "note": "SEP §1."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Śaṅkara.ki0",
+    "claim": "True self is pure consciousness, one with brahman",
+    "verdict": "supported",
+    "note": "SEP intro."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Śaṅkara.ki1",
+    "claim": "Two tiers: everyday world and ultimate reality of brahman alone",
+    "verdict": "supported",
+    "note": "SEP §2.3."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Śaṅkara.ki2",
+    "claim": "Ignorance makes us mistake mind and body for the self; only knowing the self as brahman frees us",
+    "verdict": "supported",
+    "note": "SEP §3.4."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Śaṅkara.prompt",
+    "claim": "all prompt claims",
+    "verdict": "supported",
+    "note": "Card only."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Rāmānuja.dates",
+    "claim": "1017–1137 (traditional) or 1077–1157 (recent scholarship)",
+    "verdict": "supported",
+    "note": "IEP §1."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Rāmānuja.summary",
+    "claim": "eleventh-century philosopher from the Tamil-speaking south",
+    "verdict": "supported",
+    "note": "IEP intro and §1."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Rāmānuja.summary",
+    "claim": "chief thinker of Viśiṣṭādvaita, one of Vedānta's three main forms",
+    "verdict": "supported",
+    "note": "IEP intro."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Rāmānuja.summary",
+    "claim": "IEP: first Indian philosopher to read the Vedas systematically as teaching a personal God",
+    "verdict": "supported",
+    "note": "IEP intro and §8 ('first... to provide a systematic theistic interpretation')."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Rāmānuja.ki0",
+    "claim": "Persons, qualities and objects all real, yet united in brahman",
+    "verdict": "supported",
+    "note": "IEP intro; a."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Rāmānuja.ki1",
+    "claim": "Brahman is the self of all, as a soul to its body",
+    "verdict": "supported",
+    "note": "IEP iii."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Rāmānuja.ki2",
+    "claim": "Devotion is a kind of knowing, a direct seeing of brahman; theory alone does not free us",
+    "verdict": "supported",
+    "note": "IEP §4 and c."
+  },
+  {
+    "school": "vedanta",
+    "item": "thinker:Rāmānuja.prompt",
+    "claim": "all prompt claims",
+    "verdict": "supported",
+    "note": "Card only."
+  },
+  {
+    "school": "vedanta",
+    "item": "places.places",
+    "claim": "India",
+    "verdict": "supported",
+    "note": "IEP Upaniṣads intro quote verbatim; IEP Rāmānuja §1."
+  },
+  {
+    "school": "vedanta",
+    "item": "places.span",
+    "claim": "c. 700 BCE (early Upaniṣads) – 12th century CE, and living today",
+    "verdict": "supported",
+    "note": "Quotes verbatim (IEP intro; IEP Rāmānuja §1; SEP Śaṅkara §1). 'Living today' is cited for Advaita only, which is enough for the school."
+  },
+  {
+    "school": "vedanta",
+    "item": "places.quotes",
+    "claim": "all 5 quotes on the page in the cited section",
+    "verdict": "supported",
+    "note": "Checked verbatim."
+  },
+  {
+    "school": "confucianism",
+    "item": "era",
+    "claim": "Ancient (classical China)",
+    "verdict": "supported",
+    "note": ""
+  },
+  {
+    "school": "confucianism",
+    "item": "date_range",
+    "claim": "6th–3rd century BCE (Confucius trad. 551–479 to Xunzi, died after 238 BCE)",
+    "verdict": "supported",
+    "note": "SEP Confucius intro; SEP Xunzi §1."
+  },
+  {
+    "school": "confucianism",
+    "item": "description",
+    "claim": "The tradition that grew from Confucius's teaching in ancient China",
+    "verdict": "supported",
+    "note": "SEP Mencius §1."
+  },
+  {
+    "school": "confucianism",
+    "item": "description",
+    "claim": "It holds that ritual, family duty and study shape people into good 'gentlemen'",
+    "verdict": "supported",
+    "note": "SEP Confucius §3-§5; SEP Mencius §1 (learning). See fairness flag: SEP says the core of Confucius's teaching is 'historically underdetermined'."
+  },
+  {
+    "school": "confucianism",
+    "item": "description",
+    "claim": "Rulers should lead by moral example, not force",
+    "verdict": "supported",
+    "note": "SEP Mencius §1; SEP Confucius §4 (wind and grass)."
+  },
+  {
+    "school": "confucianism",
+    "item": "description",
+    "claim": "Mencius and Xunzi later disagreed over whether human nature is good",
+    "verdict": "supported",
+    "note": "SEP Xunzi §2."
+  },
+  {
+    "school": "confucianism",
+    "item": "debatable",
+    "claim": "SEP avoids 'Confucian' because it is not well defined",
+    "verdict": "supported",
+    "note": "SEP Confucius intro."
+  },
+  {
+    "school": "confucianism",
+    "item": "debatable",
+    "claim": "Ru is older than Confucius and meant experts in ritual and music",
+    "verdict": "supported",
+    "note": "SEP intro."
+  },
+  {
+    "school": "confucianism",
+    "item": "debatable",
+    "claim": "Neo-Confucianism (Song period, 960–1279) left out",
+    "verdict": "supported",
+    "note": "SEP Confucius §1."
+  },
+  {
+    "school": "confucianism",
+    "item": "tagline",
+    "claim": "Become good through ritual, family duty and study, and govern by example, not force",
+    "verdict": "supported",
+    "note": "SEP Confucius §3, §5; SEP Mencius §1."
+  },
+  {
+    "school": "confucianism",
+    "item": "q0",
+    "claim": "Is human nature good, or must we be shaped into goodness?",
+    "verdict": "supported",
+    "note": "SEP Mencius §3; SEP Xunzi §2."
+  },
+  {
+    "school": "confucianism",
+    "item": "q1",
+    "claim": "Can bowing, mourning and other rituals make me a better person?",
+    "verdict": "supported",
+    "note": "SEP Confucius §3; SEP Xunzi §3."
+  },
+  {
+    "school": "confucianism",
+    "item": "q2",
+    "claim": "Should a leader guide by example rather than punishment?",
+    "verdict": "supported",
+    "note": "SEP Mencius §1 (Analects 2.3)."
+  },
+  {
+    "school": "confucianism",
+    "item": "theme0",
+    "claim": "Ritual (li) first meant ceremonies such as offerings to ancestors; later etiquette and ethics in general",
+    "verdict": "supported",
+    "note": "SEP Mencius §1."
+  },
+  {
+    "school": "confucianism",
+    "item": "theme0",
+    "claim": "Confucius taught that performing ritual and music well reshapes feelings, limits greedy desires and prepares good character",
+    "verdict": "supported",
+    "note": "SEP Confucius §3."
+  },
+  {
+    "school": "confucianism",
+    "item": "theme1",
+    "claim": "The gentleman (junzi) is the ideal person of the Analects, an early text of dialogues and stories about Confucius",
+    "verdict": "supported",
+    "note": "SEP Confucius intro and §4."
+  },
+  {
+    "school": "confucianism",
+    "item": "theme1",
+    "claim": "By the Han period (202 BCE–220 CE) five virtues counted as a complete set",
+    "verdict": "supported",
+    "note": "SEP §4 ('began to be considered as a complete set'); dates from SEP Mencius §5."
+  },
+  {
+    "school": "confucianism",
+    "item": "theme1",
+    "claim": "items: benevolence; righteousness; ritual propriety; wisdom; trustworthiness, with glosses",
+    "verdict": "supported",
+    "note": "SEP §4, each gloss close to the source."
+  },
+  {
+    "school": "confucianism",
+    "item": "theme2",
+    "claim": "Filial piety (xiao) means respect and care for parents and elders",
+    "verdict": "supported",
+    "note": "SEP Confucius §5 (Analects 2.5); SEP Mencius §1 (2.7, 'filial and respectful of his elders')."
+  },
+  {
+    "school": "confucianism",
+    "item": "theme2",
+    "claim": "Confucius made it 'the root of a person'; someone filial at home, he thought, rarely turns against superiors",
+    "verdict": "drift",
+    "note": "The quote is Analects 1.2. SEP Confucius §5 gives it to Confucius, but SEP Confucius §4 ('the disciple You Ruo says...') and SEP Mencius §1 ('Confucius's disciple Youzi sketched...') both give it to his disciple. The card follows the one reading of three that names Confucius.",
+    "fix": "'The Analects calls it 'the root of a person'. Confucius's disciple Youzi adds that someone filial at home rarely turns against superiors.'"
+  },
+  {
+    "school": "confucianism",
+    "item": "theme2",
+    "claim": "He even said fathers and sons should cover up for each other",
+    "verdict": "supported",
+    "note": "SEP Mencius §1; SEP Confucius §5 (Analects 13.18). See fairness flag on the missing context."
+  },
+  {
+    "school": "confucianism",
+    "item": "theme3",
+    "claim": "Rule by harsh rules and punishments makes people evasive and shameless",
+    "verdict": "supported",
+    "note": "SEP Mencius §1 (Analects 2.3)."
+  },
+  {
+    "school": "confucianism",
+    "item": "theme3",
+    "claim": "Guide by ethical example; force only as a last resort",
+    "verdict": "supported",
+    "note": "SEP Mencius §1."
+  },
+  {
+    "school": "confucianism",
+    "item": "theme3",
+    "claim": "Mencius: conquering the world by war is like 'climbing a tree in search of a fish'",
+    "verdict": "supported",
+    "note": "SEP Mencius §1."
+  },
+  {
+    "school": "confucianism",
+    "item": "theme4",
+    "claim": "Mencius: human nature is good; everyone has sprouts of virtue such as compassion that grow with care",
+    "verdict": "supported",
+    "note": "SEP Mencius §2-§3."
+  },
+  {
+    "school": "confucianism",
+    "item": "theme4",
+    "claim": "Xunzi: human nature is bad; following inborn desires leads to fighting and theft",
+    "verdict": "supported",
+    "note": "SEP Xunzi §2 ('contention and robbery'; SEP notes 'bad' as an accepted rendering of e)."
+  },
+  {
+    "school": "confucianism",
+    "item": "theme4",
+    "claim": "For Xunzi goodness comes from 'artifice', habits built through ritual and teachers",
+    "verdict": "supported",
+    "note": "SEP Xunzi §2."
+  },
+  {
+    "school": "confucianism",
+    "item": "theme4",
+    "claim": "Both agreed anyone can become good",
+    "verdict": "supported",
+    "note": "SEP Xunzi §2 'both Xunzi and Mencius argued that human beings all have the capacity to become good'."
+  },
+  {
+    "school": "confucianism",
+    "item": "reacted_against",
+    "claim": "Rule by force and strict punishment in a war-torn age",
+    "verdict": "supported",
+    "note": "SEP Mencius §1."
+  },
+  {
+    "school": "confucianism",
+    "item": "reacted_against",
+    "claim": "The Mohists, followers of Mozi, called Confucian rituals wasteful and demanded equal care for everyone",
+    "verdict": "supported",
+    "note": "SEP Mencius §4; SEP Xunzi §3."
+  },
+  {
+    "school": "confucianism",
+    "item": "link:daoism",
+    "claim": "Daoism grew as a critical alternative to Confucius's followers",
+    "verdict": "supported",
+    "note": "IEP Daoism §8 quote verbatim (IEP: 'largely represented')."
+  },
+  {
+    "school": "confucianism",
+    "item": "link:daoism",
+    "claim": "rejecting their human-made distinctions",
+    "verdict": "supported",
+    "note": "IEP §8."
+  },
+  {
+    "school": "confucianism",
+    "item": "link:daoism",
+    "claim": "Zhuangzi took aim at Mencius",
+    "verdict": "supported",
+    "note": "SEP Zhuangzi intro (foils 'of a type familiar from the Mencius'); SEP Mencius §5 hedges ('seem to clearly be directed at him'). Acceptable as 'took aim'."
+  },
+  {
+    "school": "confucianism",
+    "item": "link:daoism",
+    "claim": "kind pushed_against (Daoism → Confucianism)",
+    "verdict": "supported",
+    "note": "Fits: SEP Daoism intro 'Daoism's foil was... the Confucian-Mohist (Ru-Mo) dialectic'. Label reads correctly from both ends."
+  },
+  {
+    "school": "confucianism",
+    "item": "link:enlightenment",
+    "claim": "From Jesuit reports, 18th-century European writers such as Leibniz praised Confucius's ethics as reasoned and free of Church dogma",
+    "verdict": "drift",
+    "note": "SEP §1 supports each part: Jesuit accounts; Leibniz and Clerc 'praised Confucius for his discovery of universal natural laws through reason'; 'independence from the dogmatic influence of the Church'. But it leaves out what both sources stress. SEP: 'at times he was criticized as an atheist or an advocate of despotism'. IEP §7 calls this image one of the 'myths' ('Each remade Confucius in his own image for his own ends'). The example, Leibniz, belongs to Meander's Rationalism node, not the Enlightenment node (Voltaire, Rousseau, Diderot, Kant).",
+    "fix": "'Through Jesuit reports, 18th-century Europeans praised Confucius as a sage of reason, free of Church dogma. IEP calls this a myth that said more about them than about him.'"
+  },
+  {
+    "school": "confucianism",
+    "item": "link:enlightenment",
+    "claim": "kind built_on (Enlightenment → Confucianism)",
+    "verdict": "unsupported",
+    "note": "Not honest. Neither source says Enlightenment thought was built on Confucius. SEP describes praise and celebration, and Europeans who 'viewed Confucius as a moral philosopher whose approach was in line with rationalism and humanism': they saw their own view in him. IEP §7 is explicit that Leibniz and Wolff 'recognized in him an Enlightenment sage' as one of several projections. No node thinker (Voltaire, Rousseau, Diderot, Kant) is cited as drawing on Confucius. The link also exists only on the Confucianism card: it is not in links.json or the Enlightenment entry in full.json.",
+    "fix": "Cut the link and mention the reception in a Confucianism theme or the debatable line. Or, if a reception link is wanted, add a new kind such as 'admired' (reads 'admired by the Enlightenment as a sage of reason'). Either way, add it to both ends."
+  },
+  {
+    "school": "confucianism",
+    "item": "link:enlightenment",
+    "claim": "label 'Confucius as a sage of reason'",
+    "verdict": "supported",
+    "note": "IEP §7 'Enlightenment sage'; SEP §1 'through reason'. Reads from both ends."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Confucius.dates",
+    "claim": "trad. 551–479 BCE",
+    "verdict": "supported",
+    "note": "SEP intro."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Confucius.summary",
+    "claim": "Confucius is a Latin form of Kongfuzi, 'Master Kong'",
+    "verdict": "supported",
+    "note": "SEP intro ('Latinized combination of the surname Kong... with an honorific suffix \"Master\" (fuzi)')."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Confucius.summary",
+    "claim": "born in Zou, in today's Shandong; held offices in Lu",
+    "verdict": "supported",
+    "note": "SEP §2."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Confucius.summary",
+    "claim": "SEP: arguably the most significant thinker in East Asian history",
+    "verdict": "supported",
+    "note": "SEP intro (the hedge 'arguably' is kept)."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Confucius.ki0",
+    "claim": "Performing ritual and music well reshapes desires and starts moral growth",
+    "verdict": "supported",
+    "note": "SEP §3."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Confucius.ki1",
+    "claim": "Filial piety is the root of good character",
+    "verdict": "drift",
+    "note": "Same attribution problem as theme2: the 'root' line (Analects 1.2) is the disciple Youzi's per SEP Confucius §4 and SEP Mencius §1. SEP Confucius §5 does support Confucius linking filial piety to loyalty.",
+    "fix": "'Filial piety, real respect for parents and not just feeding them, underpins good character and loyalty', citing SEP Mencius §1 (Analects 2.7) and SEP Confucius §5. Apply the same fix in the prompt."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Confucius.ki2",
+    "claim": "Learning and reflecting need each other: learning without reflecting leaves you lost",
+    "verdict": "supported",
+    "note": "SEP Mencius §1 (Analects 2.15)."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Confucius.prompt",
+    "claim": "'filial piety is the root of good character'",
+    "verdict": "drift",
+    "note": "Same as ki1.",
+    "fix": "Mirror the ki1 fix."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Mencius.dates",
+    "claim": "4th century BCE (372–289 BCE?)",
+    "verdict": "supported",
+    "note": "SEP Mencius intro; SEP Xunzi §2 'Mencius (372–289 BCE?)', which is cited."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Mencius.summary",
+    "claim": "Latin form of Mengzi, 'Master Meng'",
+    "verdict": "supported",
+    "note": "SEP Mencius §1."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Mencius.summary",
+    "claim": "born about a century after Confucius died, in the state of Zou",
+    "verdict": "drift",
+    "note": "SEP §1: 'he is said to have been born in the state of Zou'; 'details of Mencius's early life are sketchy and uncertain'. The hedge is dropped.",
+    "fix": "'He was born about a century after Confucius died, reportedly in the state of Zou.'"
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Mencius.summary",
+    "claim": "travelled to persuade rulers to govern by benevolence not force; held office in Qi",
+    "verdict": "supported",
+    "note": "SEP §1."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Mencius.summary",
+    "claim": "called the 'Second Sage', second only to Confucius",
+    "verdict": "supported",
+    "note": "SEP intro ('Often referred to'). SEP §5 notes the title came from Neo-Confucians."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Mencius.ki0",
+    "claim": "Human nature is good: sprouts of benevolence, righteousness, wisdom and propriety",
+    "verdict": "supported",
+    "note": "SEP §2-§3."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Mencius.ki1",
+    "claim": "Child at a well shows we are not purely selfish",
+    "verdict": "supported",
+    "note": "SEP §4."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Mencius.ki2",
+    "claim": "Caring for everyone equally, as Mohists demand, goes against our nature, since we love relatives more",
+    "verdict": "supported",
+    "note": "SEP §4."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Mencius.prompt",
+    "claim": "all prompt claims",
+    "verdict": "supported",
+    "note": "Card only."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Xunzi.dates",
+    "claim": "c. 310 – after 238 BCE",
+    "verdict": "supported",
+    "note": "SEP Xunzi §1."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Xunzi.summary",
+    "claim": "Xunzi means 'Master Xun'; name Xun Kuang",
+    "verdict": "supported",
+    "note": "SEP §1."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Xunzi.summary",
+    "claim": "probably born c. 310, died after 238 BCE",
+    "verdict": "supported",
+    "note": "SEP §1 (hedged correctly)."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Xunzi.summary",
+    "claim": "For most of imperial history seen as a Confucian who went astray by rejecting Mencius",
+    "verdict": "supported",
+    "note": "SEP intro."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Xunzi.summary",
+    "claim": "Only in recent decades widely ranked among China's greatest thinkers",
+    "verdict": "supported",
+    "note": "SEP intro."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Xunzi.ki0",
+    "claim": "Human nature is bad; good is artifice built by effort",
+    "verdict": "supported",
+    "note": "SEP §2."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Xunzi.ki1",
+    "claim": "Rituals and music handed down by sages train emotions and hold society together",
+    "verdict": "supported",
+    "note": "SEP §3."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Xunzi.ki2",
+    "claim": "We cannot know Heaven but can know the Way; sages marked it with rituals like signposts",
+    "verdict": "supported",
+    "note": "SEP §4."
+  },
+  {
+    "school": "confucianism",
+    "item": "thinker:Xunzi.prompt",
+    "claim": "all prompt claims",
+    "verdict": "supported",
+    "note": "Card only."
+  },
+  {
+    "school": "confucianism",
+    "item": "places.places",
+    "claim": "China (Shandong)",
+    "verdict": "supported",
+    "note": "SEP Confucius §2 and SEP Mencius §1 quotes verbatim. The Mencius quote leaves out 'he is said to have been' just before it; the place itself still stands. Xunzi's location isn't covered, but Shandong as the home region is fair."
+  },
+  {
+    "school": "confucianism",
+    "item": "places.span",
+    "claim": "6th–3rd century BCE",
+    "verdict": "supported",
+    "note": "SEP Confucius intro 'trad. 551–479'; SEP Xunzi intro 'third century BCE'. See fairness flag: the span ends as if the tradition did."
+  },
+  {
+    "school": "confucianism",
+    "item": "places.quotes",
+    "claim": "all 4 quotes on the page in the cited section",
+    "verdict": "supported",
+    "note": "Checked verbatim."
+  },
+  {
+    "school": "daoism",
+    "item": "era",
+    "claim": "Ancient (classical China)",
+    "verdict": "supported",
+    "note": ""
+  },
+  {
+    "school": "daoism",
+    "item": "date_range",
+    "claim": "5th–3rd century BCE (the Laozi and Zhuangzi texts)",
+    "verdict": "supported",
+    "note": "SEP Daoism intro 'Classical period (5th to 3rd C. BC)'."
+  },
+  {
+    "school": "daoism",
+    "item": "date_range",
+    "claim": "revived as 'Neo-Daoism' from the 3rd century CE",
+    "verdict": "supported",
+    "note": "IEP Daoism §11 (Wang Bi 226-249); SEP Laozi §1 ('third to the sixth century C.E.')."
+  },
+  {
+    "school": "daoism",
+    "item": "description",
+    "claim": "A Chinese tradition built around the Dao, the 'Way' of nature",
+    "verdict": "supported",
+    "note": "SEP Daoism intro (natural dào); IEP intro."
+  },
+  {
+    "school": "daoism",
+    "item": "description",
+    "claim": "The Laozi (Daodejing) and Zhuangzi are its two classic books",
+    "verdict": "supported",
+    "note": "IEP §2."
+  },
+  {
+    "school": "daoism",
+    "item": "description",
+    "claim": "praise effortless action and naturalness",
+    "verdict": "supported",
+    "note": "IEP intro (wuwei, ziran)."
+  },
+  {
+    "school": "daoism",
+    "item": "description",
+    "claim": "doubt that human-made labels of good and bad make life better",
+    "verdict": "supported",
+    "note": "IEP §8."
+  },
+  {
+    "school": "daoism",
+    "item": "debatable",
+    "claim": "The name 'Daoist school' was coined by a historian in the 2nd century BCE, after its books were written",
+    "verdict": "supported",
+    "note": "IEP §1 (Sima Tan); SEP Daoism intro."
+  },
+  {
+    "school": "daoism",
+    "item": "debatable",
+    "claim": "'Daoism' also names a later religion in which Laozi is a god",
+    "verdict": "supported",
+    "note": "SEP Laozi intro 'revered as a supreme deity'; IEP §1."
+  },
+  {
+    "school": "daoism",
+    "item": "debatable",
+    "claim": "Some modern scholars think Laozi never existed",
+    "verdict": "supported",
+    "note": "SEP Laozi intro."
+  },
+  {
+    "school": "daoism",
+    "item": "tagline",
+    "claim": "Follow the Way of nature: act without forcing, and see past human-made labels",
+    "verdict": "supported",
+    "note": "IEP intro, §5, §8."
+  },
+  {
+    "school": "daoism",
+    "item": "q0",
+    "claim": "What if trying harder is the problem, not the answer?",
+    "verdict": "supported",
+    "note": "IEP §5 (no tampering); SEP Laozi §7."
+  },
+  {
+    "school": "daoism",
+    "item": "q1",
+    "claim": "Do words like 'good' and 'bad' show how things are, or only how I see them?",
+    "verdict": "supported",
+    "note": "IEP §8; IEP Zhuangzi b."
+  },
+  {
+    "school": "daoism",
+    "item": "q2",
+    "claim": "Could I live more freely by stepping outside society's roles?",
+    "verdict": "supported",
+    "note": "IEP Zhuangzi a. ('We ordinarily confine ourselves within our social roles')."
+  },
+  {
+    "school": "daoism",
+    "item": "theme0",
+    "claim": "Dao means a road or way",
+    "verdict": "supported",
+    "note": "IEP §5."
+  },
+  {
+    "school": "daoism",
+    "item": "theme0",
+    "claim": "names the process of reality itself: how things come together while always changing",
+    "verdict": "supported",
+    "note": "IEP §5 'the way things come together, while still transforming'."
+  },
+  {
+    "school": "daoism",
+    "item": "theme0",
+    "claim": "The Daodejing says we cannot fathom the Dao; no name captures it",
+    "verdict": "supported",
+    "note": "IEP §5; SEP Laozi §6."
+  },
+  {
+    "school": "daoism",
+    "item": "theme1",
+    "claim": "Wu-wei is often translated 'non-action', but IEP says scholars generally agree that is wrong",
+    "verdict": "supported",
+    "note": "IEP §5 verbatim sense. (SEP Laozi still uses 'nonaction'; see fairness and newcomer flags.)"
+  },
+  {
+    "school": "daoism",
+    "item": "theme1",
+    "claim": "means acting naturally, without forcing or tampering",
+    "verdict": "supported",
+    "note": "IEP §5."
+  },
+  {
+    "school": "daoism",
+    "item": "theme1",
+    "claim": "Ding the Butcher carves so skilfully he works by spirit, not by eye",
+    "verdict": "supported",
+    "note": "IEP §7."
+  },
+  {
+    "school": "daoism",
+    "item": "theme2",
+    "claim": "Ziran, literally 'self so', means naturalness or spontaneity",
+    "verdict": "supported",
+    "note": "SEP Laozi §7."
+  },
+  {
+    "school": "daoism",
+    "item": "theme2",
+    "claim": "The Laozi says the Dao is not modelled on anything else",
+    "verdict": "supported",
+    "note": "SEP §7 (ch. 25)."
+  },
+  {
+    "school": "daoism",
+    "item": "theme2",
+    "claim": "People should act in tune with the ways of nature",
+    "verdict": "supported",
+    "note": "SEP §7."
+  },
+  {
+    "school": "daoism",
+    "item": "theme2",
+    "claim": "The sage is plain like uncarved wood, free of society-made desires",
+    "verdict": "supported",
+    "note": "IEP §5 (chs. 19, 37)."
+  },
+  {
+    "school": "daoism",
+    "item": "theme3",
+    "claim": "Daodejing: human distinctions in law, morals and beauty create our troubles",
+    "verdict": "supported",
+    "note": "IEP §8 (ch. 3a)."
+  },
+  {
+    "school": "daoism",
+    "item": "theme3",
+    "claim": "Daoists saw Confucians as trying to carve people into polished sculptures; Daoists would rather stay like unhewn wood",
+    "verdict": "drift",
+    "note": "The sculpture image is the IEP author's own illustration ('Imagine this comparison'). It is not a Daoist statement, though IEP adds that 'this line of criticism is made very explicitly' in Zhuangzi chs. 8-10. The card turns IEP's analogy into the Daoists' own view.",
+    "fix": "'IEP sums up the contrast with an image: Daoists want to stay like natural, unhewn wood; Confucians want to be carved and polished. Zhuangzi chapters 8-10 make this criticism openly.'"
+  },
+  {
+    "school": "daoism",
+    "item": "theme4",
+    "claim": "Zhuangzi's book is full of short, funny parables",
+    "verdict": "supported",
+    "note": "SEP Zhuangzi intro ('short, pithy, and amusing')."
+  },
+  {
+    "school": "daoism",
+    "item": "theme4",
+    "claim": "Many ask whether one point of view is really better than another; Peng and the little birds see the world differently",
+    "verdict": "drift",
+    "note": "The cited IEP passage uses Peng to *reject* this reading. Guo Xiang's view that 'the Vast perspective of the giant Peng bird is no better than the petty perspectives' is called 'clearly a misreading'. IEP a.: 'the petty cannot come up to the Vast'. SEP calls Zhuangzi a relativist. The theme uses the disputed example as if it supported equal viewpoints.",
+    "fix": "'Many ask whether our point of view is the only one. The little birds laugh at the giant bird Peng, but their narrow view cannot take in his vast one.'"
+  },
+  {
+    "school": "daoism",
+    "item": "theme4",
+    "claim": "Zhuangzi admits we cannot be sure that what we fear, such as death, is bad",
+    "verdict": "supported",
+    "note": "IEP Zhuangzi b."
+  },
+  {
+    "school": "daoism",
+    "item": "reacted_against",
+    "claim": "The Confucian and Mohist debate about the right human way of life",
+    "verdict": "supported",
+    "note": "SEP Daoism intro."
+  },
+  {
+    "school": "daoism",
+    "item": "reacted_against",
+    "claim": "with its moral training and fixed distinctions; Daoists looked to the natural Way",
+    "verdict": "supported",
+    "note": "SEP Daoism intro (human vs natural dào); IEP §8."
+  },
+  {
+    "school": "daoism",
+    "item": "link:confucianism",
+    "claim": "(same link as on the Confucianism card)",
+    "verdict": "supported",
+    "note": "See confucianism link:daoism items."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Laozi.dates",
+    "claim": "traditionally 6th century BCE; possibly legendary",
+    "verdict": "supported",
+    "note": "SEP Laozi intro."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Laozi.summary",
+    "claim": "Laozi means 'Old Master'",
+    "verdict": "supported",
+    "note": "SEP intro ('best taken to mean'). SEP §1 notes some read 'Master Lao'; fine to leave out."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Laozi.summary",
+    "claim": "Chinese sources: flourished 6th c., older contemporary of Confucius",
+    "verdict": "supported",
+    "note": "SEP intro and §1."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Laozi.summary",
+    "claim": "Some modern scholars think he is entirely legendary",
+    "verdict": "supported",
+    "note": "SEP intro."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Laozi.summary",
+    "claim": "The Laozi/Daodejing probably compiled from sayings over several centuries",
+    "verdict": "supported",
+    "note": "SEP §2 (written down from 2nd half of 5th c., consolidated 4th c., stable by mid-3rd)."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Laozi.ki0",
+    "claim": "No name can capture the Dao",
+    "verdict": "supported",
+    "note": "IEP §5."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Laozi.ki1",
+    "claim": "The sage acts effortlessly, like a newborn, without plans or society's structures",
+    "verdict": "supported",
+    "note": "IEP §5."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Laozi.ki2",
+    "claim": "The best ruler stays in the background; when work is done the people say they are content",
+    "verdict": "supported",
+    "note": "IEP §5 (ch. 17)."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Laozi.prompt",
+    "claim": "all prompt claims",
+    "verdict": "supported",
+    "note": "Card only."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Zhuangzi.dates",
+    "claim": "late 4th century BCE (IEP: c. 370–300 BCE)",
+    "verdict": "supported",
+    "note": "SEP intro; IEP §6."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Zhuangzi.summary",
+    "claim": "means 'Master Zhuang'; personal name Zhou",
+    "verdict": "supported",
+    "note": "SEP intro; IEP §6 'Zhuang Zhou'. (SEP §1 says Han biographers 'speculate' about the name; IEP is enough.)"
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Zhuangzi.summary",
+    "claim": "flourished late 4th c., around the time of Mencius",
+    "verdict": "supported",
+    "note": "SEP §1."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Zhuangzi.summary",
+    "claim": "SEP: pivotal figure of classical philosophical Daoism",
+    "verdict": "supported",
+    "note": "SEP intro."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Zhuangzi.summary",
+    "claim": "The book mixes his writing with others'; chapters 1-7, the inner chapters, most often ascribed to him",
+    "verdict": "supported",
+    "note": "SEP intro; IEP §6."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Zhuangzi.ki0",
+    "claim": "'Wandering beyond': step past usual roles and values to see more fully",
+    "verdict": "supported",
+    "note": "IEP Zhuangzi a."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Zhuangzi.ki1",
+    "claim": "We cannot be certain that what seems good or bad for us really is",
+    "verdict": "supported",
+    "note": "IEP b."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Zhuangzi.ki2",
+    "claim": "He doubted that Mencius's 'sprouts' could even be told apart from weeds",
+    "verdict": "drift",
+    "note": "SEP Mencius §5 hedges: 'Zhuangzi never refers to Mencius by name, but several passages seem to clearly be directed at him'. The card drops the hedge.",
+    "fix": "'In a line SEP reads as aimed at Mencius, he doubts that 'sprouts' of virtue can even be told apart from weeds.' Mirror in the prompt."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Zhuangzi.prompt",
+    "claim": "'Mencius's sprouts of virtue cannot be told apart from weeds'",
+    "verdict": "drift",
+    "note": "Same as ki2. The prompt also turns Zhuangzi's doubt into a flat claim.",
+    "fix": "'Zhuangzi's doubt that Mencius's sprouts of virtue can be told apart from weeds'."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Wang Bi.dates",
+    "claim": "226–249 CE",
+    "verdict": "supported",
+    "note": "IEP §11; SEP Laozi §4."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Wang Bi.summary",
+    "claim": "a leader of Learning in the Profound (Xuanxue), sometimes called Neo-Daoism",
+    "verdict": "supported",
+    "note": "SEP Laozi §4 ('one of the acknowledged leaders')."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Wang Bi.summary",
+    "claim": "Despite his short life, a brilliant interpreter of the Laozi",
+    "verdict": "supported",
+    "note": "SEP §4."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Wang Bi.summary",
+    "claim": "His version of the Laozi became the standard text for almost 2,000 years",
+    "verdict": "supported",
+    "note": "IEP Daoism §4. (SEP Laozi §4 says his *commentary* was 'relatively neglected' for a long period, while Heshang Gong's held 'preeminence' until the Song. The card speaks of the text, which matches IEP, but a reader may conflate the two.)"
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Wang Bi.summary",
+    "claim": "IEP notes he was not himself a Daoist",
+    "verdict": "supported",
+    "note": "IEP §4."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Wang Bi.ki0",
+    "claim": "The Laozi is about the Dao as source of being, not long life or immortals",
+    "verdict": "supported",
+    "note": "SEP §4."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Wang Bi.ki1",
+    "claim": "He gave 'principle' (li) its first extended philosophical treatment",
+    "verdict": "drift",
+    "note": "SEP §4: 'Wang Bi is often praised in later sources for having given...'. The card states the later praise as fact.",
+    "fix": "'Later writers credit him with the first extended treatment of 'principle' (li), the pattern that makes things what they are.' Check the gloss of li against SEP before use; SEP Daoism intro glosses lǐ as internal dàos ('lanes-in-jade')."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Wang Bi.ki2",
+    "claim": "Non-action means freedom from the dictates of desire, in self-cultivation and government",
+    "verdict": "supported",
+    "note": "SEP §4."
+  },
+  {
+    "school": "daoism",
+    "item": "thinker:Wang Bi.prompt",
+    "claim": "'the first extended treatment of principle'",
+    "verdict": "drift",
+    "note": "Same as ki1.",
+    "fix": "'what later writers praised as the first extended treatment of principle'."
+  },
+  {
+    "school": "daoism",
+    "item": "places.places",
+    "claim": "China",
+    "verdict": "supported",
+    "note": "SEP Laozi intro quote verbatim."
+  },
+  {
+    "school": "daoism",
+    "item": "places.span",
+    "claim": "5th–3rd century BCE",
+    "verdict": "supported",
+    "note": "SEP Laozi §2 and IEP §2 quotes verbatim. Note the school's own date_range adds Neo-Daoism from the 3rd century CE; the span omits it (see fairness flag)."
+  },
+  {
+    "school": "daoism",
+    "item": "places.quotes",
+    "claim": "all 3 quotes on the page in the cited section",
+    "verdict": "supported",
+    "note": "Checked verbatim."
+  },
+  {
+    "school": "all",
+    "item": "newcomer:sentence-length",
+    "claim": "sentences over ~22 words in learner text",
+    "verdict": "flag-newcomer",
+    "note": "Scripted check of taglines, descriptions, debatable, date ranges, questions, themes, reacted_against, link reasons, summaries and key ideas: 0 sentences over 22 words. Only the study prompts run long (40-60 words in one sentence), but they are AI-facing templates in the same shape as the pilot."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "newcomer:Mahāyāna / Great Vehicle",
+    "claim": "'Summary of the Great Vehicle' (Asaṅga ki1, prompt) and the description's 'two great later schools'",
+    "verdict": "flag-newcomer",
+    "note": "'Great Vehicle' (Mahāyāna) is never explained.",
+    "fix": "Add once in the description: 'Mahāyāna, the 'Great Vehicle', a later wave of Buddhism'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "newcomer:Abhidharma",
+    "claim": "Asaṅga ki0 'Compendium of Abhidharma'; Vasubandhu summary 'Treasury of Abhidharma'",
+    "verdict": "flag-newcomer",
+    "note": "Abhidharma is never defined (Vasubandhu's 'manual of earlier Buddhist theory' half does it).",
+    "fix": "'Abhidharma, the early Buddhist systematic analysis of experience into basic elements'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "newcomer:Upaniṣads (in link reason)",
+    "claim": "link reason names 'the Upaniṣads' on the Buddhist card",
+    "verdict": "flag-newcomer",
+    "note": "Explained only on the Vedānta card.",
+    "fix": "'the Upaniṣads' (late Vedic texts) unchanging self'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "newcomer:Maitreya",
+    "claim": "Asaṅga summary 'his teacher, Maitreya'",
+    "verdict": "flag-newcomer",
+    "note": "Fine as a name, but SEP says tradition takes Maitreya to be the future Buddha. Without that, 'tradition says some works came from his teacher' loses its point.",
+    "fix": "'Tradition says some of his works came from Maitreya, whom it identifies with the future Buddha.'"
+  },
+  {
+    "school": "vedanta",
+    "item": "newcomer:dualism / Sāṃkhya",
+    "claim": "reacted_against 'the dualism of the rival Sāṃkhya school'; debatable 'dualist branch'",
+    "verdict": "flag-newcomer",
+    "note": "'Dualism' is unexplained.",
+    "fix": "'Sāṃkhya, which held that spirit and matter are two separate realities'."
+  },
+  {
+    "school": "vedanta",
+    "item": "newcomer:Brahma Sūtra, Bhagavad Gītā",
+    "claim": "reacted_against 'Its early guide, the Brahma Sūtra'; Śaṅkara summary 'the Brahma Sūtra, the Bhagavad Gītā'",
+    "verdict": "flag-newcomer",
+    "note": "Neither text is glossed.",
+    "fix": "'the Brahma Sūtra, a short early summary of the Upaniṣads' and 'the Bhagavad Gītā, a sacred dialogue poem'."
+  },
+  {
+    "school": "confucianism",
+    "item": "newcomer:Heaven, the Way",
+    "claim": "Xunzi ki2 'We cannot know Heaven, but we can know the Way'",
+    "verdict": "flag-newcomer",
+    "note": "Both capitalised terms are unexplained in this node.",
+    "fix": "'Heaven (tian), the higher power behind the course of things' and 'the Way (dao), the right way to live' (SEP Mencius §1 has both glosses)."
+  },
+  {
+    "school": "confucianism",
+    "item": "newcomer:Jesuit",
+    "claim": "Enlightenment link reason 'From Jesuit reports'",
+    "verdict": "flag-newcomer",
+    "note": "Not glossed.",
+    "fix": "'reports from Jesuit missionaries in China'."
+  },
+  {
+    "school": "daoism",
+    "item": "newcomer:'non-action' contradiction",
+    "claim": "theme1 says IEP calls 'non-action' wrong; Wang Bi ki2 and prompt then use 'Non-action'",
+    "verdict": "flag-newcomer",
+    "note": "A newcomer reads this as a contradiction.",
+    "fix": "Wang Bi ki2: 'Wu-wei (effortless action) means freedom from the dictates of desire...'."
+  },
+  {
+    "school": "daoism",
+    "item": "newcomer:principle (li)",
+    "claim": "Wang Bi ki1",
+    "verdict": "flag-newcomer",
+    "note": "'Principle' is unexplained, and li here is not the Confucian li (ritual), which a reader may have just learned.",
+    "fix": "Gloss it and say it is a different word from ritual li."
+  },
+  {
+    "school": "daoism",
+    "item": "newcomer:sprouts",
+    "claim": "Zhuangzi ki2 'Mencius's sprouts'",
+    "verdict": "flag-newcomer",
+    "note": "'Sprouts' is explained on the Confucianism card only.",
+    "fix": "'Mencius's 'sprouts' (inborn starts) of virtue'."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "fairness:non-self",
+    "claim": "theme1, ki1",
+    "verdict": "flag-fairness",
+    "note": "Presents the strong no-self reading as the Buddha's settled teaching. SEP §1 says the question is open and that the later tradition's reading may or may not be faithful. Fix given under theme1."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "fairness:living tradition",
+    "claim": "date_range end and places span end at 8th century CE",
+    "verdict": "flag-fairness",
+    "note": "Together with 'Indian roots' only, the end date makes a living world tradition look finished. Vedānta's span says 'living today'; Buddhism's should be treated the same way.",
+    "fix": "Add 'and living today' (SEP Nāgārjuna intro: Prāsaṅgika-Madhyamaka is Tibetan Buddhism's position 'up to the present day')."
+  },
+  {
+    "school": "buddhist-philosophy",
+    "item": "fairness:Vedic religion",
+    "claim": "reacted_against 'The ritual religion of the Brahmin priests'",
+    "verdict": "flag-fairness",
+    "note": "Mild flattening. SEP §1 notes the Upaniṣads, inside the Vedic canon, 'likewise' showed disaffection with ritualism.",
+    "fix": "Optional: '...a dissatisfaction the late Vedic Upaniṣads also shared.'"
+  },
+  {
+    "school": "confucianism",
+    "item": "fairness:underdetermined core",
+    "claim": "description 'It holds that ritual, family duty and study...'",
+    "verdict": "flag-fairness",
+    "note": "SEP intro and §2: Confucius's philosophy is 'historically underdetermined' and 'the correct identification of the core teachings is still avidly debated'. The debatable line covers the word 'Confucian' but not this.",
+    "fix": "Add to debatable: 'SEP stresses that what Confucius himself taught is still debated; this node follows the Analects.'"
+  },
+  {
+    "school": "confucianism",
+    "item": "fairness:cover-up",
+    "claim": "theme2 'fathers and sons should cover up for each other'",
+    "verdict": "flag-fairness",
+    "note": "Without context it reads as endorsing corruption. Both SEP entries tie it to a son reporting his father for stealing a sheep, and SEP Mencius §5 records the modern nepotism debate.",
+    "fix": "'Asked about a son who reported his father for stealing a sheep, he said that among his people fathers and sons cover for each other.'"
+  },
+  {
+    "school": "confucianism",
+    "item": "fairness:living tradition",
+    "claim": "places span 6th–3rd century BCE",
+    "verdict": "flag-fairness",
+    "note": "Ends as if the tradition did. SEP Mencius §5 records state ideology in the Han, Neo-Confucianism, New Confucianism and a post-Mao resurgence.",
+    "fix": "'6th–3rd century BCE (classical period; the tradition continues today)'."
+  },
+  {
+    "school": "confucianism",
+    "item": "fairness:Enlightenment reception",
+    "claim": "link:enlightenment",
+    "verdict": "flag-fairness",
+    "note": "Presents an exoticising European projection as intellectual inheritance. IEP §7 is explicit that it was a myth. See the link verdict."
+  },
+  {
+    "school": "daoism",
+    "item": "fairness:philosophy vs religion",
+    "claim": "debatable 'this node covers the philosophy'",
+    "verdict": "flag-fairness",
+    "note": "Presents the philosophy/religion split as clean. SEP Laozi intro: 'The two are deeply intertwined'. IEP intro: 'historically Daoists themselves have been uninterested in such categories'.",
+    "fix": "'...this node covers the philosophy, though SEP and IEP stress the two are deeply intertwined and Daoists themselves rarely split them.'"
+  },
+  {
+    "school": "daoism",
+    "item": "fairness:relativism",
+    "claim": "theme4",
+    "verdict": "flag-fairness",
+    "note": "Whether Zhuangzi is a relativist is contested (SEP: yes; IEP: radical relativism is 'clearly a misreading'). Fix given under theme4."
+  },
+  {
+    "school": "daoism",
+    "item": "fairness:wu-wei translation",
+    "claim": "theme1",
+    "verdict": "flag-fairness",
+    "note": "Attributing 'non-action is wrong' to IEP is honest. 'Scholars generally agree' is IEP's own claim, and SEP Laozi uses 'nonaction' throughout. Acceptable as written because it is attributed."
+  },
+  {
+    "school": "daoism",
+    "item": "fairness:living tradition",
+    "claim": "places span 5th–3rd century BCE",
+    "verdict": "flag-fairness",
+    "note": "Religious Daoism is living (SEP Laozi §1: Laozi's birthday 'celebrated in many parts of Asia' today). The span also omits the Neo-Daoism the school's own date_range includes.",
+    "fix": "'5th–3rd century BCE; Neo-Daoism from the 3rd century CE; living today as a religion'."
+  }
+]

@@ -1,0 +1,123 @@
+[
+  {
+    "item": "overview.0",
+    "claims": [
+      { "claim": "Existentialism is a loose family of ideas, not a tidy school.", "verdict": "supported", "evidence": "SEP Existentialism [intro]: 'certainly not a reference to a coherent system or philosophical school'; 'there is no unifying doctrine, one can nonetheless distill a set of overlapping ideas'." },
+      { "claim": "It starts from concrete, first-person life rather than a detached 'view from nowhere'.", "verdict": "supported", "evidence": "SEP Existentialism [2. Engagement vs. Detachment]: rejects the detached 'God's eye view' or 'view from nowhere'; existence grasped through 'careful analysis of first-person experience, of the concrete, flesh and blood particulars'." },
+      { "claim": "A central idea: no fixed nature is handed to us, so we make ourselves through our choices and are responsible for who we become.", "verdict": "supported", "evidence": "SEP Existentialism [intro] Existence Precedes Essence: 'our essence is not given in advance ... the task of creating ourselves through our choices and actions'; Freedom: 'free and responsible for who we are and what we do'." },
+      { "claim": "Kierkegaard and Nietzsche laid the groundwork in the nineteenth century.", "verdict": "supported", "evidence": "SEP Existentialism [intro]: 'the conceptual groundwork of the movement was laid much earlier in the nineteenth century by pioneers like Søren Kierkegaard and Friedrich Nietzsche'." },
+      { "claim": "Sartre and Beauvoir made it famous in mid-twentieth-century France.", "verdict": "supported", "evidence": "SEP Existentialism [intro]: movement 'exploded on the scene in mid-twentieth-century France'; 'the most popular voices of this movement were French, most notably Jean-Paul Sartre and Simone de Beauvoir'." }
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "overview.1",
+    "claims": [
+      { "claim": "It takes on questions we all meet: how to live when no rulebook tells us, how to stop drifting with the crowd, how to face anxiety, death and meaninglessness.", "verdict": "supported", "evidence": "SEP Existentialism [intro]: a generation 'forced to confront the human condition and the anxiety-provoking givens of death, freedom, and meaninglessness'; Authenticity: critical of 'our ingrained tendency to conform'; Ethics: 'reject the idea of moral absolutes'.", "note": "'Questions we all meet' is a mild generalisation of 'an entire generation was forced to confront'; acceptable paraphrase." },
+      { "claim": "Its ideas spread into novels, films, theology, psychotherapy and radical, emancipatory politics.", "verdict": "supported", "evidence": "SEP Existentialism [intro]: novels and plays listed; 'Its ideas are captured in films'; 'shaped theological debates'; 'profound impact in ... existential approaches to psychotherapy'; 'informed the radical and emancipatory politics of Martin Luther King Jr. and Malcolm X'." },
+      { "claim": "It is not moral nihilism: a good life is possible, one where we own our choices and help others be free too.", "verdict": "supported", "evidence": "SEP Existentialism [intro] Ethics: 'existentialism should not be dismissed for promoting moral nihilism. For the existentialist, a moral or praiseworthy life is possible. It is one where we acknowledge and own up to our freedom, take full responsibility for our choices, and act in such a way as to help others realize their freedom'." }
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "themes.2.p0",
+    "claims": [
+      { "claim": "Existentialists criticise living by borrowed norms.", "verdict": "supported", "evidence": "SEP Existentialism [5. Authenticity]: 'critique of mass society and our tendency to conform to the levelled-down norms and expectations of the public'." },
+      { "claim": "Kierkegaard wrote of 'the public', Nietzsche of 'the herd' and Heidegger of 'the They'.", "verdict": "supported", "evidence": "SEP Existentialism [1. Nihilism and the Crisis of Modernity]: 'In their conceptions of “the public” (Kierkegaard), “the herd” (Nietzsche), and “the They” (Heidegger)'." },
+      { "claim": "As Heidegger put it, we enjoy, read and judge things as 'they' do.", "verdict": "supported", "evidence": "SEP Existentialism [5. Authenticity]: 'As Heidegger writes, “We take pleasure and enjoy ourselves as they take pleasure. We read, see, and judge about literature and art as they see and judge”'. Now attributed to Heidegger alone, as the source does." },
+      { "claim": "Conforming is comforting, because doing what everyone does feels like living well.", "verdict": "supported", "evidence": "SEP Existentialism [5. Authenticity]: 'Living this way can be comforting, creating the illusion that we are living well because we are doing what everyone else does'." },
+      { "claim": "But it hides our freedom from us.", "verdict": "supported", "evidence": "SEP Existentialism [5. Authenticity]: conformism shows we are 'unwilling or unable to face up to the freedom and contingency of our condition'; it 'covers over the anxiety of own freedom and finitude'." },
+      { "claim": "Sartre and Beauvoir call this self-deception 'bad faith'.", "verdict": "supported", "evidence": "SEP Existentialism [5. Authenticity]: 'Sartre and Beauvoir refer to inauthenticity in terms of “bad faith” (mauvaise foi)'; [5.5]: 'self-deception'." },
+      { "claim": "I am in bad faith when I treat myself as a fixed thing ('I am what I am').", "verdict": "supported", "evidence": "SEP Existentialism [5.5 Self-Recovery in Sartre and Beauvoir]: bad faith 'when I over-identify with my facticity, as if I were a fully realized object or thing ... that “I am what I am”'." },
+      { "claim": "And also when I pretend my situation does not limit my choices.", "verdict": "supported", "evidence": "SEP Existentialism [5. Authenticity]: 'I am also in bad faith when I over-identify with freedom and deny ... that my choices are limited and constrained by my situation'." }
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "themes.3.p0",
+    "claims": [
+      { "claim": "As nineteenth-century Europe grew secular and scientific, the religious frame that gave life moral direction began to collapse.", "verdict": "supported", "evidence": "SEP Existentialism [1. Nihilism and the Crisis of Modernity]: 'By this time [the nineteenth century], an increasingly secular and scientific worldview was emerging and the traditional religious framework that gave pre-modern life a sense of moral orientation and cohesion was beginning to collapse'; [intro]: 'late nineteenth century Europe'." },
+      { "claim": "Nietzsche diagnosed the result, nihilism, with his image of the death of God.", "verdict": "supported", "evidence": "SEP Existentialism [1. Nihilism and the Crisis of Modernity]: 'Nietzsche was the most influential and prophetic in diagnosing and conceptualizing the crisis. With the death of God and the loss of moral absolutes...'." },
+      { "claim": "Camus named the clash between our 'wild longing for clarity' and 'the unreasonable silence of the world' the absurd.", "verdict": "supported", "evidence": "SEP Camus [3.3 Criticism of Existentialists]: 'an inevitable divorce between human consciousness, with its “wild longing for clarity” (MS, 21) and the “unreasonable silence of the world” (MS, 28)'; absurdity is 'an essential feature of our relationship with the world'." },
+      { "claim": "Yet this need not end in despair; for Camus the absurd calls for action, not suicide.", "verdict": "supported", "evidence": "IEP Existentialism [f. Albert Camus]: 'the acceptance of the absurd does not lead to nihilism ... or to inertia, but rather to their opposite: to action and participation'; IEP Camus [c. Essays...]: 'In the end, Camus rejects suicide'." },
+      { "claim": "Beauvoir held that existence is not absurd but ambiguous: its meaning is never fixed, so we keep making it.", "verdict": "supported", "evidence": "SEP Existentialism [5.5]: Beauvoir: 'The notion of ambiguity must not be confused with that of absurdity ... to say that it is ambiguous is to assert that its meaning is never fixed'; 'My projects have meaning and value because I chose these projects, but the meaning is contingent'." }
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "themes.4.p0",
+    "claims": [
+      { "claim": "Sartre argued that we see ourselves through 'the look' of others, whose gaze can turn us into objects.", "verdict": "supported", "evidence": "SEP Existentialism [6.1 Authentic Being-for-Others]: 'Sartre and Beauvoir argue that ... I understand or see myself ... through “the look” (le regard) of the Other. And the look has the power to strip away my freedom and turn me into an object'.", "note": "Source attributes this to Sartre and Beauvoir jointly; naming Sartre alone is a partial but not false attribution." },
+      { "claim": "Relationships become a power struggle, summed up in his play No Exit: 'Hell is—other people.'", "verdict": "supported", "evidence": "SEP Existentialism [6.1]: 'a dyadic power struggle'; 'This struggle for self-assertion leads to Sartre’s famous claim in his play Huis Clos (No Exit) that “Hell is—other people”'." },
+      { "claim": "Beauvoir's 'authentic love' nurtures the other person's freedom instead of possessing them.", "verdict": "supported", "evidence": "SEP Existentialism [6.1]: 'authentic love' as 'a relationship where we acknowledge and nurture the other’s freedom and transcendence while ... resisting the temptations ... to see the Other as an object or thing to be manipulated and possessed'." },
+      { "claim": "She and Sartre concluded that wanting my own freedom commits me to wanting it for others.", "verdict": "supported", "evidence": "SEP Existentialism [6. Ethics]: Sartre: 'I am obliged to want others to have freedom at the same time that I want my own freedom'; IEP Existentialism [e. Beauvoir]: 'To will oneself free is also to will others free'." },
+      { "claim": "In Beauvoir's words, to will oneself free is also to will others free.", "verdict": "supported", "evidence": "IEP Existentialism [e. Simone de Beauvoir]: '“To will oneself free is also to will others free” (Beauvoir 1976:73)'." },
+      { "claim": "For Sartre, the Nazi occupation, his time as a prisoner of war and his Marxist critics then shifted the focus from the individual to the social.", "verdict": "supported", "evidence": "SEP Existentialism [6.3 The Ethics of Engagement]: 'The Nazi occupation of France, his own experience as a prisoner of war, and the attacks on his philosophy from influential Marxist critics, compelled Sartre to shift his focus from the individual to the social'.", "note": "Causes now match the source. Minor: 'then' could read as 'after reaching the conclusion above'; the source gives no such sequence. Not misleading enough to fail." }
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "legacy.p1",
+    "claims": [
+      { "claim": "The IEP judges that the movement as a whole has had relatively little direct influence within academic philosophy.", "verdict": "supported", "evidence": "IEP Existentialism [b. Philosophy]: 'As a whole, existentialism has had relatively little direct influence within philosophy'." },
+      { "claim": "Though Nietzsche and Heidegger remain very much alive there.", "verdict": "supported", "evidence": "IEP Existentialism [b. Philosophy]: 'Nietzsche and Heidegger in particular are very much ‘live’ topics in philosophy, even in the 21st century'." },
+      { "claim": "The SEP sees it thriving.", "verdict": "supported", "evidence": "SEP Existentialism [7. Contemporary Relevance]: 'the movement continues to thrive in the academy today'." },
+      { "claim": "It shaped Foucault and Derrida.", "verdict": "supported", "evidence": "SEP Existentialism [7.1 Post-Structuralism]: decisive impact on post-structural philosophies; Nietzsche and Heidegger decisive influences on Derrida's deconstruction and Foucault's genealogy." },
+      { "claim": "It shaped theories of the self as a life story.", "verdict": "supported", "evidence": "SEP Existentialism [7.2 Narrative and Hermeneutic Philosophy]: existentialism informed narrative philosophy; 'grasp our lives in a narrative'." },
+      { "claim": "It shaped cognitive science's picture of the embodied mind.", "verdict": "supported", "evidence": "SEP Existentialism [7.3 Philosophy of Mind and Cognitive Science]: replaced the disembodied mind 'with the now widely accepted notion of the embedded, enactive, and embodied self'." },
+      { "claim": "Its focus on emotion opened a whole field of research.", "verdict": "supported", "evidence": "IEP Existentialism [b. Philosophy]: 'the philosophical importance that the existentialists placed upon emotion has been influential, legitimising a whole domain of philosophical research'.", "note": "'Opened' is slightly stronger than 'legitimising'; acceptable paraphrase. Sentence follows 'The SEP sees...' but is a new sentence, and IEP b is cited." },
+      { "claim": "It insisted philosophy deal directly with real-life topics such as sex and death.", "verdict": "supported", "evidence": "IEP Existentialism [b. Philosophy]: 'insisted philosophy could and should deal very directly with ‘real world’ topics such as sex, death or crime'." },
+      { "claim": "It has also shaped medicine and nursing.", "verdict": "supported", "evidence": "SEP Existentialism [7.6 Philosophy of Health and Illness]: 'deep and lasting impact on the allied health professions ... from narrative medicine to nursing'; informed a move away from reductive biomedicine." },
+      { "claim": "Its courses remain among philosophy's most popular.", "verdict": "supported", "evidence": "SEP Existentialism [7.7 A New Generation]: 'Existentialist-themed courses are often among the most popular in the philosophy curriculum'." }
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "key-works.w0",
+    "claims": [
+      { "claim": "Title 'Fear and Trembling', author Søren Kierkegaard, year 1843.", "verdict": "supported", "evidence": "SEP Kierkegaard [1. Life and Works]: 'Fear and Trembling (1843)'." },
+      { "claim": "About Abraham's near-sacrifice of Isaac.", "verdict": "supported", "evidence": "IEP Existentialism [a. Kierkegaard]: 'retells the story of the attempted sacrifice of Isaac ... at the last moment God intervenes and saves Isaac'." },
+      { "claim": "Used to ask what faith demands beyond ethics.", "verdict": "supported", "evidence": "SEP Existentialism [5.2 Kierkegaard’s Knight of Faith]: Abraham must suspend 'his obligation to the ethical sphere'; 'this is what is required to enter the sphere of faith'." }
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "key-works.w1",
+    "claims": [
+      { "claim": "Title 'The Gay Science', author Friedrich Nietzsche, year 1882; expanded 1887.", "verdict": "supported", "evidence": "SEP Nietzsche [1. Life and Works]: 'The Gay Science (1882, second expanded edition 1887)'." },
+      { "claim": "Poses the eternal-recurrence test: could you will your life again, forever?", "verdict": "supported", "evidence": "SEP Existentialism [5.3 Nietzsche’s Overman]: 'In The Gay Science, Nietzsche captures this attitude with a famous thought experiment called the “doctrine of eternal recurrence.” Here, he asks if we have the audacity to live the same life we are living now over and over for eternity'." }
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "key-works.w5",
+    "claims": [
+      { "claim": "Title 'Existentialism Is a Humanism', author Jean-Paul Sartre.", "verdict": "supported", "evidence": "SEP Sartre [intro]: 'his public lecture, Existentialism is a Humanism'." },
+      { "claim": "Year: 1945 lecture, published 1946.", "verdict": "supported", "evidence": "SEP Sartre [intro]: lecture 'towards the end of 1945'; [A.1 Works by Sartre]: '1946a [2007], L’existentialisme est un humanisme, (Collection Pensées), Paris: Nagel'." },
+      { "claim": "A packed Paris lecture.", "verdict": "supported", "evidence": "SEP Sartre [intro]: 'Many thousands of Parisians packed into his public lecture'." },
+      { "claim": "An accessible version of Being and Nothingness.", "verdict": "supported", "evidence": "SEP Sartre [intro]: 'That lecture offered an accessible version of his difficult treatise, Being and Nothingness (1943)'." }
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  },
+  {
+    "item": "study_prompt",
+    "claims": [
+      { "claim": "Existentialism is a loose movement that begins from concrete human existence.", "verdict": "supported", "evidence": "SEP Existentialism [intro]: not a coherent system or school; 'begins in medias res, amidst our own situated, first-person experience'." },
+      { "claim": "Rooted in Kierkegaard and Nietzsche and made famous by Sartre and Beauvoir in mid-20th-century France.", "verdict": "supported", "evidence": "SEP Existentialism [intro]: groundwork laid by Kierkegaard and Nietzsche; most popular voices Sartre and Beauvoir; exploded in mid-twentieth-century France." },
+      { "claim": "Its six themes: existence before essence; freedom and anxiety; authenticity versus the crowd; meaning without guarantees; my freedom needs yours; faith and the leap.", "verdict": "supported", "evidence": "Pilot themes[0..5] titles match exactly (case aside); each is backed by the cited SEP sections 3, 4.1, 5, 1, 6, 5.2." },
+      { "claim": "Camus rejected the label.", "verdict": "supported", "evidence": "SEP Camus [1. The Paradoxes of Camus’s Absurdist Philosophy]: 'Camus denied being an existentialist'; 'the “existentialist” label that Camus rejected'." },
+      { "claim": "Heidegger rejected the label.", "verdict": "supported", "evidence": "IEP Existentialism [c. Martin Heidegger]: 'he repudiates any possible connection of his philosophy with the existentialism of Sartre'; 'given Heidegger’s own repudiation of existentialism'.", "note": "Heidegger is not one of the pilot's five thinker cards, but the pilot covers him (themes.2 'the They', and a section stating he repudiated Sartre's existentialism in the Letter on Humanism), so naming him is within scope. Strictly he repudiated Sartre's existentialism; 'rejected the label' matches IEP's 'repudiation of existentialism'." }
+    ],
+    "quote_ok": true,
+    "item_verdict": "pass"
+  }
+]

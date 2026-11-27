@@ -744,6 +744,17 @@ evidence is strongest for maths and telling categories apart. *Why it matters:* 
 good for learning, not only for motivation. *Where:* Meander (11): small pieces across connected
 schools instead of weeks in one. *(Robert and Elizabeth Bjork)*
 
+#### Pre-training, signalling and expertise reversal
+Three findings for teaching a newcomer a big field. **Pre-training:** learn the names and parts first
+(here are the six big ideas), then the details. **Signalling:** make the structure visible with
+headings, numbers and highlighting (g ≈ 0.53 across studies). **Expertise reversal:** the same help
+that guides a beginner gets in an expert's way, so scaffolding should fade or be skippable. A map
+you **build** yourself teaches more than one you're handed (about 0.82 against 0.37). *Why it
+matters:* a learning product's structure, not only its sentences, decides how lost people feel.
+*Where:* Meander (11): the school skeleton (six numbered ideas before the article); the planned
+"Place it" quiz is the build-it-yourself step. *(Richard Mayer; Schneider et al. 2018; Kalyuga et
+al. 2003; Nesbit and Adesope 2006)*
+
 ### Quiz
 
 **Q:** What are the three parts of COM-B, and why check them before designing?
@@ -856,6 +867,12 @@ schools instead of weeks in one. *(Robert and Elizabeth Bjork)*
 
 **Q:** Why can interleaving and spacing beat studying one topic in a block?
 **A:** They feel harder but strengthen long-term memory ("desirable difficulties"), with the best evidence in maths and category learning.
+
+**Q:** What is the expertise reversal effect, and what does it mean for a learning app?
+**A:** Help that guides beginners gets in experts' way, so scaffolding (overviews, glosses) should fade or be skippable as people learn.
+
+**Q:** Studying a concept map or building one: which teaches more?
+**A:** Building one (about 0.82 against 0.37 in the meta-analysis), which is why Meander's next step is a "Place it" quiz rather than a bigger map.
 
 **Q:** Two ways to make a design call in a domain you don't know?
 **A:** Borrow what tools for the same user already do, then score the options on what the user needs (easy now, teaches, room to grow, transfers to real tools).
@@ -1340,6 +1357,13 @@ AI is fast at building, testing and drafting; the product decisions stay with yo
 the main job, what to cut, what "done" means. Review its work: AI drafts can look right and still
 be wrong (a too-subtle animation, a wrong-number bug).
 
+#### A critic of stills can't judge motion
+A design critic that scores screenshots never sees what moves: a zoom, a knot opening, how a click
+feels. It will rank a tidy still above an immersive interaction. Give it clickable prototypes, or
+weigh its score against the owner's feel for the motion. *Where:* Meander (11): the critic ranked
+the knot design A3 over A1 on stills; the owner chose A1 for its zoom into the thread, and the
+critic's complaints about it turned out to be fixable clutter.
+
 #### A grader must know the non-negotiables
 A grader that sees only the artefact will score it against its own idea of good, and may keep
 asking to remove things you need. Give it the requirements it may not touch, alongside the feel.
@@ -1632,6 +1656,12 @@ first: ours ran out halfway.
 
 **Q:** How do you check AI-written facts, and why not against a summary?
 **A:** Save the full source text, cite a section per item, and have a separate grader judge each claim against the cited section (supported, unsupported, wrong), plus a hand spot-check. Summaries can invent facts themselves.
+
+**Q:** What does a "drift" verdict catch that "supported / unsupported" misses?
+**A:** Claims that are roughly right but stretched, like a founder's life dates standing in for a whole school's span, or a hedged source made certain. Meander's spans had 16 of these in one round.
+
+**Q:** Why can a screenshot critic rank designs wrongly?
+**A:** It never sees motion or interaction, so a tidy still can beat an immersive zoom. Give it clickable prototypes or weigh its score against how the motion feels.
 
 **Q:** What should you check before a large AI grading run?
 **A:** The estimated cost and the API key's usage limit; Meander's grader hit the limit halfway through.

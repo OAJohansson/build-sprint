@@ -248,3 +248,84 @@ clutter 1 · hierarchy 2 · legibility 1 · feel 2 · copy 1. Legibility drop is
 | C5 | minor | "Ticks placed" floats at a different x per lane | fixed (c76da0e) |
 | C6 | minor | Melody placeholder link is gold (reserved); Melody tab needs a "next" tag like Vocals' "not yet" | fixed (c76da0e) |
 | C7 | polish | FX name field clips mid-word; "Mentor:" casing differs | fixed (c76da0e) |
+
+### Phase 6 slice 1 user test (26 Nov, `user-testing/report-2026-11-26-chords-slice1.md`)
+
+| ID | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| CS1-1 | major | Chord closeness stuck at 14/100 whatever is picked | fixed (80db130 T182; 4ae77d0 T190): the notes half is now an F-score (what the track plays that Mine covers × what Mine plays that the track has), so G7 98 vs G 86 and one bar changed moves it (97.4 → 95.8) on the Lost re-render; the sound half moves only with preset and knobs, by design |
+| CS1-2 | major | Real read of Lost 69–76 flags no bar unsure; the "?" never shows | fixed (80db130, T181): unsure when score < 0.9 or the loop's clear weakest, capped at a third |
+| CS1-3 | major | Half-bar chord names drawn at 5 px | fixed (80db130, T183): ≥ 11 px, breaks root / type over two lines, full name in the bar heading |
+| CS1-4 | minor | After the fill the track plays, not Make's chords | fixed (80db130, T184): A/B goes to B · Mine when the read is done |
+| CS1-5 | minor | Build loops 65–76; graders' loop is 69–76 (test plan note only) | noted |
+| CS1-6 | minor | "All N bars" checkbox small, vanishes with one bar left, stays off | fixed (80db130, T184): twins by Make's guess or Mine's chord (stable), on again per bar, 44 px target |
+| CS1-7 | minor | 1280 × 720: More chords' last row and "Fewer chords" under A/B | fixed (80db130 T184; 4ae77d0 T191): More's cards scroll into view clear of the A/B bar when it opens |
+| CS1-8 | minor | Bass tab's chord strip (G) disagrees with Melody (G7) | fixed (80db130, T185): the strip shows the Melody read for this loop when there is one, else 'chords est.' with an 'older estimate' tooltip |
+| CS1-9 | polish | Edited bars look the same as Make's | fixed (80db130, T183): a small teal mark on a tile you picked; tooltip names Make's read |
+
+Re-check of CS1 (26 Nov): CS1-3, 4, 6, 8, 9 fixed; CS1-1 partly (G and G7 score the same, sound half never moves); CS1-7 partly (More's last row still under A/B at 720 px); CS1-2 accepted on the 65–76 and 77–84 reads (today's 69–76 read has no weak cell; PM call). H14 3 taps, job 4/5.
+
+| ID | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| CS1-10 | major | "All N bars" groups by the current name, so a pick can overwrite a bar Make heard differently (bar 76 Gm7 lost) | fixed (4ae77d0, T189): bars grouped by Make's guess; "Make's guess" gives each bar back its own guess |
+| CS1-11 | minor | After a single-bar edit the box names a group the open bar isn't in | fixed (4ae77d0, T189): the count and name are the open bar's group (bars sharing its Make's guess) |
+| CS1-12 | polish | Half-bar names wrap ("D / sus4") and get clipped by beat marks | fixed (4ae77d0, T191): one line, 11 px with tighter tracking on half-bar tiles, no beat marks there |
+| CS1-13 | polish | Card mood lines truncate at 4 per row on 1280 | fixed (4ae77d0, T191): moods wrap to two lines; cards grow to fit |
+
+### Phase 6 slice 2 user test (26 Nov, `user-testing/report-2026-11-26-chords-slice2.md`)
+
+| ID | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| S2-1 | major | Group edits but single-bar Reset; ≈ 19 taps back to Make's | fixed (661a574, T201): with All ticked the button reads "↺ Reset N bars" and resets the group's notes and times; "Make's guess" restores times too |
+| S2-2 | major | Closeness ignores timing | fixed (661a574, T202): the notes half is half pitch match, half an onset F-score against the read events; the chords score shows one decimal |
+| S2-3 | minor | Timing targets too small | fixed (661a574, T203): strip 32 px, 16th slots ≥ 24 px wide on desktop, presets and moves 32 px |
+| S2-4 | minor | No drag or arrow keys on hits | fixed (661a574, T203): drag a hit along the 16ths (pointer events); ← / → move the selected hit |
+| S2-5 | minor | "Longer" disabled without a reason | fixed (661a574, T203): Longer pushes the hits after it; a disabled move says why in its title |
+| S2-6 | minor | Your sounds below the preset menu's fold | fixed (661a574, T204): Your sounds first in the preset menu when there are any |
+| S2-7 | polish | Chord row scrolls out of view at 720 px | fixed (661a574, T204): the rows (chord tiles, lead) are sticky at the top of the room |
+| S2-8 | polish | "G, in Mine" while Mine plays G + A | fixed (661a574, T204): a card with the same name as your own notes reads "your notes (≈ G)", no ✓ |
+| S2-9 | minor | At 390 px the Lab has no narrow layout, the chords panel can't be reached (pre-existing Lab limit; backlog) | noted |
+
+### Phase 6 slices 3–4 user test (26 Nov, `user-testing/report-2026-11-26-chords-slices3-4.md`)
+
+S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened below).
+
+| ID | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| L-1 | major | Selecting a lead note collapses the grid | fixed (d91c6ea, T207): Shorter / Longer / Remove a fixed 32 px row, always in place; the grid keeps its height |
+| L-2 | major | Lost 69–76 lead not off | re-checks at ae7ab3e and cc140dd: still on (the live line is the stab's bottom G2, chordTop 0.06–0.16); fixed again (f0408c0, T213): any voice of the chord counts, and a line under C3 is off; needs a live re-check |
+| L-3 | minor | Lead cells too small; same-pitch notes merge | fixed (d91c6ea, T207): cells 20 px tall; a note's first 16th has a divider |
+| L-4 | minor | Lead closeness ignores note fixes | fixed (d91c6ea, T209): lead closeness counts its notes (pitch and onset) against the read line |
+| W-1 | major | "Why it fits" fallback uses numerals and theory words; A♯ for B♭ | fixed (d91c6ea, T205): two plain sentences, no numerals or theory words; notes spelled by the chord (B♭); marker "Six AM's own answer (the Mentor is offline)"; [theory] lines ask the model for the same style |
+| ST-1 | major | Studio drawer names chords in the track's key, not Make's | fixed (d91c6ea, T206, L264): each bar "C7 · was G7", line "Moved from G major to this track's key" |
+| S2-3b | minor | Hits 24 px, slots 26 × 30 | re-check: hits 30 px (the strip's border); fixed (cc140dd, T212): strip 40 px, hits 32 px |
+| S2-4b | minor | Arrow keys move one step, focus drops | fixed (d91c6ea, T210): hits keep a stable key, so focus stays while arrow keys move them |
+| CS1-12b | polish | "Fsus4" clipped in half-bar tiles | fixed (d91c6ea, T210): half-bar names shrink to 10 px and read "Fs4"; full name in the heading and aria-label |
+| N-1 | polish | Timing move buttons under A/B at 720 px | fixed (d91c6ea, T210): picking a hit scrolls the moves into view above A/B |
+| N-2 | polish | Loop label "first 16 bars" for 8 bars | fixed (d91c6ea, T210): the label counts the loop's bars ("first 8 bars"); it was a fixed "16" |
+
+### Phase 6 slices 1–2 app-behaviour grade (26 Nov, `evals-runs/2026-11-26-chords-slices1-2.md`)
+
+| ID | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| S-1 | major | Two stabs in one 16th merge on save (Lost 69–76 bar 8: 124 of 128 notes, 30 chords saved where Make played 31); H9 partial | fixed (008cf37, T211): double hits merge in Mine; the save keeps the repeat only when lossless, else the whole loop as played; tested |
+
+### Phase 6 final data-evals pass (26 Nov, `evals-runs/2026-11-26-chords-final.md`)
+
+| ID | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| LD-1 | major | Loading a saved lead into Make sets every note's offset to 0 and marks all 8 bars edited (H9 lead partial) | fixed (61974fd, T214): grids keep offset, length and strength; a loaded lead is its own layer, not "edited"; test saved == loaded |
+| LD-2 | minor | Mason's lead on at first read, off after reload 4/4 | fixed (61974fd, T216): cause found headlessly in the top-line path (the split stops finding the riff as its own row when pad leaks in); a top line alone no longer switches the lead off; T208's DSP read removed; every guard in `makeLead().guards`; needs a live re-check |
+| TH-1 | minor | Em in G minor read ♭vii, should be vi | fixed (61974fd, T215): raised 6th and 7th first in minor; Em in G minor = vi, borrowed from G major |
+| TH-2 | polish | ♭VI in A♭ spelled E G♯ B | fixed (61974fd, T215): roots spelled by the numeral's letter: F♭ A♭ C♭ |
+| TH-3 | major | Live re-check: on a key stored as "G#" (Dubspinna) every chord spelled in sharps (B♭m read A♯m, D♭ C♯), a regression from T215; TH-2 only fixed for "Ab" | fixed (97f459f, T218): one shared normaliser (`conventionalKey`) before any spelling; G# major = A♭ major, D# minor = E♭ minor; the Lab header and the note names agree; tested |
+
+## Owner final review, Phase 6 (27 Nov)
+
+| ID | Severity | What happened | Status |
+| --- | --- | --- | --- |
+| OR6-1 | minor | Listen shows Drums, Bass, Other, Vocals; Make shows Bass, Drums, Melody, FX, Vocals ("not yet"). "Other" doesn't say it becomes Melody and FX | open: rename to "Melody & FX" proposed, owner to decide |
+| OR6-2 | major | Owner's goal is break down → remake each part → save → rebuild the whole song in the Studio. Make works one looped section at a time and the Studio has no guided rebuild of the original's sections | open: proposed as Phase 7's first job (rebuild the song, then make it yours) |
+| OR6-3 | major | Phase 5 owner check "drums close by ear": not close with any preset. Hats play hits the original doesn't have. Cause: three synth rows (909-style voices, not samples); every high sound (shakers, percussion, bleed) lands on Hats; no way to remove a hit or mute a row unless Make flagged it | open: options to the owner (fix-by-ear pattern editing, more rows, a real one-shot sample kit) |
+| OR6-4 | good | Phase 5 owner check, FX A/B: the FX sound quite similar to the original drops | pass (owner's ear) |
+| OR6-5 | major | In Make (Bass, Drums, Melody, FX) you can't click on the timeline to jump back to a spot; you have to listen through. The Studio has this | open: Phase 7 |

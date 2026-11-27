@@ -114,3 +114,16 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 | --- | --- | --- |
 | Melody / chords in Make: a note reader that gets real chord stabs right (≥ 70 % of chord notes on Lost in the Loop 69–76) | Plain DSP 35–37 %, Basic Pitch 13 % on the real separated part (13 Nov); Basic Pitch did read Mason's monophonic riff as one Lead row. Try: a chord-recognition model on the separated part, a polyphonic transcriber trained on synths, or reading chords as names (root + quality) and voicing them ourselves. Everything else (poly synth, presets, Suggest, A/B, Save to Chords/Pads/Lead) is built behind the flag | next phase |
 | Basic Pitch for leads only | It read single-note riffs well (6/6) but disposed its own tensors after the first read (fix the tf scope first). The try is in commit bf7164c (removed after L247) | with the above |
+- Chord reader: U-2 (Fm stabs read B♭sus2 / C♯maj7), false 7ths on triads, CH-7 Gdim on the held-out loop, held pads re-struck on swells (H3 64 % after round 2). Next idea: decide the chord per held span, not per onset (26 Nov).
+- Graders: a `?loop=69-76` parameter or a seed `--loop` option, so testers don't need `setLoop` (26 Nov).
+- Lead guard: the chords' own notes share reads 0.13 live on Lost (expected ≥ 0.6 on its fixture); find why before trusting it on a chord-voice line above C3 (26 Nov).
+- Theory spelling TH-4: E♭dim's fifth spelled A, should be B𝄫 (rare, a diminished chord the reader names) (26 Nov).
+- Layout at 1280 × 720: selecting a lead note scrolls the lead header under the sticky rows (grid + move row don't fit); Bass on Mason starts with A/B half under the save bar (Phase 5 layout, scroll fixes it) (26 Nov).
+- Design polish after Phase 6: mood lines wrap at 1280, half-bar names ~10 px, playhead over chord names, knob row cut by normal scroll at 1440 × 900 (critic 8/10) (26 Nov).
+
+## For Phase 7 (owner, 27 Nov, L265)
+- **Many more starting sounds** for bass and drums (owner: "four is too few; tweaking the knobs doesn't make much difference"). Three routes to weigh at kickoff: more synth presets plus a richer engine (cheap, same family of sound); a free-to-use one-shot sample kit (CC0, licence checked) for drums and sampled basses; and loading your own sample packs, kept in the browser. Research the licences first.
+- **Rebuild the song in the Studio** (OR6-2): the original's sections laid out to fill with your saved parts, switch to the original to compare.
+- **Fix drums by ear** (OR6-3): tap a hit to remove or add it, mute any row; more drum rows (open hat, shaker/percussion, ride) so high sounds stop piling onto Hats.
+- **Listen's "Other" → "Melody & FX"** (OR6-1).
+- **Click to jump in Make** (OR6-5): in Bass, Drums, Melody and FX, click a spot on the loop's bars to play from there, like the Studio's timeline.

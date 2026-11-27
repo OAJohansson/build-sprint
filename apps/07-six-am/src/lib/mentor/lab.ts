@@ -14,6 +14,8 @@ import { MELODY_ROW_NAMES, POLY_KNOBS, POLY_KNOB_SPECS, isMelodyPreset, melodyPr
 import { FX_KNOBS, FX_KNOB_SPECS, FX_PRESETS, FX_ROW_NAMES, fxKnobWord, fxRowOf, isFxPreset, type FxKnobId, type FxPresetId } from "@/lib/make/fx-synth";
 import { MACRO_IDS, MACRO_SPECS, MAKE_PRESETS, clampMacros, macroWord, type Macros, type MakePresetId } from "@/lib/make/presets";
 import type { MentorAnswer } from "./answer";
+import { chordFacts, chordFactsLines } from "./chord-facts";
+import { normalChord } from "@/lib/make/chords-mine";
 
 export const PART_LABEL: Record<PartName, string> = { drums: "Drums", bass: "Bass", other: "Other", vocals: "Vocals" };
 
@@ -69,7 +71,10 @@ export type LabAsk = {
   make?: LabMake | null;
   /** Phase 5: asked from Make's Drums, Melody or FX: the open row, its preset, knobs and ticks. */
   makeRow?: LabMakeRow | null;
+  /** Phase 6 slice 3 (K10): asked with a bar open in Make's Chords: its chord (as Mine plays it), the owner's own notes if built on the piano, the chords before and after it. Names and MIDI numbers only. */
+  chord?: LabChord | null;
 };
+export type LabChord = { name: string; notes?: number[]; prev?: string | null; next?: string | null };
 export type LabMake = { preset: MakePresetId; macros: Macros; ticks: Macros | null };
 /** Numbers and ids only (words are made here, on the server); `note`: our own short reason (an off row, what FX heard). */
 export type LabMakeRow = { family: "drums" | "melody" | "fx"; preset: string; knobs: Record<string, number>; ticks: Record<string, number> | null; off?: boolean; note?: string | null };
@@ -135,7 +140,19 @@ export function parseLabAsk(raw: unknown, bars: number): LabAsk | null {
     ticks: mk!.ticks && typeof mk!.ticks === "object" ? clampMacros(preset, mk!.ticks as Partial<Macros>) : null,
   } : null;
   const makeRow = parseMakeRow(r.makeRow);
-  return { part: r.part, hear, bar, playheadBar: playheadBar ?? bar, loop, chords, measure, heard, ...(make ? { make } : {}), ...(makeRow ? { makeRow } : {}) };
+  const chord = parseLabChord(r.chord);
+  return { part: r.part, hear, bar, playheadBar: playheadBar ?? bar, loop, chords, measure, heard, ...(make ? { make } : {}), ...(makeRow ? { makeRow } : {}), ...(chord ? { chord } : {}) };
+}
+
+/** K10: the open chord we can trust: a chord name Make plays, up to 8 MIDI notes, the names around it. */
+export function parseLabChord(v: unknown): LabChord | null {
+  if (!v || typeof v !== "object") return null;
+  const o = v as Record<string, unknown>;
+  const name = typeof o.name === "string" ? normalChord(o.name.slice(0, 12)) : null;
+  if (!name) return null;
+  const nb = (x: unknown) => (typeof x === "string" ? normalChord(x.slice(0, 12)) : null);
+  const notes = Array.isArray(o.notes) && o.notes.length && o.notes.length <= 8 && o.notes.every((m) => Number.isInteger(m) && (m as number) >= 24 && (m as number) <= 108) ? (o.notes as number[]) : null;
+  return { name, ...(notes ? { notes } : {}), prev: nb(o.prev), next: nb(o.next) };
 }
 
 /** The open row in Make's Drums, Melody or FX we can trust: a known preset of that family, its own knobs, 0–1. */
@@ -293,9 +310,22 @@ export function labContextText(ask: LabAsk, map: TrackMap): string {
     ...(!unheardLoop(ask, map) && unheardBars(ask).length ? [`[lab] ${barRuns(unheardBars(ask)).replace(/^b/, "B")} near it haven't been heard yet: unknown, not quiet. Never call them a gap, a break or silence; say "not heard yet" if they matter.`] : []),
     ...(ask.make ? makeLines(ask.make, name) : []),
     ...(ask.makeRow ? makeRowLines(ask.makeRow) : []),
+    ...(ask.chord ? chordLines(ask.chord, map, ask.bar) : []),
     ...(unheardLoop(ask, map) ? [`[lab] Bar ${ask.bar} hasn't been heard yet. Answer in two sentences only: what the map estimates for the ${name.toLowerCase()} there, then exactly "Loop ${unheardLoop(ask, map)} to hear it and get its notes." No chords, no guesses.`] : []),
   ];
   return lines.join("\n");
+}
+
+/** K10: the open chord's theory facts, from code (chord-facts.ts); the model only writes the words. */
+export function chordLines(c: LabChord, map: Pick<TrackMap, "key" | "scale">, bar: number): string[] {
+  const f = map.scale === "major" || map.scale === "minor" ? chordFacts({ key: map.key, scale: map.scale, chord: c.name, notes: c.notes, prev: c.prev, next: c.next }) : null;
+  return f ? chordFactsLines(f, bar) : [`[theory] The open chord in Make, bar ${bar}: ${c.name}. The track's key isn't known, so say nothing about its place in a key.`];
+}
+
+/** The facts line under a chord answer: "G7 · V7 of C major · pulls home". */
+export function chordFactsLine(c: LabChord, map: Pick<TrackMap, "key" | "scale">): string {
+  const f = map.scale === "major" || map.scale === "minor" ? chordFacts({ key: map.key, scale: map.scale, chord: c.name, notes: c.notes, prev: c.prev, next: c.next }) : null;
+  return f ? `${f.chord} · ${f.numeral} in ${f.key} · ${f.role === "borrowed" ? `borrowed from ${f.borrowed}` : f.role === "secondary" ? `leads to ${f.secondaryOf}` : f.roleWords.split(":")[0]}` : c.name;
 }
 
 /** S3: what they're making in Make, so the Mentor can talk about the knobs by name. */

@@ -779,3 +779,161 @@ first, as for the Lab: read the drums and "other" of 2 tracks and measure agains
 - Clean and minimal (decision 0007); still framing, no per-keystroke motion.
 - Make's current bass flow must keep working exactly as it does (saved sounds render unchanged).
 - Graders use the sandbox (`ACCESS_CODE=test-code`, in-memory store), never the owner's real data.
+
+# Kickoff pack: Six AM Chords in Make (Phase 6, Founder v2)
+
+**Status: final (26 Nov).** Written by the Phase 6 PM from the owner's call of 25 Nov; the owner
+answered the questions one at a time on 26 Nov (L248–L252). The draft text is kept for context.
+
+**Mode:** founder (v2)
+**Appetite:** a spike (one build round and one real-track grade, time-boxed) and four slices,
+about two to three nights in all (PM, after L248 and L249). Phase 5 planned one night and took two sittings plus a network stop.
+Owner moments: the questions below, the design picks (3 of ~10, then 1 of 3), the canvas sign-off,
+the final review.
+**Evals:** a "Chords in Make" part of `evals.md`, written from this pack once the questions are closed.
+
+## Why melody failed in Phase 5 (plain recap)
+
+- Make copies a part note by note for bass and drums. For melody it tried the same on the
+  separated "other" part: find every note, several at once.
+- On the one real chord loop with hand labels (Lost in the Loop bars 69–76, a G7 stab: G, D, B, F
+  struck just before each beat) the plain DSP reader found 35–37 % of the chord notes, and Basic
+  Pitch 13 % (it heard the stab as one low G line). The bar was 70 %. Synthetic test loops had
+  said 72–91 %.
+- Two reasons: a short stab smears into a held note, and pads over drums give wrong notes.
+- The grader also found Basic Pitch only ran on the **first** read in a page (BP-1: a tfjs scope
+  disposes the model's own tensors), so its 13 % may partly be that bug.
+
+## The owner's call (25 Nov)
+
+Two ideas together:
+
+1. **Chord names instead of notes.** House chords are mostly a loop of 3–4 chords. Make reads
+   *which chord* plays (root + type, for example G7 or Am), not every note, and plays it in a
+   standard voicing on the owner's own synth, at the stab times it reads from the part.
+2. **The owner in the loop.** Make guesses, the owner corrects by ear on a small, simple chord
+   grid, and the Mentor explains why a chord fits the key. The result saves to the Chords / Pads
+   (and maybe Lead) lanes like bass, drums and FX.
+
+Owner's goal: "where I can recreate a song using the 6AM app". Phase 7 (next) is arranging and
+exporting the owner's first own track.
+
+## What already exists (built in Phase 5, behind `MELODY_ON = false`)
+
+- **Poly synth** (`src/lib/make/poly-synth.ts`): Stab, Pluck, Pad, Keys × 6 knobs (Tone, Length,
+  Attack, Detune, Width, Space); renders the same notes sample for sample in Make and the Studio.
+- **Rows, Suggest, closeness, A/B, Save** (`melody-make.ts`, `make-melody.tsx`): Chords and Lead
+  rows, gold ticks, a per-row 0–100 score, A/B on LUFS with the original drums under both, Save
+  to Chords / Pads / Lead lanes (lead and pads never replace chords). Graded pass in Phase 5 (Z5,
+  Z6, Z7).
+- **Note reader** (`notes-read.ts`, DSP): good on onsets (stab times within ~25 ms), poor on pitch.
+- **Lab chord lane** (`src/lib/lab/chords.ts`): names one major or minor triad per 8 bars from a
+  chroma vector (12 numbers, one per note name); no 7ths, too coarse for a loop that changes
+  every bar.
+- **Key** (`src/lib/ears/features.ts`): chroma against Krumhansl–Kessler profiles, per track.
+- **Basic Pitch** (removed from the build, kept at commit `bf7164c`).
+
+## Riskiest assumptions
+
+1. **The reader:** chord names (root + type) can be read from the separated "other" part of a
+   real track for most bars, with the stab times right. Tested by the spike on real tracks first.
+2. **The ear:** someone with no music training can hear that a chord is wrong and pick the right
+   one from a short list, in a few taps. Tested by the user test of slice 2 (as far as an agent
+   can) and the owner at the final review.
+
+## Spike (time-boxed: one build round, one real-track grade)
+
+Graded on **real separated parts**, never synthetic loops alone (Phase 5 retro, `AGENTS.md`).
+In the browser only (C2): no server-side model.
+
+- **A, chord-name reader:** per bar (or half bar), a chroma vector of the part's 100 Hz–2 kHz
+  range (bass notes weighted for the root), matched against chord templates in the track's key
+  (major, minor, 7, maj7, m7, sus); a short smoothing so a loop of 3–4 chords stays a loop; stab
+  times from the existing onset reader.
+- **B, Basic Pitch, fixed:** the BP-1 scope bug fixed so every read uses the model, then its
+  notes folded into chord names the same way. A fair re-test of Phase 5's 13 %.
+- **Truth:** Lost 69–76 and 77–84 (Phase 5 labels, as chord names), plus 3–4 more loops from at
+  least 2 more tracks, labelled by data-evals from the spectrogram with the method validated in
+  Phase 5 (95–100 % on struck chords). Tracks (L250): Kiki's "What's a Girl to Do" remix (the
+  Fatima Yamaha chord loop and lead line), Retrouvé "Music Is the Answer", and Mason Flint's riff
+  (Phase 5's lead loop). If a picked track has no clear chords or lead in its separated part,
+  data-evals swaps in Dubspinna's "What's a Girl to Do" remix or Knober "Realize" and says why.
+- **Winner:** the one with more bars right on H1/H2. If neither reaches the bars, the build
+  stops and the PM brings the numbers to the owner (L252); no slice is built on a reader that
+  failed its real-track grade.
+- **Lead:** the same round reads the lead on Mason Flint's riff and Kiki's lead (DSP vs Basic
+  Pitch fixed); the better one is used (L249: lead is in either way).
+
+## Slices (one branch, one PR; each built, user-tested, graded and fixed before the next)
+
+1. **Make guesses:** the chord reader on the looped part, one chord per bar shown as names, played
+   on the poly synth in a standard voicing at the read stab times; A/B, Suggest, score, Save as
+   built in Phase 5. `MELODY_ON` back on.
+2. **You fix it by ear:** the correction grid: tap a bar's chord, hear the 2–3 next-best guesses
+   and the key's other chords, pick one; Mine and the score update; Save keeps the fixed chords.
+   Open a chord to switch single notes on or off on a small piano grid (L248), so a chord can
+   match the track exactly or get the owner's own touch; an edited chord keeps its notes, shows
+   its closest name, and saves and plays the same in the Studio.
+3. **Why it fits:** the Mentor explains a chord in the key (plain words: "G7 is the V of C, it
+   pulls home"), and the saved chords open in the Studio's Chords / Pads lane drawer.
+4. **Lead (L249):** a one-note line above the chords (riff, hook, arp) read note by note (the
+   spike picks the reader: Basic Pitch fixed or DSP), played on the poly synth's Lead row,
+   fixable on the same piano grid, saved to the Lead lane. In whether the reading is weak or not;
+   the owner fixes what's wrong.
+
+## Owner's answers
+
+| # | Question | Answer | Log |
+| --- | --- | --- | --- |
+| 1 | Chord names only, or names and notes? | Both now: names per bar with alternatives, and single-note editing inside a chord, because the goal is to recreate a song and then add my own touch (PM had recommended names only, notes in Phase 7) | L248 |
+| 2 | Lead lines in this phase? | Yes, a fourth slice, even if the reading is weak (fixed by hand on the note grid) | L249 |
+| 3 | Which tracks to grade on? | "Pick for me": Lost in the Loop, Kiki's "What's a Girl to Do" remix, Retrouvé "Music Is the Answer", Mason Flint (riff), from the tracks already used in Six AM | L250 |
+| 4 | Copy the rhythm or a standard one? | Copy the track's rhythm: chords at the read stab times, held when the part holds (pads); editable afterwards | L251 |
+| 5 | If the reader misses the bar after its time box? | Stop and ask me: the build pauses after the spike and the PM brings the numbers (PM had recommended shipping the grid with the key's usual progressions as the guess) | L252 |
+
+## Questions for the owner (draft)
+
+1. **What does the correction grid change?** Chord names per bar only, or single notes too?
+   Recommendation: names only, with the closest alternatives to tap through, because comparing a
+   few chords by ear needs no training and notes don't.
+2. **Lead lines (one-note riffs) in this phase?** Basic Pitch read Mason Flint's riff as one Lead
+   line 6 of 6 times, but nobody checked its notes. Recommendation: chords and pads first; lead
+   only as a fourth slice if the spike shows it reads real riffs.
+3. **Which tracks to grade on?** Recommendation: Lost in the Loop plus 2 tracks the owner wants
+   to recreate that have clear chords, so the grade is on the music this is for.
+4. **Copy the rhythm, or a standard one?** Play the chords at the stab times read from the part,
+   or pick a house rhythm (off-beat stab, held pad, chord on 1)? Recommendation: copy the read
+   times, with "held" for pads.
+5. **If the reader misses the bar after its time box?** Recommendation: ship the grid anyway with
+   the key's usual house progressions as the guess (no reading), so the owner still recreates the
+   chords by ear, and keep reading in the backlog.
+
+## Requirements (Phase 6)
+
+| # | Requirement |
+| --- | --- |
+| K1 | Make's Melody tab is on (`MELODY_ON`); Bass, Drums and FX work exactly as in PR 99. |
+| K2 | Chord reader: the looped "other" part is read into one chord name per bar (two when it clearly changes mid-bar): root + type (major, minor, 7, maj7, m7, sus), in the browser, numbers only. |
+| K3 | Make plays each chord in a standard voicing near the original's register on the poly synth (Stab, Pluck, Pad, Keys), at the times read from the part; a chord the part holds is held (L251). |
+| K4 | Chord grid: one cell per bar with the chord's name; tapping a cell plays and offers the next 2–3 guesses and the key's other chords; picking one updates Mine at once (L248). |
+| K5 | Note editing: a chord opens on a small piano grid where single notes switch on or off; the edited chord keeps its notes and shows its closest name (L248). |
+| K6 | Timing editable: a chord's start and length can be moved on the 16th grid. |
+| K7 | Lead row: a one-note line above the chords, read note by note, played on the Lead presets, fixable on the same note grid, saved to the Lead lane (L249). |
+| K8 | Suggest (gold ticks only), A/B at matched loudness with the original drums under both, and the open row's closeness score, as built in Phase 5, for Chords and Lead. |
+| K9 | Save keeps the fixed chords, notes and times; in the Studio a sound lands on Chords, Pads or Lead, renders the same, and is editable in the lane's drawer. |
+| K10 | The Mentor explains the open chord in plain words: what it is, its place in the key (for example "the V of C, it pulls home") and why it fits; the theory facts come from code, the model writes the words. |
+| K11 | Rights rule C2 unchanged: the original stays in memory only, never stored, exported, uploaded or sent to any API. |
+| K12 | Saved bass, drum, FX and Phase 5 melody sounds render sample for sample as before. |
+
+## Things to keep
+
+- Clean and minimal (decision 0007); still framing, no per-keystroke motion.
+- Bass, Drums and FX in Make keep working exactly as they do (saved sounds render unchanged).
+- Graders use the sandbox (`ACCESS_CODE=test-code`, in-memory store), never the owner's real data.
+- No paid API calls by agents without the owner's yes; the Mentor runs on the owner's key only in
+  the live app (its limit is reached until 1 Dec).
+
+## Folded in from Phase 5 for the final review
+
+Owner checks still open: drums close by ear; FX A/B on Lost in the Loop bars 73–80 (−1.01 dB,
+borderline); one live Mentor answer in Make (after 1 Dec).

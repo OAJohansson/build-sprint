@@ -30,6 +30,7 @@ import { Composer, Turn, useEdgeFades, type ThreadTurn } from "./mentor-thread";
 import { Knob } from "@/components/ui/knob";
 import { DrumsCheck, DrumsMiddle, DrumsSaveBar, type DrumsModel } from "./make-drums";
 import { MelodyCheck, MelodyMiddle, MelodySaveBar, type MelodyModel } from "./make-melody";
+import { prettyChord } from "@/lib/make/chords-mine";
 import { MELODY_ON } from "@/lib/make/melody-reader";
 import { FxCheck, FxMiddle, FxSaveBar, type FxModel } from "./make-fx";
 import s from "./lab.module.css";
@@ -342,7 +343,7 @@ export function MakeRoom(p: RoomProps) {
         ) : family === "melody" ? (
           <>
             {loop || p.melody.read
-              ? <MelodyMiddle m={p.melody} loop={loop} playing={p.playing} heardMs={p.heardMs} />
+              ? <MelodyMiddle m={p.melody} loop={loop} playing={p.playing} heardMs={p.heardMs} from={from} onAsk={p.onAsk} />
               : <div className={s.makeEmpty}><p>Make works on a loop of the part, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
             <div className={s.grow} />
             <MelodyCheck m={p.melody} />
@@ -358,7 +359,7 @@ export function MakeRoom(p: RoomProps) {
         ) : (
           <>
             {loop && from !== null && to !== null
-              ? <LoopStrip part={part} from={from} to={to} chords={p.chords} levels={p.levels} heardMs={p.heardMs} bpm={p.bpm} originSec={p.originSec} notes={m.isBass ? m.loopNotes : null} steps={m.loopSteps} />
+              ? <LoopStrip part={part} from={from} to={to} chords={p.chords} loopChords={loopChordsOf(p.melody, from)} levels={p.levels} heardMs={p.heardMs} bpm={p.bpm} originSec={p.originSec} notes={m.isBass ? m.loopNotes : null} steps={m.loopSteps} />
               : <div className={s.makeEmpty}><p>Make works on a loop of the part, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
             {!m.isBass ? (
               <p className={s.makeQuiet}>Make is bass-only for now. <button className={s.makeText} onClick={p.onBass}>Make a bass instead</button></p>
@@ -555,7 +556,15 @@ function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
 
 /** The loop, zoomed (handoff §Make 3): chords, bar numbers, the part's clips (heard, else the map's
  *  estimate, faint), the playhead. Grows from 118 to 280 px with spare height. */
-function LoopStrip({ part, from, to, chords, levels, heardMs, bpm, originSec, notes, steps }: { part: LabPart; from: number; to: number; chords: (string | null)[]; levels: (number | null)[][] | null; heardMs: () => number; bpm: number; originSec: number; notes: MakeNote[] | null; steps: number | null }) {
+/** CS1-8: the Melody tab's chord read of this loop (Mine's names, where they change, at track bars), once there is one. */
+function loopChordsOf(m: MelodyModel, from: number): { at: number; name: string }[] | null {
+  if (!m.chords) return null;
+  const out: { at: number; name: string }[] = [];
+  for (const c of m.chords.cells) if (c.name && c.name !== out[out.length - 1]?.name) out.push({ at: from + c.startStep / 16, name: prettyChord(c.name) });
+  return out.length ? out : null;
+}
+
+function LoopStrip({ part, from, to, chords, loopChords, levels, heardMs, bpm, originSec, notes, steps }: { part: LabPart; from: number; to: number; chords: (string | null)[]; loopChords: { at: number; name: string }[] | null; levels: (number | null)[][] | null; heardMs: () => number; bpm: number; originSec: number; notes: MakeNote[] | null; steps: number | null }) {
   const head = useRef<HTMLElement>(null);
   const len = to - from;
   useLayoutEffect(() => {
@@ -582,8 +591,11 @@ function LoopStrip({ part, from, to, chords, levels, heardMs, bpm, originSec, no
   return (
     <div className={s.loopStrip} aria-label={`${part.name} alone, bars ${from} to ${to - 1}`}>
       <div className={s.lsRow} data-kind="chords">
-        <span className={s.lsLabel}>chords est.</span>
-        <div className={s.lsTrack}>{cells.map((x) => <span key={x.at} className={s.lsChord} style={{ left: pct(Math.max(from, x.at)) }}>{x.c || "–"}</span>)}</div>
+        {loopChords
+          ? <><span className={s.lsLabel} title="The chords Make read in the Melody tab for this loop">chords</span>
+            <div className={s.lsTrack}>{loopChords.map((x) => <span key={x.at} className={s.lsChord} style={{ left: pct(x.at) }}>{x.name}</span>)}</div></>
+          : <><span className={s.lsLabel} title="The older 8-bar estimate; open Melody for Make's chord read of this loop">chords est.</span>
+            <div className={s.lsTrack}>{cells.map((x) => <span key={x.at} className={s.lsChord} style={{ left: pct(Math.max(from, x.at)) }}>{x.c || "–"}</span>)}</div></>}
       </div>
       <div className={s.lsRow} data-kind="bars">
         <span className={s.lsLabel}>bars</span>

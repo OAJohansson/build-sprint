@@ -1,0 +1,216 @@
+/* Phase 6 slice 1: the Chords row's tiles and the listening panel (design round 5, /dev/chords-r4,
+   with the critic's build notes). Tokens from the Lab root (lab.module.css). */
+.tiles { --teal: #23b3a5; display: grid; gap: 6px; padding: 8px 0; min-width: 0; }
+.tile { container-type: inline-size; position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; min-width: 0; height: 60px; padding: 7px 8px 6px; background: rgba(241, 230, 211, .035); border: 1px solid transparent; border-radius: 4px; text-align: left; cursor: pointer; }
+.tile[aria-expanded="true"] { border-color: var(--ink); background: rgba(241, 230, 211, .07); }
+@media (hover: hover) and (pointer: fine) { .tile:hover { background: rgba(241, 230, 211, .06); } }
+.tileName { font: 500 min(16px, calc(100cqi / 4.4)) var(--f-mono); color: var(--ink); white-space: nowrap; line-height: 1.1; }
+/* build note: the "?" sits fully inside its own tile's top-right corner; the name keeps clear of it */
+.unsure { position: absolute; top: 5px; right: 5px; width: 15px; height: 15px; border-radius: 50%; display: grid; place-items: center; font: 600 9.5px var(--f-mono); color: var(--bg); background: var(--muted); }
+.tile[data-unsure] .tileName { padding-right: 17px; font-size: min(16px, calc((100cqi - 17px) / 4.4)); }
+.tileFoot { display: flex; align-items: flex-end; gap: 6px; min-width: 0; }
+.hits { flex: 1; min-width: 0; height: 10px; display: block; }
+.tileFoot small { flex: none; font-size: 10px; line-height: 1; color: var(--faint); font-variant-numeric: tabular-nums; }
+.tiles[data-many] .tile { height: 46px; gap: 3px; padding-top: 5px; }
+
+.panel { --teal: #23b3a5; --teal-dim: rgba(35, 179, 165, .16); width: 100%; margin-top: 14px; padding-left: 170px; display: flex; flex-direction: column; gap: 10px; }
+.head { display: flex; align-items: center; gap: 12px; min-height: 32px; min-width: 0; }
+.where { font-size: 13px; color: var(--ink); white-space: nowrap; }
+.ask { font: italic 400 22px/1.1 var(--f-serif); white-space: nowrap; }
+
+/* the strip: the track as a reference button, then the choices (tap = hear + use) */
+.strip { display: flex; align-items: stretch; gap: 14px; min-width: 0; }
+.track { flex: none; display: inline-flex; align-items: center; gap: 8px; height: 72px; padding: 0 16px 0 14px; border: 0; border-radius: 99px; background: #2b2622; color: var(--ink) !important; font: 500 13px var(--f-mono); cursor: pointer; }
+.track[data-playing] { background: var(--ink); color: var(--bg) !important; }
+/* build note: the cards fill the row's width */
+.choices { flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.choice { position: relative; height: 72px; display: flex; align-items: center; gap: 10px; padding: 0 12px 0 10px; border: 1px solid var(--edge); border-radius: 8px; background: none; cursor: pointer; text-align: left; min-width: 0; }
+.choice[aria-pressed="true"] { border-color: var(--teal); background: var(--teal-dim); }
+@media (hover: hover) and (pointer: fine) { .choice:hover:not([aria-pressed="true"]) { border-color: var(--muted); } .track:hover:not([data-playing]) { background: #352f2a; } }
+.glyph { flex: none; width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--edge); display: grid; place-items: center; color: var(--ink); }
+.choice[data-playing] .glyph { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.choiceText { display: flex; flex-direction: column; gap: 1px; min-width: 0; padding-right: 16px; }
+/* build note: every card keeps the "Make's guess" line, so the names align */
+.guessTag { font-size: 10px; line-height: 1.3; color: var(--muted); white-space: nowrap; }
+.choiceName { font: 500 17px var(--f-mono); white-space: nowrap; color: var(--ink); }
+/* build note: the mood stays on one line */
+.mood { font-size: 11px; line-height: 1.3; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.check { position: absolute; right: 9px; bottom: 8px; color: var(--teal); }
+
+.tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.grow { flex: 1; }
+.all { display: inline-flex; align-items: center; gap: 8px; min-height: 30px; font-size: 12.5px; color: var(--ink); cursor: pointer; }
+.all input { accent-color: var(--teal); width: 16px; height: 16px; margin: 0; }
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 0 12px; border: 1px solid var(--edge); border-radius: 99px; background: none; cursor: pointer; font: 500 12px var(--f-mono); color: var(--muted) !important; white-space: nowrap; }
+.chip[aria-expanded="true"] { color: var(--ink) !important; }
+@media (hover: hover) and (pointer: fine) { .chip:hover { color: var(--ink) !important; } }
+
+@media (max-width: 900px) { .panel { padding-left: 0; } }
+@media (max-width: 700px) {
+  .tiles { grid-template-columns: repeat(8, minmax(0, 1fr)) !important; }
+  .tile { height: 56px; }
+  .head { flex-wrap: wrap; }
+  .ask { white-space: normal; font-size: 19px; }
+  .strip { flex-direction: column; gap: 8px; }
+  .track { height: 44px; align-self: flex-start; }
+  .choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* the Chords row grows with its tiles (two lines on a 16-bar loop) */
+.chordRow { height: auto !important; min-height: 76px; }
+.chordTrack { min-width: 0; }
+
+/* ── Slice 1 user-test fixes (CS1) ───────────────────────────────────────────────────────────── */
+/* CS1-3: a name is never under 11 px; a narrow (half-bar) tile breaks it between root and type, two lines at most */
+.tileName { font-size: max(11px, min(16px, calc(100cqi / 4.4))); white-space: normal; overflow-wrap: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.tile[data-unsure] .tileName { font-size: max(11px, min(16px, calc((100cqi - 17px) / 4.4))); }
+.tile[data-half] { padding-left: 6px; padding-right: 6px; gap: 2px; }
+.tile[data-half] .tileName { line-height: 1.05; }
+.curName { font: 500 13px var(--f-mono); color: var(--ink); }
+/* CS1-9: a bar you picked carries a small teal mark top-left (Make's own reads have none) */
+.edited { position: absolute; top: 0; left: 8px; width: 14px; height: 3px; border-radius: 0 0 2px 2px; background: #23b3a5; }
+/* CS1-6: the "All" switch is a 44 px target */
+.all { min-height: 44px; padding-right: 8px; }
+/* CS1-7: four cards a row on a laptop and up; More's cards sit under the tools in a tighter row */
+@media (min-width: 1280px) { .choices { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.extra .choice { height: 52px; }
+.extra .guessTag { display: none; }
+@media (max-width: 700px) { .choices { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ── Slice 2: the piano and the timing strip (design round 5: keys, timing) ─────────────────────── */
+.icon { width: 30px; height: 30px; flex: none; display: grid; place-items: center; padding: 0; border: 1px solid transparent; border-radius: 6px; background: none; color: var(--muted) !important; cursor: pointer; }
+@media (hover: hover) and (pointer: fine) { .icon:hover { color: var(--ink) !important; border-color: var(--edge); } }
+.title { font: 500 20px var(--f-mono); white-space: nowrap; color: var(--ink); }
+.reset { display: inline-flex; align-items: center; gap: 5px; min-height: 28px; padding: 0 10px; border: 1px solid var(--edge); border-radius: 99px; background: none; cursor: pointer; font: 500 12px var(--f-mono); color: var(--muted) !important; }
+@media (hover: hover) and (pointer: fine) { .reset:hover { color: var(--ink) !important; border-color: var(--muted); } }
+/* keys: unlit keys warm grey-brown, lit notes carry the light; names under the keys */
+.keysWrap { display: flex; flex-direction: column; gap: 4px; }
+.keys { position: relative; display: flex; height: 46px; }
+.white { flex: 1; border: 1px solid #1a1715; border-radius: 0 0 4px 4px; background: #4d443d; cursor: pointer; padding: 0; }
+.white[data-on] { background: #23b3a5; }
+.black { position: absolute; top: 0; height: 58%; transform: translateX(-50%); z-index: 2; border: 1px solid #0d0b0a; border-radius: 0 0 3px 3px; background: #1d1916; cursor: pointer; padding: 0; }
+.black[data-on] { background: #1a9c8f; }
+@media (hover: hover) and (pointer: fine) { .white:hover:not([data-on]) { background: #5a5048; } .black:hover:not([data-on]) { background: #2b2622; } }
+.keyNames { position: relative; height: 16px; font-size: 11px; color: var(--faint); }
+.keyNames span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
+.keyNames span[data-on] { color: var(--ink); font-weight: 500; }
+.phoneKeys { display: none; }
+/* timing */
+.timing { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.label { flex: none; font-size: 11.5px; color: var(--muted); margin-top: 6px; }
+.presets { display: flex; border: 1px solid var(--edge); border-radius: 99px; padding: 2px; flex: none; }
+.presets button { background: none; border: 0; border-radius: 99px; padding: 3px 12px; min-height: 26px; cursor: pointer; font-size: 12px; color: var(--muted) !important; white-space: nowrap; }
+.presets button[aria-pressed="true"] { background: #2b2622; color: var(--ink) !important; }
+.strip16 { display: flex; flex-direction: column; gap: 2px; flex: 0 1 340px; min-width: 240px; }
+.sixteenths { position: relative; height: 26px; display: grid; border: 1px solid var(--line); border-radius: 3px; }
+.sixteenths > i { border-left: 1px solid rgba(241, 230, 211, .06); }
+.sixteenths > i[data-beat] { border-left-color: rgba(241, 230, 211, .18); }
+.sixteenths > i:first-child { border-left: 0; }
+.empty { position: absolute; top: 0; bottom: 0; border: 0; padding: 0; background: none; cursor: pointer; }
+@media (hover: hover) and (pointer: fine) { .empty:hover { background: rgba(241, 230, 211, .06); } }
+.hit { position: absolute; top: 3px; bottom: 3px; border: 0; padding: 0; border-radius: 2px; background: #23b3a5; opacity: .75; cursor: pointer; min-width: 4px; }
+.hit[data-sel] { opacity: 1; box-shadow: 0 0 0 2px var(--ink); }
+.beats { display: grid; font-size: 10.5px; color: var(--faint); }
+.beats span { padding-left: 3px; }
+.moves { display: inline-flex; gap: 6px; flex-wrap: wrap; flex-basis: 100%; }
+.moves button { min-height: 28px; padding: 0 10px; border: 1px solid var(--edge); border-radius: 99px; background: none; cursor: pointer; font: 500 11.5px var(--f-mono); }
+@media (max-width: 700px) {
+  .deskKeys { display: none; }
+  .phoneKeys { display: flex; }
+  .strip16 { flex: 1 1 100%; }
+  .moves button { min-height: 44px; }
+}
+
+/* ── Slice 1 re-check (CS1-12, CS1-13, CS1-7) ───────────────────────────────────────────────────── */
+/* CS1-12: one line always; a half-bar tile's name is 11 px with tighter tracking, and its hits carry no beat marks */
+.tileName { white-space: nowrap; display: block; -webkit-line-clamp: unset; overflow: hidden; text-overflow: clip; }
+.tile[data-half] .tileName { font-size: 11px; letter-spacing: -0.04em; line-height: 1.2; }
+.tile[data-half][data-unsure] .tileName { padding-right: 14px; }
+/* CS1-13: the mood may take two lines (4 cards a row at 1280); the card grows to fit */
+.mood { white-space: normal; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; text-overflow: clip; }
+.choice { height: auto; min-height: 72px; padding-top: 6px; padding-bottom: 6px; }
+/* CS1-7: More's cards stop clear of the sticky A/B bar when scrolled into view */
+.extra { scroll-margin-bottom: 120px; }
+.extra .choice { min-height: 52px; height: auto; }
+
+/* ── Slice 4: the lead grid (design round 5, state "lead") ─────────────────────────────────────── */
+.leadPanel { gap: 8px; }
+.leadHead { display: flex; align-items: center; gap: 8px 12px; min-height: 32px; flex-wrap: wrap; }
+.quietSwitch { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted); cursor: pointer; min-height: 32px; }
+.quietSwitch input { accent-color: #23b3a5; margin: 0; }
+.leadGrid { display: flex; flex-direction: column; max-width: 600px; width: 100%; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.leadRow { display: grid; grid-template-columns: 44px minmax(0, 1fr); height: 12px; }
+.leadGrid[data-tall] .leadRow { height: 18px; }
+.leadRow[data-black] { background: rgba(0, 0, 0, .2); }
+.leadKey { font-size: 9px; line-height: 12px; color: var(--faint); text-align: right; padding-right: 6px; }
+.leadGrid[data-tall] .leadKey { font-size: 10.5px; line-height: 18px; }
+.leadRow[data-out] .leadKey { font-style: italic; }
+.leadCells { display: grid; grid-template-columns: repeat(16, 1fr); }
+.leadCells button { border: 0; border-left: 1px solid rgba(241, 230, 211, .05); padding: 0; background: none; cursor: pointer; transition: background-color 120ms ease-out; }
+.leadCells button[data-beat] { border-left-color: rgba(241, 230, 211, .14); }
+.leadCells button[data-on] { background: #23b3a5; }
+.leadCells button[data-sel] { background: var(--ink); }
+@media (hover: hover) and (pointer: fine) { .leadCells button:hover:not([data-on]) { background: rgba(241, 230, 211, .12); } }
+@media (prefers-reduced-motion: reduce) { .leadCells button { transition: none; } }
+.leadBars { position: absolute; inset: 0; display: grid; gap: 4px; }
+.leadBars button { border: 1px solid transparent; border-radius: 3px; background: none; cursor: pointer; padding: 0; }
+.leadBars button[aria-pressed="true"] { border-color: var(--muted); }
+.leadBars button[data-edited] { box-shadow: inset 0 3px 0 -1px #23b3a5; }
+@media (hover: hover) and (pointer: fine) { .leadBars button:hover { border-color: var(--edge); } }
+@media (max-width: 700px) {
+  /* build note: on a phone the × sits at the right edge; the switch drops to its own line */
+  .leadHead .icon { order: 2; margin-left: auto; }
+  .leadHead .quietSwitch { order: 3; flex-basis: 100%; }
+  .leadRow { height: 16px; }
+  .leadGrid { max-width: none; }
+}
+
+/* ── Slice 2 user test (S2-3, S2-7) ─────────────────────────────────────────────────────────────── */
+/* S2-3: the strip is 32 px tall and each 16th at least 24 px wide; presets and moves 32 px tall */
+.sixteenths { height: 32px; }
+.strip16 { flex: 0 1 420px; min-width: 384px; }
+.hit { touch-action: none; cursor: grab; }
+.hit:active { cursor: grabbing; }
+.presets button { min-height: 32px; }
+.moves button { min-height: 32px; }
+.moves button:disabled { color: var(--faint) !important; cursor: default; }
+@media (max-width: 700px) { .strip16 { min-width: 0; } }
+/* S2-7: the rows (chord tiles, lead) stay in view while the panel scrolls on a short window */
+.stickyRows { position: sticky; top: 0; z-index: 4; background: var(--bg); }
+
+/* ── Slices 3–4 user test (L-1, L-3, S2-3b, CS1-12b) ────────────────────────────────────────────── */
+/* L-1: the grid keeps its height; the moves are one fixed 32 px row under it */
+.leadGrid { flex: none; }
+.leadMoves { display: flex; gap: 6px; height: 32px; flex: none; }
+.leadMoves button { height: 32px; padding: 0 12px; border: 1px solid var(--edge); border-radius: 99px; background: none; cursor: pointer; font: 500 11.5px var(--f-mono); }
+.leadMoves button:disabled { color: var(--faint) !important; cursor: default; }
+.leadMoves[data-hidden] { visibility: hidden; }
+/* L-3: cells at least 20 px tall; a note's first 16th has a divider */
+.leadRow, .leadGrid[data-tall] .leadRow { height: 20px; }
+.leadKey, .leadGrid[data-tall] .leadKey { font-size: 10.5px; line-height: 20px; }
+.leadCells button[data-on][data-start] { box-shadow: inset 2px 0 0 var(--bg); }
+/* S2-3b: hits 32 px tall (the strip 38 px), slots 24 × 38 */
+.sixteenths { height: 38px; }
+/* CS1-12b: half-bar names shrink to fit, down to 10 px (sus shortened to "s" there) */
+.tile[data-half] .tileName { font-size: max(10px, min(11px, calc(100cqi / 4.2))); letter-spacing: -0.05em; }
+/* S2-3b (re-check): the strip's 1 px border took 2 px off the hits; 40 px makes them 32 */
+.sixteenths { height: 40px; }
+
+/* ── Polish round before the review (T219–T222) ─────────────────────────────────────────────────── */
+/* half-bar names in full, shrunk to fit, onto two lines if needed (reverses CS1-12b) */
+.tile[data-half] .tileName { white-space: normal; overflow-wrap: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: max(10px, min(11px, calc(100cqi / 4.4))); letter-spacing: -0.03em; line-height: 1.1; }
+.tiles[data-many] .tile[data-half] .tileName { -webkit-line-clamp: 2; }
+/* the playhead runs behind the tiles' names */
+.tiles { position: relative; z-index: 1; }
+.tileName, .tileFoot small { position: relative; z-index: 1; }
+/* cards: names on one baseline, the mood in a fixed two-line slot */
+.mood { min-height: calc(2 * 1.3em); }
+.choice { align-items: center; }
+/* the lead grid: about an octave, rows 28 px, labels 11.5 px */
+.leadRow, .leadGrid[data-tall] .leadRow { height: 28px; }
+.leadKey, .leadGrid[data-tall] .leadKey { font-size: 11.5px; line-height: 28px; }
+.leadGrid[data-wide] .leadRow { height: 22px; }
+.leadGrid[data-wide] .leadKey { line-height: 22px; font-size: 10.5px; }
+/* T226: on a narrow half-bar tile the "?" keeps its corner and the name starts under it, so it never covers the name */
+.tile[data-half][data-unsure] .tileName { padding-right: 0; margin-top: 13px; font-size: 10px; }
+.tile[data-half] .unsure { top: 3px; right: 3px; width: 13px; height: 13px; font-size: 8.5px; }

@@ -11,6 +11,9 @@ import { POLY_KNOBS, POLY_KNOB_SPECS, clampPolyMacros, melodyPreset, melodyPrese
 import { DRUM_KNOB_SPECS, DRUM_PRESETS, ROW_KNOBS, ROW_PRESETS, clampDrumMacros, drumKnobWord, rowOf, type DrumPresetId } from "@/lib/make/drum-synth";
 import { MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, type MacroId, type MakePresetId } from "@/lib/make/presets";
 import { Knob } from "@/components/ui/knob";
+import { keyChords, prettyChord, revoiceMark, transposeChord } from "@/lib/make/chords-mine";
+import { voiceChord } from "@/lib/make/chords-read";
+import { transposeSemis } from "@/lib/make/lib-loop";
 import type { Timeline } from "./use-timeline";
 import s from "./sound-drawer.module.css";
 import l from "./lanes.module.css";
@@ -89,6 +92,8 @@ function MelodyDrawer({ t, sound, color, onClose }: { t: Timeline; sound: Melody
             </select>
             <ChevronDown aria-hidden />
           </label>
+          {/* T219, T224: the chords right under the preset, compact, so they show without scrolling at 1280 × 800 */}
+          {sound.pattern.chords?.length ? <ChordList t={t} sound={sound} change={change} /> : null}
           <p className={s.dim}>{melodyPreset(sound.preset).about}</p>
           <p className={s.dim}>{sound.name}: saved in {sound.key} {sound.scale} at {Math.round(sound.bpm)} BPM; plays in the track&apos;s key and tempo.</p>
         </section>
@@ -106,6 +111,42 @@ function MelodyDrawer({ t, sound, color, onClose }: { t: Timeline; sound: Melody
         </section>
       </div>
     </aside>
+  );
+}
+
+/**
+ * K9 (Phase 6): a chords sound's chord names per bar, as the track plays them (moved to its key), each a
+ * picker: another name re-voices that bar's notes at the same times (the library keeps the original).
+ */
+function ChordList({ t, sound, change }: { t: Timeline; sound: MelodyLoop; change: (next: LibLoop, merge?: string) => void }) {
+  const semis = transposeSemis(sound, { key: t.key, scale: t.scale });
+  const inKey = keyChords(t.key, t.scale);
+  const marks = sound.pattern.chords ?? [];
+  const bar = (step: number) => `${Math.floor(step / 16) + 1}${step % 16 ? "½" : ""}`;
+  // ST-1 (L264): a sound dropped in another key plays moved to it; each bar says what it plays now and what Make named it.
+  const moved = semis !== 0;
+  return (
+    <div className={s.chordBlock} role="group" aria-label="Chords in this sound, per bar">
+      <span className={s.chordHead}>Chords · {sound.pattern.bars} bar{sound.pattern.bars === 1 ? "" : "s"}{moved ? `, moved from ${sound.key} ${sound.scale} to this track's key` : ", then it repeats"}</span>
+      <div className={s.chordList}>
+        {marks.map((m, i) => {
+          const shown = transposeChord(m.name, semis) ?? m.name, options = [...new Set([shown, ...inKey])];
+          return (
+            <label key={m.step} className={s.chordPick} title={m.notes ? "Your own notes; picking a name replaces them" : undefined}>
+              <small>{bar(m.step)}</small>
+              <select value={shown} aria-label={`Bar ${bar(m.step)} chord${moved ? `, was ${prettyChord(m.name)} in Make` : ""}`} onChange={(e) => {
+                const back = transposeChord(e.target.value, -semis), pat = back ? revoiceMark(sound.pattern, i, back, voiceChord) : null;
+                if (pat) change({ ...sound, pattern: pat });
+              }}>
+                {options.map((n) => <option key={n} value={n}>{prettyChord(n)}{m.notes && n === shown ? " (your notes)" : ""}</option>)}
+              </select>
+              {/* T230: Make's name on its own small line under the picker, never cut */}
+              {moved && <small className={s.was}>was {prettyChord(m.name)}</small>}
+            </label>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 

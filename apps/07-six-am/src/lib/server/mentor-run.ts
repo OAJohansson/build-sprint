@@ -17,7 +17,7 @@ import { sharedTraits } from "@/lib/mentor/group-traits";
 import { ownerLines, recentEditLines, sentencesOf } from "@/lib/mentor/owner-lines";
 import { askClaude, MentorError, UPDATES_PROFILE } from "./claude";
 import { mapContext } from "@/lib/map/context";
-import { factsLine, keyFlats, labContextText, unheardBars, unheardLoop, labThread, notesFromThread, parseLabAsk, PART_LABEL, type LabMeta, type ThreadItem } from "@/lib/mentor/lab";
+import { chordFactsLine, factsLine, keyFlats, labContextText, unheardBars, unheardLoop, labThread, notesFromThread, parseLabAsk, PART_LABEL, type LabMeta, type ThreadItem } from "@/lib/mentor/lab";
 import type { Group, MentorStore, MessageRow } from "./mentor-store";
 
 // One Mentor request end to end: load what the job needs from the store (the server builds the
@@ -373,7 +373,7 @@ async function askLab(store: MentorStore, body: AskBody, now: Date, tz: number):
     }
     throw error;
   }
-  const meta: LabMeta = { bar: lab.bar, part: lab.part, facts: factsLine(lab.measure, keyFlats(map.key, map.scale)) };
+  const meta: LabMeta = { bar: lab.bar, part: lab.part, facts: lab.chord ? chordFactsLine(lab.chord, map) : factsLine(lab.measure, keyFlats(map.key, map.scale)) };
   await store.addMessage({ threadId, role: "user", job: "lab", content: message, sources: null, usage: null, costUsd: 0, counted: true });
   const saved = await store.addMessage({
     threadId, role: "assistant", job: "lab", content: JSON.stringify({ ...result.answer, lab: meta }), sources: result.answer.sentences,

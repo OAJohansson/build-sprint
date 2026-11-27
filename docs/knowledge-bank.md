@@ -613,6 +613,14 @@ interests them, and give detail only when asked. *Why it matters:* people orient
 can see where a piece fits before reading it. *Where:* Meander (11): the whole globe of schools,
 then one school facing you, then a thinker. *(Ben Shneiderman, 1996)*
 
+#### Designing in a domain you don't know: borrow, then score
+When you can't judge a design by feel, borrow it: look at what tools for the same user already do
+(for beginner chords: GarageBand's chord strips, Hookpad, Scaler; for pros: the piano roll), then
+score the options on what the user needs (easy now, teaches, room to grow, transfers to real tools,
+covers the system's known weak spot). *Why it matters:* it turns taste you don't have yet into
+checks you can reason about. *Where:* Six AM Phase 6, picking the chord editor. *(Jakob's law,
+Jakob Nielsen; competitive analysis)*
+
 ### Accessibility
 
 #### Contrast ratio
@@ -848,6 +856,9 @@ schools instead of weeks in one. *(Robert and Elizabeth Bjork)*
 
 **Q:** Why can interleaving and spacing beat studying one topic in a block?
 **A:** They feel harder but strengthen long-term memory ("desirable difficulties"), with the best evidence in maths and category learning.
+
+**Q:** Two ways to make a design call in a domain you don't know?
+**A:** Borrow what tools for the same user already do, then score the options on what the user needs (easy now, teaches, room to grow, transfers to real tools).
 
 ## Technology
 
@@ -1158,6 +1169,12 @@ The score tells you what to fix and whether a change helped, but it is not the e
 Six AM Lab's closeness score (37 → 61) and "Suggest settings". *(Speech and music research:
 analysis by synthesis)*
 
+#### Diatonic chords: the key's chord palette
+A key's seven notes give seven chords built only from those notes (I, ii, iii, IV, V, vi, vii°).
+Any of them fits the song, which is why beginner tools show them as a row of buttons and why a
+wrong guess is usually one of its neighbours. *Where:* Six AM Phase 6: Make's chord cards and
+"Why it fits" use the key's chords first. *(Western harmony; music theory basics)*
+
 ### Quiz
 
 **Q:** Why can a fixture rebuilt from hand labels pass while the real recording fails?
@@ -1274,6 +1291,9 @@ analysis by synthesis)*
 
 **Q:** What does `after()` buy you in a Next.js route?
 **A:** The response goes back first and the slow work (an AI image) runs afterwards, so the user never waits for it.
+
+**Q:** Why does a palette of the key's chords always sound right?
+**A:** Each diatonic chord is built only from the key's seven notes, so none clashes with the song; a wrong guess is usually a neighbour in that palette.
 
 ## Building with AI
 

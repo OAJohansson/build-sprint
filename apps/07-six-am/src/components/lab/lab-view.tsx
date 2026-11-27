@@ -16,7 +16,9 @@ import { LabTransport, type TransportState } from "@/lib/lab/transport";
 import { clockMs, labParts, labSections, sectionAt, type LabSection } from "@/lib/lab/view";
 import type { TrackMap } from "@/lib/map/types";
 import { ApiError, mentorApi, money } from "@/lib/mentor/client";
-import { HEARD_WINDOW, knowsLine, PART_LABEL, type LabAsk } from "@/lib/mentor/lab";
+import { HEARD_WINDOW, chordLines, knowsLine, labContextText, PART_LABEL, type LabAsk } from "@/lib/mentor/lab";
+import { chordFacts, chordFactsPlain } from "@/lib/mentor/chord-facts";
+import { conventionalKey } from "@/lib/synths/theory";
 import { HATS_ROW, KICK_ROW, referenceDb } from "@/lib/lab/activity";
 import { measurePart } from "@/lib/lab/measure";
 import { HearChip, Lanes, heardParts, type Hear } from "./lanes";
@@ -25,6 +27,8 @@ import { MakeRoom, useMake, type Family, type MakeModel } from "./make-room";
 import { useDrums, type DrumsModel } from "./make-drums";
 import { useMelody, type MelodyModel } from "./make-melody";
 import { MELODY_ON } from "@/lib/make/melody-reader";
+import { MakeClient } from "@/lib/make/make-client";
+import { chordsReport, type ChordsReader, type ChordsReport } from "@/lib/make/chords-read";
 import { useFx, type FxModel } from "./make-fx";
 import type { FxKnobId, FxPresetId, FxRow } from "@/lib/make/fx-synth";
 import type { MelodyPresetId, MelodyRow, PolyKnobId } from "@/lib/make/poly-synth";
@@ -42,10 +46,30 @@ declare global {
     /** Slice 3 graders: the FX state and actions (numbers only). */
     fx: () => ReturnType<FxModel["debug"]> | null;
     fxDo: { open: (row: FxRow) => void; preset: (row: FxRow, id: FxPresetId) => void; knob: (row: FxRow, id: FxKnobId, v: number) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; save: (row: FxRow, name?: string) => Promise<void> };
+    /** Phase 6 spike graders: read the looped "other" part (in memory) with chord reader A ("dsp") or B ("basic-pitch"); numbers and names only. Null before the loop is in memory. */
+    chordsRead: (reader?: ChordsReader) => Promise<(ChordsReport & { loop: { startMs: number; endMs: number }; levelDb: number; lufs: number }) | null>;
+    /** Phase 6 slice 1 graders: Make's chords as shown and played (cells, guesses, cards, picks, played events with their notes); names and numbers only. */
+    makeChords?: () => ReturnType<MelodyModel["chordsDebug"]> | null;
+    /** Phase 6 slice 1 graders: the listening panel's actions, as a tap would do them (open a cell, pick a card, the Track button, the switches). */
+    chordsDo?: { open: (cell: number) => void; pick: (name: string, opts?: { all?: boolean; cell?: number; hear?: boolean }) => boolean; track: () => void; all: (on: boolean) => void; more: (on: boolean) => void;
+      /** Slice 2 (K5, K6): the open cell on the keys; a note in or out; the timing strip (select a hit by index, add one on a 16th, move the selected one); the presets; ↺ Reset. */
+      piano: (on: boolean) => void; toggleNote: (midi: number) => { notes: number[]; name: string | null; exact: boolean } | null;
+      hit: (op: "select" | "add" | "earlier" | "later" | "shorter" | "longer" | "remove" | "to", at?: number) => boolean; preset: (p: "held" | "short") => void; reset: () => void };
+    /** Dev/grader only (H14): Make's guess on the bar numbered `bar` (as on its tile) becomes `name`, as if misread. */
+    /** Phase 6 slice 3 graders (H12): the open chord's theory facts and the exact Lab-facts block the server puts in the prompt for a question at its bar (no model call). */
+    chordFacts?: () => { bar: number; chord: LabAsk["chord"]; facts: ReturnType<typeof chordFacts>; theory: string[]; labFacts: string; offline: string | null } | null;
+    /** Phase 6 slice 4 (K7): the lead as read and as Mine plays it (reader, doubtful/off, per-bar grids, played notes, closeness). */
+    makeLead?: () => ReturnType<MelodyModel["leadDebug"]> | null;
+    /** K7: the lead grid's actions. open/close a bar (index in the loop, 0-based), place a note (MIDI, 16th 0–15), select one (index), shorter/longer/remove the selected, reset the bar, the outside switch. */
+    leadDo?: { open: (bar: number) => void; close: () => void; place: (midi: number, at: number) => boolean; select: (k: number | null) => void; shorter: () => boolean; longer: () => boolean; remove: () => boolean; reset: () => void; outside: (on: boolean) => void };
+    /** Dev/grader only: a planted misread note in the read lead, on the bar numbered `bar` (as on the tiles), at 16th `at`. */
+    plantLeadNote?: (bar: number, at: number, midi: number) => { bar: number; notes: { at: number; len: number; midi: number }[] } | null;
+    plantChord?: (bar: number, name: string, opts?: { unsure?: boolean }) => { cell: number; barNo: number; was: string; planted: string } | null;
     melodyDo?: { open: (row: MelodyRow) => void; preset: (row: MelodyRow, id: MelodyPresetId) => void; knob: (row: MelodyRow, id: PolyKnobId, v: number) => void; suggest: (row: MelodyRow) => void; ab: (x: "a" | "b") => void; bed: (on: boolean) => void; playAnyway: (row: MelodyRow) => void; backToOff: (row: MelodyRow) => void; save: (row: MelodyRow, name?: string) => Promise<void> } } }
 }
 
 type Mode = "listen" | "make";
+const plantOn = () => { if (process.env.NODE_ENV !== "production") return true; try { return new URLSearchParams(location.search).get("plant") === "1"; } catch { return false; } };
 /** Where you were in this track, for a reload (LS1-8): a position only, per tab. */
 const POS_KEY = (id: string) => `07-six-am:lab-pos:${id}`;
 /** Phase 5: the Make family a focus part belongs to (the switch sets the focus; FX has no part of its own). */
@@ -95,7 +119,14 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const makeRef = useRef<MakeModel | null>(null);
   const drumsRef = useRef<DrumsModel | null>(null);
   const melodyRef = useRef<MelodyModel | null>(null);
+  const labAskRef = useRef<((bar: number) => LabAsk) | null>(null);
   const fxRef = useRef<FxModel | null>(null);
+  // Phase 6 spike: the track's key for the chord readers' key bias (grader hook only).
+  const keyRef = useRef<{ key: string; scale: "major" | "minor" } | undefined>(undefined);
+  useEffect(() => {
+    const k = map.key || analysis?.key || "", sc = map.scale || analysis?.scale || "";
+    keyRef.current = k && (sc === "major" || sc === "minor") ? { key: k, scale: sc } : undefined;
+  });
   const onFamily = useCallback((f: Exclude<Family, "vocals">) => {
     setFxPicked(f === "fx");
     // FX-F1: FX live in the "other" part: a question asked in FX is about that, not the last part heard.
@@ -137,6 +168,17 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
+    // Phase 6 spike: the chord readers' own worker, made on a grader's first call only (shortcut: a
+    // grader-only hook with its own two workers; slice 1 moves the read into Make's Melody tab).
+    let spike: MakeClient | null = null;
+    const chordsRead = async (reader: ChordsReader = "dsp") => {
+      const held = t.loopPart(2);
+      if (!held) return null;
+      // C2: copies of the in-memory loop go to the worker, which zeroes them; only numbers come back.
+      const res = await (spike ??= new MakeClient()).chordsRead({ left: held.left.slice(), right: held.right.slice(), rate: held.rate, bpm, key: keyRef.current, reader });
+      console.info(`[make] chords read (${res.reader}) in ${res.ms} ms: ${res.chords.cells.map((c) => c.name || "-").join(" ")}, ${res.chords.events.length} chords, lead ${res.lead.notes.length} notes (${res.lead.from})`);
+      return { ...chordsReport(res.chords, res.lead, res.ms), loop: { startMs: held.startMs, endMs: held.endMs }, levelDb: Math.round(res.levelDb * 100) / 100, lufs: Math.round(res.lufs * 100) / 100 };
+    };
     window.__sixamLab = { state: () => tr.current?.state ?? null, heardMs: () => t.heardMs(), bar: () => msToBar(t.heardMs(), bpm, origin), hear: () => hearRef.current, levels: () => t.partLevels(), barLevels: () => t.levels(), mineLevel: () => t.mineLevel(), make: () => makeRef.current?.debug() ?? null, setLoop: (startMs: number, endMs: number) => t.setLoop({ startMs, endMs }), weight: () => t.weight(), capture: (onsets: number[]) => t.capture(onsets),
       family: () => familyRef.current, setFamily: (f) => onFamilyRef.current(f), drums: () => drumsRef.current?.debug() ?? null,
       drumsDo: {
@@ -146,8 +188,39 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       },
       compareLevels: (part: number) => t.compareLevels(part), captureDrums: () => t.captureDrums(),
       // L247: Melody is off this phase, so its grader hooks are not set.
-      ...(MELODY_ON ? { melody: () => melodyRef.current?.debug() ?? null } : {}),
+      ...(MELODY_ON ? {
+        melody: () => melodyRef.current?.debug() ?? null,
+        makeChords: () => melodyRef.current?.chordsDebug() ?? null,
+        makeLead: () => melodyRef.current?.leadDebug() ?? null,
+        leadDo: {
+          open: (bar: number) => melodyRef.current?.openLead(bar), close: () => melodyRef.current?.closeLead(),
+          place: (midi: number, at: number) => melodyRef.current?.placeLead(midi, at) ?? false, select: (k: number | null) => melodyRef.current?.selectLead(k),
+          shorter: () => melodyRef.current?.stretchLead(-1) ?? false, longer: () => melodyRef.current?.stretchLead(1) ?? false, remove: () => melodyRef.current?.removeLead() ?? false,
+          reset: () => melodyRef.current?.resetLead(), outside: (on: boolean) => melodyRef.current?.setOutside(on),
+        },
+        chordFacts: () => {
+          const lc = melodyRef.current?.labChord, ask = lc ? labAskRef.current?.(lc.barNo) : null;
+          if (!lc || !ask?.chord) return null;
+          const ks = { key: map.key || "", scale: map.scale || "" };
+          const facts = ks.scale === "major" || ks.scale === "minor" ? chordFacts({ key: ks.key, scale: ks.scale, chord: ask.chord.name, notes: ask.chord.notes, prev: ask.chord.prev, next: ask.chord.next }) : null;
+          return { bar: lc.barNo, chord: ask.chord, facts, theory: chordLines(ask.chord, ks, lc.barNo), labFacts: labContextText(ask, map), offline: facts ? chordFactsPlain(facts) : null };
+        },
+        chordsDo: {
+          open: (cell: number) => melodyRef.current?.openChord(cell), pick: (name: string, opts?: { all?: boolean; cell?: number; hear?: boolean }) => melodyRef.current?.pickChord(name, opts) ?? false,
+          track: () => melodyRef.current?.tapTrack(tr.current?.playing ?? false), all: (on: boolean) => melodyRef.current?.setAll(on), more: (on: boolean) => melodyRef.current?.setMore(on),
+          piano: (on: boolean) => melodyRef.current?.setPiano(on), toggleNote: (midi: number) => melodyRef.current?.toggleNote(midi) ?? null,
+          hit: (op: "select" | "add" | "earlier" | "later" | "shorter" | "longer" | "remove" | "to", at?: number) => melodyRef.current?.hitOp(op, at) ?? false,
+          preset: (p: "held" | "short") => melodyRef.current?.presetHits(p), reset: () => melodyRef.current?.resetCell(),
+        },
+      } : {}),
+      // H14: dev builds, or a production build opened with ?plant=1 (graders run production on :3017). It only
+      // changes Make's guess in memory, never saved data.
+      ...(MELODY_ON && plantOn() ? {
+        plantChord: (bar: number, name: string, opts?: { unsure?: boolean }) => melodyRef.current?.plantChord(bar, name, opts) ?? null,
+        plantLeadNote: (bar: number, at: number, midi: number) => melodyRef.current?.plantLeadNote(bar, at, midi) ?? null,
+      } : {}),
       fx: () => fxRef.current?.debug() ?? null,
+      chordsRead,
       fxDo: {
         open: (row) => fxRef.current?.setOpen(row), preset: (row, id) => fxRef.current?.setPreset(row, id), knob: (row, id, v) => fxRef.current?.setKnob(row, id, v),
         ab: (x) => fxRef.current?.setAb(x), bed: (on) => fxRef.current?.setBed(on), save: async (row, name) => { await fxRef.current?.save(row, name); },
@@ -157,7 +230,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
         suggest: (row: MelodyRow) => melodyRef.current?.suggestNow(row), ab: (x: "a" | "b") => melodyRef.current?.setAb(x), bed: (on: boolean) => melodyRef.current?.setBed(on),
         playAnyway: (row: MelodyRow) => melodyRef.current?.playAnyway(row), backToOff: (row: MelodyRow) => melodyRef.current?.backToOff(row), save: async (row: MelodyRow, name?: string) => { await melodyRef.current?.save(row, name); },
       } } : {}) };
-    return () => { cancelAnimationFrame(raf); clearTimeout(saveTimer); t.dispose(); tr.current = null; };
+    return () => { cancelAnimationFrame(raf); clearTimeout(saveTimer); spike?.stop(); t.dispose(); tr.current = null; };
   }, [map, bpm, origin, bars, code, quiet]);
 
   // S3 Make: the same transport, the same loop; Make's own state survives the switch (T87).
@@ -172,11 +245,11 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     tr, active: mode === "make" && family === "drums", loop: ts?.loop ?? null, bpm, code, title, url: map.id,
     keyName: map.key || analysis?.key || "", scale: map.scale || analysis?.scale || "",
   });
+  const loopBarsNow = ts?.loop ? { from: Math.round(msToBar(ts.loop.startMs, bpm, origin)), bars: Math.max(1, Math.round(msToBar(ts.loop.endMs, bpm, origin)) - Math.round(msToBar(ts.loop.startMs, bpm, origin))) } : null;
   const melody = useMelody({
     tr, active: MELODY_ON && mode === "make" && family === "melody", loop: ts?.loop ?? null, bpm, code, title, url: map.id,
-    keyName: map.key || analysis?.key || "", scale: map.scale || analysis?.scale || "",
+    keyName: map.key || analysis?.key || "", scale: map.scale || analysis?.scale || "", fromBar: loopBarsNow?.from ?? null,
   });
-  const loopBarsNow = ts?.loop ? { from: Math.round(msToBar(ts.loop.startMs, bpm, origin)), bars: Math.max(1, Math.round(msToBar(ts.loop.endMs, bpm, origin)) - Math.round(msToBar(ts.loop.startMs, bpm, origin))) } : null;
   const sectionStarts = useMemo(() => sections.map((x) => x.from), [sections]);
   const fx = useFx({
     tr, active: mode === "make" && family === "fx", loop: ts?.loop ?? null, bpm, code, title, url: map.id,
@@ -283,9 +356,14 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
     // Phase 5: a question asked in Drums, Melody or FX knows the open row, its preset, knobs and ticks.
     const inRow = mode === "make" ? (family === "drums" ? drums.labRow : MELODY_ON && family === "melody" ? melody.labRow : family === "fx" ? fx.labRow : null) : null;
     const heardNow: LabAsk["hear"] = mode === "make" ? { kind: "only", parts: [focus] } : hear;
-    return { part: focus, hear: heardNow, bar, playheadBar: pos.bar, loop: loopB, chords, measure, heard, ...(inMake ? { make: inMake } : {}), ...(inRow ? { makeRow: inRow } : {}) };
-  }, [focus, hear, pos.bar, chords, bpm, origin, bars, map.key, map.scale, analysis, mode, make.labMake, family, drums.labRow, melody.labRow, fx.labRow]);
+    // K10: with a bar open in Make's Chords, its chord goes with the question (names and MIDI only, C2).
+    const lc = mode === "make" && MELODY_ON && family === "melody" ? melody.labChord : null;
+    const inChord = lc ? { name: lc.name, ...(lc.notes ? { notes: lc.notes } : {}), prev: lc.prev, next: lc.next } : null;
+    return { part: focus, hear: heardNow, bar, playheadBar: pos.bar, loop: loopB, chords, measure, heard, ...(inMake ? { make: inMake } : {}), ...(inRow ? { makeRow: inRow } : {}), ...(inChord ? { chord: inChord } : {}) };
+  }, [focus, hear, pos.bar, chords, bpm, origin, bars, map.key, map.scale, analysis, mode, make.labMake, family, drums.labRow, melody.labRow, melody.labChord, fx.labRow]);
 
+  const keyScale = useMemo(() => ({ key: map.key || analysis?.key || "", scale: map.scale || analysis?.scale || "" }), [map.key, map.scale, analysis?.key, analysis?.scale]);
+  useEffect(() => { labAskRef.current = labAsk; });
   const send = useCallback(async (id: string, q: string, bar: number, lab: LabAsk) => {
     try {
       const r = await mentorApi(code).ask({ job: "lab", track: analysis, message: q, lab });
@@ -295,9 +373,15 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
       setUsageNote(r.usage.warning ? `${r.usage.questionsToday} questions today, about ${money(r.usage.todayUsd)} so far (estimate).` : null);
     } catch (e) {
       const msg = e instanceof ApiError ? e.message : "The Mentor couldn't be reached. Try again.";
+      // K10 offline: a chord question still gets Six AM's own facts in plain words (code, no model) when the Mentor can't answer.
+      const f = lab.chord && (keyScale.scale === "major" || keyScale.scale === "minor") ? chordFacts({ key: keyScale.key, scale: keyScale.scale, chord: lab.chord.name, notes: lab.chord.notes, prev: lab.chord.prev, next: lab.chord.next }) : null;
+      if (f) {
+        setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, error: undefined, answer: { sentences: [{ text: chordFactsPlain(f), source: "general" }], tellMore: false }, facts: "Six AM's own answer (the Mentor is offline)" } : x)));
+        return;
+      }
       setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, error: msg } : x)));
     }
-  }, [code, analysis]);
+  }, [code, analysis, keyScale]);
   const pending = useRef(new Map<string, LabAsk>());
   const onAsk = useCallback((q: string, bar: number) => {
     const id = `pending-${Date.now()}`;
@@ -336,7 +420,10 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
 
   const focusTurns = turns.filter((x) => x.part === focus);
   const artist = analysis?.uploader || map.uploader;
-  const key = map.key || analysis?.key ? `${map.key || analysis!.key} ${map.scale || analysis!.scale}` : "";
+  // TH-3: the key's conventional name ("G#" major shows as A♭ major), the same one the chord facts spell from.
+  const rawKey = map.key || analysis?.key || "", rawScale = map.scale || analysis?.scale || "";
+  const convKey = rawScale === "major" || rawScale === "minor" ? conventionalKey(rawKey, rawScale) : null;
+  const key = rawKey ? `${(convKey ?? rawKey).replace(/^([A-G])b/, "$1♭").replace(/^([A-G])#/, "$1♯")} ${rawScale}` : "";
   const bpmText = `${Math.round(bpm * 10) / 10}`;
   const facts = [`${bpmText} BPM`, key ? `key ${key}` : ""].filter(Boolean).join(" · ");
   const ready = ts?.phase === "ready";
@@ -354,7 +441,7 @@ export function LabView({ map, analysis, code, quiet }: { map: TrackMap; analysi
   const loopSec = loop ? sectionAt(sections, loop.from) : null;
   // A long section loops 16 bars of it (L161): say which (LS1-2).
   const loopPart = loop && loopSec && loop.to - loop.from < loopSec.to - loopSec.from
-    ? (loop.from === loopSec.from ? ", first 16 bars" : `, bars ${loop.from}–${loop.to - 1}`) : "";
+    ? (loop.from === loopSec.from ? `, first ${loop.to - loop.from} bars` : `, bars ${loop.from}–${loop.to - 1}`) : "";
   const deckText = ready ? "Deck on" : starting ? "Deck opening…" : ts?.deckOpen ? "Deck open" : "Deck off";
   const closedLine = ts?.phase === "stopped" && ts.deckClosed ? "Deck closed. Press Play to open it again." : null;
 

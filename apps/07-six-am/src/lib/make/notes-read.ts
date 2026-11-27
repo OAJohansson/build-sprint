@@ -72,6 +72,15 @@ function pitchesOf(peaks: Peak[]): [number, number][] {
 }
 
 /**
+ * One frame's fundamentals (MIDI as a float, strength) from its 2048-point magnitude spectrum at `rate`
+ * (the greedy estimate with harmonic cancellation above). For the chord reader's chroma (Phase 6).
+ */
+export function framePitches(mag: Float64Array, rate: number, floor: number): [number, number][] {
+  return pitchesOf(peaksOf(mag, rate, floor));
+}
+export const NOTE_FFT = N;
+
+/**
  * Attacks: peaks of a fine onset curve (2.9 ms hops, a 46 ms window to decide, 23 ms to time), the summed rise of log energy in 12 bands between
  * 150 Hz and 4 kHz (bands, not bins, so partials beating inside a held note don't look like
  * attacks), above a local median. Times (s) and strengths (0–1 of the loudest).
@@ -115,6 +124,25 @@ export function attacks(x: Float32Array, rate: number, n = 512): { t: number; s:
     out.push({ t, s: sv });
   }
   return out;
+}
+
+/**
+ * Attacks of a looped part: `marks` (512-point curve, to decide) and `fine` (256-point, to time). The
+ * loop plays round: a chord struck on its first beat had no quiet stretch before it and was dropped
+ * (M-F2). Attacks are the part's own everywhere after the first 50 ms; only that start is taken from
+ * a copy with the loop's end in front, scaled to match over the rest of the loop. Shared by the note
+ * reader and the chord reader (chords-read.ts, Phase 6).
+ */
+export function loopAttacks(x: Float32Array, r: number): { marks: { t: number; s: number }[]; fine: { t: number; s: number }[] } {
+  const pre = Math.min(x.length, Math.round(0.3 * r)), xc = new Float32Array(pre + x.length);
+  xc.set(x.subarray(x.length - pre), 0); xc.set(x, pre);
+  const withStart = (own: { t: number; s: number }[], round: { t: number; s: number }[]) => {
+    const rs = round.map((m) => ({ t: m.t - pre / r, s: m.s })).filter((m) => m.t > -0.05);
+    const top = (xs: { t: number; s: number }[]) => Math.max(1e-9, ...xs.filter((m) => m.t > 0.05).map((m) => m.s));
+    const k = top(own) / top(rs);
+    return [...rs.filter((m) => m.t <= 0.05).map((m) => ({ t: m.t, s: Math.min(1, m.s * k) })), ...own.filter((m) => m.t > 0.05)];
+  };
+  return { marks: withStart(attacks(x, r), attacks(xc, r)), fine: withStart(attacks(x, r, 256), attacks(xc, r, 256)) };
 }
 
 /** Energy at `hz` of `x` over [a, b) samples (Goertzel). */
@@ -205,18 +233,7 @@ export function readNotes(left: Float32Array, right: Float32Array | undefined, r
   });
   const tonic = key ? pitchClass(key.key) : null;
   const hopSec = hop / r, half = N / 2 / r;
-  // The loop plays round: a chord struck on its first beat had no quiet stretch before it and was
-  // dropped (M-F2). Attacks are the reader's own everywhere after the first 50 ms; only that start is
-  // taken from a copy with the loop's end in front, scaled to match over the rest of the loop.
-  const pre = Math.min(x.length, Math.round(0.3 * r)), xc = new Float32Array(pre + x.length);
-  xc.set(x.subarray(x.length - pre), 0); xc.set(x, pre);
-  const withStart = (own: { t: number; s: number }[], round: { t: number; s: number }[]) => {
-    const rs = round.map((m) => ({ t: m.t - pre / r, s: m.s })).filter((m) => m.t > -0.05);
-    const top = (xs: { t: number; s: number }[]) => Math.max(1e-9, ...xs.filter((m) => m.t > 0.05).map((m) => m.s));
-    const k = top(own) / top(rs);
-    return [...rs.filter((m) => m.t <= 0.05).map((m) => ({ t: m.t, s: Math.min(1, m.s * k) })), ...own.filter((m) => m.t > 0.05)];
-  };
-  const marks = withStart(attacks(x, r), attacks(xc, r)), fine = withStart(attacks(x, r, 256), attacks(xc, r, 256));
+  const { marks, fine } = loopAttacks(x, r);
   /** Is there an attack within the snap window of a (window-centred) time? A pitch that comes back without one is the same note. */
   const nearMark = (t: number) => marks.some((m) => m.s >= NOTE_OPT.newNoteMark && Math.abs(m.t - t) <= NOTE_OPT.snapSec + half * 0.5);
   const sps = 60 / bpm / 4;

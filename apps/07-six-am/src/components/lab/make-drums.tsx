@@ -576,8 +576,8 @@ export function DrumsMiddle({ m, loop, from, playing, heardMs, onJump }: { m: Dr
       : null;
     return [
       <button key={`${r}-n`} type="button" className={s.rname} aria-pressed={lit} onClick={() => m.setOpen(r)} title={`${rowName(r)}: ${drumSoundName(m.sounds[r].preset)}`}>
-        <span>{rowName(r)}{doubtful && <span className={s.drOff}> off</span>}{m.savedRows[r] && <span className={s.drSaved}> saved</span>}</span>
-        <small>{drumSoundName(m.sounds[r].preset)}</small>
+        <span>{rowName(r)}{doubtful && <span className={s.drOff}> off</span>}</span>
+        <small>{drumSoundName(m.sounds[r].preset)}{m.savedRows[r] && " · saved"}</small>
       </button>,
       <div key={`${r}-s`} className={s.stCell} data-open={st === "open" && !off ? "" : undefined}>
         <Steps row={r} steps={steps} bars={bars} from={fromBar} kinds={off ? null : m.kinds?.[r] ?? null} muted={quiet || doubtful} disabled={off || !m.read} onTap={(i) => m.tapStep(r, i)}>

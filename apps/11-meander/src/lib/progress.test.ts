@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { progressLine, seeIdea, stateOf, threadProgress, touchSchool, withHistory, type Progress } from "./progress";
+import { begunLine, detailLine, seeIdea, stateLabel, stateOf, threadProgress, touchSchool, withHistory, type Progress } from "./progress";
 import type { Visit } from "./visits";
 
 const at = (y: number, m: number, d: number, h = 12, min = 0) => new Date(y, m - 1, d, h, min).toISOString();
@@ -20,8 +20,9 @@ describe("progress per school", () => {
   it("empty history: nothing started, everything to go", () => {
     const t = threadProgress({}, SCHOOLS);
     expect(t).toEqual({ explored: 0, started: 0, toGo: 4, rows: [] });
-    expect(progressLine(t)).toBe("4 to go");
-    expect(progressLine(threadProgress(withHistory({}, []), []))).toBe("0 to go");
+    expect(begunLine(t)).toBe("0 of 4 schools begun");
+    expect(detailLine(t)).toBe("");
+    expect(begunLine(threadProgress(withHistory({}, []), []))).toBe("0 of 0 schools begun");
   });
 
   it("opening starts a school; opening every idea explores it (normal case)", () => {
@@ -36,7 +37,10 @@ describe("progress per school", () => {
     expect(stateOf(p.sto, SCHOOLS[0].ideas)).toBe("explored");
     const t = threadProgress(p, SCHOOLS);
     expect(t.rows.map((r) => [r.id, r.state, r.seen, r.total])).toEqual([["sto", "explored", 2, 2], ["exi", "started", 0, 3]]);
-    expect(progressLine(t)).toBe("1 explored · 1 started · 2 to go");
+    expect(begunLine(t)).toBe("2 of 4 schools begun");
+    expect(detailLine(t)).toBe("1 with all ideas seen · 1 started");
+    expect(stateLabel("explored")).toBe("all ideas seen");
+    expect(stateLabel("new")).toBe("");
   });
 
   it("an explored school opened again stays explored and moves to the top", () => {
@@ -75,12 +79,15 @@ describe("progress per school", () => {
     p = withHistory(seeIdea({}, "sto", "Virtue"), visits);
     expect(p.sto).toEqual({ at: new Date(2026, 10, 27, 10, 0).toISOString(), ideas: ["Virtue"] });
     const t = threadProgress(p, SCHOOLS);
-    expect(progressLine(t)).toBe("2 started · 2 to go");
+    expect(begunLine(t)).toBe("2 of 4 schools begun");
+    expect(detailLine(t)).toBe("2 started");
   });
 
   it("all explored", () => {
     let p: Progress = {};
     for (const s of SCHOOLS.slice(0, 3)) for (const i of s.ideas) p = seeIdea(p, s.id, i);
-    expect(progressLine(threadProgress(p, SCHOOLS.slice(0, 3)))).toBe("All 3 explored");
+    const t = threadProgress(p, SCHOOLS.slice(0, 3));
+    expect(begunLine(t)).toBe("3 of 3 schools begun");
+    expect(detailLine(t)).toBe("3 with all ideas seen");
   });
 });

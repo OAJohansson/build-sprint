@@ -38,6 +38,16 @@ const shortName = (name) => SHORT[name] ?? name.replace(/\s*\(.*?\)\s*/g, " ").t
 // unless the source gives `short_dates`.
 const shortDates = (s) => (s.short_dates ?? (s.date_range ?? "").replace(/\s*\([^)]*\)/g, "").split(";")[0]).trim();
 
+// The quiet tradition tag on the Eastern schools (#42, F4): where they are from, and for the Indian ones the religion a
+// reader might search for ("Hinduism", "Buddhism"), since "Vedānta" alone is jargon.
+// shortcut: set here by hand, not sourced in the content; move it into full-eastern.json as a sourced field when the content is next revised.
+const TRADITION_TAG = {
+  "buddhist-philosophy": "Indian · Buddhist",
+  vedanta: "Indian · Hindu",
+  confucianism: "Chinese",
+  daoism: "Chinese",
+};
+
 const schools = [], thinkers = [], links = [];
 const ids = new Set(full.map((s) => s.id));
 for (const s of full) {
@@ -53,7 +63,8 @@ for (const s of full) {
     });
   }
   schools.push({
-    id: s.id, name: s.name, dates: shortDates(s), ...(s.tradition ? { tradition: s.tradition } : {}), dateRange: s.date_range ?? "", era: s.era ?? "",
+    id: s.id, name: s.name, dates: shortDates(s), ...(s.tradition ? { tradition: s.tradition } : {}),
+    ...(TRADITION_TAG[s.id] ? { traditionTag: TRADITION_TAG[s.id] } : {}), dateRange: s.date_range ?? "", era: s.era ?? "",
     description: s.description ?? "", ...(s.tagline ? (typeof s.tagline === "string" ? { tagline: s.tagline } : { tagline: s.tagline.text, taglineSources: src(s.tagline.sources) }) : {}),debatable: s.debatable ?? null,
     questions: (s.questions ?? []).map((q) => q.text),
     questionSources: (s.questions ?? []).map((q) => src(q.sources)),

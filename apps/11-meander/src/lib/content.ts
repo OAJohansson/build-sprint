@@ -31,6 +31,8 @@ export type School = {
   sample?: boolean;
   /** "eastern" for the Eastern schools (#42); missing for the Western ones. */
   tradition?: string;
+  /** "Indian · Hindu", "Chinese": the tag shown with an Eastern school (F4). */
+  traditionTag?: string;
   /** A one-line "what this is" written for the card; when missing, the first sentence of `description`. */
   tagline?: string;
   taglineSources?: Source[];
@@ -172,14 +174,9 @@ export const alsoIn = (t: Thinker): Thinker[] => thinkers.filter((o) => o.name =
 export type PlaceFacts = { places?: string[]; span?: string | null };
 const placesFile = placesJson as Record<string, PlaceFacts>;
 
-/** A quiet tradition label for the Eastern schools (#42), from where they happened (the sourced places): "Indian",
- * "Chinese". Western schools get none: the field was all Western until now, so only the new ones need saying. */
-const REGION: Record<string, string> = { India: "Indian", Nepal: "Indian", China: "Chinese" };
-export function traditionOf(s: School): string {
-  if (s.tradition !== "eastern") return "";
-  const first = placesFile[s.id]?.places?.find((p) => REGION[p.replace(/\s*\(.*\)$/, "")]);
-  return first ? REGION[first.replace(/\s*\(.*\)$/, "")] : "Eastern";
-}
+/** The quiet tradition tag for the Eastern schools (#42, F4): "Indian · Hindu", "Chinese". Set in the content import;
+ * Western schools have none, since the field was all Western until now. */
+export const traditionOf = (s: School): string => s.traditionTag ?? "";
 
 /** When a school happened: the sourced short span ("1843–1949") when there is one, else its dates. */
 export const whenOf = (s: School) => placesFile[s.id]?.span || s.dates;

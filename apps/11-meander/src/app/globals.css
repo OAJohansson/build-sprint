@@ -194,6 +194,9 @@ svg.threads path.focus.mixed { stroke-dasharray: 9 4 1.5 4; }
 .th-list button { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; width: 100%; padding: 7px 12px; border-radius: 10px; font-size: 15px; transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), background-color 160ms ease; }
 .th-list span { min-width: 0; }
 .th-list .yr { font-size: 13px; color: var(--quiet); flex-shrink: 0; white-space: nowrap; }
+/* long dates (F3: "1017–1137 CE (traditional) or …") go under the name instead of beside it */
+.th-list button:has(.yr.long) { flex-direction: column; align-items: flex-start; gap: 2px; }
+.th-list .yr.long { white-space: normal; flex-shrink: 1; text-wrap: pretty; }
 .tm { margin: 0 -12px; }
 .tm > li > button { display: grid; grid-template-columns: 16px minmax(0, 1fr); align-items: baseline; text-align: left; width: 100%; padding: 7px 12px; border-radius: 10px; font-size: 15px; transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), background-color 160ms ease; }
 .tm li.open { background: rgba(233, 226, 212, 0.06); border-radius: 12px; margin: 3px 0; padding-bottom: 12px; }
@@ -411,7 +414,18 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 .pnote p { font-size: 19px; line-height: 1.35; color: var(--bone); }
 
 /* ---------- Your thread as progress (#37) */
-.tsum { font-size: 15px; color: rgba(233, 226, 212, 0.86); margin: -2px 0 14px; }
+.tsum { font-size: 15px; color: rgba(233, 226, 212, 0.86); margin: -2px 0 0; }
+.tsub { font-size: 13px; color: var(--quiet); margin-top: 3px; }
+.tkick { font-size: 13px; color: var(--quiet); margin: 20px 0 6px; }
+/* Next from here (F1): an open ring, the school, and the thread that leads to it */
+.nextl button { display: grid; grid-template-columns: 10px minmax(0, 1fr); column-gap: 12px; align-items: start; width: 100%; padding: 8px 0; text-align: left; }
+.nextl button:active { transform: none; opacity: 0.8; }
+.nextl i { width: 9px; height: 9px; margin-top: 6px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px rgba(233, 226, 212, 0.55); }
+.nextl b { display: block; font: 400 16px/1.3 var(--serif); color: var(--bone); overflow-wrap: anywhere; }
+.nextl small { display: block; font-size: 13px; line-height: 1.35; color: var(--quiet); margin-top: 2px; }
+.phone .nextl button { min-height: 52px; }
+.phone .nextl b { font-size: 18px; }
+.phone .nextl i { margin-top: 8px; }
 .prog li { border-top: 1px solid var(--faint); }
 .prog li:last-child { border-bottom: 1px solid var(--faint); }
 .prog button { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; column-gap: 12px; align-items: baseline; width: 100%; padding: 10px 0; text-align: left; }
@@ -445,7 +459,7 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 .phone .rdlist dt { font-size: 14px; padding-top: 3px; }
 @media (hover: hover) and (pointer: fine) {
   .mi:hover { color: var(--bone); }
-  .prog button:hover .nm { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: rgba(233, 226, 212, 0.5); }
+  .nextl button:hover b, .prog button:hover .nm { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: rgba(233, 226, 212, 0.5); }
   .rdl:hover { text-decoration-color: var(--bone); }
 }
 
@@ -507,6 +521,8 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 .pskel .trad { margin: 14px 0 -4px; }
 /* the timeline's tradition tag after an Eastern school's name */
 .tl-lb .tag { margin-left: 8px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--quiet); opacity: 0.8; }
+
+.field-list .ptag { display: block; font-size: 13px; line-height: 1.3; color: var(--quiet); margin-top: 3px; }
 
 /* phone: the timeline as one column, era by era */
 .tlp { margin-top: 4px; }

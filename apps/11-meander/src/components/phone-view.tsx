@@ -9,6 +9,7 @@ import { SchoolSections, StepInside, ThinkerSections, ThreadSections } from "./c
 import { PhoneSkeleton } from "./skeleton";
 import { Mark } from "./mark";
 import { MenuBar } from "./menu-bar";
+import { stateLabel } from "@/lib/progress";
 import type { Nav } from "./meander";
 
 export function PhoneView({ nav }: { nav: Nav }) {
@@ -70,7 +71,7 @@ export function PhoneView({ nav }: { nav: Nav }) {
                         <b>{n.school.name}</b>
                         <em>{n.verb}</em>
                         {n.reason && <small>{n.reason}</small>}
-                        {v && <span className="sr-only">, {states.get(n.school.id)}</span>}
+                        {v && <span className="sr-only">, {stateLabel(states.get(n.school.id))}</span>}
                       </span>
                     </button>
                   </li>
@@ -104,7 +105,7 @@ export function PhoneView({ nav }: { nav: Nav }) {
                         <span>
                           <b>{s.name}</b>
                           <small>{[traditionOf(s), whenOf(s)].filter(Boolean).join(" · ")}</small>
-                          {v && <span className="sr-only">, {states.get(s.id)}</span>}
+                          {v && <span className="sr-only">, {stateLabel(states.get(s.id))}</span>}
                         </span>
                       </button>
                     </li>
@@ -131,7 +132,8 @@ export function PhoneView({ nav }: { nav: Nav }) {
                   <i aria-hidden="true" />
                   <span>
                     <b>{s.name}</b>
-                    {v && <span className="sr-only">, {states.get(s.id)}</span>}
+                    {traditionOf(s) && <small className="ptag">{traditionOf(s)}</small>}
+                    {v && <span className="sr-only">, {stateLabel(states.get(s.id))}</span>}
                   </span>
                 </button>
               </li>

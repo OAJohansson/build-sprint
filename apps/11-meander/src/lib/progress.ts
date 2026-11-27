@@ -62,10 +62,16 @@ export function threadProgress(p: Progress, schools: { id: string; ideas: string
   return { explored, started: rows.length - explored, toGo: schools.length - rows.length, rows };
 }
 
-/** "3 explored · 5 started · 15 to go"; parts that are zero are left out, and a field with nothing begun says so. */
-export function progressLine(t: Pick<ThreadProgress, "explored" | "started" | "toGo">): string {
-  const total = t.explored + t.started + t.toGo;
-  if (total > 0 && t.explored === total) return `All ${total} explored`;
-  if (t.explored + t.started === 0) return `${t.toGo} to go`;
-  return [t.explored && `${t.explored} explored`, t.started && `${t.started} started`, t.toGo && `${t.toGo} to go`].filter(Boolean).join(" · ");
+/** What a reader sees for a state (F1, user test 27 Nov): "explored" overclaimed, so it reads "all ideas seen". */
+export const stateLabel = (st: SchoolState | undefined) => (st === "explored" ? "all ideas seen" : st === "started" ? "started" : "");
+
+/** "5 of 27 schools begun": a count, not a scorecard (F1). */
+export function begunLine(t: Pick<ThreadProgress, "explored" | "started" | "toGo">): string {
+  const begun = t.explored + t.started, total = begun + t.toGo;
+  return `${begun} of ${total} ${total === 1 ? "school" : "schools"} begun`;
+}
+
+/** The quiet second line: "2 with all ideas seen · 3 started"; empty when nothing is begun. */
+export function detailLine(t: Pick<ThreadProgress, "explored" | "started">): string {
+  return [t.explored && `${t.explored} with all ideas seen`, t.started && `${t.started} started`].filter(Boolean).join(" · ");
 }

@@ -13,6 +13,7 @@ const worstSchools = () => [
   ...schools.map((s) => (s.id === "feminist-philosophy" ? { ...s, name: "The Very Long School of Post-Analytic Neo-Pragmatist Phenomenological Hermeneutics (Second Wave)" } : s)),
   { ...schools[0], id: "worst-everything", name: "Perennial Philosophy Across Every Tradition", dates: "c. 600 BCE–present" },
 ];
+import { stateLabel } from "@/lib/progress";
 import type { Nav } from "./meander";
 
 const X0 = 70;
@@ -137,7 +138,7 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
                 className={cls}
                 style={{ top: y(i) }}
                 data-id={id}
-                aria-label={`${s.name}, ${when}${st === "started" || st === "explored" ? `, ${st}` : ""}`}
+                aria-label={`${s.name}, ${when}${stateLabel(st) ? `, ${stateLabel(st)}` : ""}`}
                 aria-current={id === focus ? "true" : undefined}
                 onClick={(e) => { e.stopPropagation(); nav.openSchool(id); }}
                 onMouseEnter={() => setHovered(id)}

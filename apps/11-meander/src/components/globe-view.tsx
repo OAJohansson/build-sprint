@@ -13,6 +13,7 @@ import { Mark } from "./mark";
 import { MenuBar } from "./menu-bar";
 import { TimelineView } from "./timeline-view";
 import { FirstPage, Knot } from "./skeleton";
+import { stateLabel } from "@/lib/progress";
 import type { Nav } from "./meander";
 
 const W = 1440, H = 900;
@@ -279,7 +280,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
                 onFocus={() => setHovered(n.id)}
                 onBlur={() => setHovered((h) => (h === n.id ? null : h))}
                 data-id={n.id}
-                aria-label={n.rest ? `${n.name}${v ? `, ${st}` : ""}` : undefined}
+                aria-label={n.rest ? `${n.name}${v ? `, ${stateLabel(st)}` : ""}` : undefined}
               >
                 <i className="dot" style={{ width: 2 * n.r, height: 2 * n.r }} />
                 <span
@@ -296,7 +297,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
                       {n.near.reason && <span className="why">· {n.near.reason}</span>}
                     </em>
                   )}
-                  {v && <span className="sr-only">, {st}</span>}
+                  {v && <span className="sr-only">, {stateLabel(st)}</span>}
                 </span>
               </button>
             );

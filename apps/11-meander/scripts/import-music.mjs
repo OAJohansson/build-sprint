@@ -91,9 +91,21 @@ for (const g of full) {
     if (!ids.has(l.neighbour)) { problems.push(`${g.id}: link to unknown genre "${l.neighbour}"`); continue; }
     const type = KIND[l.kind];
     if (!type) { problems.push(`${g.id} → ${l.neighbour}: unknown link kind "${l.kind}"`); continue; }
-    const [from, to] = l.direction === "in" ? [g.id, l.neighbour] : [l.neighbour, g.id];
+    // Explicit from/to (the older and newer genre, as in the research's links.json) win over direction.
+    const [from, to] = l.from && l.to ? [l.from, l.to] : l.direction === "in" ? [g.id, l.neighbour] : [l.neighbour, g.id];
     const key = `${from}>${to}`;
-    if (seenLink.has(key)) continue;
+    if (seenLink.has(key)) {
+      // The same pair with "grew out of" and "reacted against" (disco → hip-hop) is one link, as philosophy's
+      // "built on, then pushed against".
+      const prev = links.find((x) => `${x.from}>${x.to}` === key);
+      if (prev && prev.type !== type && [prev.type, type].every((t) => t === "built" || t === "against")) {
+        if (prev.type === "against") { prev.label = l.label ?? prev.label; }
+        prev.type = "built-then-against";
+        prev.reason = [prev.reason, l.reason].filter(Boolean).join(" ");
+        prev.sources = [...prev.sources, ...src(l.sources)];
+      }
+      continue;
+    }
     seenLink.add(key);
     links.push({ from, to, type, label: l.label ?? "", reason: l.reason ?? "", sources: src(l.sources), sample });
   }

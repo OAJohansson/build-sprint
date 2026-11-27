@@ -139,3 +139,49 @@ product code.
 - **Licence check:** 120 Freesound page GETs, about 1 min.
 - **Unit suite:** 26 s. **Cross-version hashing:** 2 × 3 s.
 - **Browser session:** about 25 min, including 9 live loops on two tracks.
+
+## Re-grade after the fix round (51764e2), 27 Nov 2026
+
+This re-grades W2, W4 and W11 on 51764e2, which brings the fix round, renamed sounds and a new
+Upright default (Tone 0.6). I used the same scripts and feature definitions as above.
+
+**New bars (L282):**
+- Drive: level ≥ 6 dB or brightness ≥ 2×.
+- Sub: level at 20–90 Hz ≥ 6 dB.
+- Weight: level at 90–400 Hz ≥ 6 dB.
+- Wobble: brightness swing at Wobble 1 ≥ 2×.
+- Width: side level ≥ 6 dB.
+
+**Exempt:** the four Phase 4 presets (D7-3), plus D7-4 and D7-5 (L283).
+
+| Eval | Re-grade measured | Result |
+| --- | --- | --- |
+| **W2** | **0 near pairs in all 7 rows** (closest 1.14–1.23×). Drum spans are unchanged (the files didn't change). Bass on the fixed render: brightness 21.5×, length **3.12×**. Names are unique in every row (20/20, including bass) | **Pass** (bass length is just over 3×) |
+| **W4** | **Drums**, the same 30-sound sample: Pitch 30/30, Tone 30/30, Length 29/30 (hat-tick, D7-4 accepted), Drive 29/30 (kick-gabber, D7-5 accepted). **16 new bass presets, every knob:** Length, Pitch drop, Drive, Width, Sub and Weight **16/16**; **Tone 15/16, Wobble 13/16** | **Fail** (4 of 128 bass checks) |
+| **W11** | `pnpm -F 07-six-am test` **618/618**. The test files are unchanged since bb7bea0, so the bass GOLDEN table is the same. My 88 cross-version renders (12 synth drums in the Studio and in Make, 8 melody, 8 FX, the 4 Phase 4 basses) are **88/88 identical** to the Phase 6 base | **Pass** |
+
+**Bass knob detail (16 new presets):**
+- **Pitch drop:** 6.7–8.1 st. All seven presets from D7-2 now pass.
+- **Drive:** +5.1 to +18.2 dB; analog-round passes on brightness (3.0×).
+- **Sub:** +7.9 to +26 dB. **Weight:** +6.9 to +49 dB. **Width:** ≥ 101 dB.
+
+**Phase 4 presets:** they measure exactly as before (round-sub Tone 0.96× and so on), which
+confirms they weren't touched.
+
+**Remaining failures:**
+
+**D7-9. Tone on Pure sine (sine-sub) is now 1.87× (was 2.12×).**
+- **Likely cause:** the new Weight level (`weightLevel` 45). sine-sub starts at Weight 0.4, so
+  the body copy now dominates the centroid at both ends of Tone.
+- This is a regression from the fix round.
+
+**D7-10. Wobble on three presets is under 2×.**
+- Click organ (organ-click) 1.31×, FM glass (fm-glass) 1.38×, Open saw (filtered-saw) 1.28×.
+- **Likely cause:** on these the default Tone cutoff sits far above the harmonics. Even the
+  wider, two-way sweep (5 octaves) doesn't pull it down onto them often enough, and swinging
+  up adds nothing.
+- **Observation:** Wide Reese passes at 4.2×, but it already swings 5.0× with Wobble at 0
+  (detune beating). The knob is audible there only as the speed of the movement.
+
+**Cost and time:** no paid API calls; 13 s render suite, 26 s unit suite, 3 s hashing; no browser
+needed.

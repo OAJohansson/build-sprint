@@ -23,3 +23,6 @@ Simulated (user-tester agent, persona Sam as a house fan), laptop 1440×900 plus
 **Value:** would open it again "to dig into Detroit and UK garage records before going out". Same product as philosophy: "clearly the same app… music actually feels more natural because I can listen." Would pay for: real playlists of a thread (Spotify or Apple Music) and sub-genres under house. Biggest idea: a "Your trail" listening path (one record per step walked).
 
 **Tester's process suggestion:** add a wrong-belief check to scenarios (what would the persona wrongly conclude in each view).
+
+## Re-check after fixes (27 Nov)
+M-S1 from the timeline first: pass, 4 clicks, ~60 s; the wrong-belief check is clean (Ambient reads "fused with it", no longer a parent). F1, F2, F5, F6, F7 fixed; F3 fixed in the R&B view but labels still sit 50–80 px from their dots in the overview's electronic cluster and the Funk view (left for the owner with the critic's overview-label gap, L58). New: N1 the reason line sits far from the eye and some reasons read like source notes (rewritten, T41); N2 curves cross some faded timeline labels (polish).

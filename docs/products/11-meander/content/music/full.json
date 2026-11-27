@@ -6600,7 +6600,7 @@
     "neighbour_name": "Hip-hop",
     "direction": "out",
     "label": "hip-hop draws on soul",
-    "reason": "The Hip-hop infobox lists soul among the genre's stylistic origins.",
+    "reason": "Soul is one of the styles hip-hop grew out of.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Hip-hop",
@@ -7289,7 +7289,7 @@
     "neighbour_name": "Disco",
     "direction": "out",
     "label": "disco drew on funk",
-    "reason": "The Funk article says disco owed a great deal to funk, and the Disco infobox lists funk among its origins.",
+    "reason": "Disco owed a great deal to funk, which is one of its roots.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Funk",
@@ -7942,7 +7942,7 @@
     "neighbour_name": "Funk",
     "direction": "in",
     "label": "disco drew on funk",
-    "reason": "The Funk article says disco owed a great deal to funk, and the Disco infobox lists funk among its origins.",
+    "reason": "Disco owed a great deal to funk, which is one of its roots.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Funk",
@@ -7962,7 +7962,7 @@
     "neighbour_name": "Soul music",
     "direction": "in",
     "label": "disco grew from soul",
-    "reason": "Philadelphia soul and psychedelic soul are named among disco's roots, and the Soul article calls some 1970s acts a link between soul and disco.",
+    "reason": "Philadelphia soul and psychedelic soul are among disco's roots, and some 1970s soul acts were a link between the two.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Soul_music",
@@ -8026,7 +8026,7 @@
     "neighbour_name": "Hip-hop",
     "direction": "out",
     "label": "hip-hop rebelled against disco",
-    "reason": "The Hip-hop article says much of the young genre's early spirit was a rebellion against disco, the music it came from.",
+    "reason": "Much of young hip-hop's early spirit was a rebellion against disco, the music it came from.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Hip-hop",
@@ -9949,7 +9949,7 @@
     "neighbour_name": "Hip-hop",
     "direction": "out",
     "label": "toasting over versions",
-    "reason": "The hip-hop article calls dub, with its vocal-free 'versions' of records, the strongest artistic precedent for hip-hop.",
+    "reason": "Dub, with its vocal-free 'versions' of records, is called the strongest artistic precedent for hip-hop.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Hip-hop",
@@ -9985,7 +9985,7 @@
     "neighbour_name": "Ambient",
     "direction": "out",
     "label": "dub presaged ambient",
-    "reason": "The ambient article names Jamaican dub among the styles that presaged ambient music, and the dub article lists ambient among the genres dub influenced.",
+    "reason": "Jamaican dub was one of the styles that came before ambient and pointed the way; ambient is among the genres dub influenced.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Ambient_music",
@@ -12832,7 +12832,7 @@
     "neighbour_name": "Disco",
     "direction": "in",
     "label": "hip-hop rebelled against disco",
-    "reason": "The Hip-hop article says much of the young genre's early spirit was a rebellion against disco, the music it came from.",
+    "reason": "Much of young hip-hop's early spirit was a rebellion against disco, the music it came from.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Hip-hop",
@@ -12868,7 +12868,7 @@
     "neighbour_name": "Dub",
     "direction": "in",
     "label": "hip-hop learned from dub",
-    "reason": "Jamaican DJs remixed records into new sounds, and the article calls dub the strongest artistic precedent for hip-hop.",
+    "reason": "Jamaican DJs remixed records into new sounds, and dub is called the strongest artistic precedent for hip-hop.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Hip-hop",
@@ -12884,7 +12884,7 @@
     "neighbour_name": "Soul music",
     "direction": "in",
     "label": "hip-hop draws on soul",
-    "reason": "The Hip-hop infobox lists soul among the genre's stylistic origins.",
+    "reason": "Soul is one of the styles hip-hop grew out of.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Hip-hop",
@@ -13576,7 +13576,7 @@
     "neighbour_name": "Hip-hop",
     "direction": "in",
     "label": "a Southern hip-hop subgenre",
-    "reason": "Trap is a subgenre of hip-hop from the Southern United States; its article traces it from gangsta rap.",
+    "reason": "Trap is a subgenre of hip-hop from the Southern United States, traced back to gangsta rap.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Trap_music",
@@ -14155,7 +14155,7 @@
     "neighbour_name": "Electro",
     "direction": "out",
     "label": "techno-pop into electro",
-    "reason": "Electro emerged as a fusion of funk and boogie with German and Japanese techno-pop, and lists synth-pop among its origins.",
+    "reason": "Electro grew from funk and boogie mixed with German and Japanese techno-pop, with synth-pop among its roots.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Electro_(music)",
@@ -14696,7 +14696,7 @@
     "neighbour_name": "Synth-pop",
     "direction": "in",
     "label": "technopop meets funk",
-    "reason": "Electro combined funk and boogie with German and Japanese technopop, and its infobox lists synth-pop among its origins.",
+    "reason": "Electro grew from funk and boogie mixed with German and Japanese techno-pop, with synth-pop among its roots.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Electro_(music)",
@@ -14776,7 +14776,7 @@
     "neighbour_name": "House",
     "direction": "out",
     "label": "electro in the mix",
-    "reason": "House's infobox lists electro among its origins, and early Chicago DJs played electro funk by Afrika Bambaataa and Arthur Baker.",
+    "reason": "Electro is one of house's roots: early Chicago DJs played electro funk by Afrika Bambaataa and Arthur Baker.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/House_music",
@@ -15897,7 +15897,7 @@
     "neighbour_name": "Synth-pop",
     "direction": "in",
     "label": "synth-pop's machines",
-    "reason": "The synth-pop article names house among the genres it directly influenced, and Knuckles mixed European electronic sounds into his Philly records.",
+    "reason": "Synth-pop directly influenced house, and Knuckles mixed European electronic sounds into his Philly records.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/Synth-pop",
@@ -15917,7 +15917,7 @@
     "neighbour_name": "Electro",
     "direction": "in",
     "label": "electro in the mix",
-    "reason": "House's infobox lists electro among its origins, and early Chicago DJs played electro funk by Afrika Bambaataa and Arthur Baker.",
+    "reason": "Electro is one of house's roots: early Chicago DJs played electro funk by Afrika Bambaataa and Arthur Baker.",
     "sources": [
      {
       "url": "https://en.wikipedia.org/wiki/House_music",

@@ -68,11 +68,11 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid 
 .knobs { display: flex; gap: 18px; align-items: flex-start; flex: none; }
 .knob { display: grid; justify-items: center; gap: 1px; } .knob span { font-size: 12px; } .knob small { color: var(--mute); font-size: 11.5px; }
 /* drum rows: one grid, row names once on the left */
-.rows { display: grid; grid-template-columns: 196px minmax(0,1fr) 60px; column-gap: 14px; row-gap: 6px; padding-top: 10px; flex: none; }
+.rows { display: grid; grid-template-columns: 196px minmax(0,1fr) 92px; column-gap: 14px; row-gap: 6px; padding-top: 10px; flex: none; }
 .rows.fill { flex: 1; row-gap: 10px; padding-bottom: 12px; }
-.rname { grid-column: 1; display: flex; flex-direction: column; min-width: 0; padding: 4px 10px; border-radius: 6px; align-self: center; text-align: left; }
+.rname { grid-column: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; padding: 4px 10px; border-radius: 6px; align-self: center; text-align: left; }
 .rname span { line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.rname small { color: var(--mute); font-size: 11.5px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rname small { color: #c2b49e; font-size: 11.5px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rname[aria-pressed="true"] { background: rgba(241,230,211,.08); }
 @media (hover:hover) and (pointer:fine) { .rname[aria-pressed="false"]:hover { background: rgba(241,230,211,.04); } }
 .ms { grid-column: 3; display: flex; gap: 2px; align-self: center; }
@@ -97,7 +97,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid 
 .ph { position: absolute; top: -3px; bottom: -3px; width: 2px; background: #fff; pointer-events: none; border-radius: 1px; }
 .legend { display: flex; gap: 14px; font-size: 11px; color: var(--mute); white-space: nowrap; }
 .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
-.mbtn { width: 26px; height: 24px; border-radius: 4px; color: var(--dim); font-size: 11px; display: grid; place-items: center; border: 1px solid transparent; flex: none; }
+.mbtn { height: 24px; padding: 0 6px; border-radius: 4px; color: var(--mute); font-size: 12px; display: grid; place-items: center; border: 1px solid transparent; flex: none; }
 .mbtn[aria-pressed="true"] { background: #3a322c; color: var(--ink); }
 @media (hover:hover) and (pointer:fine) { .mbtn:hover { border-color: var(--line2); color: var(--ink); } }
 .hatch { background-image: repeating-linear-gradient(135deg, rgba(242,177,52,.09) 0 6px, transparent 6px 12px); border-radius: 3px; }
@@ -125,12 +125,15 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid 
 .mo button { padding: 0 14px; height: 30px; border-radius: 999px; color: var(--mute); white-space: nowrap; }
 .mo button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 .mo button[aria-disabled="true"] { color: var(--dim); opacity: .45; cursor: not-allowed; text-decoration: line-through; text-decoration-color: rgba(149,138,122,.7); }
-.strip { display: flex; gap: 24px; align-items: baseline; justify-content: space-between; padding: 9px 20px; border-bottom: 1px solid var(--line); background: var(--panel); font-size: 12.5px; color: var(--mute); min-width: 0; }
+.strip { display: flex; gap: 24px; align-items: center; justify-content: space-between; height: 36px; padding: 0 20px; white-space: nowrap; overflow: hidden; border-bottom: 1px solid var(--line); background: var(--panel); font-size: 12.5px; color: var(--mute); min-width: 0; }
+.strip.none { background: none; border-bottom-color: transparent; }
+.strip > span { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .strip b { color: var(--ink); font-weight: 500; }
 .strip .warn { color: var(--gold); margin-left: auto; text-align: right; }
 .strip .warn button { text-decoration: underline; text-underline-offset: 3px; color: var(--ink); }
 .body { display: grid; min-height: 0; }
-.arr { padding: 0 24px 14px 0; min-width: 0; min-height: 0; display: flex; }
+.arr { padding: 0 24px 14px 0; min-width: 0; min-height: 0; display: flex; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; }
+.stick { position: sticky; left: 0; z-index: 4; background: var(--bg); }
 .arrin { position: relative; flex: 1; display: grid; grid-template-rows: auto minmax(0,1fr); min-width: 0; }
 .ahead { display: grid; grid-template-columns: var(--lw) minmax(0,1fr); border-bottom: 1px solid var(--line2); }
 .tl { position: relative; min-width: 0; }
@@ -140,22 +143,22 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid 
 .sn { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .lanes { display: grid; min-height: 0; }
 .lane { display: grid; grid-template-columns: var(--lw) minmax(0,1fr); border-bottom: 1px solid var(--line); min-height: 0; }
-.lname { display: flex; align-items: center; gap: 8px; padding: 0 10px 0 20px; font-size: 14px; position: relative; }
+.lname { display: flex; align-items: center; gap: 8px; padding: 0 10px 0 20px; font-size: 14px; position: sticky; left: 0; z-index: 4; background: var(--bg); }
 .lname::before { content: ""; position: absolute; left: 0; top: 7px; bottom: 7px; width: 3px; border-radius: 0 2px 2px 0; background: var(--c); }
 .secline { position: absolute; top: 0; bottom: 0; border-left: 1px solid var(--line); }
 .slot { position: absolute; top: 6px; bottom: 6px; border-radius: 5px; display: flex; align-items: center; padding: 0 9px; min-width: 0; overflow: hidden; font-size: 13px; white-space: nowrap; background: var(--bg); }
 .slot.h { border: 1px dashed var(--goldLine); color: var(--gold); background: #1e1912; }
-.slot.l, .slot.v, .slot.n { border: 1px dashed rgba(241,230,211,.13); color: var(--dim); }
-.slot.e { border: 1px dashed transparent; color: var(--dim); }
+.slot.l, .slot.v { border: 1px dashed rgba(241,230,211,.13); color: var(--dim); }
+.slot.e, .slot.n { border: 1px dashed transparent; color: var(--dim); background: transparent; }
 .slot.f { color: var(--ink); }
 .slot[aria-expanded="true"] { box-shadow: 0 0 0 2px var(--ink); }
-.slot.e .plus { visibility: hidden; }
-@media (hover:hover) and (pointer:fine) { .slot.e:hover { border-color: rgba(241,230,211,.18); } .slot.e:hover .plus { visibility: visible; } .slot.h:hover, .slot.n:hover, .slot.l:hover { filter: brightness(1.25); } }
-.slot.e:focus-visible .plus, .slot.e[aria-expanded="true"] .plus { visibility: visible; }
+.slot .plus { visibility: hidden; }
+@media (hover:hover) and (pointer:fine) { .slot.e:hover, .slot.n:hover { border-color: rgba(241,230,211,.22); } .slot.e:hover .plus, .slot.n:hover .plus { visibility: visible; } .slot.h:hover, .slot.l:hover { filter: brightness(1.25); } }
+.slot.e:focus-visible, .slot.n:focus-visible { border-color: rgba(241,230,211,.22); }
+.slot.e:focus-visible .plus, .slot.n:focus-visible .plus, .slot[aria-expanded="true"] .plus { visibility: visible; }
 /* labels sit above the playhead, on their slot's own colour, so the line never runs through words */
-.tx { position: relative; z-index: 3; background: inherit; padding: 0 4px; margin-left: -4px; border-radius: 3px; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-.sech .tx { background: var(--bg); }
-.ph3 { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: #fff; pointer-events: none; z-index: 2; border-radius: 1px; }
+.tx { position: relative; z-index: 3; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.ph3 { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: rgba(255,255,255,.5); pointer-events: none; z-index: 2; border-radius: 1px; }
 .side { border-left: 1px solid var(--line); background: var(--panel); min-height: 0; overflow: auto; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
 .lib { display: flex; flex-direction: column; gap: 6px; }
 .part { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 6px; border: 1px solid var(--line); text-align: left; min-width: 0; }
@@ -170,7 +173,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid 
 .moments button { padding: 6px 11px; border-radius: 999px; color: rgba(255,255,255,.55); }
 .moments button[data-active] { background: rgba(255,255,255,.12); color: #fff; }
 body.shot .moments { display: none; }
-@media (max-height: 800px) { .snd b { font-size: 12px; line-height: 1.2; } .snd small { font-size: 11px; line-height: 1.15; } .snd { padding: 1px 8px !important; } .knob span, .knob small { line-height: 1.2; } .grow { min-height: 2px; } .divide { padding-top: 6px; } .grp h3 { padding-bottom: 2px; } .rname span { font-size: 12.5px; line-height: 1.2; } .rname small { font-size: 11px; line-height: 1.15; } .rows { row-gap: 3px !important; } .groups { padding: 4px; } .rows.fill { row-gap: 8px !important; } .foot { height: 52px; } .head { padding: 5px 20px; } .title h1 { font-size: 22px; } .fam { height: 40px; } .snd { padding: 2px 8px; } .shelf { padding: 8px 0; } .shelfhead { margin-bottom: 6px; } .rows { padding-top: 8px; row-gap: 4px; } .rows.fill { row-gap: 8px; } .rname { padding: 2px 10px; } }
+@media (max-height: 800px) { .snd b { font-size: 12px; line-height: 1.2; } .snd small { font-size: 11px; line-height: 1.15; } .snd { padding: 1px 8px !important; } .knob span, .knob small { line-height: 1.2; } .grow { min-height: 0; } .ruler .cells, .ruler .rb button { height: 19px; } .divide { padding-top: 6px; } .grp h3 { padding-bottom: 2px; } .rname span { font-size: 12.5px; line-height: 1.2; } .rname small { font-size: 11px; line-height: 1.15; } .rows { row-gap: 3px !important; } .groups { padding: 4px; } .rows.fill { row-gap: 8px !important; } .foot { height: 52px; } .head { padding: 5px 20px; } .title h1 { font-size: 22px; } .fam { height: 40px; } .snd { padding: 2px 8px; } .shelf { padding: 6px 0; } .shelfhead { margin-bottom: 6px; } .rows { padding-top: 8px; row-gap: 4px; } .rows.fill { row-gap: 8px; } .rname { padding: 2px 10px; } }
 </style></head>
 <body>
 <div id="stage"></div>
@@ -399,7 +402,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 const KW = { pitch: (v) => (v < .35 ? "low" : v > .65 ? "high" : "as is"), length: (v) => (v < .35 ? "short" : v > .65 ? "long" : "medium"), tone: (v) => (v < .35 ? "dark" : v > .65 ? "bright" : "warm"), drive: (v) => (v < .35 ? "clean" : v > .65 ? "dirty" : "warm") };
 function knob(id, v, size) {
-  if (tight()) size = Math.round(size * 0.76);
+  if (tight()) size = Math.round(size * 0.64);
   const name = cap1(id), word = KW[id](v), a0 = -135, a = a0 + 270 * v, r = size / 2 - 5, c = size / 2;
   const pt = (d) => [c + r * Math.sin(d * Math.PI / 180), c - r * Math.cos(d * Math.PI / 180)];
   const [x0, y0] = pt(a0), [x1, y1] = pt(a), [xe, ye] = pt(135);
@@ -426,7 +429,7 @@ function steps(id, h) {
 const ruler = () => `<div class="ruler" title="Click a spot to play from there"><div class="cells">${[0, 1, 2, 3].map((b) => `<div class="rb">${Array.from({ length: 16 }, (_, k) => `<button data-act="jump" data-i="${b * 16 + k}" aria-label="Play from bar ${LOOP.from + b}${k ? `, step ${k + 1}` : ""}">${k ? "" : LOOP.from + b}</button>`).join("")}</div>`).join("")}</div>${phLine()}</div>`;
 const legend = () => `<div class="legend" aria-label="What the hits mean"><span><i style="background:var(--drums)"></i>Six AM heard</span><span><i style="background:var(--ink)"></i>you added</span><span><i style="box-shadow:inset 0 0 0 1.5px rgba(242,177,52,.75)"></i>you took out</span></div>`;
 const yourTurn = (r) => `Your turn: listen for ${r.listen} and tap it in`;
-const ms = (id) => `<span class="ms"><button class="mbtn" data-act="mute" data-row="${id}" aria-pressed="${!!S.mute[id]}" aria-label="Mute ${ROWOF[id].name}" title="Mute">M</button><button class="mbtn" data-act="solo" data-row="${id}" aria-pressed="${!!S.solo[id]}" aria-label="Solo ${ROWOF[id].name}" title="Solo">S</button></span>`;
+const ms = (id) => `<span class="ms"><button class="mbtn" data-act="mute" data-row="${id}" aria-pressed="${!!S.mute[id]}" aria-label="Mute ${ROWOF[id].name}" title="Mute this row">Mute</button><button class="mbtn" data-act="solo" data-row="${id}" aria-pressed="${!!S.solo[id]}" aria-label="Solo ${ROWOF[id].name}" title="Hear only this row">Solo</button></span>`;
 // why the rows below the line start empty, in the words of the row(s) still open (R3b, L273b)
 function why(o) {
   if (!o.length) return "Yours, by ear.";
@@ -491,10 +494,18 @@ const make = () => `<div class="app"><header class="bar">${logo()}<nav class="na
   <section class="col">${famTabs()}${rows()}${S.shelf ? `<div class="grow"></div>${shelf()}` : shelfLine()}${foot()}</section></div>`;
 
 // ───────── Studio → Rebuild: lanes once on the left, the original's sections as columns, bar for bar ─────────
-const LW = () => (innerWidth < 1360 ? 146 : 156), SIDEW = () => (innerWidth < 1360 ? 276 : 300);
+const LW = () => (innerWidth < 1360 ? 170 : 180), SIDEW = () => (innerWidth < 1360 ? 276 : 300);
 const tlW = () => innerWidth - SIDEW() - LW() - 24;
-const secPx = (s) => ((s.b - s.a + 1) / BARS) * tlW();
-const fits = (txt, px, size = 13) => txt.length * size * 0.6 + 28 <= px;
+const MINW = 86; // a section is never narrower than a short name and its count
+function lay() {
+  const ppb = tlW() / BARS; let x = 0; const at = {};
+  for (const s of SECS) { const w = Math.max((s.b - s.a + 1) * ppb, MINW); at[s.n] = { x, w }; x += w; }
+  return { at, total: Math.max(x, tlW()) };
+}
+let LAY = null;
+const secPx = (s) => LAY.at[s.n].w;
+const barX = (bar) => { const s = secAt(bar), o = LAY.at[s.n]; return o.x + ((bar - s.a) / (s.b - s.a + 1)) * o.w; };
+const fits = (txt, px, size = 13, pad = 28) => txt.length * size * 0.6 + pad <= px;
 function studioBar() {
   return `<header class="stbar">${logo()}<nav class="nav"><a href="#" class="on" aria-current="page">Studio</a><a href="#">Analyse</a></nav>
   <span class="tname" title="${esc(TRACK.short)}, rebuilt">${esc(TRACK.short)}, rebuilt</span><span class="small">${TRACK.bpm} BPM · Am</span>
@@ -506,7 +517,7 @@ function strip() {
   const left = M === "e" ? `<span><b>The original’s ${SECS.length} sections, bar for bar.</b> Every slot starts empty: pick one, then a part you saved in Make. Gold “has kick” shows what the original has there.</span>` : "";
   const right = !S.deck ? `<span class="warn" role="status">Original is off: the Deck isn’t open. <button data-act="deck">Open the Deck</button> to hear the original from bar ${S.bar}.</span>`
     : S.mo === "orig" ? `<span class="warn mute" role="status" style="color:var(--mute)">Playing the original from bar ${S.bar}, in the Deck</span>` : "";
-  return left || right ? `<div class="strip">${left}${right}</div>` : "<div></div>";
+  return `<div class="strip ${left || right ? "" : "none"}">${left}${right}</div>`;
 }
 const partBtn = (p) => `<button class="part" data-act="${S.pop ? "fill" : "noop"}" data-part="${esc(p.name)}"><i style="background:${LANEOF[p.lane].c}"></i><div><b title="${esc(p.name)}">${esc(p.name)}</b><small>${LANEOF[p.lane].n} · ${plural(p.bars, "bar", "bars")}</small></div></button>`;
 function side() {
@@ -519,18 +530,24 @@ function side() {
   <div class="lib" style="margin-top:4px">${lane === "vocals" ? "" : parts.length ? parts.map(partBtn).join("") : `<p class="lbl" style="margin:0">No saved ${L.n.toLowerCase()} yet. Make one in Make, then save it.</p>`}</div>
   ${st === "h" ? `<button class="lbl link" data-act="leaveslot" style="align-self:flex-start">Leave empty</button>` : st === "l" ? `<span class="lbl">Left empty · <button class="link" data-act="unleaveslot">Undo</button></span>` : st === "f" ? `<button class="lbl link" data-act="clear" style="align-self:flex-start">Empty this slot</button>` : ""}`;
 }
-const slotText = (st, key, L) => st === "f" ? S.fill[key] : st === "h" ? `has ${L.n.toLowerCase()}` : st === "v" ? "has vocals" : st === "l" ? "left empty" : st === "n" ? "none here" : "";
+const slotText = (st, key, L) => st === "f" ? S.fill[key] : st === "h" ? `has ${L.n.toLowerCase()}` : st === "v" ? "has vocals · not yet" : st === "l" ? "left empty" : "";
+// shorter words for narrow slots: shorten before dropping text (a slot is never unlabelled)
+const slotShort = (st, L) => st === "h" ? [L.n.toLowerCase()] : st === "v" ? ["vocals · not yet", "not yet"] : st === "l" ? ["left"] : [];
 const fillBg = (L) => `background:color-mix(in srgb, ${L.c} 28%, #1a1715);box-shadow:inset 3px 0 ${L.c};`;
 function arrangement() {
-  const head = `<div class="ahead"><span></span><div class="tl" style="height:${tight() ? 50 : 56}px">${SECS.map((s) => { const n = toFill(s).length, px = secPx(s), range = `${s.a}–${s.b}`, roomy = s.n.length * 9 + range.length * 6.9 + 40 <= px, named = px >= 44;
-    return `<button class="sech" data-act="seek" data-bar="${s.a}" title="${esc(s.n)}, bars ${range}. Play from bar ${s.a}" style="left:${pct(s.a)}%;width:${pct(s.b + 1) - pct(s.a)}%"><span class="l1">${named ? `<span class="sn tx">${esc(s.n)}</span>` : "&nbsp;"}${roomy ? `<span class="lbl tx" style="flex:none;font-variant-numeric:tabular-nums">${range}</span>` : ""}</span>
+  LAY = lay();
+  const X = (s) => `left:${LAY.at[s.n].x.toFixed(1)}px;width:${LAY.at[s.n].w.toFixed(1)}px`;
+  const head = `<div class="ahead"><span class="stick"></span><div class="tl" style="height:${tight() ? 50 : 56}px">${SECS.map((s) => { const n = toFill(s).length, px = secPx(s), range = `${s.a}–${s.b}`, roomy = s.n.length * 9 + range.length * 6.9 + 40 <= px;
+    return `<button class="sech" data-act="seek" data-bar="${s.a}" title="${esc(s.n)}, bars ${range}. Play from bar ${s.a}" style="${X(s)}"><span class="l1"><span class="sn tx">${esc(s.n)}</span>${roomy ? `<span class="lbl tx" style="flex:none;font-variant-numeric:tabular-nums">${range}</span>` : ""}</span>
     <span class="lbl" style="white-space:nowrap"><span class="tx ${n ? "yours" : ""}">${n}${fits(`${n} to fill`, px, 11.5) ? " to fill" : ""}</span></span></button>`; }).join("")}</div></div>`;
-  const lanes = `<div class="lanes" style="grid-template-rows:repeat(${LANES.length}, minmax(${tight() ? 38 : 42}px, 1fr))">${LANES.map((l) => `<div class="lane"><div class="lname" style="--c:${l.c}"><span style="flex:1;white-space:nowrap">${l.n}</span><button class="mbtn" aria-pressed="false" aria-label="Mute ${l.n}" title="Mute">M</button></div>
-    <div class="tl">${SECS.map((s) => `<span class="secline" style="left:${pct(s.a)}%"></span>`).join("")}
-    ${SECS.map((s) => { const st = slotState(s, l.id), key = `${s.n}:${l.id}`, t = slotText(st, key, l), px = secPx(s) - 6, show = t && (st === "f" ? px >= 72 : fits(t, px));
-      return `<button class="slot ${st}" data-act="slot" data-key="${esc(key)}" aria-expanded="${S.pop === key}" aria-label="${esc(s.n)}, ${l.n}: ${esc(t || "empty, add a part")}" title="${esc(t || "Add a part")}" style="left:calc(${pct(s.a)}% + 3px);width:calc(${pct(s.b + 1) - pct(s.a)}% - 6px);${st === "f" ? fillBg(l) : ""}">${show ? `<span class="tx">${esc(t)}</span>` : st === "e" ? `<span class="plus" aria-hidden="true">+</span>` : ""}</button>`; }).join("")}</div></div>`).join("")}</div>`;
-  const ph = `<span class="ph3" style="left:calc(${LW()}px + (100% - ${LW()}px) * ${frac(S.bar).toFixed(4)})"></span>`;
-  return `<div class="arr"><div class="arrin" style="--lw:${LW()}px">${head}${lanes}${ph}</div></div>`;
+  const lanes = `<div class="lanes" style="grid-template-rows:repeat(${LANES.length}, minmax(${tight() ? 38 : 42}px, 1fr))">${LANES.map((l) => `<div class="lane"><div class="lname stick" style="--c:${l.c}"><span style="flex:1;white-space:nowrap">${l.n}</span><button class="mbtn" aria-pressed="false" aria-label="Mute ${l.n}" title="Mute this lane">Mute</button></div>
+    <div class="tl">${SECS.map((s) => `<span class="secline" style="left:${LAY.at[s.n].x}px"></span>`).join("")}
+    ${SECS.map((s) => { const st = slotState(s, l.id), key = `${s.n}:${l.id}`, t = slotText(st, key, l), px = secPx(s) - 6;
+      const short = slotShort(st, l), label = !t ? "" : st === "f" || fits(t, px, 13, 22) ? t : short.find((x) => fits(x, px, 13, 22)) || short[short.length - 1];
+      const o = LAY.at[s.n];
+      return `<button class="slot ${st}" data-act="slot" data-key="${esc(key)}" aria-expanded="${S.pop === key}" aria-label="${esc(s.n)}, ${l.n}: ${esc(t || "empty, add a part")}" title="${esc(t || "Add a part")}" style="left:${(o.x + 3).toFixed(1)}px;width:${(o.w - 6).toFixed(1)}px;${st === "f" ? fillBg(l) : ""}">${label ? `<span class="tx">${esc(label)}</span>` : `<span class="plus" aria-hidden="true">+</span>`}</button>`; }).join("")}</div></div>`).join("")}</div>`;
+  const ph = `<span class="ph3" style="left:${(LW() + barX(S.bar)).toFixed(1)}px"></span>`;
+  return `<div class="arr"><div class="arrin" style="--lw:${LW()}px;flex:none;width:${LW() + LAY.total}px">${head}${lanes}${ph}</div></div>`;
 }
 const studio = () => `<div class="app studio">${studioBar()}${strip()}<div class="body" style="grid-template-columns:minmax(0,1fr) ${SIDEW()}px">${arrangement()}<aside class="side" aria-label="${S.pop ? "Fill this slot" : "My saved parts"}">${side()}</aside></div></div>`;
 

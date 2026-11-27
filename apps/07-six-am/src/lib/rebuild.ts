@@ -45,7 +45,7 @@ export function rebuildSections(map: Pick<TrackMap, "sections" | "energy" | "lay
     .map((s) => ({ name: s.label, from: Math.max(1, Math.round(s.from)), to: Math.min(bars + 1, Math.round(s.to)) }))
     .filter((s) => s.to > s.from);
   if (!named.length) return [{ name: "Whole song", start: 1, bars, has: layersIn(map, 1, bars + 1) }];
-  // shortcut: bars before the map's first section (rare: maps start at their first downbeat) join it.
+  // shortcut: bars before the map's first section join it (maps start at their first downbeat); give them their own section if a map ever starts later.
   named[0].from = 1;
   const out: RebuildSection[] = [];
   named.forEach((s, i) => {

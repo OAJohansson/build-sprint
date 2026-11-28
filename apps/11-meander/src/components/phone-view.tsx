@@ -11,6 +11,8 @@ import { Mark } from "./mark";
 import { FieldSwitch, MenuBar } from "./menu-bar";
 import { stateLabel } from "@/lib/progress";
 import type { Nav } from "./meander";
+import { useGlobeMode } from "@/lib/globe-proto";
+import { GlobeSwitch, SpinGlobe } from "./spin-globe";
 
 export function PhoneView({ nav }: { nav: Nav }) {
   const { focus, thinker, threadOpen, inside, states, field } = nav;
@@ -27,6 +29,8 @@ export function PhoneView({ nav }: { nav: Nav }) {
   const { nameOf } = field;
   // Phone card (L56): the first three neighbours, then "N more"; opening another school folds them again.
   const [moreFor, setMoreFor] = useState<string | null>(null);
+  // Phase 5 prototype (L62): a spin globe on top of the overview; B (pure spin) drops the list under it.
+  const [gmode, setGmode] = useGlobeMode();
 
   // A new screen starts at the top, with keyboard focus on its heading.
   const first = useRef(true);
@@ -199,7 +203,18 @@ export function PhoneView({ nav }: { nav: Nav }) {
         <FieldSwitch nav={nav} />
       </header>
       <MenuBar nav={nav} phone />
-      <main>{body}</main>
+      {gmode !== "flat" && !threadOpen && !school && nav.view !== "timeline" ? (
+        <main>
+          <div className={gmode === "b" ? "spin-phone big" : "spin-phone"}>
+            <SpinGlobe key={`${field.id}-${gmode}`} field={field} mode={gmode} focus={null} states={states} onOpen={nav.openSchool} compact idPrefix="ph"
+              C={gmode === "b" ? [180, 220] : [180, 180]} R={gmode === "b" ? 172 : 160} W={360} H={gmode === "b" ? 440 : 360} fixed={[]} />
+          </div>
+          {gmode === "a" ? body : <p className="spin-hint">Drag to turn the globe. Tap a name to open it.</p>}
+        </main>
+      ) : (
+        <main>{body}</main>
+      )}
+      <GlobeSwitch mode={gmode} setMode={setGmode} />
     </div>
   );
 }

@@ -589,3 +589,47 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 }
 /* the phone's Close sits level with the "Your thread" heading, with a 44px target */
 .phone .pcard > .x { top: -9px; right: -10px; min-height: 44px; display: flex; align-items: center; }
+
+/* ---------- phase 5 prototype (L62): a globe you spin. shortcut: prototype styles, fold in once a globe is picked */
+.globe.spin { cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; outline: none; }
+.globe.spin:active { cursor: grabbing; }
+.globe.spin:focus-visible .rim { stroke: var(--brass); stroke-opacity: 0.5; }
+.globe.spin svg.threads { position: absolute; left: 0; top: 0; overflow: visible; }
+.globe.spin .grat { fill: none; stroke: #e9e2d4; stroke-opacity: 0.045; stroke-width: 0.9; }
+.globe.spin .rim { fill: none; stroke: #e9e2d4; stroke-opacity: 0.12; stroke-width: 1; }
+.globe.spin .bk { fill: #e9e2d4; fill-opacity: 0.14; }
+.globe.spin .bk.lit { fill-opacity: 0.55; }
+.globe.spin .bk.near { fill: var(--brass); fill-opacity: 0.5; }
+.globe.spin .n.nolabel .lb { visibility: hidden; }
+.globe.spin .n.nolabel:hover .lb, .globe.spin .n.nolabel:focus-visible .lb { visibility: visible; left: 12px !important; top: -10px !important; }
+.globe.spin.hovering .n:not(.lit) b { opacity: 0.45; }
+.globe.spin.hovering .n.lit b { color: var(--bone); }
+.globe.spin.hovering svg.threads path.th { stroke-opacity: 0.05; }
+.globe.spin.hovering svg.threads path.th.lit { stroke-opacity: 0.8; stroke-width: 1.3; }
+.globe.spin svg.threads path.rest { stroke-opacity: 0.05; }
+.globe.spin .n.rest .dot { opacity: 0.4; }
+.globe.spin .rimn b { font-size: 17px; }
+.globe.spin .rimn em { color: var(--quiet); }
+.globe.spin .rimn .dot { background: var(--brass); }
+.globe.spin.compact { position: relative; width: 360px; height: 100%; margin: 0 auto; }
+.globe.spin.compact .n b { font-size: 13px; }
+.spin-phone { height: 360px; margin: 4px -4px 12px; }
+.spin-phone.big { height: 440px; }
+.spin-hint { text-align: center; color: var(--quiet); font-size: 14px; margin-top: 8px; }
+.gindex { position: absolute; left: 44px; top: 118px; width: 250px; max-height: 740px; overflow-y: auto; z-index: 2; }
+.gindex .gk { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--quiet); margin: 0 0 10px 10px; }
+.gindex ul { list-style: none; margin: 0; padding: 0; }
+.gindex .gh { display: flex; justify-content: space-between; width: 100%; padding: 6px 10px; border-radius: 8px; font-size: 15px; color: rgba(233, 226, 212, 0.82); text-align: left; }
+.gindex .gh .ct { color: var(--quiet); font-size: 13px; }
+.gindex li.open > .gh { color: var(--bone); }
+.gindex .gl { margin: 2px 0 8px 10px; border-left: 1px solid rgba(233, 226, 212, 0.12); }
+.gindex .gl button { display: block; width: 100%; text-align: left; padding: 3px 12px; font-size: 14px; color: var(--quiet); border-radius: 6px; }
+.gindex .gl button.v { color: var(--brass); }
+@media (hover: hover) {
+  .gindex .gh:hover, .gindex .gl button:hover { background: rgba(233, 226, 212, 0.07); color: var(--bone); }
+}
+.gswitch { position: absolute; left: 44px; bottom: 28px; display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: rgba(233, 226, 212, 0.06); z-index: 5; font-size: 13px; }
+.phone .gswitch { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); background: rgba(16, 25, 24, 0.92); }
+.gswitch button { padding: 5px 12px; border-radius: 999px; color: var(--quiet); }
+.gswitch button.on { background: rgba(233, 226, 212, 0.14); color: var(--bone); }
+.globe.spin .measure { position: absolute; left: 0; top: 0; visibility: hidden; pointer-events: none; }

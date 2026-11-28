@@ -4,6 +4,18 @@ What happened, what was decided and why. Newest last.
 
 ## To carry over
 
+### Phase 7: for `docs/knowledge-bank.md` at wrap-up
+
+- **Technology / audio, Stem separation (and "stems"):** splitting a finished song into its parts
+  (drums, bass, vocals, the rest) with a trained model; each part is a "stem". Finer models split a
+  stem again (drums into kick, snare, hats). Why it matters: you can only copy a sound by ear if you
+  can hear it alone. Where we met it: Six AM's Lab (htdemucs) and OR7-1. From: Demucs (Meta), the
+  DrumSep and LarsNet papers. Quiz: "What is a stem?" / "Why split the drums again after the first
+  split?"
+- **Product strategy, Who a rule protects:** "personal use only" removes limits that protect *you
+  selling* (non-commercial licences) but not those protecting *someone else's rights* (the song's
+  owner). Where we met it: L299. Quiz: "Which limits does 'just for me' remove, and which not?"
+
 ### Phase 6 (Chords in Make): for `docs/knowledge-bank.md` at wrap-up
 
 **Written at the Phase 6 wrap-up (27 Nov):** knowledge bank (Design principles, Audio, quizzes) and two Six AM bullets in `docs/learnings.md`.
@@ -933,3 +945,9 @@ SoundCloud's terms and the EU private-copy rule (CJEU ACI Adam, 2014: no copies 
 sources) apply to personal use too. The clean way past C2 is songs the owner buys as files
 (backlog DR-3): split once, keep the parts on the owner's computer. Offered that plus a full drum
 split as the next phase.
+
+### 28 Nov: Phase 8 scope (L300)
+
+Owner: keep SoundCloud streaming ("a lot of the songs are from SoundCloud"), add owned files on
+top, and split *every* layer finely, not just drums. Hand-over for the Phase 8 session is under
+"Start here next time" in `backlog.md`. Taught the term "stem separation" (carry-over below).

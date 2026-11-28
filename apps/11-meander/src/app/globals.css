@@ -616,18 +616,30 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 .spin-phone { height: 360px; margin: 4px -4px 12px; overflow: hidden; }
 .spin-phone.big { height: 440px; }
 .spin-hint { text-align: center; color: var(--quiet); font-size: 14px; margin-top: 8px; }
-.gindex { position: absolute; left: 44px; top: 118px; width: 250px; max-height: 740px; overflow-y: auto; z-index: 2; }
-.gindex .gk { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--quiet); margin: 0 0 10px 10px; }
+.gindex { position: absolute; left: 44px; bottom: 96px; width: 230px; z-index: 2; }
+.gindex .gk { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(233, 226, 212, 0.5); margin: 0 0 6px 10px; }
 .gindex ul { list-style: none; margin: 0; padding: 0; }
-.gindex .gh { display: flex; justify-content: space-between; width: 100%; padding: 6px 10px; border-radius: 8px; font-size: 15px; color: rgba(233, 226, 212, 0.82); text-align: left; }
-.gindex .gh .ct { color: var(--quiet); font-size: 13px; }
-.gindex li.open > .gh { color: var(--bone); }
-.gindex .gl { margin: 2px 0 8px 10px; border-left: 1px solid rgba(233, 226, 212, 0.12); }
-.gindex .gl button { display: block; width: 100%; text-align: left; padding: 3px 12px; font-size: 14px; color: var(--quiet); border-radius: 6px; }
+.gindex .gh { display: block; width: 100%; padding: 4px 10px; border-radius: 8px; font-size: 13.5px; color: rgba(233, 226, 212, 0.6); text-align: left; }
+.gindex li.open > .gh { color: var(--brass); }
+.gindex .gl { margin: 2px 0 6px 10px; border-left: 1px solid rgba(233, 226, 212, 0.12); max-height: 210px; overflow-y: auto; }
+.gindex .gl button { display: block; width: 100%; text-align: left; padding: 2px 12px; font-size: 13px; color: var(--quiet); border-radius: 6px; }
 .gindex .gl button.v { color: var(--brass); }
 @media (hover: hover) {
   .gindex .gh:hover, .gindex .gl button:hover { background: rgba(233, 226, 212, 0.07); color: var(--bone); }
 }
+/* critic r1: quieter threads at rest; a lit family keeps its names, everything else steps back to back-dot faintness */
+.globe.spin svg.threads path.th:not(.focus):not(.lit) { stroke-opacity: 0.06; }
+.globe.spin.hovering svg.threads path.th:not(.focus):not(.lit) { stroke-opacity: 0.03; }
+.globe.spin .n.nolabel .dot { opacity: 0.45; }
+.globe.spin.fam-lit .n:not(.lit) .lb { visibility: hidden; }
+.globe.spin.fam-lit .n:not(.lit) .dot { opacity: 0.22; }
+.globe.spin.fam-lit .n.lit b { opacity: 1; color: var(--bone); }
+.globe.spin.fam-lit .n.lit.nolabel .lb { visibility: visible; left: 10px !important; top: -10px !important; }
+.globe.spin.fam-lit .n.lit .dot { opacity: 1; }
+.globe.spin.a3 .n b { color: rgba(233, 226, 212, 0.68); }
+.globe.spin .region { position: absolute; transform: translate(-50%, -50%); padding: 2px 4px; border-radius: 4px; font: 500 12.5px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--brass); white-space: nowrap; cursor: pointer; }
+.globe.spin .region.on { text-decoration: underline; text-underline-offset: 4px; }
+.globe.spin.compact .region { font-size: 10px; letter-spacing: 0.12em; }
 .gswitch { position: absolute; left: 44px; bottom: 28px; display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: rgba(233, 226, 212, 0.06); z-index: 5; font-size: 13px; }
 .phone .gswitch { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); background: rgba(16, 25, 24, 0.92); }
 .gswitch button { padding: 5px 12px; border-radius: 999px; color: var(--quiet); }
@@ -638,7 +650,4 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 .globe.spin .mring { fill: rgba(233, 226, 212, 0.05); stroke: var(--brass); stroke-opacity: 0.6; stroke-width: 1; }
 .globe.spin .md { fill: #e9e2d4; fill-opacity: 0.3; }
 .globe.spin .md.in { fill-opacity: 0.9; }
-.globe.spin .region { font: 500 11px/1 var(--sans); letter-spacing: 0.14em; text-transform: uppercase; fill: var(--brass); fill-opacity: 0.75; pointer-events: none; }
-.globe.spin .region.back { fill-opacity: 0.2; }
-.globe.spin.compact .region { font-size: 9px; }
 .gswitch button { padding: 5px 10px; }

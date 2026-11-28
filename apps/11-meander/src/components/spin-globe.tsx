@@ -15,16 +15,21 @@ import { GAMMA, RIM, project, vec, type Vec3 } from "@/lib/globe";
 import { arcPath, centroid, clampPitch, facingRot, frontOf, graticule, lerpRot, ortho, placeSpinLabels, type Box, type Rot } from "@/lib/spin";
 
 export type SpinVariant = "a1" | "a2" | "a3" | "b1" | "b2" | "b3";
-/** Families for music; Western and Eastern for philosophy. */
+/** Families for music; the timeline's eras for philosophy (critic r1: Western/Eastern was two rows, not an overview). */
 export function groupsOf(field: Field) {
-  return field.families.length
-    ? field.families.map((f) => ({ id: f.id, name: f.name, schools: field.schools.filter((s) => s.family === f.id) }))
-    : [
-      { id: "west", name: "Western", schools: field.schools.filter((s) => s.tradition !== "eastern") },
-      { id: "east", name: "Eastern", schools: field.schools.filter((s) => s.tradition === "eastern") },
-    ];
+  if (field.families.length) return field.families.map((f) => ({ id: f.id, name: f.name, schools: field.schools.filter((s) => s.family === f.id) }));
+  const rows = timelineRows(field.schools, undefined, field.spans, field.eras);
+  return field.eras.map((e, i) => ({ id: `era-${i}`, name: e.name, schools: rows.filter((r) => r.era === i).map((r) => r.item) }));
+}
+/** The densest side of the sphere: the point with the most others within about 63°, then the middle of that crowd. */
+function densest(vs: Vec3[]): Vec3 {
+  const d = (a: Vec3, b: Vec3) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  let best = vs[0], n = -1;
+  for (const v of vs) { const k = vs.filter((w) => d(v, w) > 0.45).length; if (k > n) { n = k; best = v; } }
+  return centroid(vs.filter((w) => d(best, w) > 0.45));
 }
 import { stateLabel, type SchoolState } from "@/lib/progress";
+import { timelineRows } from "@/lib/timeline";
 import type { GlobeMode } from "@/lib/globe-proto";
 
 type Props = {
@@ -58,11 +63,13 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
   const fam = mode[0] as "a" | "b";
   // b2: a close-up globe rising from the bottom (back to normal size while a card is open, so it clears the card)
   const big = mode === "b2" && !focus;
-  const R = big ? R0 * 1.42 : R0;
-  const C: [number, number] = big ? [C0[0], C0[1] + R0 * 0.38] : C0;
+  // A (critic r1): a little smaller and lower on first open, so the top clears the menu
+  const calm = fam === "a" && !focus;
+  const R = big ? R0 * 1.42 : calm ? R0 * 0.92 : R0;
+  const C: [number, number] = big ? [C0[0], C0[1] + R0 * 0.38] : calm ? [C0[0], C0[1] + 22] : C0;
   const V = useMemo(() => Object.fromEntries(field.schools.map((s) => [s.id, vec(field.positions[s.id])])) as Record<string, Vec3>, [field]);
   const start = useMemo(() => {
-    const r = facingRot(focus ? V[focus] : centroid(Object.values(V)));
+    const r = facingRot(focus ? V[focus] : densest(Object.values(V)));
     return { yaw: r.yaw, pitch: clampPitch(r.pitch - 0.12) };
   }, [field]); // eslint-disable-line react-hooks/exhaustive-deps -- where it starts, per field
   const [rot, setRot] = useState<Rot>(start);
@@ -143,13 +150,16 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
   const near = useMemo(() => new Map(focus ? field.neighbours(focus).map((n) => [n.school.id, n]) : []), [field, focus]);
   const [hovered, setHovered] = useState<string | null>(null);
   const hoverId = focus ? null : hovered;
+  // a3: a clicked family name lights its members (and turns the globe to them)
+  const [famLit, setFamLit] = useState<{ id: string; ids: Set<string> } | null>(null);
+  const familyLit = focus ? null : litIds ?? famLit?.ids ?? null;
   const lit = useMemo(() => {
-    if (litIds) return litIds;
+    if (familyLit) return familyLit;
     if (!hoverId) return null;
     const ids = new Set([hoverId]);
     for (const l of field.links) if (l.from === hoverId) ids.add(l.to); else if (l.to === hoverId) ids.add(l.from);
     return ids;
-  }, [hoverId, field.links, litIds]);
+  }, [hoverId, field.links, familyLit]);
 
   const P = Object.fromEntries(field.schools.map((s) => [s.id, ortho(V[s.id], rot, C, R)]));
   const front = field.schools.filter((s) => s.id !== focus && P[s.id].z > 0);
@@ -185,6 +195,8 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
     .sort((a, b) => (near.has(a.id) ? 0 : 1) - (near.has(b.id) ? 0 : 1) || P[b.id].z - P[a.id].z)
     .map((s) => ({ id: s.id, x: P[s.id].x, y: P[s.id].y, r: rOf(s.id), ...sizeOf(s.id), must: near.has(s.id) }));
   const title: Box[] = focus ? [{ x: C[0] - 200, y: C[1] - 30, w: 400, h: 120 }] : [];
+  // the title's text only (the dot sits at C, the name and date line under it), so threads run up to it unbroken
+  const titleKo = focus ? { x: C[0] - 175, y: C[1] - 26, w: 350, h: 82 } : null;
   const placed = placeSpinLabels(wanted, [...fixed, ...title], C, W, H);
 
   // A, focus: neighbours round the back, pinned to the rim in their direction, so the card's neighbours are all on screen.
@@ -200,7 +212,7 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
 
   const paths = field.links.map((l) => {
     const isF = l.from === focus || l.to === focus;
-    const cls = ["th", isF && "focus", isF && l.type === "against" && "against", isF && l.type === "built-then-against" && "mixed", !!focus && !isF && "rest", lit && lit.has(l.from) && lit.has(l.to) && (hoverId === l.from || hoverId === l.to || !!litIds) && "lit"]
+    const cls = ["th", isF && "focus", isF && l.type === "against" && "against", isF && l.type === "built-then-against" && "mixed", !!focus && !isF && "rest", lit && lit.has(l.from) && lit.has(l.to) && (hoverId === l.from || hoverId === l.to || !!familyLit) && "lit"]
       .filter(Boolean).join(" ");
     return { key: `${l.from}-${l.to}`, cls, d: arcPath(V[l.from], V[l.to], rot, C, R) };
   }).filter((p) => p.d && (!focus || !p.cls.includes("rest") || fam === "a"));
@@ -213,16 +225,37 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
     const f = frontOf(rot);
     return { MC, r, ring: r * Math.min(RIM, Math.pow(0.5, GAMMA)), dots: field.schools.map((s) => ({ id: s.id, ...project(f, V[s.id], MC, r) })) };
   })() : null;
-  // a3: family names over their regions, faint when round the back.
-  const regions = mode === "a3" && !focus ? groupsOf(field).filter((g) => g.schools.length).map((g) => {
-    const p = ortho(centroid(g.schools.map((s) => V[s.id])), rot, C, R * 0.86);
-    return { id: g.id, name: g.name, ...p };
-  }) : [];
+  // a3 (critic r1): a family's name sits at the middle of its members on the front, only when two or more are there,
+  // and gives way to any genre label or dot it would touch; never for the back half.
+  const regions: { id: string; name: string; x: number; y: number; ids: Set<string>; vs: Vec3[] }[] = [];
+  if (mode === "a3" && !focus) {
+    const taken = Object.values(placed).map((p) => p.rect);
+    const groups = groupsOf(field)
+      .filter((g) => !famLit || g.id === famLit.id)
+      .map((g) => ({ g, on: g.schools.filter((s) => s.id !== focus && P[s.id].z > 0.2) }))
+      .filter((x) => x.on.length >= 2)
+      .sort((a, b) => b.on.length - a.on.length)
+      .slice(0, compact ? 3 : 8);
+    for (const { g, on } of groups) {
+      const cx = on.reduce((t, s) => t + P[s.id].x, 0) / on.length, cy = on.reduce((t, s) => t + P[s.id].y, 0) / on.length;
+      const w = g.name.length * (compact ? 7.5 : 9.6) + 8, h = compact ? 12 : 16;
+      const ids = new Set(g.schools.map((s) => s.id));
+      // the middle of its members first, then a little above, below or to the side; the first place that touches nothing
+      const spot = [[0, 0], [0, -24], [0, 24], [-48, 0], [48, 0], [0, -46], [0, 46]].map(([dx, dy]) => ({ x: cx + dx, y: cy + dy })).find(({ x, y }) => {
+        const box = { x: x - w / 2, y: y - h / 2, w, h };
+        const hits = (b: Box) => box.x < b.x + b.w + 8 && b.x < box.x + box.w + 8 && box.y < b.y + b.h + 5 && b.y < box.y + box.h + 5;
+        return Math.hypot(x - C[0], y - C[1]) < R - w / 2 && !taken.some(hits) && !front.some((s) => hits({ x: P[s.id].x - 6, y: P[s.id].y - 6, w: 12, h: 12 }));
+      });
+      if (!spot) continue;
+      taken.push({ x: spot.x - w / 2, y: spot.y - h / 2, w, h });
+      regions.push({ id: g.id, name: g.name, x: spot.x, y: spot.y, ids, vs: g.schools.map((s) => V[s.id]) });
+    }
+  }
 
   return (
     <div
       ref={wrap}
-      className={["globe", "spin", compact && "compact", lit && "hovering"].filter(Boolean).join(" ")}
+      className={["globe", "spin", mode, compact && "compact", lit && "hovering", familyLit && "fam-lit"].filter(Boolean).join(" ")}
       onPointerDown={onPointerDown}
       onClickCapture={onClickCapture}
       onKeyDown={onKeyDown}
@@ -232,14 +265,14 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
       <svg className="threads" aria-hidden="true" width={W} height={H}>
         <defs>
           <radialGradient id={`${idPrefix}-lit`} cx="38%" cy="32%" r="75%">
-            <stop offset="0" stopColor="#e9e2d4" stopOpacity=".10" />
+            <stop offset="0" stopColor="#e9e2d4" stopOpacity=".06" />
             <stop offset=".6" stopColor="#e9e2d4" stopOpacity=".03" />
             <stop offset="1" stopColor="#e9e2d4" stopOpacity="0" />
           </radialGradient>
           <mask id={`${idPrefix}-ko`} maskUnits="userSpaceOnUse" x="0" y="0" width={W} height={H}>
             <rect width={W} height={H} fill="#fff" />
             {Object.values(placed).map((p, i) => <rect key={i} x={p.rect.x - 4} y={p.rect.y - 2} width={p.rect.w + 8} height={p.rect.h + 4} rx="5" fill="#000" />)}
-            {focus && <ellipse cx={C[0]} cy={C[1] + 40} rx={230} ry={78} fill="#000" />}
+            {titleKo && <rect x={titleKo.x} y={titleKo.y} width={titleKo.w} height={titleKo.h} rx="14" fill="#000" />}
           </mask>
         </defs>
         <circle cx={C[0]} cy={C[1]} r={R} fill={`url(#${idPrefix}-lit)`} />
@@ -247,9 +280,6 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
         <circle className="rim" cx={C[0]} cy={C[1]} r={R} />
         {(mode === "a1" || mode === "a3") && back.map((s) => (
           <circle key={s.id} className={["bk", lit?.has(s.id) && "lit", near.has(s.id) && "near"].filter(Boolean).join(" ")} cx={P[s.id].x} cy={P[s.id].y} r={compact ? 1.4 : 1.8} />
-        ))}
-        {regions.map((g) => (
-          <text key={g.id} className={g.z > 0 ? "region" : "region back"} x={g.x} y={g.y} textAnchor="middle">{g.name}</text>
         ))}
         <g mask={`url(#${idPrefix}-ko)`}>
           {paths.map((p) => <path key={p.key} className={p.cls} d={p.d} />)}
@@ -292,6 +322,17 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
             </span>
           </button>
         ))}
+        {regions.map((g) => (
+          <button key={g.id} type="button" className={famLit?.id === g.id ? "region on" : "region"} style={{ left: g.x, top: g.y }}
+            onClick={() => {
+              if (famLit?.id === g.id) { setFamLit(null); return; }
+              setFamLit({ id: g.id, ids: g.ids });
+              const r = facingRot(centroid(g.vs));
+              turn({ yaw: r.yaw, pitch: clampPitch(r.pitch - 0.1) });
+            }}
+            aria-pressed={famLit?.id === g.id}
+          >{g.name}</button>
+        ))}
         {children}
       </main>
       <div className="measure" ref={measure} aria-hidden="true">
@@ -311,24 +352,29 @@ export function GlobeIndex({ field, onLight, onTurn, onOpen, states }: {
 }) {
   const groups = groupsOf(field);
   const [open, setOpen] = useState<string | null>(null);
+  const setOf = (id: string | null) => { const g = groups.find((x) => x.id === id); return g ? new Set(g.schools.map((s) => s.id)) : null; };
   return (
-    <nav className="gindex" aria-label="The whole map" onPointerDown={(e) => e.stopPropagation()} onMouseLeave={() => onLight(null)}>
-      <p className="gk">The whole map · {field.schools.length}</p>
+    <nav className="gindex" aria-label="The whole map" onPointerDown={(e) => e.stopPropagation()} onMouseLeave={() => onLight(setOf(open))}>
+      <p className="gk">The whole map</p>
       <ul>
         {groups.filter((g) => g.schools.length).map((g) => (
           <li key={g.id} className={open === g.id ? "open" : undefined}>
             <button type="button" className="gh" aria-expanded={open === g.id}
               onMouseEnter={() => onLight(new Set(g.schools.map((s) => s.id)))}
-              onClick={() => { setOpen(open === g.id ? null : g.id); onTurn(centroid(g.schools.map((s) => vec(field.positions[s.id])))); }}
+              onClick={() => {
+                const next = open === g.id ? null : g.id;
+                setOpen(next); onLight(setOf(next));
+                if (next) onTurn(centroid(g.schools.map((s) => vec(field.positions[s.id]))));
+              }}
             >
-              <span>{g.name}</span><span className="ct">{g.schools.length}</span>
+              <span>{g.name}</span>
             </button>
             {open === g.id && (
               <ul className="gl">
                 {g.schools.map((s) => (
                   <li key={s.id}>
                     <button type="button" className={states.get(s.id) && states.get(s.id) !== "new" ? "v" : undefined}
-                      onMouseEnter={() => onLight(new Set([s.id]))} onClick={() => onOpen(s.id)}>
+                      onClick={() => onOpen(s.id)}>
                       {field.nameOf(s)}
                     </button>
                   </li>

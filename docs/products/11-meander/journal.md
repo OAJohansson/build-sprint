@@ -260,3 +260,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Zoomable review page for the owner (28 Nov):** the contact sheets were too small to read, so every shot is on a private page with full-size, 100% zoom and arrow keys between directions on the same view: https://claude.ai/artifact/6XbToR7nBPEp6Wzyc7sNqa
 - **Owner pick (L64):** "I like A1 and A3." Family B and A2 dropped. Next: a preview to spin them live, and one critic round on both.
 - **Preview for spinning live (pre-approved preview deploy):** https://meander-esyy0zoi2-mimirswell.vercel.app (`?globe=a1` or `?globe=a3`; may ask for the owner's Vercel sign-in).
+- **Critic round 1 (A1 5/10, A3 5/10)** and fixes: see `design/phase5/critic.md`.

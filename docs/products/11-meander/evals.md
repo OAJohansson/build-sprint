@@ -89,3 +89,26 @@ not a blocker.
 
 **Guardrails:** no copyrighted audio hosted or embedded; no lyrics quoted; 0 model API calls;
 weekly usage stops new work at 70%.
+
+## Phase 5: a globe you spin (28 Nov, Founder mode, L61)
+
+Run by `user-tester`, `data-evals`, `design-critic` and independent graders; never by the
+builder. Laptop 1440×900 and phone 390×844.
+
+| # | Check | Run by | Bar | Result | Evidence |
+| --- | --- | --- | --- | --- | --- |
+| S1 | Any genre or school reachable from first open (replaces M1's "all visible"), for the picked globe | user-tester | ≤ 2 actions, 5 of 5 sampled | | |
+| S2 | Front-half labels: rim, overlap, dot and title checks across spun views (8 rotations per field) | script, run by PM | 0 problems | | |
+| S3 | Drag spins with inertia; a click turns the item to the front; keyboard arrows spin; reduced motion turns inertia off | user-tester | yes, laptop and phone | | |
+| S4 | Phone: dragging the globe never scrolls the page; targets ≥ 44 px | user-tester | yes | | |
+| S5 | Calmer: labels on screen at once on the music globe | script | ≤ 60% of today's | | |
+| S6 | Coverage for the new genres and classical: M8 against at least three outside references | independent grader | no "must add" missing, or logged | | |
+| S7 | New content: M2 shape and M5 accuracy | data-evals | 100%, 0 wrong, ≤ 2% unsupported | | |
+| S8 | Timeline from about 1600: pre-1900 band compressed, 1900 onwards as before, no label overlaps | script + user-tester | 0 problems | | |
+| S9 | Philosophy on the new globe: tests pass, 3 schools spot-checked | PM + user-tester | yes | | |
+
+**User test (job 1, reworded):** "Find pop and say what sits next to it", then "find a genre you
+haven't heard of and open it". Bar: under 30 s each, and the tester says whether the hidden back
+half cost them anything.
+
+**Design critic:** the picked globe, fixed five-point scorecard. Target 9/10, not a blocker.

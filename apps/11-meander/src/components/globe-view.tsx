@@ -15,6 +15,8 @@ import { TimelineView } from "./timeline-view";
 import { FirstPage, Knot } from "./skeleton";
 import { stateLabel } from "@/lib/progress";
 import type { Nav } from "./meander";
+import { useGlobeMode } from "@/lib/globe-proto";
+import { GlobeIndex, GlobeSwitch, SpinGlobe, type SpinVariant } from "./spin-globe";
 
 const W = 1440, H = 900;
 // SSR and the browser must print the same numbers, so positions are rounded to 0.1 px.
@@ -104,6 +106,11 @@ export function GlobeView({ nav }: { nav: Nav }) {
   const threadH = useRef<HTMLHeadingElement>(null);
   const labelRefs = useRef(new Map<string, HTMLSpanElement>());
   const enterRef = useRef<HTMLButtonElement>(null);
+  // Phase 5 prototype (L62): the flat globe, or a real one you spin (A with a light overview, B pure).
+  const [gmode, setGmode] = useGlobeMode();
+  const spin = gmode !== "flat";
+  const [litIds, setLitIds] = useState<Set<string> | null>(null);
+  const [turnTo, setTurnTo] = useState<{ v: Vec3; n: number } | null>(null);
 
   // Re-place labels when fonts arrive or the window changes (e.g. from phone width to desktop).
   const [tick, setTick] = useState(0);
@@ -232,6 +239,30 @@ export function GlobeView({ nav }: { nav: Nav }) {
     return n && text ? { label: n.label, text } : null;
   })();
 
+  const titleEl = (
+    school && (
+            // The whole title steps inside on a click; keyboard users get the "step inside" button under it.
+            <div className={showThinker || !school.themes.length ? "title" : "title can-enter"} ref={titleRef} style={{ left: C[0], top: C[1] }} onClick={showThinker ? undefined : nav.stepInside}>
+              <i className="here" aria-hidden="true" />
+              <h1 tabIndex={-1} ref={titleH1} aria-label={school.name}>{splitName(school.name).short}</h1>
+              <p>
+                {metaLine(school)}
+                {!showThinker && school.themes.length > 0 ? (
+                  <> · <button type="button" className="enter" ref={enterRef} onClick={(e) => { e.stopPropagation(); nav.stepInside(); }}>step inside</button></>
+                ) : (
+                  " · you are here"
+                )}
+              </p>
+              {/* The open thinker hangs under the title on a short brass thread, however tall the title is. */}
+              {showThinker && thinkerData && (
+                <div className="sat" ref={satRef} aria-hidden="true">
+                  <i />{thinkerData.name}
+                </div>
+              )}
+            </div>
+          )
+  );
+
   const onStageClick = (e: React.MouseEvent) => {
     if (inside) return;
     if ((e.target as Element).closest("button, .card, .title, .sat")) return;
@@ -250,6 +281,17 @@ export function GlobeView({ nav }: { nav: Nav }) {
         data-cy={C[1]}
         data-r={R}
       >
+        {spin ? (
+          <SpinGlobe
+            key={field.id}
+            field={field} mode={gmode as SpinVariant} focus={focus} states={states} onOpen={(id) => { setLitIds(null); nav.openSchool(id); }}
+            C={C} R={R} W={W} H={H} inert={inside || timeline} litIds={focus ? null : litIds} turnTo={turnTo} idPrefix="desk"
+            fixed={[{ x: 0, y: 0, w: W, h: 84 }, ...(hasCard ? [{ x: 990, y: 0, w: 450, h: H }] : []), ...((gmode === "a1" || gmode === "a4") && !hasCard ? [{ x: 30, y: 96, w: 270, h: 780 }] : [])]}
+          >
+            {titleEl}
+          </SpinGlobe>
+        ) : (
+        <>
         {/* The globe zooms into the focused school when you step inside (P7: about 560 ms). */}
         <div className="globe">
         <svg className="threads" aria-hidden="true">
@@ -318,29 +360,15 @@ export function GlobeView({ nav }: { nav: Nav }) {
               </button>
             );
           })}
-          {school && (
-            // The whole title steps inside on a click; keyboard users get the "step inside" button under it.
-            <div className={showThinker || !school.themes.length ? "title" : "title can-enter"} ref={titleRef} style={{ left: C[0], top: C[1] }} onClick={showThinker ? undefined : nav.stepInside}>
-              <i className="here" aria-hidden="true" />
-              <h1 tabIndex={-1} ref={titleH1} aria-label={school.name}>{splitName(school.name).short}</h1>
-              <p>
-                {metaLine(school)}
-                {!showThinker && school.themes.length > 0 ? (
-                  <> · <button type="button" className="enter" ref={enterRef} onClick={(e) => { e.stopPropagation(); nav.stepInside(); }}>step inside</button></>
-                ) : (
-                  " · you are here"
-                )}
-              </p>
-              {/* The open thinker hangs under the title on a short brass thread, however tall the title is. */}
-              {showThinker && thinkerData && (
-                <div className="sat" ref={satRef} aria-hidden="true">
-                  <i />{thinkerData.name}
-                </div>
-              )}
-            </div>
-          )}
+          {titleEl}
         </main>
         </div>
+        </>
+        )}
+        {(gmode === "a1" || gmode === "a4") && !hasCard && !timeline && !inside && (
+          <GlobeIndex field={field} states={states} onLight={setLitIds} onOpen={(id) => { setLitIds(null); nav.openSchool(id); }} onTurn={(v) => setTurnTo((t) => ({ v, n: (t?.n ?? 0) + 1 }))} />
+        )}
+        <GlobeSwitch mode={gmode} setMode={setGmode} />
 
         <TimelineView nav={nav} hasCard={hasCard} tick={tick} />
 

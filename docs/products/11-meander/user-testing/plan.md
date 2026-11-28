@@ -51,3 +51,39 @@ Written as Sam's real moments. Each has a success bar from the brief.
 ## Out of scope
 
 Other fields, live map generation, non-Western traditions, phone polish beyond R8's "nothing broken".
+
+## Phase 4: Music (27 Nov)
+
+Same app, port 3011 in the worktree. Fresh storage, then switch to Music. Laptop 1440 × 900, plus one pass at 390 × 844.
+
+### M-S1 · Where does house come from? (job 1 and 2, the thread)
+- **Moment:** a free hour, headphones on, a house fan curious about the roots of the music they love.
+- **Task:** "I love house music. Where did it come from, and what grew out of it?"
+- **Success:** within 2 minutes, without help, names a genre house grew out of and two genres that grew out of house (as the map shows), then opens one of them. (Bar: 3 of 3 runs.)
+
+### M-S2 · Hear it (job 3)
+- **Task:** "Let me hear what early house sounded like."
+- **Success:** one click from the House card plays (opens a search for) a landmark recording; the link says where it goes.
+
+### M-S3 · Follow a thread three genres deep
+- **Task:** "Start at blues and follow the music forward to something you'd hear in a club today."
+- **Success:** reaches an electronic genre through neighbour links only, and can say each step's link in their own words.
+
+### M-S4 · Two maps, one app
+- **Task:** "Look at a philosophy school, then go back to music."
+- **Success:** the switch is found without help; each field keeps its own Your thread; nothing from music shows in philosophy's progress.
+
+### Value questions (music)
+- Would you open the music map again next week? What for?
+- Did it feel like the same product as the philosophy map, or like a different app?
+- Is anything missing that would make you pay for this?
+
+### Phase 4 coverage re-check (L59, 28 Nov)
+
+Same persona, laptop 1440×900, then phone 390×844. Test only the 16 added genres; wrong-belief checks on each.
+
+- **M-S5 Find the big ones:** "Where is pop? Where is indie?" Bar: both found in under 30 seconds from the music globe, and the tester can say what pop grew out of.
+- **M-S6 Reggaeton's roots:** from Reggaeton, find where it came from. Bar: reaches Dancehall and then Reggae, and doesn't believe reggaeton came straight from hip-hop alone.
+- **M-S7 Techno's ancestors:** from Techno, name two older genres it grew out of and hear one. Bar: names at least two of Krautrock, Hi-NRG, Industrial, Synth-pop; one click to a record.
+- **M-S8 Afrobeat vs Afrobeats:** open both. Bar: can say in one sentence how they differ and which came first.
+- **Coverage gut check:** "Is any big genre you'd expect still missing?" (answer recorded as is; feeds M8).

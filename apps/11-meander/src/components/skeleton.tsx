@@ -5,9 +5,9 @@
 // shows that idea. The phone gets the same content as one column (PhoneSkeleton).
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { reveal } from "@/lib/reveal";
-import { andList, schoolFacts, splitName, surnames, themeSummary, traditionOf, type School } from "@/lib/content";
+import { andList, splitName, themeSummary, traditionOf, type School } from "@/lib/content";
 import { EDGE, knotStrands, sideTransform } from "@/lib/knot";
-import { ReadingRows } from "./card-parts";
+import { ListenLink, ReadingRows } from "./card-parts";
 import type { Nav } from "./meander";
 
 const H = 900;
@@ -18,8 +18,21 @@ const HAS_ARTICLE = false;
 /** The first page's question: the school's first, smaller when long (P7 `data-long`). */
 const askClass = (q: string) => (q.length > 70 ? "ask long" : "ask");
 
+/** Music: one more labelled line on the first page, the genre's first landmark recording (L48). */
+function ListenFact({ school }: { school: School }) {
+  const r = school.recordings?.[0];
+  if (!r) return null;
+  return (
+    <div className="fx ls">
+      <dt>Listen</dt>
+      <dd><ListenLink r={r} /></dd>
+    </div>
+  );
+}
+
 /** The knot: threads, beads and the idea labels, on the 1440 × 900 stage. */
 export function Knot({ school, nav, tick }: { school: School; nav: Nav; tick: number }) {
+  const { surnames, words } = nav.field;
   const themes = school.themes;
   const strands = knotStrands(themes.length);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -67,7 +80,7 @@ export function Knot({ school, nav, tick }: { school: School; nav: Nav; tick: nu
         ))}
       </svg>
       <i className="knot" aria-hidden="true" />
-      <ol className="ideas-k" tabIndex={-1} aria-label={`${splitName(school.name).short}: ${themes.length} ideas`}>
+      <ol className="ideas-k" tabIndex={-1} aria-label={`${splitName(school.name).short}: ${themes.length} ${words.ideas}`}>
         {themes.map((t, i) => {
           const s = strands[i];
           const who = surnames(t.thinkers);
@@ -98,6 +111,7 @@ export function Knot({ school, nav, tick }: { school: School; nav: Nav; tick: nu
 
 /** The first page (right): the school's name, its big question and the labelled facts; or the picked idea. */
 export function FirstPage({ school, nav, headingRef }: { school: School; nav: Nav; headingRef?: React.Ref<HTMLHeadingElement> }) {
+  const { schoolFacts, surnames, words } = nav.field;
   const short = splitName(school.name).short;
   const q = school.questions[0];
   const facts = schoolFacts(school);
@@ -123,6 +137,7 @@ export function FirstPage({ school, nav, headingRef }: { school: School; nav: Na
                 <dd>{f.value}</dd>
               </div>
             ))}
+            <ListenFact school={school} />
             {/* Further reading (#39) as two more labelled lines */}
             <ReadingRows school={school} />
           </dl>
@@ -132,7 +147,7 @@ export function FirstPage({ school, nav, headingRef }: { school: School; nav: Na
       <div className="pk" inert={!picked}>
         {t && (
           <div className="mid" key={shown}>
-            <p className="kick">Idea {shown + 1} of {school.themes.length}</p>
+            <p className="kick">{words.ideaKick} {shown + 1} of {school.themes.length}</p>
             <h3 className="d">{t.name}</h3>
             <i className="rule" aria-hidden="true" />
             {summary && <p className={`d it sum${summary.length > 100 ? " long" : ""}`}>{summary}</p>}
@@ -150,6 +165,7 @@ export function FirstPage({ school, nav, headingRef }: { school: School; nav: Na
 
 /** Phone: the first page on top, then the ideas as a numbered list; tapping one opens its summary in place. */
 export function PhoneSkeleton({ school, nav, headingRef }: { school: School; nav: Nav; headingRef?: React.Ref<HTMLHeadingElement> }) {
+  const { schoolFacts, surnames, words } = nav.field;
   const short = splitName(school.name).short;
   const q = school.questions[0];
   const facts = schoolFacts(school);
@@ -172,9 +188,10 @@ export function PhoneSkeleton({ school, nav, headingRef }: { school: School; nav
             <dd>{f.value}</dd>
           </div>
         ))}
+        <ListenFact school={school} />
         <ReadingRows school={school} />
       </dl>
-      <h2 className="psec">{school.themes.length} big ideas</h2>
+      <h2 className="psec">{school.themes.length} {words.bigIdeas}</h2>
       <ol className="pideas" ref={listRef}>
         {school.themes.map((t, i) => {
           const open = nav.pick === i;

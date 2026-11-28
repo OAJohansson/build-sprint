@@ -1,0 +1,1838 @@
+{
+ "batch": 7,
+ "counts": {
+  "claims": 342,
+  "supported": 279,
+  "drift": 49,
+  "unsupported": 11,
+  "wrong": 3,
+  "newcomer": 8,
+  "fairness": 20
+ },
+ "counts_by_genre": {
+  "afrobeats": {
+   "claims": 62,
+   "supported": 53,
+   "drift": 7,
+   "unsupported": 0,
+   "wrong": 2,
+   "newcomer": 1,
+   "fairness": 3
+  },
+  "amapiano": {
+   "claims": 52,
+   "supported": 46,
+   "drift": 5,
+   "unsupported": 0,
+   "wrong": 1,
+   "newcomer": 0,
+   "fairness": 1
+  },
+  "hi-nrg": {
+   "claims": 56,
+   "drift": 11,
+   "unsupported": 3,
+   "wrong": 0,
+   "supported": 42,
+   "newcomer": 1,
+   "fairness": 2
+  },
+  "hardcore-electronic-dance-music-genre": {
+   "claims": 50,
+   "drift": 9,
+   "unsupported": 2,
+   "wrong": 0,
+   "supported": 39,
+   "newcomer": 4,
+   "fairness": 5
+  },
+  "industrial-music": {
+   "claims": 64,
+   "drift": 11,
+   "unsupported": 3,
+   "wrong": 0,
+   "supported": 50,
+   "newcomer": 1,
+   "fairness": 3
+  },
+  "grime-music": {
+   "claims": 58,
+   "drift": 6,
+   "unsupported": 3,
+   "wrong": 0,
+   "supported": 49,
+   "newcomer": 1,
+   "fairness": 6
+  }
+ },
+ "items": [
+  {
+   "id": "afrobeats.tagline",
+   "claim": "...not Fela Kuti's 1970s Afrobeat, which has no 's'.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Afrobeats#intro",
+    "Afrobeats#Characteristics"
+   ],
+   "note": "Source dates Afrobeat to 'the 1960s and 1970s'; the card's own hallmark1 says 1960s–70s.",
+   "fix": {
+    "text": "Today's West African pop umbrella; not Fela Kuti's 1960s–70s Afrobeat, which has no 's'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "Characteristics"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeats.description",
+   "claim": "Since the late 2010s it has become one of Africa's biggest musical exports.",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Afrobeats#intro"
+   ],
+   "note": "Source says it 'has been referred to as one of Africa's biggest cultural or musical exports' — a ranking, which the content rules exclude even when quoted.",
+   "fix": {
+    "text": "...where the name was coined to make the mix easier for British listeners to find. Since the late 2010s it has won wide global attention: its Spotify streams grew 550% between 2017 and 2022.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "Characteristics"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeats.listen1",
+   "claim": "...a 3–2 or 2–3 clave (a repeating five-hit rhythm laid over a 4/4 beat).",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Afrobeats#Characteristics",
+    "Afrobeats#Mid-2010s"
+   ],
+   "note": "'Five-hit' is not in the cited sections; source: a '3–2 or 2–3 rhythm called a clave' that 'mixes a rhythm with a normal 4/4 beat'.",
+   "fix": {
+    "text": "A driving drum pattern that leads the song, often built on a 3–2 or 2–3 clave (a rhythm laid over a normal 4/4 beat that many West African styles use).",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "Characteristics"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "Mid-2010s"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeats.hallmark2",
+   "claim": "...and in 2020 the UK launched an official afrobeats chart.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Afrobeats#2020s"
+   ],
+   "note": "Source: in July 2020 the Official Charts Company 'announced it would be creating' the chart; launch date not given.",
+   "fix": {
+    "text": "...gave African records a UK platform, and in 2020 the UK's Official Charts Company announced an official afrobeats chart.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "Name"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "Beginnings"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "2020s"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeats.hallmark5",
+   "claim": "A softer 2020s sound",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Afrobeats#2020s"
+   ],
+   "note": "Source calls the early-2020s sound 'R&B-infused, and sometimes trap-influenced'; 'softer' is not said (the tempo note is a separate Spotify study).",
+   "fix": {
+    "text": "Title: 'An R&B-infused 2020s sound'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "2020s"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeats.link.afrobeat.label",
+   "claim": "Afrobeat's heir, renamed",
+   "verdict": "wrong",
+   "flags": [],
+   "cited": [
+    "Afrobeats#Characteristics"
+   ],
+   "note": "The source stresses the two are 'distinct, sound differently and are not the same'; 'renamed' says afrobeats is afrobeat under a new name. Reason text is supported.",
+   "fix": {
+    "text": "afrobeat laid the groundwork",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "Characteristics"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeats.link.hip-hop.reason",
+   "claim": "Early 2000s artists began by reinterpreting American hip-hop and R&B, then fused them with local melodies and rhythms.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Afrobeats#Characteristics",
+    "Afrobeats#Beginnings"
+   ],
+   "note": "Order is reversed: earlier groups (Trybesmen, Plantashun Boiz, the Remedies) fused hip-hop and R&B with local melodies; the post-2005 MTV Base wave were 'merely making interpretations' of American hip-hop and R&B.",
+   "fix": {
+    "text": "Early groups such as Trybesmen and Plantashun Boiz fused American hip-hop and R&B with local melodies, and hip-hop is one of the styles afrobeats blends.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "Beginnings"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "Characteristics"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeats.link.dancehall.reason",
+   "claim": "...and the mid-2010s Pon Pon style leaned on it.",
+   "verdict": "supported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Afrobeats#Pon Pon"
+   ],
+   "note": "'Pon Pon' is not explained to a beginner.",
+   "fix": {
+    "text": "Afrobeats artists mix dancehall into their sound, and Pon Pon, a mid-2010s Nigerian subgenre named after the sound of its synths, drew on dancehall and highlife.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "Characteristics"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "Pon Pon"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeats.artist.Burna Boy.summary",
+   "claim": "A Nigerian singer, songwriter and producer from Port Harcourt, whose grandfather once managed Fela Kuti. He calls his music 'Afro-fusion'...",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Burna_Boy#intro",
+    "Burna_Boy#Early life and education",
+    "Burna_Boy#Artistry"
+   ],
+   "note": "His own article has a section '2022 Lagos nightclub shooting case' that the summary leaves out. Study prompt should take the added sentence too.",
+   "fix": {
+    "text": "A Nigerian singer, songwriter and producer from Port Harcourt, whose grandfather once managed Fela Kuti. He calls his music 'Afro-fusion', mixing afrobeat, dancehall, hip-hop, R&B and reggae. In 2022 his armed security escorts allegedly shot and wounded two people at a Lagos nightclub; five guards were charged with attempted murder, and Burna Boy later denied the shooting rumour.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Burna_Boy",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Burna_Boy",
+      "section": "Early life and education"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Burna_Boy",
+      "section": "Artistry"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Burna_Boy",
+      "section": "2022 Lagos nightclub shooting case"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeats.artist.Davido.summary",
+   "claim": "A Nigerian-American singer, songwriter and producer, born in Atlanta and raised in Lagos...",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Davido#intro",
+    "Davido#Artistry"
+   ],
+   "note": "Low severity: his article mentions, in one sentence, his arrest and a rumour that he was involved in the death of Tagbo Umenike (addressed in his song 'Fia'). Not in the summary.",
+   "fix": {
+    "text": "A Nigerian-American singer, songwriter and producer, born in Atlanta and raised in Lagos, whose music spans afrobeats, hip hop and R&B. His 2017 song 'Fia' addresses his arrest and a rumour that he was involved in the death of Tagbo Umenike.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Davido",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Davido",
+      "section": "Artistry"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Davido",
+      "section": "2017–2018: \"If\", \"Fall\", \"Fia\" and \"Assurance\""
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeats.artist.Fuse ODG.c2",
+   "claim": "...younger UK acts credit his 'Azonto' for inspiring them.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Afrobeats#Azonto and dance crazes"
+   ],
+   "note": "Source names two acts (Mista Silva and Skob) and does not say they are younger. Study prompt repeats it.",
+   "fix": {
+    "text": "His 'Antenna' reached number 7 in the UK, and he won Best African Act at the 2013 MOBO Awards; UK afrobeats acts Mista Silva and Skob credit his 'Azonto' for encouraging them.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Fuse_ODG",
+      "section": "2011–14: T.I.N.A."
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "Azonto and dance crazes"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeats.recording2",
+   "claim": "Davido, 'Fall', year null",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Davido#intro"
+   ],
+   "note": "Year is missing, while the artist card gives 2017; the cited intro gives no year.",
+   "fix": {
+    "text": "Davido, 'Fall', 2017",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Davido",
+      "section": "2017–2018: \"If\", \"Fall\", \"Fia\" and \"Assurance\""
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeats.recording3",
+   "claim": "Wizkid featuring Tems, 'Essence', 2021",
+   "verdict": "wrong",
+   "flags": [],
+   "cited": [
+    "Afrobeats#2020s"
+   ],
+   "note": "'Essence' was released on 30 October 2020 (Made in Lagos, Oct 2020); 2021 is when it reached the Hot 100 and the Bieber remix came out.",
+   "fix": {
+    "text": "Wizkid featuring Tems, 'Essence', 2020",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Tems",
+      "section": "2018–2021: Career beginnings and extended plays"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Wizkid",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "amapiano.tagline",
+   "claim": "South Africa's slow, piano-led house with booming log-drum bass, rooted in kwaito.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Amapiano#intro",
+    "Amapiano#Description"
+   ],
+   "note": "The Amapiano sections never call amapiano slow (slowness is kwaito's, Kwaito#intro); 'booming' stretches 'wide, percussive basslines'.",
+   "fix": {
+    "text": "South Africa's piano-led house hybrid with a wide, percussive log-drum bass, rooted in kwaito.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Amapiano",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Amapiano",
+      "section": "Description"
+     }
+    ]
+   }
+  },
+  {
+   "id": "amapiano.listen2",
+   "claim": "Rolling piano melodies over unhurried deep-house drums...",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Amapiano#intro",
+    "Amapiano#Description"
+   ],
+   "note": "'Rolling' and 'unhurried' are not in the source, which only says 'piano melodies, deep house'.",
+   "fix": {
+    "text": "Piano melodies over deep-house grooves ('amapiano' comes from the isiZulu word for 'pianos').",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Amapiano",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Amapiano",
+      "section": "Description"
+     }
+    ]
+   }
+  },
+  {
+   "id": "amapiano.hallmark4",
+   "claim": "Amapiano took kwaito, deep house, gqom, jazz and soul and added a new bass sound... the log drum, which became the genre's trademark.",
+   "verdict": "wrong",
+   "flags": [],
+   "cited": [
+    "Amapiano#intro",
+    "Amapiano#Description"
+   ],
+   "note": "The source says the electronic log drum 'predates amapiano although the contrary is often misperceived', possibly developed by kwaito pioneer M'du. Calling it amapiano's new sound repeats the misperception, and the card's own debatable field contradicts it. 'Trademark' is stronger than 'a popular element'.",
+   "fix": {
+    "text": "Amapiano blends kwaito, deep house, gqom, jazz and soul, and made the log drum, a wide percussive bassline, one of its most popular elements. Kabza de Small credits a producer he calls MDU with figuring out the log-drum sound, though the electronic log drum may be older than amapiano.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Amapiano",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Amapiano",
+      "section": "Description"
+     }
+    ]
+   }
+  },
+  {
+   "id": "amapiano.link.jazz.label",
+   "claim": "jazz chords mixed in",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Amapiano#intro",
+    "Kwaito#Kwai-jazz"
+   ],
+   "note": "The sources say amapiano blends in jazz but never mention chords.",
+   "fix": {
+    "text": "jazz mixed in",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Amapiano",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "amapiano.artist.Arthur Mafokate.summary",
+   "claim": "A Soweto-born kwaito musician and producer known as the 'King of Kwaito', who began as a backing dancer for Brenda Fassie and released his debut album Windy Windy in 1994.",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Arthur_Mafokate#intro",
+    "Arthur_Mafokate#Early life and career"
+   ],
+   "note": "(1) The source lists backing-dancer work but not as how he began (he was in groups from the late 1980s). (2) Fairness: his own article has 'Assault allegations', 'Allegations of unlawful enrichment at SAMRO' and 'Misappropriation of lottery funds' sections, all left out. Study prompt should take the added sentences.",
+   "fix": {
+    "text": "A Soweto-born kwaito musician and producer known as the 'King of Kwaito', who worked as a backing dancer for artists including Brenda Fassie and released his debut album Windy Windy in 1994. In 2017 his then partner, the artist Cici, accused him of physical abuse; he denied all the allegations and was found not guilty in 2019. In 2019 SAMRO sued him for unlawful enrichment, alleging he was irregularly overpaid, and in 2023 he was alleged to be involved in the misappropriation of National Lotteries Commission funds.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Arthur_Mafokate",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Arthur_Mafokate",
+      "section": "Early life and career"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Arthur_Mafokate",
+      "section": "Assault allegations"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Arthur_Mafokate",
+      "section": "Allegations of unlawful enrichment at SAMRO"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Arthur_Mafokate",
+      "section": "Misappropriation of lottery funds"
+     }
+    ]
+   }
+  },
+  {
+   "id": "amapiano.artist.Brenda Fassie.c1",
+   "claim": "...in the 1990s she adopted kwaito, one of the few women to succeed in that largely male scene.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Brenda_Fassie#Contributions to music genre",
+    "Kwaito#Women in kwaito"
+   ],
+   "note": "Source: 'there were a number of female artists that managed to become quite successful'; 'one of the few' is stronger. Study prompt repeats it.",
+   "fix": {
+    "text": "In the 1980s she made bubblegum township pop such as the disco-style 'Weekend Special', and in the 1990s she adopted kwaito, succeeding as a woman in a largely male scene.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Brenda_Fassie",
+      "section": "Contributions to music genre"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Kwaito",
+      "section": "Women in kwaito"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.tagline",
+   "claim": "Fast, camp disco for gay dance floors: club music first, where synth-pop is songs first.",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Hi-NRG#intro",
+    "Hi-NRG#Characteristics",
+    "Hi-NRG#History"
+   ],
+   "note": "No cited section contrasts hi-NRG with synth-pop as 'club music first' vs 'songs first'; the comparison is invented.",
+   "fix": {
+    "text": "Fast, camp disco built on pulsing octave basslines, a gay club sound of the early 1980s.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+      "section": "Characteristics"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+      "section": "History"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.description",
+   "claim": "Its Italian cousin, Italo disco, grew from the same post-disco and synth-pop sounds and was usually sung in English.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Italo_disco#intro",
+    "Italo_disco#Infobox"
+   ],
+   "note": "Italo disco grew from post-disco and synth-pop 'both domestic and foreign (hi-NRG, Euro disco)'; hi-NRG is one of its sources, not a sibling from 'the same' sounds (hi-NRG's own origins are electronic and disco).",
+   "fix": {
+    "text": "Italo disco, which grew in Italy from post-disco, synth-pop and hi-NRG itself, was usually sung in English.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Italo_disco",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Italo_disco",
+      "section": "Infobox"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.debatable",
+   "claim": "...Italo disco's own name has no clear origin.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Italo_disco#intro"
+   ],
+   "note": "Source: the name is 'strongly tied to marketing efforts of the ZYX record label'; only who coined it is unclear. 'No clear origin' overstates the uncertainty.",
+   "fix": {
+    "text": "Italo disco's name is tied to the German label ZYX's marketing, but it is unclear whether ZYX actually coined it.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Italo_disco",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.hallmark2",
+   "claim": "In the early 1980s hi-NRG became mainstream in the US gay community, especially among Black and white gay men in San Francisco. ... drag and diva personas were part of the show.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Hi-NRG#History",
+    "Hi-NRG#Characteristics"
+   ],
+   "note": "The San Francisco detail belongs to one theatrical strand (Megatone/Ian Levine style) that 'had a large cult following', not to hi-NRG's mainstream status as a whole; two statements merged.",
+   "fix": {
+    "text": "In the early 1980s hi-NRG became mainstream in the US gay community. One theatrical strand, with diva personas and drag performers such as Sylvester and Divine, had a large cult following among San Francisco's Black and white gay men. Cowley's 'Menergy' was a frank celebration of the gay club scene.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+      "section": "History"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+      "section": "Characteristics"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Patrick_Cowley",
+      "section": "Musical career"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.hallmark5",
+   "claim": "Only a few singles, such as Sabrina's 'Boys', reached the UK top five.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Italo_disco#Origins"
+   ],
+   "note": "Source: only a few Italo disco singles reached the UK charts at all; those named were all top-five hits. The card narrows the claim.",
+   "fix": {
+    "text": "Only a few Italo disco singles reached the UK charts, among them Sabrina's 'Boys', a top-five hit.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Italo_disco",
+      "section": "Origins"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.link.trance-music.label",
+   "claim": "hi-NRG becomes trance",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Hi-NRG#Commercial success"
+   ],
+   "note": "Hi-NRG did not become trance; one later form of trance, nu-NRG, evolved from it.",
+   "fix": {
+    "text": "hi-NRG into nu-NRG trance",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+      "section": "Commercial success"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.artist.Patrick Cowley.c1",
+   "claim": "...and made a famous 15-minute remix of Donna Summer's 'I Feel Love' from a plain vinyl copy.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Patrick_Cowley#Musical career"
+   ],
+   "note": "Source calls the remix 'a sought-after collector's item', not famous. Also the article dates it 1978.",
+   "fix": {
+    "text": "He played synthesizer on Sylvester's 1978 hits 'You Make Me Feel (Mighty Real)' and 'Dance (Disco Heat)', and in 1978 made a 15-minute remix of Donna Summer's 'I Feel Love' from a standard vinyl copy, now a sought-after collector's item.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Patrick_Cowley",
+      "section": "Musical career"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.artist.Bobby Orlando.summary",
+   "claim": "A New York producer, songwriter and label owner known as Bobby O...",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Bobby_Orlando#intro",
+    "Bobby_Orlando#Music career"
+   ],
+   "note": "Cited sections say 'American'; 'New York-based' appears only in Italo_disco#Origins, which is not cited.",
+   "fix": {
+    "text": "A New York-based producer, songwriter and label owner known as Bobby O, credited as one of the founding fathers of hi-NRG. His sound is dense synthesizers, rolling bass lines, ringing cowbells and new-wave-style vocals.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Bobby_Orlando",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Bobby_Orlando",
+      "section": "Music career"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Italo_disco",
+      "section": "Origins"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.artist.Bobby Orlando.c1",
+   "claim": "He played most instruments on his own records and ran concept acts such as The Flirts...",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Bobby_Orlando#Music career"
+   ],
+   "note": "Source: he 'has played multiple instruments on his tracks' (not most); The Flirts was his one 'project concept' with a revolving roster of singers.",
+   "fix": {
+    "text": "He played many instruments on his own tracks and created The Flirts, a project with a revolving roster of female singers, whose 'Passion' was a particular favourite of the future Pet Shop Boys.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Bobby_Orlando",
+      "section": "Music career"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.artist.Stock Aitken Waterman.dates",
+   "claim": "active 1984–1993",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Stock_Aitken_Waterman#intro"
+   ],
+   "note": "Cited intro gives only 'mid-1980s through to the early-1990s'; the Infobox (not cited) gives 1984–1993, 2005–2010, 2015, so the reunions are dropped.",
+   "fix": {
+    "text": "active 1984–1993 (reunited 2005–2010 and 2015)",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Stock_Aitken_Waterman",
+      "section": "Infobox"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.artist.Stock Aitken Waterman.summary",
+   "claim": "A London songwriting and production trio...",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Stock_Aitken_Waterman#intro"
+   ],
+   "note": "Cited intro says 'English'; London is only in the uncited Infobox (origin: London).",
+   "fix": {
+    "text": "An English songwriting and production trio from London, Mike Stock, Matt Aitken and Pete Waterman, nicknamed the Hit Factory. They began with underground club records and found worldwide success mixing a hi-NRG-influenced sound, romantic Motown-style lyrics and Italo disco melodies.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Stock_Aitken_Waterman",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Stock_Aitken_Waterman",
+      "section": "Infobox"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.artist.Stock Aitken Waterman.c2",
+   "claim": "They worked like an assembly line, writing songs themselves and recording them with synthesizers and drum machines...",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Stock_Aitken_Waterman#The assembly line"
+   ],
+   "note": "Hedge dropped: source says this was their 'usual method' and that 'some of their early artists wrote or co-wrote their own material'.",
+   "fix": {
+    "text": "Their usual method was an assembly line: write the songs themselves, record the music with synthesizers and drum machines, then bring in a singer, for acts such as Kylie Minogue and Rick Astley.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Stock_Aitken_Waterman",
+      "section": "The assembly line"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Stock_Aitken_Waterman",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.artist.Stock Aitken Waterman.recording",
+   "claim": "You Spin Me Round (Like a Record) (1985), by: Dead or Alive",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Stock_Aitken_Waterman#Formation and early hits: Divine, Hazell Dean, Dead or Alive (1984–1985)"
+   ],
+   "note": "The `by` field credits another act: the record is Dead or Alive's, which SAW produced. As an 'own recording' it miscredits the band (Pete Burns approached SAW; the article records disputes over creative credit). A production trio has no record of its own here.",
+   "fix": {
+    "text": "Present it as a production, not SAW's own record: \"Dead or Alive's 'You Spin Me Round (Like a Record)' (1985), produced by Stock Aitken Waterman, their first UK number one\"; or drop the artist recording and keep SAW in hallmark4 only.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Stock_Aitken_Waterman",
+      "section": "Formation and early hits: Divine, Hazell Dean, Dead or Alive (1984–1985)"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.artist.Stock Aitken Waterman.study",
+   "claim": "...Start with \"You Spin Me Round (Like a Record)\" (1985)...",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [],
+   "note": "Prompt starts from another act's record as if it were SAW's, and repeats the unhedged c2.",
+   "fix": {
+    "text": "Start with Dead or Alive's \"You Spin Me Round (Like a Record)\" (1985), which Stock Aitken Waterman produced: ... (and use the fixed c2 text).",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Stock_Aitken_Waterman",
+      "section": "Formation and early hits: Divine, Hazell Dean, Dead or Alive (1984–1985)"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hi-nrg.artist.Sabrina Salerno.c2",
+   "claim": "She later worked with both worlds of this card: 'All of Me (Boy Oh Boy)' was produced by Stock Aitken Waterman and 'Like a Yo-Yo' by Giorgio Moroder.",
+   "verdict": "supported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Sabrina_Salerno#1980s"
+   ],
+   "note": "Facts check out, but 'both worlds of this card' is meta and confusing; Moroder is not introduced on the card as the Italo disco side.",
+   "fix": {
+    "text": "In 1988 she recorded 'All of Me (Boy Oh Boy)', produced by Stock Aitken Waterman, and 'Like a Yo-Yo', produced by Giorgio Moroder.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Sabrina_Salerno",
+      "section": "1980s"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.description",
+   "claim": "...built on a distorted, sawtooth-edged kick drum ... It is still growing, with festivals such as Thunderdome drawing tens of thousands.",
+   "verdict": "drift",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Hardcore_(electronic_dance_music_genre)#intro",
+    "Hardcore_(electronic_dance_music_genre)#2010s"
+   ],
+   "note": "'Sawtooth' is unglossed jargon. 'Still growing' is present tense beyond the source, which describes rapid growth at the end of the 2010s (Thunderdome 2019: almost 40,000).",
+   "fix": {
+    "text": "Hardcore, or hardcore techno, is electronic dance music at 160 to 200 beats per minute or faster, built on a distorted, buzzing ('sawtooth') kick drum. It grew in Belgium, the Netherlands and Germany at the turn of the 1990s, from industrial music, EBM, new beat and acid house, and in Rotterdam it became gabber. The scene grew fast again at the end of the 2010s, when Thunderdome 2019 drew almost 40,000 people.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+      "section": "Infobox"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+      "section": "Early 1970s to early 1980s"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+      "section": "2010s"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.listen1",
+   "claim": "A distorted, saturated kick drum that hits on every beat and carries the whole track.",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Hardcore_(electronic_dance_music_genre)#intro",
+    "Angerfist#Early Years"
+   ],
+   "note": "Cited sections give a distorted sawtooth kick, intense kicks and saturation; neither 'hits on every beat' nor 'carries the whole track' is stated.",
+   "fix": {
+    "text": "A distorted, buzzing kick drum, pushed hard with saturation (deliberate overdriving), and intense synthesized bass.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.listen3",
+   "claim": "Sharp synth 'stabs', such as the Belgian 'Mentasm' sound, and aggressive sampled vocals.",
+   "verdict": "supported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Hardcore_(electronic_dance_music_genre)#1990s",
+    "Angerfist#intro"
+   ],
+   "note": "'Stabs' is in quotes but never explained to a beginner.",
+   "fix": {
+    "text": "Sharp synth 'stabs' (short, punchy synth hits), such as the 'Mentasm' sound popularised by Belgian producers, and aggressive vocals.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+      "section": "1990s"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Angerfist",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.hallmark5",
+   "claim": "In the 2010s hardcore grew internationally, with Angerfist among its best-known names.",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Hardcore_(electronic_dance_music_genre)#2010s"
+   ],
+   "note": "Source: 'artists such as Angerfist gaining popularity quickly'. 'Among its best-known names' is a ranking the section does not make.",
+   "fix": {
+    "text": "In the early 2010s hardcore grew internationally, with artists such as Angerfist gaining popularity quickly. Around 2015 the scene shifted towards faster frenchcore and uptempo styles above 200 beats per minute, and Thunderdome 2019 drew almost 40,000 people.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+      "section": "2010s"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.link.drum-and-bass.reason",
+   "claim": "grew_out_of (out): In early-1990s England the word hardcore also meant a fast breakbeat rave sound, and drum and bass and jungle grew out of that breakbeat hardcore.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Drum_and_bass#Origins",
+    "Jungle_music#intro",
+    "Hardcore_(electronic_dance_music_genre)#1990s"
+   ],
+   "note": "The reason is accurate, but the edge says drum and bass grew out of this card's continental hardcore techno, while the card's own debatable line (and the sources) treat English breakbeat hardcore as a separate sound sharing the name. The link asserts a lineage the sources don't.",
+   "fix": {
+    "text": "Change kind to a name-sharing relation and reason to: \"Jungle and drum and bass grew out of English breakbeat hardcore, a separate early-1990s rave sound that shared the 'hardcore' name.\"",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Jungle_music",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Drum_and_bass",
+      "section": "Origins"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+      "section": "1990s"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.link.trance-music.reason",
+   "claim": "Hardcore techno is listed among trance's origins.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Trance_music#Infobox"
+   ],
+   "note": "Not a plain statement about the music: it describes a Wikipedia infobox listing.",
+   "fix": {
+    "text": "Trance drew on hardcore techno among its sources, alongside house, techno and acid house.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Trance_music",
+      "section": "Infobox"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.artist.Marc Trauner.recording",
+   "claim": "We Have Arrived (1990), by: Mescalinum United",
+   "verdict": "supported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Marc_Trauner#\"We Have Arrived\""
+   ],
+   "note": "The `by` field is his own alias, not another act, so the credit is correct; but shown alone it reads as a different act to a beginner.",
+   "fix": {
+    "text": "Show the credit as \"Mescalinum United (Marc Trauner)\".",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Marc_Trauner",
+      "section": "\"We Have Arrived\""
+     }
+    ]
+   }
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.artist.DJ Paul Elstak.recording",
+   "claim": "Europapa (2024), by: Joost Klein",
+   "verdict": "unsupported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "DJ_Paul_Elstak#Biography"
+   ],
+   "note": "`by` credits another act: 'Europapa' is Joost Klein's Eurovision song, which Elstak co-wrote and co-produced. Not his own recording, and not a hardcore record, so it misleads as the entry point. His article names no recording of his own.",
+   "fix": {
+    "text": "Set recording to null (no own recording is named in his article), or use a different gabber artist whose article names one. If kept, show it as \"Joost Klein's 'Europapa' (2024), co-written and co-produced by Elstak\".",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/DJ_Paul_Elstak",
+      "section": "Biography"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.artist.DJ Paul Elstak.study",
+   "claim": "...Start with \"Europapa\" (2024)...",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [],
+   "note": "A hardcore listening module that starts from another act's Eurovision pop entry, presented as his.",
+   "fix": {
+    "text": "Start with the Rotterdam gabber style he popularised with Rob Fabrie: tell me what to listen for in it, then suggest an order for anything else named above, and end with one question to think about while listening.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+      "section": "1990s"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.artist.Liza 'N' Eliaz.recording",
+   "claim": "Initial Gain (1991), kind: song",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Liza_'N'_Eliaz#Singles and EPs"
+   ],
+   "note": "Credited to her, but only listed in the discography ('Singles and EPs', Atom Records); her article never names it as notable, and 'song' may be wrong for a single/EP entry.",
+   "fix": {
+    "text": "Present it as her first listed release: \"Initial Gain (1991), her first listed single/EP\", kind single.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Liza_'N'_Eliaz",
+      "section": "Singles and EPs"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.artist.Liza 'N' Eliaz.study",
+   "claim": "...Start with \"Initial Gain\" (1991)...",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [],
+   "note": "Presents a discography entry as a standout starting point the source never names.",
+   "fix": {
+    "text": "Start with her first listed release, \"Initial Gain\" (1991): ...",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Liza_'N'_Eliaz",
+      "section": "Singles and EPs"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.artist.Angerfist.summary",
+   "claim": "A Dutch hardcore producer and DJ, Danny Masseling, often called the 'King of Hardcore'...",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Angerfist#intro"
+   ],
+   "note": "'King of Hardcore' is a ranking; the rule excludes rankings even when quoted. The rest is supported ('Many claim' rendered 'many say').",
+   "fix": {
+    "text": "A Dutch hardcore producer and DJ, Danny Masseling, who has stayed popular in hardcore for a long time. He performs in a white hockey mask, and many claim his distorted kicks and aggressive vocals defined the modern hardcore sound.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Angerfist",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Angerfist",
+      "section": "Performances & Mask"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.artist.Angerfist.study",
+   "claim": "...often called the 'King of Hardcore'...",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [],
+   "note": "Prompt repeats the ranking from the summary.",
+   "fix": {
+    "text": "Rebuild the prompt from the fixed summary.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Angerfist",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.artist.Angerfist.c1",
+   "claim": "...with an aggressive 'nustyle' sound of hard bass drums and samples from films and other media.",
+   "verdict": "supported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Angerfist#Early Years"
+   ],
+   "note": "'Nustyle' is unglossed.",
+   "fix": {
+    "text": "Signed in 2001 to BZRK Records, he caught on in the gabber scene with an aggressive newer style ('nustyle') of hard bass drums and samples from films and TV.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Angerfist",
+      "section": "Early Years"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.description",
+   "claim": "Throbbing Gristle gave it its name and its confrontational style",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Industrial_music#intro",
+    "Industrial_music#Origins: 1970s–1980s"
+   ],
+   "note": "The term was coined in 1976 by Monte Cazazza and only adopted by Throbbing Gristle (the card's own hallmark1 says so). Crediting TG with the name miscredits Cazazza.",
+   "fix": {
+    "text": "The term was coined in 1976 by Monte Cazazza and adopted by Throbbing Gristle, whose confrontational style shaped the scene; after they split in 1981 it branched into many 'post-industrial' styles, among them electronic body music (EBM), which put industrial sounds on a danceable beat.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Industrial_music",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Industrial_music",
+      "section": "Origins: 1970s–1980s"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Industrial_music",
+      "section": "Characteristics"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.debatable",
+   "claim": "...and the most famous 'industrial' artist, Trent Reznor, has never used the word for his own music.",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "(none; genre sources)",
+    "Industrial_music#Mainstream success"
+   ],
+   "note": "'The most famous industrial artist' is a ranking (no rankings rule). The Reznor fact is in Nine_Inch_Nails#Musical style, which the card's genre sources do not cite. Greer quote should be attributed.",
+   "fix": {
+    "text": "By the 1990s the label had stretched so far that journalist James Greer called it 'the kind of meaningless catch-all term that new wave once was', and Trent Reznor of Nine Inch Nails, the act described as largely responsible for bringing industrial to a mass audience, has never referred to his own work as industrial.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Industrial_music",
+      "section": "Mainstream success"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Nine_Inch_Nails",
+      "section": "Musical style"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.listen3",
+   "claim": "Factory sounds such as hammer blows, machines and alarms, plus samples of speeches and science-fiction films.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Electronic_body_music#Characteristics"
+   ],
+   "note": "The source describes these samples as typical of EBM, not of industrial music in general; the line drops the EBM scope that listen2 keeps.",
+   "fix": {
+    "text": "In EBM, samples of hammer blows, machines and alarms create a 'factory ambiance', alongside clips of political speeches and science-fiction films.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+      "section": "Characteristics"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.hallmark4",
+   "claim": "...blended industrial sounds and electronic punk with danceable rhythms and repeating sequencer lines.",
+   "verdict": "supported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Electronic_body_music#1981–1987"
+   ],
+   "note": "'Sequencer' is not glossed for a beginner.",
+   "fix": {
+    "text": "In the early 1980s German and Belgian acts such as DAF and Front 242 blended industrial sounds and electronic punk with danceable rhythms and repeating sequencer lines (short note patterns played automatically by a machine).",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+      "section": "1981–1987"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.link.krautrock.reason",
+   "claim": "...and krautrock fed directly into EBM.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Industrial_music#1910s–1960s: Forerunners",
+    "Electronic_body_music#Precursors"
+   ],
+   "note": "Source lists krautrock and Berlin school artists such as Kraftwerk among EBM's sources; 'fed directly' is stronger. Kluster/Cluster are 'retroactively recognized' precursors.",
+   "fix": {
+    "text": "German krautrock bands such as Kluster, Cluster and Kraftwerk have been recognised in hindsight as forerunners of industrial, and krautrock artists such as Kraftwerk are among the sources of EBM.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Industrial_music",
+      "section": "1910s–1960s: Forerunners"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+      "section": "Precursors"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.artist.Throbbing Gristle.dates",
+   "claim": "active 1975–1981, 2004–2010",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Throbbing_Gristle#intro"
+   ],
+   "note": "The intro gives debut 1976, split 1981, reform 2004, end 2010; 1975 (the renaming) is only in Industrial_music#Origins, not cited.",
+   "fix": {
+    "text": "active 1975–1981, 2004–2010",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Throbbing_Gristle",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Industrial_music",
+      "section": "Origins: 1970s–1980s"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.artist.Cosey Fanni Tutti.summary",
+   "claim": "An English performance artist, musician and writer from Hull...",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Cosey_Fanni_Tutti#intro",
+    "Cosey_Fanni_Tutti#Early career",
+    "Cosey_Fanni_Tutti#Music career"
+   ],
+   "note": "None of the cited sections says she is from Hull (only that COUM/TG were Hull-based, in other articles).",
+   "fix": {
+    "text": "An English performance artist, musician and writer, best known for Throbbing Gristle and Chris & Cosey, and a founding member of COUM Transmissions in 1969 and of Throbbing Gristle in 1976.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Cosey_Fanni_Tutti",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Cosey_Fanni_Tutti",
+      "section": "Early career"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Cosey_Fanni_Tutti",
+      "section": "Music career"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.artist.Cosey Fanni Tutti.recording",
+   "claim": "Transverse (2012, album)",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Cosey_Fanni_Tutti#Music career"
+   ],
+   "note": "Transverse is credited to the trio Carter Tutti Void (with Chris Carter and Nik Colk Void), a live album, and the article does not single it out as notable; presenting it as her own record without a 'by' credit miscredits the trio. Her intro says she is best known for TG and Chris & Cosey; the only record released under her own name is 2t2.",
+   "fix": {
+    "text": "2t2 (2025, album; her solo album). Or keep Transverse with by: 'Carter Tutti Void'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Cosey_Fanni_Tutti",
+      "section": "Music career"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.artist.Cosey Fanni Tutti.study",
+   "claim": "...writer from Hull... Start with \"Transverse\" (2012)",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "(card facts)"
+   ],
+   "note": "Repeats the unsupported 'from Hull' and the miscredited recording; uses only card facts otherwise.",
+   "fix": {
+    "text": "Rebuild the prompt from the fixed summary and recording.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Cosey_Fanni_Tutti",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Cosey_Fanni_Tutti",
+      "section": "Music career"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.artist.Cabaret Voltaire.dates",
+   "claim": "active 1973–1994, 2009–2021, 2025–",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Cabaret_Voltaire_(band)#intro",
+    "Cabaret_Voltaire_(band)#Formation"
+   ],
+   "note": "2025 was one announced 50th-anniversary gig, not an ongoing reunion; 2009–2021 was Kirk alone using the name.",
+   "fix": {
+    "text": "active 1973–1994; Kirk solo under the name 2009–2021; a 50th-anniversary show in 2025",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Cabaret_Voltaire_(band)",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.artist.Cabaret Voltaire.c1",
+   "claim": "...a fuzzbox for Kirk's guitar that gave the band its own sound.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Industrial_music#Characteristics"
+   ],
+   "note": "Source: the fuzzbox 'produced a unique timbre'; 'gave the band its own sound' is stronger.",
+   "fix": {
+    "text": "Their early single 'Nag Nag Nag' sold 10,000 copies despite poor reviews, and Chris Watson custom-built a fuzzbox for Kirk's guitar that produced a unique timbre.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Cabaret_Voltaire_(band)",
+      "section": "Emergence: Mix-Up to Red Mecca (1979–1981)"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Industrial_music",
+      "section": "Characteristics"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.artist.Cabaret Voltaire.study",
+   "claim": "...that gave the band its own sound.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "(card facts)"
+   ],
+   "note": "Carries the c1 drift.",
+   "fix": {
+    "text": "Use the fixed c1 text.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Industrial_music",
+      "section": "Characteristics"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.artist.Front 242.dates",
+   "claim": "active 1981–2025",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Front_242#intro",
+    "Front_242#Formation",
+    "Front_242#Rising popularity"
+   ],
+   "note": "Cited sections give 1981 but not the 2025 end; that is in Infobox and '2008–present' (final shows January 2025).",
+   "fix": {
+    "text": "active 1981–2025",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Front_242",
+      "section": "Formation"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Front_242",
+      "section": "2008–present"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.artist.Nine Inch Nails.c2",
+   "claim": "...The Downward Spiral (1994) entered the US chart at number two and became their biggest seller.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Nine_Inch_Nails#The Downward Spiral (1993–1997)"
+   ],
+   "note": "Source: 'the band's highest seller in the US'; the US scope is dropped.",
+   "fix": {
+    "text": "Their debut Pretty Hate Machine (1989) continued the cross-over between EBM and rock, and The Downward Spiral (1994) entered the Billboard 200 at number two and became their biggest seller in the US.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+      "section": "1988–1993"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Nine_Inch_Nails",
+      "section": "The Downward Spiral (1993–1997)"
+     }
+    ]
+   }
+  },
+  {
+   "id": "industrial-music.artist.Nine Inch Nails.study",
+   "claim": "...became their biggest seller.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "(card facts)"
+   ],
+   "note": "Carries the c2 drift.",
+   "fix": {
+    "text": "Use the fixed c2 text.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Nine_Inch_Nails",
+      "section": "The Downward Spiral (1993–1997)"
+     }
+    ]
+   }
+  },
+  {
+   "id": "grime-music.tagline",
+   "claim": "...at 140 bpm, MCs up front.",
+   "verdict": "supported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Grime_music#intro",
+    "Grime_music#Musical style"
+   ],
+   "note": "'bpm' and 'MC' are unglossed in the first line a newcomer reads.",
+   "fix": {
+    "text": "East London rap-over-beats music: UK garage's beat made dark and jagged at about 140 beats per minute, with MCs (rappers) up front.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Grime_music",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Grime_music",
+      "section": "Musical style"
+     }
+    ]
+   }
+  },
+  {
+   "id": "grime-music.listen1",
+   "claim": "...often switching every eight bars.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Grime_music#8-bar"
+   ],
+   "note": "Switching beats every eight bars defines the 8-bar style, one style among others (nu shape used 16–32 bar patterns); 'often' generalises it to grime as a whole.",
+   "fix": {
+    "text": "Choppy, syncopated beats at around 140 beats per minute, built in 8- or 16-bar cycles; in the early '8-bar' style the beat switches every eight bars.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Grime_music",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Grime_music",
+      "section": "8-bar"
+     }
+    ]
+   }
+  },
+  {
+   "id": "grime-music.listen3",
+   "claim": "An MC rapping fast over the beat, often in clashes with other MCs.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Grime_music#intro",
+    "Grime_music#Origins"
+   ],
+   "note": "The cited sections say emceeing is central and clashes are important, but not that MCs rap fast.",
+   "fix": {
+    "text": "An MC up front over the beat, and clashes between MCs, generally considered an important part of grime culture.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Grime_music",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Grime_music",
+      "section": "Origins"
+     }
+    ]
+   }
+  },
+  {
+   "id": "grime-music.hallmark3",
+   "claim": "Lady Sovereign signed to Def Jam and appeared on US television.",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Grime_music#Origins",
+    "Grime_music#Development",
+    "Grime_music#International growth"
+   ],
+   "note": "The cited International growth section says she 'signed to Jay-Z's Roc-A-Fella Records'; Def Jam is only in her own article, which is not cited.",
+   "fix": {
+    "text": "Lady Sovereign was signed to Def Jam by Jay-Z and appeared on the Late Show with David Letterman.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Lady_Sovereign",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Grime_music",
+      "section": "International growth"
+     }
+    ]
+   }
+  },
+  {
+   "id": "grime-music.hallmark4",
+   "claim": "...while online channels such as SB.TV and GRM Daily kept it alive.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Grime_music#Decline"
+   ],
+   "note": "Source says these platforms gave artists an outlet without traditional media; 'kept it alive' is stronger and implies grime nearly died, while the same section notes grime still had hits.",
+   "fix": {
+    "text": "By the late 2000s grime struggled for exposure and many MCs turned to pop, while online platforms such as SB.TV and GRM Daily gave artists an outlet without traditional media. In 2014 an MC-led revival began, with Skepta's 'That's Not Me' among the hits.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Grime_music",
+      "section": "Decline"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Grime_music",
+      "section": "Revival"
+     }
+    ]
+   }
+  },
+  {
+   "id": "grime-music.artist.Wiley.summary",
+   "claim": "...who started out in the UK garage crew Pay As U Go. In 2020 he made social-media posts widely condemned as antisemitic, and in 2024 he was stripped of his MBE.",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Wiley_(musician)#intro",
+    "Wiley_(musician)#Legacy"
+   ],
+   "note": "'Started out' is wrong-ish: he was in SS Crew and Ladies Hit Squad first; the intro says he 'first tasted success' with Pay As U Go. Fairness: his article's 'Assault and burglary charges' section (2021 arrest; 2023 guilty pleas for assaulting an emergency worker and criminal damage) is left out. The antisemitism wording is correctly cautious.",
+   "fix": {
+    "text": "A grime MC and producer from Bow, East London, often called the 'Godfather of Grime', who first found success in the UK garage crew Pay As U Go. In 2020 he made social-media posts widely condemned as antisemitic; in 2023, after being charged with assault and burglary in 2021, he pleaded guilty to assaulting an emergency worker and to criminal damage and received a one-month suspended sentence; and in 2024 he was stripped of his MBE.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Wiley_(musician)",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Wiley_(musician)",
+      "section": "Assault and burglary charges"
+     }
+    ]
+   }
+  },
+  {
+   "id": "grime-music.artist.Wiley.c2",
+   "claim": "...his use of the Korg Triton on 'Wot Do U Call It?' made that synth a grime staple.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Wiley_(musician)#2004–2007: Treddin' on Thin Ice, Da 2nd Phaze and Playtime Is Over"
+   ],
+   "note": "Source: 'helped cement the synthesizer as a Grime staple'; the hedge is dropped.",
+   "fix": {
+    "text": "He formed the Roll Deep crew with Dizzee Rascal and Tinchy Stryder, moving away from garage, and his use of the Korg Triton on 'Wot Do U Call It?' helped cement that synth as a grime staple.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Wiley_(musician)",
+      "section": "1996–2003: early years"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Wiley_(musician)",
+      "section": "2004–2007: Treddin' on Thin Ice, Da 2nd Phaze and Playtime Is Over"
+     }
+    ]
+   }
+  },
+  {
+   "id": "grime-music.artist.Wiley.study",
+   "claim": "...started out in... made that synth a grime staple.",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "(card facts)"
+   ],
+   "note": "Carries the summary and c2 drift and the omitted conviction.",
+   "fix": {
+    "text": "Rebuild from the fixed summary and c2.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Wiley_(musician)",
+      "section": "Assault and burglary charges"
+     }
+    ]
+   }
+  },
+  {
+   "id": "grime-music.artist.Dizzee Rascal.summary",
+   "claim": "A rapper and MC from East London, often credited as a pioneer of grime and British hip hop, who began as a teenage drum and bass DJ rapping on pirate radio.",
+   "verdict": "unsupported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Dizzee_Rascal#intro",
+    "Dizzee_Rascal#2000–2003: Early career"
+   ],
+   "note": "Cited sections call him 'a British rapper and MC'; 'from East London' is not in them. Fairness: his article's Personal life reports a 7 March 2022 conviction for assaulting his former partner (appeal dismissed January 2023), left out.",
+   "fix": {
+    "text": "A British rapper and MC, often credited as a pioneer of grime and British hip hop, who began at about 14 as an amateur drum and bass DJ rapping on local pirate radio. In 2022 he was convicted of assaulting his former partner and received a community order; his appeal was dismissed in 2023.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Dizzee_Rascal",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Dizzee_Rascal",
+      "section": "2000–2003: Early career"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Dizzee_Rascal",
+      "section": "Personal life"
+     }
+    ]
+   }
+  },
+  {
+   "id": "grime-music.artist.Dizzee Rascal.study",
+   "claim": "A rapper and MC from East London...",
+   "verdict": "unsupported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "(card facts)"
+   ],
+   "note": "Carries the summary's unsupported place and omitted conviction.",
+   "fix": {
+    "text": "Rebuild from the fixed summary.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Dizzee_Rascal",
+      "section": "Personal life"
+     }
+    ]
+   }
+  },
+  {
+   "id": "grime-music.artist.Skepta.summary",
+   "claim": "A North London grime MC, rapper and producer of Nigerian heritage who started as a DJ in the Meridian Crew and, with his brother Jme, founded Boy Better Know.",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Skepta#intro",
+    "Skepta#Early life",
+    "Skepta#2002–2007: Career beginnings and Greatest Hits"
+   ],
+   "note": "Fairness: his article's 'Legal issues' section (2009 common-assault conviction; 2016 Melbourne guilty plea with no conviction recorded; 2016 US visa ban over his record) is left out.",
+   "fix": {
+    "text": "A North London grime MC, rapper and producer of Nigerian heritage who started as a DJ in the Meridian Crew and, with his brother Jme, founded Boy Better Know. In 2009 he was convicted of common assault, and in 2016 he pleaded guilty in Melbourne to recklessly causing injury (no conviction was recorded); that year he was refused a US visa over his criminal record.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Skepta",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Skepta",
+      "section": "Early life"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Skepta",
+      "section": "2002–2007: Career beginnings and Greatest Hits"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Skepta",
+      "section": "Legal issues"
+     }
+    ]
+   }
+  },
+  {
+   "id": "grime-music.artist.Lady Sovereign.summary",
+   "claim": "A rapper from Wembley's Chalkhill Estate, best known for '9 to 5' and 'Love Me or Hate Me'...",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Lady_Sovereign#intro",
+    "Lady_Sovereign#Early life and family"
+   ],
+   "note": "Fairness: her article's 'Controversies' section (2009 arrest in Brisbane for assault and drunk and disorderly behaviour after spitting on a bouncer; fined) is left out.",
+   "fix": {
+    "text": "A rapper from Wembley's Chalkhill Estate, best known for '9 to 5' and 'Love Me or Hate Me'. She was inspired to MC after hearing Ms. Dynamite and was signed to Def Jam by Jay-Z in 2005. In 2009 she was arrested in Brisbane for assault and drunk and disorderly behaviour after spitting on a nightclub bouncer, and was fined.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Lady_Sovereign",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Lady_Sovereign",
+      "section": "Early life and family"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Lady_Sovereign",
+      "section": "Controversies"
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,650 @@
+{
+ "batch": "3",
+ "genres": [
+  "trap-music",
+  "reggae",
+  "dub-music",
+  "salsa-music",
+  "bossa-nova",
+  "afrobeat",
+  "reggaeton",
+  "synth-pop"
+ ],
+ "counts": {
+  "claims": 344,
+  "supported": 324,
+  "drift": 16,
+  "unsupported": 4,
+  "wrong": 0,
+  "newcomer": 2,
+  "fairness": 4,
+  "extra_flags": {
+   "check-2026": 1,
+   "check-recording": 6,
+   "check-conflict": 1,
+   "data-gap": 1
+  }
+ },
+ "notes": [
+  "Claims counted per genre: tagline, place, date_range, description, debatable, 3 listen_for, 5 hallmarks, each link (label+reason as one), per artist dates/summary/2 contributions/recording/study prompt, each landmark recording. reacted_against is null on all 8 cards.",
+  "All 32 study prompts were checked mechanically: each is exactly the card's summary + contributions + recording, nothing added.",
+  "Null recording years (Toots '54-46', Colón 'El gran varón', Jobim 'Garota de Ipanema', Vinicius 'Samba da Benção', Fela 'Water No Get Enemy') are allowed by the writer brief where the corpus gives none; only Canção do Amor Demais has a year in the corpus.",
+  "2026 in the corpus but not on any card (no action unless used): T.I. 'twelfth and final album, Kill the King, was released in 2026'; Celia Cruz and Fela Kuti posthumous Rock and Roll Hall of Fame inductions in 2026."
+ ],
+ "items": [
+  {
+   "id": "trap-music.listen3",
+   "claim": "Dramatic synthesized strings, brass and keys over a slow beat, often around 70 BPM felt in half-time.",
+   "verdict": "supported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": "Trap_music#Characteristics",
+   "note": "Facts match ('typical trap beat is around 70 (140) BPM', 'often programmed in half-time'), but 'BPM' and 'felt in half-time' are unglossed jargon for a beginner.",
+   "fix": {
+    "text": "Dramatic synthesized strings, brass and keys over a beat that usually runs around 140 beats per minute but feels like a slow 70 (half-time).",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Trap_music",
+      "section": "Characteristics"
+     }
+    ]
+   }
+  },
+  {
+   "id": "trap-music.hallmark1",
+   "claim": "...early trap rappers wrote about drug dealing and the struggle to get out.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Trap_music#2003–2015: rise in mainstream popularity",
+   "note": "Source: lyrics covered life in 'the trap', drug dealing 'and the struggle for success'. 'Struggle to get out' adds an escape narrative the source doesn't state.",
+   "fix": {
+    "text": "The name comes from Atlanta slang for a drug house, and early trap rappers wrote about life in the trap, drug dealing and the struggle for success. As one critic put it, in the early 2000s the trap was a real place, and the word was later used for music made about that place.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Trap_music",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Trap_music",
+      "section": "1990s–2003: origins"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Trap_music",
+      "section": "2003–2015: rise in mainstream popularity"
+     }
+    ]
+   }
+  },
+  {
+   "id": "trap-music.artist.Lex Luger.recording",
+   "claim": "Hard in the Paint (Waka Flocka Flame) (2010, song)",
+   "verdict": "supported",
+   "flags": [
+    "check-recording"
+   ],
+   "cited": "Lex_Luger_(music_producer)#2009–2013: rise to fame",
+   "note": "Not the artist's own record: it is Waka Flocka Flame's song, produced by Luger. The article does name it as notable ('Luger's first instrumental to hit the radio waves and became a hit by May 2010'), and the title credits Waka, so it is acceptable for a producer; flagged as asked.",
+   "fix": null
+  },
+  {
+   "id": "reggae.debatable",
+   "claim": "Where the word came from is unsettled: Toots Hibbert said it simply came out of his mouth while making 'Do the Reggay', historian Steve Barrow credits Clancy Eccles, and Bob Marley said it came from a Spanish term for 'the king's music'.",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "genre sources (Infobox, intro, Origins and influences, Musical characteristics, Precursors, Emergence in Jamaica, International popularity, Cultural connections, Lyrical themes, Ska#intro)",
+   "note": "Every part is true in the corpus, but only in Reggae#Etymology, which is not among the cited sections. Text is fine; the source list needs the Etymology section.",
+   "fix": {
+    "text": "Where the word came from is unsettled: Toots Hibbert said it simply came out of his mouth while making 'Do the Reggay', historian Steve Barrow credits Clancy Eccles, and Bob Marley said it came from a Spanish term for 'the king's music'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Reggae",
+      "section": "Etymology"
+     }
+    ]
+   }
+  },
+  {
+   "id": "reggae.hallmark2",
+   "claim": "...giving its relaxed, rocking phrasing. The intro to the Wailers' 'Stir It Up' is a textbook example of the guitar chop.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Reggae#Musical characteristics; Reggae#Guitars",
+   "note": "Source says the offbeat plus beat-three drum create 'a unique sense of phrasing' and 'An example is the intro to \"Stir It Up\"'. 'Relaxed, rocking' and 'textbook' are stronger than the source.",
+   "fix": {
+    "text": "Most pop leans on beat one; reggae accents the offbeats instead. Guitar or piano chops short chords between the counts while the drum stresses beat three, giving it a distinctive sense of phrasing. The intro to the Wailers' 'Stir It Up' is an example of the guitar chop.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Reggae",
+      "section": "Musical characteristics"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Reggae",
+      "section": "Guitars"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dub-music.hallmark3",
+   "claim": "Scholar Michael Veal heard dub's reverb as a sonic metaphor for the African diaspora's experience of dislocation and memory.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Dub_music#Influence of dub",
+   "note": "Veal calls reverb a 'sonic metaphor for the condition of diaspora' and says echo and reverb 'elicit memories of African culture'. 'Dislocation' is not in the source.",
+   "fix": {
+    "text": "Delay units such as the Roland Space Echo, plus reverb and phasing, turn a song into a drifting soundscape. Scholar Michael Veal called dub's reverb a 'sonic metaphor for the condition of diaspora', used to call up memories of African culture.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Dub_music",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Dub_music",
+      "section": "Influence of dub"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/King_Tubby",
+      "section": "Remixes"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dub-music.hallmark5",
+   "claim": "...post-punk bands such as the Clash and Public Image Ltd took up its bass lines.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Dub_music#Influence of dub on punk and rock music",
+   "note": "Only Public Image Ltd is said to use dub-influenced bass lines. The Clash are described as collaborating with Lee Perry and Mikey Dread and covering 'Police & Thieves', not as taking up dub bass lines (and are a punk band in the source).",
+   "fix": {
+    "text": "In the 1970s the UK became a new centre of dub production, with Mad Professor among its best-known names. Punk and post-punk took it up: the Clash worked with Lee Perry and Mikey Dread, and Public Image Ltd used dub-influenced bass lines. Originators like Mad Professor and Lee Perry kept making dub into the 21st century.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Dub_music",
+      "section": "Dub history (since the early 1970s)"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Dub_music",
+      "section": "Influence of dub on punk and rock music"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Dub_music",
+      "section": "21st-century dub"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dub-music.link.ambient-music",
+   "claim": "grew_out_of out | dub's sense of space | The ambient article lists Jamaican dub among the sources ambient music drew on.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Ambient_music#intro",
+   "note": "Ambient intro says ambient 'was presaged by ... Jamaican dub music', a weaker relation than 'sources ambient drew on'; 'sense of space' is not in the ambient source. (Dub_music#intro, not cited here, does say dub influenced ambient.)",
+   "fix": {
+    "text": "The ambient article names Jamaican dub among the styles that presaged ambient music, and the dub article lists ambient among the genres dub influenced.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Ambient_music",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Dub_music",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "dub-music.artist.Mad Professor.recording",
+   "claim": "No Protection (Massive Attack v Mad Professor) (1995, album)",
+   "verdict": "supported",
+   "flags": [
+    "check-recording"
+   ],
+   "cited": "Mad_Professor#Remixes",
+   "note": "Named in his article ('In 1995 he produced No Protection'), but it is a dub remix of another act's album, jointly credited; not wholly his own record. Flagged as asked; acceptable since remixing is his named craft. An own-record alternative isn't named as notable in the cited sections (Dub Me Crazy series is, in Mad_Professor#Career, without a specific title).",
+   "fix": null
+  },
+  {
+   "id": "dub-music.artist.Augustus Pablo.recording",
+   "claim": "King Tubbys Meets Rockers Uptown (1976, album)",
+   "verdict": "supported",
+   "flags": [
+    "check-recording",
+    "newcomer"
+   ],
+   "cited": "Augustus_Pablo#Biography",
+   "note": "His own LP, but his article only lists it among 'a few LPs'; the notable item is the 1974 dub track (Rolling Stone's 266th greatest song). It is also near-identical to King Tubby's pick on the same card ('King Tubby Meets Rockers Uptown', 1974, song), so a beginner gets the same title twice.",
+   "fix": {
+    "text": "King Tubby Meets Rockers Uptown (1974, song) is already King Tubby's pick; for variety use 'East of the River Nile' (1971–1973 single for Aquarius), which his article names among his early recordings.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Augustus_Pablo",
+      "section": "Biography"
+     }
+    ]
+   }
+  },
+  {
+   "id": "salsa-music.description",
+   "claim": "...From there it spread across Latin America and to Africa.",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "genre sources (no African salsa section)",
+   "note": "Latin America is supported (1970s section). 'To Africa' is true in the corpus but only in Salsa_music#African salsa (Fania All Stars in Kinshasa 1974, 'the largest wave of Cuban-based music to hit Africa was in the form of salsa'), which is not cited.",
+   "fix": {
+    "text": "(keep text) add source Salsa_music#African salsa",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Salsa_music",
+      "section": "African salsa"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Salsa_music",
+      "section": "1970s: Songo in Cuba, salsa in NYC"
+     }
+    ]
+   }
+  },
+  {
+   "id": "salsa-music.listen1",
+   "claim": "The clave, a two-bar pattern often struck on two wooden sticks, that the other parts lock to.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Salsa_music#Rhythm",
+   "note": "Source: every instrument is 'either playing with the clave ... or playing independent of the clave rhythm (bass, maracas, güiro, cowbell)'. 'The other parts lock to' overstates it (the card's own hallmark2 gets it right). 'Two-bar' is not stated.",
+   "fix": {
+    "text": "The clave, a rhythm often struck on two wooden sticks, which the congas, timbales, piano and bongos play with.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Salsa_music",
+      "section": "Rhythm"
+     }
+    ]
+   }
+  },
+  {
+   "id": "salsa-music.artist.Willie Colón.dates",
+   "claim": "1950–2026",
+   "verdict": "supported",
+   "flags": [
+    "check-2026"
+   ],
+   "cited": "Willie_Col%C3%B3n#intro",
+   "note": "Corpus: 'April 28, 1950 – February 21, 2026'. Death date in 2026: needs a human double-check against a live source before publishing.",
+   "fix": null
+  },
+  {
+   "id": "salsa-music.artist.Johnny Pacheco.recording",
+   "claim": "Live at the Red Garter (Fania All-Stars) (1968, album)",
+   "verdict": "supported",
+   "flags": [
+    "check-recording"
+   ],
+   "cited": "Johnny_Pacheco#Fania All-Stars",
+   "note": "Named as a success in his article, but it is the Fania All-Stars' album (a group he put together), not a Pacheco record. His own debut 'Pacheco y su Charanga' is named in his article as selling 100,000 copies in a year.",
+   "fix": {
+    "text": "Pacheco y su Charanga (album; sold 100,000 copies within its first year)",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Johnny_Pacheco",
+      "section": "Pacheco Y Su Charanga"
+     }
+    ]
+   }
+  },
+  {
+   "id": "bossa-nova.description",
+   "claim": "The 1964 album Getz/Gilberto set off a bossa nova craze in the US and beyond.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "genre sources",
+   "note": "Cited genre sections only say Getz/Gilberto was Grammy-winning. Jobim#Career says its release 'created a bossa nova craze', but Astrud_Gilberto#The Girl from Ipanema says it was 'a major contributor to the already growing popularity of bossa nova beyond Brazil' (and Bossa_nova#History has the 1962 Carnegie Hall show and Quincy Jones's Big Band Bossa Nova). 'Set off' overstates.",
+   "fix": {
+    "text": "...The 1964 album Getz/Gilberto, a major contributor to bossa nova's already growing popularity abroad, turned it into a craze in the US and beyond.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Astrud_Gilberto",
+      "section": "The Girl from Ipanema"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Ant%C3%B4nio_Carlos_Jobim",
+      "section": "Career"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Bossa_nova",
+      "section": "History"
+     }
+    ]
+   }
+  },
+  {
+   "id": "bossa-nova.artist.Astrud Gilberto.c1",
+   "claim": "She came to the Getz/Gilberto sessions as João's interpreter and was asked to sing the English lyrics; her whispery voice helped make the song a hit.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Astrud_Gilberto#The Girl from Ipanema",
+   "note": "Hedge dropped: the source says 'Accounts vary as to exactly how Astrud was selected'; Ruy Castro says the idea was hers. 'Was asked' picks one account.",
+   "fix": {
+    "text": "She came to the Getz/Gilberto sessions as João's interpreter; accounts differ on whose idea it was, but she sang the English lyrics, and her whispery voice helped make the song a hit.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Astrud_Gilberto",
+      "section": "The Girl from Ipanema"
+     }
+    ]
+   }
+  },
+  {
+   "id": "bossa-nova.artist.Vinicius de Moraes.c2",
+   "claim": "From 1962 he sang new songs, including 'Garota de Ipanema', in small 'pocket shows' with Jobim and Gilberto in Rio.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Vinicius_de_Moraes#Bossa nova",
+   "note": "Source: in August 1962 he first performed as a singer with Jobim and Gilberto; that was the first of his pocket shows; this phase ended in 1963. The card implies an ongoing series with both partners.",
+   "fix": {
+    "text": "In August 1962 he first sang on stage with Jobim and Gilberto in Rio, the first of his small 'pocket shows', where he presented new songs such as 'Garota de Ipanema'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Vinicius_de_Moraes",
+      "section": "Bossa nova"
+     }
+    ]
+   }
+  },
+  {
+   "id": "bossa-nova.artist.Antônio Carlos Jobim.summary",
+   "claim": "...He is widely regarded as one of the most important songwriters of the 20th century.",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": "Ant%C3%B4nio_Carlos_Jobim#Legacy",
+   "note": "Sourced, but a ranking-style superlative (writer brief: no rankings). Low severity.",
+   "fix": {
+    "text": "A Brazilian composer, pianist and arranger known as Tom Jobim, considered one of the fathers of bossa nova for merging samba with cool jazz. Many of his songs became jazz standards.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Ant%C3%B4nio_Carlos_Jobim",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Ant%C3%B4nio_Carlos_Jobim",
+      "section": "Legacy"
+     }
+    ]
+   }
+  },
+  {
+   "id": "bossa-nova.artist.Antônio Carlos Jobim.recording",
+   "claim": "Garota de Ipanema (The Girl from Ipanema) (None, song)",
+   "verdict": "supported",
+   "flags": [
+    "check-recording"
+   ],
+   "cited": "Ant%C3%B4nio_Carlos_Jobim#intro",
+   "note": "His article names it as his best-known composition, but it is a song he wrote, not a named Jobim recording; the famous recording is the Getz/Gilberto single (Astrud/João Gilberto, Getz; Jobim on piano), already Astrud Gilberto's pick. No year.",
+   "fix": {
+    "text": "Águas de Março (Waters of March) (1972, song) - his article names it among his later hits, with Portuguese and English lyrics by him.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Ant%C3%B4nio_Carlos_Jobim",
+      "section": "Career"
+     }
+    ]
+   }
+  },
+  {
+   "id": "bossa-nova.recording1",
+   "claim": "Elizeth Cardoso - Canção do Amor Demais (None, album)",
+   "verdict": "supported",
+   "flags": [
+    "data-gap"
+   ],
+   "cited": "Bossa_nova#History",
+   "note": "Year left null, but the corpus gives it: 'In July 1958, Elizete Cardoso released the famous LP, Canção do Amor Demais'.",
+   "fix": {
+    "text": "Elizeth Cardoso - Canção do Amor Demais (1958, album)",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Jo%C3%A3o_Gilberto",
+      "section": "Role in bossa nova"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeat.listen2",
+   "claim": "Several guitars and horns each repeating a short riff, locking into one groove.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Fela_Kuti#Music; Afrobeat#intro",
+   "note": "Source describes the guitars (bass, rhythm, tenor) each holding one pattern for the whole piece; horns are not described as repeating riffs.",
+   "fix": {
+    "text": "Two or more guitars, each repeating one short pattern for the whole song, locking into one groove.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Fela_Kuti",
+      "section": "Music"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeat.listen3",
+   "claim": "Drums that avoid the usual 2-and-4 backbeat, with tightly swung hi-hat triplets hinting at a clave.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Fela_Kuti#Music",
+   "note": "Source: Allen 'makes sparing use' of the 2&4 backbeat (not 'avoids'); the hi-hat plays swung triplets, but it is the snare patterns that imply the clave. A listener would be pointed at the wrong drum.",
+   "fix": {
+    "text": "Drums that make sparing use of the usual 2-and-4 backbeat: tightly swung triplets on the hi-hat, and snare patterns that hint at a clave without stating it.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Fela_Kuti",
+      "section": "Music"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeat.hallmark5",
+   "claim": "...from the late 1990s a Brooklyn scene led by Antibalas brought it to new listeners.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Afrobeat#Influence",
+   "note": "Source: 'a small Afrobeat scene began in Brooklyn, New York, with projects including Antibalas, The Daktaris and the Kokolo Afrobeat Orchestra'. 'Led by' ranks Antibalas over the others; 'brought it to new listeners' is said of 2000s DJs' compilations, not the Brooklyn scene.",
+   "fix": {
+    "text": "Fela's sons Femi and Seun carry the style on, and from the late 1990s a small Brooklyn scene grew, with bands such as Antibalas and the Daktaris. Its polyrhythms also reached Western music through Talking Heads' 1980 album Remain in Light.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeat",
+      "section": "Influence"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeat.artist.Fela Kuti.summary",
+   "claim": "A Nigerian musician and political activist from Abeokuta...",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "Fela_Kuti#intro; Fela_Kuti#Activism",
+   "note": "Abeokuta is only in Fela_Kuti#Early life ('born ... in Abeokuta, Nigeria'), which isn't cited. Rest supported. Low severity.",
+   "fix": {
+    "text": "(keep text) add source Fela_Kuti#Early life",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Fela_Kuti",
+      "section": "Early life"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Fela_Kuti",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Fela_Kuti",
+      "section": "Activism"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeat.artist.Tony Allen.summary",
+   "claim": "A Lagos-born drummer... Brian Eno called him perhaps the greatest drummer who has ever lived.",
+   "verdict": "unsupported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": "Tony_Allen_(musician)#intro",
+   "note": "'Lagos-born' is only in Tony_Allen_(musician)#Early career (not cited); intro just says Nigerian. The Eno line is accurately quoted with its 'perhaps', but it is a 'greatest ever' ranking the writer brief rules out.",
+   "fix": {
+    "text": "A Nigerian drummer, composer and songwriter, born in Lagos, who was drummer and musical director of Fela Kuti's Africa '70 from 1968 to 1979 and one of Afrobeat's founders. Fela said that without him there would be no Afrobeat.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Tony_Allen_(musician)",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Tony_Allen_(musician)",
+      "section": "Early career"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeat.artist.Femi Kuti.recording",
+   "claim": "Water No Get Enemy (remake of his father's song) (2002, song)",
+   "verdict": "supported",
+   "flags": [
+    "check-recording"
+   ],
+   "cited": "Femi_Kuti#Biography",
+   "note": "A remake of Fela's song for the Red Hot & Riot tribute compilation. His article mentions it but does not call it notable or a hit, and it isn't an original Femi record.",
+   "fix": {
+    "text": "Fight to Win (2001, album) - named in his Biography section (collaborations with Common, Mos Def). Note: the article doesn't call any Femi record a hit, so a human may prefer to keep this one.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Femi_Kuti",
+      "section": "Biography"
+     }
+    ]
+   }
+  },
+  {
+   "id": "afrobeat.recording2",
+   "claim": "Talking Heads - Remain in Light (1980, album)",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": "Afrobeat#Influence",
+   "note": "Sourced ('brought polyrhythmic Afrobeat influences to Western music'), but with only two landmark recordings, one slot goes to a Western rock band's album about Afrobeat's influence rather than an African Afrobeat record. Comes from genres.json, not the writer. Suggest the pipeline add Fela's Zombie (1977) as a landmark.",
+   "fix": {
+    "text": "Fela Kuti and Africa 70 - Zombie (1977, album)",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Fela_Kuti",
+      "section": "1970s"
+     }
+    ]
+   }
+  },
+  {
+   "id": "reggaeton.description",
+   "claim": "...and took its name and form in Puerto Rico's 'underground' scene of the early 1990s.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Reggaeton#1980s–2000s: Emergence",
+   "note": "The form took shape in the early-1990s underground scene, but the source says the name 'reggaeton' 'became prominent during the early 2000s' (it was coined in Puerto Rico; the music was called 'underground' and 'perreo' before). The sentence dates the name to the early 1990s.",
+   "fix": {
+    "text": "Reggaeton grew from the Spanish-language reggae of Panama, which traces back to Afro-Caribbean workers who came to build the canal, and took shape in Puerto Rico's 'underground' scene of the early 1990s; the name reggaeton, coined in Puerto Rico, became prominent in the early 2000s. ...",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Reggaeton",
+      "section": "Afro-diasporic influences"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Reggaeton",
+      "section": "1980s–2000s: Emergence"
+     }
+    ]
+   }
+  },
+  {
+   "id": "reggaeton.hallmark1",
+   "claim": "Elements of that track appear in over 80% of reggaeton productions.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Reggaeton#Rhythm",
+   "note": "Source credits the 80% to elements of 'Dem Bow''s accompaniment track 'as well as the use of \"Pounder (Dub Mix II)\" by producer Dennis the Menace'. Dropping the second source makes the figure about Shabba's track alone.",
+   "fix": {
+    "text": "...Elements of that track, along with Dennis the Menace's 'Pounder (Dub Mix II)', are found in over 80% of reggaeton productions.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Reggaeton",
+      "section": "Rhythm"
+     }
+    ]
+   }
+  },
+  {
+   "id": "reggaeton.artist.Ivy Queen.c2",
+   "claim": "She brought bachata's guitar sound and romantic style into reggaeton on singles such as 'La Mala'.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Reggaeton#2004: Crossover",
+   "note": "Source: 'Musicians began to incorporate bachata into reggaeton, with Ivy Queen releasing singles ... featuring bachata's signature guitar sound', alongside Daddy Yankee and Don Omar. 'She brought' implies she introduced it.",
+   "fix": {
+    "text": "She was among the first to mix bachata into reggaeton, releasing singles such as 'La Mala' with bachata's guitar sound and slower, romantic rhythms.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Reggaeton",
+      "section": "2004: Crossover"
+     }
+    ]
+   }
+  },
+  {
+   "id": "reggaeton.artist.DJ Playero.c2",
+   "claim": "Daddy Yankee got his start on Playero 34, released around 1994...",
+   "verdict": "supported",
+   "flags": [
+    "check-conflict"
+   ],
+   "cited": "DJ_Playero#Mixtapes",
+   "note": "Matches the cited section, but the corpus conflicts: Reggaeton#1980s–2000s: Emergence says 'DJ Playero's Playero 37 (introducing Daddy Yankee)'. Human check; the card follows the more specific artist article, which is reasonable.",
+   "fix": null
+  },
+  {
+   "id": "reggaeton.artists",
+   "claim": "Artists: DJ Playero, Daddy Yankee, Ivy Queen, Tego Calderón (all Puerto Rican)",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": "Reggaeton#intro; Reggaeton#Afro-diasporic influences",
+   "note": "The card says reggaeton arose from Panama's Spanish reggae and Black Panamanian communities, but all four artists are Puerto Rican. The corpus names Panamanian Renato ('El D.E.N.I', an early hit) in Afro-diasporic influences. Choice is limited to genres.json's list; a pipeline note, not a card error.",
+   "fix": null
+  },
+  {
+   "id": "synth-pop.listen3",
+   "claim": "In early records, cool vocals about isolation and city life; in 1980s hits, warmer songs about romance and escape.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Synth-pop#Characteristics",
+   "note": "Source describes early synth-pop as using 'droning electronics with little change in inflection' and lyrics about 'isolation, urban anomie' and emotional coldness; 'cool vocals' moves the description from the electronics to the singing, and the source says 1980s hits had 'emotional, at times operatic singers'.",
+   "fix": {
+    "text": "In early records, droning electronics and lyrics about isolation and city alienation; in 1980s hits, emotional, sometimes operatic singers and more optimistic songs about romance and escape.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Synth-pop",
+      "section": "Characteristics"
+     }
+    ]
+   }
+  }
+ ]
+}

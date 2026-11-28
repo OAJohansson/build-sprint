@@ -1,0 +1,1033 @@
+{
+  "batch": "6",
+  "genres": [
+    "krautrock",
+    "dancehall",
+    "son-cubano",
+    "samba",
+    "highlife"
+  ],
+  "counts": {
+    "claims": 244,
+    "supported": 206,
+    "drift": 29,
+    "unsupported": 8,
+    "wrong": 1,
+    "newcomer": 4,
+    "fairness": 4
+  },
+  "extra_flags": {
+    "recording_not_own": 3,
+    "link_reason_not_plain": 2,
+    "ranking": 1,
+    "year_missing": 10,
+    "corpus_date_conflict": 8
+  },
+  "claim_counting": "244 claims across 5 genres: tagline, place, date_range, description, debatable, 3 listen_for, 5 hallmarks, each link's label and reason (2 per link), each artist's dates, summary, 2 contributions, recording and study prompt, and 3 landmark recordings each. reacted_against is null for all 5. All link labels pass. Six 'unsupported' items are true elsewhere in the corpus and only need the cited section added (Sean Paul, Pérez Prado year, samba heritage, Carmen Miranda, E. T. Mensah, Victor Uwaifo).",
+  "study_prompts": "All 20 prompts are the artist's summary plus contributions word for word, inside the fixed opening and closing lines, so none goes beyond the card's facts. Each fix to a summary, contribution or recording means regenerating that prompt. Prompts listed as items are the ones that carry a real error (Faust, Vera, Donga, Cartola, Mensah); also regenerate Can, Neu!, Shabba Ranks, Sean Paul, Carmen Miranda and Victor Uwaifo after their fixes.",
+  "recordings_rule": "Own-recording rule: fails for Donga ('by: Baiano'), Cartola ('Sim', a composition sung by others) and María Teresa Vera ('Sólo pienso en ti', named as a composition). Borderline passes: Trio Matamoros 'El que siembra su maíz', Noel Rosa 'Com que roupa?' and E. T. Mensah 'Ghana Freedom' are named as their hits or records, though the corpus never says outright who performed them. All other artist recordings are credited and named in the artist's own article.",
+  "controversy": {
+    "Shabba Ranks": "Vaguer than the source and leaves out his apology; the fix gives the source's plain wording plus the apology.",
+    "dancehall.hallmark4": "Pass. Anti-gay lyrics, cancelled concerts ('in some cases') and Stop Murder Music are worded as plainly as Dancehall#Anti-gay lyrics; Lady Saw's double-standard ban is as Lady_Saw#Style says.",
+    "samba.hallmark4/5": "Pass. Racial favouring of white performers and criminalisation are as plain as the source (except classism dropped, see item)."
+  },
+  "rankings": "One soft ranking ('best-known sound', krautrock.hallmark2). Pass: 'perhaps the most popular' (son, hedge kept), 'Kraftwerk might be the most influential group' and similar source rankings are kept out of the cards.",
+  "hedges": "Kept: 'probably first' (motorik), 'perhaps Cuba's most popular', 'reportedly sold over 100,000', 'generally considered apocryphal', 'disputed' first samba. Dropped: Faust formation disagreement, 'some scholars', 'historically most musicologists', 'at least initially rural'.",
+  "corpus_conflicts": [
+    "Lady Saw: Dancehall puts her among early-1980s deejays; Lady_Saw says she started ~1984 and took the name in 1987",
+    "Shabba Ranks Grammy: Dancehall says 1991, Shabba_Ranks says 1992 (rec.As Raw as Ever uses 1991 as release year, fine)",
+    "Trio Matamoros retirement: Son_cubano says 1960, Trio_Matamoros says disbanded May 1961 (card uses 1961, supported by cited intro)",
+    "Sexteto Occidente: Son_cubano says conducted by Vera; Vera's article names Miguel García as director",
+    "Mensah with Armstrong: Highlife says May 1956, E._T._Mensah says 1957 (card gives no year)",
+    "Uwaifo gold disc: Victor_Uwaifo#Career says 1996, likely a typo for 1966; card says 1965 song, fine",
+    "Zicartola: Cartola#intro says 1964, Biography and Samba say 1963 (card gives no year)",
+    "Guy Warren to the US: 1954 (1940–80) vs Chicago 1955 (Biography); card uses 1955 with Biography cited"
+  ],
+  "year_missing": [
+    "Faust: The Faust Tapes",
+    "Faust: Krautrock (song)",
+    "Lady Saw: Find a Good Man",
+    "Vera: Sólo pienso en ti",
+    "Trio Matamoros: El que siembra su maíz",
+    "Noel Rosa: Com que roupa? (1931 hit year is in Noel_Rosa#Career)",
+    "Cartola: Sim",
+    "E. T. Mensah: Ghana Freedom (artist and landmark)",
+    "Rex Lawson: So ala temen",
+    "Buena Vista Social Club album"
+  ],
+  "items": [
+    {
+      "id": "krautrock.hallmark2",
+      "claim": "Its best-known sound is the motorik beat, a pulsing 4/4 groove...",
+      "verdict": "drift",
+      "flags": [
+        "ranking"
+      ],
+      "cited": [
+        "Krautrock#Characteristics",
+        "Neu!#Musical style",
+        "Neu!#1971–1975: Main career",
+        "Can_(band)#intro"
+      ],
+      "note": "Source calls motorik 'a common feature' and says critics often use 'krautrock' to mean it, while adding it is 'a tiny fraction' of the music. 'Best-known' is a ranking the source does not make. Rest of the hallmark (Dinger and Liebezeit credited, 'probably first' on Neu!'s debut) is supported.",
+      "fix": {
+        "text": "A common thread is the motorik beat, a pulsing, kick-drum-heavy 4/4 groove. Neu!'s Klaus Dinger and Can's Jaki Liebezeit are credited with pioneering it; Can used it in 'Mother Sky', Neu! probably first on their debut album, and Kraftwerk in 'Autobahn'.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Krautrock",
+            "section": "Characteristics"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Neu!",
+            "section": "Musical style"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Neu!",
+            "section": "1971–1975: Main career"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Can_(band)",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "krautrock.link.post-punk.reason",
+      "claim": "Post-punk bands such as Joy Division, the Fall and Public Image Ltd drew on krautrock's repetition and hypnotic grooves.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Post-punk#intro",
+        "Krautrock#intro",
+        "Krautrock#Legacy and influence"
+      ],
+      "note": "Sources say post-punk 'drew influence from German krautrock' and that these bands cited krautrock as an influence; none says what they took from it ('repetition and hypnotic grooves' is added).",
+      "fix": {
+        "text": "Post-punk artists drew influence from German krautrock, and bands such as Joy Division, the Fall and Public Image Ltd cited it as an influence.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Post-punk",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Krautrock",
+            "section": "Legacy and influence"
+          }
+        ]
+      }
+    },
+    {
+      "id": "krautrock.artist.Can.c2",
+      "claim": "...post-punk acts such as the Fall and Joy Division, and later Radiohead, cited them as an influence.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Can_(band)#intro",
+        "Can_(band)#Legacy and influence"
+      ],
+      "note": "Legacy says Can 'influenced' the Fall and Joy Division; only Radiohead is said to have 'cited' Can. Small stretch; the study prompt repeats it.",
+      "fix": {
+        "text": "Their singles 'Spoon' (1971) and 'I Want More' (1976) reached the charts. They influenced post-punk acts such as the Fall and Joy Division, and Radiohead later cited them as an influence.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Can_(band)",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Can_(band)",
+            "section": "Legacy and influence"
+          }
+        ]
+      }
+    },
+    {
+      "id": "krautrock.artist.Neu!.c2",
+      "claim": "Their droning, hypnotic records were cited as an influence by David Bowie, Brian Eno, Joy Division's drummer Stephen Morris, Sonic Youth and Stereolab.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Neu!#Musical style",
+        "Neu!#Influence"
+      ],
+      "note": "Bowie, Eno, Sonic Youth and Stereolab cited Neu!; Stephen Morris specifically 'cited Klaus Dinger's drumming', not the records.",
+      "fix": {
+        "text": "David Bowie, Brian Eno, Sonic Youth and Stereolab cited Neu! as an influence, and Joy Division drummer Stephen Morris cited Klaus Dinger's drumming.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Neu!",
+            "section": "Influence"
+          }
+        ]
+      }
+    },
+    {
+      "id": "krautrock.artist.Faust.summary",
+      "claim": "A Hamburg band put together in 1970 by producer Uwe Nettelbeck, who lived, rehearsed and recorded in an old schoolhouse at Wümme.",
+      "verdict": "drift",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "Faust_(band)#intro",
+        "Faust_(band)#1970–1975"
+      ],
+      "note": "Two problems. (1) The 1970–1975 section says 'there is some disagreement' whether the group formed first and approached Nettelbeck or Nettelbeck assembled it for Polydor; 'put together by' drops that hedge. (2) Grammar makes Nettelbeck the one who lived in the schoolhouse; it was the band. Prompt repeats both.",
+      "fix": {
+        "text": "A Hamburg band formed in 1970 with producer Uwe Nettelbeck (accounts differ on whether he assembled it or the musicians approached him). The band lived, rehearsed and recorded in a former schoolhouse at Wümme, and their music leaned on dissonance, improvisation and electronic experiments.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Faust_(band)",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Faust_(band)",
+            "section": "1970–1975"
+          }
+        ]
+      }
+    },
+    {
+      "id": "krautrock.artist.Faust.prompt",
+      "claim": "Build me a short listening module ... A Hamburg band put together in 1970 by producer Uwe Nettelbeck, who lived, rehearsed and recorded...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [],
+      "note": "Prompt is the card's summary word for word, so it carries the summary's dropped hedge and misattribution. Regenerate from the fixed summary.",
+      "fix": {
+        "text": "Regenerate from the fixed Faust summary.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Faust_(band)",
+            "section": "1970–1975"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dancehall.hallmark2",
+      "claim": "...women deejays such as Lady G, Sister Nancy and Lady Saw emerged too. [in the early 1980s]",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Dancehall#1980s–1990s (The Naming)"
+      ],
+      "note": "The cited Dancehall section does list Lady Saw among early-1980s female deejays, but the corpus contradicts it: Lady_Saw (born 1969) began with sound systems at fifteen (~1984) and took the name in 1987, which the card's own Lady Saw summary says. The card is internally inconsistent.",
+      "fix": {
+        "text": "In the early 1980s a new wave of deejays took over from the older toasters. Yellowman became the first Jamaican deejay signed to a major American label, and women deejays such as Lady G and Sister Nancy emerged, with Lady Saw following later in the decade.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Dancehall",
+            "section": "1980s–1990s (The Naming)"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Lady_Saw",
+            "section": "Early life"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Lady_Saw",
+            "section": "1987–1995: Lover Girl"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dancehall.link.dub-music.reason",
+      "claim": "Dancehall lists dub among its roots: deejays toasted over the bass-and-drum 'dub' versions of older records.",
+      "verdict": "drift",
+      "flags": [
+        "rule:link-reason-not-plain"
+      ],
+      "cited": [
+        "Dancehall#Infobox",
+        "Dancehall#Early developments - Early 1970s"
+      ],
+      "note": "Content supported, but 'Dancehall lists dub' describes the Wikipedia infobox, not the music; link reasons must be plain statements about the music.",
+      "fix": {
+        "text": "Dub is one of dancehall's roots: early deejays toasted over bass-and-drum 'dub' rhythm tracks taken from 1960s and 1970s reggae songs.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Dancehall",
+            "section": "Infobox"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Dancehall",
+            "section": "Early developments - Early 1970s"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dancehall.artist.Shabba Ranks.summary",
+      "claim": "Rexton Gordon, a deejay raised in Kingston who toasted rather than sang ... He has also drawn heavy criticism for homophobic lyrics and remarks.",
+      "verdict": "drift",
+      "flags": [
+        "fairness"
+      ],
+      "cited": [
+        "Shabba_Ranks#intro",
+        "Shabba_Ranks#Career",
+        "Shabba_Ranks#Controversy"
+      ],
+      "note": "(1) 'Raised in Kingston' is in Shabba_Ranks#Early life, which is not cited. (2) Controversy wording: the source is plainer ('controversial for homophobia, particularly violent attitudes towards homosexuals'; 'Wicked Inna Bed' has lyrics about shooting gay men; his 1992 Bible remark) and also records that he later apologised. The card is vaguer than the source and leaves out the apology, so it is neither as plain nor as complete as the source.",
+      "fix": {
+        "text": "Rexton Gordon, a deejay raised in Kingston who toasted rather than sang, and one of the most popular Jamaican musicians in the world in the late 1980s and early 1990s. He has been controversial for homophobia: his 1990 song 'Wicked Inna Bed' includes lyrics about shooting gay men, and after 1992 TV remarks claiming the Bible advocated the 'crucifixion of homosexuals' he was dropped from a concert and later apologised.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+            "section": "Early life"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+            "section": "Career"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+            "section": "Controversy"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dancehall.artist.Shabba Ranks.c1",
+      "claim": "His albums As Raw as Ever and X-tra Naked each won the Grammy for Best Reggae Album, the first Grammy wins for a dancehall artist.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Shabba_Ranks#Career",
+        "Dancehall#1980s–1990s (The Naming)"
+      ],
+      "note": "Source: he 'became the first dancehall artist to win at the Grammy Awards' with As Raw as Ever; X-tra Naked 'earned him back-to-back awards'. Only the first win was a first. (Corpus conflict on the year: Dancehall says 1991, Shabba_Ranks says the award was 1992.)",
+      "fix": {
+        "text": "As Raw as Ever made him the first dancehall artist to win a Grammy, and X-tra Naked won the same award, Best Reggae Album, the next year.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+            "section": "Career"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Dancehall",
+            "section": "1980s–1990s (The Naming)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dancehall.artist.Sean Paul.summary",
+      "claim": "A Kingston rapper, singer and songwriter ...",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Sean_Paul#intro"
+      ],
+      "note": "Kingston is not in the cited intro; it is in Sean_Paul#Early life and the Infobox (uncited). True, needs a citation.",
+      "fix": {
+        "text": "A Kingston-born rapper, singer and songwriter who released his first album, Stage One, in 2000. His second album, Dutty Rock (2002), made him an international star.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Sean_Paul",
+            "section": "Early life"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Sean_Paul",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "son-cubano.tagline",
+      "claim": "Cuba's Spanish-African song and dance behind salsa; mambo is its big-band offshoot.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Son_cubano#intro",
+        "Mambo_(music)#intro"
+      ],
+      "note": "Mambo_(music)#intro: mambo 'originated as a syncopated form of the danzón' that used son's guajeos. It grew out of the danzón, not out of son; the card's own description says so.",
+      "fix": {
+        "text": "Cuba's Spanish-African song and dance behind salsa; mambo grew from the danzón using son's figures.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Mambo_(music)",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "son-cubano.debatable",
+      "claim": "Where it began: most musicologists point to rural eastern Cuba, but Peter Manuel argues much of its structure came from the Havana contradanza...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Son_cubano#Origins",
+        "Son_cubano#Son de Ma Teodora"
+      ],
+      "note": "Origins says 'Historically, most musicologists have supported' the eastern hypothesis, then that 'it has become increasingly clear' versions of son appeared across rural Cuba by the 1890s. The card drops 'historically' and the island-wide view, so it overstates the current consensus.",
+      "fix": {
+        "text": "Where it began: historically most musicologists pointed to rural eastern Cuba, but versions of son appeared across rural Cuba by the 1890s, Peter Manuel argues much of its structure came from the Havana contradanza, and the old 'Ma Teodora' origin story is generally considered apocryphal.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "Origins"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "Son de Ma Teodora"
+          }
+        ]
+      }
+    },
+    {
+      "id": "son-cubano.listen1",
+      "claim": "The tres (a Cuban guitar) playing a guajeo, a short repeating figure that locks the band together.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Son_cubano#intro",
+        "Son_cubano#Instrumentation"
+      ],
+      "note": "Instrumentation: the tres plays 'the typical Cuban ostinato figure known as guajeo'. 'Locks the band together' is not in the source.",
+      "fix": {
+        "text": "The tres (a small Cuban guitar) playing a guajeo, a short repeating figure (ostinato) that recurs across many son songs.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "Instrumentation"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Arsenio_Rodr%C3%ADguez",
+            "section": "Early life"
+          }
+        ]
+      }
+    },
+    {
+      "id": "son-cubano.hallmark4",
+      "claim": "In the 1940s Arsenio Rodríguez built the conjunto: several trumpets, piano and conga drums on top of the son line-up.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Son_cubano#1940s",
+        "Arsenio_Rodr%C3%ADguez#intro",
+        "Arsenio_Rodr%C3%ADguez#Expansion of the son conjunto"
+      ],
+      "note": "Overclaims a sole first. Son_cubano#1940s: 'all these elements had been used previously'; Expansion: similar changes were made 'somewhat earlier by the Lecuona Cuban Boys'; Rise to fame: only two other conjuntos existed in 1940. His own card says 'one of the first conjuntos'.",
+      "fix": {
+        "text": "In 1940 Arsenio Rodríguez formed one of the first conjuntos, adding more trumpets, piano and conga drums to the son line-up, though others had tried these elements before. His layered guajeos and clave-tight son montuno became the template for salsa.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "1940s"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Arsenio_Rodr%C3%ADguez",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Arsenio_Rodr%C3%ADguez",
+            "section": "Expansion of the son conjunto"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Arsenio_Rodr%C3%ADguez",
+            "section": "Rise to fame"
+          }
+        ]
+      }
+    },
+    {
+      "id": "son-cubano.link.salsa-music.reason",
+      "claim": "Salsa was built mainly on son cubano and son montuno, first in 1960s New York.",
+      "verdict": "drift",
+      "flags": [
+        "fairness"
+      ],
+      "cited": [
+        "Son_cubano#intro",
+        "Salsa_music#intro",
+        "Son_cubano#1940s"
+      ],
+      "note": "Salsa_music#intro says its origin is controversial, the first self-identified salsa band formed in Cuba in 1955, and New York salsa bands were 'predominantly assembled by Puerto Rican and Cuban and Dominican musicians'. 'First in 1960s New York' settles a disputed origin and leaves out the communities who made it.",
+      "fix": {
+        "text": "Most salsa is built mainly on son montuno and son cubano; it took off in 1960s and 1970s New York, played largely by Puerto Rican, Cuban and Dominican musicians.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Salsa_music",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "son-cubano.link.funk.reason",
+      "claim": "Mambo, son's big-band offshoot, lists funk among the styles that came after it.",
+      "verdict": "drift",
+      "flags": [
+        "rule:link-reason-not-plain"
+      ],
+      "cited": [
+        "Mambo_(music)#Infobox"
+      ],
+      "note": "'Lists' describes a Wikipedia infobox, not the music; it repeats the 'son's offshoot' error; and the son-to-funk path rests on one infobox line. A plain musical link exists in the corpus: Arsenio's melodic bass tumbaos, called 'critical' to funk.",
+      "fix": {
+        "text": "Arsenio Rodríguez's son conjunto gave the bass its own melodic riff (tumbao), an idea later called critical to Motown, rock and funk.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Arsenio_Rodr%C3%ADguez",
+            "section": "Clave-based structure and offbeat emphasis"
+          }
+        ]
+      }
+    },
+    {
+      "id": "son-cubano.artist.María Teresa Vera.summary",
+      "claim": "A Cuban singer, guitarist and composer from Guanajay and a leading figure of the trova song movement.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Mar%C3%ADa_Teresa_Vera#intro",
+        "Mar%C3%ADa_Teresa_Vera#Career"
+      ],
+      "note": "Guanajay is only in the uncited Infobox. The intro calls her 'an outstanding example of the Cuban trova movement'; 'leading figure' is stronger.",
+      "fix": {
+        "text": "A Cuban singer, guitarist and composer from Guanajay and an outstanding example of the trova song movement. She sang from 1911 until she retired in 1962.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Mar%C3%ADa_Teresa_Vera",
+            "section": "Infobox"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Mar%C3%ADa_Teresa_Vera",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Mar%C3%ADa_Teresa_Vera",
+            "section": "Career"
+          }
+        ]
+      }
+    },
+    {
+      "id": "son-cubano.artist.María Teresa Vera.recording",
+      "claim": "Sólo pienso en ti (song)",
+      "verdict": "drift",
+      "flags": [
+        "recording-not-own"
+      ],
+      "cited": [
+        "Mar%C3%ADa_Teresa_Vera#Career"
+      ],
+      "note": "Career names 'Sólo pienso en ti' as one of her well-known compositions (a bolero-son), not as a recording she is credited on. Her article names no surviving recording of hers by title (most Zequeira-duo recordings 'have not survived'). Her credited recordings in the corpus are the 1918 Sexteto Habanero Godínez sessions (Son_cubano#Early 20th century), untitled.",
+      "fix": {
+        "text": "Mark it as her composition, not her recording: 'Sólo pienso en ti' (her bolero-son composition). If a credited recording is required, the corpus offers none by title; drop the 'Start with' line or name the 1918 Sexteto Habanero Godínez recordings on which she sang lead and played clave.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Mar%C3%ADa_Teresa_Vera",
+            "section": "Career"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Son_cubano",
+            "section": "Early 20th century"
+          }
+        ]
+      }
+    },
+    {
+      "id": "son-cubano.artist.María Teresa Vera.prompt",
+      "claim": "...a leading figure of the trova song movement... Start with \"Sólo pienso en ti\"...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [],
+      "note": "Repeats the summary's 'leading figure' and starts from a composition not credited to her as a recording. Regenerate after the two fixes.",
+      "fix": {
+        "text": "Regenerate from the fixed summary and recording.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Mar%C3%ADa_Teresa_Vera",
+            "section": "Career"
+          }
+        ]
+      }
+    },
+    {
+      "id": "son-cubano.artist.Pérez Prado.recording",
+      "claim": "Mambo No. 5 (1950, song)",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "P%C3%A9rez_Prado#intro",
+        "P%C3%A9rez_Prado#Works"
+      ],
+      "note": "Title is his own and named in his intro, but neither cited section gives 1950. The year is in Mambo_(music)#1940-1952 ('Mambo No. 5' and 'Mambo No. 8' in 1950). Add that citation.",
+      "fix": {
+        "text": "Mambo No. 5 (1950)",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/P%C3%A9rez_Prado",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Mambo_(music)",
+            "section": "1940-1952: \"Brass\" Mambo in Mexico City"
+          }
+        ]
+      }
+    },
+    {
+      "id": "samba.debatable",
+      "claim": "...scholars note earlier songs labelled samba, say it sounded closer to maxixe...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Samba#intro",
+        "Samba#Beginnings in a Bahian terreiro"
+      ],
+      "note": "Source: its primacy 'has been questioned by some scholars'. The hedge 'some' is dropped. The maxixe point is the article's own statement, not attributed to scholars.",
+      "fix": {
+        "text": "Its first record: 'Pelo Telefone' is often called the first samba, but some scholars note earlier songs labelled samba, its rhythm and instruments were closer to maxixe, and Donga's sole authorship was soon contested by his contemporaries.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "Beginnings in a Bahian terreiro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "samba.listen1",
+      "claim": "A batucada of percussion in a two-beat (2/4) feel, with the deep surdo drum marking the pulse...",
+      "verdict": "supported",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "Samba#intro",
+        "Samba#Samba do Estácio, the genesis of urban samba"
+      ],
+      "note": "Supported, but 'batucada' is not glossed for a beginner.",
+      "fix": {
+        "text": "A batucada (samba's percussion groove) in a two-beat (2/4) feel, with the deep surdo drum marking the pulse under pandeiro, tamborim and cuíca.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "Samba do Estácio, the genesis of urban samba"
+          }
+        ]
+      }
+    },
+    {
+      "id": "samba.listen2",
+      "claim": "A sung chorus that keeps coming back between verses, often in two parts.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Samba#intro",
+        "Samba#Samba do Estácio, the genesis of urban samba"
+      ],
+      "note": "The source's two-part structure belongs to the song (Estácio sambas organised in 'first and second parts'), not the chorus. As written it reads as a two-part chorus.",
+      "fix": {
+        "text": "A sung chorus that returns between verses; Estácio-style sambas are organised in a first and a second part.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "Samba do Estácio, the genesis of urban samba"
+          }
+        ]
+      }
+    },
+    {
+      "id": "samba.listen3",
+      "claim": "Classical guitar and the cavaquinho filling in the harmony around the drums.",
+      "verdict": "supported",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "Samba#intro",
+        "Samba#Urban samba instruments"
+      ],
+      "note": "Supported by Samba#intro. 'Cavaquinho' is not glossed. (Samba#Urban samba instruments is almost empty in the corpus; it only says percussion with strings.)",
+      "fix": {
+        "text": "Classical guitar and the cavaquinho (a small four-string guitar) filling in the harmony around the drums.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "samba.hallmark5",
+      "claim": "...an attitude rooted in racism and religious intolerance ... and today Carioca samba is official Brazilian cultural heritage.",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Samba#Criminalization",
+        "Samba#Traditional samba as \"resistance music\"",
+        "Samba#Samba in the 21st century"
+      ],
+      "note": "The heritage claim is in Samba#intro (2007 IPHAN declaration), which is not cited. Criminalization also names classism alongside racism and religious intolerance; the card drops it.",
+      "fix": {
+        "text": "Early samba was criminalised: gatherings were broken up and instruments destroyed, an attitude rooted in racism, classism and religious intolerance. By the 1960s traditional samba was being championed as 'resistance music' at places like Cartola and Dona Zica's bar Zicartola, and in 2007 Carioca samba was declared Brazilian cultural heritage.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "Criminalization"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "Traditional samba as \"resistance music\""
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "samba.link.jazz.reason",
+      "claim": "Post-war samba-canção picked up cool-jazz tones, and jazz players in turn adapted street samba into jazz-samba.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Samba#Samba-canção hegemony and influences of foreign music",
+        "Jazz#Afro-Brazilian jazz"
+      ],
+      "note": "Jazz#Afro-Brazilian jazz: 'jazz-samba is an adaptation of street samba into jazz'. It does not say jazz players did it.",
+      "fix": {
+        "text": "Post-war samba-canção sometimes took on cool-jazz tones, and jazz-samba adapted street samba into jazz.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "Samba-canção hegemony and influences of foreign music"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Jazz",
+            "section": "Afro-Brazilian jazz"
+          }
+        ]
+      }
+    },
+    {
+      "id": "samba.artist.Donga.recording",
+      "claim": "Pelo Telefone (1917, song), by: Baiano",
+      "verdict": "unsupported",
+      "flags": [
+        "recording-not-own"
+      ],
+      "cited": [
+        "Donga_(musician)#intro",
+        "Samba#Beginnings in a Bahian terreiro"
+      ],
+      "note": "The card's own 'by' field credits Baiano: Donga composed and registered the song, and Baiano sang the 1917 recording. Under the own-recording rule this is not Donga's recording. His article names a recording he is credited on: in 1940 he recorded nine compositions for the album Native Brazilian Music (Columbia).",
+      "fix": {
+        "text": "Native Brazilian Music (1940, album), for which Donga recorded nine compositions (sambas, toadas, macumbas and lundus), organised by Leopold Stokowski and Heitor Villa-Lobos.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Donga_(musician)",
+            "section": "Life and career"
+          }
+        ]
+      }
+    },
+    {
+      "id": "samba.artist.Donga.prompt",
+      "claim": "...Start with \"Pelo Telefone\" (1917), credited to Baiano...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [],
+      "note": "The prompt itself admits the starting record is credited to another act. Regenerate after the recording fix (Pelo Telefone can stay as 'anything else named above').",
+      "fix": {
+        "text": "Regenerate with 'Start with \"Native Brazilian Music\" (1940)'.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Donga_(musician)",
+            "section": "Life and career"
+          }
+        ]
+      }
+    },
+    {
+      "id": "samba.rec.Pelo Telefone",
+      "claim": "artist: Donga (sung by Baiano)",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Samba#intro"
+      ],
+      "note": "The performer on the 1917 recording is Baiano; Donga is the registered composer. The other landmarks in this card name the performer first ('Francisco Alves (written by Ary Barroso)'). Also, Samba#intro does not mention Baiano; cite the Bahian terreiro section.",
+      "fix": {
+        "text": "artist: Baiano (written by Donga)",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Samba",
+            "section": "Beginnings in a Bahian terreiro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "samba.artist.Carmen Miranda.summary",
+      "claim": "A Portuguese-born Brazilian singer, dancer and actress, raised in Rio de Janeiro.",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Carmen_Miranda#intro"
+      ],
+      "note": "'Raised in Rio de Janeiro' is in Carmen_Miranda#Early life (family settled in Rio when she was under a year old), not the cited intro. True; add the citation.",
+      "fix": {
+        "text": "A Portuguese-born Brazilian singer, dancer and actress, raised in Rio de Janeiro from infancy. Her 1930 recording of 'Taí (Pra Você Gostar de Mim)' made her a star in Brazil.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Carmen_Miranda",
+            "section": "Early life"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Carmen_Miranda",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "samba.artist.Cartola.recording",
+      "claim": "Sim (song, year null)",
+      "verdict": "unsupported",
+      "flags": [
+        "recording-not-own"
+      ],
+      "cited": [
+        "Cartola#Biography"
+      ],
+      "note": "Biography: 'Sim' was 'one of his greatest hits, sung by many artists' and 'written during his grief'. It is named as his composition sung by others, not a recording he is credited on. His article names his own debut record: the 1974 album Cartola, released when he was 66.",
+      "fix": {
+        "text": "Cartola (1974, album), his first record, released at age 66.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Cartola",
+            "section": "Biography"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Cartola",
+            "section": "Albums"
+          }
+        ]
+      }
+    },
+    {
+      "id": "samba.artist.Cartola.prompt",
+      "claim": "...Start with \"Sim\"...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [],
+      "note": "Starts from a composition sung by others. Regenerate after the recording fix.",
+      "fix": {
+        "text": "Regenerate with 'Start with \"Cartola\" (1974)'.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Cartola",
+            "section": "Biography"
+          }
+        ]
+      }
+    },
+    {
+      "id": "highlife.debatable",
+      "claim": "When it began: the infobox dates its roots to the 1870s, but the name 'highlife' only appeared in the early 1920s, and the first records came in 1928.",
+      "verdict": "drift",
+      "flags": [
+        "newcomer"
+      ],
+      "cited": [
+        "Highlife#Infobox",
+        "Highlife#Dance and guitar band highlife"
+      ],
+      "note": "'The infobox' points the reader at Wikipedia's page furniture, which means nothing to a beginner. The source frames no actual debate here; the card builds one from three dates. 'The first records' stretches the source: Asare is 'credited as the first Ghanaian musician to record a song in the highlife genre'.",
+      "fix": {
+        "text": "When it began: its roots are dated to the 1870s Gold Coast, but the name 'highlife' only appeared in the early 1920s, and Jacob Asare's 1928 recordings are credited as the first in the genre.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Highlife",
+            "section": "Infobox"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Highlife",
+            "section": "Dance and guitar band highlife"
+          }
+        ]
+      }
+    },
+    {
+      "id": "highlife.listen2",
+      "claim": "Two-finger guitar picking, a style borrowed from Liberian Kru sailors, weaving bright, repeating lines.",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Highlife#intro",
+        "Highlife#Dance and guitar band highlife"
+      ],
+      "note": "Source: musicians 'used the dagomba style, borrowed from Kru sailors from Liberia, to create highlife's two-finger picking style'. The borrowed thing was dagomba, not the two-finger style itself. 'Bright, repeating lines' is not in the cited sections.",
+      "fix": {
+        "text": "Two-finger guitar picking, which highlife guitarists built from the dagomba style borrowed from Liberian Kru sailors.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Highlife",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Highlife",
+            "section": "Dance and guitar band highlife"
+          }
+        ]
+      }
+    },
+    {
+      "id": "highlife.hallmark4",
+      "claim": "From the 1940s highlife split into rural guitar bands ... and urban dance bands...",
+      "verdict": "drift",
+      "flags": [],
+      "cited": [
+        "Highlife#Dance and guitar band highlife",
+        "Highlife#1950s",
+        "Guy_Warren#Biography"
+      ],
+      "note": "Hedge dropped: guitar band highlife was 'at least initially, most common in rural areas'.",
+      "fix": {
+        "text": "From the 1940s highlife split into guitar bands, at first mostly rural and popularised by E.K. Nyame's Akan Trio, and urban dance bands like E. T. Mensah's Tempos, a band Guy Warren also played in. Warren is credited with introducing highlife to the United States.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Highlife",
+            "section": "Dance and guitar band highlife"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Highlife",
+            "section": "1950s"
+          }
+        ]
+      }
+    },
+    {
+      "id": "highlife.artist.E. T. Mensah.summary",
+      "claim": "Emmanuel Tettey Mensah, an Accra bandleader and saxophonist...",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "E._T._Mensah#intro"
+      ],
+      "note": "Accra and the saxophone are in E._T._Mensah#Early years (born in Ussher Town, Accra; learnt alto saxophone), not the cited intro. True; add the citation.",
+      "fix": {
+        "text": "Emmanuel Tettey Mensah, a bandleader and alto saxophonist from Accra, regarded as the 'King of Highlife'. He led the Tempos, a band that toured widely in West Africa.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/E._T._Mensah",
+            "section": "Early years"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/E._T._Mensah",
+            "section": "intro"
+          }
+        ]
+      }
+    },
+    {
+      "id": "highlife.artist.E. T. Mensah.c1",
+      "claim": "He turned the Tempos, first a soldiers' jam band, into an all-African dance band...",
+      "verdict": "wrong",
+      "flags": [
+        "fairness"
+      ],
+      "cited": [
+        "E._T._Mensah#The Tempos and later career",
+        "Highlife#Dance and guitar band highlife"
+      ],
+      "note": "The cited section contradicts it: the band became all-African before Mensah led it, 'led by Joe Kelly and then Guy Warren'; Mensah joined in 1947, the band split, and it re-formed with him as leader. The card gives Mensah credit for what Kelly and Warren did.",
+      "fix": {
+        "text": "The Tempos began in 1946 as a jam band of European soldiers in Accra and became all-African under Joe Kelly and then Guy Warren; Mensah joined in 1947 and led the re-formed band, which typified post-war urban highlife and toured Britain in 1953.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/E._T._Mensah",
+            "section": "The Tempos and later career"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Highlife",
+            "section": "Dance and guitar band highlife"
+          }
+        ]
+      }
+    },
+    {
+      "id": "highlife.artist.E. T. Mensah.prompt",
+      "claim": "...He turned the Tempos, first a soldiers' jam band, into an all-African dance band...",
+      "verdict": "drift",
+      "flags": [
+        "fairness"
+      ],
+      "cited": [],
+      "note": "Repeats the wrong contribution word for word. Regenerate after the fix.",
+      "fix": {
+        "text": "Regenerate from the fixed summary and contribution.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/E._T._Mensah",
+            "section": "The Tempos and later career"
+          }
+        ]
+      }
+    },
+    {
+      "id": "highlife.artist.Victor Uwaifo.summary",
+      "claim": "A guitarist, bandleader, sculptor and lecturer from Benin City, Nigeria...",
+      "verdict": "unsupported",
+      "flags": [],
+      "cited": [
+        "Victor_Uwaifo#intro",
+        "Victor_Uwaifo#National recognition"
+      ],
+      "note": "'Guitarist' and 'from Benin City' are in Victor_Uwaifo#Early life and education (born in Benin City; began playing guitar at 12), not the cited sections. True; add the citation.",
+      "fix": {
+        "text": "A guitarist, bandleader, sculptor and university lecturer from Benin City, Nigeria, who recorded as Victor Uwaifo and His Titibitis. He later became Edo State's commissioner for arts, culture and tourism.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Victor_Uwaifo",
+            "section": "Early life and education"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Victor_Uwaifo",
+            "section": "intro"
+          },
+          {
+            "url": "https://en.wikipedia.org/wiki/Victor_Uwaifo",
+            "section": "National recognition"
+          }
+        ]
+      }
+    }
+  ]
+}

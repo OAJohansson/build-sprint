@@ -10,7 +10,8 @@
     "test": "vitest run",
     "positions": "node scripts/embed-positions.mjs",
     "content": "node scripts/import-content.mjs",
-    "places": "node scripts/import-places.mjs"
+    "places": "node scripts/import-places.mjs",
+    "music": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/import-music.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

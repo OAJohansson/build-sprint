@@ -1,0 +1,1443 @@
+[
+  {
+    "sample": true,
+    "debatable": null,
+    "reacted_against": null,
+    "id": "disco",
+    "name": "Disco",
+    "family": "soul",
+    "tagline": {
+      "text": "Dance music from the clubs of 1970s New York: four-on-the-floor, strings and a bassline that never stops.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Disco",
+          "section": "Sample"
+        }
+      ]
+    },
+    "date_range": "Early 1970s – early 1980s",
+    "place": {
+      "text": "New York City and Philadelphia, United States",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Disco",
+          "section": "Sample"
+        }
+      ]
+    },
+    "description": "Sample text. Disco grew in the underground clubs of New York in the early 1970s, where DJs played soul and funk records for dancing all night. It became the biggest pop music of the late 1970s before a backlash in 1979.",
+    "listen_for": [
+      {
+        "text": "A kick drum on every beat, with open hi-hats on the off-beats.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Disco",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "text": "Lush strings and horns over a busy, melodic bassline.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Disco",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "text": "Long extended mixes made for the dance floor, not the radio.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Disco",
+            "section": "Sample"
+          }
+        ]
+      }
+    ],
+    "hallmarks": [
+      {
+        "title": "Four-on-the-floor",
+        "text": "Sample text. The kick drum lands on every beat of the bar, which makes it easy to dance to and easy for DJs to mix.",
+        "artists": [
+          "Giorgio Moroder"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Disco",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "The orchestra in the club",
+        "text": "Sample text. Producers in Philadelphia and New York layered strings and horns over funk rhythm sections.",
+        "artists": [
+          "Nile Rodgers"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Disco",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "The DJ as performer",
+        "text": "Sample text. Club DJs blended records into one long set, and labels began to press longer mixes for them.",
+        "artists": [],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Disco",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "Synthesisers arrive",
+        "text": "Sample text. By 1977 some producers built whole tracks from sequenced synthesisers, pointing towards electronic dance music.",
+        "artists": [
+          "Giorgio Moroder",
+          "Donna Summer"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Disco",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "A scene of outsiders",
+        "text": "Sample text. Its first clubs were run by and for Black, Latino and gay dancers, long before it reached the charts.",
+        "artists": [],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Disco",
+            "section": "Sample"
+          }
+        ]
+      }
+    ],
+    "links": [
+      {
+        "neighbour": "house",
+        "neighbour_name": "House",
+        "direction": "in",
+        "kind": "grew_out_of",
+        "label": "kept the four-on-the-floor",
+        "reason": "Sample text. Chicago DJs kept playing disco after the backlash and rebuilt it with drum machines.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "Stylistic origins"
+          }
+        ]
+      },
+      {
+        "neighbour": "electro",
+        "neighbour_name": "Electro",
+        "direction": "in",
+        "kind": "fused_with",
+        "label": "its dance beat, with machines",
+        "reason": "Sample text. Electro fused disco and funk with drum machines and synthesisers.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "Stylistic origins"
+          }
+        ]
+      }
+    ],
+    "artists": [
+      {
+        "name": "Donna Summer",
+        "dates": "1948–2012",
+        "summary": "Sample text. The singer who became the voice of disco, from long sensual mixes to fully electronic tracks.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Donna_Summer",
+            "section": "Sample"
+          }
+        ],
+        "contributions": [
+          {
+            "text": "Sample text. Sang over the first big all-synthesiser dance hit.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Donna_Summer",
+                "section": "Sample"
+              }
+            ]
+          },
+          {
+            "text": "Sample text. Made the album-length disco suite popular.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Donna_Summer",
+                "section": "Sample"
+              }
+            ]
+          }
+        ],
+        "recording": {
+          "title": "Love to Love You Baby",
+          "year": 1975,
+          "kind": "song",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Donna_Summer",
+              "section": "Sample"
+            }
+          ]
+        },
+        "study_prompt": {
+          "text": "Teach me Donna Summer as a short listening module. Play me Love to Love You Baby (1975) first, then ask me one question at a time about what I heard and where it came from. Finish with a five-question quiz.",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Donna_Summer",
+              "section": "Sample"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Giorgio Moroder",
+        "dates": "b. 1940",
+        "summary": "Sample text. The Munich producer who built disco from synthesisers and sequencers.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Giorgio_Moroder",
+            "section": "Sample"
+          }
+        ],
+        "contributions": [
+          {
+            "text": "Sample text. Programmed the sequenced bassline of I Feel Love.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Giorgio_Moroder",
+                "section": "Sample"
+              }
+            ]
+          },
+          {
+            "text": "Sample text. Showed a dance track could be made almost entirely by machines.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Giorgio_Moroder",
+                "section": "Sample"
+              }
+            ]
+          }
+        ],
+        "recording": {
+          "title": "From Here to Eternity",
+          "year": 1977,
+          "kind": "album",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Giorgio_Moroder",
+              "section": "Sample"
+            }
+          ]
+        },
+        "study_prompt": {
+          "text": "Teach me Giorgio Moroder as a short listening module. Play me From Here to Eternity (1977) first, then ask me one question at a time about what I heard and where it came from. Finish with a five-question quiz.",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Giorgio_Moroder",
+              "section": "Sample"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Nile Rodgers",
+        "dates": "b. 1952",
+        "summary": "Sample text. Guitarist and producer whose band Chic set the sound of late disco.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Nile_Rodgers",
+            "section": "Sample"
+          }
+        ],
+        "contributions": [
+          {
+            "text": "Sample text. His clipped rhythm guitar became a disco signature.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Nile_Rodgers",
+                "section": "Sample"
+              }
+            ]
+          },
+          {
+            "text": "Sample text. Wrote and produced hits for Chic and for other artists.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Nile_Rodgers",
+                "section": "Sample"
+              }
+            ]
+          }
+        ],
+        "recording": {
+          "title": "Good Times",
+          "year": 1979,
+          "kind": "song",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Nile_Rodgers",
+              "section": "Sample"
+            }
+          ]
+        },
+        "study_prompt": {
+          "text": "Teach me Nile Rodgers as a short listening module. Play me Good Times (1979) first, then ask me one question at a time about what I heard and where it came from. Finish with a five-question quiz.",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Nile_Rodgers",
+              "section": "Sample"
+            }
+          ]
+        }
+      }
+    ],
+    "recordings": [
+      {
+        "artist": "Donna Summer",
+        "title": "I Feel Love",
+        "year": 1977,
+        "kind": "song",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Disco",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "artist": "Chic",
+        "title": "Le Freak",
+        "year": 1978,
+        "kind": "song",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Disco",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "artist": "Gloria Gaynor",
+        "title": "I Will Survive",
+        "year": 1978,
+        "kind": "song",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Disco",
+            "section": "Sample"
+          }
+        ]
+      }
+    ],
+    "further_reading": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Disco",
+        "title": "Disco"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Post-disco",
+        "title": "Post-disco"
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Disco",
+        "section": "Lead"
+      }
+    ]
+  },
+  {
+    "sample": true,
+    "debatable": null,
+    "reacted_against": null,
+    "id": "house",
+    "name": "House",
+    "family": "electronic",
+    "tagline": {
+      "text": "Disco rebuilt with drum machines in 1980s Chicago clubs, and the root of most dance music since.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/House_music",
+          "section": "Sample"
+        }
+      ]
+    },
+    "date_range": "Early 1980s–present",
+    "place": {
+      "text": "Chicago, United States",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/House_music",
+          "section": "Sample"
+        }
+      ]
+    },
+    "description": "Sample text. House began in Chicago in the early 1980s, when DJs at clubs like the Warehouse played disco, soul and electronic records and local producers began making their own tracks on cheap drum machines.",
+    "listen_for": [
+      {
+        "text": "A steady four-on-the-floor kick at about 120 beats per minute.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "text": "Drum-machine claps and hi-hats, often from a Roland TR-808 or TR-909.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "text": "Soulful vocals or a single repeated phrase over a looping groove.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "Sample"
+          }
+        ]
+      }
+    ],
+    "hallmarks": [
+      {
+        "title": "Disco after disco",
+        "text": "Sample text. When disco left the charts, Chicago DJs kept playing it and stretched it into something new.",
+        "artists": [
+          "Frankie Knuckles"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "Cheap machines",
+        "text": "Sample text. Affordable drum machines and synthesisers let anyone with a bedroom make a club record.",
+        "artists": [
+          "Marshall Jefferson"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "Deep feeling",
+        "text": "Sample text. Some producers slowed it down and added warm chords and soul, which became deep house.",
+        "artists": [
+          "Larry Heard"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "The club as church",
+        "text": "Sample text. Its first clubs were a refuge for Black and gay dancers, and its lyrics often borrow from gospel.",
+        "artists": [
+          "Frankie Knuckles"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "Across the Atlantic",
+        "text": "Sample text. By 1987 house records were hits in Britain and fed the acid house and rave scenes.",
+        "artists": [],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "Sample"
+          }
+        ]
+      }
+    ],
+    "links": [
+      {
+        "neighbour": "disco",
+        "neighbour_name": "Disco",
+        "direction": "out",
+        "kind": "grew_out_of",
+        "label": "kept the four-on-the-floor",
+        "reason": "Sample text. Chicago DJs kept playing disco after the backlash and rebuilt it with drum machines.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "Stylistic origins"
+          }
+        ]
+      },
+      {
+        "neighbour": "techno",
+        "neighbour_name": "Techno",
+        "direction": "in",
+        "kind": "grew_out_of",
+        "label": "sped up in Detroit",
+        "reason": "Sample text. Detroit producers heard Chicago house and made it colder and more mechanical.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Stylistic origins"
+          }
+        ]
+      }
+    ],
+    "artists": [
+      {
+        "name": "Frankie Knuckles",
+        "dates": "1955–2014",
+        "summary": "Sample text. The DJ at Chicago's Warehouse, often called the godfather of house.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Frankie_Knuckles",
+            "section": "Sample"
+          }
+        ],
+        "contributions": [
+          {
+            "text": "Sample text. Re-edited disco records for his own sets.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Frankie_Knuckles",
+                "section": "Sample"
+              }
+            ]
+          },
+          {
+            "text": "Sample text. Gave house its name through the club he played at.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Frankie_Knuckles",
+                "section": "Sample"
+              }
+            ]
+          }
+        ],
+        "recording": {
+          "title": "Your Love",
+          "year": 1987,
+          "kind": "song",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Frankie_Knuckles",
+              "section": "Sample"
+            }
+          ]
+        },
+        "study_prompt": {
+          "text": "Teach me Frankie Knuckles as a short listening module. Play me Your Love (1987) first, then ask me one question at a time about what I heard and where it came from. Finish with a five-question quiz.",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Frankie_Knuckles",
+              "section": "Sample"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Marshall Jefferson",
+        "dates": "b. 1959",
+        "summary": "Sample text. Chicago producer whose piano-led track became an anthem.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Marshall_Jefferson",
+            "section": "Sample"
+          }
+        ],
+        "contributions": [
+          {
+            "text": "Sample text. Brought piano chords into house.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Marshall_Jefferson",
+                "section": "Sample"
+              }
+            ]
+          },
+          {
+            "text": "Sample text. Helped define the Chicago sound on Trax Records.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Marshall_Jefferson",
+                "section": "Sample"
+              }
+            ]
+          }
+        ],
+        "recording": {
+          "title": "Move Your Body",
+          "year": 1986,
+          "kind": "song",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Marshall_Jefferson",
+              "section": "Sample"
+            }
+          ]
+        },
+        "study_prompt": {
+          "text": "Teach me Marshall Jefferson as a short listening module. Play me Move Your Body (1986) first, then ask me one question at a time about what I heard and where it came from. Finish with a five-question quiz.",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Marshall_Jefferson",
+              "section": "Sample"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Larry Heard",
+        "dates": "b. 1960",
+        "summary": "Sample text. Producer, as Mr. Fingers, of the first deep house records.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Larry_Heard",
+            "section": "Sample"
+          }
+        ],
+        "contributions": [
+          {
+            "text": "Sample text. Added jazz-like chords and space.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Larry_Heard",
+                "section": "Sample"
+              }
+            ]
+          },
+          {
+            "text": "Sample text. Showed house could be slow and moody.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Larry_Heard",
+                "section": "Sample"
+              }
+            ]
+          }
+        ],
+        "recording": {
+          "title": "Can You Feel It",
+          "year": 1986,
+          "kind": "song",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Larry_Heard",
+              "section": "Sample"
+            }
+          ]
+        },
+        "study_prompt": {
+          "text": "Teach me Larry Heard as a short listening module. Play me Can You Feel It (1986) first, then ask me one question at a time about what I heard and where it came from. Finish with a five-question quiz.",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Larry_Heard",
+              "section": "Sample"
+            }
+          ]
+        }
+      }
+    ],
+    "recordings": [
+      {
+        "artist": "Frankie Knuckles",
+        "title": "Your Love",
+        "year": 1987,
+        "kind": "song",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "artist": "Marshall Jefferson",
+        "title": "Move Your Body",
+        "year": 1986,
+        "kind": "song",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "artist": "Mr. Fingers",
+        "title": "Can You Feel It",
+        "year": 1986,
+        "kind": "song",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/House_music",
+            "section": "Sample"
+          }
+        ]
+      }
+    ],
+    "further_reading": [
+      {
+        "url": "https://en.wikipedia.org/wiki/House_music",
+        "title": "House music"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Chicago_house",
+        "title": "Chicago house"
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/House_music",
+        "section": "Lead"
+      }
+    ]
+  },
+  {
+    "sample": true,
+    "debatable": null,
+    "reacted_against": null,
+    "id": "techno",
+    "name": "Techno",
+    "family": "electronic",
+    "tagline": {
+      "text": "Detroit's machine music of the mid-1980s: drum machines and synthesisers imagining the future.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Techno",
+          "section": "Sample"
+        }
+      ]
+    },
+    "date_range": "Mid-1980s–present",
+    "place": {
+      "text": "Detroit, United States",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Techno",
+          "section": "Sample"
+        }
+      ]
+    },
+    "description": "Sample text. Techno was made in and around Detroit in the mid-1980s by producers who loved electro, Chicago house and European synth-pop, and wanted music that sounded like the future of their city.",
+    "listen_for": [
+      {
+        "text": "Repetitive, driving drum-machine patterns, often faster than house.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "text": "Cold synthesiser stabs and strings instead of vocals.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "text": "Long tracks that change slowly, built for DJ mixing.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Sample"
+          }
+        ]
+      }
+    ],
+    "hallmarks": [
+      {
+        "title": "The Belleville Three",
+        "text": "Sample text. Three school friends from Belleville, near Detroit, are credited with starting it.",
+        "artists": [
+          "Juan Atkins",
+          "Derrick May",
+          "Kevin Saunderson"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "Futurism",
+        "text": "Sample text. Its makers drew on science fiction and futurist writing to imagine a post-industrial city.",
+        "artists": [
+          "Juan Atkins"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "Machines with soul",
+        "text": "Sample text. Derrick May called it George Clinton and Kraftwerk stuck in an elevator.",
+        "artists": [
+          "Derrick May"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "Crossing over",
+        "text": "Sample text. Some Detroit tracks took vocals and became pop hits in Britain.",
+        "artists": [
+          "Kevin Saunderson"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "Berlin",
+        "text": "Sample text. After the Wall fell, Berlin clubs took techno up and made the city its second home.",
+        "artists": [],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Sample"
+          }
+        ]
+      }
+    ],
+    "links": [
+      {
+        "neighbour": "house",
+        "neighbour_name": "House",
+        "direction": "out",
+        "kind": "grew_out_of",
+        "label": "sped up in Detroit",
+        "reason": "Sample text. Detroit producers heard Chicago house and made it colder and more mechanical.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Stylistic origins"
+          }
+        ]
+      },
+      {
+        "neighbour": "electro",
+        "neighbour_name": "Electro",
+        "direction": "out",
+        "kind": "grew_out_of",
+        "label": "kept the machines",
+        "reason": "Sample text. Juan Atkins made electro as Cybotron before he made techno.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Stylistic origins"
+          }
+        ]
+      }
+    ],
+    "artists": [
+      {
+        "name": "Juan Atkins",
+        "dates": "b. 1962",
+        "summary": "Sample text. Often called the originator of techno, first in Cybotron and then as Model 500.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Juan_Atkins",
+            "section": "Sample"
+          }
+        ],
+        "contributions": [
+          {
+            "text": "Sample text. Used the word techno for his music.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Juan_Atkins",
+                "section": "Sample"
+              }
+            ]
+          },
+          {
+            "text": "Sample text. Founded the label Metroplex.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Juan_Atkins",
+                "section": "Sample"
+              }
+            ]
+          }
+        ],
+        "recording": {
+          "title": "No UFOs",
+          "year": 1985,
+          "kind": "song",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Juan_Atkins",
+              "section": "Sample"
+            }
+          ]
+        },
+        "study_prompt": {
+          "text": "Teach me Juan Atkins as a short listening module. Play me No UFOs (1985) first, then ask me one question at a time about what I heard and where it came from. Finish with a five-question quiz.",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Juan_Atkins",
+              "section": "Sample"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Derrick May",
+        "dates": "b. 1963",
+        "summary": "Sample text. Producer, as Rhythim Is Rhythim, of techno's best-known anthem.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Derrick_May",
+            "section": "Sample"
+          }
+        ],
+        "contributions": [
+          {
+            "text": "Sample text. Brought strings and emotion into techno.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Derrick_May",
+                "section": "Sample"
+              }
+            ]
+          },
+          {
+            "text": "Sample text. Ran the label Transmat.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Derrick_May",
+                "section": "Sample"
+              }
+            ]
+          }
+        ],
+        "recording": {
+          "title": "Strings of Life",
+          "year": 1987,
+          "kind": "song",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Derrick_May",
+              "section": "Sample"
+            }
+          ]
+        },
+        "study_prompt": {
+          "text": "Teach me Derrick May as a short listening module. Play me Strings of Life (1987) first, then ask me one question at a time about what I heard and where it came from. Finish with a five-question quiz.",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Derrick_May",
+              "section": "Sample"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Kevin Saunderson",
+        "dates": "b. 1964",
+        "summary": "Sample text. Producer whose group Inner City took Detroit techno into the charts.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Kevin_Saunderson",
+            "section": "Sample"
+          }
+        ],
+        "contributions": [
+          {
+            "text": "Sample text. Made techno with vocals.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Kevin_Saunderson",
+                "section": "Sample"
+              }
+            ]
+          },
+          {
+            "text": "Sample text. Ran the label KMS.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Kevin_Saunderson",
+                "section": "Sample"
+              }
+            ]
+          }
+        ],
+        "recording": {
+          "title": "Big Fun",
+          "year": 1988,
+          "kind": "song",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Kevin_Saunderson",
+              "section": "Sample"
+            }
+          ]
+        },
+        "study_prompt": {
+          "text": "Teach me Kevin Saunderson as a short listening module. Play me Big Fun (1988) first, then ask me one question at a time about what I heard and where it came from. Finish with a five-question quiz.",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Kevin_Saunderson",
+              "section": "Sample"
+            }
+          ]
+        }
+      }
+    ],
+    "recordings": [
+      {
+        "artist": "Rhythim Is Rhythim",
+        "title": "Strings of Life",
+        "year": 1987,
+        "kind": "song",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "artist": "Model 500",
+        "title": "No UFOs",
+        "year": 1985,
+        "kind": "song",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "artist": "Inner City",
+        "title": "Big Fun",
+        "year": 1988,
+        "kind": "song",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Sample"
+          }
+        ]
+      }
+    ],
+    "further_reading": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Techno",
+        "title": "Techno"
+      },
+      {
+        "url": "https://en.wikipedia.org/wiki/Detroit_techno",
+        "title": "Detroit techno"
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Techno",
+        "section": "Lead"
+      }
+    ]
+  },
+  {
+    "sample": true,
+    "debatable": null,
+    "reacted_against": null,
+    "id": "electro",
+    "name": "Electro",
+    "family": "electronic",
+    "tagline": {
+      "text": "Funk played by drum machines and vocoders in early-1980s New York, the bridge between hip-hop and techno.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+          "section": "Sample"
+        }
+      ]
+    },
+    "date_range": "Early 1980s–present",
+    "place": {
+      "text": "New York City and Los Angeles, United States",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+          "section": "Sample"
+        }
+      ]
+    },
+    "description": "Sample text. Electro took the beat of funk, the machines of Kraftwerk and the energy of early hip-hop, and set them to the Roland TR-808 drum machine.",
+    "listen_for": [
+      {
+        "text": "The booming kick and snappy snare of the Roland TR-808.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "text": "Robotic vocals through a vocoder.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "text": "Syncopated, broken beats rather than a straight four-on-the-floor.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "Sample"
+          }
+        ]
+      }
+    ],
+    "hallmarks": [
+      {
+        "title": "The 808",
+        "text": "Sample text. The Roland TR-808 drum machine gave electro its deep kick and its handclaps.",
+        "artists": [
+          "Afrika Bambaataa"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "Kraftwerk in the Bronx",
+        "text": "Sample text. New York DJs played German electronic records for breakdancers.",
+        "artists": [
+          "Afrika Bambaataa"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "Robot voices",
+        "text": "Sample text. Vocoders and talk boxes made the singer sound like a machine.",
+        "artists": [
+          "Egyptian Lover"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "Breakdancing",
+        "text": "Sample text. Its broken beats were made for b-boys and b-girls to dance to.",
+        "artists": [],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "title": "West Coast",
+        "text": "Sample text. Los Angeles producers made a faster, harder electro for local parties.",
+        "artists": [
+          "Egyptian Lover"
+        ],
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "Sample"
+          }
+        ]
+      }
+    ],
+    "links": [
+      {
+        "neighbour": "disco",
+        "neighbour_name": "Disco",
+        "direction": "out",
+        "kind": "fused_with",
+        "label": "its dance beat, with machines",
+        "reason": "Sample text. Electro fused disco and funk with drum machines and synthesisers.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "Stylistic origins"
+          }
+        ]
+      },
+      {
+        "neighbour": "techno",
+        "neighbour_name": "Techno",
+        "direction": "in",
+        "kind": "grew_out_of",
+        "label": "kept the machines",
+        "reason": "Sample text. Juan Atkins made electro as Cybotron before he made techno.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Techno",
+            "section": "Stylistic origins"
+          }
+        ]
+      }
+    ],
+    "artists": [
+      {
+        "name": "Afrika Bambaataa",
+        "dates": "b. 1957",
+        "summary": "Sample text. Bronx DJ whose Planet Rock set the template for electro.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Afrika_Bambaataa",
+            "section": "Sample"
+          }
+        ],
+        "contributions": [
+          {
+            "text": "Sample text. Mixed Kraftwerk with funk for Bronx dancers.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Afrika_Bambaataa",
+                "section": "Sample"
+              }
+            ]
+          },
+          {
+            "text": "Sample text. Founded the Universal Zulu Nation.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Afrika_Bambaataa",
+                "section": "Sample"
+              }
+            ]
+          }
+        ],
+        "recording": {
+          "title": "Planet Rock",
+          "year": 1982,
+          "kind": "song",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Afrika_Bambaataa",
+              "section": "Sample"
+            }
+          ]
+        },
+        "study_prompt": {
+          "text": "Teach me Afrika Bambaataa as a short listening module. Play me Planet Rock (1982) first, then ask me one question at a time about what I heard and where it came from. Finish with a five-question quiz.",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Afrika_Bambaataa",
+              "section": "Sample"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Egyptian Lover",
+        "dates": "b. 1963",
+        "summary": "Sample text. Los Angeles DJ and producer of West Coast electro.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Egyptian_Lover",
+            "section": "Sample"
+          }
+        ],
+        "contributions": [
+          {
+            "text": "Sample text. Played the 808 live at parties.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Egyptian_Lover",
+                "section": "Sample"
+              }
+            ]
+          },
+          {
+            "text": "Sample text. Ran his own label, Egyptian Empire.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Egyptian_Lover",
+                "section": "Sample"
+              }
+            ]
+          }
+        ],
+        "recording": {
+          "title": "Egypt, Egypt",
+          "year": 1984,
+          "kind": "song",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Egyptian_Lover",
+              "section": "Sample"
+            }
+          ]
+        },
+        "study_prompt": {
+          "text": "Teach me Egyptian Lover as a short listening module. Play me Egypt, Egypt (1984) first, then ask me one question at a time about what I heard and where it came from. Finish with a five-question quiz.",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Egyptian_Lover",
+              "section": "Sample"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Mantronix",
+        "dates": "b. 1965",
+        "summary": "Sample text. Kurtis Mantronik's group, who pushed electro's drum programming further.",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Mantronix",
+            "section": "Sample"
+          }
+        ],
+        "contributions": [
+          {
+            "text": "Sample text. Made the drum machine the lead instrument.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Mantronix",
+                "section": "Sample"
+              }
+            ]
+          },
+          {
+            "text": "Sample text. Linked electro and hip-hop production.",
+            "sources": [
+              {
+                "url": "https://en.wikipedia.org/wiki/Mantronix",
+                "section": "Sample"
+              }
+            ]
+          }
+        ],
+        "recording": {
+          "title": "Bassline",
+          "year": 1985,
+          "kind": "song",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Mantronix",
+              "section": "Sample"
+            }
+          ]
+        },
+        "study_prompt": {
+          "text": "Teach me Mantronix as a short listening module. Play me Bassline (1985) first, then ask me one question at a time about what I heard and where it came from. Finish with a five-question quiz.",
+          "sources": [
+            {
+              "url": "https://en.wikipedia.org/wiki/Mantronix",
+              "section": "Sample"
+            }
+          ]
+        }
+      }
+    ],
+    "recordings": [
+      {
+        "artist": "Afrika Bambaataa & the Soulsonic Force",
+        "title": "Planet Rock",
+        "year": 1982,
+        "kind": "song",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "artist": "Cybotron",
+        "title": "Clear",
+        "year": 1983,
+        "kind": "song",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "Sample"
+          }
+        ]
+      },
+      {
+        "artist": "Egyptian Lover",
+        "title": "Egypt, Egypt",
+        "year": 1984,
+        "kind": "song",
+        "sources": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+            "section": "Sample"
+          }
+        ]
+      }
+    ],
+    "further_reading": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+        "title": "Electro (music)"
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://en.wikipedia.org/wiki/Electro_(music)",
+        "section": "Lead"
+      }
+    ]
+  }
+]

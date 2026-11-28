@@ -33,3 +33,37 @@
 | Your thread in its own place, with a card redesign and new wording (#44) | Out of the view switch | Next phase |
 | Timeline hover links: calmer or different (#45) | They look messy | Next phase |
 | A proper menu (#46) | Room for fields, settings, about | Next phase |
+
+## Next phase: a globe you spin (owner idea, 28 Nov)
+
+- **The idea:** draw the globe as a real sphere: the front half shows, you drag to spin it, and the back side waits round the curve. Calmer (about half the labels on screen at once) and more fun to wander. Wanted alongside classical, tech house and the other missing genres, so the extra room carries more genres without crowding.
+- **What it costs:** today `project()` in `src/lib/globe.ts` flattens the whole sphere onto one disc so every genre shows at once (job 1, eval M1). A real globe gives that up (Munzner's "no unjustified 3D": anything hidden is a cost). Ideas to keep an overview: the family list as the whole map, faint dots for the back side.
+- **How:** a prototype next to today's globe, both fields (they share it); the owner picks from screenshots (design picks are the owner's). Open question for the owner: on first open, does seeing everything at once matter, or is finding by spinning more fun?
+- **Genres with it:** classical is a scope change (the map is popular music from 1900; the timeline starts in 1900, and classical needs its own family). Tech house and other sub-genres under house (L57). All through the coverage check M8.
+
+## Coverage check for philosophy (feedback 49)
+
+- Run the coverage check (M8) on the 27 philosophy schools: an independent grader compares the list with outside references (SEP and IEP tables of contents, a standard survey such as Copleston or the Routledge Encyclopedia's top-level entries, and university introduction syllabi). It lists any major school missing, ranked, for the owner to pick from.
+
+## From the coverage re-check (28 Nov)
+
+- **More genres (L59 backlog, plus the tester's gut check):** regional Mexican, cumbia and Latin pop, filmi / Bollywood, J-pop, drill, psychedelic and progressive rock, ragtime, swing, Eurodance, trip hop. Run M8 again before adding.
+- **Find a genre:** a search on the globe that also says "not on the map yet" (re-test F5).
+- **Side links lighter:** show minor fusions (grime with indie, K-pop with techno) fainter or folded into "N more" (F3).
+- **Reason next to the neighbour:** move the hover reason from the bottom edge to beside the hovered neighbour (F4).
+- **Sub-genres under house:** deep, acid, tech house (tester asked again).
+
+## From the phase 4 planning (27 Nov)
+
+- More fields after music: architecture, fashion, political science (capitalism and others next to Marxism), the history of ideas.
+- Learning depth: quizzes, spaced repetition, a Socratic AI that asks follow-up questions about what you just read (needs a cost-per-user estimate first).
+- Willingness to pay: put the product in front of real people with a pricing page or a waitlist.
+
+## From the phase 4 music test (27 Nov)
+
+- **Your trail:** the chain of genres opened, in order, each with its link word and one record, as a listening path you can save or share (user test's biggest idea).
+- **Real playback:** direct links or a playlist (Spotify / Apple Music) for a thread instead of a YouTube search; the tester's top "would pay for".
+- **Sub-genres under house** (deep, acid, Chicago, French) and other big genres: a level below the genre.
+- **Direct record links** for the 3 landmark records per genre.
+- **Women in the electronic cards:** the corpus names none for house, electro, trance or EDM; fetch more sources.
+- **Wrong-belief checks** in user-test scenarios (tester's process suggestion).

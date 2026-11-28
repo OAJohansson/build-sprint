@@ -261,3 +261,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Owner pick (L64):** "I like A1 and A3." Family B and A2 dropped. Next: a preview to spin them live, and one critic round on both.
 - **Preview for spinning live (pre-approved preview deploy):** https://meander-esyy0zoi2-mimirswell.vercel.app (`?globe=a1` or `?globe=a3`; may ask for the owner's Vercel sign-in).
 - **Critic round 1 (A1 5/10, A3 5/10)** and fixes: see `design/phase5/critic.md`.
+- **Critic round 2: A1 8/10, A3 9/10.** Built A4 (A1 list + A3 names) from the critic's recommendation, with the round 2 fixes. Owner picks the final from A1, A3, A4.

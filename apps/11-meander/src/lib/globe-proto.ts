@@ -6,8 +6,8 @@
 import { useEffect } from "react";
 import { useLocalStorage } from "./use-local-storage";
 
-export type GlobeMode = "flat" | "a1" | "a2" | "a3" | "b1" | "b2" | "b3";
-const MODES: GlobeMode[] = ["flat", "a1", "a2", "a3", "b1", "b2", "b3"];
+export type GlobeMode = "flat" | "a1" | "a2" | "a3" | "a4" | "b1" | "b2" | "b3";
+const MODES: GlobeMode[] = ["flat", "a1", "a2", "a3", "a4", "b1", "b2", "b3"];
 const KEY = "11-meander:globe-proto";
 const isMode = (v: unknown): v is GlobeMode => MODES.includes(v as GlobeMode);
 

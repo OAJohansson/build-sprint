@@ -286,7 +286,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
             key={field.id}
             field={field} mode={gmode as SpinVariant} focus={focus} states={states} onOpen={(id) => { setLitIds(null); nav.openSchool(id); }}
             C={C} R={R} W={W} H={H} inert={inside || timeline} litIds={focus ? null : litIds} turnTo={turnTo} idPrefix="desk"
-            fixed={[{ x: 0, y: 0, w: W, h: 84 }, ...(hasCard ? [{ x: 990, y: 0, w: 450, h: H }] : []), ...(gmode === "a1" && !hasCard ? [{ x: 30, y: 96, w: 270, h: 780 }] : [])]}
+            fixed={[{ x: 0, y: 0, w: W, h: 84 }, ...(hasCard ? [{ x: 990, y: 0, w: 450, h: H }] : []), ...((gmode === "a1" || gmode === "a4") && !hasCard ? [{ x: 30, y: 96, w: 270, h: 780 }] : [])]}
           >
             {titleEl}
           </SpinGlobe>
@@ -365,7 +365,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
         </div>
         </>
         )}
-        {gmode === "a1" && !hasCard && !timeline && !inside && (
+        {(gmode === "a1" || gmode === "a4") && !hasCard && !timeline && !inside && (
           <GlobeIndex field={field} states={states} onLight={setLitIds} onOpen={(id) => { setLitIds(null); nav.openSchool(id); }} onTurn={(v) => setTurnTo((t) => ({ v, n: (t?.n ?? 0) + 1 }))} />
         )}
         <GlobeSwitch mode={gmode} setMode={setGmode} />

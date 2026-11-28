@@ -19,3 +19,15 @@ Fixed after round 1:
 
 Not changed (the card and title belong to the signed-off design): the card's clipped bottom row, the title under the
 focus dot, the dotted "provoked it" line, the "Globe"/"Genres" tab names.
+
+## Round 2 (28 Nov): A1 8/10, A3 9/10
+
+A1: hierarchy, feel and copy each up a point; the family-open state works ("the best frame in the set" for
+philosophy's Contemporary). Left: in-family threads a new hairball, the list jumped and hid members, the eyebrow.
+A3: clutter, hierarchy, legibility and feel up; left: hidden families have no name or route (3 of 8 named on first
+open), the open family's name reads as a label's heading, no family names on the phone.
+Critic's verdict: A1 does the first-open job narrowly better, A3 is the better-looking screen; strongest is both
+together. So I built **A4 = A1's list + A3's front family names**, with the r2 fixes: lit-family threads at ~40%,
+the list anchored from its top (family names never move), a fade at the end of a long member list, no eyebrow, the
+list using the globe's short names, and other families' names hidden while one family is open.
+Rounds stop here (the score reached the 9 target); the final pick is the owner's.

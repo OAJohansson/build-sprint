@@ -4,7 +4,7 @@
 // turn it, and opening a school turns it to the front. Two families of directions, three each:
 //  A, spin with a light overview (neighbours round the back always pinned to the rim):
 //   a1 faint back-side dots + "The whole map" family list; a2 a small flat mini-map of everything, with the part
-//   you face ringed; a3 family names floating over their regions, the back ones faint, plus back-side dots.
+//   you face ringed; a3 family names floating over their front regions, plus back-side dots; a4 (critic r2) = a1 + a3.
 //  B, pure spin (nothing stands in for the back half):
 //   b1 the plain globe; b2 close-up, a bigger globe rising from the bottom like a horizon; b3 spotlight, names only
 //   near the middle, so a name appears as you turn it towards you.
@@ -14,7 +14,7 @@ import { splitName, type Field } from "@/lib/content";
 import { GAMMA, RIM, project, vec, type Vec3 } from "@/lib/globe";
 import { arcPath, centroid, clampPitch, facingRot, frontOf, graticule, lerpRot, ortho, placeSpinLabels, type Box, type Rot } from "@/lib/spin";
 
-export type SpinVariant = "a1" | "a2" | "a3" | "b1" | "b2" | "b3";
+export type SpinVariant = "a1" | "a2" | "a3" | "a4" | "b1" | "b2" | "b3";
 /** Families for music; the timeline's eras for philosophy (critic r1: Western/Eastern was two rows, not an overview). */
 export function groupsOf(field: Field) {
   if (field.families.length) return field.families.map((f) => ({ id: f.id, name: f.name, schools: field.schools.filter((s) => s.family === f.id) }));
@@ -228,10 +228,10 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
   // a3 (critic r1): a family's name sits at the middle of its members on the front, only when two or more are there,
   // and gives way to any genre label or dot it would touch; never for the back half.
   const regions: { id: string; name: string; x: number; y: number; ids: Set<string>; vs: Vec3[] }[] = [];
-  if (mode === "a3" && !focus) {
+  if ((mode === "a3" || mode === "a4") && !focus) {
     const taken = Object.values(placed).map((p) => p.rect);
     const groups = groupsOf(field)
-      .filter((g) => !famLit || g.id === famLit.id)
+      .filter((g) => !familyLit || (g.schools.length > 0 && g.schools.every((m) => familyLit.has(m.id))))
       .map((g) => ({ g, on: g.schools.filter((s) => s.id !== focus && P[s.id].z > 0.2) }))
       .filter((x) => x.on.length >= 2)
       .sort((a, b) => b.on.length - a.on.length)
@@ -278,7 +278,7 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
         <circle cx={C[0]} cy={C[1]} r={R} fill={`url(#${idPrefix}-lit)`} />
         <path className="grat" d={grat} />
         <circle className="rim" cx={C[0]} cy={C[1]} r={R} />
-        {(mode === "a1" || mode === "a3") && back.map((s) => (
+        {(mode === "a1" || mode === "a3" || mode === "a4") && back.map((s) => (
           <circle key={s.id} className={["bk", lit?.has(s.id) && "lit", near.has(s.id) && "near"].filter(Boolean).join(" ")} cx={P[s.id].x} cy={P[s.id].y} r={compact ? 1.4 : 1.8} />
         ))}
         <g mask={`url(#${idPrefix}-ko)`}>
@@ -355,7 +355,6 @@ export function GlobeIndex({ field, onLight, onTurn, onOpen, states }: {
   const setOf = (id: string | null) => { const g = groups.find((x) => x.id === id); return g ? new Set(g.schools.map((s) => s.id)) : null; };
   return (
     <nav className="gindex" aria-label="The whole map" onPointerDown={(e) => e.stopPropagation()} onMouseLeave={() => onLight(setOf(open))}>
-      <p className="gk">The whole map</p>
       <ul>
         {groups.filter((g) => g.schools.length).map((g) => (
           <li key={g.id} className={open === g.id ? "open" : undefined}>
@@ -375,7 +374,7 @@ export function GlobeIndex({ field, onLight, onTurn, onOpen, states }: {
                   <li key={s.id}>
                     <button type="button" className={states.get(s.id) && states.get(s.id) !== "new" ? "v" : undefined}
                       onClick={() => onOpen(s.id)}>
-                      {field.nameOf(s)}
+                      {splitName(s.name).short}
                     </button>
                   </li>
                 ))}
@@ -392,7 +391,7 @@ export function GlobeIndex({ field, onLight, onTurn, onOpen, states }: {
 export function GlobeSwitch({ mode, setMode }: { mode: string; setMode: (m: GlobeMode) => void }) {
   return (
     <div className="gswitch" role="radiogroup" aria-label="Globe prototype" onPointerDown={(e) => e.stopPropagation()}>
-      {([["flat", "Flat"], ["a1", "A1"], ["a2", "A2"], ["a3", "A3"], ["b1", "B1"], ["b2", "B2"], ["b3", "B3"]] as const).map(([m, t]) => (
+      {([["flat", "Flat"], ["a1", "A1"], ["a2", "A2"], ["a3", "A3"], ["a4", "A4"], ["b1", "B1"], ["b2", "B2"], ["b3", "B3"]] as const).map(([m, t]) => (
         <button key={m} type="button" role="radio" aria-checked={mode === m} className={mode === m ? "on" : undefined} onClick={() => setMode(m)}>{t}</button>
       ))}
     </div>

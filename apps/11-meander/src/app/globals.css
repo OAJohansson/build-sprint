@@ -616,12 +616,12 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 .spin-phone { height: 360px; margin: 4px -4px 12px; overflow: hidden; }
 .spin-phone.big { height: 440px; }
 .spin-hint { text-align: center; color: var(--quiet); font-size: 14px; margin-top: 8px; }
-.gindex { position: absolute; left: 44px; bottom: 96px; width: 230px; z-index: 2; }
+.gindex { position: absolute; left: 44px; top: 300px; width: 230px; z-index: 2; }
 .gindex .gk { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(233, 226, 212, 0.5); margin: 0 0 6px 10px; }
 .gindex ul { list-style: none; margin: 0; padding: 0; }
 .gindex .gh { display: block; width: 100%; padding: 4px 10px; border-radius: 8px; font-size: 13.5px; color: rgba(233, 226, 212, 0.6); text-align: left; }
 .gindex li.open > .gh { color: var(--brass); }
-.gindex .gl { margin: 2px 0 6px 10px; border-left: 1px solid rgba(233, 226, 212, 0.12); max-height: 210px; overflow-y: auto; }
+.gindex .gl { margin: 2px 0 6px 10px; border-left: 1px solid rgba(233, 226, 212, 0.12); max-height: 280px; overflow-y: auto; -webkit-mask-image: linear-gradient(#000 85%, transparent); mask-image: linear-gradient(#000 85%, transparent); padding-bottom: 18px; }
 .gindex .gl button { display: block; width: 100%; text-align: left; padding: 2px 12px; font-size: 13px; color: var(--quiet); border-radius: 6px; }
 .gindex .gl button.v { color: var(--brass); }
 @media (hover: hover) {
@@ -636,7 +636,9 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 .globe.spin.fam-lit .n.lit b { opacity: 1; color: var(--bone); }
 .globe.spin.fam-lit .n.lit.nolabel .lb { visibility: visible; left: 10px !important; top: -10px !important; }
 .globe.spin.fam-lit .n.lit .dot { opacity: 1; }
-.globe.spin.a3 .n b { color: rgba(233, 226, 212, 0.68); }
+.globe.spin.a3 .n b, .globe.spin.a4 .n b { color: rgba(233, 226, 212, 0.68); }
+/* critic r2: a lit family's threads at about 40%, so the family reads before its hairball */
+.globe.spin.fam-lit svg.threads path.th.lit { stroke-opacity: 0.32; stroke-width: 1; }
 .globe.spin .region { position: absolute; transform: translate(-50%, -50%); padding: 2px 4px; border-radius: 4px; font: 500 12.5px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--brass); white-space: nowrap; cursor: pointer; }
 .globe.spin .region.on { text-decoration: underline; text-underline-offset: 4px; }
 .globe.spin.compact .region { font-size: 10px; letter-spacing: 0.12em; }

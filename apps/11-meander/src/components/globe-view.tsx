@@ -3,14 +3,14 @@
 // Desktop: the whole field as one globe turned to face the focused school (handoff "Where a school
 // sits", "Where a label sits"), with the card or the "Your thread" panel on the right.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { getSchool, getThinker, links, metaLine, neighbours, positions, schools, splitName, themeSummary, type Neighbour } from "@/lib/content";
+import { splitName, themeSummary, type Field, type Neighbour } from "@/lib/content";
 import {
   FADE, FAR, R, centre, emptiest, placeLabels, project, samplePolyline, thread, vec,
   type LabelPlace, type Projected, type Rect, type ThreadPoint, type Vec3,
 } from "@/lib/globe";
 import { SchoolSections, ThinkerSections, ThreadSections } from "./card-parts";
 import { Mark } from "./mark";
-import { MenuBar } from "./menu-bar";
+import { FieldSwitch, MenuBar } from "./menu-bar";
 import { TimelineView } from "./timeline-view";
 import { FirstPage, Knot } from "./skeleton";
 import { stateLabel } from "@/lib/progress";
@@ -19,10 +19,19 @@ import type { Nav } from "./meander";
 const W = 1440, H = 900;
 // SSR and the browser must print the same numbers, so positions are rounded to 0.1 px.
 const round1 = (v: number) => Math.round(v * 10) / 10;
-const ORDER: Record<string, number> = Object.fromEntries(schools.map((s, i) => [s.id, i]));
-const V: Record<string, Vec3> = Object.fromEntries(schools.map((s) => [s.id, vec(positions[s.id])]));
-let overviewFacing: Vec3 | null = null;
-const facing = () => (overviewFacing ??= emptiest(Object.values(V)));
+type Sphere = { ORDER: Record<string, number>; V: Record<string, Vec3>; facing: () => Vec3 };
+const spheres = new Map<string, Sphere>();
+/** Each field's schools on the sphere, its content order, and where the overview faces (its emptiest spot). */
+function sphereOf(f: Field): Sphere {
+  let sp = spheres.get(f.id);
+  if (!sp) {
+    const V: Record<string, Vec3> = Object.fromEntries(f.schools.map((s) => [s.id, vec(f.positions[s.id])]));
+    let overviewFacing: Vec3 | null = null;
+    sp = { ORDER: Object.fromEntries(f.schools.map((s, i) => [s.id, i])), V, facing: () => (overviewFacing ??= emptiest(Object.values(V))) };
+    spheres.set(f.id, sp);
+  }
+  return sp;
+}
 // The faint "yarn" rings drawn on the globe: [flattening, rotation, opacity].
 const YARN: [number, number, number][] = [[0.9, -18, 0.05], [0.46, 28, 0.045], [0.2, -54, 0.05]];
 
@@ -43,8 +52,10 @@ type Path = { key: string; a: string; b: string; d: string; cls: string; pts: Pr
 // rest: a school with no thread to the focus. Focus mode shows it as a faint dot with no label (feedback #16).
 type Node = { id: string; name: string; label: string; p: Projected; r: number; near?: Neighbour; far: boolean; rest: boolean };
 
-function useLayout(focus: string | null, hasCard: boolean) {
+function useLayout(field: Field, focus: string | null, hasCard: boolean) {
   return useMemo(() => {
+    const { schools, links, neighbours } = field;
+    const { V, facing } = sphereOf(field);
     const C = centre(hasCard);
     const f = focus ? V[focus] : facing();
     const P: Record<string, Projected> = Object.fromEntries(schools.map((s) => [s.id, project(f, V[s.id], C, R)]));
@@ -69,15 +80,17 @@ function useLayout(focus: string | null, hasCard: boolean) {
       .sort((a, b) => (a.near ? 0 : 1) - (b.near ? 0 : 1) || a.p.theta - b.p.theta);
     const threadPts: ThreadPoint[] = paths.filter((p) => !focus || p.focus).flatMap((p) => samplePolyline(p.pts, p.focus ? 14 : 1));
     return { C, paths, nodes, threadPts };
-  }, [focus, hasCard]);
+  }, [field, focus, hasCard]);
 }
 
 export function GlobeView({ nav }: { nav: Nav }) {
-  const { focus, thinker, threadOpen, inside, pick, states, view } = nav;
+  const { focus, thinker, threadOpen, inside, pick, states, view, field } = nav;
+  const { getSchool, getThinker, links, metaLine, words } = field;
+  const { ORDER } = sphereOf(field);
   const timeline = view === "timeline";
   const hasCard = !!focus || threadOpen;
   const showThinker = !!focus && !!thinker && !threadOpen;
-  const { C, paths, nodes, threadPts } = useLayout(focus, hasCard);
+  const { C, paths, nodes, threadPts } = useLayout(field, focus, hasCard);
   const school = focus ? getSchool(focus) : undefined;
   const thinkerData = thinker ? getThinker(thinker) : undefined;
 
@@ -104,7 +117,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
     const ids = new Set([hoverId]);
     for (const l of links) if (l.from === hoverId) ids.add(l.to); else if (l.to === hoverId) ids.add(l.from);
     return ids;
-  }, [hoverId]);
+  }, [hoverId, links]);
   useEffect(() => {
     let alive = true;
     document.fonts?.ready.then(() => alive && setTick((t) => t + 1));
@@ -113,8 +126,8 @@ export function GlobeView({ nav }: { nav: Nav }) {
     return () => { alive = false; window.removeEventListener("resize", onResize); };
   }, []);
 
-  const key = `${focus}|${hasCard}|${showThinker ? thinker : ""}|${threadOpen}|${nav.openTheme}`;
-  const [placed, setPlaced] = useState<{ key: string; map: Record<string, LabelPlace>; ko: Rect[]; fade: { cx: number; cy: number; rx: number; ry: number } | null; under: Set<string> } | null>(null);
+  const key = `${field.id}|${focus}|${hasCard}|${showThinker ? thinker : ""}|${threadOpen}|${nav.openTheme}`;
+  const [placed, setPlaced] = useState<{ key: string; map: Record<string, LabelPlace>; ko: Rect[]; fade: { cx: number; cy: number; rx: number; ry: number } | null; under: Set<string>; clear: Rect | null } | null>(null);
 
   useLayoutEffect(() => {
     const stage = stageRef.current;
@@ -151,7 +164,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
       // ties keep the content's order, as in the design's runtime
       return { id: n.id, x: n.p.x, y: n.p.y, r: n.r, pref: n.p.out, ord: (n.near ? 0 : Math.round(n.p.theta)) + ORDER[n.id] * 1e-4, w: el ? inkWidth(el, k) : 0, h: el?.offsetHeight ?? 0 };
     });
-    const map = placeLabels(inputs, fixed, threadPts, C, R, W, H);
+    const map = placeLabels(inputs, fixed, threadPts, C, R, W, H, field.dense ? 4 : 6);
     // A wrapped name's box is wider than its lines; shift the box so the lines sit where the placer put them.
     for (const [id, pl] of Object.entries(map)) {
       const extra = boxW[id] - pl.rect.w;
@@ -179,8 +192,10 @@ export function GlobeView({ nav }: { nav: Nav }) {
         }
       }
     }
-    setPlaced({ key, map, ko: ko.concat(titleLines), fade, under });
-  }, [key, tick, nodes, threadPts, C]);
+    // Dense fields (music, L56): threads from the focus stop short of the whole title block, not only its text lines.
+    const clear = field.dense && focus && box ? { x: box.x - 18, y: box.y - 14, w: box.w + 36, h: box.h + 28 } : null;
+    setPlaced({ key, map, ko: ko.concat(titleLines), fade, under, clear });
+  }, [key, tick, nodes, threadPts, C, ORDER, field.dense, focus]);
 
   // Move keyboard focus to what just opened, so Tab continues from there into the card.
   const first = useRef(true);
@@ -195,8 +210,8 @@ export function GlobeView({ nav }: { nav: Nav }) {
   // just closed when its Back button had focus), and the live region says where you are.
   const said = inside && school
     ? pick !== null && school.themes[pick]
-      ? `Idea ${pick + 1} of ${school.themes.length}: ${school.themes[pick].name}. ${themeSummary(school.themes[pick])}`
-      : `Inside ${splitName(school.name).short}: ${school.themes.length} ideas`
+      ? `${words.ideaKick} ${pick + 1} of ${school.themes.length}: ${school.themes[pick].name}. ${themeSummary(school.themes[pick])}`
+      : `Inside ${splitName(school.name).short}: ${school.themes.length} ${words.ideas}`
     : "";
   const was = useRef({ inside, pick, focus });
   useEffect(() => {
@@ -211,6 +226,11 @@ export function GlobeView({ nav }: { nav: Nav }) {
   }, [inside, pick, focus, school]); // eslint-disable-line react-hooks/exhaustive-deps -- the view only picks where focus lands
 
   const ready = placed?.key === key ? placed : null;
+  const whyNode = (() => {
+    const n = focus && hovered ? nodes.find((m) => m.id === hovered && m.near) : undefined;
+    const text = n?.near ? n.near.link.reason || n.near.reason : "";
+    return n && text ? { label: n.label, text } : null;
+  })();
 
   const onStageClick = (e: React.MouseEvent) => {
     if (inside) return;
@@ -222,7 +242,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
     <div className="desk">
       {/* Clicking empty space returns to the overview; Esc and the logo do the same for keyboard users. */}
       <div
-        className={["stage", timeline && "tl", still && "still", lit && "hovering", inside && school && "inside", inside && pick !== null && "has-pick"].filter(Boolean).join(" ")}
+        className={["stage", timeline && "tl", still && "still", lit && "hovering", field.dense && showThinker && "sat-open", inside && school && "inside", inside && pick !== null && "has-pick"].filter(Boolean).join(" ")}
         ref={stageRef}
         onClick={onStageClick}
         onMouseMove={still ? () => setStill(false) : undefined}
@@ -257,6 +277,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
             {focus && ready?.fade && (
               <ellipse cx={ready.fade.cx} cy={ready.fade.cy} rx={ready.fade.rx} ry={ready.fade.ry} fill="url(#fade)" />
             )}
+            {ready?.clear && <rect x={ready.clear.x} y={ready.clear.y} width={ready.clear.w} height={ready.clear.h} rx="22" fill="#000" />}
             {ready?.ko.map((p, i) => (
               <rect key={i} x={p.x - 5} y={p.y - 3} width={p.w + 10} height={p.h + 6} rx="6" fill="#000" />
             ))}
@@ -280,7 +301,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
                 onFocus={() => setHovered(n.id)}
                 onBlur={() => setHovered((h) => (h === n.id ? null : h))}
                 data-id={n.id}
-                aria-label={n.rest ? `${n.name}${v ? `, ${stateLabel(st)}` : ""}` : undefined}
+                aria-label={n.rest ? `${n.name}${v ? `, ${stateLabel(st, words.allSeen)}` : ""}` : undefined}
               >
                 <i className="dot" style={{ width: 2 * n.r, height: 2 * n.r }} />
                 <span
@@ -290,14 +311,9 @@ export function GlobeView({ nav }: { nav: Nav }) {
                 >
                   {/* name first, then what it did, so it reads as a sentence: "Marxism / inspired it" (#23) */}
                   <b className={n.label.length > 20 ? "wrap" : undefined}>{n.label}</b>
-                  {n.near && (
-                    <em>
-                      {n.near.verb}
-                      {/* the link's reason, on hover or keyboard focus only (L20) */}
-                      {n.near.reason && <span className="why">· {n.near.reason}</span>}
-                    </em>
-                  )}
-                  {v && <span className="sr-only">, {stateLabel(st)}</span>}
+                  {n.near && <em>{n.near.verb}</em>}
+                  {n.near && (n.near.link.reason || n.near.reason) && <span className="sr-only">: {n.near.link.reason || n.near.reason}</span>}
+                  {v && <span className="sr-only">, {stateLabel(st, words.allSeen)}</span>}
                 </span>
               </button>
             );
@@ -332,6 +348,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
           <button type="button" className="wm" translate="no" title="Back to the whole field" aria-label="Meander, back to the whole field" onClick={nav.overview}>
             <Mark />Meander
           </button>
+          <FieldSwitch nav={nav} />
           <MenuBar nav={nav} />
         </header>
 
@@ -345,6 +362,12 @@ export function GlobeView({ nav }: { nav: Nav }) {
           </div>
         )}
         <p className="sr-only" aria-live="polite">{said}</p>
+        {/* F2 (L56): a hovered or focused neighbour's full reason, one quiet line under the globe, clear of every label */}
+        {whyNode && !inside && !timeline && (
+          <p className="why-line" style={{ left: C[0] }} aria-hidden="true">
+            <b>{whyNode.label}</b> {whyNode.text}
+          </p>
+        )}
 
         {threadOpen ? (
           <aside className="card" id="thread-panel" aria-label="Your thread" ref={cardRef}>

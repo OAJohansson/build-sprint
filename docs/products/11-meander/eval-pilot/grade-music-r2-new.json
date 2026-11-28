@@ -1,0 +1,1818 @@
+{
+ "batch": "5,6,7 (round 2)",
+ "counts": {
+  "claims": 529,
+  "supported": 491,
+  "drift": 28,
+  "unsupported": 8,
+  "wrong": 2,
+  "newcomer": 1,
+  "fairness": 14
+ },
+ "counts_after_grader_fixes": {
+  "claims": 529,
+  "supported": 497,
+  "drift": 28,
+  "unsupported": 2,
+  "wrong": 2,
+  "newcomer": 1,
+  "fairness": 14
+ },
+ "by_part": {
+  "A": {
+   "genres": [
+    "traditional-pop",
+    "pop-music"
+   ],
+   "counts": {
+    "claims": 56,
+    "supported": 49,
+    "drift": 6,
+    "unsupported": 1,
+    "wrong": 0,
+    "newcomer": 0,
+    "fairness": 5
+   }
+  },
+  "B": {
+   "genres": [
+    "k-pop",
+    "indie-rock",
+    "post-punk"
+   ],
+   "counts": {
+    "claims": 114,
+    "supported": 104,
+    "drift": 3,
+    "unsupported": 5,
+    "wrong": 2,
+    "newcomer": 0,
+    "fairness": 0
+   }
+  },
+  "C": {
+   "genres": [
+    "krautrock",
+    "dancehall",
+    "son-cubano"
+   ],
+   "counts": {
+    "claims": 85,
+    "supported": 78,
+    "drift": 5,
+    "unsupported": 2,
+    "wrong": 0,
+    "newcomer": 0,
+    "fairness": 2
+   }
+  },
+  "D": {
+   "genres": [
+    "samba",
+    "highlife"
+   ],
+   "counts": {
+    "claims": 52,
+    "supported": 48,
+    "drift": 4,
+    "unsupported": 0,
+    "wrong": 0,
+    "newcomer": 0,
+    "fairness": 0
+   }
+  },
+  "E": {
+   "genres": [
+    "afrobeats",
+    "amapiano",
+    "hi-nrg"
+   ],
+   "counts": {
+    "claims": 101,
+    "supported": 99,
+    "drift": 2,
+    "unsupported": 0,
+    "wrong": 0,
+    "newcomer": 0,
+    "fairness": 3
+   }
+  },
+  "F": {
+   "genres": [
+    "industrial-music",
+    "hardcore-electronic-dance-music-genre",
+    "grime-music"
+   ],
+   "counts": {
+    "claims": 121,
+    "supported": 113,
+    "drift": 8,
+    "unsupported": 0,
+    "wrong": 0,
+    "newcomer": 1,
+    "fairness": 4
+   }
+  }
+ },
+ "scope": "All round-1 items in grade-5/6/7 as they now read (replacements graded; DJ Paul Elstak items resolved by removal, not counted), every tagline, link label and reason, artist summary, recording and study prompt, contributions touched in round 1 or for new artists, and every allegation/controversy sentence plus an omission scan of each artist article.",
+ "study_prompts": "All 66 prompts machine-checked: fixed opener + the card summary and contributions verbatim + a Start-with close naming the card recording; prompt sources equal the union of the card sources. Closers for Berlin, Buzzcocks, Bikini Kill, Vera, Cosey Fanni Tutti and Liza N Eliaz add no facts beyond the card.",
+ "grader_edits": [
+  "batch-5 traditional-pop.tagline: added source Bing_Crosby#Success as a solo singer (crooners).",
+  "batch-5 post-punk.tagline: added source Post-punk#Influences (art-school).",
+  "batch-5 post-punk Joy Division summary and study prompt: removed \"near Manchester\" (not in corpus).",
+  "batch-6 dancehall Yellowman summary and study prompt: added sources Yellowman#Career and #Infobox (Kingston, early 1980s)."
+ ],
+ "notes": {
+  "part-A.scope": "56 claims: 20 round-1 items (12 traditional-pop, 8 pop-music), 2 taglines, 16 further link labels/reasons (10 links x2 minus 4 round-1 overlaps), 4 further artist summaries, 6 further artist recordings, 8 study prompts. Allegation sentences (Crosby, Sinatra, Jackson summaries) graded inside the summaries; own-article greps for all 8 artists.",
+  "part-A.round1_now_supported": [
+   "traditional-pop.description",
+   "traditional-pop.date_range (fairness cleared: description now names the 1980s standards revivals)",
+   "traditional-pop.hallmark1",
+   "traditional-pop.hallmark3",
+   "traditional-pop.link1.label",
+   "traditional-pop.link2.reason",
+   "traditional-pop.link4.reason",
+   "traditional-pop.artist.Bing Crosby.recording",
+   "traditional-pop.recording1",
+   "traditional-pop.artist.Frank Sinatra.summary",
+   "traditional-pop.artist.Patti Page.summary",
+   "pop-music.hallmark4",
+   "pop-music.hallmark5 (Blackout claim is in Pop_music#21st century)",
+   "pop-music.link1.label",
+   "pop-music.artist.Michael Jackson.c2",
+   "pop-music.artist.Whitney Houston.summary",
+   "pop-music.artist.Whitney Houston.c2",
+   "pop-music.recording3 (2020 = chart peak per Synth-pop#21st-century revival)"
+  ],
+  "part-B.claim_counting": "114 claims: the 21 round-1 items for these genres as they now read; each tagline (3); every link label and reason (k-pop 6 links, indie-rock 6, post-punk 12, minus the 2 k-pop reasons already counted as round-1 items); every artist's summary, recording and study prompt (15 artists, minus the 2 indie recordings already counted); and the one controversy sentence (k-pop hallmark5).",
+  "part-B.round1_status": "Resolved and now supported (17 of 21): k-pop place, description, listen_for2, listen_for3, hallmark1 (new jack swing glossed from Electro_(music)#Electro-soul), hallmark2, link reasons 2 and 5; indie-rock debatable (Alternative_rock#Indie rock now in genre sources), listen_for3, hallmark2 (jangle pop glossed), Bikini Kill c2; post-punk hallmark3, hallmark5, Siouxsie dates, PiL dates. Still open: Buzzcocks recording and indie recording1 (kind still 'album' for an EP), Bikini Kill recording (year issue resolved by allowing null, but own-recording rule fails), post-punk description (one new date drift), Siouxsie c1 (facts fixed, long verbatim quote).",
+  "part-B.study_prompts": "Checked by machine: all 15 are the card's summary + contributions word for word with the fixed opener and a 'Start with <recording>' closer. Buzzcocks closer ('the Spiral Scratch EP (1977)') and Bikini Kill closer ('the single Joan Jett produced for them (its year is not in these facts)') add nothing beyond c1/c2. Prompts inherit: Siouxsie (c1 quote), Joy Division (summary), Bikini Kill (recording).",
+  "part-B.controversy": "k-pop hallmark5 (criticism of training system, commercialism and treatment of artists; more autonomy in the 2020s) matches K-pop#intro, #Idol trainee and #Working conditions. Allegation grep of all 15 artists' articles found no serious sourced allegation (violence, sexual abuse, hate speech, conviction) against any artist. Noted but not flagged: BTS#Love Yourself album series (2018 Nazi-symbolism clothing and atomic-bomb T-shirt; Big Hit apologised), H.O.T. and Seo Taiji plagiarism accusations, PiL contentious 1980 shows and a Lydon quote on Israel — none in the serious categories.",
+  "part-B.rankings_hedges": "No rankings on the cards (sources' Rolling Stone, Spin, 'best-selling', 'biggest girl group', 'best band of the 1990s' all left out). Hedges kept: 'considered the first K-pop idol group', 'one of the first idol boy bands', 'often called the Queen of K-pop', 'credited with pioneering rap', 'one of the first punk groups to set up an independent label', 'widely seen as one of the leading bands'.",
+  "part-C.counting": "85 claims: 21 round-1 items (krautrock 6, dancehall 5, son-cubano 10; all 21 now supported except Shabba Ranks summary, which keeps two residues), 3 taglines, 16 links x label+reason less 4 reasons already in round-1 (28), 13 artists x summary/recording/prompt less 8 already in round-1 (31), and 2 more controversy sentences (dancehall.hallmark4, Lady Saw c1). The two Shabba summary edits count as one claim.",
+  "part-C.notes": {
+   "recordings": "All 13 artist recordings pass the own-recording rule. María Teresa Vera now 'Mujer bandolera' (1918) with by: Sexteto Habanero Godínez (Sexteto_Habanero#Origins: credited to that act, oldest known sexteto-format recordings; Vera on lead vocals and claves 'according to Díaz Ayala'); the prompt's closer 'credited to Sexteto Habanero Godínez' is the card's `by` field, so it stays within card facts. Pérez Prado's Mambo No. 5 now cites Mambo_(music) for 1950. Borderline pass kept: Trio Matamoros 'El que siembra su maíz' is named as Miguel Matamoros's first hit, without saying the trio recorded it.",
+   "controversy": "Shabba Ranks: allegations now as plain as the source with the outcome (dropped from Bobby Brown concert, apologised): pass, apart from 'British TV'. dancehall.hallmark4: hedge 'in some cases' and outcome restored by fix. Lady Saw c1 (shows banned while lewd male shows were not): matches Lady_Saw#Style. Omission scan of all 13 own articles: no serious allegation left out. Yellowman#Philosophy says the slackness style 'sometimes has homophobic lyrics' but quotes him speaking against anti-gay lyrics: not an allegation against him. Faust#1970–1975 mentions three members briefly arrested over an unpaid studio bill in 1975: minor, not in the serious class. Sean Paul's article mentions his father's manslaughter conviction: not about the artist.",
+   "links": "All 16 labels pass; all reasons are plain statements about the music now (dub and funk fixed). Salsa reason is two sentences (brief asks for one) but every fact is sourced.",
+   "rankings": "Only residue: Shabba Ranks 'one of the most popular Jamaican musicians in the world' (fixed above). Soft hedged lines left as is: son 'perhaps Cuba's most popular music' (hallmark3, source hedges)."
+  },
+  "part-D.claim_counting": "samba 28: 12 round-1 items; tagline; 3 link labels and 3 reasons; Donga, Cartola and Noel Rosa summaries; Carmen Miranda and Noel Rosa recordings and prompts; controversy lines (Donga c1 authorship, hallmark2 dispute, hallmark4 white performers favoured). highlife 24: 7 round-1 items; tagline; 3 link labels and 3 reasons; Guy Warren and Rex Lawson summaries; all 5 artist recordings; Warren, Lawson and Uwaifo prompts. All round-1 fixes in these two genres were applied and now pass, except for the hedges noted below.",
+  "part-D.notes": "Own-recording rule: Donga 'Native Brazilian Music' (1940) and Cartola 'Cartola' (1974) are credited to them in their own articles, which list them without calling them notable or hits (Donga's article is very short; Cartola's calls it his first record at 66). Counted as supported, but these are borderline. Noel Rosa 'Com que roupa?' and E. T. Mensah 'Ghana Freedom' are named as his hit or notable record, though neither article says outright who performed them (same as round 1). Allegation scan: no serious allegation (violence, sexual abuse, hate speech, conviction) in the articles of Donga, Carmen Miranda, Cartola, Noel Rosa, E. T. Mensah, Guy Warren, Rex Lawson or Victor Uwaifo. Miranda's 'Brazilian criticism' section (stereotyping, 'too black') is not serious under the brief and is not needed. Rankings: none. Noel Rosa's intro line about one of the greatest names and Rex Lawson's 'one of the best-known' are correctly left out.",
+  "part-E.claim_counting": "Re-graded: all 34 round-1 items for these genres (SAW items graded on Hazell Dean, the replacement: dates, summary, c1, c2, recording, prompt); every tagline; every link label and reason (8+6+5 links); every artist summary, recording and prompt (13 artists); contributions where round 1 touched them or the artist is new (Fuse ODG c2, Brenda Fassie c1, Cowley c1, Orlando c1 and c2, Sabrina c2, Dean c1 and c2); genre recordings 2 and 3 of afrobeats. Allegation sentences: Mafokate (supported: accused 2017, denied, not guilty 2019).",
+  "part-E.notes": {
+   "round1_resolved": "32 of 34 round-1 items now pass: afrobeats tagline, description (ranking removed), hallmark2, hallmark5, afrobeat label, hip-hop reason, dancehall reason (Pon Pon glossed), Fuse ODG c2, recordings 2 and 3; amapiano tagline, listen2, hallmark4, jazz label, Mafokate summary (abuse allegation with denial and 2019 not-guilty verdict), Fassie c1; hi-NRG tagline (now 'fast, camp disco... gay club sound', separates it from synth-pop), description, debatable, hallmark2, hallmark5, trance label, Cowley c1, Orlando summary (Italo_disco#Origins now cited) and c1; SAW replaced by Hazell Dean, whose dates, summary, contributions, own recording 'Searchin'' (named in her intro as best known) and prompt are supported; Sabrina c2. Remaining: Burna Boy summary/prompt omission, Davido (low).",
+   "own_recording": "All 13 artist recordings credited to the artist and named in their own article (Made in Lagos, Fall, African Giant, Love Me JeJe, Antenna, Kaffir, Weekend Special, Umshove, Water, Menergy, She Has a Way, Searchin', Boys).",
+   "allegation_scan": "Grepped all 13 artist articles. Serious items: Burna Boy 2022 shooting case (left out, flagged); Mafokate abuse case (on card, correctly worded with outcome). Not violence/sexual/hate/conviction, so not flagged: Mafokate's SAMRO unlawful-enrichment suit (2019) and alleged lottery-fund misappropriation (2023); Wizkid paternity controversy; Burna Boy 'Acting Bad' dispute and xenophobia row; Fassie's death from a cocaine overdose. Nothing in Wizkid, Tems, Fuse ODG, Kabza de Small, Tyla, Cowley, Orlando, Dean or Sabrina.",
+   "soft_superlatives": "Not flagged (chart facts, not quality rankings): afrobeats hallmark4 'Spotify's most streamed song', Kabza de Small c2 'the country's most streamed artist' (Spotify, Dec 2020). Owner may prefer to soften."
+  },
+  "part-F.counts_by_genre": {
+   "industrial-music": {
+    "claims": 51,
+    "supported": 47,
+    "drift": 4
+   },
+   "hardcore-electronic-dance-music-genre": {
+    "claims": 28,
+    "supported": 26,
+    "drift": 2,
+    "newcomer": 1
+   },
+   "grime-music": {
+    "claims": 42,
+    "supported": 40,
+    "drift": 2,
+    "fairness": 4
+   }
+  },
+  "part-F.claim_counting": "Round-1 items (15 industrial, 11 hardcore excluding 3 resolved by removal, 12 grime) plus, not already counted: tagline; every link's label and reason; every artist's summary, contributions, recording and study prompt. Study prompts are graded as the worst verdict of the card facts they repeat. Round-1 items now supported: all other 35 (incl. industrial description/debatable/listen3/hallmark4/krautrock link, TG/Front 242 dates, Cosey summary, CV c1, NIN c2, hardcore description/listen1/listen3/hallmark5/trance link/Trauner credit, Angerfist summary/c1, grime tagline/listen1/listen3/hallmark3/hallmark4, Wiley c2, Dizzee summary with 2022 conviction and dismissed appeal).",
+  "part-F.allegations": "Checked every artist article with an allegation regex. Carried and worded as the source: Wiley (antisemitic posts 'widely condemned'; 2021 charges, 2023 guilty pleas, suspended sentence; MBE removed), Dizzee Rascal (2022 conviction for assaulting his former partner, community order, appeal dismissed 2023), Throbbing Gristle ('disturbing imagery', as the source). Missing: Wiley's apology (outcome), Skepta's 2009 assault conviction and 2016 guilty plea, Lady Sovereign's 2009 assault arrest and fine. Not flagged (no serious finding or no outcome in source): Dizzee's 2005 and 2008 weapon arrests (alleged, no outcome), Front 242's press reading as 'pro-fascist' (rejected by band), Stormzy's 2025 McDonald's backlash. Cosey Fanni Tutti, Cabaret Voltaire, NIN, Trauner, Liza N Eliaz, Angerfist: nothing serious.",
+  "part-F.rankings": "None in the cards. Source rankings avoided: Angerfist 'King of Hardcore', NIN 'most popular industrial group ever', Dizzee 'greatest British rappers'/'best British hip hop album', Wiley 'King of Grime', Front 242 Billboard 'Top 500'.",
+  "part-F.resolved": [
+   {
+    "id": "hardcore-electronic-dance-music-genre.artist.DJ Paul Elstak.recording",
+    "status": "resolved by removal",
+    "note": "Artist dropped; no replacement (hardcore now has 3 artists: Trauner, Liza N Eliaz, Angerfist)."
+   },
+   {
+    "id": "hardcore-electronic-dance-music-genre.artist.DJ Paul Elstak.study",
+    "status": "resolved by removal",
+    "note": "Artist dropped."
+   },
+   {
+    "id": "hardcore-electronic-dance-music-genre.link.drum-and-bass.reason",
+    "status": "resolved by removal",
+    "note": "Link no longer in links.json or the card."
+   }
+  ]
+ },
+ "items": [
+  {
+   "id": "traditional-pop.tagline",
+   "claim": "The songwriters' and crooners' pop of the Great American Songbook, before rock and roll.",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Traditional_pop#intro",
+    "Traditional_pop#Origins"
+   ],
+   "note": "Citation-only: the cited sections cover the songwriters and the Songbook but not the singers; 'crooner' is in Bing_Crosby#Success as a solo singer. Text unchanged.",
+   "fix": {
+    "text": "The songwriters' and crooners' pop of the Great American Songbook, before rock and roll.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Traditional_pop",
+      "section": "Origins"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Bing_Crosby",
+      "section": "Success as a solo singer"
+     }
+    ]
+   },
+   "batch": 5,
+   "status": "fixed by grader (round 2)"
+  },
+  {
+   "id": "traditional-pop.artist.Irving Berlin.recording",
+   "claim": "recording: Alexander's Ragtime Band (1911), song, by: \"Emma Carus\"",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Irving_Berlin#\"Alexander's Ragtime Band\" (1911)"
+   ],
+   "note": "The section says Emma Carus 'introduced' the song in 1911 (followed by Berlin's own performance at the Friars' Frolic); it credits no recording to Carus, and the hits were by Bessie Smith, Louis Armstrong and others. `by` reads as a credited record. The study prompt's closer already handles this correctly (asks for a recording by one of the named singers), so the prompt passes.",
+   "fix": {
+    "text": "by: \"Emma Carus, who introduced it\"",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Irving_Berlin",
+      "section": "\"Alexander's Ragtime Band\" (1911)"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 5,
+    "genre": "traditional-pop",
+    "path": [
+     "artists",
+     {
+      "name": "Irving Berlin"
+     },
+     "recording",
+     "by"
+    ],
+    "old": "Emma Carus",
+    "new": "Emma Carus, who introduced it"
+   },
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "traditional-pop.artist.Bing Crosby.summary",
+   "claim": "After his death his eldest son Gary's memoir depicted him as physically and psychologically abusive, though Gary's siblings reportedly distanced themselves from the claims and a 2018 biographer called the memoir unreliable on them.",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Bing_Crosby#Children"
+   ],
+   "note": "Allegation worded weaker than the source: Bing_Crosby#Children says the siblings distanced themselves from the abuse claims 'while acknowledging that corporal punishments took place'; the card drops that and frames the rest with 'though'. Also uncovered (minor, not added): Bing_Crosby#Personal life says he spent 60 days in jail for drinking and crashing his car during Prohibition (late 1920s-early 1930s).",
+   "fix": {
+    "text": "After his death his eldest son Gary's memoir depicted him as physically and psychologically abusive; Gary's siblings reportedly acknowledged corporal punishment but distanced themselves from the abuse claims and a 2018 biographer called the memoir unreliable on them.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Bing_Crosby",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Bing_Crosby",
+      "section": "Children"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 5,
+    "genre": "traditional-pop",
+    "path": [
+     "artists",
+     {
+      "name": "Bing Crosby"
+     },
+     "summary"
+    ],
+    "old": ", though Gary's siblings reportedly distanced themselves from the claims",
+    "new": "; Gary's siblings reportedly acknowledged corporal punishment but distanced themselves from the abuse claims"
+   },
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "traditional-pop.artist.Bing Crosby.prompt",
+   "claim": "study prompt repeats the summary verbatim",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Bing_Crosby#Children"
+   ],
+   "note": "Inherits the summary drift; apply the same substring replacement to study_prompt.text (skip if the apply script re-templates prompts).",
+   "fix": {
+    "text": "same replacement as the summary",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Bing_Crosby",
+      "section": "Children"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 5,
+    "genre": "traditional-pop",
+    "path": [
+     "artists",
+     {
+      "name": "Bing Crosby"
+     },
+     "study_prompt",
+     "text"
+    ],
+    "old": ", though Gary's siblings reportedly distanced themselves from the claims",
+    "new": "; Gary's siblings reportedly acknowledged corporal punishment but distanced themselves from the abuse claims"
+   },
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "traditional-pop.artist.Frank Sinatra.allegations",
+   "claim": "(summary covers his violence toward journalists, publicists and photographers)",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Frank_Sinatra#Style and personality",
+    "Frank_Sinatra#1970–1981: \"Retirement\" and return",
+    "Frank_Sinatra#Alleged organized-crime links and Cal Neva Lodge"
+   ],
+   "note": "Violence sentence matches the source. Left out, for the PM's call (not applied): in 1974 he called Australian journalists 'bums, parasites, fags, broads and buck-and-a-half hookers' and refused to apologise (a slur, arguably hate speech); and his reported Mafia ties (alleged; he denied them). Neither is violence, sexual abuse or a conviction, so low priority.",
+   "fix": {
+    "text": "(optional) add: 'In 1974 he called Australian journalists slurs including \"fags\" and refused to apologise.'",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Frank_Sinatra",
+      "section": "1970–1981: \"Retirement\" and return"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "pop-music.link3.reason",
+   "claim": "Contemporary R&B blends rhythm and blues with pop, soul, funk and disco, and pop lists it among its fusion styles.",
+   "verdict": "drift",
+   "flags": [
+    "rule:link-reason-not-plain"
+   ],
+   "cited": [
+    "Contemporary_R%26B#intro",
+    "Pop_music#Infobox"
+   ],
+   "note": "'pop lists it among its fusion styles' describes the article's infobox, not the music.",
+   "fix": {
+    "text": "Contemporary R&B blends rhythm and blues with pop, soul, funk and disco.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Contemporary_R%26B",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Pop_music",
+      "section": "Infobox"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 5,
+    "genre": "pop-music",
+    "path": [
+     "links",
+     2,
+     "reason"
+    ],
+    "old": ", and pop lists it among its fusion styles.",
+    "new": "."
+   },
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "pop-music.artist.Britney Spears.summary",
+   "claim": "...and is credited with reviving teen pop in the late 1990s.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Britney_Spears#intro",
+    "Britney_Spears#Musical style"
+   ],
+   "note": "Hedge tightened: Musical style says she was 'credited with influencing the revival of teen pop in the late 1990s'; Legacy calls her one of the 'driving force[s]'; intro speaks of her 'role in reviving'.",
+   "fix": {
+    "text": "An American singer from Mississippi, called the 'Princess of Pop', who started on The All-New Mickey Mouse Club and is credited with helping revive teen pop in the late 1990s.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Britney_Spears",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Britney_Spears",
+      "section": "1981–1997: Early life, family, and career beginnings"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Britney_Spears",
+      "section": "Musical style"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 5,
+    "genre": "pop-music",
+    "path": [
+     "artists",
+     {
+      "name": "Britney Spears"
+     },
+     "summary"
+    ],
+    "old": "is credited with reviving teen pop in the late 1990s",
+    "new": "is credited with helping revive teen pop in the late 1990s"
+   },
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "pop-music.artist.Britney Spears.prompt",
+   "claim": "study prompt repeats the summary verbatim",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Britney_Spears#Musical style"
+   ],
+   "note": "Inherits the summary drift; same replacement (skip if prompts are re-templated).",
+   "fix": {
+    "text": "same replacement as the summary",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Britney_Spears",
+      "section": "Musical style"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 5,
+    "genre": "pop-music",
+    "path": [
+     "artists",
+     {
+      "name": "Britney Spears"
+     },
+     "study_prompt",
+     "text"
+    ],
+    "old": "is credited with reviving teen pop in the late 1990s",
+    "new": "is credited with helping revive teen pop in the late 1990s"
+   },
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "pop-music.artist.Britney Spears.allegations",
+   "claim": "(no legal matter on the card)",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Britney_Spears#2022–present: Third marriage, The Woman in Me, and retirement from the music industry"
+   ],
+   "note": "Uncovered conviction, minor: on 4 May 2026 she pled guilty to one count of reckless driving after a March 2026 DUI-suspicion arrest and got one year of probation and one day in jail (served). Not violence or abuse; PM's call whether a card needs it. Not applied.",
+   "fix": {
+    "text": "(optional) add: 'In 2026 she pleaded guilty to reckless driving and was sentenced to a year of probation.'",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Britney_Spears",
+      "section": "2022–present: Third marriage, The Woman in Me, and retirement from the music industry"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 5,
+   "status": "left out by PM decision under L60"
+  },
+  {
+   "id": "pop-music.artist.Whitney Houston.summary",
+   "claim": "An American singer and actress from Newark, New Jersey, commonly called 'the Voice' ... who broke gender and racial barriers in pop and film.",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Whitney_Houston#intro",
+    "Whitney_Houston#Early life and family",
+    "Whitney_Houston#Legal issues"
+   ],
+   "note": "Text is supported, but Whitney_Houston#Legal issues is cited for nothing on the card. That section holds a violence charge: in 1991 she was charged with fourth-degree assault after a Lexington hotel fight in which men attacked her brother; charges were dropped for contradictory evidence, and the fight reportedly began with the men's racial slurs at her. Either drop the citation or add the sentence with its outcome (PM's call; not applied).",
+   "fix": {
+    "text": "(optional) add: 'In 1991 she was charged with assault after a hotel fight in which men attacked her brother; the charges were dropped.'",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Whitney_Houston",
+      "section": "Legal issues"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "indie-rock.artist.Buzzcocks.recording",
+   "claim": "Spiral Scratch (1977, kind: album)",
+   "verdict": "wrong",
+   "flags": [],
+   "cited": [
+    "Indie_rock#Early UK DIY movement",
+    "Buzzcocks#Early years"
+   ],
+   "note": "Not fixed from round 1: kind is still 'album', but every cited section calls it a 'four-track EP' (the card's own c1 and study prompt also say EP). The writer brief only allows song|album, so this needs a schema call: allow kind 'EP' or add 'EP' to the title.",
+   "fix": {
+    "text": "{title: \"Spiral Scratch\", year: 1977, kind: \"EP\"} (or kind 'album' with title 'Spiral Scratch EP' if the app only accepts song|album)",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Indie_rock",
+      "section": "Early UK DIY movement"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Buzzcocks",
+      "section": "Early years"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "indie-rock.recording1",
+   "claim": "Buzzcocks, Spiral Scratch (1977, kind: album)",
+   "verdict": "wrong",
+   "flags": [],
+   "cited": [
+    "Indie_rock#Early UK DIY movement",
+    "Buzzcocks#Early years"
+   ],
+   "note": "Same as the artist recording: the corpus calls it an EP every time; kind still 'album'.",
+   "fix": {
+    "text": "{artist: Buzzcocks, title: \"Spiral Scratch\", year: 1977, kind: \"EP\"}",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Indie_rock",
+      "section": "Early UK DIY movement"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Buzzcocks",
+      "section": "Early years"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "indie-rock.artist.Bikini Kill.recording",
+   "claim": "Rebel Girl (year: null, song)",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Bikini_Kill#1990 – 1997: Formation and career",
+    "Bikini_Kill#1998 – 2016: Post-breakup"
+   ],
+   "note": "Credited to the band, but the own-recording rule fails: the article only says Joan Jett produced the single 'New Radio'/'Rebel Girl' and that a 2016 clip using it went viral; it never calls the song notable, a hit or influential, and gives no year. The one release the article does credit with an effect is the Bikini Kill EP, which 'helped establish the band's audience' (also undated).",
+   "fix": {
+    "text": "Recording: {title: \"Bikini Kill\" (EP), year: null, kind: album/EP}, with c2 unchanged; prompt close: 'Start with their first EP, Bikini Kill, on Kill Rock Stars (its year is not in these facts)'. Or keep 'Rebel Girl' and accept it as a credited single the article names.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Bikini_Kill",
+      "section": "1990 – 1997: Formation and career"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "indie-rock.artist.Bikini Kill.prompt",
+   "claim": "Start with \"Rebel Girl\", the single Joan Jett produced for them (its year is not in these facts)...",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Bikini_Kill#1990 – 1997: Formation and career"
+   ],
+   "note": "The closer adds nothing beyond the card (Jett-produced single is in c2; the year caveat is honest), but it inherits the recording problem above. Regenerate if the recording changes.",
+   "fix": {
+    "text": "Regenerate the closer from whatever recording is chosen.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Bikini_Kill",
+      "section": "1990 – 1997: Formation and career"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "post-punk.tagline",
+   "claim": "Punk's experimental aftermath: melodic bass, angular guitars, dub and art-school ideas.",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Post-punk#intro",
+    "Post-punk#Characteristics"
+   ],
+   "note": "Citation only: melodic basslines, angular guitars and dub are in the cited sections, but 'art-school' is in Post-punk#Influences ('returned to the art school tradition'), which isn't cited.",
+   "fix": {
+    "text": "(text unchanged) add source Post-punk#Influences",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Post-punk",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Post-punk",
+      "section": "Characteristics"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Post-punk",
+      "section": "Influences"
+     }
+    ]
+   },
+   "batch": 5,
+   "status": "fixed by grader (round 2)"
+  },
+  {
+   "id": "post-punk.description",
+   "claim": "Its lighter, more pop-oriented relative, new wave, grew up alongside it, reached the charts from 1979 and spread across America through MTV...",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "New_wave_music#1970s: Origins and breakthrough"
+   ],
+   "note": "Round-1 fix applied well (glosses for dub and krautrock, new wave alongside). One date is rounded the wrong way: the source says new wave acts 'began to make chart appearances' in late 1978 and 1979 (the Cars entered the US top 40 in October 1978; 'Heart of Glass' hit number one in January 1979).",
+   "fix": {
+    "text": "...grew up alongside it, reached the charts from late 1978 and spread across America through MTV; both have had revivals since the 2000s.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/New_wave_music",
+      "section": "1970s: Origins and breakthrough"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/New_wave_music",
+      "section": "intro"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 5,
+    "genre": "post-punk",
+    "path": [
+     "description"
+    ],
+    "old": "reached the charts from 1979",
+    "new": "reached the charts from late 1978"
+   },
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "post-punk.artist.Siouxsie and the Banshees.c1",
+   "claim": "With guitarist John McKay and drummer Kenny Morris they made 'a form of post-punk discord full of daring rhythmic and sonic experimentation'; their debut The Scream (1978) was widely acclaimed...",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Siouxsie_and_the_Banshees#intro",
+    "Siouxsie_and_the_Banshees#Musical style"
+   ],
+   "note": "Facts now match the source (round-1 fix applied), but it quotes 12 words verbatim; the brief allows quotations of only a few words. Paraphrase.",
+   "fix": {
+    "text": "With guitarist John McKay and drummer Kenny Morris they made a discordant post-punk full of daring rhythmic and sonic experiment; their debut The Scream (1978) was widely acclaimed, and the lyrics of their first two albums dealt with madness, childhood and escaping suburbia.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Siouxsie_and_the_Banshees",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Siouxsie_and_the_Banshees",
+      "section": "Musical style"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 5,
+    "genre": "post-punk",
+    "path": [
+     "artists",
+     {
+      "name": "Siouxsie and the Banshees"
+     },
+     "contributions",
+     0,
+     "text"
+    ],
+    "old": "they made 'a form of post-punk discord full of daring rhythmic and sonic experimentation'",
+    "new": "they made a discordant post-punk full of daring rhythmic and sonic experiment"
+   },
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "post-punk.artist.Siouxsie and the Banshees.prompt",
+   "claim": "(repeats c1 verbatim, including the long quotation)",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Siouxsie_and_the_Banshees#intro"
+   ],
+   "note": "Inherits the c1 quotation; regenerate after the c1 edit.",
+   "fix": {
+    "text": "Regenerate from the fixed c1.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Siouxsie_and_the_Banshees",
+      "section": "intro"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 5,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "post-punk.artist.Joy Division.summary",
+   "claim": "A band from Salford, near Manchester (Ian Curtis, Bernard Sumner, Peter Hook and Stephen Morris), formed after a 1976 Sex Pistols gig and signed to Factory Records.",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Joy_Division#intro"
+   ],
+   "note": "'near Manchester' is not in the corpus (intro and Infobox say only Salford / Salford, England). The rest is supported.",
+   "fix": {
+    "text": "A band from Salford (Ian Curtis, Bernard Sumner, Peter Hook and Stephen Morris), formed after a 1976 Sex Pistols gig and signed to Factory Records.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Joy_Division",
+      "section": "intro"
+     }
+    ]
+   },
+   "batch": 5,
+   "status": "fixed by grader (round 2)"
+  },
+  {
+   "id": "post-punk.artist.Joy Division.prompt",
+   "claim": "(repeats the summary, including 'near Manchester')",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Joy_Division#intro"
+   ],
+   "note": "Inherits the summary; regenerate after the summary edit.",
+   "fix": {
+    "text": "Regenerate from the fixed summary.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Joy_Division",
+      "section": "intro"
+     }
+    ]
+   },
+   "batch": 5,
+   "status": "fixed by grader (round 2)"
+  },
+  {
+   "id": "krautrock.artist.Neu!.summary",
+   "claim": "...with producer Conny Plank often called their 'hidden member'.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Neu!#intro",
+    "Neu!#Infobox"
+   ],
+   "note": "Intro: Plank 'has been regarded as the group's \"hidden member\"'. 'Often called' adds a frequency the source does not give. Rest supported.",
+   "fix": {
+    "text": "...with producer Conny Plank regarded as their 'hidden member'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Neu!",
+      "section": "intro"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 6,
+    "genre": "krautrock",
+    "path": [
+     "artists",
+     {
+      "name": "Neu!"
+     },
+     "summary"
+    ],
+    "old": "often called their 'hidden member'",
+    "new": "regarded as their 'hidden member'"
+   },
+   "batch": 6,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "krautrock.artist.Neu!.prompt",
+   "claim": "Prompt repeats the summary's 'often called their hidden member'.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Neu!#intro"
+   ],
+   "note": "Inherits the summary drift; regenerate (same substring replacement).",
+   "fix": {
+    "text": "Regenerate from the fixed Neu! summary.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Neu!",
+      "section": "intro"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 6,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "dancehall.hallmark4",
+   "claim": "The genre has also been criticised for violent and anti-gay lyrics, which led to cancelled concerts and campaigns such as Stop Murder Music.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Dancehall#Anti-gay lyrics",
+    "Dancehall#Early developments - Early 1970s"
+   ],
+   "note": "Source hedges the cancellations ('In some cases ... have had their concerts cancelled') and gives the outcome ('many artists have over time apologized', some signed the Reggae Compassionate Act). Card drops the hedge and the outcome.",
+   "fix": {
+    "text": "The genre has also been criticised for violent and anti-gay lyrics, which in some cases led to cancelled concerts and to campaigns such as Stop Murder Music; many artists have since apologised.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Dancehall",
+      "section": "Anti-gay lyrics"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 6,
+    "genre": "dancehall",
+    "path": [
+     "hallmarks",
+     3,
+     "text"
+    ],
+    "old": "which led to cancelled concerts and campaigns such as Stop Murder Music.",
+    "new": "which in some cases led to cancelled concerts and to campaigns such as Stop Murder Music; many artists have since apologised."
+   },
+   "batch": 6,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "dancehall.artist.Yellowman.summary",
+   "claim": "Winston Foster, a Kingston deejay who rose to fame in the early 1980s...",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Yellowman#intro"
+   ],
+   "note": "Citation only: the intro says he 'first became popular in Jamaica in the 1980s' and gives no place. Kingston (Infobox birth place; grew up at Alpha Boys School in Kingston) and early-1980s success ('working with producer Henry Junjo Lawes during the early 1980s'; signed 1981) are in Yellowman#Career and #Infobox.",
+   "fix": {
+    "text": "Text unchanged; add sources Yellowman#Career and Yellowman#Infobox.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Yellowman",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Yellowman",
+      "section": "Career"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Yellowman",
+      "section": "Infobox"
+     }
+    ]
+   },
+   "batch": 6,
+   "status": "fixed by grader (round 2)"
+  },
+  {
+   "id": "dancehall.artist.Yellowman.prompt",
+   "claim": "Prompt repeats the Yellowman summary.",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": [
+    "Yellowman#intro"
+   ],
+   "note": "Citation only; add the same two sources to the prompt's sources.",
+   "fix": {
+    "text": "Text unchanged; add Yellowman#Career and #Infobox to sources.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Yellowman",
+      "section": "Career"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Yellowman",
+      "section": "Infobox"
+     }
+    ]
+   },
+   "batch": 6,
+   "status": "fixed by grader (round 2)"
+  },
+  {
+   "id": "dancehall.artist.Shabba Ranks.summary",
+   "claim": "...and one of the most popular Jamaican musicians in the world in the late 1980s and early 1990s. ... after saying on British TV in 1992 that the Bible advocated the 'crucifixion of homosexuals' he was dropped from a Bobby Brown concert and later apologised.",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Shabba_Ranks#intro",
+    "Shabba_Ranks#Controversy",
+    "Shabba_Ranks#Early life",
+    "Shabba_Ranks#Career"
+   ],
+   "note": "Round-1 fix applied: controversy now as plain as Shabba_Ranks#Controversy, with the outcome (dropped from concert, apologised) — that part passes. Two residues: (1) 'one of the most popular Jamaican musicians in the world' is a ranking (quoted from the intro), which the content rules exclude; (2) 'British TV' is not in the corpus, which names Channel 4's The Word. Kingston, toasting: supported.",
+   "fix": {
+    "text": "Rexton Gordon, a deejay raised in Kingston who toasted rather than sang, and an international star of the late 1980s and early 1990s who gained popularity in North America with his 1990 album Just Reality. He has been controversial for homophobia: his 1990 song 'Wicked Inna Bed' includes lyrics about shooting gay men, and after saying on Channel 4's The Word in 1992 that the Bible advocated the 'crucifixion of homosexuals' he was dropped from a Bobby Brown concert and later apologised.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+      "section": "Early life"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+      "section": "Career"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+      "section": "Controversy"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 6,
+    "genre": "dancehall",
+    "path": [
+     "artists",
+     {
+      "name": "Shabba Ranks"
+     },
+     "summary"
+    ],
+    "old": "and one of the most popular Jamaican musicians in the world in the late 1980s and early 1990s.",
+    "new": "and an international star of the late 1980s and early 1990s who gained popularity in North America with his 1990 album Just Reality."
+   },
+   "batch": 6,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "dancehall.artist.Shabba Ranks.summary.tv",
+   "claim": "after saying on British TV in 1992",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Shabba_Ranks#Controversy"
+   ],
+   "note": "Second edit for the same summary: the source says 'Channel 4 music show The Word'; 'British' is not stated. (Counted with the summary item above.)",
+   "fix": {
+    "text": "after saying on Channel 4's The Word in 1992",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+      "section": "Controversy"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 6,
+    "genre": "dancehall",
+    "path": [
+     "artists",
+     {
+      "name": "Shabba Ranks"
+     },
+     "summary"
+    ],
+    "old": "on British TV in 1992",
+    "new": "on Channel 4's The Word in 1992"
+   },
+   "batch": 6,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "dancehall.artist.Shabba Ranks.prompt",
+   "claim": "Prompt repeats the Shabba Ranks summary (ranking and 'British TV').",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Shabba_Ranks#intro",
+    "Shabba_Ranks#Controversy"
+   ],
+   "note": "Inherits both summary residues; regenerate with the same two substring replacements.",
+   "fix": {
+    "text": "Regenerate from the fixed Shabba Ranks summary.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+      "section": "Career"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Shabba_Ranks",
+      "section": "Controversy"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 6,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "samba.debatable",
+   "claim": "...and Donga's sole authorship was soon contested by his contemporaries.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Samba#intro",
+    "Samba#Beginnings in a Bahian terreiro"
+   ],
+   "note": "Source: his exclusive authorship 'was soon contested by some of his contemporaries'. The hedge 'some' is dropped. The rest of the round-1 fix is in and supported.",
+   "fix": {
+    "text": "Its first record: 'Pelo Telefone' is often called the first samba, but some scholars note earlier songs labelled samba, its rhythm and instruments were closer to maxixe, and Donga's sole authorship was soon contested by some of his contemporaries.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Samba",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Samba",
+      "section": "Beginnings in a Bahian terreiro"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 6,
+    "genre": "samba",
+    "path": [
+     "debatable"
+    ],
+    "old": "was soon contested by his contemporaries",
+    "new": "was soon contested by some of his contemporaries"
+   },
+   "batch": 6,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "samba.artist.Donga.c1",
+   "claim": "He composed 'Pelo Telefone', registered in 1916 and considered the first recorded samba, though other musicians disputed his sole authorship.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Donga_(musician)#intro",
+    "Donga_(musician)#Life and career",
+    "Samba#Beginnings in a Bahian terreiro"
+   ],
+   "note": "This is a controversy line. Source: authorship 'soon contested by some of his contemporaries who accused him of appropriating a collective, anonymous creation'. 'Other musicians' drops the hedge 'some'. It is otherwise no stronger than the source.",
+   "fix": {
+    "text": "He composed 'Pelo Telefone', registered in 1916 and considered the first recorded samba, though some of his contemporaries disputed his sole authorship.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Donga_(musician)",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Donga_(musician)",
+      "section": "Life and career"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Samba",
+      "section": "Beginnings in a Bahian terreiro"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 6,
+    "genre": "samba",
+    "path": [
+     "artists",
+     {
+      "name": "Donga"
+     },
+     "contributions",
+     0,
+     "text"
+    ],
+    "old": "though other musicians disputed his sole authorship",
+    "new": "though some of his contemporaries disputed his sole authorship"
+   },
+   "batch": 6,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "samba.artist.Donga.prompt",
+   "claim": "...though other musicians disputed his sole authorship...",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [],
+   "note": "Repeats c1 word for word. The round-1 recording fix is in: it now starts with 'Native Brazilian Music' (1940). Regenerate with the same substring swap as c1.",
+   "fix": {
+    "text": "Same replacement as samba.artist.Donga.c1 inside the prompt text.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Samba",
+      "section": "Beginnings in a Bahian terreiro"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 6,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "highlife.hallmark4",
+   "claim": "From the 1940s highlife split into guitar bands, at first mostly rural and popularised by E.K. Nyame's Akan Trio...",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Highlife#Dance and guitar band highlife",
+    "Highlife#1950s",
+    "Guy_Warren#Biography"
+   ],
+   "note": "The round-1 rural hedge is in. Source: 'E.K. Nyame and his Akan Trio helped to popularize guitar band highlife'. 'Popularised by' drops the 'helped to' hedge.",
+   "fix": {
+    "text": "From the 1940s highlife split into guitar bands, at first mostly rural, which E.K. Nyame's Akan Trio helped popularise, and urban dance bands like E. T. Mensah's Tempos, a band Guy Warren also played in. Warren is credited with introducing highlife to the United States.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Highlife",
+      "section": "Dance and guitar band highlife"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Highlife",
+      "section": "1950s"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 6,
+    "genre": "highlife",
+    "path": [
+     "hallmarks",
+     3,
+     "text"
+    ],
+    "old": "guitar bands, at first mostly rural and popularised by E.K. Nyame's Akan Trio,",
+    "new": "guitar bands, at first mostly rural, which E.K. Nyame's Akan Trio helped popularise,"
+   },
+   "batch": 6,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "afrobeats.listen1",
+   "claim": "A driving drum pattern that leads the song, often built on a 3–2 or 2–3 clave (a rhythm laid over a normal 4/4 beat that many West African styles use).",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Afrobeats#Characteristics",
+    "Afrobeats#Mid-2010s"
+   ],
+   "note": "Round-1 fix applied, but the gloss adds that 'many West African styles use' the clave; the source says only that afrobeats commonly features a 3–2 or 2–3 clave over 4/4 and that its beats harken to traditional West African drumming.",
+   "fix": {
+    "text": "A driving drum pattern that leads the song, often a 3–2 or 2–3 rhythm called a clave over a normal 4/4 beat, echoing traditional West African drums.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Afrobeats",
+      "section": "Characteristics"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 7,
+    "genre": "afrobeats",
+    "path": [
+     "listen_for",
+     0,
+     "text"
+    ],
+    "old": "often built on a 3–2 or 2–3 clave (a rhythm laid over a normal 4/4 beat that many West African styles use).",
+    "new": "often a 3–2 or 2–3 rhythm called a clave over a normal 4/4 beat, echoing traditional West African drums."
+   },
+   "batch": 7,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "afrobeats.artist.Burna Boy.summary",
+   "claim": "A Nigerian singer, songwriter and producer from Port Harcourt, whose grandfather once managed Fela Kuti. He calls his music 'Afro-fusion', mixing afrobeat, dancehall, hip-hop, R&B and reggae.",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Burna_Boy#intro",
+    "Burna_Boy#Early life and education",
+    "Burna_Boy#Artistry"
+   ],
+   "note": "Still unfixed from round 1. His own article has a section '2022 Lagos nightclub shooting case': his armed security escorts allegedly shot and wounded two people; five guards were arrested and charged with attempted murder; he later denied the shooting rumour. No verdict is given in the source. A serious violence allegation left out. (Lesser, same article: a deleted 2019 tweet saying he would physically confront AKA; reconciled 2022.) This fix is an addition, not a wording correction.",
+   "fix": {
+    "text": "...mixing afrobeat, dancehall, hip-hop, R&B and reggae. In 2022 his armed security escorts allegedly shot and wounded two people at a Lagos nightclub; five of the guards were charged with attempted murder, and he later denied the shooting rumour.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Burna_Boy",
+      "section": "2022 Lagos nightclub shooting case"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 7,
+    "genre": "afrobeats",
+    "path": [
+     "artists",
+     {
+      "name": "Burna Boy"
+     },
+     "summary"
+    ],
+    "old": "R&B and reggae.",
+    "new": "R&B and reggae. In 2022 his armed security escorts allegedly shot and wounded two people at a Lagos nightclub; five of the guards were charged with attempted murder, and he later denied the shooting rumour.",
+    "add_sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Burna_Boy",
+      "section": "2022 Lagos nightclub shooting case"
+     }
+    ],
+    "kind": "addition"
+   },
+   "batch": 7,
+   "status": "left out by PM decision under L60"
+  },
+  {
+   "id": "afrobeats.artist.Burna Boy.prompt",
+   "claim": "Study prompt (repeats summary)",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Burna_Boy#intro",
+    "Burna_Boy#Artistry"
+   ],
+   "note": "Inherits the summary omission; regenerate from the fixed summary (the apply script's prompt replacement covers it).",
+   "fix": {
+    "text": "Regenerate with the fixed summary.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Burna_Boy",
+      "section": "2022 Lagos nightclub shooting case"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 7,
+   "status": "left out by PM decision under L60"
+  },
+  {
+   "id": "afrobeats.artist.Davido.summary",
+   "claim": "A Nigerian-American singer, songwriter and producer, born in Atlanta and raised in Lagos, whose music spans afrobeats, hip hop and R&B.",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Davido#intro",
+    "Davido#Artistry"
+   ],
+   "note": "Low severity, unchanged from round 1: his article says only, in one sentence, that 'Fia' (2017) addresses his arrest and Caroline Danjuma's role in fuelling a rumour he was involved in the death of Tagbo Umenike. Source frames it as a rumour and gives no charge or outcome, so leaving it out is defensible; owner call whether to add.",
+   "fix": {
+    "text": "(optional, append) His 2017 song 'Fia' addresses his arrest and a rumour that he was involved in the death of Tagbo Umenike.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Davido",
+      "section": "2017–2018: \"If\", \"Fall\", \"Fia\" and \"Assurance\""
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 7,
+   "status": "left out by PM decision under L60"
+  },
+  {
+   "id": "hi-nrg.link.techno.label",
+   "claim": "Euro disco into techno",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Hi-NRG#History",
+    "Techno#Infobox",
+    "Techno#Proto-techno"
+   ],
+   "note": "The link is hi-NRG → techno, but the label names Euro disco, a different genre; read from the techno end it misnames the neighbour. Hi-NRG#History: 'The hi-NRG sound also influenced techno'; Techno#Infobox lists hi-NRG among its origins.",
+   "fix": {
+    "text": "hi-NRG feeds techno",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Hi-NRG",
+      "section": "History"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Techno",
+      "section": "Infobox"
+     }
+    ]
+   },
+   "apply": {
+    "batch": 7,
+    "genre": "hi-nrg",
+    "path": [
+     "links",
+     3,
+     "label"
+    ],
+    "old": "Euro disco into techno",
+    "new": "hi-NRG feeds techno"
+   },
+   "batch": 7,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "industrial-music.link.heavy-metal-music.reason",
+   "claim": "North American bands combined EBM bass sequences with the roughness of hardcore punk and thrash metal, leading to industrial metal.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Electronic_body_music#1988–1993"
+   ],
+   "note": "Source only says '(cf. industrial metal)'; 'leading to' asserts a causal lineage the section does not.",
+   "fix": {
+    "text": "North American bands combined EBM bass sequences with the roughness of hardcore punk and thrash metal, a mix close to industrial metal.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+      "section": "1988–1993"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+      "section": "Infobox"
+     }
+    ]
+   },
+   "apply": {
+    "genre": "industrial-music",
+    "path": [
+     "links",
+     5,
+     "reason"
+    ],
+    "old": ", leading to industrial metal.",
+    "new": ", a mix close to industrial metal.",
+    "add_sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Electronic_body_music",
+      "section": "Infobox"
+     }
+    ],
+    "batch": 7
+   },
+   "batch": 7,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "industrial-music.artist.Cabaret Voltaire.dates",
+   "claim": "active 1973–1994; Kirk solo under the name 2009–2021; a 50th-anniversary show in 2025",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Cabaret_Voltaire_(band)#intro",
+    "Cabaret_Voltaire_(band)#Infobox",
+    "Cabaret_Voltaire_(band)#50th anniversary reunion and final tour (2025–present)"
+   ],
+   "note": "Round-1 fix used the intro only. The Infobox gives '2025–present' and the 2025–present section describes a reunion of Mallinder and Watson with a final UK tour (October 2026) and European/North American farewell dates, so 'a show in 2025' understates it.",
+   "fix": {
+    "text": "active 1973–1994; Kirk solo under the name 2009–2021; reunited 2025–present",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Cabaret_Voltaire_(band)",
+      "section": "Infobox"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Cabaret_Voltaire_(band)",
+      "section": "50th anniversary reunion and final tour (2025–present)"
+     }
+    ]
+   },
+   "apply": {
+    "genre": "industrial-music",
+    "path": [
+     "artists",
+     {
+      "name": "Cabaret Voltaire"
+     },
+     "dates"
+    ],
+    "old": "a 50th-anniversary show in 2025",
+    "new": "reunited 2025–present",
+    "add_sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Cabaret_Voltaire_(band)",
+      "section": "Infobox"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Cabaret_Voltaire_(band)",
+      "section": "50th anniversary reunion and final tour (2025–present)"
+     }
+    ],
+    "batch": 7
+   },
+   "batch": 7,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "industrial-music.artist.Cosey Fanni Tutti.recording",
+   "claim": "2t2 (2025, album)",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Cosey_Fanni_Tutti#Music career"
+   ],
+   "note": "Round-1 'from Hull' and Transverse miscredit are fixed (summary now supported). 2t2 is credited to her alone, but her article only says she released it in 2025; it never names it (or any solo record) as notable, so the own-recording rule is met on credit but not on 'named as notable'. Her intro says she is best known for Throbbing Gristle and Chris & Cosey, whose records her article does not single out either.",
+   "fix": {
+    "text": "Owner/PM choice, not a wording fix: keep 2t2 and accept it as her only release under her own name, or use a Throbbing Gristle record her TG article names (e.g. 20 Jazz Funk Greats, 1979) with by: 'Throbbing Gristle'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Cosey_Fanni_Tutti",
+      "section": "Music career"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Throbbing_Gristle",
+      "section": "intro"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 7,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "industrial-music.artist.Cosey Fanni Tutti.study",
+   "claim": "...Start with her 2025 solo album, \"2t2\"...",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Cosey_Fanni_Tutti#Music career"
+   ],
+   "note": "Closer's 'her 2025 solo album' matches the card's recording (year 2025, album) and the source ('her solo album, 2t2'); otherwise only card facts. Inherits the recording drift.",
+   "fix": {
+    "text": "Rebuild the closer if the recording changes.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Cosey_Fanni_Tutti",
+      "section": "Music career"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 7,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.tagline",
+   "claim": "Techno pushed to 160–200 bpm with a distorted kick, from Rotterdam, Frankfurt and Belgium.",
+   "verdict": "supported",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": [
+    "Hardcore_(electronic_dance_music_genre)#intro",
+    "Hardcore_(electronic_dance_music_genre)#Infobox"
+   ],
+   "note": "'bpm' is unglossed in the first line a newcomer reads (the same flag round 1 raised on grime's tagline, which was fixed).",
+   "fix": {
+    "text": "Techno at 160–200 beats a minute on a distorted kick, from Rotterdam, Frankfurt, Belgium.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Hardcore_(electronic_dance_music_genre)",
+      "section": "Infobox"
+     }
+    ]
+   },
+   "apply": {
+    "genre": "hardcore-electronic-dance-music-genre",
+    "path": [
+     "tagline",
+     "text"
+    ],
+    "old": "Techno pushed to 160–200 bpm with a distorted kick, from Rotterdam, Frankfurt and Belgium.",
+    "new": "Techno at 160–200 beats a minute on a distorted kick, from Rotterdam, Frankfurt, Belgium.",
+    "batch": 7
+   },
+   "batch": 7,
+   "status": "fix ready, not applied (verdict is drift or a flag; writer/PM to apply)"
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.artist.Liza 'N' Eliaz.recording",
+   "claim": "Initial Gain (1991, song)",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Liza_'N'_Eliaz#Singles and EPs"
+   ],
+   "note": "Credited to her, but it is only the first line of her 'Singles and EPs' list; the article never names it (or any record) as notable, and 'song' is unverified for a single/EP entry. No release of hers is singled out anywhere in the corpus, so this is a content choice, not a wording fix.",
+   "fix": {
+    "text": "Keep Initial Gain as 'her first listed release' (kind left as is or set to the EP/single the list implies), or set the recording to null and let the prompt start from her four-turntable DJ style.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Liza_'N'_Eliaz",
+      "section": "Singles and EPs"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 7,
+   "status": "open: needs a content decision"
+  },
+  {
+   "id": "hardcore-electronic-dance-music-genre.artist.Liza 'N' Eliaz.study",
+   "claim": "...Start with her first listed release, \"Initial Gain\" (1991)...",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Liza_'N'_Eliaz#Singles and EPs"
+   ],
+   "note": "'Her first listed release' is true of the discography (1991 is its first entry) and is now honest about why it was chosen; rest is card facts verbatim. Inherits the recording drift only.",
+   "fix": {
+    "text": "Rebuild the closer if the recording changes.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Liza_'N'_Eliaz",
+      "section": "Singles and EPs"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 7,
+   "status": "open: needs a content decision"
+  },
+  {
+   "id": "grime-music.artist.Wiley.summary",
+   "claim": "In 2020 he made social-media posts widely condemned as antisemitic;",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Wiley_(musician)#intro",
+    "Wiley_(musician)#Assault and burglary charges"
+   ],
+   "note": "Round-1 fixes landed (Pay As U Go wording, the 2021 charges and 2023 guilty pleas with the suspended sentence, MBE removal; all as cautious as the source). Remaining gap: the antisemitism sentence gives no outcome of its own; his article's 'Antisemitism on social media' section says he apologised on 29 July 2020 for generalising about Jewish people and said he is not a racist (the police investigation was dropped on jurisdiction). Same standard as round 1's Shabba Ranks apology fix.",
+   "fix": {
+    "text": "A grime MC and producer from Bow, East London, often called the 'Godfather of Grime', who first found success in the UK garage crew Pay As U Go. In 2020 he made social-media posts widely condemned as antisemitic, then apologised for generalising about Jewish people; in 2023, after being charged with assault and burglary in 2021, he pleaded guilty to assaulting an emergency worker and to criminal damage and received a one-month suspended sentence; and in 2024 he was stripped of his MBE.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Wiley_(musician)",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Wiley_(musician)",
+      "section": "Antisemitism on social media"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Wiley_(musician)",
+      "section": "Assault and burglary charges"
+     }
+    ]
+   },
+   "apply": {
+    "genre": "grime-music",
+    "path": [
+     "artists",
+     {
+      "name": "Wiley"
+     },
+     "summary"
+    ],
+    "old": "In 2020 he made social-media posts widely condemned as antisemitic;",
+    "new": "In 2020 he made social-media posts widely condemned as antisemitic, then apologised for generalising about Jewish people;",
+    "add_sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Wiley_(musician)",
+      "section": "Antisemitism on social media"
+     }
+    ],
+    "prompt_follows": true,
+    "batch": 7
+   },
+   "batch": 7,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "grime-music.artist.Wiley.study",
+   "claim": "(repeats the summary)",
+   "verdict": "drift",
+   "flags": [],
+   "cited": [
+    "Wiley_(musician)#intro"
+   ],
+   "note": "Inherits the summary drift; c2 hedge now kept.",
+   "fix": {
+    "text": "Apply the same replacement to the prompt text and add the source.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Wiley_(musician)",
+      "section": "Antisemitism on social media"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 7,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "grime-music.artist.Skepta.summary",
+   "claim": "A North London grime MC, rapper and producer of Nigerian heritage who started as a DJ in the Meridian Crew and, with his brother Jme, founded Boy Better Know.",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Skepta#intro",
+    "Skepta#Early life",
+    "Skepta#2002–2007: Career beginnings and Greatest Hits"
+   ],
+   "note": "Still leaves out his article's 'Legal issues' section, flagged in round 1 and not fixed: a 2009 common-assault conviction (with his account that he was racially abused first) and a 2016 Melbourne guilty plea for recklessly causing injury after punching a man (no conviction recorded, fined). Wiley's and Dizzee Rascal's cards now carry theirs, so the omission is also inconsistent.",
+   "fix": {
+    "text": "with his brother Jme, founded Boy Better Know. In 2009 he was convicted of common assault and fined over a 2006 fight in Cyprus, which he said began when a group of men racially abused him and his friends; in 2016 he pleaded guilty in Melbourne to recklessly causing injury, with no conviction recorded.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Skepta",
+      "section": "Legal issues"
+     }
+    ]
+   },
+   "apply": {
+    "genre": "grime-music",
+    "path": [
+     "artists",
+     {
+      "name": "Skepta"
+     },
+     "summary"
+    ],
+    "old": "with his brother Jme, founded Boy Better Know.",
+    "new": "with his brother Jme, founded Boy Better Know. In 2009 he was convicted of common assault and fined over a 2006 fight in Cyprus, which he said began when a group of men racially abused him and his friends; in 2016 he pleaded guilty in Melbourne to recklessly causing injury, with no conviction recorded.",
+    "add_sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Skepta",
+      "section": "Legal issues"
+     }
+    ],
+    "prompt_follows": true,
+    "batch": 7
+   },
+   "batch": 7,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "grime-music.artist.Skepta.study",
+   "claim": "(repeats the summary)",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Skepta#intro"
+   ],
+   "note": "Inherits the summary omission.",
+   "fix": {
+    "text": "Apply the same replacement to the prompt text and add the source.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Skepta",
+      "section": "Legal issues"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 7,
+   "status": "fixed (round 2, PM decision)"
+  },
+  {
+   "id": "grime-music.artist.Lady Sovereign.summary",
+   "claim": "A rapper from Wembley's Chalkhill Estate, best known for '9 to 5' and 'Love Me or Hate Me'. She was inspired to MC after hearing Ms. Dynamite and was signed to Def Jam by Jay-Z in 2005.",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Lady_Sovereign#intro",
+    "Lady_Sovereign#Early life and family"
+   ],
+   "note": "Still leaves out her article's 'Controversies' section, flagged in round 1 and not fixed: arrested in Brisbane in September 2009 for assault and drunk and disorderly behaviour after spitting on a bouncer; fined $400 AUD plus $200 compensation.",
+   "fix": {
+    "text": "was signed to Def Jam by Jay-Z in 2005. In 2009 she was arrested in Brisbane for assault and drunk and disorderly behaviour after spitting on a nightclub bouncer, and was fined.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Lady_Sovereign",
+      "section": "Controversies"
+     }
+    ]
+   },
+   "apply": {
+    "genre": "grime-music",
+    "path": [
+     "artists",
+     {
+      "name": "Lady Sovereign"
+     },
+     "summary"
+    ],
+    "old": "was signed to Def Jam by Jay-Z in 2005.",
+    "new": "was signed to Def Jam by Jay-Z in 2005. In 2009 she was arrested in Brisbane for assault and drunk and disorderly behaviour after spitting on a nightclub bouncer, and was fined.",
+    "add_sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Lady_Sovereign",
+      "section": "Controversies"
+     }
+    ],
+    "prompt_follows": true,
+    "batch": 7
+   },
+   "batch": 7,
+   "status": "left out by PM decision under L60"
+  },
+  {
+   "id": "grime-music.artist.Lady Sovereign.study",
+   "claim": "(repeats the summary)",
+   "verdict": "supported",
+   "flags": [
+    "fairness"
+   ],
+   "cited": [
+    "Lady_Sovereign#intro"
+   ],
+   "note": "Inherits the summary omission.",
+   "fix": {
+    "text": "Apply the same replacement to the prompt text and add the source.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Lady_Sovereign",
+      "section": "Controversies"
+     }
+    ]
+   },
+   "apply": null,
+   "batch": 7,
+   "status": "left out by PM decision under L60"
+  }
+ ],
+ "pm_decision_edits": [
+  "Applied the prepared drift fixes as given: Irving Berlin by \"Emma Carus, who introduced it\"; Bing Crosby allegation restores \"acknowledged corporal punishment\"; pop-music link3 reason drops the article reference; Britney Spears \"helping revive\"; post-punk description \"from late 1978\"; Siouxsie c1 paraphrased; Neu! \"regarded as\"; dancehall hallmark4 \"in some cases\" plus apologies; Shabba Ranks ranking removed and \"Channel 4's The Word\"; samba debatable and Donga c1 \"some of his contemporaries\"; highlife hallmark4 \"helped popularise\"; afrobeats listen1 gloss; hi-NRG to techno label \"hi-NRG feeds techno\"; industrial to heavy metal reason \"a mix close to industrial metal\"; Cabaret Voltaire dates \"reunited 2025–present\" (sources added to card and prompt); Wiley antisemitism sentence adds his apology, sourced to Antisemitism on social media.",
+  "Spiral Scratch: title \"Spiral Scratch EP\" in the Buzzcocks recording and indie-rock recordings[0]; kind stays album; hallmark and c1 already say EP; prompt closer \"Start with the Spiral Scratch EP (1977)\".",
+  "Bikini Kill: recording now \"Bikini Kill EP\", year null, kind album, sourced to Bikini_Kill#1990 – 1997: Formation and career; c2 now says the Bikini Kill EP helped establish their audience, so the prompt stays card facts only.",
+  "Cosey Fanni Tutti: recording now \"20 Jazz Funk Greats\" (1979), by \"Throbbing Gristle\", sourced to Throbbing_Gristle#intro and #First era: 1976–1981 (her own article does not name it; she is a founding member per the card).",
+  "Skepta: summary adds one sentence on the 2009 common-assault conviction and fine over a 2006 Cyprus fight, with his account of racial abuse first; source Skepta#Legal issues. 2016 plea and visa left out.",
+  "Frank Sinatra: summary adds the 1974 Australian tour slurs at journalists (one anti-gay), his refusal to apologise and the union action that cancelled concerts and grounded his plane; source Frank_Sinatra#1970–1981: \"Retirement\" and return.",
+  "Whitney Houston: removed the unused Legal issues citation from the summary and prompt sources.",
+  "Not changed: Burna Boy, Lady Sovereign, Spears, Crosby drink-driving, Davido (PM), the two streaming superlatives (PM), the hardcore tagline newcomer fix and Liza N Eliaz recording (no decision given).",
+  "Every edited artist prompt was regenerated as fixed opener + summary + contributions word for word + closer; all 66 prompts re-checked by script, sources equal the card union. Validator: 0 errors, 0 warnings."
+ ]
+}

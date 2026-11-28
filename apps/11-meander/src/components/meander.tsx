@@ -2,10 +2,10 @@
 
 // The app's state: what is in focus, what is open in the card, and the visit history.
 // Both the desktop globe and the phone screen render from it; CSS shows one of them.
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { getSchool, getThinker, schools } from "@/lib/content";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { getField, isFieldId, type Field, type FieldId } from "@/lib/content";
 import { addVisit, type Visit } from "@/lib/visits";
-import { seeIdea, stateOf, touchSchool, withHistory, type Progress, type SchoolState } from "@/lib/progress";
+import { forField, seeIdea, stateOf, storageKeys, touchSchool, type Progress, type SchoolState } from "@/lib/progress";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { GlobeView } from "./globe-view";
 import { PhoneView } from "./phone-view";
@@ -13,6 +13,10 @@ import { PhoneView } from "./phone-view";
 export type View = "globe" | "timeline";
 
 export type Nav = {
+  /** The field on show (phase 4): philosophy or music. Its content, words and progress. */
+  field: Field;
+  /** Switch field: anything open closes, the view (globe or timeline) stays, and the choice survives a reload. */
+  showField: (id: FieldId) => void;
   /** The overview: the globe, or the schools laid out in time (#41). */
   view: View;
   /** Switch view: Your thread and the skeleton close; the open school stays open. */
@@ -46,12 +50,10 @@ export type Nav = {
 };
 
 const NO_VISITS: Visit[] = [];
-const VISITS_KEY = "11-meander:visits";
-const PROGRESS_KEY = "11-meander:progress";
 const NO_PROGRESS: Progress = {};
+const FIELD_KEY = "11-meander:field";
 /** Whatever is in storage, as progress (a hand-edited or broken value reads as none). */
 const safe = (p: unknown): Progress => (p && typeof p === "object" && !Array.isArray(p) ? (p as Progress) : NO_PROGRESS);
-const IDEAS = schools.map((s) => ({ id: s.id, ideas: s.themes.map((t) => t.name) }));
 
 export function Meander() {
   // shortcut: focus lives in React state, not the URL, so a reload returns to the overview and a school can't be linked; move it to a ?school= search param if linking or back-button support is wanted.
@@ -63,21 +65,24 @@ export function Meander() {
   const [pick, setPick] = useState<number | null>(null);
   // shortcut: the view lives in React state like the focus, so a reload returns to the globe; move both to the URL together.
   const [view, setView] = useState<View>("globe");
-  const [stored, setVisits] = useLocalStorage<Visit[]>(VISITS_KEY, NO_VISITS);
-  // Visits to schools or thinkers no longer in the content (ids change when the content is re-imported)
-  // stay in storage but don't count or show.
-  const visits = useMemo(
-    () => (Array.isArray(stored) ? stored : NO_VISITS).filter((v) => (v.kind === "school" ? getSchool(v.id) : getThinker(v.id))),
-    [stored],
+  // shortcut: the field is read from localStorage after hydration, so a reload into music shows philosophy for one frame; move it to the URL with the focus and view.
+  const [storedField, setStoredField] = useLocalStorage<string>(FIELD_KEY, "philosophy");
+  const field = getField(isFieldId(storedField) ? storedField : "philosophy");
+  const keys = storageKeys(field.id);
+  const { getSchool, getThinker } = field;
+  const [stored, setVisits] = useLocalStorage<Visit[]>(keys.visits, NO_VISITS);
+  const [storedProgress, setProgress] = useLocalStorage<Progress>(keys.progress, NO_PROGRESS);
+  // Only this field's schools and thinkers count: visits to ones no longer in the content (ids change when the content
+  // is re-imported) stay in storage but don't count or show. Schools opened before progress existed count as started
+  // (migration); it stays a merge, never a rewrite.
+  const { visits, progress } = useMemo(
+    () => forField({ visits: stored, progress: storedProgress }, { school: (id) => !!getSchool(id), thinker: (id) => !!getThinker(id) }),
+    [stored, storedProgress, getSchool, getThinker],
   );
-
-  const [storedProgress, setProgress] = useLocalStorage<Progress>(PROGRESS_KEY, NO_PROGRESS);
-  // Schools opened before progress existed count as started (migration); it stays a merge, never a rewrite.
-  const progress = useMemo(
-    () => withHistory(safe(storedProgress), visits),
-    [storedProgress, visits],
+  const states = useMemo(
+    () => new Map(field.schools.map((s) => [s.id, stateOf(progress[s.id], s.themes.map((t) => t.name))])),
+    [field, progress],
   );
-  const states = useMemo(() => new Map(IDEAS.map((s) => [s.id, stateOf(progress[s.id], s.ideas)])), [progress]);
 
   const record = useCallback(
     (kind: Visit["kind"], id: string) => {
@@ -92,7 +97,7 @@ export function Meander() {
       const name = focus ? getSchool(focus)?.themes[i]?.name : undefined;
       if (focus && name) setProgress((p) => seeIdea(safe(p), focus, name));
     },
-    [focus, setProgress],
+    [focus, getSchool, setProgress],
   );
 
   const openSchool = useCallback(
@@ -123,7 +128,7 @@ export function Meander() {
       setPick(null);
       record("thinker", id);
     },
-    [focus, record],
+    [focus, getThinker, record],
   );
 
   const overview = useCallback(() => {
@@ -140,8 +145,24 @@ export function Meander() {
     else setInside(false);
   }, [pick]);
 
+  // F6: each field remembers the school last open in it, for this visit (in memory), and reopens it on the way back.
+  const lastOpen = useRef<Partial<Record<FieldId, string | null>>>({});
+  const showField = useCallback(
+    (id: FieldId) => {
+      if (id === field.id) return;
+      lastOpen.current[field.id] = focus;
+      overview();
+      setStoredField(id);
+      const back = lastOpen.current[id];
+      if (back && getField(id).getSchool(back)) setFocus(back);
+    },
+    [field.id, focus, overview, setStoredField],
+  );
+
   const nav: Nav = useMemo(
     () => ({
+      field,
+      showField,
       view,
       showView: (v) => { setView(v); setThreadOpen(false); setInside(false); setPick(null); },
       focus,
@@ -166,7 +187,7 @@ export function Meander() {
       stepOut: () => { setPick(null); setInside(false); },
       togglePick: (i) => { if (pick !== i) see(i); setPick(pick === i ? null : i); },
     }),
-    [view, focus, thinker, openTheme, threadOpen, inside, pick, visits, progress, states, openSchool, openThinker, overview, stepBack, see],
+    [field, showField, view, focus, thinker, openTheme, threadOpen, inside, pick, visits, progress, states, openSchool, openThinker, overview, stepBack, see],
   );
 
   // Esc closes the innermost thing: Your thread, then a picked idea, then the skeleton, then an open theme,

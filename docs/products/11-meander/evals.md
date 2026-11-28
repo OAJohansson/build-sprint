@@ -62,3 +62,30 @@ Every top job scored ≥ 4/5 by `user-tester`, and no blocker or major finding l
 
 - `pnpm -F 11-meander build`, `lint` and `test` pass (the visit-day counting test, decision 0011).
 - No secrets in the diff.
+
+---
+
+## Phase 4: Music (27 Nov, Founder mode, L44)
+
+Run by `data-evals`, `user-tester` and `design-critic`; never by the builder. Laptop 1440×900
+unless noted.
+
+| # | Check | Run by | Bar | Result | Evidence |
+| --- | --- | --- | --- | --- | --- |
+| M1 | Every genre visible on the music globe's first load; rim, overlap, dot and title checks across every view | script (engineer's checker, run by PM) + user-tester | 0 problems | | |
+| M2 | Every genre has tagline, 3 listen-for lines, 5 hallmarks, 3–5 artists, 3 landmark recordings, neighbours and sources | data-evals script | 100% | | |
+| M3 | Each landmark recording opens a search for that exact recording in a new tab, in one click | user-tester | 3 of 3 sampled | | |
+| M4 | Switching Philosophy ↔ Music keeps each field's view and progress apart; reload keeps the field | user-tester | yes | | |
+| M5 | Music content accuracy: every claim graded against the saved sources | data-evals | 0 wrong, 0 invented links, ≤ 2% unsupported after fixes | | |
+| M6 | Philosophy unchanged: all existing tests pass; 3 schools spot-checked | PM + user-tester | yes | | |
+| M7 | Phone 390×844: open a genre, play a recording, switch field | user-tester | nothing cut off, targets ≥ 44 px | | |
+| M8 | Coverage: the field's list checked against at least three outside references by a grader that didn't build it (feedback 48) | independent grader | no "must add" item missing, or each one logged as a decision | | |
+
+**User test (job 2, the thread):** from House, say where it came from and name two genres it led
+to, then open one of them. Bar: 3 of 3 runs, under 2 minutes each.
+
+**Design critic:** the genre card and the field switcher, fixed five-point scorecard. Target 9/10,
+not a blocker.
+
+**Guardrails:** no copyrighted audio hosted or embedded; no lyrics quoted; 0 model API calls;
+weekly usage stops new work at 70%.

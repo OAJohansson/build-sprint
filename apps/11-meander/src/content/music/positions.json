@@ -1,0 +1,198 @@
+{
+  "blues": [
+    -21.2,
+    164.1
+  ],
+  "jazz": [
+    -40.9,
+    -158.8
+  ],
+  "gospel-music": [
+    10.3,
+    174.7
+  ],
+  "country-music": [
+    -14.8,
+    -133.1
+  ],
+  "american-folk-music-revival": [
+    -10.1,
+    -163.8
+  ],
+  "rock-and-roll": [
+    18.5,
+    -147.6
+  ],
+  "rock-music": [
+    40.2,
+    -174.7
+  ],
+  "heavy-metal-music": [
+    79.3,
+    -114.6
+  ],
+  "punk-rock": [
+    47.8,
+    -129.6
+  ],
+  "alternative-rock": [
+    55.4,
+    -71.5
+  ],
+  "rhythm-and-blues": [
+    -49.3,
+    -118.8
+  ],
+  "soul-music": [
+    -76.3,
+    -176.1
+  ],
+  "funk": [
+    -65.7,
+    -61.7
+  ],
+  "disco": [
+    -45.1,
+    -8.7
+  ],
+  "contemporary-r-b": [
+    -53.7,
+    101.4
+  ],
+  "reggae": [
+    6.1,
+    -79
+  ],
+  "dub-music": [
+    8.9,
+    -32.3
+  ],
+  "salsa-music": [
+    -34.7,
+    -79
+  ],
+  "bossa-nova": [
+    -15.6,
+    -98
+  ],
+  "afrobeat": [
+    -49.2,
+    151.2
+  ],
+  "reggaeton": [
+    -35.7,
+    -44.1
+  ],
+  "hip-hop": [
+    -32.2,
+    26.6
+  ],
+  "trap-music": [
+    -18,
+    89.2
+  ],
+  "synth-pop": [
+    61.9,
+    -2.9
+  ],
+  "electro-music": [
+    -5,
+    17.2
+  ],
+  "ambient-music": [
+    64.4,
+    37.6
+  ],
+  "house-music": [
+    8,
+    2.1
+  ],
+  "techno": [
+    28.4,
+    -1.1
+  ],
+  "trance-music": [
+    39.4,
+    85.3
+  ],
+  "drum-and-bass": [
+    30.9,
+    20.8
+  ],
+  "uk-garage": [
+    9.2,
+    71
+  ],
+  "dubstep": [
+    11.2,
+    35.8
+  ],
+  "electronic-dance-music": [
+    62.5,
+    85.5
+  ],
+  "traditional-pop": [
+    5.1,
+    142.1
+  ],
+  "pop-music": [
+    37.5,
+    132.5
+  ],
+  "k-pop": [
+    11.8,
+    105.9
+  ],
+  "indie-rock": [
+    64.1,
+    167.2
+  ],
+  "post-punk": [
+    13.9,
+    -114.4
+  ],
+  "krautrock": [
+    32.6,
+    -92.9
+  ],
+  "dancehall": [
+    24.8,
+    -52.8
+  ],
+  "son-cubano": [
+    -16.1,
+    -19.7
+  ],
+  "samba": [
+    -10.3,
+    -57.2
+  ],
+  "highlife": [
+    -23.2,
+    123.8
+  ],
+  "afrobeats": [
+    -36.7,
+    59.8
+  ],
+  "amapiano": [
+    -68,
+    37.8
+  ],
+  "hi-nrg": [
+    -4.6,
+    49.8
+  ],
+  "industrial-music": [
+    43.6,
+    -19.5
+  ],
+  "hardcore-electronic-dance-music-genre": [
+    29.1,
+    61.4
+  ],
+  "grime-music": [
+    41.8,
+    41
+  ]
+}

@@ -2,14 +2,14 @@
 //   pnpm -F 11-meander content
 // Reads  docs/products/11-meander/content/full.json   (schema: sources.md in that folder), then full-eastern.json
 // Also reads docs/products/11-meander/content/schools.json for the entries' titles (Further reading, #39).
-// Writes src/content/schools.json, thinkers.json, links.json, titles.json  (then run `pnpm -F 11-meander positions`
+// Writes src/content/philosophy/schools.json, thinkers.json, links.json, titles.json  (then run `pnpm -F 11-meander positions`
 // if schools or links changed). Every school, theme, question, thinker, key idea, prompt and link keeps its
 // `sources`. Fails loudly on anything the app can't resolve (unknown neighbour, theme thinker not in the school).
 import fs from "node:fs";
 
 // CONTENT_SRC / CONTENT_OUT override the paths (for trying the converter on a fixture).
 const SRC = process.env.CONTENT_SRC ? new URL(`file://${process.env.CONTENT_SRC}`) : new URL("../../../docs/products/11-meander/content/full.json", import.meta.url);
-const OUT = process.env.CONTENT_OUT ? new URL(`file://${process.env.CONTENT_OUT.replace(/\/?$/, "/")}`) : new URL("../src/content/", import.meta.url);
+const OUT = process.env.CONTENT_OUT ? new URL(`file://${process.env.CONTENT_OUT.replace(/\/?$/, "/")}`) : new URL("../src/content/philosophy/", import.meta.url);
 // The Eastern schools (#42) live in their own file next to full.json, same schema plus "tradition": "eastern", so a
 // wording fix in either is just a re-run. Skipped when the file is missing or CONTENT_SRC points at a fixture.
 const EAST = new URL("../../../docs/products/11-meander/content/full-eastern.json", import.meta.url);

@@ -4,12 +4,12 @@
 // one row each so nothing overlaps. Hover or focus shows a school's links as quiet bone curves (L31: brass only for
 // the current one); a click opens the school's card, as on the globe.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { links, schools, splitName, traditionOf, whenOf } from "@/lib/content";
-import { makeScale, RAW, timelineRows, yearLabel, type RawSpan } from "@/lib/timeline";
+import { splitName, traditionOf, type School } from "@/lib/content";
+import { makeScale, timelineRows, yearLabel, type RawSpan } from "@/lib/timeline";
 
 // Dev only (break-ui): ?timeline=worst adds a school spanning nearly everything and gives one school a very long name.
 const WORST: Record<string, RawSpan> = { "worst-everything": { from: -600, to: "present" } };
-const worstSchools = () => [
+const worstSchools = (schools: School[]) => [
   ...schools.map((s) => (s.id === "feminist-philosophy" ? { ...s, name: "The Very Long School of Post-Analytic Neo-Pragmatist Phenomenological Hermeneutics (Second Wave)" } : s)),
   { ...schools[0], id: "worst-everything", name: "Perennial Philosophy Across Every Tradition", dates: "c. 600 BCE–present" },
 ];
@@ -20,21 +20,28 @@ const X0 = 70;
 /** The axis ends at the stage's right edge, or before the card when one is open. */
 const X1_FULL = 1370, X1_CARD = 950;
 const TOP = 150, BOTTOM = 800;
-const TICKS = [-500, 1, 500, 1000, 1500, 1800, 1900, 2000];
 const GAP = 12;
+/** Room kept left of a name for its link word on hover ("grew out of it"), so it never runs off the stage. */
+const VERB_ROOM = 120;
 
-type Side = "after" | "before" | "on";
+/** One rule (L56): the name ends just left of the start dot; where there is no room, it starts just right of the dot,
+ * knocked out over its own bar. Never at the bar's far end. */
+type Side = "before" | "start";
 
 export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolean; tick: number }) {
-  const { focus, states } = nav;
+  const { focus, states, field } = nav;
+  const { links, schools, whenOf, words, spans, eras, ticks: TICKS } = field;
   const x1 = hasCard ? X1_CARD : X1_FULL;
   const [worst, setWorst] = useState(false);
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- read the dev-only flag after hydration
     if (process.env.NODE_ENV !== "production" && new URLSearchParams(location.search).get("timeline") === "worst") setWorst(true);
   }, []);
-  const rows = useMemo(() => (worst ? timelineRows(worstSchools(), undefined, { ...RAW, ...WORST }) : timelineRows(schools)), [worst]);
-  const { scale, bands, end } = useMemo(() => makeScale(X0, x1), [x1]);
+  const rows = useMemo(
+    () => (worst ? timelineRows(worstSchools(schools), undefined, { ...spans, ...WORST }, eras) : timelineRows(schools, undefined, spans, eras)),
+    [worst, schools, spans, eras],
+  );
+  const { scale, bands, end } = useMemo(() => makeScale(X0, x1, undefined, eras), [x1, eras]);
   const rowH = Math.min(30, (BOTTOM - TOP) / Math.max(1, rows.length));
   const y = (i: number) => TOP + rowH * (i + 0.5);
   const geo = useMemo(
@@ -45,22 +52,21 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
     [rows, scale],
   );
 
-  // Each name sits after its bar when it fits, else before it, else on the bar (a span that covers nearly everything).
+  // Each name sits before its start dot, or just after it where there's no room.
   const labelRefs = useRef(new Map<string, HTMLSpanElement>());
-  const [sides, setSides] = useState<{ key: string; map: Record<string, Side> } | null>(null);
-  const key = `${x1}|${tick}`;
+  const [sides, setSides] = useState<{ key: string; map: Record<string, Side>; w: Record<string, number> } | null>(null);
+  const key = `${field.id}|${x1}|${tick}`;
   useLayoutEffect(() => {
-    const map: Record<string, Side> = {};
-    const right = hasCard ? 995 : 1415;
+    const map: Record<string, Side> = {}, widths: Record<string, number> = {};
     rows.forEach((r, i) => {
-      const w = labelRefs.current.get(r.item.id)?.scrollWidth ?? 0; // full width, even when capped on the bar
-      const g = geo[i];
-      // a living tradition's name sits after its solid part, over the faint tail (knocked out behind the text)
-      map[r.item.id] = g.xe + GAP + w <= right ? "after" : g.xs - GAP - w >= 24 ? "before" : "on";
+      const w = labelRefs.current.get(r.item.id)?.querySelector(".nm")?.scrollWidth ?? 0;
+      widths[r.item.id] = w;
+      map[r.item.id] = geo[i].xs - GAP - w - VERB_ROOM >= 24 ? "before" : "start";
     });
-    setSides({ key, map });
-  }, [key, rows, geo, hasCard]);
+    setSides({ key, map, w: widths });
+  }, [key, rows, geo]);
   const placed = sides?.key === key ? sides.map : null;
+  const widths = sides?.key === key ? sides.w : null;
 
   // The current school: the one under the pointer or keyboard, else the open one.
   const [hovered, setHovered] = useState<string | null>(null);
@@ -68,9 +74,11 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
   const index = useMemo(() => new Map(rows.map((r, i) => [r.item.id, i])), [rows]);
   const curLinks = useMemo(
     () => (cur ? links.filter((l) => (l.from === cur || l.to === cur) && index.has(l.from) && index.has(l.to)) : []),
-    [cur, index],
+    [cur, index, links],
   );
   const lit = new Set(curLinks.flatMap((l) => [l.from, l.to]));
+  /** Each linked row's link word, read with that row as the subject and the current one as "it". */
+  const verbOf = new Map(cur ? curLinks.map((l) => [l.from === cur ? l.to : l.from, field.verbFor(l, cur)] as const) : []);
 
   /** A link drawn from the older school, at the moment the newer one starts (or its end, if it was over by then). */
   const curve = (from: string, to: string) => {
@@ -98,7 +106,7 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
 
   return (
     <div className={["timeline", cur && "has-cur"].filter(Boolean).join(" ")} inert={nav.view !== "timeline" || nav.inside}>
-      <h1 className="sr-only">The schools in time, earliest first</h1>
+      <h1 className="sr-only">{words.timelineTitle}</h1>
       <svg className="tl-svg" aria-hidden="true">
         {bands.map((b, i) => (
           <g key={b.name}>
@@ -111,7 +119,7 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
           <line key={t} x1={scale(t)} x2={scale(t)} y1={BOTTOM + 10} y2={BOTTOM + 16} className="axis" />
         ))}
         {curLinks.map((l) => (
-          <path key={`${l.from}-${l.to}`} className={l.type === "built" ? "lk" : l.type === "against" ? "lk against" : "lk mixed"} d={curve(l.from, l.to)} />
+          <path key={`${l.from}-${l.to}`} className={l.type === "built" || l.type === "fused" ? "lk" : l.type === "against" ? "lk against" : "lk mixed"} d={curve(l.from, l.to)} />
         ))}
       </svg>
       <ol className="tl-eras" aria-hidden="true">
@@ -124,11 +132,16 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
           <li key={t} style={{ left: scale(t), top: BOTTOM + 22 }}>{yearLabel(t)}</li>
         ))}
       </ol>
-      <ol className="tl-rows" onKeyDown={onKeyDown} aria-label="Schools, earliest first">
+      <ol className="tl-rows" onKeyDown={onKeyDown} aria-label={words.timelineList}>
         {rows.map((r, i) => {
           const s = r.item, g = geo[i], id = s.id;
           const st = states.get(id);
-          const side = placed?.[id] ?? "after";
+          const side = placed?.[id] ?? "before";
+          // The bar never runs under its own name (round 4): a name right of the dot pushes the visible bar (or tail) on to
+          // just past its end, and a name left of the dot cuts the faint roots line short of it.
+          const lw = widths?.[id] ?? 0;
+          const from = side === "start" && widths ? g.xs + GAP + lw + 8 : g.xs;
+          const rootsEnd = side === "before" && widths ? g.xs - GAP - lw - 8 : g.xs;
           const cls = ["tb", st === "started" && "v", st === "explored" && "v xp", id === cur && "cur", lit.has(id) && "lit", r.span.open && "open"].filter(Boolean).join(" ");
           const when = whenOf(s);
           return (
@@ -138,7 +151,7 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
                 className={cls}
                 style={{ top: y(i) }}
                 data-id={id}
-                aria-label={`${s.name}, ${when}${stateLabel(st) ? `, ${stateLabel(st)}` : ""}`}
+                aria-label={`${s.name}, ${when}${stateLabel(st) ? `, ${stateLabel(st, words.allSeen)}` : ""}`}
                 aria-current={id === focus ? "true" : undefined}
                 onClick={(e) => { e.stopPropagation(); nav.openSchool(id); }}
                 onMouseEnter={() => setHovered(id)}
@@ -146,22 +159,21 @@ export function TimelineView({ nav, hasCard, tick }: { nav: Nav; hasCard: boolea
                 onFocus={() => setHovered(id)}
                 onBlur={() => setHovered((h) => (h === id ? null : h))}
               >
-                {g.xr != null && <i className="roots" style={{ left: g.xr, width: g.xs - g.xr }} />}
-                <i className="bar" style={{ left: g.xs, width: g.xe - g.xs }} />
-                {g.xt != null && g.xt > g.xe && <i className="tail" style={{ left: g.xe, width: g.xt - g.xe }} />}
+                {g.xr != null && rootsEnd > g.xr && <i className="roots" style={{ left: g.xr, width: rootsEnd - g.xr }} />}
+                {g.xe > from && <i className="bar" style={{ left: from, width: g.xe - from }} />}
+                {g.xt != null && g.xt > Math.max(g.xe, from) && <i className="tail" style={{ left: Math.max(g.xe, from), width: g.xt - Math.max(g.xe, from) }} />}
                 <i className="mk" style={{ left: g.xs }} />
                 <span
-                  className={["tl-lb", side, g.xt != null && "knock", placed && "placed"].filter(Boolean).join(" ")}
+                  className={["tl-lb", side, placed && "placed"].filter(Boolean).join(" ")}
                   ref={(el) => { if (el) labelRefs.current.set(id, el); else labelRefs.current.delete(id); }}
-                  style={{
-                    left: side === "after" ? g.xe + GAP : side === "before" ? g.xs - GAP : g.xs + 16,
-                    // on the bar: never past the axis's end; the button's label keeps the full name
-                    maxWidth: side === "on" ? Math.max(80, x1 - g.xs - 24) : undefined,
-                  }}
-                  title={side === "on" ? s.name : undefined}
+                  style={{ left: side === "before" ? g.xs - GAP : g.xs + GAP, maxWidth: side === "start" ? Math.max(80, x1 - g.xs - 24) : undefined }}
                 >
-                  {splitName(s.name).short}
-                  {traditionOf(s) && <small className="tag">{traditionOf(s)}</small>}
+                  <span className="nm">
+                    {splitName(s.name).short}
+                    {traditionOf(s) && <small className="tag">{traditionOf(s)}</small>}
+                  </span>
+                  {/* F1: how a linked row relates to the current one, in the globe's words, so a later genre can't read as a parent */}
+                  {verbOf.get(id) && <small className="tl-vb">{verbOf.get(id)}</small>}
                 </span>
               </button>
             </li>

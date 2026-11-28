@@ -1,0 +1,1683 @@
+{
+ "batch": "1",
+ "counts": {
+  "claims": 357,
+  "supported": 274,
+  "drift": 74,
+  "unsupported": 8,
+  "wrong": 1,
+  "newcomer": 4,
+  "fairness": 3,
+  "human_check_2026": 2
+ },
+ "per_genre": {
+  "blues": {
+   "claims": 44,
+   "drift": 8
+  },
+  "jazz": {
+   "claims": 47,
+   "wrong": 1,
+   "drift": 14
+  },
+  "gospel-music": {
+   "claims": 43,
+   "drift": 12,
+   "unsupported": 1
+  },
+  "country-music": {
+   "claims": 42,
+   "drift": 8,
+   "unsupported": 2
+  },
+  "american-folk-music-revival": {
+   "claims": 41,
+   "drift": 8,
+   "unsupported": 3
+  },
+  "rock-and-roll": {
+   "claims": 46,
+   "drift": 8
+  },
+  "rock-music": {
+   "claims": 46,
+   "unsupported": 1,
+   "drift": 7
+  },
+  "heavy-metal-music": {
+   "claims": 48,
+   "drift": 9,
+   "unsupported": 1
+  }
+ },
+ "notes": [
+  "Study prompts graded against 'must not go beyond the card's own facts': 33 of 33 add facts that are in the cited sections but not on the card (verdict drift, note starts 'Beyond card'). Facts themselves are accurate unless the note says otherwise. Excluding these, drift = 41.",
+  "Items with no own sources (date_range, description, debatable) were checked against the genre-level sources.",
+  "'unsupported' items here are all citation gaps except country-music.listen_for3: the fact is in the corpus but in an uncited section; fix = add the source.",
+  "HUMAN CHECK 2026: Dolly Parton's death date 2026-08-25 (country-music.artist.Dolly Parton.dates and study_prompt). The corpus states it; verify against a live source. No other death or end date in 2026 appears on any card in this batch (Ozzy Osbourne's death is July 2025 in the corpus and isn't on the card; Black Sabbath ends 2025)."
+ ],
+ "items": [
+  {
+   "id": "blues.description",
+   "claim": "Blues grew among African Americans in the Deep South after the end of slavery",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Blues intro; Blues Origin",
+   "note": "Hedge dropped: intro says its first appearance 'is often dated to after the ending of slavery'; Origin says dating is 'usually' after 1863 and the causes 'are not fully known'.",
+   "fix": {
+    "text": "Blues grew among African Americans in the Deep South, usually dated to the decades after slavery ended, out of work songs, field hollers, spirituals and ballads. Its call-and-response phrasing, blue notes and twelve-bar form run all through jazz, rhythm and blues and rock and roll.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Blues",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Blues",
+      "section": "Origin"
+     }
+    ]
+   }
+  },
+  {
+   "id": "blues.hallmark4",
+   "claim": "women singers from vaudeville were the first blues stars on record ... led a wave that sold to Black and white buyers alike",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Blues Urban blues",
+   "note": "Two stretches. The section says classic female and vaudeville blues singers 'were popular in the 1920s' and Mamie Smith was the first African American to record a blues song; it does not call the women the first blues stars on record. It says 'some' of their records 'were purchased by white buyers as well', not 'Black and white buyers alike'.",
+   "fix": {
+    "text": "In the 1920s women singers, many from vaudeville, were the blues' big stars on record. Ma Rainey, the 'Mother of the Blues', and Bessie Smith were two of 'the big three', and some of their records sold to white buyers too.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Blues",
+      "section": "Urban blues"
+     }
+    ]
+   }
+  },
+  {
+   "id": "blues.hallmark5",
+   "claim": "Muddy Waters made Chicago a centre for this louder sound",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Blues 1950s; B. B. King intro",
+   "note": "Causation added: the section says 'Chicago became a center for electric blues from 1948 on, when Muddy Waters recorded his first success'. A timing link, not that he made it so.",
+   "fix": {
+    "text": "After the war, migrants from Mississippi plugged in: electric guitar, harmonica through a microphone, bass and drums. Chicago became a centre for this louder sound from 1948, when Muddy Waters had his first hit there, and it later fired up British bands such as the Rolling Stones. B. B. King's string-bending solos went on to shape electric blues guitar.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Blues",
+      "section": "1950s"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/B._B._King",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "blues.link.blues>jazz",
+   "claim": "Jazz took shape in New Orleans by mixing brass-band marches, ragtime and blues with group improvisation.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Jazz intro; Blues Musical influence",
+   "note": "Jazz intro says this of 'New Orleans jazz' and adds in the next sentence that 'jazz did not begin as a single musical tradition in New Orleans or elsewhere'. Stating it of jazz as a whole drops that hedge.",
+   "fix": {
+    "text": "New Orleans jazz mixed brass-band marches, ragtime and blues with group improvisation, and blues forms and blue notes stayed at its heart.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Jazz",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Blues",
+      "section": "Musical influence"
+     }
+    ]
+   }
+  },
+  {
+   "id": "blues.artist.Ma Rainey.study_prompt",
+   "claim": "she had a powerful, 'moaning' singing style and majestic phrasing",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Ma Rainey intro",
+   "note": "Beyond card: 'majestic phrasing' is in the cited intro but not on the card (summary/contributions). Everything else matches the card.",
+   "fix": {
+    "text": "Drop 'and majestic phrasing' (or add it to the summary: 'Known for her powerful voice, majestic phrasing and moaning style', Ma Rainey intro).",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Ma_Rainey",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "blues.artist.Bessie Smith.study_prompt",
+   "claim": "she busked on the streets of Chattanooga as a child and toured in a group that included Ma Rainey; ... suited the new electrical recording; 'Downhearted Blues' was her first record and a hit",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Bessie Smith intro, Career",
+   "note": "Beyond card: busking, touring with Ma Rainey, electrical recording and 'first record' are all in the cited sections (intro, Career) but none is on the card. Facts themselves are accurate.",
+   "fix": {
+    "text": "Use only these facts: She was nicknamed the 'Empress of the Blues' and was the most popular woman blues singer of her day; her strong contralto voice influenced later blues and jazz singers; she made 160 recordings for Columbia from 1923, often with Louis Armstrong and Fletcher Henderson; her 'Downhearted Blues' was added to the National Recording Registry in 2002.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Bessie_Smith",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Bessie_Smith",
+      "section": "Career"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Bessie_Smith",
+      "section": "National Recording Registry"
+     }
+    ]
+   }
+  },
+  {
+   "id": "blues.artist.Muddy Waters.study_prompt",
+   "claim": "He grew up near Clarksdale, Mississippi, copying Son House and Robert Johnson; ... recorded for the Chess brothers; his early-1950s band featured Little Walter on harmonica",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Muddy Waters intro, Influence",
+   "note": "Beyond card: Clarksdale, Son House/Robert Johnson, the Chess brothers and Little Walter are in the cited intro but not on the card. Accurate to the source.",
+   "fix": {
+    "text": "Use only these facts: He grew up on a Mississippi plantation and is often called the 'father of modern Chicago blues'; Alan Lomax recorded him for the Library of Congress in 1941, two years before he moved to Chicago; his 1958 England trip helped spark the British blues boom; the Rolling Stones named themselves after his 1950 song 'Rollin' Stone'; his music laid groundwork for rock and roll and rock.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Muddy_Waters",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Muddy_Waters",
+      "section": "Influence"
+     }
+    ]
+   }
+  },
+  {
+   "id": "blues.artist.B. B. King.study_prompt",
+   "claim": "taught himself guitar, starting in juke joints and on local radio; ... his version of 'The Thrill Is Gone' won a Grammy in 1970 and was a pop and R&B hit",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "B. B. King intro, 1949–2005",
+   "note": "Beyond card: self-taught/juke joints/radio and the Grammy are in the cited sections but not on the card. Accurate to the source.",
+   "fix": {
+    "text": "Use only these facts: He was a Mississippi Delta guitarist and singer called 'The King of the Blues'; his soloing used fluid string bending, shimmering vibrato and staccato (short, detached) picking; '3 O'Clock Blues' topped the R&B chart in 1952; he played 342 shows in 1956 and named his guitar Lucille.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/B._B._King",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/B._B._King",
+      "section": "1949–2005"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.debatable",
+   "claim": "Duke Ellington preferred to call his work American music, 'beyond category'",
+   "verdict": "wrong",
+   "flags": [],
+   "cited": "genre sources: Jazz Infobox, intro, Improvisation",
+   "note": "Not in any cited section. The corpus has it elsewhere and it says something different: Ellington 'called his music American Music, rather than jazz, and liked to describe those who impressed him as \"beyond category\"' (The influence of Duke Ellington). 'Beyond category' was his praise for other musicians, not a name for his own work. The 'construct' quote is from Krin Gabbard in Etymology and definition, also uncited.",
+   "fix": {
+    "text": "Jazz is famously hard to define: one writer calls it 'a construct' for many related musics, and Duke Ellington called his own work American Music rather than jazz.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Jazz",
+      "section": "Etymology and definition"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Jazz",
+      "section": "The influence of Duke Ellington"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.listen_for1",
+   "claim": "Swing: a rhythmic lilt that makes even, steady notes feel bouncy and alive.",
+   "verdict": "drift",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": "Jazz intro; Swing in the early 20th century",
+   "note": "The section describes swing as triple subdivisions of the beat laid over a duple (even) pulse. Saying swing makes 'even' notes feel bouncy can mislead a newcomer into thinking the notes stay even; the point is that they don't.",
+   "fix": {
+    "text": "Swing: instead of splitting each beat evenly, players split it unevenly, in threes over a steady pulse, so the music rolls and bounces.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Jazz",
+      "section": "Swing in the early 20th century"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.listen_for3",
+   "claim": "from the tangled group lines of New Orleans to call and response between sections",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Jazz intro; Improvisation",
+   "note": "Intro names 'call and response vocals'; neither cited section mentions call and response between band sections.",
+   "fix": {
+    "text": "Instruments talking to each other, from New Orleans players weaving countermelodies around the tune to call and response in the vocals.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Jazz",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Jazz",
+      "section": "Improvisation"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.hallmark4",
+   "claim": "Swing fans were often hostile at first.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Jazz Bebop",
+   "note": "Section: 'a divided, sometimes hostile response among fans and musicians, especially swing players'. 'Often' strengthens 'sometimes', and the hostility it singles out is from swing players, not swing fans.",
+   "fix": {
+    "text": "In the 1940s bebop players such as Charlie Parker made jazz music for listening, not dancing: faster tempos, trickier chords and racing lines. The response was divided and sometimes hostile, especially from swing players, but by the 1950s bebop was part of the jazz vocabulary.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Jazz",
+      "section": "Bebop"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.hallmark5",
+   "claim": "his In a Silent Way went electric and opened the door to fusion",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Jazz Modal jazz; Miles Davis's new directions",
+   "note": "Section says In a Silent Way 'can be considered his first fusion album' (hedged, about his own work). 'Opened the door to fusion' implies it started the genre; the intro dates fusion's appearance to the late 1960s generally, and the same section names Tony Williams Lifetime's Emergency! (1969) as another early fusion album.",
+   "fix": {
+    "text": "Miles Davis's Kind of Blue (1959) built solos on scales rather than fast-changing chords, and became the best-selling jazz album. A decade later he went fully electric with In a Silent Way (1969), which can be considered his first fusion album.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Jazz",
+      "section": "Modal jazz"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Jazz",
+      "section": "Miles Davis's new directions"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.link.blues>jazz",
+   "claim": "Jazz took shape in New Orleans by mixing brass-band marches, ragtime and blues with group improvisation.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Jazz intro; Blues Musical influence",
+   "note": "Same reason text as on the Blues card. Intro says this of 'New Orleans jazz' and then 'jazz did not begin as a single musical tradition in New Orleans or elsewhere'.",
+   "fix": {
+    "text": "New Orleans jazz mixed brass-band marches, ragtime and blues with group improvisation, and blues forms and blue notes stayed at its heart.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Jazz",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Blues",
+      "section": "Musical influence"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.link.jazz>reggae",
+   "claim": "label 'grew out of jazz' (reggae end)",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Reggae Precursors",
+   "note": "Reason is supported, but the label read from the reggae card ('grew out of jazz') overstates: the section says reggae's 'direct origins are in the ska and rocksteady of 1960s Jamaica', strongly influenced by mento and by American jazz and R&B. Jazz is an influence, not the root. Kind stays grew_out_of (from links.json); only the label wording changes.",
+   "fix": {
+    "text": "label: 'drew on jazz'",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Reggae",
+      "section": "Precursors"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.link.jazz>bossa-nova",
+   "claim": "Bossa nova was influenced by jazz, especially in its harmonies.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Bossa nova intro",
+   "note": "Drops the section's own hedge: 'A common misconception is that these complex chords and harmonies were derived from jazz', since samba guitarists used similar structures from the 1920s ('parallel evolution'). It then says bossa nova was influenced by jazz in harmonies and instrumentation. 'Especially in its harmonies' leans into the misconception the source warns about.",
+   "fix": {
+    "text": "Bossa nova took some harmony and instrumentation from jazz, though its rich chords also grew out of samba guitar on a parallel path.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Bossa_nova",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.artist.Louis Armstrong.c2",
+   "claim": "His rich, gravelly voice and scat singing made him a crossover star with white and international audiences.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Louis Armstrong intro",
+   "note": "Cause added. The intro gives the voice and scat skills and, separately, that he was 'one of the first popular African-American entertainers to \"cross over\"'. It doesn't say the voice caused the crossover.",
+   "fix": {
+    "text": "He was also an influential singer with a rich, gravelly voice and a skilled scat singer, and one of the first popular African-American entertainers to cross over to wide white and international audiences.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Louis_Armstrong",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.artist.Louis Armstrong.study_prompt",
+   "claim": "followed King Oliver to Chicago around 1922; ... among the first to improvise on a song's chords; ... 'Hello, Dolly!' won a Grammy in 1965",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Louis Armstrong intro, Hot Five, Horn playing and early jazz, Film, television, and radio",
+   "note": "Beyond card: King Oliver/Chicago 1922, the chord-improvising first, and the 1965 Grammy are in cited sections but not on the card. 'Among the first' also softens the source's 'virtually the first' acceptably; that part is fine.",
+   "fix": {
+    "text": "Use only these facts: He was a New Orleans trumpeter and singer nicknamed 'Satchmo', one of the most influential figures in jazz; he shifted jazz's focus from group improvising to the solo; his 1920s Hot Five and Hot Seven records in Chicago were full of inventive solos; he had a rich, gravelly voice, scatted, and was one of the first African-American entertainers to cross over to wide white and international audiences.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Louis_Armstrong",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Louis_Armstrong",
+      "section": "The Hot Five"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.artist.Ella Fitzgerald.study_prompt",
+   "claim": "a nursery rhyme she co-wrote, was one of the biggest-selling records of the decade; ... eight Song Book sets; ... records with Louis Armstrong and Duke Ellington",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Ella Fitzgerald intro, Early career, Verve years",
+   "note": "Beyond card: co-writing, 'biggest-selling records of the decade', the count of eight and the Armstrong/Ellington records are sourced (Early career, Verve years, intro) but not on the card.",
+   "fix": {
+    "text": "Use only these facts: She was a jazz singer called the 'First Lady of Song', admired for her pure tone, clear diction and horn-like scat improvising; she found fame with Chick Webb's orchestra at Harlem's Savoy Ballroom and led the band for a while after Webb died in 1939; her Song Book albums for Verve, from 1956, covered much of the Great American Songbook.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Ella_Fitzgerald",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Ella_Fitzgerald",
+      "section": "Verve years"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.artist.Charlie Parker.c1",
+   "claim": "He brought rapid passing chords, altered chords and chord substitutions into jazz.",
+   "verdict": "drift",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": "Charlie Parker intro",
+   "note": "Intro says he introduced 'new variants of altered chords'; altered chords and substitutions existed before him (Jazz Bebop: reharmonising was 'already well-established in earlier jazz'). Also three unglossed jargon terms for a newcomer.",
+   "fix": {
+    "text": "He brought new harmonic ideas into jazz: quick in-between chords, fresh twists on altered (tension-filled) chords, and swapping a tune's chords for related ones.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Charlie_Parker",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.artist.Charlie Parker.study_prompt",
+   "claim": "he recorded it at a November 1945 Savoy session with Dizzy Gillespie and a young Miles Davis",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Charlie Parker intro, Artistry, 1945–1953: Solo career",
+   "note": "Beyond card: the session details are in the cited Solo career section but not on the card. 'Young' is the writer's word.",
+   "fix": {
+    "text": "Use only these facts: He was nicknamed 'Bird' and played alto saxophone; he was a leading figure in bebop, known for fast tempos, dazzling technique and new harmonic ideas; he often wrote new melodies over existing tunes' chords; many of his pieces, like 'Now's the Time', use the 12-bar blues.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Charlie_Parker",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Charlie_Parker",
+      "section": "Artistry"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.artist.Miles Davis.c2",
+   "claim": "Kind of Blue (1959), planned around Bill Evans's piano and George Russell's ideas about modes",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Miles Davis 1957–1963",
+   "note": "Section: 'the music had been planned around Evans's piano style. Both Davis and Evans were familiar with George Russell's ideas about modal jazz.' Knowing Russell's ideas is not the same as the album being planned around them.",
+   "fix": {
+    "text": "Kind of Blue (1959), planned around Bill Evans's piano style by two players who knew George Russell's ideas about modes, is what some consider his greatest album.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Miles_Davis",
+      "section": "1957–1963: Collaborations with Gil Evans and Kind of Blue"
+     }
+    ]
+   }
+  },
+  {
+   "id": "jazz.artist.Miles Davis.study_prompt",
+   "claim": "Kind of Blue (1959) was planned around Bill Evans's piano and George Russell's ideas about modes; he recorded early hard bop; his legacy reaches rock, funk and hip-hop",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Miles Davis intro, 1957–1963",
+   "note": "Repeats the c2 stretch about Russell. Hard bop and the legacy line are in the intro but not on the card (beyond card).",
+   "fix": {
+    "text": "Use only these facts: He was a trumpeter and bandleader at the front of one jazz change after another, from bebop and cool jazz to modal jazz and fusion; after playing in Charlie Parker's quintet he recorded the Birth of the Cool sessions, key to cool jazz; Kind of Blue (1959), planned around Bill Evans's piano style by two players who knew George Russell's ideas about modes, is what some consider his greatest album.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Miles_Davis",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Miles_Davis",
+      "section": "1957–1963: Collaborations with Gil Evans and Kind of Blue"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.date_range",
+   "claim": "late 19th century – today",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Gospel music Infobox, intro, Gospel goes to mainstream",
+   "note": "The intro says 'Gospel music can be traced to the early 17th century'. The card picks the 1874 first use of 'gospel song' as the start without saying so. The span is defensible only if the card says the roots go back further.",
+   "fix": {
+    "text": "Keep 'late 19th century – today' and add to debatable: 'Its roots are traced back to the early 17th century, ...' (see debatable fix).",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Gospel_music",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.debatable",
+   "claim": "Thomas Dorsey is often credited with creating it, though he more accurately spread a movement; ... 'gospel song' probably first appeared in print in 1874",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "genre sources: Gospel music Infobox, intro, Gospel goes to mainstream",
+   "note": "The Dorsey half is accurate, but it comes from Thomas A. Dorsey intro, which this item doesn't cite. 'Probably' adds a hedge the intro doesn't have: it states flatly that the first published use was in 1874.",
+   "fix": {
+    "text": "There is no clean founding date: its roots are traced to the early 17th century, the term 'gospel song' first appeared in print in 1874, and 1930 is said to be the year traditional Black gospel began; Thomas Dorsey is often credited with creating it, though he more accurately spread a movement.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Gospel_music",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Gospel_music",
+      "section": "Gospel goes to mainstream"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Thomas_A._Dorsey",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.listen_for2",
+   "claim": "Hand-clapping and foot-stomping carrying the rhythm, often with little or no band.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Gospel music intro",
+   "note": "The intro gives this as how the churches sang historically ('Most of the churches relied on...'). Urban Contemporary section: today's most common recorded gospel 'relies heavily on rhythms and instrumentation' of secular music, including electronic beats. As a present-tense 'what you'll hear' it misleads.",
+   "fix": {
+    "text": "In older church recordings, hand-clapping and foot-stomping carry the rhythm, often with no band at all.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Gospel_music",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.listen_for3",
+   "claim": "Bent, 'worried' blue notes and long runs of several notes on one syllable.",
+   "verdict": "drift",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": "Mahalia Jackson Singing",
+   "note": "The cited section describes Mahalia Jackson's own style, not gospel in general. It gives this as one singer's hallmark (and says her style was new to many white listeners).",
+   "fix": {
+    "text": "In singers like Mahalia Jackson: bent, 'worried' blue notes and long runs of several notes on one syllable.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Mahalia_Jackson",
+      "section": "Singing"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.hallmark5",
+   "claim": "Kirk Franklin's choirs pushed further into R&B and hip-hop.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Gospel music Contemporary Black gospel; Urban contemporary",
+   "note": "Section says artists like Yolanda Adams and Kirk Franklin made 'increasingly more bold forays into the secular world'. It does not name R&B and hip-hop for Franklin.",
+   "fix": {
+    "text": "From 'Oh Happy Day' in 1969 on, gospel borrowed the rhythms and electronic beats of secular Black music. Later artists like Kirk Franklin made ever bolder moves into the secular world.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Gospel_music",
+      "section": "Contemporary Black gospel and gospel rap (1970s–present)"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Gospel_music",
+      "section": "Urban contemporary"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.link.gospel-music>rhythm-and-blues",
+   "claim": "Rhythm and blues carries a strong gospel influence, from church singing to call and response.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Rhythm and blues Etymology; Infobox",
+   "note": "Neither cited section mentions church singing or call and response for R&B. They support gospel as one ingredient (Smithsonian 'amalgam of jump blues, big band swing, gospel, boogie, and blues') and AllMusic's 'stronger gospel influences' than jump blues.",
+   "fix": {
+    "text": "Rhythm and blues mixed gospel with jump blues, swing, boogie and blues, and its stronger gospel influence is what sets it apart from jump blues.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Rhythm_and_blues",
+      "section": "Etymology, definitions and description"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Rhythm_and_blues",
+      "section": "Infobox"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.artist.Thomas A. Dorsey.study_prompt",
+   "claim": "barrelhouses and parties in Atlanta; about 3,000 songs; encouraged clapping, stomping and shouting; MLK's favourite song",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Thomas A. Dorsey intro, Legacy",
+   "note": "Beyond card: all four facts are in the cited sections but not on the card.",
+   "fix": {
+    "text": "Use only these facts: He was a Georgia-born pianist and composer called the 'Father of Gospel Music', who mixed the good news of gospel with the feel of blues; before gospel he toured with Ma Rainey and recorded as 'Georgia Tom' with Tampa Red; he co-founded the National Convention of Gospel Choirs and Choruses in 1932 and led music at Chicago's Pilgrim Baptist Church for 50 years.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Thomas_A._Dorsey",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.artist.Mahalia Jackson.c1",
+   "claim": "sold two million copies, firsts for gospel",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Mahalia Jackson intro",
+   "note": "Source: 'selling two million copies and hitting the number-two spot on Billboard charts, both firsts for gospel'. Dropping the chart position leaves 'firsts' with only one thing to refer to.",
+   "fix": {
+    "text": "Her 1947 'Move On Up a Little Higher' sold two million copies and reached number two on the Billboard charts, both firsts for gospel, and she became the first gospel recording artist to tour Europe.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Mahalia_Jackson",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.artist.Mahalia Jackson.study_prompt",
+   "claim": "influenced by Thomas Dorsey and by Bessie Smith; self-taught, voice ranging from contralto to soprano; worried blue notes and melisma",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Mahalia Jackson intro, Singing",
+   "note": "Beyond card: these facts are in the cited sections (accurate) but not on the card.",
+   "fix": {
+    "text": "Use only these facts: She was a New Orleans-born gospel singer, widely seen as one of the most influential voices of the 20th century; she sold an estimated 22 million records and turned down secular music; her 1947 'Move On Up a Little Higher' sold two million copies and reached number two, both firsts for gospel; she was the first gospel recording artist to tour Europe and sang for the civil rights movement.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Mahalia_Jackson",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.artist.Sister Rosetta Tharpe.c2",
+   "claim": "Her 1944 'Strange Things Happening Every Day' was the first gospel record to cross over to the R&B chart.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Sister Rosetta Tharpe intro",
+   "note": "Source: her '1945 hit', recorded in late 1944, hit No. 2 on the Billboard 'race records' chart, 'the term then used for what later became the R&B chart', in April 1945. 'The R&B chart' is anachronistic and the hit year is 1945.",
+   "fix": {
+    "text": "Her 'Strange Things Happening Every Day', recorded in late 1944, was the first gospel record to cross over, reaching No. 2 on Billboard's 'race records' chart (later the R&B chart) in 1945.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Sister_Rosetta_Tharpe",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.artist.Sister Rosetta Tharpe.study_prompt",
+   "claim": "She grew up in a Pentecostal church; ... crossed over to the R&B chart; she influenced Little Richard, Chuck Berry, Johnny Cash and Elvis Presley",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Sister Rosetta Tharpe intro",
+   "note": "Beyond card: the Pentecostal roots and named influences aren't on the card. Repeats the 'R&B chart' anachronism from c2.",
+   "fix": {
+    "text": "Use only these facts: She was a singer and electric guitarist who became the first great recording star of gospel, later called 'the Godmother of Rock and Roll'; she mixed spiritual lyrics with electric guitar; she helped pioneer pop-gospel from 1938, taking sacred songs into nightclubs and concert halls; 'This Train' was her 1939 hit; 'Strange Things Happening Every Day' was the first gospel record to cross over to Billboard's 'race records' chart, in 1945.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Sister_Rosetta_Tharpe",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.artist.Kirk Franklin.c2",
+   "claim": "'Stomp' (1997), with the choir God's Property, became a crossover hit on MTV and R&B radio.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Kirk Franklin Signing to record label",
+   "note": "Source: it was the remix, featuring Salt of Salt-N-Pepa, that 'was considered a crossover hit' with MTV rotation and No. 1 on R&B Singles Airplay.",
+   "fix": {
+    "text": "The remix of 'Stomp' (1997), with the choir God's Property and Salt of Salt-N-Pepa, became a crossover hit on MTV and R&B radio.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Kirk_Franklin",
+      "section": "Signing to record label"
+     }
+    ]
+   }
+  },
+  {
+   "id": "gospel-music.artist.Kirk Franklin.study_prompt",
+   "claim": "it was only the third gospel album to sell over a million copies; 'Stomp' and its remix with Salt of Salt-N-Pepa",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Kirk Franklin intro, Signing to record label",
+   "note": "Beyond card: 'third gospel album to sell a million' and the Salt remix are in the cited section but not on the card (unless c2 is fixed as above).",
+   "fix": {
+    "text": "Use only these facts: He is a Texas gospel singer-songwriter, choir director and producer called a 'Reigning King of Urban Gospel', with 20 Grammy Awards; his 1993 debut with The Family spent 42 weeks at No. 1 on the gospel albums chart and sold a million copies; the remix of 'Stomp' (1997), with God's Property, became a crossover hit on MTV and R&B radio.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Kirk_Franklin",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Kirk_Franklin",
+      "section": "Signing to record label"
+     }
+    ]
+   }
+  },
+  {
+   "id": "country-music.tagline",
+   "claim": "born on early radio",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Country music intro; First generation (1920s)",
+   "note": "The intro says country 'was first developed in the South' from older folk traditions; First generation says radio 'gained [it] an increased audience' in the 1920s. Radio spread it; it wasn't born there.",
+   "fix": {
+    "text": "Southern ballads and dance tunes on fiddle, banjo and guitar, spread by early radio.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Country_music",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Country_music",
+      "section": "First generation (1920s)"
+     }
+    ]
+   }
+  },
+  {
+   "id": "country-music.debatable",
+   "claim": "something historians tie to record labels splitting 'race' and 'hillbilly' music by the performer's colour in the 1920s",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "genre sources: Country music Infobox, intro, Origins",
+   "note": "The point is real but uncited: Race in modern country music says the white association 'has been attributed to the efforts to segregate the music industry by record labels, beginning in the 1920s'. It names no historians and doesn't use 'race'/'hillbilly' (that detail is in Blues Origin). Stronger and more specific than the source.",
+   "fix": {
+    "text": "Its roots are both African and European, yet it is now largely linked with white Americans, which has been put down to record labels segregating the music industry from the 1920s.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Country_music",
+      "section": "Race in modern country music"
+     }
+    ]
+   }
+  },
+  {
+   "id": "country-music.listen_for3",
+   "claim": "A yodel: the voice flipping quickly between chest voice and a high break.",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "Jimmie Rodgers intro; Style and image",
+   "note": "Neither cited section describes how a yodel works. They say Rodgers was best known for his yodel and that it used 4/4 time instead of alpine 3/4.",
+   "fix": {
+    "text": "Jimmie Rodgers's 'blue yodel', a yodel set to a steady four-beat time rather than the three-beat alpine kind.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Jimmie_Rodgers",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Jimmie_Rodgers",
+      "section": "Style and image"
+     }
+    ]
+   }
+  },
+  {
+   "id": "country-music.hallmark1",
+   "claim": "Ralph Peer recorded both the Carter Family and Jimmie Rodgers, a day apart",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "Country music First generation (1920s)",
+   "note": "Citation gap. The cited section has only the Carters at Bristol on 1 August 1927. 'A day apart' is in Carter Family intro ('the day before country singer Jimmie Rodgers made his initial recordings for Victor under Peer'), which isn't cited. Facts correct; add the source.",
+   "fix": {
+    "text": "Keep text; add source Carter Family intro (and Jimmie Rodgers intro for Rodgers at Bristol).",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Carter_Family",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Jimmie_Rodgers",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Country_music",
+      "section": "First generation (1920s)"
+     }
+    ]
+   }
+  },
+  {
+   "id": "country-music.hallmark3",
+   "claim": "grew up in Texas bar rooms, drawing on western swing and Mexican ranchera. Hank Williams came up in this world",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": "Country music Second generation (1930s–1940s)",
+   "note": "The section names three roots: western swing, Mexican ranchera 'together with the blues of the American South'. Dropping the blues drops the Black contribution the source credits. It places the sound in Texas, Oklahoma and New Mexico, not just Texas. Nothing in the cited section puts Hank Williams in honky-tonk; it mentions him only for 'Cold, Cold Heart'.",
+   "fix": {
+    "text": "A raw sound of guitar, bass and steel guitar grew up in the bar rooms of Texas, Oklahoma and New Mexico, drawing on western swing, Mexican ranchera and the blues of the South. In 1951 Tony Bennett's pop cover of Hank Williams's 'Cold, Cold Heart' took his songwriting to mainstream audiences.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Country_music",
+      "section": "Second generation (1930s–1940s)"
+     }
+    ]
+   }
+  },
+  {
+   "id": "country-music.hallmark4",
+   "claim": "Outlaw country later pushed back toward rawer, Texas-flavoured music.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Country music Third generation; Fourth generation",
+   "note": "Fourth generation says outlaw country emerged in the late 1950s–60s from Western styles in the bars of Oklahoma, New Mexico and Texas, with lyrics of anger and alienation, and 'revolutionized country music in the early 1970s'. It does not frame it as a pushback; the 'back-to-basics' rejection of polish it describes is the mid-1980s neotraditionalists.",
+   "fix": {
+    "text": "In the 1950s and 60s country branched into bluegrass, rockabilly and the polished Nashville sound, with strings and smooth vocals. Outlaw country, from the bars of Oklahoma, New Mexico and Texas, shook things up in the early 1970s with songs of anger and alienation.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Country_music",
+      "section": "Third generation (1950s–1960s)"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Country_music",
+      "section": "Fourth generation (1970s–1980s)"
+     }
+    ]
+   }
+  },
+  {
+   "id": "country-music.artist.Jimmie Rodgers.study_prompt",
+   "claim": "recorded at the 1927 Bristol sessions and then in Camden, New Jersey, on November 30, 1927; 'Blue Yodel No. 1' became his most successful recording",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Jimmie Rodgers intro, Style and image, Influence, Music career",
+   "note": "Beyond card: the Bristol/Camden dates and 'most successful recording' are sourced (Music career) but not on the card.",
+   "fix": {
+    "text": "Use only these facts: He was 'The Singing Brakeman', widely regarded as the 'Father of Country Music' and best known for his yodelling; he mixed Anglo-Celtic ballad singing with Black blues and set his yodel to a steady four-beat time; the Country Music Hall of Fame says he defined the role of the singing star in country music.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Jimmie_Rodgers",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Jimmie_Rodgers",
+      "section": "Style and image"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Jimmie_Rodgers",
+      "section": "Influence"
+     }
+    ]
+   }
+  },
+  {
+   "id": "country-music.artist.Carter Family.study_prompt",
+   "claim": "first recorded in Bristol, Tennessee, on August 1, 1927, by Ralph Peer; shape-note singing; Sara ... played autoharp or guitar; 'Can the Circle Be Unbroken' entered the Grammy Hall of Fame in 1998",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Carter Family intro, Infobox, Legacy",
+   "note": "Beyond card: the Bristol date, shape-note singing, autoharp and the 1998 Grammy Hall of Fame entry are in the cited sections, not on the card.",
+   "fix": {
+    "text": "Use only these facts: The group was Sara, A. P. and Maybelle Carter from southwest Virginia, the first vocal group to become country stars; their tight mountain-gospel harmonies shaped country, bluegrass and the later folk revival; Sara sang lead, and Maybelle's 'Carter Scratch' played melody and rhythm at once; songs like 'Wildwood Flower' became country standards, and they were the first group in the Country Music Hall of Fame.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Carter_Family",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Carter_Family",
+      "section": "Legacy"
+     }
+    ]
+   }
+  },
+  {
+   "id": "country-music.artist.Hank Williams.study_prompt",
+   "claim": "influenced by Roy Acuff; started on local radio in Montgomery; 'Lovesick Blues' stayed at number one for four months and took him to the Grand Ole Opry; died at 29",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Hank Williams intro, Infobox, 1940s",
+   "note": "Beyond card: Acuff, Montgomery radio, the four months at No. 1 and the Opry, and his death at 29 are sourced but not on the card.",
+   "fix": {
+    "text": "Use only these facts: He was an Alabama singer-songwriter and early country pioneer whose short career produced 12 number-one country hits; he learned guitar from blues musician Rufus Payne; though he could barely read music he wrote standards such as 'Your Cheatin' Heart' and 'Hey, Good Lookin''; he influenced Chuck Berry, Elvis Presley, Johnny Cash, Bob Dylan and the Rolling Stones.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Hank_Williams",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "country-music.artist.Dolly Parton.dates",
+   "claim": "1946–2026",
+   "verdict": "supported",
+   "flags": [
+    "human-check-2026"
+   ],
+   "cited": "Dolly Parton intro; Infobox",
+   "note": "HUMAN CHECK: the corpus gives death date 2026-08-25 (Infobox 'death date: 2026-8-25', intro 'January 19, 1946 – August 25, 2026', and '1967–1975' section 'until her death in 2026'). It is supported by the corpus, but a 2026 death is recent enough to need checking against a live source before publishing. If wrong, the card's past tense ('was', 'logged') and the summary need rewriting for a living artist.",
+   "fix": null
+  },
+  {
+   "id": "country-music.artist.Dolly Parton.study_prompt",
+   "claim": "wrote her first song at six; debut album Hello, I'm Dolly (1967); later a huge hit for Whitney Houston; 'Jolene' and '9 to 5'",
+   "verdict": "drift",
+   "flags": [
+    "human-check-2026"
+   ],
+   "cited": "Dolly Parton intro, Infobox, 1976–1986, 1967–1975",
+   "note": "Beyond card: first song at six, the debut album, the Whitney Houston hit and 'Jolene'/'9 to 5' are in the cited intro, not on the card. Also carries the 1946–2026 dates (see human check).",
+   "fix": {
+    "text": "Use only these facts: She was the 'Queen of Country', an East Tennessee singer-songwriter who wrote more than 3,000 songs; she logged 25 No. 1 country singles, tied for the most by a woman, and a record 44 Top 10 country albums; her mid-1970s turn toward pop paid off with Here You Come Again (1977), her first million-seller; 'I Will Always Love You' went to No. 1 on the country chart in 1974.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Dolly_Parton",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Dolly_Parton",
+      "section": "1976–1986: A broader audience"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Dolly_Parton",
+      "section": "1967–1975: Country music success"
+     }
+    ]
+   }
+  },
+  {
+   "id": "american-folk-music-revival.debatable",
+   "claim": "folk would have gone mainstream a decade earlier, making the 1960s boom unnecessary",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "American folk music revival Early years",
+   "note": "Eyerman and Baretta speculate folk 'would very likely have entered mainstream American culture in even greater force in the early 1950s, perhaps making the second wave ... redundant'. Folk was already mainstream then (the Weavers' 13 weeks at No. 1), so 'gone mainstream a decade earlier' misstates it, and 'unnecessary' drops 'perhaps'. 'Some historians' for two named writers is fine.",
+   "fix": {
+    "text": "Two scholars speculate that without the anti-communist blacklisting of the 1950s, folk would have hit the mainstream even harder in the early 1950s, perhaps making the 1960s boom redundant.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/American_folk_music_revival",
+      "section": "Early years"
+     }
+    ]
+   }
+  },
+  {
+   "id": "american-folk-music-revival.hallmark1",
+   "claim": "The revival grew from People's Songs, a clearing house for union songs.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Folk revival Early years; Woody Guthrie intro; Pete Seeger intro",
+   "note": "Early years gives two roots: the New York revival 'was rooted in the resurgent interest in square dancing and folk dancing' of the 1940s, and the revival as a popular phenomenon 'begins with the career of the Weavers', formed by members of People's Songs. Saying it grew from People's Songs collapses that.",
+   "fix": {
+    "text": "As a popular movement the revival began with the Weavers, formed by members of People's Songs, a clearing house for union songs. Pete Seeger and Woody Guthrie's circle sang about workers, fascism and later civil rights.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/American_folk_music_revival",
+      "section": "Early years"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Woody_Guthrie",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Pete_Seeger",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "american-folk-music-revival.link.american-folk-music-revival>rock-music",
+   "claim": "When Dylan and folk-scene bands like the Byrds picked up electric instruments, folk rock was born.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Folk revival Rock subsumes folk; Rock music Folk rock",
+   "note": "Folk rock section: there were 'early attempts' (the Animals' 1964 'House of the Rising Sun'), and the movement 'is usually thought to have taken off' with the Byrds' 'Mr. Tambourine Man' (1965); Dylan went electric 'later that year'. 'Was born' drops the hedge and the order is reversed.",
+   "fix": {
+    "text": "Folk rock is usually thought to have taken off when the Byrds, from LA's folk café scene, recorded Dylan's 'Mr. Tambourine Man' with electric guitars and drums in 1965; Dylan went electric later that year.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Rock_music",
+      "section": "Folk rock"
+     }
+    ]
+   }
+  },
+  {
+   "id": "american-folk-music-revival.artist.Woody Guthrie.study_prompt",
+   "claim": "grew up in Okemah; worked at KFVD; socialism and anti-fascism; recorded Dust Bowl Ballads in New York; 'This Land Is Your Land' in February 1940",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Woody Guthrie intro, Infobox",
+   "note": "Beyond card: all are in the cited intro but not on the card.",
+   "fix": {
+    "text": "Use only these facts: He was an Oklahoma singer-songwriter, one of the most significant figures in American folk music, whose songs about the Dust Bowl and working people inspired generations; Dust Bowl Ballads (1940), drawn from his years among migrants heading to California, earned him the name 'Dust Bowl Troubadour'; Pete Seeger, Bob Dylan, Johnny Cash and Bruce Springsteen name him as an influence.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Woody_Guthrie",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "american-folk-music-revival.artist.Pete Seeger.summary",
+   "claim": "a New York singer, banjo player and activist",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "Pete Seeger intro; Infobox",
+   "note": "Citation gap. Neither cited section calls him a banjo player. Folk revival Major figures (uncited) mentions his How to Play the Five-String Banjo, which supports it.",
+   "fix": {
+    "text": "Keep text; add source American folk music revival 'Major figures'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/American_folk_music_revival",
+      "section": "Major figures"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Pete_Seeger",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "american-folk-music-revival.artist.Pete Seeger.study_prompt",
+   "claim": "he wrote 'Where Have All the Flowers Gone?', 'If I Had a Hammer' (with Lee Hays) and 'Turn! Turn! Turn!'; sang for disarmament, civil rights and the environment",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Pete Seeger intro, Infobox",
+   "note": "Beyond card: the song credits and causes are in the cited intro but not on the card.",
+   "fix": {
+    "text": "Use only these facts: He was a New York singer, banjo player and activist, a fixture of 1940s radio and a member of The Weavers, who became a leading protest singer in the 1960s; with the Weavers he topped the charts for 13 weeks in 1950 with Lead Belly's 'Goodnight, Irene' before the group was blacklisted; he helped popularise 'We Shall Overcome'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Pete_Seeger",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "american-folk-music-revival.artist.Joan Baez.c1",
+   "claim": "her 1960 debut stayed on the Billboard charts for over two years",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "Joan Baez intro",
+   "note": "Citation gap. The 'gold' half is in the Joan Baez intro; the 'over two years' half is in Folk revival 'The revival at its height', which isn't cited.",
+   "fix": {
+    "text": "Keep text; add source American folk music revival 'The revival at its height'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Joan_Baez",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/American_folk_music_revival",
+      "section": "The revival at its height"
+     }
+    ]
+   }
+  },
+  {
+   "id": "american-folk-music-revival.artist.Joan Baez.c2",
+   "claim": "Openly political, she sang 'We Shall Overcome' at the 1963 March on Washington.",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "Joan Baez intro",
+   "note": "Citation gap. The Baez intro says only that she recorded 'We Shall Overcome'. 'Openly political' and the March come from Folk revival 'The revival at its height', which isn't cited.",
+   "fix": {
+    "text": "Keep text; add source American folk music revival 'The revival at its height'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/American_folk_music_revival",
+      "section": "The revival at its height"
+     }
+    ]
+   }
+  },
+  {
+   "id": "american-folk-music-revival.artist.Joan Baez.study_prompt",
+   "claim": "her generally interprets others' songs; ... she sang at Woodstock in 1969; she has campaigned for civil rights and nonviolence",
+   "verdict": "drift",
+   "flags": [
+    "newcomer"
+   ],
+   "cited": "Joan Baez intro, Infobox",
+   "note": "Typo: 'her generally interprets' should be 'she generally interprets'. Beyond card: Woodstock, 'Diamonds & Rust' and the causes aren't on the card.",
+   "fix": {
+    "text": "Use only these facts: She is a singer and activist whose folk music often carries songs of protest and social justice; she mostly interprets other people's songs, from old ballads to Dylan; her first three albums went gold, and her 1960 debut stayed on the Billboard charts for over two years; she sang 'We Shall Overcome' at the 1963 March on Washington.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Joan_Baez",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/American_folk_music_revival",
+      "section": "The revival at its height"
+     }
+    ]
+   }
+  },
+  {
+   "id": "american-folk-music-revival.artist.Bob Dylan.c2",
+   "claim": "helping folk turn into folk rock",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Bob Dylan intro",
+   "note": "The cited intro says the electric albums 'sparked controversy' and that 'Like a Rolling Stone' expanded boundaries. It says nothing about him turning folk into folk rock (Rock music Folk rock credits the Byrds with the take-off and says Dylan followed).",
+   "fix": {
+    "text": "He sparked controversy by recording with electric rock instruments in 1965, and his six-minute 'Like a Rolling Stone' stretched what a pop single could be.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Bob_Dylan",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "american-folk-music-revival.artist.Bob Dylan.study_prompt",
+   "claim": "moved to New York in 1961; debut held traditional folk and blues; Freewheelin' breakthrough; went electric on Bringing It All Back Home and Highway 61 Revisited; 2016 Nobel Prize",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Bob Dylan intro, Infobox",
+   "note": "Beyond card: most of these are in the cited intro but not on the card.",
+   "fix": {
+    "text": "Use only these facts: He is a Minnesota-born singer-songwriter who brought literary, political and philosophical lyrics into 1960s folk; 'Blowin' in the Wind' and 'The Times They Are a-Changin'' became anthems of the civil rights and antiwar movements; he sparked controversy by recording with electric rock instruments in 1965.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Bob_Dylan",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-and-roll.listen_for2",
+   "claim": "Twelve-bar blues chords under the song, borrowed straight from the blues.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Rock and roll intro",
+   "note": "Intro: 'Minimal blues chord progressions such as the twelve-bar blues are commonly used.' The card states it as a given for every song.",
+   "fix": {
+    "text": "Often a simple blues chord pattern under the song, most commonly the twelve-bar blues.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Rock_and_roll",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-and-roll.hallmark2",
+   "claim": "His riffs and showmanship set a template for rock guitar.",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": "Rock and roll Origins",
+   "note": "The same paragraph says Keith Richards's claim that Berry created rock guitar 'neglects the black guitarists who did the same thing before Berry, such as Goree Carter, Gatemouth Brown, and the originator of the style, T-Bone Walker', and that distortion 'was predated by electric blues guitarists'. Presenting Berry alone as the template, under the title 'The guitar hero', drops the credit the source deliberately gives. What the section does say: Berry 'established the electric guitar as its centerpiece'.",
+   "fix": {
+    "text": "Chuck Berry made the electric guitar rock and roll's centrepiece; his 1955 'Maybellene' has a distorted solo from his small valve amp. Black guitarists like T-Bone Walker had played this way before him, and blues players used distortion first.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Rock_and_roll",
+      "section": "Origins"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-and-roll.artist.Sister Rosetta Tharpe.c2",
+   "claim": "Elvis Presley and Johnny Cash both counted her as an influence",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Sister Rosetta Tharpe Musical influence",
+   "note": "Cash did (he called her his favourite singer as a child). For Presley, the source is 'a PBS article' saying he was influenced by five artists including her. Presley himself isn't quoted, so 'counted her' overstates.",
+   "fix": {
+    "text": "She invited a young Little Richard on stage in 1947; Johnny Cash called her his favourite singer as a child, and a PBS article names her among five artists who influenced Elvis Presley.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Sister_Rosetta_Tharpe",
+      "section": "Musical influence"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-and-roll.artist.Sister Rosetta Tharpe.study_prompt",
+   "claim": "'Strange Things Happening Every Day' (1944) crossed over to the R&B chart; ... her 1964 European tour with Muddy Waters inspired British guitarists",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Sister Rosetta Tharpe intro, Infobox, Musical influence",
+   "note": "The 'R&B chart' is anachronistic: the source says Billboard's 'race records' chart, the name 'then used for what later became the R&B chart', and the hit came in 1945. Beyond card: the crossover, the 1964 tour and 'first public performance outside church' aren't on this card.",
+   "fix": {
+    "text": "Use only these facts: She was a gospel singer and electric guitarist later called 'the Godmother of Rock and Roll', among the first gospel musicians to win over rhythm and blues and rock and roll audiences; her guitar mixed melodic urban blues, folk arrangements and a pulsing swing seen as a forerunner of rock and roll; she invited a young Little Richard on stage in 1947, and Johnny Cash called her his favourite singer as a child.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Sister_Rosetta_Tharpe",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Sister_Rosetta_Tharpe",
+      "section": "Musical influence"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-and-roll.artist.Chuck Berry.c1",
+   "claim": "His lyrics about teenage life, cars and music itself",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Chuck Berry intro",
+   "note": "Source: 'lyrics that focused on teenage life, consumerism, and music itself'. 'Cars' isn't in the source.",
+   "fix": {
+    "text": "His lyrics about teenage life, buying things and music itself, plus guitar solos and showmanship, shaped later rock.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Chuck_Berry",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-and-roll.artist.Chuck Berry.study_prompt",
+   "claim": "influenced by T-Bone Walker; hits list; first Rock and Roll Hall of Fame class in 1986",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Chuck Berry intro, Infobox",
+   "note": "Beyond card: T-Bone Walker, the four-hit list and the 1986 Hall of Fame are in the cited intro but not on the card.",
+   "fix": {
+    "text": "Use only these facts: He was a St. Louis guitarist, singer and songwriter nicknamed the 'Father of Rock and Roll', who turned rhythm and blues into the core of rock and roll; his lyrics about teenage life, buying things and music itself, plus guitar solos and showmanship, shaped later rock; Muddy Waters pointed him to Chess Records in Chicago in 1955, where he cut 'Maybellene'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Chuck_Berry",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-and-roll.artist.Little Richard.study_prompt",
+   "claim": "'Tutti Frutti' ... entered the National Recording Registry in 2009; 'Long Tall Sally' (1956) topped the R&B chart; the Beatles opened for him in 1962",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Little Richard intro, Infobox, Music",
+   "note": "Beyond card: the Registry entry, 'Long Tall Sally' and the Beatles are in the cited sections but not on the card.",
+   "fix": {
+    "text": "Use only these facts: He was the 'Architect of Rock and Roll', a Georgia singer and pianist whose frenetic piano, pounding backbeat and raspy vocals laid a foundation for the genre; he was one of the first Black crossover artists, and his concerts drew Black and white audiences together despite segregation; Otis Redding and Sam Cooke credited him with shaping early soul, and James Brown said his band first put funk in the rock beat.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Little_Richard",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Little_Richard",
+      "section": "Music"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-and-roll.artist.Elvis Presley.study_prompt",
+   "claim": "grew up in Tupelo and Memphis; producer Sam Phillips, who wanted to bring African-American music to a wider audience; 'Heartbreak Hotel' became a number-one hit",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Elvis Presley intro, Infobox, First national TV appearances",
+   "note": "Beyond card: Tupelo/Memphis, Sam Phillips's aim and the No. 1 are in the cited intro but not on the card.",
+   "fix": {
+    "text": "Use only these facts: He was the 'King of Rock and Roll', a Mississippi-born singer whose energetic style mixed influences across the colour line, bringing great success and controversy; at Sun Records in 1954, with Scotty Moore and Bill Black, he became a pioneer of rockabilly, a fusion of country and rhythm and blues; he is one of the best-selling artists in history.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Elvis_Presley",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-music.debatable",
+   "claim": "some dictionaries treat the terms as the same",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "genre sources: Rock music Infobox, intro, Characteristics",
+   "note": "Citation gap. The 'blanket term' half is in Rock music Characteristics. The dictionaries half is only in Rock and roll Etymology ('sometimes also used as synonymous with \"rock music\" and is defined as such in some dictionaries'), which isn't cited. True to the corpus.",
+   "fix": {
+    "text": "Keep text; add source Rock and roll 'Etymology'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Rock_and_roll",
+      "section": "Etymology"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Rock_music",
+      "section": "Characteristics"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-music.listen_for3",
+   "claim": "Verse-chorus songs, often stretched into long jams or whole concept albums.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Rock music intro; Blues rock",
+   "note": "Intro: 'Usually, rock is song-based music ... using a verse–chorus form'. Long improvisations are attributed to blues rock bands specifically (Blues rock), and concept albums to progressive rock (Progressive rock, uncited). 'Often' generalises a subgenre trait to all rock.",
+   "fix": {
+    "text": "Mostly verse-chorus songs, though blues rock and psychedelic bands often stretched them into long improvised jams.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Rock_music",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Rock_music",
+      "section": "Blues rock"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-music.hallmark2",
+   "claim": "A second wave of British bands, led by the Rolling Stones, drew straight on American blues.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Rock music Blues rock",
+   "note": "Section: 'a second wave of bands that drew their inspiration more directly from American blues, including the Rolling Stones and the Yardbirds'. 'Led by' adds a ranking the source doesn't make. Janis Joplin is tagged as an artist but the text never mentions her or the US side of blues rock where she appears.",
+   "fix": {
+    "text": "A second wave of British bands, including the Rolling Stones and the Yardbirds, drew more directly on American blues, and US acts like Janis Joplin and Jimi Hendrix followed. By the 1970s the style had become heavier and riff-based.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Rock_music",
+      "section": "Blues rock"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-music.link.american-folk-music-revival>rock-music",
+   "claim": "When Dylan and folk-scene bands like the Byrds picked up electric instruments, folk rock was born.",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Folk revival Rock subsumes folk; Rock music Folk rock",
+   "note": "Same reason as on the folk revival card. Folk rock 'is usually thought to have taken off' with the Byrds' 'Mr. Tambourine Man'; Dylan went electric 'later that year'. The hedge is dropped and the order reversed.",
+   "fix": {
+    "text": "Folk rock is usually thought to have taken off when the Byrds, from LA's folk café scene, recorded Dylan's 'Mr. Tambourine Man' with electric guitars and drums in 1965; Dylan went electric later that year.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Rock_music",
+      "section": "Folk rock"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-music.artist.The Beatles.study_prompt",
+   "claim": "played clubs in Liverpool and Hamburg; producer George Martin; first hit 'Love Me Do' (1962); best-selling music act of all time",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "The Beatles intro, Infobox",
+   "note": "Beyond card: Hamburg, George Martin, 'Love Me Do' and the sales record are in the cited intro but not on the card.",
+   "fix": {
+    "text": "Use only these facts: They were a Liverpool band, John Lennon, Paul McCartney, George Harrison and Ringo Starr, regarded as the most influential band in popular music; rooted in skiffle, beat and 1950s rock and roll, they folded in classical, folk, Indian music and psychedelia; after quitting live shows in 1966 they made studio albums such as Revolver and Sgt. Pepper that heralded the album era.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/The_Beatles",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-music.artist.The Rolling Stones.study_prompt",
+   "claim": "They formed in London in 1962 with Mick Jagger, Keith Richards, Brian Jones, Bill Wyman and Charlie Watts; ... returned to their roots on Beggars Banquet (1968)",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "The Rolling Stones intro, Infobox",
+   "note": "The intro gives those five as the 'first stable line-up', reached after Ian Stewart was sidelined. It doesn't say the band formed with them. Beyond card: the line-up and Beggars Banquet aren't on the card.",
+   "fix": {
+    "text": "Use only these facts: They are a London band rooted in blues who were at the front of the British Invasion and pioneered the gritty, rhythmic sound of hard rock; their own songs '(I Can't Get No) Satisfaction' and 'Paint It Black' became international No. 1 hits in the mid-1960s; they have broken the record for highest-grossing concert tour three times and still record.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/The_Rolling_Stones",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-music.artist.Jimi Hendrix.study_prompt",
+   "claim": "backed the Isley Brothers; moved to England in 1966 and formed the Experience; inspired by rock and roll and electric blues; Uni-Vibe; only US number-one album",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Jimi Hendrix intro, Infobox",
+   "note": "Beyond card: these are in the cited intro but not on the card.",
+   "fix": {
+    "text": "Use only these facts: He was a Seattle-born guitarist and singer-songwriter, widely regarded as one of the most influential guitarists ever, who found fame in England in the late 1960s; he made amplifier feedback a musical sound and was among the first rock guitarists to lean on effects like fuzz and wah-wah; before fame he played the Chitlin' Circuit and backed Little Richard, and his 1967 Monterey Pop set made him a US star.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Jimi_Hendrix",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "rock-music.artist.Janis Joplin.study_prompt",
+   "claim": "Port Arthur; Kozmic Blues Band and Full Tilt Boogie Band; Woodstock 1969; died at 27; Pearl reached number one",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Janis Joplin intro, Infobox",
+   "note": "Beyond card: these are in the cited sections but not on the card.",
+   "fix": {
+    "text": "Use only these facts: She was a Texas singer, one of the most iconic rock performers of her era, known for her powerful voice and stage presence; she broke through at the 1967 Monterey Pop Festival singing with San Francisco psychedelic band Big Brother and the Holding Company; in 1995 she became the first female solo artist inducted into the Rock and Roll Hall of Fame in her first year of eligibility.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Janis_Joplin",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "heavy-metal-music.place",
+   "claim": "United Kingdom (Birmingham above all) and the United States",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Heavy metal Infobox, intro, Origins",
+   "note": "Origins credits Birmingham's industrial environment with influencing Black Sabbath's sound 'and the sound of heavy metal in general'. It doesn't rank Birmingham above other places; the other two founding bands it names (Led Zeppelin, Deep Purple) are not from Birmingham.",
+   "fix": {
+    "text": "United Kingdom (notably Birmingham) and the United States",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Heavy_metal_music",
+      "section": "Infobox"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Heavy_metal_music",
+      "section": "Origins: late 1960s and early 1970s"
+     }
+    ]
+   }
+  },
+  {
+   "id": "heavy-metal-music.description",
+   "claim": "built one of music's most loyal fan cultures",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Heavy metal Infobox, intro, Characteristics, Origins",
+   "note": "A comparison none of the cited sections makes. The intro says only that by the late 1970s fans 'became known as \"metalheads\" or \"headbangers\"'.",
+   "fix": {
+    "text": "Heavy metal grew out of blues rock and psychedelic rock in the late 1960s, mostly in Britain and the US. Its thick, loud sound of distorted guitars, solos and pounding drums split into many styles, and its fans became known as 'metalheads' or 'headbangers'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Heavy_metal_music",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "heavy-metal-music.hallmark2",
+   "claim": "British Steel (1980) is said to have codified what heavy metal means.",
+   "verdict": "unsupported",
+   "flags": [],
+   "cited": "Heavy metal Origins",
+   "note": "Citation gap. Origins doesn't mention British Steel. The line is in Judas Priest 'Musical style and influences' ('record that, more than any other, codified what we mean by heavy metal'), which isn't cited. Accurate otherwise.",
+   "fix": {
+    "text": "Keep text; add source Judas Priest 'Musical style and influences'.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Heavy_metal_music",
+      "section": "Origins: late 1960s and early 1970s"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Judas_Priest",
+      "section": "Musical style and influences"
+     }
+    ]
+   }
+  },
+  {
+   "id": "heavy-metal-music.artist.Black Sabbath.study_prompt",
+   "claim": "horror-inspired lyrics; Iommi lost the tips of two fingers in a sheet-metal factory accident",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Black Sabbath intro, Infobox, Musical style, Influence and innovation",
+   "note": "Beyond card: the horror lyrics and the factory accident are in the cited sections but not on the artist card (the accident is in the genre's hallmark1, not the artist card).",
+   "fix": {
+    "text": "Use only these facts: They were a Birmingham band, Tony Iommi, Bill Ward, Geezer Butler and Ozzy Osbourne, cited as pioneers of heavy metal for their occult themes and down-tuned guitars; their first three albums, Black Sabbath, Paranoid and Master of Reality, are cited as pioneering metal records; their doomy sound often used the tritone, the 'devil's interval', and they influenced Judas Priest, Iron Maiden and Metallica.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Black_Sabbath",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Black_Sabbath",
+      "section": "Musical style"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Black_Sabbath",
+      "section": "Influence and innovation"
+     }
+    ]
+   }
+  },
+  {
+   "id": "heavy-metal-music.artist.Judas Priest.summary",
+   "claim": "pioneers of the New Wave of British Heavy Metal",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Judas Priest intro; Infobox",
+   "note": "Hedge dropped: intro says 'They have been referred to as one of the pioneers of the new wave of British heavy metal'. They formed in 1969, before NWOBHM, and are usually counted as a precursor.",
+   "fix": {
+    "text": "Judas Priest are a Birmingham heavy metal band, referred to as pioneers of the New Wave of British Heavy Metal and cited as an influence on speed, thrash and power metal.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Judas_Priest",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "heavy-metal-music.artist.Judas Priest.study_prompt",
+   "claim": "Rocka Rolla rooted in blues rock; progressive mid-1970s albums; Sin After Sin used double bass drums; 'codified heavy metal'",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Judas Priest intro, Infobox, Musical style and influences",
+   "note": "Beyond card: the album-by-album details are in the cited sections but not on the card.",
+   "fix": {
+    "text": "Use only these facts: They are a Birmingham heavy metal band, referred to as pioneers of the New Wave of British Heavy Metal and an influence on speed, thrash and power metal; singer Rob Halford developed a powerful, operatic voice running from low growls to piercing high screams; their 1980 album British Steel finally brought mainstream success and simplified their sound.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Judas_Priest",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Judas_Priest",
+      "section": "Musical style and influences"
+     }
+    ]
+   }
+  },
+  {
+   "id": "heavy-metal-music.artist.Iron Maiden.study_prompt",
+   "claim": "Leyton; Dickinson replaced Paul Di'Anno; The Number of the Beast sold almost 20 million copies",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Iron Maiden intro, Infobox",
+   "note": "Beyond card: Di'Anno and the 20 million sales are in the cited intro but not on the card.",
+   "fix": {
+    "text": "Use only these facts: They are an East London band founded by bassist Steve Harris, pioneers of the New Wave of British Heavy Metal and one of metal's most influential bands; Bruce Dickinson's arrival as singer in 1981 was a turning point; their lyrics draw on history, literature, war, mythology and science fiction, and their mascot Eddie has fronted their covers for over 40 years.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Iron_Maiden",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "heavy-metal-music.artist.Metallica.study_prompt",
+   "claim": "harmonised leads and long instrumentals; Ulrich cites Iron Maiden as their biggest influence",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Metallica intro, Infobox, Musical style and lyrical themes",
+   "note": "Beyond card: these are in the cited Musical style section but not on the card. Also Ulrich said 'probably the biggest influence'; the prompt drops 'probably'.",
+   "fix": {
+    "text": "Use only these facts: They are a Los Angeles-formed, San Francisco-based band whose fast tempos and aggressive playing made them one of the 'Big Four' of thrash metal; Master of Puppets (1986) gave them their first commercial success and is often cited as one of the best metal albums; their 1991 self-titled album moved away from thrash toward a mainstream sound and sold over 16 million copies in the US.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Metallica",
+      "section": "intro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "heavy-metal-music.artist.Girlschool.c2",
+   "claim": "they helped pave the way for women in rock",
+   "verdict": "drift",
+   "flags": [
+    "fairness"
+   ],
+   "cited": "Girlschool Legacy",
+   "note": "Legacy attributes this to reviewers and critics, then gives the counterpoint: Enid Williams recalled they inspired young men more than women, major 2000s female metal bands denied even knowing them, and 'only' the Donnas acknowledged their influence. Stating it as fact drops both the attribution and the counterweight.",
+   "fix": {
+    "text": "Reviewers saw a successful all-female group in a macho scene as a statement of equality and credit them with helping pave the way for women in rock, though few later female bands named them as an influence.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Girlschool",
+      "section": "Legacy"
+     }
+    ]
+   }
+  },
+  {
+   "id": "heavy-metal-music.artist.Girlschool.study_prompt",
+   "claim": "formed from a school band called Painted Lady; 'too heavy to be New Wave and too punk to be a heavy metal band' as Kim McAuliffe put it; Hit and Run (1981) reached No. 5 in the UK",
+   "verdict": "drift",
+   "flags": [],
+   "cited": "Girlschool intro, Infobox, Music and style, 1978–1982, Legacy",
+   "note": "Beyond card: Painted Lady, the McAuliffe quote and the No. 5 chart place aren't on the card. The quote is 13 words, longer than the writer brief's 'a few words' limit.",
+   "fix": {
+    "text": "Use only these facts: They are a London band from the New Wave of British Heavy Metal and the longest-running all-female rock band, playing what was called punk-tinged metal; closely linked with Motörhead, they recorded the joint EP St. Valentine's Day Massacre with them; reviewers saw a successful all-female group in a macho scene as a statement of equality.",
+    "sources": [
+     {
+      "url": "https://en.wikipedia.org/wiki/Girlschool",
+      "section": "intro"
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Girlschool",
+      "section": "1978–1982: N.W.O.B.H.M."
+     },
+     {
+      "url": "https://en.wikipedia.org/wiki/Girlschool",
+      "section": "Legacy"
+     }
+    ]
+   }
+  }
+ ]
+}

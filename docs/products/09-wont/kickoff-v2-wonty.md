@@ -8,8 +8,10 @@ reversible guess until the gate.
 
 **Mode:** streamlined (owner decides at four gates: kickoff, design pick, first working version,
 final review)
-**Appetite:** *(provisional)* about 5 weeks to a closed test on Google Play with ~12 testers, ideally
-live by 1 Jan (the fresh-start window, P17); public launch after the 14-day test
+**Appetite:** closed test on Google Play with ~12 testers starting by **1 Jan** (New Year window,
+P17), public launch late January (L37). Owner travelling until 7 Dec, then full time, 5–6 h a day.
+Fixed time, variable scope: the cut order below decides what goes if time runs short. Continue or
+stop is decided on the closed-test numbers (Success, below), set before the test starts.
 **Evals:** `evals-v2.md` (written after the gate)
 
 ## Why this phase

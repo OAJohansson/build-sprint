@@ -228,3 +228,6 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   teach one small piece of behaviour change and one thing to try; Wonty takes the reading into
   practice and reminds you of what you read. Note: lessons in Wonty's own words from the research,
   never the book's text, and no implied link to any author.
+- **Gate Q2 decided (L37):** closed test by 1 Jan. Owner travels until 7 Dec, then works full time
+  5–6 h a day, more if it looks viable. Before 7 Dec: phone-friendly owner steps only (say-it test,
+  Play Console sign-up for its identity check, the design pick from screenshots).

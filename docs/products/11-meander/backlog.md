@@ -34,6 +34,13 @@
 | Timeline hover links: calmer or different (#45) | They look messy | Next phase |
 | A proper menu (#46) | Room for fields, settings, about | Next phase |
 
+## Next phase: a globe you spin (owner idea, 28 Nov)
+
+- **The idea:** draw the globe as a real sphere: the front half shows, you drag to spin it, and the back side waits round the curve. Calmer (about half the labels on screen at once) and more fun to wander. Wanted alongside classical, tech house and the other missing genres, so the extra room carries more genres without crowding.
+- **What it costs:** today `project()` in `src/lib/globe.ts` flattens the whole sphere onto one disc so every genre shows at once (job 1, eval M1). A real globe gives that up (Munzner's "no unjustified 3D": anything hidden is a cost). Ideas to keep an overview: the family list as the whole map, faint dots for the back side.
+- **How:** a prototype next to today's globe, both fields (they share it); the owner picks from screenshots (design picks are the owner's). Open question for the owner: on first open, does seeing everything at once matter, or is finding by spinning more fun?
+- **Genres with it:** classical is a scope change (the map is popular music from 1900; the timeline starts in 1900, and classical needs its own family). Tech house and other sub-genres under house (L57). All through the coverage check M8.
+
 ## Coverage check for philosophy (feedback 49)
 
 - Run the coverage check (M8) on the 27 philosophy schools: an independent grader compares the list with outside references (SEP and IEP tables of contents, a standard survey such as Copleston or the Routledge Encyclopedia's top-level entries, and university introduction syllabi). It lists any major school missing, ranked, for the owner to pick from.

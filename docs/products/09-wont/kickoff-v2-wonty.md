@@ -70,24 +70,18 @@ Guardrail: nobody reports feeling guilt or nagging.
 
 ## MVP and stop line
 
-*(provisional, gate question 3)*
+Decided at the gate (L38): the owner's 11 features plus four from research and Finch, as **a thin
+slice of each**. Full list, research mapping and design rules: [`mvp-v2.md`](mvp-v2.md).
 
-- Android app (Expo), built so iOS is a later build, not a rewrite.
-- Habits as if-then commitments (carried over from Wont) linked to optional yearly goals.
-- Wonty: a small fixed set of poses (idle, happy, comeback, thinking), personality mostly in words.
-- After a miss: normalise → believe → "what got in the way?" (one tap) → a smaller version or an
-  if-then plan for today.
-- Giving to Wonty: logging adds to Wonty's world; misses never take anything away.
-- Anonymous start, save with Google sign-in; sync across devices; delete account in the app.
-- **Learning woven in** *(owner, 28 Nov)*: short, visual, story-led lessons on what behaviour change
-  takes, shown at the moment they matter (setting a habit → if-then plans; first miss → why one slip
-  doesn't undo a habit; week 3 → habits take about two months), plus patterns from the user's own
-  log ("what got in the way" most often). Evidence over pop frameworks: Atomic Habits as the
-  doorway, the research underneath (`research.md`, "Popular frameworks...").
-- Closed test on Google Play.
+- Slice sizes: ~5 lessons, ~40 Wonty lines, 4 poses, 6 suggestion areas, one daily notification
+  (opt-in, timed to the routine, fading; P10), one insights screen, a weekly look-back.
+- Cut order if time runs short: illustrated lessons → text; growing world → fixed poses; weekly
+  look-back → week 2 of the test; patterns → after launch.
+- Never cut: habits as if-then commitments (build and quit), the comeback after a miss, accounts
+  and data.
 
-**Stop line:** no payments, no social or friends, no notifications beyond one optional daily
-check-in (gate question 4), no iOS build yet, no web app changes.
+**Stop line:** no payments, no social or friends, no iOS build, no widget, no shop or currency, no
+more than one notification a day, no web app changes.
 
 ## Requirements
 

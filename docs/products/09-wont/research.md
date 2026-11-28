@@ -134,3 +134,58 @@ Only a few apps encode methods beyond self-monitoring and reminders. Atoms asks 
 The research changes what a habit tracker is *for*. The market treats it as a daily engagement product whose job is to keep you coming back. The science treats it as **temporary scaffolding whose job is to move the cue from the phone into your routine and then get out of the way**. Seen that way, the two moments that matter most are ones most apps handle worst: the first missed day in weeks one to three, and the day a habit no longer needs tracking. A product that owns the comeback, measures automaticity and celebrates graduation has open space in a crowded category, and each of those features is cheap to build.
 
 Two caveats should shape how the owner reads this. First, **almost every effect here is small (d ≈ 0.2–0.4), short-lived, or both**. Megastudy forecasters could not predict which interventions would win, so the app should collect its own evidence: per-habit completion and SRBAI over time, not just day-7 retention. Second, the strongest evidence for breaking habits (HRT, cut-down-to-quit, MBRP) comes from clinical or addiction samples. Applying it to scrolling or snacking is a reasonable bet, but it should be presented to users as "a technique from habit research", not as proven for their habit.
+
+## Today's alternatives: Finch and Habitica (28 Nov)
+
+Researched for v2 (Wonty) by a research subagent. Tags: **official** (company site, help centre, store
+listing), **many users** (a pattern across reviews/threads), **anecdote** (one source). Reddit read
+from search snippets only.
+
+### Finch: Self-Care Pet
+
+- **Loop.** Mood check-in; each self-care goal, journal or breathing exercise gives the bird energy;
+  enough energy sends it on an adventure, and it returns in the evening with a story and a gratitude
+  reflection ([Play listing](https://play.google.com/store/apps/details?id=com.finch.finch), official).
+  Goals also earn Rainbow Stones for outfits, furniture and colours
+  ([Engadget, Mar 2025](https://www.engadget.com/apps/this-self-care-virtual-pet-is-helping-me-get-my-act-together-160027169.html)).
+  Daily quests, weekly milestones, seasonal events.
+- **Missed days.** The streak counts days the app is *opened*; repaired with stones or a free saver
+  every 3 adventures; Pause Mode freezes it
+  ([help centre](https://help.finchcare.com/hc/en-us/articles/37780736136205-Understanding-Streaks), official).
+  The bird never suffers, yet users still feel guilty about "leaving her alone" (many users).
+- **Goals.** Daily tasks plus "self-care areas" with weekly milestones (replaced Journeys in early
+  2025, against a petition). **No yearly or outcome-goal layer found** (not found ≠ absent).
+- **Money.** Free core, no ads; Finch Plus about $9.99/month or $69.99/year (third-party; App Store
+  lists $5.99–$69.99, Nov 2026); 7-day trial reported.
+- **Scale.** 10M+ Play downloads, 4.9★ from ~645K reviews, #7 top-grossing Health & Fitness (Play,
+  28 Nov 2026, official); ~780K App Store ratings. Spread on TikTok; framed as a Gen Z app (anecdote).
+- **Complaints (1–3★, Trustpilot, Reddit).** 1) Billing and trial traps, charged a year with no
+  reminder (many users). 2) Commercial creep, movie tie-in themes feel like ads (anecdote). 3) Too
+  much to collect, overwhelm (many users). 4) Changes that remove loved features (Journeys) (many
+  users). 5) Bugs and data loss (many users). 6) Shallow accountability: tick without doing, no
+  challenge; forced positivity (anecdote).
+- **Voice.** Gentle, curious, childlike; leads with what you did, not what you missed; reassuring,
+  rarely challenging.
+
+### Habitica (brief)
+
+RPG: habits and dailies earn XP and gold; parties fight bosses. **Failure is punished:** missed
+dailies cost health, in a quest the whole party takes damage, at zero you lose a level, all gold
+and gear ([wiki](https://habitica.fandom.com/wiki/Death), official). Free; subscription $4.99/month
+or $47.99/year (App Store). Complaints (punishment spirals, heavy setup) not verified this session.
+
+### Gaps Wonty could fill
+
+- **Yearly goals that habits serve:** not found in Finch; users protested losing Journeys.
+- **Honest accountability without punishment:** Finch is kind but easy to game, Habitica
+  accountable but punishing. Neither names a miss honestly and then helps you recover (P5, P7).
+- **Learning from a setback:** Finch's answer is a currency streak repair, Habitica's damage;
+  neither offers reflection or an if-then plan (P1).
+- **No guilt about leaving:** Wonty can say outright it's fine on its own and glad you're back.
+- **Calm and small:** one clear loop instead of an event and collection treadmill.
+- **Trustworthy money:** Finch's loudest 1★ theme is billing; clear pricing is a difference.
+
+### Avoid copying
+
+Collection treadmills and brand tie-ins; streaks counted by app opens and repaired with currency (a
+miss gets a price, and opening beats doing); shared punishment (Habitica's party damage).

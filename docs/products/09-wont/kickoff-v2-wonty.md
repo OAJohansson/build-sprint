@@ -1,0 +1,149 @@
+# Kickoff pack: v2, Wonty on Android
+
+Streamlined-mode phase opened 28 Nov by the owner's call (L32). Builds on `kickoff.md`,
+`kickoff-v1.1-sync.md` and `research.md` (P = principle, A = anti-pattern); the comeback bet and
+the evidence still hold. **Draft:** Claude drafted it from the 28 Nov conversation; the owner decides
+it at the kickoff gate (open questions at the end). Lines marked *(provisional)* are Claude's most
+reversible guess until the gate.
+
+**Mode:** streamlined (owner decides at four gates: kickoff, design pick, first working version,
+final review)
+**Appetite:** closed test on Google Play with ~12 testers starting by **1 Jan** (New Year window,
+P17), public launch late January (L37). Owner travelling until 7 Dec, then full time, 5–6 h a day.
+Fixed time, variable scope: the cut order below decides what goes if time runs short. Continue or
+stop is decided on the closed-test numbers (Success, below), set before the test starts.
+**Evals:** `evals-v2.md` (written after the gate)
+
+## Why this phase
+
+Primarily for learning: build and publish a real app from scratch, find and onboard real users
+(even if free), and set it up as a small business (data, security, accounts, pricing later). A
+successful business is a welcome by-product, not the goal.
+
+## Problem
+
+People set goals (often at New Year) and the habits that should get them there fade within weeks.
+One missed day feels like failure, the streak resets to zero, and the bad feeling turns one slip
+into a lost attempt (A1, A3). Encouragement from a person who believes in you works (the owner's
+cousin Oli: honest that it's hard, sure you can do it, curious about setbacks), but most people
+don't have someone checking in every day.
+
+## Who
+
+First the owner, then ~12 closed-test users from the first audience (L36): **people who've read
+about habits (Atomic Habits, book summaries) but can't make them stick.** They're motivated and
+curious about how change works, forget most of what they read, and often have quit a streak app.
+Wonty turns what they read into what they do. Reached through short educational posts (one piece of
+behaviour change and one thing to try) on Instagram and TikTok, plus r/getdisciplined and
+r/selfimprovement. The product stays general (any habit, linked to yearly goals).
+
+## Moment of use and jobs to be done
+
+On the phone: a daily check-in with Wonty, and the morning after a miss.
+
+1. When I miss a habit, I want to be met with honesty and belief, and helped to learn what got in
+   the way, so I come back today instead of giving up. *(P5, P7, P1)*
+2. When I set goals for the year, I want habits linked to them, so each small action has a reason.
+   *(P11 "why this matters", P17)*
+3. When I keep a habit, I want to log it in one tap and give something to Wonty, so progress feels
+   shared and visible without a streak to lose. *(P2, P6)*
+
+## Today's alternatives
+
+Finch (self-care pet), Habitica (RPG habits), streak apps (Streaks), and the web Wont itself.
+Teardown: `research.md`, section "Today's alternatives: Finch and Habitica (28 Nov)".
+
+## Riskiest assumptions
+
+- **Value (riskiest):** a cartoon wonton can feel like an accountability partner (encouraging and
+  honest) without turning into guilt or decoration. Test: closed-test users' week-2 return and what
+  they say about Wonty.
+- **Viability:** the owner can find ~12 testers and a first audience organically.
+- **Feasibility:** a first native app (Expo), Play Store setup and the art pipeline fit the appetite.
+- **Usability:** a reflection after a miss feels supportive, not like homework.
+
+## Success: what good looks like
+
+The owner and the testers still use it in week 3. Signals: testers who log in week 2 (target: half);
+testers who come back the day after a miss; one unprompted mention of Wonty's personality.
+Guardrail: nobody reports feeling guilt or nagging.
+
+## MVP and stop line
+
+Decided at the gate (L38): the owner's 11 features plus four from research and Finch, as **a thin
+slice of each**. Full list, research mapping and design rules: [`mvp-v2.md`](mvp-v2.md).
+
+- Slice sizes: ~5 lessons, ~40 Wonty lines, 4 poses, 6 suggestion areas, one daily notification
+  (opt-in, timed to the routine, fading; P10), one insights screen, a weekly look-back.
+- Cut order if time runs short: illustrated lessons → text; growing world → fixed poses; weekly
+  look-back → week 2 of the test; patterns → after launch.
+- Never cut: habits as if-then commitments (build and quit), the comeback after a miss, accounts
+  and data.
+
+**Stop line:** no payments, no social or friends, no iOS build, no widget, no shop or currency, no
+more than one notification a day, no web app changes.
+
+## Requirements
+
+Filled in after the gate, one row per MVP item, each with a check (then `evals-v2.md`).
+
+**No-gos:** a pet that suffers, sickens or leaves when you miss; any reset to zero; red failure
+states; asking for an account before the user has met Wonty and chosen habits; collecting data the app doesn't use.
+
+**Rabbit holes:** a big art library (outfits, rooms) before the core loop works; a custom
+animation engine; building pricing before retention.
+
+## Feel references
+
+- Finch's bird, for warmth only (not its look or mechanics).
+- Wont's wontons (L18, L24): dough on ink, the comeback wink.
+- A friend like Oli: honest, sure of you, curious about setbacks.
+
+**The feel in one sentence:** *(provisional)* an absurdly cute character with an adult voice: an
+honest friend who believes you can do it, helps you come back, and shows you how change works.
+
+## Things to avoid
+
+- Streak guilt, scolding, sad-pet guilt-tripping.
+- Generic cheerleading ("You've got this! 🎉") with no honesty.
+- Faux-Asian fonts, accents or stereotypes for a Chinese-food mascot.
+- Copying Finch's look, features or currency system.
+
+## Decisions already made
+
+- Mode: Streamlined (L32).
+- Name: Wonty, store title "Wonty: Habit Tracker" (L33, provisional until the owner's say-it test;
+  trademark web check: low risk, `research/name-check-wonty.md`).
+- Domain `wonty.app` (Cloudflare Registrar); `hello@wonty.app` forwards to a separate Wonty Gmail
+  (L34). That Gmail owns Wonty's Google services (Play Console, Google Cloud).
+- Wonty gets its own infrastructure, separate from the sprint apps (L35).
+- Devices: Android phone first; iOS later from the same code.
+
+## Setup decisions for the gate (Claude's recommendations)
+
+| Area | Recommendation | Cost | When |
+| --- | --- | --- | --- |
+| App stack | Expo (React Native, TypeScript); reuse Wont's `src/lib` day logic and tests | free (EAS free tier) | now |
+| Backend | Own Supabase organisation, EU region (Stockholm), two projects: production and test sandbox | free, then Pro ~$25/mo at public launch (no pausing, daily backups) | now |
+| Accounts | **Account from the start (L39):** Google sign-in or email with a one-time code (no password); created at the end of onboarding, after meeting Wonty and choosing habits; Sign in with Apple when iOS comes | free | now |
+| Security | Row-level security on every table; secrets only server-side | — | now |
+| Privacy | Minimum data (habit names can be health data under GDPR); privacy policy on wonty.app; Play Data safety form; account deletion in app and on web (Play requires it) | — | before closed test |
+| Play Console | Personal developer account on the Wonty Gmail (organisation needs a company and D-U-N-S) | $25 once | after the gate |
+| Analytics and crashes | PostHog (EU, free tier) and Sentry (free tier) | free | before public launch |
+| Email from the app | Sign-in codes need a sending service on `wonty.app` (e.g. Resend free tier, SPF/DKIM on Cloudflare); Supabase's built-in sender is for testing only | free | now |
+| Payments | Play Billing via RevenueCat; check whether a sole-trader registration is needed | — | not this phase |
+| Code home | **Its own private GitHub repo `wonty` (L40)**, own CI and builds; product docs (card, kickoff, decisions, journal, research) stay in build-sprint so the notebook keeps them; the card's `repo:` field points to it | free | now |
+
+## Unit tests
+
+Carried over: the day logic (day boundary, rolling rate, comeback due). New: goal ↔ habit links
+and the "misses never take anything away" rule for Wonty's world.
+
+## Open questions for the kickoff gate
+
+1. Who is the first audience (beyond the owner) and where do they spend time online?
+2. Appetite: closed test by 1 Jan, or a calmer target?
+3. The MVP cut above: keep, cut or add?
+4. Notifications: one optional daily check-in from Wonty, or none in the MVP?
+5. Stack and setup table: accept as recommended?
+6. What does the user give Wonty? (Can wait for the design gate.)

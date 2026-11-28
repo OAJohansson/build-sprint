@@ -198,3 +198,44 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   (laptop, then phone) and confirmed it works. Phase closed; more Wont work later from the backlog.
 - Lesson: the kickoff's "one device, no backend" was decided without asking which devices the
   owner uses (Selvedge had the same lesson). The kickoff template now asks.
+
+## 28 Nov: v2 idea, Wonty
+
+- **The idea.** The owner wants to turn Wont into a product people might pay for, Finch-style but
+  with the wonton, published on Google Play: mainly to learn building, publishing and finding
+  users. Claude's critique: crowded category, so lead with Wont's own bet (a miss is a comeback);
+  start distribution early; pricing last; Expo over Kotlin; don't polish the web app first, reuse
+  its `src/lib` logic. Most of the research the owner asked for already exists in `research.md`.
+- **The character.** From the owner's cousin Oli: honest that it's hard, sure you can do it,
+  curious about setbacks. Mapped to evidence: self-compassion after a slip (P7), if-then plans
+  after a miss (P1), fresh start at New Year (P17); growth mindset kept as voice, not as a feature
+  (weak intervention evidence). Rule: effort grows Wonty's world, misses never take anything away.
+  The owner's first draft of the morning-after line was warm but missed belief and learning;
+  copy deferred to design.
+- **Decisions:** Streamlined mode (L32), name Wonty (L33), domain and email (L34), own
+  infrastructure (L35). Setup done by the owner with Claude's steps: `wonty.app` at Cloudflare,
+  Email Routing `hello@` and catch-all to the Wonty Gmail (DNS checked: Cloudflare MX and SPF).
+- **Draft kickoff** `kickoff-v2-wonty.md` with the setup recommendations; the gate questions go to
+  the owner one at a time. Finch/Habitica teardown and a trademark check are running.
+- **Finch walkthrough** (56 screens, `research/finch-walkthrough.md`). Owner: cute, alive (cards,
+  animation, haptics) but game-like, "for kids", bloated. Claude: an engagement product rather than
+  a scam; the line for Wonty is that the reward serves the habit, not the app.
+- **New pillar (owner):** education woven in. Wonty should feel adult and teach what behaviour change
+  takes, story-led and visual, at the moment it matters, plus patterns from the user's own log. Added
+  to the draft MVP; the feel sentence now says "adult voice". Audience question reopened with a
+  readers option, since the education angle suits people who've read about habits.
+- **Gate Q1 decided (L36):** first audience is habit-book readers. Owner's framing: Instagram posts
+  teach one small piece of behaviour change and one thing to try; Wonty takes the reading into
+  practice and reminds you of what you read. Note: lessons in Wonty's own words from the research,
+  never the book's text, and no implied link to any author.
+- **Gate Q2 decided (L37):** closed test by 1 Jan. Owner travels until 7 Dec, then works full time
+  5–6 h a day, more if it looks viable. Before 7 Dec: phone-friendly owner steps only (say-it test,
+  Play Console sign-up for its identity check, the design pick from screenshots).
+- **Owner's MVP list (gate Q3 in progress):** onboarding with tailored suggestions, yearly goals
+  tied to habits, build vs quit habits, Wonty reacting to every log and miss, setback learning,
+  insights, education as a thread, a growing world with animation and haptics, notifications
+  (owner: important), accounts. Claude mapped each to research and added gaps in `mvp-v2.md`
+  (weekly look-back P2, starter areas, pause/archive, soft 3-habit limit). Scope flagged: fits
+  1 Jan only as a thin slice of each.
+- **Gate Q3–Q4 decided (L38):** thin slice of each, per `mvp-v2.md`; one daily notification.
+- **Gate Q5 decided (L39, L40):** accounts from the start (Google or email code, at the end of onboarding); code in its own repo `wonty`, docs stay here. Rest of the setup table accepted.

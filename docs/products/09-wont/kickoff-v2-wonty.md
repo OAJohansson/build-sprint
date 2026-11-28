@@ -74,6 +74,11 @@ Guardrail: nobody reports feeling guilt or nagging.
   if-then plan for today.
 - Giving to Wonty: logging adds to Wonty's world; misses never take anything away.
 - Anonymous start, save with Google sign-in; sync across devices; delete account in the app.
+- **Learning woven in** *(owner, 28 Nov)*: short, visual, story-led lessons on what behaviour change
+  takes, shown at the moment they matter (setting a habit → if-then plans; first miss → why one slip
+  doesn't undo a habit; week 3 → habits take about two months), plus patterns from the user's own
+  log ("what got in the way" most often). Evidence over pop frameworks: Atomic Habits as the
+  doorway, the research underneath (`research.md`, "Popular frameworks...").
 - Closed test on Google Play.
 
 **Stop line:** no payments, no social or friends, no notifications beyond one optional daily
@@ -95,8 +100,8 @@ animation engine; building pricing before retention.
 - Wont's wontons (L18, L24): dough on ink, the comeback wink.
 - A friend like Oli: honest, sure of you, curious about setbacks.
 
-**The feel in one sentence:** *(provisional)* an absurdly cute, honest friend who believes you can
-do it and helps you come back.
+**The feel in one sentence:** *(provisional)* an absurdly cute character with an adult voice: an
+honest friend who believes you can do it, helps you come back, and shows you how change works.
 
 ## Things to avoid
 

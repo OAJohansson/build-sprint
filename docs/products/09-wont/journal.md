@@ -217,3 +217,10 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   Email Routing `hello@` and catch-all to the Wonty Gmail (DNS checked: Cloudflare MX and SPF).
 - **Draft kickoff** `kickoff-v2-wonty.md` with the setup recommendations; the gate questions go to
   the owner one at a time. Finch/Habitica teardown and a trademark check are running.
+- **Finch walkthrough** (56 screens, `research/finch-walkthrough.md`). Owner: cute, alive (cards,
+  animation, haptics) but game-like, "for kids", bloated. Claude: an engagement product rather than
+  a scam; the line for Wonty is that the reward serves the habit, not the app.
+- **New pillar (owner):** education woven in. Wonty should feel adult and teach what behaviour change
+  takes, story-led and visual, at the moment it matters, plus patterns from the user's own log. Added
+  to the draft MVP; the feel sentence now says "adult voice". Audience question reopened with a
+  readers option, since the education angle suits people who've read about habits.

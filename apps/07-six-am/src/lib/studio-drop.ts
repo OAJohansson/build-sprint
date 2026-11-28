@@ -3,7 +3,7 @@
 // Pure apart from timeline.ts's sound registry (place() reads loop lengths from it).
 import { libLoopFrom, libLaneType, dropLength, phraseStart } from "./make/lib-loop";
 import type { LibrarySound } from "./make/library";
-import { isDrumPreset } from "./make/drum-synth";
+import { isDrumSoundId } from "./make/drum-synth";
 import { isMelodyPreset } from "./make/poly-synth";
 import { accepts, legacyTrack as legacyTrackOf, addLane, laneOfRegion, lanesOf, legacyMix, type Lane, type LaneType } from "./studio-lanes";
 import { docBars, newId, place, registerSounds, type Doc, type Region } from "./timeline";
@@ -39,7 +39,7 @@ export function dropLibSound(
   if (sounds.length >= MAX_SOUNDS) return null;
   let lanes = lanesOf(doc);
   // D-F4, M-F1: a drum or melody row only lands on its own lane type (a lead never replaces the chords).
-  const exact = isDrumPreset(s.preset) || isMelodyPreset(s.preset);
+  const exact = isDrumSoundId(s.preset) || isMelodyPreset(s.preset);
   let lane = lanes.find((l) => l.id === o.laneId && accepts(l, { type, track: legacyTrackOf(type), exact })) ?? (o.newLane ? undefined : lanes.find((l) => l.type === type));
   if (!lane) {
     const added = addLane(lanes, type);

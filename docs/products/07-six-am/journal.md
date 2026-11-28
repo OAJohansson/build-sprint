@@ -4,6 +4,20 @@ What happened, what was decided and why. Newest last.
 
 ## To carry over
 
+### Phase 7: for `docs/knowledge-bank.md` at wrap-up
+
+**Written at the Phase 7 wrap-up (28 Nov):** knowledge bank (Audio, Risks and assumptions, quizzes) and two Six AM bullets in `docs/learnings.md`.
+
+- **Technology / audio, Stem separation (and "stems"):** splitting a finished song into its parts
+  (drums, bass, vocals, the rest) with a trained model; each part is a "stem". Finer models split a
+  stem again (drums into kick, snare, hats). Why it matters: you can only copy a sound by ear if you
+  can hear it alone. Where we met it: Six AM's Lab (htdemucs) and OR7-1. From: Demucs (Meta), the
+  DrumSep and LarsNet papers. Quiz: "What is a stem?" / "Why split the drums again after the first
+  split?"
+- **Product strategy, Who a rule protects:** "personal use only" removes limits that protect *you
+  selling* (non-commercial licences) but not those protecting *someone else's rights* (the song's
+  owner). Where we met it: L299. Quiz: "Which limits does 'just for me' remove, and which not?"
+
 ### Phase 6 (Chords in Make): for `docs/knowledge-bank.md` at wrap-up
 
 **Written at the Phase 6 wrap-up (27 Nov):** knowledge bank (Design principles, Audio, quizzes) and two Six AM bullets in `docs/learnings.md`.
@@ -860,3 +874,82 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Honest answer to "is this realistic?": sounding like the record, no; rebuilding the song's skeleton by ear, yes. The owner restated the goal as "recognisably the same song, and I built every part of it", and wants a good production kit (L265).
 - Phase 7 inputs are in `backlog.md` under "For Phase 7": many more starting sounds (research licences first: presets, a CC0 sample kit, own packs), rebuild the song in the Studio, fix drums by ear plus more rows, click to jump in Make, and "Other" → "Melody & FX". The old Phase 7 plan (arrange and export an own track) comes after the rebuild.
 - The owner said yes to the merge in chat; PR 104 merged after green checks.
+
+## Phase 7 kickoff: Rebuild the song (27 Nov)
+
+- New session, worktree `07-six-am-phase7-00338d`, branch `claude/07-six-am-phase7-00338d` from `main` at 0b30aae. Founder v2; the PM read the card, kickoff, L265, the "For Phase 7" backlog, the Phase 6 review and OR6-1..5.
+- **Research first** (owner's priority 1, many more sounds): a research agent (web search only, no paid tools) checked licences and sources; the brief is `research-sounds.md`, evidence strength first. Headline: royalty-free packs forbid shipping raw files in an app; CC0 / CC BY allow it even if Six AM is sold; the popular 909/808 banks have no licence; a drum-hit recording belongs to whoever recorded it (CJEU Pelham).
+- **Kickoff calls, one at a time:** sounds route = CC0 kit for drums + richer bass synth with a few CC BY sampled basses, own packs later (L266); 20 sounds per row picked for breadth, with a variety map (L267, owner raised it from the PM's 12/16 and asked for variety); new rows: Make reads open hats, Shaker and Ride start empty, and the design must make the rows still to fill unmissable (L268, the owner asked for the pros and cons first); the rebuild starts with sections only (L269); compare plays the original from the same bar through the Deck (L270).
+- Kickoff pack final in `kickoff.md` (4 slices: sounds, fix drums by ear + click to jump, lay out the song, compare); evals W1–W16 in `evals.md`.
+- Owner's yes for downloading the kit's candidate sounds for the whole phase (L271): Freesound CC0, Sonic Pi CC0, tonejs-instruments CC BY only.
+- Discovery wrote the Phase 7 brief section, persona update and scenarios R7-S1..S8. PM logged its assumptions (L272) and settled its gaps inside the pack (L273: hints only for measured layers, W5b, R3b over L262 for empty rows, the rebuild replaces the Phase 3 draft button, eval clarifications, a dev hook, sandbox seeds).
+- Designer built 10 directions for three moments (choose a sound, fix by ear, rebuild + Deck closed): contact sheet `design/p7-directions.html`, prototype `design/p7-directions/prototype.html` (b9c7e22). Designer's calls logged as T233 (static prototype per the make-layers precedent; hit looks: read gold, added cream, taken out gold outline; Vocals slots say 'in the original', not counted as to fill). Stop for the owner's pick of 3.
+- Engineer built the candidate drum kit (c1c2f96): 120 CC0 one-shots, 20 per row, 1.9 MB, every variety-map family covered (thin: clicky kick, 909 clap, snap, brush at 1 each; 909 ride stand-ins, L275); builder's W2 pass all rows (open hat brightness 3.1×, the weakest); nothing heard by ear yet (owner's check). Logged L274–L275, T234–T237. 409 raw candidates kept in the session scratchpad for swaps.
+- Owner picked 2 Shelf, 4 Side list and 10 Table (L276). Next: the designer develops the three with the real kit, the critic scores them, the owner picks one.
+- Designer round 2 on 2 Shelf, 4 Side list, 10 Table with the real kit (677c048): `design/p7-round2.html`, prototype `design/p7-round2/prototype.html`. Logged L277, T238. Critic scoring the three.
+- Critic round 2: Shelf 6/10, Side list 6/10, Table 5/10; would build Shelf for Make with Side list's rebuild grid (`design/p7-round2-critic.md`). PM recommends the same hybrid to the owner.
+- Owner picked the hybrid: Shelf for Make, Side list's grid for the Studio rebuild (L278). Next: designer round 3 (the final), the same critic re-scores, then the canvas sign-off.
+- Designer round 3, the final hybrid (285e28e): `design/p7-final.html`, prototype `design/p7-final/prototype.html`; logged T239. Critic re-scoring.
+- Critic round 3: 8/10 (hierarchy and copy up). Six fixable gaps sent back to the designer as round 3b before the canvas.
+- Critic round 3b: 9/10; leftovers go to the build (backlog). Canvas sign-off published: https://claude.ai/artifact/8Ygt985YZbU4fdSdpiN7fP (8 screens: Make choose, fix, empty row; Studio rebuild empty, filled, Deck closed; 1280 choose; worst-case rebuild). Waiting for the owner's comments and approval before the UI build (L163, decision 0028 as amended 27 Oct).
+- Owner approved the canvas as is (L279) and went to the gym; build starts with slice 1 (sounds).
+- Slice 1 built (f8b4323..339654b): 20 sampled sounds per drum row on the shelf, 20 bass sounds (13 new synth presets, 3 sampled basses), audible knobs, Suggest over the 20, credits, dev hook; 618 tests pass. Logged L280–L281, T240–T246. Next: user-tester and data-evals on slice 1.
+- Slice 1 user test: find 4 (3 at 1280), shape 4; U7-1 major (shelf hides sounds without a cue), U7-2..7 minor/polish (`user-testing/report-2026-11-27-p7-slice1.md`). Waiting for data-evals before the fix round.
+- Slice 1 data-evals (cb941cc): W1, W2, W3, W11, W12, W13 pass; W4 fails on bass Drive / Sub / Weight / Wobble (D7-1) and Pitch drop on 7 presets (D7-2). PM set the bass knob bars (L282) and accepted D7-3/4/5/7 knowingly (L283). Fix round sent to the engineer: U7-1..7, D7-1, D7-2, D7-6.
+- Slice 1 fix round done (51764e2, T247). Re-grade sent to data-evals (W4, W2, W11), user-tester (U7-1..7) and the critic (the shelf changed from columns to chip lines).
+- Critic on the built shelf: 5/10 (grouping lost in the chip lines). Engineer asked for two-column families with a fixed label column (critic's fix).
+- Data-evals re-grade (e5cd9bd): W2, W11 pass; W4 124/128 (D7-9 regression on Pure sine's Tone, D7-10 Wobble on three presets); added to the engineer's current round.
+- User-tester re-check (51764e2): both jobs 4/5 at both sizes, W14 met; U7-1, U7-3, U7-5 fixed; U7-2/4/6/7 partly; new polish U7-8/9; bass A/B below the fold at 720 judged acceptable (one scroll). Leftovers added to the engineer's shelf round.
+- Shelf round done (c7e4ef5, T248). Critic and data-evals re-checking. Slice 2 starts in parallel with a fresh engineer (different job: rows, editing, click to jump; the open-hat reader is graded on real loops before the UI relies on it).
+- Critic on the rebuilt shelf: 9/10; small leftovers (incl. checking the 'closer' hint is stable) folded into the slice 2 engineer's round.
+- Data-evals second re-grade (54a9045): W2, W4, W11 pass; W4's Wobble on the eval's own brightness measure, accepted openly with an owner listen as guard (L284). Slice 1 done: W1–W4, W11–W14 pass; built shelf 9/10.
+- Slice 2 built (1f49245..0a63c04): six rows, open-hat reader (synthetic only, flag READ_OPEN_HATS), rows-to-fill, fix by ear with mute/solo, click to jump in all four tabs, "Melody & FX"; 633 tests pass. Logged L285–L286, T249–T254. Known: steps ~7 px wide at 8 bars; shelf below the sticky A/B (scroll). Graders next, the open-hat reader on real loops first.
+- Critic on built slice 2: 6/10 (steps too thin on 8-bar loops, strip cut by the sticky A/B). Fix round waits for the user test and data-evals.
+- Slice 2 user test: rows-to-fill 4, add/remove 2, mute 4, jump 3, old sounds 5 (W7 4/5, W14 not met). Majors: thin steps, edits lost after reload, Drums jump late (`user-testing/report-2026-11-27-p7-slice2.md`).
+- Slice 2 data-evals (fd657ed, f14d1f8): W8, W11, W13 pass; W5 fails (open-hat reader 44 % / 31 %, retune won't pass) → reader off (L287); W6 fails 4/5 (D7-11 rename bug); W5b → owner's ear. PM calls L287–L289 (reader off, edits persist per loop, 4 bars at a time while fixing). Fix round sent to the slice 2 engineer.
+- Slice 2 fix round done (cd2b28f, T255): reader off, 4 bars at a time, one bottom bar, edits kept per loop, save-per-loop bug fixed, copy bar, bass jump, copy. Steps still 11.9 / 9.4 px with the Mentor rail: PM folds the rail while fixing (L290).
+- L290 built (0d5a9d5, T256): steps 17.2 / 14.7 px while fixing. Re-check by all three graders.
+- Critic re-score slice 2: 8/10. Leftovers wait for the user test and data-evals re-checks.
+- Slice 2 user re-check: W7 5/5, W14 met (all jobs ≥ 4). New U7-19, U7-20 go into the polish round with the critic's leftovers.
+- Slice 2 data-evals re-grade (71aa3f4): W6, W8, W11, W13 pass; D7-11 fixed; W5 recorded fail with the agreed fallback (L287). Slice 2 done apart from a polish round (critic 8/10 leftovers, U7-19, U7-20). Slice 3 starts with a fresh engineer (Studio files; the polish round stays in Make files).
+- Slice 2 polish done (a19debe, T257); the edit-store change (U7-19) gets a W6 and user re-check alongside slice 3's grading.
+- Slice 3 built (81232f1..c09aad7): rebuild route, arrangement grid, hints, fill / leave empty, reserved strip, seed maps and parts, dev hook; 643 tests pass. Logged L291–L293, T258. The Lab's "Rebuild this song" button is wired next (it was in Make-polish files).
+- Rebuild link wired in the Lab top bar (0c2f2ff, T259). Slice 3 graders start (plus the U7-19 edit-store re-check).
+- Critic on built slice 3: 9/10; copy leftovers wait for the other two graders.
+- Slice 3 user test: entry 3, see sections 4, fill 5, come back 5 (W14 met); U7-19 fixed. Polish: entry link findability, measured-empty slots, bar ranges, names.
+- Slice 3 data-evals (c3329a3): W9, W11, W13 pass, W6 regression pass; D7-17 (edits after a reload follow a new reading) → L294; D7-18 hints on a real map at the final review. Slice 3 polish calls L295. Polish round sent to the slice 3 engineer.
+- Slice 3 polish done (72e06b8, 0465af1, T260). Slice 4 (compare with the original) starts with the same engineer; slice 3 polish is re-checked together with slice 4's grading.
+- Slice 4 built (cfbc6ae): Mine / Original switch through the Deck, Deck-closed state, strip summary, bar ↔ ms on the map's exact grid; 652 tests. The landing measure includes play before the Deck's first report, so W10 can't be judged yet: engineer adds a report on seek landing first.
+- Slice 4 landing report (6b0950f, T262): builder measures 0–15 ms landing, 10/10 at both sizes. Graders on slices 3 polish + 4.
+- Critic on slice 4 + slice 3 polish: 9/10; small removals and copy, waiting for the other graders.
+- Slice 4 user test: compare 5, Deck closed 5, whole section 5, way in 4 (W14 met). Small findings U7-26..29 for the final polish round.
+- Slice 4 data-evals (2a9f5af): W10 pass (Original starts 7–12 ms after the bar, 5/5; errMs judged the fair measure), W13, W11, W9, D7-17 fix pass. PM calls L297–L298. Final polish round sent (critic CR4-1, U7-23, U7-25..29, D7-19..21). Owner said "keep going".
+- Final polish done (6ec8f77, T263). Next: a short data-evals regression (W10, W11, W13), merge main, PR, preview, eval report, final review.
+- PR #109 opened; preview https://six-bqjzreiwf-mimirswell.vercel.app (preview deploy, pre-approved); eval report `eval-report-phase7.md`. Waiting for the final regression and CI, then the owner's final review.
+- Final regression on 6ec8f77 (5672d25): W10, W11, W13, W6 spot pass; D7-20 fixed; D7-21 didn't recur. Ready for the owner's final review.
+
+### 28 Nov: final review, first finding (OR7-1)
+
+The owner tried to rebuild the drums by ear and found it impossible while hearing the whole drum
+layer. Ask: isolate each drum sound of the original. Researched: the app already splits the song
+in the browser (htdemucs); drum-splitting models exist (DrumSep, MIT, ~335 MB ONNX, kick / snare /
+cymbals / toms; LarsNet is non-commercial only). Offered two routes to the owner: quick filter
+"listen to kick / clap / hats" on the drums layer (no model, rough), or a time-boxed spike running
+DrumSep in the browser, graded on real loops first. Merge of PR #109 held until this is settled.
+
+### 28 Nov: personal use only (L299)
+
+The owner set the product to personal use only, no publishing or selling for now, and asked which
+past calls that improves. Reviewed: limits that came from *us* selling (CC0 / CC BY only sounds,
+LarsNet's non-commercial weights, Essentia's licence, the tonejs credit risk) fall away. Limits
+that come from the *song's* owner (C2: never store the SoundCloud original) don't, because
+SoundCloud's terms and the EU private-copy rule (CJEU ACI Adam, 2014: no copies from unlawful
+sources) apply to personal use too. The clean way past C2 is songs the owner buys as files
+(backlog DR-3): split once, keep the parts on the owner's computer. Offered that plus a full drum
+split as the next phase.
+
+### 28 Nov: Phase 8 scope (L300)
+
+Owner: keep SoundCloud streaming ("a lot of the songs are from SoundCloud"), add owned files on
+top, and split *every* layer finely, not just drums. Hand-over for the Phase 8 session is under
+"Start here next time" in `backlog.md`. Taught the term "stem separation" (carry-over below).

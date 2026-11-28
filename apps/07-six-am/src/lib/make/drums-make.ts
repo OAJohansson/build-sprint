@@ -14,8 +14,11 @@
 // - Save (P9): a row folded to its 1-, 2- or 4-bar repeat for the library.
 import { band, correlation, stepEnergy } from "./closeness";
 import { dB, fft, hann, toMono } from "./dsp";
-import { DRUM_PRESETS, DRUM_ROWS, ROW_KNOBS, ROW_MIDI, clampDrumMacros, kickHz, renderDrumHits, type DrumKnobId, type DrumMacros, type DrumPresetId, type DrumRow } from "./drum-synth";
+import { hasKitSample } from "./kit-samples";
+import { DRUM_PRESETS, DRUM_ROWS, ROW_PRESETS, SYNTH_TO_KIT_ROW, clampDrumMacros, isDrumPreset, kickHz, knobsOf, makeRowOf, renderDrumHits, type DrumKnobId, type DrumMacros, type DrumRow, type DrumSoundId } from "./drum-synth";
+import { P7_ROWS, p7Sounds, type P7Row } from "./kit-p7";
 import { GATE, type DrumReading } from "./drums-read";
+import type { HatFeature } from "./hats-split";
 import { secondsPer16th, type MakeNote } from "./render";
 
 // ── Rows ────────────────────────────────────────────────────────────────────────────────────────
@@ -24,7 +27,23 @@ import { secondsPer16th, type MakeNote } from "./render";
 export type RowHit = { step: number; off: number; vel: number; t: number; db: number | null; faint: boolean };
 /** `why`: the full reason a row is off (Mentor, tooltip); `note`: the one short line shown in the row (U2). */
 export type DrumRowRead = { hits: RowHit[]; doubtful: boolean; why: string | null; note?: string | null };
-export type DrumsReading = { rows: Record<DrumRow, DrumRowRead>; steps: number; bars: number; gridMs: number; swingMs: number };
+/**
+ * Phase 7 slice 2 (R3, L268): Make's six rows are the kit's (kick, clap, hat, ohat, perc, ride). The
+ * reader's Kick and Claps go to their rows, its hats to Closed hat or Open hat (hats-split.ts);
+ * Shaker / percussion and Ride start empty, filled by ear. `hats`: each reader hat hit's open-vs-closed
+ * measure (for the graders, W5); `openRead`: whether Open hat was read (false: it starts empty, L272).
+ */
+export type MakeRow = P7Row;
+export const MAKE_ROWS: MakeRow[] = P7_ROWS;
+/** Rows Six AM reads from the loop, and the rows that start empty for the owner to fill by ear (L268). */
+export const EAR_ROWS: MakeRow[] = ["perc", "ride"];
+/**
+ * L268, L272: Make reads Open hat from the loop. The PM flips this to false if the open-hat reader
+ * fails its real-loop grade (W5): Open hat then starts empty, below the line, like Shaker and Ride.
+ * L287: W5 failed on real loops (open read open 44 %, closed read open 31 %), so it is off.
+ */
+export const READ_OPEN_HATS = false;
+export type DrumsReading = { rows: Record<MakeRow, DrumRowRead>; steps: number; bars: number; gridMs: number; swingMs: number; hats?: HatFeature[]; openRead?: boolean };
 
 const BLEED_FROM: Record<DrumRow, string> = { kick: "the bass", clap: "the chords", hats: "another part" };
 /** A hit this close (dB) above its row's gate counts as faint. */
@@ -57,10 +76,12 @@ export function repeatShare(hits: Pick<RowHit, "step">[], steps: number): number
   return best;
 }
 
-/** The reader's rows as Make plays them, with the doubtful rows marked (L225, D-F6). */
+const EMPTY_ROW = (): DrumRowRead => ({ hits: [], doubtful: false, why: null, note: null });
+
+/** The reader's rows as Make plays them, with the doubtful rows marked (L225, D-F6): its hats all on Closed hat until splitOpenHats. */
 export function drumsFromReading(r: DrumReading, bpm: number): DrumsReading {
   const sps = secondsPer16th(bpm), bars = Math.max(1, Math.round(r.steps / 16));
-  const rows = {} as Record<DrumRow, DrumRowRead>;
+  const rows = { ohat: EMPTY_ROW(), perc: EMPTY_ROW(), ride: EMPTY_ROW() } as Record<MakeRow, DrumRowRead>;
   DRUM_ROWS.forEach((row, k) => {
     const hits = r.rows[row].map((h) => {
       const db = h.db ?? null;
@@ -71,7 +92,7 @@ export function drumsFromReading(r: DrumReading, bpm: number): DrumsReading {
     const sparse = hits.length > 0 && (hits.length <= Math.max(1, Math.floor(bars / 2)) || hits.length >= MIN_IRREGULAR) && hits.every((h) => h.faint);
     // D-F6: a rising noise wash (a build) reads as many hits on no repeating pattern; real drums repeat.
     const irregular = !sparse && hits.length >= MIN_IRREGULAR && r.steps >= 32 && repeatShare(hits, r.steps) < REPEAT_MIN;
-    rows[row] = {
+    rows[SYNTH_TO_KIT_ROW[row]] = {
       hits, doubtful: sparse || irregular,
       why: sparse ? `${hits.length} faint mark${hits.length === 1 ? "" : "s"}, probably ${BLEED_FROM[row]} bleeding through: off in Mine`
         : irregular ? `${hits.length} marks on no repeating pattern, probably a noise build or ${BLEED_FROM[row]} bleeding through: off in Mine` : null,
@@ -81,6 +102,21 @@ export function drumsFromReading(r: DrumReading, bpm: number): DrumsReading {
   return { rows, steps: r.steps, bars, gridMs: r.gridMs, swingMs: r.swingMs };
 }
 
+/**
+ * L268: the Closed hat row's hits that ring open move to Open hat (each hit's measure from
+ * classifyHats, in the same order as the row's hits). With `read` off (the reader failed its
+ * real-loop grade, L272) Open hat starts empty and every hat stays on Closed hat.
+ */
+export function splitOpenHats(d: DrumsReading, features: HatFeature[], read = true): DrumsReading {
+  const hat = d.rows.hat;
+  if (!read || !hat.hits.length) return { ...d, hats: features, openRead: read };
+  const open = hat.hits.filter((_, i) => features[i]?.open), closed = hat.hits.filter((_, i) => !features[i]?.open);
+  return {
+    ...d, hats: features, openRead: true,
+    rows: { ...d.rows, hat: { ...hat, hits: closed }, ohat: open.length ? { hits: open, doubtful: hat.doubtful, why: hat.why, note: hat.note } : EMPTY_ROW() },
+  };
+}
+
 // ── Measuring one row's hits (Suggest's target) ─────────────────────────────────────────────────
 
 const EDGES = [30, 60, 90, 130, 180, 250, 350, 500, 700, 1000, 1400, 2000, 2800, 4000, 5600, 8000, 11000, 16000];
@@ -88,11 +124,15 @@ const NB = EDGES.length - 1;
 /** Slices of a hit (s after its start): the attack, its body, its ring, its tail. */
 const SLICES: [number, number][] = [[0, 0.01], [0.01, 0.035], [0.035, 0.09], [0.09, 0.25]];
 /** Each row's own band (Hz), for its level and the closeness envelopes (drums-read's ROW_BANDS). */
-export const ROW_BAND: Record<DrumRow, [number, number]> = { kick: [30, 180], clap: [700, 5600], hats: [5600, 16000] };
+export const ROW_BAND: Record<MakeRow, [number, number]> = { kick: [30, 180], clap: [700, 5600], hat: [5600, 16000], ohat: [5600, 16000], perc: [2000, 12000], ride: [3000, 16000] };
+/** The closeness report's three bands (Phase 5: kick, clap, hats), kept so the score reads as before. */
+const REPORT_BANDS: [number, number][] = [[30, 180], [700, 5600], [5600, 16000]];
+/** Rows measured for width (the hats' side level) and for a note (the kick's). */
+const WIDE = (row: MakeRow) => row !== "kick" && row !== "clap";
 
 /** Where each row's shape is measured from (Hz): a clap and hats often sit on a kick's tail (a clap
  *  on the beat in four-on-the-floor), so the kick's range would swamp their shape. */
-export const SHAPE_FROM: Record<DrumRow, number> = { kick: 0, clap: 600, hats: 2000 };
+export const SHAPE_FROM: Record<MakeRow, number> = { kick: 0, clap: 600, hat: 2000, ohat: 2000, perc: 2000, ride: 2000 };
 
 /** Band energies (dB re their sum) of each slice of a hit at sample `a`, slices cut at `end` s,
  *  over the bands from `fromHz` up. */
@@ -149,12 +189,12 @@ function rowLevel(bandX: Float32Array, starts: number[], rate: number): number {
 const MAX_HITS = 12;
 
 /** Suggest's targets and each row's level, measured on the looped drum part (numbers only). */
-export function measureRows(left: Float32Array, right: Float32Array, rate: number, d: DrumsReading): Record<DrumRow, RowTarget | null> {
+export function measureRows(left: Float32Array, right: Float32Array, rate: number, d: DrumsReading): Record<MakeRow, RowTarget | null> {
   const mono = toMono(left, right);
-  const all = DRUM_ROWS.flatMap((row) => d.rows[row].hits.map((h) => ({ row, t: h.t })));
-  const out = {} as Record<DrumRow, RowTarget | null>;
+  const all = MAKE_ROWS.flatMap((row) => d.rows[row].hits.map((h) => ({ row, t: h.t })));
+  const out = {} as Record<MakeRow, RowTarget | null>;
   const low = band(mono, rate, 30, 150);
-  for (const row of DRUM_ROWS) {
+  for (const row of MAKE_ROWS) {
     const hits = d.rows[row].hits;
     if (!hits.length) { out[row] = null; continue; }
     // How long a hit has before the next one of its row (the window every measure uses).
@@ -170,7 +210,7 @@ export function measureRows(left: Float32Array, right: Float32Array, rate: numbe
     out[row] = {
       shape, endS, n: use.length, levelDb: Math.round(levelDb * 10) / 10,
       hz: row === "kick" ? (median(starts.map((a) => lowHz(low, a, endS, rate) ?? NaN)) || null) : null,
-      side: row === "hats" ? median(starts.map((a) => sideDb(left, right, a, endS, rate))) : null,
+      side: WIDE(row) ? median(starts.map((a) => sideDb(left, right, a, endS, rate))) : null,
     };
   }
   return out;
@@ -191,13 +231,13 @@ export function rowDistance(t: RowTarget, shape: number[], hz: number | null, si
 }
 
 /** One hit of a candidate sound, measured as the original's hits are. */
-export function measureCandidate(preset: DrumPresetId, m: DrumMacros, t: RowTarget, rate = 44100) {
+export function measureCandidate(preset: DrumSoundId, m: DrumMacros, t: RowTarget, rate = 44100) {
   const r = renderDrumHits(preset, m, [{ t: 0, vel: 1 }, { t: t.endS, vel: 0 }], { lenS: t.endS + 0.01, rate, wrap: false });
-  const mono = toMono(r.left, r.right), row = DRUM_PRESETS[preset].row;
+  const mono = toMono(r.left, r.right), row = makeRowOf(preset);
   return {
     shape: hitShape(mono, 0, t.endS, rate, SHAPE_FROM[row]),
     hz: row === "kick" ? lowHz(band(mono, rate, 30, 150), 0, t.endS, rate) : null,
-    side: row === "hats" ? sideDb(r.left, r.right, 0, t.endS, rate) : null,
+    side: WIDE(row) ? sideDb(r.left, r.right, 0, t.endS, rate) : null,
   };
 }
 
@@ -209,7 +249,7 @@ export const ROW_SCORE_SCALE = 8;
  * kick's note, the hats' width; clap and hats in their own bands), so following that row's gold
  * ticks raises it. The pattern and the level are copied, so they aren't in it.
  */
-export function rowCloseness(t: RowTarget, preset: DrumPresetId, m: DrumMacros, rate = 44100): { score: number; distance: number } {
+export function rowCloseness(t: RowTarget, preset: DrumSoundId, m: DrumMacros, rate = 44100): { score: number; distance: number } {
   const c = measureCandidate(preset, m, t, rate);
   const distance = rowDistance(t, c.shape, c.hz, c.side);
   return { score: Math.round(100 * Math.exp(-distance / ROW_SCORE_SCALE)), distance: Math.round(distance * 100) / 100 };
@@ -223,16 +263,17 @@ export const DRUM_PRIOR = 2;
  * Knob values for `preset` whose hit measures closest to the row's target ("Suggest for kick"):
  * a coarse sweep of each knob, then a finer one round the best, from the preset's own (or `start`).
  */
-export function suggestDrum(t: RowTarget, preset: DrumPresetId, o: { start?: DrumMacros; rate?: number } = {}): DrumSuggestion {
-  const ids = ROW_KNOBS[DRUM_PRESETS[preset].row], home = clampDrumMacros(preset, undefined);
+export function suggestDrum(t: RowTarget, preset: DrumSoundId, o: { start?: DrumMacros; rate?: number } = {}): DrumSuggestion {
+  const ids = knobsOf(preset), home = clampDrumMacros(preset, undefined);
   let renders = 0;
   const dist = (m: DrumMacros) => { renders++; const c = measureCandidate(preset, m, t, o.rate); return rowDistance(t, c.shape, c.hz, c.side); };
   const prior = (m: DrumMacros) => DRUM_PRIOR * ids.reduce((a, id) => a + ((m[id] ?? 0) - (home[id] ?? 0)) ** 2, 0);
   const presetDistance = dist(home);
   let best = clampDrumMacros(preset, { ...home, ...o.start });
   let bestCost = (o.start ? dist(best) : presetDistance) + prior(best);
-  // The kick's note first: it is what the ear hears most, and the shape is measured on that note.
-  const order: DrumKnobId[] = ids.includes("tune") ? ["tune", ...ids.filter((x) => x !== "tune")] : ids;
+  // The kick's note first (a sampled sound's Pitch): it is what the ear hears most, and the shape is measured on that note.
+  const first = ids.includes("tune") ? "tune" : ids.includes("pitch") ? "pitch" : null;
+  const order: DrumKnobId[] = first ? [first, ...ids.filter((x) => x !== first)] : ids;
   for (const grid of [[0, 0.2, 0.4, 0.6, 0.8, 1], [-0.1, -0.05, 0.05, 0.1]]) {
     for (const id of order) {
       const base = best[id] ?? 0;
@@ -250,24 +291,45 @@ export function suggestDrum(t: RowTarget, preset: DrumPresetId, o: { start?: Dru
   return { macros: out, distance: dist(out), presetDistance, renders };
 }
 
-/** N2 (drums re-check): another preset of the row is clearly closer when its best is 25 % and ≥ 1.0 nearer. */
-export const CLOSER = { share: 0.75, abs: 1 };
 /**
- * Suggest across the row's presets: the open preset's ticks, plus the row's other presets at their own
- * best, and the one clearly closer if any (the clap that stays at 22 on its ticks while Tight snare
- * reaches 36). Gold ticks only; the preset isn't changed.
+ * N2 (drums re-check): another preset of the row is clearly closer when its best is 25 % and ≥ 1.0
+ * nearer. Phase 7 slice 2 (critic: the tip named 808 rusty on one load and 909 round on the next):
+ * and only when it is also 10 % nearer than the runner-up, so a near tie between two sounds (which
+ * the loop's small differences from load to load can flip) names neither.
  */
-export function suggestDrumRow(t: RowTarget, preset: DrumPresetId, o: { start?: DrumMacros; rate?: number } = {}) {
+export const CLOSER = { share: 0.75, abs: 1, lead: 0.9 };
+/** The 20 starting sounds Suggest searches for a Make row (L272). */
+export const rowCandidates = (row: MakeRow): DrumSoundId[] => p7Sounds(row).map((x) => x.id as DrumSoundId);
+/** How many of the row's sounds get a full knob search after the quick pass at their home settings. */
+export const SEARCH_TOP = 3;
+
+/**
+ * Suggest across the row's starting sounds (L272): the open sound's ticks, plus the row's 20 sounds,
+ * each measured once as it starts and the closest few searched in full, and the one clearly closer
+ * if any (the clap that stays at 22 on its ticks while another reaches 36). Gold ticks only; the
+ * sound isn't changed. A sound whose sample isn't loaded measures as silence and is never picked.
+ */
+export function suggestDrumRow(t: RowTarget, preset: DrumSoundId, o: { start?: DrumMacros; rate?: number; candidates?: DrumSoundId[] } = {}) {
   const own = suggestDrum(t, preset, o);
-  const others = ROW_PRESETS_OF(preset).filter((p) => p !== preset).map((p) => ({ preset: p, ...suggestDrum(t, p, { rate: o.rate }) }));
-  const best = others.sort((a, b) => a.distance - b.distance)[0];
-  const closer = best && best.distance <= own.distance * CLOSER.share && own.distance - best.distance >= CLOSER.abs ? { preset: best.preset, macros: best.macros, distance: best.distance } : null;
-  return { ...own, renders: own.renders + others.reduce((a, x) => a + x.renders, 0), closer };
+  // A saved synth sound (Phases 5–6) is also compared with its row's other synth presets, as before.
+  const synth = isDrumPreset(preset) ? ROW_PRESETS[DRUM_PRESETS[preset].row] : [];
+  const pool = [...new Set([...(o.candidates ?? rowCandidates(makeRowOf(preset))), ...synth])].filter((p) => p !== preset && (isDrumPreset(p) || hasKitSample(p)));
+  let renders = own.renders;
+  const quick = pool.map((p) => {
+    renders++;
+    const c = measureCandidate(p, clampDrumMacros(p, undefined), t, o.rate);
+    return { p, d: rowDistance(t, c.shape, c.hz, c.side) };
+  }).filter((x) => Number.isFinite(x.d)).sort((a, b) => a.d - b.d).slice(0, SEARCH_TOP);
+  const others = quick.map((x) => ({ preset: x.p, ...suggestDrum(t, x.p, { rate: o.rate }) }));
+  renders += others.reduce((a, x) => a + x.renders, 0);
+  const [best, second] = others.sort((a, b) => a.distance - b.distance);
+  const clear = !second || best.distance <= second.distance * CLOSER.lead;
+  const closer = best && clear && best.distance <= own.distance * CLOSER.share && own.distance - best.distance >= CLOSER.abs ? { preset: best.preset, macros: best.macros, distance: best.distance } : null;
+  return { ...own, renders, closer };
 }
-const ROW_PRESETS_OF = (p: DrumPresetId) => (Object.keys(DRUM_PRESETS) as DrumPresetId[]).filter((x) => DRUM_PRESETS[x].row === DRUM_PRESETS[p].row);
 
 /** The kick's note as the Mentor says it ("about 55 Hz"). */
-export const tuneHz = (preset: DrumPresetId, m: DrumMacros) => Math.round(kickHz(preset, m.tune ?? 0.5));
+export const tuneHz = (preset: DrumSoundId, m: DrumMacros) => Math.round(kickHz(preset, m.tune ?? 0.5));
 
 // ── Closeness (P8) ──────────────────────────────────────────────────────────────────────────────
 
@@ -276,7 +338,7 @@ export type DrumsReport = { steps: number[][]; spectrum: number[] };
 
 export function drumsReport(left: Float32Array, right: Float32Array, rate: number, bpm: number): DrumsReport {
   const mono = toMono(left, right);
-  const steps = DRUM_ROWS.map((row) => stepEnergy(band(mono, rate, ...ROW_BAND[row]), rate, bpm));
+  const steps = REPORT_BANDS.map(([lo, hi]) => stepEnergy(band(mono, rate, lo, hi), rate, bpm));
   // Band balance over the whole loop: power per band from 4096-point frames every ~93 ms.
   const n = 4096, e = new Array(NB).fill(0), w = hann(n), re = new Float64Array(n), im = new Float64Array(n);
   for (let a = 0; a + n <= mono.length; a += n) {
@@ -319,19 +381,20 @@ export function drumsCloseness(orig: DrumsReport, mine: DrumsReport): DrumsClose
 
 // ── Mine over the loop ──────────────────────────────────────────────────────────────────────────
 
-export type RowSound = { preset: DrumPresetId; macros: DrumMacros; on: boolean };
+export type RowSound = { preset: DrumSoundId; macros: DrumMacros; on: boolean };
 
 /**
  * Mine's three rows over one pass of the loop (`steps` 16ths from the grid's step 0), each row at the
  * original row's level when there is one (each row's band, median over its hits), summed. The
  * caller turns it by the grid's phase so the hits land where the original's do.
  */
-export function renderDrumsMine(d: DrumsReading, sounds: Record<DrumRow, RowSound>, levels: Record<DrumRow, number | null>, bpm: number, rate: number) {
+export function renderDrumsMine(d: DrumsReading, sounds: Record<MakeRow, RowSound>, levels: Record<MakeRow, number | null>, bpm: number, rate: number) {
   const sps = secondsPer16th(bpm), lenS = d.steps * sps;
   const n = Math.max(1, Math.round(lenS * rate));
   const left = new Float32Array(n), right = new Float32Array(n);
-  const gains = {} as Record<DrumRow, number | null>;
-  for (const row of DRUM_ROWS) {
+  const gains = {} as Record<MakeRow, number | null>;
+  // shortcut: a row filled by ear (no original row to match) plays at its kit level (KIT_ROW_GAIN_DB), then the whole loop is matched to the original's loudness; measure the shaker or ride under the other rows if the owner finds them too loud or quiet.
+  for (const row of MAKE_ROWS) {
     const s = sounds[row], hits = d.rows[row].hits;
     gains[row] = null;
     if (!s.on || !hits.length) continue;
@@ -350,9 +413,40 @@ export function renderDrumsMine(d: DrumsReading, sounds: Record<DrumRow, RowSoun
 
 // ── Saving a row (P9) ───────────────────────────────────────────────────────────────────────────
 
-/** The repeat (1, 2 or 4 bars) a saved row keeps, from how well each folds the whole loop. */
-export function foldRow(row: DrumRow, hits: Pick<RowHit, "step" | "off" | "vel">[], steps: number): { bars: 1 | 2 | 4; notes: MakeNote[] } {
+/** General MIDI drum notes per Make row, so a saved pattern reads like any drum pattern (closed and open hi-hat, maracas, ride). */
+export const MAKE_MIDI: Record<MakeRow, number> = { kick: 36, clap: 39, hat: 42, ohat: 46, perc: 70, ride: 51 };
+/** The repeats a saved drum row may keep (bars). */
+export const DRUM_SAVE_BARS = [1, 2, 4, 8, 16] as const;
+export type DrumSaveBars = (typeof DRUM_SAVE_BARS)[number];
+
+/**
+ * The repeat a saved row keeps (R4, W6: what plays is what is saved): the shortest of 1, 2, 4, 8 or
+ * 16 bars that plays exactly the loop's hits on exactly their steps, each position's offset and
+ * velocity the median over its repeats. A loop that no such repeat fits (an odd length, 3 or 6 bars)
+ * folds as Phase 5 did: the 1-, 2- or 4-bar repeat that misses the fewest hits.
+ */
+export function foldRow(row: MakeRow, hits: Pick<RowHit, "step" | "off" | "vel">[], steps: number): { bars: DrumSaveBars; notes: MakeNote[] } {
   const by = new Map(hits.map((h) => [h.step, h]));
+  const noteAt = (p: number, here: Pick<RowHit, "off" | "vel">[]): MakeNote => {
+    const off = median(here.map((h) => h.off)), vel = median(here.map((h) => h.vel));
+    return { step: p, midi: MAKE_MIDI[row], dur: 1, vel: Math.round(vel * 100) / 100, ...(Math.abs(off) >= 0.005 ? { off: Math.round(Math.max(-0.5, Math.min(0.5, off)) * 100) / 100 } : {}) };
+  };
+  const loopBars = Math.max(1, Math.round(steps / 16));
+  for (const bars of DRUM_SAVE_BARS) {
+    const P = bars * 16;
+    if (P > steps) break;
+    let exact = true;
+    for (let s = P; s < steps && exact; s++) if (by.has(s) !== by.has(s % P)) exact = false;
+    // A repeat longer than one bar must fit the loop a whole number of times (else its last pass is cut).
+    if (!exact || (bars > 1 && loopBars % bars !== 0)) continue;
+    const notes: MakeNote[] = [];
+    for (let p = 0; p < P; p++) {
+      const here = Array.from({ length: Math.ceil(steps / P) }, (_, r) => by.get(r * P + p)).filter(Boolean) as Pick<RowHit, "off" | "vel">[];
+      if (here.length) notes.push(noteAt(p, here));
+    }
+    return { bars, notes };
+  }
+  // shortcut: an odd-length loop (3, 5, 6, 7 bars) saves the closest 1-, 2- or 4-bar repeat, not exactly what plays; save the whole loop once the library takes any length.
   const fold = (bars: 1 | 2 | 4) => {
     const P = bars * 16, reps = Math.max(1, Math.floor(steps / P));
     const notes: MakeNote[] = [];
@@ -361,16 +455,12 @@ export function foldRow(row: DrumRow, hits: Pick<RowHit, "step" | "off" | "vel">
       const here = Array.from({ length: reps }, (_, r) => by.get(r * P + p)).filter(Boolean) as Pick<RowHit, "off" | "vel">[];
       const keep = here.length * 2 >= reps && here.length > 0;
       err += keep ? reps - here.length : here.length;
-      if (keep) {
-        const off = median(here.map((h) => h.off)), vel = median(here.map((h) => h.vel));
-        notes.push({ step: p, midi: ROW_MIDI[row], dur: 1, vel: Math.round(vel * 100) / 100, ...(Math.abs(off) >= 0.005 ? { off: Math.round(Math.max(-0.5, Math.min(0.5, off)) * 100) / 100 } : {}) });
-      }
+      if (keep) notes.push(noteAt(p, here));
     }
     return { bars, notes, err };
   };
   const options = ([1, 2, 4] as const).filter((b) => b === 1 || steps >= b * 16).map(fold);
   const best = Math.min(...options.map((o) => o.err));
-  // The shortest repeat that misses at most a few more hits than the best one.
   const pick = options.find((o) => o.err <= best + Math.max(1, 0.03 * hits.length))!;
   return { bars: pick.bars, notes: pick.notes };
 }

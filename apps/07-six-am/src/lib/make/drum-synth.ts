@@ -6,6 +6,8 @@
 // A pass wraps round (a tail at the end sounds at the start), as the loop does.
 import type { DrumRow } from "./drums-read";
 import { secondsPer16th, type Rendered } from "./render";
+import { KIT_KNOBS, KIT_KNOB_SPECS, clampKitMacros, isKitSound, kitKnobValue, kitKnobWord, kitSound, renderKitHits, type KitKnobId } from "./kit-drum";
+import { P7_ROW_NAMES, type P7Row } from "./kit-p7";
 
 export type { DrumRow };
 export const DRUM_ROWS: DrumRow[] = ["kick", "clap", "hats"];
@@ -13,7 +15,7 @@ export const DRUM_ROW_NAMES: Record<DrumRow, string> = { kick: "Kick", clap: "Cl
 /** General MIDI drum notes, so a saved pattern reads like any drum pattern. */
 export const ROW_MIDI: Record<DrumRow, number> = { kick: 36, clap: 39, hats: 42 };
 
-export type DrumKnobId = "tune" | "decay" | "click" | "drive" | "tone" | "snap" | "room" | "length" | "width";
+export type DrumKnobId = "tune" | "decay" | "click" | "drive" | "tone" | "snap" | "room" | "length" | "width" | "pitch";
 export type DrumMacros = Partial<Record<DrumKnobId, number>>;
 /** T124: Kick Tune/Decay/Click/Drive (909 kick plus Drive); Clap & snare Tone/Decay/Snap/Room; Hats Tone/Length/Width. */
 export const ROW_KNOBS: Record<DrumRow, DrumKnobId[]> = { kick: ["tune", "decay", "click", "drive"], clap: ["tone", "decay", "snap", "room"], hats: ["tone", "length", "width"] };
@@ -63,12 +65,41 @@ export const ROW_PRESETS: Record<DrumRow, DrumPresetId[]> = {
   clap: DRUM_PRESET_IDS.filter((id) => DRUM_PRESETS[id].row === "clap"),
   hats: DRUM_PRESET_IDS.filter((id) => DRUM_PRESETS[id].row === "hats"),
 };
+/** A synth drum preset (Phases 5–6). Phase 7's sampled sounds are `isKitSound`; either is `isDrumSoundId`. */
 export const isDrumPreset = (v: unknown): v is DrumPresetId => typeof v === "string" && Object.prototype.hasOwnProperty.call(DRUM_PRESETS, v);
-export const rowOf = (id: DrumPresetId): DrumRow => DRUM_PRESETS[id].row;
+
+// ── Phase 7 slice 1: a drum sound is a synth preset or a sampled kit sound (kit-p7.ts) ────────────
+
+/** A kit sound's id, "<row>-<name>" (T236); never the same string as a synth preset's. */
+export type KitSoundId = `${P7Row}-${string}`;
+export type DrumSoundId = DrumPresetId | KitSoundId;
+export const isDrumSoundId = (v: unknown): v is DrumSoundId => isDrumPreset(v) || isKitSound(v);
+export const isKitId = (v: unknown): v is KitSoundId => !isDrumPreset(v) && isKitSound(v);
+/** The kit's row of a sampled sound (kick, clap, hat, ohat, perc, ride). */
+export const kitRowOf = (id: KitSoundId): P7Row => kitSound(id).row;
+/** The Phase 5 row family a kit row belongs to (the drum reader's three, and the old synth presets'): every high kit row is a kind of hats. */
+export const KIT_TO_ROW: Record<P7Row, DrumRow> = { kick: "kick", clap: "clap", hat: "hats", ohat: "hats", perc: "hats", ride: "hats" };
+export const rowOf = (id: DrumSoundId): DrumRow => (isDrumPreset(id) ? DRUM_PRESETS[id].row : KIT_TO_ROW[kitRowOf(id)]);
+/** Phase 7 slice 2 (R3, R9): Make's six rows are the kit's; an old synth sound opens on its row, Hats on Closed hat. */
+export const SYNTH_TO_KIT_ROW: Record<DrumRow, P7Row> = { kick: "kick", clap: "clap", hats: "hat" };
+export const makeRowOf = (id: DrumSoundId): P7Row => (isDrumPreset(id) ? SYNTH_TO_KIT_ROW[DRUM_PRESETS[id].row] : kitRowOf(id));
+/** The Studio lane a drum sound drops on (L272): kick, clap, hats; the kit's shaker / percussion on Percussion, its open hat and ride on Hats. */
+export type DrumLaneRow = "kick" | "clap" | "hats" | "perc";
+export const laneRowOf = (id: DrumSoundId): DrumLaneRow => (isDrumPreset(id) ? DRUM_PRESETS[id].row : kitRowOf(id) === "perc" ? "perc" : KIT_TO_ROW[kitRowOf(id)]);
+/** The knobs a sound has: its row's synth knobs, or a sampled sound's Pitch, Length, Tone, Drive (L273e). */
+export const knobsOf = (id: DrumSoundId): DrumKnobId[] => (isDrumPreset(id) ? ROW_KNOBS[DRUM_PRESETS[id].row] : KIT_KNOBS);
+/** A sound's name as shown ("Deep 909", "909 round"). */
+export const drumSoundName = (id: DrumSoundId) => (isDrumPreset(id) ? DRUM_PRESETS[id].name : kitSound(id).name);
+export const drumSoundAbout = (id: DrumSoundId) => (isDrumPreset(id) ? DRUM_PRESETS[id].about : kitSound(id).about);
+/** A sound's tags for the library: a synth preset's own, a kit sound's family and feel word. */
+export const drumSoundTags = (id: DrumSoundId): string[] => (isDrumPreset(id) ? DRUM_PRESETS[id].tags : [kitSound(id).feel, kitSound(id).family]);
+/** The row name a sound sits in, in the kit's words ("Closed hat", "Shaker / percussion"). */
+export const drumSoundRowName = (id: DrumSoundId) => (isDrumPreset(id) ? DRUM_ROW_NAMES[DRUM_PRESETS[id].row] : P7_ROW_NAMES[kitRowOf(id)]);
 
 const clamp01 = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : null);
 /** The row's knobs only, 0–1; missing or junk values get the preset's own. */
-export function clampDrumMacros(preset: DrumPresetId, v: Partial<Record<string, unknown>> | undefined): DrumMacros {
+export function clampDrumMacros(preset: DrumSoundId, v: Partial<Record<string, unknown>> | undefined): DrumMacros {
+  if (!isDrumPreset(preset)) return clampKitMacros(v);
   const p = DRUM_PRESETS[preset], out: DrumMacros = {};
   for (const id of ROW_KNOBS[p.row]) out[id] = clamp01(v?.[id]) ?? p.macros[id] ?? 0.5;
   return out;
@@ -86,25 +117,47 @@ export const DRUM_KNOB_SPECS: Record<DrumKnobId, { name: string; explain: string
   room: { name: "Room", explain: "A short room around the hit: dry up close, then a bigger space." },
   length: { name: "Length", explain: "How long each hat rings: a closed tick, up to an open hat. The next hat always cuts the last." },
   width: { name: "Width", explain: "Spreads the hats between the speakers." },
+  pitch: KIT_KNOB_SPECS.pitch,
 };
+/** A knob's name and line on this sound (a sampled sound's Length, Tone and Drive say what they do on a recording). */
+export const drumKnobSpec = (id: DrumSoundId, k: DrumKnobId) => (isKitId(id) && (KIT_KNOBS as string[]).includes(k) ? KIT_KNOB_SPECS[k as KitKnobId] : DRUM_KNOB_SPECS[k]);
 
 const NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const noteOf = (hz: number) => { const m = Math.round(69 + 12 * Math.log2(hz / 440)); return `${NAMES[((m % 12) + 12) % 12]}${Math.floor(m / 12) - 1}`; };
 const lerpExp = ([lo, hi]: [number, number], v: number) => lo * Math.pow(hi / lo, v);
 /** The kick's note in Hz at Tune `v` on this preset. */
-export const kickHz = (preset: DrumPresetId, v: number) => { const x = DRUM_PRESETS[preset].voice; return x.kind === "kick" ? lerpExp(x.hz, v) : 0; };
+export const kickHz = (preset: DrumSoundId, v: number) => { if (!isDrumPreset(preset)) return 0; const x = DRUM_PRESETS[preset].voice; return x.kind === "kick" ? lerpExp(x.hz, v) : 0; };
 
 /**
  * The word under a drum knob: what the value sounds like, fine enough that every drag shows a change
  * (U5, user test 12 Nov): lengths in ms, the tone in Hz, the kick's note; the other knobs a word and
  * the value 0–100 ("snappy · 45"). The word before " · " is what the Mentor says (drumSuggestLine).
  */
+/** U7-3: the number behind a drum knob's word, for its tooltip only (a sampled sound's, or a synth word's part after " · "). */
+export function drumKnobDetail(preset: DrumSoundId, id: DrumKnobId, v: number): string {
+  if (!isDrumPreset(preset) || id === "pitch") return kitKnobValue(id as KitKnobId, v);
+  // U7-17: a synth kick's note and a decay show their number only here (the knob says a word).
+  if (id === "tune" || id === "decay") return drumKnobWord(preset, id, v);
+  const w = drumKnobWord(preset, id, v).split(" · ");
+  return w.length > 1 ? w.slice(1).join(" · ") : "";
+}
 /** C4: a knob's word from a ladder of ten, one step per tenth of a turn. */
 export const ladder = (v: number, words: string[]) => words[Math.max(0, Math.min(words.length - 1, Math.floor(v * words.length)))];
 export const WIDTH_WORDS = ["centred", "narrow", "a little wide", "half wide", "wide", "wider", "very wide", "extra wide", "near full", "full width"];
 
-export function drumKnobWord(preset: DrumPresetId, id: DrumKnobId, v: number, bpm = 124): string {
+/**
+ * U7-17: the word under a knob on screen: words only, as the sampled sounds' (an old synth kick's note
+ * and a decay's length go to the tooltip, drumKnobDetail). The Mentor's line still names them.
+ */
+export function drumKnobShown(preset: DrumSoundId, id: DrumKnobId, v: number, bpm = 124): string {
+  if (isDrumPreset(preset) && id === "tune") return ladder(v, ["very deep", "deep", "low", "lowish", "middle", "mid-high", "high", "higher", "very high", "highest"]);
+  if (isDrumPreset(preset) && id === "decay") return ladder(v, ["very short", "short", "shortish", "tight", "medium", "medium-long", "longish", "long", "very long", "longest"]);
+  return drumKnobWord(preset, id, v, bpm).split(" · ")[0];
+}
+
+export function drumKnobWord(preset: DrumSoundId, id: DrumKnobId, v: number, bpm = 124): string {
   void bpm;
+  if (!isDrumPreset(preset) || id === "pitch") return kitKnobWord(id as KitKnobId, v);
   const p = DRUM_PRESETS[preset], x = p.voice;
   const ms = (s: number) => `${s >= 1 ? (Math.round(s * 10) / 10).toFixed(1) + " s" : `${Math.round((s * 1000) / 5) * 5} ms`}`;
   const hz = (f: number) => (f >= 1000 ? `${(Math.round(f / 100) / 10).toFixed(1)} kHz` : `${Math.round(f)} Hz`);
@@ -261,7 +314,9 @@ export type TimedHit = { t: number; vel: number };
  * or a tail past the end comes round the other side (and the next hit after the last is the first
  * one, a pass later). Kicks and hats are cut by the next hit of their row (a 909's hats choke).
  */
-export function renderDrumHits(preset: DrumPresetId, macros: DrumMacros, hits: TimedHit[], o: { lenS: number; rate?: number; wrap?: boolean }): Rendered {
+export function renderDrumHits(preset: DrumSoundId, macros: DrumMacros, hits: TimedHit[], o: { lenS: number; rate?: number; wrap?: boolean }): Rendered {
+  // Phase 7: a sampled sound plays its recording (kit-drum.ts); the synth presets render as before.
+  if (!isDrumPreset(preset)) return renderKitHits(preset, macros, hits, o);
   const rate = o.rate ?? 44100, p = DRUM_PRESETS[preset], m = clampDrumMacros(preset, macros);
   const n = Math.max(1, Math.round(o.lenS * rate));
   const left = new Float32Array(n), right = new Float32Array(n);
@@ -285,7 +340,7 @@ export function renderDrumHits(preset: DrumPresetId, macros: DrumMacros, hits: T
 export type StepDrum = { step: number; off?: number; vel: number };
 
 /** One pass of `steps` 16ths at `bpm`: the hits at their steps plus offsets, in tempo (L215). */
-export function renderDrumRow(preset: DrumPresetId, macros: DrumMacros, hits: StepDrum[], o: { bpm: number; steps: number; rate?: number }): Rendered {
+export function renderDrumRow(preset: DrumSoundId, macros: DrumMacros, hits: StepDrum[], o: { bpm: number; steps: number; rate?: number }): Rendered {
   const sps = secondsPer16th(o.bpm);
   return renderDrumHits(preset, macros, hits.map((h) => ({ t: (h.step + (h.off ?? 0)) * sps, vel: h.vel })), { lenS: o.steps * sps, rate: o.rate });
 }
@@ -296,13 +351,14 @@ export function renderDrumRow(preset: DrumPresetId, macros: DrumMacros, hits: St
 const TRAIT: Record<DrumKnobId, [string, string]> = {
   tune: ["higher", "lower"], decay: ["longer", "shorter"], click: ["snappier", "softer"], drive: ["grittier", "cleaner"],
   tone: ["brighter", "darker"], snap: ["crisper", "softer"], room: ["roomier", "drier"], length: ["longer", "shorter"], width: ["wider", "narrower"],
+  pitch: ["higher", "lower"],
 };
 /** A tick this close to the knob counts as reached (as coach.ts). */
 const REACHED = 0.08;
 
 /** The knobs furthest from their ticks (at most 2), biggest move first. */
-export function drumMoves(row: DrumRow, current: DrumMacros, ticks: DrumMacros) {
-  return ROW_KNOBS[row].map((id) => ({ id, up: (ticks[id] ?? 0) > (current[id] ?? 0), by: Math.abs((ticks[id] ?? 0) - (current[id] ?? 0)) }))
+export function drumMoves(ids: DrumKnobId[], current: DrumMacros, ticks: DrumMacros) {
+  return ids.map((id) => ({ id, up: (ticks[id] ?? 0) > (current[id] ?? 0), by: Math.abs((ticks[id] ?? 0) - (current[id] ?? 0)) }))
     .filter((x) => x.by >= REACHED).sort((a, b) => b.by - a.by).slice(0, 2);
 }
 
@@ -310,14 +366,20 @@ export function drumMoves(row: DrumRow, current: DrumMacros, ticks: DrumMacros) 
  * "Tune down to A1, Click up. The original kick is lower and snappier." A move names the word it
  * lands on when the word changes (Tune always: its note). `noun`: kick, clap, snare, rim or hats.
  */
-export function drumSuggestLine(preset: DrumPresetId, current: DrumMacros, ticks: DrumMacros, noun: string, bpm = 124): string {
-  const moves = drumMoves(DRUM_PRESETS[preset].row, current, ticks);
+export function drumSuggestLine(preset: DrumSoundId, current: DrumMacros, ticks: DrumMacros, noun: string, bpm = 124): string {
+  const moves = drumMoves(knobsOf(preset), current, ticks);
   if (!moves.length) return "You're on the gold ticks. Switch A/B to judge the rest by ear.";
+  if (!isDrumPreset(preset)) {
+    // U7-4: a sampled sound's tip says the target, never a knob word that can read backwards ("Length down to longer").
+    const say = moves.map(({ id, up, by }) => `${by < 0.2 ? "a bit " : by > 0.5 ? "much " : ""}${TRAIT[id][up ? 0 : 1]} (${drumKnobSpec(preset, id).name})`);
+    return `make it ${say.join(" and ")}, like the original ${noun}; the gold ticks show where.`;
+  }
   const say = moves.map(({ id, up }) => {
     // The note and the decay always name their target; the others only when the word itself changes.
-    const word = (v: number) => drumKnobWord(preset, id, v, bpm).split(" · ")[0];
-    const to = word(ticks[id] ?? 0), named = id === "tune" || id === "decay" || to !== word(current[id] ?? 0);
-    return `${DRUM_KNOB_SPECS[id].name} ${up ? "up" : "down"}${named ? ` to ${to}` : ""}`;
+    // A sampled sound's Pitch names its semitones ("Pitch up to +3 st"), not just "higher".
+    const word = (v: number) => { const w = drumKnobWord(preset, id, v, bpm).split(" · "); return id === "pitch" ? w[w.length - 1] : w[0]; };
+    const to = word(ticks[id] ?? 0), named = id === "tune" || id === "decay" || id === "pitch" || to !== word(current[id] ?? 0);
+    return `${drumKnobSpec(preset, id).name} ${up ? "up" : "down"}${named ? ` to ${to}` : ""}`;
   });
   const traits = moves.map(({ id, up }) => TRAIT[id][up ? 0 : 1]);
   return `${say.join(", ")}. The original ${noun} ${noun === "hats" ? "are" : "is"} ${traits.join(" and ")}.`;

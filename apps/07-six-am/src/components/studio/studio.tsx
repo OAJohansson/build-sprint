@@ -5,13 +5,15 @@
 // Studio loads my tracks (decision 0020) and autosaves; Session is one open track.
 import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
 import { ChevronDown, Trash2 } from "lucide-react";
-import { api, ApiError } from "@/lib/api";
+import { api, ApiError, type Api } from "@/lib/api";
 import { demoDoc, TRACKS, type Doc } from "@/lib/timeline";
 import type { Track, TrackSummary } from "@/lib/tracks";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { clampBpm, DEFAULT_BPM, formatBpm, TEMPO_KEY } from "@/lib/tempo";
 import { STUDIO_DRAFT_KEY, type StudioDraft } from "@/lib/mentor/studio";
 import { mentorApi, useAccessCode } from "@/lib/mentor/client";
+import { rebuildDoc, rebuildTrackId, sectionIndexAt } from "@/lib/rebuild";
+import { shortTitle } from "@/lib/make/library";
 import { FAMILIES, colorOf, laneType, type LaneType } from "@/lib/studio-lanes";
 import v from "./lanes.module.css";
 import { parseDoc } from "@/lib/tracks";
@@ -23,6 +25,8 @@ import { Crate, type MySounds } from "./crate";
 import { SoundDrawer } from "./sound-drawer";
 import { LibDrawer } from "./lib-drawer";
 import { Library } from "./library";
+import { RebuildView } from "./rebuild-view";
+import { useCompare } from "./use-compare";
 import { Logo } from "./logo";
 import { Notice, Unlock } from "./unlock";
 import s from "./studio.module.css";
@@ -35,8 +39,18 @@ const LEAVE_DRAFT = "This Mentor draft isn't saved. Leave it?";
 const emptyDoc = (): Doc => ({ regions: [], muted: TRACKS.map(() => false) });
 const summary = (t: Track): TrackSummary => ({ id: t.id, name: t.name, updatedAt: t.updatedAt });
 
-type Phase = { is: "loading" } | { is: "locked"; error: string | null } | { is: "problem"; text: string } | { is: "ready" };
+type Phase = { is: "loading" } | { is: "locked"; error: string | null } | { is: "problem"; text: string } | { is: "nomap" } | { is: "ready" };
 export type SaveStatus = "saved" | "saving" | "error";
+
+/** A song's rebuild: the saved one if it exists, else a new one from its map; null when the song
+ *  has no map (a track with no map has no rebuild, L272). */
+async function openRebuild(client: Api, code: string, mapId: string): Promise<Track | null> {
+  const id = rebuildTrackId(mapId);
+  try { return await client.get(id); } catch (e) { if (!(e instanceof ApiError && e.status === 404)) throw e; }
+  let map;
+  try { map = await mentorApi(code).map(mapId); } catch (e) { if (e instanceof ApiError && e.status === 404) return null; throw e; }
+  return client.save(id, `${shortTitle(map.title || "Untitled")}, rebuilt`.slice(0, 80), rebuildDoc(map));
+}
 
 export function Studio() {
   const [code, setCode, ready] = useAccessCode();
@@ -69,6 +83,16 @@ export function Studio() {
     }
   }, [client]);
 
+  // Slice 3 (R7-S7): a change made just before the tab is hidden or closed is sent at once, not
+  // after the 0.7 s wait (a rebuild filled and closed straight away came back without its last fill).
+  useEffect(() => {
+    const now = () => { if (document.visibilityState === "hidden" && pending.current) void flush(); };
+    const hide = () => { if (pending.current) void flush(); };
+    document.addEventListener("visibilitychange", now);
+    addEventListener("pagehide", hide);
+    return () => { document.removeEventListener("visibilitychange", now); removeEventListener("pagehide", hide); };
+  }, [flush]);
+
   const queue = useCallback((name: string, doc: Doc) => {
     if (!track) return;
     pending.current = { id: track.id, name, doc };
@@ -87,6 +111,22 @@ export function Studio() {
       try {
         // One request for the list and the track to open (the last one, else the newest): the first
         // load used to wait for the list, then fetch the track.
+        // R8b (L269, L272): /?rebuild=<the map's id> opens that song's one rebuild, made on first open.
+        const rebuildOf = new URLSearchParams(location.search).get("rebuild");
+        if (rebuildOf) {
+          const opened = await openRebuild(client, code, rebuildOf);
+          if (me !== run.current) return;
+          if (!opened) { setPhase({ is: "nomap" }); return; }
+          const list = await client.list();
+          if (me !== run.current) return;
+          history.replaceState(null, "", "/");
+          setLastId(opened.id);
+          setTracks(list);
+          setTrack(opened);
+          setDraft(null);
+          setPhase({ is: "ready" });
+          return;
+        }
         const first = await client.listAndOpen(lastId);
         let list = first.tracks;
         let open: Track;
@@ -206,6 +246,7 @@ export function Studio() {
   if (ready && !code) return <Unlock error={null} onUnlock={(c) => { setPhase({ is: "loading" }); setCode(c); }} />;
   if (phase.is === "loading") return <Notice text="Loading your tracks…" />;
   if (phase.is === "locked") return <Unlock error={phase.error} onUnlock={(c) => { setPhase({ is: "loading" }); setCode(c); }} />;
+  if (phase.is === "nomap") return <Notice text="This song isn't mapped yet, so it has no rebuild. Map it first: open it in Analyse and press Map." action={{ label: "Go to Analyse", onClick: () => { location.href = "/analyse"; } }} />;
   if (phase.is === "problem" || !track) {
     return <Notice text={phase.is === "problem" ? phase.text : "Something went wrong."} action={{ label: "Try again", onClick: () => location.reload() }} />;
   }
@@ -252,7 +293,13 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
   const [name, setName] = useState(track.name);
   const savedName = useRef(track.name);
   const [library, setLibrary] = useState(false);
+  /** Phase 7: a rebuild opens its arrangement grid instead of the lanes and the crate. */
+  const rb = track.doc.rebuild;
   const [code] = useAccessCode();
+  // Slice 4 (R7, L270): Mine / Original on a rebuild, through the Deck window (commands only).
+  const cmp = useCompare(t, rb, code);
+  const orig = cmp.on && cmp.mode === "orig";
+  const sounding = orig ? cmp.deck.playing : t.playing;
   useEffect(() => { t.engine().then((e) => e.setAccessCode(code)); }, [t, code]);
   // My sounds (L158, L200): the library, newest first, for the crate's first tab.
   const [mine, setMine] = useState<MySounds>({ is: "loading" });
@@ -313,7 +360,7 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
         <ViewsNav current="studio" />
         <div className={s.trackBox}>
           <input
-            className={s.trackTitle}
+            className={cx(s.trackTitle, rb && s.trackTitleWide)}
             value={name}
             // F3: a long draft name is capped and ends in an ellipsis; the full name is the tooltip.
             size={Math.min(Math.max(8, name.length + 1), 40)}
@@ -348,18 +395,29 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
           ) : null}
         </div>
         <div className={s.transport}>
-          <button className={s.tb} onClick={() => t.jumpTo(1)} aria-label="Back to start">{Icon.start}</button>
-          <button className={cx(s.tb, s.play)} onClick={() => t.setPlaying(!t.playing)} aria-label={t.playing ? "Pause" : "Play"}>{t.playing ? Icon.pause : Icon.play}</button>
+          {/* U7-26: on Original the transport drives the Deck (❚❚ pauses it, ▶ plays it on). */}
+          <button className={s.tb} onClick={() => (orig ? cmp.seek(1) : t.jumpTo(1))} aria-label="Back to start">{Icon.start}</button>
+          <button className={cx(s.tb, s.play)} onClick={() => (orig ? cmp.toggleOriginal() : t.setPlaying(!t.playing))} aria-label={sounding ? "Pause" : "Play"}>{sounding ? Icon.pause : Icon.play}</button>
           {/* L200: one 13 px line; a track without its own key plays synths in A minor (the crate's key). */}
-          <div className={v.facts} aria-live="off">
-            bar <b>{t.bar}.{t.beat}</b> · <span title={bpm === DEFAULT_BPM ? undefined : `Set from Analyse; the Studio's default is ${DEFAULT_BPM}`}>{formatBpm(bpm)} bpm</span> · {track.doc.key
+          <div className={cx(v.facts, rb && s.factsFixed)} aria-live="off">
+            {/* A rebuild shows bar and section here; its tempo and key sit in the strip (room for the
+                track name beside Mine / Original at 1280). */}
+            bar <b>{t.bar}.{t.beat}</b>{rb ? <> · <span className={s.secName}>{rb.sections[sectionIndexAt(rb, t.playhead)].name}</span></> : <> · <span title={bpm === DEFAULT_BPM ? undefined : `Set from Analyse; the Studio's default is ${DEFAULT_BPM}`}>{formatBpm(bpm)} bpm</span> · {track.doc.key
               ? <span>{track.doc.key.key}{track.doc.key.scale === "minor" ? "m" : ""}</span>
-              : <span title="No key set: synths play in A minor, the crate's key">Am</span>}
+              : <span title="No key set: synths play in A minor, the crate's key">Am</span>}</>}
           </div>
+          {cmp.on ? (
+            <div className={s.mo} role="group" aria-label="Hear mine or the original">
+              <button aria-pressed={cmp.mode === "mine"} onClick={cmp.toMine}>Mine</button>
+              <button aria-pressed={cmp.mode === "orig"} aria-disabled={!cmp.ready || undefined} onClick={cmp.toOriginal}
+                title={cmp.ready ? `Hear the original from here, bar ${t.bar}, in the Deck` : cmp.otherSong ? "The Deck is playing another song" : "Open the Deck to hear the original"}>Original</button>
+            </div>
+          ) : null}
           <button className={s.undo} onClick={t.undo} disabled={!t.canUndo} aria-label="Undo">{Icon.undo} <span className={s.undoWord}>Undo</span></button>
         </div>
         <SettingsLink />
       </header>
+      {rb ? <RebuildView t={t} mine={mine} cmp={cmp} /> : <>
       <LanesView t={t} onNewSound={(l) => { t.setSelected(null); t.setSoundTarget(l.id); setAddLane([0, 1, 2, 2, 3, 3, 3][FAMILIES.findIndex((f) => f.id === familyId(l.type))]); }} />
       {selSound?.source === "lib" ? (
         <LibDrawer key={selSound.id} t={t} sound={selSound} color={colorOf(selSound.type)} onClose={closeDrawer} />
@@ -369,6 +427,7 @@ function Session({ track, tracks, status, draft, onSaveDraft, onChange, onRetry,
       ) : (
         <Crate t={t} mine={mine} />
       )}
+      </>}
       {t.toast ? (
         <div className={v.toast} role="status">
           <span>{t.toast}</span>

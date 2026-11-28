@@ -2,6 +2,32 @@
 
 ## Start here next time
 
+### Phase 8: hear every layer alone (owner, 28 Nov, L299, L300)
+
+Owner's words: splitting the song "shouldn't just cover drums. It should cover all aspects of the
+song", because recreating a layer by ear while hearing the full song (or the full drums) is "really
+not easy". Keep SoundCloud streaming as the main way in; add songs you own as files on top.
+
+What the Phase 7 PM found (28 Nov, web search, to re-check at kickoff):
+
+- Today: htdemucs in the browser, live from the Deck, four parts (drums, bass, Melody & FX, vocals).
+- Drums into parts: **strong** that models exist. DrumSep (MIT, HDemucs, ~335 MB ONNX, kick / snare
+  / cymbals / toms; 5- and 6-part versions split hi-hat, ride, crash), LarsNet (kick, snare, toms,
+  hi-hat, cymbals; CC BY-NC weights, fine since L299), an MDX23C 6-part community model. **None**
+  seen running in a browser.
+- Melody & FX into parts (chords, lead, pads, FX): **weak**, no good model known; htdemucs_6s adds
+  only guitar and piano. Research this first; filters or the Make reader's notes may be the
+  fallback.
+- With streaming, C2 still holds: the finer split runs on what's in memory. A looped section (16
+  bars in memory, L161) can be split in the background while it loops: the likely streaming route.
+- Songs you own: split once, keep the parts on the owner's computer (IndexedDB / OPFS), no Deck
+  needed; long loops, instant compare, maybe slow-down.
+- Phase 7 review checks not done yet (carry): Wobble on three presets, W5b, gold hints on a real map,
+  Mine / Original by ear, first taps on the preview, live Mentor after 1 Dec.
+- Quick fallback if a model fails its time box: filter "listen to" buttons (low / mid / high) on a
+  separated part.
+
+
 Shipped on 19 Oct without the playbook's checks (owner: ship and wrap up tonight). First: the
 skipped checks below, on the live URL. Then song analysis, the biggest wish.
 
@@ -127,3 +153,8 @@ previous gate is passed. Full detail in `kickoff-source.md`.
 - **Fix drums by ear** (OR6-3): tap a hit to remove or add it, mute any row; more drum rows (open hat, shaker/percussion, ride) so high sounds stop piling onto Hats.
 - **Listen's "Other" → "Melody & FX"** (OR6-1).
 - **Click to jump in Make** (OR6-5): in Bass, Drums, Melody and FX, click a spot on the loop's bars to play from there, like the Studio's timeline.
+- **Load your own sample packs** (L266): pick a folder in Chrome, sounds kept in the browser only (IndexedDB / OPFS), never uploaded; once the CC0 kit runs out (`research-sounds.md`, route C).
+- Build-time design fixes from the critic's round 3b (9/10): worst-case rebuild grid ends at the side panel with a scroll cue; "Breakdown" fits; narrow counts read "2 to fill" or nothing; Ride's "Your turn" line clear of the shelf at 1280; blank-cell hover / focus outline (27 Nov).
+- Viability risk (L283): tonejs-instruments' sampled basses are CC BY 3.0 but its README doesn't say where the recordings came from; check before charging, or swap for basses recorded by a known author.
+- Drum reader: clap / snare bodies land on Closed hat (D7-13, 0–83 % of the row per loop); open-vs-closed hats need more than energy gates (D7-12: 44 % / 31 %; try a small classifier on labelled real hits); hat onsets ~18 ms early (D7-15) (27 Nov).
+- "Save drums" for all edited rows at once (U7-16); today Save is per row because each row lands on its own Studio lane (27 Nov).

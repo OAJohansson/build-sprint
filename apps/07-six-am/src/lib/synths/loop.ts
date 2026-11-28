@@ -115,7 +115,7 @@ export function soundMeta(s: Sound): { track: number; name: string; bars: number
   if (s.source === "lib") {
     // Phase 5: a drum row's block draws as hits (the "kick" shape).
     // Phase 5: a drum row's block draws as hits (the "kick" shape), a melody row's as stabs or a pad.
-    const kind = isDrumLoop(s) ? "kick" : isFxLoop(s) ? "pad" : isMelodyLoop(s) ? (s.preset.endsWith("-pad") ? "pad" : "stab") : ({ "round-sub": "sub", "rubber-pluck": "pump", reese: "pump", "acid-line": "acid" } as const)[s.preset];
+    const kind = isDrumLoop(s) ? "kick" : isFxLoop(s) ? "pad" : isMelodyLoop(s) ? (s.preset.endsWith("-pad") ? "pad" : "stab") : (({ "round-sub": "sub", "rubber-pluck": "pump", reese: "pump", "acid-line": "acid" } as const) as Record<string, "sub" | "pump" | "acid" | undefined>)[s.preset] ?? "pump";
     return { track: s.lane, name: s.name, bars: s.bars, vibe: "My sound", kind };
   }
   const kind = ({ sub: "sub", acid: "acid", reese: "pump", organ: "stab", rhodes: "stab", pad: "pad" } as const)[s.preset];

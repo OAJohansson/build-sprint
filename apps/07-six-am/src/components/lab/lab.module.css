@@ -16,7 +16,7 @@
 .appBar { height: 64px; flex: none; display: flex; align-items: center; gap: 28px; padding: 0 24px; background: var(--panel); border-bottom: 1px solid var(--line); }
 .logo { font: italic 400 30px var(--f-serif); display: flex; align-items: center; gap: 12px; flex: none; }
 .mark { width: 30px; height: 30px; flex: none; }
-.appRight { margin-left: auto; }
+.appRight { margin-left: auto; display: flex; align-items: center; gap: 20px; }
 
 .head { flex: none; display: flex; align-items: center; gap: 24px; padding: 12px 24px; min-width: 0; border-bottom: 1px solid var(--line); }
 .back { flex: none; color: var(--muted); text-decoration: none; font-size: 12px; }
@@ -66,6 +66,8 @@
 .ruler { position: relative; background: var(--panel); border-bottom: 1px solid var(--line); cursor: pointer; overflow: hidden; }
 .sec { position: absolute; top: 0; height: 24px; padding: 0 8px; font: 400 11.5px/24px var(--f-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; background: none; border: 0; cursor: pointer; }
 .sec[aria-pressed="true"] { color: var(--gold) !important; }
+.rebuildBtn { color: var(--ink) !important; text-decoration: none; display: inline-flex; align-items: center; }
+.rebuildBtn:hover { border-color: var(--muted); }
 .num { position: absolute; bottom: 3px; padding-left: 5px; font-size: 10.5px; color: var(--muted); pointer-events: none; font-variant-numeric: tabular-nums; }
 .loopBand { position: absolute; top: 0; bottom: 0; background: rgba(242,177,52,.08); border-left: 1px solid rgba(242,177,52,.5); border-right: 1px solid rgba(242,177,52,.5); pointer-events: none; }
 .loopShade { position: absolute; top: 0; bottom: 0; background: rgba(242,177,52,.035); pointer-events: none; }
@@ -436,3 +438,295 @@
 @media (hover: hover) and (pointer: fine) { .quietLink:hover { color: var(--ink) !important; } }
 /* C7: the FX name field grows with its name, up to the room there is. */
 .saveBar .fxName { flex: 0 1 auto; field-sizing: content; min-width: 340px; max-width: 440px; }
+
+/* Phase 7 slice 1 (design p7-final, L278): the shelf of starting sounds under the drum rows (and the
+   bass's). Head: where (row · 20 sounds, credits), the sound now (serif name, family · feel, one line),
+   its knobs, Hide / Show. Under it the sounds in their families, side by side, scrolling sideways. */
+.lbl { font-size: 11.5px; color: var(--muted); }
+.drSound { font-size: 11.5px; color: var(--muted); max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.drRow[data-lit] .drSound { color: var(--ink); opacity: .8; }
+.shelf { width: 100%; display: flex; flex-direction: column; min-width: 0; border-top: 1px solid var(--line); margin-top: 14px; padding-top: 10px; flex: none; }
+.shelfHead { display: flex; align-items: center; gap: 22px; min-width: 0; margin-bottom: 8px; }
+.shelfWhere { display: flex; flex-direction: column; align-items: flex-start; flex: none; gap: 2px; }
+.shelfNow { min-width: 0; flex: 1; display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; }
+.shelfName { font: italic 400 24px/1.1 var(--f-serif); white-space: nowrap; }
+.shelfAbout { flex-basis: 100%; font-size: 11.5px; color: var(--ink); opacity: .8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; margin-top: 2px; }
+.shelf .drKnobs { gap: 18px; margin: 0; flex: none; }
+.shelfHead > .textBtn { align-self: flex-start; flex: none; }
+.groups { display: flex; gap: 4px; border: 1px solid var(--line); border-radius: 8px; padding: 6px 4px; overflow-x: auto; overscroll-behavior: contain; }
+.grp { flex: 1 1 auto; min-width: max-content; }
+.grp h3 { margin: 0; font-size: 11px; line-height: 1.3; font-weight: 400; color: var(--faint); padding: 1px 9px 3px; white-space: nowrap; }
+.gcol { display: grid; grid-auto-flow: column; grid-auto-columns: max-content; }
+.snd { display: flex; flex-direction: column; align-items: flex-start; padding: 4px 9px; border-radius: 6px; border: 1px solid transparent; background: none; text-align: left; white-space: nowrap; cursor: pointer; }
+.snd b { font-weight: 500; font-size: 12.5px; line-height: 1.3; }
+.snd small { color: var(--muted); font-size: 11.5px; line-height: 1.3; }
+.snd[aria-pressed="true"] { border-color: var(--gold); background: rgba(242, 177, 52, .13); }
+.sndMine { max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+@media (hover: hover) and (pointer: fine) { .snd[aria-pressed="false"]:hover, .snd:not([aria-pressed]):hover { background: rgba(241, 230, 211, .05); } }
+.shelf + .drSuggest, .shelf + .drWait { margin-top: 6px; }
+@media (max-height: 860px) {
+  .shelf { margin-top: 8px; padding-top: 6px; }
+  .shelfHead { margin-bottom: 6px; }
+  .shelfName { font-size: 21px; }
+  .snd { padding: 2px 8px; }
+  .snd b { font-size: 12px; line-height: 1.2; }
+  .snd small { font-size: 11px; line-height: 1.15; }
+  .groups { padding: 4px; }
+}
+/* Sound credits: a link that opens a small popover above the shelf. */
+.creditsBox { position: relative; }
+.creditsPop { position: absolute; left: 0; bottom: calc(100% + 8px); z-index: 30; width: 420px; background: #221d1a; border: 1px solid var(--edge); border-radius: 10px; box-shadow: 0 14px 40px rgba(0,0,0,.55); padding: 14px; font-size: 12px; line-height: 1.6; white-space: normal; }
+.creditsPop p { margin: 0 0 10px; }
+.creditsPop a { color: var(--ink); }
+.creditsTop { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+.creditsTop b { font-weight: 500; }
+/* The bass shelf's head holds the sound's name (its menu: your sounds, words), family · feel, one line. */
+.shelfNow .preset { width: auto; flex: 1 1 100%; gap: 4px; }
+.shelfNow .presetName { font-size: 24px !important; }
+.shelfNow .presetRow { align-items: baseline; gap: 10px; }
+.shelf .gcol + .gcol { margin-top: 0; }
+@media (max-height: 760px) {
+  .shelf { margin-top: 4px; padding-top: 4px; }
+  .shelfHead { margin-bottom: 4px; gap: 16px; }
+  .shelfName, .shelfNow .presetName { font-size: 20px !important; }
+  .grp h3 { padding-bottom: 1px; }
+  .groups { padding: 3px 4px; }
+}
+
+/* Slice 1 fix round (U7-1, U7-2, U7-5): every starting sound in view, no sideways scroll. The families
+   wrap onto as many lines as they need; the plain line gets the shelf's full width under its head; a
+   short window (≤ 760 px) puts each family's label and sounds on one line, name and feel side by side. */
+.groups { flex-wrap: wrap; overflow: visible; gap: 4px 16px; padding: 6px 8px; }
+.grp { flex: 0 0 auto; min-width: 0; }
+.gcol { display: flex; flex-wrap: wrap; }
+.shelf > .shelfAbout { margin: 0 0 8px; white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.45; }
+.shelfHead { margin-bottom: 4px; }
+@media (max-height: 860px) {
+  .shelf > .shelfAbout { margin-bottom: 6px; }
+}
+/* Each family is one unit on a line (its label, then its sounds, name and feel side by side); the
+   families wrap onto as many lines as they need. */
+.groups { align-items: baseline; }
+.grp { display: flex; align-items: baseline; }
+.gcol { display: flex; }
+.grp h3 { padding: 0 6px 0 0; }
+/* The closer sound Suggest found, under the sound's name (U7-5: never under the A/B row). */
+.shelfCloser { flex-basis: 100%; font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+.snd { flex-direction: row; align-items: baseline; gap: 5px; padding: 2px 7px; }
+/* The shelf takes room under the rows: rows, gaps and the loop strip a little tighter on every window. */
+@media (min-height: 861px) {
+  .drRow { height: 52px; }
+  .drName { height: 46px; }
+  .synth { gap: 14px; }
+  .loopStrip { flex: 1 1 96px; min-height: 96px; }
+}
+@media (max-height: 760px) {
+  .groups { gap: 0 10px; padding: 4px 4px; }
+  .snd { padding: 1px 4px; gap: 4px; }
+  .shelf > .shelfAbout { margin-bottom: 4px; }
+  .synth { gap: 8px; }
+  .loopStrip { flex: 1 1 72px; min-height: 72px; }
+  .drRow { height: 36px; }
+  .drName { height: 34px; }
+  .drTrack, .drPattern { height: 24px; }
+  .drRow[data-head] { height: 14px; }
+  .groups { row-gap: 0; }
+  .grp h3 { font-size: 10.5px; }
+  .shelf .drKnobs [role="slider"] { gap: 1px; padding: 2px; }
+  .drSuggest, .drWait { height: auto; min-height: 20px; }
+}
+@media (min-height: 761px) {
+  .bassCheck { position: sticky; bottom: -24px; z-index: 3; background: var(--bg); padding-bottom: 24px; margin-bottom: -24px; }
+}
+.shelfWhere[data-end] { align-self: flex-start; align-items: flex-end; }
+.shelfAboutIn { flex-basis: 100%; font-size: 11.5px; line-height: 1.35; color: var(--ink); opacity: .8; margin-top: 2px; }
+.shelfCloser[data-gap] { margin-top: 1px; }
+.creditsBox .creditsPop { right: auto; }
+.shelfWhere[data-end] .creditsPop { left: auto; right: 0; }
+
+/* Critic on the built shelf (5/10): families in two columns, each family one row with its label in a
+   fixed column on the left and its sounds to the right, so position carries the grouping. 8 px
+   between a label and its first sound; every line at least 22 px. */
+.groups { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 24px; padding: 4px 8px; flex-wrap: nowrap; }
+.gcolumn { display: grid; grid-template-columns: max-content minmax(0, 1fr); align-content: start; min-width: 0; }
+.grp { display: contents; }
+.grp h3 { font-size: 11px; line-height: 24px; padding: 0 8px 0 0; margin: 0; white-space: nowrap; }
+.gcol { display: flex; flex-wrap: wrap; align-items: center; column-gap: 2px; min-width: 0; }
+.snd { min-height: 24px; padding: 0 6px; align-items: center; }
+.snd b, .snd small { line-height: 20px; }
+@media (max-height: 760px) {
+  .groups { padding: 2px 6px; }
+  .snd { padding: 0 5px; }
+}
+
+/* Height for 24 px sound lines: a slimmer shelf top, and on a short window slimmer drum rows. */
+@media (min-height: 861px) { .shelf { margin-top: 6px; padding-top: 6px; } .synth { gap: 10px; } }
+@media (max-height: 760px) {
+  .drRow { height: 33px; }
+  .drName { height: 31px; }
+  .drTrack, .drPattern { height: 22px; }
+}
+/* Columns sized to their families (a long family keeps one line when the other column is narrow). */
+.groups { grid-template-columns: auto auto; justify-content: space-between; }
+@media (max-height: 760px) {
+  .drRow { height: 29px; }
+  .drName { height: 28px; }
+  .drName span { line-height: 1.15; }
+  .drTrack, .drPattern { height: 20px; }
+}
+/* A short window: each row is one line (its sound is named in the shelf head when open, and in the row's tooltip). */
+@media (max-height: 760px) { .drSound { display: none; } }
+
+/* Phase 7 slice 2 (design p7-final ?m=2 / ?m=r; R3, R3b, R4, R5): six drum rows in one grid, row names
+   once on the left, a step per 16th to tap, Mute and Solo in words on the right. The heard rows first
+   under "Six AM heard these", then a dashed line with the count of rows to fill by ear, then Shaker /
+   percussion and Ride, striped while empty, with "Your turn …" under them. The bar ruler on top plays
+   from the 16th you click. Rows keep one height whatever is open, so tapping moves nothing. */
+.dr2 { --rowH: 40px; display: grid; grid-template-columns: 180px minmax(0, 1fr) 96px; column-gap: 14px; row-gap: 6px; width: 100%; padding-top: 4px; }
+.dr2[data-fill] { --rowH: 48px; row-gap: 8px; }
+.dr2 > [data-head] { grid-column: 1; align-self: end; padding-left: 10px; }
+.rname { grid-column: 1; display: flex; flex-direction: column; justify-content: center; gap: 2px; min-width: 0; height: var(--rowH); padding: 0 10px; border: 0; border-radius: 6px; background: none; text-align: left; cursor: pointer; color: var(--ink) !important; font-size: 13px; }
+.rname span { line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rname small { color: #c2b49e; font-size: 11.5px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rname[aria-pressed="true"] { background: rgba(241, 230, 211, .08); }
+@media (hover: hover) and (pointer: fine) { .rname[aria-pressed="false"]:hover { background: rgba(241, 230, 211, .04); } }
+.stCell { grid-column: 2; position: relative; height: var(--rowH); min-width: 0; border-radius: 3px; }
+.stCell[data-open] { background-image: repeating-linear-gradient(135deg, rgba(242, 177, 52, .09) 0 6px, transparent 6px 12px); }
+.steps { position: relative; display: grid; row-gap: 4px; height: 100%; }
+.stLine { display: grid; column-gap: 6px; min-height: 0; }
+.steps[data-dense] .stLine { column-gap: 4px; }
+.stBar { display: grid; grid-template-columns: repeat(16, minmax(0, 1fr)); column-gap: 2px; min-width: 0; }
+.steps[data-dense] .stBar { column-gap: 1px; }
+.st { display: block; min-width: 0; min-height: 6px; padding: 0; border: 0; border-radius: 2px; background: rgba(241, 230, 211, .05); cursor: pointer; }
+.st[data-beat] { background: rgba(241, 230, 211, .09); }
+.st[data-k="read"] { background: var(--gold); }
+.st[data-k="added"] { background: var(--ink); }
+.st[data-k="removed"] { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(242, 177, 52, .75); }
+.st:disabled { cursor: default; }
+@media (hover: hover) and (pointer: fine) { .st:not(:disabled):hover { box-shadow: inset 0 0 0 1px rgba(241, 230, 211, .6); } }
+.st:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.root .st:active:not(:disabled) { transform: none; }
+.steps[data-muted] .st[data-k="read"], .steps[data-muted] .st[data-k="added"] { opacity: .3; }
+.stHead { position: absolute; width: 2px; margin-left: -1px; background: #fff; border-radius: 1px; pointer-events: none; }
+.drRuler { grid-column: 2; position: relative; display: grid; row-gap: 2px; min-width: 0; }
+.rLine { display: grid; column-gap: 6px; height: 22px; }
+.drRuler[data-dense] .rLine { column-gap: 4px; }
+.drRuler[data-lines="2"] .rLine { height: 16px; }
+.rb { display: grid; grid-template-columns: repeat(16, minmax(0, 1fr)); border-bottom: 1px solid var(--edge); min-width: 0; }
+.rb button { display: flex; align-items: flex-end; height: 100%; min-width: 0; padding: 0 0 3px 2px; border: 0; background: none; font: 11px var(--f-mono); color: var(--faint) !important; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: visible; cursor: pointer; }
+.rb button:disabled { cursor: default; }
+@media (hover: hover) and (pointer: fine) { .rb button:not(:disabled):hover { box-shadow: inset 0 -3px var(--muted); color: var(--ink) !important; } }
+.root .rb button:active:not(:disabled) { transform: none; }
+.drRuler .stHead { top: 0 !important; height: 100% !important; }
+.ms { grid-column: 3; display: flex; gap: 2px; align-self: center; justify-self: end; }
+.mbtn { height: 24px; padding: 0 6px; border-radius: 4px; border: 1px solid transparent; background: none; font: 12px var(--f-mono); color: var(--muted) !important; cursor: pointer; }
+.mbtn[aria-pressed="true"] { background: var(--edge); color: var(--ink) !important; }
+@media (hover: hover) and (pointer: fine) { .mbtn:hover { border-color: var(--edge); color: var(--ink) !important; } }
+.underCell { grid-column: 2; margin-top: -2px; }
+.under { font-size: 12px; color: var(--muted); display: flex; align-items: baseline; gap: 6px; white-space: nowrap; min-width: 0; }
+.under > span { overflow: hidden; text-overflow: ellipsis; }
+.under[data-yours] { color: var(--gold); }
+.under .textBtn { min-height: 0; padding: 0; color: inherit !important; }
+.divide { grid-column: 1 / -1; display: flex; gap: 12px; align-items: baseline; min-width: 0; margin-top: 4px; padding: 8px 10px 2px; border-top: 1px dashed rgba(242, 177, 52, .55); }
+.divide[data-done] { border-top-color: var(--edge); }
+.divide .lbl { line-height: 1.5; min-width: 0; }
+.count { display: inline-flex; align-items: center; gap: 8px; flex: none; font-size: 12.5px; color: var(--gold); white-space: nowrap; }
+.count::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex: none; }
+.count[data-done] { color: var(--muted); }
+.count[data-done]::before { background: #7fbf6a; }
+.legend { display: inline-flex; gap: 14px; font-size: 11px; color: var(--muted); white-space: nowrap; }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.legend i[data-k="read"] { background: var(--gold); }
+.legend i[data-k="added"] { background: var(--ink); }
+.legend i[data-k="removed"] { box-shadow: inset 0 0 0 1.5px rgba(242, 177, 52, .75); }
+/* The shelf sits clear of the last row's "Your turn" line (critic round 3b, 1280). */
+.dr2 + .shelf { margin-top: 14px; }
+/* R5: the FX and melody bar numbers and the bass strip's are buttons; the strip under them takes a click anywhere. */
+.jumpBars { cursor: pointer; }
+.jumpBars button, .jumpTrack .lsNum { position: absolute; top: 0; padding: 0; border: 0; background: none; font: 12px var(--f-mono); color: var(--muted) !important; font-variant-numeric: tabular-nums; cursor: pointer; }
+.jumpTrack { cursor: pointer; }
+.jumpTrack .lsNum { font-size: 10px; color: var(--faint) !important; line-height: 18px; padding-left: 4px; }
+.jumpBars button:disabled, .jumpTrack .lsNum:disabled { cursor: default; }
+@media (hover: hover) and (pointer: fine) { .jumpBars button:not(:disabled):hover, .jumpTrack .lsNum:not(:disabled):hover { color: var(--ink) !important; } }
+.jumpBars { pointer-events: auto; }
+/* Family labels one step brighter (critic, slice 1 shelf round). */
+.grp h3 { color: var(--muted); }
+@media (max-height: 860px) {
+  .dr2 { --rowH: 34px; row-gap: 4px; }
+  .dr2[data-fill] { --rowH: 46px; row-gap: 8px; }
+  .rname small { font-size: 11px; }
+}
+@media (max-height: 760px) {
+  .dr2 { --rowH: 28px; row-gap: 3px; padding-top: 0; }
+  .dr2[data-fill] { --rowH: 32px; row-gap: 5px; }
+  .rname { gap: 0; font-size: 12px; }
+  .rname span, .rname small { line-height: 1.15; }
+  .rname small { font-size: 10.5px; }
+  .drSound { display: block; }
+  .rLine { height: 18px; }
+  .divide { padding-top: 5px; margin-top: 2px; }
+  .under { font-size: 11.5px; }
+  .dr2 + .shelf { margin-top: 10px; }
+}
+
+/* Slice 2 fix round (L289, CR2-1, CR2-2, CR2-3, U7-10, U7-13): 4 bars at a time, every 16th a cell
+   with no dead gaps (the drawn block is inset in its cell; a bar break is drawn inside the bar's
+   first cell), a ruler whose bar numbers are real buttons, and one bottom bar. */
+.steps { display: grid; column-gap: 0; row-gap: 0; }
+.st { position: relative; background: none !important; box-shadow: none !important; border-radius: 0; min-height: 0; height: 100%; }
+.st::before { content: ""; position: absolute; inset: 0 1px; border-radius: 2px; background: rgba(241, 230, 211, .05); }
+.st[data-bar]::before { left: 6px; }
+.st[data-beat]::before { background: rgba(241, 230, 211, .09); }
+.st[data-k="read"]::before { background: var(--gold); }
+.st[data-k="added"]::before { background: var(--ink); }
+.st[data-k="removed"]::before { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(242, 177, 52, .75); }
+@media (hover: hover) and (pointer: fine) { .st:not(:disabled):hover::before { box-shadow: inset 0 0 0 1px rgba(241, 230, 211, .6); } }
+.steps[data-muted] .st[data-k="read"]::before, .steps[data-muted] .st[data-k="added"]::before { opacity: .3; }
+.steps[data-muted] .st[data-k] { opacity: 1; }
+.steps > .stHead { top: -3px; bottom: -3px; height: auto; }
+.drRuler { position: relative; display: block; height: 24px; border-bottom: 1px solid var(--edge); cursor: pointer; }
+.rbar { position: absolute; top: 0; min-width: 28px; height: 24px; padding: 0 6px 0 4px; border: 0; border-radius: 4px; background: none; font: 11.5px var(--f-mono); color: var(--muted) !important; font-variant-numeric: tabular-nums; text-align: left; cursor: pointer; }
+.rbar:disabled { cursor: default; color: var(--faint) !important; }
+@media (hover: hover) and (pointer: fine) { .rbar:not(:disabled):hover { background: rgba(241, 230, 211, .08); color: var(--ink) !important; } }
+.root .rbar:active:not(:disabled) { transform: none; }
+.rtick { position: absolute; bottom: 0; width: 1px; height: 8px; background: var(--edge); }
+.drRuler > .stHead { top: 0; height: 100%; }
+.pages { grid-column: 3; display: flex; gap: 2px; align-self: end; justify-self: end; }
+.pages .mbtn { min-width: 30px; }
+.pages .mbtn[aria-pressed="true"]:not([data-held]) { background: none; border-color: var(--edge); }
+/* CR2-3: the reason stays on one line (its full text in the tooltip). */
+.divide .lbl { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.drSuggest .ghost[aria-pressed] { margin-left: auto; }
+/* CR2-2: one bottom bar in Drums: A/B, closeness, name, Save. */
+.drBar { gap: 16px; }
+.drBar .ab { flex: none; }
+.drBar .drScore { margin-left: 0; flex: none; }
+.drBar .input { flex: 1 1 260px; max-width: 360px; margin-left: auto; }
+@media (max-height: 760px) {
+  .drRuler { height: 22px; }
+  .rbar { height: 22px; }
+}
+/* L289: as much width as the room gives to the steps (the Mentor rail stays, T245). */
+.dr2 { grid-template-columns: 164px minmax(0, 1fr) 88px; column-gap: 10px; }
+.ms .mbtn { padding: 0 4px; }
+@media (max-width: 1360px) { .divide .lbl { white-space: normal; } }
+.rname { font-size: 12.5px; }
+/* L290: the Mentor rail folded while fixing drums by ear: the room is one column, the button on the tab line. */
+.room[data-rail="folded"] { grid-template-columns: minmax(0, 1fr); }
+.room[data-rail="folded"] .saveBar { border-right: 0; }
+.askMentor { padding: 4px 12px; }
+.fam > .askMentor { margin-left: 16px; order: 2; }
+.fam > .askMentor ~ .famCap { order: 1; }
+/* Polish round: pages read as pages ("‹ 76–79 ›"); the reason under the line wraps, never cut; Melody / FX bar numbers are ≥ 24 px buttons. */
+.pages { align-items: center; gap: 0; }
+.pgArrow, .pgRange { height: 24px; border: 1px solid transparent; border-radius: 4px; background: none; font: 12px var(--f-mono); color: var(--muted) !important; cursor: pointer; font-variant-numeric: tabular-nums; }
+.pgArrow { width: 20px; padding: 0; font-size: 15px; }
+.pgArrow:disabled { opacity: .35; cursor: default; }
+.pgRange { padding: 0 4px; white-space: nowrap; }
+.pgRange[data-held] { background: var(--edge); color: var(--ink) !important; }
+@media (hover: hover) and (pointer: fine) { .pgArrow:not(:disabled):hover, .pgRange:hover { border-color: var(--edge); color: var(--ink) !important; } }
+.dr2 { grid-template-columns: 164px minmax(0, 1fr) 96px; }
+.divide .lbl { white-space: normal; overflow: visible; }
+.jumpBars button { min-width: 24px; min-height: 24px; top: -4px; padding: 0 4px; text-align: left; border-radius: 4px; }
+@media (hover: hover) and (pointer: fine) { .jumpBars button:not(:disabled):hover { background: rgba(241, 230, 211, .08); } }
+.drBar .saved { flex: 0 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

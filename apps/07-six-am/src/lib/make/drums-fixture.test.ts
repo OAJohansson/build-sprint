@@ -6,8 +6,8 @@ import { dropLibSound } from "@/lib/studio-drop";
 import { lanesOf } from "@/lib/studio-lanes";
 import type { Doc } from "@/lib/timeline";
 import { LOST_FLAM, REAL_LABELLED, renderLabelled, renderNoiseBuild } from "./drums-fixture";
-import { DRUM_PRESETS, DRUM_ROWS, ROW_PRESETS } from "./drum-synth";
-import { drumsFromReading, measureRows } from "./drums-make";
+import { DRUM_PRESETS, DRUM_ROWS, ROW_PRESETS, SYNTH_TO_KIT_ROW } from "./drum-synth";
+import { MAKE_ROWS, drumsFromReading, measureRows } from "./drums-make";
 import { readDrums } from "./drums-read";
 import { runMakeJob } from "./jobs";
 import { scoreDrums } from "./layers-bench";
@@ -58,7 +58,7 @@ describe("the real-loop fixture (Z1, Z2)", () => {
       expect(d.rows.kick.doubtful).toBe(true);
       expect(d.rows.kick.why).toMatch(/no repeating pattern/);
     }
-    expect(d.rows.hats.doubtful).toBe(false);
+    expect(d.rows.hat.doubtful).toBe(false);
   });
 });
 
@@ -71,8 +71,9 @@ describe("drums A/B at the same perceived loudness (D-F5, Z5)", () => {
     const target = lufs({ left: mono, right: mono, rate: RATE });
     const sets = [["kick-tight", "clap-rim", "hats-shaker"], ["kick-round-808", "clap-tight-snare", "hats-ride"], DRUM_ROWS.map((r) => ROW_PRESETS[r][0])];
     for (const set of sets) {
-      const sounds = Object.fromEntries(DRUM_ROWS.map((r, i) => [r, { preset: set[i], macros: DRUM_PRESETS[set[i] as keyof typeof DRUM_PRESETS].macros, on: true }])) as never;
-      const levels = Object.fromEntries(DRUM_ROWS.map((r) => [r, read.targets[r]?.levelDb ?? null])) as never;
+      // Phase 7: Make's six rows; the old synth sets play on Kick, Claps and Closed hat, the rest off.
+      const sounds = Object.fromEntries(MAKE_ROWS.map((r) => { const i = DRUM_ROWS.findIndex((x) => SYNTH_TO_KIT_ROW[x] === r); return [r, i >= 0 ? { preset: set[i], macros: DRUM_PRESETS[set[i] as keyof typeof DRUM_PRESETS].macros, on: true } : { preset: set[2], macros: {}, on: false }]; })) as never;
+      const levels = Object.fromEntries(MAKE_ROWS.map((r) => [r, read.targets[r]?.levelDb ?? null])) as never;
       const res = runMakeJob({ type: "drums-render", id: 2, reading: read.reading, sounds, levels, report: read.report, bpm: spec.bpm, rate: RATE, samples: mono.length, levelDb: read.levelDb, lufs: read.lufs }).res;
       if (res.type !== "drums-render") throw new Error(res.type);
       expect(Math.abs(lufs(res) - target), set.join(" + ")).toBeLessThanOrEqual(0.1);

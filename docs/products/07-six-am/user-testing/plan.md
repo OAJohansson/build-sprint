@@ -607,3 +607,172 @@ No "time passes" scenario: Phase 6 adds no date or time logic. Reload survival i
 - Network and storage: no audio of the original stored, uploaded or sent (K11, H11).
 - What was saved matches what was in Mine, bar by bar (names, notes, times) after a reload.
 - Ask afterwards: "Did anything make you think Six AM kept a copy of the track?"
+
+## Phase 7: Rebuild the song (27 Nov)
+
+Persona: the owner, Phase 7 update in [`persona.md`](persona.md) (no theory, ear first, reads
+almost nothing, but empty rows and sections must explain themselves, L268). Bars are copied from
+the Phase 7 part of [`../evals.md`](../evals.md): **W14** every job per slice ≥ 4/5, **W7** every
+open row named without help in 5 / 5 tries, **W16** Listen's "Other" reads "Melody & FX". Where
+`evals.md` gives no time or tap bar for a user task, the tester reports the number without a
+pass/fail. The measured bars (W1–W6, W8–W13) are data-evals'; scenarios below say which ones they
+touch, but a tester's observation never replaces them. Requirements are R1–R10 in the kickoff
+pack.
+
+### How to run the app for testing
+
+- **Sandbox only, never the owner's real data:**
+  `SUPABASE_URL= SUPABASE_SECRET_KEY= ACCESS_CODE=test-code pnpm -F 07-six-am exec next dev -p 3017`,
+  then `node apps/07-six-am/evals/sandbox-seed.mjs` (refuses unless the store is the in-memory
+  sandbox). Type `test-code` once. The seed puts Lost in the Loop (G major, 123.02 BPM, 101 bars, 6
+  sections; bars 69–76 in the build) and Mason Flint (108 bars, 8 sections) in.
+- **Seed gaps the PM fills before slices 3–4** (see the discovery report): the seeded maps' layer
+  curves are flat placeholders, so a per-section hint can't be judged on them; the PM seeds one map
+  with real (or exported) layer curves, or with a section where the original has no kick (e.g.
+  Mason's breakdown, bars 57–64). The library needs saved parts to fill slots; either the tester
+  makes and saves them in slices 1–2 first, or the PM seeds a few saved sounds per lane in the
+  sandbox. The report says which.
+- Desktop Chrome, 1440 × 900, plus one pass at 1280 × 800 and one short window (≤ 820 px high).
+  Phone is out of scope.
+- **Getting the loop into memory:** the Lab separates the track live from the SoundCloud tab (C2).
+  Use Chrome launched with the tab auto-select flags, as in Phases 3–6, or batch one **[owner's
+  hands]** ask for the tab-share click. The report says which.
+- **The agent can't hear.** It reads what plays from the page and the dev hooks (the picked sound's
+  family and feel word, the pattern per row, the play position, the Deck's reported position).
+  Whether a sound *sounds* like the track is the owner's final review; whether a knob is audible is
+  W4 (data-evals). For "find a sound of a feel", the tester gets the target as words (e.g. "a long,
+  dark 808 kick") and judges only from what the screen says.
+- **The Deck (slice 4):** the Deck window plays the SoundCloud original; it reports its position over
+  the BroadcastChannel. The tester reads that position (and the Studio's) to check the same bar; it
+  never records or captures what plays.
+- **No instruction text by design (L262), except empty rows and sections (R3b):** the tester works
+  without help and records each stuck point (where, what they tried, how long, whether they got
+  there without a hint). A hint from the PM ends the "without a hint" count for that task.
+- Network log kept in every scenario (W13: nothing of the original stored or uploaded).
+
+### Numbers to report in every scenario
+
+| Number | How |
+| --- | --- |
+| Taps | every click from the scenario's start to its success state |
+| Time to first sound | from opening the row (or the rebuild) to the first sound playing, seconds (W12 is data-evals' measured bar) |
+| Understood without a hint | yes / no per task, with the stuck points |
+| Job score | 1–5 per job (W14: ≥ 4) |
+
+### Scenarios (one block per slice)
+
+#### R7-S1 · Find a sound of a feel (slice 1)
+- **Moment:** an evening, the Lab open on a loved track's drop; four presets weren't enough last
+  time.
+- **Task:** "Find me a long, dark boom kick, then a tight, bright one." Then the same for Closed
+  hat ("a dusty lo-fi hat"), Open hat, Shaker / percussion ("a conga"), Ride ("a ride bell") and
+  Bass ("a 90s organ bass", "a Reese"). For each pick, turn each knob end to end and say from the
+  screen what it changed.
+- **Success:** every row offers 20 sounds, each with a family, a feel word and one plain line
+  (R1; W1 is data-evals'); each target found from the labels alone, without a hint; a preview plays
+  on tap; each knob says what it changes in plain words and its value moves end to end (R2; audible
+  is W4). CC BY sounds show a credit (W3). Report taps and seconds per target, and any two sounds
+  that look like the same thing (feeds W2). Job score ≥ 4/5 for "find a sound of a feel" and
+  "shape it with the knobs" (W14).
+
+#### R7-S2 · Which rows are mine to fill? (slice 2, W7)
+- **Moment:** Make → Drums on a drop loop; the loop sounds thin because two rows are empty.
+- **Task:** "Make filled some drums. Which rows still need me?" Do it on 5 tries: 5 loops (or
+  states) chosen by the PM, at least one where Open hat is also empty and one where the owner has
+  already filled Shaker.
+- **Success:** in each try the tester names every open row (Shaker, Ride, and any other Make left
+  empty) and the loop's count ("2 rows to fill by ear") without help, **5 / 5 (W7)**. After filling
+  one row and dismissing another, the count goes down and the dismissed row no longer says it's
+  open (R3b). Report how each open row was spotted and seconds to name them all. Job score ≥ 4/5
+  (W14).
+
+#### R7-S3 · Fix the drums by ear (slice 2)
+- **Moment:** straight after R7-S2; the hats play a hit the original doesn't have, and the shaker
+  row is empty.
+- **Task:** "Remove that extra hat on step N, tap a shaker in on the offbeats, mute the claps,
+  then solo the kick. Save it." (The PM gives the step numbers as text.) Then reload and open the
+  saved sound.
+- **Success:** a tap adds or removes a hit; mute and solo work per row; Suggest, A/B and closeness
+  still respond on the edited pattern; the saved pattern equals what played, and muted or soloed
+  rows come back as rows, not as deleted hits (R4; W6 is data-evals' 5 / 5). Report taps per
+  sub-task (remove, add, mute, solo, save). Job score ≥ 4/5 for "add or remove a hit" and "mute a
+  row" (W14).
+
+#### R7-S4 · Jump to a spot (slice 2)
+- **Moment:** halfway through an 8-bar loop, wanting to hear bar 3 again.
+- **Task:** "Play from the start of bar 3" in Bass, Drums, Melody and FX, then "from the middle of
+  bar 6".
+- **Success:** a click on the loop's bars plays from there in all four families without a hint
+  (R5); the play position shown lands at the clicked spot (W8's within-one-16th bar is
+  data-evals'). Report taps and whether the click target was found without a hint, per family.
+  Job score ≥ 4/5 (W14).
+
+#### R7-S5 · Old sounds and Listen's label (slice 2)
+- **Task:** open a drums sound saved in Phase 5 (three rows) and a Phase 6 chords sound; open
+  Listen on any track.
+- **Success:** the old drums open with Hats as Closed hat and the three new rows empty (and saying
+  so, R3b); the chords sound opens as before (R9; sample for sample is W11, data-evals'). Listen
+  shows Drums, Bass, Melody & FX, Vocals: "Other" reads "Melody & FX" (**W16**).
+
+#### R7-S6 · Lay out the song (slice 3)
+- **Moment:** a few parts of the track are remade and saved; now the whole song.
+- **Task:** "Start rebuilding Lost in the Loop (or the PM's seeded map with real layers). Tell me
+  its sections and what the original has in each. Fill the first drop's kick and bass with my saved
+  parts. Then tell me what's still to fill in that drop."
+- **Success:** the rebuild opens with the original's sections laid out bar for bar, every slot
+  empty, no starter blocks (R6; W9's 100 % / 0 is data-evals'); the tester names each section and
+  what the original has there from the hints alone; a saved part drops into a section's lane from
+  the library and fills that section; the drop then shows what's still to fill. Edge: a section
+  where the original has no kick says so, and doesn't count as "to fill". Report taps from opening
+  the rebuild to the first filled slot, and stuck points. Job score ≥ 4/5 for "see what the
+  original has" and "fill a section from the library" (W14).
+
+#### R7-S7 · Come back another evening (slice 3)
+- **Task:** reload the page (and close and reopen the tab); find the rebuild again and carry on.
+- **Success:** the rebuild is in the Studio's tracks, with the same filled and empty slots and
+  hints; the existing saved tracks are unchanged. Report taps to get back to where they stopped.
+  No date or time logic in this phase, so this is a reload check, not a "time passes" scenario.
+
+#### R7-S8 · Mine or the original, same bar (slice 4)
+- **Moment:** the first drop is filled; wanting to hear how close it is.
+- **Task:** "Play my drop from bar 21, then flip to the original at the bar I'm at, then back."
+  Do it at 5 bars chosen by the PM (incl. a section start and the last section). Then once with the
+  Deck closed, and once for a whole section (click its start, then flip).
+- **Success:** one switch, Mine / Original: the Studio pauses and the Deck plays the original from
+  the same bar, and back to Mine at the same bar, 5 / 5 (R7; W10's 150 ms is data-evals', from the
+  Deck's reported position); with the Deck closed the switch says how to open it, and after
+  following that the switch works (R7). The network log shows only commands and numbers (W13).
+  Report taps per flip, and whether the tester could say which side is playing at a glance. Job
+  score ≥ 4/5 for "compare at a bar" (W14).
+
+### Edge passes (inside the scenarios)
+
+- A row with all 20 sounds' feel words and lines at their longest (R7-S1): nothing cut off.
+- A loop where Make read nothing on a row it normally fills (R7-S2): it reads as open, not broken.
+- Mute and solo two rows at once, then save (R7-S3): what plays is what is saved.
+- A 16-bar loop (R7-S4): click to jump on the second line.
+- A part shorter than its section, and one longer (R7-S6): what the slot does at the section end.
+- An empty library (R7-S6): what an empty slot offers.
+- The last bar of the song and a bar inside a section (R7-S8): the Deck lands on the same bar.
+
+### Value questions
+
+- **Riskiest assumption (rebuild):** after R7-S6 and R7-S8, could a beginner see what each section
+  needs, fill it with their own parts and hear where it differs? The agent can test the path and the
+  same-bar switch; the owner's ear decides at the final review.
+- Did the 20 sounds feel like a choice or a wall (R7-S1)?
+- Did any empty row or section ever look broken instead of "yours to fill" (L268)?
+
+### Trust checks
+
+- Network and storage: no audio of the original stored, uploaded or sent (R10, W13); only play,
+  pause, seek and positions cross to the Deck.
+- Every block in the rebuild is one the tester put there (L269).
+- Credits for CC BY sounds are findable in the app (W3).
+- Ask afterwards: "Did anything make you think Six AM kept a copy of the track?"
+
+### Out of scope
+
+The owner-only checks (by ear: recognisably the same; breadth feels broad; the song feels mine);
+reading Shaker and Ride; own sample packs; arranging and exporting an own track; phone layout; the
+design critic's score (W15, run separately); a live Mentor answer (carried owner check, after 1 Dec).

@@ -64,10 +64,10 @@ describe("the Mentor's knob line", () => {
   it("names the two biggest moves, with the word they land on", () => {
     const ticks = { ...cur, length: 0.25, pitchDrop: 0.6, drive: 0.25 };
     expect(movesTo(cur, ticks).map((m) => m.id)).toEqual(["length", "pitchDrop"]);
-    expect(suggestLine(cur, ticks)).toBe("Length down to 1/8, Pitch drop up to deep. The original bass measures shorter notes and more pitch drop.");
+    expect(suggestLine(cur, ticks)).toBe("Make it shorter (Length) and more pitch drop (Pitch drop), like the original bass.");
   });
   it("says just the way when the word stays", () => {
-    expect(suggestLine(cur, { ...cur, tone: 0.2 })).toBe("Tone down. The original bass measures a darker tone.");
+    expect(suggestLine(cur, { ...cur, tone: 0.2 })).toMatch(/^Make it (a bit )?darker \(Tone\), like the original bass\.$/);
   });
   it("says which ticks a new suggestion moved", () => {
     expect(ticksMoved(cur, { ...cur, tone: 0.5, wobble: 0.3 })).toBe("Ticks moved: Tone, Wobble.");

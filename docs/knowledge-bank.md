@@ -224,6 +224,14 @@ last 30 days"), never promise a result ("pain free"). It's also more honest: som
 will say it didn't help. Why it matters: it's a viability risk you can design out on day one.
 Where we met it: naming Mallow (04). From: Cagan's viability risk (legal and compliance).
 
+#### Ask who a rule protects
+Before dropping a limit because "it's just for me", ask whose interest it guards. Personal use
+removes limits that protect *you selling* (non-commercial licences on models and sounds), but not
+those protecting *someone else's rights*, such as the owner of a song you stream. *Where:* Six AM
+went personal-use only (L299): LarsNet's non-commercial weights became usable, while "never keep
+the SoundCloud original" (C2) stayed. *(Cagan's viability risk; CJEU ACI Adam, 2014, on private
+copies)*
+
 ### Prioritisation
 
 #### Impact versus effort
@@ -242,6 +250,9 @@ reaction. Where we met it: Scribble's light vs dark design (03), solved by follo
 setting. From: Jeff Bezos, Amazon shareholder letter (2015).
 
 ### Quiz
+
+**Q:** Which limits does "it's only for me" remove, and which not?
+**A:** It removes limits that protect you selling (non-commercial licences); it doesn't remove ones protecting someone else's rights (a song owner's copyright, a service's terms).
 
 **Q:** In assumption mapping, what are the two axes, and which corner do you test first?
 **A:** Importance (would the product fail if it's false?) and evidence (have I seen it, or am I guessing?). Test the important, no-evidence corner (top left) first.
@@ -1192,7 +1203,18 @@ Any of them fits the song, which is why beginner tools show them as a row of but
 wrong guess is usually one of its neighbours. *Where:* Six AM Phase 6: Make's chord cards and
 "Why it fits" use the key's chords first. *(Western harmony; music theory basics)*
 
+#### Stem separation ("stems")
+A trained model splits a finished song into its parts (drums, bass, vocals, the rest); each part
+is a **stem**. A finer model can split a stem again, such as drums into kick, snare, hats and
+cymbals. Why it matters: you can only copy a sound by ear once you can hear it alone. *Where:* Six
+AM's Lab splits a SoundCloud stream live (htdemucs); at the Phase 7 review the owner couldn't
+rebuild the kick while hearing the whole drum stem (OR7-1). *(Demucs, Meta; DrumSep and LarsNet for
+drums)*
+
 ### Quiz
+
+**Q:** What is a stem, and why split the drums again after the first split?
+**A:** One part of a finished song (drums, bass, vocals, the rest) split out by a model. A second split (kick, snare, hats) lets you hear one drum alone, which you need to copy it by ear.
 
 **Q:** Why can a fixture rebuilt from hand labels pass while the real recording fails?
 **A:** The re-render lacks the real part's bleed, ringing and mix, so the reader meets an easier problem; only a measurement on the real part should decide.

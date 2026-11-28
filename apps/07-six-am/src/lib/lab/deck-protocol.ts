@@ -11,7 +11,9 @@ export const DECK_REPORT_MS = 100;
 /** No report for this long → the Deck is treated as closed. */
 export const DECK_GONE_MS = 2000;
 
-export type DeckState = { kind: "state"; url: string; title: string; pos: number; playing: boolean; durationMs: number };
+/** `landed` (slice 4, W10): sent once, the moment a seek lands: the seek's target ms, and `pos` is
+ *  the position the player reported right then. Numbers only. */
+export type DeckState = { kind: "state"; url: string; title: string; pos: number; playing: boolean; durationMs: number; landed?: number };
 export type DeckCmd =
   | { kind: "cmd"; cmd: "play" }
   | { kind: "cmd"; cmd: "pause" }
@@ -65,10 +67,22 @@ export class DeckRemote {
 export function serveDeck(o: {
   url: string;
   read: () => Promise<{ pos: number; playing: boolean; title: string; durationMs: number }>;
-  onCmd: (c: DeckCmd) => void;
+  /** May return the position a seek landed at (ms); the Deck then reports it at once (W10). */
+  onCmd: (c: DeckCmd) => void | Promise<number | void>;
 }) {
   const ch = new BroadcastChannel(DECK_CHANNEL);
-  ch.onmessage = (e: MessageEvent<unknown>) => { if (isMsg(e.data) && e.data.kind === "cmd") o.onCmd(e.data); };
+  ch.onmessage = (e: MessageEvent<unknown>) => {
+    if (!isMsg(e.data) || e.data.kind !== "cmd") return;
+    const c = e.data;
+    const r = o.onCmd(c);
+    if (c.cmd === "seek" && r instanceof Promise) {
+      r.then(async (pos) => {
+        if (typeof pos !== "number") return;
+        const s = await o.read().catch(() => null);
+        if (s) ch.postMessage({ kind: "state", url: o.url, ...s, pos, playing: true, landed: c.ms } satisfies DeckState);
+      }, () => { /* the seek didn't land; the timer's reports go on */ });
+    }
+  };
   let busy = false;
   const t = setInterval(async () => {
     if (busy) return;

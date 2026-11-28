@@ -8,7 +8,8 @@ import { ChevronDown, X } from "lucide-react";
 import { editLibLoop, isDrumLoop, isFxLoop, isMelodyLoop, type BassLoop, type DrumLoop, type FxLoop, type LibLoop, type MelodyLoop } from "@/lib/make/lib-loop";
 import { FX_KNOBS, FX_KNOB_SPECS, FX_PRESETS, clampFxMacros, fxKnobWord, fxRowOf, fxRowPresets, type FxPresetId } from "@/lib/make/fx-synth";
 import { POLY_KNOBS, POLY_KNOB_SPECS, clampPolyMacros, melodyPreset, melodyPresetIds, melodyRowOf, polyKnobWord, type MelodyPresetId } from "@/lib/make/poly-synth";
-import { DRUM_KNOB_SPECS, DRUM_PRESETS, ROW_KNOBS, ROW_PRESETS, clampDrumMacros, drumKnobWord, rowOf, type DrumPresetId } from "@/lib/make/drum-synth";
+import { DRUM_PRESETS, ROW_PRESETS, clampDrumMacros, drumKnobDetail, drumKnobSpec, drumKnobWord, drumSoundAbout, isDrumPreset, kitRowOf, knobsOf, laneRowOf, type DrumSoundId } from "@/lib/make/drum-synth";
+import { p7Sounds, type P7Row } from "@/lib/make/kit-p7";
 import { MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, type MacroId, type MakePresetId } from "@/lib/make/presets";
 import { Knob } from "@/components/ui/knob";
 import { keyChords, prettyChord, revoiceMark, transposeChord } from "@/lib/make/chords-mine";
@@ -158,7 +159,10 @@ function DrumDrawer({ t, sound, color, onClose }: { t: Timeline; sound: DrumLoop
     if (listening) t.setPreviewSound(next);
   };
   const blocks = t.doc.regions.filter((r) => r.loopId === sound.id).length;
-  const row = rowOf(sound.preset), home = clampDrumMacros(sound.preset, undefined);
+  // Phase 7: a drum sound switches among its row's sampled starting sounds and, on the three old rows, the synth presets.
+  const lane = laneRowOf(sound.preset), home = clampDrumMacros(sound.preset, undefined);
+  const kitRow: P7Row = isDrumPreset(sound.preset) ? ({ kick: "kick", clap: "clap", hats: "hat", perc: "perc" } as const)[lane] : kitRowOf(sound.preset);
+  const synth = lane === "perc" ? [] : ROW_PRESETS[lane];
   return (
     <aside className={s.drawer} style={{ ["--c" as string]: color }} aria-label={`${sound.name}, a sound from your library`}>
       <div className={s.top}>
@@ -169,17 +173,18 @@ function DrumDrawer({ t, sound, color, onClose }: { t: Timeline; sound: DrumLoop
         <section className={s.pick}>
           <label className={l.presetPick}>
             <span className={l.presetLabel}>Preset</span>
-            <select value={sound.preset} onChange={(e) => change(editLibLoop(sound, { preset: e.target.value as DrumPresetId }))} aria-label="Preset">
-              {ROW_PRESETS[row].map((id) => <option key={id} value={id}>{DRUM_PRESETS[id].name}</option>)}
+            <select value={sound.preset} onChange={(e) => change(editLibLoop(sound, { preset: e.target.value as DrumSoundId }))} aria-label="Preset">
+              <optgroup label="Starting sounds">{p7Sounds(kitRow).map((x) => <option key={x.id} value={x.id}>{x.name} · {x.feel}</option>)}</optgroup>
+              {synth.length > 0 && <optgroup label="Synth">{synth.map((id) => <option key={id} value={id}>{DRUM_PRESETS[id].name}</option>)}</optgroup>}
             </select>
             <ChevronDown aria-hidden />
           </label>
-          <p className={s.dim}>{DRUM_PRESETS[sound.preset].about}</p>
+          <p className={s.dim}>{drumSoundAbout(sound.preset)}</p>
           <p className={s.dim}>{sound.name}: saved at {Math.round(sound.bpm)} BPM; plays at the track&apos;s tempo, with its swing.</p>
         </section>
         <section className={s.shape} style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
-          {ROW_KNOBS[row].map((id) => (
-            <Knob key={id} id={id} spec={DRUM_KNOB_SPECS[id]} wordOf={(v) => drumKnobWord(sound.preset, id, v, sound.bpm)} value={sound.macros[id] ?? 0} color={color} disabled={false} reset={home[id] ?? 0}
+          {knobsOf(sound.preset).map((id) => (
+            <Knob key={id} id={id} spec={drumKnobSpec(sound.preset, id)} wordOf={(v) => drumKnobWord(sound.preset, id, v, sound.bpm).split(" · ")[0]} detailOf={(v) => drumKnobDetail(sound.preset, id, v)} value={sound.macros[id] ?? 0} color={color} disabled={false} reset={home[id] ?? 0}
               onChange={(v) => change(editLibLoop(sound, { macros: { [id]: v } }), `lib:${sound.id}:${id}`)} size={72} />
           ))}
         </section>

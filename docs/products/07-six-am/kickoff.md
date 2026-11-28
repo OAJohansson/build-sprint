@@ -937,3 +937,142 @@ In the browser only (C2): no server-side model.
 
 Owner checks still open: drums close by ear; FX A/B on Lost in the Loop bars 73–80 (−1.01 dB,
 borderline); one live Mentor answer in Make (after 1 Dec).
+
+# Kickoff pack: Six AM Rebuild the song (Phase 7, Founder v2)
+
+**Status: final (27 Nov).** Written by the Phase 7 PM from the owner's Phase 6 review (L265,
+OR6-1..5, `backlog.md` "For Phase 7"); the owner answered the questions one at a time on 27 Nov
+(L266–L270). The draft questions are kept for context.
+
+**Mode:** founder (v2)
+**Appetite:** four slices, about three nights (PM). Owner moments: the kickoff questions, the
+design picks (3 of ~10, then 1 of 3), the canvas sign-off, the final review.
+**Evals:** the "Rebuild the song (Phase 7)" part of `evals.md`.
+
+## The goal (owner, 27 Nov, L265)
+
+Not a copy that sounds like the record, but "recognisably the same song, and I built every part
+of it": take a loved track apart in Listen, remake each part in Make, save it, and rebuild the
+whole song in the Studio, to learn how good songs are built and then make my own. Six AM should
+still have the parts of a good production kit.
+
+## What already exists
+
+- **Make** (Bass, Drums, Melody, FX): one looped section at a time. Bass has 4 synth presets ×
+  8 knobs; Drums 3 rows (Kick, Claps & snares, Hats) × 4 synth presets each; every high sound
+  (shakers, rides, percussion, bleed) lands on Hats (OR6-3). Hits can't be removed or added by
+  hand, rows can't be muted unless Make flagged them. No click to jump on the loop (OR6-5).
+- **Studio:** two CC0 sampled kits (909-style, 808-style, 4 sounds each, Freesound, licences in
+  `public/kits/LICENSES.md`), 48 crate loops, saved Make sounds in the library drawer, lanes up to
+  Kick / Claps / Hats / Bass / Chords / Pads / Lead / FX.
+- **Map → Studio draft** (Phase 3, `src/lib/map/template.ts`): a new track with the reference's
+  tempo, key, length, a marker per section and starter blocks where the map hears each layer.
+- **The Deck** (Phase 4, `src/lib/lab/deck-protocol.ts`): the window that plays the SoundCloud
+  original; the Lab sends play / pause / seek over a BroadcastChannel and the Deck reports its
+  position. Only commands and numbers cross it, never audio (C2).
+- **Listen** names the separated parts Drums, Bass, Other, Vocals; Make's tabs are Bass, Drums,
+  Melody, FX (OR6-1).
+
+## Problem
+
+The owner can remake one looped part at a time, but there is no path from "I remade the bassline
+of the drop" to "I rebuilt the whole song", and the parts they make don't sound like a kit worth
+building with: four starting sounds per row, knobs that change little, drums that never get close
+because every high sound lands on one Hats row and wrong hits can't be removed.
+
+## Riskiest assumptions
+
+1. **Sounds:** a bigger, better set of starting sounds (route from the research brief,
+   `research-sounds.md`) gets drums and bass "recognisably the same" by ear, where four synth
+   presets didn't. Tested by the owner at the final review; agents check range (the sounds differ
+   measurably) and licences.
+2. **Rebuild:** with the original's sections laid out and a one-tap switch to the original at the
+   same bar, a beginner can fill a whole song with their own saved parts and hear where it differs.
+   Tested by the slice 4 user test (as far as an agent can) and the owner.
+3. **Reading more drum rows:** open hat, shaker / percussion and ride can be told apart in the
+   separated drums well enough to start those rows filled. If not, they start empty and the owner
+   fills them by ear (slice 2 makes that easy). Graded on real loops before the slice builds on it.
+
+## Slices (one branch, one PR; each built, user-tested, graded and fixed before the next)
+
+1. **More starting sounds:** the route the owner picks (question 1), for bass and every drum row,
+   including the new rows' sounds; knobs that change the sound audibly; licences recorded per file.
+2. **Fix drums by ear:** rows Kick, Claps & snares, Closed hat, Open hat, Shaker / percussion,
+   Ride; tap a step to add or remove a hit, mute or solo any row; click a spot on the loop's bars
+   to play from there, in Bass, Drums, Melody and FX (OR6-5).
+3. **Lay out the song:** in the Studio, the original's sections (from its map) laid out bar for
+   bar, each section a slot to fill with saved parts from the library (per lane), with what each
+   section has (kick, bass, chords…) shown as a hint.
+4. **Compare with the original:** one switch, Mine / Original, at the same bar: the Studio pauses
+   and the Deck seeks the original there (and back). Then the old Phase 7 plan (arrange and
+   export an own track) follows in a later phase.
+
+Small, folded in: Listen's "Other" becomes "Melody & FX" (OR6-1, toil, logged as a T-number).
+
+## Questions for the owner (draft, answered below)
+
+1. **Where should the new sounds come from?** (Research brief: `research-sounds.md`.)
+   Recommendation: a hand-picked free (CC0) sample kit for drums, about 12 sounds per row, plus a
+   richer bass synth with more presets and a few credited sampled basses; your own packs later.
+2. **How many starting sounds is enough?** Recommendation: about 12 per drum row and 16 for bass,
+   grouped by feel (deep, punchy, dusty…), with a preview on tap, so choosing stays quick.
+3. **Should Make try to read the new drum rows (open hat, shaker, ride) from the track, or start
+   them empty for you to fill by ear?** Recommendation: read open hats (they're long and easy to
+   tell apart), start shaker and ride empty unless the reader passes its real-track grade.
+4. **Rebuild: start from the map's draft, or from an empty song with only the sections?**
+   Recommendation: only the sections (no starter sounds), because "I built every part" means
+   every block is yours; each section shows which parts the original has there.
+5. **Compare with the original: whole song, or the section you're in?** Recommendation: one
+   switch that plays the original from the bar you're at, so you hear the same moment both ways.
+
+## Owner's answers
+
+| # | Question | Answer | Log |
+| --- | --- | --- | --- |
+| 1 | Where do the new sounds come from? | A hand-picked free (CC0) sample kit for drums, a richer bass synth with more presets plus a few credited sampled basses; own packs later (PM's recommendation, `research-sounds.md`) | L266 |
+| 2 | How many starting sounds? | 20 per row (every drum row and bass), picked for breadth: cover a lot of variety, not 20 versions of one sound (PM had recommended 12 drums / 16 bass). The variety map below guides the picks | L267 |
+| 3 | Should Make read the new drum rows? | The middle way: Make reads open hats; shaker and ride start empty for you to fill by ear (switched on later only if a reader passes a real-track grade). **Design must make it very clear** which rows are still yours to fill, so an empty row never makes the loop sound "nothing like the original" without saying why | L268 |
+| 4 | Rebuild: sections only, or the map's draft with starter sounds? | Sections only: the original's sections laid out as empty slots, each showing which parts the original has there; no generic starter sounds, so every block is the owner's own (PM's recommendation) | L269 |
+| 5 | Compare: same bar, or the whole section? | Same bar: the switch plays the original from the bar you're at, through the Deck (commands only), and back to Mine (PM's recommendation) | L270 |
+
+## Variety map for the 20 sounds per row (L267)
+
+Each row's 20 are spread over **families** (kinds of sound, 2–4 each) and three **dials**:
+short ↔ long, dark ↔ bright, clean ↔ dirty. No two sounds in a row may be near-duplicates
+(measured: brightness and length both within a small margin). Each sound has a family, a feel
+word and one plain line.
+
+| Row | Families to cover |
+| --- | --- |
+| Kick | 909 punchy · 808 long boom · soft round deep-house · tight short techno · hard / distorted · acoustic (live drum) · lo-fi dusty · sub-heavy · clicky top |
+| Claps & snares | 909 clap · 808 clap · big layered clap · snap · rim · tight snare · roomy snare · acoustic snare · lo-fi snare · brush |
+| Closed hat | 909 · 808 · acoustic · tiny tick · dusty lo-fi · sizzly bright · shaker-like |
+| Open hat | 909 open · 808 open · short open · long sizzle · acoustic · lo-fi |
+| Shaker / percussion | shakers · tambourine · congas / bongos · cowbell · clave / woodblock · toms · claps-and-hands |
+| Ride | 909 ride · acoustic ride · ride bell · crash / splash · sizzle |
+| Bass (synth, with a few samples) | clean sub · rubber pluck · Reese · acid · organ bass (90s house) · FM bass · round analog · Detroit square · filtered saw · wobble · stab bass · electric bass (sampled) · upright / contrabass (sampled) |
+
+## Requirements (Phase 7)
+
+| # | Requirement |
+| --- | --- |
+| R1 | 20 starting sounds for bass and every drum row, spread over the variety map's families and dials, no near-duplicates (L266, L267), each with a plain one-line description; licences recorded per file; nothing that can't be redistributed in a web app is shipped. |
+| R2 | Knobs change the sound audibly: each knob's range moves a measured feature (brightness, length, level, pitch) clearly between its ends. |
+| R3 | Drum rows: Kick, Claps & snares, Closed hat, Open hat, Shaker / percussion, Ride. Make reads Kick, Claps, Closed and Open hat; Shaker and Ride start empty (L268). |
+| R3b | Empty rows are unmissable (L268): each row Make didn't fill says so in plain words ("Your turn: listen for a shaker and tap it in"), and the loop as a whole shows what's still open ("2 rows to fill by ear") until the owner fills or dismisses them, so a thin-sounding loop always explains itself. Checked in the design critic's pass and the user test. |
+| R4 | Fix by ear: tap a step to add or remove a hit; mute and solo per row; Suggest, A/B, closeness and Save keep working on the edited pattern; what plays is what is saved. |
+| R5 | Click to jump: clicking a spot on the loop's bars plays from there, in Bass, Drums, Melody and FX. |
+| R6 | Studio rebuild: the original's sections laid out on the timeline from its map as empty slots (no starter sounds, L269), each section fillable per lane from the library; per section, a clear hint of which parts the original has there and which are still to fill (as R3b). |
+| R7 | Compare: one switch plays the original from the bar you're at through the Deck (commands only), and back to Mine (L270); if the Deck isn't open, the switch says how to open it. |
+| R8 | Listen's "Other" reads "Melody & FX". |
+| R8b | The rebuild replaces the Phase 3 "Start a track from this" draft as the map's way into the Studio (L273). |
+| R8c | A dev hook `window.__sixamMake` exposes the picked sound, each row's pattern and the play position for graders (L273). |
+| R9 | Saved sounds from Phases 4–6 render sample for sample as before; old 3-row drum sounds open in the new rows unchanged (Hats → Closed hat). |
+| R10 | Rights rule C2 unchanged: the original stays in memory only, never stored, exported, uploaded or sent to any API. |
+
+## Things to keep
+
+- Clean and minimal (decision 0007); still framing, no per-keystroke motion.
+- Graders use the sandbox (`ACCESS_CODE=test-code`, in-memory store), never the owner's real data.
+- No paid API calls by agents without the owner's yes.
+- Carried owner check: one live Mentor answer in Make after the API limit resets on 1 Dec.

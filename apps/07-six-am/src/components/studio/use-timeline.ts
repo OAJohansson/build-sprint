@@ -152,6 +152,15 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
     return r.id;
   }, [editLanes]);
 
+  /** Phase 7 rebuild: any pure doc edit (rebuild.ts fillSlot, emptySlot, leaveSlot) as one undo step; null = no change. */
+  const edit = useCallback((f: (d: Doc) => Doc | null) => {
+    const next = f(docRef.current);
+    if (!next || next === docRef.current) return false;
+    registerSounds(next.sounds);
+    commit(next);
+    return true;
+  }, [commit]);
+
   const remove = useCallback((id: string) => {
     const d = docRef.current;
     commit({ ...d, regions: d.regions.filter((r) => r.id !== id) });
@@ -485,7 +494,7 @@ export function useTimeline(initial: Doc, bpm: number, startBar = 1) {
     preview, setPreview, group, setGroup, ghost, bin, pxPerBar, lanesRef,
     lanes, silent, laneOf, toggleMute, toggleSolo, setLaneVolume, setLanePan, renameLane, moveLane, removeLane, addLane,
     soundTarget, setSoundTarget,
-    canUndo: past.length > 0, undo, remove, toast, undoToast, dropNote,
+    canUndo: past.length > 0, undo, remove, edit, toast, undoToast, dropNote,
     crateItem, blockBody, blockGrip, ruler,
   };
 }

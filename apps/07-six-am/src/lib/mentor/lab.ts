@@ -9,7 +9,7 @@ import { barActivity } from "@/lib/lab/activity";
 import { loopBars } from "@/lib/lab/timing";
 import type { TrackMap } from "@/lib/map/types";
 import { midiName, pitchClass, usesFlats } from "@/lib/synths/theory";
-import { DRUM_KNOB_SPECS, DRUM_PRESETS, DRUM_ROW_NAMES, ROW_KNOBS, drumKnobWord, isDrumPreset, rowOf, type DrumKnobId, type DrumPresetId } from "@/lib/make/drum-synth";
+import { drumKnobSpec, drumKnobWord, drumSoundAbout, drumSoundName, drumSoundRowName, isDrumPreset, isDrumSoundId, knobsOf, type DrumKnobId, type DrumSoundId } from "@/lib/make/drum-synth";
 import { MELODY_ROW_NAMES, POLY_KNOBS, POLY_KNOB_SPECS, isMelodyPreset, melodyPreset, melodyRowOf, polyKnobWord, type MelodyPresetId, type PolyKnobId } from "@/lib/make/poly-synth";
 import { FX_KNOBS, FX_KNOB_SPECS, FX_PRESETS, FX_ROW_NAMES, fxKnobWord, fxRowOf, isFxPreset, type FxKnobId, type FxPresetId } from "@/lib/make/fx-synth";
 import { MACRO_IDS, MACRO_SPECS, MAKE_PRESETS, clampMacros, macroWord, type Macros, type MakePresetId } from "@/lib/make/presets";
@@ -17,12 +17,13 @@ import type { MentorAnswer } from "./answer";
 import { chordFacts, chordFactsLines } from "./chord-facts";
 import { normalChord } from "@/lib/make/chords-mine";
 
-export const PART_LABEL: Record<PartName, string> = { drums: "Drums", bass: "Bass", other: "Other", vocals: "Vocals" };
+// Phase 7 (R8, OR6-1): the "other" part is named for what Make makes of it, Melody and FX.
+export const PART_LABEL: Record<PartName, string> = { drums: "Drums", bass: "Bass", other: "Melody & FX", vocals: "Vocals" };
 
-/** A part in a sentence (LS2-N11): "the bass", "the drums", but "Other" (a lane's name, not a thing). */
-export const partNoun = (p: PartName) => (p === "other" ? "Other" : `the ${p}`);
-/** "What's the bass doing here?", "What are the vocals doing here?", "What's Other doing here?" */
-export const whatDoing = (p: PartName) => `What${p === "drums" || p === "vocals" ? " are" : "'s"} ${partNoun(p)} doing here?`;
+/** A part in a sentence (LS2-N11): "the bass", "the drums", "the melody and FX" (R8). */
+export const partNoun = (p: PartName) => (p === "other" ? "the melody and FX" : `the ${p}`);
+/** "What's the bass doing here?", "What are the vocals doing here?", "What are the melody and FX doing here?" */
+export const whatDoing = (p: PartName) => `What${p === "drums" || p === "vocals" || p === "other" ? " are" : "'s"} ${partNoun(p)} doing here?`;
 
 /** What you hear (L177): everything, only some parts, or everything without some. */
 export type LabHear = { kind: "all" } | { kind: "only"; parts: PartName[] } | { kind: "mute"; parts: PartName[] };
@@ -162,7 +163,7 @@ function parseMakeRow(v: unknown): LabMakeRow | null {
   const fam = o.family === "drums" || o.family === "melody" || o.family === "fx" ? o.family : null;
   if (!fam) return null;
   const preset = typeof o.preset === "string" ? o.preset : "";
-  const ids: string[] | null = fam === "drums" && isDrumPreset(preset) ? ROW_KNOBS[rowOf(preset)] : fam === "melody" && isMelodyPreset(preset) ? POLY_KNOBS : fam === "fx" && isFxPreset(preset) ? FX_KNOBS[fxRowOf(preset)] : null;
+  const ids: string[] | null = fam === "drums" && isDrumSoundId(preset) ? knobsOf(preset) : fam === "melody" && isMelodyPreset(preset) ? POLY_KNOBS : fam === "fx" && isFxPreset(preset) ? FX_KNOBS[fxRowOf(preset)] : null;
   if (!ids) return null;
   const pick = (x: unknown) => {
     if (!x || typeof x !== "object") return null;
@@ -344,10 +345,10 @@ function makeLines(mk: LabMake, name: string): string[] {
 /** Phase 5: what they're shaping in Make's Drums, Melody or FX: the open row, its preset and knobs in words. */
 function makeRowLines(r: LabMakeRow): string[] {
   let row = "", name = "", about = "", word: (id: string, v: number) => string, label: (id: string) => string, what = "";
-  if (r.family === "drums" && isDrumPreset(r.preset)) {
-    const p = DRUM_PRESETS[r.preset]; row = DRUM_ROW_NAMES[p.row]; name = p.name; about = p.about;
-    word = (id, v) => drumKnobWord(r.preset as DrumPresetId, id as DrumKnobId, v); label = (id) => DRUM_KNOB_SPECS[id as DrumKnobId].name;
-    what = "their own drums on Six AM's drum synth, the original's pattern copied, comparing A (the original drums) and B (their three rows) at the same loudness";
+  if (r.family === "drums" && isDrumSoundId(r.preset)) {
+    const id0 = r.preset as DrumSoundId; row = drumSoundRowName(id0); name = drumSoundName(id0); about = drumSoundAbout(id0);
+    word = (id, v) => drumKnobWord(id0, id as DrumKnobId, v); label = (id) => drumKnobSpec(id0, id as DrumKnobId).name;
+    what = `their own drums on Six AM's ${isDrumPreset(id0) ? "drum synth" : "sampled starter kit (a recorded hit)"}, the original's pattern copied, comparing A (the original drums) and B (their three rows) at the same loudness`;
   } else if (r.family === "melody" && isMelodyPreset(r.preset)) {
     row = MELODY_ROW_NAMES[melodyRowOf(r.preset)]; name = melodyPreset(r.preset).name; about = melodyPreset(r.preset).about;
     word = (id, v) => polyKnobWord(r.preset as MelodyPresetId, id as PolyKnobId, v); label = (id) => POLY_KNOB_SPECS[id as PolyKnobId].name;

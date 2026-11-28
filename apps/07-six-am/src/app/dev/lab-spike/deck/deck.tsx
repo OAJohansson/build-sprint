@@ -26,7 +26,7 @@ export function Deck({ url, auto }: { url: string; auto: boolean }) {
         onCmd: (c) => {
           if (c.cmd === "play") p.play();
           else if (c.cmd === "pause") p.pause();
-          else p.seekAndPlay(c.ms).catch(() => {});
+          else if (c.cmd === "seek") p.seekAndPlay(c.ms).catch(() => {});
         },
       });
     }).catch((e) => setStatus(String(e?.message ?? e)));

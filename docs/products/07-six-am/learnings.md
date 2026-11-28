@@ -172,3 +172,27 @@ before code; hand-labelled real loops made drums trustworthy; the fallback rule.
 Anthropic API usage limit hit mid-phase, so the Mentor fix is unverified live.
 **Change:** grade data readers on the real part before building the slice on them (process
 changelog, 13 Nov).
+
+## Phase 7: Rebuild the song (27–28 Nov)
+
+- **Research licences before downloading.** "Royalty-free" packs can't be shipped in an app; a
+  CC0 / CC BY shortlist with evidence strength made the sounds route a two-minute owner call.
+- **A reader that fails gets turned off, not faked.** Open hats read 44 % right on real loops, so
+  the rows became "fill by ear", clearly marked, as agreed before the grade.
+- **Measure what the user feels.** The Original switch looked 100 ms late until the Deck reported
+  when it actually landed (0–17 ms).
+- **Green evals, real gap.** Every agent check passed; the owner's first real rebuild found the
+  core problem: you can't copy a kick while hearing the whole drum layer (OR7-1). Agents can't hear.
+- **Ask who a limit protects** (L299): personal use opened non-commercial tools, not stream copies.
+
+### Retro (Phase 7)
+
+**Numbers:** kickoff and build 27 Nov, review and merge 28 Nov (PR 109). Four slices, all shipped.
+652 tests. Graders: 4 data-evals runs plus a final regression, 4 user tests, critic passes from
+6 to 9/10. Owner decisions: L266–L271, L276, L278, L279, L299, L300.
+**Went well:** research-first sounds with evidence strength; the agreed fallback for the open-hat
+reader; one critic across the phase; the canvas sign-off was quick.
+**Went badly:** the phase answered "more sounds and tools" when the owner's real block was hearing
+the original's layers apart; nobody tried the rebuild end to end by ear before the review.
+**Change:** none to the process; the lesson is product-level (hear one layer at a time), carried
+into Phase 8 (L300).

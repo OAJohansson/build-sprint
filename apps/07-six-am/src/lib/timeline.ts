@@ -2,6 +2,7 @@
 // and the drawn waveforms. No React here, so the rules can be unit tested.
 import { soundMeta, type Sound } from "./synths/loop";
 import type { Lane } from "./studio-lanes";
+import type { Rebuild } from "./rebuild";
 
 /** A track's length when it doesn't set its own (every track saved before Phase 3). */
 export const BARS = 64;
@@ -44,6 +45,9 @@ export type Doc = {
   /** S5 (L159): the track's lanes, in family order. Missing on every track saved before S5: its
    *  lanes are then the 4 old ones (studio-lanes.ts lanesOf). `muted`/`soloed` stay the 4-lane view's. */
   lanes?: Lane[];
+  /** Phase 7 (R6, L269): a rebuild of a mapped song: its sections bar for bar, slots left empty.
+   *  Its blocks may stop mid-pass at a section's end (rebuild.ts fillSlot). */
+  rebuild?: Rebuild;
 };
 
 /** Which lanes are silent: with any lane soloed, every lane that isn't; otherwise the muted ones. */

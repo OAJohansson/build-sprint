@@ -22,13 +22,17 @@ import { notesForLoop } from "@/lib/make/pattern";
 import { gateNotes } from "@/lib/make/gate";
 import { MakeClient } from "@/lib/make/make-client";
 import { isBassSound, saveAction, soundId, suggestName, suggestTags, type BassSound } from "@/lib/make/library";
-import { MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, type MacroId, type Macros, type MakePresetId } from "@/lib/make/presets";
+import { BASS_FAMILIES, MACRO_IDS, MAKE_PRESETS, MAKE_PRESET_IDS, type MacroId, type Macros, type MakePresetId } from "@/lib/make/presets";
+import { hasKitSample } from "@/lib/make/kit-samples";
+import { bassSampleIds, loadSamples, previewBass } from "@/lib/make/kit-load";
+import { SoundCredits } from "./sound-credits";
+import { ShelfGroups } from "./shelf-groups";
 import { ApiError, mentorApi } from "@/lib/mentor/client";
 import { noteName, partNoun, type LabMake } from "@/lib/mentor/lab";
 import type { Scale } from "@/lib/synths/theory";
 import { Composer, Turn, useEdgeFades, type ThreadTurn } from "./mentor-thread";
 import { Knob } from "@/components/ui/knob";
-import { DrumsCheck, DrumsMiddle, DrumsSaveBar, type DrumsModel } from "./make-drums";
+import { DrumsLegend, DrumsMiddle, DrumsSaveBar, useShort, type DrumsModel } from "./make-drums";
 import { MelodyCheck, MelodyMiddle, MelodySaveBar, type MelodyModel } from "./make-melody";
 import { prettyChord } from "@/lib/make/chords-mine";
 import { MELODY_ON } from "@/lib/make/melody-reader";
@@ -91,6 +95,10 @@ export function useMake(o: MakeOpts) {
   const [ticksFor, setTicksFor] = useState<string | null>(null);
   const [moved, setMoved] = useState<string | null>(null);
   const renderMs = useRef<number | null>(null);
+  // Phase 7: bumped when a sampled bass's recordings arrive; the shelf's state; the last tap (W12, dev hook).
+  const [samplesV, setSamplesV] = useState(0);
+  const [shelf, setShelf] = useState(true);
+  const [tap, setTap] = useState<{ id: MakePresetId; at: number; heardMs: number | null } | null>(null);
   const wordsBuf = useRef<{ left: Float32Array; right: Float32Array; rate: number } | null>(null);
   const isBass = o.focus === "bass";
   const loopKey = loopKeyOf(o.loop);
@@ -110,7 +118,9 @@ export function useMake(o: MakeOpts) {
     setSuggesting(true);
     const t0 = performance.now();
     try {
-      const res = await cl().suggest({ reading: r.r, preset: p, bpm: o.bpm, start });
+      // Phase 7: a sampled bass's recordings load first and go to the search worker once.
+      await loadSamples(bassSampleIds(p));
+      const res = await cl().suggest({ reading: r.r, preset: p, bpm: o.bpm, start }, bassSampleIds(p));
       console.info(`[make] suggest ${p}: ${res.suggestion.renders} renders in ${res.ms} ms (${Math.round(performance.now() - t0)} ms round trip), distance ${res.suggestion.distance.toFixed(2)} (preset ${res.suggestion.presetDistance.toFixed(2)})`);
       setTicks(res.suggestion.macros);
       setTicksFor(soundId(p, start ?? MAKE_PRESETS[p].macros));
@@ -150,20 +160,25 @@ export function useMake(o: MakeOpts) {
   // Mine: re-render on every knob or preset change (debounced), and swap it in, in sync.
   useEffect(() => {
     if (!o.active || !reading || words) return;
+    void samplesV;
     const key = `${reading.loopKey}|${preset}|${MACRO_IDS.map((id) => macros[id].toFixed(3)).join(",")}`;
     // Phase 5: Mine is one buffer for every family; render again when another family took it meanwhile.
     if (key === mineKey && (tr.current?.mineOwner ?? "bass") === "bass") return;
+    // Phase 7: a sampled bass renders once its recordings are in (the first pick loads them).
+    const need = bassSampleIds(preset).filter((id) => !hasKitSample(id));
+    if (need.length) { void loadSamples(need).then(() => setSamplesV((v) => v + 1)); return; }
     const t = setTimeout(() => {
       const t0 = performance.now();
-      cl().render({ reading: reading.r, active: reading.active, preset, macros, bpm: o.bpm, rate: reading.rate, levelDb: reading.levelDb, lufs: reading.lufs, samples: reading.samples }).then(({ res, stale }) => {
+      cl().render({ reading: reading.r, active: reading.active, preset, macros, bpm: o.bpm, rate: reading.rate, levelDb: reading.levelDb, lufs: reading.lufs, samples: reading.samples }, bassSampleIds(preset)).then(({ res, stale }) => {
         if (stale || loopKeyOf(tr.current?.state.loop ?? null) !== reading.loopKey) return;
         renderMs.current = Math.round(performance.now() - t0);
         tr.current?.setMine(res);
         setMineKey(key);
+        setTap((x) => (x && x.id === preset && x.heardMs === null ? { ...x, heardMs: Math.round(performance.now() - x.at) } : x));
       }, (e) => console.warn("[make] render failed", e));
     }, 60);
     return () => clearTimeout(t);
-  }, [o.active, reading, preset, macros, words, mineKey, o.bpm, tr]);
+  }, [o.active, reading, preset, macros, words, mineKey, o.bpm, tr, samplesV]);
 
   const setPreset = useCallback((p: MakePresetId) => {
     setWords(null);
@@ -190,6 +205,13 @@ export function useMake(o: MakeOpts) {
     setTicks(null);
     setMoved(null);
     if (reading) void suggest(reading, x.preset);
+  };
+  /** Phase 7: a tap on the bass shelf: plays it in the loop (B · Mine) when the loop plays, else one note on its own. */
+  const pick = (p: MakePresetId, playing: boolean) => {
+    setTap({ id: p, at: performance.now(), heardMs: null });
+    if (words || p !== preset) setPreset(p);
+    if (playing && reading) setAb("b");
+    else void previewBass(p).then(() => setTap((x) => (x && x.id === p && x.heardMs === null ? { ...x, heardMs: Math.round(performance.now() - x.at) } : x)));
   };
   const setMacro = useCallback((id: MacroId, v: number) => setMacros((m) => (m[id] === v ? m : { ...m, [id]: v })), []);
 
@@ -260,7 +282,7 @@ export function useMake(o: MakeOpts) {
   const loopNotes = useMemo(() => (reading ? gateNotes(notesForLoop(reading.r.pattern, reading.r.loopSteps).map((n, i, all) => ({ ...n, dur: Math.min(n.dur, reading.r.pattern.notes.find((x) => x.step === n.step % (reading.r.pattern.bars * 16))?.dur ?? n.dur, (all[i + 1]?.step ?? reading.r.loopSteps) - n.step) })), reading.active) : null), [reading]);
 
   return {
-    isBass, preset, setPreset, macros, setMacro, ticks, ab, setAb, drums, setDrums, reading, readState, readError, suggesting,
+    isBass, preset, setPreset, pick, shelf, setShelf, macros, setMacro, ticks, ab, setAb, drums, setDrums, reading, readState, readError, suggesting,
     suggestAgain: () => { if (reading) void suggest(reading, preset, macros, ticks); },
     /** The ticks were worked out from exactly these knobs: nothing new to suggest (S3-2). */
     suggestedNow: !!ticks && ticksFor === sound, moved,
@@ -269,7 +291,7 @@ export function useMake(o: MakeOpts) {
     name: nameField, setName, tags, save, saved,
     /** What the Lab Mentor gets with a question asked in Make. */
     labMake: (isBass && !words ? { preset, macros, ticks } : null) as LabMake | null,
-    debug: () => ({ preset, macros, ticks, ab, readState, mineKey, renderMs: renderMs.current, active: reading?.active ?? null, sounds: sounds.map((x) => x.name), words: words?.text ?? null, pattern: reading?.r.pattern ?? null, levelDb: reading?.levelDb ?? null, features: reading?.r.features ?? null, saved }),
+    debug: () => ({ preset, name: MAKE_PRESETS[preset].name, family: MAKE_PRESETS[preset].family, feel: MAKE_PRESETS[preset].feel, loaded: bassSampleIds(preset).every(hasKitSample), tap, macros, ticks, ab, readState, mineKey, renderMs: renderMs.current, active: reading?.active ?? null, sounds: sounds.map((x) => x.name), words: words?.text ?? null, pattern: reading?.r.pattern ?? null, levelDb: reading?.levelDb ?? null, features: reading?.r.features ?? null, saved }),
   };
 }
 export type MakeModel = ReturnType<typeof useMake>;
@@ -298,6 +320,8 @@ type RoomProps = {
   onAsk: (q: string, bar: number) => void;
   onRetry: (id: string) => void;
   onSeek: (bar: number) => void;
+  /** R5: play from a spot of the loop (track ms), from a click on a bar ruler. */
+  onJump: (ms: number) => void;
   onLoopHere: () => void;
   /** S3-4: from Drums, Other or Vocals in Make, focus the bass. */
   onBass: () => void;
@@ -320,8 +344,13 @@ export function MakeRoom(p: RoomProps) {
     ? `${lead} ${[where, `${clockMs(loop.startMs)}–${clockMs(loop.endMs)}`].filter(Boolean).join(", ")}, ${loop.state === "memory" ? "looping" : p.playing ? "filling the loop" : "the loop fills when you press Play"}`
     : family === "fx" ? "Timed to the section" : `${partName} alone`;
   const later = family === "vocals" || (family === "melody" && !MELODY_ON); // L247: Melody comes next phase
+  // L290 (polish round): in Drums the Mentor rail folds to an "Ask the Mentor" button so the steps get
+  // its width, shelf open or not; one tap opens it, and it folds again when you come back to Drums.
+  const [rail, setRail] = useState({ family, open: false });
+  if (rail.family !== family) setRail({ family, open: false });
+  const railFolded = family === "drums" && !rail.open;
   return (
-    <div className={s.room}>
+    <div className={s.room} data-rail={railFolded ? "folded" : undefined}>
       <section className={s.synth} aria-label={`Make ${family === "bass" ? `a ${name}` : family === "drums" ? "drums" : family}`}>
         <div className={s.fam} role="tablist" aria-label="What to make">
           {FAMILIES.map((f) => (
@@ -330,12 +359,14 @@ export function MakeRoom(p: RoomProps) {
             </button>
           ))}
           <span className={s.famTab} data-off="" aria-disabled="true" title="Vocals come later">Vocals<em>not yet</em></span>
-          {!later && <span className={s.famCap} aria-live="polite" title={caption}>{caption}</span>}
+          {/* Slice 2 (T239): in Drums, the hit legend sits on the tab line once the rows are read; the caption stays in the tooltip. */}
+          {railFolded && <button type="button" className={`${s.ghost} ${s.askMentor}`} onClick={() => setRail({ family, open: true })}>Ask the Mentor</button>}
+          {!later && (family === "drums" && p.drums.readState === "ready" ? <span className={s.famCap} title={caption}><DrumsLegend /></span> : <span className={s.famCap} aria-live="polite" title={caption}>{caption}</span>)}
         </div>
         {later ? <LaterFamily family={family} onBass={() => p.onFamily("bass")} /> : family === "fx" ? (
           <>
             {loop || p.fx.read
-              ? <FxMiddle m={p.fx} loop={loop} from={from} playing={p.playing} heardMs={p.heardMs} />
+              ? <FxMiddle m={p.fx} loop={loop} from={from} playing={p.playing} heardMs={p.heardMs} onJump={p.onJump} />
               : <div className={s.makeEmpty}><p>Make times FX to a loop of the song, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
             <div className={s.grow} />
             <FxCheck m={p.fx} />
@@ -343,7 +374,7 @@ export function MakeRoom(p: RoomProps) {
         ) : family === "melody" ? (
           <>
             {loop || p.melody.read
-              ? <MelodyMiddle m={p.melody} loop={loop} playing={p.playing} heardMs={p.heardMs} from={from} onAsk={p.onAsk} />
+              ? <MelodyMiddle m={p.melody} loop={loop} playing={p.playing} heardMs={p.heardMs} from={from} onAsk={p.onAsk} onJump={p.onJump} />
               : <div className={s.makeEmpty}><p>Make works on a loop of the part, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
             <div className={s.grow} />
             <MelodyCheck m={p.melody} />
@@ -351,15 +382,14 @@ export function MakeRoom(p: RoomProps) {
         ) : family === "drums" ? (
           <>
             {loop || p.drums.read
-              ? <DrumsMiddle m={p.drums} loop={loop} from={from} playing={p.playing} heardMs={p.heardMs} />
+              ? <DrumsMiddle m={p.drums} loop={loop} from={from} playing={p.playing} heardMs={p.heardMs} onJump={p.onJump} />
               : <div className={s.makeEmpty}><p>Make works on a loop of the part, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
-            <div className={s.grow} />
-            <DrumsCheck m={p.drums} />
+            {/* CR2-2: A/B and closeness are in the one bottom bar (DrumsSaveBar). */}
           </>
         ) : (
           <>
             {loop && from !== null && to !== null
-              ? <LoopStrip part={part} from={from} to={to} chords={p.chords} loopChords={loopChordsOf(p.melody, from)} levels={p.levels} heardMs={p.heardMs} bpm={p.bpm} originSec={p.originSec} notes={m.isBass ? m.loopNotes : null} steps={m.loopSteps} />
+              ? <LoopStrip part={part} from={from} to={to} chords={p.chords} loopChords={loopChordsOf(p.melody, from)} levels={p.levels} heardMs={p.heardMs} bpm={p.bpm} originSec={p.originSec} notes={m.isBass ? m.loopNotes : null} steps={m.loopSteps} loop={loop} onJump={p.onJump} />
               : <div className={s.makeEmpty}><p>Make works on a loop of the part, held in memory while it plays.</p><button className={s.ghost} onClick={p.onLoopHere}>Loop this section</button></div>}
             {!m.isBass ? (
               <p className={s.makeQuiet}>Make is bass-only for now. <button className={s.makeText} onClick={p.onBass}>Make a bass instead</button></p>
@@ -369,11 +399,11 @@ export function MakeRoom(p: RoomProps) {
           </>
         )}
       </section>
-      {family === "bass" && m.isBass && <SaveBar m={m} />}
+      {family === "bass" && m.isBass && <SaveBar m={m} partName={part.name.toLowerCase()} />}
       {family === "drums" && <DrumsSaveBar m={p.drums} />}
       {family === "melody" && MELODY_ON && <MelodySaveBar m={p.melody} />}
       {family === "fx" && <FxSaveBar m={p.fx} />}
-      <MentorRail turns={p.turns} part={part} askOff={later} noun={family === "melody" ? "the melody" : family === "fx" ? "the drop" : undefined} bar={p.bar} onAsk={p.onAsk} onRetry={p.onRetry} onSeek={p.onSeek} busy={p.busy} note={p.note} />
+      {!railFolded && <MentorRail turns={p.turns} part={part} askOff={later} noun={family === "melody" ? "the melody" : family === "fx" ? "the drop" : undefined} bar={p.bar} onAsk={p.onAsk} onRetry={p.onRetry} onSeek={p.onSeek} busy={p.busy} note={p.note} />}
     </div>
   );
 }
@@ -440,6 +470,8 @@ function BlindAB({ m, partName }: { m: MakeModel; partName: string }) {
 }
 
 function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: LabPart; loop: LoopState | null; ready: boolean; playing: boolean }) {
+  // Phase 7: the shelf takes room, so the knobs get smaller on a short window (as the drums' do).
+  const short = useShort();
   const [blind] = useState(blindOn);
   const off = !!m.words || m.readState !== "ready";
   const wait = waitLine(m, loop, ready, playing);
@@ -448,14 +480,16 @@ function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: 
   if (wait) line = <span className={s.faintLine}>The knobs and B · Mine come alive once the loop is in memory.</span>;
   else if (m.words) line = <>Mine is a loop Stable Audio made from your words and the track&apos;s tempo and key.<br /><span className={s.faintLine}>The knobs work on presets. Pick one to go back.</span></>;
   else if (!m.ticks) line = <>{m.suggesting ? `Measuring the bass against ${MAKE_PRESETS[m.preset].name}…` : "Mentor: press Suggest settings to compare this preset with the bass."}</>;
-  else line = <>Mentor: {suggestLine(m.macros, m.ticks)}{(moves.length > 0 || m.moved) && <><br /><span className={s.faintLine}>{m.moved ?? "Gold ticks mark those."}</span></>}</>;
+  // U7-4 / A/B clearance: one line, the ticks note inline.
+  else line = <>Mentor: {suggestLine(m.macros, m.ticks)}{(moves.length > 0 || m.moved) && <> <span className={s.faintLine}>{m.moved ?? "Gold ticks mark those."}</span></>}</>;
   return (
     <>
-      <PresetHead m={m} partName={part.name.toLowerCase()} />
+      {/* Phase 7: the shelf of 20 starting sounds heads the controls; its name opens Your sounds and words. */}
+      <BassShelf m={m} playing={playing} partName={part.name.toLowerCase()} />
       <div className={s.macros} data-off={off ? "" : undefined}>
         {wait && <p className={s.makeWait} role="status">{wait}</p>}
         {MACRO_IDS.map((id) => (
-          <Knob key={id} id={id} value={m.macros[id]} sug={m.ticks?.[id]} color={part.color} disabled={off} onChange={(v) => m.setMacro(id, v)} reset={MAKE_PRESETS[m.preset].macros[id]} size={84} />
+          <Knob key={id} id={id} value={m.macros[id]} sug={m.ticks?.[id]} color={part.color} disabled={off} onChange={(v) => m.setMacro(id, v)} reset={MAKE_PRESETS[m.preset].macros[id]} size={short === 2 ? 56 : short === 1 ? 64 : 72} />
         ))}
       </div>
       <div className={s.suggestRow}>
@@ -463,25 +497,22 @@ function SynthControls({ m, part, loop, ready, playing }: { m: MakeModel; part: 
         {/* Suggest settings (L157, T85): local patch matching; it only moves the gold ticks. */}
         <button className={s.ghost} onClick={m.suggestAgain} disabled={off || m.suggesting || m.suggestedNow} aria-describedby="suggest-hint">{m.suggesting ? "Suggesting…" : m.suggestedNow ? "Suggested" : "Suggest settings"}</button>
         <span id="suggest-hint" hidden>Places gold ticks where the knobs come closest to the original; it never turns a knob</span>
+        {/* Polish round: A/B is in the one bottom bar (as Drums); the original drums under both sits here. */}
+        {!blind && <button className={s.ghost} aria-pressed={m.drums} onClick={() => m.setDrums(!m.drums)} title="Plays the original drums under both A and B, so you judge the bass beside the kick">{m.drums ? "Drums under both: on" : "Drums under both: off"}</button>}
       </div>
-      <div className={s.checkRow}>
-        {blind ? <BlindAB m={m} partName={part.name.toLowerCase()} /> : (
-        <div className={s.abWrap}>
-          <div className={s.ab} role="group" aria-label="Compare at the same loudness">
-            <button aria-pressed={m.ab === "a"} onClick={() => m.setAb("a")}>A · Original {part.name.toLowerCase()}</button>
-            <button aria-pressed={m.ab === "b"} onClick={() => m.setAb("b")} disabled={!m.mineReady} title={m.mineReady ? undefined : "Mine plays once the loop is read"}>B · Mine</button>
-          </div>
-          <span className={s.faint}>same loudness</span>
+      {/* The owner's blind A/B test (?blind=1) keeps its own row; the plain A/B is in the bottom bar. */}
+      {blind && (
+        <div className={`${s.checkRow} ${s.bassCheck}`}>
+          <BlindAB m={m} partName={part.name.toLowerCase()} />
+          <button className={s.ghost} aria-pressed={m.drums} onClick={() => m.setDrums(!m.drums)} title="Plays the original drums under both A and B, so you judge the bass beside the kick">{m.drums ? "Drums under both: on" : "Drums under both: off"}</button>
         </div>
-        )}
-        <button className={s.ghost} aria-pressed={m.drums} onClick={() => m.setDrums(!m.drums)} title="Plays the original drums under both A and B, so you judge the bass beside the kick">{m.drums ? "Drums under both: on" : "Drums under both: off"}</button>
-      </div>
+      )}
     </>
   );
 }
 
 /** The preset name opens a menu of tagged starting points; describing one in words is its last item (T85). */
-function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
+function PresetHead({ m, partName, meta }: { m: MakeModel; partName: string; meta?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [menuMax, setMenuMax] = useState<number | undefined>(undefined);
   const [asking, setAsking] = useState(false);
@@ -506,22 +537,15 @@ function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
           setMenuMax(col ? Math.max(180, Math.round(col.bottom - e.currentTarget.getBoundingClientRect().bottom - 16)) : undefined);
           setOpen(!open);
         }}
-          aria-label={`Preset: ${current}. Change preset`}>{current} <span aria-hidden>▾</span></button>
+          aria-label={`Sound: ${current}. Your sounds, or describe one in words`}>{current} <span aria-hidden>▾</span></button>
+        {meta}
       </div>
       {open && (
         <div className={s.menu} role="menu" aria-label="Presets" style={{ maxHeight: menuMax }}>
-          {MAKE_PRESET_IDS.map((id) => (
-            <button key={id} role="menuitemradio" aria-checked={!m.words && id === m.preset} className={s.menuItem}
-              onClick={() => { setOpen(false); setAsking(false); if (m.words || id !== m.preset) m.setPreset(id); }}>
-              <span className={s.menuCheck} aria-hidden>{!m.words && id === m.preset ? "✓" : ""}</span>
-              <span>{MAKE_PRESETS[id].name}</span>
-              <small>{MAKE_PRESETS[id].tags.join(" · ")}</small>
-            </button>
-          ))}
+          {/* Phase 7: the 20 starting sounds are on the shelf under the knobs; this menu keeps your saved sounds and words. */}
           {/* T110 (S5-2, F3): every sound saved from this track, newest first; one click loads it. */}
           {m.sounds.length > 0 && (
             <>
-              <i className={s.menuRule} aria-hidden />
               <span className={s.menuHead}>Your sounds</span>
               <div className={s.menuSounds} role="group" aria-label="Your sounds from this track">
                 {m.sounds.map((x) => (
@@ -534,7 +558,7 @@ function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
               </div>
             </>
           )}
-          <i className={s.menuRule} aria-hidden />
+          {m.sounds.length > 0 && <i className={s.menuRule} aria-hidden />}
           <button role="menuitem" className={s.menuItem} disabled={!canWords} onClick={() => { setOpen(false); setAsking(true); }}>
             <span className={s.menuCheck} aria-hidden>{m.words ? "✓" : ""}</span>
             <span>Describe a {partName} in words…</span>
@@ -554,6 +578,38 @@ function PresetHead({ m, partName }: { m: MakeModel; partName: string }) {
   );
 }
 
+const cap1 = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+
+/**
+ * Phase 7 (design p7-final, "same shelf pattern as drums"): the bass's 20 starting sounds in the variety
+ * map's families, a feel word each; the sound now (name, family · feel, one plain line) above them; a tap
+ * plays it in the loop (B · Mine), or one note alone when the loop is stopped. "Hide sounds" folds it.
+ */
+function BassShelf({ m, playing, partName }: { m: MakeModel; playing: boolean; partName: string }) {
+  const p = MAKE_PRESETS[m.preset];
+  return (
+    <section className={s.shelf} aria-label="Bass sounds">
+      <div className={s.shelfHead}>
+        <div className={s.shelfWhere}>
+          <span className={s.lbl}>Bass · {MAKE_PRESET_IDS.length} sounds</span>
+          <SoundCredits />
+        </div>
+        <div className={s.shelfNow}>
+          <PresetHead m={m} partName={partName} meta={!m.words && <span className={s.lbl}>{cap1(p.family)} · {p.feel}</span>} />
+        </div>
+        <button className={s.textBtn} aria-expanded={m.shelf} onClick={() => m.setShelf(!m.shelf)}>{m.shelf ? "Hide sounds" : `Show ${MAKE_PRESET_IDS.length} sounds`}</button>
+      </div>
+      <p className={s.shelfAbout} title={m.words ? undefined : p.about}>{m.words ? "A loop Stable Audio made from your words; pick a sound below to go back." : p.about}</p>
+      {m.shelf && (
+        <ShelfGroups compact label="Bass sounds" families={BASS_FAMILIES.map((f) => ({
+          label: cap1(f),
+          items: MAKE_PRESET_IDS.filter((id) => MAKE_PRESETS[id].family === f).map((id) => ({ id, name: MAKE_PRESETS[id].name, feel: MAKE_PRESETS[id].feel, about: MAKE_PRESETS[id].about, pressed: !m.words && m.preset === id, onPick: () => m.pick(id, playing) })),
+        }))} />
+      )}
+    </section>
+  );
+}
+
 /** The loop, zoomed (handoff §Make 3): chords, bar numbers, the part's clips (heard, else the map's
  *  estimate, faint), the playhead. Grows from 118 to 280 px with spare height. */
 /** CS1-8: the Melody tab's chord read of this loop (Mine's names, where they change, at track bars), once there is one. */
@@ -564,7 +620,7 @@ function loopChordsOf(m: MelodyModel, from: number): { at: number; name: string 
   return out.length ? out : null;
 }
 
-function LoopStrip({ part, from, to, chords, loopChords, levels, heardMs, bpm, originSec, notes, steps }: { part: LabPart; from: number; to: number; chords: (string | null)[]; loopChords: { at: number; name: string }[] | null; levels: (number | null)[][] | null; heardMs: () => number; bpm: number; originSec: number; notes: MakeNote[] | null; steps: number | null }) {
+function LoopStrip({ part, from, to, chords, loopChords, levels, heardMs, bpm, originSec, notes, steps, loop, onJump }: { part: LabPart; from: number; to: number; chords: (string | null)[]; loopChords: { at: number; name: string }[] | null; levels: (number | null)[][] | null; heardMs: () => number; bpm: number; originSec: number; notes: MakeNote[] | null; steps: number | null; loop: LoopState | null; onJump: (ms: number) => void }) {
   const head = useRef<HTMLElement>(null);
   const len = to - from;
   useLayoutEffect(() => {
@@ -587,7 +643,10 @@ function LoopStrip({ part, from, to, chords, loopChords, levels, heardMs, bpm, o
     ? part.subs.map((x, i) => ({ label: `${x.name}`, ...blocksFromActivity(bandActivity(levels?.[i === 0 ? KICK_ROW : HATS_ROW], own), x.blocks) }))
     : [{ label: part.name.toLowerCase(), ...laneBlocks(own, part.blocks) }];
   const cells = chords.map((c, i) => ({ c, at: 1 + i * 8 })).filter((x) => x.at + 8 > from && x.at < to && x.c !== null);
-  const step = len > 32 ? 8 : 4;
+  // U7-15: every bar labelled.
+  const step = 1;
+  // R5 (U7-15): a click on the bars or on the notes plays from that spot (the loop's own span).
+  const jumpAt = loop ? (e: React.MouseEvent<HTMLDivElement>) => { if ((e.target as HTMLElement).closest("button")) return; const r = e.currentTarget.getBoundingClientRect(); onJump(loop.startMs + Math.max(0, Math.min(0.9999, (e.clientX - r.left) / r.width)) * (loop.endMs - loop.startMs)); } : undefined;
   return (
     <div className={s.loopStrip} aria-label={`${part.name} alone, bars ${from} to ${to - 1}`}>
       <div className={s.lsRow} data-kind="chords">
@@ -597,14 +656,19 @@ function LoopStrip({ part, from, to, chords, loopChords, levels, heardMs, bpm, o
           : <><span className={s.lsLabel} title="The older 8-bar estimate; open Melody for Make's chord read of this loop">chords est.</span>
             <div className={s.lsTrack}>{cells.map((x) => <span key={x.at} className={s.lsChord} style={{ left: pct(Math.max(from, x.at)) }}>{x.c || "–"}</span>)}</div></>}
       </div>
+      {/* R5 (OR6-5): the bar ruler plays from the spot you click (the loop's own span, start to end). */}
       <div className={s.lsRow} data-kind="bars">
         <span className={s.lsLabel}>bars</span>
-        <div className={s.lsTrack}>{Array.from({ length: Math.ceil(len / step) }, (_, i) => from + i * step).map((b) => <span key={b} className={s.lsNum} style={{ left: pct(b) }}>{b}</span>)}</div>
+        <div className={`${s.lsTrack} ${s.jumpTrack}`} title={loop ? "Click a spot to play from there" : undefined} onClick={jumpAt}>
+          {Array.from({ length: Math.ceil(len / step) }, (_, i) => from + i * step).map((b) => (
+            <button key={b} type="button" className={s.lsNum} disabled={!loop} style={{ left: pct(b) }} aria-label={`Play from bar ${b}`} onClick={() => { if (loop) onJump(loop.startMs + ((b - from) / len) * (loop.endMs - loop.startMs)); }}>{b}</button>
+          ))}
+        </div>
       </div>
       {rows.map((row) => (
         <div key={row.label} className={s.lsRow}>
           <span className={s.lsLabel}>{row.label}</span>
-          <div className={s.lsTrack}>
+          <div className={`${s.lsTrack} ${loop ? s.jumpTrack : ""}`} onClick={jumpAt} title={loop ? "Click a spot to play from there" : undefined}>
             {clip(row.heard).map((x) => <span key={`h${x.from}`} className={s.lsClip} data-under={notes?.length ? "" : undefined} style={{ left: pct(x.from), width: w(x.from, x.to), background: part.color }} />)}
             {/* S3-5: the notes Make read from the loop (what Mine plays), by pitch. */}
             {notes && steps && notes.length > 0 && !part.subs.length && (() => {
@@ -623,16 +687,21 @@ function LoopStrip({ part, from, to, chords, loopChords, levels, heardMs, bpm, o
   );
 }
 
-function SaveBar({ m }: { m: MakeModel }) {
+/** Polish round: the bass's one bottom bar, as Drums': A/B at the same loudness, the name, Save ("Saved" once saved). */
+function SaveBar({ m, partName }: { m: MakeModel; partName: string }) {
   // Saved once: the button rests until the sound changes (a change is a new sound to save).
   const can = m.readState === "ready" && !m.words && m.saved.state !== "saving" && m.saved.action !== "none";
+  const done = !!m.saved.savedAs && m.saved.action === "none";
+  const why = m.saved.state === "error" ? m.saved.text : m.words ? "A loop from words can't be saved yet" : m.readState !== "ready" ? "nothing to save until the loop is read" : "";
   return (
-    <div className={s.saveBar}>
-      <label className={s.saveLabel} htmlFor="save-name">Name</label>
-      <input id="save-name" name="sound-name" autoComplete="off" className={s.input} value={m.name} maxLength={60} onChange={(e) => m.setName(e.target.value)} disabled={!!m.words} />
-      <span className={s.facts} title={m.tags.join(" · ")}>{m.tags.join(" · ")}</span>
-      <span className={s.saved} role="status">{m.saved.state === "error" ? m.saved.text : m.words ? "A loop from words can't be saved yet" : m.saved.savedAs && m.saved.action === "none" ? `Saved as ${m.saved.savedAs}` : ""}</span>
-      <button className={s.gold} onClick={() => void m.save()} disabled={!can}>{m.saved.state === "saving" ? "Saving…" : "Save to library"}</button>
+    <div className={`${s.saveBar} ${s.drBar}`}>
+      <div className={s.ab} role="group" aria-label="Compare at the same loudness">
+        <button aria-pressed={m.ab === "a"} onClick={() => m.setAb("a")} title="The original, at the same loudness as Mine">A · Original {partName}</button>
+        <button aria-pressed={m.ab === "b"} onClick={() => m.setAb("b")} disabled={!m.mineReady} title={m.mineReady ? "Mine, at the same loudness as the original" : "Mine plays once the loop is read"}>B · Mine</button>
+      </div>
+      <input id="save-name" name="sound-name" aria-label="Name for the saved sound" autoComplete="off" className={s.input} value={m.name} maxLength={60} onChange={(e) => m.setName(e.target.value)} disabled={!!m.words} title={m.tags.join(" · ")} />
+      {why && <span className={s.saved} role="status">{why}</span>}
+      <button className={s.gold} onClick={() => void m.save()} disabled={!can}>{m.saved.state === "saving" ? "Saving…" : done ? "Saved" : "Save to library"}</button>
     </div>
   );
 }

@@ -88,7 +88,7 @@ more than one notification a day, no web app changes.
 Filled in after the gate, one row per MVP item, each with a check (then `evals-v2.md`).
 
 **No-gos:** a pet that suffers, sickens or leaves when you miss; any reset to zero; red failure
-states; asking for an account before the first habit; collecting data the app doesn't use.
+states; asking for an account before the user has met Wonty and chosen habits; collecting data the app doesn't use.
 
 **Rabbit holes:** a big art library (outfits, rooms) before the core loop works; a custom
 animation engine; building pricing before retention.
@@ -125,14 +125,14 @@ honest friend who believes you can do it, helps you come back, and shows you how
 | --- | --- | --- | --- |
 | App stack | Expo (React Native, TypeScript); reuse Wont's `src/lib` day logic and tests | free (EAS free tier) | now |
 | Backend | Own Supabase organisation, EU region (Stockholm), two projects: production and test sandbox | free, then Pro ~$25/mo at public launch (no pausing, daily backups) | now |
-| Accounts | Anonymous start, link Google sign-in later; Sign in with Apple when iOS comes | free | now |
+| Accounts | **Account from the start (L39):** Google sign-in or email with a one-time code (no password); created at the end of onboarding, after meeting Wonty and choosing habits; Sign in with Apple when iOS comes | free | now |
 | Security | Row-level security on every table; secrets only server-side | — | now |
 | Privacy | Minimum data (habit names can be health data under GDPR); privacy policy on wonty.app; Play Data safety form; account deletion in app and on web (Play requires it) | — | before closed test |
 | Play Console | Personal developer account on the Wonty Gmail (organisation needs a company and D-U-N-S) | $25 once | after the gate |
 | Analytics and crashes | PostHog (EU, free tier) and Sentry (free tier) | free | before public launch |
-| Email from the app | Avoid by using Google sign-in; else a sending service | free | later |
+| Email from the app | Sign-in codes need a sending service on `wonty.app` (e.g. Resend free tier, SPF/DKIM on Cloudflare); Supabase's built-in sender is for testing only | free | now |
 | Payments | Play Billing via RevenueCat; check whether a sole-trader registration is needed | — | not this phase |
-| Code home | `apps/09-wonty` in this repo, its own Expo app; move to its own repo only if it outgrows the sprint | — | now |
+| Code home | **Its own private GitHub repo `wonty` (L40)**, own CI and builds; product docs (card, kickoff, decisions, journal, research) stay in build-sprint so the notebook keeps them; the card's `repo:` field points to it | free | now |
 
 ## Unit tests
 

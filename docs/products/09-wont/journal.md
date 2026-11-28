@@ -238,3 +238,4 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   (weekly look-back P2, starter areas, pause/archive, soft 3-habit limit). Scope flagged: fits
   1 Jan only as a thin slice of each.
 - **Gate Q3–Q4 decided (L38):** thin slice of each, per `mvp-v2.md`; one daily notification.
+- **Gate Q5 decided (L39, L40):** accounts from the start (Google or email code, at the end of onboarding); code in its own repo `wonty`, docs stay here. Rest of the setup table accepted.

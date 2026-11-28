@@ -108,8 +108,8 @@ do it and helps you come back.
 ## Decisions already made
 
 - Mode: Streamlined (L32).
-- Name: Wonty, store title "Wonty: Habit Tracker" (L33, provisional until the say-it test and a
-  trademark check).
+- Name: Wonty, store title "Wonty: Habit Tracker" (L33, provisional until the owner's say-it test;
+  trademark web check: low risk, `research/name-check-wonty.md`).
 - Domain `wonty.app` (Cloudflare Registrar); `hello@wonty.app` forwards to a separate Wonty Gmail
   (L34). That Gmail owns Wonty's Google services (Play Console, Google Cloud).
 - Wonty gets its own infrastructure, separate from the sprint apps (L35).

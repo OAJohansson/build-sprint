@@ -6,6 +6,8 @@ What happened, what was decided and why. Newest last.
 
 ### Phase 7: for `docs/knowledge-bank.md` at wrap-up
 
+**Written at the Phase 7 wrap-up (28 Nov):** knowledge bank (Audio, Risks and assumptions, quizzes) and two Six AM bullets in `docs/learnings.md`.
+
 - **Technology / audio, Stem separation (and "stems"):** splitting a finished song into its parts
   (drums, bass, vocals, the rest) with a trained model; each part is a "stem". Finer models split a
   stem again (drums into kick, snare, hats). Why it matters: you can only copy a sound by ear if you

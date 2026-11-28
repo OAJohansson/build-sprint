@@ -156,6 +156,11 @@ Rules I now apply to every product (detail in the playbook).
   the same song, and I built every part of it" (L265).
 - **Make: one number that moves with the knob.** A single closeness score hid clap and hats
   changes; a score for the open row made every tick visibly count.
+- **Rebuild: the ear needs one layer at a time.** Phase 7 gave 120 sounds, six drum rows and a
+  song layout, all graded green; the owner's first real try said recreating the drums is
+  "impossible" while hearing every drum at once. The next bet is hearing each layer alone (L300).
+- **Ask who a limit protects.** Going personal-use only (L299) opened non-commercial models and
+  sounds, but not keeping a streamed original: that rule protects the song's owner, not our sales.
 
 ### 08 Selvedge
 

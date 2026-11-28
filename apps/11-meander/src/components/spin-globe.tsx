@@ -1,18 +1,35 @@
 "use client";
 
 // Phase 5 prototype (L62): a real globe you spin. The front half shows; drag spins it (with inertia), arrow keys
-// turn it, and opening a school turns it to the front. Mode "a" keeps a light overview: faint dots for the back
-// half, neighbours round the back pinned to the rim, and the family list as the whole map. Mode "b" is pure spin.
+// turn it, and opening a school turns it to the front. Two families of directions, three each:
+//  A, spin with a light overview (neighbours round the back always pinned to the rim):
+//   a1 faint back-side dots + "The whole map" family list; a2 a small flat mini-map of everything, with the part
+//   you face ringed; a3 family names floating over their regions, the back ones faint, plus back-side dots.
+//  B, pure spin (nothing stands in for the back half):
+//   b1 the plain globe; b2 close-up, a bigger globe rising from the bottom like a horizon; b3 spotlight, names only
+//   near the middle, so a name appears as you turn it towards you.
 // shortcut: prototype quality (no label cost search, no tab order by distance); rebuild properly once picked.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { splitName, type Field } from "@/lib/content";
-import { vec, type Vec3 } from "@/lib/globe";
-import { arcPath, centroid, clampPitch, facingRot, graticule, lerpRot, ortho, placeSpinLabels, type Box, type Rot } from "@/lib/spin";
+import { GAMMA, RIM, project, vec, type Vec3 } from "@/lib/globe";
+import { arcPath, centroid, clampPitch, facingRot, frontOf, graticule, lerpRot, ortho, placeSpinLabels, type Box, type Rot } from "@/lib/spin";
+
+export type SpinVariant = "a1" | "a2" | "a3" | "b1" | "b2" | "b3";
+/** Families for music; Western and Eastern for philosophy. */
+export function groupsOf(field: Field) {
+  return field.families.length
+    ? field.families.map((f) => ({ id: f.id, name: f.name, schools: field.schools.filter((s) => s.family === f.id) }))
+    : [
+      { id: "west", name: "Western", schools: field.schools.filter((s) => s.tradition !== "eastern") },
+      { id: "east", name: "Eastern", schools: field.schools.filter((s) => s.tradition === "eastern") },
+    ];
+}
 import { stateLabel, type SchoolState } from "@/lib/progress";
+import type { GlobeMode } from "@/lib/globe-proto";
 
 type Props = {
   field: Field;
-  mode: "a" | "b";
+  mode: SpinVariant;
   focus: string | null;
   states: Map<string, SchoolState>;
   onOpen: (id: string) => void;
@@ -37,7 +54,12 @@ type Props = {
 const reduced = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
-export function SpinGlobe({ field, mode, focus, states, onOpen, C, R, W, H, fixed, compact, inert, litIds, turnTo, idPrefix, children }: Props) {
+export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W, H, fixed, compact, inert, litIds, turnTo, idPrefix, children }: Props) {
+  const fam = mode[0] as "a" | "b";
+  // b2: a close-up globe rising from the bottom (back to normal size while a card is open, so it clears the card)
+  const big = mode === "b2" && !focus;
+  const R = big ? R0 * 1.42 : R0;
+  const C: [number, number] = big ? [C0[0], C0[1] + R0 * 0.38] : C0;
   const V = useMemo(() => Object.fromEntries(field.schools.map((s) => [s.id, vec(field.positions[s.id])])) as Record<string, Vec3>, [field]);
   const start = useMemo(() => {
     const r = facingRot(focus ? V[focus] : centroid(Object.values(V)));
@@ -157,7 +179,7 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C, R, W, H, fixe
   const sizeKey = (id: string) => `${id}|${near.has(id) ? 1 : 0}`;
   const sizeOf = (id: string) => sizes.get(sizeKey(id)) ?? { w: label(id).length * (near.has(id) ? 11 : 7.6), h: near.has(id) ? 44 : 19 };
   // Labels: neighbours first, then the nearest the front; none for the rim band, where names would squash.
-  const minZ = compact ? 0.42 : 0.34;
+  const minZ = mode === "b3" ? (compact ? 0.82 : 0.78) : compact ? 0.42 : 0.34;
   const wanted = front
     .filter((s) => near.has(s.id) || (!focus && P[s.id].z > minZ))
     .sort((a, b) => (near.has(a.id) ? 0 : 1) - (near.has(b.id) ? 0 : 1) || P[b.id].z - P[a.id].z)
@@ -166,7 +188,7 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C, R, W, H, fixe
   const placed = placeSpinLabels(wanted, [...fixed, ...title], C, W, H);
 
   // A, focus: neighbours round the back, pinned to the rim in their direction, so the card's neighbours are all on screen.
-  const rim = mode === "a" && focus && !compact
+  const rim = fam === "a" && focus && !compact
     ? back.filter((s) => near.has(s.id)).map((s) => {
       const p = P[s.id], dx = p.x - C[0], dy = p.y - C[1], l = Math.hypot(dx, dy) || 1;
       const x = C[0] + (dx / l) * (R + 10), w = sizeOf(s.id).w;
@@ -181,9 +203,21 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C, R, W, H, fixe
     const cls = ["th", isF && "focus", isF && l.type === "against" && "against", isF && l.type === "built-then-against" && "mixed", !!focus && !isF && "rest", lit && lit.has(l.from) && lit.has(l.to) && (hoverId === l.from || hoverId === l.to || !!litIds) && "lit"]
       .filter(Boolean).join(" ");
     return { key: `${l.from}-${l.to}`, cls, d: arcPath(V[l.from], V[l.to], rot, C, R) };
-  }).filter((p) => p.d && (!focus || !p.cls.includes("rest") || mode === "a"));
+  }).filter((p) => p.d && (!focus || !p.cls.includes("rest") || fam === "a"));
 
   const grat = graticule(rot, C, R);
+
+  // a2: the whole field as today's flat disc, small, turned to whatever faces you; the ring is the half you can see.
+  const mini = mode === "a2" && !focus ? (() => {
+    const r = compact ? 46 : 92, MC: [number, number] = compact ? [W - r - 6, r + 6] : [W - r - 52, H - r - 60];
+    const f = frontOf(rot);
+    return { MC, r, ring: r * Math.min(RIM, Math.pow(0.5, GAMMA)), dots: field.schools.map((s) => ({ id: s.id, ...project(f, V[s.id], MC, r) })) };
+  })() : null;
+  // a3: family names over their regions, faint when round the back.
+  const regions = mode === "a3" && !focus ? groupsOf(field).filter((g) => g.schools.length).map((g) => {
+    const p = ortho(centroid(g.schools.map((s) => V[s.id])), rot, C, R * 0.86);
+    return { id: g.id, name: g.name, ...p };
+  }) : [];
 
   return (
     <div
@@ -211,13 +245,23 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C, R, W, H, fixe
         <circle cx={C[0]} cy={C[1]} r={R} fill={`url(#${idPrefix}-lit)`} />
         <path className="grat" d={grat} />
         <circle className="rim" cx={C[0]} cy={C[1]} r={R} />
-        {mode === "a" && back.map((s) => (
+        {(mode === "a1" || mode === "a3") && back.map((s) => (
           <circle key={s.id} className={["bk", lit?.has(s.id) && "lit", near.has(s.id) && "near"].filter(Boolean).join(" ")} cx={P[s.id].x} cy={P[s.id].y} r={compact ? 1.4 : 1.8} />
+        ))}
+        {regions.map((g) => (
+          <text key={g.id} className={g.z > 0 ? "region" : "region back"} x={g.x} y={g.y} textAnchor="middle">{g.name}</text>
         ))}
         <g mask={`url(#${idPrefix}-ko)`}>
           {paths.map((p) => <path key={p.key} className={p.cls} d={p.d} />)}
         </g>
       </svg>
+      {mini && (
+        <svg className="mini" aria-hidden="true" width={W} height={H}>
+          <circle cx={mini.MC[0]} cy={mini.MC[1]} r={mini.r + 4} className="mbg" />
+          <circle cx={mini.MC[0]} cy={mini.MC[1]} r={mini.ring} className="mring" />
+          {mini.dots.map((d) => <circle key={d.id} cx={d.x} cy={d.y} r={compact ? 1.3 : 1.8} className={d.theta < 90 ? "md in" : "md"} />)}
+        </svg>
+      )}
       <main inert={inert}>
         {front.map((s) => {
           const p = P[s.id], st = states.get(s.id), v = st === "started" || st === "explored", pl = placed[s.id], n = near.get(s.id);
@@ -265,12 +309,7 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C, R, W, H, fixe
 export function GlobeIndex({ field, onLight, onTurn, onOpen, states }: {
   field: Field; onLight: (ids: Set<string> | null) => void; onTurn: (v: Vec3) => void; onOpen: (id: string) => void; states: Map<string, SchoolState>;
 }) {
-  const groups = field.families.length
-    ? field.families.map((f) => ({ id: f.id, name: f.name, schools: field.schools.filter((s) => s.family === f.id) }))
-    : [
-      { id: "west", name: "Western", schools: field.schools.filter((s) => s.tradition !== "eastern") },
-      { id: "east", name: "Eastern", schools: field.schools.filter((s) => s.tradition === "eastern") },
-    ];
+  const groups = groupsOf(field);
   const [open, setOpen] = useState<string | null>(null);
   return (
     <nav className="gindex" aria-label="The whole map" onPointerDown={(e) => e.stopPropagation()} onMouseLeave={() => onLight(null)}>
@@ -303,11 +342,11 @@ export function GlobeIndex({ field, onLight, onTurn, onOpen, states }: {
   );
 }
 
-/** Prototype only: Flat · Spin A · Spin B, in a corner. */
-export function GlobeSwitch({ mode, setMode }: { mode: string; setMode: (m: "flat" | "a" | "b") => void }) {
+/** Prototype only: Flat · A1 A2 A3 (light overview) · B1 B2 B3 (pure spin), in a corner. */
+export function GlobeSwitch({ mode, setMode }: { mode: string; setMode: (m: GlobeMode) => void }) {
   return (
     <div className="gswitch" role="radiogroup" aria-label="Globe prototype" onPointerDown={(e) => e.stopPropagation()}>
-      {([["flat", "Flat"], ["a", "Spin A"], ["b", "Spin B"]] as const).map(([m, t]) => (
+      {([["flat", "Flat"], ["a1", "A1"], ["a2", "A2"], ["a3", "A3"], ["b1", "B1"], ["b2", "B2"], ["b3", "B3"]] as const).map(([m, t]) => (
         <button key={m} type="button" role="radio" aria-checked={mode === m} className={mode === m ? "on" : undefined} onClick={() => setMode(m)}>{t}</button>
       ))}
     </div>

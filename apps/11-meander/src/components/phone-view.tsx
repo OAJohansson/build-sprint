@@ -12,7 +12,7 @@ import { FieldSwitch, MenuBar } from "./menu-bar";
 import { stateLabel } from "@/lib/progress";
 import type { Nav } from "./meander";
 import { useGlobeMode } from "@/lib/globe-proto";
-import { GlobeSwitch, SpinGlobe } from "./spin-globe";
+import { GlobeSwitch, SpinGlobe, type SpinVariant } from "./spin-globe";
 
 export function PhoneView({ nav }: { nav: Nav }) {
   const { focus, thinker, threadOpen, inside, states, field } = nav;
@@ -205,11 +205,11 @@ export function PhoneView({ nav }: { nav: Nav }) {
       <MenuBar nav={nav} phone />
       {gmode !== "flat" && !threadOpen && !school && nav.view !== "timeline" ? (
         <main>
-          <div className={gmode === "b" ? "spin-phone big" : "spin-phone"}>
-            <SpinGlobe key={`${field.id}-${gmode}`} field={field} mode={gmode} focus={null} states={states} onOpen={nav.openSchool} compact idPrefix="ph"
-              C={gmode === "b" ? [180, 220] : [180, 180]} R={gmode === "b" ? 172 : 160} W={360} H={gmode === "b" ? 440 : 360} fixed={[]} />
+          <div className={gmode[0] === "b" ? "spin-phone big" : "spin-phone"}>
+            <SpinGlobe key={`${field.id}-${gmode}`} field={field} mode={gmode as SpinVariant} focus={null} states={states} onOpen={nav.openSchool} compact idPrefix="ph"
+              C={gmode[0] === "b" ? [180, 220] : [180, 180]} R={gmode[0] === "b" ? 172 : 160} W={360} H={gmode[0] === "b" ? 440 : 360} fixed={[]} />
           </div>
-          {gmode === "a" ? body : <p className="spin-hint">Drag to turn the globe. Tap a name to open it.</p>}
+          {gmode[0] === "a" ? body : <p className="spin-hint">Drag to turn the globe. Tap a name to open it.</p>}
         </main>
       ) : (
         <main>{body}</main>

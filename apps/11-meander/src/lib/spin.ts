@@ -113,3 +113,10 @@ export function placeSpinLabels(nodes: SpinLabelIn[], fixed: Box[], C: [number, 
   }
   return out;
 }
+
+/** The point on the sphere now facing the viewer (the inverse of `rotate` applied to the front). */
+export function frontOf({ yaw, pitch }: Rot): Vec3 {
+  // undo pitch on [0, 0, 1], then undo yaw
+  const y = Math.sin(pitch), z1 = Math.cos(pitch);
+  return [-z1 * Math.sin(yaw), y, z1 * Math.cos(yaw)];
+}

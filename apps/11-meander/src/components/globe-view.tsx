@@ -16,7 +16,7 @@ import { FirstPage, Knot } from "./skeleton";
 import { stateLabel } from "@/lib/progress";
 import type { Nav } from "./meander";
 import { useGlobeMode } from "@/lib/globe-proto";
-import { GlobeIndex, GlobeSwitch, SpinGlobe } from "./spin-globe";
+import { GlobeIndex, GlobeSwitch, SpinGlobe, type SpinVariant } from "./spin-globe";
 
 const W = 1440, H = 900;
 // SSR and the browser must print the same numbers, so positions are rounded to 0.1 px.
@@ -284,9 +284,9 @@ export function GlobeView({ nav }: { nav: Nav }) {
         {spin ? (
           <SpinGlobe
             key={field.id}
-            field={field} mode={gmode as "a" | "b"} focus={focus} states={states} onOpen={(id) => { setLitIds(null); nav.openSchool(id); }}
+            field={field} mode={gmode as SpinVariant} focus={focus} states={states} onOpen={(id) => { setLitIds(null); nav.openSchool(id); }}
             C={C} R={R} W={W} H={H} inert={inside || timeline} litIds={focus ? null : litIds} turnTo={turnTo} idPrefix="desk"
-            fixed={[{ x: 0, y: 0, w: W, h: 84 }, ...(hasCard ? [{ x: 990, y: 0, w: 450, h: H }] : []), ...(gmode === "a" && !hasCard ? [{ x: 30, y: 96, w: 270, h: 780 }] : [])]}
+            fixed={[{ x: 0, y: 0, w: W, h: 84 }, ...(hasCard ? [{ x: 990, y: 0, w: 450, h: H }] : []), ...(gmode === "a1" && !hasCard ? [{ x: 30, y: 96, w: 270, h: 780 }] : [])]}
           >
             {titleEl}
           </SpinGlobe>
@@ -365,7 +365,7 @@ export function GlobeView({ nav }: { nav: Nav }) {
         </div>
         </>
         )}
-        {gmode === "a" && !hasCard && !timeline && !inside && (
+        {gmode === "a1" && !hasCard && !timeline && !inside && (
           <GlobeIndex field={field} states={states} onLight={setLitIds} onOpen={(id) => { setLitIds(null); nav.openSchool(id); }} onTurn={(v) => setTurnTo((t) => ({ v, n: (t?.n ?? 0) + 1 }))} />
         )}
         <GlobeSwitch mode={gmode} setMode={setGmode} />

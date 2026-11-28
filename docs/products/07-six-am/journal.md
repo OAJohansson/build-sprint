@@ -922,3 +922,14 @@ in the browser (htdemucs); drum-splitting models exist (DrumSep, MIT, ~335 MB ON
 cymbals / toms; LarsNet is non-commercial only). Offered two routes to the owner: quick filter
 "listen to kick / clap / hats" on the drums layer (no model, rough), or a time-boxed spike running
 DrumSep in the browser, graded on real loops first. Merge of PR #109 held until this is settled.
+
+### 28 Nov: personal use only (L299)
+
+The owner set the product to personal use only, no publishing or selling for now, and asked which
+past calls that improves. Reviewed: limits that came from *us* selling (CC0 / CC BY only sounds,
+LarsNet's non-commercial weights, Essentia's licence, the tonejs credit risk) fall away. Limits
+that come from the *song's* owner (C2: never store the SoundCloud original) don't, because
+SoundCloud's terms and the EU private-copy rule (CJEU ACI Adam, 2014: no copies from unlawful
+sources) apply to personal use too. The clean way past C2 is songs the owner buys as files
+(backlog DR-3): split once, keep the parts on the owner's computer. Offered that plus a full drum
+split as the next phase.

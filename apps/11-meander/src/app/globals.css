@@ -653,3 +653,7 @@ svg.ov .bead { fill: var(--bone); transition: opacity 200ms ease; }
 .globe.spin .md { fill: #e9e2d4; fill-opacity: 0.3; }
 .globe.spin .md.in { fill-opacity: 0.9; }
 .gswitch button { padding: 5px 10px; }
+/* hover (28 Nov): a linked school round the back, named at the rim while the hover lasts */
+.globe.spin .rimn.hov { pointer-events: none; }
+.globe.spin .rimn.hov b { font-size: 14px; color: var(--bone); }
+.globe.spin .rimn.hov .dot { background: var(--bone); opacity: 0.7; }

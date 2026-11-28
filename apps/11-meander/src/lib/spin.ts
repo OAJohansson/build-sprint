@@ -84,7 +84,8 @@ export function graticule(rot: Rot, C: [number, number], R: number): string {
 }
 
 export type Box = { x: number; y: number; w: number; h: number };
-export type SpinLabelIn = { id: string; x: number; y: number; r: number; w: number; h: number; must: boolean };
+/** `out`: the outward direction (a pulled-in neighbour's spoke); its label tries that side first. */
+export type SpinLabelIn = { id: string; x: number; y: number; r: number; w: number; h: number; must: boolean; out?: [number, number] };
 export type SpinLabel = { left: number; top: number; text: "left" | "right" | "center"; rect: Box };
 
 /**
@@ -96,19 +97,26 @@ export function placeSpinLabels(nodes: SpinLabelIn[], fixed: Box[], C: [number, 
   const out: Record<string, SpinLabel> = {};
   const taken: Box[] = [];
   const hit = (a: Box, b: Box, pad: number) => a.x < b.x + b.w + pad && b.x < a.x + a.w + pad && a.y < b.y + b.h + pad && b.y < a.y + a.h + pad;
+  // a name that must show but fits nowhere goes where it covers least (the card and the screen edge count double)
+  const over = (a: Box, b: Box) => Math.max(0, Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x)) * Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y));
+  const leastBad = (ts: SpinLabel[]) => ts.map((t) => ({ t, c:
+    2 * fixed.reduce((s, b) => s + over(t.rect, b), 0) + taken.reduce((s, b) => s + over(t.rect, b), 0) +
+    2 * (t.rect.w * t.rect.h - over(t.rect, { x: 4, y: 4, w: W - 8, h: H - 8 })) })).sort((p, q) => p.c - q.c)[0].t;
   for (const n of nodes) {
     const g = n.r + 7;
     const right: SpinLabel = { left: g, top: -n.h / 2, text: "left", rect: { x: n.x + g, y: n.y - n.h / 2, w: n.w, h: n.h } };
     const left: SpinLabel = { left: -g - n.w, top: -n.h / 2, text: "right", rect: { x: n.x - g - n.w, y: n.y - n.h / 2, w: n.w, h: n.h } };
     const above: SpinLabel = { left: -n.w / 2, top: -g - n.h, text: "center", rect: { x: n.x - n.w / 2, y: n.y - g - n.h, w: n.w, h: n.h } };
     const below: SpinLabel = { left: -n.w / 2, top: g, text: "center", rect: { x: n.x - n.w / 2, y: n.y + g, w: n.w, h: n.h } };
-    const tries = n.x >= C[0] ? [right, left, above, below] : [left, right, above, below];
+    const side = (n.out ? n.out[0] : n.x - C[0]) >= 0 ? [right, left] : [left, right];
+    const vert = n.out && n.out[1] > 0 ? [below, above] : [above, below];
+    const tries = n.out && Math.abs(n.out[1]) > Math.abs(n.out[0]) * 0.9 ? [vert[0], side[0], side[1], vert[1]] : [...side, ...vert];
     const ok = tries.find((t) =>
       t.rect.x >= 4 && t.rect.y >= 4 && t.rect.x + t.rect.w <= W - 4 && t.rect.y + t.rect.h <= H - 4 &&
       !taken.some((b) => hit(t.rect, b, 4)) &&
       !fixed.some((b) => hit(t.rect, b, 6)) &&
       !nodes.some((m) => m !== n && m.x > t.rect.x - 4 && m.x < t.rect.x + t.rect.w + 4 && m.y > t.rect.y - 4 && m.y < t.rect.y + t.rect.h + 4),
-    ) ?? (n.must ? tries[0] : undefined);
+    ) ?? (n.must ? leastBad(tries) : undefined);
     if (ok) { out[n.id] = ok; taken.push(ok.rect); }
   }
   return out;
@@ -119,4 +127,33 @@ export function frontOf({ yaw, pitch }: Rot): Vec3 {
   // undo pitch on [0, 0, 1], then undo yaw
   const y = Math.sin(pitch), z1 = Math.cos(pitch);
   return [-z1 * Math.sin(yaw), y, z1 * Math.cos(yaw)];
+}
+
+/**
+ * Pull-in (L65): an open school's neighbours leave their place on the sphere for a ring round it, each on the spoke
+ * that points where it lives, spread so no two crowd. `dirs` are their directions from the focus (screen space,
+ * any length); returns each one's spot on an ellipse (rx, ry) round C. Pure, so the ring is the same every time.
+ */
+export function pullRing(dirs: { id: string; dx: number; dy: number }[], C: [number, number], rx: number, ry: number): Record<string, { x: number; y: number; out: [number, number] }> {
+  const n = dirs.length;
+  if (!n) return {};
+  const a = dirs.map((d, i) => ({ id: d.id, t: Math.hypot(d.dx, d.dy) < 1e-3 ? (i / n) * 2 * Math.PI : Math.atan2(d.dy, d.dx) }))
+    .sort((p, q) => p.t - q.t);
+  const gap = Math.min((2 * Math.PI) / n, 0.52);
+  for (let k = 0; k < 60; k++) {
+    for (let i = 0; i < n && n > 1; i++) {
+      const p = a[i], q = a[(i + 1) % n];
+      let d = q.t - p.t;
+      if (i === n - 1) d += 2 * Math.PI;
+      if (d < gap) { const m = (gap - d) / 2; p.t -= m; q.t += m; }
+    }
+  }
+  // two neighbours a ring apart when crowded: every other one a little further out
+  const out: Record<string, { x: number; y: number; out: [number, number] }> = {};
+  a.forEach((p, i) => {
+    const k = n > 10 && i % 2 ? 1.17 : 1;
+    const c = Math.cos(p.t), s = Math.sin(p.t);
+    out[p.id] = { x: C[0] + rx * k * c, y: C[1] + ry * k * s, out: [c, s] };
+  });
+  return out;
 }

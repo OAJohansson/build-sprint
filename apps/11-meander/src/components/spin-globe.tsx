@@ -12,7 +12,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { splitName, type Field } from "@/lib/content";
 import { GAMMA, RIM, project, vec, type Vec3 } from "@/lib/globe";
-import { arcPath, centroid, clampPitch, facingRot, frontOf, graticule, lerpRot, ortho, placeSpinLabels, type Box, type Rot } from "@/lib/spin";
+import { arcPath, centroid, clampPitch, facingRot, frontOf, graticule, lerpRot, ortho, placeSpinLabels, pullRing, rotate, type Box, type Rot } from "@/lib/spin";
 
 export type SpinVariant = "a1" | "a2" | "a3" | "a4" | "b1" | "b2" | "b3";
 /** Families for music; the timeline's eras for philosophy (critic r1: Western/Eastern was two rows, not an overview). */
@@ -93,6 +93,24 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
   useEffect(() => { if (turnTo) { const r = facingRot(turnTo.v); turn({ yaw: r.yaw, pitch: clampPitch(r.pitch - 0.1) }); } }, [turnTo]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => stop, []);
 
+  // Pull-in (L65, A on laptop): opening a school pulls its neighbours off the sphere into a ring round it, so every
+  // name fits; closing it lets them go back. `pull` runs 0 → 1 while the globe turns.
+  const pullOn = fam === "a" && !!focus && !compact;
+  const [pull, setPull] = useState(1);
+  const pullRaf = useRef(0);
+  useEffect(() => {
+    cancelAnimationFrame(pullRaf.current);
+    if (!pullOn) return;
+    const t0 = performance.now(), ms = reduced() ? 0 : 800;
+    const step = (t: number) => {
+      const k = ms ? Math.min(1, (t - t0) / ms) : 1;
+      setPull(k);
+      if (k < 1) pullRaf.current = requestAnimationFrame(step);
+    };
+    pullRaf.current = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(pullRaf.current);
+  }, [focus, pullOn]);
+
   // Drag to spin. Window listeners, not pointer capture, so a click on a name still lands on its button.
   const wrap = useRef<HTMLDivElement>(null);
   const dragged = useRef(false);
@@ -162,8 +180,27 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
   }, [hoverId, field.links, familyLit]);
 
   const P = Object.fromEntries(field.schools.map((s) => [s.id, ortho(V[s.id], rot, C, R)]));
-  const front = field.schools.filter((s) => s.id !== focus && P[s.id].z > 0);
-  const back = field.schools.filter((s) => s.id !== focus && P[s.id].z <= 0);
+  // the ring: each neighbour's direction from the focus once the globe has finished turning, so it never wobbles
+  const ring = useMemo(() => {
+    if (!pullOn || !focus) return {};
+    const to = facingRot(V[focus]);
+    return pullRing([...near.keys()].map((id) => { const [x, y] = rotate(V[id], to); return { id, dx: x, dy: -y }; }), C, R * 0.68, R * 0.62);
+  }, [pullOn, focus, near, V, C[0], C[1], R]); // eslint-disable-line react-hooks/exhaustive-deps
+  const pulled = (id: string) => pullOn && !!ring[id];
+  const kPull = ease(pull);
+  const Q = (id: string) => {
+    const p = P[id];
+    if (!pulled(id)) return p;
+    // a neighbour round the back starts from the rim in its direction
+    const dx = p.x - C[0], dy = p.y - C[1], l = Math.hypot(dx, dy) || 1;
+    const s = p.z > 0 ? p : { x: C[0] + (dx / l) * R, y: C[1] + (dy / l) * R, z: 0 };
+    const g = ring[id];
+    return { x: s.x + (g.x - s.x) * kPull, y: s.y + (g.y - s.y) * kPull, z: p.z > 0 ? 1 : kPull };
+  };
+  const front = field.schools.filter((s) => s.id !== focus && (P[s.id].z > 0 || pulled(s.id)));
+  const back = field.schools.filter((s) => s.id !== focus && P[s.id].z <= 0 && !pulled(s.id));
+  // hover (owner, 28 Nov): every school linked to the hovered one gets its name, wherever it sits on the front
+  const hoverNb = hoverId && !familyLit && lit ? lit : null;
   const rOf = (id: string) => (near.has(id) ? 6 : focus ? 2.5 : (compact ? 2.2 : 2.6) + 1.6 * P[id].z);
 
   // Label sizes are measured once per school and look, then reused while the globe turns.
@@ -191,17 +228,17 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
   // Labels: neighbours first, then the nearest the front; none for the rim band, where names would squash.
   const minZ = mode === "b3" ? (compact ? 0.82 : 0.78) : compact ? 0.42 : 0.34;
   const wanted = front
-    .filter((s) => near.has(s.id) || (!focus && P[s.id].z > minZ))
-    .sort((a, b) => (near.has(a.id) ? 0 : 1) - (near.has(b.id) ? 0 : 1) || P[b.id].z - P[a.id].z)
-    .map((s) => ({ id: s.id, x: P[s.id].x, y: P[s.id].y, r: rOf(s.id), ...sizeOf(s.id), must: near.has(s.id) }));
+    .filter((s) => near.has(s.id) || hoverNb?.has(s.id) || (!focus && P[s.id].z > minZ))
+    .sort((a, b) => (near.has(a.id) || hoverNb?.has(a.id) ? 0 : 1) - (near.has(b.id) || hoverNb?.has(b.id) ? 0 : 1) || (a.id === hoverId ? -1 : b.id === hoverId ? 1 : 0) || P[b.id].z - P[a.id].z)
+    .map((s) => { const q = Q(s.id); return { id: s.id, x: q.x, y: q.y, r: rOf(s.id), ...sizeOf(s.id), must: near.has(s.id) || !!hoverNb?.has(s.id), out: pulled(s.id) ? ring[s.id].out : undefined }; });
   const title: Box[] = focus ? [{ x: C[0] - 200, y: C[1] - 30, w: 400, h: 120 }] : [];
   // the title's text only (the dot sits at C, the name and date line under it), so threads run up to it unbroken
   const titleKo = focus ? { x: C[0] - 175, y: C[1] - 26, w: 350, h: 82 } : null;
   const placed = placeSpinLabels(wanted, [...fixed, ...title], C, W, H);
 
   // A, focus: neighbours round the back, pinned to the rim in their direction, so the card's neighbours are all on screen.
-  const rim = fam === "a" && focus && !compact
-    ? back.filter((s) => near.has(s.id)).map((s) => {
+  const rim = fam === "a" && !compact && (hoverNb || (focus && !pullOn))
+    ? back.filter((s) => near.has(s.id) || (hoverNb?.has(s.id) && s.id !== hoverId)).map((s) => {
       const p = P[s.id], dx = p.x - C[0], dy = p.y - C[1], l = Math.hypot(dx, dy) || 1;
       const x = C[0] + (dx / l) * (R + 10), w = sizeOf(s.id).w;
       // the label points away from the globe, unless that runs off the screen; then it tucks inside the rim
@@ -214,6 +251,14 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
     const isF = l.from === focus || l.to === focus;
     const cls = ["th", isF && "focus", isF && l.type === "against" && "against", isF && l.type === "built-then-against" && "mixed", !!focus && !isF && "rest", lit && lit.has(l.from) && lit.has(l.to) && (hoverId === l.from || hoverId === l.to || !!familyLit) && "lit"]
       .filter(Boolean).join(" ");
+    if (pullOn && isF) {
+      // a pulled-in neighbour's thread: a light curve from the open school out to its place on the ring
+      const o = Q(l.from === focus ? l.to : l.from), mx = (C[0] + o.x) / 2, my = (C[1] + o.y) / 2;
+      const nx = -(o.y - C[1]) * 0.1, ny = (o.x - C[0]) * 0.1;
+      return { key: `${l.from}-${l.to}`, cls, d: `M${C[0]} ${C[1]}Q${(mx + nx).toFixed(1)} ${(my + ny).toFixed(1)} ${o.x.toFixed(1)} ${o.y.toFixed(1)}` };
+    }
+    // threads that would run to a neighbour's old place on the sphere go while it is pulled in
+    if (pullOn && (pulled(l.from) || pulled(l.to))) return { key: `${l.from}-${l.to}`, cls, d: "" };
     return { key: `${l.from}-${l.to}`, cls, d: arcPath(V[l.from], V[l.to], rot, C, R) };
   }).filter((p) => p.d && (!focus || !p.cls.includes("rest") || fam === "a"));
 
@@ -294,8 +339,8 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
       )}
       <main inert={inert}>
         {front.map((s) => {
-          const p = P[s.id], st = states.get(s.id), v = st === "started" || st === "explored", pl = placed[s.id], n = near.get(s.id);
-          const fade = Math.min(1, p.z / 0.18);
+          const p = Q(s.id), st = states.get(s.id), v = st === "started" || st === "explored", pl = placed[s.id], n = near.get(s.id);
+          const fade = pulled(s.id) ? Math.min(1, 0.15 + p.z) : Math.min(1, p.z / 0.18);
           const cls = ["n", n && "t1", !!focus && !n && "rest", v && "v", st === "explored" && "xp", lit?.has(s.id) && "lit", !pl && "nolabel"].filter(Boolean).join(" ");
           return (
             <button key={s.id} type="button" className={cls} style={{ left: p.x, top: p.y, opacity: fade }} data-id={s.id}
@@ -313,7 +358,7 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
             </button>
           );
         })}
-        {rim.map(({ s, x, y, right }) => (
+        {rim.map(({ s, x, y, right }) => focus ? (
           <button key={s.id} type="button" className="n t1 rimn" style={{ left: x, top: y }} onClick={() => onOpen(s.id)} aria-label={`${s.name}, round the back`}>
             <i className="dot" style={{ width: 8, height: 8 }} />
             <span className="lb placed" aria-hidden="true" style={right ? { left: 12, top: -10 } : { right: 12, left: "auto", top: -10, textAlign: "right", alignItems: "flex-end" }}>
@@ -321,6 +366,14 @@ export function SpinGlobe({ field, mode, focus, states, onOpen, C: C0, R: R0, W,
               <em>{near.get(s.id)!.verb} · round the back</em>
             </span>
           </button>
+        ) : (
+          // hover: a linked school round the back, named at the rim while the hover lasts
+          <span key={s.id} className="n rimn hov" style={{ left: x, top: y }} aria-hidden="true">
+            <i className="dot" style={{ width: 6, height: 6 }} />
+            <span className="lb placed" style={right ? { left: 10, top: -9 } : { right: 10, left: "auto", top: -9, textAlign: "right", alignItems: "flex-end" }}>
+              <b>{label(s.id)}</b>
+            </span>
+          </span>
         ))}
         {regions.map((g) => (
           <button key={g.id} type="button" className={famLit?.id === g.id ? "region on" : "region"} style={{ left: g.x, top: g.y }}

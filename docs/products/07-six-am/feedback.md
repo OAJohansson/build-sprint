@@ -385,3 +385,4 @@ S2 re-check: S2-1, 2, 5, 6, 7, 8 fixed; S2-3, S2-4, CS1-12 partly (reopened belo
 | D7-20 | minor | A Deck on another song shows "the Deck isn't open" | fixed (6ec8f77) |
 | D7-21 | polish | First switch of a session starts ~1 s late while the player buffers | accepted (L298); preload if cheap |
 
+| OR7-1 | major | Owner's final review (28 Nov): recreating the drums by ear is "really impossible" while listening to the whole drum layer at once. Wants to hear one drum sound of the original alone (kick, then clap/snare, then hats), match it, then move to the next | open: owner's call on route (filter "listen to" buttons now vs. a drum-splitting model spike) |

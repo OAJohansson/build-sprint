@@ -913,3 +913,12 @@ Written into the shared pages at the Ears + Mentor wrap-up (24 Oct), in one comm
 - Final polish done (6ec8f77, T263). Next: a short data-evals regression (W10, W11, W13), merge main, PR, preview, eval report, final review.
 - PR #109 opened; preview https://six-bqjzreiwf-mimirswell.vercel.app (preview deploy, pre-approved); eval report `eval-report-phase7.md`. Waiting for the final regression and CI, then the owner's final review.
 - Final regression on 6ec8f77 (5672d25): W10, W11, W13, W6 spot pass; D7-20 fixed; D7-21 didn't recur. Ready for the owner's final review.
+
+### 28 Nov: final review, first finding (OR7-1)
+
+The owner tried to rebuild the drums by ear and found it impossible while hearing the whole drum
+layer. Ask: isolate each drum sound of the original. Researched: the app already splits the song
+in the browser (htdemucs); drum-splitting models exist (DrumSep, MIT, ~335 MB ONNX, kick / snare /
+cymbals / toms; LarsNet is non-commercial only). Offered two routes to the owner: quick filter
+"listen to kick / clap / hats" on the drums layer (no model, rough), or a time-boxed spike running
+DrumSep in the browser, graded on real loops first. Merge of PR #109 held until this is settled.

@@ -231,3 +231,9 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Gate Q2 decided (L37):** closed test by 1 Jan. Owner travels until 7 Dec, then works full time
   5–6 h a day, more if it looks viable. Before 7 Dec: phone-friendly owner steps only (say-it test,
   Play Console sign-up for its identity check, the design pick from screenshots).
+- **Owner's MVP list (gate Q3 in progress):** onboarding with tailored suggestions, yearly goals
+  tied to habits, build vs quit habits, Wonty reacting to every log and miss, setback learning,
+  insights, education as a thread, a growing world with animation and haptics, notifications
+  (owner: important), accounts. Claude mapped each to research and added gaps in `mvp-v2.md`
+  (weekly look-back P2, starter areas, pause/archive, soft 3-habit limit). Scope flagged: fits
+  1 Jan only as a thin slice of each.

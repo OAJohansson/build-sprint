@@ -198,3 +198,22 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   (laptop, then phone) and confirmed it works. Phase closed; more Wont work later from the backlog.
 - Lesson: the kickoff's "one device, no backend" was decided without asking which devices the
   owner uses (Selvedge had the same lesson). The kickoff template now asks.
+
+## 28 Nov: v2 idea, Wonty
+
+- **The idea.** The owner wants to turn Wont into a product people might pay for, Finch-style but
+  with the wonton, published on Google Play: mainly to learn building, publishing and finding
+  users. Claude's critique: crowded category, so lead with Wont's own bet (a miss is a comeback);
+  start distribution early; pricing last; Expo over Kotlin; don't polish the web app first, reuse
+  its `src/lib` logic. Most of the research the owner asked for already exists in `research.md`.
+- **The character.** From the owner's cousin Oli: honest that it's hard, sure you can do it,
+  curious about setbacks. Mapped to evidence: self-compassion after a slip (P7), if-then plans
+  after a miss (P1), fresh start at New Year (P17); growth mindset kept as voice, not as a feature
+  (weak intervention evidence). Rule: effort grows Wonty's world, misses never take anything away.
+  The owner's first draft of the morning-after line was warm but missed belief and learning;
+  copy deferred to design.
+- **Decisions:** Streamlined mode (L32), name Wonty (L33), domain and email (L34), own
+  infrastructure (L35). Setup done by the owner with Claude's steps: `wonty.app` at Cloudflare,
+  Email Routing `hello@` and catch-all to the Wonty Gmail (DNS checked: Cloudflare MX and SPF).
+- **Draft kickoff** `kickoff-v2-wonty.md` with the setup recommendations; the gate questions go to
+  the owner one at a time. Finch/Habitica teardown and a trademark check are running.

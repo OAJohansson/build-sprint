@@ -31,3 +31,10 @@
 - "Not today" to close a day honestly (user test F5).
 - History beyond 14 days, a month grid (audit 7).
 - Show "why this matters" back, e.g. on the morning-after message (user test).
+
+## From the v2 conversation (28 Nov)
+
+- `wontyapp.com` as a redirect once Wonty has traction; offer for `wonty.com` (parked) much later.
+- "Send as" `hello@wonty.app` in the Wonty Gmail once replying to testers regularly; paid mailbox later.
+- iOS build and Sign in with Apple.
+- Payments: Play Billing via RevenueCat, sole-trader check.

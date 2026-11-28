@@ -250,3 +250,8 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
 - **Writing and grading:** three writers, three graders. Round 1: 874 claims, 6 wrong, 104 drift, 28 unsupported. **L60:** allegations made proportionate (convictions and allegations of violence, abuse or hate speech, with outcomes; not minor offences or people around the artist). Round 2 re-graded 529 claims: 2 wrong (Spiral Scratch called an album), fixed with the rest; the validator is at 0 errors.
 - **In the app:** 49 genres, 208 artists, 157 links, 146 records. A fresh globe layout clusters the eight families. 0 label problems across 50 music views and 28 philosophy views; 34 tests, lint and build green.
 - **Owner idea before merge (28 Nov):** a spinnable real globe, less busy, plus classical and tech house. My view: good fit for the wander feel and cheap to build (positions are already on a sphere; only the drawing and drag-to-spin change), at the cost of the see-everything overview. Agreed order: merge PR 108 as is, then the spinning globe and the extra genres become the next phase (backlog "Next phase: a globe you spin").
+
+## Phase 5: a globe you spin (28 Nov, Founder mode)
+
+- **Ops:** branch `claude/11-meander-phase5-spin-globe-1d8421`, at origin/main (`b4cd864`, PR 108). Weekly usage 64% at the start; guard stops new work at 70%.
+- **Kickoff (L61–L63):** Founder mode again. On "see everything vs find by spinning", the owner wants both explored: A, spin with a light overview, and B, pure spin, next to today's globe (L62). Classical is in as its own family with a timeline back to about 1600 (L63). Kickoff pack and Phase 5 evals written; S1 replaces M1's "all visible" with "reachable in 2 actions".

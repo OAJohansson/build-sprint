@@ -65,3 +65,4 @@ Every decision except ops (decision 0026): L-numbers for learning decisions, T-n
 | L33 | 28 Nov | Name: **Wonty** ("Wont" autocorrects to "won't" and few know the word); store title "Wonty: Habit Tracker". Provisional until the say-it test and a trademark check | owner | v2 kickoff | |
 | L34 | 28 Nov | Domain `wonty.app` only (bought at Cloudflare; `wontyapp.com` later if it gets traction); `hello@` and a catch-all forward free to a separate Wonty Gmail, which also owns Wonty's Google services | owner | v2 kickoff | |
 | L35 | 28 Nov | Wonty gets its own infrastructure (own Supabase organisation, own accounts), separate from the sprint apps, so real users' data never shares free-plan limits with them | owner | v2 kickoff | |
+| L36 | 28 Nov | First audience: people who've read about habits but can't make them stick; Wonty takes the reading into practice and reminds them of it. Content-led reach (educational posts) | owner | v2 kickoff gate, Q1 | |

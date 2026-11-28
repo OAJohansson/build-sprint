@@ -224,3 +224,7 @@ For the shared pages (knowledge bank, problems, learnings, process changes), wri
   takes, story-led and visual, at the moment it matters, plus patterns from the user's own log. Added
   to the draft MVP; the feel sentence now says "adult voice". Audience question reopened with a
   readers option, since the education angle suits people who've read about habits.
+- **Gate Q1 decided (L36):** first audience is habit-book readers. Owner's framing: Instagram posts
+  teach one small piece of behaviour change and one thing to try; Wonty takes the reading into
+  practice and reminds you of what you read. Note: lessons in Wonty's own words from the research,
+  never the book's text, and no implied link to any author.

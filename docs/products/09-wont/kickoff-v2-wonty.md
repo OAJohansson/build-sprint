@@ -28,9 +28,12 @@ don't have someone checking in every day.
 
 ## Who
 
-*(provisional)* First the owner, then ~12 closed-test users. A narrow first audience is still open
-(gate question 1): the product stays general (any habit, linked to yearly goals), but the first
-posts and testers need a specific person in mind.
+First the owner, then ~12 closed-test users from the first audience (L36): **people who've read
+about habits (Atomic Habits, book summaries) but can't make them stick.** They're motivated and
+curious about how change works, forget most of what they read, and often have quit a streak app.
+Wonty turns what they read into what they do. Reached through short educational posts (one piece of
+behaviour change and one thing to try) on Instagram and TikTok, plus r/getdisciplined and
+r/selfimprovement. The product stays general (any habit, linked to yearly goals).
 
 ## Moment of use and jobs to be done
 
